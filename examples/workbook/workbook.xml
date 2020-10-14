@@ -78,6 +78,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         </p>
                     </statement>
                 </exercise>
+                <exercise>
+                    <statement>
+                        <p>
+                            This exercise has groupings markup: <q>q</q> <sq>sq</sq> <dblbrackets>dblbrackets</dblbrackets> <angles>angles</angles> <abbr>abbr</abbr> <acro>acro</acro> <init>init</init> <em>em</em> <term>term</term> <alert>alert</alert> <pubtitle>pubtitle</pubtitle> <articletitle>articletitle</articletitle> <foreign>foreign</foreign> <delete>delete</delete> <insert>insert</insert> <stale>stale</stale> <taxon>taxon</taxon> <taxon><genus>genus</genus><species>species</species></taxon> <email>email</email>
+                        </p>
+                    </statement>
+                </exercise>
             </worksheet>
             <worksheet>
                 <title>A Simple Worksheet</title>

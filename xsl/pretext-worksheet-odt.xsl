@@ -179,6 +179,127 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- ######### -->
+<!-- Groupings -->
+<!-- ######### -->
+<xsl:template match="abbr">
+    <text:span text:style-name="Abbr">
+        <xsl:apply-templates/>
+    </text:span>
+</xsl:template>
+<xsl:template match="acro">
+    <text:span text:style-name="Acro">
+        <xsl:apply-templates/>
+    </text:span>
+</xsl:template>
+<xsl:template match="init">
+    <text:span text:style-name="Init">
+        <xsl:apply-templates/>
+    </text:span>
+</xsl:template>
+<xsl:template match="em">
+    <text:span text:style-name="Emphasis">
+        <xsl:apply-templates/>
+    </text:span>
+</xsl:template>
+<xsl:template match="term">
+    <text:span text:style-name="Term">
+        <xsl:apply-templates/>
+    </text:span>
+</xsl:template>
+<xsl:template match="alert">
+    <text:span text:style-name="Alert">
+        <xsl:apply-templates/>
+    </text:span>
+</xsl:template>
+<xsl:template match="pubtitle">
+    <text:span text:style-name="Pubtitle">
+        <xsl:apply-templates/>
+    </text:span>
+</xsl:template>
+<xsl:template match="articletitle">
+    <text:span text:style-name="Articletitle">
+        <xsl:call-template name="lq-character"/>
+        <xsl:apply-templates/>
+        <xsl:call-template name="rq-character"/>
+    </text:span>
+</xsl:template>
+<xsl:template match="foreign">
+    <text:span text:style-name="Foreign">
+        <xsl:apply-templates/>
+    </text:span>
+</xsl:template>
+<xsl:template match="delete">
+    <text:span text:style-name="Delete">
+        <xsl:apply-templates/>
+    </text:span>
+</xsl:template>
+<xsl:template match="insert">
+    <text:span text:style-name="Insert">
+        <xsl:apply-templates/>
+    </text:span>
+</xsl:template>
+<xsl:template match="stale">
+    <text:span text:style-name="Stale">
+        <xsl:apply-templates/>
+    </text:span>
+</xsl:template>
+<xsl:template match="taxon[not(genus) and not(species)]">
+    <text:span text:style-name="Taxon">
+        <xsl:apply-templates/>
+    </text:span>
+</xsl:template>
+<xsl:template match="taxon[genus or species]">
+    <text:span text:style-name="Taxon">
+        <xsl:if test="genus">
+            <text:span text:style-name="Genus">
+                <xsl:apply-templates select="genus"/>
+            </text:span>
+        </xsl:if>
+        <xsl:if test="genus and species">
+            <xsl:text> </xsl:text>
+        </xsl:if>
+        <xsl:if test="species">
+            <text:span text:style-name="Species">
+                <xsl:apply-templates select="species"/>
+            </text:span>
+        </xsl:if>
+    </text:span>
+</xsl:template>
+<xsl:template match="email">
+    <text:span text:style-name="Email">
+        <xsl:apply-templates/>
+    </text:span>
+</xsl:template>
+
+<!-- ########## -->
+<!-- Characters -->
+<!-- ########## -->
+<xsl:template name="lsq-character">
+    <xsl:text>&#x2018;</xsl:text>
+</xsl:template>
+<xsl:template name="rsq-character">
+    <xsl:text>&#x2019;</xsl:text>
+</xsl:template>
+<xsl:template name="lq-character">
+    <xsl:text>&#x201c;</xsl:text>
+</xsl:template>
+<xsl:template name="rq-character">
+    <xsl:text>&#x201d;</xsl:text>
+</xsl:template>
+<xsl:template name="ldblbracket-character">
+    <xsl:text>&#x27e6;</xsl:text>
+</xsl:template>
+<xsl:template name="rdblbracket-character">
+    <xsl:text>&#x27e7;</xsl:text>
+</xsl:template>
+<xsl:template name="langle-character">
+    <xsl:text>&#x3008;</xsl:text>
+</xsl:template>
+<xsl:template name="rangle-character">
+    <xsl:text>&#x3009;</xsl:text>
+</xsl:template>
+
 
 
 <!-- ############# -->
@@ -310,6 +431,115 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         fo:font-weight="bold"
                     />
                 </style:style>
+                <!-- Groupings -->
+                <style:style
+                    style:name="Abbr"
+                    style:family="text"
+                />
+                <style:style
+                    style:name="Acro"
+                    style:family="text"
+                />
+                <style:style
+                    style:name="Init"
+                    style:family="text"
+                />
+                <style:style
+                    style:name="Emphasis"
+                    style:family="text"
+                    >
+                    <style:text-properties
+                        fo:font-style="italic"
+                    />
+                </style:style>
+                <style:style
+                    style:name="Term"
+                    style:family="text"
+                    >
+                    <style:text-properties
+                        fo:font-weight="bold"
+                    />
+                </style:style>
+                <style:style
+                    style:name="Alert"
+                    style:family="text"
+                    >
+                    <style:text-properties
+                        fo:font-style="italic"
+                        fo:font-weight="bold"
+                    />
+                </style:style>
+                <style:style
+                    style:name="Pubtitle"
+                    style:family="text"
+                    >
+                    <style:text-properties
+                        fo:font-style="oblique"
+                    />
+                </style:style>
+                <style:style
+                    style:name="Articletitle"
+                    style:family="text"
+                    >
+                </style:style>
+                <style:style
+                    style:name="Foreign"
+                    style:family="text"
+                    >
+                    <style:text-properties
+                        fo:font-style="italic"
+                    />
+                </style:style>
+                <style:style
+                    style:name="Delete"
+                    style:family="text"
+                    >
+                    <style:text-properties
+                        style:text-line-through-style="solid"
+                    />
+                </style:style>
+                <style:style
+                    style:name="Insert"
+                    style:family="text"
+                    >
+                    <style:text-properties
+                        style:text-underline-style="solid"
+                    />
+                </style:style>
+                <style:style
+                    style:name="Stale"
+                    style:family="text"
+                    >
+                    <style:text-properties
+                        style:text-line-through-style="solid"
+                    />
+                </style:style>
+                <style:style
+                    style:name="Taxon"
+                    style:family="text"
+                    >
+                    <style:text-properties
+                        fo:font-style="italic"
+                    />
+                </style:style>
+                <style:style
+                    style:name="Genus"
+                    style:family="text"
+                    >
+                    <style:text-properties
+                    />
+                </style:style>
+                <style:style
+                    style:name="Species"
+                    style:family="text"
+                    >
+                    <style:text-properties
+                    />
+                </style:style>
+                <style:style
+                    style:name="Email"
+                    style:family="text"
+                />
                 <!-- Headings -->
                 <!-- First, very generic heading styling -->
                 <style:style
