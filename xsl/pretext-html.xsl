@@ -3035,6 +3035,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="tabular">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
+            <xsl:if test="$b-subcaptioned">
+                <xsl:apply-templates select="." mode="figure-caption">
+                    <xsl:with-param name="b-original" select="$b-original"/>
+                </xsl:apply-templates>
+            </xsl:if>
         </xsl:when>
         <!-- "title" at the top, subcaption at the bottom -->
         <xsl:when test="self::list">
