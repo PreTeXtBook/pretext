@@ -6723,14 +6723,70 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- vertical space etc, that is the container's responsibiility      -->
 <!-- A sequence of rows, we ignore column group in applying templates -->
 <!-- Realized as an HTML table                                        -->
-<xsl:template match="tabular">
+
+<xsl:template match="tabular[not(ancestor::sidebyside)]">
     <xsl:param name="b-original" select="true()" />
-    <xsl:param name="width" select="'100%'" />
+    <!-- naked tabular carries its own width -->
+
+    <xsl:choose>
+        <xsl:when test="not(@margins) and (not(@width) or (@width = 'auto'))">
+            <!-- the "natural width" case                       -->
+            <!-- 100% width allows paragraph cells to be widest -->
+            <div class="tabular-box natural-width">
+                <xsl:apply-templates select="." mode="tabular-inclusion">
+                    <xsl:with-param name="b-original" select="$b-original" />
+                    <xsl:with-param name="width" select="'100%'" />
+                </xsl:apply-templates>
+            </div>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:variable name="rtf-layout">
+                <xsl:apply-templates select="." mode="layout-parameters"/>
+            </xsl:variable>
+            <xsl:variable name="layout" select="exsl:node-set($rtf-layout)"/>
+            <div class="tabular-box">
+                <xsl:attribute name="style">
+                    <xsl:text>width: </xsl:text>
+                    <xsl:value-of select="$layout/width"/>
+                    <xsl:text>%;</xsl:text>
+                    <xsl:text> margin-left: </xsl:text>
+                    <xsl:value-of select="$layout/left-margin"/>
+                    <xsl:text>%;</xsl:text>
+                    <xsl:text> margin-right: </xsl:text>
+                    <xsl:value-of select="$layout/right-margin"/>
+                    <xsl:text>%;</xsl:text>
+                </xsl:attribute>
+                <xsl:apply-templates select="." mode="tabular-inclusion">
+                    <xsl:with-param name="b-original" select="$b-original"/>
+                    <xsl:with-param name="width" select="concat($layout/width, '%')"/>
+                </xsl:apply-templates>
+            </div>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="tabular[ancestor::sidebyside]">
+    <xsl:param name="b-original" select="true()" />
+    <!-- sidebyside should always provide width, -->
+    <!-- so no default value provided here       -->
+    <xsl:param name="width"/>
+
+    <xsl:apply-templates select="." mode="tabular-inclusion">
+        <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="width" select="$width" />
+    </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="tabular" mode="tabular-inclusion">
+    <xsl:param name="b-original" select="$b-original"/>
+    <xsl:param name="width"  select="$width"/>
+
     <!-- Abort if tabular's cols have widths summing to over 100% -->
     <xsl:call-template name="cap-width-at-one-hundred-percent">
         <xsl:with-param name="nodeset" select="col/@width" />
     </xsl:call-template>
-    <xsl:element name="table">
+
+    <table class="tabular">
         <!-- We *actively* enforce header rows being (a) initial, and      -->
         <!-- (b) contiguous.  So following two-part match will do no harm  -->
         <!-- to correct source, but will definitely harm incorrect source. -->
@@ -6742,7 +6798,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="b-original" select="$b-original" />
             <xsl:with-param name="ambient-relative-width" select="$width" />
         </xsl:apply-templates>
-    </xsl:element>
+    </table>
 </xsl:template>
 
 <!-- A row of table -->
