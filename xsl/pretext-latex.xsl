@@ -1659,6 +1659,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcolumntype{A}{!{\vrule width 0.04em}}&#xa;</xsl:text>
         <xsl:text>\newcolumntype{B}{!{\vrule width 0.07em}}&#xa;</xsl:text>
         <xsl:text>\newcolumntype{C}{!{\vrule width 0.11em}}&#xa;</xsl:text>
+        <!-- naked tabulars work best in a tcolorbox -->
+        <xsl:text>%% tcolorbox to place tabular outside of a sidebyside&#xa;</xsl:text>
+        <xsl:text>\tcbset{ tabularboxstyle/.style={bwminimalstyle,} }&#xa;</xsl:text>
+        <xsl:text>\newtcolorbox{tabularbox}[3]{tabularboxstyle, left skip=#1\linewidth, width=#2\linewidth,}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//cell/line">
         <xsl:text>\newcommand{\tablecelllines}[3]%&#xa;</xsl:text>
@@ -8669,13 +8673,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A "list" has an introduction/conclusion, with a       -->
     <!-- list of some type in-between, and these will all      -->
     <!-- automatically word-wrap to fill the available width.  -->
-    <!-- A "tabular" on the other hand, will have fixed-width, -->
-    <!-- so needs to be explicitly centered.                   -->
-    <!-- Note: centering seems to also happen (additionally)   -->
-    <!-- for a "tabular" inside a sidebyside panel.            -->
-    <xsl:if test="self::table">
-        <xsl:text>\centering&#xa;</xsl:text>
-    </xsl:if>
     <!-- TODO: process meta-data, then restrict contents -->
     <!-- tabular, introduction|list|conclusion           -->
     <xsl:apply-templates select="*"/>
@@ -8986,7 +8983,56 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Tabular Layout -->
 <!-- ############## -->
 
-<xsl:template match="tabular">
+<xsl:template match="tabular[not(ancestor::sidebyside)]">
+    <xsl:choose>
+        <!-- the "natural width" case, centered -->
+        <xsl:when test="not(@margins) and (not(@width) or (@width = 'auto'))">
+            <xsl:choose>
+                <xsl:when test="parent::table">
+                    <!-- center with no space more than "tableptx" provides -->
+                    <xsl:text>\centering%&#xa;</xsl:text>
+                    <xsl:apply-templates select="." mode="tabular-inclusion"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <!-- center with some vertical separation -->
+                    <xsl:text>\begin{center}%&#xa;</xsl:text>
+                    <xsl:apply-templates select="." mode="tabular-inclusion"/>
+                    <xsl:text>\end{center}%&#xa;</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- an option for a long table here? -->
+        <!-- Or does it go with "table"?      -->
+        <xsl:otherwise>
+            <xsl:variable name="rtf-layout">
+                <xsl:apply-templates select="." mode="layout-parameters" />
+            </xsl:variable>
+            <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
+            <xsl:text>\begin{tabularbox}</xsl:text>
+            <xsl:text>{</xsl:text>
+            <xsl:value-of select="$layout/left-margin div 100"/>
+            <xsl:text>}</xsl:text>
+            <xsl:text>{</xsl:text>
+            <xsl:value-of select="$layout/width div 100"/>
+            <xsl:text>}</xsl:text>
+            <xsl:text>{</xsl:text>
+            <xsl:value-of select="$layout/right-margin div 100"/>
+            <xsl:text>}%&#xa;</xsl:text>
+            <xsl:text>\resizebox{\linewidth}{!}{%&#xa;</xsl:text>
+            <xsl:apply-templates select="." mode="tabular-inclusion"/>
+            <xsl:text>}%&#xa;</xsl:text>
+            <xsl:text>\end{tabularbox}%&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="tabular[ancestor::sidebyside]">
+    <xsl:text>\resizebox{\linewidth}{!}{%&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="tabular-inclusion"/>
+    <xsl:text>}%&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="tabular" mode="tabular-inclusion">
     <!-- Abort if tabular's cols have widths summing to over 100% -->
     <xsl:call-template name="cap-width-at-one-hundred-percent">
         <xsl:with-param name="nodeset" select="col/@width" />
