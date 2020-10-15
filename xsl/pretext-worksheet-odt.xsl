@@ -1152,13 +1152,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <style:footer-style/>
                 </style:page-layout>
             </office:automatic-styles>
+            <!-- Print header on first page, but move to a header-free page -->
             <office:master-styles>
                 <style:master-page
                     style:name="Standard"
                     style:page-layout-name="Page"
+                    style:next-style-name="Latter-page"
                     >
-                    <style:header />
-                    <style:header-first>
+                    <style:header>
                         <text:p text:style-name="Header-first-page">
                             <xsl:apply-templates select="$document-root" mode="title-full" />
                             <text:tab/>
@@ -1168,8 +1169,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <text:tab/>
                             <xsl:apply-templates select="$document-root/frontmatter/titlepage/author" mode="name-list"/>
                         </text:p>
-                    </style:header-first>
+                    </style:header>
                 </style:master-page>
+                <style:master-page
+                    style:name="Latter-page"
+                    style:page-layout-name="Page"
+                    style:next-style-name="Latter-page"
+                />
             </office:master-styles>
         </office:document-styles>
     </exsl:document>
