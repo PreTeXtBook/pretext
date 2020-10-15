@@ -127,6 +127,56 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         </p>
                     </statement>
                 </exercise>
+                <exercise>
+                    <statement>
+                        <p>
+                            Verbatim characters: <c>~`!@#$%^&amp;*()_-+=[]{}|\;:'",&lt;.>?/</c>. And with leading and trailing whitespace: <c>  Two before.   Three in between.   Four after.    </c>
+                        </p>
+                        <p>
+                            Here in the middle of a <tag>p</tag> we have a <tag>cd</tag>:
+                            <cd>zip -r -X</cd>
+                            And then the <tag>p</tag> resumes.
+                        </p>
+                        <p>
+                            <cd>This p opens with a cd</cd>
+                            And then the <tag>p</tag> resumes.
+                        </p>
+                        <p>
+                            In this <tag>p</tag>,
+                            <cd>we end with a cd.</cd>
+                        </p>
+                        <p>
+                            <cd>A lonely cd</cd>
+                        </p>
+                        <p>
+                            <cd> There  are   progressively    more     spaces.      </cd>
+                        </p>
+                        <p>
+                            This one has <tag>cline</tag>:
+                            <cd>
+                                <cline>One line  </cline>
+                                <cline>   Two    line     </cline>
+                            </cd>
+                        </p>
+                        <pre>
+                            Here
+                                is
+                                    preformatted
+                                        text
+                        </pre>
+                        <pre>
+                            <cline>    and here</cline>
+                            <cline>with cline</cline>
+                        </pre>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p>
+                            Tags that use <tag>c</tag>: <tag>tag</tag> <tage>tage</tage> <attr>attr</attr> <url href="url.com"/>. (And a <url href="url.com">URL</url> without <tag>c</tag>.)
+                        </p>
+                    </statement>
+                </exercise>
             </worksheet>
             <worksheet>
                 <title>A Simple Worksheet</title>

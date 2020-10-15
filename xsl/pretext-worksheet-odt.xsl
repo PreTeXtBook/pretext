@@ -38,6 +38,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
     xmlns:officeooo="http://openoffice.org/2009/office"
     xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
 >
 
 <xsl:import href="./pretext-common.xsl" />
@@ -178,10 +179,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="worksheet//statement">
-    <!-- TODO: For now, only supporting p children -->
-    <xsl:apply-templates select="p"/>
+    <xsl:apply-templates />
 </xsl:template>
-
 
 <!-- ######### -->
 <!-- Groupings -->
@@ -500,6 +499,136 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- ############# -->
+<!-- Verbatim Text -->
+<!-- ############# -->
+<!-- .odt will (1) ignore leading and trailing whitespace -->
+<!-- (2) collapse adjacent whitespace into a single space -->
+<!-- (3) treat a line break character as a space          -->
+<!-- So the explicit-space template replaces space with   -->
+<!-- <text:s/> and replaces \n with <text:line-break/>    -->
+<!-- With pre, we still past conteent to sanitize-text    -->
+<!-- template for consistency with other output formats   -->
+
+<!-- TODO: code spans will line break in the natural way, and I'm unsure if it's possible to prevent that.        -->
+<!-- With line breaking possible, an outline makes less sense; can't seem to get an outline even if I wanted one. -->
+<xsl:template match="c">
+    <text:span text:style-name="C">
+        <xsl:call-template name="explicit-space">
+            <xsl:with-param name="string" select="."/>
+        </xsl:call-template>
+    </text:span>
+</xsl:template>
+
+<xsl:template match="cd">
+    <xsl:if test="boolean(preceding-sibling::*) or boolean(preceding-sibling::text()[normalize-space() != ''])">
+        <text:line-break/>
+    </xsl:if>
+    <text:span text:style-name="C">
+        <xsl:choose>
+            <xsl:when test="cline">
+                <xsl:apply-templates select="cline" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="explicit-space">
+                    <xsl:with-param name="string" select="."/>
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
+    </text:span>
+    <xsl:if test="boolean(following-sibling::*) or boolean(following-sibling::text()[normalize-space() != ''])">
+        <text:line-break/>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="cline">
+    <xsl:call-template name="explicit-space">
+        <xsl:with-param name="string" select="."/>
+    </xsl:call-template>
+    <xsl:if test="following-sibling::cline">
+        <text:line-break/>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="pre">
+    <text:p text:style-name="Pre">
+        <xsl:choose>
+            <xsl:when test="cline">
+                <xsl:apply-templates select="cline" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="explicit-space">
+                    <xsl:with-param name="string">
+                        <xsl:call-template name="sanitize-text">
+                            <xsl:with-param name="text" select="." />
+                        </xsl:call-template>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
+    </text:p>
+</xsl:template>
+
+<xsl:template name="explicit-space">
+    <xsl:param name="string" select="''"/>
+    <xsl:choose>
+        <xsl:when test="string-length($string) = 0"/>
+        <xsl:when test="substring($string,1,1) = ' '">
+            <text:s/>
+            <xsl:call-template name="explicit-space">
+                <xsl:with-param name="string" select="substring($string,2)"/>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:when test="substring($string,1,1) = '&#xa;'">
+            <text:line-break/>
+            <xsl:call-template name="explicit-space">
+                <xsl:with-param name="string" select="substring($string,2)"/>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="substring($string,1,1)" />
+            <xsl:call-template name="explicit-space">
+                <xsl:with-param name="string" select="substring($string,2)"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- ### -->
+<!-- URL -->
+<!-- ### -->
+<xsl:template match="url">
+    <!-- visible portion of HTML is the URL itself,   -->
+    <!-- formatted as code, or content of PTX element -->
+    <xsl:variable name="visible-text">
+        <xsl:choose>
+            <xsl:when test="not(*) and not(normalize-space())">
+                <xsl:variable name="the-element">
+                    <c>
+                        <xsl:value-of select="@href" />
+                    </c>
+                </xsl:variable>
+                <xsl:apply-templates select="exsl:node-set($the-element)/*" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- Normally in an active link, except inactive in titles -->
+    <xsl:choose>
+        <xsl:when test="ancestor::title|ancestor::shorttitle|ancestor::subtitle">
+            <xsl:copy-of select="$visible-text" />
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- class name identifies an external link -->
+            <text:a xlink:type="simple" xlink:href="{@href}">
+                <xsl:copy-of select="$visible-text" />
+            </text:a>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- ############# -->
 <!-- File building -->
 <!-- ############# -->
 
@@ -551,8 +680,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <style:font-face
                     style:name="Icon"
                     svg:font-family="&apos;Arial Unicode MS&apos;"
-                    style:font-family-generic="system"
+                    style:font-family-generic="decorative"
                     style:font-pitch="variable"
+                />
+                <style:font-face
+                    style:name="Code"
+                    svg:font-family="&apos;Courier New&apos;"
+                    style:font-family-generic="modern"
+                    style:font-pitch="fixed"
                 />
             </office:font-face-decls>
             <office:styles>
@@ -807,6 +942,35 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     >
                     <style:text-properties
                         style:text-position="super"
+                    />
+                </style:style>
+                <!-- Verbatim -->
+                <style:style
+                    style:name="C"
+                    style:family="text"
+                    >
+                    <style:text-properties
+                        style:font-name="Code"
+                        fo:background-color="#eeeeee"
+                    />
+                </style:style>
+                <style:style
+                    style:name="Cd"
+                    style:display-name="Code Display"
+                    style:family="paragraph"
+                    >
+                    <style:text-properties
+                        style:font-name="Code"
+                        fo:background-color="#eeeeee"
+                    />
+                </style:style>
+                <style:style
+                    style:name="Pre"
+                    style:display-name="Preformatted"
+                    style:family="paragraph"
+                    >
+                    <style:text-properties
+                        style:font-name="Code"
                     />
                 </style:style>
                 <!-- Footnote -->
