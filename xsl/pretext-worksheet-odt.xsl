@@ -628,6 +628,34 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- ################ -->
+<!-- Cross-references -->
+<!-- ################ -->
+<xsl:template match="*" mode="xref-link">
+    <xsl:param name="content" />
+    <xsl:param name="xref" />
+    <xsl:param name="b-human-readable" />
+    <xsl:copy-of select="$content" />
+</xsl:template>
+
+<xsl:template match="*" mode="xref-number">
+    <xsl:param name="xref" select="/.." />
+    <xsl:variable name="needs-part-prefix">
+        <xsl:apply-templates select="." mode="crosses-part-boundary">
+            <xsl:with-param name="xref" select="$xref" />
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:if test="$needs-part-prefix = 'true'">
+        <xsl:apply-templates select="ancestor::part" mode="serial-number" />
+        <xsl:text>.</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="." mode="number" />
+</xsl:template>
+
+<xsl:template match="mrow[@tag]" mode="xref-number">
+    <xsl:apply-templates select="@tag" mode="tag-symbol" />
+</xsl:template>
+
 <!-- ############# -->
 <!-- File building -->
 <!-- ############# -->

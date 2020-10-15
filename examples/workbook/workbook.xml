@@ -45,7 +45,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
         <chapter>
             <title>Workbook Example</title>
-            <section>
+            <section xml:id="section">
                 <title>Introduction</title>
                 <p>
                     This section gives the chapter enough structure so that we may give the chapter multiple worksheets.
@@ -59,7 +59,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <p>
                         This is an introduction paragraph before the exercises start.
                         It is long enough to wrap to a second line so we can see any indentation.
-                        <fn>The second footnote of the book is in the first worksheet.</fn>
+                        This worksheet follows <xref ref="section"/>,
+                        so that was a cross-reference to outside this worksheet.<fn>The second footnote of the book is in the first worksheet.</fn>
                     </p>
                     <p>
                         And a second paragraph.
@@ -70,11 +71,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         It is also has a lot of extra words in it so that it will be long enough to wrap to a second line so we can see any indentation.
                     </p>
                 </introduction>
-                <exercise>
+                <exercise xml:id="exercise">
                     <statement>
                         <p>
-                            This is the first exercise. Its first paragraph is so long that the text will wrap to the second line so that we can see any indentation.
-                            <fn>The third footnote of the book is also in the first worksheet.</fn>
+                            This is the first exercise. Its first paragraph is so long that the text will wrap to the second line
+                            so that we can see any indentation.<fn>The third footnote of the book is also in the first worksheet.</fn>
                         </p>
                         <p>
                             There is a second paragraph to see any indentation and any skip.
@@ -123,7 +124,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <exercise>
                     <statement>
                         <p>
-                            Miscellaneous: fillin <fillin characters="5"/>
+                            Miscellaneous: fillin <fillin characters="5"/>. Remember when we did <xref ref="exercise" text="type-local"/>? (A cross-reference to within this worksheet.)
                         </p>
                     </statement>
                 </exercise>
