@@ -9388,6 +9388,557 @@ the xsltproc executable.
                     </sidebyside>
                 </figure>
             </subsection>
+
+            <subsection xml:id="atomic-tabular">
+                <title><tag>tabular</tag></title>
+
+                <p>A <tag>tabular</tag> can be placed in six different ways:<ol>
+
+
+                    <li>all by itself, as a peer of <tag>p</tag> typically, with no layout control and hence with a <q>natural width,</q> and centered</li>
+                    <li>all by itself, as a peer of <tag>p</tag> typically, with explicit layout control,</li>
+                    <li>inside a <tag>table</tag>, earning a number and title,</li>
+                    <li>inside a <tag>sidebyside</tag>, with size and layout configured,</li>
+                    <li>inside a <tag>table</tag> inside a <tag>sidebyside</tag>, with size and layout configured, with a number and title, and</li>
+                    <li>inside a <tag>table</tag> inside a <tag>sidebyside</tag> inside a <tag>figure</tag>, with size and layout configured, with a number and title, but now sub-numbered ((a), (b), (c),<ellipsis/>).</li>
+                </ol>Examples of each, and more.</p>
+
+                <p>A <tag>tabular</tag> realized by <latex/> will normally be as wide as necessary to hold the content, without word-wrapping the content of any cell that is not explicitly authored that way.  So for <pretext/> output as <latex/>, when you explicitly constrain the width (including use as a panel of a <tag>sidebyside</tag>, or even setting margins) the table will be scaled, which can result in an apparent font size very different than the surrounding document.  [NOT SURE HOW HTML WILL BEHAVE]</p>
+
+                <p>Data in a table form can be placed in amongst a series of paragraphs.  With no layout control, it will occupy its <q>natural width</q> and be centered.</p>
+
+                <tabular>
+                    <row header="yes">
+                        <cell>State</cell>
+                        <cell>Population</cell>
+                        <cell>Area (sq. mi.)</cell>
+                        <cell>Statehood (Year)</cell>
+                    </row>
+                    <row>
+                        <cell>Washington</cell>
+                        <cell>7,614,893</cell>
+                        <cell>71,362</cell>
+                        <cell>1889</cell>
+                    </row>
+                    <row>
+                        <cell>Oregon</cell>
+                        <cell>4,217,737</cell>
+                        <cell>98,381</cell>
+                        <cell>1859</cell>
+                    </row>
+                    <row>
+                        <cell>California</cell>
+                        <cell>39,512,223</cell>
+                        <cell>163,696</cell>
+                        <cell>1850</cell>
+                    </row>
+                </tabular>
+
+                <p>The same effect can be had by specifying that the <attr>width</attr> attribute have the value <c>auto</c>, but do not specify any <attr>margins</attr>.</p>
+
+                <tabular width="auto">
+                    <row header="yes">
+                        <cell>State</cell>
+                        <cell>Population</cell>
+                        <cell>Area (sq. mi.)</cell>
+                        <cell>Statehood (Year)</cell>
+                    </row>
+                    <row>
+                        <cell>Washington</cell>
+                        <cell>7,614,893</cell>
+                        <cell>71,362</cell>
+                        <cell>1889</cell>
+                    </row>
+                    <row>
+                        <cell>Oregon</cell>
+                        <cell>4,217,737</cell>
+                        <cell>98,381</cell>
+                        <cell>1859</cell>
+                    </row>
+                    <row>
+                        <cell>California</cell>
+                        <cell>39,512,223</cell>
+                        <cell>163,696</cell>
+                        <cell>1850</cell>
+                    </row>
+                </tabular>
+
+                <p>In amongst a run of paragraphs (or similar) a <tag>tabular</tag> can be placed with layout control.  For <latex/> output, this will scale the table to fit within the explicit, or implicit, width.  This can result in obvious differences in the apparent font size.  We first have a <attr>width</attr> that is experimentally similar to the natural width, with asymetric margins.  Then a narrow width, and a wide width, as an illustration.</p>
+
+                <tabular width="81.61%">
+                    <row header="yes">
+                        <cell>State</cell>
+                        <cell>Population</cell>
+                        <cell>Area (sq. mi.)</cell>
+                        <cell>Statehood (Year)</cell>
+                    </row>
+                    <row>
+                        <cell>Washington</cell>
+                        <cell>7,614,893</cell>
+                        <cell>71,362</cell>
+                        <cell>1889</cell>
+                    </row>
+                    <row>
+                        <cell>Oregon</cell>
+                        <cell>4,217,737</cell>
+                        <cell>98,381</cell>
+                        <cell>1859</cell>
+                    </row>
+                    <row>
+                        <cell>California</cell>
+                        <cell>39,512,223</cell>
+                        <cell>163,696</cell>
+                        <cell>1850</cell>
+                    </row>
+                </tabular>
+
+                <p>Narrow.  45% width.  20% margin left, 35% margin right.</p>
+
+                <tabular width="45%" margins="20% 35%">
+                    <row header="yes">
+                        <cell>State</cell>
+                        <cell>Population</cell>
+                        <cell>Area (sq. mi.)</cell>
+                        <cell>Statehood (Year)</cell>
+                    </row>
+                    <row>
+                        <cell>Washington</cell>
+                        <cell>7,614,893</cell>
+                        <cell>71,362</cell>
+                        <cell>1889</cell>
+                    </row>
+                    <row>
+                        <cell>Oregon</cell>
+                        <cell>4,217,737</cell>
+                        <cell>98,381</cell>
+                        <cell>1859</cell>
+                    </row>
+                    <row>
+                        <cell>California</cell>
+                        <cell>39,512,223</cell>
+                        <cell>163,696</cell>
+                        <cell>1850</cell>
+                    </row>
+                </tabular>
+
+                <p>Wide.  97% width. 1% margin left, 2% right.</p>
+
+                <tabular width="97%"  margins="1% 2%">
+                    <row header="yes">
+                        <cell>State</cell>
+                        <cell>Population</cell>
+                        <cell>Area (sq. mi.)</cell>
+                        <cell>Statehood (Year)</cell>
+                    </row>
+                    <row>
+                        <cell>Washington</cell>
+                        <cell>7,614,893</cell>
+                        <cell>71,362</cell>
+                        <cell>1889</cell>
+                    </row>
+                    <row>
+                        <cell>Oregon</cell>
+                        <cell>4,217,737</cell>
+                        <cell>98,381</cell>
+                        <cell>1859</cell>
+                    </row>
+                    <row>
+                        <cell>California</cell>
+                        <cell>39,512,223</cell>
+                        <cell>163,696</cell>
+                        <cell>1850</cell>
+                    </row>
+                </tabular>
+
+                <p>Naturally, a <tag>tabular</tag> can be placed inside a <tag>table</tag>, earning a number and a title.</p>
+
+                <table>
+                    <title>Natural Width</title>
+                    <tabular>
+                        <row header="yes">
+                            <cell>State</cell>
+                            <cell>Population</cell>
+                            <cell>Area (sq. mi.)</cell>
+                            <cell>Statehood (Year)</cell>
+                        </row>
+                        <row>
+                            <cell>Washington</cell>
+                            <cell>7,614,893</cell>
+                            <cell>71,362</cell>
+                            <cell>1889</cell>
+                        </row>
+                        <row>
+                            <cell>Oregon</cell>
+                            <cell>4,217,737</cell>
+                            <cell>98,381</cell>
+                            <cell>1859</cell>
+                        </row>
+                        <row>
+                            <cell>California</cell>
+                            <cell>39,512,223</cell>
+                            <cell>163,696</cell>
+                            <cell>1850</cell>
+                        </row>
+                    </tabular>
+                </table>
+
+                <p>A little narrower, but still centered by default.</p>
+
+                <table>
+                    <title>Width of 60%, automatic centering</title>
+                    <tabular width="60%">
+                        <row header="yes">
+                            <cell>State</cell>
+                            <cell>Population</cell>
+                            <cell>Area (sq. mi.)</cell>
+                            <cell>Statehood (Year)</cell>
+                        </row>
+                        <row>
+                            <cell>Washington</cell>
+                            <cell>7,614,893</cell>
+                            <cell>71,362</cell>
+                            <cell>1889</cell>
+                        </row>
+                        <row>
+                            <cell>Oregon</cell>
+                            <cell>4,217,737</cell>
+                            <cell>98,381</cell>
+                            <cell>1859</cell>
+                        </row>
+                        <row>
+                            <cell>California</cell>
+                            <cell>39,512,223</cell>
+                            <cell>163,696</cell>
+                            <cell>1850</cell>
+                        </row>
+                    </tabular>
+                </table>
+
+
+                <p>Very narrow, asymmetric margins.</p>
+
+                <table>
+                    <title>Width of 30%, 30% left margin, 40% right margin</title>
+                    <tabular width="30%" margins="30% 40%">
+                        <row header="yes">
+                            <cell>State</cell>
+                            <cell>Population</cell>
+                            <cell>Area (sq. mi.)</cell>
+                            <cell>Statehood (Year)</cell>
+                        </row>
+                        <row>
+                            <cell>Washington</cell>
+                            <cell>7,614,893</cell>
+                            <cell>71,362</cell>
+                            <cell>1889</cell>
+                        </row>
+                        <row>
+                            <cell>Oregon</cell>
+                            <cell>4,217,737</cell>
+                            <cell>98,381</cell>
+                            <cell>1859</cell>
+                        </row>
+                        <row>
+                            <cell>California</cell>
+                            <cell>39,512,223</cell>
+                            <cell>163,696</cell>
+                            <cell>1850</cell>
+                        </row>
+                    </tabular>
+                </table>
+
+                <p>Wider than necessary, asymmetric margins.</p>
+
+                <table>
+                    <title>Width of 90%, 8% left margin, 2% right margin</title>
+                    <tabular width="90%" margins="8% 2%">
+                        <row header="yes">
+                            <cell>State</cell>
+                            <cell>Population</cell>
+                            <cell>Area (sq. mi.)</cell>
+                            <cell>Statehood (Year)</cell>
+                        </row>
+                        <row>
+                            <cell>Washington</cell>
+                            <cell>7,614,893</cell>
+                            <cell>71,362</cell>
+                            <cell>1889</cell>
+                        </row>
+                        <row>
+                            <cell>Oregon</cell>
+                            <cell>4,217,737</cell>
+                            <cell>98,381</cell>
+                            <cell>1859</cell>
+                        </row>
+                        <row>
+                            <cell>California</cell>
+                            <cell>39,512,223</cell>
+                            <cell>163,696</cell>
+                            <cell>1850</cell>
+                        </row>
+                    </tabular>
+                </table>
+
+                <p>Now into <tag>sidebyside</tag> in various ways and with various sizes. First, two <tag>tabular</tag> as panels with widths at 60% and 30%.</p>
+
+                <sidebyside widths="60% 30%">
+                    <tabular>
+                        <row header="yes">
+                            <cell>State</cell>
+                            <cell>Population</cell>
+                            <cell>Area (sq. mi.)</cell>
+                            <cell>Statehood (Year)</cell>
+                        </row>
+                        <row>
+                            <cell>Washington</cell>
+                            <cell>7,614,893</cell>
+                            <cell>71,362</cell>
+                            <cell>1889</cell>
+                        </row>
+                        <row>
+                            <cell>Oregon</cell>
+                            <cell>4,217,737</cell>
+                            <cell>98,381</cell>
+                            <cell>1859</cell>
+                        </row>
+                        <row>
+                            <cell>California</cell>
+                            <cell>39,512,223</cell>
+                            <cell>163,696</cell>
+                            <cell>1850</cell>
+                        </row>
+                    </tabular>
+                    <tabular>
+                        <row header="yes">
+                            <cell><m>x</m></cell>
+                            <cell><m>f(x)</m></cell>
+                        </row>
+                        <row>
+                            <cell>3</cell>
+                            <cell>9.734</cell>
+                        </row>
+                        <row>
+                            <cell>5</cell>
+                            <cell>2.175</cell>
+                        </row>
+                    </tabular>
+                </sidebyside>
+
+                <p>Let's do that again, but with widths experimentally set to make font sizes match.</p>
+
+                <sidebyside widths="81.61% 12.75%">
+                    <tabular>
+                        <row header="yes">
+                            <cell>State</cell>
+                            <cell>Population</cell>
+                            <cell>Area (sq. mi.)</cell>
+                            <cell>Statehood (Year)</cell>
+                        </row>
+                        <row>
+                            <cell>Washington</cell>
+                            <cell>7,614,893</cell>
+                            <cell>71,362</cell>
+                            <cell>1889</cell>
+                        </row>
+                        <row>
+                            <cell>Oregon</cell>
+                            <cell>4,217,737</cell>
+                            <cell>98,381</cell>
+                            <cell>1859</cell>
+                        </row>
+                        <row>
+                            <cell>California</cell>
+                            <cell>39,512,223</cell>
+                            <cell>163,696</cell>
+                            <cell>1850</cell>
+                        </row>
+                    </tabular>
+                    <tabular>
+                        <row header="yes">
+                            <cell><m>x</m></cell>
+                            <cell><m>f(x)</m></cell>
+                        </row>
+                        <row>
+                            <cell>3</cell>
+                            <cell>9.734</cell>
+                        </row>
+                        <row>
+                            <cell>5</cell>
+                            <cell>2.175</cell>
+                        </row>
+                    </tabular>
+                </sidebyside>
+
+                <p>Same tabular, which fills roughly 80% by itself, packed into a single <tag>sidebyside</tag> with just a 2% gap, and no side margins.</p>
+
+                <sidebyside widths="49% 49%" margins="0% 0%">
+                    <tabular left="medium" top="medium">
+                        <col/>
+                        <col/>
+                        <col/>
+                        <col right="medium"/>
+                        <row header="yes">
+                            <cell>State</cell>
+                            <cell>Population</cell>
+                            <cell>Area (sq. mi.)</cell>
+                            <cell>Statehood (Year)</cell>
+                        </row>
+                        <row>
+                            <cell>Washington</cell>
+                            <cell>7,614,893</cell>
+                            <cell>71,362</cell>
+                            <cell>1889</cell>
+                        </row>
+                        <row>
+                            <cell>Oregon</cell>
+                            <cell>4,217,737</cell>
+                            <cell>98,381</cell>
+                            <cell>1859</cell>
+                        </row>
+                        <row bottom="medium">
+                            <cell>California</cell>
+                            <cell>39,512,223</cell>
+                            <cell>163,696</cell>
+                            <cell>1850</cell>
+                        </row>
+                    </tabular>
+                    <tabular left="medium" top="medium">
+                        <col/>
+                        <col/>
+                        <col/>
+                        <col right="medium"/>
+                        <row header="yes">
+                            <cell>State</cell>
+                            <cell>Population</cell>
+                            <cell>Area (sq. mi.)</cell>
+                            <cell>Statehood (Year)</cell>
+                        </row>
+                        <row>
+                            <cell>Washington</cell>
+                            <cell>7,614,893</cell>
+                            <cell>71,362</cell>
+                            <cell>1889</cell>
+                        </row>
+                        <row>
+                            <cell>Oregon</cell>
+                            <cell>4,217,737</cell>
+                            <cell>98,381</cell>
+                            <cell>1859</cell>
+                        </row>
+                        <row bottom="medium">
+                            <cell>California</cell>
+                            <cell>39,512,223</cell>
+                            <cell>163,696</cell>
+                            <cell>1850</cell>
+                        </row>
+                    </tabular>
+                </sidebyside>
+
+                <p>Natural widths, but now as a pair of tables.</p>
+
+                <sidebyside widths="81.61% 12.75%">
+                    <table>
+                        <title>West Coast</title>
+                        <tabular>
+                            <row header="yes">
+                                <cell>State</cell>
+                                <cell>Population</cell>
+                                <cell>Area (sq. mi.)</cell>
+                                <cell>Statehood (Year)</cell>
+                            </row>
+                            <row>
+                                <cell>Washington</cell>
+                                <cell>7,614,893</cell>
+                                <cell>71,362</cell>
+                                <cell>1889</cell>
+                            </row>
+                            <row>
+                                <cell>Oregon</cell>
+                                <cell>4,217,737</cell>
+                                <cell>98,381</cell>
+                                <cell>1859</cell>
+                            </row>
+                            <row>
+                                <cell>California</cell>
+                                <cell>39,512,223</cell>
+                                <cell>163,696</cell>
+                                <cell>1850</cell>
+                            </row>
+                        </tabular>
+                    </table>
+                    <table>
+                        <title>Function Values</title>
+                        <tabular>
+                            <row header="yes">
+                                <cell><m>x</m></cell>
+                                <cell><m>f(x)</m></cell>
+                            </row>
+                            <row>
+                                <cell>3</cell>
+                                <cell>9.734</cell>
+                            </row>
+                            <row>
+                                <cell>5</cell>
+                                <cell>2.175</cell>
+                            </row>
+                        </tabular>
+                    </table>
+                </sidebyside>
+
+                <p>Finally, as two individual <tag>table</tag>, grouped and laid out via a <tag>sidebyside</tag>, and collected as a <tag>figure</tag>.  Which causes sub-numbering of the enclosed <tag>table</tag>.</p>
+
+                <figure>
+                    <caption>Geography and Mathematics</caption>
+                    <sidebyside widths="81.61% 12.75%">
+                        <table>
+                            <title>West Coast</title>
+                            <tabular>
+                                <row header="yes">
+                                    <cell>State</cell>
+                                    <cell>Population</cell>
+                                    <cell>Area (sq. mi.)</cell>
+                                    <cell>Statehood (Year)</cell>
+                                </row>
+                                <row>
+                                    <cell>Washington</cell>
+                                    <cell>7,614,893</cell>
+                                    <cell>71,362</cell>
+                                    <cell>1889</cell>
+                                </row>
+                                <row>
+                                    <cell>Oregon</cell>
+                                    <cell>4,217,737</cell>
+                                    <cell>98,381</cell>
+                                    <cell>1859</cell>
+                                </row>
+                                <row>
+                                    <cell>California</cell>
+                                    <cell>39,512,223</cell>
+                                    <cell>163,696</cell>
+                                    <cell>1850</cell>
+                                </row>
+                            </tabular>
+                        </table>
+                        <table>
+                            <title>Function Values</title>
+                            <tabular>
+                                <row header="yes">
+                                    <cell><m>x</m></cell>
+                                    <cell><m>f(x)</m></cell>
+                                </row>
+                                <row>
+                                    <cell>3</cell>
+                                    <cell>9.734</cell>
+                                </row>
+                                <row>
+                                    <cell>5</cell>
+                                    <cell>2.175</cell>
+                                </row>
+                            </tabular>
+                        </table>
+                    </sidebyside>
+                </figure>
+            </subsection>
         </section>
 
         <section xml:id="advanced-numbering">
