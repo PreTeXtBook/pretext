@@ -8635,9 +8635,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>}%&#xa;</xsl:text>
     <!-- images have margins and widths, so centering not needed -->
+    <!-- likewise, sidebyside and tabular will center themselves -->
     <!-- Eventually everything in a figure should control itself -->
-    <!-- or be flush left (or so)                                -->
-    <xsl:if test="self::figure and not(image)">
+    <!-- TODO: need to investigate more (poem? etc)              -->
+    <xsl:if test="self::figure and not(image or sidebyside or tabular)">
         <xsl:text>\centering&#xa;</xsl:text>
     </xsl:if>
     <!-- TODO: process meta-data, then restrict contents -->
