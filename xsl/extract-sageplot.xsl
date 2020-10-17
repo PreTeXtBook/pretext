@@ -44,8 +44,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:output method="text" />
 
 <!-- Sage graphics to standalone Sage/Python file      -->
-<!-- 2015/02/08: Deprecated, still functional but not maintained -->
-<xsl:template match="image/sageplot">
+<xsl:template match="image/sageplot" mode="extraction">
     <!-- has one trailing newline, which we ignore later (?) -->
     <xsl:variable name="plot-code-sanitary">
         <xsl:call-template name="sanitize-text">
@@ -121,7 +120,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Deprecated Graphics Code Templates -->
 <!-- ################################## -->
 <!-- 2015/02/08: Deprecated, still functional but not maintained -->
-<xsl:template match="sageplot">
+<!-- 2020/10/16: remove "image/sageplot" parent in real          -->
+<!-- template, once this one is *really* removed                 -->
+<xsl:template match="sageplot" mode="extraction">
     <!-- has one trailing newline, which we ignore later (?) -->
     <xsl:variable name="plot-code">
         <xsl:call-template name="sanitize-text">
