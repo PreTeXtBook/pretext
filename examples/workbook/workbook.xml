@@ -308,7 +308,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <ol label="A">
                                 <li>
                                     <p>
-                                        Again, the the default label style is overruled in this next list.
+                                        Again, the default label style is overruled in this next list.
                                         <ol label="I">
                                             <li>
                                                 <title>A Title</title>

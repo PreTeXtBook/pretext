@@ -47,6 +47,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Intend output is xml for an Open Document Text package (.odt file) -->
 <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes" />
 
+<!-- ################ -->
+<!-- Design variables -->
+<!-- ################ -->
+
+<!-- This length is used repeatedly for indentations   -->
+<!-- 0.34745in is 5ex in 12pt Latin Modern Roman       -->
+<!-- We must do arithmetic on this, like multiply by 2 -->
+<!-- So we put "in" in a separate variable             -->
+<xsl:variable name="design-indent" select="0.34745" />
+<xsl:variable name="design-unit" select="'in'" />
+
+
 
 <!-- ############## -->
 <!-- Entry Template -->
@@ -903,23 +915,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     style:font-family-generic="roman"
                     style:font-pitch="variable"
                 />
-                <style:font-face
-                    style:name="TeX"
-                    svg:font-family="&apos;Latin Modern Roman&apos;"
-                    style:font-family-generic="roman"
-                />
-                <style:font-face
-                    style:name="Icon"
-                    svg:font-family="&apos;Arial Unicode MS&apos;"
-                    style:font-family-generic="decorative"
-                    style:font-pitch="variable"
-                />
-                <style:font-face
-                    style:name="Code"
-                    svg:font-family="&apos;Courier New&apos;"
-                    style:font-family-generic="modern"
-                    style:font-pitch="fixed"
-                />
+                <xsl:if test="$document-root//tex|$document-root//latex">
+                    <style:font-face
+                        style:name="TeX"
+                        svg:font-family="&apos;Latin Modern Roman&apos;"
+                        style:font-family-generic="roman"
+                    />
+                </xsl:if>
+                <xsl:if test="$document-root//icon">
+                    <style:font-face
+                        style:name="Icon"
+                        svg:font-family="&apos;Arial Unicode MS&apos;"
+                        style:font-family-generic="decorative"
+                        style:font-pitch="variable"
+                    />
+                </xsl:if>
+                <xsl:if test="$document-root//c|$document-root//cd|$document-root//tag|$document-root//tage|$document-root//attr|$document-root//url">
+                    <style:font-face
+                        style:name="Code"
+                        svg:font-family="&apos;Courier New&apos;"
+                        style:font-family-generic="modern"
+                        style:font-pitch="fixed"
+                    />
+                </xsl:if>
             </office:font-face-decls>
             <office:styles>
                 <style:default-style style:family="paragraph">
@@ -978,222 +996,272 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     />
                 </style:style>
                 <!-- Groupings -->
-                <style:style
-                    style:name="Abbr"
-                    style:family="text"
-                />
-                <style:style
-                    style:name="Acro"
-                    style:family="text"
-                />
-                <style:style
-                    style:name="Init"
-                    style:family="text"
-                />
-                <style:style
-                    style:name="Emphasis"
-                    style:family="text"
-                    >
-                    <style:text-properties
-                        fo:font-style="italic"
+                <xsl:if test="$document-root//abbr">
+                    <style:style
+                        style:name="Abbr"
+                        style:family="text"
                     />
-                </style:style>
-                <style:style
-                    style:name="Term"
-                    style:family="text"
-                    >
-                    <style:text-properties
-                        fo:font-weight="bold"
+                </xsl:if>
+                <xsl:if test="$document-root//acro">
+                    <style:style
+                        style:name="Acro"
+                        style:family="text"
                     />
-                </style:style>
-                <style:style
-                    style:name="Alert"
-                    style:family="text"
-                    >
-                    <style:text-properties
-                        fo:font-style="italic"
-                        fo:font-weight="bold"
+                </xsl:if>
+                <xsl:if test="$document-root//init">
+                    <style:style
+                        style:name="Init"
+                        style:family="text"
                     />
-                </style:style>
-                <style:style
-                    style:name="Pubtitle"
-                    style:family="text"
-                    >
-                    <style:text-properties
-                        fo:font-style="oblique"
+                </xsl:if>
+                <xsl:if test="$document-root//em">
+                    <style:style
+                        style:name="Emphasis"
+                        style:family="text"
+                        >
+                        <style:text-properties
+                            fo:font-style="italic"
+                        />
+                    </style:style>
+                </xsl:if>
+                <xsl:if test="$document-root//term">
+                    <style:style
+                        style:name="Term"
+                        style:family="text"
+                        >
+                        <style:text-properties
+                            fo:font-weight="bold"
+                        />
+                    </style:style>
+                </xsl:if>
+                <xsl:if test="$document-root//alert">
+                    <style:style
+                        style:name="Alert"
+                        style:family="text"
+                        >
+                        <style:text-properties
+                            fo:font-style="italic"
+                            fo:font-weight="bold"
+                        />
+                    </style:style>
+                </xsl:if>
+                <xsl:if test="$document-root//pubtitle">
+                    <style:style
+                        style:name="Pubtitle"
+                        style:family="text"
+                        >
+                        <style:text-properties
+                            fo:font-style="oblique"
+                        />
+                    </style:style>
+                </xsl:if>
+                <xsl:if test="$document-root//articletitle">
+                    <style:style
+                        style:name="Articletitle"
+                        style:family="text"
+                        >
+                    </style:style>
+                </xsl:if>
+                <xsl:if test="$document-root//foreign">
+                    <style:style
+                        style:name="Foreign"
+                        style:family="text"
+                        >
+                        <style:text-properties
+                            fo:font-style="italic"
+                        />
+                    </style:style>
+                </xsl:if>
+                <xsl:if test="$document-root//delete">
+                    <style:style
+                        style:name="Delete"
+                        style:family="text"
+                        >
+                        <style:text-properties
+                            style:text-line-through-style="solid"
+                        />
+                    </style:style>
+                </xsl:if>
+                <xsl:if test="$document-root//insert">
+                    <style:style
+                        style:name="Insert"
+                        style:family="text"
+                        >
+                        <style:text-properties
+                            style:text-underline-style="solid"
+                        />
+                    </style:style>
+                </xsl:if>
+                <xsl:if test="$document-root//stale">
+                    <style:style
+                        style:name="Stale"
+                        style:family="text"
+                        >
+                        <style:text-properties
+                            style:text-line-through-style="solid"
+                        />
+                    </style:style>
+                </xsl:if>
+                <xsl:if test="$document-root//taxon">
+                    <style:style
+                        style:name="Taxon"
+                        style:family="text"
+                        >
+                        <style:text-properties
+                            fo:font-style="italic"
+                        />
+                    </style:style>
+                </xsl:if>
+                <xsl:if test="$document-root//genus">
+                    <style:style
+                        style:name="Genus"
+                        style:family="text"
+                        >
+                        <style:text-properties
+                        />
+                    </style:style>
+                </xsl:if>
+                <xsl:if test="$document-root//species">
+                    <style:style
+                        style:name="Species"
+                        style:family="text"
+                        >
+                        <style:text-properties
+                        />
+                    </style:style>
+                    <style:style
+                        style:name="Email"
+                        style:family="text"
                     />
-                </style:style>
-                <style:style
-                    style:name="Articletitle"
-                    style:family="text"
-                    >
-                </style:style>
-                <style:style
-                    style:name="Foreign"
-                    style:family="text"
-                    >
-                    <style:text-properties
-                        fo:font-style="italic"
-                    />
-                </style:style>
-                <style:style
-                    style:name="Delete"
-                    style:family="text"
-                    >
-                    <style:text-properties
-                        style:text-line-through-style="solid"
-                    />
-                </style:style>
-                <style:style
-                    style:name="Insert"
-                    style:family="text"
-                    >
-                    <style:text-properties
-                        style:text-underline-style="solid"
-                    />
-                </style:style>
-                <style:style
-                    style:name="Stale"
-                    style:family="text"
-                    >
-                    <style:text-properties
-                        style:text-line-through-style="solid"
-                    />
-                </style:style>
-                <style:style
-                    style:name="Taxon"
-                    style:family="text"
-                    >
-                    <style:text-properties
-                        fo:font-style="italic"
-                    />
-                </style:style>
-                <style:style
-                    style:name="Genus"
-                    style:family="text"
-                    >
-                    <style:text-properties
-                    />
-                </style:style>
-                <style:style
-                    style:name="Species"
-                    style:family="text"
-                    >
-                    <style:text-properties
-                    />
-                </style:style>
-                <style:style
-                    style:name="Email"
-                    style:family="text"
-                />
+                </xsl:if>
                 <!-- Icons -->
-                <style:style
-                    style:name="Icon"
-                    style:family="text"
-                    >
-                    <style:text-properties
-                        style:font-name="Icon"
-                    />
-                </style:style>
+                <xsl:if test="$document-root//icon">
+                    <style:style
+                        style:name="Icon"
+                        style:family="text"
+                        >
+                        <style:text-properties
+                            style:font-name="Icon"
+                        />
+                    </style:style>
+                </xsl:if>
                 <!-- Generators -->
-                <style:style
-                    style:name="TeX"
-                    style:family="text"
-                    >
-                    <style:text-properties
-                        style:font-name="TeX"
-                        fo:letter-spacing="-0.01951in"
-                    />
-                </style:style>
-                <style:style
-                    style:name="E"
-                    style:family="text"
-                    style:parent-style-name="TeX"
-                    >
-                    <style:text-properties
-                        style:text-position="-21.5% 100%"
-                    />
-                </style:style>
-                <style:style
-                    style:name="A"
-                    style:family="text"
-                    style:parent-style-name="TeX"
-                    >
-                    <style:text-properties
-                        style:text-position="21.5% 75%"
-                    />
-                </style:style>
+                <xsl:if test="$document-root//tex|$document-root//latex">
+                    <style:style
+                        style:name="TeX"
+                        style:family="text"
+                        >
+                        <style:text-properties
+                            style:font-name="TeX"
+                            fo:letter-spacing="-0.01951in"
+                        />
+                    </style:style>
+                </xsl:if>
+                <xsl:if test="$document-root//tex|$document-root//latex">
+                    <style:style
+                        style:name="E"
+                        style:family="text"
+                        style:parent-style-name="TeX"
+                        >
+                        <style:text-properties
+                            style:text-position="-21.5% 100%"
+                        />
+                    </style:style>
+                </xsl:if>
+                <xsl:if test="$document-root//latex">
+                    <style:style
+                        style:name="A"
+                        style:family="text"
+                        style:parent-style-name="TeX"
+                        >
+                        <style:text-properties
+                            style:text-position="21.5% 75%"
+                        />
+                    </style:style>
+                </xsl:if>
                 <!-- Fillin -->
-                <style:style
-                    style:name="Fillin"
-                    style:family="text"
-                    >
-                    <style:text-properties
-                        style:text-underline-style="solid"
-                        style:text-underline-width="auto"
-                        style:text-underline-color="font-color"
-                    />
-                </style:style>
+                <xsl:if test="$document-root//fillin">
+                    <style:style
+                        style:name="Fillin"
+                        style:family="text"
+                        >
+                        <style:text-properties
+                            style:text-underline-style="solid"
+                            style:text-underline-width="auto"
+                            style:text-underline-color="font-color"
+                        />
+                    </style:style>
+                </xsl:if>
                 <!-- Quantity -->
-                <style:style
-                    style:name="Quantity"
-                    style:family="text"
-                />
-                <style:style
-                    style:name="Super"
-                    style:family="text"
-                    >
-                    <style:text-properties
-                        style:text-position="super"
+                <xsl:if test="$document-root//quantity">
+                    <style:style
+                        style:name="Quantity"
+                        style:family="text"
                     />
-                </style:style>
+                    <style:style
+                        style:name="Super"
+                        style:family="text"
+                        >
+                        <style:text-properties
+                            style:text-position="super"
+                        />
+                    </style:style>
+                </xsl:if>
                 <!-- Verbatim -->
-                <style:style
-                    style:name="C"
-                    style:family="text"
-                    >
-                    <style:text-properties
-                        style:font-name="Code"
-                        fo:background-color="#eeeeee"
-                    />
-                </style:style>
-                <style:style
-                    style:name="Cd"
-                    style:display-name="Code Display"
-                    style:family="paragraph"
-                    >
-                    <style:text-properties
-                        style:font-name="Code"
-                        fo:background-color="#eeeeee"
-                    />
-                </style:style>
-                <style:style
-                    style:name="Pre"
-                    style:display-name="Preformatted"
-                    style:family="paragraph"
-                    >
-                    <style:text-properties
-                        style:font-name="Code"
-                    />
-                </style:style>
+                <xsl:if test="$document-root//c">
+                    <style:style
+                        style:name="C"
+                        style:family="text"
+                        >
+                        <style:text-properties
+                            style:font-name="Code"
+                            fo:background-color="#eeeeee"
+                        />
+                    </style:style>
+                </xsl:if>
+                <xsl:if test="$document-root//cd">
+                    <style:style
+                        style:name="Cd"
+                        style:display-name="Code Display"
+                        style:family="paragraph"
+                        >
+                        <style:text-properties
+                            style:font-name="Code"
+                            fo:background-color="#eeeeee"
+                        />
+                    </style:style>
+                </xsl:if>
+                <xsl:if test="$document-root//pre">
+                    <style:style
+                        style:name="Pre"
+                        style:display-name="Preformatted"
+                        style:family="paragraph"
+                        >
+                        <style:text-properties
+                            style:font-name="Code"
+                        />
+                    </style:style>
+                </xsl:if>
                 <!-- Footnote -->
-                <style:style
-                    style:name="Footnote"
-                    style:family="paragraph"
-                    style:parent-style-name="P"
-                    >
-                    <style:paragraph-properties
-                        fo:margin-left="0.2354in"
-                        fo:margin-right="0in"
-                        fo:text-indent="-0.2354in"
-                        style:auto-text-indent="false"
-                        text:number-lines="false"
-                        text:line-number="0"
-                    />
-                    <style:text-properties
-                        fo:font-size="10pt"
-                    />
-                </style:style>
+                <xsl:if test="$document-root//fn">
+                    <style:style
+                        style:name="Footnote"
+                        style:family="paragraph"
+                        style:parent-style-name="P"
+                        >
+                        <style:paragraph-properties
+                            fo:margin-left="0.2354in"
+                            fo:margin-right="0in"
+                            fo:text-indent="-0.2354in"
+                            style:auto-text-indent="false"
+                            text:number-lines="false"
+                            text:line-number="0"
+                        />
+                        <style:text-properties
+                            fo:font-size="10pt"
+                        />
+                    </style:style>
+                </xsl:if>
                 <!-- Headings -->
                 <!-- First, very generic heading styling -->
                 <style:style
@@ -1305,263 +1373,274 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <style:list-level-properties
                             text:list-level-position-and-space-mode="label-alignment"
                             >
-                            <!-- 0.34745in is 5ex in 12pt Latin Modern Roman -->
                             <style:list-level-label-alignment
                                 text:label-followed-by="listtab"
-                                text:list-tab-stop-position="0.34745in"
-                                fo:text-indent="-0.34745in"
-                                fo:margin-left="0.34745in"
+                                text:list-tab-stop-position="{$design-indent}{$design-unit}"
+                                fo:text-indent="-{$design-indent}{$design-unit}"
+                                fo:margin-left="{$design-indent}{$design-unit}"
                             />
                         </style:list-level-properties>
                     </text:list-level-style-number>
-                    <text:list-level-style-number
-                        text:level="2"
-                        text:style-name="List_Numbering"
-                        style:num-prefix="("
-                        style:num-suffix=")"
-                        style:num-format="a"
-                        >
-                        <style:list-level-properties
-                            text:list-level-position-and-space-mode="label-alignment"
+                    <xsl:if test="exercise//ol">
+                        <text:list-level-style-number
+                            text:level="2"
+                            text:style-name="List_Numbering"
+                            style:num-prefix="("
+                            style:num-suffix=")"
+                            style:num-format="a"
                             >
-                            <style:list-level-label-alignment
-                                text:label-followed-by="listtab"
-                                text:list-tab-stop-position="0.6949in"
-                                fo:text-indent="-0.34745in"
-                                fo:margin-left="0.6949in"
-                            />
-                        </style:list-level-properties>
-                    </text:list-level-style-number>
-                    <text:list-level-style-number
-                        text:level="3"
-                        text:style-name="List_Numbering"
-                        style:num-suffix="."
-                        style:num-format="i"
-                        >
-                        <style:list-level-properties
-                            text:list-level-position-and-space-mode="label-alignment"
+                            <style:list-level-properties
+                                text:list-level-position-and-space-mode="label-alignment"
+                                >
+                                <style:list-level-label-alignment
+                                    text:label-followed-by="listtab"
+                                    text:list-tab-stop-position="{2 * $design-indent}{$design-unit}"
+                                    fo:text-indent="-{$design-indent}{$design-unit}"
+                                    fo:margin-left="{2 * $design-indent}{$design-unit}"
+                                />
+                            </style:list-level-properties>
+                        </text:list-level-style-number>
+                        <text:list-level-style-number
+                            text:level="3"
+                            text:style-name="List_Numbering"
+                            style:num-suffix="."
+                            style:num-format="i"
                             >
-                            <style:list-level-label-alignment
-                                text:label-followed-by="listtab"
-                                text:list-tab-stop-position="1.04235in"
-                                fo:text-indent="-0.34745in"
-                                fo:margin-left="1.04235in"
-                            />
-                        </style:list-level-properties>
-                    </text:list-level-style-number>
-                    <text:list-level-style-number
-                        text:level="4"
-                        text:style-name="List_Numbering"
-                        style:num-suffix="."
-                        style:num-format="A"
-                        >
-                        <style:list-level-properties
-                            text:list-level-position-and-space-mode="label-alignment"
+                            <style:list-level-properties
+                                text:list-level-position-and-space-mode="label-alignment"
+                                >
+                                <style:list-level-label-alignment
+                                    text:label-followed-by="listtab"
+                                    text:list-tab-stop-position="{3 * $design-indent}{$design-unit}"
+                                    fo:text-indent="-{$design-indent}{$design-unit}"
+                                    fo:margin-left="{3 * $design-indent}{$design-unit}"
+                                />
+                            </style:list-level-properties>
+                        </text:list-level-style-number>
+                        <text:list-level-style-number
+                            text:level="4"
+                            text:style-name="List_Numbering"
+                            style:num-suffix="."
+                            style:num-format="A"
                             >
-                            <style:list-level-label-alignment
-                                text:label-followed-by="listtab"
-                                text:list-tab-stop-position="1.3898in"
-                                fo:text-indent="-0.34745in"
-                                fo:margin-left="1.3898in"
-                            />
-                        </style:list-level-properties>
-                    </text:list-level-style-number>
+                            <style:list-level-properties
+                                text:list-level-position-and-space-mode="label-alignment"
+                                >
+                                <style:list-level-label-alignment
+                                    text:label-followed-by="listtab"
+                                    text:list-tab-stop-position="{4 * $design-indent}{$design-unit}"
+                                    fo:text-indent="-{$design-indent}{$design-unit}"
+                                    fo:margin-left="{4 * $design-indent}{$design-unit}"
+                                />
+                            </style:list-level-properties>
+                        </text:list-level-style-number>
+                    </xsl:if>
                 </text:list-style>
-                <text:list-style
-                    style:name="List"
-                    >
-                    <text:list-level-style-number
-                        text:level="1"
-                        text:style-name="List_Numbering"
-                        style:num-prefix="("
-                        style:num-suffix=")"
-                        style:num-format="a"
+                <!-- Styling for a list in the introduction or conclusion -->
+                <xsl:if test="$document-root//ol[not(ancestor::exercise)]">
+                    <text:list-style
+                        style:name="List"
                         >
-                        <style:list-level-properties
-                            text:list-level-position-and-space-mode="label-alignment"
+                        <text:list-level-style-number
+                            text:level="1"
+                            text:style-name="List_Numbering"
+                            style:num-prefix="("
+                            style:num-suffix=")"
+                            style:num-format="a"
                             >
-                            <!-- 0.34745in is 5ex in 12pt Latin Modern Roman -->
-                            <style:list-level-label-alignment
-                                text:label-followed-by="listtab"
-                                text:list-tab-stop-position="0.34745in"
-                                fo:text-indent="-0.34745in"
-                                fo:margin-left="0.6949in"
-                            />
-                        </style:list-level-properties>
-                    </text:list-level-style-number>
-                    <text:list-level-style-number
-                        text:level="2"
-                        text:style-name="List_Numbering"
-                        style:num-suffix="."
-                        style:num-format="i"
+                            <style:list-level-properties
+                                text:list-level-position-and-space-mode="label-alignment"
+                                >
+                                <!-- 0.34745in is 5ex in 12pt Latin Modern Roman -->
+                                <style:list-level-label-alignment
+                                    text:label-followed-by="listtab"
+                                    text:list-tab-stop-position="{$design-indent}{$design-unit}"
+                                    fo:text-indent="-{$design-indent}{$design-unit}"
+                                    fo:margin-left="{2 * $design-indent}{$design-unit}"
+                                />
+                            </style:list-level-properties>
+                        </text:list-level-style-number>
+                        <text:list-level-style-number
+                            text:level="2"
+                            text:style-name="List_Numbering"
+                            style:num-suffix="."
+                            style:num-format="i"
+                            >
+                            <style:list-level-properties
+                                text:list-level-position-and-space-mode="label-alignment"
+                                >
+                                <style:list-level-label-alignment
+                                    text:label-followed-by="listtab"
+                                    text:list-tab-stop-position="{2 * $design-indent}{$design-unit}"
+                                    fo:text-indent="-{$design-indent}{$design-unit}"
+                                    fo:margin-left="{3 * $design-indent}{$design-unit}"
+                                />
+                            </style:list-level-properties>
+                        </text:list-level-style-number>
+                        <text:list-level-style-number
+                            text:level="3"
+                            text:style-name="List_Numbering"
+                            style:num-suffix="."
+                            style:num-format="A"
+                            >
+                            <style:list-level-properties
+                                text:list-level-position-and-space-mode="label-alignment"
+                                >
+                                <style:list-level-label-alignment
+                                    text:label-followed-by="listtab"
+                                    text:list-tab-stop-position="{3 * $design-indent}{$design-unit}"
+                                    fo:text-indent="-{$design-indent}{$design-unit}"
+                                    fo:margin-left="{4 * $design-indent}{$design-unit}"
+                                />
+                            </style:list-level-properties>
+                        </text:list-level-style-number>
+                    </text:list-style>
+                </xsl:if>
+                <!-- styling for an unordered list not in an exercise -->
+                <xsl:if test="$document-root//ul[not(ancestor::exercise)]">
+                    <text:list-style
+                        style:name="Unordered"
                         >
-                        <style:list-level-properties
-                            text:list-level-position-and-space-mode="label-alignment"
+                        <text:list-level-style-bullet
+                            text:level="1"
+                            text:style-name="List_Numbering"
+                            text:bullet-char="•"
                             >
-                            <style:list-level-label-alignment
-                                text:label-followed-by="listtab"
-                                text:list-tab-stop-position="0.6949in"
-                                fo:text-indent="-0.34745in"
-                                fo:margin-left="1.04235in"
-                            />
-                        </style:list-level-properties>
-                    </text:list-level-style-number>
-                    <text:list-level-style-number
-                        text:level="3"
-                        text:style-name="List_Numbering"
-                        style:num-suffix="."
-                        style:num-format="A"
+                            <style:list-level-properties
+                                text:list-level-position-and-space-mode="label-alignment"
+                                >
+                                <!-- 0.34745in is 5ex in 12pt Latin Modern Roman -->
+                                <style:list-level-label-alignment
+                                    text:label-followed-by="listtab"
+                                    text:list-tab-stop-position="{2 * $design-indent}{$design-unit}"
+                                    fo:text-indent="-{$design-indent}{$design-unit}"
+                                    fo:margin-left="{2 * $design-indent}{$design-unit}"
+                                />
+                            </style:list-level-properties>
+                        </text:list-level-style-bullet>
+                        <text:list-level-style-bullet
+                            text:level="2"
+                            text:style-name="List_Numbering"
+                            text:bullet-char="◦"
+                            >
+                            <style:list-level-properties
+                                text:list-level-position-and-space-mode="label-alignment"
+                                >
+                                <style:list-level-label-alignment
+                                    text:label-followed-by="listtab"
+                                    text:list-tab-stop-position="{3 * $design-indent}{$design-unit}"
+                                    fo:text-indent="-{$design-indent}{$design-unit}"
+                                    fo:margin-left="{3 * $design-indent}{$design-unit}"
+                                />
+                            </style:list-level-properties>
+                        </text:list-level-style-bullet>
+                        <text:list-level-style-bullet
+                            text:level="3"
+                            text:style-name="List_Numbering"
+                            text:bullet-char="■"
+                            >
+                            <style:list-level-properties
+                                text:list-level-position-and-space-mode="label-alignment"
+                                >
+                                <style:list-level-label-alignment
+                                    text:label-followed-by="listtab"
+                                    text:list-tab-stop-position="{4 * $design-indent}{$design-unit}"
+                                    fo:text-indent="-{$design-indent}{$design-unit}"
+                                    fo:margin-left="{4 * $design-indent}{$design-unit}"
+                                />
+                            </style:list-level-properties>
+                        </text:list-level-style-bullet>
+                        <text:list-level-style-bullet
+                            text:level="4"
+                            text:style-name="List_Numbering"
+                            text:bullet-char="•"
+                            >
+                            <style:list-level-properties
+                                text:list-level-position-and-space-mode="label-alignment"
+                                >
+                                <style:list-level-label-alignment
+                                    text:label-followed-by="listtab"
+                                    text:list-tab-stop-position="{5 * $design-indent}{$design-unit}"
+                                    fo:text-indent="-{$design-indent}{$design-unit}"
+                                    fo:margin-left="{5 * $design-indent}{$design-unit}"
+                                />
+                            </style:list-level-properties>
+                        </text:list-level-style-bullet>
+                    </text:list-style>
+                </xsl:if>
+                <!-- styling for an unordered list not in an exercise -->
+                <xsl:if test="$document-root//ul[ancestor::exercise]">
+                    <text:list-style
+                        style:name="Exercises-unordered"
                         >
-                        <style:list-level-properties
-                            text:list-level-position-and-space-mode="label-alignment"
+                        <text:list-level-style-bullet
+                            text:level="2"
+                            text:style-name="List_Numbering"
+                            text:bullet-char="•"
                             >
-                            <style:list-level-label-alignment
-                                text:label-followed-by="listtab"
-                                text:list-tab-stop-position="1.04235in"
-                                fo:text-indent="-0.34745in"
-                                fo:margin-left="1.3898in"
-                            />
-                        </style:list-level-properties>
-                    </text:list-level-style-number>
-                </text:list-style>
-                <text:list-style
-                    style:name="Unordered"
-                    >
-                    <text:list-level-style-bullet
-                        text:level="1"
-                        text:style-name="List_Numbering"
-                        text:bullet-char="•"
-                        >
-                        <style:list-level-properties
-                            text:list-level-position-and-space-mode="label-alignment"
+                            <style:list-level-properties
+                                text:list-level-position-and-space-mode="label-alignment"
+                                >
+                                <!-- 0.34745in is 5ex in 12pt Latin Modern Roman -->
+                                <style:list-level-label-alignment
+                                    text:label-followed-by="listtab"
+                                    text:list-tab-stop-position="{2 * $design-indent}{$design-unit}"
+                                    fo:text-indent="-{$design-indent}{$design-unit}"
+                                    fo:margin-left="{2 * $design-indent}{$design-unit}"
+                                />
+                            </style:list-level-properties>
+                        </text:list-level-style-bullet>
+                        <text:list-level-style-bullet
+                            text:level="3"
+                            text:style-name="List_Numbering"
+                            text:bullet-char="◦"
                             >
-                            <!-- 0.34745in is 5ex in 12pt Latin Modern Roman -->
-                            <style:list-level-label-alignment
-                                text:label-followed-by="listtab"
-                                text:list-tab-stop-position="0.6949in"
-                                fo:text-indent="-0.34745in"
-                                fo:margin-left="0.6949in"
-                            />
-                        </style:list-level-properties>
-                    </text:list-level-style-bullet>
-                    <text:list-level-style-bullet
-                        text:level="2"
-                        text:style-name="List_Numbering"
-                        text:bullet-char="◦"
-                        >
-                        <style:list-level-properties
-                            text:list-level-position-and-space-mode="label-alignment"
+                            <style:list-level-properties
+                                text:list-level-position-and-space-mode="label-alignment"
+                                >
+                                <style:list-level-label-alignment
+                                    text:label-followed-by="listtab"
+                                    text:list-tab-stop-position="{3 * $design-indent}{$design-unit}"
+                                    fo:text-indent="-{$design-indent}{$design-unit}"
+                                    fo:margin-left="{3 * $design-indent}{$design-unit}"
+                                />
+                            </style:list-level-properties>
+                        </text:list-level-style-bullet>
+                        <text:list-level-style-bullet
+                            text:level="4"
+                            text:style-name="List_Numbering"
+                            text:bullet-char="■"
                             >
-                            <style:list-level-label-alignment
-                                text:label-followed-by="listtab"
-                                text:list-tab-stop-position="1.04235in"
-                                fo:text-indent="-0.34745in"
-                                fo:margin-left="1.04235in"
-                            />
-                        </style:list-level-properties>
-                    </text:list-level-style-bullet>
-                    <text:list-level-style-bullet
-                        text:level="3"
-                        text:style-name="List_Numbering"
-                        text:bullet-char="■"
-                        >
-                        <style:list-level-properties
-                            text:list-level-position-and-space-mode="label-alignment"
+                            <style:list-level-properties
+                                text:list-level-position-and-space-mode="label-alignment"
+                                >
+                                <style:list-level-label-alignment
+                                    text:label-followed-by="listtab"
+                                    text:list-tab-stop-position="{4 * $design-indent}{$design-unit}"
+                                    fo:text-indent="-{$design-indent}{$design-unit}"
+                                    fo:margin-left="{4 * $design-indent}{$design-unit}"
+                                />
+                            </style:list-level-properties>
+                        </text:list-level-style-bullet>
+                        <text:list-level-style-bullet
+                            text:level="5"
+                            text:style-name="List_Numbering"
+                            text:bullet-char="•"
                             >
-                            <style:list-level-label-alignment
-                                text:label-followed-by="listtab"
-                                text:list-tab-stop-position="1.3898in"
-                                fo:text-indent="-0.34745in"
-                                fo:margin-left="1.3898in"
-                            />
-                        </style:list-level-properties>
-                    </text:list-level-style-bullet>
-                    <text:list-level-style-bullet
-                        text:level="4"
-                        text:style-name="List_Numbering"
-                        text:bullet-char="•"
-                        >
-                        <style:list-level-properties
-                            text:list-level-position-and-space-mode="label-alignment"
-                            >
-                            <style:list-level-label-alignment
-                                text:label-followed-by="listtab"
-                                text:list-tab-stop-position="1.73725in"
-                                fo:text-indent="-0.34745in"
-                                fo:margin-left="1.73725in"
-                            />
-                        </style:list-level-properties>
-                    </text:list-level-style-bullet>
-                </text:list-style>
-                <text:list-style
-                    style:name="Exercises-unordered"
-                    >
-                    <text:list-level-style-bullet
-                        text:level="2"
-                        text:style-name="List_Numbering"
-                        text:bullet-char="•"
-                        >
-                        <style:list-level-properties
-                            text:list-level-position-and-space-mode="label-alignment"
-                            >
-                            <!-- 0.34745in is 5ex in 12pt Latin Modern Roman -->
-                            <style:list-level-label-alignment
-                                text:label-followed-by="listtab"
-                                text:list-tab-stop-position="0.6949in"
-                                fo:text-indent="-0.34745in"
-                                fo:margin-left="0.6949in"
-                            />
-                        </style:list-level-properties>
-                    </text:list-level-style-bullet>
-                    <text:list-level-style-bullet
-                        text:level="3"
-                        text:style-name="List_Numbering"
-                        text:bullet-char="◦"
-                        >
-                        <style:list-level-properties
-                            text:list-level-position-and-space-mode="label-alignment"
-                            >
-                            <style:list-level-label-alignment
-                                text:label-followed-by="listtab"
-                                text:list-tab-stop-position="1.04235in"
-                                fo:text-indent="-0.34745in"
-                                fo:margin-left="1.04235in"
-                            />
-                        </style:list-level-properties>
-                    </text:list-level-style-bullet>
-                    <text:list-level-style-bullet
-                        text:level="4"
-                        text:style-name="List_Numbering"
-                        text:bullet-char="■"
-                        >
-                        <style:list-level-properties
-                            text:list-level-position-and-space-mode="label-alignment"
-                            >
-                            <style:list-level-label-alignment
-                                text:label-followed-by="listtab"
-                                text:list-tab-stop-position="1.3898in"
-                                fo:text-indent="-0.34745in"
-                                fo:margin-left="1.3898in"
-                            />
-                        </style:list-level-properties>
-                    </text:list-level-style-bullet>
-                    <text:list-level-style-bullet
-                        text:level="5"
-                        text:style-name="List_Numbering"
-                        text:bullet-char="•"
-                        >
-                        <style:list-level-properties
-                            text:list-level-position-and-space-mode="label-alignment"
-                            >
-                            <style:list-level-label-alignment
-                                text:label-followed-by="listtab"
-                                text:list-tab-stop-position="1.73725in"
-                                fo:text-indent="-0.34745in"
-                                fo:margin-left="1.73725in"
-                            />
-                        </style:list-level-properties>
-                    </text:list-level-style-bullet>
-                </text:list-style>
+                            <style:list-level-properties
+                                text:list-level-position-and-space-mode="label-alignment"
+                                >
+                                <style:list-level-label-alignment
+                                    text:label-followed-by="listtab"
+                                    text:list-tab-stop-position="{5 * $design-indent}{$design-unit}"
+                                    fo:text-indent="-{$design-indent}{$design-unit}"
+                                    fo:margin-left="{5 * $design-indent}{$design-unit}"
+                                />
+                            </style:list-level-properties>
+                        </text:list-level-style-bullet>
+                    </text:list-style>
+                </xsl:if>
+                <!-- styling for various list levels with an author-defined label -->
                 <xsl:if test="$document-root//ol[@label]">
                     <xsl:variable name="ol-with-label" select="$document-root//ol[@label]"/>
                     <xsl:for-each select="$ol-with-label">
@@ -1611,20 +1690,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <style:list-level-properties
                                     text:list-level-position-and-space-mode="label-alignment"
                                     >
-                                    <!-- 0.34745in is 5ex in 12pt Latin Modern Roman -->
                                     <style:list-level-label-alignment
                                         text:label-followed-by="listtab"
-                                        fo:text-indent="-0.34745in"
-                                        >
-                                        <xsl:attribute name="text:list-tab-stop-position">
-                                            <xsl:value-of select="0.34745 * ($level + 1)"/>
-                                            <xsl:text>in</xsl:text>
-                                        </xsl:attribute>
-                                        <xsl:attribute name="fo:margin-left">
-                                            <xsl:value-of select="0.34745 * ($level + 2)"/>
-                                            <xsl:text>in</xsl:text>
-                                        </xsl:attribute>
-                                    </style:list-level-label-alignment>
+                                        fo:text-indent="-{$design-indent}{$design-unit}"
+                                        text:list-tab-stop-position="{$design-indent * ($level + 1)}{$design-unit}"
+                                        fo:margin-left="{$design-indent * ($level + 2)}{$design-unit}"
+                                    />
                                 </style:list-level-properties>
                             </text:list-level-style-number>
                         </text:list-style>
@@ -1667,20 +1738,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <style:list-level-properties
                                     text:list-level-position-and-space-mode="label-alignment"
                                     >
-                                    <!-- 0.34745in is 5ex in 12pt Latin Modern Roman -->
                                     <style:list-level-label-alignment
                                         text:label-followed-by="listtab"
-                                        fo:text-indent="-0.34745in"
-                                        >
-                                        <xsl:attribute name="text:list-tab-stop-position">
-                                            <xsl:value-of select="0.34745 * ($level)"/>
-                                            <xsl:text>in</xsl:text>
-                                        </xsl:attribute>
-                                        <xsl:attribute name="fo:margin-left">
-                                            <xsl:value-of select="0.34745 * ($level + 1)"/>
-                                            <xsl:text>in</xsl:text>
-                                        </xsl:attribute>
-                                    </style:list-level-label-alignment>
+                                        fo:text-indent="-{$design-indent}{$design-unit}"
+                                        text:list-tab-stop-position="{$design-indent * ($level)}{$design-unit}"
+                                        fo:margin-left="{$design-indent * ($level + 1)}{$design-unit}"
+                                    />
                                 </style:list-level-properties>
                             </text:list-level-style-bullet>
                         </text:list-style>
@@ -1715,20 +1778,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <style:list-level-properties
                                     text:list-level-position-and-space-mode="label-alignment"
                                     >
-                                    <!-- 0.34745in is 5ex in 12pt Latin Modern Roman -->
                                     <style:list-level-label-alignment
                                         text:label-followed-by="listtab"
-                                        fo:text-indent="-0.34745in"
-                                        >
-                                        <xsl:attribute name="text:list-tab-stop-position">
-                                            <xsl:value-of select="0.34745 * ($level - 0.5)"/>
-                                            <xsl:text>in</xsl:text>
-                                        </xsl:attribute>
-                                        <xsl:attribute name="fo:margin-left">
-                                            <xsl:value-of select="0.34745 * ($level)"/>
-                                            <xsl:text>in</xsl:text>
-                                        </xsl:attribute>
-                                    </style:list-level-label-alignment>
+                                        fo:text-indent="-{$design-indent}{$design-unit}"
+                                        text:list-tab-stop-position="{$design-indent * ($level - 0.5)}{$design-unit}"
+                                        fo:margin-left="{$design-indent * ($level)}{$design-unit}"
+                                    />
                                 </style:list-level-properties>
                             </text:list-level-style-bullet>
                         </text:list-style>
