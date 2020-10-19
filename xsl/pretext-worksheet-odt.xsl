@@ -118,7 +118,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <text:p>
         <xsl:attribute name="text:style-name">
             <xsl:choose>
-                <xsl:when test="following-sibling::*">
+                <xsl:when test="following-sibling::*|parent::li/following-sibling::li|ancestor::ol/following-sibling::*|ancestor::ol/parent::p/following-sibling::*|ancestor::ul/following-sibling::*|ancestor::ul/parent::p/following-sibling::*|ancestor::dl/following-sibling::*|ancestor::dl/parent::p/following-sibling::*">
                     <xsl:text>P</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
@@ -130,12 +130,94 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- The count construct checks that the only preceding siblings are metadata   -->
         <xsl:if test="boolean(parent::*/title) and (count(preceding-sibling::&METADATA;) = count(preceding-sibling::*))">
             <text:span text:style-name="Runin-title">
-                <xsl:apply-templates select="parent::introduction" mode="title-full"/>
+                <xsl:apply-templates select="parent::*" mode="title-full"/>
             </text:span>
             <xsl:text> </xsl:text>
         </xsl:if>
         <xsl:apply-templates />
     </text:p>
+</xsl:template>
+<!-- Paragraphs, with displays within                    -->
+<!-- Later, so a higher priority match                   -->
+<!-- Lists are ODT blocks                                -->
+<!-- and so should not be within an ODT paragraph.       -->
+<!-- We bust them out.                                   -->
+<xsl:template match="p[ol|ul|dl]">
+    <!-- will later loop over lists within paragraph -->
+    <xsl:variable name="displays" select="ol|ul|dl" />
+    <!-- content prior to first display is exceptional, but if empty,   -->
+    <!-- as indicated by $initial, we do not produce an empty paragraph -->
+    <!-- all interesting nodes of paragraph, before first display       -->
+    <xsl:variable name="initial" select="$displays[1]/preceding-sibling::*|$displays[1]/preceding-sibling::text()" />
+    <xsl:variable name="initial-content">
+        <xsl:apply-templates select="$initial"/>
+    </xsl:variable>
+    <xsl:variable name="needs-title" select="boolean(parent::*/title) and (count(preceding-sibling::&METADATA;) = count(preceding-sibling::*))"/>
+    <!-- XSLT 1.0: RTF is just a string if not converted to node set -->
+    <!-- This comparison might improve with a normalize-space()      -->
+    <xsl:if test="not($initial-content='') or $needs-title">
+        <text:p text:style-name="P-fragment">
+            <xsl:if test="$needs-title">
+                <text:span text:style-name="Runin-title">
+                    <xsl:apply-templates select="parent::*" mode="title-full"/>
+                </text:span>
+            </xsl:if>
+            <xsl:if test="not($initial-content='') and $needs-title">
+                <xsl:text> </xsl:text>
+            </xsl:if>
+            <xsl:if test="not($initial-content='')">
+                <xsl:copy-of select="$initial-content" />
+            </xsl:if>
+        </text:p>
+    </xsl:if>
+    <!-- for each display, output the display, plus trailing content -->
+    <xsl:for-each select="$displays">
+        <!-- do the display proper -->
+        <xsl:apply-templates select="." />
+        <!-- look through remainder, all element and text nodes, and the next display -->
+        <xsl:variable name="rightward" select="following-sibling::*|following-sibling::text()" />
+        <xsl:variable name="next-display" select="following-sibling::*[self::ol or self::ul or self::dl][1]" />
+        <xsl:choose>
+            <xsl:when test="$next-display">
+                <xsl:variable name="leftward" select="$next-display/preceding-sibling::*|$next-display/preceding-sibling::text()" />
+                <!-- device below forms set intersection -->
+                <xsl:variable name="common" select="$rightward[count(. | $leftward) = count($leftward)]" />
+                <xsl:variable name="common-content">
+                    <xsl:apply-templates select="$common" />
+                </xsl:variable>
+                <!-- XSLT 1.0: RTF is just a string if not converted to node set -->
+                <!-- This comparison might improve with a normalize-space()      -->
+                <xsl:if test="not($common-content = '')">
+                    <text:p text:style-name="P-fragment">
+                        <xsl:copy-of select="$common-content" />
+                    </text:p>
+                </xsl:if>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- finish the trailing content, if nonempty -->
+                <xsl:variable name="common-content">
+                    <xsl:apply-templates select="$rightward" />
+                </xsl:variable>
+                <!-- XSLT 1.0: RTF is just a string if not converted to node set -->
+                <!-- This comparison might improve with a normalize-space()      -->
+                <xsl:if test="not($common-content = '')">
+                    <text:p>
+                        <xsl:attribute name="text:style-name">
+                            <xsl:choose>
+                                <xsl:when test="parent::*/following-sibling::*">
+                                    <xsl:text>P</xsl:text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:text>P-last</xsl:text>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:attribute>
+                        <xsl:copy-of select="$common-content" />
+                    </text:p>
+                </xsl:if>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:for-each>
 </xsl:template>
 
 <!-- ##################################### -->
@@ -639,6 +721,127 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="@tag" mode="tag-symbol" />
 </xsl:template>
 
+<!-- ##### -->
+<!-- Lists -->
+<!-- ##### -->
+<xsl:template match="ol">
+    <text:list>
+        <xsl:attribute name="text:style-name">
+            <xsl:choose>
+                <xsl:when test="@label">
+                    <xsl:apply-templates select="." mode="get-label"/>
+                </xsl:when>
+                <xsl:when test="ancestor::exercise">
+                    <xsl:text>Exercises</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>List</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+        <xsl:apply-templates />
+    </text:list>
+</xsl:template>
+
+<xsl:template match="ol" mode="get-label">
+    <xsl:choose>
+        <xsl:when test="contains(@label,'0')">
+            <xsl:message>PTX:ERROR: .odt output format does not permit list numbering to begin with 0</xsl:message>
+        </xsl:when>
+        <xsl:when test="contains(@label,'1')">Arabic-1</xsl:when>
+        <xsl:when test="contains(@label,'a')">Lowercase</xsl:when>
+        <xsl:when test="contains(@label,'A')">Uppercase</xsl:when>
+        <xsl:when test="contains(@label,'i')">Lowercase-roman</xsl:when>
+        <xsl:when test="contains(@label,'I')">Uppercase-roman</xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:ERROR: ordered list label (<xsl:value-of select="@label" />) not recognized</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>-</xsl:text>
+    <xsl:apply-templates select="." mode="list-level"/>
+</xsl:template>
+
+<xsl:template match="ul">
+    <text:list>
+        <xsl:attribute name="text:style-name">
+            <xsl:choose>
+                <xsl:when test="@label">
+                    <xsl:apply-templates select="." mode="get-label"/>
+                </xsl:when>
+                <xsl:when test="ancestor::exercise">
+                    <xsl:text>Exercises-unordered</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>Unordered</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+        <xsl:apply-templates />
+    </text:list>
+</xsl:template>
+
+<xsl:template match="ul" mode="get-label">
+    <xsl:choose>
+        <xsl:when test="@label='disc'">Disc</xsl:when>
+        <xsl:when test="@label='circle'">Circle</xsl:when>
+        <xsl:when test="@label='square'">Square</xsl:when>
+        <xsl:when test="@label=''">None</xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:ERROR: unordered list label (<xsl:value-of select="@label" />) not recognized</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>-</xsl:text>
+    <xsl:apply-templates select="." mode="list-level"/>
+</xsl:template>
+
+<xsl:template match="dl">
+    <text:list>
+        <xsl:attribute name="text:style-name">
+            <xsl:apply-templates select="." mode="get-label"/>
+        </xsl:attribute>
+        <xsl:apply-templates />
+    </text:list>
+</xsl:template>
+
+<xsl:template match="dl" mode="get-label">
+    <xsl:text>Description-</xsl:text>
+    <xsl:apply-templates select="." mode="list-level"/>
+</xsl:template>
+
+<xsl:template match="li">
+    <text:list-item>
+        <!-- if there is a title but the first non-metadata child is not a p, give the title its own p -->
+        <xsl:if test="title and boolean(*[not(&METADATA-FILTER;)][position() = 1][not(self::p)])">
+            <text:p text:style-name="P">
+                <text:span text:style-name="Runin-title">
+                    <xsl:apply-templates select="." mode="title-full"/>
+                </text:span>
+            </text:p>
+        </xsl:if>
+        <xsl:choose>
+            <xsl:when test="p|blockquote|pre|figure|table|listing|list|aside|biographical|historical|sidebyside|sbsgroup|sage">
+                <xsl:apply-templates/>
+            </xsl:when>
+            <xsl:otherwise>
+                <text:p>
+                    <xsl:attribute name="text:style-name">
+                        <xsl:choose>
+                            <xsl:when test="following-sibling::*|parent::li/following-sibling::li|ancestor::ol/following-sibling::*|ancestor::ol/parent::p/following-sibling::*|ancestor::ul/following-sibling::*|ancestor::ul/parent::p/following-sibling::*|ancestor::dl/following-sibling::*|ancestor::dl/parent::p/following-sibling::*">
+                                <xsl:text>P</xsl:text>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text>P-last</xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
+                    <xsl:apply-templates/>
+                </text:p>
+            </xsl:otherwise>
+        </xsl:choose>
+    </text:list-item>
+</xsl:template>
+
+
 <!-- ############# -->
 <!-- File building -->
 <!-- ############# -->
@@ -726,6 +929,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <style:paragraph-properties
                         fo:margin-bottom="0.08304in"
                         fo:text-indent="0in"
+                    />
+                </style:style>
+                <!-- This style is for when a PTX p is broken up into -->
+                <!-- several ODT p because of a list or display       -->
+                <style:style
+                    style:name="P-fragment"
+                    style:family="paragraph"
+                    style:parent-style-name="P"
+                    >
+                    <style:paragraph-properties
+                        fo:margin-bottom="0in"
                     />
                 </style:style>
                 <!-- The last paragraph in a block can have a bit more vertical skip at the end -->
@@ -1047,6 +1261,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         fo:font-weight="bold"
                     />
                 </style:style>
+                <style:style
+                    style:name="List_Numbering"
+                    style:display-name="List Numbering"
+                    style:family="text"
+                />
+                <style:style
+                    style:name="Description_Numbering"
+                    style:display-name="Description Numbering"
+                    style:family="text"
+                    >
+                    <style:text-properties
+                        fo:font-weight="bold"
+                    />
+                </style:style>
                 <!-- Styling the primary exercise numbering in a worksheet -->
                 <text:list-style
                     style:name="Exercises"
@@ -1069,7 +1297,426 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             />
                         </style:list-level-properties>
                     </text:list-level-style-number>
+                    <text:list-level-style-number
+                        text:level="2"
+                        text:style-name="List_Numbering"
+                        style:num-prefix="("
+                        style:num-suffix=")"
+                        style:num-format="a"
+                        >
+                        <style:list-level-properties
+                            text:list-level-position-and-space-mode="label-alignment"
+                            >
+                            <style:list-level-label-alignment
+                                text:label-followed-by="listtab"
+                                text:list-tab-stop-position="0.6949in"
+                                fo:text-indent="-0.34745in"
+                                fo:margin-left="0.6949in"
+                            />
+                        </style:list-level-properties>
+                    </text:list-level-style-number>
+                    <text:list-level-style-number
+                        text:level="3"
+                        text:style-name="List_Numbering"
+                        style:num-suffix="."
+                        style:num-format="i"
+                        >
+                        <style:list-level-properties
+                            text:list-level-position-and-space-mode="label-alignment"
+                            >
+                            <style:list-level-label-alignment
+                                text:label-followed-by="listtab"
+                                text:list-tab-stop-position="1.04235in"
+                                fo:text-indent="-0.34745in"
+                                fo:margin-left="1.04235in"
+                            />
+                        </style:list-level-properties>
+                    </text:list-level-style-number>
+                    <text:list-level-style-number
+                        text:level="4"
+                        text:style-name="List_Numbering"
+                        style:num-suffix="."
+                        style:num-format="A"
+                        >
+                        <style:list-level-properties
+                            text:list-level-position-and-space-mode="label-alignment"
+                            >
+                            <style:list-level-label-alignment
+                                text:label-followed-by="listtab"
+                                text:list-tab-stop-position="1.3898in"
+                                fo:text-indent="-0.34745in"
+                                fo:margin-left="1.3898in"
+                            />
+                        </style:list-level-properties>
+                    </text:list-level-style-number>
                 </text:list-style>
+                <text:list-style
+                    style:name="List"
+                    >
+                    <text:list-level-style-number
+                        text:level="1"
+                        text:style-name="List_Numbering"
+                        style:num-prefix="("
+                        style:num-suffix=")"
+                        style:num-format="a"
+                        >
+                        <style:list-level-properties
+                            text:list-level-position-and-space-mode="label-alignment"
+                            >
+                            <!-- 0.34745in is 5ex in 12pt Latin Modern Roman -->
+                            <style:list-level-label-alignment
+                                text:label-followed-by="listtab"
+                                text:list-tab-stop-position="0.34745in"
+                                fo:text-indent="-0.34745in"
+                                fo:margin-left="0.6949in"
+                            />
+                        </style:list-level-properties>
+                    </text:list-level-style-number>
+                    <text:list-level-style-number
+                        text:level="2"
+                        text:style-name="List_Numbering"
+                        style:num-suffix="."
+                        style:num-format="i"
+                        >
+                        <style:list-level-properties
+                            text:list-level-position-and-space-mode="label-alignment"
+                            >
+                            <style:list-level-label-alignment
+                                text:label-followed-by="listtab"
+                                text:list-tab-stop-position="0.6949in"
+                                fo:text-indent="-0.34745in"
+                                fo:margin-left="1.04235in"
+                            />
+                        </style:list-level-properties>
+                    </text:list-level-style-number>
+                    <text:list-level-style-number
+                        text:level="3"
+                        text:style-name="List_Numbering"
+                        style:num-suffix="."
+                        style:num-format="A"
+                        >
+                        <style:list-level-properties
+                            text:list-level-position-and-space-mode="label-alignment"
+                            >
+                            <style:list-level-label-alignment
+                                text:label-followed-by="listtab"
+                                text:list-tab-stop-position="1.04235in"
+                                fo:text-indent="-0.34745in"
+                                fo:margin-left="1.3898in"
+                            />
+                        </style:list-level-properties>
+                    </text:list-level-style-number>
+                </text:list-style>
+                <text:list-style
+                    style:name="Unordered"
+                    >
+                    <text:list-level-style-bullet
+                        text:level="1"
+                        text:style-name="List_Numbering"
+                        text:bullet-char="•"
+                        >
+                        <style:list-level-properties
+                            text:list-level-position-and-space-mode="label-alignment"
+                            >
+                            <!-- 0.34745in is 5ex in 12pt Latin Modern Roman -->
+                            <style:list-level-label-alignment
+                                text:label-followed-by="listtab"
+                                text:list-tab-stop-position="0.6949in"
+                                fo:text-indent="-0.34745in"
+                                fo:margin-left="0.6949in"
+                            />
+                        </style:list-level-properties>
+                    </text:list-level-style-bullet>
+                    <text:list-level-style-bullet
+                        text:level="2"
+                        text:style-name="List_Numbering"
+                        text:bullet-char="◦"
+                        >
+                        <style:list-level-properties
+                            text:list-level-position-and-space-mode="label-alignment"
+                            >
+                            <style:list-level-label-alignment
+                                text:label-followed-by="listtab"
+                                text:list-tab-stop-position="1.04235in"
+                                fo:text-indent="-0.34745in"
+                                fo:margin-left="1.04235in"
+                            />
+                        </style:list-level-properties>
+                    </text:list-level-style-bullet>
+                    <text:list-level-style-bullet
+                        text:level="3"
+                        text:style-name="List_Numbering"
+                        text:bullet-char="■"
+                        >
+                        <style:list-level-properties
+                            text:list-level-position-and-space-mode="label-alignment"
+                            >
+                            <style:list-level-label-alignment
+                                text:label-followed-by="listtab"
+                                text:list-tab-stop-position="1.3898in"
+                                fo:text-indent="-0.34745in"
+                                fo:margin-left="1.3898in"
+                            />
+                        </style:list-level-properties>
+                    </text:list-level-style-bullet>
+                    <text:list-level-style-bullet
+                        text:level="4"
+                        text:style-name="List_Numbering"
+                        text:bullet-char="•"
+                        >
+                        <style:list-level-properties
+                            text:list-level-position-and-space-mode="label-alignment"
+                            >
+                            <style:list-level-label-alignment
+                                text:label-followed-by="listtab"
+                                text:list-tab-stop-position="1.73725in"
+                                fo:text-indent="-0.34745in"
+                                fo:margin-left="1.73725in"
+                            />
+                        </style:list-level-properties>
+                    </text:list-level-style-bullet>
+                </text:list-style>
+                <text:list-style
+                    style:name="Exercises-unordered"
+                    >
+                    <text:list-level-style-bullet
+                        text:level="2"
+                        text:style-name="List_Numbering"
+                        text:bullet-char="•"
+                        >
+                        <style:list-level-properties
+                            text:list-level-position-and-space-mode="label-alignment"
+                            >
+                            <!-- 0.34745in is 5ex in 12pt Latin Modern Roman -->
+                            <style:list-level-label-alignment
+                                text:label-followed-by="listtab"
+                                text:list-tab-stop-position="0.6949in"
+                                fo:text-indent="-0.34745in"
+                                fo:margin-left="0.6949in"
+                            />
+                        </style:list-level-properties>
+                    </text:list-level-style-bullet>
+                    <text:list-level-style-bullet
+                        text:level="3"
+                        text:style-name="List_Numbering"
+                        text:bullet-char="◦"
+                        >
+                        <style:list-level-properties
+                            text:list-level-position-and-space-mode="label-alignment"
+                            >
+                            <style:list-level-label-alignment
+                                text:label-followed-by="listtab"
+                                text:list-tab-stop-position="1.04235in"
+                                fo:text-indent="-0.34745in"
+                                fo:margin-left="1.04235in"
+                            />
+                        </style:list-level-properties>
+                    </text:list-level-style-bullet>
+                    <text:list-level-style-bullet
+                        text:level="4"
+                        text:style-name="List_Numbering"
+                        text:bullet-char="■"
+                        >
+                        <style:list-level-properties
+                            text:list-level-position-and-space-mode="label-alignment"
+                            >
+                            <style:list-level-label-alignment
+                                text:label-followed-by="listtab"
+                                text:list-tab-stop-position="1.3898in"
+                                fo:text-indent="-0.34745in"
+                                fo:margin-left="1.3898in"
+                            />
+                        </style:list-level-properties>
+                    </text:list-level-style-bullet>
+                    <text:list-level-style-bullet
+                        text:level="5"
+                        text:style-name="List_Numbering"
+                        text:bullet-char="•"
+                        >
+                        <style:list-level-properties
+                            text:list-level-position-and-space-mode="label-alignment"
+                            >
+                            <style:list-level-label-alignment
+                                text:label-followed-by="listtab"
+                                text:list-tab-stop-position="1.73725in"
+                                fo:text-indent="-0.34745in"
+                                fo:margin-left="1.73725in"
+                            />
+                        </style:list-level-properties>
+                    </text:list-level-style-bullet>
+                </text:list-style>
+                <xsl:if test="$document-root//ol[@label]">
+                    <xsl:variable name="ol-with-label" select="$document-root//ol[@label]"/>
+                    <xsl:for-each select="$ol-with-label">
+                        <xsl:variable name="level">
+                            <xsl:apply-templates select="." mode="list-level"/>
+                        </xsl:variable>
+                        <text:list-style>
+                            <xsl:attribute name="style:name">
+                                <xsl:apply-templates select="." mode="get-label"/>
+                            </xsl:attribute>
+                            <text:list-level-style-number
+                                text:style-name="List_Numbering"
+                                >
+                                <xsl:attribute name="text:level">
+                                    <xsl:value-of select="$level + 1"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="style:num-prefix">
+                                    <xsl:if test="contains(@label,'a')">
+                                        <xsl:text>(</xsl:text>
+                                    </xsl:if>
+                                </xsl:attribute>
+                                <xsl:attribute name="style:num-suffix">
+                                    <xsl:choose>
+                                        <xsl:when test="contains(@label,'a')">
+                                            <xsl:text>)</xsl:text>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:text>.</xsl:text>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:attribute>
+                                <xsl:attribute name="style:num-format">
+                                    <xsl:choose>
+                                        <xsl:when test="contains(@label,'0')">
+                                            <xsl:message>PTX:ERROR: .odt output format does not permit list numbering to begin with 0</xsl:message>
+                                        </xsl:when>
+                                        <xsl:when test="contains(@label,'1')">1</xsl:when>
+                                        <xsl:when test="contains(@label,'a')">a</xsl:when>
+                                        <xsl:when test="contains(@label,'A')">A</xsl:when>
+                                        <xsl:when test="contains(@label,'i')">i</xsl:when>
+                                        <xsl:when test="contains(@label,'I')">I</xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:message>PTX:ERROR: ordered list label (<xsl:value-of select="@label" />) not recognized</xsl:message>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:attribute>
+                                <style:list-level-properties
+                                    text:list-level-position-and-space-mode="label-alignment"
+                                    >
+                                    <!-- 0.34745in is 5ex in 12pt Latin Modern Roman -->
+                                    <style:list-level-label-alignment
+                                        text:label-followed-by="listtab"
+                                        fo:text-indent="-0.34745in"
+                                        >
+                                        <xsl:attribute name="text:list-tab-stop-position">
+                                            <xsl:value-of select="0.34745 * ($level + 1)"/>
+                                            <xsl:text>in</xsl:text>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="fo:margin-left">
+                                            <xsl:value-of select="0.34745 * ($level + 2)"/>
+                                            <xsl:text>in</xsl:text>
+                                        </xsl:attribute>
+                                    </style:list-level-label-alignment>
+                                </style:list-level-properties>
+                            </text:list-level-style-number>
+                        </text:list-style>
+                    </xsl:for-each>
+                </xsl:if>
+                <xsl:if test="$document-root//ul[@label]">
+                    <xsl:variable name="ul-with-label" select="$document-root//ul[@label]"/>
+                    <xsl:for-each select="$ul-with-label">
+                        <xsl:variable name="level">
+                            <xsl:apply-templates select="." mode="list-level"/>
+                        </xsl:variable>
+                        <text:list-style>
+                            <xsl:attribute name="style:name">
+                                <xsl:apply-templates select="." mode="get-label"/>
+                            </xsl:attribute>
+                            <text:list-level-style-bullet
+                                text:style-name="List_Numbering"
+                                >
+                                <xsl:attribute name="text:level">
+                                    <xsl:choose>
+                                        <xsl:when test="ancestor::exercise">
+                                            <xsl:value-of select="$level + 1"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:value-of select="$level"/>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:attribute>
+                                <xsl:attribute name="text:bullet-char">
+                                    <xsl:choose>
+                                        <xsl:when test="@label='disc'">•</xsl:when>
+                                        <xsl:when test="@label='circle'">◦</xsl:when>
+                                        <xsl:when test="@label='square'">■</xsl:when>
+                                        <xsl:when test="@label=''"><xsl:call-template name="nbsp-character"/></xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:message>PTX:ERROR: unordered list label (<xsl:value-of select="@label" />) not recognized</xsl:message>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:attribute>
+                                <style:list-level-properties
+                                    text:list-level-position-and-space-mode="label-alignment"
+                                    >
+                                    <!-- 0.34745in is 5ex in 12pt Latin Modern Roman -->
+                                    <style:list-level-label-alignment
+                                        text:label-followed-by="listtab"
+                                        fo:text-indent="-0.34745in"
+                                        >
+                                        <xsl:attribute name="text:list-tab-stop-position">
+                                            <xsl:value-of select="0.34745 * ($level)"/>
+                                            <xsl:text>in</xsl:text>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="fo:margin-left">
+                                            <xsl:value-of select="0.34745 * ($level + 1)"/>
+                                            <xsl:text>in</xsl:text>
+                                        </xsl:attribute>
+                                    </style:list-level-label-alignment>
+                                </style:list-level-properties>
+                            </text:list-level-style-bullet>
+                        </text:list-style>
+                    </xsl:for-each>
+                </xsl:if>
+                <xsl:if test="$document-root//dl">
+                    <xsl:variable name="dl" select="$document-root//dl"/>
+                    <xsl:for-each select="$dl">
+                        <xsl:variable name="level">
+                            <xsl:apply-templates select="." mode="list-level"/>
+                        </xsl:variable>
+                        <text:list-style>
+                            <xsl:attribute name="style:name">
+                                <xsl:apply-templates select="." mode="get-label"/>
+                            </xsl:attribute>
+                            <text:list-level-style-bullet
+                                text:style-name="Description_Numbering"
+                                >
+                                <xsl:attribute name="text:level">
+                                    <xsl:choose>
+                                        <xsl:when test="ancestor::exercise">
+                                            <xsl:value-of select="$level + 1"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:value-of select="$level"/>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:attribute>
+                                <xsl:attribute name="text:bullet-char">
+                                    <xsl:call-template name="nbsp-character"/>
+                                </xsl:attribute>
+                                <style:list-level-properties
+                                    text:list-level-position-and-space-mode="label-alignment"
+                                    >
+                                    <!-- 0.34745in is 5ex in 12pt Latin Modern Roman -->
+                                    <style:list-level-label-alignment
+                                        text:label-followed-by="listtab"
+                                        fo:text-indent="-0.34745in"
+                                        >
+                                        <xsl:attribute name="text:list-tab-stop-position">
+                                            <xsl:value-of select="0.34745 * ($level - 0.5)"/>
+                                            <xsl:text>in</xsl:text>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="fo:margin-left">
+                                            <xsl:value-of select="0.34745 * ($level)"/>
+                                            <xsl:text>in</xsl:text>
+                                        </xsl:attribute>
+                                    </style:list-level-label-alignment>
+                                </style:list-level-properties>
+                            </text:list-level-style-bullet>
+                        </text:list-style>
+                    </xsl:for-each>
+                </xsl:if>
             </office:styles>
             <office:automatic-styles>
                 <style:page-layout style:name="Page">

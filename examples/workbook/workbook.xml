@@ -64,11 +64,109 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </p>
                     <p>
                         And a second paragraph.
+                        <ol>
+                            <li>
+                                <p>
+                                    Here is a <tag>p</tag> inside a list item.
+                                </p>
+                            </li>
+                            <li>
+                                <p>
+                                    This list is in the introduction.
+                                    <ol>
+                                        <li>
+                                            <title>With Title</title>
+                                            <p>
+                                                And here is some nesting. And this nested item has a sentence that is very long; so long that it goes onto a second line so we can see indentation.
+                                                <ol>
+                                                    <li>
+                                                        <p>
+                                                            More nesting.
+                                                        </p>
+                                                    </li>
+                                                </ol>
+                                            </p>
+                                        </li>
+                                    </ol>
+                                </p>
+                            </li>
+                            <li>
+                                This is an item <em>not</em> in a <tag>p</tag>.
+                            </li>
+                        </ol>
                         It is also has a lot of extra words in it so that it will be long enough to wrap to a second line so we can see any indentation.
+                        <ol>
+                            <li>
+                                <p>
+                                    It also has a second list.
+                                </p>
+                            </li>
+                        </ol>
                     </p>
                     <p>
                         And a third paragraph.
                         It is also has a lot of extra words in it so that it will be long enough to wrap to a second line so we can see any indentation.
+                        And now it has an unordered list.
+                        <ul>
+                            <li>
+                                <p>
+                                    An item.
+                                    <ul>
+                                        <li>
+                                            <p>
+                                                Another item.
+                                                <ul>
+                                                    <li>
+                                                        <p>
+                                                            Three deep.
+                                                            <ul>
+                                                                <li>
+                                                                    Four deep. Also not in a <tag>p</tag>.
+                                                                </li>
+                                                            </ul>
+                                                        </p>
+                                                    </li>
+                                                </ul>
+                                            </p>
+                                        </li>
+                                    </ul>
+                                </p>
+                            </li>
+                            <li>
+                                <p>
+                                    An item. Next list changes label from default to square.
+                                    <ul label="square">
+                                        <li>
+                                            <p>
+                                                Another item. Next list changes label from default to empty.
+                                                <ul label="">
+                                                    <li>
+                                                        <p>
+                                                            Three deep.
+                                                        </p>
+                                                    </li>
+                                                </ul>
+                                            </p>
+                                        </li>
+                                    </ul>
+                                </p>
+                            </li>
+                        </ul>
+                        Now a description list:
+                        <dl>
+                            <li>
+                                <title>Tacos</title>
+                                <p>
+                                    Can be soft or crunchy.  We need this sentence to be very long so we can see what happens when the text wraps to the next line.
+                                </p>
+                            </li>
+                            <li>
+                                <title>Pizza</title>
+                                <p>
+                                    Can be round or square.
+                                </p>
+                            </li>
+                        </dl>
                     </p>
                 </introduction>
                 <exercise xml:id="exercise">
@@ -178,7 +276,166 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         </p>
                     </statement>
                 </exercise>
+                <exercise>
+                    <statement>
+                        <p>
+                            This line precedes the list.
+                            <ol>
+                                <li>
+                                    <p>
+                                        This exercise has an ordered list.
+                                        <ol>
+                                            <li>
+                                                <p>
+                                                    With some nesting.
+                                                    <ol>
+                                                        <li>
+                                                            <p>
+                                                                And more nesting.
+                                                            </p>
+                                                        </li>
+                                                    </ol>
+                                                </p>
+                                            </li>
+                                        </ol>
+                                    </p>
+                                </li>
+                            </ol>
+                        </p>
+                        <p>
+                            This line precedes another list where the default label style is overruled.
+                            <ol label="A">
+                                <li>
+                                    <p>
+                                        Again, the the default label style is overruled in this next list.
+                                        <ol label="I">
+                                            <li>
+                                                <title>A Title</title>
+                                                <p>
+                                                    With some nesting, and again the default label style is overruled.
+                                                    <ol label="a">
+                                                        <li>
+                                                            <title>Another Title</title>
+                                                            <p>
+                                                                And more nesting.
+                                                            </p>
+                                                        </li>
+                                                    </ol>
+                                                </p>
+                                            </li>
+                                        </ol>
+                                    </p>
+                                </li>
+                            </ol>
+                        </p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p>
+                            This time, the list is <q>unstructured</q>.
+                            <ol>
+                                <li>
+                                    Here is an item.
+                                </li>
+                                <li>
+                                    Here is another item.
+                                </li>
+                            </ol>
+                        </p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p>
+                            An exercise with unordered lists.
+                            <ul>
+                                <li>
+                                    <p>
+                                        An item.
+                                        <ul>
+                                            <li>
+                                                <p>
+                                                    Another item.
+                                                    <ul>
+                                                        <li>
+                                                            <p>
+                                                                Three deep.
+                                                                <ul>
+                                                                    <li>
+                                                                        <p>
+                                                                            Four deep.
+                                                                        </p>
+                                                                    </li>
+                                                                </ul>
+                                                            </p>
+                                                        </li>
+                                                    </ul>
+                                                </p>
+                                            </li>
+                                        </ul>
+                                    </p>
+                                </li>
+                                <li>
+                                    <p>
+                                        An item. Next list changes label from default to square.
+                                        <ul label="square">
+                                            <li>
+                                                <p>
+                                                    Another item. Next list changes label from default to empty.
+                                                    <ul label="">
+                                                        <li>
+                                                            <p>
+                                                                Three deep.
+                                                            </p>
+                                                        </li>
+                                                    </ul>
+                                                </p>
+                                            </li>
+                                        </ul>
+                                    </p>
+                                </li>
+                            </ul>
+                        </p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p>
+                            An exercise with a description list:
+                            <dl>
+                                <li>
+                                    <title>Tacos</title>
+                                    <p>
+                                        Can be soft or crunchy. We need this sentence to be very long so we can see what happens when the text wraps to the next line.
+                                    </p>
+                                </li>
+                                <li>
+                                    <title>Pizza</title>
+                                    <p>
+                                        Can be round or square.
+                                        <dl>
+                                            <li>
+                                                <title>Round</title>
+                                                <p>
+                                                    Round ones are round.
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <title>Square</title>
+                                                <p>
+                                                    Square ones are square.
+                                                </p>
+                                            </li>
+                                        </dl>
+                                    </p>
+                                </li>
+                            </dl>
+                        </p>
+                    </statement>
+                </exercise>
             </worksheet>
+
             <worksheet>
                 <title>A Simple Worksheet</title>
                 <introduction>
