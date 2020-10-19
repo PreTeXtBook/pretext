@@ -128,9 +128,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
         <!-- If there is a title to a block and it belongs within this p, place it here -->
         <!-- The count construct checks that the only preceding siblings are metadata   -->
-        <xsl:if test="boolean(parent::*/title) and (count(preceding-sibling::&METADATA;) = count(preceding-sibling::*))">
+        <xsl:if test="boolean(parent::*/title or parent::statement/parent::*/title) and (count(preceding-sibling::&METADATA;) = count(preceding-sibling::*))">
             <text:span text:style-name="Runin-title">
-                <xsl:apply-templates select="parent::*" mode="title-full"/>
+                <xsl:choose>
+                    <xsl:when test="parent::statement">
+                        <xsl:apply-templates select="parent::statement/parent::*" mode="title-full"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:apply-templates select="parent::*" mode="title-full"/>
+                    </xsl:otherwise>
+                </xsl:choose>
             </text:span>
             <xsl:text> </xsl:text>
         </xsl:if>
@@ -246,6 +253,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="worksheet//statement">
+    <!-- if there is a title but the first non-metadata child is not a p, give the title its own p -->
+    <xsl:if test="parent::*/title and boolean(*[not(&METADATA-FILTER;)][position() = 1][not(self::p)])">
+        <text:p text:style-name="P">
+            <text:span text:style-name="Runin-title">
+                <xsl:apply-templates select="." mode="title-full"/>
+            </text:span>
+        </text:p>
+    </xsl:if>
     <xsl:apply-templates/>
 </xsl:template>
 

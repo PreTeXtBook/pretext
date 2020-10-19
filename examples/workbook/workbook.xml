@@ -170,6 +170,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </p>
                 </introduction>
                 <exercise xml:id="exercise">
+                    <title>This Exercise has a Title</title>
                     <statement>
                         <p>
                             This is the first exercise. Its first paragraph is so long that the text will wrap to the second line
