@@ -8260,9 +8260,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$b-has-input">
         <pre>
             <xsl:attribute name="class">
+                <!-- always identify as coming from "program" -->
+                <xsl:text>program</xsl:text>
+                <!-- always add indicators (of some sort) for Prettifier -->
                 <xsl:choose>
-                    <!-- always identify as coming from "program" -->
-                    <xsl:text>program</xsl:text>
                     <!-- with a language supplied, pre.prettyprint -->
                     <!-- activates styling and Prettifier effects  -->
                     <xsl:when test="not($pretty-language = '')">
