@@ -115,27 +115,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "p" paragraphs styled according to where they reside in the worksheet -->
 <!-- ##################################################################### -->
 <xsl:template match="worksheet//p">
-    <xsl:variable name="style">
-        <xsl:choose>
-            <xsl:when test="parent::introduction and count(preceding-sibling::&METADATA;) = count(preceding-sibling::*) and not(following-sibling::*)">
-                <xsl:text>P-introduction-both</xsl:text>
-            </xsl:when>
-            <xsl:when test="parent::introduction and count(preceding-sibling::&METADATA;) = count(preceding-sibling::*)">
-                <xsl:text>P-introduction-top</xsl:text>
-            </xsl:when>
-            <xsl:when test="parent::introduction and not(following-sibling::*)">
-                <xsl:text>P-introduction-bottom</xsl:text>
-            </xsl:when>
-            <xsl:when test="parent::introduction">
-                <xsl:text>P-introduction</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>P</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <text:p text:style-name="{$style}">
-        <xsl:if test="parent::introduction/title and (count(preceding-sibling::&METADATA;) = count(preceding-sibling::*))">
+    <text:p>
+        <xsl:attribute name="text:style-name">
+            <xsl:choose>
+                <xsl:when test="following-sibling::*">
+                    <xsl:text>P</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>P-last</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+        <!-- If there is a title to a block and it belongs within this p, place it here -->
+        <!-- The count construct checks that the only preceding siblings are metadata   -->
+        <xsl:if test="boolean(parent::*/title) and (count(preceding-sibling::&METADATA;) = count(preceding-sibling::*))">
             <text:span text:style-name="Runin-title">
                 <xsl:apply-templates select="parent::introduction" mode="title-full"/>
             </text:span>
@@ -151,17 +144,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="worksheet//introduction">
     <!-- if there is a title but the first non-metadata child is not a p, give the title its own p -->
     <xsl:if test="title and boolean(*[not(&METADATA-FILTER;)][position() = 1][not(self::p)])">
-        <xsl:variable name="title-style">
-            <xsl:choose>
-                <xsl:when test="count(*[&METADATA-FILTER;]) = count(*)">
-                    <xsl:text>P-introduction-only</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>P-introduction-top</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <text:p text:style-name="{$title-style}">
+        <text:p text:style-name="P">
             <text:span text:style-name="Runin-title">
                 <xsl:apply-templates select="." mode="title-full"/>
             </text:span>
@@ -720,12 +703,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </office:font-face-decls>
             <office:styles>
                 <style:default-style style:family="paragraph">
-                    <!-- 0.08304in is 6pt -->
+                    <!-- We are unable to use paragraphindentation in a consistent way throughout a worksheet, -->
+                    <!-- including within exercises. So we use no indenation anywhere and end a paragraph with -->
+                    <!-- 0.08304in (6pt) of vertical skip as a way to indicate new paragraphs.                 -->
                     <style:paragraph-properties
                         fo:orphans="2"
                         fo:widows="2"
-                        fo:margin-bottom="0.08304in"
-                        fo:text-indent="0in"
                         style:auto-text-indent="false"
                         style:punctuation-wrap="hanging"
                     />
@@ -735,63 +718,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         style:letter-kerning="true"
                     />
                 </style:default-style>
-
-                <!-- A typical paragraph just falls to the default "paragraph" family of styling -->
+                <!-- A typical paragraph -->
                 <style:style
                     style:name="P"
                     style:family="paragraph"
-                />
-
-                <!-- The overall worksheet introduction is the only place we can implement indentation.  -->
-                <!-- All content within the actual exercises is in an ordered list, where the list level -->
-                <!-- indentation overrides individual paragraph indentation. So we have some specific    -->
-                <!-- styling for the overall introduction.                                               -->
-
-                <!-- A paragraph at the very top of an introduction -->
-                <!-- No preceding image or anything like that       -->
-                <!-- Gets no indentation, no parskip                -->
-                <style:style
-                    style:name="P-introduction-top"
-                    style:family="paragraph"
-                    style:parent-style-name="P-introduction"
                     >
                     <style:paragraph-properties
+                        fo:margin-bottom="0.08304in"
                         fo:text-indent="0in"
                     />
                 </style:style>
-                <!-- A general paragraph somewhere in the middle                   -->
-                <!-- Indent by 0.24387in, which is 1.5em (in 12pt) to match LaTeX  -->
+                <!-- The last paragraph in a block can have a bit more vertical skip at the end -->
                 <style:style
-                    style:name="P-introduction"
+                    style:name="P-last"
                     style:family="paragraph"
                     style:parent-style-name="P"
                     >
                     <style:paragraph-properties
-                        fo:text-indent="0.24387in"
-                        fo:margin-bottom="0in"
-                    />
-                </style:style>
-                <!-- A paragraph at the very end of an introduction         -->
-                <!-- No following image or anything like that               -->
-                <!-- Indent and skip 0.08304in, which is 6pt to match LaTeX -->
-                <style:style
-                    style:name="P-introduction-bottom"
-                    style:family="paragraph"
-                    style:parent-style-name="P-introduction"
-                    >
-                    <style:paragraph-properties
-                        fo:margin-bottom="0.08304in"
-                    />
-                </style:style>
-                <!-- When the introduction only has one content child and it's a p -->
-                <!-- No indent like "top", but after-skip like "bottom"            -->
-                <style:style
-                    style:name="P-introduction-only"
-                    style:family="paragraph"
-                    style:parent-style-name="P-top"
-                    >
-                    <style:paragraph-properties
-                        fo:margin-bottom="0.08304in"
+                        fo:margin-bottom="0.16608in"
                     />
                 </style:style>
                 <style:style
