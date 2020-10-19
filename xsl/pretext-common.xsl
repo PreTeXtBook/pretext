@@ -6947,7 +6947,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <xsl:when test="$level='2'">i</xsl:when>
                 <xsl:when test="$level='3'">A</xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>MBX:ERROR: ordered list is more than 4 levels deep (at level <xsl:value-of select="$level" />)</xsl:message>
+                    <xsl:message>MBX:ERROR: ordered list is more than 4 levels deep (at level <xsl:value-of select="$level" />) or is inside an "exercise" and is more than 3 levels deep  (at level <xsl:value-of select="$level - 1" />)</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:otherwise>
