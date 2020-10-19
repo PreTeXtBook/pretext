@@ -240,11 +240,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ####################### -->
 <!-- TODO: extend so that an exercise need not have a statement -->
 <xsl:template match="worksheet//exercise">
-    <text:list-item><xsl:apply-templates select="statement"/></text:list-item>
+    <text:list-item>
+        <xsl:apply-templates/>
+    </text:list-item>
 </xsl:template>
 
 <xsl:template match="worksheet//statement">
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
 </xsl:template>
 
 <!-- ######### -->

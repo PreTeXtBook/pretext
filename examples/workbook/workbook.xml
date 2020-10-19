@@ -434,6 +434,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         </p>
                     </statement>
                 </exercise>
+                <exercise>
+                    <p>
+                        This exercise jumps straight in, bypassing a <tag>statement</tag> tag.
+                    </p>
+                    <p>
+                        Here is a second paragraph just because.
+                    </p>
+                </exercise>
             </worksheet>
 
             <worksheet>
