@@ -351,6 +351,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     Or, one page, totally unstructured, just lots of paragraphs, widgets, etc -->
 <xsl:template match="article">
     <xsl:call-template name="converter-blurb-latex" />
+    <xsl:call-template name="snapshot-package-info"/>
     <xsl:text>\documentclass[</xsl:text>
     <xsl:call-template name="sidedness"/>
     <xsl:text>,</xsl:text>
@@ -413,6 +414,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "Bookmaking", 3rd Edition, Marshall Lee, Chapter 27 -->
 <xsl:template match="book">
     <xsl:call-template name="converter-blurb-latex" />
+    <xsl:call-template name="snapshot-package-info"/>
     <xsl:text>\documentclass[</xsl:text>
     <xsl:call-template name="sidedness"/>
     <xsl:text>,</xsl:text>
@@ -435,6 +437,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A letter, LaTeX structure -->
 <xsl:template match="letter">
     <xsl:call-template name="converter-blurb-latex" />
+    <xsl:call-template name="snapshot-package-info"/>
     <xsl:text>\documentclass[</xsl:text>
     <xsl:call-template name="sidedness"/>
     <xsl:text>,</xsl:text>
@@ -456,6 +459,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A memo, LaTeX structure -->
 <xsl:template match="memo">
     <xsl:call-template name="converter-blurb-latex" />
+    <xsl:call-template name="snapshot-package-info"/>
     <xsl:text>\documentclass[</xsl:text>
     <xsl:call-template name="sidedness"/>
     <xsl:text>,</xsl:text>
@@ -472,6 +476,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="text-alignment"/>
     <xsl:apply-templates />
     <xsl:text>\end{document}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- We write "snapshot" information into <job>.dep, primarily for     -->
+<!-- developer's use to see what possible (dependent) packages are     -->
+<!-- loaded.  Some authors may be able to copy this information out of -->
+<!-- the dep file and use it to make an "archival" version of their    -->
+<!-- LaTeX source with frozen dependencies.                            -->
+<xsl:template name="snapshot-package-info">
+    <xsl:text>%% We elect to always write snapshot output into &lt;job&gt;.dep file&#xa;</xsl:text>
+    <xsl:text>\RequirePackage{snapshot}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- LaTeX preamble is common for both books, articles, memos and letters -->
