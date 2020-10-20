@@ -112,6 +112,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </listing>
 
+        <p>Octave is supported on Runestone.  Octave is meant to be a drop-in replacement for Matlab.  So in some places we use the language codes <c>matlab</c> and <c>octave</c> as synonyms, in particular for Runestone ActiveCode windows.</p>
+
+        <listing xml:id="program-activecode-octave">
+            <caption>A simple Octave program</caption>
+            <program xml:id="octave-simple" interactive='yes' language="octave">
+                <input>
+                x = 2 + 2
+                printf("%d\n", x)
+                </input>
+            </program>
+        </listing>
+
         <p>An unsupported language might give a warning, but will be rendered static.</p>
 
 

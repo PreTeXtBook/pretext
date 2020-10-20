@@ -7849,7 +7849,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <language mbx="racket"      active=""            listings="Lisp"             prettify="rkt"/>       <!-- Prettify extension 2018-09-23 -->
     <language mbx="sql"         active="sql"         listings=""                 prettify=""/>          <!-- ActiveCode         2020-08-13 -->
     <language mbx="llvm"        active=""            listings="LLVM"             prettify="llvm"/>      <!-- Prettify extension 2018-09-23 -->
-    <language mbx="matlab"      active=""            listings="Matlab"           prettify="matlab"/>    <!-- Prettify extension 2018-09-23 -->
+    <language mbx="matlab"      active="octave"      listings="Matlab"           prettify="matlab"/>    <!-- Prettify extension 2018-09-23 -->
+    <language mbx="octave"      active="octave"      listings="Octave"           prettify="matlab"/>    <!-- ActiveCode         2020-10-20 -->
     <language mbx="ml"          active=""            listings="ML"               prettify="ml"/>        <!-- Prettify extension 2018-09-23 -->
     <language mbx="ocaml"       active=""            listings="[Objective]Caml"  prettify="ml"/>        <!-- Prettify extension 2018-09-23 -->
     <language mbx="fsharp"      active=""            listings="ML"               prettify="fs"/>        <!-- Prettify extension 2018-09-23 -->
