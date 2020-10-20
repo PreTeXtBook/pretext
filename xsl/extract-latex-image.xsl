@@ -46,6 +46,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Output LaTeX as text -->
 <xsl:output method="text" />
 
+<!-- Stylesheet is parametrized based on intended output   -->
+<!--   regular: PDF that can be cropped, manipulated, etc  -->
+<!--   braille: enhanced for dvisvgm, SVG to receive  BRF  -->
+<!-- 2020-10-20: 'braille' is not implemented              -->
+<xsl:param name="output-style" select="'regular'"/>
+
 <!-- NB: Code between lines of hashes is cut/paste    -->
 <!-- from the LaTeX conversion.  Until we do a better -->
 <!-- job of ensuring they remain in-sync, please      -->
@@ -163,6 +169,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="latex-image|latex-image-code"/>
         <xsl:text>\end{document}&#xa;</xsl:text>
     </exsl:document>
+</xsl:template>
+
+<!-- We override the standard production of visual labels, but simply   -->
+<!-- "apply-imports" for that case.  When a consumer of this stylesheet -->
+<!-- (a script) specifies output for use with braille we will create a  -->
+<!-- sequence of braille-cell sized rectangles to make space for BRF    -->
+<!-- that will be printed/embossed as braille cells.                    -->
+<!-- (No implementation yet.)                                           -->
+<xsl:template match="label">
+    <xsl:choose>
+        <xsl:when test="$output-style = 'regular'">
+            <xsl:apply-imports/>
+        </xsl:when>
+        <xsl:when test="$output-style = 'braille'">
+            <xsl:message terminate="yes">'braille' option for latex-image extraction stylesheet is not implemented</xsl:message>
+        </xsl:when>
+        <xsl:otherwise/>  <!-- warning? sanitize above? -->
+    </xsl:choose>
 </xsl:template>
 
 </xsl:stylesheet>
