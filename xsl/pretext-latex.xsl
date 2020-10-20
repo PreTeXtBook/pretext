@@ -9266,16 +9266,61 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Clean indentation, drop into LaTeX               -->
 <!-- See "latex-image-preamble" for critical parts    -->
 <!-- Side-By-Side scaling happens there, could be here -->
+<!-- TODO: maybe these should be split into current v. legacy -->
 <xsl:template match="image[latex-image-code]|image[latex-image]" mode="image-inclusion">
     <!-- tikz images go into a tcolorbox where \linewidth is reset. -->
     <!-- grouping reins in the scope of any local graphics settings -->
     <!-- we resize what tikz produces, to fill a containing box     -->
     <!-- changes to accomodate resizing to fit requested layouts -->
     <xsl:text>\resizebox{\linewidth}{!}{%&#xa;</xsl:text>
-    <xsl:call-template name="sanitize-text">
-        <xsl:with-param name="text" select="latex-image-code|latex-image" />
-    </xsl:call-template>
+    <xsl:apply-templates select="latex-image|latex-image-code"/>
     <xsl:text>}%&#xa;</xsl:text>
+</xsl:template>
+
+<!-- EXPERIMENTAL -->
+<!-- We allow some mark-up inside the "latex-image" element, -->
+<!-- which was formerly assumed to be purely text.  Then we  -->
+<!-- sanitize it.                                            -->
+
+<!-- This template (and those it employs) are also used  -->
+<!-- in "extract-latex-image.xsl" so check consequences  -->
+<!-- there if this changes.                              -->
+<!-- We do not really support legacy "latex-image-code", -->
+<!-- but following should just see a single large text   -->
+<!-- node and reproduce it.  Just like before structure, -->
+<!-- such as "label" was introduced.                     -->
+<xsl:template match="latex-image|latex-image-code">
+    <xsl:call-template name="sanitize-text">
+        <xsl:with-param name="text">
+            <!-- we need to copy text bits verbatim (value-of), -->
+            <!-- versus applying templates to "label" elements  -->
+            <!-- (could match on, e.g., latex-image/text() )    -->
+            <xsl:for-each select="text()|label">
+                <xsl:choose>
+                    <xsl:when test="self::text()">
+                        <xsl:value-of select="."/>
+                    </xsl:when>
+                    <xsl:when test="self::label">
+                        <xsl:apply-templates select="."/>
+                    </xsl:when>
+                </xsl:choose>
+            </xsl:for-each>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- This is producing TikZ code, so will not be effective in any sort    -->
+<!-- of "LaTeX image" scenario.  Thus the experimental designation above. -->
+<xsl:template match="label">
+    <xsl:text>\node [</xsl:text>
+    <xsl:value-of select="@direction"/>
+    <xsl:text>] at (</xsl:text>
+    <xsl:value-of select="@location"/>
+    <xsl:text>) {</xsl:text>
+    <!-- process content as if structured -->
+    <!-- like contents of a paragraph     -->
+    <xsl:apply-templates/>
+    <xsl:text>};</xsl:text>
 </xsl:template>
 
 <!-- EXPERIMENTAL -->

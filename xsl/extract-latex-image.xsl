@@ -33,6 +33,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Get internal ID's for filenames, etc -->
 <xsl:import href="./pretext-common.xsl" />
 
+<!-- We use some common code to make the actual LaTeX code used      -->
+<!-- for the image.  The extract-identity stylesheet will override   -->
+<!-- the entry template, so we just access some templates as needed. -->
+<xsl:import href="./pretext-latex.xsl"/>
+
 <!-- Get a "subtree" xml:id value   -->
 <!-- Then walk the XML source tree  -->
 <!-- applying specializations below -->
@@ -100,9 +105,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <!-- latex graphics to standalone file        -->
-<xsl:template match="image/latex-image-code|image/latex-image" mode="extraction">
+<!-- Intercept "extraction" process at identical template in -latex -->
+<xsl:template match="image[latex-image-code]|image[latex-image]" mode="extraction">
     <xsl:variable name="filebase">
-        <xsl:apply-templates select=".." mode="visible-id" />
+        <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
     <!-- Do not use directories here, as Windows paths will get mangled -->
     <!-- Instead, set working directory before applying stylesheet      -->
@@ -153,11 +159,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex-macros" />
         <xsl:text>\begin{document}&#xa;</xsl:text>
         <xsl:text>\pagestyle{empty}&#xa;</xsl:text>
-        <xsl:call-template name="sanitize-text">
-            <xsl:with-param name="text" select="." />
-        </xsl:call-template>
+        <!-- These templates are in pretext-latex.xsl -->
+        <xsl:apply-templates select="latex-image|latex-image-code"/>
         <xsl:text>\end{document}&#xa;</xsl:text>
     </exsl:document>
-  </xsl:template>
+</xsl:template>
 
 </xsl:stylesheet>
