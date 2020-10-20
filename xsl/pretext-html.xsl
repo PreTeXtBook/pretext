@@ -8311,6 +8311,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:attribute>
+                    <!-- SQL (only) needs an attribute so it can find some code -->
+                    <xsl:if test="$active-language = 'sql'">
+                        <xsl:attribute name="data-wasm">
+                            <xsl:text>/_static</xsl:text>
+                        </xsl:attribute>
+                    </xsl:if>
                     <xsl:call-template name="sanitize-text">
                         <xsl:with-param name="text" select="input" />
                     </xsl:call-template>
