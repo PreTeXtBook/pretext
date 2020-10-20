@@ -3487,35 +3487,58 @@ the xsltproc executable.
                     <caption>The complex <m>8^\text{th}</m> roots of unity</caption>
                     <image xml:id="roots-of-unity" width="60%">
                         <latex-image>
+                        <!-- indentation expects forthcoming groupings, -->
+                        <!-- so the diffs might be more informative     -->
                         \begin{tikzpicture}[scale=1.65]
+                        \coordinate (negative-y-axis) at (0,-1.5);
+                        \coordinate (positive-y-axis) at (0,1.5);
+                        \coordinate (negative-x-axis) at (-1.75,0);
+                        \coordinate (positive-x-axis) at (1.75,0);
+                        \coordinate (origin) at (0,0);
 
-                        \draw [->]  (0,-1.5) -- (0,1.5);
-                        \draw  [->] (-1.75,0) -- (1.75,0);
-                        \node [right] at (0,1.5) {$y$};
-                        \node [below] at (1.75,0) {$x$};
-                        \node [below] at (0.1,0) {$0$};
+                        \pgfmathsetmacro{\pointsize}{0.06}
 
-                        \draw (0,0) circle (1);
+                        <!-- locations in polar coordinates -->
+                        \coordinate (zero)  at (0:1);
+                        \coordinate (one)   at (45:1);
+                        \coordinate (two)   at (90:1);
+                        \coordinate (three) at (135:1);
+                        \coordinate (four)  at (180:1);
+                        \coordinate (five)  at (225:1);
+                        \coordinate (six)   at (270:1);
+                        \coordinate (seven) at (315:1);
 
-                        \filldraw[fill=black, draw=black] (0:1) circle (0.03);
-                        \filldraw[fill=black, draw=black] (45:1) circle (0.03);
-                        \filldraw[fill=black, draw=black] (90:1) circle (0.03);
-                        \filldraw[fill=black, draw=black] (135:1) circle (0.03);
-                        \filldraw[fill=black, draw=black] (180:1) circle (0.03);
-                        \filldraw[fill=black, draw=black] (225:1) circle (0.03);
-                        \filldraw[fill=black, draw=black] (270:1) circle (0.03);
-                        \filldraw[fill=black, draw=black] (315:1) circle (0.03);
+                                \draw [->]  (negative-x-axis) -- (positive-x-axis);
+                                \draw [->]  (negative-y-axis) -- (positive-y-axis);
+                                <label xml:id="origin" location="origin" direction="below right"><m>0</m></label>
+                                <label xml:id="posx" location="positive-x-axis" direction="above"><m>x</m>-axis</label>
+                                <label xml:id="posy" location="positive-y-axis" direction="right"><m>y</m>-axis</label>
 
+                            \draw (origin) circle (1);
 
-                        \node [right] at (1,-0.15) {1};
-                        \node [right] at (45:1) {$\omega$};
-                        \node [left] at (0,1.15) {$i$};
-                        \node [left] at (135:1) {$\omega^3$};
-                        \node [left] at (-1,-0.15) {$-1$};
-                        \node [left] at (225:1) {$\omega^5$};
-                        \node [left] at (0,-1.15) {$-i$};
-                        \node [right] at (315:1) {$\omega^7$};
+                                    \filldraw[fill=black, draw=black] (zero)   circle (\pointsize);
+                                    <label xml:id="power-zero" location="zero" direction="below right"><m>1</m></label>
 
+                                    \filldraw[fill=black, draw=black] (one)    circle (\pointsize);
+                                    <label xml:id="power-one" location="one" direction="above right"><m>\omega</m></label>
+
+                                    \filldraw[fill=black, draw=black] (two)    circle (\pointsize);
+                                    <label xml:id="power-two" location="two" direction="above right"><m>i</m></label>
+
+                                    \filldraw[fill=black, draw=black] (three)  circle (\pointsize);
+                                    <label xml:id="power-three" location="three" direction="above left"><m>\omega^3</m></label>
+
+                                    \filldraw[fill=black, draw=black] (four)    circle (\pointsize);
+                                    <label xml:id="power-four" location="four" direction="below left"><m>-1</m></label>
+
+                                    \filldraw[fill=black, draw=black] (five)   circle (\pointsize);
+                                    <label xml:id="power-five" location="five" direction="below left"><m>\omega^5</m></label>
+
+                                    \filldraw[fill=black, draw=black] (six)    circle (\pointsize);
+                                    <label xml:id="power-six" location="six" direction="below right"><m>-i</m></label>
+
+                                    \filldraw[fill=black, draw=black] (seven)  circle (\pointsize);
+                                    <label xml:id="power-seven" location="seven" direction="below right"><m>\omega^7</m></label>
                         \end{tikzpicture}
                         </latex-image>
                     </image>
