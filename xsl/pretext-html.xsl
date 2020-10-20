@@ -8651,7 +8651,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <title>
             <xsl:apply-templates select="." mode="title-full"/>
         </title>
-    <!-- recurse into PTX sections -->
+    <!-- Recurse into PTX sections, or if the chapter is not structured, -->
+    <!-- then pick up inline exercises directly within a chapter         -->
     <xsl:apply-templates select="*" mode="runestone-manifest"/>
     </chapter>
 </xsl:template>
@@ -8668,9 +8669,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <title>
             <xsl:apply-templates select="." mode="title-full"/>
         </title>
-        <!-- nearly a dead end, recurse only into exercises and programs -->
-        <!-- within this RS "subchapter", but at *any* PTX depth         -->
-        <xsl:apply-templates select=".//exercise|.//program"  mode="runestone-manifest"/>
+        <!-- nearly a dead end, recurse into exercises at *any* PTX depth, -->
+        <!-- but recurse into &PROJECT-LIKE; as children of "section"      -->
+        <xsl:apply-templates select=".//exercise|project|activity|exploration|investigation"  mode="runestone-manifest"/>
     </subchapter>
     <!-- dead end structurally, no more recursion, even if "subsection", etc. -->
 </xsl:template>
@@ -8678,7 +8679,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A Runestone exercise needs to identify itself when an instructor wants   -->
 <!-- to select it for assignment, so we want to provide enough identification -->
 <!-- in the manifest, via a "label" element full of raw text.                 -->
-<xsl:template match="exercise" mode="runestone-manifest-label">
+<xsl:template match="exercise|project|activity|exploration|investigation" mode="runestone-manifest-label">
     <label>
         <xsl:apply-templates select="." mode="type-name"/>
         <xsl:text> </xsl:text>
@@ -8703,12 +8704,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercise[webwork-reps]" mode="runestone-manifest">
     <question>
         <xsl:apply-templates select="." mode="runestone-manifest-label"/>
+        <!-- N.B.  Better here to ask for "exercise-components"? -->
         <xsl:apply-templates select="introduction|webwork-reps|conclusion"/>
     </question>
 </xsl:template>
 
 <!-- Coding Exercise to the Runestone manifest -->
-<xsl:template match="exercise[program]" mode="runestone-manifest">
+<!--   "exercise" with "program" *outside* of "statement" -->
+<!--   &PROJECT-LIKE; only at top-level                   -->
+<xsl:template match="exercise[program]|project[program]|activity[program]|exploration[program]|investigation[program]" mode="runestone-manifest">
     <xsl:variable name="active-language">
         <xsl:apply-templates select="program" mode="active-language"/>
     </xsl:variable>

@@ -173,6 +173,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <answer>We're not really sure.</answer>
         </exercise>
 
+        <activity>
+            <title>Activity Coding Exercise</title>
+
+            <statement>
+                <p>Similar to above, but now as an <tag>activity</tag>.  This demonstrates the possibility to use any <q>project-like</q> block (<tag>project</tag>, <tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag>), but not in the case when structured with <tag>task</tag>.</p>
+            </statement>
+            <program xml:id="coding-exercise-partial" language="c" interactive="yes">
+                <input>
+                #include
+
+                int main(void)
+                </input>
+            </program>
+            <answer>We're still not really sure.</answer>
+        </activity>
+
         <exercise>
             <title>Inline Coding Exercise, Static</title>
 
