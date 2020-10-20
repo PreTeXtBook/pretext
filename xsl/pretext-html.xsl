@@ -4026,8 +4026,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="block-type" select="$block-type"/>
                 </xsl:apply-templates>
             </xsl:if>
-            <!-- we consider a "program" of a coding exercise as part of the "statement" -->
-            <xsl:apply-templates select="program"/>
+            <!-- We consider a "program" of a coding exercise as part of the "statement" -->
+            <!-- for the purpose of deciding if it is included or not.  As a peer of a   -->
+            <!-- "statement" (not a child of a "statement") on Runestone we go straight  -->
+            <!--  to an ActiveCode window, else we respect the @interactive attribute.   -->
+            <xsl:choose>
+                <xsl:when test="$b-host-runestone">
+                    <xsl:apply-templates select="program" mode="runestone-activecode"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="program"/>
+                </xsl:otherwise>
+            </xsl:choose>
             <!-- no  div.solutions  if there is nothing to go into it -->
             <xsl:if test="(hint and $b-has-hint) or (answer and $b-has-answer) or (solution and $b-has-solution)">
                 <div class="solutions">
@@ -8717,7 +8727,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="program" mode="active-language"/>
     </xsl:variable>
     <!-- if elected as interactive AND @language is supported -->
-    <xsl:if test="(program/@interactive = 'yes') and not($active-language = '')">
+    <xsl:if test="not($active-language = '')">
         <question>
             <!-- label is from the "exercise" -->
             <xsl:apply-templates select="." mode="runestone-manifest-label"/>
