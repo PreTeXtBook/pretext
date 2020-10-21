@@ -149,7 +149,8 @@
         <c>-s</c> specifies the <webwork/> server.
         The <webwork /> server needs to be version 2.14 or later, specified with its protocol and domain,
         like <c>https://webwork-ptx.aimath.org</c>.
-        (If you do not have a server, you may use <c>https://webwork-ptx.aimath.org</c>.)
+        It is <em>important</em> to get the protocol correct for your server (<c>http</c> versus <c>https</c>).
+        If you do not have a server, you may use <c>https://webwork-ptx.aimath.org</c>.
       </p>
       <p>
         If any of your hosting course, user for that course, password for the site, or password for the course user are not <q>anonymous</q>,
@@ -157,6 +158,7 @@
         <cd>-s "(https://webwork-ptx.aimath.org,courseID,userID,site_password,course_password)"</cd>
         The <c>site_password</c> is probably <q>anonymous</q>,
         but could be something different. Only server administrators can set this.
+        Again, it is <em>important</em> to get the protocol correct for your server (<c>http</c> versus <c>https</c>).
       </p>
       <p>
         <c>-d</c> specifies a path to the folder where the auxiliary files will be stored.
