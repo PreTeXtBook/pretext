@@ -55,8 +55,12 @@ so that we can set our own later */
 }
 .pretext-content .aside-like > p:first-child,
 .pretext-content td > p:first-child,
-.pretext-content .solution > p:first-child {
+.pretext-content .solution-like > p:first-child {
     margin-top: 0;
+}
+/* for assemblages without a title */
+.pretext-content .assemblage-like > p:first-of-type {
+    margin-top: 0.25em;
 }
 .pretext-content p.intertext {
     margin-top: -0.25em;
@@ -1209,7 +1213,8 @@ body > a.assistive:focus {
 }
 /* when jumping to a permalink, push down so sticky navbar does not cover */
 :target {
-    scroll-margin-top: 42px;
+    /* scroll-snap-margin-top: 45px;   for safari, except it doesn't work */
+    scroll-margin-top: 45px;
 }
 
 .pretext-content .exercises > .autopermalink,
