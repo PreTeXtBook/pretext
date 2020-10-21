@@ -84,6 +84,7 @@ WWOUT      = $(SCRATCH)/webwork-representations
 # Either specify only the protocol and domain (like https://webwork.yourschool.edu)
 # or specify a 5-tuple with quotes exactly as in this example
 # SERVER = "(https://webwork-ptx.aimath.org,courseID,userID,password,course_password)"
+# NOTE: it is IMPORTANT to get the protocol correct for your server (HTTP versus HTTPS)
 SERVER = https://webwork-ptx.aimath.org
 
 
