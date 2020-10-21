@@ -46,6 +46,8 @@ so that we can set our own later */
     line-height: 1.1;
 }
 
+/* spacing around and after p, and around and after article */
+
 .pretext-content p {
     margin-top: 1.25em;
     margin-bottom: 0;
@@ -60,6 +62,97 @@ so that we can set our own later */
     margin-top: -0.25em;
     text-indent: 0;
 }
+
+.pretext-content p + table {
+    margin-top: 1em;
+}
+
+.pretext-content table tr td p + p {
+    margin-top: 1em;
+}
+
+.pretext-content table + p {
+    margin-top: 1.5em;
+}
+
+.pretext-content p + figure.figure-like > table {
+    margin-top: 1em;
+}
+
+/* 1.25 = ol top + li top ?  looked too big with 0.75 below */
+.pretext-content .exercise-like p + ol {  
+    margin-top: 0.5em;
+}
+
+.pretext-content p + pre.prettyprint,
+.pretext-content p + pre.plainprint {
+    margin-top: 1.25em;
+}
+.pretext-content p + .code-box {
+    margin-top: 1.25em;
+}
+.pretext-content .code-box > .console{
+    margin-left: 1.5em;
+}
+
+
+
+
+
+
+
+
+
+
+/* this > may be too restrictive.  The purpose is to not put a
+   top margin on an article at the top of a knowl */
+.pretext-content section > article {
+    margin-top: 1.25em;
+}
+.pretext-content section article + article,
+.pretext-content section p + article,
+.pretext-content section .posterior + article {
+    margin-top: 1.75em;
+}
+.pretext-content section article > .introduction + article {
+    margin-top: 1em;
+}
+.pretext-content article + .hidden-knowl-wrapper {
+    margin-top: 1em;
+}
+.pretext-content article + .posterior {
+    margin-top: 0.5em;
+}
+.pretext-content section p + .tabular-box {
+    margin-top: 0.75em;
+}
+.pretext-content section .proof {
+    margin-top: 0.75em;
+}
+
+.pretext-content section > pre, .pretext-content p + pre {
+    margin-top: 1.25em;
+}
+
+.pretext-content ol p + p, .pretext-content ul p + p {
+    margin-top: 1em;
+}
+
+/* see Ex 29 https://yoshiwarabooks.org/linear-functions.html 
+and ex 2.91 in 
+https://yoshiwarabooks.org/mfg/MathModels.html */
+.pretext-content p + .sidebyside,
+.pretext-content ol + .sidebyside,
+.pretext-content ul + .sidebyside {
+    margin-top: 1em;
+}
+
+
+
+
+
+
+
 
 .pretext-content ol, .pretext-content ul {
     margin-bottom: 0;
@@ -81,33 +174,6 @@ so that we can set our own later */
 .pretext-content .heading {
     margin-top: 0;
     margin-bottom: 0;
-}
-
-/* this > may be too restrictive.  The purpose is to not put a
-   top margin on an article at the top of a knowl */
-.pretext-content section > article {
-    margin-top: 1.25em;
-}
-.pretext-content section article + article,
-.pretext-content section p + article,
-.pretext-content section .posterior + article {
-    margin-top: 1.75em;
-}
-.pretext-content section article > .introduction + article {
-    margin-top: 1em;
-}
-.pretext-content article + .hidden-knowl-wrapper {
-    margin-top: 1em;
-}
-.pretext-content article + .posterior {
-    margin-top: 0.5em;
-}
-.pretext-content section .proof {
-    margin-top: 0.75em;
-}
-
-.pretext-content section > pre, .pretext-content p + pre {
-    margin-top: 1.25em;
 }
 
 .pretext-content .conclusion {
@@ -142,10 +208,6 @@ so that we can set our own later */
 
 .pretext-content ol ol, .pretext-content ol ul,  .pretext-content ul ol, .pretext-content ul ul {
     margin-top: 0.5em;
-}
-
-.pretext-content ol p + p, .pretext-content ul p + p {
-    margin-top: 1em;
 }
 
 .pretext-content dl dt, .pretext-content dl dd {
@@ -340,7 +402,9 @@ so that we can set our own later */
 from Jiří Lebl */
 .pretext-content .MJXc-display, .pretext-content .knowl-output .knowl-output .knowl-output .knowl-output .MJXc-display ,
 .pretext-content pre.prettyprint,
-.pretext-content pre.plainprint {
+.pretext-content pre.plainprint, 
+.pretext-content pre.console,
+.pretext-content .code-box {
     background-image: linear-gradient(to right, white, white), linear-gradient(to right, white, white), linear-gradient(to right, rgba(0,0,0,.25), rgba(255,255,255,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(255,255,255,0));
     background-position: left center, right center, left center, right center;
     background-repeat: no-repeat;
@@ -538,6 +602,7 @@ body > a.assistive:focus {
 
 .pretext-content figure.table-like figcaption:first-child {
     font-style: oblique;
+    margin-top: 0;
 }
 .pretext-content figure.table-like figcaption:first-child .type,
 .pretext-content figure.table-like figcaption:first-child .codenumber {
@@ -661,6 +726,11 @@ body > a.assistive:focus {
     display: inline-block;
     margin: 0;
 }
+.pretext-content .sidebyside .sbspanel > table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+}
 
 .pretext-content .sidebyside figcaption {
     padding-left: 1em; 
@@ -697,15 +767,6 @@ body > a.assistive:focus {
 
 .pretext-content .sidebyside {
     width: 100%;
-}
-
-/* see Ex 29 https://yoshiwarabooks.org/linear-functions.html 
-and ex 2.91 in 
-https://yoshiwarabooks.org/mfg/MathModels.html */
-.pretext-content p + .sidebyside,
-.pretext-content ol + .sidebyside,
-.pretext-content ul + .sidebyside {
-    margin-top: 1em;
 }
 
 .pretext-content .sbsrow {
@@ -751,10 +812,6 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     overflow-x: scroll;
 }
 */
-
-.pretext-content p + table {
-    margin-top: 1em;
-}
 
 .pretext-content table {
     border-spacing: 0;
@@ -981,14 +1038,6 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     margin-left: 1em;
 }
 
-.pretext-content table tr td p + p {
-    margin-top: 1em;
-}
-
-.pretext-content table + p {
-    margin-top: 1.5em;
-}
-
 .pretext-content table tr td span.decimal {
     float: left;
     text-align: right;
@@ -996,6 +1045,12 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 
 .pretext-content table + article {
     margin-top: 1em;
+}
+
+#pretext-SA #table-12 table  tr:first-of-type th {
+    background: #faa;
+    writing-mode: vertical-rl;
+    transform: none!important;
 }
 
 .pretext-content .hidden-knowl-wrapper .hiddenproof,
@@ -1018,9 +1073,6 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .pretext-content figure.table-like {
     margin-left: 30px;
     margin-right: 30px;
-}
-.pretext-content p + figure.figure-like > table {
-    margin-top: 1em;
 }
 
 .pretext-content figure.figure-like figcaption {
@@ -1120,11 +1172,13 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 }
 
 /* temporary for runestone */
+/*
 .pretext-content section article .heading + div,
 .pretext-content section article.exercise  .heading + div,
 .pretext-content section article.exercise  .heading + div > p:first-child,
 .pretext-content section article .heading + div.exercisegroup > div:first-child,
 .pretext-content section article .heading + div.exercisegroup > div:first-child > p:first-child,
+*/
 .pretext-content section article .heading + div.runestone,
 .pretext-content section article .heading + div.runestone > div:first-child,
 .pretext-content section article .heading + div.runestone > div:first-child > p:first-child {
@@ -1159,6 +1213,7 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     padding-right: 0.2em;
 }
 /* when jumping to a permalink, push down so sticky navbar does not cover */
+/*
 :target::before {
   content: "";
   display: block;
@@ -1166,10 +1221,17 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
   padding: -42px 0 0;
   border: 0;
 }
+*/
+/* when jumping to a permalink, push down so sticky navbar does not cover */
+:target {
+    scroll-margin-top: 42px;
+}
 
+/*
 :target > div.autopermalink {
   top: 45px;
 }
+*/
 
 /*
 .pretext-content .autopermalink {
@@ -1379,22 +1441,10 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     float: left;
 }
 
-/* 1.25 = ol top + li top ?  looked too big with 0.75 below */
-.pretext-content .exercise-like p + ol {  
-    margin-top: 0.5em;
-}
-/*
-.pretext-content .exercise-like ol {  
-    margin-bottom: 0;
-}
-*/
-
 .pretext-content .incontext {
     display: block;
     font-size: 85%;
     text-align: right;
-/*    margin-bottom: -1.0em;
-*/
 }
 
 .pretext-content .terminology {
@@ -1853,9 +1903,16 @@ a.mjx-svg-href  {
 
 .pretext-content .code-inline,
 .pretext-content .code-block,
-.pretext-content .console {
+.pretext-content .console,
+.pretext-content .program {
     font-family: "Inconsolata", monospace;
 }
+.pretext-content .code-block,
+.pretext-content .console,
+.pretext-content .program {
+    overflow-x: auto;
+}
+
 .pretext-content .code-inline {
     font-size: 1em;
     white-space: nowrap;
@@ -2094,6 +2151,9 @@ figure figcaption.wrap {
 .pretext-content figure .image-box {
     margin-top: 0;
 }
+.pretext-content .sidebyside figure {
+    margin-top: 0;
+}
 .pretext-content .image-box img,  /* See sample article Graphics section */
 .pretext-content .sbspanel img {
     width: 100%;
@@ -2194,11 +2254,6 @@ code.inline {
     padding-bottom: 0.25em;
 */
     width: 2.5em;
-}
-
-.pretext-content p + pre.prettyprint,
-.pretext-content p + pre.plainprint {
-    margin-top: 1.25em;
 }
 
 .pretext-content .objectives {
@@ -3023,11 +3078,6 @@ main a[data-knowl].newstuff {
     background: #fff;
 }
 
-/*
-table td { border-left: 1px solid #000; }
-table td:first-child { border-left: none; }
-*/
-
 .pretext-content .wwprob ol, .pretext-content .wwprob ul {
     margin-top: 0.75em !important;
 }
@@ -3174,6 +3224,9 @@ label.incorrect .feedback {
 .pretext-content .exercise-wrapper form > div:first-child {
     display: inline-block;
     vertical-align: top;
+}
+.pretext-content .exercise-wrapper form {
+     max-width: 95%;
 }
 
 /*
