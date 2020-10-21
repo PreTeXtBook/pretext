@@ -1197,11 +1197,6 @@ body > a.assistive:focus {
 .pretext-content .autopermalink {
     position: absolute;
     display: inline-block;
-/*
-    max-width: 3em;
-    padding-left: 0.5em;
-    padding-right: 0.5em;
-*/
     top: 3px;
     left: -1.9em;
     font-size: 85%;
@@ -1213,36 +1208,10 @@ body > a.assistive:focus {
     padding-right: 0.2em;
 }
 /* when jumping to a permalink, push down so sticky navbar does not cover */
-/*
-:target::before {
-  content: "";
-  display: block;
-  height: 42px;
-  padding: -42px 0 0;
-  border: 0;
-}
-*/
-/* when jumping to a permalink, push down so sticky navbar does not cover */
 :target {
     scroll-margin-top: 42px;
 }
 
-/*
-:target > div.autopermalink {
-  top: 45px;
-}
-*/
-
-/*
-.pretext-content .autopermalink {
-    position: absolute;
-    top: 0px;
-    right: -120px;
-    font-size: 85%;
-    color: #a00;
-    opacity: 0.02
-}
-*/
 .pretext-content .exercises > .autopermalink,
 .pretext-content .introduction > .autopermalink,
 .pretext-content .glossary > .autopermalink {
