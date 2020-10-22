@@ -1443,9 +1443,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- solutions to inline exercises -->
         <xsl:if test="$document-root//exercise[boolean(&INLINE-EXERCISE-FILTER;)]">
         <xsl:text>%% Solutions to inline exercises, style and environment&#xa;</xsl:text>
-            <xsl:text>\tcbset{ inlineexercisesolutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable, parbox=false } }&#xa;</xsl:text>
-            <xsl:text>\newtcolorbox{inlineexercisesolution}[3]</xsl:text>
-            <xsl:text>{inlineexercisesolutionstyle, title={\hyperref[#3]{</xsl:text>
+            <xsl:text>\tcbset{ inlinesolutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable, parbox=false } }&#xa;</xsl:text>
+            <xsl:text>\newtcolorbox{inlinesolution}[3]</xsl:text>
+            <xsl:text>{inlinesolutionstyle, title={\hyperref[#3]{</xsl:text>
             <!-- Hardcode "name" of an inline exercise in the environment -->
             <xsl:call-template name="type-name">
                 <xsl:with-param name="string-id" select="'inlineexercise'" />
@@ -5504,7 +5504,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>solution</xsl:text>
         </xsl:when>
         <xsl:when test="&INLINE-EXERCISE-FILTER;">
-            <xsl:text>inlineexercisesolution</xsl:text>
+            <xsl:text>inlinesolution</xsl:text>
         </xsl:when>
         <xsl:when test="ancestor::exercises or ancestor::worksheet or ancestor::reading-questions">
             <xsl:text>divisionsolution</xsl:text>
