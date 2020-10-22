@@ -6918,9 +6918,9 @@ the xsltproc executable.
                 <title>Inline Coding Exercise, No Help</title>
 
                 <statement>
-                    <p>An exercise might ask a reader to write a computer program, that would go here in the <tag>statement</tag>.  But you can also add a <tag>program</tag> element after a <tag>statement</tag>.  Here we place no code at all, but we do say we want it to be interactive.  The purpose is to make it a live coding environment for a version of your output that allows the reader to perhaps submit a solution.  The <tag>program</tag> element is necessary so you can specify a programming language.</p>
+                    <p>An exercise might ask a reader to write a computer program, so you can also add a <tag>program</tag> element after the <tag>statement</tag> of an <tag>exercise</tag>.    The purpose is to make it a live coding environment for a version of your output that allows the reader to perhaps submit a solution, if the hosting enviromnment is capable of that.    The <tag>program</tag> element is necessary so you can specify a programming language.  Here we place no code at all in the <tag>program</tag>, so there may be noting at all to see.</p>
                 </statement>
-                <program xml:id="coding-exercise-blank" language="python" interactive="yes"/>
+                <program xml:id="coding-exercise-blank" language="python"/>
                 <hint>We didn't really ask you to do anything.</hint>
             </exercise>
 
@@ -6928,9 +6928,9 @@ the xsltproc executable.
                 <title>Inline Coding Exercise, Partial</title>
 
                 <statement>
-                    <p>Similar to above, but we provide a starting point for the exercise.</p>
+                    <p>Similar to above, but we provide an incomplete start for the exercise, which is likely visible in all conversions.</p>
                 </statement>
-                <program xml:id="coding-exercise-partial" language="c" interactive="yes">
+                <program xml:id="coding-exercise-partial" language="c">
                     <input>
                     #include
 
