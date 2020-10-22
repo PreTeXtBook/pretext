@@ -6574,59 +6574,54 @@ the xsltproc executable.
 
             <p>In the meantime, program listings,<idx><h>listing</h></idx><idx><h>program listing</h></idx> especially with syntax highlighting, is useful all by itself.  The <q>R</q> language might not be a bad stand-in for pseudo-code, as it supports assignment with a left arrow and has fairly generic procedural syntax for control structures and data structures.  Or maybe Pascal would be a good choice?  Here is an example of R.  Note in the source that the entire block of code is wrapped in a CDATA section due to the four left angle brackets.  We do not recommend this technique for isolated problem characters, but it is a life-saver for situations like the <init>XSLT</init> code just following.</p>
 
+
             <!-- Output in knowls?? -->
 
             <!-- Comments edited for length                                                         -->
             <!-- http://connectmv.com/tutorials/r-tutorial/programming-in-r-loops-and-flow-control/ -->
-            <sidebyside width="100%">
-                <program language="r">
-                    <input>
-                    <![CDATA[n_loops <- 10
-                    x.means <- numeric(n_loops)  # create a vector of zeros for results
-                    for (i in 1:n_loops){
-                        x <- as.integer(runif(100, 1, 7))  # 1 to 6, uniformly
-                        x.means[i] <- mean(x)
-                    }
-                    x.means]]>
-                    </input>
-                </program>
-            </sidebyside>
+            <program language="r">
+                <input>
+                <![CDATA[n_loops <- 10
+                x.means <- numeric(n_loops)  # create a vector of zeros for results
+                for (i in 1:n_loops){
+                    x <- as.integer(runif(100, 1, 7))  # 1 to 6, uniformly
+                    x.means[i] <- mean(x)
+                }
+                x.means]]>
+                </input>
+            </program>
 
             <p>And some self-referential XSL:</p>
 
-            <sidebyside margins="15%">
-                <program language="xslt">
-                    <input>
-                    <![CDATA[<xsl:template match="biblio" mode="number">
-                        <xsl:apply-templates select="." mode="structural-number" />
-                        <xsl:text>.</xsl:text>
-                        <xsl:number from="references" level="any" count="biblio" />
-                    </xsl:template>]]>
-                    </input>
-                </program>
-            </sidebyside>
+            <program language="xslt" margins="15%">
+                <input>
+                <![CDATA[<xsl:template match="biblio" mode="number">
+                    <xsl:apply-templates select="." mode="structural-number" />
+                    <xsl:text>.</xsl:text>
+                    <xsl:number from="references" level="any" count="biblio" />
+                </xsl:template>]]>
+                </input>
+            </program>
 
             <p>You can write made-up pseudo-code, but you might explain to a reader what your symbols all mean.  This routine takes the <m>m\times n</m> marix <m>A</m> to reduced row-echelon form.  Note that with no language specified, there is no special formatting or use of color.  Note in the source the use of escaped characters for the three less-than symbols.</p>
 
-            <sidebyside margins="5%">
-                <program>
-                    <input>
-                    input m, n and A
-                    r := 0
-                    for j := 1 to n
-                       i := r+1
-                       while i &lt;= m and A[i,j] == 0
-                           i := i+1
-                       if i &lt; m+1
-                           r := r+1
-                           swap rows i and r of A (row op 1)
-                           scale A[r,j] to a leading 1 (row op 2)
-                           for k := 1 to m, k &lt;> r
-                               make A[k,j] zero (row op 3, employing row r)
-                    output r and A
-                    </input>
-                </program>
-            </sidebyside>
+            <program margins="5%">
+                <input>
+                input m, n and A
+                r := 0
+                for j := 1 to n
+                   i := r+1
+                   while i &lt;= m and A[i,j] == 0
+                       i := i+1
+                   if i &lt; m+1
+                       r := r+1
+                       swap rows i and r of A (row op 1)
+                       scale A[r,j] to a leading 1 (row op 2)
+                       for k := 1 to m, k &lt;> r
+                           make A[k,j] zero (row op 3, employing row r)
+                output r and A
+                </input>
+            </program>
 
             <p>Look in the <c>pretext-common.xsl</c> file to see the strings to use to identify languages.  Always all-lowercase, no symbols, no punctuation.</p>
 
