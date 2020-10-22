@@ -5254,9 +5254,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{case}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- ######### -->
-<!-- Exercises -->
-<!-- ######### -->
+<!-- ##################### -->
+<!-- Exercises and Projects-->
+<!-- ##################### -->
 
 <!-- Exercises are inline (parent is a division), or           -->
 <!-- divisional by virtue of being in an "exercises"           -->
@@ -5276,15 +5276,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (statement, hint, answer, solution) visible or not        -->
 
 <!-- A template formulates the various possible environments   -->
-<xsl:template match="exercise" mode="environment-name">
+<xsl:template match="exercise|&PROJECT-LIKE;" mode="environment-name">
     <xsl:choose>
+        <!-- projects sit in divisions according to schema,  -->
+        <!-- just like inline exercises, so we catch them    -->
+        <!-- first, before differentiating exercises based   -->
+        <!-- on placement, just recycle PreTeXt element name -->
+        <xsl:when test="&PROJECT-FILTER;">
+            <xsl:value-of select="local-name(.)" />
+        </xsl:when>
         <xsl:when test="&INLINE-EXERCISE-FILTER;">
             <xsl:text>inlineexercise</xsl:text>
         </xsl:when>
+        <!-- "exercisegroup" and "exercisegroup/@cols" become -->
+        <!-- progressively more complicated to organize       -->
         <xsl:when test="ancestor::exercises or ancestor::worksheet or ancestor::reading-questions">
             <xsl:text>divisionexercise</xsl:text>
-            <!-- "exercisegroup" and "exercisegroup/@cols" become  -->
-            <!-- progressively more complicated to organize -->
             <xsl:if test="ancestor::exercisegroup">
                 <xsl:text>eg</xsl:text>
             </xsl:if>
@@ -5293,49 +5300,58 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:text>exercise-without-environment-name</xsl:text>
+            <xsl:text>exercise-project-without-environment-name</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
 <!-- Inline exercises (inside divisions, or pseudo-divisons     -->
-<!-- like "paragraphs") and divisional exercises                -->
+<!-- like "paragraphs"), project-like, and divisional exercises -->
 <!-- (exercises//exercise, worksheet//exercise, etc) when born, -->
-<!-- so appearance of componenets is under control of switches  -->
+<!-- so appearance of components is under control of switches   -->
 <!-- A division with "exercise" might be divided by a           -->
 <!-- "subexercises", "exercisegroup" or "sidebyside"            -->
 <!-- (worksheet), so we match with a //                         -->
-<xsl:template match="exercise[boolean(&INLINE-EXERCISE-FILTER;)]|exercises//exercise|worksheet//exercise|reading-questions//exercise">
+<xsl:template match="exercise[boolean(&INLINE-EXERCISE-FILTER;)]|&PROJECT-LIKE;|exercises//exercise|worksheet//exercise|reading-questions//exercise">
     <!-- Four types of exercises, we use local variables when we -->
     <!-- need to condition.  Exactly one of these is true, which -->
     <!-- is important in the more complicated booleans below.    -->
     <xsl:variable name="inline" select="boolean(&INLINE-EXERCISE-FILTER;)"/>
+    <xsl:variable name="project" select="boolean(&PROJECT-FILTER;)"/>
     <xsl:variable name="divisional" select="boolean(ancestor::exercises)"/>
     <xsl:variable name="worksheet" select="boolean(ancestor::worksheet)"/>
     <xsl:variable name="reading" select="boolean(ancestor::reading-questions)"/>
+    <!-- TODO: check that at least one is true? -->
 
-    <!-- There are four sets of switches, so we build a single set,  -->
+    <!-- There are five sets of switches, so we build a single set,  -->
     <!-- depending on what type of location the "exercise" lives in. -->
     <!-- For each, exactly one location is true, and then the        -->
     <!-- expression will evaluate to the corresponding global switch -->
     <xsl:variable name="b-has-statement" select="true()"/>
     <xsl:variable name="b-has-hint"
         select="($inline and $b-has-inline-hint)  or
+                ($project and $b-has-project-hint)  or
                 ($divisional and $b-has-divisional-hint) or
                 ($worksheet and $b-has-worksheet-hint)  or
                 ($reading and $b-has-reading-hint)"/>
     <xsl:variable name="b-has-answer"
         select="($inline and $b-has-inline-answer)  or
+                ($project and $b-has-project-answer)  or
                 ($divisional and $b-has-divisional-answer) or
                 ($worksheet and $b-has-worksheet-answer)  or
                 ($reading and $b-has-reading-answer)"/>
     <xsl:variable name="b-has-solution"
         select="($inline and $b-has-inline-solution)  or
+                ($project and $b-has-project-solution)  or
                 ($divisional and $b-has-divisional-solution) or
                 ($worksheet and $b-has-worksheet-solution)  or
                 ($reading and $b-has-reading-solution)"/>
-    <!-- TODO: check that at least one is true? -->
 
+    <!-- structured version of a project may contain a prelude, -->
+    <!-- which is rendered *before* environment begins          -->
+    <xsl:if test="$project and (statement or task)">
+        <xsl:apply-templates select="prelude" />
+    </xsl:if>
     <!-- The exact environment depends on the placement of the -->
     <!-- "exercise" when located in an "exercises" division    -->
     <xsl:variable name="env-name">
@@ -5345,7 +5361,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$env-name"/>
     <xsl:text>}</xsl:text>
     <xsl:choose>
-        <xsl:when test="$inline">
+        <xsl:when test="$inline or $project">
             <!-- Looks like lots of other environments -->
             <xsl:apply-templates select="." mode="block-options"/>
         </xsl:when>
@@ -5464,6 +5480,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$env-name"/>
     <xsl:text>}%&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
+    <!-- structured version of a project may contain a postlude, -->
+    <!-- which is rendered *after* environment ends              -->
+    <xsl:if test="$project and (statement or task)">
+        <xsl:apply-templates select="postlude" />
+    </xsl:if>
 </xsl:template>
 
 <!-- ################################# -->
@@ -5649,54 +5670,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}%&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
-
-<!-- Project Like -->
-<!-- More complicated structure possibly, with task as division -->
-<!-- Parameterized to allow control on hint, answer, solution   -->
-<xsl:template match="&PROJECT-LIKE;">
-    <!-- structured version may contain a prelude -->
-    <xsl:if test="statement or task">
-        <xsl:apply-templates select="prelude" />
-    </xsl:if>
-    <!-- environment, title, label string, newline -->
-    <xsl:text>\begin{</xsl:text>
-    <xsl:value-of select="local-name(.)" />
-    <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="." mode="block-options"/>
-    <xsl:text>%&#xa;</xsl:text>
-    <xsl:choose>
-        <!-- structured versions first      -->
-        <!-- prelude?, introduction?, task+, conclusion?, postlude? -->
-        <xsl:when test="task">
-            <xsl:apply-templates select="introduction"/>
-            <xsl:apply-templates select="task">
-                <xsl:with-param name="b-has-statement" select="true()" />
-                <xsl:with-param name="b-has-hint"      select="$b-has-project-hint" />
-                <xsl:with-param name="b-has-answer"    select="$b-has-project-answer" />
-                <xsl:with-param name="b-has-solution"  select="$b-has-project-solution" />
-            </xsl:apply-templates>
-            <xsl:apply-templates select="conclusion"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="." mode="exercise-components">
-                <xsl:with-param name="b-original" select="true()" />
-                <xsl:with-param name="b-has-statement" select="true()" />
-                <xsl:with-param name="b-has-hint"      select="$b-has-project-hint" />
-                <xsl:with-param name="b-has-answer"    select="$b-has-project-answer" />
-                <xsl:with-param name="b-has-solution"  select="$b-has-project-solution" />
-            </xsl:apply-templates>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>\end{</xsl:text>
-        <xsl:value-of select="local-name(.)" />
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:apply-templates select="." mode="pop-footnote-text"/>
-    <!-- structured version may contain a postlude -->
-    <xsl:if test="statement or task">
-        <xsl:apply-templates select="postlude" />
-    </xsl:if>
-</xsl:template>
-
 
 <!-- Project Like (in solutions divisions) -->
 <!-- Nothing produced if there is no content  -->
