@@ -8195,10 +8195,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Program Listings -->
 <!-- Research:  http://softwaremaniacs.org/blog/2011/05/22/highlighters-comparison/  -->
-<!-- From Google: downloadable, auto-detects languages, has hint-handlers            -->
-<!-- http://code.google.com/p/google-code-prettify/                                  -->
-<!-- http://code.google.com/p/google-code-prettify/wiki/GettingStarted               -->
-<!-- See common file for more on language handlers, and "language-prettify" template -->
+<!-- See common file for more on language handlers, and "language-prism" template    -->
 <!-- TODO: maybe ship sanitized "input" to each modal template? -->
 <xsl:template match="program[not(ancestor::sidebyside)]|console[not(ancestor::sidebyside)]">
     <xsl:choose>
@@ -8257,38 +8254,38 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- A non-interactive version with potential syntax -->
-<!-- highlighting from the Google Prettifier         -->
+<!-- A non-interactive version with potential -->
+<!-- syntax highlighting from Prism           -->
 <xsl:template match="program" mode="code-inclusion">
-    <xsl:variable name="pretty-language">
-        <xsl:apply-templates select="." mode="prettify-language"/>
+    <xsl:variable name="prism-language">
+        <xsl:apply-templates select="." mode="prism-language"/>
     </xsl:variable>
     <!-- a "program" element may be empty in a coding       -->
     <!-- exercise, and just used to indicate an interactive -->
     <!-- area supporting some language                      -->
     <xsl:variable name="b-has-input" select="not(normalize-space(input) = '')"/>
     <xsl:if test="$b-has-input">
-        <pre>
-            <xsl:attribute name="class">
-                <!-- always identify as coming from "program" -->
-                <xsl:text>program</xsl:text>
-                <!-- always add indicators (of some sort) for Prettifier -->
-                <xsl:choose>
-                    <!-- with a language supplied, pre.prettyprint -->
-                    <!-- activates styling and Prettifier effects  -->
-                    <xsl:when test="not($pretty-language = '')">
-                        <xsl:text> prettyprint lang-</xsl:text>
-                        <xsl:value-of select="$pretty-language" />
-                    </xsl:when>
-                    <!-- else, pre.plainprint just yields some minimal styling -->
-                    <xsl:otherwise>
-                        <xsl:text> plainprint</xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:attribute>
-            <xsl:call-template name="sanitize-text">
-                <xsl:with-param name="text" select="input" />
-            </xsl:call-template>
+        <!-- always identify as coming from "program" -->
+        <pre class="program">
+            <code>
+                <!-- Prism only needs a single class name, per language  -->
+                <!-- placed on "code" but will migrate to the "pre" also -->
+                <xsl:attribute name="class">
+                    <xsl:choose>
+                        <xsl:when test="not($prism-language = '')">
+                            <xsl:text>language-</xsl:text>
+                            <xsl:value-of select="$prism-language" />
+                        </xsl:when>
+                        <!-- else, explicitly use what code gives -->
+                        <xsl:otherwise>
+                            <xsl:text>language-none</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:attribute>
+                <xsl:call-template name="sanitize-text">
+                    <xsl:with-param name="text" select="input" />
+                </xsl:call-template>
+            </code>
         </pre>
     </xsl:if>
 </xsl:template>
@@ -9586,7 +9583,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- webwork's iframeResizer needs to come before sage -->
             <xsl:call-template name="webwork" />
             <xsl:apply-templates select="." mode="sagecell" />
-            <xsl:call-template name="google-code-prettifier" />
+            <xsl:call-template name="syntax-highlight-header"/>
             <xsl:call-template name="google-search-box-js" />
             <xsl:call-template name="mathbook-js" />
             <xsl:call-template name="knowl" />
@@ -9678,6 +9675,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="google-universal"/>
             <xsl:call-template name="google-gst"/>
             <xsl:call-template name="pytutor-footer" />
+            <xsl:call-template name="syntax-highlight-footer" />
             <xsl:call-template name="aim-login-footer" />
             <xsl:call-template name="extra-js-footer"/>
         </body>
@@ -10915,11 +10913,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Program Listings from Google -->
-<!--   ?skin=sunburst  on end of src URL gives black terminal look -->
-<xsl:template name="google-code-prettifier">
+<!-- Program Listings highlighted by Prism -->
+<xsl:template name="syntax-highlight-header">
     <xsl:if test="$b-has-program">
-        <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+        <link href="https://unpkg.com/prismjs@v1.22.0/themes/prism.css" rel="stylesheet"/>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template name="syntax-highlight-footer">
+    <xsl:if test="$b-has-program">
+        <script src="https://unpkg.com/prismjs@v1.22.0/components/prism-core.min.js"></script>
+        <script src="https://unpkg.com/prismjs@v1.22.0/plugins/autoloader/prism-autoloader.min.js"></script>
     </xsl:if>
 </xsl:template>
 

@@ -7795,26 +7795,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- other packages. Blank means not explicitly supported.    -->
 <!-- Alphabetical by type.                                    -->
 
-<!-- Prettify: -->
-<!-- Last reviewed 2018/09/23                      -->
-<!-- https://github.com/google/code-prettify       -->
-<!-- Some languages can be "guessed", indicated by -->
-<!-- "Prettify default"  in the comments.  But we  -->
-<!-- provide strings anyway.  List on 2019-09-23:  -->
-<!--                                               -->
-<!--     "bsh", "c", "cc", "cpp", "cs", "csh",     -->
-<!--     "cyc", "cv", "htm", "html", "java", "js", -->
-<!--     "m", "mxml", "perl", "pl", "pm", "py",    -->
-<!--     "rb", "sh", "xhtml", "xml", "xsl".        -->
-<!--                                               -->
-<!-- There are extension files for some other      -->
-<!-- languages, which register identifying strings -->
-<!-- that can be determined by opening their       -->
-<!-- files/code.  We use such strings here.        -->
-<!-- Comments say "Prettify extension".            -->
-<!-- 2019-09-23: there may be some new ones we     -->
-<!-- could add, but we have not reviewed the       -->
-<!-- necessary "listings" options: bash, Haskell   -->
+<!-- Prism: -->
+<!-- Last reviewed 2020-10-21                        -->
+<!-- 2020-10-21: Cutover from Google Code Prettifier -->
 
 <!-- Listings: -->
 <!-- Last reviewed carefully: 2014/06/28           -->
@@ -7826,54 +7809,53 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Languages supported by Runestone ActiveCode   -->
 <!-- interactive element, added 2020-08-13         -->
 
-<!-- Our strings (@mbx) are always all-lowercase, no symbols, no punctuation -->
+<!-- Our strings (@ptx) are always all-lowercase, no symbols, no punctuation -->
 <mb:programming>
     <!-- Procedural -->
-    <language mbx="basic"       active=""            listings="Basic"            prettify="basic"/>     <!-- Prettify extension 2018-09-23 -->
-    <language mbx="c"           active="c"           listings="C"                prettify="c"/>         <!-- Prettify default   2018-09-23 -->
-    <language mbx="cpp"         active="cpp"         listings="C++"              prettify="cpp"/>       <!-- Prettify default   2018-09-23 -->
-    <language mbx="go"          active=""            listings="C"                prettify="go"/>        <!-- Prettify extension 2018-09-23 -->
-    <language mbx="java"        active="java"        listings="Java"             prettify="java"/>      <!-- Prettify default   2018-09-23 -->
-    <language mbx="javascript"  active="javascript"  listings=""                 prettify="js"/>        <!-- Prettify default   2018-09-23 -->
-    <language mbx="lua"         active=""            listings="Lua"              prettify="lua"/>       <!-- Prettify extension 2018-09-23 -->
-    <language mbx="pascal"      active=""            listings="Pascal"           prettify="pascal"/>    <!-- Prettify extension 2018-09-23 -->
-    <language mbx="perl"        active=""            listings="Perl"             prettify="perl"/>      <!-- Prettify default   2018-09-23 -->
-    <language mbx="python"      active="python"      listings="Python"           prettify="py"/>        <!-- Prettify default   2018-09-23 -->
-    <language mbx="python2"     active="python2"     listings="Python"           prettify="py"/>        <!-- ActiveCode         2020-08-13 -->
-    <language mbx="python3"     active="python3"     listings="Python"           prettify="py"/>        <!-- ActiveCode         2020-08-13 -->
-    <language mbx="r"           active=""            listings="R"                prettify="r"/>         <!-- Prettify extension 2018-09-23 -->
-    <language mbx="s"           active=""            listings="S"                prettify="s"/>         <!-- Prettify extension 2018-09-23 -->
-    <language mbx="sas"         active=""            listings="SAS"              prettify="s"/>         <!-- Prettify extension 2018-09-23 -->
-    <language mbx="sage"        active=""            listings="Python"           prettify="py"/>        <!-- Prettify default   2018-09-23 -->
-    <language mbx="splus"       active=""            listings="[Plus]S"          prettify="s"/>         <!-- Prettify extension 2018-09-23 -->
-    <language mbx="vbasic"      active=""            listings="[Visual]Basic"    prettify="vb"/>        <!-- Prettify extension 2018-09-23 -->
-    <language mbx="vbscript"    active=""            listings="VBscript"         prettify="vbs"/>       <!-- Prettify extension 2018-09-23 -->
-    <!-- Others (esp. functional  -->
-    <language mbx="apollo"      active=""            listings=""                 prettify="apollo"/>    <!-- Prettify extension 2018-09-23 -->
-    <language mbx="clojure"     active=""            listings="Lisp"             prettify="clj"/>       <!-- Prettify extension 2018-09-23 -->
-    <language mbx="lisp"        active=""            listings="Lisp"             prettify="lisp"/>      <!-- Prettify extension 2018-09-23 -->
-    <language mbx="clisp"       active=""            listings="Lisp"             prettify="cl"/>        <!-- Prettify extension 2018-09-23 -->
-    <language mbx="elisp"       active=""            listings="Lisp"             prettify="el"/>        <!-- Prettify extension 2018-09-23 -->
-    <language mbx="scheme"      active=""            listings="Lisp"             prettify="scm"/>       <!-- Prettify extension 2018-09-23 -->
-    <language mbx="racket"      active=""            listings="Lisp"             prettify="rkt"/>       <!-- Prettify extension 2018-09-23 -->
-    <language mbx="sql"         active="sql"         listings=""                 prettify=""/>          <!-- ActiveCode         2020-08-13 -->
-    <language mbx="llvm"        active=""            listings="LLVM"             prettify="llvm"/>      <!-- Prettify extension 2018-09-23 -->
-    <language mbx="matlab"      active="octave"      listings="Matlab"           prettify="matlab"/>    <!-- Prettify extension 2018-09-23 -->
-    <language mbx="octave"      active="octave"      listings="Octave"           prettify="matlab"/>    <!-- ActiveCode         2020-10-20 -->
-    <language mbx="ml"          active=""            listings="ML"               prettify="ml"/>        <!-- Prettify extension 2018-09-23 -->
-    <language mbx="ocaml"       active=""            listings="[Objective]Caml"  prettify="ml"/>        <!-- Prettify extension 2018-09-23 -->
-    <language mbx="fsharp"      active=""            listings="ML"               prettify="fs"/>        <!-- Prettify extension 2018-09-23 -->
+    <language ptx="basic"       active=""            listings="Basic"            prism="basic"/>
+    <language ptx="c"           active="c"           listings="C"                prism="c"/>
+    <language ptx="cpp"         active="cpp"         listings="C++"              prism="cpp"/>
+    <language ptx="go"          active=""            listings="C"                prism="go"/>
+    <language ptx="java"        active="java"        listings="Java"             prism="java"/>
+    <language ptx="javascript"  active="javascript"  listings=""                 prism="javascript"/>
+    <language ptx="lua"         active=""            listings="Lua"              prism="lua"/>
+    <language ptx="pascal"      active=""            listings="Pascal"           prism="pascal"/>
+    <language ptx="perl"        active=""            listings="Perl"             prism="perl"/>
+    <language ptx="python"      active="python"      listings="Python"           prism="py"/>
+    <language ptx="python2"     active="python2"     listings="Python"           prism="py"/>
+    <language ptx="python3"     active="python3"     listings="Python"           prism="py"/>
+    <language ptx="r"           active=""            listings="R"                prism="r"/>
+    <language ptx="s"           active=""            listings="S"                prism="s"/>
+    <language ptx="sas"         active=""            listings="SAS"              prism="s"/>
+    <language ptx="sage"        active=""            listings="Python"           prism="py"/>
+    <language ptx="splus"       active=""            listings="[Plus]S"          prism="s"/>
+    <language ptx="vbasic"      active=""            listings="[Visual]Basic"    prism="visual-basic"/>
+    <language ptx="vbscript"    active=""            listings="VBscript"         prism="visual-basic"/>
+    <!-- Others (esp. functional)  -->
+    <language ptx="clojure"     active=""            listings="Lisp"             prism="clojure"/>
+    <language ptx="lisp"        active=""            listings="Lisp"             prism="lisp"/>
+    <language ptx="clisp"       active=""            listings="Lisp"             prism="lisp"/>
+    <language ptx="elisp"       active=""            listings="Lisp"             prism="elisp"/>
+    <language ptx="scheme"      active=""            listings="Lisp"             prism="scheme"/>
+    <language ptx="racket"      active=""            listings="Lisp"             prism="racket"/>
+    <language ptx="sql"         active="sql"         listings="SQL"                 prism="sql"/>
+    <language ptx="llvm"        active=""            listings="LLVM"             prism="llvm"/>
+    <language ptx="matlab"      active="octave"      listings="Matlab"           prism="matlab"/>
+    <language ptx="octave"      active="octave"      listings="Octave"           prism="matlab"/>
+    <language ptx="ml"          active=""            listings="ML"               prism=""/>
+    <language ptx="ocaml"       active=""            listings="[Objective]Caml"  prism="ocaml"/>
+    <language ptx="fsharp"      active=""            listings="ML"               prism="fsharp"/>
     <!-- Text Manipulation -->
-    <language mbx="css"         active=""            listings=""                 prettify="css-str"/>   <!-- Prettify extension 2018-09-23 -->
-    <language mbx="latex"       active=""            listings="[LaTeX]TeX"       prettify="latex"/>     <!-- Prettify extension 2018-09-23 -->
-    <language mbx="html"        active="html"        listings="HTML"             prettify="html"/>      <!-- Prettify default   2018-09-23 -->
-    <language mbx="tex"         active=""            listings="[plain]TeX"       prettify="tex"/>       <!-- Prettify extension 2018-09-23 -->
-    <language mbx="xml"         active=""            listings="XML"              prettify="xml"/>       <!-- Prettify default   2018-09-23 -->
-    <language mbx="xslt"        active=""            listings="XSLT"             prettify="xsl"/>       <!-- Prettify default   2018-09-23 -->
+    <language ptx="css"         active=""            listings=""                 prism="css"/>
+    <language ptx="latex"       active=""            listings="[LaTeX]TeX"       prism="latex"/>
+    <language ptx="html"        active="html"        listings="HTML"             prism="html"/>
+    <language ptx="tex"         active=""            listings="[plain]TeX"       prism="tex"/>
+    <language ptx="xml"         active=""            listings="XML"              prism="xml"/>
+    <language ptx="xslt"        active=""            listings="XSLT"             prism="xml"/>
 </mb:programming>
 
 <!-- Define the key for indexing into the data list -->
-<xsl:key name="proglang" match="language" use="@mbx" />
+<xsl:key name="proglang" match="language" use="@ptx" />
 
 <!-- A whole <program> node comes in,  -->
 <!-- text of ActiveCode name comes out -->
@@ -7894,11 +7876,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- A whole <program> node comes in,  -->
-<!-- text of prettify name comes out -->
-<xsl:template match="*" mode="prettify-language">
+<!-- text of prism name comes out -->
+<xsl:template match="*" mode="prism-language">
     <xsl:variable name="language"><xsl:value-of select="@language" /></xsl:variable>
     <xsl:for-each select="document('')/*/mb:programming">
-        <xsl:value-of select="key('proglang', $language)/@prettify" />
+        <xsl:value-of select="key('proglang', $language)/@prism" />
     </xsl:for-each>
 </xsl:template>
 
@@ -7907,7 +7889,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!--
 <xsl:template match="*" mode="listings-language">
     <xsl:variable name="language"><xsl:value-of select="@language" /></xsl:variable>
-    <xsl:value-of select="document('')/*/mb:programming/language[@mbx=$language]/listings"/>
+    <xsl:value-of select="document('')/*/mb:programming/language[@ptx=$language]/listings"/>
 </xsl:template>
 -->
 
