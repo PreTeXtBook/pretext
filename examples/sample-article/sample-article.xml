@@ -6603,6 +6603,23 @@ the xsltproc executable.
                 </input>
             </program>
 
+            <p>Matlab is a commercial language for mathematics, while Octave in an open source version.  The <attr>language</attr> values of <c>matlab</c> and <c>octave</c> are somewhat interchangeable.  Following is a very slighlty edited version of an example from <articletitle>50 Basic Examples for Matlab</articletitle><fn><c>http://www.public.asu.edu/~hhuang38/hph_matlab_basic2013_1.pdf</c></fn>.</p>
+
+            <!-- Example 45: 50 Basic Examples for Matlab -->
+            <program language="matlab">
+                <input>
+                a = [0:0.5:5]; % A Matlab comment here
+                b = 2*a.^2 + 3*a -5;
+                c = 1.2*a.^2+4*a-3;
+                subplot(1,2,1)
+                plot(a,b,'-or','MarkerFaceColor','g','LineWidth',2)
+                xlabel('X'); ylabel('Y'); legend('Curve ','Location','NorthWest')
+                subplot(1,2,2)
+                plot(a,c,'--ok','MarkerFaceColor','c','LineWidth',2)
+                xlabel('X'); ylabel('Y'); legend('Curve 2','Location','NorthWest')
+                </input>
+            </program>
+
             <p>You can write made-up pseudo-code, but you might explain to a reader what your symbols all mean.  This routine takes the <m>m\times n</m> marix <m>A</m> to reduced row-echelon form.  Note that with no language specified, there is no special formatting or use of color.  Note in the source the use of escaped characters for the three less-than symbols.</p>
 
             <program margins="5%">
