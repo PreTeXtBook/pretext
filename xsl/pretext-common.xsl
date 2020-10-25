@@ -545,6 +545,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- use these as well. We only do quality control here       -->
 <!-- first. The "*.text.*" forms are deprecated with warnings -->
 <!-- elsewhere, but we try to preserve their intent here.     -->
+<!-- NB 2020-10-23: consider dropping "-statement" versions   -->
+<!-- as silly, since a Solutions Manual, or similar, can be   -->
+<!-- built with a solutions generator, and an Instructors     -->
+<!-- Edition would need statements also (always)              -->
 <xsl:variable name="entered-exercise-inline-statement">
     <xsl:choose>
         <xsl:when test="($exercise.inline.statement = 'yes') or
