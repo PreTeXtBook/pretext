@@ -5323,11 +5323,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="reading" select="boolean(ancestor::reading-questions)"/>
     <!-- TODO: check that at least one is true? -->
 
+    <!-- This template is for exercises when born and so should always -->
+    <!-- include the statement, so we set this parameter to true.      -->
+    <xsl:variable name="b-has-statement" select="true()"/>
+
     <!-- There are five sets of switches, so we build a single set,  -->
     <!-- depending on what type of location the "exercise" lives in. -->
     <!-- For each, exactly one location is true, and then the        -->
     <!-- expression will evaluate to the corresponding global switch -->
-    <xsl:variable name="b-has-statement" select="true()"/>
     <xsl:variable name="b-has-hint"
         select="($inline and $b-has-inline-hint)  or
                 ($project and $b-has-project-hint)  or
@@ -5347,8 +5350,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 ($worksheet and $b-has-worksheet-solution)  or
                 ($reading and $b-has-reading-solution)"/>
 
-    <!-- structured version of a project may contain a prelude, -->
-    <!-- which is rendered *before* environment begins          -->
+    <!-- structured version of a project-like may contain a     -->
+    <!-- prelude, which is rendered *before* environment begins -->
     <xsl:if test="$project and (statement or task)">
         <xsl:apply-templates select="prelude" />
     </xsl:if>
@@ -5389,91 +5392,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>%&#xa;</xsl:text>
-    <!-- Allow a webwork or myopenmath exercise to introduce/connect    -->
-    <!-- a problem (especially from server) to the text in various ways -->
-    <xsl:if test="webwork-reps|myopenmath">
-        <xsl:apply-templates select="introduction"/>
-    </xsl:if>
-    <!-- condition on how statement, hint, answer, solution are presented -->
-    <xsl:choose>
-        <!-- webwork, structured with "stage" matches first  -->
-        <!-- Above provides infrastructure for the exercise, -->
-        <!-- we pass the stage on to a WW-specific template  -->
-        <!-- since each stage may have hints, answers, and   -->
-        <!-- solutions.                                      -->
-        <xsl:when test="webwork-reps/static/stage">
-            <xsl:apply-templates select="webwork-reps/static/stage">
-                <xsl:with-param name="b-original" select="true()" />
-                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-                <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
-                <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
-            </xsl:apply-templates>
-        </xsl:when>
-        <!-- webwork exercise, no "stage" -->
-        <xsl:when test="webwork-reps/static">
-            <xsl:apply-templates select="webwork-reps/static" mode="exercise-components">
-                <xsl:with-param name="b-original" select="true()" />
-                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-                <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
-                <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
-            </xsl:apply-templates>
-        </xsl:when>
-        <!-- myopenmath exercise -->
-        <!-- We only try to open an external file when the source  -->
-        <!-- has a MOM problem (with an id number).  The second    -->
-        <!-- argument of the "document()" function is a node from  -->
-        <!-- the original source, and not the enhanced source, and -->
-        <!-- causes the relative file name to resolve according    -->
-        <!-- to the correct location.   Experiments with the       -->
-        <!-- empty node "/.." are interesting.                     -->
-        <!-- https://ajwelch.blogspot.co.za/2008/04/relative-paths-and-document-function.html -->
-        <!-- http://www.dpawson.co.uk/xsl/sect2/N2602.html#d3862e73 (Point 4) -->
-        <xsl:when test="myopenmath">
-            <xsl:variable name="filename" select="concat(concat('problems/mom-', myopenmath/@problem), '.xml')" />
-            <xsl:apply-templates select="document($filename, $original)/myopenmath"  mode="exercise-components">
-                <xsl:with-param name="b-original" select="true()" />
-                <xsl:with-param name="b-has-statement" select="true()" />
-                <xsl:with-param name="b-has-hint"      select="false()" />
-                <xsl:with-param name="b-has-answer"    select="false()" />
-                <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
-            </xsl:apply-templates>
-        </xsl:when>
-        <!-- "normal" exercise -->
-        <!-- structured versions first     -->
-        <!-- task+, conclusion?, postlude? -->
-        <xsl:when test="task">
-            <xsl:if test="$b-has-statement">
-                <xsl:apply-templates select="introduction"/>
-            </xsl:if>
-            <xsl:apply-templates select="task">
-                <xsl:with-param name="b-original" select="true()" />
-                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-                <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
-                <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
-            </xsl:apply-templates>
-            <xsl:if test="$b-has-statement">
-                <xsl:apply-templates select="conclusion"/>
-            </xsl:if>
-        </xsl:when>
-        <!-- Now no task possibility -->
-        <xsl:otherwise>
-            <xsl:apply-templates select="." mode="exercise-components">
-                <xsl:with-param name="b-original" select="true()" />
-                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-                <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
-                <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
-            </xsl:apply-templates>
-        </xsl:otherwise>
-    </xsl:choose>
-    <!-- Allow a webwork or myopenmath exercise to conclude/connect     -->
-    <!-- a problem (especially from server) to the text in various ways -->
-    <xsl:if test="webwork-reps|myopenmath">
-        <xsl:apply-templates select="conclusion"/>
-    </xsl:if>
+    <!-- Now the guts of the exercise, inside of its  -->
+    <!-- (variable) identification, environment, etc. -->
+    <!-- NB: the "b-component-heading" relates to     -->
+    <!-- reducing duplication in solutions divisions, -->
+    <!-- so comes down through the "solutions" modal  -->
+    <!-- templates.  So we set it to "true()" for     -->
+    <!-- "where born" exercises.                      -->
+    <!-- NB: this is where we say goodbye to the      -->
+    <!-- "solutions" modal templates and switch to    -->
+    <!-- the "exercise-components"templates with the  -->
+    <!-- $b-original flag.                            -->
+    <xsl:apply-templates select="." mode="exercise-components">
+        <xsl:with-param name="b-original" select="true()" />
+        <xsl:with-param name="b-component-heading" select="true()"/>
+        <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+        <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+        <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+        <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+    </xsl:apply-templates>
     <!-- closing % necessary, as newline between adjacent environments -->
     <!-- will cause a slight indent on trailing exercise               -->
     <xsl:text>\end{</xsl:text>
@@ -5491,8 +5428,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Exercises and Projects for Solutions Divisions -->
 <!-- ############################################## -->
 
-<!-- A template formulates the various possible environments   -->
-<!-- Just as above, but now a different mode                   -->
+<!-- A template formulates the various possible environments -->
+<!-- Just as above, but now a different mode                 -->
 <xsl:template match="exercise|&PROJECT-LIKE;" mode="solutions-environment-name">
     <xsl:choose>
         <!-- projects sit in divisions according to schema,  -->
@@ -5553,7 +5490,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
         </xsl:apply-templates>
     </xsl:variable>
-    <!-- <xsl:variable name="nonempty" select="$b-has-statement or ($b-has-hint and hint) or ($b-has-answer and answer) or ($b-has-solution and solution)" /> -->
 
     <xsl:if test="not($dry-run = '')">
         <!-- no project-like prelude, as duplicating in solutions division -->
@@ -5578,283 +5514,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="latex-id"/>
         <xsl:text>}</xsl:text>
         <xsl:text>%&#xa;</xsl:text>
-        <!-- Allow a webwork or myopenmath exercise to introduce/connect    -->
-        <!-- a problem (especially from server) to the text in various ways -->
-        <xsl:if test="webwork-reps|myopenmath">
-            <xsl:apply-templates select="introduction"/>
-        </xsl:if>
-        <!-- condition on how statement, hint, answer, solution are presented -->
-        <xsl:choose>
-            <!-- webwork, structured with "stage" matches first -->
-            <!-- Above provides infrastructure for the exercise, -->
-            <!-- we pass the stage on to a WW-specific template  -->
-            <!-- since each stage may have hints, answers, and   -->
-            <!-- solutions.                                      -->
-            <xsl:when test="webwork-reps/static/stage">
-                <xsl:apply-templates select="webwork-reps/static/stage" mode="solutions">
-                    <xsl:with-param name="b-original" select="false()" />
-                    <xsl:with-param name="purpose" select="$purpose" />
-                    <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
-                    <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                    <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-                    <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
-                    <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
-                </xsl:apply-templates>
-            </xsl:when>
-            <!-- webwork exercise, no "stage" -->
-            <xsl:when test="webwork-reps/static">
-                <xsl:apply-templates select="webwork-reps/static" mode="exercise-components">
-                    <xsl:with-param name="b-original" select="false()" />
-                    <xsl:with-param name="purpose" select="$purpose" />
-                    <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
-                    <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                    <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-                    <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
-                    <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
-                </xsl:apply-templates>
-            </xsl:when>
-            <!-- myopenmath exercise -->
-            <!-- We only try to open an external file when the source  -->
-            <!-- has a MOM problem (with an id number).  The second    -->
-            <!-- argument of the "document()" function is a node and   -->
-            <!-- causes the relative file name to resolve according    -->
-            <!-- to the location of the XML.   Experiments with the    -->
-            <!-- empty node "/.." are interesting.                     -->
-            <!-- https://ajwelch.blogspot.co.za/2008/04/relative-paths-and-document-function.html -->
-            <!-- http://www.dpawson.co.uk/xsl/sect2/N2602.html#d3862e73 (Point 4) -->
-            <xsl:when test="myopenmath">
-                <xsl:variable name="filename" select="concat(concat('problems/mom-', myopenmath/@problem), '.xml')" />
-                <xsl:apply-templates select="document($filename, .)/myopenmath"  mode="exercise-components">
-                    <xsl:with-param name="b-original" select="false()" />
-                    <xsl:with-param name="purpose" select="$purpose" />
-                    <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
-                    <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                    <xsl:with-param name="b-has-hint"      select="false()" />
-                    <xsl:with-param name="b-has-answer"    select="false()" />
-                    <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
-                </xsl:apply-templates>
-            </xsl:when>
-            <!-- "normal" exercise -->
-            <!-- structured versions first     -->
-            <!-- task+, conclusion?, postlude? -->
-            <xsl:when test="task">
-                <xsl:if test="$b-has-statement">
-                    <xsl:apply-templates select="introduction"/>
-                </xsl:if>
-                <xsl:apply-templates select="task" mode="solutions">
-                    <xsl:with-param name="b-original" select="false()" />
-                    <xsl:with-param name="purpose" select="$purpose" />
-                    <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
-                    <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                    <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-                    <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
-                    <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
-                </xsl:apply-templates>
-                <xsl:if test="$b-has-statement">
-                    <xsl:apply-templates select="conclusion"/>
-                </xsl:if>
-            </xsl:when>
-            <!-- Now no task possibility -->
-            <xsl:otherwise>
-                <xsl:apply-templates select="." mode="exercise-components">
-                    <xsl:with-param name="b-original" select="false()" />
-                    <xsl:with-param name="purpose" select="$purpose" />
-                    <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
-                    <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                    <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-                    <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
-                    <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
-                </xsl:apply-templates>
-            </xsl:otherwise>
-        </xsl:choose>
-        <!-- Allow a webwork or myopenmath exercise to conclude/connect     -->
-        <!-- a problem (especially from server) to the text in various ways -->
-        <xsl:if test="webwork-reps|myopenmath">
-            <xsl:apply-templates select="conclusion"/>
-        </xsl:if>
+        <!-- Now the guts of the exercise, inside of its  -->
+        <!-- (variable) identification, environment, etc. -->
+        <!-- NB: this is where we say goodbye to the      -->
+        <!-- "solutions" modal templates and switch to    -->
+        <!-- the "exercise-components"templates with the  -->
+        <!-- $b-original flag.                            -->
+        <xsl:apply-templates select="." mode="exercise-components">
+            <xsl:with-param name="b-original" select="false()" />
+            <xsl:with-param name="purpose" select="$purpose" />
+            <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
+            <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+            <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+            <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+            <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+        </xsl:apply-templates>
         <!-- closing % necessary, as newline between adjacent environments -->
         <!-- will cause a slight indent on trailing exercise               -->
         <xsl:text>\end{</xsl:text>
         <xsl:value-of select="$env-name"/>
         <xsl:text>}%&#xa;</xsl:text>
         <!-- no project-like postlude, as duplicating in solutions division -->
-    </xsl:if>
-</xsl:template>
-
-<!-- ################################################ -->
-<!-- Task (for structured exercises and project-like) -->
-<!-- ################################################ -->
-
-<!-- Task (a part of an exercise or project) -->
-<!-- Parameterized, but with no defaults, since this -->
-<!-- is always a constituent of something larger     -->
-<xsl:template match="task">
-    <xsl:param name="b-has-statement"/>
-    <xsl:param name="b-has-hint"     />
-    <xsl:param name="b-has-answer"   />
-    <xsl:param name="b-has-solution" />
-
-    <!-- if first at its level, start the list environment -->
-    <xsl:if test="not(preceding-sibling::task)">
-        <!-- set the label style of this list       -->
-        <!-- using features of the enumitem package -->
-        <xsl:text>\begin{enumerate}[font=\bfseries,label=</xsl:text>
-        <xsl:choose>
-            <!-- three deep -->
-            <xsl:when test="parent::task/parent::task">
-                <xsl:text>(\Alph*),ref=\theenumi.\theenumii.\Alph*</xsl:text>
-            </xsl:when>
-            <!-- two deep -->
-            <xsl:when test="parent::task">
-                <xsl:text>(\roman*),ref=\theenumi.\roman*</xsl:text>
-            </xsl:when>
-            <!-- one deep -->
-            <xsl:otherwise>
-                <xsl:text>(\alph*),ref=\alph*</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:text>]&#xa;</xsl:text>
-    </xsl:if>
-    <!-- always a list item -->
-    <xsl:text>\item</xsl:text>
-    <!-- \label{} will separate content, if   -->
-    <!-- employed, else we use an empty group -->
-    <xsl:choose>
-        <xsl:when test="@xml:id">
-            <xsl:apply-templates select="." mode="label" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>{}</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <!-- more structured versions first -->
-    <xsl:choose>
-        <xsl:when test="task">
-            <xsl:apply-templates select="introduction"/>
-            <xsl:apply-templates select="task">
-                <xsl:with-param name="b-original" select="true()" />
-                <xsl:with-param name="b-has-statement" select="true()" />
-                <xsl:with-param name="b-has-hint" select="$b-has-hint" />
-                <xsl:with-param name="b-has-answer" select="$b-has-answer" />
-                <xsl:with-param name="b-has-solution" select="$b-has-solution" />
-            </xsl:apply-templates>
-            <xsl:apply-templates select="conclusion"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="." mode="exercise-components">
-                <xsl:with-param name="b-original" select="true()" />
-                <xsl:with-param name="b-has-statement" select="true()" />
-                <xsl:with-param name="b-has-hint" select="$b-has-hint" />
-                <xsl:with-param name="b-has-answer" select="$b-has-answer" />
-                <xsl:with-param name="b-has-solution" select="$b-has-solution" />
-            </xsl:apply-templates>
-        </xsl:otherwise>
-    </xsl:choose>
-    <!-- if last at its level, end the list environment -->
-    <xsl:if test="not(following-sibling::task)">
-        <xsl:text>\end{enumerate}&#xa;</xsl:text>
-    </xsl:if>
-</xsl:template>
-
-<!-- Task (a part of a project), in solutions division -->
-<xsl:template match="task" mode="solutions">
-    <xsl:param name="purpose"/>
-    <xsl:param name="b-component-heading"/>
-    <xsl:param name="b-has-statement" />
-    <xsl:param name="b-has-hint" />
-    <xsl:param name="b-has-answer" />
-    <xsl:param name="b-has-solution" />
-
-    <xsl:variable name="preceding-dry-run">
-        <xsl:apply-templates select="preceding-sibling::task" mode="dry-run">
-            <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-            <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
-            <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-            <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
-        </xsl:apply-templates>
-    </xsl:variable>
-    <xsl:variable name="dry-run">
-        <xsl:apply-templates select="." mode="dry-run">
-            <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-            <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
-            <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-            <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
-        </xsl:apply-templates>
-    </xsl:variable>
-    <xsl:variable name="following-dry-run">
-        <xsl:apply-templates select="following-sibling::task" mode="dry-run">
-            <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-            <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
-            <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-            <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
-        </xsl:apply-templates>
-    </xsl:variable>
-
-    <!-- if first at its level, non-empty list, start the list environment -->
-    <xsl:if test="($preceding-dry-run = '') and not($dry-run = '')">
-        <!-- set the label style of this list       -->
-        <!-- using features of the enumitem package -->
-        <xsl:text>\begin{enumerate}[font=\bfseries,label=</xsl:text>
-        <xsl:choose>
-            <!-- three deep -->
-            <xsl:when test="parent::task/parent::task">
-                <xsl:text>(\Alph*),ref=\theenumi.\theenumii.\Alph*</xsl:text>
-            </xsl:when>
-            <!-- two deep -->
-            <xsl:when test="parent::task">
-                <xsl:text>(\roman*),ref=\theenumi.\roman*</xsl:text>
-            </xsl:when>
-            <!-- one deep -->
-            <xsl:otherwise>
-                <xsl:text>(\alph*),ref=\alph*</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:text>]&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="not($dry-run = '')">
-        <!-- always a list item -->
-        <xsl:text>\item</xsl:text>
-        <!-- hard-code the number when duplicating, since some items -->
-        <!-- are absent, and then automatic numbering would be wrong -->
-        <xsl:text>[(</xsl:text>
-        <xsl:apply-templates select="." mode="list-number" />
-        <xsl:text>)]</xsl:text>
-        <!-- no label since duplicating -->
-        <!-- more structured versions first -->
-        <xsl:choose>
-            <!-- introduction?, task+, conclusion? -->
-            <xsl:when test="task">
-                <xsl:if test="$b-has-statement">
-                    <xsl:apply-templates select="introduction"/>
-                </xsl:if>
-                <xsl:apply-templates select="task" mode="solutions">
-                    <xsl:with-param name="purpose" select="$purpose" />
-                    <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
-                    <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                    <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-                    <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
-                    <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
-                </xsl:apply-templates>
-                <xsl:if test="$b-has-statement">
-                    <xsl:apply-templates select="conclusion"/>
-                </xsl:if>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="." mode="exercise-components">
-                    <xsl:with-param name="b-original" select="false()"/>
-                    <xsl:with-param name="purpose" select="$purpose" />
-                    <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
-                    <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                    <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-                    <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
-                    <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
-                </xsl:apply-templates>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:if>
-    <!-- if last at its level, non-empty-list, end the list environment -->
-    <xsl:if test="not($dry-run = '') and ($following-dry-run = '') ">
-        <xsl:text>\end{enumerate}&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
 
@@ -5871,16 +5551,260 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- $purpose determines if the components are being built for the    -->
 <!-- main matter or back matter and so help be certain the right      -->
 <!-- label is created.                                                -->
+<!-- NB: once into an exercise, we abandon the "solutions" modal      -->
+<!-- templates and instead rely on the $b-original flag to            -->
+<!-- distinguish between "when born" ($b-original = true()) and a     -->
+<!-- duplicate in some sort of collection of solutions                -->
+<!-- ($b-original = false()).                                         -->
 <!-- NB: The $b-component-heading variable gets passed down from the  -->
 <!-- solutions generator, to prevent repeated headings when they are  -->
 <!-- all the same.  For use when an exercise is born the situation    -->
 <!-- is simpler and always has a "statement", necessitating a heading -->
 <!-- on a component.  So we default the parameter to true right here. -->
 
-<xsl:template match="exercise|webwork-reps/static|webwork-reps/static/stage|myopenmath|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task" mode="exercise-components">
+
+<xsl:template match="exercise[myopenmath]" mode="exercise-components">
     <xsl:param name="b-original" />
     <xsl:param name="purpose" />
-    <xsl:param name="b-component-heading" select="true()"/>
+    <xsl:param name="b-component-heading"/>
+    <xsl:param name="b-has-statement" />
+    <xsl:param name="b-has-hint" />
+    <xsl:param name="b-has-answer"  />
+    <xsl:param name="b-has-solution"  />
+
+    <xsl:if test="$b-has-statement">
+        <xsl:apply-templates select="introduction"/>
+    </xsl:if>
+
+    <!-- TODO: Should really do this in the assembly phase, ala WW -->
+    <!-- We only try to open an external file when the source  -->
+    <!-- has a MOM problem (with an id number).  The second    -->
+    <!-- argument of the "document()" function is a node from  -->
+    <!-- the original source, and not the enhanced source, and -->
+    <!-- causes the relative file name to resolve according    -->
+    <!-- to the correct location.   Experiments with the       -->
+    <xsl:variable name="filename" select="concat(concat('problems/mom-', myopenmath/@problem), '.xml')" />
+    <xsl:apply-templates select="document($filename, $original)/myopenmath" mode="exercise-components">
+        <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="purpose" select="$purpose" />
+        <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
+        <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+        <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+        <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+        <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+    </xsl:apply-templates>
+
+    <xsl:if test="$b-has-statement">
+        <xsl:apply-templates select="conclusion"/>
+    </xsl:if>
+</xsl:template>
+
+<!-- A "webwork-reps" inside an "exercise" indicates a WeBWorK problem -->
+<!-- originally in the source.  We could try to condition on a bare    -->
+<!-- "static" versus "static/stage" but it seems safer to stick with   -->
+<!-- a "choose" and a straightforward match.                           -->
+<xsl:template match="exercise[webwork-reps]" mode="exercise-components">
+    <xsl:param name="b-original" />
+    <xsl:param name="purpose" />
+    <xsl:param name="b-component-heading"/>
+    <xsl:param name="b-has-statement" />
+    <xsl:param name="b-has-hint" />
+    <xsl:param name="b-has-answer"  />
+    <xsl:param name="b-has-solution"  />
+
+
+    <!-- The introduction (and conclusion) remain in the "exercise" as part -->
+    <!-- of the enhanced source, and so lie outside of the "webwork-reps"   -->
+    <xsl:if test="$b-has-statement">
+        <xsl:apply-templates select="introduction"/>
+    </xsl:if>
+
+    <xsl:choose>
+        <xsl:when test="webwork-reps/static/stage">
+            <!-- structured into individual stages which are each -->
+            <!-- structured as  statement|hint|answer|solution      -->
+            <xsl:for-each select="webwork-reps/static/stage">
+                 <xsl:variable name="dry-run">
+                    <xsl:apply-templates select="." mode="dry-run">
+                        <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+                        <xsl:with-param name="b-has-hint" select="$b-has-hint" />
+                        <xsl:with-param name="b-has-answer" select="$b-has-answer" />
+                        <xsl:with-param name="b-has-solution" select="$b-has-solution" />
+                    </xsl:apply-templates>
+                </xsl:variable>
+
+                <xsl:if test="not($dry-run = '')">
+                    <xsl:apply-templates select="." mode="leave-vertical-mode"/>
+                    <!-- e.g., Part 2. -->
+                    <xsl:text>\textbf{</xsl:text>
+                    <xsl:call-template name="type-name">
+                        <xsl:with-param name="string-id" select="'part'" />
+                    </xsl:call-template>
+                    <xsl:text> </xsl:text>
+                    <xsl:apply-templates select="." mode="serial-number" />
+                    <xsl:text>.}</xsl:text>
+                    <!-- statement will be inline so needs inline separation, -->
+                    <!-- other components have be preceded with a linebreak   -->
+                    <xsl:if test="$b-has-statement">
+                        <xsl:text>\quad</xsl:text>
+                    </xsl:if>
+                    <xsl:text>%&#xa;</xsl:text>
+                    <xsl:apply-templates select="." mode="exercise-components">
+                        <xsl:with-param name="b-original" select="$b-original"/>
+                        <xsl:with-param name="purpose" select="$purpose"/>
+                        <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
+                        <xsl:with-param name="b-has-statement" select="$b-has-statement"/>
+                        <xsl:with-param name="b-has-hint" select="$b-has-hint"/>
+                        <xsl:with-param name="b-has-answer" select="$b-has-answer"/>
+                        <xsl:with-param name="b-has-solution" select="$b-has-solution"/>
+                    </xsl:apply-templates>
+                    <xsl:if test="following-sibling::stage">
+                        <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
+                    </xsl:if>
+                </xsl:if>
+            </xsl:for-each>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- static is structured as  statement|hint|answer|solution -->
+            <xsl:variable name="dry-run">
+                <xsl:apply-templates select="webwork-reps/static" mode="dry-run">
+                    <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+                    <xsl:with-param name="b-has-hint" select="$b-has-hint" />
+                    <xsl:with-param name="b-has-answer" select="$b-has-answer" />
+                    <xsl:with-param name="b-has-solution" select="$b-has-solution" />
+                </xsl:apply-templates>
+            </xsl:variable>
+
+            <xsl:if test="not($dry-run = '')">
+                <xsl:apply-templates select="webwork-reps/static" mode="exercise-components">
+                    <xsl:with-param name="b-original" select="$b-original"/>
+                    <xsl:with-param name="purpose" select="$purpose"/>
+                    <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
+                    <xsl:with-param name="b-has-statement" select="$b-has-statement"/>
+                    <xsl:with-param name="b-has-hint" select="$b-has-hint"/>
+                    <xsl:with-param name="b-has-answer" select="$b-has-answer"/>
+                    <xsl:with-param name="b-has-solution" select="$b-has-solution"/>
+                </xsl:apply-templates>
+            </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
+
+    <xsl:if test="$b-has-statement">
+        <xsl:apply-templates select="conclusion"/>
+    </xsl:if>
+</xsl:template>
+
+
+<!-- ################################################ -->
+<!-- Task (for structured exercises and project-like) -->
+<!-- ################################################ -->
+
+<!-- "exercise" and PROJECT-LIKE can be structured with up to three level -->
+<!-- of "task".  When this is done, each level may have an "introduction" -->
+<!-- and a "conclusion".  This template handles every structure that can  -->
+<!-- have a "task" child, which includes a "task" itself.  We run over    -->
+<!-- each nested "task".  We make sure a nested list has content, before  -->
+<!-- starting (and later ending) a list to hold the tasks.  Only terminal -->
+<!-- tasks have statement|hint|answer|solutuion.                          -->
+<xsl:template match="exercise[task]|project[task]|activity[task]|exploration[task]|investigation[task]|task[task]" mode="exercise-components">
+    <xsl:param name="b-original" />
+    <xsl:param name="purpose" />
+    <xsl:param name="b-component-heading"/>
+    <xsl:param name="b-has-statement" />
+    <xsl:param name="b-has-hint" />
+    <xsl:param name="b-has-answer"  />
+    <xsl:param name="b-has-solution"  />
+
+    <xsl:if test="$b-has-statement">
+        <xsl:apply-templates select="introduction"/>
+    </xsl:if>
+
+    <!-- Now we see if the list of contained tasks is empty or not -->
+    <xsl:variable name="task-list-dry-run">
+        <xsl:apply-templates select="task" mode="dry-run">
+            <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+            <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+            <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+            <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:variable name="b-has-task-list" select="not($task-list-dry-run = '')"/>
+
+    <xsl:if test="$b-has-task-list">
+        <!-- set the label style of this list       -->
+        <!-- using features of the enumitem package -->
+        <xsl:text>\begin{enumerate}[font=\bfseries,label=</xsl:text>
+        <xsl:choose>
+            <!-- three deep -->
+            <xsl:when test="parent::task">
+                <xsl:text>(\Alph*),ref=\theenumi.\theenumii.\Alph*</xsl:text>
+            </xsl:when>
+            <!-- two deep -->
+            <xsl:when test="self::task and not(parent::task)">
+                <xsl:text>(\roman*),ref=\theenumi.\roman*</xsl:text>
+            </xsl:when>
+            <!-- one deep -->
+            <xsl:otherwise>
+                <xsl:text>(\alph*),ref=\alph*</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text>]&#xa;</xsl:text>
+    </xsl:if>
+
+    <xsl:for-each select="task">
+        <!-- just for this particular task -->
+        <xsl:variable name="dry-run">
+            <xsl:apply-templates select="." mode="dry-run">
+                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+                <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+                <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+                <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+            </xsl:apply-templates>
+        </xsl:variable>
+
+        <xsl:if test="not($dry-run = '')">
+            <!-- always a list item -->
+            <xsl:text>\item</xsl:text>
+            <!-- hard-code the number when duplicating, since some items -->
+            <!-- are absent, and then automatic numbering would be wrong -->
+            <xsl:text>[(</xsl:text>
+            <xsl:apply-templates select="." mode="list-number" />
+            <xsl:text>)]</xsl:text>
+            <!-- Identification in place, we can write the generic guts -->
+            <xsl:apply-templates select="." mode="exercise-components">
+                <xsl:with-param name="b-original" select="$b-original" />
+                <xsl:with-param name="purpose" select="$purpose" />
+                <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
+                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+                <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+                <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+                <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+            </xsl:apply-templates>
+        </xsl:if>
+    </xsl:for-each>
+
+    <!-- End the liast, if started -->
+    <xsl:if test="$b-has-task-list">
+        <xsl:text>\end{enumerate}&#xa;</xsl:text>
+    </xsl:if>
+
+    <xsl:if test="$b-has-statement">
+        <xsl:apply-templates select="conclusion"/>
+    </xsl:if>
+</xsl:template>
+
+
+<!-- An object that reaches here is either just a statement (bare) or        -->
+<!-- is structured as statement|hint|answer|solution.  Likely we could       -->
+<!-- split this into two templates, but a choose seems more convenient.      -->
+<!-- When structured, a forward reference is constructed to the first        -->
+<!-- hint|answer|solution that might appear somewhere else.  Since there     -->
+<!-- could be multiple targets, we use the heuristic of choosing main matter -->
+<!-- over back matter.  Unclear what happens if there are multiple targets.  -->
+<xsl:template match="exercise|webwork-reps/static|webwork-reps/static/stage|myopenmath|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task[not(task)]" mode="exercise-components">
+    <xsl:param name="b-original" />
+    <xsl:param name="purpose" />
+    <xsl:param name="b-component-heading"/>
     <xsl:param name="b-has-statement" />
     <xsl:param name="b-has-hint" />
     <xsl:param name="b-has-answer"  />
@@ -6016,9 +5940,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Separators depend on possible trailing items, so no   -->
 <!-- vertical spacing beforehand is present here           -->
 <xsl:template match="hint|answer|solution" mode="solution-heading">
-    <xsl:param name="b-original" select="true()" />
+    <xsl:param name="b-original" />
     <xsl:param name="purpose" />
     <xsl:param name="b-component-heading"/>
+
 
     <!-- NB: this is the only place \blocktitlefont is written into   -->
     <!-- the body, so a tcbcolorbox could be a great idea to maintain -->
@@ -6330,84 +6255,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- stage.  We realize each stage in print as a "Part", which    -->
 <!-- has a statement and optionally, hints, answers and solutions.-->
 
-<!-- Fail if WeBWorK extraction and merging has not been done -->
+<!-- Warn if WeBWorK representations have not been assembled -->
 <xsl:template match="webwork[node()|@*]">
-    <xsl:message>PTX:ERROR: A document that uses WeBWorK must have the mbx script webwork extraction run, followed by a merge using pretext-merge.xsl.  Apply subsequent style sheets to the merged output.  Your WeBWorK problems will be absent from your LaTeX output.</xsl:message>
-</xsl:template>
-
-<xsl:template match="webwork-reps/static/stage">
-    <xsl:param name="b-original" />
-    <xsl:param name="b-has-statement" />
-    <xsl:param name="b-has-hint" />
-    <xsl:param name="b-has-answer" />
-    <xsl:param name="b-has-solution" />
-
-    <xsl:apply-templates select="." mode="leave-vertical-mode"/>
-    <!-- e.g., Part 2. -->
-    <xsl:text>\textbf{</xsl:text>
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="'part'" />
-    </xsl:call-template>
-    <xsl:text> </xsl:text>
-    <xsl:apply-templates select="." mode="serial-number" />
-    <xsl:text>.}\quad </xsl:text>
-    <xsl:apply-templates select="." mode="exercise-components">
-        <xsl:with-param name="b-original" select="$b-original" />
-        <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-        <xsl:with-param name="b-has-hint" select="$b-has-hint" />
-        <xsl:with-param name="b-has-answer" select="$b-has-answer" />
-        <xsl:with-param name="b-has-solution" select="$b-has-solution" />
-    </xsl:apply-templates>
-    <xsl:if test="following-sibling::stage">
-        <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
-    </xsl:if>
-</xsl:template>
-
-<xsl:template match="webwork-reps/static/stage" mode="solutions">
-    <xsl:param name="b-original"/>
-    <xsl:param name="purpose"/>
-    <xsl:param name="b-component-heading"/>
-    <xsl:param name="b-has-statement"/>
-    <xsl:param name="b-has-hint"/>
-    <xsl:param name="b-has-answer"/>
-    <xsl:param name="b-has-solution"/>
-
-    <!-- When we subset exercises for solutions, an entire -->
-    <!-- "stage" can become empty.  So we do a dry-run     -->
-    <!-- and if there is no content at all we bail out.    -->
-     <xsl:variable name="dry-run">
-        <xsl:apply-templates select="." mode="dry-run">
-            <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-            <xsl:with-param name="b-has-hint" select="$b-has-hint" />
-            <xsl:with-param name="b-has-answer" select="$b-has-answer" />
-            <xsl:with-param name="b-has-solution" select="$b-has-solution" />
-        </xsl:apply-templates>
-    </xsl:variable>
-
-    <xsl:if test="not($dry-run = '')">
-        <xsl:apply-templates select="." mode="leave-vertical-mode"/>
-        <!-- e.g., Part 2. -->
-        <xsl:text>\textbf{</xsl:text>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'part'" />
-        </xsl:call-template>
-        <xsl:text> </xsl:text>
-        <xsl:apply-templates select="." mode="serial-number" />
-        <xsl:text>.}&#xa;</xsl:text>
-        <!-- <xsl:text>\par\smallskip\noindent</xsl:text> -->
-        <xsl:apply-templates select="." mode="exercise-components">
-            <xsl:with-param name="b-original" select="$b-original"/>
-            <xsl:with-param name="purpose" select="$purpose"/>
-            <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
-            <xsl:with-param name="b-has-statement" select="$b-has-statement"/>
-            <xsl:with-param name="b-has-hint" select="$b-has-hint"/>
-            <xsl:with-param name="b-has-answer" select="$b-has-answer"/>
-            <xsl:with-param name="b-has-solution" select="$b-has-solution"/>
-        </xsl:apply-templates>
-        <xsl:if test="following-sibling::stage">
-            <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
-        </xsl:if>
-    </xsl:if>
+    <xsl:message>PTX:ERROR: A document that uses WeBWorK nees to incorporate a file</xsl:message>
+    <xsl:message>of representations of WW problems.  These can be created with the</xsl:message>
+    <xsl:message>"pretext" Python script and specified in a publisher file.</xsl:message>
+    <xsl:message>See the documentation for details.</xsl:message>
 </xsl:template>
 
 <!-- answer blank for other kinds of answers                 -->
@@ -6460,6 +6313,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+
 <!-- Definition Like, Remark Like, Computation Like, Example Like  -->
 <!-- Simpler than theorems, definitions, etc      -->
 <!-- Only EXAMPLE-LIKE has hint, answer, solution -->
@@ -6484,6 +6338,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="&EXAMPLE-FILTER;">
             <xsl:apply-templates select="." mode="exercise-components">
                 <xsl:with-param name="b-original" select="true()" />
+                <xsl:with-param name="b-component-heading" select="true()" />
                 <xsl:with-param name="b-has-statement" select="true()" />
                 <xsl:with-param name="b-has-hint" select="true()" />
                 <xsl:with-param name="b-has-answer" select="true()" />
