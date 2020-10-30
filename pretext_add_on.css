@@ -2062,6 +2062,11 @@ body, html body { background: #fff; }
     max-width: 650px;
 }
 
+.pretext-content .tabular-box table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 figure img {
     display: block;
     margin-left: auto;
