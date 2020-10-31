@@ -1878,7 +1878,8 @@ a.mjx-svg-href  {
 .pretext-content .code-inline,
 .pretext-content .code-block,
 .pretext-content .console,
-.pretext-content .program {
+.pretext-content .program,
+.pretext-content .program code {
     font-family: "Inconsolata", monospace;
 }
 .pretext-content .code-block,
@@ -2212,6 +2213,35 @@ code.inline {
     border: none;
 }
 
+/* These next are frp Prism */
+.pretext-content pre.program,
+.pretext-content pre.program code {
+    line-height: 1.1;
+}
+.pretext-content section > .code-box,
+.pretext-content p + .code-box {
+    margin-top: 1em;
+}
+
+.pretext-content pre.program {
+    margin-top: 0;
+    padding-left: 15px;
+    border-left: 1px solid #aaa;
+    font-size: 93%;
+    overflow: auto;
+    background: inherit;  /* over-ride Prism's #f5f2f0 */
+}
+.pretext-content pre.program:before {
+    content:'';
+    font-size: 50%;
+    border-top: 1px solid #aaa;
+    display: block;
+    margin-right: auto;
+    margin-left: -15px;
+    width: 3.0em;
+}
+
+/* next os for the old code formatting js */
 .pretext-content pre.prettyprint,
 .pretext-content pre.plainprint {
     margin-top: 0;
@@ -2225,6 +2255,7 @@ code.inline {
 .pretext-content pre.prettyprint:before,
 .pretext-content pre.plainprint:before {
     content:'';
+    font-size: 50%;
     border-top: 1px solid #aaa;
     display: block;
     margin-right: auto;
