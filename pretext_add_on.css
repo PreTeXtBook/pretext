@@ -2232,7 +2232,7 @@ code.inline {
     background: inherit;  /* over-ride Prism's #f5f2f0 */
 }
 .pretext-content pre.program:before {
-    content:'';
+    content:' ';
     font-size: 50%;
     border-top: 1px solid #aaa;
     display: block;
