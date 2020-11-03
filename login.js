@@ -149,13 +149,15 @@ function validateLogin() {
     console.log("xuname", uname, "yemanu", emanu);
     var guest_name = "guest";
     var the_password_guest = "guest";
+    var editor_name = "editor";
+    var the_password_editor = "editor";
     var instructor_name = "instructor";
     var the_password_instructor = "instructor";
     var the_un_enc = hash_of_string(un);
     console.log("un", un, "the_un_enc", "y"+the_un_enc+"y", "pw", "x"+pw+"x", "pw == the_un_enc", pw == the_un_enc);
     var the_url_enc = hash_of_string(window.location.hostname);
     console.log('window.location.hostname ' + window.location.hostname);
-    if ((typeof guest_access !== 'undefined') && guest_access && (un == guest_name) && (pw == the_password_guest)) {
+    if ((typeof guest_access !== 'undefined') && guest_access && ( ((un == guest_name) && (pw == the_password_guest))  || ((un == editor_name) && (pw == the_password_editor))) ) {
         console.log("setting the guest ut_cookie");
         createCookie('ut_cookie',un,0.25);
         logged_in = true;
@@ -188,7 +190,7 @@ function validateLogin() {
         $("#theloginform").hide();
         document.getElementById('loginlogout').innerHTML = 'logout' + ' ' + un;
         loadScript('answer');
-        loadScript('highlight');
+        if(uname != "editor") {loadScript('highlight')}
         if ((typeof trails !== 'undefined') && trails) {
             loadScript('trails');
         }
@@ -271,7 +273,7 @@ if (pageIdentifier) {
     document.getElementById('loginlogout').innerHTML = 'logout' + ' ' + ut_id;
     console.log("done hiding "+ut_id);
     loadScript('answer');
-    loadScript('highlight');
+    if(uname != "editor") {loadScript('highlight')}
     if ((typeof trails !== 'undefined') && trails) {
             loadScript('trails');
     }
