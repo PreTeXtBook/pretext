@@ -5991,14 +5991,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Task (for structured exercises and project-like) -->
 <!-- ################################################ -->
 
-<!-- "exercise" and PROJECT-LIKE can be structured with up to three level -->
-<!-- of "task".  When this is done, each level may have an "introduction" -->
-<!-- and a "conclusion".  This template handles every structure that can  -->
-<!-- have a "task" child, which includes a "task" itself.  We run over    -->
-<!-- each nested "task".  We make sure a nested list has content, before  -->
-<!-- starting (and later ending) a list to hold the tasks.  Only terminal -->
-<!-- tasks have statement|hint|answer|solutuion.                          -->
-<xsl:template match="exercise[task]|project[task]|activity[task]|exploration[task]|investigation[task]|task[task]" mode="exercise-components">
+<!-- "exercise", PROJECT-LIKE and EXAMPLE-LIKE can be structured     -->
+<!-- with up to three level of "task".  When this is done, each      -->
+<!-- level may have an "introduction" and a "conclusion".  This      -->
+<!-- template handles every structure that can have a "task" child,  -->
+<!-- which includes a "task"itself.  We run over each nested "task". -->
+<!-- We make sure a nested list has content, before starting (and    -->
+<!-- later ending) a list to hold the tasks.  Only terminal tasks    -->
+<!-- have statement|hint|answer|solution.                            -->
+<xsl:template match="exercise[task]|project[task]|activity[task]|exploration[task]|investigation[task]|example[task]|question[task]|problem[task]|task[task]" mode="exercise-components">
     <xsl:param name="b-original" />
     <xsl:param name="purpose" />
     <xsl:param name="b-component-heading"/>
