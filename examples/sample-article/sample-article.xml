@@ -1148,6 +1148,77 @@ the xsltproc executable.
                         </postlude>
                     </project>
 
+                    <p>The following <tag>example</tag>, from Elise Desgreniers, is structured with <tag>task</tag>.</p>
+
+                    <example xml:id="example-structured-with-task">
+                        <title>Notation mathématique 2</title>
+                        <introduction>
+                            <p>Écrivez chacun des exemples suivants avec les conditions pertinentes.</p>
+                        </introduction>
+                        <task>
+                            <statement>
+                                <p>Soit l'ensemble <m>A=\lbrace 1,2,3,4,5\rbrace</m>.</p>
+                                <p>On constate que cet ensemble contient uniquement des entiers positifs allant de 1 à 5.</p>
+                                <p>Donc, on peut écrire <m>A=\lbrace x\mid x\in\mathbb{N}\text{ et } 1\leq x\leq 5\rbrace</m>.</p>
+                            </statement>
+                        </task>
+                        <task>
+                            <statement>
+                                <p><m>\{3,6,9,12,15,\ldots,27,30\}</m></p>
+                            </statement>
+                            <hint>
+                                <p>Ce sont des multiples de 3.</p>
+                            </hint>
+                            <answer>
+                                <p><m>\{x\mid x=3y \text{ et } 1\leq y\leq 10 \text{ et } y\in\mathbb{N}\}</m></p>
+                            </answer>
+                        </task>
+                        <task>
+                            <statement>
+                                <p><m>\{1,3,5,7,9,11,\ldots\}</m></p>
+                            </statement>
+                            <hint>
+                                <p>Ce sont des nombres impairs.</p>
+                            </hint>
+                            <answer>
+                                <p><m>\{x\mid x\mod 2=1 \text{ et } x\in\mathbb{N}\}</m></p>
+                            </answer>
+                        </task>
+                        <task>
+                            <statement>
+                                <p><m>\{2,3,5,7,11,13,17,19,23,\ldots\}</m></p>
+                            </statement>
+                            <hint>
+                                <p>Ce sont des nombres premiers.</p>
+                            </hint>
+                            <answer>
+                                <p><m>\{x\mid x\text{ est un nombre premier positif}\}</m></p>
+                            </answer>
+                        </task>
+                        <task>
+                            <statement>
+                                <p><m>\{1,4,9,16,25,36,\ldots,961\}</m></p>
+                            </statement>
+                            <hint>
+                                <p>Ce sont des carrés parfaits.</p>
+                            </hint>
+                            <answer>
+                                <p><m>\{x\mid x=y^2 \text{ et } 1\leq y\leq 31\text{ et } y\in\mathbb{N}\}</m></p>
+                            </answer>
+                        </task>
+                        <task>
+                            <statement>
+                                <p><m>\{1,8,27,64,125,\ldots\}</m></p>
+                            </statement>
+                            <hint>
+                                <p>Ce sont des cubes parfaits.</p>
+                            </hint>
+                            <answer>
+                                <p><m>\{x\mid x=y^3 \text{ et } y\in\mathbb{N^*}\}</m></p>
+                            </answer>
+                        </task>
+                    </example>
+
                     <p>Notes or examples related to computation or technology can go in blocks of the same name.</p>
 
                     <technology>
