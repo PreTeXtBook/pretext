@@ -1446,6 +1446,17 @@
           <ref name="Solution"/>
         </zeroOrMore>
       </group>
+      <group>
+        <optional>
+          <ref name="IntroductionStatement"/>
+        </optional>
+        <oneOrMore>
+          <ref name="Task"/>
+        </oneOrMore>
+        <optional>
+          <ref name="ConclusionStatement"/>
+        </optional>
+      </group>
     </choice>
   </define>
   <define name="Example">
@@ -2114,6 +2125,17 @@
           <zeroOrMore>
             <ref name="Solution"/>
           </zeroOrMore>
+        </group>
+        <group>
+          <optional>
+            <ref name="IntroductionStatement"/>
+          </optional>
+          <oneOrMore>
+            <ref name="Task"/>
+          </oneOrMore>
+          <optional>
+            <ref name="ConclusionStatement"/>
+          </optional>
         </group>
         <group>
           <optional>

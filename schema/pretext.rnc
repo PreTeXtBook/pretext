@@ -578,7 +578,11 @@
         
         ExampleLike =
             MetaDataTitleOptional,
-            ((BlockStatement)+ | (Statement, Hint*, Answer*, Solution*))
+            (
+                (BlockStatement)+ |
+                (Statement, Hint*, Answer*, Solution*) |
+                (IntroductionStatement?, Task+, ConclusionStatement?)
+            )
         Example =
             element example {ExampleLike}
         |
@@ -905,6 +909,7 @@
                 (
                 ExerciseBody |
                 (StatementExercise, Hint*, Answer*, Solution*) |
+                (IntroductionStatement?, Task+, ConclusionStatement?) |
                 (IntroductionText?, WebWork, ConclusionText?)
                 )
             }

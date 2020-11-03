@@ -1486,9 +1486,7 @@
     <section>
         <title>Exercises</title>
 
-        <p>Inline, divisional, and <webwork />.  Exercises use ordered lists for parts of their statement (something that may need to be revisited).</p>
-
-
+        <p>Inline, divisional, and <webwork />.  Exercises use task to structure parts, where before they used ordered lists for parts of a statement (to eventually be deprecated).</p>
 
         <fragment xml:id="exercise">
         ExerciseBody =
@@ -1512,6 +1510,7 @@
                 (
                 ExerciseBody |
                 (StatementExercise, Hint*, Answer*, Solution*) |
+                (IntroductionStatement?, Task+, ConclusionStatement?) |
                 (IntroductionText?, WebWork, ConclusionText?)
                 )
             }
@@ -1558,12 +1557,16 @@
     <section>
         <title>Examples and Questions</title>
 
-        <p>Expository, but with solutions, etc. (Borrows from exercises.)</p>
+        <p>Expository, but with solutions, etc. (Borrows from exercises and projects.)</p>
 
         <fragment xml:id="example-like">
         ExampleLike =
             MetaDataTitleOptional,
-            ((BlockStatement)+ | (Statement, Hint*, Answer*, Solution*))
+            (
+                (BlockStatement)+ |
+                (Statement, Hint*, Answer*, Solution*) |
+                (IntroductionStatement?, Task+, ConclusionStatement?)
+            )
         Example =
             element example {ExampleLike}
         |

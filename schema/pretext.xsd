@@ -1323,6 +1323,11 @@
           <xs:element minOccurs="0" maxOccurs="unbounded" ref="answer"/>
           <xs:group minOccurs="0" maxOccurs="unbounded" ref="Solution"/>
         </xs:sequence>
+        <xs:sequence>
+          <xs:group minOccurs="0" ref="IntroductionStatement"/>
+          <xs:element maxOccurs="unbounded" ref="task"/>
+          <xs:group minOccurs="0" ref="ConclusionStatement"/>
+        </xs:sequence>
       </xs:choice>
     </xs:sequence>
     <xs:attributeGroup ref="MetaDataTitleOptional"/>
@@ -1934,6 +1939,11 @@
             <xs:group minOccurs="0" maxOccurs="unbounded" ref="Hint"/>
             <xs:element minOccurs="0" maxOccurs="unbounded" ref="answer"/>
             <xs:group minOccurs="0" maxOccurs="unbounded" ref="Solution"/>
+          </xs:sequence>
+          <xs:sequence>
+            <xs:group minOccurs="0" ref="IntroductionStatement"/>
+            <xs:element maxOccurs="unbounded" ref="task"/>
+            <xs:group minOccurs="0" ref="ConclusionStatement"/>
           </xs:sequence>
           <xs:sequence>
             <xs:group minOccurs="0" ref="IntroductionText"/>
