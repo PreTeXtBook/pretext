@@ -134,9 +134,9 @@
 
         <p><pretext/> makes it as easy as possible to have services provide data about visitors to the <init>HTML</init> version of your book.  We support <url hef="https://analytics.google.com/analytics/web/">Google Analytics</url><fn><c>analytics.google.com/analytics/web/</c></fn> and <url hef="https://statcounter.com/">StatCounter</url><fn><c>statcounter.com/</c></fn>.</p>
 
-        <p>In each case, use is similar.  Begin at the service's site and follow their instructions for enabling data collection for your book's site.  We will not document those instructions here.  When completed, you can request (or will be shown) sample Javascript code to add to pages on your site.  Except, <pretext/> is going to do that part for you.  You only need to provide the unique identifiers used by the service that identify your project.  Because these sign-ups are dependent on your site, this is a publisher activity, and hence configured with the publisher file (<xref ref="publisher-file"/>), see <xref ref="online-analytics-options"/> for details.</p>
+        <p>In each case, use is similar.  Begin at the service's site and follow their instructions for enabling data collection for your book's site.  We will not document those instructions here.  <em>Do not copy the identification numbers from another project<mdash/>be sure to obtain your own for your project.</em>  When completed, you can request (or will be shown) sample Javascript code to add to pages on your site.  Except, <pretext/> is going to do that part for you.  You only need to provide the unique identifiers used by the service that identify your project.  Because these sign-ups are dependent on your site, this is a publisher activity, and hence configured with the publisher file (<xref ref="publisher-file"/>), see <xref ref="online-analytics-options"/> for details.</p>
 
-        <p>StatCounter uses two identifiers, a <c>project</c> ID and a <c>security</c> code.  You can find them in your <q>Project Config</q> under <q>Settings</q>.  Or the code provided will contain lines such as<cd>
+        <p>StatCounter uses two identifiers, a <c>project</c> ID and a <c>security</c> code.  <em>Do not copy the identification numbers from another project<mdash/>be sure to obtain your own for your project.</em>  You can find them in your <q>Project Config</q> under <q>Settings</q>.  Or the code provided will contain lines such as<cd>
             <cline>var sc_project=11538430;</cline>
             <cline>var sc_invisible=1;</cline>
             <cline>var sc_security="72e1390a";</cline>
@@ -145,7 +145,7 @@
             <cline>           statcounter-security"72e1390a"/&gt;</cline>
         </cd></p>
 
-        <p>Google Analytics comes in several flavors.  We once supported Classic and Universal, but no longer, so we do not provide documentation here.  For the replacement, Google <term>Global Site Tag</term> is a single ID.  Google once called this a tracking ID, which may also be called a property ID.  An example looks like <c>UA-6836004-1</c>.  In which case your publisher file would have an element under <c>html</c> like<cd>
+        <p>Google Analytics comes in several flavors.  We once supported Classic and Universal, but no longer, so we do not provide documentation here.  For the replacement, Google <term>Global Site Tag</term> is a single ID.    <em>Do not copy the identification numbers from another project<mdash/>be sure to obtain your own for your project.</em>  Google once called this a tracking ID, which may also be called a property ID.  An example looks like <c>UA-6836004-1</c>.  In which case your publisher file would have an element under <c>html</c> like<cd>
             <cline>&lt;analytics google-gst="UA-6836004-1"/&gt;</cline>
         </cd>If you use both services, you can elect to use just one <tag>analytics</tag> element with several attributes.</p>
 

@@ -11136,6 +11136,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="google-classic">
     <xsl:if test="$b-google-classic">
         <xsl:comment>Start: Google Classic code</xsl:comment>
+        <xsl:comment>*** DO NOT COPY ANOTHER PROJECT'S MAGIC NUMBERS/ID ***</xsl:comment>
+        <xsl:comment>***           GET YOUR OWN FROM GOOGLE             ***</xsl:comment>
         <xsl:text>&#xa;</xsl:text>
         <script>
             <xsl:text>&#xa;</xsl:text>
@@ -11159,6 +11161,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="google-universal">
     <xsl:if test="$b-google-universal">
         <xsl:comment>Start: Google Universal code</xsl:comment>
+        <xsl:comment>*** DO NOT COPY ANOTHER PROJECT'S MAGIC NUMBERS/ID ***</xsl:comment>
+        <xsl:comment>***           GET YOUR OWN FROM GOOGLE             ***</xsl:comment>
         <xsl:text>&#xa;</xsl:text>
         <script>
             <xsl:text>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){&#xa;</xsl:text>
@@ -11184,6 +11188,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$google-gst-tracking"/>
         </xsl:variable>
         <xsl:comment>Start: Google Global Site Tag code</xsl:comment>
+        <xsl:comment>*** DO NOT COPY ANOTHER PROJECT'S MAGIC NUMBERS/ID ***</xsl:comment>
+        <xsl:comment>***           GET YOUR OWN FROM GOOGLE             ***</xsl:comment>
         <xsl:text>&#xa;</xsl:text>
         <script async="" src="{$gst-url}"></script>
         <script>
@@ -11211,6 +11217,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>/1/</xsl:text>
         </xsl:variable>
         <xsl:comment>Start: StatCounter code</xsl:comment>
+        <xsl:comment>*** DO NOT COPY ANOTHER PROJECT'S MAGIC NUMBERS/ID ***</xsl:comment>
+        <xsl:comment>***        GET YOUR OWN FROM STATCOUNTER           ***</xsl:comment>
         <script>
         <xsl:text>&#xa;</xsl:text>
         <xsl:text>var sc_project=</xsl:text>
