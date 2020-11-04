@@ -1400,12 +1400,10 @@ the xsltproc executable.
 
                     <p>A sample table, as a <c>tabular</c> inside a <c>sidebyside</c> with no caption, follows.</p>
 
-                    <sidebyside>
-                        <tabular>
-                            <row><cell>A</cell><cell>B</cell><cell>C</cell></row>
-                            <row><cell>Uno</cell><cell>Dos</cell><cell>Tres</cell></row>
-                        </tabular>
-                    </sidebyside>
+                    <tabular>
+                        <row><cell>A</cell><cell>B</cell><cell>C</cell></row>
+                        <row><cell>Uno</cell><cell>Dos</cell><cell>Tres</cell></row>
+                    </tabular>
                 </assemblage>
 
                 <assemblage>
@@ -2113,28 +2111,27 @@ the xsltproc executable.
 
                 <p>There are a few  common abbreviations of Latin phrases that can be achieved in HTML one way, and in <latex /> with a slightly different mechanism.  These are due to <latex />'s treatment of a period (full stop), depending on its surroundings.  So not reserved characters, but just divergent treatment.  Using these will lead to the best quality in all your outputs.  See Will Robertson's informative and arcane <url href="http://latex-alive.tumblr.com/post/827168808/correct-punctuation-spaces">blog post</url> on the topic if you want the full story for the treatment of a full stop in <latex />.</p>
 
-                <sidebyside>
-                    <tabular>
-                        <row><cell>Tag</cell><cell>Realization</cell><cell>Meaning</cell></row>
-                        <!--  -->
-                        <row><cell><c>ad</c></cell>    <cell><ad/>    </cell><cell><foreign>anno Domini</foreign>, in the year of the Lord</cell>      </row>
-                        <row><cell><c>am</c></cell>    <cell><am/>    </cell><cell><foreign>ante meridiem</foreign>, before midday</cell>              </row>
-                        <row><cell><c>bc</c></cell>    <cell><bc/>    </cell><cell>English, before Christ</cell>                                       </row>
-                        <row><cell><c>ca</c></cell>    <cell><ca/>    </cell><cell><foreign>circa</foreign>, about</cell>                              </row>
-                        <row><cell><c>eg</c></cell>    <cell><eg/>    </cell><cell><foreign>exempli gratia</foreign>, for example</cell>               </row>
-                        <row><cell><c>etal</c></cell>  <cell><etal/>  </cell><cell><foreign>et alia</foreign>, and others</cell>                       </row>
-                        <row><cell><c>etc</c></cell>   <cell><etc/>   </cell><cell><foreign>et caetera</foreign>, and the rest</cell>                  </row>
-                        <row><cell><c>ie</c></cell>    <cell><ie/>    </cell><cell><foreign>id est</foreign>, in other words</cell>                    </row>
-                        <row><cell><c>nb</c></cell>    <cell><nb/>    </cell><cell><foreign>nota bene</foreign>, note well</cell>                      </row>
-                        <row><cell><c>pm</c></cell>    <cell><pm/>    </cell><cell><foreign>post meridiem</foreign>, after midday</cell>               </row>
-                        <row><cell><c>ps</c></cell>    <cell><ps/>    </cell><cell><foreign>post scriptum</foreign>, after what has been written</cell></row>
-                        <row><cell><c>vs</c></cell>    <cell><vs/>    </cell><cell><foreign>versus</foreign>, against</cell>                           </row>
-                        <row><cell><c>viz</c></cell>   <cell><viz/>   </cell><cell><foreign>videlicet</foreign>, namely</cell>                         </row>
-                    </tabular>
-                </sidebyside>                <!-- 47.266898N -122.596464W, then 505.3 feet to mean tideline -->
+                <tabular>
+                    <row><cell>Tag</cell><cell>Realization</cell><cell>Meaning</cell></row>
+                    <!--  -->
+                    <row><cell><c>ad</c></cell>    <cell><ad/>    </cell><cell><foreign>anno Domini</foreign>, in the year of the Lord</cell>      </row>
+                    <row><cell><c>am</c></cell>    <cell><am/>    </cell><cell><foreign>ante meridiem</foreign>, before midday</cell>              </row>
+                    <row><cell><c>bc</c></cell>    <cell><bc/>    </cell><cell>English, before Christ</cell>                                       </row>
+                    <row><cell><c>ca</c></cell>    <cell><ca/>    </cell><cell><foreign>circa</foreign>, about</cell>                              </row>
+                    <row><cell><c>eg</c></cell>    <cell><eg/>    </cell><cell><foreign>exempli gratia</foreign>, for example</cell>               </row>
+                    <row><cell><c>etal</c></cell>  <cell><etal/>  </cell><cell><foreign>et alia</foreign>, and others</cell>                       </row>
+                    <row><cell><c>etc</c></cell>   <cell><etc/>   </cell><cell><foreign>et caetera</foreign>, and the rest</cell>                  </row>
+                    <row><cell><c>ie</c></cell>    <cell><ie/>    </cell><cell><foreign>id est</foreign>, in other words</cell>                    </row>
+                    <row><cell><c>nb</c></cell>    <cell><nb/>    </cell><cell><foreign>nota bene</foreign>, note well</cell>                      </row>
+                    <row><cell><c>pm</c></cell>    <cell><pm/>    </cell><cell><foreign>post meridiem</foreign>, after midday</cell>               </row>
+                    <row><cell><c>ps</c></cell>    <cell><ps/>    </cell><cell><foreign>post scriptum</foreign>, after what has been written</cell></row>
+                    <row><cell><c>vs</c></cell>    <cell><vs/>    </cell><cell><foreign>versus</foreign>, against</cell>                           </row>
+                    <row><cell><c>viz</c></cell>   <cell><viz/>   </cell><cell><foreign>videlicet</foreign>, namely</cell>                         </row>
+                </tabular>
 
                 <p>We also distinguish between abbreviations (<abbr>vs.</abbr>), acronyms (<acro>SCUBA</acro>) and initialisms (<init>XML</init>).  This is a test of the text version of a multiplication symbol: 2<nbsp /><times /><nbsp />4.</p>
 
+                <!-- 47.266898N -122.596464W, then 505.3 feet to mean tideline -->
                 <p>Simple coordinates with degrees, minutes, seconds, or temperature, or distance in feet and inches.  <q>We parked the car at 36<degree/>16<prime/>0.83<dblprime/>N, 122<degree/>35<prime/>47.27<dblprime/>W, and since it was 93<degree/>F, we walked 505<prime/>3.6<dblprime/> so we could swim in the bay.</q></p>
 
                 <p>An <term>em dash</term> is the long dash used much like parentheses (not an <term>en dash</term> used to denote a range, such as a range of page numbers).  It should not have spaces around it, but some style guides allow for a <em>thin</em> space, which<mdash />we test right now.  The command line stringparam <c>emdash.space</c> can be set to <c>none</c> or <c>thin</c> to control this.</p>
@@ -2675,6 +2672,7 @@ the xsltproc executable.
 
                     <sidebyside margins="20% 30%">
                         <p>A paragraph interior to a <c>sidebyside</c> with a footnote<fn>Interior footnote.</fn> buried inside the paragraph.</p>
+                        <p>A second paragraph, just to avoid a one-panel warning.</p>
                     </sidebyside>
 
                     <p>The final paragraph of this remark, randomly placed, to test footnotes in <latex/> conversions.</p>
@@ -3490,59 +3488,55 @@ the xsltproc executable.
 
                 <p>The table below is a summary of how graphics and images are specified, constructed and manipulated.  Additional processing is indicated by reference to the Python script <c>pretext</c>.  Images need to be placed relative to the <latex /> file that includes them during compilation, and placed relative to the <init>HTML</init> files which reference/include them.  Author-provided image files may be placed in any subdirectory, and the <c>@source</c> attribute should include the complete relative path with the subdirectory.  Files generated by the <c>pretext</c> script will be specified in the output using the relative directory <c>images</c>, which can be changed using the <c>directory.images</c> stringparam.  There is no reason author-provided files cannot also be placed in this same directory (presuming no duplicate names). [This table is presently more readable in HTML, the PDF version will improve.]</p>
 
-                <sidebyside>
-                    <tabular top="medium" bottom="minor">
-                        <row bottom="medium">
-                            <cell>MBX Element</cell>
-                            <cell>Specification</cell>
-                            <cell><latex />/Print</cell>
-                            <cell>HTML</cell>
-                            <cell>Notes</cell>
-                        </row>
+                <tabular top="medium" bottom="minor">
+                    <row bottom="medium">
+                        <cell>MBX Element</cell>
+                        <cell>Specification</cell>
+                        <cell><latex />/Print</cell>
+                        <cell>HTML</cell>
+                        <cell>Notes</cell>
+                    </row>
 
-                        <row>
-                            <cell><c>image/@source</c></cell>
-                            <cell>full relative path, w/ extension</cell>
-                            <cell>directly included</cell>
-                            <cell>directly included</cell>
-                            <cell>author-provided <init>PNG</init>, <init>JPEG</init></cell>
-                        </row>
+                    <row>
+                        <cell><c>image/@source</c></cell>
+                        <cell>full relative path, w/ extension</cell>
+                        <cell>directly included</cell>
+                        <cell>directly included</cell>
+                        <cell>author-provided <init>PNG</init>, <init>JPEG</init></cell>
+                    </row>
 
-                        <row>
-                            <cell><c>image/@source</c></cell>
-                            <cell>full relative path, w/o extension</cell>
-                            <cell>presumes <init>PDF</init></cell>
-                            <cell>presumes <init>SVG</init></cell>
-                            <cell>author-provided</cell>
-                        </row>
+                    <row>
+                        <cell><c>image/@source</c></cell>
+                        <cell>full relative path, w/o extension</cell>
+                        <cell>presumes <init>PDF</init></cell>
+                        <cell>presumes <init>SVG</init></cell>
+                        <cell>author-provided</cell>
+                    </row>
 
-                        <row>
-                            <cell><c>image/latex-image-code</c></cell>
-                            <cell><latex />-compatible source</cell>
-                            <cell>directly included</cell>
-                            <cell><init>SVG</init> via <c>pretext</c></cell>
-                            <cell><eg /> tikz, pgfplots, xypic</cell>
-                        </row>
+                    <row>
+                        <cell><c>image/latex-image-code</c></cell>
+                        <cell><latex />-compatible source</cell>
+                        <cell>directly included</cell>
+                        <cell><init>SVG</init> via <c>pretext</c></cell>
+                        <cell><eg /> tikz, pgfplots, xypic</cell>
+                    </row>
 
-                        <row>
-                            <cell><c>image/sageplot</c></cell>
-                            <cell>Sage code</cell>
-                            <cell><init>PDF</init> via <c>pretext</c></cell>
-                            <cell><init>SVG</init> via <c>pretext</c></cell>
-                            <cell><init>PNG</init> for 3-D</cell>
-                        </row>
+                    <row>
+                        <cell><c>image/sageplot</c></cell>
+                        <cell>Sage code</cell>
+                        <cell><init>PDF</init> via <c>pretext</c></cell>
+                        <cell><init>SVG</init> via <c>pretext</c></cell>
+                        <cell><init>PNG</init> for 3-D</cell>
+                    </row>
 
-                        <row>
-                            <cell><c>image/asymptote</c></cell>
-                            <cell>Asymptote code</cell>
-                            <cell><init>PDF</init> via <c>pretext</c></cell>
-                            <cell><init>SVG</init> via <c>pretext</c></cell>
-                            <cell></cell>
-                        </row>
-
-
-                    </tabular>
-                </sidebyside>
+                    <row>
+                        <cell><c>image/asymptote</c></cell>
+                        <cell>Asymptote code</cell>
+                        <cell><init>PDF</init> via <c>pretext</c></cell>
+                        <cell><init>SVG</init> via <c>pretext</c></cell>
+                        <cell></cell>
+                    </row>
+                </tabular>
 
                 <p>In the early stages of a writing project, it may be best not to track provisional image files built with <c>pretext</c> under version control, and just regenerate them periodically (see the <c>-r</c> option for <c>pretext</c>).  As a project matures, then it makes sense to put stable files under version control for collaborators and others.  In every case, managing graphics files (and other aspects of production), is much more pleasurable with a script (shell, Makefile, etc.)</p>
             </subsection>
@@ -3655,10 +3649,7 @@ the xsltproc executable.
 
                     <introduction>
                         <p>In the next two problems compute the indicated derivative.</p>
-                        <p>Use a <c>sidebyside</c> element to insert a relevant <c>image</c>, or <c>tabular</c>, or other un-numbered item that does not fit in a sentence.</p>
-                        <sidebyside width="30%">
-                            <image source="images/cubic-function.png" />
-                        </sidebyside>
+                        <image source="images/cubic-function.png" width="30%"/>
                         <p>You could <q>connect</q> the image above with the exercises following as part of this <c>introduction</c> for the <c>exercisegroup</c>.</p>
                     </introduction>
 
@@ -4857,11 +4848,9 @@ the xsltproc executable.
             </table>
 
 
-            <p>For a table without a caption, create a <tag>tabular</tag> and place it inside a <tag>sidebyside</tag>.  This will allow control over the horizontal placment, but without a caption, there is no number, and the tabular cannot be cross-referenced.</p>
+            <p>For a table without a caption, create a <tag>tabular</tag> and place it directly within the current division.  This will allow control over the horizontal placment, but without a caption, there is no number, and the tabular cannot be cross-referenced.</p>
 
-            <sidebyside>
-                <tabular top="medium"><row bottom="medium" left="minor"><cell right="minor">One</cell></row></tabular>
-            </sidebyside>
+            <tabular top="medium"><row bottom="medium" left="minor"><cell right="minor">One</cell></row></tabular>
 
             <p>Same example as before, but now with vertical rules.  See the source for comments.</p>
 
@@ -6682,16 +6671,14 @@ the xsltproc executable.
 
                 <p>The <c>console</c> tag is also implemented with <c>fancyvrb</c>, with adjustments for the input lines.  It will not look like it, but these are 8 such inputs, with similar results to above, but now bolded.</p>
 
-                <sidebyside margins="0%">
-                    <console>
-                        <input>  &#x00A1; &#x00A2; &#x00A3; &#x00A4; &#x00A5; &#x00A6; &#x00A7; &#x00A8; &#x00A9; &#x00AA; &#x00AB; &#x00AC;   &#x00AE; &#x00AF;</input>
-                        <input>&#x00B0; &#x00B1; &#x00B2; &#x00B3; &#x00B4; &#x00B5; &#x00B6; &#x00B7; &#x00B8; &#x00B9; &#x00BA; &#x00BB; &#x00BC; &#x00BD; &#x00BE; &#x00BF;</input>
-                        <input>&#x00C0; &#x00C1; &#x00C2; &#x00C3; &#x00C4; &#x00C5; &#x00C6; &#x00C7; &#x00C8; &#x00C9; &#x00CA; &#x00CB; &#x00CC; &#x00CD; &#x00CE; &#x00CF;</input>
-                        <input>&#x00D0; &#x00D1; &#x00D2; &#x00D3; &#x00D4; &#x00D5; &#x00D6; &#x00D7; &#x00D8; &#x00D9; &#x00DA; &#x00DB; &#x00DC; &#x00DD; &#x00DE; &#x00DF;</input>
-                        <input>&#x00E0; &#x00E1; &#x00E2; &#x00E3; &#x00E4; &#x00E5; &#x00E6; &#x00E7; &#x00E8; &#x00E9; &#x00EA; &#x00EB; &#x00EC; &#x00ED; &#x00EE; &#x00EF;</input>
-                        <input>&#x00F0; &#x00F1; &#x00F2; &#x00F3; &#x00F4; &#x00F5; &#x00F6; &#x00F7; &#x00F8; &#x00F9; &#x00FA; &#x00FB; &#x00FC; &#x00FD; &#x00FE; &#x00FF;</input>
-                    </console>
-                </sidebyside>
+                <console margins="0%">
+                    <input>  &#x00A1; &#x00A2; &#x00A3; &#x00A4; &#x00A5; &#x00A6; &#x00A7; &#x00A8; &#x00A9; &#x00AA; &#x00AB; &#x00AC;   &#x00AE; &#x00AF;</input>
+                    <input>&#x00B0; &#x00B1; &#x00B2; &#x00B3; &#x00B4; &#x00B5; &#x00B6; &#x00B7; &#x00B8; &#x00B9; &#x00BA; &#x00BB; &#x00BC; &#x00BD; &#x00BE; &#x00BF;</input>
+                    <input>&#x00C0; &#x00C1; &#x00C2; &#x00C3; &#x00C4; &#x00C5; &#x00C6; &#x00C7; &#x00C8; &#x00C9; &#x00CA; &#x00CB; &#x00CC; &#x00CD; &#x00CE; &#x00CF;</input>
+                    <input>&#x00D0; &#x00D1; &#x00D2; &#x00D3; &#x00D4; &#x00D5; &#x00D6; &#x00D7; &#x00D8; &#x00D9; &#x00DA; &#x00DB; &#x00DC; &#x00DD; &#x00DE; &#x00DF;</input>
+                    <input>&#x00E0; &#x00E1; &#x00E2; &#x00E3; &#x00E4; &#x00E5; &#x00E6; &#x00E7; &#x00E8; &#x00E9; &#x00EA; &#x00EB; &#x00EC; &#x00ED; &#x00EE; &#x00EF;</input>
+                    <input>&#x00F0; &#x00F1; &#x00F2; &#x00F3; &#x00F4; &#x00F5; &#x00F6; &#x00F7; &#x00F8; &#x00F9; &#x00FA; &#x00FB; &#x00FC; &#x00FD; &#x00FE; &#x00FF;</input>
+                </console>
 
             <p>We take care to render the <c>U+0080</c><ndash /><c>U+00FF</c> characters in Sage cells.  This would allow some flexibility in comments and strings employed.  The following is just a test of these characters in the <c>input</c> and <c>output</c> of a <c>sage</c> element.  This is not functional code.</p>
 
@@ -6718,17 +6705,15 @@ the xsltproc executable.
 
             <p>The table below has a single column, and each cell of the table has a string of 10 characters inside a <c>c</c> element.  It is meant to test if the font is monospace in this situation.</p>
 
-            <sidebyside>
-                <table>
-                    <title>Alignment Test</title>
-                    <tabular>
-                        <row><cell><c>0123456789</c></cell></row>
-                        <row><cell><c>9876543210</c></cell></row>
-                        <row><cell><c>iiiiiiiiii</c></cell></row>
-                        <row><cell><c>mmmmmmmmmm</c></cell></row>
-                    </tabular>
-                </table>
-            </sidebyside>
+            <table>
+                <title>Alignment Test</title>
+                <tabular>
+                    <row><cell><c>0123456789</c></cell></row>
+                    <row><cell><c>9876543210</c></cell></row>
+                    <row><cell><c>iiiiiiiiii</c></cell></row>
+                    <row><cell><c>mmmmmmmmmm</c></cell></row>
+                </tabular>
+            </table>
 
             <p>Again, more examples and more thorough explanations can be found in the sample: <c>examples/fonts/fonts-and-characters.xml</c>.  Be aware that the nature of the more advanced sample is that it will likely produce many errors when processed with <c>pdflatex</c>.  Adding <c>-interaction batchmode</c> or <c>-interaction nonstopmode</c> to the <c>pdflatex</c> command-line will sometimes be less painless than acknowledging each error.  The more advanced sample will perform well when processed with <c>xelatex</c>.</p>
         </section>
@@ -6944,21 +6929,19 @@ the xsltproc executable.
                 </console>
             </listing>
 
-            <p>Here is the plain version, placed inside a <c>sidebyside</c> for layout control.  We simply place a small margin on the left (at 4%).</p>
+            <p>Here is the plain version, some layout control.  We simply place a small margin on the left (at 4% width).</p>
 
-            <sidebyside margins="4%">
-                <console>
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                    <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                    <input>./intAndFloat</input>
-                    <output>
-                    The integer is 19088743 and the float is 19088.742188
-                    </output>
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                    <input />
-                </console>
-            </sidebyside>
+            <console margins="4%">
+                <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
+                <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                <input>./intAndFloat</input>
+                <output>
+                The integer is 19088743 and the float is 19088.742188
+                </output>
+                <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                <input />
+            </console>
 
             <p>If your console input exceeds more than one line, you can author it across several lines and your choice of line breaks will be reflected in the rendering.  You can decide to indent lines after the first one for clarity, if desired.  You can also decide if your audience needs line-continuation characters or not.</p>
 
@@ -7947,10 +7930,9 @@ the xsltproc executable.
                     <li><p>This is<ol>
                         <li><p>a very<ol>
                             <li><p>wide<ol>
-                                    <li><p>rectangle</p>
-                                        <sidebyside margins="0%" width="100%" >
-                                            <image source="images/cross-rectangle.png" />
-                                        </sidebyside>
+                                    <li>
+                                        <p>rectangle</p>
+                                        <image source="images/cross-rectangle.png" margins="0%" width="100%"/>
                                     </li>
                             </ol></p></li>
                         </ol></p></li>
@@ -8581,6 +8563,16 @@ the xsltproc executable.
                                 <cell>D</cell>
                             </row>
                         </tabular>
+                        <tabular>
+                            <row>
+                                <cell><m>\alpha</m></cell>
+                                <cell><m>\beta</m></cell>
+                            </row>
+                            <row>
+                                <cell><m>\gamma</m></cell>
+                                <cell><m>\delta</m></cell>
+                            </row>
+                        </tabular>
                     </sidebyside>
                 </paragraphs>
 
@@ -8812,19 +8804,7 @@ the xsltproc executable.
                 <video xml:id="airborne-midnight-1" youtube="UYPoMjR6-Ao" />
             </sidebyside>
 
-            <p>Videos can be placed quite compactly for HTML output, but we display a fair amount of information for a YouTube video in print, and therefore two videos side-by-side gets pretty crowded.  The examples above have the bare minimum amount of information attached (not in an overarching <c>figure</c>), and the bare amount which which is displayed in print.  We could relax our common spacing to make it a bit better.  For other examples see <xref ref="section-video" text="type-global" />.</p>
-
-            <figure>
-                <caption>A <tag>sidebyside</tag> with one large panel</caption>
-                <sidebyside margins="10%">
-                    <figure>
-                        <caption><pubtitle>Sometime Around Midnight</pubtitle>, Airborne Toxic Event, 2009</caption>
-                        <video xml:id="airborne-midnight-2" youtube="UYPoMjR6-Ao" start="48" end="100" />
-                    </figure>
-                </sidebyside>
-            </figure>
-
-            <p>We make an exception to our common layout and put one YouTube video, with a start and end time into a single panel of a <c>sidebyside</c> as a <c>figure</c> with a <c>title</c> and a <c>caption</c> that is rendered as a sub-caption.  Read about <q>side-by-side</q> groups (<c>sbsgroup</c>) and experiment with stacking several sub-captioned videos into an overall captioned figure (<xref ref="subsection-sbsgroup" text="type-global" />).</p>
+            <p>Videos can be placed quite compactly for HTML output, but we display a fair amount of information for a YouTube video in print, and therefore two videos side-by-side gets pretty crowded.  The examples above have the bare minimum amount of information attached (not in an overarching <c>figure</c>), and the bare amount which which is displayed in print.  We could relax our common spacing to make it a bit better.  Read about <q>side-by-side</q> groups (<c>sbsgroup</c>) and experiment with stacking several sub-captioned videos into an overall captioned figure (<xref ref="subsection-sbsgroup" text="type-global" />).  For other examples see <xref ref="section-video" text="type-global"/> and <xref ref="atomic-video" text="type-global"/>.</p>
         </section>
 
         <section xml:id="poetry">
@@ -10430,20 +10410,18 @@ the xsltproc executable.
                     <example>
                         <title> Kirchoff's Current Law </title>
                         <p> For the circuit below <m> I_1 + I_2 = I_3 </m>.</p>
-                        <sidebyside width="40%">
-                            <image xml:id="worksheet-kirchoff-law">
-                                <latex-image>
-                                \begin{circuitikz}
-                                \draw (0,0)
-                                to[R, i=$I_1$, *-o](2,2);
-                                \draw (0,0)
-                                to[R, i=$I_2$, *-o](2,-2);
-                                \draw (-3, 0)
-                                to[R, i=$I_3$, o-*](0,0);
-                                \end{circuitikz}
-                                </latex-image>
-                            </image>
-                        </sidebyside>
+                        <image xml:id="worksheet-kirchoff-law" width="40%">
+                            <latex-image>
+                            \begin{circuitikz}
+                            \draw (0,0)
+                            to[R, i=$I_1$, *-o](2,2);
+                            \draw (0,0)
+                            to[R, i=$I_2$, *-o](2,-2);
+                            \draw (-3, 0)
+                            to[R, i=$I_3$, o-*](0,0);
+                            \end{circuitikz}
+                            </latex-image>
+                        </image>
                     </example>
 
                     <theorem>
@@ -10463,48 +10441,44 @@ the xsltproc executable.
                     <exercise workspace="12%">
                         <statement>
                         <p>For the simple network pictured, calculuate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
-                       <sidebyside>
-                            <image xml:id="worksheet-simple-network">
-                                <latex-image>
-                                \begin{circuitikz}
-                                \draw (0,0)
-                                to[V, v=$11\quad \mbox{volt}$](0, 3)
-                                to[short](2,3)
-                                to[R, R=$4\quad \mbox{ohm}$] (3, 3)
-                                to[short](4,3)
-                                to[R, R=$3\quad \mbox{ohm}$](4,0)
-                                to[short](3,0)
-                                to[R, R=$3\quad \mbox{ohm}$](2,0)
-                                to[short](0,0);
-                                \end{circuitikz}
-                                </latex-image>
-                            </image>
-                        </sidebyside>
+                        <image xml:id="worksheet-simple-network">
+                            <latex-image>
+                            \begin{circuitikz}
+                            \draw (0,0)
+                            to[V, v=$11\quad \mbox{volt}$](0, 3)
+                            to[short](2,3)
+                            to[R, R=$4\quad \mbox{ohm}$] (3, 3)
+                            to[short](4,3)
+                            to[R, R=$3\quad \mbox{ohm}$](4,0)
+                            to[short](3,0)
+                            to[R, R=$3\quad \mbox{ohm}$](2,0)
+                            to[short](0,0);
+                            \end{circuitikz}
+                            </latex-image>
+                        </image>
                        </statement>
                     </exercise>
 
                     <exercise workspace="12%">
                         <statement>
                         <p> Compare it with a parallel circuit network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
-                        <sidebyside>
-                            <image xml:id="worksheet-parallel-circuit">
-                                <latex-image>
-                                \begin{circuitikz}
-                                \draw(0,0)
-                                to[V, v=$11\quad \mbox{volt}$](0, 3)
-                                to[short](5,3)
-                                to[R, R=$4\quad \mbox{ohm}$](6,3)
-                                to[short](7,3)
-                                to[R, R=$3\quad \mbox{ohm}$](7,0)
-                                to[short](6,0)
-                                to[R, R=$3\quad \mbox{ohm}$](5,0)
-                                to[short](0,0);
-                                \draw(4,0)
-                                to[R, R=$3\quad \mbox{ohm}$](4,3);
-                                \end{circuitikz}
-                                </latex-image>
-                            </image>
-                        </sidebyside>
+                        <image xml:id="worksheet-parallel-circuit">
+                            <latex-image>
+                            \begin{circuitikz}
+                            \draw(0,0)
+                            to[V, v=$11\quad \mbox{volt}$](0, 3)
+                            to[short](5,3)
+                            to[R, R=$4\quad \mbox{ohm}$](6,3)
+                            to[short](7,3)
+                            to[R, R=$3\quad \mbox{ohm}$](7,0)
+                            to[short](6,0)
+                            to[R, R=$3\quad \mbox{ohm}$](5,0)
+                            to[short](0,0);
+                            \draw(4,0)
+                            to[R, R=$3\quad \mbox{ohm}$](4,3);
+                            \end{circuitikz}
+                            </latex-image>
+                        </image>
                         </statement>
                     </exercise>
                 </sidebyside>
@@ -10512,31 +10486,29 @@ the xsltproc executable.
                 <exercise workspace="12%">
                     <statement>
                     <p> Now for a more complicated network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
-                        <sidebyside>
-                            <image xml:id="worksheet-complicated-network">
-                                <latex-image>
-                                \begin{circuitikz}
-                                \draw(0,0)
-                                to[V, v=$11 \quad \mbox{volt}$](0, 3)
-                                to[short](5,3)
-                                to[R, R=$4 \quad \mbox{ohm}$](6,3)
-                                to[short](9,3)
-                                to[R, R=$4 \quad \mbox{ohm}$](10,3)
-                                to[short](11,3)
-                                to[R, R=$3 \quad \mbox{ohm}$](11, 0)
-                                to[short](10,0)
-                                to[R, R=$2\quad \mbox{ohm}$](9,0)
-                                to[short](6,0)
-                                to[R, R=$2\quad \mbox{ohm}$](5,0)
-                                to[short](0,0);
-                                \draw(4,0)
-                                to[R, R=$3\quad \mbox{ohm}$](4,3);
-                                \draw(8,0)
-                                to[R, R=$1\quad \mbox{ohm}$](8,3);
-                                \end{circuitikz}
-                                </latex-image>
-                            </image>
-                        </sidebyside>
+                    <image xml:id="worksheet-complicated-network">
+                        <latex-image>
+                        \begin{circuitikz}
+                        \draw(0,0)
+                        to[V, v=$11 \quad \mbox{volt}$](0, 3)
+                        to[short](5,3)
+                        to[R, R=$4 \quad \mbox{ohm}$](6,3)
+                        to[short](9,3)
+                        to[R, R=$4 \quad \mbox{ohm}$](10,3)
+                        to[short](11,3)
+                        to[R, R=$3 \quad \mbox{ohm}$](11, 0)
+                        to[short](10,0)
+                        to[R, R=$2\quad \mbox{ohm}$](9,0)
+                        to[short](6,0)
+                        to[R, R=$2\quad \mbox{ohm}$](5,0)
+                        to[short](0,0);
+                        \draw(4,0)
+                        to[R, R=$3\quad \mbox{ohm}$](4,3);
+                        \draw(8,0)
+                        to[R, R=$1\quad \mbox{ohm}$](8,3);
+                        \end{circuitikz}
+                        </latex-image>
+                    </image>
                     </statement>
                 </exercise>
 
@@ -10546,21 +10518,19 @@ the xsltproc executable.
                     <statement>
                         <p> Now generalize these ideas to a context outside of electrical circuits. Consider the network of streets given in the diagram (with one-way directions as indicated).</p>
 
-                        <sidebyside width="65%">
-                            <image xml:id="worksheet-street-network">
-                                <latex-image>
-                                <![CDATA[
-                                \begin{tikzpicture}[>=stealth]
-                                \draw[->, very thick] (0,0) -- (10, 0) node[midway, below]{East Bound Winooski Ave};
-                                \draw[<-, very thick] (0, 1) -- (10, 1) node[midway, above]{West Bound Winooski Ave};
-                                    \draw[<-, very thick] (0, 4) -- (10, 4) node[midway, above]{Shelburne St};
-                                    \draw[<-, very thick] (1, -1) -- (1, 5) node[midway, above, sloped]{Willow};
-                                    \draw[->, very thick] (9, -1) -- (9, 5) node[midway, above, sloped]{Jay};
-                                    \end{tikzpicture}
-                                ]]>
-                                </latex-image>
-                            </image>
-                        </sidebyside>
+                        <image xml:id="worksheet-street-network" width="65%">
+                            <latex-image>
+                            <![CDATA[
+                            \begin{tikzpicture}[>=stealth]
+                            \draw[->, very thick] (0,0) -- (10, 0) node[midway, below]{East Bound Winooski Ave};
+                            \draw[<-, very thick] (0, 1) -- (10, 1) node[midway, above]{West Bound Winooski Ave};
+                                \draw[<-, very thick] (0, 4) -- (10, 4) node[midway, above]{Shelburne St};
+                                \draw[<-, very thick] (1, -1) -- (1, 5) node[midway, above, sloped]{Willow};
+                                \draw[->, very thick] (9, -1) -- (9, 5) node[midway, above, sloped]{Jay};
+                                \end{tikzpicture}
+                            ]]>
+                            </latex-image>
+                        </image>
 
                         <p>A traffic engineer counts the hourly flow of cars into and out of this network at the entrances.  They get (EB = East Bound; WB = West Bound): </p>
 
