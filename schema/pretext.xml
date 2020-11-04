@@ -530,6 +530,20 @@
                 </code>
         </fragment>
 
+        <p>The <tag>kbd</tag> element will produce something akin to a calculator key or a keyboard key.  It may have (simple) content, which will be reproduced as the label of the key, or it may have a <attr>name</attr> attribute which describes a key that looks more like a graphic, such as an arrow key.</p>
+
+        <!-- TODO: restrict @name to known/supported values? -->
+
+        <fragment xml:id="keyboard-character">
+            <title>Keyboard characters</title>
+            <code>
+            Character |=
+                element kbd {
+                    (text | attribute name {text})
+                }
+            </code>
+        </fragment>
+
         <p>We support musical notation as if they were characters: accidentals, scale degrees, notes, and chords.  Implementation of these is about as complicated as inline mathematical notation, hence they have identical rules about placement.</p>
 
         <fragment xml:id="music-character">
@@ -578,6 +592,7 @@
             <fragref ref="arithmetic-character" />
             <fragref ref="exotic-character" />
             <fragref ref="icon-character" />
+            <fragref ref="keyboard-character" />
             <fragref ref="music-character" />
         </fragment>
 
