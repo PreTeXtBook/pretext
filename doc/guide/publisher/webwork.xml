@@ -209,66 +209,64 @@
       <p>
         There are several string parameters you may pass to <c>xsltproc</c>.
       </p>
-      <sidebyside>
-        <tabular valign="top">
-          <col />
-          <col width="60%" />
-          <row bottom="major">
-            <cell>stringparam</cell>
-            <cell>options</cell>
-          </row>
-          <row bottom="minor">
-            <cell><c>webwork.inline.static</c></cell>
-            <cell>
-              <p>
-                <c>'no'</c> (default) means inline exercises render as interactive.
-              </p>
-              <p>
-                <c>'yes'</c> means inline exercises render as static.
-              </p>
-              <p>
-                <c>'preview'</c> (planned) means inline exercises render as static until you click to activate them.
-              </p>
-            </cell>
-          </row>
-          <row bottom="minor">
-            <cell><c>webwork.divisional.static</c></cell>
-            <cell>
-              <p>
-                <c>'no'</c> means divisional exercises render as interactive.
-              </p>
-              <p>
-                <c>'yes'</c> (default) means divisional exercises render as static.
-              </p>
-              <p>
-                <c>'preview'</c> (planned) means divisional exercises render as static until you click to activate them.
-              </p>
-            </cell>
-          </row>
-          <row bottom="minor">
-            <cell><c>html.knowl.exercise.inline</c></cell>
-            <cell>
-              <p>
-                <c>'no'</c> means inline exercises appear on page load.
-              </p>
-              <p>
-                <c>'yes'</c> (default) means inline exercises are hidden in knowls.
-              </p>
-            </cell>
-          </row>
-          <row bottom="minor">
-            <cell><c>html.knowl.exercise.sectional</c></cell>
-            <cell>
-              <p>
-                <c>'no'</c> (default) means divisional exercises appear on page load.
-              </p>
-              <p>
-                <c>'yes'</c> means divisional exercises are hidden in knowls.
-              </p>
-            </cell>
-          </row>
-        </tabular>
-      </sidebyside>
+      <tabular valign="top">
+        <col />
+        <col width="60%" />
+        <row bottom="major">
+          <cell>stringparam</cell>
+          <cell>options</cell>
+        </row>
+        <row bottom="minor">
+          <cell><c>webwork.inline.static</c></cell>
+          <cell>
+            <p>
+              <c>'no'</c> (default) means inline exercises render as interactive.
+            </p>
+            <p>
+              <c>'yes'</c> means inline exercises render as static.
+            </p>
+            <p>
+              <c>'preview'</c> (planned) means inline exercises render as static until you click to activate them.
+            </p>
+          </cell>
+        </row>
+        <row bottom="minor">
+          <cell><c>webwork.divisional.static</c></cell>
+          <cell>
+            <p>
+              <c>'no'</c> means divisional exercises render as interactive.
+            </p>
+            <p>
+              <c>'yes'</c> (default) means divisional exercises render as static.
+            </p>
+            <p>
+              <c>'preview'</c> (planned) means divisional exercises render as static until you click to activate them.
+            </p>
+          </cell>
+        </row>
+        <row bottom="minor">
+          <cell><c>html.knowl.exercise.inline</c></cell>
+          <cell>
+            <p>
+              <c>'no'</c> means inline exercises appear on page load.
+            </p>
+            <p>
+              <c>'yes'</c> (default) means inline exercises are hidden in knowls.
+            </p>
+          </cell>
+        </row>
+        <row bottom="minor">
+          <cell><c>html.knowl.exercise.sectional</c></cell>
+          <cell>
+            <p>
+              <c>'no'</c> (default) means divisional exercises appear on page load.
+            </p>
+            <p>
+              <c>'yes'</c> means divisional exercises are hidden in knowls.
+            </p>
+          </cell>
+        </row>
+      </tabular>
       <p>
         If your <webwork/> processing produced image files from the <webwork/> server
         and you are rendering the corresponding problems as static,

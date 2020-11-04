@@ -1089,14 +1089,10 @@
         (on a single line).
       </p>
 
-      <sidebyside width="80%" margins="10% 10%">
-
+      <console width="80%" margins="10% 10%">
         <!-- <idx><h><c>pretext</c> script</h><h>for latex-image</h></idx> -->
-<pre>
-  [path to mathbook]/pretext/pretext -c latex-image -f svg
--d ./images [path to PTX source file]
-</pre>
-      </sidebyside>
+        <input>[path to mathbook]/script/pretext -c latex-image -f svg -d ./images [path to PTX source file]</input>
+      </console>
 
       <p>
         This command assumes that we're in the directory where we usually run <c>xsltproc</c> to produce our <init>HTML</init> and that we want to put the images in a directory called <c>images</c> inside that directory.
@@ -1229,7 +1225,7 @@
         (or a chunk of code)
         but you would like to produce a figure to include in your project by using SageMath.
         The cleanest way to do this his to put the SageMath code right in your <pretext/> project and use the <c>pretext</c> script to produce the image files required for your chosen output formats.
-        This is accomplished by using <tag>sageplot</tag> and the <c>pretext</c> script that we discussed in <xref ref="basics-s-latex-fig"/>.
+        This is accomplished by using <tag>sageplot</tag> and the <c>pretext</c> script that we discussed in <xref ref="mdash/>"/>.
         (In particular,
         see the aside in that section about the additional packages that must be installed and configured to use the <c>pretext</c> script.)
       </p>
@@ -1258,17 +1254,13 @@
 
       <!-- <idx><h><c>pretext</c> script</h><h>for sageplot to svg</h></idx> -->
       <!-- <idx><h><c>pretext</c> script</h><h>for sageplot to pdf</h></idx> -->
-      <sidebyside widths="80%" margins="10% 10%">
+      <console width="80%" margins="10% 10%">
+        <input>[path to mathbook]/script/pretext -c sageplot -f svg -d ./images [path to PTX source file]</input>
+      </console>
 
-<pre>[path to mathbook]/script/pretext -c sageplot -f svg
--d ./images [path to PTX source file]</pre>
-      </sidebyside>
-
-      <sidebyside widths="80%" margins="10% 10%">
-
-<pre>[path to mathbook]/script/pretext -c sageplot -f pdf
--d ./images [path to PTX source file]</pre>
-      </sidebyside>
+      <console width="80%" margins="10% 10%">
+        <input>[path to mathbook]/script/pretext -c sageplot -f pdf -d ./images [path to PTX source file]</input>
+      </console>
 
       <p>
         The code in <xref ref="basics-l-sageplot"/> produces the following output.
