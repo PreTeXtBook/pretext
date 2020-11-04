@@ -785,9 +785,9 @@
     <section>
         <title>Blocks</title>
 
-        <p>A <term>text block</term> is very similar to a paragraph.  It can be an actual paragraph, a sequence of paragraphs enclosed as a block quote (with attribution, perhaps), or a large chunk of unformatted text presented typically in a monospace font.</p>
+        <p>A <term>text block</term> is very similar to a paragraph.  It can be an actual paragraph, a sequence of paragraphs enclosed as a block quote (with attribution, perhaps), or a large chunk of unformatted text presented typically in a monospace font.  Certain <q>atomic</q> objects, such as an <tag>image</tag> may be placed as peers of paragraph-like objects.</p>
 
-        <p>A <term>statement block</term> is used in statements.  What are those?  Theorems have statements, exercises have statements, questions have statements.  Some of these blocks with statements also have proofs, hints, and solutions.  In statements, and their peers, we include text blocks, captioned items, asides, side-by-side layouts, and Sage computations, but exclude many of the numbered and titled division blocks.  The <c>NoCaption</c> variant prohibits all numbered items, but allows placement of items like <c>image</c>.  It also does not include <c>Sage</c>.</p>
+        <p>A <term>statement block</term> is used in statements.  What are those?  Theorems have statements, exercises have statements, questions have statements.  Some of these blocks with statements also have proofs, hints, and solutions.  In statements, and their peers, we include text blocks, captioned items, asides, side-by-side layouts, and Sage computations, but exclude many of the numbered and titled division blocks.</p>
 
         <p>A <term>division block</term> includes text blocks, statement blocks, plus topical chunks of text that can have numbered headings or numbered captions, with optional titles, and are set apart slightly from the surrounding narrative.  These are placed mostly as children of divisions, and so one cannot contain another.  They certainly contain paragraphs, and all that goes into them, such as mathematics (inline and display) and figures (and other captioned items).  The <c>sidebyside</c> element can be used to illustrate a division block with a variety of images and displayed text in flexible layouts.</p>
 
@@ -799,7 +799,8 @@
             <title>Blocks</title>
             <code>
             BlockText =
-                Paragraph | BlockQuote | Preformatted
+                Paragraph | BlockQuote | Preformatted |
+                Image | Video | Program | Console | Tabular
             BlockStatementNoCaption =
                 BlockText | Aside |
                 SideBySideNoCaption | SideBySideGroupNoCaption
@@ -1047,6 +1048,8 @@
             Console =
                 element console {
                     PermanentID?,
+                    attribute width {text}?,
+                    attribute margins {text}?,
                     (
                         element prompt {text}?,
                         element input {text}?,
@@ -1056,6 +1059,8 @@
             Program =
                 element program {
                     PermanentID?,
+                    attribute width {text}?,
+                    attribute margins {text}?,
                     attribute language {text}?,
                     attribute interactive {"pythontutor"}?,
                     element input {text}
@@ -1392,6 +1397,8 @@
             Tabular =
                 element tabular {
                     PermanentID?,
+                    attribute width {text}?,
+                    attribute margins {text}?,
                     AlignmentHorizontal?,
                     AlignmentVertical?,
                     BorderTop?,
@@ -1506,6 +1513,7 @@
                 element image {
                     PermanentID?,
                     attribute width {text}?,
+                    attribute margins {text}?,
                     attribute archive {text}?,
                     element description {TextShort}?,
                     attribute source {text}
@@ -1515,6 +1523,7 @@
                     UniqueID?,
                     PermanentID?,
                     attribute width {text}?,
+                    attribute margins {text}?,
                     attribute archive {text}?,
                     element description {TextShort}?,
                     (
@@ -1585,6 +1594,7 @@
                     UniqueID?,
                     PermanentID?,
                     attribute width {text}?,
+                    attribute margins {text}?,
                     attribute aspect {text}?,
                     attribute start {xsd:integer}?,
                     attribute end {xsd:integer}?,
