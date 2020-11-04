@@ -10605,18 +10605,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the &quot;task&quot; element is no longer used as a child of a top-level division, but is instead being used to divide the other &quot;project-like&quot; elements.  It can be replaced by a functional equivalent: &quot;project&quot;, &quot;activity&quot;, &quot;exploration&quot;, or &quot;investigation&quot;'" />
     </xsl:call-template>
     <!--  -->
-    <!-- 2017-08-06  remove "program" and "console" as top-level blocks -->
-    <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//program[not(parent::sidebyside or parent::listing)]" />
-        <xsl:with-param name="date-string" select="'2017-08-06'" />
-        <xsl:with-param name="message" select="'the &quot;program&quot; element is no longer used as a child of a top-level division, but instead should be enclosed by a &quot;listing&quot; or &quot;sidebyside&quot;'" />
-    </xsl:call-template>
-    <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//console[not(parent::sidebyside or parent::listing)]" />
-        <xsl:with-param name="date-string" select="'2017-08-06'" />
-        <xsl:with-param name="message" select="'the &quot;console&quot; element is no longer used as a child of a top-level division, but instead should be enclosed by a &quot;listing&quot; or &quot;sidebyside&quot;'" />
-    </xsl:call-template>
-    <!--  -->
     <!-- 2017-09-10  deprecate title-less paragraphs, outside of sidebyside -->
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurrences" select="$document-root//paragraphs[not(title) and not(parent::sidebyside)]" />
@@ -11021,6 +11009,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2020-05-29'" />
         <xsl:with-param name="message" select="'the  html.calculator  parameter has been replaced by the  html/calculator/@model  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($html.calculator != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2020-11-04  *warning* about one-panel "sidebyside" -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//sidebyside[not(parent::interactive) and count(*[not(&METADATA-FILTER;)]) = 1]" />
+        <xsl:with-param name="date-string" select="'2020-11-04'" />
+        <xsl:with-param name="message" select="'this is a temporary *warning*, which we plan to remove around 2021-01-30.  A &quot;sidebyside&quot; is no longer necessary to hold, or provide layout control, for single instances of &quot;image&quot;,  &quot;video&quot;,  &quot;tabular&quot;, and similar.  Try removing the &quot;sidebyside&quot; and moving any layout control onto the remaining object.'" />
     </xsl:call-template>
 </xsl:template>
 
