@@ -2321,7 +2321,7 @@ the xsltproc executable.
                     <row>
                         <cell>Dollar</cell>
                         <cell><kbd>$</kbd></cell>
-                        -<cell><kbd name="dollar"/></cell>
+                        <cell><kbd name="dollar"/></cell>
                     </row>
                     <row>
                         <cell>Per cent</cell>
@@ -3064,8 +3064,7 @@ the xsltproc executable.
                 <figure xml:id="figure-asymptote-workcone">
                     <caption>Work Cone (Asymptote Interactive 3D Image)</caption>
                     <image xml:id="asymptote-workcone" width="50%">
-                        <!-- aspect ratio from canvas in produced HTML -->
-                        <asymptote aspect="139:151">
+                        <asymptote>
                         import solids;
                         size(0,150);
                         currentprojection=orthographic(0,-30,5);
@@ -7148,7 +7147,9 @@ the xsltproc executable.
                     <p>An exercise might ask a reader to write a computer program, so you can also add a <tag>program</tag> element after the <tag>statement</tag> of an <tag>exercise</tag>.    The purpose is to make it a live coding environment for a version of your output that allows the reader to perhaps submit a solution, if the hosting enviromnment is capable of that.    The <tag>program</tag> element is necessary so you can specify a programming language.  Here we place no code at all in the <tag>program</tag>, so there may be noting at all to see.</p>
                 </statement>
                 <program xml:id="coding-exercise-blank" language="python"/>
-                <hint>We didn't really ask you to do anything.</hint>
+                <hint>
+                    <p>We didn't really ask you to do anything.</p>
+                </hint>
             </exercise>
 
             <exercise>
@@ -7164,7 +7165,9 @@ the xsltproc executable.
                     int main(void)
                     </input>
                 </program>
-                <answer>We're not really sure.</answer>
+                <answer>
+                    <p>We're not really sure.</p>
+                </answer>
             </exercise>
         </section>
 
