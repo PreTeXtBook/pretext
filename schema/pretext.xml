@@ -1535,12 +1535,13 @@
             Image = ImageRaster | ImageCode
             ImageRaster =
                 element image {
+                    UniqueID?,
                     PermanentID?,
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute archive {text}?,
-                    element description {TextShort}?,
-                    attribute source {text}
+                    attribute source {text},
+                    element description {TextShort}?
                 }
             ImageCode =
                 element image {
