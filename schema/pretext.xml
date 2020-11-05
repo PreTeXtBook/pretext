@@ -787,7 +787,7 @@
 
         <p>A <term>text block</term> is very similar to a paragraph.  It can be an actual paragraph, a sequence of paragraphs enclosed as a block quote (with attribution, perhaps), or a large chunk of unformatted text presented typically in a monospace font.  Certain <q>atomic</q> objects, such as an <tag>image</tag> may be placed as peers of paragraph-like objects.</p>
 
-        <p>A <term>statement block</term> is used in statements.  What are those?  Theorems have statements, exercises have statements, questions have statements.  Some of these blocks with statements also have proofs, hints, and solutions.  In statements, and their peers, we include text blocks, captioned items, asides, side-by-side layouts, and Sage computations, but exclude many of the numbered and titled division blocks.</p>
+        <p>A <term>statement block</term> is used in statements.  What are those?  Theorems have statements, exercises have statements, questions have statements.  Some of these blocks with statements also have peers of statments that are proofs, hints, answers, and solutions.  In statements, and their peers, we include text blocks, captioned items, asides, side-by-side layouts, and Sage computations, but exclude many of the numbered and titled division blocks. A slight extension is a <term>solution block</term>, which is everything that can go in a <tag>statement</tag>, plus one or more <tag>proof</tag>, only as part of a <tag>hint</tag>, <tag>answer</tag>, or <tag>solution</tag>.</p>
 
         <p>A <term>division block</term> includes text blocks, statement blocks, plus topical chunks of text that can have numbered headings or numbered captions, with optional titles, and are set apart slightly from the surrounding narrative.  These are placed mostly as children of divisions, and so one cannot contain another.  They certainly contain paragraphs, and all that goes into them, such as mathematics (inline and display) and figures (and other captioned items).  The <c>sidebyside</c> element can be used to illustrate a division block with a variety of images and displayed text in flexible layouts.</p>
 
@@ -808,6 +808,8 @@
                 BlockText |
                 Figure | Aside |
                 SideBySide | SideBySideGroup | Sage
+            BlockSolution =
+                BlockStatement | Proof
             BlockDivision =
                 BlockStatement |
                 Remark | Computation | Theorem | Proof | Definition |
@@ -837,17 +839,17 @@
             Hint =
                 element hint {
                     MetaDataTitleOptional,
-                    BlockStatement+
+                    BlockSolution+
                 }
             Answer =
                 element answer {
                     MetaDataTitleOptional,
-                    BlockStatement+
+                    BlockSolution+
                 }
             Solution =
                 element solution {
                     MetaDataTitleOptional,
-                    BlockStatement+
+                    BlockSolution+
                 }
             </code>
         </fragment>
