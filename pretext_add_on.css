@@ -1047,15 +1047,23 @@ body > a.assistive:focus {
     text-align: right;
 }
 
+.pretext-content table tr.header-vertical th {
+    writing-mode: vertical-rl;
+    padding-left: 2em;
+    transform: rotate(180deg);
+}
+
 .pretext-content table + article {
     margin-top: 1em;
 }
 
+/*
 #pretext-SA #table-12 table  tr:first-of-type th {
     background: #faa;
     writing-mode: vertical-rl;
     transform: none!important;
 }
+*/
 
 .pretext-content .hidden-knowl-wrapper .hiddenproof,
 .pretext-content .blob > article.hiddenproof,
@@ -3253,3 +3261,18 @@ label.incorrect .feedback {
     z-index: 0;
 }
 */
+
+/* CAT  */
+
+#edit_menu_holder {
+    position: relative;
+    left: 30em;
+    bottom: 1.5em;
+}
+#edit_menu_holder #edit_menu {
+    background: #fcc;
+    position: absolute;
+}
+.text_source {
+    font-size: 95%;
+}
