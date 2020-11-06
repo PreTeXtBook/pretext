@@ -2501,10 +2501,20 @@
         <title>(*) Tables and Tabulars</title>
 
         <!-- Reprise:  <title>Bully Pulpit: Vertical Rules in Tables</title> -->
+        <!-- copy in table of possible attributes/features from sample article, -->
+        <!-- and replace hacked \times with a proper typographic "x" element    -->
 
-        <p>This section needs much more work.</p>
+        <introduction>
+            <p>This section needs much more work, and we are slowly adding material as we work on features.</p>
 
-        <p>Note that tables may be constructed using the <url href="http://www.latex-tables.com/"><latex /> Complex Table Editor</url> tool online at <c>latex-tables.com</c>and then exported in <pretext /> syntax.</p>
+            <p>Note that tables may be constructed using the <url href="http://www.latex-tables.com/"><latex /> Complex Table Editor</url> tool online at <c>latex-tables.com</c>and then exported in <pretext /> syntax.</p>
+        </introduction>
+
+        <subsection xml:id="table-headers">
+            <title>Table Headers</title>
+
+            <p>To achieve <em>column</em> headings, you indicate that a <em>row</em> contains headings.  Typically, the contents of every cell in this row will then be rendered in bold, or some other style.  The <tag>row</tag> element accepts a <attr>header</attr> attribute with possible values of <c>no</c> (the default), <c>yes</c>, or <c>vertical</c>.  The latter is useful if space is at a premium (which always seems to be the case with tables), and the cells of a column are narrow and the heading is long.  The one restriction is that rows identified as having headers must be the initial (top) rows of the table and must be contiguous.</p>
+        </subsection>
     </section>
 
     <section xml:id="topic-program-listings">
