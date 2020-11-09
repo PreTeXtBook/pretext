@@ -14,15 +14,33 @@
     <article xml:id="pretext">
         <title>PreTeXt RELAX-NG Schema</title>
 
-        <!-- necessary to get title to appear/ -->
+        <!-- necessary to get title to appear -->
         <frontmatter>
-            <p>Junk</p>
+            <titlepage>
+
+               <!-- There can be several authors here -->
+                <author>
+                    <personname>Robert A.<nbsp/>Beezer</personname>
+                    <!-- department here is one line, so unstructured -->
+                    <department>Department of Mathematics and Computer Science</department>
+                    <!-- institution uses two lines, so structured as such -->
+                    <institution>
+                        <line>University of Puget Sound</line>
+                        <line>Tacoma, Washington, USA</line>
+                    </institution>
+                    <email>beezer@pugetsound.edu</email>
+                </author>
+
+                <!-- Can set date manually or use the "today" element -->
+                <date><today /></date>
+
+            </titlepage>
         </frontmatter>
 
     <introduction>
         <p>This is a literate programming version of the <init>RELAX-NG</init> schema for <pretext/>.  As such, it is used to generate the <init>RELAX-NG</init> compact syntax version (<c>pretext.rnc</c>) and other versions are derived from the compact version with standard tools.</p>
 
-        <p>We intend this to be helpful, for both authors and developers.  It is essentially a contract between the two.  If an author's source validates against the schema, then a developer's code should render the content accurately, or warn about why it cannot.  That said, it is still a work in progress.<ul>
+        <p>We intend this to be helpful for both authors and implementers.  The schema is the contract between authors and implementers.  If an author's source validates against the schema, then an implementer's conversion should render the content accurately, or warn about why it cannot.  That said, it is still a work in progress:<ul>
             <li>New features are not added until they are reasonably stable.  Validating the sample article can be a good way to see what these are.</li>
             <li>Even for stable features, the schema will sometimes lag behind the code.</li>
             <li>There will be other inaccuracies here, so reports or pull requests are welcome.</li>
@@ -41,13 +59,13 @@
                 <title><c>+</c></title>
                 <p>One or more.  Required, with no limit.</p>
             </li>
-        </dl></p>
+        </dl><xref ref="fragment-list"/> contains a list of all the fragments described here, in order of appearance, and may be useful if you are looking for some particular topic, element, or attribute.</p>
     </introduction>
 
     <section>
         <title>Gross Structure</title>
 
-        <p>A <pretext/> document is always a single <c>mathbook</c> element below the root.  There are two divisions, a <c>docinfo</c>, which is a database of sorts about the document, along with a sibling element that indicates the type of the document and contains all the content.  (2019-02-08:  the root element may be <tag>pretext</tag>, and eventually <tag>mathbook</tag> will be deprecated.)</p>
+        <p>A <pretext/> document is always a single <c>pretext</c> element below the root.  There are two divisions, a <c>docinfo</c>, which is a database of sorts about the document, along with a sibling element that indicates the type of the document and contains all the content.  <c>start</c> is the way to specify the lone top-level element as part of the schema, so it will not be used again.</p>
 
         <fragment xml:id="gross-structure">
             <title>Gross structure</title>
@@ -78,14 +96,16 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs | Commentary)+,
-                            (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
+                            (ReadingQuestions? &amp; Exercises? &amp;
+                             Solutions? &amp; References?),
                             Outcomes?
                         )
                     |
                         (
                             (Objectives? &amp; IntroductionDivision?),
                             Section,
-                            (Section | ReadingQuestions | Exercises | Solutions | References)*,
+                            (Section | ReadingQuestions | Exercises |
+                             Solutions | References)*,
                             (Outcomes? &amp; ConclusionDivision?),
                             ArticleBackMatter?
                         )
@@ -131,14 +151,16 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs | Commentary)+,
-                            (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
+                            (ReadingQuestions? &amp; Exercises? &amp;
+                             Solutions? &amp; References?),
                             Outcomes?
                         )
                     |
                         (
                             (Objectives? &amp; IntroductionDivision?),
                             Section,
-                            (Section | ReadingQuestions | Exercises | Solutions | References)*,
+                            (Section | ReadingQuestions | Exercises |
+                             Solutions | References)*,
                             (Outcomes? &amp; ConclusionDivision?)
                         )
                     )
@@ -151,14 +173,16 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs | Commentary)+,
-                            (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
+                            (ReadingQuestions? &amp; Exercises? &amp;
+                             Solutions? &amp; References?),
                             Outcomes?
                         )
                     |
                         (
                             (Objectives? &amp; IntroductionDivision?),
                             Subsection,
-                            (Subsection | ReadingQuestions | Exercises | Solutions | References)*,
+                            (Subsection | ReadingQuestions | Exercises |
+                             Solutions | References)*,
                             (Outcomes? &amp; ConclusionDivision?)
                         )
                     )
@@ -171,14 +195,16 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs | Commentary)+,
-                            (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
+                            (ReadingQuestions? &amp; Exercises? &amp;
+                             Solutions? &amp; References?),
                             Outcomes?
                         )
                     |
                         (
                             (Objectives? &amp; IntroductionDivision?),
                             Subsubsection,
-                            (Subsubsection | ReadingQuestions | Exercises | Solutions | References)*,
+                            (Subsubsection | ReadingQuestions | Exercises |
+                             Solutions | References)*,
                             (Outcomes? &amp; ConclusionDivision?)
                         )
                     )
@@ -189,7 +215,8 @@
                     AuthorByline*,
                     Objectives?,
                     (BlockDivision | Paragraphs | Commentary)+,
-                    (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
+                    (ReadingQuestions? &amp; Exercises? &amp;
+                     Solutions? &amp; References?),
                     Outcomes?
                 }
             ArticleAppendix =
@@ -199,15 +226,18 @@
                     (
                         (
                             Objectives?,
-                            (BlockDivision | Paragraphs | Commentary | NotationList)+,
-                            (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
+                            (BlockDivision | Paragraphs | Commentary |
+                             NotationList)+,
+                            (ReadingQuestions? &amp; Exercises? &amp;
+                             Solutions? &amp; References?),
                             Outcomes?
                         )
                     |
                         (
                             (Objectives? &amp; IntroductionDivision?),
                             Subsection,
-                            (Subsection | ReadingQuestions | Exercises | Solutions | References)*,
+                            (Subsection | ReadingQuestions | Exercises |
+                             Solutions | References)*,
                             (Outcomes? &amp; ConclusionDivision?)
                         )
                     )
@@ -219,8 +249,10 @@
                     (
                         (
                             Objectives?,
-                            (BlockDivision | Paragraphs | Commentary | NotationList)+,
-                            (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
+                            (BlockDivision | Paragraphs | Commentary |
+                             NotationList)+,
+                            (ReadingQuestions? &amp; Exercises? &amp;
+                             Solutions? &amp; References?),
                             Outcomes?
                         )
                     |
@@ -298,8 +330,7 @@
                     MetaDataShortTitleOptional,
                     IntroductionDivision?,
                     (
-                        (Exercise | ExerciseGroup)+
-                        |
+                        (Exercise | ExerciseGroup)+ |
                         Subexercises+
                     ),
                     ConclusionDivision?
@@ -712,8 +743,7 @@
                 element mrow {
                     MetaDataTarget,
                     (
-                        attribute number {"yes" | "no"}
-                        |
+                        attribute number {"yes" | "no"} |
                         attribute tag {"star" | "dstar" | "tstar" |
                                        "dagger" | "ddagger" | "tdagger" |
                                        "hash" | "dhash" | "thash" |
@@ -726,13 +756,11 @@
             MathDisplay =
                 element me {
                     mixed {(FillIn | WWVariable)*}
-                }
-            |
+                } |
                 element men {
                     MetaDataTarget,
                     mixed {(FillIn | WWVariable)*}
-                }
-            |
+                } |
                 element md {
                     attribute number {"yes" | "no"}?,
                     attribute break {"yes" | "no"}?,
@@ -740,8 +768,7 @@
                     attribute alignat-columns {text}?,
                     MathRow,
                     (MathRow | MathIntertext)*
-                }
-            |
+                } |
                 element mdn {
                     attribute number {"yes" | "no"}?,
                     attribute break {"yes" | "no"}?,
@@ -869,7 +896,8 @@
             <code>
             XrefTextStyle =
                 "local" | "global" | "hybrid" | "type-local" | "type-global" |
-                "type-hybrid" | "phrase-global" | "phrase-hybrid" | "title" | "custom"
+                "type-hybrid" | "phrase-global" | "phrase-hybrid" |
+                "title" | "custom"
             Reference = Url | Xref
             Url =
                 element url {
@@ -1058,8 +1086,7 @@
                             (MetaDataTitleOptional, BlockStatement+)
                         )
                     }+
-                }
-            |
+                } |
                 element ul {
                     PermanentID?,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
@@ -1071,8 +1098,7 @@
                             (MetaDataTitleOptional, BlockStatement+)
                         )
                     }+
-                }
-            |
+                } |
                 element dl {
                     PermanentID?,
                     attribute width {"narrow" | "medium" | "wide"}?,
@@ -1126,20 +1152,13 @@
                 MetaDataTitleCreatorOptional,
                 (BlockStatement+ | (Statement, Proof*))
             Theorem =
-                element theorem {TheoremLike}
-            |
-                element lemma {TheoremLike}
-            |
-                element corollary {TheoremLike}
-            |
-                element claim {TheoremLike}
-            |
-                element proposition {TheoremLike}
-            |
-                element algorithm {TheoremLike}
-            |
-                element fact {TheoremLike}
-            |
+                element theorem {TheoremLike} |
+                element lemma {TheoremLike} |
+                element corollary {TheoremLike} |
+                element claim {TheoremLike} |
+                element proposition {TheoremLike} |
+                element algorithm {TheoremLike} |
+                element fact {TheoremLike} |
                 element identity {TheoremLike}
             </code>
         </fragment>
@@ -1157,16 +1176,11 @@
                 MetaDataTitleCreatorOptional,
                 Statement
             Axiom =
-                element axiom {AxiomLike}
-            |
-                element principle {AxiomLike}
-            |
-                element conjecture {AxiomLike}
-            |
-                element heuristic {AxiomLike}
-            |
-                element hypothesis {AxiomLike}
-            |
+                element axiom {AxiomLike} |
+                element principle {AxiomLike} |
+                element conjecture {AxiomLike} |
+                element heuristic {AxiomLike} |
+                element hypothesis {AxiomLike} |
                 element assumption {AxiomLike}
             </code>
         </fragment>
@@ -1194,12 +1208,9 @@
                     )
                 )
             Project =
-                element activity {ProjectLike}
-            |
-                element investigation {ProjectLike}
-            |
-                element exploration {ProjectLike}
-            |
+                element activity {ProjectLike} |
+                element investigation {ProjectLike} |
+                element exploration {ProjectLike} |
                 element project {ProjectLike}
             Task =
                 element task {
@@ -1226,16 +1237,11 @@
                 MetaDataTitleOptional,
                 BlockStatement+
             Remark =
-                element remark {RemarkLike}
-            |
-                element convention {RemarkLike}
-            |
-                element note {RemarkLike}
-            |
-                element observation {RemarkLike}
-            |
-                element warning {RemarkLike}
-            |
+                element remark {RemarkLike} |
+                element convention {RemarkLike} |
+                element note {RemarkLike} |
+                element observation {RemarkLike} |
+                element warning {RemarkLike} |
                 element insight {RemarkLike}
             </code>
         </fragment>
@@ -1253,8 +1259,7 @@
                 MetaDataTitleOptional,
                 BlockStatement+
             Computation =
-                element computation {ComputationLike}
-            |
+                element computation {ComputationLike} |
                 element technology {ComputationLike}
             </code>
         </fragment>
@@ -1272,10 +1277,8 @@
                 MetaDataTitleOptional,
                 BlockStatement+
             Aside =
-                element aside {AsideLike}
-                |
-                element biographical {AsideLike}
-                |
+                element aside {AsideLike} |
+                element biographical {AsideLike} |
                 element historical {AsideLike}
             </code>
         </fragment>
@@ -1319,21 +1322,18 @@
                         Video |
                         MuseScore
                     )
-                }
-            |
+                } |
                 element table {
                     MetaDataShortTitle,
                     Tabular
-                }
-            |
+                } |
                 element listing {
                     MetaDataCaption,
                     (
                         Program |
                         Console
                     )
-                }
-            |
+                } |
                 element list {
                     MetaDataShortTitle,
                     IntroductionText?,
@@ -1590,7 +1590,8 @@
                     attribute end {xsd:integer}?,
                     attribute play-at {"embed" | "popout" | "select"}?,
                     attribute preview {"default" | "generic" | text}?,
-                    (AttributesSourceFile | AttributesYouTube | AttributesYouTubePlaylist)
+                    (AttributesSourceFile | AttributesYouTube |
+                     AttributesYouTubePlaylist)
                 }
             AttributesSourceFile =
                 attribute source {text}
@@ -1728,10 +1729,8 @@
                     (IntroductionStatement?, Task+, ConclusionStatement?)
                 )
             Example =
-                element example {ExampleLike}
-            |
-                element question {ExampleLike}
-            |
+                element example {ExampleLike} |
+                element question {ExampleLike} |
                 element problem {ExampleLike}
             </code>
         </fragment>
@@ -1840,14 +1839,8 @@
 
         <fragment xml:id="frequently-used">
             <title>Frequent constructions</title>
-            <fragref ref="statements" />
             <fragref ref="attribution" />
             <fragref ref="metadata" />
-        </fragment>
-
-
-        <fragment xml:id="statements">
-            <title>Statements</title>
         </fragment>
 
         <p>Used on the end of prefaces to <q>sign</q> them, and on block quotes.</p>
@@ -2113,14 +2106,17 @@
                     MetaDataTitleOptional,
                     (
                         (
-                            (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)+,
+                            (BlockStatementNoCaption | ParagraphsNoNumber |
+                             Commentary)+,
                             Attribution*
                         )
                         |
                         (
-                            (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)*,
+                            (BlockStatementNoCaption | ParagraphsNoNumber |
+                             Commentary)*,
                             Contributors,
-                            (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)*
+                            (BlockStatementNoCaption | ParagraphsNoNumber |
+                             Commentary)*
                         )
                     )
                 }
@@ -2214,7 +2210,6 @@
             <fragref ref="rename" />
             <fragref ref="imagearchive" />
             <fragref ref="authorbiographylength" />
-            <fragref ref="addins" />
             <fragref ref="numbering" />
         </fragment>
 
@@ -2327,7 +2322,7 @@
             </code>
         </fragment>
 
-        <p>An author biography (or several) might be a paragraph or two each, or each one might be severalpages.  This style can be controlled.</p>
+        <p>An author biography (or several) might be a paragraph or two each, or each one might be several pages.  This style can be controlled.</p>
 
         <fragment xml:id="authorbiographylength">
             <title>Author biographies</title>
@@ -2360,6 +2355,7 @@
         <p>We collect all the specifications, roughly in a top-down order, so the generated schema files have a rational ordering to them, even if the order presented here is different.</p>
 
         <fragment filename="pretext.rnc">
+            <title>Hierarchical Structure</title>
             <code>
             grammar {
             </code>
