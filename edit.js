@@ -12,7 +12,8 @@ var menu_active_background = "#fdd";
 menu_for = {
 "section": ["paragraph", "list-like", "theorem-like", "remark-like", "example-like", "image/display-like", "table-like", "minor heading", "subsection", "side-by-side"],
 "theorem-like": ["theorem", "proposition", "lemma", "corollary", "hypothesis", "conjecture"],
-"list-like": ["ordered list", "unordered list", "dictionary-list"]
+"list-like": ["ordered list", "unordered list", "dictionary-list"],
+"blockquote": ["paragraph"]
 }
 
 /*
@@ -30,7 +31,8 @@ fetch(url)
 console.log("then here");
 */
 
-function base_menu_options_for(component) {
+function base_menu_options_for(COMPONENT) {
+     component = COMPONENT.toLowerCase();
      if (component in menu_for) {
          component_items = menu_for[component]
      } else {
@@ -247,10 +249,14 @@ function logKey(e) {
                console.log("going to edit it", to_be_edited);
                edit_in_place(to_be_edited);
                } 
-        } // here should look for data-location           
-        var this_item_type = current_active_menu_item.getAttribute("data-env");
-        edit_submenu.innerHTML = base_menu_options_for(this_item_type);
-        current_active_menu_item.insertAdjacentElement("beforeend", edit_submenu);
+        } else if (current_active_menu_item.hasAttribute("data-location")) {
+            if (['before', 'after'].includes(current_active_menu_item.getAttribute("data-location"))) {
+                parent_type = document.getElementById('edit_menu_holder').parentElement.parentElement.tagName;
+                console.log("making a menu for", parent_type);
+                edit_submenu.innerHTML = base_menu_options_for(parent_type);
+                current_active_menu_item.insertAdjacentElement("beforeend", edit_submenu);
+            }
+        } else { alert("entering sub-object not implemented yet")  }
     }
 }
 
