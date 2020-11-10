@@ -10,7 +10,7 @@ var menu_neutral_background = "#ddb";
 var menu_active_background = "#fdd";
 
 menu_for = {
-"section": ["paragraph", "list-like", "theorem-like", "remark-like", "example-like", "image/display-like", "table-like", "minor heading", "subsection"],
+"section": ["paragraph", "list-like", "theorem-like", "remark-like", "example-like", "image/display-like", "table-like", "minor heading", "subsection", "side-by-side"],
 "theorem-like": ["theorem", "proposition", "lemma", "corollary", "hypothesis", "conjecture"],
 "list-like": ["ordered list", "unordered list", "dictionary-list"]
 }
@@ -53,9 +53,9 @@ function base_menu_options_for(component) {
 function top_menu_options_for(this_obj_id) {
     var this_object_type = "pparagraph";
     var this_list = '<li tabindex="-1" id="choose_current" data-env="paragraph" data-action="edit">Edit ' + this_object_type + '</li>';
-    this_list += '<li tabindex="-1" data-env="paragraph" data-action="enter">Enter ' + this_object_type + '</li>';
-    this_list += '<li tabindex="-1" data-env="section">Insert before ' + this_object_type + '</li>';
-    this_list += '<li tabindex="-1" data-env="section">Insert after ' + this_object_type + '</li>';
+    this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_object_type + '</li>';
+    this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="before">Insert before ' + this_object_type + '</li>';
+    this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="after">Insert after ' + this_object_type + '</li>';
     return this_list
 }
 
@@ -69,7 +69,7 @@ function edit_menu_for(this_obj_id) {
     document.getElementById(this_obj_id).insertAdjacentElement("afterbegin", edit_menu_holder);
 
     var enter_option = document.createElement('span');
-    enter_option.setAttribute('class', 'level1 past');
+//    enter_option.setAttribute('class', 'level1 past');
     enter_option.setAttribute('id', 'enter_choice');
 
 //    var this_list = '<li tabindex="-1" id="choose_current" data-env="paragraph" data-action="edit">Edit ' + this_object_type + '</li>';
@@ -179,13 +179,16 @@ function logKey(e) {
     console.log("logKey",e,"XXX",e.code);
     if (e.code == "Tab") {
        console.log("hit a Tab");
+
+       // we are tabbing along deciding what component to edit
+       // so a Tab means to move on
+       // so remove the option to edit one object
        if(document.getElementById('enter_choice')) {
            $("#edit_menu_holder").parent().removeClass("may_select");
-   //        document.getElementById('edit_menu_holder').parentNode.removeAttribute("style");
            document.getElementById('edit_menu_holder').remove()
        }
+       // and add the option to edit the next object
        if (!document.getElementById('edit_menu_holder')) {  // we are not already navigating a menu
-   //        document.activeElement.setAttribute("style", "box-shadow: -10px -5px 5px yellow;");
            $(":focus").addClass("may_select");
            edit_menu_for(document.activeElement.id);        // so create one
            return
@@ -214,7 +217,7 @@ function logKey(e) {
     }
     else if (e.code == "Enter") {
         console.log("saw a Return");
-        // we have just tabbed to a new element.  Tab to move on, return to edit at/hear that element
+        // we have just tabbed to a new element.  Tab to move on, return to edit at/near that element
         if (document.getElementById('enter_choice')) {
             var edit_submenu = document.createElement('ol');
             edit_submenu.setAttribute('id', 'edit_menu');
@@ -228,10 +231,12 @@ function logKey(e) {
             return
         }
         // otherwise, see if we just selected a menu item
+        $("#choose_current").parent().addClass("past");
         current_active_menu_item = document.getElementById('choose_current');
+        console.log("apparently selected", current_active_menu_item);
         current_active_menu_item.removeAttribute("id");
         current_active_menu_item.setAttribute('class', 'chosen');
-        current_active_menu_item.setAttribute('style', 'background:#ddf;');
+ //       current_active_menu_item.setAttribute('style', 'background:#ddf;');
         var edit_submenu = document.createElement('ol');
         if (current_active_menu_item.hasAttribute("data-action")) {
             to_be_edited = document.getElementById('edit_menu_holder').parentElement;
@@ -242,7 +247,7 @@ function logKey(e) {
                console.log("going to edit it", to_be_edited);
                edit_in_place(to_be_edited);
                } 
-        }            
+        } // here should look for data-location           
         var this_item_type = current_active_menu_item.getAttribute("data-env");
         edit_submenu.innerHTML = base_menu_options_for(this_item_type);
         current_active_menu_item.insertAdjacentElement("beforeend", edit_submenu);
