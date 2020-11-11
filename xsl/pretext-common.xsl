@@ -5431,6 +5431,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:apply-templates select="." mode="list-number" />
 </xsl:template>
 
+<!-- Serial Numbers: fragments -->
+<!-- The @ref variant is not numbered, see below.  -->
+<!-- We number the remainder sequentially.         -->
+<xsl:template match="fragment" mode="serial-number">
+    <xsl:value-of select="count(preceding::fragment) + 1"/>
+</xsl:template>
+
 
 <!-- Serial Numbers: the unnumbered     -->
 <!-- Empty string signifies not numbered -->
@@ -5487,6 +5494,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- A subexercises is meant to be minimal, and does not have a number -->
 <xsl:template match="subexercises" mode="serial-number"/>
+
+<!-- This should not be called, a "fragment" as a      -->
+<!-- pointer is not really much in the way of content, -->
+<!-- and we are more interested in its target          -->
+<xsl:template match="fragment[@ref]" mode="serial-number"/>
 
 <!-- Multi-part WeBWorK problems have PTX elements        -->
 <!-- called "stage" which typically render as "Part..."   -->
@@ -5862,6 +5874,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template match="objectives/ol/li|outcomes/ol/li" mode="structure-number">
     <xsl:apply-templates select="ancestor::*[&STRUCTURAL-FILTER;][1]" mode="number" />
 </xsl:template>
+
+<!-- Structure Numbers: Fragment -->
+<!-- We number serially, see below -->
+<xsl:template match="fragment" mode="structure-number"/>
 
 <!-- Should not drop in here.  Ever. -->
 <xsl:template match="*" mode="structure-number">
