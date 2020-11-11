@@ -50,14 +50,14 @@
         <p>A <pretext/> document is always a single <c>mathbook</c> element below the root.  There are two divisions, a <c>docinfo</c>, which is a database of sorts about the document, along with a sibling element that indicates the type of the document and contains all the content.  (2019-02-08:  the root element may be <tag>pretext</tag>, and eventually <tag>mathbook</tag> will be deprecated.)</p>
 
         <fragment xml:id="gross-structure">
-        <title>Gross structure</title>
+            <title>Gross structure</title>
             <code>
-        start =
-            element pretext {
-                XMLLang?,
-                DocInfo?,
-                (Book | Article | Letter | Memorandum)
-            }
+            start =
+                element pretext {
+                    XMLLang?,
+                    DocInfo?,
+                    (Book | Article | Letter | Memorandum)
+                }
             </code>
         </fragment>
     </section>
@@ -68,41 +68,41 @@
         <p><c>letter</c> and <c>memo</c> elements are not documented.</p>
 
         <fragment xml:id="document-types">
-        <title>Document types</title>
+            <title>Document types</title>
             <code>
-        Article =
-            element article {
-                MetaDataLinedSubtitle,
-                ArticleFrontMatter?,
-                (
+            Article =
+                element article {
+                    MetaDataLinedSubtitle,
+                    ArticleFrontMatter?,
                     (
-                        Objectives?,
-                        (BlockDivision | Paragraphs | Commentary)+,
-                        (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
-                        Outcomes?
+                        (
+                            Objectives?,
+                            (BlockDivision | Paragraphs | Commentary)+,
+                            (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
+                            Outcomes?
+                        )
+                    |
+                        (
+                            (Objectives? &amp; IntroductionDivision?),
+                            Section,
+                            (Section | ReadingQuestions | Exercises | Solutions | References)*,
+                            (Outcomes? &amp; ConclusionDivision?),
+                            ArticleBackMatter?
+                        )
                     )
-                |
-                    (
-                        (Objectives? &amp; IntroductionDivision?),
-                        Section,
-                        (Section | ReadingQuestions | Exercises | Solutions | References)*,
-                        (Outcomes? &amp; ConclusionDivision?),
-                        ArticleBackMatter?
-                    )
-                )
-            }
-        Book =
-            ## Here is what a book looks like.
-            element book {
-                MetaDataLinedSubtitle,
-                BookFrontMatter?,
-                (Part+ | Chapter+ ),
-                BookBackMatter?
-            }
-        Letter =
-            element letter {empty}
-        Memorandum =
-            element memo {empty}
+                }
+            Book =
+                ## Here is what a book looks like.
+                element book {
+                    MetaDataLinedSubtitle,
+                    BookFrontMatter?,
+                    (Part+ | Chapter+ ),
+                    BookBackMatter?
+                }
+            Letter =
+                element letter {empty}
+            Memorandum =
+                element memo {empty}
             </code>
         </fragment>
     </section>
@@ -117,126 +117,126 @@
         <p>There are several things to note (expand this): always a title, dead-end with blocks, or subdivide with optional intro and conclusion.</p>
 
         <fragment xml:id="divisions">
-        <title>Divisions</title>
+            <title>Divisions</title>
             <code>
-        Part =
-            element part {
-                MetaDataLinedTitle, Chapter+
-            }
-        Chapter =
-            element chapter {
-                MetaDataLinedTitle,
-                AuthorByline*,
-                (
+            Part =
+                element part {
+                    MetaDataLinedTitle, Chapter+
+                }
+            Chapter =
+                element chapter {
+                    MetaDataLinedTitle,
+                    AuthorByline*,
                     (
-                        Objectives?,
-                        (BlockDivision | Paragraphs | Commentary)+,
-                        (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
-                        Outcomes?
+                        (
+                            Objectives?,
+                            (BlockDivision | Paragraphs | Commentary)+,
+                            (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
+                            Outcomes?
+                        )
+                    |
+                        (
+                            (Objectives? &amp; IntroductionDivision?),
+                            Section,
+                            (Section | ReadingQuestions | Exercises | Solutions | References)*,
+                            (Outcomes? &amp; ConclusionDivision?)
+                        )
                     )
-                |
+                }
+            Section =
+                element section {
+                    MetaDataLinedTitle,
+                    AuthorByline*,
                     (
-                        (Objectives? &amp; IntroductionDivision?),
-                        Section,
-                        (Section | ReadingQuestions | Exercises | Solutions | References)*,
-                        (Outcomes? &amp; ConclusionDivision?)
+                        (
+                            Objectives?,
+                            (BlockDivision | Paragraphs | Commentary)+,
+                            (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
+                            Outcomes?
+                        )
+                    |
+                        (
+                            (Objectives? &amp; IntroductionDivision?),
+                            Subsection,
+                            (Subsection | ReadingQuestions | Exercises | Solutions | References)*,
+                            (Outcomes? &amp; ConclusionDivision?)
+                        )
                     )
-                )
-            }
-        Section =
-            element section {
-                MetaDataLinedTitle,
-                AuthorByline*,
-                (
+                }
+            Subsection =
+                element subsection {
+                    MetaDataShortTitle,
+                    AuthorByline*,
                     (
-                        Objectives?,
-                        (BlockDivision | Paragraphs | Commentary)+,
-                        (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
-                        Outcomes?
+                        (
+                            Objectives?,
+                            (BlockDivision | Paragraphs | Commentary)+,
+                            (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
+                            Outcomes?
+                        )
+                    |
+                        (
+                            (Objectives? &amp; IntroductionDivision?),
+                            Subsubsection,
+                            (Subsubsection | ReadingQuestions | Exercises | Solutions | References)*,
+                            (Outcomes? &amp; ConclusionDivision?)
+                        )
                     )
-                |
+                }
+            Subsubsection =
+                element subsubsection {
+                    MetaDataShortTitle,
+                    AuthorByline*,
+                    Objectives?,
+                    (BlockDivision | Paragraphs | Commentary)+,
+                    (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
+                    Outcomes?
+                }
+            ArticleAppendix =
+                element appendix {
+                    MetaDataShortTitle,
+                    AuthorByline*,
                     (
-                        (Objectives? &amp; IntroductionDivision?),
-                        Subsection,
-                        (Subsection | ReadingQuestions | Exercises | Solutions | References)*,
-                        (Outcomes? &amp; ConclusionDivision?)
+                        (
+                            Objectives?,
+                            (BlockDivision | Paragraphs | Commentary | NotationList)+,
+                            (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
+                            Outcomes?
+                        )
+                    |
+                        (
+                            (Objectives? &amp; IntroductionDivision?),
+                            Subsection,
+                            (Subsection | ReadingQuestions | Exercises | Solutions | References)*,
+                            (Outcomes? &amp; ConclusionDivision?)
+                        )
                     )
-                )
-            }
-        Subsection =
-            element subsection {
-                MetaDataShortTitle,
-                AuthorByline*,
-                (
+                }
+            BookAppendix =
+                element appendix {
+                    MetaDataShortTitle,
+                    AuthorByline*,
                     (
-                        Objectives?,
-                        (BlockDivision | Paragraphs | Commentary)+,
-                        (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
-                        Outcomes?
+                        (
+                            Objectives?,
+                            (BlockDivision | Paragraphs | Commentary | NotationList)+,
+                            (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
+                            Outcomes?
+                        )
+                    |
+                        (
+                            (Objectives? &amp; IntroductionDivision?),
+                            Section,
+                            (Section | ReadingQuestions | Exercises | Solutions | References)*,
+                            (Outcomes? &amp; ConclusionDivision?)
+                        )
                     )
-                |
-                    (
-                        (Objectives? &amp; IntroductionDivision?),
-                        Subsubsection,
-                        (Subsubsection | ReadingQuestions | Exercises | Solutions | References)*,
-                        (Outcomes? &amp; ConclusionDivision?)
-                    )
-                )
-            }
-        Subsubsection =
-            element subsubsection {
-                MetaDataShortTitle,
-                AuthorByline*,
-                Objectives?,
-                (BlockDivision | Paragraphs | Commentary)+,
-                (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
-                Outcomes?
-            }
-        ArticleAppendix =
-            element appendix {
-                MetaDataShortTitle,
-                AuthorByline*,
-                (
-                    (
-                        Objectives?,
-                        (BlockDivision | Paragraphs | Commentary | NotationList)+,
-                        (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
-                        Outcomes?
-                    )
-                |
-                    (
-                        (Objectives? &amp; IntroductionDivision?),
-                        Subsection,
-                        (Subsection | ReadingQuestions | Exercises | Solutions | References)*,
-                        (Outcomes? &amp; ConclusionDivision?)
-                    )
-                )
-            }
-        BookAppendix =
-            element appendix {
-                MetaDataShortTitle,
-                AuthorByline*,
-                (
-                    (
-                        Objectives?,
-                        (BlockDivision | Paragraphs | Commentary | NotationList)+,
-                        (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
-                        Outcomes?
-                    )
-                |
-                    (
-                        (Objectives? &amp; IntroductionDivision?),
-                        Section,
-                        (Section | ReadingQuestions | Exercises | Solutions | References)*,
-                        (Outcomes? &amp; ConclusionDivision?)
-                    )
-                )
-            }
-        IndexDivision =
-            element index {
-                MetaDataShortTitleOptional,
-                IndexList
-            }
+                }
+            IndexDivision =
+                element index {
+                    MetaDataShortTitleOptional,
+                    IndexList
+                }
             </code>
         </fragment>
     </section>
@@ -254,26 +254,26 @@
         <p><tag>commentary</tag> is elective, so should not have any numbered items ever, so the <q>NoNumber</q> provision is implicit.</p>
 
         <fragment xml:id="paragraphs">
-        <title>Paragraphs division</title>
+            <title>Paragraphs division</title>
             <code>
-        Paragraphs =
-            element paragraphs {
-                MetaDataTitle,
-                Index*,
-                BlockDivision+
-            }
-        ParagraphsNoNumber =
-            element paragraphs {
-                MetaDataTitle,
-                Index*,
-                BlockStatementNoCaption+
-            }
-        Commentary =
-            element commentary {
-                MetaDataTitle,
-                Index*,
-                BlockStatementNoCaption+
-            }
+            Paragraphs =
+                element paragraphs {
+                    MetaDataTitle,
+                    Index*,
+                    BlockDivision+
+                }
+            ParagraphsNoNumber =
+                element paragraphs {
+                    MetaDataTitle,
+                    Index*,
+                    BlockStatementNoCaption+
+                }
+            Commentary =
+                element commentary {
+                    MetaDataTitle,
+                    Index*,
+                    BlockStatementNoCaption+
+                }
             </code>
         </fragment>
     </section>
@@ -284,49 +284,49 @@
         <p>We add specialized divisions, which may appear within any of the above divisions.  Titles will be provided as defaults.</p>
 
         <fragment xml:id="universal">
-        <title>Specialized divisions</title>
+            <title>Specialized divisions</title>
             <code>
-        ReadingQuestions =
-            element reading-questions {
-                MetaDataShortTitleOptional,
-                IntroductionDivision?,
-                Exercise+,
-                ConclusionDivision?
-            }
-        Exercises =
-            element exercises {
-                MetaDataShortTitleOptional,
-                IntroductionDivision?,
-                (
-                    (Exercise | ExerciseGroup)+
-                    |
-                    Subexercises+
-                ),
-                ConclusionDivision?
-            }
-        Subexercises =
-            element subexercises {
-                MetaDataShortTitleOptional,
-                IntroductionDivision?,
-                (Exercise | ExerciseGroup)+,
-                ConclusionDivision?
-            }
-        Solutions =
-            element solutions {
-                MetaDataShortTitleOptional,
-                attribute inline {text}?,
-                attribute divisional {text}?,
-                attribute project {text}?,
-                IntroductionDivision?,
-                ConclusionDivision?
-            }
-        References =
-            element references {
-                MetaDataShortTitleOptional,
-                IntroductionDivision?,
-                BibliographyItem+,
-                ConclusionDivision?
-            }
+            ReadingQuestions =
+                element reading-questions {
+                    MetaDataShortTitleOptional,
+                    IntroductionDivision?,
+                    Exercise+,
+                    ConclusionDivision?
+                }
+            Exercises =
+                element exercises {
+                    MetaDataShortTitleOptional,
+                    IntroductionDivision?,
+                    (
+                        (Exercise | ExerciseGroup)+
+                        |
+                        Subexercises+
+                    ),
+                    ConclusionDivision?
+                }
+            Subexercises =
+                element subexercises {
+                    MetaDataShortTitleOptional,
+                    IntroductionDivision?,
+                    (Exercise | ExerciseGroup)+,
+                    ConclusionDivision?
+                }
+            Solutions =
+                element solutions {
+                    MetaDataShortTitleOptional,
+                    attribute inline {text}?,
+                    attribute divisional {text}?,
+                    attribute project {text}?,
+                    IntroductionDivision?,
+                    ConclusionDivision?
+                }
+            References =
+                element references {
+                    MetaDataShortTitleOptional,
+                    IntroductionDivision?,
+                    BibliographyItem+,
+                    ConclusionDivision?
+                }
             </code>
         </fragment>
     </section>
@@ -344,27 +344,27 @@
         <p><term>Long text</term> is everything that is short text, but also allows for references, both external (internet <init>URL</init>s) and internal (cross-references).  It is used for the content of footnotes and captions.  The <webwork /> variant allows for variables in inline mathematics.</p>
 
         <fragment xml:id="shorttext">
-        <title>Running text</title>
+            <title>Running text</title>
             <code>
-        TextSimple = mixed {
-            Character* }
-        TextShort = mixed { (
-            Character |
-            Generator |
-            Verbatim |
-            Group |
-            MathInline |
-            Music)* }
-        TextLong =  mixed { (
-            Character |
-            Generator |
-            Verbatim |
-            Group |
-            MathInline |
-            Music |
-            Reference |
-            WWVariable)* }
-            </code>
+            TextSimple = mixed {
+                Character* }
+            TextShort = mixed { (
+                Character |
+                Generator |
+                Verbatim |
+                Group |
+                MathInline |
+                Music)* }
+            TextLong =  mixed { (
+                Character |
+                Generator |
+                Verbatim |
+                Group |
+                MathInline |
+                Music |
+                Reference |
+                WWVariable)* }
+                </code>
         </fragment>
 
         <p>A paragraph is a key bottleneck between structure and prose.  You can use a variety of constructs in a paragraph, and you may use a paragraph in many places.  So the name of the element is very simple, just a <c>p</c>.  Now you can include footnotes, display mathematics, display verbatim text, and lists.  Note that a list can <em>only</em> occur in a paragraph, so to make nested lists you must structure a list item of the exterior list with a paragraph to contain the interior list.  A paragraph can contain some metadata, like index entries and mathematical notation.  It does not have a title, not is it ever numbered.  It can be the target of a cross-reference, but only with some care.</p>
@@ -374,35 +374,35 @@
         <p>Note: A paragraph effectively could have the <c>MetaDataTarget</c> pattern, except that we allow index elements (<tag>idx</tag>) to go anywhere within the paragraph.</p>
 
         <fragment xml:id="paragraph">
-        <title>Paragraphs</title>
+            <title>Paragraphs</title>
             <code>
-        TextParagraph = mixed { (
-            Character |
-            Generator |
-            Verbatim |
-            Group |
-            WWVariable |
-            MathInline |
-            Music |
-            Reference |
-            CodeDisplay |
-            MathDisplay |
-            List |
-            Footnote |
-            Notation |
-            Index)* }
-        Paragraph =
-            element p {
-                UniqueID?,
-                PermanentID?,
-                TextParagraph
-            }
-        ParagraphLined =
-            element p {
-                UniqueID?,
-                PermanentID?,
-                element line {TextShort}+
-            }
+            TextParagraph = mixed { (
+                Character |
+                Generator |
+                Verbatim |
+                Group |
+                WWVariable |
+                MathInline |
+                Music |
+                Reference |
+                CodeDisplay |
+                MathDisplay |
+                List |
+                Footnote |
+                Notation |
+                Index)* }
+            Paragraph =
+                element p {
+                    UniqueID?,
+                    PermanentID?,
+                    TextParagraph
+                }
+            ParagraphLined =
+                element p {
+                    UniqueID?,
+                    PermanentID?,
+                    element line {TextShort}+
+                }
             </code>
         </fragment>
 
@@ -413,13 +413,13 @@
         <p>See below for elements that can be used to form groupings with left and right delimiters.  For example, a simple quotation should use a left double quote and a right double quote, and these characters should look different (so-called <term>smart</term> quotes).  Notice that a keyboard only has a single <term>dumb</term> quote.  If you need these characters in isolation (<ie />, not in pairs), these are the best way to ensure you get what you want in all possible conversions.  Note that left and right braces (<q>curly brackets</q>) are previously defined with the <latex /> characters.</p>
 
         <fragment xml:id="delimiter-character">
-        <title>Delimiter characters</title>
+            <title>Delimiter characters</title>
             <code>
-        Character =
-            element lsq {empty} |
-            element rsq {empty} |
-            element rq {empty} |
-            element lq {empty}
+            Character =
+                element lsq {empty} |
+                element rsq {empty} |
+                element rq {empty} |
+                element lq {empty}
             </code>
         </fragment>
 
@@ -428,112 +428,112 @@
         <p>There is a variety of dashes of various lengths.  Use the keyboard character for a <term>hyphen</term>, use an <term>ndash</term> to seperate a range of numbers or dates, and use an <term>mdash</term> as punctuation within a sentence to isolate a clause.  These are implemented differently for different conversions, so their use is strongly encouraged.</p>
 
         <fragment xml:id="dash-character">
-        <title>Dash characters</title>
+            <title>Dash characters</title>
             <code>
-        Character |=
-            element nbsp {empty} |
-            element ndash {empty} |
-            element mdash {empty}
+            Character |=
+                element nbsp {empty} |
+                element ndash {empty} |
+                element mdash {empty}
             </code>
         </fragment>
 
         <p>A <c>fillin</c> blank is not really a character, but maybe a really long, low dash?  The <c>characters</c> attribute controls the length.  It is atomic, indivisable, and content-less, like all the other characters.  <c>fillin</c> is also unusual due to its allowed use within mathematics.</p>
 
         <fragment xml:id="fillin-character">
-        <title>Fill-in blank character</title>
+            <title>Fill-in blank character</title>
             <code>
-        FillIn = element fillin {attribute characters {xsd:integer}?, empty}
-        Character |=
-            FillIn
+            FillIn = element fillin {attribute characters {xsd:integer}?, empty}
+            Character |=
+                FillIn
             </code>
         </fragment>
 
         <p>We define a few characters to help with simple arithmetic expressions authored withing regular text.    These are for simple uses in regular text, not for actual mathematics, which is described later.  The <term>solidus</term> is slightly different from the <term>slash</term> found on a keyboard and is used for fractions and ratios.  The <tage>minus</tage> is for subtraction and negation, and is not a hyphen or dash.  An <term>obelus</term> is better known as a division sign.</p>
 
         <fragment xml:id="arithmetic-character">
-        <title>Arithmetic characters</title>
+            <title>Arithmetic characters</title>
             <code>
-        Character |=
-            element minus {empty} |
-            element times {empty} |
-            element solidus {empty} |
-            element obelus {empty} |
-            element plusminus {empty}
+            Character |=
+                element minus {empty} |
+                element times {empty} |
+                element solidus {empty} |
+                element obelus {empty} |
+                element plusminus {empty}
             </code>
         </fragment>
 
         <p>The following are largely conveniences.  They are typically not available on keyboards, and their implementations for various conversions can involve some subtleties.  Again, their use is encouraged for the best quality output.</p>
 
         <fragment xml:id="exotic-character">
-        <title>Exotic characters</title>
+            <title>Exotic characters</title>
             <code>
-        Character |=
-            element ellipsis {empty} |
-            element midpoint {empty} |
-            element swungdash {empty} |
-            element permille {empty} |
-            element pilcrow {empty} |
-            element section-mark {empty} |
-            element copyright {empty} |
-            element registered {empty} |
-            element trademark {empty}
+            Character |=
+                element ellipsis {empty} |
+                element midpoint {empty} |
+                element swungdash {empty} |
+                element permille {empty} |
+                element pilcrow {empty} |
+                element section-mark {empty} |
+                element copyright {empty} |
+                element registered {empty} |
+                element trademark {empty}
             </code>
         </fragment>
 
         <p>Icons are available through a <attr>name</attr> attribute, which is meant to usually be more semantic than just a description of the picture, though that may sometimes be the case.  These are intended for use when describing elements of computer interfaces.  Icons which are decorative shuld be supplied as part of styling, not as part of the source language.</p>
 
         <fragment xml:id="icon-character">
-        <title>Icon characters</title>
+            <title>Icon characters</title>
             <code>
-        Character |=
-            element icon {
-                attribute name {text}
-            }
-            </code>
+            Character |=
+                element icon {
+                    attribute name {text}
+                }
+                </code>
         </fragment>
 
         <p>We support musical notation as if they were characters: accidentals, scale degrees, notes, and chords.  Implementation of these is about as complicated as inline mathematical notation, hence they have identical rules about placement.</p>
 
         <fragment xml:id="music-character">
-        <title>Music characters</title>
+            <title>Music characters</title>
             <code>
-        Music =
-            element doublesharp {empty} |
-            element sharp {empty} |
-            element natural {empty} |
-            element flat {empty} |
-            element doubleflat {empty} |
-            element scaledeg {"0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"|"10"} |
-            element timesignature {
-                attribute top {text},
-                attribute bottom {text}
-            } |
-            element n {
-                attribute pc {
-                    "A"|"B"|"C"|"D"|"E"|"F"|"G"|"a"|"b"|"c"|"d"|"e"|"f"|"g"|
-                    "1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"|"10"
-                },
-                attribute acc {"doublesharp"|"sharp"|"flat"|"doubleflat"}?,
-                attribute octave {"1"|"2"|"3"|"4"|"5"}?
-            } |
-            element chord {
-                attribute root {text}?,
-                attribute mode {text}?,
-                attribute bps {text}?,
-                attribute bass {text}?,
-                attribute suspended {"yes"|"no"}?,
-                attribute parentheses {"yes"|"no"}?,
-                element alteration {
-                    (TextSimple |
-                    element sharp {empty} |
-                    element flat {empty})*
-                }*
-            }
-            </code>
+            Music =
+                element doublesharp {empty} |
+                element sharp {empty} |
+                element natural {empty} |
+                element flat {empty} |
+                element doubleflat {empty} |
+                element scaledeg {"0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"|"10"} |
+                element timesignature {
+                    attribute top {text},
+                    attribute bottom {text}
+                } |
+                element n {
+                    attribute pc {
+                        "A"|"B"|"C"|"D"|"E"|"F"|"G"|"a"|"b"|"c"|"d"|"e"|"f"|"g"|
+                        "1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"|"10"
+                    },
+                    attribute acc {"doublesharp"|"sharp"|"flat"|"doubleflat"}?,
+                    attribute octave {"1"|"2"|"3"|"4"|"5"}?
+                } |
+                element chord {
+                    attribute root {text}?,
+                    attribute mode {text}?,
+                    attribute bps {text}?,
+                    attribute bass {text}?,
+                    attribute suspended {"yes"|"no"}?,
+                    attribute parentheses {"yes"|"no"}?,
+                    element alteration {
+                        (TextSimple |
+                        element sharp {empty} |
+                        element flat {empty})*
+                    }*
+                }
+                </code>
         </fragment>
 
         <fragment xml:id="character">
-        <title>Characters</title>
+            <title>Characters</title>
             <fragment ref="dash-character" />
             <fragment ref="fillin-character" />
             <fragment ref="delimiter-character" />
@@ -547,57 +547,57 @@
 
         <!-- webwork, latex will need work -->
         <fragment xml:id="generator">
-        <title>Text generators</title>
+            <title>Text generators</title>
             <code>
-        Generator =
-            element today {empty} |
-            element timeofday {empty} |
-            element tex {empty} |
-            element latex {empty} |
-            element pretext {empty} |
-            element webwork {empty} |
-            element ad {empty} |
-            element am {empty} |
-            element bc {empty} |
-            element ca {empty} |
-            element eg {empty} |
-            element etal {empty} |
-            element etc {empty} |
-            element ie {empty} |
-            element nb {empty} |
-            element pm {empty} |
-            element ps {empty} |
-            element vs {empty} |
-            element viz {empty}
+            Generator =
+                element today {empty} |
+                element timeofday {empty} |
+                element tex {empty} |
+                element latex {empty} |
+                element pretext {empty} |
+                element webwork {empty} |
+                element ad {empty} |
+                element am {empty} |
+                element bc {empty} |
+                element ca {empty} |
+                element eg {empty} |
+                element etal {empty} |
+                element etc {empty} |
+                element ie {empty} |
+                element nb {empty} |
+                element pm {empty} |
+                element ps {empty} |
+                element vs {empty} |
+                element viz {empty}
             </code>
         </fragment>
 
         <p>A large class of similary indivisible items are units on physical quantities.  The <tag>quantity</tag> element is allowed to be empty, and the code should silently produce no output.  Expressing non-emptieness here might get a bit messy, so a Schematron warning could be a good alternative.</p>
 
         <fragment xml:id="siunit">
-        <title>SI units</title>
+            <title>SI units</title>
             <code>
-        UnitSpecification =
-                attribute prefix {text}?,
-                attribute base {text},
-                attribute exp {xsd:integer}?
-        Generator |=
-            element quantity {
-                element mag {text}?,
-                element unit {UnitSpecification}*,
-                element per {UnitSpecification}*
-            }
+            UnitSpecification =
+                    attribute prefix {text}?,
+                    attribute base {text},
+                    attribute exp {xsd:integer}?
+            Generator |=
+                element quantity {
+                    element mag {text}?,
+                    element unit {UnitSpecification}*,
+                    element per {UnitSpecification}*
+                }
             </code>
         </fragment>
 
         <p>Some markup is for just ASCII characters, in other words, unadorned verbatim text.</p>
 
         <fragment xml:id="verbatim">
-        <title>Verbatim text</title>
+            <title>Verbatim text</title>
             <code>
-        Verbatim =
-            element c {text} |
-            element email {text}
+            Verbatim =
+                element c {text} |
+                element email {text}
             </code>
         </fragment>
 
@@ -606,87 +606,87 @@
         <p>Abbreviations are sequences of characters that shorten some longer word or words (<eg /> <abbr>vs.</abbr> for the Latin <foreign>versus</foreign>), initialisms are formed from the first letters of a sequence of words (<eg /> <init>HTML</init>), acronyms are pronouncable as words (<eg /> <acro>SCUBA</acro>).</p>
 
         <fragment xml:id="abbreviation-group">
-        <title>Abbreviations</title>
+            <title>Abbreviations</title>
             <code>
-        Group |=
-            element abbr {TextSimple} |
-            element acro {TextSimple} |
-            element init {TextSimple}
+            Group |=
+                element abbr {TextSimple} |
+                element acro {TextSimple} |
+                element init {TextSimple}
             </code>
         </fragment>
 
         <p>Notice that long text can be part of a grouping construction, and that long text can can contain a group construction.  The effect is that these groupings can be nested arbitrarily deep.</p>
 
         <fragment xml:id="delimiter-group">
-        <title>Delimited groups</title>
+            <title>Delimited groups</title>
             <code>
-        Group |=
-            element q {TextLong} |
-            element sq {TextLong} |
-            element angles {TextLong} |
-            element dblbrackets {TextLong}
-            </code>
+            Group |=
+                element q {TextLong} |
+                element sq {TextLong} |
+                element angles {TextLong} |
+                element dblbrackets {TextLong}
+                </code>
         </fragment>
 
         <fragment xml:id="highlight-group">
-        <title>Highlighted groups</title>
+            <title>Highlighted groups</title>
             <code>
-        Group |=
-            element em {TextLong} |
-            element term {TextLong} |
-            element alert {TextLong} |
-            element pubtitle {TextLong} |
-            element articletitle {TextLong} |
-            element foreign {
-              XMLLang?,
-              TextLong
-            }
+            Group |=
+                element em {TextLong} |
+                element term {TextLong} |
+                element alert {TextLong} |
+                element pubtitle {TextLong} |
+                element articletitle {TextLong} |
+                element foreign {
+                  XMLLang?,
+                  TextLong
+                }
             </code>
         </fragment>
 
         <fragment xml:id="editing-group">
-        <title>Editing groups</title>
+            <title>Editing groups</title>
             <code>
-        Group |=
-            element delete {TextLong} |
-            element insert {TextLong} |
-            element stale {TextLong}
-            </code>
+            Group |=
+                element delete {TextLong} |
+                element insert {TextLong} |
+                element stale {TextLong}
+                </code>
         </fragment>
 
         <p>We use elements to get consistent typography when discussing <pretext /> itself.  We could probably limit the content of these elements to lowercase letters and a hyphen.  The definitions here will preclude any contained markup.</p>
 
         <fragment xml:id="xml-syntax-group">
-        <title><init>XML</init> syntax groups</title>
+            <title><init>XML</init> syntax groups</title>
             <code>
-        Group |=
-            element tag {text} |
-            element tage {text} |
-            element attr {text}
+            Group |=
+                element tag {text} |
+                element tage {text} |
+                element attr {text}
             </code>
         </fragment>
 
         <p>An empty <c>taxon</c> will match either version.</p>
 
         <fragment xml:id="scientific-name-group">
-        <title>Taxonomic groups</title>
+            <title>Taxonomic groups</title>
             <code>
-        Group |=
-            element taxon {
-                attribute ncbi {xsd:integer}?,
-                (
-                    TextSimple |
+            Group |=
+                element taxon {
+                    attribute ncbi {xsd:integer}?,
                     (
-                        element genus {TextSimple}?,
-                        element species {TextSimple}?
+                        TextSimple |
+                        (
+                            element genus {TextSimple}?,
+                            element species {TextSimple}?
+                        )
                     )
-                )
-            }
+                }
             </code>
         </fragment>
 
         <fragment xml:id="group">
-        <title>Text groups</title>
+            <title>Text groups</title>
             <fragment ref="abbreviation-group" />
             <fragment ref="delimiter-group" />
             <fragment ref="highlight-group" />
@@ -702,54 +702,54 @@
         <p>All mathematics appears inside paragraphs, and the syntax is that of <latex />, as supported by MathJax, whose supported commands and macros are meant to be very similar to those of the AMSMath package.  Note that the content is typically unstructured, excepting <q>fill-in-the-blank</q>, <webwork /> variables (see variants), and internal cross-references in multi-row display mathematics. Also, <c>md</c> and <c>mdn</c> are not targets of cross-references, though their rows can be.</p>
 
         <fragment xml:id="mathematics">
-        <title>Mathematics</title>
+            <title>Mathematics</title>
             <code>
-        MathInline =
-            element m {
-                mixed {(FillIn | WWVariable)*}
-            }
-        MathRow =
-            element mrow {
-                MetaDataTarget,
-                (
-                    attribute number {"yes" | "no"}
-                    |
-                    attribute tag {"star" | "dstar" | "tstar" |
-                                   "dagger" | "ddagger" | "tdagger" |
-                                   "hash" | "dhash" | "thash" |
-                                   "maltese" | "dmaltese" | "tmaltese" }
-                )?,
-                attribute break {"yes" | "no"}?,
-                mixed {(Xref | FillIn | WWVariable)*}
-            }
-        MathIntertext = element intertext {TextLong}
-        MathDisplay =
-            element me {
-                mixed {(FillIn | WWVariable)*}
-            }
-        |
-            element men {
-                MetaDataTarget,
-                mixed {(FillIn | WWVariable)*}
-            }
-        |
-            element md {
-                attribute number {"yes" | "no"}?,
-                attribute break {"yes" | "no"}?,
-                attribute alignment {text}?,
-                attribute alignat-columns {text}?,
-                MathRow,
-                (MathRow | MathIntertext)*
-            }
-        |
-            element mdn {
-                attribute number {"yes" | "no"}?,
-                attribute break {"yes" | "no"}?,
-                attribute alignment {text}?,
-                attribute alignat-columns {text}?,
-                MathRow,
-                (MathRow | MathIntertext)*
-            }
+            MathInline =
+                element m {
+                    mixed {(FillIn | WWVariable)*}
+                }
+            MathRow =
+                element mrow {
+                    MetaDataTarget,
+                    (
+                        attribute number {"yes" | "no"}
+                        |
+                        attribute tag {"star" | "dstar" | "tstar" |
+                                       "dagger" | "ddagger" | "tdagger" |
+                                       "hash" | "dhash" | "thash" |
+                                       "maltese" | "dmaltese" | "tmaltese" }
+                    )?,
+                    attribute break {"yes" | "no"}?,
+                    mixed {(Xref | FillIn | WWVariable)*}
+                }
+            MathIntertext = element intertext {TextLong}
+            MathDisplay =
+                element me {
+                    mixed {(FillIn | WWVariable)*}
+                }
+            |
+                element men {
+                    MetaDataTarget,
+                    mixed {(FillIn | WWVariable)*}
+                }
+            |
+                element md {
+                    attribute number {"yes" | "no"}?,
+                    attribute break {"yes" | "no"}?,
+                    attribute alignment {text}?,
+                    attribute alignat-columns {text}?,
+                    MathRow,
+                    (MathRow | MathIntertext)*
+                }
+            |
+                element mdn {
+                    attribute number {"yes" | "no"}?,
+                    attribute break {"yes" | "no"}?,
+                    attribute alignment {text}?,
+                    attribute alignat-columns {text}?,
+                    MathRow,
+                    (MathRow | MathIntertext)*
+                }
             </code>
         </fragment>
     </section>
@@ -769,23 +769,23 @@
         <p><c>demonstration</c> is slated for removal or an overhaul, and so is in the <xref ref="badbank" text="title" />.  Avoid using them for now.</p>
 
         <fragment xml:id="block">
-        <title>Blocks</title>
+            <title>Blocks</title>
             <code>
-        BlockText =
-            Paragraph | BlockQuote | Preformatted
-        BlockStatementNoCaption =
-            BlockText | Aside |
-            SideBySideNoCaption | SideBySideGroupNoCaption
-        BlockStatement =
-            BlockText |
-            Figure | Aside |
-            SideBySide | SideBySideGroup | Sage
-        BlockDivision =
-            BlockStatement |
-            Remark | Computation | Theorem | Proof | Definition |
-            Axiom | Example | Exercise | Project |
-            Poem | Assemblage | ListGenerator |
-            Demonstration
+            BlockText =
+                Paragraph | BlockQuote | Preformatted
+            BlockStatementNoCaption =
+                BlockText | Aside |
+                SideBySideNoCaption | SideBySideGroupNoCaption
+            BlockStatement =
+                BlockText |
+                Figure | Aside |
+                SideBySide | SideBySideGroup | Sage
+            BlockDivision =
+                BlockStatement |
+                Remark | Computation | Theorem | Proof | Definition |
+                Axiom | Example | Exercise | Project |
+                Poem | Assemblage | ListGenerator |
+                Demonstration
             </code>
         </fragment>
 
@@ -794,33 +794,33 @@
         <p>When a block is structured to allow some of the ancillary parts, a <c>statement</c> element is used to structure the main part.  Hints, answers, and solutions can be the target of cross-references, but do not get author-supplied titles.</p>
 
         <fragment xml:id="block-component">
-        <title>Common components of blocks</title>
+            <title>Common components of blocks</title>
             <code>
-        Prelude =
-            element prelude {BlockText+}
-        Interlude =
-            element interlude {BlockText+}
-        Postlude =
-            element postlude {BlockText+}
-        Statement =
-            element statement {
-                BlockStatement+
-            }
-        Hint =
-            element hint {
-                MetaDataTitleOptional,
-                BlockStatement+
-            }
-        Answer =
-            element answer {
-                MetaDataTitleOptional,
-                BlockStatement+
-            }
-        Solution =
-            element solution {
-                MetaDataTitleOptional,
-                BlockStatement+
-            }
+            Prelude =
+                element prelude {BlockText+}
+            Interlude =
+                element interlude {BlockText+}
+            Postlude =
+                element postlude {BlockText+}
+            Statement =
+                element statement {
+                    BlockStatement+
+                }
+            Hint =
+                element hint {
+                    MetaDataTitleOptional,
+                    BlockStatement+
+                }
+            Answer =
+                element answer {
+                    MetaDataTitleOptional,
+                    BlockStatement+
+                }
+            Solution =
+                element solution {
+                    MetaDataTitleOptional,
+                    BlockStatement+
+                }
             </code>
         </fragment>
     </section>
@@ -831,30 +831,30 @@
         <p>The <c>introduction</c> and <c>conclusion</c> containers can be used in a variety of other structured elements.  They come in three levels, according to what they can contain, and are meant to be consonant with their surroundings.  As children of a division, they may carry a <c>title</c>, which in turn allows them to be cross-referenced by that text.</p>
 
         <fragment xml:id="introduction-conclusion">
-        <title>Introductions and conclusions</title>
+            <title>Introductions and conclusions</title>
             <code>
-        IntroductionText =
-            element introduction {BlockText+}
-        ConclusionText =
-            element conclusion {BlockText+}
-        IntroductionStatementNoCaption =
-            element introduction {BlockStatementNoCaption+}
-        ConclusionStatementNoCaption =
-            element conclusion {BlockStatementNoCaption+}
-        IntroductionStatement =
-            element introduction {BlockStatement+}
-        ConclusionStatement =
-            element conclusion {BlockStatement+}
-        IntroductionDivision =
-            element introduction {
-                MetaDataTitleOptional,
-                BlockDivision+
-            }
-        ConclusionDivision =
-            element conclusion {
-                MetaDataTitleOptional?,
-                BlockDivision+
-            }
+            IntroductionText =
+                element introduction {BlockText+}
+            ConclusionText =
+                element conclusion {BlockText+}
+            IntroductionStatementNoCaption =
+                element introduction {BlockStatementNoCaption+}
+            ConclusionStatementNoCaption =
+                element conclusion {BlockStatementNoCaption+}
+            IntroductionStatement =
+                element introduction {BlockStatement+}
+            ConclusionStatement =
+                element conclusion {BlockStatement+}
+            IntroductionDivision =
+                element introduction {
+                    MetaDataTitleOptional,
+                    BlockDivision+
+                }
+            ConclusionDivision =
+                element conclusion {
+                    MetaDataTitleOptional?,
+                    BlockDivision+
+                }
             </code>
         </fragment>
     </section>
@@ -865,42 +865,42 @@
         <p>There are a variety of referencing mechanisms, external references, internal cross-references, index entries, and specialized support for a table of mathematical notation.</p>
 
         <fragment xml:id="reference">
-        <title>Cross-references</title>
+            <title>Cross-references</title>
             <code>
-        XrefTextStyle =
-            "local" | "global" | "hybrid" | "type-local" | "type-global" |
-            "type-hybrid" | "phrase-global" | "phrase-hybrid" | "title" | "custom"
-        Reference = Url | Xref
-        Url =
-            element url {
-                attribute href {text},
-                TextShort
-            }
-        Xref =
-            element xref {
-                    (
-                        attribute ref {text} |
-                        (attribute first {text}, attribute last {text}) |
-                        attribute provisional {text}
-                    ),
-                    attribute text { XrefTextStyle }?,
-                    attribute detail {text}?,
-                    TextShort
-            }
-        Notation =
-            element notation {
-                element usage {text},
-                element description {
+            XrefTextStyle =
+                "local" | "global" | "hybrid" | "type-local" | "type-global" |
+                "type-hybrid" | "phrase-global" | "phrase-hybrid" | "title" | "custom"
+            Reference = Url | Xref
+            Url =
+                element url {
+                    attribute href {text},
                     TextShort
                 }
-            }
+            Xref =
+                element xref {
+                        (
+                            attribute ref {text} |
+                            (attribute first {text}, attribute last {text}) |
+                            attribute provisional {text}
+                        ),
+                        attribute text { XrefTextStyle }?,
+                        attribute detail {text}?,
+                        TextShort
+                }
+            Notation =
+                element notation {
+                    element usage {text},
+                    element description {
+                        TextShort
+                    }
+                }
             </code>
         </fragment>
 
         <p>Footnotes are especially dangerous.  They should contain quite a bit of content, and should be targets of cross-references.  So the content is not as expansive as a regular paragraph, which is possibly too restrictive.</p>
 
         <fragment xml:id="footnote">
-        <title>Footnotes</title>
+            <title>Footnotes</title>
             <code>
             Footnote =
                 element fn {
@@ -917,31 +917,31 @@
         <p>Note that we might point to another index entry as part of a <q>see also</q> mechanism.</p>
 
         <fragment xml:id="index">
-        <title>Index entries</title>
+            <title>Index entries</title>
             <code>
-        IdxHeading =
-            element h {
-                attribute sortby {text}?,
-                TextShort
-            }
-        Index =
-            element idx {
-                MetaDataTarget,
-                attribute sortby {text}?,
-                attribute start {text}?,
-                attribute finish {text}?,
-                (
+            IdxHeading =
+                element h {
+                    attribute sortby {text}?,
                     TextShort
-                |
+                }
+            Index =
+                element idx {
+                    MetaDataTarget,
+                    attribute sortby {text}?,
+                    attribute start {text}?,
+                    attribute finish {text}?,
                     (
-                    IdxHeading,
-                    IdxHeading?,
-                    IdxHeading?,
-                    (element see {TextShort} | element seealso {TextShort})?
+                        TextShort
+                    |
+                        (
+                        IdxHeading,
+                        IdxHeading?,
+                        IdxHeading?,
+                        (element see {TextShort} | element seealso {TextShort})?
+                        )
                     )
-                )
-            }
-        IndexList = element index-list {empty}
+                }
+            IndexList = element index-list {empty}
             </code>
         </fragment>
 
@@ -953,22 +953,22 @@
         <p>A division may lead (first) with an optional list of objectives for the division and may be followed by a (final) optional list of outcomes.  The element names are only chosen to reflect a pre- and post- behavior and so could be used for objectivbes, outcomes, and standards in a variety of ways.</p>
 
         <fragment xml:id="objective-outcome">
-        <title>Objectives and outcomes</title>
+            <title>Objectives and outcomes</title>
             <code>
-        Objectives =
-            element objectives {
-                MetaDataTitleOptional,
-                IntroductionText?,
-                List,
-                ConclusionText?
-            }
-        Outcomes =
-            element outcomes {
-                MetaDataTitleOptional,
-                IntroductionText?,
-                List,
-                ConclusionText?
-            }
+            Objectives =
+                element objectives {
+                    MetaDataTitleOptional,
+                    IntroductionText?,
+                    List,
+                    ConclusionText?
+                }
+            Outcomes =
+                element outcomes {
+                    MetaDataTitleOptional,
+                    IntroductionText?,
+                    List,
+                    ConclusionText?
+                }
             </code>
         </fragment>
     </section>
@@ -979,20 +979,20 @@
         <p>These are a run of paragraphs, but may optionally have an <c>attribution</c>.</p>
 
         <fragment xml:id="blockquote">
-        <title>Block quotes</title>
+            <title>Block quotes</title>
             <code>
-        BlockQuote =
-            element blockquote {
-                MetaDataTitleOptional,
-                Paragraph+,
-                Attribution?
-            }
-        SimpleLine =
-            element line {TextSimple}
-        ShortLine =
-            element line {TextShort}
-        LongLine =
-            element line {TextLong}
+            BlockQuote =
+                element blockquote {
+                    MetaDataTitleOptional,
+                    Paragraph+,
+                    Attribution?
+                }
+            SimpleLine =
+                element line {TextSimple}
+            ShortLine =
+                element line {TextShort}
+            LongLine =
+                element line {TextLong}
             </code>
         </fragment>
     </section>
@@ -1003,35 +1003,35 @@
         <p>Large blocks of verbatim material, rather than just little bits in a sentence.  A code display, <c>cd</c>, is an analog of a math display, and meant to be used <em>within</em> a paragraph, either as a single line of text, or optionally structured as several lines by using code lines, <c>cline</c>.   <c>pre</c> is a block, which preserves line breaks and sanitizes whitespace to the left.  It can be optionally structured as code lines.  It should be thought of as a monospace analogue of a <q>regular</q> paragraph, minus indentation and automatic line-breaking.</p>
 
         <fragment xml:id="verbatimdisplay">
-        <title>Verbatim displays</title>
+            <title>Verbatim displays</title>
             <code>
-        CodeLine =
-            element cline {text}
-        CodeDisplay =
-            element cd {
-                attribute latexsep {text}?,
-                (text | CodeLine+)
-            }
-        Preformatted =
-            element pre {
-                text | CodeLine+
-            }
-        Console =
-            element console {
-                PermanentID?,
-                (
-                    element prompt {text}?,
-                    element input {text}?,
-                    element output {text}?
-                )+
-            }
-        Program =
-            element program {
-                PermanentID?,
-                attribute language {text}?,
-                attribute interactive {"pythontutor"}?,
-                element input {text}
-            }
+            CodeLine =
+                element cline {text}
+            CodeDisplay =
+                element cd {
+                    attribute latexsep {text}?,
+                    (text | CodeLine+)
+                }
+            Preformatted =
+                element pre {
+                    text | CodeLine+
+                }
+            Console =
+                element console {
+                    PermanentID?,
+                    (
+                        element prompt {text}?,
+                        element input {text}?,
+                        element output {text}?
+                    )+
+                }
+            Program =
+                element program {
+                    PermanentID?,
+                    attribute language {text}?,
+                    attribute interactive {"pythontutor"}?,
+                    element input {text}
+                }
             </code>
         </fragment>
     </section>
@@ -1044,43 +1044,43 @@
         <p>As a container, the lists themselves get no metadata.  But the numbered or titled list items do get metadata.  To point to an entire list, make it a <term>named list</term> and point to that.</p>
 
         <fragment xml:id="list">
-        <title>Lists</title>
+            <title>Lists</title>
             <code>
-        List =
-            element ol {
-                PermanentID?,
-                attribute cols {"2"|"3"|"4"|"5"|"6"}?,
-                attribute label {text}?,
-                element li {
-                    (
-                        (MetaDataTarget, TextParagraph)
-                    |
-                        (MetaDataTitleOptional, BlockStatement+)
-                    )
-                }+
-            }
-        |
-            element ul {
-                PermanentID?,
-                attribute cols {"2"|"3"|"4"|"5"|"6"}?,
-                attribute label {"disc" | "circle" | "square" | ""}?,
-                element li {
-                    (
-                        (MetaDataTarget, TextParagraph)
-                    |
-                        (MetaDataTitleOptional, BlockStatement+)
-                    )
-                }+
-            }
-        |
-            element dl {
-                PermanentID?,
-                attribute width {"narrow" | "medium" | "wide"}?,
-                element li {
-                    MetaDataTitle,
-                    BlockStatement+
-                }+
-            }
+            List =
+                element ol {
+                    PermanentID?,
+                    attribute cols {"2"|"3"|"4"|"5"|"6"}?,
+                    attribute label {text}?,
+                    element li {
+                        (
+                            (MetaDataTarget, TextParagraph)
+                        |
+                            (MetaDataTitleOptional, BlockStatement+)
+                        )
+                    }+
+                }
+            |
+                element ul {
+                    PermanentID?,
+                    attribute cols {"2"|"3"|"4"|"5"|"6"}?,
+                    attribute label {"disc" | "circle" | "square" | ""}?,
+                    element li {
+                        (
+                            (MetaDataTarget, TextParagraph)
+                        |
+                            (MetaDataTitleOptional, BlockStatement+)
+                        )
+                    }+
+                }
+            |
+                element dl {
+                    PermanentID?,
+                    attribute width {"narrow" | "medium" | "wide"}?,
+                    element li {
+                        MetaDataTitle,
+                        BlockStatement+
+                    }+
+                }
             </code>
         </fragment>
     </section>
@@ -1091,14 +1091,14 @@
         <p>Definitions are special, there is nothing else quite like them.  A statement, no proof, and also a natural place for notation entries.</p>
 
         <fragment xml:id="definition-like">
-        <title>Definitions</title>
+            <title>Definitions</title>
             <code>
-        DefinitionLike =
-            MetaDataTitleOptional,
-            Notation*,
-            Statement
-        Definition =
-            element definition {DefinitionLike}
+            DefinitionLike =
+                MetaDataTitleOptional,
+                Notation*,
+                Statement
+            Definition =
+                element definition {DefinitionLike}
             </code>
         </fragment>
     </section>
@@ -1109,38 +1109,38 @@
         <p>Theorems, corollaries, lemmas <mdash /> they all have statements, and should have proof(s).  Otherwise they are all the same.  A proof may be divided with cases, in no particular rigid way, just as a marker of any number of different, non-overlapping portions of a proof.  Titles can be used to describe each case, or implication arrows may be used (typically with a prrof of an equivalence).  A <c>proof</c> is also allowed to stand on its own as a block, independent of a structure like a <c>theorem</c> or <c>algorithm</c>.</p>
 
         <fragment xml:id="theorem-like">
-        <title>Theorems, and similar</title>
+            <title>Theorems, and similar</title>
             <code>
-        Case =
-            element case {
-               MetaDataTitleOptional,
-               attribute direction {text}?,
-               BlockStatement+
-               }
-        Proof =
-            element proof {
-                MetaDataTitleOptional,
-                (BlockStatement | Case)+
-            }
-        TheoremLike =
-            MetaDataTitleCreatorOptional,
-            (BlockStatement+ | (Statement, Proof*))
-        Theorem =
-            element theorem {TheoremLike}
-        |
-            element lemma {TheoremLike}
-        |
-            element corollary {TheoremLike}
-        |
-            element claim {TheoremLike}
-        |
-            element proposition {TheoremLike}
-        |
-            element algorithm {TheoremLike}
-        |
-            element fact {TheoremLike}
-        |
-            element identity {TheoremLike}
+            Case =
+                element case {
+                   MetaDataTitleOptional,
+                   attribute direction {text}?,
+                   BlockStatement+
+                   }
+            Proof =
+                element proof {
+                    MetaDataTitleOptional,
+                    (BlockStatement | Case)+
+                }
+            TheoremLike =
+                MetaDataTitleCreatorOptional,
+                (BlockStatement+ | (Statement, Proof*))
+            Theorem =
+                element theorem {TheoremLike}
+            |
+                element lemma {TheoremLike}
+            |
+                element corollary {TheoremLike}
+            |
+                element claim {TheoremLike}
+            |
+                element proposition {TheoremLike}
+            |
+                element algorithm {TheoremLike}
+            |
+                element fact {TheoremLike}
+            |
+                element identity {TheoremLike}
             </code>
         </fragment>
     </section>
@@ -1151,23 +1151,23 @@
         <p>Mathematical statements that do not have proofs (in other words, no proof is known, or a proof is not appropriate).</p>
 
         <fragment xml:id="axiom-like">
-        <title>Axioms, and similar</title>
+            <title>Axioms, and similar</title>
             <code>
-        AxiomLike =
-            MetaDataTitleCreatorOptional,
-            Statement
-        Axiom =
-            element axiom {AxiomLike}
-        |
-            element principle {AxiomLike}
-        |
-            element conjecture {AxiomLike}
-        |
-            element heuristic {AxiomLike}
-        |
-            element hypothesis {AxiomLike}
-        |
-            element assumption {AxiomLike}
+            AxiomLike =
+                MetaDataTitleCreatorOptional,
+                Statement
+            Axiom =
+                element axiom {AxiomLike}
+            |
+                element principle {AxiomLike}
+            |
+                element conjecture {AxiomLike}
+            |
+                element heuristic {AxiomLike}
+            |
+                element hypothesis {AxiomLike}
+            |
+                element assumption {AxiomLike}
             </code>
         </fragment>
     </section>
@@ -1178,38 +1178,38 @@
         <p>A favorite of Inquiry-Based Learning textbooks.  Numbered independently.  Possibly structured with <c>task</c>.  Three different ways to structure this, we combine the second two so that the derived XML Schema (XSD) version is less-confusing to certain tools (<eg/> the Red Hat XML schema validator used within VS Code).</p>
 
         <fragment xml:id="project-like">
-        <title>Projects, and similar</title>
+            <title>Projects, and similar</title>
             <code>
-        ProjectLike =
-            MetaDataTitleOptional,
-            (
-                (BlockStatement+) |
+            ProjectLike =
+                MetaDataTitleOptional,
                 (
-                   Prelude?,
-                   (
-                      (Statement, Hint*, Answer*, Solution*) |
-                      (IntroductionStatement?, Task+, ConclusionStatement?)
-                   ),
-                   Postlude?
+                    (BlockStatement+) |
+                    (
+                       Prelude?,
+                       (
+                          (Statement, Hint*, Answer*, Solution*) |
+                          (IntroductionStatement?, Task+, ConclusionStatement?)
+                       ),
+                       Postlude?
+                    )
                 )
-            )
-        Project =
-            element activity {ProjectLike}
-        |
-            element investigation {ProjectLike}
-        |
-            element exploration {ProjectLike}
-        |
-            element project {ProjectLike}
-        Task =
-            element task {
-                MetaDataTarget,
-                (
-                    BlockStatement+ |
-                    (Statement, Hint*, Answer*, Solution*) |
-                    (IntroductionStatement?, Task+, ConclusionStatement?)
-                )
-            }
+            Project =
+                element activity {ProjectLike}
+            |
+                element investigation {ProjectLike}
+            |
+                element exploration {ProjectLike}
+            |
+                element project {ProjectLike}
+            Task =
+                element task {
+                    MetaDataTarget,
+                    (
+                        BlockStatement+ |
+                        (Statement, Hint*, Answer*, Solution*) |
+                        (IntroductionStatement?, Task+, ConclusionStatement?)
+                    )
+                }
             </code>
         </fragment>
     </section>
@@ -1220,23 +1220,23 @@
         <p>Really simple blocks, they do not have much structure, and so are just runs of paragraphs, though <tag>figure</tag>, <tag>table</tag>, <tag>listing</tag>, and <tag>list</tag> may be included.</p>
 
         <fragment xml:id="remark-like">
-        <title>Remarks, and similar</title>
+            <title>Remarks, and similar</title>
             <code>
-        RemarkLike =
-            MetaDataTitleOptional,
-            BlockStatement+
-        Remark =
-            element remark {RemarkLike}
-        |
-            element convention {RemarkLike}
-        |
-            element note {RemarkLike}
-        |
-            element observation {RemarkLike}
-        |
-            element warning {RemarkLike}
-        |
-            element insight {RemarkLike}
+            RemarkLike =
+                MetaDataTitleOptional,
+                BlockStatement+
+            Remark =
+                element remark {RemarkLike}
+            |
+                element convention {RemarkLike}
+            |
+                element note {RemarkLike}
+            |
+                element observation {RemarkLike}
+            |
+                element warning {RemarkLike}
+            |
+                element insight {RemarkLike}
             </code>
         </fragment>
     </section>
@@ -1247,15 +1247,15 @@
         <p>Somewhat simple blocks, they do not have much structure, but can hold more than a Remark.</p>
 
         <fragment xml:id="computation-like">
-        <title>Computation, and similar</title>
+            <title>Computation, and similar</title>
             <code>
-        ComputationLike =
-            MetaDataTitleOptional,
-            BlockStatement+
-        Computation =
-            element computation {ComputationLike}
-        |
-            element technology {ComputationLike}
+            ComputationLike =
+                MetaDataTitleOptional,
+                BlockStatement+
+            Computation =
+                element computation {ComputationLike}
+            |
+                element technology {ComputationLike}
             </code>
         </fragment>
     </section>
@@ -1266,17 +1266,17 @@
         <p>An aside is a deviation from the narrative, and might physically move in the presentation (say, to a margin, or to a knowl).  <c>biographical</c> and <c>historical</c> may be further developed.</p>
 
         <fragment xml:id="aside">
-        <title>Asides, and similar</title>
+            <title>Asides, and similar</title>
             <code>
-        AsideLike =
-            MetaDataTitleOptional,
-            BlockStatement+
-        Aside =
-            element aside {AsideLike}
-            |
-            element biographical {AsideLike}
-            |
-            element historical {AsideLike}
+            AsideLike =
+                MetaDataTitleOptional,
+                BlockStatement+
+            Aside =
+                element aside {AsideLike}
+                |
+                element biographical {AsideLike}
+                |
+                element historical {AsideLike}
             </code>
         </fragment>
     </section>
@@ -1287,13 +1287,13 @@
         <p>Since an <c>assemblage</c> is meant to accumulate significant content (as a review or summary, or for initial presentation) lists are allowed here, an exception to their restriction to paragraphs.  We are also mildly restrictive about what can be content here<mdash />in particular blocks are excluded, despite not strictly being blocks themselves.</p>
 
         <fragment xml:id="assemblage">
-        <title>Assemblages</title>
+            <title>Assemblages</title>
             <code>
-        Assemblage =
-            element assemblage {
-                MetaDataTitleOptional,
-                (BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+
-            }
+            Assemblage =
+                element assemblage {
+                    MetaDataTitleOptional,
+                    (BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+
+                }
             </code>
         </fragment>
     </section>
@@ -1304,103 +1304,103 @@
         <p>These are containers that carry titles, captions, and numbers and need to be filled with other (indivisable) items.  They have a mandatory <c>caption</c> (which can have no text, but will still produce a numbered caption), and may have a <c>title</c>, which could more appropriately be called a <term>heading</term>.  These are also called <term>captioned items</term>.</p>
 
         <fragment xml:id="table-figure">
-        <title>Captioned and titled displays</title>
+            <title>Captioned and titled displays</title>
             <code>
-        Caption =
-            element caption {TextLong}
-        Figure =
-            element figure {
-                MetaDataCaption,
-                (
-                    Image |
-                    Tabular |
-                    SideBySide |
-                    SideBySideGroup |
-                    Video |
-                    MuseScore
-                )
-            }
-        |
-            element table {
-                MetaDataShortTitle,
-                Tabular
-            }
-        |
-            element listing {
-                MetaDataCaption,
-                (
-                    Program |
-                    Console
-                )
-            }
-        |
-            element list {
-                MetaDataShortTitle,
-                IntroductionText?,
-                List,
-                ConclusionText?
-            }
+            Caption =
+                element caption {TextLong}
+            Figure =
+                element figure {
+                    MetaDataCaption,
+                    (
+                        Image |
+                        Tabular |
+                        SideBySide |
+                        SideBySideGroup |
+                        Video |
+                        MuseScore
+                    )
+                }
+            |
+                element table {
+                    MetaDataShortTitle,
+                    Tabular
+                }
+            |
+                element listing {
+                    MetaDataCaption,
+                    (
+                        Program |
+                        Console
+                    )
+                }
+            |
+                element list {
+                    MetaDataShortTitle,
+                    IntroductionText?,
+                    List,
+                    ConclusionText?
+                }
             </code>
         </fragment>
 
         <p>The guts of a table go in a <c>tabular</c> element.</p>
 
         <fragment xml:id="tabular">
-        <title>Tabular display</title>
+            <title>Tabular display</title>
             <code>
-        BorderThickness = "none" | "minor" | "medium" | "major"
-        BorderTop =
-            attribute top {BorderThickness}
-        BorderBottom =
-            attribute bottom {BorderThickness}
-        BorderLeft =
-            attribute left {BorderThickness}
-        BorderRight =
-            attribute right {BorderThickness}
-        AlignmentHorizontal =
-            attribute halign {"left" | "center" | "right" | "justify"}
-        AlignmentVertical =
-            attribute valign {"top" | "middle" | "bottom"}
+            BorderThickness = "none" | "minor" | "medium" | "major"
+            BorderTop =
+                attribute top {BorderThickness}
+            BorderBottom =
+                attribute bottom {BorderThickness}
+            BorderLeft =
+                attribute left {BorderThickness}
+            BorderRight =
+                attribute right {BorderThickness}
+            AlignmentHorizontal =
+                attribute halign {"left" | "center" | "right" | "justify"}
+            AlignmentVertical =
+                attribute valign {"top" | "middle" | "bottom"}
 
-        TableCell =
-            element cell {
-                AlignmentHorizontal?,
-                BorderBottom?,
-                BorderRight?,
-                attribute colspan {text}?,
-                (
-                    TextLong |
-                    LongLine+ |
-                    Paragraph+
-                )
-            }
-        TableRow =
-            element row {
-                AlignmentHorizontal?,
-                AlignmentVertical?,
-                BorderBottom?,
-                BorderLeft?,
-                TableCell+
-            }
-        TableColumn =
-            element col {
-                AlignmentHorizontal?,
-                BorderTop?,
-                BorderRight?,
-                attribute width {text}?
-            }
-        Tabular =
-            element tabular {
-                PermanentID?,
-                AlignmentHorizontal?,
-                AlignmentVertical?,
-                BorderTop?,
-                BorderBottom?,
-                BorderLeft?,
-                BorderRight?,
-                TableColumn*,
-                TableRow+
-            }
+            TableCell =
+                element cell {
+                    AlignmentHorizontal?,
+                    BorderBottom?,
+                    BorderRight?,
+                    attribute colspan {text}?,
+                    (
+                        TextLong |
+                        LongLine+ |
+                        Paragraph+
+                    )
+                }
+            TableRow =
+                element row {
+                    AlignmentHorizontal?,
+                    AlignmentVertical?,
+                    BorderBottom?,
+                    BorderLeft?,
+                    TableCell+
+                }
+            TableColumn =
+                element col {
+                    AlignmentHorizontal?,
+                    BorderTop?,
+                    BorderRight?,
+                    attribute width {text}?
+                }
+            Tabular =
+                element tabular {
+                    PermanentID?,
+                    AlignmentHorizontal?,
+                    AlignmentVertical?,
+                    BorderTop?,
+                    BorderBottom?,
+                    BorderLeft?,
+                    BorderRight?,
+                    TableColumn*,
+                    TableRow+
+                }
             </code>
         </fragment>
     </section>
@@ -1423,70 +1423,70 @@
         <p>For <webwork /> the NoCaption variant allows <c>Tabular</c> and <c>ImageWW</c>.  This may change if these two items are liberated from <tag>sidebyside</tag>.  Presently, there should only be a single item inside a <c>sidebyside</c> inside a <c>webwork</c>, but we do not have a rule for that.</p>
 
         <fragment xml:id="sidebyside">
-        <title>Side-by-side layouts</title>
+            <title>Side-by-side layouts</title>
             <code>
-        Stack =
-            element stack {
-                (
-                    Tabular |
-                    Image |
-                    Video |
-                    Program |
-                    Console |
-                    Paragraph |
-                    Preformatted |
-                    List
-                )+
-            }
-        SidebySideAttributes =
-            PermanentID?,
-            attribute margins {text}?,
-            (attribute width {text} | attribute widths {text})?,
-            (AlignmentVertical | attribute valigns {text})?
-        SideBySide =
-            element sidebyside {
-                SidebySideAttributes,
-                (
-                    Figure |
-                    Poem |
-                    Tabular |
-                    Image |
-                    Video |
-                    Program |
-                    Console |
-                    Paragraph |
-                    Preformatted |
-                    List |
-                    Stack
-                )+
-            }
-        SideBySideNoCaption =
-            element sidebyside {
-                SidebySideAttributes,
-                (
-                    Poem |
-                    Tabular |
-                    Image |
-                    ImageWW |
-                    Video |
-                    Program |
-                    Console |
-                    Paragraph |
-                    Preformatted |
-                    List |
-                    Stack
-                )+
-            }
-        SideBySideGroup =
-            element sbsgroup {
-                SidebySideAttributes,
-                SideBySide+
-            }
-        SideBySideGroupNoCaption =
-            element sbsgroup {
-                SidebySideAttributes,
-                SideBySideNoCaption+
-            }
+            Stack =
+                element stack {
+                    (
+                        Tabular |
+                        Image |
+                        Video |
+                        Program |
+                        Console |
+                        Paragraph |
+                        Preformatted |
+                        List
+                    )+
+                }
+            SidebySideAttributes =
+                PermanentID?,
+                attribute margins {text}?,
+                (attribute width {text} | attribute widths {text})?,
+                (AlignmentVertical | attribute valigns {text})?
+            SideBySide =
+                element sidebyside {
+                    SidebySideAttributes,
+                    (
+                        Figure |
+                        Poem |
+                        Tabular |
+                        Image |
+                        Video |
+                        Program |
+                        Console |
+                        Paragraph |
+                        Preformatted |
+                        List |
+                        Stack
+                    )+
+                }
+            SideBySideNoCaption =
+                element sidebyside {
+                    SidebySideAttributes,
+                    (
+                        Poem |
+                        Tabular |
+                        Image |
+                        ImageWW |
+                        Video |
+                        Program |
+                        Console |
+                        Paragraph |
+                        Preformatted |
+                        List |
+                        Stack
+                    )+
+                }
+            SideBySideGroup =
+                element sbsgroup {
+                    SidebySideAttributes,
+                    SideBySide+
+                }
+            SideBySideGroupNoCaption =
+                element sbsgroup {
+                    SidebySideAttributes,
+                    SideBySideNoCaption+
+                }
             </code>
         </fragment>
     </section>
@@ -1499,35 +1499,35 @@
         <p>Note: the <c>ImageCode</c> pattern allows an <attr>xml:id</attr> attribute since it is used to construct a filename.</p>
 
         <fragment xml:id="image">
-        <title>Images</title>
+            <title>Images</title>
             <code>
-        Image = ImageRaster | ImageCode
-        ImageRaster =
-            element image {
-                PermanentID?,
-                attribute width {text}?,
-                attribute archive {text}?,
-                element description {TextShort}?,
-                attribute source {text}
-            }
-        ImageCode =
-            element image {
-                UniqueID?,
-                PermanentID?,
-                attribute width {text}?,
-                attribute archive {text}?,
-                element description {TextShort}?,
-                (
-                    element latex-image {text} |
-                    element asymptote {text} |
-                    element sageplot {text}
-                )
-            }
-        ImageWW =
-            element image {
-                attribute pg-name {text}?,
-                element description {(TextShort | WWVariable)*}?
-            }
+            Image = ImageRaster | ImageCode
+            ImageRaster =
+                element image {
+                    PermanentID?,
+                    attribute width {text}?,
+                    attribute archive {text}?,
+                    element description {TextShort}?,
+                    attribute source {text}
+                }
+            ImageCode =
+                element image {
+                    UniqueID?,
+                    PermanentID?,
+                    attribute width {text}?,
+                    attribute archive {text}?,
+                    element description {TextShort}?,
+                    (
+                        element latex-image {text} |
+                        element asymptote {text} |
+                        element sageplot {text}
+                    )
+                }
+            ImageWW =
+                element image {
+                    attribute pg-name {text}?,
+                    element description {(TextShort | WWVariable)*}?
+                }
             </code>
         </fragment>
     </section>
@@ -1538,16 +1538,16 @@
         <p>Sage is integral.</p>
 
         <fragment xml:id="sage">
-        <title>Sage code</title>
+            <title>Sage code</title>
             <code>
-        Sage = element sage {
-            PermanentID?,
-            attribute doctest {text}?,
-            attribute tolerance {text}?,
-            attribute language {text}?,
-            attribute type {text}?,
-            (element input {text}, element output {text}?)?
-        }
+            Sage = element sage {
+                PermanentID?,
+                attribute doctest {text}?,
+                attribute tolerance {text}?,
+                attribute language {text}?,
+                attribute type {text}?,
+                (element input {text}, element output {text}?)?
+            }
             </code>
         </fragment>
     </section>
@@ -1558,13 +1558,13 @@
         <p>Some specific interactive goodies.  These are being phased-out in favor of a more general <tag>interactive</tag> element.</p>
 
         <fragment xml:id="interactive">
-        <title>Interactives</title>
+            <title>Interactives</title>
             <code>
-        MuseScore =
-            element score {
-                attribute musescoreuser {text},
-                attribute musescore {text}
-            }
+            MuseScore =
+                element score {
+                    attribute musescoreuser {text},
+                    attribute musescore {text}
+                }
             </code>
         </fragment>
     </section>
@@ -1578,26 +1578,26 @@
 
 
         <fragment xml:id="audiovideo">
-        <title>Video and audio</title>
+            <title>Video and audio</title>
             <code>
-        Video =
-            element video {
-                UniqueID?,
-                PermanentID?,
-                attribute width {text}?,
-                attribute aspect {text}?,
-                attribute start {xsd:integer}?,
-                attribute end {xsd:integer}?,
-                attribute play-at {"embed" | "popout" | "select"}?,
-                attribute preview {"default" | "generic" | text}?,
-                (AttributesSourceFile | AttributesYouTube | AttributesYouTubePlaylist)
-            }
-        AttributesSourceFile =
-            attribute source {text}
-        AttributesYouTube =
-            attribute youtube {text}
-        AttributesYouTubePlaylist =
-            attribute youtubeplaylist {text}
+            Video =
+                element video {
+                    UniqueID?,
+                    PermanentID?,
+                    attribute width {text}?,
+                    attribute aspect {text}?,
+                    attribute start {xsd:integer}?,
+                    attribute end {xsd:integer}?,
+                    attribute play-at {"embed" | "popout" | "select"}?,
+                    attribute preview {"default" | "generic" | text}?,
+                    (AttributesSourceFile | AttributesYouTube | AttributesYouTubePlaylist)
+                }
+            AttributesSourceFile =
+                attribute source {text}
+            AttributesYouTube =
+                attribute youtube {text}
+            AttributesYouTubePlaylist =
+                attribute youtubeplaylist {text}
             </code>
         </fragment>
     </section>
@@ -1608,29 +1608,29 @@
         <p>Poems!</p>
 
         <fragment xml:id="poetry">
-        <title>Poems</title>
+            <title>Poems</title>
             <code>
-        AlignmentPoem = attribute halign {"left" | "center" | "right"}
-        Poem =
-            element poem {
-                MetaDataTitleOptional,
-                AlignmentPoem?,
-                element author {
+            AlignmentPoem = attribute halign {"left" | "center" | "right"}
+            Poem =
+                element poem {
+                    MetaDataTitleOptional,
                     AlignmentPoem?,
+                    element author {
+                        AlignmentPoem?,
+                        TextShort
+                    }?,
+                    (PoemLine+ | Stanza+)
+                }
+            Stanza =
+                element stanza {
+                    MetaDataTitleOptional,
+                    PoemLine+
+                }
+            PoemLine =
+                element line {
+                    attribute indent {xsd:integer}?,
                     TextShort
-                }?,
-                (PoemLine+ | Stanza+)
-            }
-        Stanza =
-            element stanza {
-                MetaDataTitleOptional,
-                PoemLine+
-            }
-        PoemLine =
-            element line {
-                attribute indent {xsd:integer}?,
-                TextShort
-            }
+                }
             </code>
         </fragment>
     </section>
@@ -1641,41 +1641,41 @@
         <p>Inline, divisional, and <webwork />.  Exercises use task to structure parts, where before they used ordered lists for parts of a statement (to eventually be deprecated).</p>
 
         <fragment xml:id="exercise">
-        <title>Exercises</title>
+            <title>Exercises</title>
             <code>
-        ExerciseBody =
-            (
-                BlockStatement |
-                element ol {
-                    attribute cols {text}?,
-                    attribute label {text}?,
-                    element li {
-                        MetaDataTarget,
-                        (TextParagraph | BlockText+)
-                    }+
-                }
-            )+
-        StatementExercise =
-            element statement { ExerciseBody }
-        Exercise =
-            element exercise {
-                MetaDataTitleOptional,
-                attribute number {text}?,
+            ExerciseBody =
                 (
-                ExerciseBody |
-                (StatementExercise, Hint*, Answer*, Solution*) |
-                (IntroductionStatement?, Task+, ConclusionStatement?) |
-                (IntroductionText?, WebWork, ConclusionText?)
-                )
-            }
-        ExerciseGroup =
-            element exercisegroup {
-                MetaDataTitleOptional,
-                attribute cols {"2"|"3"|"4"|"5"|"6"}?,
-                IntroductionStatementNoCaption?,
-                Exercise+,
-                ConclusionStatementNoCaption?
-            }
+                    BlockStatement |
+                    element ol {
+                        attribute cols {text}?,
+                        attribute label {text}?,
+                        element li {
+                            MetaDataTarget,
+                            (TextParagraph | BlockText+)
+                        }+
+                    }
+                )+
+            StatementExercise =
+                element statement { ExerciseBody }
+            Exercise =
+                element exercise {
+                    MetaDataTitleOptional,
+                    attribute number {text}?,
+                    (
+                    ExerciseBody |
+                    (StatementExercise, Hint*, Answer*, Solution*) |
+                    (IntroductionStatement?, Task+, ConclusionStatement?) |
+                    (IntroductionText?, WebWork, ConclusionText?)
+                    )
+                }
+            ExerciseGroup =
+                element exercisegroup {
+                    MetaDataTitleOptional,
+                    attribute cols {"2"|"3"|"4"|"5"|"6"}?,
+                    IntroductionStatementNoCaption?,
+                    Exercise+,
+                    ConclusionStatementNoCaption?
+                }
             </code>
         </fragment>
     </section>
@@ -1686,28 +1686,28 @@
         <p>This is all stop-gap and will change radically.  But it seems to work for now.</p>
 
         <fragment xml:id="bibliography">
-        <title>Bibliography</title>
+            <title>Bibliography</title>
             <code>
-        BibliographyItem =
-            element biblio {
-                MetaDataTarget,
-                attribute type {"raw"}?,
-                (TextLong |
-                Ibid |
-                BibTitle |
-                BibYear |
-                BibJournal |
-                BibNumber |
-                BibVolume |
-                BibNote)*
-            }
-        Ibid = element ibid {empty}
-        BibYear = element year {text}
-        BibJournal = element journal {text}
-        BibNumber = element number {text}
-        BibVolume = element volume {text}
-        BibTitle = element title {TextLong}
-        BibNote = element note {UniqueID?, Paragraph+}
+            BibliographyItem =
+                element biblio {
+                    MetaDataTarget,
+                    attribute type {"raw"}?,
+                    (TextLong |
+                    Ibid |
+                    BibTitle |
+                    BibYear |
+                    BibJournal |
+                    BibNumber |
+                    BibVolume |
+                    BibNote)*
+                }
+            Ibid = element ibid {empty}
+            BibYear = element year {text}
+            BibJournal = element journal {text}
+            BibNumber = element number {text}
+            BibVolume = element volume {text}
+            BibTitle = element title {TextLong}
+            BibNote = element note {UniqueID?, Paragraph+}
             </code>
         </fragment>
     </section>
@@ -1718,21 +1718,21 @@
         <p>Expository, but with solutions, etc. (Borrows from exercises and projects.)</p>
 
         <fragment xml:id="example-like">
-        <title>Examples, and similar</title>
+            <title>Examples, and similar</title>
             <code>
-        ExampleLike =
-            MetaDataTitleOptional,
-            (
-                (BlockStatement)+ |
-                (Statement, Hint*, Answer*, Solution*) |
-                (IntroductionStatement?, Task+, ConclusionStatement?)
-            )
-        Example =
-            element example {ExampleLike}
-        |
-            element question {ExampleLike}
-        |
-            element problem {ExampleLike}
+            ExampleLike =
+                MetaDataTitleOptional,
+                (
+                    (BlockStatement)+ |
+                    (Statement, Hint*, Answer*, Solution*) |
+                    (IntroductionStatement?, Task+, ConclusionStatement?)
+                )
+            Example =
+                element example {ExampleLike}
+            |
+                element question {ExampleLike}
+            |
+                element problem {ExampleLike}
             </code>
         </fragment>
     </section>
@@ -1750,84 +1750,84 @@
 
 
         <fragment xml:id="webwork">
-        <title><webwork/></title>
+            <title><webwork/></title>
             <code>
-        WebWork = (WebWorkAuthored | WebWorkSource)
-        WebWorkSource =
-            element webwork {
-                attribute source {text}?,
-                attribute seed {xsd:integer}?
-            }
-        WebWorkAuthored =
-            element webwork {
-                attribute seed {xsd:integer}?,
-                element description {
+            WebWork = (WebWorkAuthored | WebWorkSource)
+            WebWorkSource =
+                element webwork {
+                    attribute source {text}?,
+                    attribute seed {xsd:integer}?
+                }
+            WebWorkAuthored =
+                element webwork {
+                    attribute seed {xsd:integer}?,
+                    element description {
+                        (
+                            TextSimple |
+                            SimpleLine+
+                        )
+                    }?,
+                    WWMacros?,
+                    element pg-code {text}?,
                     (
-                        TextSimple |
-                        SimpleLine+
+                        (StatementExerciseWW, HintWW?, SolutionWW?)
+                    |
+                        element stage {
+                            Title?,
+                            StatementExerciseWW,
+                            HintWW?,
+                            SolutionWW?
+                        }+
                     )
-                }?,
-                WWMacros?,
-                element pg-code {text}?,
-                (
-                    (StatementExerciseWW, HintWW?, SolutionWW?)
-                |
-                    element stage {
-                        Title?,
-                        StatementExerciseWW,
-                        HintWW?,
-                        SolutionWW?
-                    }+
-                )
-            }
-        StatementExerciseWW =
-            element statement {
-                (
-                    Paragraph |
-                    WWInstruction |
-                    Preformatted |
-                    SideBySideNoCaption
-                )+
-            }
-        WWMacros =
-            element pg-macros {
-                element macro-file {text}+
-            }
-        WWVariable =
-            ## The WeBWorK "var" element appears in the RELAX-NG schema as a child of many elements, but almost always as a descendant of a "p" element or a "cell" element.  As an element that is only relevant for a WeBWorK problem, occurences of "var" must be within a "webwork" element.  A Schematron rule will check on these two situations.
-            element var {
-                (attribute name {text},
-                attribute evaluator {text}?,
-                attribute width {text}?,
-                attribute category {
-                                    "angle" | "decimal" | "exponent"
-                                  | "formula" | "fraction" | "inequality"
-                                  | "integer" | "interval" | "logarithm"
-                                  | "limit" | "number" | "point"
-                                  | "syntax" | "quantity" | "vector"
-                                  }?,
-                attribute form {"popup"|"buttons"|"none"}?) |
-                (attribute form {"essay"},
-                attribute width {text}?)
-            }
-        WWInstruction =
-            element instruction {TextShort}
-        HintWW =
-            element hint {
-                (
-                    Paragraph |
-                    Preformatted |
-                    SideBySideNoCaption
-                )+
-            }
-        SolutionWW =
-            element solution {
-                (
-                    Paragraph |
-                    Preformatted |
-                    SideBySideNoCaption
-                )+
-            }
+                }
+            StatementExerciseWW =
+                element statement {
+                    (
+                        Paragraph |
+                        WWInstruction |
+                        Preformatted |
+                        SideBySideNoCaption
+                    )+
+                }
+            WWMacros =
+                element pg-macros {
+                    element macro-file {text}+
+                }
+            WWVariable =
+                ## The WeBWorK "var" element appears in the RELAX-NG schema as a child of many elements, but almost always as a descendant of a "p" element or a "cell" element.  As an element that is only relevant for a WeBWorK problem, occurences of "var" must be within a "webwork" element.  A Schematron rule will check on these two situations.
+                element var {
+                    (attribute name {text},
+                    attribute evaluator {text}?,
+                    attribute width {text}?,
+                    attribute category {
+                                        "angle" | "decimal" | "exponent"
+                                      | "formula" | "fraction" | "inequality"
+                                      | "integer" | "interval" | "logarithm"
+                                      | "limit" | "number" | "point"
+                                      | "syntax" | "quantity" | "vector"
+                                      }?,
+                    attribute form {"popup"|"buttons"|"none"}?) |
+                    (attribute form {"essay"},
+                    attribute width {text}?)
+                }
+            WWInstruction =
+                element instruction {TextShort}
+            HintWW =
+                element hint {
+                    (
+                        Paragraph |
+                        Preformatted |
+                        SideBySideNoCaption
+                    )+
+                }
+            SolutionWW =
+                element solution {
+                    (
+                        Paragraph |
+                        Preformatted |
+                        SideBySideNoCaption
+                    )+
+                }
             </code>
         </fragment>
     </section>
@@ -1839,26 +1839,26 @@
 
 
         <fragment xml:id="frequently-used">
-        <title>Frequent constructions</title>
-        <fragment ref="statements" />
-        <fragment ref="attribution" />
-        <fragment ref="metadata" />
+            <title>Frequent constructions</title>
+            <fragment ref="statements" />
+            <fragment ref="attribution" />
+            <fragment ref="metadata" />
         </fragment>
 
 
         <fragment xml:id="statements">
-        <title>Statements</title>
+            <title>Statements</title>
         </fragment>
 
         <p>Used on the end of prefaces to <q>sign</q> them, and on block quotes.</p>
 
         <fragment xml:id="attribution">
-        <title>Attribution</title>
+            <title>Attribution</title>
             <code>
-        Attribution =
-            element attribution {
-                (TextLong | LongLine+)
-            }
+            Attribution =
+                element attribution {
+                    (TextLong | LongLine+)
+                }
             </code>
         </fragment>
 
@@ -1880,101 +1880,101 @@
         </ul></p>
 
         <fragment xml:id="metadata">
-        <title>Metadata</title>
+            <title>Metadata</title>
             <code>
-        UniqueID =
-            attribute xml:id {text}
-        PermanentID =
-            attribute permid {text}
-        Title =
-            element title {TextLong}
-        LinedTitle =
-            element title {LongLine+}
-        Subtitle =
-            element subtitle {TextLong}
-        LinedSubtitle =
-            element subtitle {LongLine+}
-        ShortTitle =
-            element shorttitle {TextShort}
-        Creator =
-            element creator {TextShort}
-        XMLBase = attribute xml:base {text}
-        XMLLang = attribute xml:lang {text}
-        MetaDataTarget =
-            UniqueID?,
-            PermanentID?,
-            Index*
-        MetaDataTitle =
-            UniqueID?,
-            PermanentID?,
-            XMLBase?,
-            XMLLang?,
-            Title,
-            Index*
-        MetaDataShortTitle =
-            UniqueID?,
-            PermanentID?,
-            XMLBase?,
-            XMLLang?,
-            Title,
-            ShortTitle?,
-            Index*
-        MetaDataLinedTitle =
-            UniqueID?,
-            PermanentID?,
-            XMLBase?,
-            XMLLang?,
-            (Title | LinedTitle),
-            ShortTitle?,
-            Index*
-        MetaDataSubtitle =
-            UniqueID?,
-            PermanentID?,
-            XMLBase?,
-            XMLLang?,
-            Title,
-            Subtitle?,
-            ShortTitle?,
-            Index*
-        MetaDataLinedSubtitle =
-            UniqueID?,
-            PermanentID?,
-            XMLBase?,
-            XMLLang?,
-            (Title | LinedTitle),
-            (Subtitle | LinedSubtitle)?,
-            ShortTitle?,
-            Index*
-        MetaDataTitleOptional =
-            UniqueID?,
-            PermanentID?,
-            XMLBase?,
-            XMLLang?,
-            Title?,
-            Index*
-        MetaDataShortTitleOptional =
-            UniqueID?,
-            PermanentID?,
-            XMLBase?,
-            XMLLang?,
-            (Title, ShortTitle?)?,
-            Index*
-        MetaDataTitleCreatorOptional =
-            UniqueID?,
-            PermanentID?,
-            XMLBase?,
-            XMLLang?,
-            Title?,
-            Creator?,
-            Index*
-        MetaDataCaption =
-            UniqueID?,
-            PermanentID?,
-            XMLBase?,
-            XMLLang?,
-            Title?,
-            Caption,
-            Index*
+            UniqueID =
+                attribute xml:id {text}
+            PermanentID =
+                attribute permid {text}
+            Title =
+                element title {TextLong}
+            LinedTitle =
+                element title {LongLine+}
+            Subtitle =
+                element subtitle {TextLong}
+            LinedSubtitle =
+                element subtitle {LongLine+}
+            ShortTitle =
+                element shorttitle {TextShort}
+            Creator =
+                element creator {TextShort}
+            XMLBase = attribute xml:base {text}
+            XMLLang = attribute xml:lang {text}
+            MetaDataTarget =
+                UniqueID?,
+                PermanentID?,
+                Index*
+            MetaDataTitle =
+                UniqueID?,
+                PermanentID?,
+                XMLBase?,
+                XMLLang?,
+                Title,
+                Index*
+            MetaDataShortTitle =
+                UniqueID?,
+                PermanentID?,
+                XMLBase?,
+                XMLLang?,
+                Title,
+                ShortTitle?,
+                Index*
+            MetaDataLinedTitle =
+                UniqueID?,
+                PermanentID?,
+                XMLBase?,
+                XMLLang?,
+                (Title | LinedTitle),
+                ShortTitle?,
+                Index*
+            MetaDataSubtitle =
+                UniqueID?,
+                PermanentID?,
+                XMLBase?,
+                XMLLang?,
+                Title,
+                Subtitle?,
+                ShortTitle?,
+                Index*
+            MetaDataLinedSubtitle =
+                UniqueID?,
+                PermanentID?,
+                XMLBase?,
+                XMLLang?,
+                (Title | LinedTitle),
+                (Subtitle | LinedSubtitle)?,
+                ShortTitle?,
+                Index*
+            MetaDataTitleOptional =
+                UniqueID?,
+                PermanentID?,
+                XMLBase?,
+                XMLLang?,
+                Title?,
+                Index*
+            MetaDataShortTitleOptional =
+                UniqueID?,
+                PermanentID?,
+                XMLBase?,
+                XMLLang?,
+                (Title, ShortTitle?)?,
+                Index*
+            MetaDataTitleCreatorOptional =
+                UniqueID?,
+                PermanentID?,
+                XMLBase?,
+                XMLLang?,
+                Title?,
+                Creator?,
+                Index*
+            MetaDataCaption =
+                UniqueID?,
+                PermanentID?,
+                XMLBase?,
+                XMLLang?,
+                Title?,
+                Caption,
+                Index*
             </code>
         </fragment>
 
@@ -1986,7 +1986,7 @@
         <p>Provisional items, with uncertain futures.</p>
 
         <fragment xml:id="miscellaneous">
-        <title>Miscellaneous or uncertain</title>
+            <title>Miscellaneous or uncertain</title>
         </fragment>
     </section>
 
@@ -1998,17 +1998,17 @@
         <p>Notation can be automatically generated.  We restrict its locations to appendices.</p>
 
         <fragment xml:id="listgenerator">
-        <title>List generator</title>
+            <title>List generator</title>
             <code>
-        ListGenerator =
-            element list-of {
-                attribute elements {text},
-                attribute scope {text}?,
-                attribute divisions {text}?,
-                attribute empty {"yes" | "no"}?
-            }
-        NotationList =
-            element notation-list {empty}
+            ListGenerator =
+                element list-of {
+                    attribute elements {text},
+                    attribute scope {text}?,
+                    attribute divisions {text}?,
+                    attribute empty {"yes" | "no"}?
+                }
+            NotationList =
+                element notation-list {empty}
             </code>
         </fragment>
     </section>
@@ -2019,111 +2019,111 @@
         <p>Articles and books have material at the start, which gets organized in interesting ways. <c>minilicense</c> is very restrictive, <c>shortlicense</c> allows references (<eg /> <init>URL</init>s).  <c>titlepage</c> is like a very small database<mdash />for HTML it migrates to the top of the page for the <c>frontmatter</c>, and for <latex /> it migrates to the half-title and title pages.  Since it generally makes no sense as the target of a cross-reference, <c>titlepagfe</c> does not allow an <c>@xml:id</c> attribute.</p>
 
         <fragment xml:id="frontmatter">
-        <title>Front matter</title>
+            <title>Front matter</title>
             <code>
-        ArticleFrontMatter =
-            element frontmatter {
-                MetaDataTitleOptional,
-                TitlePage,
-                Abstract?
-            }
-        BookFrontMatter = element frontmatter {
-                MetaDataTitleOptional,
-                TitlePage?,
-                ColophonFront?,
-                Biography*,
-                Dedication?,
-                Acknowledgement?,
-                Preface*
-            }
-        TitlePage =
-            element titlepage {
-                (
-                    (Author, Author*, Editor*)
-                    |
-                    (Editor, Editor*)
-                ),
-                Credit*,
-                Date?
-            }
-        Author =
-            element author {
-                element personname {TextSimple},
-                element department {TextSimple | ShortLine+}?,
-                element institution {TextSimple | ShortLine+}?,
-                element email {text}?
-            }
-        Editor =
-            element editor {
-                element personname {TextSimple},
-                element department {TextSimple | ShortLine+}?,
-                element institution {TextSimple | ShortLine+}?,
-                element email {text}?
-            }
-        Credit =
-            element credit {
-                element title {TextLong},
-                Author+
-            }
-        Date =
-            element date {
-                mixed {(Character | Generator)*}
-            }
-        Abstract =
-            element abstract {
-                MetaDataTitleOptional,
-                BlockText+
-            }
-        ColophonFront =
-            element colophon {
-                MetaDataTarget,
+            ArticleFrontMatter =
+                element frontmatter {
+                    MetaDataTitleOptional,
+                    TitlePage,
+                    Abstract?
+                }
+            BookFrontMatter = element frontmatter {
+                    MetaDataTitleOptional,
+                    TitlePage?,
+                    ColophonFront?,
+                    Biography*,
+                    Dedication?,
+                    Acknowledgement?,
+                    Preface*
+                }
+            TitlePage =
+                element titlepage {
+                    (
+                        (Author, Author*, Editor*)
+                        |
+                        (Editor, Editor*)
+                    ),
+                    Credit*,
+                    Date?
+                }
+            Author =
+                element author {
+                    element personname {TextSimple},
+                    element department {TextSimple | ShortLine+}?,
+                    element institution {TextSimple | ShortLine+}?,
+                    element email {text}?
+                }
+            Editor =
+                element editor {
+                    element personname {TextSimple},
+                    element department {TextSimple | ShortLine+}?,
+                    element institution {TextSimple | ShortLine+}?,
+                    element email {text}?
+                }
+            Credit =
                 element credit {
-                    element role {TextShort},
-                    element entity {TextLong}
-                }*,
-                element edition {text}?,
-                element website {
-                    element name {TextShort},
-                    element address {text}
-                }?,
-                element copyright {
-                    element year {TextShort},
-                    element holder {text},
-                    element minilicense {TextShort}?,
-                    element shortlicense {TextLong}?
-                }?
-            }
-        Biography =
-            element biography {
-                MetaDataTitleOptional,
-                (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)+
-            }
-        Dedication =
-            element dedication {
-                MetaDataTitleOptional,
-                (Paragraph|ParagraphLined)+
-            }
-        Acknowledgement =
-            element acknowledgement {
-                MetaDataTitleOptional,
-                (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)+
-            }
-        Preface =
-            element preface {
-                MetaDataTitleOptional,
-                (
+                    element title {TextLong},
+                    Author+
+                }
+            Date =
+                element date {
+                    mixed {(Character | Generator)*}
+                }
+            Abstract =
+                element abstract {
+                    MetaDataTitleOptional,
+                    BlockText+
+                }
+            ColophonFront =
+                element colophon {
+                    MetaDataTarget,
+                    element credit {
+                        element role {TextShort},
+                        element entity {TextLong}
+                    }*,
+                    element edition {text}?,
+                    element website {
+                        element name {TextShort},
+                        element address {text}
+                    }?,
+                    element copyright {
+                        element year {TextShort},
+                        element holder {text},
+                        element minilicense {TextShort}?,
+                        element shortlicense {TextLong}?
+                    }?
+                }
+            Biography =
+                element biography {
+                    MetaDataTitleOptional,
+                    (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)+
+                }
+            Dedication =
+                element dedication {
+                    MetaDataTitleOptional,
+                    (Paragraph|ParagraphLined)+
+                }
+            Acknowledgement =
+                element acknowledgement {
+                    MetaDataTitleOptional,
+                    (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)+
+                }
+            Preface =
+                element preface {
+                    MetaDataTitleOptional,
                     (
-                        (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)+,
-                        Attribution*
+                        (
+                            (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)+,
+                            Attribution*
+                        )
+                        |
+                        (
+                            (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)*,
+                            Contributors,
+                            (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)*
+                        )
                     )
-                    |
-                    (
-                        (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)*,
-                        Contributors,
-                        (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)*
-                    )
-                )
-            }
+                }
             </code>
         </fragment>
     </section>
@@ -2134,23 +2134,23 @@
         <p>A single <c>contributors</c> element may be placed into a <c>preface</c> and is a list of <c>contributor</c>.  It can be optionally preceded, or followed, by all the usual things that can go into any preface.  An AuthorByline is a special instance of acknowledging a contributor on a division.</p>
 
         <fragment xml:id="contributor">
-        <title>Contributor</title>
+            <title>Contributor</title>
             <code>
-        Contributor =
-            element contributor {
-                MetaDataTarget,
-                element personname {TextSimple},
-                element department {TextSimple}?,
-                element institution {TextSimple}?,
-                element location {TextSimple}?,
-                element email {text}?
-            }
-        Contributors =
-            element contributors {
-                Contributor+
-            }
-        AuthorByline =
-            element author {(TextSimple|Xref)}
+            Contributor =
+                element contributor {
+                    MetaDataTarget,
+                    element personname {TextSimple},
+                    element department {TextSimple}?,
+                    element institution {TextSimple}?,
+                    element location {TextSimple}?,
+                    element email {text}?
+                }
+            Contributors =
+                element contributors {
+                    Contributor+
+                }
+            AuthorByline =
+                element author {(TextSimple|Xref)}
             </code>
         </fragment>
     </section>
@@ -2162,29 +2162,29 @@
         <p>Articles and books have material at the end, structured as a sequence of <c>appendix</c>.  A <c>solutions</c> division should be numbered and rendered as if it was one of the <c>appendix</c>, and so can mix-in in any order.</p>
 
         <fragment xml:id="backmatter">
-        <title>Back matter</title>
+            <title>Back matter</title>
             <code>
-        ArticleBackMatter =
-            element backmatter {
-                MetaDataTitleOptional,
-                (ArticleAppendix|Solutions)*,
-                References?,
-                IndexDivision?,
-                ColophonBack?
-            }
-        BookBackMatter =
-            element backmatter {
-                MetaDataTitleOptional,
-                (BookAppendix|Solutions)*,
-                References?,
-                IndexDivision?,
-                ColophonBack?
-            }
-        ColophonBack =
-            element colophon {
-                MetaDataTarget,
-                (BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+
-            }
+            ArticleBackMatter =
+                element backmatter {
+                    MetaDataTitleOptional,
+                    (ArticleAppendix|Solutions)*,
+                    References?,
+                    IndexDivision?,
+                    ColophonBack?
+                }
+            BookBackMatter =
+                element backmatter {
+                    MetaDataTitleOptional,
+                    (BookAppendix|Solutions)*,
+                    References?,
+                    IndexDivision?,
+                    ColophonBack?
+                }
+            ColophonBack =
+                element colophon {
+                    MetaDataTarget,
+                    (BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+
+                }
             </code>
         </fragment>
     </section>
@@ -2195,7 +2195,7 @@
         <p>The <c>docinfo</c> section is like a small database for the document.</p>
 
         <fragment xml:id="docinfo">
-        <title>Document information</title>
+            <title>Document information</title>
             <code>
         DocInfo =
             element docinfo {
@@ -2204,152 +2204,152 @@
                 Configuration+
             }
             </code>
-        <fragment ref="brandlogo" />
-        <fragment ref="latexpreamble" />
-        <fragment ref="macros" />
-        <fragment ref="cross-references" />
-        <fragment ref="lateximagepreamble" />
-        <fragment ref="initialism" />
-        <fragment ref="feedback" />
-        <fragment ref="rename" />
-        <fragment ref="imagearchive" />
-        <fragment ref="authorbiographylength" />
-        <fragment ref="addins" />
-        <fragment ref="numbering" />
+            <fragment ref="brandlogo" />
+            <fragment ref="latexpreamble" />
+            <fragment ref="macros" />
+            <fragment ref="cross-references" />
+            <fragment ref="lateximagepreamble" />
+            <fragment ref="initialism" />
+            <fragment ref="feedback" />
+            <fragment ref="rename" />
+            <fragment ref="imagearchive" />
+            <fragment ref="authorbiographylength" />
+            <fragment ref="addins" />
+            <fragment ref="numbering" />
         </fragment>
 
         <p>A nice icon near the top of an electronic version is a nice touch, and can link back to a project landing page.</p>
 
         <fragment xml:id="brandlogo">
-        <title>Brand logo</title>
+            <title>Brand logo</title>
             <code>
-        Configuration |=
-            element brandlogo {
-                attribute url {text}?,
-                attribute source {text}
-            }
+            Configuration |=
+                element brandlogo {
+                    attribute url {text}?,
+                    attribute source {text}
+                }
             </code>
         </fragment>
 
         <p>We add some items to the preamble for LaTeX.  A <c>package</c> needs to have an identical implementation, and be of the same name, as a version that exists for MathJax.</p>
 
         <fragment xml:id="latexpreamble">
-        <title><latex/> preamble</title>
+            <title><latex/> preamble</title>
             <code>
-        Configuration |=
-            element latex-preamble {
-                element package {text}*
-            }
+            Configuration |=
+                element latex-preamble {
+                    element package {text}*
+                }
             </code>
         </fragment>
 
         <p>Macros for <latex /> are shared across implementations.  This should move under some general <latex /> section, the name is too vague.</p>
 
         <fragment xml:id="macros">
-        <title><latex/> macros</title>
+            <title><latex/> macros</title>
             <code>
-        Configuration |=
-            element macros {text}
+            Configuration |=
+                element macros {text}
             </code>
         </fragment>
 
         <p>The style of text used in a cross-reference (the <c>xref</c> element) is contained in the source and uses the same per-item choices.</p>
 
         <fragment xml:id="cross-references">
-        <title>Cross-reference text style</title>
+            <title>Cross-reference text style</title>
             <code>
-        Configuration |=
-            element
-                cross-references {
-                    attribute text { XrefTextStyle }
-                }
+            Configuration |=
+                element
+                    cross-references {
+                        attribute text { XrefTextStyle }
+                    }
             </code>
         </fragment>
 
         <p>Images specified by <latex /> syntax sometimes need extra information in their preambles.</p>
 
         <fragment xml:id="lateximagepreamble">
-        <title><latex/> image preamble</title>
+            <title><latex/> image preamble</title>
             <code>
-        Configuration |=
-            element latex-image-preamble {text}
+            Configuration |=
+                element latex-image-preamble {text}
             </code>
         </fragment>
 
         <p>An initialism is a useful short version of a book title.</p>
 
         <fragment xml:id="initialism">
-        <title>Project initialism</title>
+            <title>Project initialism</title>
             <code>
-        Configuration |=
-            element initialism {text}
+            Configuration |=
+                element initialism {text}
             </code>
         </fragment>
 
         <p>Online versions can request feedback via a URL for some form.  Maybe this should really be an <c>href</c> for consistency.  There should be a device to provide text to go with the link.</p>
 
         <fragment xml:id="feedback">
-        <title>Feedback link</title>
+            <title>Feedback link</title>
             <code>
-        Configuration |=
-            element feedback {
-                element url {text}
-            }
+            Configuration |=
+                element feedback {
+                    element url {text}
+                }
             </code>
         </fragment>
 
         <p>Some elements can be renamed.  This should be a rare event.  Since the content of this element can (optionally) be specified in  different languages, the <attr>xml:lang</attr> attribute is appropriate.<fn><url href="https://www.w3.org/International/questions/qa-when-xmllang"/></fn></p>
 
         <fragment xml:id="rename">
-        <title>Element renaming</title>
+            <title>Element renaming</title>
             <code>
-        Configuration |=
-            element rename {
-                attribute element {text},
-                attribute xml:lang {text}?,
-                text
-            }
+            Configuration |=
+                element rename {
+                    attribute element {text},
+                    attribute xml:lang {text}?,
+                    text
+                }
             </code>
         </fragment>
 
         <p>Image archives have some global specification.  The <c>from</c> attribute gives a root for only working on a subtree of the document.  The content is a comma-separated list of file extensions.</p>
 
         <fragment xml:id="imagearchive">
-        <title>Image archives</title>
+            <title>Image archives</title>
             <code>
-        Configuration |=
-            element images {
-                element archive {
-                    attribute from {text}?,
-                    text
-                }+
-            }
+            Configuration |=
+                element images {
+                    element archive {
+                        attribute from {text}?,
+                        text
+                    }+
+                }
             </code>
         </fragment>
 
         <p>An author biography (or several) might be a paragraph or two each, or each one might be severalpages.  This style can be controlled.</p>
 
         <fragment xml:id="authorbiographylength">
-        <title>Author biographies</title>
+            <title>Author biographies</title>
             <code>
-        Configuration |=
-            element author-biographies {
-                attribute length {"short" | "long"}
-            }
+            Configuration |=
+                element author-biographies {
+                    attribute length {"short" | "long"}
+                }
             </code>
         </fragment>
 
         <p>Many aspects of numbering are configurable.  These choices affect the numbers printed, and so are an author's decision, and hence run with the source.</p>
 
         <fragment xml:id="numbering">
-        <title>Numbering of part divisions</title>
+            <title>Numbering of part divisions</title>
             <code>
-        Configuration |=
-            element numbering {
-                element division {
-                    attribute part {"decorative" | "structural"}
-                }?
-            }
+            Configuration |=
+                element numbering {
+                    element division {
+                        attribute part {"decorative" | "structural"}
+                    }?
+                }
             </code>
         </fragment>
     </section>
@@ -2363,57 +2363,57 @@
             <code>
             grammar {
             </code>
-        <fragment ref="gross-structure" />
-        <fragment ref="document-types" />
-        <fragment ref="divisions" />
-        <fragment ref="frontmatter" />
-        <fragment ref="backmatter" />
-        <fragment ref="paragraphs" />
-        <fragment ref="universal" />
-        <fragment ref="block" />
-        <fragment ref="block-component" />
-        <fragment ref="introduction-conclusion" />
-        <fragment ref="objective-outcome" />
-        <fragment ref="blockquote" />
-        <fragment ref="verbatimdisplay" />
-        <fragment ref="list" />
-        <fragment ref="definition-like" />
-        <fragment ref="theorem-like" />
-        <fragment ref="axiom-like" />
-        <fragment ref="example-like" />
-        <fragment ref="project-like" />
-        <fragment ref="remark-like" />
-        <fragment ref="computation-like" />
-        <fragment ref="aside" />
-        <fragment ref="assemblage" />
-        <fragment ref="table-figure" />
-        <fragment ref="sidebyside" />
-        <fragment ref="image" />
-        <fragment ref="tabular" />
-        <fragment ref="sage" />
-        <fragment ref="interactive" />
-        <fragment ref="audiovideo" />
-        <fragment ref="exercise" />
-        <fragment ref="poetry" />
-        <fragment ref="bibliography" />
-        <fragment ref="contributor" />
-        <fragment ref="webwork" />
-        <fragment ref="miscellaneous" />
-        <fragment ref="frequently-used" />
-        <fragment ref="paragraph" />
-        <fragment ref="shorttext" />
-        <fragment ref="footnote" />
-        <fragment ref="index" />
-        <fragment ref="reference" />
-        <fragment ref="mathematics" />
-        <fragment ref="verbatim" />
-        <fragment ref="group" />
-        <fragment ref="generator" />
-        <fragment ref="siunit" />
-        <fragment ref="character" />
-        <fragment ref="listgenerator" />
-        <fragment ref="bad-bank" />
-        <fragment ref="docinfo" />
+            <fragment ref="gross-structure" />
+            <fragment ref="document-types" />
+            <fragment ref="divisions" />
+            <fragment ref="frontmatter" />
+            <fragment ref="backmatter" />
+            <fragment ref="paragraphs" />
+            <fragment ref="universal" />
+            <fragment ref="block" />
+            <fragment ref="block-component" />
+            <fragment ref="introduction-conclusion" />
+            <fragment ref="objective-outcome" />
+            <fragment ref="blockquote" />
+            <fragment ref="verbatimdisplay" />
+            <fragment ref="list" />
+            <fragment ref="definition-like" />
+            <fragment ref="theorem-like" />
+            <fragment ref="axiom-like" />
+            <fragment ref="example-like" />
+            <fragment ref="project-like" />
+            <fragment ref="remark-like" />
+            <fragment ref="computation-like" />
+            <fragment ref="aside" />
+            <fragment ref="assemblage" />
+            <fragment ref="table-figure" />
+            <fragment ref="sidebyside" />
+            <fragment ref="image" />
+            <fragment ref="tabular" />
+            <fragment ref="sage" />
+            <fragment ref="interactive" />
+            <fragment ref="audiovideo" />
+            <fragment ref="exercise" />
+            <fragment ref="poetry" />
+            <fragment ref="bibliography" />
+            <fragment ref="contributor" />
+            <fragment ref="webwork" />
+            <fragment ref="miscellaneous" />
+            <fragment ref="frequently-used" />
+            <fragment ref="paragraph" />
+            <fragment ref="shorttext" />
+            <fragment ref="footnote" />
+            <fragment ref="index" />
+            <fragment ref="reference" />
+            <fragment ref="mathematics" />
+            <fragment ref="verbatim" />
+            <fragment ref="group" />
+            <fragment ref="generator" />
+            <fragment ref="siunit" />
+            <fragment ref="character" />
+            <fragment ref="listgenerator" />
+            <fragment ref="bad-bank" />
+            <fragment ref="docinfo" />
             <code>
             }
             </code>
@@ -2424,13 +2424,13 @@
         <title>Bad Bank</title>
 
         <fragment xml:id="bad-bank">
-        <title>Bad bank</title>
+            <title>Bad bank</title>
             <code>
-        Demonstration = element demonstration {
-            Title,
-            Paragraph,
-            Sage
-        }
+            Demonstration = element demonstration {
+                Title,
+                Paragraph,
+                Sage
+            }
             </code>
         </fragment>
     </section>
