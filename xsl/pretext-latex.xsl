@@ -1976,7 +1976,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$document-root//pre|$document-root//cd|$document-root//fragment">
         <xsl:text>%% Fancy Verbatim for consoles, preformatted, code display, literate programming&#xa;</xsl:text>
         <xsl:text>\usepackage{fancyvrb}&#xa;</xsl:text>
-        <xsl:if test="$document-root//pre">
+        <xsl:if test="$document-root//pre|$document-root//fragment">
             <xsl:text>%% Pre-formatted text, a peer of paragraphs&#xa;</xsl:text>
             <xsl:text>\DefineVerbatimEnvironment{preformatted}{Verbatim}{}&#xa;</xsl:text>
         </xsl:if>
@@ -10579,75 +10579,80 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Literate Programming Support -->
 <!-- ############################ -->
 
-<!-- common template so we can preferentially handle the filename  -->
-<!-- case first, then have an xml:id on *any* fragment -->
-<xsl:template match="fragment[@xml:id]|fragment[@filename]">
-    <xsl:choose>
-        <!-- filename fragments are the top of their trees, but -->
-        <!-- can have an @xml:id so they can be referenced      -->
-        <xsl:when test="@filename">
-            <!-- switch to node-set with "c" if characters need escaping -->
-            <xsl:text>\par\medskip\noindent\textbf{Begin File:} \mono{</xsl:text>
-            <xsl:value-of select="@filename" />
-            <xsl:text>}</xsl:text>
-            <xsl:text>\index{file root!\mono{</xsl:text>
-            <xsl:value-of select="@filename" />
-            <xsl:text>}}</xsl:text>
-        </xsl:when>
-        <!-- other fragments are known by their xml:id strings -->
-        <xsl:when test="@xml:id">
-            <!-- switch to node-set with "c" if characters need escaping -->
-            <xsl:text>\par\medskip\noindent\textbf{Fragment:} \mono{</xsl:text>
-            <xsl:value-of select="@xml:id" />
-            <xsl:text>}</xsl:text>
-            <!-- sortby first, @ separator, then tt version -->
-            <xsl:text>\index{</xsl:text>
-            <xsl:value-of select="@xml:id" />
-            <xsl:text>@\mono{</xsl:text>
-            <xsl:value-of select="@xml:id" />
-            <xsl:text>}}</xsl:text>
-        </xsl:when>
-    </xsl:choose>
+<!-- A fragment has contents, and may also be a root (file) node -->
+<xsl:template match="fragment">
+    <xsl:text>\par\medskip%&#xa;</xsl:text>
     <!-- always possible to label (universal PTX capability) -->
-    <xsl:text>\phantomsection</xsl:text>
+    <xsl:text>\noindent\phantomsection</xsl:text>
     <xsl:apply-templates select="." mode="label"/>
-    <xsl:text>\\&#xa;</xsl:text>
-    <!-- now the guts, in pieces -->
-    <xsl:apply-templates select="text()|fragment[@ref]" />
-</xsl:template>
-
-<!-- convert fragment pointer to text -->
-<!-- in monospace font                -->
-<xsl:template match="fragment[@ref]">
-    <!-- switch to node-set with "c" if characters need escaping -->
-    <xsl:text>\mono{</xsl:text>
-    <xsl:text>&lt;code: </xsl:text>
-    <xsl:value-of select="@ref" />
-    <xsl:text>\space\space\pageref{</xsl:text>
-    <xsl:apply-templates select="id(@ref)" mode="latex-id"/>
-    <xsl:text>}</xsl:text>
-    <xsl:text>&gt;</xsl:text>
+    <xsl:call-template name="langle-character"/>
+    <xsl:apply-templates select="." mode="number"/>
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:call-template name="rangle-character"/>
+    <xsl:text> </xsl:text>
+    <xsl:call-template name="begin-inline-math"/>
+    <xsl:text>\equiv</xsl:text>
+    <xsl:call-template name="end-inline-math"/>
+    <!-- sortby first, @ separator, then tt version -->
+    <xsl:text>\index{</xsl:text>
+    <xsl:value-of select="@xml:id" />
+    <xsl:text>@</xsl:text>
+    <xsl:value-of select="@xml:id" />
     <xsl:text>}</xsl:text>
     <xsl:text>\\&#xa;</xsl:text>
+    <!-- special case, root node with filename -->
+    <xsl:if test="@filename">
+        <xsl:text>Root of file: </xsl:text>
+        <xsl:text>\mono{</xsl:text>
+        <xsl:value-of select="@filename" />
+        <xsl:text>}</xsl:text>
+        <xsl:text>\index{file root!\mono{</xsl:text>
+        <xsl:value-of select="@filename" />
+        <xsl:text>}}</xsl:text>
+        <xsl:text>\\&#xa;</xsl:text>
+    </xsl:if>
+    <!-- now the guts, two different types of pieces -->
+    <xsl:apply-templates select="code|fragref"/>
 </xsl:template>
 
 <!-- wrap code in a Verbatim environment, though perhaps another -->
 <!-- LaTeX environment or a tcolor box would work better         -->
+<!-- Simple \mono{} needs escapes, won't line break              -->
 <!-- Drop whitespace only text() nodes                           -->
-<xsl:template match="fragment/text()">
+<xsl:template match="fragment/code">
     <xsl:variable name="normalized-frag" select="normalize-space(.)"/>
     <xsl:if test="not($normalized-frag = '')">
-        <xsl:text>\begin{Verbatim}</xsl:text>
+        <xsl:text>\begin{preformatted}</xsl:text>
         <xsl:text>&#xa;</xsl:text>  <!-- required by fancyvrb -->
         <xsl:call-template name="sanitize-text">
             <xsl:with-param name="text" select="." />
         </xsl:call-template>
-        <xsl:text>\end{Verbatim}&#xa;</xsl:text>
+        <xsl:text>\end{preformatted}&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
 
+<!-- A "fragref" has a @ref that is simply a pointer to another fragment, -->
+<!-- so convert to a visual representation of a pointer to a target,      -->
+<!-- with a hyperlink to the target (as a page number for print)          -->
+<xsl:template match="fragref">
+    <xsl:variable name="target" select="id(@ref)"/>
+    <xsl:call-template name="langle-character"/>
+    <xsl:apply-templates select="$target" mode="title-full"/>
+    <xsl:text> </xsl:text>
+    <xsl:text>{\scriptsize </xsl:text>
+    <xsl:apply-templates select="$target" mode="number"/>
+    <xsl:text>\space[\pageref{</xsl:text>
+    <xsl:apply-templates select="$target" mode="latex-id"/>
+    <xsl:text>}]</xsl:text>
+    <xsl:text>}</xsl:text>
+    <xsl:call-template name="rangle-character"/>
+    <xsl:text>\\&#xa;</xsl:text>
+</xsl:template>
 
+<!-- ################### -->
 <!-- References Sections -->
+<!-- ################### -->
 <!-- We use description lists to manage bibliographies,  -->
 <!-- and \bibitem seems comfortable there, so our source -->
 <!-- is nearly compatible with the usual usage           -->
