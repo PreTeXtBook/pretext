@@ -75,10 +75,6 @@ function edit_menu_for(this_obj_id) {
 //    enter_option.setAttribute('class', 'level1 past');
     enter_option.setAttribute('id', 'enter_choice');
 
-//    var this_list = '<li tabindex="-1" id="choose_current" data-env="paragraph" data-action="edit">Edit ' + this_object_type + '</li>';
-//    this_list += '<li tabindex="-1" data-env="paragraph" data-action="enter">Enter ' + this_object_type + '</li>';
-//    this_list += '<li tabindex="-1" data-env="section">Insert before ' + this_object_type + '</li>';
-//    this_list += '<li tabindex="-1" data-env="section">Insert after ' + this_object_type + '</li>';
     enter_option.innerHTML = "edit near here?";
     document.getElementById("edit_menu_holder").insertAdjacentElement("afterbegin", enter_option);
 
@@ -287,11 +283,21 @@ function logKey(e) {
  //       current_active_menu_item.setAttribute('style', 'background:#ddf;');
             current_active_menu_item_environment = current_active_menu_item.getAttribute('data-env');
             if (current_active_menu_item_environment in menu_for) {  // object names a collection, so make submenu
-            
+                console.log("making a menu for", current_active_menu_item_environment);
+                var edit_submenu = document.createElement('ol');
+                edit_submenu.innerHTML = base_menu_options_for(current_active_menu_item_environment);
+                console.log("removing id from", current_active_menu_item);
+                current_active_menu_item.removeAttribute("id");
+                current_active_menu_item.insertAdjacentElement("beforeend", edit_submenu);
+          //      next_menu_item.setAttribute("id", "choose_current");
+                document.getElementById('choose_current').focus();
+                console.log("setting focus AA on",next_menu_item);
+                next_menu_item.focus();
             } else {  // we just selected an action, so do it
                       // that probably involves adding something before or after a given object
                 object_near_new_object = document.getElementById('edit_menu_holder').parentElement;
-                alert("attempting to add someting before/after " + object_near_new_object.tagName);
+                var before_after = $("#edit_menu_holder > #edit_menu > .chosen").attr("data-location");
+                alert("attempting to add someting "+ before_after + " " + object_near_new_object.tagName);
                 object_near_new_object.focus();
                 object_near_new_object.classList.remove("may_select");
                 document.getElementById('edit_menu_holder').remove();
