@@ -3266,13 +3266,70 @@ label.incorrect .feedback {
 
 #edit_menu_holder {
     position: relative;
-    left: 30em;
+    left: 20em;
     bottom: 1.5em;
+    z-index: 1000;
 }
-#edit_menu_holder #edit_menu {
-    background: #fcc;
+#edit_menu_holder #edit_menu,
+#edit_menu_holder #enter_choice {
+    background: #fee;
     position: absolute;
+    white-space: nowrap;
+    z-index: 1000;
+}
+#edit_menu_holder #edit_menu.past {
+    background: #ffe;
+    color: #999;
+}
+#edit_menu_holder .past li {
+    background: #fff9f9;
+    color: #aaa;
+}
+#edit_menu_holder #enter_choice {
+    padding: 0.25em 0.5em 0 0.5em;
+    background: yellow;
+    bottom: -1.2em;
+    border-radius: 0.5em 0.5em 0 0; 
+}
+#edit_menu_holder #edit_menu li.chosen,
+#edit_menu_holder #edit_menu #choose_current {
+    background: #ddf;
+    color: #000;
+}
+#edit_menu_holder #edit_menu.past > .choose {
+    background: #eef;
+    color: #000;
+}
+#edit_menu {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style-type: none;
+}
+#edit_menu li {
+    margin-top: 0;
+}
+#edit_menu li#choose_current {
+    background: #ddf;
+}
+#edit_menu li.choosen {
+    background: #ddf;
+}
+#edit_menu li ol {
+    position: absolute;
+    left: 8em;
+    bottom: -0.5em;
+    margin-top: 0;
+    padding-left: 0;
+    list-style-type: none;
+    background: #fdd;
+}
+#edit_menu_holder #edit_menu li.choose {
+    background: #eef;
 }
 .text_source {
     font-size: 95%;
+}
+.may_select {
+    box-shadow: -10px -5px 5px yellow;
 }
