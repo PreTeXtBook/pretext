@@ -67,6 +67,7 @@ function edit_menu_for(this_obj_id) {
     var edit_menu_holder = document.createElement('div');
     edit_menu_holder.setAttribute('class', 'edit_menu_holder');
     edit_menu_holder.setAttribute('id', 'edit_menu_holder');
+    edit_menu_holder.setAttribute('tabindex', '-1');
     console.log("adding menu for", this_obj_id);
     document.getElementById(this_obj_id).insertAdjacentElement("afterbegin", edit_menu_holder);
 
@@ -191,10 +192,13 @@ function logKey(e) {
        }
        // and add the option to edit the next object
        if (!document.getElementById('edit_menu_holder')) {  // we are not already navigating a menu
-           $(":focus").addClass("may_select");
            edit_menu_for(document.activeElement.id);        // so create one
-           return
-       }
+           $(":focus").addClass("may_select");
+           console.log("element with fcous is", $(":focus"));
+           console.log("putting focus on", document.getElementById('edit_menu_holder'));
+           document.getElementById('edit_menu_holder').focus();
+           console.log("element with fcous is", $(":focus"));
+       } else {
         current_active_menu_item = document.getElementById('choose_current');
         next_menu_item = current_active_menu_item.nextSibling;
         console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
@@ -206,6 +210,7 @@ function logKey(e) {
         next_menu_item.setAttribute("id", "choose_current");
         console.log("setting focus on",next_menu_item);
         next_menu_item.focus();
+      }
 
 /*
        if(document.activeElement.tagName == "P") {
@@ -224,39 +229,73 @@ function logKey(e) {
             var edit_submenu = document.createElement('ol');
             edit_submenu.setAttribute('id', 'edit_menu');
 
-            to_be_edited = document.getElementById('enter_choice').parentElement;
+            var to_be_edited = document.getElementById('enter_choice').parentElement;
             console.log("to_be_edited", to_be_edited);
             console.log("option", top_menu_options_for(to_be_edited));
             edit_submenu.innerHTML = top_menu_options_for(to_be_edited);
             $("#enter_choice").replaceWith(edit_submenu);
             document.getElementById('choose_current').focus();
             return
+        } 
+           // otherwise check if there is an action associated to this choice
+           else if (document.getElementById('choose_current').hasAttribute("data-action")) {
+                var current_active_menu_item = document.getElementById('choose_current');
+                var this_action = current_active_menu_item.getAttribute("data-action");
+                var to_be_edited = document.getElementById('edit_menu_holder').parentElement;
+                if (this_action == "edit") {
+                   console.log("going to edit it", to_be_edited);
+                   edit_in_place(to_be_edited);
+                   } 
+                else { alert("unimplemented action: "+ this_action) }
         }
-        // otherwise, see if we just selected a menu item
-        $("#choose_current").parent().addClass("past");
-        current_active_menu_item = document.getElementById('choose_current');
-        console.log("apparently selected", current_active_menu_item);
-        current_active_menu_item.removeAttribute("id");
-        current_active_menu_item.setAttribute('class', 'chosen');
- //       current_active_menu_item.setAttribute('style', 'background:#ddf;');
-        var edit_submenu = document.createElement('ol');
-        if (current_active_menu_item.hasAttribute("data-action")) {
-            to_be_edited = document.getElementById('edit_menu_holder').parentElement;
-            
-            document.getElementById('edit_menu_holder').remove();
-            this_action = current_active_menu_item.getAttribute("data-action");
-            if (this_action == "edit") {
-               console.log("going to edit it", to_be_edited);
-               edit_in_place(to_be_edited);
-               } 
-        } else if (current_active_menu_item.hasAttribute("data-location")) {
+        // otherwise, see if we just selected a top level menu item about location
+        // because that involves checking the parent to see what options are possible
+        else if (document.getElementById('choose_current').hasAttribute("data-location")) {
+            var current_active_menu_item = document.getElementById('choose_current');
             if (['before', 'after'].includes(current_active_menu_item.getAttribute("data-location"))) {
                 parent_type = document.getElementById('edit_menu_holder').parentElement.parentElement.tagName;
                 console.log("making a menu for", parent_type);
+                var edit_submenu = document.createElement('ol');
                 edit_submenu.innerHTML = base_menu_options_for(parent_type);
+                console.log("just inserted base_menu_options_for(parent_type)", base_menu_options_for(parent_type));
                 current_active_menu_item.insertAdjacentElement("beforeend", edit_submenu);
+                // next 3 lines are repeats, so look to consolidate
+           //     next_menu_item.setAttribute("id", "choose_current");
+                console.log("setting focus BB on",next_menu_item);
+           //     next_menu_item.focus();
+                document.getElementById('choose_current').focus();
             }
-        } else { alert("entering sub-object not implemented yet")  }
+
+        } else { // else check if the selected items leads to a submenu
+            $("#choose_current").parent().addClass("past");
+            current_active_menu_item = document.getElementById('choose_current');
+            console.log("apparently selected", current_active_menu_item);
+            current_active_menu_item.removeAttribute("id");
+            current_active_menu_item.setAttribute('class', 'chosen');
+ //       current_active_menu_item.setAttribute('style', 'background:#ddf;');
+            current_active_menu_item_environment = current_active_menu_item.getAttribute('data-env');
+            if (current_active_menu_item_environment in menu_for) {  // object names a collection, so make submenu
+       //     if (current_active_menu_item.hasAttribute("data-action")) {
+                to_be_edited = document.getElementById('edit_menu_holder').parentElement;
+            
+                document.getElementById('edit_menu_holder').remove();
+            } else if (current_active_menu_item.hasAttribute("data-location")) {
+                if (['before', 'after'].includes(current_active_menu_item.getAttribute("data-location"))) {
+                    parent_type = document.getElementById('edit_menu_holder').parentElement.parentElement.tagName;
+                    console.log("making a menu for", parent_type);
+                    var edit_submenu = document.createElement('ol');
+                    edit_submenu.innerHTML = base_menu_options_for(parent_type);
+                    current_active_menu_item.insertAdjacentElement("beforeend", edit_submenu);
+                    next_menu_item = current_active_menu_item.nextSibling;
+
+                    console.log("next_menu_item",next_menu_item);
+                    // next 3 lines are repeats, so look to consolidate
+                    next_menu_item.setAttribute("id", "choose_current");
+                    console.log("setting focus AA on",next_menu_item);
+                    next_menu_item.focus();
+                }
+            } else { alert("entering sub-object not implemented yet")  }
+        }
     }
 }
 
