@@ -49,8 +49,10 @@
 
     <section xml:id="schema-products">
         <title>Versions of the Schema</title>
+        <idx>literate programming</idx>
 
-        <p>The schema is born within a <pretext /> document, <c>schema/pretext.xml</c>, where surrounding text provides documentation and guidance on implementation.  The literate programming support in <pretext /> (see <xref provisional="literate programming documentation" />) is used to produce a file, <c>schema/pretext.rnc</c>, which is a <acro>RELAX-NG</acro> specification in compact syntax.  As the literate programming support improves from 2017-07-21, <init>HTML</init> and <init>PDF</init> versions will be made available on the <pretext /> website as documentation.  We provide some guidance below on reading the compact syntax.</p>
+
+        <p>The schema is born within a <pretext/> document, <c>schema/pretext.xml</c>, where surrounding text provides documentation and guidance on implementation.  The literate programming support in <pretext/> (start at <xref ref="overview-literate-programming"/>) is used to produce a file, <c>schema/pretext.rnc</c>, which is a <acro>RELAX-NG</acro> specification in compact syntax.  <init>HTML</init> and <init>PDF</init> versions are available on the <pretext/> website as documentation.  We provide some guidance below on reading the compact syntax.</p>
 
         <p>The compact syntax is a faithful representation of the more verbose <init>XML</init> syntax.  And vice-versa, so it is possible to translate back-and-forth between the two syntaxes.  In practice, we convert the compact version to the <init>XML</init> version, producing a file <c>schema/pretext.rng</c>.  Some tools require this latter (100% equivalent) version.  We perform this conversion with <c>trang</c><idx><c>trang</c></idx>, an open source program written by James Clark, one of the authors of <acro>RELAX-NG</acro>.  (<c>trang</c> stands for <q>TRAnslator for relax NG</q>.)  The compact syntax is often indicated as <init>RNC</init> and the <init>XML</init> syntax is often indicated as <init>RNG</init>.</p>
         <!-- acronym suggested at bottom of: http://www.thaiopensource.com/relaxng/convert-to-xsd-talk.html -->

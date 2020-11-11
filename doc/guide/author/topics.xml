@@ -3368,4 +3368,34 @@ A minimal working example may be found in the
 </url><fn><c>examples/sample-slideshow/sample-slideshow.xml</c></fn>.
         </p>
     </section>
+
+    <section xml:id="topic-literate-programming">
+        <title>Literate Programming</title>
+        <idx>literate programming</idx>
+
+        <p>We continue (and do not repeat) the introduction at <xref ref="overview-literate-programming"/>.  <pretext/> implements the literate programming paradigm with two primary elements, <tag>fragment</tag> and <tag>fragref</tag>.</p>
+
+        <p>A <tag>fragment</tag> is a chunk of code.  Almost always it has a <attr>xml:id</attr> attribute.  It begins with a mandatory <tag>title</tag>.  It may have index entries, but see below for advice using the <tag>list-of</tag> element.  Then there is a mix of <tag>code</tag> and <tag>fragref</tag> elements.  The <tag>code</tag> element holds the actual text in whatever computer language you are using.  Line breaks are respected.  Use the <init>XML</init> escape characters <c>&amp;lt;</c> and <c>&amp;amp;</c> if your code needs the <c>&lt;</c> or <c>&amp;</c> characters.  Do not try to use <init>XML</init> markup inside the <tag>code</tag> element.</p>
+
+        <p>A <tag>fragref</tag> is a reference to some other <tag>fragment</tag>.  This is accomplished via the <attr>ref</attr> attribute which points to the target via an <attr>xml:id</attr>.  So this is very similar to an <tag>xref</tag> (<xref ref="overview-cross-references"/>), but not enough alike to have the same element name.   The most important distinction is that the <c>xsl/pretext-litprog.xsl</c> stylesheet will <em>replace</em> the <tag>fragref</tag> with the <em>contents</em> of the target <tag>fragment</tag>.  In other conversions, the <tag>fragref</tag> will be a visual expression of the target <tag>fragment</tag>, possibly with some active means to visit or examine the target (hyperlink, knowl), more similar to an <element>xref</element>.</p>
+
+        <p>So the <c>xsl/pretext-litprog.xsl</c> stylesheet will course through your fragments converting the tree-like structure given by the references in the <tag>fragref</tag> elements into a depth-first traversal that will assemble the <tag>code</tag> elements, and only the <tag>code</tag> elements, linearly into a program.  Notice that it is your job as the author of the program to be certain that this rearrangement results in a syntactically correct program.  (<pretext/> is good, but not that good.)</p>
+
+        <p>If you are with us this far, you are wondering just where the root of this tree is?  In other words, just <em>which</em> <tag>fragment</tag> does this traversal begin with?  Good question.  At least one <tag>fragment</tag> must have a <attr>filename</attr> attribute.  Then a traversal will begin here and your program will be output to the file with the name you specify.  You are not limited to one file/root, so if your program has multiple source files they may be documented/collected into a single <pretext/> source file.  (Notice this implies that every <tag>fragment</tag> must have an <attr>xml:id</attr> or a <attr>filename</attr>.)</p>
+
+        <p>You can place a <tag>fragment</tag> most anywhere you might place a paragraph (<c>p</c>), though we would tend to place them as children of divisions.  The remainder of your document can have all the usual <pretext/> features: a table of contents, a preface, divisions, an index, references, etc.  Then a conversion to <init>PDF</init>, <init>HTML</init>, or other formats, will include your code, but in an order that might be more human-readable, and with careful documentation in close proximity.</p>
+
+        <p>Automatically migrating each <tag>fragment</tag> to an index is a bad idea.  (We already experimented.)  Instead you can try putting<cd>
+            <cline>&lt;list-of elements="fragment"/&gt;</cline>
+        </cd>into an <tag>appendix</tag>.  Perhaps a pointer early on to its existence will help your reader.  This list can be subdivided with the use of the <attr>divisions</attr> attribute.  See <xref ref="topic-automatic-lists"/>.  Note that you might still want to provide an index, but remember that its construction is a job for an author (<xref ref="topic-index-advice"/>).</p>
+
+        <p>Literate programming has been developed to support the authoritative <init>RELAX-NG</init> version of the <pretext/> schema.  Since <init>RELAX-NG</init> is a declarative language, the rearrangement of code hunks is not quite as critical.  But still, see <c>schema/pretext.xml</c> for a non-trivial example.  As of 2020-11-11 there are a few caveats.  Start a discussion on the development forum if you have a need.<ul>
+            <li>The conversion to a program has no explicit support for languages which interpret indentation meaningfully (e.g. Python).  The <tag>code</tag> element makes <em>no changes</em>, so you could succeed if authored carefully.  Some sort of relative indentation attribute might be a good solution.</li>
+
+            <li>We do not syntax-highlight the code.  A language attribute might allow us to recycle existing features.</li>
+
+            <li>Numbering is serial from the start of the document.  Raise a feature request if you think hierarchical numbering is indicated.</li>
+        </ul></p>
+    </section>
+
 </chapter>

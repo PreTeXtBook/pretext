@@ -470,4 +470,15 @@
         is in the works, but not yet available.
       </p>
     </section>
+
+    <section xml:id="overview-literate-programming">
+        <title>Literate Programming</title>
+        <idx>literate programming</idx>
+
+        <p>If you know what <term>literate programming</term> is, then you may not be surprised to learn that <pretext/> provides excellent support primarily with two additional elements: <tag>fragment</tag> and <tag>fragref</tag>.</p>
+
+        <p>If you have never heard of literate programming, it is a way to mix code and documentation for a computer program in a single file.  But rather than typographically simple code comments, you have the full power of every other feature in <pretext/> and all of the possible output formats.  Furthermore, you can arrange your code in an order that might make more sense to a human (top-down, bottom-up, a mixture, or <ellipsis/>) and <pretext/> will rearrange the code into an order that the compiler or interpreter understands.</p>
+
+        <p>So the idea is that from one file you get a program for the compiler, and a beautiful, typeset explanation for a human reader in any format <pretext/> supports.  An accessible introduction is Knuth's description of his <c>WEB</c> system for the Pascal programming language <xref ref="knuth-literate-programming"/>, or many more resources are at <url href="http://www.literateprogramming.com/">the literate programming site</url><fn><c>www.literateprogramming.com</c></fn>.  Full details on the <pretext/> implementation are at <xref ref="topic-literate-programming"/>.</p>
+    </section>
 </chapter>
