@@ -534,13 +534,13 @@
 
         <fragment xml:id="character">
             <title>Characters</title>
-            <fragment ref="dash-character" />
-            <fragment ref="fillin-character" />
-            <fragment ref="delimiter-character" />
-            <fragment ref="arithmetic-character" />
-            <fragment ref="exotic-character" />
-            <fragment ref="icon-character" />
-            <fragment ref="music-character" />
+            <fragref ref="dash-character" />
+            <fragref ref="fillin-character" />
+            <fragref ref="delimiter-character" />
+            <fragref ref="arithmetic-character" />
+            <fragref ref="exotic-character" />
+            <fragref ref="icon-character" />
+            <fragref ref="music-character" />
         </fragment>
 
         <p>There are empty elements to generate certain items, like the date, or names of commonly referenced tools, such as <pretext /> itself.  These include some common <term>Latin abbreviations</term>, for the purpose of handling the periods properly in conversions to <latex />.</p>
@@ -687,12 +687,12 @@
 
         <fragment xml:id="group">
             <title>Text groups</title>
-            <fragment ref="abbreviation-group" />
-            <fragment ref="delimiter-group" />
-            <fragment ref="highlight-group" />
-            <fragment ref="editing-group" />
-            <fragment ref="xml-syntax-group" />
-            <fragment ref="scientific-name-group" />
+            <fragref ref="abbreviation-group" />
+            <fragref ref="delimiter-group" />
+            <fragref ref="highlight-group" />
+            <fragref ref="editing-group" />
+            <fragref ref="xml-syntax-group" />
+            <fragref ref="scientific-name-group" />
         </fragment>
     </section>
 
@@ -1840,9 +1840,9 @@
 
         <fragment xml:id="frequently-used">
             <title>Frequent constructions</title>
-            <fragment ref="statements" />
-            <fragment ref="attribution" />
-            <fragment ref="metadata" />
+            <fragref ref="statements" />
+            <fragref ref="attribution" />
+            <fragref ref="metadata" />
         </fragment>
 
 
@@ -2204,18 +2204,18 @@
                 Configuration+
             }
             </code>
-            <fragment ref="brandlogo" />
-            <fragment ref="latexpreamble" />
-            <fragment ref="macros" />
-            <fragment ref="cross-references" />
-            <fragment ref="lateximagepreamble" />
-            <fragment ref="initialism" />
-            <fragment ref="feedback" />
-            <fragment ref="rename" />
-            <fragment ref="imagearchive" />
-            <fragment ref="authorbiographylength" />
-            <fragment ref="addins" />
-            <fragment ref="numbering" />
+            <fragref ref="brandlogo" />
+            <fragref ref="latexpreamble" />
+            <fragref ref="macros" />
+            <fragref ref="cross-references" />
+            <fragref ref="lateximagepreamble" />
+            <fragref ref="initialism" />
+            <fragref ref="feedback" />
+            <fragref ref="rename" />
+            <fragref ref="imagearchive" />
+            <fragref ref="authorbiographylength" />
+            <fragref ref="addins" />
+            <fragref ref="numbering" />
         </fragment>
 
         <p>A nice icon near the top of an electronic version is a nice touch, and can link back to a project landing page.</p>
@@ -2363,57 +2363,57 @@
             <code>
             grammar {
             </code>
-            <fragment ref="gross-structure" />
-            <fragment ref="document-types" />
-            <fragment ref="divisions" />
-            <fragment ref="frontmatter" />
-            <fragment ref="backmatter" />
-            <fragment ref="paragraphs" />
-            <fragment ref="universal" />
-            <fragment ref="block" />
-            <fragment ref="block-component" />
-            <fragment ref="introduction-conclusion" />
-            <fragment ref="objective-outcome" />
-            <fragment ref="blockquote" />
-            <fragment ref="verbatimdisplay" />
-            <fragment ref="list" />
-            <fragment ref="definition-like" />
-            <fragment ref="theorem-like" />
-            <fragment ref="axiom-like" />
-            <fragment ref="example-like" />
-            <fragment ref="project-like" />
-            <fragment ref="remark-like" />
-            <fragment ref="computation-like" />
-            <fragment ref="aside" />
-            <fragment ref="assemblage" />
-            <fragment ref="table-figure" />
-            <fragment ref="sidebyside" />
-            <fragment ref="image" />
-            <fragment ref="tabular" />
-            <fragment ref="sage" />
-            <fragment ref="interactive" />
-            <fragment ref="audiovideo" />
-            <fragment ref="exercise" />
-            <fragment ref="poetry" />
-            <fragment ref="bibliography" />
-            <fragment ref="contributor" />
-            <fragment ref="webwork" />
-            <fragment ref="miscellaneous" />
-            <fragment ref="frequently-used" />
-            <fragment ref="paragraph" />
-            <fragment ref="shorttext" />
-            <fragment ref="footnote" />
-            <fragment ref="index" />
-            <fragment ref="reference" />
-            <fragment ref="mathematics" />
-            <fragment ref="verbatim" />
-            <fragment ref="group" />
-            <fragment ref="generator" />
-            <fragment ref="siunit" />
-            <fragment ref="character" />
-            <fragment ref="listgenerator" />
-            <fragment ref="bad-bank" />
-            <fragment ref="docinfo" />
+            <fragref ref="gross-structure" />
+            <fragref ref="document-types" />
+            <fragref ref="divisions" />
+            <fragref ref="frontmatter" />
+            <fragref ref="backmatter" />
+            <fragref ref="paragraphs" />
+            <fragref ref="universal" />
+            <fragref ref="block" />
+            <fragref ref="block-component" />
+            <fragref ref="introduction-conclusion" />
+            <fragref ref="objective-outcome" />
+            <fragref ref="blockquote" />
+            <fragref ref="verbatimdisplay" />
+            <fragref ref="list" />
+            <fragref ref="definition-like" />
+            <fragref ref="theorem-like" />
+            <fragref ref="axiom-like" />
+            <fragref ref="example-like" />
+            <fragref ref="project-like" />
+            <fragref ref="remark-like" />
+            <fragref ref="computation-like" />
+            <fragref ref="aside" />
+            <fragref ref="assemblage" />
+            <fragref ref="table-figure" />
+            <fragref ref="sidebyside" />
+            <fragref ref="image" />
+            <fragref ref="tabular" />
+            <fragref ref="sage" />
+            <fragref ref="interactive" />
+            <fragref ref="audiovideo" />
+            <fragref ref="exercise" />
+            <fragref ref="poetry" />
+            <fragref ref="bibliography" />
+            <fragref ref="contributor" />
+            <fragref ref="webwork" />
+            <fragref ref="miscellaneous" />
+            <fragref ref="frequently-used" />
+            <fragref ref="paragraph" />
+            <fragref ref="shorttext" />
+            <fragref ref="footnote" />
+            <fragref ref="index" />
+            <fragref ref="reference" />
+            <fragref ref="mathematics" />
+            <fragref ref="verbatim" />
+            <fragref ref="group" />
+            <fragref ref="generator" />
+            <fragref ref="siunit" />
+            <fragref ref="character" />
+            <fragref ref="listgenerator" />
+            <fragref ref="bad-bank" />
+            <fragref ref="docinfo" />
             <code>
             }
             </code>
