@@ -3281,7 +3281,7 @@ label.incorrect .feedback {
     background: #ffe;
     color: #999;
 }
-#edit_menu_holder .past li {
+#edit_menu_holder .past > li {
     background: #fff9f9;
     color: #aaa;
 }
@@ -3308,6 +3308,19 @@ label.incorrect .feedback {
 }
 #edit_menu li {
     margin-top: 0;
+    padding-right: 0.4em;
+    padding-left: 0.4em;
+    padding-bottom: 0.1em;
+}
+#edit_menu li:last-of-type {
+    padding-bottom: 0.3em;
+}
+#edit_menu_holder ol:not(.past) {
+/*    border: 0.1em solid #ccc;
+    border-right: none;
+    border-bottom: none;
+*/
+    box-shadow: 0.2em 0.2em 0.1em #ccc;
 }
 #edit_menu li#choose_current {
     background: #ddf;
