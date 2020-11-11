@@ -138,6 +138,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'><xsl:text>Capoverso</xsl:text></localization>
     <localization string-id='blockquote'><xsl:text>Citazione</xsl:text></localization>
+    <!-- Literate programming, a chunk of computer code -->
+    <!-- <localization string-id='fragment'><xsl:text>Fragment</xsl:text></localization> -->
     <!-- Parts of an exercise and its solution -->
     <!-- An "exercise", at any level, within an "exercises" division is a          -->
     <!-- "divisional" exercise and the string employed is 'divisionalexercise'.    -->
