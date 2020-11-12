@@ -813,6 +813,8 @@
 
         <p>A <term>division block</term> includes text blocks, statement blocks, plus topical chunks of text that can have numbered headings or numbered captions, with optional titles, and are set apart slightly from the surrounding narrative.  These are placed mostly as children of divisions, and so one cannot contain another.  They certainly contain paragraphs, and all that goes into them, such as mathematics (inline and display) and figures (and other captioned items).  The <c>sidebyside</c> element can be used to illustrate a division block with a variety of images and displayed text in flexible layouts.</p>
 
+        <p>A <tag>fragment</tag> is used for literate programming, and is numbered, so it is allowed places where other numbered itmes go.</p>
+
         <p>Other division blocks include <c>poem</c>, <c>aside</c>, and <c>assemblage</c>.  These are never numbered, but can have titles.  The <c>list-of</c> mechanism is a convenience device to automatically create lists of contents, and so we leave surrounding divisional structure to the author.  A <c>sidebyside</c>, and its cousin, <c>sbsgroup</c>, are strictly layout devices.  The <c>sage</c> element is unique for its possibilities in certain electronic formats.</p>
 
         <p><c>demonstration</c> is slated for removal or an overhaul, and so is in the <xref ref="badbank" text="title" />.  Avoid using them for now.</p>
@@ -821,7 +823,7 @@
             <title>Blocks</title>
             <code>
             BlockText =
-                Paragraph | BlockQuote | Preformatted | Fragment |
+                Paragraph | BlockQuote | Preformatted |
                 Image | Video | Program | Console | Tabular
             BlockStatementNoCaption =
                 BlockText | Aside |
@@ -836,7 +838,7 @@
                 BlockStatement |
                 Remark | Computation | Theorem | Proof | Definition |
                 Axiom | Example | Exercise | Project |
-                Poem | Assemblage | ListGenerator |
+                Poem | Assemblage | ListGenerator | Fragment |
                 Demonstration
             </code>
         </fragment>

@@ -365,7 +365,7 @@
                 }
             
             BlockText =
-                Paragraph | BlockQuote | Preformatted | Fragment |
+                Paragraph | BlockQuote | Preformatted |
                 Image | Video | Program | Console | Tabular
             BlockStatementNoCaption =
                 BlockText | Aside |
@@ -380,7 +380,7 @@
                 BlockStatement |
                 Remark | Computation | Theorem | Proof | Definition |
                 Axiom | Example | Exercise | Project |
-                Poem | Assemblage | ListGenerator |
+                Poem | Assemblage | ListGenerator | Fragment |
                 Demonstration
             
             Prelude =

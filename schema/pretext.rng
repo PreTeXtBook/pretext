@@ -953,7 +953,6 @@
       <ref name="Paragraph"/>
       <ref name="BlockQuote"/>
       <ref name="Preformatted"/>
-      <ref name="Fragment"/>
       <ref name="Image"/>
       <ref name="Video"/>
       <ref name="Program"/>
@@ -1000,6 +999,7 @@
       <ref name="Poem"/>
       <ref name="Assemblage"/>
       <ref name="ListGenerator"/>
+      <ref name="Fragment"/>
       <ref name="Demonstration"/>
     </choice>
   </define>

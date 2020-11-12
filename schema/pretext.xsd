@@ -832,7 +832,6 @@
       <xs:group ref="Paragraph"/>
       <xs:element ref="blockquote"/>
       <xs:element ref="pre"/>
-      <xs:element ref="fragment"/>
       <xs:group ref="Image"/>
       <xs:element ref="video"/>
       <xs:element ref="program"/>
@@ -879,6 +878,7 @@
       <xs:element ref="poem"/>
       <xs:element ref="assemblage"/>
       <xs:element ref="list-of"/>
+      <xs:element ref="fragment"/>
       <xs:element ref="demonstration"/>
     </xs:choice>
   </xs:group>
