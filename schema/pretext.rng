@@ -953,6 +953,11 @@
       <ref name="Paragraph"/>
       <ref name="BlockQuote"/>
       <ref name="Preformatted"/>
+      <ref name="Image"/>
+      <ref name="Video"/>
+      <ref name="Program"/>
+      <ref name="Console"/>
+      <ref name="Tabular"/>
     </choice>
   </define>
   <define name="BlockStatementNoCaption">
@@ -971,6 +976,12 @@
       <ref name="SideBySide"/>
       <ref name="SideBySideGroup"/>
       <ref name="Sage"/>
+    </choice>
+  </define>
+  <define name="BlockSolution">
+    <choice>
+      <ref name="BlockStatement"/>
+      <ref name="Proof"/>
     </choice>
   </define>
   <define name="BlockDivision">
@@ -1023,7 +1034,7 @@
     <element name="hint">
       <ref name="MetaDataTitleOptional"/>
       <oneOrMore>
-        <ref name="BlockStatement"/>
+        <ref name="BlockSolution"/>
       </oneOrMore>
     </element>
   </define>
@@ -1031,7 +1042,7 @@
     <element name="answer">
       <ref name="MetaDataTitleOptional"/>
       <oneOrMore>
-        <ref name="BlockStatement"/>
+        <ref name="BlockSolution"/>
       </oneOrMore>
     </element>
   </define>
@@ -1039,7 +1050,7 @@
     <element name="solution">
       <ref name="MetaDataTitleOptional"/>
       <oneOrMore>
-        <ref name="BlockStatement"/>
+        <ref name="BlockSolution"/>
       </oneOrMore>
     </element>
   </define>
@@ -1186,6 +1197,12 @@
       <optional>
         <ref name="PermanentID"/>
       </optional>
+      <optional>
+        <attribute name="width"/>
+      </optional>
+      <optional>
+        <attribute name="margins"/>
+      </optional>
       <oneOrMore>
         <optional>
           <element name="prompt">
@@ -1209,6 +1226,12 @@
     <element name="program">
       <optional>
         <ref name="PermanentID"/>
+      </optional>
+      <optional>
+        <attribute name="width"/>
+      </optional>
+      <optional>
+        <attribute name="margins"/>
       </optional>
       <optional>
         <attribute name="language"/>
@@ -1779,20 +1802,26 @@
   <define name="ImageRaster">
     <element name="image">
       <optional>
+        <ref name="UniqueID"/>
+      </optional>
+      <optional>
         <ref name="PermanentID"/>
       </optional>
       <optional>
         <attribute name="width"/>
       </optional>
       <optional>
+        <attribute name="margins"/>
+      </optional>
+      <optional>
         <attribute name="archive"/>
       </optional>
+      <attribute name="source"/>
       <optional>
         <element name="description">
           <ref name="TextShort"/>
         </element>
       </optional>
-      <attribute name="source"/>
     </element>
   </define>
   <define name="ImageCode">
@@ -1805,6 +1834,9 @@
       </optional>
       <optional>
         <attribute name="width"/>
+      </optional>
+      <optional>
+        <attribute name="margins"/>
       </optional>
       <optional>
         <attribute name="archive"/>
@@ -1957,6 +1989,12 @@
         <ref name="PermanentID"/>
       </optional>
       <optional>
+        <attribute name="width"/>
+      </optional>
+      <optional>
+        <attribute name="margins"/>
+      </optional>
+      <optional>
         <ref name="AlignmentHorizontal"/>
       </optional>
       <optional>
@@ -2027,6 +2065,9 @@
       </optional>
       <optional>
         <attribute name="width"/>
+      </optional>
+      <optional>
+        <attribute name="margins"/>
       </optional>
       <optional>
         <attribute name="aspect"/>
@@ -3367,6 +3408,12 @@
       <element name="lq">
         <empty/>
       </element>
+      <element name="langle">
+        <empty/>
+      </element>
+      <element name="rangle">
+        <empty/>
+      </element>
     </choice>
   </define>
   <define name="Character" combine="choice">
@@ -3384,6 +3431,15 @@
         <empty/>
       </element>
       <element name="plusminus">
+        <empty/>
+      </element>
+      <element name="degree">
+        <empty/>
+      </element>
+      <element name="prime">
+        <empty/>
+      </element>
+      <element name="dblprime">
         <empty/>
       </element>
     </choice>
@@ -3417,11 +3473,25 @@
       <element name="trademark">
         <empty/>
       </element>
+      <element name="phonomark">
+        <empty/>
+      </element>
+      <element name="servicemark">
+        <empty/>
+      </element>
     </choice>
   </define>
   <define name="Character" combine="choice">
     <element name="icon">
       <attribute name="name"/>
+    </element>
+  </define>
+  <define name="Character" combine="choice">
+    <element name="kbd">
+      <choice>
+        <text/>
+        <attribute name="name"/>
+      </choice>
     </element>
   </define>
   <define name="Music">
