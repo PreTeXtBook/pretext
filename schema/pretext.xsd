@@ -832,6 +832,7 @@
       <xs:group ref="Paragraph"/>
       <xs:element ref="blockquote"/>
       <xs:element ref="pre"/>
+      <xs:element ref="fragment"/>
       <xs:group ref="Image"/>
       <xs:element ref="video"/>
       <xs:element ref="program"/>
@@ -2310,6 +2311,25 @@
       </xs:element>
     </xs:sequence>
   </xs:group>
+  <xs:element name="fragment">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="Title"/>
+        <xs:choice maxOccurs="unbounded">
+          <xs:element ref="code"/>
+          <xs:element ref="fragref"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute name="filename"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="code" type="xs:string"/>
+  <xs:element name="fragref">
+    <xs:complexType>
+      <xs:attribute name="ref" use="required"/>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="attribution">
     <xs:complexType mixed="true">
       <xs:choice>

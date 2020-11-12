@@ -821,7 +821,7 @@
             <title>Blocks</title>
             <code>
             BlockText =
-                Paragraph | BlockQuote | Preformatted |
+                Paragraph | BlockQuote | Preformatted | Fragment |
                 Image | Video | Program | Console | Tabular
             BlockStatementNoCaption =
                 BlockText | Aside |
@@ -1867,6 +1867,37 @@
     </section>
 
     <section>
+        <title>Literate Programming</title>
+
+        <p>Literate programming is a technique for documenting programs, with code <term>fragments</term> rearranged to create a syntactically correct program.  A root fragment is indicated by <attr>filename</attr> which could have an <attr>xml:id</attr>, otherwise the <attr>xml:id</attr> is required.</p>
+
+        <fragment xml:id="literate-programming">
+            <title>Literate programming</title>
+            <code>
+            Fragment =
+                element fragment {
+                    (
+                        attribute xml:id {text}
+                    |
+                        (
+                            attribute filename {text},
+                            attribute xml:id {text}?
+                         )
+                    ),
+                    Title,
+                    (
+                        element code {text} |
+                        element fragref {
+                            attribute ref {text}
+                        }
+                    )+
+                }
+            </code>
+        </fragment>
+
+    </section>
+
+    <section>
         <title>Frequently Used</title>
 
         <p>Frequently used items, with no natural place to associate them.</p>
@@ -2429,6 +2460,7 @@
             <fragref ref="bibliography" />
             <fragref ref="contributor" />
             <fragref ref="webwork" />
+            <fragref ref="literate-programming" />
             <fragref ref="miscellaneous" />
             <fragref ref="frequently-used" />
             <fragref ref="paragraph" />

@@ -365,7 +365,7 @@
                 }
             
             BlockText =
-                Paragraph | BlockQuote | Preformatted |
+                Paragraph | BlockQuote | Preformatted | Fragment |
                 Image | Video | Program | Console | Tabular
             BlockStatementNoCaption =
                 BlockText | Aside |
@@ -1027,6 +1027,26 @@
                         SideBySideNoCaption
                     )+
                 }
+            
+            Fragment =
+                element fragment {
+                    (
+                        attribute xml:id {text}
+                    |
+                        (
+                            attribute filename {text},
+                            attribute xml:id {text}?
+                         )
+                    ),
+                    Title,
+                    (
+                        element code {text} |
+                        element fragref {
+                            attribute ref {text}
+                        }
+                    )+
+                }
+            
             
             Attribution =
                 element attribution {

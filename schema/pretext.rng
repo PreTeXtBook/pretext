@@ -953,6 +953,7 @@
       <ref name="Paragraph"/>
       <ref name="BlockQuote"/>
       <ref name="Preformatted"/>
+      <ref name="Fragment"/>
       <ref name="Image"/>
       <ref name="Video"/>
       <ref name="Program"/>
@@ -2539,6 +2540,30 @@
           <ref name="Paragraph"/>
           <ref name="Preformatted"/>
           <ref name="SideBySideNoCaption"/>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="Fragment">
+    <element name="fragment">
+      <choice>
+        <attribute name="xml:id"/>
+        <group>
+          <attribute name="filename"/>
+          <optional>
+            <attribute name="xml:id"/>
+          </optional>
+        </group>
+      </choice>
+      <ref name="Title"/>
+      <oneOrMore>
+        <choice>
+          <element name="code">
+            <text/>
+          </element>
+          <element name="fragref">
+            <attribute name="ref"/>
+          </element>
         </choice>
       </oneOrMore>
     </element>

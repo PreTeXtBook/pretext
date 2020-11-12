@@ -10208,7 +10208,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:if test="$document-root//fragment">
         <xsl:call-template name="banner-warning">
             <xsl:with-param name="warning">
-                <xsl:text>  Literate Programming support is experimental&#xa;</xsl:text>
+                <xsl:text>  Literate Programming support is incomplete&#xa;</xsl:text>
                 <xsl:text>&#xa;</xsl:text>
                 <xsl:text>    1.  Code generation is functional, but does not respect indentation&#xa;</xsl:text>
                 <xsl:text>    2.  LaTeX generation is functional, could be improved, 2020-11-11&#xa;</xsl:text>
