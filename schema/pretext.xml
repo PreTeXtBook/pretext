@@ -969,7 +969,7 @@
 
         <p>Note that we might point to another index entry as part of a <q>see also</q> mechanism.</p>
 
-        <fragment xml:id="index">
+        <fragment xml:id="index-entries">
             <title>Index entries</title>
             <code>
             IdxHeading =
@@ -1780,7 +1780,7 @@
             <li>Statements, hints and solutions do not require at least one paragraph, so may be just a table or figure (say).</li>
             <li>Are static and set elements mutually exclusive?</li>
             <li>Can the usage part of the var element be split across math and paragraphs?</li>
-        </ul></p>.
+        </ul></p>
 
 
         <fragment xml:id="webwork">
@@ -2046,6 +2046,8 @@
 
         <fragment xml:id="miscellaneous">
             <title>Miscellaneous or uncertain</title>
+            <code>
+            </code>
         </fragment>
     </section>
 
@@ -2466,7 +2468,7 @@
             <fragref ref="paragraph" />
             <fragref ref="shorttext" />
             <fragref ref="footnote" />
-            <fragref ref="index" />
+            <fragref ref="index-entries" />
             <fragref ref="reference" />
             <fragref ref="mathematics" />
             <fragref ref="verbatim" />
