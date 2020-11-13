@@ -1830,7 +1830,7 @@
 
                     draw(graph(Gaussian,min(a),max(a)),blue);
 
-                    // Optionally calculate "optimal" number 
+                    // Optionally calculate "optimal" number
                     // of bins a la Shimazaki and Shinomoto.
                     int N=bins(a);
 
@@ -1858,7 +1858,7 @@
 
                     draw(graph(Gaussian,min(a),max(a)),blue);
 
-                    // Optionally calculate "optimal" number 
+                    // Optionally calculate "optimal" number
                     // of bins a la Shimazaki and Shinomoto.
                     int N=bins(a);
 
@@ -1890,6 +1890,18 @@
                     <title>Build 3-D Asymptote Figures</title>
 
                     <p>If your project uses geometric or mathematical objects that are three-dimensional, invest some time in learning the Asymptote vector graphics language.  The interactive diagrams for your <init>HTML</init> output produced by Asymptote, in <init>WebGL</init> format, are outstanding and will greatly enhance your project.  (And the other static formats are similarly excellent.)</p>
+                </note>
+
+                <note>
+                    <title>Asymptote preamble</title>
+
+                    <p>Colors in Asymptote can be hard-coded using <c>rgb</c> syntax. Colors can also be defined at the top of an Asymptote file, to be referred to later.
+                    You may wish to produce <init>PDF</init> in both color (electronic) and black and white (print on demand) formats, and you probably do not want to maintain parallel source for both versions.
+                    Rather than writing (for example) <c>pen p=rgb(0,0,.7);</c> in your Asymptote code, you can write <c>pen p=curvepen1;</c>.
+                    Then, in the <tag>docinfo</tag> section of your document, you can add an <tag>asymptote-preamble</tag> and include the line <c>pen curvepen1=rgb(0,0,.7);</c>.
+                    Once you are ready to produce your black and white version, you need only change the definition of <c>curvepen1</c> in your <tag>asymptote-preamble</tag>.</p>
+                    <p>One note of caution: if your preamble includes Asymptote code that only works once certain libraries are loaded, you must include lines to import those libraries in your preamble.
+                      For example, to define a <c>material</c> you must first have the line <c>import three;</c>.</p>
                 </note>
             </subsubsection>
 
