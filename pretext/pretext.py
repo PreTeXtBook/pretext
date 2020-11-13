@@ -164,9 +164,9 @@ def asymptote_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
         if outformat == 'html':
             asy_cli = [asy_executable, '-f', outformat]
         elif outformat in ['pdf', 'eps']:
-            asy_cli = [asy_executable, '-f', outformat, '-noprc', '-iconify', '-batchMask']
+            asy_cli = [asy_executable, '-f', outformat, '-noprc', '-iconify', '-tex', 'xelatex', '-batchMask']
         elif outformat in ['svg', 'png']:
-            asy_cli = [asy_executable, '-f', outformat, '-render=4', '-iconify']
+            asy_cli = [asy_executable, '-f', outformat, '-render=4', '-tex', 'xelatex', '-iconify']
         # loop over files, doing conversions
         for asydiagram in os.listdir(tmp_dir):
             filebase, _ = os.path.splitext(asydiagram)
@@ -1193,7 +1193,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format):
     _debug(msg.format(xml_source, math_format, math_representations))
     mathjax_latex(xml_source, pub_file, math_representations, None, math_format)
 
-    # Build necessary content and infrastructure EPUB files, 
+    # Build necessary content and infrastructure EPUB files,
     # using SVG images of math.  Most output goes into the
     # EPUB/xhtml directory via exsl:document templates in
     # the EPUB XSL conversion.  The stylesheet does record,
@@ -1231,9 +1231,9 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format):
     # bits of info necessary for packaging
     packaging_tree = ET.parse(packaging_file)
 
-    # Stage CSS files in EPUB/css, coordinate 
+    # Stage CSS files in EPUB/css, coordinate
     # with names in manifest and *.xhtml via XSL.
-    # CSS files live in distribution in "css" directory, 
+    # CSS files live in distribution in "css" directory,
     # which is a peer of the "xsl" directory
     # EPUB exists from above xsltproc call
     css_dir = os.path.join(tmp_dir, 'EPUB', 'css')
