@@ -1,6 +1,16 @@
 
 console.log(" enabling edit");
 
+// we have to keep track of multiple consecutive carriage returns
+this_char = "";
+prev_char = "";
+prev_prev_char = "";
+
+// sometimes we have to prevent Tab from changing focus
+this_focused_element = "";
+prev_focused_element = "";
+prev_prev_focused_element = "";
+
 //$("p").tabIndex = 0;
 $("p").attr("tabindex", 0);
 
@@ -202,7 +212,14 @@ var sourceContent = {
     that is individually separate and distinct.'
 }
 
-function menu_navigator(e) {  // we are not currently editing
+function local_menu_navigator(e) {
+    if (e.code == "Tab") {
+        console.log("putting focus back");
+        prev_focused_element.focus();
+    }
+}
+
+function main_menu_navigator(e) {  // we are not currently editing
                               // so we are building the menu for the user to decide what/how to edit
 
     if (e.code == "Tab") {
@@ -353,16 +370,26 @@ console.log("adding tab listener");
 document.addEventListener('keyup', logKey);
 
 function logKey(e) {
+    prev_prev_char = prev_char;
+    prev_char = this_char;
+    this_char = e;
     console.log("logKey",e,"XXX",e.code);
     console.log("are we editing", document.getElementById('actively_editing'));
     console.log("is there already an edit menu?", document.getElementById('edit_menu_holder'));
 
     // if we are writing something, keystrokes usually are just text input
     if (document.getElementById('actively_editing')) {
+        local_menu_navigator(e)
 
     } else {
-        menu_navigator(e)
+        main_menu_navigator(e)
     }
 }
 
+document.addEventListener('focus', function() {
+  console.log('focused: ', document.activeElement)
+  prev_prev_focused_element = prev_focused_element;
+  prev_focused_element = this_focused_element;
+  this_focused_element = document.activeElement;
+}, true);
 
