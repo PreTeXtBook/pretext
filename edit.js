@@ -23,7 +23,13 @@ menu_for = {
 "section": ["paragraph", "list-like", "theorem-like", "remark-like", "example-like", "image/display-like", "table-like", "minor heading", "subsection", "side-by-side"],
 "theorem-like": ["theorem", "proposition", "lemma", "corollary", "hypothesis", "conjecture"],
 "list-like": ["ordered list", "unordered list", "dictionary-list"],
-"blockquote": ["paragraph"]
+"blockquote": ["paragraph"],
+"metadata": ["index entries", "notation"],
+"p": ["text decoration", "abbreviation", "symbols", "ref or link"],
+"text decoration": ["emphasis", "foreign word", "book title", "inline quote"],
+"abbreviation": ["ie", "eg", "etc", "et al"],
+"symbols": ["ellipsis", "trademark", "copyright"],
+"ref or link": ["ref to an id", "citation", "hyperlink"]
 }
 
 /*
@@ -63,19 +69,20 @@ function base_menu_options_for(COMPONENT) {
 }
 
 function top_menu_options_for(this_obj_id) {
-    var this_object_type = "pparagraph";
+    var this_object_type = "paragraph";
     var this_list = '<li tabindex="-1" id="choose_current" data-env="paragraph" data-action="edit">Edit ' + this_object_type + '</li>';
     this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_object_type + '</li>';
-    this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="before">Insert before ' + this_object_type + '</li>';
-    this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="after">Insert after ' + this_object_type + '</li>';
+    this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="before">Insert before</li>';
+    this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="after">Insert after</li>';
+    this_list += '<li tabindex="-1" data-env="' + this_object_type + '">Metadata</li>';
+    this_list += '<li tabindex="-1" data-env="' + this_object_type + '">Move or delete</li>';
     return this_list
 }
 
 function edit_menu_for(this_obj_id) {
     console.log("make edit menu for", this_obj_id);
-//    var this_object_type = "pparagraph";
     var edit_menu_holder = document.createElement('div');
-    edit_menu_holder.setAttribute('class', 'edit_menu_holder');
+//    edit_menu_holder.setAttribute('class', 'edit_menu_holder');
     edit_menu_holder.setAttribute('id', 'edit_menu_holder');
     edit_menu_holder.setAttribute('tabindex', '-1');
     console.log("adding menu for", this_obj_id);
@@ -86,14 +93,24 @@ function edit_menu_for(this_obj_id) {
 
     enter_option.innerHTML = "edit near here?";
     document.getElementById("edit_menu_holder").insertAdjacentElement("afterbegin", enter_option);
+}
 
-/*
-    var edit_menu = document.createElement('div');
-    edit_menu.setAttribute('class', 'level1');
-    edit_menu.setAttribute('id', 'edit_menu');
-    edit_menu.textContent = 'Edit paragraph';
-    document.getElementById("edit_menu_holder").insertAdjacentElement("afterbegin", edit_menu);
-*/
+function local_menu_for(this_obj_id) { 
+    console.log("make local edit menu for", this_obj_id);
+    var local_menu_holder = document.createElement('div');
+    local_menu_holder.setAttribute('id', 'local_menu_holder');
+    local_menu_holder.setAttribute('tabindex', '-1');
+    console.log("adding local menu for", this_obj_id);
+    document.getElementById(this_obj_id).insertAdjacentElement("beforebegin", local_menu_holder);
+    
+    var enter_option = document.createElement('ol');
+    enter_option.setAttribute('id', 'edit_menu');
+    
+    enter_option.innerHTML = base_menu_options_for("p");
+
+    document.getElementById("local_menu_holder").insertAdjacentElement("afterbegin", enter_option);
+   // prev_focused_element.focus();
+    // next_menu_item.focus();
 }
 
 /*
@@ -176,7 +193,8 @@ function edit_in_place(obj) {
         $("#" + thisID).replaceWith(this_content_container);
 
         var idOfEditContainer = thisID + '_input';
-        var idOfEditText = thisID + '_input_text';
+   //     var idOfEditText = thisID + '_input_text';
+        var idOfEditText = 'editing' + '_input_text';
         var textarea_editable = document.createElement('textarea');
         textarea_editable.setAttribute('class', 'text_source');
         textarea_editable.setAttribute('id', idOfEditText);
@@ -214,15 +232,46 @@ var sourceContent = {
 
 function local_menu_navigator(e) {
     if (e.code == "Tab") {
+        if (!document.getElementById('local_menu_holder')) {  // no local menu, so make one
+            local_menu_for('actively_editing_paragraph');
+//  ???  local_menu_for('editing' + '_input_text');
+        }  else {  //Tab must be cycling through a menu
+            // this is copied from main_menu_navigator, so maybe consolidate
+            current_active_menu_item = document.getElementById('choose_current');
+            next_menu_item = current_active_menu_item.nextSibling;
+            console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
+            if (!next_menu_item) { next_menu_item = current_active_menu_item.parentNode.firstChild }
+            console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
+            current_active_menu_item.removeAttribute("id");
+            console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
+//        current_active_menu_item.setAttribute("class", "chosen");
+            next_menu_item.setAttribute("id", "choose_current");
+            console.log("setting focus on",next_menu_item);
+            next_menu_item.focus();
+        }
+    } else {
+        main_menu_navigator(e)
+    }
+}
+
+function local_editing_action(e) {
+    if (e.code == "Escape") {
         console.log("putting focus back");
         prev_focused_element.focus();
+    } else if (e.code == "Tab") {
+        console.log("making a local menu");
+        local_menu_navigator(e);
+    } else if (e.code == "Return") {
+        if (prev_char == "Return" && prev_prev_char == "Return") {
+            save_current_editing()
+        }
     }
 }
 
 function main_menu_navigator(e) {  // we are not currently editing
                               // so we are building the menu for the user to decide what/how to edit
 
-    if (e.code == "Tab") {
+    if (e.code == "Tab" || e.code == "ArrowDown") {
        console.log("hit a Tab");
        console.log("focus is on", $(":focus"));
 
@@ -265,7 +314,7 @@ function main_menu_navigator(e) {  // we are not currently editing
        }
 */
     }
-    else if (e.code == "Enter") {
+    else if (e.code == "Enter" || e.code == "ArrowRight") {
         console.log("saw a Return");
        console.log("focus is on", $(":focus"));
         // we have just tabbed to a new element.  Tab to move on, return to edit at/near that element
@@ -308,10 +357,6 @@ function main_menu_navigator(e) {  // we are not currently editing
                 edit_submenu.innerHTML = base_menu_options_for(parent_type);
                 console.log("just inserted base_menu_options_for(parent_type)", base_menu_options_for(parent_type));
                 current_active_menu_item.insertAdjacentElement("beforeend", edit_submenu);
-                // next 3 lines are repeats, so look to consolidate
-           //     next_menu_item.setAttribute("id", "choose_current");
-                console.log("setting focus BB on something");
-           //     next_menu_item.focus();
                 document.getElementById('choose_current').focus();
                 console.log("focus is on", $(":focus"));
             } else if (current_active_menu_item.getAttribute("data-location") == "enter") {
@@ -362,6 +407,10 @@ function main_menu_navigator(e) {  // we are not currently editing
             }
 
         }
+    }  else if (e.code == "ArrowUp") {
+        alert("Sorry, up arrow not implemented yet.\nBut when it is, it will move to the previous item on this sub-menu");
+    }  else if (e.code == "ArrowLeft") {
+        alert("Sorry, left arrow not implemented yet.\nBut when it is, it will move to the previous sub-menu");
     }
 }
 
@@ -379,7 +428,11 @@ function logKey(e) {
 
     // if we are writing something, keystrokes usually are just text input
     if (document.getElementById('actively_editing')) {
-        local_menu_navigator(e)
+        if (document.getElementById('local_menu_holder')) {
+            local_menu_navigator(e)
+        }  else {
+            local_editing_action(e)
+        }
 
     } else {
         main_menu_navigator(e)
