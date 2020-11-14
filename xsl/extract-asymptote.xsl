@@ -1,4 +1,4 @@
-<?xml version='1.0'?> 
+<?xml version='1.0'?>
 
 <!--********************************************************************
 Copyright 2014-2016 Robert A. Beezer
@@ -24,7 +24,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This includes the LaTeX macros present in docinfo     -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
-    xmlns:xml="http://www.w3.org/XML/1998/namespace" 
+    xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:exsl="http://exslt.org/common"
     extension-element-prefixes="exsl"
 >

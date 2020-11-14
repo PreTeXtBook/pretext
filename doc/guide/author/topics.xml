@@ -1830,7 +1830,7 @@
 
                     draw(graph(Gaussian,min(a),max(a)),blue);
 
-                    // Optionally calculate "optimal" number 
+                    // Optionally calculate "optimal" number
                     // of bins a la Shimazaki and Shinomoto.
                     int N=bins(a);
 
@@ -1858,7 +1858,7 @@
 
                     draw(graph(Gaussian,min(a),max(a)),blue);
 
-                    // Optionally calculate "optimal" number 
+                    // Optionally calculate "optimal" number
                     // of bins a la Shimazaki and Shinomoto.
                     int N=bins(a);
 
