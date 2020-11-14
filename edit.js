@@ -13,6 +13,7 @@ prev_prev_focused_element = "";
 
 //$("p").tabIndex = 0;
 $("p").attr("tabindex", 0);
+$(".autopermalink > a").attr("tabindex", -1);
 
 var result;
 
@@ -164,8 +165,8 @@ function container_for_editing(obj_type) {
         title += '<input id="actively_editing_title" class="starting_point_for_editing" placeholder="Optional title" type="text"/>';
         title += '<input id="actively_editing_id" placeholder="Optional Id" class="input_id" type="text"/>';
         title += '</div>';
-        var statement = '<textarea id="actively_editing_statement" style="width:100%;" placeholder="statement"></textarea>';
-        var proof = '<textarea id="actively_editing_proof" style="width:100%;" placeholder="proof (optional)"></textarea>';
+        var statement = '<div><span class="group_description">statement (paragraphs, images, lists, etc)</span><textarea id="actively_editing_statement" style="width:100%;" placeholder="first paragraph of statement"></textarea></div>';
+        var proof = '<div><span class="group_description">optional proof (paragraphs, images, lists, etc)</span><textarea id="actively_editing_proof" style="width:100%;" placeholder="first paragraph of optional proof"></textarea></div>';
 
         this_content_container.innerHTML = title + statement + proof
     }
@@ -444,5 +445,15 @@ document.addEventListener('focus', function() {
   prev_prev_focused_element = prev_focused_element;
   prev_focused_element = this_focused_element;
   this_focused_element = document.activeElement;
+  $('.in_edit_tree').removeClass('in_edit_tree');
+  var edit_tree = $(':focus').parents();
+  console.log("edit tree", edit_tree);
+//  edit_tree.addClass('in_edit_tree');
+  // put little lines on teh right, to show the local heirarchy
+  for (var i=0; i < edit_tree.length; ++i) {
+      console.log('edit_tree[i]', edit_tree[i]);
+      if (edit_tree[i].getAttribute('id') == "content") { break }
+      edit_tree[i].classList.add('in_edit_tree')
+  }
 }, true);
 
