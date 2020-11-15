@@ -80,20 +80,38 @@ function top_menu_options_for(this_obj_id) {
     return this_list
 }
 
-function edit_menu_for(this_obj_id, location="afterbegin") {
-    console.log("make edit menu", location, "for", this_obj_id);
+function edit_menu_for(this_obj_id, motion="entering") {
+    console.log("make edit menu", motion, "for", this_obj_id);
+
+    if (motion == "entering") { menu_location = "afterbegin" }
+    else { menu_location = "afterend" }
+
     var edit_menu_holder = document.createElement('div');
 //    edit_menu_holder.setAttribute('class', 'edit_menu_holder');
     edit_menu_holder.setAttribute('id', 'edit_menu_holder');
     edit_menu_holder.setAttribute('tabindex', '-1');
     console.log("adding menu for", this_obj_id);
-    document.getElementById(this_obj_id).insertAdjacentElement(location, edit_menu_holder);
+    document.getElementById(this_obj_id).insertAdjacentElement(menu_location, edit_menu_holder);
 
-    var enter_option = document.createElement('span');
-    enter_option.setAttribute('id', 'enter_choice');
+    var edit_option;
 
-    enter_option.innerHTML = "edit near here?";
-    document.getElementById("edit_menu_holder").insertAdjacentElement(location, enter_option);
+    if (motion == "entering") {
+        edit_option = document.createElement('span');
+        edit_option.setAttribute('id', 'enter_choice');
+        edit_option.innerHTML = "edit near here?";
+    } else {
+        edit_option = document.createElement('ol');
+        edit_option.setAttribute('id', 'top_choices');
+        these_choices = '<li id="enter_choice">leave [this object]</li>'
+        these_choices += '<li>go to beginning</li>'
+        edit_option.innerHTML = these_choices;
+    }
+//    var enter_option = document.createElement('span');
+//    enter_option.setAttribute('id', 'enter_choice');
+//
+//    enter_option.innerHTML = "edit near here?";
+//    document.getElementById("edit_menu_holder").insertAdjacentElement("afterbegin", enter_option);
+    document.getElementById("edit_menu_holder").insertAdjacentElement("afterbegin", edit_option);
 }
 
 function local_menu_for(this_obj_id) { 
@@ -117,41 +135,6 @@ function local_menu_for(this_obj_id) {
 /*
 let response = await fetch(url);
 console.log("status of response",response.status);
-*/
-
-
-/*
-$("p").click(function(){
-    console.log("clicked a p");
-    $(this).css("background-color", "yellow");
-    thisID = $(this).attr('id');
-    if( sourceContent[thisID] ) {
-        console.log("we have that content")
-
-        var idOfEditContainer = thisID + '_input';
-        var idOfEditText = thisID + '_input_text';
-        var textarea_editable = document.createElement('textarea');
-        textarea_editable.setAttribute('class', 'text_source');
-        textarea_editable.setAttribute('id', idOfEditText);
-        textarea_editable.setAttribute('style', 'width:105%;');
-
-        var this_content_container = document.createElement('div');
-        this_content_container.setAttribute('id', idOfEditContainer);
-        $("#" + thisID).replaceWith(this_content_container);
-
-        document.getElementById(idOfEditContainer).insertAdjacentElement("afterbegin", textarea_editable);
-
-        $('#' + idOfEditText).val(sourceContent[thisID]);
-        document.getElementById(idOfEditText).focus();
-        document.getElementById(idOfEditText).setSelectionRange(0,0);
-        textarea_editable.style.height = textarea_editable.scrollHeight + "px";
-        console.log("made edit box for", thisID);
-        textarea_editable.addEventListener("keypress", function() {
-          textarea_editable.style.height = textarea_editable.scrollHeight + "px";
-       }, false);
-    }
-    edit_menu_for(thisID + "_input")
-});
 */
 
 function container_for_editing(obj_type) {
@@ -290,10 +273,14 @@ function main_menu_navigator(e) {  // we are not currently editing
            $("#edit_menu_holder").parent().removeClass("may_select");
            console.log("item to get next focus",$("#edit_menu_holder").parent().next('[tabindex="0"]'), "which has length", $("#edit_menu_holder").parent().next('[tabindex="0"]').length);
            if(!$("#edit_menu_holder").parent().next('[tabindex="0"]').length) { //at the end of a block.  Do we leave or go to the top?
+               e.preventDefault();
                var enclosing_block = $("#edit_menu_holder").parent().parent()[0];
                console.log("at the end of", enclosing_block, "with id", enclosing_block.id);
                document.getElementById('edit_menu_holder').remove();
                edit_menu_for(enclosing_block.getAttribute("id"), "afterend");
+               console.log("focus is on",  $(":focus"));
+               enclosing_block.classList.add("may_leave");
+               document.getElementById('edit_menu_holder').focus();
                return
            }  else {
                $("#edit_menu_holder").parent().next('[tabindex="0"]').focus();
