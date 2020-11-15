@@ -80,20 +80,20 @@ function top_menu_options_for(this_obj_id) {
     return this_list
 }
 
-function edit_menu_for(this_obj_id) {
-    console.log("make edit menu for", this_obj_id);
+function edit_menu_for(this_obj_id, location="afterbegin") {
+    console.log("make edit menu", location, "for", this_obj_id);
     var edit_menu_holder = document.createElement('div');
 //    edit_menu_holder.setAttribute('class', 'edit_menu_holder');
     edit_menu_holder.setAttribute('id', 'edit_menu_holder');
     edit_menu_holder.setAttribute('tabindex', '-1');
     console.log("adding menu for", this_obj_id);
-    document.getElementById(this_obj_id).insertAdjacentElement("afterbegin", edit_menu_holder);
+    document.getElementById(this_obj_id).insertAdjacentElement(location, edit_menu_holder);
 
     var enter_option = document.createElement('span');
     enter_option.setAttribute('id', 'enter_choice');
 
     enter_option.innerHTML = "edit near here?";
-    document.getElementById("edit_menu_holder").insertAdjacentElement("afterbegin", enter_option);
+    document.getElementById("edit_menu_holder").insertAdjacentElement(location, enter_option);
 }
 
 function local_menu_for(this_obj_id) { 
@@ -232,9 +232,11 @@ var sourceContent = {
 }
 
 function local_menu_navigator(e) {
+    e.preventDefault();
     if (e.code == "Tab") {
         if (!document.getElementById('local_menu_holder')) {  // no local menu, so make one
-            local_menu_for('actively_editing_paragraph');
+            local_menu_for('actively_editing');
+//            local_menu_for('actively_editing_paragraph');
 //  ???  local_menu_for('editing' + '_input_text');
         }  else {  //Tab must be cycling through a menu
             // this is copied from main_menu_navigator, so maybe consolidate
@@ -260,9 +262,11 @@ function local_editing_action(e) {
         console.log("putting focus back");
         prev_focused_element.focus();
     } else if (e.code == "Tab") {
+        e.preventDefault();
         console.log("making a local menu");
         local_menu_navigator(e);
     } else if (e.code == "Return") {
+    //    e.preventDefault();
         if (prev_char == "Return" && prev_prev_char == "Return") {
             save_current_editing()
         }
@@ -272,7 +276,9 @@ function local_editing_action(e) {
 function main_menu_navigator(e) {  // we are not currently editing
                               // so we are building the menu for the user to decide what/how to edit
 
+ // too early   e.preventDefault();  // we are navigating a menu, we we control what keystrokes mean
     if (e.code == "Tab" || e.code == "ArrowDown") {
+//       e.preventDefault();
        console.log("hit a Tab");
        console.log("focus is on", $(":focus"));
 
@@ -280,17 +286,30 @@ function main_menu_navigator(e) {  // we are not currently editing
        // so a Tab means to move on
        // so remove the option to edit one object
        if(document.getElementById('enter_choice')) {
+           console.log("there already is an 'enter_choice'");
            $("#edit_menu_holder").parent().removeClass("may_select");
-           document.getElementById('edit_menu_holder').remove()
+           console.log("item to get next focus",$("#edit_menu_holder").parent().next('[tabindex="0"]'), "which has length", $("#edit_menu_holder").parent().next('[tabindex="0"]').length);
+           if(!$("#edit_menu_holder").parent().next('[tabindex="0"]').length) { //at the end of a block.  Do we leave or go to the top?
+               var enclosing_block = $("#edit_menu_holder").parent().parent()[0];
+               console.log("at the end of", enclosing_block, "with id", enclosing_block.id);
+               document.getElementById('edit_menu_holder').remove();
+               edit_menu_for(enclosing_block.getAttribute("id"), "afterend");
+               return
+           }  else {
+               $("#edit_menu_holder").parent().next('[tabindex="0"]').focus();
+               document.getElementById('edit_menu_holder').remove()
+           }
        }
        // and add the option to edit the next object
        if (!document.getElementById('edit_menu_holder')) {  // we are not already navigating a menu
+           e.preventDefault();
            edit_menu_for(document.activeElement.id);        // so create one
            $(":focus").addClass("may_select");
            console.log("element with fcous is", $(":focus"));
            console.log("putting focus on", document.getElementById('edit_menu_holder'));
            document.getElementById('edit_menu_holder').focus();
            console.log("element with fcous is", $(":focus"));
+           console.log("are we done tabbing to the next item?");
        } else {
         current_active_menu_item = document.getElementById('choose_current');
         next_menu_item = current_active_menu_item.nextSibling;
@@ -305,19 +324,11 @@ function main_menu_navigator(e) {  // we are not currently editing
         next_menu_item.focus();
       }
 
-/*
-       if(document.activeElement.tagName == "P") {
-           console.log("removing old menu");
-           var oldmenu = document.getElementById('edit_menu_holder');
-           if (oldmenu) { oldmenu.remove() }
-           console.log("making ner menu");
-           edit_menu_for(document.activeElement.id)
-       }
-*/
     }
     else if (e.code == "Enter" || e.code == "ArrowRight") {
+        e.preventDefault();
         console.log("saw a Return");
-       console.log("focus is on", $(":focus"));
+        console.log("focus is on", $(":focus"));
         // we have just tabbed to a new element.  Tab to move on, return to edit at/near that element
         if (document.getElementById('enter_choice')) {
             var edit_submenu = document.createElement('ol');
@@ -391,7 +402,6 @@ function main_menu_navigator(e) {  // we are not currently editing
                 next_menu_item.focus();
             } else {  // we just selected an action, so do it
                       // that probably involves adding something before or after a given object
-                e = "";
                 var new_object_type = current_active_menu_item.getAttribute("data-env");
                 object_near_new_object = document.getElementById('edit_menu_holder').parentElement;
                 var before_after = $("#edit_menu_holder > #edit_menu > .chosen").attr("data-location");
@@ -417,7 +427,7 @@ function main_menu_navigator(e) {  // we are not currently editing
 
 console.log("adding tab listener");
 
-document.addEventListener('keyup', logKey);
+document.addEventListener('keydown', logKey);
 
 function logKey(e) {
     prev_prev_char = prev_char;
@@ -427,16 +437,23 @@ function logKey(e) {
     console.log("are we editing", document.getElementById('actively_editing'));
     console.log("is there already an edit menu?", document.getElementById('edit_menu_holder'));
 
+    var input_region = document.activeElement.tagName;
+    console.log("input_region", input_region);
     // if we are writing something, keystrokes usually are just text input
     if (document.getElementById('actively_editing')) {
-        if (document.getElementById('local_menu_holder')) {
+        if (document.getElementById('local_menu_holder')) {  // we are editing, but are doing so through a local menu
+            console.log("document.getElementById('local_menu_holder')", document.getElementById('local_menu_holder'));
             local_menu_navigator(e)
         }  else {
-            local_editing_action(e)
+            if (input_region == "INPUT") { return }   // e.preventDefault() 
+            else { // input_region is TEXTAREA
+                local_editing_action(e) }
         }
 
     } else {
-        main_menu_navigator(e)
+        main_menu_navigator(e);
+ //       alert("what has Tab done?");
+ //       e.preventDefault();
     }
 }
 
@@ -451,7 +468,7 @@ document.addEventListener('focus', function() {
 //  edit_tree.addClass('in_edit_tree');
   // put little lines on teh right, to show the local heirarchy
   for (var i=0; i < edit_tree.length; ++i) {
-      console.log('edit_tree[i]', edit_tree[i]);
+//      console.log('edit_tree[i]', edit_tree[i]);
       if (edit_tree[i].getAttribute('id') == "content") { break }
       edit_tree[i].classList.add('in_edit_tree')
   }
