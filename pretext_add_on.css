@@ -3266,37 +3266,68 @@ label.incorrect .feedback {
 
 #edit_menu_holder {
     position: relative;
+    left: 15em;
+    bottom: 1.5em;
+    z-index: 1000;
+}
+#local_menu_holder {
+    position: relative;
     left: 20em;
     bottom: 1.5em;
     z-index: 1000;
 }
-#edit_menu_holder #edit_menu,
-#edit_menu_holder #enter_choice {
+#edit_menu,
+#enter_choice {
     background: #fee;
     position: absolute;
     white-space: nowrap;
     z-index: 1000;
 }
-#edit_menu_holder #edit_menu.past {
+#edit_menu.past {
     background: #ffe;
     color: #999;
 }
-#edit_menu_holder .past > li {
+.past > li {
     background: #fff9f9;
     color: #aaa;
 }
-#edit_menu_holder #enter_choice {
+#enter_choice {
     padding: 0.25em 0.5em 0 0.5em;
     background: yellow;
     bottom: -1.2em;
     border-radius: 0.5em 0.5em 0 0; 
 }
-#edit_menu_holder #edit_menu li.chosen,
-#edit_menu_holder #edit_menu #choose_current {
+.may_leave + #edit_menu_holder #top_choices {
+    position: absolute;
+
+    padding: 0.25em 0.5em 0.25 0.5em;
+    padding: 0em 0.75em 0.5em 0.75em;
+    background: #FFC6D1;
+    bottom: -4.85em;
+    border-radius: 0 0 0.5em 0.5em;
+    list-style-type: none;
+ /*   margin: 0 0.25em 0.25em 0.25em;
+*/
+    font-style: italic;
+}
+.may_leave + #edit_menu_holder #top_choices li {
+    padding: 0;
+    padding-left: 0.25em;
+    padding-right: 0.25em;
+}
+.may_leave + #edit_menu_holder #top_choices #enter_choice {
+    position: relative;
+    border-radius: 0;
+    background: lightcyan;
+    bottom: 0;
+}
+
+#edit_menu li.chosen,
+#edit_menu #choose_current {
     background: #ddf;
     color: #000;
 }
-#edit_menu_holder #edit_menu.past > .choose {
+#edit_menu.past > .choose {
     background: #eef;
     color: #000;
 }
@@ -3337,7 +3368,7 @@ label.incorrect .feedback {
     list-style-type: none;
     background: #fdd;
 }
-#edit_menu_holder #edit_menu li.choose {
+#edit_menu li.choose {
     background: #eef;
 }
 .text_source {
@@ -3345,4 +3376,45 @@ label.incorrect .feedback {
 }
 .may_select {
     box-shadow: -10px -5px 5px yellow;
+}
+.may_leave {
+    box-shadow: -10px 5px 5px #FFC6D1;
+}
+#actively_editing {
+    margin-top: 1em;
+}
+#actively_editing_id {
+    float: right;
+    width: 8em;
+    margin-bottom: 0;
+}
+#actively_editing_title {
+    width: 25;
+}
+.in_edit_tree {
+    border-right: 1px solid blue;
+    margin-right: 0.25em;
+}
+.in_edit_tree:before,
+.in_edit_tree:after {
+    content: ' ';
+    font-size: 50%;
+    border-top: 1px solid blue;
+    display: block;
+    margin-right: 0em;
+    margin-left: auto;
+    width: 0.75em;
+}
+
+#edit_menu .in_edit_tree {
+    border: none;
+}
+#edit_menu .in_edit_tree:before,
+#edit_menu .in_edit_tree:before {
+    display: none;
+}
+
+.group_description {
+    font-size: 70%;
+    font-color: #aaa;
 }
