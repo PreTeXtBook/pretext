@@ -4522,14 +4522,14 @@ the xsltproc executable.
         <section xml:id="table-calisthenics">
             <title>Table Calisthenics</title>
 
-            <p>A very minimal table, hence with left-justified cells, no borders.  We do wrap the tabular element in a table element to get centering, numbering and a caption.</p>
+            <p>A very minimal table, hence with left-justified cells, no borders.  We do wrap the tabular element in a table element to get centering, numbering and a caption.  Footnotes inside cells are tested here.</p>
 
             <table>
                 <title>Some Colors</title>
                 <tabular>
                     <row>
                         <cell>Red</cell>
-                        <cell>Green</cell>
+                        <cell>Green<fn>Green can be a very sick looking color.</fn></cell>
                         <cell>Yellow</cell>
                     </row>
                     <row>
@@ -9417,11 +9417,11 @@ the xsltproc executable.
                     </row>
                 </tabular>
 
-                <p>The same effect can be had by specifying that the <attr>width</attr> attribute have the value <c>auto</c>, but do not specify any <attr>margins</attr>.</p>
+                <p>The same effect can be had by specifying that the <attr>width</attr> attribute have the value <c>auto</c>, but do not specify any <attr>margins</attr>.  We test multiple footnotes in a <tag>tabular</tag>, not included in a <tag>table</tag>.</p>
 
                 <tabular width="auto">
                     <row header="yes">
-                        <cell>State</cell>
+                        <cell>State<fn>Only from the West Coast.</fn></cell>
                         <cell>Population</cell>
                         <cell>Area (sq. mi.)</cell>
                         <cell>Statehood (Year)</cell>
@@ -9440,7 +9440,7 @@ the xsltproc executable.
                     </row>
                     <row>
                         <cell>California</cell>
-                        <cell>39,512,223</cell>
+                        <cell>39,512,223<fn>Wow! That is as big as many countries.</fn></cell>
                         <cell>163,696</cell>
                         <cell>1850</cell>
                     </row>
