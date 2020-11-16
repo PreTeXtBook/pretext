@@ -9207,7 +9207,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- now ready to build rows -->
     <xsl:text>&#xa;</xsl:text>
     <!-- table-wide values are needed to reconstruct/determine overrides -->
-    <xsl:apply-templates select="row">
+    <!-- We *actively* enforce header rows being (a) initial, and        -->
+    <!-- (b) contiguous.  So following two-part match will do no harm    -->
+    <!-- to correct source, but will definitely harm incorrect source.   -->
+    <xsl:apply-templates select="row[@header]">
+        <xsl:with-param name="table-left" select="$table-left" />
+        <xsl:with-param name="table-bottom" select="$table-bottom" />
+        <xsl:with-param name="table-right" select="$table-right" />
+        <xsl:with-param name="table-halign" select="$table-halign" />
+        <xsl:with-param name="table-valign" select="$table-valign" />
+    </xsl:apply-templates>
+    <xsl:apply-templates select="row[not(@header)]">
         <xsl:with-param name="table-left" select="$table-left" />
         <xsl:with-param name="table-bottom" select="$table-bottom" />
         <xsl:with-param name="table-right" select="$table-right" />
