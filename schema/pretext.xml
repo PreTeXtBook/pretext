@@ -2263,18 +2263,17 @@
         <fragment xml:id="docinfo">
             <title>Document information</title>
             <code>
-        DocInfo =
-            element docinfo {
-                XMLBase?,
-                XMLLang?,
-                Configuration+
-            }
+            DocInfo =
+                element docinfo {
+                    XMLBase?,
+                    XMLLang?,
+                    Configuration+
+                }
             </code>
             <fragref ref="brandlogo" />
-            <fragref ref="latexpreamble" />
+            <fragref ref="preambles" />
             <fragref ref="macros" />
             <fragref ref="cross-references" />
-            <fragref ref="lateximagepreamble" />
             <fragref ref="initialism" />
             <fragref ref="feedback" />
             <fragref ref="rename" />
@@ -2296,15 +2295,19 @@
             </code>
         </fragment>
 
-        <p>We add some items to the preamble for LaTeX.  A <c>package</c> needs to have an identical implementation, and be of the same name, as a version that exists for MathJax.</p>
+        <p>We add some items to the preamble for <latex/>, <tag>latex-image</tag>, and <tag>asymptote</tag>.  For a <c>package</c> to be in a <tag>latex-preamble</tag>, it needs to have an identical implementation, and be of the same name, as a version that exists for MathJax.  Images specified by <latex/> or Asymptote syntax sometimes need extra information in their preambles.</p>
 
-        <fragment xml:id="latexpreamble">
-            <title><latex/> preamble</title>
+        <fragment xml:id="preambles">
+            <title>Preambles</title>
             <code>
             Configuration |=
                 element latex-preamble {
                     element package {text}*
                 }
+            Configuration |=
+                element latex-image-preamble {text}
+            Configuration |=
+                element asymptote-preamble {text}
             </code>
         </fragment>
 
@@ -2328,16 +2331,6 @@
                     cross-references {
                         attribute text { XrefTextStyle }
                     }
-            </code>
-        </fragment>
-
-        <p>Images specified by <latex /> syntax sometimes need extra information in their preambles.</p>
-
-        <fragment xml:id="lateximagepreamble">
-            <title><latex/> image preamble</title>
-            <code>
-            Configuration |=
-                element latex-image-preamble {text}
             </code>
         </fragment>
 
