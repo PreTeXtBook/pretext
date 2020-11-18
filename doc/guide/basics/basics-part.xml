@@ -1225,7 +1225,7 @@
         (or a chunk of code)
         but you would like to produce a figure to include in your project by using SageMath.
         The cleanest way to do this his to put the SageMath code right in your <pretext/> project and use the <c>pretext</c> script to produce the image files required for your chosen output formats.
-        This is accomplished by using <tag>sageplot</tag> and the <c>pretext</c> script that we discussed in <xref ref="mdash/>"/>.
+        This is accomplished by using <tag>sageplot</tag> and the <c>pretext</c> script that we discussed in <xref ref="basics-s-latex-fig"/>.
         (In particular,
         see the aside in that section about the additional packages that must be installed and configured to use the <c>pretext</c> script.)
       </p>

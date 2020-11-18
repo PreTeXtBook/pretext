@@ -1475,12 +1475,12 @@
                 Sage
             }
             
-        DocInfo =
-            element docinfo {
-                XMLBase?,
-                XMLLang?,
-                Configuration+
-            }
+            DocInfo =
+                element docinfo {
+                    XMLBase?,
+                    XMLLang?,
+                    Configuration+
+                }
             
             Configuration |=
                 element brandlogo {
@@ -1492,6 +1492,10 @@
                 element latex-preamble {
                     element package {text}*
                 }
+            Configuration |=
+                element latex-image-preamble {text}
+            Configuration |=
+                element asymptote-preamble {text}
             
             Configuration |=
                 element macros {text}
@@ -1501,9 +1505,6 @@
                     cross-references {
                         attribute text { XrefTextStyle }
                     }
-            
-            Configuration |=
-                element latex-image-preamble {text}
             
             Configuration |=
                 element initialism {text}

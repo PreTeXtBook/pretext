@@ -2480,11 +2480,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- is impersonated with knowl content located in an external file.  So   -->
 <!-- this template is a no-op for duplicates.                              -->
 
-<xsl:template match="p|figure|listing|ol|ul|dl" mode="pop-footnote-text">
+<xsl:template match="p|figure|table|listing|tabular|ol|ul|dl" mode="pop-footnote-text">
     <xsl:param name="b-original"/>
 
     <xsl:if test="$b-original">
-        <xsl:if test="count(ancestor::*[self::p|self::figure|self::listing|self::ol|self::ul|self::dl]) = 0">
+        <xsl:if test="count(ancestor::*[self::p|self::figure|self::table|self::listing|self::tabular|self::ol|self::ul|self::dl]) = 0">
             <xsl:for-each select=".//fn">
                 <xsl:apply-templates select="."  mode="hidden-knowl-content">
                     <xsl:with-param name="b-original" select="$b-original"/>
@@ -4663,7 +4663,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- collect elements which can have footnotes within -->
         <!-- footnotes in captions of figures and listings,   -->
         <!-- but not in titles of tables or lists             -->
-        <xsl:apply-templates select="self::figure|self::listing" mode="pop-footnote-text">
+        <xsl:apply-templates select="self::figure|self::table|self::listing" mode="pop-footnote-text">
             <xsl:with-param name="b-original" select="$b-original"/>
         </xsl:apply-templates>
     </xsl:if>
@@ -6442,9 +6442,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- This an optional component of an author-hosted video, -->
 <!-- and the markup closely tracks the generated HTML.     -->
-<!-- We do not specify a default (yet).                    -->
+<!-- The HTML @default attribute functions simply by being -->
+<!-- present, so we do not provide a value.                -->
 <xsl:template match="track">
     <track>
+        <xsl:if test="@default='yes'">
+            <xsl:attribute name="default"/>
+        </xsl:if>
         <xsl:attribute name="label">
             <xsl:value-of select="@label"/>
         </xsl:attribute>
@@ -6799,6 +6803,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="ambient-relative-width" select="$width" />
         </xsl:apply-templates>
     </table>
+    <!-- any footnote in a bare "tabular" can go here; if   -->
+    <!-- wrapped in a PTX "table" it'll pop outside of that -->
+    <xsl:apply-templates select="." mode="pop-footnote-text">
+        <xsl:with-param name="b-original" select="$b-original"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- A row of table -->
