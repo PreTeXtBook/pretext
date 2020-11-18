@@ -6300,13 +6300,21 @@ the xsltproc executable.
             <subsection>
                 <title>Captions and Subtitles</title>
 
-                <p>Experimental support for captions and subtitles first.  Look at the source, which mimics the actual HTML.  The words of the titles and/or subcaptions (there is a difference!) come from a file in <url href="https://en.wikipedia.org/wiki/WebVTT">Web Video Text Tracks</url><fn><c>wikipedia.org/wiki/WebVTT</c></fn> (<init>WEBVVT</init>) format.  The <attr>default</attr> attribute on <tag>track</tag> can be set to the value <c>yes</c> to make one set of captions the default (and only one!).</p>
+                <p>Experimental support for captions and subtitles first.  Look at the source, which mimics the actual HTML.  The words of the titles and/or subcaptions (there is a difference!) come from a file in <url href="https://en.wikipedia.org/wiki/WebVTT">Web Video Text Tracks</url><fn><c>wikipedia.org/wiki/WebVTT</c></fn> (<init>WEBVVT</init>) format.</p>
                 <figure>
                     <caption>Big Buck Bunny with subtitles adapted from <url href="https://sites.google.com/site/chrisfoo/subtitles"><c>https://sites.google.com/site/chrisfoo/subtitles</c></url></caption>
                     <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="images/big-buck-bunny-frame-one.jpg">
                         <track kind="subtitles" label="US English" xml:lang="en" source="images/BigBuckBunnyAcapella.vtt"/>
                     </video>
                 </figure>
+
+                <p>This video is identical to the previous one, except it tests the use of a default <tag>track</tag>.  The <attr>default</attr> attribute on <tag>track</tag> can be set to the value <c>yes</c> to make one set of captions the default (and only one!).  Test is a bit lame, the two <tag>track</tag> use the same file, but just have different labels for the player's menu.  Track named <c>US English Two</c> will show as in-use at start-up.</p>
+
+                <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="images/big-buck-bunny-frame-one.jpg">
+                    <track kind="subtitles" label="US English One" xml:lang="en" source="images/BigBuckBunnyAcapella.vtt"/>
+                    <track kind="subtitles" label="US English Two" xml:lang="en" source="images/BigBuckBunnyAcapella.vtt" default="yes"/>
+                </video>
+
             </subsection>
         </section>
 
