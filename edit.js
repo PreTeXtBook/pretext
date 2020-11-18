@@ -100,18 +100,15 @@ function edit_menu_for(this_obj_id, motion="entering") {
     console.log("adding menu for", this_obj_id);
     document.getElementById(this_obj_id).insertAdjacentElement(menu_location, edit_menu_holder);
 
-    var edit_option;
+    var edit_option = document.createElement('span');
+    edit_option.setAttribute('id', 'enter_choice');
 
     if (motion == "entering") {
-        edit_option = document.createElement('span');
-        edit_option.setAttribute('id', 'enter_choice');
+        edit_option.setAttribute('data-location', 'next');
         edit_option.innerHTML = "edit near here?";
     } else {
-        edit_option = document.createElement('ol');
-        edit_option.setAttribute('id', 'top_choices');
-        these_choices = '<li data-location="leave" id="choose_current">leave [this object]</li>'
-        these_choices += '<li data-location="stay">go to beginning</li>'
-        edit_option.innerHTML = these_choices;
+        edit_option.setAttribute('data-location', 'stay');
+        edit_option.innerHTML = "continue editing [this object]";
     }
 //    var enter_option = document.createElement('span');
 //    enter_option.setAttribute('id', 'enter_choice');
