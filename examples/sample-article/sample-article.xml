@@ -6300,7 +6300,7 @@ the xsltproc executable.
             <subsection>
                 <title>Captions and Subtitles</title>
 
-                <p>Experimental support for captions and subtitles first.  Look at teh source, which mimics the actual HTML.  The words of the titles and/or subcaptions (there is a difference!) come from a file in <url href="https://en.wikipedia.org/wiki/WebVTT">Web Video Text Tracks</url><fn><c>wikipedia.org/wiki/WebVTT</c></fn> (<init>WEBVVT</init>) format.</p>
+                <p>Experimental support for captions and subtitles first.  Look at the source, which mimics the actual HTML.  The words of the titles and/or subcaptions (there is a difference!) come from a file in <url href="https://en.wikipedia.org/wiki/WebVTT">Web Video Text Tracks</url><fn><c>wikipedia.org/wiki/WebVTT</c></fn> (<init>WEBVVT</init>) format.  The <attr>default</attr> attribute on <tag>track</tag> can be set to the value <c>yes</c> to make one set of captions the default (and only one!).</p>
                 <figure>
                     <caption>Big Buck Bunny with subtitles adapted from <url href="https://sites.google.com/site/chrisfoo/subtitles"><c>https://sites.google.com/site/chrisfoo/subtitles</c></url></caption>
                     <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="images/big-buck-bunny-frame-one.jpg">
