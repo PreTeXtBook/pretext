@@ -8818,12 +8818,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Asymptote graphics language  -->
 <!-- PDF's produced by mbx script -->
 <xsl:template match="image[asymptote]" mode="image-inclusion">
-    <xsl:text>\includegraphics[width=\linewidth]</xsl:text>
-    <xsl:text>{</xsl:text>
-    <xsl:value-of select="$directory.images" />
-    <xsl:text>/</xsl:text>
-    <xsl:apply-templates select="." mode="visible-id" />
-    <xsl:text>.pdf}&#xa;</xsl:text>
+  <xsl:choose>
+      <xsl:when test="$b-asymptote-links">
+        <xsl:text>\href{</xsl:text>
+        <xsl:value-of select="$baseurl" />
+        <xsl:text>/images/</xsl:text>
+        <xsl:apply-templates select="." mode="visible-id" />
+        <xsl:text>.html}</xsl:text>
+        <xsl:text>{\includegraphics[width=\linewidth]</xsl:text>
+        <xsl:text>{</xsl:text>
+        <xsl:value-of select="$directory.images" />
+        <xsl:text>/</xsl:text>
+        <xsl:apply-templates select="." mode="visible-id" />
+        <xsl:text>.pdf}}&#xa;</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>\includegraphics[width=\linewidth]</xsl:text>
+        <xsl:text>{</xsl:text>
+        <xsl:value-of select="$directory.images" />
+        <xsl:text>/</xsl:text>
+        <xsl:apply-templates select="." mode="visible-id" />
+        <xsl:text>.pdf}&#xa;</xsl:text>
+      </xsl:otherwise>
+  </xsl:choose>
+
 </xsl:template>
 
 <!-- Sage graphics plots          -->

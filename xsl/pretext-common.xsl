@@ -504,9 +504,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- source on different servers.  It is in "docinfo" as a      -->
 <!-- convenience during development stages.                     -->
 <!-- NB: Presumed to not have a trailing slash                  -->
-<xsl:variable name="baseurl">
+<!-- <xsl:variable name="baseurl">
     <xsl:value-of select="$docinfo/html/baseurl/@href"/>
-</xsl:variable>
+</xsl:variable> -->
 
 <!-- The new version can return to the generic version  -->
 <!-- once we kill the dashed version for author use.    -->

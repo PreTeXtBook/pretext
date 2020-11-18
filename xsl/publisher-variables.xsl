@@ -460,6 +460,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="b-video-privacy" select="$embedded-video-privacy = 'yes'"/>
 
+<xsl:variable name="baseurl">
+    <xsl:choose>
+        <!-- if publisher.xml file has a base url, use it -->
+        <xsl:when test="$publication/html/baseurl/@href">
+            <xsl:value-of select="$publication/html/baseurl/@href"/>
+        </xsl:when>
+        <!-- otherwise use the dafault -->
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!--                       -->
 <!-- HTML Platform Options -->
 <!--                       -->
@@ -499,6 +512,36 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ###################### -->
 <!-- LaTeX-Specific Options -->
 <!-- ###################### -->
+
+<!-- Add a boolean variable to toggle links for Asymptote images in PDF -->
+<!-- If a baseurl is set, and an HTML version is available with interactive WebGL images -->
+<!-- the publisher may want static images in the PDF to link to the interactive images online. -->
+
+<xsl:variable name="asymptote-links">
+    <xsl:choose>
+        <xsl:when test="$publication/pdf/asy-figs/@links = 'yes'">
+            <xsl:value-of select="$publication/pdf/asy-figs/@links"/>
+            <xsl:if test="$baseurl = ''">
+                <xsl:message>PTX WARNING: baseurl must be set in publisher file or hrefs on Asymptote images will not work</xsl:message>
+            </xsl:if>
+        </xsl:when>
+        <xsl:when test="$publication/pdf/asy-figs/@links = 'no'">
+            <xsl:value-of select="$publication/pdf/asy-figs/@links"/>
+        </xsl:when>
+        <!-- set, but not correct, so inform and use default -->
+        <xsl:when test="$publication/pdf/asy-figs/@links">
+            <xsl:value-of select="$publication/pdf/asy-figs/@links"/>
+            <xsl:message>PTX WARNING:   PDF Asymptote/links in publisher file should be "yes" (links to HTML) or "no" (no links), not "<xsl:value-of select="$publication/pdf/asymptote/@links"/>". Proceeding with default value: "no" (no links)</xsl:message>
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- unset, so use default -->
+        <xsl:otherwise>
+            <xsl:text>no</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="b-asymptote-links" select="$asymptote-links = 'yes'"/>
 
 
 <!-- ########################### -->
