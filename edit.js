@@ -3,10 +3,11 @@
 
 
 //$("p").tabIndex = 0;
-$("p").attr("tabindex", 0);
+$("p").attr("tabindex", -1);
 $(".autopermalink > a").attr("tabindex", -1);
 
 $("#akX > *").attr("data-editable", 99);
+$("section > p").attr("data-editable", 99);
 
 /* the code */
 
@@ -91,7 +92,7 @@ function edit_menu_for(this_obj_id, motion="entering") {
     console.log("make edit menu", motion, "for", this_obj_id);
 
     if (motion == "entering") { menu_location = "afterbegin" }
-    else { menu_location = "afterend" }  // motion is 'leaving'
+    else { menu_location = "afterend" }  // when motion is 'leaving'
 
     var edit_menu_holder = document.createElement('div');
 //    edit_menu_holder.setAttribute('class', 'edit_menu_holder');
@@ -272,25 +273,48 @@ function main_menu_navigator(e) {  // we are not currently editing
        // we are tabbing along deciding what component to edit
        // so a Tab means to move on
        // so remove the option to edit one object
-       if(document.getElementById('enter_choice')) {
+       if(this_choice = document.getElementById('enter_choice')) {
            console.log("there already is an 'enter_choice'");
-           $("#edit_menu_holder").parent().removeClass("may_select");
-           console.log("item to get next focus",$("#edit_menu_holder").parent().next('[tabindex="0"]'), "which has length", $("#edit_menu_holder").parent().next('[tabindex="0"]').length);
-           if(!$("#edit_menu_holder").parent().next('[tabindex="0"]').length) { //at the end of a block.  Do we leave or go to the top?
-               e.preventDefault();
-               var enclosing_block = $("#edit_menu_holder").parent().parent()[0];
-               console.log("at the end of", enclosing_block, "with id", enclosing_block.id);
-               document.getElementById('edit_menu_holder').remove();
-               edit_menu_for(enclosing_block.getAttribute("id"), "leaving");
-               console.log("focus is on",  $(":focus"));
-               enclosing_block.classList.add("may_leave");
-               document.getElementById('choose_current').focus();
-               console.log("document.getElementById('choose_current')", document.getElementById('choose_current'), $(":focus"));
-               return
-           }  else {
-               $("#edit_menu_holder").parent().next('[data-editable="99"]').focus();
-               document.getElementById('edit_menu_holder').remove()
-           }
+           // there are two cases:  1) we are at the top of a block (and so may enter it or add near it, or move on)
+           //                       2) we are at the bottom (actually, after) a block, and may return to it, or move on
+           var this_menu = document.getElementById("edit_menu_holder");
+           if (this_choice.getAttribute('data-location') == 'next') {
+
+               $(this_menu).parent().removeClass("may_select");
+               console.log("item to get next focus",$("#edit_menu_holder").parent().next('[data-editable="99"]'), "which has length", $("#edit_menu_holder").parent().next('[data-editable="99"]').length);
+               if(!$(this_menu).parent().next('[data-editable="99"]').length) { //at the end of a block, so new menu goes at end
+               //    e.preventDefault();
+                   var enclosing_block = $(this_menu).parent().parent()[0];
+                   console.log("at the end of", enclosing_block, "with id", enclosing_block.id);
+                   this_menu.remove();
+                   edit_menu_for(enclosing_block.getAttribute("id"), "leaving");
+                   console.log("focus is on",  $(":focus"));
+                   enclosing_block.classList.add("may_leave");
+               //    document.getElementById('choose_current').focus();
+                   document.getElementById('enter_choice').focus();
+                   console.log("document.getElementById('enter_choice')", document.getElementById('enter_choice'), $(":focus"));
+                   return
+                }
+                else {
+                   $(this_menu).parent().next('[data-editable="99"]').focus();
+                   this_menu.remove()
+               }
+           } else if (this_choice.getAttribute('data-location') == 'stay') { // at end of block, and want to move on
+               // remove class from prev sibling, find its next sibling
+               console.log("about to leave a block");
+               console.log("this_menu", this_menu, "this_menu.previousSibling", document.getElementById('edit_menu_holder').previousSibling);
+           //    block_we_are_leaving = document.getElementById('edit_menu_holder').previousSibling;
+               console.log("again:  this_menu", this_menu, "this_menu.previousSibling", this_menu.previousSibling);
+               console.log("are they the sme?", document.getElementById('edit_menu_holder') == this_menu, document.getElementById('edit_menu_holder'), this_menu);
+               block_we_are_leaving = this_menu.previousSibling;
+               block_we_are_leaving.classList.remove("may_leave");
+               console.log("$(block_we_are_leaving)",$(block_we_are_leaving), "xxxx", $(block_we_are_leaving).next(), "yyyyy", $(block_we_are_leaving).next('[data-editable="99"]'));
+               next_block_to_edit = $(this_menu).next('[data-editable="99"]');
+               this_menu.remove()
+               $(next_block_to_edit).focus();
+       //        $(block_we_are_leaving).next('[data-editable="99"]').focus();
+               console.log("left a block.  focus is now on", $(":focus"));
+           }  else { alert("Error:  enter_choice without data-location") }
        }
        // and add the option to edit the next object
        if (!document.getElementById('edit_menu_holder')) {  // we are not already navigating a menu
@@ -371,6 +395,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                 object_to_be_edited.classList.remove("may_select");
                 document.getElementById('edit_menu_holder').remove();
             // consolidate leave/stay ?
+//  the leave/stay is now handles by Tab, so delete the next couple things
             } else if (current_active_menu_item.getAttribute("data-location") == "leave") {
                 var object_we_are_in = $('#edit_menu_holder').prev();
                 console.log("leaving", object_we_are_in);
