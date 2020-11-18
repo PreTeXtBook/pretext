@@ -3420,9 +3420,10 @@
     <xs:choice>
       <xs:element ref="brandlogo"/>
       <xs:element ref="latex-preamble"/>
+      <xs:element ref="latex-image-preamble"/>
+      <xs:element ref="asymptote-preamble"/>
       <xs:element ref="macros"/>
       <xs:element ref="cross-references"/>
-      <xs:element ref="latex-image-preamble"/>
       <xs:element ref="initialism"/>
       <xs:element ref="feedback"/>
       <xs:element ref="rename"/>
@@ -3445,13 +3446,14 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="package" type="xs:string"/>
+  <xs:element name="latex-image-preamble" type="xs:string"/>
+  <xs:element name="asymptote-preamble" type="xs:string"/>
   <xs:element name="macros" type="xs:string"/>
   <xs:element name="cross-references">
     <xs:complexType>
       <xs:attribute name="text" use="required" type="XrefTextStyle"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="latex-image-preamble" type="xs:string"/>
   <xs:element name="initialism" type="xs:string"/>
   <xs:element name="feedback">
     <xs:complexType>

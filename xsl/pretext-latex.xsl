@@ -9225,7 +9225,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- now ready to build rows -->
     <xsl:text>&#xa;</xsl:text>
     <!-- table-wide values are needed to reconstruct/determine overrides -->
-    <xsl:apply-templates select="row">
+    <!-- We *actively* enforce header rows being (a) initial, and        -->
+    <!-- (b) contiguous.  So following two-part match will do no harm    -->
+    <!-- to correct source, but will definitely harm incorrect source.   -->
+    <xsl:apply-templates select="row[@header]">
+        <xsl:with-param name="table-left" select="$table-left" />
+        <xsl:with-param name="table-bottom" select="$table-bottom" />
+        <xsl:with-param name="table-right" select="$table-right" />
+        <xsl:with-param name="table-halign" select="$table-halign" />
+        <xsl:with-param name="table-valign" select="$table-valign" />
+    </xsl:apply-templates>
+    <xsl:apply-templates select="row[not(@header)]">
         <xsl:with-param name="table-left" select="$table-left" />
         <xsl:with-param name="table-bottom" select="$table-bottom" />
         <xsl:with-param name="table-right" select="$table-right" />
@@ -9236,6 +9246,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{tabular}&#xa;</xsl:text>
     <!-- finish grouping for tabular font -->
     <xsl:text>}%&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="pop-footnote-text"/>
     <xsl:if test="ancestor::sidebyside">
         <xsl:text>\par}&#xa;</xsl:text>
     </xsl:if>
@@ -9371,16 +9382,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <!-- End of the row is too late to see if we have the last one -->
-    <!-- so we get it here and just kick it down the road          -->
-    <xsl:variable name="last-row" select="not(following-sibling::row)" />
     <!-- Walking the row's cells, write contents and bottom borders -->
-    <xsl:call-template name="row-cells">
-        <xsl:with-param name="the-cell" select="cell[1]" />
-        <xsl:with-param name="left-col" select="../col[1]" /> <!-- possibly empty -->
+    <xsl:apply-templates select="cell[1]">
+        <xsl:with-param name="left-col" select="parent::tabular/col[1]" /> <!-- possibly empty -->
         <xsl:with-param name="left-column-number" select="1" />
-        <xsl:with-param name="last-row" select="$last-row" />
         <xsl:with-param name="clines" select="''" />
+        <xsl:with-param name="start-run" select="1" />
         <xsl:with-param name="table-left" select="$table-left"/>
         <xsl:with-param name="table-bottom" select="$table-bottom"/>
         <xsl:with-param name="table-right" select="$table-right" />
@@ -9388,29 +9395,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="table-valign" select="$table-valign" />
         <xsl:with-param name="row-left" select="$row-left" />
         <xsl:with-param name="row-bottom" select="$row-bottom" />
-        <xsl:with-param name="prior-bottom" select="'undefined'" />
-        <xsl:with-param name="start-run" select="1" />
-    </xsl:call-template>
+    </xsl:apply-templates>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Recursively traverse the "cell"'s of a "row" while simultaneously     -->
+<!-- Recursively traverse the "cell" of a "row" while simultaneously       -->
 <!-- traversing the "col" elements of the column group, if present.        -->
 <!-- Inspect the (previously) built column specifications to see if        -->
 <!-- a \multicolumn is necessary for an override on a table entry          -->
 <!-- Accumulate cline information to write at the end of the line/row.     -->
 <!-- Study the "column-cols" template for a less-involved template         -->
 <!-- that uses an identical strategy, if you want to see something simpler -->
-<!-- NB: when the recursion is unwound (and simply each row is hit         -->
-<!-- with a template), first select rows with @header, then rows without.  -->
-<!-- That way non-initial, non-contiguous attempts will obviously fail.    -->
-<!-- See the -html conversion to see how this can be done.                 -->
-<xsl:template name="row-cells">
-    <xsl:param name="the-cell" />
+<!-- NB: column numbers are always accurate.  There may be either (1) no   -->
+<!-- tabular/col or (2) one tabular/col for each column of the table.  So  -->
+<!-- the $left-col parameter might  be empty through the entire recursion. -->
+<!-- NB: the $table-* and $row-* parameters could be recomputed inside     -->
+<!-- this template by looking outward and implmenting the same effective   -->
+<!-- override and defaults strategy.  They are left in place as a          -->
+<!-- historical artifact, and they might be just a smidge more efficient.  -->
+<xsl:template match="cell">
     <xsl:param name="left-col" />
     <xsl:param name="left-column-number" />
-    <xsl:param name="last-row" />
     <xsl:param name="clines" />
+    <xsl:param name="start-run" />
     <xsl:param name="table-left" />
     <xsl:param name="table-bottom" />
     <xsl:param name="table-right" />
@@ -9418,28 +9425,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="table-valign" />
     <xsl:param name="row-left" />
     <xsl:param name="row-bottom" />
-    <xsl:param name="prior-bottom" />
-    <xsl:param name="start-run" />
     <!-- A cell may span several columns, or default to just 1              -->
     <!-- When colspan is not trivial, we identify the left and right ends   -->
     <!-- of the span, both as col elements and as column numbers            -->
     <!-- When colspan is trivial, the left and right versions are identical -->
     <!-- Left is used for left border and for horizontal alignment          -->
     <!-- Right is used for right border                                     -->
-    <!-- Left (less 1) is used for lagging cline flushes                    -->
     <xsl:variable name="column-span">
         <xsl:choose>
-            <xsl:when test="$the-cell/@colspan">
-                <xsl:value-of select="$the-cell/@colspan" />
+            <xsl:when test="@colspan">
+                <xsl:value-of select="@colspan" />
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>1</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <!-- For a "normal" 1-column cell these variables effectively make copies -->
-    <xsl:variable name="right-column-number" select="$left-column-number + $column-span - 1" />
-    <xsl:variable name="right-col" select="($left-col/self::*|$left-col/following-sibling::col)[position()=$column-span]" />
+    <xsl:variable name="b-multiple-columns" select="$column-span > 1"/>
+    <xsl:variable name="right-column-number" select="$left-column-number + $column-span - 1"/>
+    <xsl:variable name="right-col" select="(parent::row/parent::tabular/col)[$right-column-number]"/>
     <!-- recreate the column specification for a right border       -->
     <!-- either a per-column value, or the global, table-wide value -->
     <xsl:variable name="column-right">
@@ -9456,8 +9460,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- else default to the column value          -->
     <xsl:variable name="cell-right">
         <xsl:choose>
-            <xsl:when test="$the-cell/@right">
-                <xsl:value-of select="$the-cell/@right" />
+            <xsl:when test="@right">
+                <xsl:value-of select="@right" />
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="$column-right" />
@@ -9481,12 +9485,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- check for row override, else default to the column value -->
     <xsl:variable name="cell-halign">
         <xsl:choose>
-            <xsl:when test="$the-cell/@halign">
-                <xsl:value-of select="$the-cell/@halign" />
+            <xsl:when test="@halign">
+                <xsl:value-of select="@halign" />
             </xsl:when>
             <!-- look to the row -->
-            <xsl:when test="$the-cell/parent::*[1]/@halign">
-                <xsl:value-of select="$the-cell/parent::*[1]/@halign" />
+            <xsl:when test="parent::row/@halign">
+                <xsl:value-of select="parent::row/@halign" />
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="$column-halign" />
@@ -9498,20 +9502,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- either a per-row value, or the global, table-wide value  -->
     <xsl:variable name="row-valign">
         <xsl:choose>
-            <xsl:when test="$the-cell/parent::*[1]/@valign">
-                <xsl:value-of select="$the-cell/parent::*[1]/@valign" />
+            <xsl:when test="parent::row/@valign">
+                <xsl:value-of select="parent::row/@valign" />
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="$table-valign" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <!-- Look ahead to next cell, anticipating recursion   -->
-    <!-- but also probing for end of row (no more cells),  -->
-    <!-- which is needed when flushing cline specification -->
-    <!-- Also advance to next col element from right one   -->
-    <xsl:variable name="next-cell" select="$the-cell/following-sibling::cell[1]" /> <!-- possibly empty -->
-    <xsl:variable name="next-col"  select="$right-col/following-sibling::col[1]" />
+    <!-- Look ahead to next cell, anticipating recursion     -->
+    <!-- but also probing for end of row (empty $next-cell), -->
+    <!-- which is needed when flushing cline specification.  -->
+    <!-- Also for identifying changes in border styles       -->
+    <xsl:variable name="next-cell" select="following-sibling::cell[1]"/>
     <!-- Write the cell's contents -->
     <!-- Wrap in a multicolumn in any of the following situations for    -->
     <!-- the purposes of vertical boundary rules or content formatting:  -->
@@ -9521,78 +9524,74 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!--    -if there are paragraphs in the cell                         -->
     <!-- $table-left and $row-left *can* differ on first use,            -->
     <!-- but row-left is subsequently set to $table-left.                -->
-    <xsl:if test="$the-cell">
-        <xsl:choose>
-            <xsl:when test="not($table-left = $row-left) or not($column-halign = $cell-halign) or not($column-right = $cell-right) or ($column-span > 1) or $the-cell/p">
-                <xsl:text>\multicolumn{</xsl:text>
-                <xsl:value-of select="$column-span" />
-                <xsl:text>}{</xsl:text>
-                <!-- only place latex allows/needs a left border -->
-                <xsl:if test="$left-column-number = 1">
-                    <xsl:call-template name="vrule-specification">
-                        <xsl:with-param name="width" select="$row-left" />
-                    </xsl:call-template>
-                </xsl:if>
-                <xsl:choose>
-                    <xsl:when test="$the-cell/p">
-                        <!-- paragraph-valign-specification differs from valign-specification -->
-                        <xsl:call-template name="paragraph-valign-specification">
-                            <xsl:with-param name="align" select="$row-valign" />
-                        </xsl:call-template>
-                        <xsl:text>{</xsl:text>
-                        <xsl:choose>
-                            <xsl:when test="$left-col/@width">
-                                <xsl:variable name="width">
-                                    <xsl:call-template name="normalize-percentage">
-                                        <xsl:with-param name="percentage" select="$left-col/@width" />
-                                    </xsl:call-template>
-                                </xsl:variable>
-                                <xsl:value-of select="substring-before($width, '%') div 100" />
-                            </xsl:when>
-                            <!-- If there is no $left-col/@width, terminate -->
-                            <xsl:otherwise>
-                                <xsl:message terminate="yes">MBX:ERROR:   cell with p element has no corresponding col element with width attribute</xsl:message>
-                                <xsl:apply-templates select="." mode="location-report" />
-                            </xsl:otherwise>
-                        </xsl:choose>
-                        <xsl:text>\linewidth}</xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:call-template name="halign-specification">
-                            <xsl:with-param name="align" select="$cell-halign" />
-                        </xsl:call-template>
-                    </xsl:otherwise>
-                </xsl:choose>
+    <xsl:choose>
+        <xsl:when test="not($table-left = $row-left) or not($column-halign = $cell-halign) or not($column-right = $cell-right) or $b-multiple-columns or p">
+            <xsl:text>\multicolumn{</xsl:text>
+            <xsl:value-of select="$column-span" />
+            <xsl:text>}{</xsl:text>
+            <!-- only place latex allows/needs a left border -->
+            <xsl:if test="$left-column-number = 1">
                 <xsl:call-template name="vrule-specification">
-                    <xsl:with-param name="width" select="$cell-right" />
+                    <xsl:with-param name="width" select="$row-left" />
                 </xsl:call-template>
-                <xsl:text>}{</xsl:text>
-                <xsl:call-template name="table-cell-content">
-                    <xsl:with-param name="the-cell" select="$the-cell" />
-                    <xsl:with-param name="halign" select="$cell-halign" />
-                    <xsl:with-param name="valign" select="$row-valign" />
-                </xsl:call-template>
-                <xsl:text>}</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:call-template name="table-cell-content">
-                    <xsl:with-param name="the-cell" select="$the-cell" />
-                    <xsl:with-param name="halign" select="$cell-halign" />
-                    <xsl:with-param name="valign" select="$row-valign" />
-                </xsl:call-template>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:if test="$the-cell/following-sibling::cell">
-            <xsl:text>&amp;</xsl:text>
-        </xsl:if>
+            </xsl:if>
+            <xsl:choose>
+                <xsl:when test="p">
+                    <!-- paragraph-valign-specification differs from valign-specification -->
+                    <xsl:call-template name="paragraph-valign-specification">
+                        <xsl:with-param name="align" select="$row-valign" />
+                    </xsl:call-template>
+                    <xsl:text>{</xsl:text>
+                    <xsl:choose>
+                        <xsl:when test="$left-col/@width">
+                            <xsl:variable name="width">
+                                <xsl:call-template name="normalize-percentage">
+                                    <xsl:with-param name="percentage" select="$left-col/@width" />
+                                </xsl:call-template>
+                            </xsl:variable>
+                            <xsl:value-of select="substring-before($width, '%') div 100" />
+                        </xsl:when>
+                        <!-- If there is no $left-col/@width, terminate -->
+                        <xsl:otherwise>
+                            <xsl:message terminate="yes">PTX:ERROR:   cell with p element has no corresponding col element with width attribute</xsl:message>
+                            <xsl:apply-templates select="." mode="location-report" />
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:text>\linewidth}</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:call-template name="halign-specification">
+                        <xsl:with-param name="align" select="$cell-halign" />
+                    </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:call-template name="vrule-specification">
+                <xsl:with-param name="width" select="$cell-right" />
+            </xsl:call-template>
+            <xsl:text>}{</xsl:text>
+            <xsl:apply-templates select="." mode="table-cell-content">
+                <xsl:with-param name="halign" select="$cell-halign" />
+                <xsl:with-param name="valign" select="$row-valign" />
+            </xsl:apply-templates>
+            <xsl:text>}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="table-cell-content">
+                <xsl:with-param name="halign" select="$cell-halign" />
+                <xsl:with-param name="valign" select="$row-valign" />
+            </xsl:apply-templates>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- more content to come, use tabular separator -->
+    <xsl:if test="$next-cell">
+        <xsl:text>&amp;</xsl:text>
     </xsl:if>
     <!-- The desired bottom border style for this cell     -->
-    <!-- Considered, but also paid forward as prior-bottom -->
     <xsl:variable name="current-bottom">
         <xsl:choose>
             <!-- cell specification -->
-            <xsl:when test="$the-cell/@bottom">
-                <xsl:value-of select="$the-cell/@bottom" />
+            <xsl:when test="@bottom">
+                <xsl:value-of select="@bottom" />
             </xsl:when>
             <!-- inherited specification for row -->
             <xsl:otherwise>
@@ -9600,89 +9599,105 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <!-- Formulate any necessary update to cline  -->
-    <!-- information for the bottom border -->
+    <!-- The desired bottom border style for the next cell     -->
+    <xsl:variable name="next-bottom">
+        <xsl:choose>
+            <!-- end of row, no next cell, so      -->
+            <!-- bottom style signals change/flush -->
+            <xsl:when test="not($next-cell)">
+                <xsl:text>undefined-bottom</xsl:text>
+            </xsl:when>
+            <!-- next cell's specification -->
+            <xsl:when test="$next-cell/@bottom">
+                <xsl:value-of select="$next-cell/@bottom" />
+            </xsl:when>
+            <!-- inherited specification for row -->
+            <xsl:otherwise>
+                <xsl:value-of select="$row-bottom" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- Formulate any necessary update to cline -->
+    <!-- information for the bottom border       -->
     <xsl:variable name="updated-cline">
-        <!-- write current cline information -->
         <xsl:value-of select="$clines" />
-        <!-- is there a change, or end of row, indicating need to flush -->
-        <xsl:if test="not($the-cell) or not($prior-bottom = $current-bottom)">
+        <!-- if there a change in bottom border, and always at end -->
+        <!-- of row, conclude the creation of a specification      -->
+        <xsl:if test="not($current-bottom = $next-bottom)">
             <xsl:choose>
                 <!-- end of row and have never flushed -->
                 <!-- hence a uniform bottom border     -->
-                <xsl:when test="not($the-cell) and ($start-run = 1)">
+                <xsl:when test="not($next-cell) and ($start-run = 1)">
                     <xsl:call-template name="hrule-specification">
-                        <xsl:with-param name="width" select="$prior-bottom" />
+                        <xsl:with-param name="width" select="$current-bottom" />
                     </xsl:call-template>
                 </xsl:when>
                 <!-- write cline for up-to, and including, prior cell      -->
                 <!-- prior-bottom always lags, so never operate on cell #1 -->
-                <xsl:when test="($left-column-number != 1) and not($prior-bottom = 'none')">
+                <xsl:when test="not($current-bottom = 'none')">
                     <xsl:call-template name="crule-specification">
-                        <xsl:with-param name="width" select="$prior-bottom" />
+                        <xsl:with-param name="width" select="$current-bottom" />
                         <xsl:with-param name="start" select="$start-run" />
-                        <xsl:with-param name="finish" select="$left-column-number - 1" />
+                        <xsl:with-param name="finish" select="$right-column-number" />
                     </xsl:call-template>
                 </xsl:when>
-                <xsl:otherwise>
-                    <!-- no update -->
-                </xsl:otherwise>
+                <xsl:otherwise/>
             </xsl:choose>
         </xsl:if>
     </xsl:variable>
-    <!-- update start of consecutive run of styles -->
+    <!-- duplicate start of current border style or reset to next column -->
     <xsl:variable name="new-start-run">
         <xsl:choose>
-            <xsl:when test="$left-column-number = 1 or $prior-bottom = $current-bottom">
+            <xsl:when test="$current-bottom = $next-bottom">
                 <xsl:value-of select="$start-run" />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="$left-column-number" />
+                <xsl:value-of select="$right-column-number + 1" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:choose>
-        <!-- Call this template on next cell              -->
-        <!-- Possibly passing an empty node (as sentinel) -->
-        <xsl:when test="$the-cell">
-            <xsl:call-template name="row-cells">
-                <xsl:with-param name="the-cell" select="$next-cell" />
-                <xsl:with-param name="left-col" select="$next-col" /> <!-- possibly empty -->
-                <xsl:with-param name="left-column-number" select="$right-column-number + 1" />
-                <xsl:with-param name="last-row" select="$last-row" />
-                <xsl:with-param name="clines" select="$updated-cline" />
-                <xsl:with-param name="table-left" select="$table-left" />
-                <xsl:with-param name="table-bottom" select="$table-bottom" />
-                <xsl:with-param name="table-right" select="$table-right" />
-                <xsl:with-param name="table-halign" select="$table-halign" />
-                <xsl:with-param name="table-valign" select="$table-valign" />
-                <!-- next line correct, only allow discrepancy on first use -->
-                <xsl:with-param name="row-left" select="$table-left" />
-                <xsl:with-param name="row-bottom" select="$row-bottom" />
-                <xsl:with-param name="prior-bottom" select="$current-bottom" />
-                <xsl:with-param name="start-run" select="$new-start-run" />
-            </xsl:call-template>
-        </xsl:when>
-        <!-- At non-cell, done with row          -->
-        <!-- conclude line, dump cline info, etc -->
-        <xsl:otherwise>
-            <!-- \tabularnewline is unambiguous, better than \\    -->
-            <!-- also at a final line with end-of-line decoration  -->
-            <xsl:if test="not($updated-cline='') or not($last-row)">
+
+    <!-- Always attempt a recursive call.  If cells are exhausted, -->
+    <!-- $next-cell is empty/false and nothing happens here        -->
+    <!-- Leap forward to column element just beyond end of colspan -->
+    <xsl:apply-templates select="$next-cell">
+        <xsl:with-param name="left-col" select="$right-col/following-sibling::col[1]" />
+        <xsl:with-param name="left-column-number" select="$right-column-number + 1" />
+        <xsl:with-param name="clines" select="$updated-cline" />
+        <xsl:with-param name="start-run" select="$new-start-run" />
+        <xsl:with-param name="table-left" select="$table-left" />
+        <xsl:with-param name="table-bottom" select="$table-bottom" />
+        <xsl:with-param name="table-right" select="$table-right" />
+        <xsl:with-param name="table-halign" select="$table-halign" />
+        <xsl:with-param name="table-valign" select="$table-valign" />
+        <xsl:with-param name="row-left" select="$table-left" />
+        <xsl:with-param name="row-bottom" select="$row-bottom" />
+    </xsl:apply-templates>
+
+    <!-- finish the row, dump cline info, etc -->
+    <xsl:if test="not($next-cell)">
+        <xsl:choose>
+            <!-- \tabularnewline is unambiguous, better than \\ -->
+            <!-- *any* line with decoration needs a conclusion  -->
+            <xsl:when test="not($updated-cline = '')">
                 <xsl:text>\tabularnewline</xsl:text>
-            </xsl:if>
-            <!-- no harm if end-of-line decoration is empty -->
-            <xsl:value-of select="$updated-cline" />
-            <!-- next row could begin with bare [ and LaTeX sees -->
+                <xsl:value-of select="$updated-cline"/>
+            </xsl:when>
+            <!-- Test determines if there are more rows.         -->
+            <!-- Next row could begin with bare [ and LaTeX sees -->
             <!-- the start of \tabularnewline[] which would      -->
-            <!-- indicate space, so we just appease the macro    -->
+            <!-- indicate the need for some unit of length for a -->
+            <!-- space, so we just appease the macro with a 0pt. -->
             <!-- https://github.com/rbeezer/mathbook/issues/300  -->
-            <xsl:if test="$updated-cline='' and not($last-row)">
-                <xsl:text>[0pt]</xsl:text>
-            </xsl:if>
-        </xsl:otherwise>
-    </xsl:choose>
+            <xsl:when test="parent::row/following-sibling::row">
+                <xsl:text>\tabularnewline[0pt]</xsl:text>
+            </xsl:when>
+            <!-- last row, no decoration, \end{tabular} concludes-->
+            <xsl:otherwise/>
+         </xsl:choose>
+    </xsl:if>
 </xsl:template>
+
 
 <!-- ############################ -->
 <!-- Table construction utilities -->
@@ -9822,20 +9837,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<xsl:template name="table-cell-content">
+<xsl:template match="cell" mode="table-cell-content">
     <xsl:param name="the-cell" />
     <xsl:param name="halign" />
     <xsl:param name="valign" />
+
     <!-- a cell of a header row needs to be bold -->
     <!-- NB: Named templates means context is a  -->
     <!-- row, which is really wrong.  Tests      -->
     <!-- should be on  parent::row/@header       -->
     <xsl:variable name="header-row">
         <xsl:choose>
-            <xsl:when test="@header = 'yes'">
+            <xsl:when test="parent::row/@header = 'yes'">
                 <xsl:text>true</xsl:text>
             </xsl:when>
-            <xsl:when test="@header = 'vertical'">
+            <xsl:when test="parent::row/@header = 'vertical'">
                 <xsl:text>true</xsl:text>
             </xsl:when>
             <!-- "no" is other choice, or no attribute at all  -->
@@ -9845,21 +9861,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:variable name="b-header" select="$header-row = 'true'"/>
     <!-- and vertical text is a simpler check -->
-    <xsl:variable name="b-vertical-header" select="@header = 'vertical'"/>
+    <xsl:variable name="b-vertical-header" select="parent::row/@header = 'vertical'"/>
     <xsl:choose>
-        <xsl:when test="$the-cell/p">
+        <xsl:when test="p">
             <!-- paragraph-halign-specification differs from halign-specification -->
             <xsl:call-template name="paragraph-halign-specification">
                 <xsl:with-param name="align" select="$halign" />
             </xsl:call-template>
             <!-- styling choice for interparagraph spacing within a table cell    -->
-            <xsl:if test="$the-cell[count(p) &gt; 1]">
+            <xsl:if test="count(p) > 1">
                 <xsl:text>\setlength{\parskip}{0.5\baselineskip}</xsl:text>
             </xsl:if>
             <xsl:text>%&#xa;</xsl:text>
-            <xsl:apply-templates select="$the-cell/p" />
+            <xsl:apply-templates select="p" />
         </xsl:when>
-        <xsl:when test="$the-cell/line">
+        <xsl:when test="line">
             <xsl:text>\tablecelllines{</xsl:text>
             <xsl:call-template name="halign-specification">
                 <xsl:with-param name="align" select="$halign" />
@@ -9871,7 +9887,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}&#xa;</xsl:text>
             <xsl:text>{</xsl:text>
             <!-- adding \textbf, \bfseries not 100% effective here -->
-            <xsl:apply-templates select="$the-cell/line" />
+            <xsl:apply-templates select="line" />
             <xsl:text>}&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -9881,8 +9897,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:if test="$b-vertical-header">
                 <xsl:text>\rotatebox{90}{</xsl:text>
             </xsl:if>
-            <!-- finally - the content -->
-            <xsl:apply-templates select="$the-cell" />
+            <!-- finally - the content of unstructured cell -->
+            <xsl:apply-templates/>
             <!-- a little space keeps text off a top rule -->
             <xsl:if test="$b-vertical-header">
                 <xsl:text>\space}</xsl:text>
@@ -10569,9 +10585,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- package, and its "\mpfootnotemark" alternative works    -->
 <!-- worse than simple default LaTeX (though the numbers     -->
 <!-- could be hard-coded if necessary).                      -->
+<!-- NB: (2020-11-15) New environments may mean there is no  -->
+<!-- migration to the *.aux file, hence the \protect may not -->
+<!-- be necessary.                                           -->
 <xsl:template match="fn">
     <xsl:choose>
-        <xsl:when test="ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &GOAL-FILTER; or &FIGURE-FILTER; or self::commentary or self::list or self::sidebyside or self::defined-term or self::colophon/parent::backmatter or self::assemblage or self::exercise]">
+        <xsl:when test="ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &GOAL-FILTER; or &FIGURE-FILTER; or self::tabular or self::commentary or self::list or self::sidebyside or self::defined-term or self::colophon/parent::backmatter or self::assemblage or self::exercise]">
             <!-- a footnote in the text of a caption will migrate to -->
             <!-- the auxiliary file for use in the "list of figures" -->
             <!-- and there is some confusion of braces and the use   -->
@@ -10591,9 +10610,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- Part 2: for items implemented as "tcolorbox" we scan back     -->
+<!-- Part 2: for items implemented as "tcolorbox", and other       -->
+<!-- environments that could harbor a footnote, such as            -->
+<!-- "figure", "table", "tabular", etc., we scan back              -->
 <!-- through the contents, formulating the text of footnotes,      -->
-<!-- in order.  it is necessary to hard-code the (serial) number   -->
+<!-- in order.  It is necessary to hard-code the (serial) number   -->
 <!-- of the footnote since otherwise the numbering gets confused   -->
 <!-- by an intervening "tcolorbox".  The template should be placed -->
 <!-- immediately after the "\end{}" of affected environments.      -->
@@ -10606,8 +10627,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- no ancestors are implmented by tcolorbox.  Otherwise, we      -->
 <!-- "wait" and pop all interior footnotes later.                  -->
 <!-- NB: these templates could be improved with an entity          -->
-<xsl:template match="&ASIDE-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|commentary|list|sidebyside|defined-term|&GOAL-LIKE;|backmatter/colophon|assemblage|exercise" mode="pop-footnote-text">
-    <xsl:if test="count(ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &GOAL-FILTER; or &FIGURE-FILTER; or self::commentary or self::list or self::sidebyside or self::defined-term or self::colophon/parent::backmatter or self::assemblage or self::exercise]) = 0">
+<xsl:template match="&ASIDE-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|tabular|commentary|list|sidebyside|defined-term|&GOAL-LIKE;|backmatter/colophon|assemblage|exercise" mode="pop-footnote-text">
+    <xsl:if test="count(ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &GOAL-FILTER; or &FIGURE-FILTER; or self::tabular or self::commentary or self::list or self::sidebyside or self::defined-term or self::colophon/parent::backmatter or self::assemblage or self::exercise]) = 0">
         <xsl:for-each select=".//fn">
             <xsl:text>\footnotetext[</xsl:text>
             <xsl:apply-templates select="." mode="serial-number"/>

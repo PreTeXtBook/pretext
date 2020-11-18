@@ -4522,14 +4522,14 @@ the xsltproc executable.
         <section xml:id="table-calisthenics">
             <title>Table Calisthenics</title>
 
-            <p>A very minimal table, hence with left-justified cells, no borders.  We do wrap the tabular element in a table element to get centering, numbering and a caption.</p>
+            <p>A very minimal table, hence with left-justified cells, no borders.  We do wrap the tabular element in a table element to get centering, numbering and a caption.  Footnotes inside cells are tested here.</p>
 
             <table>
                 <title>Some Colors</title>
                 <tabular>
                     <row>
                         <cell>Red</cell>
-                        <cell>Green</cell>
+                        <cell>Green<fn>Green can be a very sick looking color.</fn></cell>
                         <cell>Yellow</cell>
                     </row>
                     <row>
@@ -6300,13 +6300,21 @@ the xsltproc executable.
             <subsection>
                 <title>Captions and Subtitles</title>
 
-                <p>Experimental support for captions and subtitles first.  Look at teh source, which mimics the actual HTML.  The words of the titles and/or subcaptions (there is a difference!) come from a file in <url href="https://en.wikipedia.org/wiki/WebVTT">Web Video Text Tracks</url><fn><c>wikipedia.org/wiki/WebVTT</c></fn> (<init>WEBVVT</init>) format.</p>
+                <p>Experimental support for captions and subtitles first.  Look at the source, which mimics the actual HTML.  The words of the titles and/or subcaptions (there is a difference!) come from a file in <url href="https://en.wikipedia.org/wiki/WebVTT">Web Video Text Tracks</url><fn><c>wikipedia.org/wiki/WebVTT</c></fn> (<init>WEBVVT</init>) format.</p>
                 <figure>
                     <caption>Big Buck Bunny with subtitles adapted from <url href="https://sites.google.com/site/chrisfoo/subtitles"><c>https://sites.google.com/site/chrisfoo/subtitles</c></url></caption>
                     <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="images/big-buck-bunny-frame-one.jpg">
                         <track kind="subtitles" label="US English" xml:lang="en" source="images/BigBuckBunnyAcapella.vtt"/>
                     </video>
                 </figure>
+
+                <p>This video is identical to the previous one, except it tests the use of a default <tag>track</tag>.  The <attr>default</attr> attribute on <tag>track</tag> can be set to the value <c>yes</c> to make one set of captions the default (and only one!).  Test is a bit lame, the two <tag>track</tag> use the same file, but just have different labels for the player's menu.  Track named <c>US English Two</c> will show as in-use at start-up.</p>
+
+                <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="images/big-buck-bunny-frame-one.jpg">
+                    <track kind="subtitles" label="US English One" xml:lang="en" source="images/BigBuckBunnyAcapella.vtt"/>
+                    <track kind="subtitles" label="US English Two" xml:lang="en" source="images/BigBuckBunnyAcapella.vtt" default="yes"/>
+                </video>
+
             </subsection>
         </section>
 
@@ -9417,11 +9425,11 @@ the xsltproc executable.
                     </row>
                 </tabular>
 
-                <p>The same effect can be had by specifying that the <attr>width</attr> attribute have the value <c>auto</c>, but do not specify any <attr>margins</attr>.</p>
+                <p>The same effect can be had by specifying that the <attr>width</attr> attribute have the value <c>auto</c>, but do not specify any <attr>margins</attr>.  We test multiple footnotes in a <tag>tabular</tag>, not included in a <tag>table</tag>.</p>
 
                 <tabular width="auto">
                     <row header="yes">
-                        <cell>State</cell>
+                        <cell>State<fn>Only from the West Coast.</fn></cell>
                         <cell>Population</cell>
                         <cell>Area (sq. mi.)</cell>
                         <cell>Statehood (Year)</cell>
@@ -9440,7 +9448,7 @@ the xsltproc executable.
                     </row>
                     <row>
                         <cell>California</cell>
-                        <cell>39,512,223</cell>
+                        <cell>39,512,223<fn>Wow! That is as big as many countries.</fn></cell>
                         <cell>163,696</cell>
                         <cell>1850</cell>
                     </row>

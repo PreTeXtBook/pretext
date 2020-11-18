@@ -1882,6 +1882,12 @@
                     </li>
                     <li>You may want to produce <init>SVG</init> versions of your diagrams for conversion to <init>EPUB</init>, and <init>PNG</init> versions for conversion to the <init>EPUB</init> precursor for Kindle format.</li>
                     <li><init>PDF</init> versions produced by the <c>pretext</c> script will not include the RPC extensions.  So <q>rotatable</q> 3D images rendered by the proprietary viewer, Adobe Acrobat, are not created, consistent with our open source philosophy.</li>
+
+                    <li>
+                        <p>Colors in Asymptote can be hard-coded using <c>rgb</c> syntax. Colors can also be defined at the top of an Asymptote file, to be referred to later. You may wish to produce <init>PDF</init> in both color (electronic) and black and white (print on demand) formats, and you probably do not want to maintain parallel source for both versions. Rather than writing (for example) <c>pen p=rgb(0,0,.7);</c> in your Asymptote code, you can write <c>pen p=curvepen1;</c>. Then, in the <tag>docinfo</tag> section of your document, you can add an <tag>asymptote-preamble</tag> and include the line <c>pen curvepen1=rgb(0,0,.7);</c>. Once you are ready to produce your black and white version, you need only change the definition of <c>curvepen1</c> in your <tag>asymptote-preamble</tag>.</p>
+
+                        <p>One note of caution: if your preamble includes Asymptote code that only works once certain libraries are loaded, you must include lines to import those libraries in your preamble. For example, to define a <c>material</c> you must first have the line <c>import three;</c>.</p>
+                    </li>
                 </ul></p>
 
                 <p>At this writing (2020-07-16) the <c>pretext</c> Python script requires a very new version of Asymptote in order to accurately produce all the versions described above.  There is no real way to do otherwise.  However, Asymptote provides a very useful <url href="http://asymptote.ualberta.ca/">web application</url><fn><c>asymptote.ualberta.ca</c></fn> written by Pedram Emami.  So you can create various output files <q>by hand</q> and download them for use.  More importantly, the web application is a great place to learn, experiment, and iterate as you become more skilled at building high-quality graphics to illustrate the concepts in your document.</p>

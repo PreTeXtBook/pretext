@@ -3715,6 +3715,16 @@
     </element>
   </define>
   <define name="Configuration" combine="choice">
+    <element name="latex-image-preamble">
+      <text/>
+    </element>
+  </define>
+  <define name="Configuration" combine="choice">
+    <element name="asymptote-preamble">
+      <text/>
+    </element>
+  </define>
+  <define name="Configuration" combine="choice">
     <element name="macros">
       <text/>
     </element>
@@ -3724,11 +3734,6 @@
       <attribute name="text">
         <ref name="XrefTextStyle"/>
       </attribute>
-    </element>
-  </define>
-  <define name="Configuration" combine="choice">
-    <element name="latex-image-preamble">
-      <text/>
     </element>
   </define>
   <define name="Configuration" combine="choice">
