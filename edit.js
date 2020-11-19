@@ -96,7 +96,7 @@ function base_menu_options_for(COMPONENT) {
              this_item_label = this_item['entry_key'];
              this_item_shortcut = this_item['entry_shortcut'];
 
-             this_menu += '<li tabindex="-1" data-env="' + this_item_label + '"i ' + 'data-jump="' + this_item_shortcut + '"';
+             this_menu += '<li tabindex="-1" data-env="' + this_item_label + '" ' + 'data-jump="' + this_item_shortcut + '"';
              if(i==0) { this_menu += ' id="choose_current"'}
              this_menu += '>';
 
@@ -581,6 +581,26 @@ function main_menu_navigator(e) {  // we are not currently editing
             current_object_being_edited.classList.remove("may_select");
             edit_menu_for(parent_object_to_edit.id);
             parent_object_to_edit.classList.add("may_select");
+        }
+    } else if ((key_hit = e.code.toLowerCase()) != e.code.toUpperCase()) {  //  supposed to check if it is a letter
+        key_hit = key_hit.substring(3);  // remove forst 3 characters, i.e., "key"
+        current_active_menu_item = document.getElementById('choose_current');
+        console.log('current_active_menu_item',  current_active_menu_item );
+        console.log( $(current_active_menu_item) );
+        if (next_menu_item = $(current_active_menu_item).nextAll('[data-jump="' + key_hit + '"]:first')[0]) {  // check there is a menu item with that key
+            current_active_menu_item.removeAttribute("id", "choose_current");
+            console.log('[data-jump="' + key_hit + '"]');
+            console.log( $(current_active_menu_item) );
+            console.log("li",  $(current_active_menu_item).next('li') );
+            console.log("nextAll", $(current_active_menu_item).nextAll('[data-jump="' + key_hit + '"]:first') );
+            console.log("next t-l", $(current_active_menu_item).next('[data-env="theorem-like"]') );
+            console.log("current_active_menu_item", current_active_menu_item, "cccc", $(current_active_menu_item).next('[data-jump="' + key_hit + '"]'));
+            console.log("next_menu_item", next_menu_item);
+            next_menu_item.setAttribute("id", "choose_current");
+            next_menu_item.focus();
+        } else {
+            // not sure what to do if an errelevant key was hit
+            console.log("that key does not match any option")
         }
     }
 }
