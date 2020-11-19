@@ -62,7 +62,7 @@ menu_for = {
                  ["corollary", "c"],
                  ["hypothesis", "h"],
                  ["conjecture", "j"]],
-"list-like": ["ordered list", "unordered list", "dictionary-list"],
+"list-like": [["ordered list"], ["unordered list"], ["dictionary-list"]],
 "blockquote": ["paragraph"],
 "metadata": ["index entries", "notation"],
 "p": ["emphasis-like", "abbreviation", "symbols", "ref or link"],
@@ -115,8 +115,15 @@ function base_menu_options_for(COMPONENT) {
              this_item_name = this_item[0];
              this_item_shortcut = this_item[this_item.length - 1];
              if (this_item.length == 3) {
-                 this_item_label = this_item[1]
-             } else { this_item_label = this_item_name }
+                 this_item_label = this_item[1];
+                 this_item_shortcut = this_item[2];
+             } else if (this_item.length == 2) { 
+                 this_item_label = this_item_name;
+                 this_item_shortcut = this_item[1]
+             } else if (this_item.length == 1) {
+                 this_item_label = this_item_name;
+                 this_item_shortcut = this_item_name.charAt(0)
+             }
 
              this_item_name = this_item_name.replace(this_item_shortcut, '<b>' + this_item_shortcut + '</b>');
 
