@@ -3210,13 +3210,14 @@ the xsltproc executable.
 
                 <sidebyside width="40%" margins="auto">
                     <!-- Tour example modified: figsize moved from show() into plot() -->
+                    <!-- 2020-11-18: converted an xrange() to an srange() -->
                     <figure xml:id="figure-sage-multigraph">
                         <caption>A Sage multigraph of a sentence</caption>
                         <image xml:id="sageplot-sentence-multigraph">
                             <sageplot>
                             stnc = 'I am a cool multiedge graph with loops'
                             g = DiGraph({}, loops=True, multiedges=True)
-                            for a,b in [(stnc[i], stnc[i+1]) for i in xrange(len(stnc)-1)]:
+                            for a,b in [(stnc[i], stnc[i+1]) for i in srange(len(stnc)-1)]:
                                g.add_edge(a, b, b)
                             g.plot(color_by_label=True, edge_style='solid', figsize=(8,8))
                             </sageplot>
