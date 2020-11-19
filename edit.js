@@ -35,15 +35,26 @@ var menu_neutral_background = "#ddb";
 var menu_active_background = "#fdd";
 
 menu_for = {
-"section": ["paragraph", "list-like", "theorem-like", "remark-like", "example-like", "image/display-like", "table-like", "minor heading", "subsection", "side-by-side"],
+/*
+"section": ["<b>p</b>aragraph", "<b>l</b>ist/table-like", "<b>t</b>heorem-like", "<b>r</b>emark-like", "<b>e</b>xample-like", "<b>d</b>isplay/image-like", "pro<b>j</b>ect/exercise-like", "<b>i</b>nteractives", "<b>s</b>ection-like"],
+*/
+"section": [{"menu_entry": "<b>p</b>aragraph", "entry_key": "paragraph", "entry_shortcut": "p"},
+{"menu_entry": "<b>l</b>ist/table-like", "entry_key": "list-like", "entry_shortcut": "l"},
+{"menu_entry":  "<b>t</b>heorem-like", "entry_key": "theorem-like", "entry_shortcut": "t"},
+{"menu_entry":  "<b>r</b>emark-like", "entry_key": "remark-like", "entry_shortcut": "r"},
+{"menu_entry":  "<b>e</b>xample-like", "entry_key": "example-like", "entry_shortcut": "e"},
+{"menu_entry":  "<b>d</b>isplay/image-like", "entry_key": "display-like", "entry_shortcut": "d"},
+{"menu_entry":  "pro<b>j</b>ect/exercise-like", "entry_key": "project-like", "entry_shortcut": "j"},
+{"menu_entry":  "<b>i</b>nteractives", "entry_key": "interactives", "entry_shortcut": "i"},
+{"menu_entry":  "<b>s</b>ection-like", "entry_key": "section-like", "entry_shortcut": "s"}],
 "theorem-like": ["theorem", "proposition", "lemma", "corollary", "hypothesis", "conjecture"],
 "list-like": ["ordered list", "unordered list", "dictionary-list"],
 "blockquote": ["paragraph"],
 "metadata": ["index entries", "notation"],
-"p": ["text decoration", "abbreviation", "symbols", "ref or link"],
-"text decoration": ["emphasis", "foreign word", "book title", "inline quote"],
-"abbreviation": ["ie", "eg", "etc", "et al"],
-"symbols": ["ellipsis", "trademark", "copyright"],
+"p": ["emphasis-like", "abbreviation", "symbols", "ref or link"],
+"emphasis-like": ["emphasis", "foreign word", "book title", "inline quote", "name of a ship"],
+// "abbreviation": ["ie", "eg", "etc", "et al"],  // i.e., etc., ellipsis, can just be typed.
+"symbols": ["trademark", "copyright"],
 "ref or link": ["ref to an id", "citation", "hyperlink"]
 }
 
@@ -74,9 +85,26 @@ function base_menu_options_for(COMPONENT) {
      this_menu = "";
      for (var i=0; i < component_items.length; ++i) {
          this_item = component_items[i];
-         if(i==0) { this_menu += '<li tabindex="-1" id="choose_current" data-env="' + this_item + '">' }
-         else { this_menu += '<li tabindex="-1" data-env="' + this_item + '">' }
-         this_menu += this_item + '</li>';
+         if ( (typeof this_item) == 'string' ) {  // this case will go away once we have proper menu data
+             if(i==0) { this_menu += '<li tabindex="-1" id="choose_current" data-env="' + this_item + '">' }
+             else { this_menu += '<li tabindex="-1" data-env="' + this_item + '">' }
+             this_menu += this_item;
+             if (this_item in menu_for) { this_menu += '<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div>' }
+             this_menu += '</li>';
+         } else {
+             this_item_name = this_item['menu_entry'];
+             this_item_label = this_item['entry_key'];
+             this_item_shortcut = this_item['entry_shortcut'];
+
+             this_menu += '<li tabindex="-1" data-env="' + this_item_label + '"i ' + 'data-jump="' + this_item_shortcut + '"';
+             if(i==0) { this_menu += ' id="choose_current"'}
+             this_menu += '>';
+
+             this_menu += this_item_name 
+                     // little right triangle if there is a submenu
+             if (this_item_label in menu_for) { this_menu += '<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div>' }
+             this_menu += '</li>';
+         }
      }
 //     this_menu += "</ol>";
 
@@ -529,9 +557,6 @@ function main_menu_navigator(e) {  // we are not currently editing
         next_menu_item.setAttribute("id", "choose_current");
         console.log("setting focus on",next_menu_item);
         next_menu_item.focus();
-  //      alert("Sorry, up arrow not implemented yet.\nBut when it is, it will move to the previous item on this sub-menu");
-//    }  else if (e.code == "ArrowLeft") {
-//        alert("Sorry, left arrow not implemented yet.\nBut when it is, it will move to the previous sub-menu");
     }  else if (e.code == "Escape" || e.code == "ArrowLeft") {
         console.log("processing ECS");
         if (current_active_menu_item = document.getElementById('choose_current')) {
