@@ -980,14 +980,12 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
 def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     import subprocess, shutil
+    import os  # chdir
     import os.path # join()
 
     suffix = 'png'
 
     _verbose('creating interactive previews from {} for placement in {}'.format(xml_source, dest_dir))
-
-    # see below, pageres-cli writes into current working directory
-    needs_moving = not( os.getcwd() == os.path.normpath(dest_dir) )
 
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-interactive.xsl')
@@ -1017,14 +1015,22 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     _debug("pageres executable: {}".format(pageres_executable))
     _debug("interactives identifiers: {}".format(interactives))
 
+    # pageres-cli writes into current working directory
+    # so change to temporary directory, and copy out
+    owd = os.getcwd()
+    os.chdir(tmp_dir)
+
     # Start after the leading base URL sneakiness
     for preview in interactives[1:]:
         input_page = os.path.join(baseurl, preview + '.html')
+        page_with_fragment = ''.join([input_page, '#', preview])
         selector_option = '--selector=#' + preview
         # file suffix is provided by pageres
         format_option = '--format=' + suffix
         filename_option = '--filename=' + preview + '-preview'
         filename = preview + '-preview.' + suffix
+        page_with_fragment = ''.join([input_page, '#', preview])
+        _verbose('converting {} to {}'.format(page_with_fragment, filename))
 
         # pageres invocation
         # Overwriting files prevents numbered versions (with spaces!)
@@ -1043,10 +1049,10 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         _debug("pageres command: {}".format(cmd))
 
         subprocess.call(cmd)
-        # 2018-04-27  CLI pageres only writes into current directory
-        # and it is an error to move a file onto itself, so we are careful
-        if needs_moving:
-            shutil.move(filename, dest_dir)
+        shutil.copy2(filename, dest_dir)
+
+    # restore working directory
+    os.chdir(owd)
 
 
 #####################################
