@@ -3,11 +3,17 @@
 
 
 //$("p").tabIndex = 0;
-$("p").attr("tabindex", -1);
+// $("p").attr("tabindex", -1);
 $(".autopermalink > a").attr("tabindex", -1);
 
 $("#akX > *").attr("data-editable", 99);
-$("section > p").attr("data-editable", 99);
+var editable_objects = ["p", "ol", "ul", "li", "article"];
+for(var j=0; j < editable_objects.length; ++j) {
+    $(editable_objects[j]).attr("data-editable", 99);
+    $(editable_objects[j]).attr("tabindex", -1);
+}
+// $("section > p").attr("data-editable", 99);
+// $("section > article").attr("data-editable", 99);
 
 /* the code */
 
@@ -77,8 +83,9 @@ function base_menu_options_for(COMPONENT) {
      return this_menu
 }
 
-function top_menu_options_for(this_obj_id) {
-    var this_object_type = "paragraph";
+function top_menu_options_for(this_obj) {
+    console.log("top_menu_options_for", this_obj);
+    var this_object_type = this_obj.tagName;   //  needs to examine other attributes and then look up a reasonable name
     var this_list = '<li tabindex="-1" id="choose_current" data-env="paragraph" data-action="edit">Edit ' + this_object_type + '</li>';
     this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_object_type + '</li>';
     this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="before">Insert before</li>';
@@ -111,11 +118,6 @@ function edit_menu_for(this_obj_id, motion="entering") {
         edit_option.setAttribute('data-location', 'stay');
         edit_option.innerHTML = "continue editing [this object]";
     }
-//    var enter_option = document.createElement('span');
-//    enter_option.setAttribute('id', 'enter_choice');
-//
-//    enter_option.innerHTML = "edit near here?";
-//    document.getElementById("edit_menu_holder").insertAdjacentElement("afterbegin", enter_option);
     document.getElementById("edit_menu_holder").insertAdjacentElement("afterbegin", edit_option);
 }
 
@@ -265,9 +267,10 @@ function main_menu_navigator(e) {  // we are not currently editing
                               // so we are building the menu for the user to decide what/how to edit
 
  // too early   e.preventDefault();  // we are navigating a menu, we we control what keystrokes mean
-    if (e.code == "Tab" || e.code == "ArrowDown") {
+    if ((e.code == "Tab" || e.code == "ArrowDown") && prev_char.code != "ShiftLeft") {
        e.preventDefault();
        console.log("hit a Tab (or ArrowDown");
+       console.log("prev_char", prev_char.code, "xxxx", prev_char);
        console.log("focus is on", $(":focus"));
 
        // we are tabbing along deciding what component to edit
@@ -318,7 +321,7 @@ function main_menu_navigator(e) {  // we are not currently editing
        }
        // and add the option to edit the next object
        if (!document.getElementById('edit_menu_holder')) {  // we are not already navigating a menu
-           e.preventDefault();
+    //       e.preventDefault();
            edit_menu_for(document.activeElement.id);        // so create one
            $(":focus").addClass("may_select");
            console.log("element with fcous is", $(":focus"));
@@ -340,23 +343,83 @@ function main_menu_navigator(e) {  // we are not currently editing
         next_menu_item.focus();
       }
 
-    }
+    } else if (e.code == "Tab" && prev_char.code == "ShiftLeft") {  // Shift-Tab to prevous object
+     // recopied code:  consolidate
+        if(this_choice = document.getElementById('enter_choice')) {
+           console.log("there already is an 'enter_choice'");
+           // there are two cases:  1) we are at the top of a block (and so may enter it or add near it, or move on)
+           //                       2) we are at the bottom (actually, after) a block, and may return to it, or move on
+           var this_menu = document.getElementById("edit_menu_holder");
+           if (this_choice.getAttribute('data-location') == 'next') {  // we are at the top of a block
+               
+               $(this_menu).parent().removeClass("may_select");
+               console.log("item to get next focus",$("#edit_menu_holder").parent().prev('[data-editable="99"]'), "which has length", $("#edit_menu_holder").parent().next('[data-editable="99"]').length);
+               if(!$(this_menu).parent().prev('[data-editable="99"]').length) { //at the start of a block, so go up one
+               //    e.preventDefault(); 
+                   var enclosing_block = $(this_menu).parent().parent()[0]; 
+                   console.log("at the end of", enclosing_block, "with id", enclosing_block.id);
+                   this_menu.remove();
+                   edit_menu_for(enclosing_block.getAttribute("id"), "entering");
+                   console.log("focus is on",  $(":focus"));
+                   enclosing_block.classList.add("may_select");
+               //    document.getElementById('choose_current').focus();
+                   document.getElementById('enter_choice').focus();
+                   console.log("document.getElementById('enter_choice')", document.getElementById('enter_choice'), $(":focus"));
+                   return
+                }
+                else {
+                   $(this_menu).parent().prev('[data-editable="99"]').focus();
+                   this_menu.remove()
+                   // copied.  consolidate
+                   edit_menu_for(document.activeElement.id);        // so create one
+                   $(":focus").addClass("may_select");
+                   console.log("element with fcous is", $(":focus"));
+                   console.log("putting focus on", document.getElementById('edit_menu_holder'));
+                   document.getElementById('edit_menu_holder').focus();
+                   console.log("element with fcous is", $(":focus"));
+                   console.log("are we done tabbing to the next item?");
+
+               }
+           } else { // we are at the bottom of a block
+               alert ("Shift-Tab not implemented at the bottom of a block");
+           }
+       } else {
+         console.log("Error:  Shift-Tab not understood when ther eis an active menu");
+       }
+    } 
     else if (e.code == "Enter" || e.code == "ArrowRight") {
         e.preventDefault();
         console.log("saw a Return");
         console.log("focus is on", $(":focus"));
         // we have just tabbed to a new element.  Tab to move on, return to edit at/near that element
-        if (document.getElementById('enter_choice')) {
-            var edit_submenu = document.createElement('ol');
-            edit_submenu.setAttribute('id', 'edit_menu');
+        // But: it makes a difference whether we are at the end of a block
+        if (this_choice = document.getElementById('enter_choice')) {
+            console.log("this_choice is", this_choice);
+            if (this_choice.getAttribute('data-location') == 'stay') {
+               var this_menu = document.getElementById("edit_menu_holder");
+               block_we_are_reentering = this_menu.previousSibling;
+               block_we_are_reentering.classList.remove("may_leave");
+               $(block_we_are_reentering).children('[data-editable="99"]')[0].focus();
+               this_menu.remove();
+               // put  menu on the item at the top of the block_we_are_reentering
+                   // this is a repeat of a Tab case, so consolidate
+               edit_menu_for(document.activeElement.id);
+               $(":focus").addClass("may_select");
+               document.getElementById('edit_menu_holder').focus();
+               return
 
-            var to_be_edited = document.getElementById('enter_choice').parentElement;
-            console.log("to_be_edited", to_be_edited);
-            console.log("option", top_menu_options_for(to_be_edited));
-            edit_submenu.innerHTML = top_menu_options_for(to_be_edited);
-            $("#enter_choice").replaceWith(edit_submenu);
-            document.getElementById('choose_current').focus();
-            return
+            } else {
+                var edit_submenu = document.createElement('ol');
+                edit_submenu.setAttribute('id', 'edit_menu');
+
+                var to_be_edited = document.getElementById('enter_choice').parentElement.parentElement;
+                console.log("to_be_edited", to_be_edited);
+                console.log("option", top_menu_options_for(to_be_edited));
+                edit_submenu.innerHTML = top_menu_options_for(to_be_edited);
+                $("#enter_choice").replaceWith(edit_submenu);
+                document.getElementById('choose_current').focus();
+                return
+            }
         } 
            // otherwise check if there is an action associated to this choice
            else if (document.getElementById('choose_current').hasAttribute("data-action")) {
@@ -389,11 +452,19 @@ function main_menu_navigator(e) {  // we are not currently editing
                 document.getElementById('choose_current').focus();
                 console.log("focus is on", $(":focus"));
             } else if (current_active_menu_item.getAttribute("data-location") == "enter") {
-                var object_to_be_edited = document.getElementById('edit_menu_holder').parentElement;
-                var object_to_be_edited_type = object_to_be_edited.tagName;
-                alert("Entering " + object_to_be_edited_type + " not implemented yet");
-                object_to_be_edited.classList.remove("may_select");
-                document.getElementById('edit_menu_holder').remove();
+                this_menu = document.getElementById('edit_menu_holder');
+                var object_to_be_entered = this_menu.parentElement;
+                this_menu.remove();
+                object_to_be_entered.classList.remove("may_select");
+                var object_to_be_entered_type = object_to_be_entered.tagName;
+             //   alert("Entering " + object_to_be_edited_type + " not implemented yet");
+                $(object_to_be_entered).children('[data-editable="99"]')[0].focus();
+               // put  menu on the item at the top of the block_we_are_reentering
+                   // this is a repeat of a Tab case, so consolidate
+                edit_menu_for(document.activeElement.id);
+                $(":focus").addClass("may_select");
+                document.getElementById('edit_menu_holder').focus();
+                return
             // consolidate leave/stay ?
 //  the leave/stay is now handles by Tab, so delete the next couple things
             } else if (current_active_menu_item.getAttribute("data-location") == "leave") {
@@ -446,9 +517,46 @@ function main_menu_navigator(e) {  // we are not currently editing
 
         }
     }  else if (e.code == "ArrowUp") {
-        alert("Sorry, up arrow not implemented yet.\nBut when it is, it will move to the previous item on this sub-menu");
-    }  else if (e.code == "ArrowLeft") {
-        alert("Sorry, left arrow not implemented yet.\nBut when it is, it will move to the previous sub-menu");
+        // copied from Tab, so consolidate
+        current_active_menu_item = document.getElementById('choose_current');
+        next_menu_item = current_active_menu_item.previousSibling;
+        console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
+        if (!next_menu_item) { next_menu_item = current_active_menu_item.parentNode.lastChild }
+        console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
+        current_active_menu_item.removeAttribute("id");
+        console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
+//        current_active_menu_item.setAttribute("class", "chosen");
+        next_menu_item.setAttribute("id", "choose_current");
+        console.log("setting focus on",next_menu_item);
+        next_menu_item.focus();
+  //      alert("Sorry, up arrow not implemented yet.\nBut when it is, it will move to the previous item on this sub-menu");
+//    }  else if (e.code == "ArrowLeft") {
+//        alert("Sorry, left arrow not implemented yet.\nBut when it is, it will move to the previous sub-menu");
+    }  else if (e.code == "Escape" || e.code == "ArrowLeft") {
+        console.log("processing ECS");
+        if (current_active_menu_item = document.getElementById('choose_current')) {
+            console.log("current_active_menu_item", current_active_menu_item);
+            previous_selection = current_active_menu_item.parentNode.parentNode;  //current li, up to ol, then up to div or li
+            if (previous_selection.tagName == "LI") {
+                console.log("going up to the previous selection");
+                current_active_menu_item.parentNode.remove();  // remove the ol containing this selection
+                previous_selection.focus();
+                previous_selection.setAttribute("id", "choose_current");
+            } else {  // shoudl be the div#edit_menu_holder
+                current_object_to_edit = document.getElementById('edit_menu_holder').parentNode;
+                document.getElementById('edit_menu_holder').remove();
+                edit_menu_for(current_object_to_edit.id);
+                 // just put the entering option
+            }
+        } else {  // we are at the top of an object and have not decided to edit it
+            current_object_being_edited = document.getElementById('edit_menu_holder').parentNode;
+            parent_object_to_edit = current_object_being_edited.parentNode;
+            console.log("parent_object_to_edit", parent_object_to_edit);
+            document.getElementById('edit_menu_holder').remove();
+            current_object_being_edited.classList.remove("may_select");
+            edit_menu_for(parent_object_to_edit.id);
+            parent_object_to_edit.classList.add("may_select");
+        }
     }
 }
 
