@@ -37,17 +37,31 @@ var menu_active_background = "#fdd";
 menu_for = {
 /*
 "section": ["<b>p</b>aragraph", "<b>l</b>ist/table-like", "<b>t</b>heorem-like", "<b>r</b>emark-like", "<b>e</b>xample-like", "<b>d</b>isplay/image-like", "pro<b>j</b>ect/exercise-like", "<b>i</b>nteractives", "<b>s</b>ection-like"],
+"section": [{"menu_entry": "paragraph", "entry_key": "paragraph", "entry_shortcut": "p"}, 
+            {"menu_entry": "list/table-like", "entry_key": "list-like", "entry_shortcut": "l"},
+            {"menu_entry": "theorem-like", "entry_key": "theorem-like", "entry_shortcut": "t"},
+            {"menu_entry": "remark-like", "entry_key": "remark-like", "entry_shortcut": "r"},
+            {"menu_entry": "example-like", "entry_key": "example-like", "entry_shortcut": "e"}, 
+            {"menu_entry": "display/image-like", "entry_key": "display-like", "entry_shortcut": "d"},
+            {"menu_entry": "project/exercise-like", "entry_key": "project-like", "entry_shortcut": "j"},
+            {"menu_entry": "interactives", "entry_key": "interactives", "entry_shortcut": "i"},
+            {"menu_entry": "section-like", "entry_key": "section-like", "entry_shortcut": "s"}]
 */
-"section": [{"menu_entry": "<b>p</b>aragraph", "entry_key": "paragraph", "entry_shortcut": "p"},
-{"menu_entry": "<b>l</b>ist/table-like", "entry_key": "list-like", "entry_shortcut": "l"},
-{"menu_entry":  "<b>t</b>heorem-like", "entry_key": "theorem-like", "entry_shortcut": "t"},
-{"menu_entry":  "<b>r</b>emark-like", "entry_key": "remark-like", "entry_shortcut": "r"},
-{"menu_entry":  "<b>e</b>xample-like", "entry_key": "example-like", "entry_shortcut": "e"},
-{"menu_entry":  "<b>d</b>isplay/image-like", "entry_key": "display-like", "entry_shortcut": "d"},
-{"menu_entry":  "pro<b>j</b>ect/exercise-like", "entry_key": "project-like", "entry_shortcut": "j"},
-{"menu_entry":  "<b>i</b>nteractives", "entry_key": "interactives", "entry_shortcut": "i"},
-{"menu_entry":  "<b>s</b>ection-like", "entry_key": "section-like", "entry_shortcut": "s"}],
-"theorem-like": ["theorem", "proposition", "lemma", "corollary", "hypothesis", "conjecture"],
+"section": [["paragraph", "p"],
+            ["list/table-like", "list-like", "l"],
+            ["theorem-like", "theorem-like", "t"],
+            ["remark-like", "r"],
+            ["example-like", "example-like", "e"],
+            ["display/image-like", "display-like", "d"],
+            ["project/exercise-like", "project-like", "j"],
+            ["interactives", "i"],
+            ["section-like", "s"]],
+"theorem-like": [["theorem","t"],
+                 ["proposition", "p"],
+                 ["lemma", "l"],
+                 ["corollary", "c"],
+                 ["hypothesis", "h"],
+                 ["conjecture", "j"]],
 "list-like": ["ordered list", "unordered list", "dictionary-list"],
 "blockquote": ["paragraph"],
 "metadata": ["index entries", "notation"],
@@ -92,9 +106,19 @@ function base_menu_options_for(COMPONENT) {
              if (this_item in menu_for) { this_menu += '<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div>' }
              this_menu += '</li>';
          } else {
+             
+/*
              this_item_name = this_item['menu_entry'];
              this_item_label = this_item['entry_key'];
              this_item_shortcut = this_item['entry_shortcut'];
+*/
+             this_item_name = this_item[0];
+             this_item_shortcut = this_item[this_item.length - 1];
+             if (this_item.length == 3) {
+                 this_item_label = this_item[1]
+             } else { this_item_label = this_item_name }
+
+             this_item_name = this_item_name.replace(this_item_shortcut, '<b>' + this_item_shortcut + '</b>');
 
              this_menu += '<li tabindex="-1" data-env="' + this_item_label + '" ' + 'data-jump="' + this_item_shortcut + '"';
              if(i==0) { this_menu += ' id="choose_current"'}
