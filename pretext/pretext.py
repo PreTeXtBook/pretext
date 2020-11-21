@@ -179,10 +179,13 @@ def asymptote_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
                 shutil.copy2(asyout, dest_dir)
             else:
                 msg = [
-                'PTX:ERROR:   the Asymptote output {} was not built'.format(asyout),
-                'Perhaps your code has errors (try testing in the Asymptote web app).',
-                'Or your copy of Asymtote may precede version 2.66 that we expect.',
-                'Your Asymptote reports: "{}"'.format(asyversion)]
+                'PTX:WARNING: the Asymptote output {} was not built'.format(asyout),
+                '             1. Perhaps your code has errors (try testing in the Asymptote web app).',
+                '             2. Or your copy of Asymtote may precede version 2.66 that we expect.',
+                '                Not every image can be built in every possible format.',
+                '',
+                '                Your Asymptote reports its version within the following:',
+                '                {}'.format(asyversion)]
                 print('\n'.join(msg))
 
 
