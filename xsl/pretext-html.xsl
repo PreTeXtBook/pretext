@@ -7797,7 +7797,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:element name="pre">
         <xsl:attribute name="class">
-            <xsl:text>code-block tex2jax_ignore</xsl:text>
+            <xsl:text>code-display tex2jax_ignore</xsl:text>
         </xsl:attribute>
         <xsl:apply-templates select="." mode="insert-paragraph-id" >
             <xsl:with-param name="b-original" select="$b-original" />
@@ -7811,7 +7811,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:element name="pre">
         <xsl:attribute name="class">
-            <xsl:text>code-block tex2jax_ignore</xsl:text>
+            <xsl:text>code-display tex2jax_ignore</xsl:text>
         </xsl:attribute>
         <xsl:apply-templates select="." mode="insert-paragraph-id" >
             <xsl:with-param name="b-original" select="$b-original" />
