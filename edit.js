@@ -34,6 +34,13 @@ var result;
 var menu_neutral_background = "#ddb";
 var menu_active_background = "#fdd";
 
+/* need to distingiosh between th elist of objects of a type,
+   and the list of types that can go in a location.
+   OR, is it okay that these are all in one list?
+   It seems to not be okay, because the "blockquote" entry
+   says that only a "p" can go in a blockquote.  But blockquote
+   is an entry  under "quoted".
+*/
 menu_for = {
 /*
 "section": ["<b>p</b>aragraph", "<b>l</b>ist/table-like", "<b>t</b>heorem-like", "<b>r</b>emark-like", "<b>e</b>xample-like", "<b>d</b>isplay/image-like", "pro<b>j</b>ect/exercise-like", "<b>i</b>nteractives", "<b>s</b>ection-like"],
@@ -52,20 +59,38 @@ menu_for = {
             ["theorem-like", "theorem-like", "t"],
             ["remark-like", "r"],
             ["example-like", "example-like", "e"],
-            ["display/image-like", "display-like", "d"],
+            ["image/video/sound", "display-like", "d"],
             ["project/exercise-like", "project-like", "j"],
+            ["blockquote/code/poem/etc", "quoted", "b"],
+            ["aside-like", "d"],
             ["interactives", "i"],
+            ["layout-like"],
             ["section-like", "s"]],
 "theorem-like": [["theorem","t"],
                  ["proposition", "p"],
                  ["lemma", "l"],
                  ["corollary", "c"],
-                 ["hypothesis", "h"],
+                 ["definition", "d"],
+                 ["claim", "m"],
+                 ["algorithm"],
+                 ["fact"],
+                 ["identity", "i"],
+                 ["axiom", "x"],
+                 ["principle", "r"],
+                 ["heuristic", "h"],
+                 ["hypothesis", "y"],
                  ["conjecture", "j"]],
-"list-like": [["ordered list"], ["unordered list"], ["dictionary-list"]],
-"section-like": [["side-by-side", "b"], ["minor heading"], ["section"]],
-"project-like": [["exercise"], ["project"]],
+"list-like": [["ordered list"], ["unordered list"], ["dictionary list"], ["table"], ["table with caption", "c"]],
+"section-like": [["side-by-side", "b"], ["minor heading"], ["reading questions"], ["exercises"], ["section"]],
+"project-like": [["exercise"], ["activitiy"], ["investigation"], ["exploration", "x"], ["project"]],
+"remark-like": [["remark"], ["warning"], ["note"], ["observation"], ["convention"], ["insight"]],
+"example-like": [["example"], ["question"], ["problem"]],
+"display-like": [["image"], ["image with caption", "m"], ["video"], ["video with caption", "i"], ["audio"]],
+"aside-like": [["aside"], ["historical"], ["biographical"]],
+"layout-like": [["side by side"], ["assemblage"], ["biographical"]],
+"quoted": [["blockquote"], ["poem"], ["code"]],
 "blockquote": [["paragraph"]],
+"interactives": [["sage cell"], ["webwork"], ["asymptote"], ["musical score"]],
 "metadata": ["index entries", "notation"],
 "p": ["emphasis-like", "abbreviation", "symbols", "ref or link"],
 "emphasis-like": ["emphasis", "foreign word", "book title", "inline quote", "name of a ship"],
@@ -73,6 +98,11 @@ menu_for = {
 "symbols": ["trademark", "copyright"],
 "ref or link": ["ref to an id", "citation", "hyperlink"]
 }
+
+editing_container_for = { "paragraph": 1,
+ "theorem": 1,
+ "lemma": 1 }
+
 
 /*
 var url = "https://github.com/oscarlevin/discrete-book/blob/master/ptx/sec_intro-intro.ptx";
@@ -149,10 +179,10 @@ function top_menu_options_for(this_obj) {
     var this_object_type = this_obj.tagName;   //  needs to examine other attributes and then look up a reasonable name
     var this_list = '<li tabindex="-1" id="choose_current" data-env="paragraph" data-action="edit">Edit ' + this_object_type + '</li>';
     this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_object_type + '</li>';
-    this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="before">Insert before</li>';
-    this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="after">Insert after</li>';
-    this_list += '<li tabindex="-1" data-env="' + this_object_type + '">Metadata</li>';
-    this_list += '<li tabindex="-1" data-env="' + this_object_type + '">Move or delete</li>';
+    this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="before">Insert before<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+    this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="after">Insert after<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+    this_list += '<li tabindex="-1" data-env="' + this_object_type + '">Metadata<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+    this_list += '<li tabindex="-1" data-env="' + this_object_type + '">Move or delete<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
     return this_list
 }
 
@@ -561,6 +591,15 @@ function main_menu_navigator(e) {  // we are not currently editing
                 next_menu_item.focus();
             } else {  // we just selected an action, so do it
                       // that probably involves adding something before or after a given object
+        if ( !(new_object_type in editing_container_for) ) {
+          alert("don't know about", new_object_type);
+          document.getElementById('edit_menu_holder').parentElement.focus();
+          document.getElementById('edit_menu_holder').remove();
+          edit_menu_for(document.activeElement.id);
+  // this should be done automatically by edit_menu_for()
+          document.getElementById('edit_menu_holder').focus();
+
+        }  else {
                 var new_object_type = current_active_menu_item.getAttribute("data-env");
                 object_near_new_object = document.getElementById('edit_menu_holder').parentElement;
                 var before_after = $("#edit_menu_holder > #edit_menu > .chosen").attr("data-location");
@@ -570,10 +609,11 @@ function main_menu_navigator(e) {  // we are not currently editing
                 object_near_new_object.insertAdjacentElement(new_location, container_for_editing(new_object_type));
            //     document.getElementById('starting_point_for_editing').focus();
                 document.querySelectorAll('[class="starting_point_for_editing"]')[0].focus();
-                hack_to_fix_first_textbox_character('starting_point_for_editing');
+  //              hack_to_fix_first_textbox_character('starting_point_for_editing');
      //           object_near_new_object.focus();
                 object_near_new_object.classList.remove("may_select");
                 document.getElementById('edit_menu_holder').remove();
+}
             }
 
         }
@@ -586,12 +626,12 @@ function main_menu_navigator(e) {  // we are not currently editing
         console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
         current_active_menu_item.removeAttribute("id");
         console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
-//        current_active_menu_item.setAttribute("class", "chosen");
+        current_active_menu_item.classList.remove("chosen");
         next_menu_item.setAttribute("id", "choose_current");
         console.log("setting focus on",next_menu_item);
         next_menu_item.focus();
     }  else if (e.code == "Escape" || e.code == "ArrowLeft") {
-        console.log("processing ECS");
+        console.log("processing ESC");
         if (current_active_menu_item = document.getElementById('choose_current')) {
             console.log("current_active_menu_item", current_active_menu_item);
             previous_selection = current_active_menu_item.parentNode.parentNode;  //current li, up to ol, then up to div or li
@@ -600,6 +640,8 @@ function main_menu_navigator(e) {  // we are not currently editing
                 current_active_menu_item.parentNode.remove();  // remove the ol containing this selection
                 previous_selection.focus();
                 previous_selection.setAttribute("id", "choose_current");
+                previous_selection.classList.remove("chosen");
+                previous_selection.parentNode.classList.remove("past");
             } else {  // shoudl be the div#edit_menu_holder
                 current_object_to_edit = document.getElementById('edit_menu_holder').parentNode;
                 document.getElementById('edit_menu_holder').remove();
