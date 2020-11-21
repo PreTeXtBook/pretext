@@ -3296,30 +3296,24 @@ label.incorrect .feedback {
     background: yellow;
     bottom: -1.2em;
     border-radius: 0.5em 0.5em 0 0; 
+    font-style: italic;
 }
-.may_leave + #edit_menu_holder #top_choices {
+.may_leave + #edit_menu_holder #enter_choice {
     position: absolute;
 
-    padding: 0.25em 0.5em 0.25 0.5em;
-    padding: 0em 0.75em 0.5em 0.75em;
-    background: #FFC6D1;
-    bottom: -4.85em;
+    padding: 0em 0.5em 0.25em 0.25em;
+    background: #FFD6D9;
+    bottom: -2.25em;
     border-radius: 0 0 0.5em 0.5em;
     list-style-type: none;
  /*   margin: 0 0.25em 0.25em 0.25em;
 */
     font-style: italic;
 }
-.may_leave + #edit_menu_holder #top_choices li {
+.may_leave + #edit_menu_holder #enter_choice li {
     padding: 0;
     padding-left: 0.25em;
     padding-right: 0.25em;
-}
-.may_leave + #edit_menu_holder #top_choices #enter_choice {
-    position: relative;
-    border-radius: 0;
-    background: lightcyan;
-    bottom: 0;
 }
 
 #edit_menu li.chosen,
@@ -3339,7 +3333,7 @@ label.incorrect .feedback {
 }
 #edit_menu li {
     margin-top: 0;
-    padding-right: 0.4em;
+    padding-right: 1.4em;
     padding-left: 0.4em;
     padding-bottom: 0.1em;
 }
@@ -3347,11 +3341,12 @@ label.incorrect .feedback {
     padding-bottom: 0.3em;
 }
 #edit_menu_holder ol:not(.past) {
-/*    border: 0.1em solid #ccc;
+    border: 0.1em solid #ccc;
+/*
     border-right: none;
     border-bottom: none;
 */
-    box-shadow: 0.2em 0.2em 0.1em #ccc;
+    box-shadow: 0.15em 0.15em 0.05em #ccc;
 }
 #edit_menu li#choose_current {
     background: #ddf;
@@ -3371,14 +3366,28 @@ label.incorrect .feedback {
 #edit_menu li.choose {
     background: #eef;
 }
+#edit_menu .wrap_to_submenu {
+    float: right;
+}
+.past > li > .wrap_to_submenu {
+    display: none;
+}
+#edit_menu .to_submenu {
+    position: absolute;
+    padding-left: 0.5em;
+}
 .text_source {
     font-size: 95%;
 }
 .may_select {
     box-shadow: -10px -5px 5px yellow;
+    margin-top: 1.25em;
+}
+.may_select > p:first-of-type {
+    margin-top: 0;
 }
 .may_leave {
-    box-shadow: -10px 5px 5px #FFC6D1;
+    box-shadow: -10px 5px 5px #FFD6D9;
 }
 #actively_editing {
     margin-top: 1em;
