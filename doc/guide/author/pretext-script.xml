@@ -107,11 +107,11 @@
 
         <p>A publisher file (<xref ref="publisher-file"/>) can be used to control various options that are independent of the authoring process, or for some conversions may be necessary.  Use the <c>-p</c> switch to specify this file.</p>
 
-        <p>Sometimes you might have need to pass stringparams to the pretext script.  This is accomplished with the <c>-x</c> flag, followed by a space separated list of (stringparam, value) pairs.  Do not use parentheses, just separate with spaces.  But note that <c>-x</c> cannot be the last option passed to the script since it makes it hard for the script to <q>see</q> filename for your source.</p>
+        <p>Sometimes you might have need to pass stringparams to the <pretext/> script, though this will eventually be something an author will rarely do, and is more likely necessary for developers.  This is accomplished with the <c>-x</c> flag, followed by a space separated list of (stringparam, value) pairs.  Do not use parentheses, just separate with spaces.  But note that <c>-x</c> cannot be the last option passed to the script since it makes it hard for the script to <q>see</q> the filename for your source.</p>
 
         <p>For example:<cd>
-            <cline>pretext -vv -x latex.engine xelatex latex.font.size 12pt -f svg</cline>
-            <cline>   -c latex-image -d ~/books/aota/images ~/books/aota/animals.xml</cline>
+            <cline>pretext -vv -x debug.datedfiles no whitespace flexible -f html</cline>
+            <cline>   -c all -d /tmp/aota-html ~/books/aota/animals.xml</cline>
         </cd></p>
     </section>
 
