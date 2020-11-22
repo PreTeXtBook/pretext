@@ -791,4 +791,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- html/calculator/@model  in publisher file -->
 <xsl:param name="html.calculator" select="''" />
 
+<!-- RETIRED: 2020-11-22 Not a deprecation, this is a string parameter that             -->
+<!-- was never used at all.  Probably no real harm in parking it here for now.          -->
+<!-- N.B. This has no effect, and may never.  xelatex and lualatex support is automatic -->
+<xsl:param name="latex.engine" select="'pdflatex'" />
+
 </xsl:stylesheet>
