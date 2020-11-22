@@ -54,49 +54,49 @@ menu_for = {
             {"menu_entry": "interactives", "entry_key": "interactives", "entry_shortcut": "i"},
             {"menu_entry": "section-like", "entry_key": "section-like", "entry_shortcut": "s"}]
 */
-"section": [["paragraph", "p"],
-            ["list/table-like", "list-like", "l"],
-            ["theorem-like", "theorem-like", "t"],
-            ["remark-like", "r"],
-            ["example-like", "example-like", "e"],
+"section": [["paragraph"],
+            ["list/table-like", "list-like"],
+            ["theorem-like", "theorem-like"],
+            ["remark-like"],
+            ["example-like", "example-like"],
             ["image/video/sound", "display-like", "d"],
             ["project/exercise-like", "project-like", "j"],
-            ["blockquote/code/poem/etc", "quoted", "b"],
-            ["aside-like", "d"],
-            ["interactives", "i"],
+            ["blockquote/code/poem/etc", "quoted"],
+            ["aside-like", "aside-ilke", "d"],
+            ["interactives"],
             ["layout-like"],
-            ["section-like", "s"]],
-"theorem-like": [["theorem","t"],
-                 ["proposition", "p"],
-                 ["lemma", "l"],
-                 ["corollary", "c"],
-                 ["definition", "d"],
-                 ["claim", "m"],
+            ["section-like"]],
+"theorem-like": [["theorem"],
+                 ["proposition"],
+                 ["lemma"],
+                 ["corollary"],
+                 ["definition"],
+                 ["claim", "claim", "m"],
                  ["algorithm"],
                  ["fact"],
-                 ["identity", "i"],
-                 ["axiom", "x"],
-                 ["principle", "r"],
-                 ["heuristic", "h"],
-                 ["hypothesis", "y"],
-                 ["conjecture", "j"]],
-"list-like": [["ordered list"], ["unordered list"], ["dictionary list"], ["table"], ["table with caption", "c"]],
-"section-like": [["side-by-side", "b"], ["minor heading"], ["reading questions"], ["exercises"], ["section"]],
-"project-like": [["exercise"], ["activitiy"], ["investigation"], ["exploration", "x"], ["project"]],
+                 ["identity"],
+                 ["axiom", "axiom", "x"],
+                 ["principle", "principle", "r"],
+                 ["heuristic",],
+                 ["hypothesis", "hypothesis", "y"],
+                 ["conjecture", "conjecture", "j"]],
+"list-like": [["ordered list", "ol"], ["unordered list", "ul"], ["dictionary list", "dl"], ["table"], ["table with caption", "tablecaption", "c"]],
+"section-like": [["titled paragraph", "paragraphs"], ["reading questions", "rq"], ["exercises"], ["section"]],
+"project-like": [["exercise"], ["activitiy"], ["investigation"], ["exploration", "exploration", "x"], ["project"]],
 "remark-like": [["remark"], ["warning"], ["note"], ["observation"], ["convention"], ["insight"]],
 "example-like": [["example"], ["question"], ["problem"]],
-"display-like": [["image"], ["image with caption", "m"], ["video"], ["video with caption", "i"], ["audio"]],
+"display-like": [["image"], ["image with caption", "imagecaption", "m"], ["video"], ["video with caption", "videocaption", "i"], ["audio"]],
 "aside-like": [["aside"], ["historical"], ["biographical"]],
-"layout-like": [["side by side"], ["assemblage"], ["biographical"]],
+"layout-like": [["side-by-side"], ["assemblage"], ["biographical aside"], ["titled paragraph", "paragraphs"]],
 "quoted": [["blockquote"], ["poem"], ["code"]],
-"blockquote": [["paragraph"]],
-"interactives": [["sage cell"], ["webwork"], ["asymptote"], ["musical score"]],
+"blockquote": [["paragraph", "p"]],
+"interactives": [["sage cell", "sagecell"], ["webwork"], ["asymptote"], ["musical score", "musicalscore"]],
 "metadata": ["index entries", "notation"],
-"p": ["emphasis-like", "abbreviation", "symbols", "ref or link"],
-"emphasis-like": ["emphasis", "foreign word", "book title", "inline quote", "name of a ship"],
+"p": ["emphasis-like", "abbreviation", "symbols", ["ref or link", "ref"]],
+"emphasis-like": ["emphasis", ["foreign word", "foreign"], "book title", "article title", "inline quote", "name of a ship"],
 // "abbreviation": ["ie", "eg", "etc", "et al"],  // i.e., etc., ellipsis, can just be typed.
 "symbols": ["trademark", "copyright"],
-"ref or link": ["ref to an id", "citation", "hyperlink"]
+"ref": ["ref to an internal id", "citation", "hyperlink"]
 }
 
 editing_container_for = { "paragraph": 1,
@@ -118,6 +118,15 @@ fetch(url)
   });
 console.log("then here");
 */
+
+function standard_title_form(object_name) {
+    var title_form = "<div><b>" + obj_type + "&nbsp;NN</b>&nbsp;";
+    title_form += '<input id="actively_editing_title" class="starting_point_for_editing" placeholder="Optional title" type="text"/>';
+    title_form += '<input id="actively_editing_id" placeholder="Optional Id" class="input_id" type="text"/>';
+    title_form += '</div>';
+
+    return title_form
+}
 
 function base_menu_options_for(COMPONENT) {
      component = COMPONENT.toLowerCase();
@@ -145,23 +154,34 @@ function base_menu_options_for(COMPONENT) {
              this_item_shortcut = this_item['entry_shortcut'];
 */
              this_item_name = this_item[0];
-             this_item_shortcut = this_item[this_item.length - 1];
+             this_item_label = this_item_name;
+             this_item_shortcut = "";
+   //          this_item_shortcut = this_item[this_item.length - 1];
              if (this_item.length == 3) {
                  this_item_label = this_item[1];
                  this_item_shortcut = this_item[2];
              } else if (this_item.length == 2) { 
-                 this_item_label = this_item_name;
-                 this_item_shortcut = this_item[1]
-             } else if (this_item.length == 1) {
-                 this_item_label = this_item_name;
-                 this_item_shortcut = this_item_name.charAt(0)
+                 this_item_label = this_item[1];
+             } 
+      //      else if (this_item.length == 1) {
+      //           this_item_label = this_item_name;
+      //           this_item_shortcut = this_item_name.charAt(0)
+      //       }
+
+     //        this_item_name = this_item_name.replace(this_item_shortcut, '<b>' + this_item_shortcut + '</b>');
+
+             this_menu += '<li tabindex="-1" data-env="' + this_item_label + '"';
+             if (this_item_shortcut) { 
+                 this_menu += ' data-jump="' + this_item_name.charAt(0) + ' ' + this_item_shortcut + '"';
+                 this_item_name = this_item_name.replace(this_item_shortcut, '<b>' + this_item_shortcut + '</b>');
+             } else {
+                 this_menu += 'data-jump="' + this_item_name.charAt(0) + '"';
              }
-
-             this_item_name = this_item_name.replace(this_item_shortcut, '<b>' + this_item_shortcut + '</b>');
-
-             this_menu += '<li tabindex="-1" data-env="' + this_item_label + '" ' + 'data-jump="' + this_item_shortcut + '"';
              if(i==0) { this_menu += ' id="choose_current"'}
              this_menu += '>';
+
+             first_character = this_item_name.charAt(0);
+             this_item_name = this_item_name.replace(first_character, "<b>" + first_character + "</b>");
 
              this_menu += this_item_name 
                      // little right triangle if there is a submenu
@@ -242,10 +262,13 @@ function container_for_editing(obj_type) {
     if (obj_type == "paragraph") {
         this_content_container.innerHTML = '<textarea id="actively_editing_paragraph" class="starting_point_for_editing" style="width:100%;" placeholder="' + obj_type + '"></textarea>';
     } else if ( menu_for["theorem-like"].includes(obj_type) ) {
+        var title = standard_title_form(obj_type);
+/*
         var title = "<div><b>" + obj_type + "&nbsp;NN</b>&nbsp;";
         title += '<input id="actively_editing_title" class="starting_point_for_editing" placeholder="Optional title" type="text"/>';
         title += '<input id="actively_editing_id" placeholder="Optional Id" class="input_id" type="text"/>';
         title += '</div>';
+*/
         var statement = '<div><span class="group_description">statement (paragraphs, images, lists, etc)</span><textarea id="actively_editing_statement" style="width:100%;" placeholder="first paragraph of statement"></textarea></div>';
         var proof = '<div><span class="group_description">optional proof (paragraphs, images, lists, etc)</span><textarea id="actively_editing_proof" style="width:100%;" placeholder="first paragraph of optional proof"></textarea></div>';
 
@@ -591,8 +614,9 @@ function main_menu_navigator(e) {  // we are not currently editing
                 next_menu_item.focus();
             } else {  // we just selected an action, so do it
                       // that probably involves adding something before or after a given object
+                var new_object_type = current_active_menu_item.getAttribute("data-env");
         if ( !(new_object_type in editing_container_for) ) {
-          alert("don't know about", new_object_type);
+          alert("don't know about" + new_object_type);
           document.getElementById('edit_menu_holder').parentElement.focus();
           document.getElementById('edit_menu_holder').remove();
           edit_menu_for(document.activeElement.id);
@@ -600,7 +624,6 @@ function main_menu_navigator(e) {  // we are not currently editing
           document.getElementById('edit_menu_holder').focus();
 
         }  else {
-                var new_object_type = current_active_menu_item.getAttribute("data-env");
                 object_near_new_object = document.getElementById('edit_menu_holder').parentElement;
                 var before_after = $("#edit_menu_holder > #edit_menu > .chosen").attr("data-location");
      //           alert("attempting to add " + new_object_type + " " + before_after + " " + object_near_new_object.tagName);
@@ -662,7 +685,10 @@ function main_menu_navigator(e) {  // we are not currently editing
         current_active_menu_item = document.getElementById('choose_current');
         console.log('current_active_menu_item',  current_active_menu_item );
         console.log( $(current_active_menu_item) );
-        if (next_menu_item = $(current_active_menu_item).nextAll('[data-jump="' + key_hit + '"]:first')[0]) {  // check there is a menu item with that key
+          // there can be multiple data-jump, so use ~= to find if the one we are looking for is there
+          // and start from the beginning in case the match is earlier  (make the second selector better)
+        if ((next_menu_item = $(current_active_menu_item).nextAll('[data-jump~="' + key_hit + '"]:first')[0]) ||
+            (next_menu_item = $(current_active_menu_item).prevAll('[data-jump~="' + key_hit + '"]:last')[0])) {  // check there is a menu item with that key
             current_active_menu_item.removeAttribute("id", "choose_current");
             console.log('[data-jump="' + key_hit + '"]');
             console.log( $(current_active_menu_item) );
