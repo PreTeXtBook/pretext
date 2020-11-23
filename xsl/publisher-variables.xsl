@@ -94,10 +94,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- HTML-Specific Options -->
 <!-- ##################### -->
 
-<!--                          -->
-<!-- HTML Index Page Redirect -->
-<!--                          -->
-
 <!-- Calculator -->
 <!-- Possible values are geogebra-classic, geogebra-graphing -->
 <!-- geogebra-geometry, geogebra-3d                          -->
@@ -137,6 +133,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="b-has-calculator" select="not($html-calculator = 'none')" />
 
+
+<!--                          -->
+<!-- HTML Index Page Redirect -->
+<!--                          -->
 
 <!-- A generic "index.html" page will be built to redirect to an     -->
 <!-- existing page from the HTML build/chunking.  The default is the -->
