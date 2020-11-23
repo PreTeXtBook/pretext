@@ -1650,6 +1650,18 @@ def get_output_filename(xml, out_file, dest_dir, suffix):
     derivedname = os.path.splitext(os.path.split(xml)[1])[0]  + suffix
     return os.path.join(dest_dir, derivedname)
 
+def verify_input_directory(inputdir):
+    """Verify directory exists, or raise error.  Return absolute path"""
+    import os.path # isdir(), abspath()
+
+    _verbose('verifying and expanding input directory: {}'.format(inputdir))
+    if not(os.path.isdir(inputdir)):
+        raise ValueError('directory {} does not exist'.format(inputdir))
+    absdir = os.path.abspath(inputdir)
+    _verbose('input directory expanded to absolute path: {}'.format(absdir))
+    return absdir
+
+
 ########
 #
 # Module

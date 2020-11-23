@@ -30,17 +30,6 @@ import pretext as ptx
 # by author/publisher on the command line
 # Use pretext module console messaging routines
 
-def verify_input_directory(inputdir):
-    """Verify directory exists, or raise error.  Return absolute path"""
-    import os.path # isdir(), abspath()
-
-    ptx._verbose('verifying and expanding input directory: {}'.format(inputdir))
-    if not(os.path.isdir(inputdir)):
-        raise ValueError('directory {} does not exist'.format(inputdir))
-    absdir = os.path.abspath(inputdir)
-    ptx._verbose('input directory expanded to absolute path: {}'.format(absdir))
-    return absdir
-
 def verify_input_file(f):
     """Verify file exists, or raise error.  Return absolute path"""
     import os.path # isfile(), abspath()
@@ -69,7 +58,7 @@ def get_destination_directory(directory):
 
     # if specified, check, sanitize, return absolute path
     if directory:
-        return verify_input_directory(directory)
+        return ptx.verify_input_directory(directory)
     # else default to current directory
     return os.getcwd()
 
@@ -215,7 +204,7 @@ def main():
     xml_source = verify_input_file(args.xml_file)
     # data directory is optional, so allow for None here
     if args.data_dir:
-        data_dir = verify_input_directory(args.data_dir)
+        data_dir = ptx.verify_input_directory(args.data_dir)
     else:
         data_dir = None
     # publisher file is optional, so allow for None here
