@@ -3405,7 +3405,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\setfoot{}{\pagefont\thepage}{}%&#xa;</xsl:text>
     <xsl:text>}%&#xa;</xsl:text>
     <xsl:choose>
-        <xsl:when test="$latex-sides = 'one'">
+        <xsl:when test="not($b-latex-two-sides)">
             <!-- Every "regular" page has number top right -->
             <!-- CHAPTER 8. TITLE                      234 -->
             <xsl:text>%% Single pages as in default LaTeX&#xa;</xsl:text>
@@ -3413,7 +3413,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\sethead{\pagefont\slshape\MakeUppercase{\ifthechapter{\chaptertitlename\space\thechapter.\space}{}\chaptertitle}}{}{\pagefont\thepage}%&#xa;</xsl:text>
             <xsl:text>}%&#xa;</xsl:text>
         </xsl:when>
-        <xsl:when test="$latex-sides = 'two'">
+        <xsl:when test="$b-latex-two-sides">
             <!-- Two-page spread:  (Section empty if not in use)           -->
             <!-- 234       CHAPTER 8. TITLE || SECTION 8.4 TITLE       235 -->
             <xsl:text>%% Two-page spread as in default LaTeX&#xa;</xsl:text>
@@ -3652,7 +3652,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- need an empty page, obverse of half-title    -->
         <!-- could also be left-side of title page spread -->
-        <xsl:when test="$latex-sides = 'two'">
+        <xsl:when test="$b-latex-two-sides">
             <xsl:text>%% begin: adcard (empty)&#xa;</xsl:text>
             <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
             <xsl:text>\null%&#xa;</xsl:text>
@@ -4112,7 +4112,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
     <xsl:text>\clearpage&#xa;</xsl:text>
     <xsl:text>%% end:   dedication-page&#xa;</xsl:text>
-    <xsl:if test="$latex-sides = 'two'">
+    <xsl:if test="$b-latex-two-sides">
         <xsl:text>%% begin: obverse-dedication-page (empty)&#xa;</xsl:text>
         <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
         <xsl:text>\null%&#xa;</xsl:text>
@@ -4295,7 +4295,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The "backcolophon" environment is a tcolorbox          -->
 <xsl:template match="book/backmatter/colophon">
     <xsl:choose>
-        <xsl:when test="$latex-sides = 'two'">
+        <xsl:when test="$b-latex-two-sides">
             <xsl:text>\cleardoublepage&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise>

@@ -50,6 +50,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <video privacy="yes"/>
     </html>
 
-    <latex print="no"/>
+    <latex print="no" sides="two"/>
 
 </publication>

@@ -500,6 +500,48 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- LaTeX-Specific Options -->
 <!-- ###################### -->
 
+<!-- Sides are given as "one" or "two".  And we cannot think of    -->
+<!-- any other options.  So we build, and use, a boolean variable.   -->
+<!-- But if a third option aries, we can use it, and switch away  -->
+<!-- from the boolean variable without the author knowing. -->
+<xsl:variable name="latex-sides">
+    <!-- default depends on character of output -->
+    <xsl:variable name="default-sides">
+        <xsl:choose>
+            <xsl:when test="$b-latex-print">
+                <xsl:text>two</xsl:text>
+            </xsl:when>
+            <xsl:otherwise> <!-- electronic -->
+                <xsl:text>one</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$publication/latex/@sides = 'two'">
+            <xsl:text>two</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/latex/@sides = 'one'">
+            <xsl:text>one</xsl:text>
+        </xsl:when>
+        <!-- not recognized, so warn and default -->
+        <xsl:when test="$publication/latex/@sides">
+            <xsl:message>PTX:WARNING: LaTeX @sides in publisher file should be "one" or "two", not "<xsl:value-of select="$publication/latex/@sides"/>".  Proceeding with default value, which depends on if you are making electronic ("one") or print ("two") output</xsl:message>
+            <xsl:value-of select="$default-sides"/>
+        </xsl:when>
+        <!-- inspect deprecated string parameter  -->
+        <!-- no error-checking, shouldn't be used -->
+        <xsl:when test="not($latex.sides = '')">
+            <xsl:value-of select="$latex.sides"/>
+        </xsl:when>
+        <!-- default depends -->
+        <xsl:otherwise>
+            <xsl:value-of select="$default-sides"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- We have "one" or "two", or junk from the deprecated string parameter -->
+<xsl:variable name="b-latex-two-sides" select="$latex-sides = 'two'"/>
+
 <!-- Print versus electronic.  Historically "yes" versus "no" -->
 <!-- and that seems stable enough, as in, we don't need to    -->
 <!-- contemplate some third variant of LaTeX output.          -->
