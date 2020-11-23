@@ -1055,6 +1055,103 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     os.chdir(owd)
 
 
+############
+# All Images
+############
+
+def all_images(xml, pub_file, stringparams, xmlid_root):
+    """All images, in all necessary formats, in subdirectories, for production of any project"""
+    import os  # mkdir()
+    import os.path  # join(), isdir()
+    import lxml.etree as ET
+
+    # parse source, no harm to assume
+    # xinclude modularization is necessary
+    src_tree = ET.parse(xml)
+    src_tree.xinclude()
+
+    # explore source for various PreTeXt elements needing assistance
+    # no element => empty list => boolean is False
+    has_latex_image = bool(src_tree.xpath("/pretext/*[not(docinfo)]//latex-image"))
+    has_asymptote = bool(src_tree.xpath("/pretext/*[not(docinfo)]//asymptote"))
+    has_sageplot = bool(src_tree.xpath("/pretext/*[not(docinfo)]//sageplot"))
+    has_youtube = bool(src_tree.xpath("/pretext/*[not(docinfo)]//video[@youtube]"))
+    has_preview = bool(src_tree.xpath("/pretext/*[not(docinfo)]//interactive[not(@preview)]"))
+
+    # debugging comment/uncomment or True/False
+    # has_latex_image = False
+    # has_asymptote = False
+    # has_sageplot = False
+    # has_youtube = False
+    # has_preview = False
+
+    # get the target output directory from the publisher file
+    # this is *required* so fail if pieces are missing
+    if not(pub_file):
+        msg = ' '.join(["creating all images requires a directory specification",
+                        "in a publisher file, and no publisher file has been given"])
+        raise ValueError(msg)
+    generated_dir, data_dir, _ = get_image_directories(xml, pub_file)
+    # correct attribute and not a directory gets caught earlier
+    # but could have publisher file and bad elements/attributes
+    if not(generated_dir):
+        msg = ' '.join(["creating all images requires a directory specified in the",
+                        "publisher file in the attribute /publication/source/@generated-images" ])
+        raise ValueError(msg)
+
+    # first stanza has code comments, and subsequent follow this
+    # model so only comments are for important distinctions
+
+    # latex-image
+    #
+    if has_latex_image:
+        # empty last part implies directory separator
+        dest_dir = os.path.join(generated_dir, 'latex-image', '')
+        # make directory if not already present
+        if not(os.path.isdir(dest_dir)):
+            os.mkdir(dest_dir)
+        latex_image_conversion(xml, pub_file, stringparams, xmlid_root, data_dir, dest_dir, 'pdf')
+        latex_image_conversion(xml, pub_file, stringparams, xmlid_root, data_dir, dest_dir, 'svg')
+
+    # Asymptote
+    #
+    if has_asymptote:
+        dest_dir = os.path.join(generated_dir, 'asymptote', '')
+        if not(os.path.isdir(dest_dir)):
+            os.mkdir(dest_dir)
+        asymptote_conversion(xml, pub_file, stringparams, xmlid_root, dest_dir, 'pdf')
+        asymptote_conversion(xml, pub_file, stringparams, xmlid_root, dest_dir, 'html')
+
+    # Sage plots
+    #
+    if has_sageplot:
+        dest_dir = os.path.join(generated_dir, 'sageplot', '')
+        if not(os.path.isdir(dest_dir)):
+            os.mkdir(dest_dir)
+        # for 3D images might produce a single PNG instead of an SVG and a PDF
+        # conversions look for this PNG as a fallback absent SVG or PDF
+        sage_conversion(xml, pub_file, stringparams, xmlid_root, dest_dir, 'pdf')
+        sage_conversion(xml, pub_file, stringparams, xmlid_root, dest_dir, 'svg')
+
+    # YouTube previews
+    #
+    if has_youtube:
+        dest_dir = os.path.join(generated_dir, 'youtube', '')
+        if not(os.path.isdir(dest_dir)):
+            os.mkdir(dest_dir)
+        # no format, they are what they are (*.jpg)
+        youtube_thumbnail(xml, pub_file, stringparams, xmlid_root, dest_dir)
+
+    # Previews (headless screenshots)
+    #
+    if has_preview:
+        dest_dir = os.path.join(generated_dir, 'preview', '')
+        if not(os.path.isdir(dest_dir)):
+            os.mkdir(dest_dir)
+        # no format, they are what they are (*.png)
+        preview_images(xml, pub_file, stringparams, xmlid_root, dest_dir)
+
+
 #####################################
 #
 #  MyOpenMath static problem scraping

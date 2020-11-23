@@ -286,6 +286,8 @@ def main():
             raise NotImplementedError("'braille' format deprecated (2020-08-19), 'braille-emboss' is replacement")
         else:
             raise NotImplementedError('cannot make entire document in "{}" format'.format(args.format))
+    elif args.component == 'images':
+        ptx.all_images(xml_source, publisher_file, stringparams, args.xmlid)
     # 2020-05-19 tikz_conversion() function removed
     elif args.component == 'tikz':
         raise NotImplementedError('conversion of TikZ pictures has been subsumed into the "latex-image" component (2020-05-19)')
