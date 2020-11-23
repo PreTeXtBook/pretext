@@ -949,4 +949,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- silently moved here, which should make no real difference -->
 <xsl:param name="directory.media"  select="''" />
 
+<!-- RETIRED: 2020-11-23 this parameter was never used, now    -->
+<!-- silently moved here, which should make no real difference -->
+<xsl:param name="directory.knowls"  select="''" />
+
 </xsl:stylesheet>

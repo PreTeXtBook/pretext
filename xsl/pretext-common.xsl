@@ -169,11 +169,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- For example, "2" would mean subsections of a book are unnumbered -->
 <!-- N.B.: the levels above cannot be numerically larger              -->
 <xsl:param name="numbering.maximum.level" select="''" />
-<!-- Image files and knowls are placed in directories    -->
+<!-- Image files are placed in directories    -->
 <!-- The defaults are relative to wherever principal output goes      -->
 <!-- These can be overridden at the command-line or in customizations -->
 <xsl:param name="directory.images" select="'images'" />
-<xsl:param name="directory.knowls" select="'knowls'" />
 <!-- Pointers to realizations of the actual document -->
 <xsl:param name="address.html" select="''" />
 <xsl:param name="address.pdf" select="''" />
