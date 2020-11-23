@@ -945,4 +945,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- N.B. This has no effect, and may never.  xelatex and lualatex support is automatic -->
 <xsl:param name="latex.engine" select="'pdflatex'" />
 
+<!-- RETIRED: 2020-11-23 this parameter was never used, now    -->
+<!-- silently moved here, which should make no real difference -->
+<xsl:param name="directory.media"  select="''" />
+
 </xsl:stylesheet>
