@@ -1661,6 +1661,70 @@ def verify_input_directory(inputdir):
     _verbose('input directory expanded to absolute path: {}'.format(absdir))
     return absdir
 
+def get_image_directories(xml_source, pub_file):
+    """Returns triple: (generated, data, external) absolute paths, derived from publisher file"""
+    import os.path # isabs, split
+    import lxml.etree as ET  # XML source
+
+    # N.B. manage attributes carefully to distinguish
+    # absent (None) versus empty string value ('')
+
+    # Examine /publication/source element carefully for
+    # attributes which we code here for convenience
+    gen_attr = 'generated-images'
+    data_attr = 'data-images'
+    ext_attr = 'source-images'
+
+    # prepare for relative paths later
+    source_dir = get_source_path(xml_source)
+
+    # Unknown until running the gauntlet
+    generated = None
+    data = None
+    external = None
+    if pub_file:
+        # parse publisher file, xinclude is conceivable
+        # for multiple similar files with common parts
+        pub_tree = ET.parse(pub_file)
+        pub_tree.xinclude()
+        # "source" element => single-item list
+        # no "source" element => empty list => triple of None returned
+        element_list = pub_tree.xpath("/publication/source")
+        if element_list:
+            attributes_dict = element_list[0].attrib
+            # attribute absent => None
+            if gen_attr in attributes_dict.keys():
+                raw_path = attributes_dict[gen_attr]
+                if os.path.isabs(raw_path):
+                    abs_path = raw_path
+                else:
+                    abs_path = os.path.join(source_dir, raw_path)
+                generated = verify_input_directory(abs_path)
+            # attribute absent => None
+            if data_attr in attributes_dict.keys():
+                raw_path = attributes_dict[data_attr]
+                if os.path.isabs(raw_path):
+                    msg = ' '.join(['the directory path to data for images, given in the',
+                          'publisher file as "source/@{}" must be relative to',
+                          'the PreTeXt source file location, and not the absolute path "{}"'])
+                    raise ValueError(msg.format(data_attr, raw_path))
+                else:
+                    abs_path = os.path.join(source_dir, raw_path)
+                data = verify_input_directory(abs_path)
+            # attribute absent => None
+            if ext_attr in attributes_dict.keys():
+                raw_path = attributes_dict[ext_attr]
+                if os.path.isabs(raw_path):
+                    msg = ' '.join(['the directory path to source images, given in the',
+                          'publisher file as "source/@{}" must be relative to',
+                          'the PreTeXt source file location, and not the absolute path "{}"'])
+                    raise ValueError(msg.format(ext_attr, raw_path))
+                else:
+                    abs_path = os.path.join(source_dir, raw_path)
+                external = verify_input_directory(abs_path)
+    # triple of discovered paths
+    return (generated, data, external)
+
 
 ########
 #
