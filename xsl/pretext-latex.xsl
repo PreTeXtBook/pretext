@@ -96,9 +96,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Page Numbers in cross-references -->
 <xsl:param name="latex.pageref" select="''"/>
 <!--  -->
-<!-- Sidedness -->
-<xsl:param name="latex.sides" select="''"/>
-<!--  -->
 <!-- Fillin Style Option                                  -->
 <!-- Can be 'underline' or 'box'                          -->
 <xsl:param name="latex.fillin.style" select="'underline'"/>
@@ -148,37 +145,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Not a parameter, a variable to override deliberately within a conversion -->
 <xsl:variable name="b-latex-hardcode-numbers" select="false()"/>
-
-<!-- We allow publishers to choose one-sided or two-sided -->
-<!-- "printing" though the default will vary with the     -->
-<!-- electronic/print dichotomy                           -->
-<xsl:variable name="latex-sides">
-    <xsl:variable name="default-sides">
-        <xsl:choose>
-            <xsl:when test="$b-latex-print">
-                <xsl:text>two</xsl:text>
-            </xsl:when>
-            <xsl:otherwise> <!-- electronic -->
-                <xsl:text>one</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:choose>
-        <xsl:when test="$latex.sides = ''">
-            <xsl:value-of select="$default-sides"/>
-        </xsl:when>
-        <xsl:when test="$latex.sides = 'one'">
-            <xsl:text>one</xsl:text>
-        </xsl:when>
-        <xsl:when test="$latex.sides = 'two'">
-            <xsl:text>two</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$default-sides"/>
-            <xsl:message>PTX:WARNING: the "latex.sides" stringparam should be "one" or "two", not "<xsl:value-of select="$latex.sides"/>", so assuming "<xsl:value-of select="$default-sides"/>"</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
 
 <!-- We generally want one large complete LaTeX file -->
 <xsl:variable name="chunk-level">

@@ -11008,6 +11008,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the  latex.print  parameter has been replaced by the  latex/@print  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($latex.print != '')" />
     </xsl:call-template>
+    <!--  -->
+    <!-- 2020-11-22  LaTeX sideness option controlled by publisher file -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2020-11-22'" />
+        <xsl:with-param name="message" select="'the  latex.sides  parameter has been replaced by the  latex/@sides  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($latex.sides != '')" />
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Miscellaneous -->

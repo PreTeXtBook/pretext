@@ -756,6 +756,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="autoname" select="''" />
 <!-- 2020-11-22: latex.print to publisher file -->
 <xsl:param name="latex.print" select="''"/>
+<!-- 2020-11-22 sidedness to publisher file -->
+<xsl:param name="latex.sides" select="''"/>
 
 
 <!-- ################# -->
