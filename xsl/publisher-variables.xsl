@@ -874,6 +874,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="latex.sides" select="''"/>
 
 
+<!-- Deprecated 2020-11-23 in favor of publisher file -->
+<!-- specification, but will still be respected       -->
+<xsl:param name="directory.images" select="''" />
+
 <!-- ################# -->
 <!-- Variable Bad Bank -->
 <!-- ################# -->

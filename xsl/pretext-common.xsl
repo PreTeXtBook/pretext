@@ -169,10 +169,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- For example, "2" would mean subsections of a book are unnumbered -->
 <!-- N.B.: the levels above cannot be numerically larger              -->
 <xsl:param name="numbering.maximum.level" select="''" />
-<!-- Image files are placed in directories    -->
-<!-- The defaults are relative to wherever principal output goes      -->
-<!-- These can be overridden at the command-line or in customizations -->
-<xsl:param name="directory.images" select="'images'" />
 <!-- Pointers to realizations of the actual document -->
 <xsl:param name="address.html" select="''" />
 <xsl:param name="address.pdf" select="''" />
@@ -11003,6 +10999,12 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="$docinfo/html/baseurl/@href" />
         <xsl:with-param name="date-string" select="'2020-11-22'" />
         <xsl:with-param name="message" select="'the &quot;baseurl/@href&quot; element in the &quot;docinfo&quot; has been replaced and is now specified in the publisher file with &quot;html/baseurl/@href&quot;, as documented in the PreTeXt Guide.'"/>
+    </xsl:call-template>
+    <!-- 2020-11-23  directory.images replaced by publisher file specification -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2020-11-23'" />
+        <xsl:with-param name="message" select="'the  directory.images  parameter has been replaced by specification of two directories in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($directory.images != '')" />
     </xsl:call-template>
 </xsl:template>
 
