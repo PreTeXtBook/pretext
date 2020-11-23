@@ -155,7 +155,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="latex-sides">
     <xsl:variable name="default-sides">
         <xsl:choose>
-            <xsl:when test="$latex.print = 'yes'">
+            <xsl:when test="$b-latex-print">
                 <xsl:text>two</xsl:text>
             </xsl:when>
             <xsl:otherwise> <!-- electronic -->
@@ -279,7 +279,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="pagerefs-option">
     <xsl:choose>
         <!-- electronic PDF -->
-        <xsl:when test="$latex.print = 'no'">
+        <xsl:when test="not($b-latex-print)">
             <xsl:choose>
                 <xsl:when test="$latex.pageref = 'yes'">
                     <xsl:text>yes</xsl:text>
@@ -290,7 +290,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:choose>
         </xsl:when>
         <!-- print PDF -->
-        <xsl:when test="$latex.print = 'yes'">
+        <xsl:when test="$b-latex-print">
             <xsl:choose>
                 <xsl:when test="$latex.pageref = 'no'">
                     <xsl:text>no</xsl:text>
@@ -1018,12 +1018,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\usepackage[normalem]{ulem}&#xa;</xsl:text>
         <xsl:text>%% Rules in this package reset proportional to fontsize&#xa;</xsl:text>
         <xsl:text>%% NB: *never* reset to package default (0.4pt?) after use&#xa;</xsl:text>
-        <xsl:text>%% Macros will use colors if  latex.print='no'  (the default)&#xa;</xsl:text>
+        <xsl:text>%% Macros will use colors for "electronic" version (the default)&#xa;</xsl:text>
         <xsl:if test="$document-root//insert">
             <xsl:text>%% Used for an edit that is an addition&#xa;</xsl:text>
             <xsl:text>\newcommand{\insertthick}{.1ex}&#xa;</xsl:text>
             <xsl:choose>
-                <xsl:when test="$latex.print='yes'">
+                <xsl:when test="$b-latex-print">
                     <xsl:text>\newcommand{\inserted}[1]{\renewcommand{\ULthickness}{\insertthick}\uline{#1}}&#xa;</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
@@ -1035,7 +1035,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% Used for an edit that is a deletion&#xa;</xsl:text>
             <xsl:text>\newcommand{\deletethick}{.25ex}&#xa;</xsl:text>
             <xsl:choose>
-                <xsl:when test="$latex.print='yes'">
+                <xsl:when test="$b-latex-print">
                     <xsl:text>\newcommand{\deleted}[1]{\renewcommand{\ULthickness}{\deletethick}\sout{#1}}&#xa;</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
@@ -1901,18 +1901,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-has-program">
             <xsl:text>%% Program listings via new tcblisting environment&#xa;</xsl:text>
             <xsl:text>%% First a universal color scheme for parts of any language&#xa;</xsl:text>
-            <xsl:if test="$latex.print='no'" >
+            <xsl:if test="not($b-latex-print)" >
                 <xsl:text>%% Colors match a subset of Google prettify "Default" style&#xa;</xsl:text>
-                <xsl:text>%% Set latex.print='yes' to get all black&#xa;</xsl:text>
+                <xsl:text>%% Full colors for "electronic" version&#xa;</xsl:text>
                 <xsl:text>%% http://code.google.com/p/google-code-prettify/source/browse/trunk/src/prettify.css&#xa;</xsl:text>
                 <xsl:text>\definecolor{identifiers}{rgb}{0.375,0,0.375}&#xa;</xsl:text>
                 <xsl:text>\definecolor{comments}{rgb}{0.5,0,0}&#xa;</xsl:text>
                 <xsl:text>\definecolor{strings}{rgb}{0,0.5,0}&#xa;</xsl:text>
                 <xsl:text>\definecolor{keywords}{rgb}{0,0,0.5}&#xa;</xsl:text>
             </xsl:if>
-            <xsl:if test="$latex.print='yes'" >
-                <xsl:text>%% All-black colors&#xa;</xsl:text>
-                <xsl:text>%% Set latex.print='no' to get actual colors&#xa;</xsl:text>
+            <xsl:if test="$b-latex-print" >
+                <xsl:text>%% All-black colors for "print" version&#xa;</xsl:text>
                 <xsl:text>\definecolor{identifiers}{rgb}{0,0,0}&#xa;</xsl:text>
                 <xsl:text>\definecolor{comments}{rgb}{0,0,0}&#xa;</xsl:text>
                 <xsl:text>\definecolor{strings}{rgb}{0,0,0}&#xa;</xsl:text>
@@ -2100,12 +2099,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% configure hyperref's  \url  to match listings' inline verbatim&#xa;</xsl:text>
         <xsl:text>\renewcommand\UrlFont{\small\ttfamily}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$latex.print='no'">
+    <xsl:if test="not($b-latex-print)">
         <xsl:text>%% Hyperlinking active in electronic PDFs, all links solid and blue&#xa;</xsl:text>
         <xsl:text>\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$latex.print='yes'">
-        <xsl:text>%% latex.print parameter set to 'yes', all hyperlinks black and inactive&#xa;</xsl:text>
+    <xsl:if test="$b-latex-print">
+        <xsl:text>%% "print" version, all hyperlinks black and inactive&#xa;</xsl:text>
         <xsl:text>\hypersetup{draft}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\hypersetup{pdftitle={</xsl:text>

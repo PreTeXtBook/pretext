@@ -500,6 +500,36 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- LaTeX-Specific Options -->
 <!-- ###################### -->
 
+<!-- Print versus electronic.  Historically "yes" versus "no" -->
+<!-- and that seems stable enough, as in, we don't need to    -->
+<!-- contemplate some third variant of LaTeX output.          -->
+<xsl:variable name="latex-print">
+    <xsl:choose>
+        <xsl:when test="$publication/latex/@print = 'yes'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/latex/@print = 'no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- not recognized, so warn and default -->
+        <xsl:when test="$publication/latex/@print">
+            <xsl:message>PTX:WARNING: LaTeX @print in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/latex/@print"/>".  Proceeding with default value: "no"</xsl:message>
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- inspect deprecated string parameter  -->
+        <!-- no error-checking, shouldn't be used -->
+        <xsl:when test="not($latex.print = '')">
+            <xsl:value-of select="$latex.print"/>
+        </xsl:when>
+        <!-- default is "no" -->
+        <xsl:otherwise>
+            <xsl:text>no</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- We have "yes" or "no", or possibly junk from the deprecated string    -->
+<!-- parameter, so we want the default (false) to be more likely than not. -->
+<xsl:variable name="b-latex-print" select="not($latex-print = 'no')"/>
 
 <!-- ########################### -->
 <!-- Reveal.js Slideshow Options -->
