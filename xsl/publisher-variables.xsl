@@ -724,6 +724,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The autoname parameter is deprecated (2017-07-25) -->
 <!-- Replace with docinfo/cross-references/@text       -->
 <xsl:param name="autoname" select="''" />
+<!-- 2020-11-22: latex.print to publisher file -->
+<xsl:param name="latex.print" select="''"/>
+
 
 <!-- ################# -->
 <!-- Variable Bad Bank -->

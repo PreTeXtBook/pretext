@@ -11001,6 +11001,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2020-11-04'" />
         <xsl:with-param name="message" select="'this is a temporary *warning*, which we plan to remove around 2021-01-30.  A &quot;sidebyside&quot; is no longer necessary to hold, or provide layout control, for single instances of &quot;image&quot;,  &quot;video&quot;,  &quot;tabular&quot;, and similar.  Try removing the &quot;sidebyside&quot; and moving any layout control onto the remaining object.'" />
     </xsl:call-template>
+    <!--  -->
+    <!-- 2020-11-22  LaTeX print option controlled by publisher file -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2020-11-22'" />
+        <xsl:with-param name="message" select="'the  latex.print  parameter has been replaced by the  latex/@print  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($latex.print != '')" />
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Miscellaneous -->
