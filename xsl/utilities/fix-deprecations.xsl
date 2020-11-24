@@ -564,7 +564,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- 2015-02-08: graphics languages are source for images,  -->
 <!-- so need a wrapper and their  xml:id  should move -->
-<xsl:template match="tikz[not(parent::image)]|asymptote[not(parent::image)]|sageplot[not(parent::image)]">
+<xsl:template match="tikz[not(parent::image)]">
     <image>
         <xsl:if test="@xml:id">
             <xsl:attribute name="xml:id">

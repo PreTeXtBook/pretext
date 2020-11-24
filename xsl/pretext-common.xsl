@@ -10429,14 +10429,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!-- 2017-07-05  top-level items that should have captions, but don't -->
     <!-- 2017-07-05  sidebyside items that do not have captions, so ineffective -->
     <!--  -->
-    <!--  -->
-    <!-- 2015-02-08  naked tikz, asymptote, sageplot are banned    -->
-    <!-- typically these would be in a figure, but not necessarily -->
-    <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//tikz[not(parent::image)]|$document-root//asymptote[not(parent::image)]|$document-root//sageplot[not(parent::image)]" />
-        <xsl:with-param name="date-string" select="'2015-02-08'" />
-        <xsl:with-param name="message" select="'&quot;tikz&quot;, &quot;asymptote&quot;, &quot;sageplot&quot;, elements must always be contained directly within an &quot;image&quot; element, rather than directly within a &quot;figure&quot; element'" />
-    </xsl:call-template>
+    <!-- 2015-02-08  naked tikz, asymptote, sageplot are no longer accomodated -->
     <!--  -->
     <!-- 2015-02-20  tikz is generalized to latex-image-code -->
     <xsl:call-template name="deprecation-message">
