@@ -1995,13 +1995,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>{\end{BVerbatim}\end{lrbox}\usebox{\codedisplaybox}\end{center}}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="$document-root//tikz">
-        <xsl:message>MBX:WARNING: the "tikz" element is deprecated (2015-10-16), use "latex-image-code" tag inside an "image" tag, and include the tikz package and relevant libraries in docinfo/latex-image-preamble</xsl:message>
-        <xsl:text>%% Tikz graphics&#xa;</xsl:text>
-        <xsl:text>\usepackage{tikz}&#xa;</xsl:text>
-        <xsl:text>\usetikzlibrary{backgrounds}&#xa;</xsl:text>
-        <xsl:text>\usetikzlibrary{arrows,matrix}&#xa;</xsl:text>
-    </xsl:if>
     <!-- TODO:  \showidx package as part of a draft mode, prints entries in margin -->
      <xsl:if test="$document-root//ol[@cols]|$document-root//ul[@cols]|$document-root//dl[@cols]|$document-root//contributors">
         <xsl:text>%% Multiple column, column-major lists&#xa;</xsl:text>
@@ -8933,22 +8926,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="latex-image-code[not(parent::image)]">
     <xsl:message>MBX:WARNING: latex-image-code element should be enclosed by an image element</xsl:message>
 </xsl:template>
-
-<!-- ################################## -->
-<!-- Deprecated Graphics Code Templates -->
-<!-- ################################## -->
-<!-- 2015/02/08: Deprecated, still functional but not maintained -->
-<xsl:template match="tikz">
-    <xsl:message>MBX:WARNING: tikz element superceded by latex-image-code element</xsl:message>
-    <xsl:message>MBX:WARNING: tikz package and necessary libraries should be included in docinfo/latex-image-preamble</xsl:message>
-    <xsl:apply-templates select="." mode="location-report" />
-    <xsl:call-template name="sanitize-text">
-        <xsl:with-param name="text" select="." />
-    </xsl:call-template>
-</xsl:template>
-<!-- ################################## -->
-<!-- Deprecated Graphics Code Templates -->
-<!-- ################################## -->
 
 <!-- ############## -->
 <!-- Tabular Layout -->

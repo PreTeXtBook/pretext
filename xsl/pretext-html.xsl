@@ -5870,31 +5870,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- ################################## -->
-<!-- Deprecated Graphics Code Templates -->
-<!-- ################################## -->
-<!-- 2015/02/08: Deprecated, still functional but not maintained -->
-<xsl:template match="tikz">
-    <xsl:message>MBX:WARNING: tikz element superceded by latex-image-code element</xsl:message>
-    <xsl:message>MBX:WARNING: tikz package and necessary libraries should be included in docinfo/latex-image-preamble</xsl:message>
-    <xsl:apply-templates select="." mode="location-report" />
-    <xsl:element name="object">
-        <xsl:attribute name="type">image/svg+xml</xsl:attribute>
-        <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
-        <xsl:attribute name="data">
-            <xsl:value-of select="$directory.images" />
-            <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="." mode="visible-id" />
-            <xsl:text>.svg</xsl:text>
-        </xsl:attribute>
-        <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
-    </xsl:element>
-</xsl:template>
-<!-- ################################## -->
-<!-- Deprecated Graphics Code Templates -->
-<!-- ################################## -->
-
-
 <!-- ############# -->
 <!-- Audio & Video -->
 <!-- ############# -->

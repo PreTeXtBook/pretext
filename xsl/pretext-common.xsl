@@ -10430,13 +10430,9 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!-- 2017-07-05  sidebyside items that do not have captions, so ineffective -->
     <!--  -->
     <!-- 2015-02-08  naked tikz, asymptote, sageplot are no longer accomodated -->
+    <!-- 2015-02-20  tikz element is entirely abandoned -->
     <!--  -->
-    <!-- 2015-02-20  tikz is generalized to latex-image-code -->
-    <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//tikz" />
-        <xsl:with-param name="date-string" select="'2015-02-20'" />
-        <xsl:with-param name="message" select="'the &quot;tikz&quot; element is deprecated, convert to &quot;latex-image-code&quot; inside &quot;image&quot;'" />
-    </xsl:call-template>
+    <!-- Active deprecations follow -->
     <!--  -->
     <!-- 2015-03-13  paragraph is renamed more accurately to paragraphs           -->
     <!-- 2017-07-16  removed all backwards compatibility and added empty template -->
