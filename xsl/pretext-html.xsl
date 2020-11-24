@@ -5726,14 +5726,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- LaTeX standalone image              -->
-<!-- Deprecated when not inside an image -->
-<!-- But it gets processed anyway        -->
-<xsl:template match="latex-image-code">
-    <xsl:message>MBX WARNING: latex-image-code element should be enclosed by an image element</xsl:message>
-    <xsl:apply-templates select="." mode="location-report" />
-</xsl:template>
-
 
 <!-- ################## -->
 <!-- SideBySide Layouts -->

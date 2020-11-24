@@ -112,7 +112,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- latex graphics to standalone file        -->
 <!-- Intercept "extraction" process at identical template in -latex -->
-<xsl:template match="image[latex-image-code]|image[latex-image]" mode="extraction">
+<xsl:template match="image[latex-image]" mode="extraction">
     <xsl:variable name="filebase">
         <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
@@ -166,7 +166,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\begin{document}&#xa;</xsl:text>
         <xsl:text>\pagestyle{empty}&#xa;</xsl:text>
         <!-- These templates are in pretext-latex.xsl -->
-        <xsl:apply-templates select="latex-image|latex-image-code"/>
+        <xsl:apply-templates select="latex-image"/>
         <xsl:text>\end{document}&#xa;</xsl:text>
     </exsl:document>
 </xsl:template>

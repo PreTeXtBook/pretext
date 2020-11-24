@@ -265,17 +265,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
-<!-- 2017-12-22  latex-image-code to simply latex-image -->
-<xsl:template match="latex-image-code">
-    <latex-image>
-        <xsl:apply-templates select="@* | node()" />
-    </latex-image>
-    <xsl:call-template name="deprecation-fix-report">
-        <xsl:with-param name="date">2017-12-22</xsl:with-param>
-        <xsl:with-param name="message">Replacing &lt;latex-image-code&gt; by &lt;latex-image&gt;</xsl:with-param>
-    </xsl:call-template>
-</xsl:template>
-
 <!-- 2017-12-07  "c" content totally escaped for LaTeX -->
 <xsl:template match="c/@latexsep|cd/@latexsep">
     <!-- do nothing, just drop it and report -->

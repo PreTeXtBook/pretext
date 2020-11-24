@@ -10431,6 +10431,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!--  -->
     <!-- 2015-02-08  naked tikz, asymptote, sageplot are no longer accomodated -->
     <!-- 2015-02-20  tikz element is entirely abandoned -->
+    <!-- 2017-12-22  latex-image-code element is entirely abandoned -->
     <!--  -->
     <!-- Active deprecations follow -->
     <!--  -->
@@ -10635,13 +10636,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="$document-root//image/@copy" />
         <xsl:with-param name="date-string" select="'2017-12-21'" />
         <xsl:with-param name="message" select="'@copy on an &quot;image&quot; element is deprecated, possibly use the xinclude mechanism with common source code in an external file'" />
-    </xsl:call-template>
-    <!--  -->
-    <!-- 2017-12-22  latex-image-code to simply latex-image -->
-    <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//latex-image-code" />
-        <xsl:with-param name="date-string" select="'2017-12-22'" />
-        <xsl:with-param name="message" select="'the &quot;latex-image-code&quot; element has been replaced by the functionally equivalent &quot;latex-image&quot;'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2018-02-04  geogebra-applet gone -->

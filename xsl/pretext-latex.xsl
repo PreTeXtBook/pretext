@@ -2166,7 +2166,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
     </xsl:if>
     <xsl:text>%% If tikz has been loaded, replace ampersand with \amp macro&#xa;</xsl:text>
-    <xsl:if test="$document-root//latex-image-code|$document-root//latex-image">
+    <xsl:if test="$document-root//latex-image">
         <xsl:text>\ifdefined\tikzset&#xa;</xsl:text>
         <xsl:text>    \tikzset{ampersand replacement = \amp}&#xa;</xsl:text>
         <xsl:text>\fi&#xa;</xsl:text>
@@ -8847,13 +8847,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See "latex-image-preamble" for critical parts    -->
 <!-- Side-By-Side scaling happens there, could be here -->
 <!-- TODO: maybe these should be split into current v. legacy -->
-<xsl:template match="image[latex-image-code]|image[latex-image]" mode="image-inclusion">
+<xsl:template match="image[latex-image]" mode="image-inclusion">
     <!-- tikz images go into a tcolorbox where \linewidth is reset. -->
     <!-- grouping reins in the scope of any local graphics settings -->
     <!-- we resize what tikz produces, to fill a containing box     -->
     <!-- changes to accomodate resizing to fit requested layouts -->
     <xsl:text>\resizebox{\linewidth}{!}{%&#xa;</xsl:text>
-    <xsl:apply-templates select="latex-image|latex-image-code"/>
+    <xsl:apply-templates select="latex-image"/>
     <xsl:text>}%&#xa;</xsl:text>
 </xsl:template>
 
@@ -8869,7 +8869,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- but following should just see a single large text   -->
 <!-- node and reproduce it.  Just like before structure, -->
 <!-- such as "label" was introduced.                     -->
-<xsl:template match="latex-image|latex-image-code">
+<xsl:template match="latex-image">
     <xsl:call-template name="sanitize-text">
         <xsl:with-param name="text">
             <!-- we need to copy text bits verbatim (value-of), -->
@@ -8920,11 +8920,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]{</xsl:text>
         <xsl:value-of select="@href" />
     <xsl:text>}}%&#xa;</xsl:text>
-</xsl:template>
-
-<!-- was once direct-descendant of subdivision, this catches that -->
-<xsl:template match="latex-image-code[not(parent::image)]">
-    <xsl:message>MBX:WARNING: latex-image-code element should be enclosed by an image element</xsl:message>
 </xsl:template>
 
 <!-- ############## -->
