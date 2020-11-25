@@ -139,10 +139,6 @@ the xsltproc executable.
         <html>
             <!-- Expects favicon/favicon-32x32.png, and favicon/favicon-16x16.png -->
             <favicon/>
-            <!-- There does not need to be a trailing / on the URL             -->
-            <!-- NB Eventually a publisher option will exist to overrule this, -->
-            <!-- so a given source can be installed more than one place        -->
-            <baseurl href="https://pretextbook.org/examples/sample-article/html" />
         </html>
         <!--
         With a <feedback> element, in the HTML version, you get a button
