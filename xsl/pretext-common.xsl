@@ -492,22 +492,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$docinfo/document-id"/>
 </xsl:variable>
 
-<!-- This is used to build standalone pages.  Despite looking   -->
-<!-- like a property of the HTML conversion, it gets used in    -->
-<!-- the LaTeX conversion to form QR codes and it is discovered -->
-<!-- by the "extract-interactive.xsl" stylesheet, which only    -->
-<!-- imports this stylesheet.  So this needs to be a global     -->
-<!-- variable, defined here.                                    -->
-<!--                                                            -->
-<!-- Eventually a stringparam should preferentially override    -->
-<!-- this determination, so publishers can install the same     -->
-<!-- source on different servers.  It is in "docinfo" as a      -->
-<!-- convenience during development stages.                     -->
-<!-- NB: Presumed to not have a trailing slash                  -->
-<xsl:variable name="baseurl">
-    <xsl:value-of select="$docinfo/html/baseurl/@href"/>
-</xsl:variable>
-
 <!-- The new version can return to the generic version  -->
 <!-- once we kill the dashed version for author use.    -->
 <xsl:variable name="author-tools-new">
@@ -11014,6 +10998,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2020-11-22'" />
         <xsl:with-param name="message" select="'the  latex.sides  parameter has been replaced by the  latex/@sides  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($latex.sides != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2020-11-22  deprecate HTML base URL in docinfo -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$docinfo/html/baseurl/@href" />
+        <xsl:with-param name="date-string" select="'2020-11-22'" />
+        <xsl:with-param name="message" select="'the &quot;baseurl/@href&quot; element in the &quot;docinfo&quot; has been replaced and is now specified in the publisher file with &quot;html/baseurl/@href&quot;, as documented in the PreTeXt Guide.'"/>
     </xsl:call-template>
 </xsl:template>
 

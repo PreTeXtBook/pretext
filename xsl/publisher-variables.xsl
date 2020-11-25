@@ -200,6 +200,42 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!--               -->
+<!-- HTML Base URL -->
+<!--               -->
+
+<!-- This is used to build/reference standalone pages.    -->
+<!-- Specified as a property of the HTML conversion, it   -->
+<!-- actually gets used in the LaTeX conversion to form   -->
+<!-- QR codes and make links to HTML versions of          -->
+<!-- Asymptote figures.                                   -->
+<!-- NB: We add a trailing slash, if not authored already -->
+<xsl:variable name="baseurl">
+    <xsl:variable name="raw-input">
+        <xsl:choose>
+            <!-- if publisher file has a base url, use it -->
+            <xsl:when test="$publication/html/baseurl/@href">
+                <xsl:value-of select="$publication/html/baseurl/@href"/>
+            </xsl:when>
+            <!-- reluctantly query the old docinfo version -->
+            <xsl:when test="$docinfo/html/baseurl/@href">
+                <xsl:value-of select="$docinfo/html/baseurl/@href"/>
+            </xsl:when>
+            <!-- otherwise use the default, is empty as sentinel -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$raw-input =''"/>
+        <xsl:otherwise>
+            <xsl:value-of select="$raw-input"/>
+            <xsl:if test="not(substring($raw-input, string-length($raw-input), 1) = '/')">
+                <xsl:text>/</xsl:text>
+            </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!--                              -->
 <!-- HTML CSS Style Specification -->
 <!--                              -->
