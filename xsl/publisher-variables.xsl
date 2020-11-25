@@ -61,6 +61,84 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Source Options -->
 <!-- ############## -->
 
+<!-- A directory of images that *are not* generated, or reproducible,     -->
+<!-- from an author's source.  Canonical example would be a photograph.   -->
+<!-- The directory specified is always a relative path rooted at the      -->
+<!-- author's source file containing the "pretext" element (i.e. if       -->
+<!-- source is modularized, the "master" or "top-level" file).            -->
+<!-- Historically, authors were 100% responsible for this path, so the    -->
+<!-- default is empty.  With this publisher file specification, a         -->
+<!-- redundance in these paths (a common leading path) may be specified   -->
+<!-- once, and source can assume less about the location of these images. -->
+<!-- A leading slash is an error, since that'd be an absolute path,       -->
+<!-- while a trailing slash will be reliably added if                     -->
+<!--     (a) not present in publisher file specification                  -->
+<!--     (b) the path is not empty                                        -->
+<xsl:variable name="source-image-directory">
+    <xsl:variable name="raw-input">
+        <xsl:choose>
+            <xsl:when test="$publication/source/@source-images">
+                <xsl:value-of select="$publication/source/@source-images"/>
+            </xsl:when>
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+        <!-- leading path separator is an error -->
+        <xsl:when test="substring($raw-input, 1, 1) = '/'">
+            <xsl:message>PTX:ERROR:   a source image directory (source/@source-images in the publisher file) must be a relative path and not begin with "/" as in "<xsl:value-of select="$raw-input"/>".  Proceeding with the default, which is an empty string, and may lead to unexpected results.</xsl:message>
+            <xsl:text/>
+        </xsl:when>
+        <!-- trailing path separator is good and -->
+        <!-- we know it is not due to simply '/' -->
+        <xsl:when test="substring($raw-input, string-length($raw-input), 1) = '/'">
+            <xsl:value-of select="$raw-input"/>
+        </xsl:when>
+        <!-- if there is substance, we need to add a trailing slash -->
+        <xsl:when test="string-length($raw-input) > 0">
+            <xsl:value-of select="concat($raw-input, '/')"/>
+        </xsl:when>
+        <!-- specification must be empty, so we leave it that way -->
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Historically this was given by the "images" directory as a default, -->
+<!-- and it seems almost every author just ran with this.                -->
+<xsl:variable name="generated-image-directory">
+    <xsl:variable name="raw-input">
+        <xsl:choose>
+            <xsl:when test="$publication/source/@generated-images">
+                <xsl:value-of select="$publication/source/@generated-images"/>
+            </xsl:when>
+            <xsl:when test="not($directory.images = '')">
+                <xsl:value-of select="$directory.images"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>images/</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+        <!-- trailing path separator is good -->
+        <xsl:when test="substring($raw-input, string-length($raw-input), 1) = '/'">
+            <xsl:value-of select="$raw-input"/>
+        </xsl:when>
+        <!-- if there is substance, we need to add a trailing slash -->
+        <xsl:when test="string-length($raw-input) > 0">
+            <xsl:value-of select="concat($raw-input, '/')"/>
+        </xsl:when>
+        <!-- specification must be empty, so we leave it that way -->
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- For backward-compatibility, we want to know if the collection of  -->
+<!-- generated images is structured by their production method (newer) -->
+<!-- or not (older, historical).  So we create a boolean based on the  -->
+<!-- presence of the publisher file specification.                     -->
+<xsl:variable name="b-structured-generated-images" select="boolean($publication/source/@generated-images)"/>
+
 <!-- A file of hint|answer|solution, with @ref back to "exercise" -->
 <!-- so that the solutions can see limited distribution.  No real -->
 <!-- error-checking.  If not set/present, then an empty string    -->
