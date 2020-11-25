@@ -9,19 +9,23 @@
 
 <chapter xml:id="pdf-print">
     <title>Conversion to PDF and Print</title>
+    <idx><h>print option</h><h>LaTeX, PDF</h></idx>
+    <idx><h>electronic option</h><h>LaTeX, PDF</h></idx>
+    <idx><h>LaTeX</h><h>print option</h></idx>
+    <idx><h>LaTeX</h><h>electronic option</h></idx>
+    <idx><h>PDF</h><h>print option</h></idx>
+    <idx><h>PDF</h><h>electronic option</h></idx>
 
     <introduction>
-        <p>This chapter describes ways a publisher can adjust the presentation of <pretext/> content for a print format, or an lectronic facsimile (i.e. <init>PDF</init>), without actually changing that content.</p>
+        <p>This chapter describes ways a publisher can adjust the presentation of <pretext/> content for a print format, or an electronic facsimile (i.e. <init>PDF</init>), without actually changing any content.</p>
 
-        <p>
-            <idx><h>PDF</h><h>electronic</h></idx>
-            <idx><h>PDF</h><h>print</h></idx>
-            The stylesheet <c>pretext-latex.xsl</c> can produce two very similar outputs.  Each is a file in <latex/> syntax, which can be converted to a <init>PDF</init> with a <latex/> executable (<q>engine</q>).  However, there are two purposes for such a <init>PDF</init>.  The first is a document which is meant to be read on a screen.  We call this an <term>electronic PDF</term>.  The second is meant to be printed as a physical book, so it would be the file you provide to a copy shop, campus bookstore, or print-on-demand service (see <xref ref="print-on-demand"/>).  We call this a <term>print PDF</term>.  As you read this, keep in mind that that <latex/> conversion is really two-converters-in-one.
-        </p>
+        <p>The stylesheet <c>pretext-latex.xsl</c> can produce two very similar outputs.  Each is a file in <latex/> syntax, which can be converted to a <init>PDF</init> with a <latex/> executable (<q>engine</q>).  However, there are two purposes for such a <init>PDF</init>.  The first is a document which is meant to be read on a screen.  We call this an <term>electronic PDF</term>.  The second is meant to be printed as a physical book, so it would be the file you provide to a copy shop, campus bookstore, or print-on-demand service (see <xref ref="print-on-demand"/>).  We call this a <term>print PDF</term>.  So as you read this, keep in mind that the <latex/> conversion is really two-converters-in-one.</p>
 
         <p>As an illustration of the difference, an electronic <init>PDF</init> will contain cross-references that are active, and colored to be obvious to the reader.  For the print <init>PDF</init> the same cross-reference will be black, inactive, and by default contain the page number of the target.</p>
 
-        <p>The <c>latex.print</c> switch controls the selection of the two output modes of this single stylesheet.  The default is <c>no</c> for the electronic version, and <c>yes</c> will change to the print version.  In this chapter, we describe both of these two, slightly dissimilar, conversions together.</p>
+        <p>The publisher file entry <c>latex/@print</c> controls the selection of the two output modes of this single stylesheet.  The default is <c>no</c> for the electronic version, and <c>yes</c> will change to the print version.  See <xref ref="latex-print-options"/> for the specifics of this entry.</p>
+
+        <p>In this chapter, we describe both of these two conversions together, since they are only slightly dissimilar.</p>
     </introduction>
 
     <section xml:id="print-justification">

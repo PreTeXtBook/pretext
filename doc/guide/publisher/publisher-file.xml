@@ -18,6 +18,32 @@
         <p>This chapter is reference material for the <term>publisher file</term>, whose employment is described in <xref ref="publisher-file"/>.</p>
     </introduction>
 
+    <section xml:id="publisher-file-latex">
+        <title>PDF (<latex/>) Options</title>
+        <idx>PDF publisher options</idx>
+        <idx>LaTeX publisher options</idx>
+        <idx><h>publisher options</h><h>PDF</h></idx>
+        <idx><h>publisher options</h><h>LaTeX</h></idx>
+
+        <introduction>
+            <p>These options affect the conversion to <latex/>, which can in turn be converted into <init>PDF</init>.
+            See <xref ref="pdf-print"/> for a more general overview of this conversion with more details.  This includes some existing options that will eventually migrate to the publisher file.</p>
+        </introduction>
+
+        <subsection xml:id="latex-print-options">
+            <title><latex/> Print Option</title>
+            <idx><h>print option</h><h>LaTeX, PDF</h></idx>
+            <idx><h>electronic option</h><h>LaTeX, PDF</h></idx>
+            <idx><h>LaTeX</h><h>print option</h></idx>
+            <idx><h>LaTeX</h><h>electronic option</h></idx>
+            <idx><h>PDF</h><h>print option</h></idx>
+            <idx><h>PDF</h><h>electronic option</h></idx>
+
+            <p>The conversion to <latex/> can produce a <init>PDF</init> optimized for print, or optimized for use electronically on a screen.  The<cd>
+                <cline>/publication/latex/@print</cline>
+            </cd>attribute can have the value <c>yes</c> to produce a print version, or the value <c>no</c> to produce an electronic version.  The default is an electronic version.  See the introduction to <xref ref="pdf-print"/> for more detail.</p>
+        </subsection>
+
     <section xml:id="publisher-file-online">
         <title>Online (HTML) Options</title>
         <idx>HTML publisher options</idx>
