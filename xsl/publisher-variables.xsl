@@ -605,9 +605,45 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+
 <!-- We have "yes" or "no", or possibly junk from the deprecated string    -->
 <!-- parameter, so we want the default (false) to be more likely than not. -->
 <xsl:variable name="b-latex-print" select="not($latex-print = 'no')"/>
+
+<!-- Add a boolean variable to toggle links for Asymptote images in PDF.    -->
+<!-- If a baseurl is set, and an HTML version is available with interactive -->
+<!-- WebGL images the publisher may want static images in the PDF to link   -->
+<!-- to the interactive images online.                                      -->
+<xsl:variable name="asymptote-links">
+    <xsl:choose>
+        <!-- fail automatically and silently for print -->
+        <xsl:when test="$b-latex-print">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- fail when no base URL is given -->
+        <xsl:when test="$baseurl = ''">
+            <xsl:message>PTX WARNING: baseurl must be set in publisher file to enable links from Asymptote images</xsl:message>
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/latex/asymptote/@links = 'yes'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/latex/asymptote/@links = 'no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- set, but not correct, so inform and use default -->
+        <xsl:when test="$publication/latex/asymptote/@links">
+            <xsl:message>PTX WARNING: LaTeX links to Asymptote publisher file should be "yes" (links to HTML) or "no" (no links), not "<xsl:value-of select="$publication/latex/asymptote/@links"/>". Proceeding with default value: "no" (no links)</xsl:message>
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- unset, but have prerequisites, so use default -->
+        <xsl:otherwise>
+            <xsl:text>yes</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-asymptote-links" select="$asymptote-links = 'yes'"/>
+
 
 <!-- ########################### -->
 <!-- Reveal.js Slideshow Options -->

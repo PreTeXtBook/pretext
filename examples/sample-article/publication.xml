@@ -54,6 +54,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <video privacy="yes"/>
     </html>
 
-    <latex print="no" sides="two"/>
+    <latex print="no" sides="two">
+        <asymptote links="yes"/>
+    </latex>
 
 </publication>
