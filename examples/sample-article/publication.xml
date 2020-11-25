@@ -58,6 +58,4 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <asymptote links="yes"/>
     </latex>
 
-    <source generated-images="/tmp/real-crap"/>
-
 </publication>
