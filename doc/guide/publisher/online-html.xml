@@ -44,6 +44,13 @@
             <p>You may elect to have an embedded online calculator in each page of your online version.  It will appear in the right margin, and will stay there as a reader scrolls the page up and down.  A button near the masthead can be used to contol visibility.  By default no calculator is available, so you need to explicitly request this feature.  As of 2020-05-30 there are four calculators available from the GeoGebra Project<fn><url href="https://www.geogebra.org/">www.geogebra.org</url></fn>.  See <xref ref="online-calculator"/> for details on specifying this option.</p>
         </paragraphs>
 
+        <paragraphs xml:id="online-base-url">
+            <title>Base URL</title>
+            <idx><h>calculator</h><h>embedded in <init>HTML</init></h></idx>
+
+            <p>The base <init>URL</init> of a hosted version of <init>HTML</init> output may be specified as an entry in a publisher file.  Then certain aspects of other output (typically <init>PDF</init>/<latex/>) will link to corresponding aspects of the <init>HTML</init> output.  See <xref ref="online-baseurl"/> for the specifics of this entry.  Examples of use include links from Asymptote graphics.</p>
+        </paragraphs>
+
         <paragraphs xml:id="video-embedding">
             <title>Privacy Options for Video Embedding</title>
             <idx><h>video</h><h>HTML</h></idx>
