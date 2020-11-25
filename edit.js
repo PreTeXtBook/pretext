@@ -261,8 +261,10 @@ function container_for_editing(obj_type) {
     this_content_container.setAttribute('id', "actively_editing");
 
     if (obj_type == "paragraph") {
+        this_content_container.setAttribute('data-objecttype', 'p');
         this_content_container.innerHTML = '<textarea id="actively_editing_paragraph" class="starting_point_for_editing" style="width:100%;" placeholder="' + obj_type + '"></textarea>';
     } else if ( menu_for["theorem-like"].includes(obj_type) ) {
+        this_content_container.setAttribute('data-objecttype', 'theorem-like');
         var title = standard_title_form(obj_type);
 /*
         var title = "<div><b>" + obj_type + "&nbsp;NN</b>&nbsp;";
@@ -362,8 +364,42 @@ function local_menu_navigator(e) {
     }
 }
 
+function ptx_to_html(input_text) {
+    output_text = input_text;
+
+    output_text = output_text.replace(/<term>/g, "<b>"); 
+    output_text = output_text.replace(/<\/term>/g, "</b>"); 
+    return(output_text)
+}
+
 function save_current_editing() {
-    alert("finished editing a paragraph")
+    console.log("current active element to be saved", document.activeElement);
+    //not currently used
+    object_being_edited = document.getElementById('actively_editing');
+
+    textbox_being_edited = document.getElementById('actively_editing_paragraph');
+    paragraph_content = textbox_being_edited.value;
+    paragraph_content = paragraph_content.trim();
+
+    cursor_location = textbox_being_edited.selectionStart;
+
+    console.log("cursor_location", cursor_location, "out of", paragraph_content.length, "paragraph_content", paragraph_content);
+    paragraph_content_list = paragraph_content.split("\n\n");
+
+    for(var j=0; j < paragraph_content_list.length; ++j) {
+        var object_as_html = document.createElement('p');
+        object_as_html.setAttribute("class", "just_added");
+        object_as_html.innerHTML = ptx_to_html(paragraph_content_list[j]);
+        document.getElementById('actively_editing').insertAdjacentElement('beforebegin', object_as_html);
+    } 
+    
+//    alert("finished editing a paragraph")
+    
+    $(object_being_edited).next('[data-editable="99"]').focus();
+//    document.getElementById('actively_editing').remove();
+    object_being_edited.remove();
+    $(":focus").addClass("may_select");
+    edit_menu_for($(":focus").attr("id"), "entering");
 }
 
 function local_editing_action(e) {
@@ -375,6 +411,8 @@ function local_editing_action(e) {
         e.preventDefault();
         console.log("making a local menu");
         local_menu_navigator(e);
+    } else if (e.code == "Escape") {
+            save_current_editing()
     } else if (e.code == "Enter") {
         console.log("saw a Ret");
     //    e.preventDefault();
