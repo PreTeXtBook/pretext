@@ -83,7 +83,7 @@
 
             <p>The<cd>
                 <cline>/publication/html/baseurl/@href</cline>
-            </cd>attribute may be given as a complete <init>URL</init> for the top-level of where <init>HTML</init> output is hosted.  Of course, this may be different for different publishers.  The value is a directory, and so should end with a slash (path separator).  See   See <xref ref="online-base-url" text="title"/> in <xref ref="html-publisher-options"/> for reasons why you might want to specify this.</p>
+            </cd>attribute may be given as a complete <init>URL</init> for the top-level of where <init>HTML</init> output is hosted.  Of course, this may be different for different publishers.  The value is a directory, and so should end with a slash (path separator).  See <xref ref="online-base-url"/> for reasons why you might want to specify this.</p>
         </subsection>
 
         <subsection xml:id="online-calculator">
@@ -102,7 +102,7 @@
                         <li><c>none</c></li>
                     </ul></p>
                 </li>
-            </ul>  See <xref ref="online-embedded-calculator" text="title"/> in <xref ref="html-publisher-options"/> for more.</p>
+            </ul>  See <xref ref="online-embedded-calculator"/> for more.</p>
         </subsection>
 
         <subsection xml:id="online-index-page">
@@ -114,7 +114,7 @@
                 <cline>/publication/html/index-page</cline>
             </cd>element can have the following attribute:<ul>
                 <li><attr>ref</attr>: the <attr>xml:id</attr> of a division which will be a complete page at whatever level the document is chunked (broken into smaller pages).</li>
-            </ul>An <c>index.html</c> page will be created which redirects immediately to this page.  Many webservers will serve this page when a <init>URL</init> stops with the enclosing directory.  So the Table of Contents (<tag>book</tag>, <tag>article</tag>) or the <tag>frontmatter</tag> are common choices.  See <xref ref="index-page" text="title"/> in <xref ref="html-publisher-options"/> for more.</p>
+            </ul>An <c>index.html</c> page will be created which redirects immediately to this page.  Many webservers will serve this page when a <init>URL</init> stops with the enclosing directory.  So the Table of Contents (<tag>book</tag>, <tag>article</tag>) or the <tag>frontmatter</tag> are common choices.  See <xref ref="index-page"/> for more.</p>
         </subsection>
 
         <subsection xml:id="online-platform-options">
@@ -168,7 +168,7 @@
                 <cline>/publication/html/video</cline>
             </cd>element can have the following attribute:<ul>
                 <li><attr>privacy</attr>: allowed values are <c>yes</c> or <c>no</c>.</li>
-            </ul>Setting this to yes (the default) prevents certain tracking cookies from being used. Currently only supported for videos from YouTube. See <xref ref="video-embedding" text="title"/> in <xref ref="html-publisher-options"/> for more.</p>
+            </ul>Setting this to yes (the default) prevents certain tracking cookies from being used. Currently only supported for videos from YouTube. See <xref ref="video-embedding"/> for more.</p>
         </subsection>
     </section>
 
