@@ -54,6 +54,17 @@
                 <cline>/publication/latex/@sides</cline>
             </cd>attribute can have the value <c>one</c> for a one-sided version, or the value <c>two</c> to produce a two-sided version.  The default depends on if the output is electronic (one-sided) or print (two-sided).  See <xref ref="print-sides"/> for more detail.</p>
         </subsection>
+
+        <subsection xml:id="latex-asymptote-link-options">
+            <title><latex/> Asymptote Links</title>
+            <idx><h>Asymptote links</h><h>LaTeX, PDF</h></idx>
+            <idx><h>LaTeX</h><h>Asymptote links</h></idx>
+            <idx><h>PDF</h><h>Asymptote links</h></idx>
+
+            <p>The conversion to <latex/> can provide a link to an <init>HTML</init> version of each Asymptote graphic.  The<cd>
+                <cline>/publication/latex/asymptote/@links</cline>
+            </cd>attribute can have the value <c>yes</c> to produce links, or the value <c>no</c> to not create links.  If the base URL has been set (<xref ref="online-base-url"/>), then the default is <c>yes</c> and this feature is enabled.  See  <xref ref="latex-asymptote-links"/> for more detail.</p>
+        </subsection>
     </section>
 
     <section xml:id="publisher-file-online">
