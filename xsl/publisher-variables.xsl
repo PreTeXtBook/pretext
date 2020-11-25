@@ -954,7 +954,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Deprecated 2020-11-23 in favor of publisher file -->
 <!-- specification, but will still be respected       -->
-<xsl:param name="directory.images" select="''" />
+<xsl:param name="directory.images" select="'images'" />
 
 <!-- ################# -->
 <!-- Variable Bad Bank -->
