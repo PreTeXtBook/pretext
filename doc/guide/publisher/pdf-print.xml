@@ -38,14 +38,14 @@
         <p>See <xref ref="styling-justification"/> for greater control over some aspects of right-justified text and also read about justified text in <xref ref="topic-accessibility"/>.</p>
     </section>
 
-    <section>
+    <section xml:id="print-sides">
         <title>One-Sided or Two-Sided</title>
 
-        <p>An electronic <init>PDF</init> will default to page layout appropriate for a document printed single-sided, which makes the most sense for a document that may not be printed, or which might be printed on a personal printer.</p>
+        <p>An electronic <init>PDF</init> will default to page layout appropriate for a document printed single-sided, which makes the most sense for a document that may not ever be printed, or which possibly might be printed on a personal printer.</p>
 
         <p>A print <init>PDF</init> will default to page layout appropriate for a document printed two-sided, which makes the most sense for a document that may be sent to a print-on-demand service or printed on a printer that will print on both sides of a sheet of paper.</p>
 
-        <p>These defaults may be overridden with the <c>latex.sides</c> switch with values <c>one</c> and <c>two</c>.</p>
+        <p>These defaults may be overridden with the publisher entry <c>latex/@sides</c> switch with values <c>one</c> and <c>two</c>.  See <xref ref="latex-sides-options"/> for the specifics of this entry.</p>
 
         <p>One-sided layout will default to symmetric left/right margins, and page headers with the page numbers <em>always</em> placed in the upper-right corner as part of default page headers.  There will be no blank pages between chapters of a book.</p>
 

@@ -44,6 +44,18 @@
             </cd>attribute can have the value <c>yes</c> to produce a print version, or the value <c>no</c> to produce an electronic version.  The default is an electronic version.  See the introduction to <xref ref="pdf-print"/> for more detail.</p>
         </subsection>
 
+        <subsection xml:id="latex-sides-options">
+            <title><latex/> Sides Option</title>
+            <idx><h>sides option</h><h>LaTeX, PDF</h></idx>
+            <idx><h>LaTeX</h><h>sides option</h></idx>
+            <idx><h>PDF</h><h>sides option</h></idx>
+
+            <p>The conversion to <latex/> can produce a <init>PDF</init> designed for printing on only one side of the page, or on both sides of the page.  The<cd>
+                <cline>/publication/latex/@sides</cline>
+            </cd>attribute can have the value <c>one</c> for a one-sided version, or the value <c>two</c> to produce a two-sided version.  The default depends on if the output is electronic (one-sided) or print (two-sided).  See <xref ref="print-sides"/> for more detail.</p>
+        </subsection>
+    </section>
+
     <section xml:id="publisher-file-online">
         <title>Online (HTML) Options</title>
         <idx>HTML publisher options</idx>
