@@ -28,6 +28,7 @@ prev_prev_char = "";
 this_focused_element = "";
 prev_focused_element = "";
 prev_prev_focused_element = "";
+shift_active = false;
 
 var result;
 
@@ -361,7 +362,12 @@ function local_menu_navigator(e) {
     }
 }
 
+function save_current_editing() {
+    alert("finished editing a paragraph")
+}
+
 function local_editing_action(e) {
+    console.log("in local_editing_action for" ,e.code);
     if (e.code == "Escape") {
         console.log("putting focus back");
         prev_focused_element.focus();
@@ -369,11 +375,15 @@ function local_editing_action(e) {
         e.preventDefault();
         console.log("making a local menu");
         local_menu_navigator(e);
-    } else if (e.code == "Return") {
+    } else if (e.code == "Enter") {
+        console.log("saw a Ret");
     //    e.preventDefault();
-        if (prev_char == "Return" && prev_prev_char == "Return") {
+        if (prev_char.code == "Enter" && prev_prev_char.code == "Enter") {
+            console.log("need to save");
             save_current_editing()
         }
+    } else {
+        console.log("e.code was not one of those we were looking for", e)
     }
 }
 
@@ -381,7 +391,8 @@ function main_menu_navigator(e) {  // we are not currently editing
                               // so we are building the menu for the user to decide what/how to edit
 
  // too early   e.preventDefault();  // we are navigating a menu, we we control what keystrokes mean
-    if ((e.code == "Tab" || e.code == "ArrowDown") && prev_char.code != "ShiftLeft") {
+  //  if ((e.code == "Tab" || e.code == "ArrowDown") && prev_char.code != "ShiftLeft") {
+    if ((e.code == "Tab" || e.code == "ArrowDown") && !e.shiftKey) {
        e.preventDefault();
        console.log("hit a Tab (or ArrowDown");
        console.log("prev_char", prev_char.code, "xxxx", prev_char);
@@ -457,7 +468,8 @@ function main_menu_navigator(e) {  // we are not currently editing
         next_menu_item.focus();
       }
 
-    } else if (e.code == "Tab" && prev_char.code == "ShiftLeft") {  // Shift-Tab to prevous object
+//    } else if (e.code == "Tab" && prev_char.code == "ShiftLeft") {  // Shift-Tab to prevous object
+    } else if (e.code == "Tab" && e.shiftKey) {  // Shift-Tab to prevous object
      // recopied code:  consolidate
         if(this_choice = document.getElementById('enter_choice')) {
            console.log("there already is an 'enter_choice'");
@@ -503,7 +515,7 @@ function main_menu_navigator(e) {  // we are not currently editing
     } 
     else if (e.code == "Enter" || e.code == "ArrowRight") {
         e.preventDefault();
-        console.log("saw a Return");
+        console.log("saw a Return (meaning, Enter)");
         console.log("focus is on", $(":focus"));
         // we have just tabbed to a new element.  Tab to move on, return to edit at/near that element
         // But: it makes a difference whether we are at the end of a block
@@ -708,9 +720,10 @@ function main_menu_navigator(e) {  // we are not currently editing
 
 console.log("adding tab listener");
 
-document.addEventListener('keydown', logKey);
+document.addEventListener('keydown', logKeyDown);
 
-function logKey(e) {
+function logKeyDown(e) {
+    if (e.code == "ShiftLeft" || e.code == "ShiftRight" || e.code == "Shift") { return }
     prev_prev_char = prev_char;
     prev_char = this_char;
     this_char = e;
@@ -722,12 +735,14 @@ function logKey(e) {
     console.log("input_region", input_region);
     // if we are writing something, keystrokes usually are just text input
     if (document.getElementById('actively_editing')) {
+        console.log("                 we are actively editing");
         if (document.getElementById('local_menu_holder')) {  // we are editing, but are doing so through a local menu
             console.log("document.getElementById('local_menu_holder')", document.getElementById('local_menu_holder'));
             local_menu_navigator(e)
         }  else {
             if (input_region == "INPUT") { return }   // e.preventDefault() 
             else { // input_region is TEXTAREA
+                console.log("about to do local_editing_action", this_char.code, prev_char.code, prev_prev_char.code);
                 local_editing_action(e) }
         }
 
