@@ -1719,21 +1719,17 @@ def copy_data_directory(source_file, data_dir, tmp_dir):
     shutil.copytree(data_dir, destination_root)
 
 def get_temporary_directory():
-    """Create scratch directory and return a fully-qualified filename"""
-    import tempfile # gettempdir()
-    import os       # times(), makedirs()
-    import os.path  # join()
+    """Create, record, and return a scratch directory"""
+    import tempfile #  mkdtemp()
+    global _temps   #  cache of temporary directories
 
-    # TODO: condition on debugging switch to
-    # make self-cleaning temporary directories
-
-    # https://stackoverflow.com/questions/847850/
-    # cross-platform-way-of-getting-temp-directory-in-python
-    # TODO: convert hash value to unsigned hex?
-    # t = os.path.join(tempfile.gettempdir(), 'pretext{}'.format(hash(os.times())))
-    # os.makedirs(t)
-    # return t
-    return tempfile.mkdtemp()
+    temp_dir = tempfile.mkdtemp()
+    # Register the directory for cleanup at the end of successful
+    # execution iff the verbosity is set to level 2 ("debug")
+    # So errors, or requesting gross debugging info, will leave the
+    # directories behind for inspection, otherwise they get removed
+    _temps.append(temp_dir)
+    return temp_dir
 
 def get_output_filename(xml, out_file, dest_dir, suffix):
     """Formulate a filename for single-file output"""
@@ -1852,3 +1848,5 @@ set_ptx_path()
 # Parse configuration file once
 _config = None
 set_config_info()
+
+_temps = []
