@@ -294,6 +294,9 @@ def main():
     else:
         raise ValueError('the "{}" component is not a conversion option'.format(args.component))
 
+    # Cleanup, if execution does not raise errors
+    ptx.release_temporary_directories()
+
 
 # Do it - lone top-level command
 main()

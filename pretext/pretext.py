@@ -1743,6 +1743,18 @@ def get_output_filename(xml, out_file, dest_dir, suffix):
     derivedname = os.path.splitext(os.path.split(xml)[1])[0]  + suffix
     return os.path.join(dest_dir, derivedname)
 
+def release_temporary_directories():
+    """Release scratch directories unless requesting debugging info"""
+    import shutil #  rmtree()
+    global _temps #  cache of temporary directories
+
+    _debug('Temporary directories left behind for inspection: {}'.format(_temps))
+    if _verbosity < 2:
+        for td in _temps:
+            _verbose('Removing temporary directory {}'.format(td))
+            # conservatively, raise exception on errors
+            shutil.rmtree(td, ignore_errors=False)
+
 def verify_input_directory(inputdir):
     """Verify directory exists, or raise error.  Return absolute path"""
     import os.path # isdir(), abspath()

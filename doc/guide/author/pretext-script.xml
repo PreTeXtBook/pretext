@@ -79,9 +79,12 @@
 
         <p>A principal use of the <c>pretext/pretext</c> script is to isolate source code from <tag>latex-image</tag> sections, package them up as proper <c>*.tex</c> files, run <latex/> to make cropped <init>PDF</init> versions, and then convert these to other formats such as <init>SVG</init> or <init>PNG</init>.</p>
 
-        <p>Much of this activity happens in a temporary directory.  If you use the <c>-vv</c> switch described above, then one of the messages early in the output describing the initialization will be the name of this directory.  Looking to see what files end up there, and what those files contain, is often useful in determining the step where this toolchain fails, and maybe even why.</p>
+        <p>Much of this activity happens in a temporary directory, and it is similar for Asymptote images and other options of the script.  If you use the <c>-vv</c> switch described above, then these temporary directories will be noted in the debugging output requested, and a complete list will be the last line of output.   In this case, and if the script encounters an error prior to successful execution, then these directories will be left in place.  Looking to see what files end up there, and what those files contain, is often useful in determining the step where the script fails, and maybe even why.</p>
 
-        <p>Another option is to ask for the actual <c>*.tex</c> files as the result of a run.  This is accomplished with the <c>-f source</c> option when invoking <c>pretext</c>.  If the right packages or macros are not being employed in these files, this is an easy way to get at the source files for inspection and analysis.</p>
+        <p>With no chatter requested, or just progress indications (<c>-v</c>) these temporary directories will be cleaned out as the last part of successful execution.</p>
+
+        <p>Another option is to ask for the actual source files (<c>*.tex</c>, <c>*.asy</c>, etc.) as the output of a run.  This is accomplished with the <c>-f source</c> option when invoking <c>pretext/pretext</c>.  If the right packages or macros are not being employed in these files, this is an easy way to get at the source files for inspection and analysis, and is a good first check on problematic execution.</p>
+
     </section>
 
     <section xml:id="pretext-helpers">
