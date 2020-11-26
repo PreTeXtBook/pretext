@@ -375,18 +375,23 @@ function ptx_to_html(input_text) {
 function save_current_editing() {
     console.log("current active element to be saved", document.activeElement);
     //not currently used
-    object_being_edited = document.getElementById('actively_editing');
+    var object_being_edited = document.getElementById('actively_editing');
 
-    textbox_being_edited = document.getElementById('actively_editing_paragraph');
-    paragraph_content = textbox_being_edited.value;
+    var new_ptx_source = "";
+
+    var textbox_being_edited = document.getElementById('actively_editing_paragraph');
+    var paragraph_content = textbox_being_edited.value;
     paragraph_content = paragraph_content.trim();
 
-    cursor_location = textbox_being_edited.selectionStart;
+    var cursor_location = textbox_being_edited.selectionStart;
 
     console.log("cursor_location", cursor_location, "out of", paragraph_content.length, "paragraph_content", paragraph_content);
-    paragraph_content_list = paragraph_content.split("\n\n");
+    var paragraph_content_list = paragraph_content.split("\n\n");
 
     for(var j=0; j < paragraph_content_list.length; ++j) {
+        new_ptx_source += "<p>" + "\n";
+        new_ptx_source += paragraph_content_list[j];
+        new_ptx_source += "\n" + "</p>" + "\n";
         var object_as_html = document.createElement('p');
         object_as_html.setAttribute("class", "just_added");
         object_as_html.innerHTML = ptx_to_html(paragraph_content_list[j]);
