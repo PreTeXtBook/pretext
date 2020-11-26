@@ -19,6 +19,8 @@ for(var j=0; j < editable_objects.length; ++j) {
 
 console.log(" enabling edit");
 
+user_level = "novice";
+
 // we have to keep track of multiple consecutive carriage returns
 this_char = "";
 prev_char = "";
@@ -55,7 +57,7 @@ menu_for = {
             {"menu_entry": "interactives", "entry_key": "interactives", "entry_shortcut": "i"},
             {"menu_entry": "section-like", "entry_key": "section-like", "entry_shortcut": "s"}]
 */
-"section": [["paragraph"],
+"section": [["paragraph", "p"],
             ["list/table-like", "list-like"],
             ["theorem-like", "theorem-like"],
             ["remark-like"],
@@ -93,17 +95,35 @@ menu_for = {
 "blockquote": [["paragraph", "p"]],
 "interactives": [["sage cell", "sagecell"], ["webwork"], ["asymptote"], ["musical score", "musicalscore"]],
 "metadata": ["index entries", "notation"],
+/* this shoudl be in the local menu list
 "p": ["emphasis-like", "abbreviation", "symbols", ["ref or link", "ref"]],
+*/
 "emphasis-like": ["emphasis", ["foreign word", "foreign"], "book title", "article title", "inline quote", "name of a ship"],
 // "abbreviation": ["ie", "eg", "etc", "et al"],  // i.e., etc., ellipsis, can just be typed.
 "symbols": ["trademark", "copyright"],
 "ref": ["ref to an internal id", "citation", "hyperlink"]
 }
 
-editing_container_for = { "paragraph": 1,
+editing_container_for = { "p": 1,
  "theorem": 1,
  "lemma": 1 }
 
+editing_hints = {
+    "p": ["two RETurns to separate paragraphs",
+          "three RETurns to end editing a paragraph",
+          "TAB to insert emphasis, math, special characters, etc",
+          "ESC to stop editing and save",
+          "TAB to insert musical characters, species name, inline code, etc"]
+}
+          
+function editing_hint_for(obj_type) {
+    if (user_level != "novice") { return "" }
+    if (obj_type in editing_hints) {
+        possible_hints = editing_hints[obj_type];
+        this_hint = possible_hints[Math.floor(Math.random()*possible_hints.length)];
+    } else { this_hint = "" }
+    return this_hint;
+}
 
 /*
 var url = "https://github.com/oscarlevin/discrete-book/blob/master/ptx/sec_intro-intro.ptx";
@@ -198,7 +218,7 @@ function base_menu_options_for(COMPONENT) {
 function top_menu_options_for(this_obj) {
     console.log("top_menu_options_for", this_obj);
     var this_object_type = this_obj.tagName;   //  needs to examine other attributes and then look up a reasonable name
-    var this_list = '<li tabindex="-1" id="choose_current" data-env="paragraph" data-action="edit">Edit ' + this_object_type + '</li>';
+    var this_list = '<li tabindex="-1" id="choose_current" data-env="p" data-action="edit">Edit ' + this_object_type + '</li>';
     this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_object_type + '</li>';
     this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="before">Insert before<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
     this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="after">Insert after<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
@@ -260,9 +280,15 @@ function container_for_editing(obj_type) {
     var this_content_container = document.createElement('div');
     this_content_container.setAttribute('id', "actively_editing");
 
-    if (obj_type == "paragraph") {
+    if (obj_type == "p") {
         this_content_container.setAttribute('data-objecttype', 'p');
-        this_content_container.innerHTML = '<textarea id="actively_editing_paragraph" class="starting_point_for_editing" style="width:100%;" placeholder="' + obj_type + '"></textarea>';
+        var obj_type_name = "paragraph";
+        this_hint = editing_hint_for(obj_type);
+        if (this_hint) {
+            instructions = '<span class="group_description">' + this_hint + '</span>';
+        } else { instrucitons = '' }
+        var editingregion = '<textarea id="actively_editing_p" class="starting_point_for_editing" style="width:100%;" placeholder="' + obj_type_name + '"></textarea>';
+        this_content_container.innerHTML = instructions + editingregion;
     } else if ( menu_for["theorem-like"].includes(obj_type) ) {
         this_content_container.setAttribute('data-objecttype', 'theorem-like');
         var title = standard_title_form(obj_type);
@@ -343,7 +369,7 @@ function local_menu_navigator(e) {
     if (e.code == "Tab") {
         if (!document.getElementById('local_menu_holder')) {  // no local menu, so make one
             local_menu_for('actively_editing');
-//            local_menu_for('actively_editing_paragraph');
+//            local_menu_for('actively_editing_p');
 //  ???  local_menu_for('editing' + '_input_text');
         }  else {  //Tab must be cycling through a menu
             // this is copied from main_menu_navigator, so maybe consolidate
@@ -379,7 +405,7 @@ function save_current_editing() {
 
     var new_ptx_source = "";
 
-    var textbox_being_edited = document.getElementById('actively_editing_paragraph');
+    var textbox_being_edited = document.getElementById('actively_editing_p');
     var paragraph_content = textbox_being_edited.value;
     paragraph_content = paragraph_content.trim();
 
