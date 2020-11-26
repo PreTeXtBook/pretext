@@ -108,7 +108,7 @@ editing_container_for = { "p": 1,
  "theorem": 1,
  "lemma": 1 }
 
-editing_hints = {
+editing_tips = {
     "p": ["two RETurns to separate paragraphs",
           "three RETurns to end editing a paragraph",
           "TAB to insert emphasis, math, special characters, etc",
@@ -116,13 +116,13 @@ editing_hints = {
           "TAB to insert musical characters, species name, inline code, etc"]
 }
           
-function editing_hint_for(obj_type) {
+function editing_tip_for(obj_type) {
     if (user_level != "novice") { return "" }
-    if (obj_type in editing_hints) {
-        possible_hints = editing_hints[obj_type];
-        this_hint = possible_hints[Math.floor(Math.random()*possible_hints.length)];
-    } else { this_hint = "" }
-    return this_hint;
+    if (obj_type in editing_tips) {
+        possible_tips = editing_tips[obj_type];
+        this_tip = possible_tips[Math.floor(Math.random()*possible_tips.length)];
+    } else { this_tip = "" }
+    return this_tip;
 }
 
 /*
@@ -283,9 +283,9 @@ function container_for_editing(obj_type) {
     if (obj_type == "p") {
         this_content_container.setAttribute('data-objecttype', 'p');
         var obj_type_name = "paragraph";
-        this_hint = editing_hint_for(obj_type);
-        if (this_hint) {
-            instructions = '<span class="group_description">' + this_hint + '</span>';
+        this_tip = editing_tip_for(obj_type);
+        if (this_tip) {
+            instructions = '<span class="group_description">' + 'Tip: ' + this_tip + '</span>';
         } else { instrucitons = '' }
         var editingregion = '<textarea id="actively_editing_p" class="starting_point_for_editing" style="width:100%;" placeholder="' + obj_type_name + '"></textarea>';
         this_content_container.innerHTML = instructions + editingregion;
