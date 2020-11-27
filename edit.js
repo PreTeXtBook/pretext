@@ -44,31 +44,25 @@ var menu_active_background = "#fdd";
    says that only a "p" can go in a blockquote.  But blockquote
    is an entry  under "quoted".
 */
-menu_for = {
-/*
-"section": ["<b>p</b>aragraph", "<b>l</b>ist/table-like", "<b>t</b>heorem-like", "<b>r</b>emark-like", "<b>e</b>xample-like", "<b>d</b>isplay/image-like", "pro<b>j</b>ect/exercise-like", "<b>i</b>nteractives", "<b>s</b>ection-like"],
-"section": [{"menu_entry": "paragraph", "entry_key": "paragraph", "entry_shortcut": "p"}, 
-            {"menu_entry": "list/table-like", "entry_key": "list-like", "entry_shortcut": "l"},
-            {"menu_entry": "theorem-like", "entry_key": "theorem-like", "entry_shortcut": "t"},
-            {"menu_entry": "remark-like", "entry_key": "remark-like", "entry_shortcut": "r"},
-            {"menu_entry": "example-like", "entry_key": "example-like", "entry_shortcut": "e"}, 
-            {"menu_entry": "display/image-like", "entry_key": "display-like", "entry_shortcut": "d"},
-            {"menu_entry": "project/exercise-like", "entry_key": "project-like", "entry_shortcut": "j"},
-            {"menu_entry": "interactives", "entry_key": "interactives", "entry_shortcut": "i"},
-            {"menu_entry": "section-like", "entry_key": "section-like", "entry_shortcut": "s"}]
-*/
+base_menu_for = {
 "section": [["paragraph", "p"],
             ["list/table-like", "list-like"],
             ["theorem-like", "theorem-like"],
             ["remark-like"],
             ["example-like", "example-like"],
-            ["image/video/sound", "display-like", "d"],
+            ["image/video/sound", "display-like", "v"],
+            ["math/chemistry/code", "math-like", "c"],
             ["project/exercise-like", "project-like", "j"],
-            ["blockquote/code/poem/etc", "quoted"],
-            ["aside-like", "aside-ilke", "d"],
+            ["blockquote/poem//music/etc", "quoted"],
+            ["aside-like", "aside-like", "d"],
             ["interactives"],
             ["layout-like"],
             ["section-like"]],
+"blockquote": [["paragraph", "p"]],
+"p": ["emphasis-like", "formula", "abbreviation", "symbols", ["ref or link", "ref"]]
+}
+
+inner_menu_for = {
 "theorem-like": [["theorem"],
                  ["proposition"],
                  ["lemma"],
@@ -88,16 +82,13 @@ menu_for = {
 "project-like": [["exercise"], ["activitiy"], ["investigation"], ["exploration", "exploration", "x"], ["project"]],
 "remark-like": [["remark"], ["warning"], ["note"], ["observation"], ["convention"], ["insight"]],
 "example-like": [["example"], ["question"], ["problem"]],
-"display-like": [["image"], ["image with caption", "imagecaption", "m"], ["video"], ["video with caption", "videocaption", "i"], ["audio"]],
+"display-like": [["image"], ["image with caption", "imagecaption", "m"], ["video"], ["video with caption", "videocaption", "d"], ["audio"]],
 "aside-like": [["aside"], ["historical"], ["biographical"]],
 "layout-like": [["side-by-side"], ["assemblage"], ["biographical aside"], ["titled paragraph", "paragraphs"]],
-"quoted": [["blockquote"], ["poem"], ["code"]],
-"blockquote": [["paragraph", "p"]],
+"math-like": [["math display", "mathdisplay"], ["chemistry display", "chemistrydisplay"], ["code listing", "code", "l"]],
+"quoted": [["blockquote"], ["poem"], ["music"]],
 "interactives": [["sage cell", "sagecell"], ["webwork"], ["asymptote"], ["musical score", "musicalscore"]],
 "metadata": ["index entries", "notation"],
-/* this shoudl be in the local menu list
-"p": ["emphasis-like", "abbreviation", "symbols", ["ref or link", "ref"]],
-*/
 "emphasis-like": ["emphasis", ["foreign word", "foreign"], "book title", "article title", "inline quote", "name of a ship"],
 // "abbreviation": ["ie", "eg", "etc", "et al"],  // i.e., etc., ellipsis, can just be typed.
 "symbols": ["trademark", "copyright"],
@@ -105,7 +96,7 @@ menu_for = {
 }
 
 editing_container_for = { "p": 1,
- "theorem": 1,
+ "theorem-like": ["theorem", "proposition", "lemma"],
  "lemma": 1 }
 
 editing_tips = {
@@ -140,8 +131,8 @@ fetch(url)
 console.log("then here");
 */
 
-function standard_title_form(object_name) {
-    var title_form = "<div><b>" + obj_type + "&nbsp;NN</b>&nbsp;";
+function standard_title_form(object_type) {
+    var title_form = "<div><b>" + object_type + "&nbsp;NN</b>&nbsp;";
     title_form += '<input id="actively_editing_title" class="starting_point_for_editing" placeholder="Optional title" type="text"/>';
     title_form += '<input id="actively_editing_id" placeholder="Optional Id" class="input_id" type="text"/>';
     title_form += '</div>';
@@ -149,41 +140,32 @@ function standard_title_form(object_name) {
     return title_form
 }
 
-function base_menu_options_for(COMPONENT) {
+function menu_options_for(COMPONENT, level="inner") {
+     var menu_for;
+     if (level == "base") { menu_for = base_menu_for }
+     else { menu_for = inner_menu_for }
      component = COMPONENT.toLowerCase();
+     console.log("in menu_options_for", component);
      if (component in menu_for) {
          component_items = menu_for[component]
      } else {
-         component_items = ["placeholder 1", "placeholder 2-like", "placeholder 3", "placeholder 4", "placeholder 5"];
+         component_items = [["placeholder 1"], ["placeholder 2-like"], ["placeholder 3"], ["placeholder 4"], ["placeholder 5"]];
      }
 
 //     this_menu = "<ol>";
      this_menu = "";
      for (var i=0; i < component_items.length; ++i) {
          this_item = component_items[i];
-         if ( (typeof this_item) == 'string' ) {  // this case will go away once we have proper menu data
-             if(i==0) { this_menu += '<li tabindex="-1" id="choose_current" data-env="' + this_item + '">' }
-             else { this_menu += '<li tabindex="-1" data-env="' + this_item + '">' }
-             this_menu += this_item;
-             if (this_item in menu_for) { this_menu += '<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div>' }
-             this_menu += '</li>';
-         } else {
-             
-/*
-             this_item_name = this_item['menu_entry'];
-             this_item_label = this_item['entry_key'];
-             this_item_shortcut = this_item['entry_shortcut'];
-*/
-             this_item_name = this_item[0];
-             this_item_label = this_item_name;
-             this_item_shortcut = "";
-   //          this_item_shortcut = this_item[this_item.length - 1];
-             if (this_item.length == 3) {
-                 this_item_label = this_item[1];
-                 this_item_shortcut = this_item[2];
-             } else if (this_item.length == 2) { 
-                 this_item_label = this_item[1];
-             } 
+
+         this_item_name = this_item[0];
+         this_item_label = this_item_name;
+         this_item_shortcut = "";
+         if (this_item.length == 3) {
+             this_item_label = this_item[1];
+             this_item_shortcut = this_item[2];
+         } else if (this_item.length == 2) { 
+             this_item_label = this_item[1];
+         } 
       //      else if (this_item.length == 1) {
       //           this_item_label = this_item_name;
       //           this_item_shortcut = this_item_name.charAt(0)
@@ -191,24 +173,25 @@ function base_menu_options_for(COMPONENT) {
 
      //        this_item_name = this_item_name.replace(this_item_shortcut, '<b>' + this_item_shortcut + '</b>');
 
-             this_menu += '<li tabindex="-1" data-env="' + this_item_label + '"';
-             if (this_item_shortcut) { 
-                 this_menu += ' data-jump="' + this_item_name.charAt(0) + ' ' + this_item_shortcut + '"';
-                 this_item_name = this_item_name.replace(this_item_shortcut, '<b>' + this_item_shortcut + '</b>');
-             } else {
-                 this_menu += 'data-jump="' + this_item_name.charAt(0) + '"';
-             }
-             if(i==0) { this_menu += ' id="choose_current"'}
-             this_menu += '>';
-
-             first_character = this_item_name.charAt(0);
-             this_item_name = this_item_name.replace(first_character, "<b>" + first_character + "</b>");
-
-             this_menu += this_item_name 
-                     // little right triangle if there is a submenu
-             if (this_item_label in menu_for) { this_menu += '<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div>' }
-             this_menu += '</li>';
+         this_menu += '<li tabindex="-1" data-env="' + this_item_label + '"';
+         this_menu += ' data-env-parent="' + component + '"';
+         if (this_item_shortcut) { 
+             this_menu += ' data-jump="' + this_item_name.charAt(0) + ' ' + this_item_shortcut + '"';
+             this_item_name = this_item_name.replace(this_item_shortcut, '<b>' + this_item_shortcut + '</b>');
+         } else {
+             this_menu += 'data-jump="' + this_item_name.charAt(0) + '"';
          }
+         if(i==0) { this_menu += ' id="choose_current"'}
+         this_menu += '>';
+
+         first_character = this_item_name.charAt(0);
+         this_item_name = this_item_name.replace(first_character, "<b>" + first_character + "</b>");
+
+         this_menu += this_item_name 
+                 // little right triangle if there is a submenu
+         if (this_item_label in inner_menu_for) { this_menu += '<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div>' }
+         this_menu += '</li>';
+         
      }
 //     this_menu += "</ol>";
 
@@ -264,7 +247,7 @@ function local_menu_for(this_obj_id) {
     var enter_option = document.createElement('ol');
     enter_option.setAttribute('id', 'edit_menu');
     
-    enter_option.innerHTML = base_menu_options_for("p");
+    enter_option.innerHTML = menu_options_for("p", "base");
 
     document.getElementById("local_menu_holder").insertAdjacentElement("afterbegin", enter_option);
    // prev_focused_element.focus();
@@ -277,6 +260,9 @@ console.log("status of response",response.status);
 */
 
 function container_for_editing(obj_type) {
+    // the most recent characters were TAB and RET from navigatin gthe menu, which are irrelevant now.
+    prev_char = "";
+    prev_prev_char = "";
     var this_content_container = document.createElement('div');
     this_content_container.setAttribute('id', "actively_editing");
 
@@ -286,10 +272,14 @@ function container_for_editing(obj_type) {
         this_tip = editing_tip_for(obj_type);
         if (this_tip) {
             instructions = '<span class="group_description">' + 'Tip: ' + this_tip + '</span>';
-        } else { instrucitons = '' }
-        var editingregion = '<textarea id="actively_editing_p" class="starting_point_for_editing" style="width:100%;" placeholder="' + obj_type_name + '"></textarea>';
-        this_content_container.innerHTML = instructions + editingregion;
-    } else if ( menu_for["theorem-like"].includes(obj_type) ) {
+        } else { instructions = '' }
+        var editingregion_container_start = '<div class="editing_p_holder">';
+        var editingregion_container_end = '</div>';
+   //     var editingregion = '<textarea id="actively_editing_p" class="starting_point_for_editing" style="width:100%;" placeholder="' + obj_type_name + '"></textarea>';
+        var editingregion = '<textarea class="editing_p starting_point_for_editing" style="width:100%;" placeholder="' + obj_type_name + '"></textarea>';
+        this_content_container.innerHTML = instructions + editingregion_container_start + editingregion + editingregion_container_end;
+    } else if ( editing_container_for["theorem-like"].includes(obj_type) ) {
+        console.log("making a form for", obj_type);
         this_content_container.setAttribute('data-objecttype', 'theorem-like');
         var title = standard_title_form(obj_type);
 /*
@@ -298,7 +288,16 @@ function container_for_editing(obj_type) {
         title += '<input id="actively_editing_id" placeholder="Optional Id" class="input_id" type="text"/>';
         title += '</div>';
 */
-        var statement = '<div><span class="group_description">statement (paragraphs, images, lists, etc)</span><textarea id="actively_editing_statement" style="width:100%;" placeholder="first paragraph of statement"></textarea></div>';
+        var statement_container_start = '<div class="editing_statement">';
+        var statement_container_end = '</div>';
+        var editingregion_container_start = '<div class="editing_p_holder">'
+        var editingregion_container_end = '</div>'
+        var instructions = '<span class="group_description">statement (paragraphs, images, lists, etc)</span>';
+        var editingregion = '</span><textarea id="actively_editing_statement" style="width:100%;" placeholder="first paragraph of statement"></textarea>';
+        var statement = statement_container_start + editingregion_container_start;
+        statement += instructions;
+        statement += editingregion;
+        statement += editingregion_container_end + statement_container_end;
         var proof = '<div><span class="group_description">optional proof (paragraphs, images, lists, etc)</span><textarea id="actively_editing_proof" style="width:100%;" placeholder="first paragraph of optional proof"></textarea></div>';
 
         this_content_container.innerHTML = title + statement + proof
@@ -401,36 +400,50 @@ function ptx_to_html(input_text) {
 function save_current_editing() {
     console.log("current active element to be saved", document.activeElement);
     //not currently used
-    var object_being_edited = document.getElementById('actively_editing');
+ //   var object_being_edited = document.getElementById('actively_editing');
+    var object_being_edited = document.activeElement;
 
     var new_ptx_source = "";
 
-    var textbox_being_edited = document.getElementById('actively_editing_p');
-    var paragraph_content = textbox_being_edited.value;
-    paragraph_content = paragraph_content.trim();
+    if (object_being_edited.tagName == "TEXTAREA") {
+        var textbox_being_edited = object_being_edited;  //document.getElementById('actively_editing_p');
+        var paragraph_content = textbox_being_edited.value;
+        paragraph_content = paragraph_content.trim();
 
-    var cursor_location = textbox_being_edited.selectionStart;
+        var cursor_location = textbox_being_edited.selectionStart;
 
-    console.log("cursor_location", cursor_location, "out of", paragraph_content.length, "paragraph_content", paragraph_content);
-    var paragraph_content_list = paragraph_content.split("\n\n");
+        console.log("cursor_location", cursor_location, "out of", paragraph_content.length, "paragraph_content", paragraph_content);
+        var paragraph_content_list = paragraph_content.split("\n\n");
 
-    for(var j=0; j < paragraph_content_list.length; ++j) {
-        new_ptx_source += "<p>" + "\n";
-        new_ptx_source += paragraph_content_list[j];
-        new_ptx_source += "\n" + "</p>" + "\n";
-        var object_as_html = document.createElement('p');
-        object_as_html.setAttribute("class", "just_added");
-        object_as_html.innerHTML = ptx_to_html(paragraph_content_list[j]);
-        document.getElementById('actively_editing').insertAdjacentElement('beforebegin', object_as_html);
-    } 
+        for(var j=0; j < paragraph_content_list.length; ++j) {
+            new_ptx_source += "<p>" + "\n";
+            new_ptx_source += paragraph_content_list[j];
+            new_ptx_source += "\n" + "</p>" + "\n";
+            var object_as_html = document.createElement('p');
+            object_as_html.setAttribute("class", "just_added");
+            object_as_html.innerHTML = ptx_to_html(paragraph_content_list[j]);
+            document.getElementById('actively_editing').insertAdjacentElement('beforebegin', object_as_html);
+        } 
     
 //    alert("finished editing a paragraph")
     
-    $(object_being_edited).next('[data-editable="99"]').focus();
+        console.log("current item of focus", document.activeElement);
+        console.log("its parent", document.activeElement.parentElement);
+        var holder_of_object_being_edited = object_being_edited.parentElement.parentElement;
+        if (holder_of_object_being_edited.id == "actively_editing") { // we are only editing a p
+            $(holder_of_object_being_edited).next('[data-editable="99"]').focus();
+            console.log("next item of focus", document.activeElement);
 //    document.getElementById('actively_editing').remove();
-    object_being_edited.remove();
-    $(":focus").addClass("may_select");
-    edit_menu_for($(":focus").attr("id"), "entering");
+            holder_of_object_being_edited.remove();
+            $(":focus").addClass("may_select");
+            edit_menu_for($(":focus").attr("id"), "entering");
+        } else { // this p is in a larvger object, like a theorem or li
+            alert("inside an object, don; tknow what to do next")
+    }
+    } else {
+        console.log("trouble saving", object_being_edited);
+        alert("don;t know how to save ", object_being_edited.tagName)
+    }
 }
 
 function local_editing_action(e) {
@@ -638,11 +651,11 @@ function main_menu_navigator(e) {  // we are not currently editing
                 current_active_menu_item.removeAttribute("id");
                 current_active_menu_item.classList.add("chosen");
 
-                parent_type = document.getElementById('edit_menu_holder').parentElement.parentElement.tagName;
+                parent_type = document.getElementById('edit_menu_holder').parentElement.parentElement.tagName.toLowerCase();
                 console.log("making a menu for", parent_type);
                 var edit_submenu = document.createElement('ol');
-                edit_submenu.innerHTML = base_menu_options_for(parent_type);
-                console.log("just inserted base_menu_options_for(parent_type)", base_menu_options_for(parent_type));
+                edit_submenu.innerHTML = menu_options_for(parent_type, "base");
+                console.log("just inserted inner menu_options_for(parent_type)", menu_options_for(parent_type, "inner"));
                 current_active_menu_item.insertAdjacentElement("beforeend", edit_submenu);
                 document.getElementById('choose_current').focus();
                 console.log("focus is on", $(":focus"));
@@ -682,10 +695,10 @@ function main_menu_navigator(e) {  // we are not currently editing
  //       current_active_menu_item.setAttribute('style', 'background:#ddf;');
             current_active_menu_item_environment = current_active_menu_item.getAttribute('data-env');
 
-            if (current_active_menu_item_environment in menu_for) {  // object names a collection, so make submenu
+            if (current_active_menu_item_environment in inner_menu_for) {  // object names a collection, so make submenu
                 console.log("making a menu for", current_active_menu_item_environment);
                 var edit_submenu = document.createElement('ol');
-                edit_submenu.innerHTML = base_menu_options_for(current_active_menu_item_environment);
+                edit_submenu.innerHTML = menu_options_for(current_active_menu_item_environment, "inner");
      //           console.log("removing id from", current_active_menu_item);
      //           current_active_menu_item.removeAttribute("id");
                 current_active_menu_item.insertAdjacentElement("beforeend", edit_submenu);
@@ -696,28 +709,29 @@ function main_menu_navigator(e) {  // we are not currently editing
             } else {  // we just selected an action, so do it
                       // that probably involves adding something before or after a given object
                 var new_object_type = current_active_menu_item.getAttribute("data-env");
-        if ( !(new_object_type in editing_container_for) ) {
-          alert("don't know about" + new_object_type);
-          document.getElementById('edit_menu_holder').parentElement.focus();
-          document.getElementById('edit_menu_holder').remove();
-          edit_menu_for(document.activeElement.id);
-  // this should be done automatically by edit_menu_for()
-          document.getElementById('edit_menu_holder').focus();
-
-        }  else {
-                object_near_new_object = document.getElementById('edit_menu_holder').parentElement;
-                var before_after = $("#edit_menu_holder > #edit_menu > .chosen").attr("data-location");
+                var new_object_type_parent = current_active_menu_item.getAttribute("data-env-parent");
+                if ( (new_object_type_parent in editing_container_for) || (new_object_type in editing_container_for) ) {
+                    object_near_new_object = document.getElementById('edit_menu_holder').parentElement;
+                    var before_after = $("#edit_menu_holder > #edit_menu > .chosen").attr("data-location");
      //           alert("attempting to add " + new_object_type + " " + before_after + " " + object_near_new_object.tagName);
-                if (before_after == "before") { new_location = "beforebegin" }
-                else if (before_after == "after") { new_location = "afterend" }
-                object_near_new_object.insertAdjacentElement(new_location, container_for_editing(new_object_type));
+                    if (before_after == "before") { new_location = "beforebegin" }
+                    else if (before_after == "after") { new_location = "afterend" }
+                    object_near_new_object.insertAdjacentElement(new_location, container_for_editing(new_object_type));
            //     document.getElementById('starting_point_for_editing').focus();
-                document.querySelectorAll('[class="starting_point_for_editing"]')[0].focus();
+                    document.querySelectorAll('[class~="starting_point_for_editing"]')[0].focus();
   //              hack_to_fix_first_textbox_character('starting_point_for_editing');
      //           object_near_new_object.focus();
-                object_near_new_object.classList.remove("may_select");
-                document.getElementById('edit_menu_holder').remove();
-}
+                    object_near_new_object.classList.remove("may_select");
+                    document.getElementById('edit_menu_holder').remove();
+
+                 } else {
+                    alert("don't yet know about " + new_object_type);
+                    document.getElementById('edit_menu_holder').parentElement.focus();
+                    document.getElementById('edit_menu_holder').remove();
+                    edit_menu_for(document.activeElement.id);
+            // this should be done automatically by edit_menu_for()
+                    document.getElementById('edit_menu_holder').focus();
+                }
             }
 
         }
