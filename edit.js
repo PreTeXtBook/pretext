@@ -292,13 +292,22 @@ function container_for_editing(obj_type) {
         var statement_container_end = '</div>';
         var editingregion_container_start = '<div class="editing_p_holder">'
         var editingregion_container_end = '</div>'
-        var instructions = '<span class="group_description">statement (paragraphs, images, lists, etc)</span>';
-        var editingregion = '</span><textarea id="actively_editing_statement" style="width:100%;" placeholder="first paragraph of statement"></textarea>';
+        var statementinstructions = '<span class="group_description">statement (paragraphs, images, lists, etc)</span>';
+        var statementeditingregion = '<textarea id="actively_editing_statement" style="width:100%;" placeholder="first paragraph of statement"></textarea>';
         var statement = statement_container_start + editingregion_container_start;
-        statement += instructions;
-        statement += editingregion;
+        statement += statementinstructions;
+        statement += statementeditingregion;
         statement += editingregion_container_end + statement_container_end;
-        var proof = '<div><span class="group_description">optional proof (paragraphs, images, lists, etc)</span><textarea id="actively_editing_proof" style="width:100%;" placeholder="first paragraph of optional proof"></textarea></div>';
+
+        var proof_container_start = '<div class="editing_proof">';
+        var proof_container_end = '</div>';
+        var proofinstructions = '<span class="group_description">optional proof (paragraphs, images, lists, etc)</span>';
+        var proofeditingregion = '<textarea id="actively_editing_proof" style="width:100%;" placeholder="first paragraph of optional proof"></textarea>';
+ 
+        var proof = proof_container_start + editingregion_container_start;
+        proof += proofinstructions;
+        proof += proofeditingregion;
+        proof += editingregion_container_end + proof_container_end;
 
         this_content_container.innerHTML = title + statement + proof
     }
@@ -396,6 +405,51 @@ function ptx_to_html(input_text) {
     output_text = output_text.replace(/<\/term>/g, "</b>"); 
     return(output_text)
 }
+function hide_new_source(ptx_src, src_type) {
+    var hidden_div = document.createElement('div');
+    hidden_div.setAttribute("id", "in_progress_" + src_type);
+    hidden_div.setAttribute("style", "display: none");
+    hidden_div.innerHTML = ptx_src;
+    document.body.insertAdjacentElement('beforeend', hidden_div);
+}
+function save_new(objecttype) {
+    // placeholder
+}
+function display_new(objectclass, objecttype, whereat, relativelocation="beforebegin") {
+    if (objectclass == "theorem-like") {
+        object_in_html = document.createElement("article");
+        object_in_html.setAttribute("class", objectclass + " " + objecttype);
+        object_in_html.setAttribute("tabindex", -1);
+
+        object_title = document.getElementById('actively_editing_title').value;
+        object_id = document.getElementById('actively_editing_id').value;
+
+        if (object_id) { object_in_html.setAttribute("xml:id", object_id); }
+
+        object_heading_html = '<h6 class="heading">';
+        object_heading_html += '<span class="type">' + objecttype + '</span>';
+        object_heading_html += '<span class="space">' + " " + '</span>';
+        object_heading_html += '<span class="codenumber">' + "NN" + '</span>';
+
+        if (object_title) {
+            object_heading_html += '<span class="space">' + " " + '</span>';
+            object_heading_html += '<span class="creator">(' + object_title + ')</span>';
+        }
+        object_heading_html += '<span class="period">' + "." + '</span>';
+        object_heading_html += '</h6>';
+
+        object_statement_ptx = document.getElementById("in_progress_statement").innerHTML;
+        object_statement_html = object_statement_ptx;   // add the transform later
+
+        object_in_html.innerHTML = object_heading_html + object_statement_html;
+
+        whereat.insertAdjacentElement(relativelocation, object_in_html);
+        console.log("trying to put the focus on",object_in_html);
+        object_in_html.focus();
+    } else {
+        alert("I don;t know how to display", objectclass)
+    }
+}
 
 function save_current_editing() {
     console.log("current active element to be saved", document.activeElement);
@@ -415,6 +469,7 @@ function save_current_editing() {
         console.log("cursor_location", cursor_location, "out of", paragraph_content.length, "paragraph_content", paragraph_content);
         var paragraph_content_list = paragraph_content.split("\n\n");
 
+        var holder_of_object_being_edited = object_being_edited.parentElement.parentElement;
         for(var j=0; j < paragraph_content_list.length; ++j) {
             new_ptx_source += "<p>" + "\n";
             new_ptx_source += paragraph_content_list[j];
@@ -422,24 +477,50 @@ function save_current_editing() {
             var object_as_html = document.createElement('p');
             object_as_html.setAttribute("class", "just_added");
             object_as_html.innerHTML = ptx_to_html(paragraph_content_list[j]);
-            document.getElementById('actively_editing').insertAdjacentElement('beforebegin', object_as_html);
+     //       document.getElementById('actively_editing').insertAdjacentElement('beforebegin', object_as_html);
+            holder_of_object_being_edited.insertAdjacentElement('beforebegin', object_as_html);
         } 
+        
     
 //    alert("finished editing a paragraph")
     
         console.log("current item of focus", document.activeElement);
         console.log("its parent", document.activeElement.parentElement);
-        var holder_of_object_being_edited = object_being_edited.parentElement.parentElement;
         if (holder_of_object_being_edited.id == "actively_editing") { // we are only editing a p
             $(holder_of_object_being_edited).next('[data-editable="99"]').focus();
             console.log("next item of focus", document.activeElement);
 //    document.getElementById('actively_editing').remove();
-            holder_of_object_being_edited.remove();
             $(":focus").addClass("may_select");
             edit_menu_for($(":focus").attr("id"), "entering");
+        } else if (holder_of_object_being_edited.classList.contains("editing_statement")) {
+        // hide the ptx_source to be retrieved later
+        hide_new_source(new_ptx_source, "statement");
+              // the p is in a statement (of theorem-like or definition-like or remark-like or ...)
+            if (holder_of_object_being_edited.parentElement.getAttribute('data-objecttype') == "theorem-like") {
+              // now focus switches to the proof?
+                console.log("focus shoudl switch to",holder_of_object_being_edited.nextSibling.firstChild.children[1]);
+                holder_of_object_being_edited.nextSibling.firstChild.children[1].focus()  // 1 to skip the Tip
+            } else {
+                alert("don't know where to go next");
+               // I guess we are done editing this object?
+            }
+        } else if (holder_of_object_being_edited.classList.contains("editing_proof")) {
+            hide_new_source(new_ptx_source, "proof");
+            // done editing the theorem-like, to put focus on the next thing and display/save the theorem
+            save_new("theorem");
+            display_new("theorem-like", "corollary", document.getElementById("actively_editing"), "afterend");
+            console.log("is focus on the new object?", $(":focus"));
+            $(":focus").addClass("may_select");
+            edit_menu_for($(":focus").attr("id"), "entering");
+            document.getElementById("actively_editing").remove();
+            console.log("just did display_new");
         } else { // this p is in a larvger object, like a theorem or li
+            
             alert("inside an object, don; tknow what to do next")
-    }
+        }
+        console.log("holder_of_object_being_edited.remove()", holder_of_object_being_edited);
+  //      document.getElementById("actively_editing").remove();
+            holder_of_object_being_edited.remove();
     } else {
         console.log("trouble saving", object_being_edited);
         alert("don;t know how to save ", object_being_edited.tagName)
@@ -462,6 +543,7 @@ function local_editing_action(e) {
     //    e.preventDefault();
         if (prev_char.code == "Enter" && prev_prev_char.code == "Enter") {
             console.log("need to save");
+            e.preventDefault();
             save_current_editing()
         }
     } else {
