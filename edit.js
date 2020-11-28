@@ -37,6 +37,10 @@ var result;
 var menu_neutral_background = "#ddb";
 var menu_active_background = "#fdd";
 
+function randomstring(len=10) {
+    return (Math.random() + 1).toString(36).substring(2,len)
+}
+
 /* need to distingiosh between th elist of objects of a type,
    and the list of types that can go in a location.
    OR, is it okay that these are all in one list?
@@ -406,6 +410,7 @@ function ptx_to_html(input_text) {
     return(output_text)
 }
 function hide_new_source(ptx_src, src_type) {
+    if (!ptx_src) { return }
     var hidden_div = document.createElement('div');
     hidden_div.setAttribute("id", "in_progress_" + src_type);
     hidden_div.setAttribute("style", "display: none");
@@ -420,11 +425,13 @@ function display_new(objectclass, objecttype, whereat, relativelocation="beforeb
         object_in_html = document.createElement("article");
         object_in_html.setAttribute("class", objectclass + " " + objecttype);
         object_in_html.setAttribute("tabindex", -1);
+        object_in_html.setAttribute("data-editable", 99);
 
         object_title = document.getElementById('actively_editing_title').value;
         object_id = document.getElementById('actively_editing_id').value;
+        object_id = object_id || randomstring();
 
-        if (object_id) { object_in_html.setAttribute("xml:id", object_id); }
+        if (object_id) { object_in_html.setAttribute("id", object_id); }
 
         object_heading_html = '<h6 class="heading">';
         object_heading_html += '<span class="type">' + objecttype + '</span>';
@@ -439,6 +446,7 @@ function display_new(objectclass, objecttype, whereat, relativelocation="beforeb
         object_heading_html += '</h6>';
 
         object_statement_ptx = document.getElementById("in_progress_statement").innerHTML;
+        document.getElementById("in_progress_statement").remove();
         object_statement_html = object_statement_ptx;   // add the transform later
 
         object_in_html.innerHTML = object_heading_html + object_statement_html;
@@ -446,6 +454,17 @@ function display_new(objectclass, objecttype, whereat, relativelocation="beforeb
         whereat.insertAdjacentElement(relativelocation, object_in_html);
         console.log("trying to put the focus on",object_in_html);
         object_in_html.focus();
+
+        if(object_proof = document.getElementById("in_progress_proof")) { //if there is a proof
+            object_proof_ptx = object_proof.innerHTML;
+            object_proof.remove;
+            proof_in_html = document.createElement("article");
+            proof_in_html.setAttribute("class", "hiddenproof");
+            proof_in_html.innerHTML = '<a data-knowl="" class="id-ref proof-knowl original" data-refid="hk-Jkl"><h6 class="heading"><span class="type">Proof<span class="period">.</span></span></h6></a>';
+            
+            document.activeElement.insertAdjacentElement("afterend", proof_in_html)
+         }
+
     } else {
         alert("I don;t know how to display", objectclass)
     }
@@ -471,30 +490,35 @@ function save_current_editing() {
 
         var holder_of_object_being_edited = object_being_edited.parentElement.parentElement;
         for(var j=0; j < paragraph_content_list.length; ++j) {
+            if (!paragraph_content_list[j] ) { continue }
             new_ptx_source += "<p>" + "\n";
             new_ptx_source += paragraph_content_list[j];
             new_ptx_source += "\n" + "</p>" + "\n";
             var object_as_html = document.createElement('p');
-            object_as_html.setAttribute("class", "just_added");
+            object_as_html.setAttribute("data-editable", 99);
+            object_as_html.setAttribute("tabindex", -1);
+            object_as_html.setAttribute("id", randomstring());
+     //       object_as_html.setAttribute("class", "just_added");
             object_as_html.innerHTML = ptx_to_html(paragraph_content_list[j]);
      //       document.getElementById('actively_editing').insertAdjacentElement('beforebegin', object_as_html);
             holder_of_object_being_edited.insertAdjacentElement('beforebegin', object_as_html);
         } 
         
     
-//    alert("finished editing a paragraph")
+        console.log("finished editing a paragraph", new_ptx_source, "previous is new_ptx_source");
     
         console.log("current item of focus", document.activeElement);
         console.log("its parent", document.activeElement.parentElement);
         if (holder_of_object_being_edited.id == "actively_editing") { // we are only editing a p
-            $(holder_of_object_being_edited).next('[data-editable="99"]').focus();
+            console.log("will focus on what we just added",$(holder_of_object_being_edited).prev('[data-editable="99"]'));
+            $(holder_of_object_being_edited).prev('[data-editable="99"]').focus();
             console.log("next item of focus", document.activeElement);
 //    document.getElementById('actively_editing').remove();
             $(":focus").addClass("may_select");
             edit_menu_for($(":focus").attr("id"), "entering");
         } else if (holder_of_object_being_edited.classList.contains("editing_statement")) {
         // hide the ptx_source to be retrieved later
-        hide_new_source(new_ptx_source, "statement");
+            hide_new_source(new_ptx_source, "statement");
               // the p is in a statement (of theorem-like or definition-like or remark-like or ...)
             if (holder_of_object_being_edited.parentElement.getAttribute('data-objecttype') == "theorem-like") {
               // now focus switches to the proof?
@@ -574,7 +598,8 @@ function main_menu_navigator(e) {  // we are not currently editing
 
                $(this_menu).parent().removeClass("may_select");
                console.log("item to get next focus",$("#edit_menu_holder").parent().next('[data-editable="99"]'), "which has length", $("#edit_menu_holder").parent().next('[data-editable="99"]').length);
-               if(!$(this_menu).parent().next('[data-editable="99"]').length) { //at the end of a block, so new menu goes at end
+     //////          if(!$(this_menu).parent().next('[data-editable="99"]').length) { //at the end of a block, so new menu goes at end
+               if(!$(this_menu).parent().next().length) { //at the end of a block, so new menu goes at end
                //    e.preventDefault();
                    var enclosing_block = $(this_menu).parent().parent()[0];
                    console.log("at the end of", enclosing_block, "with id", enclosing_block.id);
@@ -588,7 +613,9 @@ function main_menu_navigator(e) {  // we are not currently editing
                    return
                 }
                 else {
-                   $(this_menu).parent().next('[data-editable="99"]').focus();
+                   console.log("moving to next *editable* object A");
+    /////////               $(this_menu).parent().next('[data-editable="99"]').focus();
+                   $(this_menu).parent().nextAll('[data-editable="99"]')[0].focus();
                    this_menu.remove()
                }
            } else if (this_choice.getAttribute('data-location') == 'stay') { // at end of block, and want to move on
@@ -601,6 +628,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                block_we_are_leaving = this_menu.previousSibling;
                block_we_are_leaving.classList.remove("may_leave");
                console.log("$(block_we_are_leaving)",$(block_we_are_leaving), "xxxx", $(block_we_are_leaving).next(), "yyyyy", $(block_we_are_leaving).next('[data-editable="99"]'));
+               console.log("moving to next object B");
                next_block_to_edit = $(this_menu).next('[data-editable="99"]');
                this_menu.remove()
                $(next_block_to_edit).focus();
@@ -633,7 +661,7 @@ function main_menu_navigator(e) {  // we are not currently editing
       }
 
 //    } else if (e.code == "Tab" && prev_char.code == "ShiftLeft") {  // Shift-Tab to prevous object
-    } else if (e.code == "Tab" && e.shiftKey) {  // Shift-Tab to prevous object
+    } else if ((e.code == "Tab" && e.shiftKey) || e.code == "ArrowUp") {  // Shift-Tab to prevous object
      // recopied code:  consolidate
         if(this_choice = document.getElementById('enter_choice')) {
            console.log("there already is an 'enter_choice'");
@@ -644,7 +672,8 @@ function main_menu_navigator(e) {  // we are not currently editing
                
                $(this_menu).parent().removeClass("may_select");
                console.log("item to get next focus",$("#edit_menu_holder").parent().prev('[data-editable="99"]'), "which has length", $("#edit_menu_holder").parent().next('[data-editable="99"]').length);
-               if(!$(this_menu).parent().prev('[data-editable="99"]').length) { //at the start of a block, so go up one
+    ////////           if(!$(this_menu).parent().prev('[data-editable="99"]').length) { //at the start of a block, so go up one
+               if(!$(this_menu).parent().prev().length) { //at the start of a block, so go up one
                //    e.preventDefault(); 
                    var enclosing_block = $(this_menu).parent().parent()[0]; 
                    console.log("at the end of", enclosing_block, "with id", enclosing_block.id);
@@ -658,7 +687,9 @@ function main_menu_navigator(e) {  // we are not currently editing
                    return
                 }
                 else {
-                   $(this_menu).parent().prev('[data-editable="99"]').focus();
+                   console.log("moving to next object C");
+     /////////              $(this_menu).parent().prev('[data-editable="99"]').focus();
+                   $(this_menu).parent().prevAll('[data-editable="99"]')[0].focus();
                    this_menu.remove()
                    // copied.  consolidate
                    edit_menu_for(document.activeElement.id);        // so create one
@@ -671,7 +702,7 @@ function main_menu_navigator(e) {  // we are not currently editing
 
                }
            } else { // we are at the bottom of a block
-               alert ("Shift-Tab not implemented at the bottom of a block");
+               alert("Shift-Tab not implemented at the bottom of a block");
            }
        } else {
          console.log("Error:  Shift-Tab not understood when ther eis an active menu");
