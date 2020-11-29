@@ -46,7 +46,7 @@
             <li>There will be other inaccuracies here, so reports or pull requests are welcome.</li>
         </ul></p>
 
-        <p>The <init>RELAX-NG</init> syntax is built on <term>patterns</term>, which describe how <init>XML</init> elements and attributes may be combined.  It begins with a <c>start</c> pattern.  Patterns separated by commas must appear in that order.  Elements separated by a vertical bar represent a choice.  Parentheses are used for grouping.  Braces are basic syntax, reminiscent of the syntax for Java.  An equals sign is assignment and <c>|=</c> is a continuation of an assignment.  Finally, optional and/or multiple occurences can be specified with modifiers:<dl>
+        <p>The <init>RELAX-NG</init> syntax is built on <term>patterns</term>, which describe how <init>XML</init> elements and attributes may be combined.  It begins with a <c>start</c> pattern.  Patterns separated by commas must appear in that order.  Elements separated by a vertical bar represent a choice.  Parentheses are used for grouping.  Braces are basic syntax, reminiscent of the syntax for Java.  An equals sign is assignment and <c>|=</c> is a continuation of an assignment.  Finally, optional and/or multiple occurrences can be specified with modifiers:<dl>
             <li>
                 <title><c>?</c></title>
                 <p>Zero or one.  Optional, at most one.</p>
@@ -398,7 +398,7 @@
                 </code>
         </fragment>
 
-        <p>A paragraph is a key bottleneck between structure and prose.  You can use a variety of constructs in a paragraph, and you may use a paragraph in many places.  So the name of the element is very simple, just a <c>p</c>.  Now you can include footnotes, display mathematics, display verbatim text, and lists.  Note that a list can <em>only</em> occur in a paragraph, so to make nested lists you must structure a list item of the exterior list with a paragraph to contain the interior list.  A paragraph can contain some metadata, like index entries and mathematical notation.  It does not have a title, not is it ever numbered.  It can be the target of a cross-reference, but only with some care.</p>
+        <p>A paragraph is a key bottleneck between structure and prose.  You can use a variety of constructs in a paragraph, and you may use a paragraph in many places.  So the name of the element is very simple, just a <c>p</c>.  Now you can include footnotes, display mathematics, display verbatim text, and lists.  Note that a list can <em>only</em> occur in a paragraph, so to make nested lists you must structure a list item of the exterior list with a paragraph to contain the interior list.  A paragraph can contain some metadata, like index entries and mathematical notation.  It does not have a title, nor is it ever numbered.  It can be the target of a cross-reference, but only with some care.</p>
 
         <p>A <term>lined paragraph</term> is a variant, for use when the line-by-line structure is necessary.  The <webwork /> variant of a <c>p</c> element allows for using the <c>var</c> element as an answer blank or generated content, possibly inside mathematics, and possibly inside lists.</p>
 
@@ -458,7 +458,7 @@
 
         <p>A space is a space.  But sometimes you want a space between two associated items which will not get split across two lines (<eg/>, Chapter<nbsp />23).  An element will create a <term>non-breaking space</term> using the right technique for the conversion at hand.</p>
 
-        <p>There is a variety of dashes of various lengths.  Use the keyboard character for a <term>hyphen</term>, use an <term>ndash</term> to seperate a range of numbers or dates, and use an <term>mdash</term> as punctuation within a sentence to isolate a clause.  These are implemented differently for different conversions, so their use is strongly encouraged.</p>
+        <p>There is a variety of dashes of various lengths.  Use the keyboard character for a <term>hyphen</term>, use an <term>ndash</term> to separate a range of numbers or dates, and use an <term>mdash</term> as punctuation within a sentence to isolate a clause.  These are implemented differently for different conversions, so their use is strongly encouraged.</p>
 
         <fragment xml:id="dash-character">
             <title>Dash characters</title>
@@ -470,7 +470,7 @@
             </code>
         </fragment>
 
-        <p>A <c>fillin</c> blank is not really a character, but maybe a really long, low dash?  The <c>characters</c> attribute controls the length.  It is atomic, indivisable, and content-less, like all the other characters.  <c>fillin</c> is also unusual due to its allowed use within mathematics.</p>
+        <p>A <c>fillin</c> blank is not really a character, but maybe a really long, low dash?  The <c>characters</c> attribute controls the length.  It is atomic, indivisible, and content-less, like all the other characters.  <c>fillin</c> is also unusual due to its allowed use within mathematics.</p>
 
         <fragment xml:id="fillin-character">
             <title>Fill-in blank character</title>
@@ -518,7 +518,7 @@
             </code>
         </fragment>
 
-        <p>Icons are available through a <attr>name</attr> attribute, which is meant to usually be more semantic than just a description of the picture, though that may sometimes be the case.  These are intended for use when describing elements of computer interfaces.  Icons which are decorative shuld be supplied as part of styling, not as part of the source language.</p>
+        <p>Icons are available through a <attr>name</attr> attribute, which is meant to usually be more semantic than just a description of the picture, though that may sometimes be the case.  These are intended for use when describing elements of computer interfaces.  Icons which are decorative should be supplied as part of styling, not as part of the source language.</p>
 
         <fragment xml:id="icon-character">
             <title>Icon characters</title>
@@ -625,7 +625,7 @@
             </code>
         </fragment>
 
-        <p>A large class of similary indivisible items are units on physical quantities.  The <tag>quantity</tag> element is allowed to be empty, and the code should silently produce no output.  Expressing non-emptieness here might get a bit messy, so a Schematron warning could be a good alternative.</p>
+        <p>A large class of similarly indivisible items are units on physical quantities.  The <tag>quantity</tag> element is allowed to be empty, and the code should silently produce no output.  Expressing non-emptiness here might get a bit messy, so a Schematron warning could be a good alternative.</p>
 
         <fragment xml:id="siunit">
             <title>SI units</title>
@@ -656,7 +656,7 @@
 
         <p>Simple markup is groupings of text that gets a different typographic appearance, either through font changes or through delimiters.  Examples are emphasis or paired quotations, non-examples are cross-references or footnotes.</p>
 
-        <p>Abbreviations are sequences of characters that shorten some longer word or words (<eg /> <abbr>vs.</abbr> for the Latin <foreign>versus</foreign>), initialisms are formed from the first letters of a sequence of words (<eg /> <init>HTML</init>), acronyms are pronouncable as words (<eg /> <acro>SCUBA</acro>).</p>
+        <p>Abbreviations are sequences of characters that shorten some longer word or words (<eg /> <abbr>vs.</abbr> for the Latin <foreign>versus</foreign>), initialisms are formed from the first letters of a sequence of words (<eg /> <init>HTML</init>), acronyms are pronounceable as words (<eg /> <acro>SCUBA</acro>).</p>
 
         <fragment xml:id="abbreviation-group">
             <title>Abbreviations</title>
@@ -809,11 +809,11 @@
 
         <p>A <term>text block</term> is very similar to a paragraph.  It can be an actual paragraph, a sequence of paragraphs enclosed as a block quote (with attribution, perhaps), or a large chunk of unformatted text presented typically in a monospace font.  Certain <q>atomic</q> objects, such as an <tag>image</tag> may be placed as peers of paragraph-like objects.</p>
 
-        <p>A <term>statement block</term> is used in statements.  What are those?  Theorems have statements, exercises have statements, questions have statements.  Some of these blocks with statements also have peers of statments that are proofs, hints, answers, and solutions.  In statements, and their peers, we include text blocks, captioned items, asides, side-by-side layouts, and Sage computations, but exclude many of the numbered and titled division blocks. A slight extension is a <term>solution block</term>, which is everything that can go in a <tag>statement</tag>, plus one or more <tag>proof</tag>, only as part of a <tag>hint</tag>, <tag>answer</tag>, or <tag>solution</tag>.</p>
+        <p>A <term>statement block</term> is used in statements.  What are those?  Theorems have statements, exercises have statements, questions have statements.  Some of these blocks with statements also have peers of statements that are proofs, hints, answers, and solutions.  In statements, and their peers, we include text blocks, captioned items, asides, side-by-side layouts, and Sage computations, but exclude many of the numbered and titled division blocks. A slight extension is a <term>solution block</term>, which is everything that can go in a <tag>statement</tag>, plus one or more <tag>proof</tag>, only as part of a <tag>hint</tag>, <tag>answer</tag>, or <tag>solution</tag>.</p>
 
         <p>A <term>division block</term> includes text blocks, statement blocks, plus topical chunks of text that can have numbered headings or numbered captions, with optional titles, and are set apart slightly from the surrounding narrative.  These are placed mostly as children of divisions, and so one cannot contain another.  They certainly contain paragraphs, and all that goes into them, such as mathematics (inline and display) and figures (and other captioned items).  The <c>sidebyside</c> element can be used to illustrate a division block with a variety of images and displayed text in flexible layouts.</p>
 
-        <p>A <tag>fragment</tag> is used for literate programming, and is numbered, so it is allowed places where other numbered itmes go.</p>
+        <p>A <tag>fragment</tag> is used for literate programming, and is numbered, so it is allowed places where other numbered items go.</p>
 
         <p>Other division blocks include <c>poem</c>, <c>aside</c>, and <c>assemblage</c>.  These are never numbered, but can have titles.  The <c>list-of</c> mechanism is a convenience device to automatically create lists of contents, and so we leave surrounding divisional structure to the author.  A <c>sidebyside</c>, and its cousin, <c>sbsgroup</c>, are strictly layout devices.  The <c>sage</c> element is unique for its possibilities in certain electronic formats.</p>
 
@@ -843,7 +843,7 @@
             </code>
         </fragment>
 
-        <p>Blocks are often structured, in a light way.  Hints, answers, and solutions adorn exercises, examples, and projects.  A simple introduction or conclusion is sometimes useful.  A <c>prelude</c> or <c>postlude</c> are authored inside a block and so are associated with it.  But they are presented before and after the block visually.  An <c>interlude</c> will be used between the statment of a theorem and its proof.</p>
+        <p>Blocks are often structured, in a light way.  Hints, answers, and solutions adorn exercises, examples, and projects.  A simple introduction or conclusion is sometimes useful.  A <c>prelude</c> or <c>postlude</c> are authored inside a block and so are associated with it.  But they are presented before and after the block visually.  An <c>interlude</c> will be used between the statement of a theorem and its proof.</p>
 
         <p>When a block is structured to allow some of the ancillary parts, a <c>statement</c> element is used to structure the main part.  Hints, answers, and solutions can be the target of cross-references, but do not get author-supplied titles.</p>
 
@@ -1005,7 +1005,7 @@
     <section>
         <title>Objectives</title>
 
-        <p>A division may lead (first) with an optional list of objectives for the division and may be followed by a (final) optional list of outcomes.  The element names are only chosen to reflect a pre- and post- behavior and so could be used for objectivbes, outcomes, and standards in a variety of ways.</p>
+        <p>A division may lead (first) with an optional list of objectives for the division and may be followed by a (final) optional list of outcomes.  The element names are only chosen to reflect a pre- and post- behavior and so could be used for objectives, outcomes, and standards in a variety of ways.</p>
 
         <fragment xml:id="objective-outcome">
             <title>Objectives and outcomes</title>
@@ -1163,7 +1163,7 @@
     <section>
         <title>Theorems, And Other Results</title>
 
-        <p>Theorems, corollaries, lemmas <mdash /> they all have statements, and should have proof(s).  Otherwise they are all the same.  A proof may be divided with cases, in no particular rigid way, just as a marker of any number of different, non-overlapping portions of a proof.  Titles can be used to describe each case, or implication arrows may be used (typically with a prrof of an equivalence).  A <c>proof</c> is also allowed to stand on its own as a block, independent of a structure like a <c>theorem</c> or <c>algorithm</c>.</p>
+        <p>Theorems, corollaries, lemmas <mdash /> they all have statements, and should have proof(s).  Otherwise they are all the same.  A proof may be divided with cases, in no particular rigid way, just as a marker of any number of different, non-overlapping portions of a proof.  Titles can be used to describe each case, or implication arrows may be used (typically with a proof of an equivalence).  A <c>proof</c> is also allowed to stand on its own as a block, independent of a structure like a <c>theorem</c> or <c>algorithm</c>.</p>
 
         <fragment xml:id="theorem-like">
             <title>Theorems, and similar</title>
@@ -1335,7 +1335,7 @@
     <section>
         <title>Figures, Tables, Listings and Named Lists</title>
 
-        <p>These are containers that carry titles, captions, and numbers and need to be filled with other (indivisable) items.  They have a mandatory <c>caption</c> (which can have no text, but will still produce a numbered caption), and may have a <c>title</c>, which could more appropriately be called a <term>heading</term>.  These are also called <term>captioned items</term>.</p>
+        <p>These are containers that carry titles, captions, and numbers and need to be filled with other (indivisible) items.  They have a mandatory <c>caption</c> (which can have no text, but will still produce a numbered caption), and may have a <c>title</c>, which could more appropriately be called a <term>heading</term>.  These are also called <term>captioned items</term>.</p>
 
         <fragment xml:id="table-figure">
             <title>Captioned and titled displays</title>
@@ -1830,7 +1830,7 @@
                     element macro-file {text}+
                 }
             WWVariable =
-                ## The WeBWorK "var" element appears in the RELAX-NG schema as a child of many elements, but almost always as a descendant of a "p" element or a "cell" element.  As an element that is only relevant for a WeBWorK problem, occurences of "var" must be within a "webwork" element.  A Schematron rule will check on these two situations.
+                ## The WeBWorK "var" element appears in the RELAX-NG schema as a child of many elements, but almost always as a descendant of a "p" element or a "cell" element.  As an element that is only relevant for a WeBWorK problem, occurrences of "var" must be within a "webwork" element.  A Schematron rule will check on these two situations.
                 element var {
                     (attribute name {text},
                     attribute evaluator {text}?,
@@ -1927,8 +1927,8 @@
 
         <p>Notes: <ul>
             <li>Language tags go on the root element to affect variants of names of objects, like theorems.</li>
-            <li><attr>permid</attr> is part of managing editions, and is supplied by a script.  You should not be adding thse manually as an author.  (You do want to manually author <attr>xml:id</attr>.)</li>
-            <li>The <c>xinlude</c> mechanism may pass language tgs down through the root element of included files to make them universally available.</li>
+            <li><attr>permid</attr> is part of managing editions, and is supplied by a script.  You should not be adding these manually as an author.  (You do want to manually author <attr>xml:id</attr>.)</li>
+            <li>The <c>xinlude</c> mechanism may pass language tags down through the root element of included files to make them universally available.</li>
             <li>The <c>xinclude</c> mechanism inserts a <c>@xml:base</c> attribute on the root element of an included file.  So we allow this attribute on any element that allows a title.</li>
             <li>These are not unordered specifications since they contain several attributes, and we enforce a <c>title</c>, <c>subtitle</c>, <tag>shorttitle</tag>, <c>creator</c>, <c>caption</c>, <c>idx</c> order.</li>
             <li><c>MetaDataTarget</c> is for items that are targets of cross-references, but without even optional titles.  Since they will be knowled, they can appear in an index.  But without the potential to be titled, we do not set them up as possible root elements of a file to <c>xinclude</c>.</li>
@@ -2079,7 +2079,7 @@
     <section>
         <title>Front Matter</title>
 
-        <p>Articles and books have material at the start, which gets organized in interesting ways. <c>minilicense</c> is very restrictive, <c>shortlicense</c> allows references (<eg /> <init>URL</init>s).  <c>titlepage</c> is like a very small database<mdash />for HTML it migrates to the top of the page for the <c>frontmatter</c>, and for <latex /> it migrates to the half-title and title pages.  Since it generally makes no sense as the target of a cross-reference, <c>titlepagfe</c> does not allow an <c>@xml:id</c> attribute.</p>
+        <p>Articles and books have material at the start, which gets organized in interesting ways. <c>minilicense</c> is very restrictive, <c>shortlicense</c> allows references (<eg /> <init>URL</init>s).  <c>titlepage</c> is like a very small database<mdash />for HTML it migrates to the top of the page for the <c>frontmatter</c>, and for <latex /> it migrates to the half-title and title pages.  Since it generally makes no sense as the target of a cross-reference, <c>titlepage</c> does not allow an <c>@xml:id</c> attribute.</p>
 
         <fragment xml:id="frontmatter">
             <title>Front matter</title>
@@ -2413,7 +2413,7 @@
     </section>
 
     <section>
-        <title>Hierachical Structure</title>
+        <title>Hierarchical Structure</title>
 
         <p>We collect all the specifications, roughly in a top-down order, so the generated schema files have a rational ordering to them, even if the order presented here is different.</p>
 
