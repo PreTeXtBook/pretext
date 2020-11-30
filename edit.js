@@ -349,7 +349,7 @@ function edit_in_place(obj) {
   //      document.getElementById(idOfEditContainer).insertAdjacentElement("afterbegin", textarea_editable);
         document.getElementById('actively_editing').insertAdjacentElement("afterbegin", textarea_editable);
 
-        $('#' + idOfEditText).val(sourceContent[thisID]);
+        $('#' + idOfEditText).val(sourceContent[thisID]["content"]);
         document.getElementById(idOfEditText).focus();
         document.getElementById(idOfEditText).setSelectionRange(0,0);
         textarea_editable.style.height = textarea_editable.scrollHeight + "px";
@@ -360,9 +360,11 @@ function edit_in_place(obj) {
     }
 }
 
-var sourceContent = {
-   "cak": '<em>Synonyms</em>: separate - detached - distinct - abstract.',
-   "UvL": '    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n\
+var sourceContent = {  // currently the key is the HTML id
+   "cak": {"xml:id": "", "permid": "cak", "ptxtag": "p", "ptxtagclass": "", "title": "", 
+           "content": '<em>Synonyms</em>: separate - detached - distinct - abstract.'},
+   "UvL": {"xml:id": "", "permid": "UvL", "ptxtag": "p", "ptxtagclass": "", "title": "", 
+           "content": '    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n\
     In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n\
     <ellipsis/>.\n\
     Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n\
@@ -373,7 +375,7 @@ var sourceContent = {
     Whatever your conception of what mathematics is,\n\
     try applying the concept of <q>discrete</q> to it, as defined above.\n\
     Some math fundamentally deals with <em>stuff</em>\n\
-    that is individually separate and distinct.'
+    that is individually separate and distinct.'}
 }
 
 function local_menu_navigator(e) {
