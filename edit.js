@@ -332,7 +332,7 @@ function edit_in_place(obj) {
     thisID = obj.getAttribute("id");
     console.log("will edit in place", thisID);
 // this only works for paragraphs, so go back and allow editing of other types
-    if( ptxSource[thisID] ) {
+    if( internalSource[thisID] ) {
 
         var this_content_container = document.createElement('div');
         this_content_container.setAttribute('id', "actively_editing");
@@ -350,7 +350,7 @@ function edit_in_place(obj) {
   //      document.getElementById(idOfEditContainer).insertAdjacentElement("afterbegin", textarea_editable);
         document.getElementById('actively_editing').insertAdjacentElement("afterbegin", textarea_editable);
 
-        $('#' + idOfEditText).val(ptxSource[thisID]["content"]);
+        $('#' + idOfEditText).val(internalSource[thisID]["content"]);
         document.getElementById(idOfEditText).focus();
         document.getElementById(idOfEditText).setSelectionRange(0,0);
         textarea_editable.style.height = textarea_editable.scrollHeight + "px";
@@ -361,22 +361,16 @@ function edit_in_place(obj) {
     }
 }
 
-var ptxSource = {  // currently the key is the HTML id
+var internalSource = {  // currently the key is the HTML id
    "cak": {"xml:id": "", "permid": "cak", "ptxtag": "p", "ptxtagclass": "", "title": "", 
-           "content": '<em>Synonyms</em>: separate - detached - distinct - abstract.'},
+           "content": '<^>13579<;>'},
    "UvL": {"xml:id": "", "permid": "UvL", "ptxtag": "p", "ptxtagclass": "", "title": "", 
-           "content": '    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n\
-    In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n\
-    <ellipsis/>.\n\
-    Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n\
-    What sort of problems?\n\
-    Okay, those that involve numbers,\n\
-    functions, lines, triangles,\n\
-    <ellipsis/>.\n\
-    Whatever your conception of what mathematics is,\n\
-    try applying the concept of <q>discrete</q> to it, as defined above.\n\
-    Some math fundamentally deals with <em>stuff</em>\n\
-    that is individually separate and distinct.'}
+           "content": '<^>246810<;>'},
+   "246910": '    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n <ellipsis/>.\n Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n What sort of problems?\n Okay, those that involve numbers,\n functions, lines, triangles,\n <ellipsis/>.\n Whatever your conception of what mathematics is,\n try applying the concept of <q>discrete</q> to it, as defined above.\n Some math fundamentally deals with <em>stuff</em>\n that is individually separate and distinct.',
+   "13579": '<&>357911<;>: separate - detached - distinct - abstract.',
+   "357911": {"xml:id": "", "permid": "", "ptxtag": "em", "ptxtagclass": "emphasis-like", "title": "", 
+           "content": '<^>124567<;>'},
+   "124567": "Synonyms"
 }
 
 function local_menu_navigator(e) {
@@ -497,11 +491,11 @@ function assemble_ptx_version() {
         for(var j=0; j < num_paragraphs; ++j) {
             if (!paragraph_content_list[j] ) { continue }
             if (j == 0 && (prev_id = textbox_being_edited.getAttribute("data_source_id"))) {
-                if (prev_id in ptxSource) {
-                    ptxSource[prev_id]["content"] = paragraph_content_list[j]
+                if (prev_id in internalSource) {
+                    internalSource[prev_id]["content"] = paragraph_content_list[j]
                     these_ids.push(prev_id);
                 } else {
-                    console.log("error:  existing tag from input", prev_id, "not in ptxSource")
+                    console.log("error:  existing tag from input", prev_id, "not in internalSource")
                 }
             } else {
                 var this_object_ptx = {"ptxtag": "p", "ptxtagclass": "", "title": ""}; //p don't have title
