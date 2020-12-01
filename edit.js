@@ -331,11 +331,11 @@ function hack_to_fix_first_textbox_character(thisID) {
 function edit_in_place(obj) {
     thisID = obj.getAttribute("id");
     console.log("will edit in place", thisID);
-    if( sourceContent[thisID] ) {
+// this only works for paragraphs, so go back and allow editing of other types
+    if( ptxSource[thisID] ) {
 
         var this_content_container = document.createElement('div');
         this_content_container.setAttribute('id', "actively_editing");
-        this_content_container.setAttribute('data_source_id', thisID);
         $("#" + thisID).replaceWith(this_content_container);
 
         var idOfEditContainer = thisID + '_input';
@@ -344,12 +344,13 @@ function edit_in_place(obj) {
         var textarea_editable = document.createElement('textarea');
         textarea_editable.setAttribute('class', 'text_source');
         textarea_editable.setAttribute('id', idOfEditText);
-        textarea_editable.setAttribute('style', 'width:100%;');
+        textarea_editable.setAttribute('data_source_id', thisID);
+        textarea_editable.setAttribute('style', 'width:99%;');
 
   //      document.getElementById(idOfEditContainer).insertAdjacentElement("afterbegin", textarea_editable);
         document.getElementById('actively_editing').insertAdjacentElement("afterbegin", textarea_editable);
 
-        $('#' + idOfEditText).val(sourceContent[thisID]["content"]);
+        $('#' + idOfEditText).val(ptxSource[thisID]["content"]);
         document.getElementById(idOfEditText).focus();
         document.getElementById(idOfEditText).setSelectionRange(0,0);
         textarea_editable.style.height = textarea_editable.scrollHeight + "px";
@@ -360,7 +361,7 @@ function edit_in_place(obj) {
     }
 }
 
-var sourceContent = {  // currently the key is the HTML id
+var ptxSource = {  // currently the key is the HTML id
    "cak": {"xml:id": "", "permid": "cak", "ptxtag": "p", "ptxtagclass": "", "title": "", 
            "content": '<em>Synonyms</em>: separate - detached - distinct - abstract.'},
    "UvL": {"xml:id": "", "permid": "UvL", "ptxtag": "p", "ptxtagclass": "", "title": "", 
@@ -472,6 +473,131 @@ function display_new(objectclass, objecttype, whereat, relativelocation="beforeb
     }
 }
 
+function assemble_ptx_version() {
+    console.log("current active element to be saved", document.activeElement);
+
+    var new_ptx_source = "";
+    var these_ids = [];
+
+    var object_being_edited = document.activeElement;
+
+    if (object_being_edited.tagName == "TEXTAREA") {
+        var textbox_being_edited = object_being_edited;  //document.getElementById('actively_editing_p');
+        var paragraph_content = textbox_being_edited.value;
+        paragraph_content = paragraph_content.trim();
+
+        var cursor_location = textbox_being_edited.selectionStart;
+
+        console.log("cursor_location", cursor_location, "out of", paragraph_content.length, "paragraph_content", paragraph_content);
+
+        // does the textbox contain more than one paragraph?
+        var paragraph_content_list = paragraph_content.split("\n\n");
+        var num_paragraphs = paragraph_content_list.length;
+
+        for(var j=0; j < num_paragraphs; ++j) {
+            if (!paragraph_content_list[j] ) { continue }
+            if (j == 0 && (prev_id = textbox_being_edited.getAttribute("data_source_id"))) {
+                if (prev_id in ptxSource) {
+                    ptxSource[prev_id]["content"] = paragraph_content_list[j]
+                    these_ids.push(prev_id);
+                } else {
+                    console.log("error:  existing tag from input", prev_id, "not in ptxSource")
+                }
+            } else {
+                var this_object_ptx = {"ptxtag": "p", "ptxtagclass": "", "title": ""}; //p don't have title
+                this_label = randomstring();
+                this_object_ptx["xmlid"] = this_label;
+                this_object_ptx["permid"] = "";
+                this_object_ptx["content"] = paragraph_content_list[j];
+                these_ids.push(this_label);
+            }
+        }
+    } else {
+        alert("don;t know how to assemble_ptx_version of", object_being_edited.tagName)
+    }
+}
+            
+
+            
+function assemble_html_version() {
+        var holder_of_object_being_edited = object_being_edited.parentElement.parentElement;
+        for(var j=0; j < num_paragraphs; ++j) {
+            if (!paragraph_content_list[j] ) { continue }
+            new_ptx_source += "<p>" + "\n";
+            new_ptx_source += paragraph_content_list[j];
+            new_ptx_source += "\n" + "</p>" + "\n";
+            var object_as_html = document.createElement('p');
+            object_as_html.setAttribute("data-editable", 99);
+            object_as_html.setAttribute("tabindex", -1);
+            object_as_html.setAttribute("id", randomstring());
+     //       object_as_html.setAttribute("class", "just_added");
+            object_as_html.innerHTML = ptx_to_html(paragraph_content_list[j]);
+     //       document.getElementById('actively_editing').insertAdjacentElement('beforebegin', object_as_html);
+            holder_of_object_being_edited.insertAdjacentElement('beforebegin', object_as_html);
+        } 
+        
+    
+        console.log("finished editing a paragraph", new_ptx_source, "previous is new_ptx_source");
+    
+        console.log("current item of focus", document.activeElement);
+        console.log("its parent", document.activeElement.parentElement);
+        if (holder_of_object_being_edited.id == "actively_editing") { // we are only editing a p
+            console.log("will focus on what we just added",$(holder_of_object_being_edited).prev('[data-editable="99"]'));
+            $(holder_of_object_being_edited).prev('[data-editable="99"]').focus();
+            console.log("next item of focus", document.activeElement);
+//    document.getElementById('actively_editing').remove();
+            $(":focus").addClass("may_select");
+            edit_menu_for($(":focus").attr("id"), "entering");
+        } else if (holder_of_object_being_edited.classList.contains("editing_statement")) {
+        // hide the ptx_source to be retrieved later
+            hide_new_source(new_ptx_source, "statement");
+              // the p is in a statement (of theorem-like or definition-like or remark-like or ...)
+            if (holder_of_object_being_edited.parentElement.getAttribute('data-objecttype') == "theorem-like") {
+              // now focus switches to the proof?
+                console.log("focus shoudl switch to",holder_of_object_being_edited.nextSibling.firstChild.children[1]);
+                holder_of_object_being_edited.nextSibling.firstChild.children[1].focus()  // 1 to skip the Tip
+            } else {
+                alert("don't know where to go next");
+               // I guess we are done editing this object?
+            }
+        } else if (holder_of_object_being_edited.classList.contains("editing_proof")) {
+            hide_new_source(new_ptx_source, "proof");
+            // done editing the theorem-like, to put focus on the next thing and display/save the theorem
+            save_new("theorem");
+            display_new("theorem-like", "corollary", document.getElementById("actively_editing"), "afterend");
+            console.log("is focus on the new object?", $(":focus"));
+            $(":focus").addClass("may_select");
+            edit_menu_for($(":focus").attr("id"), "entering");
+            document.getElementById("actively_editing").remove();
+            console.log("just did display_new");
+        } else { // this p is in a larvger object, like a theorem or li
+            
+            alert("inside an object, don; tknow what to do next")
+        }
+        console.log("holder_of_object_being_edited.remove()", holder_of_object_being_edited);
+  //      document.getElementById("actively_editing").remove();
+            holder_of_object_being_edited.remove();
+/*
+    } else {
+        console.log("trouble saving", object_being_edited);
+        alert("don;t know how to save ", object_being_edited.tagName)
+    }
+*/
+}
+
+function update_ptx_identifiers() {
+}
+
+function save_ptx_version() {
+}
+
+
+function insert_html_version() {
+}
+
+function update_navigation() {
+}
+
 function save_current_editing() {
     console.log("current active element to be saved", document.activeElement);
     //not currently used
@@ -563,6 +689,7 @@ function local_editing_action(e) {
         console.log("making a local menu");
         local_menu_navigator(e);
     } else if (e.code == "Escape") {
+            e.preventDefault();
             save_current_editing()
     } else if (e.code == "Enter") {
         console.log("saw a Ret");
