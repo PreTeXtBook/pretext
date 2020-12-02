@@ -51,13 +51,14 @@ function randomstring(len=10) {
 base_menu_for = {
 "section": [["paragraph", "p"],
             ["list/table-like", "list-like"],
+            ["definition-like", "definition-like"],
             ["theorem-like", "theorem-like"],
             ["remark-like"],
             ["example-like", "example-like"],
             ["image/video/sound", "display-like", "v"],
             ["math/chemistry/code", "math-like", "c"],
             ["project/exercise-like", "project-like", "j"],
-            ["blockquote/poem//music/etc", "quoted"],
+            ["blockquote/poem/music/etc", "quoted"],
             ["aside-like", "aside-like", "d"],
             ["interactives"],
             ["layout-like"],
@@ -67,20 +68,20 @@ base_menu_for = {
 }
 
 inner_menu_for = {
-"theorem-like": [["theorem"],
+"theorem-like": [["lemma"],
                  ["proposition"],
-                 ["lemma"],
+                 ["theorem"],
                  ["corollary"],
-                 ["definition"],
                  ["claim", "claim", "m"],
-                 ["algorithm"],
                  ["fact"],
                  ["identity"],
-                 ["axiom", "axiom", "x"],
-                 ["principle", "principle", "r"],
-                 ["heuristic",],
-                 ["hypothesis", "hypothesis", "y"],
-                 ["conjecture", "conjecture", "j"]],
+                 ["algorithm"]],
+"definition-like": [["definition"],
+                   ["axiom", "axiom"],
+                   ["principle", "principle"],
+                   ["heuristic",],
+                   ["hypothesis", "hypothesis", "y"],
+                   ["conjecture", "conjecture"]],
 "list-like": [["ordered list", "ol"], ["unordered list", "ul"], ["dictionary list", "dl"], ["table"], ["table with caption", "tablecaption", "c"]],
 "section-like": [["titled paragraph", "paragraphs"], ["reading questions", "rq"], ["exercises"], ["section"]],
 "project-like": [["exercise"], ["activitiy"], ["investigation"], ["exploration", "exploration", "x"], ["project"]],
@@ -362,14 +363,14 @@ function edit_in_place(obj) {
 }
 
 var internalSource = {  // currently the key is the HTML id
-   "cak": {"xml:id": "", "permid": "cak", "ptxtag": "p", "ptxtagclass": "", "title": "", 
-           "content": '<^>13579<;>'},
-   "UvL": {"xml:id": "", "permid": "UvL", "ptxtag": "p", "ptxtagclass": "", "title": "", 
-           "content": '<^>246810<;>'},
+   "cak": {"xml:id": "", "permid": "cak", "ptxtag": "p", "title": "", 
+           "content": '13579'},
+   "UvL": {"xml:id": "", "permid": "UvL", "ptxtag": "p", "title": "", 
+           "content": '246810'},
    "246910": '    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n <ellipsis/>.\n Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n What sort of problems?\n Okay, those that involve numbers,\n functions, lines, triangles,\n <ellipsis/>.\n Whatever your conception of what mathematics is,\n try applying the concept of <q>discrete</q> to it, as defined above.\n Some math fundamentally deals with <em>stuff</em>\n that is individually separate and distinct.',
    "13579": '<&>357911<;>: separate - detached - distinct - abstract.',
-   "357911": {"xml:id": "", "permid": "", "ptxtag": "em", "ptxtagclass": "emphasis-like", "title": "", 
-           "content": '<^>124567<;>'},
+   "357911": {"xml:id": "", "permid": "", "ptxtag": "em", "title": "", 
+           "content": '124567'},
    "124567": "Synonyms"
 }
 
@@ -467,15 +468,16 @@ function display_new(objectclass, objecttype, whereat, relativelocation="beforeb
     }
 }
 
-function assemble_ptx_version() {
+function assemble_internal_version_changes() {
     console.log("current active element to be saved", document.activeElement);
 
-    var new_ptx_source = "";
-    var these_ids = [];
+    var possibly_changed_ids = [];
+    var nature_of_the_change = "";
 
     var object_being_edited = document.activeElement;
 
     if (object_being_edited.tagName == "TEXTAREA") {
+        nature_of_the_chnage = "replace";
         var textbox_being_edited = object_being_edited;  //document.getElementById('actively_editing_p');
         var paragraph_content = textbox_being_edited.value;
         paragraph_content = paragraph_content.trim();
@@ -492,28 +494,52 @@ function assemble_ptx_version() {
             if (!paragraph_content_list[j] ) { continue }
             if (j == 0 && (prev_id = textbox_being_edited.getAttribute("data_source_id"))) {
                 if (prev_id in internalSource) {
-                    internalSource[prev_id]["content"] = paragraph_content_list[j]
-                    these_ids.push(prev_id);
+                    // the content is referenced, so we update the referenced content
+                    id_of_content = internalSource[prev_id]["content"];
+                    internalSource[id_of_content] = paragraph_content_list[j]
+                    possibly_changed_ids.push(prev_id);
                 } else {
                     console.log("error:  existing tag from input", prev_id, "not in internalSource")
                 }
-            } else {
-                var this_object_ptx = {"ptxtag": "p", "ptxtagclass": "", "title": ""}; //p don't have title
-                this_label = randomstring();
-                this_object_ptx["xmlid"] = this_label;
-                this_object_ptx["permid"] = "";
-                this_object_ptx["content"] = paragraph_content_list[j];
-                these_ids.push(this_label);
+            } else {  // a newly created paragraph
+                var this_object_internal = {"ptxtag": "p", "title": ""}; //p don't have title
+                this_object_label = randomstring();
+                this_content_label = randomstring();
+                this_object_internal["xmlid"] = this_object_label;
+                this_object_internal["permid"] = "";
+                this_object_internal["content"] = this_content_label;
+                internalSource[this_object_label] = this_object_internal
+                possibly_changed_ids.push(this_object_label);
+                internalSource[this_content_label] = paragraph_content_list[j];
             }
         }
     } else {
-        alert("don;t know how to assemble_ptx_version of", object_being_edited.tagName)
+        alert("don;t know how to assemble_internal_version_changes of", object_being_edited.tagName)
     }
+    return [nature_of_the_change, possibly_changed_ids]
 }
             
+function html_from_internal_id(the_id) {
+    var the_object = internalSource[the_id];
+    var ptxtag = the_object["ptxtag"];
 
-            
-function assemble_html_version() {
+    if (ptxtag == "p") {
+        html_of_this_object = document.createElement('p');
+        html_of_this_object.setAttribute("data-editable", 99);
+        html_of_this_object.setAttribute("tabindex", -1);
+        html_of_this_object.setAttribute("id", the_id);
+
+        var content_id = the_object["content"];
+        html_of_this_object.innerHTML = internalSource[content_id];
+    } else {
+         alert("don't know how to make html from", the_object)
+    }
+    return html_of_this_object
+}
+
+function assemble_html_changes(ids_that_changed) {
+
+/// copied, in progress
         var holder_of_object_being_edited = object_being_edited.parentElement.parentElement;
         for(var j=0; j < num_paragraphs; ++j) {
             if (!paragraph_content_list[j] ) { continue }
