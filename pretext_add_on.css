@@ -1446,7 +1446,6 @@ body > a.assistive:focus {
 :target {
     animation: target-fade 15s 1;
 }
-
 @-webkit-keyframes target-fade {
     0% { background-color: rgba(120,0,120,.3); }
     100% { background-color: inherit;
@@ -3247,6 +3246,17 @@ label.incorrect .feedback {
      max-width: 95%;
 }
 
+/*  does not work as intended in Chrome dark mode 
+    (because Chrome dark mode does not seem to be a true dark mode)
+
+@media (prefers-color-scheme: dark) {
+  html .pretext-content * {
+    border-color: #ccc !important; 
+}
+}
+
+*/
+
 /*
 .problem a.internal::after {
     content: "";
@@ -3340,8 +3350,11 @@ label.incorrect .feedback {
 #edit_menu li:last-of-type {
     padding-bottom: 0.3em;
 }
+#edit_menu_holder ol.past {
+    box-shadow: -0.25em 0.25em 0 #ccc;
+}
 #edit_menu_holder ol:not(.past) {
-    border: 0.1em solid #ccc;
+    border: 0.1em solid #999;
 /*
     border-right: none;
     border-bottom: none;
@@ -3424,6 +3437,10 @@ label.incorrect .feedback {
 }
 
 .group_description {
-    font-size: 70%;
-    font-color: #aaa;
+    font-size: 75%;
+    font-color: #caa;
+    font-style: italic;
 }
+[data-objecttype="theorem-like"] p {
+    font-style: italic;
+} 
