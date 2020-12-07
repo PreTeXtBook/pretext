@@ -334,7 +334,7 @@ function edit_in_place(obj) {
     console.log("will edit in place", thisID);
 // this only works for paragraphs, so go back and allow editing of other types
     if( internalSource[thisID] ) {
-
+      if(obj.tagName == "P") {
         var this_content_container = document.createElement('div');
         this_content_container.setAttribute('id', "actively_editing");
         $("#" + thisID).replaceWith(this_content_container);
@@ -351,7 +351,9 @@ function edit_in_place(obj) {
   //      document.getElementById(idOfEditContainer).insertAdjacentElement("afterbegin", textarea_editable);
         document.getElementById('actively_editing').insertAdjacentElement("afterbegin", textarea_editable);
 
-        $('#' + idOfEditText).val(internalSource[thisID]["content"]);
+        id_of_existing_content = internalSource[thisID]["content"];
+ //       $('#' + idOfEditText).val(internalSource[thisID]["content"]);
+        $('#' + idOfEditText).val(internalSource[id_of_existing_content]);
         document.getElementById(idOfEditText).focus();
         document.getElementById(idOfEditText).setSelectionRange(0,0);
         textarea_editable.style.height = textarea_editable.scrollHeight + "px";
@@ -359,6 +361,12 @@ function edit_in_place(obj) {
         textarea_editable.addEventListener("keypress", function() {
           textarea_editable.style.height = textarea_editable.scrollHeight + "px";
        });
+      } else {
+        console.log("Error: I don;t know how to edit_in_place", obj)
+      }
+    } else {
+        console.log("Error: edit_in_place of object that is not already known", obj);
+        console.log("What is known:", internalSource)
     }
 }
 
@@ -367,7 +375,7 @@ var internalSource = {  // currently the key is the HTML id
            "content": '13579'},
    "UvL": {"xml:id": "", "permid": "UvL", "ptxtag": "p", "title": "", 
            "content": '246810'},
-   "246910": '    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n <ellipsis/>.\n Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n What sort of problems?\n Okay, those that involve numbers,\n functions, lines, triangles,\n <ellipsis/>.\n Whatever your conception of what mathematics is,\n try applying the concept of <q>discrete</q> to it, as defined above.\n Some math fundamentally deals with <em>stuff</em>\n that is individually separate and distinct.',
+   "246810": '    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n <ellipsis/>.\n Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n What sort of problems?\n Okay, those that involve numbers,\n functions, lines, triangles,\n <ellipsis/>.\n Whatever your conception of what mathematics is,\n try applying the concept of <q>discrete</q> to it, as defined above.\n Some math fundamentally deals with <em>stuff</em>\n that is individually separate and distinct.',
    "13579": '<&>357911<;>: separate - detached - distinct - abstract.',
    "357911": {"xml:id": "", "permid": "", "ptxtag": "em", "title": "", 
            "content": '124567'},
@@ -475,6 +483,7 @@ function assemble_internal_version_changes() {
     var nature_of_the_change = "";
 
     var object_being_edited = document.activeElement;
+    var location_of_change = object_being_edited.parentElement;
 
     if (object_being_edited.tagName == "TEXTAREA") {
         nature_of_the_chnage = "replace";
@@ -516,7 +525,7 @@ function assemble_internal_version_changes() {
     } else {
         alert("don;t know how to assemble_internal_version_changes of", object_being_edited.tagName)
     }
-    return [nature_of_the_change, possibly_changed_ids]
+    return [nature_of_the_change, location_of_change, possibly_changed_ids]
 }
             
 function html_from_internal_id(the_id) {
@@ -697,6 +706,8 @@ function save_current_editing() {
         console.log("trouble saving", object_being_edited);
         alert("don;t know how to save ", object_being_edited.tagName)
     }
+
+    console.log("internalSource", internalSource)
 }
 
 function local_editing_action(e) {
@@ -710,6 +721,7 @@ function local_editing_action(e) {
         local_menu_navigator(e);
     } else if (e.code == "Escape") {
             e.preventDefault();
+            assemble_internal_version_changes();
             save_current_editing()
     } else if (e.code == "Enter") {
         console.log("saw a Ret");
@@ -717,6 +729,7 @@ function local_editing_action(e) {
         if (prev_char.code == "Enter" && prev_prev_char.code == "Enter") {
             console.log("need to save");
             e.preventDefault();
+            assemble_internal_version_changes();
             save_current_editing()
         }
     } else {
@@ -1093,8 +1106,6 @@ function logKeyDown(e) {
 
     } else {
         main_menu_navigator(e);
- //       alert("what has Tab done?");
- //       e.preventDefault();
     }
 }
 
