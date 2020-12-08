@@ -670,6 +670,11 @@ function update_navigation() {
 }
 
 function save_current_editing() {
+
+// this needs to use the updated internal version (possibly having the output of
+// assemble_internal_version_changes() passed to it.
+
+
     console.log("current active element to be saved", document.activeElement);
     //not currently used
  //   var object_being_edited = document.getElementById('actively_editing');
