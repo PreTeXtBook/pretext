@@ -345,15 +345,17 @@ function edit_in_place(obj) {
         var textarea_editable = document.createElement('textarea');
         textarea_editable.setAttribute('class', 'text_source');
         textarea_editable.setAttribute('id', idOfEditText);
-        textarea_editable.setAttribute('data_source_id', thisID);
+        textarea_editable.setAttribute('data-source_id', thisID);
+        textarea_editable.setAttribute('data-parent_id', internalSource[thisID]["parent"][0]);
+        textarea_editable.setAttribute('data-parent_component', internalSource[thisID]["parent"][1]);
         textarea_editable.setAttribute('style', 'width:99%;');
 
   //      document.getElementById(idOfEditContainer).insertAdjacentElement("afterbegin", textarea_editable);
         document.getElementById('actively_editing').insertAdjacentElement("afterbegin", textarea_editable);
 
-        id_of_existing_content = internalSource[thisID]["content"];
- //       $('#' + idOfEditText).val(internalSource[thisID]["content"]);
-        $('#' + idOfEditText).val(internalSource[id_of_existing_content]);
+  //      id_of_existing_content = internalSource[thisID]["content"];
+        $('#' + idOfEditText).val(internalSource[thisID]["content"]);
+ //       $('#' + idOfEditText).val(internalSource[id_of_existing_content]);
         document.getElementById(idOfEditText).focus();
         document.getElementById(idOfEditText).setSelectionRange(0,0);
         textarea_editable.style.height = textarea_editable.scrollHeight + "px";
@@ -370,7 +372,7 @@ function edit_in_place(obj) {
     }
 }
 
-var internalSource = {  // currently the key is the HTML id
+var OldinternalSource = {  // currently the key is the HTML id
    "cak": {"xml:id": "", "permid": "cak", "ptxtag": "p", "title": "", 
            "content": '13579'},
    "UvL": {"xml:id": "", "permid": "UvL", "ptxtag": "p", "title": "", 
@@ -381,6 +383,28 @@ var internalSource = {  // currently the key is the HTML id
            "content": '124567'},
    "124567": "Synonyms"
 }
+
+var internalSource = {  // currently the key is the HTML id
+   "hPw": {"xml:id": "", "permid": "hPw", "ptxtag": "section", "title": "What is Discrete Mathematics?",
+           "content": "<&>akX<;>\n<&>UvL<;>\n<&>ACU<;>\n<&>gKd<;>\n<&>MRm<;>\n<&>udO<;>\n<&>sYv<;>\n<&>ZfE<;>"},
+   "cak": {"xml:id": "", "permid": "cak", "ptxtag": "p", "title": "", "parent": ["akX","content"],
+           "content": "<&>357911<;>: separate - detached - distinct - abstract."},
+   "akX": {"xml:id": "", "permid": "akX", "ptxtag": "blockquote", "title": "", "parent": ["hPw","content"],
+           "content": "<&>357911<;>\n<&>PLS<;>\n<&>vTb<;>\n<&>cak<;>"},
+   "UvL": {"xml:id": "", "permid": "UvL", "ptxtag": "p", "title": "","parent": ["hPw","content"],
+           "content": "    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n <ellipsis/>.\n Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n What sort of problems?\n Okay, those that involve numbers,\n functions, lines, triangles,\n <ellipsis/>.\n Whatever your conception of what mathematics is,\n try applying the concept of <q>discrete</q> to it, as defined above.\n Some math fundamentally deals with <em>stuff</em>\n that is individually separate and distinct."},
+//           "content": '246810'},
+//   "246810": '    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n <ellipsis/>.\n Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n What sort of problems?\n Okay, those that involve numbers,\n functions, lines, triangles,\n <ellipsis/>.\n Whatever your conception of what mathematics is,\n try applying the concept of <q>discrete</q> to it, as defined above.\n Some math fundamentally deals with <em>stuff</em>\n that is individually separate and distinct.',
+//   "13579": '<&>357911<;>: separate - detached - distinct - abstract.',
+   "357911": {"xml:id": "", "permid": "", "ptxtag": "em", "title": "",
+           "content": 'Synonyms'},
+   "sYv": {"xml:id": "", "permid": "sYv", "ptxtag": "p", "parent": ["hPw","content"],
+           "content": "One way to get a feel for the subject is to consider the types of problems you solve in discrete math. Here are a few simple examples:"}
+//           "content": '124567'},
+//   "124567": "Synonyms"
+}
+
+
 
 function local_menu_navigator(e) {
     e.preventDefault();
@@ -499,32 +523,50 @@ function assemble_internal_version_changes() {
         var paragraph_content_list = paragraph_content.split("\n\n");
         var num_paragraphs = paragraph_content_list.length;
 
+        var parent_and_location = [object_being_edited.getAttribute("data-parent_id"), object_being_edited.getAttribute("data-parent_component")];
+        var this_arrangement_of_objects = "";
+        console.log("parent_and_location", parent_and_location);
         for(var j=0; j < num_paragraphs; ++j) {
             if (!paragraph_content_list[j] ) { continue }
-            if (j == 0 && (prev_id = textbox_being_edited.getAttribute("data_source_id"))) {
+            if (j == 0 && (prev_id = textbox_being_edited.getAttribute("data-source_id"))) {
                 if (prev_id in internalSource) {
                     // the content is referenced, so we update the referenced content
-                    id_of_content = internalSource[prev_id]["content"];
-                    internalSource[id_of_content] = paragraph_content_list[j]
+               //     id_of_content = internalSource[prev_id]["content"];
+               //     internalSource[id_of_content] = paragraph_content_list[j]
+                    internalSource[prev_id]["content"] = paragraph_content_list[j];  // should we write [0] ?
                     possibly_changed_ids.push(prev_id);
+                    this_arrangement_of_objects = internalSource[parent_and_location[0]][parent_and_location[1]];
                 } else {
                     console.log("error:  existing tag from input", prev_id, "not in internalSource")
                 }
             } else {  // a newly created paragraph
                 var this_object_internal = {"ptxtag": "p", "title": ""}; //p don't have title
                 this_object_label = randomstring();
-                this_content_label = randomstring();
+         //       this_content_label = randomstring();
                 this_object_internal["xmlid"] = this_object_label;
                 this_object_internal["permid"] = "";
-                this_object_internal["content"] = this_content_label;
+                this_object_internal["parent"] = parent_and_location;
+                console.log("need to add paragraph",this_object_label, "inside", this_arrangement_of_objects, "after (or after after)", prev_id);
+ //   the_ans = the_ans.replace(/(^|\s|-)\$([^\$\f\r\n]+)\$(\s|\.|,|;|:|\?|!|-|$)/g, "$1\\($2\\)$3");
+
+                var object_before = new RegExp('(<&>' + prev_id + '<;>)');
+                this_arrangement_of_objects = this_arrangement_of_objects.replace(object_before, '$1' + '\n<&>' + this_object_label + '<;>');
+                prev_id = this_object_label;
+                
+         //       this_object_internal["content"] = this_content_label;
+                this_object_internal["content"] = paragraph_content_list[j];
                 internalSource[this_object_label] = this_object_internal
                 possibly_changed_ids.push(this_object_label);
-                internalSource[this_content_label] = paragraph_content_list[j];
+          //      internalSource[this_content_label] = paragraph_content_list[j];
             }
         }
+        console.log("this_arrangement_of_objects was",  internalSource[parent_and_location[0]][parent_and_location[1]]);
+        internalSource[parent_and_location[0]][parent_and_location[1]] = this_arrangement_of_objects;
+        console.log("this_arrangement_of_objects is", this_arrangement_of_objects);
     } else {
         alert("don;t know how to assemble_internal_version_changes of", object_being_edited.tagName)
     }
+    console.log("finished assembling internal version, which is now:",internalSource);
     return [nature_of_the_change, location_of_change, possibly_changed_ids]
 }
             
