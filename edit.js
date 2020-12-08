@@ -221,6 +221,7 @@ function edit_menu_for(this_obj_id, motion="entering") {
     if (motion == "entering") { menu_location = "afterbegin" }
     else { menu_location = "afterend" }  // when motion is 'leaving'
 
+    document.getElementById(this_obj_id).classList.add("may_select");
     var edit_menu_holder = document.createElement('div');
 //    edit_menu_holder.setAttribute('class', 'edit_menu_holder');
     edit_menu_holder.setAttribute('id', 'edit_menu_holder');
@@ -510,7 +511,7 @@ function assemble_internal_version_changes() {
     var location_of_change = object_being_edited.parentElement;
 
     if (object_being_edited.tagName == "TEXTAREA") {
-        nature_of_the_chnage = "replace";
+        nature_of_the_change = "replace";
         var textbox_being_edited = object_being_edited;  //document.getElementById('actively_editing_p');
         var paragraph_content = textbox_being_edited.value;
         paragraph_content = paragraph_content.trim();
@@ -663,7 +664,39 @@ function save_ptx_version() {
 }
 
 
-function insert_html_version() {
+function insert_html_version(these_changes) {
+
+    nature_of_the_change = these_changes[0];
+    location_of_change = these_changes[1];
+    possibly_changed_ids = these_changes[2];
+
+    console.log("nature_of_the_change", nature_of_the_change);
+    console.log("location_of_change", location_of_change);
+    console.log("possibly_changed_ids", possibly_changed_ids);
+
+    // we make HTML version of the objects with ids possibly_changed_ids,
+    // and then insert those into the page.  
+
+    if (nature_of_the_change != "replace") {
+        console.log("should be replace, since it is the edit form we are replacing");
+        alert("should be replace, since it is the edit form we are replacing")
+    }
+
+    for (var j=0; j < possibly_changed_ids.length; ++j) {
+        this_object_id = possibly_changed_ids[j];
+        this_object = internalSource[this_object_id];
+        if (this_object["ptxtag"] == "p") {
+            var object_as_html = document.createElement('p');
+            object_as_html.setAttribute("data-editable", 99);
+            object_as_html.setAttribute("tabindex", -1);
+            object_as_html.setAttribute("id", this_object_id);
+            object_as_html.innerHTML = ptx_to_html(this_object["content"]);
+            location_of_change.insertAdjacentElement('beforebegin', object_as_html);
+        } else {
+           alert("I don; tknow how to make a", this_object["ptxtag"]);
+        }
+    }
+    location_of_change.remove();
 }
 
 function update_navigation() {
@@ -671,6 +704,7 @@ function update_navigation() {
 
 function save_current_editing() {
 
+    return "";
 // this needs to use the updated internal version (possibly having the output of
 // assemble_internal_version_changes() passed to it.
 
@@ -768,7 +802,8 @@ function local_editing_action(e) {
         local_menu_navigator(e);
     } else if (e.code == "Escape") {
             e.preventDefault();
-            assemble_internal_version_changes();
+            these_changes = assemble_internal_version_changes();
+            insert_html_version(these_changes);
             save_current_editing()
     } else if (e.code == "Enter") {
         console.log("saw a Ret");
@@ -776,7 +811,8 @@ function local_editing_action(e) {
         if (prev_char.code == "Enter" && prev_prev_char.code == "Enter") {
             console.log("need to save");
             e.preventDefault();
-            assemble_internal_version_changes();
+            these_changes = assemble_internal_version_changes();
+            insert_html_version(these_changes);
             save_current_editing()
         }
     } else {
