@@ -272,6 +272,7 @@ console.log("status of response",response.status);
 
 function container_for_editing(obj_type) {
     // the most recent characters were TAB and RET from navigatin gthe menu, which are irrelevant now.
+    console.log("in container_for_editing");
     prev_char = "";
     prev_prev_char = "";
     var this_content_container = document.createElement('div');
@@ -326,21 +327,17 @@ function container_for_editing(obj_type) {
     return this_content_container
 }
 
-function hack_to_fix_first_textbox_character(thisID) {
-//    this_text = $("#" + thisID).val();
-//    console.log("this edit box" + this_text + "was");
-//    this_text = this_text.replace(/^\s/,"");
-//    this_text = this_text.replace(/^\s/,"");
-//    console.log("this edit box" + this_text + "is");
-//    $("#" + thisID).val(this_text);
-}
+function edit_in_place(obj, is_new=false) {
 
-function edit_in_place(obj) {
+// fix this so that we can delete container_for_editing
+
+
     thisID = obj.getAttribute("id");
     console.log("will edit in place", thisID);
+    thisTagName = obj.tagName.toLowerCase();
 // this only works for paragraphs, so go back and allow editing of other types
     if( internalSource[thisID] ) {
-      if(obj.tagName == "P") {
+      if(thisTagName == "p") {
         var this_content_container = document.createElement('div');
         this_content_container.setAttribute('id', "actively_editing");
         $("#" + thisID).replaceWith(this_content_container);
@@ -665,13 +662,6 @@ function assemble_html_changes(ids_that_changed) {
 */
 }
 
-function update_ptx_identifiers() {
-}
-
-function save_ptx_version() {
-}
-
-
 function insert_html_version(these_changes) {
 
     nature_of_the_change = these_changes[0];
@@ -705,9 +695,6 @@ function insert_html_version(these_changes) {
         }
     }
     location_of_change.remove();
-}
-
-function update_navigation() {
 }
 
 function save_current_editing() {
@@ -1102,7 +1089,6 @@ function main_menu_navigator(e) {  // we are not currently editing
                     object_near_new_object.insertAdjacentElement(new_location, container_for_editing(new_object_type));
            //     document.getElementById('starting_point_for_editing').focus();
                     document.querySelectorAll('[class~="starting_point_for_editing"]')[0].focus();
-  //              hack_to_fix_first_textbox_character('starting_point_for_editing');
      //           object_near_new_object.focus();
                     object_near_new_object.classList.remove("may_select");
                     document.getElementById('edit_menu_holder').remove();
