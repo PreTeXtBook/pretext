@@ -218,10 +218,14 @@ function top_menu_options_for(this_obj) {
 function edit_menu_for(this_obj_id, motion="entering") {
     console.log("make edit menu", motion, "for", this_obj_id);
 
-    if (motion == "entering") { menu_location = "afterbegin" }
-    else { menu_location = "afterend" }  // when motion is 'leaving'
+    if (motion == "entering") {
+        menu_location = "afterbegin";
+        document.getElementById(this_obj_id).classList.add("may_select");
+    } else { menu_location = "afterend";
+        document.getElementById(this_obj_id).classList.remove("may_select");
+        document.getElementById(this_obj_id).classList.add("may_leave"); 
+    }  // when motion is 'leaving'
 
-    document.getElementById(this_obj_id).classList.add("may_select");
     var edit_menu_holder = document.createElement('div');
 //    edit_menu_holder.setAttribute('class', 'edit_menu_holder');
     edit_menu_holder.setAttribute('id', 'edit_menu_holder');
@@ -240,6 +244,7 @@ function edit_menu_for(this_obj_id, motion="entering") {
         edit_option.innerHTML = "continue editing [this object]";
     }
     document.getElementById("edit_menu_holder").insertAdjacentElement("afterbegin", edit_option);
+    document.getElementById('edit_menu_holder').focus();
 }
 
 function local_menu_for(this_obj_id) { 
@@ -618,7 +623,8 @@ function assemble_html_changes(ids_that_changed) {
             $(holder_of_object_being_edited).prev('[data-editable="99"]').focus();
             console.log("next item of focus", document.activeElement);
 //    document.getElementById('actively_editing').remove();
-            $(":focus").addClass("may_select");
+         //   $(":focus").addClass("may_select");
+            console.log("menu place 1");
             edit_menu_for($(":focus").attr("id"), "entering");
         } else if (holder_of_object_being_edited.classList.contains("editing_statement")) {
         // hide the ptx_source to be retrieved later
@@ -638,7 +644,9 @@ function assemble_html_changes(ids_that_changed) {
             save_new("theorem");
             display_new("theorem-like", "corollary", document.getElementById("actively_editing"), "afterend");
             console.log("is focus on the new object?", $(":focus"));
-            $(":focus").addClass("may_select");
+    //        $(":focus").addClass("may_select");
+            console.log("menu place 2");
+
             edit_menu_for($(":focus").attr("id"), "entering");
             document.getElementById("actively_editing").remove();
             console.log("just did display_new");
@@ -752,7 +760,9 @@ function save_current_editing() {
             $(holder_of_object_being_edited).prev('[data-editable="99"]').focus();
             console.log("next item of focus", document.activeElement);
 //    document.getElementById('actively_editing').remove();
-            $(":focus").addClass("may_select");
+       //     $(":focus").addClass("may_select");
+            console.log("menu place 3");
+
             edit_menu_for($(":focus").attr("id"), "entering");
         } else if (holder_of_object_being_edited.classList.contains("editing_statement")) {
         // hide the ptx_source to be retrieved later
@@ -772,7 +782,9 @@ function save_current_editing() {
             save_new("theorem");
             display_new("theorem-like", "corollary", document.getElementById("actively_editing"), "afterend");
             console.log("is focus on the new object?", $(":focus"));
-            $(":focus").addClass("may_select");
+      //      $(":focus").addClass("may_select");
+            console.log("menu place 4");
+
             edit_menu_for($(":focus").attr("id"), "entering");
             document.getElementById("actively_editing").remove();
             console.log("just did display_new");
@@ -843,17 +855,20 @@ function main_menu_navigator(e) {  // we are not currently editing
 
                $(this_menu).parent().removeClass("may_select");
                console.log("item to get next focus",$("#edit_menu_holder").parent().next('[data-editable="99"]'), "which has length", $("#edit_menu_holder").parent().next('[data-editable="99"]').length);
-     //////          if(!$(this_menu).parent().next('[data-editable="99"]').length) { //at the end of a block, so new menu goes at end
                if(!$(this_menu).parent().next().length) { //at the end of a block, so new menu goes at end
                //    e.preventDefault();
                    var enclosing_block = $(this_menu).parent().parent()[0];
                    console.log("at the end of", enclosing_block, "with id", enclosing_block.id);
                    this_menu.remove();
+            console.log("menu place 5");
+
                    edit_menu_for(enclosing_block.getAttribute("id"), "leaving");
                    console.log("focus is on",  $(":focus"));
-                   enclosing_block.classList.add("may_leave");
+              //     enclosing_block.classList.remove("may_select");
+              //     enclosing_block.classList.add("may_leave");
                //    document.getElementById('choose_current').focus();
-                   document.getElementById('enter_choice').focus();
+               //    document.getElementById('enter_choice').focus();
+               //    document.getElementById('edit_menu_holder').focus();
                    console.log("document.getElementById('enter_choice')", document.getElementById('enter_choice'), $(":focus"));
                    return
                 }
@@ -884,8 +899,10 @@ function main_menu_navigator(e) {  // we are not currently editing
        // and add the option to edit the next object
        if (!document.getElementById('edit_menu_holder')) {  // we are not already navigating a menu
     //       e.preventDefault();
+            console.log("menu place 6");
+
            edit_menu_for(document.activeElement.id);        // so create one
-           $(":focus").addClass("may_select");
+    //       $(":focus").addClass("may_select");
            console.log("element with fcous is", $(":focus"));
            console.log("putting focus on", document.getElementById('edit_menu_holder'));
            document.getElementById('edit_menu_holder').focus();
@@ -905,9 +922,9 @@ function main_menu_navigator(e) {  // we are not currently editing
         next_menu_item.focus();
       }
 
-//    } else if (e.code == "Tab" && prev_char.code == "ShiftLeft") {  // Shift-Tab to prevous object
     } else if ((e.code == "Tab" && e.shiftKey) || e.code == "ArrowUp") {  // Shift-Tab to prevous object
      // recopied code:  consolidate
+        e.preventDefault();
         if(this_choice = document.getElementById('enter_choice')) {
            console.log("there already is an 'enter_choice'");
            // there are two cases:  1) we are at the top of a block (and so may enter it or add near it, or move on)
@@ -917,17 +934,19 @@ function main_menu_navigator(e) {  // we are not currently editing
                
                $(this_menu).parent().removeClass("may_select");
                console.log("item to get next focus",$("#edit_menu_holder").parent().prev('[data-editable="99"]'), "which has length", $("#edit_menu_holder").parent().next('[data-editable="99"]').length);
-    ////////           if(!$(this_menu).parent().prev('[data-editable="99"]').length) { //at the start of a block, so go up one
                if(!$(this_menu).parent().prev().length) { //at the start of a block, so go up one
                //    e.preventDefault(); 
                    var enclosing_block = $(this_menu).parent().parent()[0]; 
                    console.log("at the end of", enclosing_block, "with id", enclosing_block.id);
                    this_menu.remove();
+            console.log("menu place 7");
+
                    edit_menu_for(enclosing_block.getAttribute("id"), "entering");
                    console.log("focus is on",  $(":focus"));
-                   enclosing_block.classList.add("may_select");
+         //          enclosing_block.classList.add("may_select");
                //    document.getElementById('choose_current').focus();
-                   document.getElementById('enter_choice').focus();
+                //   document.getElementById('enter_choice').focus();
+                //   document.getElementById('edit_menu_holder').focus();
                    console.log("document.getElementById('enter_choice')", document.getElementById('enter_choice'), $(":focus"));
                    return
                 }
@@ -937,11 +956,13 @@ function main_menu_navigator(e) {  // we are not currently editing
                    $(this_menu).parent().prevAll('[data-editable="99"]')[0].focus();
                    this_menu.remove()
                    // copied.  consolidate
+            console.log("menu place 8");
+
                    edit_menu_for(document.activeElement.id);        // so create one
-                   $(":focus").addClass("may_select");
+        //           $(":focus").addClass("may_select");
                    console.log("element with fcous is", $(":focus"));
                    console.log("putting focus on", document.getElementById('edit_menu_holder'));
-                   document.getElementById('edit_menu_holder').focus();
+            //       document.getElementById('edit_menu_holder').focus();
                    console.log("element with fcous is", $(":focus"));
                    console.log("are we done tabbing to the next item?");
 
@@ -969,9 +990,11 @@ function main_menu_navigator(e) {  // we are not currently editing
                this_menu.remove();
                // put  menu on the item at the top of the block_we_are_reentering
                    // this is a repeat of a Tab case, so consolidate
+            console.log("menu place 9");
+
                edit_menu_for(document.activeElement.id);
-               $(":focus").addClass("may_select");
-               document.getElementById('edit_menu_holder').focus();
+      //         $(":focus").addClass("may_select");
+         //      document.getElementById('edit_menu_holder').focus();
                return
 
             } else {
@@ -1027,9 +1050,11 @@ function main_menu_navigator(e) {  // we are not currently editing
                 $(object_to_be_entered).children('[data-editable="99"]')[0].focus();
                // put  menu on the item at the top of the block_we_are_reentering
                    // this is a repeat of a Tab case, so consolidate
+            console.log("menu place 10");
+
                 edit_menu_for(document.activeElement.id);
-                $(":focus").addClass("may_select");
-                document.getElementById('edit_menu_holder').focus();
+       //         $(":focus").addClass("may_select");
+          //      document.getElementById('edit_menu_holder').focus();
                 return
             // consolidate leave/stay ?
 //  the leave/stay is now handles by Tab, so delete the next couple things
@@ -1086,15 +1111,18 @@ function main_menu_navigator(e) {  // we are not currently editing
                     alert("don't yet know about " + new_object_type);
                     document.getElementById('edit_menu_holder').parentElement.focus();
                     document.getElementById('edit_menu_holder').remove();
+            console.log("menu place 11");
+
                     edit_menu_for(document.activeElement.id);
             // this should be done automatically by edit_menu_for()
-                    document.getElementById('edit_menu_holder').focus();
+            //        document.getElementById('edit_menu_holder').focus();
                 }
             }
 
         }
     }  else if (e.code == "ArrowUp") {
         // copied from Tab, so consolidate
+        console.log("saw an",e.code);
         current_active_menu_item = document.getElementById('choose_current');
         next_menu_item = current_active_menu_item.previousSibling;
         console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
@@ -1121,6 +1149,8 @@ function main_menu_navigator(e) {  // we are not currently editing
             } else {  // shoudl be the div#edit_menu_holder
                 current_object_to_edit = document.getElementById('edit_menu_holder').parentNode;
                 document.getElementById('edit_menu_holder').remove();
+            console.log("menu place 12");
+
                 edit_menu_for(current_object_to_edit.id);
                  // just put the entering option
             }
@@ -1130,8 +1160,10 @@ function main_menu_navigator(e) {  // we are not currently editing
             console.log("parent_object_to_edit", parent_object_to_edit);
             document.getElementById('edit_menu_holder').remove();
             current_object_being_edited.classList.remove("may_select");
+            console.log("menu place 13");
+
             edit_menu_for(parent_object_to_edit.id);
-            parent_object_to_edit.classList.add("may_select");
+  //          parent_object_to_edit.classList.add("may_select");
         }
     } else if ((key_hit = e.code.toLowerCase()) != e.code.toUpperCase()) {  //  supposed to check if it is a letter
         key_hit = key_hit.substring(3);  // remove forst 3 characters, i.e., "key"
