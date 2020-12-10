@@ -145,7 +145,7 @@ function standard_title_form(object_type) {
     return title_form
 }
 
-function menu_options_for(COMPONENT, level="inner") {
+function menu_options_for(COMPONENT, level) {
      var menu_for;
      if (level == "base") { menu_for = base_menu_for }
      else { menu_for = inner_menu_for }
@@ -215,7 +215,7 @@ function top_menu_options_for(this_obj) {
     return this_list
 }
 
-function edit_menu_for(this_obj_id, motion="entering") {
+function edit_menu_for(this_obj_id, motion) {
     console.log("make edit menu", motion, "for", this_obj_id);
 
     if (motion == "entering") {
@@ -327,10 +327,31 @@ function container_for_editing(obj_type) {
     return this_content_container
 }
 
-function edit_in_place(obj, is_new=false) {
+function edit_in_place(obj, new_object_description) {
+
+// a new_object looks like [type, parent, sibling, position]
 
 // fix this so that we can delete container_for_editing
+    if (new_object_description) {
+                  // first insert a placeholder to edit-in-place
+        var new_id = randomstring();
+        var edit_placeholder = document.createElement('span');
+        edit_placeholder.setAttribute('id', new_id);
+        var relative_placement = "beforebegin";
+        if (new_object_description[2] == "after") { relative_placement = "afterend" }
+        document.getElementById(new_object_description[1]).insertAdjacentElement(relative_placement, edit_placeholder);
+        obj = edit_placeholder;
 
+                  // then create the empty internalSource for the new object
+        new_tag = new_object_description[0];
+        new_source = {"xml:id": new_id, "permid": "", "ptxtag": new_tag, "title": ""}
+        if (editing_container_for["theorem-like"].includes(new_tag)) {
+            new_source["statement"] = "";
+            new_source["proof"] = ""
+        }  else {   // note: not all cases have been covered
+            new_source["content"] = ""
+        }
+    }
 
     thisID = obj.getAttribute("id");
     console.log("will edit in place", thisID);
@@ -453,7 +474,7 @@ function hide_new_source(ptx_src, src_type) {
 function save_new(objecttype) {
     // placeholder
 }
-function display_new(objectclass, objecttype, whereat, relativelocation="beforebegin") {
+function display_new(objectclass, objecttype, whereat, relativelocation) {
     if (objectclass == "theorem-like") {
         object_in_html = document.createElement("article");
         object_in_html.setAttribute("class", objectclass + " " + objecttype);
@@ -695,6 +716,8 @@ function insert_html_version(these_changes) {
         }
     }
     location_of_change.remove();
+    return object_as_html  // the most recently added object, which we may want to
+                           // do something, like add an editing menu
 }
 
 function save_current_editing() {
@@ -802,16 +825,19 @@ function local_editing_action(e) {
     } else if (e.code == "Escape") {
             e.preventDefault();
             these_changes = assemble_internal_version_changes();
-            insert_html_version(these_changes);
+            final_added_object = insert_html_version(these_changes);
+            edit_menu_for(final_added_object.id, "entering");
             save_current_editing()
     } else if (e.code == "Enter") {
         console.log("saw a Ret");
     //    e.preventDefault();
         if (prev_char.code == "Enter" && prev_prev_char.code == "Enter") {
+  // same as ESC above:  consolidate
             console.log("need to save");
             e.preventDefault();
             these_changes = assemble_internal_version_changes();
-            insert_html_version(these_changes);
+            final_added_object = insert_html_version(these_changes);
+            edit_menu_for(final_added_object.id, "entering");
             save_current_editing()
         }
     } else {
@@ -888,7 +914,7 @@ function main_menu_navigator(e) {  // we are not currently editing
     //       e.preventDefault();
             console.log("menu place 6");
 
-           edit_menu_for(document.activeElement.id);        // so create one
+           edit_menu_for(document.activeElement.id, "entering");        // so create one
     //       $(":focus").addClass("may_select");
            console.log("element with fcous is", $(":focus"));
            console.log("putting focus on", document.getElementById('edit_menu_holder'));
@@ -945,7 +971,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                    // copied.  consolidate
             console.log("menu place 8");
 
-                   edit_menu_for(document.activeElement.id);        // so create one
+                   edit_menu_for(document.activeElement.id, "entering");        // so create one
         //           $(":focus").addClass("may_select");
                    console.log("element with fcous is", $(":focus"));
                    console.log("putting focus on", document.getElementById('edit_menu_holder'));
@@ -979,7 +1005,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                    // this is a repeat of a Tab case, so consolidate
             console.log("menu place 9");
 
-               edit_menu_for(document.activeElement.id);
+               edit_menu_for(document.activeElement.id, "entering");
       //         $(":focus").addClass("may_select");
          //      document.getElementById('edit_menu_holder').focus();
                return
@@ -1039,7 +1065,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                    // this is a repeat of a Tab case, so consolidate
             console.log("menu place 10");
 
-                edit_menu_for(document.activeElement.id);
+                edit_menu_for(document.activeElement.id, "entering");
        //         $(":focus").addClass("may_select");
           //      document.getElementById('edit_menu_holder').focus();
                 return
@@ -1099,7 +1125,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                     document.getElementById('edit_menu_holder').remove();
             console.log("menu place 11");
 
-                    edit_menu_for(document.activeElement.id);
+                    edit_menu_for(document.activeElement.id, "entering");
             // this should be done automatically by edit_menu_for()
             //        document.getElementById('edit_menu_holder').focus();
                 }
@@ -1137,7 +1163,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                 document.getElementById('edit_menu_holder').remove();
             console.log("menu place 12");
 
-                edit_menu_for(current_object_to_edit.id);
+                edit_menu_for(current_object_to_edit.id, "entering");
                  // just put the entering option
             }
         } else {  // we are at the top of an object and have not decided to edit it
@@ -1148,7 +1174,7 @@ function main_menu_navigator(e) {  // we are not currently editing
             current_object_being_edited.classList.remove("may_select");
             console.log("menu place 13");
 
-            edit_menu_for(parent_object_to_edit.id);
+            edit_menu_for(parent_object_to_edit.id, "entering");
   //          parent_object_to_edit.classList.add("may_select");
         }
     } else if ((key_hit = e.code.toLowerCase()) != e.code.toUpperCase()) {  //  supposed to check if it is a letter
