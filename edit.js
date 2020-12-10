@@ -37,7 +37,8 @@ var result;
 var menu_neutral_background = "#ddb";
 var menu_active_background = "#fdd";
 
-function randomstring(len=10) {
+function randomstring(len) {
+    if (!len) { len = 10 }
     return (Math.random() + 1).toString(36).substring(2,len)
 }
 
@@ -329,21 +330,24 @@ function container_for_editing(obj_type) {
 
 function edit_in_place(obj, new_object_description) {
 
-// a new_object looks like [type, parent, sibling, position]
+// a new_object looks like [type, sibling, position]
 
 // fix this so that we can delete container_for_editing
     if (new_object_description) {
+        console.log("new_object_description", new_object_description);
                   // first insert a placeholder to edit-in-place
+        new_tag = new_object_description[0];
         var new_id = randomstring();
-        var edit_placeholder = document.createElement('span');
+        var edit_placeholder = document.createElement(new_tag);
         edit_placeholder.setAttribute('id', new_id);
+        var new_objects_sibling = new_object_description[1];
         var relative_placement = new_object_description[2];
    //     if (new_object_description[2] == "after") { relative_placement = "afterend" }
-        document.getElementById(new_object_description[1]).insertAdjacentElement(relative_placement, edit_placeholder);
+   //     document.getElementById(this_parent_id).insertAdjacentElement(relative_placement, edit_placeholder);
+        new_objects_sibling.insertAdjacentElement(relative_placement, edit_placeholder);
         obj = edit_placeholder;
 
                   // then create the empty internalSource for the new object
-        new_tag = new_object_description[0];
         new_source = {"xml:id": new_id, "permid": "", "ptxtag": new_tag, "title": ""}
         if (editing_container_for["theorem-like"].includes(new_tag)) {
             new_source["statement"] = "";
@@ -351,6 +355,25 @@ function edit_in_place(obj, new_object_description) {
         }  else {   // note: not all cases have been covered
             new_source["content"] = ""
         }
+                  // and describe where it goes
+  //      var parent_id = new_object_description[1];
+        var sibling_id = new_objects_sibling.id;
+        var parent_description = internalSource[sibling_id]["parent"];  
+        new_source["parent"] = parent_description;
+        internalSource[new_id] = new_source
+   // we have made the new object, but we still have to put it in the correct location
+
+        var the_current_arrangement = internalSource[parent_description[0]][parent_description[1]];
+        console.log("         the_current_arrangement", the_current_arrangement);
+
+        var object_neighbor = new RegExp('(<&>' + sibling_id + '<;>)');
+        var neighbor_with_new = '$1' + '\n<&>' + new_id + '<;>'   //if the new goes after the old
+        if (relative_placement == "beforebegin") {  neighbor_with_new = '<&>' + new_id + '<;>\n' + '$1' }
+        new_arrangement = the_current_arrangement.replace(object_neighbor, neighbor_with_new);
+        internalSource[parent_description[0]][parent_description[1]] = new_arrangement;
+        console.log("         new_arrangement", new_arrangement);
+        console.log("tried to insert", new_id, "next to", sibling_id, "in", the_current_arrangement)
+ 
     }
 
     thisID = obj.getAttribute("id");
@@ -414,7 +437,7 @@ var internalSource = {  // currently the key is the HTML id
    "cak": {"xml:id": "", "permid": "cak", "ptxtag": "p", "title": "", "parent": ["akX","content"],
            "content": "<&>357911<;>: separate - detached - distinct - abstract."},
    "akX": {"xml:id": "", "permid": "akX", "ptxtag": "blockquote", "title": "", "parent": ["hPw","content"],
-           "content": "<&>357911<;>\n<&>PLS<;>\n<&>vTb<;>\n<&>cak<;>"},
+           "content": "<&>PLS<;>\n<&>vTb<;>\n<&>cak<;>"},
    "UvL": {"xml:id": "", "permid": "UvL", "ptxtag": "p", "title": "","parent": ["hPw","content"],
            "content": "    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n <ellipsis/>.\n Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n What sort of problems?\n Okay, those that involve numbers,\n functions, lines, triangles,\n <ellipsis/>.\n Whatever your conception of what mathematics is,\n try applying the concept of <q>discrete</q> to it, as defined above.\n Some math fundamentally deals with <em>stuff</em>\n that is individually separate and distinct."},
 //           "content": '246810'},
@@ -1109,9 +1132,10 @@ function main_menu_navigator(e) {  // we are not currently editing
                     var before_after = $("#edit_menu_holder > #edit_menu > .chosen").attr("data-location");
               //      if (before_after == "before") { new_location = "beforebegin" }
               //      else if (before_after == "after") { new_location = "afterend" }
-                    object_near_new_object.insertAdjacentElement(before_after, container_for_editing(new_object_type));
+      /// /// ///              object_near_new_object.insertAdjacentElement(before_after, container_for_editing(new_object_type));
+                edit_in_place("", [new_object_type, object_near_new_object, before_after]);
            //     document.getElementById('starting_point_for_editing').focus();
-                    document.querySelectorAll('[class~="starting_point_for_editing"]')[0].focus();
+             //////       document.querySelectorAll('[class~="starting_point_for_editing"]')[0].focus();
      //           object_near_new_object.focus();
                     object_near_new_object.classList.remove("may_select");
                     document.getElementById('edit_menu_holder').remove();
