@@ -208,8 +208,8 @@ function top_menu_options_for(this_obj) {
     var this_object_type = this_obj.tagName;   //  needs to examine other attributes and then look up a reasonable name
     var this_list = '<li tabindex="-1" id="choose_current" data-env="p" data-action="edit">Edit ' + this_object_type + '</li>';
     this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_object_type + '</li>';
-    this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="before">Insert before<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
-    this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="after">Insert after<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+    this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="beforebegin">Insert before<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+    this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="afterend">Insert after<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
     this_list += '<li tabindex="-1" data-env="' + this_object_type + '">Metadata<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
     this_list += '<li tabindex="-1" data-env="' + this_object_type + '">Move or delete<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
     return this_list
@@ -337,8 +337,8 @@ function edit_in_place(obj, new_object_description) {
         var new_id = randomstring();
         var edit_placeholder = document.createElement('span');
         edit_placeholder.setAttribute('id', new_id);
-        var relative_placement = "beforebegin";
-        if (new_object_description[2] == "after") { relative_placement = "afterend" }
+        var relative_placement = new_object_description[2];
+   //     if (new_object_description[2] == "after") { relative_placement = "afterend" }
         document.getElementById(new_object_description[1]).insertAdjacentElement(relative_placement, edit_placeholder);
         obj = edit_placeholder;
 
@@ -571,8 +571,8 @@ function assemble_internal_version_changes() {
                 this_object_internal["permid"] = "";
                 this_object_internal["parent"] = parent_and_location;
                 console.log("need to add paragraph",this_object_label, "inside", this_arrangement_of_objects, "after (or after after)", prev_id);
- //   the_ans = the_ans.replace(/(^|\s|-)\$([^\$\f\r\n]+)\$(\s|\.|,|;|:|\?|!|-|$)/g, "$1\\($2\\)$3");
 
+                // put the new p after the previous p in the string describing the neighboring contents
                 var object_before = new RegExp('(<&>' + prev_id + '<;>)');
                 this_arrangement_of_objects = this_arrangement_of_objects.replace(object_before, '$1' + '\n<&>' + this_object_label + '<;>');
                 prev_id = this_object_label;
@@ -625,9 +625,7 @@ function assemble_html_changes(ids_that_changed) {
             object_as_html.setAttribute("data-editable", 99);
             object_as_html.setAttribute("tabindex", -1);
             object_as_html.setAttribute("id", randomstring());
-     //       object_as_html.setAttribute("class", "just_added");
             object_as_html.innerHTML = ptx_to_html(paragraph_content_list[j]);
-     //       document.getElementById('actively_editing').insertAdjacentElement('beforebegin', object_as_html);
             holder_of_object_being_edited.insertAdjacentElement('beforebegin', object_as_html);
         } 
         
@@ -1039,7 +1037,7 @@ function main_menu_navigator(e) {  // we are not currently editing
           else if (document.getElementById('choose_current').hasAttribute("data-location")) {
             var current_active_menu_item = document.getElementById('choose_current');
             console.log("location infro on",current_active_menu_item);
-            if (['before', 'after'].includes(current_active_menu_item.getAttribute("data-location"))) {
+            if (['beforebegin', 'afterend'].includes(current_active_menu_item.getAttribute("data-location"))) {
             //    $("#choose_current").parent().addClass("past");
                 current_active_menu_item.parentElement.classList.add("past");
                 current_active_menu_item.removeAttribute("id");
@@ -1109,10 +1107,9 @@ function main_menu_navigator(e) {  // we are not currently editing
                 if ( (new_object_type_parent in editing_container_for) || (new_object_type in editing_container_for) ) {
                     object_near_new_object = document.getElementById('edit_menu_holder').parentElement;
                     var before_after = $("#edit_menu_holder > #edit_menu > .chosen").attr("data-location");
-     //           alert("attempting to add " + new_object_type + " " + before_after + " " + object_near_new_object.tagName);
-                    if (before_after == "before") { new_location = "beforebegin" }
-                    else if (before_after == "after") { new_location = "afterend" }
-                    object_near_new_object.insertAdjacentElement(new_location, container_for_editing(new_object_type));
+              //      if (before_after == "before") { new_location = "beforebegin" }
+              //      else if (before_after == "after") { new_location = "afterend" }
+                    object_near_new_object.insertAdjacentElement(before_after, container_for_editing(new_object_type));
            //     document.getElementById('starting_point_for_editing').focus();
                     document.querySelectorAll('[class~="starting_point_for_editing"]')[0].focus();
      //           object_near_new_object.focus();
