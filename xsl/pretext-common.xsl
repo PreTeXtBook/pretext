@@ -169,12 +169,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- For example, "2" would mean subsections of a book are unnumbered -->
 <!-- N.B.: the levels above cannot be numerically larger              -->
 <xsl:param name="numbering.maximum.level" select="''" />
-<!-- Image files, media files and knowls are placed in directories    -->
-<!-- The defaults are relative to wherever principal output goes      -->
-<!-- These can be overridden at the command-line or in customizations -->
-<xsl:param name="directory.images" select="'images'" />
-<xsl:param name="directory.media"  select="'media'" />
-<xsl:param name="directory.knowls" select="'knowls'" />
 <!-- Pointers to realizations of the actual document -->
 <xsl:param name="address.html" select="''" />
 <xsl:param name="address.pdf" select="''" />
@@ -490,22 +484,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "no choice" by the author.                          -->
 <xsl:variable name="document-id">
     <xsl:value-of select="$docinfo/document-id"/>
-</xsl:variable>
-
-<!-- This is used to build standalone pages.  Despite looking   -->
-<!-- like a property of the HTML conversion, it gets used in    -->
-<!-- the LaTeX conversion to form QR codes and it is discovered -->
-<!-- by the "extract-interactive.xsl" stylesheet, which only    -->
-<!-- imports this stylesheet.  So this needs to be a global     -->
-<!-- variable, defined here.                                    -->
-<!--                                                            -->
-<!-- Eventually a stringparam should preferentially override    -->
-<!-- this determination, so publishers can install the same     -->
-<!-- source on different servers.  It is in "docinfo" as a      -->
-<!-- convenience during development stages.                     -->
-<!-- NB: Presumed to not have a trailing slash                  -->
-<xsl:variable name="baseurl">
-    <xsl:value-of select="$docinfo/html/baseurl/@href"/>
 </xsl:variable>
 
 <!-- The new version can return to the generic version  -->
@@ -10429,21 +10407,11 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!-- 2017-07-05  top-level items that should have captions, but don't -->
     <!-- 2017-07-05  sidebyside items that do not have captions, so ineffective -->
     <!--  -->
+    <!-- 2015-02-08  naked tikz, asymptote, sageplot are no longer accomodated -->
+    <!-- 2015-02-20  tikz element is entirely abandoned -->
+    <!-- 2017-12-22  latex-image-code element is entirely abandoned -->
     <!--  -->
-    <!-- 2015-02-08  naked tikz, asymptote, sageplot are banned    -->
-    <!-- typically these would be in a figure, but not necessarily -->
-    <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//tikz[not(parent::image)]|$document-root//asymptote[not(parent::image)]|$document-root//sageplot[not(parent::image)]" />
-        <xsl:with-param name="date-string" select="'2015-02-08'" />
-        <xsl:with-param name="message" select="'&quot;tikz&quot;, &quot;asymptote&quot;, &quot;sageplot&quot;, elements must always be contained directly within an &quot;image&quot; element, rather than directly within a &quot;figure&quot; element'" />
-    </xsl:call-template>
-    <!--  -->
-    <!-- 2015-02-20  tikz is generalized to latex-image-code -->
-    <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//tikz" />
-        <xsl:with-param name="date-string" select="'2015-02-20'" />
-        <xsl:with-param name="message" select="'the &quot;tikz&quot; element is deprecated, convert to &quot;latex-image-code&quot; inside &quot;image&quot;'" />
-    </xsl:call-template>
+    <!-- Active deprecations follow -->
     <!--  -->
     <!-- 2015-03-13  paragraph is renamed more accurately to paragraphs           -->
     <!-- 2017-07-16  removed all backwards compatibility and added empty template -->
@@ -10613,10 +10581,11 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     </xsl:call-template>
     <!--  -->
     <!-- 2017-11-09  WeBWorK images now with widths as percentages, only on an enclosing sidebyside -->
+    <!-- 2020-11-04  One-panel sidebysides not necessary, so now only warn about old attributes     -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//webwork//image[@width or @height or @tex-size]" />
+        <xsl:with-param name="occurrences" select="$document-root//webwork//image[@height or @tex-size]" />
         <xsl:with-param name="date-string" select="'2017-11-09'" />
-        <xsl:with-param name="message" select="'an &quot;image&quot; within a &quot;webwork&quot; now has its size given by just a &quot;width&quot; attribute expressed as a percentage, including the percent sign (so in particular do not use &quot;height&quot; or &quot;tex-size&quot;).  Within &quot;webwork&quot;, the &quot;width&quot; needs to be given on an enclosing &quot;sidebyside&quot;'" />
+        <xsl:with-param name="message" select="'an &quot;image&quot; within a &quot;webwork&quot; now has its size given by just a &quot;width&quot; attribute expressed as a percentage, including the percent sign (so in particular do not use &quot;height&quot; or &quot;tex-size&quot;)'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-11-09  Assemblages have been rationalized, warn about captioned items -->
@@ -10645,13 +10614,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="$document-root//image/@copy" />
         <xsl:with-param name="date-string" select="'2017-12-21'" />
         <xsl:with-param name="message" select="'@copy on an &quot;image&quot; element is deprecated, possibly use the xinclude mechanism with common source code in an external file'" />
-    </xsl:call-template>
-    <!--  -->
-    <!-- 2017-12-22  latex-image-code to simply latex-image -->
-    <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//latex-image-code" />
-        <xsl:with-param name="date-string" select="'2017-12-22'" />
-        <xsl:with-param name="message" select="'the &quot;latex-image-code&quot; element has been replaced by the functionally equivalent &quot;latex-image&quot;'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2018-02-04  geogebra-applet gone -->
@@ -11017,6 +10979,36 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2020-11-04'" />
         <xsl:with-param name="message" select="'this is a temporary *warning*, which we plan to remove around 2021-01-30.  A &quot;sidebyside&quot; is no longer necessary to hold, or provide layout control, for single instances of &quot;image&quot;,  &quot;video&quot;,  &quot;tabular&quot;, and similar.  Try removing the &quot;sidebyside&quot; and moving any layout control onto the remaining object.'" />
     </xsl:call-template>
+    <!--  -->
+    <!-- 2020-11-22  LaTeX print option controlled by publisher file -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2020-11-22'" />
+        <xsl:with-param name="message" select="'the  latex.print  parameter has been replaced by the  latex/@print  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($latex.print != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2020-11-22  LaTeX sideness option controlled by publisher file -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2020-11-22'" />
+        <xsl:with-param name="message" select="'the  latex.sides  parameter has been replaced by the  latex/@sides  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($latex.sides != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2020-11-22  deprecate HTML base URL in docinfo -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$docinfo/html/baseurl/@href" />
+        <xsl:with-param name="date-string" select="'2020-11-22'" />
+        <xsl:with-param name="message" select="'the &quot;baseurl/@href&quot; element in the &quot;docinfo&quot; has been replaced and is now specified in the publisher file with &quot;html/baseurl/@href&quot;, as documented in the PreTeXt Guide.'"/>
+    </xsl:call-template>
+    <!-- 2020-11-23  directory.images replaced by publisher file specification -->
+    <!-- Reverse this soon, hot fix -->
+    <!--     
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2020-11-23'" />
+        <xsl:with-param name="message" select="'the  directory.images  parameter has been replaced by specification of two directories in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($directory.images != '')" />
+    </xsl:call-template>
+ -->
 </xsl:template>
 
 <!-- Miscellaneous -->

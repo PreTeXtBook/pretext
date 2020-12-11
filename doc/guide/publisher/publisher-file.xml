@@ -18,6 +18,55 @@
         <p>This chapter is reference material for the <term>publisher file</term>, whose employment is described in <xref ref="publisher-file"/>.</p>
     </introduction>
 
+    <section xml:id="publisher-file-latex">
+        <title>PDF (<latex/>) Options</title>
+        <idx>PDF publisher options</idx>
+        <idx>LaTeX publisher options</idx>
+        <idx><h>publisher options</h><h>PDF</h></idx>
+        <idx><h>publisher options</h><h>LaTeX</h></idx>
+
+        <introduction>
+            <p>These options affect the conversion to <latex/>, which can in turn be converted into <init>PDF</init>.
+            See <xref ref="pdf-print"/> for a more general overview of this conversion with more details.  This includes some existing options that will eventually migrate to the publisher file.</p>
+        </introduction>
+
+        <subsection xml:id="latex-print-options">
+            <title><latex/> Print Option</title>
+            <idx><h>print option</h><h>LaTeX, PDF</h></idx>
+            <idx><h>electronic option</h><h>LaTeX, PDF</h></idx>
+            <idx><h>LaTeX</h><h>print option</h></idx>
+            <idx><h>LaTeX</h><h>electronic option</h></idx>
+            <idx><h>PDF</h><h>print option</h></idx>
+            <idx><h>PDF</h><h>electronic option</h></idx>
+
+            <p>The conversion to <latex/> can produce a <init>PDF</init> optimized for print, or optimized for use electronically on a screen.  The<cd>
+                <cline>/publication/latex/@print</cline>
+            </cd>attribute can have the value <c>yes</c> to produce a print version, or the value <c>no</c> to produce an electronic version.  The default is an electronic version.  See <xref ref="electronic-or-print"/> for more detail.</p>
+        </subsection>
+
+        <subsection xml:id="latex-sides-options">
+            <title><latex/> Sides Option</title>
+            <idx><h>sides option</h><h>LaTeX, PDF</h></idx>
+            <idx><h>LaTeX</h><h>sides option</h></idx>
+            <idx><h>PDF</h><h>sides option</h></idx>
+
+            <p>The conversion to <latex/> can produce a <init>PDF</init> designed for printing on only one side of the page, or on both sides of the page.  The<cd>
+                <cline>/publication/latex/@sides</cline>
+            </cd>attribute can have the value <c>one</c> for a one-sided version, or the value <c>two</c> to produce a two-sided version.  The default depends on if the output is electronic (one-sided) or print (two-sided).  See <xref ref="print-sides"/> for more detail.</p>
+        </subsection>
+
+        <subsection xml:id="latex-asymptote-link-options">
+            <title><latex/> Asymptote Links</title>
+            <idx><h>Asymptote links</h><h>LaTeX, PDF</h></idx>
+            <idx><h>LaTeX</h><h>Asymptote links</h></idx>
+            <idx><h>PDF</h><h>Asymptote links</h></idx>
+
+            <p>The conversion to <latex/> can provide a link to an <init>HTML</init> version of each Asymptote graphic.  The<cd>
+                <cline>/publication/latex/asymptote/@links</cline>
+            </cd>attribute can have the value <c>yes</c> to produce links, or the value <c>no</c> to not create links.  If the base URL has been set (<xref ref="online-base-url"/>), then the default is <c>yes</c> and this feature is enabled.  See  <xref ref="latex-asymptote-links"/> for more detail.</p>
+        </subsection>
+    </section>
+
     <section xml:id="publisher-file-online">
         <title>Online (HTML) Options</title>
         <idx>HTML publisher options</idx>
@@ -39,6 +88,15 @@
             </ul>Setting these attributes to non-empty strings is the signal to add the relevant code to each of the pages of your HTML output.  See <xref ref="online-analytics"/> for more.</p>
         </subsection>
 
+        <subsection xml:id="online-baseurl">
+            <title>HTML Base URL</title>
+            <idx><h>base url</h><h>HTML output</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/baseurl/@href</cline>
+            </cd>attribute may be given as a complete <init>URL</init> for the top-level of where <init>HTML</init> output is hosted.  Of course, this may be different for different publishers.  The value is a directory, and so should end with a slash (path separator).  See <xref ref="online-base-url"/> for reasons why you might want to specify this.</p>
+        </subsection>
+
         <subsection xml:id="online-calculator">
             <title>HTML Embedded Calculator</title>
             <idx><h>calculator</h><h>embedded in <init>HTML</init></h></idx>
@@ -55,7 +113,7 @@
                         <li><c>none</c></li>
                     </ul></p>
                 </li>
-            </ul>  See <xref ref="online-embedded-calculator" text="title"/> in <xref ref="html-publisher-options"/> for more.</p>
+            </ul>  See <xref ref="online-embedded-calculator"/> for more.</p>
         </subsection>
 
         <subsection xml:id="online-index-page">
@@ -67,7 +125,7 @@
                 <cline>/publication/html/index-page</cline>
             </cd>element can have the following attribute:<ul>
                 <li><attr>ref</attr>: the <attr>xml:id</attr> of a division which will be a complete page at whatever level the document is chunked (broken into smaller pages).</li>
-            </ul>An <c>index.html</c> page will be created which redirects immediately to this page.  Many webservers will serve this page when a <init>URL</init> stops with the enclosing directory.  So the Table of Contents (<tag>book</tag>, <tag>article</tag>) or the <tag>frontmatter</tag> are common choices.  See <xref ref="index-page" text="title"/> in <xref ref="html-publisher-options"/> for more.</p>
+            </ul>An <c>index.html</c> page will be created which redirects immediately to this page.  Many webservers will serve this page when a <init>URL</init> stops with the enclosing directory.  So the Table of Contents (<tag>book</tag>, <tag>article</tag>) or the <tag>frontmatter</tag> are common choices.  See <xref ref="index-page"/> for more.</p>
         </subsection>
 
         <subsection xml:id="online-platform-options">
@@ -121,7 +179,7 @@
                 <cline>/publication/html/video</cline>
             </cd>element can have the following attribute:<ul>
                 <li><attr>privacy</attr>: allowed values are <c>yes</c> or <c>no</c>.</li>
-            </ul>Setting this to yes (the default) prevents certain tracking cookies from being used. Currently only supported for videos from YouTube. See <xref ref="video-embedding" text="title"/> in <xref ref="html-publisher-options"/> for more.</p>
+            </ul>Setting this to yes (the default) prevents certain tracking cookies from being used. Currently only supported for videos from YouTube. See <xref ref="video-embedding"/> for more.</p>
         </subsection>
     </section>
 

@@ -179,10 +179,13 @@ def asymptote_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
                 shutil.copy2(asyout, dest_dir)
             else:
                 msg = [
-                'PTX:ERROR:   the Asymptote output {} was not built'.format(asyout),
-                'Perhaps your code has errors (try testing in the Asymptote web app).',
-                'Or your copy of Asymtote may precede version 2.66 that we expect.',
-                'Your Asymptote reports: "{}"'.format(asyversion)]
+                'PTX:WARNING: the Asymptote output {} was not built'.format(asyout),
+                '             1. Perhaps your code has errors (try testing in the Asymptote web app).',
+                '             2. Or your copy of Asymtote may precede version 2.66 that we expect.',
+                '                Not every image can be built in every possible format.',
+                '',
+                '                Your Asymptote reports its version within the following:',
+                '                {}'.format(asyversion)]
                 print('\n'.join(msg))
 
 
@@ -977,14 +980,12 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
 def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     import subprocess, shutil
+    import os  # chdir
     import os.path # join()
 
     suffix = 'png'
 
     _verbose('creating interactive previews from {} for placement in {}'.format(xml_source, dest_dir))
-
-    # see below, pageres-cli writes into current working directory
-    needs_moving = not( os.getcwd() == os.path.normpath(dest_dir) )
 
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-interactive.xsl')
@@ -1014,14 +1015,22 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     _debug("pageres executable: {}".format(pageres_executable))
     _debug("interactives identifiers: {}".format(interactives))
 
+    # pageres-cli writes into current working directory
+    # so change to temporary directory, and copy out
+    owd = os.getcwd()
+    os.chdir(tmp_dir)
+
     # Start after the leading base URL sneakiness
     for preview in interactives[1:]:
         input_page = os.path.join(baseurl, preview + '.html')
+        page_with_fragment = ''.join([input_page, '#', preview])
         selector_option = '--selector=#' + preview
         # file suffix is provided by pageres
         format_option = '--format=' + suffix
         filename_option = '--filename=' + preview + '-preview'
         filename = preview + '-preview.' + suffix
+        page_with_fragment = ''.join([input_page, '#', preview])
+        _verbose('converting {} to {}'.format(page_with_fragment, filename))
 
         # pageres invocation
         # Overwriting files prevents numbered versions (with spaces!)
@@ -1040,10 +1049,107 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         _debug("pageres command: {}".format(cmd))
 
         subprocess.call(cmd)
-        # 2018-04-27  CLI pageres only writes into current directory
-        # and it is an error to move a file onto itself, so we are careful
-        if needs_moving:
-            shutil.move(filename, dest_dir)
+        shutil.copy2(filename, dest_dir)
+
+    # restore working directory
+    os.chdir(owd)
+
+
+############
+# All Images
+############
+
+def all_images(xml, pub_file, stringparams, xmlid_root):
+    """All images, in all necessary formats, in subdirectories, for production of any project"""
+    import os  # mkdir()
+    import os.path  # join(), isdir()
+    import lxml.etree as ET
+
+    # parse source, no harm to assume
+    # xinclude modularization is necessary
+    src_tree = ET.parse(xml)
+    src_tree.xinclude()
+
+    # explore source for various PreTeXt elements needing assistance
+    # no element => empty list => boolean is False
+    has_latex_image = bool(src_tree.xpath("/pretext/*[not(docinfo)]//latex-image"))
+    has_asymptote = bool(src_tree.xpath("/pretext/*[not(docinfo)]//asymptote"))
+    has_sageplot = bool(src_tree.xpath("/pretext/*[not(docinfo)]//sageplot"))
+    has_youtube = bool(src_tree.xpath("/pretext/*[not(docinfo)]//video[@youtube]"))
+    has_preview = bool(src_tree.xpath("/pretext/*[not(docinfo)]//interactive[not(@preview)]"))
+
+    # debugging comment/uncomment or True/False
+    # has_latex_image = False
+    # has_asymptote = False
+    # has_sageplot = False
+    # has_youtube = False
+    # has_preview = False
+
+    # get the target output directory from the publisher file
+    # this is *required* so fail if pieces are missing
+    if not(pub_file):
+        msg = ' '.join(["creating all images requires a directory specification",
+                        "in a publisher file, and no publisher file has been given"])
+        raise ValueError(msg)
+    generated_dir, data_dir, _ = get_image_directories(xml, pub_file)
+    # correct attribute and not a directory gets caught earlier
+    # but could have publisher file and bad elements/attributes
+    if not(generated_dir):
+        msg = ' '.join(["creating all images requires a directory specified in the",
+                        "publisher file in the attribute /publication/source/@generated-images" ])
+        raise ValueError(msg)
+
+    # first stanza has code comments, and subsequent follow this
+    # model so only comments are for important distinctions
+
+    # latex-image
+    #
+    if has_latex_image:
+        # empty last part implies directory separator
+        dest_dir = os.path.join(generated_dir, 'latex-image', '')
+        # make directory if not already present
+        if not(os.path.isdir(dest_dir)):
+            os.mkdir(dest_dir)
+        latex_image_conversion(xml, pub_file, stringparams, xmlid_root, data_dir, dest_dir, 'pdf')
+        latex_image_conversion(xml, pub_file, stringparams, xmlid_root, data_dir, dest_dir, 'svg')
+
+    # Asymptote
+    #
+    if has_asymptote:
+        dest_dir = os.path.join(generated_dir, 'asymptote', '')
+        if not(os.path.isdir(dest_dir)):
+            os.mkdir(dest_dir)
+        asymptote_conversion(xml, pub_file, stringparams, xmlid_root, dest_dir, 'pdf')
+        asymptote_conversion(xml, pub_file, stringparams, xmlid_root, dest_dir, 'html')
+
+    # Sage plots
+    #
+    if has_sageplot:
+        dest_dir = os.path.join(generated_dir, 'sageplot', '')
+        if not(os.path.isdir(dest_dir)):
+            os.mkdir(dest_dir)
+        # for 3D images might produce a single PNG instead of an SVG and a PDF
+        # conversions look for this PNG as a fallback absent SVG or PDF
+        sage_conversion(xml, pub_file, stringparams, xmlid_root, dest_dir, 'pdf')
+        sage_conversion(xml, pub_file, stringparams, xmlid_root, dest_dir, 'svg')
+
+    # YouTube previews
+    #
+    if has_youtube:
+        dest_dir = os.path.join(generated_dir, 'youtube', '')
+        if not(os.path.isdir(dest_dir)):
+            os.mkdir(dest_dir)
+        # no format, they are what they are (*.jpg)
+        youtube_thumbnail(xml, pub_file, stringparams, xmlid_root, dest_dir)
+
+    # Previews (headless screenshots)
+    #
+    if has_preview:
+        dest_dir = os.path.join(generated_dir, 'preview', '')
+        if not(os.path.isdir(dest_dir)):
+            os.mkdir(dest_dir)
+        # no format, they are what they are (*.png)
+        preview_images(xml, pub_file, stringparams, xmlid_root, dest_dir)
 
 
 #####################################
@@ -1613,21 +1719,17 @@ def copy_data_directory(source_file, data_dir, tmp_dir):
     shutil.copytree(data_dir, destination_root)
 
 def get_temporary_directory():
-    """Create scratch directory and return a fully-qualified filename"""
-    import tempfile # gettempdir()
-    import os       # times(), makedirs()
-    import os.path  # join()
+    """Create, record, and return a scratch directory"""
+    import tempfile #  mkdtemp()
+    global _temps   #  cache of temporary directories
 
-    # TODO: condition on debugging switch to
-    # make self-cleaning temporary directories
-
-    # https://stackoverflow.com/questions/847850/
-    # cross-platform-way-of-getting-temp-directory-in-python
-    # TODO: convert hash value to unsigned hex?
-    # t = os.path.join(tempfile.gettempdir(), 'pretext{}'.format(hash(os.times())))
-    # os.makedirs(t)
-    # return t
-    return tempfile.mkdtemp()
+    temp_dir = tempfile.mkdtemp()
+    # Register the directory for cleanup at the end of successful
+    # execution iff the verbosity is set to level 2 ("debug")
+    # So errors, or requesting gross debugging info, will leave the
+    # directories behind for inspection, otherwise they get removed
+    _temps.append(temp_dir)
+    return temp_dir
 
 def get_output_filename(xml, out_file, dest_dir, suffix):
     """Formulate a filename for single-file output"""
@@ -1640,6 +1742,94 @@ def get_output_filename(xml, out_file, dest_dir, suffix):
     # split off source filename, replace suffix
     derivedname = os.path.splitext(os.path.split(xml)[1])[0]  + suffix
     return os.path.join(dest_dir, derivedname)
+
+def release_temporary_directories():
+    """Release scratch directories unless requesting debugging info"""
+    import shutil #  rmtree()
+    global _temps #  cache of temporary directories
+
+    _debug('Temporary directories left behind for inspection: {}'.format(_temps))
+    if _verbosity < 2:
+        for td in _temps:
+            _verbose('Removing temporary directory {}'.format(td))
+            # conservatively, raise exception on errors
+            shutil.rmtree(td, ignore_errors=False)
+
+def verify_input_directory(inputdir):
+    """Verify directory exists, or raise error.  Return absolute path"""
+    import os.path # isdir(), abspath()
+
+    _verbose('verifying and expanding input directory: {}'.format(inputdir))
+    if not(os.path.isdir(inputdir)):
+        raise ValueError('directory {} does not exist'.format(inputdir))
+    absdir = os.path.abspath(inputdir)
+    _verbose('input directory expanded to absolute path: {}'.format(absdir))
+    return absdir
+
+def get_image_directories(xml_source, pub_file):
+    """Returns triple: (generated, data, external) absolute paths, derived from publisher file"""
+    import os.path # isabs, split
+    import lxml.etree as ET  # XML source
+
+    # N.B. manage attributes carefully to distinguish
+    # absent (None) versus empty string value ('')
+
+    # Examine /publication/source element carefully for
+    # attributes which we code here for convenience
+    gen_attr = 'generated-images'
+    data_attr = 'data-images'
+    ext_attr = 'source-images'
+
+    # prepare for relative paths later
+    source_dir = get_source_path(xml_source)
+
+    # Unknown until running the gauntlet
+    generated = None
+    data = None
+    external = None
+    if pub_file:
+        # parse publisher file, xinclude is conceivable
+        # for multiple similar files with common parts
+        pub_tree = ET.parse(pub_file)
+        pub_tree.xinclude()
+        # "source" element => single-item list
+        # no "source" element => empty list => triple of None returned
+        element_list = pub_tree.xpath("/publication/source")
+        if element_list:
+            attributes_dict = element_list[0].attrib
+            # attribute absent => None
+            if gen_attr in attributes_dict.keys():
+                raw_path = attributes_dict[gen_attr]
+                if os.path.isabs(raw_path):
+                    abs_path = raw_path
+                else:
+                    abs_path = os.path.join(source_dir, raw_path)
+                generated = verify_input_directory(abs_path)
+            # attribute absent => None
+            if data_attr in attributes_dict.keys():
+                raw_path = attributes_dict[data_attr]
+                if os.path.isabs(raw_path):
+                    msg = ' '.join(['the directory path to data for images, given in the',
+                          'publisher file as "source/@{}" must be relative to',
+                          'the PreTeXt source file location, and not the absolute path "{}"'])
+                    raise ValueError(msg.format(data_attr, raw_path))
+                else:
+                    abs_path = os.path.join(source_dir, raw_path)
+                data = verify_input_directory(abs_path)
+            # attribute absent => None
+            if ext_attr in attributes_dict.keys():
+                raw_path = attributes_dict[ext_attr]
+                if os.path.isabs(raw_path):
+                    msg = ' '.join(['the directory path to source images, given in the',
+                          'publisher file as "source/@{}" must be relative to',
+                          'the PreTeXt source file location, and not the absolute path "{}"'])
+                    raise ValueError(msg.format(ext_attr, raw_path))
+                else:
+                    abs_path = os.path.join(source_dir, raw_path)
+                external = verify_input_directory(abs_path)
+    # triple of discovered paths
+    return (generated, data, external)
+
 
 ########
 #
@@ -1670,3 +1860,5 @@ set_ptx_path()
 # Parse configuration file once
 _config = None
 set_config_info()
+
+_temps = []

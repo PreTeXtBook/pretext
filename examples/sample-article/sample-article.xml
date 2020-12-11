@@ -139,10 +139,6 @@ the xsltproc executable.
         <html>
             <!-- Expects favicon/favicon-32x32.png, and favicon/favicon-16x16.png -->
             <favicon/>
-            <!-- There does not need to be a trailing / on the URL             -->
-            <!-- NB Eventually a publisher option will exist to overrule this, -->
-            <!-- so a given source can be installed more than one place        -->
-            <baseurl href="https://pretextbook.org/examples/sample-article/html" />
         </html>
         <!--
         With a <feedback> element, in the HTML version, you get a button
@@ -3210,13 +3206,14 @@ the xsltproc executable.
 
                 <sidebyside width="40%" margins="auto">
                     <!-- Tour example modified: figsize moved from show() into plot() -->
+                    <!-- 2020-11-18: converted an xrange() to an srange() -->
                     <figure xml:id="figure-sage-multigraph">
                         <caption>A Sage multigraph of a sentence</caption>
                         <image xml:id="sageplot-sentence-multigraph">
                             <sageplot>
                             stnc = 'I am a cool multiedge graph with loops'
                             g = DiGraph({}, loops=True, multiedges=True)
-                            for a,b in [(stnc[i], stnc[i+1]) for i in xrange(len(stnc)-1)]:
+                            for a,b in [(stnc[i], stnc[i+1]) for i in srange(len(stnc)-1)]:
                                g.add_edge(a, b, b)
                             g.plot(color_by_label=True, edge_style='solid', figsize=(8,8))
                             </sageplot>
@@ -6247,15 +6244,15 @@ the xsltproc executable.
                 <sidebyside margins="0%" width="30%">
                     <figure>
                         <caption>Medium Length</caption>
-                        <video xml:id="ups-promo-1" source="images/ups-visitor-guide-360"/>
+                        <video xml:id="ups-promo-1" source="images/ups-visitor-guide-360" preview="images/ups-promo-preview.jpg"/>
                     </figure>
                     <figure>
                         <caption>Short</caption>
-                        <video xml:id="ups-promo-2" source="images/ups-visitor-guide-360" start="4" end="10"/>
+                        <video xml:id="ups-promo-2" source="images/ups-visitor-guide-360" start="4" end="10" preview="images/ups-promo-preview.jpg"/>
                     </figure>
                     <figure>
                         <caption>A Really Long Caption That Will Wrap onto a New Line</caption>
-                        <video xml:id="ups-promo-3" source="images/ups-visitor-guide-360"/>
+                        <video xml:id="ups-promo-3" source="images/ups-visitor-guide-360" preview="images/ups-promo-preview.jpg"/>
                     </figure>
                 </sidebyside>
 
@@ -6266,15 +6263,15 @@ the xsltproc executable.
                     <sidebyside margins="0%" width="30%">
                         <figure>
                             <caption>Medium Length</caption>
-                            <video xml:id="ups-promo-4" source="images/ups-visitor-guide-360"/>
+                            <video xml:id="ups-promo-4" source="images/ups-visitor-guide-360" preview="images/ups-promo-preview.jpg"/>
                         </figure>
                         <figure>
                             <caption>Short</caption>
-                            <video xml:id="ups-promo-5" source="images/ups-visitor-guide-360" start="4" end="10"/>
+                            <video xml:id="ups-promo-5" source="images/ups-visitor-guide-360" start="4" end="10" preview="images/ups-promo-preview.jpg"/>
                         </figure>
                         <figure>
                             <caption>A Really Long Caption That Will Wrap onto a New Line</caption>
-                            <video xml:id="ups-promo-6" source="images/ups-visitor-guide-360"/>
+                            <video xml:id="ups-promo-6" source="images/ups-visitor-guide-360" preview="images/ups-promo-preview.jpg"/>
                         </figure>
                     </sidebyside>
                 </figure>
@@ -6287,7 +6284,7 @@ the xsltproc executable.
 
                 <figure>
                     <caption><articletitle>MOVE</articletitle>, by <url href="https://vimeo.com/rickmereki">Rick Mereki</url>, <c>vimeo.com/rickmereki</c></caption>
-                    <video xml:id="vimeo-move" vimeo="27246366" width="80%"/>
+                    <video xml:id="vimeo-move" vimeo="27246366" width="80%" preview="images/vimeo-move.jpg"/>
                 </figure>
 
                 <p>Now with an author-supplied poster.</p>
@@ -8968,7 +8965,7 @@ the xsltproc executable.
 
                 <p>All by itsef, with no layout specified, so showing the default size and placement.  Vivamus in congue massa. Morbi condimentum ac magna at accumsan. Vestibulum ac augue eu lorem semper gravida.</p>
 
-                <video xml:id="ups-promo-7" source="images/ups-visitor-guide-360"/>
+                <video xml:id="ups-promo-7" source="images/ups-visitor-guide-360" preview="images/ups-promo-preview.jpg"/>
 
                 <p>Vestibulum facilisis ligula lectus, ac tristique nisl aliquet non. Quisque ornare felis arcu. Vivamus suscipit diam eget mi cursus viverra.</p>
 
@@ -8976,7 +8973,7 @@ the xsltproc executable.
 
                 <p>Width set at 40%, so equal margins and thus centered.  Aenean faucibus augue tellus, et sollicitudin tortor finibus non. Maecenas semper dolor quis diam placerat, iaculis sollicitudin augue finibus. Vestibulum facilisis ligula lectus, ac tristique nisl aliquet non.</p>
 
-                <video xml:id="ups-promo-8" source="images/ups-visitor-guide-360" width="40%"/>
+                <video xml:id="ups-promo-8" source="images/ups-visitor-guide-360" width="40%" preview="images/ups-promo-preview.jpg"/>
 
                 <p>Vestibulum facilisis ligula lectus, ac tristique nisl aliquet non. Quisque ornare felis arcu. Vivamus suscipit diam eget mi cursus viverra.</p>
 
@@ -8984,7 +8981,7 @@ the xsltproc executable.
 
                 <p>Asymmetric margins of 20% and 40% given, implying 40% width, equal to previous instance.  Vivamus suscipit diam eget mi cursus viverra.</p>
 
-                <video xml:id="ups-promo-9" source="images/ups-visitor-guide-360" margins="20% 40%"/>
+                <video xml:id="ups-promo-9" source="images/ups-visitor-guide-360" margins="20% 40%" preview="images/ups-promo-preview.jpg"/>
 
                 <p>Vestibulum facilisis ligula lectus, ac tristique nisl aliquet non. Quisque ornare felis arcu. Vivamus suscipit diam eget mi cursus viverra.</p>
 
@@ -8993,7 +8990,7 @@ the xsltproc executable.
                 <p>As a plain component of a <tag>sidebyside</tag>.  Widths here are 20% and 30%, margins and gaps are automatic, default alignment on top edges.  Nulla pharetra imperdiet elit, in sodales nibh blandit ultricies. Maecenas efficitur ac felis ut pharetra.</p>
 
                 <sidebyside widths="20% 30%">
-                    <video xml:id="ups-promo-10" source="images/ups-visitor-guide-360"/>
+                    <video xml:id="ups-promo-10" source="images/ups-visitor-guide-360" preview="images/ups-promo-preview.jpg"/>
                     <video xml:id="pre-roll-countdown-10" youtube="Srmdij0CU1U"/>
                 </sidebyside>
 
@@ -9001,7 +8998,7 @@ the xsltproc executable.
 
                 <figure>
                     <caption>University of Puget Sound Promotional Video</caption>
-                    <video xml:id="ups-promo-11" source="images/ups-visitor-guide-360"/>
+                    <video xml:id="ups-promo-11" source="images/ups-visitor-guide-360" preview="images/ups-promo-preview.jpg"/>
                 </figure>
 
                 <p>Vestibulum facilisis ligula lectus, ac tristique nisl aliquet non. Quisque ornare felis arcu. Vivamus suscipit diam eget mi cursus viverra.</p>
@@ -9015,7 +9012,7 @@ the xsltproc executable.
 
                 <figure>
                     <caption>University of Puget Sound Promotional Video</caption>
-                    <video xml:id="ups-promo-12" source="images/ups-visitor-guide-360" margins="30% 60%"/>
+                    <video xml:id="ups-promo-12" source="images/ups-visitor-guide-360" margins="30% 60%" preview="images/ups-promo-preview.jpg"/>
                 </figure>
 
                 <p>Vestibulum facilisis ligula lectus, ac tristique nisl aliquet non. Quisque ornare felis arcu. Vivamus suscipit diam eget mi cursus viverra.</p>
@@ -9034,7 +9031,7 @@ the xsltproc executable.
                     </figure>
                     <figure>
                         <caption>University of Puget Sound Promotional Video</caption>
-                        <video xml:id="ups-promo-13" source="images/ups-visitor-guide-360"/>
+                        <video xml:id="ups-promo-13" source="images/ups-visitor-guide-360" preview="images/ups-promo-preview.jpg"/>
                     </figure>
                 </sidebyside>
 
@@ -9049,7 +9046,7 @@ the xsltproc executable.
                         </figure>
                         <figure xml:id="ups-video">
                             <caption>University of Puget Sound Promotional Video</caption>
-                            <video xml:id="ups-promo-14" source="images/ups-visitor-guide-360"/>
+                            <video xml:id="ups-promo-14" source="images/ups-visitor-guide-360" preview="images/ups-promo-preview.jpg"/>
                         </figure>
                     </sidebyside>
                 </figure>

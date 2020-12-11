@@ -79,9 +79,12 @@
 
         <p>A principal use of the <c>pretext/pretext</c> script is to isolate source code from <tag>latex-image</tag> sections, package them up as proper <c>*.tex</c> files, run <latex/> to make cropped <init>PDF</init> versions, and then convert these to other formats such as <init>SVG</init> or <init>PNG</init>.</p>
 
-        <p>Much of this activity happens in a temporary directory.  If you use the <c>-vv</c> switch described above, then one of the messages early in the output describing the initialization will be the name of this directory.  Looking to see what files end up there, and what those files contain, is often useful in determining the step where this toolchain fails, and maybe even why.</p>
+        <p>Much of this activity happens in a temporary directory, and it is similar for Asymptote images and other options of the script.  If you use the <c>-vv</c> switch described above, then these temporary directories will be noted in the debugging output requested, and a complete list will be the last line of output.   In this case, and if the script encounters an error prior to successful execution, then these directories will be left in place.  Looking to see what files end up there, and what those files contain, is often useful in determining the step where the script fails, and maybe even why.</p>
 
-        <p>Another option is to ask for the actual <c>*.tex</c> files as the result of a run.  This is accomplished with the <c>-f source</c> option when invoking <c>pretext</c>.  If the right packages or macros are not being employed in these files, this is an easy way to get at the source files for inspection and analysis.</p>
+        <p>With no chatter requested, or just progress indications (<c>-v</c>) these temporary directories will be cleaned out as the last part of successful execution.</p>
+
+        <p>Another option is to ask for the actual source files (<c>*.tex</c>, <c>*.asy</c>, etc.) as the output of a run.  This is accomplished with the <c>-f source</c> option when invoking <c>pretext/pretext</c>.  If the right packages or macros are not being employed in these files, this is an easy way to get at the source files for inspection and analysis, and is a good first check on problematic execution.</p>
+
     </section>
 
     <section xml:id="pretext-helpers">
@@ -107,11 +110,11 @@
 
         <p>A publisher file (<xref ref="publisher-file"/>) can be used to control various options that are independent of the authoring process, or for some conversions may be necessary.  Use the <c>-p</c> switch to specify this file.</p>
 
-        <p>Sometimes you might have need to pass stringparams to the pretext script.  This is accomplished with the <c>-x</c> flag, followed by a space separated list of (stringparam, value) pairs.  Do not use parentheses, just separate with spaces.  But note that <c>-x</c> cannot be the last option passed to the script since it makes it hard for the script to <q>see</q> filename for your source.</p>
+        <p>Sometimes you might have need to pass stringparams to the <pretext/> script, though this will eventually be something an author will rarely do, and is more likely necessary for developers.  This is accomplished with the <c>-x</c> flag, followed by a space separated list of (stringparam, value) pairs.  Do not use parentheses, just separate with spaces.  But note that <c>-x</c> cannot be the last option passed to the script since it makes it hard for the script to <q>see</q> the filename for your source.</p>
 
         <p>For example:<cd>
-            <cline>pretext -vv -x latex.engine xelatex latex.font.size 12pt -f svg</cline>
-            <cline>   -c latex-image -d ~/books/aota/images ~/books/aota/animals.xml</cline>
+            <cline>pretext -vv -x debug.datedfiles no whitespace flexible -f html</cline>
+            <cline>   -c all -d /tmp/aota-html ~/books/aota/animals.xml</cline>
         </cd></p>
     </section>
 

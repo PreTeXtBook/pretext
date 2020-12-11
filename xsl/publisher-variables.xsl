@@ -61,6 +61,84 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Source Options -->
 <!-- ############## -->
 
+<!-- A directory of images that *are not* generated, or reproducible,     -->
+<!-- from an author's source.  Canonical example would be a photograph.   -->
+<!-- The directory specified is always a relative path rooted at the      -->
+<!-- author's source file containing the "pretext" element (i.e. if       -->
+<!-- source is modularized, the "master" or "top-level" file).            -->
+<!-- Historically, authors were 100% responsible for this path, so the    -->
+<!-- default is empty.  With this publisher file specification, a         -->
+<!-- redundance in these paths (a common leading path) may be specified   -->
+<!-- once, and source can assume less about the location of these images. -->
+<!-- A leading slash is an error, since that'd be an absolute path,       -->
+<!-- while a trailing slash will be reliably added if                     -->
+<!--     (a) not present in publisher file specification                  -->
+<!--     (b) the path is not empty                                        -->
+<xsl:variable name="source-image-directory">
+    <xsl:variable name="raw-input">
+        <xsl:choose>
+            <xsl:when test="$publication/source/@source-images">
+                <xsl:value-of select="$publication/source/@source-images"/>
+            </xsl:when>
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+        <!-- leading path separator is an error -->
+        <xsl:when test="substring($raw-input, 1, 1) = '/'">
+            <xsl:message>PTX:ERROR:   a source image directory (source/@source-images in the publisher file) must be a relative path and not begin with "/" as in "<xsl:value-of select="$raw-input"/>".  Proceeding with the default, which is an empty string, and may lead to unexpected results.</xsl:message>
+            <xsl:text/>
+        </xsl:when>
+        <!-- trailing path separator is good and -->
+        <!-- we know it is not due to simply '/' -->
+        <xsl:when test="substring($raw-input, string-length($raw-input), 1) = '/'">
+            <xsl:value-of select="$raw-input"/>
+        </xsl:when>
+        <!-- if there is substance, we need to add a trailing slash -->
+        <xsl:when test="string-length($raw-input) > 0">
+            <xsl:value-of select="concat($raw-input, '/')"/>
+        </xsl:when>
+        <!-- specification must be empty, so we leave it that way -->
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Historically this was given by the "images" directory as a default, -->
+<!-- and it seems almost every author just ran with this.                -->
+<xsl:variable name="generated-image-directory">
+    <xsl:variable name="raw-input">
+        <xsl:choose>
+            <xsl:when test="$publication/source/@generated-images">
+                <xsl:value-of select="$publication/source/@generated-images"/>
+            </xsl:when>
+            <xsl:when test="not($directory.images = '')">
+                <xsl:value-of select="$directory.images"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>images/</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+        <!-- trailing path separator is good -->
+        <xsl:when test="substring($raw-input, string-length($raw-input), 1) = '/'">
+            <xsl:value-of select="$raw-input"/>
+        </xsl:when>
+        <!-- if there is substance, we need to add a trailing slash -->
+        <xsl:when test="string-length($raw-input) > 0">
+            <xsl:value-of select="concat($raw-input, '/')"/>
+        </xsl:when>
+        <!-- specification must be empty, so we leave it that way -->
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- For backward-compatibility, we want to know if the collection of  -->
+<!-- generated images is structured by their production method (newer) -->
+<!-- or not (older, historical).  So we create a boolean based on the  -->
+<!-- presence of the publisher file specification.                     -->
+<xsl:variable name="b-structured-generated-images" select="boolean($publication/source/@generated-images)"/>
+
 <!-- A file of hint|answer|solution, with @ref back to "exercise" -->
 <!-- so that the solutions can see limited distribution.  No real -->
 <!-- error-checking.  If not set/present, then an empty string    -->
@@ -93,10 +171,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ##################### -->
 <!-- HTML-Specific Options -->
 <!-- ##################### -->
-
-<!--                          -->
-<!-- HTML Index Page Redirect -->
-<!--                          -->
 
 <!-- Calculator -->
 <!-- Possible values are geogebra-classic, geogebra-graphing -->
@@ -137,6 +211,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="b-has-calculator" select="not($html-calculator = 'none')" />
 
+
+<!--                          -->
+<!-- HTML Index Page Redirect -->
+<!--                          -->
 
 <!-- A generic "index.html" page will be built to redirect to an     -->
 <!-- existing page from the HTML build/chunking.  The default is the -->
@@ -196,6 +274,42 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- absolute last option is $document-root, *always* a webpage -->
         <xsl:otherwise>
             <xsl:apply-templates select="$document-root" mode="containing-filename"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!--               -->
+<!-- HTML Base URL -->
+<!--               -->
+
+<!-- This is used to build/reference standalone pages.    -->
+<!-- Specified as a property of the HTML conversion, it   -->
+<!-- actually gets used in the LaTeX conversion to form   -->
+<!-- QR codes and make links to HTML versions of          -->
+<!-- Asymptote figures.                                   -->
+<!-- NB: We add a trailing slash, if not authored already -->
+<xsl:variable name="baseurl">
+    <xsl:variable name="raw-input">
+        <xsl:choose>
+            <!-- if publisher file has a base url, use it -->
+            <xsl:when test="$publication/html/baseurl/@href">
+                <xsl:value-of select="$publication/html/baseurl/@href"/>
+            </xsl:when>
+            <!-- reluctantly query the old docinfo version -->
+            <xsl:when test="$docinfo/html/baseurl/@href">
+                <xsl:value-of select="$docinfo/html/baseurl/@href"/>
+            </xsl:when>
+            <!-- otherwise use the default, is empty as sentinel -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$raw-input =''"/>
+        <xsl:otherwise>
+            <xsl:value-of select="$raw-input"/>
+            <xsl:if test="not(substring($raw-input, string-length($raw-input), 1) = '/')">
+                <xsl:text>/</xsl:text>
+            </xsl:if>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -500,6 +614,114 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- LaTeX-Specific Options -->
 <!-- ###################### -->
 
+<!-- Sides are given as "one" or "two".  And we cannot think of    -->
+<!-- any other options.  So we build, and use, a boolean variable.   -->
+<!-- But if a third option aries, we can use it, and switch away  -->
+<!-- from the boolean variable without the author knowing. -->
+<xsl:variable name="latex-sides">
+    <!-- default depends on character of output -->
+    <xsl:variable name="default-sides">
+        <xsl:choose>
+            <xsl:when test="$b-latex-print">
+                <xsl:text>two</xsl:text>
+            </xsl:when>
+            <xsl:otherwise> <!-- electronic -->
+                <xsl:text>one</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$publication/latex/@sides = 'two'">
+            <xsl:text>two</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/latex/@sides = 'one'">
+            <xsl:text>one</xsl:text>
+        </xsl:when>
+        <!-- not recognized, so warn and default -->
+        <xsl:when test="$publication/latex/@sides">
+            <xsl:message>PTX:WARNING: LaTeX @sides in publisher file should be "one" or "two", not "<xsl:value-of select="$publication/latex/@sides"/>".  Proceeding with default value, which depends on if you are making electronic ("one") or print ("two") output</xsl:message>
+            <xsl:value-of select="$default-sides"/>
+        </xsl:when>
+        <!-- inspect deprecated string parameter  -->
+        <!-- no error-checking, shouldn't be used -->
+        <xsl:when test="not($latex.sides = '')">
+            <xsl:value-of select="$latex.sides"/>
+        </xsl:when>
+        <!-- default depends -->
+        <xsl:otherwise>
+            <xsl:value-of select="$default-sides"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- We have "one" or "two", or junk from the deprecated string parameter -->
+<xsl:variable name="b-latex-two-sides" select="$latex-sides = 'two'"/>
+
+<!-- Print versus electronic.  Historically "yes" versus "no" -->
+<!-- and that seems stable enough, as in, we don't need to    -->
+<!-- contemplate some third variant of LaTeX output.          -->
+<xsl:variable name="latex-print">
+    <xsl:choose>
+        <xsl:when test="$publication/latex/@print = 'yes'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/latex/@print = 'no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- not recognized, so warn and default -->
+        <xsl:when test="$publication/latex/@print">
+            <xsl:message>PTX:WARNING: LaTeX @print in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/latex/@print"/>".  Proceeding with default value: "no"</xsl:message>
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- inspect deprecated string parameter  -->
+        <!-- no error-checking, shouldn't be used -->
+        <xsl:when test="not($latex.print = '')">
+            <xsl:value-of select="$latex.print"/>
+        </xsl:when>
+        <!-- default is "no" -->
+        <xsl:otherwise>
+            <xsl:text>no</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- We have "yes" or "no", or possibly junk from the deprecated string    -->
+<!-- parameter, so we want the default (false) to be more likely than not. -->
+<xsl:variable name="b-latex-print" select="not($latex-print = 'no')"/>
+
+<!-- Add a boolean variable to toggle links for Asymptote images in PDF.    -->
+<!-- If a baseurl is set, and an HTML version is available with interactive -->
+<!-- WebGL images the publisher may want static images in the PDF to link   -->
+<!-- to the interactive images online.                                      -->
+<xsl:variable name="asymptote-links">
+    <xsl:choose>
+        <!-- fail automatically and silently for print -->
+        <xsl:when test="$b-latex-print">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- fail when no base URL is given -->
+        <xsl:when test="$baseurl = ''">
+            <xsl:message>PTX WARNING: baseurl must be set in publisher file to enable links from Asymptote images</xsl:message>
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/latex/asymptote/@links = 'yes'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/latex/asymptote/@links = 'no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- set, but not correct, so inform and use default -->
+        <xsl:when test="$publication/latex/asymptote/@links">
+            <xsl:message>PTX WARNING: LaTeX links to Asymptote publisher file should be "yes" (links to HTML) or "no" (no links), not "<xsl:value-of select="$publication/latex/asymptote/@links"/>". Proceeding with default value: "no" (no links)</xsl:message>
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- unset, but have prerequisites, so use default -->
+        <xsl:otherwise>
+            <xsl:text>yes</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-asymptote-links" select="$asymptote-links = 'yes'"/>
+
 
 <!-- ########################### -->
 <!-- Reveal.js Slideshow Options -->
@@ -724,6 +946,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The autoname parameter is deprecated (2017-07-25) -->
 <!-- Replace with docinfo/cross-references/@text       -->
 <xsl:param name="autoname" select="''" />
+<!-- 2020-11-22: latex.print to publisher file -->
+<xsl:param name="latex.print" select="''"/>
+<!-- 2020-11-22 sidedness to publisher file -->
+<xsl:param name="latex.sides" select="''"/>
+
+
+<!-- Deprecated 2020-11-23 in favor of publisher file -->
+<!-- specification, but will still be respected       -->
+<xsl:param name="directory.images" select="'images'" />
 
 <!-- ################# -->
 <!-- Variable Bad Bank -->
@@ -790,5 +1021,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- DEPRECATED: 2020-05-29  In favor of       -->
 <!-- html/calculator/@model  in publisher file -->
 <xsl:param name="html.calculator" select="''" />
+
+<!-- RETIRED: 2020-11-22 Not a deprecation, this is a string parameter that             -->
+<!-- was never used at all.  Probably no real harm in parking it here for now.          -->
+<!-- N.B. This has no effect, and may never.  xelatex and lualatex support is automatic -->
+<xsl:param name="latex.engine" select="'pdflatex'" />
+
+<!-- RETIRED: 2020-11-23 this parameter was never used, now    -->
+<!-- silently moved here, which should make no real difference -->
+<xsl:param name="directory.media"  select="''" />
+
+<!-- RETIRED: 2020-11-23 this parameter was never used, now    -->
+<!-- silently moved here, which should make no real difference -->
+<xsl:param name="directory.knowls"  select="''" />
 
 </xsl:stylesheet>

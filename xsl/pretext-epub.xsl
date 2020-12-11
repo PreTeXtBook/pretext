@@ -700,7 +700,7 @@ width: 100%
                 </xsl:choose>
             </xsl:if>
         </xsl:when>
-        <xsl:when test="latex-image|latex-image-code|sageplot|asymptote">
+        <xsl:when test="latex-image|sageplot|asymptote">
             <xsl:value-of select="$directory.images" />
             <xsl:text>/</xsl:text>
             <xsl:apply-templates select="." mode="visible-id" />
@@ -756,7 +756,7 @@ width: 100%
                 <xsl:when test="@source and ($extension='svg' or $extension='')">
                     <xsl:text>image/svg+xml</xsl:text>
                 </xsl:when>
-                <xsl:when test="latex-image|latex-image-code|sageplot|asymptote">
+                <xsl:when test="latex-image|sageplot|asymptote">
                     <xsl:text>image/svg+xml</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>

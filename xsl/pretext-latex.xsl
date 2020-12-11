@@ -43,10 +43,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Parameters to pass via xsltproc "stringparam" on command-line            -->
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
 <!--  -->
-<!-- LaTeX executable, "engine"                       -->
-<!-- pdflatex is default, xelatex or lualatex for Unicode support -->
-<!-- N.B. This has no effect, and may never.  xelatex and lualatex support is automatic -->
-<xsl:param name="latex.engine" select="'pdflatex'" />
 <!--  -->
 <!-- Standard fontsizes: 10pt, 11pt, or 12pt       -->
 <!-- extsizes package: 8pt, 9pt, 14pt, 17pt, 20pt  -->
@@ -97,16 +93,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     with paperheight, paperwidth                          -->
 <xsl:param name="latex.draft" select="'no'"/>
 <!--  -->
-<!-- Print Option                                         -->
-<!-- For a non-electronic copy, inactive links in black   -->
-<!-- Any color options go to black and white, as possible -->
-<xsl:param name="latex.print" select="'no'"/>
-<!--  -->
 <!-- Page Numbers in cross-references -->
 <xsl:param name="latex.pageref" select="''"/>
-<!--  -->
-<!-- Sidedness -->
-<xsl:param name="latex.sides" select="''"/>
 <!--  -->
 <!-- Fillin Style Option                                  -->
 <!-- Can be 'underline' or 'box'                          -->
@@ -157,37 +145,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Not a parameter, a variable to override deliberately within a conversion -->
 <xsl:variable name="b-latex-hardcode-numbers" select="false()"/>
-
-<!-- We allow publishers to choose one-sided or two-sided -->
-<!-- "printing" though the default will vary with the     -->
-<!-- electronic/print dichotomy                           -->
-<xsl:variable name="latex-sides">
-    <xsl:variable name="default-sides">
-        <xsl:choose>
-            <xsl:when test="$latex.print = 'yes'">
-                <xsl:text>two</xsl:text>
-            </xsl:when>
-            <xsl:otherwise> <!-- electronic -->
-                <xsl:text>one</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:choose>
-        <xsl:when test="$latex.sides = ''">
-            <xsl:value-of select="$default-sides"/>
-        </xsl:when>
-        <xsl:when test="$latex.sides = 'one'">
-            <xsl:text>one</xsl:text>
-        </xsl:when>
-        <xsl:when test="$latex.sides = 'two'">
-            <xsl:text>two</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$default-sides"/>
-            <xsl:message>PTX:WARNING: the "latex.sides" stringparam should be "one" or "two", not "<xsl:value-of select="$latex.sides"/>", so assuming "<xsl:value-of select="$default-sides"/>"</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
 
 <!-- We generally want one large complete LaTeX file -->
 <xsl:variable name="chunk-level">
@@ -288,7 +245,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="pagerefs-option">
     <xsl:choose>
         <!-- electronic PDF -->
-        <xsl:when test="$latex.print = 'no'">
+        <xsl:when test="not($b-latex-print)">
             <xsl:choose>
                 <xsl:when test="$latex.pageref = 'yes'">
                     <xsl:text>yes</xsl:text>
@@ -299,7 +256,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:choose>
         </xsl:when>
         <!-- print PDF -->
-        <xsl:when test="$latex.print = 'yes'">
+        <xsl:when test="$b-latex-print">
             <xsl:choose>
                 <xsl:when test="$latex.pageref = 'no'">
                     <xsl:text>no</xsl:text>
@@ -1027,12 +984,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\usepackage[normalem]{ulem}&#xa;</xsl:text>
         <xsl:text>%% Rules in this package reset proportional to fontsize&#xa;</xsl:text>
         <xsl:text>%% NB: *never* reset to package default (0.4pt?) after use&#xa;</xsl:text>
-        <xsl:text>%% Macros will use colors if  latex.print='no'  (the default)&#xa;</xsl:text>
+        <xsl:text>%% Macros will use colors for "electronic" version (the default)&#xa;</xsl:text>
         <xsl:if test="$document-root//insert">
             <xsl:text>%% Used for an edit that is an addition&#xa;</xsl:text>
             <xsl:text>\newcommand{\insertthick}{.1ex}&#xa;</xsl:text>
             <xsl:choose>
-                <xsl:when test="$latex.print='yes'">
+                <xsl:when test="$b-latex-print">
                     <xsl:text>\newcommand{\inserted}[1]{\renewcommand{\ULthickness}{\insertthick}\uline{#1}}&#xa;</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
@@ -1044,7 +1001,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% Used for an edit that is a deletion&#xa;</xsl:text>
             <xsl:text>\newcommand{\deletethick}{.25ex}&#xa;</xsl:text>
             <xsl:choose>
-                <xsl:when test="$latex.print='yes'">
+                <xsl:when test="$b-latex-print">
                     <xsl:text>\newcommand{\deleted}[1]{\renewcommand{\ULthickness}{\deletethick}\sout{#1}}&#xa;</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
@@ -1910,18 +1867,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-has-program">
             <xsl:text>%% Program listings via new tcblisting environment&#xa;</xsl:text>
             <xsl:text>%% First a universal color scheme for parts of any language&#xa;</xsl:text>
-            <xsl:if test="$latex.print='no'" >
+            <xsl:if test="not($b-latex-print)" >
                 <xsl:text>%% Colors match a subset of Google prettify "Default" style&#xa;</xsl:text>
-                <xsl:text>%% Set latex.print='yes' to get all black&#xa;</xsl:text>
+                <xsl:text>%% Full colors for "electronic" version&#xa;</xsl:text>
                 <xsl:text>%% http://code.google.com/p/google-code-prettify/source/browse/trunk/src/prettify.css&#xa;</xsl:text>
                 <xsl:text>\definecolor{identifiers}{rgb}{0.375,0,0.375}&#xa;</xsl:text>
                 <xsl:text>\definecolor{comments}{rgb}{0.5,0,0}&#xa;</xsl:text>
                 <xsl:text>\definecolor{strings}{rgb}{0,0.5,0}&#xa;</xsl:text>
                 <xsl:text>\definecolor{keywords}{rgb}{0,0,0.5}&#xa;</xsl:text>
             </xsl:if>
-            <xsl:if test="$latex.print='yes'" >
-                <xsl:text>%% All-black colors&#xa;</xsl:text>
-                <xsl:text>%% Set latex.print='no' to get actual colors&#xa;</xsl:text>
+            <xsl:if test="$b-latex-print" >
+                <xsl:text>%% All-black colors for "print" version&#xa;</xsl:text>
                 <xsl:text>\definecolor{identifiers}{rgb}{0,0,0}&#xa;</xsl:text>
                 <xsl:text>\definecolor{comments}{rgb}{0,0,0}&#xa;</xsl:text>
                 <xsl:text>\definecolor{strings}{rgb}{0,0,0}&#xa;</xsl:text>
@@ -1994,13 +1950,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>{\VerbatimEnvironment\begin{center}\begin{lrbox}{\codedisplaybox}\begin{BVerbatim}}&#xa;</xsl:text>
             <xsl:text>{\end{BVerbatim}\end{lrbox}\usebox{\codedisplaybox}\end{center}}&#xa;</xsl:text>
         </xsl:if>
-    </xsl:if>
-    <xsl:if test="$document-root//tikz">
-        <xsl:message>MBX:WARNING: the "tikz" element is deprecated (2015-10-16), use "latex-image-code" tag inside an "image" tag, and include the tikz package and relevant libraries in docinfo/latex-image-preamble</xsl:message>
-        <xsl:text>%% Tikz graphics&#xa;</xsl:text>
-        <xsl:text>\usepackage{tikz}&#xa;</xsl:text>
-        <xsl:text>\usetikzlibrary{backgrounds}&#xa;</xsl:text>
-        <xsl:text>\usetikzlibrary{arrows,matrix}&#xa;</xsl:text>
     </xsl:if>
     <!-- TODO:  \showidx package as part of a draft mode, prints entries in margin -->
      <xsl:if test="$document-root//ol[@cols]|$document-root//ul[@cols]|$document-root//dl[@cols]|$document-root//contributors">
@@ -2116,12 +2065,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% configure hyperref's  \url  to match listings' inline verbatim&#xa;</xsl:text>
         <xsl:text>\renewcommand\UrlFont{\small\ttfamily}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$latex.print='no'">
+    <xsl:if test="not($b-latex-print)">
         <xsl:text>%% Hyperlinking active in electronic PDFs, all links solid and blue&#xa;</xsl:text>
         <xsl:text>\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$latex.print='yes'">
-        <xsl:text>%% latex.print parameter set to 'yes', all hyperlinks black and inactive&#xa;</xsl:text>
+    <xsl:if test="$b-latex-print">
+        <xsl:text>%% "print" version, all hyperlinks black and inactive&#xa;</xsl:text>
         <xsl:text>\hypersetup{draft}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\hypersetup{pdftitle={</xsl:text>
@@ -2173,7 +2122,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
     </xsl:if>
     <xsl:text>%% If tikz has been loaded, replace ampersand with \amp macro&#xa;</xsl:text>
-    <xsl:if test="$document-root//latex-image-code|$document-root//latex-image">
+    <xsl:if test="$document-root//latex-image">
         <xsl:text>\ifdefined\tikzset&#xa;</xsl:text>
         <xsl:text>    \tikzset{ampersand replacement = \amp}&#xa;</xsl:text>
         <xsl:text>\fi&#xa;</xsl:text>
@@ -3456,7 +3405,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\setfoot{}{\pagefont\thepage}{}%&#xa;</xsl:text>
     <xsl:text>}%&#xa;</xsl:text>
     <xsl:choose>
-        <xsl:when test="$latex-sides = 'one'">
+        <xsl:when test="not($b-latex-two-sides)">
             <!-- Every "regular" page has number top right -->
             <!-- CHAPTER 8. TITLE                      234 -->
             <xsl:text>%% Single pages as in default LaTeX&#xa;</xsl:text>
@@ -3464,7 +3413,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\sethead{\pagefont\slshape\MakeUppercase{\ifthechapter{\chaptertitlename\space\thechapter.\space}{}\chaptertitle}}{}{\pagefont\thepage}%&#xa;</xsl:text>
             <xsl:text>}%&#xa;</xsl:text>
         </xsl:when>
-        <xsl:when test="$latex-sides = 'two'">
+        <xsl:when test="$b-latex-two-sides">
             <!-- Two-page spread:  (Section empty if not in use)           -->
             <!-- 234       CHAPTER 8. TITLE || SECTION 8.4 TITLE       235 -->
             <xsl:text>%% Two-page spread as in default LaTeX&#xa;</xsl:text>
@@ -3703,7 +3652,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- need an empty page, obverse of half-title    -->
         <!-- could also be left-side of title page spread -->
-        <xsl:when test="$latex-sides = 'two'">
+        <xsl:when test="$b-latex-two-sides">
             <xsl:text>%% begin: adcard (empty)&#xa;</xsl:text>
             <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
             <xsl:text>\null%&#xa;</xsl:text>
@@ -4163,7 +4112,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
     <xsl:text>\clearpage&#xa;</xsl:text>
     <xsl:text>%% end:   dedication-page&#xa;</xsl:text>
-    <xsl:if test="$latex-sides = 'two'">
+    <xsl:if test="$b-latex-two-sides">
         <xsl:text>%% begin: obverse-dedication-page (empty)&#xa;</xsl:text>
         <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
         <xsl:text>\null%&#xa;</xsl:text>
@@ -4346,7 +4295,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The "backcolophon" environment is a tcolorbox          -->
 <xsl:template match="book/backmatter/colophon">
     <xsl:choose>
-        <xsl:when test="$latex-sides = 'two'">
+        <xsl:when test="$b-latex-two-sides">
             <xsl:text>\cleardoublepage&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -7119,11 +7068,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- point to HTML-produced, and canonically-hosted, standalone page -->
 <!-- Eventually match on all interactives                            -->
-<!-- NB baseurl is not assumed to have a trailing slash              -->
+<!-- NB: baseurl is assumed to have a trailing slash                 -->
 
 <xsl:template match="audio[@source]|video[@source]|interactive" mode="static-url">
     <xsl:value-of select="$baseurl"/>
-    <xsl:text>/</xsl:text>
     <xsl:apply-templates select="." mode="standalone-filename" />
 </xsl:template>
 
@@ -8808,7 +8756,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:text>\includegraphics[width=\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="@source" mode="visible-id" />
+    <xsl:value-of select="@source"/>
     <xsl:if test="not($extension)">
         <xsl:text>.pdf&#xa;</xsl:text>
     </xsl:if>
@@ -8818,12 +8766,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Asymptote graphics language  -->
 <!-- PDF's produced by mbx script -->
 <xsl:template match="image[asymptote]" mode="image-inclusion">
-    <xsl:text>\includegraphics[width=\linewidth]</xsl:text>
-    <xsl:text>{</xsl:text>
-    <xsl:value-of select="$directory.images" />
-    <xsl:text>/</xsl:text>
-    <xsl:apply-templates select="." mode="visible-id" />
-    <xsl:text>.pdf}&#xa;</xsl:text>
+  <xsl:choose>
+      <xsl:when test="$b-asymptote-links">
+        <xsl:text>\href{</xsl:text>
+        <xsl:value-of select="$baseurl" />
+        <xsl:text>images/</xsl:text>
+        <xsl:apply-templates select="." mode="visible-id" />
+        <xsl:text>.html}</xsl:text>
+        <xsl:text>{\includegraphics[width=\linewidth]</xsl:text>
+        <xsl:text>{</xsl:text>
+        <xsl:value-of select="$directory.images" />
+        <xsl:text>/</xsl:text>
+        <xsl:apply-templates select="." mode="visible-id" />
+        <xsl:text>.pdf}}&#xa;</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>\includegraphics[width=\linewidth]</xsl:text>
+        <xsl:text>{</xsl:text>
+        <xsl:value-of select="$directory.images" />
+        <xsl:text>/</xsl:text>
+        <xsl:apply-templates select="." mode="visible-id" />
+        <xsl:text>.pdf}&#xa;</xsl:text>
+      </xsl:otherwise>
+  </xsl:choose>
+
 </xsl:template>
 
 <!-- Sage graphics plots          -->
@@ -8854,13 +8820,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See "latex-image-preamble" for critical parts    -->
 <!-- Side-By-Side scaling happens there, could be here -->
 <!-- TODO: maybe these should be split into current v. legacy -->
-<xsl:template match="image[latex-image-code]|image[latex-image]" mode="image-inclusion">
+<xsl:template match="image[latex-image]" mode="image-inclusion">
     <!-- tikz images go into a tcolorbox where \linewidth is reset. -->
     <!-- grouping reins in the scope of any local graphics settings -->
     <!-- we resize what tikz produces, to fill a containing box     -->
     <!-- changes to accomodate resizing to fit requested layouts -->
     <xsl:text>\resizebox{\linewidth}{!}{%&#xa;</xsl:text>
-    <xsl:apply-templates select="latex-image|latex-image-code"/>
+    <xsl:apply-templates select="latex-image"/>
     <xsl:text>}%&#xa;</xsl:text>
 </xsl:template>
 
@@ -8876,7 +8842,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- but following should just see a single large text   -->
 <!-- node and reproduce it.  Just like before structure, -->
 <!-- such as "label" was introduced.                     -->
-<xsl:template match="latex-image|latex-image-code">
+<xsl:template match="latex-image">
     <xsl:call-template name="sanitize-text">
         <xsl:with-param name="text">
             <!-- we need to copy text bits verbatim (value-of), -->
@@ -8928,57 +8894,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="@href" />
     <xsl:text>}}%&#xa;</xsl:text>
 </xsl:template>
-
-<!-- was once direct-descendant of subdivision, this catches that -->
-<xsl:template match="latex-image-code[not(parent::image)]">
-    <xsl:message>MBX:WARNING: latex-image-code element should be enclosed by an image element</xsl:message>
-</xsl:template>
-
-<!-- ################################## -->
-<!-- Deprecated Graphics Code Templates -->
-<!-- ################################## -->
-<!-- 2015/02/08: Deprecated, still functional but not maintained -->
-<xsl:template match="tikz">
-    <xsl:message>MBX:WARNING: tikz element superceded by latex-image-code element</xsl:message>
-    <xsl:message>MBX:WARNING: tikz package and necessary libraries should be included in docinfo/latex-image-preamble</xsl:message>
-    <xsl:apply-templates select="." mode="location-report" />
-    <xsl:call-template name="sanitize-text">
-        <xsl:with-param name="text" select="." />
-    </xsl:call-template>
-</xsl:template>
-<!-- 2015/02/08: Deprecated, still functional but not maintained -->
-<xsl:template match="asymptote">
-    <xsl:message>MBX:WARNING: asymptote element must be enclosed by an image element - deprecation (2015/02/08)</xsl:message>
-    <xsl:apply-templates select="." mode="location-report" />
-    <xsl:text>\includegraphics[width=0.80\textwidth]{</xsl:text>
-    <xsl:value-of select="$directory.images" />
-    <xsl:text>/</xsl:text>
-    <xsl:apply-templates select="." mode="visible-id" />
-    <xsl:text>.pdf}&#xa;</xsl:text>
-</xsl:template>
-<!-- 2015/02/08: Deprecated, still functional but not maintained -->
-<xsl:template match="sageplot">
-    <xsl:message>MBX:WARNING: sageplot element must be enclosed by an image element - deprecation (2015/02/08)</xsl:message>
-    <xsl:apply-templates select="." mode="location-report" />
-    <xsl:text>\IfFileExists{</xsl:text>
-    <xsl:value-of select="$directory.images" />
-    <xsl:text>/</xsl:text>
-    <xsl:apply-templates select="." mode="visible-id" />
-    <xsl:text>.pdf}%&#xa;</xsl:text>
-    <xsl:text>{\includegraphics[width=0.80\textwidth]{</xsl:text>
-    <xsl:value-of select="$directory.images" />
-    <xsl:text>/</xsl:text>
-    <xsl:apply-templates select="." mode="visible-id" />
-    <xsl:text>.pdf}}%&#xa;</xsl:text>
-    <xsl:text>{\includegraphics[width=0.80\textwidth]{</xsl:text>
-    <xsl:value-of select="$directory.images" />
-    <xsl:text>/</xsl:text>
-    <xsl:apply-templates select="." mode="visible-id" />
-    <xsl:text>.png}}&#xa;</xsl:text>
-</xsl:template>
-<!-- ################################## -->
-<!-- Deprecated Graphics Code Templates -->
-<!-- ################################## -->
 
 <!-- ############## -->
 <!-- Tabular Layout -->

@@ -30,17 +30,6 @@ import pretext as ptx
 # by author/publisher on the command line
 # Use pretext module console messaging routines
 
-def verify_input_directory(inputdir):
-    """Verify directory exists, or raise error.  Return absolute path"""
-    import os.path # isdir(), abspath()
-
-    ptx._verbose('verifying and expanding input directory: {}'.format(inputdir))
-    if not(os.path.isdir(inputdir)):
-        raise ValueError('directory {} does not exist'.format(inputdir))
-    absdir = os.path.abspath(inputdir)
-    ptx._verbose('input directory expanded to absolute path: {}'.format(absdir))
-    return absdir
-
 def verify_input_file(f):
     """Verify file exists, or raise error.  Return absolute path"""
     import os.path # isfile(), abspath()
@@ -51,6 +40,27 @@ def verify_input_file(f):
     absf = os.path.abspath(f)
     ptx._verbose('input file expanded to absolute path: {}'.format(absf))
     return absf
+
+def get_output_file(file_path):
+    """Expand provided filename, or return None"""
+    import os # getcwd
+
+    # if specified, return absolute path
+    # does not need to exist
+    if file_path:
+        return os.path.abspath(file_path)
+    # else leave unspecified
+    return None
+
+def get_destination_directory(directory):
+    """Check and expand provided directory, or return current working directory"""
+    import os # getcwd
+
+    # if specified, check, sanitize, return absolute path
+    if directory:
+        return ptx.verify_input_directory(directory)
+    # else default to current directory
+    return os.getcwd()
 
 def string_parameters_as_dict(pairs):
     """Convert flat list of consecutive keys and values into a dictionary"""
@@ -146,7 +156,8 @@ def get_cli_arguments():
 
 def main():
     """React to command-line switches in order to perform basic tasks"""
-    import os # getcwd, .sep
+    import os # .sep
+    # TODO: isolate two os.sep into getters
 
     # always check version, raises error for Python 2 or less
     ptx.check_python_version()
@@ -181,20 +192,19 @@ def main():
     ptx._debug('executables in configuration file: {}'.format(dict(ptx.get_config_info()['executables'])))
 
     # directory/file locations provided on command-line by user
-    # output file expanded, or remains unspecified
-    if args.out:
-        out_file = os.path.abspath(args.out)
-    else:
-        out_file = None
-    # output directory, default to cwd
-    if args.dir:
-        dest_dir = verify_input_directory(args.dir)
-    else:
-        dest_dir = os.getcwd()
+    # Expanded here to be complete paths, or set to defaults
+    # output file expanded; if not specified, then no
+    # natural default, so could be left undefined (None)
+    # We don't assume it exists, it is being created
+    out_file = get_output_file(args.out)
+    # output directory: CLI switch or default to cwd
+    # must exist first if given, return value always exists
+    dest_dir = get_destination_directory(args.dir)
+    # check and sanitize XML source, presumed to exiast
     xml_source = verify_input_file(args.xml_file)
     # data directory is optional, so allow for None here
     if args.data_dir:
-        data_dir = verify_input_directory(args.data_dir)
+        data_dir = ptx.verify_input_directory(args.data_dir)
     else:
         data_dir = None
     # publisher file is optional, so allow for None here
@@ -276,11 +286,16 @@ def main():
             raise NotImplementedError("'braille' format deprecated (2020-08-19), 'braille-emboss' is replacement")
         else:
             raise NotImplementedError('cannot make entire document in "{}" format'.format(args.format))
+    elif args.component == 'images':
+        ptx.all_images(xml_source, publisher_file, stringparams, args.xmlid)
     # 2020-05-19 tikz_conversion() function removed
     elif args.component == 'tikz':
         raise NotImplementedError('conversion of TikZ pictures has been subsumed into the "latex-image" component (2020-05-19)')
     else:
         raise ValueError('the "{}" component is not a conversion option'.format(args.component))
+
+    # Cleanup, if execution does not raise errors
+    ptx.release_temporary_directories()
 
 
 # Do it - lone top-level command
