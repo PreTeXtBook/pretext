@@ -137,10 +137,21 @@ fetch(url)
 console.log("then here");
 */
 
-function standard_title_form(object_type) {
-    var title_form = "<div><b>" + object_type + "&nbsp;#N</b>&nbsp;";
-    title_form += '<input id="actively_editing_title" class="starting_point_for_editing" placeholder="Optional title" type="text"/>';
+function standard_title_form(object_id) {
+    the_object = internalSource[object_id];
+    object_type = the_object["ptxtag"];  // need to use that to determin the object_type_name
+    object_type_name = object_type;
+    the_parent = the_object["parent"];
+    the_parent_id = the_parent[0];
+    the_parent_component = the_parent[1];
+
+    var title_form = "<div><b>" + object_type_name + "&nbsp;#N</b>&nbsp;";
+    title_form += '<input id="actively_editing_title" class="starting_point_for_editing" data-source_id="' + object_id + '" data-parent_id="' + the_parent_id + '" data-parent_component="' + the_parent_component + '" placeholder="Optional title" type="text"/>';
+
+    title_form += '&nbsp;<span class="group_description">(RETurn to save the title)</span>';
+/*
     title_form += '<input id="actively_editing_id" placeholder="Optional Id" class="input_id" type="text"/>';
+*/
     title_form += '</div>';
 
     return title_form
@@ -333,6 +344,10 @@ function edit_in_place(obj, new_object_description) {
                   // first insert a placeholder to edit-in-place
         new_tag = new_object_description[0];
         var new_id = randomstring();
+            // we won;t need all of these, so re-think when these are created
+        var new_content_p_id = randomstring();
+        var new_statement_p_id = randomstring();
+        var new_proof_p_id = randomstring();
         var edit_placeholder = document.createElement("span");
         edit_placeholder.setAttribute('id', new_id);
         var new_objects_sibling = new_object_description[1];
@@ -345,10 +360,16 @@ function edit_in_place(obj, new_object_description) {
                   // then create the empty internalSource for the new object
         new_source = {"xml:id": new_id, "permid": "", "ptxtag": new_tag, "title": ""}
         if (editing_container_for["theorem-like"].includes(new_tag)) {
-            new_source["statement"] = "";
-            new_source["proof"] = ""
+            new_source["statement"] = "<&>" + new_statement_p_id + "<;>";
+            internalSource[new_statement_p_id] = { "xml:id": new_statement_p_id, "permid": "", ptxtag: "p",
+                          content: "", "parent": ["new_id", "statement"] }
+            new_source["proof"] = "<&>" + new_proof_p_id + "<;>";
+            internalSource[new_proof_p_id] = { "xml:id": new_proof_p_id, "permid": "", ptxtag: "p",
+                          content: "", "parent": ["new_id", "proof"] }
         }  else {   // note: not all cases have been covered
-            new_source["content"] = ""
+            new_source["content"] = "<&>" + new_content_p_id + "<;>";
+            internalSource[new_content_p_id] = { "xml:id": new_content_p_id, "permid": "", ptxtag: "p",
+                          content: "", "parent": ["new_id", "content"] }
         }
                   // and describe where it goes
   //      var parent_id = new_object_description[1];
@@ -410,19 +431,24 @@ function edit_in_place(obj, new_object_description) {
        });
       } else if (editing_container_for["theorem-like"].includes(new_tag)) {
 // copied from no-longer-existent container_for_editing
+
+// only good for creating a new theorem, not editing in place
+// think about thaat use case:  once it exists, do we ever edit the theorem as a unit?
+
         console.log("edit_in_place", obj)
         var this_content_container = document.createElement('div');
         this_content_container.setAttribute('id', "actively_editing");
         this_content_container.setAttribute('data-objecttype', 'theorem-like');
 
-        var title = standard_title_form(new_tag);
+   //     var title = standard_title_form(new_tag);
+        var title = standard_title_form(new_id);
 
         var statement_container_start = '<div class="editing_statement">';
         var statement_container_end = '</div>';
         var editingregion_container_start = '<div class="editing_p_holder">'
         var editingregion_container_end = '</div>'
         var statementinstructions = '<span class="group_description">statement (paragraphs, images, lists, etc)</span>';
-        var statementeditingregion = '<textarea id="actively_editing_statement" style="width:100%;" placeholder="first paragraph of statement"></textarea>';
+        var statementeditingregion = '<textarea id="actively_editing_statement" style="width:98%;" placeholder="first paragraph of statement" data-source_id="' + new_statement_p_id + '" data-parent_id="' + new_id + '" data-parent_component="statement"></textarea>';
         var statement = statement_container_start + editingregion_container_start;
         statement += statementinstructions;
         statement += statementeditingregion;
@@ -431,7 +457,7 @@ function edit_in_place(obj, new_object_description) {
         var proof_container_start = '<div class="editing_proof">';
         var proof_container_end = '</div>';
         var proofinstructions = '<span class="group_description">optional proof (paragraphs, images, lists, etc)</span>';
-        var proofeditingregion = '<textarea id="actively_editing_proof" style="width:100%;" placeholder="first paragraph of optional proof"></textarea>';
+        var proofeditingregion = '<textarea id="actively_editing_proof" style="width:98%;" placeholder="first paragraph of optional proof"  data-source_id="' + new_proof_p_id + '" data-parent_id="' + new_id + '" data-parent_component="proof"></textarea>';
 
         var proof = proof_container_start + editingregion_container_start;
         proof += proofinstructions;
