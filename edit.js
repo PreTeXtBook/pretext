@@ -138,7 +138,7 @@ console.log("then here");
 */
 
 function standard_title_form(object_type) {
-    var title_form = "<div><b>" + object_type + "&nbsp;NN</b>&nbsp;";
+    var title_form = "<div><b>" + object_type + "&nbsp;#N</b>&nbsp;";
     title_form += '<input id="actively_editing_title" class="starting_point_for_editing" placeholder="Optional title" type="text"/>';
     title_form += '<input id="actively_editing_id" placeholder="Optional Id" class="input_id" type="text"/>';
     title_form += '</div>';
@@ -295,12 +295,7 @@ function container_for_editing(obj_type) {
         console.log("making a form for", obj_type);
         this_content_container.setAttribute('data-objecttype', 'theorem-like');
         var title = standard_title_form(obj_type);
-/*
-        var title = "<div><b>" + obj_type + "&nbsp;NN</b>&nbsp;";
-        title += '<input id="actively_editing_title" class="starting_point_for_editing" placeholder="Optional title" type="text"/>';
-        title += '<input id="actively_editing_id" placeholder="Optional Id" class="input_id" type="text"/>';
-        title += '</div>';
-*/
+
         var statement_container_start = '<div class="editing_statement">';
         var statement_container_end = '</div>';
         var editingregion_container_start = '<div class="editing_p_holder">'
@@ -332,13 +327,13 @@ function edit_in_place(obj, new_object_description) {
 
 // a new_object looks like [type, sibling, position]
 
-// fix this so that we can delete container_for_editing
+// This first part, creating the new internal Source, shoudl be a separate function
     if (new_object_description) {
         console.log("new_object_description", new_object_description);
                   // first insert a placeholder to edit-in-place
         new_tag = new_object_description[0];
         var new_id = randomstring();
-        var edit_placeholder = document.createElement(new_tag);
+        var edit_placeholder = document.createElement("span");
         edit_placeholder.setAttribute('id', new_id);
         var new_objects_sibling = new_object_description[1];
         var relative_placement = new_object_description[2];
@@ -374,11 +369,14 @@ function edit_in_place(obj, new_object_description) {
         console.log("         new_arrangement", new_arrangement);
         console.log("tried to insert", new_id, "next to", sibling_id, "in", the_current_arrangement)
  
+        thisID = new_id;
+        thisTagName = new_tag;
+    } else {
+        thisID = obj.getAttribute("id");
+        console.log("will edit in place", thisID);
+        thisTagName = obj.tagName.toLowerCase();
     }
 
-    thisID = obj.getAttribute("id");
-    console.log("will edit in place", thisID);
-    thisTagName = obj.tagName.toLowerCase();
 // this only works for paragraphs, so go back and allow editing of other types
     if( internalSource[thisID] ) {
       if(thisTagName == "p") {
@@ -410,13 +408,48 @@ function edit_in_place(obj, new_object_description) {
         textarea_editable.addEventListener("keypress", function() {
           textarea_editable.style.height = textarea_editable.scrollHeight + "px";
        });
+      } else if (editing_container_for["theorem-like"].includes(new_tag)) {
+// copied from no-longer-existent container_for_editing
+        console.log("edit_in_place", obj)
+        var this_content_container = document.createElement('div');
+        this_content_container.setAttribute('id', "actively_editing");
+        this_content_container.setAttribute('data-objecttype', 'theorem-like');
+
+        var title = standard_title_form(new_tag);
+
+        var statement_container_start = '<div class="editing_statement">';
+        var statement_container_end = '</div>';
+        var editingregion_container_start = '<div class="editing_p_holder">'
+        var editingregion_container_end = '</div>'
+        var statementinstructions = '<span class="group_description">statement (paragraphs, images, lists, etc)</span>';
+        var statementeditingregion = '<textarea id="actively_editing_statement" style="width:100%;" placeholder="first paragraph of statement"></textarea>';
+        var statement = statement_container_start + editingregion_container_start;
+        statement += statementinstructions;
+        statement += statementeditingregion;
+        statement += editingregion_container_end + statement_container_end;
+
+        var proof_container_start = '<div class="editing_proof">';
+        var proof_container_end = '</div>';
+        var proofinstructions = '<span class="group_description">optional proof (paragraphs, images, lists, etc)</span>';
+        var proofeditingregion = '<textarea id="actively_editing_proof" style="width:100%;" placeholder="first paragraph of optional proof"></textarea>';
+
+        var proof = proof_container_start + editingregion_container_start;
+        proof += proofinstructions;
+        proof += proofeditingregion;
+        proof += editingregion_container_end + proof_container_end;
+
+        this_content_container.innerHTML = title + statement + proof
+
+        $("#" + thisID).replaceWith(this_content_container);
+        $("#actively_editing_title").focus();
+
       } else {
-        console.log("Error: I don;t know how to edit_in_place", obj)
-      }
-    } else {
+          console.log("I do not know how to edit", new_tag)
+     }
+   } else {
         console.log("Error: edit_in_place of object that is not already known", obj);
         console.log("What is known:", internalSource)
-    }
+     }
 }
 
 var OldinternalSource = {  // currently the key is the HTML id
@@ -513,7 +546,7 @@ function display_new(objectclass, objecttype, whereat, relativelocation) {
         object_heading_html = '<h6 class="heading">';
         object_heading_html += '<span class="type">' + objecttype + '</span>';
         object_heading_html += '<span class="space">' + " " + '</span>';
-        object_heading_html += '<span class="codenumber">' + "NN" + '</span>';
+        object_heading_html += '<span class="codenumber">' + "#N" + '</span>';
 
         if (object_title) {
             object_heading_html += '<span class="space">' + " " + '</span>';
