@@ -704,6 +704,8 @@ function html_from_internal_id(the_id) {
     var the_object = internalSource[the_id];
     var ptxtag = the_object["ptxtag"];
 
+    var the_html_objects = [];
+
     if (ptxtag == "p") {
         html_of_this_object = document.createElement('p');
         html_of_this_object.setAttribute("data-editable", 99);
@@ -712,79 +714,49 @@ function html_from_internal_id(the_id) {
 
         var content_id = the_object["content"];
         html_of_this_object.innerHTML = internalSource[content_id];
+
+        the_html_objects.push(html_of_this_object);
+
+    } else if (editing_container_for["theorem-like"].includes(ptxtag)) {
+           //shoud be statement_object_in_html, and then proof_object_in_html
+        object_in_html = document.createElement("article");
+        object_in_html.setAttribute("class", "theorem-like" + " " + ptxtag);
+        object_in_html.setAttribute("tabindex", -1);
+        object_in_html.setAttribute("data-editable", 99);
+
+        object_title = the_object["title"];
+
+        object_in_html.setAttribute("id", the_id);
+
+        object_heading_html = '<h6 class="heading">';
+        var objecttype_capped = ptxtag.charAt(0).toUpperCase() + ptxtag.slice(1);
+        object_heading_html += '<span class="type">' + objecttype_capped + '</span>';
+        object_heading_html += '<span class="space">' + " " + '</span>';
+        object_heading_html += '<span class="codenumber">' + "#N" + '</span>';
+
+        if (object_title) {
+            object_heading_html += '<span class="space">' + " " + '</span>';
+            object_heading_html += '<span class="creator">(' + object_title + ')</span>';
+        }
+        object_heading_html += '<span class="period">' + "." + '</span>';
+        object_heading_html += '</h6>';
+
+        object_statement_ptx = the_object["statement"];
+
+        object_statement_html =  ptx_to_html(object_statement_ptx);   // transform not really working yet
+
+        object_in_html.innerHTML = object_heading_html + object_statement_html + "sorry, proof is missing";
+
+        the_html_objects.push(object_in_html);
+
+//            proof_in_html = document.createElement("article");
+//            proof_in_html.setAttribute("class", "hiddenproof");
+//            proof_in_html.innerHTML = '<a data-knowl="" class="id-ref proof-knowl original" data-refid="hk-Jkl"><h6 class="heading"><span class="type">Proof<span class="period">.</span></span></h6></a>';
+
     } else {
          alert("don't know how to make html from", the_object)
     }
-    return html_of_this_object
-}
-
-function assemble_html_changes(ids_that_changed) {
-
-/// copied, in progress
-        var holder_of_object_being_edited = object_being_edited.parentElement.parentElement;
-        for(var j=0; j < num_paragraphs; ++j) {
-            if (!paragraph_content_list[j] ) { continue }
-            new_ptx_source += "<p>" + "\n";
-            new_ptx_source += paragraph_content_list[j];
-            new_ptx_source += "\n" + "</p>" + "\n";
-            var object_as_html = document.createElement('p');
-            object_as_html.setAttribute("data-editable", 99);
-            object_as_html.setAttribute("tabindex", -1);
-            object_as_html.setAttribute("id", randomstring());
-            object_as_html.innerHTML = ptx_to_html(paragraph_content_list[j]);
-            holder_of_object_being_edited.insertAdjacentElement('beforebegin', object_as_html);
-        } 
-        
-    
-        console.log("finished editing a paragraph", new_ptx_source, "previous is new_ptx_source");
-    
-        console.log("current item of focus", document.activeElement);
-        console.log("its parent", document.activeElement.parentElement);
-        if (holder_of_object_being_edited.id == "actively_editing") { // we are only editing a p
-            console.log("will focus on what we just added",$(holder_of_object_being_edited).prev('[data-editable="99"]'));
-            $(holder_of_object_being_edited).prev('[data-editable="99"]').focus();
-            console.log("next item of focus", document.activeElement);
-//    document.getElementById('actively_editing').remove();
-         //   $(":focus").addClass("may_select");
-            console.log("menu place 1");
-            edit_menu_for($(":focus").attr("id"), "entering");
-        } else if (holder_of_object_being_edited.classList.contains("editing_statement")) {
-        // hide the ptx_source to be retrieved later
-            hide_new_source(new_ptx_source, "statement");
-              // the p is in a statement (of theorem-like or definition-like or remark-like or ...)
-            if (holder_of_object_being_edited.parentElement.getAttribute('data-objecttype') == "theorem-like") {
-              // now focus switches to the proof?
-                console.log("focus shoudl switch to",holder_of_object_being_edited.nextSibling.firstChild.children[1]);
-                holder_of_object_being_edited.nextSibling.firstChild.children[1].focus()  // 1 to skip the Tip
-            } else {
-                alert("don't know where to go next");
-               // I guess we are done editing this object?
-            }
-        } else if (holder_of_object_being_edited.classList.contains("editing_proof")) {
-            hide_new_source(new_ptx_source, "proof");
-            // done editing the theorem-like, to put focus on the next thing and display/save the theorem
-            save_new("theorem");
-            display_new("theorem-like", "corollary", document.getElementById("actively_editing"), "afterend");
-            console.log("is focus on the new object?", $(":focus"));
-    //        $(":focus").addClass("may_select");
-            console.log("menu place 2");
-
-            edit_menu_for($(":focus").attr("id"), "entering");
-            document.getElementById("actively_editing").remove();
-            console.log("just did display_new");
-        } else { // this p is in a larvger object, like a theorem or li
-            
-            alert("inside an object, don; tknow what to do next")
-        }
-        console.log("holder_of_object_being_edited.remove()", holder_of_object_being_edited);
-  //      document.getElementById("actively_editing").remove();
-            holder_of_object_being_edited.remove();
-/*
-    } else {
-        console.log("trouble saving", object_being_edited);
-        alert("don;t know how to save ", object_being_edited.tagName)
-    }
-*/
+    return the_html_objects
 }
 
 function insert_html_version(these_changes) {
@@ -965,6 +937,12 @@ function local_editing_action(e) {
             if (next_textarea = document.querySelector('textarea')) {
                 next_textarea.focus();
                 next_textarea.setSelectionRange(0,0);
+            } else if (editing_placeholder = document.getElementById("actively_editing")) {
+                console.log("still editing", editing_placeholder, "which contains", final_added_object);
+                var this_parent = internalSource[final_added_object.id]["parent"];
+                console.log("final_added_object parent", internalSource[final_added_object.id]["parent"]);
+                the_whole_object = html_from_internal_id(this_parent[0]);
+                $("#actively_editing").replaceWith(the_whole_object[0]);  // later handle multiple additions
             } else {
                 edit_menu_for(final_added_object.id, "entering");
             }
