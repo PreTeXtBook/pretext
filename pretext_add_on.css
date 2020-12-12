@@ -3411,12 +3411,13 @@ label.incorrect .feedback {
     margin-bottom: 0;
 }
 #actively_editing_title {
-    width: 25;
+    size: 25;
 }
 .in_edit_tree {
     border-right: 1px solid blue;
     margin-right: 0.25em;
 }
+/* do we really need the top and bottom edge of the structure bracket?  It messes up some other things
 .in_edit_tree:before,
 .in_edit_tree:after {
     content: ' ';
@@ -3427,6 +3428,7 @@ label.incorrect .feedback {
     margin-left: auto;
     width: 0.75em;
 }
+*/
 
 #edit_menu .in_edit_tree {
     border: none;
