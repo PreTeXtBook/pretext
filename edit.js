@@ -301,7 +301,6 @@ function container_for_editing(obj_type) {
         } else { instructions = '' }
         var editingregion_container_start = '<div class="editing_p_holder">';
         var editingregion_container_end = '</div>';
-   //     var editingregion = '<textarea id="actively_editing_p" class="starting_point_for_editing" style="width:100%;" placeholder="' + obj_type_name + '"></textarea>';
         var editingregion = '<textarea class="editing_p starting_point_for_editing" style="width:100%;" placeholder="' + obj_type_name + '"></textarea>';
         this_content_container.innerHTML = instructions + editingregion_container_start + editingregion + editingregion_container_end;
     } else if ( editing_container_for["theorem-like"].includes(obj_type) ) {
@@ -361,17 +360,19 @@ function edit_in_place(obj, new_object_description) {
 
                   // then create the empty internalSource for the new object
         new_source = {"xml:id": new_id, "permid": "", "ptxtag": new_tag, "title": ""}
-        if (editing_container_for["theorem-like"].includes(new_tag)) {
+        if (new_tag == "p") {
+            new_source["content"] = "";
+        } else if (editing_container_for["theorem-like"].includes(new_tag)) {
             new_source["statement"] = "<&>" + new_statement_p_id + "<;>";
             internalSource[new_statement_p_id] = { "xml:id": new_statement_p_id, "permid": "", ptxtag: "p",
-                          content: "", "parent": ["new_id", "statement"] }
+                          content: "", "parent": [new_id, "statement"] }
             new_source["proof"] = "<&>" + new_proof_p_id + "<;>";
             internalSource[new_proof_p_id] = { "xml:id": new_proof_p_id, "permid": "", ptxtag: "p",
-                          content: "", "parent": ["new_id", "proof"] }
+                          content: "", "parent": [new_id, "proof"] }
         }  else {   // note: not all cases have been covered
             new_source["content"] = "<&>" + new_content_p_id + "<;>";
             internalSource[new_content_p_id] = { "xml:id": new_content_p_id, "permid": "", ptxtag: "p",
-                          content: "", "parent": ["new_id", "content"] }
+                          content: "", "parent": [new_id, "content"] }
         }
                   // and describe where it goes
   //      var parent_id = new_object_description[1];
@@ -611,7 +612,7 @@ function display_new(objectclass, objecttype, whereat, relativelocation) {
 function assemble_internal_version_changes() {
     console.log("current active element to be saved", document.activeElement);
 
-    var possibly_changed_ids = [];
+    var possibly_changed_ids_and_entry = [];
     var nature_of_the_change = "";
 
     var object_being_edited = document.activeElement;
@@ -642,7 +643,7 @@ function assemble_internal_version_changes() {
                //     id_of_content = internalSource[prev_id]["content"];
                //     internalSource[id_of_content] = paragraph_content_list[j]
                     internalSource[prev_id]["content"] = paragraph_content_list[j];  // should we write [0] ?
-                    possibly_changed_ids.push(prev_id);
+                    possibly_changed_ids_and_entry.push([prev_id, "content"]);
                     this_arrangement_of_objects = internalSource[parent_and_location[0]][parent_and_location[1]];
                 } else {
                     console.log("error:  existing tag from input", prev_id, "not in internalSource")
@@ -664,7 +665,7 @@ function assemble_internal_version_changes() {
          //       this_object_internal["content"] = this_content_label;
                 this_object_internal["content"] = paragraph_content_list[j];
                 internalSource[this_object_label] = this_object_internal
-                possibly_changed_ids.push(this_object_label);
+                possibly_changed_ids_and_entry.push([this_object_label, "content"]);
           //      internalSource[this_content_label] = paragraph_content_list[j];
             }
         }
@@ -672,17 +673,21 @@ function assemble_internal_version_changes() {
         internalSource[parent_and_location[0]][parent_and_location[1]] = this_arrangement_of_objects;
         console.log("this_arrangement_of_objects is", this_arrangement_of_objects);
     } else if (object_being_edited.tagName == "INPUT") {
+
+  // current code assume the INPUT is a title.  Other cases?
+
         nature_of_the_change = "replace";
         var line_being_edited = object_being_edited;  //document.getElementById('actively_editing_p');
         var line_content = line_being_edited.value;
         line_content = line_content.trim();
         console.log("the content (is it a title?) is", line_content);
         var owner_of_change = object_being_edited.getAttribute("data-source_id");
-        var location_of_change = object_being_edited.getAttribute("data-component");
-        console.log("location_of_change", location_of_change, "within", owner_of_change);
+        var component_being_changed = object_being_edited.getAttribute("data-component");
+        console.log("component_being_changed", component_being_changed, "within", owner_of_change);
         // update the title of the object
-        internalSource[owner_of_change][location_of_change] = line_content;
-        $("#editing_title_holder").replaceWith("<b>(" + line_content + ")</b>");
+        internalSource[owner_of_change][component_being_changed] = line_content;
+        possibly_changed_ids_and_entry.push([owner_of_change, "title"]);
+ //       $("#editing_title_holder").replaceWith("<b>(" + line_content + ")</b>");
 
         //  now put focus on next testarea?
 
@@ -692,7 +697,7 @@ function assemble_internal_version_changes() {
         alert("don;t know how to assemble_internal_version_changes of", object_being_edited.tagName)
     }
     console.log("finished assembling internal version, which is now:",internalSource);
-    return [nature_of_the_change, location_of_change, possibly_changed_ids]
+    return [nature_of_the_change, location_of_change, possibly_changed_ids_and_entry]
 }
             
 function html_from_internal_id(the_id) {
@@ -786,13 +791,13 @@ function insert_html_version(these_changes) {
 
     nature_of_the_change = these_changes[0];
     location_of_change = these_changes[1];
-    possibly_changed_ids = these_changes[2];
+    possibly_changed_ids_and_entry = these_changes[2];
 
     console.log("nature_of_the_change", nature_of_the_change);
     console.log("location_of_change", location_of_change);
-    console.log("possibly_changed_ids", possibly_changed_ids);
+    console.log("possibly_changed_ids_and_entry", possibly_changed_ids_and_entry);
 
-    // we make HTML version of the objects with ids possibly_changed_ids,
+    // we make HTML version of the objects with ids possibly_changed_ids_and_entry,
     // and then insert those into the page.  
 
     if (nature_of_the_change != "replace") {
@@ -800,18 +805,28 @@ function insert_html_version(these_changes) {
         alert("should be replace, since it is the edit form we are replacing")
     }
 
-    for (var j=0; j < possibly_changed_ids.length; ++j) {
-        this_object_id = possibly_changed_ids[j];
+    for (var j=0; j < possibly_changed_ids_and_entry.length; ++j) {
+        this_object_id = possibly_changed_ids_and_entry[j][0];
+        this_object_entry = possibly_changed_ids_and_entry[j][1];
         this_object = internalSource[this_object_id];
         if (this_object["ptxtag"] == "p") {
             var object_as_html = document.createElement('p');
             object_as_html.setAttribute("data-editable", 99);
             object_as_html.setAttribute("tabindex", -1);
             object_as_html.setAttribute("id", this_object_id);
-            object_as_html.innerHTML = ptx_to_html(this_object["content"]);
+      //      object_as_html.innerHTML = ptx_to_html(this_object["content"]);
+            object_as_html.innerHTML = ptx_to_html(this_object[this_object_entry]);
+            location_of_change.insertAdjacentElement('beforebegin', object_as_html);
+        } else if(this_object_entry == "title") {
+            var object_as_html = document.createElement('span');
+            object_as_html.setAttribute("data-editable", 99);
+            object_as_html.setAttribute("tabindex", -1);
+            object_as_html.setAttribute("class", "title");
+            object_as_html.innerHTML = ptx_to_html(this_object[this_object_entry]);
+            console.log("inserting",object_as_html,"before",location_of_change);
             location_of_change.insertAdjacentElement('beforebegin', object_as_html);
         } else {
-           alert("I don; tknow how to make a", this_object["ptxtag"]);
+            alert("I don; tknow how to make a", this_object["ptxtag"]);
         }
     }
     location_of_change.remove();
@@ -933,13 +948,26 @@ function local_editing_action(e) {
             console.log("probably saving a title");
             e.preventDefault();
             these_changes = assemble_internal_version_changes();
+            final_added_object = insert_html_version(these_changes);
+            console.log("final_added_object", final_added_object);
+// assumes we are editing a theorem-like.  Need to generalize
+            document.getElementById("actively_editing_statement").focus();
+            document.getElementById("actively_editing_statement").setSelectionRange(0,0);
+            save_current_editing()
+
         } else if (prev_char.code == "Enter" && prev_prev_char.code == "Enter") {
   // same as ESC above:  consolidate
             console.log("need to save");
             e.preventDefault();
             these_changes = assemble_internal_version_changes();
             final_added_object = insert_html_version(these_changes);
-            edit_menu_for(final_added_object.id, "entering");
+            // if there is a textarea ahead, go there.  Otherwise menu the last thing added
+            if (next_textarea = document.querySelector('textarea')) {
+                next_textarea.focus();
+                next_textarea.setSelectionRange(0,0);
+            } else {
+                edit_menu_for(final_added_object.id, "entering");
+            }
             save_current_editing()
         }
     } else {
