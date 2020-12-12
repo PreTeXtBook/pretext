@@ -146,12 +146,14 @@ function standard_title_form(object_id) {
     the_parent_component = the_parent[1];
 
     var title_form = "<div><b>" + object_type_name + "&nbsp;#N</b>&nbsp;";
-    title_form += '<input id="actively_editing_title" class="starting_point_for_editing" data-source_id="' + object_id + '" data-parent_id="' + the_parent_id + '" data-parent_component="' + the_parent_component + '" placeholder="Optional title" type="text"/>';
+    title_form += '<span id="editing_title_holder">';
+    title_form += '<input id="actively_editing_title" class="starting_point_for_editing" data-source_id="' + object_id + '" data-component="' + 'title' + '" placeholder="Optional title" type="text"/>';
 
     title_form += '&nbsp;<span class="group_description">(RETurn to save the title)</span>';
 /*
     title_form += '<input id="actively_editing_id" placeholder="Optional Id" class="input_id" type="text"/>';
 */
+    title_form += '</span>';  // #editing_title_holder
     title_form += '</div>';
 
     return title_form
@@ -669,6 +671,23 @@ function assemble_internal_version_changes() {
         console.log("this_arrangement_of_objects was",  internalSource[parent_and_location[0]][parent_and_location[1]]);
         internalSource[parent_and_location[0]][parent_and_location[1]] = this_arrangement_of_objects;
         console.log("this_arrangement_of_objects is", this_arrangement_of_objects);
+    } else if (object_being_edited.tagName == "INPUT") {
+        nature_of_the_change = "replace";
+        var line_being_edited = object_being_edited;  //document.getElementById('actively_editing_p');
+        var line_content = line_being_edited.value;
+        line_content = line_content.trim();
+        console.log("the content (is it a title?) is", line_content);
+        var owner_of_change = object_being_edited.getAttribute("data-source_id");
+        var location_of_change = object_being_edited.getAttribute("data-component");
+        console.log("location_of_change", location_of_change, "within", owner_of_change);
+        // update the title of the object
+        internalSource[owner_of_change][location_of_change] = line_content;
+        $("#editing_title_holder").replaceWith("<b>(" + line_content + ")</b>");
+
+        //  now put focus on next testarea?
+
+
+
     } else {
         alert("don;t know how to assemble_internal_version_changes of", object_being_edited.tagName)
     }
@@ -910,8 +929,11 @@ function local_editing_action(e) {
             save_current_editing()
     } else if (e.code == "Enter") {
         console.log("saw a Ret");
-    //    e.preventDefault();
-        if (prev_char.code == "Enter" && prev_prev_char.code == "Enter") {
+        if (document.activeElement.tagName == "INPUT") {
+            console.log("probably saving a title");
+            e.preventDefault();
+            these_changes = assemble_internal_version_changes();
+        } else if (prev_char.code == "Enter" && prev_prev_char.code == "Enter") {
   // same as ESC above:  consolidate
             console.log("need to save");
             e.preventDefault();
@@ -1305,10 +1327,14 @@ function logKeyDown(e) {
             console.log("document.getElementById('local_menu_holder')", document.getElementById('local_menu_holder'));
             local_menu_navigator(e)
         }  else {
-            if (input_region == "INPUT") { return }   // e.preventDefault() 
+            if (input_region == "INPUT") {
+                console.log("Enter in an INPUT, so time to save it")
+                local_editing_action(e)
+            }
             else { // input_region is TEXTAREA
                 console.log("about to do local_editing_action", this_char.code, prev_char.code, prev_prev_char.code);
-                local_editing_action(e) }
+                local_editing_action(e)
+            }
         }
 
     } else {
