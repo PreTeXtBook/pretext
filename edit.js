@@ -7,7 +7,7 @@
 $(".autopermalink > a").attr("tabindex", -1);
 
 $("#akX > *").attr("data-editable", 99);
-var editable_objects = ["p", "ol", "ul", "li", "article"];
+var editable_objects = ["p", "ol", "ul", "li", "article", "blockquote", "section"];
 for(var j=0; j < editable_objects.length; ++j) {
     $(editable_objects[j]).attr("data-editable", 99);
     $(editable_objects[j]).attr("tabindex", -1);
@@ -407,6 +407,7 @@ function edit_in_place(obj, new_object_description) {
         }
                   // and describe where it goes
   //      var parent_id = new_object_description[1];
+        console.log("new_objects_sibling",new_objects_sibling);
         var sibling_id = new_objects_sibling.id;
         var parent_description = internalSource[sibling_id]["parent"];  
         new_source["parent"] = parent_description;
@@ -569,7 +570,9 @@ var internalSource = {  // currently the key is the HTML id
    "357911": {"xml:id": "356711", "permid": "", "ptxtag": "em", "title": "",
            "content": 'Synonyms'},
    "sYv": {"xml:id": "", "permid": "sYv", "ptxtag": "p", "parent": ["hPw","content"],
-           "content": "One way to get a feel for the subject is to consider the types of problems you solve in discrete math. Here are a few simple examples:"}
+           "content": "One way to get a feel for the subject is to consider the types of problems you solve in discrete math. Here are a few simple examples:"},
+   "ACU": {"xml:id": "", "permid": "ACU", "ptxtag": "p", "parent": ["hPw","content"],
+           "content": "In an algebra or calculus class, you might have found a particular set of numbers (maybe the set of numbers in the range of a function). You would represent this set as an interval: <m>[0,\\infty)</m> is the range of <m>f(x)=x^2</m> since the set of outputs of the function are all real numbers <m>0</m> and greater. This set of numbers is NOT discrete. The numbers in the set are not separated by much at all. In fact, take any two numbers in the set and there are infinitely many more between them which are also in the set."}
 //           "content": '124567'},
 //   "124567": "Synonyms"
 }
@@ -1249,7 +1252,11 @@ function main_menu_navigator(e) {  // we are not currently editing
 
                }
            } else { // we are at the bottom of a block
-               alert("Shift-Tab not implemented at the bottom of a block");
+               document.getElementById("edit_menu_holder").previousSibling.classList.remove("may_leave");
+               document.getElementById("edit_menu_holder").previousSibling.focus();
+               document.getElementById("edit_menu_holder").remove()
+               edit_menu_for(document.activeElement.id, "entering"); 
+           //    alert("Shift-Tab not implemented at the bottom of a block");
            }
        } else {
         // copied from Tab, so consolidate
