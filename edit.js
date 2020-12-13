@@ -103,6 +103,7 @@ inner_menu_for = {
 
 editing_container_for = { "p": 1,
  "theorem-like": ["theorem", "proposition", "lemma"],
+ "definition-like": ["definition", "axiom", "hypothesis"],
  "lemma": 1 }
 
 editing_tips = {
@@ -230,8 +231,9 @@ function top_menu_options_for(this_obj) {
     }
     this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="beforebegin">Insert before<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
     this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="afterend">Insert after<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
-    this_list += '<li tabindex="-1" data-env="' + this_object_type + '">Metadata<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
     this_list += '<li tabindex="-1" data-env="' + this_object_type + '">Move or delete<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+    this_list += '<li tabindex="-1" data-env="' + "metaadata" + '">Metadata<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+    this_list += '<li tabindex="-1" data-env="' + "how to undo" + '">Undo<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
     return this_list
 }
 
@@ -336,6 +338,25 @@ function container_for_editing(obj_type) {
         proof += editingregion_container_end + proof_container_end;
 
         this_content_container.innerHTML = title + statement + proof
+    } else if ( editing_container_for["definition-like"].includes(obj_type) ) {
+
+// consolidate with theorem-like
+        console.log("making a form for", obj_type);
+        this_content_container.setAttribute('data-objecttype', 'definition-like');
+        var title = standard_title_form(obj_type);
+
+        var statement_container_start = '<div class="editing_statement">';
+        var statement_container_end = '</div>';
+        var editingregion_container_start = '<div class="editing_p_holder">'
+        var editingregion_container_end = '</div>'
+        var statementinstructions = '<span class="group_description">statement (paragraphs, images, lists, etc)</span>';
+        var statementeditingregion = '<textarea id="actively_editing_statement" style="width:100%;" placeholder="first paragraph of statement"></textarea>';
+        var statement = statement_container_start + editingregion_container_start;
+        statement += statementinstructions;
+        statement += statementeditingregion;
+        statement += editingregion_container_end + statement_container_end;
+
+        this_content_container.innerHTML = title + statement
     }
 
     return this_content_container
@@ -375,6 +396,10 @@ function edit_in_place(obj, new_object_description) {
             new_source["proof"] = "<&>" + new_proof_p_id + "<;>";
             internalSource[new_proof_p_id] = { "xml:id": new_proof_p_id, "permid": "", ptxtag: "p",
                           content: "", "parent": [new_id, "proof"] }
+        } else if (editing_container_for["definition-like"].includes(new_tag)) {
+            new_source["statement"] = "<&>" + new_statement_p_id + "<;>";
+            internalSource[new_statement_p_id] = { "xml:id": new_statement_p_id, "permid": "", ptxtag: "p",
+                          content: "", "parent": [new_id, "statement"] }
         }  else {   // note: not all cases have been covered
             new_source["content"] = "<&>" + new_content_p_id + "<;>";
             internalSource[new_content_p_id] = { "xml:id": new_content_p_id, "permid": "", ptxtag: "p",
@@ -477,6 +502,36 @@ function edit_in_place(obj, new_object_description) {
 
         $("#" + thisID).replaceWith(this_content_container);
         $("#actively_editing_title").focus();
+      } else if (editing_container_for["definition-like"].includes(new_tag)) {
+// reconcile with theorem-like
+
+// only good for creating a new theorem, not editing in place
+// think about thaat use case:  once it exists, do we ever edit the theorem as a unit?
+
+        console.log("edit_in_place", obj)
+        var this_content_container = document.createElement('div');
+        this_content_container.setAttribute('id', "actively_editing");
+        this_content_container.setAttribute('data-objecttype', 'definition-like');
+
+   //     var title = standard_title_form(new_tag);
+        var title = standard_title_form(new_id);
+
+        var statement_container_start = '<div class="editing_statement">';
+        var statement_container_end = '</div>';
+        var editingregion_container_start = '<div class="editing_p_holder">'
+        var editingregion_container_end = '</div>'
+        var statementinstructions = '<span class="group_description">statement (paragraphs, images, lists, etc)</span>';
+        var statementeditingregion = '<textarea id="actively_editing_statement" style="width:98%;" placeholder="first paragraph of statement" data-source_id="' + new_statement_p_id + '" data-parent_id="' + new_id + '" data-parent_component="statement"></textarea>';
+        var statement = statement_container_start + editingregion_container_start;
+        statement += statementinstructions;
+        statement += statementeditingregion;
+        statement += editingregion_container_end + statement_container_end;
+
+        this_content_container.innerHTML = title + statement
+
+        $("#" + thisID).replaceWith(this_content_container);
+        $("#actively_editing_title").focus();
+
 
       } else {
           console.log("I do not know how to edit", new_tag)
@@ -583,7 +638,7 @@ function display_new(objectclass, objecttype, whereat, relativelocation) {
 
         if (object_id) { object_in_html.setAttribute("id", object_id); }
 
-        object_heading_html = '<h6 class="heading">';
+        object_heading_html = '<h6 class="heading" data=parent_id="' + object_id + '" data-editable="99" tabindex="-1">';
         object_heading_html += '<span class="type">' + objecttype + '</span>';
         object_heading_html += '<span class="space">' + " " + '</span>';
         object_heading_html += '<span class="codenumber">' + "#N" + '</span>';
@@ -610,10 +665,43 @@ function display_new(objectclass, objecttype, whereat, relativelocation) {
             object_proof.remove;
             proof_in_html = document.createElement("article");
             proof_in_html.setAttribute("class", "hiddenproof");
-            proof_in_html.innerHTML = '<a data-knowl="" class="id-ref proof-knowl original" data-refid="hk-Jkl"><h6 class="heading"><span class="type">Proof<span class="period">.</span></span></h6></a>';
+            proof_in_html.innerHTML = '<a data-knowl="" class="id-ref proof-knowl original" data-refid="hk-Jkl"><h6 class="heading" data-editable="99" tabindex="-1"><span class="type">Proof<span class="period">.</span></span></h6></a>';
             
             document.activeElement.insertAdjacentElement("afterend", proof_in_html)
          }
+        } else if (objectclass == "definition-like") {
+        object_in_html = document.createElement("article");
+        object_in_html.setAttribute("class", objectclass + " " + objecttype);
+        object_in_html.setAttribute("tabindex", -1);
+        object_in_html.setAttribute("data-editable", 99);
+
+        object_title = document.getElementById('actively_editing_title').value;
+        object_id = document.getElementById('actively_editing_id').value;
+        object_id = object_id || randomstring();
+
+        if (object_id) { object_in_html.setAttribute("id", object_id); }
+
+        object_heading_html = '<h6 class="heading" data=parent_id="' + object_id + '" data-editable="99" tabindex="-1">';
+        object_heading_html += '<span class="type">' + objecttype + '</span>';
+        object_heading_html += '<span class="space">' + " " + '</span>';
+        object_heading_html += '<span class="codenumber">' + "#N" + '</span>';
+
+        if (object_title) {
+            object_heading_html += '<span class="space">' + " " + '</span>';
+            object_heading_html += '<span class="creator">(' + object_title + ')</span>';
+        }
+        object_heading_html += '<span class="period">' + "." + '</span>';
+        object_heading_html += '</h6>';
+
+        object_statement_ptx = document.getElementById("in_progress_statement").innerHTML;
+        document.getElementById("in_progress_statement").remove();
+        object_statement_html = object_statement_ptx;   // add the transform later
+
+        object_in_html.innerHTML = object_heading_html + object_statement_html;
+
+        whereat.insertAdjacentElement(relativelocation, object_in_html);
+        console.log("trying to put the focus on",object_in_html);
+        object_in_html.focus();
 
     } else {
         alert("I don;t know how to display", objectclass)
@@ -735,7 +823,8 @@ function html_from_internal_id(the_id, is_inner) {
         var the_content = the_object["content"];
         if (is_inner) { 
                 // should the id be the_id ?
-            var opening_tag = '<p id="' + the_object["xml:id"] + '"';
+        //    var opening_tag = '<p id="' + the_object["xml:id"] + '"';
+            var opening_tag = '<p id="' + the_id + '"';
             opening_tag += ' data-editable="99" tabindex="-1"';
             opening_tag += '>';
             var closing_tag = '</p>';
@@ -763,7 +852,7 @@ function html_from_internal_id(the_id, is_inner) {
 
         object_in_html.setAttribute("id", the_id);
 
-        object_heading_html = '<h6 class="heading">';
+        object_heading_html = '<h6 class="heading" data-editable="99" tabindex="-1">';
         var objecttype_capped = ptxtag.charAt(0).toUpperCase() + ptxtag.slice(1);
         object_heading_html += '<span class="type">' + objecttype_capped + '</span>';
         object_heading_html += '<span class="space">' + " " + '</span>';
@@ -788,6 +877,39 @@ function html_from_internal_id(the_id, is_inner) {
 //            proof_in_html = document.createElement("article");
 //            proof_in_html.setAttribute("class", "hiddenproof");
 //            proof_in_html.innerHTML = '<a data-knowl="" class="id-ref proof-knowl original" data-refid="hk-Jkl"><h6 class="heading"><span class="type">Proof<span class="period">.</span></span></h6></a>';
+    } else if (editing_container_for["definition-like"].includes(ptxtag)) {
+           //shoud be statement_object_in_html, and then proof_object_in_html
+        object_in_html = document.createElement("article");
+        object_in_html.setAttribute("class", "definition-like" + " " + ptxtag);
+        object_in_html.setAttribute("tabindex", -1);
+        object_in_html.setAttribute("data-editable", 99);
+
+        object_title = the_object["title"];
+
+        object_in_html.setAttribute("id", the_id);
+
+        object_heading_html = '<h6 class="heading" data-parent_id="' + the_id + '" data-editable="99" tabindex="-1">';
+        var objecttype_capped = ptxtag.charAt(0).toUpperCase() + ptxtag.slice(1);
+        object_heading_html += '<span class="type">' + objecttype_capped + '</span>';
+        object_heading_html += '<span class="space">' + " " + '</span>';
+        object_heading_html += '<span class="codenumber">' + "#N" + '</span>';
+
+        if (object_title) {
+            object_heading_html += '<span class="space">' + " " + '</span>';
+            object_heading_html += '<span class="creator">(' + object_title + ')</span>';
+        }
+        object_heading_html += '<span class="period">' + "." + '</span>';
+        object_heading_html += '</h6>';
+
+        object_statement_ptx = the_object["statement"];
+
+    //    object_statement_html =  ptx_to_html(object_statement_ptx);   // transform not really working yet
+        object_statement_html =  expand_condensed_source_html(object_statement_ptx);
+
+        object_in_html.innerHTML = object_heading_html + object_statement_html;
+
+        the_html_objects.push(object_in_html);
+
 
     } else {
          alert("don't know how to make html from", the_object)
@@ -827,8 +949,8 @@ function insert_html_version(these_changes) {
             location_of_change.insertAdjacentElement('beforebegin', object_as_html);
         } else if(this_object_entry == "title") {
             var object_as_html = document.createElement('span');
-            object_as_html.setAttribute("data-editable", 99);
-            object_as_html.setAttribute("tabindex", -1);
+  //          object_as_html.setAttribute("data-editable", 99);
+  //          object_as_html.setAttribute("tabindex", -1);
             object_as_html.setAttribute("class", "title");
             object_as_html.innerHTML = ptx_to_html(this_object[this_object_entry]);
             console.log("inserting",object_as_html,"before",location_of_change);
@@ -1083,6 +1205,7 @@ function main_menu_navigator(e) {  // we are not currently editing
     } else if ((e.code == "Tab" && e.shiftKey) || e.code == "ArrowUp") {  // Shift-Tab to prevous object
      // recopied code:  consolidate
         e.preventDefault();
+        console.log("just saw a", e.code);
         if(this_choice = document.getElementById('enter_choice')) {
            console.log("there already is an 'enter_choice'");
            // there are two cases:  1) we are at the top of a block (and so may enter it or add near it, or move on)
@@ -1129,6 +1252,19 @@ function main_menu_navigator(e) {  // we are not currently editing
                alert("Shift-Tab not implemented at the bottom of a block");
            }
        } else {
+        // copied from Tab, so consolidate
+        console.log("saw an",e.code);
+        current_active_menu_item = document.getElementById('choose_current');
+        next_menu_item = current_active_menu_item.previousSibling;
+        console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
+        if (!next_menu_item) { next_menu_item = current_active_menu_item.parentNode.lastChild }
+        console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
+        current_active_menu_item.removeAttribute("id");
+        console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
+        current_active_menu_item.classList.remove("chosen");
+        next_menu_item.setAttribute("id", "choose_current");
+        console.log("setting focus on",next_menu_item);
+        next_menu_item.focus();
          console.log("Error:  Shift-Tab not understood when ther eis an active menu");
        }
     } 
@@ -1209,8 +1345,11 @@ function main_menu_navigator(e) {  // we are not currently editing
                // put  menu on the item at the top of the block_we_are_reentering
                    // this is a repeat of a Tab case, so consolidate
             console.log("menu place 10");
+            console.log("document.activeElement", document.activeElement);
 
-                edit_menu_for(document.activeElement.id, "entering");
+                id_for_editing = (document.activeElement.id || document.activeElement.getAttribute("data-parent_id"));
+// not right:  data-parent_id is used when we want to change the title or tag
+                edit_menu_for(id_for_editing, "entering");
        //         $(":focus").addClass("may_select");
           //      document.getElementById('edit_menu_holder').focus();
                 return
@@ -1277,20 +1416,6 @@ function main_menu_navigator(e) {  // we are not currently editing
             }
 
         }
-    }  else if (e.code == "ArrowUp") {
-        // copied from Tab, so consolidate
-        console.log("saw an",e.code);
-        current_active_menu_item = document.getElementById('choose_current');
-        next_menu_item = current_active_menu_item.previousSibling;
-        console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
-        if (!next_menu_item) { next_menu_item = current_active_menu_item.parentNode.lastChild }
-        console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
-        current_active_menu_item.removeAttribute("id");
-        console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
-        current_active_menu_item.classList.remove("chosen");
-        next_menu_item.setAttribute("id", "choose_current");
-        console.log("setting focus on",next_menu_item);
-        next_menu_item.focus();
     }  else if (e.code == "Escape" || e.code == "ArrowLeft") {
         console.log("processing ESC");
         if (current_active_menu_item = document.getElementById('choose_current')) {
