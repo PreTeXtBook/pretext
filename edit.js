@@ -110,7 +110,10 @@ editing_tips = {
           "three RETurns to end editing a paragraph",
           "TAB to insert emphasis, math, special characters, etc",
           "ESC to stop editing and save",
-          "TAB to insert musical characters, species name, inline code, etc"]
+          "TAB to insert a reference or index entry",
+          "TAB to insert musical characters, species name, inline code, etc"],
+    "title": ["RETurn to save title",
+              "TAB for a reference, special characters, etc"]
 }
           
 function editing_tip_for(obj_type) {
@@ -149,7 +152,7 @@ function standard_title_form(object_id) {
     title_form += '<span id="editing_title_holder">';
     title_form += '<input id="actively_editing_title" class="starting_point_for_editing" data-source_id="' + object_id + '" data-component="' + 'title' + '" placeholder="Optional title" type="text"/>';
 
-    title_form += '&nbsp;<span class="group_description">(RETurn to save the title)</span>';
+    title_form += '&nbsp;<span class="group_description">(' + editing_tip_for("title") + ')</span>';
 /*
     title_form += '<input id="actively_editing_id" placeholder="Optional Id" class="input_id" type="text"/>';
 */
@@ -221,7 +224,10 @@ function top_menu_options_for(this_obj) {
     console.log("top_menu_options_for", this_obj);
     var this_object_type = this_obj.tagName;   //  needs to examine other attributes and then look up a reasonable name
     var this_list = '<li tabindex="-1" id="choose_current" data-env="p" data-action="edit">Edit ' + this_object_type + '</li>';
-    this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_object_type + '</li>';
+    if ($(this_obj).children('[data-editable="99"]').length) {
+        console.log("$(this_obj).children('[data-editable=99]')", $(this_obj).children('[data-editable="99"]'));
+        this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_object_type + '</li>';
+    }
     this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="beforebegin">Insert before<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
     this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="afterend">Insert after<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
     this_list += '<li tabindex="-1" data-env="' + this_object_type + '">Metadata<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
@@ -505,7 +511,7 @@ var internalSource = {  // currently the key is the HTML id
 //           "content": '246810'},
 //   "246810": '    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n <ellipsis/>.\n Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n What sort of problems?\n Okay, those that involve numbers,\n functions, lines, triangles,\n <ellipsis/>.\n Whatever your conception of what mathematics is,\n try applying the concept of <q>discrete</q> to it, as defined above.\n Some math fundamentally deals with <em>stuff</em>\n that is individually separate and distinct.',
 //   "13579": '<&>357911<;>: separate - detached - distinct - abstract.',
-   "357911": {"xml:id": "", "permid": "", "ptxtag": "em", "title": "",
+   "357911": {"xml:id": "356711", "permid": "", "ptxtag": "em", "title": "",
            "content": 'Synonyms'},
    "sYv": {"xml:id": "", "permid": "sYv", "ptxtag": "p", "parent": ["hPw","content"],
            "content": "One way to get a feel for the subject is to consider the types of problems you solve in discrete math. Here are a few simple examples:"}
@@ -543,6 +549,11 @@ function local_menu_navigator(e) {
 
 function ptx_to_html(input_text) {
     output_text = input_text;
+
+// there are two types of expansion to be done:
+//    expand internal tags
+//    convert hand-written ptx to HTML
+    output_text = expand_condensed_source_html(output_text);
 
     output_text = output_text.replace(/<term>/g, "<b>"); 
     output_text = output_text.replace(/<\/term>/g, "</b>"); 
@@ -699,24 +710,48 @@ function assemble_internal_version_changes() {
     console.log("finished assembling internal version, which is now:",internalSource);
     return [nature_of_the_change, location_of_change, possibly_changed_ids_and_entry]
 }
-            
-function html_from_internal_id(the_id) {
+
+function expand_condensed_source_html(text) {
+    if (text.includes("<&>")) {
+        return text.replace(/<&>(.*?)<;>/g,expand_condensed_src_html)
+    } else {
+    return text
+    }
+}
+function expand_condensed_src_html(match, the_id) {
+    return html_from_internal_id(the_id, "inner")
+}
+
+function html_from_internal_id(the_id, is_inner) {
+       // the outer element needs to be constructed as document.createElement
+       // but the inner content is just plain text
     var the_object = internalSource[the_id];
+    console.log("making html of", the_object);
     var ptxtag = the_object["ptxtag"];
 
     var the_html_objects = [];
 
     if (ptxtag == "p") {
+        var the_content = the_object["content"];
+        if (is_inner) { 
+                // should the id be the_id ?
+            var opening_tag = '<p id="' + the_object["xml:id"] + '"';
+            opening_tag += ' data-editable="99" tabindex="-1"';
+            opening_tag += '>';
+            var closing_tag = '</p>';
+            return opening_tag + expand_condensed_source_html(the_content) + closing_tag
+        }
+
         html_of_this_object = document.createElement('p');
         html_of_this_object.setAttribute("data-editable", 99);
         html_of_this_object.setAttribute("tabindex", -1);
         html_of_this_object.setAttribute("id", the_id);
 
-        var content_id = the_object["content"];
-        html_of_this_object.innerHTML = internalSource[content_id];
-
+        html_of_this_object.innerHTML = the_content
         the_html_objects.push(html_of_this_object);
 
+    } else if (ptxtag == "em") {   // assume is_inner?
+        return '<em id="' + the_id + '"data-editable="99" tabindex="-1">' + the_object["content"] + '</em>';
     } else if (editing_container_for["theorem-like"].includes(ptxtag)) {
            //shoud be statement_object_in_html, and then proof_object_in_html
         object_in_html = document.createElement("article");
@@ -743,7 +778,8 @@ function html_from_internal_id(the_id) {
 
         object_statement_ptx = the_object["statement"];
 
-        object_statement_html =  ptx_to_html(object_statement_ptx);   // transform not really working yet
+    //    object_statement_html =  ptx_to_html(object_statement_ptx);   // transform not really working yet
+        object_statement_html =  expand_condensed_source_html(object_statement_ptx); 
 
         object_in_html.innerHTML = object_heading_html + object_statement_html + "sorry, proof is missing";
 
@@ -943,6 +979,7 @@ function local_editing_action(e) {
                 console.log("final_added_object parent", internalSource[final_added_object.id]["parent"]);
                 the_whole_object = html_from_internal_id(this_parent[0]);
                 $("#actively_editing").replaceWith(the_whole_object[0]);  // later handle multiple additions
+                edit_menu_for(this_parent[0], "entering");
             } else {
                 edit_menu_for(final_added_object.id, "entering");
             }
