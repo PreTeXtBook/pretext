@@ -78,13 +78,14 @@ inner_menu_for = {
                  ["identity"],
                  ["algorithm"]],
 "definition-like": [["definition"],
-                   ["axiom", "axiom"],
+                   ["conjecture", "conjecture"],
+                   ["axiom", "axiom", "x"],
                    ["principle", "principle"],
-                   ["heuristic",],
+                   ["heuristic", "heuristic", "u"],
                    ["hypothesis", "hypothesis", "y"],
-                   ["conjecture", "conjecture"]],
+                   ["assumption", "assumption", "s"]],
 "list-like": [["ordered list", "ol"], ["unordered list", "ul"], ["dictionary list", "dl"], ["table"], ["table with caption", "tablecaption", "c"]],
-"section-like": [["titled paragraph", "paragraphs"], ["reading questions", "rq"], ["exercises"], ["section"]],
+"section-like": [["section"], ["subsection", "subsection", "b"], ["titled paragraph", "paragraphs"], ["reading questions", "rq"], ["exercises"]],
 "project-like": [["exercise"], ["activitiy"], ["investigation"], ["exploration", "exploration", "x"], ["project"]],
 "remark-like": [["remark"], ["warning"], ["note"], ["observation"], ["convention"], ["insight"]],
 "example-like": [["example"], ["question"], ["problem"]],
@@ -101,10 +102,13 @@ inner_menu_for = {
 "ref": ["ref to an internal id", "citation", "hyperlink"]
 }
 
+// this should be created from inner_menu_for
 editing_container_for = { "p": 1,
- "theorem-like": ["theorem", "proposition", "lemma"],
- "definition-like": ["definition", "axiom", "hypothesis"],
- "lemma": 1 }
+ "theorem-like": ["theorem", "proposition", "lemma", "corollary", "claim", "fact", "identity", "algorithm"],
+ "definition-like": ["definition", "conjecture", "axiom", "hypothesis", "principle", "heuristic", "assumption"],
+"remark-like": ["remark", "warning", "note", "observation", "convention", "insight"],
+"section-like": ["section", "subsection", "paragraphs", "rq", "exercises"]
+}
 
 editing_tips = {
     "p": ["two RETurns to separate paragraphs",
@@ -357,6 +361,45 @@ function container_for_editing(obj_type) {
         statement += editingregion_container_end + statement_container_end;
 
         this_content_container.innerHTML = title + statement
+    } else if ( editing_container_for["remark-like"].includes(obj_type) ) {
+
+// consolidate with theorem-like
+        console.log("making a form for", obj_type);
+        this_content_container.setAttribute('data-objecttype', 'remark-like');
+        var title = standard_title_form(obj_type);
+
+        var statement_container_start = '<div class="editing_statement">';
+        var statement_container_end = '</div>';
+        var editingregion_container_start = '<div class="editing_p_holder">'
+        var editingregion_container_end = '</div>'
+        var statementinstructions = '<span class="group_description">statement (paragraphs, images, lists, etc)</span>';
+        var statementeditingregion = '<textarea id="actively_editing_statement" style="width:100%;" placeholder="first paragraph of statement"></textarea>';
+        var statement = statement_container_start + editingregion_container_start;
+        statement += statementinstructions;
+        statement += statementeditingregion;
+        statement += editingregion_container_end + statement_container_end;
+
+        this_content_container.innerHTML = title + statement
+    } else if ( editing_container_for["section-like"].includes(obj_type) ) {
+
+// consolidate with theorem-like
+        console.log("making a form for", obj_type);
+        this_content_container.setAttribute('data-objecttype', 'section-like');
+        var title = standard_title_form(obj_type);
+
+        var statement_container_start = '<div class="editing_statement">';
+        var statement_container_end = '</div>';
+        var editingregion_container_start = '<div class="editing_p_holder">'
+        var editingregion_container_end = '</div>'
+        var statementinstructions = '<span class="group_description">statement (paragraphs, images, lists, etc)</span>';
+        var statementeditingregion = '<textarea id="actively_editing_statement" style="width:100%;" placeholder="first paragraph of statement"></textarea>';
+        var statement = statement_container_start + editingregion_container_start;
+        statement += statementinstructions;
+        statement += statementeditingregion;
+        statement += editingregion_container_end + statement_container_end;
+
+        this_content_container.innerHTML = title + statement
+
     }
 
     return this_content_container
@@ -400,6 +443,14 @@ function edit_in_place(obj, new_object_description) {
             new_source["statement"] = "<&>" + new_statement_p_id + "<;>";
             internalSource[new_statement_p_id] = { "xml:id": new_statement_p_id, "permid": "", ptxtag: "p",
                           content: "", "parent": [new_id, "statement"] }
+        } else if (editing_container_for["remark-like"].includes(new_tag)) {
+            new_source["content"] = "<&>" + new_content_p_id + "<;>";
+            internalSource[new_content_p_id] = { "xml:id": new_content_p_id, "permid": "", ptxtag: "p",
+                          content: "", "parent": [new_id, "content"] }
+        } else if (editing_container_for["section-like"].includes(new_tag)) {
+            new_source["content"] = "<&>" + new_content_p_id + "<;>";
+            internalSource[new_content_p_id] = { "xml:id": new_content_p_id, "permid": "", ptxtag: "p",
+                          content: "", "parent": [new_id, "content"] }
         }  else {   // note: not all cases have been covered
             new_source["content"] = "<&>" + new_content_p_id + "<;>";
             internalSource[new_content_p_id] = { "xml:id": new_content_p_id, "permid": "", ptxtag: "p",
@@ -532,9 +583,61 @@ function edit_in_place(obj, new_object_description) {
 
         $("#" + thisID).replaceWith(this_content_container);
         $("#actively_editing_title").focus();
+      } else if (editing_container_for["remark-like"].includes(new_tag)) {
+// reconcile with theorem-like
+
+        console.log("edit_in_place", obj)
+        var this_content_container = document.createElement('div');
+        this_content_container.setAttribute('id', "actively_editing");
+        this_content_container.setAttribute('data-objecttype', 'remark-like');
+
+   //     var title = standard_title_form(new_tag);
+        var title = standard_title_form(new_id);
+
+        var content_container_start = '<div class="editing_content">';
+        var content_container_end = '</div>';
+        var editingregion_container_start = '<div class="editing_p_holder">'
+        var editingregion_container_end = '</div>'
+        var contentinstructions = '<span class="group_description">content (paragraphs, images, lists, etc)</span>';
+        var contenteditingregion = '<textarea id="actively_editing_statement" style="width:98%;" placeholder="first paragraph of content" data-source_id="' + new_content_p_id + '" data-parent_id="' + new_id + '" data-parent_component="content"></textarea>';
+        var content = content_container_start + editingregion_container_start;
+        content += contentinstructions;
+        content += contenteditingregion;
+        content += editingregion_container_end + content_container_end;
+
+        this_content_container.innerHTML = title + content
+
+        $("#" + thisID).replaceWith(this_content_container);
+        $("#actively_editing_title").focus();
+      } else if (editing_container_for["section-like"].includes(new_tag)) {
+// reconcile with theorem-like
+
+        console.log("edit_in_place", obj)
+        var this_content_container = document.createElement('div');
+        this_content_container.setAttribute('id', "actively_editing");
+        this_content_container.setAttribute('data-objecttype', 'section-like');
+
+   //     var title = standard_title_form(new_tag);
+        var title = standard_title_form(new_id);
+
+        var content_container_start = '<div class="editing_content">';
+        var content_container_end = '</div>';
+        var editingregion_container_start = '<div class="editing_p_holder">'
+        var editingregion_container_end = '</div>'
+        var contentinstructions = '<span class="group_description">content (paragraphs, images, lists, etc)</span>';
+        var contenteditingregion = '<textarea id="actively_editing_statement" style="width:98%;" placeholder="first paragraph of content" data-source_id="' + new_content_p_id + '" data-parent_id="' + new_id + '" data-parent_component="content"></textarea>';
+        var content = content_container_start + editingregion_container_start;
+        content += contentinstructions;
+        content += contenteditingregion;
+        content += editingregion_container_end + content_container_end;
+
+        this_content_container.innerHTML = title + content
+
+        $("#" + thisID).replaceWith(this_content_container);
+        $("#actively_editing_title").focus();
 
 
-      } else {
+     } else {
           console.log("I do not know how to edit", new_tag)
      }
    } else {
@@ -705,6 +808,73 @@ function display_new(objectclass, objecttype, whereat, relativelocation) {
         whereat.insertAdjacentElement(relativelocation, object_in_html);
         console.log("trying to put the focus on",object_in_html);
         object_in_html.focus();
+
+        } else if (objectclass == "remark-like") {
+        object_in_html = document.createElement("article");
+        object_in_html.setAttribute("class", objectclass + " " + objecttype);
+        object_in_html.setAttribute("tabindex", -1);
+        object_in_html.setAttribute("data-editable", 99);
+
+        object_title = document.getElementById('actively_editing_title').value;
+        object_id = document.getElementById('actively_editing_id').value;
+        object_id = object_id || randomstring();
+
+        if (object_id) { object_in_html.setAttribute("id", object_id); }
+
+        object_heading_html = '<h6 class="heading" data=parent_id="' + object_id + '" data-editable="99" tabindex="-1">';
+        object_heading_html += '<span class="type">' + objecttype + '</span>';
+        object_heading_html += '<span class="space">' + " " + '</span>';
+        object_heading_html += '<span class="codenumber">' + "#N" + '</span>';
+
+        if (object_title) {
+            object_heading_html += '<span class="space">' + " " + '</span>';
+            object_heading_html += '<span class="creator">(' + object_title + ')</span>';
+        }
+        object_heading_html += '<span class="period">' + "." + '</span>';
+        object_heading_html += '</h6>';
+
+        object_statement_ptx = document.getElementById("in_progress_content").innerHTML;
+        document.getElementById("in_progress_content").remove();
+        object_statement_html = object_statement_ptx;   // add the transform later
+
+        object_in_html.innerHTML = object_heading_html + object_statement_html;
+
+        whereat.insertAdjacentElement(relativelocation, object_in_html);
+        console.log("trying to put the focus on",object_in_html);
+        object_in_html.focus();
+        } else if (objectclass == "section-like") {
+        object_in_html = document.createElement("section");
+        object_in_html.setAttribute("class", objecttype);
+        object_in_html.setAttribute("tabindex", -1);
+        object_in_html.setAttribute("data-editable", 99);
+
+        object_title = document.getElementById('actively_editing_title').value;
+        object_id = document.getElementById('actively_editing_id').value;
+        object_id = object_id || randomstring();
+
+        if (object_id) { object_in_html.setAttribute("id", object_id); }
+
+        object_heading_html = '<h2 class="heading hide-type" data=parent_id="' + object_id + '" data-editable="99" tabindex="-1">';
+        object_heading_html += '<span class="type">' + objecttype + '</span>';
+        object_heading_html += '<span class="space">' + " " + '</span>';
+        object_heading_html += '<span class="codenumber">' + "#N" + '</span>';
+
+        if (object_title) {
+            object_heading_html += '<span class="space">' + " " + '</span>';
+            object_heading_html += '<span class="title">' + object_title + '</span>';
+        }
+        object_heading_html += '</h2>';
+
+        object_statement_ptx = document.getElementById("in_progress_content").innerHTML;
+        document.getElementById("in_progress_content").remove();
+        object_statement_html = object_statement_ptx;   // add the transform later
+
+        object_in_html.innerHTML = object_heading_html + object_statement_html;
+
+        whereat.insertAdjacentElement(relativelocation, object_in_html);
+        console.log("trying to put the focus on",object_in_html);
+        object_in_html.focus();
+
 
     } else {
         alert("I don;t know how to display", objectclass)
@@ -912,6 +1082,71 @@ function html_from_internal_id(the_id, is_inner) {
         object_in_html.innerHTML = object_heading_html + object_statement_html;
 
         the_html_objects.push(object_in_html);
+    } else if (editing_container_for["remark-like"].includes(ptxtag)) {
+           //shoud be statement_object_in_html, and then proof_object_in_html
+        object_in_html = document.createElement("article");
+        object_in_html.setAttribute("class", "remark-like" + " " + ptxtag);
+        object_in_html.setAttribute("tabindex", -1);
+        object_in_html.setAttribute("data-editable", 99);
+
+        object_title = the_object["title"];
+
+        object_in_html.setAttribute("id", the_id);
+
+        object_heading_html = '<h6 class="heading" data-parent_id="' + the_id + '" data-editable="99" tabindex="-1">';
+        var objecttype_capped = ptxtag.charAt(0).toUpperCase() + ptxtag.slice(1);
+        object_heading_html += '<span class="type">' + objecttype_capped + '</span>';
+        object_heading_html += '<span class="space">' + " " + '</span>';
+        object_heading_html += '<span class="codenumber">' + "#N" + '</span>';
+
+        if (object_title) {
+            object_heading_html += '<span class="space">' + " " + '</span>';
+            object_heading_html += '<span class="creator">(' + object_title + ')</span>';
+        }
+        object_heading_html += '<span class="period">' + "." + '</span>';
+        object_heading_html += '</h6>';
+
+        object_statement_ptx = the_object["content"];
+
+    //    object_statement_html =  ptx_to_html(object_statement_ptx);   // transform not really working yet
+        object_statement_html =  expand_condensed_source_html(object_statement_ptx);
+
+        object_in_html.innerHTML = object_heading_html + object_statement_html;
+
+        the_html_objects.push(object_in_html);
+    } else if (editing_container_for["section-like"].includes(ptxtag)) {
+           //shoud be statement_object_in_html, and then proof_object_in_html
+        object_in_html = document.createElement("section");
+        object_in_html.setAttribute("class", "section-like" + " " + ptxtag);
+        object_in_html.setAttribute("tabindex", -1);
+        object_in_html.setAttribute("data-editable", 99);
+
+        object_title = the_object["title"];
+
+        object_in_html.setAttribute("id", the_id);
+
+        object_heading_html = '<h2 class="heading" data-parent_id="' + the_id + '" data-editable="99" tabindex="-1">';
+        var objecttype_capped = ptxtag.charAt(0).toUpperCase() + ptxtag.slice(1);
+        object_heading_html += '<span class="type hide-type">' + objecttype_capped + '</span>';
+        object_heading_html += '<span class="space">' + " " + '</span>';
+        object_heading_html += '<span class="codenumber">' + "#N" + '</span>';
+
+        if (object_title) {
+            object_heading_html += '<span class="space">' + " " + '</span>';
+            object_heading_html += '<span class="title">' + object_title + '</span>';
+        }
+        object_heading_html += '<span class="period">' + "." + '</span>';
+        object_heading_html += '</h2>';
+
+        object_statement_ptx = the_object["content"];
+
+    //    object_statement_html =  ptx_to_html(object_statement_ptx);   // transform not really working yet
+        object_statement_html =  expand_condensed_source_html(object_statement_ptx);
+
+        object_in_html.innerHTML = object_heading_html + object_statement_html;
+
+        the_html_objects.push(object_in_html);
+
 
 
     } else {
