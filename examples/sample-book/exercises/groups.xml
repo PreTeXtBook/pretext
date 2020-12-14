@@ -517,4 +517,166 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </statement>
     </exercise>
 
+    <exercisegroup cols="2">
+        <introduction>
+            <p>
+                In each group, how many solutions are there to <m>x^2=e</m>?
+            </p>
+        </introduction>
+
+        <exercise number="55">
+            <statement>
+                <p>
+                    <m>C_n</m>, <m>n</m> odd.
+                </p>
+            </statement>
+            <answer>
+                <p>
+                    <m>1</m>
+                </p>
+            </answer>
+        </exercise>
+
+        <exercise number="56">
+            <statement>
+                <p>
+                    <m>C_n</m>, <m>n</m> even.
+                </p>
+            </statement>
+            <answer>
+                <p>
+                    <m>2</m>
+                </p>
+            </answer>
+        </exercise>
+
+        <exercise number="57">
+            <statement>
+                <p>
+                    <m>D_n</m>, <m>n</m> odd.
+                </p>
+            </statement>
+            <answer>
+                <p>
+                    <m>n</m>
+                </p>
+            </answer>
+        </exercise>
+
+        <exercise number="58">
+            <statement>
+                <p>
+                    <m>D_n</m>, <m>n</m> even.
+                </p>
+            </statement>
+            <answer>
+                <p>
+                    <m>n+1</m>
+                </p>
+            </answer>
+        </exercise>
+    </exercisegroup>
+
+    <exercise number="59">
+        <introduction>
+            <p>
+                This is an odd-numbered exercise with tasks.
+            </p>
+        </introduction>
+        <task>
+            <statement>
+                <p>
+                    What is <m>1+1</m>?
+                </p>
+            </statement>
+            <answer>
+                <p>
+                    <m>2</m>
+                </p>
+            </answer>
+        </task>
+        <task>
+            <introduction>
+                <p>
+                    This task has subtasks.
+                </p>
+            </introduction>
+            <task>
+                <statement>
+                    <p>
+                        What is <m>3+3</m>?
+                    </p>
+                </statement>
+                <answer>
+                    <p>
+                        <m>6</m>
+                    </p>
+                </answer>
+            </task>
+            <task>
+                <statement>
+                    <p>
+                        What is <m>5+5</m>?
+                    </p>
+                </statement>
+                <answer>
+                    <p>
+                        <m>10</m>
+                    </p>
+                </answer>
+            </task>
+        </task>
+    </exercise>
+
+    <exercise number="60">
+        <introduction>
+            <p>
+                This is an even-numbered exercise with tasks.
+            </p>
+        </introduction>
+        <task>
+            <statement>
+                <p>
+                    What is <m>2+2</m>?
+                </p>
+            </statement>
+            <answer>
+                <p>
+                    <m>4</m>
+                </p>
+            </answer>
+        </task>
+        <task>
+            <introduction>
+                <p>
+                    This task has subtasks.
+                </p>
+            </introduction>
+            <task>
+                <statement>
+                    <p>
+                        What is <m>4+4</m>?
+                    </p>
+                </statement>
+                <answer>
+                    <p>
+                        <m>8</m>
+                    </p>
+                </answer>
+            </task>
+            <task>
+                <statement>
+                    <p>
+                        What is <m>6+6</m>?
+                    </p>
+                </statement>
+                <answer>
+                    <p>
+                        <m>12</m>
+                    </p>
+                </answer>
+            </task>
+        </task>
+    </exercise>
+
 </exercises>
