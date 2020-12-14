@@ -32,26 +32,38 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- to describe it as the "assembly" of "enhanced" source.  By    -->
 <!-- "assembly" we mean pre-processing of source, by "assembling"  -->
 <!-- various pieces of material or content, authored or computed,  -->
-<!-- into an enhanced source tree.                                 -->
+<!-- into an enhanced source tree. This template operates by       -->
+<!-- successive passes through the entire source tree making       -->
+<!-- adjustments into a new "enhanced" or modified source tree     -->
+<!-- with each pass.                                               -->
 <!--                                                               -->
-<!-- Import this stylesheet immediately after pretext-common.xsl. -->
+<!-- Import this stylesheet immediately after pretext-common.xsl.  -->
 <!--                                                               -->
 <!-- * $original will point to source file/tree/XML at the overall -->
 <!--   "pretext" element.                                          -->
-<!-- * The modal "assembly" template will be applied to the source -->
+<!-- * The modal "assembly" templates are applied to the source    -->
 <!--   root element, creating a new version of the source, which   -->
-<!--   has been "enhanced".                                        -->
-<!-- * $duplicate will point to the root of the enhanced source    -->
-<!--   file/tree/XML.                                              -->
+<!--   has been "enhanced".  Various things happen in this pass,   -->
+<!--   such as assembling auxiliary files of content (WeBWorK      -->
+<!--   representations, private solutions, bibliographic items),   -->
+<!--   or automatically repairing deprecated constructions so that -->
+<!--   actual conversions can remove orphaned code.  This creates  -->
+<!--   the $assembly source tree.                                  -->
+<!-- * The two modal "version" templates are applied to decide if  -->
+<!--   certain elements are included or excluded from the source   -->
+<!--   tree.  This creates the $version source tree.               -->
+<!-- * $version will point to the root of the final enhanced       -->
+<!--   source file/tree/XML.                                       -->
 <!-- * $root will override (via this import) the similar variable  -->
 <!--   defined in -common.                                         -->
 <!-- * Derived variables, $docinfo and $document-root, will        -->
-<!--   reference the enhanced source.                              -->
+<!--   reference the final enhanced source tree ($version).        -->
 <!--                                                               -->
 <!-- Notes:                                                        -->
 <!--                                                               -->
-<!-- 1.  $original is needed here for context switches into the    -->
-<!--     authored source.                                          -->
+<!-- 1.  $original is needed for context switches back into the    -->
+<!--     original authored source, such as for determining the     -->
+<!--     location of the source in the file system.                -->
 <!-- 2.  Any coordination of automatically assigned identifiers    -->
 <!--     requires identical source, so even a simple extraction    -->
 <!--     stylesheet might require preparing identical source       -->
@@ -64,34 +76,48 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Source Assembly Infrastructure -->
 <!-- ############################## -->
 
-<!-- When building the duplicate, we have occasion -->
-<!-- to inspect the orginal in various places      -->
+<!-- When building duplicates, we have occasion -->
+<!-- to inspect the original in various places  -->
 <xsl:variable name="original" select="/mathbook|/pretext"/>
 
-<!-- This modal "assembly" template duplicates the source        -->
-<!-- exactly: elements, attributes, text, whitespace, comments,  -->
-<!-- everything. Various other templates may override this       -->
-<!-- template in various ways to create an enhanced source tree. -->
+<!-- These modal templates duplicate the source exactly for each -->
+<!-- pass: elements, attributes, text, whitespace, comments,     -->
+<!-- everything. Various other templates will override these     -->
+<!-- templates to create a new enhanced source tree.             -->
 <xsl:template match="node()|@*" mode="assembly">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="assembly"/>
     </xsl:copy>
 </xsl:template>
 
-<!-- This constructs the new tree as a (text) result tree      -->
-<!-- fragment and then we convert it into real XML nodes. It   -->
-<!-- has a root element as part of the node-set() manufacture. -->
-<xsl:variable name="duplicate-rtf">
+<xsl:template match="node()|@*" mode="version">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="version"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- These templates initiate and create several iterations of -->
+<!-- the source tree via modal templates.  Think of each as a  -->
+<!-- "pass" through the source. Generally this constructs the  -->
+<!-- new tree as a (text) result tree fragment and then we     -->
+<!-- convert it into real XML nodes. These "real" trees have a -->
+<!-- root element, as a result of the node-set() manufacture.  -->
+<xsl:variable name="assembly-rtf">
     <xsl:call-template name="assembly-warnings"/>
     <xsl:apply-templates select="/" mode="assembly"/>
 </xsl:variable>
-<xsl:variable name="duplicate" select="exsl:node-set($duplicate-rtf)"/>
+<xsl:variable name="assembly" select="exsl:node-set($assembly-rtf)"/>
+
+<xsl:variable name="version-rtf">
+    <xsl:apply-templates select="$assembly" mode="version"/>
+</xsl:variable>
+<xsl:variable name="version" select="exsl:node-set($version-rtf)"/>
 
 <!-- -common defines a "$root" which is the overall named element. -->
 <!-- We override it here and then -common will define some derived -->
 <!-- variables based upon the $root                                -->
 <!-- NB: source repair below converts a /mathbook to a /pretext    -->
-<xsl:variable name="root" select="$duplicate/pretext" />
+<xsl:variable name="root" select="$version/pretext" />
 
 
 <!-- ######################## -->
