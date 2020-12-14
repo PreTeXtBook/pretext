@@ -278,6 +278,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- A version may be specified as a list of components.  We "fence" -->
+<!-- the list so as to make matching a single component in the list  -->
+<!-- more reliable (don't match substrings).  A totally empty string -->
+<!-- means it has not been set.                                      -->
+<!-- N.B. tokenize() and string+node-set matching might be better    -->
+<xsl:variable name="components-fenced">
+    <xsl:choose>
+        <xsl:when test="$publication/source/version/@include">
+            <xsl:value-of select="concat('|', translate(normalize-space($publication/source/version/@include), ' ', '|'), '|')"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- WeBWork problem representations are formed by the           -->
 <!-- pretext/pretext script communicating with a WeBWorK server. -->
 <xsl:variable name="webwork-representations-file">
