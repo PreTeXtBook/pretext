@@ -3288,6 +3288,9 @@ label.incorrect .feedback {
     bottom: 1.5em;
     z-index: 1000;
 }
+em #edit_menu_holder {
+    left: -0.5em;
+}
 #local_menu_holder {
     position: relative;
     left: 20em;
@@ -3407,6 +3410,11 @@ label.incorrect .feedback {
 }
 .may_select > p:first-of-type {
     margin-top: 0;
+}
+.may_select.inline {
+    box-shadow: none;
+    border-top: 0.5em solid yellow;
+    border-bottom: 0.5em solid yellow;
 }
 .may_leave {
     box-shadow: -10px 5px 5px #FFD6D9;
