@@ -1898,7 +1898,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$document-root//console">
             <xsl:text>%% Console session with prompt, input, output&#xa;</xsl:text>
             <xsl:text>%% listings allows for escape sequences to enable LateX,&#xa;</xsl:text>
-            <xsl:text>%% so we bold the input commands via teh following macro&#xa;</xsl:text>
+            <xsl:text>%% so we bold the input commands via the following macro&#xa;</xsl:text>
             <xsl:text>\newcommand{\consoleinput}[1]{\textbf{#1}}&#xa;</xsl:text>
             <!-- https://tex.stackexchange.com/questions/299401/bold-just-one-line-inside-of-lstlisting/299406 -->
             <!-- Syntax highlighting is not so great for "language=bash" -->
@@ -6377,7 +6377,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Guarantee: Never a blank line, always finish with newline -->
 <!--                                                           -->
 <!-- Note: a paragraph could end with an item we want          -->
-<!-- to look good in teh source, like a list or display        -->
+<!-- to look good in the source, like a list or display        -->
 <!-- math and we already have a newline so any subsequent      -->
 <!-- content from the paragraph will start anwew.  But         -->
 <!-- there might not be anything more to output.  So we        -->
@@ -9974,7 +9974,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- fashion the entire link text.  This is the $content variable below.    -->
 <!-- From this the actual \hyperref or \hypertarget is made. Almost always, -->
 <!-- across PreTeXt, the "xref-number" template will return the number of   -->
-<!-- an item as computed in teh -common routines.  However, to maintain     -->
+<!-- an item as computed in the -common routines.  However, to maintain     -->
 <!-- fidelity with LaTeX's automatic numbering system, we create  \ref{}    -->
 <!-- as often as possible. -->
 <!--                                                                        -->
