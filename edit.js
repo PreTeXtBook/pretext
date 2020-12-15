@@ -299,8 +299,8 @@ console.log("status of response",response.status);
 function container_for_editing(obj_type) {
     // the most recent characters were TAB and RET from navigatin gthe menu, which are irrelevant now.
     console.log("in container_for_editing");
+    this_char = "";
     prev_char = "";
-    prev_prev_char = "";
     var this_content_container = document.createElement('div');
     this_content_container.setAttribute('id', "actively_editing");
 
@@ -512,6 +512,8 @@ function edit_in_place(obj, new_object_description) {
         document.getElementById(idOfEditText).setSelectionRange(0,0);
         textarea_editable.style.height = textarea_editable.scrollHeight + "px";
         console.log("made edit box for", thisID);
+        this_char = "";
+        prev_char = "";
         textarea_editable.addEventListener("keypress", function() {
           textarea_editable.style.height = textarea_editable.scrollHeight + "px";
        });
@@ -1321,6 +1323,8 @@ function local_editing_action(e) {
 // assumes we are editing a theorem-like.  Need to generalize
             document.getElementById("actively_editing_statement").focus();
             document.getElementById("actively_editing_statement").setSelectionRange(0,0);
+            this_char = "";
+            prev_char = "";
             save_current_editing()
 
         } else if (prev_char.code == "Enter" && prev_prev_char.code == "Enter") {
@@ -1333,6 +1337,8 @@ function local_editing_action(e) {
             if (next_textarea = document.querySelector('textarea')) {
                 next_textarea.focus();
                 next_textarea.setSelectionRange(0,0);
+                this_char = "";
+                prev_char = "";
             } else if (editing_placeholder = document.getElementById("actively_editing")) {
                 console.log("still editing", editing_placeholder, "which contains", final_added_object);
                 var this_parent = internalSource[final_added_object.id]["parent"];
