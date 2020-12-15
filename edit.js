@@ -110,7 +110,12 @@ editing_container_for = { "p": 1,
 "section-like": ["section", "subsection", "paragraphs", "rq", "exercises"]
 }
 
-inline_tags = ["em", "term", "m", "idx"];
+// each tag has [ptx_tag, [html_start, html_end]]
+// Note: end of html_start is missing, so it is easier to add attributes
+inline_tags = {'em': ['em', ['<em class="emphasis"', "</em>"]], 
+               'term': ['term', ['<def class="terminology"', '</dfn>']],
+               'm': ['m', ['\\(', '\\)']]
+}
 
 editing_tips = {
     "p": ["two RETurns to separate paragraphs",
@@ -250,7 +255,7 @@ function edit_menu_for(this_obj_id, motion) {
     if (motion == "entering") {
         menu_location = "afterbegin";
         this_obj.classList.add("may_select");
-        if (inline_tags.includes(this_obj.tagName.toLowerCase())) {
+        if (this_obj.tagName.toLowerCase() in inline_tags) {
             this_obj.classList.add("inline");
         }
     } else { menu_location = "afterend";
@@ -270,12 +275,13 @@ function edit_menu_for(this_obj_id, motion) {
     edit_option.setAttribute('id', 'enter_choice');
 
     if (motion == "entering") {
-        edit_option.setAttribute('data-location', 'next');
-        console.log("inline_tags", inline_tags, "tag", this_obj.tagName.toLowerCase, inline_tags.includes(this_obj.tagName.toLowerCase));
-        if (inline_tags.includes(this_obj.tagName.toLowerCase())) {
+        console.log("inline_tags", inline_tags, "tag", this_obj.tagName.toLowerCase);
+        if (this_obj.tagName.toLowerCase() in inline_tags) {
             edit_option.innerHTML = "change this?";
+            edit_option.setAttribute('data-location', 'inline');
         } else {
             edit_option.innerHTML = "edit near here?";
+            edit_option.setAttribute('data-location', 'next');
         }
     } else {
         edit_option.setAttribute('data-location', 'stay');
@@ -1026,8 +1032,12 @@ function html_from_internal_id(the_id, is_inner) {
         html_of_this_object.innerHTML = the_content
         the_html_objects.push(html_of_this_object);
 
-    } else if (ptxtag == "em") {   // assume is_inner?
-        return '<em id="' + the_id + '"data-editable="99" tabindex="-1">' + the_object["content"] + '</em>';
+    } else if (ptxtag in inline_tags) {   // assume is_inner?
+        var opening_tag = inline_tags[ptxtag][1][0];
+        opening_tag += ' id="' + the_id + '"data-editable="99" tabindex="-1">';
+        var closing_tag = inline_tags[ptxtag][1][1];
+        return opening_tag + the_object["content"] + closing_tag
+  //      return '<em id="' + the_id + '"data-editable="99" tabindex="-1">' + the_object["content"] + '</em>';
     } else if (editing_container_for["theorem-like"].includes(ptxtag)) {
            //shoud be statement_object_in_html, and then proof_object_in_html
         object_in_html = document.createElement("article");
@@ -1311,10 +1321,7 @@ function save_current_editing() {
 
 function local_editing_action(e) {
     console.log("in local_editing_action for" ,e.code);
-    if (e.code == "Escape") {
-        console.log("putting focus back");
-        prev_focused_element.focus();
-    } else if (e.code == "Tab") {
+    if (e.code == "Tab") {
         e.preventDefault();
         console.log("making a local menu");
         local_menu_navigator(e);
