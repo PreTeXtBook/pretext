@@ -3395,12 +3395,14 @@ label.incorrect .feedback {
 .may_select {
     box-shadow: -10px -5px 5px yellow;
     margin-top: 1.25em;
+    background: #ffffee;
 }
 .may_select > p:first-of-type {
     margin-top: 0;
 }
 .may_leave {
     box-shadow: -10px 5px 5px #FFD6D9;
+    background: #ffeeee;
 }
 #actively_editing {
     margin-top: 1em;
