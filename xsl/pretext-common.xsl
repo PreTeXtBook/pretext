@@ -7040,12 +7040,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:param name="b-has-solution" />
 
     <xsl:variable name="admitted">
-        <xsl:call-template name="determine-admission">
-            <xsl:with-param name="serial-number">
-                <xsl:apply-templates select="." mode="serial-number"/>
-            </xsl:with-param>
+        <xsl:apply-templates select="." mode="determine-admission">
             <xsl:with-param name="admit" select="$admit"/>
-        </xsl:call-template>
+        </xsl:apply-templates>
     </xsl:variable>
     <xsl:variable name="b-admitted" select="boolean($admitted = 'yes')"/>
 
@@ -7120,12 +7117,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:param name="b-has-solution" />
 
     <xsl:variable name="admitted">
-        <xsl:call-template name="determine-admission">
-            <xsl:with-param name="serial-number">
-                <xsl:apply-templates select="." mode="serial-number"/>
-            </xsl:with-param>
+        <xsl:apply-templates select="." mode="determine-admission">
             <xsl:with-param name="admit" select="$admit"/>
-        </xsl:call-template>
+        </xsl:apply-templates>
     </xsl:variable>
     <xsl:variable name="b-admitted" select="boolean($admitted = 'yes')"/>
 
@@ -7465,9 +7459,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- Determine whether an exercise should be admitted, given its serial -->
 <!-- number and some specification for what should be admitted.         -->
-<xsl:template name="determine-admission">
-    <xsl:param name="serial-number"/>
+<xsl:template match="exercise" mode="determine-admission">
     <xsl:param name="admit"/>
+    <xsl:variable name="serial-number">
+        <xsl:apply-templates select="." mode="serial-number"/>
+    </xsl:variable>
     <xsl:choose>
         <xsl:when test="($admit='odd') and ($serial-number mod 2 = 1)">
             <xsl:value-of select="'yes'"/>

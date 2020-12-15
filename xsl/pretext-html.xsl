@@ -2063,6 +2063,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </h6>
 </xsl:template>
 
+<xsl:template match="stage" mode="heading-full">
+    <h6 class="exercise-stage">
+        <span class="type">Part</span>
+        <xsl:variable name="the-number">
+            <xsl:apply-templates select="." mode="serial-number" />
+        </xsl:variable>
+        <xsl:if test="not($the-number='')">
+            <xsl:call-template name="space-styled"/>
+            <span class="codenumber">
+                <xsl:value-of select="$the-number"/>
+            </span>
+        </xsl:if>
+        <!-- A period now, no matter what we have above-->
+        <xsl:call-template name="period-styled"/>
+        <!-- A title carries its own punctuation -->
+        <xsl:if test="title">
+            <xsl:call-template name="space-styled"/>
+            <span class="title">
+                <xsl:apply-templates select="." mode="title-full"/>
+            </span>
+        </xsl:if>
+    </h6>
+</xsl:template>
+
 <xsl:template match="figure|listing|table|list" mode="figure-caption">
     <xsl:param name="b-original"/>
 
@@ -4028,6 +4052,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-has-hint" />
     <xsl:param name="b-has-answer" />
     <xsl:param name="b-has-solution" />
+
+    <xsl:if test="self::stage">
+        <xsl:apply-templates select="." mode="heading-full"/>
+    </xsl:if>
 
     <xsl:choose>
         <!-- intercept a reading question, when hosted on Runestone -->
