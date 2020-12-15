@@ -137,7 +137,7 @@
     <section xml:id="pretext-capabilities">
         <title><c>pretext/pretext</c> Capabilities</title>
 
-        <p>Again, the command <c>pretext -h</c> will remind you of the various options for the script and is teh most likely list to be correct and up-to-date.  The following is a brief summary, in general terms, of what is possible.<dl width="narrow">
+        <p>Again, the command <c>pretext -h</c> will remind you of the various options for the script and is the most likely list to be correct and up-to-date.  The following is a brief summary, in general terms, of what is possible.<dl width="narrow">
             <li>
                 <title>Complete Conversions</title>
                 <p>With <c>-c all</c> and various choices of the format (<c>-f</c>) the script will execute a complete conversion.  In some cases, this is a convenience compated with just using the <c>xsltproc</c> processor.  In other cases the conversion is very complex and multiple (arcane) output files must be packaged up in very specific ways and no author would want to manage it all.  Conversion to <c>EPUB</c> is one example (<xref provisional="epub conversion"/>).</p>
