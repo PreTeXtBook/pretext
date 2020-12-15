@@ -110,6 +110,8 @@ editing_container_for = { "p": 1,
 "section-like": ["section", "subsection", "paragraphs", "rq", "exercises"]
 }
 
+inline_tags = ["em", "term", "m", "idx"];
+
 editing_tips = {
     "p": ["two RETurns to separate paragraphs",
           "three RETurns to end editing a paragraph",
@@ -244,12 +246,16 @@ function top_menu_options_for(this_obj) {
 function edit_menu_for(this_obj_id, motion) {
     console.log("make edit menu", motion, "for", this_obj_id);
 
+    this_obj = document.getElementById(this_obj_id);
     if (motion == "entering") {
         menu_location = "afterbegin";
-        document.getElementById(this_obj_id).classList.add("may_select");
+        this_obj.classList.add("may_select");
+        if (inline_tags.includes(this_obj.tagName.toLowerCase())) {
+            this_obj.classList.add("inline");
+        }
     } else { menu_location = "afterend";
-        document.getElementById(this_obj_id).classList.remove("may_select");
-        document.getElementById(this_obj_id).classList.add("may_leave"); 
+        this_obj.classList.remove("may_select");
+        this_obj.classList.add("may_leave"); 
     }  // when motion is 'leaving'
 
     var edit_menu_holder = document.createElement('div');
@@ -257,14 +263,20 @@ function edit_menu_for(this_obj_id, motion) {
     edit_menu_holder.setAttribute('id', 'edit_menu_holder');
     edit_menu_holder.setAttribute('tabindex', '-1');
     console.log("adding menu for", this_obj_id);
-    document.getElementById(this_obj_id).insertAdjacentElement(menu_location, edit_menu_holder);
+    console.log("which has tag", this_obj.tagName);
+    this_obj.insertAdjacentElement(menu_location, edit_menu_holder);
 
     var edit_option = document.createElement('span');
     edit_option.setAttribute('id', 'enter_choice');
 
     if (motion == "entering") {
         edit_option.setAttribute('data-location', 'next');
-        edit_option.innerHTML = "edit near here?";
+        console.log("inline_tags", inline_tags, "tag", this_obj.tagName.toLowerCase, inline_tags.includes(this_obj.tagName.toLowerCase));
+        if (inline_tags.includes(this_obj.tagName.toLowerCase())) {
+            edit_option.innerHTML = "change this?";
+        } else {
+            edit_option.innerHTML = "edit near here?";
+        }
     } else {
         edit_option.setAttribute('data-location', 'stay');
         edit_option.innerHTML = "continue editing [this object]";
@@ -1666,6 +1678,9 @@ function main_menu_navigator(e) {  // we are not currently editing
         }
     }  else if (e.code == "Escape" || e.code == "ArrowLeft") {
         console.log("processing ESC");
+        if (document.getElementById("local_menu_holder")) {  // hack for when the interface gets confused
+            document.getElementById("local_menu_holder").remove()
+        }
         if (current_active_menu_item = document.getElementById('choose_current')) {
             console.log("current_active_menu_item", current_active_menu_item);
             previous_selection = current_active_menu_item.parentNode.parentNode;  //current li, up to ol, then up to div or li
