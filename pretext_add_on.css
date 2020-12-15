@@ -314,6 +314,14 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     font-weight: 700;
     color: inherit;
 }
+.pretext-content article .exercise-stage {
+    font-family: "PT Serif", "Times New Roman", Times, serif;
+    font-weight: 700;
+    color: inherit;
+    font-size: 100%;
+    margin-top: 0.4em;
+}
+
 /*
 .pretext-content a article .heading {
     font-weight: 500;
