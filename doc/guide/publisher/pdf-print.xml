@@ -73,7 +73,7 @@
     <section xml:id="latex-asymptote-links">
         <title>Asymptote Links</title>
 
-        <p>An image described by an <tag>asymptote</tag> element will produce standalone <init>HTML</init> files as part of the convversion to <init>HTML</init> output.  For 3D images, these are interactive (rotate, scale).  If you set a base <init>URL</init> for your project (<xref ref="online-base-url"/>) then the default is to have each image in an electronic <init>PDF</init> (<xref ref="electronic-or-print"/>) be a link to the <init>HTML</init> version. See <xref ref="latex-asymptote-link-options"/> for the specifics of this entry.</p>
+        <p>An image described by an <tag>asymptote</tag> element will produce standalone <init>HTML</init> files as part of the convversion to <init>HTML</init> output.  For 3D images, these are interactive (rotate, scale).  If you set a base <init>URL</init> for your project (<xref ref="online-base-url"/>) and request this feature through a publisher switch, then each image in an electronic <init>PDF</init> (<xref ref="electronic-or-print"/>) will be a link to the <init>HTML</init> version. See <xref ref="latex-asymptote-link-options"/> for the specifics of this entry.  This feature is off by default.</p>
     </section>
 
     <section>
