@@ -113,9 +113,9 @@ editing_container_for = { "p": 1,
 // each tag has [ptx_tag, [html_start, html_end]]
 // Note: end of html_start is missing, so it is easier to add attributes
 inline_tags = {'em': ['em', ['<em class="emphasis"', "</em>"]], 
-               'term': ['term', ['<def class="terminology"', '</dfn>']],
-               'm': ['m', ['\\(', '\\)']]
+               'term': ['term', ['<dfn class="terminology"', '</dfn>']]
 }
+math_tags = {'m': ['m', ['\\(', '\\)']] }
 
 editing_tips = {
     "p": ["two RETurns to separate paragraphs",
@@ -248,10 +248,20 @@ function top_menu_options_for(this_obj) {
     return this_list
 }
 
-function edit_menu_for(this_obj_id, motion) {
-    console.log("make edit menu", motion, "for", this_obj_id);
+function edit_menu_for(this_obj_or_id, motion) {
+    console.log("make edit menu", motion, "for", this_obj_or_id);
 
-    this_obj = document.getElementById(this_obj_id);
+    if (!this_obj_or_id) {
+        console.log("error: empty this_obj_or_id", motion);
+        return ""
+    }
+
+    if (typeof this_obj_or_id === 'string') {
+        this_obj = document.getElementById(this_obj_or_id)
+    } else {
+        this_obj = this_obj_or_id
+    }
+
     if (motion == "entering") {
         menu_location = "afterbegin";
         this_obj.classList.add("may_select");
@@ -267,7 +277,7 @@ function edit_menu_for(this_obj_id, motion) {
 //    edit_menu_holder.setAttribute('class', 'edit_menu_holder');
     edit_menu_holder.setAttribute('id', 'edit_menu_holder');
     edit_menu_holder.setAttribute('tabindex', '-1');
-    console.log("adding menu for", this_obj_id);
+    console.log("adding menu for", this_obj_or_id, "menu_location", menu_location);
     console.log("which has tag", this_obj.tagName);
     this_obj.insertAdjacentElement(menu_location, edit_menu_holder);
 
@@ -275,9 +285,12 @@ function edit_menu_for(this_obj_id, motion) {
     edit_option.setAttribute('id', 'enter_choice');
 
     if (motion == "entering") {
-        console.log("inline_tags", inline_tags, "tag", this_obj.tagName.toLowerCase);
+        console.log("inline_tags", inline_tags, "tag", this_obj.tagName.toLowerCase());
         if (this_obj.tagName.toLowerCase() in inline_tags) {
             edit_option.innerHTML = "change this?";
+            edit_option.setAttribute('data-location', 'inline');
+        } else if (this_obj.tagName.toLowerCase() == "h6") {  // more generally, it holds a title
+            edit_option.innerHTML = "modify this?";
             edit_option.setAttribute('data-location', 'inline');
         } else {
             edit_option.innerHTML = "edit near here?";
@@ -1602,6 +1615,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                 document.getElementById('choose_current').focus();
                 console.log("focus is on", $(":focus"));
             } else if (current_active_menu_item.getAttribute("data-location") == "enter") {
+                console.log("current_active_menu_item", current_active_menu_item);
                 this_menu = document.getElementById('edit_menu_holder');
                 var object_to_be_entered = this_menu.parentElement;
                 this_menu.remove();
@@ -1614,9 +1628,10 @@ function main_menu_navigator(e) {  // we are not currently editing
             console.log("menu place 10");
             console.log("document.activeElement", document.activeElement);
 
-                id_for_editing = (document.activeElement.id || document.activeElement.getAttribute("data-parent_id"));
+            //    id_for_editing = (document.activeElement.id || document.activeElement.getAttribute("data-parent_id"));
 // not right:  data-parent_id is used when we want to change the title or tag
-                edit_menu_for(id_for_editing, "entering");
+             //   edit_menu_for(id_for_editing, "entering");
+                  edit_menu_for(document.activeElement, "entering");
        //         $(":focus").addClass("may_select");
           //      document.getElementById('edit_menu_holder').focus();
                 return
