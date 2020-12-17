@@ -7459,7 +7459,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- Determine whether an exercise should be admitted, given its serial -->
 <!-- number and some specification for what should be admitted.         -->
-<xsl:template match="exercise" mode="determine-admission">
+<xsl:template match="exercise|&PROJECT-LIKE;" mode="determine-admission">
     <xsl:param name="admit"/>
     <xsl:variable name="serial-number">
         <xsl:apply-templates select="." mode="serial-number"/>
