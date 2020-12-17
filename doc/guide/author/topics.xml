@@ -1761,6 +1761,17 @@
                 <cline>  &lt;/solutions&gt;</cline>
                 <cline>&lt;/section&gt;</cline>
             </cd>would generate an entire subsection with hints and solutions to every worksheet and every project, located anywhere (including in subsections and subsubsections) in the section on Birds of Paradise.</p>
+
+            <p>
+                An <attr>admit</attr> attribute specifies some feature of an exercise's serial number
+                to determine whether its components are admitted into the solutions division.
+                (For example, the <q>serial number</q> of Exercise 1.2.3 is 3.)
+                Presently, the only options are <c>odd</c>, <c>even</c>, and the default <c>all</c>.
+                So, <pretext/> source like
+                <cd>&lt;solutions divisional="answer" admit="odd"&gt;</cd>
+                would generate a subsection with answers to only the odd-numbered divisional exercises.
+            </p>
+
         </subsection>
     </section>
 
