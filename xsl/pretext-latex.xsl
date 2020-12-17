@@ -5194,6 +5194,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="subexercises" mode="solutions">
     <xsl:param name="purpose"/>
+    <xsl:param name="admit"/>
     <xsl:param name="b-component-heading"/>
     <xsl:param name="b-has-statement" />
     <xsl:param name="b-has-hint" />
@@ -5205,6 +5206,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- and if there is no content at all we bail out.         -->
      <xsl:variable name="dry-run">
         <xsl:apply-templates select="." mode="dry-run">
+            <xsl:with-param name="admit" select="$admit"/>
             <xsl:with-param name="b-has-statement" select="$b-has-statement" />
             <xsl:with-param name="b-has-hint" select="$b-has-hint" />
             <xsl:with-param name="b-has-answer" select="$b-has-answer" />
@@ -5231,6 +5233,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:apply-templates select="exercise|exercisegroup" mode="solutions">
             <xsl:with-param name="purpose" select="$purpose" />
+            <xsl:with-param name="admit" select="$admit"/>
             <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
             <xsl:with-param name="b-has-statement" select="$b-has-statement" />
             <xsl:with-param name="b-has-hint" select="$b-has-hint" />
@@ -5314,6 +5317,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Introduction and conclusion iff with statements -->
 <xsl:template match="exercisegroup" mode="solutions">
     <xsl:param name="purpose"/>
+    <xsl:param name="admit"/>
     <xsl:param name="b-component-heading"/>
     <xsl:param name="b-has-statement" />
     <xsl:param name="b-has-hint" />
@@ -5325,6 +5329,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- and if there is no content at all we bail out.         -->
      <xsl:variable name="dry-run">
         <xsl:apply-templates select="." mode="dry-run">
+            <xsl:with-param name="admit" select="$admit"/>
             <xsl:with-param name="b-has-statement" select="$b-has-statement" />
             <xsl:with-param name="b-has-hint" select="$b-has-hint" />
             <xsl:with-param name="b-has-answer" select="$b-has-answer" />
@@ -5382,6 +5387,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
         <xsl:apply-templates select="exercise" mode="solutions">
             <xsl:with-param name="purpose" select="$purpose" />
+            <xsl:with-param name="admit" select="$admit"/>
             <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
             <xsl:with-param name="b-has-statement" select="$b-has-statement" />
             <xsl:with-param name="b-has-hint" select="$b-has-hint" />
@@ -5619,6 +5625,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: switches originate in solutions generator -->
 <xsl:template match="exercise[boolean(&INLINE-EXERCISE-FILTER;)]|&PROJECT-LIKE;|exercises//exercise|worksheet//exercise|reading-questions//exercise" mode="solutions">
     <xsl:param name="purpose"/>
+    <xsl:param name="admit"/>
     <xsl:param name="b-component-heading"/>
     <xsl:param name="b-has-statement" />
     <xsl:param name="b-has-hint"      />
@@ -5634,6 +5641,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
      <xsl:variable name="dry-run">
         <xsl:apply-templates select="." mode="dry-run">
+            <xsl:with-param name="admit" select="$admit"/>
             <xsl:with-param name="b-has-statement" select="$b-has-statement" />
             <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
             <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
