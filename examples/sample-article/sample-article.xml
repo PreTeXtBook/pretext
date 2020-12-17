@@ -11262,6 +11262,17 @@ the xsltproc executable.
                 <!-- content will happen here automatically -->
             </solutions>
 
+            <solutions inline="answer" divisional="answer" worksheet="answer" reading="answer" project="answer" admit="odd">
+                <title>All Solutions that are Answers to Odd Exercises</title>
+                <idx><h>solutions</h><h>all even answers</h></idx>
+
+                <introduction>
+                    <p>This should be identical to the previous collection of answers, <em>except</em> only exercises with an even number are reported (via the <attr>admit</attr> attribute).</p>
+                </introduction>
+
+                <!-- content will happen here automatically -->
+            </solutions>
+
             <appendix xml:id="appendix-results">
                 <title>List of Results</title>
 
