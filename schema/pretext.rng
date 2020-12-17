@@ -927,6 +927,15 @@
         <attribute name="project"/>
       </optional>
       <optional>
+        <attribute name="admit">
+          <choice>
+            <value>all</value>
+            <value>odd</value>
+            <value>even</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
         <ref name="IntroductionDivision"/>
       </optional>
       <optional>

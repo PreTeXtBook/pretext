@@ -810,6 +810,15 @@
           <xs:attribute name="inline"/>
           <xs:attribute name="divisional"/>
           <xs:attribute name="project"/>
+          <xs:attribute name="admit">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="all"/>
+                <xs:enumeration value="odd"/>
+                <xs:enumeration value="even"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>

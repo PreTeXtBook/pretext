@@ -353,6 +353,7 @@
                     attribute inline {text}?,
                     attribute divisional {text}?,
                     attribute project {text}?,
+                    attribute admit {"all"|"odd"|"even"}?,
                     IntroductionDivision?,
                     ConclusionDivision?
                 }
