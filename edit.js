@@ -65,6 +65,10 @@ base_menu_for = {
             ["layout-like"],
             ["section-like"]],
 "blockquote": [["paragraph", "p"]],
+"article": [["paragraph", "p"],
+            ["list/table-like", "list-like"],
+            ["math/chemistry/code", "math-like", "c"],
+            ["image/video/sound", "display-like", "v"]],
 "p": ["emphasis-like", "formula", "abbreviation", "symbols", ["ref or link", "ref"]]
 }
 
@@ -116,6 +120,16 @@ inline_tags = {'em': ['em', ['<em class="emphasis"', "</em>"]],
                'term': ['term', ['<dfn class="terminology"', '</dfn>']]
 }
 math_tags = {'m': ['m', ['\\(', '\\)']] }
+
+title_like_tags = {
+    "h1": [],   //  all the hN are .heading, so probably should use that
+    "h2": [],
+    "h3": [],
+    "h4": [],
+    "h5": [],
+    "h6": [],  // title or creator or ...
+    "figcaption": []  // plain text betweem last </span> and </figcaption>
+}
 
 editing_tips = {
     "p": ["two RETurns to separate paragraphs",
@@ -289,7 +303,7 @@ function edit_menu_for(this_obj_or_id, motion) {
         if (this_obj.tagName.toLowerCase() in inline_tags) {
             edit_option.innerHTML = "change this?";
             edit_option.setAttribute('data-location', 'inline');
-        } else if (this_obj.tagName.toLowerCase() == "h6") {  // more generally, it holds a title
+        } else if (this_obj.tagName.toLowerCase() in title_like_tags) { 
             edit_option.innerHTML = "modify this?";
             edit_option.setAttribute('data-location', 'inline');
         } else {
@@ -1407,6 +1421,8 @@ function main_menu_navigator(e) {  // we are not currently editing
            // there are two cases:  1) we are at the top of a block (and so may enter it or add near it, or move on)
            //                       2) we are at the bottom (actually, after) a block, and may return to it, or move on
            var this_menu = document.getElementById("edit_menu_holder");
+           console.log("this_menu", this_menu);
+           console.log("this_choice", this_choice);
            if (this_choice.getAttribute('data-location') == 'next') {
 
                $(this_menu).parent().removeClass("may_select");
@@ -1450,6 +1466,23 @@ function main_menu_navigator(e) {  // we are not currently editing
                $(next_block_to_edit).focus();
        //        $(block_we_are_leaving).next('[data-editable="99"]').focus();
                console.log("left a block.  focus is now on", $(":focus"));
+           } else if (this_choice.getAttribute('data-location') == 'inline') {
+               console.log("options for something inline");
+               thing_to_edit = document.getElementById("edit_menu_holder").parentElement;
+               source_of_thing_to_edit = internalSource[thing_to_edit.parentElement.id]; 
+               console.log("thing we are going to edit", thing_to_edit, "which has title", source_of_thing_to_edit["title"]);
+               thing_to_edit.classList.remove("may_select");
+               this_menu.remove();
+               if (upcoming_blocks = $(thing_to_edit).nextAll('[data-editable="99"]')) {
+                   next_block_to_edit = upcoming_blocks[0];
+                   next_block_to_edit.classList.add("may_select");
+               } else {
+                   next_block_to_edit = thing_to_edit.parentElement;
+                   next_block_to_edit.classList.add("may_leave");
+               }
+               $(next_block_to_edit).focus();
+               console.log("next_block_to_edit", next_block_to_edit);
+           //    alert("failing to deal with moving between inline elements");
            }  else { alert("Error:  enter_choice without data-location") }
        }
        // and add the option to edit the next object
