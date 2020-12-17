@@ -12,7 +12,7 @@
 
     <p>This is a list of answers to frequent questions, in no particular order.</p>
 
-    <p><ul>
+    <p><ol>
         <li>
             <title>Why does the conversion to HTML use a fixed width for the text?</title>
             <p>There is an optimal number of characters per line for human readers,
@@ -99,5 +99,5 @@
             <p>Suppose your <init>HTML</init> output seems to work fine, but once you place it inside your university's Learning Management System (<init>LMS</init>) it no longer works very well.</p>
             <p>A likely culprit is that your <init>LMS</init> is adding material to your files, ruining them in the process.</p>
         </li>
-    </ul></p>
+    </ol></p>
 </chapter>

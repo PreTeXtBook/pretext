@@ -7,12 +7,12 @@
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
 
-<chapter xml:id="faq">
+<chapter xml:id="author-faq">
     <title>Author FAQ: Frequently Asked Questions</title>
 
     <p>Technical questions first, followed by questions about markup.</p>
 
-    <p><ul>
+    <p><ol>
         <li>
           <title>On my local machine, why are the knowls/Sage cells empty?</title>
             <p>
@@ -250,5 +250,5 @@
 
           <p>There are subtle and minor variations and restrictions around the interpretation of <latex/> syntax by <latex/> itself and the MathJax Javascript routines for rendering in a web page.  Work backwards from <xref ref="mathematics-notes"/> for details.</p>
         </li>
-    </ul></p>
-  </chapter>
+    </ol></p>
+</chapter>
