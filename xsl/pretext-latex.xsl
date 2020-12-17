@@ -2488,6 +2488,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Pervasive -->
+<!-- Specialized divisions                         -->
 <!-- Product of PTX name with LaTeX level/division -->
 <xsl:template match="exercises|solutions|worksheet|reading-questions|glossary|references" mode="division-environment-name">
     <xsl:value-of select="local-name(.)"/>
@@ -2499,6 +2500,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:message>NO DIVISION ENVIRONMENT NAME for <xsl:value-of select="local-name(.)"/></xsl:message>
 </xsl:template>
 
+<!-- Possibly numberless?  When employed, we can tell if a specialized -->
+<!-- division should be numberless.  This needs to be broken out since -->
+<!-- when we *create* the environments in the preamble we just make    -->
+<!-- "regular" and "numberless" variants, always.                      -->
+<xsl:template match="*" mode="division-environment-name-suffix">
+    <!-- Inspect parent (part through subsubsection)  -->
+    <!-- to determine one of two models of a division -->
+    <!-- NB: return values are 'true' and empty       -->
+    <xsl:variable name="is-structured">
+        <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
+    </xsl:variable>
+    <xsl:variable name="b-is-structured" select="$is-structured = 'true'"/>
+
+    <!-- Determine if context is a specialized division that might be numberless -->
+    <!-- NB: unclear why "solutions" is the only one different in backmatter     -->
+    <xsl:variable name="b-is-specialized" select="boolean(self::exercises|self::solutions[not(parent::backmatter)]|self::reading-questions|self::glossary|self::references|self::worksheet)"/>
+
+    <xsl:if test="not($b-is-structured) and $b-is-specialized">
+        <xsl:text>-numberless</xsl:text>
+    </xsl:if>
+</xsl:template>
 
 <xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|index|exercises|solutions|worksheet|reading-questions|glossary|references" mode="environment">
     <!-- for specialized divisions we always make a numbered -->
@@ -4778,43 +4800,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A "solutions" division in the back matter is implemented as an     -->
 <!-- appendix.  The levels and division-name templates will produce a   -->
 <!-- LaTeX chapter for a "book" and a LaTeX "section" for an "article". -->
-
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|solutions[parent::backmatter]" mode="latex-division-heading">
-    <xsl:text>\begin{</xsl:text>
-    <xsl:apply-templates select="." mode="division-environment-name" />
-    <xsl:text>}</xsl:text>
-    <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="title-full"/>
-    <xsl:text>}</xsl:text>
-    <xsl:text>{</xsl:text>
-    <!-- subtitle here -->
-    <xsl:text>}</xsl:text>
-    <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="title-short"/>
-    <xsl:text>}</xsl:text>
-    <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="author" mode="name-list"/>
-    <xsl:text>}</xsl:text>
-    <xsl:text>{</xsl:text>
-    <!-- subtitle here -->
-    <!-- <xsl:text>An epigraph here\\with two lines\\-Rob</xsl:text> -->
-    <xsl:text>}</xsl:text>
-    <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="latex-id" />
-    <xsl:text>}</xsl:text>
-    <xsl:text>&#xa;</xsl:text>
-</xsl:template>
-
-<!-- Specialized Divisions: we do not implement "author", "subtitle",  -->
-<!-- or "epigraph" yet.  These may be added/supported later.           -->
-<xsl:template match="exercises|solutions[not(parent::backmatter)]|reading-questions|glossary|references|worksheet" mode="latex-division-heading">
-    <!-- Inspect parent (part through subsubsection)  -->
-    <!-- to determine one of two models of a division -->
-    <!-- NB: return values are 'true' and empty       -->
-    <xsl:variable name="is-structured">
-        <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
-    </xsl:variable>
-    <xsl:variable name="b-is-structured" select="$is-structured = 'true'"/>
+<!-- Specialized Divisions: we do not implement "author", "subtitle",   -->
+<!-- or "epigraph" yet.  These may be added/supported later.            -->
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|solutions|reading-questions|glossary|references|worksheet" mode="latex-division-heading">
+    <!-- NB: could be obsoleted, see single use -->
+    <xsl:variable name="b-is-specialized" select="boolean(self::exercises|self::solutions[not(parent::backmatter)]|self::reading-questions|self::glossary|self::references|self::worksheet)"/>
 
     <xsl:if test="self::worksheet">
         <!-- \newgeometry includes a \clearpage -->
@@ -4822,9 +4812,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="division-environment-name" />
-    <xsl:if test="not($b-is-structured)">
-        <xsl:text>-numberless</xsl:text>
-    </xsl:if>
+    <!-- possibly numberless -->
+    <xsl:apply-templates select="." mode="division-environment-name-suffix" />
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
@@ -4837,9 +4826,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
     <!-- author here -->
+    <!-- historical, could be relaxed -->
+    <xsl:if test="not($b-is-specialized)">
+        <xsl:apply-templates select="author" mode="name-list"/>
+    </xsl:if>
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
-    <!-- subtitle here -->
+    <!-- epigraph here -->
+    <!-- <xsl:text>An epigraph here\\with two lines\\-Rob</xsl:text> -->
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="latex-id" />
@@ -4937,27 +4931,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Footers are straightfoward, except for specialized divisions -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|solutions[parent::backmatter]" mode="latex-division-footing">
+<!-- Footers are straightforward -->
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|solutions|reading-questions|glossary|references|worksheet" mode="latex-division-footing">
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="division-environment-name" />
-    <xsl:text>}&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="exercises|solutions[not(parent::backmatter)]|reading-questions|glossary|references|worksheet" mode="latex-division-footing">
-    <!-- Inspect parent (part through subsubsection)  -->
-    <!-- to determine one of two models of a division -->
-    <!-- NB: return values are 'true' and empty       -->
-    <xsl:variable name="is-structured">
-        <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
-    </xsl:variable>
-    <xsl:variable name="b-is-structured" select="$is-structured = 'true'"/>
-
-    <xsl:text>\end{</xsl:text>
-    <xsl:apply-templates select="." mode="division-environment-name" />
-    <xsl:if test="not($b-is-structured)">
-        <xsl:text>-numberless</xsl:text>
-    </xsl:if>
+    <!-- possibly numberless -->
+    <xsl:apply-templates select="." mode="division-environment-name-suffix" />
     <xsl:text>}&#xa;</xsl:text>
     <xsl:if test="self::worksheet">
         <!-- \restoregeometry includes a \clearpage -->

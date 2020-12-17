@@ -698,13 +698,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$b-latex-print">
             <xsl:text>no</xsl:text>
         </xsl:when>
-        <!-- fail when no base URL is given -->
-        <xsl:when test="$baseurl = ''">
-            <xsl:message>PTX WARNING: baseurl must be set in publisher file to enable links from Asymptote images</xsl:message>
-            <xsl:text>no</xsl:text>
-        </xsl:when>
+        <!-- proceed when requested, so long as there is a base URL -->
         <xsl:when test="$publication/latex/asymptote/@links = 'yes'">
-            <xsl:text>yes</xsl:text>
+            <xsl:choose>
+                <!-- fail when no base URL is given -->
+                <xsl:when test="$baseurl = ''">
+                    <xsl:message>PTX WARNING: baseurl must be set in publisher file to enable links from Asymptote images</xsl:message>
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>yes</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:when>
         <xsl:when test="$publication/latex/asymptote/@links = 'no'">
             <xsl:text>no</xsl:text>
@@ -714,9 +719,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:message>PTX WARNING: LaTeX links to Asymptote publisher file should be "yes" (links to HTML) or "no" (no links), not "<xsl:value-of select="$publication/latex/asymptote/@links"/>". Proceeding with default value: "no" (no links)</xsl:message>
             <xsl:text>no</xsl:text>
         </xsl:when>
-        <!-- unset, but have prerequisites, so use default -->
+        <!-- unset, use the default, which is "no" since -->
+        <!-- it also needs action to set base URL        -->
         <xsl:otherwise>
-            <xsl:text>yes</xsl:text>
+            <xsl:text>no</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>

@@ -63,7 +63,7 @@
 
             <p>The conversion to <latex/> can provide a link to an <init>HTML</init> version of each Asymptote graphic.  The<cd>
                 <cline>/publication/latex/asymptote/@links</cline>
-            </cd>attribute can have the value <c>yes</c> to produce links, or the value <c>no</c> to not create links.  If the base URL has been set (<xref ref="online-base-url"/>), then the default is <c>yes</c> and this feature is enabled.  See  <xref ref="latex-asymptote-links"/> for more detail.</p>
+            </cd>attribute can have the value <c>yes</c> to produce links, or the value <c>no</c> to not create links.  Note that a base URL must be set for this feature to be functional (<xref ref="online-base-url"/>).  The default is <c>no</c>.  See  <xref ref="latex-asymptote-links"/> for more detail.</p>
         </subsection>
     </section>
 
