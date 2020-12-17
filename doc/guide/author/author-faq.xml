@@ -244,5 +244,11 @@
 
           <p>Or convert your list to an <tag>ol</tag> or <tag>ul</tag>.  The titles will now render more like their own paragraphs.</p>
         </li>
+
+        <li>
+          <title>My math looks great in one output format (<latex/> or <init>HTML</init>) but is causing errors or looks bad in another output format (<init>HTML</init> or <latex/>).  What's up?</title>
+
+          <p>There are subtle and minor variations and restrictions around the interpretation of <latex/> syntax by <latex/> itself and the MathJax Javascript routines for rendering in a web page.  Work backwards from <xref ref="mathematics-notes"/> for details.</p>
+        </li>
     </ul></p>
   </chapter>

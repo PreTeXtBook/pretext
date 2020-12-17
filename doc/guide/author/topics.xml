@@ -1316,7 +1316,7 @@
             <p>For print output, do nothing additional and <latex /> will do its best to break your display between lines.  You can turn this behavior off by setting the <attr>break</attr> attribute on the <tag>md</tag> or <tag>mdn</tag> to the value <c>no</c>.  Once you do this, you can then selectively allow a page break after a given <tag>mrow</tag> by setting the <attr>break</attr> attribute on the <tag>mrow</tag> to the value <c>yes</c>.</p>
         </subsection>
 
-        <subsection>
+        <subsection xml:id="mathematics-macros">
             <title>Your Macros</title>
 
             <p>These go in the <tag>docinfo</tag> section, wrapped in a <tag>macros</tag><idx>macro</idx> element.  Keep them simple<mdash />one or two arguments, and one-line definitions.  This is not the place to be fancy, and not the place to try to end-run the structural aspects of <pretext />.  The idea is to define something like <c>\adjoint{A}</c> for the matrix <c>A</c> to be a superscript asterisk, and later you can change your mind and use a superscript dagger instead.  Keep in the spirit of <pretext /> and use readable, semantic macros.  For example, do not use <c>\a{A}</c> for the adjoint of <c>A</c>.</p>
@@ -1364,7 +1364,7 @@
             <p>Note that <em>any</em> text, other than whitespace, outside the <tag>m</tag> tag will disable this feature, <em>including punctuation</em>. However, according to the Chicago Manual of Style, 14e, 6.127, <q>Items carry no closing punctuation unless they consist of complete sentences.</q> So that comma at the end of your equation probably doesn't belong there anyway.</p>
         </subsection>
 
-        <subsection>
+        <subsection xml:id="mathematics-latex-packages">
             <title>Additional Packages</title>
 
             <p>Generally, you cannot add additional packages for use within mathematics.  The exception is a package with support available optionally within MathJax.  And it must have the same name as its normal <latex /> version.  Then set a <c>docinfo/latex-preamble/package</c> element to be the common name of the package.   (The <c>cancel</c> package is one such example.)</p>
@@ -1376,6 +1376,17 @@
             <title>Extras</title>
 
             <p>There are two existing additional options, which we might want to remove some day for technical reasons.  Macros from the <c>extpfeil</c> extensible arrows package are available by default, and an <c>\sfrac{}{}</c> macro is available for appealing inline <q>slanted fractions.</q></p>
+        </subsection>
+
+        <subsection xml:id="mathematics-notes">
+            <title>Notes</title>
+
+            <p>As mentioned at the start of this section, your use of <latex/> needs to also be supported by MathJax so that it may be rendered as part of an <init>HTML</init> page displayed in a web broswer.  In addition to the information at the start of <xref ref="topic-mathematics"/>, this subsection has some notes that may help you navigate this situation.<ol>
+                <li>Generally, MathJax supports commands available in the <c>amsmath</c> package.</li>
+                <li>You can construct, and use, your own macros, <em>but only for mathematics</em>, not for document structure or document management.  See <xref ref="mathematics-macros"/>.</li>
+                <li>Support for loading <q>extra</q> packages is extremely limited.  See <xref ref="mathematics-latex-packages"/>.</li>
+                <li>The <c>\matrix{}</c> command, and its friends (such as <c>\pmatrix{}</c>) are not supported by <latex/>, despite being recognized by MathJax.  So use environments like <c>\begin{matrix}</c> and <c>\begin{pmatrix}</c> (with their corresponding <c>\end{}</c>, of course) and you will get accurate results for both formats.</li>
+            </ol></p>
         </subsection>
     </section>
 
