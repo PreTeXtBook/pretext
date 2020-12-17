@@ -36,8 +36,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <notation-list />
     </appendix>
 
+    <solutions divisional="hint answer solution" admit="odd">
+        <title>Hints and Answers to Selected Odd Exercises</title>
+    </solutions>
+
+    <solutions divisional="hint answer solution" admit="even">
+        <title>Hints and Answers to Selected Even Exercises</title>
+    </solutions>
+
     <solutions divisional="hint answer solution">
-        <title>Hints and Solutions to Selected Exercises</title>
+        <title>Hints and Answers to Selected Exercises</title>
     </solutions>
 
     <appendix>
