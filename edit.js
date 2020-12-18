@@ -42,6 +42,16 @@ function randomstring(len) {
     return (Math.random() + 1).toString(36).substring(2,len)
 }
 
+function removeItemFromList(lis, value) {
+  var index = lis.indexOf(value);
+  if (index > -1) {
+    lis.splice(index, 1);
+  }
+  return lis;
+}
+
+tmpdefinitionlike = ["definition", "conjecture", "axiom", "principle", "heuristic", "hypothesis", "assumption"];
+
 /* need to distingiosh between th elist of objects of a type,
    and the list of types that can go in a location.
    OR, is it okay that these are all in one list?
@@ -191,7 +201,19 @@ function standard_title_form(object_id) {
 function menu_options_for(COMPONENT, level) {
      var menu_for;
      if (level == "base") { menu_for = base_menu_for }
-     else { menu_for = inner_menu_for }
+     else if (level == "change") {
+         console.log("menu_options_for", component);
+         // assume definition-like
+         var replacement_list = removeItemFromList(component, tmpdefinitionlike);
+         var this_menu = "";
+         for (var i=0; i < replacement_list.length; ++i) {
+             this_menu += '<li tabindex="-1" data-env="' + this_item_label + '"'; 
+             this_menu += '>';
+             this_menu += replacement_list[i];
+             this_menu += '</li>';
+         }
+         return this_menu
+     } else { menu_for = inner_menu_for }
      component = COMPONENT.toLowerCase();
      console.log("in menu_options_for", component);
      if (component in menu_for) {
@@ -247,18 +269,32 @@ function menu_options_for(COMPONENT, level) {
 }
 
 function top_menu_options_for(this_obj) {
-    console.log("top_menu_options_for", this_obj);
-    var this_object_type = this_obj.tagName;   //  needs to examine other attributes and then look up a reasonable name
-    var this_list = '<li tabindex="-1" id="choose_current" data-env="p" data-action="edit">Edit ' + this_object_type + '</li>';
-    if ($(this_obj).children('[data-editable="99"]').length) {
-        console.log("$(this_obj).children('[data-editable=99]')", $(this_obj).children('[data-editable="99"]'));
-        this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_object_type + '</li>';
+    console.log("top_menu_options_for aa", this_obj);
+
+    var this_list = "";
+
+    if (this_obj.classList.contains("heading")) {
+        this_obj_parent = this_obj.parentElement;
+        console.log("heading options for bbb", this_obj_parent); 
+        this_obj_parent_id = this_obj_parent.id;
+        this_obj_parent_source = internalSource[this_obj_parent_id];
+        this_obj_environemnt = this_obj_parent_source["ptxtag"];
+        
+        this_list = '<li tabindex="-1" id="choose_current" data-env="p" data-action="edit">Change the title</li>';
+        this_list += '<li tabindex="-1" data-action="change_env">Change "' + this_obj_environemnt + '" to <div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+    } else {
+        var this_object_type = this_obj.tagName;   //  needs to examine other attributes and then look up a reasonable name
+        this_list = '<li tabindex="-1" id="choose_current" data-env="p" data-action="edit">Edit ' + this_object_type + '</li>';
+        if ($(this_obj).children('[data-editable="99"]').length) {
+            console.log("$(this_obj).children('[data-editable=99]')", $(this_obj).children('[data-editable="99"]'));
+            this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_object_type + '</li>';
+        }
+        this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="beforebegin">Insert before<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+        this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="afterend">Insert after<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+        this_list += '<li tabindex="-1" data-env="' + this_object_type + '">Move or delete<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+        this_list += '<li tabindex="-1" data-env="' + "metaadata" + '">Metadata<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+        this_list += '<li tabindex="-1" data-env="' + "how to undo" + '">Undo<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
     }
-    this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="beforebegin">Insert before<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
-    this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="afterend">Insert after<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
-    this_list += '<li tabindex="-1" data-env="' + this_object_type + '">Move or delete<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
-    this_list += '<li tabindex="-1" data-env="' + "metaadata" + '">Metadata<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
-    this_list += '<li tabindex="-1" data-env="' + "how to undo" + '">Undo<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
     return this_list
 }
 
@@ -1515,12 +1551,14 @@ function main_menu_navigator(e) {  // we are not currently editing
      // recopied code:  consolidate
         e.preventDefault();
         console.log("just saw a", e.code);
+        console.log("focus is on", $(":focus"));
         if(this_choice = document.getElementById('enter_choice')) {
            console.log("there already is an 'enter_choice'");
            // there are two cases:  1) we are at the top of a block (and so may enter it or add near it, or move on)
            //                       2) we are at the bottom (actually, after) a block, and may return to it, or move on
            var this_menu = document.getElementById("edit_menu_holder");
-           if (this_choice.getAttribute('data-location') == 'next') {  // we are at the top of a block
+           if (this_choice.getAttribute('data-location') == 'next' || this_choice.getAttribute('data-location') == 'inline') {  // we are at the top of a block
+ // need to understand possible use cases for "inline", so this may not be right
                
                $(this_menu).parent().removeClass("may_select");
                console.log("item to get next focus",$("#edit_menu_holder").parent().prev('[data-editable="99"]'), "which has length", $("#edit_menu_holder").parent().next('[data-editable="99"]').length);
@@ -1548,9 +1586,10 @@ function main_menu_navigator(e) {  // we are not currently editing
                    // copied.  consolidate
             console.log("menu place 8");
 
-                   edit_menu_for(document.activeElement.id, "entering");        // so create one
+                   console.log("element with fcous is", $(":focus"), "aka",document.activeElement);
+               //    edit_menu_for(document.activeElement.id, "entering");        // so create one
+                   edit_menu_for(document.activeElement, "entering");        // so create one
         //           $(":focus").addClass("may_select");
-                   console.log("element with fcous is", $(":focus"));
                    console.log("putting focus on", document.getElementById('edit_menu_holder'));
             //       document.getElementById('edit_menu_holder').focus();
                    console.log("element with fcous is", $(":focus"));
@@ -1599,7 +1638,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                    // this is a repeat of a Tab case, so consolidate
             console.log("menu place 9");
 
-               edit_menu_for(document.activeElement.id, "entering");
+               edit_menu_for(document.activeElement, "entering");
       //         $(":focus").addClass("may_select");
          //      document.getElementById('edit_menu_holder').focus();
                return
@@ -1625,7 +1664,21 @@ function main_menu_navigator(e) {  // we are not currently editing
                 if (this_action == "edit") {
                    console.log("going to edit it", to_be_edited);
                    edit_in_place(to_be_edited);
-                   } 
+                } else if (this_action == 'change_env') {
+                    current_env = document.getElementById('edit_menu_holder').parentElement.parentElement;
+                    current_env_id = current_env.id;
+                    current_env_source = internalSource[current_env_id];
+                    current_env_name = current_env_source["ptxtag"];
+                    console.log("need menu to change", current_env_name);
+
+                    var edit_submenu = document.createElement('ol');
+                    edit_submenu.innerHTML = menu_options_for(current_env_name, "change");
+                    console.log("just inserted inner menu_options_for(parent_type)", menu_options_for(parent_type, "inner"));
+                    current_active_menu_item.insertAdjacentElement("beforeend", edit_submenu);
+                    document.getElementById('choose_current').focus();
+                    console.log("focus is on", $(":focus"));
+
+                }
                 else { alert("unimplemented action: "+ this_action) }
         }
         // otherwise, see if we just selected a top level menu item about location
@@ -1751,7 +1804,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                 document.getElementById('edit_menu_holder').remove();
             console.log("menu place 12");
 
-                edit_menu_for(current_object_to_edit.id, "entering");
+                edit_menu_for(current_object_to_edit, "entering");
                  // just put the entering option
             }
         } else {  // we are at the top of an object and have not decided to edit it
