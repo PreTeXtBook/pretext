@@ -200,21 +200,22 @@ function standard_title_form(object_id) {
 
 function menu_options_for(COMPONENT, level) {
      var menu_for;
+     var component = COMPONENT.toLowerCase();
      if (level == "base") { menu_for = base_menu_for }
      else if (level == "change") {
          console.log("menu_options_for", component);
          // assume definition-like
-         var replacement_list = removeItemFromList(component, tmpdefinitionlike);
+         var replacement_list = removeItemFromList(tmpdefinitionlike, component);
          var this_menu = "";
          for (var i=0; i < replacement_list.length; ++i) {
-             this_menu += '<li tabindex="-1" data-env="' + this_item_label + '"'; 
+             this_menu += '<li tabindex="-1" data-action="change-env-to" data-env="' + replacement_list[i] + '"'; 
+             if(i==0) { this_menu += ' id="choose_current"'}
              this_menu += '>';
              this_menu += replacement_list[i];
              this_menu += '</li>';
          }
          return this_menu
      } else { menu_for = inner_menu_for }
-     component = COMPONENT.toLowerCase();
      console.log("in menu_options_for", component);
      if (component in menu_for) {
          component_items = menu_for[component]
@@ -278,17 +279,29 @@ function top_menu_options_for(this_obj) {
         console.log("heading options for bbb", this_obj_parent); 
         this_obj_parent_id = this_obj_parent.id;
         this_obj_parent_source = internalSource[this_obj_parent_id];
-        this_obj_environemnt = this_obj_parent_source["ptxtag"];
+        this_obj_environment = this_obj_parent_source["ptxtag"];
+
+        console.log("this_obj_environment", this_obj_environment);
         
         this_list = '<li tabindex="-1" id="choose_current" data-env="p" data-action="edit">Change the title</li>';
-        this_list += '<li tabindex="-1" data-action="change_env">Change "' + this_obj_environemnt + '" to <div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+        this_list += '<li tabindex="-1" data-action="change-env">Change "' + this_obj_environment + '" to <div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
     } else {
         var this_object_type = this_obj.tagName;   //  needs to examine other attributes and then look up a reasonable name
-        this_list = '<li tabindex="-1" id="choose_current" data-env="p" data-action="edit">Edit ' + this_object_type + '</li>';
-        if ($(this_obj).children('[data-editable="99"]').length) {
-            console.log("$(this_obj).children('[data-editable=99]')", $(this_obj).children('[data-editable="99"]'));
-            this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_object_type + '</li>';
-        }
+//consolidate this redundancy
+        this_obj_id = this_obj.id;
+        this_obj_source = internalSource[this_obj_id];
+        this_obj_environment = this_obj_source["ptxtag"];
+        if (this_object_type == "P") {
+            this_list = '<li tabindex="-1" id="choose_current" data-env="p" data-action="edit">Edit ' + this_obj_environment + '</li>';
+            if ($(this_obj).children('[data-editable="99"]').length) {
+                console.log("$(this_obj).children('[data-editable=99]')", $(this_obj).children('[data-editable="99"]'));
+                this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_obj_environment + '</li>';
+            }
+        } else {
+            console.log("are there children", $(this_obj).children('[data-editable="99"]').length);
+            this_list += '<li tabindex="-1" id="choose_current" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_obj_environment + '</li>';
+       }
+
         this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="beforebegin">Insert before<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
         this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="afterend">Insert after<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
         this_list += '<li tabindex="-1" data-env="' + this_object_type + '">Move or delete<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
@@ -559,10 +572,17 @@ function edit_in_place(obj, new_object_description) {
  
         thisID = new_id;
         thisTagName = new_tag;
-    } else {
-        thisID = obj.getAttribute("id");
+    } else if (thisID = obj.getAttribute("id")) {
         console.log("will edit in place", thisID);
         thisTagName = obj.tagName.toLowerCase();
+    } else {  // editing somethign without an id, so probably is a title or caption
+        if (obj.classList.contains("heading")) {
+            console.log("changing a heading");
+            console.log("except we don;t know how to do that")
+        } else {
+            console.log("error:  I don't know how to edit", obj)
+        }
+        return ""
     }
 
 // this only works for paragraphs, so go back and allow editing of other types
@@ -1660,16 +1680,38 @@ function main_menu_navigator(e) {  // we are not currently editing
            else if (document.getElementById('choose_current').hasAttribute("data-action")) {
                 var current_active_menu_item = document.getElementById('choose_current');
                 var this_action = current_active_menu_item.getAttribute("data-action");
+                console.log("               this_action", this_action)
                 var to_be_edited = document.getElementById('edit_menu_holder').parentElement;
                 if (this_action == "edit") {
                    console.log("going to edit it", to_be_edited);
                    edit_in_place(to_be_edited);
-                } else if (this_action == 'change_env') {
+                } else if (this_action == "change-env-to") {
+                    var new_env = current_active_menu_item.getAttribute("data-env");
+                    console.log("changing environment to", new_env);
+                    to_be_edited = document.getElementById('edit_menu_holder').parentElement.parentElement;
+                    console.log("to_be_edited", to_be_edited);
+                    var id_of_object = to_be_edited.id;
+                    var this_object_source = internalSource[id_of_object];  
+                    console.log("current envoronemnt", this_object_source);
+                    internalSource[id_of_object]["ptxtag"] = new_env;
+                    the_whole_object = html_from_internal_id(id_of_object);
+                    console.log("the_whole_object", the_whole_object);
+                    console.log('$("#actively_editing")', $("#actively_editing"));
+                    $("#" + id_of_object).replaceWith(the_whole_object[0]);  // later handle multiple additions
+            //        document.getElementById('edit_menu_holder').remove();
+                    edit_menu_for(id_of_object, "entering");
+                    return ""
+                    
+                } else if (this_action == 'change-env') {
                     current_env = document.getElementById('edit_menu_holder').parentElement.parentElement;
                     current_env_id = current_env.id;
                     current_env_source = internalSource[current_env_id];
                     current_env_name = current_env_source["ptxtag"];
-                    console.log("need menu to change", current_env_name);
+                    console.log("need menu to change", current_env_name, "in", current_env_source);
+
+                    current_active_menu_item.parentElement.classList.add("past");
+                    current_active_menu_item.removeAttribute("id");
+                    current_active_menu_item.classList.add("chosen");
 
                     var edit_submenu = document.createElement('ol');
                     edit_submenu.innerHTML = menu_options_for(current_env_name, "change");
