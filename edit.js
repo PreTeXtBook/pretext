@@ -79,7 +79,7 @@ base_menu_for = {
             ["list/table-like", "list-like"],
             ["math/chemistry/code", "math-like", "c"],
             ["image/video/sound", "display-like", "v"]],
-"p": ["emphasis-like", "formula", "abbreviation", "symbols", ["ref or link", "ref"]]
+"p": [["emphasis-like"], ["formula"], ["abbreviation"], ["symbol"], ["ref or link", "ref"]]
 }
 
 inner_menu_for = {
@@ -109,11 +109,12 @@ inner_menu_for = {
 "math-like": [["math display", "mathdisplay"], ["chemistry display", "chemistrydisplay"], ["code listing", "code", "l"]],
 "quoted": [["blockquote"], ["poem"], ["music"]],
 "interactives": [["sage cell", "sagecell"], ["webwork"], ["asymptote"], ["musical score", "musicalscore"]],
-"metadata": ["index entries", "notation"],
-"emphasis-like": ["emphasis", ["foreign word", "foreign"], "book title", "article title", "inline quote", "name of a ship"],
+"metadata": [["index entries"], ["notation"]],
+"emphasis-like": [["emphasis"], ["foreign word", "foreign"], ["book title"], ["article title"], ["inline quote"], ["name of a ship"]],
 // "abbreviation": ["ie", "eg", "etc", "et al"],  // i.e., etc., ellipsis, can just be typed.
-"symbols": ["trademark", "copyright"],
-"ref": ["ref to an internal id", "citation", "hyperlink"]
+"symbol": [["trademark"], ["copyright"], ["money"]],
+"money": [["$ dollar"], ["&euro; euro"], ["&pound; pound"], ["&yen; yen"]],
+"ref": [["reference withing this document"], ["citation"], ["hyperlink"]]
 }
 
 // this should be created from inner_menu_for
@@ -248,15 +249,19 @@ function menu_options_for(COMPONENT, level) {
          this_menu += ' data-env-parent="' + component + '"';
          if (this_item_shortcut) { 
              this_menu += ' data-jump="' + this_item_name.charAt(0) + ' ' + this_item_shortcut + '"';
-             this_item_name = this_item_name.replace(this_item_shortcut, '<b>' + this_item_shortcut + '</b>');
+             if(this_item_name.match(/^[a-z]/i)) {
+                 this_item_name = this_item_name.replace(this_item_shortcut, '<b>' + this_item_shortcut + '</b>');
+             }
          } else {
              this_menu += 'data-jump="' + this_item_name.charAt(0) + '"';
          }
          if(i==0) { this_menu += ' id="choose_current"'}
          this_menu += '>';
 
-         first_character = this_item_name.charAt(0);
-         this_item_name = this_item_name.replace(first_character, "<b>" + first_character + "</b>");
+         if(this_item_name.match(/^[a-z]/i)) {
+             first_character = this_item_name.charAt(0);
+             this_item_name = this_item_name.replace(first_character, "<b>" + first_character + "</b>");
+         }
 
          this_menu += this_item_name 
                  // little right triangle if there is a submenu
@@ -787,6 +792,7 @@ var internalSource = {  // currently the key is the HTML id
 
 function local_menu_navigator(e) {
     e.preventDefault();
+    console.log("in the local_menu_navigator");
     if (e.code == "Tab") {
         if (!document.getElementById('local_menu_holder')) {  // no local menu, so make one
             local_menu_for('actively_editing');
@@ -1542,7 +1548,7 @@ function main_menu_navigator(e) {  // we are not currently editing
            }  else { alert("Error:  enter_choice without data-location") }
        }
        // and add the option to edit the next object
-       if (!document.getElementById('edit_menu_holder')) {  // we are not already navigating a menu
+       if (!document.getElementById('edit_menu_holder') && !document.getElementById('local_menu_holder')) {  // we are not already navigating a menu
     //       e.preventDefault();
             console.log("menu place 6");
 
@@ -1794,8 +1800,8 @@ function main_menu_navigator(e) {  // we are not currently editing
                 current_active_menu_item.insertAdjacentElement("beforeend", edit_submenu);
           //      next_menu_item.setAttribute("id", "choose_current");
                 document.getElementById('choose_current').focus();
-                console.log("setting focus AA on",next_menu_item);
-                next_menu_item.focus();
+          //      console.log("setting focus AA on",next_menu_item);
+          //      next_menu_item.focus();
             } else {  // we just selected an action, so do it
                       // that probably involves adding something before or after a given object
                 var new_object_type = current_active_menu_item.getAttribute("data-env");
@@ -1813,6 +1819,10 @@ function main_menu_navigator(e) {  // we are not currently editing
                     object_near_new_object.classList.remove("may_select");
                     document.getElementById('edit_menu_holder').remove();
 
+                 } else if (document.getElementById('actively_editing')) {
+                     // need a mini-form for part of the larger form
+                     console.log("now make a n-=mini-form");
+                     document.getElementById("local_edit_form").remove();
                  } else {
                     alert("don't yet know about " + new_object_type);
                     document.getElementById('edit_menu_holder').parentElement.focus();
