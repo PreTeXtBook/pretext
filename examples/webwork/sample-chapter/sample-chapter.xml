@@ -595,7 +595,7 @@
                 </exercisegroup>
 
                 <exercise xml:id="ww-use-the-definition-of-the-derivative">
-                    <tite>Show Your Work</tite>
+                    <title>Show Your Work</title>
                     <introduction>
                         <p>
                             Sometimes you would like a student to give a <q>simple</q> answer that <webwork/> can automatically assess,
@@ -856,7 +856,7 @@
 
             <p>
                 Occasionally (and probably very rarely) your PG code will include a string variable where the content is PGML syntax.
-                If this is put into the exercise statement, it will be inserted <emph>after</emph> PGML processing is done,
+                If this is put into the exercise statement, it will be inserted <em>after</em> PGML processing is done,
                 and therefore it won't render as you might expect. To insert this content and also have it processed as PGML,
                 use <c>data="pgml"</c>. (This is not in the <pretext/> schema as of 3/26/2020, and is subject to change.)
             </p>
