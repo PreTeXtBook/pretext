@@ -1817,14 +1817,14 @@
                         }+
                     )
                 }
+            BlockStatementWW =
+                        Paragraph |
+                        Preformatted |
+                        Tabular |
+                        ImageWW
             StatementExerciseWW =
                 element statement {
-                    (
-                        Paragraph |
-                        WWInstruction |
-                        Preformatted |
-                        SideBySideNoCaption
-                    )+
+                    (BlockStatementWW|WWInstruction)+
                 }
             WWMacros =
                 element pg-macros {
@@ -1851,19 +1851,11 @@
                 element instruction {TextShort}
             HintWW =
                 element hint {
-                    (
-                        Paragraph |
-                        Preformatted |
-                        SideBySideNoCaption
-                    )+
+                    (BlockStatementWW)+
                 }
             SolutionWW =
                 element solution {
-                    (
-                        Paragraph |
-                        Preformatted |
-                        SideBySideNoCaption
-                    )+
+                    (BlockStatementWW)+
                 }
             </code>
         </fragment>

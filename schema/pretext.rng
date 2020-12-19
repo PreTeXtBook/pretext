@@ -2451,14 +2451,20 @@
       </choice>
     </element>
   </define>
+  <define name="BlockStatementWW">
+    <choice>
+      <ref name="Paragraph"/>
+      <ref name="Preformatted"/>
+      <ref name="Tabular"/>
+      <ref name="ImageWW"/>
+    </choice>
+  </define>
   <define name="StatementExerciseWW">
     <element name="statement">
       <oneOrMore>
         <choice>
-          <ref name="Paragraph"/>
+          <ref name="BlockStatementWW"/>
           <ref name="WWInstruction"/>
-          <ref name="Preformatted"/>
-          <ref name="SideBySideNoCaption"/>
         </choice>
       </oneOrMore>
     </element>
@@ -2534,22 +2540,14 @@
   <define name="HintWW">
     <element name="hint">
       <oneOrMore>
-        <choice>
-          <ref name="Paragraph"/>
-          <ref name="Preformatted"/>
-          <ref name="SideBySideNoCaption"/>
-        </choice>
+        <ref name="BlockStatementWW"/>
       </oneOrMore>
     </element>
   </define>
   <define name="SolutionWW">
     <element name="solution">
       <oneOrMore>
-        <choice>
-          <ref name="Paragraph"/>
-          <ref name="Preformatted"/>
-          <ref name="SideBySideNoCaption"/>
-        </choice>
+        <ref name="BlockStatementWW"/>
       </oneOrMore>
     </element>
   </define>
