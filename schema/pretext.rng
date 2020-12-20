@@ -1564,7 +1564,7 @@
   </define>
   <define name="Task">
     <element name="task">
-      <ref name="MetaDataTarget"/>
+      <ref name="MetaDataTitleOptional"/>
       <choice>
         <oneOrMore>
           <ref name="BlockStatement"/>

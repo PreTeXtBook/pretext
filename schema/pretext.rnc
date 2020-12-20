@@ -601,7 +601,7 @@
                 element project {ProjectLike}
             Task =
                 element task {
-                    MetaDataTarget,
+                    MetaDataTitleOptional,
                     (
                         BlockStatement+ |
                         (Statement, Hint*, Answer*, Solution*) |

@@ -1408,7 +1408,7 @@
   <xs:element name="task">
     <xs:complexType>
       <xs:sequence>
-        <xs:group ref="MetaDataTarget"/>
+        <xs:group ref="MetaDataTitleOptional"/>
         <xs:choice>
           <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
           <xs:sequence>
@@ -1424,7 +1424,7 @@
           </xs:sequence>
         </xs:choice>
       </xs:sequence>
-      <xs:attributeGroup ref="MetaDataTarget"/>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="RemarkLike">
