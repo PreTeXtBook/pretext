@@ -3893,6 +3893,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
 
+    <!-- *Something* is being output, so include an (optional) title -->
+    <xsl:if test="title">
+        <h6 class="heading">
+            <span class="title">
+                <xsl:apply-templates select="." mode="title-full"/>
+            </span>
+        </h6>
+    </xsl:if>
     <xsl:choose>
         <!-- introduction?, task+, conclusion? -->
         <xsl:when test="task">
@@ -3936,6 +3944,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <article class="exercise-like">
             <xsl:apply-templates select="." mode="heading-birth" />
 
+            <!-- *Something* is being output, so include an (optional) title -->
+            <xsl:if test="title">
+                <h6 class="heading">
+                    <span class="title">
+                        <xsl:apply-templates select="." mode="title-full"/>
+                    </span>
+                </h6>
+            </xsl:if>
             <xsl:choose>
                 <!-- introduction?, task+, conclusion? -->
                 <xsl:when test="task">
