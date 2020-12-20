@@ -942,6 +942,7 @@ the xsltproc executable.
                         </introduction>
 
                         <task>
+                            <title>A super-simple task</title>
                             <p>This first task is very simple, just a paragraph.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                         </task>
 
@@ -952,11 +953,13 @@ the xsltproc executable.
                         </task>
 
                         <task>
+                            <title>A title of a task that has a subtask with an <tag>answer</tag> for the Solutions</title>
                             <introduction>
                                 <p>This second task is further divided by more tasks.  This is its introduction.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                                 <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                             </introduction>
                             <task>
+                                <title>A task with a title and an <tag>answer</tag> for the Solutions</title>
                                 <statement>
                                     <p>A really simple subtask.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                                     <p>A short paragraph, before an answer.</p>
@@ -979,12 +982,13 @@ the xsltproc executable.
                             </task>
                             <task>
                                 <introduction>
-                                    <p>Two simple sub-sub-tasks.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                                    <p>Three simple sub-sub-tasks.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                                 </introduction>
                                 <task>
                                     <p>First subsubtask.  Short paragraph.</p>
                                 </task>
                                 <task>
+                                    <title>A second three-deep subsubtask!</title>
                                     <p>Second subsubtask.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                                     <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                                 </task>
