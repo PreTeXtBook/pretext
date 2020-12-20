@@ -4010,8 +4010,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template match="paragraphs|proof|case|defined-term" mode="title-wants-punctuation">
     <xsl:value-of select="true()"/>
 </xsl:template>
-<!-- Titled list items -->
-<xsl:template match="ol/li|ul/li" mode="title-wants-punctuation">
+<!-- Titled: list items, tasks of exercise, PROJECT-LIKE, EXAMPLE-LIKE -->
+<xsl:template match="ol/li|ul/li|task" mode="title-wants-punctuation">
     <xsl:value-of select="true()"/>
 </xsl:template>
 <!-- Introductions and Conclusions -->
