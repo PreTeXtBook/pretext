@@ -1073,7 +1073,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:if test="$document-root//ol/li/title|$document-root//ul/li/title">
         <!-- Styling: expose this macro to easier overriding for style work -->
+        <!-- NB: needs a rename (or suplication) before exposing publicly   -->
         <xsl:text>%% Style of a title on a list item, for ordered and unordered lists&#xa;</xsl:text>
+        <xsl:text>%% Also "task" of exercise, PROJECT-LIKE, EXAMPLE-LIKE&#xa;</xsl:text>
         <xsl:text>\newcommand{\lititle}[1]{{\slshape#1}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%% End: Semantic Macros&#xa;</xsl:text>
@@ -6003,6 +6005,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>[(</xsl:text>
             <xsl:apply-templates select="." mode="list-number" />
             <xsl:text>)]</xsl:text>
+            <!-- Something is being output, so include an (optional) title  -->
+            <!-- Semantic macro defined in preamble, mostly for font change -->
+            <xsl:if test="title">
+                <xsl:text>\lititle{</xsl:text>
+                <xsl:apply-templates select="." mode="title-full"/>
+                <xsl:text>}\par%&#xa;</xsl:text>
+            </xsl:if>
             <!-- Identification in place, we can write the generic guts -->
             <xsl:apply-templates select="." mode="exercise-components">
                 <xsl:with-param name="b-original" select="$b-original" />
