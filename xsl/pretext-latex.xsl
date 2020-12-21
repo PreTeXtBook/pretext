@@ -1071,9 +1071,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\forwardimplication}{($\Rightarrow$)}&#xa;</xsl:text>
         <xsl:text>\newcommand{\backwardimplication}{($\Leftarrow$)}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$document-root//ol/li/title|$document-root//ul/li/title">
+    <xsl:if test="$document-root//ol/li/title|$document-root//ul/li/title|$document-root//task/title">
         <!-- Styling: expose this macro to easier overriding for style work -->
-        <!-- NB: needs a rename (or suplication) before exposing publicly   -->
+        <!-- NB: needs a rename (and duplication) before exposing publicly  -->
+        <!-- conditional can be split for list items v. tasks               -->
         <xsl:text>%% Style of a title on a list item, for ordered and unordered lists&#xa;</xsl:text>
         <xsl:text>%% Also "task" of exercise, PROJECT-LIKE, EXAMPLE-LIKE&#xa;</xsl:text>
         <xsl:text>\newcommand{\lititle}[1]{{\slshape#1}}&#xa;</xsl:text>
