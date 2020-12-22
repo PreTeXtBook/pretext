@@ -412,7 +412,7 @@ function container_for_editing(obj_type) {
         } else { instructions = '' }
         var editingregion_container_start = '<div class="editing_p_holder">';
         var editingregion_container_end = '</div>';
-        var editingregion = '<textarea class="editing_p starting_point_for_editing" style="width:100%;" placeholder="' + obj_type_name + '"></textarea>';
+        var editingregion = '<textarea class="paragraph_input" editing_p starting_point_for_editing" style="width:100%;" placeholder="' + obj_type_name + '"></textarea>';
         this_content_container.innerHTML = instructions + editingregion_container_start + editingregion + editingregion_container_end;
     } else if ( editing_container_for["theorem-like"].includes(obj_type) ) {
         console.log("making a form for", obj_type);
@@ -424,7 +424,7 @@ function container_for_editing(obj_type) {
         var editingregion_container_start = '<div class="editing_p_holder">'
         var editingregion_container_end = '</div>'
         var statementinstructions = '<span class="group_description">statement (paragraphs, images, lists, etc)</span>';
-        var statementeditingregion = '<textarea id="actively_editing_statement" style="width:100%;" placeholder="first paragraph of statement"></textarea>';
+        var statementeditingregion = '<textarea class="paragraph_input" id="actively_editing_statement" style="width:100%;" placeholder="first paragraph of statement"></textarea>';
         var statement = statement_container_start + editingregion_container_start;
         statement += statementinstructions;
         statement += statementeditingregion;
@@ -433,7 +433,7 @@ function container_for_editing(obj_type) {
         var proof_container_start = '<div class="editing_proof">';
         var proof_container_end = '</div>';
         var proofinstructions = '<span class="group_description">optional proof (paragraphs, images, lists, etc)</span>';
-        var proofeditingregion = '<textarea id="actively_editing_proof" style="width:100%;" placeholder="first paragraph of optional proof"></textarea>';
+        var proofeditingregion = '<textarea class="paragraph_input" id="actively_editing_proof" style="width:100%;" placeholder="first paragraph of optional proof"></textarea>';
  
         var proof = proof_container_start + editingregion_container_start;
         proof += proofinstructions;
@@ -453,7 +453,7 @@ function container_for_editing(obj_type) {
         var editingregion_container_start = '<div class="editing_p_holder">'
         var editingregion_container_end = '</div>'
         var statementinstructions = '<span class="group_description">statement (paragraphs, images, lists, etc)</span>';
-        var statementeditingregion = '<textarea id="actively_editing_statement" style="width:100%;" placeholder="first paragraph of statement"></textarea>';
+        var statementeditingregion = '<textarea class="paragraph_input" id="actively_editing_statement" style="width:100%;" placeholder="first paragraph of statement"></textarea>';
         var statement = statement_container_start + editingregion_container_start;
         statement += statementinstructions;
         statement += statementeditingregion;
@@ -472,7 +472,7 @@ function container_for_editing(obj_type) {
         var editingregion_container_start = '<div class="editing_p_holder">'
         var editingregion_container_end = '</div>'
         var statementinstructions = '<span class="group_description">statement (paragraphs, images, lists, etc)</span>';
-        var statementeditingregion = '<textarea id="actively_editing_statement" style="width:100%;" placeholder="first paragraph of statement"></textarea>';
+        var statementeditingregion = '<textarea class="paragraph_input" id="actively_editing_statement" style="width:100%;" placeholder="first paragraph of statement"></textarea>';
         var statement = statement_container_start + editingregion_container_start;
         statement += statementinstructions;
         statement += statementeditingregion;
@@ -491,7 +491,7 @@ function container_for_editing(obj_type) {
         var editingregion_container_start = '<div class="editing_p_holder">'
         var editingregion_container_end = '</div>'
         var statementinstructions = '<span class="group_description">statement (paragraphs, images, lists, etc)</span>';
-        var statementeditingregion = '<textarea id="actively_editing_statement" style="width:100%;" placeholder="first paragraph of statement"></textarea>';
+        var statementeditingregion = '<textarea class="paragraph_input" id="actively_editing_statement" style="width:100%;" placeholder="first paragraph of statement"></textarea>';
         var statement = statement_container_start + editingregion_container_start;
         statement += statementinstructions;
         statement += statementeditingregion;
@@ -601,7 +601,7 @@ function edit_in_place(obj, new_object_description) {
    //     var idOfEditText = thisID + '_input_text';
         var idOfEditText = 'editing' + '_input_text';
         var textarea_editable = document.createElement('textarea');
-        textarea_editable.setAttribute('class', 'text_source');
+        textarea_editable.setAttribute('class', 'text_source paragraph_input');
         textarea_editable.setAttribute('id', idOfEditText);
         textarea_editable.setAttribute('data-source_id', thisID);
         textarea_editable.setAttribute('data-parent_id', internalSource[thisID]["parent"][0]);
@@ -642,7 +642,7 @@ function edit_in_place(obj, new_object_description) {
         var editingregion_container_start = '<div class="editing_p_holder">'
         var editingregion_container_end = '</div>'
         var statementinstructions = '<span class="group_description">statement (paragraphs, images, lists, etc)</span>';
-        var statementeditingregion = '<textarea id="actively_editing_statement" style="width:98%;" placeholder="first paragraph of statement" data-source_id="' + new_statement_p_id + '" data-parent_id="' + new_id + '" data-parent_component="statement"></textarea>';
+        var statementeditingregion = '<textarea class="paragraph_input" id="actively_editing_statement" style="width:98%;" placeholder="first paragraph of statement" data-source_id="' + new_statement_p_id + '" data-parent_id="' + new_id + '" data-parent_component="statement"></textarea>';
         var statement = statement_container_start + editingregion_container_start;
         statement += statementinstructions;
         statement += statementeditingregion;
@@ -651,7 +651,8 @@ function edit_in_place(obj, new_object_description) {
         var proof_container_start = '<div class="editing_proof">';
         var proof_container_end = '</div>';
         var proofinstructions = '<span class="group_description">optional proof (paragraphs, images, lists, etc)</span>';
-        var proofeditingregion = '<textarea id="actively_editing_proof" style="width:98%;" placeholder="first paragraph of optional proof"  data-source_id="' + new_proof_p_id + '" data-parent_id="' + new_id + '" data-parent_component="proof"></textarea>';
+    //    var proofeditingregion = '<textarea id="actively_editing_proof" style="width:98%;" placeholder="first paragraph of optional proof"  data-source_id="' + new_proof_p_id + '" data-parent_id="' + new_id + '" data-parent_component="proof"></textarea>';
+        var proofeditingregion = '<div id="actively_editing_proof" class="paragraph_input" contenteditable="true" style="width:98%;min-height:6em;" placeholder="first paragraph of optional proof"  data-source_id="' + new_proof_p_id + '" data-parent_id="' + new_id + '" data-parent_component="proof">What is <b>bold</b> or <em>emphasized</em>?</div>';
 
         var proof = proof_container_start + editingregion_container_start;
         proof += proofinstructions;
@@ -681,7 +682,7 @@ function edit_in_place(obj, new_object_description) {
         var editingregion_container_start = '<div class="editing_p_holder">'
         var editingregion_container_end = '</div>'
         var statementinstructions = '<span class="group_description">statement (paragraphs, images, lists, etc)</span>';
-        var statementeditingregion = '<textarea id="actively_editing_statement" style="width:98%;" placeholder="first paragraph of statement" data-source_id="' + new_statement_p_id + '" data-parent_id="' + new_id + '" data-parent_component="statement"></textarea>';
+        var statementeditingregion = '<textarea class="paragraph_input" id="actively_editing_statement" style="width:98%;" placeholder="first paragraph of statement" data-source_id="' + new_statement_p_id + '" data-parent_id="' + new_id + '" data-parent_component="statement"></textarea>';
         var statement = statement_container_start + editingregion_container_start;
         statement += statementinstructions;
         statement += statementeditingregion;
@@ -707,7 +708,7 @@ function edit_in_place(obj, new_object_description) {
         var editingregion_container_start = '<div class="editing_p_holder">'
         var editingregion_container_end = '</div>'
         var contentinstructions = '<span class="group_description">content (paragraphs, images, lists, etc)</span>';
-        var contenteditingregion = '<textarea id="actively_editing_statement" style="width:98%;" placeholder="first paragraph of content" data-source_id="' + new_content_p_id + '" data-parent_id="' + new_id + '" data-parent_component="content"></textarea>';
+        var contenteditingregion = '<textarea class="paragraph_input" id="actively_editing_statement" style="width:98%;" placeholder="first paragraph of content" data-source_id="' + new_content_p_id + '" data-parent_id="' + new_id + '" data-parent_component="content"></textarea>';
         var content = content_container_start + editingregion_container_start;
         content += contentinstructions;
         content += contenteditingregion;
@@ -733,7 +734,7 @@ function edit_in_place(obj, new_object_description) {
         var editingregion_container_start = '<div class="editing_p_holder">'
         var editingregion_container_end = '</div>'
         var contentinstructions = '<span class="group_description">content (paragraphs, images, lists, etc)</span>';
-        var contenteditingregion = '<textarea id="actively_editing_statement" style="width:98%;" placeholder="first paragraph of content" data-source_id="' + new_content_p_id + '" data-parent_id="' + new_id + '" data-parent_component="content"></textarea>';
+        var contenteditingregion = '<textarea class="paragraph_input" id="actively_editing_statement" style="width:98%;" placeholder="first paragraph of content" data-source_id="' + new_content_p_id + '" data-parent_id="' + new_id + '" data-parent_component="content"></textarea>';
         var content = content_container_start + editingregion_container_start;
         content += contentinstructions;
         content += contenteditingregion;
@@ -1442,7 +1443,8 @@ function local_editing_action(e) {
             these_changes = assemble_internal_version_changes();
             final_added_object = insert_html_version(these_changes);
             // if there is a textarea ahead, go there.  Otherwise menu the last thing added
-            if (next_textarea = document.querySelector('textarea')) {
+      //      if (next_textarea = document.querySelector('textarea')) {
+            if (next_textarea = document.querySelector('.paragraph_input')) {
                 next_textarea.focus();
                 next_textarea.setSelectionRange(0,0);
                 this_char = "";
