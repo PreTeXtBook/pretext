@@ -627,13 +627,6 @@ body > a.assistive:focus {
     font-size: inherit;
 }
 
-/*
-.pretext-content figcaption .heading + .codenumber::before,
-.pretext-content figcaption .type + .codenumber::before {
-    content: " ";
-}
-*/
-
 .pretext-content figcaption .codenumber:after {
     content: "\2002";
 }
@@ -1757,6 +1750,14 @@ a.mjx-svg-href  {
 .pretext-content .exercisegroup article.exercise-like .heading {
     margin: 0;
 }
+.pretext-content article.exercise-like .task > .heading + .heading {
+    font-weight: 600;  /* still looks same as bold to me */
+}
+.pretext-content article.exercise-like .task > .heading + .heading + p,
+.pretext-content article.exercise-like .task > .heading + .heading + div {
+    display: block;
+    margin-top: 0;
+}
 .pretext-content .exercisegroup .conclusion .heading {
     margin-top: 0.5em;
 }
@@ -2199,15 +2200,9 @@ figure figcaption.wrap {
     width: 100%;
 }
 
-/* .caption .counter:after { content: " ";} */
-
-/* above repeated for captions outside figures */
-
 .caption .heading {
     font-weight: bold;
 }
-
-/* .caption .heading:after { content: " ";} */
 
 .caption .counter {
     font-weight: bold;
