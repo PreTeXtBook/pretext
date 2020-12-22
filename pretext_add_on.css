@@ -3287,8 +3287,10 @@ label.incorrect .feedback {
     left: 15em;
     bottom: 1.5em;
     z-index: 1000;
+    display: inline;
 }
-em #edit_menu_holder {
+em #edit_menu_holder,
+h6 #edit_menu_holder {
     left: -0.5em;
 }
 #local_menu_holder {
@@ -3303,6 +3305,8 @@ em #edit_menu_holder {
     position: absolute;
     white-space: nowrap;
     z-index: 1000;
+    font-size: 95%;
+    font-weight: normal;
 }
 #edit_menu.past {
     background: #ffe;
@@ -3318,6 +3322,14 @@ em #edit_menu_holder {
     bottom: -1.2em;
     border-radius: 0.5em 0.5em 0 0; 
     font-style: italic;
+}
+#enter_choice[data-location="inline"] {
+    bottom: -0.2em;
+    left: -0.5em;
+}
+.heading + p > #edit_menu_holder {
+    bottom: -0.2em;
+    left: -0.5em;
 }
 .may_leave + #edit_menu_holder #enter_choice {
     position: absolute;
