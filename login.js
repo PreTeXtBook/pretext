@@ -189,10 +189,12 @@ function validateLogin() {
     if (logged_in) {
         $("#theloginform").hide();
         document.getElementById('loginlogout').innerHTML = 'logout' + ' ' + un;
-        loadScript('answer');
-        if(uname != "editor") {loadScript('highlight')}
-        if ((typeof trails !== 'undefined') && trails) {
-            loadScript('trails');
+        if(uname != "editor") {
+            loadScript('answer');
+            loadScript('highlight')
+            if ((typeof trails !== 'undefined') && trails) {
+                loadScript('trails');
+            }
         }
     }
     var role_key = check_role();
