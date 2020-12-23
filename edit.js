@@ -395,115 +395,6 @@ let response = await fetch(url);
 console.log("status of response",response.status);
 */
 
-function container_for_editing(obj_type) {
-    // the most recent characters were TAB and RET from navigatin gthe menu, which are irrelevant now.
-    console.log("in container_for_editing");
-    this_char = "";
-    prev_char = "";
-    var this_content_container = document.createElement('div');
-    this_content_container.setAttribute('id', "actively_editing");
-
-    if (obj_type == "p") {
-        this_content_container.setAttribute('data-objecttype', 'p');
-        var obj_type_name = "paragraph";
-        this_tip = editing_tip_for(obj_type);
-        if (this_tip) {
-            instructions = '<span class="group_description">' + 'Tip: ' + this_tip + '</span>';
-        } else { instructions = '' }
-        var editingregion_container_start = '<div class="editing_p_holder">';
-        var editingregion_container_end = '</div>';
-        var editingregion = '<textarea class="paragraph_input" editing_p starting_point_for_editing" style="width:100%;" placeholder="' + obj_type_name + '"></textarea>';
-        this_content_container.innerHTML = instructions + editingregion_container_start + editingregion + editingregion_container_end;
-    } else if ( editing_container_for["theorem-like"].includes(obj_type) ) {
-        console.log("making a form for", obj_type);
-        this_content_container.setAttribute('data-objecttype', 'theorem-like');
-        var title = standard_title_form(obj_type);
-
-        var statement_container_start = '<div class="editing_statement">';
-        var statement_container_end = '</div>';
-        var editingregion_container_start = '<div class="editing_p_holder">'
-        var editingregion_container_end = '</div>'
-        var statementinstructions = '<span class="group_description">statement (paragraphs, images, lists, etc)</span>';
-        var statementeditingregion = '<textarea class="paragraph_input" id="actively_editing_statement" style="width:100%;" placeholder="first paragraph of statement"></textarea>';
-        var statement = statement_container_start + editingregion_container_start;
-        statement += statementinstructions;
-        statement += statementeditingregion;
-        statement += editingregion_container_end + statement_container_end;
-
-        var proof_container_start = '<div class="editing_proof">';
-        var proof_container_end = '</div>';
-        var proofinstructions = '<span class="group_description">optional proof (paragraphs, images, lists, etc)</span>';
-        var proofeditingregion = '<textarea class="paragraph_input" id="actively_editing_proof" style="width:100%;" placeholder="first paragraph of optional proof"></textarea>';
- 
-        var proof = proof_container_start + editingregion_container_start;
-        proof += proofinstructions;
-        proof += proofeditingregion;
-        proof += editingregion_container_end + proof_container_end;
-
-        this_content_container.innerHTML = title + statement + proof
-    } else if ( editing_container_for["definition-like"].includes(obj_type) ) {
-
-// consolidate with theorem-like
-        console.log("making a form for", obj_type);
-        this_content_container.setAttribute('data-objecttype', 'definition-like');
-        var title = standard_title_form(obj_type);
-
-        var statement_container_start = '<div class="editing_statement">';
-        var statement_container_end = '</div>';
-        var editingregion_container_start = '<div class="editing_p_holder">'
-        var editingregion_container_end = '</div>'
-        var statementinstructions = '<span class="group_description">statement (paragraphs, images, lists, etc)</span>';
-        var statementeditingregion = '<textarea class="paragraph_input" id="actively_editing_statement" style="width:100%;" placeholder="first paragraph of statement"></textarea>';
-        var statement = statement_container_start + editingregion_container_start;
-        statement += statementinstructions;
-        statement += statementeditingregion;
-        statement += editingregion_container_end + statement_container_end;
-
-        this_content_container.innerHTML = title + statement
-    } else if ( editing_container_for["remark-like"].includes(obj_type) ) {
-
-// consolidate with theorem-like
-        console.log("making a form for", obj_type);
-        this_content_container.setAttribute('data-objecttype', 'remark-like');
-        var title = standard_title_form(obj_type);
-
-        var statement_container_start = '<div class="editing_statement">';
-        var statement_container_end = '</div>';
-        var editingregion_container_start = '<div class="editing_p_holder">'
-        var editingregion_container_end = '</div>'
-        var statementinstructions = '<span class="group_description">statement (paragraphs, images, lists, etc)</span>';
-        var statementeditingregion = '<textarea class="paragraph_input" id="actively_editing_statement" style="width:100%;" placeholder="first paragraph of statement"></textarea>';
-        var statement = statement_container_start + editingregion_container_start;
-        statement += statementinstructions;
-        statement += statementeditingregion;
-        statement += editingregion_container_end + statement_container_end;
-
-        this_content_container.innerHTML = title + statement
-    } else if ( editing_container_for["section-like"].includes(obj_type) ) {
-
-// consolidate with theorem-like
-        console.log("making a form for", obj_type);
-        this_content_container.setAttribute('data-objecttype', 'section-like');
-        var title = standard_title_form(obj_type);
-
-        var statement_container_start = '<div class="editing_statement">';
-        var statement_container_end = '</div>';
-        var editingregion_container_start = '<div class="editing_p_holder">'
-        var editingregion_container_end = '</div>'
-        var statementinstructions = '<span class="group_description">statement (paragraphs, images, lists, etc)</span>';
-        var statementeditingregion = '<textarea class="paragraph_input" id="actively_editing_statement" style="width:100%;" placeholder="first paragraph of statement"></textarea>';
-        var statement = statement_container_start + editingregion_container_start;
-        statement += statementinstructions;
-        statement += statementeditingregion;
-        statement += editingregion_container_end + statement_container_end;
-
-        this_content_container.innerHTML = title + statement
-
-    }
-
-    return this_content_container
-}
-
 function edit_in_place(obj, new_object_description) {
 
 // a new_object looks like [type, sibling, position]
@@ -600,29 +491,32 @@ function edit_in_place(obj, new_object_description) {
         var idOfEditContainer = thisID + '_input';
    //     var idOfEditText = thisID + '_input_text';
         var idOfEditText = 'editing' + '_input_text';
-        var textarea_editable = document.createElement('textarea');
-        textarea_editable.setAttribute('class', 'text_source paragraph_input');
-        textarea_editable.setAttribute('id', idOfEditText);
-        textarea_editable.setAttribute('data-source_id', thisID);
-        textarea_editable.setAttribute('data-parent_id', internalSource[thisID]["parent"][0]);
-        textarea_editable.setAttribute('data-parent_component', internalSource[thisID]["parent"][1]);
-        textarea_editable.setAttribute('style', 'width:99%;');
+        var paragraph_editable = document.createElement('div');
+        paragraph_editable.setAttribute('contenteditable', 'true');
+        paragraph_editable.setAttribute('class', 'text_source paragraph_input');
+        paragraph_editable.setAttribute('id', idOfEditText);
+        paragraph_editable.setAttribute('data-source_id', thisID);
+        paragraph_editable.setAttribute('data-parent_id', internalSource[thisID]["parent"][0]);
+        paragraph_editable.setAttribute('data-parent_component', internalSource[thisID]["parent"][1]);
 
   //      document.getElementById(idOfEditContainer).insertAdjacentElement("afterbegin", textarea_editable);
-        document.getElementById('actively_editing').insertAdjacentElement("afterbegin", textarea_editable);
+        document.getElementById('actively_editing').insertAdjacentElement("afterbegin", paragraph_editable);
 
   //      id_of_existing_content = internalSource[thisID]["content"];
-        $('#' + idOfEditText).val(internalSource[thisID]["content"]);
- //       $('#' + idOfEditText).val(internalSource[id_of_existing_content]);
+        console.log("setting", $('#' + idOfEditText), "to have contents", internalSource[thisID]["content"]);
+        the_contents = internalSource[thisID]["content"]; 
+        the_contents = expand_condensed_source_html(the_contents, "edit");
+        $('#' + idOfEditText).html(the_contents);
+  //      $('#' + idOfEditText).val(internalSource[thisID]["content"]);
         document.getElementById(idOfEditText).focus();
-        document.getElementById(idOfEditText).setSelectionRange(0,0);
-        textarea_editable.style.height = textarea_editable.scrollHeight + "px";
+  //      document.getElementById(idOfEditText).setSelectionRange(0,0);
+  //      textarea_editable.style.height = textarea_editable.scrollHeight + "px";
         console.log("made edit box for", thisID);
         this_char = "";
         prev_char = "";
-        textarea_editable.addEventListener("keypress", function() {
-          textarea_editable.style.height = textarea_editable.scrollHeight + "px";
-       });
+//        textarea_editable.addEventListener("keypress", function() {
+ //         textarea_editable.style.height = textarea_editable.scrollHeight + "px";
+  //     });
       } else if (editing_container_for["theorem-like"].includes(new_tag)) {
 // copied from no-longer-existent container_for_editing
 
@@ -642,7 +536,8 @@ function edit_in_place(obj, new_object_description) {
         var editingregion_container_start = '<div class="editing_p_holder">'
         var editingregion_container_end = '</div>'
         var statementinstructions = '<span class="group_description">statement (paragraphs, images, lists, etc)</span>';
-        var statementeditingregion = '<textarea class="paragraph_input" id="actively_editing_statement" style="width:98%;" placeholder="first paragraph of statement" data-source_id="' + new_statement_p_id + '" data-parent_id="' + new_id + '" data-parent_component="statement"></textarea>';
+     //   var statementeditingregion = '<textarea class="paragraph_input" id="actively_editing_statement" style="width:98%;" placeholder="first paragraph of statement" data-source_id="' + new_statement_p_id + '" data-parent_id="' + new_id + '" data-parent_component="statement"></textarea>';
+        var statementeditingregion = '<div contenteditable="true" class="paragraph_input" id="actively_editing_statement" placeholder="first paragraph of statement" data-source_id="' + new_statement_p_id + '" data-parent_id="' + new_id + '" data-parent_component="statement"></div>';
         var statement = statement_container_start + editingregion_container_start;
         statement += statementinstructions;
         statement += statementeditingregion;
@@ -682,7 +577,7 @@ function edit_in_place(obj, new_object_description) {
         var editingregion_container_start = '<div class="editing_p_holder">'
         var editingregion_container_end = '</div>'
         var statementinstructions = '<span class="group_description">statement (paragraphs, images, lists, etc)</span>';
-        var statementeditingregion = '<textarea class="paragraph_input" id="actively_editing_statement" style="width:98%;" placeholder="first paragraph of statement" data-source_id="' + new_statement_p_id + '" data-parent_id="' + new_id + '" data-parent_component="statement"></textarea>';
+        var statementeditingregion = '<div contenteditable="true" class="paragraph_input" id="actively_editing_statement" style="width:98%;" placeholder="first paragraph of statement" data-source_id="' + new_statement_p_id + '" data-parent_id="' + new_id + '" data-parent_component="statement"></div>';
         var statement = statement_container_start + editingregion_container_start;
         statement += statementinstructions;
         statement += statementeditingregion;
@@ -708,7 +603,7 @@ function edit_in_place(obj, new_object_description) {
         var editingregion_container_start = '<div class="editing_p_holder">'
         var editingregion_container_end = '</div>'
         var contentinstructions = '<span class="group_description">content (paragraphs, images, lists, etc)</span>';
-        var contenteditingregion = '<textarea class="paragraph_input" id="actively_editing_statement" style="width:98%;" placeholder="first paragraph of content" data-source_id="' + new_content_p_id + '" data-parent_id="' + new_id + '" data-parent_component="content"></textarea>';
+        var contenteditingregion = '<div contenteditable="true" class="paragraph_input" id="actively_editing_statement" style="width:98%;" placeholder="first paragraph of content" data-source_id="' + new_content_p_id + '" data-parent_id="' + new_id + '" data-parent_component="content"></div>';
         var content = content_container_start + editingregion_container_start;
         content += contentinstructions;
         content += contenteditingregion;
@@ -734,7 +629,7 @@ function edit_in_place(obj, new_object_description) {
         var editingregion_container_start = '<div class="editing_p_holder">'
         var editingregion_container_end = '</div>'
         var contentinstructions = '<span class="group_description">content (paragraphs, images, lists, etc)</span>';
-        var contenteditingregion = '<textarea class="paragraph_input" id="actively_editing_statement" style="width:98%;" placeholder="first paragraph of content" data-source_id="' + new_content_p_id + '" data-parent_id="' + new_id + '" data-parent_component="content"></textarea>';
+        var contenteditingregion = '<div contenteditable="true" class="paragraph_input" id="actively_editing_statement" style="width:98%;" placeholder="first paragraph of content" data-source_id="' + new_content_p_id + '" data-parent_id="' + new_id + '" data-parent_component="content"></div>';
         var content = content_container_start + editingregion_container_start;
         content += contentinstructions;
         content += contenteditingregion;
@@ -784,7 +679,9 @@ var internalSource = {  // currently the key is the HTML id
    "sYv": {"xml:id": "", "permid": "sYv", "ptxtag": "p", "parent": ["hPw","content"],
            "content": "One way to get a feel for the subject is to consider the types of problems you solve in discrete math. Here are a few simple examples:"},
    "ACU": {"xml:id": "", "permid": "ACU", "ptxtag": "p", "parent": ["hPw","content"],
-           "content": "In an algebra or calculus class, you might have found a particular set of numbers (maybe the set of numbers in the range of a function). You would represent this set as an interval: <m>[0,\\infty)</m> is the range of <m>f(x)=x^2</m> since the set of outputs of the function are all real numbers <m>0</m> and greater. This set of numbers is NOT discrete. The numbers in the set are not separated by much at all. In fact, take any two numbers in the set and there are infinitely many more between them which are also in the set."}
+           "content": "In an algebra or calculus class, you might have found a particular set of numbers (maybe the set of numbers in the range of a function). You would represent this set as an interval: <m>[0,\\infty)</m> is the range of <&>112233<;> since the set of outputs of the function are all real numbers <m>0</m> and greater. This set of numbers is NOT discrete. The numbers in the set are not separated by much at all. In fact, take any two numbers in the set and there are infinitely many more between them which are also in the set."},
+   "112233": {"xml:id": "", "permid": "", "ptxtag": "m", "parent": ["ACU","content"],
+           "content": "f(x)=x^2"}
 //           "content": '124567'},
 //   "124567": "Synonyms"
 }
@@ -991,6 +888,35 @@ function display_new(objectclass, objecttype, whereat, relativelocation) {
     }
 }
 
+function save_internal_contents(some_text) {
+
+    // some_text must be a paragraph with mixed content only contining
+    // non-nested tags
+    the_text = some_text;
+    console.log("            xxxxxxxxxx  the_text is", the_text);
+    if (the_text.includes('data-editable="99"')) {
+        return the_text.replace(/<([^<]+) data-editable="99" tabindex="-1">(.*?)<[^<]+>/g, save_internal_cont)
+    } else if(the_text.includes('$ ')) {   // not general enough
+         return the_text.replace(/ \$([^\$]+)\$ /, extract_new_math)
+    } else {
+    return the_text
+    }
+}
+
+function extract_new_math(match, math_content) {
+    new_math_id = randomstring();
+    internalSource[new_math_id] = { "xml:id": new_math_id, "permid": "", "ptxtag": "m",
+                          "content": math_content}
+    return " <&>" + new_math_id + "<;> "
+}
+
+function save_internal_cont(match, contains_id, the_contents) {
+    this_id = contains_id.replace(/.*id="(.+?)".*/, '$1');
+
+    console.log("id", this_id, "now has contents", the_contents);
+    internalSource[this_id]["content"] = the_contents;
+    return "<&>" + this_id + "<;>"
+}
 function assemble_internal_version_changes() {
     console.log("current active element to be saved", document.activeElement);
 
@@ -1000,10 +926,13 @@ function assemble_internal_version_changes() {
     var object_being_edited = document.activeElement;
     var location_of_change = object_being_edited.parentElement;
 
-    if (object_being_edited.tagName == "TEXTAREA") {
+//    if (object_being_edited.tagName == "TEXTAREA") {
+    if (object_being_edited.classList.contains("paragraph_input")) {
         nature_of_the_change = "replace";
         var textbox_being_edited = object_being_edited;  //document.getElementById('actively_editing_p');
-        var paragraph_content = textbox_being_edited.value;
+   //     var paragraph_content = textbox_being_edited.value;
+        var paragraph_content = textbox_being_edited.innerHTML;
+        console.log("paragraph_content from innerHTML", paragraph_content);
         paragraph_content = paragraph_content.trim();
 
         var cursor_location = textbox_being_edited.selectionStart;
@@ -1011,20 +940,30 @@ function assemble_internal_version_changes() {
         console.log("cursor_location", cursor_location, "out of", paragraph_content.length, "paragraph_content", paragraph_content);
 
         // does the textbox contain more than one paragraph?
-        var paragraph_content_list = paragraph_content.split("\n\n");
+  //      var paragraph_content_list = paragraph_content.split("\n\n");
+        var paragraph_content_list = paragraph_content.split("<div><br></div>");
         var num_paragraphs = paragraph_content_list.length;
 
         var parent_and_location = [object_being_edited.getAttribute("data-parent_id"), object_being_edited.getAttribute("data-parent_component")];
         var this_arrangement_of_objects = "";
         console.log("parent_and_location", parent_and_location);
         for(var j=0; j < num_paragraphs; ++j) {
-            if (!paragraph_content_list[j] ) { continue }
+            // probably each paragraph is wrapped in meaningless div tags
+            var this_paragraph_contents_raw = paragraph_content_list[j];
+            this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/^<div>/, "");
+            this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/<\/div>$/, "");
+            this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/&nbsp;/, " ");
+            this_paragraph_contents_raw = this_paragraph_contents_raw.trim();
+            if (!this_paragraph_contents_raw) { console.log("empty paragraph"); continue }
+            console.log("this_paragraph_contents_raw", this_paragraph_contents_raw);
             if (j == 0 && (prev_id = textbox_being_edited.getAttribute("data-source_id"))) {
                 if (prev_id in internalSource) {
                     // the content is referenced, so we update the referenced content
                //     id_of_content = internalSource[prev_id]["content"];
                //     internalSource[id_of_content] = paragraph_content_list[j]
-                    internalSource[prev_id]["content"] = paragraph_content_list[j];  // should we write [0] ?
+                       // need to check internal content, such as em or math
+                    this_paragraph_contents = save_internal_contents(this_paragraph_contents_raw);
+                    internalSource[prev_id]["content"] = this_paragraph_contents;
                     possibly_changed_ids_and_entry.push([prev_id, "content"]);
                     this_arrangement_of_objects = internalSource[parent_and_location[0]][parent_and_location[1]];
                 } else {
@@ -1045,7 +984,9 @@ function assemble_internal_version_changes() {
                 prev_id = this_object_label;
                 
          //       this_object_internal["content"] = this_content_label;
-                this_object_internal["content"] = paragraph_content_list[j];
+                this_paragraph_contents = save_internal_contents(this_paragraph_contents_raw);
+                this_object_internal["content"] = this_paragraph_contents;
+             //   this_object_internal["content"] = paragraph_content_list[j];
                 internalSource[this_object_label] = this_object_internal
                 possibly_changed_ids_and_entry.push([this_object_label, "content"]);
           //      internalSource[this_content_label] = paragraph_content_list[j];
@@ -1082,9 +1023,13 @@ function assemble_internal_version_changes() {
     return [nature_of_the_change, location_of_change, possibly_changed_ids_and_entry]
 }
 
-function expand_condensed_source_html(text) {
+function expand_condensed_source_html(text, context) {
     if (text.includes("<&>")) {
-        return text.replace(/<&>(.*?)<;>/g,expand_condensed_src_html)
+        if (context == "edit") {
+            return text.replace(/<&>(.*?)<;>/g,expand_condensed_src_edit)
+         } else {
+            return text.replace(/<&>(.*?)<;>/g,expand_condensed_src_html)
+         }
     } else {
     return text
     }
@@ -1092,26 +1037,29 @@ function expand_condensed_source_html(text) {
 function expand_condensed_src_html(match, the_id) {
     return html_from_internal_id(the_id, "inner")
 }
+function expand_condensed_src_edit(match, the_id) {
+    return html_from_internal_id(the_id, "edit")
+}
 
 function html_from_internal_id(the_id, is_inner) {
        // the outer element needs to be constructed as document.createElement
        // but the inner content is just plain text
     var the_object = internalSource[the_id];
-    console.log("making html of", the_object);
+    console.log("making html of", the_object, "is_inner", is_inner);
     var ptxtag = the_object["ptxtag"];
 
     var the_html_objects = [];
 
     if (ptxtag == "p") {
         var the_content = the_object["content"];
-        if (is_inner) { 
+        if (is_inner == "inner") { 
                 // should the id be the_id ?
         //    var opening_tag = '<p id="' + the_object["xml:id"] + '"';
             var opening_tag = '<p id="' + the_id + '"';
             opening_tag += ' data-editable="99" tabindex="-1"';
             opening_tag += '>';
             var closing_tag = '</p>';
-            return opening_tag + expand_condensed_source_html(the_content) + closing_tag
+            return opening_tag + expand_condensed_source_html(the_content, "inner") + closing_tag
         }
 
         html_of_this_object = document.createElement('p');
@@ -1128,6 +1076,17 @@ function html_from_internal_id(the_id, is_inner) {
         var closing_tag = inline_tags[ptxtag][1][1];
         return opening_tag + the_object["content"] + closing_tag
   //      return '<em id="' + the_id + '"data-editable="99" tabindex="-1">' + the_object["content"] + '</em>';
+    } else if (ptxtag in math_tags) {
+        // here we are assuming the tag is 'm'
+        var opening_tag = '<span class="edit_inline_math"';
+        var closing_tag = '</span>';
+        if (is_inner == "edit") {
+            opening_tag += ' id="' + the_id + '"data-editable="99" tabindex="-1">';
+        } else {
+            opening_tag = math_tags[ptxtag][1][0];
+            closing_tag = math_tags[ptxtag][1][1];
+        }
+        return opening_tag + the_object["content"] + closing_tag
     } else if (editing_container_for["theorem-like"].includes(ptxtag)) {
            //shoud be statement_object_in_html, and then proof_object_in_html
         object_in_html = document.createElement("article");
@@ -1312,12 +1271,18 @@ function insert_html_version(these_changes) {
         }
     }
     location_of_change.remove();
+
+    // call mathjax, in case the new vontent contains math
+    MathJax.Hub.Queue(['Typeset', MathJax.Hub, this_object_id]);
     return object_as_html  // the most recently added object, which we may want to
                            // do something, like add an editing menu
 }
 
 function save_current_editing() {
 
+    var currentState = internalSource;
+
+    localStorage.setObject("savededits", currentState);
     return "";
 // this needs to use the updated internal version (possibly having the output of
 // assemble_internal_version_changes() passed to it.
@@ -1431,7 +1396,7 @@ function local_editing_action(e) {
             console.log("final_added_object", final_added_object);
 // assumes we are editing a theorem-like.  Need to generalize
             document.getElementById("actively_editing_statement").focus();
-            document.getElementById("actively_editing_statement").setSelectionRange(0,0);
+      //      document.getElementById("actively_editing_statement").setSelectionRange(0,0);
             this_char = "";
             prev_char = "";
             save_current_editing()
@@ -1446,7 +1411,7 @@ function local_editing_action(e) {
       //      if (next_textarea = document.querySelector('textarea')) {
             if (next_textarea = document.querySelector('.paragraph_input')) {
                 next_textarea.focus();
-                next_textarea.setSelectionRange(0,0);
+       //         next_textarea.setSelectionRange(0,0);
                 this_char = "";
                 prev_char = "";
             } else if (editing_placeholder = document.getElementById("actively_editing")) {
