@@ -84,7 +84,9 @@ base_menu_for = {
 "p": [["emphasis-like"], ["formula"], ["abbreviation"], ["symbol"], ["ref or link", "ref"]]
 }
 
-inner_menu_for = {
+function inner_menu_for() {
+
+the_inner_menu = {
 "theorem-like": [["lemma"],
                  ["proposition"],
                  ["theorem"],
@@ -116,7 +118,10 @@ inner_menu_for = {
 // "abbreviation": ["ie", "eg", "etc", "et al"],  // i.e., etc., ellipsis, can just be typed.
 "symbol": [["trademark"], ["copyright"], ["money"]],
 "money": [["$ dollar"], ["&euro; euro"], ["&pound; pound"], ["&yen; yen"]],
-"ref": [["reference withing this document"], ["citation"], ["hyperlink"]]
+"ref": [["reference withing this document"], ["citation"], ["hyperlink"]],
+"undo": recent_editing_actions.map(x => [x])
+}
+    return the_inner_menu
 }
 
 // this should be created from inner_menu_for
@@ -218,7 +223,7 @@ function menu_options_for(COMPONENT, level) {
              this_menu += '</li>';
          }
          return this_menu
-     } else { menu_for = inner_menu_for }
+     } else { menu_for = inner_menu_for() }
      console.log("in menu_options_for", component);
      if (component in menu_for) {
          component_items = menu_for[component]
@@ -267,7 +272,7 @@ function menu_options_for(COMPONENT, level) {
 
          this_menu += this_item_name 
                  // little right triangle if there is a submenu
-         if (this_item_label in inner_menu_for) { this_menu += '<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div>' }
+         if (this_item_label in inner_menu_for()) { this_menu += '<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div>' }
          this_menu += '</li>';
          
      }
@@ -1588,7 +1593,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                     var this_object_source = internalSource[id_of_object];  
                     console.log("current envoronemnt", this_object_source);
                     internalSource[id_of_object]["ptxtag"] = new_env;
-                    recent_editing_actions.push("added " new_env + " " + owner_of_change);
+                    recent_editing_actions.push("added " + new_env + " " + owner_of_change);
                     the_whole_object = html_from_internal_id(id_of_object);
                     console.log("the_whole_object", the_whole_object);
                     console.log('$("#actively_editing")', $("#actively_editing"));
@@ -1680,7 +1685,7 @@ function main_menu_navigator(e) {  // we are not currently editing
  //       current_active_menu_item.setAttribute('style', 'background:#ddf;');
             current_active_menu_item_environment = current_active_menu_item.getAttribute('data-env');
 
-            if (current_active_menu_item_environment in inner_menu_for) {  // object names a collection, so make submenu
+            if (current_active_menu_item_environment in inner_menu_for()) {  // object names a collection, so make submenu
                 console.log("making a menu for", current_active_menu_item_environment);
                 var edit_submenu = document.createElement('ol');
                 edit_submenu.innerHTML = menu_options_for(current_active_menu_item_environment, "inner");
