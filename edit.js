@@ -37,6 +37,8 @@ var result;
 var menu_neutral_background = "#ddb";
 var menu_active_background = "#fdd";
 
+var recent_editing_actions = [];
+
 function randomstring(len) {
     if (!len) { len = 10 }
     return (Math.random() + 1).toString(36).substring(2,len)
@@ -311,7 +313,7 @@ function top_menu_options_for(this_obj) {
         this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="afterend">Insert after<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
         this_list += '<li tabindex="-1" data-env="' + this_object_type + '">Move or delete<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
         this_list += '<li tabindex="-1" data-env="' + "metaadata" + '">Metadata<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
-        this_list += '<li tabindex="-1" data-env="' + "how to undo" + '">Undo<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+        this_list += '<li tabindex="-1" data-env="' + "undo" + '">Undo<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
     }
     return this_list
 }
@@ -735,9 +737,7 @@ function hide_new_source(ptx_src, src_type) {
     hidden_div.innerHTML = ptx_src;
     document.body.insertAdjacentElement('beforeend', hidden_div);
 }
-function save_new(objecttype) {
-    // placeholder
-}
+
 function display_new(objectclass, objecttype, whereat, relativelocation) {
     if (objectclass == "theorem-like") {
         object_in_html = document.createElement("article");
@@ -963,7 +963,10 @@ function assemble_internal_version_changes() {
                //     internalSource[id_of_content] = paragraph_content_list[j]
                        // need to check internal content, such as em or math
                     this_paragraph_contents = save_internal_contents(this_paragraph_contents_raw);
-                    internalSource[prev_id]["content"] = this_paragraph_contents;
+                    if (internalSource[prev_id]["content"] != this_paragraph_contents) {
+                        internalSource[prev_id]["content"] = this_paragraph_contents;
+                        recent_editing_actions.push("changed paragraph " + prev_id)
+                    }
                     possibly_changed_ids_and_entry.push([prev_id, "content"]);
                     this_arrangement_of_objects = internalSource[parent_and_location[0]][parent_and_location[1]];
                 } else {
@@ -988,6 +991,7 @@ function assemble_internal_version_changes() {
                 this_object_internal["content"] = this_paragraph_contents;
              //   this_object_internal["content"] = paragraph_content_list[j];
                 internalSource[this_object_label] = this_object_internal
+                recent_editing_actions.push("added paragraph " + this_object_label);
                 possibly_changed_ids_and_entry.push([this_object_label, "content"]);
           //      internalSource[this_content_label] = paragraph_content_list[j];
             }
@@ -1009,6 +1013,7 @@ function assemble_internal_version_changes() {
         console.log("component_being_changed", component_being_changed, "within", owner_of_change);
         // update the title of the object
         internalSource[owner_of_change][component_being_changed] = line_content;
+        recent_editing_actions.push("changed title " + owner_of_change);
         possibly_changed_ids_and_entry.push([owner_of_change, "title"]);
  //       $("#editing_title_holder").replaceWith("<b>(" + line_content + ")</b>");
 
@@ -1284,94 +1289,10 @@ function save_current_editing() {
 
     localStorage.setObject("savededits", currentState);
     return "";
-// this needs to use the updated internal version (possibly having the output of
-// assemble_internal_version_changes() passed to it.
+}
 
-
-    console.log("current active element to be saved", document.activeElement);
-    //not currently used
- //   var object_being_edited = document.getElementById('actively_editing');
-    var object_being_edited = document.activeElement;
-
-    var new_ptx_source = "";
-
-    if (object_being_edited.tagName == "TEXTAREA") {
-        var textbox_being_edited = object_being_edited;  //document.getElementById('actively_editing_p');
-        var paragraph_content = textbox_being_edited.value;
-        paragraph_content = paragraph_content.trim();
-
-        var cursor_location = textbox_being_edited.selectionStart;
-
-        console.log("cursor_location", cursor_location, "out of", paragraph_content.length, "paragraph_content", paragraph_content);
-        var paragraph_content_list = paragraph_content.split("\n\n");
-
-        var holder_of_object_being_edited = object_being_edited.parentElement.parentElement;
-        for(var j=0; j < paragraph_content_list.length; ++j) {
-            if (!paragraph_content_list[j] ) { continue }
-            new_ptx_source += "<p>" + "\n";
-            new_ptx_source += paragraph_content_list[j];
-            new_ptx_source += "\n" + "</p>" + "\n";
-            var object_as_html = document.createElement('p');
-            object_as_html.setAttribute("data-editable", 99);
-            object_as_html.setAttribute("tabindex", -1);
-            object_as_html.setAttribute("id", randomstring());
-     //       object_as_html.setAttribute("class", "just_added");
-            object_as_html.innerHTML = ptx_to_html(paragraph_content_list[j]);
-     //       document.getElementById('actively_editing').insertAdjacentElement('beforebegin', object_as_html);
-            holder_of_object_being_edited.insertAdjacentElement('beforebegin', object_as_html);
-        } 
-        
-    
-        console.log("finished editing a paragraph", new_ptx_source, "previous is new_ptx_source");
-    
-        console.log("current item of focus", document.activeElement);
-        console.log("its parent", document.activeElement.parentElement);
-        if (holder_of_object_being_edited.id == "actively_editing") { // we are only editing a p
-            console.log("will focus on what we just added",$(holder_of_object_being_edited).prev('[data-editable="99"]'));
-            $(holder_of_object_being_edited).prev('[data-editable="99"]').focus();
-            console.log("next item of focus", document.activeElement);
-//    document.getElementById('actively_editing').remove();
-       //     $(":focus").addClass("may_select");
-            console.log("menu place 3");
-
-            edit_menu_for($(":focus").attr("id"), "entering");
-        } else if (holder_of_object_being_edited.classList.contains("editing_statement")) {
-        // hide the ptx_source to be retrieved later
-            hide_new_source(new_ptx_source, "statement");
-              // the p is in a statement (of theorem-like or definition-like or remark-like or ...)
-            if (holder_of_object_being_edited.parentElement.getAttribute('data-objecttype') == "theorem-like") {
-              // now focus switches to the proof?
-                console.log("focus shoudl switch to",holder_of_object_being_edited.nextSibling.firstChild.children[1]);
-                holder_of_object_being_edited.nextSibling.firstChild.children[1].focus()  // 1 to skip the Tip
-            } else {
-                alert("don't know where to go next");
-               // I guess we are done editing this object?
-            }
-        } else if (holder_of_object_being_edited.classList.contains("editing_proof")) {
-            hide_new_source(new_ptx_source, "proof");
-            // done editing the theorem-like, to put focus on the next thing and display/save the theorem
-            save_new("theorem");
-            display_new("theorem-like", "corollary", document.getElementById("actively_editing"), "afterend");
-            console.log("is focus on the new object?", $(":focus"));
-      //      $(":focus").addClass("may_select");
-            console.log("menu place 4");
-
-            edit_menu_for($(":focus").attr("id"), "entering");
-            document.getElementById("actively_editing").remove();
-            console.log("just did display_new");
-        } else { // this p is in a larvger object, like a theorem or li
-            
-            alert("inside an object, don; tknow what to do next")
-        }
-        console.log("holder_of_object_being_edited.remove()", holder_of_object_being_edited);
-  //      document.getElementById("actively_editing").remove();
-            holder_of_object_being_edited.remove();
-    } else {
-        console.log("trouble saving", object_being_edited);
-        alert("don;t know how to save ", object_being_edited.tagName)
-    }
-
-    console.log("internalSource", internalSource)
+function retrieve_previous_editing() {
+    internalSource = localStorage.getObject("savededits");
 }
 
 function local_editing_action(e) {
@@ -1667,6 +1588,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                     var this_object_source = internalSource[id_of_object];  
                     console.log("current envoronemnt", this_object_source);
                     internalSource[id_of_object]["ptxtag"] = new_env;
+                    recent_editing_actions.push("added " new_env + " " + owner_of_change);
                     the_whole_object = html_from_internal_id(id_of_object);
                     console.log("the_whole_object", the_whole_object);
                     console.log('$("#actively_editing")', $("#actively_editing"));
@@ -1916,4 +1838,7 @@ document.addEventListener('focus', function() {
       edit_tree[i].classList.add('in_edit_tree')
   }
 }, true);
+
+retrieve_previous_editing();
+console.log("retrieved previous", internalSource)
 
