@@ -86,6 +86,14 @@ base_menu_for = {
 
 function inner_menu_for() {
 
+    console.log("recent_editing_actions", recent_editing_actions, "xx", recent_editing_actions != []);
+    var the_past_edits = [];
+    if(recent_editing_actions.length) {
+         the_past_edits = recent_editing_actions.map(x => [x])}
+    else { the_past_edits = [["no chnages yet"]] }
+
+    console.log("the_past_edits", the_past_edits);
+
 the_inner_menu = {
 "theorem-like": [["lemma"],
                  ["proposition"],
@@ -119,7 +127,7 @@ the_inner_menu = {
 "symbol": [["trademark"], ["copyright"], ["money"]],
 "money": [["$ dollar"], ["&euro; euro"], ["&pound; pound"], ["&yen; yen"]],
 "ref": [["reference withing this document"], ["citation"], ["hyperlink"]],
-"undo": recent_editing_actions.map(x => [x])
+"undo": the_past_edits
 }
     return the_inner_menu
 }
@@ -217,7 +225,7 @@ function menu_options_for(COMPONENT, level) {
          var this_menu = "";
          for (var i=0; i < replacement_list.length; ++i) {
              this_menu += '<li tabindex="-1" data-action="change-env-to" data-env="' + replacement_list[i] + '"'; 
-             if(i==0) { this_menu += ' id="choose_current"'}
+             if (i==0) { this_menu += ' id="choose_current"'}
              this_menu += '>';
              this_menu += replacement_list[i];
              this_menu += '</li>';
@@ -256,16 +264,16 @@ function menu_options_for(COMPONENT, level) {
          this_menu += ' data-env-parent="' + component + '"';
          if (this_item_shortcut) { 
              this_menu += ' data-jump="' + this_item_name.charAt(0) + ' ' + this_item_shortcut + '"';
-             if(this_item_name.match(/^[a-z]/i)) {
+             if (this_item_name.match(/^[a-z]/i)) {
                  this_item_name = this_item_name.replace(this_item_shortcut, '<b>' + this_item_shortcut + '</b>');
              }
          } else {
              this_menu += 'data-jump="' + this_item_name.charAt(0) + '"';
          }
-         if(i==0) { this_menu += ' id="choose_current"'}
+         if (i==0) { this_menu += ' id="choose_current"'}
          this_menu += '>';
 
-         if(this_item_name.match(/^[a-z]/i)) {
+         if (this_item_name.match(/^[a-z]/i)) {
              first_character = this_item_name.charAt(0);
              this_item_name = this_item_name.replace(first_character, "<b>" + first_character + "</b>");
          }
@@ -489,8 +497,8 @@ function edit_in_place(obj, new_object_description) {
     }
 
 // this only works for paragraphs, so go back and allow editing of other types
-    if( internalSource[thisID] ) {
-      if(thisTagName == "p") {
+    if ( internalSource[thisID] ) {
+      if (thisTagName == "p") {
         var this_content_container = document.createElement('div');
         this_content_container.setAttribute('id', "actively_editing");
         $("#" + thisID).replaceWith(this_content_container);
@@ -686,9 +694,11 @@ var internalSource = {  // currently the key is the HTML id
    "sYv": {"xml:id": "", "permid": "sYv", "ptxtag": "p", "parent": ["hPw","content"],
            "content": "One way to get a feel for the subject is to consider the types of problems you solve in discrete math. Here are a few simple examples:"},
    "ACU": {"xml:id": "", "permid": "ACU", "ptxtag": "p", "parent": ["hPw","content"],
-           "content": "In an algebra or calculus class, you might have found a particular set of numbers (maybe the set of numbers in the range of a function). You would represent this set as an interval: <m>[0,\\infty)</m> is the range of <&>112233<;> since the set of outputs of the function are all real numbers <m>0</m> and greater. This set of numbers is NOT discrete. The numbers in the set are not separated by much at all. In fact, take any two numbers in the set and there are infinitely many more between them which are also in the set."},
+           "content": "In an algebra or calculus class, you might have found a particular set of numbers (maybe the set of numbers in the range of a function). You would represent this set as an interval: <&>223344<;> is the range of <&>112233<;> since the set of outputs of the function are all real numbers <m>0</m> and greater. This set of numbers is NOT discrete. The numbers in the set are not separated by much at all. In fact, take any two numbers in the set and there are infinitely many more between them which are also in the set."},
    "112233": {"xml:id": "", "permid": "", "ptxtag": "m", "parent": ["ACU","content"],
-           "content": "f(x)=x^2"}
+           "content": "f(x)=x^2"},
+   "223344": {"xml:id": "", "permid": "", "ptxtag": "m", "parent": ["ACU","content"],
+           "content": "[0, \\infty)"}
 //           "content": '124567'},
 //   "124567": "Synonyms"
 }
@@ -899,10 +909,10 @@ function save_internal_contents(some_text) {
     // non-nested tags
     the_text = some_text;
     console.log("            xxxxxxxxxx  the_text is", the_text);
-    if (the_text.includes('data-editable="99"')) {
+    if (the_text.includes('data-editable="99" tabindex="-1">')) {
         return the_text.replace(/<([^<]+) data-editable="99" tabindex="-1">(.*?)<[^<]+>/g, save_internal_cont)
     } else if(the_text.includes('$ ')) {   // not general enough
-         return the_text.replace(/ \$([^\$]+)\$ /, extract_new_math)
+         return the_text.replace(/ \$([^\$]+)\$ /g, extract_new_math)
     } else {
     return the_text
     }
@@ -1268,7 +1278,7 @@ function insert_html_version(these_changes) {
       //      object_as_html.innerHTML = ptx_to_html(this_object["content"]);
             object_as_html.innerHTML = ptx_to_html(this_object[this_object_entry]);
             location_of_change.insertAdjacentElement('beforebegin', object_as_html);
-        } else if(this_object_entry == "title") {
+        } else if (this_object_entry == "title") {
             var object_as_html = document.createElement('span');
   //          object_as_html.setAttribute("data-editable", 99);
   //          object_as_html.setAttribute("tabindex", -1);
@@ -1297,7 +1307,10 @@ function save_current_editing() {
 }
 
 function retrieve_previous_editing() {
-    internalSource = localStorage.getObject("savededits");
+    var old_internal_source = localStorage.getObject("savededits");
+    if (old_internal_source) {
+        internalSource = old_internal_source
+    }
 }
 
 function local_editing_action(e) {
@@ -1371,7 +1384,7 @@ function main_menu_navigator(e) {  // we are not currently editing
        // we are tabbing along deciding what component to edit
        // so a Tab means to move on
        // so remove the option to edit one object
-       if(this_choice = document.getElementById('enter_choice')) {
+       if (this_choice = document.getElementById('enter_choice')) {
            console.log("there already is an 'enter_choice'");
            // there are two cases:  1) we are at the top of a block (and so may enter it or add near it, or move on)
            //                       2) we are at the bottom (actually, after) a block, and may return to it, or move on
@@ -1382,7 +1395,7 @@ function main_menu_navigator(e) {  // we are not currently editing
 
                $(this_menu).parent().removeClass("may_select");
                console.log("item to get next focus",$("#edit_menu_holder").parent().next('[data-editable="99"]'), "which has length", $("#edit_menu_holder").parent().next('[data-editable="99"]').length);
-               if(!$(this_menu).parent().next().length) { //at the end of a block, so new menu goes at end
+               if (!$(this_menu).parent().next().length) { //at the end of a block, so new menu goes at end
                //    e.preventDefault();
                    var enclosing_block = $(this_menu).parent().parent()[0];
                    console.log("at the end of", enclosing_block, "with id", enclosing_block.id);
@@ -1471,7 +1484,7 @@ function main_menu_navigator(e) {  // we are not currently editing
         e.preventDefault();
         console.log("just saw a", e.code);
         console.log("focus is on", $(":focus"));
-        if(this_choice = document.getElementById('enter_choice')) {
+        if (this_choice = document.getElementById('enter_choice')) {
            console.log("there already is an 'enter_choice'");
            // there are two cases:  1) we are at the top of a block (and so may enter it or add near it, or move on)
            //                       2) we are at the bottom (actually, after) a block, and may return to it, or move on
@@ -1481,7 +1494,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                
                $(this_menu).parent().removeClass("may_select");
                console.log("item to get next focus",$("#edit_menu_holder").parent().prev('[data-editable="99"]'), "which has length", $("#edit_menu_holder").parent().next('[data-editable="99"]').length);
-               if(!$(this_menu).parent().prev().length) { //at the start of a block, so go up one
+               if (!$(this_menu).parent().prev().length) { //at the start of a block, so go up one
                //    e.preventDefault(); 
                    var enclosing_block = $(this_menu).parent().parent()[0]; 
                    console.log("at the end of", enclosing_block, "with id", enclosing_block.id);
@@ -1844,6 +1857,6 @@ document.addEventListener('focus', function() {
   }
 }, true);
 
-retrieve_previous_editing();
+// retrieve_previous_editing();
 console.log("retrieved previous", internalSource)
 
