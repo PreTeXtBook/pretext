@@ -1071,9 +1071,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\forwardimplication}{($\Rightarrow$)}&#xa;</xsl:text>
         <xsl:text>\newcommand{\backwardimplication}{($\Leftarrow$)}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$document-root//ol/li/title|$document-root//ul/li/title">
+    <xsl:if test="$document-root//ol/li/title|$document-root//ul/li/title|$document-root//task/title">
         <!-- Styling: expose this macro to easier overriding for style work -->
+        <!-- NB: needs a rename (and duplication) before exposing publicly  -->
+        <!-- conditional can be split for list items v. tasks               -->
         <xsl:text>%% Style of a title on a list item, for ordered and unordered lists&#xa;</xsl:text>
+        <xsl:text>%% Also "task" of exercise, PROJECT-LIKE, EXAMPLE-LIKE&#xa;</xsl:text>
         <xsl:text>\newcommand{\lititle}[1]{{\slshape#1}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%% End: Semantic Macros&#xa;</xsl:text>
@@ -1898,7 +1901,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$document-root//console">
             <xsl:text>%% Console session with prompt, input, output&#xa;</xsl:text>
             <xsl:text>%% listings allows for escape sequences to enable LateX,&#xa;</xsl:text>
-            <xsl:text>%% so we bold the input commands via teh following macro&#xa;</xsl:text>
+            <xsl:text>%% so we bold the input commands via the following macro&#xa;</xsl:text>
             <xsl:text>\newcommand{\consoleinput}[1]{\textbf{#1}}&#xa;</xsl:text>
             <!-- https://tex.stackexchange.com/questions/299401/bold-just-one-line-inside-of-lstlisting/299406 -->
             <!-- Syntax highlighting is not so great for "language=bash" -->
@@ -5194,6 +5197,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="subexercises" mode="solutions">
     <xsl:param name="purpose"/>
+    <xsl:param name="admit"/>
     <xsl:param name="b-component-heading"/>
     <xsl:param name="b-has-statement" />
     <xsl:param name="b-has-hint" />
@@ -5205,6 +5209,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- and if there is no content at all we bail out.         -->
      <xsl:variable name="dry-run">
         <xsl:apply-templates select="." mode="dry-run">
+            <xsl:with-param name="admit" select="$admit"/>
             <xsl:with-param name="b-has-statement" select="$b-has-statement" />
             <xsl:with-param name="b-has-hint" select="$b-has-hint" />
             <xsl:with-param name="b-has-answer" select="$b-has-answer" />
@@ -5231,6 +5236,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:apply-templates select="exercise|exercisegroup" mode="solutions">
             <xsl:with-param name="purpose" select="$purpose" />
+            <xsl:with-param name="admit" select="$admit"/>
             <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
             <xsl:with-param name="b-has-statement" select="$b-has-statement" />
             <xsl:with-param name="b-has-hint" select="$b-has-hint" />
@@ -5314,6 +5320,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Introduction and conclusion iff with statements -->
 <xsl:template match="exercisegroup" mode="solutions">
     <xsl:param name="purpose"/>
+    <xsl:param name="admit"/>
     <xsl:param name="b-component-heading"/>
     <xsl:param name="b-has-statement" />
     <xsl:param name="b-has-hint" />
@@ -5325,6 +5332,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- and if there is no content at all we bail out.         -->
      <xsl:variable name="dry-run">
         <xsl:apply-templates select="." mode="dry-run">
+            <xsl:with-param name="admit" select="$admit"/>
             <xsl:with-param name="b-has-statement" select="$b-has-statement" />
             <xsl:with-param name="b-has-hint" select="$b-has-hint" />
             <xsl:with-param name="b-has-answer" select="$b-has-answer" />
@@ -5382,6 +5390,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
         <xsl:apply-templates select="exercise" mode="solutions">
             <xsl:with-param name="purpose" select="$purpose" />
+            <xsl:with-param name="admit" select="$admit"/>
             <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
             <xsl:with-param name="b-has-statement" select="$b-has-statement" />
             <xsl:with-param name="b-has-hint" select="$b-has-hint" />
@@ -5619,6 +5628,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: switches originate in solutions generator -->
 <xsl:template match="exercise[boolean(&INLINE-EXERCISE-FILTER;)]|&PROJECT-LIKE;|exercises//exercise|worksheet//exercise|reading-questions//exercise" mode="solutions">
     <xsl:param name="purpose"/>
+    <xsl:param name="admit"/>
     <xsl:param name="b-component-heading"/>
     <xsl:param name="b-has-statement" />
     <xsl:param name="b-has-hint"      />
@@ -5634,6 +5644,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
      <xsl:variable name="dry-run">
         <xsl:apply-templates select="." mode="dry-run">
+            <xsl:with-param name="admit" select="$admit"/>
             <xsl:with-param name="b-has-statement" select="$b-has-statement" />
             <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
             <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
@@ -5995,6 +6006,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>[(</xsl:text>
             <xsl:apply-templates select="." mode="list-number" />
             <xsl:text>)]</xsl:text>
+            <!-- Something is being output, so include an (optional) title  -->
+            <!-- Semantic macro defined in preamble, mostly for font change -->
+            <xsl:if test="title">
+                <xsl:text>\lititle{</xsl:text>
+                <xsl:apply-templates select="." mode="title-full"/>
+                <xsl:text>}\par%&#xa;</xsl:text>
+            </xsl:if>
             <!-- Identification in place, we can write the generic guts -->
             <xsl:apply-templates select="." mode="exercise-components">
                 <xsl:with-param name="b-original" select="$b-original" />
@@ -6377,7 +6395,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Guarantee: Never a blank line, always finish with newline -->
 <!--                                                           -->
 <!-- Note: a paragraph could end with an item we want          -->
-<!-- to look good in teh source, like a list or display        -->
+<!-- to look good in the source, like a list or display        -->
 <!-- math and we already have a newline so any subsequent      -->
 <!-- content from the paragraph will start anwew.  But         -->
 <!-- there might not be anything more to output.  So we        -->
@@ -9974,7 +9992,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- fashion the entire link text.  This is the $content variable below.    -->
 <!-- From this the actual \hyperref or \hypertarget is made. Almost always, -->
 <!-- across PreTeXt, the "xref-number" template will return the number of   -->
-<!-- an item as computed in teh -common routines.  However, to maintain     -->
+<!-- an item as computed in the -common routines.  However, to maintain     -->
 <!-- fidelity with LaTeX's automatic numbering system, we create  \ref{}    -->
 <!-- as often as possible. -->
 <!--                                                                        -->

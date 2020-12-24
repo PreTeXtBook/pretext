@@ -161,7 +161,7 @@
     <section>
         <title>LaTeX Font Configuration (Ubuntu/Debian Linux)</title>
 
-        <p>Actual font installation is missing here, since I (RAB) cannot recall just when or how certain fonts arrived on my system.  Certainly they were almost all via Ubuntu/Debian packages, though they could have been specific to <tex/>Live.  Specifically, the <c>texlive-fonts-recommended</c> and <c>texlive-fonts-extra</c> are two packages that will make many fonts available to <tex/>/<latex/> on an Ubuntu/Debian system.  The following is offered in teh hope that it will be useful to other publishers on other Unix-like systems.</p>
+        <p>Actual font installation is missing here, since I (RAB) cannot recall just when or how certain fonts arrived on my system.  Certainly they were almost all via Ubuntu/Debian packages, though they could have been specific to <tex/>Live.  Specifically, the <c>texlive-fonts-recommended</c> and <c>texlive-fonts-extra</c> are two packages that will make many fonts available to <tex/>/<latex/> on an Ubuntu/Debian system.  The following is offered in the hope that it will be useful to other publishers on other Unix-like systems.</p>
 
         <p>There is a system directory<cd>
             <cline>/etc/fonts/conf.d</cline>

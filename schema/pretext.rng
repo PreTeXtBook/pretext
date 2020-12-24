@@ -927,6 +927,15 @@
         <attribute name="project"/>
       </optional>
       <optional>
+        <attribute name="admit">
+          <choice>
+            <value>all</value>
+            <value>odd</value>
+            <value>even</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
         <ref name="IntroductionDivision"/>
       </optional>
       <optional>
@@ -1555,7 +1564,7 @@
   </define>
   <define name="Task">
     <element name="task">
-      <ref name="MetaDataTarget"/>
+      <ref name="MetaDataTitleOptional"/>
       <choice>
         <oneOrMore>
           <ref name="BlockStatement"/>
@@ -2442,14 +2451,20 @@
       </choice>
     </element>
   </define>
+  <define name="BlockStatementWW">
+    <choice>
+      <ref name="Paragraph"/>
+      <ref name="Preformatted"/>
+      <ref name="Tabular"/>
+      <ref name="ImageWW"/>
+    </choice>
+  </define>
   <define name="StatementExerciseWW">
     <element name="statement">
       <oneOrMore>
         <choice>
-          <ref name="Paragraph"/>
+          <ref name="BlockStatementWW"/>
           <ref name="WWInstruction"/>
-          <ref name="Preformatted"/>
-          <ref name="SideBySideNoCaption"/>
         </choice>
       </oneOrMore>
     </element>
@@ -2525,22 +2540,14 @@
   <define name="HintWW">
     <element name="hint">
       <oneOrMore>
-        <choice>
-          <ref name="Paragraph"/>
-          <ref name="Preformatted"/>
-          <ref name="SideBySideNoCaption"/>
-        </choice>
+        <ref name="BlockStatementWW"/>
       </oneOrMore>
     </element>
   </define>
   <define name="SolutionWW">
     <element name="solution">
       <oneOrMore>
-        <choice>
-          <ref name="Paragraph"/>
-          <ref name="Preformatted"/>
-          <ref name="SideBySideNoCaption"/>
-        </choice>
+        <ref name="BlockStatementWW"/>
       </oneOrMore>
     </element>
   </define>

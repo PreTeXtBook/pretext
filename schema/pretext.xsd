@@ -810,6 +810,15 @@
           <xs:attribute name="inline"/>
           <xs:attribute name="divisional"/>
           <xs:attribute name="project"/>
+          <xs:attribute name="admit">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="all"/>
+                <xs:enumeration value="odd"/>
+                <xs:enumeration value="even"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
@@ -1399,7 +1408,7 @@
   <xs:element name="task">
     <xs:complexType>
       <xs:sequence>
-        <xs:group ref="MetaDataTarget"/>
+        <xs:group ref="MetaDataTitleOptional"/>
         <xs:choice>
           <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
           <xs:sequence>
@@ -1415,7 +1424,7 @@
           </xs:sequence>
         </xs:choice>
       </xs:sequence>
-      <xs:attributeGroup ref="MetaDataTarget"/>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="RemarkLike">
@@ -2217,15 +2226,21 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:group name="BlockStatementWW">
+    <xs:choice>
+      <xs:group ref="Paragraph"/>
+      <xs:element ref="pre"/>
+      <xs:element ref="tabular"/>
+      <xs:group ref="ImageWW"/>
+    </xs:choice>
+  </xs:group>
   <xs:group name="StatementExerciseWW">
     <xs:sequence>
       <xs:element name="statement">
         <xs:complexType>
           <xs:choice maxOccurs="unbounded">
-            <xs:group ref="Paragraph"/>
+            <xs:group ref="BlockStatementWW"/>
             <xs:element ref="instruction"/>
-            <xs:element ref="pre"/>
-            <xs:group ref="SideBySideNoCaption"/>
           </xs:choice>
         </xs:complexType>
       </xs:element>
@@ -2289,11 +2304,7 @@
     <xs:sequence>
       <xs:element name="hint">
         <xs:complexType>
-          <xs:choice maxOccurs="unbounded">
-            <xs:group ref="Paragraph"/>
-            <xs:element ref="pre"/>
-            <xs:group ref="SideBySideNoCaption"/>
-          </xs:choice>
+          <xs:group maxOccurs="unbounded" ref="BlockStatementWW"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -2302,11 +2313,7 @@
     <xs:sequence>
       <xs:element name="solution">
         <xs:complexType>
-          <xs:choice maxOccurs="unbounded">
-            <xs:group ref="Paragraph"/>
-            <xs:element ref="pre"/>
-            <xs:group ref="SideBySideNoCaption"/>
-          </xs:choice>
+          <xs:group maxOccurs="unbounded" ref="BlockStatementWW"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>

@@ -353,6 +353,7 @@
                     attribute inline {text}?,
                     attribute divisional {text}?,
                     attribute project {text}?,
+                    attribute admit {"all"|"odd"|"even"}?,
                     IntroductionDivision?,
                     ConclusionDivision?
                 }
@@ -600,7 +601,7 @@
                 element project {ProjectLike}
             Task =
                 element task {
-                    MetaDataTarget,
+                    MetaDataTitleOptional,
                     (
                         BlockStatement+ |
                         (Statement, Hint*, Answer*, Solution*) |
@@ -979,14 +980,14 @@
                         }+
                     )
                 }
+            BlockStatementWW =
+                        Paragraph |
+                        Preformatted |
+                        Tabular |
+                        ImageWW
             StatementExerciseWW =
                 element statement {
-                    (
-                        Paragraph |
-                        WWInstruction |
-                        Preformatted |
-                        SideBySideNoCaption
-                    )+
+                    (BlockStatementWW|WWInstruction)+
                 }
             WWMacros =
                 element pg-macros {
@@ -1013,19 +1014,11 @@
                 element instruction {TextShort}
             HintWW =
                 element hint {
-                    (
-                        Paragraph |
-                        Preformatted |
-                        SideBySideNoCaption
-                    )+
+                    (BlockStatementWW)+
                 }
             SolutionWW =
                 element solution {
-                    (
-                        Paragraph |
-                        Preformatted |
-                        SideBySideNoCaption
-                    )+
+                    (BlockStatementWW)+
                 }
             
             Fragment =

@@ -86,7 +86,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </frontmatter>
 
         <!-- This will go with the "no parts" version of the book           -->
-        <!-- All of the content of teh book (the "main matter") needs       -->
+        <!-- All of the content of the book (the "main matter") needs       -->
         <!-- to be here so that numbering will be consistent with the       -->
         <!-- text itself.  So do not skip chapters or sections just because -->
         <!-- they have no solutions.  PreTeXt will figure that out itself.  -->

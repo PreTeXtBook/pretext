@@ -91,18 +91,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <exercise number="8">
         <statement>
-            <p>Prove the Leibniz rule for <m>f^{(n)} (x)</m>, where <m>f^{(n)}</m> is the <m>n</m>th derivative of <m>f</m>; that is, show that 
+            <p>Use induction to prove that <m>1 + 2 + 2^2 + \cdots + 2^n = 2^{n + 1} - 1</m> for <m>n \in {\mathbb N}</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="9">
+        <statement>
+            <p>Prove the Leibniz rule for <m>f^{(n)} (x)</m>, where <m>f^{(n)}</m> is the <m>n</m>th derivative of <m>f</m>; that is, show that
                 <me>(fg)^{(n)}(x) = \sum_{k = 0}^{n} \binom{n}{k} f^{(k)}(x) g^{(n - k)}(x).</me></p>
         </statement>
         <hint>
             <p>Follow the proof in <xref ref="example-integers-binomial-theorem"/>.</p>
         </hint>
-    </exercise>
-
-    <exercise number="9">
-        <statement>
-            <p>Use induction to prove that <m>1 + 2 + 2^2 + \cdots + 2^n = 2^{n + 1} - 1</m> for <m>n \in {\mathbb N}</m>.</p>
-        </statement>
     </exercise>
 
     <exercise number="10">

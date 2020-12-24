@@ -942,6 +942,7 @@ the xsltproc executable.
                         </introduction>
 
                         <task>
+                            <title>A super-simple task</title>
                             <p>This first task is very simple, just a paragraph.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                         </task>
 
@@ -952,11 +953,13 @@ the xsltproc executable.
                         </task>
 
                         <task>
+                            <title>A title of a task that has a subtask with an <tag>answer</tag> for the Solutions</title>
                             <introduction>
                                 <p>This second task is further divided by more tasks.  This is its introduction.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                                 <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                             </introduction>
                             <task>
+                                <title>A task with a title and an <tag>answer</tag> for the Solutions</title>
                                 <statement>
                                     <p>A really simple subtask.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                                     <p>A short paragraph, before an answer.</p>
@@ -979,12 +982,13 @@ the xsltproc executable.
                             </task>
                             <task>
                                 <introduction>
-                                    <p>Two simple sub-sub-tasks.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                                    <p>Three simple sub-sub-tasks.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                                 </introduction>
                                 <task>
                                     <p>First subsubtask.  Short paragraph.</p>
                                 </task>
                                 <task>
+                                    <title>A second three-deep subsubtask!</title>
                                     <p>Second subsubtask.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                                     <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                                 </task>
@@ -11257,6 +11261,17 @@ the xsltproc executable.
 
                 <introduction>
                     <p>The back matter solutions appendix requests every <tag>answer</tag>, and only <tag>answer</tag>, of all types of exercises: inline, divisional, worksheet, reading questions, and projects.  Now, as observed by Bruce Yoshiwara, it gets a bit tedious to see the <q>Answer</q> heading over and over in print, when every entry has that heading.  So we squelch it for you in print/PDF output.  (For <init>HTML</init> output we use knowls and need to have something to click on.  But perhaps for <init>EPUB</init> we should be more careful?)  Note that you might want to use a <tag>title</tag>, or an <tag>introduction</tag>, that explains which component of the exercises is being displayed, so there is no confusion.</p>
+                </introduction>
+
+                <!-- content will happen here automatically -->
+            </solutions>
+
+            <solutions inline="answer" divisional="answer" worksheet="answer" reading="answer" project="answer" admit="odd">
+                <title>All Solutions that are Answers to Odd Exercises</title>
+                <idx><h>solutions</h><h>all even answers</h></idx>
+
+                <introduction>
+                    <p>This should be identical to the previous collection of answers, <em>except</em> only exercises with an even number are reported (via the <attr>admit</attr> attribute).</p>
                 </introduction>
 
                 <!-- content will happen here automatically -->
