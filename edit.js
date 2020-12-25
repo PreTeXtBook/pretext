@@ -313,12 +313,16 @@ function top_menu_options_for(this_obj) {
         this_obj_environment = this_obj_source["ptxtag"];
         if (this_object_type == "P") {
             this_list = '<li tabindex="-1" id="choose_current" data-env="p" data-action="edit">Edit ' + this_obj_environment + '</li>';
-            if ($(this_obj).children('.heading > [data-editable="99"], [data-editable="99"]').length) {
+            var editable_children = next_editable_of(this_obj, "children");
+            console.log("editable_children", editable_children);
+     //       if ($(this_obj).children('.heading > [data-editable="99"], [data-editable="99"]').length) {
+            if (editable_children.length) {
                 console.log("$(this_obj).children('.heading > [data-editable=99], [data-editable=99]')", $(this_obj).children('.heading > [data-editable="99"], [data-editable="99"]'));
                 this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_obj_environment + '</li>';
             }
         } else {
-            console.log("are there children", $(this_obj).children('.heading > [data-editable="99"], [data-editable="99"]').length);
+            console.log("are there children", $(this_obj).children('.heading > [data-editable="99"], [data-editable="99"]'));
+    //        console.log("are there children", editable_children.length);
             this_list += '<li tabindex="-1" id="choose_current" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_obj_environment + '</li>';
        }
 
@@ -409,6 +413,20 @@ function local_menu_for(this_obj_id) {
 let response = await fetch(url);
 console.log("status of response",response.status);
 */
+
+function next_editable_of(obj, relationship) {
+    var next_to_edit;
+    if (relationship == "children") {
+        next_to_edit = $(obj).children('.heading, [data-editable="99"]')
+    } else if (relationship == "siblings") {
+        next_to_edit = $(obj).nextAll('.heading, [data-editable="99"]')
+    } else if (relationship == "previoussiblings") {
+        next_to_edit = $(obj).prevAll('.heading, [data-editable="99"]')
+    }
+
+    return next_to_edit
+}
+
 
 function edit_in_place(obj, new_object_description) {
 
@@ -996,7 +1014,7 @@ function assemble_internal_version_changes() {
                 this_object_internal["xmlid"] = this_object_label;
                 this_object_internal["permid"] = "";
                 this_object_internal["parent"] = parent_and_location;
-                console.log("need to add paragraph",this_object_label, "inside", this_arrangement_of_objects, "after (or after after)", prev_id);
+        //        console.log("need to add paragraph",this_object_label, "inside", this_arrangement_of_objects, "after (or after after)", prev_id);
 
                 // put the new p after the previous p in the string describing the neighboring contents
                 var object_before = new RegExp('(<&>' + prev_id + '<;>)');
@@ -1419,7 +1437,9 @@ function main_menu_navigator(e) {  // we are not currently editing
                    console.log("moving to next *editable* object A");
     /////////               $(this_menu).parent().next('[data-editable="99"]').focus();
           ////         $(this_menu).parent().nextAll('[data-editable="99"]')[0].focus();
-                   $(this_menu).parent().nextAll('.heading > [data-editable="99"], [data-editable="99"]')[0].focus();
+                   var next_to_edit = next_editable_of($(this_menu).parent(), "siblings");
+           //        $(this_menu).parent().nextAll('.heading > [data-editable="99"], [data-editable="99"]')[0].focus();
+                   next_to_edit[0].focus();
                    this_menu.remove()
                }
            } else if (this_choice.getAttribute('data-location') == 'stay') { // at end of block, and want to move on
@@ -1433,7 +1453,8 @@ function main_menu_navigator(e) {  // we are not currently editing
                block_we_are_leaving.classList.remove("may_leave");
                console.log("$(block_we_are_leaving)",$(block_we_are_leaving), "xxxx", $(block_we_are_leaving).next(), "yyyyy", $(block_we_are_leaving).next('[data-editable="99"]'));
                console.log("moving to next object B");
-               next_block_to_edit = $(this_menu).next('.heading > [data-editable="99"], [data-editable="99"]');
+         //      next_block_to_edit = $(this_menu).next('.heading > [data-editable="99"], [data-editable="99"]');
+               next_block_to_edit = next_editable_of($(this_menu), "siblings")[0];
                this_menu.remove()
                $(next_block_to_edit).focus();
        //        $(block_we_are_leaving).next('[data-editable="99"]').focus();
@@ -1445,7 +1466,9 @@ function main_menu_navigator(e) {  // we are not currently editing
                console.log("thing we are going to edit", thing_to_edit, "which has title", source_of_thing_to_edit["title"]);
                thing_to_edit.classList.remove("may_select");
                this_menu.remove();
-               if (upcoming_blocks = $(thing_to_edit).nextAll('.heading > [data-editable="99"], [data-editable="99"]')) {
+               upcoming_blocks = next_editable_of($(thing_to_edit), "siblings");
+       //        if (upcoming_blocks = $(thing_to_edit).nextAll('.heading > [data-editable="99"], [data-editable="99"]')) {
+               if (upcoming_blocks.length) {
                    next_block_to_edit = upcoming_blocks[0];
                    next_block_to_edit.classList.add("may_select");
                } else {
@@ -1517,7 +1540,8 @@ function main_menu_navigator(e) {  // we are not currently editing
                 else {
                    console.log("moving to next object C");
      /////////              $(this_menu).parent().prev('[data-editable="99"]').focus();
-                   $(this_menu).parent().prevAll('.heading > [data-editable="99"], [data-editable="99"]')[0].focus();
+                   next_editable_of($(this_menu).parent(), "previoussiblings")[0].focus();
+             //      $(this_menu).parent().prevAll('.heading > [data-editable="99"], [data-editable="99"]')[0].focus();
                    this_menu.remove()
                    // copied.  consolidate
             console.log("menu place 8");
@@ -1568,7 +1592,8 @@ function main_menu_navigator(e) {  // we are not currently editing
                var this_menu = document.getElementById("edit_menu_holder");
                block_we_are_reentering = this_menu.previousSibling;
                block_we_are_reentering.classList.remove("may_leave");
-               $(block_we_are_reentering).children('.heading > [data-editable="99"], [data-editable="99"]')[0].focus();
+         //      $(block_we_are_reentering).children('.heading > [data-editable="99"], [data-editable="99"]')[0].focus();
+               next_editable_of(block_we_are_reentering, "children")[0].focus();
                this_menu.remove();
                // put  menu on the item at the top of the block_we_are_reentering
                    // this is a repeat of a Tab case, so consolidate
@@ -1668,7 +1693,8 @@ function main_menu_navigator(e) {  // we are not currently editing
                 object_to_be_entered.classList.remove("may_select");
                 var object_to_be_entered_type = object_to_be_entered.tagName;
              //   alert("Entering " + object_to_be_edited_type + " not implemented yet");
-                $(object_to_be_entered).children('.heading > [data-editable="99"], [data-editable="99"]')[0].focus();
+           //     $(object_to_be_entered).children('.heading > [data-editable="99"], [data-editable="99"]')[0].focus();
+                next_editable_of(object_to_be_entered, "children")[0].focus();
                 console.log("object_to_be_entered", object_to_be_entered);
                 console.log("with children", $(object_to_be_entered).children('.heading > [data-editable="99"], [data-editable="99"]'));
                 console.log("with some children", $(object_to_be_entered).children('.heading, [data-editable="99"]'));
@@ -1694,7 +1720,8 @@ function main_menu_navigator(e) {  // we are not currently editing
             } else if (current_active_menu_item.getAttribute("data-location") == "stay") {
                     // we are at the bottom of a block and want to stay in it, so go to the top of it
                 var object_we_are_in = $('#edit_menu_holder').prev();
-                object_we_are_in.first('.heading > [data-editable="99"], [data-editable="99"]').focus();
+          //      object_we_are_in.first('.heading > [data-editable="99"], [data-editable="99"]').focus();
+                next_editable_of(object_we_are_in, "siblings")[0].focus();
             }
         } else { // else check if the selected items leads to a submenu
             console.log("selected a menu item with no action and no location");
