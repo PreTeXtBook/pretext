@@ -313,12 +313,12 @@ function top_menu_options_for(this_obj) {
         this_obj_environment = this_obj_source["ptxtag"];
         if (this_object_type == "P") {
             this_list = '<li tabindex="-1" id="choose_current" data-env="p" data-action="edit">Edit ' + this_obj_environment + '</li>';
-            if ($(this_obj).children('[data-editable="99"]').length) {
-                console.log("$(this_obj).children('[data-editable=99]')", $(this_obj).children('[data-editable="99"]'));
+            if ($(this_obj).children('.heading > [data-editable="99"], [data-editable="99"]').length) {
+                console.log("$(this_obj).children('.heading > [data-editable=99], [data-editable=99]')", $(this_obj).children('.heading > [data-editable="99"], [data-editable="99"]'));
                 this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_obj_environment + '</li>';
             }
         } else {
-            console.log("are there children", $(this_obj).children('[data-editable="99"]').length);
+            console.log("are there children", $(this_obj).children('.heading > [data-editable="99"], [data-editable="99"]').length);
             this_list += '<li tabindex="-1" id="choose_current" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_obj_environment + '</li>';
        }
 
@@ -766,14 +766,15 @@ function display_new(objectclass, objecttype, whereat, relativelocation) {
 
         if (object_id) { object_in_html.setAttribute("id", object_id); }
 
-        object_heading_html = '<h6 class="heading" data=parent_id="' + object_id + '" data-editable="99" tabindex="-1">';
-        object_heading_html += '<span class="type">' + objecttype + '</span>';
+   //     object_heading_html = '<h6 class="heading" data=parent_id="' + object_id + '" data-editable="99" tabindex="-1">';
+        object_heading_html = '<h6 class="heading" data=parent_id="' + object_id + '">';
+        object_heading_html += '<span class="type" data-editable="99" tabindex="-1">' + objecttype + '</span>';
         object_heading_html += '<span class="space">' + " " + '</span>';
         object_heading_html += '<span class="codenumber">' + "#N" + '</span>';
 
         if (object_title) {
             object_heading_html += '<span class="space">' + " " + '</span>';
-            object_heading_html += '<span class="creator">(' + object_title + ')</span>';
+            object_heading_html += '<span class="creator" data-editable="99" tabindex="-1">(' + object_title + ')</span>';
         }
         object_heading_html += '<span class="period">' + "." + '</span>';
         object_heading_html += '</h6>';
@@ -809,14 +810,15 @@ function display_new(objectclass, objecttype, whereat, relativelocation) {
 
         if (object_id) { object_in_html.setAttribute("id", object_id); }
 
-        object_heading_html = '<h6 class="heading" data=parent_id="' + object_id + '" data-editable="99" tabindex="-1">';
-        object_heading_html += '<span class="type">' + objecttype + '</span>';
+    //    object_heading_html = '<h6 class="heading" data-parent_id="' + object_id + '" data-editable="99" tabindex="-1">';
+        object_heading_html = '<h6 class="heading" data-parent_id="' + object_id + '">';
+        object_heading_html += '<span class="type"  data-editable="99" tabindex="-1">' + objecttype + '</span>';
         object_heading_html += '<span class="space">' + " " + '</span>';
         object_heading_html += '<span class="codenumber">' + "#N" + '</span>';
 
         if (object_title) {
             object_heading_html += '<span class="space">' + " " + '</span>';
-            object_heading_html += '<span class="creator">(' + object_title + ')</span>';
+            object_heading_html += '<span class="creator" data-editable="99" tabindex="-1">(' + object_title + ')</span>';
         }
         object_heading_html += '<span class="period">' + "." + '</span>';
         object_heading_html += '</h6>';
@@ -1154,15 +1156,16 @@ function html_from_internal_id(the_id, is_inner) {
 
         object_in_html.setAttribute("id", the_id);
 
-        object_heading_html = '<h6 class="heading" data-parent_id="' + the_id + '" data-editable="99" tabindex="-1">';
+   //     object_heading_html = '<h6 class="heading" data-parent_id="' + the_id + '" data-editable="99" tabindex="-1">';
+        object_heading_html = '<h6 class="heading" data-parent_id="' + the_id + '">';
         var objecttype_capped = ptxtag.charAt(0).toUpperCase() + ptxtag.slice(1);
-        object_heading_html += '<span class="type">' + objecttype_capped + '</span>';
+        object_heading_html += '<span class="type" data-editable="99" tabindex="-1">' + objecttype_capped + '</span>';
         object_heading_html += '<span class="space">' + " " + '</span>';
         object_heading_html += '<span class="codenumber">' + "#N" + '</span>';
 
         if (object_title) {
             object_heading_html += '<span class="space">' + " " + '</span>';
-            object_heading_html += '<span class="creator">(' + object_title + ')</span>';
+            object_heading_html += '<span class="creator" data-editable="99" tabindex="-1">(' + object_title + ')</span>';
         }
         object_heading_html += '<span class="period">' + "." + '</span>';
         object_heading_html += '</h6>';
@@ -1415,7 +1418,8 @@ function main_menu_navigator(e) {  // we are not currently editing
                 else {
                    console.log("moving to next *editable* object A");
     /////////               $(this_menu).parent().next('[data-editable="99"]').focus();
-                   $(this_menu).parent().nextAll('[data-editable="99"]')[0].focus();
+          ////         $(this_menu).parent().nextAll('[data-editable="99"]')[0].focus();
+                   $(this_menu).parent().nextAll('.heading > [data-editable="99"], [data-editable="99"]')[0].focus();
                    this_menu.remove()
                }
            } else if (this_choice.getAttribute('data-location') == 'stay') { // at end of block, and want to move on
@@ -1429,7 +1433,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                block_we_are_leaving.classList.remove("may_leave");
                console.log("$(block_we_are_leaving)",$(block_we_are_leaving), "xxxx", $(block_we_are_leaving).next(), "yyyyy", $(block_we_are_leaving).next('[data-editable="99"]'));
                console.log("moving to next object B");
-               next_block_to_edit = $(this_menu).next('[data-editable="99"]');
+               next_block_to_edit = $(this_menu).next('.heading > [data-editable="99"], [data-editable="99"]');
                this_menu.remove()
                $(next_block_to_edit).focus();
        //        $(block_we_are_leaving).next('[data-editable="99"]').focus();
@@ -1441,7 +1445,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                console.log("thing we are going to edit", thing_to_edit, "which has title", source_of_thing_to_edit["title"]);
                thing_to_edit.classList.remove("may_select");
                this_menu.remove();
-               if (upcoming_blocks = $(thing_to_edit).nextAll('[data-editable="99"]')) {
+               if (upcoming_blocks = $(thing_to_edit).nextAll('.heading > [data-editable="99"], [data-editable="99"]')) {
                    next_block_to_edit = upcoming_blocks[0];
                    next_block_to_edit.classList.add("may_select");
                } else {
@@ -1513,7 +1517,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                 else {
                    console.log("moving to next object C");
      /////////              $(this_menu).parent().prev('[data-editable="99"]').focus();
-                   $(this_menu).parent().prevAll('[data-editable="99"]')[0].focus();
+                   $(this_menu).parent().prevAll('.heading > [data-editable="99"], [data-editable="99"]')[0].focus();
                    this_menu.remove()
                    // copied.  consolidate
             console.log("menu place 8");
@@ -1564,7 +1568,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                var this_menu = document.getElementById("edit_menu_holder");
                block_we_are_reentering = this_menu.previousSibling;
                block_we_are_reentering.classList.remove("may_leave");
-               $(block_we_are_reentering).children('[data-editable="99"]')[0].focus();
+               $(block_we_are_reentering).children('.heading > [data-editable="99"], [data-editable="99"]')[0].focus();
                this_menu.remove();
                // put  menu on the item at the top of the block_we_are_reentering
                    // this is a repeat of a Tab case, so consolidate
@@ -1605,8 +1609,9 @@ function main_menu_navigator(e) {  // we are not currently editing
                     var id_of_object = to_be_edited.id;
                     var this_object_source = internalSource[id_of_object];  
                     console.log("current envoronemnt", this_object_source);
+                    var old_env = internalSource[id_of_object]["ptxtag"];
                     internalSource[id_of_object]["ptxtag"] = new_env;
-                    recent_editing_actions.push("added " + new_env + " " + owner_of_change);
+                    recent_editing_actions.push("changed " + old_env + " to " + new_env + " " + id_of_object);
                     the_whole_object = html_from_internal_id(id_of_object);
                     console.log("the_whole_object", the_whole_object);
                     console.log('$("#actively_editing")', $("#actively_editing"));
@@ -1663,7 +1668,10 @@ function main_menu_navigator(e) {  // we are not currently editing
                 object_to_be_entered.classList.remove("may_select");
                 var object_to_be_entered_type = object_to_be_entered.tagName;
              //   alert("Entering " + object_to_be_edited_type + " not implemented yet");
-                $(object_to_be_entered).children('[data-editable="99"]')[0].focus();
+                $(object_to_be_entered).children('.heading > [data-editable="99"], [data-editable="99"]')[0].focus();
+                console.log("object_to_be_entered", object_to_be_entered);
+                console.log("with children", $(object_to_be_entered).children('.heading > [data-editable="99"], [data-editable="99"]'));
+                console.log("with some children", $(object_to_be_entered).children('.heading, [data-editable="99"]'));
                // put  menu on the item at the top of the block_we_are_reentering
                    // this is a repeat of a Tab case, so consolidate
             console.log("menu place 10");
@@ -1686,7 +1694,7 @@ function main_menu_navigator(e) {  // we are not currently editing
             } else if (current_active_menu_item.getAttribute("data-location") == "stay") {
                     // we are at the bottom of a block and want to stay in it, so go to the top of it
                 var object_we_are_in = $('#edit_menu_holder').prev();
-                object_we_are_in.first('[data-editable="99"]').focus();
+                object_we_are_in.first('.heading > [data-editable="99"], [data-editable="99"]').focus();
             }
         } else { // else check if the selected items leads to a submenu
             console.log("selected a menu item with no action and no location");
