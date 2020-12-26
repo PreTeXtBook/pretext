@@ -416,14 +416,17 @@ console.log("status of response",response.status);
 
 function next_editable_of(obj, relationship) {
     var next_to_edit;
+    console.log("finding", relationship, "editable of", obj);
     if (relationship == "children") {
-        next_to_edit = $(obj).children('.heading, [data-editable="99"]')
+        next_to_edit = $(obj).find('> .heading > [data-editable="99"], > [data-editable="99"]')
+    //    next_to_edit = $(obj).children('[data-editable="99"]')
     } else if (relationship == "siblings") {
-        next_to_edit = $(obj).nextAll('.heading, [data-editable="99"]')
+        next_to_edit = $(obj).nextAll('[data-editable="99"]')
     } else if (relationship == "previoussiblings") {
-        next_to_edit = $(obj).prevAll('.heading, [data-editable="99"]')
+        next_to_edit = $(obj).prevAll('[data-editable="99"]')
     }
 
+    console.log(next_to_edit);
     return next_to_edit
 }
 
@@ -1050,11 +1053,6 @@ function assemble_internal_version_changes() {
         internalSource[owner_of_change][component_being_changed] = line_content;
         recent_editing_actions.push("changed title " + owner_of_change);
         possibly_changed_ids_and_entry.push([owner_of_change, "title"]);
- //       $("#editing_title_holder").replaceWith("<b>(" + line_content + ")</b>");
-
-        //  now put focus on next testarea?
-
-
 
     } else {
         alert("don;t know how to assemble_internal_version_changes of", object_being_edited.tagName)
@@ -1689,14 +1687,16 @@ function main_menu_navigator(e) {  // we are not currently editing
                 console.log("current_active_menu_item", current_active_menu_item);
                 this_menu = document.getElementById('edit_menu_holder');
                 var object_to_be_entered = this_menu.parentElement;
+                console.log("object_to_be_entered", object_to_be_entered);
                 this_menu.remove();
                 object_to_be_entered.classList.remove("may_select");
                 var object_to_be_entered_type = object_to_be_entered.tagName;
              //   alert("Entering " + object_to_be_edited_type + " not implemented yet");
            //     $(object_to_be_entered).children('.heading > [data-editable="99"], [data-editable="99"]')[0].focus();
+                console.log('next_editable_of(object_to_be_entered, "children")', next_editable_of(object_to_be_entered));
+                console.log("children", next_editable_of(object_to_be_entered, "children")[0]);
                 next_editable_of(object_to_be_entered, "children")[0].focus();
                 console.log("object_to_be_entered", object_to_be_entered);
-                console.log("with children", $(object_to_be_entered).children('.heading > [data-editable="99"], [data-editable="99"]'));
                 console.log("with some children", $(object_to_be_entered).children('.heading, [data-editable="99"]'));
                // put  menu on the item at the top of the block_we_are_reentering
                    // this is a repeat of a Tab case, so consolidate
