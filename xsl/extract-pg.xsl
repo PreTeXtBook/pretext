@@ -1694,6 +1694,51 @@
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
+<!-- ######### -->
+<!-- Groupings -->
+<!-- ######### -->
+
+<!-- We cannot rely on the -common templates for these,   -->
+<!-- because if they contain math, we need to respect the -->
+<!-- human readable parameter.                            -->
+
+<xsl:template match="q">
+    <xsl:param name="b-human-readable" />
+    <xsl:call-template name="lq-character"/>
+    <xsl:apply-templates>
+        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
+    </xsl:apply-templates>
+    <xsl:call-template name="rq-character"/>
+</xsl:template>
+
+<xsl:template match="sq">
+    <xsl:param name="b-human-readable" />
+    <xsl:call-template name="lsq-character"/>
+    <xsl:apply-templates>
+        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
+    </xsl:apply-templates>
+    <xsl:call-template name="rsq-character"/>
+</xsl:template>
+
+<xsl:template match="dblbrackets">
+    <xsl:param name="b-human-readable" />
+    <xsl:call-template name="ldblbracket-character"/>
+    <xsl:apply-templates>
+        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
+    </xsl:apply-templates>
+    <xsl:call-template name="rdblbracket-character"/>
+</xsl:template>
+
+<xsl:template match="angles">
+    <xsl:param name="b-human-readable" />
+    <xsl:call-template name="langle-character"/>
+    <xsl:apply-templates>
+        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
+    </xsl:apply-templates>
+    <xsl:call-template name="rangle-character"/>
+</xsl:template>
+
+
 <!-- ########################## -->
 <!-- Numbers, units, quantities -->
 <!-- ########################## -->
