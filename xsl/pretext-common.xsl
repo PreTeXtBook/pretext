@@ -7497,6 +7497,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Similarly, "scope" is set to the context on first call, then        -->
 <!-- replicated/preserved/remembered in recursive calls, so do not       -->
 <!-- pass in a different value.                                          -->
+<!--                                                                     -->
+<!-- NB: this template is used/called directly by the                    -->
+<!-- "solution-manual-latex.xsl" stylesheet, so coordinate               -->
+<!-- changes here with usage there.                                      -->
 
 <xsl:template match="book|article|part|chapter|section|subsection|subsubsection|exercises|worksheet|reading-questions" mode="solutions-generator">
     <xsl:param name="purpose"/>
