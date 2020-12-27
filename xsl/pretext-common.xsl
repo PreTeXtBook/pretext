@@ -5215,6 +5215,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Note: numbers may be hard-coded for longevity        -->
 <!-- exercisegroups  and future lightweight divisions may -->
 <!-- be intermediate, but should not hinder the count     -->
+<!-- NB: there are three historical "apply-templates"     -->
+<!-- here which might now be written as "value-of",       -->
+<!-- but perhaps it is irrelevant                         -->
 <xsl:template match="exercises//exercise" mode="serial-number">
     <xsl:number from="exercises" level="any" count="exercise" />
 </xsl:template>
