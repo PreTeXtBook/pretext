@@ -366,6 +366,12 @@ function edit_menu_for(this_obj_or_id, motion) {
     edit_menu_holder.setAttribute('tabindex', '-1');
     console.log("adding menu for", this_obj_or_id, "menu_location", menu_location);
     console.log("which has tag", this_obj.tagName);
+    console.log("does", this_obj.classList, "include type", this_obj.classList.contains("type"));
+    // delete the old menu, if it exists
+    if (current_menu = document.getElementById('edit_menu_holder')) {
+        current_menu.parentElement.classList.remove("may_select");
+        current_menu.remove();
+    }
     this_obj.insertAdjacentElement(menu_location, edit_menu_holder);
 
     var edit_option = document.createElement('span');
@@ -378,6 +384,22 @@ function edit_menu_for(this_obj_or_id, motion) {
             edit_option.setAttribute('data-location', 'inline');
         } else if (this_obj.tagName.toLowerCase() in title_like_tags) { 
             edit_option.innerHTML = "modify this?";
+            edit_option.setAttribute('data-location', 'inline');
+        } else if (this_obj.classList.contains("type")) {
+            // need to code this better:  over-writing edit_option
+            edit_option = document.createElement('ol');
+            edit_option.setAttribute('id', 'edit_menu');
+            this_obj_parent_id = this_obj.parentElement.parentElement.id;
+            this_obj_environment = internalSource[this_obj_parent_id]["ptxtag"];
+            edit_option.innerHTML = '<li id="choose_current" tabindex="-1" data-action="change-env">Change "' + this_obj_environment + '" to <div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+            edit_option.setAttribute('data-location', 'inline');
+        } else if (this_obj.classList.contains("creator")) {
+            // need to code this better:  over-writing edit_option
+            edit_option = document.createElement('ol');
+            edit_option.setAttribute('id', 'edit_menu');
+            this_obj_parent_id = this_obj.parentElement.parentElement.id;
+            this_obj_environment = internalSource[this_obj_parent_id]["ptxtag"];
+            edit_option.innerHTML = '<li id="choose_current" tabindex="-1" data-action="change-title">Change title</li>';
             edit_option.setAttribute('data-location', 'inline');
         } else {
             edit_option.innerHTML = "edit near here?";
@@ -517,7 +539,7 @@ function edit_in_place(obj, new_object_description) {
         return ""
     }
 
-// this only works for paragraphs, so go back and allow editing of other types
+// this only works for paragraphs, so go back and allow editing of other environemnts
     if ( internalSource[thisID] ) {
       if (thisTagName == "p") {
         var this_content_container = document.createElement('div');
@@ -988,9 +1010,13 @@ function assemble_internal_version_changes() {
         for(var j=0; j < num_paragraphs; ++j) {
             // probably each paragraph is wrapped in meaningless div tags
             var this_paragraph_contents_raw = paragraph_content_list[j];
-            this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/^<div>/, "");
-            this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/<\/div>$/, "");
-            this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/&nbsp;/, " ");
+     //       this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/^<div>/, "");
+     //       this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/<\/div>$/, "");
+            this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/<div>/g, "");
+            this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/<\/div>/g, "");
+            this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/&nbsp;/g, " ");
+            this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/ <br>/g, " ");
+            this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/<br>/g, " ");
             this_paragraph_contents_raw = this_paragraph_contents_raw.trim();
             if (!this_paragraph_contents_raw) { console.log("empty paragraph"); continue }
             console.log("this_paragraph_contents_raw", this_paragraph_contents_raw);
@@ -1433,12 +1459,24 @@ function main_menu_navigator(e) {  // we are not currently editing
                 }
                 else {
                    console.log("moving to next *editable* object A");
+                   var this_motion = "entering";
     /////////               $(this_menu).parent().next('[data-editable="99"]').focus();
           ////         $(this_menu).parent().nextAll('[data-editable="99"]')[0].focus();
                    var next_to_edit = next_editable_of($(this_menu).parent(), "siblings");
+                   console.log("next_to_edit", next_to_edit, "siblings of", $(this_menu).parent());
            //        $(this_menu).parent().nextAll('.heading > [data-editable="99"], [data-editable="99"]')[0].focus();
-                   next_to_edit[0].focus();
-                   this_menu.remove()
+                   if (!next_to_edit.length) {
+                       next_to_edit = next_editable_of($(this_menu).parent(), "previoussiblings");
+                   }
+                   if (next_to_edit.length) {
+                       next_to_edit[0].focus();
+                   } else {
+                       $(this_menu).parent().parent().focus()
+                       this_motion = "leaving";
+                   }
+ //////                  this_menu.remove()
+                   edit_menu_for(document.activeElement, this_motion);
+                   return ""
                }
            } else if (this_choice.getAttribute('data-location') == 'stay') { // at end of block, and want to move on
                // remove class from prev sibling, find its next sibling
@@ -1475,7 +1513,6 @@ function main_menu_navigator(e) {  // we are not currently editing
                }
                $(next_block_to_edit).focus();
                console.log("next_block_to_edit", next_block_to_edit);
-           //    alert("failing to deal with moving between inline elements");
            }  else { alert("Error:  enter_choice without data-location") }
        }
        // and add the option to edit the next object
@@ -1496,6 +1533,23 @@ function main_menu_navigator(e) {  // we are not currently editing
         console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
         if (!next_menu_item) { next_menu_item = current_active_menu_item.parentNode.firstChild }
         console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
+        if (current_active_menu_item == next_menu_item) { //only one item on menu, so Tab shold move to the next editable item
+   // wasteful, clean up
+            var editable_objects = next_editable_of(document.getElementById("edit_menu_holder").parentElement.parentElement.parentElement, "children");
+            var currently_being_edited = document.getElementById("edit_menu_holder").parentElement;
+            console.log("we want to move past", currently_being_edited, "to the next of", editable_objects);
+            for (var j=0; j<editable_objects.length; ++j) {
+                if (editable_objects[j] ==  currently_being_edited) {
+                    current_index = j;
+                    console.log("currently editing item", current_index);
+                    break
+                }
+            }
+            if (current_index == editable_objects.length - 1) { next_index = 0 }
+            else { next_index = current_index + 1 }
+            editable_objects[next_index].focus();
+            edit_menu_for(document.activeElement, "entering");
+        }
         current_active_menu_item.removeAttribute("id");
         console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
 //        current_active_menu_item.setAttribute("class", "chosen");
@@ -1627,7 +1681,8 @@ function main_menu_navigator(e) {  // we are not currently editing
                 } else if (this_action == "change-env-to") {
                     var new_env = current_active_menu_item.getAttribute("data-env");
                     console.log("changing environment to", new_env);
-                    to_be_edited = document.getElementById('edit_menu_holder').parentElement.parentElement;
+                       // #edit_menu_holder is in span.type, inside .heading, inside article
+                    to_be_edited = document.getElementById('edit_menu_holder').parentElement.parentElement.parentElement;
                     console.log("to_be_edited", to_be_edited);
                     var id_of_object = to_be_edited.id;
                     var this_object_source = internalSource[id_of_object];  
@@ -1644,7 +1699,8 @@ function main_menu_navigator(e) {  // we are not currently editing
                     return ""
                     
                 } else if (this_action == 'change-env') {
-                    current_env = document.getElementById('edit_menu_holder').parentElement.parentElement;
+                       // #edit_menu_holder is in span.type, inside .heading, inside article
+                    current_env = document.getElementById('edit_menu_holder').parentElement.parentElement.parentElement;
                     current_env_id = current_env.id;
                     current_env_source = internalSource[current_env_id];
                     current_env_name = current_env_source["ptxtag"];
@@ -1768,7 +1824,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                  } else {
                     alert("don't yet know about " + new_object_type);
                     document.getElementById('edit_menu_holder').parentElement.focus();
-                    document.getElementById('edit_menu_holder').remove();
+      //              document.getElementById('edit_menu_holder').remove();
             console.log("menu place 11");
 
                     edit_menu_for(document.activeElement.id, "entering");
@@ -1795,7 +1851,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                 previous_selection.parentNode.classList.remove("past");
             } else {  // shoudl be the div#edit_menu_holder
                 current_object_to_edit = document.getElementById('edit_menu_holder').parentNode;
-                document.getElementById('edit_menu_holder').remove();
+       //         document.getElementById('edit_menu_holder').remove();
             console.log("menu place 12");
 
                 edit_menu_for(current_object_to_edit, "entering");
@@ -1805,7 +1861,7 @@ function main_menu_navigator(e) {  // we are not currently editing
             current_object_being_edited = document.getElementById('edit_menu_holder').parentNode;
             parent_object_to_edit = current_object_being_edited.parentNode;
             console.log("parent_object_to_edit", parent_object_to_edit);
-            document.getElementById('edit_menu_holder').remove();
+   //         document.getElementById('edit_menu_holder').remove();
             current_object_being_edited.classList.remove("may_select");
             console.log("menu place 13");
 
