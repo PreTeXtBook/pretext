@@ -63,7 +63,7 @@ tmpdefinitionlike = ["definition", "conjecture", "axiom", "principle", "heuristi
 */
 base_menu_for = {
 "section": [["paragraph", "p"],
-            ["list/table-like", "list-like"],
+            ["list or table", "list-like"],
             ["definition-like", "definition-like"],
             ["theorem-like", "theorem-like"],
             ["remark-like"],
@@ -78,7 +78,7 @@ base_menu_for = {
             ["section-like"]],
 "blockquote": [["paragraph", "p"]],
 "article": [["paragraph", "p"],
-            ["list/table-like", "list-like"],
+            ["list or table", "list-like"],
             ["math/chemistry/code", "math-like", "c"],
             ["image/video/sound", "display-like", "v"]],
 "p": [["emphasis-like"], ["formula"], ["abbreviation"], ["symbol"], ["ref or link", "ref"]]
@@ -110,7 +110,7 @@ the_inner_menu = {
                    ["heuristic", "heuristic", "u"],
                    ["hypothesis", "hypothesis", "y"],
                    ["assumption", "assumption", "s"]],
-"list-like": [["ordered list", "ol"], ["unordered list", "ul"], ["dictionary list", "dl"], ["table"], ["table with caption", "tablecaption", "c"]],
+"list-like": [["itemized list", "list"], ["dictionary list", "dl"], ["table"]],
 "section-like": [["section"], ["subsection", "subsection", "b"], ["titled paragraph", "paragraphs"], ["reading questions", "rq"], ["exercises"]],
 "project-like": [["exercise"], ["activitiy"], ["investigation"], ["exploration", "exploration", "x"], ["project"]],
 "remark-like": [["remark"], ["warning"], ["note"], ["observation"], ["convention"], ["insight"]],
@@ -137,7 +137,8 @@ editing_container_for = { "p": 1,
  "theorem-like": ["theorem", "proposition", "lemma", "corollary", "claim", "fact", "identity", "algorithm"],
  "definition-like": ["definition", "conjecture", "axiom", "hypothesis", "principle", "heuristic", "assumption"],
 "remark-like": ["remark", "warning", "note", "observation", "convention", "insight"],
-"section-like": ["section", "subsection", "paragraphs", "rq", "exercises"]
+"section-like": ["section", "subsection", "paragraphs", "rq", "exercises"],
+"list": ["item"]
 }
 
 // each tag has [ptx_tag, [html_start, html_end]]
@@ -239,7 +240,6 @@ function menu_options_for(COMPONENT, level) {
          component_items = [["placeholder 1"], ["placeholder 2-like"], ["placeholder 3"], ["placeholder 4"], ["placeholder 5"]];
      }
 
-//     this_menu = "<ol>";
      this_menu = "";
      for (var i=0; i < component_items.length; ++i) {
          this_item = component_items[i];
@@ -284,7 +284,6 @@ function menu_options_for(COMPONENT, level) {
          this_menu += '</li>';
          
      }
-//     this_menu += "</ol>";
 
      return this_menu
 }
@@ -480,6 +479,14 @@ function edit_in_place(obj, new_object_description) {
         new_source = {"xml:id": new_id, "permid": "", "ptxtag": new_tag, "title": ""}
         if (new_tag == "p") {
             new_source["content"] = "";
+        } else if (new_tag == "list") {  // creating a list, which needs one item to begin
+                                       // that item is an li contining a p
+            var new_li_id = randomstring();
+            var new_p_id = randomstring();
+            internalSource[new_p_id] = {"xml:id": new_id, "permid": "", "ptxtag": "p", "content": "", "parent": [new_li_id, "content"]}
+            internalSource[new_li_id] = {"xml:id": new_id, "permid": "", "ptxtag": "p", "content": "<&>" + new_p_id + "<;>", "parent": [new_id, "content"] }
+            new_source["content"] = "<&>" + new_li_id + "<;>";
+    //    }
         } else if (editing_container_for["theorem-like"].includes(new_tag)) {
             new_source["statement"] = "<&>" + new_statement_p_id + "<;>";
             internalSource[new_statement_p_id] = { "xml:id": new_statement_p_id, "permid": "", ptxtag: "p",
@@ -575,6 +582,17 @@ function edit_in_place(obj, new_object_description) {
 //        textarea_editable.addEventListener("keypress", function() {
  //         textarea_editable.style.height = textarea_editable.scrollHeight + "px";
   //     });
+      } else if (new_tag == "list") {
+          console.log("edit_in_place", obj)
+          var this_content_container = document.createElement('ol');
+          this_content_container.setAttribute('id', "actively_editing");
+          this_content_container.setAttribute('data-objecttype', 'list');
+          var list_content = '<li class="editing_li"><p id="editing_input_text" contenteditable="true" class="paragraph_input" tabindex="-1">xxxx cccc vvvv bbba</p><p contenteditable="true" class="paragraph_input" tabindex="-1"></p></li>';
+          list_content += '<li><p contenteditable="true" class="paragraph_input" tabindex="-1"></p></li>';
+          this_content_container.innerHTML = list_content;
+          $("#" + thisID).replaceWith(this_content_container);
+          $("#editing_input_text").focus();
+          console.log("now put focus on", document.activeElement)
       } else if (editing_container_for["theorem-like"].includes(new_tag)) {
 // copied from no-longer-existent container_for_editing
 
@@ -1807,10 +1825,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                 if ( (new_object_type_parent in editing_container_for) || (new_object_type in editing_container_for) ) {
                     object_near_new_object = document.getElementById('edit_menu_holder').parentElement;
                     var before_after = $("#edit_menu_holder > #edit_menu > .chosen").attr("data-location");
-              //      if (before_after == "before") { new_location = "beforebegin" }
-              //      else if (before_after == "after") { new_location = "afterend" }
-      /// /// ///              object_near_new_object.insertAdjacentElement(before_after, container_for_editing(new_object_type));
-                edit_in_place("", [new_object_type, object_near_new_object, before_after]);
+                    edit_in_place("", [new_object_type, object_near_new_object, before_after]);
            //     document.getElementById('starting_point_for_editing').focus();
              //////       document.querySelectorAll('[class~="starting_point_for_editing"]')[0].focus();
      //           object_near_new_object.focus();
