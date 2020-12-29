@@ -15,7 +15,7 @@
 
         <p>While the majority of the processing of your text is accomplished with <init>XSL</init> transforms, we rely on Python for numerous other tasks and conveniences.  So, sooner or later, you will want, or need, to get Python working on your system.  Part of our attraction to Python is that is very popular and so should run very similarly (identically?) on a variety of systems: Linux, Mac, and Windows.  So the quicker we can get you to a platform-neutral setup, the better.</p>
 
-        <p>On Linux and Mac, you will likely have at least some version of Python already installled.  On Windows, you may need to explicity install it.  (We hope to provide some more careful advice here for Windows users.  For now, see <xref ref="installing-anaconda"/> and <xref ref="windows-subsystem-linux"/>.)</p>
+        <p>On Linux and Mac, you will likely have at least some version of Python already installed.  On Windows, you may need to explicitly install it.  (We hope to provide some more careful advice here for Windows users.  For now, see <xref ref="installing-anaconda"/> and <xref ref="windows-subsystem-linux"/>.)</p>
 
         <p>Python 2 is no longer being developed and is officially dead.  That does not mean you do not have it on your system.  And for older systems, it may well be the default.  <pretext/> requires at least Python 3.4 (current as of 2020-07-27).  At a command-line, or in a terminal or console, or at a command-prompt, try<cd>
             <cline>python --version</cline>
@@ -27,7 +27,8 @@
     <section xml:id="python-virtual">
         <title>Python Virtual Environment</title>
 
-        <p>There is a very good chance your system has a version of Python installed already because various other programs rely on it.  You will be much happier if various Python programs you need for <pretext/> do not get entangled with your Python programs installed as system software.  And if we need to help you debug some related problems we will ask you to work in a virtual environment anyway.  We will follow a <url href="https://realpython.com/python-virtual-environments-a-primer/">primer</url><fn><c>realpython.com/python-virtual-environments-a-primer/</c></fn> that has been recommended by Brad Miller, founder of Runestone Interactive.  See that page for more details.</p>
+        <p>There is a very good chance your system has a version of Python
+        installed already since various other programs rely on it.  You will be much happier if various Python programs you need for <pretext/> do not get entangled with your Python programs installed as system software.  And if we need to help you debug some related problems we will ask you to work in a virtual environment anyway.  We will follow a <url href="https://realpython.com/python-virtual-environments-a-primer/">primer</url><fn><c>realpython.com/python-virtual-environments-a-primer/</c></fn> that has been recommended by Brad Miller, founder of Runestone Interactive.  See that page for more details.</p>
 
         <p>These are condensed instructions without much explanation.<ol>
             <li>Do not install the old-school <c>virtualenv</c> module.</li>
@@ -64,7 +65,8 @@
     <section xml:id="pip-install">
         <title><init>PIP</init> Install</title>
 
-        <p><init>PIP</init>, in the best open source tradition of recursive acronyms, stands for <q>PIP Installs Packages</q>.  This a package manager, meant to help you obtain software and keep it up-to-date.  There are three packages that are indispensable for use with <pretext/> so you can practice doing installations now via your virtual environment.</p>
+        <p><init>PIP</init>, in the open source tradition of recursive acronyms,
+        stands for <q>PIP Installs Packages</q>.  This package manager helps you obtain software and keep it up-to-date.  There are three packages that are indispensable for use with <pretext/> so you can practice doing installations now via your virtual environment.</p>
 
         <p>In your virtual environment, go<cd>
             <cline>(ptx) $ pip install lxml</cline>

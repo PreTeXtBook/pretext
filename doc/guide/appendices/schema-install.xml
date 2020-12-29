@@ -57,7 +57,7 @@
                         <p>Follow the instructions in the <c>readme.md</c> found at the top level of the <c>jing-trang</c> distribution, observing the following notes keyed to the four steps.  These helpful notes come courtesy of the experiences of Jahrme Risner, Mitch Keller, Bruce Yoshiwara, Ken Levasseur, and Jessica Sklar on a variety of operating systems.</p>
                         <p><ol>
                             <li>
-                                <p>It is necesssary to have a developer's version of <c>java</c> on your machine.  Try <c>which java</c> to see if one is already available.  Any output here might help in the next step.  References here to the <init>JDK</init> is the Java Development Kit.  There are specific directions for MacOS (<xref ref="mac-os-java"/>) and Windows (<xref ref="section-jing"/>).</p>
+                                <p>It is necessary to have a developer's version of <c>java</c> on your machine.  Try <c>which java</c> to see if one is already available.  Any output here might help in the next step.  References here to the <init>JDK</init> is the Java Development Kit.  There are specific directions for MacOS (<xref ref="mac-os-java"/>) and Windows (<xref ref="section-jing"/>).</p>
                             </li>
 
                             <li>
@@ -122,8 +122,8 @@
     <section xml:id="pretext-validation-plus">
         <title><pretext/> Validation Plus</title>
 
-        <p>The second step of validation is our <q>validation-plus</q> stylesheet.  Fortunately, there is nothing to install.  Use is just like the conversions you have already been doing.  In the <pretext/> distribution, in the <c>schema</c> directory you will find <c>pretext-validation-plus.xsl</c>.  This is a stylesheet, unique to <pretext/>, which will carefully analyze your source to find any exceptions that the <acro>RELAX-NG</acro> schema was not designed to catch.  You use the stylesheet like any other,<cd>
-            <cline>xsltproc schema/pretext-validation-plus.xsl ~/books/aota/animals.xml</cline>
+        <p>The second step of validation is our <q>validation-plus</q> stylesheet.  Fortunately, there is nothing to install.  Use it just like the conversions you have already been doing.  In the <pretext/> distribution, in the <c>schema</c> directory you will find <c>pretext-validation-plus.xsl</c>.  This is a stylesheet, unique to <pretext/>, which will carefully analyze your source to find any exceptions that the <acro>RELAX-NG</acro> schema was not designed to catch.  You use the stylesheet like any other,<cd>
+            <cline>xsltproc ~/mathbook/schema/pretext-validation-plus.xsl ~/books/aota/animals.xml</cline>
         </cd>with suitably adjusted paths, and be sure to provide the <c>-xinclude</c> switch if your source is modularized across multiple files (<xref ref="processing-modular" />).  No news is good news, but each exception found should provide enough explanation for you to locate, and correct, the problem.  These messages are under <pretext/>'s control, so please report any that are not helpful enough.  That's it<mdash/>easy.</p>
     </section>
 

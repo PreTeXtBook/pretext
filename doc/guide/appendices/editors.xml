@@ -20,7 +20,7 @@
 
         <introduction>
             <p>Sublime Text is a fast cross-platform editor with thousands of user-contributed packages implemented in its Python <init>API</init>. It is not free or open-source, although most of the user-contributed packages are both. Development is active as of June<nbsp />2016.</p>
-            <p>Here, we outline several of the most important Sublime Text features that will help you to minimize your typing overhead and work more efficiently with your MathBook <init>XML</init> project. We also introduce the MBXTools package designed to help MathBook <init>XML</init> authors work more efficiently.</p>
+            <p>Here we outline several of the most important Sublime Text features that will help you to minimize your typing overhead and work more efficiently with your MathBook <init>XML</init> project. We also introduce the MBXTools package designed to help MathBook <init>XML</init> authors work more efficiently.</p>
             <p>Sublime Text 2 and 3 are both available for an unlimited evaluation period, but a licence must be purchased for continued use. I have found the additional features of Sublime Text 3 to be well worth the cost of the license.</p>
         </introduction>
         <subsection xml:id="subsection-settings">
@@ -28,7 +28,8 @@
             <p>Sublime Text settings are stored and managed in a collection of <init>JSON</init> files as key-value pairs, in files that have a <c>.sublime-settings</c> extension. You change the settings by visiting these files and editing the values away from their defaults.</p>
             <p>To edit your Sublime Text settings, you can use the Preferences/Settings <mdash /> User menu (Sublime Text/Preferences<ellipsis /> on <init>OS X</init>). Make sure that when you go to edit Settings, you always choose the User option. Changes to Default settings files will be overwritten when Sublime Text updates. It is recommended to use the Default files to see what settings are available to change. There are a lot, and not all are documented.</p>
             <p>All Sublime Text users should be aware that a particular view (buffer) may receive settings in several different ways, e.g., from global default settings, from global <init>OS</init>-specific settings, from package-provided settings, from user-provided settings, and so on.</p>
-            <p>Key bindings are also stored in files with a similar format. There are only so many keyboard shortcuts available, although Sublime Text does support multistep shortcuts like Emacs. If you find that you wish to reassign shortcuts, this is certainly possible through the Preferences/Key Bindings <mdash /> User menu (Sublime Text/Preferences<ellipsis /> on <init>OS X</init>).</p>
+            <p>Key bindings are also stored in files with a similar format. There
+            are only a limited number of keyboard shortcuts available, although Sublime Text does support multistep shortcuts like Emacs. If you find that you wish to reassign shortcuts, this is certainly possible through the Preferences/Key Bindings <mdash /> User menu (Sublime Text/Preferences<ellipsis /> on <init>OS X</init>).</p>
         </subsection>
         <subsection xml:id="subsection-package-control">
             <title>Package Control</title>
@@ -60,7 +61,7 @@
                 <title>Explicit Projects</title>
                 <p>To save your project explicitly, use the Project menu to choose Save As Project<ellipsis /> and choose an appropriate name and location. For a MathBook <init>XML</init> project, this would probably be the same name and location as the document root file. Use the Project menu commands to open and close your project.</p>
                 <p>There are a few benefits to using an explicit project to group files.<ul>
-                    <li><p>You can group together files and folders in different parts of the filesystem, instead of being restricted to subtrees.</p></li>
+                    <li><p>You can group together files and folders in different parts of the file system, instead of being restricted to subtrees.</p></li>
                     <li><p>You can have project-specific settings that are different from Sublime Text's defaults and different from your user preferences (<xref provisional="subsection-settings" />).</p></li>
                     <li><p>Sublime's project workspaces will remember which files you had open when you last closed the project, and at which positions.</p></li>
                     <li><p>If you get very fancy, you can have multiple workspaces for the same project, with different filters and views for different purposes.</p></li>
@@ -99,7 +100,10 @@
                 </li>
             </ol></p>
             <p>Another example that occurs frequently when authoring <init>XML</init> is when you use the Wrap with Tag snippet (<c>Alt+Shift+W</c>/<c>Ctrl+Shift+W</c>). This snippet wraps the selection(s) in a <tag>p</tag> tag, with the tag name highlighted in both the start and end tags. If the <c>p</c> element is not what you wanted, just type. Both tags are replaced. This is a huge benefit to the <init>XML</init> author that makes essential use of multiple selections, even though you are barely aware of this as you use the feature.</p>
-            <p>Column selection allows you to select a rectangular area of a file. This is unbelievably useful when editing a structured document. There are lots of ways to do it (<url href="http://docs.sublimetext.info/en/latest/editing/editing.html">see the Sublime Text documentation</url> for a mostly exhaustive list), but the most frequently used is to hold down <c>Shift</c> while clicking and dragging with the right mouse button (on <init>OS X</init>, hold down <c>Option</c> while dragging with the right mouse button). See the documentation for keyboard-based shortcuts.</p>
+            <p>Column selection allows you to select a rectangular area of a file.
+            This is unbelievably useful when editing a structured document. There
+            are lots of ways to do it (<url
+            href="http://docs.sublimetext.info/en/latest/editing/editing.html">see the Sublime Text documentation</url> for an almost exhaustive list), but the most frequently used is to hold down <c>Shift</c> while clicking and dragging with the right mouse button (on <init>OS X</init>, hold down <c>Option</c> while dragging with the right mouse button). See the documentation for keyboard-based shortcuts.</p>
             <p>Column selection becomes even more useful when used in combination with the keyboard shortcuts for moving and selecting, such as <c>Ctrl+Shift+Right</c> (select to end of word) and <c>Shift+End</c> (select to end of line).</p>
             <p>Yet another example of the appallingly great utility of multiple selection comes when copying and pasting from a different file format. Suppose you have copied some lines of text and wish each such line to become a list item in your MathBook <init>XML</init> source.<ol>
                 <li>
@@ -187,7 +191,7 @@
                 <title>Installation</title>
                 <paragraphs xml:id="paragraphs-mbxtools-install-via-package-control">
                     <title>via Package Control</title>
-                    <p>It is recommended to install MBXTools via <url href = "https://packagecontrol.io">Package Control</url>. If you have not installed Package Control yet, you should do that first (and restart Sublime Text afterward).</p>
+                    <p>It is recommended to install MBXTools via <url href = "https://packagecontrol.io">Package Control</url>. If you have not installed Package Control yet, you should do that first (and restart Sublime Text afterwards).</p>
                     <p>After Package Control is installed, use the <c>Install Package</c> command to search for the MBXTools package, and select it from the Quick Panel to install. This method of installation allows Package Control to automatically update your installation and show you appropriate release notes.</p>
                 </paragraphs>
                 <paragraphs xml:id="paragraphs-mbxtools-install-via-git">
@@ -254,7 +258,7 @@
     <section xml:id="aspell">
         <title>Aspell</title> <!-- lowercase "s" -->
 
-        <p>Aspell is a spell-checker that you can easily configure to skip every piece of text used as a name of an <init>XML</init> element, and to skip <pretext/> elements that are likely to contain text that is not really made up of words and sentences.  For example, the element <tag>chapter</tag> might not be flagged by some mainstream spell checkers, but most likely the element <tage>mdash</tage> will be flagged by every spell checker, including the default configuration of Aspell.  And your <tag>m</tag> elements are full of <latex/>, not words.  Unfortunately, Aspell will not follow your <c>xi:xinclude</c> directives, so you need to run it against each of your files if you have modularized your source.  A command-line invocation would like like:<cd>
+        <p>Aspell is a spell-checker which you can easily configure to skip every piece of text used as a name of an <init>XML</init> element, and to skip <pretext/> elements that are likely to contain text that is not really made up of words and sentences.  For example, the element <tag>chapter</tag> might not be flagged by some mainstream spell checkers, but most likely the element <tage>mdash</tage> will be flagged by every spell checker, including the default configuration of Aspell.  And your <tag>m</tag> elements are full of <latex/>, not words.  Unfortunately, Aspell will not follow your <c>xi:xinclude</c> directives, so you need to run it against each of your files if you have modularized your source.  A command-line invocation would like like:<cd>
             <cline>aspell -c ~/aota/src/fish.xml</cline>
         </cd></p>
 
@@ -330,7 +334,7 @@
         <title>Atom</title>
         <author>Oscar Levin</author>
         <p>
-            An open source alternative to Sublime Text, with many of the same features, is <url href="https://atom.io">Atom</url><fn><c>atom.io</c></fn>, made by the folks at GitHub.  Much of the advise given in <xref ref="section-sublime-text"/> also applies to Atom, although the shortcuts and packages might be slightly different.  Atom is available for Windows, Mac, and Linux.
+            An open source alternative to Sublime Text with many of the same features is <url href="https://atom.io">Atom</url><fn><c>atom.io</c></fn>, made by the folks at GitHub.  Much of the advice given in <xref ref="section-sublime-text"/> also applies to Atom, although the shortcuts and packages might be slightly different.  Atom is available for Windows, Mac, and Linux.
         </p>
 
         <p>
@@ -397,7 +401,7 @@
             </li>
             <li> <em>Command mode: </em> This mode is to execute commands.
                 Typing <c>/abc</c> in normal mode initiates a forward search for the
-                first occurence of
+                first occurrence of
                 <q>abc</q> via the command mode. Similarly <c>:w</c> will use command
                 mode to write out the current working material (buffer) to the disk.
             </li>
@@ -532,7 +536,7 @@
                 </row>
                 <row>
                     <cell right="minor">:set list</cell>
-                    <cell>Show tabs and carraige returns </cell>
+                    <cell>Show tabs and carriage returns </cell>
                 </row>
                 <row>
                     <cell right="minor">:set tabstops<m>=</m>n</cell>
@@ -623,7 +627,7 @@
             desiring an abbreviation within
             <q>I enjoyed my visit to the Technische Hogeschool Eindhoven</q>,
             it would be folly to use <c>:ab the  Technische Hogeschool Eindhoven</c>.
-            The abbreviation should be mneumonic, but avoid actual words.
+            The abbreviation should be mnemonic, but avoid actual words.
             </p>
 
             <p>Now consider the following problem: what if the <kbd>Enter</kbd> key
@@ -825,7 +829,7 @@
             <cd>
             imap &lt;C-A&gt; &lt;Esc&gt;yiwi&lt;&lt;Esc&gt;ea&gt;&lt;/&lt;Esc&gt;pa&gt;&lt;Esc&gt;F&lt;i
             </cd>
-            which is a truely cryptic sequence of key strokes. Here is what they do:
+            which is a truly cryptic sequence of key strokes. Here is what they do:
             </p>
 
             <table>
