@@ -570,7 +570,8 @@ function edit_in_place(obj) {
         return ""
     }
 
-// this only works for paragraphs, so go back and allow editing of other environemnts
+     // this only works for paragraphs,
+     // whing may be right, becaise ixisting content is mostly titles and paragraphs
     if ( internalSource[thisID] ) {
       new_tag = internalSource[thisID]["ptxtag"];
       new_id = thisID;  // track down why new_id is in the code
@@ -670,7 +671,6 @@ function edit_in_place(obj) {
         this_content_container.setAttribute('id', "actively_editing");
         this_content_container.setAttribute('data-objecttype', 'theorem-like');
 
-   //     var title = standard_title_form(new_tag);
         var title = standard_title_form(new_id);
 
         var statement_container_start = '<div class="editing_statement">';
@@ -711,7 +711,6 @@ function edit_in_place(obj) {
         this_content_container.setAttribute('id', "actively_editing");
         this_content_container.setAttribute('data-objecttype', objecttype);
 
-   //     var title = standard_title_form(new_tag);
         var title = standard_title_form(new_id);
 
         var statement_container_start = '<div class="editing_statement">';
@@ -759,7 +758,6 @@ function edit_in_place(obj) {
         this_content_container.setAttribute('id', "actively_editing");
         this_content_container.setAttribute('data-objecttype', 'remark-like');
 
-   //     var title = standard_title_form(new_tag);
         var title = standard_title_form(new_id);
 
         var content_container_start = '<div class="editing_content">';
@@ -785,7 +783,6 @@ function edit_in_place(obj) {
         this_content_container.setAttribute('id', "actively_editing");
         this_content_container.setAttribute('data-objecttype', 'section-like');
 
-   //     var title = standard_title_form(new_tag);
         var title = standard_title_form(new_id);
 
         var content_container_start = '<div class="editing_content">';
@@ -896,181 +893,6 @@ function ptx_to_html(input_text) {
     output_text = output_text.replace(/<term>/g, "<b>"); 
     output_text = output_text.replace(/<\/term>/g, "</b>"); 
     return(output_text)
-}
-function hide_new_source(ptx_src, src_type) {
-    if (!ptx_src) { return }
-    var hidden_div = document.createElement('div');
-    hidden_div.setAttribute("id", "in_progress_" + src_type);
-    hidden_div.setAttribute("style", "display: none");
-    hidden_div.innerHTML = ptx_src;
-    document.body.insertAdjacentElement('beforeend', hidden_div);
-}
-
-function XXXXXXXXXXXXXXXxdisplay_new(objectclass, objecttype, whereat, relativelocation) {
-    console.log("in display_new");
-    if (false && objectclass == "theorem-like") {
-        object_in_html = document.createElement("article");
-        object_in_html.setAttribute("class", objectclass + " " + objecttype);
-        object_in_html.setAttribute("tabindex", -1);
-        object_in_html.setAttribute("data-editable", 99);
-
-        object_title = document.getElementById('actively_editing_title').value;
-        object_id = document.getElementById('actively_editing_id').value;
-        object_id = object_id || randomstring();
-
-        if (object_id) { object_in_html.setAttribute("id", object_id); }
-
-   //     object_heading_html = '<h6 class="heading" data=parent_id="' + object_id + '" data-editable="99" tabindex="-1">';
-        object_heading_html = '<h6 class="heading" data=parent_id="' + object_id + '">';
-        object_heading_html += '<span class="type" data-editable="99" tabindex="-1">' + objecttype + '</span>';
-        object_heading_html += '<span class="space">' + " " + '</span>';
-        object_heading_html += '<span class="codenumber">' + "#N" + '</span>';
-
-        if (object_title) {
-            object_heading_html += '<span class="space">' + " " + '</span>';
-            object_heading_html += '<span class="creator" data-editable="99" tabindex="-1">(' + object_title + ')</span>';
-        }
-        object_heading_html += '<span class="period">' + "." + '</span>';
-        object_heading_html += '</h6>';
-
-        object_statement_ptx = document.getElementById("in_progress_statement").innerHTML;
-        document.getElementById("in_progress_statement").remove();
-        object_statement_html = object_statement_ptx;   // add the transform later
-
-        object_in_html.innerHTML = object_heading_html + object_statement_html;
-
-        whereat.insertAdjacentElement(relativelocation, object_in_html);
-        console.log("trying to put the focus on",object_in_html);
-        object_in_html.focus();
-
-        if(object_proof = document.getElementById("in_progress_proof")) { //if there is a proof
-            object_proof_ptx = object_proof.innerHTML;
-            object_proof.remove;
-            proof_in_html = document.createElement("article");
-            proof_in_html.setAttribute("class", "hiddenproof");
-            proof_in_html.innerHTML = '<a data-knowl="" class="id-ref proof-knowl original" data-refid="hk-Jkl"><h6 class="heading" data-editable="99" tabindex="-1"><span class="type">Proof<span class="period">.</span></span></h6></a>';
-            
-            document.activeElement.insertAdjacentElement("afterend", proof_in_html)
-         }
-
-        } else if (objectclass == "definition-likeXXXXXXXXXXXXxx"  || objectclass == "theorem-like") {
-            console.log("adding definition or theorem", objectclass, objecttype);
-            object_in_html = document.createElement("article");
-            object_in_html.setAttribute("class", objectclass + " " + objecttype);
-            object_in_html.setAttribute("tabindex", -1);
-            object_in_html.setAttribute("data-editable", 99);
-
-            object_title = document.getElementById('actively_editing_title').value;
-            object_id = document.getElementById('actively_editing_id').value;
-            object_id = object_id || randomstring();
-
-            if (object_id) { object_in_html.setAttribute("id", object_id); }
-
-    //    object_heading_html = '<h6 class="heading" data-parent_id="' + object_id + '" data-editable="99" tabindex="-1">';
-            object_heading_html = '<h6 class="heading" data-parent_id="' + object_id + '">';
-            object_heading_html += '<span class="type"  data-editable="99" tabindex="-1">' + objecttype + '</span>';
-            object_heading_html += '<span class="space">' + " " + '</span>';
-            object_heading_html += '<span class="codenumber">' + "#N" + '</span>';
-
-            if (object_title) {
-                object_heading_html += '<span class="space">' + " " + '</span>';
-                object_heading_html += '<span class="creator" data-editable="99" tabindex="-1">(' + object_title + ')</span>';
-            }
-            object_heading_html += '<span class="period">' + "." + '</span>';
-            object_heading_html += '</h6>';
-
-            object_statement_ptx = document.getElementById("in_progress_statement").innerHTML;
-            document.getElementById("in_progress_statement").remove();
-            object_statement_html = object_statement_ptx;   // add the transform later
-
-            object_in_html.innerHTML = object_heading_html + object_statement_html;
-
-        whereat.insertAdjacentElement(relativelocation, object_in_html);
-        console.log("trying to put the focus on",object_in_html);
-        object_in_html.focus();
-
-        // if theorem-like, add proof if it exists
-        if (objectclass == "theorem-like") {
-       //     if(object_proof = document.getElementById("in_progress_proof")) { //if there is a proof
-       //     object_proof_ptx = object_proof.innerHTML;
-       //     object_proof.remove;
-            proof_in_html = document.createElement("article");
-            proof_in_html.setAttribute("class", "hiddenproof");
-            proof_in_html.innerHTML = '<a data-knowl="" class="id-ref proof-knowl original" data-refid="hk-Jkl"><h6 class="heading" data-editable="99" tabindex="-1"><span class="type">Proof<span class="period">.</span></span></h6></a>';
-
-            document.activeElement.insertAdjacentElement("afterend", proof_in_html)
-        }
-
-        } else if (objectclass == "remark-like") {
-        object_in_html = document.createElement("article");
-        object_in_html.setAttribute("class", objectclass + " " + objecttype);
-        object_in_html.setAttribute("tabindex", -1);
-        object_in_html.setAttribute("data-editable", 99);
-
-        object_title = document.getElementById('actively_editing_title').value;
-        object_id = document.getElementById('actively_editing_id').value;
-        object_id = object_id || randomstring();
-
-        if (object_id) { object_in_html.setAttribute("id", object_id); }
-
-        object_heading_html = '<h6 class="heading" data=parent_id="' + object_id + '" data-editable="99" tabindex="-1">';
-        object_heading_html += '<span class="type">' + objecttype + '</span>';
-        object_heading_html += '<span class="space">' + " " + '</span>';
-        object_heading_html += '<span class="codenumber">' + "#N" + '</span>';
-
-        if (object_title) {
-            object_heading_html += '<span class="space">' + " " + '</span>';
-            object_heading_html += '<span class="creator">(' + object_title + ')</span>';
-        }
-        object_heading_html += '<span class="period">' + "." + '</span>';
-        object_heading_html += '</h6>';
-
-        object_statement_ptx = document.getElementById("in_progress_content").innerHTML;
-        document.getElementById("in_progress_content").remove();
-        object_statement_html = object_statement_ptx;   // add the transform later
-
-        object_in_html.innerHTML = object_heading_html + object_statement_html;
-
-        whereat.insertAdjacentElement(relativelocation, object_in_html);
-        console.log("trying to put the focus on",object_in_html);
-        object_in_html.focus();
-        } else if (objectclass == "section-like") {
-        object_in_html = document.createElement("section");
-        object_in_html.setAttribute("class", objecttype);
-        object_in_html.setAttribute("tabindex", -1);
-        object_in_html.setAttribute("data-editable", 99);
-
-        object_title = document.getElementById('actively_editing_title').value;
-        object_id = document.getElementById('actively_editing_id').value;
-        object_id = object_id || randomstring();
-
-        if (object_id) { object_in_html.setAttribute("id", object_id); }
-
-        object_heading_html = '<h2 class="heading hide-type" data=parent_id="' + object_id + '" data-editable="99" tabindex="-1">';
-        object_heading_html += '<span class="type">' + objecttype + '</span>';
-        object_heading_html += '<span class="space">' + " " + '</span>';
-        object_heading_html += '<span class="codenumber">' + "#N" + '</span>';
-
-        if (object_title) {
-            object_heading_html += '<span class="space">' + " " + '</span>';
-            object_heading_html += '<span class="title">' + object_title + '</span>';
-        }
-        object_heading_html += '</h2>';
-
-        object_statement_ptx = document.getElementById("in_progress_content").innerHTML;
-        document.getElementById("in_progress_content").remove();
-        object_statement_html = object_statement_ptx;   // add the transform later
-
-        object_in_html.innerHTML = object_heading_html + object_statement_html;
-
-        whereat.insertAdjacentElement(relativelocation, object_in_html);
-        console.log("trying to put the focus on",object_in_html);
-        object_in_html.focus();
-
-
-    } else {
-        alert("I don;t know how to display", objectclass)
-    }
 }
 
 function save_internal_contents(some_text) {
@@ -1244,7 +1066,6 @@ function html_from_internal_id(the_id, is_inner) {
 
     if (ptxtag == "p") {
         var the_content = the_object["content"];
-//        if (is_inner == "inner") { 
         if ("edit inner".includes(is_inner)) {
             var opening_tag="<p ", closing_tag="</p>";
 
@@ -1280,7 +1101,6 @@ function html_from_internal_id(the_id, is_inner) {
   //      the_content = expand_condensed_source_html(the_content, "inner");
         console.log("which now has content", the_content);
 
-    //    if (is_inner == "inner") {
         if ("edit inner".includes(is_inner)) {
                 // should the id be the_id ?
         //    var opening_tag = '<p id="' + the_object["xml:id"] + '"';
@@ -1316,42 +1136,6 @@ function html_from_internal_id(the_id, is_inner) {
             closing_tag = math_tags[ptxtag][1][1];
         }
         return opening_tag + the_object["content"] + closing_tag
-    } else if (false && editing_container_for["theorem-like"].includes(ptxtag)) {
-           //shoud be statement_object_in_html, and then proof_object_in_html
-        object_in_html = document.createElement("article");
-        object_in_html.setAttribute("class", "theorem-like" + " " + ptxtag);
-        object_in_html.setAttribute("tabindex", -1);
-        object_in_html.setAttribute("data-editable", 99);
-
-        object_title = the_object["title"];
-
-        object_in_html.setAttribute("id", the_id);
-
-        object_heading_html = '<h6 class="heading" data-editable="99" tabindex="-1">';
-        var objecttype_capped = ptxtag.charAt(0).toUpperCase() + ptxtag.slice(1);
-        object_heading_html += '<span class="type">' + objecttype_capped + '</span>';
-        object_heading_html += '<span class="space">' + " " + '</span>';
-        object_heading_html += '<span class="codenumber">' + "#N" + '</span>';
-
-        if (object_title) {
-            object_heading_html += '<span class="space">' + " " + '</span>';
-            object_heading_html += '<span class="creator">(' + object_title + ')</span>';
-        }
-        object_heading_html += '<span class="period">' + "." + '</span>';
-        object_heading_html += '</h6>';
-
-        object_statement_ptx = the_object["statement"];
-
-    //    object_statement_html =  ptx_to_html(object_statement_ptx);   // transform not really working yet
-        object_statement_html =  expand_condensed_source_html(object_statement_ptx); 
-
-        object_in_html.innerHTML = object_heading_html + object_statement_html + "sorry, proof is missing";
-
-        the_html_objects.push(object_in_html);
-
-//            proof_in_html = document.createElement("article");
-//            proof_in_html.setAttribute("class", "hiddenproof");
-//            proof_in_html.innerHTML = '<a data-knowl="" class="id-ref proof-knowl original" data-refid="hk-Jkl"><h6 class="heading"><span class="type">Proof<span class="period">.</span></span></h6></a>';
     } else if (editing_container_for["definition-like"].includes(ptxtag) ||
                editing_container_for["theorem-like"].includes(ptxtag) ||
                editing_container_for["remark-like"].includes(ptxtag) ||
@@ -1398,7 +1182,6 @@ function html_from_internal_id(the_id, is_inner) {
             var object_statement_ptx = the_object["statement"];
         }
 
-    //    object_statement_html =  ptx_to_html(object_statement_ptx);   // transform not really working yet
         object_statement_html =  expand_condensed_source_html(object_statement_ptx);
 
         object_in_html.innerHTML = object_heading_html + object_statement_html;
@@ -1413,73 +1196,6 @@ function html_from_internal_id(the_id, is_inner) {
         //    document.activeElement.insertAdjacentElement("afterend", proof_in_html)
             the_html_objects.push(proof_in_html)
         }
-
-    } else if (false && editing_container_for["remark-like"].includes(ptxtag)) {
-           //shoud be statement_object_in_html, and then proof_object_in_html
-        object_in_html = document.createElement("article");
-        object_in_html.setAttribute("class", "remark-like" + " " + ptxtag);
-        object_in_html.setAttribute("tabindex", -1);
-        object_in_html.setAttribute("data-editable", 99);
-
-        object_title = the_object["title"];
-
-        object_in_html.setAttribute("id", the_id);
-
-        object_heading_html = '<h6 class="heading" data-parent_id="' + the_id + '" data-editable="99" tabindex="-1">';
-        var objecttype_capped = ptxtag.charAt(0).toUpperCase() + ptxtag.slice(1);
-        object_heading_html += '<span class="type">' + objecttype_capped + '</span>';
-        object_heading_html += '<span class="space">' + " " + '</span>';
-        object_heading_html += '<span class="codenumber">' + "#N" + '</span>';
-
-        if (object_title) {
-            object_heading_html += '<span class="space">' + " " + '</span>';
-            object_heading_html += '<span class="creator">(' + object_title + ')</span>';
-        }
-        object_heading_html += '<span class="period">' + "." + '</span>';
-        object_heading_html += '</h6>';
-
-        object_statement_ptx = the_object["content"];
-
-    //    object_statement_html =  ptx_to_html(object_statement_ptx);   // transform not really working yet
-        object_statement_html =  expand_condensed_source_html(object_statement_ptx);
-
-        object_in_html.innerHTML = object_heading_html + object_statement_html;
-
-        the_html_objects.push(object_in_html);
-    } else if (false && editing_container_for["section-like"].includes(ptxtag)) {
-           //shoud be statement_object_in_html, and then proof_object_in_html
-        object_in_html = document.createElement("section");
-        object_in_html.setAttribute("class", "section-like" + " " + ptxtag);
-        object_in_html.setAttribute("tabindex", -1);
-        object_in_html.setAttribute("data-editable", 99);
-
-        object_title = the_object["title"];
-
-        object_in_html.setAttribute("id", the_id);
-
-        object_heading_html = '<h2 class="heading" data-parent_id="' + the_id + '" data-editable="99" tabindex="-1">';
-        var objecttype_capped = ptxtag.charAt(0).toUpperCase() + ptxtag.slice(1);
-        object_heading_html += '<span class="type hide-type">' + objecttype_capped + '</span>';
-        object_heading_html += '<span class="space">' + " " + '</span>';
-        object_heading_html += '<span class="codenumber">' + "#N" + '</span>';
-
-        if (object_title) {
-            object_heading_html += '<span class="space">' + " " + '</span>';
-            object_heading_html += '<span class="title">' + object_title + '</span>';
-        }
-        object_heading_html += '<span class="period">' + "." + '</span>';
-        object_heading_html += '</h2>';
-
-        object_statement_ptx = the_object["content"];
-
-    //    object_statement_html =  ptx_to_html(object_statement_ptx);   // transform not really working yet
-        object_statement_html =  expand_condensed_source_html(object_statement_ptx);
-
-        object_in_html.innerHTML = object_heading_html + object_statement_html;
-
-        the_html_objects.push(object_in_html);
-
-
 
     } else {
          alert("don't know how to make html from", the_object)
@@ -1515,7 +1231,6 @@ function insert_html_version(these_changes) {
             object_as_html.setAttribute("data-editable", 99);
             object_as_html.setAttribute("tabindex", -1);
             object_as_html.setAttribute("id", this_object_id);
-      //      object_as_html.innerHTML = ptx_to_html(this_object["content"]);
             object_as_html.innerHTML = ptx_to_html(this_object[this_object_entry]);
             location_of_change.insertAdjacentElement('beforebegin', object_as_html);
         } else if (this_object_entry == "title") {
