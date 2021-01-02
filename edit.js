@@ -7,7 +7,8 @@
 $(".autopermalink > a").attr("tabindex", -1);
 
 $("#akX > *").attr("data-editable", 99);
-var editable_objects = ["p", "ol", "ul", "li", "article", "blockquote", "section"];
+// var editable_objects = ["p", "ol", "ul", "li", "article", "blockquote", "section"];
+var editable_objects = ["p", "ol", "ul", "article", "blockquote", "section"];
 for(var j=0; j < editable_objects.length; ++j) {
     $(editable_objects[j]).attr("data-editable", 99);
     $(editable_objects[j]).attr("tabindex", -1);
@@ -30,14 +31,17 @@ prev_prev_char = "";
 this_focused_element = "";
 prev_focused_element = "";
 prev_prev_focused_element = "";
-shift_active = false;
-
-var result;
 
 var menu_neutral_background = "#ddb";
 var menu_active_background = "#fdd";
 
 var recent_editing_actions = [];
+
+var current_editing = {
+    "level": 0,
+    "location": [0],
+    "tree": [document.getElementById["hPw"]]
+}
 
 function randomstring(len) {
     if (!len) { len = 10 }
@@ -461,7 +465,8 @@ function next_editable_of(obj, relationship) {
     var next_to_edit;
     console.log("finding", relationship, "editable of", obj);
     if (relationship == "children") {
-        next_to_edit = $(obj).find('> .heading > [data-editable="99"], > [data-editable="99"]')
+    //    next_to_edit = $(obj).find('> .heading > [data-editable="99"], > [data-editable="99"]')
+        next_to_edit = $(obj).find('>li > [data-editable="99"], > .heading > [data-editable="99"], > [data-editable="99"]')
     //    next_to_edit = $(obj).children('[data-editable="99"]')
     } else if (relationship == "siblings") {
         next_to_edit = $(obj).nextAll('[data-editable="99"]')
@@ -477,7 +482,6 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
 
     console.log("create_object_to_edit", new_tag, new_objects_sibling, relative_placement);
               // first insert a placeholder to edit-in-place
-//    new_tag = new_object_description[0];
     var new_id = randomstring();
         // we won;t need all of these, so re-think when these are created
     var new_content_p_id = randomstring();
@@ -485,12 +489,7 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
     var new_proof_p_id = randomstring();
     var edit_placeholder = document.createElement("span");
     edit_placeholder.setAttribute('id', new_id);
-//    var new_objects_sibling = new_object_description[1];
-//    var relative_placement = new_object_description[2];
-   //     if (new_object_description[2] == "after") { relative_placement = "afterend" }
-   //     document.getElementById(this_parent_id).insertAdjacentElement(relative_placement, edit_placeholder);
     new_objects_sibling.insertAdjacentElement(relative_placement, edit_placeholder);
-//    obj = edit_placeholder;
 
                   // then create the empty internalSource for the new object
     new_source = {"xml:id": new_id, "permid": "", "ptxtag": new_tag, "title": ""}
@@ -592,31 +591,24 @@ function edit_in_place(obj) {
         paragraph_editable.setAttribute('data-parent_id', internalSource[thisID]["parent"][0]);
         paragraph_editable.setAttribute('data-parent_component', internalSource[thisID]["parent"][1]);
 
-  //      document.getElementById(idOfEditContainer).insertAdjacentElement("afterbegin", textarea_editable);
         document.getElementById('actively_editing').insertAdjacentElement("afterbegin", paragraph_editable);
 
-  //      id_of_existing_content = internalSource[thisID]["content"];
         console.log("setting", $('#' + idOfEditText), "to have contents", internalSource[thisID]["content"]);
         the_contents = internalSource[thisID]["content"]; 
         the_contents = expand_condensed_source_html(the_contents, "edit");
         $('#' + idOfEditText).html(the_contents);
-  //      $('#' + idOfEditText).val(internalSource[thisID]["content"]);
         document.getElementById(idOfEditText).focus();
   //      document.getElementById(idOfEditText).setSelectionRange(0,0);
   //      textarea_editable.style.height = textarea_editable.scrollHeight + "px";
         console.log("made edit box for", thisID);
         this_char = "";
         prev_char = "";
-//        textarea_editable.addEventListener("keypress", function() {
- //         textarea_editable.style.height = textarea_editable.scrollHeight + "px";
-  //     });
       } else if (new_tag == "li") {
         var this_content_container = document.createElement('li');
         this_content_container.setAttribute('id', "actively_editing");
         $("#" + thisID).replaceWith(this_content_container);
         
         var idOfEditContainer = thisID + '_input';
-   //     var idOfEditText = thisID + '_input_text';
         var idOfEditText = 'editing' + '_input_text';
         var paragraph_editable = document.createElement('div');
         paragraph_editable.setAttribute('contenteditable', 'true');
@@ -626,18 +618,14 @@ function edit_in_place(obj) {
         paragraph_editable.setAttribute('data-parent_id', internalSource[thisID]["parent"][0]);
         paragraph_editable.setAttribute('data-parent_component', internalSource[thisID]["parent"][1]);
   
-  //      document.getElementById(idOfEditContainer).insertAdjacentElement("afterbegin", textarea_editable);
         document.getElementById('actively_editing').insertAdjacentElement("afterbegin", paragraph_editable);
   
-  //      id_of_existing_content = internalSource[thisID]["content"];
         console.log("setting", $('#' + idOfEditText), "to have contents", internalSource[thisID]["content"]);
         the_contents = internalSource[thisID]["content"]; 
         the_contents = expand_condensed_source_html(the_contents, "edit");
         $('#' + idOfEditText).html(the_contents);
-  //      $('#' + idOfEditText).val(internalSource[thisID]["content"]);
         document.getElementById(idOfEditText).focus();
   //      document.getElementById(idOfEditText).setSelectionRange(0,0);
-  //      textarea_editable.style.height = textarea_editable.scrollHeight + "px";
         console.log("made edit box for", thisID);
         this_char = "";
         prev_char = "";
@@ -652,7 +640,6 @@ function edit_in_place(obj) {
           this_content_container.setAttribute('data-objecttype', 'list');
        //   var list_content = '<li class="editing_li"><p id="editing_input_text" contenteditable="true" class="paragraph_input" tabindex="-1">xxxx cccc vvvv bbba</p></li>';
           var list_content = internalSource[thisID]["content"];
-      //    list_content += '<li><p contenteditable="true" class="paragraph_input" tabindex="-1"></p></li>';
           console.log("expanding list_content", list_content, "as edit");
      //     list_content = expand_condensed_source_html(list_content, "inner");
           list_content = expand_condensed_source_html(list_content, "edit");
@@ -660,44 +647,6 @@ function edit_in_place(obj) {
           $("#" + thisID).replaceWith(this_content_container);
           $("#editing_input_text").focus();
           console.log("now put focus on", document.activeElement)
-      } else if (false && editing_container_for["theorem-like"].includes(new_tag)) {
-// copied from no-longer-existent container_for_editing
-
-// only good for creating a new theorem, not editing in place
-// think about thaat use case:  once it exists, do we ever edit the theorem as a unit?
-
-        console.log("edit_in_place", obj)
-        var this_content_container = document.createElement('div');
-        this_content_container.setAttribute('id', "actively_editing");
-        this_content_container.setAttribute('data-objecttype', 'theorem-like');
-
-        var title = standard_title_form(new_id);
-
-        var statement_container_start = '<div class="editing_statement">';
-        var statement_container_end = '</div>';
-        var editingregion_container_start = '<div class="editing_p_holder">'
-        var editingregion_container_end = '</div>'
-        var statementinstructions = '<span class="group_description">statement (paragraphs, images, lists, etc)</span>';
-        var statementeditingregion = '<div contenteditable="true" class="paragraph_input" id="actively_editing_statement" placeholder="first paragraph of statement" data-source_id="' + new_statement_p_id + '" data-parent_id="' + new_id + '" data-parent_component="statement"></div>';
-        var statement = statement_container_start + editingregion_container_start;
-        statement += statementinstructions;
-        statement += statementeditingregion;
-        statement += editingregion_container_end + statement_container_end;
-
-        var proof_container_start = '<div class="editing_proof">';
-        var proof_container_end = '</div>';
-        var proofinstructions = '<span class="group_description">optional proof (paragraphs, images, lists, etc)</span>';
-        var proofeditingregion = '<div id="actively_editing_proof" class="paragraph_input" contenteditable="true" style="width:98%;min-height:6em;" placeholder="first paragraph of optional proof"  data-source_id="' + new_proof_p_id + '" data-parent_id="' + new_id + '" data-parent_component="proof">What is <b>bold</b> or <em>emphasized</em>?</div>';
-
-        var proof = proof_container_start + editingregion_container_start;
-        proof += proofinstructions;
-        proof += proofeditingregion;
-        proof += editingregion_container_end + proof_container_end;
-
-        this_content_container.innerHTML = title + statement + proof
-
-        $("#" + thisID).replaceWith(this_content_container);
-        $("#actively_editing_title").focus();
       } else if (editing_container_for["definition-like"].includes(new_tag) ||
                 editing_container_for["theorem-like"].includes(new_tag) ||
                 editing_container_for["remark-like"].includes(new_tag) ||
@@ -775,33 +724,6 @@ function edit_in_place(obj) {
 
         $("#" + thisID).replaceWith(this_content_container);
         $("#actively_editing_title").focus();
-      } else if (false && editing_container_for["section-like"].includes(new_tag)) {
-// reconcile with theorem-like
-
-        console.log("edit_in_place", obj)
-        var this_content_container = document.createElement('div');
-        this_content_container.setAttribute('id', "actively_editing");
-        this_content_container.setAttribute('data-objecttype', 'section-like');
-
-        var title = standard_title_form(new_id);
-
-        var content_container_start = '<div class="editing_content">';
-        var content_container_end = '</div>';
-        var editingregion_container_start = '<div class="editing_p_holder">'
-        var editingregion_container_end = '</div>'
-        var contentinstructions = '<span class="group_description">content (paragraphs, images, lists, etc)</span>';
-        var contenteditingregion = '<div contenteditable="true" class="paragraph_input" id="actively_editing_statement" style="width:98%;" placeholder="first paragraph of content" data-source_id="' + new_content_p_id + '" data-parent_id="' + new_id + '" data-parent_component="content"></div>';
-        var content = content_container_start + editingregion_container_start;
-        content += contentinstructions;
-        content += contenteditingregion;
-        content += editingregion_container_end + content_container_end;
-
-        this_content_container.innerHTML = title + content
-
-        $("#" + thisID).replaceWith(this_content_container);
-        $("#actively_editing_title").focus();
-
-
      } else {
           console.log("I do not know how to edit", new_tag)
      }
@@ -822,9 +744,6 @@ var internalSource = {  // currently the key is the HTML id
            "content": "<&>PLS<;>\n<&>vTb<;>\n<&>cak<;>"},
    "UvL": {"xml:id": "", "permid": "UvL", "ptxtag": "p", "title": "","parent": ["hPw","content"],
            "content": "    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n <ellipsis/>.\n Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n What sort of problems?\n Okay, those that involve numbers,\n functions, lines, triangles,\n <ellipsis/>.\n Whatever your conception of what mathematics is,\n try applying the concept of <q>discrete</q> to it, as defined above.\n Some math fundamentally deals with <em>stuff</em>\n that is individually separate and distinct."},
-//           "content": '246810'},
-//   "246810": '    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n <ellipsis/>.\n Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n What sort of problems?\n Okay, those that involve numbers,\n functions, lines, triangles,\n <ellipsis/>.\n Whatever your conception of what mathematics is,\n try applying the concept of <q>discrete</q> to it, as defined above.\n Some math fundamentally deals with <em>stuff</em>\n that is individually separate and distinct.',
-//   "13579": '<&>357911<;>: separate - detached - distinct - abstract.',
    "357911": {"xml:id": "356711", "permid": "", "ptxtag": "em", "title": "",
            "content": 'Synonyms'},
    "sYv": {"xml:id": "", "permid": "sYv", "ptxtag": "p", "parent": ["hPw","content"],
@@ -849,8 +768,6 @@ var internalSource = {  // currently the key is the HTML id
            "content": "At the warm-up event for Oscar's All Star Hot Dog Eating Contest, Al ate one hot dog.\n Bob then showed him up by eating three hot dogs.\n Not to be outdone, Carl ate five.\n This continued with each contestant eating two more hot dogs than the previous contestant.\n How many hot dogs did Zeno (the 26th and final contestant) eat?\n How many hot dogs were eaten all together?"},
    "223344": {"xml:id": "", "permid": "", "ptxtag": "m", "parent": ["ACU","content"],
            "content": "[0, \\infty)"}
-//           "content": '124567'},
-//   "124567": "Synonyms"
 }
 
 
@@ -958,8 +875,6 @@ function assemble_internal_version_changes() {
         for(var j=0; j < num_paragraphs; ++j) {
             // probably each paragraph is wrapped in meaningless div tags
             var this_paragraph_contents_raw = paragraph_content_list[j];
-     //       this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/^<div>/, "");
-     //       this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/<\/div>$/, "");
             this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/<\/div><div>/g, "\n");
             this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/<div>/g, "");
             this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/<\/div>/g, "");
@@ -998,14 +913,11 @@ function assemble_internal_version_changes() {
                 this_arrangement_of_objects = this_arrangement_of_objects.replace(object_before, '$1' + '\n<&>' + this_object_label + '<;>');
                 prev_id = this_object_label;
                 
-         //       this_object_internal["content"] = this_content_label;
                 this_paragraph_contents = save_internal_contents(this_paragraph_contents_raw);
                 this_object_internal["content"] = this_paragraph_contents;
-             //   this_object_internal["content"] = paragraph_content_list[j];
                 internalSource[this_object_label] = this_object_internal
                 recent_editing_actions.push("added paragraph " + this_object_label);
                 possibly_changed_ids_and_entry.push([this_object_label, "content"]);
-          //      internalSource[this_content_label] = paragraph_content_list[j];
             }
         }
         console.log("this_arrangement_of_objects was",  internalSource[parent_and_location[0]][parent_and_location[1]]);
@@ -1075,14 +987,11 @@ function html_from_internal_id(the_id, is_inner) {
                 opening_tag += ' class="paragraph_input"'
             } else if (is_inner == "inner") {
 
-                // should the id be the_id ?
-        //    var opening_tag = '<p id="' + the_object["xml:id"] + '"';
                 opening_tag += 'id="' + the_id + '"';
                 opening_tag += ' data-editable="99" tabindex="-1"';
             }
 
             opening_tag += '>';
-       //     return opening_tag + expand_condensed_source_html(the_content, "inner") + closing_tag
             return opening_tag + expand_condensed_source_html(the_content, is_inner) + closing_tag
         }
 
@@ -1098,17 +1007,14 @@ function html_from_internal_id(the_id, is_inner) {
         var the_content = the_object["content"];
         console.log("inserting an li with content", the_content);
         the_content = expand_condensed_source_html(the_content, is_inner);
-  //      the_content = expand_condensed_source_html(the_content, "inner");
         console.log("which now has content", the_content);
 
         if ("edit inner".includes(is_inner)) {
                 // should the id be the_id ?
-        //    var opening_tag = '<p id="' + the_object["xml:id"] + '"';
             var opening_tag = '<li id="' + the_id + '"';
             opening_tag += ' data-editable="99" tabindex="-1"';
             opening_tag += '>';
             var closing_tag = '</li>';
-        //    return opening_tag + expand_condensed_source_html(the_content, "inner") + closing_tag
             return opening_tag + the_content + closing_tag
         }
 
@@ -1156,7 +1062,6 @@ function html_from_internal_id(the_id, is_inner) {
 
         object_in_html.setAttribute("id", the_id);
 
-   //     object_heading_html = '<h6 class="heading" data-parent_id="' + the_id + '" data-editable="99" tabindex="-1">';
         object_heading_html = '<' + headertag;
         object_heading_html += ' class="heading" data-parent_id="' + the_id + '">';
         var objecttype_capped = ptxtag.charAt(0).toUpperCase() + ptxtag.slice(1);
@@ -1193,7 +1098,6 @@ function html_from_internal_id(the_id, is_inner) {
             proof_in_html.setAttribute("class", "hiddenproof");
             proof_in_html.innerHTML = '<a data-knowl="" class="id-ref proof-knowl original" data-refid="hk-Jkl"><h6 class="heading" data-editable="99" tabindex="-1"><span class="type">Proof<span class="period">.</span></span></h6></a>';
 
-        //    document.activeElement.insertAdjacentElement("afterend", proof_in_html)
             the_html_objects.push(proof_in_html)
         }
 
@@ -1334,8 +1238,6 @@ function local_editing_action(e) {
 function main_menu_navigator(e) {  // we are not currently editing
                               // so we are building the menu for the user to decide what/how to edit
 
- // too early   e.preventDefault();  // we are navigating a menu, we we control what keystrokes mean
-  //  if ((e.code == "Tab" || e.code == "ArrowDown") && prev_char.code != "ShiftLeft") {
     if ((e.code == "Tab" || e.code == "ArrowDown") && !e.shiftKey) {
        e.preventDefault();
        console.log("hit a Tab (or ArrowDown");
@@ -1365,22 +1267,14 @@ function main_menu_navigator(e) {  // we are not currently editing
 
                    edit_menu_for(enclosing_block.getAttribute("id"), "leaving");
                    console.log("focus is on",  $(":focus"));
-              //     enclosing_block.classList.remove("may_select");
-              //     enclosing_block.classList.add("may_leave");
-               //    document.getElementById('choose_current').focus();
-               //    document.getElementById('enter_choice').focus();
-               //    document.getElementById('edit_menu_holder').focus();
                    console.log("document.getElementById('enter_choice')", document.getElementById('enter_choice'), $(":focus"));
                    return
                 }
                 else {
                    console.log("moving to next *editable* object A");
                    var this_motion = "entering";
-    /////////               $(this_menu).parent().next('[data-editable="99"]').focus();
-          ////         $(this_menu).parent().nextAll('[data-editable="99"]')[0].focus();
                    var next_to_edit = next_editable_of($(this_menu).parent(), "siblings");
                    console.log("next_to_edit", next_to_edit, "siblings of", $(this_menu).parent());
-           //        $(this_menu).parent().nextAll('.heading > [data-editable="99"], [data-editable="99"]')[0].focus();
                    if (!next_to_edit.length) {
                        next_to_edit = next_editable_of($(this_menu).parent(), "previoussiblings");
                    }
@@ -1405,11 +1299,9 @@ function main_menu_navigator(e) {  // we are not currently editing
                block_we_are_leaving.classList.remove("may_leave");
                console.log("$(block_we_are_leaving)",$(block_we_are_leaving), "xxxx", $(block_we_are_leaving).next(), "yyyyy", $(block_we_are_leaving).next('[data-editable="99"]'));
                console.log("moving to next object B");
-         //      next_block_to_edit = $(this_menu).next('.heading > [data-editable="99"], [data-editable="99"]');
                next_block_to_edit = next_editable_of($(this_menu), "siblings")[0];
                this_menu.remove()
                $(next_block_to_edit).focus();
-       //        $(block_we_are_leaving).next('[data-editable="99"]').focus();
                console.log("left a block.  focus is now on", $(":focus"));
            } else if (this_choice.getAttribute('data-location') == 'inline') {
                console.log("options for something inline");
@@ -1419,7 +1311,6 @@ function main_menu_navigator(e) {  // we are not currently editing
                thing_to_edit.classList.remove("may_select");
                this_menu.remove();
                upcoming_blocks = next_editable_of($(thing_to_edit), "siblings");
-       //        if (upcoming_blocks = $(thing_to_edit).nextAll('.heading > [data-editable="99"], [data-editable="99"]')) {
                if (upcoming_blocks.length) {
                    next_block_to_edit = upcoming_blocks[0];
                    next_block_to_edit.classList.add("may_select");
@@ -1433,7 +1324,6 @@ function main_menu_navigator(e) {  // we are not currently editing
        }
        // and add the option to edit the next object
        if (!document.getElementById('edit_menu_holder') && !document.getElementById('local_menu_holder')) {  // we are not already navigating a menu
-    //       e.preventDefault();
             console.log("menu place 6");
 
            edit_menu_for(document.activeElement.id, "entering");        // so create one
@@ -1498,10 +1388,6 @@ function main_menu_navigator(e) {  // we are not currently editing
 
                    edit_menu_for(enclosing_block.getAttribute("id"), "entering");
                    console.log("focus is on",  $(":focus"));
-         //          enclosing_block.classList.add("may_select");
-               //    document.getElementById('choose_current').focus();
-                //   document.getElementById('enter_choice').focus();
-                //   document.getElementById('edit_menu_holder').focus();
                    console.log("document.getElementById('enter_choice')", document.getElementById('enter_choice'), $(":focus"));
                    return
                 }
@@ -1560,7 +1446,6 @@ function main_menu_navigator(e) {  // we are not currently editing
                var this_menu = document.getElementById("edit_menu_holder");
                block_we_are_reentering = this_menu.previousSibling;
                block_we_are_reentering.classList.remove("may_leave");
-         //      $(block_we_are_reentering).children('.heading > [data-editable="99"], [data-editable="99"]')[0].focus();
                next_editable_of(block_we_are_reentering, "children")[0].focus();
                this_menu.remove();
                // put  menu on the item at the top of the block_we_are_reentering
@@ -1568,8 +1453,6 @@ function main_menu_navigator(e) {  // we are not currently editing
             console.log("menu place 9");
 
                edit_menu_for(document.activeElement, "entering");
-      //         $(":focus").addClass("may_select");
-         //      document.getElementById('edit_menu_holder').focus();
                return
 
             } else {
@@ -1664,7 +1547,6 @@ function main_menu_navigator(e) {  // we are not currently editing
                 object_to_be_entered.classList.remove("may_select");
                 var object_to_be_entered_type = object_to_be_entered.tagName;
              //   alert("Entering " + object_to_be_edited_type + " not implemented yet");
-           //     $(object_to_be_entered).children('.heading > [data-editable="99"], [data-editable="99"]')[0].focus();
                 console.log('next_editable_of(object_to_be_entered, "children")', next_editable_of(object_to_be_entered));
                 console.log("children", next_editable_of(object_to_be_entered, "children")[0]);
                 next_editable_of(object_to_be_entered, "children")[0].focus();
@@ -1675,12 +1557,8 @@ function main_menu_navigator(e) {  // we are not currently editing
             console.log("menu place 10");
             console.log("document.activeElement", document.activeElement);
 
-            //    id_for_editing = (document.activeElement.id || document.activeElement.getAttribute("data-parent_id"));
 // not right:  data-parent_id is used when we want to change the title or tag
-             //   edit_menu_for(id_for_editing, "entering");
                   edit_menu_for(document.activeElement, "entering");
-       //         $(":focus").addClass("may_select");
-          //      document.getElementById('edit_menu_holder').focus();
                 return
             // consolidate leave/stay ?
 //  the leave/stay is now handles by Tab, so delete the next couple things
@@ -1692,7 +1570,6 @@ function main_menu_navigator(e) {  // we are not currently editing
             } else if (current_active_menu_item.getAttribute("data-location") == "stay") {
                     // we are at the bottom of a block and want to stay in it, so go to the top of it
                 var object_we_are_in = $('#edit_menu_holder').prev();
-          //      object_we_are_in.first('.heading > [data-editable="99"], [data-editable="99"]').focus();
                 next_editable_of(object_we_are_in, "siblings")[0].focus();
             }
         } else { // else check if the selected items leads to a submenu
@@ -1702,7 +1579,6 @@ function main_menu_navigator(e) {  // we are not currently editing
             console.log("apparently selected", current_active_menu_item);
             current_active_menu_item.removeAttribute("id");
             current_active_menu_item.setAttribute('class', 'chosen');
- //       current_active_menu_item.setAttribute('style', 'background:#ddf;');
             current_active_menu_item_environment = current_active_menu_item.getAttribute('data-env');
 
             if (current_active_menu_item_environment in inner_menu_for()) {  // object names a collection, so make submenu
@@ -1710,12 +1586,10 @@ function main_menu_navigator(e) {  // we are not currently editing
                 var edit_submenu = document.createElement('ol');
                 edit_submenu.innerHTML = menu_options_for(current_active_menu_item_environment, "inner");
      //           console.log("removing id from", current_active_menu_item);
-     //           current_active_menu_item.removeAttribute("id");
                 current_active_menu_item.insertAdjacentElement("beforeend", edit_submenu);
           //      next_menu_item.setAttribute("id", "choose_current");
                 document.getElementById('choose_current').focus();
           //      console.log("setting focus AA on",next_menu_item);
-          //      next_menu_item.focus();
             } else {  // we just selected an action, so do it
                       // that probably involves adding something before or after a given object
                 var new_object_type = current_active_menu_item.getAttribute("data-env");
@@ -1727,9 +1601,6 @@ function main_menu_navigator(e) {  // we are not currently editing
                     var new_obj = create_object_to_edit(new_object_type, object_near_new_object, before_after);
                //     edit_in_place("", [new_object_type, object_near_new_object, before_after]);
                     edit_in_place(new_obj);
-           //     document.getElementById('starting_point_for_editing').focus();
-             //////       document.querySelectorAll('[class~="starting_point_for_editing"]')[0].focus();
-     //           object_near_new_object.focus();
                     object_near_new_object.classList.remove("may_select");
                     document.getElementById('edit_menu_holder').remove();
 
@@ -1740,12 +1611,9 @@ function main_menu_navigator(e) {  // we are not currently editing
                  } else {
                     alert("don't yet know about " + new_object_type);
                     document.getElementById('edit_menu_holder').parentElement.focus();
-      //              document.getElementById('edit_menu_holder').remove();
             console.log("menu place 11");
 
                     edit_menu_for(document.activeElement.id, "entering");
-            // this should be done automatically by edit_menu_for()
-            //        document.getElementById('edit_menu_holder').focus();
                 }
             }
 
@@ -1777,12 +1645,10 @@ function main_menu_navigator(e) {  // we are not currently editing
             current_object_being_edited = document.getElementById('edit_menu_holder').parentNode;
             parent_object_to_edit = current_object_being_edited.parentNode;
             console.log("parent_object_to_edit", parent_object_to_edit);
-   //         document.getElementById('edit_menu_holder').remove();
             current_object_being_edited.classList.remove("may_select");
             console.log("menu place 13");
 
             edit_menu_for(parent_object_to_edit.id, "entering");
-  //          parent_object_to_edit.classList.add("may_select");
         }
     } else if ((key_hit = e.code.toLowerCase()) != e.code.toUpperCase()) {  //  supposed to check if it is a letter
         key_hit = key_hit.substring(3);  // remove forst 3 characters, i.e., "key"
