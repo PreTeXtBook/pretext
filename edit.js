@@ -40,7 +40,7 @@ var recent_editing_actions = [];
 var current_editing = {
     "level": 0,
     "location": [0],
-    "tree": [document.getElementById["hPw"]]
+    "tree": [document.getElementById("hPw")]
 }
 
 function randomstring(len) {
@@ -1236,7 +1236,143 @@ function local_editing_action(e) {
 }
 
 function main_menu_navigator(e) {  // we are not currently editing
-                              // so we are building the menu for the user to decide what/how to edit
+                              // so we are building the menu, and possibly moving aroung the document,
+                              //for the user to decide what/how to edit
+
+// There are 3 modes:
+//   #enter_choice, data-location="next"
+//   #enter_choice, data-location="stay"
+// above means we are deciding whenter to edit/enter/leave and object, or to move on
+//   #choose_current
+// 3rd option means we already have a menu
+
+    if (theEnterChoice = document.getElementById("enter_choice")) {
+        console.log("enter_choice", e);
+        var theMotion = theEnterChoice.getAttribute("data-location");
+        var object_of_interest;
+        if (theMotion == "stay") {
+            object_of_interest = theEnterChoice.parentElement.previousSibling;
+        } else {
+            object_of_interest = theEnterChoice.parentElement.parentElement;
+        }
+        console.log("      MMN: want to", theMotion, "on", object_of_interest, "from", theEnterChoice)
+
+        console.log("current_editing", current_editing);
+        console.log("theEnterChoice", theEnterChoice);
+        var current_level = current_editing["level"];
+        var current_location = current_editing["location"][current_level];
+        var current_siblings =  current_editing["tree"][current_level];
+        console.log("current_level", current_level, "current_location", current_location, "current_siblings", current_siblings);
+
+        if ((e.code == "Tab" || e.code == "ArrowDown") && !e.shiftKey) {
+            e.preventDefault();
+            // go to next sibling, or stage to exit if on last sibling
+            if (current_location == (current_siblings.length - 1)) {
+                if (theMotion == "next") {  //at the end, so make "stay" menu
+                    console.log("staying");
+                    edit_menu_for(object_of_interest, "stay")
+                } else { //and end, so want to leave
+                    current_level -= 1;
+                    current_editing["level"] = current_level;
+                    current_location = current_editing["location"][current_level];
+                    current_siblings = current_editing["tree"][current_level];
+                    if (current_location == (current_siblings.length - 1)) {
+                        edit_menu_for(current_siblings[current_location], "stay")
+                    } else {
+                        edit_menu_for(current_siblings[current_location], "entering")
+                    }
+                }
+            } else {
+                console.log("moving to the next editable sibling");
+                current_location += 1;
+                current_editing["location"][current_level] += 1;
+                edit_menu_for(current_siblings[current_location], "entering")
+            }
+        } else if ((e.code == "Tab" && e.shiftKey) || e.code == "ArrowUp") {  // Shift-Tab to prevous object
+            e.preventDefault();
+            // go to previous sibling, or up one if on first sibling
+            if (current_location == 0) {
+                if (!current_level) { return "" } // already at the top, so nowhere to go, so do nothing
+// A1
+                current_level -= 1;
+                current_editing["level"] = current_level;
+                current_location = current_editing["location"][current_level];
+                current_siblings = current_editing["tree"][current_level];
+                edit_menu_for(current_siblings[current_location], "entering")
+            } else {
+                current_location -= 1;
+                current_editing["location"][current_level] = current_location;
+                edit_menu_for(current_siblings[current_location], "entering")
+            }
+        } else if (e.code == "Escape" || e.code == "ArrowLeft") {
+            e.preventDefault();
+            if (!current_level) { return "" } // already at the top, so nowhere to go, so do nothing
+// copied from A1
+                current_level -= 1;
+                current_editing["level"] = current_level;
+                current_location = current_editing["location"][current_level];
+                current_siblings = current_editing["tree"][current_level];
+                edit_menu_for(current_siblings[current_location], "entering")
+        } else if (e.code == "Enter" || e.code == "ArrowRight") {
+            e.preventDefault();
+            if (theMotion == "stay") {
+                edit_menu_for(object_of_interest, "entering");  // should that be current_location?
+                return ""
+            } 
+            var edit_submenu = document.createElement('ol');
+            edit_submenu.setAttribute('id', 'edit_menu');
+
+       //     var to_be_edited = document.getElementById('enter_choice').parentElement.parentElement;
+            var to_be_edited = object_of_interest;
+            console.log("to_be_edited", to_be_edited);
+            console.log("option", top_menu_options_for(to_be_edited));
+            edit_submenu.innerHTML = top_menu_options_for(to_be_edited);
+            $("#enter_choice").replaceWith(edit_submenu);
+            document.getElementById('choose_current').focus();
+        }
+        console.log("   Just handled the case of enter_choice");
+        return ""
+
+    } else if (theChooseCurrent = document.getElementById("choose_current")) {
+        var dataLocation = theChooseCurrent.getAttribute("data-location");  // may be null
+        var object_of_interest = document.getElementById("edit_menu_holder").parentElement;
+        current_level = current_editing["level"];
+        current_location = current_editing["location"][current_level];
+        current_siblings = current_editing["tree"][current_level];
+
+        if (e.code == "Enter" || e.code == "ArrowRight") {
+
+            if (dataLocation == "enter") {  // we are moving down into an object
+
+                console.log("current_active_menu_item", current_active_menu_item);
+            //    this_menu = document.getElementById('edit_menu_holder');
+                var object_to_be_entered = object_of_interest;
+                console.log("object_to_be_entered", object_to_be_entered);
+            //    this_menu.remove();
+                object_to_be_entered.classList.remove("may_select");
+                console.log('next_editable_of(object_to_be_entered, "children")', next_editable_of(object_to_be_entered));
+                editableChildren = next_editable_of(object_to_be_entered, "children");
+                current_level += 1;
+                current_editing["level"] = current_level;
+                current_editing["location"].push(0);
+                current_editing["tree"].push(editableChildren);                
+                console.log("current_editing", current_editing);
+
+                editableChildren[0].focus();
+                console.log("object_to_be_entered", object_to_be_entered);
+                console.log("with some children", editableChildren);
+               // put  menu on the item at the top of the block_we_are_reentering
+                   // this is a repeat of a Tab case, so consolidate
+            console.log("menu place 10");
+            console.log("document.activeElement", document.activeElement);
+
+// not right:  data-parent_id is used when we want to change the title or tag
+                 edit_menu_for(document.activeElement, "entering");
+
+                return ""
+            }
+        }
+    } //  tmp #choose_current
 
     if ((e.code == "Tab" || e.code == "ArrowDown") && !e.shiftKey) {
        e.preventDefault();
@@ -1326,6 +1462,8 @@ function main_menu_navigator(e) {  // we are not currently editing
        if (!document.getElementById('edit_menu_holder') && !document.getElementById('local_menu_holder')) {  // we are not already navigating a menu
             console.log("menu place 6");
 
+           alert("at menu place 6");  // not sure we can ever get here
+
            edit_menu_for(document.activeElement.id, "entering");        // so create one
     //       $(":focus").addClass("may_select");
            console.log("element with fcous is", $(":focus"));
@@ -1394,7 +1532,14 @@ function main_menu_navigator(e) {  // we are not currently editing
                 else {
                    console.log("moving to next object C");
      /////////              $(this_menu).parent().prev('[data-editable="99"]').focus();
-                   next_editable_of($(this_menu).parent(), "previoussiblings")[0].focus();
+                   var previous_editable_siblings = next_editable_of($(this_menu).parent(), "previoussiblings");
+                   console.log("previous_editable_siblings", previous_editable_siblings);
+                   if (previous_editable_siblings.length) {
+               //        next_editable_of($(this_menu).parent(), "previoussiblings")[0].focus();
+                       previous_editable_siblings[0].focus();
+                   } else {
+                       $(this_menu).parent().parent().focus()
+                   }
              //      $(this_menu).parent().prevAll('.heading > [data-editable="99"], [data-editable="99"]')[0].focus();
                    this_menu.remove()
                    // copied.  consolidate
