@@ -132,8 +132,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We generally want to chunk longer HTML output -->
 <xsl:variable name="chunk-level">
     <xsl:choose>
-        <xsl:when test="$chunk.level != ''">
-            <xsl:value-of select="$chunk.level" />
+        <xsl:when test="$chunk-level-entered != ''">
+            <xsl:value-of select="$chunk-level-entered" />
         </xsl:when>
         <xsl:when test="$root/book/part">3</xsl:when>
         <xsl:when test="$root/book">2</xsl:when>

@@ -273,9 +273,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We set this variable a bit differently -->
 <!-- for different conversions, so this is  -->
 <!-- basically an abstract implementation   -->
-<xsl:variable name="chunk-level">
-    <xsl:text>0</xsl:text>
-</xsl:variable>
+<xsl:variable name="chunk-level" select="number(0)"/>
 
 <!-- Flag Table of Contents, or not, with boolean variable -->
 <xsl:variable name="b-has-toc" select="$toc-level != 0" />

@@ -21,6 +21,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <publication>
 
+    <!-- Common Options -->
+    <common>
+        <chunking level="0"/>
+    </common>
+
     <!-- HTML-Specific Options -->
     <html>
         <!-- Several embedded calculators are available            -->

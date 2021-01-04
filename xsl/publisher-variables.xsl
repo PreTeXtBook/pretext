@@ -55,7 +55,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- ############## -->
 <!-- Common Options -->
-<!-- ############### -->
+<!-- ############## -->
+
+<xsl:variable name="chunks">
+    <xsl:choose>
+        <xsl:when test="$publication/common/chunking/@level">
+            <xsl:value-of select="$publication/common/chunking/@level"/>
+        </xsl:when>
+        <!-- legacy, but useful as stringparam for testing regime -->
+        <xsl:when test="not($chunk.level = '')">
+            <xsl:value-of select="$chunk.level"/>
+        </xsl:when>
+    </xsl:choose>
+</xsl:variable>
+<!-- We do not convert this to a number since various   -->
+<!-- conversions will consume this and produce their    -->
+<!-- own defaults, and we need to recognize "no choice" -->
+<!-- as an empty string -->
+<xsl:variable name="chunk-level-entered" select="string($chunks)"/>
+
 
 <!-- ############## -->
 <!-- Source Options -->
