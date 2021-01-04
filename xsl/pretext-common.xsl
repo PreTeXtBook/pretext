@@ -10527,10 +10527,11 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     </xsl:call-template>
     <!--  -->
     <!-- 2015-06-26  chunking became a general thing -->
+    <!-- 2021-01-03  rendered ineffective            -->
     <xsl:if test="$html.chunk.level != ''">
     <xsl:call-template name="parameter-deprecation-message">
         <xsl:with-param name="date-string" select="'2015-06-26'" />
-        <xsl:with-param name="message" select="'the  html.chunk.level  parameter has been replaced by simply  chunk.level  and now applies more generally'" />
+        <xsl:with-param name="message" select="'the  html.chunk.level  parameter has been replaced by the common/chunking/@level  entry in the publisher file.  It will be ignored.  Please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
             <xsl:with-param name="incorrect-use" select="($html.chunk.level != '')" />
         </xsl:call-template>
     </xsl:if>

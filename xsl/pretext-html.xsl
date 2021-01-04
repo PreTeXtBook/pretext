@@ -135,11 +135,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$chunk.level != ''">
             <xsl:value-of select="$chunk.level" />
         </xsl:when>
-        <!-- HTML-specific deprecated 2015/06      -->
-        <!-- But still effective if not superseded -->
-        <xsl:when test="$html.chunk.level != ''">
-            <xsl:value-of select="$html.chunk.level" />
-        </xsl:when>
         <xsl:when test="$root/book/part">3</xsl:when>
         <xsl:when test="$root/book">2</xsl:when>
         <xsl:when test="$root/article/section">1</xsl:when>
