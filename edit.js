@@ -363,6 +363,24 @@ function top_menu_options_for(this_obj) {
 function edit_menu_for(this_obj_or_id, motion) {
     console.log("make edit menu", motion, "for", this_obj_or_id);
 
+    // delete the old menu, if it exists
+    if (current_menu = document.getElementById('edit_menu_holder')) {
+        console.log("current_menu", current_menu);
+        console.log("this_choice", document.getElementById('enter_choice'));
+        if (this_choice = document.getElementById('enter_choice')) {
+            if (this_choice.getAttribute("data-location") == "stay") {
+                current_menu.previousSibling.classList.remove("may_leave")
+            } else {
+                current_menu.parentElement.classList.remove("may_select");
+            }
+        }
+   //     this_obj.classList.remove("may_select");
+   //     this_obj.classList.remove("may_leave");
+   //     current_menu.parentElement.classList.remove("may_select");
+   //     current_menu.previousSibling.classList.remove("may_leave");
+        current_menu.remove();
+    }
+
     if (!this_obj_or_id) {
         console.log("error: empty this_obj_or_id", motion);
         return ""
@@ -376,6 +394,7 @@ function edit_menu_for(this_obj_or_id, motion) {
 
     if (motion == "entering") {
         menu_location = "afterbegin";
+        this_obj.classList.remove("may_leave"); 
         this_obj.classList.add("may_select");
         if (this_obj.tagName.toLowerCase() in inline_tags) {
             this_obj.classList.add("inline");
@@ -383,6 +402,7 @@ function edit_menu_for(this_obj_or_id, motion) {
     } else { menu_location = "afterend";
         this_obj.classList.remove("may_select");
         this_obj.classList.add("may_leave"); 
+        console.log("added may_leave to", this_obj)
     }  // when motion is 'leaving'
 
     var edit_menu_holder = document.createElement('div');
@@ -392,11 +412,7 @@ function edit_menu_for(this_obj_or_id, motion) {
     console.log("adding menu for", this_obj_or_id, "menu_location", menu_location);
     console.log("which has tag", this_obj.tagName);
     console.log("does", this_obj.classList, "include type", this_obj.classList.contains("type"));
-    // delete the old menu, if it exists
-    if (current_menu = document.getElementById('edit_menu_holder')) {
-        current_menu.parentElement.classList.remove("may_select");
-        current_menu.remove();
-    }
+
     this_obj.insertAdjacentElement(menu_location, edit_menu_holder);
 
     var edit_option = document.createElement('span');
@@ -1268,24 +1284,34 @@ function main_menu_navigator(e) {  // we are not currently editing
             e.preventDefault();
             // go to next sibling, or stage to exit if on last sibling
             if (current_location == (current_siblings.length - 1)) {
-                if (theMotion == "next") {  //at the end, so make "stay" menu
-                    console.log("staying");
-                    edit_menu_for(object_of_interest, "stay")
-                } else { //and end, so want to leave
+     //           if (theMotion == "next") {  //at the end, so make "stay" menu on the parent
+     //               console.log("staying");
+     //               edit_menu_for(object_of_interest, "stay")
+     //           } else { //and end, so want to leave
                     current_level -= 1;
-                    current_editing["level"] = current_level;
                     current_location = current_editing["location"][current_level];
+                    current_editing["level"] = current_level;
+                    current_editing["location"][current_level] = current_location;
                     current_siblings = current_editing["tree"][current_level];
-                    if (current_location == (current_siblings.length - 1)) {
-                        edit_menu_for(current_siblings[current_location], "stay")
-                    } else {
-                        edit_menu_for(current_siblings[current_location], "entering")
-                    }
-                }
+          //          if (current_location == (current_siblings.length - 1)) {
+              console.log("stay menu A");
+                    object_of_interest.classList.remove("may_leave");
+                    object_of_interest.classList.remove("may_elect");
+                        edit_menu_for(current_siblings[current_location], "leaving")
+          //          } else {
+          //              edit_menu_for(current_siblings[current_location], "entering")
+          //          }
+      //          }
             } else {
                 console.log("moving to the next editable sibling");
+                console.log(current_location, "was", current_editing);
                 current_location += 1;
-                current_editing["location"][current_level] += 1;
+                object_of_interest.classList.remove("may_leave");
+                object_of_interest.classList.remove("may_elect");
+              console.log("stay menu B");
+         //       current_editing["location"][current_level] += 1;
+                current_editing["location"][current_level] = current_location;
+                console.log(current_location, "is", current_editing);
                 edit_menu_for(current_siblings[current_location], "entering")
             }
         } else if ((e.code == "Tab" && e.shiftKey) || e.code == "ArrowUp") {  // Shift-Tab to prevous object
@@ -1350,12 +1376,13 @@ function main_menu_navigator(e) {  // we are not currently editing
                 console.log("object_to_be_entered", object_to_be_entered);
             //    this_menu.remove();
                 object_to_be_entered.classList.remove("may_select");
+                object_to_be_entered.classList.remove("may_leave");
                 console.log('next_editable_of(object_to_be_entered, "children")', next_editable_of(object_to_be_entered));
                 editableChildren = next_editable_of(object_to_be_entered, "children");
                 current_level += 1;
                 current_editing["level"] = current_level;
-                current_editing["location"].push(0);
-                current_editing["tree"].push(editableChildren);                
+                current_editing["location"][current_level] = 0;
+                current_editing["tree"][current_level] = editableChildren;
                 console.log("current_editing", current_editing);
 
                 editableChildren[0].focus();
@@ -1432,6 +1459,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                console.log("again:  this_menu", this_menu, "this_menu.previousSibling", this_menu.previousSibling);
                console.log("are they the sme?", document.getElementById('edit_menu_holder') == this_menu, document.getElementById('edit_menu_holder'), this_menu);
                block_we_are_leaving = this_menu.previousSibling;
+               console.log("here B");
                block_we_are_leaving.classList.remove("may_leave");
                console.log("$(block_we_are_leaving)",$(block_we_are_leaving), "xxxx", $(block_we_are_leaving).next(), "yyyyy", $(block_we_are_leaving).next('[data-editable="99"]'));
                console.log("moving to next object B");
@@ -1444,18 +1472,22 @@ function main_menu_navigator(e) {  // we are not currently editing
                thing_to_edit = document.getElementById("edit_menu_holder").parentElement;
                source_of_thing_to_edit = internalSource[thing_to_edit.parentElement.id]; 
                console.log("thing we are going to edit", thing_to_edit, "which has title", source_of_thing_to_edit["title"]);
+               console.log("here C");
                thing_to_edit.classList.remove("may_select");
                this_menu.remove();
                upcoming_blocks = next_editable_of($(thing_to_edit), "siblings");
                if (upcoming_blocks.length) {
                    next_block_to_edit = upcoming_blocks[0];
+               console.log("here D");
                    next_block_to_edit.classList.add("may_select");
                } else {
                    next_block_to_edit = thing_to_edit.parentElement;
+               console.log("here E");
                    next_block_to_edit.classList.add("may_leave");
                }
                $(next_block_to_edit).focus();
                console.log("next_block_to_edit", next_block_to_edit);
+               console.log("here F");
            }  else { alert("Error:  enter_choice without data-location") }
        }
        // and add the option to edit the next object
