@@ -28,6 +28,19 @@
         </cd>This file should reduce the many other string parameters in use, and reduce the need for extra <init>XSL</init> files (<xref ref="processing-thin-xsl"/>).</p>
     </section>
 
+    <section xml:id="publisher-levels">
+        <title>Levels Explained</title>
+        <idx>levels</idx>
+
+        <p>Every <pretext/> document has a hierarchy, even if it might not be very deep.  As an extreme example, for a sub-sub-section of a book, the <tag>subsubsection</tag> is contained in a <tag>subsection</tag>, that <tag>subsection</tag> is contained in a <tag>section</tag>, that <tag>section</tag> is contained in a <tag>chapter</tag>, and that <tag>chapter</tag> is contained in the <tag>book</tag>.  Each division of a document has a <term>level</term>, and the overall <term>root</term> element is always at level 0 (the <tag>book</tag> in the example).  Each other division is at some <tag>depth</tag>, computed by counting from the root.  So the <tag>subsubsection</tag> in the example is at level 4.</p>
+
+        <p>Many aspects of the different outputs produced can be customized, typically via the publisher file (<xref ref="publisher-file"/>), based on how much of the hierarchy is used or made visible.  A good example is the Table of Contents.  If the level of the Table of Contents of a book is set to 2, then the Table of Contents will be <q>two-deep</q> or have <q>two levels</q> of entries.  More precisely, there will be titles (and maybe page numbers) for every <tag>chapter</tag> and every <tag>section</tag>.</p>
+
+        <p>When hierarchical numbering is customized by specifying a level, the number of an object will have as many separators (periods, typically) as the level given.  Here's why.  Suppose equations are set to be numbered at level 2.  Then two levels of the hierarchy will be used to create the initial part of the number.  So in an <tag>article</tag>, Equation 5.2.34 will be in Subsection 2, of Chapter 5, and then will be the 34th equation of that sub-section.  Two levels: one separator to describe the division, one less that the number of levels (this is the <term>structure number</term>) and a second separator to set off the count within the division (the <term>serial number</term>).  So, <m>(2 - 1) + 1 = 2</m> separators.  See more on numbering at <xref provisional="publisher-numbering"/>.</p>
+
+        <p>Notice that you make no assumptions or decisions in your source about the depth of the Table of Contents, nor the numbering of equations.  At any time, right up to the completion of your project (or later!), you can change this aspect of your output with a nearly trivial edit in the publisher file.  Nice.</p>
+    </section>
+
     <section xml:id="processing-parameters">
         <title>Processing Parameters</title>
 
