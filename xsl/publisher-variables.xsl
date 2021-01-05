@@ -1540,6 +1540,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- 2021-01-03 chunk.level to publisher file -->
 <xsl:param name="chunk.level" select="''" />
+<!-- 2021-01-03 toc.level to publisher file -->
+<xsl:param name="toc.level" select="''" />
+
 
 <!-- Deprecated 2021-01-23, but still respected -->
 <xsl:param name="html.knowl.theorem" select="''" />

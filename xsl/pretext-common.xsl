@@ -143,10 +143,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Otherwise ('yes'), todo's show in red paragraphs, -->
 <!-- provisional cross-references show in red          -->
 <xsl:param name="author.tools" select="''" />
-<!-- How many levels to table of contents  -->
-<!-- Not peculiar to HTML or LaTeX or etc. -->
-<!-- Sentinel indicates no choice made     -->
-<xsl:param name="toc.level" select="''" />
 <!-- How many levels in numbering of theorems, etc     -->
 <!-- Followed by a sequential number across that level -->
 <!-- For example "2" implies Theorem 5.3.12 is         -->
@@ -11068,6 +11064,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2021-01-03'" />
         <xsl:with-param name="message" select="'the  chunk.level  parameter has been replaced by the  common/chunking/@level  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($chunk.level != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2021-01-03  toc.level now in publisher file -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-03'"/>
+        <xsl:with-param name="message" select="'the  toc.level  parameter has been replaced by the  common/tableofcontents/@level  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($toc.level != '')" />
     </xsl:call-template>
     <!-- 2020-11-23  directory.images replaced by publisher file specification -->
     <!-- Reverse this soon, hot fix -->
