@@ -448,7 +448,7 @@ function edit_menu_for(this_obj_or_id, motion) {
         }
     } else {
         edit_option.setAttribute('data-location', 'stay');
-        edit_option.innerHTML = "continue editing [this object]";
+        edit_option.innerHTML = "continue editing " + this_obj.tagName;
     }
     document.getElementById("edit_menu_holder").insertAdjacentElement("afterbegin", edit_option);
     document.getElementById('edit_menu_holder').focus();
@@ -1361,12 +1361,16 @@ function main_menu_navigator(e) {  // we are not currently editing
 
     } else if (theChooseCurrent = document.getElementById("choose_current")) {
         var dataLocation = theChooseCurrent.getAttribute("data-location");  // may be null
+        var dataAction = theChooseCurrent.getAttribute("data-action");  // may be null
         var object_of_interest = document.getElementById("edit_menu_holder").parentElement;
         current_level = current_editing["level"];
         current_location = current_editing["location"][current_level];
         current_siblings = current_editing["tree"][current_level];
+        console.log("in choose_current", dataLocation, "of", object_of_interest);
+        console.log("dataAction ", dataAction);
 
         if (e.code == "Enter" || e.code == "ArrowRight") {
+            e.preventDefault;
 
             if (dataLocation == "enter") {  // we are moving down into an object
 
@@ -1394,26 +1398,24 @@ function main_menu_navigator(e) {  // we are not currently editing
             console.log("document.activeElement", document.activeElement);
 
 // not right:  data-parent_id is used when we want to change the title or tag
-                 edit_menu_for(document.activeElement, "entering");
+           //      edit_menu_for(document.activeElement, "entering");
+                 edit_menu_for(object_of_interest, "entering");
 
                 return ""
+            } else if (dataAction == "edit") {
+               console.log("going to edit", object_of_interest);
+               edit_in_place(object_of_interest);
             }
-        }
-    } //  tmp #choose_current
+        } else if ((e.code == "Tab" || e.code == "ArrowDown") && !e.shiftKey) {
+            e.preventDefault();
+            console.log("hit a Tab (or ArrowDown");
+            console.log("prev_char", prev_char.code, "xxxx", prev_char);
+            console.log("focus is on", $(":focus"));
 
-    if ((e.code == "Tab" || e.code == "ArrowDown") && !e.shiftKey) {
-       e.preventDefault();
-       console.log("hit a Tab (or ArrowDown");
-       console.log("prev_char", prev_char.code, "xxxx", prev_char);
-       console.log("focus is on", $(":focus"));
-
-       // we are tabbing along deciding what component to edit
-       // so a Tab means to move on
-       // so remove the option to edit one object
-       if (this_choice = document.getElementById('enter_choice')) {
+//  xxxxxxxxxxx
+       if (false && document.getElementById('enter_choice')) {
+           this_choice = document.getElementById('enter_choice');
            console.log("there already is an 'enter_choice'");
-           // there are two cases:  1) we are at the top of a block (and so may enter it or add near it, or move on)
-           //                       2) we are at the bottom (actually, after) a block, and may return to it, or move on
            var this_menu = document.getElementById("edit_menu_holder");
            console.log("this_menu", this_menu);
            console.log("this_choice", this_choice);
@@ -1490,6 +1492,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                console.log("here F");
            }  else { alert("Error:  enter_choice without data-location") }
        }
+//   xxxxxxxxx
        // and add the option to edit the next object
        if (!document.getElementById('edit_menu_holder') && !document.getElementById('local_menu_holder')) {  // we are not already navigating a menu
             console.log("menu place 6");
@@ -1534,7 +1537,9 @@ function main_menu_navigator(e) {  // we are not currently editing
         next_menu_item.focus();
       }
 
-    } else if ((e.code == "Tab" && e.shiftKey) || e.code == "ArrowUp") {  // Shift-Tab to prevous object
+    } //  tmp #choose_current
+
+     else if ((e.code == "Tab" && e.shiftKey) || e.code == "ArrowUp") {  // Shift-Tab to prevous object
      // recopied code:  consolidate
         e.preventDefault();
         console.log("just saw a", e.code);
@@ -1852,6 +1857,7 @@ function main_menu_navigator(e) {  // we are not currently editing
         }
     }
 }
+}
 
 console.log("adding tab listener");
 
@@ -1908,5 +1914,14 @@ document.addEventListener('focus', function() {
 }, true);
 
 // retrieve_previous_editing();
-console.log("retrieved previous", internalSource)
+console.log("retrieved previous", internalSource);
+
+// make the top level menu
+e_tree = current_editing["tree"];
+console.log("e_tree", e_tree);
+e_level = current_editing["level"];
+console.log("e_level", e_level);
+e_location = current_editing["location"];
+console.log("e_location", e_location);
+edit_menu_for(e_tree[e_level], "entering")
 
