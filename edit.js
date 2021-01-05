@@ -1369,13 +1369,68 @@ function main_menu_navigator(e) {  // we are not currently editing
         current_siblings = current_editing["tree"][current_level];
         console.log("in choose_current", dataLocation, "of", object_of_interest);
         console.log("dataAction ", dataAction);
+          // we have an active menu, and have selected an item
+          // there are three main sub-cases, depending on whether there is a data-location attribute,
+          // a data-action attribute, or a data-env attribute
+
+          // however, some actions (such as Tab and shift-Tab) are the same
+          // in each sub-case (because all we are doing is moving up and down the
+          // current list of options), so we handle those first.
+
+        if ((e.code == "Tab" || e.code == "ArrowDown") && !e.shiftKey) {
+            e.preventDefault();
+            theChooseCurrent = document.getElementById('choose_current');
+            next_menu_item = theChooseCurrent.nextSibling;
+            console.log("theChooseCurrent", theChooseCurrent, "next_menu_item", next_menu_item);
+            if (!next_menu_item) { next_menu_item = theChooseCurrent.parentNode.firstChild }
+            console.log("theChooseCurrent", theChooseCurrent, "next_menu_item", next_menu_item);
+            if (theChooseCurrent == next_menu_item) { //only one item on menu, so Tab shold move to the next editable item
+   // wasteful, clean up
+                var editable_objects = next_editable_of(document.getElementById("edit_menu_holder").parentElement.parentElement.parentElement, "children");
+                var currently_being_edited = document.getElementById("edit_menu_holder").parentElement;
+                console.log("we want to move past", currently_being_edited, "to the next of", editable_objects);
+                for (var j=0; j<editable_objects.length; ++j) {
+                    if (editable_objects[j] ==  currently_being_edited) {
+                        current_index = j;
+                        console.log("currently editing item", current_index);
+                        break
+                    }
+                }
+                if (current_index == editable_objects.length - 1) { next_index = 0 }
+                else { next_index = current_index + 1 }
+                editable_objects[next_index].focus();
+                edit_menu_for(document.activeElement, "entering");
+            }
+            theChooseCurrent.removeAttribute("id");
+            console.log("theChooseCurrent", theChooseCurrent, "next_menu_item", next_menu_item);
+//        theChooseCurrent.setAttribute("class", "chosen");
+            next_menu_item.setAttribute("id", "choose_current");
+            console.log("setting focus on",next_menu_item);
+            next_menu_item.focus();
+        }  // Tab
+          else if ((e.code == "Tab" && e.shiftKey) || e.code == "ArrowUp") {  // Shift-Tab to prevous object
+     // recopied code:  consolidate
+            e.preventDefault();
+            console.log("just saw a", e.code);
+            console.log("focus is on", $(":focus"));
+        // copied from Tab, so consolidate
+            console.log("saw an",e.code);
+            current_active_menu_item = document.getElementById('choose_current');
+            next_menu_item = current_active_menu_item.previousSibling;
+            console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
+            if (!next_menu_item) { next_menu_item = current_active_menu_item.parentNode.lastChild }
+            console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
+            current_active_menu_item.removeAttribute("id");
+            console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
+            current_active_menu_item.classList.remove("chosen");
+            next_menu_item.setAttribute("id", "choose_current");
+            console.log("setting focus on",next_menu_item);
+            next_menu_item.focus();
+  //       console.log("Error:  Shift-Tab not understood when ther eis an active menu");
+        }
 
         if (e.code == "Enter" || e.code == "ArrowRight") {
           e.preventDefault;
-          // we have an active menu, and have selected an item
-          // there are three main cases, depending on whether there is a data-location attribute,
-          // a data-action attribute, or a data-env attribute
-
 // dataLocation
           if (dataLocation) {
             if (dataLocation == "enter") {  // we are moving down into an object
@@ -1480,7 +1535,7 @@ function main_menu_navigator(e) {  // we are not currently editing
             }
           }  // dataAction
 //  qqqqqqq
-        } else if ((e.code == "Tab" || e.code == "ArrowDown") && !e.shiftKey) {
+        } else if ( false && (e.code == "Tab" || e.code == "ArrowDown") && !e.shiftKey) {
             e.preventDefault();
             console.log("hit a Tab (or ArrowDown");
             console.log("prev_char", prev_char.code, "xxxx", prev_char);
@@ -1581,6 +1636,8 @@ function main_menu_navigator(e) {  // we are not currently editing
            console.log("element with fcous is", $(":focus"));
            console.log("are we done tabbing to the next item?");
        } else {
+        alert("shoudl not be here G7");
+        if (false) {
         current_active_menu_item = document.getElementById('choose_current');
         next_menu_item = current_active_menu_item.nextSibling;
         console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
@@ -1609,6 +1666,7 @@ function main_menu_navigator(e) {  // we are not currently editing
         next_menu_item.setAttribute("id", "choose_current");
         console.log("setting focus on",next_menu_item);
         next_menu_item.focus();
+       }
       }
 
     } //  tmp #choose_current
