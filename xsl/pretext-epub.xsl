@@ -86,7 +86,7 @@
 </xsl:variable>
 
 <!-- We disable the ToC level to avoid any conflicts with chunk level -->
-<xsl:param name="toc.level" select="0" />
+<xsl:variable name="toc-level" select="number(0)" />
 
 <!-- XHTML files as output -->
 <xsl:variable name="file-extension" select="'.xhtml'" />

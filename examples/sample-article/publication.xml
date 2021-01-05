@@ -24,6 +24,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Common Options -->
     <common>
         <chunking level="0"/>
+        <tableofcontents level="3"/>
     </common>
 
     <!-- HTML-Specific Options -->

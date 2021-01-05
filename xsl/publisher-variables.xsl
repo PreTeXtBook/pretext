@@ -74,6 +74,39 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- as an empty string -->
 <xsl:variable name="chunk-level-entered" select="string($chunks)"/>
 
+<!-- A book must have a chapter              -->
+<!-- An article need not have a section      -->
+<!-- This gets replaced in -latex stylehseet -->
+<xsl:variable name="toc-level-entered">
+    <xsl:choose>
+        <xsl:when test="$publication/common/tableofcontents/@level">
+            <xsl:value-of select="$publication/common/tableofcontents/@level"/>
+        </xsl:when>
+        <!-- legacy, respect string parameter -->
+        <xsl:when test="$toc.level != ''">
+            <xsl:value-of select="$toc.level" />
+        </xsl:when>
+        <!-- defaults purely by structure, not by output format -->
+        <xsl:when test="$root/book/part/chapter/section">3</xsl:when>
+        <xsl:when test="$root/book/part/chapter">2</xsl:when>
+        <xsl:when test="$root/book/chapter/section">2</xsl:when>
+        <xsl:when test="$root/book/chapter">1</xsl:when>
+        <xsl:when test="$root/article/section/subsection">2</xsl:when>
+        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
+        <xsl:when test="$root/article">0</xsl:when>
+        <xsl:when test="$root/slideshow">0</xsl:when>
+        <xsl:when test="$root/letter">0</xsl:when>
+        <xsl:when test="$root/memo">0</xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:ERROR: Table of Contents level not determined</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="toc-level" select="number($toc-level-entered)"/>
+
+<!-- Flag Table of Contents, or not, with boolean variable -->
+<xsl:variable name="b-has-toc" select="$toc-level > 0" />
+
 
 <!-- ############## -->
 <!-- Source Options -->

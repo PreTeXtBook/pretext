@@ -163,8 +163,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- We override the default ToC structure    -->
 <!-- just to kill the ToC always for articles -->
-<xsl:variable name="toc-level">
+<xsl:variable name="toc-level-override">
     <xsl:choose>
+        <!-- this is really bad, we should not be consulting -->
+        <!-- the publisher file here, so consider a better   -->
+        <!-- way to make this override                       -->
+        <xsl:when test="$publication/common/tableofcontents/@level">
+            <xsl:value-of select="$publication/common/tableofcontents/@level"/>
+        </xsl:when>
+        <!-- legacy, respect string parameter -->
         <xsl:when test="$toc.level != ''">
             <xsl:value-of select="$toc.level" />
         </xsl:when>
@@ -174,10 +181,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$root/letter">0</xsl:when>
         <xsl:when test="$root/memo">0</xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Table of Contents level not determined</xsl:message>
+            <xsl:message>PTX:ERROR: Table of Contents level (for LateX conversion) not determined</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+<xsl:variable name="toc-level" select="number($toc-level-override)"/>
 
 <!-- font-size also dictates document class for -->
 <!-- those provided by extsizes, but we can get -->

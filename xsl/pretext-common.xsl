@@ -271,32 +271,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- basically an abstract implementation   -->
 <xsl:variable name="chunk-level" select="number(0)"/>
 
-<!-- Flag Table of Contents, or not, with boolean variable -->
-<xsl:variable name="b-has-toc" select="$toc-level != 0" />
-
-<!-- A book must have a chapter         -->
-<!-- An article need not have a section -->
-<xsl:variable name="toc-level">
-    <xsl:choose>
-        <xsl:when test="$toc.level != ''">
-            <xsl:value-of select="$toc.level" />
-        </xsl:when>
-        <xsl:when test="$root/book/part/chapter/section">3</xsl:when>
-        <xsl:when test="$root/book/part/chapter">2</xsl:when>
-        <xsl:when test="$root/book/chapter/section">2</xsl:when>
-        <xsl:when test="$root/book/chapter">1</xsl:when>
-        <xsl:when test="$root/article/section/subsection">2</xsl:when>
-        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
-        <xsl:when test="$root/article">0</xsl:when>
-        <xsl:when test="$root/slideshow">0</xsl:when>
-        <xsl:when test="$root/letter">0</xsl:when>
-        <xsl:when test="$root/memo">0</xsl:when>
-        <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Table of Contents level not determined</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
 <!-- User-supplied Numbering for Theorems, etc    -->
 <!-- Respect switch, or provide sensible defaults -->
 <xsl:variable name="numbering-theorems">
