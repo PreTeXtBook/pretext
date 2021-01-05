@@ -964,7 +964,7 @@ function assemble_internal_version_changes() {
 }
 
 function expand_condensed_source_html(text, context) {
-    console.log("qqqqqqqqq     in expand_condensed_source_html", text);
+    console.log("iiiiiii     in expand_condensed_source_html", text);
     if (text.includes("<&>")) {
         console.log("     eeeeeeeeee      expand_condensed_source_html", text);
         if (context == "edit") {
@@ -1362,6 +1362,7 @@ function main_menu_navigator(e) {  // we are not currently editing
     } else if (theChooseCurrent = document.getElementById("choose_current")) {
         var dataLocation = theChooseCurrent.getAttribute("data-location");  // may be null
         var dataAction = theChooseCurrent.getAttribute("data-action");  // may be null
+        var dataEnv = theChooseCurrent.getAttribute("data-env");  // may be null
         var object_of_interest = document.getElementById("edit_menu_holder").parentElement;
         current_level = current_editing["level"];
         current_location = current_editing["location"][current_level];
@@ -1370,8 +1371,13 @@ function main_menu_navigator(e) {  // we are not currently editing
         console.log("dataAction ", dataAction);
 
         if (e.code == "Enter" || e.code == "ArrowRight") {
-            e.preventDefault;
+          e.preventDefault;
+          // we have an active menu, and have selected an item
+          // there are three main cases, depending on whether there is a data-location attribute,
+          // a data-action attribute, or a data-env attribute
 
+// dataLocation
+          if (dataLocation) {
             if (dataLocation == "enter") {  // we are moving down into an object
 
                 console.log("current_active_menu_item", current_active_menu_item);
@@ -1389,7 +1395,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                 current_editing["tree"][current_level] = editableChildren;
                 console.log("current_editing", current_editing);
 
-                editableChildren[0].focus();
+        //        editableChildren[0].focus();
                 console.log("object_to_be_entered", object_to_be_entered);
                 console.log("with some children", editableChildren);
                // put  menu on the item at the top of the block_we_are_reentering
@@ -1399,13 +1405,81 @@ function main_menu_navigator(e) {  // we are not currently editing
 
 // not right:  data-parent_id is used when we want to change the title or tag
            //      edit_menu_for(document.activeElement, "entering");
-                 edit_menu_for(object_of_interest, "entering");
+                 console.log("menu on", editableChildren[0]);
+                 edit_menu_for(editableChildren[0], "entering");
 
                 return ""
-            } else if (dataAction == "edit") {
+            } else {  // dataLoction is beforebegin or afterend
+            //    $("#choose_current").parent().addClass("past");
+                theChooseCurrent.parentElement.classList.add("past");
+                theChooseCurrent.removeAttribute("id");
+                theChooseCurrent.classList.add("chosen");
+
+                parent_type = document.getElementById('edit_menu_holder').parentElement.parentElement.tagName.toLowerCase();
+                console.log("making a menu for", parent_type);
+                var edit_submenu = document.createElement('ol');
+                edit_submenu.innerHTML = menu_options_for(parent_type, "base");
+        //        edit_submenu.innerHTML = menu_options_for(parent_type, "inner");
+                console.log("just inserted inner menu_options_for(" + parent_type + ")", menu_options_for(parent_type, "inner"));
+            //    current_active_menu_item.insertAdjacentElement("beforeend", edit_submenu);
+                theChooseCurrent.insertAdjacentElement("beforeend", edit_submenu);
+                document.getElementById('choose_current').focus();
+                console.log("focus is on", $(":focus"));
+
+                console.log("don;t know about dataLocation", dataLocation);
+                alert("don;t know about dataLocation" + dataLocation);
+                return ""
+            }
+          }  // dataLocation
+
+// dataAction
+          if (dataAction) {
+            if (dataAction == "edit") {
                console.log("going to edit", object_of_interest);
                edit_in_place(object_of_interest);
+            } else if (dataAction == "change-env-to") {
+                    var new_env = current_active_menu_item.getAttribute("data-env");
+                    console.log("changing environment to", new_env);
+                       // #edit_menu_holder is in span.type, inside .heading, inside article
+                    to_be_edited = document.getElementById('edit_menu_holder').parentElement.parentElement.parentElement;
+                    console.log("to_be_edited", to_be_edited);
+                    var id_of_object = to_be_edited.id;
+                    var this_object_source = internalSource[id_of_object];
+                    console.log("current envoronemnt", this_object_source);
+                    var old_env = internalSource[id_of_object]["ptxtag"];
+                    internalSource[id_of_object]["ptxtag"] = new_env;
+                    recent_editing_actions.push("changed " + old_env + " to " + new_env + " " + id_of_object);
+                    console.log("the change was", "changed " + old_env + " to " + new_env + " " + id_of_object);
+                    the_whole_object = html_from_internal_id(id_of_object);
+                    console.log("B: the_whole_object", the_whole_object);
+                    $("#" + id_of_object).replaceWith(the_whole_object[0]);  // later handle multiple additions
+                    edit_menu_for(id_of_object, "entering");
+                    return ""
+
+            } else if (dataAction == 'change-env') {
+                       // #edit_menu_holder is in span.type, inside .heading, inside article
+                    current_env = document.getElementById('edit_menu_holder').parentElement.parentElement.parentElement;
+                    current_env_id = current_env.id;
+                    current_env_source = internalSource[current_env_id];
+                    current_env_name = current_env_source["ptxtag"];
+                    console.log("need menu to change", current_env_name, "in", current_env_source);
+
+                    current_active_menu_item.parentElement.classList.add("past");
+                    current_active_menu_item.removeAttribute("id");
+                    current_active_menu_item.classList.add("chosen");
+
+                    var edit_submenu = document.createElement('ol');
+                    edit_submenu.innerHTML = menu_options_for(current_env_name, "change");
+                    console.log("just inserted inner menu_options_for(parent_type)", menu_options_for(parent_type, "change"));
+                    current_active_menu_item.insertAdjacentElement("beforeend", edit_submenu);
+                    document.getElementById('choose_current').focus();
+                    console.log("focus is on", $(":focus"));
+            } else {
+                alert("I don;t know what to do llllllll dataAction", dataAction)
+                return
             }
+          }  // dataAction
+//  qqqqqqq
         } else if ((e.code == "Tab" || e.code == "ArrowDown") && !e.shiftKey) {
             e.preventDefault();
             console.log("hit a Tab (or ArrowDown");
@@ -1613,7 +1687,7 @@ function main_menu_navigator(e) {  // we are not currently editing
         next_menu_item.setAttribute("id", "choose_current");
         console.log("setting focus on",next_menu_item);
         next_menu_item.focus();
-         console.log("Error:  Shift-Tab not understood when ther eis an active menu");
+  //       console.log("Error:  Shift-Tab not understood when ther eis an active menu");
        }
     } 
     else if (e.code == "Enter" || e.code == "ArrowRight") {
@@ -1651,7 +1725,7 @@ function main_menu_navigator(e) {  // we are not currently editing
             }
         } 
            // otherwise check if there is an action associated to this choice
-           else if (document.getElementById('choose_current').hasAttribute("data-action")) {
+           else if (false && document.getElementById('choose_current').hasAttribute("data-action")) {
                 var current_active_menu_item = document.getElementById('choose_current');
                 var this_action = current_active_menu_item.getAttribute("data-action");
                 console.log("               this_action", this_action)
@@ -1702,6 +1776,7 @@ function main_menu_navigator(e) {  // we are not currently editing
         }
         // otherwise, see if we just selected a top level menu item about location
         // because that involves checking the parent to see what options are possible
+// ppppppppp
           else if (document.getElementById('choose_current').hasAttribute("data-location")) {
             var current_active_menu_item = document.getElementById('choose_current');
             console.log("location infro on",current_active_menu_item);
