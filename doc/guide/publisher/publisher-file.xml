@@ -36,6 +36,16 @@
                 <cline>/publication/common/chunking/@level</cline>
             </cd>with a whole number as the value (generally 0 is allowed).  This is critical for the construction of <init>HTML</init> output, and ignored for <latex/> output.</p>
         </subsection>
+
+        <subsection xml:id="common-toc-options">
+            <title>Table of Contents Level Option</title>
+            <idx><h>common option</h><h>table of contents level</h></idx>
+            <idx><h>table of contents</h><h>level option</h></idx>
+
+            <p>The depth of the entries in a Table of Contents is given as a level, see <xref ref="publisher-levels"/> for more about levels.  The specification is in the attribute<cd>
+                <cline>/publication/common/tableofcontents/@level</cline>
+            </cd>with a whole number as the value.  A value of 0 is used to indicate that no Table of Contents is desired.  Absent this setting, reasonable defaults are supplied, which can vary by conversion and document type.</p>
+        </subsection>
     </section>
 
     <section xml:id="publisher-file-latex">
