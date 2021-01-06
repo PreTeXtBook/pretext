@@ -18,6 +18,26 @@
         <p>This chapter is reference material for the <term>publisher file</term>, whose employment is described in <xref ref="publisher-file"/>.</p>
     </introduction>
 
+    <section xml:id="publisher-file-common">
+        <title>Common Options</title>
+        <idx>common options</idx>
+        <idx><h>publisher options</h><h>common</h></idx>
+
+        <introduction>
+            <p>These are options that might affect several conversions, though the influence may vary from one conversion to the next.</p>
+        </introduction>
+
+        <subsection xml:id="common-chunking-options">
+            <title>Common Chunking Option</title>
+            <idx><h>common option</h><h>chunking</h></idx>
+            <idx><h>chunking option</h><h>chunking</h></idx>
+
+            <p>Many outputs are produced as a collection of several files, others may only produce a single file.  A <term>chunk</term> is a generic, informal term for a portion of an output, typically a single file.  This is given as a level, see <xref ref="publisher-levels"/> for more about levels.  The specification is in the attribute<cd>
+                <cline>/publication/common/chunking/@level</cline>
+            </cd>with a whole number as the value (generally 0 is allowed).  This is critical for the construction of <init>HTML</init> output, and ignored for <latex/> output.</p>
+        </subsection>
+    </section>
+
     <section xml:id="publisher-file-latex">
         <title>PDF (<latex/>) Options</title>
         <idx>PDF publisher options</idx>
