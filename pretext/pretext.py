@@ -269,10 +269,12 @@ def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, data_
             latex_cmd = [tex_executable, "-interaction=batchmode", latex_image]
             _verbose("converting {} to {}".format(latex_image, latex_image_pdf))
             subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+            if not os.path.exists(latex_image_pdf):
+                print('PTX:ERROR: There was a problem compiling {} and {} was not created'.format(latex_image,latex_image_pdf))
             pcm_executable = get_executable('pdfcrop')
             _debug("pdf-crop-margins executable: {}".format(pcm_executable))
             pcm_cmd = [pcm_executable, latex_image_pdf, "-o", "cropped-"+latex_image_pdf, "-p", "0", "-a", "-1"]
-            _verbose("cropping {} to {}".format(latex_image_pdf, latex_image_pdf))
+            _verbose("cropping {} to {}".format(latex_image_pdf, "cropped-"+latex_image_pdf))
             subprocess.call(pcm_cmd, stdout=devnull, stderr=subprocess.STDOUT)
             shutil.move("cropped-"+latex_image_pdf, latex_image_pdf)
             if outformat == 'all':
