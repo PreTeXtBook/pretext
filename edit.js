@@ -37,6 +37,8 @@ var menu_active_background = "#fdd";
 
 var recent_editing_actions = [];
 
+var letters = ["KeyA", "KeyB", "KeyC", "KeyD", "KeyE", "KeyF", "KeyG", "KeyH", "KeyI", "KeyJ", "KeyK", "KeyL", "KeyM", "KeyN", "KeyO", "KeyP", "KeyQ", "KeyR", "KeyS", "KeyT", "KeyU", "KeyV", "KeyW", "KeyX", "KeyY", "KeyZ"];
+
 var current_editing = {
     "level": 0,
     "location": [0],
@@ -1467,22 +1469,25 @@ function main_menu_navigator(e) {  // we are not currently editing
                 edit_menu_for(current_object_to_edit, "entering");
             }
     }
-      else if ((key_hit = e.code.toLowerCase()) != e.code.toUpperCase()) {  //  supposed to check if it is a letter
-        key_hit = key_hit.substring(3);  // remove forst 3 characters, i.e., "key"
-        current_active_menu_item = document.getElementById('choose_current');
-        console.log('current_active_menu_item',  current_active_menu_item );
-        console.log( $(current_active_menu_item) );
+   //   else if ((key_hit = e.code.toLowerCase()) != e.code.toUpperCase()) {  //  supposed to check if it is a letter
+      else if (letters.includes(e.code)) {
+    //    key_hit = key_hit.substring(3);  // remove forst 3 characters, i.e., "key"
+        key_hit = e.code.toLowerCase().substring(3);  // remove forst 3 characters, i.e., "key"
+        console.log("key_hit", key_hit);
+        theChooseCurrent = document.getElementById('choose_current');
+        console.log('theChooseCurrent',  theChooseCurrent );
+        console.log( $(theChooseCurrent) );
           // there can be multiple data-jump, so use ~= to find if the one we are looking for is there
           // and start from the beginning in case the match is earlier  (make the second selector better)
-        if ((next_menu_item = $(current_active_menu_item).nextAll('[data-jump~="' + key_hit + '"]:first')[0]) ||
-            (next_menu_item = $(current_active_menu_item).prevAll('[data-jump~="' + key_hit + '"]:last')[0])) {  // check there is a menu item with that key
-            current_active_menu_item.removeAttribute("id", "choose_current");
+        if ((next_menu_item = $(theChooseCurrent).nextAll('[data-jump~="' + key_hit + '"]:first')[0]) ||
+            (next_menu_item = $(theChooseCurrent).prevAll('[data-jump~="' + key_hit + '"]:last')[0])) {  // check there is a menu item with that key
+            theChooseCurrent.removeAttribute("id", "choose_current");
             console.log('[data-jump="' + key_hit + '"]');
-            console.log( $(current_active_menu_item) );
-            console.log("li",  $(current_active_menu_item).next('li') );
-            console.log("nextAll", $(current_active_menu_item).nextAll('[data-jump="' + key_hit + '"]:first') );
-            console.log("next t-l", $(current_active_menu_item).next('[data-env="theorem-like"]') );
-            console.log("current_active_menu_item", current_active_menu_item, "cccc", $(current_active_menu_item).next('[data-jump="' + key_hit + '"]'));
+            console.log( $(theChooseCurrent) );
+            console.log("li",  $(theChooseCurrent).next('li') );
+            console.log("nextAll", $(theChooseCurrent).nextAll('[data-jump="' + key_hit + '"]:first') );
+            console.log("next t-l", $(theChooseCurrent).next('[data-env="theorem-like"]') );
+            console.log("theChooseCurrent", theChooseCurrent, "cccc", $(theChooseCurrent).next('[data-jump="' + key_hit + '"]'));
             console.log("next_menu_item", next_menu_item);
             next_menu_item.setAttribute("id", "choose_current");
             next_menu_item.focus();
@@ -1492,18 +1497,17 @@ function main_menu_navigator(e) {  // we are not currently editing
         }
     }
 
-
-//  end of navigate menu keys when #choose_current
-//  now prioritize the other attributes of #choose_current
+//  Now only Enter and ArrowRight are meaningful in this context.
+//  The effect will depend on the other attributes of #choose_current:
 //  dataLocation, dataAction, dataEnv
 
-        if (e.code == "Enter" || e.code == "ArrowRight") {
-          e.preventDefault;
+      else if (e.code == "Enter" || e.code == "ArrowRight") {
+        e.preventDefault;
 // dataLocation
-          if (dataLocation) {
+        if (dataLocation) {
             if (dataLocation == "enter") {  // we are moving down into an object
 
-                console.log("current_active_menu_item", current_active_menu_item);
+                console.log("theChooseCurrent", theChooseCurrent);
             //    this_menu = document.getElementById('edit_menu_holder');
                 var object_to_be_entered = object_of_interest;
                 console.log("object_to_be_entered", object_to_be_entered);
@@ -1556,7 +1560,7 @@ function main_menu_navigator(e) {  // we are not currently editing
           }  // dataLocation
 
 // dataAction
-          if (dataAction) {
+          else if (dataAction) {
             if (dataAction == "edit") {
                console.log("going to edit", object_of_interest);
                edit_in_place(object_of_interest);
@@ -1602,6 +1606,9 @@ function main_menu_navigator(e) {  // we are not currently editing
                 return
             }
           }  // dataAction
+          else if (dataEnv) {
+              console.log("dataEnv not re-implemented yet")
+          }
 //  qqqqqqq
         } else if ( false && (e.code == "Tab" || e.code == "ArrowDown") && !e.shiftKey) {
             e.preventDefault();
@@ -2058,6 +2065,8 @@ function main_menu_navigator(e) {  // we are not currently editing
             // not sure what to do if an errelevant key was hit
             console.log("that key does not match any option")
         }
+    } else {
+        console.log("key that is not meaningful when navigating a menu:", e.code)
     }
 }
 }
