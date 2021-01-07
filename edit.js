@@ -1282,6 +1282,9 @@ function main_menu_navigator(e) {  // we are not currently editing
 
         if ((e.code == "Tab" || e.code == "ArrowDown") && !e.shiftKey) {
             e.preventDefault();
+            if (current_level == 0) { // at the top, so no "next" object
+                return ""
+            }
             // go to next sibling, or stage to exit if on last sibling
             if (current_location == (current_siblings.length - 1)) {
      //           if (theMotion == "next") {  //at the end, so make "stay" menu on the parent
@@ -1317,14 +1320,26 @@ function main_menu_navigator(e) {  // we are not currently editing
         } else if ((e.code == "Tab" && e.shiftKey) || e.code == "ArrowUp") {  // Shift-Tab to prevous object
             e.preventDefault();
             // go to previous sibling, or up one if on first sibling
+            console.log("ArrowUp:", "current_location", current_location, "current_level", current_level);
             if (current_location == 0) {
-                if (!current_level) { return "" } // already at the top, so nowhere to go, so do nothing
+                if (!current_level) { // already at the top, so nowhere to go, so do nothing
+                    console.log("at the top, so can't go up");
+                    return ""
+                }
 // A1
                 current_level -= 1;
                 current_editing["level"] = current_level;
                 current_location = current_editing["location"][current_level];
+                console.log("new current_location", current_location, " current_editing['tree']",  current_editing["tree"]);
+                console.log(" current_editing['tree'][0]",  current_editing["tree"][0]);
                 current_siblings = current_editing["tree"][current_level];
-                edit_menu_for(current_siblings[current_location], "entering")
+                console.log("current_siblings", current_siblings);
+                if (current_level) {  // design flaw: current siblings are a list if level > 0,
+                                      // but are one object if level == 0
+                    edit_menu_for(current_siblings[current_location], "entering")
+                } else {
+                    edit_menu_for(current_siblings, "entering")
+                }
             } else {
                 current_location -= 1;
                 current_editing["location"][current_level] = current_location;
@@ -1359,7 +1374,8 @@ function main_menu_navigator(e) {  // we are not currently editing
         console.log("   Just handled the case of enter_choice");
         return ""
 
-    } else if (theChooseCurrent = document.getElementById("choose_current")) {
+    } else if (document.getElementById("choose_current")) {
+        var theChooseCurrent = document.getElementById("choose_current");
         var dataLocation = theChooseCurrent.getAttribute("data-location");  // may be null
         var dataAction = theChooseCurrent.getAttribute("data-action");  // may be null
         var dataEnv = theChooseCurrent.getAttribute("data-env");  // may be null
@@ -1379,7 +1395,7 @@ function main_menu_navigator(e) {  // we are not currently editing
 
         if ((e.code == "Tab" || e.code == "ArrowDown") && !e.shiftKey) {
             e.preventDefault();
-            theChooseCurrent = document.getElementById('choose_current');
+ //           theChooseCurrent = document.getElementById('choose_current');
             next_menu_item = theChooseCurrent.nextSibling;
             console.log("theChooseCurrent", theChooseCurrent, "next_menu_item", next_menu_item);
             if (!next_menu_item) { next_menu_item = theChooseCurrent.parentNode.firstChild }
@@ -1415,19 +1431,71 @@ function main_menu_navigator(e) {  // we are not currently editing
             console.log("focus is on", $(":focus"));
         // copied from Tab, so consolidate
             console.log("saw an",e.code);
-            current_active_menu_item = document.getElementById('choose_current');
-            next_menu_item = current_active_menu_item.previousSibling;
-            console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
-            if (!next_menu_item) { next_menu_item = current_active_menu_item.parentNode.lastChild }
-            console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
-            current_active_menu_item.removeAttribute("id");
-            console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
-            current_active_menu_item.classList.remove("chosen");
+    //        current_active_menu_item = document.getElementById('choose_current');
+            next_menu_item = theChooseCurrent.previousSibling;
+            console.log("theChooseCurrent", theChooseCurrent, "next_menu_item", next_menu_item);
+            if (!next_menu_item) { next_menu_item = theChooseCurrent.parentNode.lastChild }
+            console.log("theChooseCurrent", theChooseCurrent, "next_menu_item", next_menu_item);
+            theChooseCurrent.removeAttribute("id");
+            console.log("theChooseCurrent", theChooseCurrent, "next_menu_item", next_menu_item);
+            theChooseCurrent.classList.remove("chosen");
             next_menu_item.setAttribute("id", "choose_current");
             console.log("setting focus on",next_menu_item);
             next_menu_item.focus();
   //       console.log("Error:  Shift-Tab not understood when ther eis an active menu");
         }
+          else if (e.code == "Escape" || e.code == "ArrowLeft") {
+            console.log("processing ESC");
+            if (document.getElementById("local_menu_holder")) {  // hack for when the interface gets confused
+                document.getElementById("local_menu_holder").remove()
+            }
+ // current_active_menu_item = document.getElementById('choose_current');
+            console.log("theChooseCurrent", theChooseCurrent);
+            previous_selection = theChooseCurrent.parentNode.parentNode;  //current li, up to ol, then up to div or li
+            if (previous_selection.tagName == "LI") {
+                console.log("going up to the previous selection");
+                theChooseCurrent.parentNode.remove();  // remove the ol containing this selection
+                previous_selection.focus();
+                previous_selection.setAttribute("id", "choose_current");
+                previous_selection.classList.remove("chosen");
+                previous_selection.parentNode.classList.remove("past");
+            } else {  // shoudl be the div#edit_menu_holder
+                current_object_to_edit = document.getElementById('edit_menu_holder').parentNode;
+       //         document.getElementById('edit_menu_holder').remove();
+            console.log("menu place 12");
+
+                edit_menu_for(current_object_to_edit, "entering");
+            }
+    }
+      else if ((key_hit = e.code.toLowerCase()) != e.code.toUpperCase()) {  //  supposed to check if it is a letter
+        key_hit = key_hit.substring(3);  // remove forst 3 characters, i.e., "key"
+        current_active_menu_item = document.getElementById('choose_current');
+        console.log('current_active_menu_item',  current_active_menu_item );
+        console.log( $(current_active_menu_item) );
+          // there can be multiple data-jump, so use ~= to find if the one we are looking for is there
+          // and start from the beginning in case the match is earlier  (make the second selector better)
+        if ((next_menu_item = $(current_active_menu_item).nextAll('[data-jump~="' + key_hit + '"]:first')[0]) ||
+            (next_menu_item = $(current_active_menu_item).prevAll('[data-jump~="' + key_hit + '"]:last')[0])) {  // check there is a menu item with that key
+            current_active_menu_item.removeAttribute("id", "choose_current");
+            console.log('[data-jump="' + key_hit + '"]');
+            console.log( $(current_active_menu_item) );
+            console.log("li",  $(current_active_menu_item).next('li') );
+            console.log("nextAll", $(current_active_menu_item).nextAll('[data-jump="' + key_hit + '"]:first') );
+            console.log("next t-l", $(current_active_menu_item).next('[data-env="theorem-like"]') );
+            console.log("current_active_menu_item", current_active_menu_item, "cccc", $(current_active_menu_item).next('[data-jump="' + key_hit + '"]'));
+            console.log("next_menu_item", next_menu_item);
+            next_menu_item.setAttribute("id", "choose_current");
+            next_menu_item.focus();
+        } else {
+            // not sure what to do if an errelevant key was hit
+            console.log("that key does not match any option")
+        }
+    }
+
+
+//  end of navigate menu keys when #choose_current
+//  now prioritize the other attributes of #choose_current
+//  dataLocation, dataAction, dataEnv
 
         if (e.code == "Enter" || e.code == "ArrowRight") {
           e.preventDefault;
@@ -1481,8 +1549,8 @@ function main_menu_navigator(e) {  // we are not currently editing
                 document.getElementById('choose_current').focus();
                 console.log("focus is on", $(":focus"));
 
-                console.log("don;t know about dataLocation", dataLocation);
-                alert("don;t know about dataLocation" + dataLocation);
+        //        console.log("don;t know about dataLocation", dataLocation);
+       //         alert("don;t know about dataLocation" + dataLocation);
                 return ""
             }
           }  // dataLocation
@@ -1542,7 +1610,7 @@ function main_menu_navigator(e) {  // we are not currently editing
             console.log("focus is on", $(":focus"));
 
 //  xxxxxxxxxxx
-       if (false && document.getElementById('enter_choice')) {
+         if (false && document.getElementById('enter_choice')) {
            this_choice = document.getElementById('enter_choice');
            console.log("there already is an 'enter_choice'");
            var this_menu = document.getElementById("edit_menu_holder");
@@ -1671,12 +1739,13 @@ function main_menu_navigator(e) {  // we are not currently editing
 
     } //  tmp #choose_current
 
-     else if ((e.code == "Tab" && e.shiftKey) || e.code == "ArrowUp") {  // Shift-Tab to prevous object
+     else if (false && ((e.code == "Tab" && e.shiftKey) || e.code == "ArrowUp")) {  // Shift-Tab to prevous object
      // recopied code:  consolidate
         e.preventDefault();
         console.log("just saw a", e.code);
         console.log("focus is on", $(":focus"));
-        if (this_choice = document.getElementById('enter_choice')) {
+        if (false && document.getElementById('enter_choice')) {
+           this_choice = document.getElementById('enter_choice');
            console.log("there already is an 'enter_choice'");
            // there are two cases:  1) we are at the top of a block (and so may enter it or add near it, or move on)
            //                       2) we are at the bottom (actually, after) a block, and may return to it, or move on
@@ -1748,7 +1817,7 @@ function main_menu_navigator(e) {  // we are not currently editing
   //       console.log("Error:  Shift-Tab not understood when ther eis an active menu");
        }
     } 
-    else if (e.code == "Enter" || e.code == "ArrowRight") {
+    else if ( false && (e.code == "Enter" || e.code == "ArrowRight")) {
         e.preventDefault();
         console.log("saw a Return (meaning, Enter)");
         console.log("focus is on", $(":focus"));
@@ -1933,12 +2002,13 @@ function main_menu_navigator(e) {  // we are not currently editing
             }
 
         }
-    }  else if (e.code == "Escape" || e.code == "ArrowLeft") {
+    }  else if (false && (e.code == "Escape" || e.code == "ArrowLeft")) {
         console.log("processing ESC");
         if (document.getElementById("local_menu_holder")) {  // hack for when the interface gets confused
             document.getElementById("local_menu_holder").remove()
         }
-        if (current_active_menu_item = document.getElementById('choose_current')) {
+        if (false && document.getElementById('choose_current')) {
+            current_active_menu_item = document.getElementById('choose_current');
             console.log("current_active_menu_item", current_active_menu_item);
             previous_selection = current_active_menu_item.parentNode.parentNode;  //current li, up to ol, then up to div or li
             if (previous_selection.tagName == "LI") {
@@ -1965,7 +2035,7 @@ function main_menu_navigator(e) {  // we are not currently editing
 
             edit_menu_for(parent_object_to_edit.id, "entering");
         }
-    } else if ((key_hit = e.code.toLowerCase()) != e.code.toUpperCase()) {  //  supposed to check if it is a letter
+    } else if (false && ((key_hit = e.code.toLowerCase()) != e.code.toUpperCase())) {  //  supposed to check if it is a letter
         key_hit = key_hit.substring(3);  // remove forst 3 characters, i.e., "key"
         current_active_menu_item = document.getElementById('choose_current');
         console.log('current_active_menu_item',  current_active_menu_item );

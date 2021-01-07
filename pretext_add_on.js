@@ -419,7 +419,7 @@ var newscript = document.createElement('script');
 window.addEventListener("load",function(event) {
        if($('body').attr('id') == "levin-DMOI") {
            console.log("            found DMOI");
-           console.log(uname, "  uname");
+           console.log("aaaa", uname, "  uname");
            if(uname == "editor") {
                 loadScript('edit');
            } else {
