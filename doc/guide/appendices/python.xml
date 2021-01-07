@@ -36,16 +36,26 @@
             <li>Python 3.4: Use the <c>pyvenv</c> command-line tool.</li>
         </ol>Done.  But how do you use it?<ol>
             <li>
-                <p>To activate your virtual environment, be sure you are in the <c>virtual-python</c> directory<cd>
+                <p>To activate your virtual environment, be sure you are in the <c>virtual-python</c> directory.
+                For Mac or Linux, with a bash shell go<cd>
                     <cline>source ptx/bin/activate</cline>
                     <cline>(ptx) $</cline>
+                </cd>
+                There are other scripts for other shells, take a look around.</p>
+                <p>For Windows, go<cd>
+                    <cline>ptx/Scripts/activate.bat</cline>
+                    <cline>(ptx) &gt;</cline>
                 </cd>Notice that your prompt has changed to remind you that now anything you do with Python will be <q>sandboxed</q> in this virtual environment and not get mixed up with your system Python.</p>
             </li>
             <li>Now you can do any Python-related task using your virtual environment, and can change directories if desired.</li>
             <li>
-                <p>When you are finished with your virtual environment you simply go<cd>
+                <p>When you are finished with your virtual environment, on Mac or Linux with a bash shell you simply go<cd>
                     <cline>(ptx) $ deactivate</cline>
                     <cline>$</cline>
+                </cd></p>
+                <p>For Windows, similarly<cd>
+                    <cline>(ptx) &gt; deactivate</cline>
+                    <cline>&gt;</cline>
                 </cd></p>
             </li>
         </ol></p>
