@@ -650,6 +650,10 @@ body > a.assistive:focus {
 .pretext-content figcaption + .named-list-content > .introduction > p:first-child {
     margin-top: 0;
 }
+.pretext-content figcaption + table,
+.pretext-content figcaption + .tabular-box {
+    margin-top: 0.5em;
+}
 
 /* should be .emphasis instead of em */
 .pretext-content .definition-like p > em {
@@ -732,9 +736,13 @@ body > a.assistive:focus {
     margin: 0;
 }
 .pretext-content .sidebyside .sbspanel > table {
-    display: block;
+/* see Sec 23.12 of sample article */
+ /*   display: block;
     width: 100%;
+*/
     overflow-x: auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .pretext-content .sidebyside figcaption {
