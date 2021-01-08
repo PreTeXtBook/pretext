@@ -1195,7 +1195,7 @@
         <idx>mathematics</idx>
 
         <introduction>
-            <p>As mentioned in the overview, <xref ref="overview-math" />, we use <latex /> syntax for mathematics.  In order to allow for quality display in <init>HTML</init>, and other electronic formats, this limits us to the subset of <latex /> supported by the very capable <url href="https://www.mathjax.org/">MathJax</url> Javascript library.  Generally this looks like the <c>amsmath</c><idx><c>amsmath</c></idx> package maintained by the American Mathematical Society at their <url href="http://www.ams.org/publications/authors/tex/amslatex">AMS-LaTeX page</url>.  For a complete and precise list of what MathJax supports, see MathJax's <url href="http://docs.mathjax.org/en/latest/input/tex/macros/">Supported <tex/>/<latex/> commands</url><fn><c>http://docs.mathjax.org/en/latest/input/tex/macros/</c></fn> (2019-11-10: this link may be specific to MathJax 3.0, which we have not yet adopted.)</p>
+            <p>As mentioned in the overview, <xref ref="overview-math" />, we use <latex /> syntax for mathematics.  In order to allow for quality display in <init>HTML</init>, and other electronic formats, this limits us to the subset of <latex /> supported by the very capable <url href="https://www.mathjax.org/">MathJax</url> Javascript library.  Generally this looks like the <c>amsmath</c><idx><c>amsmath</c></idx> package maintained by the American Mathematical Society at their <url href="http://www.ams.org/publications/authors/tex/amslatex">AMS-LaTeX page</url>.  For a complete and precise list of what MathJax supports, see MathJax's <url href="http://docs.mathjax.org/en/latest/input/tex/macros/">Supported <tex/>/<latex/> commands</url><fn><c>http://docs.mathjax.org/en/latest/input/tex/macros/</c></fn> (2019-11-10: this link may be specific to MathJax 3.0, which we have not yet adopted.)  Once you have digested this more general section, be sure to also consult <xref ref="topic-mathematics-practices"/> for some very specific suggestions.</p>
         </introduction>
 
         <subsection>
@@ -1388,6 +1388,24 @@
                 <li>The <c>\matrix{}</c> command, and its friends (such as <c>\pmatrix{}</c>) are not supported by <latex/>, despite being recognized by MathJax.  So use environments like <c>\begin{matrix}</c> and <c>\begin{pmatrix}</c> (with their corresponding <c>\end{}</c>, of course) and you will get accurate results for both formats.</li>
             </ol></p>
         </subsection>
+    </section>
+
+    <section xml:id="topic-mathematics-practices">
+        <title>Mathematics Best Practices</title>
+        <idx><h>mathematics</h><h>best practices</h></idx>
+
+        <p>This is an incomplete list of suggestions you can consider when authoring mathematics in <latex/> syntax.  Some are definitely technical, and we are only aware of them from authors' experience and reports.  Many are meant to help in the conversion to braille.  Additions welcome.
+        <ol>
+            <li>
+                <title>Operator names</title>
+                <p>Sean Fitzpatrick reports on 2021-01-06 that the <latex/> macro construction<cd>\newcommand{\foo}{\operatorname{foo}}</cd> behaves better in Asymptote diagrams than<cd>
+                \DeclareMathOperator{\foo}{foo}</cd></p>
+            </li>
+            <li>
+                <title>Ratios</title>
+                <p>If you really intend to communicate a ratio with a colon, keep it super-simple, like <c>3:2</c> or <c>a:b</c>.  Do not wrap it in parentheses or other decorations, since then the colon will be communicated literally in braille.  For example, the index of a subgroup, <c>[G:H]</c>, should not be confused with a ratio.  If your ratio is kept simple, braille will use special syntax designed for ratios.</p>
+            </li>
+        </ol></p>
     </section>
 
     <section xml:id="topic-lists">
