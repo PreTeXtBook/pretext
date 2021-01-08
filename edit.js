@@ -37,7 +37,7 @@ var menu_active_background = "#fdd";
 
 var recent_editing_actions = [];
 
-var letters = ["KeyA", "KeyB", "KeyC", "KeyD", "KeyE", "KeyF", "KeyG", "KeyH", "KeyI", "KeyJ", "KeyK", "KeyL", "KeyM", "KeyN", "KeyO", "KeyP", "KeyQ", "KeyR", "KeyS", "KeyT", "KeyU", "KeyV", "KeyW", "KeyX", "KeyY", "KeyZ"];
+var keyletters = ["KeyA", "KeyB", "KeyC", "KeyD", "KeyE", "KeyF", "KeyG", "KeyH", "KeyI", "KeyJ", "KeyK", "KeyL", "KeyM", "KeyN", "KeyO", "KeyP", "KeyQ", "KeyR", "KeyS", "KeyT", "KeyU", "KeyV", "KeyW", "KeyX", "KeyY", "KeyZ"];
 
 var current_editing = {
     "level": 0,
@@ -1470,7 +1470,7 @@ function main_menu_navigator(e) {  // we are not currently editing
             }
     }
    //   else if ((key_hit = e.code.toLowerCase()) != e.code.toUpperCase()) {  //  supposed to check if it is a letter
-      else if (letters.includes(e.code)) {
+      else if (keyletters.includes(e.code)) {
     //    key_hit = key_hit.substring(3);  // remove forst 3 characters, i.e., "key"
         key_hit = e.code.toLowerCase().substring(3);  // remove forst 3 characters, i.e., "key"
         console.log("key_hit", key_hit);
@@ -1536,7 +1536,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                  edit_menu_for(editableChildren[0], "entering");
 
                 return ""
-            } else {  // dataLoction is beforebegin or afterend
+            } else if ((dataLocation == "beforebegin") || (dataLocation == "afterend")) {  // should be the only other options
             //    $("#choose_current").parent().addClass("past");
                 theChooseCurrent.parentElement.classList.add("past");
                 theChooseCurrent.removeAttribute("id");
@@ -1556,6 +1556,8 @@ function main_menu_navigator(e) {  // we are not currently editing
         //        console.log("don;t know about dataLocation", dataLocation);
        //         alert("don;t know about dataLocation" + dataLocation);
                 return ""
+            } else {
+                console.log("Error: unknown dataLocation:", dataLocation)
             }
           }  // dataLocation
 
@@ -1565,7 +1567,8 @@ function main_menu_navigator(e) {  // we are not currently editing
                console.log("going to edit", object_of_interest);
                edit_in_place(object_of_interest);
             } else if (dataAction == "change-env-to") {
-                    var new_env = current_active_menu_item.getAttribute("data-env");
+                 // shoudl use dataEnv ?
+                    var new_env = theChooseCurrent.getAttribute("data-env");
                     console.log("changing environment to", new_env);
                        // #edit_menu_holder is in span.type, inside .heading, inside article
                     to_be_edited = document.getElementById('edit_menu_holder').parentElement.parentElement.parentElement;
@@ -1591,23 +1594,45 @@ function main_menu_navigator(e) {  // we are not currently editing
                     current_env_name = current_env_source["ptxtag"];
                     console.log("need menu to change", current_env_name, "in", current_env_source);
 
-                    current_active_menu_item.parentElement.classList.add("past");
-                    current_active_menu_item.removeAttribute("id");
-                    current_active_menu_item.classList.add("chosen");
+                    theChooseCurrent.parentElement.classList.add("past");
+                    theChooseCurrent.removeAttribute("id");
+                    theChooseCurrent.classList.add("chosen");
 
                     var edit_submenu = document.createElement('ol');
                     edit_submenu.innerHTML = menu_options_for(current_env_name, "change");
                     console.log("just inserted inner menu_options_for(parent_type)", menu_options_for(parent_type, "change"));
-                    current_active_menu_item.insertAdjacentElement("beforeend", edit_submenu);
+                    theChooseCurrent.insertAdjacentElement("beforeend", edit_submenu);
                     document.getElementById('choose_current').focus();
                     console.log("focus is on", $(":focus"));
+            } else if (dataAction == "change-title") {
+                console.log("change-title not implemented yet")
             } else {
                 alert("I don;t know what to do llllllll dataAction", dataAction)
-                return
             }
           }  // dataAction
-          else if (dataEnv) {
-              console.log("dataEnv not re-implemented yet")
+          else if (dataEnv) {  // this has to come after dataAction, because if both occur,
+                               // dataAction says to do something, and dataEnv says what to do
+              console.log("in dataEnv", dataEnv);
+              console.log("selected a menu item with no action and no location");
+              $("#choose_current").parent().addClass("past");
+          //    current_active_menu_item = document.getElementById('choose_current');
+              console.log("apparently selected", theChooseCurrent);
+              theChooseCurrent.removeAttribute("id");
+              theChooseCurrent.setAttribute('class', 'chosen');
+         //     current_active_menu_item_environment = current_active_menu_item.getAttribute('data-env');
+
+              if (dataEnv in inner_menu_for()) {  // object names a collection, so make submenu
+                  console.log("making a menu for", dataEnv);
+                  var edit_submenu = document.createElement('ol');
+                  edit_submenu.innerHTML = menu_options_for(dataEnv, "inner");
+     //           console.log("removing id from", current_active_menu_item);
+                  theChooseCurrent.insertAdjacentElement("beforeend", edit_submenu);
+          //      next_menu_item.setAttribute("id", "choose_current");
+                  document.getElementById('choose_current').focus();
+          //      console.log("setting focus AA on",next_menu_item);
+            } else {
+                console.log("Error: unknown dataEnv", dataEnv)
+            }
           }
 //  qqqqqqq
         } else if ( false && (e.code == "Tab" || e.code == "ArrowDown") && !e.shiftKey) {
