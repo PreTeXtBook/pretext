@@ -1405,6 +1405,19 @@
                 <title>Ratios</title>
                 <p>If you really intend to communicate a ratio with a colon, keep it super-simple, like <c>3:2</c> or <c>a:b</c>.  Do not wrap it in parentheses or other decorations, since then the colon will be communicated literally in braille.  For example, the index of a subgroup, <c>[G:H]</c>, should not be confused with a ratio.  If your ratio is kept simple, braille will use special syntax designed for ratios.</p>
             </li>
+            <li>
+                <title>Avoid Nesting</title>
+                <p>It may seem  convenient to nest custom macro definitions. For example:
+                    <cd>
+                        <cline>\newcommand{\makered}[1]{{\color{red}{#1}}}</cline>
+                        <cline>\newcommand{\MAKERED}[1]{\textbf{\makered{#1}}}</cline>
+                    </cd>
+                The second macro definition uses the first macro. At least one <pretext/> conversion isolates macro defintions for use only on an as-needed basis. So here, if the author used <c>\MAKERED</c> without also using <m>\makered</m> close nearby, it would lead to an issue under that conversion, because <c>\makered</c> would be locally undefined. So we recommend defining each macro from the ground up. In this case:
+                    <cd>
+                        <cline>\newcommand{\MAKERED}[1]{\textbf{\color{red}{#1}}}</cline>
+                    </cd>
+                </p>
+            </li>
         </ol></p>
     </section>
 
