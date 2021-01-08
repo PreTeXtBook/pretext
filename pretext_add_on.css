@@ -3326,6 +3326,9 @@ h6 #edit_menu_holder {
     bottom: -0.2em;
     left: -0.5em;
 }
+li > #edit_menu_holder {
+    display: block;
+}
 .may_leave + #edit_menu_holder #enter_choice {
     position: absolute;
 
@@ -3471,3 +3474,25 @@ h6 #edit_menu_holder {
 [data-objecttype="theorem-like"] p {
     font-style: italic;
 } 
+[data-objecttype="theorem-like"] p ol {
+    font-style: normal;
+} 
+
+.paragraph_input {
+    width: 98%;
+    min-height: 3em;
+    border: 3px dashed #999;
+}
+.paragraph_input:focus {
+    border: 1px solid #000;
+    padding: 2px;
+}
+.edit_inline_math {
+    font-family: "Inconsolata";
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    background-color: #ddf;
+}
+#actively_editing em {
+    background-color: #fdf;
+}
