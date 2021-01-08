@@ -121,14 +121,14 @@
 
             <p>Some questions with quantitative answers.</p>
 
-            <exercise>
+            <exercise xml:id="integer-addition">
                 <title>Adding Single-Digit Integers</title>
 
                 <introduction>
                     <p>A simple, but functional example to begin with. If you are just learning how to add, you can test yourself here.</p>
                 </introduction>
 
-                <webwork xml:id="integer-addition">
+                <webwork>
                     <description>
                         Add two positive single-digit integers.
                     </description>
@@ -156,14 +156,14 @@
 
             <p>If you are familiar with <webwork />, then it may be a surprise to you to be interacting with a <webwork /> problem this way, without having logged in to <webwork />.</p>
 
-            <exercise>
+            <exercise xml:id="integer-addition-with-seed">
                 <title>Declaring a Problem Seed</title>
 
                 <introduction>
                     <p>You can also declare a <c>seed</c> to specify a version of any problem that has randomization. Here is the same problem, but with a <c>seed</c> specified.</p>
                 </introduction>
 
-                <webwork xml:id="integer-addition-with-seed" seed="510">
+                <webwork seed="510">
                     <pg-code>
                         $a = random(1, 9, 1);
                         $b = random(1, 9, 1);
@@ -181,14 +181,14 @@
                 </webwork>
             </exercise>
 
-            <exercise>
+            <exercise xml:id="integer-addition-with-control-seed">
                 <title>Controlling Randomness</title>
 
                 <introduction>
                     <p>You can code your problem with randomization, but then use a specific <c>seed</c> and <webwork />'s <c>$envir{problemSeed}</c> to override that randomization for the purposes of the version that will appear in HTML and print output.</p>
                 </introduction>
 
-                <webwork xml:id="integer-addition-with-control-seed" seed="1">
+                <webwork seed="1">
                     <pg-code>
                         $a = random(1, 9, 1);
                         $b = random(1, 9, 1);
@@ -336,10 +336,10 @@
                 </proof>
             </theorem>
 
-            <exercise>
+            <exercise xml:id="quadratic-equation">
                 <title>Solving Quadratic Equations</title>
 
-                <webwork xml:id="quadratic-equation">
+                <webwork>
                     <description>
                         <line>Find a quadratic equation's solutions.</line>
                         <line>One positive integer solution and one negative fraction solution.</line>
@@ -1099,10 +1099,10 @@
 
             <p>This section samples the subject area template problems found on the <webwork /> wiki at <url href="http://webwork.maa.org/wiki/SubjectAreaTemplates"/>.</p>
 
-            <exercise>
+            <exercise xml:id="number-or-function">
                 <title>Answer is a number or a function</title>
 
-                <webwork xml:id="number-or-function">
+                <webwork>
 
                     <pg-code>
                         $a = non_zero_random(-9,9,1);
@@ -1139,10 +1139,10 @@
                 </webwork>
             </exercise>
 
-            <exercise>
+            <exercise xml:id="function-with-domain-issues">
                 <title>Answer is a function with domain issues</title>
 
-                <webwork xml:id="function-with-domain-issues">
+                <webwork>
 
                     <pg-code>
                         $a = random(2,5,1);
@@ -1181,11 +1181,11 @@
                 </webwork>
             </exercise>
 
-            <exercise>
+            <exercise xml:id="multiple-choice-popup-or-radio-buttons">
                 <!--Checkbox not implemented yet; see note in pretext-webwork-pg.xsl  -->
                 <title>Multiple choice by popup, radio buttons<!--, or checkbox--></title>
 
-                <webwork xml:id="multiple-choice-popup-or-radio-buttons">
+                <webwork>
 
                         <pg-code>
                             $color1 = PopUp(["?","Red","Blue","Green"], 2);
@@ -1246,10 +1246,10 @@
 
             </exercise>
 
-            <exercise>
+            <exercise xml:id="tables">
                 <title>Tables</title>
 
-                <webwork xml:id="tables">
+                <webwork>
 
                     <pg-code>
                         $x = Real(5);
