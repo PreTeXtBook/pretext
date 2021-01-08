@@ -1745,6 +1745,19 @@
                     </statement>
                 </webwork>
             </exercise>
+
+            <exercise>
+                <introduction>
+                    <p>
+                        This exercise has no content in its statement.
+                        It should throw a PTX warning during the representations build.
+                    </p>
+                </introduction>
+                <webwork>
+                    <statement>
+                    </statement>
+                </webwork>
+            </exercise>
         </section>
 
         <section>

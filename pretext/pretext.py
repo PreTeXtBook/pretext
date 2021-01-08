@@ -693,7 +693,10 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
                     pass
             # blocks like this next one micromanage newlines and indentation when we print to file
             last = statement.xpath('./*[last()]')
-            last[0].tail = "\n      "
+            if last:
+                last[0].tail = "\n      "
+            else:
+                print('PTX:WARNING: a statement in {} has no content'.format(problem_identifier))
             statement.tail = "\n      "
 
             hints = response_root.findall('.//hint')
@@ -710,7 +713,10 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
                         pass
 
                 last = htcopy.xpath('./*[last()]')
-                last[0].tail = "\n      "
+                if last:
+                    last[0].tail = "\n      "
+                else:
+                    print('PTX:WARNING: a hint in {} has no content'.format(problem_identifier))
                 htcopy.text = "\n        "
                 htcopy.tail = "\n      "
 
@@ -747,7 +753,10 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
                         pass
 
                 last = solcopy.xpath('./*[last()]')
-                last[0].tail = "\n      "
+                if last:
+                    last[0].tail = "\n      "
+                else:
+                    print('PTX:WARNING: a solution in {} has no content'.format(problem_identifier))
                 solcopy.text = "\n        "
                 solcopy.tail = "\n      "
 
@@ -776,7 +785,10 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
                         pass
 
                 last = statement.xpath('./*[last()]')
-                last[0].tail = "\n        "
+                if last:
+                    last[0].tail = "\n        "
+                else:
+                    print('PTX:WARNING: a statement in {} has no content'.format(problem_identifier))
                 statement.tail = "\n        "
 
                 hints = stg.findall('.//hint')
@@ -793,7 +805,10 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
                             pass
 
                     last = htcopy.xpath('./*[last()]')
-                    last[0].tail = "\n        "
+                    if last:
+                        last[0].tail = "\n        "
+                    else:
+                        print('PTX:WARNING: a hint in {} has no content'.format(problem_identifier))
                     htcopy.text = "\n          "
                     htcopy.tail = "\n        "
 
@@ -833,7 +848,10 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
                             pass
 
                     last = solcopy.xpath('./*[last()]')
-                    last[0].tail = "\n        "
+                    if last:
+                        last[0].tail = "\n        "
+                    else:
+                        print('PTX:WARNING: a solution in {} has no content'.format(problem_identifier))
                     solcopy.text = "\n          "
                     solcopy.tail = "\n        "
 
@@ -844,7 +862,10 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
                 stage.tail = "\n      "
 
         last = static.xpath('./*[last()]')
-        last[0].tail = "\n    "
+        if last:
+            last[0].tail = "\n    "
+        else:
+            print('PTX:WARNING: {} has no content'.format(problem_identifier))
         static.tail = "\n    "
 
         # Add elements for interactivity
