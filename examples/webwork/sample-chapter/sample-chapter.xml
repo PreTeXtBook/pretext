@@ -389,6 +389,7 @@
                     </pg-code>
 
                     <stage>
+                        <title>Identify Coefficients</title>
                         <statement>
                             <p>Consider the quadratic equation given by <me><var name="$quadratic" /> = 0\text{.}</me>  First, identify the coefficients for the quadratic equation using the standard form from <xref ref="theorem-quadratic-formula" />.</p>
 
@@ -401,6 +402,7 @@
                     </stage>
 
                     <stage>
+                        <title>Use the Quadratic Formula</title>
                         <statement>
                             <p>Using the quadratic formula, solve <m><var name="$quadratic"/>=0</m>.</p>
                             <p><m>x=</m> <var name="$multians1" width="15"/> or <m>x=</m> <var name="$multians1" width="15"/></p>
@@ -1340,15 +1342,13 @@
                             <image pg-name="$gr[4]" width="25%"/>
                             <image pg-name="$gr[5]" width="25%"/>
                         </statement>
-                        <!-- No hints for now because with displayMode=tex, the anonymous problem rendering is not -->
-                        <!--generating a hints section at all. Will have to work with Mike to investigate this.    -->
-                        <!--<hint>
+                        <hint>
                             <image pg-name="$gr[6]" width="25%"/>
-                        </hint>-->
+                        </hint>
                         <solution>
                             <image pg-name="$gr[7]" width="25%"/>
                         </solution>
-                  </stage>
+                    </stage>
                 </webwork>
             </exercise>
 

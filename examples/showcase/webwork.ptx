@@ -272,7 +272,7 @@
         $solutions = Formula("-3/2,5");
       </pg-code>
       <stage>
-        <title>Identify the coefficients</title>
+        <title>Identify Coefficients</title>
         <statement>
           <p>
             Consider the equation
@@ -296,7 +296,7 @@
         </solution>
       </stage>
       <stage>
-        <title>Solve using the quadratic formula</title>
+        <title>Use the Quadratic Formula</title>
         <statement>
           <p>
             Use the quadratic formula to find the solution set to
