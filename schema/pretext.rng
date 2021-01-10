@@ -1875,6 +1875,9 @@
         <attribute name="pg-name"/>
       </optional>
       <optional>
+        <attribute name="width"/>
+      </optional>
+      <optional>
         <element name="description">
           <zeroOrMore>
             <choice>

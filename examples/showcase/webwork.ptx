@@ -225,9 +225,7 @@
         <p>
           This Venn Diagram groups animals by certain characteristics.
         </p>
-        <sidebyside widths="50%">
-          <image pg-name="$vd"/>
-        </sidebyside>
+        <image pg-name="$vd" width="50%"/>
         <p>
           Name an animal that belongs in the center region. Spelling counts!
         </p>

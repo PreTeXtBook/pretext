@@ -1563,6 +1563,7 @@
             ImageWW =
                 element image {
                     attribute pg-name {text}?,
+                    attribute width {text}?,
                     element description {(TextShort | WWVariable)*}?
                 }
             </code>
