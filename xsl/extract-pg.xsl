@@ -1364,7 +1364,7 @@
 <!-- PGML Image Construction -->
 <!-- ####################### -->
 
-<xsl:template match="image[@pg-name]">
+<xsl:template match="image[@pg-name]" mode="components">
     <xsl:variable name="width">
         <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
@@ -1390,7 +1390,7 @@
 <!-- is to give the reader something like keyboard syntax instructions     -->
 <!-- but withhold these in print output.                                   -->
 <xsl:template match="instruction">
-    <xsl:if test="preceding-sibling::p|preceding-sibling::sidebyside and not(child::*[1][self::ol] or child::*[1][self::ul])">
+    <xsl:if test="preceding-sibling::p and not(child::*[1][self::ol] or child::*[1][self::ul])">
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
     <xsl:text>[@KeyboardInstructions(</xsl:text>
@@ -1450,7 +1450,7 @@
 <!-- inside a list, special handling                                      -->
 <xsl:template match="p">
     <xsl:param name="b-human-readable" />
-    <xsl:if test="preceding-sibling::p|preceding-sibling::sidebyside and not(child::*[1][self::ol] or child::*[1][self::ul])">
+    <xsl:if test="preceding-sibling::p and not(child::*[1][self::ol] or child::*[1][self::ul])">
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
     <xsl:apply-templates>
@@ -1467,19 +1467,21 @@
     </xsl:if>
 </xsl:template>
 
-<!-- Sidebyside in a WeBWorK expects only one child: image or tabular.    -->
-<!-- Just applies templates to its child                                  -->
-<!-- NB: this may need improvements, such as positioning                  -->
-<!-- NB: a Schematron rule should enforce the single child                -->
-<xsl:template match="sidebyside">
+<!-- Some common wrappers for image and tabular   -->
+<!-- Formerly this template was for sidebyside    -->
+<!-- And we leave it to also work on a sidebyside -->
+<!-- for backwards compatibility. However, such   -->
+<!-- use will be caught by a deprectation warning -->
+<!-- as well as fail a schema validation.         -->
+<xsl:template match="image|tabular|sidebyside">
     <xsl:param name="b-human-readable" />
-    <xsl:if test="preceding-sibling::p|preceding-sibling::sidebyside">
+    <xsl:if test="preceding-sibling::p">
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
     <xsl:if test="not(ancestor::li)">
         <xsl:text>&gt;&gt; </xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="image|tabular">
+    <xsl:apply-templates select="self::image|self::tabular|self::sidebyside/image|self::sidebyside/tabular" mode="components">
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
     <xsl:if test="not(ancestor::li)">
@@ -2362,7 +2364,7 @@
     </xsl:apply-templates>
 </xsl:template>
 
-<xsl:template match="tabular">
+<xsl:template match="tabular" mode="components">
     <!-- PTX tabular attributes top, bottom, left, right, halign are essentially passed -->
     <!-- down to cells, rather than used at the tabular level.                          -->
     <xsl:param name="b-human-readable" />

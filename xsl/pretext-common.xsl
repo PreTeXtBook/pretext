@@ -11095,6 +11095,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="incorrect-use" select="($directory.images != '')" />
     </xsl:call-template>
  -->
+    <!--  -->
+    <!-- 2021-01-07  deprecate sidebyside within a webwork -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//webwork//sidebyside" />
+        <xsl:with-param name="date-string" select="'2021-01-07'" />
+        <xsl:with-param name="message" select="'a &quot;sidebyside&quot; as a descendant of a &quot;webwork&quot; has been replaced and now &quot;image&quot; and &quot;tabular&quot; elements should be used directly.'"/>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Miscellaneous -->
