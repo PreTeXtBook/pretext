@@ -10,7 +10,7 @@ function createCookie(name,value,days) {
 	else var expires = "";
 /*	document.cookie = name+"="+value+expires+"; path=/; domain=aimath.org";
 */
-	document.cookie = name+"="+value+expires+"; path=/";
+	document.cookie = name + "=" + value + expires + "; path=/; " + "SameSite=None; Secure";
         console.log("created cookie " + name);
 }
 
