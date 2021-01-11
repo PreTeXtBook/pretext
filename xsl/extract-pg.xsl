@@ -1152,6 +1152,10 @@
         <xsl:text>->correct_ans()</xsl:text>
     </xsl:if>
     <xsl:text>]</xsl:text>
+    <!-- if the variable is a string of perl code to be executed -->
+    <xsl:if test="@data='perl'">
+        <xsl:text>*</xsl:text>
+    </xsl:if>
     <!-- if the variable is a string of PGML syntax to be processed -->
     <xsl:if test="@data='pgml'">
         <xsl:text>**</xsl:text>
