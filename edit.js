@@ -42,7 +42,7 @@ var keyletters = ["KeyA", "KeyB", "KeyC", "KeyD", "KeyE", "KeyF", "KeyG", "KeyH"
 var current_editing = {
     "level": 0,
     "location": [0],
-    "tree": [document.getElementById("hPw")]
+    "tree": [ [document.getElementById("hPw")] ]
 }
 
 function randomstring(len) {
@@ -247,11 +247,12 @@ function menu_options_for(COMPONENT, level) {
      var component = COMPONENT.toLowerCase();
      if (level == "base") { menu_for = base_menu_for }
      else if (level == "change") {
-         console.log("menu_options_for", component);
+         console.log("C1 menu_options_for", component);
          objectclass = object_class_of(component);
          console.log("which has class",objectclass);
-         var equivalent_objects = renamable[objectclass];
+         var equivalent_objects = renamable[objectclass].slice();
          var replacement_list = removeItemFromList(equivalent_objects, component);
+         console.log("equivalent_objects", equivalent_objects);
          var this_menu = "";
          for (var i=0; i < replacement_list.length; ++i) {
              this_menu += '<li tabindex="-1" data-action="change-env-to" data-env="' + replacement_list[i] + '"'; 
@@ -260,6 +261,7 @@ function menu_options_for(COMPONENT, level) {
              this_menu += replacement_list[i];
              this_menu += '</li>';
          }
+         console.log("made this_menu", this_menu);
          return this_menu
      } else { menu_for = inner_menu_for() }
      console.log("in menu_options_for", component);
@@ -1232,13 +1234,13 @@ function local_editing_action(e) {
         e.preventDefault();
         console.log("making a local menu");
         local_menu_navigator(e);
-    } else if (e.code == "Escape") {
+    } else if (false && e.code == "Escape") {
             e.preventDefault();
             these_changes = assemble_internal_version_changes();
             final_added_object = insert_html_version(these_changes);
             edit_menu_from_current_editing(final_added_object.id, "entering");
             save_edits()
-    } else if (e.code == "Enter") {
+    } else if (e.code == "Escape" || e.code == "Enter") {
         console.log("saw a Ret");
         if (document.activeElement.tagName == "INPUT") {
             console.log("probably saving a title");
@@ -1253,7 +1255,7 @@ function local_editing_action(e) {
             prev_char = "";
             save_edits()
 
-        } else if (prev_char.code == "Enter" && prev_prev_char.code == "Enter") {
+        } else if (e.code == "Escape" || (prev_char.code == "Enter" && prev_prev_char.code == "Enter")) {
   // same as ESC above:  consolidate
             console.log("need to save");
             e.preventDefault();
@@ -1378,12 +1380,13 @@ function main_menu_navigator(e) {  // we are not currently editing
                 console.log(" current_editing['tree'][0]",  current_editing["tree"][0]);
                 current_siblings = current_editing["tree"][current_level];
                 console.log("current_siblings", current_siblings);
-                if (current_level) {  // design flaw: current siblings are a list if level > 0,
-                                      // but are one object if level == 0
-                    edit_menu_for(current_siblings[current_location], "entering")
-                } else {
-                    edit_menu_for(current_siblings, "entering")
-                }
+      //          if (current_level) {  // design flaw: current siblings are a list if level > 0,
+      //                                // but are one object if level == 0
+      //              edit_menu_for(current_siblings[current_location], "entering")
+      //          } else {
+      //              edit_menu_for(current_siblings, "entering")
+      //          }
+                edit_menu_for(current_siblings[current_location], "entering")
             } else {
                 current_location -= 1;
                 current_editing["location"][current_level] = current_location;
@@ -1393,15 +1396,15 @@ function main_menu_navigator(e) {  // we are not currently editing
             }
         } else if (e.code == "Escape" || e.code == "ArrowLeft") {
             e.preventDefault();
-            if (!current_level) { return "" } // already at the top, so nowhere to go, so do nothing
+            if (current_level == 0) { return "" } // already at the top, so nowhere to go, so do nothing
 // copied from A1
-                console.log("At ArrowLeft, level was", current_level, "with location",  current_editing["location"], "and tree", current_editing["tree"][current_level]);
-                current_level -= 1;
-                current_editing["level"] = current_level;
-                current_location = current_editing["location"][current_level];
-                current_siblings = current_editing["tree"][current_level];
-                console.log("now level id", current_level, "with location",  current_editing["location"], "and tree", current_editing["tree"][current_level]);
-                edit_menu_for(current_siblings[current_location], "entering")
+            console.log("At ArrowLeft, level was", current_level, "with location",  current_editing["location"], "and tree", current_editing["tree"][current_level]);
+            current_level -= 1;
+            current_editing["level"] = current_level;
+            current_location = current_editing["location"][current_level];
+            current_siblings = current_editing["tree"][current_level];
+            console.log("now level id", current_level, "with location",  current_editing["location"], "and tree", current_editing["tree"][current_level]);
+            edit_menu_for(current_siblings[current_location], "entering")
         } else if (e.code == "Enter" || e.code == "ArrowRight") {
             e.preventDefault();
             if (theMotion == "stay") {
@@ -1682,8 +1685,9 @@ function main_menu_navigator(e) {  // we are not currently editing
                     theChooseCurrent.classList.add("chosen");
 
                     var edit_submenu = document.createElement('ol');
+                    console.log("J1 lookinh for menu options for", current_env_name);
                     edit_submenu.innerHTML = menu_options_for(current_env_name, "change");
-                    console.log("just inserted inner menu_options_for(parent_type)", menu_options_for(parent_type, "change"));
+                    console.log("just inserted inner menu_options_for(parent_type)", menu_options_for(current_env_name, "change"));
                     theChooseCurrent.insertAdjacentElement("beforeend", edit_submenu);
                     document.getElementById('choose_current').focus();
                     console.log("focus is on", $(":focus"));
@@ -2024,8 +2028,10 @@ function main_menu_navigator(e) {  // we are not currently editing
                     current_active_menu_item.classList.add("chosen");
 
                     var edit_submenu = document.createElement('ol');
+                    console.log("J2 looking for menu options for", current_env_name);
+
                     edit_submenu.innerHTML = menu_options_for(current_env_name, "change");
-                    console.log("just inserted inner menu_options_for(parent_type)", menu_options_for(parent_type, "change"));
+                    console.log("just inserted inner menu_options_for(parent_type)", menu_options_for(current_env_name, "change"));
                     current_active_menu_item.insertAdjacentElement("beforeend", edit_submenu);
                     document.getElementById('choose_current').focus();
                     console.log("focus is on", $(":focus"));
@@ -2259,5 +2265,5 @@ e_level = current_editing["level"];
 console.log("e_level", e_level);
 e_location = current_editing["location"];
 console.log("e_location", e_location);
-edit_menu_for(e_tree[e_level], "entering")
+edit_menu_for(e_tree[e_level][e_location], "entering")
 
