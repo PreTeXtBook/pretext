@@ -624,6 +624,10 @@ function edit_in_place(obj) {
         document.getElementById(idOfEditText).focus();
   //      document.getElementById(idOfEditText).setSelectionRange(0,0);
         console.log("made edit box for", thisID);
+        console.log("which is", document.getElementById(idOfEditText));
+        console.log("Whth content CC" + document.getElementById(idOfEditText).innerHTML + "DD");
+        console.log("Whth content EE" + document.getElementById(idOfEditText).innerText + "FF");
+        console.log("Whth content GG" + document.getElementById(idOfEditText).textContent + "HH");
         this_char = "";
         prev_char = "";
       } else if (new_tag == "li") {
@@ -947,6 +951,7 @@ function expand_condensed_source_html(text, context) {
             return text.replace(/<&>(.*?)<;>/g,expand_condensed_src_html)
          }
     } else {
+    console.log("returning text XX" + text + "YY");
     return text
     }
 }
@@ -1401,7 +1406,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                 console.log("setting focus on",next_menu_item);
                 next_menu_item.focus();
             }
-          }
+        }
           else if (e.code == "Escape" || e.code == "ArrowLeft") {
             console.log("processing ESC");
             console.log("At ArrowLeft, level was", current_level, "xx", current_editing["level"], "with location",  current_editing["location"], "and tree", current_editing["tree"][current_level]);
@@ -1449,7 +1454,7 @@ function main_menu_navigator(e) {  // we are not currently editing
 //  dataLocation, dataAction, dataEnv
 
       else if (e.code == "Enter" || e.code == "ArrowRight") {
-        e.preventDefault;
+        e.preventDefault();
         if (dataLocation) {
             if (dataLocation == "enter") {  // we are moving down into an object
 
@@ -1499,7 +1504,6 @@ function main_menu_navigator(e) {  // we are not currently editing
         }  // dataLocation
 
           else if (dataAction) {
-            e.preventDefault;
             if (dataAction == "edit") {
                console.log("going to edit", object_of_interest);
                edit_in_place(object_of_interest);
@@ -1556,7 +1560,7 @@ function main_menu_navigator(e) {  // we are not currently editing
         }  // dataAction
           else if (dataEnv) {  // this has to come after dataAction, because if both occur,
                                // dataAction says to do something, and dataEnv says what to do
-              e.preventDefault;
+              e.preventDefault();  // was this handled earlier?
               console.log("in dataEnv", dataEnv);
               console.log("selected a menu item with no action and no location");
               $("#choose_current").parent().addClass("past");
@@ -1581,6 +1585,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                   var before_after = $("#edit_menu_holder > #edit_menu > .chosen").attr("data-location");
                   console.log("create_object_to_edit",dataEnv, object_near_new_object,before_after);
                   var new_obj = create_object_to_edit(dataEnv, object_near_new_object, before_after);
+                  console.log("new_obj", new_obj);
                   edit_in_place(new_obj);
                   object_near_new_object.classList.remove("may_select");
                   document.getElementById('edit_menu_holder').remove();
@@ -1632,8 +1637,11 @@ function logKeyDown(e) {
     }
 }
 
+// xx 
+
 document.addEventListener('focus', function() {
-  console.log('focused: ', document.activeElement)
+  console.log('focused:', document.activeElement)
+  console.log('which has content XX' + document.activeElement.innerHTML + "VV")
   prev_prev_focused_element = prev_focused_element;
   prev_focused_element = this_focused_element;
   this_focused_element = document.activeElement;
