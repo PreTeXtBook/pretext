@@ -419,12 +419,32 @@ var newscript = document.createElement('script');
 window.addEventListener("load",function(event) {
        if($('body').attr('id') == "levin-DMOI") {
            console.log("            found DMOI");
-           console.log(uname, "  uname");
+           console.log("aaaa", uname, "  uname");
            if(uname == "editor") {
                 loadScript('edit');
            } else {
                 console.log("not enabling editing")
            }
+}});
+
+var knowl_id_counterX = 0;
+window.addEventListener("load",function(event) {
+   if($('body').hasClass("braillesample")) {
+       console.log("            found braillesample");
+       var all_knowls = $('[data-knowl]');
+       console.log("found", all_knowls.length, "knowls");
+       console.log("which are", all_knowls);
+       for (var j=1; j < all_knowls.length; ++j) {
+           console.log(j, "un-knowling", all_knowls[j]);
+           console.log("attr", $(all_knowls[j]).attr("data-knowl"));
+           $knowl = $(all_knowls[j]);
+           if(!$knowl.attr("data-knowl-uid")) {
+              $knowl.attr("data-knowl-uid", knowl_id_counterX);
+              knowl_id_counterX++;
+            }
+            knowl_click_handler($knowl);
+          // knowl_click_handler($(all_knowls[j]))
+       }
 }});
 
 /*
