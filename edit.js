@@ -1209,6 +1209,10 @@ function local_editing_action(e) {
                 }
                 console.log("here is where we need ti pudate current_editing", "parent:", this_parent,"which is",document.getElementById(this_parent[0]), "level:", current_editing["level"], "loation:", current_editing["location"], "tree:", current_editing["tree"]);
                 $("#actively_editing").remove();
+
+              // parents_parent is wrong, because the editable siblings do not live at the same level,
+              // p in li being an example
+
                 var parents_parent = document.getElementById(this_parent[0]).parentElement;
                 console.log("going to make the new tree from parent of", this_parent, "which is", parents_parent, "and has children", next_editable_of(this_parent.parentElement, "children"));
                 current_editing["tree"][current_editing["level"]] = next_editable_of(parents_parent, "children");
@@ -1310,7 +1314,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                 current_location -= 1;
                 current_editing["location"][current_level] = current_location;
                 console.log("current_siblings", current_siblings);
-                console.log("BB new current_location", current_location, " current_editing['tree']",  current_editing["tree"]);
+                console.log("BB new current_location", current_location, "at level", current_level, " current_editing['tree']",  current_editing["tree"]);
                 edit_menu_for(current_siblings[current_location], "entering")
             }
         } else if (e.code == "Escape" || e.code == "ArrowLeft") {
