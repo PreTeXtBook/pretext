@@ -625,7 +625,7 @@ the xsltproc executable.
             </objectives>
 
             <introduction>
-                <p>This is a cross-reference to one of the objectives above, forced to use the <c>type-global</c> form of the text.  It should describe the objective as belonging to the <em>section</em> (rather than the <em>objectives</em>), since objectives are one-per-subdivision and are numbered based upon the containing division: <xref ref="objective-structure" text="phrase-global" />.  For comparison this is the (forced) <c>type-global</c> cross-reference: <xref ref="objective-structure" text="type-global" />.</p>
+                <p>This is a cross-reference to one of the objectives above, forced to use the <c>phrase-global</c> form of the text.  It should describe the objective as belonging to the <em>section</em> (rather than the <em>objectives</em>), since objectives are one-per-subdivision and are numbered based upon the containing division: <xref ref="objective-structure" text="phrase-global" />.  For comparison this is the (forced) <c>type-global</c> cross-reference: <xref ref="objective-structure" text="type-global" />.</p>
 
                 <p>The Fundamental Theorem comes in two flavors, where usually one is a corollary of the other.</p>
             </introduction>
