@@ -2701,12 +2701,12 @@
             <p></p>
         </subsection>
 
-        <subsection>
-            <title>(*) Automatic Lists</title>
+        <subsection xml:id="automatic-lists">
+            <title>Automatic Lists</title>
 
             <p></p>
         </subsection>
-
+            <p>The <tag>row</tag> element accepts a <attr>header</attr> attribute with possible values of <c>no</c> (the default), <c>yes</c>, or <c>vertical</c>.  The latter is useful if space is at a premium (which always seems to be the case with tables), and the cells of a column are narrow and the heading is long.  The one restriction is that rows identified as having headers must be the initial (top) rows of the table and must be contiguous.</p>
         <subsection>
             <title>(*) Solutions</title>
 
@@ -2958,8 +2958,15 @@
     </section>
 
     <section xml:id="topic-automatic-lists">
-        <title>(*) Automatic Lists</title>
-        <p></p>
+        <title>Automatic Lists</title>
+
+        <p>Sometimes it is useful to have an automatic list of various elements of one kind in a book, other than the ones already available in a <pretext/> document.  The predefined ones include an index (see <xref ref="topic-index"/>) and a list of notation (see <xref ref="topic-notation"/>).  Examples of lists one might wish to create could include lists of titled figures, computational listing, or theorems.</p>
+
+        <p>To construct an automatic list, one uses a (self-closing) <tag>list-of</tag> element.  This tag has a required <attr>elements</attr> attribute, where the author limits the list to a certain tag.  This could be <c>elements="theorem"</c>, or a space-delimited list of tags like <c>elements="theorem fact corollary"</c>.</p>
+
+        <p>Although automatic lists may be most useful in backmatter, it is possible to use them for summarizing results or other items in a smaller part of your document.  Use the <attr>scope</attr> attribute to limit to the current <c>"section"</c> or <c>"part"</c>.  To organize the list better, use the <attr>divisions</attr> attribute to give structure with headings, such as <c>divisions="section subsection" to organize at two levels.  Finally, the <attr>empty</attr> attribute can be set to <c>"yes"</c> or <c>"no"</c> (default), depending on whether you wish to show any divisions that have none of the requested elements (obviously only useful if you set <c>divisions</c> to something nonempty).</p>
+
+        <p>Note that an automatic list gets no title or visual separation from surrounding material, so use the usual subdivision elements to make that happen.</p>
     </section>
 
     <section xml:id="topic-url">
