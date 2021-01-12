@@ -2,19 +2,14 @@
 /* preliminary hacks */
 
 
-//$("p").tabIndex = 0;
-// $("p").attr("tabindex", -1);
 $(".autopermalink > a").attr("tabindex", -1);
 
 $("#akX > *").attr("data-editable", 99);
-// var editable_objects = ["p", "ol", "ul", "li", "article", "blockquote", "section"];
 var editable_objects = ["p", "ol", "ul", "article", "blockquote", "section"];
 for(var j=0; j < editable_objects.length; ++j) {
     $(editable_objects[j]).attr("data-editable", 99);
     $(editable_objects[j]).attr("tabindex", -1);
 }
-// $("section > p").attr("data-editable", 99);
-// $("section > article").attr("data-editable", 99);
 
 /* the code */
 
@@ -79,7 +74,7 @@ function object_class_of(tag) {
     return "unknown"
 }
 
-/* need to distingiosh between th elist of objects of a type,
+/* need to distinguish between the list of objects of a type,
    and the list of types that can go in a location.
    OR, is it okay that these are all in one list?
    It seems to not be okay, because the "blockquote" entry
@@ -169,7 +164,7 @@ editing_container_for = { "p": 1,
 }
 
 // each tag has [ptx_tag, [html_start, html_end]]
-// Note: end of html_start is missing, so it is easier to add attributes
+// Note: end of html_start is missing, to make it easier to add attributes
 inline_tags = {'em': ['em', ['<em class="emphasis"', "</em>"]], 
                'term': ['term', ['<dfn class="terminology"', '</dfn>']]
 }
@@ -233,9 +228,6 @@ function standard_title_form(object_id) {
     title_form += '<input id="actively_editing_title" class="starting_point_for_editing" data-source_id="' + object_id + '" data-component="' + 'title' + '" placeholder="Optional title" type="text"/>';
 
     title_form += '&nbsp;<span class="group_description">(' + editing_tip_for("title") + ')</span>';
-/*
-    title_form += '<input id="actively_editing_id" placeholder="Optional Id" class="input_id" type="text"/>';
-*/
     title_form += '</span>';  // #editing_title_holder
     title_form += '</div>';
 
@@ -284,13 +276,6 @@ function menu_options_for(COMPONENT, level) {
          } else if (this_item.length == 2) { 
              this_item_label = this_item[1];
          } 
-      //      else if (this_item.length == 1) {
-      //           this_item_label = this_item_name;
-      //           this_item_shortcut = this_item_name.charAt(0)
-      //       }
-
-     //        this_item_name = this_item_name.replace(this_item_shortcut, '<b>' + this_item_shortcut + '</b>');
-
          this_menu += '<li tabindex="-1" data-env="' + this_item_label + '"';
          this_menu += ' data-env-parent="' + component + '"';
          if (this_item_shortcut) { 
@@ -346,14 +331,12 @@ function top_menu_options_for(this_obj) {
             this_list = '<li tabindex="-1" id="choose_current" data-env="p" data-action="edit">Edit ' + this_obj_environment + '</li>';
             var editable_children = next_editable_of(this_obj, "children");
             console.log("editable_children", editable_children);
-     //       if ($(this_obj).children('.heading > [data-editable="99"], [data-editable="99"]').length) {
             if (editable_children.length) {
                 console.log("$(this_obj).children('.heading > [data-editable=99], [data-editable=99]')", $(this_obj).children('.heading > [data-editable="99"], [data-editable="99"]'));
                 this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_obj_environment + '</li>';
             }
         } else {
             console.log("are there children", $(this_obj).children('.heading > [data-editable="99"], [data-editable="99"]'));
-    //        console.log("are there children", editable_children.length);
             this_list += '<li tabindex="-1" id="choose_current" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_obj_environment + '</li>';
        }
 
@@ -424,7 +407,6 @@ function edit_menu_for(this_obj_or_id, motion) {
     }  // when motion is 'leaving'
 
     var edit_menu_holder = document.createElement('div');
-//    edit_menu_holder.setAttribute('class', 'edit_menu_holder');
     edit_menu_holder.setAttribute('id', 'edit_menu_holder');
     edit_menu_holder.setAttribute('tabindex', '-1');
     console.log("adding menu for", this_obj_or_id, "menu_location", menu_location);
@@ -488,8 +470,6 @@ function local_menu_for(this_obj_id) {
     enter_option.innerHTML = menu_options_for("p", "base");
 
     document.getElementById("local_menu_holder").insertAdjacentElement("afterbegin", enter_option);
-   // prev_focused_element.focus();
-    // next_menu_item.focus();
 }
 
 /*
@@ -582,28 +562,20 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
     var neighbor_with_new = '';
     var current_level = current_editing["level"];
     var current_location = current_editing["location"][current_level];
-//    var current_siblings = current_editing["tree"][current_level];
     if (relative_placement == "beforebegin") {  
         neighbor_with_new = '<&>' + new_id + '<;>\n' + '$1';
- //       console.log("current_siblings", current_siblings);
-  //      current_siblings.splice(current_location, 0, edit_placeholder)
-   //     console.log("current_siblings", current_siblings);
     }
     else {
         neighbor_with_new = '$1' + '\n<&>' + new_id + '<;>'
-    //    current_siblings.splice(current_location + 1, 0, edit_placeholder);
         current_location += 1
         }
     new_arrangement = the_current_arrangement.replace(object_neighbor, neighbor_with_new);
     internalSource[parent_description[0]][parent_description[1]] = new_arrangement;
     current_editing["location"][current_level] = current_location;
- //   current_editing["tree"][current_level] = current_siblings;
     console.log("         new_arrangement", new_arrangement);
     console.log("tried to insert", new_id, "next to", sibling_id, "in", the_current_arrangement)
     console.log("    updated current_editing", current_editing);
 
-//    thisID = new_id;
-//    thisTagName = new_tag;
     return edit_placeholder
 }
 
@@ -634,7 +606,6 @@ function edit_in_place(obj) {
         $("#" + thisID).replaceWith(this_content_container);
 
         var idOfEditContainer = thisID + '_input';
-   //     var idOfEditText = thisID + '_input_text';
         var idOfEditText = 'editing' + '_input_text';
         var paragraph_editable = document.createElement('div');
         paragraph_editable.setAttribute('contenteditable', 'true');
@@ -652,7 +623,6 @@ function edit_in_place(obj) {
         $('#' + idOfEditText).html(the_contents);
         document.getElementById(idOfEditText).focus();
   //      document.getElementById(idOfEditText).setSelectionRange(0,0);
-  //      textarea_editable.style.height = textarea_editable.scrollHeight + "px";
         console.log("made edit box for", thisID);
         this_char = "";
         prev_char = "";
@@ -691,10 +661,8 @@ function edit_in_place(obj) {
           this_content_container.setAttribute('data-parent_id', internalSource[thisID]["parent"][0]);
           this_content_container.setAttribute('data-parent_component', internalSource[thisID]["parent"][1]);
           this_content_container.setAttribute('data-objecttype', 'list');
-       //   var list_content = '<li class="editing_li"><p id="editing_input_text" contenteditable="true" class="paragraph_input" tabindex="-1">xxxx cccc vvvv bbba</p></li>';
           var list_content = internalSource[thisID]["content"];
           console.log("expanding list_content", list_content, "as edit");
-     //     list_content = expand_condensed_source_html(list_content, "inner");
           list_content = expand_condensed_source_html(list_content, "edit");
           this_content_container.innerHTML = list_content;
           $("#" + thisID).replaceWith(this_content_container);
@@ -753,31 +721,8 @@ function edit_in_place(obj) {
 
         $("#" + thisID).replaceWith(this_content_container);
         $("#actively_editing_title").focus();
-      } else if (false && editing_container_for["remark-like"].includes(new_tag)) {
-
-        console.log("edit_in_place", obj)
-        var this_content_container = document.createElement('div');
-        this_content_container.setAttribute('id', "actively_editing");
-        this_content_container.setAttribute('data-objecttype', 'remark-like');
-
-        var title = standard_title_form(new_id);
-
-        var content_container_start = '<div class="editing_content">';
-        var content_container_end = '</div>';
-        var editingregion_container_start = '<div class="editing_p_holder">'
-        var editingregion_container_end = '</div>'
-        var contentinstructions = '<span class="group_description">content (paragraphs, images, lists, etc)</span>';
-        var contenteditingregion = '<div contenteditable="true" class="paragraph_input" id="actively_editing_statement" style="width:98%;" placeholder="first paragraph of content" data-source_id="' + new_content_p_id + '" data-parent_id="' + new_id + '" data-parent_component="content"></div>';
-        var content = content_container_start + editingregion_container_start;
-        content += contentinstructions;
-        content += contenteditingregion;
-        content += editingregion_container_end + content_container_end;
-
-        this_content_container.innerHTML = title + content
-
-        $("#" + thisID).replaceWith(this_content_container);
-        $("#actively_editing_title").focus();
-     } else {
+      } 
+        else {
           console.log("I do not know how to edit", new_tag)
      }
    } else {
@@ -831,8 +776,6 @@ function local_menu_navigator(e) {
     if (e.code == "Tab") {
         if (!document.getElementById('local_menu_holder')) {  // no local menu, so make one
             local_menu_for('actively_editing');
-//            local_menu_for('actively_editing_p');
-//  ???  local_menu_for('editing' + '_input_text');
         }  else {  //Tab must be cycling through a menu
             // this is copied from main_menu_navigator, so maybe consolidate
             current_active_menu_item = document.getElementById('choose_current');
@@ -842,7 +785,6 @@ function local_menu_navigator(e) {
             console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
             current_active_menu_item.removeAttribute("id");
             console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
-//        current_active_menu_item.setAttribute("class", "chosen");
             next_menu_item.setAttribute("id", "choose_current");
             console.log("setting focus on",next_menu_item);
             next_menu_item.focus();
@@ -916,7 +858,6 @@ function assemble_internal_version_changes() {
         console.log("cursor_location", cursor_location, "out of", paragraph_content.length, "paragraph_content", paragraph_content);
 
         // does the textbox contain more than one paragraph?
-  //      var paragraph_content_list = paragraph_content.split("\n\n");
         var paragraph_content_list = paragraph_content.split("<div><br></div>");
         var num_paragraphs = paragraph_content_list.length;
 
@@ -939,8 +880,6 @@ function assemble_internal_version_changes() {
             if (j == 0 && (prev_id = textbox_being_edited.getAttribute("data-source_id"))) {
                 if (prev_id in internalSource) {
                     // the content is referenced, so we update the referenced content
-               //     id_of_content = internalSource[prev_id]["content"];
-               //     internalSource[id_of_content] = paragraph_content_list[j]
                        // need to check internal content, such as em or math
                     this_paragraph_contents = save_internal_contents(this_paragraph_contents_raw);
                     if (internalSource[prev_id]["content"] != this_paragraph_contents) {
@@ -958,7 +897,6 @@ function assemble_internal_version_changes() {
                 this_object_internal["xmlid"] = this_object_label;
                 this_object_internal["permid"] = "";
                 this_object_internal["parent"] = parent_and_location;
-        //        console.log("need to add paragraph",this_object_label, "inside", this_arrangement_of_objects, "after (or after after)", prev_id);
 
                 // put the new p after the previous p in the string describing the neighboring contents
                 var object_before = new RegExp('(<&>' + prev_id + '<;>)');
@@ -1192,8 +1130,6 @@ function insert_html_version(these_changes) {
             current_editing["tree"][current_editing["level"]] = next_editable_of(location_of_change.parentElement, "children");
         } else if (this_object_entry == "title") {
             var object_as_html = document.createElement('span');
-  //          object_as_html.setAttribute("data-editable", 99);
-  //          object_as_html.setAttribute("tabindex", -1);
             object_as_html.setAttribute("class", "title");
             object_as_html.innerHTML = ptx_to_html(this_object[this_object_entry]);
             console.log("inserting",object_as_html,"before",location_of_change);
@@ -1203,11 +1139,9 @@ function insert_html_version(these_changes) {
         }
         MathJax.Hub.Queue(['Typeset', MathJax.Hub, this_object_id]);
     }
-//    var parent_of_change = location_of_change.parentElement;
     location_of_change.remove();
-//    current_editing["tree"][current_editing["level"]] = next_editable_of(parent_of_change, "children");
 
-    // call mathjax, in case the new vontent contains math
+    // call mathjax, in case the new content contains math
     return object_as_html  // the most recently added object, which we may want to
                            // do something, like add an editing menu
 }
@@ -1234,12 +1168,6 @@ function local_editing_action(e) {
         e.preventDefault();
         console.log("making a local menu");
         local_menu_navigator(e);
-    } else if (false && e.code == "Escape") {
-            e.preventDefault();
-            these_changes = assemble_internal_version_changes();
-            final_added_object = insert_html_version(these_changes);
-            edit_menu_from_current_editing(final_added_object.id, "entering");
-            save_edits()
     } else if (e.code == "Escape" || e.code == "Enter") {
         console.log("saw a Ret");
         if (document.activeElement.tagName == "INPUT") {
@@ -1248,7 +1176,6 @@ function local_editing_action(e) {
             these_changes = assemble_internal_version_changes();
             final_added_object = insert_html_version(these_changes);
             console.log("final_added_object", final_added_object);
-// assumes we are editing a theorem-like.  Need to generalize
             document.getElementById("actively_editing_statement").focus();
       //      document.getElementById("actively_editing_statement").setSelectionRange(0,0);
             this_char = "";
@@ -1256,7 +1183,6 @@ function local_editing_action(e) {
             save_edits()
 
         } else if (e.code == "Escape" || (prev_char.code == "Enter" && prev_prev_char.code == "Enter")) {
-  // same as ESC above:  consolidate
             console.log("need to save");
             e.preventDefault();
             these_changes = assemble_internal_version_changes();
@@ -1339,15 +1265,10 @@ function main_menu_navigator(e) {  // we are not currently editing
                     current_editing["location"][current_level] = current_location;
                     current_siblings = current_editing["tree"][current_level];
                     console.log("current_location is", current_location);
-          //          if (current_location == (current_siblings.length - 1)) {
-              console.log("stay menu A");
+                    console.log("stay menu A");
                     object_of_interest.classList.remove("may_leave");
                     object_of_interest.classList.remove("may_elect");
                         edit_menu_for(current_siblings[current_location], "leaving")
-          //          } else {
-          //              edit_menu_for(current_siblings[current_location], "entering")
-          //          }
-      //          }
             } else {
                 console.log("moving to the next editable sibling");
                     console.log("level was", current_level,"siblings was", current_siblings, "tree", current_editing["tree"]);
@@ -1358,7 +1279,6 @@ function main_menu_navigator(e) {  // we are not currently editing
                 object_of_interest.classList.remove("may_elect");
                     console.log("current_location is", current_location);
               console.log("stay menu B");
-         //       current_editing["location"][current_level] += 1;
                 current_editing["location"][current_level] = current_location;
                 console.log(current_location, "is", current_editing);
                 edit_menu_for(current_siblings[current_location], "entering")
@@ -1380,12 +1300,6 @@ function main_menu_navigator(e) {  // we are not currently editing
                 console.log(" current_editing['tree'][0]",  current_editing["tree"][0]);
                 current_siblings = current_editing["tree"][current_level];
                 console.log("current_siblings", current_siblings);
-      //          if (current_level) {  // design flaw: current siblings are a list if level > 0,
-      //                                // but are one object if level == 0
-      //              edit_menu_for(current_siblings[current_location], "entering")
-      //          } else {
-      //              edit_menu_for(current_siblings, "entering")
-      //          }
                 edit_menu_for(current_siblings[current_location], "entering")
             } else {
                 current_location -= 1;
@@ -1414,7 +1328,6 @@ function main_menu_navigator(e) {  // we are not currently editing
             var edit_submenu = document.createElement('ol');
             edit_submenu.setAttribute('id', 'edit_menu');
 
-       //     var to_be_edited = document.getElementById('enter_choice').parentElement.parentElement;
             var to_be_edited = object_of_interest;
             console.log("to_be_edited", to_be_edited);
             console.log("option", top_menu_options_for(to_be_edited));
@@ -1447,7 +1360,6 @@ function main_menu_navigator(e) {  // we are not currently editing
 
         if ((e.code == "Tab" || e.code == "ArrowDown") && !e.shiftKey) {
             e.preventDefault();
- //           theChooseCurrent = document.getElementById('choose_current');
             next_menu_item = theChooseCurrent.nextSibling;
             console.log("theChooseCurrent", theChooseCurrent, "next_menu_item", next_menu_item);
             if (!next_menu_item) { next_menu_item = theChooseCurrent.parentNode.firstChild }
@@ -1457,38 +1369,18 @@ function main_menu_navigator(e) {  // we are not currently editing
                 console.log("single item menu, current_location now", current_location);
                 current_editing["location"][current_level] = current_location;
                 edit_menu_from_current_editing("current_object_to_edit", "entering");
-        if (false) {
-                var editable_objects = next_editable_of(document.getElementById("edit_menu_holder").parentElement.parentElement.parentElement, "children");
-                var currently_being_edited = document.getElementById("edit_menu_holder").parentElement;
-                console.log("we want to move past", currently_being_edited, "to the next of", editable_objects);
-                for (var j=0; j<editable_objects.length; ++j) {
-                    if (editable_objects[j] ==  currently_being_edited) {
-                        current_index = j;
-                        console.log("currently editing item", current_index);
-                        break
-                    }
-                }
-                if (current_index == editable_objects.length - 1) { next_index = 0 }
-                else { next_index = current_index + 1 }
-                editable_objects[next_index].focus();
-                edit_menu_for(document.activeElement, "entering");
-        }
             }
             theChooseCurrent.removeAttribute("id");
             console.log("theChooseCurrent", theChooseCurrent, "next_menu_item", next_menu_item);
-//        theChooseCurrent.setAttribute("class", "chosen");
             next_menu_item.setAttribute("id", "choose_current");
             console.log("setting focus on",next_menu_item);
             next_menu_item.focus();
         }  // Tab
           else if ((e.code == "Tab" && e.shiftKey) || e.code == "ArrowUp") {  // Shift-Tab to prevous object
-     // recopied code:  consolidate
             e.preventDefault();
             console.log("just saw a", e.code);
             console.log("focus is on", $(":focus"));
-        // copied from Tab, so consolidate
             console.log("saw an",e.code);
-    //        current_active_menu_item = document.getElementById('choose_current');
             next_menu_item = theChooseCurrent.previousSibling;
             console.log("W1 theChooseCurrent", theChooseCurrent, "next_menu_item", next_menu_item);
             if (!next_menu_item) { next_menu_item = theChooseCurrent.parentNode.lastChild }
@@ -1509,15 +1401,13 @@ function main_menu_navigator(e) {  // we are not currently editing
                 console.log("setting focus on",next_menu_item);
                 next_menu_item.focus();
             }
-  //       console.log("Error:  Shift-Tab not understood when ther eis an active menu");
-        }
+          }
           else if (e.code == "Escape" || e.code == "ArrowLeft") {
             console.log("processing ESC");
             console.log("At ArrowLeft, level was", current_level, "xx", current_editing["level"], "with location",  current_editing["location"], "and tree", current_editing["tree"][current_level]);
             if (document.getElementById("local_menu_holder")) {  // hack for when the interface gets confused
                 document.getElementById("local_menu_holder").remove()
             }
- // current_active_menu_item = document.getElementById('choose_current');
             console.log("W4 theChooseCurrent", theChooseCurrent);
             if (current_editing["location"][current_level] == 0) {  // we are on the first sibling
                 current_editing["level"] -= 1;
@@ -1525,31 +1415,10 @@ function main_menu_navigator(e) {  // we are not currently editing
                 current_editing["location"][ current_editing["level"] ] -= 1
             }
 
-       //     edit_menu_for(current_object_to_edit, "entering");
             console.log("edit choice from current_editing", "level", current_editing["level"], "location", current_editing["location"]);
             edit_menu_from_current_editing("", "entering");
-
-           if (false) {
-            previous_selection = theChooseCurrent.parentNode.parentNode;  //current li, up to ol, then up to div or li
-            if (previous_selection.tagName == "LI") {
-                console.log("going up to the previous selection");
-                theChooseCurrent.parentNode.remove();  // remove the ol containing this selection
-                previous_selection.focus();
-                previous_selection.setAttribute("id", "choose_current");
-                previous_selection.classList.remove("chosen");
-                previous_selection.parentNode.classList.remove("past");
-            } else {  // shoudl be the div#edit_menu_holder
-                current_object_to_edit = document.getElementById('edit_menu_holder').parentNode;
-       //         document.getElementById('edit_menu_holder').remove();
-            console.log("menu place 12");
-
-                edit_menu_for(current_object_to_edit, "entering");
-            }
-           }
-    }
-   //   else if ((key_hit = e.code.toLowerCase()) != e.code.toUpperCase()) {  //  supposed to check if it is a letter
+      }
       else if (keyletters.includes(e.code)) {
-    //    key_hit = key_hit.substring(3);  // remove forst 3 characters, i.e., "key"
         key_hit = e.code.toLowerCase().substring(3);  // remove forst 3 characters, i.e., "key"
         console.log("key_hit", key_hit);
         theChooseCurrent = document.getElementById('choose_current');
@@ -1570,7 +1439,7 @@ function main_menu_navigator(e) {  // we are not currently editing
             next_menu_item.setAttribute("id", "choose_current");
             next_menu_item.focus();
         } else {
-            // not sure what to do if an errelevant key was hit
+            // not sure what to do if an irrelevant key was hit
             console.log("that key does not match any option")
         }
     }
@@ -1581,15 +1450,12 @@ function main_menu_navigator(e) {  // we are not currently editing
 
       else if (e.code == "Enter" || e.code == "ArrowRight") {
         e.preventDefault;
-// dataLocation
         if (dataLocation) {
             if (dataLocation == "enter") {  // we are moving down into an object
 
                 console.log("theChooseCurrent", theChooseCurrent);
-            //    this_menu = document.getElementById('edit_menu_holder');
                 var object_to_be_entered = object_of_interest;
                 console.log("object_to_be_entered", object_to_be_entered);
-            //    this_menu.remove();
                 object_to_be_entered.classList.remove("may_select");
                 object_to_be_entered.classList.remove("may_leave");
                 console.log('next_editable_of(object_to_be_entered, "children")', next_editable_of(object_to_be_entered));
@@ -1600,7 +1466,6 @@ function main_menu_navigator(e) {  // we are not currently editing
                 current_editing["tree"][current_level] = editableChildren;
                 console.log("current_editing", current_editing);
 
-        //        editableChildren[0].focus();
                 console.log("object_to_be_entered", object_to_be_entered);
                 console.log("with some children", editableChildren);
                // put  menu on the item at the top of the block_we_are_reentering
@@ -1609,13 +1474,11 @@ function main_menu_navigator(e) {  // we are not currently editing
             console.log("document.activeElement", document.activeElement);
 
 // not right:  data-parent_id is used when we want to change the title or tag
-           //      edit_menu_for(document.activeElement, "entering");
                  console.log("menu on", editableChildren[0]);
                  edit_menu_for(editableChildren[0], "entering");
 
                 return ""
             } else if ((dataLocation == "beforebegin") || (dataLocation == "afterend")) {  // should be the only other options
-            //    $("#choose_current").parent().addClass("past");
                 theChooseCurrent.parentElement.classList.add("past");
                 theChooseCurrent.removeAttribute("id");
                 theChooseCurrent.classList.add("chosen");
@@ -1624,23 +1487,19 @@ function main_menu_navigator(e) {  // we are not currently editing
                 console.log("making a menu for", parent_type);
                 var edit_submenu = document.createElement('ol');
                 edit_submenu.innerHTML = menu_options_for(parent_type, "base");
-        //        edit_submenu.innerHTML = menu_options_for(parent_type, "inner");
                 console.log("just inserted inner menu_options_for(" + parent_type + ")", menu_options_for(parent_type, "inner"));
-            //    current_active_menu_item.insertAdjacentElement("beforeend", edit_submenu);
                 theChooseCurrent.insertAdjacentElement("beforeend", edit_submenu);
                 document.getElementById('choose_current').focus();
                 console.log("focus is on", $(":focus"));
 
-        //        console.log("don;t know about dataLocation", dataLocation);
-       //         alert("don;t know about dataLocation" + dataLocation);
                 return ""
             } else {
                 console.log("Error: unknown dataLocation:", dataLocation)
             }
-          }  // dataLocation
+        }  // dataLocation
 
-// dataAction
           else if (dataAction) {
+            e.preventDefault;
             if (dataAction == "edit") {
                console.log("going to edit", object_of_interest);
                edit_in_place(object_of_interest);
@@ -1661,10 +1520,8 @@ function main_menu_navigator(e) {  // we are not currently editing
                     the_whole_object = html_from_internal_id(id_of_object);
                     console.log("B: the_whole_object", the_whole_object);
                     $("#" + id_of_object).replaceWith(the_whole_object[0]);  // later handle multiple additions
-              //      edit_menu_for(id_of_object, "entering");
                     console.log("just edited", $("#" + id_of_object));
                     // since we changed an object which is in 
-   // maybe need to go up one level?
                     console.log("curent_editing level", current_editing["level"], "with things", current_editing["tree"][current_editing["level"]]);
                     current_editing["level"] -= 1;
                     current_editing["tree"][current_editing["level"]] = next_editable_of(document.getElementById(id_of_object).parentElement, "children");
@@ -1696,17 +1553,16 @@ function main_menu_navigator(e) {  // we are not currently editing
             } else {
                 alert("I don;t know what to do llllllll dataAction", dataAction)
             }
-          }  // dataAction
+        }  // dataAction
           else if (dataEnv) {  // this has to come after dataAction, because if both occur,
                                // dataAction says to do something, and dataEnv says what to do
+              e.preventDefault;
               console.log("in dataEnv", dataEnv);
               console.log("selected a menu item with no action and no location");
               $("#choose_current").parent().addClass("past");
-          //    current_active_menu_item = document.getElementById('choose_current');
               console.log("apparently selected", theChooseCurrent);
               theChooseCurrent.removeAttribute("id");
               theChooseCurrent.setAttribute('class', 'chosen');
-         //     current_active_menu_item_environment = current_active_menu_item.getAttribute('data-env');
 
               if (dataEnv in inner_menu_for()) {  // object names a collection, so make submenu
                   console.log("making a menu for", dataEnv);
@@ -1714,488 +1570,26 @@ function main_menu_navigator(e) {  // we are not currently editing
                   edit_submenu.innerHTML = menu_options_for(dataEnv, "inner");
      //           console.log("removing id from", current_active_menu_item);
                   theChooseCurrent.insertAdjacentElement("beforeend", edit_submenu);
-          //      next_menu_item.setAttribute("id", "choose_current");
                   document.getElementById('choose_current').focus();
 
                            // determine whether both of these next cases can occur
               } else if ( (dataEnv in editing_container_for) || (dataEnvParent in editing_container_for) ) {
               // we just selected an action, so do it
                       // that probably involves adding something before or after a given object
-     //           var new_object_type = current_active_menu_item.getAttribute("data-env");
-     //           var new_object_type_parent = current_active_menu_item.getAttribute("data-env-parent");
-                console.log("making a new", dataEnv, "within", dataEnvParent);
-       //         if ( (new_object_type_parent in editing_container_for) || (new_object_type in editing_container_for) ) {
-             //       object_near_new_object = document.getElementById('edit_menu_holder').parentElement;
-               //     object_near_new_object = object_of_interest.parentElement;
-                    object_near_new_object = object_of_interest;
-                    var before_after = $("#edit_menu_holder > #edit_menu > .chosen").attr("data-location");
-                    console.log("create_object_to_edit",dataEnv, object_near_new_object,before_after);
-                    var new_obj = create_object_to_edit(dataEnv, object_near_new_object, before_after);
-                    edit_in_place(new_obj);
-                    object_near_new_object.classList.remove("may_select");
-                    document.getElementById('edit_menu_holder').remove();
+                  console.log("making a new", dataEnv, "within", dataEnvParent);
+                  object_near_new_object = object_of_interest;
+                  var before_after = $("#edit_menu_holder > #edit_menu > .chosen").attr("data-location");
+                  console.log("create_object_to_edit",dataEnv, object_near_new_object,before_after);
+                  var new_obj = create_object_to_edit(dataEnv, object_near_new_object, before_after);
+                  edit_in_place(new_obj);
+                  object_near_new_object.classList.remove("may_select");
+                  document.getElementById('edit_menu_holder').remove();
               } else {
                   console.log("Error: unknown dataEnv", dataEnv)
               }
           }
-//  qqqqqqq
-        } else if ( false && (e.code == "Tab" || e.code == "ArrowDown") && !e.shiftKey) {
-            e.preventDefault();
-            console.log("hit a Tab (or ArrowDown");
-            console.log("prev_char", prev_char.code, "xxxx", prev_char);
-            console.log("focus is on", $(":focus"));
-
-//  xxxxxxxxxxx
-         if (false && document.getElementById('enter_choice')) {
-           this_choice = document.getElementById('enter_choice');
-           console.log("there already is an 'enter_choice'");
-           var this_menu = document.getElementById("edit_menu_holder");
-           console.log("this_menu", this_menu);
-           console.log("this_choice", this_choice);
-           if (this_choice.getAttribute('data-location') == 'next') {
-
-               $(this_menu).parent().removeClass("may_select");
-               console.log("item to get next focus",$("#edit_menu_holder").parent().next('[data-editable="99"]'), "which has length", $("#edit_menu_holder").parent().next('[data-editable="99"]').length);
-               if (!$(this_menu).parent().next().length) { //at the end of a block, so new menu goes at end
-               //    e.preventDefault();
-                   var enclosing_block = $(this_menu).parent().parent()[0];
-                   console.log("at the end of", enclosing_block, "with id", enclosing_block.id);
-                   this_menu.remove();
-            console.log("menu place 5");
-
-                   edit_menu_for(enclosing_block.getAttribute("id"), "leaving");
-                   console.log("focus is on",  $(":focus"));
-                   console.log("document.getElementById('enter_choice')", document.getElementById('enter_choice'), $(":focus"));
-                   return
-                }
-                else {
-                   console.log("moving to next *editable* object A");
-                   var this_motion = "entering";
-                   var next_to_edit = next_editable_of($(this_menu).parent(), "siblings");
-                   console.log("next_to_edit", next_to_edit, "siblings of", $(this_menu).parent());
-                   if (!next_to_edit.length) {
-                       next_to_edit = next_editable_of($(this_menu).parent(), "previoussiblings");
-                   }
-                   if (next_to_edit.length) {
-                       next_to_edit[0].focus();
-                   } else {
-                       $(this_menu).parent().parent().focus()
-                       this_motion = "leaving";
-                   }
- //////                  this_menu.remove()
-                   edit_menu_for(document.activeElement, this_motion);
-                   return ""
-               }
-           } else if (this_choice.getAttribute('data-location') == 'stay') { // at end of block, and want to move on
-               // remove class from prev sibling, find its next sibling
-               console.log("about to leave a block");
-               console.log("this_menu", this_menu, "this_menu.previousSibling", document.getElementById('edit_menu_holder').previousSibling);
-           //    block_we_are_leaving = document.getElementById('edit_menu_holder').previousSibling;
-               console.log("again:  this_menu", this_menu, "this_menu.previousSibling", this_menu.previousSibling);
-               console.log("are they the sme?", document.getElementById('edit_menu_holder') == this_menu, document.getElementById('edit_menu_holder'), this_menu);
-               block_we_are_leaving = this_menu.previousSibling;
-               console.log("here B");
-               block_we_are_leaving.classList.remove("may_leave");
-               console.log("$(block_we_are_leaving)",$(block_we_are_leaving), "xxxx", $(block_we_are_leaving).next(), "yyyyy", $(block_we_are_leaving).next('[data-editable="99"]'));
-               console.log("moving to next object B");
-               next_block_to_edit = next_editable_of($(this_menu), "siblings")[0];
-               this_menu.remove()
-               $(next_block_to_edit).focus();
-               console.log("left a block.  focus is now on", $(":focus"));
-           } else if (this_choice.getAttribute('data-location') == 'inline') {
-               console.log("options for something inline");
-               thing_to_edit = document.getElementById("edit_menu_holder").parentElement;
-               source_of_thing_to_edit = internalSource[thing_to_edit.parentElement.id]; 
-               console.log("thing we are going to edit", thing_to_edit, "which has title", source_of_thing_to_edit["title"]);
-               console.log("here C");
-               thing_to_edit.classList.remove("may_select");
-               this_menu.remove();
-               upcoming_blocks = next_editable_of($(thing_to_edit), "siblings");
-               if (upcoming_blocks.length) {
-                   next_block_to_edit = upcoming_blocks[0];
-               console.log("here D");
-                   next_block_to_edit.classList.add("may_select");
-               } else {
-                   next_block_to_edit = thing_to_edit.parentElement;
-               console.log("here E");
-                   next_block_to_edit.classList.add("may_leave");
-               }
-               $(next_block_to_edit).focus();
-               console.log("next_block_to_edit", next_block_to_edit);
-               console.log("here F");
-           }  else { alert("Error:  enter_choice without data-location") }
-       }
-//   xxxxxxxxx
-       // and add the option to edit the next object
-       if (!document.getElementById('edit_menu_holder') && !document.getElementById('local_menu_holder')) {  // we are not already navigating a menu
-            console.log("menu place 6");
-
-           alert("at menu place 6");  // not sure we can ever get here
-
-           edit_menu_for(document.activeElement.id, "entering");        // so create one
-    //       $(":focus").addClass("may_select");
-           console.log("element with fcous is", $(":focus"));
-           console.log("putting focus on", document.getElementById('edit_menu_holder'));
-           document.getElementById('edit_menu_holder').focus();
-           console.log("element with fcous is", $(":focus"));
-           console.log("are we done tabbing to the next item?");
-       } else {
-        alert("shoudl not be here G7");
-        if (false) {
-        current_active_menu_item = document.getElementById('choose_current');
-        next_menu_item = current_active_menu_item.nextSibling;
-        console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
-        if (!next_menu_item) { next_menu_item = current_active_menu_item.parentNode.firstChild }
-        console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
-        if (current_active_menu_item == next_menu_item) { //only one item on menu, so Tab shold move to the next editable item
-   // wasteful, clean up
-            var editable_objects = next_editable_of(document.getElementById("edit_menu_holder").parentElement.parentElement.parentElement, "children");
-            var currently_being_edited = document.getElementById("edit_menu_holder").parentElement;
-            console.log("we want to move past", currently_being_edited, "to the next of", editable_objects);
-            for (var j=0; j<editable_objects.length; ++j) {
-                if (editable_objects[j] ==  currently_being_edited) {
-                    current_index = j;
-                    console.log("currently editing item", current_index);
-                    break
-                }
-            }
-            if (current_index == editable_objects.length - 1) { next_index = 0 }
-            else { next_index = current_index + 1 }
-            editable_objects[next_index].focus();
-            edit_menu_for(document.activeElement, "entering");
-        }
-        current_active_menu_item.removeAttribute("id");
-        console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
-//        current_active_menu_item.setAttribute("class", "chosen");
-        next_menu_item.setAttribute("id", "choose_current");
-        console.log("setting focus on",next_menu_item);
-        next_menu_item.focus();
-       }
-      }
-
-    } //  tmp #choose_current
-
-     else if (false && ((e.code == "Tab" && e.shiftKey) || e.code == "ArrowUp")) {  // Shift-Tab to prevous object
-     // recopied code:  consolidate
-        e.preventDefault();
-        console.log("just saw a", e.code);
-        console.log("focus is on", $(":focus"));
-        if (false && document.getElementById('enter_choice')) {
-           this_choice = document.getElementById('enter_choice');
-           console.log("there already is an 'enter_choice'");
-           // there are two cases:  1) we are at the top of a block (and so may enter it or add near it, or move on)
-           //                       2) we are at the bottom (actually, after) a block, and may return to it, or move on
-           var this_menu = document.getElementById("edit_menu_holder");
-           if (this_choice.getAttribute('data-location') == 'next' || this_choice.getAttribute('data-location') == 'inline') {  // we are at the top of a block
- // need to understand possible use cases for "inline", so this may not be right
-               
-               $(this_menu).parent().removeClass("may_select");
-               console.log("item to get next focus",$("#edit_menu_holder").parent().prev('[data-editable="99"]'), "which has length", $("#edit_menu_holder").parent().next('[data-editable="99"]').length);
-               if (!$(this_menu).parent().prev().length) { //at the start of a block, so go up one
-               //    e.preventDefault(); 
-                   var enclosing_block = $(this_menu).parent().parent()[0]; 
-                   console.log("at the end of", enclosing_block, "with id", enclosing_block.id);
-                   this_menu.remove();
-            console.log("menu place 7");
-
-                   edit_menu_for(enclosing_block.getAttribute("id"), "entering");
-                   console.log("focus is on",  $(":focus"));
-                   console.log("document.getElementById('enter_choice')", document.getElementById('enter_choice'), $(":focus"));
-                   return
-                }
-                else {
-                   console.log("moving to next object C");
-     /////////              $(this_menu).parent().prev('[data-editable="99"]').focus();
-                   var previous_editable_siblings = next_editable_of($(this_menu).parent(), "previoussiblings");
-                   console.log("previous_editable_siblings", previous_editable_siblings);
-                   if (previous_editable_siblings.length) {
-               //        next_editable_of($(this_menu).parent(), "previoussiblings")[0].focus();
-                       previous_editable_siblings[0].focus();
-                   } else {
-                       $(this_menu).parent().parent().focus()
-                   }
-             //      $(this_menu).parent().prevAll('.heading > [data-editable="99"], [data-editable="99"]')[0].focus();
-                   this_menu.remove()
-                   // copied.  consolidate
-            console.log("menu place 8");
-
-                   console.log("element with fcous is", $(":focus"), "aka",document.activeElement);
-               //    edit_menu_for(document.activeElement.id, "entering");        // so create one
-                   edit_menu_for(document.activeElement, "entering");        // so create one
-        //           $(":focus").addClass("may_select");
-                   console.log("putting focus on", document.getElementById('edit_menu_holder'));
-            //       document.getElementById('edit_menu_holder').focus();
-                   console.log("element with fcous is", $(":focus"));
-                   console.log("are we done tabbing to the next item?");
-
-               }
-           } else { // we are at the bottom of a block
-               document.getElementById("edit_menu_holder").previousSibling.classList.remove("may_leave");
-               document.getElementById("edit_menu_holder").previousSibling.focus();
-               document.getElementById("edit_menu_holder").remove()
-               edit_menu_for(document.activeElement.id, "entering"); 
-           //    alert("Shift-Tab not implemented at the bottom of a block");
-           }
-       } else {
-        // copied from Tab, so consolidate
-        console.log("saw an",e.code);
-        current_active_menu_item = document.getElementById('choose_current');
-        next_menu_item = current_active_menu_item.previousSibling;
-        console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
-        if (!next_menu_item) { next_menu_item = current_active_menu_item.parentNode.lastChild }
-        console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
-        current_active_menu_item.removeAttribute("id");
-        console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
-        current_active_menu_item.classList.remove("chosen");
-        next_menu_item.setAttribute("id", "choose_current");
-        console.log("setting focus on",next_menu_item);
-        next_menu_item.focus();
-  //       console.log("Error:  Shift-Tab not understood when ther eis an active menu");
-       }
-    } 
-    else if ( false && (e.code == "Enter" || e.code == "ArrowRight")) {
-        e.preventDefault();
-        console.log("saw a Return (meaning, Enter)");
-        console.log("focus is on", $(":focus"));
-        // we have just tabbed to a new element.  Tab to move on, return to edit at/near that element
-        // But: it makes a difference whether we are at the end of a block
-        if (this_choice = document.getElementById('enter_choice')) {
-            console.log("this_choice is", this_choice);
-            if (this_choice.getAttribute('data-location') == 'stay') {
-               var this_menu = document.getElementById("edit_menu_holder");
-               block_we_are_reentering = this_menu.previousSibling;
-               block_we_are_reentering.classList.remove("may_leave");
-               next_editable_of(block_we_are_reentering, "children")[0].focus();
-               this_menu.remove();
-               // put  menu on the item at the top of the block_we_are_reentering
-                   // this is a repeat of a Tab case, so consolidate
-            console.log("menu place 9");
-
-               edit_menu_for(document.activeElement, "entering");
-               return
-
-            } else {
-                var edit_submenu = document.createElement('ol');
-                edit_submenu.setAttribute('id', 'edit_menu');
-
-                var to_be_edited = document.getElementById('enter_choice').parentElement.parentElement;
-                console.log("to_be_edited", to_be_edited);
-                console.log("option", top_menu_options_for(to_be_edited));
-                edit_submenu.innerHTML = top_menu_options_for(to_be_edited);
-                $("#enter_choice").replaceWith(edit_submenu);
-                document.getElementById('choose_current').focus();
-                return
-            }
-        } 
-           // otherwise check if there is an action associated to this choice
-           else if (false && document.getElementById('choose_current').hasAttribute("data-action")) {
-                var current_active_menu_item = document.getElementById('choose_current');
-                var this_action = current_active_menu_item.getAttribute("data-action");
-                console.log("               this_action", this_action)
-                var to_be_edited = document.getElementById('edit_menu_holder').parentElement;
-                if (this_action == "edit") {
-                   console.log("going to edit it", to_be_edited);
-                   edit_in_place(to_be_edited);
-                } else if (this_action == "change-env-to") {
-                    var new_env = current_active_menu_item.getAttribute("data-env");
-                    console.log("changing environment to", new_env);
-                       // #edit_menu_holder is in span.type, inside .heading, inside article
-                    to_be_edited = document.getElementById('edit_menu_holder').parentElement.parentElement.parentElement;
-                    console.log("to_be_edited", to_be_edited);
-                    var id_of_object = to_be_edited.id;
-                    var this_object_source = internalSource[id_of_object];  
-                    console.log("current envoronemnt", this_object_source);
-                    var old_env = internalSource[id_of_object]["ptxtag"];
-                    internalSource[id_of_object]["ptxtag"] = new_env;
-                    recent_editing_actions.push("changed " + old_env + " to " + new_env + " " + id_of_object);
-                    console.log("the change was", "changed " + old_env + " to " + new_env + " " + id_of_object);
-                    the_whole_object = html_from_internal_id(id_of_object);
-                    console.log("B: the_whole_object", the_whole_object);
-                    $("#" + id_of_object).replaceWith(the_whole_object[0]);  // later handle multiple additions
-                    edit_menu_for(id_of_object, "entering");
-                    return ""
-                    
-                } else if (this_action == 'change-env') {
-                       // #edit_menu_holder is in span.type, inside .heading, inside article
-                    current_env = document.getElementById('edit_menu_holder').parentElement.parentElement.parentElement;
-                    current_env_id = current_env.id;
-                    current_env_source = internalSource[current_env_id];
-                    current_env_name = current_env_source["ptxtag"];
-                    console.log("need menu to change", current_env_name, "in", current_env_source);
-
-                    current_active_menu_item.parentElement.classList.add("past");
-                    current_active_menu_item.removeAttribute("id");
-                    current_active_menu_item.classList.add("chosen");
-
-                    var edit_submenu = document.createElement('ol');
-                    console.log("J2 looking for menu options for", current_env_name);
-
-                    edit_submenu.innerHTML = menu_options_for(current_env_name, "change");
-                    console.log("just inserted inner menu_options_for(parent_type)", menu_options_for(current_env_name, "change"));
-                    current_active_menu_item.insertAdjacentElement("beforeend", edit_submenu);
-                    document.getElementById('choose_current').focus();
-                    console.log("focus is on", $(":focus"));
-
-                }
-                else { alert("unimplemented action: "+ this_action) }
-        }
-        // otherwise, see if we just selected a top level menu item about location
-        // because that involves checking the parent to see what options are possible
-// ppppppppp
-          else if (document.getElementById('choose_current').hasAttribute("data-location")) {
-            var current_active_menu_item = document.getElementById('choose_current');
-            console.log("location infro on",current_active_menu_item);
-            if (['beforebegin', 'afterend'].includes(current_active_menu_item.getAttribute("data-location"))) {
-            //    $("#choose_current").parent().addClass("past");
-                current_active_menu_item.parentElement.classList.add("past");
-                current_active_menu_item.removeAttribute("id");
-                current_active_menu_item.classList.add("chosen");
-
-                parent_type = document.getElementById('edit_menu_holder').parentElement.parentElement.tagName.toLowerCase();
-                console.log("making a menu for", parent_type);
-                var edit_submenu = document.createElement('ol');
-                edit_submenu.innerHTML = menu_options_for(parent_type, "base");
-        //        edit_submenu.innerHTML = menu_options_for(parent_type, "inner");
-                console.log("just inserted inner menu_options_for(" + parent_type + ")", menu_options_for(parent_type, "inner"));
-                current_active_menu_item.insertAdjacentElement("beforeend", edit_submenu);
-                document.getElementById('choose_current').focus();
-                console.log("focus is on", $(":focus"));
-            } else if (current_active_menu_item.getAttribute("data-location") == "enter") {
-                console.log("current_active_menu_item", current_active_menu_item);
-                this_menu = document.getElementById('edit_menu_holder');
-                var object_to_be_entered = this_menu.parentElement;
-                console.log("object_to_be_entered", object_to_be_entered);
-                this_menu.remove();
-                object_to_be_entered.classList.remove("may_select");
-                var object_to_be_entered_type = object_to_be_entered.tagName;
-             //   alert("Entering " + object_to_be_edited_type + " not implemented yet");
-                console.log('next_editable_of(object_to_be_entered, "children")', next_editable_of(object_to_be_entered));
-                console.log("children", next_editable_of(object_to_be_entered, "children")[0]);
-                next_editable_of(object_to_be_entered, "children")[0].focus();
-                console.log("object_to_be_entered", object_to_be_entered);
-                console.log("with some children", $(object_to_be_entered).children('.heading, [data-editable="99"]'));
-               // put  menu on the item at the top of the block_we_are_reentering
-                   // this is a repeat of a Tab case, so consolidate
-            console.log("menu place 10");
-            console.log("document.activeElement", document.activeElement);
-
-// not right:  data-parent_id is used when we want to change the title or tag
-                  edit_menu_for(document.activeElement, "entering");
-                return
-            // consolidate leave/stay ?
-//  the leave/stay is now handles by Tab, so delete the next couple things
-            } else if (current_active_menu_item.getAttribute("data-location") == "leave") {
-                var object_we_are_in = $('#edit_menu_holder').prev();
-                console.log("leaving", object_we_are_in);
-                object_we_are_in.classList.remove("may_leave");
-
-            } else if (current_active_menu_item.getAttribute("data-location") == "stay") {
-                    // we are at the bottom of a block and want to stay in it, so go to the top of it
-                var object_we_are_in = $('#edit_menu_holder').prev();
-                next_editable_of(object_we_are_in, "siblings")[0].focus();
-            }
-        } else { // else check if the selected items leads to a submenu
-            console.log("selected a menu item with no action and no location");
-            $("#choose_current").parent().addClass("past");
-            current_active_menu_item = document.getElementById('choose_current');
-            console.log("apparently selected", current_active_menu_item);
-            current_active_menu_item.removeAttribute("id");
-            current_active_menu_item.setAttribute('class', 'chosen');
-            current_active_menu_item_environment = current_active_menu_item.getAttribute('data-env');
-
-            if (current_active_menu_item_environment in inner_menu_for()) {  // object names a collection, so make submenu
-                console.log("making a menu for", current_active_menu_item_environment);
-                var edit_submenu = document.createElement('ol');
-                edit_submenu.innerHTML = menu_options_for(current_active_menu_item_environment, "inner");
-     //           console.log("removing id from", current_active_menu_item);
-                current_active_menu_item.insertAdjacentElement("beforeend", edit_submenu);
-          //      next_menu_item.setAttribute("id", "choose_current");
-                document.getElementById('choose_current').focus();
-          //      console.log("setting focus AA on",next_menu_item);
-            } else {  // we just selected an action, so do it
-                      // that probably involves adding something before or after a given object
-                var new_object_type = current_active_menu_item.getAttribute("data-env");
-                var new_object_type_parent = current_active_menu_item.getAttribute("data-env-parent");
-                console.log("making a new", new_object_type, "within", new_object_type_parent);
-                if ( (new_object_type_parent in editing_container_for) || (new_object_type in editing_container_for) ) {
-                    object_near_new_object = document.getElementById('edit_menu_holder').parentElement;
-                    var before_after = $("#edit_menu_holder > #edit_menu > .chosen").attr("data-location");
-                    var new_obj = create_object_to_edit(new_object_type, object_near_new_object, before_after);
-                    edit_in_place(new_obj);
-                    object_near_new_object.classList.remove("may_select");
-                    document.getElementById('edit_menu_holder').remove();
-
-                 } else if (document.getElementById('actively_editing')) {
-                     // need a mini-form for part of the larger form
-                     console.log("now make a n-=mini-form");
-                     document.getElementById("local_edit_form").remove();
-                 } else {
-                    alert("don't yet know about " + new_object_type);
-                    document.getElementById('edit_menu_holder').parentElement.focus();
-            console.log("menu place 11");
-
-                    edit_menu_for(document.activeElement.id, "entering");
-                }
-            }
-
-        }
-    }  else if (false && (e.code == "Escape" || e.code == "ArrowLeft")) {
-        console.log("processing ESC");
-        if (document.getElementById("local_menu_holder")) {  // hack for when the interface gets confused
-            document.getElementById("local_menu_holder").remove()
-        }
-        if (false && document.getElementById('choose_current')) {
-            current_active_menu_item = document.getElementById('choose_current');
-            console.log("current_active_menu_item", current_active_menu_item);
-            previous_selection = current_active_menu_item.parentNode.parentNode;  //current li, up to ol, then up to div or li
-            if (previous_selection.tagName == "LI") {
-                console.log("going up to the previous selection");
-                current_active_menu_item.parentNode.remove();  // remove the ol containing this selection
-                previous_selection.focus();
-                previous_selection.setAttribute("id", "choose_current");
-                previous_selection.classList.remove("chosen");
-                previous_selection.parentNode.classList.remove("past");
-            } else {  // shoudl be the div#edit_menu_holder
-                current_object_to_edit = document.getElementById('edit_menu_holder').parentNode;
-       //         document.getElementById('edit_menu_holder').remove();
-            console.log("menu place 12");
-
-                edit_menu_for(current_object_to_edit, "entering");
-                 // just put the entering option
-            }
-        } else {  // we are at the top of an object and have not decided to edit it
-            current_object_being_edited = document.getElementById('edit_menu_holder').parentNode;
-            parent_object_to_edit = current_object_being_edited.parentNode;
-            console.log("parent_object_to_edit", parent_object_to_edit);
-            current_object_being_edited.classList.remove("may_select");
-            console.log("menu place 13");
-
-            edit_menu_for(parent_object_to_edit.id, "entering");
-        }
-    } else if (false && ((key_hit = e.code.toLowerCase()) != e.code.toUpperCase())) {  //  supposed to check if it is a letter
-        key_hit = key_hit.substring(3);  // remove forst 3 characters, i.e., "key"
-        current_active_menu_item = document.getElementById('choose_current');
-        console.log('current_active_menu_item',  current_active_menu_item );
-        console.log( $(current_active_menu_item) );
-          // there can be multiple data-jump, so use ~= to find if the one we are looking for is there
-          // and start from the beginning in case the match is earlier  (make the second selector better)
-        if ((next_menu_item = $(current_active_menu_item).nextAll('[data-jump~="' + key_hit + '"]:first')[0]) ||
-            (next_menu_item = $(current_active_menu_item).prevAll('[data-jump~="' + key_hit + '"]:last')[0])) {  // check there is a menu item with that key
-            current_active_menu_item.removeAttribute("id", "choose_current");
-            console.log('[data-jump="' + key_hit + '"]');
-            console.log( $(current_active_menu_item) );
-            console.log("li",  $(current_active_menu_item).next('li') );
-            console.log("nextAll", $(current_active_menu_item).nextAll('[data-jump="' + key_hit + '"]:first') );
-            console.log("next t-l", $(current_active_menu_item).next('[data-env="theorem-like"]') );
-            console.log("current_active_menu_item", current_active_menu_item, "cccc", $(current_active_menu_item).next('[data-jump="' + key_hit + '"]'));
-            console.log("next_menu_item", next_menu_item);
-            next_menu_item.setAttribute("id", "choose_current");
-            next_menu_item.focus();
-        } else {
-            // not sure what to do if an errelevant key was hit
-            console.log("that key does not match any option")
-        }
-    } else {
+    } //  // dataEnv
+      else {
         console.log("key that is not meaningful when navigating a menu:", e.code)
     }
 }
@@ -2246,7 +1640,6 @@ document.addEventListener('focus', function() {
   $('.in_edit_tree').removeClass('in_edit_tree');
   var edit_tree = $(':focus').parents();
   console.log("edit tree", edit_tree);
-//  edit_tree.addClass('in_edit_tree');
   // put little lines on teh right, to show the local heirarchy
   for (var i=0; i < edit_tree.length; ++i) {
 //      console.log('edit_tree[i]', edit_tree[i]);
