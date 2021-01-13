@@ -455,12 +455,12 @@ window.addEventListener("load",function(event) {
    if (window.location.hash.length) {
        let id = window.location.hash.substring(1);
        the_anchor = document.getElementById(id);
-       console.log("the_anchor", the_anchor);
-       var contained_knowl = the_anchor.querySelector("a[data-knowl]");
- //      if (the_anchor.hasAttribute("data-knowl")) {
-       if (contained_knowl) {
+       if (the_anchor.tagName == "ARTICLE") {
+         var contained_knowl = the_anchor.querySelector("a[data-knowl]");
+         if (contained_knowl && contained_knowl.parentElement == the_anchor) {
            console.log("found a knowl", contained_knowl);
            knowl_click_handler($(contained_knowl))
+         }
        }
    }
 });
