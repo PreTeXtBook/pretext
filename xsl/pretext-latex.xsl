@@ -6001,11 +6001,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="not($dry-run = '')">
             <!-- always a list item -->
             <xsl:text>\item</xsl:text>
-            <!-- hard-code the number when duplicating, since some items -->
-            <!-- are absent, and then automatic numbering would be wrong -->
-            <xsl:text>[(</xsl:text>
-            <xsl:apply-templates select="." mode="list-number" />
-            <xsl:text>)]</xsl:text>
+            <!-- We use the ref/label mechanism for tasks where born. -->
+            <!-- But if in a "solutions" division, we may be skipping -->
+            <!-- some and need to hard-code the task label/number.    -->
+            <xsl:choose>
+                <xsl:when test="$b-original">
+                    <!-- \label{} will separate content, if   -->
+                    <!-- employed, else we use an empty group -->
+                    <xsl:choose>
+                        <xsl:when test="@xml:id">
+                            <xsl:apply-templates select="." mode="label" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>{}</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise>
+                    <!-- hard-code the number when duplicating, since some items -->
+                    <!-- are absent, and then automatic numbering would be wrong -->
+                    <xsl:text>[(</xsl:text>
+                    <xsl:apply-templates select="." mode="list-number" />
+                    <xsl:text>)]</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
             <!-- Something is being output, so include an (optional) title  -->
             <!-- Semantic macro defined in preamble, mostly for font change -->
             <xsl:if test="title">
