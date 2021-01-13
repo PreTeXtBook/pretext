@@ -4854,7 +4854,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- XSLT 1.0: RTF is just a string if not converted to node set -->
                 <!-- This comparison might improve with a normalize-space()      -->
                 <xsl:if test="not($common-content = '')">
-                    <p data-braille="continuation">
+                    <p class="continuation">
+                        <xsl:if test="$b-braille">
+                            <xsl:attribute name="data-braille">
+                                <xsl:text>continuation</xsl:text>
+                            </xsl:attribute>
+                        </xsl:if>
                         <xsl:copy-of select="$common-content" />
                     </p>
                 </xsl:if>
@@ -4869,7 +4874,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- XSLT 1.0: RTF is just a string if not converted to node set -->
                 <!-- This comparison might improve with a normalize-space()      -->
                 <xsl:if test="not($common-content = '')">
-                    <p data-braille="continuation">
+                    <p class="continuation">
+                        <xsl:if test="$b-braille">
+                            <xsl:attribute name="data-braille">
+                                <xsl:text>continuation</xsl:text>
+                            </xsl:attribute>
+                        </xsl:if>
                         <xsl:copy-of select="$common-content" />
                     </p>
                 </xsl:if>
@@ -7063,9 +7073,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:if>
             </xsl:attribute>
             <xsl:if test="not($next-cell)">
-                <xsl:attribute name="data-braille">
-                    <xsl:text>last-cell</xsl:text>
-                </xsl:attribute>
+                <xsl:if test="$b-braille">
+                    <xsl:attribute name="data-braille">
+                        <xsl:text>last-cell</xsl:text>
+                    </xsl:attribute>
+                </xsl:if>
             </xsl:if>
             <xsl:if test="not($column-span = 1)">
                 <xsl:attribute name="colspan">
