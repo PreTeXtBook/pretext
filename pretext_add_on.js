@@ -427,9 +427,12 @@ window.addEventListener("load",function(event) {
            }
 }});
 
-var knowl_id_counterX = 0;
+
+// this is to open every knowl on a page
+// (this code is not actually used anywhere)
 window.addEventListener("load",function(event) {
    if($('body').hasClass("braillesample")) {
+       var knowl_id_counterX = 0;
        console.log("            found braillesample");
        var all_knowls = $('[data-knowl]');
        console.log("found", all_knowls.length, "knowls");
@@ -446,6 +449,21 @@ window.addEventListener("load",function(event) {
           // knowl_click_handler($(all_knowls[j]))
        }
 }});
+
+// when the anchor is a knowl, open it
+window.addEventListener("load",function(event) {
+   if (window.location.hash.length) {
+       let id = window.location.hash.substring(1);
+       the_anchor = document.getElementById(id);
+       console.log("the_anchor", the_anchor);
+       var contained_knowl = the_anchor.querySelector("a[data-knowl]");
+ //      if (the_anchor.hasAttribute("data-knowl")) {
+       if (contained_knowl) {
+           console.log("found a knowl", contained_knowl);
+           knowl_click_handler($(contained_knowl))
+       }
+   }
+});
 
 /*
 window.setInterval(function(){
