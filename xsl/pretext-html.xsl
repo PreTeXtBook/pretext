@@ -4012,24 +4012,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- now, structured versus unstructured -->
         <xsl:when test="statement">
-            <xsl:if test="$b-has-statement">
-                <xsl:apply-templates select="statement">
-                    <xsl:with-param name="b-original" select="$b-original" />
-                    <xsl:with-param name="block-type" select="$block-type"/>
-                </xsl:apply-templates>
-            </xsl:if>
-            <!-- We consider a "program" of a coding exercise as part of the "statement" -->
-            <!-- for the purpose of deciding if it is included or not.  As a peer of a   -->
-            <!-- "statement" (not a child of a "statement") on Runestone we go straight  -->
-            <!--  to an ActiveCode window, else we respect the @interactive attribute.   -->
+            <!-- exceptional, Runestone ActiveCode exercise     -->
+            <!-- statement as a parameter, so inserted properly -->
             <xsl:choose>
-                <xsl:when test="$b-host-runestone">
-                    <xsl:apply-templates select="program" mode="runestone-activecode"/>
+                <xsl:when test="$b-host-runestone and $b-has-statement and program">
+                    <xsl:apply-templates select="program" mode="runestone-activecode">
+                        <xsl:with-param name="statement-content">
+                            <xsl:apply-templates select="statement">
+                                <xsl:with-param name="b-original" select="$b-original" />
+                                <xsl:with-param name="block-type" select="$block-type"/>
+                            </xsl:apply-templates>
+                        </xsl:with-param>
+                    </xsl:apply-templates>
                 </xsl:when>
-                <xsl:otherwise>
-                    <xsl:apply-templates select="program"/>
-                </xsl:otherwise>
+                <xsl:when test="$b-has-statement">
+                    <xsl:apply-templates select="statement">
+                        <xsl:with-param name="b-original" select="$b-original" />
+                        <xsl:with-param name="block-type" select="$block-type"/>
+                    </xsl:apply-templates>
+                </xsl:when>
             </xsl:choose>
+            <!-- A "program" gets absorbed above, so we don't want to show it twice -->
+            <!-- Outside of Runestone, we just follow-on with the program           -->
+            <xsl:if test="not($b-host-runestone) and $b-has-statement and program">
+                <xsl:apply-templates select="program"/>
+            </xsl:if>
             <!-- no  div.solutions  if there is nothing to go into it -->
             <xsl:if test="(hint and $b-has-hint) or (answer and $b-has-answer) or (solution and $b-has-solution)">
                 <div class="solutions">
@@ -8455,42 +8462,70 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Runestone has support for various languages.  Some  -->
 <!-- are "in-browser" while others are backed by "real"  -->
-<!-- compilers as part of a Runestone server.            -->
+<!-- compilers as part of a Runestone server.  For an    -->
+<!-- exercise, we pass in some lead-in text, which is    -->
+<!-- the question posed for use in the ActiveCode window -->
 <xsl:template match="program" mode="runestone-activecode">
+    <xsl:param name="statement-content" select="''"/>
+
     <xsl:variable name="active-language">
         <xsl:apply-templates select="." mode="active-language"/>
     </xsl:variable>
+    <xsl:variable name="hid">
+        <xsl:apply-templates select="." mode="html-id"/>
+    </xsl:variable>
+    <!-- assumes we get here from inside an "exercise" -->
+    <xsl:variable name="num">
+        <xsl:apply-templates select="ancestor::exercise" mode="number"/>
+    </xsl:variable>
     <xsl:choose>
         <xsl:when test="not($active-language = '')">
-            <div data-childcomponent="ac2_2_1" class="runestone explainer ac_section alert alert-warning">
-                <textarea data-component="activecode" data-lang="{$active-language}" data-timelimit="25000" data-audio="">
+            <div class="runestone explainer ac_section alert alert-warning">
+                <div data-component="activecode">
                     <xsl:attribute name="id">
-                        <xsl:apply-templates select="." mode="html-id" />
+                        <xsl:value-of select="$hid"/>
                     </xsl:attribute>
-                    <!-- Code Lens only for certain languages -->
-                    <xsl:attribute name="data-codelens">
-                        <xsl:choose>
-                            <xsl:when test="($active-language = 'python') or ($active-language = 'python2') or ($active-language = 'python3')">
-                                <xsl:text>true</xsl:text>
-                            </xsl:when>
-                            <xsl:when test="($active-language = 'c') or ($active-language = 'cpp') or ($active-language = 'java')">
-                                <xsl:text>true</xsl:text>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:text>false</xsl:text>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:attribute>
-                    <!-- SQL (only) needs an attribute so it can find some code -->
-                    <xsl:if test="$active-language = 'sql'">
-                        <xsl:attribute name="data-wasm">
-                            <xsl:text>/_static</xsl:text>
-                        </xsl:attribute>
+                    <!-- add some lead-in text to the window -->
+                    <xsl:if test="not($statement-content = '')">
+                        <div class="ac_question col-md-12">
+                            <xsl:attribute name="id">
+                                <xsl:value-of select="concat($hid, '_question')"/>
+                            </xsl:attribute>
+                            <xsl:copy-of select="$statement-content"/>
+                        </div>
                     </xsl:if>
-                    <xsl:call-template name="sanitize-text">
-                        <xsl:with-param name="text" select="input" />
-                    </xsl:call-template>
-                </textarea>
+                    <textarea data-lang="{$active-language}" data-timelimit="25000" data-audio="" data-coach="true" style="visibility: hidden;">
+                        <xsl:attribute name="id">
+                            <xsl:value-of select="concat($hid, '_editor')"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="data-question_label">
+                            <xsl:value-of select="$num"/>
+                        </xsl:attribute>
+                        <!-- Code Lens only for certain languages -->
+                        <xsl:attribute name="data-codelens">
+                            <xsl:choose>
+                                <xsl:when test="($active-language = 'python') or ($active-language = 'python2') or ($active-language = 'python3')">
+                                    <xsl:text>true</xsl:text>
+                                </xsl:when>
+                                <xsl:when test="($active-language = 'c') or ($active-language = 'cpp') or ($active-language = 'java')">
+                                    <xsl:text>true</xsl:text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:text>false</xsl:text>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:attribute>
+                        <!-- SQL (only) needs an attribute so it can find some code -->
+                        <xsl:if test="$active-language = 'sql'">
+                            <xsl:attribute name="data-wasm">
+                                <xsl:text>/_static</xsl:text>
+                            </xsl:attribute>
+                        </xsl:if>
+                        <xsl:call-template name="sanitize-text">
+                            <xsl:with-param name="text" select="input" />
+                        </xsl:call-template>
+                    </textarea>
+                </div>
             </div>
         </xsl:when>
         <xsl:otherwise>
