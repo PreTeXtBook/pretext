@@ -459,7 +459,8 @@ window.addEventListener("load",function(event) {
          var contained_knowl = the_anchor.querySelector("a[data-knowl]");
          if (contained_knowl && contained_knowl.parentElement == the_anchor) {
            console.log("found a knowl", contained_knowl);
-           knowl_click_handler($(contained_knowl))
+       //    knowl_click_handler($(contained_knowl))
+           contained_knowl.click()
          }
        }
    }
