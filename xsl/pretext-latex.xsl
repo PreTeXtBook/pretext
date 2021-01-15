@@ -5283,6 +5283,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="label"/>
     </xsl:if>
     <xsl:text>%&#xa;</xsl:text>
+    <xsl:apply-templates select="idx"/>
     <xsl:apply-templates select="introduction" />
     <xsl:choose>
         <xsl:when test="$ncols = 1">
@@ -5519,6 +5520,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="env-name">
         <xsl:apply-templates select="." mode="environment-name"/>
     </xsl:variable>
+    <xsl:apply-templates select="idx"/>
     <xsl:text>\begin{</xsl:text>
     <xsl:value-of select="$env-name"/>
     <xsl:text>}</xsl:text>
