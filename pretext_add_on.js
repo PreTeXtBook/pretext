@@ -419,6 +419,7 @@ var newscript = document.createElement('script');
 window.addEventListener("load",function(event) {
        if($('body').attr('id') == "levin-DMOI") {
            console.log("            found DMOI");
+           if (typeof uname === "undefined") { uname = "" }
            console.log("aaaa", uname, "  uname");
            if(uname == "editor") {
                 loadScript('edit');
@@ -453,13 +454,26 @@ window.addEventListener("load",function(event) {
 window.addEventListener("load",function(event) {
    if (window.location.hash.length) {
        let id = window.location.hash.substring(1);
-       the_anchor = document.getElementById(id);
-       console.log("the_anchor", the_anchor);
-       var contained_knowl = the_anchor.querySelector("a[data-knowl]");
- //      if (the_anchor.hasAttribute("data-knowl")) {
-       if (contained_knowl) {
+       var the_anchor = document.getElementById(id);
+       console.log("id", id, "the_anchor", the_anchor);
+       if (the_anchor.tagName == "ARTICLE") {
+         var contained_knowl = the_anchor.querySelector("a[data-knowl]");
+         if (contained_knowl && contained_knowl.parentElement == the_anchor) {
            console.log("found a knowl", contained_knowl);
-           knowl_click_handler($(contained_knowl))
+       //    knowl_click_handler($(contained_knowl))
+           contained_knowl.click()
+         }
+       } else if (the_anchor.hasAttribute("data-knowl")) {
+           the_anchor.click()
+       } else {
+           // if it is a hidden knowl, find the knowl and open it
+           var this_hidden_content = the_anchor.closest(".hidden-content");
+           if (this_hidden_content) {
+               console.log("linked to a hidden knowl with this_hidden_content", this_hidden_content);
+               var the_refid = this_hidden_content.id;
+               var this_knowl = document.querySelector('[data-refid="' + the_refid + '"]');
+               this_knowl.click()
+           }
        }
    }
 });
