@@ -5295,6 +5295,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}&#xa;</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
+    <!-- Each "idx" produces its own newline -->
+    <xsl:apply-templates select="idx"/>
     <!-- an exercisegroup can only appear in an "exercises" division,    -->
     <!-- the template for exercises//exercise will consult switches for  -->
     <!-- visibility of components when born (not doing "solutions" here) -->
@@ -5551,6 +5553,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>%&#xa;</xsl:text>
+    <!-- Each "idx" produces its own newline -->
+    <xsl:apply-templates select="idx"/>
     <!-- Now the guts of the exercise, inside of its  -->
     <!-- (variable) identification, environment, etc. -->
     <!-- NB: the "b-component-heading" relates to     -->
