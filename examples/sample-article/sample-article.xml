@@ -3646,6 +3646,7 @@ the xsltproc executable.
 
                 <exercisegroup xml:id="exercisegroup-two-problems">
                     <title>Two Derivative Problems</title>
+                    <idx><h>exercise group</h><h>two derivatives</h></idx>
 
                     <introduction>
                         <p>In the next two problems compute the indicated derivative.</p>
@@ -3660,6 +3661,7 @@ the xsltproc executable.
                     </exercise>
 
                     <exercise xml:id="exercises-cosine-derivative">
+                        <idx><h>derivative</h><h>cosine</h></idx>
                         <statement>
                             <p><m>y = \cos(x)</m>, <m>y^\prime</m>.</p>
                         </statement>
