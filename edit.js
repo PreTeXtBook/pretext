@@ -370,11 +370,13 @@ function edit_menu_for(this_obj_or_id, motion) {
                 current_menu.previousSibling.classList.remove("may_leave")
             } else {
                 current_menu.parentElement.classList.remove("may_select");
+                current_menu.parentElement.classList.remove("may_enter");
             }
         }
    //     this_obj.classList.remove("may_select");
    //     this_obj.classList.remove("may_leave");
         current_menu.parentElement.classList.remove("may_select");
+        current_menu.parentElement.classList.remove("may_enter");
    //     current_menu.previousSibling.classList.remove("may_leave");
         current_menu.remove();
     }
@@ -396,12 +398,17 @@ function edit_menu_for(this_obj_or_id, motion) {
     if (motion == "entering") {
         menu_location = "afterbegin";
         this_obj.classList.remove("may_leave"); 
-        this_obj.classList.add("may_select");
+        if (next_editable_of(this_obj, "children").length) {
+            this_obj.classList.add("may_enter");
+        } else {
+            this_obj.classList.add("may_select");
+        }
         if (this_obj.tagName.toLowerCase() in inline_tags) {
             this_obj.classList.add("inline");
         }
     } else { menu_location = "afterend";
         this_obj.classList.remove("may_select");
+        this_obj.classList.remove("may_enter");
         this_obj.classList.add("may_leave"); 
         console.log("added may_leave to", this_obj)
     }  // when motion is 'leaving'
@@ -444,7 +451,13 @@ function edit_menu_for(this_obj_or_id, motion) {
             edit_option.innerHTML = '<li id="choose_current" tabindex="-1" data-action="change-title">Change title</li>';
             edit_option.setAttribute('data-location', 'inline');
         } else {
-            edit_option.innerHTML = "edit near here?";
+     //  if (editable_children.length)
+     //  next_editable_of(this_obj, "children")
+            if (next_editable_of(this_obj, "children").length) {
+                edit_option.innerHTML = "enter, or edit near here?";
+            } else {
+                edit_option.innerHTML = "edit this, or add near here?";
+            }
             edit_option.setAttribute('data-location', 'next');
         }
     } else {
@@ -713,7 +726,7 @@ function edit_in_place(obj) {
             var proofinstructions = '<span class="group_description">optional proof (paragraphs, images, lists, etc)</span>';
             var new_proof_p_id = internalSource[new_id]["statement"];
             new_proof_p_id = new_proof_p_id.replace(/<.>/g, "");
-            var proofeditingregion = '<div id="actively_editing_proof" class="paragraph_input" contenteditable="true" style="width:98%;min-height:6em;" placeholder="first paragraph of optional proof"  data-source_id="' + new_proof_p_id + '" data-parent_id="' + new_id + '" data-parent_component="proof">What is <b>bold</b> or <em>emphasized</em>?</div>';
+            var proofeditingregion = '<div id="actively_editing_proof" class="paragraph_input" contenteditable="true" style="width:98%;min-height:6em;" placeholder="first paragraph of optional proof"  data-source_id="' + new_proof_p_id + '" data-parent_id="' + new_id + '" data-parent_component="proof"></div>';
 
             proof = proof_container_start + editingregion_container_start;
             proof += proofinstructions;
@@ -816,7 +829,8 @@ function save_internal_contents(some_text) {
     // some_text must be a paragraph with mixed content only contining
     // non-nested tags
     the_text = some_text;
-    console.log("            xxxxxxxxxx  the_text is", the_text);
+ //   console.log("            xxxxxxxxxx  the_text is", the_text);
+    console.log("save_internal_contents");
     if (the_text.includes('data-editable="99" tabindex="-1">')) {
         return the_text.replace(/<([^<]+) data-editable="99" tabindex="-1">(.*?)<[^<]+>/g, save_internal_cont)
     } else if(the_text.includes('$ ')) {   // not general enough
@@ -841,6 +855,7 @@ function save_internal_cont(match, contains_id, the_contents) {
     return "<&>" + this_id + "<;>"
 }
 function assemble_internal_version_changes() {
+    console.log("in assemble_internal_version_changes");
     console.log("current active element to be saved", document.activeElement);
 
     var possibly_changed_ids_and_entry = [];
@@ -854,7 +869,7 @@ function assemble_internal_version_changes() {
         var textbox_being_edited = object_being_edited;  //document.getElementById('actively_editing_p');
    //     var paragraph_content = textbox_being_edited.value;
         var paragraph_content = textbox_being_edited.innerHTML;
-        console.log("paragraph_content from innerHTML", paragraph_content);
+    //    console.log("paragraph_content from innerHTML", paragraph_content);
         paragraph_content = paragraph_content.trim();
 
         var cursor_location = textbox_being_edited.selectionStart;
@@ -880,7 +895,8 @@ function assemble_internal_version_changes() {
             this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/<br>/g, " ");
             this_paragraph_contents_raw = this_paragraph_contents_raw.trim();
             if (!this_paragraph_contents_raw) { console.log("empty paragraph"); continue }
-            console.log("this_paragraph_contents_raw", this_paragraph_contents_raw);
+       //     console.log("this_paragraph_contents_raw", this_paragraph_contents_raw);
+            console.log("done transforming paragraph", j, "with textbox_being_edited",textbox_being_edited);
             if (j == 0 && (prev_id = textbox_being_edited.getAttribute("data-source_id"))) {
                 if (prev_id in internalSource) {
                     // the content is referenced, so we update the referenced content
@@ -942,7 +958,7 @@ function assemble_internal_version_changes() {
 }
 
 function expand_condensed_source_html(text, context) {
-    console.log("iiiiiii     in expand_condensed_source_html", text);
+    console.log("iiiiiii     in expand_condensed_source_html");
     if (text.includes("<&>")) {
         console.log("     eeeeeeeeee      expand_condensed_source_html", text);
         if (context == "edit") {
@@ -951,7 +967,8 @@ function expand_condensed_source_html(text, context) {
             return text.replace(/<&>(.*?)<;>/g,expand_condensed_src_html)
          }
     } else {
-    console.log("returning text XX" + text + "YY");
+ //   console.log("returning text XX" + text + "YY");
+    console.log("returning from expand_condensed_source_html");
     return text
     }
 }
@@ -1090,8 +1107,12 @@ function html_from_internal_id(the_id, is_inner) {
 
         if (objectclass == "theorem-like") {
             proof_in_html = document.createElement("article");
-            proof_in_html.setAttribute("class", "hiddenproof");
-            proof_in_html.innerHTML = '<a data-knowl="" class="id-ref proof-knowl original" data-refid="hk-Jkl"><h6 class="heading" data-editable="99" tabindex="-1"><span class="type">Proof<span class="period">.</span></span></h6></a>';
+       //     proof_in_html.setAttribute("class", "hiddenproof");
+            proof_in_html.setAttribute("class", "proof");
+            var proof_contents = '<h6 class="heading"><span class="type">Proof</span><span class="period">.</span></h6>';
+            proof_contents += the_object["proof"]
+      //      proof_in_html.innerHTML = '<a data-knowl="" class="id-ref proof-knowl original" data-refid="hk-Jkl"><h6 class="heading" data-editable="99" tabindex="-1"><span class="type">Proof<span class="period">.</span></span></h6></a>';
+            proof_in_html.innerHTML = proof_contents
 
             the_html_objects.push(proof_in_html)
         }
@@ -1132,7 +1153,10 @@ function insert_html_version(these_changes) {
             object_as_html.setAttribute("id", this_object_id);
             object_as_html.innerHTML = ptx_to_html(this_object[this_object_entry]);
             location_of_change.insertAdjacentElement('beforebegin', object_as_html);
-            current_editing["tree"][current_editing["level"]] = next_editable_of(location_of_change.parentElement, "children");
+        //    current_editing["tree"][current_editing["level"]] = next_editable_of(location_of_change.parentElement, "children");
+            var editing_parent = current_editing["tree"][ current_editing["level"] -1 ][ current_editing["location"][ current_editing["level"] - 1 ] ];
+       //     current_editing["tree"][current_editing["level"]] = next_editable_of(location_of_change.parentElement, "children");
+            current_editing["tree"][current_editing["level"]] = next_editable_of(editing_parent, "children");
         } else if (this_object_entry == "title") {
             var object_as_html = document.createElement('span');
             object_as_html.setAttribute("class", "title");
@@ -1200,6 +1224,7 @@ function local_editing_action(e) {
                 prev_char = "";
             } else if (editing_placeholder = document.getElementById("actively_editing")) {
                 console.log("still editing", editing_placeholder, "which contains", final_added_object);
+         //       alert("apparently still actively_editing");
                 var this_parent = internalSource[final_added_object.id]["parent"];
                 console.log("final_added_object parent", internalSource[final_added_object.id]["parent"]);
                 the_whole_object = html_from_internal_id(this_parent[0]);
@@ -1213,9 +1238,12 @@ function local_editing_action(e) {
               // parents_parent is wrong, because the editable siblings do not live at the same level,
               // p in li being an example
 
-                var parents_parent = document.getElementById(this_parent[0]).parentElement;
-                console.log("going to make the new tree from parent of", this_parent, "which is", parents_parent, "and has children", next_editable_of(this_parent.parentElement, "children"));
-                current_editing["tree"][current_editing["level"]] = next_editable_of(parents_parent, "children");
+             //   var parents_parent = document.getElementById(this_parent[0]).parentElement;
+                var editing_parent = current_editing["tree"][ current_editing["level"] -1 ][ current_editing["location"][ current_editing["level"] - 1 ] ];
+          //      console.log("going to make the new tree from parent of", this_parent, "which is", parents_parent, "and has children", next_editable_of(this_parent.parentElement, "children"));
+                console.log("going to make the new tree from parent of", this_parent, "which is", editing_parent, "and has children", next_editable_of(this_parent.parentElement, "children"));
+            //    current_editing["tree"][current_editing["level"]] = next_editable_of(parents_parent, "children");
+                current_editing["tree"][current_editing["level"]] = next_editable_of(editing_parent, "children");
                 console.log("updated tree", current_editing["tree"]);
           //      $("#actively_editing").replaceWith(the_whole_object[0]);  // later handle multiple additions
                 edit_menu_from_current_editing(this_parent[0], "entering");
@@ -1466,6 +1494,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                 var object_to_be_entered = object_of_interest;
                 console.log("object_to_be_entered", object_to_be_entered);
                 object_to_be_entered.classList.remove("may_select");
+                object_to_be_entered.classList.remove("may_enter");
                 object_to_be_entered.classList.remove("may_leave");
                 console.log('next_editable_of(object_to_be_entered, "children")', next_editable_of(object_to_be_entered));
                 editableChildren = next_editable_of(object_to_be_entered, "children");
@@ -1592,6 +1621,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                   console.log("new_obj", new_obj);
                   edit_in_place(new_obj);
                   object_near_new_object.classList.remove("may_select");
+                  object_near_new_object.classList.remove("may_enter");
                   document.getElementById('edit_menu_holder').remove();
               } else {
                   console.log("Error: unknown dataEnv", dataEnv)
