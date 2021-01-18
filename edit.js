@@ -160,7 +160,8 @@ editing_container_for = { "p": 1,
  "definition-like": ["definition", "conjecture", "axiom", "hypothesis", "principle", "heuristic", "assumption"],
 "remark-like": ["remark", "warning", "note", "observation", "convention", "insight"],
 "section-like": ["section", "subsection", "paragraphs", "rq", "exercises"],
-"ol": ["item"]
+"ol": ["item"],
+"proof": [""]  //just a guess
 }
 
 // each tag has [ptx_tag, [html_start, html_end]]
@@ -310,11 +311,11 @@ function top_menu_options_for(this_obj) {
     var this_list = "";
 
     if (this_obj.classList.contains("heading")) {
-        this_obj_parent = this_obj.parentElement;
+        var this_obj_parent = this_obj.parentElement;
         console.log("heading options for bbb", this_obj_parent); 
-        this_obj_parent_id = this_obj_parent.id;
-        this_obj_parent_source = internalSource[this_obj_parent_id];
-        this_obj_environment = this_obj_parent_source["ptxtag"];
+        var this_obj_parent_id = this_obj_parent.id;
+        var this_obj_parent_source = internalSource[this_obj_parent_id];
+        var this_obj_environment = this_obj_parent_source["ptxtag"];
 
         console.log("this_obj_environment", this_obj_environment);
         
@@ -515,7 +516,8 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
         // we won;t need all of these, so re-think when these are created
     var new_content_p_id = randomstring();
     var new_statement_p_id = randomstring();
-    var new_proof_p_id = randomstring();
+    var new_proof_id = randomstring();  // only used if theorem-like
+    var new_proof_p_id = randomstring();  // only used if theorem-like
     var edit_placeholder = document.createElement("span");
     edit_placeholder.setAttribute('id', new_id);
     new_objects_sibling.insertAdjacentElement(relative_placement, edit_placeholder);
@@ -539,9 +541,11 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
         new_source["statement"] = "<&>" + new_statement_p_id + "<;>";
         internalSource[new_statement_p_id] = { "xml:id": new_statement_p_id, "permid": "", ptxtag: "p",
                       content: "", "parent": [new_id, "statement"] }
-        new_source["proof"] = "<&>" + new_proof_p_id + "<;>";
+        new_source["proof"] = "<&>" + new_proof_id + "<;>";
+        internalSource[new_proof_id] = { "xml:id": new_proof_id, "permid": "", ptxtag: "proof",
+                      content: "<&>" + new_proof_p_id + "<;>", "parent": [new_id, "proof"] }
         internalSource[new_proof_p_id] = { "xml:id": new_proof_p_id, "permid": "", ptxtag: "p",
-                      content: "", "parent": [new_id, "proof"] }
+                      content: "", "parent": [new_proof_id, "content"] }
     } else if (editing_container_for["definition-like"].includes(new_tag)) {
         new_source["statement"] = "<&>" + new_statement_p_id + "<;>";
         internalSource[new_statement_p_id] = { "xml:id": new_statement_p_id, "permid": "", ptxtag: "p",
@@ -724,7 +728,12 @@ function edit_in_place(obj) {
             var proof_container_start = '<div class="editing_proof">';
             var proof_container_end = '</div>';
             var proofinstructions = '<span class="group_description">optional proof (paragraphs, images, lists, etc)</span>';
-            var new_proof_p_id = internalSource[new_id]["statement"];
+        //    var new_proof_p_id = internalSource[new_id]["statement"];
+            var new_proof_id = internalSource[new_id]["proof"];
+            console.log("new_proof_id", new_proof_p_id);
+            new_proof_id = new_proof_id.replace(/<.>/g, "");
+            var new_proof_p_id = internalSource[new_proof_id]["content"];
+            console.log("new_proof_p_id", new_proof_p_id);
             new_proof_p_id = new_proof_p_id.replace(/<.>/g, "");
             var proofeditingregion = '<div id="actively_editing_proof" class="paragraph_input" contenteditable="true" style="width:98%;min-height:6em;" placeholder="first paragraph of optional proof"  data-source_id="' + new_proof_p_id + '" data-parent_id="' + new_id + '" data-parent_component="proof"></div>';
 
@@ -967,7 +976,7 @@ function expand_condensed_source_html(text, context) {
             return text.replace(/<&>(.*?)<;>/g,expand_condensed_src_html)
          }
     } else {
- //   console.log("returning text XX" + text + "YY");
+    console.log("returning text XX" + text + "YY");
     console.log("returning from expand_condensed_source_html");
     return text
     }
@@ -983,8 +992,9 @@ function html_from_internal_id(the_id, is_inner) {
        // the outer element needs to be constructed as document.createElement
        // but the inner content is just plain text
     var the_object = internalSource[the_id];
-    console.log("making html of", the_object, "is_inner", is_inner);
+    console.log("making html of", the_object, "is_inner", is_inner, "the_id", the_id);
     var ptxtag = the_object["ptxtag"];
+    console.log("which has tag", ptxtag);
 
     var the_html_objects = [];
 
@@ -1054,6 +1064,25 @@ function html_from_internal_id(the_id, is_inner) {
             closing_tag = math_tags[ptxtag][1][1];
         }
         return opening_tag + the_object["content"] + closing_tag
+    } else if (ptxtag == "proof") {  // maybe consolidate with remark-like
+        object_in_html = document.createElement("article");
+        object_in_html.setAttribute("id", the_id);
+        object_in_html.setAttribute("class", ptxtag);
+        object_in_html.setAttribute("tabindex", -1);
+        object_in_html.setAttribute("data-editable", 99);
+        var headertag = "h6";
+        object_heading_html = '<' + headertag;
+        object_heading_html += ' class="heading" data-parent_id="' + the_id + '">';
+        object_heading_html += '<span class="type">Proof</span>';
+        object_heading_html += '<span class="period">' + "." + '</span>';
+        object_heading_html += '</' + headertag + '>';
+
+        var object_statement_ptx = the_object["content"];
+        object_statement_html =  expand_condensed_source_html(object_statement_ptx);
+        console.log("proof statement is", object_statement_html);
+        object_in_html.innerHTML = object_heading_html + object_statement_html;
+        the_html_objects.push(object_in_html);
+
     } else if (editing_container_for["definition-like"].includes(ptxtag) ||
                editing_container_for["theorem-like"].includes(ptxtag) ||
                editing_container_for["remark-like"].includes(ptxtag) ||
@@ -1100,19 +1129,26 @@ function html_from_internal_id(the_id, is_inner) {
         }
 
         object_statement_html =  expand_condensed_source_html(object_statement_ptx);
+        console.log("statement statement is", object_statement_html);
 
         object_in_html.innerHTML = object_heading_html + object_statement_html;
 
         the_html_objects.push(object_in_html);
 
-        if (objectclass == "theorem-like") {
+        if (false && objectclass == "theorem-like") {
             proof_in_html = document.createElement("article");
+            var proof_id = the_object["proof"];
+            proof_id = proof_id.replace(/<.>/g, "");
        //     proof_in_html.setAttribute("class", "hiddenproof");
+            proof_in_html.setAttribute("id", proof_id);
             proof_in_html.setAttribute("class", "proof");
+            proof_in_html.setAttribute("data-editable", "99");
             var proof_contents = '<h6 class="heading"><span class="type">Proof</span><span class="period">.</span></h6>';
-            proof_contents += the_object["proof"]
+            console.log("             Proof un-expanded", the_object["proof"])
+            proof_contents += expand_condensed_source_html(the_object["proof"]);
+            console.log("expanded proof", proof_contents)
       //      proof_in_html.innerHTML = '<a data-knowl="" class="id-ref proof-knowl original" data-refid="hk-Jkl"><h6 class="heading" data-editable="99" tabindex="-1"><span class="type">Proof<span class="period">.</span></span></h6></a>';
-            proof_in_html.innerHTML = proof_contents
+            proof_in_html.innerHTML = proof_contents;
 
             the_html_objects.push(proof_in_html)
         }
@@ -1120,6 +1156,7 @@ function html_from_internal_id(the_id, is_inner) {
     } else {
          alert("don't know how to make html from", the_object)
     }
+    console.log("    RRRR returning the_html_objects", the_html_objects);
     return the_html_objects
 }
 
@@ -1133,6 +1170,10 @@ function insert_html_version(these_changes) {
     console.log("location_of_change", location_of_change);
     console.log("possibly_changed_ids_and_entry", possibly_changed_ids_and_entry);
 
+    if (!possibly_changed_ids_and_entry.length) {
+        console.log("nothing to change");
+        return ""
+    }
     // we make HTML version of the objects with ids possibly_changed_ids_and_entry,
     // and then insert those into the page.  
 
@@ -1141,11 +1182,11 @@ function insert_html_version(these_changes) {
         alert("should be replace, since it is the edit form we are replacing")
     }
 
-    console.log("possibly_changed_ids_and_entry", possibly_changed_ids_and_entry);
     for (var j=0; j < possibly_changed_ids_and_entry.length; ++j) {
         this_object_id = possibly_changed_ids_and_entry[j][0];
         this_object_entry = possibly_changed_ids_and_entry[j][1];
         this_object = internalSource[this_object_id];
+        console.log(j, "this_object", this_object);
         if (this_object["ptxtag"] == "p") {
             var object_as_html = document.createElement('p');
             object_as_html.setAttribute("data-editable", 99);
@@ -1214,24 +1255,34 @@ function local_editing_action(e) {
         } else if (e.code == "Escape" || (prev_char.code == "Enter" && prev_prev_char.code == "Enter")) {
             console.log("need to save");
             e.preventDefault();
+            this_char = "";
+            prev_char = "";
             these_changes = assemble_internal_version_changes();
+            console.log("    CCC these_changes", these_changes);
             final_added_object = insert_html_version(these_changes);
             // if there is an editing paragraph ahead, go there.  Otherwise menu the last thing added
             if (next_textarea = document.querySelector('.paragraph_input')) {
                 next_textarea.focus();
        //         next_textarea.setSelectionRange(0,0);
-                this_char = "";
-                prev_char = "";
-            } else if (editing_placeholder = document.getElementById("actively_editing")) {
+  //              this_char = "";
+  //              prev_char = "";
+            } else if (final_added_object && document.getElementById("actively_editing")) {
+                var editing_placeholder = document.getElementById("actively_editing");
                 console.log("still editing", editing_placeholder, "which contains", final_added_object);
-         //       alert("apparently still actively_editing");
                 var this_parent = internalSource[final_added_object.id]["parent"];
-                console.log("final_added_object parent", internalSource[final_added_object.id]["parent"]);
-                the_whole_object = html_from_internal_id(this_parent[0]);
+                console.log("final_added_object parent", this_parent);
+                var the_whole_object = html_from_internal_id(this_parent[0]);
                 console.log("the_whole_object", the_whole_object);
+                if (internalSource[this_parent[0]]["ptxtag"] == "proof") { // insert the theorem-like statement
+                    var the_parent_object = html_from_internal_id(internalSource[this_parent[0]]["parent"][0]);
+                    the_whole_object = the_parent_object.concat(the_whole_object)
+              //      the_whole_object = the_parent_object
+                }
                 for (var j = the_whole_object.length - 1; j >= 0; --j) {
+                    console.log("   X", j, "the_whole_object[j]", the_whole_object[j]);
                     document.getElementById("actively_editing").insertAdjacentElement("afterend", the_whole_object[j])
                 }
+                
                 console.log("here is where we need ti pudate current_editing", "parent:", this_parent,"which is",document.getElementById(this_parent[0]), "level:", current_editing["level"], "loation:", current_editing["location"], "tree:", current_editing["tree"]);
                 $("#actively_editing").remove();
 
@@ -1241,7 +1292,7 @@ function local_editing_action(e) {
              //   var parents_parent = document.getElementById(this_parent[0]).parentElement;
                 var editing_parent = current_editing["tree"][ current_editing["level"] -1 ][ current_editing["location"][ current_editing["level"] - 1 ] ];
           //      console.log("going to make the new tree from parent of", this_parent, "which is", parents_parent, "and has children", next_editable_of(this_parent.parentElement, "children"));
-                console.log("going to make the new tree from parent of", this_parent, "which is", editing_parent, "and has children", next_editable_of(this_parent.parentElement, "children"));
+                console.log("going to make the new tree from parent of", this_parent, "which is", editing_parent, "and has children", next_editable_of(editing_parent, "children"));
             //    current_editing["tree"][current_editing["level"]] = next_editable_of(parents_parent, "children");
                 current_editing["tree"][current_editing["level"]] = next_editable_of(editing_parent, "children");
                 console.log("updated tree", current_editing["tree"]);
@@ -1446,14 +1497,26 @@ function main_menu_navigator(e) {  // we are not currently editing
                 document.getElementById("local_menu_holder").remove()
             }
             console.log("W4 theChooseCurrent", theChooseCurrent);
-            if (current_editing["location"][current_level] == 0) {  // we are on the first sibling
-                current_editing["level"] -= 1;
+            // need to go up one level in the menu
+            var previous_menu_item = theChooseCurrent.parentElement.parentElement;  // li > ol > li
+            if (previous_menu_item.id == "edit_menu_holder") {
+                var thenewchoice = '<span id="enter_choice" data-location="next">';
+                thenewchoice += 'edit or add nearby';
+                thenewchoice += '</span>';
+                previous_menu_item.innerHTML = thenewchoice
             } else {
-                current_editing["location"][ current_editing["level"] ] -= 1
+                theChooseCurrent.parentElement.remove();
+                previous_menu_item.classList.remove('chosen');
+                previous_menu_item.parentElement.classList.remove('past');
+                previous_menu_item.setAttribute("id", "choose_current");
+                previous_menu_item.focus();
             }
-
-            console.log("edit choice from current_editing", "level", current_editing["level"], "location", current_editing["location"]);
-            edit_menu_from_current_editing("", "entering");
+    //        if (current_editing["location"][current_level] == 0) {
+    //            current_editing["level"] -= 1;
+    //        } else {
+    //            current_editing["location"][ current_editing["level"] ] -= 1
+    //        }
+    //        edit_menu_from_current_editing("", "entering");
       }
       else if (keyletters.includes(e.code)) {
         key_hit = e.code.toLowerCase().substring(3);  // remove forst 3 characters, i.e., "key"
@@ -1554,7 +1617,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                     internalSource[id_of_object]["ptxtag"] = new_env;
                     recent_editing_actions.push("changed " + old_env + " to " + new_env + " " + id_of_object);
                     console.log("the change was", "changed " + old_env + " to " + new_env + " " + id_of_object);
-                    the_whole_object = html_from_internal_id(id_of_object);
+                    var the_whole_object = html_from_internal_id(id_of_object);
                     console.log("B: the_whole_object", the_whole_object);
                     $("#" + id_of_object).replaceWith(the_whole_object[0]);  // later handle multiple additions
                     console.log("just edited", $("#" + id_of_object));
@@ -1624,7 +1687,13 @@ function main_menu_navigator(e) {  // we are not currently editing
                   object_near_new_object.classList.remove("may_enter");
                   document.getElementById('edit_menu_holder').remove();
               } else {
-                  console.log("Error: unknown dataEnv", dataEnv)
+                  console.log("Error: unknown dataEnv", dataEnv);
+                  console.log("moving up the menu -- not");
+                  alert("Sorry, not implemented yet!");
+                  theChooseCurrent.classList.remove("chosen");
+                  theChooseCurrent.parentElement.classList.remove("past");
+                  theChooseCurrent.setAttribute("id", "choose_current");
+             //     theChooseCurrent.focus();
               }
           }
     } //  // dataEnv
@@ -1681,7 +1750,7 @@ document.addEventListener('focus', function() {
   this_focused_element = document.activeElement;
   $('.in_edit_tree').removeClass('in_edit_tree');
   var edit_tree = $(':focus').parents();
-  console.log("edit tree", edit_tree);
+//  console.log("edit tree", edit_tree);
   // put little lines on teh right, to show the local heirarchy
   for (var i=0; i < edit_tree.length; ++i) {
 //      console.log('edit_tree[i]', edit_tree[i]);
