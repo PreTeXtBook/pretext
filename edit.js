@@ -350,7 +350,7 @@ function top_menu_options_for(this_obj) {
     return this_list
 }
 
-function edit_menu_from_current_editing(ignoreme, motion) {
+function edit_menu_from_current_editing(motion) {
         // obviously we need to think a bit about current_editing and how it is used
     console.log("in edit_menu_from_current_editing, level:", current_editing["level"],"location:", current_editing["location"], "tree:", current_editing["tree"]);
     var object_of_interest = current_editing["tree"][ current_editing["level"] ][ current_editing["location"][ current_editing["level"] ] ];
@@ -1297,9 +1297,9 @@ function local_editing_action(e) {
                 current_editing["tree"][current_editing["level"]] = next_editable_of(editing_parent, "children");
                 console.log("updated tree", current_editing["tree"]);
           //      $("#actively_editing").replaceWith(the_whole_object[0]);  // later handle multiple additions
-                edit_menu_from_current_editing(this_parent[0], "entering");
+                edit_menu_from_current_editing("entering");
             } else {
-                edit_menu_from_current_editing(final_added_object.id, "entering");
+                edit_menu_from_current_editing("entering");
             }
             save_edits()
         }
@@ -1356,7 +1356,8 @@ function main_menu_navigator(e) {  // we are not currently editing
                     console.log("stay menu A");
                     object_of_interest.classList.remove("may_leave");
                     object_of_interest.classList.remove("may_elect");
-                        edit_menu_for(current_siblings[current_location], "leaving")
+                   //     edit_menu_for(current_siblings[current_location], "leaving")
+                        edit_menu_from_current_editing("leaving")
             } else {
                 console.log("moving to the next editable sibling");
                     console.log("level was", current_level,"siblings was", current_siblings, "tree", current_editing["tree"]);
@@ -1369,7 +1370,8 @@ function main_menu_navigator(e) {  // we are not currently editing
               console.log("stay menu B");
                 current_editing["location"][current_level] = current_location;
                 console.log(current_location, "is", current_editing);
-                edit_menu_for(current_siblings[current_location], "entering")
+           //     edit_menu_for(current_siblings[current_location], "entering")
+                edit_menu_from_current_editing("entering")
             }
         } else if ((e.code == "Tab" && e.shiftKey) || e.code == "ArrowUp") {  // Shift-Tab to prevous object
             e.preventDefault();
@@ -1388,13 +1390,15 @@ function main_menu_navigator(e) {  // we are not currently editing
                 console.log(" current_editing['tree'][0]",  current_editing["tree"][0]);
                 current_siblings = current_editing["tree"][current_level];
                 console.log("current_siblings", current_siblings);
-                edit_menu_for(current_siblings[current_location], "entering")
+          //      edit_menu_for(current_siblings[current_location], "entering")
+                edit_menu_from_current_editing("entering")
             } else {
                 current_location -= 1;
                 current_editing["location"][current_level] = current_location;
                 console.log("current_siblings", current_siblings);
                 console.log("BB new current_location", current_location, "at level", current_level, " current_editing['tree']",  current_editing["tree"]);
-                edit_menu_for(current_siblings[current_location], "entering")
+         //       edit_menu_for(current_siblings[current_location], "entering")
+                edit_menu_from_current_editing("entering")
             }
         } else if (e.code == "Escape" || e.code == "ArrowLeft") {
             e.preventDefault();
@@ -1406,11 +1410,13 @@ function main_menu_navigator(e) {  // we are not currently editing
             current_location = current_editing["location"][current_level];
             current_siblings = current_editing["tree"][current_level];
             console.log("now level id", current_level, "with location",  current_editing["location"], "and tree", current_editing["tree"][current_level]);
-            edit_menu_for(current_siblings[current_location], "entering")
+      //      edit_menu_for(current_siblings[current_location], "entering")
+            edit_menu_from_current_editing("entering")
         } else if (e.code == "Enter" || e.code == "ArrowRight") {
             e.preventDefault();
             if (theMotion == "stay") {
-                edit_menu_for(object_of_interest, "entering");  // should that be current_location?
+            //    edit_menu_for(object_of_interest, "entering");  // should that be current_location?
+                edit_menu_from_current_editing("entering");
                 return ""
             } 
             var edit_submenu = document.createElement('ol');
@@ -1456,7 +1462,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                 current_location += 1;
                 console.log("single item menu, current_location now", current_location);
                 current_editing["location"][current_level] = current_location;
-                edit_menu_from_current_editing("current_object_to_edit", "entering");
+                edit_menu_from_current_editing("entering");
             }
             theChooseCurrent.removeAttribute("id");
             console.log("theChooseCurrent", theChooseCurrent, "next_menu_item", next_menu_item);
@@ -1480,7 +1486,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                     current_editing["location"][ current_editing["level"] ] -= 1;
                 }
                 console.log("single item menu, current_level now", current_level);
-                edit_menu_from_current_editing("", "entering");
+                edit_menu_from_current_editing("entering");
             } else {
                 theChooseCurrent.removeAttribute("id");
                 console.log("W3 theChooseCurrent", theChooseCurrent, "next_menu_item", next_menu_item);
@@ -1511,12 +1517,6 @@ function main_menu_navigator(e) {  // we are not currently editing
                 previous_menu_item.setAttribute("id", "choose_current");
                 previous_menu_item.focus();
             }
-    //        if (current_editing["location"][current_level] == 0) {
-    //            current_editing["level"] -= 1;
-    //        } else {
-    //            current_editing["location"][ current_editing["level"] ] -= 1
-    //        }
-    //        edit_menu_from_current_editing("", "entering");
       }
       else if (keyletters.includes(e.code)) {
         key_hit = e.code.toLowerCase().substring(3);  // remove forst 3 characters, i.e., "key"
@@ -1626,7 +1626,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                     current_editing["level"] -= 1;
                     current_editing["tree"][current_editing["level"]] = next_editable_of(document.getElementById(id_of_object).parentElement, "children");
                     console.log("now curent_editing level", current_editing["level"], "with things", current_editing["tree"][current_editing["level"]]);
-                    edit_menu_from_current_editing(id_of_object, "entering");
+                    edit_menu_from_current_editing("entering");
                     return ""
 
             } else if (dataAction == 'change-env') {
