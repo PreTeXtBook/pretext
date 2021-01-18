@@ -6773,6 +6773,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 
     <table class="tabular">
+        <!-- If the source has a permid, then so will the HTML.  -->
+        <!-- See the definition of this modal template for more. -->
+        <!-- In particular, do not add an HTML id any other way. -->
+        <xsl:apply-templates select="." mode="html-permid-only"/>
         <!-- We *actively* enforce header rows being (a) initial, and      -->
         <!-- (b) contiguous.  So following two-part match will do no harm  -->
         <!-- to correct source, but will definitely harm incorrect source. -->
@@ -7378,6 +7382,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="str:replace($the-id, '-', '__')" />
 </xsl:template>
 
+<!-- This template is motivated by the need to put @permid on    -->
+<!-- "tabular" as part of an "in context" testing regimen        -->
+<!-- spearheaded by Volker Sorge.  As a PreTeXt construction,    -->
+<!-- it could be ill-advised.  But we won't split that hair now. -->
+<!-- Do not use any place another HTML is is being added.        -->
+<!-- And use the "match" so we can catalog *where* it is used.   -->
+<xsl:template match="tabular" mode="html-permid-only">
+    <xsl:if test="@permid">
+        <xsl:attribute name="id">
+            <xsl:value-of select="@permid"/>
+        </xsl:attribute>
+    </xsl:if>
+</xsl:template>
 
 
 <!-- ######## -->
