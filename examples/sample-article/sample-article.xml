@@ -4474,7 +4474,8 @@ the xsltproc executable.
                     <statement>
                         <table>
                             <title>Table Alignment Example</title>
-                            <tabular top="minor" left="minor" halign="center">
+                            <!-- permids go onto tabular, so we test picking it up -->
+                            <tabular top="minor" left="minor" halign="center" permid="fhP">
                                 <col right="medium"/>
                                 <col right="major"/>
                                 <col />
