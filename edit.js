@@ -843,17 +843,17 @@ function save_internal_contents(some_text) {
     if (the_text.includes('data-editable="99" tabindex="-1">')) {
         return the_text.replace(/<([^<]+) data-editable="99" tabindex="-1">(.*?)<[^<]+>/g, save_internal_cont)
     } else if(the_text.includes('$ ')) {   // not general enough
-         return the_text.replace(/ \$([^\$]+)\$ /g, extract_new_math)
+         return the_text.replace(/(^|\s)\$([^\$]+)\$(\s|$|[.,!?;:])/g, extract_new_math)
     } else {
     return the_text
     }
 }
 
-function extract_new_math(match, math_content) {
+function extract_new_math(match, sp_before, math_content, sp_after) {
     new_math_id = randomstring();
     internalSource[new_math_id] = { "xml:id": new_math_id, "permid": "", "ptxtag": "m",
                           "content": math_content}
-    return " <&>" + new_math_id + "<;> "
+    return sp_before + "<&>" + new_math_id + "<;>" + sp_after
 }
 
 function save_internal_cont(match, contains_id, the_contents) {
@@ -875,38 +875,44 @@ function assemble_internal_version_changes() {
 
     if (object_being_edited.classList.contains("paragraph_input")) {
         nature_of_the_change = "replace";
-        var textbox_being_edited = object_being_edited;  //document.getElementById('actively_editing_p');
+  //      var textbox_being_edited = object_being_edited;  //document.getElementById('actively_editing_p');
    //     var paragraph_content = textbox_being_edited.value;
-        var paragraph_content = textbox_being_edited.innerHTML;
+        var paragraph_content = object_being_edited.innerHTML;
     //    console.log("paragraph_content from innerHTML", paragraph_content);
         paragraph_content = paragraph_content.trim();
 
-        var cursor_location = textbox_being_edited.selectionStart;
+        var cursor_location = object_being_edited.selectionStart;
 
         console.log("cursor_location", cursor_location, "out of", paragraph_content.length, "paragraph_content", paragraph_content);
 
         // does the textbox contain more than one paragraph?
         var paragraph_content_list = paragraph_content.split("<div><br></div>");
-        var num_paragraphs = paragraph_content_list.length;
+        console.log("there were", paragraph_content_list.length, "paragraphs, but some may be empty");
+//        paragraph_content_list = paragraph_content_list.filter(item => item);  // remove empty paragraphs
+//        console.log("there are", paragraph_content_list.length, "paragraphs");
+   //     var num_paragraphs = paragraph_content_list.length;
 
         var parent_and_location = [object_being_edited.getAttribute("data-parent_id"), object_being_edited.getAttribute("data-parent_component")];
         var this_arrangement_of_objects = "";
         console.log("parent_and_location", parent_and_location);
         console.log("of ", object_being_edited);
-        for(var j=0; j < num_paragraphs; ++j) {
+
+        prev_id = object_being_edited.getAttribute("data-source_id");
+        for(var j=0; j < paragraph_content_list.length; ++j) {
             // probably each paragraph is wrapped in meaningless div tags
             var this_paragraph_contents_raw = paragraph_content_list[j];
             this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/<\/div><div>/g, "\n");
             this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/<div>/g, "");
             this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/<\/div>/g, "");
             this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/&nbsp;/g, " ");
-            this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/ <br>/g, " ");
-            this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/<br>/g, " ");
+            this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/ +<br>/g, "\n");
+            this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/<br>/g, "\n");
             this_paragraph_contents_raw = this_paragraph_contents_raw.trim();
             if (!this_paragraph_contents_raw) { console.log("empty paragraph"); continue }
        //     console.log("this_paragraph_contents_raw", this_paragraph_contents_raw);
-            console.log("done transforming paragraph", j, "with textbox_being_edited",textbox_being_edited);
-            if (j == 0 && (prev_id = textbox_being_edited.getAttribute("data-source_id"))) {
+            console.log("done transforming paragraph", j, "with object_being_edited",object_being_edited);
+       //     if (j == 0 && (prev_id = object_being_edited.getAttribute("data-source_id"))) {
+            if (j == 0 && prev_id) {
                 if (prev_id in internalSource) {
                     // the content is referenced, so we update the referenced content
                        // need to check internal content, such as em or math
@@ -1172,7 +1178,7 @@ function insert_html_version(these_changes) {
 
     if (!possibly_changed_ids_and_entry.length) {
         console.log("nothing to change");
-        return ""
+  //      return ""
     }
     // we make HTML version of the objects with ids possibly_changed_ids_and_entry,
     // and then insert those into the page.  
@@ -1182,13 +1188,14 @@ function insert_html_version(these_changes) {
         alert("should be replace, since it is the edit form we are replacing")
     }
 
+    var object_as_html = "";
     for (var j=0; j < possibly_changed_ids_and_entry.length; ++j) {
         this_object_id = possibly_changed_ids_and_entry[j][0];
         this_object_entry = possibly_changed_ids_and_entry[j][1];
         this_object = internalSource[this_object_id];
         console.log(j, "this_object", this_object);
         if (this_object["ptxtag"] == "p") {
-            var object_as_html = document.createElement('p');
+            object_as_html = document.createElement('p');
             object_as_html.setAttribute("data-editable", 99);
             object_as_html.setAttribute("tabindex", -1);
             object_as_html.setAttribute("id", this_object_id);
