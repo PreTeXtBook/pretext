@@ -1281,6 +1281,8 @@ function local_editing_action(e) {
                 for (var j = the_whole_object.length - 1; j >= 0; --j) {
                     console.log("   X", j, "the_whole_object[j]", the_whole_object[j]);
                     document.getElementById("actively_editing").insertAdjacentElement("afterend", the_whole_object[j])
+                    MathJax.Hub.Queue(['Typeset', MathJax.Hub, the_whole_object[j]]);
+
                 }
                 
                 console.log("here is where we need ti pudate current_editing", "parent:", this_parent,"which is",document.getElementById(this_parent[0]), "level:", current_editing["level"], "loation:", current_editing["location"], "tree:", current_editing["tree"]);
