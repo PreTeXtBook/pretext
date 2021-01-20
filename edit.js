@@ -107,13 +107,13 @@ base_menu_for = {
 
 function inner_menu_for() {
 
-    console.log("recent_editing_actions", recent_editing_actions, "xx", recent_editing_actions != []);
+//    console.log("recent_editing_actions", recent_editing_actions, "xx", recent_editing_actions != []);
     var the_past_edits = [];
     if(recent_editing_actions.length) {
          the_past_edits = recent_editing_actions.map(x => [x])}
     else { the_past_edits = [["no chnages yet"]] }
 
-    console.log("the_past_edits", the_past_edits);
+ //   console.log("the_past_edits", the_past_edits);
 
 the_inner_menu = {
 "theorem-like": [["lemma"],
@@ -833,13 +833,13 @@ function ptx_to_html(input_text) {
     return(output_text)
 }
 
-function save_internal_contents(some_text) {
+function extract_internal_contents(some_text) {
 
     // some_text must be a paragraph with mixed content only contining
     // non-nested tags
     the_text = some_text;
  //   console.log("            xxxxxxxxxx  the_text is", the_text);
-    console.log("save_internal_contents");
+    console.log("extract_internal_contents");
     if (the_text.includes('data-editable="99" tabindex="-1">')) {
         return the_text.replace(/<([^<]+) data-editable="99" tabindex="-1">(.*?)<[^<]+>/g, save_internal_cont)
     } else if(the_text.includes('$ ')) {   // not general enough
@@ -916,7 +916,7 @@ function assemble_internal_version_changes() {
                 if (prev_id in internalSource) {
                     // the content is referenced, so we update the referenced content
                        // need to check internal content, such as em or math
-                    this_paragraph_contents = save_internal_contents(this_paragraph_contents_raw);
+                    this_paragraph_contents = extract_internal_contents(this_paragraph_contents_raw);
                     if (internalSource[prev_id]["content"] != this_paragraph_contents) {
                         internalSource[prev_id]["content"] = this_paragraph_contents;
                         recent_editing_actions.push("changed paragraph " + prev_id)
@@ -938,7 +938,7 @@ function assemble_internal_version_changes() {
                 this_arrangement_of_objects = this_arrangement_of_objects.replace(object_before, '$1' + '\n<&>' + this_object_label + '<;>');
                 prev_id = this_object_label;
                 
-                this_paragraph_contents = save_internal_contents(this_paragraph_contents_raw);
+                this_paragraph_contents = extract_internal_contents(this_paragraph_contents_raw);
                 this_object_internal["content"] = this_paragraph_contents;
                 internalSource[this_object_label] = this_object_internal
                 recent_editing_actions.push("added paragraph " + this_object_label);
@@ -1768,7 +1768,7 @@ document.addEventListener('focus', function() {
   }
 }, true);
 
-// retrieve_previous_editing();
+retrieve_previous_editing();
 console.log("retrieved previous", internalSource);
 
 // make the top level menu
