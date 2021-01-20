@@ -188,7 +188,7 @@ editing_tips = {
           "ESC to stop editing and save",
           "TAB to insert a reference or index entry",
           "TAB to insert musical characters, species name, inline code, etc"],
-    "title": ["RETurn to save title",
+    "creator": ["RETurn to save creator",
               "TAB for a reference, special characters, etc"]
 }
           
@@ -216,7 +216,7 @@ fetch(url)
 console.log("then here");
 */
 
-function standard_title_form(object_id) {
+function standard_creator_form(object_id) {
     the_object = internalSource[object_id];
     object_type = the_object["ptxtag"];  // need to use that to determin the object_type_name
     object_type_name = object_type;
@@ -224,15 +224,15 @@ function standard_title_form(object_id) {
     the_parent_id = the_parent[0];
     the_parent_component = the_parent[1];
 
-    var title_form = "<div><b>" + object_type_name + "&nbsp;#N</b>&nbsp;";
-    title_form += '<span id="editing_title_holder">';
-    title_form += '<input id="actively_editing_title" class="starting_point_for_editing" data-source_id="' + object_id + '" data-component="' + 'title' + '" placeholder="Optional title" type="text"/>';
+    var creator_form = "<div><b>" + object_type_name + "&nbsp;#N</b>&nbsp;";
+    creator_form += '<span id="editing_creator_holder">';
+    creator_form += '<input id="actively_editing_creator" class="starting_point_for_editing" data-source_id="' + object_id + '" data-component="' + 'creator' + '" placeholder="Optional creator" type="text"/>';
 
-    title_form += '&nbsp;<span class="group_description">(' + editing_tip_for("title") + ')</span>';
-    title_form += '</span>';  // #editing_title_holder
-    title_form += '</div>';
+    creator_form += '&nbsp;<span class="group_description">(' + editing_tip_for("creator") + ')</span>';
+    creator_form += '</span>';  // #editing_creator_holder
+    creator_form += '</div>';
 
-    return title_form
+    return creator_form
 }
 
 function menu_options_for(COMPONENT, level) {
@@ -319,7 +319,7 @@ function top_menu_options_for(this_obj) {
 
         console.log("this_obj_environment", this_obj_environment);
         
-        this_list = '<li tabindex="-1" id="choose_current" data-env="p" data-action="edit">Change the title</li>';
+        this_list = '<li tabindex="-1" id="choose_current" data-env="p" data-action="edit">Change the creator</li>';
         this_list += '<li tabindex="-1" data-action="change-env">Change "' + this_obj_environment + '" to <div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
     } else {
         var this_object_type = this_obj.tagName;   //  needs to examine other attributes and then look up a reasonable name
@@ -449,7 +449,7 @@ function edit_menu_for(this_obj_or_id, motion) {
             edit_option.setAttribute('id', 'edit_menu');
             this_obj_parent_id = this_obj.parentElement.parentElement.id;
             this_obj_environment = internalSource[this_obj_parent_id]["ptxtag"];
-            edit_option.innerHTML = '<li id="choose_current" tabindex="-1" data-action="change-title">Change title</li>';
+            edit_option.innerHTML = '<li id="choose_current" tabindex="-1" data-action="change-creator">Change creator</li>';
             edit_option.setAttribute('data-location', 'inline');
         } else {
      //  if (editable_children.length)
@@ -601,7 +601,7 @@ function edit_in_place(obj) {
     if (thisID = obj.getAttribute("id")) {
         console.log("will edit in place", thisID);
         thisTagName = obj.tagName.toLowerCase();
-    } else {  // editing somethign without an id, so probably is a title or caption
+    } else {  // editing somethign without an id, so probably is a creator or caption
         if (obj.classList.contains("heading")) {
             console.log("changing a heading");
             console.log("except we don;t know how to do that")
@@ -702,7 +702,7 @@ function edit_in_place(obj) {
         this_content_container.setAttribute('id', "actively_editing");
         this_content_container.setAttribute('data-objecttype', objecttype);
 
-        var title = standard_title_form(new_id);
+        var creator = standard_creator_form(new_id);
 
         var statement_container_start = '<div class="editing_statement">';
         var statement_container_end = '</div>';
@@ -743,10 +743,10 @@ function edit_in_place(obj) {
             proof += editingregion_container_end + proof_container_end;
         }
 
-        this_content_container.innerHTML = title + statement + proof;
+        this_content_container.innerHTML = creator + statement + proof;
 
         $("#" + thisID).replaceWith(this_content_container);
-        $("#actively_editing_title").focus();
+        $("#actively_editing_creator").focus();
       } 
         else {
           console.log("I do not know how to edit", new_tag)
@@ -956,14 +956,14 @@ function assemble_internal_version_changes() {
         var line_being_edited = object_being_edited;  //document.getElementById('actively_editing_p');
         var line_content = line_being_edited.value;
         line_content = line_content.trim();
-        console.log("the content (is it a title?) is", line_content);
+        console.log("the content (is it a creator?) is", line_content);
         var owner_of_change = object_being_edited.getAttribute("data-source_id");
         var component_being_changed = object_being_edited.getAttribute("data-component");
         console.log("component_being_changed", component_being_changed, "within", owner_of_change);
         // update the title of the object
         internalSource[owner_of_change][component_being_changed] = line_content;
-        recent_editing_actions.push("changed title " + owner_of_change);
-        possibly_changed_ids_and_entry.push([owner_of_change, "title"]);
+        recent_editing_actions.push("changed creator " + owner_of_change);
+        possibly_changed_ids_and_entry.push([owner_of_change, "creator"]);
 
     } else {
         alert("don;t know how to assemble_internal_version_changes of", object_being_edited.tagName)
@@ -1106,6 +1106,7 @@ function html_from_internal_id(the_id, is_inner) {
         object_in_html.setAttribute("data-editable", 99);
 
         object_title = the_object["title"];
+        object_creator = the_object["creator"];
 
         object_in_html.setAttribute("id", the_id);
 
@@ -1117,13 +1118,13 @@ function html_from_internal_id(the_id, is_inner) {
         object_heading_html += '<span class="codenumber">' + "#N" + '</span>';
 
         if (object_title) {
-            object_heading_html += '<span class="space">' + " " + '</span>';
-            if (objectclass == "section-like") {
-                object_heading_html += '<span class="title" data-editable="99" tabindex="-1">' + object_title + '</span>';
-            } else {
-                object_heading_html += '<span class="creator" data-editable="99" tabindex="-1">(' + object_title + ')</span>';
-            }
+            object_heading_html += '<span class="title" data-editable="99" tabindex="-1">' + object_title + '</span>';
         }
+        if (object_creator) {
+            object_heading_html += '<span class="space">' + " " + '</span>';
+            object_heading_html += '<span class="creator" data-editable="99" tabindex="-1">(' + object_creator + ')</span>';
+        }
+
         object_heading_html += '<span class="period">' + "." + '</span>';
         object_heading_html += '</' + headertag + '>';
 
@@ -1205,9 +1206,9 @@ function insert_html_version(these_changes) {
             var editing_parent = current_editing["tree"][ current_editing["level"] -1 ][ current_editing["location"][ current_editing["level"] - 1 ] ];
        //     current_editing["tree"][current_editing["level"]] = next_editable_of(location_of_change.parentElement, "children");
             current_editing["tree"][current_editing["level"]] = next_editable_of(editing_parent, "children");
-        } else if (this_object_entry == "title") {
+        } else if (this_object_entry == "creator") {
             var object_as_html = document.createElement('span');
-            object_as_html.setAttribute("class", "title");
+            object_as_html.setAttribute("class", "creator");
             object_as_html.innerHTML = ptx_to_html(this_object[this_object_entry]);
             console.log("inserting",object_as_html,"before",location_of_change);
             location_of_change.insertAdjacentElement('beforebegin', object_as_html);
@@ -1248,7 +1249,7 @@ function local_editing_action(e) {
     } else if (e.code == "Escape" || e.code == "Enter") {
         console.log("saw a Ret");
         if (document.activeElement.tagName == "INPUT") {
-            console.log("probably saving a title");
+            console.log("probably saving a creator");
             e.preventDefault();
             these_changes = assemble_internal_version_changes();
             final_added_object = insert_html_version(these_changes);
@@ -1583,7 +1584,7 @@ function main_menu_navigator(e) {  // we are not currently editing
             console.log("menu place 10");
             console.log("document.activeElement", document.activeElement);
 
-// not right:  data-parent_id is used when we want to change the title or tag
+// not right:  data-parent_id is used when we want to change the creator or tag
                  console.log("menu on", editableChildren[0]);
                  edit_menu_for(editableChildren[0], "entering");
 
@@ -1657,8 +1658,8 @@ function main_menu_navigator(e) {  // we are not currently editing
                     theChooseCurrent.insertAdjacentElement("beforeend", edit_submenu);
                     document.getElementById('choose_current').focus();
                     console.log("focus is on", $(":focus"));
-            } else if (dataAction == "change-title") {
-                console.log("change-title not implemented yet")
+            } else if (dataAction == "change-creator") {
+                console.log("change-creator not implemented yet")
             } else {
                 alert("I don;t know what to do llllllll dataAction", dataAction)
             }
