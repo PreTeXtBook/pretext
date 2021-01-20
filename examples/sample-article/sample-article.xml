@@ -99,7 +99,7 @@ the xsltproc executable.
         <!--
         Extra packages, package options, and package settings for latex-based images.
         Inserted in the preamble for LaTeX output.
-        Inserted in the preamble to each standalone latex-based image for HMTL SVG output.
+        Inserted in the preamble to each standalone latex-based image for HTML SVG output.
         -->
         <latex-image-preamble>
         \usepackage{pgfplots}               % loads tikz package
@@ -255,7 +255,7 @@ the xsltproc executable.
                 <p>This is a sample of many of the things you can do with <pretext />.  Sometimes the math makes sense, sometimes it seems to be written in the first person, sort of like this Abstract.</p>
             </abstract>
             <!--
-            Acknowledgements, dedications, colophon (ISBN, copyright, etc)
+            Acknowledgments, dedications, colophon (ISBN, copyright, etc)
             are supported in the book document type.  Such a diverse range
             is not yet available for articles.  Send requests.
              -->
@@ -522,7 +522,7 @@ the xsltproc executable.
                 </input>
             </sage>
 
-            <p>Here is a blank Sage cell that you may use for practice and experimentation with the commands above.  Note that this cell allows a choice of languages, and is not linked with any of the previous cells, so a reader would need to start fresh, or cut/paste definitioons from other cells.</p>
+            <p>Here is a blank Sage cell that you may use for practice and experimentation with the commands above.  Note that this cell allows a choice of languages, and is not linked with any of the previous cells, so a reader would need to start fresh, or cut/paste definitions from other cells.</p>
 
             <sage type="practice" />
 
@@ -1425,7 +1425,7 @@ the xsltproc executable.
 
                     <p>Any subdivision may have a sequence of paragraphs within an <tag>introduction</tag> that precedes subsequent further subdivisions.  You are reading one now.  They are always leaves of the document structure, so are rendered on some pages that reference the following subdivisions.</p>
 
-                    <p>An introduction or conclusion is an extremely restrictive container with simple presentation.  A title is optional (and probably not advisable).  Content is meant to be short and unstructured, in particular, nothing that can be numbered is allowed.  If this feels <em>too</em> restrictive, then place your content in an initial numbered subdivision and perhaps title it <q>Introduction</q>.  Or make your entire subdivion unstructured and place whatever you want into it.</p>
+                    <p>An introduction or conclusion is an extremely restrictive container with simple presentation.  A title is optional (and probably not advisable).  Content is meant to be short and unstructured, in particular, nothing that can be numbered is allowed.  If this feels <em>too</em> restrictive, then place your content in an initial numbered subdivision and perhaps title it <q>Introduction</q>.  Or make your entire subdivision unstructured and place whatever you want into it.</p>
 
                     <p>This ends this introduction to introductions.</p>
                 </introduction>
@@ -1646,12 +1646,12 @@ the xsltproc executable.
             </md>.
             <notation>
                 <usage>\rho</usage>
-                <description>this symbol could be used for lots of things, but we are just trying to make a super-long description to get it to wrap within the column where it belongs, which is sometimes set to a fixed width to accomodate really complicated explanations</description>
+                <description>this symbol could be used for lots of things, but we are just trying to make a super-long description to get it to wrap within the column where it belongs, which is sometimes set to a fixed width to accommodate really complicated explanations</description>
             </notation>
             <idx>rho, a test</idx>
-            Just prior to this sentence, in the middle of this paragraph, is an <tag>idx</tag> and a <tag>notation</tag>, adjacent, but separated by some whitespace in the authored source.  That insignificant whitespace will be removed akways, which will be a (slightly) noticeable improvement in the <latex/> output.  We test referencing notation here, placed <em>before</em> the sentence-ending period and right after some inline mathematics<mdash/>for <m>\mathbb{Z}_n</m><notation><usage>\mathbb{Z}_n</usage><description>(ring of) integers modulo <m>n</m></description></notation>.</p>
+            Just prior to this sentence, in the middle of this paragraph, is an <tag>idx</tag> and a <tag>notation</tag>, adjacent, but separated by some whitespace in the authored source.  That insignificant whitespace will be removed always, which will be a (slightly) noticeable improvement in the <latex/> output.  We test referencing notation here, placed <em>before</em> the sentence-ending period and right after some inline mathematics<mdash/>for <m>\mathbb{Z}_n</m><notation><usage>\mathbb{Z}_n</usage><description>(ring of) integers modulo <m>n</m></description></notation>.</p>
 
-            <p><latex /> has a device where you can interrupt a sequence of equations with a small amout of text and preserve the equation alignment on either side.  Here are two tests of that device, with aligned equations and non-aligned equations.  Study the source to see use and differences.  (The math does not make sense.)</p>
+            <p><latex /> has a device where you can interrupt a sequence of equations with a small amount of text and preserve the equation alignment on either side.  Here are two tests of that device, with aligned equations and non-aligned equations.  Study the source to see use and differences.  (The math does not make sense.)</p>
 
             <p>Aligned and numbered first.<mdn>
                 <mrow>{\mathcal L}(y')(s)  &amp;= s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
@@ -1928,7 +1928,7 @@ the xsltproc executable.
                     <p>So.  Do not take any extra steps and let <latex /> figure out the breaks.  If you do not like a break, modify the <c>md</c> or <c>mdn</c> to go back to the AMSmath default behavior and not break at all.  Ever.  Or rather, go further and modify an individual <c>mrow</c> to suggest that it is a good place for a break.</p>
                 </example>
 
-                <p permid="Cde">This is a poorly-authored paragaph to test the conversion to <init>HTML</init>.  There are two displayed equations, separated by a period ending the first one's sentence, which should migrate into the display, and not leave behind an empty paragraph: <me permid="Fgh">z+y = z</me>.  <me>a + b = c</me>.  This final sentence should remain, inside another <init>HTML</init> paragraph, without the second equation's period.</p>
+                <p permid="Cde">This is a poorly-authored paragraph to test the conversion to <init>HTML</init>.  There are two displayed equations, separated by a period ending the first one's sentence, which should migrate into the display, and not leave behind an empty paragraph: <me permid="Fgh">z+y = z</me>.  <me>a + b = c</me>.  This final sentence should remain, inside another <init>HTML</init> paragraph, without the second equation's period.</p>
             </subsection>
 
             <subsection>
@@ -2017,7 +2017,7 @@ the xsltproc executable.
                     <p>Rather than pressing the &lt; and &amp; keys on your keyboard, instead always enter the escape sequences <c>&amp;lt;</c> and <c>&amp;amp;</c> as replacements.</p>
                 </blockquote>
 
-                <p>Simple.  And it will work in <q>running text,</q> verbatim text (like when authoring the content of <tag>c</tag> or <tag>pre</tag> elements), and mixed into <latex/> syntax to desribe mathematical expressions.  <init>XML</init> has three other escape sequences <c>&amp;gt;</c>, <c>&amp;apos;</c>, and <c>&amp;quot;</c>, for the characters &gt;, &apos;, and &quot; (respectively).  But they seem largely unnecessary for authoring in PreTeXt, as we now demonstrate by typing them directly from our keyboard into our source: &gt;, &apos;, and &quot;.</p>
+                <p>Simple.  And it will work in <q>running text,</q> verbatim text (like when authoring the content of <tag>c</tag> or <tag>pre</tag> elements), and mixed into <latex/> syntax to describe mathematical expressions.  <init>XML</init> has three other escape sequences <c>&amp;gt;</c>, <c>&amp;apos;</c>, and <c>&amp;quot;</c>, for the characters &gt;, &apos;, and &quot; (respectively).  But they seem largely unnecessary for authoring in PreTeXt, as we now demonstrate by typing them directly from our keyboard into our source: &gt;, &apos;, and &quot;.</p>
 
                 <exercise>
                     <p>How was <c>&amp;amp;</c> authored?  Work it out, and then check the source here for the answer.</p>
@@ -2033,7 +2033,7 @@ the xsltproc executable.
 
                 <p><sq>It is always wise to look ahead, but difficult to look further than you can see.</sq> (Winston Churchill)</p>
 
-                <p>A large quote can be accomodated with the <tag>blockquote</tag> tag, which can carry within itself an <tag>attribution</tag> element.</p>
+                <p>A large quote can be accommodated with the <tag>blockquote</tag> tag, which can carry within itself an <tag>attribution</tag> element.</p>
 
                 <blockquote xml:id="blockquote-seuss">
                     <p>The problem with writing a book in verse is, to be successful, it has to sound like you knocked it off on a rainy Friday afternoon. It has to sound easy. When you can do it, it helps tremendously because it's a thing that forces kids to read on. You have this unconsummated feeling if you stop.</p>
@@ -2607,7 +2607,7 @@ the xsltproc executable.
 
                 <p>We also disrupt certain constructions from <latex/>.  Attempting to sneak-in any traditional macro for the purposes of <latex/>-only output, such as, say a \newpage, will fail since the leading backslash will be caught and converted to <c>\textbackslash</c>.  (See?  It just happened twice.)  For technical reasons we want to particularly test \textbackslash, \textbraceleft, and \textbraceright.</p>
 
-                <p>Four <q><tex/> ligatures</q>, <c>--</c>, <c>---</c>, <c>``</c>, and <c>''</c>, authored in running text, --, ---, ``, ''.  It may be hard to tell that the two consecutive apostrophes have not coalesced into a curly left smart quote, but see below, the spacing is subtely different.</p>
+                <p>Four <q><tex/> ligatures</q>, <c>--</c>, <c>---</c>, <c>``</c>, and <c>''</c>, authored in running text, --, ---, ``, ''.  It may be hard to tell that the two consecutive apostrophes have not coalesced into a curly left smart quote, but see below, the spacing is subtly different.</p>
 
                 <p>We want the double quote mark from your keyboard, <c>"</c>, to not morph into some other character: "<nbsp/>.</p>
 
@@ -2627,7 +2627,7 @@ the xsltproc executable.
             <subsection>
                 <title><init>HTML</init> and accidental mathematics</title>
 
-                <p>We render mathematics in web pages with the fantastic MathJax Javascript library.  Simplifying just a bit, it recognizes <latex/> syntax within a page, takes control of that text, and replaces it wth nice fonts and formatting.  Now, if you write about <latex/> you might well have some mathematics in your examples.  Best practice would be to use verbatim text for that, and we mark off such text as being off-limits to MathJax.</p>
+                <p>We render mathematics in web pages with the fantastic MathJax Javascript library.  Simplifying just a bit, it recognizes <latex/> syntax within a page, takes control of that text, and replaces it with nice fonts and formatting.  Now, if you write about <latex/> you might well have some mathematics in your examples.  Best practice would be to use verbatim text for that, and we mark off such text as being off-limits to MathJax.</p>
 
                 <p>But if you are writing running text, then you can (accidentally) author some text which MathJax recognizes and converts to something (unintended).  And if you are doing this intentionally, then you have ignored <pretext/> markup for mathematics, and are missing out on some features.</p>
 
@@ -2643,7 +2643,7 @@ the xsltproc executable.
             <title>Graphics</title>
 
             <introduction>
-                <p>In addition to including images created externally (e.g. photographs),  <pretext/> supports several languages for describing diagrams and pictures with human-readable source code (<ie /> plain text), rather than using a <q>paint</q> program.  This section describes the various methods for incorporationg, or generating, graphis, images or diagrams.</p>
+                <p>In addition to including images created externally (e.g. photographs),  <pretext/> supports several languages for describing diagrams and pictures with human-readable source code (<ie /> plain text), rather than using a <q>paint</q> program.  This section describes the various methods for incorporating, or generating, graphs, images or diagrams.</p>
             </introduction>
 
             <subsection>
@@ -3113,11 +3113,11 @@ the xsltproc executable.
                     </image>
                 </figure>
 
-                <p>These 3D images in HTML output are rotable with a pointing device (mouse, trackpad) with a click-and-drag.  A finger should suffice on touch-sensitive devices (phones, tablets).  Zooming in and out can be accomplished with a mouse wheel, or by pinching.  As a contribution to the accessibility of <pretext/> HTML output, keyboard controls will also allow for exploration of these images.  (Make sure the image has focus when you attempt to use these.)</p>
+                <p>These 3D images in HTML output are rotatable with a pointing device (mouse, trackpad) with a click-and-drag.  A finger should suffice on touch-sensitive devices (phones, tablets).  Zooming in and out can be accomplished with a mouse wheel, or by pinching.  As a contribution to the accessibility of <pretext/> HTML output, keyboard controls will also allow for exploration of these images.  (Make sure the image has focus when you attempt to use these.)</p>
 
                 <!-- More possible keyboard shortcuts are at Section 8.29, page 136 -->
                 <!-- https://asymptote.sourceforge.io/asymptote.pdf                 -->
-                <!-- Not all seem to be implented, so review/test carefully         -->
+                <!-- Not all seem to be implemented, so review/test carefully         -->
 
                 <table>
                     <title>3D Image Keyboard Controls</title>
@@ -3194,7 +3194,7 @@ the xsltproc executable.
                     </image>
                 </figure>
 
-                <p>Sage code comprised of just a single line was once mishandled, leading to <em>no ouput</em>.  From Jean-Sébastien Turcotte we have the example that revealed the problem.</p>
+                <p>Sage code comprised of just a single line was once mishandled, leading to <em>no output</em>.  From Jean-Sébastien Turcotte we have the example that revealed the problem.</p>
 
                 <figure xml:id="figure-sage-exosagevec1">
                     <caption>Les vecteurs <m>\vec{u}</m> et <m>\vec{v}</m></caption>
@@ -3250,7 +3250,7 @@ the xsltproc executable.
                     </figure>
                 </sidebyside>
 
-                <p>From the Sage documentation, with slight modifications, credited to Douglas Summers-Stay.  A plot of the implicity defined surface <me>2 = \cos(x + ty) + \cos(x - ty) + \cos(y + tz) + \cos(y - tz) + \cos(z - tx) + \cos(z + tx)</me> in rectangular <m>xyz</m> coordinates, with <m>t</m> equal to the golden ratio.</p>
+                <p>From the Sage documentation, with slight modifications, credited to Douglas Summers-Stay.  A plot of the implicitly defined surface <me>2 = \cos(x + ty) + \cos(x - ty) + \cos(y + tz) + \cos(y - tz) + \cos(z - tx) + \cos(z + tx)</me> in rectangular <m>xyz</m> coordinates, with <m>t</m> equal to the golden ratio.</p>
 
                 <figure xml:id="figure-sage-implicit-surface">
                     <caption>A Sage implicitly defined 3D surface</caption>
@@ -3934,7 +3934,7 @@ the xsltproc executable.
 
                 <p>Items in ordered lists (only) may be be give an <c>xml:id</c> and then may be the target of an <c>xref</c>.  We test three here, referencing down into the hierarchy above.  Level 1, second: <xref ref="list-two" />.  Level 3, second: <xref ref="list-two-two-two" />.  Level 4, third: <xref ref="list-two-two-two-three" />.  Note that if a list item of an ordered list is contained within a list item of an unordered list, then its number will not be defined.</p>
 
-                <p>And now a four-level deep unordered list with the default labels supplied by MBX (disc, circle, square, disc).  Again, the defalt order for Markdown/Jupyter (disc, square, circle, circle) is different than for <latex /> and HTML (disc, circle, square, disc)<ul>
+                <p>And now a four-level deep unordered list with the default labels supplied by MBX (disc, circle, square, disc).  Again, the default order for Markdown/Jupyter (disc, square, circle, circle) is different than for <latex /> and HTML (disc, circle, square, disc)<ul>
                     <li>
                         <title>A title on a top-level item</title>
                         <p>Level 1, first.</p>
@@ -4296,7 +4296,7 @@ the xsltproc executable.
                 <p>Use <c>dl</c> to make a description list<idx><h>description list</h></idx><idx><h>list</h><h>description</h></idx>. Inside of those tags, use <c>li</c> for each entry. Then, use <c>title</c> to specify the term being described and <c>p</c> to specify the description.</p>
                 <p>A <q>description</q> list
                 <idx><h>description list</h></idx><idx><h>list</h><h>description</h></idx>
-                has a short term or phrase that is prominent, followed by a short description.  It is modeled on the lists of similar structure in both <latex /> and HTML.  It makes for a nice medium-weight way to define terms, somewhere in-between the <c>term</c> tag which just makes a term prominent in a sentence, and a <c>definition</c>, which is set off, has a heading, a number, and a title.  Do not try to manage the separation between the title and the description by employing punctuation (but you can include a question-mark or exclamation-point if necessary).  For example, do not include a colon to the end of the title.  This example is from Bob Plantz.
+                has a short term or phrase that is prominent, followed by a short description.  It is modeled on the lists of similar structure in both <latex /> and HTML.  It makes for a nice medium-weight way to define terms, somewhere in-between the <c>term</c> tag which just makes a term prominent in a sentence, and a <c>definition</c>, which is set off, has a heading, a number, and a title.  Do not try to manage the separation between the title and the description by employing punctuation (but you can include a question-mark or exclamation-point if necessary).  For example, do not include a colon or period at the end of the title.  This example is from Bob Plantz.
                 <dl>
                     <li xml:id="cpu-definition">
                         <title>Central Processing Unit (CPU)</title>
@@ -4616,7 +4616,7 @@ the xsltproc executable.
 
             <p>The next table describes how to construct tables via the <c>tabular</c> element.  The <c>table</c> element may be used to enclose the raw table, so as to associate a caption and get vertical separation with horizontal centering.</p>
 
-            <p>The <c>tabular</c> element contains a sequence of <c>row</c> elements, and must contain at least one.  Each <c>row</c> contains a sequence of <c>cell</c> elements and must have the same number in each row (acccounting for the use of the <c>colspan</c> attribute).  The contents of the <c>cell</c> elements are the text to appear in entries of the table.</p>
+            <p>The <c>tabular</c> element contains a sequence of <c>row</c> elements, and must contain at least one.  Each <c>row</c> contains a sequence of <c>cell</c> elements and must have the same number in each row (accounting for the use of the <c>colspan</c> attribute).  The contents of the <c>cell</c> elements are the text to appear in entries of the table.</p>
 
             <p>A sequence of <c>col</c> elements may optionally be used.  But if one appears, then there must be the right number for the width of the table.  They are empty elements always, and just carry information about their respective column.</p>
 
@@ -4757,7 +4757,7 @@ the xsltproc executable.
 
             <p>An example of aligning table cells' contents horizontally. See the source for comments.</p>
 
-            <!-- Default matches HTML and LaTEX, left. -->
+            <!-- Default matches HTML and LaTeX, left. -->
             <!-- We set this table's default to right. -->
             <table>
                 <title>Horizontal Alignment Example</title>
@@ -4851,7 +4851,7 @@ the xsltproc executable.
             </table>
 
 
-            <p>For a table without a caption, create a <tag>tabular</tag> and place it directly within the current division.  This will allow control over the horizontal placment, but without a caption, there is no number, and the tabular cannot be cross-referenced.</p>
+            <p>For a table without a caption, create a <tag>tabular</tag> and place it directly within the current division.  This will allow control over the horizontal placement, but without a caption, there is no number, and the tabular cannot be cross-referenced.</p>
 
             <tabular top="medium"><row bottom="medium" left="minor"><cell right="minor">One</cell></row></tabular>
 
@@ -5034,7 +5034,7 @@ the xsltproc executable.
                 </tabular>
             </table>
 
-            <p>Table cells with a fixed width where text wraps are known as <q>paragraph cells</q>. A cell will be created as a paragraph cell if and only if it has <tag>p</tag> children. And such cells should <em>only</em> have <tag>p</tag> children. The width of a paragraph cell is determined by a <c>width</c> attribute on the corresponding <tag>col</tag> (as a percentage). If no <c>width</c> is specified (or there isn't even a <tag>col</tag> in the first place) then <c>xsltproc</c> will abort. If the column has a non-paragraph cell with contents that are wider than the paragraph cells, results will be undesirable. There is presently no implementation for a paragraph cell that has a <c>colspan</c> greater than <m>1</m>, although cells with <c>colspan</c> greater than <m>1</m> that are above or below a paragraph cell will behave. Setting <c>width</c> on a <tag>col</tag> that has no paragraph cells may produce unexpected results. A <c>valign</c> for the parent <tag>row</tag> (or the ambient <tag>tabular</tag>) can control vertical alignment (top, middle, or bottom). A paragraph cell's <c>halign</c> attribute (left, center, right, or justify) controls how the text is justfied. Cells inherit <c>halign</c> from <tag>row</tag>, <tag>col</tag>, and <tag>tabular</tag> in that order of preference. In a non-paragraph cell where <c>halign='justify'</c>, the horizontal alignment will match the behavior of <c>halign='left'</c>.</p>
+            <p>Table cells with a fixed width where text wraps are known as <q>paragraph cells</q>. A cell will be created as a paragraph cell if and only if it has <tag>p</tag> children. And such cells should <em>only</em> have <tag>p</tag> children. The width of a paragraph cell is determined by a <c>width</c> attribute on the corresponding <tag>col</tag> (as a percentage). If no <c>width</c> is specified (or there isn't even a <tag>col</tag> in the first place) then <c>xsltproc</c> will abort. If the column has a non-paragraph cell with contents that are wider than the paragraph cells, results will be undesirable. There is presently no implementation for a paragraph cell that has a <c>colspan</c> greater than <m>1</m>, although cells with <c>colspan</c> greater than <m>1</m> that are above or below a paragraph cell will behave. Setting <c>width</c> on a <tag>col</tag> that has no paragraph cells may produce unexpected results. A <c>valign</c> for the parent <tag>row</tag> (or the ambient <tag>tabular</tag>) can control vertical alignment (top, middle, or bottom). A paragraph cell's <c>halign</c> attribute (left, center, right, or justify) controls how the text is justified. Cells inherit <c>halign</c> from <tag>row</tag>, <tag>col</tag>, and <tag>tabular</tag> in that order of preference. In a non-paragraph cell where <c>halign='justify'</c>, the horizontal alignment will match the behavior of <c>halign='left'</c>.</p>
 
             <table xml:id="table-time-units">
                 <title>Time Units</title>
@@ -5065,7 +5065,7 @@ the xsltproc executable.
                     <row valign="top" bottom="major">
                         <cell><quantity><unit base="hour"/></quantity></cell>
                         <cell>hour</cell>
-                        <cell><p>exactly <m>3600</m> seconds; exaclty <m>60</m> minutes</p></cell>
+                        <cell><p>exactly <m>3600</m> seconds; exactly <m>60</m> minutes</p></cell>
                         <cell><p>the length of one episode of a premium cable television show</p></cell>
                     </row>
                 </tabular>
@@ -5680,7 +5680,7 @@ the xsltproc executable.
 
                 <p>Place Javascript inside a file that is specified with the <attr>source</attr> attribute of the <tag>interactive</tag> element.  Then just be certain that <attr>xml:id</attr> of the <tag>interactive</tag> element is passed as the <init>HTML</init> <c>id</c> in an (early) call to JSXGraph's <c>initBoard()</c> method.</p>
 
-                <p>The plot below is the curve <m>r=a+b\theta</m> in polar coordinates, for <m>0\leq\theta\leq 8\pi</m>.  It may be manipulated with the sliders to control the shape of the curve.  Point <m>A</m> is contrained to the curve, but may be dragged to a new location. At <m>A</m> the tangent line and normal line are plotted as dashed red lines.  Use the controls in the lower left to adjust the viewing window.  This <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral">example</url> is taken from the JSXGraph <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">example wiki</url>.  The code could be written in 7 lines.  Width is 80% and aspect ratio is 4:3.</p>
+                <p>The plot below is the curve <m>r=a+b\theta</m> in polar coordinates, for <m>0\leq\theta\leq 8\pi</m>.  It may be manipulated with the sliders to control the shape of the curve.  Point <m>A</m> is constrained to the curve, but may be dragged to a new location. At <m>A</m> the tangent line and normal line are plotted as dashed red lines.  Use the controls in the lower left to adjust the viewing window.  This <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral">example</url> is taken from the JSXGraph <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">example wiki</url>.  The code could be written in 7 lines.  Width is 80% and aspect ratio is 4:3.</p>
 
                 <figure>
                     <caption>The Archimedian Spiral <m>r = a + b\theta</m>, <m>0\leq\theta\leq 8\pi</m></caption>
@@ -5811,7 +5811,7 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
-                <title>Geogebra</title>
+                <title>GeoGebra</title>
 
                 <p>To embed a GeoGebra applet as-is from GeoGebra's Classroom Resources site (by material ID), see <xref ref="subsection-geogebra-server" text="type-global"/>. To design your own applet (either from scratch, or modifying something that already exists in one of those three forms) you may use one of Geogebra's <q>Apps</q> to embed the material in your document. (But note, use of the App comes with licensing restrictions.) <pretext /> will handle most of the technical details for you.</p>
 
@@ -6069,7 +6069,7 @@ the xsltproc executable.
                 <p>You can replace the <q>preview</q> image of a video with one of your own making.  <init>HTML</init> refers to this as the <term>poster</term>, presumably because it advertises the video.  The image you make should be of the same quality as the video, and with the same aspect-ratio, and is presumably one of the frames of the video.  So a screenshot is the likely avenue.  (Maybe we will have advice on how to do this easily, or see <url href="https://github.com/rbeezer/mathbook/issues/853" />.)
                 <idx><h>link</h><h>external, url</h></idx>
                 <idx><h>reference</h><h>external, url</h></idx>
-                On the <tag>video</tag> tag, include a <attr>preview</attr> attribute which is the name of an image file, including a relative path.  (JPEG or PNG formats are best.  JPEG may be smaller for video screenshots, while PNG is lossless and so may work better for diagrams.)  The next video has a preview/poster that is a fram part way into the introduction.</p>
+                On the <tag>video</tag> tag, include a <attr>preview</attr> attribute which is the name of an image file, including a relative path.  (JPEG or PNG formats are best.  JPEG may be smaller for video screenshots, while PNG is lossless and so may work better for diagrams.)  The next video has a preview/poster that is a frame part way into the introduction.</p>
 
                 <figure>
                     <caption>University of Puget Sound Promotional Video</caption>
@@ -6326,7 +6326,7 @@ the xsltproc executable.
         Various author tools are planned.  Note the embedded "todo"
         elements above.  An XSL transform in-testing will extract them
         for a report, and they are hidden in actual output.
-        For a cross-reference, instead of a "ref" atrribute,
+        For a cross-reference, instead of a "ref" attribute,
         you can use a "provisional" attribute while writing, which is
         especially useful for unknown forward references.  This is
         included in the author report also.
@@ -6412,7 +6412,7 @@ the xsltproc executable.
                 <li><p>A <c>type-global</c> cross-reference to a second-level <c>task</c> within a project: <xref ref="project-task-level-two" text="type-global" />, the encompassing <c>project</c>: <xref ref="project-structured" />, and a <c>local</c> reference <xref ref="project-task-level-two" text="local" />.</p></li>
                 <li><p>A subcaptioned named list: <xref ref="color-list-as-panel" /></p></li>
                 <li><p>A cross-reference to a paragraph (<c>p</c>) in the <c>statement</c> of an <c>exercise</c>: <xref ref="paragraph-in-exercise" text="custom">paragraph</xref>.  Notice that such a paragraph has no number and no title, so you need to (a) use <c>text='custom'</c>, and (b) provide custom text as the content of the <tag>xref</tag>.  You may wish to provide very explicit location information for hardcopy print.  Notice that this is not a cross-reference to the <c>exercise</c>, just a small portion of it.</p></li>
-                <li><p>This opens a knowl for an <c>example</c>.  It has a solution, which is orginally presented as a hidden knowl.  But since this version is a duplicate, the knowl for the solution is a file version, not an embedded version, and hence free from duplicating any unique identifaction like an <init>HTML</init> id.  So we test its styling and function here: <xref ref="example-structured" text="type-global" /></p></li>
+                <li><p>This opens a knowl for an <c>example</c>.  It has a solution, which is originally presented as a hidden knowl.  But since this version is a duplicate, the knowl for the solution is a file version, not an embedded version, and hence free from duplicating any unique identification like an <init>HTML</init> id.  So we test its styling and function here: <xref ref="example-structured" text="type-global" /></p></li>
                 <li><p>A cross-reference to a poem, where we need to use a title for the link text, since a <c>poem</c> is not numbered: <xref ref="poem-light-brigade" text="title" /></p></li>
                 <li><p>A cross-reference to a <tag>references</tag> division in a subsection, which should not be numbered where born, but which has the number of its parent division in a cross-reference: <xref ref="references-section" text="type-global"/>.  And a cross-reference to a <tag>references</tag> division, which is the <q>main</q> bibliography in the back matter, and so is not numbered where born, nor in a cross-reference (which we must accomplish via it's title): <xref ref="references-backmatter" text="title"/>.</p></li>
                 <li><p>A cross-reference to a <tag>solutions</tag> division in a subsection, which should not be numbered where born, but which has the number of its parent division in a cross-reference: <xref ref="solutions-subsection" text="type-global"/>.  And a cross-reference to a <tag>solutions</tag> division, which should appear as an appendix both where born and as a cross-reference: <xref ref="solutions-backmatter" text="type-global"/>.</p></li>
@@ -6763,7 +6763,7 @@ the xsltproc executable.
 
             <p>Snippets should also be robust for cut/paste operations.  For example, you should not get <q>curly</q> <q>smart</q> quote marks in verbatim text: <c>this should have "dumb" quote marks</c>. Here are a few characters that should migrate through <latex /> to a PDF unmolested:  <c>'"----"'</c></p>
 
-            <p><c>If you write a very long snippet of inline code (i.e. within a &lt;c&gt; element) it can impinge on the right margin, since very long words will not hypenate, unless you have a dash/hypen.  Such as when you use words like pneumonoultramicroscopicsilicovolcanoconiosis, parastratiosphecomyia stratiosphecomyioides, floccinaucinihilipilification, or subdermatoglyphic.  For output in LaTeX we get line-breaking, and perhaps word-spacing, but we do not get hyphenation and the font is fixed-width.  So not always perfect.  Consider other options like &lt;cd&gt; or &lt;pre&gt; below.</c></p>
+            <p><c>If you write a very long snippet of inline code (i.e. within a &lt;c&gt; element) it can impinge on the right margin, since very long words will not hyphenate, unless you have a dash/hypen.  Such as when you use words like pneumonoultramicroscopicsilicovolcanoconiosis, parastratiosphecomyia stratiosphecomyioides, floccinaucinihilipilification, or subdermatoglyphic.  For output in LaTeX we get line-breaking, and perhaps word-spacing, but we do not get hyphenation and the font is fixed-width.  So not always perfect.  Consider other options like &lt;cd&gt; or &lt;pre&gt; below.</c></p>
 
             <p>An intermediate type of verbatim text can be accomplished with the <tag>cd</tag> tag, short for <q>code display.</q>  It allows for larger chunks of verbatim text to show up in the middle of a paragraph, but with some vertical space above and below, and centered between the margins.  It can be<cd>authored as a single line</cd>or if you wish to have multiple lines<cd>
                 <cline>there is the &lt;cline&gt; tag</cline>
@@ -6778,7 +6778,7 @@ the xsltproc executable.
             <pre>
                 <cline>If you write a very long snippet of inline code (i.e. within</cline>
                 <cline>a &lt;c&gt; element) it can impinge on the right margin, since</cline>
-                <cline>very long words will not hypenate, unless you have a dash/hypen.</cline>
+                <cline>very long words will not hyphenate, unless you have a dash/hypen.</cline>
                 <cline>Such as when you use words like</cline>
                 <cline>pneumonoultramicroscopicsilicovolcanoconiosis,</cline>
                 <cline>parastratiosphecomyia stratiosphecomyioides,</cline>
@@ -6826,7 +6826,7 @@ the xsltproc executable.
                 </input>
             </program>
 
-            <p>Matlab is a commercial language for mathematics, while Octave in an open source version.  The <attr>language</attr> values of <c>matlab</c> and <c>octave</c> are somewhat interchangeable.  Following is a very slighlty edited version of an example from <articletitle>50 Basic Examples for Matlab</articletitle><fn><c>http://www.public.asu.edu/~hhuang38/hph_matlab_basic2013_1.pdf</c></fn>.</p>
+            <p>Matlab is a commercial language for mathematics, while Octave in an open source version.  The <attr>language</attr> values of <c>matlab</c> and <c>octave</c> are somewhat interchangeable.  Following is a very slightly edited version of an example from <articletitle>50 Basic Examples for Matlab</articletitle><fn><c>http://www.public.asu.edu/~hhuang38/hph_matlab_basic2013_1.pdf</c></fn>.</p>
 
             <!-- Example 45: 50 Basic Examples for Matlab -->
             <program language="matlab">
@@ -6865,7 +6865,7 @@ the xsltproc executable.
 
             <p>Look in the <c>pretext-common.xsl</c> file to see the strings to use to identify languages.  Always all-lowercase, no symbols, no punctuation.</p>
 
-            <p>Note that the above examples all have slightly different widths (theser are very evident in print with the frames).  As 2-D atomic objects, to place them in the narrative requires the layout features of a <c>sidebyside</c> element.  Then <c>width</c> and/or <c>margin</c> attributes will influence the width of the panel.</p>
+            <p>Note that the above examples all have slightly different widths (these are are very evident in print with the frames).  As 2-D atomic objects, to place them in the narrative requires the layout features of a <c>sidebyside</c> element.  Then <c>width</c> and/or <c>margin</c> attributes will influence the width of the panel.</p>
 
             <p>A <c>program</c> may also be nested inside a <c>listing</c>, which behaves similar to a <c>figure</c>.  You can provide a <c>caption</c>, and the listing will be numbered along with tables and figures.  This then makes it possible to cross-reference the listing, such as <xref ref="listing-c-hello" text="type-global" />.  It also removes the requirement of wrapping the <c>program</c> in a <c>sidebyside</c>.  For technical reasons, the three examples above will not split across a page break in PDF output, but the placement inside a <c>listing</c> will allow splits, as you should see in at least one example following.</p>
 
@@ -7156,7 +7156,7 @@ the xsltproc executable.
                 <title>Inline Coding Exercise, No Help</title>
 
                 <statement>
-                    <p>An exercise might ask a reader to write a computer program, so you can also add a <tag>program</tag> element after the <tag>statement</tag> of an <tag>exercise</tag>.    The purpose is to make it a live coding environment for a version of your output that allows the reader to perhaps submit a solution, if the hosting enviromnment is capable of that.    The <tag>program</tag> element is necessary so you can specify a programming language.  Here we place no code at all in the <tag>program</tag>, so there may be noting at all to see.</p>
+                    <p>An exercise might ask a reader to write a computer program, so you can also add a <tag>program</tag> element after the <tag>statement</tag> of an <tag>exercise</tag>.    The purpose is to make it a live coding environment for a version of your output that allows the reader to perhaps submit a solution, if the hosting environment is capable of that.    The <tag>program</tag> element is necessary so you can specify a programming language.  Here we place no code at all in the <tag>program</tag>, so there may be noting at all to see.</p>
                 </statement>
                 <program xml:id="coding-exercise-blank" language="python"/>
                 <hint>
@@ -7186,7 +7186,7 @@ the xsltproc executable.
         <section>
             <title>Units of Measure</title>
 
-            <p>Units of measure can be given xml treatment too with the <c>quantity</c> element. In <latex />, the <c>siunitx</c><idx><h>siunitx package</h></idx><idx><h>package</h><h>siunitx</h></idx><idx><h>units</h></idx> package is loaded to achive unit handling. Since that package only offers SI units, some other common units will be added by MBX in the preamble. In HTML, the capabilities of <c>siunitx</c> are simulated, weakly. Note that at present, you should not attempt to use the <c>quantity</c> element within a math environment.</p>
+            <p>Units of measure can be given xml treatment too with the <c>quantity</c> element. In <latex />, the <c>siunitx</c><idx><h>siunitx package</h></idx><idx><h>package</h><h>siunitx</h></idx><idx><h>units</h></idx> package is loaded to achieve unit handling. Since that package only offers SI units, some other common units will be added by MBX in the preamble. In HTML, the capabilities of <c>siunitx</c> are simulated, weakly. Note that at present, you should not attempt to use the <c>quantity</c> element within a math environment.</p>
             <p>The value of gravitational constant <m>g</m> is <quantity><mag>9.8</mag><unit base="meter"/><per base="second" exp="2"/></quantity>. Force is measured in <quantity><unit prefix="kilo" base="gram"/><unit base="meter"/><per base="second" exp="2"/></quantity>, also known as one <quantity><unit base="newton"/></quantity>. A quantity with rather ridiculous units is <quantity><mag>23</mag><unit prefix='micro' base='hectare' exp='23'/><per base='degreeCelsius'/><per base='second' exp='2'/></quantity>. One <quantity><unit base="hertz"/></quantity> is the same as <quantity><per base='second'/></quantity>. You can have a unitless quantity, like <quantity><mag>42</mag></quantity>, which may help with consistency between such numbers and units in the <latex /> output. Some non-SI units are available, such as the absurd <quantity><unit base="degreeFahrenheit"/><unit base="foot"/><unit base="pound"/><per base="gallon"/></quantity>.  The <latex /> command <c>\pi</c> is recognized within <c>mag</c> in conversions to HTML, which is consistent with the behavior with a conversion to <latex />, for example there are
             <quantity>
                 <mag>2\pi</mag>
@@ -7983,7 +7983,7 @@ the xsltproc executable.
                             <li>Square</li>
                             <li>Geometric</li>
                         </ul>
-                        <p>The blue-ness of the border contrasts with the stark emptieness of the white interior, evoking images of blue skies and vast sandy deserts.  The harsh black cross draws the viewer's attention to the exact center.</p>
+                        <p>The blue-ness of the border contrasts with the stark emptiness of the white interior, evoking images of blue skies and vast sandy deserts.  The harsh black cross draws the viewer's attention to the exact center.</p>
                     </stack>
                 </sidebyside>
 
@@ -8672,7 +8672,7 @@ the xsltproc executable.
                 </sidebyside>
             </figure>
 
-            <p>Note that these two chunks of verbatim text will very likely exceed the right side of a too-skinny panel.  We have severly edited these two examples from previous appearances just to fit here.</p>
+            <p>Note that these two chunks of verbatim text will very likely exceed the right side of a too-skinny panel.  We have severely edited these two examples from previous appearances just to fit here.</p>
 
             <figure>
                 <caption>An <tag>poem</tag> and a <tag>tabular</tag></caption>
@@ -8876,7 +8876,7 @@ the xsltproc executable.
             <title>Atomic Objects</title>
 
             <introduction>
-                <p>Some <pretext/> objects are relatively indivisable and are used as components of other structures.  We call them <term>atomic</term>, even if the term is not perfect.  A good example is <tag>image</tag> (next, <xref ref="atomic-image"/>).  This section is arranged according to these objects and tests the various ways they can be employed.</p>
+                <p>Some <pretext/> objects are relatively indivisible and are used as components of other structures.  We call them <term>atomic</term>, even if the term is not perfect.  A good example is <tag>image</tag> (next, <xref ref="atomic-image"/>).  This section is arranged according to these objects and tests the various ways they can be employed.</p>
 
                 <p>We frequently include some nonsense text inside short intervening paragraphs to test spacing and establish margins.</p>
             </introduction>
@@ -8894,7 +8894,7 @@ the xsltproc executable.
                     <li>inside a <tag>figure</tag> inside a <tag>sidebyside</tag> inside a <tag>figure</tag>, with size and layout configured, with a number and caption, but now sub-numbered ((a), (b), (c),<ellipsis/>).</li>
                 </ol>Examples of each, and more.</p>
 
-                <p>All by itsef, with no layout specified, so showing the default size and placement.  Vivamus in congue massa. Morbi condimentum ac magna at accumsan. Vestibulum ac augue eu lorem semper gravida.</p>
+                <p>All by itself, with no layout specified, so showing the default size and placement.  Vivamus in congue massa. Morbi condimentum ac magna at accumsan. Vestibulum ac augue eu lorem semper gravida.</p>
 
                 <image source="images/nz-landscape.jpg"/>
 
@@ -9458,7 +9458,7 @@ the xsltproc executable.
                     </row>
                 </tabular>
 
-                <p>In amongst a run of paragraphs (or similar) a <tag>tabular</tag> can be placed with layout control.  For <latex/> output, this will scale the table to fit within the explicit, or implicit, width.  This can result in obvious differences in the apparent font size.  We first have a <attr>width</attr> that is experimentally similar to the natural width, with asymetric margins.  Then a narrow width, and a wide width, as an illustration.</p>
+                <p>In amongst a run of paragraphs (or similar) a <tag>tabular</tag> can be placed with layout control.  For <latex/> output, this will scale the table to fit within the explicit, or implicit, width.  This can result in obvious differences in the apparent font size.  We first have a <attr>width</attr> that is experimentally similar to the natural width, with asymmetric margins.  Then a narrow width, and a wide width, as an illustration.</p>
 
                 <tabular width="81.61%">
                     <row header="yes">
@@ -10215,7 +10215,7 @@ the xsltproc executable.
             <exercise>
                 <title>Negative Numbers and Exponents</title>
                 <introduction>
-                    <p>This is an introduction, providing articulation between the MOM problem and the contents of the text.  For example, you might cross-reference a result or example given previosly.  (HTML Note: The resizer for the knowl is not functioning yet.)</p>
+                    <p>This is an introduction, providing articulation between the MOM problem and the contents of the text.  For example, you might cross-reference a result or example given previously.  (HTML Note: The resizer for the knowl is not functioning yet.)</p>
                 </introduction>
                 <myopenmath problem="2572" />
             </exercise>
@@ -10223,7 +10223,7 @@ the xsltproc executable.
             <exercise>
                 <title>A Statistical Test</title>
                 <introduction>
-                    <p>This is an introduction, providing articulation between the MOM problem and the contents of the text.  For example, you might cross-reference a result or example given previosly.  (HTML Note: The resizer for the knowl is not functioning yet.)</p>
+                    <p>This is an introduction, providing articulation between the MOM problem and the contents of the text.  For example, you might cross-reference a result or example given previously.  (HTML Note: The resizer for the knowl is not functioning yet.)</p>
                 </introduction>
                 <myopenmath problem="7492" />
             </exercise>
@@ -10455,7 +10455,7 @@ the xsltproc executable.
                 <sidebyside width="45%" margins="0%">
                     <exercise workspace="12%">
                         <statement>
-                        <p>For the simple network pictured, calculuate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
+                        <p>For the simple network pictured, calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
                         <image xml:id="worksheet-simple-network">
                             <latex-image>
                             \begin{circuitikz}
