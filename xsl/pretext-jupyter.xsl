@@ -324,13 +324,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- after same.  Adjustments are: different overall       -->
 <!-- delimiters, and no enclosing div to hide content      -->
 <!-- (thereby avoiding the need for serialization).        -->
+<!-- We *remove* our defintion of \lt since MathJax does   -->
+<!-- it anyway and Jupyter adds it in as part of a         -->
+<!-- conversion to LateX.  Bad practice?  Maybe better to  -->
+<!-- go back to -common and rework the entire latex-macro  -->
+<!-- generation scheme?                                    -->
 <xsl:template name="latex-macros">
     <xsl:call-template name="markdown-cell">
         <xsl:with-param name="content">
             <xsl:call-template name="begin-string" />
             <xsl:call-template name="begin-inline-math" />
             <xsl:value-of select="$latex-packages-mathjax" />
-            <xsl:value-of select="$latex-macros" />
+            <!-- Sequence replacements if \gt and/or \amp need to go -->
+            <xsl:value-of select="str:replace($latex-macros,'\newcommand{\lt}{&lt;}&#xa;', '')"/>
             <xsl:call-template name="end-inline-math" />
             <xsl:call-template name="end-string" />
         </xsl:with-param>

@@ -2211,6 +2211,13 @@ Book (with parts), "section" at level 3
 <!-- possible, then strip all comments,  without  -->
 <!-- stripping too much, such as useful \%        -->
 <!-- We save in a variable, so only here once     -->
+<!-- NB: the \lt definition is removed in the     -->
+<!-- Jupyter conversion, since the Jupyter        -->
+<!-- "print to LaTeX" converter will also define  -->
+<!-- it in order to cover for MathJax's decision  -->
+<!-- to make the definition. So if *any* edit is  -->
+<!-- made here, then the "replace()" there will   -->
+<!-- need to be edited to match.                  -->
 <xsl:variable name="latex-macros">
     <xsl:variable name="latex-left-justified">
         <xsl:call-template name="sanitize-text">
