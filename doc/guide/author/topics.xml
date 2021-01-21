@@ -3431,7 +3431,8 @@ parts of a slide (e.g. it inserts a Beamer <c>\pause</c>).
 A minimal working example may be found in the
 <url href="https://github.com/rbeezer/mathbook/blob/dev/examples/sample-slideshow/sample-slideshow.xml">
   Examples folder of the PreTeXt repo on GitHub
-</url><fn><c>examples/sample-slideshow/sample-slideshow.xml</c></fn>.
+</url><fn><c>examples/sample-slideshow/sample-slideshow.xml</c></fn>.  
+See publishing details for various outputs in <xref ref="publisher-slides"/>.
         </p>
     </section>
 
