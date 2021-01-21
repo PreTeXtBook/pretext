@@ -220,5 +220,36 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <p>And some more mathematics.  An identity due to Ramanujan:<me>\frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} = 1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}} {1+\frac{e^{-8\pi}} {1+\ldots} } } }</me>.</p>
             </slide>
         </section>
+
+        <section>
+            <title>Other features</title>
+
+            <slide>
+                <title>Pausing</title>
+
+                <p>Pausing doesn't always act how you expect from <latex />.  The first and third lines are always visible.</p>
+
+                <p pause="yes">But this one needs you to advance the slide.</p>
+
+                <p>(Visible from the outset.)</p>
+            </slide>
+
+            <slide>
+                <title>Subslides</title>
+
+                <p>Subslides are another way to achieve pausing without lists.</p>
+
+                <subslide>
+                    <p>This is a subslide.  It always comes after a pause.</p>
+                    <p><ul pause="yes">
+                        <li>You can also pause within it.</li>
+                        <li>Of course!</li>
+                    </ul></p>
+                </subslide>
+
+                <p>But this is still visible from the outset.</p>
+            </slide>
+
+        </section>
     </slideshow>
 </pretext>
