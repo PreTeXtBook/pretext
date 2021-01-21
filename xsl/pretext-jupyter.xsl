@@ -643,26 +643,14 @@ TODO: (overall)
 <!-- few gotchas need adjustment.  So we override.             -->
 <xsl:template match="c">
     <!-- grab content literally -->
-    <xsl:variable name="text">
-        <xsl:value-of select="."/>
-    </xsl:variable>
-
-    <!-- We wrap verbatim inline text with an HTML "code" element. -->
-    <!-- When there are to in close proximity (same paragraph)     -->
-    <!-- certain characters can pair up (as Markdown, or MathJax,  -->
-    <!-- delimiters?) and wreak havoc.  But escaped versions seem  -->
-    <!-- to perform well in all cases, so we make these            -->
-    <!-- replacements first.                                       -->
-    <xsl:variable name="backtick-fixed"   select="str:replace($text,           '`',  '\`' )"/>
-    <xsl:variable name="asterisk-fixed"   select="str:replace($backtick-fixed, '*',  '\*' )"/>
-    <xsl:variable name="underscore-fixed" select="str:replace($asterisk-fixed, '_',  '\_' )"/>
+    <xsl:variable name="text" select="string(.)"/>
 
     <!-- Jupyter notebook is careful about XML special characters, -->
     <!-- but if you want to write about the escaped versions, they -->
     <!-- just get converted to the real thing.  So in these five   -->
     <!-- very special situations we escape the leading ampersand   -->
     <!-- and whatever conversion is happening is satiated.         -->
-    <xsl:variable name="escaped-ampersand-fixed"    select="str:replace($underscore-fixed,           '&amp;amp;',  '&amp;amp;amp;' )"/>
+    <xsl:variable name="escaped-ampersand-fixed"    select="str:replace($text,                       '&amp;amp;',  '&amp;amp;amp;' )"/>
     <xsl:variable name="escaped-leftbracket-fixed"  select="str:replace($escaped-ampersand-fixed,    '&amp;lt;',   '&amp;amp;lt;' )"/>
     <xsl:variable name="escaped-rightbracket-fixed" select="str:replace($escaped-leftbracket-fixed,  '&amp;gt;',   '&amp;amp;gt;' )"/>
     <xsl:variable name="escaped-apostrophe-fixed"   select="str:replace($escaped-rightbracket-fixed, '&amp;apos;', '&amp;amp;apos;' )"/>
@@ -675,7 +663,8 @@ TODO: (overall)
     <!-- version and let that convert to the character.                -->
     <xsl:variable name="leftbracket-fixed" select="str:replace($escaped-quote-fixed, '&lt;', '&amp;lt;' )"/>
 
-    <!-- We enclose with PreTeXt's HTML, serializing by hand -->
+    <!-- We wrap verbatim inline text with an HTML "code" element. -->
+    <!-- We enclose with PreTeXt's HTML, serializing by hand.      -->
     <xsl:text>&lt;code class="code-inline tex2jax_ignore"&gt;</xsl:text>
         <xsl:value-of select="$leftbracket-fixed"/>
     <xsl:text>&lt;/code&gt;</xsl:text>
