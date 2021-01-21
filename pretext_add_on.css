@@ -2317,6 +2317,10 @@ code.inline {
   background-color: #f5faff;
   box-shadow: 0 0 1.0em 0.2em #fff inset;
 }
+.pretext-content .aside-like p {
+    overflow-x: auto;
+}
+
 .pretext-content .aside-like:first-child {
     margin-top: -2.25em;
 }
@@ -3292,9 +3296,23 @@ label.incorrect .feedback {
     z-index: 1000;
     display: inline;
 }
+/*
+article > #edit_menu_holder {
+    bottom: 3.7em;
+}
+ol > #edit_menu_holder {
+    bottom: -2.2em;
+}
+li > p > #edit_menu_holder {
+    bottom: -1.2em;
+}
 em #edit_menu_holder,
 h6 #edit_menu_holder {
     left: -0.5em;
+}
+*/
+p > #edit_menu_holder {
+    bottom: 4.2em;
 }
 #local_menu_holder {
     position: relative;
@@ -3306,6 +3324,7 @@ h6 #edit_menu_holder {
 #enter_choice {
     background: #fee;
     position: absolute;
+    left: 0;
     white-space: nowrap;
     z-index: 1000;
     font-size: 95%;
@@ -3326,20 +3345,42 @@ h6 #edit_menu_holder {
     border-radius: 0.5em 0.5em 0 0; 
     font-style: italic;
 }
+.may_enter #enter_choice {
+    background: #fee;
+}
+p > #edit_menu_holder > #enter_choice {
+    bottom: -2.8em;
+}
+blockquote > #edit_menu_holder > #enter_choice {
+    bottom: -1.0em;
+}
+article.project-like > #edit_menu_holder > #enter_choice {
+    bottom: -2.5em;
+}
+article.project-like > ol > #edit_menu_holder > #enter_choice {
+    bottom: -5.2em;
+}
+ol > #edit_menu_holder > #enter_choice {
+    bottom: 2.8em;
+}
+li > p > #edit_menu_holder > #enter_choice {
+    bottom: 2.8em;
+}
 #enter_choice[data-location="inline"] {
     bottom: -0.2em;
     left: -0.5em;
 }
+/*
 .heading + p > #edit_menu_holder {
     bottom: -0.2em;
     left: -0.5em;
 }
+*/
 li > #edit_menu_holder {
     display: block;
 }
 .may_leave + #edit_menu_holder #enter_choice {
     position: absolute;
-
     padding: 0em 0.5em 0.25em 0.25em;
     background: #FFD6D9;
     bottom: -2.25em;
@@ -3348,6 +3389,9 @@ li > #edit_menu_holder {
  /*   margin: 0 0.25em 0.25em 0.25em;
 */
     font-style: italic;
+}
+article.may_leave + #edit_menu_holder #enter_choice {
+    bottom: -2em;
 }
 .may_leave + #edit_menu_holder #enter_choice li {
     padding: 0;
@@ -3426,6 +3470,12 @@ li > #edit_menu_holder {
     margin-top: 1.25em;
     background: #ffffee;
 }
+.may_enter {
+    box-shadow: -10px -5px 5px #ccccee;
+    margin-top: 1.25em;
+    background: #eeeeff;
+}
+
 .may_select > p:first-of-type {
     margin-top: 0;
 }
@@ -3503,4 +3553,7 @@ li > #edit_menu_holder {
 }
 #actively_editing em {
     background-color: #fdf;
+}
+.pretext-content section.may_enter > .heading {
+    margin-top: 0;
 }
