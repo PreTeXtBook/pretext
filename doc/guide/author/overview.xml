@@ -72,7 +72,7 @@
 
             <p>Even if you are not yet sure what a knowl is, and even if you think you do not want to use them, there are other good reasons to have a title (such as automatic lists, see <xref ref="topic-automatic-lists"/>).  Constructing them on-the-fly is much easier than making a big chore out of going back and doing it later.</p>
 
-            <p><dl>
+            <p><dl width="narrow">
                 <li>
                     <title>Bad</title>
                     <p>Example 5.10</p>
