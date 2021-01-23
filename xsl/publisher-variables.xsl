@@ -1487,6 +1487,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- specification, but will still be respected       -->
 <xsl:param name="directory.images" select="'images'" />
 
+<!-- Deprecated 2021-01-23, but still respected -->
+<xsl:param name="html.knowl.theorem" select="''" />
+<xsl:param name="html.knowl.proof" select="''" />
+<xsl:param name="html.knowl.definition" select="''" />
+<xsl:param name="html.knowl.example" select="''" />
+<xsl:param name="html.knowl.project" select="''" />
+<xsl:param name="html.knowl.task" select="''" />
+<xsl:param name="html.knowl.list" select="''" />
+<xsl:param name="html.knowl.remark" select="''" />
+<xsl:param name="html.knowl.objectives" select="''" />
+<xsl:param name="html.knowl.outcomes" select="''" />
+<xsl:param name="html.knowl.figure" select="''" />
+<xsl:param name="html.knowl.table" select="''" />
+<xsl:param name="html.knowl.listing" select="''" />
+<xsl:param name="html.knowl.exercise.inline" select="''" />
+<xsl:param name="html.knowl.exercise.sectional" select="''" />
+<xsl:param name="html.knowl.exercise.worksheet" select="''" />
+<xsl:param name="html.knowl.exercise.readingquestion" select="''" />
+
+
 <!-- ################# -->
 <!-- Variable Bad Bank -->
 <!-- ################# -->

@@ -78,45 +78,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
 <!-- See more generally applicable parameters in pretext-common.xsl file     -->
 
-<!-- Content as Knowls -->
-<!-- These parameters control if content is      -->
-<!-- hidden in a knowl on first appearance       -->
-<!-- The happens automatically sometimes,        -->
-<!-- eg content of a footnote is always hidden   -->
-<!-- Some things never are hidden,               -->
-<!-- eg an entire section (too big),             -->
-<!-- or a bibliographic item (pointless)         -->
-<!-- These switches often control a whole group  -->
-<!-- of similar items, for example the "theorem" -->
-<!-- switch will similarly affect corrolaries,   -->
-<!-- lemmas, etc - anything that can be proved   -->
-<!-- NB: figures and tables inside of            -->
-<!-- side-by-side panels are never born hidden,  -->
-<!-- no matter how the switches below are set.   -->
-<!-- You may elect to have entire side-by-side   -->
-<!-- panels born as knowls, using the switch.    -->
-<!-- PROJECT-LIKE gets own switch here           -->
-<!-- "example" are set to 'yes' by default       -->
-<!-- so new authors know that knowls exist       -->
-<xsl:param name="html.knowl.theorem" select="''" />
-<xsl:param name="html.knowl.proof" select="''" />
-<xsl:param name="html.knowl.definition" select="''" />
-<xsl:param name="html.knowl.example" select="''" />
-<xsl:param name="html.knowl.project" select="''" />
-<xsl:param name="html.knowl.task" select="''" />
-<xsl:param name="html.knowl.list" select="''" />
-<xsl:param name="html.knowl.remark" select="''" />
-<xsl:param name="html.knowl.objectives" select="''" />
-<xsl:param name="html.knowl.outcomes" select="''" />
-<xsl:param name="html.knowl.figure" select="''" />
-<xsl:param name="html.knowl.table" select="''" />
-<xsl:param name="html.knowl.listing" select="''" />
-<xsl:param name="html.knowl.exercise.inline" select="''" />
-<xsl:param name="html.knowl.exercise.sectional" select="''" />
-<xsl:param name="html.knowl.exercise.worksheet" select="''" />
-<xsl:param name="html.knowl.exercise.readingquestion" select="''" />
-<!-- html.knowl.example.solution: always "yes", could be implemented -->
-
 <!-- CSS and Javascript Servers -->
 <!-- We allow processing paramteers to specify new servers   -->
 <!-- or to specify the particular CSS file, which may have   -->
