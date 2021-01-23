@@ -35,6 +35,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- default behavior, but we do this as a test and as an  -->
         <!-- illustration                                          -->
         <index-page ref="derivatives"/>
+        <!-- Certain blocks may be electively knowled.  Defaults   -->
+        <!-- are variable.  We exercise two such switches here,    -->
+        <!-- the values are defaults so should make no discernable -->
+        <!-- difference.                                           -->
+        <knowl example="yes" remark="no"/>
         <!-- specify the style of the html by giving names to      -->
         <!-- override defaults.  Ex: to use "style_oscarlevin.css" -->
         <!-- put <css style="oscarlevin"/>                         -->
