@@ -98,23 +98,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- PROJECT-LIKE gets own switch here           -->
 <!-- "example" are set to 'yes' by default       -->
 <!-- so new authors know that knowls exist       -->
-<xsl:param name="html.knowl.theorem" select="'no'" />
-<xsl:param name="html.knowl.proof" select="'yes'" />
-<xsl:param name="html.knowl.definition" select="'no'" />
-<xsl:param name="html.knowl.example" select="'yes'" />
-<xsl:param name="html.knowl.project" select="'no'" />
-<xsl:param name="html.knowl.task" select="'no'" />
-<xsl:param name="html.knowl.list" select="'no'" />
-<xsl:param name="html.knowl.remark" select="'no'" />
-<xsl:param name="html.knowl.objectives" select="'no'" />
-<xsl:param name="html.knowl.outcomes" select="'no'" />
-<xsl:param name="html.knowl.figure" select="'no'" />
-<xsl:param name="html.knowl.table" select="'no'" />
-<xsl:param name="html.knowl.listing" select="'no'" />
-<xsl:param name="html.knowl.exercise.inline" select="'yes'" />
-<xsl:param name="html.knowl.exercise.sectional" select="'no'" />
-<xsl:param name="html.knowl.exercise.worksheet" select="'no'" />
-<xsl:param name="html.knowl.exercise.readingquestion" select="'no'" />
+<xsl:param name="html.knowl.theorem" select="''" />
+<xsl:param name="html.knowl.proof" select="''" />
+<xsl:param name="html.knowl.definition" select="''" />
+<xsl:param name="html.knowl.example" select="''" />
+<xsl:param name="html.knowl.project" select="''" />
+<xsl:param name="html.knowl.task" select="''" />
+<xsl:param name="html.knowl.list" select="''" />
+<xsl:param name="html.knowl.remark" select="''" />
+<xsl:param name="html.knowl.objectives" select="''" />
+<xsl:param name="html.knowl.outcomes" select="''" />
+<xsl:param name="html.knowl.figure" select="''" />
+<xsl:param name="html.knowl.table" select="''" />
+<xsl:param name="html.knowl.listing" select="''" />
+<xsl:param name="html.knowl.exercise.inline" select="''" />
+<xsl:param name="html.knowl.exercise.sectional" select="''" />
+<xsl:param name="html.knowl.exercise.worksheet" select="''" />
+<xsl:param name="html.knowl.exercise.readingquestion" select="''" />
 <!-- html.knowl.example.solution: always "yes", could be implemented -->
 
 <!-- CSS and Javascript Servers -->

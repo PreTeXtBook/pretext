@@ -278,6 +278,531 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!--                   -->
+<!-- HTML Knowlization -->
+<!--                   -->
+
+<!-- A multitude of switches to control whether various HTML "blocks"      -->
+<!-- are born hidden as knowls.  Most names of resulting variables are     -->
+<!-- self-explanatory, the ones for exercises come in different varities.  -->
+<!-- Each template here ALWAYS produces "yes" or "no".  We do not make     -->
+<!-- boolean variables, since these are consumed (exclusively) in modal    -->
+<!-- "is-hidden" templates that produce string "true" or "false"           -->
+<!-- (respectively).  Some HTML-based conversions cannot accomodate knowls -->
+<!-- (EPUB, braille) so we turn off the "is-hidden" templates rather       -->
+<!-- than override these variables.                                        -->
+
+<xsl:variable name="knowl-theorem">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@theorem">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@theorem = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@theorem = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "theorem" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@theorem"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.theorem = '')">
+            <xsl:value-of select="$html.knowl.theorem"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-proof">
+    <xsl:variable name="knowl-default" select="'yes'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@proof">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@proof = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@proof = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "proof" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@proof"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.proof = '')">
+            <xsl:value-of select="$html.knowl.proof"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-definition">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@definition">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@definition = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@definition = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "definition" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@definition"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.definition = '')">
+            <xsl:value-of select="$html.knowl.definition"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-example">
+    <xsl:variable name="knowl-default" select="'yes'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@example">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@example = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@example = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "example" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@example"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.example = '')">
+            <xsl:value-of select="$html.knowl.example"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-project">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@project">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@project = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@project = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "project" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@project"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.project = '')">
+            <xsl:value-of select="$html.knowl.project"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-task">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@task">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@task = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@task = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "task" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@task"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.task = '')">
+            <xsl:value-of select="$html.knowl.task"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-list">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@list">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@list = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@list = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "list" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@list"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.list = '')">
+            <xsl:value-of select="$html.knowl.list"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-remark">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@remark">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@remark = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@remark = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "remark" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@remark"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.remark = '')">
+            <xsl:value-of select="$html.knowl.remark"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-objectives">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@objectives">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@objectives = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@objectives = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "objectives" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@objectives"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.objectives = '')">
+            <xsl:value-of select="$html.knowl.objectives"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-outcomes">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@outcomes">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@outcomes = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@outcomes = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "outcomes" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@outcomes"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.outcomes = '')">
+            <xsl:value-of select="$html.knowl.outcomes"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-figure">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@figure">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@figure = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@figure = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "figure" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@figure"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.figure = '')">
+            <xsl:value-of select="$html.knowl.figure"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-table">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@table">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@table = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@table = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "table" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@table"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.table = '')">
+            <xsl:value-of select="$html.knowl.table"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-listing">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@listing">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@listing = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@listing = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "listing" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@listing"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.listing = '')">
+            <xsl:value-of select="$html.knowl.listing"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-exercise-inline">
+    <xsl:variable name="knowl-default" select="'yes'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@exercise-inline">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@exercise-inline = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@exercise-inline = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "exercise-inline" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@exercise-inline"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.exercise.inline = '')">
+            <xsl:value-of select="$html.knowl.exercise.inline"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-exercise-divisional">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@exercise-divisional">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@exercise-divisional = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@exercise-divisional = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "exercise-divisional" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@exercise-divisional"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.exercise.sectional = '')">
+            <xsl:value-of select="$html.knowl.exercise.sectional"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-exercise-worksheet">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@exercise-worksheet">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@exercise-worksheet = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@exercise-worksheet = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "exercise-worksheet" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@exercise-worksheet"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.exercise.worksheet = '')">
+            <xsl:value-of select="$html.knowl.exercise.worksheet"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-exercise-readingquestion">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@exercise-readingquestion">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@exercise-readingquestion = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@exercise-readingquestion = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "exercise-readingquestion" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@exercise-readingquestion"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.exercise.readingquestion = '')">
+            <xsl:value-of select="$html.knowl.exercise.readingquestion"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+
 <!--               -->
 <!-- HTML Base URL -->
 <!--               -->
