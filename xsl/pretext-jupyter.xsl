@@ -44,14 +44,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- iPython files as output -->
 <xsl:variable name="file-extension" select="'.ipynb'" />
 
-<!-- Examples, proofs and inline exercises are knowled     -->
-<!-- by default in HTML conversion.  While a THEOREM-LIKE  -->
-<!-- is one big unit, so proofs are not even considered    -->
-<!-- as knowls, EXAMPLE-LIKE do need protection.           -->
-
-<xsl:param name="html.knowl.proof" select="'no'" />
-<xsl:param name="html.knowl.example" select="'no'" />
-<xsl:param name="html.knowl.exercise.inline" select="'no'" />
 <xsl:param name="jupyter.kernel" select="''" />
 
 <!-- ############## -->
@@ -347,6 +339,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################# -->
 <!-- Block Level Items -->
 <!-- ################# -->
+
+<!-- Everything configurable by author, 2020-01-02         -->
+<!-- Roughly in the order of old  html.knowl.*  switches   -->
+<!-- Similar HTML templates return string for boolean test -->
+<!-- Jupyter is hostile to knowls code, so we don't knowl  -->
+<!-- anything and ignore any choice in a publisher file    -->
+<!-- https://github.com/jupyter/notebook/pull/2947         -->
+<xsl:template match="&THEOREM-LIKE;|proof|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&REMARK-LIKE;|&GOAL-LIKE;|exercise" mode="is-hidden">
+    <xsl:text>false</xsl:text>
+</xsl:template>
 
 <!-- These are "top-level" items, children of divisions    -->
 <!-- and pseudo-divisions.  Normally they would get a high -->
