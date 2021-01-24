@@ -642,11 +642,11 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
 
 function edit_in_place(obj) {
 
-    console.log("in edit_in_place");
+    console.log("in edit in place");
     if (thisID = obj.getAttribute("id")) {
         console.log("will edit in place", thisID);
         thisTagName = obj.tagName.toLowerCase();
-    } else {  // editing somethign without an id, so probably is a creator or caption
+    } else {  // editing somethign without an id, so probably is a title or caption
         if (obj.classList.contains("heading")) {
             console.log("changing a heading");
             console.log("except we don;t know how to do that")
@@ -733,7 +733,7 @@ function edit_in_place(obj) {
         prev_char = "";
 
       } else if (new_tag == "list") {
-          console.log("list edit_in_place", obj)
+          console.log("list edit in place", obj)
           var this_content_container = document.createElement('ol');
           this_content_container.setAttribute('id', "actively_editing");
           this_content_container.setAttribute('data-source_id', thisID);
@@ -756,7 +756,7 @@ function edit_in_place(obj) {
 // only good for creating a new theorem or definition, not editing in place
 // think about thaat use case:  once it exists, do we ever edit the theorem as a unit?
 
-        console.log("edit_in_place", obj);
+        console.log("edit in place", obj);
         var objecttype = object_class_of(new_tag);
         var this_content_container = document.createElement('div');
         this_content_container.setAttribute('id', "actively_editing");
@@ -826,7 +826,7 @@ function edit_in_place(obj) {
           console.log("I do not know how to edit", new_tag)
      }
    } else {
-        console.log("Error: edit_in_place of object that is not already known", obj);
+        console.log("Error: edit in place of object that is not already known", obj);
         console.log("What is known:", internalSource)
      }
 }
@@ -1774,7 +1774,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                   console.log("making a new", dataEnv, "within", dataEnvParent);
                   object_near_new_object = object_of_interest;
                   var before_after = $("#edit_menu_holder > #edit_menu > .chosen").attr("data-location");
-                  console.log("create_object_to_edit",dataEnv, object_near_new_object,before_after);
+                  console.log("create_object_to_edit",dataEnv, object_near_new_object, before_after);
                   var new_obj = create_object_to_edit(dataEnv, object_near_new_object, before_after);
                   console.log("new_obj", new_obj);
                   edit_in_place(new_obj);
