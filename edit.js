@@ -31,6 +31,7 @@ var menu_neutral_background = "#ddb";
 var menu_active_background = "#fdd";
 
 var recent_editing_actions = [];
+var old_content = {};   // to hold old versions of changed materials
 
 // what will happen with internationalization?
 var keyletters = ["KeyA", "KeyB", "KeyC", "KeyD", "KeyE", "KeyF", "KeyG", "KeyH", "KeyI", "KeyJ", "KeyK", "KeyL", "KeyM", "KeyN", "KeyO", "KeyP", "KeyQ", "KeyR", "KeyS", "KeyT", "KeyU", "KeyV", "KeyW", "KeyX", "KeyY", "KeyZ"];
@@ -259,6 +260,24 @@ function menu_options_for(COMPONENT, level) {
      var menu_for;
      var component = COMPONENT.toLowerCase();
      if (level == "base") { menu_for = base_menu_for }
+     else if (level == "move-or-delete") {
+         console.log("C0 menu_options_for", component);
+         var m_d_options = [
+             ["move-local", "Move within this page"],
+             ["move-global", "Move elsewhere (not implemented)"],
+             ["delete", "Delete"]
+         ];
+         var this_menu = "";
+         for (var i=0; i < m_d_options.length; ++i) {
+             this_menu += '<li tabindex="-1" data-action="' + m_d_options[i][0] + '"' // change-env-to" data-env="' + replacement_list[i] + '"';
+             if (i==0) { this_menu += ' id="choose_current"'}
+             this_menu += '>';
+             this_menu += m_d_options[i][1]
+             this_menu += '</li>';
+         }
+         console.log("made this_menu", this_menu);
+         return this_menu
+     }
      else if (level == "change") {
          console.log("C1 menu_options_for", component);
          objectclass = object_class_of(component);
@@ -363,9 +382,10 @@ function top_menu_options_for(this_obj) {
 
         this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="beforebegin">Insert before<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
         this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="afterend">Insert after<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
-        this_list += '<li tabindex="-1" data-env="' + this_object_type + '">Move or delete<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+  //      this_list += '<li tabindex="-1" data-env="' + this_object_type + '">Move or delete<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+        this_list += '<li tabindex="-1" data-action="move-or-delete">Move or delete<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
         this_list += '<li tabindex="-1" data-env="' + "metaadata" + '">Metadata<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
-        this_list += '<li tabindex="-1" data-env="' + "undo" + '">Undo<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+        this_list += '<li tabindex="-1" data-env="' + "undo" + '">Revert<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
     }
     return this_list
 }
@@ -469,7 +489,7 @@ function edit_menu_for(this_obj_or_id, motion) {
             edit_option.setAttribute('id', 'edit_menu');
             this_obj_parent_id = this_obj.parentElement.parentElement.id;
             this_obj_environment = internalSource[this_obj_parent_id]["ptxtag"];
-            edit_option.innerHTML = '<li id="choose_current" tabindex="-1" data-action="change-creator">Change creator</li>';
+            edit_option.innerHTML = '<li id="choose_current" tabindex="-1" data-action="change-title">Change creator</li>';
             edit_option.setAttribute('data-location', 'inline');
         } else {
      //  if (editable_children.length)
@@ -829,6 +849,50 @@ function edit_in_place(obj) {
         console.log("Error: edit in place of object that is not already known", obj);
         console.log("What is known:", internalSource)
      }
+}
+
+function delete_by_id(theid) {
+        // first delete the specific object
+    var deleted_content = internalSource[theid];
+    var parent_and_location = deleted_content["parent"];
+    delete internalSource[theid];
+    console.log("deleted", theid, "so", theid in internalSource, "now", internalSource);
+        // and save what was deleted
+    if (theid in old_content) {
+        old_content[theid].push(deleted_content)
+    } else {
+        old_content[theid] = [deleted_content]
+    }
+    recent_editing_actions.push("deleted " + deleted_content["ptxtag"] + " " + theid);
+        // update the parent of the object
+    var current_level = current_editing["level"];
+//    var new_level = current_level;
+    var where_it_was = internalSource[parent_and_location[0]][ parent_and_location[1] ];
+    var object_in_parent = '<&>' + theid + '<;>';
+    var where_it_is = where_it_was.replace(object_in_parent, "");
+    console.log("where_it_is ZZ" + where_it_is + "EE");
+    internalSource[parent_and_location[0]][ parent_and_location[1] ] = where_it_is;
+        // if the parent is empty, delete it
+    if (!(where_it_is.trim()) && (parent_and_location[1] == "content" || parent_and_location[1] == "statement")) {
+ //       new_level -= 1;
+        if (internalSource[parent_and_location[0]][ "ptxtag" ] == "li") {
+            console.log("not going up a level, because it is a list element")
+        } else {
+            current_editing["level"] -= 1;
+        }
+        delete_by_id(parent_and_location[0])
+    } else {  // else, because the parent is going to be deleted, so no need to delete the child
+        // delete from the html
+        alert("deleting " + deleted_content["ptxtag"]);
+        document.getElementById(theid).remove()
+        // update current_editing
+        var editing_parent = current_editing["tree"][ current_level - 1 ][ current_editing["location"][ current_level - 1 ] ];
+        current_editing["tree"][current_editing["level"]] = next_editable_of(editing_parent, "children");
+        if (current_editing["location"] >= current_editing["tree"][ current_level ].length ) {
+            current_editing["location"] = current_editing["tree"][ current_level ].length - 1
+        }
+        edit_menu_from_current_editing("entering");
+    }
 }
 
 var internalSource = {  // currently the key is the HTML id
@@ -1743,8 +1807,35 @@ function main_menu_navigator(e) {  // we are not currently editing
                     theChooseCurrent.insertAdjacentElement("beforeend", edit_submenu);
                     document.getElementById('choose_current').focus();
                     console.log("focus is on", $(":focus"));
-            } else if (dataAction == "change-creator") {
-                console.log("change-creator not implemented yet")
+            } else if (dataAction == "move-or-delete") {
+                // almost all repeats from dataAction == 'change-env' 
+                //  except for current_env and menu_options_for.  Consolidate
+                //  maybe also separate actions which give anotehr menu, from actions which change content
+                    current_env = document.getElementById('edit_menu_holder').parentElement;
+                    console.log("current_env", current_env);
+                    current_env_id = current_env.id;
+                    current_env_source = internalSource[current_env_id];
+                    current_env_name = current_env_source["ptxtag"];
+                    console.log("need menu to change", current_env_name, "in", current_env_source);
+
+                    theChooseCurrent.parentElement.classList.add("past");
+                    theChooseCurrent.removeAttribute("id");
+                    theChooseCurrent.classList.add("chosen");
+
+                    var edit_submenu = document.createElement('ol');
+                    console.log("J3 looking for menu options for", current_env_name);
+                    edit_submenu.innerHTML = menu_options_for(current_env_name, "move-or-delete");
+                    console.log("just inserted inner menu_options_for(parent_type)", menu_options_for(current_env_name, "move-or-delete"));
+                    theChooseCurrent.insertAdjacentElement("beforeend", edit_submenu);
+                    document.getElementById('choose_current').focus();
+                    console.log("focus is on", $(":focus"));
+            } else if (dataAction == "delete") {
+                    current_env = document.getElementById('edit_menu_holder').parentElement;
+                    console.log("current_env", current_env);
+                    current_env_id = current_env.id;
+                    delete_by_id(current_env_id)
+            } else if (dataAction == "change-title") {
+                console.log("change-title not implemented yet")
             } else {
                 alert("I don;t know what to do llllllll dataAction", dataAction)
             }
