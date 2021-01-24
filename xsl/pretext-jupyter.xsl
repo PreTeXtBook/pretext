@@ -64,7 +64,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="banner-warning">
         <xsl:with-param name="warning">Jupyter notebook conversion is experimental and incomplete&#xa;Requests to fix/implement specific constructions welcome</xsl:with-param>
     </xsl:call-template>
-    <xsl:apply-templates select="mathbook" mode="deprecation-warnings" />
+    <xsl:apply-templates select="." mode="generic-warnings"/>
+    <xsl:apply-templates select="." mode="deprecation-warnings"/>
     <xsl:apply-templates mode="chunking" />
 </xsl:template>
 
