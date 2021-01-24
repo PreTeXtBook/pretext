@@ -89,10 +89,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Parameters to pass via xsltproc "stringparam" on command-line            -->
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
 <!-- These here are independent of the output format as well                  -->
-<!--                                                                          -->
-<!-- Depth to which a document is broken into smaller files/chunks -->
-<!-- Sentinel indicates no choice made                             -->
-<xsl:param name="chunk.level" select="''" />
 
 <!-- An exercise has a statement, and may have hints,      -->
 <!-- answers and solutions.  An answer is just the         -->
@@ -11091,6 +11087,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="$docinfo/html/baseurl/@href" />
         <xsl:with-param name="date-string" select="'2020-11-22'" />
         <xsl:with-param name="message" select="'the &quot;baseurl/@href&quot; element in the &quot;docinfo&quot; has been replaced and is now specified in the publisher file with &quot;html/baseurl/@href&quot;, as documented in the PreTeXt Guide.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2021-01-03  chunk.level now in publisher file -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-03'" />
+        <xsl:with-param name="message" select="'the  chunk.level  parameter has been replaced by the  common/chunking/@level  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($chunk.level != '')" />
     </xsl:call-template>
     <!-- 2020-11-23  directory.images replaced by publisher file specification -->
     <!-- Reverse this soon, hot fix -->

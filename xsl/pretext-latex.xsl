@@ -146,18 +146,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Not a parameter, a variable to override deliberately within a conversion -->
 <xsl:variable name="b-latex-hardcode-numbers" select="false()"/>
 
-<!-- We generally want one large complete LaTeX file -->
-<xsl:variable name="chunk-level">
-    <xsl:choose>
-        <xsl:when test="$chunk.level != ''">
-            <xsl:message>MBX:ERROR:   chunking of LaTeX output is deprecated as of 2016-06-10, remove the "chunk.level" stringparam</xsl:message>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>0</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
 <!-- LaTeX always puts sections at level "1", while PTX         -->
 <!-- has sections at level "2", so we provide adjusted,         -->
 <!-- LaTeX-only variables for packages/macros that crudely      -->
