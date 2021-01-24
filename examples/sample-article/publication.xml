@@ -23,8 +23,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- Common Options -->
     <common>
-        <chunking level="0"/>
-        <tableofcontents level="3"/>
+        <!-- How deep to go for separate files, in HTML the -->
+        <!-- default for an article with sections is 1      -->
+        <chunking level="1"/>
+        <!-- How deep to nest a Table of Contents, for an article   -->
+        <!-- with subsections in HTML, the default is 2, but in the -->
+        <!-- LateX conversion the default is no ToC at all.  So we  -->
+        <!-- let these conversion-specific defaults play out, and   -->
+        <!-- just leave this example as a comment.                  -->
+        <!-- <tableofcontents level="2"/> -->
     </common>
 
     <!-- HTML-Specific Options -->
