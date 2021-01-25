@@ -3557,3 +3557,14 @@ article.may_leave + #edit_menu_holder #enter_choice {
 .pretext-content section.may_enter > .heading {
     margin-top: 0;
 }
+.pretext-content #deleting {
+    transition: all 1.0s;
+    background: #666;
+    height: 5em;
+    margin-right: 10em;
+    margin-left: 5em;
+    font-size: 5%;
+/*
+    overflow: hidden;
+*/
+}
