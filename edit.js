@@ -30,7 +30,7 @@ prev_prev_focused_element = "";
 var menu_neutral_background = "#ddb";
 var menu_active_background = "#fdd";
 
-var recent_editing_actions = [];
+var recent_editing_actions = [];  // we unshift to this, so most recent edit is first.
 var old_content = {};   // to hold old versions of changed materials
 
 // what will happen with internationalization?
@@ -863,7 +863,7 @@ function delete_by_id(theid) {
     } else {
         old_content[theid] = [deleted_content]
     }
-    recent_editing_actions.push("deleted " + deleted_content["ptxtag"] + " " + theid);
+    recent_editing_actions.unshift("deleted " + deleted_content["ptxtag"] + " " + theid);
         // update the parent of the object
     var current_level = current_editing["level"];
 //    var new_level = current_level;
@@ -875,6 +875,7 @@ function delete_by_id(theid) {
         // if the parent is empty, delete it
     if (!(where_it_is.trim()) && (parent_and_location[1] == "content" || parent_and_location[1] == "statement")) {
  //       new_level -= 1;
+        document.getElementById(theid).removeAttribute("data-editable");  // so it is invisible to next_editable_of as we delete its parent
         if (internalSource[parent_and_location[0]][ "ptxtag" ] == "li") {
             console.log("not going up a level, because it is a list element")
         } else {
@@ -883,8 +884,12 @@ function delete_by_id(theid) {
         delete_by_id(parent_and_location[0])
     } else {  // else, because the parent is going to be deleted, so no need to delete the child
         // delete from the html
-        alert("deleting " + deleted_content["ptxtag"]);
-        document.getElementById(theid).remove()
+    //    alert("deleting " + deleted_content["ptxtag"]);
+ //       document.getElementById(theid).remove()
+        document.getElementById(theid).setAttribute("id", "deleting");
+        document.getElementById("deleting").removeAttribute("data-editable");  // so it is invisible to next_editable_of
+        setTimeout(() => {  document.getElementById("deleting").remove(); }, 1000);
+
         // update current_editing
         var editing_parent = current_editing["tree"][ current_level - 1 ][ current_editing["location"][ current_level - 1 ] ];
         current_editing["tree"][current_editing["level"]] = next_editable_of(editing_parent, "children");
@@ -1059,7 +1064,7 @@ function assemble_internal_version_changes() {
                     this_paragraph_contents = extract_internal_contents(this_paragraph_contents_raw);
                     if (internalSource[prev_id]["content"] != this_paragraph_contents) {
                         internalSource[prev_id]["content"] = this_paragraph_contents;
-                        recent_editing_actions.push("changed paragraph " + prev_id)
+                        recent_editing_actions.unshift("changed paragraph " + prev_id)
                     }
                     possibly_changed_ids_and_entry.push([prev_id, "content"]);
                     this_arrangement_of_objects = internalSource[parent_and_location[0]][parent_and_location[1]];
@@ -1081,7 +1086,7 @@ function assemble_internal_version_changes() {
                 this_paragraph_contents = extract_internal_contents(this_paragraph_contents_raw);
                 this_object_internal["content"] = this_paragraph_contents;
                 internalSource[this_object_label] = this_object_internal
-                recent_editing_actions.push("added paragraph " + this_object_label);
+                recent_editing_actions.unshift("added paragraph " + this_object_label);
                 possibly_changed_ids_and_entry.push([this_object_label, "content"]);
             }
         }
@@ -1102,7 +1107,7 @@ function assemble_internal_version_changes() {
         console.log("component_being_changed", component_being_changed, "within", owner_of_change);
         // update the title of the object
         internalSource[owner_of_change][component_being_changed] = line_content;
-        recent_editing_actions.push("changed creator " + owner_of_change);
+        recent_editing_actions.unshift("changed creator " + owner_of_change);
         possibly_changed_ids_and_entry.push([owner_of_change, "creator"]);
 
     } else {
@@ -1774,7 +1779,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                     console.log("current envoronemnt", this_object_source);
                     var old_env = internalSource[id_of_object]["ptxtag"];
                     internalSource[id_of_object]["ptxtag"] = new_env;
-                    recent_editing_actions.push("changed " + old_env + " to " + new_env + " " + id_of_object);
+                    recent_editing_actions.unshift("changed " + old_env + " to " + new_env + " " + id_of_object);
                     console.log("the change was", "changed " + old_env + " to " + new_env + " " + id_of_object);
                     var the_whole_object = html_from_internal_id(id_of_object);
                     console.log("B: the_whole_object", the_whole_object);
