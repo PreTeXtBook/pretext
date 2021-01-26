@@ -219,7 +219,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Visual URLs -->
 <!-- A great way to present a URL is with some clickable text.  But that    -->
 <!-- is useless in print.  And maybe a reader really would like to see the  -->
-<!-- actual URL.  So "@visual" is a version of the UTRL that is pleasing to -->
+<!-- actual URL.  So "@visual" is a version of the URL that is pleasing to -->
 <!-- look at, maybe just a TLD, no protocol (e.g "https://"), no "www."     -->
 <!-- if unnecessary, etc.  Here it becomes a footnote, and in monospace     -->
 <!-- ("code") font.  This is great in print, and is a knowl in HTML.        -->
