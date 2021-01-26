@@ -207,6 +207,37 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- ############# -->
+<!-- Conveniences  -->
+<!-- ############# -->
+
+<!-- Certain markup can be translated into more primitive versions using      -->
+<!-- existing markup, so we do a translation of certain forms into more       -->
+<!-- potentially verbose forms that an author might tire of doing repeatedly. -->
+<!-- See below for examples.  This is better than making a result-tree        -->
+<!-- fragment and applying templates, since all context is lost that way.     -->
+
+<!-- Visual URLs -->
+<!-- A great way to present a URL is with some clickable text.  But that    -->
+<!-- is useless in print.  And maybe a reader really would like to see the  -->
+<!-- actual URL.  So "@visual" is a version of the UTRL that is pleasing to -->
+<!-- look at, maybe just a TLD, no protocol (e.g "https://"), no "www."     -->
+<!-- if unnecessary, etc.  Here it becomes a footnote, and in monospace     -->
+<!-- ("code") font.  This is great in print, and is a knowl in HTML.        -->
+<!--                                                                        -->
+<!-- Advantages: however a conversion does footnotes, this will be the      -->
+<!-- right markup for that conversion.  Note that LaTeX pulls footnotes     -->
+<!-- out of "tcolorbox" environments, which is based on the *context*,      -->
+<!-- so a result-tree fragment implementation is doomed to fail.            -->
+
+<xsl:template match="url[@visual]" mode="assembly">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*[not(local-name(.) = 'visual')]" mode="assembly"/>
+    </xsl:copy>
+    <fn><c><xsl:value-of select="@visual"/></c></fn>
+</xsl:template>
+
+
+<!-- ############# -->
 <!-- Source Repair -->
 <!-- ############# -->
 
