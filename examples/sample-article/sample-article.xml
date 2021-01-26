@@ -2652,7 +2652,7 @@ the xsltproc executable.
                 <p>If you have raster images (photographs, etc.) then they are specified with complete filenames, as above in Figure<nbsp /><xref ref="figure-function-derivative"/> or just below.</p>
 
                 <figure>
-                    <caption>New Zealand Landscape, <url href="https://commons.wikimedia.org/wiki/File:NZ_Landscape_from_the_van.jpg"><c>commons.wikimedia.org</c></url><fn><c>https://commons.wikimedia.org/wiki/File:NZ_Landscape_from_the_van.jpg</c></fn>, CC-BY-SA-2.0</caption>
+                    <caption>New Zealand Landscape, <url href="https://commons.wikimedia.org/wiki/File:NZ_Landscape_from_the_van.jpg" visual="commons.wikimedia.org/wiki/File:NZ_Landscape_from_the_van.jpg"><c>commons.wikimedia.org</c></url>, CC-BY-SA-2.0</caption>
                     <image source="images/nz-landscape.jpg" width="80%"/>
                 </figure>
 
@@ -3059,7 +3059,7 @@ the xsltproc executable.
             <subsection xml:id="graphics-asymptote-webgl">
                 <title>Asymptote, 3D via WebGL</title>
 
-                <p>Asymptote can create an <init>HTML</init> file that is an interactive version of a 3D shape.  At this writing (2020-05-18) support via the <c>pretext</c> script is evolving.  Plus, you will need newer versions of Asymptote and the <c>dvisvgm</c> utility to duplicate all of the results being displayed here in this testing document.  The other distinction is that the author needs to provide the aspect ratio of the figure, and this should be placed on the <tag>asymptote</tag> element (not on the <tag>image</tag> element).  <xref ref="figure-asymptote-workcone" text="type-global"/> is from the <url href="http://asymptote.sourceforge.net/gallery/3Dwebgl/">Asymptote Gallery</url><fn><c>http://asymptote.sourceforge.net/gallery/3Dwebgl/</c></fn>.</p>
+                <p>Asymptote can create an <init>HTML</init> file that is an interactive version of a 3D shape.  At this writing (2020-05-18) support via the <c>pretext</c> script is evolving.  Plus, you will need newer versions of Asymptote and the <c>dvisvgm</c> utility to duplicate all of the results being displayed here in this testing document.  The other distinction is that the author needs to provide the aspect ratio of the figure, and this should be placed on the <tag>asymptote</tag> element (not on the <tag>image</tag> element).  <xref ref="figure-asymptote-workcone" text="type-global"/> is from the <url href="http://asymptote.sourceforge.net/gallery/3Dwebgl/" visual="asymptote.sourceforge.net/gallery/3Dwebgl/">Asymptote Gallery</url>.</p>
 
                 <figure xml:id="figure-asymptote-workcone">
                     <caption>Work Cone (Asymptote Interactive 3D Image)</caption>
@@ -3269,7 +3269,7 @@ the xsltproc executable.
             <subsection>
                 <title>Inkscape Images</title>
 
-                <p><url href="https://inkscape.org/">Inkscape</url><fn><c>inkscape.org/</c></fn> is a great tool for creating images.  It ticks all the boxes: open source, mature, cross-platform, standards-compliant.  Read much more about it in The <pretext/> Guide.  In <init>HTML</init> output the two images below are both in <init>SVG</init> format.  The first is <q>pure</q> SVG, while the second has embedded information that makes it easier to edit in Inkscape.  You could view the source for this page in the <init>HTML</init> version, deduce the filename of the second image, download it, and manipulate it profitably with Inkscape.  Both files are quite small, but the first is half the size of the second.  In <init>PDF</init> the two images come from files that are identical, so nothing is being tested.  The <init>PDF</init> version is smaller still.</p>
+                <p><url href="https://inkscape.org/" visual="inkscape.org">Inkscape</url> is a great tool for creating images.  It ticks all the boxes: open source, mature, cross-platform, standards-compliant.  Read much more about it in The <pretext/> Guide.  In <init>HTML</init> output the two images below are both in <init>SVG</init> format.  The first is <q>pure</q> SVG, while the second has embedded information that makes it easier to edit in Inkscape.  You could view the source for this page in the <init>HTML</init> version, deduce the filename of the second image, download it, and manipulate it profitably with Inkscape.  Both files are quite small, but the first is half the size of the second.  In <init>PDF</init> the two images come from files that are identical, so nothing is being tested.  The <init>PDF</init> version is smaller still.</p>
 
                 <figure>
                     <caption>Inkscape Stars, Plain SVG (left), Inkscape SVG (right), from Bethany Llewellyn</caption>
@@ -5911,7 +5911,7 @@ the xsltproc executable.
             <subsection>
                 <title>threejs</title>
 
-                <p>An example using the <c>threejs</c> 3D Javascript library.  This is <url href="https://threejs.org/examples/#webgl_geometry_extrude_splines">one of the project's examples</url><fn><c>https://threejs.org/examples/#webgl_geometry_extrude_splines</c></fn>, licensed with an MIT License, with minimal modifications.  We get several of the necessary libraries from the <c>threejs.org</c> site.</p>
+                <p>An example using the <c>threejs</c> 3D Javascript library.  This is <url href="https://threejs.org/examples/#webgl_geometry_extrude_splines" visual="threejs.org/examples/#webgl_geometry_extrude_splines">one of the project's examples</url>, licensed with an MIT License, with minimal modifications.  We get several of the necessary libraries from the <c>threejs.org</c> site.</p>
 
                 <figure xml:id="figure-threejs-splines">
                     <caption><c>threejs</c> webgl_geometry_extrude_splines example</caption>
@@ -6287,7 +6287,7 @@ the xsltproc executable.
             <subsection>
                 <title>Vimeo</title>
 
-                <p>We support videos from <url href="https://vimeo.com/">Vimeo</url><fn><c>vimeo.com</c></fn> in much the same way as YouTube videos.  Now the identifier is a long integer.  For example, the video up next would normally be found at <c>https://vimeo.com/27246366</c>.  But instead, you can embed the video with as little as <c>&lt;video vimeo="27246366"/&gt;</c>.  As of 2019-05-18, we intend to support as many of the options described above as possible.  Widths and heights (via the aspect ratio) will perform as expected.  We have not investigated start and end times.</p>
+                <p>We support videos from <url href="https://vimeo.com/" visual="vimeo.com">Vimeo</url> in much the same way as YouTube videos.  Now the identifier is a long integer.  For example, the video up next would normally be found at <c>https://vimeo.com/27246366</c>.  But instead, you can embed the video with as little as <c>&lt;video vimeo="27246366"/&gt;</c>.  As of 2019-05-18, we intend to support as many of the options described above as possible.  Widths and heights (via the aspect ratio) will perform as expected.  We have not investigated start and end times.</p>
 
                 <figure>
                     <caption><articletitle>MOVE</articletitle>, by <url href="https://vimeo.com/rickmereki">Rick Mereki</url>, <c>vimeo.com/rickmereki</c></caption>
@@ -6304,7 +6304,7 @@ the xsltproc executable.
             <subsection>
                 <title>Captions and Subtitles</title>
 
-                <p>Experimental support for captions and subtitles first.  Look at the source, which mimics the actual HTML.  The words of the titles and/or subcaptions (there is a difference!) come from a file in <url href="https://en.wikipedia.org/wiki/WebVTT">Web Video Text Tracks</url><fn><c>wikipedia.org/wiki/WebVTT</c></fn> (<init>WEBVVT</init>) format.</p>
+                <p>Experimental support for captions and subtitles first.  Look at the source, which mimics the actual HTML.  The words of the titles and/or subcaptions (there is a difference!) come from a file in <url href="https://en.wikipedia.org/wiki/WebVTT" visual="wikipedia.org/wiki/WebVTT">Web Video Text Tracks</url> (<init>WEBVVT</init>) format.</p>
                 <figure>
                     <caption>Big Buck Bunny with subtitles adapted from <url href="https://sites.google.com/site/chrisfoo/subtitles"><c>https://sites.google.com/site/chrisfoo/subtitles</c></url></caption>
                     <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="images/big-buck-bunny-frame-one.jpg">
@@ -6826,7 +6826,7 @@ the xsltproc executable.
                 </input>
             </program>
 
-            <p>Matlab is a commercial language for mathematics, while Octave in an open source version.  The <attr>language</attr> values of <c>matlab</c> and <c>octave</c> are somewhat interchangeable.  Following is a very slighlty edited version of an example from <articletitle>50 Basic Examples for Matlab</articletitle><fn><c>http://www.public.asu.edu/~hhuang38/hph_matlab_basic2013_1.pdf</c></fn>.</p>
+            <p>Matlab is a commercial language for mathematics, while Octave in an open source version.  The <attr>language</attr> values of <c>matlab</c> and <c>octave</c> are somewhat interchangeable.  Following is a very slighlty edited version of an example from <url href="http://www.public.asu.edu/~hhuang38/hph_matlab_basic2013_1.pdf" visual="www.public.asu.edu/~hhuang38/hph_matlab_basic2013_1.pdf"><articletitle>50 Basic Examples for Matlab</articletitle></url>.</p>
 
             <!-- Example 45: 50 Basic Examples for Matlab -->
             <program language="matlab">
