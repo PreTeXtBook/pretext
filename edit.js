@@ -264,7 +264,7 @@ function menu_options_for(COMPONENT, level) {
          console.log("C0 menu_options_for", component);
          var m_d_options = [
              ["move-local", "Move within this page"],
-             ["move-global", "Move elsewhere (not implemented)"],
+             ["move-global", "Move elsewhere (not implemented yet)"],
              ["delete", "Delete"]
          ];
          var this_menu = "";
@@ -851,6 +851,19 @@ function edit_in_place(obj) {
      }
 }
 
+function move_local_by_id(theid) {
+    // when moving an object within a page, we create a placeholder that is manipulated
+    var current_parent_and_location = internalSource[theid]["parent"];
+
+    var the_placeholder = document.createElement('div');
+    the_placeholder.setAttribute("id", "move_placeholder");
+    var these_instructions = '<div class="movearrow"><span class="arrow">&uarr;</span><p class="up">"shift-tab", or "up arrow", to move up</p></div>';
+    these_instructions += '<div class="movearrow"><p class="done">"return" to set in place </p></div>';
+    these_instructions += '<div class="movearrow"><span class="arrow">&darr;</span><p class="down">"tab" or "down arrow" to move down</p></div>';
+    the_placeholder.innerHTML = these_instructions;
+    document.getElementById(theid).replaceWith(the_placeholder)
+}
+
 function delete_by_id(theid) {
         // first delete the specific object
     var deleted_content = internalSource[theid];
@@ -886,6 +899,8 @@ function delete_by_id(theid) {
         // delete from the html
     //    alert("deleting " + deleted_content["ptxtag"]);
  //       document.getElementById(theid).remove()
+
+        document.getElementById("edit_menu_holder").remove()
         document.getElementById(theid).setAttribute("id", "deleting");
         document.getElementById("deleting").removeAttribute("data-editable");  // so it is invisible to next_editable_of
         setTimeout(() => {  document.getElementById("deleting").remove(); }, 1000);
@@ -1839,6 +1854,11 @@ function main_menu_navigator(e) {  // we are not currently editing
                     console.log("current_env", current_env);
                     current_env_id = current_env.id;
                     delete_by_id(current_env_id)
+            } else if (dataAction == "move-local") {
+                    current_env = document.getElementById('edit_menu_holder').parentElement;
+                    console.log("current_env", current_env);
+                    current_env_id = current_env.id;
+                    move_local_by_id(current_env_id)
             } else if (dataAction == "change-title") {
                 console.log("change-title not implemented yet")
             } else {
