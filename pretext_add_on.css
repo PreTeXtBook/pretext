@@ -3561,10 +3561,67 @@ article.may_leave + #edit_menu_holder #enter_choice {
     transition: all 1.0s;
     background: #666;
     height: 5em;
-    margin-right: 10em;
-    margin-left: 5em;
+    margin-right: 20em;
+    margin-left: 15em;
     font-size: 5%;
+    box-shadow: -2px -1px 1px #770000;
+}
+
+* {
+    z-index: 0
+}
+.pretext-content #move_placeholder {
+    margin-left: 5em;
+    margin-right: 7em;
+    padding: 1.5em;
+    box-shadow: 1em 1em #999;
+    box-shadow: 1em 1em rgba(150, 150,150,0.9);
+    margin-top: -2em;
+    margin-bottom: -2em;
+    z-index: 100;
+    background: rgba(239, 223,256,0.9);
+    font-size: 110%;
+    font-style: italic;
 /*
-    overflow: hidden;
+    background: #edf;
+    opacity: 0.8;
 */
+    position: relative;
+}
+.pretext-content #move_placeholder .done {
+    margin-left: 4em;
+/*
+    float: right;
+*/
+}
+.pretext-content #move_placeholder .movearrow  {
+    position: relative;
+    z-index: 101;
+    background: rgba(243, 225,256,1);
+/*
+    background: #edf;
+    opacity: 1;
+*/
+}
+.pretext-content #move_placeholder .movearrow .arrow {
+    font-size: 200%;
+    margin-right: 0.6em;
+    margin-top: -0.5em;
+}
+.pretext-content #move_placeholder .movearrow p {
+    margin-top: 0.4em;
+}
+.pretext-content #move_placeholder .movearrow p.up {
+    margin-top: 0;
+}
+.pretext-content #move_placeholder .movearrow p.down {
+    margin-top: 0.5em;
+}
+/*
+.pretext-content #move_placeholder .movearrow .down {
+    margin-bottom: 0.5em;
+}
+*/
+.pretext-content #move_placeholder .movearrow > * {
+    display: inline-block;
 }
