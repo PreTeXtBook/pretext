@@ -3567,17 +3567,13 @@ article.may_leave + #edit_menu_holder #enter_choice {
     box-shadow: -2px -1px 1px #770000;
 }
 
-* {
-    z-index: 0
-}
 .pretext-content #move_placeholder {
     margin-left: 5em;
     margin-right: 7em;
     padding: 1.5em;
-    box-shadow: 1em 1em #999;
-    box-shadow: 1em 1em rgba(150, 150,150,0.9);
-    margin-top: -2em;
-    margin-bottom: -2em;
+    box-shadow: 1em 0.7em rgba(150, 150,150,0.96);
+    margin-top: -1.5em;
+    margin-bottom: -1.5em;
     z-index: 100;
     background: rgba(239, 223,256,0.9);
     font-size: 110%;
@@ -3587,6 +3583,9 @@ article.may_leave + #edit_menu_holder #enter_choice {
     opacity: 0.8;
 */
     position: relative;
+}
+.pretext-content #move_placeholder + p {
+    margin-top: 0;
 }
 .pretext-content #move_placeholder .done {
     margin-left: 4em;
