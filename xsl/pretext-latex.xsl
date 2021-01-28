@@ -7573,10 +7573,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Within titles, we just produce (formatted)      -->
 <!-- text, but nothing active                        -->
 
-<xsl:template match="url">
+<!-- Empty form, so duplicate URL as clickable -->
+<!-- \url{} seems to provide line-breaking     -->
+<xsl:template match="url[not(node())]">
     <!-- choose a macro, font change, or active link -->
     <xsl:choose>
-        <xsl:when test="ancestor::title|ancestor::subtitle">
+        <xsl:when test="ancestor::title|ancestor::shorttitle|ancestor::subtitle">
             <!-- switch to node-set with "c" if characters need escaping -->
             <xsl:text>\mono{</xsl:text>
         </xsl:when>
@@ -7593,23 +7595,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- Checking for "content-less" form           -->
-<!-- http://stackoverflow.com/questions/9782021 -->
-<xsl:template match="url[* or normalize-space()]">
+<!-- With content of any form, so with no assumptions -->
+<xsl:template match="url[node()]">
     <xsl:choose>
-        <!-- just the content, ignore the actual URL -->
-        <xsl:when test="ancestor::title|ancestor::subtitle">
+        <!-- just the content, ignore the actual URL @href -->
+        <xsl:when test="ancestor::title|ancestor::shorttitle|ancestor::subtitle">
             <xsl:apply-templates />
         </xsl:when>
         <!-- the functional version, usually -->
         <xsl:otherwise>
+            <!-- the actual URL -->
             <xsl:text>\href{</xsl:text>
             <xsl:call-template name="escape-url-to-latex">
                 <xsl:with-param name="text">
                     <xsl:value-of select="@href" />
                 </xsl:with-param>
             </xsl:call-template>
-            <xsl:text>}{</xsl:text>
+            <xsl:text>}</xsl:text>
+            <!-- the visible clickable -->
+            <xsl:text>{</xsl:text>
             <xsl:apply-templates />
             <xsl:text>}</xsl:text>
         </xsl:otherwise>

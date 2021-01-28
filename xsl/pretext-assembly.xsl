@@ -229,6 +229,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- out of "tcolorbox" environments, which is based on the *context*,      -->
 <!-- so a result-tree fragment implementation is doomed to fail.            -->
 
+<!-- N.B.  We considered interpreting the "no content" form here by simply  -->
+<!-- duplicating @href as the content (in a "c" element).  This would mean  -->
+<!-- just a single template/case in conversions.  But it would prevent      -->
+<!-- LaTeX from being able to use a \url{} construction which does sensible -->
+<!-- line-breaking. -->
+
 <xsl:template match="url[@visual]" mode="assembly">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*[not(local-name(.) = 'visual')]" mode="assembly"/>
