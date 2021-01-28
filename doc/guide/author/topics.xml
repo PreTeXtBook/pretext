@@ -1013,7 +1013,7 @@
             <title>Variations</title>
 
             <p>There are some variant uses for the <tag>xref</tag> tag.<ul>
-                <li>Replace <attr>ref</attr> by <attr>provisional</attr> and give it a value with some simple text like <c>subsection on eagle habitat</c> and you will get reminders that once you write this future subsection you need to link it in right here.  This is just a convenience for authors during the early stages of a writing project.</li>
+                <li>Replace <attr>ref</attr> by <attr>provisional</attr> and give it a value with some simple text like <c>subsection on eagle habitat</c> and you will get reminders that once you write this future subsection you need to link it in right here.  This is just a convenience for authors during the early stages of a writing project (see <xref ref="processing-author-tools" /> for details).</li>
 
                 <li>Replace <attr>ref</attr> by the pair <attr>first</attr> and <attr>last</attr>.  Provide attribute values just as you would for <attr>ref</attr>.  The code will check that the targets have the exact same tag, and that the order is correct.  You will get a link that looks like a range, separated by an en dash.  As a link, only <attr>first</attr> will be used for the linking mechanism (<ie />, one link is generated, not two).  Experiment with <attr>text</attr> and content overrides.</li>
 
