@@ -4,11 +4,12 @@
 
 $(".autopermalink > a").attr("tabindex", -1);
 
-$("#akX > *").attr("data-editable", 99);
-var editable_objects = ["p", "ol", "ul", "article", "blockquote", "section"];
+//  $("#akX > *").attr("data-editable", 99);
+// var editable_objects = ["p", "ol", "ul", "article", "blockquote", "section"];
+var editable_objects = [["p", 99], ["ol", 97], ["ul", 96], ["article", 95], ["blockquote", 80], ["section", 66]];
 for(var j=0; j < editable_objects.length; ++j) {
-    $(editable_objects[j]).attr("data-editable", 99);
-    $(editable_objects[j]).attr("tabindex", -1);
+    $(editable_objects[j][0]).attr("data-editable", editable_objects[j][1]);
+    $(editable_objects[j][0]).attr("tabindex", -1);
 }
 
 /* the code */
@@ -41,6 +42,9 @@ var current_editing = {
     "location": [0],
     "tree": [ [document.getElementById("hPw")] ]
 }
+
+var movement_location_options = [];
+var movement_location = 0;
 
 function randomstring(len) {
     if (!len) { len = 10 }
@@ -372,11 +376,9 @@ function top_menu_options_for(this_obj) {
             var editable_children = next_editable_of(this_obj, "children");
             console.log("editable_children", editable_children);
             if (editable_children.length) {
-                console.log("$(this_obj).children('.heading > [data-editable=99], [data-editable=99]')", $(this_obj).children('.heading > [data-editable="99"], [data-editable="99"]'));
                 this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_obj_environment + '</li>';
             }
         } else {
-            console.log("are there children", $(this_obj).children('.heading > [data-editable="99"], [data-editable="99"]'));
             this_list += '<li tabindex="-1" id="choose_current" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_obj_environment + '</li>';
        }
 
@@ -535,14 +537,21 @@ function next_editable_of(obj, relationship) {
     var next_to_edit;
     console.log("finding", relationship, "editable of", obj);
     if (relationship == "children") {
-    //    next_to_edit = $(obj).find('> .heading > [data-editable="99"], > [data-editable="99"]')
-        next_to_edit = $(obj).find('>li > [data-editable="99"], > .heading > [data-editable="99"], > [data-editable="99"]')
-    //    next_to_edit = $(obj).children('[data-editable="99"]')
-    } else if (relationship == "siblings") {
-        next_to_edit = $(obj).nextAll('[data-editable="99"]')
-    } else if (relationship == "previoussiblings") {
-        next_to_edit = $(obj).prevAll('[data-editable="99"]')
+      // 99 is only paragraphs
+      //  next_to_edit = $(obj).find('>li > [data-editable="99"], > .heading > [data-editable="99"], > [data-editable="99"]')
+        next_to_edit = $(obj).find('>li > [data-editable], > .heading > [data-editable], > [data-editable]')
+    } else if (relationship == "outer-block") {  // for example, a direct child of a section
+        next_to_edit = $(obj).find('section > [data-editable]')
+    } else if (relationship == "inner-block") {  // typically a paragraph
+        next_to_edit = $(obj).find('section > [data-editable], [data-editable="99"]')
+    } else {
+        console.log("unimplemented next_editable_of")
     }
+//    } else if (relationship == "siblings") {
+//        next_to_edit = $(obj).nextAll('[data-editable="99"]')
+//    } else if (relationship == "previoussiblings") {
+//        next_to_edit = $(obj).prevAll('[data-editable="99"]')
+//    }
 
     console.log(next_to_edit);
     return next_to_edit
@@ -852,16 +861,71 @@ function edit_in_place(obj) {
 }
 
 function move_local_by_id(theid) {
-    // when moving an object within a page, we create a placeholder that is manipulated
+    // when moving an object within a page, we create a phantomobject that is manipulated
+    // the actual movement is handled by move_object(e)
+
+    // but first, remember the initial location of the object
+
+    var moving_object = document.getElementById(theid);
+    console.log("moving", moving_object, "within this page");
+    console.log("moving_id", theid);
+    console.log("current_editing[tree][0]", current_editing["tree"][0]);
+    movement_location_options = next_editable_of(current_editing["tree"][0][0], "inner-block");
+    console.log("movement_location_options", movement_location_options);
+    var foundit = false;
+    for (var j=0; j < movement_location_options.length; ++j) {
+        if (movement_location_options[j] == moving_object) {
+            movement_location = j;
+                // delete the one which is being moved
+                // isn't there a better way to delete one item from a list?
+            movement_location_options.splice(j, 1);
+            foundit = true;
+            break;
+        }
+    }
+    if (!foundit) { console.log("serious error:  trying to move an object that is not movable", theid) }
+
     var current_parent_and_location = internalSource[theid]["parent"];
 
-    var the_placeholder = document.createElement('div');
-    the_placeholder.setAttribute("id", "move_placeholder");
+    var the_phantomobject = document.createElement('div');
+    the_phantomobject.setAttribute("id", "phantomobject");
+    the_phantomobject.setAttribute("data-moving_id", theid);
+    the_phantomobject.setAttribute("class", "move");
     var these_instructions = '<div class="movearrow"><span class="arrow">&uarr;</span><p class="up">"shift-tab", or "up arrow", to move up</p></div>';
     these_instructions += '<div class="movearrow"><p class="done">"return" to set in place </p></div>';
     these_instructions += '<div class="movearrow"><span class="arrow">&darr;</span><p class="down">"tab" or "down arrow" to move down</p></div>';
-    the_placeholder.innerHTML = these_instructions;
-    document.getElementById(theid).replaceWith(the_placeholder)
+    the_phantomobject.innerHTML = these_instructions;
+    document.getElementById(theid).replaceWith(the_phantomobject)
+}
+
+function move_object(e) {
+                // we have alread set movement_location_options and movement_location
+    if ((e.code == "Tab" && e.shiftKey) || e.code == "ArrowUp") {  // Shift-Tab up the page
+        if (movement_location == 0) {
+            alert("can't move past the top of this section")
+        } else {
+            movement_location -= 1
+        }
+    } else if ((e.code == "Tab" || e.code == "ArrowDown") && !e.shiftKey) {
+        if (movement_location == movement_location_options.length - 1) {
+            alert("can't move past the bottom of this section")
+        } else {
+            movement_location += 1
+        }
+    } else if (e.code == "Escape" || e.code == "Enter") {
+        console.log(" decided where to put it")
+        // do something
+        return
+    } else {
+        console.log("don't know how to move with", e.code)
+    }
+
+    var the_phantomobject = document.getElementById('phantomobject');
+    if (movement_location < movement_location_options.length) {
+        movement_location_options[movement_location].parentElement.insertBefore(the_phantomobject, movement_location_options[movement_location]) 
+    } else {
+        movement_location_options[movement_location].insertAfter(the_phantomobject)
+    }
 }
 
 function delete_by_id(theid) {
@@ -888,7 +952,7 @@ function delete_by_id(theid) {
         // if the parent is empty, delete it
     if (!(where_it_is.trim()) && (parent_and_location[1] == "content" || parent_and_location[1] == "statement")) {
  //       new_level -= 1;
-        document.getElementById(theid).removeAttribute("data-editable");  // so it is invisible to next_editable_of as we delete its parent
+        document.getElementById(theid).removeAttribute("data-editable");  // so it is invisible to next-editable-of as we delete its parent
         if (internalSource[parent_and_location[0]][ "ptxtag" ] == "li") {
             console.log("not going up a level, because it is a list element")
         } else {
@@ -902,7 +966,7 @@ function delete_by_id(theid) {
 
         document.getElementById("edit_menu_holder").remove()
         document.getElementById(theid).setAttribute("id", "deleting");
-        document.getElementById("deleting").removeAttribute("data-editable");  // so it is invisible to next_editable_of
+        document.getElementById("deleting").removeAttribute("data-editable");  // so it is invisible to next-editable-of
         setTimeout(() => {  document.getElementById("deleting").remove(); }, 1000);
 
         // update current_editing
@@ -1204,14 +1268,14 @@ function html_from_internal_id(the_id, is_inner) {
         if ("edit inner".includes(is_inner)) {
                 // should the id be the_id ?
             var opening_tag = '<li id="' + the_id + '"';
-            opening_tag += ' data-editable="99" tabindex="-1"';
+            opening_tag += ' data-editable="98" tabindex="-1"';
             opening_tag += '>';
             var closing_tag = '</li>';
             return opening_tag + the_content + closing_tag
         }
 
         html_of_this_object = document.createElement('li');
-        html_of_this_object.setAttribute("data-editable", 99);
+        html_of_this_object.setAttribute("data-editable", 98);
         html_of_this_object.setAttribute("tabindex", -1);
         html_of_this_object.setAttribute("id", the_id);
 
@@ -1219,16 +1283,15 @@ function html_from_internal_id(the_id, is_inner) {
         the_html_objects.push(html_of_this_object);
     } else if (ptxtag in inline_tags) {   // assume is_inner?
         var opening_tag = inline_tags[ptxtag][1][0];
-        opening_tag += ' id="' + the_id + '"data-editable="99" tabindex="-1">';
+        opening_tag += ' id="' + the_id + '"data-editable="50" tabindex="-1">';
         var closing_tag = inline_tags[ptxtag][1][1];
         return opening_tag + the_object["content"] + closing_tag
-  //      return '<em id="' + the_id + '"data-editable="99" tabindex="-1">' + the_object["content"] + '</em>';
     } else if (ptxtag in math_tags) {
         // here we are assuming the tag is 'm'
         var opening_tag = '<span class="edit_inline_math"';
         var closing_tag = '</span>';
         if (is_inner == "edit") {
-            opening_tag += ' id="' + the_id + '"data-editable="99" tabindex="-1">';
+            opening_tag += ' id="' + the_id + '"data-editable="42" tabindex="-1">';
         } else {
             opening_tag = math_tags[ptxtag][1][0];
             closing_tag = math_tags[ptxtag][1][1];
@@ -1239,7 +1302,7 @@ function html_from_internal_id(the_id, is_inner) {
         object_in_html.setAttribute("id", the_id);
         object_in_html.setAttribute("class", ptxtag);
         object_in_html.setAttribute("tabindex", -1);
-        object_in_html.setAttribute("data-editable", 99);
+        object_in_html.setAttribute("data-editable", 60);
         var headertag = "h6";
         object_heading_html = '<' + headertag;
         object_heading_html += ' class="heading" data-parent_id="' + the_id + '">';
@@ -1269,7 +1332,11 @@ function html_from_internal_id(the_id, is_inner) {
         object_in_html = document.createElement("article");
         object_in_html.setAttribute("class", objectclass + " " + ptxtag);
         object_in_html.setAttribute("tabindex", -1);
-        object_in_html.setAttribute("data-editable", 99);
+        if (editing_container_for["section-like"].includes(ptxtag)) {
+            object_in_html.setAttribute("data-editable", 66);
+        } else {
+            object_in_html.setAttribute("data-editable", 95);
+        }
 
         object_title = the_object["title"];
         object_creator = the_object["creator"];
@@ -1279,16 +1346,16 @@ function html_from_internal_id(the_id, is_inner) {
         object_heading_html = '<' + headertag;
         object_heading_html += ' class="heading" data-parent_id="' + the_id + '">';
         var objecttype_capped = ptxtag.charAt(0).toUpperCase() + ptxtag.slice(1);
-        object_heading_html += '<span class="type" data-editable="99" tabindex="-1">' + objecttype_capped + '</span>';
+        object_heading_html += '<span class="type" data-editable="70" tabindex="-1">' + objecttype_capped + '</span>';
         object_heading_html += '<span class="space">' + " " + '</span>';
         object_heading_html += '<span class="codenumber">' + "#N" + '</span>';
 
         if (object_title) {
-            object_heading_html += '<span class="title" data-editable="99" tabindex="-1">' + object_title + '</span>';
+            object_heading_html += '<span class="title" data-editable="75" tabindex="-1">' + object_title + '</span>';
         }
         if (object_creator) {
             object_heading_html += '<span class="space">' + " " + '</span>';
-            object_heading_html += '<span class="creator" data-editable="99" tabindex="-1">(' + object_creator + ')</span>';
+            object_heading_html += '<span class="creator" data-editable="73" tabindex="-1">(' + object_creator + ')</span>';
         }
 
         object_heading_html += '<span class="period">' + "." + '</span>';
@@ -1307,24 +1374,6 @@ function html_from_internal_id(the_id, is_inner) {
         object_in_html.innerHTML = object_heading_html + object_statement_html;
 
         the_html_objects.push(object_in_html);
-
-        if (false && objectclass == "theorem-like") {
-            proof_in_html = document.createElement("article");
-            var proof_id = the_object["proof"];
-            proof_id = proof_id.replace(/<.>/g, "");
-       //     proof_in_html.setAttribute("class", "hiddenproof");
-            proof_in_html.setAttribute("id", proof_id);
-            proof_in_html.setAttribute("class", "proof");
-            proof_in_html.setAttribute("data-editable", "99");
-            var proof_contents = '<h6 class="heading"><span class="type">Proof</span><span class="period">.</span></h6>';
-            console.log("             Proof un-expanded", the_object["proof"])
-            proof_contents += expand_condensed_source_html(the_object["proof"]);
-            console.log("expanded proof", proof_contents)
-      //      proof_in_html.innerHTML = '<a data-knowl="" class="id-ref proof-knowl original" data-refid="hk-Jkl"><h6 class="heading" data-editable="99" tabindex="-1"><span class="type">Proof<span class="period">.</span></span></h6></a>';
-            proof_in_html.innerHTML = proof_contents;
-
-            the_html_objects.push(proof_in_html)
-        }
 
     } else {
          alert("don't know how to make html from", the_object)
@@ -1364,7 +1413,11 @@ function insert_html_version(these_changes) {
         if (this_object["ptxtag"] == "p" || this_object["ptxtag"] == "li") {
           //  object_as_html = document.createElement('p');
             object_as_html = document.createElement(this_object["ptxtag"]);
-            object_as_html.setAttribute("data-editable", 99);
+            if (this_object["ptxtag"] == "p") {
+                object_as_html.setAttribute("data-editable", 99);
+            } else {
+                object_as_html.setAttribute("data-editable", 98);
+            }
             object_as_html.setAttribute("tabindex", -1);
             object_as_html.setAttribute("id", this_object_id);
             console.log("now making inner htmh", this_object[this_object_entry]);
@@ -1556,7 +1609,7 @@ function main_menu_navigator(e) {  // we are not currently editing
         } else if ((e.code == "Tab" && e.shiftKey) || e.code == "ArrowUp") {  // Shift-Tab to prevous object
             e.preventDefault();
             // go to previous sibling, or up one if on first sibling
-            console.log("ArrowUp:", "current_location", current_location, "current_level", current_level);
+            console.log("Arrow Up:", "current_location", current_location, "current_level", current_level);
             if (current_location == 0) {
                 if (!current_level) { // already at the top, so nowhere to go, so do nothing
                     console.log("at the top, so can't go up");
@@ -1946,6 +1999,14 @@ function logKeyDown(e) {
             }
         }
 
+    } else if (document.getElementById('phantomobject')) {
+        var the_phantomobject = document.getElementById('phantomobject');
+
+        if (the_phantomobject.classList.contains('move')) {
+            move_object(e)
+        } else {
+            alert("do not know what to do with that")
+        }
     } else {
         main_menu_navigator(e);
     }
