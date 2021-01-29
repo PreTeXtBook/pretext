@@ -864,25 +864,34 @@ function move_local_by_id(theid) {
     // when moving an object within a page, we create a phantomobject that is manipulated
     // the actual movement is handled by move_object(e)
 
+    document.getElementById("edit_menu_holder").remove()
+    document.getElementById(theid).classList.remove("may_select");
+
     // but first, remember the initial location of the object
 
-    var moving_object = document.getElementById(theid);
+    moving_object = document.getElementById(theid);
     console.log("moving", moving_object, "within this page");
     console.log("moving_id", theid);
     console.log("current_editing[tree][0]", current_editing["tree"][0]);
-    movement_location_options = next_editable_of(current_editing["tree"][0][0], "inner-block");
-    console.log("movement_location_options", movement_location_options);
+    movement_location_neighbors = next_editable_of(current_editing["tree"][0][0], "inner-block");
+    console.log("movement_location_neighbors", movement_location_neighbors);
     var foundit = false;
-    for (var j=0; j < movement_location_options.length; ++j) {
-        if (movement_location_options[j] == moving_object) {
+    for (var j=0; j < movement_location_neighbors.length; ++j) {
+        if (movement_location_neighbors[j] == moving_object) {
             movement_location = j;
-                // delete the one which is being moved
+                // delete the one which is being moved, because
+                // we are making a list of slots to place it, and its slot will still be there
                 // isn't there a better way to delete one item from a list?
-            movement_location_options.splice(j, 1);
+            movement_location_neighbors.splice(j, 1);
             foundit = true;
             break;
         }
     }
+    movement_location_options = [];
+    for (var j=0; j < movement_location_neighbors.length; ++j) {
+        movement_location_options.push(movement_location_neighbors[j])
+    }
+ 
     if (!foundit) { console.log("serious error:  trying to move an object that is not movable", theid) }
 
     var current_parent_and_location = internalSource[theid]["parent"];
@@ -892,7 +901,7 @@ function move_local_by_id(theid) {
     the_phantomobject.setAttribute("data-moving_id", theid);
     the_phantomobject.setAttribute("class", "move");
     var these_instructions = '<div class="movearrow"><span class="arrow">&uarr;</span><p class="up">"shift-tab", or "up arrow", to move up</p></div>';
-    these_instructions += '<div class="movearrow"><p class="done">"return" to set in place </p></div>';
+    these_instructions += '<div class="movearrow"><p class="done">"return" or "escape" to set in place </p></div>';
     these_instructions += '<div class="movearrow"><span class="arrow">&darr;</span><p class="down">"tab" or "down arrow" to move down</p></div>';
     the_phantomobject.innerHTML = these_instructions;
     document.getElementById(theid).replaceWith(the_phantomobject)
@@ -901,21 +910,35 @@ function move_local_by_id(theid) {
 function move_object(e) {
                 // we have alread set movement_location_options and movement_location
     if ((e.code == "Tab" && e.shiftKey) || e.code == "ArrowUp") {  // Shift-Tab up the page
+        e.preventDefault();
         if (movement_location == 0) {
             alert("can't move past the top of this section")
         } else {
             movement_location -= 1
         }
     } else if ((e.code == "Tab" || e.code == "ArrowDown") && !e.shiftKey) {
+        e.preventDefault();
         if (movement_location == movement_location_options.length - 1) {
             alert("can't move past the bottom of this section")
         } else {
             movement_location += 1
         }
     } else if (e.code == "Escape" || e.code == "Enter") {
-        console.log(" decided where to put it")
-        // do something
+        e.preventDefault();
+        console.log(" decided where to put it");
+        var new_location_anchor = movement_location_options[movement_location]
+        console.log("new_location_anchor",new_location_anchor);
+        new_location_anchor.insertAdjacentElement('beforebegin', moving_object);
+ //       tmp_for_debugging = document.createElement('div');
+ //       tmp_for_debugging.setAttribute("data-editable", 99);
+ //       tmp_for_debugging.setAttribute("tabindex", -1);
+//
+//        tmp_for_debugging.innerHTML = "just testing";
+//        new_location_anchor.insertAdjacentElement('beforebegin', tmp_for_debugging);
+        document.getElementById('phantomobject').remove();
+        edit_menu_from_current_editing("entering");
         return
+
     } else {
         console.log("don't know how to move with", e.code)
     }
