@@ -1439,7 +1439,7 @@ the xsltproc executable.
                 <subsubsection>
                     <title>Test Two</title>
 
-                    <p>An intervening subsection section which contains an <tag>exercises</tag> division which must at the level of a Subsubsubsection.</p>
+                    <p>An intervening subsection section which contains an <tag>exercises</tag> division which must be at the level of a Subsubsubsection.</p>
 
                     <exercises>
                         <exercise>
