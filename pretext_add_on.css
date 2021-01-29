@@ -3341,12 +3341,12 @@ p > #edit_menu_holder {
 #enter_choice {
     padding: 0.25em 0.5em 0 0.5em;
     background: yellow;
-    bottom: -1.2em;
+    bottom: 1.2em;
     border-radius: 0.5em 0.5em 0 0; 
     font-style: italic;
 }
 .may_enter #enter_choice {
-    background: #fee;
+    background: #ccccee;
 }
 p > #edit_menu_holder > #enter_choice {
     bottom: -2.8em;
@@ -3355,20 +3355,29 @@ blockquote > #edit_menu_holder > #enter_choice {
     bottom: -1.0em;
 }
 article.project-like > #edit_menu_holder > #enter_choice {
-    bottom: -2.5em;
+    bottom: 0;
 }
 article.project-like > ol > #edit_menu_holder > #enter_choice {
-    bottom: -5.2em;
+    bottom: -0.9em;
 }
+.pretext-content section article.project-like.may-enter > .heading,
+.pretext-content section article.project-like.may-leave > .heading {
+    background-color: inherit;
+}
+
 ol > #edit_menu_holder > #enter_choice {
     bottom: 2.8em;
 }
 li > p > #edit_menu_holder > #enter_choice {
-    bottom: 2.8em;
+    bottom: -2.8em;
 }
 #enter_choice[data-location="inline"] {
     bottom: -0.2em;
     left: -0.5em;
+}
+
+#edit_menu_holder + p {
+    margin-top: 0;
 }
 /*
 .heading + p > #edit_menu_holder {
@@ -3383,12 +3392,15 @@ li > #edit_menu_holder {
     position: absolute;
     padding: 0em 0.5em 0.25em 0.25em;
     background: #FFD6D9;
-    bottom: -2.25em;
+    bottom: -1.9em;
     border-radius: 0 0 0.5em 0.5em;
     list-style-type: none;
  /*   margin: 0 0.25em 0.25em 0.25em;
 */
     font-style: italic;
+}
+section.may_leave + #edit_menu_holder #enter_choice {
+    bottom: -3.0em;
 }
 article.may_leave + #edit_menu_holder #enter_choice {
     bottom: -2em;
@@ -3471,9 +3483,9 @@ article.may_leave + #edit_menu_holder #enter_choice {
     background: #ffffee;
 }
 .may_enter {
-    box-shadow: -10px -5px 5px #ccccee;
+    box-shadow: -10px -10px 5px #ccccee;
     margin-top: 1.25em;
-    background: #eeeeff;
+    background: #eeeeff !important;
 }
 
 .may_select > p:first-of-type {
@@ -3486,7 +3498,7 @@ article.may_leave + #edit_menu_holder #enter_choice {
 }
 .may_leave {
     box-shadow: -10px 5px 5px #FFD6D9;
-    background: #ffeeee;
+    background: #ffeeee !important;
 }
 #actively_editing {
     margin-top: 1em;
@@ -3567,11 +3579,11 @@ article.may_leave + #edit_menu_holder #enter_choice {
     box-shadow: -2px -1px 1px #770000;
 }
 
-.pretext-content #move_placeholder {
+.pretext-content #phantomobject.move {
     margin-left: 5em;
-    margin-right: 7em;
+    margin-right: 2em;
     padding: 1.5em;
-    box-shadow: 1em 0.7em rgba(150, 150,150,0.96);
+    box-shadow: 1em 0.7em rgba(180, 180, 180,0.96);
     margin-top: -1.5em;
     margin-bottom: -1.5em;
     z-index: 100;
@@ -3584,16 +3596,16 @@ article.may_leave + #edit_menu_holder #enter_choice {
 */
     position: relative;
 }
-.pretext-content #move_placeholder + p {
+.pretext-content #phantomobject.move + p {
     margin-top: 0;
 }
-.pretext-content #move_placeholder .done {
+.pretext-content #phantomobject.move .done {
     margin-left: 4em;
 /*
     float: right;
 */
 }
-.pretext-content #move_placeholder .movearrow  {
+.pretext-content #phantomobject.move .movearrow  {
     position: relative;
     z-index: 101;
     background: rgba(243, 225,256,1);
@@ -3602,25 +3614,20 @@ article.may_leave + #edit_menu_holder #enter_choice {
     opacity: 1;
 */
 }
-.pretext-content #move_placeholder .movearrow .arrow {
+.pretext-content #phantomobject.move .movearrow .arrow {
     font-size: 200%;
     margin-right: 0.6em;
     margin-top: -0.5em;
 }
-.pretext-content #move_placeholder .movearrow p {
+.pretext-content #phantomobject.move .movearrow p {
     margin-top: 0.4em;
 }
-.pretext-content #move_placeholder .movearrow p.up {
+.pretext-content #phantomobject.move .movearrow p.up {
     margin-top: 0;
 }
-.pretext-content #move_placeholder .movearrow p.down {
+.pretext-content #phantomobject.move .movearrow p.down {
     margin-top: 0.5em;
 }
-/*
-.pretext-content #move_placeholder .movearrow .down {
-    margin-bottom: 0.5em;
-}
-*/
-.pretext-content #move_placeholder .movearrow > * {
+.pretext-content #phantomobject.move .movearrow > * {
     display: inline-block;
 }
