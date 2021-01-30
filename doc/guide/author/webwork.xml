@@ -269,7 +269,7 @@
         then when the exercises are exported to <c>.pg</c> problem files for use as online homework from a <webwork/> server
         it makes sense that the instructions from the <tag>exercisegroup</tag>'s <tag>introduction</tag> should be included in the <c>.pg</c> file.
         And so they are included there. Note that they are <em>not</em> included when you are building <acro>HTML</acro> or <latex/> output
-        for your proeject. (Rather, the <tag>exercisegroup</tag>'s <tag>introduction</tag> appears in its normal place.)
+        for your project. (Rather, the <tag>exercisegroup</tag>'s <tag>introduction</tag> appears in its normal place.)
       </p>
       <p>
         You should be aware of this when you write the <tag>exercisegroup</tag>'s <tag>introduction</tag>.
