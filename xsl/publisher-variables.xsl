@@ -218,6 +218,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- File of  custom/@name  elements, whose content is a custom -->
+<!-- replacement for a corresponding  custom/@ref  element in   -->
+<!-- the source.                                                -->
+<xsl:variable name="customizations-file">
+    <xsl:choose>
+        <xsl:when test="$publication/source/@customizations">
+            <xsl:value-of select="$publication/source/@customizations"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 
 <!-- ##################### -->
 <!-- HTML-Specific Options -->
