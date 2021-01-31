@@ -37,10 +37,12 @@ var old_content = {};   // to hold old versions of changed materials
 // what will happen with internationalization?
 var keyletters = ["KeyA", "KeyB", "KeyC", "KeyD", "KeyE", "KeyF", "KeyG", "KeyH", "KeyI", "KeyJ", "KeyK", "KeyL", "KeyM", "KeyN", "KeyO", "KeyP", "KeyQ", "KeyR", "KeyS", "KeyT", "KeyU", "KeyV", "KeyW", "KeyX", "KeyY", "KeyZ"];
 
+var top_level_id = "hPw";
+
 var current_editing = {
     "level": 0,
     "location": [0],
-    "tree": [ [document.getElementById("hPw")] ]
+    "tree": [ [document.getElementById(top_level_id)] ]
 }
 
 var movement_location_options = [];
@@ -240,6 +242,63 @@ fetch(url)
   });
 console.log("then here");
 */
+
+function make_current_editing_from_id(theid) {
+
+    console.log("make_current_editing_from_id", theid);
+    // the existing current_editing know the top level id
+    var top_id = current_editing["tree"][0][0].id;
+
+//    if (theid == top_id) {
+//        current_editing = {
+//            "level": 0,
+//            "location": [0],
+//            "tree": [ [document.getElementById(top_id)] ]
+//        }
+//        return "";
+//    }
+
+    // but now we need to start over and go bottom-up
+    current_editing = {
+            "level": -1,
+            "location": [],
+            "tree": [ ]
+        }
+
+    var current_id = theid;
+    var current_element = document.getElementById(current_id);
+    var selectable_parent, current_element_siblings, selectable_parent_id;
+    var ct=0;
+    while (current_id != top_id && ct < 8) {
+        ct += 1;
+        console.log("ct", ct);
+        selectable_parent = current_element.parentElement.closest("[data-editable]");
+        current_element_siblings = next_editable_of(selectable_parent, "children");
+        current_id = selectable_parent.id;
+        console.log("current_id", current_id);
+        current_editing["tree"].unshift(current_element_siblings);
+        console.log("looking for", current_element, "in", current_element_siblings);
+        for (var j=0; j < current_element_siblings.length; ++j) {
+            if (current_element == current_element_siblings[j]) {
+                current_editing["level"] += 1;
+                current_editing["location"].unshift(j);
+                console.log("this is item", j);
+                break
+            } else {
+                console.log(current_element == current_element_siblings[j], "aaa", current_element,"zzz", current_element_siblings[j])
+            }
+        }
+        current_element = selectable_parent
+    }
+    current_editing["level"] += 1;
+    current_editing["location"].unshift(0);
+    current_editing["tree"].unshift([document.getElementById(top_id)]);
+
+    console.log("built current_editing after", ct, "levels");
+    console.log("current_editing[level]", current_editing["level"]);
+    console.log("current_editing[location]", current_editing["location"]);
+    console.log("current_editing[tree]", current_editing["tree"])
+}
 
 function standard_creator_form(object_id) {
     the_object = internalSource[object_id];
@@ -539,7 +598,7 @@ function next_editable_of(obj, relationship) {
     if (relationship == "children") {
       // 99 is only paragraphs
       //  next_to_edit = $(obj).find('>li > [data-editable="99"], > .heading > [data-editable="99"], > [data-editable="99"]')
-        next_to_edit = $(obj).find('>li > [data-editable], > .heading > [data-editable], > [data-editable]')
+        next_to_edit = $(obj).find('> li > [data-editable], > .heading > [data-editable], > [data-editable]')
     } else if (relationship == "outer-block") {  // for example, a direct child of a section
         next_to_edit = $(obj).find('section > [data-editable]')
     } else if (relationship == "inner-block") {  // typically a paragraph
@@ -860,12 +919,25 @@ function edit_in_place(obj) {
      }
 }
 
-function move_local_by_id(theid) {
+function move_by_id_local(theid) {
     // when moving an object within a page, we create a phantomobject that is manipulated
     // the actual movement is handled by move_object(e)
 
     document.getElementById("edit_menu_holder").remove()
     document.getElementById(theid).classList.remove("may_select");
+
+    moved_content = internalSource[theid];
+    recent_editing_actions.unshift("moved " + moved_content["ptxtag"] + " " + theid);
+    moved_parent_and_location = moved_content["parent"];
+    console.log("moving", theid);
+    console.log("moved_parent_and_location", moved_parent_and_location);
+  // code duplicated elsewhere
+    var where_it_was = internalSource[moved_parent_and_location[0]][ moved_parent_and_location[1] ];
+    console.log("where_it_was", where_it_was);
+    var object_in_parent = '<&>' + theid + '<;>';
+    var where_it_is = where_it_was.replace(object_in_parent, "");
+    console.log("where_it_is ZZ" + where_it_is + "EE");
+    internalSource[moved_parent_and_location[0]][ moved_parent_and_location[1] ] = where_it_is;
 
     // but first, remember the initial location of the object
 
@@ -889,7 +961,7 @@ function move_local_by_id(theid) {
     }
     movement_location_options = [];
     for (var j=0; j < movement_location_neighbors.length; ++j) {
-        movement_location_options.push(movement_location_neighbors[j])
+        movement_location_options.push([movement_location_neighbors[j], "beforebegin"])
     }
  
     if (!foundit) { console.log("serious error:  trying to move an object that is not movable", theid) }
@@ -900,11 +972,13 @@ function move_local_by_id(theid) {
     the_phantomobject.setAttribute("id", "phantomobject");
     the_phantomobject.setAttribute("data-moving_id", theid);
     the_phantomobject.setAttribute("class", "move");
+    the_phantomobject.setAttribute("tabindex", "-1");
     var these_instructions = '<div class="movearrow"><span class="arrow">&uarr;</span><p class="up">"shift-tab", or "up arrow", to move up</p></div>';
     these_instructions += '<div class="movearrow"><p class="done">"return" or "escape" to set in place </p></div>';
     these_instructions += '<div class="movearrow"><span class="arrow">&darr;</span><p class="down">"tab" or "down arrow" to move down</p></div>';
     the_phantomobject.innerHTML = these_instructions;
     document.getElementById(theid).replaceWith(the_phantomobject)
+    document.getElementById("phantomobject").focus();
 }
 
 function move_object(e) {
@@ -912,30 +986,44 @@ function move_object(e) {
     if ((e.code == "Tab" && e.shiftKey) || e.code == "ArrowUp") {  // Shift-Tab up the page
         e.preventDefault();
         if (movement_location == 0) {
-            alert("can't move past the top of this section")
+            alert("can't move past the top")
         } else {
             movement_location -= 1
         }
     } else if ((e.code == "Tab" || e.code == "ArrowDown") && !e.shiftKey) {
         e.preventDefault();
         if (movement_location == movement_location_options.length - 1) {
-            alert("can't move past the bottom of this section")
+            alert("can't move past the bottom")
         } else {
             movement_location += 1
         }
     } else if (e.code == "Escape" || e.code == "Enter") {
         e.preventDefault();
         console.log(" decided where to put it");
-        var new_location_anchor = movement_location_options[movement_location]
-        console.log("new_location_anchor",new_location_anchor);
-        new_location_anchor.insertAdjacentElement('beforebegin', moving_object);
- //       tmp_for_debugging = document.createElement('div');
- //       tmp_for_debugging.setAttribute("data-editable", 99);
- //       tmp_for_debugging.setAttribute("tabindex", -1);
-//
-//        tmp_for_debugging.innerHTML = "just testing";
-//        new_location_anchor.insertAdjacentElement('beforebegin', tmp_for_debugging);
+        var id_of_moving_object = document.getElementById('phantomobject').getAttribute("data-moving_id");
         document.getElementById('phantomobject').remove();
+        var new_anchor_and_position = movement_location_options[movement_location]
+        console.log("new_location_anchor",new_anchor_and_position);
+        new_anchor_and_position[0].insertAdjacentElement(new_anchor_and_position[1], moving_object);
+
+        // the html appears to be updated, but we still need to update both the internal source:
+        var new_neighbor_id = new_anchor_and_position[0].id;
+        var new_neighbor_rel_pos = new_anchor_and_position[1];
+        var [new_neighbor_parent, new_neighbor_location] = internalSource[new_neighbor_id]["parent"];
+        var new_neighbor_in_context = internalSource[new_neighbor_parent][new_neighbor_location];
+        var neighbor_tag = '<&>' + new_neighbor_id + '<;>';
+        var moving_object_tag = '<&>' + new_neighbor_id + '<;>';
+        if (new_neighbor_rel_pos == "beforebegin") {
+            new_neighbor_in_context.replace(neighbor_tag, moving_object_tag + "\n" + neighbor_tag)
+        } else {
+            new_neighbor_in_context.replace(neighbor_tag, neighbor_tag + "\n" + moving_object_tag)
+        }
+        internalSource[new_neighbor_parent][new_neighbor_location] = new_neighbor_in_context;
+
+
+        // and the navigation information
+        make_current_editing_from_id(id_of_moving_object);
+
         edit_menu_from_current_editing("entering");
         return
 
@@ -944,11 +1032,13 @@ function move_object(e) {
     }
 
     var the_phantomobject = document.getElementById('phantomobject');
-    if (movement_location < movement_location_options.length) {
-        movement_location_options[movement_location].parentElement.insertBefore(the_phantomobject, movement_location_options[movement_location]) 
-    } else {
-        movement_location_options[movement_location].insertAfter(the_phantomobject)
-    }
+    movement_location_options[movement_location][0].insertAdjacentElement(movement_location_options[movement_location][1], the_phantomobject);
+//    if (movement_location < movement_location_options.length) {
+//        movement_location_options[movement_location].parentElement.insertBefore(the_phantomobject, movement_location_options[movement_location]) 
+//    } else {
+//        movement_location_options[movement_location].insertAfter(the_phantomobject)
+//    }
+    document.getElementById("phantomobject").focus();
 }
 
 function delete_by_id(theid) {
@@ -966,7 +1056,6 @@ function delete_by_id(theid) {
     recent_editing_actions.unshift("deleted " + deleted_content["ptxtag"] + " " + theid);
         // update the parent of the object
     var current_level = current_editing["level"];
-//    var new_level = current_level;
     var where_it_was = internalSource[parent_and_location[0]][ parent_and_location[1] ];
     var object_in_parent = '<&>' + theid + '<;>';
     var where_it_is = where_it_was.replace(object_in_parent, "");
@@ -1934,7 +2023,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                     current_env = document.getElementById('edit_menu_holder').parentElement;
                     console.log("current_env", current_env);
                     current_env_id = current_env.id;
-                    move_local_by_id(current_env_id)
+                    move_by_id_local(current_env_id)
             } else if (dataAction == "change-title") {
                 console.log("change-title not implemented yet")
             } else {
