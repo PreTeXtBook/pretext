@@ -959,10 +959,19 @@ function move_by_id_local(theid) {
             break;
         }
     }
-    movement_location_options = [];
-    for (var j=0; j < movement_location_neighbors.length; ++j) {
-        movement_location_options.push([movement_location_neighbors[j], "beforebegin"])
+    // a paragraph by itself in an item or a statement can have a new paragraph before or after it
+    movement_location_options = [[movement_location_neighbors[0], "beforebegin"],
+                                 [movement_location_neighbors[0], "afterend"]];
+    for (var j=1; j < movement_location_neighbors.length; ++j) {
+        if (movement_location_neighbors[j-1].parentElement == movement_location_neighbors[j].parentElement) {
+            movement_location_options.push([movement_location_neighbors[j], "afterend"])
+        } else {
+            movement_location_options.push([movement_location_neighbors[j], "beforebegin"])
+            movement_location_options.push([movement_location_neighbors[j], "afterend"])
+        }
     }
+    console.log("made", movement_location_options.length, "movement_location_options", movement_location_options);
+    console.log("from", movement_location_neighbors.length, "movement_location_neighbors", movement_location_neighbors);
  
     if (!foundit) { console.log("serious error:  trying to move an object that is not movable", theid) }
 
