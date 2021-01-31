@@ -34,6 +34,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- <tableofcontents level="2"/> -->
     </common>
 
+    <source customizations="customizations-one.xml"/>
+
     <!-- HTML-Specific Options -->
     <html>
         <!-- Several embedded calculators are available            -->

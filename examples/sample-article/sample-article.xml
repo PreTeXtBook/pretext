@@ -10205,6 +10205,42 @@ the xsltproc executable.
 
             </subsection>
 
+            <subsection>
+                <title>Customizing Phrases</title>
+
+                <p>There is a facility for providing alternate text for small or short phrases, or other components of a paragraph.  Here we just provide some tests.  Each is inside of a block quote to identify it clearly.</p>
+
+                <p>We have two auxiliary files of custom elements, so you need to adjust the publisher file to specify the second one during testing.  First, a very simple string as the variation.</p>
+
+                <blockquote>
+                    <p>This is an article about <custom ref="plural-animal"/>.</p>
+                </blockquote>
+
+                <p>Now a string which is partially text and partially simple markup.</p>
+
+                <blockquote>
+                    <p>We like to write with <custom ref="an-emotional-style"/>.</p>
+                </blockquote>
+
+                <p>And a mildly more complicated structure (a list) as the variable text.</p>
+
+                <blockquote>
+                    <p>Some of our favorite colors are <custom ref="color-list"/></p>
+                </blockquote>
+
+                <p>A cross-reference to test, since context is critical.</p>
+
+                <blockquote>
+                    <p>See also <custom ref="xref-to-result"/>.</p>
+                </blockquote>
+
+                <p>The URLs used as a replacment have the <attr>visual</attr> attribute which is also managed by the assembly pre-processor to provide a footnote.  But this is not organized properly and so this provokes a known bug.  Placing it here should expose the fix during testing of new phases of the pre-processor.</p>
+
+                <blockquote>
+                    <p>A <init>URL</init> that should have a footnote: <custom ref="a-URL"/>.</p>
+                </blockquote>
+            </subsection>
+
         </section>
 
         <section xml:id="section-myopenmath">
