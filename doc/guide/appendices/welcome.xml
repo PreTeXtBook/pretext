@@ -27,9 +27,8 @@
 
         <p>There are many examples available in an area on the website.  Compare <pretext /> source to the resulting output (in both directions).  The <articletitle>sample article</articletitle> is not always pretty, since it is used for testing, but it does try to have one of everything.</p>
 
-        <p>When the above is not sufficient, the <c>pretext-support</c> Google Group is the right place to ask questions.  If you are trying to determine which elements to use to accomplish something, provide some context.  Do not ask, <q>How do I print a line of text upside-down?</q>  Instead say, <q>I am writing a monograph on mammalian vision, and I'd like the reader to use a mirror to view a line of text written upside down.  What is the best way to do that?</q>  (I think the answer would be: make an image and include that, rather than trying to get reflected text.)  Sometimes a quick search of the Goggle Group may yield insights.</p>
+        <p>When the above is not sufficient, the <c>pretext-support</c> Google Group is the right place to ask questions.  If you are trying to determine which elements to use to accomplish something, provide some context.  Do not ask, <q>How do I print a line of text upside-down?</q>  Instead say, <q>I am writing a monograph on mammalian vision, and I'd like the reader to use a mirror to view a line of text written upside down.  What is the best way to do that?</q>  (I think the answer would be: make an image and include that, rather than trying to get reflected text.)  Sometimes a quick search of the Goggle Group may yield insights.  Overall, do your best not to be a <url href="http://slash7.com/2006/12/22/vampires/" visual="slash7.com/2006/12/22/vampires/">Help Vampire</url>.</p>
 
-        <p>When you have a question about design, or you are pretty sure you have encountered a bug, then the <c>pretext-dev</c> list is the place to start a discussion.  As you get more comfortable with <pretext/> this may be a more useful venue for more detailed discussions.</p>
     </section>
 
     <section xml:id="github-issues">
@@ -52,7 +51,9 @@
 
         <p>The documentation is authored in <pretext/>, so you know how to create additions, clean-up obsolete parts, and fix typos.  If you know <c>git</c> and GitHub, then a pull request (on a new branch!) is a very economical way for us to manage contributions.  Even if you do not know GitHub, we can easily accept files written in <pretext/> that contain changes to the documentation.  For example, files supporting localization to new languages (see <xref ref="topic-localization"/>) are ideal for simply submitting an entire file.  (Send files to us by email, or post as attachments on one of the Google groups.)</p>
 
-        <p>Conversions are written in <init>XSL</init>, a declarative language.  It has a steep learning curve, but is very powerful for an application like this.  Start small, and we do not mind helping you along with suggestions and critiques.  Do not begin an ambitious task unless your skills are up to it.</p>
+        <p>Conversions are written in <init>XSL</init>, a declarative language.  It has a steep learning curve, but is very powerful for an application like this.  Start small, and we do not mind helping you along with suggestions and critiques.  Do not, do not, begin an ambitious task unless your skills are up to it.</p>
+
+        <p>When you have gained significant experience as an author, and have a good feel for the questions asked by other authors due to your material participation in the <c>pretext-support</c> group, then it may be time to apply to be part of the <c>pretext-dev</c> group.  This where design discussions are held and nasty bugs are squashed collectively.</p>
     </section>
 
     <section xml:id="personal-email">
