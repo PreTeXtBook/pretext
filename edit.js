@@ -556,9 +556,9 @@ function edit_menu_for(this_obj_or_id, motion) {
      //  if (editable_children.length)
      //  next_editable_of(this_obj, "children")
             if (next_editable_of(this_obj, "children").length) {
-                edit_option.innerHTML = "enter, or edit near here?";
+                edit_option.innerHTML = "<b>enter</b> this XXXYYYZZZ, or add near here?";
             } else {
-                edit_option.innerHTML = "edit this, or add near here?";
+                edit_option.innerHTML = "<b>edit</b> this paragraph, or add near here?";
             }
             edit_option.setAttribute('data-location', 'next');
         }
@@ -612,7 +612,7 @@ function next_editable_of(obj, relationship) {
 //        next_to_edit = $(obj).prevAll('[data-editable="99"]')
 //    }
 
-    console.log(next_to_edit);
+    console.log("next_to_edit", next_to_edit);
     return next_to_edit
 }
 
@@ -1050,8 +1050,10 @@ function move_object(e) {
     document.getElementById("phantomobject").focus();
 }
 
-function delete_by_id(theid) {
+function delete_by_id(theid, thereason) {
+    // reasons to delete something:  author wants it deleted, it is empty, ...
         // first delete the specific object
+    console.log("deleting by theid", theid, "with content", internalSource[theid]);
     var deleted_content = internalSource[theid];
     var parent_and_location = deleted_content["parent"];
     delete internalSource[theid];
@@ -1079,16 +1081,24 @@ function delete_by_id(theid) {
         } else {
             current_editing["level"] -= 1;
         }
-        delete_by_id(parent_and_location[0])
+    //    delete_by_id(parent_and_location[0], "choice")
+        delete_by_id(parent_and_location[0], thereason)
     } else {  // else, because the parent is going to be deleted, so no need to delete the child
         // delete from the html
     //    alert("deleting " + deleted_content["ptxtag"]);
  //       document.getElementById(theid).remove()
 
-        document.getElementById("edit_menu_holder").remove()
-        document.getElementById(theid).setAttribute("id", "deleting");
-        document.getElementById("deleting").removeAttribute("data-editable");  // so it is invisible to next-editable-of
-        setTimeout(() => {  document.getElementById("deleting").remove(); }, 1000);
+        if (thereason == "empty") {
+            document.getElementById(theid).remove()
+        } else {
+            document.getElementById("edit_menu_holder").remove()
+            document.getElementById(theid).setAttribute("id", "deleting");
+            document.getElementById("deleting").removeAttribute("data-editable");  // so it is invisible to next-editable-of
+            setTimeout(() => {  document.getElementById("deleting").remove(); }, 600);
+        }
+
+  //  ERROR:  if deleting that element leaves an empty content or statement, then delete the parent
+  //  (in HTML and internalSource)
 
         // update current_editing
         var editing_parent = current_editing["tree"][ current_level - 1 ][ current_editing["location"][ current_level - 1 ] ];
@@ -1231,9 +1241,10 @@ function assemble_internal_version_changes() {
         // does the textbox contain more than one paragraph?
         var paragraph_content_list = paragraph_content.split("<div><br></div>");
         console.log("there were", paragraph_content_list.length, "paragraphs, but some may be empty");
-//        paragraph_content_list = paragraph_content_list.filter(item => item);  // remove empty paragraphs
-//        console.log("there are", paragraph_content_list.length, "paragraphs");
-   //     var num_paragraphs = paragraph_content_list.length;
+        for (var j=0; j < paragraph_content_list.length; ++j) {
+
+            console.log("paragraph", j, "begins", paragraph_content_list[j].substring(0,20))
+        }
 
         var parent_and_location = [object_being_edited.getAttribute("data-parent_id"), object_being_edited.getAttribute("data-parent_component")];
         var this_arrangement_of_objects = "";
@@ -1243,7 +1254,10 @@ function assemble_internal_version_changes() {
         var prev_id = object_being_edited.getAttribute("data-source_id");
         console.log("prev_id", prev_id);
         console.log("which is", prev_id);
-        for(var j=0; j < paragraph_content_list.length; ++j) {
+
+        var  paragraph_content_list_trimmed = [];
+
+        for (var j=0; j < paragraph_content_list.length; ++j) {
             // probably each paragraph is wrapped in meaningless div tags
             var this_paragraph_contents_raw = paragraph_content_list[j];
             this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/<\/div><div>/g, "\n");
@@ -1253,18 +1267,48 @@ function assemble_internal_version_changes() {
             this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/ +<br>/g, "\n");
             this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/<br>/g, "\n");
             this_paragraph_contents_raw = this_paragraph_contents_raw.trim();
-            if (!this_paragraph_contents_raw) { console.log("empty paragraph"); continue }
+            if (!this_paragraph_contents_raw) { console.log("empty paragraph") }
+            else { paragraph_content_list_trimmed.push(this_paragraph_contents_raw) }
        //     console.log("this_paragraph_contents_raw", this_paragraph_contents_raw);
             console.log("done transforming paragraph", j, "with object_being_edited",object_being_edited);
-       //     if (j == 0 && (prev_id = object_being_edited.getAttribute("data-source_id"))) {
+            console.log("which has contents", this_paragraph_contents_raw.substring(0,20))
+        }
+
+        if (!paragraph_content_list_trimmed.length ) { 
+                // empty, so insert it and delete it later
+            nature_of_the_change = "empty";
+            paragraph_content_list_trimmed = [""];
+        }
+//            delete_by_id(prev_id);
+//            return ["", "", ["",""]]
+          // which means delete it, and the reference in its parent
+//          delete internalSource[prev_id];
+//          var object_before = new RegExp('(<&>' + prev_id + '<;>)');
+//          var previous_arrangement = internalSource[parent_and_location[0]][parent_and_location[1]];
+//          var new_arrangement = previous_arrangement.replace(object_before, '');
+//          if ((parent_and_location[1] == "content" || parent_and_location[1] == "statement") && !new_arrangement) {
+//              alert("empty p in content " + parent_and_location[0] + " of " + parent_and_location[1]);
+//              delete internalSource[parent_and_location[0]]
+//          } else {
+//              alert("random empty p")
+//          }
+
+        for (var j=0; j < paragraph_content_list_trimmed.length; ++j) {
+
+            console.log("_trimmed paragraph", j, "begins", paragraph_content_list_trimmed[j].substring(0,20))
+        }
+        for (var j=0; j < paragraph_content_list_trimmed.length; ++j) {
+            var this_paragraph_contents = paragraph_content_list_trimmed[j];
+            console.log("this_paragraph_contents", this_paragraph_contents.substring(0,20));
             if (j == 0 && prev_id) {
                 if (prev_id in internalSource) {
                     // the content is referenced, so we update the referenced content
                        // need to check internal content, such as em or math
-                    this_paragraph_contents = extract_internal_contents(this_paragraph_contents_raw);
+                    this_paragraph_contents = extract_internal_contents(this_paragraph_contents);
                     if (internalSource[prev_id]["content"] != this_paragraph_contents) {
                         internalSource[prev_id]["content"] = this_paragraph_contents;
-                        recent_editing_actions.unshift("changed paragraph " + prev_id)
+                        recent_editing_actions.unshift("changed paragraph " + prev_id);
+                        console.log("changed content of", prev_id)
                     }
                     possibly_changed_ids_and_entry.push([prev_id, "content"]);
                     this_arrangement_of_objects = internalSource[parent_and_location[0]][parent_and_location[1]];
@@ -1283,16 +1327,18 @@ function assemble_internal_version_changes() {
                 this_arrangement_of_objects = this_arrangement_of_objects.replace(object_before, '$1' + '\n<&>' + this_object_label + '<;>');
                 prev_id = this_object_label;
                 
-                this_paragraph_contents = extract_internal_contents(this_paragraph_contents_raw);
+                this_paragraph_contents = extract_internal_contents(this_paragraph_contents);
                 this_object_internal["content"] = this_paragraph_contents;
                 internalSource[this_object_label] = this_object_internal
+                console.log("just inserted at label", this_object_label, "content starting", this_paragraph_contents.substring(0,11));
                 recent_editing_actions.unshift("added paragraph " + this_object_label);
+// here is where we can record that somethign is empty, hence should be deleted
                 possibly_changed_ids_and_entry.push([this_object_label, "content"]);
             }
-        }
-        console.log("this_arrangement_of_objects was",  internalSource[parent_and_location[0]][parent_and_location[1]]);
-        internalSource[parent_and_location[0]][parent_and_location[1]] = this_arrangement_of_objects;
-        console.log("this_arrangement_of_objects is", this_arrangement_of_objects);
+          }
+          console.log("this_arrangement_of_objects was",  internalSource[parent_and_location[0]][parent_and_location[1]]);
+          internalSource[parent_and_location[0]][parent_and_location[1]] = this_arrangement_of_objects;
+          console.log("this_arrangement_of_objects is", this_arrangement_of_objects);
     } else if (object_being_edited.tagName == "INPUT") {
 
   // current code assume the INPUT is a title.  Other cases?
@@ -1311,7 +1357,7 @@ function assemble_internal_version_changes() {
         possibly_changed_ids_and_entry.push([owner_of_change, "creator"]);
 
     } else {
-        alert("don;t know how to assemble_internal_version_changes of", object_being_edited.tagName)
+        alert("don;t know how to assemble internal_version_changes of", object_being_edited.tagName)
     }
     console.log("finished assembling internal version, which is now:",internalSource);
     return [nature_of_the_change, location_of_change, possibly_changed_ids_and_entry]
@@ -1327,7 +1373,7 @@ function expand_condensed_source_html(text, context) {
             return text.replace(/<&>(.*?)<;>/g,expand_condensed_src_html)
          }
     } else {
-    console.log("returning text XX" + text + "YY");
+    console.log("returning text XX" + text.substring(0,17) + "YY");
     console.log("returning from expand_condensed_source_html");
     return text
     }
@@ -1520,6 +1566,10 @@ function insert_html_version(these_changes) {
     // we make HTML version of the objects with ids possibly_changed_ids_and_entry,
     // and then insert those into the page.  
 
+
+
+// here is where we detect deleting?
+// or is that after this function is done?
     if (nature_of_the_change != "replace") {
         console.log("should be replace, since it is the edit form we are replacing");
         alert("should be replace, since it is the edit form we are replacing")
@@ -1541,7 +1591,7 @@ function insert_html_version(these_changes) {
             }
             object_as_html.setAttribute("tabindex", -1);
             object_as_html.setAttribute("id", this_object_id);
-            console.log("now making inner htmh", this_object[this_object_entry]);
+            console.log("now making inner htmh", this_object[this_object_entry].substring(0,12));
             object_as_html.innerHTML = ptx_to_html(this_object[this_object_entry]);
             location_of_change.insertAdjacentElement('beforebegin', object_as_html);
         //    current_editing["tree"][current_editing["level"]] = next_editable_of(location_of_change.parentElement, "children");
@@ -1611,6 +1661,10 @@ function local_editing_action(e) {
             these_changes = assemble_internal_version_changes();
             console.log("    CCC these_changes", these_changes);
             final_added_object = insert_html_version(these_changes);
+            if (these_changes[0] == "empty") {
+                console.log("            going to delete", these_changes[2][0]);
+                delete_by_id(these_changes[2][0][0], "empty")
+            }
             // if there is an editing paragraph ahead, go there.  Otherwise menu the last thing added
             if (document.querySelector('.paragraph_input')) {
                 next_textarea = document.querySelector('.paragraph_input');
@@ -1648,6 +1702,9 @@ function local_editing_action(e) {
                 console.log("going to make the new tree from parent of", this_parent, "which is", editing_parent, "and has children", next_editable_of(editing_parent, "children"));
                 current_editing["tree"][current_editing["level"]] = next_editable_of(editing_parent, "children");
                 console.log("updated tree", current_editing["tree"]);
+                edit_menu_from_current_editing("entering");
+            } else if ( document.getElementById("actively_editing")) {
+                 document.getElementById("actively_editing").remove();
                 edit_menu_from_current_editing("entering");
             } else {
                 edit_menu_from_current_editing("entering");
@@ -1731,7 +1788,9 @@ function main_menu_navigator(e) {  // we are not currently editing
             e.preventDefault();
             // go to previous sibling, or up one if on first sibling
             console.log("Arrow Up:", "current_location", current_location, "current_level", current_level);
-            if (current_location == 0) {
+            if (theMotion == "stay") {  // about to leave, to return to the top of that region
+                edit_menu_from_current_editing("entering")
+            } else if (current_location == 0) {
                 if (!current_level) { // already at the top, so nowhere to go, so do nothing
                     console.log("at the top, so can't go up");
                     return ""
@@ -2027,7 +2086,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                     current_env = document.getElementById('edit_menu_holder').parentElement;
                     console.log("current_env", current_env);
                     current_env_id = current_env.id;
-                    delete_by_id(current_env_id)
+                    delete_by_id(current_env_id, "choice")
             } else if (dataAction == "move-local") {
                     current_env = document.getElementById('edit_menu_holder').parentElement;
                     console.log("current_env", current_env);
