@@ -3294,7 +3294,9 @@ label.incorrect .feedback {
     left: 15em;
     bottom: 1.5em;
     z-index: 1000;
+/*
     display: inline;
+*/
 }
 /*
 article > #edit_menu_holder {
@@ -3341,35 +3343,55 @@ p > #edit_menu_holder {
 #enter_choice {
     padding: 0.25em 0.5em 0 0.5em;
     background: yellow;
-    bottom: 1.2em;
+    bottom: -1.2em;
     border-radius: 0.5em 0.5em 0 0; 
     font-style: italic;
 }
 .may_enter #enter_choice {
     background: #ccccee;
 }
+.may_enter {
+    box-shadow: -10px -10px 5px #ccccee;
+    margin-top: 1.25em;
+    background: #eeeeff !important;
+}
+.may_enter > [data-editable] {
+    background: #feeedf !important;
+}
+.may_enter > [data-editable="99"] {
+    background: #ffffdd !important;
+}
+
 p > #edit_menu_holder > #enter_choice {
-    bottom: -2.8em;
+    bottom: -4.2em;
 }
 blockquote > #edit_menu_holder > #enter_choice {
-    bottom: -1.0em;
+    bottom: -1.2em;
+}
+blockquote.may_leave + #edit_menu_holder > #enter_choice {
+    bottom: -2.3em;
 }
 article.project-like > #edit_menu_holder > #enter_choice {
-    bottom: 0;
+    bottom: -0.5em;
 }
+/*
 article.project-like > ol > #edit_menu_holder > #enter_choice {
-    bottom: -0.9em;
+    bottom: -1.3em;
 }
+*/
 .pretext-content section article.project-like.may-enter > .heading,
 .pretext-content section article.project-like.may-leave > .heading {
     background-color: inherit;
 }
 
 ol > #edit_menu_holder > #enter_choice {
-    bottom: 2.8em;
+    bottom: -1.3em;
+}
+ol.may_leave + #edit_menu_holder > #enter_choice {
+    bottom: -3.3em;
 }
 li > p > #edit_menu_holder > #enter_choice {
-    bottom: -2.8em;
+    bottom: -4.1em;
 }
 #enter_choice[data-location="inline"] {
     bottom: -0.2em;
@@ -3400,10 +3422,10 @@ li > #edit_menu_holder {
     font-style: italic;
 }
 section.may_leave + #edit_menu_holder #enter_choice {
-    bottom: -3.0em;
+    bottom: -3.3em;
 }
 article.may_leave + #edit_menu_holder #enter_choice {
-    bottom: -2em;
+    bottom: -2.3em;
 }
 .may_leave + #edit_menu_holder #enter_choice li {
     padding: 0;
@@ -3482,12 +3504,6 @@ article.may_leave + #edit_menu_holder #enter_choice {
     margin-top: 1.25em;
     background: #ffffee;
 }
-.may_enter {
-    box-shadow: -10px -10px 5px #ccccee;
-    margin-top: 1.25em;
-    background: #eeeeff !important;
-}
-
 .may_select > p:first-of-type {
     margin-top: 0;
 }
@@ -3570,7 +3586,7 @@ article.may_leave + #edit_menu_holder #enter_choice {
     margin-top: 0;
 }
 .pretext-content #deleting {
-    transition: all 1.0s;
+    transition: all 0.5s;
     background: #666;
     height: 5em;
     margin-right: 20em;
