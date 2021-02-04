@@ -3257,8 +3257,22 @@ label.incorrect .feedback {
     display: inline-block;
     vertical-align: top;
 }
+/*
 .pretext-content .exercise-wrapper form {
      max-width: 95%;
+}
+*/
+.pretext-content .exercise-wrapper > p:first-child,
+.pretext-content .exercisegroup .exercise-wrapper > p:first-child {
+    margin-top: 0;
+    display: inline;
+}
+/* next is realted to having exercises start in-line with their exercise number,
+   including when a static WW problem is made interactive */
+/* not sure this was the right way to do it */
+.pretext-content .heading + .exercise-wrapper {
+    display: inline-block;
+    width: 90%;
 }
 
 /*  does not work as intended in Chrome dark mode 
