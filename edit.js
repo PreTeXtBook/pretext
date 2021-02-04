@@ -728,7 +728,9 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
     return edit_placeholder
 }
 
-function edit_in_place(obj) {
+function edit_in_place(obj, oldornew) {
+    // currentlt old_or_new is onlu use as "new" for a new li, so that we know
+    // to immediately make a new li to edit
 
     console.log("in edit in place");
     if (thisID = obj.getAttribute("id")) {
@@ -753,6 +755,7 @@ function edit_in_place(obj) {
       if (new_tag == "p") {
         var this_content_container = document.createElement('div');
         this_content_container.setAttribute('id', "actively_editing");
+        this_content_container.setAttribute('data-age', oldornew);
         $("#" + thisID).replaceWith(this_content_container);
 
         var idOfEditContainer = thisID + '_input';
@@ -797,6 +800,7 @@ function edit_in_place(obj) {
         paragraph_editable.setAttribute('contenteditable', 'true');
         paragraph_editable.setAttribute('class', 'eeee text_source paragraph_input');
         paragraph_editable.setAttribute('id', idOfEditText);
+        paragraph_editable.setAttribute('data-age', oldornew);
 //        paragraph_editable.setAttribute('data-source_id', thisID);
 //        paragraph_editable.setAttribute('data-parent_id', internalSource[thisID]["parent"][0]);
 //        paragraph_editable.setAttribute('data-parent_component', internalSource[thisID]["parent"][1]);
@@ -824,6 +828,7 @@ function edit_in_place(obj) {
           console.log("list edit in place", obj)
           var this_content_container = document.createElement('ol');
           this_content_container.setAttribute('id', "actively_editing");
+          this_content_container.setAttribute('data-age', oldornew);
           this_content_container.setAttribute('data-source_id', thisID);
           this_content_container.setAttribute('data-parent_id', internalSource[thisID]["parent"][0]);
           this_content_container.setAttribute('data-parent_component', internalSource[thisID]["parent"][1]);
@@ -848,6 +853,7 @@ function edit_in_place(obj) {
         var objecttype = object_class_of(new_tag);
         var this_content_container = document.createElement('div');
         this_content_container.setAttribute('id', "actively_editing");
+        this_content_container.setAttribute('data-age', oldornew);
         this_content_container.setAttribute('data-objecttype', objecttype);
 
         var creator = standard_creator_form(new_id);
@@ -1219,6 +1225,12 @@ function save_internal_cont(match, contains_id, the_contents) {
 function assemble_internal_version_changes() {
     console.log("in assemble_internal_version_changes");
     console.log("current active element to be saved", document.activeElement);
+    console.log("which has parent", document.activeElement.parentElement);
+    console.log("whose age is", document.activeElement.parentElement.getAttribute("data-age"));
+
+    var oldornew = document.activeElement.parentElement.getAttribute("data-age");
+    if (!oldornew) { oldornew = document.activeElement.getAttribute("data-age") }
+    console.log("    OLDorNEW", oldornew);
 
     var possibly_changed_ids_and_entry = [];
     var nature_of_the_change = "";
@@ -1310,7 +1322,7 @@ function assemble_internal_version_changes() {
                         recent_editing_actions.unshift("changed paragraph " + prev_id);
                         console.log("changed content of", prev_id)
                     }
-                    possibly_changed_ids_and_entry.push([prev_id, "content"]);
+                    possibly_changed_ids_and_entry.push([prev_id, "content", oldornew]);
                     this_arrangement_of_objects = internalSource[parent_and_location[0]][parent_and_location[1]];
                 } else {
                     console.log("error:  existing tag from input", prev_id, "not in internalSource")
@@ -1333,7 +1345,7 @@ function assemble_internal_version_changes() {
                 console.log("just inserted at label", this_object_label, "content starting", this_paragraph_contents.substring(0,11));
                 recent_editing_actions.unshift("added paragraph " + this_object_label);
 // here is where we can record that somethign is empty, hence should be deleted
-                possibly_changed_ids_and_entry.push([this_object_label, "content"]);
+                possibly_changed_ids_and_entry.push([this_object_label, "content", "new"]);
             }
           }
           console.log("this_arrangement_of_objects was",  internalSource[parent_and_location[0]][parent_and_location[1]]);
@@ -1360,13 +1372,14 @@ function assemble_internal_version_changes() {
         alert("don;t know how to assemble internal_version_changes of", object_being_edited.tagName)
     }
     console.log("finished assembling internal version, which is now:",internalSource);
+    console.log("    NUMBER of things chagnged:", possibly_changed_ids_and_entry.length);
     return [nature_of_the_change, location_of_change, possibly_changed_ids_and_entry]
 }
 
 function expand_condensed_source_html(text, context) {
     console.log("iiiiiii     in expand_condensed_source_html");
     if (text.includes("<&>")) {
-        console.log("     eeeeeeeeee      expand_condensed_source_html", text);
+        console.log("     qqqqq      expand_condensed_source_html", text);
         if (context == "edit") {
             return text.replace(/<&>(.*?)<;>/g,expand_condensed_src_edit)
          } else {
@@ -1551,9 +1564,9 @@ function html_from_internal_id(the_id, is_inner) {
 
 function insert_html_version(these_changes) {
 
-    nature_of_the_change = these_changes[0];
-    location_of_change = these_changes[1];
-    possibly_changed_ids_and_entry = these_changes[2];
+    var nature_of_the_change = these_changes[0];
+    var location_of_change = these_changes[1];
+    var possibly_changed_ids_and_entry = these_changes[2];
 
     console.log("nature_of_the_change", nature_of_the_change);
     console.log("location_of_change", location_of_change);
@@ -1576,9 +1589,12 @@ function insert_html_version(these_changes) {
     }
 
     var object_as_html = "";
+    var this_object_id, this_object_entry, this_object_oldornew, this_object;
+
     for (var j=0; j < possibly_changed_ids_and_entry.length; ++j) {
         this_object_id = possibly_changed_ids_and_entry[j][0];
         this_object_entry = possibly_changed_ids_and_entry[j][1];
+        this_object_oldornew = possibly_changed_ids_and_entry[j][2];
         this_object = internalSource[this_object_id];
         console.log(j, "this_object", this_object);
         if (this_object["ptxtag"] == "p" || this_object["ptxtag"] == "li") {
@@ -1591,6 +1607,7 @@ function insert_html_version(these_changes) {
             }
             object_as_html.setAttribute("tabindex", -1);
             object_as_html.setAttribute("id", this_object_id);
+            object_as_html.setAttribute("data-age", this_object_oldornew);
             console.log("now making inner htmh", this_object[this_object_entry].substring(0,12));
             object_as_html.innerHTML = ptx_to_html(this_object[this_object_entry]);
             location_of_change.insertAdjacentElement('beforebegin', object_as_html);
@@ -1692,7 +1709,7 @@ function local_editing_action(e) {
 
                 }
                 
-                console.log("here is where we need ti pudate current_editing", "parent:", this_parent,"which is",document.getElementById(this_parent[0]), "level:", current_editing["level"], "loation:", current_editing["location"], "tree:", current_editing["tree"]);
+                console.log("here is where we need to update current_editing", "parent:", this_parent,"which is",document.getElementById(this_parent[0]), "level:", current_editing["level"], "loation:", current_editing["location"], "tree:", current_editing["tree"]);
                 $("#actively_editing").remove();
 
               // parents_parent is wrong, because the editable siblings do not live at the same level,
@@ -1709,6 +1726,18 @@ function local_editing_action(e) {
             } else {
                 edit_menu_from_current_editing("entering");
             }
+
+            console.log("check if final_added_object", final_added_object, "has parent li");
+            console.log("final_added_object.parentElement", final_added_object.parentElement);
+            console.log("is it new", final_added_object.parentElement.getAttribute("data-age") == "new");
+
+            if (final_added_object.getAttribute("data-age")) {
+                console.log("THIS", final_added_object.tagName,"is", final_added_object.getAttribute("data-age"))
+            } else {
+                var relevant_parent = final_added_object.closest("[data-age]");
+                console.log("THAT", final_added_object.tagName,"has a parent which is a(n)", relevant_parent.tagName, "which is", relevant_parent.getAttribute("data-age"))
+            }
+
             save_edits()
         }  //  esc or enter enter enter
         console.log ("processed an enter");
@@ -1931,7 +1960,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                 previous_menu_item.focus();
             }
       }
-      else if (keyletters.includes(e.code)) {
+        else if (keyletters.includes(e.code)) {
         key_hit = e.code.toLowerCase().substring(3);  // remove forst 3 characters, i.e., "key"
         console.log("key_hit", key_hit);
         theChooseCurrent = document.getElementById('choose_current');
@@ -2014,7 +2043,7 @@ function main_menu_navigator(e) {  // we are not currently editing
           else if (dataAction) {
             if (dataAction == "edit") {
                console.log("going to edit", object_of_interest);
-               edit_in_place(object_of_interest);
+               edit_in_place(object_of_interest, "old");
             } else if (dataAction == "change-env-to") {
                  // shoudl use dataEnv ?
                     var new_env = theChooseCurrent.getAttribute("data-env");
@@ -2121,14 +2150,18 @@ function main_menu_navigator(e) {  // we are not currently editing
               // we just selected an action, so do it
                       // that probably involves adding something before or after a given object
                   console.log("making a new", dataEnv, "within", dataEnvParent);
-                  object_near_new_object = object_of_interest;
+              //    object_near_new_object = object_of_interest;
                   var before_after = $("#edit_menu_holder > #edit_menu > .chosen").attr("data-location");
-                  console.log("create_object_to_edit",dataEnv, object_near_new_object, before_after);
-                  var new_obj = create_object_to_edit(dataEnv, object_near_new_object, before_after);
+              //    console.log("create_object_to_edit",dataEnv, object_near_new_object, before_after);
+              //    var new_obj = create_object_to_edit(dataEnv, object_near_new_object, before_after);
+                  console.log("create_object_to_edit",dataEnv, object_of_interest, before_after);
+                  var new_obj = create_object_to_edit(dataEnv, object_of_interest, before_after);
                   console.log("new_obj", new_obj);
-                  edit_in_place(new_obj);
-                  object_near_new_object.classList.remove("may_select");
-                  object_near_new_object.classList.remove("may_enter");
+                  edit_in_place(new_obj, "new");
+              //    object_near_new_object.classList.remove("may_select");
+              //    object_near_new_object.classList.remove("may_enter");
+                  object_of_interest.classList.remove("may_select");
+                  object_of_interest.classList.remove("may_enter");
                   document.getElementById('edit_menu_holder').remove();
               } else {
                   console.log("Error: unknown dataEnv", dataEnv);
@@ -2144,7 +2177,7 @@ function main_menu_navigator(e) {  // we are not currently editing
       else {
         console.log("key that is not meaningful when navigating a menu:", e.code)
     }
-}
+    }
 }
 
 console.log("adding tab listener");
