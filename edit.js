@@ -32,6 +32,8 @@ var menu_neutral_background = "#ddb";
 var menu_active_background = "#fdd";
 
 var recent_editing_actions = [];  // we unshift to this, so most recent edit is first.
+     // currently just a human-readable list
+var current_editing_actions = [];
 var old_content = {};   // to hold old versions of changed materials
 
 // what will happen with internationalization?
@@ -134,7 +136,7 @@ function inner_menu_for() {
 //    console.log("recent_editing_actions", recent_editing_actions, "xx", recent_editing_actions != []);
     var the_past_edits = [];
     if(recent_editing_actions.length) {
-         the_past_edits = recent_editing_actions.map(x => [x])}
+         the_past_edits = recent_editing_actions.map(x => [x.join(" ")])}
     else { the_past_edits = [["no chnages yet"]] }
 
  //   console.log("the_past_edits", the_past_edits);
@@ -245,6 +247,8 @@ console.log("then here");
 
 function make_current_editing_from_id(theid) {
 
+//current_editing keeps track of where we are in the tree.  maybe need a better name?
+
     console.log("make_current_editing_from_id", theid);
     // the existing current_editing know the top level id
     var top_id = current_editing["tree"][0][0].id;
@@ -327,7 +331,7 @@ function menu_options_for(COMPONENT, level) {
          console.log("C0 menu_options_for", component);
          var m_d_options = [
              ["move-local", "Move within this page"],
-             ["move-global", "Move elsewhere (not implemented yet)"],
+             ["move-global", "Move to another page (not implemented yet)"],
              ["delete", "Delete"]
          ];
          var this_menu = "";
@@ -577,7 +581,8 @@ function local_menu_for(this_obj_id) {
     local_menu_holder.setAttribute('id', 'local_menu_holder');
     local_menu_holder.setAttribute('tabindex', '-1');
     console.log("adding local menu for", this_obj_id);
-    document.getElementById(this_obj_id).insertAdjacentElement("beforebegin", local_menu_holder);
+//    document.getElementById(this_obj_id).insertAdjacentElement("beforebegin", local_menu_holder);
+    document.getElementById(this_obj_id).insertAdjacentElement("afterbegin", local_menu_holder);
     
     var enter_option = document.createElement('ol');
     enter_option.setAttribute('id', 'edit_menu');
@@ -621,6 +626,7 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
     console.log("create_object_to_edit", new_tag, new_objects_sibling, relative_placement);
               // first insert a placeholder to edit-in-place
     var new_id = randomstring();
+    current_editing_actions.push(["new", new_tag, new_id]);
         // we won;t need all of these, so re-think when these are created
     var new_content_p_id = randomstring();  // section-like
     var new_statement_p_id = randomstring();  // theorem-like, definition-like, remark-like, example-like, exercise-like
@@ -933,7 +939,8 @@ function move_by_id_local(theid) {
     document.getElementById(theid).classList.remove("may_select");
 
     moved_content = internalSource[theid];
-    recent_editing_actions.unshift("moved " + moved_content["ptxtag"] + " " + theid);
+//    recent_editing_actions.unshift("moved " + moved_content["ptxtag"] + " " + theid);
+    current_editing_actions.push(["moved", moved_content["ptxtag"], theid]);
     moved_parent_and_location = moved_content["parent"];
     console.log("moving", theid);
     console.log("moved_parent_and_location", moved_parent_and_location);
@@ -954,9 +961,10 @@ function move_by_id_local(theid) {
     movement_location_neighbors = next_editable_of(current_editing["tree"][0][0], "inner-block");
     console.log("movement_location_neighbors", movement_location_neighbors);
     var foundit = false;
+    var movement_location_tmp = 0;
     for (var j=0; j < movement_location_neighbors.length; ++j) {
         if (movement_location_neighbors[j] == moving_object) {
-            movement_location = j;
+            movement_location_tmp = j;
                 // delete the one which is being moved, because
                 // we are making a list of slots to place it, and its slot will still be there
                 // isn't there a better way to delete one item from a list?
@@ -965,22 +973,32 @@ function move_by_id_local(theid) {
             break;
         }
     }
+
+    if (!foundit) { console.log("serious error:  trying to move an object that is not movable", theid) }
+
+    console.log("movement_location_tmp", movement_location_tmp);
     // a paragraph by itself in an item or a statement can have a new paragraph before or after it
     movement_location_options = [[movement_location_neighbors[0], "beforebegin"],
                                  [movement_location_neighbors[0], "afterend"]];
+    movement_location = 0;
+    var movement_location_ct = 2;
     for (var j=1; j < movement_location_neighbors.length; ++j) {
+        if (movement_location_tmp == j) { movement_location = movement_location_ct }
         if (movement_location_neighbors[j-1].parentElement == movement_location_neighbors[j].parentElement) {
+            movement_location_ct += 1;
             movement_location_options.push([movement_location_neighbors[j], "afterend"])
         } else {
+            movement_location_ct += 2;
             movement_location_options.push([movement_location_neighbors[j], "beforebegin"])
             movement_location_options.push([movement_location_neighbors[j], "afterend"])
         }
     }
+    console.log("movement_location_ct", movement_location_ct);
+    console.log("movement_location", movement_location);
+
     console.log("made", movement_location_options.length, "movement_location_options", movement_location_options);
     console.log("from", movement_location_neighbors.length, "movement_location_neighbors", movement_location_neighbors);
  
-    if (!foundit) { console.log("serious error:  trying to move an object that is not movable", theid) }
-
     var current_parent_and_location = internalSource[theid]["parent"];
 
     var the_phantomobject = document.createElement('div');
@@ -1023,6 +1041,7 @@ function move_object(e) {
 
         // the html appears to be updated, but we still need to update both the internal source:
         var new_neighbor_id = new_anchor_and_position[0].id;
+        console.log("new_neighbor_id", new_neighbor_id);
         var new_neighbor_rel_pos = new_anchor_and_position[1];
         var [new_neighbor_parent, new_neighbor_location] = internalSource[new_neighbor_id]["parent"];
         var new_neighbor_in_context = internalSource[new_neighbor_parent][new_neighbor_location];
@@ -1070,7 +1089,8 @@ function delete_by_id(theid, thereason) {
     } else {
         old_content[theid] = [deleted_content]
     }
-    recent_editing_actions.unshift("deleted " + deleted_content["ptxtag"] + " " + theid);
+//    recent_editing_actions.unshift("deleted " + deleted_content["ptxtag"] + " " + theid);
+    current_editing_actions.push(["deleted ", deleted_content["ptxtag"], theid]);
         // update the parent of the object
     var current_level = current_editing["level"];
     var where_it_was = internalSource[parent_and_location[0]][ parent_and_location[1] ];
@@ -1174,7 +1194,13 @@ function local_menu_navigator(e) {
             console.log("setting focus on",next_menu_item);
             next_menu_item.focus();
         }
+//    } else if (e.code == "Escape") {
+//        if (document.getElementById('local_menu_holder')) {  // must be trying to exit local menu
+//            document.getElementById("local_menu_holder").remove()
+//            }
+//        main_menu_navigator(e)
     } else {
+        console.log("local_menu_navigator calling main_menu_navigator");
         main_menu_navigator(e)
     }
 }
@@ -1318,8 +1344,13 @@ function assemble_internal_version_changes() {
                        // need to check internal content, such as em or math
                     this_paragraph_contents = extract_internal_contents(this_paragraph_contents);
                     if (internalSource[prev_id]["content"] != this_paragraph_contents) {
+                        if (internalSource[prev_id]["content"]) {
+                            current_editing_actions.push(["changed", "p", prev_id]);
+                        } else {
+                            current_editing_actions.push(["new", "p", prev_id]);
+                        }
                         internalSource[prev_id]["content"] = this_paragraph_contents;
-                        recent_editing_actions.unshift("changed paragraph " + prev_id);
+                     //   recent_editing_actions.unshift("changed paragraph " + prev_id);
                         console.log("changed content of", prev_id)
                     }
                     possibly_changed_ids_and_entry.push([prev_id, "content", oldornew]);
@@ -1343,7 +1374,8 @@ function assemble_internal_version_changes() {
                 this_object_internal["content"] = this_paragraph_contents;
                 internalSource[this_object_label] = this_object_internal
                 console.log("just inserted at label", this_object_label, "content starting", this_paragraph_contents.substring(0,11));
-                recent_editing_actions.unshift("added paragraph " + this_object_label);
+             //   recent_editing_actions.unshift("added paragraph " + this_object_label);
+                current_editing_actions.push(["added", "p", this_object_label]);
 // here is where we can record that somethign is empty, hence should be deleted
                 possibly_changed_ids_and_entry.push([this_object_label, "content", "new"]);
             }
@@ -1364,8 +1396,13 @@ function assemble_internal_version_changes() {
         var component_being_changed = object_being_edited.getAttribute("data-component");
         console.log("component_being_changed", component_being_changed, "within", owner_of_change);
         // update the title of the object
+    //    recent_editing_actions.unshift("changed creator " + owner_of_change);
+        if (internalSource[owner_of_change][component_being_changed]) {
+            current_editing_actions.push(["changed", "creator", owner_of_change]);
+        } else {
+            current_editing_actions.push(["added", "creator", owner_of_change]);
+        }
         internalSource[owner_of_change][component_being_changed] = line_content;
-        recent_editing_actions.unshift("changed creator " + owner_of_change);
         possibly_changed_ids_and_entry.push([owner_of_change, "creator"]);
 
     } else {
@@ -1663,6 +1700,9 @@ function local_editing_action(e) {
             e.preventDefault();
             these_changes = assemble_internal_version_changes();
             final_added_object = insert_html_version(these_changes);
+            var most_recent_edit = current_editing_actions.pop();
+            recent_editing_actions.unshift(most_recent_edit);
+            console.log("most_recent_edit should be title change", most_recent_edit);
             console.log("final_added_object", final_added_object);
             document.getElementById("actively_editing_statement").focus();
       //      document.getElementById("actively_editing_statement").setSelectionRange(0,0);
@@ -1726,6 +1766,14 @@ function local_editing_action(e) {
             } else {
                 edit_menu_from_current_editing("entering");
             }
+
+            while (current_editing_actions.length) {
+                var most_recent_edit = current_editing_actions.pop();
+                // a theorem involves multiple additions, so make it appear so
+                if (current_editing_actions.length) { most_recent_edit[0] = " -" + most_recent_edit[0] }
+                recent_editing_actions.unshift(most_recent_edit);
+            }
+            console.log("      most_recent_edit", most_recent_edit);
 
             console.log("check if final_added_object", final_added_object, "has parent li");
             console.log("final_added_object.parentElement", final_added_object.parentElement);
@@ -1880,7 +1928,12 @@ function main_menu_navigator(e) {  // we are not currently editing
         var dataAction = theChooseCurrent.getAttribute("data-action");  // may be null
         var dataEnv = theChooseCurrent.getAttribute("data-env");  // may be null
         var dataEnvParent = theChooseCurrent.getAttribute("data-env-parent");  // may be null
-        var object_of_interest = document.getElementById("edit_menu_holder").parentElement;
+        var object_of_interest;
+        if (document.getElementById("edit_menu_holder")) {
+            object_of_interest = document.getElementById("edit_menu_holder").parentElement
+        } else {
+            object_of_interest = document.getElementById("local_menu_holder").parentElement
+        }
         current_level = current_editing["level"];
         current_location = current_editing["location"][current_level];
         current_siblings = current_editing["tree"][current_level];
@@ -1941,6 +1994,7 @@ function main_menu_navigator(e) {  // we are not currently editing
           else if (e.code == "Escape" || e.code == "ArrowLeft") {
             console.log("processing ESC");
             console.log("At ArrowLeft, level was", current_level, "xx", current_editing["level"], "with location",  current_editing["location"], "and tree", current_editing["tree"][current_level]);
+   // I think the next if can never be true, because of how to route keystrokes
             if (document.getElementById("local_menu_holder")) {  // hack for when the interface gets confused
                 document.getElementById("local_menu_holder").remove()
             }
@@ -2056,7 +2110,8 @@ function main_menu_navigator(e) {  // we are not currently editing
                     console.log("current envoronemnt", this_object_source);
                     var old_env = internalSource[id_of_object]["ptxtag"];
                     internalSource[id_of_object]["ptxtag"] = new_env;
-                    recent_editing_actions.unshift("changed " + old_env + " to " + new_env + " " + id_of_object);
+               //     recent_editing_actions.unshift("changed " + old_env + " to " + new_env + " " + id_of_object);
+                    current_editing_actions.push([old_env, new_env, id_of_object]);
                     console.log("the change was", "changed " + old_env + " to " + new_env + " " + id_of_object);
                     var the_whole_object = html_from_internal_id(id_of_object);
                     console.log("B: the_whole_object", the_whole_object);
