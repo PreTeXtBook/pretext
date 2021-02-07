@@ -25,7 +25,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:exsl="http://exslt.org/common"
     xmlns:str="http://exslt.org/strings"
-    extension-element-prefixes="exsl str"
+    xmlns:date="http://exslt.org/dates-and-times"
+    extension-element-prefixes="exsl date str"
 >
 
 <!-- This is the once-mythical pre-processor, though we prefer     -->
@@ -71,6 +72,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 3.  Overrides, customization of the assembly will typically   -->
 <!--     happen here, but can be converter-specific in some ways.  -->
 
+<!-- Timing debugging -->
+<xsl:param name="debug.assembly.time" select="'no'"/>
+<xsl:variable name="time-assembly" select="$debug.assembly.time = 'yes'"/>
 
 <!-- ############################## -->
 <!-- Source Assembly Infrastructure -->
@@ -104,12 +108,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- root element, as a result of the node-set() manufacture.  -->
 <xsl:variable name="assembly-rtf">
     <xsl:call-template name="assembly-warnings"/>
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: start assembly</xsl:message>
+    </xsl:if>
+    <!--  -->
     <xsl:apply-templates select="/" mode="assembly"/>
+    <!--  -->
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: end assembly</xsl:message>
+    </xsl:if>
+    <!--  -->
 </xsl:variable>
 <xsl:variable name="assembly" select="exsl:node-set($assembly-rtf)"/>
 
 <xsl:variable name="version-rtf">
     <xsl:apply-templates select="$assembly" mode="version"/>
+    <!--  -->
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: end version</xsl:message>
+    </xsl:if>
+    <!--  -->
 </xsl:variable>
 <xsl:variable name="version" select="exsl:node-set($version-rtf)"/>
 
