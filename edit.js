@@ -142,7 +142,7 @@ function inner_menu_for() {
 
  //   console.log("the_past_edits", the_past_edits);
 
-the_inner_menu = {
+var the_inner_menu = {
 "theorem-like": [["lemma"],
                  ["proposition"],
                  ["theorem"],
@@ -325,26 +325,28 @@ function standard_creator_form(object_id) {
     return creator_form
 }
 
-function menu_options_for(object_id, level) {
+function menu_options_for(object_id, component_type, level) {
         // this should be a function of the object, not just its tag
         //  p in li vs p child of section, for example
      var menu_for;
-     var component_tag = internalSource[object_id]["ptxtag"];
-     console.log("menu options for", object_id, "which is", internalSource[object_id]);
-     if (level == "base") { menu_for = base_menu_for }
-     else if (level == "move-or-delete") {
-         console.log("C0 menu_options_for", component_tag);
+
+     if (!component_type) { component_type = internalSource[object_id]["ptxtag"] }
+     console.log("component_tag", component_type);
+     if (level == "base") {
+         menu_for = base_menu_for
+     } else if (level == "move-or-delete") {
+         console.log("C0 menu options for", component_type);
          var m_d_options;
          var component_parent = internalSource[object_id]["parent"][0];
          var component_parent_tag = internalSource[component_parent]["ptxtag"];
-         if (component_tag == "p" && component_parent_tag == "li") {
+         if (component_type == "p" && component_parent_tag == "li") {
              m_d_options = [
                  ["move-local-p", "Move these words within this page"],
                  ["move-local-li", "Move this list item within this page"],
                  ["move-global", "Move this another page (not implemented yet)"],
                  ["delete", "Delete"]  // does it matter whether there are other p in this li?
              ];
-         } else if(component_tag == "p") {
+         } else if(component_type == "p") {
              m_d_options = [
                  ["move-local-p", "Move this text within this page"],
                  ["move-global", "Move to another page (not implemented yet)"],
@@ -369,11 +371,11 @@ function menu_options_for(object_id, level) {
          return this_menu
      }
      else if (level == "change") {
-         console.log("C1 menu_options_for", component_tag);
-         objectclass = object_class_of(component_tag);
+         console.log("C1 menu options for", component_type);
+         objectclass = object_class_of(component_type);
          console.log("which has class",objectclass);
          var equivalent_objects = renamable[objectclass].slice();
-         var replacement_list = removeItemFromList(equivalent_objects, component_tag);
+         var replacement_list = removeItemFromList(equivalent_objects, component_type);
          console.log("equivalent_objects", equivalent_objects);
          var this_menu = "";
          for (var i=0; i < replacement_list.length; ++i) {
@@ -386,9 +388,10 @@ function menu_options_for(object_id, level) {
          console.log("made this_menu", this_menu);
          return this_menu
      } else { menu_for = inner_menu_for() }
-     console.log("in menu_options_for", component_tag);
-     if (component_tag in menu_for) {
-         component_items = menu_for[component_tag]
+     console.log("C2 in menu options for", component_type, "or", object_id);
+     console.log("menu_for", menu_for);
+     if (component_type in menu_for) {
+         component_items = menu_for[component_type]
      } else {
          component_items = [["placeholder 1"], ["placeholder 2-like"], ["placeholder 3"], ["placeholder 4"], ["placeholder 5"]];
      }
@@ -407,7 +410,7 @@ function menu_options_for(object_id, level) {
              this_item_label = this_item[1];
          } 
          this_menu += '<li tabindex="-1" data-env="' + this_item_label + '"';
-         this_menu += ' data-env-parent="' + component_tag + '"';
+         this_menu += ' data-env-parent="' + component_type + '"';
          if (this_item_shortcut) { 
              this_menu += ' data-jump="' + this_item_name.charAt(0) + ' ' + this_item_shortcut + '"';
              if (this_item_name.match(/^[a-z]/i)) {
@@ -435,7 +438,7 @@ function menu_options_for(object_id, level) {
 }
 
 function top_menu_options_for(this_obj) {
-    console.log("top_menu_options_for aa", this_obj);
+    console.log("top menu options for aa", this_obj);
 
     var this_list = "";
 
@@ -610,7 +613,7 @@ function local_menu_for(this_obj_id) {
     var enter_option = document.createElement('ol');
     enter_option.setAttribute('id', 'edit_menu');
     
-    enter_option.innerHTML = menu_options_for(this_obj_id, "base");
+    enter_option.innerHTML = menu_options_for(this_obj_id, "XunusedX", "base");
 
     document.getElementById("local_menu_holder").insertAdjacentElement("afterbegin", enter_option);
 }
@@ -628,7 +631,7 @@ function next_editable_of(obj, relationship) {
       //  next_to_edit = $(obj).find('>li > [data-editable="99"], > .heading > [data-editable="99"], > [data-editable="99"]')
         next_to_edit = $(obj).find('> li > [data-editable], > .heading > [data-editable], > [data-editable]')
     } else if (relationship == "outer-block") {  // for example, a direct child of a section
-        next_to_edit = $(obj).find('section > [data-editable]')
+        next_to_edit = $(obj).find(' > [data-editable]')
     } else if (relationship == "inner-block") {  // typically a paragraph
         next_to_edit = $(obj).find('section > [data-editable], [data-editable="99"]')
     } else if (relationship == "li-only") {  // typically a paragraph
@@ -967,7 +970,6 @@ function move_by_id_local(theid, thehandleid) {
 
     moved_content = internalSource[theid];
     moved_content_tag = moved_content["ptxtag"];
-//    recent_editing_actions.unshift("moved " + moved_content["ptxtag"] + " " + theid);
     current_editing_actions.push(["moved", moved_content_tag, theid]);
     moved_parent_and_location = moved_content["parent"];
     console.log("moving", theid);
@@ -1118,6 +1120,9 @@ function move_object(e) {
         // and the navigation information
         make_current_editing_from_id(handle_of_moving_object);
 
+        var most_recent_edit = current_editing_actions.pop();
+        recent_editing_actions.unshift(most_recent_edit);
+
         edit_menu_from_current_editing("entering");
         return
 
@@ -1150,7 +1155,6 @@ function delete_by_id(theid, thereason) {
     } else {
         old_content[theid] = [deleted_content]
     }
-//    recent_editing_actions.unshift("deleted " + deleted_content["ptxtag"] + " " + theid);
     current_editing_actions.push(["deleted ", deleted_content["ptxtag"], theid]);
         // update the parent of the object
     var current_level = current_editing["level"];
@@ -1168,7 +1172,6 @@ function delete_by_id(theid, thereason) {
         } else {
             current_editing["level"] -= 1;
         }
-    //    delete_by_id(parent_and_location[0], "choice")
         delete_by_id(parent_and_location[0], thereason)
     } else {  // else, because the parent is going to be deleted, so no need to delete the child
         // delete from the html
@@ -1388,7 +1391,6 @@ function assemble_internal_version_changes() {
             nature_of_the_change = "empty";
             paragraph_content_list_trimmed = [""];
         }
-//            delete_by_id(prev_id);
 //            return ["", "", ["",""]]
           // which means delete it, and the reference in its parent
 //          delete internalSource[prev_id];
@@ -1421,7 +1423,6 @@ function assemble_internal_version_changes() {
                             current_editing_actions.push(["new", "p", prev_id]);
                         }
                         internalSource[prev_id]["content"] = this_paragraph_contents;
-                     //   recent_editing_actions.unshift("changed paragraph " + prev_id);
                         console.log("changed content of", prev_id)
                     }
                     possibly_changed_ids_and_entry.push([prev_id, "content", oldornew]);
@@ -1445,7 +1446,6 @@ function assemble_internal_version_changes() {
                 this_object_internal["content"] = this_paragraph_contents;
                 internalSource[this_object_label] = this_object_internal
                 console.log("just inserted at label", this_object_label, "content starting", this_paragraph_contents.substring(0,11));
-             //   recent_editing_actions.unshift("added paragraph " + this_object_label);
                 current_editing_actions.push(["added", "p", this_object_label]);
 // here is where we can record that somethign is empty, hence should be deleted
                 possibly_changed_ids_and_entry.push([this_object_label, "content", "new"]);
@@ -1467,7 +1467,6 @@ function assemble_internal_version_changes() {
         var component_being_changed = object_being_edited.getAttribute("data-component");
         console.log("component_being_changed", component_being_changed, "within", owner_of_change);
         // update the title of the object
-    //    recent_editing_actions.unshift("changed creator " + owner_of_change);
         if (internalSource[owner_of_change][component_being_changed]) {
             current_editing_actions.push(["changed", "creator", owner_of_change]);
         } else {
@@ -1792,6 +1791,7 @@ function local_editing_action(e) {
             if (these_changes[0] == "empty") {
                 console.log("            going to delete", these_changes[2][0]);
                 delete_by_id(these_changes[2][0][0], "empty")
+                current_editing_actions.pop();   // content was empty, so there is no editing action
             }
             // if there is an editing paragraph ahead, go there.  Otherwise menu the last thing added
             if (document.querySelector('.paragraph_input')) {
@@ -1858,6 +1858,13 @@ function local_editing_action(e) {
             }
 
             save_edits()
+
+            // is this in the right place?
+            console.log("most_recent_edit", most_recent_edit);
+            if (most_recent_edit[1] == "li") {  // added to a list, so try adding again
+                var new_obj = create_object_to_edit("li", document.getElementById(most_recent_edit[2]), "afterend")
+                edit_in_place(new_obj, "new");
+            }
         }  //  esc or enter enter enter
         console.log ("processed an enter");
     } //  esc or enter
@@ -2068,21 +2075,22 @@ function main_menu_navigator(e) {  // we are not currently editing
    // I think the next if can never be true, because of how to route keystrokes
             if (document.getElementById("local_menu_holder")) {  // hack for when the interface gets confused
                 document.getElementById("local_menu_holder").remove()
-            }
-            console.log("W4 theChooseCurrent", theChooseCurrent);
-            // need to go up one level in the menu
-            var previous_menu_item = theChooseCurrent.parentElement.parentElement;  // li > ol > li
-            if (previous_menu_item.id == "edit_menu_holder") {
-                var thenewchoice = '<span id="enter_choice" data-location="next">';
-                thenewchoice += 'edit or add nearby';
-                thenewchoice += '</span>';
-                previous_menu_item.innerHTML = thenewchoice
             } else {
-                theChooseCurrent.parentElement.remove();
-                previous_menu_item.classList.remove('chosen');
-                previous_menu_item.parentElement.classList.remove('past');
-                previous_menu_item.setAttribute("id", "choose_current");
-                previous_menu_item.focus();
+                console.log("W4 theChooseCurrent", theChooseCurrent);
+                // need to go up one level in the menu
+                var previous_menu_item = theChooseCurrent.parentElement.parentElement;  // li > ol > li
+                if (previous_menu_item.id == "edit_menu_holder") {
+                    var thenewchoice = '<span id="enter_choice" data-location="next">';
+                    thenewchoice += 'edit or add nearby';
+                    thenewchoice += '</span>';
+                    previous_menu_item.innerHTML = thenewchoice
+                } else {
+                    theChooseCurrent.parentElement.remove();
+                    previous_menu_item.classList.remove('chosen');
+                    previous_menu_item.parentElement.classList.remove('past');
+                    previous_menu_item.setAttribute("id", "choose_current");
+                    previous_menu_item.focus();
+                }
             }
       }
         else if (keyletters.includes(e.code)) {
@@ -2153,8 +2161,8 @@ function main_menu_navigator(e) {  // we are not currently editing
                 var parent_id = document.getElementById('edit_menu_holder').parentElement.parentElement.id;
                 console.log("making a menu for", parent_id);
                 var edit_submenu = document.createElement('ol');
-                edit_submenu.innerHTML = menu_options_for(parent_id, "base");
-                console.log("just inserted inner menu_options_for(" + parent_id + ")", menu_options_for(parent_id, "inner"));
+                edit_submenu.innerHTML = menu_options_for(parent_id, "", "base");
+                console.log("just inserted inner menu_options_for(" + parent_id + ")", menu_options_for(parent_id, "", "base"));
                 theChooseCurrent.insertAdjacentElement("beforeend", edit_submenu);
                 document.getElementById('choose_current').focus();
                 console.log("focus is on", $(":focus"));
@@ -2181,7 +2189,6 @@ function main_menu_navigator(e) {  // we are not currently editing
                     console.log("current envoronemnt", this_object_source);
                     var old_env = internalSource[id_of_object]["ptxtag"];
                     internalSource[id_of_object]["ptxtag"] = new_env;
-               //     recent_editing_actions.unshift("changed " + old_env + " to " + new_env + " " + id_of_object);
                     current_editing_actions.push([old_env, new_env, id_of_object]);
                     console.log("the change was", "changed " + old_env + " to " + new_env + " " + id_of_object);
                     var the_whole_object = html_from_internal_id(id_of_object);
@@ -2210,7 +2217,7 @@ function main_menu_navigator(e) {  // we are not currently editing
 
                     var edit_submenu = document.createElement('ol');
                     console.log("J1 lookinh for menu options for", current_env_id);
-                    edit_submenu.innerHTML = menu_options_for(current_env_id, "change");
+                    edit_submenu.innerHTML = menu_options_for(current_env_id, "", "change");
                     console.log("just inserted inner menu_options_for(parent_type)", menu_options_for(current_env_id, "change"));
                     theChooseCurrent.insertAdjacentElement("beforeend", edit_submenu);
                     document.getElementById('choose_current').focus();
@@ -2232,8 +2239,8 @@ function main_menu_navigator(e) {  // we are not currently editing
 
                     var edit_submenu = document.createElement('ol');
                     console.log("J3 looking for menu options for", current_env_id);
-                    edit_submenu.innerHTML = menu_options_for(current_env_id, "move-or-delete");
-                    console.log("just inserted inner menu_options_for(parent_type)", menu_options_for(current_env_id, "move-or-delete"));
+                    edit_submenu.innerHTML = menu_options_for(current_env_id, "", "move-or-delete");
+                    console.log("just inserted inner menu_options_for(parent_type)", menu_options_for(current_env_id, "", "move-or-delete"));
                     theChooseCurrent.insertAdjacentElement("beforeend", edit_submenu);
                     document.getElementById('choose_current').focus();
                     console.log("focus is on", $(":focus"));
@@ -2274,8 +2281,8 @@ function main_menu_navigator(e) {  // we are not currently editing
               if (dataEnv in inner_menu_for()) {  // object names a collection, so make submenu
                   console.log("making a menu for", dataEnv);
                   var edit_submenu = document.createElement('ol');
-      //            edit_submenu.innerHTML = menu_options_for(dataEnv, "inner");
-                  edit_submenu.innerHTML = menu_options_for(object_of_interest.id, "inner");
+                  edit_submenu.innerHTML = menu_options_for("", dataEnv, "inner");
+        //          edit_submenu.innerHTML = menu_options_for(object_of_interest.id, "inner");
      //           console.log("removing id from", current_active_menu_item);
                   theChooseCurrent.insertAdjacentElement("beforeend", edit_submenu);
                   document.getElementById('choose_current').focus();
