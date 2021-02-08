@@ -673,6 +673,7 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
         var new_p_id = randomstring();
         internalSource[new_p_id] = {"xml:id": new_p_id, "permid": "", "ptxtag": "p", "content": "", "parent": [new_id, "content"]}
         new_source["content"] = "<&>" + new_p_id + "<;>";
+//        current_editing_actions.push(["new", "p", new_p_id]);
     } else if (new_tag == "list") {  // creating a list, which needs one item to begin.
                                    // that item is an li contining a p
         var new_li_id = randomstring();
@@ -1051,7 +1052,7 @@ function move_by_id_local(theid, thehandleid) {
     //  note:  this will be wrong if there is other non-p siblings inside the li
     var moving_object_replace = moving_object;
     if (moved_content_tag == "p" && internalSource[moved_parent_and_location[0]]["ptxtag"] == "li") {
-        // check if that p is the only thing inside the li, and if so,
+        // check if that p is the only thing inside the li (so the li is empty when we move the p), and if so,
         // remove that li from internalSource and also the HTML, and the reverence to it in internalSource
         if (moving_object.parentElement.getElementsByTagName("p").length == 1) {
             moving_object_replace = moving_object.parentElement
@@ -1090,7 +1091,7 @@ function move_object(e) {
         } else {
             movement_location += 1
         }
-    } else if (e.code == "Escape" || e.code == "Enter") {
+    } else if (e.code == "Escape" || e.code == "Enter" || e.code == "ArrowRight") {
         e.preventDefault();
         console.log(" decided where to put moving_object", moving_object);
         var id_of_moving_object = document.getElementById('phantomobject').getAttribute("data-moving_id");
@@ -1388,7 +1389,7 @@ function assemble_internal_version_changes() {
 
         if (!paragraph_content_list_trimmed.length ) { 
                 // empty, so insert it and delete it later
-            nature_of_the_change = "empty";
+            nature_of_the_change = "empty";  // not sure this is used
             paragraph_content_list_trimmed = [""];
         }
 //            return ["", "", ["",""]]
@@ -1419,11 +1420,15 @@ function assemble_internal_version_changes() {
                     if (internalSource[prev_id]["content"] != this_paragraph_contents) {
                         if (internalSource[prev_id]["content"]) {
                             current_editing_actions.push(["changed", "p", prev_id]);
-                        } else {
+                        } else if (this_paragraph_contents) {
                             current_editing_actions.push(["new", "p", prev_id]);
                         }
                         internalSource[prev_id]["content"] = this_paragraph_contents;
                         console.log("changed content of", prev_id)
+                    } else if (!this_paragraph_contents) {  // adding an empty paragraph
+                        current_editing_actions.push(["empty", "p", prev_id]);
+                    } else {
+                        // this means the contents are nonempty and unchanged, so don't record is as a change
                     }
                     possibly_changed_ids_and_entry.push([prev_id, "content", oldornew]);
                     this_arrangement_of_objects = internalSource[parent_and_location[0]][parent_and_location[1]];
@@ -1698,6 +1703,8 @@ function insert_html_version(these_changes) {
     var object_as_html = "";
     var this_object_id, this_object_entry, this_object_oldornew, this_object;
 
+    console.log(" there are", possibly_changed_ids_and_entry.length, "items to process");
+
     for (var j=0; j < possibly_changed_ids_and_entry.length; ++j) {
         this_object_id = possibly_changed_ids_and_entry[j][0];
         this_object_entry = possibly_changed_ids_and_entry[j][1];
@@ -1715,7 +1722,7 @@ function insert_html_version(these_changes) {
             object_as_html.setAttribute("tabindex", -1);
             object_as_html.setAttribute("id", this_object_id);
             object_as_html.setAttribute("data-age", this_object_oldornew);
-            console.log("now making inner htmh", this_object[this_object_entry].substring(0,12));
+            console.log("now making inner HTML", this_object[this_object_entry].substring(0,12));
             object_as_html.innerHTML = ptx_to_html(this_object[this_object_entry]);
             location_of_change.insertAdjacentElement('beforebegin', object_as_html);
         //    current_editing["tree"][current_editing["level"]] = next_editable_of(location_of_change.parentElement, "children");
@@ -1736,6 +1743,7 @@ function insert_html_version(these_changes) {
     }
     location_of_change.remove();
 
+    console.log("returning from", insert_html_version);
     // call mathjax, in case the new content contains math
     return object_as_html  // the most recently added object, which we may want to
                            // do something, like add an editing menu
@@ -1787,11 +1795,15 @@ function local_editing_action(e) {
             prev_char = "";
             these_changes = assemble_internal_version_changes();
             console.log("    CCC these_changes", these_changes);
+            console.log("    CCC these_changes[0]", these_changes[0]);
+            console.log("current_editing_actions", current_editing_actions);
             final_added_object = insert_html_version(these_changes);
+                // maybe this next if only handles when we delete by removing the letters in a p?
             if (these_changes[0] == "empty") {
                 console.log("            going to delete", these_changes[2][0]);
-                delete_by_id(these_changes[2][0][0], "empty")
+                delete_by_id(these_changes[2][0][0], "empty");
                 current_editing_actions.pop();   // content was empty, so there is no editing action
+                console.log("current_editing_actions", current_editing_actions);
             }
             // if there is an editing paragraph ahead, go there.  Otherwise menu the last thing added
             if (document.querySelector('.paragraph_input')) {
@@ -1846,9 +1858,9 @@ function local_editing_action(e) {
             }
             console.log("      most_recent_edit", most_recent_edit);
 
-            console.log("check if final_added_object", final_added_object, "has parent li");
-            console.log("final_added_object.parentElement", final_added_object.parentElement);
-            console.log("is it new", final_added_object.parentElement.getAttribute("data-age") == "new");
+ //           console.log("check if final_added_object", final_added_object, "has parent li");
+ //           console.log("final_added_object.parentElement", final_added_object.parentElement);
+ //           console.log("is it new", final_added_object.parentElement.getAttribute("data-age") == "new");
 
             if (final_added_object.getAttribute("data-age")) {
                 console.log("THIS", final_added_object.tagName,"is", final_added_object.getAttribute("data-age"))
@@ -1862,7 +1874,8 @@ function local_editing_action(e) {
             // is this in the right place?
             console.log("most_recent_edit", most_recent_edit);
             if (most_recent_edit[1] == "li") {  // added to a list, so try adding again
-                var new_obj = create_object_to_edit("li", document.getElementById(most_recent_edit[2]), "afterend")
+                  //  note that when adding an li, the neichbor is a p within the actual li neighbor
+                var new_obj = create_object_to_edit("li", document.getElementById(most_recent_edit[2]).firstElementChild, "afterend")
                 edit_in_place(new_obj, "new");
             }
         }  //  esc or enter enter enter
