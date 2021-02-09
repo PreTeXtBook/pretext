@@ -411,6 +411,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Sloppy for optional testing, will sometime soon become -->
+<!-- a real warning and will be coded real nice too         -->
+<xsl:param name="debug.xref.target" select="'no'"/>
+<xsl:variable name="debug-xref-target" select="$debug.xref.target = 'yes'"/>
+
+<!-- much like entities as of XXXXXX -->
+<xsl:template match="&STRUCTURAL;|&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|&SOLUTION-LIKE;|exercise|task|exercisegroup|poem|assemblage|paragraphs|li|fn|men|mrow|biblio|proof|contributor" mode="is-xref-target">
+    <xsl:value-of select="'yes'"/>
+</xsl:template>
+
+<xsl:template match="*" mode="is-xref-target">
+    <xsl:value-of select="'no'"/>
+</xsl:template>
+<!-- End: sloppy -->
+
 <xsl:template match="xref" mode="check-ref-list">
     <xsl:param name="ref-list"/>
     <xsl:choose>
@@ -430,6 +445,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:for-each select="$original">
                     <xsl:if test="exsl:node-set(id($initial))">
                         <xsl:text>X</xsl:text>
+                        <!-- Sloppy, temporary -->
+                        <xsl:if test="$debug-xref-target">
+                            <xsl:variable name="target" select="exsl:node-set(id($initial))"/>
+                            <xsl:variable name="is-a-target">
+                                <xsl:apply-templates select="$target" mode="is-xref-target"/>
+                            </xsl:variable>
+                            <xsl:if test="$is-a-target = 'no'">
+                                <xsl:message>PTX:DEBUG: xref/@ref "<xsl:value-of select="$initial"/>" points to a "<xsl:value-of select="local-name($target)"/>" element.  Please report me!</xsl:message>
+                            </xsl:if>
+                        </xsl:if>
+                        <!-- End: sloppy, temporary -->
                     </xsl:if>
                 </xsl:for-each>
                 <!-- optionally do a context shift to private solutions file -->
