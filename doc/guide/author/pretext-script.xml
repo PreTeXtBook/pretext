@@ -55,7 +55,9 @@
         <p>Now you need to generate the <init>SVG</init> versions of your images that will accompany your <init>HTML</init> version of your book and provide nice scalable graphics. This is exactly the sort of chore the <c>pretext/pretext</c> script was designed for.  You might run (all on one line)<cd>
             <cline>pretext -vv -c latex-image -f svg</cline>
             <cline>  -d ~/books/aota/images ~/books/aota/animals.xml</cline>
-        </cd>Here <c>-c</c> is specifying the <q>component</q> of your book to process, and <c>-f</c> is specifying the <q>format</q> of what is being produced.  The <c>-d</c> argument specifies a directory where the output ends up, in this case a collection of <init>SVG</init> files, one per image.</p>
+        </cd>Here <c>-c</c> is specifying the <q>component</q> of your book to process, and <c>-f</c> is specifying the <q>format</q> of what is being produced.  The <c>-d</c> argument specifies a directory where the output ends up, in this case a collection of <init>SVG</init> files, one per image.
+Note that the <pretext/> file, <c>animals.xml</c> in the above example, is the main source file for the document.
+The script should be run on the entire document, even if all the images are in one file.</p>
     </section>
 
     <section xml:id="pretext-strategy">
