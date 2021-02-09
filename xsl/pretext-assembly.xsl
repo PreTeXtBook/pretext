@@ -19,6 +19,12 @@ You should have received a copy of the GNU General Public License
 along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
+<!-- http://pimpmyxslt.com/articles/entity-tricks-part2/ -->
+<!DOCTYPE xsl:stylesheet [
+    <!ENTITY % entities SYSTEM "entities.ent">
+    %entities;
+]>
+
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
