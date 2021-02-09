@@ -24,11 +24,11 @@
 <xsl:variable name="file-extension" select="'.py'" />
 
 <!-- Set the chunking level variable for the routines in pretext-common.xsl. -->
-<!-- Default to zero, else use whatever an author specifies                   -->
+<!-- Default to zero, else use whatever an author specifies                  -->
 <xsl:variable name="chunk-level">
     <xsl:choose>
-        <xsl:when test="$chunk.level != ''">
-            <xsl:value-of select="$chunk.level" />
+        <xsl:when test="$chunk-level-entered != ''">
+            <xsl:value-of select="$chunk-level-entered" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>0</xsl:text>

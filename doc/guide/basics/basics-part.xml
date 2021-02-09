@@ -1162,9 +1162,9 @@
             numbers in PreTeXt.  Some approximate quotes about tables from CMOS: 
             <ul>
                 <li>facts that are easy to scan and compare</li>
-                <li>a reader unfamiliar with the material should still be ale to make 
-                sense of the table </li>
-                <li>tables are numbered and have titles (and not captions) </li>
+                <li>a reader unfamiliar with the material should still be able to make 
+                sense of the table</li>
+                <li>tables are numbered and have titles (and not captions)</li>
             </ul>
             </p>
             <p>My take-away is that a CMOS table is a supplement to what is written 
@@ -1224,10 +1224,11 @@
         Sometimes you don't want to provide an interactive SageMath environment in the middle of your book
         (or a chunk of code)
         but you would like to produce a figure to include in your project by using SageMath.
-        The cleanest way to do this his to put the SageMath code right in your <pretext/> project and use the <c>pretext</c> script to produce the image files required for your chosen output formats.
-        This is accomplished by using <tag>sageplot</tag> and the <c>pretext</c> script that we discussed in <xref ref="basics-s-latex-fig"/>.
-        (In particular,
-        see the aside in that section about the additional packages that must be installed and configured to use the <c>pretext</c> script.)
+        The cleanest way to do this his to put the SageMath code right in your <pretext/> project and use the <c>pretext</c> script
+	that we discussed in <xref ref="basics-s-latex-fig"/> to produce the image files required for your chosen output formats.
+        This is accomplished by using <tag>sageplot</tag> with the script.
+        (The <c>pretext</c> script is fully discussed in <xref ref="pretext-script"/>, but at least
+        see the aside in <xref ref="basics-s-latex-fig"/> about the additional packages that must be installed and configured to use it properly.)
       </p>
 
       <listing xml:id="basics-l-sageplot">

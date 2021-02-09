@@ -321,10 +321,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- but we do not want any automatic, or configured, -->
 <!-- knowlization to take place.  Ever.  Never.       -->
 
-<!-- Everything configurable by author, 2020-01-02    -->
-<!-- Roughly in the order of  html.knowl.*  switches  -->
+<!-- Everything configurable by author, 2020-01-02         -->
+<!-- Roughly in the order of old  html.knowl.*  switches   -->
+<!-- Similar HTML templates return string for boolean test -->
 <xsl:template match="&THEOREM-LIKE;|proof|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&REMARK-LIKE;|&GOAL-LIKE;|exercise" mode="is-hidden">
-    <xsl:text>no</xsl:text>
+    <xsl:text>false</xsl:text>
 </xsl:template>
 
 <!-- A hook in the HTML conversion allows for the addition of a @data-braille attribute to the "body-element".  Then liblouis can select on these values to apply the "boxline" style which delimits the blocks.  Here we define these values.  The stub in the HTML conversion does nothing (empty text) and so is a signal to not employ this attribute at all.  So a non-empty definition here also activates the attribute's existence. -->

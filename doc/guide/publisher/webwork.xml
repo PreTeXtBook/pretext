@@ -322,14 +322,13 @@
       <console>
         <prompt>$ </prompt>
         <input>xsltproc -stringparam publisher publication.ptx</input>
-        <input>  -stringparam chunk.level 2 pretext-ww-problem-sets.xsl aota.ptx</input>
+        <input>  pretext-ww-problem-sets.xsl aota.ptx</input>
       </console>
       <p>
         You may need to specify paths to these files.
       </p>
       <p>
-        With a book, <c>-stringparam chunk.level 2</c> means that each problem set corresponds to a section from the book.
-        Level 1: chapter. Level 3: subsection. With an article there are no chapters, and Level 1 corresponds to sections.
+        With a book, you can break up your problem set into multiple files according to a chosen depth of the hierarchy.  See <xref ref="common-chunking-options"/> for details on how to specify this.
       </p>
       <p>
         This creates a folder named after your book title,

@@ -33,25 +33,6 @@
 <!-- TODO: liberate GeoGebra, videos -->
 <!-- TODO: style Sage display-only code in a similar padded box -->
 
-<!-- Knowls do not function in an ePub,       -->
-<!-- so no content should be born hidden      -->
-<xsl:param name="html.knowl.theorem" select="'no'" />
-<xsl:param name="html.knowl.proof" select="'no'" />
-<xsl:param name="html.knowl.definition" select="'no'" />
-<xsl:param name="html.knowl.example" select="'no'" />
-<xsl:param name="html.knowl.project" select="'no'" />
-<xsl:param name="html.knowl.task" select="'no'" />
-<xsl:param name="html.knowl.list" select="'no'" />
-<xsl:param name="html.knowl.remark" select="'no'" />
-<xsl:param name="html.knowl.objectives" select="'no'" />
-<xsl:param name="html.knowl.outcomes" select="'no'" />
-<xsl:param name="html.knowl.figure" select="'no'" />
-<xsl:param name="html.knowl.table" select="'no'" />
-<xsl:param name="html.knowl.listing" select="'no'" />
-<xsl:param name="html.knowl.exercise.inline" select="'no'" />
-<xsl:param name="html.knowl.exercise.sectional" select="'no'" />
-<xsl:param name="html.knowl.exercise.worksheet" select="'no'" />
-
 <!-- Output as well-formed xhtml -->
 <!-- This may have no practical effect -->
 <xsl:output method="xml" encoding="UTF-8" doctype-system="about:legacy-compat" indent="no" />
@@ -105,7 +86,7 @@
 </xsl:variable>
 
 <!-- We disable the ToC level to avoid any conflicts with chunk level -->
-<xsl:param name="toc.level" select="0" />
+<xsl:variable name="toc-level" select="number(0)" />
 
 <!-- XHTML files as output -->
 <xsl:variable name="file-extension" select="'.xhtml'" />
@@ -792,9 +773,19 @@ width: 100%
 
 <!-- Knowls -->
 <!-- Nothing should be knowled, since we do not have Javascript for it -->
+<!-- We kill both cross-reference and born-hidden knowls by overriding -->
+<!-- templates designed partially for this purpose                     -->
 <xsl:template match="*" mode="xref-as-knowl">
     <xsl:value-of select="false()" />
 </xsl:template>
+
+<!-- Everything configurable by author, 2020-01-02         -->
+<!-- Roughly in the order of old  html.knowl.*  switches   -->
+<!-- Similar HTML templates return string for boolean test -->
+<xsl:template match="&THEOREM-LIKE;|proof|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&REMARK-LIKE;|&GOAL-LIKE;|exercise" mode="is-hidden">
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
 
 <!-- ######## -->
 <!-- Endnotes -->

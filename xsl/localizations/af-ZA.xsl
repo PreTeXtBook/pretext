@@ -61,11 +61,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='volume'><xsl:text>Volume</xsl:text></localization>
     <localization string-id='book'><xsl:text>Boek</xsl:text></localization>
     <localization string-id='article'><xsl:text>Artikel</xsl:text></localization>
-    <!-- <localization string-id='slideshow'><xsl:text>Slideshow</xsl:text></localization> -->
+    <localization string-id='slideshow'><xsl:text>Skyfie Vertoning</xsl:text></localization>
     <localization string-id='letter'><xsl:text>Brief</xsl:text></localization>
     <localization string-id='memo'><xsl:text>Memo</xsl:text></localization>
     <localization string-id='presentation'><xsl:text>Aanbieding</xsl:text></localization>
     <!-- Parts of a document -->
+    <!-- "part" will also be used for a "stage" of a WeBWorK problem -->
     <localization string-id='frontmatter'><xsl:text>Voorsake</xsl:text></localization> <!-- Can't find this anywhere, so I made it up. -->
     <localization string-id='part'><xsl:text>Deel</xsl:text></localization>
     <localization string-id='chapter'><xsl:text>Hoofstuk</xsl:text></localization>
@@ -74,19 +75,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='subsection'><xsl:text>Onderafdeling</xsl:text></localization>
     <localization string-id='subsubsection'><xsl:text>Onderonderafdeling</xsl:text></localization>
     <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
-    <!-- <localization string-id='slide'><xsl:text>Slide</xsl:text></localization> -->
+    <localization string-id='slide'><xsl:text>Skyfie</xsl:text></localization>
     <localization string-id='introduction'><xsl:text>Inleiding</xsl:text></localization>
     <localization string-id='conclusion'><xsl:text>Slot</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Oefeninge</xsl:text></localization>
-    <!-- <localization string-id='worksheet'><xsl:text>Worksheet</xsl:text></localization> -->
-    <!-- <localization string-id='reading-questions'><xsl:text>Reading Questions</xsl:text></localization> -->
-    <!-- <localization string-id='solutions'><xsl:text>Solutions</xsl:text></localization> -->
-    <!-- <localization string-id='glossary'><xsl:text>Glossary</xsl:text></localization> -->
+    <localization string-id='worksheet'><xsl:text>Werkblad</xsl:text></localization>
+    <localization string-id='reading-questions'><xsl:text>Leesvrae</xsl:text></localization>
+    <localization string-id='solutions'><xsl:text>Oplossings</xsl:text></localization>
+    <localization string-id='glossary'><xsl:text>Woordelys</xsl:text></localization>
     <localization string-id='references'><xsl:text>Verwysings</xsl:text></localization>
     <localization string-id='backmatter'><xsl:text>Nasake</xsl:text></localization> <!-- Can't find this anywhere, so I made it up. -->
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'><xsl:text>Paragrawe</xsl:text></localization>
-    <!-- <localization string-id='commentary'><xsl:text>Commentary</xsl:text></localization> -->
+    <localization string-id='commentary'><xsl:text>Kommentaar</xsl:text></localization>
     <localization string-id='subparagraph'><xsl:text>Onderparagrawe</xsl:text></localization>
     <!-- Components of the narrative -->
     <!-- REMARK-LIKE blocks -->
@@ -102,7 +103,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- ASIDE-LIKE blocks -->
     <localization string-id='aside'><xsl:text>Ter Syde</xsl:text></localization>
     <localization string-id='biographical'><xsl:text>Biografiese Ter Syde</xsl:text></localization>
-    <localization string-id='historical'><xsl:text>Historiese Ter Syde</xsl:text></localization> <!-- or "Geskiedkundige Ter Syde" -->
+    <localization string-id='historical'><xsl:text>Geskiedkundige Ter Syde</xsl:text></localization>
     <!-- EXAMPLE-LIKE blocks -->
     <localization string-id='example'><xsl:text>Voorbeeld</xsl:text></localization>
     <localization string-id='question'><xsl:text>Vraag</xsl:text></localization>
@@ -114,14 +115,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='task'><xsl:text>Taak</xsl:text></localization>
     <localization string-id='investigation'><xsl:text>Ondersoek</xsl:text></localization>
     <!-- assemblages are collections of minimally structured material -->
-    <localization string-id='assemblage'><xsl:text>Versameling</xsl:text></localization> <!-- Note that this is also the word used for "set" -->
+    <localization string-id='assemblage'><xsl:text>Samevatting</xsl:text></localization>
     <localization string-id='poem'><xsl:text>Gedig</xsl:text></localization>
     <!-- Objectives is the block, objective is a list item within -->
     <localization string-id='objectives'><xsl:text>Doelstellings</xsl:text></localization>
     <localization string-id='objective'><xsl:text>Doelstelling</xsl:text></localization>
     <!-- Outcomes is the block, outcome is a list item within (different) -->
-    <!-- <localization string-id='outcomes'><xsl:text>Outcomes</xsl:text></localization> -->
-    <!-- <localization string-id='outcome'><xsl:text>Outcome</xsl:text></localization> -->
+    <!-- These two words need to be different, to avoid ambiguous cross-references -->
+    <localization string-id='outcomes'><xsl:text>Uitkomstes</xsl:text></localization>
+    <localization string-id='outcome'><xsl:text>Uitkoms</xsl:text></localization>
     <!--  -->
     <localization string-id='figure'><xsl:text>Figuur</xsl:text></localization>
     <localization string-id='table'><xsl:text>Tabel</xsl:text></localization>
@@ -132,19 +134,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='list'><xsl:text>Lys</xsl:text></localization>
     <localization string-id='li'><xsl:text>Item</xsl:text></localization>
     <!-- A term (word) defined in a glossary -->
-    <!-- <localization string-id='defined-term'><xsl:text>Term</xsl:text></localization> -->
+    <localization string-id='defined-term'><xsl:text>Term</xsl:text></localization>
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'><xsl:text>Paragraaf</xsl:text></localization>
     <localization string-id='blockquote'><xsl:text>Aanhaling</xsl:text></localization>
     <!-- Literate programming, a chunk of computer code -->
-    <!-- <localization string-id='fragment'><xsl:text>Fragment</xsl:text></localization> -->
+    <localization string-id='fragment'><xsl:text>Fragment</xsl:text></localization>
     <!-- Parts of an exercise and its solution -->
+    <!-- An "exercise", at any level, within an "exercises" division is a          -->
+    <!-- "divisional" exercise and the string employed is 'divisionalexercise'.    -->
+    <!-- An "exercise" whose parent is a division (chapter, section, etc) we       -->
+    <!-- call an "inline exercise" and the string employed is 'inlineexercise'.    -->
+    <!-- And an "exercise" in a "worksheet" is a 'worksheetexercise'.              -->
+    <!-- And an "exercise" in a "reading-questions" is a 'readingquestion'.         -->
+    <!-- It is important to use different translations so that a text with         -->
+    <!-- different types of exercises do not have ambiguous cross-references       -->
+    <!-- (there is an example of this at the start of one of the later             -->
+    <!-- sections of the sample article).                                          -->
+    <!--                                                                           -->
+    <!-- In English, an "Exercise" is something you do that has a beneficial       -->
+    <!-- outcome, such as "I am going to the gym to exercise."  A "Checkpoint"     -->
+    <!-- is something you must do before you do something else.  Another use of    -->
+    <!-- the term is a location on a roadway where you must stop for the      -->
+    <!-- police to do an inspection. A worksheet is a collection of activities or  -->
+    <!-- problems, typically printed on paper, which might be used in a classroom. -->
     <localization string-id='divisionalexercise'><xsl:text>Oefening</xsl:text></localization>
-    <!-- Translation needed for South African Afrikaans -->
-    <!-- See en-US file for distinctions here, do not repeat previous translation -->
-    <!-- <localization string-id='inlineexercise'><xsl:text>Checkpoint</xsl:text></localization> -->
-    <!-- <localization string-id='worksheetexercise'><xsl:text>Worksheet Exercise</xsl:text></localization> -->
-    <!-- <localization string-id='readingquestion'><xsl:text>Reading Question</xsl:text></localization> -->
+    <localization string-id='inlineexercise'><xsl:text>Kontrolepunt</xsl:text></localization>
+    <localization string-id='worksheetexercise'><xsl:text>Werkbladoefening</xsl:text></localization>
+    <localization string-id='readingquestion'><xsl:text>Leesvraag</xsl:text></localization>
     <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Wenk</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Antwoord</xsl:text></localization>
@@ -187,12 +204,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='up'><xsl:text>Op</xsl:text></localization>
     <localization string-id='next'><xsl:text>Volgende</xsl:text></localization>
     <!-- Keep these short, so buttons are not overly wide, 4 characters maximum -->
-    <localization string-id='previous-short'><xsl:text>Vorige</xsl:text></localization>
+    <localization string-id='previous-short'><xsl:text>Vorig</xsl:text></localization>
     <localization string-id='up-short'><xsl:text>Op</xsl:text></localization>
-    <localization string-id='next-short'><xsl:text>Volgende</xsl:text></localization>
+    <localization string-id='next-short'><xsl:text>Volg</xsl:text></localization>
     <!-- NB: Use toc from above for both headings and navigation sidebar-->
     <localization string-id='annotations'><xsl:text>Aantekeninge</xsl:text></localization>
     <localization string-id='feedback'><xsl:text>Terugvoer</xsl:text></localization>
+    <!-- This phrase should suggest that PreTeXt is the source -->
+    <!-- language that makes a particular output possible      -->
     <localization string-id='authored'><xsl:text>Geskryf in</xsl:text></localization>
     <!-- Parts of memos and letters -->
     <localization string-id='to'><xsl:text>Aan</xsl:text></localization>
@@ -217,7 +236,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- else whatever crud ends up on the button kills the cell -->
     <localization string-id='evaluate'><xsl:text>Evalueer</xsl:text></localization>
     <localization string-id='evaluate'><xsl:text>Evalueer</xsl:text></localization>
-    <!-- <localization string-id='code'><xsl:text>Code</xsl:text></localization> -->
+    <!-- <localization string-id='code'><xsl:text>Kode</xsl:text></localization> -->
 </xsl:variable>
 
 </xsl:stylesheet>

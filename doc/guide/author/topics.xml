@@ -1013,7 +1013,7 @@
             <title>Variations</title>
 
             <p>There are some variant uses for the <tag>xref</tag> tag.<ul>
-                <li>Replace <attr>ref</attr> by <attr>provisional</attr> and give it a value with some simple text like <c>subsection on eagle habitat</c> and you will get reminders that once you write this future subsection you need to link it in right here.  This is just a convenience for authors during the early stages of a writing project.</li>
+                <li>Replace <attr>ref</attr> by <attr>provisional</attr> and give it a value with some simple text like <c>subsection on eagle habitat</c> and you will get reminders that once you write this future subsection you need to link it in right here.  This is just a convenience for authors during the early stages of a writing project (see <xref ref="processing-author-tools" /> for details).</li>
 
                 <li>Replace <attr>ref</attr> by the pair <attr>first</attr> and <attr>last</attr>.  Provide attribute values just as you would for <attr>ref</attr>.  The code will check that the targets have the exact same tag, and that the order is correct.  You will get a link that looks like a range, separated by an en dash.  As a link, only <attr>first</attr> will be used for the linking mechanism (<ie />, one link is generated, not two).  Experiment with <attr>text</attr> and content overrides.</li>
 
@@ -1195,7 +1195,7 @@
         <idx>mathematics</idx>
 
         <introduction>
-            <p>As mentioned in the overview, <xref ref="overview-math" />, we use <latex /> syntax for mathematics.  In order to allow for quality display in <init>HTML</init>, and other electronic formats, this limits us to the subset of <latex /> supported by the very capable <url href="https://www.mathjax.org/">MathJax</url> Javascript library.  Generally this looks like the <c>amsmath</c><idx><c>amsmath</c></idx> package maintained by the American Mathematical Society at their <url href="http://www.ams.org/publications/authors/tex/amslatex">AMS-LaTeX page</url>.  For a complete and precise list of what MathJax supports, see MathJax's <url href="http://docs.mathjax.org/en/latest/input/tex/macros/">Supported <tex/>/<latex/> commands</url><fn><c>http://docs.mathjax.org/en/latest/input/tex/macros/</c></fn> (2019-11-10: this link may be specific to MathJax 3.0, which we have not yet adopted.)</p>
+            <p>As mentioned in the overview, <xref ref="overview-math" />, we use <latex /> syntax for mathematics.  In order to allow for quality display in <init>HTML</init>, and other electronic formats, this limits us to the subset of <latex /> supported by the very capable <url href="https://www.mathjax.org/">MathJax</url> Javascript library.  Generally this looks like the <c>amsmath</c><idx><c>amsmath</c></idx> package maintained by the American Mathematical Society at their <url href="http://www.ams.org/publications/authors/tex/amslatex">AMS-LaTeX page</url>.  For a complete and precise list of what MathJax supports, see MathJax's <url href="http://docs.mathjax.org/en/latest/input/tex/macros/">Supported <tex/>/<latex/> commands</url><fn><c>http://docs.mathjax.org/en/latest/input/tex/macros/</c></fn> (2019-11-10: this link may be specific to MathJax 3.0, which we have not yet adopted.)  Once you have digested this more general section, be sure to also consult <xref ref="topic-mathematics-practices"/> for some very specific suggestions.</p>
         </introduction>
 
         <subsection>
@@ -1388,6 +1388,37 @@
                 <li>The <c>\matrix{}</c> command, and its friends (such as <c>\pmatrix{}</c>) are not supported by <latex/>, despite being recognized by MathJax.  So use environments like <c>\begin{matrix}</c> and <c>\begin{pmatrix}</c> (with their corresponding <c>\end{}</c>, of course) and you will get accurate results for both formats.</li>
             </ol></p>
         </subsection>
+    </section>
+
+    <section xml:id="topic-mathematics-practices">
+        <title>Mathematics Best Practices</title>
+        <idx><h>mathematics</h><h>best practices</h></idx>
+
+        <p>This is an incomplete list of suggestions you can consider when authoring mathematics in <latex/> syntax.  Some are definitely technical, and we are only aware of them from authors' experience and reports.  Many are meant to help in the conversion to braille.  Additions welcome.
+        <ol>
+            <li>
+                <title>Operator names</title>
+                <p>Sean Fitzpatrick reports on 2021-01-06 that the <latex/> macro construction<cd>\newcommand{\foo}{\operatorname{foo}}</cd> behaves better in Asymptote diagrams than<cd>
+                \DeclareMathOperator{\foo}{foo}</cd></p>
+            </li>
+            <li>
+                <title>Ratios</title>
+                <p>If you really intend to communicate a ratio with a colon, keep it super-simple, like <c>3:2</c> or <c>a:b</c>.  Do not wrap it in parentheses or other decorations, since then the colon will be communicated literally in braille.  For example, the index of a subgroup, <c>[G:H]</c>, should not be confused with a ratio.  If your ratio is kept simple, braille will use special syntax designed for ratios.</p>
+            </li>
+            <li>
+                <title>Avoid Nesting</title>
+                <p>It may seem  convenient to nest custom macro definitions. For example:
+                    <cd>
+                        <cline>\newcommand{\makered}[1]{{\color{red}{#1}}}</cline>
+                        <cline>\newcommand{\MAKERED}[1]{\textbf{\makered{#1}}}</cline>
+                    </cd>
+                The second macro definition uses the first macro. At least one <pretext/> conversion isolates macro defintions for use only on an as-needed basis. So here, if the author used <c>\MAKERED</c> without also using <c>\makered</c> close nearby, it would lead to an issue under that conversion, because <c>\makered</c> would be locally undefined. So we recommend defining each macro from the ground up. In this case:
+                    <cd>
+                        <cline>\newcommand{\MAKERED}[1]{\textbf{\color{red}{#1}}}</cline>
+                    </cd>
+                </p>
+            </li>
+        </ol></p>
     </section>
 
     <section xml:id="topic-lists">
@@ -2670,12 +2701,12 @@
             <p></p>
         </subsection>
 
-        <subsection>
-            <title>(*) Automatic Lists</title>
+        <subsection xml:id="automatic-lists">
+            <title>Automatic Lists</title>
 
             <p></p>
         </subsection>
-
+            <p>The <tag>row</tag> element accepts a <attr>header</attr> attribute with possible values of <c>no</c> (the default), <c>yes</c>, or <c>vertical</c>.  The latter is useful if space is at a premium (which always seems to be the case with tables), and the cells of a column are narrow and the heading is long.  The one restriction is that rows identified as having headers must be the initial (top) rows of the table and must be contiguous.</p>
         <subsection>
             <title>(*) Solutions</title>
 
@@ -2927,8 +2958,15 @@
     </section>
 
     <section xml:id="topic-automatic-lists">
-        <title>(*) Automatic Lists</title>
-        <p></p>
+        <title>Automatic Lists</title>
+
+        <p>Sometimes it is useful to have an automatic list of various elements of one kind in a book, other than the ones already available in a <pretext/> document.  The predefined ones include an index (see <xref ref="topic-index"/>) and a list of notation (see <xref ref="topic-notation"/>).  Examples of lists one might wish to create could include lists of titled figures, computational listing, or theorems.</p>
+
+        <p>To construct an automatic list, one uses a <tage>list-of</tage> element.  This tag has a required <attr>elements</attr> attribute, where the author limits the list to a certain tag.  This could be <c>elements="theorem"</c>, or a space-delimited list of tags like <c>elements="theorem fact corollary"</c>.</p>
+
+        <p>Although automatic lists may be most useful in backmatter, it is possible to use them for summarizing results or other items in a smaller part of your document.  Use the <attr>scope</attr> attribute to limit to the current <c>"section"</c> or <c>"part"</c>.  To organize the list better, use the <attr>divisions</attr> attribute to give structure with headings, such as <c>divisions="section subsection"</c> to organize at two levels.  Finally, the <attr>empty</attr> attribute can be set to <c>"yes"</c> or <c>"no"</c> (default), depending on whether you wish to show any divisions that have none of the requested elements (obviously only useful if you set <c>divisions</c> to something nonempty).</p>
+
+        <p>Note that an automatic list gets no title or visual separation from surrounding material, so use the usual subdivision elements to make that happen.</p>
     </section>
 
     <section xml:id="topic-url">
@@ -3257,7 +3295,8 @@
                     <li>You can navigate (explore) the expression tree with the up, down, left, and right arrow keys.  The subtitles will change as you do this.</li>
                 </ol></p>
                 <p>From the MathJax demonstration page, Maxwell's equations for practice:<idx>Maxwell's equations</idx><md>
-                    <mrow>\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &amp; = \frac{4\pi}{c}\vec{\mathbf{j}}</mrow>
+                    <mrow>\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t}
+                    &amp; = \frac{4\pi}{c}\vec{\boldsymbol{\jmath}}</mrow>
                     <mrow>\nabla \cdot \vec{\mathbf{E}} &amp; = 4 \pi \rho</mrow>
                     <mrow>\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} &amp; = \vec{\mathbf{0}}</mrow>
                     <mrow>\nabla \cdot \vec{\mathbf{B}} &amp; = 0</mrow>
