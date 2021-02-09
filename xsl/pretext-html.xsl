@@ -78,45 +78,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
 <!-- See more generally applicable parameters in pretext-common.xsl file     -->
 
-<!-- Content as Knowls -->
-<!-- These parameters control if content is      -->
-<!-- hidden in a knowl on first appearance       -->
-<!-- The happens automatically sometimes,        -->
-<!-- eg content of a footnote is always hidden   -->
-<!-- Some things never are hidden,               -->
-<!-- eg an entire section (too big),             -->
-<!-- or a bibliographic item (pointless)         -->
-<!-- These switches often control a whole group  -->
-<!-- of similar items, for example the "theorem" -->
-<!-- switch will similarly affect corrolaries,   -->
-<!-- lemmas, etc - anything that can be proved   -->
-<!-- NB: figures and tables inside of            -->
-<!-- side-by-side panels are never born hidden,  -->
-<!-- no matter how the switches below are set.   -->
-<!-- You may elect to have entire side-by-side   -->
-<!-- panels born as knowls, using the switch.    -->
-<!-- PROJECT-LIKE gets own switch here           -->
-<!-- "example" are set to 'yes' by default       -->
-<!-- so new authors know that knowls exist       -->
-<xsl:param name="html.knowl.theorem" select="'no'" />
-<xsl:param name="html.knowl.proof" select="'yes'" />
-<xsl:param name="html.knowl.definition" select="'no'" />
-<xsl:param name="html.knowl.example" select="'yes'" />
-<xsl:param name="html.knowl.project" select="'no'" />
-<xsl:param name="html.knowl.task" select="'no'" />
-<xsl:param name="html.knowl.list" select="'no'" />
-<xsl:param name="html.knowl.remark" select="'no'" />
-<xsl:param name="html.knowl.objectives" select="'no'" />
-<xsl:param name="html.knowl.outcomes" select="'no'" />
-<xsl:param name="html.knowl.figure" select="'no'" />
-<xsl:param name="html.knowl.table" select="'no'" />
-<xsl:param name="html.knowl.listing" select="'no'" />
-<xsl:param name="html.knowl.exercise.inline" select="'yes'" />
-<xsl:param name="html.knowl.exercise.sectional" select="'no'" />
-<xsl:param name="html.knowl.exercise.worksheet" select="'no'" />
-<xsl:param name="html.knowl.exercise.readingquestion" select="'no'" />
-<!-- html.knowl.example.solution: always "yes", could be implemented -->
-
 <!-- CSS and Javascript Servers -->
 <!-- We allow processing paramteers to specify new servers   -->
 <!-- or to specify the particular CSS file, which may have   -->
@@ -171,13 +132,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We generally want to chunk longer HTML output -->
 <xsl:variable name="chunk-level">
     <xsl:choose>
-        <xsl:when test="$chunk.level != ''">
-            <xsl:value-of select="$chunk.level" />
-        </xsl:when>
-        <!-- HTML-specific deprecated 2015/06      -->
-        <!-- But still effective if not superseded -->
-        <xsl:when test="$html.chunk.level != ''">
-            <xsl:value-of select="$html.chunk.level" />
+        <xsl:when test="$chunk-level-entered != ''">
+            <xsl:value-of select="$chunk-level-entered" />
         </xsl:when>
         <xsl:when test="$root/book/part">3</xsl:when>
         <xsl:when test="$root/book">2</xsl:when>
@@ -2622,7 +2578,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Born-hidden behavior is configurable -->
 <xsl:template match="&REMARK-LIKE;" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.remark = 'yes'" />
+    <xsl:value-of select="$knowl-remark = 'yes'" />
 </xsl:template>
 
 <!-- Overall enclosing element -->
@@ -2672,7 +2628,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Born-hidden behavior is configurable -->
 <xsl:template match="&COMPUTATION-LIKE;" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.remark = 'yes'" />
+    <xsl:value-of select="$knowl-remark = 'yes'" />
 </xsl:template>
 
 <!-- Overall enclosing element -->
@@ -2722,7 +2678,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Born-hidden behavior is configurable -->
 <xsl:template match="&DEFINITION-LIKE;" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.definition = 'yes'" />
+    <xsl:value-of select="$knowl-definition = 'yes'" />
 </xsl:template>
 
 <!-- Overall enclosing element -->
@@ -2950,19 +2906,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Born-hidden behavior is configurable -->
 <!-- On a per-element basis               -->
 <xsl:template match="figure" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.figure = 'yes'" />
+    <xsl:value-of select="$knowl-figure = 'yes'" />
 </xsl:template>
 
 <xsl:template match="table" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.table = 'yes'" />
+    <xsl:value-of select="$knowl-table = 'yes'" />
 </xsl:template>
 
 <xsl:template match="listing" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.listing = 'yes'" />
+    <xsl:value-of select="$knowl-listing = 'yes'" />
 </xsl:template>
 
 <xsl:template match="list" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.list = 'yes'" />
+    <xsl:value-of select="$knowl-list = 'yes'" />
 </xsl:template>
 
 <!-- The optionally born-hidden items can be panels of -->
@@ -3241,10 +3197,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Born-hidden behavior is configurable -->
 <xsl:template match="objectives" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.objectives = 'yes'" />
+    <xsl:value-of select="$knowl-objectives = 'yes'" />
 </xsl:template>
 <xsl:template match="outcomes" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.outcomes = 'yes'" />
+    <xsl:value-of select="$knowl-outcomes = 'yes'" />
 </xsl:template>
 
 <!-- Overall enclosing element -->
@@ -3297,7 +3253,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Born-hidden behavior is configurable -->
 <xsl:template match="&EXAMPLE-LIKE;" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.example = 'yes'" />
+    <xsl:value-of select="$knowl-example = 'yes'" />
 </xsl:template>
 
 <!-- Overall enclosing element -->
@@ -3564,17 +3520,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Born-hidden behavior is configurable   -->
 <!-- Note match first on inline first, override if divisional -->
 <xsl:template match="exercise" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.exercise.inline = 'yes'" />
+    <xsl:value-of select="$knowl-exercise-inline = 'yes'"/>
 </xsl:template>
 <xsl:template match="exercises//exercise" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.exercise.sectional = 'yes'" />
+    <xsl:value-of select="$knowl-exercise-divisional = 'yes'"/>
 </xsl:template>
 <xsl:template match="worksheet//exercise" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.exercise.worksheet = 'yes'" />
+    <xsl:value-of select="$knowl-exercise-worksheet = 'yes'"/>
 </xsl:template>
-
 <xsl:template match="reading-questions//exercise" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.exercise.readingquestion = 'yes'" />
+    <xsl:value-of select="$knowl-exercise-readingquestion = 'yes'"/>
 </xsl:template>
 
 <!-- Overall enclosing element -->
@@ -3685,7 +3640,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Born-hidden behavior is configurable -->
 <xsl:template match="&PROJECT-LIKE;" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.project = 'yes'" />
+    <xsl:value-of select="$knowl-project = 'yes'" />
 </xsl:template>
 
 <!-- Overall enclosing element -->
@@ -3854,7 +3809,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Born-hidden behavior is configurable -->
 <xsl:template match="task" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.task = 'yes'" />
+    <xsl:value-of select="$knowl-task = 'yes'" />
 </xsl:template>
 
 <!-- Overall enclosing element -->
@@ -4135,7 +4090,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Born-hidden behavior is configurable -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.theorem = 'yes'" />
+    <xsl:value-of select="$knowl-theorem = 'yes'" />
 </xsl:template>
 
 <!-- Overall enclosing element -->
@@ -4186,7 +4141,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Born-hidden behavior is configurable -->
 <xsl:template match="proof" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.proof = 'yes'" />
+    <xsl:value-of select="$knowl-proof = 'yes'" />
 </xsl:template>
 
 <!-- Overall enclosing element -->
@@ -4199,7 +4154,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- as visible or hidden in a knowl           -->
 <xsl:template match="proof" mode="body-css-class">
     <xsl:choose>
-        <xsl:when test="$html.knowl.proof = 'yes'">
+        <xsl:when test="$knowl-proof = 'yes'">
             <xsl:text>hiddenproof</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -7733,13 +7688,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Open in new window/tab as external reference                        -->
 <!-- If content-less, then automatically formatted like code             -->
 <!-- Within titles, we just produce (formatted) text, but nothing active -->
-<!-- http://stackoverflow.com/questions/9782021/check-for-empty-xml-element-using-xslt -->
 <xsl:template match="url">
     <!-- visible portion of HTML is the URL itself,   -->
     <!-- formatted as code, or content of PTX element -->
     <xsl:variable name="visible-text">
         <xsl:choose>
-            <xsl:when test="not(*) and not(normalize-space())">
+            <xsl:when test="not(node())">
                 <code class="code-inline tex2jax_ignore">
                     <xsl:value-of select="@href" />
                 </code>

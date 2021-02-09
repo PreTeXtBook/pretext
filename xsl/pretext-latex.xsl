@@ -146,18 +146,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Not a parameter, a variable to override deliberately within a conversion -->
 <xsl:variable name="b-latex-hardcode-numbers" select="false()"/>
 
-<!-- We generally want one large complete LaTeX file -->
-<xsl:variable name="chunk-level">
-    <xsl:choose>
-        <xsl:when test="$chunk.level != ''">
-            <xsl:message>MBX:ERROR:   chunking of LaTeX output is deprecated as of 2016-06-10, remove the "chunk.level" stringparam</xsl:message>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>0</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
 <!-- LaTeX always puts sections at level "1", while PTX         -->
 <!-- has sections at level "2", so we provide adjusted,         -->
 <!-- LaTeX-only variables for packages/macros that crudely      -->
@@ -175,8 +163,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- We override the default ToC structure    -->
 <!-- just to kill the ToC always for articles -->
-<xsl:variable name="toc-level">
+<xsl:variable name="toc-level-override">
     <xsl:choose>
+        <!-- this is really bad, we should not be consulting -->
+        <!-- the publisher file here, so consider a better   -->
+        <!-- way to make this override                       -->
+        <xsl:when test="$publication/common/tableofcontents/@level">
+            <xsl:value-of select="$publication/common/tableofcontents/@level"/>
+        </xsl:when>
+        <!-- legacy, respect string parameter -->
         <xsl:when test="$toc.level != ''">
             <xsl:value-of select="$toc.level" />
         </xsl:when>
@@ -186,10 +181,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$root/letter">0</xsl:when>
         <xsl:when test="$root/memo">0</xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Table of Contents level not determined</xsl:message>
+            <xsl:message>PTX:ERROR: Table of Contents level (for LateX conversion) not determined</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+<xsl:variable name="toc-level" select="number($toc-level-override)"/>
 
 <!-- font-size also dictates document class for -->
 <!-- those provided by extsizes, but we can get -->
@@ -7577,10 +7573,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Within titles, we just produce (formatted)      -->
 <!-- text, but nothing active                        -->
 
-<xsl:template match="url">
+<!-- Empty form, so duplicate URL as clickable -->
+<!-- \url{} seems to provide line-breaking     -->
+<xsl:template match="url[not(node())]">
     <!-- choose a macro, font change, or active link -->
     <xsl:choose>
-        <xsl:when test="ancestor::title|ancestor::subtitle">
+        <xsl:when test="ancestor::title|ancestor::shorttitle|ancestor::subtitle">
             <!-- switch to node-set with "c" if characters need escaping -->
             <xsl:text>\mono{</xsl:text>
         </xsl:when>
@@ -7597,23 +7595,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- Checking for "content-less" form           -->
-<!-- http://stackoverflow.com/questions/9782021 -->
-<xsl:template match="url[* or normalize-space()]">
+<!-- With content of any form, so with no assumptions -->
+<xsl:template match="url[node()]">
     <xsl:choose>
-        <!-- just the content, ignore the actual URL -->
-        <xsl:when test="ancestor::title|ancestor::subtitle">
+        <!-- just the content, ignore the actual URL @href -->
+        <xsl:when test="ancestor::title|ancestor::shorttitle|ancestor::subtitle">
             <xsl:apply-templates />
         </xsl:when>
         <!-- the functional version, usually -->
         <xsl:otherwise>
+            <!-- the actual URL -->
             <xsl:text>\href{</xsl:text>
             <xsl:call-template name="escape-url-to-latex">
                 <xsl:with-param name="text">
                     <xsl:value-of select="@href" />
                 </xsl:with-param>
             </xsl:call-template>
-            <xsl:text>}{</xsl:text>
+            <xsl:text>}</xsl:text>
+            <!-- the visible clickable -->
+            <xsl:text>{</xsl:text>
             <xsl:apply-templates />
             <xsl:text>}</xsl:text>
         </xsl:otherwise>

@@ -72,7 +72,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- describing those files                                   -->
 <xsl:variable name="file-extension" select="'.html'"/>
 <xsl:variable name="chunk-level">
-    <xsl:value-of select="$chunk.level"/>
+    <xsl:value-of select="$chunk-level-entered"/>
 </xsl:variable>
 
 <!-- Entry Template               -->

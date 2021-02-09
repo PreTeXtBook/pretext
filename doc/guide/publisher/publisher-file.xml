@@ -18,6 +18,36 @@
         <p>This chapter is reference material for the <term>publisher file</term>, whose employment is described in <xref ref="publisher-file"/>.</p>
     </introduction>
 
+    <section xml:id="publisher-file-common">
+        <title>Common Options</title>
+        <idx>common options</idx>
+        <idx><h>publisher options</h><h>common</h></idx>
+
+        <introduction>
+            <p>These are options that might affect several conversions, though the influence may vary from one conversion to the next.</p>
+        </introduction>
+
+        <subsection xml:id="common-chunking-options">
+            <title>Common Chunking Option</title>
+            <idx><h>common option</h><h>chunking</h></idx>
+            <idx><h>chunking option</h><h>chunking</h></idx>
+
+            <p>Many outputs are produced as a collection of several files, others may only produce a single file.  A <term>chunk</term> is a generic, informal term for a portion of an output, typically a single file.  This is given as a level, see <xref ref="publisher-levels"/> for more about levels.  The specification is in the attribute<cd>
+                <cline>/publication/common/chunking/@level</cline>
+            </cd>with a whole number as the value (generally 0 is allowed).  This is critical for the construction of <init>HTML</init> output, and ignored for <latex/> output.</p>
+        </subsection>
+
+        <subsection xml:id="common-toc-options">
+            <title>Table of Contents Level Option</title>
+            <idx><h>common option</h><h>table of contents level</h></idx>
+            <idx><h>table of contents</h><h>level option</h></idx>
+
+            <p>The depth of the entries in a Table of Contents is given as a level, see <xref ref="publisher-levels"/> for more about levels.  The specification is in the attribute<cd>
+                <cline>/publication/common/tableofcontents/@level</cline>
+            </cd>with a whole number as the value.  A value of 0 is used to indicate that no Table of Contents is desired.  Absent this setting, reasonable defaults are supplied, which can vary by conversion and document type.</p>
+        </subsection>
+    </section>
+
     <section xml:id="publisher-file-latex">
         <title>PDF (<latex/>) Options</title>
         <idx>PDF publisher options</idx>
@@ -126,6 +156,133 @@
             </cd>element can have the following attribute:<ul>
                 <li><attr>ref</attr>: the <attr>xml:id</attr> of a division which will be a complete page at whatever level the document is chunked (broken into smaller pages).</li>
             </ul>An <c>index.html</c> page will be created which redirects immediately to this page.  Many webservers will serve this page when a <init>URL</init> stops with the enclosing directory.  So the Table of Contents (<tag>book</tag>, <tag>article</tag>) or the <tag>frontmatter</tag> are common choices.  See <xref ref="index-page"/> for more.</p>
+        </subsection>
+
+        <subsection xml:id="online-knowlization-options">
+            <title>HTML Knowlization</title>
+            <idx><h>knowls</h><h>elective</h></idx>
+            <idx>elective knowls</idx>
+
+            <p>In a conversion to <init>HTML</init> a wide variety of content can be <q>born</q> in a <term>knowl</term>.  Publisher switches are specified via multiple attributes of a single<cd>
+                <cline>/publication/html/knowl</cline>
+            </cd>element, with values of <c>yes</c> (do use a knowl) or <c>no</c> (do not use a knowl, present content normally).  For example,<cd>
+                <cline>&lt;knowl remark="yes"/&gt;</cline>
+            </cd>would make every <q>remark-like</q> element occur as a knowl where the content is first introduced.  Note that these are distinctly different than cross-reference knowls.  For more detail see <xref ref="knowled-content"/>.</p>
+
+            <p>This table gives the various attribute names, the default value, and an indication of the elements affected.  Note that some items are automatically born knowled (e.g. footnotes) and so there is no option to control that behavior.  Also, items such as <tag>figure</tag>, when included in a <tag>sidebyside</tag> are not influenced by the relevant option and are not born knowled.</p>
+
+            <table>
+                <title>Knowlization options</title>
+                <tabular>
+                    <row heading="yes" bottom="major">
+                        <cell>Attribute</cell>
+                        <cell>Default</cell>
+                        <cell>Element(s)</cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>theorem</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell><tag>theorem</tag>, <tag>lemma</tag>, <ellipsis/></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>proof</c></cell>
+                        <cell><c>yes</c></cell>
+                        <cell><tag>proof</tag></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>definition</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell><tag>definition</tag></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>example</c></cell>
+                        <cell><c>yes</c></cell>
+                        <cell><tag>example</tag>, <tag>problem</tag>, <ellipsis/></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>project</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell><tag>project</tag>, <tag>activity</tag>, <ellipsis/></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>task</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell><tag>task</tag></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>remark</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell><tag>remark</tag>, <tag>note</tag>, <ellipsis/></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>objectives</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell><tag>objectives</tag></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>outcomes</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell><tag>outcomes</tag></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>figure</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell><tag>figure</tag></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>table</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell><tag>table</tag></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>listing</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell><tag>listing</tag></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>list</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell><tag>list</tag></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>exercise-inline</c></cell>
+                        <cell><c>yes</c></cell>
+                        <cell>within narrative</cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>exercise-divisional</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell>inside <tag>exercises</tag> division</cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>exercise-worksheet</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell>inside <tag>worksheet</tag> division</cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>exercise-readingquestion</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell>inside <tag>readingquestions</tag> division</cell>
+                    </row>
+                </tabular>
+            </table>
         </subsection>
 
         <subsection xml:id="online-platform-options">
