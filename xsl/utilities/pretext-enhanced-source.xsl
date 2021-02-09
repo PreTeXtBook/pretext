@@ -33,14 +33,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Entry Template -->
 <!-- ############## -->
 
-<!-- $duplicate points to intermediate enhanced source created   -->
+<!-- $root points to intermediate enhanced source created        -->
 <!-- in the "pretext-assembly.xsl" stylesheet, so study that     -->
 <!-- stylesheet to understand what it is being displayed.        -->
 <!-- This stylesheet will be affected by whatever parameters     -->
 <!-- and auxiliary files that the assembly stylesheet reacts to. -->
 
 <xsl:template match="/">
-    <xsl:apply-templates select="$duplicate" mode="showme"/>
+    <xsl:apply-templates select="$root" mode="showme"/>
 </xsl:template>
 
 <xsl:template match="node()|@*" mode="showme">
