@@ -108,6 +108,15 @@
         </li>
 
         <li>
+            <title>Can I create <pretext/> source in Microsoft Word or Google Docs?</title>
+            <p>Unlikely.  <pretext/> is designed around <init>XML</init> markup, so using a text editor to create a text file is the intended process for creating source.  When you create a file with other word processors it is likely to use different characters in some places, such as <q>smart quotes</q>, and convert other things you type, such as converting three periods into a single ellipsis character.  And if you make font changes, such as italics for emphasis, that will not translate directly to <pretext/>.</p>
+
+            <p>Perhaps you know somebody technically-minded you want to convert your word-processor files for you?  First, this is a tedious job.  Second, they may not accurately translate your intent.  Third, you cannot make any edits and you will be <em>reliant</em> on them alone to maintain your project for you.</p>
+
+            <p>If you insist on authoring with a traditional word-processor, then you should.  But you will get whatever output that tool provides, and miss out on the benefits of the semantic markup that allows us to create all the various output formats <pretext/> provides.</p>
+        </li>
+
+        <li>
             <title>Why do I get no output and some warnings about bugs?</title>
             <p>There is a good chance you have <q>modularized</q> your source files and have not included the <c>--xinclude</c> switch on the command-line when you ran <c>xsltproc</c>.  (See <xref ref="processing-modular" />.)
                If that was your mistake, then you should have seen a warning.
