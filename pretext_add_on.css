@@ -3388,6 +3388,10 @@ blockquote.may_leave + #edit_menu_holder > #enter_choice {
 article.project-like > #edit_menu_holder > #enter_choice {
     bottom: -0.5em;
 }
+article.theorem-like > #edit_menu_holder > #enter_choice,
+article.definition-like > #edit_menu_holder > #enter_choice {
+    bottom: -0.2em;
+}
 /*
 article.project-like > ol > #edit_menu_holder > #enter_choice {
     bottom: -1.3em;
@@ -3630,7 +3634,8 @@ article.may_leave + #edit_menu_holder #enter_choice {
     margin-top: 0;
 }
 .pretext-content #phantomobject.move .done {
-    margin-left: 4em;
+    margin-left: 1em;
+    margin-top: 0em;
 /*
     float: right;
 */
@@ -3654,9 +3659,10 @@ article.may_leave + #edit_menu_holder #enter_choice {
 }
 .pretext-content #phantomobject.move .movearrow p.up {
     margin-top: 0;
+    margin-bottom: -1em;
 }
 .pretext-content #phantomobject.move .movearrow p.down {
-    margin-top: 0.5em;
+    margin-top: 0.0em;
 }
 .pretext-content #phantomobject.move .movearrow > * {
     display: inline-block;
