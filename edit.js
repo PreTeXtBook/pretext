@@ -706,26 +706,6 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
                editing_container_for["exercise-like"].includes(new_tag) ) {
             console.log("suggestions (hint, asnwer, solution) not implemented yet")
         }
-    } else if (false && editing_container_for["theorem-like"].includes(new_tag)) {
-        new_source["statement"] = "<&>" + new_statement_p_id + "<;>";
-        internalSource[new_statement_p_id] = { "xml:id": new_statement_p_id, "permid": "", ptxtag: "p",
-                      content: "", "parent": [new_id, "statement"] }
-
-        var new_proof_id = randomstring();
-        var new_proof_p_id = randomstring();
-        new_source["proof"] = "<&>" + new_proof_id + "<;>";
-        internalSource[new_proof_id] = { "xml:id": new_proof_id, "permid": "", ptxtag: "proof",
-                      content: "<&>" + new_proof_p_id + "<;>", "parent": [new_id, "proof"] }
-        internalSource[new_proof_p_id] = { "xml:id": new_proof_p_id, "permid": "", ptxtag: "p",
-                      content: "", "parent": [new_proof_id, "content"] }
-    } else if (false && editing_container_for["definition-like"].includes(new_tag)) {
-        new_source["statement"] = "<&>" + new_statement_p_id + "<;>";
-        internalSource[new_statement_p_id] = { "xml:id": new_statement_p_id, "permid": "", ptxtag: "p",
-                      content: "", "parent": [new_id, "statement"] }
-    } else if (false && editing_container_for["remark-like"].includes(new_tag)) {
-        new_source["statement"] = "<&>" + new_content_p_id + "<;>";
-        internalSource[new_content_p_id] = { "xml:id": new_content_p_id, "permid": "", ptxtag: "p",
-                      content: "", "parent": [new_id, "statement"] }
     } else if (editing_container_for["section-like"].includes(new_tag)) {
         new_source["content"] = "<&>" + new_content_p_id + "<;>";
         internalSource[new_content_p_id] = { "xml:id": new_content_p_id, "permid": "", ptxtag: "p",
@@ -946,32 +926,6 @@ function edit_in_place(obj, oldornew) {
 //          edit_in_place(document.getElementById(id_of_p, "old"));
 //
 //          return ""
-
-      } else if (false && new_tag == "list") {
-          console.log("list edit in place", obj)
-          var this_new_list = document.createElement('ol');   // later distinguish between ol and ul
-          this_new_list.setAttribute('id', thisID);
-          this_new_list.setAttribute('data-editable', 97);
-          this_new_list.setAttribute('tabindex', -1);
-          $("#" + thisID).replaceWith(this_new_list);
-
-          var id_of_li = internalSource[thisID]["content"];
-          id_of_li = id_of_li.replace(/<.>/g, "");
-          console.log("id_of_li", id_of_li);
-          var this_new_li = document.createElement('li');
-          this_new_li.setAttribute('id', id_of_li);
-          document.getElementById(thisID).insertAdjacentElement("afterbegin", this_new_li);
-
-          var id_of_p = internalSource[thisID]["content"];
-          id_of_p = id_of_p.replace(/<.>/g, "");
-          console.log("id_of_p", id_of_p);
-          var this_new_p = document.createElement('p');
-          this_new_li.setAttribute('id', id_of_p);
-          document.getElementById(id_of_li).insertAdjacentElement("afterbegin", this_new_p);
-
-          edit_in_place(document.getElementById(id_of_p, "old"));
-
-          return ""
 
       } else if (editing_container_for["definition-like"].includes(new_tag) ||
                 editing_container_for["theorem-like"].includes(new_tag) ||
