@@ -123,6 +123,11 @@
             <p>We understand that <pretext /> is a moving target, but we are iterating to a better state, and it is best to have everybody along for the <em>whole</em> ride.</p>
         </li>
 
+        <li xml:id="faq-keep-up-with-changes">
+            <title>I have not updated in months, so I did a pull, and now I have a bunch of warnings.  How do I catch up?</title>
+            <p>Changes on our end which produce new warnings are almost always announced on the <c>pretext-announce</c> Google Group.  This is a very low-traffic, announcement-only list, so you could skim the messages you missed.  Also, read warnings carefully, as they often have explicit suggestions about what to do next.</p>
+        </li>
+
         <!-- mathbook-xml-support:  2015-06-21:  Subscripts in custom lists -->
         <!-- mathbook-xml-support:  2016-06-19:  Formulas in list labels    -->
         <li>
