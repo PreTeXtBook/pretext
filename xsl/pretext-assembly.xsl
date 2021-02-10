@@ -411,13 +411,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- Sloppy for optional testing, will sometime soon become -->
-<!-- a real warning and will be coded real nice too         -->
-<xsl:param name="debug.xref.target" select="'no'"/>
-<xsl:variable name="debug-xref-target" select="$debug.xref.target = 'yes'"/>
-
-<!-- much like entities as of XXXXXX -->
-<xsl:template match="&STRUCTURAL;|&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|&SOLUTION-LIKE;|exercise|task|exercisegroup|poem|assemblage|paragraphs|li|fn|men|mrow|biblio|proof|contributor" mode="is-xref-target">
+<!-- yes/no boolean for valid targets of an "xref"         -->
+<!-- Initial list from entities file as of 2021-02-10      -->
+<!-- Others from test docs, public testing via pretext-dev -->
+<xsl:template match="&STRUCTURAL;|&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|&SOLUTION-LIKE;|exercise|task|exercisegroup|poem|assemblage|paragraphs|li|fn|men|mrow|biblio|proof|case|contributor|defined-term" mode="is-xref-target">
     <xsl:value-of select="'yes'"/>
 </xsl:template>
 
@@ -445,17 +442,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:for-each select="$original">
                     <xsl:if test="exsl:node-set(id($initial))">
                         <xsl:text>X</xsl:text>
-                        <!-- Sloppy, temporary -->
-                        <xsl:if test="$debug-xref-target">
+                        <!-- Sloppy, temporary-ish, bad indent -->
                             <xsl:variable name="target" select="exsl:node-set(id($initial))"/>
                             <xsl:variable name="is-a-target">
                                 <xsl:apply-templates select="$target" mode="is-xref-target"/>
                             </xsl:variable>
                             <xsl:if test="$is-a-target = 'no'">
-                                <xsl:message>PTX:DEBUG: xref/@ref "<xsl:value-of select="$initial"/>" points to a "<xsl:value-of select="local-name($target)"/>" element.  Please report me!</xsl:message>
+                                <xsl:message>PTX:DEBUG: xref/@ref "<xsl:value-of select="$initial"/>" points to a "<xsl:value-of select="local-name($target)"/>" element.  (1) we made a mistake, and we need to add this element to a list of potential targets of a cross-reference, or (2) you made a mistake and really did not mean this particular construction, or (3) we need to have a discussion about the advisability of this element being a target.   If (1) or (3) could you please report me!</xsl:message>
                             </xsl:if>
-                        </xsl:if>
-                        <!-- End: sloppy, temporary -->
+                        <!-- End: sloppy, temporary-ish -->
                     </xsl:if>
                 </xsl:for-each>
                 <!-- optionally do a context shift to private solutions file -->
