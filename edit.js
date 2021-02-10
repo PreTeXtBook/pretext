@@ -23,6 +23,9 @@ this_char = "";
 prev_char = "";
 prev_prev_char = "";
 
+final_added_object = "";
+previous_added_object = "";
+
 // sometimes we have to prevent Tab from changing focus
 this_focused_element = "";
 prev_focused_element = "";
@@ -191,6 +194,7 @@ editing_container_for = { "p": 1,
 "section-like": ["section", "subsection", "paragraphs", "rq", "exercises"],
 "ol": ["item"],
 "li": [""],
+"list": [""],
 "proof": [""]  //just a guess
 }
 
@@ -586,7 +590,7 @@ function edit_menu_for(this_obj_or_id, motion) {
      //  if (editable_children.length)
      //  next_editable_of(this_obj, "children")
             if (next_editable_of(this_obj, "children").length) {
-                edit_option.innerHTML = "<b>enter</b> this XXXYYYZZZ, or add near here?";
+                edit_option.innerHTML = "<b>enter</b> this " + internalSource[this_obj.id]["ptxtag"] + ", or add near here?";
             } else {
                 edit_option.innerHTML = "<b>edit</b> this paragraph, or add near here?";
             }
@@ -654,7 +658,7 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
     console.log("create_object_to_edit", new_tag, new_objects_sibling, relative_placement);
               // first insert a placeholder to edit-in-place
     var new_id = randomstring();
-    current_editing_actions.push(["new", new_tag, new_id]);
+    recent_editing_actions.push(["new", new_tag, new_id]);
         // we won;t need all of these, so re-think when these are created
     var new_content_p_id = randomstring();  // section-like
     var new_statement_p_id = randomstring();  // theorem-like, definition-like, remark-like, example-like, exercise-like
@@ -673,14 +677,15 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
         var new_p_id = randomstring();
         internalSource[new_p_id] = {"xml:id": new_p_id, "permid": "", "ptxtag": "p", "content": "", "parent": [new_id, "content"]}
         new_source["content"] = "<&>" + new_p_id + "<;>";
-//        current_editing_actions.push(["new", "p", new_p_id]);
+        current_editing_actions.push(["new", "li", new_id]);
     } else if (new_tag == "list") {  // creating a list, which needs one item to begin.
                                    // that item is an li contining a p
         var new_li_id = randomstring();
         var new_p_id = randomstring();
-        internalSource[new_p_id] = {"xml:id": new_p_id, "permid": "", "ptxtag": "p", "content": "just a tesssss sssst", "parent": [new_li_id, "content"]}
+        internalSource[new_p_id] = {"xml:id": new_p_id, "permid": "", "ptxtag": "p", "content": "", "parent": [new_li_id, "content"]}
         internalSource[new_li_id] = {"xml:id": new_li_id, "permid": "", "ptxtag": "li", "content": "<&>" + new_p_id + "<;>", "parent": [new_id, "content"] }
         new_source["content"] = "<&>" + new_li_id + "<;>";
+        current_editing_actions.push(["new", "li", new_li_id]);
     } else if (editing_container_for["theorem-like"].includes(new_tag) ||
                editing_container_for["definition-like"].includes(new_tag) ||
                editing_container_for["remark-like"].includes(new_tag) ||
@@ -742,10 +747,13 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
     console.log("         the_current_arrangement", the_current_arrangement);
     console.log("    current_editing", current_editing);
 
+// maybe the changes to current_editing is different for lists?
+
     var object_neighbor = new RegExp('(<&>' + sibling_id + '<;>)');
     var neighbor_with_new = '';
     var current_level = current_editing["level"];
     var current_location = current_editing["location"][current_level];
+    console.log("  UUU  current_editing", current_editing["level"], current_editing["location"].length, current_editing["tree"].length, current_editing["tree"][current_editing["level"]])
     if (relative_placement == "beforebegin") {  
         neighbor_with_new = '<&>' + new_id + '<;>\n' + '$1';
     }
@@ -755,10 +763,17 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
         }
     new_arrangement = the_current_arrangement.replace(object_neighbor, neighbor_with_new);
     internalSource[parent_description[0]][parent_description[1]] = new_arrangement;
-    current_editing["location"][current_level] = current_location;
+    if (new_tag == "list") {
+        current_editing["level"] += 1;
+        current_editing["location"].push(0);
+        current_editing["tree"].push([document.getElementById(new_p_id)])
+    }  else {
+        current_editing["location"][current_level] = current_location;
+    }
     console.log("         new_arrangement", new_arrangement);
     console.log("tried to insert", new_id, "next to", sibling_id, "in", the_current_arrangement)
     console.log("    updated current_editing", current_editing);
+    console.log("  VVV  current_editing", current_editing["level"], current_editing["location"].length, current_editing["tree"].length, current_editing["tree"][current_editing["level"]])
 
     return edit_placeholder
 }
@@ -769,7 +784,7 @@ function edit_in_place(obj, oldornew) {
 
     console.log("in edit in place");
     if (thisID = obj.getAttribute("id")) {
-        console.log("will edit in place", thisID);
+        console.log("will edit in place id", thisID, "which is", obj);
         thisTagName = obj.tagName.toLowerCase();
     } else {  // editing somethign without an id, so probably is a title or caption
         if (obj.classList.contains("heading")) {
@@ -828,7 +843,7 @@ function edit_in_place(obj, oldornew) {
         document.getElementById(thisID).insertAdjacentElement("afterbegin", this_content_container);
     //    $("#" + thisID).replaceWith(this_content_container);
 
-        console.log("inserted li, with #actively_editing inside it");
+        console.log("NOT: inserted li, with #actively_editing inside it");
         var idOfEditContainer = thisID + '_input';
         var idOfEditText = 'editing' + '_input_text';
         var paragraph_editable = document.createElement('div');
@@ -859,22 +874,105 @@ function edit_in_place(obj, oldornew) {
         this_char = "";
         prev_char = "";
 
-      } else if (new_tag == "list") {
+     } else if (new_tag == "list") {
+        console.log("list edit in place", obj)
+        var this_new_list = document.createElement('ol');   // later distinguish between ol and ul
+        this_new_list.setAttribute('id', thisID);
+        this_new_list.setAttribute('data-editable', 97);
+        this_new_list.setAttribute('tabindex', -1);
+        $("#" + thisID).replaceWith(this_new_list);
+
+        var id_of_li = internalSource[thisID]["content"];
+        id_of_li = id_of_li.replace(/<.>/g, "");
+        console.log("id_of_li", id_of_li);
+        var this_new_li = document.createElement('li');
+        this_new_li.setAttribute('id', id_of_li);
+        document.getElementById(thisID).insertAdjacentElement("afterbegin", this_new_li);
+
+
+
+
+        var this_content_container = document.createElement('div');
+        this_content_container.setAttribute('id', "actively_editing");
+   //     document.getElementById(thisID).insertAdjacentElement("afterbegin", this_content_container);
+        document.getElementById(id_of_li).insertAdjacentElement("afterbegin", this_content_container);
+    //    $("#" + thisID).replaceWith(this_content_container);
+
+        console.log(": inserted li, with #actively_editing inside it");
+        var idOfEditContainer = thisID + '_input';
+        var idOfEditText = 'editing' + '_input_text';
+        var paragraph_editable = document.createElement('div');
+        paragraph_editable.setAttribute('contenteditable', 'true');
+        paragraph_editable.setAttribute('class', 'eeee text_source paragraph_input');
+        paragraph_editable.setAttribute('id', idOfEditText);
+        paragraph_editable.setAttribute('data-age', oldornew);
+//        paragraph_editable.setAttribute('data-source_id', thisID);
+//        paragraph_editable.setAttribute('data-parent_id', internalSource[thisID]["parent"][0]);
+//        paragraph_editable.setAttribute('data-parent_component', internalSource[thisID]["parent"][1]);
+        // need the content of the new li, for the p id
+        var id_of_p = internalSource[id_of_li]["content"];
+        id_of_p = id_of_p.replace(/<.>/g, "");
+        console.log("id_of_p", id_of_p);
+        paragraph_editable.setAttribute('data-source_id', id_of_p);
+        paragraph_editable.setAttribute('data-parent_id', thisID);  // this li
+        paragraph_editable.setAttribute('data-parent_component', "content");  // the p is in the content of the li
+
+        document.getElementById('actively_editing').insertAdjacentElement("afterbegin", paragraph_editable);
+
+        console.log("setting", $('#' + idOfEditText), "to have contents", internalSource[thisID]["content"]);
+        the_contents = internalSource[id_of_p]["content"];
+        the_contents = expand_condensed_source_html(the_contents, "edit");
+        $('#' + idOfEditText).html(the_contents);
+        document.getElementById(idOfEditText).focus();
+  //      document.getElementById(idOfEditText).setSelectionRange(0,0);
+        console.log("made edit box for", thisID);
+        console.log("actually, made edit box for", id_of_p);
+        this_char = "";
+        prev_char = "";
+
+        make_current_editing_from_id("actively_editing");
+
+
+
+
+
+//          var id_of_p = internalSource[thisID]["content"];
+//          id_of_p = id_of_p.replace(/<.>/g, "");
+//          console.log("id_of_p", id_of_p);
+//          var this_new_p = document.createElement('p');
+//          this_new_li.setAttribute('id', id_of_p);
+//          document.getElementById(id_of_li).insertAdjacentElement("afterbegin", this_new_p);
+//
+//          edit_in_place(document.getElementById(id_of_p, "old"));
+//
+//          return ""
+
+      } else if (false && new_tag == "list") {
           console.log("list edit in place", obj)
-          var this_content_container = document.createElement('ol');
-          this_content_container.setAttribute('id', "actively_editing");
-          this_content_container.setAttribute('data-age', oldornew);
-          this_content_container.setAttribute('data-source_id', thisID);
-          this_content_container.setAttribute('data-parent_id', internalSource[thisID]["parent"][0]);
-          this_content_container.setAttribute('data-parent_component', internalSource[thisID]["parent"][1]);
-          this_content_container.setAttribute('data-objecttype', 'list');
-          var list_content = internalSource[thisID]["content"];
-          console.log("expanding list_content", list_content, "as edit");
-          list_content = expand_condensed_source_html(list_content, "edit");
-          this_content_container.innerHTML = list_content;
-          $("#" + thisID).replaceWith(this_content_container);
-          $("#editing_input_text").focus();
-          console.log("now put focus on", document.activeElement)
+          var this_new_list = document.createElement('ol');   // later distinguish between ol and ul
+          this_new_list.setAttribute('id', thisID);
+          this_new_list.setAttribute('data-editable', 97);
+          this_new_list.setAttribute('tabindex', -1);
+          $("#" + thisID).replaceWith(this_new_list);
+
+          var id_of_li = internalSource[thisID]["content"];
+          id_of_li = id_of_li.replace(/<.>/g, "");
+          console.log("id_of_li", id_of_li);
+          var this_new_li = document.createElement('li');
+          this_new_li.setAttribute('id', id_of_li);
+          document.getElementById(thisID).insertAdjacentElement("afterbegin", this_new_li);
+
+          var id_of_p = internalSource[thisID]["content"];
+          id_of_p = id_of_p.replace(/<.>/g, "");
+          console.log("id_of_p", id_of_p);
+          var this_new_p = document.createElement('p');
+          this_new_li.setAttribute('id', id_of_p);
+          document.getElementById(id_of_li).insertAdjacentElement("afterbegin", this_new_p);
+
+          edit_in_place(document.getElementById(id_of_p, "old"));
+
+          return ""
+
       } else if (editing_container_for["definition-like"].includes(new_tag) ||
                 editing_container_for["theorem-like"].includes(new_tag) ||
                 editing_container_for["remark-like"].includes(new_tag) ||
@@ -1156,7 +1254,9 @@ function delete_by_id(theid, thereason) {
     } else {
         old_content[theid] = [deleted_content]
     }
-    current_editing_actions.push(["deleted ", deleted_content["ptxtag"], theid]);
+    if (thereason != "newempty") {
+        current_editing_actions.push(["deleted ", deleted_content["ptxtag"], theid]);
+    }
         // update the parent of the object
     var current_level = current_editing["level"];
     var where_it_was = internalSource[parent_and_location[0]][ parent_and_location[1] ];
@@ -1179,7 +1279,7 @@ function delete_by_id(theid, thereason) {
     //    alert("deleting " + deleted_content["ptxtag"]);
  //       document.getElementById(theid).remove()
 
-        if (thereason == "empty") {
+        if (thereason == "empty" || thereason == "newempty") {
             document.getElementById(theid).remove()
         } else {
             document.getElementById("edit_menu_holder").remove()
@@ -1228,6 +1328,10 @@ var internalSource = {  // currently the key is the HTML id
            "content": "Note: Throughout the text you will see <em>Investigate!</em>\nactivities like this one.\nAnswer the questions in these as best you can to give yourself a feel for what is coming next."},
    "ooC": {"xml:id": "", "permid": "ooC", "ptxtag": "list", "parent": ["udO","content"],
            "content": "<&>mzp<;><&>SGy<;><&>yNH<;><&>eUQ<;>"},
+   "eUQ": {"xml:id": "", "permid": "eUQ", "ptxtag": "li", "parent": ["ooC","content"],
+           "content": "<&>jEJ<;>"},
+   "jEJ": {"xml:id": "", "permid": "jEJ", "ptxtag": "p", "parent": ["eUQ","content"],
+           "content": "Back in the days of yore, five small towns decided they wanted to build roads directly connecting each pair of towns. While the towns had plenty of money to build roads as long and as winding as they wished, it was very important that the roads not intersect with each other (as stop signs had not yet been invented). Also, tunnels and bridges were not allowed. Is it possible for each of these towns to build a road to each of the four other towns without creating any intersections?"},
    "mzp": {"xml:id": "", "permid": "mzp", "ptxtag": "li", "parent": ["ooC","content"],
            "content": "<&>LbZ<;>"},
    "LbZ": {"xml:id": "", "permid": "LbZ", "ptxtag": "p", "parent": ["mzp","content"],
@@ -1528,10 +1632,6 @@ function html_from_internal_id(the_id, is_inner) {
         if(is_inner == "edit") {
             opening_tag= ""; //"<div ";
             closing_tag= ""; // "</div>";
-       //     opening_tag += 'id="editing_input_text" data-parent_id="' + the_id + '" data-parent_component="content"'
-       //     opening_tag += ' contenteditable="true"'
-       //     opening_tag += ' class="paragraph_input"'
-       //     opening_tag += '>';
 
             return opening_tag + expand_condensed_source_html(the_content, is_inner) + closing_tag
 
@@ -1728,6 +1828,8 @@ function insert_html_version(these_changes) {
         //    current_editing["tree"][current_editing["level"]] = next_editable_of(location_of_change.parentElement, "children");
             var editing_parent = current_editing["tree"][ current_editing["level"] -1 ][ current_editing["location"][ current_editing["level"] - 1 ] ];
        //     current_editing["tree"][current_editing["level"]] = next_editable_of(location_of_change.parentElement, "children");
+            console.log("               editing_parent", editing_parent);
+            console.log("       EEE   ", current_editing["level"], "     current_editing[tree]", current_editing["tree"], " EEE ", current_editing["tree"][current_editing["level"]]);
             current_editing["tree"][current_editing["level"]] = next_editable_of(editing_parent, "children");
         } else if (this_object_entry == "creator") {
             var object_as_html = document.createElement('span');
@@ -1745,7 +1847,7 @@ function insert_html_version(these_changes) {
 
     console.log("returning from", insert_html_version);
     // call mathjax, in case the new content contains math
-    return object_as_html  // the most recently added object, which we may want to
+    return object_as_html // the most recently added object, which we may want to
                            // do something, like add an editing menu
 }
 
@@ -1767,6 +1869,7 @@ function retrieve_previous_editing() {
 
 function local_editing_action(e) {
     console.log("in local_editing_action for" ,e.code);
+    var most_recent_edit;
     if (e.code == "Tab") {
         e.preventDefault();
         console.log("making a local menu");
@@ -1778,7 +1881,7 @@ function local_editing_action(e) {
             e.preventDefault();
             these_changes = assemble_internal_version_changes();
             final_added_object = insert_html_version(these_changes);
-            var most_recent_edit = current_editing_actions.pop();
+            most_recent_edit = current_editing_actions.pop();
             recent_editing_actions.unshift(most_recent_edit);
             console.log("most_recent_edit should be title change", most_recent_edit);
             console.log("final_added_object", final_added_object);
@@ -1790,20 +1893,53 @@ function local_editing_action(e) {
 
         } else if (e.code == "Escape" || (prev_char.code == "Enter" && prev_prev_char.code == "Enter")) {
             console.log("need to save");
+console.log("    HHH current_editing", current_editing);
+
             e.preventDefault();
             this_char = "";
             prev_char = "";
             these_changes = assemble_internal_version_changes();
             console.log("    CCC these_changes", these_changes);
-            console.log("    CCC these_changes[0]", these_changes[0]);
+            console.log("    CCC0 these_changes[0]", these_changes[0]);
             console.log("current_editing_actions", current_editing_actions);
+            console.log("actively_editing", document.getElementById("actively_editing"));
+console.log("    III current_editing", current_editing, current_editing["tree"][current_editing["level"]]);
+            previous_added_object = final_added_object;
             final_added_object = insert_html_version(these_changes);
+            console.log("final_added_object, previous_added_object", final_added_object, previous_added_object);
+console.log("    LLL current_editing", current_editing, current_editing["tree"][current_editing["level"]]);
+            console.log("the final_added_object", final_added_object);
+            console.log("the actively_editing", document.getElementById("actively_editing"));
+            console.log("OO", current_editing_actions.length, " current_editing_actions", current_editing_actions);
+            console.log("current_editing_actions[0]", current_editing_actions[0]);
+            console.log("current_editing_actions[0][2]", current_editing_actions[0][2]);
                 // maybe this next if only handles when we delete by removing the letters in a p?
             if (these_changes[0] == "empty") {
+                console.log("NN", current_editing_actions.length, " current_editing_actions", current_editing_actions);
+                console.log("current_editing_actions[0]", current_editing_actions[0]);
+                console.log("current_editing_actions[0][2]", current_editing_actions[0][2]);
                 console.log("            going to delete", these_changes[2][0]);
-                delete_by_id(these_changes[2][0][0], "empty");
-                current_editing_actions.pop();   // content was empty, so there is no editing action
-                console.log("current_editing_actions", current_editing_actions);
+                // this is sort-of a hack to detext the end of inserting li
+                if (current_editing_actions.length == 2 &&
+                    current_editing_actions[1][0] == "empty" &&
+                    current_editing_actions[1][1] == "p" &&
+                    current_editing_actions[0][0] == "new" &&
+                    current_editing_actions[0][1] == "li") {
+                    current_editing_actions.pop();   // content was empty, so there is no editing action
+                    current_editing_actions.pop();
+                    delete_by_id(these_changes[2][0][0], "newempty");
+                    current_editing["location"][current_editing["level"]] -= 1
+                    final_added_object = previous_added_object;  // this approach makes the updating of current_editing moot?
+                } else {
+                    delete_by_id(these_changes[2][0][0], "empty");
+                }
+                console.log("MM", current_editing_actions.length, " current_editing_actions", current_editing_actions);
+                for (var j=0; j<current_editing_actions.length; ++j ) {
+                    console.log(j, "current_editing_actions[j]", current_editing_actions[j]);
+                }
+      //          current_editing_actions.pop();   // content was empty, so there is no editing action
+      //          current_editing_actions.pop();   // and also the now empty parent (this is correct for li, but probably not other cases)
+                console.log("PP", current_editing_actions.length, " current_editing_actions", current_editing_actions);
             }
             // if there is an editing paragraph ahead, go there.  Otherwise menu the last thing added
             if (document.querySelector('.paragraph_input')) {
@@ -1813,7 +1949,11 @@ function local_editing_action(e) {
        //         next_textarea.setSelectionRange(0,0);
   //              this_char = "";
   //              prev_char = "";
-            } else if (final_added_object && document.getElementById("actively_editing")) {
+            } else if (final_added_object) { //  && document.getElementById("actively_editing")) {
+
+              if(document.getElementById("actively_editing")) {
+console.log("    SSS current_editing", current_editing, current_editing["tree"][current_editing["level"]]);
+
                 var editing_placeholder = document.getElementById("actively_editing");
                 console.log("still editing", editing_placeholder, "which contains", final_added_object);
                 var this_parent = internalSource[final_added_object.id]["parent"];
@@ -1835,49 +1975,97 @@ function local_editing_action(e) {
                 console.log("here is where we need to update current_editing", "parent:", this_parent,"which is",document.getElementById(this_parent[0]), "level:", current_editing["level"], "loation:", current_editing["location"], "tree:", current_editing["tree"]);
                 $("#actively_editing").remove();
 
-              // parents_parent is wrong, because the editable siblings do not live at the same level,
-              // p in li being an example
+console.log("    DDD current_editing", current_editing, current_editing["tree"][current_editing["level"]]);
 
+              }
+
+
+                most_recent_edit = ["","",""];
+                while (current_editing_actions.length) {
+                    most_recent_edit = current_editing_actions.pop();
+                    recent_editing_actions.unshift(most_recent_edit);
+                    console.log("      most_recent_edit", most_recent_edit);
+                }
+                console.log("      final_added_object", final_added_object);
+
+                save_edits()
+
+                // is this in the right place?
+                console.log("most_recent_edit", most_recent_edit);
+
+
+                // sometimes, such as when adding items to a list, you want to
+                // automatically start adding something else.
+                // maybe refactor theorem to add proof after?
+                if (most_recent_edit[1] == "li") {  // added to a list, so try adding again
+                      //  note that when adding an li, the neichbor is a p within the actual li neighbor
+                    var new_obj = create_object_to_edit("li", document.getElementById(most_recent_edit[2]).firstElementChild, "afterend")
+                    edit_in_place(new_obj, "new");
+                    console.log("now editing the assumed new li");
+console.log("    GGG current_editing", current_editing, current_editing["tree"][current_editing["level"]]);
+           //         alert("now editing the new li");
+                } else {
+
+
+
+
+
+console.log("    PPP current_editing", current_editing, current_editing["tree"][current_editing["level"]]);
+
+
+// alert("put back the edit menu");
+            
                 var editing_parent = current_editing["tree"][ current_editing["level"] -1 ][ current_editing["location"][ current_editing["level"] - 1 ] ];
                 console.log("going to make the new tree from parent of", this_parent, "which is", editing_parent, "and has children", next_editable_of(editing_parent, "children"));
-                current_editing["tree"][current_editing["level"]] = next_editable_of(editing_parent, "children");
+                current_editing["tree"][current_editing["level"]] = next_editable_of(editing_parent, "children");    
                 console.log("updated tree", current_editing["tree"]);
+console.log("    QQQ current_editing", current_editing, current_editing["tree"][current_editing["level"]]);
+console.log("    final_added_object", final_added_object);
+
+                make_current_editing_from_id(final_added_object.id);
+
+
                 edit_menu_from_current_editing("entering");
+
+                }
+
             } else if ( document.getElementById("actively_editing")) {
                  document.getElementById("actively_editing").remove();
                 edit_menu_from_current_editing("entering");
             } else {
                 edit_menu_from_current_editing("entering");
-            }
+            }   
 
-            while (current_editing_actions.length) {
-                var most_recent_edit = current_editing_actions.pop();
-                // a theorem involves multiple additions, so make it appear so
-                if (current_editing_actions.length) { most_recent_edit[0] = " -" + most_recent_edit[0] }
-                recent_editing_actions.unshift(most_recent_edit);
-            }
-            console.log("      most_recent_edit", most_recent_edit);
 
- //           console.log("check if final_added_object", final_added_object, "has parent li");
- //           console.log("final_added_object.parentElement", final_added_object.parentElement);
- //           console.log("is it new", final_added_object.parentElement.getAttribute("data-age") == "new");
 
-            if (final_added_object.getAttribute("data-age")) {
-                console.log("THIS", final_added_object.tagName,"is", final_added_object.getAttribute("data-age"))
-            } else {
-                var relevant_parent = final_added_object.closest("[data-age]");
-                console.log("THAT", final_added_object.tagName,"has a parent which is a(n)", relevant_parent.tagName, "which is", relevant_parent.getAttribute("data-age"))
-            }
 
-            save_edits()
 
-            // is this in the right place?
-            console.log("most_recent_edit", most_recent_edit);
-            if (most_recent_edit[1] == "li") {  // added to a list, so try adding again
-                  //  note that when adding an li, the neichbor is a p within the actual li neighbor
-                var new_obj = create_object_to_edit("li", document.getElementById(most_recent_edit[2]).firstElementChild, "afterend")
-                edit_in_place(new_obj, "new");
-            }
+
+
+///            while (current_editing_actions.length) {
+///                var most_recent_edit = current_editing_actions.pop();
+///                recent_editing_actions.unshift(most_recent_edit);
+///            }
+///            console.log("      most_recent_edit", most_recent_edit);
+///            console.log("      final_added_object", final_added_object);
+///
+///            save_edits()
+///
+///            // is this in the right place?
+///            console.log("most_recent_edit", most_recent_edit);
+///            if (most_recent_edit[1] == "li") {  // added to a list, so try adding again
+///                  //  note that when adding an li, the neichbor is a p within the actual li neighbor
+///                var new_obj = create_object_to_edit("li", document.getElementById(most_recent_edit[2]).firstElementChild, "afterend")
+///                edit_in_place(new_obj, "new");
+///                console.log("now editing the assumed new li");
+///                alert("now editing the new li");
+///            }
+
+
+
+
+
+
         }  //  esc or enter enter enter
         console.log ("processed an enter");
     } //  esc or enter
@@ -2202,7 +2390,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                     console.log("current envoronemnt", this_object_source);
                     var old_env = internalSource[id_of_object]["ptxtag"];
                     internalSource[id_of_object]["ptxtag"] = new_env;
-                    current_editing_actions.push([old_env, new_env, id_of_object]);
+                    recent_editing_actions.push([old_env, new_env, id_of_object]);
                     console.log("the change was", "changed " + old_env + " to " + new_env + " " + id_of_object);
                     var the_whole_object = html_from_internal_id(id_of_object);
                     console.log("B: the_whole_object", the_whole_object);
@@ -2313,6 +2501,9 @@ function main_menu_navigator(e) {  // we are not currently editing
                   var new_obj = create_object_to_edit(dataEnv, object_of_interest, before_after);
                   console.log("new_obj", new_obj);
                   edit_in_place(new_obj, "new");
+                  console.log("are we editing", new_obj);
+                  console.log("  JJJ  current_editing", current_editing["level"], current_editing["location"].length, current_editing["tree"].length, current_editing["tree"][current_editing["level"]]);
+                  console.log("    current_editing", current_editing);
               //    object_near_new_object.classList.remove("may_select");
               //    object_near_new_object.classList.remove("may_enter");
                   object_of_interest.classList.remove("may_select");
