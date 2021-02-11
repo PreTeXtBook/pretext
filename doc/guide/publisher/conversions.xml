@@ -102,6 +102,8 @@
         <p>When choosing names to use as values for the  <attr>ref</attr> and <attr>name</attr> attributes, develop a consistent scheme that will make sense to other authors. Do not use spaces or capital letters. This name will never be visible to readers but should be easy for developers to understand.  Placing careful comments in one <q>main</q> customization file can help other authors create new customizations that are accurate.</p>
 
         <p>Note that this functionality is limited when it comes to irregular plurals and capitalization. Take care with the placement of custom elements: they will not, for example, capitalize automatically at the beginning of a sentence.</p>
+
+        <p>See <xref ref="publisher-file-source"/> for the mechanics of specifying a file of customizations via the publisher file.</p>
     </section>
 
     <section xml:id="processing-parameters">
