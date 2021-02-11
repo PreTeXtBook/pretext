@@ -60,33 +60,49 @@
         <p>We have implemented some flexibility for figures and tables, and for projects.  This work is in flux, so we have not yet documented the possibilities.  Our view is that figures and tables can be considered visually different enough to merit a separate sequence of serial numbers.</p>
     </section>
 
-    <section xml:id="customizations">
+    <section xml:id="publisher-customizations">
     <title>Customizations</title>
     <idx>customizations</idx>
 
-        <p>The customization feature allows you to create two or more versions of your text for slightly different audiences. To do this, the author uses a custom element in the publisher file that points to a customization file. Multiple different customization files can be used to build different versions of the text. For example, we might want to create two versions of our biology book <init>AOTA</init>, one for zoologists and one for laypeople. For the zoologist edition we want animal names to be scientific names, but in the edition for laypeople we want to use common names. The rest of the text is identical. To execute this, we make every animal name a custom element and create a customization file for each of the two versions.</p>
+        <p>The customization feature allows you to create two or more versions of your text for slightly different audiences. To do this, an author defines custom elements that find their translations in a file specified in the publisher file.  Multiple customization files can then be used to build different versions of the text. For example, we might want to create two versions of our <init>AOTA</init> book, one for zoologists and one for laypeople. For the zoologist edition we want animal names to be scientific names, but in the edition for laypeople we want to use common names. The rest of the text is identical.  To execute this, we make every animal name a custom element and create a customization file for each of the two versions.</p>
 
-        <p>Say we want to write a sentence that reads <q>The IUCN red list classification of the western lowland gorilla is critically endangered</q> in the layperson’s edition and <q>The IUCN red list classification of the <taxon>Gorilla gorilla gorilla</taxon> is critically endangered</q> in the zoologist’s edition. We begin by writing the sentence in the source and creating a custom element for the name of the gorilla:</p>
+        <p>Say we want to write a sentence that reads <q>The IUCN red list classification of the western lowland gorilla is critically endangered</q> in the layperson’s edition and <q>The IUCN red list classification of the <taxon>Gorilla gorilla gorilla</taxon> is critically endangered</q> in the zoologist’s edition. We begin by writing the sentence in the source and creating a <tag>custom</tag> element as a place-holder for the name of the gorilla:</p>
 
-        <p><cd>The i&lt;nit>IUCN&lt;/init&gt; red list classification of the &lt;custom ref=“gorilla-name”/&gt; is critically endangered.</cd></p>
+        <pre>
+        The &lt;init>IUCN&lt;/init&gt; red list classification of
+        the &lt;custom ref="gorilla-name"/&gt; is critically endangered.
+        </pre>
 
-        <p>When naming the ref element, develop a consistent schema that makes sense to the authors. Don’t use spaces or capital letters. This ref element name will never be visible to readers but should be easy for developers to understand.</p>
+        <p>Then the file of translations will contain a <tag>custom</tag> element, with a <attr>name</attr> attribute that has value <c>gorilla-name</c>, and whose content is the translation.</p>
 
-        <p>Next, we create the customization file that this reference in the publisher file will point to. This file should be built in your source in a folder called <q>customizations.</q> Within this folder, create one file for each version of the text that may be built. The customization file opens with a special element and then contains a definition for each custom ref. We encourage commenting and systematic organization to keep your customizations straight.</p>
+        <p>Once you have placed <tag>custom</tag> elements in your source, you need to create one or more files of translations.  To stay organized you might choose to place them in a directory of their own.  The customization file opens with a special element and then contains a definition for each customization.</p>
 
-        <p>For the example above, here’s the beginning of the customization file we might name <q>zoologist.ptx.</q></p>
+        <p>For the example above, here is the beginning of the customization file we might name <c>customizations/zoologist.ptx.</c></p>
 
-        <p><cd>
+        <pre>
         &lt;pi:customizations xmlns:pi="http://pretextbook.org/2020/pretext/internal"&gt;
-        &lt;!-- Name of Western mountain gorilla --&gt;
-        &lt;custom name= “gorilla-name”>&lt;taxon&gt;Gorilla gorilla gorilla&lt;/taxon&gt;&lt;/custom&gt;
+          &lt;!-- Name of Western mountain gorilla --&gt;
+          &lt;custom name= "gorilla-name">
+            &lt;taxon&gt;Gorilla gorilla gorilla&lt;/taxon&gt;
+          &lt;/custom&gt;
         &lt;/pi:customizations&gt;
-        </cd></p>
+        </pre>
 
-        <p>Note that the <cd>&lt;custom name=&gt;</cd> element matches the custom ref from the text. Avoid any extra spaces. Then, we would also create a customization file named <q>layperson.ptx</q> and set it up in the same way. For this version, the same custom name element will contain the text <q>western lowland gorilla.</q> Once this is set up, the element <cd>&lt;custom ref=“gorilla-name”/&gt;</cd> can be used throughout the text and will populate automatically depending on which version is built. </p>
+        <p>Note that employing a common value for the <attr>name</attr> attribute and the <attr>ref</attr> attribute makes the association for the replacement in the source. Next, we would also create a customization file named <q>customizations/layperson.ptx</q> that looks like the following.</p>
 
-        <p><note> <title>Capitals and plurals</title> This functionality is limited when it comes to irregular plurals and capitalization. Take care with the placement of custom elements: they will not, for example, capitalize automatically at the beginning of a sentence.</note></p>
-        </section>
+        <pre>
+        &lt;pi:customizations xmlns:pi="http://pretextbook.org/2020/pretext/internal"&gt;
+          &lt;!-- Name of Western mountain gorilla --&gt;
+          &lt;custom name= "gorilla-name">western lowland gorilla&lt;/custom&gt;
+        &lt;/pi:customizations&gt;
+        </pre>
+
+        <p>Once the customization files are created, the element <c>&lt;custom ref="gorilla-name"/&gt;</c> can be used <em>throughout</em> the text and will populate automatically depending on which customization file is specified in the publisher file.</p>
+
+        <p>When choosing names to use as values for the  <attr>ref</attr> and <attr>name</attr> attributes, develop a consistent scheme that will make sense to other authors. Do not use spaces or capital letters. This name will never be visible to readers but should be easy for developers to understand.  Placing careful comments in one <q>main</q> customization file can help other authors create new customizations that are accurate.</p>
+
+        <p>Note that this functionality is limited when it comes to irregular plurals and capitalization. Take care with the placement of custom elements: they will not, for example, capitalize automatically at the beginning of a sentence.</p>
+    </section>
 
     <section xml:id="processing-parameters">
         <title>Processing Parameters</title>
