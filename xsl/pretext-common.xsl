@@ -11031,13 +11031,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="incorrect-use" select="($html.calculator != '')" />
     </xsl:call-template>
     <!--  -->
-    <!-- 2020-11-04  *warning* about one-panel "sidebyside" -->
-    <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//sidebyside[not(parent::interactive) and count(*[not(&METADATA-FILTER;)]) = 1]" />
-        <xsl:with-param name="date-string" select="'2020-11-04'" />
-        <xsl:with-param name="message" select="'this is a temporary *warning*, which we plan to remove around 2021-01-30.  A &quot;sidebyside&quot; is no longer necessary to hold, or provide layout control, for single instances of &quot;image&quot;,  &quot;video&quot;,  &quot;tabular&quot;, and similar.  Try removing the &quot;sidebyside&quot; and moving any layout control onto the remaining object.'" />
-    </xsl:call-template>
-    <!--  -->
     <!-- 2020-11-22  LaTeX print option controlled by publisher file -->
     <xsl:call-template name="parameter-deprecation-message">
         <xsl:with-param name="date-string" select="'2020-11-22'" />

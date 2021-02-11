@@ -19,6 +19,12 @@ You should have received a copy of the GNU General Public License
 along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
+<!-- http://pimpmyxslt.com/articles/entity-tricks-part2/ -->
+<!-- NB: directories affect location -->
+<!DOCTYPE xsl:stylesheet [
+    <!ENTITY % entities SYSTEM "../xsl/entities.ent">
+    %entities;
+]>
 <!-- Identify as a stylesheet -->
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
@@ -112,6 +118,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates/>
 </xsl:template>
 
+<!-- ########## -->
+<!-- Advisories -->
+<!-- ########## -->
+
+<xsl:template match="sidebyside[not(parent::interactive)]">
+    <xsl:if test="count(*[not(&METADATA-FILTER;)]) = 1">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message">
+                <xsl:text>A &lt;sidebyside&gt; normally does not have a single panel.&#xa;</xsl:text>
+                <xsl:text>If this construct is only for layout control, try moving&#xa;</xsl:text>
+                <xsl:text>layout onto the element used as panel ("</xsl:text>
+                <xsl:value-of select="local-name(*[not(&METADATA-FILTER;)])"/>
+                <xsl:text>") and remove the &lt;sidebyside&gt;&#xa;</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- recurse further -->
+    <xsl:apply-templates/>
+</xsl:template>
 
 <!-- ####### -->
 <!-- WeBWorK -->
