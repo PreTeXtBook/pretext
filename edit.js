@@ -388,7 +388,12 @@ function menu_options_for(object_id, component_type, level) {
      if (component_type in menu_for) {
          component_items = menu_for[component_type]
      } else {
-         component_items = [["placeholder 1"], ["placeholder 2-like"], ["placeholder 3"], ["placeholder 4"], ["placeholder 5"]];
+       //  component_items = [["placeholder 1"], ["placeholder 2-like"], ["placeholder 3"], ["placeholder 4"], ["placeholder 5"]];
+         // is this a reasbable default for what can go anywhere?
+         component_items = [["paragraph", "p"],
+            ["list or table", "list-like"],
+            ["math/chemistry/code", "math-like", "c"]]
+      //      ["image/video/sound", "display-like", "v"]]
      }
 
      this_menu = "";
@@ -1667,7 +1672,7 @@ function insert_html_version(these_changes) {
 // or is that after this function is done?
     if (nature_of_the_change != "replace") {
         console.log("should be replace, since it is the edit form we are replacing");
-        alert("should be replace, since it is the edit form we are replacing")
+ //       alert("should be replace, since it is the edit form we are replacing")
     }
 
     var object_as_html = "";
