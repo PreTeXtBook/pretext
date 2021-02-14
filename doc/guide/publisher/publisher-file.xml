@@ -63,6 +63,9 @@
             <cline>/publication/numbering/equations/@level</cline>
             <cline>/publication/numbering/footnotes/@level</cline>
         </cd> whose values should be integers (zero is a possibility) that do not exceed the maximum level specified for divisions.</p>
+        <p>Chapters of a <tag>book</tag> may start numbering from something other than one.  This feature is not available in a book with structural parts (rather than decorative parts).  Read about this at the end of <xref ref="publisher-numbering"/> and <xref ref="best-practice-chapter-zero"/>.  If you still want to proceed, then set the publisher file entry<cd>
+            <cline>/publication/numbering/divisions/@chapter-start</cline>
+        </cd> to the desired value of the first chapter.</p>
     </section>
 
     <section xml:id="publisher-file-latex">

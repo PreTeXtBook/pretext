@@ -58,6 +58,14 @@
         <p>If it is so important to not have separate sequences of serial numbers, then why do equations and footnotes get their own sequences?  These items are substantially different visually, and even their numbers are formatted quite differently, so scanning for blocks or equations or footnotes should be very distinct visually.  Notice that it is their <em>distinctive appearance</em> that is the criteria for an independent sequence of serial numbers.</p>
 
         <p>We have implemented some flexibility for figures and tables, and for projects.  This work is in flux, so we have not yet documented the possibilities.  Our view is that figures and tables can be considered visually different enough to merit a separate sequence of serial numbers.</p>
+
+        <p>Divisions that are <tag>chapter</tag>s, and only <tag>chapter</tag>s, may begin with a number other than one.  Primarly this is to accomodate books that need to be printed in multiple physical volumes, so numbering in a second (or subsequent) volume can be correct.  We also understand the instructive value of a computer science text that wants to start counting from zero.  We do not mean to encourage a Chapter 0 that is an introduction (go ahead and title Chapter 1 <articletitle>Introduction</articletitle>) or background preparatory material (make that an appendix).  Understand that a <tag>preface</tag>, or multiple <tag>preface</tag>s, is teh place to talk about how, or why, you wrote your book, and/or a place to instruct a reader or instructor about the best ways to use your book.</p>
+
+        <note xml:id="best-practice-chapter-zero">
+            <title>Use Chapter Zero Carefully</title>
+
+            <p>Chapter numbering may start with a number other than one, and zero is a popular choice.  This should not be simply because the first chapter is introductory or preparatory, nor should it be a replacement for a preface, which has a well-defined purpose.</p>
+        </note>
     </section>
 
     <section xml:id="publisher-customizations">
