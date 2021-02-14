@@ -25,6 +25,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Specification of image locations, relative to main source file -->
     <epub cover="images/cover_aata_2014.png" image-directory="images"/>
 
+    <numbering>
+        <!-- defaults for a book with parts -->
+        <divisions level="5"/>
+    </numbering>
+
     <!-- HTML-Specific Options -->
     <html>
         <!-- @xml:id of a page to be target of index.html redirect -->
