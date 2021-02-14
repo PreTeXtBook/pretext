@@ -301,7 +301,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- check $candidate against upper bound, $max-feasible -->
     <xsl:choose>
         <xsl:when test="$candidate-maxlevel > $max-feasible">
-            <xsl:message>PTX:ERROR:   numbering level set for divisions ("<xsl:value-of select="$candidate"/>") is greater than the maximum possible ("<xsl:value-of select="$max-feasible"/>") for this document type.  The default value will be used instead</xsl:message>
+            <xsl:message>PTX:ERROR:   numbering level set for divisions ("<xsl:value-of select="$candidate-maxlevel"/>") is greater than the maximum possible ("<xsl:value-of select="$max-feasible"/>") for this document type.  The default value will be used instead</xsl:message>
             <xsl:value-of select="$max-feasible"/>
         </xsl:when>
         <xsl:otherwise>
