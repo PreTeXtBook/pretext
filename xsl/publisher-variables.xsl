@@ -1921,6 +1921,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="numbering.footnotes.level" select="''" />
 <xsl:param name="numbering.maximum.level" select="''" />
 
+<!-- Deprecated 2021-02-14, now ignored, but warning exists -->
+<xsl:param name="debug.chapter.start" select="''" />
 
 
 <!-- ################# -->
