@@ -568,6 +568,63 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="chapter-start" select="number($chapter-start-entered)"/>
 
+<!-- Status quo, for no-part books and articles is "absent".     -->
+<!-- The "structural" option will change numbers and numbering   -->
+<!-- substantially.  The "decorative" option is the default for  -->
+<!-- books with parts, and it looks just like the LaTeX default. -->
+<xsl:variable name="parts">
+    <xsl:choose>
+        <!-- no parts, just record as absent,  -->
+        <!-- but warn of ill-advised attempts  -->
+        <xsl:when test="not($document-root/part)">
+            <xsl:choose>
+                <xsl:when test="$publication/numbering/divisions/@part-structure">
+                    <xsl:message>PTX:WARNING: your document is not a book with parts, so the publisher file  numbering/divisions/@part-structure  entry is being ignored</xsl:message>
+                </xsl:when>
+                <xsl:when test="$docinfo/numbering/division/@part">
+                    <xsl:message>PTX:WARNING: your document is not a book with parts, and docinfo/numbering/division/@part is deprecated anyway and is being ignored</xsl:message>
+                </xsl:when>
+            </xsl:choose>
+            <!-- flag this situation -->
+            <xsl:text>absent</xsl:text>
+        </xsl:when>
+        <!-- now we have parts to deal with -->
+        <!-- first via publisher file       -->
+        <xsl:when test="$publication/numbering/divisions/@part-structure">
+            <xsl:choose>
+                <xsl:when test="$publication/numbering/divisions/@part-structure = 'structural'">
+                    <xsl:text>structural</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/numbering/divisions/@part-structure = 'decorative'">
+                    <xsl:text>decorative</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: the publisher file  numbering/divisions/@part-structure  entry should be "decorative" or "structural", not "<xsl:value-of select="$publication/numbering/divisions/@part-structure" />".  The default will be used instead.</xsl:message>
+                    <xsl:text>decorative</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- Preserve much of old behavior, warning is elsewhere -->
+        <xsl:when test="$docinfo/numbering/division/@part">
+            <xsl:choose>
+                <xsl:when test="$docinfo/numbering/division/@part = 'structural'">
+                    <xsl:text>structural</xsl:text>
+                </xsl:when>
+                <xsl:when test="$docinfo/numbering/division/@part = 'decorative'">
+                    <xsl:text>decorative</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: the  docinfo/numbering/division/@part  entry should be "decorative" or "structural", not "<xsl:value-of select="$docinfo/numbering/division/@part"/>".  The default will be used instead.</xsl:message>
+                    <xsl:text>decorative</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- no specification, use default -->
+        <xsl:otherwise>
+            <xsl:text>decorative</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
 
 <!-- ##################### -->
 <!-- HTML-Specific Options -->

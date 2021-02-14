@@ -833,37 +833,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- historically false -->
 <xsl:variable name="b-number-exercise-distinct" select="boolean($docinfo/numbering/exercises)" />
 
-<!-- Status quo, for no-part books and articles is "absent".     -->
-<!-- The "structural" option will change numbers and numbering   -->
-<!-- substantially.  The "decorative" option is the default for  -->
-<!-- books with parts, and it looks just like the LaTeX default. -->
-<xsl:variable name="parts">
-    <xsl:choose>
-        <xsl:when test="not($document-root/part) and $docinfo/numbering/division/@part">
-            <xsl:message>MBX:WARNING: your document is not a book with parts, so docinfo/numbering/division/@part will be ignored</xsl:message>
-            <xsl:text>absent</xsl:text>
-        </xsl:when>
-        <!-- Schema restricts parts to a division of a book -->
-        <!-- So usual no-part book, or article, or ...      -->
-        <xsl:when test="not($document-root/part)">
-            <xsl:text>absent</xsl:text>
-        </xsl:when>
-        <!-- has parts, check docinfo specification        -->
-        <!-- nothing given is default, which is decorative -->
-        <xsl:when test="not($docinfo/numbering/division/@part)">
-            <xsl:text>decorative</xsl:text>
-        </xsl:when>
-        <xsl:when test="$docinfo/numbering/division/@part = 'structural'">
-            <xsl:text>structural</xsl:text>
-        </xsl:when>
-        <xsl:when test="$docinfo/numbering/division/@part = 'decorative'">
-            <xsl:text>decorative</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message terminate='yes'>MBX:WARNING: docinfo/numbering/division/@part should be "decorative" or "structural", not "<xsl:value-of select="$docinfo/numbering/division/@part" />"  Quitting...</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
 
 <!-- We read the document language translation -->
 <!-- nodes out of the right file, which relies -->
