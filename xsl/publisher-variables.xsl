@@ -59,10 +59,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="chunks">
     <xsl:choose>
+        <!-- debugging tool overrides anything else -->
+        <xsl:when test="not($debug.chunk = '')">
+            <xsl:value-of select="$debug.chunk"/>
+        </xsl:when>
+        <!-- consult publisher file -->
         <xsl:when test="$publication/common/chunking/@level">
             <xsl:value-of select="$publication/common/chunking/@level"/>
         </xsl:when>
-        <!-- legacy, but useful as stringparam for testing regime -->
+        <!-- respect legacy string parameter -->
         <xsl:when test="not($chunk.level = '')">
             <xsl:value-of select="$chunk.level"/>
         </xsl:when>

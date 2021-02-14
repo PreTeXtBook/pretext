@@ -1159,6 +1159,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- ################### -->
+<!-- Debugging Variables -->
+<!-- ################### -->
+
+<!-- 2021-02-14: collect debugging string parameters here. -->
+<!-- (1) Military style names: debug.*.*, finer purposes   -->
+<!-- (2) Minimal documentation here.                       -->
+<!-- (3) No error-checking, no deprecation plan            -->
+<!-- (4) Perhaps warnings on removal, migrate to Bad Bank  -->
+
+<!-- Override chunking publisher variable, for testing -->
+<xsl:param name="debug.chunk" select="''"/>
 
 <!-- Sometimes  xsltproc fails, and fails spectacularly,        -->
 <!-- setting this switch will dump lots of location info to the -->
