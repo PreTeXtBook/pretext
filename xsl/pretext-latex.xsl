@@ -1100,10 +1100,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newtcolorbox[auto counter</xsl:text>
     <!-- control the levels of the numbering -->
     <!-- global (no periods) is the default  -->
-    <xsl:if test="not($numbering-theorems = 0)">
+    <xsl:if test="not($numbering-blocks = 0)">
         <xsl:text>, number within=</xsl:text>
         <xsl:call-template name="level-to-name">
-            <xsl:with-param name="level" select="$numbering-theorems" />
+            <xsl:with-param name="level" select="$numbering-blocks" />
         </xsl:call-template>
     </xsl:if>
     <xsl:text>]{block}{}&#xa;</xsl:text>

@@ -267,49 +267,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- basically an abstract implementation   -->
 <xsl:variable name="chunk-level" select="number(0)"/>
 
-<!-- User-supplied Numbering for Theorems, etc    -->
-<!-- Respect switch, or provide sensible defaults -->
-<xsl:variable name="numbering-theorems">
-    <xsl:choose>
-        <xsl:when test="$numbering.theorems.level != ''">
-            <xsl:value-of select="$numbering.theorems.level" />
-        </xsl:when>
-        <xsl:when test="$root/book/part">3</xsl:when>
-        <xsl:when test="$root/book">2</xsl:when>
-        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
-        <xsl:when test="$root/article">0</xsl:when>
-        <xsl:when test="$root/slideshow">0</xsl:when>
-        <xsl:when test="$root/letter">0</xsl:when>
-        <xsl:when test="$root/memo">0</xsl:when>
-        <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Theorem numbering level not determined</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<!-- User-supplied Numbering for Projects, etc    -->
-<!-- Respect switch, or provide sensible defaults -->
-<!-- PROJECT-LIKE -->
-<!-- NB: this should become elective, more like the      -->
-<!-- schemes below for inline exercises and figure-like. -->
-<xsl:variable name="numbering-projects">
-    <xsl:choose>
-        <xsl:when test="$numbering.projects.level != ''">
-            <xsl:value-of select="$numbering.projects.level" />
-        </xsl:when>
-        <xsl:when test="$root/book/part">3</xsl:when>
-        <xsl:when test="$root/book">2</xsl:when>
-        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
-        <xsl:when test="$root/article">0</xsl:when>
-        <xsl:when test="$root/slideshow">0</xsl:when>
-        <xsl:when test="$root/letter">0</xsl:when>
-        <xsl:when test="$root/memo">0</xsl:when>
-        <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Theorem numbering level not determined</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
 <!-- Inline Exercises can optionally run on their own numbering scheme -->
 <!-- This is set (temporarily) in docinfo, which will change           -->
 <!-- We do no special error-checking here since this will change       -->
@@ -324,108 +281,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The variable will be empty if not set                             -->
 <xsl:variable name="numbering-figures">
     <xsl:value-of select="$docinfo/numbering/figures/@level"/>
-</xsl:variable>
-
-<!-- User-supplied Numbering for Equations    -->
-<!-- Respect switch, or provide sensible defaults -->
-<xsl:variable name="numbering-equations">
-    <xsl:choose>
-        <xsl:when test="$numbering.equations.level != ''">
-            <xsl:value-of select="$numbering.equations.level" />
-        </xsl:when>
-        <xsl:when test="$root/book/part">3</xsl:when>
-        <xsl:when test="$root/book">2</xsl:when>
-        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
-        <xsl:when test="$root/article">0</xsl:when>
-        <xsl:when test="$root/slideshow">0</xsl:when>
-        <xsl:when test="$root/letter">0</xsl:when>
-        <xsl:when test="$root/memo">0</xsl:when>
-        <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Equation numbering level not determined</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<!-- User-supplied Numbering for Footnotes        -->
-<!-- Respect switch, or provide sensible defaults -->
-<xsl:variable name="numbering-footnotes">
-    <xsl:choose>
-        <xsl:when test="$numbering.footnotes.level != ''">
-            <xsl:value-of select="$numbering.footnotes.level" />
-        </xsl:when>
-        <xsl:when test="$root/book/part">3</xsl:when>
-        <xsl:when test="$root/book">2</xsl:when>
-        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
-        <xsl:when test="$root/article">0</xsl:when>
-        <xsl:when test="$root/slideshow">0</xsl:when>
-        <xsl:when test="$root/letter">0</xsl:when>
-        <xsl:when test="$root/memo">0</xsl:when>
-        <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Footnote numbering level not determined</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<!-- User-supplied Numbering for Maximum Level     -->
-<!-- Respect switch, or provide sensible defaults  -->
-<!-- NB: level number counts the number of         -->
-<!-- separators (periods) present once qualified   -->
-<!-- with a numbered item contained within         -->
-<!-- NB: If we were to allow multiple (hence       -->
-<!-- numbered) specialized divisions of a          -->
-<!-- "subsubsection", then the non-zero maximums   -->
-<!-- below would go up by 1                        -->
-<!--   article/section: s.ss.sss => 3              -->
-<!--   book:            c.s.ss.sss => 4            -->
-<!--   book/part:       p.c.s.ss.sss => 5          -->
-<xsl:variable name="numbering-maxlevel">
-    <xsl:variable name="max-feasible">
-        <xsl:choose>
-            <xsl:when test="$root/book/part">5</xsl:when>
-            <xsl:when test="$root/book">4</xsl:when>
-            <xsl:when test="$root/article/section|$root/article/worksheet">3</xsl:when>
-            <xsl:when test="$root/article">0</xsl:when>
-            <xsl:when test="$root/letter">0</xsl:when>
-            <xsl:when test="$root/slideshow">0</xsl:when>
-            <xsl:when test="$root/memo">0</xsl:when>
-            <xsl:otherwise>
-                <xsl:message>MBX:BUG: New document type for maximum level defaults</xsl:message>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- If not provided, try the biggest possible for consistency -->
-    <xsl:variable name="candidate">
-        <xsl:choose>
-            <xsl:when test="$numbering.maximum.level = ''">
-                <xsl:value-of select="$max-feasible" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="$numbering.maximum.level" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:choose>
-        <xsl:when test="$candidate &lt; $numbering-theorems">
-            <xsl:message terminate="yes">MBX:FATAL:   theorem numbering level cannot exceed sectioning level</xsl:message>
-        </xsl:when>
-        <!-- PROJECT-LIKE -->
-        <xsl:when test="$candidate &lt; $numbering-projects">
-            <xsl:message terminate="yes">MBX:FATAL:   project numbering level cannot exceed sectioning level</xsl:message>
-        </xsl:when>
-        <xsl:when test="$candidate &lt; $numbering-equations">
-            <xsl:message terminate="yes">MBX:FATAL:   equation numbering level cannot exceed sectioning level</xsl:message>
-        </xsl:when>
-        <xsl:when test="$candidate &lt; $numbering-footnotes">
-            <xsl:message terminate="yes">MBX:FATAL:   footnote numbering level cannot exceed sectioning level</xsl:message>
-        </xsl:when>
-        <xsl:when test="$candidate &gt; $max-feasible">
-            <xsl:message terminate="yes">MBX:FATAL:   sectioning level exceeds maximum possible for this document (<xsl:value-of select="$max-feasible" />)</xsl:message>
-        </xsl:when>
-        <!-- Survived the gauntlet, spit it out candidate as $numbering-maxlevel -->
-        <xsl:otherwise>
-            <xsl:value-of select="$candidate" />
-        </xsl:otherwise>
-    </xsl:choose>
 </xsl:variable>
 
 <!-- Document language comes from the mathbook element -->
@@ -4966,7 +4821,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|exercise" mode="atomic-block-serial-number">
     <xsl:variable name="subtree-level">
         <xsl:apply-templates select="." mode="absolute-subtree-level">
-            <xsl:with-param name="numbering-items" select="$numbering-theorems" />
+            <xsl:with-param name="numbering-items" select="$numbering-blocks" />
         </xsl:apply-templates>
     </xsl:variable>
     <xsl:choose>
@@ -5005,7 +4860,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             </xsl:when>
             <xsl:otherwise>
                 <xsl:apply-templates select="." mode="absolute-subtree-level">
-                    <xsl:with-param name="numbering-items" select="$numbering-theorems" />
+                    <xsl:with-param name="numbering-items" select="$numbering-blocks" />
                 </xsl:apply-templates>
             </xsl:otherwise>
         </xsl:choose>
@@ -5051,7 +4906,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             </xsl:when>
             <xsl:otherwise>
                 <xsl:apply-templates select="." mode="absolute-subtree-level">
-                    <xsl:with-param name="numbering-items" select="$numbering-theorems" />
+                    <xsl:with-param name="numbering-items" select="$numbering-blocks" />
                 </xsl:apply-templates>
             </xsl:otherwise>
         </xsl:choose>
@@ -5116,7 +4971,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             </xsl:when>
             <xsl:otherwise>
                 <xsl:apply-templates select="." mode="absolute-subtree-level">
-                    <xsl:with-param name="numbering-items" select="$numbering-theorems" />
+                    <xsl:with-param name="numbering-items" select="$numbering-blocks" />
                 </xsl:apply-templates>
             </xsl:otherwise>
         </xsl:choose>
@@ -5658,7 +5513,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Structure Numbers: Theorems, Examples, Projects, Figures -->
 <xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
-        <xsl:with-param name="levels" select="$numbering-theorems" />
+        <xsl:with-param name="levels" select="$numbering-blocks" />
         <xsl:with-param name="pad" select="'yes'" />
     </xsl:apply-templates>
 </xsl:template>
@@ -5671,7 +5526,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <xsl:value-of select="$numbering-projects" />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="$numbering-theorems" />
+                <xsl:value-of select="$numbering-blocks" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -5680,8 +5535,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:with-param name="pad" select="'yes'" />
     </xsl:apply-templates>
 </xsl:template>
-<!-- FIGURE-LIKE get a structure number from default $numbering-theorems -->
-<!-- or from "docinfo" independent numbering configuration               -->
+<!-- FIGURE-LIKE get a structure number from default $numbering-blocks -->
+<!-- or from "docinfo" independent numbering configuration             -->
 <xsl:template match="&FIGURE-LIKE;"  mode="structure-number">
     <xsl:variable name="figure-levels">
         <xsl:choose>
@@ -5689,7 +5544,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <xsl:value-of select="$numbering-figures" />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="$numbering-theorems" />
+                <xsl:value-of select="$numbering-blocks" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -5727,7 +5582,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <xsl:value-of select="$numbering-exercises" />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="$numbering-theorems" />
+                <xsl:value-of select="$numbering-blocks" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
