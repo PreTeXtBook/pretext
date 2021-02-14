@@ -1890,6 +1890,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.knowl.exercise.worksheet" select="''" />
 <xsl:param name="html.knowl.exercise.readingquestion" select="''" />
 
+<!-- Deprecated 2021-02-14 but still respected -->
+<!-- maxlevel -> divisions.level, theorems.level -> blocks.level -->
+<xsl:param name="numbering.theorems.level" select="''" />
+<xsl:param name="numbering.projects.level" select="''" />
+<xsl:param name="numbering.equations.level" select="''" />
+<xsl:param name="numbering.footnotes.level" select="''" />
+<xsl:param name="numbering.maximum.level" select="''" />
+
+
 
 <!-- ################# -->
 <!-- Variable Bad Bank -->
