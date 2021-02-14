@@ -1535,10 +1535,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\renewcommand*{\chaptername}{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'chapter'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
-            <!-- This code is correct, interface is temporary and will be redone with no notice -->
-            <xsl:if test="not($debug.chapter.start = '')">
+            <!-- We only adjust when necessary -->
+            <xsl:if test="not($chapter-start = 1)">
                 <xsl:text>\setcounter{chapter}{</xsl:text>
-                <xsl:value-of select="$debug.chapter.start - 1" />
+                <xsl:value-of select="$chapter-start - 1" />
                 <xsl:text>}&#xa;</xsl:text>
             </xsl:if>
         </xsl:if>

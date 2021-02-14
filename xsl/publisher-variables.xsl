@@ -545,6 +545,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="numbering-footnotes" select="number($numbering-footnotes-entered)"/>
 
+<xsl:variable name="chapter-start-entered">
+    <xsl:choose>
+        <xsl:when test="$publication/numbering/divisions/@chapter-start">
+            <xsl:variable name="the-number" select="$publication/numbering/divisions/@chapter-start"/>
+            <xsl:choose>
+                <!-- NaN does not equal *anything*, so tests if a number -->
+                <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
+                    <xsl:message>PTX:ERROR:   starting number for chapters given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
+                    <xsl:value-of select="1"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$publication/numbering/divisions/@chapter-start"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- default if not specified -->
+        <xsl:otherwise>
+            <xsl:value-of select="1"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="chapter-start" select="number($chapter-start-entered)"/>
+
 
 <!-- ##################### -->
 <!-- HTML-Specific Options -->

@@ -4575,15 +4575,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:variable name="true-count">
                 <xsl:number from="book" level="any" count="chapter" format="1" />
             </xsl:variable>
-            <xsl:choose>
-                <!-- This code is correct, interface is temporary and will be redone with no notice -->
-                <xsl:when test="$debug.chapter.start = ''">
-                    <xsl:value-of select="$true-count" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="$true-count + $debug.chapter.start - 1" />
-                </xsl:otherwise>
-            </xsl:choose>
+            <!-- $chapter-start defaults to 1 -->
+            <xsl:value-of select="$true-count + $chapter-start - 1" />
         </xsl:when>
         <!-- author-specified chapter strat number does  -->
         <!-- not really make sense for structural parts? -->
