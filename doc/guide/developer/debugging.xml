@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--        PreTeXt Developer's Guide                         -->
+<!--                                                          -->
+<!-- Copyright (C) 2019-2019                                  -->
+<!-- Robert A. Beezer, David Farmer, Alex Jordan              -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="debugging">
+    <title>Debugging</title>
+
+    <section xml:id="developer-debugging-parameters">
+        <title>Debugging Parameters</title>
+
+        <p>There are a variety of command-line string parameters (<xref ref="processing-publisher-stringparam"/>) for use by developers testing new code or diagnosing problems.  As of 2021-02-14 we are collecting their definitions in the <c>pretext-common.xsl</c> stylesheet early on.  Search on <c>debug.</c> to find them.  Elsewhere the names might be a bit more variable until we get them all rounded up in one place, but usually the name contains <c>debug</c> somewhere.  No documentation here, these are not documented (or stable), and only intended for authors as a stop-gap measure before being replaced in function.  Read the code for more, while some more permanent versions will be mentioned in this part.</p>
+    </section>
+</chapter>
+
+
