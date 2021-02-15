@@ -14,7 +14,23 @@
     <section xml:id="developer-debugging-parameters">
         <title>Debugging Parameters</title>
 
-        <p>There are a variety of command-line string parameters (<xref ref="processing-publisher-stringparam"/>) for use by developers testing new code or diagnosing problems.  As of 2021-02-14 we are collecting their definitions in the <c>pretext-common.xsl</c> stylesheet early on.  Search on <c>debug.</c> to find them.  Elsewhere the names might be a bit more variable until we get them all rounded up in one place, but usually the name contains <c>debug</c> somewhere.  No documentation here, these are not documented (or stable), and only intended for authors as a stop-gap measure before being replaced in function.  Read the code for more, while some more permanent versions will be mentioned in this part.</p>
+        <p>There are a variety of command-line string parameters (<xref ref="processing-publisher-stringparam"/>) for use by developers testing new code or diagnosing problems.  As of 2021-02-14 we are collecting their definitions in the <c>pretext-common.xsl</c> stylesheet early on.  Search on <c>debug.</c> to find them.  Elsewhere the names might be a bit more variable until we get them all rounded up in one place, but usually the name contains <c>debug</c> somewhere.  No documentation here, these are not documented (or stable), and only intended for authors as a stop-gap measure before being replaced in function.  Read the code for more, while some more permanent versions will be mentioned in this chapter.</p>
+    </section>
+
+    <section xml:id="developer-testing-procedures">
+        <title>Testing Procedures</title>
+
+        <p>When developing a new feature or trying to fix a bug, it can be helpful to test a <q>before</q> version of some output format versus a current or <q>after</q> version.  Sometimes you can lay the groundwork for a new feature by adding some code which has zero effect, but leaves a place where a small addition enables the feature.  Then you can be somewhat confident your additions will also not ruin existing (desirable) behavior.  Here are some suggestions for doing this with <pretext/>.<ul>
+            <li>Make a <q>before</q> version before you start.  Or do a <c>git stash save</c> to put away uncommitted changes and then make that initial version.  Use <c>git stash pop</c> to bring the changes back.  You can also temporarily <c>git checkout 1234abcd</c> some commit, and <c>git checkout topic-branch</c> to come back.  You can have <c>sample-article.tex.old</c> around to compare with a new and constantly updated <c>sample-article.tex</c>.  I routinely remove <c>*.tex</c> between tests, so the <c>*.tex.old</c> version is named so it does not get deleted.</li>
+            <li>The <c>sample-article.xml</c> document is meant to have one of most everything and lots of extreme examples.  If your changes affect chapters, and other aspects of a book, then the <c>sample-book.xml</c> document can also be used.</li>
+            <li>Be careful about adding new content since you can get a lot of automatically-generated id's that change, making it hard to see real changes.  By managing location (early in a list of commits) and building at specific commits you can test new code that needs new sample uses.</li>
+            <li><latex/> output is one big file.  Use the <c>debug.chunk</c> string parameter, set to <c>0</c> to get one big <init>HTML</init> file.</li>
+            <li>Use the <c>debug.datedfiles</c> string parameter set to <c>no</c> so that file headers (knowls!) do not all have spurious changes.</li>
+            <li><c>git diff sample-article.tex.old sample-article.tex</c> works well, and oftentimes it works even better with <c>--word-diff</c>.  You really want your test output off in some scratch directory.  If not, be careful, and you may need the <c>--no-index</c> option so you are not fooled by no apparent changes. (Those options need a double-dash to lead, they look like one right now.)</li>
+            <li>Having <c>&lt;today/></c> and <c>&lt;timeofday/></c> in your test document you can be sure there is always at least one or two changes, and prevent some confusion due to mistakes.</li>
+            <li>When testing <init>HTML</init> output, especially for chunking or knowls, putting two versions in different parallel directories will allow git to compare the entire directories with <c>git diff /tmp/before /tmp/after</c>.</li>
+            <li>Every number is hard-coded in <init>HTML</init> output, so changes to numbering are best tested there.  The <latex/> conversion may react differently (a mix of hard-coded and automatically-generated numbers), so should also be tested.</li>
+        </ul>It can be very surprising how many subtle bugs can be revealed by very small, or very few, changes discovered by these procedures.</p>
     </section>
 </chapter>
 
