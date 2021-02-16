@@ -128,7 +128,7 @@
                     <p>A simple, but functional example to begin with. If you are just learning how to add, you can test yourself here.</p>
                 </introduction>
 
-                <webwork>
+                <webwork xml:id="webwork-add-numbers">
                     <description>
                         Add two positive single-digit integers.
                     </description>
@@ -160,25 +160,11 @@
                 <title>Declaring a Problem Seed</title>
 
                 <introduction>
-                    <p>You can also declare a <c>seed</c> to specify a version of any problem that has randomization. Here is the same problem, but with a <c>seed</c> specified.</p>
+                    <p>You can also declare a <c>seed</c> to specify a version of any problem that has randomization. Here is the same problem (<q>copied</q> in the <pretext/> source), but with a <c>seed</c> specified.</p>
                 </introduction>
 
-                <webwork seed="510">
-                    <pg-code>
-                        $a = random(1, 9, 1);
-                        $b = random(1, 9, 1);
-                        $c = Compute($a + $b);
-                    </pg-code>
+                <webwork copy="webwork-add-numbers" seed="510"/>
 
-                    <statement>
-                        <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
-                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="5" category="integer" /></p>
-                    </statement>
-
-                    <solution>
-                        <p><m><var name="$a" /> + <var name="$b" /> = <var name="$c" /></m>.</p>
-                    </solution>
-                </webwork>
             </exercise>
 
             <exercise xml:id="integer-addition-with-control-seed">

@@ -39,7 +39,8 @@
 
 <!-- Each dictionary uses the webworks' visible-ids as keys. There are     -->
 <!-- dictionaries for obtaining:                                           -->
-<!-- 1. a 'ptx'|'server' flag (is it authored in PTX or on the server?)    -->
+<!-- 1. a ptx|server flag (authored in PTX [or a copy], or from server)    -->
+<!-- 1b. if it is copied, from which?                                      -->
 <!-- 2. a seed for randomization (with a default explicitly declared)      -->
 <!-- 3. source (a problem's file path if it is server-based)               -->
 <!-- 4. human readable PG (for PTX-authored)                               -->
@@ -53,10 +54,15 @@
 <!-- that lives on a server. Or if the configuration of the hosting server -->
 <!-- or course changes.                                                    -->
 
-<!-- Then other translation sheets' assempbly phase will factor in         -->
+<!-- Then other translation sheets' assembly phase will factor in          -->
 <!-- webwork-representations.xml                                           -->
 
 <xsl:import href="./pretext-common.xsl" />
+<xsl:import href="./pretext-assembly.xsl"/>
+
+<!-- Override the corresponding param in pretext-assembly so that webwork  -->
+<!-- copies can be made.                                                   -->
+<xsl:variable name="b-extracting-pg" select="true()"/>
 
 <!-- We are outputting Python code, and there is no reason to output       -->
 <!-- anything other than "text"                                            -->
@@ -93,6 +99,7 @@
     <xsl:apply-templates select="mathbook|pretext" mode="deprecation-warnings" />
     <!-- Initialize empty dictionaries, then define key-value pairs -->
     <xsl:text>origin = {}&#xa;</xsl:text>
+    <xsl:text>copiedfrom = {}&#xa;</xsl:text>
     <xsl:text>seed = {}&#xa;</xsl:text>
     <xsl:text>source = {}&#xa;</xsl:text>
     <xsl:text>pghuman = {}&#xa;</xsl:text>
@@ -109,7 +116,7 @@
     <xsl:variable name="problem">
         <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
-    <!-- 1. a 'ptx'|'server' flag (is it authored in PTX or on the server?)    -->
+    <!-- 1. a ptx|copy|server flag (authored in PTX, a copy, or from server)   -->
     <xsl:text>origin["</xsl:text>
     <xsl:value-of select="$problem" />
     <xsl:text>"] = "server"&#xa;</xsl:text>
@@ -132,10 +139,18 @@
     <xsl:variable name="problem">
         <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
-    <!-- 1. a 'ptx'|'server' flag (is it authored in PTX or on the server?)    -->
+    <!-- 1. a ptx|server flag (authored in PTX [or a copy], or from server)    -->
     <xsl:text>origin["</xsl:text>
     <xsl:value-of select="$problem" />
     <xsl:text>"] = "ptx"&#xa;</xsl:text>
+    <!-- 1b. if this problem is a copy, record where it was copied from        -->
+    <xsl:if test="@copied-from">
+        <xsl:text>copiedfrom["</xsl:text>
+        <xsl:value-of select="$problem" />
+        <xsl:text>"] = "</xsl:text>
+        <xsl:value-of select="@copied-from"/>
+        <xsl:text>"&#xa;</xsl:text>
+    </xsl:if>
     <!-- 2. a seed for randomization (with a default explicitly declared)      -->
     <xsl:text>seed["</xsl:text>
     <xsl:value-of select="$problem" />

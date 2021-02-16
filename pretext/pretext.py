@@ -338,9 +338,9 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
     if pub_file:
         stringparams['publisher'] = pub_file
     _verbose('string parameters passed to extraction stylesheet: {}'.format(stringparams))
-    # execute XSL extraction to get back five dictionaries
+    # execute XSL extraction to get back six dictionaries
     # where the keys are the internal-ids for the problems
-    # origin, seed, source, pghuman, pgdense
+    # origin, copy, seed, source, pghuman, pgdense
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-pg.xsl')
 
@@ -920,6 +920,11 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
         # Add PG for PTX-authored problems
         # Empty tag with @source for server problems
         pg = ET.SubElement(webwork_reps,'pg')
+        try:
+            pg.set('copied-from',copiedfrom[problem])
+        except Exception:
+            pass
+
         if origin[problem] == 'ptx':
             if badness:
                 pg_shell = "DOCUMENT();\nloadMacros('PGstandard.pl','PGML.pl','PGcourse.pl');\nTEXT(beginproblem());\nBEGIN_PGML\n{}END_PGML\nENDDOCUMENT();"
