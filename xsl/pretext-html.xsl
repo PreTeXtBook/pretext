@@ -243,12 +243,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="rso" select="'~._'"/>
 <xsl:variable name="rsc" select="'_.~'"/>
 
-<!-- Temporary, undocumented, and experimental -->
-<!-- all = old-style, necessary = new-style -->
-<xsl:param name="debug.knowl-production" select="'all'"/>
-<!-- edit above! -->
-<xsl:variable name="b-knowls-new" select="not($debug.knowl-production = 'all')"/>
-
 <!-- ############### -->
 <!-- Source Analysis -->
 <!-- ############### -->
@@ -313,12 +307,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
     </xsl:choose>
 </xsl:variable>
-
-<!-- Temporary, undocumented, and experimental           -->
-<!-- Makes randomization buttons for inline WW probmlems -->
-<xsl:param name="debug.webwork.inline.randomize" select="''"/>
-<xsl:variable name="b-webwork-inline-randomize" select="$debug.webwork.inline.randomize = 'yes'"/>
-
 
 <!-- ############## -->
 <!-- Entry Template -->

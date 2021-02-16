@@ -375,7 +375,7 @@
             </p>
             </introduction>
 
-            <subsubsection>
+            <subsubsection xml:id="vi-modes">
             <title>Modes of vi: Command, Normal, and Insert</title>
             <p>
             One of the most fundamental properties of vi is that every editing task
@@ -481,7 +481,7 @@
                 </image>
             </figure>
 
-            <p xml:id="special-chars">
+            <p>
             An exclamation point prefix  <c>!</c> in Command mode
             sends that command to the operating system.
             For example, entering  <c>:!date</c> will cause the results
@@ -805,7 +805,7 @@
             <p>
             We can make special use of the special characters
             <c>!</c> and <c>%</c>
-            as described in this <xref ref="special-chars" text="custom">paragraph</xref>.
+            as described at the end of <xref ref="vi-modes"/>.
             </p>
 
             <p>

@@ -1100,10 +1100,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newtcolorbox[auto counter</xsl:text>
     <!-- control the levels of the numbering -->
     <!-- global (no periods) is the default  -->
-    <xsl:if test="not($numbering-theorems = 0)">
+    <xsl:if test="not($numbering-blocks = 0)">
         <xsl:text>, number within=</xsl:text>
         <xsl:call-template name="level-to-name">
-            <xsl:with-param name="level" select="$numbering-theorems" />
+            <xsl:with-param name="level" select="$numbering-blocks" />
         </xsl:call-template>
     </xsl:if>
     <xsl:text>]{block}{}&#xa;</xsl:text>
@@ -1535,10 +1535,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\renewcommand*{\chaptername}{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'chapter'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
-            <!-- This code is correct, interface is temporary and will be redone with no notice -->
-            <xsl:if test="not($debug.chapter.start = '')">
+            <!-- We only adjust when necessary -->
+            <xsl:if test="not($chapter-start = 1)">
                 <xsl:text>\setcounter{chapter}{</xsl:text>
-                <xsl:value-of select="$debug.chapter.start - 1" />
+                <xsl:value-of select="$chapter-start - 1" />
                 <xsl:text>}&#xa;</xsl:text>
             </xsl:if>
         </xsl:if>

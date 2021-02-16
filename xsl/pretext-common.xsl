@@ -143,24 +143,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Otherwise ('yes'), todo's show in red paragraphs, -->
 <!-- provisional cross-references show in red          -->
 <xsl:param name="author.tools" select="''" />
-<!-- How many levels in numbering of theorems, etc     -->
-<!-- Followed by a sequential number across that level -->
-<!-- For example "2" implies Theorem 5.3.12 is         -->
-<!-- 12-th theorem, lemma, etc in 5.2                  -->
-<xsl:param name="numbering.theorems.level" select="''" />
-<!-- How many levels in numbering of projects, etc     -->
-<!-- PROJECT-LIKE gets independent numbering -->
-<xsl:param name="numbering.projects.level" select="''" />
-<!-- How many levels in numbering of equations     -->
-<!-- Analagous to numbering theorems, but distinct -->
-<xsl:param name="numbering.equations.level" select="''" />
-<!-- Level where footnote numbering resets                                -->
-<!-- For example, "2" would be sections in books, subsections in articles -->
-<xsl:param name="numbering.footnotes.level" select="''" />
-<!-- Last level where subdivision (section) numbering takes place     -->
-<!-- For example, "2" would mean subsections of a book are unnumbered -->
-<!-- N.B.: the levels above cannot be numerically larger              -->
-<xsl:param name="numbering.maximum.level" select="''" />
 <!-- Pointers to realizations of the actual document -->
 <xsl:param name="address.html" select="''" />
 <xsl:param name="address.pdf" select="''" />
@@ -267,49 +249,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- basically an abstract implementation   -->
 <xsl:variable name="chunk-level" select="number(0)"/>
 
-<!-- User-supplied Numbering for Theorems, etc    -->
-<!-- Respect switch, or provide sensible defaults -->
-<xsl:variable name="numbering-theorems">
-    <xsl:choose>
-        <xsl:when test="$numbering.theorems.level != ''">
-            <xsl:value-of select="$numbering.theorems.level" />
-        </xsl:when>
-        <xsl:when test="$root/book/part">3</xsl:when>
-        <xsl:when test="$root/book">2</xsl:when>
-        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
-        <xsl:when test="$root/article">0</xsl:when>
-        <xsl:when test="$root/slideshow">0</xsl:when>
-        <xsl:when test="$root/letter">0</xsl:when>
-        <xsl:when test="$root/memo">0</xsl:when>
-        <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Theorem numbering level not determined</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<!-- User-supplied Numbering for Projects, etc    -->
-<!-- Respect switch, or provide sensible defaults -->
-<!-- PROJECT-LIKE -->
-<!-- NB: this should become elective, more like the      -->
-<!-- schemes below for inline exercises and figure-like. -->
-<xsl:variable name="numbering-projects">
-    <xsl:choose>
-        <xsl:when test="$numbering.projects.level != ''">
-            <xsl:value-of select="$numbering.projects.level" />
-        </xsl:when>
-        <xsl:when test="$root/book/part">3</xsl:when>
-        <xsl:when test="$root/book">2</xsl:when>
-        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
-        <xsl:when test="$root/article">0</xsl:when>
-        <xsl:when test="$root/slideshow">0</xsl:when>
-        <xsl:when test="$root/letter">0</xsl:when>
-        <xsl:when test="$root/memo">0</xsl:when>
-        <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Theorem numbering level not determined</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
 <!-- Inline Exercises can optionally run on their own numbering scheme -->
 <!-- This is set (temporarily) in docinfo, which will change           -->
 <!-- We do no special error-checking here since this will change       -->
@@ -324,108 +263,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The variable will be empty if not set                             -->
 <xsl:variable name="numbering-figures">
     <xsl:value-of select="$docinfo/numbering/figures/@level"/>
-</xsl:variable>
-
-<!-- User-supplied Numbering for Equations    -->
-<!-- Respect switch, or provide sensible defaults -->
-<xsl:variable name="numbering-equations">
-    <xsl:choose>
-        <xsl:when test="$numbering.equations.level != ''">
-            <xsl:value-of select="$numbering.equations.level" />
-        </xsl:when>
-        <xsl:when test="$root/book/part">3</xsl:when>
-        <xsl:when test="$root/book">2</xsl:when>
-        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
-        <xsl:when test="$root/article">0</xsl:when>
-        <xsl:when test="$root/slideshow">0</xsl:when>
-        <xsl:when test="$root/letter">0</xsl:when>
-        <xsl:when test="$root/memo">0</xsl:when>
-        <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Equation numbering level not determined</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<!-- User-supplied Numbering for Footnotes        -->
-<!-- Respect switch, or provide sensible defaults -->
-<xsl:variable name="numbering-footnotes">
-    <xsl:choose>
-        <xsl:when test="$numbering.footnotes.level != ''">
-            <xsl:value-of select="$numbering.footnotes.level" />
-        </xsl:when>
-        <xsl:when test="$root/book/part">3</xsl:when>
-        <xsl:when test="$root/book">2</xsl:when>
-        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
-        <xsl:when test="$root/article">0</xsl:when>
-        <xsl:when test="$root/slideshow">0</xsl:when>
-        <xsl:when test="$root/letter">0</xsl:when>
-        <xsl:when test="$root/memo">0</xsl:when>
-        <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Footnote numbering level not determined</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<!-- User-supplied Numbering for Maximum Level     -->
-<!-- Respect switch, or provide sensible defaults  -->
-<!-- NB: level number counts the number of         -->
-<!-- separators (periods) present once qualified   -->
-<!-- with a numbered item contained within         -->
-<!-- NB: If we were to allow multiple (hence       -->
-<!-- numbered) specialized divisions of a          -->
-<!-- "subsubsection", then the non-zero maximums   -->
-<!-- below would go up by 1                        -->
-<!--   article/section: s.ss.sss => 3              -->
-<!--   book:            c.s.ss.sss => 4            -->
-<!--   book/part:       p.c.s.ss.sss => 5          -->
-<xsl:variable name="numbering-maxlevel">
-    <xsl:variable name="max-feasible">
-        <xsl:choose>
-            <xsl:when test="$root/book/part">5</xsl:when>
-            <xsl:when test="$root/book">4</xsl:when>
-            <xsl:when test="$root/article/section|$root/article/worksheet">3</xsl:when>
-            <xsl:when test="$root/article">0</xsl:when>
-            <xsl:when test="$root/letter">0</xsl:when>
-            <xsl:when test="$root/slideshow">0</xsl:when>
-            <xsl:when test="$root/memo">0</xsl:when>
-            <xsl:otherwise>
-                <xsl:message>MBX:BUG: New document type for maximum level defaults</xsl:message>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- If not provided, try the biggest possible for consistency -->
-    <xsl:variable name="candidate">
-        <xsl:choose>
-            <xsl:when test="$numbering.maximum.level = ''">
-                <xsl:value-of select="$max-feasible" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="$numbering.maximum.level" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:choose>
-        <xsl:when test="$candidate &lt; $numbering-theorems">
-            <xsl:message terminate="yes">MBX:FATAL:   theorem numbering level cannot exceed sectioning level</xsl:message>
-        </xsl:when>
-        <!-- PROJECT-LIKE -->
-        <xsl:when test="$candidate &lt; $numbering-projects">
-            <xsl:message terminate="yes">MBX:FATAL:   project numbering level cannot exceed sectioning level</xsl:message>
-        </xsl:when>
-        <xsl:when test="$candidate &lt; $numbering-equations">
-            <xsl:message terminate="yes">MBX:FATAL:   equation numbering level cannot exceed sectioning level</xsl:message>
-        </xsl:when>
-        <xsl:when test="$candidate &lt; $numbering-footnotes">
-            <xsl:message terminate="yes">MBX:FATAL:   footnote numbering level cannot exceed sectioning level</xsl:message>
-        </xsl:when>
-        <xsl:when test="$candidate &gt; $max-feasible">
-            <xsl:message terminate="yes">MBX:FATAL:   sectioning level exceeds maximum possible for this document (<xsl:value-of select="$max-feasible" />)</xsl:message>
-        </xsl:when>
-        <!-- Survived the gauntlet, spit it out candidate as $numbering-maxlevel -->
-        <xsl:otherwise>
-            <xsl:value-of select="$candidate" />
-        </xsl:otherwise>
-    </xsl:choose>
 </xsl:variable>
 
 <!-- Document language comes from the mathbook element -->
@@ -996,37 +833,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- historically false -->
 <xsl:variable name="b-number-exercise-distinct" select="boolean($docinfo/numbering/exercises)" />
 
-<!-- Status quo, for no-part books and articles is "absent".     -->
-<!-- The "structural" option will change numbers and numbering   -->
-<!-- substantially.  The "decorative" option is the default for  -->
-<!-- books with parts, and it looks just like the LaTeX default. -->
-<xsl:variable name="parts">
-    <xsl:choose>
-        <xsl:when test="not($document-root/part) and $docinfo/numbering/division/@part">
-            <xsl:message>MBX:WARNING: your document is not a book with parts, so docinfo/numbering/division/@part will be ignored</xsl:message>
-            <xsl:text>absent</xsl:text>
-        </xsl:when>
-        <!-- Schema restricts parts to a division of a book -->
-        <!-- So usual no-part book, or article, or ...      -->
-        <xsl:when test="not($document-root/part)">
-            <xsl:text>absent</xsl:text>
-        </xsl:when>
-        <!-- has parts, check docinfo specification        -->
-        <!-- nothing given is default, which is decorative -->
-        <xsl:when test="not($docinfo/numbering/division/@part)">
-            <xsl:text>decorative</xsl:text>
-        </xsl:when>
-        <xsl:when test="$docinfo/numbering/division/@part = 'structural'">
-            <xsl:text>structural</xsl:text>
-        </xsl:when>
-        <xsl:when test="$docinfo/numbering/division/@part = 'decorative'">
-            <xsl:text>decorative</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message terminate='yes'>MBX:WARNING: docinfo/numbering/division/@part should be "decorative" or "structural", not "<xsl:value-of select="$docinfo/numbering/division/@part" />"  Quitting...</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
 
 <!-- We read the document language translation -->
 <!-- nodes out of the right file, which relies -->
@@ -1070,53 +876,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This should be overridden in an importing stylesheet  -->
 <xsl:variable name="file-extension" select="'.need-to-set-file-extension-variable'" />
 
-<!-- Prior to January 2017 we treated all whitespace as -->
-<!-- significant in mixed-content nodes.  With changes  -->
-<!-- in this policy we preserve the option to process   -->
-<!-- in this older style.  This could avoid frequent    -->
-<!-- applications of low-level text-processing routines -->
-<!-- and perhaps speed up processing.  Switch here      -->
-<!-- controls possible whitespace modes.                -->
-<xsl:param name="whitespace" select="'flexible'" />
-<xsl:variable name="whitespace-style">
-    <xsl:choose>
-        <xsl:when test="$whitespace='strict' or $whitespace='flexible'">
-            <xsl:value-of select="$whitespace" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>
-                <xsl:text>MBX:ERROR: the whitespace parameter can be 'strict' or 'flexible', not '</xsl:text>
-                <xsl:value-of select="$whitespace" />
-                <xsl:text>'.  Using the default ('flexible').</xsl:text>
-            </xsl:message>
-            <xsl:text>flexible</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<!-- 2019-05: this is a switch to transition from slow, more-stable -->
-<!-- identication strings to fast, less-stable strings.             -->
-<!--   1.  Default should switch to make transition                 -->
-<!--   2.  Switch should be deprecated and slow code abandoned      -->
-<!-- To change default from old-slow-style                          -->
-<!--   1.  move match on empty to "no" result                       -->
-<!--   2.  flip otherwise clause                                    -->
-<xsl:param name="oldids" select="''"/>
-<xsl:variable name="oldstyle">
-    <xsl:choose>
-        <xsl:when test="($oldids = '') or ($oldids = 'yes')">
-            <xsl:text>yes</xsl:text>
-        </xsl:when>
-        <xsl:when test="$oldids = 'no'">
-            <xsl:text>no</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>yes</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-<xsl:variable name="b-fast-ids" select="$oldstyle = 'no'"/>
-
 <!-- We preserve action of the "autoname" parameter         -->
 <!-- But originally the default was "no", and now is        -->
 <!-- equivalent to "yes".  We set to blank on creation,     -->
@@ -1159,21 +918,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-
-<!-- Sometimes  xsltproc fails, and fails spectacularly,        -->
-<!-- setting this switch will dump lots of location info to the -->
-<!-- console, and perhaps will be helpful in locating a failure -->
-<!-- You might redirect stderror to a file with "2> errors.txt" -->
-<!-- appended to your command line                              -->
-<xsl:param name="debug" select="'no'" />
-<xsl:variable name="b-debug" select="$debug = 'yes'" />
-
-<xsl:param name="debug.datedfiles" select="'yes'" />
-<xsl:variable name="b-debug-datedfiles" select="not($debug.datedfiles = 'no')" />
-
-<!-- This code is correct, interface is temporary and will be redone with no notice -->
-<xsl:param name="debug.chapter.start" select="''" />
-
 <xsl:variable name="emdash-space">
     <xsl:choose>
         <xsl:when test="$emdash.space = ''">
@@ -1191,9 +935,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
-
-<!-- very temporary, just for testing -->
-<xsl:param name="debug.exercises.forward" select="''"/>
 
 <!-- text for a watermark that is centered, -->
 <!-- running at a 45 degree angle           -->
@@ -1319,6 +1060,106 @@ $inline-solution-main|$divisional-solution-main|$worksheet-solution-main|$readin
 $inline-hint-back    |$divisional-hint-back    |$worksheet-hint-back    |$reading-hint-back    |$project-hint-back|
 $inline-answer-back  |$divisional-answer-back  |$worksheet-answer-back  |$reading-answer-back  |$project-answer-back|
 $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$reading-solution-back|$project-solution-back"/>
+
+<!-- ################### -->
+<!-- Debugging Variables -->
+<!-- ################### -->
+
+<!-- Collect debugging and transition string parameters.   -->
+<!-- (1) Military style names: debug.*.*, finer purposes   -->
+<!-- (2) Minimal documentation here.                       -->
+<!-- (3) No error-checking, no deprecation plan            -->
+<!-- (4) Perhaps warnings on removal, migrate to Bad Bank  -->
+
+<!-- Override chunking publisher variable, for testing -->
+<xsl:param name="debug.chunk" select="''"/>
+
+<!-- Sometimes  xsltproc fails, and fails spectacularly,        -->
+<!-- setting this switch will dump lots of location info to the -->
+<!-- console, and perhaps will be helpful in locating a failure -->
+<!-- You might redirect stderror to a file with "2> errors.txt" -->
+<!-- appended to your command line                              -->
+<xsl:param name="debug" select="'no'" />
+<xsl:variable name="b-debug" select="$debug = 'yes'" />
+
+<xsl:param name="debug.datedfiles" select="'yes'" />
+<xsl:variable name="b-debug-datedfiles" select="not($debug.datedfiles = 'no')" />
+
+
+<!-- Single-use to display low-level info on whitespace manipulation -->
+<xsl:param name="ws.debug" select="'no'" />
+<xsl:variable name="wsdebug" select="boolean($ws.debug = 'yes')" />
+
+<!-- Colored boxes on panels -->
+<xsl:param name="sbs.debug" select="'no'" />
+<xsl:variable name="sbsdebug" select="boolean($sbs.debug = 'yes')" />
+
+<!-- very temporary, just for testing -->
+<xsl:param name="debug.exercises.forward" select="''"/>
+
+<!-- LaTeX display style in list items -->
+<xsl:param name="debug.displaystyle" select="'yes'"/>
+
+<!-- HTML only, trying to fix knowls in waves -->
+<!-- Temporary, undocumented, and experimental -->
+<!-- all = old-style, necessary = new-style -->
+<xsl:param name="debug.knowl-production" select="'all'"/>
+<xsl:variable name="b-knowls-new" select="not($debug.knowl-production = 'all')"/>
+
+<!-- HTML only, experimental -->
+<!-- Temporary, undocumented, and experimental           -->
+<!-- Makes randomization buttons for inline WW probmlems -->
+<xsl:param name="debug.webwork.inline.randomize" select="''"/>
+<xsl:variable name="b-webwork-inline-randomize" select="$debug.webwork.inline.randomize = 'yes'"/>
+
+<!-- Maybe not debugging, but transitional variables -->
+
+<!-- Prior to January 2017 we treated all whitespace as -->
+<!-- significant in mixed-content nodes.  With changes  -->
+<!-- in this policy we preserve the option to process   -->
+<!-- in this older style.  This could avoid frequent    -->
+<!-- applications of low-level text-processing routines -->
+<!-- and perhaps speed up processing.  Switch here      -->
+<!-- controls possible whitespace modes.                -->
+<xsl:param name="whitespace" select="'flexible'" />
+<xsl:variable name="whitespace-style">
+    <xsl:choose>
+        <xsl:when test="$whitespace='strict' or $whitespace='flexible'">
+            <xsl:value-of select="$whitespace" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>
+                <xsl:text>MBX:ERROR: the whitespace parameter can be 'strict' or 'flexible', not '</xsl:text>
+                <xsl:value-of select="$whitespace" />
+                <xsl:text>'.  Using the default ('flexible').</xsl:text>
+            </xsl:message>
+            <xsl:text>flexible</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- 2019-05: this is a switch to transition from slow, more-stable -->
+<!-- identication strings to fast, less-stable strings.             -->
+<!--   1.  Default should switch to make transition                 -->
+<!--   2.  Switch should be deprecated and slow code abandoned      -->
+<!-- To change default from old-slow-style                          -->
+<!--   1.  move match on empty to "no" result                       -->
+<!--   2.  flip otherwise clause                                    -->
+<xsl:param name="oldids" select="''"/>
+<xsl:variable name="oldstyle">
+    <xsl:choose>
+        <xsl:when test="($oldids = '') or ($oldids = 'yes')">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <xsl:when test="$oldids = 'no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>yes</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-fast-ids" select="$oldstyle = 'no'"/>
 
 <!-- ############## -->
 <!-- Entry Template -->
@@ -1543,7 +1384,7 @@ Book (with parts), "section" at level 3
 <!--       bring into math with \text() wrapper          -->
 <!--       when  $math.punctuation.include  indicates    -->
 
-<xsl:param name="debug.displaystyle" select="'yes'"/>
+<!-- $debug.displaystyle defaults to yes for testing -->
 
 <xsl:template match="m">
     <!-- Build a textual version of the latex,  -->
@@ -3233,11 +3074,6 @@ Book (with parts), "section" at level 3
 <!-- General Text Handling and Clean-Up -->
 <!-- ################################## -->
 
-<!-- Debugging information is not documented, nor supported -->
-<!-- Only outputs on a change                               -->
-<xsl:param name="ws.debug" select="'no'" />
-<xsl:variable name="wsdebug" select="boolean($ws.debug = 'yes')" />
-
 <!-- Text adjustments -->
 <!-- This is a general template for every text node.  -->
 <!-- Note that most verbatim-ish elements should not  -->
@@ -3370,6 +3206,7 @@ Book (with parts), "section" at level 3
             </xsl:variable>
             <!-- ACTUAL output -->
             <xsl:value-of select="$middle-cleaned" />
+            <!-- comes from ws.debug string parameter -->
             <xsl:if test="$wsdebug and not($text-processed = $middle-cleaned)">
                 <!-- DEBUGGING follows, maybe move outward later -->
                 <xsl:message>
@@ -4726,15 +4563,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:variable name="true-count">
                 <xsl:number from="book" level="any" count="chapter" format="1" />
             </xsl:variable>
-            <xsl:choose>
-                <!-- This code is correct, interface is temporary and will be redone with no notice -->
-                <xsl:when test="$debug.chapter.start = ''">
-                    <xsl:value-of select="$true-count" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="$true-count + $debug.chapter.start - 1" />
-                </xsl:otherwise>
-            </xsl:choose>
+            <!-- $chapter-start defaults to 1 -->
+            <xsl:value-of select="$true-count + $chapter-start - 1" />
         </xsl:when>
         <!-- author-specified chapter strat number does  -->
         <!-- not really make sense for structural parts? -->
@@ -4954,7 +4784,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|exercise" mode="atomic-block-serial-number">
     <xsl:variable name="subtree-level">
         <xsl:apply-templates select="." mode="absolute-subtree-level">
-            <xsl:with-param name="numbering-items" select="$numbering-theorems" />
+            <xsl:with-param name="numbering-items" select="$numbering-blocks" />
         </xsl:apply-templates>
     </xsl:variable>
     <xsl:choose>
@@ -4993,7 +4823,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             </xsl:when>
             <xsl:otherwise>
                 <xsl:apply-templates select="." mode="absolute-subtree-level">
-                    <xsl:with-param name="numbering-items" select="$numbering-theorems" />
+                    <xsl:with-param name="numbering-items" select="$numbering-blocks" />
                 </xsl:apply-templates>
             </xsl:otherwise>
         </xsl:choose>
@@ -5039,7 +4869,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             </xsl:when>
             <xsl:otherwise>
                 <xsl:apply-templates select="." mode="absolute-subtree-level">
-                    <xsl:with-param name="numbering-items" select="$numbering-theorems" />
+                    <xsl:with-param name="numbering-items" select="$numbering-blocks" />
                 </xsl:apply-templates>
             </xsl:otherwise>
         </xsl:choose>
@@ -5104,7 +4934,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             </xsl:when>
             <xsl:otherwise>
                 <xsl:apply-templates select="." mode="absolute-subtree-level">
-                    <xsl:with-param name="numbering-items" select="$numbering-theorems" />
+                    <xsl:with-param name="numbering-items" select="$numbering-blocks" />
                 </xsl:apply-templates>
             </xsl:otherwise>
         </xsl:choose>
@@ -5646,7 +5476,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Structure Numbers: Theorems, Examples, Projects, Figures -->
 <xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
-        <xsl:with-param name="levels" select="$numbering-theorems" />
+        <xsl:with-param name="levels" select="$numbering-blocks" />
         <xsl:with-param name="pad" select="'yes'" />
     </xsl:apply-templates>
 </xsl:template>
@@ -5659,7 +5489,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <xsl:value-of select="$numbering-projects" />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="$numbering-theorems" />
+                <xsl:value-of select="$numbering-blocks" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -5668,8 +5498,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:with-param name="pad" select="'yes'" />
     </xsl:apply-templates>
 </xsl:template>
-<!-- FIGURE-LIKE get a structure number from default $numbering-theorems -->
-<!-- or from "docinfo" independent numbering configuration               -->
+<!-- FIGURE-LIKE get a structure number from default $numbering-blocks -->
+<!-- or from "docinfo" independent numbering configuration             -->
 <xsl:template match="&FIGURE-LIKE;"  mode="structure-number">
     <xsl:variable name="figure-levels">
         <xsl:choose>
@@ -5677,7 +5507,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <xsl:value-of select="$numbering-figures" />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="$numbering-theorems" />
+                <xsl:value-of select="$numbering-blocks" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -5715,7 +5545,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <xsl:value-of select="$numbering-exercises" />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="$numbering-theorems" />
+                <xsl:value-of select="$numbering-blocks" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -6224,10 +6054,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- This is purely a container to specify layout parameters,     -->
 <!-- and place/control the horizontal arrangement in converters   -->
 
-<!-- Debugging information is not documented, nor supported     -->
+<!-- Debug with sbs.debug string parameter, $sbsdebug variable  -->
 <!-- Colored boxes in HTML, black boxes in LaTeX with baselines -->
-<xsl:param name="sbs.debug" select="'no'" />
-<xsl:variable name="sbsdebug" select="boolean($sbs.debug = 'yes')" />
 
 <!-- A "sidebyside" is a sequence of objects laid out       -->
 <!-- horizontally in panels.  This is a deviation from      -->
@@ -11031,13 +10859,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="incorrect-use" select="($html.calculator != '')" />
     </xsl:call-template>
     <!--  -->
-    <!-- 2020-11-04  *warning* about one-panel "sidebyside" -->
-    <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//sidebyside[not(parent::interactive) and count(*[not(&METADATA-FILTER;)]) = 1]" />
-        <xsl:with-param name="date-string" select="'2020-11-04'" />
-        <xsl:with-param name="message" select="'this is a temporary *warning*, which we plan to remove around 2021-01-30.  A &quot;sidebyside&quot; is no longer necessary to hold, or provide layout control, for single instances of &quot;image&quot;,  &quot;video&quot;,  &quot;tabular&quot;, and similar.  Try removing the &quot;sidebyside&quot; and moving any layout control onto the remaining object.'" />
-    </xsl:call-template>
-    <!--  -->
     <!-- 2020-11-22  LaTeX print option controlled by publisher file -->
     <xsl:call-template name="parameter-deprecation-message">
         <xsl:with-param name="date-string" select="'2020-11-22'" />
@@ -11192,6 +11013,52 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the  html.knowl.exercise.readingquestion  parameter has been replaced by the  html/knowl/@exercise-readingquestion  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($html.knowl.exercise.readingquestion != '')" />
     </xsl:call-template>
+    <!--  -->
+    <!-- 2014-02-14 Five parameters for numbering level to publisher file -->
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-02-14'" />
+        <xsl:with-param name="message" select="'the  numbering.maximum.level  parameter has been replaced by the  numbering/divisions/@level  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($numbering.maximum.level != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-02-14'" />
+        <xsl:with-param name="message" select="'the  numbering.theorems.level  parameter has been replaced by the  numbering/blocks/@level  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($numbering.theorems.level != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-02-14'" />
+        <xsl:with-param name="message" select="'the  numbering.projects.level  parameter has been replaced by the  numbering/projects/@level  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($numbering.projects.level != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-02-14'" />
+        <xsl:with-param name="message" select="'the  numbering.equations.level  parameter has been replaced by the  numbering/equations/@level  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($numbering.equations.level != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-02-14'" />
+        <xsl:with-param name="message" select="'the  numbering.footnotes.level  parameter has been replaced by the  numbering/footnotes/@level  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($numbering.footnotes.level != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-02-14'" />
+        <xsl:with-param name="message" select="'the  debug.chapter.start  parameter has been removed entirely and so will be ignored.  Please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($debug.chapter.start != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2021-02-14  deprecate using docinfo for part structure -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$docinfo/numbering/division/@part" />
+        <xsl:with-param name="date-string" select="'2021-02-14'" />
+        <xsl:with-param name="message" select="'docinfo/numbering/division/@part has been replaced by the  numbering/divisions/@part-structure  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'"/>
+    </xsl:call-template>
+    <!-- -->
 </xsl:template>
 
 <!-- Miscellaneous -->

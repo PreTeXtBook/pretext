@@ -34,7 +34,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- <tableofcontents level="2"/> -->
     </common>
 
+    <!-- we use customizations-two for the oscarlevin style example -->
     <source customizations="customizations-one.xml"/>
+
+    <!-- For an "article" with "section" we can only go 3 levels    -->
+    <!-- deep (section > subsection > subsubsection) and this is    -->
+    <!-- the default for divisions' levels.  For numbers on smaller -->
+    <!-- pieces of content, the default is XX.NN, i.e. level 1.     -->
+    <!-- Read the PreTeXt Guide for more on numbering and levels.   -->
+    <numbering>
+        <divisions level="3"/>
+        <blocks    level="1"/>
+        <projects  level="1"/>
+        <equations level="1"/>
+        <footnotes level="1"/>
+    </numbering>
 
     <!-- HTML-Specific Options -->
     <html>
