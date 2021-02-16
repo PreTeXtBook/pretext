@@ -876,53 +876,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This should be overridden in an importing stylesheet  -->
 <xsl:variable name="file-extension" select="'.need-to-set-file-extension-variable'" />
 
-<!-- Prior to January 2017 we treated all whitespace as -->
-<!-- significant in mixed-content nodes.  With changes  -->
-<!-- in this policy we preserve the option to process   -->
-<!-- in this older style.  This could avoid frequent    -->
-<!-- applications of low-level text-processing routines -->
-<!-- and perhaps speed up processing.  Switch here      -->
-<!-- controls possible whitespace modes.                -->
-<xsl:param name="whitespace" select="'flexible'" />
-<xsl:variable name="whitespace-style">
-    <xsl:choose>
-        <xsl:when test="$whitespace='strict' or $whitespace='flexible'">
-            <xsl:value-of select="$whitespace" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>
-                <xsl:text>MBX:ERROR: the whitespace parameter can be 'strict' or 'flexible', not '</xsl:text>
-                <xsl:value-of select="$whitespace" />
-                <xsl:text>'.  Using the default ('flexible').</xsl:text>
-            </xsl:message>
-            <xsl:text>flexible</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<!-- 2019-05: this is a switch to transition from slow, more-stable -->
-<!-- identication strings to fast, less-stable strings.             -->
-<!--   1.  Default should switch to make transition                 -->
-<!--   2.  Switch should be deprecated and slow code abandoned      -->
-<!-- To change default from old-slow-style                          -->
-<!--   1.  move match on empty to "no" result                       -->
-<!--   2.  flip otherwise clause                                    -->
-<xsl:param name="oldids" select="''"/>
-<xsl:variable name="oldstyle">
-    <xsl:choose>
-        <xsl:when test="($oldids = '') or ($oldids = 'yes')">
-            <xsl:text>yes</xsl:text>
-        </xsl:when>
-        <xsl:when test="$oldids = 'no'">
-            <xsl:text>no</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>yes</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-<xsl:variable name="b-fast-ids" select="$oldstyle = 'no'"/>
-
 <!-- We preserve action of the "autoname" parameter         -->
 <!-- But originally the default was "no", and now is        -->
 <!-- equivalent to "yes".  We set to blank on creation,     -->
@@ -965,30 +918,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-<!-- ################### -->
-<!-- Debugging Variables -->
-<!-- ################### -->
-
-<!-- 2021-02-14: collect debugging string parameters here. -->
-<!-- (1) Military style names: debug.*.*, finer purposes   -->
-<!-- (2) Minimal documentation here.                       -->
-<!-- (3) No error-checking, no deprecation plan            -->
-<!-- (4) Perhaps warnings on removal, migrate to Bad Bank  -->
-
-<!-- Override chunking publisher variable, for testing -->
-<xsl:param name="debug.chunk" select="''"/>
-
-<!-- Sometimes  xsltproc fails, and fails spectacularly,        -->
-<!-- setting this switch will dump lots of location info to the -->
-<!-- console, and perhaps will be helpful in locating a failure -->
-<!-- You might redirect stderror to a file with "2> errors.txt" -->
-<!-- appended to your command line                              -->
-<xsl:param name="debug" select="'no'" />
-<xsl:variable name="b-debug" select="$debug = 'yes'" />
-
-<xsl:param name="debug.datedfiles" select="'yes'" />
-<xsl:variable name="b-debug-datedfiles" select="not($debug.datedfiles = 'no')" />
-
 <xsl:variable name="emdash-space">
     <xsl:choose>
         <xsl:when test="$emdash.space = ''">
@@ -1006,9 +935,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
-
-<!-- very temporary, just for testing -->
-<xsl:param name="debug.exercises.forward" select="''"/>
 
 <!-- text for a watermark that is centered, -->
 <!-- running at a 45 degree angle           -->
@@ -1134,6 +1060,106 @@ $inline-solution-main|$divisional-solution-main|$worksheet-solution-main|$readin
 $inline-hint-back    |$divisional-hint-back    |$worksheet-hint-back    |$reading-hint-back    |$project-hint-back|
 $inline-answer-back  |$divisional-answer-back  |$worksheet-answer-back  |$reading-answer-back  |$project-answer-back|
 $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$reading-solution-back|$project-solution-back"/>
+
+<!-- ################### -->
+<!-- Debugging Variables -->
+<!-- ################### -->
+
+<!-- Collect debugging and transition string parameters.   -->
+<!-- (1) Military style names: debug.*.*, finer purposes   -->
+<!-- (2) Minimal documentation here.                       -->
+<!-- (3) No error-checking, no deprecation plan            -->
+<!-- (4) Perhaps warnings on removal, migrate to Bad Bank  -->
+
+<!-- Override chunking publisher variable, for testing -->
+<xsl:param name="debug.chunk" select="''"/>
+
+<!-- Sometimes  xsltproc fails, and fails spectacularly,        -->
+<!-- setting this switch will dump lots of location info to the -->
+<!-- console, and perhaps will be helpful in locating a failure -->
+<!-- You might redirect stderror to a file with "2> errors.txt" -->
+<!-- appended to your command line                              -->
+<xsl:param name="debug" select="'no'" />
+<xsl:variable name="b-debug" select="$debug = 'yes'" />
+
+<xsl:param name="debug.datedfiles" select="'yes'" />
+<xsl:variable name="b-debug-datedfiles" select="not($debug.datedfiles = 'no')" />
+
+
+<!-- Single-use to display low-level info on whitespace manipulation -->
+<xsl:param name="ws.debug" select="'no'" />
+<xsl:variable name="wsdebug" select="boolean($ws.debug = 'yes')" />
+
+<!-- Colored boxes on panels -->
+<xsl:param name="sbs.debug" select="'no'" />
+<xsl:variable name="sbsdebug" select="boolean($sbs.debug = 'yes')" />
+
+<!-- very temporary, just for testing -->
+<xsl:param name="debug.exercises.forward" select="''"/>
+
+<!-- LaTeX display style in list items -->
+<xsl:param name="debug.displaystyle" select="'yes'"/>
+
+<!-- HTML only, trying to fix knowls in waves -->
+<!-- Temporary, undocumented, and experimental -->
+<!-- all = old-style, necessary = new-style -->
+<xsl:param name="debug.knowl-production" select="'all'"/>
+<xsl:variable name="b-knowls-new" select="not($debug.knowl-production = 'all')"/>
+
+<!-- HTML only, experimental -->
+<!-- Temporary, undocumented, and experimental           -->
+<!-- Makes randomization buttons for inline WW probmlems -->
+<xsl:param name="debug.webwork.inline.randomize" select="''"/>
+<xsl:variable name="b-webwork-inline-randomize" select="$debug.webwork.inline.randomize = 'yes'"/>
+
+<!-- Maybe not debugging, but transitional variables -->
+
+<!-- Prior to January 2017 we treated all whitespace as -->
+<!-- significant in mixed-content nodes.  With changes  -->
+<!-- in this policy we preserve the option to process   -->
+<!-- in this older style.  This could avoid frequent    -->
+<!-- applications of low-level text-processing routines -->
+<!-- and perhaps speed up processing.  Switch here      -->
+<!-- controls possible whitespace modes.                -->
+<xsl:param name="whitespace" select="'flexible'" />
+<xsl:variable name="whitespace-style">
+    <xsl:choose>
+        <xsl:when test="$whitespace='strict' or $whitespace='flexible'">
+            <xsl:value-of select="$whitespace" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>
+                <xsl:text>MBX:ERROR: the whitespace parameter can be 'strict' or 'flexible', not '</xsl:text>
+                <xsl:value-of select="$whitespace" />
+                <xsl:text>'.  Using the default ('flexible').</xsl:text>
+            </xsl:message>
+            <xsl:text>flexible</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- 2019-05: this is a switch to transition from slow, more-stable -->
+<!-- identication strings to fast, less-stable strings.             -->
+<!--   1.  Default should switch to make transition                 -->
+<!--   2.  Switch should be deprecated and slow code abandoned      -->
+<!-- To change default from old-slow-style                          -->
+<!--   1.  move match on empty to "no" result                       -->
+<!--   2.  flip otherwise clause                                    -->
+<xsl:param name="oldids" select="''"/>
+<xsl:variable name="oldstyle">
+    <xsl:choose>
+        <xsl:when test="($oldids = '') or ($oldids = 'yes')">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <xsl:when test="$oldids = 'no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>yes</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-fast-ids" select="$oldstyle = 'no'"/>
 
 <!-- ############## -->
 <!-- Entry Template -->
@@ -1358,7 +1384,7 @@ Book (with parts), "section" at level 3
 <!--       bring into math with \text() wrapper          -->
 <!--       when  $math.punctuation.include  indicates    -->
 
-<xsl:param name="debug.displaystyle" select="'yes'"/>
+<!-- $debug.displaystyle defaults to yes for testing -->
 
 <xsl:template match="m">
     <!-- Build a textual version of the latex,  -->
@@ -3048,11 +3074,6 @@ Book (with parts), "section" at level 3
 <!-- General Text Handling and Clean-Up -->
 <!-- ################################## -->
 
-<!-- Debugging information is not documented, nor supported -->
-<!-- Only outputs on a change                               -->
-<xsl:param name="ws.debug" select="'no'" />
-<xsl:variable name="wsdebug" select="boolean($ws.debug = 'yes')" />
-
 <!-- Text adjustments -->
 <!-- This is a general template for every text node.  -->
 <!-- Note that most verbatim-ish elements should not  -->
@@ -3185,6 +3206,7 @@ Book (with parts), "section" at level 3
             </xsl:variable>
             <!-- ACTUAL output -->
             <xsl:value-of select="$middle-cleaned" />
+            <!-- comes from ws.debug string parameter -->
             <xsl:if test="$wsdebug and not($text-processed = $middle-cleaned)">
                 <!-- DEBUGGING follows, maybe move outward later -->
                 <xsl:message>
@@ -6032,10 +6054,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- This is purely a container to specify layout parameters,     -->
 <!-- and place/control the horizontal arrangement in converters   -->
 
-<!-- Debugging information is not documented, nor supported     -->
+<!-- Debug with sbs.debug string parameter, $sbsdebug variable  -->
 <!-- Colored boxes in HTML, black boxes in LaTeX with baselines -->
-<xsl:param name="sbs.debug" select="'no'" />
-<xsl:variable name="sbsdebug" select="boolean($sbs.debug = 'yes')" />
 
 <!-- A "sidebyside" is a sequence of objects laid out       -->
 <!-- horizontally in panels.  This is a deviation from      -->
