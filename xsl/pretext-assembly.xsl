@@ -178,6 +178,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- $webwork-representations-file is from publisher file      -->
 <xsl:variable name="b-doing-webwork-assembly" select="not($webwork-representations-file = '')"/>
 
+<!-- Normally we are not extracting PG. When we do, extract-pg.xsl -->
+<!-- will override the following with true()                       -->
+<xsl:variable name="b-extracting-pg" select="false()"/>
+
 <!-- Don't match on simple WeBWorK logo       -->
 <!-- Seed and possibly source attributes      -->
 <!-- Then authored?, pg?, and static children -->
@@ -189,6 +193,42 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
     <xsl:choose>
+        <xsl:when test="$b-extracting-pg">
+            <xsl:choose>
+                <xsl:when test="@copy">
+                    <xsl:variable name="target" select="id(@copy)"/>
+                    <xsl:choose>
+                        <xsl:when test="$target/statement|$target/stage">
+                            <xsl:copy>
+                                <xsl:attribute name="copied-from">
+                                    <xsl:value-of select="@copy"/>
+                                </xsl:attribute>
+                                <xsl:apply-templates select="@*[not(local-name(.) = 'copy')]" mode="assembly"/>
+                                <xsl:apply-templates select="$target/@*[not(local-name(.) = 'id')][not(local-name(.) = 'seed')]" mode="assembly"/>
+                                <!-- TODO: The following should scrub unique IDs as it continues down the tree. -->
+                                <!-- Perhaps with a param to the assembly modal template.                       -->
+                                <xsl:apply-templates select="$target/node()" mode="assembly"/>
+                            </xsl:copy>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <webwork>
+                                <statement>
+                                    <p>
+                                        A WeBWorK problem would appear here, but something about its <c>@copy</c> attribute is not right.
+                                        Search the runtime output for <q><c>PTX:ERROR</c></q>.
+                                    </p>
+                                </statement>
+                            </webwork>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:copy>
+                        <xsl:apply-templates select="node()|@*" mode="assembly"/>
+                    </xsl:copy>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
         <xsl:when test="$b-doing-webwork-assembly">
             <xsl:copy-of select="document($webwork-representations-file, /pretext)/webwork-representations/webwork-reps[@ww-id=$ww-id]" />
         </xsl:when>
@@ -356,7 +396,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A place for warnings about missing files, etc -->
 <!-- and/or temporary/experimental features        -->
 <xsl:template name="assembly-warnings">
-    <xsl:if test="$original/*[not(self::docinfo)]//webwork/node() and not($b-doing-webwork-assembly)">
+    <xsl:if test="$original/*[not(self::docinfo)]//webwork/node() and not($b-doing-webwork-assembly or $b-extracting-pg)">
         <xsl:message>PTX:WARNING: Your document has WeBworK exercises,</xsl:message>
         <xsl:message>             but your publisher file does not indicate the file</xsl:message>
         <xsl:message>             of problem representations created by a WeBWorK server.</xsl:message>
@@ -364,6 +404,30 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:message>             of the intended content.  Not making this file available</xsl:message>
         <xsl:message>             can cause difficulties when parts of your document get</xsl:message>
         <xsl:message>             processed by external programs (e.g. graphics, previews)</xsl:message>
+    </xsl:if>
+    <xsl:if test="$b-extracting-pg">
+        <xsl:variable name="webwork-with-copy" select="$original//webwork[@copy]"/>
+        <xsl:for-each select="$webwork-with-copy">
+            <xsl:variable name="target" select="id(@copy)"/>
+            <xsl:choose>
+                <xsl:when test="$target/statement|$target/stage"/>
+                <xsl:when test="$target/@source">
+                    <xsl:message>PTX:ERROR:   A WeBWorK problem with copy="<xsl:value-of select="@copy"/>"</xsl:message>
+                    <xsl:message>             points to a WeBWorK problem that uses a source attribute</xsl:message>
+                    <xsl:message>             to generate a problem using a file that exists on the WeBWorK server.</xsl:message>
+                    <xsl:message>             Instead of using the copy attribute, use the same source attribute.</xsl:message>
+                </xsl:when>
+                <xsl:when test="not($target)">
+                    <xsl:message>PTX:ERROR:   A WeBWorK problem uses copy="<xsl:value-of select="@copy"/>",</xsl:message>
+                    <xsl:message>             but there is no WeBWorK problem with xml:id="<xsl:value-of select="@copy"/>".</xsl:message>
+                    <xsl:message>             Is it a typo? Is the target WeBWorK problem currently commented out in source?</xsl:message>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR:   A WeBWorK problem with copy="<xsl:value-of select="@copy"/>"</xsl:message>
+                    <xsl:message>             points to a WeBWorK problem that does not have a statement or stage.</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:for-each>
     </xsl:if>
 </xsl:template>
 
