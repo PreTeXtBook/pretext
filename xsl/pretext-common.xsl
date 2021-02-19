@@ -8321,7 +8321,20 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- Primary case, no separators in @ref -->
 <xsl:template match="xref[@ref and not(contains(normalize-space(@ref), ' ')) and  not(contains(normalize-space(@ref), ','))]">
-    <!-- sanitize, check, and resolve the reference -->
+    <xsl:variable name="error-message">
+        <xsl:apply-templates select="." mode="error-check-xref"/>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="not($error-message = '')">
+            <xsl:variable name="warning-rtf">
+                <c>
+                    <xsl:value-of select="$error-message"/>
+                </c>
+            </xsl:variable>
+            <xsl:apply-templates select="exsl:node-set($warning-rtf)/c"/>
+        </xsl:when>
+        <!-- clear of errors, so on to main event -->
+        <xsl:otherwise>
     <xsl:variable name="ref" select="normalize-space(@ref)" />
     <xsl:variable name="target" select="id($ref)" />
     <!-- Determine style of visible text in link -->
@@ -8385,6 +8398,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:with-param name="target" select="$target" />
         <xsl:with-param name="content" select="$text" />
     </xsl:apply-templates>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- A range given by @first, @last            -->
@@ -8394,7 +8409,20 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Equations look like (4.2)-(4.8)           -->
 <!-- Bibliography looks like [6-14]            -->
 <xsl:template match="xref[@first and @last]">
-    <!-- sanitize, check, and resolve the two references -->
+    <xsl:variable name="error-message">
+        <xsl:apply-templates select="." mode="error-check-xref"/>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="not($error-message = '')">
+            <xsl:variable name="warning-rtf">
+                <c>
+                    <xsl:value-of select="$error-message"/>
+                </c>
+            </xsl:variable>
+            <xsl:apply-templates select="exsl:node-set($warning-rtf)/c"/>
+        </xsl:when>
+        <!-- clear of errors, so on to main event -->
+        <xsl:otherwise>
     <xsl:variable name="ref-one" select="normalize-space(@first)" />
     <xsl:variable name="target-one" select="id($ref-one)" />
     <xsl:variable name="ref-two" select="normalize-space(@last)" />
@@ -8480,12 +8508,28 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:with-param name="target" select="$target-one" />
         <xsl:with-param name="content" select="$text" />
     </xsl:apply-templates>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- A comma-, or space-separated list is unusual, -->
 <!-- outside of a list of bibliography items.  For -->
 <!-- other items we just mimic this case.          -->
 <xsl:template match="xref[@ref and (contains(normalize-space(@ref), ' ') or contains(normalize-space(@ref), ','))]">
+    <xsl:variable name="error-message">
+        <xsl:apply-templates select="." mode="error-check-xref"/>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="not($error-message = '')">
+            <xsl:variable name="warning-rtf">
+                <c>
+                    <xsl:value-of select="$error-message"/>
+                </c>
+            </xsl:variable>
+            <xsl:apply-templates select="exsl:node-set($warning-rtf)/c"/>
+        </xsl:when>
+        <!-- clear of errors, so on to main event -->
+        <xsl:otherwise>
     <!-- Determine style of visible text in link -->
     <xsl:variable name="text-style">
         <xsl:apply-templates select="." mode="get-text-style" />
@@ -8499,6 +8543,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:with-param name="ref-list" select="$normalized-ref-list" />
         <xsl:with-param name="text-style" select="$text-style" />
     </xsl:apply-templates>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- $ref-list must always have a trailing blank, if non-empty      -->
@@ -8580,23 +8626,17 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- Provisional cross-references -->
 <!-- A convenience for authors in early stages of writing -->
-<!-- Appear both inline and moreso in author tools        -->
-<!-- N.B. (2020-06-07) The "assembly" phase will *replace*-->
-<!-- these, and so this template may never be hit         -->
-<!-- (or only rarely?)                                    -->
+<!-- Just drop a reminder in text                         -->
 <xsl:template match="xref[@provisional]">
-    <xsl:variable name="inline-warning">
-        <xsl:value-of select="@provisional" />
+    <xsl:variable name="warning-ref">
+        <c>
+            <xsl:text>[provisional cross-reference: </xsl:text>
+            <xsl:value-of select="@provisional"/>
+            <xsl:text>]</xsl:text>
+        </c>
     </xsl:variable>
-    <xsl:variable name="margin-warning">
-        <xsl:text>Provisional xref</xsl:text>
-    </xsl:variable>
-    <xsl:call-template name="inline-warning">
-        <xsl:with-param name="warning" select="$inline-warning" />
-    </xsl:call-template>
-    <xsl:call-template name="margin-warning">
-        <xsl:with-param name="warning" select="$margin-warning" />
-    </xsl:call-template>
+    <xsl:variable name="warning" select="exsl:node-set($warning-ref)"/>
+    <xsl:apply-templates select="$warning/c"/>
 </xsl:template>
 
 <!-- Warnings for a high-frequency mistake -->
@@ -8618,6 +8658,111 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- ######################### -->
 <!-- Cross-Reference Utilities -->
 <!-- ######################### -->
+
+<!-- Error-checking first, an "xref" in, a placeholder message back -->
+<!-- to insert into text that screams there is a problem.  Routine  -->
+<!-- also scribbles on the console.  To use, capture the output in  -->
+<!--  avariable, if non-empty then use text as result, if empty     -->
+<!-- then do the work.                                              -->
+
+<xsl:template match="xref" mode="error-check-xref">
+    <!-- A @ref attribute can be a list (e.g. of biblio) and the   -->
+    <!-- @first/@last construction is really two @ref.  We package -->
+    <!-- up a list as a string no matter what.  No commas, plus a  -->
+    <!-- trailing space added so we can chop up the list reliably. -->
+    <!-- commas to blanks, normalize spaces, -->
+    <!-- add trailing space for final split  -->
+    <xsl:variable name="normalized-ref-list">
+        <xsl:choose>
+            <xsl:when test="@ref">
+                <xsl:value-of select="concat(normalize-space(str:replace(@ref,',', ' ')), ' ')"/>
+            </xsl:when>
+            <!-- put @first and @last into a normalized two-part list -->
+            <xsl:when test="@first and @last">
+                <xsl:value-of select="concat(normalize-space(@first), ' ', normalize-space(@last), ' ')"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message>PTX:ERROR:   an "xref" lacks a @ref, @first/@last, or @provisional; check your source</xsl:message>
+                <xsl:apply-templates select="." mode="location-report"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- Variable will have a list of bad cross-reference -->
+    <!-- labels (no target located!) in a comma-separated -->
+    <!-- list.  Empty is success and we then do nothing.  -->
+    <xsl:variable name="bad-xrefs-in-list">
+        <!-- recursive, start with full list -->
+        <xsl:apply-templates select="." mode="check-ref-list">
+            <xsl:with-param name="ref-list" select="$normalized-ref-list"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:if test="not($bad-xrefs-in-list = '')">
+        <!-- error condition, so warn and return  -->
+        <!-- placeholder text as template result  -->
+        <xsl:variable name="error-list" select="substring($bad-xrefs-in-list, 1, string-length($bad-xrefs-in-list) - 2)"/>
+        <xsl:message>PTX:ERROR:   a cross-reference ("xref") uses references [<xsl:value-of select="$error-list"/>] that do not point to any target, or perhaps point to multiple targets.  Maybe you typed an @xml:id value wrong, maybe the target of the @xml:id is nonexistent, or maybe you temporarily removed the target from your source, or maybe an auxiliary file contains a duplicate.  Your output will contain some placeholder text that you will not want to distribute to your readers.</xsl:message>
+        <xsl:apply-templates select="." mode="location-report"/>
+        <!-- placeholder text -->
+        <xsl:text>[cross-reference to target(s) "</xsl:text>
+        <xsl:value-of select="$error-list"/>
+        <xsl:text>" missing or not unique]</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- yes/no boolean for valid targets of an "xref"         -->
+<!-- Initial list from entities file as of 2021-02-10      -->
+<!-- Others from test docs, public testing via pretext-dev -->
+<xsl:template match="&STRUCTURAL;|&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|&SOLUTION-LIKE;|exercise|task|exercisegroup|poem|assemblage|paragraphs|li|fn|men|mrow|biblio|proof|case|contributor|defined-term" mode="is-xref-target">
+    <xsl:value-of select="'yes'"/>
+</xsl:template>
+
+<xsl:template match="*" mode="is-xref-target">
+    <xsl:value-of select="'no'"/>
+</xsl:template>
+
+<xsl:template match="xref" mode="check-ref-list">
+    <xsl:param name="ref-list"/>
+    <xsl:choose>
+        <!-- no more to test, stop recursing -->
+        <xsl:when test="$ref-list = ''"/>
+        <!-- test/check initial ref of the list -->
+        <xsl:otherwise>
+            <xsl:variable name="initial" select="substring-before($ref-list, ' ')" />
+            <!-- Look up the ref in all relevant "documents":          -->
+            <!-- the original source, and private solution file.       -->
+            <!-- Count the number of successes, hoping it will be 1.   -->
+            <!-- Long-term, this check should be performed in a second -->
+            <!-- pass on a completely assembled source, so the id()    -->
+            <!-- function does not need to survey multiple documents.  -->
+            <xsl:variable name="hits">
+                <!-- always do a context shift to $original -->
+                <xsl:for-each select="$original">
+                    <xsl:if test="exsl:node-set(id($initial))">
+                        <xsl:text>X</xsl:text>
+                        <xsl:variable name="target" select="exsl:node-set(id($initial))"/>
+                        <xsl:variable name="is-a-target">
+                            <xsl:apply-templates select="$target" mode="is-xref-target"/>
+                        </xsl:variable>
+                        <xsl:if test="$is-a-target = 'no'">
+                            <xsl:message>PTX:DEBUG: xref/@ref "<xsl:value-of select="$initial"/>" points to a "<xsl:value-of select="local-name($target)"/>" element.  (1) we made a mistake, and we need to add this element to a list of potential targets of a cross-reference, or (2) you made a mistake and really did not mean this particular construction, or (3) we need to have a discussion about the advisability of this element being a target.   If (1) or (3) could you please report me!</xsl:message>
+                        </xsl:if>
+                    </xsl:if>
+                </xsl:for-each>
+            </xsl:variable>
+            <xsl:if test="not($hits = 'X')">
+                <!-- drop the failed lookup, plus a separator.  A nonempty -->
+                <!-- result for this template is indicative of a failure   -->
+                <!-- and the list can be reported in the error message     -->
+                <xsl:value-of select="$initial"/>
+                <xsl:text>, </xsl:text>
+            </xsl:if>
+            <!-- recurse to next label -->
+            <xsl:apply-templates select="." mode="check-ref-list">
+                <xsl:with-param name="ref-list" select="substring-after($ref-list, ' ')"/>
+            </xsl:apply-templates>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- Parse, analyze switches, attributes -->
 <!--   global:      5.2                  -->
