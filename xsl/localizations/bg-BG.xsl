@@ -63,6 +63,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='volume'><xsl:text>Том</xsl:text></localization>
     <localization string-id='book'><xsl:text>Книга</xsl:text></localization>
     <localization string-id='article'><xsl:text>Статия</xsl:text></localization>
+    <!-- <localization string-id='slideshow'><xsl:text>Slideshow</xsl:text></localization> -->
     <localization string-id='letter'><xsl:text>Писмо</xsl:text></localization>
     <localization string-id='memo'><xsl:text>Паметна записка</xsl:text></localization>
     <localization string-id='presentation'><xsl:text>Презентация</xsl:text></localization>
@@ -75,6 +76,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='section'><xsl:text>Параграф</xsl:text></localization>
     <localization string-id='subsection'><xsl:text>Точка</xsl:text></localization>
     <localization string-id='subsubsection'><xsl:text>Подточка</xsl:text></localization>
+    <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
+    <!-- <localization string-id='slide'><xsl:text>Slide</xsl:text></localization> -->
     <localization string-id='introduction'><xsl:text>Увод</xsl:text></localization>
     <localization string-id='conclusion'><xsl:text>Заключение</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Упражнения</xsl:text></localization>
@@ -149,6 +152,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'><xsl:text>Абзац</xsl:text></localization>
     <localization string-id='blockquote'><xsl:text>Цитат</xsl:text></localization>
+    <!-- Literate programming, a chunk of computer code -->
+    <!-- <localization string-id='fragment'><xsl:text>Fragment</xsl:text></localization> -->
     <!-- Parts of an exercise and its solution -->
     <!-- An "exercise", at any level, within an "exercises" division is a          -->
     <!-- "divisional" exercise and the string employed is 'divisionalexercise'.    -->

@@ -41,7 +41,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:output method="text" />
 
 <!-- Enclosing structure is a Python list -->
-<!-- So wrap at outermost level           -->
+<!-- So wrap at outermost level and       -->
+<!-- return control to extract-identity   -->
 <xsl:template match="/">
     <xsl:text>[</xsl:text>
     <xsl:apply-imports />
@@ -50,7 +51,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Problem ids. As sterings. Period. -->
 <!-- Trailing comma is good in Python. -->
-<xsl:template match="myopenmath[@problem]">
+<xsl:template match="myopenmath[@problem]" mode="extraction">
     <xsl:text>'</xsl:text>
     <xsl:value-of select="@problem" />
     <xsl:text>', </xsl:text>

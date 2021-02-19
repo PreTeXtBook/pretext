@@ -121,14 +121,14 @@
 
             <p>Some questions with quantitative answers.</p>
 
-            <exercise>
+            <exercise xml:id="integer-addition">
                 <title>Adding Single-Digit Integers</title>
 
                 <introduction>
                     <p>A simple, but functional example to begin with. If you are just learning how to add, you can test yourself here.</p>
                 </introduction>
 
-                <webwork xml:id="integer-addition">
+                <webwork>
                     <description>
                         Add two positive single-digit integers.
                     </description>
@@ -141,7 +141,7 @@
 
                     <statement>
                         <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
-                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="2" category="integer" /></p>
+                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="5" category="integer" /></p>
                     </statement>
 
                     <solution>
@@ -156,14 +156,14 @@
 
             <p>If you are familiar with <webwork />, then it may be a surprise to you to be interacting with a <webwork /> problem this way, without having logged in to <webwork />.</p>
 
-            <exercise>
+            <exercise xml:id="integer-addition-with-seed">
                 <title>Declaring a Problem Seed</title>
 
                 <introduction>
                     <p>You can also declare a <c>seed</c> to specify a version of any problem that has randomization. Here is the same problem, but with a <c>seed</c> specified.</p>
                 </introduction>
 
-                <webwork xml:id="integer-addition-with-seed" seed="510">
+                <webwork seed="510">
                     <pg-code>
                         $a = random(1, 9, 1);
                         $b = random(1, 9, 1);
@@ -172,7 +172,7 @@
 
                     <statement>
                         <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
-                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="2" category="integer" /></p>
+                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="5" category="integer" /></p>
                     </statement>
 
                     <solution>
@@ -181,14 +181,14 @@
                 </webwork>
             </exercise>
 
-            <exercise>
+            <exercise xml:id="integer-addition-with-control-seed">
                 <title>Controlling Randomness</title>
 
                 <introduction>
                     <p>You can code your problem with randomization, but then use a specific <c>seed</c> and <webwork />'s <c>$envir{problemSeed}</c> to override that randomization for the purposes of the version that will appear in HTML and print output.</p>
                 </introduction>
 
-                <webwork xml:id="integer-addition-with-control-seed" seed="1">
+                <webwork seed="1">
                     <pg-code>
                         $a = random(1, 9, 1);
                         $b = random(1, 9, 1);
@@ -198,7 +198,7 @@
 
                     <statement>
                         <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
-                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="2" category="integer" /></p>
+                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="5" category="integer" /></p>
                     </statement>
 
                     <solution>
@@ -243,7 +243,7 @@
 
                         <instruction>To enter a power, use a <c>^</c>, as in <c>x^2</c> for <m>x^2</m>.</instruction>
 
-                        <p><m><var name="$expression" />=</m><var name="$answer" evaluator="$evaluator" width="8" category="formula" /></p>
+                        <p><m><var name="$expression" />=</m> <var name="$answer" evaluator="$evaluator" width="8" category="formula" /></p>
 
                     </statement>
 
@@ -279,7 +279,7 @@
 
                     <statement>
                         <p>Simplify the expression <m><var name="$expression"/></m>.</p>
-                        <p><m><var name="$expression"/>=</m><var name="$answer" width="10"/></p>
+                        <p><m><var name="$expression"/>=</m> <var name="$answer" width="10"/></p>
                     </statement>
 
                     <hint>
@@ -299,7 +299,7 @@
                 </introduction>
                 <webwork>
                     <statement>
-                        <p><m>1+2=</m><var name="3" width="5" /></p>
+                        <p><m>1+2=</m> <var name="3" width="5" /></p>
                     </statement>
                 </webwork>
                 <conclusion>
@@ -336,10 +336,10 @@
                 </proof>
             </theorem>
 
-            <exercise>
+            <exercise xml:id="quadratic-equation">
                 <title>Solving Quadratic Equations</title>
 
-                <webwork xml:id="quadratic-equation">
+                <webwork>
                     <description>
                         <line>Find a quadratic equation's solutions.</line>
                         <line>One positive integer solution and one negative fraction solution.</line>
@@ -389,6 +389,7 @@
                     </pg-code>
 
                     <stage>
+                        <title>Identify Coefficients</title>
                         <statement>
                             <p>Consider the quadratic equation given by <me><var name="$quadratic" /> = 0\text{.}</me>  First, identify the coefficients for the quadratic equation using the standard form from <xref ref="theorem-quadratic-formula" />.</p>
 
@@ -401,6 +402,7 @@
                     </stage>
 
                     <stage>
+                        <title>Use the Quadratic Formula</title>
                         <statement>
                             <p>Using the quadratic formula, solve <m><var name="$quadratic"/>=0</m>.</p>
                             <p><m>x=</m> <var name="$multians1" width="15"/> or <m>x=</m> <var name="$multians1" width="15"/></p>
@@ -436,6 +438,16 @@
 
                 <webwork source="Library/PCC/BasicAlgebra/Geometry/CylinderVolume10.pg" seed="8435"/>
             </exercise>
+
+            <p>This uninteresting image, authored in <latex/> syntax, is here only to make sure its automatically-assigned identifier is correct, given that the <init>OPL</init> problem just above is going to generate another image for its static representation.</p>
+
+            <image>
+                <latex-image>
+                    \begin{tikzpicture}
+                        \draw[fill=white] (0,0) ellipse (3 and 0.45);
+                    \end{tikzpicture}
+                </latex-image>
+            </image>
 
             <warning>
                 <title>Incompatible Problems</title>
@@ -585,7 +597,7 @@
                 </exercisegroup>
 
                 <exercise xml:id="ww-use-the-definition-of-the-derivative">
-                    <tite>Show Your Work</tite>
+                    <title>Show Your Work</title>
                     <introduction>
                         <p>
                             Sometimes you would like a student to give a <q>simple</q> answer that <webwork/> can automatically assess,
@@ -846,7 +858,7 @@
 
             <p>
                 Occasionally (and probably very rarely) your PG code will include a string variable where the content is PGML syntax.
-                If this is put into the exercise statement, it will be inserted <emph>after</emph> PGML processing is done,
+                If this is put into the exercise statement, it will be inserted <em>after</em> PGML processing is done,
                 and therefore it won't render as you might expect. To insert this content and also have it processed as PGML,
                 use <c>data="pgml"</c>. (This is not in the <pretext/> schema as of 3/26/2020, and is subject to change.)
             </p>
@@ -962,7 +974,7 @@
         <section>
             <title>Tables</title>
 
-            <p>Although a <webwork /> problem written in <pretext /> source can't have a <q>table</q> (which would be captioned and cause trouble with free-standing PG output), they can have a <q>tabular</q> (which must be a child of a <q>sidebyside</q>). Tabulars can be made using the existing syntax and options that PTX offers for table-making, with some exceptions. As of summer 2017, the exceptions are that individual cells cannot have <c>bottom</c> border attributes and individual columns cannot have <c>top</c> border attributes. Also, while PTX table borders are generally <c>minor</c>, <c>medium</c>, or <c>major</c>, when these borders are used in a <webwork /> problem that is rendered as a hard copy problem from within <webwork />, the only thickness option corresponds to <c>minor</c>. Several more features (like rules in general) do not carry through to static output (print or HTML-preview). However we hope this is only temporary.</p>
+            <p>Although a <webwork /> problem written in <pretext /> source can't have a <q>table</q> (which would be captioned and cause trouble with free-standing PG output), they can have a <q>tabular</q>. Tabulars can be made using the existing syntax and options that PTX offers for table-making, with some exceptions. As of summer 2017, the exceptions are that individual cells cannot have <c>bottom</c> border attributes and individual columns cannot have <c>top</c> border attributes. Also, while PTX table borders are generally <c>minor</c>, <c>medium</c>, or <c>major</c>, when these borders are used in a <webwork /> problem that is rendered as a hard copy problem from within <webwork />, the only thickness option corresponds to <c>minor</c>. Several more features (like rules in general) do not carry through to static output (print or HTML-preview). However we hope this is only temporary.</p>
 
             <exercise>
                 <title>Complete this Table</title>
@@ -977,53 +989,49 @@
                     <statement>
                         <p>Complete this multiplication table.</p>
 
-                        <sidebyside>
-                            <tabular bottom="minor" right="minor" halign="center">
-                                <col halign="right" right="major"/>
-                                <col />
-                                <col />
-                                <row bottom="major">
-                                    <cell><m>\times</m></cell>
-                                    <cell><m><var name="$a[0]"/></m></cell>
-                                    <cell><m><var name="$a[1]"/></m></cell>
-                                </row>
-                                <row>
-                                    <cell><m><var name="$b[0]"/></m></cell>
-                                    <cell><var name="$p[0]" form="none" category="integer"/></cell>
-                                    <cell><var name="$p[2]" form="none" category="integer"/></cell>
-                                </row>
-                                <row>
-                                    <cell><m><var name="$b[1]"/></m></cell>
-                                    <cell><var name="$p[1]" form="none" category="integer"/></cell>
-                                    <cell><var name="$p[3]" form="none" category="integer"/></cell>
-                                </row>
-                            </tabular>
-                        </sidebyside>
+                        <tabular bottom="minor" right="minor" halign="center">
+                            <col halign="right" right="major"/>
+                            <col />
+                            <col />
+                            <row bottom="major">
+                                <cell><m>\times</m></cell>
+                                <cell><m><var name="$a[0]"/></m></cell>
+                                <cell><m><var name="$a[1]"/></m></cell>
+                            </row>
+                            <row>
+                                <cell><m><var name="$b[0]"/></m></cell>
+                                <cell><var name="$p[0]" form="none" category="integer"/></cell>
+                                <cell><var name="$p[2]" form="none" category="integer"/></cell>
+                            </row>
+                            <row>
+                                <cell><m><var name="$b[1]"/></m></cell>
+                                <cell><var name="$p[1]" form="none" category="integer"/></cell>
+                                <cell><var name="$p[3]" form="none" category="integer"/></cell>
+                            </row>
+                        </tabular>
                     </statement>
 
                     <solution>
-                        <sidebyside>
-                            <tabular bottom="minor" right="minor" halign="center">
-                                <col halign="right" right="major"/>
-                                <col />
-                                <col />
-                                <row bottom="major">
-                                    <cell><m>\times</m></cell>
-                                    <cell><m><var name="$a[0]"/></m></cell>
-                                    <cell><m><var name="$a[1]"/></m></cell>
-                                </row>
-                                <row>
-                                    <cell><m><var name="$b[0]"/></m></cell>
-                                    <cell><m><var name="$p[0]"/></m></cell>
-                                    <cell><m><var name="$p[2]"/></m></cell>
-                                </row>
-                                <row>
-                                    <cell><m><var name="$b[1]"/></m></cell>
-                                    <cell><m><var name="$p[1]"/></m></cell>
-                                    <cell><m><var name="$p[3]"/></m></cell>
-                                </row>
-                            </tabular>
-                        </sidebyside>
+                        <tabular bottom="minor" right="minor" halign="center">
+                            <col halign="right" right="major"/>
+                            <col />
+                            <col />
+                            <row bottom="major">
+                                <cell><m>\times</m></cell>
+                                <cell><m><var name="$a[0]"/></m></cell>
+                                <cell><m><var name="$a[1]"/></m></cell>
+                            </row>
+                            <row>
+                                <cell><m><var name="$b[0]"/></m></cell>
+                                <cell><m><var name="$p[0]"/></m></cell>
+                                <cell><m><var name="$p[2]"/></m></cell>
+                            </row>
+                            <row>
+                                <cell><m><var name="$b[1]"/></m></cell>
+                                <cell><m><var name="$p[1]"/></m></cell>
+                                <cell><m><var name="$p[3]"/></m></cell>
+                            </row>
+                        </tabular>
 
                     </solution>
                 </webwork>
@@ -1066,11 +1074,9 @@
                     <statement>
                         <p>The graph below is a graph of <m>y=f(x)</m>. Use the graph to solve the equation <m>f(x)=1</m>.</p>
 
-                        <sidebyside widths="50%">
-                            <image pg-name="$gr">
-                                <description>a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points (<var name="$answer"/>,1) and (<var name="$second_x"/>,2) before leaving the graph moving more and more upward and to the right.</description>
-                            </image>
-                        </sidebyside>
+                        <image pg-name="$gr" width="50%">
+                            <description>a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points (<var name="$answer"/>,1) and (<var name="$second_x"/>,2) before leaving the graph moving more and more upward and to the right.</description>
+                        </image>
 
                         <p><m>x=</m> <var name="$answer" width="5" category="number"/></p>
                     </statement>
@@ -1079,11 +1085,9 @@
 
                         <p>The graph reveals that the only solution to <m>f(x)=1</m> is <m>x=<var name="$answer"/></m>.</p>
 
-                        <sidebyside widths="50%">
-                            <image pg-name="$solgr">
-                                <description>a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points ($answer,1) and ($second_x,2) before leaving the graph moving more and more upward and to the right; a horizontal line segment moves rightward from y=1 on the y-axis until it reaches a point on the curve; a vertical line segment moves down from this point to x=$answer on the x-axis.</description>
-                            </image>
-                        </sidebyside>
+                        <image pg-name="$solgr" width="50%">
+                            <description>a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points ($answer,1) and ($second_x,2) before leaving the graph moving more and more upward and to the right; a horizontal line segment moves rightward from y=1 on the y-axis until it reaches a point on the curve; a vertical line segment moves down from this point to x=$answer on the x-axis.</description>
+                        </image>
 
                     </solution>
 
@@ -1097,10 +1101,10 @@
 
             <p>This section samples the subject area template problems found on the <webwork /> wiki at <url href="http://webwork.maa.org/wiki/SubjectAreaTemplates"/>.</p>
 
-            <exercise>
+            <exercise xml:id="number-or-function">
                 <title>Answer is a number or a function</title>
 
-                <webwork xml:id="number-or-function">
+                <webwork>
 
                     <pg-code>
                         $a = non_zero_random(-9,9,1);
@@ -1137,10 +1141,10 @@
                 </webwork>
             </exercise>
 
-            <exercise>
+            <exercise xml:id="function-with-domain-issues">
                 <title>Answer is a function with domain issues</title>
 
-                <webwork xml:id="function-with-domain-issues">
+                <webwork>
 
                     <pg-code>
                         $a = random(2,5,1);
@@ -1179,11 +1183,11 @@
                 </webwork>
             </exercise>
 
-            <exercise>
+            <exercise xml:id="multiple-choice-popup-or-radio-buttons">
                 <!--Checkbox not implemented yet; see note in pretext-webwork-pg.xsl  -->
                 <title>Multiple choice by popup, radio buttons<!--, or checkbox--></title>
 
-                <webwork xml:id="multiple-choice-popup-or-radio-buttons">
+                <webwork>
 
                         <pg-code>
                             $color1 = PopUp(["?","Red","Blue","Green"], 2);
@@ -1230,7 +1234,12 @@
                           $expressions = RadioButtons(['\(x\)','\(x^2\)','\(2^x\)'], 2);
                     </pg-code>
                     <statement>
-                        <p>There is math in each option for this question. Which expression is not a polynomial? <var name="$expressions" form="buttons"/></p>
+                        <p>
+                            There is math in each option for this question. Which expression is not a polynomial?
+                        </p>
+                        <p>
+                            <var name="$expressions" form="buttons"/>
+                        </p>
                     </statement>
                     <solution>
                         <p>The answer is <var name="$expressions"/>.</p>
@@ -1239,10 +1248,10 @@
 
             </exercise>
 
-            <exercise>
+            <exercise xml:id="tables">
                 <title>Tables</title>
 
-                <webwork xml:id="tables">
+                <webwork>
 
                     <pg-code>
                         $x = Real(5);
@@ -1251,48 +1260,44 @@
                     <statement>
                         <p>A table with minimal XML source.</p>
 
-                        <sidebyside>
-                            <tabular>
-                                <row>
-                                    <cell>A</cell>
-                                    <cell>B</cell>
-                                    <cell>C</cell>
-                                </row>
-                                <row>
-                                    <cell>D</cell>
-                                    <cell>E</cell>
-                                    <cell>F</cell>
-                                </row>
-                                <row>
-                                    <cell>G</cell>
-                                    <cell>H</cell>
-                                    <cell>I</cell>
-                                </row>
-                            </tabular>
-                        </sidebyside>
+                        <tabular>
+                            <row>
+                                <cell>A</cell>
+                                <cell>B</cell>
+                                <cell>C</cell>
+                            </row>
+                            <row>
+                                <cell>D</cell>
+                                <cell>E</cell>
+                                <cell>F</cell>
+                            </row>
+                            <row>
+                                <cell>G</cell>
+                                <cell>H</cell>
+                                <cell>I</cell>
+                            </row>
+                        </tabular>
                         <p>Finish this table.</p>
 
-                        <sidebyside>
-                            <tabular top="major" left="major" bottom="major" right="minor" halign="center">
-                                <col halign="right" top="minor"/>
-                                <col right="medium"/>
-                                <col halign="left"/>
-                                <row bottom="none" left="none">
-                                <cell right="minor">1</cell>
-                                    <cell>two</cell>
-                                    <cell><m>\lfloor\pi\rfloor</m></cell>
-                                </row>
-                                <row valign="bottom">
-                                    <cell bottom="minor"><line><m>\text{I}+\text{I}</m></line><line><m>{}+\text{I}+\text{I}</m></line></cell>
-                                    <cell><var name="$x" form="none" category="integer"/></cell>
-                                    <cell>six</cell>
-                                </row>
-                                <row halign="right">
-                                    <cell><m>2^3-1</m></cell>
-                                    <cell colspan="2" halign="center">VIII</cell>
-                                </row>
-                            </tabular>
-                        </sidebyside>
+                        <tabular top="major" left="major" bottom="major" right="minor" halign="center">
+                            <col halign="right" top="minor"/>
+                            <col right="medium"/>
+                            <col halign="left"/>
+                            <row bottom="none" left="none">
+                            <cell right="minor">1</cell>
+                                <cell>two</cell>
+                                <cell><m>\lfloor\pi\rfloor</m></cell>
+                            </row>
+                            <row valign="bottom">
+                                <cell bottom="minor"><line><m>\text{I}+\text{I}</m></line><line><m>{}+\text{I}+\text{I}</m></line></cell>
+                                <cell><var name="$x" form="none" category="integer"/></cell>
+                                <cell>six</cell>
+                            </row>
+                            <row halign="right">
+                                <cell><m>2^3-1</m></cell>
+                                <cell colspan="2" halign="center">VIII</cell>
+                            </row>
+                        </tabular>
                     </statement>
 
                     <solution>
@@ -1324,44 +1329,26 @@
                     </pg-code>
                     <stage>
                         <statement>
-                            <sidebyside widths="25%">
-                                <image pg-name="$gr[0]" />
-                            </sidebyside>
-                            <sidebyside widths="25%">
-                                <image pg-name="$gr[1]" />
-                            </sidebyside>
+                            <image pg-name="$gr[0]" width="25%"/>
+                            <image pg-name="$gr[1]" width="25%"/>
                         </statement>
                         <solution>
-                            <sidebyside widths="25%">
-                                <image pg-name="$gr[2]" />
-                            </sidebyside>
+                            <image pg-name="$gr[2]" width="25%"/>
                         </solution>
                     </stage>
                     <stage>
                         <statement>
-                            <sidebyside widths="25%">
-                                <image pg-name="$gr[3]" />
-                            </sidebyside>
-                            <sidebyside widths="25%">
-                                <image pg-name="$gr[4]" />
-                            </sidebyside>
-                            <sidebyside widths="25%">
-                                <image pg-name="$gr[5]" />
-                            </sidebyside>
+                            <image pg-name="$gr[3]" width="25%"/>
+                            <image pg-name="$gr[4]" width="25%"/>
+                            <image pg-name="$gr[5]" width="25%"/>
                         </statement>
-                        <!-- No hints for now because with displayMode=tex, the anonymous problem rendering is not -->
-                        <!--generating a hints section at all. Will have to work with Mike to investigate this.    -->
-                        <!--<hint>
-                            <sidebyside widths="25%">
-                                <image pg-name="$gr[6]" />
-                            </sidebyside>
-                        </hint>-->
+                        <hint>
+                            <image pg-name="$gr[6]" width="25%"/>
+                        </hint>
                         <solution>
-                            <sidebyside widths="25%">
-                                <image pg-name="$gr[7]" />
-                            </sidebyside>
+                            <image pg-name="$gr[7]" width="25%"/>
                         </solution>
-                  </stage>
+                    </stage>
                 </webwork>
             </exercise>
 
@@ -1642,22 +1629,15 @@
                         <p><ol>
                             <li>
                                 <p>Structured item</p>
-                                <sidebyside widths="17%">
-                                    <image pg-name="$g" />
-                                </sidebyside>
+                                <image pg-name="$g" width="17%"/>
                             </li>
                             <li>
-                                <sidebyside widths="17%">
-                                    <image pg-name="$g" />
-                                </sidebyside>
+                                <image pg-name="$g" width="17%"/>
                                 <p>Structured item</p>
                             </li>
                             <li>
                                 <p>Structured item</p>
-                                <sidebyside widths="17%">
-                                    <image pg-name="$g" />
-                                </sidebyside>
-                                <p>Second paragraph</p>
+                                <image pg-name="$g" width="17%"/>
                             </li>
                             <li>
                                 <p>Structured item</p>
@@ -1667,57 +1647,51 @@
                         <p><ol>
                             <li>
                                 <p>Structured item</p>
-                                <sidebyside>
-                                    <tabular>
-                                        <row>
-                                            <cell>a</cell>
-                                            <cell>b</cell>
-                                        </row>
-                                        <row>
-                                            <cell>c</cell>
-                                            <cell>d</cell>
-                                        </row>
-                                    </tabular>
-                                </sidebyside>
+                                <tabular>
+                                    <row>
+                                        <cell>a</cell>
+                                        <cell>b</cell>
+                                    </row>
+                                    <row>
+                                        <cell>c</cell>
+                                        <cell>d</cell>
+                                    </row>
+                                </tabular>
                             </li>
                             <li>
-                                <sidebyside>
-                                    <tabular top="major" left="major" bottom="major" right="minor" halign="center">
-                                        <col halign="right" top="minor"/>
-                                        <col right="medium"/>
-                                        <col halign="left"/>
-                                        <row bottom="none" left="none">
-                                        <cell right="minor">1</cell>
-                                            <cell>two</cell>
-                                            <cell><m>\lfloor\pi\rfloor</m></cell>
-                                        </row>
-                                        <row valign="bottom">
-                                            <cell bottom="minor"><line><m>\text{I}+\text{I}</m></line><line><m>{}+\text{I}+\text{I}</m></line></cell>
-                                            <cell><m>5</m></cell>
-                                            <cell>six</cell>
-                                        </row>
-                                        <row halign="right">
-                                            <cell><m>2^3-1</m></cell>
-                                            <cell colspan="2" halign="center">VIII</cell>
-                                        </row>
-                                    </tabular>
-                                </sidebyside>
+                                <tabular top="major" left="major" bottom="major" right="minor" halign="center">
+                                    <col halign="right" top="minor"/>
+                                    <col right="medium"/>
+                                    <col halign="left"/>
+                                    <row bottom="none" left="none">
+                                    <cell right="minor">1</cell>
+                                        <cell>two</cell>
+                                        <cell><m>\lfloor\pi\rfloor</m></cell>
+                                    </row>
+                                    <row valign="bottom">
+                                        <cell bottom="minor"><line><m>\text{I}+\text{I}</m></line><line><m>{}+\text{I}+\text{I}</m></line></cell>
+                                        <cell><m>5</m></cell>
+                                        <cell>six</cell>
+                                    </row>
+                                    <row halign="right">
+                                        <cell><m>2^3-1</m></cell>
+                                        <cell colspan="2" halign="center">VIII</cell>
+                                    </row>
+                                </tabular>
                                 <p>Structured item</p>
                             </li>
                             <li>
                                 <p>Structured item</p>
-                                <sidebyside>
-                                    <tabular>
-                                        <row>
-                                            <cell>a</cell>
-                                            <cell>b</cell>
-                                        </row>
-                                        <row>
-                                            <cell>c</cell>
-                                            <cell>d</cell>
-                                        </row>
-                                    </tabular>
-                                </sidebyside>
+                                <tabular>
+                                    <row>
+                                        <cell>a</cell>
+                                        <cell>b</cell>
+                                    </row>
+                                    <row>
+                                        <cell>c</cell>
+                                        <cell>d</cell>
+                                    </row>
+                                </tabular>
                                 <p>Second paragraph</p>
                             </li>
                             <li>
@@ -1768,6 +1742,19 @@
                             </ul></p></li>
                             <li><p>Level 1, third.</p></li>
                         </ul></p>
+                    </statement>
+                </webwork>
+            </exercise>
+
+            <exercise>
+                <introduction>
+                    <p>
+                        This exercise has no content in its statement.
+                        It should throw a PTX warning during the representations build.
+                    </p>
+                </introduction>
+                <webwork>
+                    <statement>
                     </statement>
                 </webwork>
             </exercise>

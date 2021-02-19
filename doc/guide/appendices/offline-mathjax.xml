@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<appendix xml:id="offline-mathjax">
+    <title>Offline MathJax</title>
+    <idx>MathJax</idx>
+
+    <introduction>
+        <p><pretext/> uses the well-known <latex/> syntax for mathematics.  One fundamental reason for this choice is that the <url href="https://www.mathjax.org/">MathJax</url><fn><c>www.mathjax.org</c></fn> Javascript library is so capable at rendering <latex/> inside of an <init>HTML</init> web page.  Of course, it is not hard to render <latex/> syntax inside of <latex/> output!  But what about output formats that are not processed by <latex/> or Javascript, such as <init>EPUB</init> or braille?  That is where running MathJax offline (locally) comes into play.</p>
+    </introduction>
+
+    <section xml:id="node-and-npm">
+        <title>Node and npm</title>
+
+        <p>To run a Javascript program <em>outside</em> a web browser requires a program that can interpret the Javascript language.  A popular choice is <c>node.js</c>, whose executable is simply <c>node</c>.  Programs designed for execution by <c>node</c> often build on other programs.  These are all organized in packages, which can be managed by the Node Package Manager, known as <c>npm</c> for short.  A basic purpose of <c>npm</c> is to manage versions and dependencies among packages.</p>
+
+        <p>So the first step is to install both <c>node</c> and <c>npm</c> on your system.  These programs are meant to be cross-platform, so once you do these two operating-system-specific installations, we can proceed with generic instructions. (2020-11-09: we could add instructions for specific operating systems to other appendices?)</p>
+
+        <p><c>node</c> should be on your path after installation, and you can try <cd>which node</cd> to see if your operating system can locate it automatically.  If not, then you will need to edit your peronal copy of the <c>pretext.cfg</c> configuration file to have the <c>node</c> key provide a path to the executable (2020-11-10: needs a cross-reference to the script's configuration file).</p>
+    </section>
+
+    <section xml:id="install-mathjax">
+        <title>MathJax and Speech Rule Engine</title>
+        <idx>Speech Rule Engine</idx>
+
+        <p>MathJax is packaged as a <c>node.js</c> program.  A component of MathJax is Speech Rule Engine (<init>SRE</init>), which converts <latex/> to text that represents a spoken version of the mathematics, and to Nemeth braille, a braille code for expressing mathematics.</p>
+
+        <p>Follow the directions here <em>exactly</em>.  Do not free-style and think some modification will have a better or identical result.  In a terminal, set your working directory to be your top-level home/user directory.  Install both packages <em>at the same time</em> with a <em>single</em> command:<cd>
+            <cline>npm install mathjax-full speech-rule-engine</cline>
+        </cd>It is possible you will get an error and a warning about the <c>package-lock.json</c> file.  They are harmless, ignore them.</p>
+
+
+        <p>These two packages, along with others that are dependencies, will appear in a directory/folder called <c>node_modules</c>.  Your version of Speech Rule Engine should be the newest stable version, and this is important since <init>SRE</init> is under active development.  If you do not follow these directions (or maybe even if you do?) there is a risk your MathJax installation will also include a copy of <init>SRE</init>, since it is a component of MathJax.  And this version is likely older, so you want to get rid of it.  If so, the older version will be in the directory<cd>
+            <cline>node_modules/mathjax-full/node_modules/speech-rule-engine</cline>
+        </cd>By removing this directory, only the newer version will remain and MathJax will locate it for use in the routines <pretext/> supplies.</p>
+    </section>
+
+
+    <section xml:id="math-representations">
+        <title>Mathematics Representations</title>
+
+        <p>Once MathJax is installed properly, the <c>pretext/pretext</c> script will be able to produce an <init>EPUB</init> version of your project.  The script will first analyze your document, isolating all of the mathematics.  These are then processed by MathJax and produce a file of <term>representations</term> of the mathematics, either as <init>SVG</init> images or as MathML versions.  These representations are then inserted properly into the eventual output.  This process is all automatic but explains why it is possible to produce two different types of <init>EPUB</init>.  A good test of your installation is to use the <c>pretext/pretext</c> script to make an <init>EPUB</init> (<xref provisional="epub production"/>) or the script can be used to simply produce structured files of these alternate representations (see <xref provisional="script math representations"/> or paragraph just below).</p>
+
+        <p>With <init>SRE</init> also installed, text (speech) becomes a possible representation, as well as Nemeth braille.  This makes possible an <init>EPUB</init> version that is all text, and there are online sites that will turn this <init>EPUB</init> into an audio book (of not very good quality).  The braille representations are one component of the production of braille output.  (<xref provisional="braille production"/>, <xref ref="mathematics-representations"/>)</p>
+
+        <p>If you use the <c>pretext/pretext</c> script with a <c>math</c> component, and a format of <c>svg</c> or <c>mathml</c>, you will produce a file of these representations, structured by <init>XML</init> (naturally).  These files are not much use by themselves, but may be of interest.</p>
+    </section>
+
+</appendix>

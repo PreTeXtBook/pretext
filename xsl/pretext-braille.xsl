@@ -79,9 +79,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- These two templates are similar to those of  pretext-html.xsl. -->
 <!-- Primarily the production of cross-reference ("xref") knowls    -->
-<!-- has been removed.                                              -->
+<!-- has been removed.  The pretext-html.xsl template will have     -->
+<!-- done the assembly phase, adjusting $root to point to the       -->
+<!-- in-memory enhanced source.                                     -->
 <xsl:template match="/">
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="$root"/>
 </xsl:template>
 
 <!-- Deprecation warnings are universal analysis of source and parameters   -->
@@ -90,7 +92,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <!-- We process structural nodes via chunking routine in xsl/pretext-common.xsl    -->
 <!-- This in turn calls specific modal templates defined elsewhere in this file     -->
-<xsl:template match="/mathbook|/pretext">
+<xsl:template match="/pretext">
     <!-- No point in proceeding without the file of braille   -->
     <!-- representations, and right at the start, so a banner -->
     <!-- warning for those who think this stylesheet alone    -->
@@ -244,6 +246,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Verbatim from -html conversion read about it there -->
 <xsl:template match="book|article" mode="section-header" />
+<!-- Slideshow is similar, but not present in the -html stylesheet -->
+<xsl:template match="slideshow" mode="section-header" />
 
 <!-- Default is indeterminate (seacrch while debugging) -->
 <xsl:template match="*" mode="division-class">
@@ -271,10 +275,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="section" mode="division-class">
     <xsl:choose>
+        <!-- slideshow is exceptional, a major division, -->
+        <!-- but no real content, and only a title       -->
+        <xsl:when test="parent::slideshow">
+            <xsl:text>fullpage</xsl:text>
+        </xsl:when>
+        <!-- routine and *not* generally terminal -->
         <xsl:when test="$b-has-subsubsection">
             <xsl:text>center</xsl:text>
         </xsl:when>
-        <!-- terminal -->
+        <!-- routine and necessarily terminal -->
         <xsl:otherwise>
             <xsl:text>cell5</xsl:text>
         </xsl:otherwise>
@@ -299,6 +309,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>cell7</xsl:text>
 </xsl:template>
 
+<xsl:template match="slide" mode="division-class">
+    <xsl:text>centerpage</xsl:text>
+</xsl:template>
+
 <!-- ################### -->
 <!-- Environments/Blocks -->
 <!-- ################### -->
@@ -307,10 +321,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- but we do not want any automatic, or configured, -->
 <!-- knowlization to take place.  Ever.  Never.       -->
 
-<!-- Everything configurable by author, 2020-01-02    -->
-<!-- Roughly in the order of  html.knowl.*  switches  -->
+<!-- Everything configurable by author, 2020-01-02         -->
+<!-- Roughly in the order of old  html.knowl.*  switches   -->
+<!-- Similar HTML templates return string for boolean test -->
 <xsl:template match="&THEOREM-LIKE;|proof|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&REMARK-LIKE;|&GOAL-LIKE;|exercise" mode="is-hidden">
-    <xsl:text>no</xsl:text>
+    <xsl:text>false</xsl:text>
 </xsl:template>
 
 <!-- A hook in the HTML conversion allows for the addition of a @data-braille attribute to the "body-element".  Then liblouis can select on these values to apply the "boxline" style which delimits the blocks.  Here we define these values.  The stub in the HTML conversion does nothing (empty text) and so is a signal to not employ this attribute at all.  So a non-empty definition here also activates the attribute's existence. -->
@@ -473,6 +488,60 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </article>
 </xsl:template>
 
+<!-- ################# -->
+<!-- Verbatim Material -->
+<!-- ################# -->
+
+<!-- cd is for use in paragraphs, inline -->
+<!-- Unstructured is pure text           -->
+<xsl:template match="cd">
+    <pre class="code-block">
+        <xsl:value-of select="." />
+    </pre>
+</xsl:template>
+
+<!-- cline template is in xsl/pretext-common.xsl -->
+<xsl:template match="cd[cline]">
+    <pre class="code-block">
+        <xsl:call-template name="break-lines-html">
+            <xsl:with-param name="text">
+                <xsl:apply-templates select="cline"/>
+            </xsl:with-param>
+        </xsl:call-template>
+    </pre>
+</xsl:template>
+
+<xsl:template match="pre">
+    <pre class="code-block">
+        <xsl:call-template name="break-lines-html">
+            <xsl:with-param name="text">
+                <xsl:apply-templates select="." mode="interior"/>
+            </xsl:with-param>
+        </xsl:call-template>
+    </pre>
+</xsl:template>
+
+<!-- Utility to insert explicit HTML (only) line breaks       -->
+<!-- Recursively strip a leading line from pure text chunk    -->
+<!-- based on character, and add HTML newlines ("br") to each -->
+<!-- so liblouis will break lines in "computerCoded" format.  -->
+<!-- It seems that text must arrive with trailing newlines,   -->
+<!-- so recursion behaves.                                    -->
+<xsl:template name="break-lines-html">
+    <xsl:param name="text"/>
+
+    <xsl:choose>
+        <xsl:when test="$text = ''"/>
+        <xsl:otherwise>
+            <xsl:value-of select="substring-before($text, '&#xa;')"/>
+            <br/>
+            <xsl:call-template name="break-lines-html">
+                <xsl:with-param name="text" select="substring-after($text, '&#xa;')"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- ###################### -->
 <!-- Paragraph-Level Markup -->
@@ -508,12 +577,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="id">
         <xsl:apply-templates select="." mode="visible-id"/>
     </xsl:variable>
-    <!-- And the braille string itself.  We remove ASCII space  -->
-    <!-- which is present as a testing artifact.  Remove later. -->
-    <!-- Real spaces are Unicode braille blank pattern (?),     -->
-    <!-- U+2800, while testing spaces are ASCII spaces, U+0020. -->
-    <xsl:variable name="spaced-braille" select="$math-repr/pi:math[@id = $id]"/>
-    <xsl:variable name="braille" select="translate($spaced-braille, '&#x20;', '')"/>
+    <!-- Real spaces are Unicode braille blank pattern U+2800 -->
+    <xsl:variable name="braille" select="$math-repr/pi:math[@id = $id]/div[@class = 'braille']"/>
     <!-- We investigate actual source for very simple math   -->
     <!-- (one-letter variable names in Latin letters), so we -->
     <!-- process the content (which could have "xref", etc)  -->

@@ -7,12 +7,12 @@
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
 
-<chapter xml:id="faq">
+<chapter xml:id="author-faq">
     <title>Author FAQ: Frequently Asked Questions</title>
 
     <p>Technical questions first, followed by questions about markup.</p>
 
-    <p><ul>
+    <p><ol>
         <li>
           <title>On my local machine, why are the knowls/Sage cells empty?</title>
             <p>
@@ -108,6 +108,15 @@
         </li>
 
         <li>
+            <title>Can I create <pretext/> source in Microsoft Word or Google Docs?</title>
+            <p>Unlikely.  <pretext/> is designed around <init>XML</init> markup, so using a text editor to create a text file is the intended process for creating source.  When you create a file with other word processors it is likely to use different characters in some places, such as <q>smart quotes</q>, and convert other things you type, such as converting three periods into a single ellipsis character.  And if you make font changes, such as italics for emphasis, that will not translate directly to <pretext/>.</p>
+
+            <p>Perhaps you know somebody technically-minded you want to convert your word-processor files for you?  First, this is a tedious job.  Second, they may not accurately translate your intent.  Third, you cannot make any edits and you will be <em>reliant</em> on them alone to maintain your project for you.</p>
+
+            <p>If you insist on authoring with a traditional word-processor, then you should.  But you will get whatever output that tool provides, and miss out on the benefits of the semantic markup that allows us to create all the various output formats <pretext/> provides.</p>
+        </li>
+
+        <li>
             <title>Why do I get no output and some warnings about bugs?</title>
             <p>There is a good chance you have <q>modularized</q> your source files and have not included the <c>--xinclude</c> switch on the command-line when you ran <c>xsltproc</c>.  (See <xref ref="processing-modular" />.)
                If that was your mistake, then you should have seen a warning.
@@ -121,6 +130,11 @@
             <p>As volunteers, we cannot support problems from old versions, and sometimes we have to implement changes in reaction to third-party software (like MathJax), which is beyond our control.  So while development is rapid, we implore you to remain on the <c>dev</c> branch of the repository and <c>git pull</c> regularly.  Such as <em>daily</em>, with your morning coffee as you sit down to write, or with your last compilation of the evening.  You will have <em>far fewer unpleasant surprises</em> this way, and we can help you better.</p>
 
             <p>We understand that <pretext /> is a moving target, but we are iterating to a better state, and it is best to have everybody along for the <em>whole</em> ride.</p>
+        </li>
+
+        <li xml:id="faq-keep-up-with-changes">
+            <title>I have not updated in months, so I did a pull, and now I have a bunch of warnings.  How do I catch up?</title>
+            <p>Changes on our end which produce new warnings are almost always announced on the <c>pretext-announce</c> Google Group.  This is a very low-traffic, announcement-only list, so you could skim the messages you missed.  Also, read warnings carefully, as they often have explicit suggestions about what to do next.</p>
         </li>
 
         <!-- mathbook-xml-support:  2015-06-21:  Subscripts in custom lists -->
@@ -151,24 +165,16 @@
         </li>
 
         <li>
-            <title>Why are theorems, definitions, examples, remarks, <etc /> all numbered using the same counter?</title>
+            <title>Why are theorems, definitions, examples, remarks, etc.<nbsp/>all numbered using the same counter?</title>
             <p>The following is an argument in favor of using common counters for blocks of similar appearance. The argument is stronger in the context of using a printed copy of the book, where physical page flipping is necessary, but also applies to scrolling through a (long) page in a web browser.</p>
 
-            <p>Suppose your math professor gave you a note to review Theorem 2.4.7 in your textbook. The <q>2.4</q> is useful information directing you to Chapter 2, Section 4. You can tell by the <q>7</q> that the theorem is probably not right at the beginning of the section, so you open to the middle of the section. You find yourself on a page with no theorems, but you do see Example 2.4.11. What do you do: flip forward or flip backward?</p>
+            <p>Suppose your professor gave you a note to review Example 2.4.7 in your textbook. The <q>2.4</q> is useful information directing you to Chapter 2, Section 4. You can tell by the <q>7</q> that the example is probably not right at the beginning of the section, so you open to the middle of the section. You find yourself on a page with no examples, but you do see Remark 2.4.11. What do you do: flip forward or flip backward?</p>
 
-            <p>If theorems and examples are numbered using separate counters, you have no information about which way to go. You need to make a random decision, and flip pages until you find another theorem that you can use as a guidepost. And theorems may be rare and sparse, so it may take quite a bit of page flipping to find that guidepost. You may end up at Theorem 2.4.8, telling you that you need to flip backward now. But how far? Will it be one page earlier or twenty?</p>
+            <p>If examples and remarks are numbered using separate counters, you have no information about which way to go. You need to make a random decision, and flip pages until you find another example that you can use as a guidepost.  And examples might be rare and sparse, so it may take quite a bit of page flipping to find that guidepost. You may end up at Example 2.4.8, telling you that you need to flip backward now. But how far? Will it be one page earlier or twenty?</p>
 
-            <p>If theorems and examples are using the same counter, then you know that you need to flip backward. And perhaps more importantly, the oblivious reader who thinks they are looking for <q>2.4.7</q> (and is not thinking about <q>Theorem</q>) sees the <q>2.4.11</q> and correctly flips backward without even realizing the potential for different counters. As they pass Definition 2.4.10 and Example 2.4.9, they have a sense of the pace at which they are converging on Theorem 2.4.7. This is the main argument for the use of common counters: it makes everything easier to locate.</p>
+            <p>For a more expansive discussion along these lines, see <xref ref="publisher-numbering"/>.</p>
 
-            <p>For another point, perhaps you have read a math book in the past and have seen something like <q>and according to 2.4.7<ellipsis /></q>.  What if the book has Theorem 2.4.7 and also Example 2.4.7? Which one is the author talking about? If you are lucky, you are conscious that there are multiple possibilities. If you are unlucky, you flip to Example 2.4.7 but the author meant Theorem 2.4.7, and you go a bit mad trying to make Example 2.4.7 logically relevant to the reference.</p>
-
-            <p><pretext /> makes it easy to avoid this particular annoyance, because cross references can identify their <q>type</q>, especially through the use of the global <q>autonaming</q> feature. But even when the text explicitly says <q>and according to Theorem 2.4.7<ellipsis /></q>, with humans being human, some readers will still focus on the <q>2.4.7</q> and begin a search for that number rather than the theorem with that number. With common counters, once 2.4.7 is a Theorem, there will never be an Example 2.4.7.</p>
-
-            <p>One counterargument is that it feels <q>wrong</q> to allow for an Example 2.4.9 and an Example 2.4.11 with no Example 2.4.10 existing in between. This violates our instinct to categorize and order objects. And perhaps the <q>missing</q> Example 2.4.10 will indeed cause some confusion to some readers. However, we suggest that such idealized views should be subservient to our goal of producing textbooks that provide a useful resource for the vast majority of our students.</p>
-
-            <p>We plan to allow figures and tables to use different counters, since they look obviously different, so you can quickly distinguish the previous, or next, item as you scan a page.  Notice that it is their <em>distinctive appearance</em> that is the criteria for an independent counter.  For example, numbers for displayed equations meet this criteria.  They have their own counter, they are displayed distinctively when originlly formatted, and a cross-reference emphasizes their distinctive type through the use of parentheses (<eg />, Equation (2.4.7)).</p>
-
-            <p>Also, as an author, recognize that there is a very flexible mechanism for making lists of objects that may be included in the <tag>backmatter</tag>.  To continue the example here, you could make a list of all the theorems in the book, and a separate list of all the examples.  Each list would be in the order of appearance, include the number (and a title if you provide one).  In HTML output, each is a knowl which will quickly provide the content (independent of location), and also provides an <q>in-context</q> link to take you to the location for surrounding material.  This useful feature requires very little additional effort, especially if you title your blocks as you author them.</p>
+            <p>Also, as an author, recognize that there is a very flexible mechanism for making lists of objects that may be included in the <tag>backmatter</tag> (or elsewhere).  To continue the example here, you could make a list of all the examples in the book, and a separate list of all the remarks.  Each list would be in the order of appearance, include the number (and a title if you provide one).  In <init>HTML</init> output, each is a knowl which will quickly provide the content (independent of location), and also provides an <q>in-context</q> link to take you to the location for surrounding material.  This useful feature requires very little additional effort, especially if you title your blocks as you author them.</p>
         </li>
 
         <li>
@@ -230,7 +236,7 @@
 
           <p>So think of <c>&amp;lt;</c> and <c>&amp;amp;</c> as <em>being</em> the characters <c>&lt;</c> and <c>&amp;</c>.  End of story.  These two concessions should <q>work</q> throughout your <pretext/> source and in every conversion.  Every markup language needs, and uses, an escape character, but <init>XML</init> and <pretext/> have you covered and really only need these two (infrequent) exceptions.</p>
 
-          <p>It is worth repeating: think of the escaped versions of the characters as actually being the characters themselves.  That is the way the <init>XML</init> processor sees them and uses them.  For more, see <xref ref="overview-special-characters"/>, <xref ref="overview-verbatim-literal"/>, <xref ref="topic-exceptional-characters"/>, <xref ref="topic-verbatim-literal"/>, and <xref ref="topic-url-characters"/>.</p>
+          <p>It is worth repeating: think of the escaped versions of the characters as actually being the characters themselves.  That is the way the <init>XML</init> processor sees them and uses them.  For more, see <xref ref="overview-exceptional-characters"/>, <xref ref="overview-verbatim-literal"/>, <xref ref="topic-exceptional-characters"/>, <xref ref="topic-verbatim-literal"/>, and <xref ref="topic-url-characters"/>.</p>
 
           <p>Postscript:  <init>XML</init> has the escaped characters <c>&amp;gt</c>, <c>&amp;apos</c>, and <c>&amp;quot</c> for <c>&gt;</c>, <c>&apos;</c>, and <c>&quot;</c> (respectively).  But they are rarely (never?) necessary within <pretext/>.</p>
 
@@ -244,5 +250,11 @@
 
           <p>Or convert your list to an <tag>ol</tag> or <tag>ul</tag>.  The titles will now render more like their own paragraphs.</p>
         </li>
-    </ul></p>
-  </chapter>
+
+        <li>
+          <title>My math looks great in one output format (<latex/> or <init>HTML</init>) but is causing errors or looks bad in another output format (<init>HTML</init> or <latex/>).  What's up?</title>
+
+          <p>There are subtle and minor variations and restrictions around the interpretation of <latex/> syntax by <latex/> itself and the MathJax Javascript routines for rendering in a web page.  Work backwards from <xref ref="mathematics-notes"/> for details.</p>
+        </li>
+    </ol></p>
+</chapter>

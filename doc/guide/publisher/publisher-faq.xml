@@ -12,7 +12,7 @@
 
     <p>This is a list of answers to frequent questions, in no particular order.</p>
 
-    <p><ul>
+    <p><ol>
         <li>
             <title>Why does the conversion to HTML use a fixed width for the text?</title>
             <p>There is an optimal number of characters per line for human readers,
@@ -25,8 +25,13 @@
         </li>
 
         <li>
-            <title>I do not want my examples in knowls</title>
-            <p>You can change that!  See <xref ref="knowled-content" />.</p>
+            <title>I do not want my examples in knowls (nor my inline exercises, nor proofs)</title>
+            <p>You can change that!  See <xref ref="knowled-content"/>.</p>
+        </li>
+
+        <li>
+            <title>Knowls are fantastic!  Can I have more?</title>
+            <p>Start at <xref ref="knowled-content"/> and follow a cross-reference to details on the various options.</p>
         </li>
 
         <li>
@@ -99,5 +104,10 @@
             <p>Suppose your <init>HTML</init> output seems to work fine, but once you place it inside your university's Learning Management System (<init>LMS</init>) it no longer works very well.</p>
             <p>A likely culprit is that your <init>LMS</init> is adding material to your files, ruining them in the process.</p>
         </li>
-    </ul></p>
+
+        <li>
+            <title>I get a bad line break in HTML with a hyphen between text and mathematics</title>
+            <p>When you author something like <c>&lt;m&gt;x&lt;/m&gt;-axis</c> the code produced by MathJax may allow a web browser to break a line just before the hyphen.  Yes, this looks very bad.  No, it is not a problem <pretext/> can easily solve.  So we will wait for MathJax and web browsers to do a better job.  You might let us know when this happens?</p>
+        </li>
+    </ol></p>
 </chapter>

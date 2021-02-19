@@ -34,6 +34,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:svg="http://www.w3.org/2000/svg"
     xmlns:b64="https://github.com/ilyakharlamov/xslt_base64"
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
@@ -68,11 +69,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="runestone.dev" select="''"/>
 <xsl:variable name="runestone-dev" select="$runestone.dev = 'yes'"/>
 
-<!-- Temporary, undocumented, and experimental           -->
-<!-- Makes randomization buttons for inline WW probmlems -->
-<xsl:param name="debug.webwork.inline.randomize" select="''"/>
-<xsl:variable name="b-webwork-inline-randomize" select="$debug.webwork.inline.randomize = 'yes'"/>
-
 <!-- ################################################ -->
 <!-- Following is slated to migrate above, 2019-07-10 -->
 <!-- ################################################ -->
@@ -82,68 +78,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
 <!-- See more generally applicable parameters in pretext-common.xsl file     -->
 
-<!-- WeBWorK exercise may be rendered static="yes"    -->
-<!-- TODO: implement middle option static="preview"   -->
-<!-- Or static="no" makes an interactive problem      -->
-<!-- Also in play here are params from -common:       -->
-<!-- exercise.text.statement, exercise.text.hint, exercise.text.solution -->
-<!-- For a divisional exercise, when static="no", that is an intentional -->
-<!-- decision to show the live problem, which means the statement will   -->
-<!-- be shown, regardless of exercise.text.statement. If the problem was -->
-<!-- authored in PTX source, we can respect the values for               -->
-<!-- exercise.text.hint and exercise.text.solution. If the problem       -->
-<!-- source is on the webwork server, then hints and solutions will show -->
-<!-- no matter what.                                                     -->
-<!-- For a divisional exercise, when static="yes", each of the three     -->
-<!-- -common params will be respected. Effectively the content is        -->
-<!-- handled like a non-webwork exercise.                                -->
-<!-- For an inline exercise (webwork or otherwise) statements, hints,    -->
-<!-- and solutions are always shown. The -common params mentioned above  -->
-<!-- do not apply. Whether static is "yes" or "no" doesn't matter.       -->
-<xsl:param name="webwork.inline.static" select="'no'" />
-<xsl:param name="webwork.divisional.static" select="'yes'" />
-<xsl:param name="webwork.reading.static" select="'yes'" />
-<xsl:param name="webwork.worksheet.static" select="'yes'" />
-
-<!-- Content as Knowls -->
-<!-- These parameters control if content is      -->
-<!-- hidden in a knowl on first appearance       -->
-<!-- The happens automatically sometimes,        -->
-<!-- eg content of a footnote is always hidden   -->
-<!-- Some things never are hidden,               -->
-<!-- eg an entire section (too big),             -->
-<!-- or a bibliographic item (pointless)         -->
-<!-- These switches often control a whole group  -->
-<!-- of similar items, for example the "theorem" -->
-<!-- switch will similarly affect corrolaries,   -->
-<!-- lemmas, etc - anything that can be proved   -->
-<!-- NB: figures and tables inside of            -->
-<!-- side-by-side panels are never born hidden,  -->
-<!-- no matter how the switches below are set.   -->
-<!-- You may elect to have entire side-by-side   -->
-<!-- panels born as knowls, using the switch.    -->
-<!-- PROJECT-LIKE gets own switch here           -->
-<!-- "example" are set to 'yes' by default       -->
-<!-- so new authors know that knowls exist       -->
-<xsl:param name="html.knowl.theorem" select="'no'" />
-<xsl:param name="html.knowl.proof" select="'yes'" />
-<xsl:param name="html.knowl.definition" select="'no'" />
-<xsl:param name="html.knowl.example" select="'yes'" />
-<xsl:param name="html.knowl.project" select="'no'" />
-<xsl:param name="html.knowl.task" select="'no'" />
-<xsl:param name="html.knowl.list" select="'no'" />
-<xsl:param name="html.knowl.remark" select="'no'" />
-<xsl:param name="html.knowl.objectives" select="'no'" />
-<xsl:param name="html.knowl.outcomes" select="'no'" />
-<xsl:param name="html.knowl.figure" select="'no'" />
-<xsl:param name="html.knowl.table" select="'no'" />
-<xsl:param name="html.knowl.listing" select="'no'" />
-<xsl:param name="html.knowl.exercise.inline" select="'yes'" />
-<xsl:param name="html.knowl.exercise.sectional" select="'no'" />
-<xsl:param name="html.knowl.exercise.worksheet" select="'no'" />
-<xsl:param name="html.knowl.exercise.readingquestion" select="'no'" />
-<!-- html.knowl.example.solution: always "yes", could be implemented -->
-
 <!-- CSS and Javascript Servers -->
 <!-- We allow processing paramteers to specify new servers   -->
 <!-- or to specify the particular CSS file, which may have   -->
@@ -151,6 +85,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- fine and will not need changes on initial or casual use -->
 <!-- Files with name colors_*.css set the colors.            -->
 <!-- colors_default is similar to the old mathbook-3.css     -->
+<!-- N.B.: if the CSS has a version bump, then be sure to    -->
+<!-- visit the "css" directory and make an update there      -->
+<!-- for the benefit of offline formats                      -->
 <xsl:param name="html.css.server" select="'https://pretextbook.org'" />
 <xsl:param name="html.css.version" select="'0.31'" />
 <xsl:param name="html.js.server" select="'https://pretextbook.org'" />
@@ -195,33 +132,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We generally want to chunk longer HTML output -->
 <xsl:variable name="chunk-level">
     <xsl:choose>
-        <xsl:when test="$chunk.level != ''">
-            <xsl:value-of select="$chunk.level" />
-        </xsl:when>
-        <!-- HTML-specific deprecated 2015/06      -->
-        <!-- But still effective if not superseded -->
-        <xsl:when test="$html.chunk.level != ''">
-            <xsl:value-of select="$html.chunk.level" />
+        <xsl:when test="$chunk-level-entered != ''">
+            <xsl:value-of select="$chunk-level-entered" />
         </xsl:when>
         <xsl:when test="$root/book/part">3</xsl:when>
         <xsl:when test="$root/book">2</xsl:when>
         <xsl:when test="$root/article/section">1</xsl:when>
         <xsl:when test="$root/article">0</xsl:when>
+        <xsl:when test="$root/slideshow">0</xsl:when>
         <xsl:when test="$root/letter">0</xsl:when>
         <xsl:when test="$root/memo">0</xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: HTML chunk level not determined</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<xsl:variable name="webwork-server">
-    <xsl:choose>
-        <xsl:when test="$document-root//webwork-reps/server-url">
-            <xsl:value-of select="substring-before($document-root//webwork-reps/server-url[1], '/webwork2')" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>https://webwork-ptx.aimath.org</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -321,12 +243,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="rso" select="'~._'"/>
 <xsl:variable name="rsc" select="'_.~'"/>
 
-<!-- Temporary, undocumented, and experimental -->
-<!-- all = old-style, necessary = new-style -->
-<xsl:param name="debug.knowl-production" select="'all'"/>
-<!-- edit above! -->
-<xsl:variable name="b-knowls-new" select="not($debug.knowl-production = 'all')"/>
-
 <!-- ############### -->
 <!-- Source Analysis -->
 <!-- ############### -->
@@ -356,6 +272,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (The old style of specifying an index is deprecated)     -->
 <xsl:variable name="the-index"          select="($document-root//index-part|$document-root//index[index-list])[1]"/>
 
+<!-- ######## -->
+<!-- WeBWorK  -->
+<!-- ######## -->
+
+<!-- WeBWorK exercise may be rendered static="yes" or static="no" makes  -->
+<!-- an interactive problem. Also in play here are params from -common:  -->
+<!-- exercise.text.statement, exercise.text.hint, exercise.text.solution -->
+<!-- For a divisional exercise, when static="no", that is an intentional -->
+<!-- decision to show the live problem, which means the statement will   -->
+<!-- be shown, regardless of exercise.text.statement. For webwork-reps   -->
+<!-- version 2 (WW 2.16 and later), we respect the values for            -->
+<!-- exercise.text.hint, exercise.text.answer, exercise.text.solution.   -->
+<!-- For version 1, if the problem was authored in PTX source, we can    -->
+<!-- respect the values for exercise.text.hint, exercise.text.solution.  -->
+<!-- When the problem is static, we can respect exercise.text.answer.    -->
+<!-- When the problem is live, we cannot stop the user from seeing the   -->
+<!-- answers. And if the problem source is on the webwork server, then   -->
+<!-- hints and solutions will show  no matter what.                      -->
+<xsl:param name="webwork.inline.static" select="'no'" />
+<xsl:param name="webwork.divisional.static" select="'yes'" />
+<xsl:param name="webwork.reading.static" select="'yes'" />
+<xsl:param name="webwork.worksheet.static" select="'yes'" />
+
+<xsl:variable name="webwork-reps-version" select="$document-root//webwork-reps[1]/@version"/>
+
+<xsl:variable name="webwork-domain">
+    <xsl:choose>
+        <xsl:when test="$webwork-reps-version = 1">
+            <xsl:value-of select="$document-root//webwork-reps[1]/server-url[1]/@domain" />
+        </xsl:when>
+        <xsl:when test="$webwork-reps-version = 2">
+            <xsl:value-of select="$document-root//webwork-reps[1]/server-data/@domain" />
+        </xsl:when>
+    </xsl:choose>
+</xsl:variable>
 
 <!-- ############## -->
 <!-- Entry Template -->
@@ -1158,11 +1109,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Index Creation -->
 <!-- ############## -->
 
+<!-- Used at the end of the next template to group index       -->
+<!-- entries by letter for eventual output organized by letter -->
+<xsl:key name="index-entry-by-letter" match="index" use="@letter"/>
+
 <!-- "index-list":                                           -->
 <!--     build a sorted list of every "index" in text        -->
-<!-- "group-by-letter":                                      -->
-<!--     accumulate common first-letter entries,             -->
-<!--     send to their own div for spacing, "jump to" device -->
+<!--     use Muenchian Method to group by letter and process -->
 <!-- "group-by-heading":                                     -->
 <!--     consolidate/accumulate entries with common heading  -->
 <!-- "knowl-list":                                           -->
@@ -1201,6 +1154,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="index-items">
         <xsl:for-each select="$document-root//idx[not(@start) and (not(ancestor::commentary) or $b-commentary)] | //index[not(index-list) and not(@start) and (not(ancestor::commentary) or $b-commentary)]">
             <index>
+                <!-- identify content of primary sort key      -->
+                <!-- this follows the logic of creating key[1] -->
+                <!-- TODO: this may be too ad-hoc, study       -->
+                <!--       closely on a refactor               -->
+                <xsl:variable name="letter-content">
+                    <xsl:choose>
+                        <xsl:when test="@sortby">
+                            <xsl:value-of select="@sortby" />
+                        </xsl:when>
+                        <xsl:when test="not(main) and not(h)">
+                            <xsl:apply-templates/>
+                        </xsl:when>
+                        <xsl:when test="(main or h) and (main/@sortby or h[1]/@sortby)">
+                            <xsl:apply-templates select="main/@sortby|h[1]/@sortby"/>
+                        </xsl:when>
+                        <xsl:when test="main or h">
+                            <xsl:apply-templates select="main|h[1]"/>
+                        </xsl:when>
+                    </xsl:choose>
+                </xsl:variable>
+                <!-- lowercase first letter of primary sort key    -->
+                <!-- used later to group items by letter in output -->
+                <xsl:attribute name="letter">
+                    <xsl:value-of select="translate(substring($letter-content,1,1), &UPPERCASE;, &LOWERCASE;)"/>
+                </xsl:attribute>
                 <xsl:choose>
                     <!-- simple mixed-content first, no structure -->
                     <!-- one text-key pair, two more empty        -->
@@ -1336,60 +1314,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:copy-of select="." />
         </xsl:for-each>
     </xsl:variable>
-    <!-- ship start of a node-set to be grouped by letter   -->
-    <!-- conversion to node-set is necessary for subsequent -->
-    <xsl:apply-templates select="exsl:node-set($sorted-index)/index[1]" mode="group-by-letter">
-        <xsl:with-param name="letter-group" select="/.." />
-    </xsl:apply-templates>
-</xsl:template>
-
-<!-- Accumulate index entries with a common first letter    -->
-<!-- in first heading, based on key[1], into $letter-group. -->
-<!-- When a look-ahead sees the initial letter changing,    -->
-<!-- send the group off to be formatted as a letter-group   -->
-<!-- and further organize by heading.                       -->
-<xsl:template match="index" mode="group-by-letter">
-    <!-- Empty node list from parent of root node -->
-    <xsl:param name="letter-group"/>
-
-    <!-- look ahead at next index entry -->
-    <xsl:variable name="next-index" select="following-sibling::index[1]"/>
-    <!-- check if we have run out all of the index entries -->
-    <xsl:if test=".">
-        <!-- always accumulate context node in node-list (first, or $next-index inspected) -->
-        <xsl:variable name="new-letter-group" select="$letter-group|."/>
-        <xsl:choose>
-            <!-- next index item has same lead letter, so iterate -->
-            <xsl:when test="substring($next-index/key[1], 1, 1) = substring(key[1], 1,1)">
-                <xsl:apply-templates select="$next-index" mode="group-by-letter">
-                    <xsl:with-param name="letter-group" select="$new-letter-group" />
-                </xsl:apply-templates>
-            </xsl:when>
-            <!-- next index item has different lead letter      -->
-            <!-- wrap the letter-group in a div with correct id -->
-            <!-- and course through to group by headings        -->
-            <xsl:otherwise>
-                <xsl:variable name="lead" select="substring(key[1], 1, 1)" />
-                <div class="indexletter" id="indexletter-{$lead}">
-                    <!-- send to group headings, pass letter-group through -->
-                    <xsl:apply-templates select="$new-letter-group[1]" mode="group-by-heading">
-                        <xsl:with-param name="heading-group" select="/.." />
-                        <xsl:with-param name="letter-group" select="$new-letter-group" />
-                    </xsl:apply-templates>
-                </div>
-                <!-- restart letter grouping with node having new letter -->
-                <xsl:apply-templates select="$next-index" mode="group-by-letter">
-                    <xsl:with-param name="letter-group" select="/.." />
-                </xsl:apply-templates>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:if>
+    <!-- Group by Letter -->
+    <!-- A careful exposition of the Muenchian Method, named after Steve Muench  -->
+    <!-- of Oracle.  This is an well-known, but complicated, XSLT 1.0 technique. -->
+    <!-- (This is much easier in XSLT 2.0 with certain instructions).  We follow -->
+    <!-- the XSLT Cookbook 2.0, Recipe 6.2, modulo one critical typo, and also   -->
+    <!-- Jeni Tennison's instructive  "Grouping Using the Muenchian Method" at   -->
+    <!-- http://www.jenitennison.com/xslt/grouping/muenchian.html.               -->
+    <!--                                                                         -->
+    <!-- Initial "for-each" sieves out a single (the first) representative of    -->
+    <!-- each group of "index" that have a common initial letter for their sort  -->
+    <!-- criteria.  Each becomes the context node for the remainder.             -->
+    <xsl:for-each select="exsl:node-set($sorted-index)/index[count(.|key('index-entry-by-letter', @letter)[1]) = 1]">
+        <!-- save the key to use again in selecting the group -->
+        <xsl:variable name="current-letter" select="@letter"/>
+        <!-- collect all the "index" with the same initial letter as representative    -->
+        <!-- this key is still perusing the nodes of $sorted-index as context document -->
+        <xsl:variable name="letter-group" select="key('index-entry-by-letter', $current-letter)"/>
+        <!-- wrap the group in a div, which will be used for presentation -->
+        <div class="indexletter" id="indexletter-{$current-letter}">
+            <!-- send to group-by-headings, which is vestigal -->
+            <xsl:apply-templates select="$letter-group[1]" mode="group-by-heading">
+                <xsl:with-param name="heading-group" select="/.." />
+                <xsl:with-param name="letter-group" select="$letter-group" />
+            </xsl:apply-templates>
+        </div>
+    </xsl:for-each>
 </xsl:template>
 
 <!-- Accumulate index entries with identical headings - their    -->
 <!-- exact text, not anything related to the keys.  Quit         -->
 <!-- accumulating when look-ahead shows next entry differs.      -->
 <!-- Output the (3-part) heading and locators before restarting. -->
+<!-- TODO: investigate reworking this via Muenchian Method       -->
 <xsl:template match="index" mode="group-by-heading">
     <!-- Empty node list from parent of root node -->
     <xsl:param name="heading-group"/>
@@ -1722,7 +1679,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="commentary" mode="xref-as-knowl">
     <xsl:value-of select="$b-commentary" />
 </xsl:template>
-<xsl:template match="fn|p|blockquote|biblio|biblio/note|defined-term|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|&GOAL-LIKE;|exercise|hint|answer|solution|exercisegroup|men|mrow|li[not(parent::var)]|contributor" mode="xref-as-knowl">
+<xsl:template match="fn|p|blockquote|biblio|biblio/note|defined-term|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|&GOAL-LIKE;|exercise|hint|answer|solution|exercisegroup|men|mrow|li[not(parent::var)]|contributor|fragment" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 
@@ -2365,7 +2322,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- (7) TODO: "wrapped-content" called by "body" to separate code. -->
 
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|defined-term|p|li|me|men|md|mdn">
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|defined-term|p|li|me|men|md|mdn|fragment">
     <xsl:param name="b-original" select="true()" />
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
@@ -2467,11 +2424,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- is impersonated with knowl content located in an external file.  So   -->
 <!-- this template is a no-op for duplicates.                              -->
 
-<xsl:template match="p|figure|listing|ol|ul|dl" mode="pop-footnote-text">
+<xsl:template match="p|figure|table|listing|tabular|ol|ul|dl" mode="pop-footnote-text">
     <xsl:param name="b-original"/>
 
     <xsl:if test="$b-original">
-        <xsl:if test="count(ancestor::*[self::p|self::figure|self::listing|self::ol|self::ul|self::dl]) = 0">
+        <xsl:if test="count(ancestor::*[self::p|self::figure|self::table|self::listing|self::tabular|self::ol|self::ul|self::dl]) = 0">
             <xsl:for-each select=".//fn">
                 <xsl:apply-templates select="."  mode="hidden-knowl-content">
                     <xsl:with-param name="b-original" select="$b-original"/>
@@ -2522,19 +2479,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:element name="a">
         <!-- empty, indicates content *not* in a file -->
         <xsl:attribute name="data-knowl" />
-        <!-- id-ref class means content is in div referenced by id -->
+        <!-- id-ref class: content is in div referenced by id       -->
+        <!-- (element-name)-knowl: specific element used in content -->
+        <!-- original: born hidden knowl, not xref                  -->
+        <!-- Similar to "duplicate-hidden-knowl-link", id-ref extra -->
         <xsl:attribute name="class">
             <xsl:text>id-ref</xsl:text>
-            <xsl:choose>
-                <!-- Exceptional: for styling purposes -->
-                <xsl:when test="self::fn">
-                    <xsl:text> fn-knowl</xsl:text>
-                </xsl:when>
-                <!-- original content, for styling purposes -->
-                <xsl:otherwise>
-                    <xsl:text> original</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
+            <!--  -->
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="local-name(.)"/>
+            <xsl:text>-knowl</xsl:text>
+            <!--  -->
+            <xsl:text> original</xsl:text>
         </xsl:attribute>
         <!-- and the id via a template for consistency -->
         <xsl:attribute name="data-refid">
@@ -2577,17 +2533,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The link for a duplicate hidden knowl -->
 <xsl:template match="*" mode="duplicate-hidden-knowl-link">
     <xsl:element name="a">
+        <!-- (element-name)-knowl: specific element used in content -->
+        <!-- original: born hidden knowl, not xref                  -->
+        <!-- Similar to "hidden-knowl-link", no id-ref              -->
         <xsl:attribute name="class">
-            <xsl:choose>
-                <!-- Exceptional: for styling purposes -->
-                <xsl:when test="self::fn">
-                    <xsl:text>fn-knowl</xsl:text>
-                </xsl:when>
-                <!-- original content, for styling purposes -->
-                <xsl:otherwise>
-                    <xsl:text>original</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:value-of select="local-name(.)"/>
+            <xsl:text>-knowl</xsl:text>
+            <!--  -->
+            <xsl:text> original</xsl:text>
         </xsl:attribute>
         <xsl:attribute name="data-knowl">
             <xsl:apply-templates select="." mode="hidden-knowl-filename" />
@@ -2613,7 +2566,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Born-hidden behavior is configurable -->
 <xsl:template match="&REMARK-LIKE;" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.remark = 'yes'" />
+    <xsl:value-of select="$knowl-remark = 'yes'" />
 </xsl:template>
 
 <!-- Overall enclosing element -->
@@ -2663,7 +2616,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Born-hidden behavior is configurable -->
 <xsl:template match="&COMPUTATION-LIKE;" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.remark = 'yes'" />
+    <xsl:value-of select="$knowl-remark = 'yes'" />
 </xsl:template>
 
 <!-- Overall enclosing element -->
@@ -2713,7 +2666,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Born-hidden behavior is configurable -->
 <xsl:template match="&DEFINITION-LIKE;" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.definition = 'yes'" />
+    <xsl:value-of select="$knowl-definition = 'yes'" />
 </xsl:template>
 
 <!-- Overall enclosing element -->
@@ -2941,19 +2894,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Born-hidden behavior is configurable -->
 <!-- On a per-element basis               -->
 <xsl:template match="figure" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.figure = 'yes'" />
+    <xsl:value-of select="$knowl-figure = 'yes'" />
 </xsl:template>
 
 <xsl:template match="table" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.table = 'yes'" />
+    <xsl:value-of select="$knowl-table = 'yes'" />
 </xsl:template>
 
 <xsl:template match="listing" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.listing = 'yes'" />
+    <xsl:value-of select="$knowl-listing = 'yes'" />
 </xsl:template>
 
 <xsl:template match="list" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.list = 'yes'" />
+    <xsl:value-of select="$knowl-list = 'yes'" />
 </xsl:template>
 
 <!-- The optionally born-hidden items can be panels of -->
@@ -3026,6 +2979,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="tabular">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
+            <xsl:if test="$b-subcaptioned">
+                <xsl:apply-templates select="." mode="figure-caption">
+                    <xsl:with-param name="b-original" select="$b-original"/>
+                </xsl:apply-templates>
+            </xsl:if>
         </xsl:when>
         <!-- "title" at the top, subcaption at the bottom -->
         <xsl:when test="self::list">
@@ -3227,10 +3185,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Born-hidden behavior is configurable -->
 <xsl:template match="objectives" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.objectives = 'yes'" />
+    <xsl:value-of select="$knowl-objectives = 'yes'" />
 </xsl:template>
 <xsl:template match="outcomes" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.outcomes = 'yes'" />
+    <xsl:value-of select="$knowl-outcomes = 'yes'" />
 </xsl:template>
 
 <!-- Overall enclosing element -->
@@ -3283,7 +3241,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Born-hidden behavior is configurable -->
 <xsl:template match="&EXAMPLE-LIKE;" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.example = 'yes'" />
+    <xsl:value-of select="$knowl-example = 'yes'" />
 </xsl:template>
 
 <!-- Overall enclosing element -->
@@ -3383,6 +3341,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- For solutions divisions, we mimic and reuse some of the above -->
 <xsl:template match="subexercises" mode="solutions">
+    <xsl:param name="admit"/>
     <xsl:param name="b-has-statement" />
     <xsl:param name="b-has-hint" />
     <xsl:param name="b-has-answer" />
@@ -3392,6 +3351,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- if there is no content, then we will not output anything at all -->
      <xsl:variable name="dry-run">
         <xsl:apply-templates select="." mode="dry-run">
+            <xsl:with-param name="admit" select="$admit"/>
             <xsl:with-param name="b-has-statement" select="$b-has-statement" />
             <xsl:with-param name="b-has-hint" select="$b-has-hint" />
             <xsl:with-param name="b-has-answer" select="$b-has-answer" />
@@ -3408,6 +3368,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:apply-templates>
             </xsl:if>
             <xsl:apply-templates select="exercise|exercisegroup" mode="solutions">
+                <xsl:with-param name="admit"           select="$admit"/>
                 <xsl:with-param name="b-has-statement" select="$b-has-statement" />
                 <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
                 <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
@@ -3467,10 +3428,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <div>
         <xsl:attribute name="class">
             <xsl:text>exercisegroup-exercises</xsl:text>
-            <xsl:if test="@cols">
-                <xsl:text> </xsl:text>
+            <xsl:variable name="cols-class-name">
                 <!-- HTML-specific, but in pretext-common.xsl -->
-                <xsl:apply-templates select="." mode="number-cols-CSS-class" />
+                <xsl:apply-templates select="." mode="number-cols-CSS-class"/>
+            </xsl:variable>
+            <xsl:if test="not($cols-class-name = '')">
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="$cols-class-name"/>
             </xsl:if>
         </xsl:attribute>
         <xsl:apply-templates select="exercise">
@@ -3484,6 +3448,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- For solutions divisions, we mimic and reuse some of the above -->
 <xsl:template match="exercisegroup" mode="solutions">
+    <xsl:param name="admit"/>
     <xsl:param name="b-has-statement" />
     <xsl:param name="b-has-hint" />
     <xsl:param name="b-has-answer" />
@@ -3493,6 +3458,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- if there is no content, then we will not output anything at all -->
      <xsl:variable name="dry-run">
         <xsl:apply-templates select="." mode="dry-run">
+            <xsl:with-param name="admit" select="$admit"/>
             <xsl:with-param name="b-has-statement" select="$b-has-statement" />
             <xsl:with-param name="b-has-hint" select="$b-has-hint" />
             <xsl:with-param name="b-has-answer" select="$b-has-answer" />
@@ -3510,13 +3476,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <div>
                 <xsl:attribute name="class">
                     <xsl:text>exercisegroup-exercises</xsl:text>
-                    <xsl:if test="@cols">
-                        <xsl:text> </xsl:text>
+                    <xsl:variable name="cols-class-name">
                         <!-- HTML-specific, but in pretext-common.xsl -->
-                        <xsl:apply-templates select="." mode="number-cols-CSS-class" />
+                        <xsl:apply-templates select="." mode="number-cols-CSS-class"/>
+                    </xsl:variable>
+                    <xsl:if test="not($cols-class-name = '')">
+                        <xsl:text> </xsl:text>
+                        <xsl:value-of select="$cols-class-name"/>
                     </xsl:if>
                 </xsl:attribute>
                 <xsl:apply-templates select="exercise" mode="solutions">
+                    <xsl:with-param name="admit"           select="$admit"/>
                     <xsl:with-param name="b-has-statement" select="$b-has-statement" />
                     <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
                     <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
@@ -3538,17 +3508,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Born-hidden behavior is configurable   -->
 <!-- Note match first on inline first, override if divisional -->
 <xsl:template match="exercise" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.exercise.inline = 'yes'" />
+    <xsl:value-of select="$knowl-exercise-inline = 'yes'"/>
 </xsl:template>
 <xsl:template match="exercises//exercise" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.exercise.sectional = 'yes'" />
+    <xsl:value-of select="$knowl-exercise-divisional = 'yes'"/>
 </xsl:template>
 <xsl:template match="worksheet//exercise" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.exercise.worksheet = 'yes'" />
+    <xsl:value-of select="$knowl-exercise-worksheet = 'yes'"/>
 </xsl:template>
-
 <xsl:template match="reading-questions//exercise" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.exercise.readingquestion = 'yes'" />
+    <xsl:value-of select="$knowl-exercise-readingquestion = 'yes'"/>
 </xsl:template>
 
 <!-- Overall enclosing element -->
@@ -3654,56 +3623,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- For solutions divisions, we mimic and reuse some of the above -->
-<xsl:template match="exercise" mode="solutions">
-    <xsl:param name="b-has-statement" />
-    <xsl:param name="b-has-hint" />
-    <xsl:param name="b-has-answer" />
-    <xsl:param name="b-has-solution" />
-
-    <!-- we check for content, subject to selection of switches          -->
-    <!-- if there is no content, then we will not output anything at all -->
-     <xsl:variable name="dry-run">
-        <xsl:apply-templates select="." mode="dry-run">
-            <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-            <xsl:with-param name="b-has-hint" select="$b-has-hint" />
-            <xsl:with-param name="b-has-answer" select="$b-has-answer" />
-            <xsl:with-param name="b-has-solution" select="$b-has-solution" />
-        </xsl:apply-templates>
-    </xsl:variable>
-
-    <xsl:if test="not($dry-run = '')">
-        <article class="exercise-like">
-            <xsl:choose>
-                <!-- inline can go with generic, which is switched on inline/divisional -->
-                <xsl:when test="boolean(&INLINE-EXERCISE-FILTER;)">
-                    <xsl:apply-templates select="." mode="heading-birth" />
-                </xsl:when>
-                <!-- with full number just for solution list -->
-                <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="heading-divisional-exercise" />
-                </xsl:otherwise>
-            </xsl:choose>
-            <!-- TODO: dry-run is not letting these through, no matter what -->
-            <!-- webwork case -->
-            <!-- MyOpenMath case -->
-            <xsl:apply-templates select="."  mode="exercise-components">
-                <xsl:with-param name="b-original"     select="false()" />
-                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-                <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
-                <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
-            </xsl:apply-templates>
-        </article>
-    </xsl:if>
-</xsl:template>
-
 <!-- Project-LIKE -->
 <!-- A complex block, possibly structured with task -->
 
 <!-- Born-hidden behavior is configurable -->
 <xsl:template match="&PROJECT-LIKE;" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.project = 'yes'" />
+    <xsl:value-of select="$knowl-project = 'yes'" />
 </xsl:template>
 
 <!-- Overall enclosing element -->
@@ -3763,7 +3688,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- For solutions divisions, we mimic and reuse some of the above -->
-<xsl:template match="&PROJECT-LIKE;" mode="solutions">
+<xsl:template match="exercise|&PROJECT-LIKE;" mode="solutions">
+    <xsl:param name="admit"/>
     <xsl:param name="b-has-statement" />
     <xsl:param name="b-has-hint" />
     <xsl:param name="b-has-answer" />
@@ -3773,6 +3699,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- if there is no content, then we will not output anything at all -->
      <xsl:variable name="dry-run">
         <xsl:apply-templates select="." mode="dry-run">
+            <xsl:with-param name="admit" select="$admit"/>
             <xsl:with-param name="b-has-statement" select="$b-has-statement" />
             <xsl:with-param name="b-has-hint" select="$b-has-hint" />
             <xsl:with-param name="b-has-answer" select="$b-has-answer" />
@@ -3781,11 +3708,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
 
     <xsl:if test="not($dry-run = '')">
-        <article class="project-like">
-            <xsl:apply-templates select="." mode="heading-birth" />
-
+        <!-- incongruities here are historical, -->
+        <!-- keeping the diff low-impact        -->
+        <xsl:element name="article">
+            <xsl:attribute name="class">
+                <xsl:choose>
+                    <xsl:when test="self::exercise">
+                        <xsl:text>exercise-like</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>project-like</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
+            <!-- A variety of headings -->
             <xsl:choose>
-                <!-- structured version              -->
+                <!-- inline can go with generic, which is switched on inline/divisional -->
+                <xsl:when test="boolean(&INLINE-EXERCISE-FILTER;)">
+                    <xsl:apply-templates select="." mode="heading-birth" />
+                </xsl:when>
+                <!-- with full number just for solution list -->
+                <!-- "exercise" must be divisional now -->
+                <xsl:when test="self::exercise">
+                    <xsl:apply-templates select="." mode="heading-divisional-exercise" />
+                </xsl:when>
+                <!-- now PROJECT-LIKE -->
+                <xsl:otherwise>
+                    <xsl:apply-templates select="." mode="heading-birth" />
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:choose>
+                <!-- structured version -->
                 <xsl:when test="task">
                     <xsl:if test="$b-has-statement">
                         <xsl:apply-templates select="introduction">
@@ -3805,6 +3758,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:apply-templates>
                     </xsl:if>
                 </xsl:when>
+                <!-- webwork with stages -->
+                <xsl:when test="webwork-reps/static/stage">
+                    <xsl:apply-templates select="webwork-reps/static/stage" mode="exercise-components">
+                        <xsl:with-param name="b-original" select="false()" />
+                        <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+                        <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+                        <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+                        <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+                    </xsl:apply-templates>
+                </xsl:when>
+                <!-- webwork without stages -->
+                <xsl:when test="webwork-reps/static">
+                    <xsl:apply-templates select="webwork-reps/static" mode="exercise-components">
+                        <xsl:with-param name="b-original" select="false()" />
+                        <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+                        <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+                        <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+                        <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+                    </xsl:apply-templates>
+                </xsl:when>
                 <xsl:otherwise>
                     <xsl:apply-templates select="."  mode="exercise-components">
                         <xsl:with-param name="b-original" select="false()" />
@@ -3815,7 +3788,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:apply-templates>
                 </xsl:otherwise>
             </xsl:choose>
-        </article>
+        </xsl:element>
     </xsl:if>
 </xsl:template>
 
@@ -3824,7 +3797,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Born-hidden behavior is configurable -->
 <xsl:template match="task" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.task = 'yes'" />
+    <xsl:value-of select="$knowl-task = 'yes'" />
 </xsl:template>
 
 <!-- Overall enclosing element -->
@@ -3863,6 +3836,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
 
+    <!-- *Something* is being output, so include an (optional) title -->
+    <xsl:if test="title">
+        <h6 class="heading">
+            <span class="title">
+                <xsl:apply-templates select="." mode="title-full"/>
+            </span>
+        </h6>
+    </xsl:if>
     <xsl:choose>
         <!-- introduction?, task+, conclusion? -->
         <xsl:when test="task">
@@ -3906,6 +3887,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <article class="exercise-like">
             <xsl:apply-templates select="." mode="heading-birth" />
 
+            <!-- *Something* is being output, so include an (optional) title -->
+            <xsl:if test="title">
+                <h6 class="heading">
+                    <span class="title">
+                        <xsl:apply-templates select="." mode="title-full"/>
+                    </span>
+                </h6>
+            </xsl:if>
             <xsl:choose>
                 <!-- introduction?, task+, conclusion? -->
                 <xsl:when test="task">
@@ -3991,7 +3980,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
-<xsl:template match="exercise|&PROJECT-LIKE;|task|&EXAMPLE-LIKE;|webwork-reps/static" mode="exercise-components">
+<xsl:template match="exercise|&PROJECT-LIKE;|task|&EXAMPLE-LIKE;|webwork-reps/static|webwork-reps/static/stage" mode="exercise-components">
     <xsl:param name="b-original"/>
     <xsl:param name="block-type"/>
     <xsl:param name="b-has-statement" />
@@ -4002,8 +3991,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- intercept a reading question, when hosted on Runestone -->
         <xsl:when test="ancestor::reading-questions and $b-host-runestone">
-            <div class="runestone">
-                <div data-component="shortanswer" class="journal alert alert-success" data-optional="" data-mathjax="">
+            <div class="runestone outer-exercise-wrapper">
+                <div data-component="shortanswer" class="journal alert alert-success exercise-wrapper" data-optional="" data-mathjax="">
                     <xsl:attribute name="id">
                         <xsl:apply-templates select="." mode="html-id"/>
                     </xsl:attribute>
@@ -4029,6 +4018,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="block-type" select="$block-type"/>
                 </xsl:apply-templates>
             </xsl:if>
+            <!-- We consider a "program" of a coding exercise as part of the "statement" -->
+            <!-- for the purpose of deciding if it is included or not.  As a peer of a   -->
+            <!-- "statement" (not a child of a "statement") on Runestone we go straight  -->
+            <!--  to an ActiveCode window, else we respect the @interactive attribute.   -->
+            <xsl:choose>
+                <xsl:when test="$b-host-runestone">
+                    <xsl:apply-templates select="program" mode="runestone-activecode"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="program"/>
+                </xsl:otherwise>
+            </xsl:choose>
             <!-- no  div.solutions  if there is nothing to go into it -->
             <xsl:if test="(hint and $b-has-hint) or (answer and $b-has-answer) or (solution and $b-has-solution)">
                 <div class="solutions">
@@ -4077,7 +4078,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Born-hidden behavior is configurable -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.theorem = 'yes'" />
+    <xsl:value-of select="$knowl-theorem = 'yes'" />
 </xsl:template>
 
 <!-- Overall enclosing element -->
@@ -4128,7 +4129,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Born-hidden behavior is configurable -->
 <xsl:template match="proof" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.proof = 'yes'" />
+    <xsl:value-of select="$knowl-proof = 'yes'" />
 </xsl:template>
 
 <!-- Overall enclosing element -->
@@ -4141,7 +4142,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- as visible or hidden in a knowl           -->
 <xsl:template match="proof" mode="body-css-class">
     <xsl:choose>
-        <xsl:when test="$html.knowl.proof = 'yes'">
+        <xsl:when test="$knowl-proof = 'yes'">
             <xsl:text>hiddenproof</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -4518,6 +4519,60 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
+<!-- Fragment (literate programming) -->
+<!-- A simple item hanging off others -->
+
+<!-- Always born-hidden, by design -->
+<xsl:template match="fragment" mode="is-hidden">
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
+<!-- Overall enclosing element -->
+<xsl:template match="fragment" mode="body-element">
+    <xsl:text>div</xsl:text>
+</xsl:template>
+
+<!-- And its CSS class -->
+<!-- This is a temporary hack, which should go away -->
+<xsl:template match="fragment" mode="body-css-class">
+    <xsl:text>fragment</xsl:text>
+</xsl:template>
+
+<!-- Never born hidden -->
+<xsl:template match="fragment" mode="hidden-knowl-placement"/>
+
+<!-- When born use this heading -->
+<xsl:template match="fragment" mode="heading-birth">
+    <h6 class="heading">
+        <xsl:call-template name="langle-character"/>
+        <xsl:apply-templates select="." mode="number"/>
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="." mode="title-full"/>
+        <xsl:call-template name="rangle-character"/>
+        <!--  U+2261 ≡ IDENTICAL TO -->
+        <xsl:text> &#x2261;</xsl:text>
+    </h6>
+    <xsl:if test="@filename">
+        <xsl:text>Root of file: </xsl:text>
+        <xsl:value-of select="@filename"/>
+        <br/>
+    </xsl:if>
+</xsl:template>
+
+<!-- Heading for interior of xref-knowl content -->
+<xsl:template match="fragment" mode="heading-xref-knowl">
+    <xsl:apply-templates select="." mode="heading-full" />
+</xsl:template>
+
+<!-- Primary content of generic "body" template -->
+<!-- Pass along b-original flag                 -->
+<xsl:template match="fragment" mode="wrapped-content">
+    <xsl:param name="b-original" select="true()" />
+    <pre>
+        <xsl:apply-templates select="code|fragref"/>
+    </pre>
+</xsl:template>
+
 <!-- Stub: for the conversion to braille, which imports this -->
 <!-- stylesheet, we sometimes add a @data-braille attribute  -->
 <!-- to guide the application of  liblouis  styles.  For     -->
@@ -4537,7 +4592,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and top-down when components are also knowled.  -->
 
 
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note" mode="body">
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|fragment" mode="body">
     <xsl:param name="b-original" select="true()"/>
     <xsl:param name="block-type"/>
 
@@ -4595,7 +4650,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- collect elements which can have footnotes within -->
         <!-- footnotes in captions of figures and listings,   -->
         <!-- but not in titles of tables or lists             -->
-        <xsl:apply-templates select="self::figure|self::listing" mode="pop-footnote-text">
+        <xsl:apply-templates select="self::figure|self::table|self::listing" mode="pop-footnote-text">
             <xsl:with-param name="b-original" select="$b-original"/>
         </xsl:apply-templates>
     </xsl:if>
@@ -4742,7 +4797,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- XSLT 1.0: RTF is just a string if not converted to node set -->
                 <!-- This comparison might improve with a normalize-space()      -->
                 <xsl:if test="not($common-content = '')">
-                    <p data-braille="continuation">
+                    <p class="continuation">
+                        <xsl:if test="$b-braille">
+                            <xsl:attribute name="data-braille">
+                                <xsl:text>continuation</xsl:text>
+                            </xsl:attribute>
+                        </xsl:if>
                         <xsl:copy-of select="$common-content" />
                     </p>
                 </xsl:if>
@@ -4757,7 +4817,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- XSLT 1.0: RTF is just a string if not converted to node set -->
                 <!-- This comparison might improve with a normalize-space()      -->
                 <xsl:if test="not($common-content = '')">
-                    <p data-braille="continuation">
+                    <p class="continuation">
+                        <xsl:if test="$b-braille">
+                            <xsl:attribute name="data-braille">
+                                <xsl:text>continuation</xsl:text>
+                            </xsl:attribute>
+                        </xsl:if>
                         <xsl:copy-of select="$common-content" />
                     </p>
                 </xsl:if>
@@ -5009,6 +5074,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- computed in -common, but sometimes symbols        -->
 <!-- generated by mrow/@tag                            -->
 
+<!-- 2020-08-17: \label{} gets butchered in the SRE conversion      -->
+<!-- to Nemeth braille, so we are using stripped down versions      -->
+<!-- of these templates in the "extract-math" stylesheet (look      -->
+<!-- there before editing here).  Presently, the useLabelIDs        -->
+<!-- scheme with the "mjx-eqn-foo" manufactured is used in HTML     -->
+<!-- output.  But maybe we should mimic knowl creation and have     -->
+<!-- a cross-reference (in-context) point to an ID on an            -->
+<!-- (existing) enclosing "div" on display mathematics.  That       -->
+<!-- might be better for EPUB, speech, etc, in addition to braille. -->
+
 <xsl:template match="me" mode="tag" />
 
 <xsl:template match="men|mrow" mode="tag">
@@ -5247,10 +5322,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:attribute name="class">
             <xsl:apply-templates select="." mode="html-list-class" />
-            <xsl:if test="@cols">
-                <xsl:text> </xsl:text>
+            <xsl:variable name="cols-class-name">
                 <!-- HTML-specific, but in pretext-common.xsl -->
-                <xsl:apply-templates select="." mode="number-cols-CSS-class" />
+                <xsl:apply-templates select="." mode="number-cols-CSS-class"/>
+            </xsl:variable>
+            <xsl:if test="not($cols-class-name = '')">
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="$cols-class-name"/>
             </xsl:if>
         </xsl:attribute>
         <xsl:apply-templates select="li">
@@ -5274,7 +5352,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="class">
             <xsl:choose>
                 <xsl:when test="@width = 'narrow'">
-                    <xsl:text>description-list-narrow</xsl:text>
+                    <xsl:text>description-list narrow</xsl:text>
                 </xsl:when>
                 <!-- 'medium', 'wide', and any typo (let DTD check) -->
                 <xsl:otherwise>
@@ -5429,42 +5507,71 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Asymptote graphics language -->
 <xsl:template match="image[asymptote]" mode="image-inclusion">
+    <!-- base-pathname needed later for archive link production -->
     <xsl:variable name="base-pathname">
         <xsl:value-of select="$directory.images" />
         <xsl:text>/</xsl:text>
         <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
-    <xsl:variable name="svg-filename" select="concat($base-pathname, '.svg')" />
     <xsl:variable name="html-filename" select="concat($base-pathname, '.html')" />
 
-    <object data="{$html-filename}">
-        <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="visible-id" />
-        </xsl:attribute>
-        <xsl:attribute name="width">
-            <xsl:apply-templates select="." mode="get-width-pixels" />
-        </xsl:attribute>
-        <xsl:attribute name="height">
-            <xsl:apply-templates select="." mode="get-height-pixels">
-                <xsl:with-param name="default-aspect" select="'1:1'" />
-            </xsl:apply-templates>
-        </xsl:attribute>
-        <!-- fallback to SVG -->
-        <xsl:element name="embed">
-            <!-- source file attribute for img element, the SVG image -->
-            <xsl:attribute name="src">
-                <xsl:value-of select="$svg-filename" />
-            </xsl:attribute>
-            <!-- replace with a CSS class -->
-            <xsl:attribute name="style">
-                <xsl:text>width: 100%; height: auto;</xsl:text>
-            </xsl:attribute>
-            <!-- alt attribute for accessibility -->
-            <xsl:attribute name="alt">
-                <xsl:apply-templates select="description" />
-            </xsl:attribute>
-        </xsl:element>
-    </object>
+    <!-- Assumes filename is relative to primary source file, -->
+    <!-- which must be specified with the original version,   -->
+    <!-- not the pre-processed, "assembled" version           -->
+    <xsl:variable name="image-xml" select="document($html-filename, $original)"/>
+    <!-- width first -->
+    <xsl:variable name="width">
+        <xsl:choose>
+            <!-- 2-D diagram -->
+            <!-- note necessity of namespace for "svg" element -->
+            <xsl:when test="$image-xml/html/body/svg:svg">
+                <xsl:variable name="wpt" select="$image-xml/html/body/svg:svg/@width"/>
+                <!-- Strip "pt" suffix -->
+                <xsl:value-of select="substring($wpt, 1, string-length($wpt) - 2)"/>
+            </xsl:when>
+            <!-- 3-D diagram -->
+            <xsl:when test="$image-xml/html/body/canvas">
+                <xsl:value-of select="$image-xml/html/body/canvas/@width"/>
+            </xsl:when>
+            <!-- failure -->
+            <xsl:otherwise>
+                <xsl:message>PTX:ERROR:   the Asympote diagram produced in "<xsl:value-of select="$html-filename"/>" needs to be available relative to the primary source file, or if available it is perhaps ill-formed and its width cannot be determined (which you might report as a bug).  We might be able to procede as if the diagram is square, but results can be unpredictable.</xsl:message>
+                <!-- reasonable guess at points/pixels -->
+                <xsl:text>400</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- now height, similarly -->
+    <xsl:variable name="height">
+        <xsl:choose>
+            <!-- 2-D diagram -->
+            <!-- note necessity of namespace for "svg" element -->
+            <xsl:when test="$image-xml/html/body/svg:svg">
+                <xsl:variable name="hpt" select="$image-xml/html/body/svg:svg/@height"/>
+                <!-- Strip "pt" suffix -->
+                <xsl:value-of select="substring($hpt, 1, string-length($hpt) - 2)"/>
+            </xsl:when>
+            <!-- 3-D diagram -->
+            <xsl:when test="$image-xml/html/body/canvas">
+                <xsl:value-of select="$image-xml/html/body/canvas/@height"/>
+            </xsl:when>
+            <!-- failure -->
+            <xsl:otherwise>
+                <xsl:message>PTX:ERROR:   the Asympote diagram produced in "<xsl:value-of select="$html-filename"/>" needs to be available relative to the primary source file, or if available it is perhaps ill-formed and its height cannot be determined (which you might report as a bug).  We might be able to procede as if the diagram is square, but results can be unpredictable.</xsl:message>
+                <!-- reasonable guess at points/pixels -->
+                <xsl:text>400</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- All that was to get an aspect-ratio for a responsive iframe embedding -->
+    <xsl:variable name="aspect-percent" select="($height div $width) * 100"/>
+
+    <!-- Surrounding/constraining "image", or "sidebyside" panel, or ...    -->
+    <!-- will provide an overall width.  The "padding-top" property is what -->
+    <!-- makes the right shape.  CSS provides some constant properties.     -->
+    <div class="asymptote-box" style="padding-top: {$aspect-percent}%">
+        <iframe src="{$html-filename}" class="asymptote"/>
+    </div>
     <!-- possibly annotate with archive links -->
     <xsl:apply-templates select="." mode="archive">
         <xsl:with-param name="base-pathname" select="$base-pathname" />
@@ -5487,7 +5594,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="src">
             <xsl:value-of select="$svg-filename" />
         </xsl:attribute>
-        <!-- replace with a CSS class -->
+        <!-- For accessibility use an ARIA role, e.g so screen  -->
+        <!-- readers do not try to read the elements of the SVG -->
+        <!-- NB: if we write SVG into the page, put this        -->
+        <!-- attribute onto the "svg" element                   -->
+        <xsl:attribute name="role">
+            <xsl:text>img</xsl:text>
+        </xsl:attribute>
+        <!-- replace with a CSS class                           -->
         <xsl:attribute name="style">
             <xsl:text>width: 100%; height: auto;</xsl:text>
         </xsl:attribute>
@@ -5607,14 +5721,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="formats" select="$remaining-formats" />
         </xsl:call-template>
     </xsl:if>
-</xsl:template>
-
-<!-- LaTeX standalone image              -->
-<!-- Deprecated when not inside an image -->
-<!-- But it gets processed anyway        -->
-<xsl:template match="latex-image-code">
-    <xsl:message>MBX WARNING: latex-image-code element should be enclosed by an image element</xsl:message>
-    <xsl:apply-templates select="." mode="location-report" />
 </xsl:template>
 
 
@@ -5753,180 +5859,138 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- ################################## -->
-<!-- Deprecated Graphics Code Templates -->
-<!-- ################################## -->
-<!-- 2015/02/08: Deprecated, still functional but not maintained -->
-<xsl:template match="tikz">
-    <xsl:message>MBX:WARNING: tikz element superceded by latex-image-code element</xsl:message>
-    <xsl:message>MBX:WARNING: tikz package and necessary libraries should be included in docinfo/latex-image-preamble</xsl:message>
-    <xsl:apply-templates select="." mode="location-report" />
-    <xsl:element name="object">
-        <xsl:attribute name="type">image/svg+xml</xsl:attribute>
-        <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
-        <xsl:attribute name="data">
-            <xsl:value-of select="$directory.images" />
-            <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="." mode="visible-id" />
-            <xsl:text>.svg</xsl:text>
-        </xsl:attribute>
-        <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
-    </xsl:element>
-</xsl:template>
-<!-- 2015/02/08: Deprecated, still functional but not maintained -->
-<xsl:template match="asymptote">
-    <xsl:message>MBX:WARNING: asymptote element must be enclosed by an image element - deprecation (2015/02/08)</xsl:message>
-    <xsl:apply-templates select="." mode="location-report" />
-    <xsl:element name="object">
-        <xsl:attribute name="type">image/svg+xml</xsl:attribute>
-        <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
-        <xsl:attribute name="data">
-            <xsl:value-of select="$directory.images" />
-            <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="." mode="visible-id" />
-            <xsl:text>.svg</xsl:text>
-        </xsl:attribute>
-        <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
-    </xsl:element>
-</xsl:template>
-<!-- 2015/02/08: Deprecated, still functional but not maintained -->
-<xsl:template match="sageplot">
-    <xsl:message>MBX:WARNING: sageplot element must be enclosed by an image element - deprecation (2015/02/08)</xsl:message>
-    <xsl:apply-templates select="." mode="location-report" />
-    <xsl:element name="object">
-        <xsl:attribute name="type">image/svg+xml</xsl:attribute>
-        <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
-        <xsl:attribute name="data">
-            <xsl:value-of select="$directory.images" />
-            <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="." mode="visible-id" />
-            <xsl:text>.svg</xsl:text>
-        </xsl:attribute>
-        <xsl:element name="img">
-            <xsl:attribute name="src">
-                <xsl:value-of select="$directory.images" />
-                <xsl:text>/</xsl:text>
-                <xsl:apply-templates select="." mode="visible-id" />
-                <xsl:text>.png</xsl:text>
-            </xsl:attribute>
-        </xsl:element>
-    </xsl:element>
-</xsl:template>
-<!-- ################################## -->
-<!-- Deprecated Graphics Code Templates -->
-<!-- ################################## -->
+<!-- ############# -->
+<!-- Audio & Video -->
+<!-- ############# -->
 
+<!-- Audio and video are similar enough that we share    -->
+<!-- some routines under the general heading of "media", -->
+<!-- or else we present them here alongside, due to the  -->
+<!-- similarities.                                       -->
 
-<!-- ##### -->
-<!-- Video -->
-<!-- ##### -->
-
-<!-- We begin with a general construction of various   -->
-<!-- options for embedding, pop-out, and previews.     -->
-<!-- An abstract modal method "video-embed" constructs -->
-<!-- an HTML object of the correct size and with the   -->
-<!-- right autoplay characteristic.                    -->
-<!-- Note: autoplay option is internal, not author-set -->
-
-<!-- Two types of video: HTML5, YouTube                   -->
-<!-- Three previews: default, generic, author-constructed -->
-<!-- Three embeddings: embed, popout, select              -->
-
-<xsl:template match="audio|video">
-    <!-- collect and process size information from author -->
-    <xsl:variable name="width">
-        <xsl:apply-templates select="." mode="get-width-pixels" />
-    </xsl:variable>
-    <xsl:variable name="height">
-        <xsl:apply-templates select="." mode="get-height-pixels">
-            <xsl:with-param name="default-aspect" select="'16:9'" />
+<xsl:template match="video">
+    <!-- This is an RTF of the object, it is important that it returns -->
+    <!-- 100% width as default, so when the object is in an enclosing  -->
+    <!-- "sidebyside" only the @aspect is on the object and hence a    -->
+    <!-- $layout/height is computed properly.                          -->
+    <xsl:variable name="rtf-layout">
+        <xsl:apply-templates select="." mode="layout-parameters">
+            <xsl:with-param name="default-aspect" select="'16:9'"/>
         </xsl:apply-templates>
     </xsl:variable>
-
-    <!-- Always build a standalone page, PDF links to these -->
-    <xsl:apply-templates select="." mode="video-standalone-page" />
-
-    <!-- standalone page name uses visible-id of the video -->
-    <xsl:variable name="int-id">
-        <xsl:apply-templates select="." mode="visible-id" />
-    </xsl:variable>
-    <xsl:choose>
-        <xsl:when test="@play-at = 'popout'">
-            <a href="{$int-id}.html" target="_blank">
-            <!-- place a thumbnail as clickable for page already extant -->
-                <xsl:choose>
-                    <!-- generic requested -->
-                    <xsl:when test="@preview = 'generic'">
-                        <xsl:call-template name="generic-preview-svg">
-                            <xsl:with-param name="width" select="$width" />
-                            <xsl:with-param name="height" select="$height" />
-                        </xsl:call-template>
-                    </xsl:when>
-                    <!-- author-provided -->
-                    <xsl:when test="@preview and not(@preview = 'default')">
-                        <img src="{@preview}" width="{$width}" height="{$height}" alt="Video cover image"/>
-                    </xsl:when>
-                    <!-- this id-device should be replaced by graceful failure  -->
-                    <!-- to the generic preview with a console warning          -->
-                    <xsl:when test="(@preview = 'default') or not(@preview)">
-                        <xsl:variable name="thumbnail-image">
-                            <xsl:text>images/</xsl:text>
-                            <xsl:value-of select="$int-id" />
-                            <xsl:text>.jpg</xsl:text>
-                        </xsl:variable>
-                        <img src="{$thumbnail-image}" width="{$width}" height="{$height}" alt="Video cover image"/>
-                    </xsl:when>
-                </xsl:choose>
-            </a>
-            <!-- until we get an overlay, explain popout -->
-            <div style="text-align: center;">
-                <xsl:text>Click Above to Play</xsl:text>
-            </div>
-        </xsl:when>
-        <xsl:when test="(@play-at = 'select') or (@play-at = 'embed') or not(@play-at)">
-            <xsl:apply-templates select="." mode="video-embed">
-                <xsl:with-param name="width"  select="$width" />
-                <xsl:with-param name="height" select="$height" />
-            </xsl:apply-templates>
-            <!-- for the reader-select case, we need a link as a "button" -->
-            <!-- if this case is deprecated, we can drop this thing -->
-            <xsl:if test="@play-at = 'select'">
-                <div style="text-align: center;">
-                    <a href="{$int-id}.html" target="_blank">
-                        <xsl:text>Click to Pop-Out</xsl:text>
-                    </a>
-                </div>
+    <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
+    <!-- div is constraint/positioning for contained video   -->
+    <!-- Use of "padding-top" for responsive iframes is from -->
+    <!-- https://davidwalsh.name/responsive-iframes          -->
+    <div class="video-box">
+        <xsl:attribute name="style">
+            <xsl:text>width: </xsl:text>
+            <xsl:value-of select="$layout/width"/>
+            <xsl:text>%;</xsl:text>
+            <!-- surrogate for height, except on Runestone -->
+            <xsl:if test="not($b-host-runestone and @youtube)">
+                <xsl:text>padding-top: </xsl:text>
+                <xsl:value-of select="$layout/height"/>
+                <xsl:text>%;</xsl:text>
             </xsl:if>
-        </xsl:when>
-        <xsl:otherwise />
-    </xsl:choose>
+            <xsl:text> margin-left: </xsl:text>
+            <xsl:value-of select="$layout/left-margin"/>
+            <xsl:text>%;</xsl:text>
+            <xsl:text> margin-right: </xsl:text>
+            <xsl:value-of select="$layout/right-margin"/>
+            <xsl:text>%;</xsl:text>
+        </xsl:attribute>
+        <xsl:choose>
+            <xsl:when test="$b-host-runestone and @youtube">
+                <!-- we compute pixels in the parameter value -->
+                <xsl:apply-templates select="." mode="runestone-youtube-embed">
+                    <xsl:with-param name="width" select="($layout/width * $design-width) div 100"/>
+                    <xsl:with-param name="height" select="($layout/height * $design-width) div 100"/>
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="media-embed"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </div>
+    <!-- Always build a standalone page, PDF links to these -->
+    <xsl:apply-templates select="." mode="media-standalone-page" />
+</xsl:template>
+
+<xsl:template match="audio">
+    <!-- This is an RTF of the object, it is important that it returns -->
+    <!-- 100% width as default, so when the object is in an enclosing  -->
+    <!-- "sidebyside" it fills the panel.                              -->
+    <!-- Note: we may want to support images as posters, so we may  -->
+    <!-- want to support an aspect-ratio, or perhaps the image will -->
+    <!-- define the size?                                           -->
+    <xsl:variable name="rtf-layout">
+        <xsl:apply-templates select="." mode="layout-parameters"/>
+    </xsl:variable>
+    <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
+    <!-- div is constraint/positioning for contained audio -->
+    <div class="audio-box">
+        <xsl:attribute name="style">
+            <xsl:text>width: </xsl:text>
+            <xsl:value-of select="$layout/width"/>
+            <xsl:text>%;</xsl:text>
+            <xsl:text> margin-left: </xsl:text>
+            <xsl:value-of select="$layout/left-margin"/>
+            <xsl:text>%;</xsl:text>
+            <xsl:text> margin-right: </xsl:text>
+            <xsl:value-of select="$layout/right-margin"/>
+            <xsl:text>%;</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates select="." mode="media-embed"/>
+    </div>
+    <!-- Always build a standalone page, PDF links to these -->
+    <xsl:apply-templates select="." mode="media-standalone-page" />
 </xsl:template>
 
 <!-- Formerly a "pop-out" page, now a "standalone" page     -->
 <!-- Has autoplay on since a reader has elected to go there -->
 <!-- TODO: override preview, since it just plays, pass 'default -->
-<xsl:template match="audio|video" mode="video-standalone-page">
-    <xsl:variable name="aspect-ratio">
-        <xsl:apply-templates select="." mode="get-aspect-ratio">
-            <xsl:with-param name="default-aspect" select="'16:9'" />
-        </xsl:apply-templates>
-    </xsl:variable>
-    <!-- apparent width of content region of HTML page  -->
-    <!-- with no sidebar, subtract margins = 900 - 2*30 -->
-    <xsl:variable name="ptx-content-width" select="'840'" />
-    <xsl:variable name="ptx-content-height" select="$ptx-content-width div $aspect-ratio" />
+<xsl:template match="audio|video" mode="media-standalone-page">
     <xsl:apply-templates select="." mode="standalone-page">
         <xsl:with-param name="content">
             <!-- display preview, and enable autoplay  -->
             <!-- since reader has elected this page    -->
-            <!-- audio: height parameter is ignored    -->
-            <xsl:apply-templates select="." mode="video-embed">
-                <xsl:with-param name="width"  select="$ptx-content-width" />
-                <xsl:with-param name="height" select="$ptx-content-height" />
-                <xsl:with-param name="preview" select="'false'" />
-                <xsl:with-param name="autoplay" select="'true'" />
-            </xsl:apply-templates>
             <div style="text-align: center;">Reloading this page will reset a start location</div>
+            <div>
+                <xsl:attribute name="class">
+                    <xsl:choose>
+                        <xsl:when test="self::audio">
+                            <xsl:text>audio-box</xsl:text>
+                        </xsl:when>
+                        <xsl:when test="self::video">
+                            <xsl:text>video-box</xsl:text>
+                        </xsl:when>
+                    </xsl:choose>
+                </xsl:attribute>
+                <xsl:attribute name="style">
+                    <xsl:text>width: </xsl:text>
+                    <xsl:text>100%;</xsl:text>
+                    <xsl:if test="self::video">
+                        <xsl:variable name="rtf-layout">
+                            <xsl:apply-templates select="." mode="layout-parameters">
+                                <xsl:with-param name="default-aspect" select="'16:9'"/>
+                            </xsl:apply-templates>
+                        </xsl:variable>
+                        <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
+                        <!-- get back the aspect ratio via height and width of layout, -->
+                        <!-- which are both defined for a video (but not an audio)     -->
+                        <!-- Pairs with 100% width above                               -->
+                        <xsl:variable name="height-percent" select="100 * ($layout/height div $layout/width)"/>
+                        <xsl:text>padding-top: </xsl:text>
+                        <xsl:value-of select="$height-percent"/>
+                        <xsl:text>%;</xsl:text>
+                    </xsl:if>
+                </xsl:attribute>
+                <xsl:apply-templates select="." mode="media-embed">
+                    <xsl:with-param name="preview" select="'false'" />
+                    <xsl:with-param name="autoplay" select="'true'" />
+                </xsl:apply-templates>
+            </div>
         </xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>
@@ -6040,7 +6104,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- With sidebars killed, this stuff is extraneous     -->
                     <!-- <xsl:apply-templates select="." mode="sidebars" /> -->
                     <main class="main">
-                        <div id="content" class="pretext-content">
+                        <!-- relax the 600px width restriction, so with    -->
+                        <!-- responsive videos they grow to be much bigger -->
+                        <div id="content" class="pretext-content" style="max-width: 1600px">
                             <!-- This is content passed in as a parameter -->
                             <xsl:copy-of select="$content" />
                           </div>
@@ -6052,14 +6118,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="google-universal"/>
                 <xsl:call-template name="google-gst"/>
                 <!-- <xsl:call-template name="pytutor-footer" /> -->
+                <xsl:call-template name="extra-js-footer"/>
             </body>
         </html>
     </exsl:document>
 </xsl:template>
 
 <xsl:template name="generic-preview-svg">
-    <xsl:param name="width" select="''" />
-    <xsl:param name="height" select="''" />
     <!-- viewbox was square (0,0), 96x96, now clipped 14 above and below                   -->
     <!-- preserveAspectRatio="none" makes it amenable to matching video it hides           -->
     <!-- SVG scaling, comprehensive: https://css-tricks.com/scale-svg/                     -->
@@ -6069,7 +6134,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- License text:  This image only consists of simple geometric shapes or text.       -->
     <!-- It does not meet the threshold of originality needed for copyright protection,    -->
     <!-- and is therefore in the public domain.                                            -->
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 14 96 68" width="{$width}" height="{$height}" style="cursor:pointer;" preserveAspectRatio="none">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 14 96 68" style="cursor:pointer; position: absolute; top: 0; left: 0; width: 100%; height: 100%;" preserveAspectRatio="none">
         <path fill="#e62117" d="M94.98,28.84c0,0-0.94-6.6-3.81-9.5c-3.64-3.81-7.72-3.83-9.59-4.05c-13.4-0.97-33.52-0.85-33.52-0.85s-20.12-0.12-33.52,0.85c-1.87,0.22-5.95,0.24-9.59,4.05c-2.87,2.9-3.81,9.5-3.81,9.5S0.18,36.58,0,44.33v7.26c0.18,7.75,1.14,15.49,1.14,15.49s0.93,6.6,3.81,9.5c3.64,3.81,8.43,3.69,10.56,4.09c7.53,0.72,31.7,0.89,32.54,0.9c0.01,0,20.14,0.03,33.54-0.94c1.87-0.22,5.95-0.24,9.59-4.05c2.87-2.9,3.81-9.5,3.81-9.5s0.96-7.75,1.02-15.49v-7.26C95.94,36.58,94.98,28.84,94.98,28.84z M38.28,61.41v-27l25.74,13.5L38.28,61.41z"/>
     </svg>
 </xsl:template>
@@ -6102,36 +6167,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- NB: here, and elesewhere, references -->
 <!-- to "video" should become "media"     -->
-<xsl:template match="audio[@source]" mode="video-embed">
-    <xsl:param name="width" select="''" />
-    <xsl:param name="height" select="''" />
-    <xsl:param name="preview" select="'true'" />
+<xsl:template match="audio[@source]" mode="media-embed">
+    <xsl:param name="preview" select="'false'" />
     <xsl:param name="autoplay" select="'false'" />
-
-    <!-- $width is in pixels for video @width attribute,   -->
-    <!-- but for the audio element we seem to need to      -->
-    <!-- use CSS, so we revert back to the percentage. (!) -->
-    <!-- Seems to work great on skinny screens             -->
-    <xsl:variable name="width-percentage">
-        <xsl:value-of select="round(($width div $design-width)*100)"/>
-    </xsl:variable>
 
     <xsl:element name="audio">
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="html-id"/>
         </xsl:attribute>
-        <!-- seems necessary to style the controls, since it        -->
-        <!-- has no notion of height and width, like video does     -->
-        <!-- caller supplies width in pixels, we assume full height -->
-        <!-- migrate block and height properties to CSS             -->
-        <xsl:attribute name="style">
-            <xsl:text>width:</xsl:text>
-            <xsl:value-of select="$width-percentage" />
-            <xsl:text>%;</xsl:text>
-            <xsl:text>height:100%;display:block;margin:auto;</xsl:text>
+        <xsl:attribute name="class">
+            <xsl:text>audio</xsl:text>
         </xsl:attribute>
         <!-- empty forms work as boolean switches -->
-        <xsl:attribute name="controls" />
+        <xsl:attribute name="controls"/>
         <xsl:if test="$autoplay = 'true'">
             <xsl:attribute name="autoplay" />
         </xsl:if>
@@ -6149,7 +6197,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- no extension suggests hosting has multiple -->
         <!-- versions for browser to sort through       -->
         <!-- More open formats first!  ;-)              -->
-        <xsl:if test="$extension = '' or $extension = 'oog'">
+        <xsl:if test="$extension = '' or $extension = 'ogg'">
             <xsl:element name="source">
                 <xsl:attribute name="src">
                     <xsl:value-of select="@source"/>
@@ -6203,9 +6251,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- dimensions and autoplay as parameters        -->
 <!-- Normally $preview is true, and not passed in -->
 <!-- 'false' is an override for standalone pages  -->
-<xsl:template match="video[@source]" mode="video-embed">
-    <xsl:param name="width" select="''" />
-    <xsl:param name="height" select="''" />
+<xsl:template match="video[@source]" mode="media-embed">
     <xsl:param name="preview" select="'true'" />
     <xsl:param name="autoplay" select="'false'" />
 
@@ -6214,16 +6260,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="html-id"/>
         </xsl:attribute>
-        <xsl:attribute name="width">
-            <xsl:value-of select="$width" />
-        </xsl:attribute>
-        <xsl:attribute name="height">
-            <xsl:value-of select="$height" />
-        </xsl:attribute>
-        <!-- This CSS allows us to break the aspect-ratio -->
-        <!-- https://stackoverflow.com/questions/4000818/ -->
-        <xsl:attribute name="style">
-            <text>object-fit: fill;</text>
+        <xsl:attribute name="class">
+            <xsl:text>video</xsl:text>
         </xsl:attribute>
         <!-- empty forms work as boolean switches -->
         <xsl:attribute name="controls" />
@@ -6256,13 +6294,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- no extension suggests hosting has multiple -->
         <!-- versions for browser to sort through       -->
         <!-- More open formats first!  ;-)              -->
-        <xsl:if test="$extension = '' or $extension = 'oog'">
+        <xsl:if test="$extension = '' or $extension = 'ogv'">
             <xsl:element name="source">
                 <xsl:attribute name="src">
                     <xsl:value-of select="@source"/>
                     <!-- augment no-extension form -->
                     <xsl:if test="$extension = ''">
-                        <xsl:text>.ogg</xsl:text>
+                        <xsl:text>.ogv</xsl:text>
                     </xsl:if>
                     <xsl:apply-templates select="." mode="temporal-fragment"/>
                 </xsl:attribute>
@@ -6301,9 +6339,54 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:attribute>
             </xsl:element>
         </xsl:if>
+        <!-- 2007: *.oog officially replaced by *.ogv    -->
+        <!-- 2018-04-01: we supported *.oog for video at -->
+        <!--    91028991e081d2c933d46d3ce5d4d1cb6759c0bf -->
+        <!-- 2020-07-05: demoted, but continue support   -->
+        <xsl:if test="$extension = '' or $extension = 'oog'">
+            <xsl:element name="source">
+                <xsl:attribute name="src">
+                    <xsl:value-of select="@source"/>
+                    <!-- augment no-extension form -->
+                    <xsl:if test="$extension = ''">
+                        <xsl:text>.ogg</xsl:text>
+                    </xsl:if>
+                    <xsl:apply-templates select="." mode="temporal-fragment"/>
+                </xsl:attribute>
+                <xsl:attribute name="type">
+                    <xsl:text>video/ogg</xsl:text>
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
         <!-- failure to perform -->
         <xsl:text>Your browser does not support the &lt;video&gt; tag.</xsl:text>
+        <xsl:apply-templates select="track"/>
     </xsl:element>
+</xsl:template>
+
+
+<!-- This an optional component of an author-hosted video, -->
+<!-- and the markup closely tracks the generated HTML.     -->
+<!-- The HTML @default attribute functions simply by being -->
+<!-- present, so we do not provide a value.                -->
+<xsl:template match="track">
+    <track>
+        <xsl:if test="@default='yes'">
+            <xsl:attribute name="default"/>
+        </xsl:if>
+        <xsl:attribute name="label">
+            <xsl:value-of select="@label"/>
+        </xsl:attribute>
+        <xsl:attribute name="kind">
+            <xsl:value-of select="@kind"/>
+        </xsl:attribute>
+        <xsl:attribute name="srclang">
+            <xsl:value-of select="@xml:lang"/>
+        </xsl:attribute>
+        <xsl:attribute name="src">
+            <xsl:value-of select="@source"/>
+        </xsl:attribute>
+    </track>
 </xsl:template>
 
 <!-- HTML5 Media Fragment URI (shared for audio, video)       -->
@@ -6344,9 +6427,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Templates, on a per-service basis, supply a URL, -->
 <!-- and any attributes on the "iframe" element which -->
 <!-- are not shared                                   -->
-<xsl:template match="video[@youtube|@youtubeplaylist|@vimeo]" mode="video-embed">
-    <xsl:param name="width" select="''" />
-    <xsl:param name="height" select="''" />
+<xsl:template match="video[@youtube|@youtubeplaylist|@vimeo]" mode="media-embed">
     <xsl:param name="preview" select="'true'" />
     <xsl:param name="autoplay" select="'false'" />
 
@@ -6386,21 +6467,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <div onclick="this.nextElementSibling.style.display='block'; this.style.display='none'">
                 <xsl:choose>
                     <xsl:when test="@preview = 'generic'">
-                        <xsl:call-template name="generic-preview-svg">
-                            <xsl:with-param name="width" select="$width" />
-                            <xsl:with-param name="height" select="$height" />
-                        </xsl:call-template>
+                        <xsl:call-template name="generic-preview-svg"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <img width="{$width}" height="{$height}" src="{@preview}" alt="Video cover image"/>
+                        <img src="{@preview}" class="video-poster"
+                            alt="Video cover image"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </div>
             <div class="hidden-content">
                 <!-- Hidden content in here                   -->
                 <!-- Turn autoplay on, else two clicks needed -->
-                <iframe id="{$hid}" width="{$width}" height="{$height}" allowfullscreen=""
-                        src="{$source-url-autoplay-on}">
+                <iframe id="{$hid}" class="video" 
+                    allowfullscreen="" src="{$source-url-autoplay-on}">
                     <xsl:apply-templates select="." mode="video-iframe-attributes">
                         <xsl:with-param name="autoplay" select="'true'"/>
                     </xsl:apply-templates>
@@ -6408,14 +6487,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </div>
         </xsl:when>
         <xsl:otherwise>
-            <iframe id="{$hid}" width="{$width}" height="{$height}" allowfullscreen=""
-                    src="{$source-url}">
+            <iframe id="{$hid}"  class="video"
+                allowfullscreen="" src="{$source-url}">
                 <xsl:apply-templates select="." mode="video-iframe-attributes">
                     <xsl:with-param name="autoplay" select="$autoplay"/>
                 </xsl:apply-templates>
             </iframe>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- Special for YouTube API setup on Runestone  -->
+<!-- Uses pixels (to match containing video-box) -->
+<!-- so is exceptional and featureless           -->
+<!-- TODO: are start/end attributes useful?      -->
+<xsl:template match="video[@youtube]" mode="runestone-youtube-embed">
+    <xsl:param name="width"/>
+    <xsl:param name="height"/>
+
+    <xsl:variable name="hid">
+        <xsl:apply-templates select="." mode="html-id"/>
+    </xsl:variable>
+
+    <div id="{$hid}" data-component="youtube" class="align-left youtube-video"
+         data-video-height="{$height}" data-video-width="{$width}"
+         data-video-videoid="{@youtube}" data-video-divid="{$hid}"
+         data-video-start="0" data-video-end="-1"/>
 </xsl:template>
 
 <!-- Creates a YouTube URL for embedding for use in an iframe -->
@@ -6555,27 +6652,123 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- vertical space etc, that is the container's responsibiility      -->
 <!-- A sequence of rows, we ignore column group in applying templates -->
 <!-- Realized as an HTML table                                        -->
-<xsl:template match="tabular">
+
+<xsl:template match="tabular[not(ancestor::sidebyside)]">
     <xsl:param name="b-original" select="true()" />
-    <xsl:param name="width" select="'100%'" />
+    <!-- naked tabular carries its own width -->
+
+    <xsl:choose>
+        <xsl:when test="not(@margins) and (not(@width) or (@width = 'auto'))">
+            <!-- the "natural width" case                       -->
+            <!-- 100% width allows paragraph cells to be widest -->
+            <div class="tabular-box natural-width">
+                <xsl:apply-templates select="." mode="tabular-inclusion">
+                    <xsl:with-param name="b-original" select="$b-original" />
+                    <xsl:with-param name="width" select="'100%'" />
+                </xsl:apply-templates>
+            </div>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:variable name="rtf-layout">
+                <xsl:apply-templates select="." mode="layout-parameters"/>
+            </xsl:variable>
+            <xsl:variable name="layout" select="exsl:node-set($rtf-layout)"/>
+            <div class="tabular-box">
+                <xsl:attribute name="style">
+                    <xsl:text>width: </xsl:text>
+                    <xsl:value-of select="$layout/width"/>
+                    <xsl:text>%;</xsl:text>
+                    <xsl:text> margin-left: </xsl:text>
+                    <xsl:value-of select="$layout/left-margin"/>
+                    <xsl:text>%;</xsl:text>
+                    <xsl:text> margin-right: </xsl:text>
+                    <xsl:value-of select="$layout/right-margin"/>
+                    <xsl:text>%;</xsl:text>
+                </xsl:attribute>
+                <xsl:apply-templates select="." mode="tabular-inclusion">
+                    <xsl:with-param name="b-original" select="$b-original"/>
+                    <xsl:with-param name="width" select="concat($layout/width, '%')"/>
+                </xsl:apply-templates>
+            </div>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="tabular[ancestor::sidebyside]">
+    <xsl:param name="b-original" select="true()" />
+    <!-- sidebyside should always provide width, -->
+    <!-- so no default value provided here       -->
+    <xsl:param name="width"/>
+
+    <xsl:apply-templates select="." mode="tabular-inclusion">
+        <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="width" select="$width" />
+    </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="tabular" mode="tabular-inclusion">
+    <xsl:param name="b-original" select="$b-original"/>
+    <xsl:param name="width"  select="$width"/>
+
     <!-- Abort if tabular's cols have widths summing to over 100% -->
     <xsl:call-template name="cap-width-at-one-hundred-percent">
         <xsl:with-param name="nodeset" select="col/@width" />
     </xsl:call-template>
-    <xsl:element name="table">
-        <xsl:apply-templates select="row">
+
+    <table class="tabular">
+        <!-- If the source has a permid, then so will the HTML.  -->
+        <!-- See the definition of this modal template for more. -->
+        <!-- In particular, do not add an HTML id any other way. -->
+        <xsl:apply-templates select="." mode="html-permid-only"/>
+        <!-- We *actively* enforce header rows being (a) initial, and      -->
+        <!-- (b) contiguous.  So following two-part match will do no harm  -->
+        <!-- to correct source, but will definitely harm incorrect source. -->
+        <xsl:apply-templates select="row[@header]">
             <xsl:with-param name="b-original" select="$b-original" />
             <xsl:with-param name="ambient-relative-width" select="$width" />
         </xsl:apply-templates>
-    </xsl:element>
+        <xsl:apply-templates select="row[not(@header)]">
+            <xsl:with-param name="b-original" select="$b-original" />
+            <xsl:with-param name="ambient-relative-width" select="$width" />
+        </xsl:apply-templates>
+    </table>
+    <!-- any footnote in a bare "tabular" can go here; if   -->
+    <!-- wrapped in a PTX "table" it'll pop outside of that -->
+    <xsl:apply-templates select="." mode="pop-footnote-text">
+        <xsl:with-param name="b-original" select="$b-original"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- A row of table -->
 <xsl:template match="row">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="ambient-relative-width" />
+
+    <!-- Determine if the row is a header row -->
+    <!-- and construct class names as needed  -->
+    <xsl:variable name="header-row">
+        <xsl:choose>
+            <xsl:when test="@header = 'yes'">
+                <xsl:text>header-horizontal</xsl:text>
+            </xsl:when>
+            <xsl:when test="@header = 'vertical'">
+                <xsl:text>header-vertical</xsl:text>
+            </xsl:when>
+            <!-- "no" is other choice, or no attribute at all -->
+            <!-- controlled by schema, so no error-check here -->
+            <!-- empty implies no class attribute at all      -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+
     <!-- Form the HTML table row -->
     <xsl:element name="tr">
+        <!-- and a class attribute for horizontal or vertical headers -->
+        <xsl:if test="not($header-row = '')">
+            <xsl:attribute name="class">
+                <xsl:value-of select="$header-row"/>
+            </xsl:attribute>
+        </xsl:if>
         <!-- Walk the cells of the row -->
         <xsl:call-template name="row-cells">
             <xsl:with-param name="b-original" select="$b-original" />
@@ -6759,8 +6952,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
+
+        <!-- a cell of a header row needs to be "th" -->
+        <!-- else the HTML mark up is "td"           -->
+        <!-- NB: Named templates means context is a  -->
+        <!-- row, which is really wrong.  Tests      -->
+        <!-- should be on  parent::row/@header       -->
+        <xsl:variable name="header-row-elt">
+            <xsl:choose>
+                <xsl:when test="@header = 'yes'">
+                    <xsl:text>th</xsl:text>
+                </xsl:when>
+                <xsl:when test="@header = 'vertical'">
+                    <xsl:text>th</xsl:text>
+                </xsl:when>
+                <!-- "no" is other choice, or no attribute at all -->
+                <!-- controlled by schema, so no error-check here -->
+                <xsl:otherwise>
+                    <xsl:text>td</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+
         <!-- the HTML element for the cell -->
-        <xsl:element name="td">
+        <xsl:element name="{$header-row-elt}">
             <!-- and the class attribute -->
             <xsl:attribute name="class">
                 <!-- always write alignment, so *precede* all subsequent with a space -->
@@ -6805,9 +7020,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:if>
             </xsl:attribute>
             <xsl:if test="not($next-cell)">
-                <xsl:attribute name="data-braille">
-                    <xsl:text>last-cell</xsl:text>
-                </xsl:attribute>
+                <xsl:if test="$b-braille">
+                    <xsl:attribute name="data-braille">
+                        <xsl:text>last-cell</xsl:text>
+                    </xsl:attribute>
+                </xsl:if>
             </xsl:if>
             <xsl:if test="not($column-span = 1)">
                 <xsl:attribute name="colspan">
@@ -7062,26 +7279,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   B.  The permid-edition scheme is effective           -->
 <xsl:template match="*" mode="html-id">
     <xsl:choose>
-        <xsl:when test="@permid">
-            <xsl:value-of select="@permid"/>
-        </xsl:when>
-        <xsl:when test="@xml:id">
-            <xsl:value-of select="@xml:id"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="local-name(.)"/>
-            <xsl:text>-</xsl:text>
-            <!-- 2015-09: slow version matches previous "internal-id" -->
-            <!-- use for third (automatic) construction               -->
+        <!-- primary version, as described above -->
+        <xsl:when test="not($b-host-runestone)">
             <xsl:choose>
-                <xsl:when test="$b-fast-ids">
-                    <!-- xsltproc produces non-numeric prefix "idm" -->
-                    <xsl:value-of select="substring(generate-id(.), 4)"/>
+                <xsl:when test="@permid">
+                    <xsl:value-of select="@permid"/>
+                </xsl:when>
+                <xsl:when test="@xml:id">
+                    <xsl:value-of select="@xml:id"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:number from="book|article|letter|memo" level="any"/>
+                    <xsl:value-of select="local-name(.)"/>
+                    <xsl:text>-</xsl:text>
+                    <!-- 2015-09: slow version matches previous "internal-id" -->
+                    <!-- use for third (automatic) construction               -->
+                    <xsl:choose>
+                        <xsl:when test="$b-fast-ids">
+                            <!-- xsltproc produces non-numeric prefix "idm" -->
+                            <xsl:value-of select="substring(generate-id(.), 4)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:number from="book|article|letter|memo" level="any"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:otherwise>
             </xsl:choose>
+        </xsl:when>
+        <!-- alternate version for Runestone, prefer @xml:id, -->
+        <!-- never use permid, no fast-id testing, in -common -->
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="visible-id"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -7098,6 +7325,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="str:replace($the-id, '-', '__')" />
 </xsl:template>
 
+<!-- This template is motivated by the need to put @permid on    -->
+<!-- "tabular" as part of an "in context" testing regimen        -->
+<!-- spearheaded by Volker Sorge.  As a PreTeXt construction,    -->
+<!-- it could be ill-advised.  But we won't split that hair now. -->
+<!-- Do not use any place another HTML is is being added.        -->
+<!-- And use the "match" so we can catalog *where* it is used.   -->
+<xsl:template match="tabular" mode="html-permid-only">
+    <xsl:if test="@permid">
+        <xsl:attribute name="id">
+            <xsl:value-of select="@permid"/>
+        </xsl:attribute>
+    </xsl:if>
+</xsl:template>
 
 
 <!-- ######## -->
@@ -7436,13 +7676,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Open in new window/tab as external reference                        -->
 <!-- If content-less, then automatically formatted like code             -->
 <!-- Within titles, we just produce (formatted) text, but nothing active -->
-<!-- http://stackoverflow.com/questions/9782021/check-for-empty-xml-element-using-xslt -->
 <xsl:template match="url">
     <!-- visible portion of HTML is the URL itself,   -->
     <!-- formatted as code, or content of PTX element -->
     <xsl:variable name="visible-text">
         <xsl:choose>
-            <xsl:when test="not(*) and not(normalize-space())">
+            <xsl:when test="not(node())">
                 <code class="code-inline tex2jax_ignore">
                     <xsl:value-of select="@href" />
                 </code>
@@ -7501,7 +7740,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:element name="pre">
         <xsl:attribute name="class">
-            <xsl:text>code-block tex2jax_ignore</xsl:text>
+            <xsl:text>code-display tex2jax_ignore</xsl:text>
         </xsl:attribute>
         <xsl:apply-templates select="." mode="insert-paragraph-id" >
             <xsl:with-param name="b-original" select="$b-original" />
@@ -7515,7 +7754,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:element name="pre">
         <xsl:attribute name="class">
-            <xsl:text>code-block tex2jax_ignore</xsl:text>
+            <xsl:text>code-display tex2jax_ignore</xsl:text>
         </xsl:attribute>
         <xsl:apply-templates select="." mode="insert-paragraph-id" >
             <xsl:with-param name="b-original" select="$b-original" />
@@ -7720,7 +7959,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Plus/Minus -->
 <!-- The combined symbol -->
-<xsl:template match="plusminus">
+<xsl:template name="plusminus-character">
     <xsl:text>&#xb1;</xsl:text>
 </xsl:template>
 
@@ -8007,6 +8246,48 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
+
+<!-- ############################ -->
+<!-- Literate Programming Support -->
+<!-- ############################ -->
+
+<!-- The "fragment" element is used various other places, so that it   -->
+<!-- slots into the knowl-creation system.  The pointer to a fragment, -->
+<!-- "fragref", is different, and this makes a visual representation   -->
+<!-- of a pointer to the target, as a knowl.  The next two templates   -->
+<!-- support the "wrapped-content" template for "fragment".            -->
+
+<!-- @ref is simply a pointer to a fragment, so -->
+<!-- convert title into a knowl for the target  -->
+<xsl:template match="fragref">
+    <xsl:variable name="target" select="id(@ref)"/>
+    <span>
+        <xsl:call-template name="langle-character"/>
+        <xsl:apply-templates select="." mode="xref-link">
+            <xsl:with-param name="target" select="$target" />
+            <xsl:with-param name="content">
+                <xsl:apply-templates select="$target" mode="title-full"/>
+            </xsl:with-param>
+        </xsl:apply-templates>
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="$target" mode="number"/>
+        <xsl:call-template name="rangle-character"/>
+    </span>
+    <br/>
+</xsl:template>
+
+<!-- wrap code in a "pre" environment, after pulling left -->
+<!-- Drop whitespace only text() nodes                    -->
+<xsl:template match="fragment/code">
+    <xsl:variable name="normalized-frag" select="normalize-space(.)"/>
+    <xsl:if test="not($normalized-frag = '')">
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text" select="." />
+        </xsl:call-template>
+    </xsl:if>
+</xsl:template>
+
+
 <!-- Sage Cells -->
 <!-- TODO: make hidden autoeval cells link against sage-compute cells -->
 
@@ -8024,6 +8305,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- output text, then wraps it for the Sage Cell Server -->
 <!-- TODO: consider showing output in green span (?),    -->
 <!-- presently output is dropped as computable           -->
+<!-- NB: button text is also set as part of knowls code  -->
 <xsl:template match="sage" mode="sage-active-markup">
     <xsl:param name="block-type"/>
     <xsl:param name="language-attribute" />
@@ -8074,21 +8356,136 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Program Listings -->
-<!-- Research:  http://softwaremaniacs.org/blog/2011/05/22/highlighters-comparison/           -->
-<!-- From Google: downloadable, auto-detects languages, has hint-handlers                     -->
-<!-- http://code.google.com/p/google-code-prettify/                                           -->
-<!-- http://code.google.com/p/google-code-prettify/wiki/GettingStarted                        -->
-<!-- See common file for more on language handlers, and "language-prettify" template          -->
-<!-- Coordinate with disabling in Sage Notebook production                                    -->
-<xsl:template match="program">
+<!-- Research:  http://softwaremaniacs.org/blog/2011/05/22/highlighters-comparison/  -->
+<!-- See common file for more on language handlers, and "language-prism" template    -->
+<!-- TODO: maybe ship sanitized "input" to each modal template? -->
+<xsl:template match="program[not(ancestor::sidebyside)]|console[not(ancestor::sidebyside)]">
     <xsl:choose>
-        <xsl:when test="$b-host-runestone and (@language = 'python')">
-        <!-- Runestone ActiveCode, automatically -->
+        <!-- 100% historical, replace with a "web" platform option       -->
+        <!-- TODO: once "exercise" conditions earlier on the platform,   -->
+        <!-- then maybe the parts of this "choose" will migrate to other -->
+        <!-- places and this will be more straightforward.               -->
+        <xsl:when test="self::program and not($b-host-runestone) and (@interactive='pythontutor')">
+            <xsl:apply-templates select="." mode="python-tutor"/>
+        </xsl:when>
+        <!-- if elected as interactive and on Runestone -->
+        <xsl:when test="self::program and (@interactive='yes') and $b-host-runestone">
+            <xsl:apply-templates select="." mode="runestone-activecode"/>
+        </xsl:when>
+        <!-- fallback is a less-capable static version, which -->
+        <!-- might actually be desired for many formats       -->
+        <xsl:otherwise>
+            <xsl:variable name="rtf-layout">
+                <xsl:apply-templates select="." mode="layout-parameters" />
+            </xsl:variable>
+            <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
+            <!-- div is constraint/positioning for contained image -->
+            <div class="code-box">
+                <xsl:attribute name="style">
+                    <xsl:text>width: </xsl:text>
+                    <xsl:value-of select="$layout/width"/>
+                    <xsl:text>%;</xsl:text>
+                    <xsl:text> margin-left: </xsl:text>
+                    <xsl:value-of select="$layout/left-margin"/>
+                    <xsl:text>%;</xsl:text>
+                    <xsl:text> margin-right: </xsl:text>
+                    <xsl:value-of select="$layout/right-margin"/>
+                    <xsl:text>%;</xsl:text>
+                </xsl:attribute>
+                <xsl:apply-templates select="." mode="code-inclusion"/>
+            </div>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="program[ancestor::sidebyside]|console[ancestor::sidebyside]">
+    <xsl:choose>
+        <!-- 100% historical, replace with a "web" platform option, see note above -->
+        <xsl:when test="self::program and not($b-host-runestone) and (@interactive='pythontutor')">
+            <xsl:apply-templates select="." mode="python-tutor"/>
+        </xsl:when>
+        <!-- if elected as interactive and on Runestone -->
+        <xsl:when test="self::program and (@interactive='yes') and $b-host-runestone">
+            <xsl:apply-templates select="." mode="runestone-activecode"/>
+        </xsl:when>
+        <!-- fallback is a less-capable static version, which -->
+        <!-- might actually be desired for many formats       -->
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="code-inclusion"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- A non-interactive version with potential -->
+<!-- syntax highlighting from Prism           -->
+<xsl:template match="program" mode="code-inclusion">
+    <xsl:variable name="prism-language">
+        <xsl:apply-templates select="." mode="prism-language"/>
+    </xsl:variable>
+    <!-- a "program" element may be empty in a coding       -->
+    <!-- exercise, and just used to indicate an interactive -->
+    <!-- area supporting some language                      -->
+    <xsl:variable name="b-has-input" select="not(normalize-space(input) = '')"/>
+    <xsl:if test="$b-has-input">
+        <!-- always identify as coming from "program" -->
+        <pre class="program">
+            <code>
+                <!-- Prism only needs a single class name, per language  -->
+                <!-- placed on "code" but will migrate to the "pre" also -->
+                <xsl:attribute name="class">
+                    <xsl:choose>
+                        <xsl:when test="not($prism-language = '')">
+                            <xsl:text>language-</xsl:text>
+                            <xsl:value-of select="$prism-language" />
+                        </xsl:when>
+                        <!-- else, explicitly use what code gives -->
+                        <xsl:otherwise>
+                            <xsl:text>language-none</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:attribute>
+                <xsl:call-template name="sanitize-text">
+                    <xsl:with-param name="text" select="input" />
+                </xsl:call-template>
+            </code>
+        </pre>
+    </xsl:if>
+</xsl:template>
+
+<!-- Runestone has support for various languages.  Some  -->
+<!-- are "in-browser" while others are backed by "real"  -->
+<!-- compilers as part of a Runestone server.            -->
+<xsl:template match="program" mode="runestone-activecode">
+    <xsl:variable name="active-language">
+        <xsl:apply-templates select="." mode="active-language"/>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="not($active-language = '')">
             <div data-childcomponent="ac2_2_1" class="runestone explainer ac_section alert alert-warning">
-                <textarea data-component="activecode" data-lang="python" data-timelimit="25000" data-codelens="true" data-audio="">
+                <textarea data-component="activecode" data-lang="{$active-language}" data-timelimit="25000" data-audio="">
                     <xsl:attribute name="id">
                         <xsl:apply-templates select="." mode="html-id" />
                     </xsl:attribute>
+                    <!-- Code Lens only for certain languages -->
+                    <xsl:attribute name="data-codelens">
+                        <xsl:choose>
+                            <xsl:when test="($active-language = 'python') or ($active-language = 'python2') or ($active-language = 'python3')">
+                                <xsl:text>true</xsl:text>
+                            </xsl:when>
+                            <xsl:when test="($active-language = 'c') or ($active-language = 'cpp') or ($active-language = 'java')">
+                                <xsl:text>true</xsl:text>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text>false</xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
+                    <!-- SQL (only) needs an attribute so it can find some code -->
+                    <xsl:if test="$active-language = 'sql'">
+                        <xsl:attribute name="data-wasm">
+                            <xsl:text>/_static</xsl:text>
+                        </xsl:attribute>
+                    </xsl:if>
                     <xsl:call-template name="sanitize-text">
                         <xsl:with-param name="text" select="input" />
                     </xsl:call-template>
@@ -8096,37 +8493,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </div>
         </xsl:when>
         <xsl:otherwise>
-            <!-- with language, pre.prettyprint activates styling and Prettifier -->
-            <!-- with no language, pre.plainprint just yields some styling       -->
-            <xsl:variable name="pretty-language">
-                <xsl:apply-templates select="." mode="prettify-language"/>
-            </xsl:variable>
-            <pre>
-                <xsl:attribute name="class">
-                    <xsl:choose>
-                        <xsl:when test="not($pretty-language = '')">
-                            <xsl:text>prettyprint</xsl:text>
-                            <xsl:text> </xsl:text>
-                            <xsl:text>lang-</xsl:text>
-                            <xsl:value-of select="$pretty-language" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:text>plainprint</xsl:text>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:attribute>
-                <xsl:call-template name="sanitize-text">
-                    <xsl:with-param name="text" select="input" />
-                </xsl:call-template>
-            </pre>
+            <xsl:message>PTX:WARNING:  a Runestone ActiveCode element cannot produce interactive code in the language "<xsl:value-of select="@language"/>", so the code will be rendered in a static form.</xsl:message>
+            <xsl:apply-templates select="." mode="html-static"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
 <!-- Interactive Programs, PyTutor -->
-<!-- Use the PyTutor embedding to provide a Python program -->
+<!-- Use the PyTutor embedding to provide a Python program     -->
 <!-- where a reader can interactively step through the program -->
-<xsl:template match="program[@interactive='pythontutor']">
+<xsl:template match="program" mode="python-tutor">
     <!-- check that the language is Python? -->
     <xsl:variable name="hid">
         <xsl:apply-templates select="." mode="html-id" />
@@ -8193,31 +8569,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Console Session -->
 <!-- An interactive command-line session with a prompt, input and output -->
-<xsl:template match="console">
+<xsl:template match="console" mode="code-inclusion">
     <!-- ignore prompt, and pick it up in trailing input -->
-    <xsl:element name="pre">
-        <xsl:attribute name="class">console</xsl:attribute>
-        <xsl:apply-templates select="input|output" />
-    </xsl:element>
+    <pre class="console">
+        <xsl:apply-templates select="input|output"/>
+    </pre>
 </xsl:template>
 
 <!-- do not run through generic text() template -->
 <xsl:template match="console/prompt">
-    <xsl:element name="span">
-        <xsl:attribute name="class">prompt unselectable</xsl:attribute>
+    <span class="prompt unselectable">
         <xsl:value-of select="." />
-    </xsl:element>
+    </span>
 </xsl:template>
 
 <!-- match immediately preceding, only if a prompt:                   -->
 <!-- https://www.oxygenxml.com/archives/xsl-list/199910/msg00541.html -->
 <xsl:template match="console/input">
     <xsl:apply-templates select="preceding-sibling::*[1][self::prompt]" />
-    <xsl:element name="b">
+    <b>
         <xsl:call-template name="sanitize-text">
             <xsl:with-param name="text" select="." />
         </xsl:call-template>
-    </xsl:element>
+    </b>
 </xsl:template>
 
 <xsl:template match="console/output">
@@ -8255,6 +8629,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>eBookConfig.isLoggedIn = </xsl:text><xsl:value-of select="$rso"/><xsl:text>= is_logged_in</xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.email = '</xsl:text><xsl:value-of select="$rso"/><xsl:text>= user_email </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.isInstructor = </xsl:text><xsl:value-of select="$rso"/><xsl:text>= is_instructor </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.logLevel = 10;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.ajaxURL = eBookConfig.app + "/ajax/";&#xa;</xsl:text>
                 <!-- no .loglevel -->
                 <xsl:text>eBookConfig.username = '</xsl:text><xsl:value-of select="$rso"/><xsl:text>= user_id</xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
@@ -8262,7 +8637,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>eBookConfig.activities = </xsl:text><xsl:value-of select="$rso"/><xsl:text>= XML(activity_info) </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.downloadsEnabled = </xsl:text><xsl:value-of select="$rso"/><xsl:text>=downloads_enabled</xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.allow_pairs = </xsl:text><xsl:value-of select="$rso"/><xsl:text>=allow_pairs</xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
-                <xsl:text>eBookConfig.enableScratchAC = true;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.enableScratchAC = false;&#xa;</xsl:text>
                 <!-- no .build_info -->
                 <!-- no .python3 -->
                 <!-- no .acDefaultLanguage -->
@@ -8301,6 +8676,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
         </script>
+        <xsl:text>&#xa;</xsl:text>
+
+        <!-- Google Ads on Runestone -->
+        <!-- Only in PreTeXt production version, only visible in -->
+        <!-- *non-login* versions of books hosted at Runestone   -->
+        <xsl:if test="not($runestone-dev)">
+            <!-- attribute is templated, so we form it as a -->
+            <!-- variable that we can place it using an AVT -->
+            <xsl:variable name="id-attr">
+                <xsl:value-of select="$rso"/>
+                <xsl:text>=settings.adsenseid</xsl:text>
+                <xsl:value-of select="$rsc"/>
+            </xsl:variable>
+            <!--  -->
+            <xsl:value-of select="$rso"/>
+            <xsl:text> if response.serve_ad and settings.adsenseid: </xsl:text>
+            <xsl:value-of select="$rsc"/>
+            <xsl:text>&#xa;</xsl:text>
+            <!--  -->
+            <script data-ad-client="{$id-attr}" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!--  -->
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:value-of select="$rso"/>
+            <xsl:text> pass </xsl:text>
+            <xsl:value-of select="$rsc"/>
+            <xsl:text>&#xa;</xsl:text>
+            <!--  -->
+        </xsl:if>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
@@ -8314,6 +8717,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <script type="text/javascript" src="_static/jquery.idle-timer.js"></script>
         <script type="text/javascript" src="_static/runestone.js"></script>
+        <script type="text/javascript" src="https://www.youtube.com/player_api"></script>
 
         <style>
         <xsl:text>.dropdown {&#xa;</xsl:text>
@@ -8370,13 +8774,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Conditional run-in -->
 <xsl:template name="runestone-manifest">
-    <xsl:if test="$b-host-runestone and $b-is-book">
+    <xsl:if test="$b-host-runestone and ($b-is-book or $b-is-article)">
         <!-- $document-root *will* be a book -->
         <xsl:apply-templates select="$document-root" mode="runestone-manifest"/>
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="book" mode="runestone-manifest">
+<xsl:template match="book|article" mode="runestone-manifest">
     <exsl:document href="runestone-manifest.xml" method="xml" indent="yes" encoding="UTF-8">
         <manifest>
             <!-- LaTeX packages and macros first -->
@@ -8385,8 +8789,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="$latex-packages-mathjax"/>
                 <xsl:value-of select="$latex-macros"/>
             </latex-macros>
-            <!-- Now recurse into chapters   -->
-            <xsl:apply-templates select="*" mode="runestone-manifest"/>
+            <xsl:choose>
+                <xsl:when test="self::book">
+                    <!-- Now recurse into chapters, appendix -->
+                    <xsl:apply-templates select="*" mode="runestone-manifest"/>
+                </xsl:when>
+                <xsl:when test="self::article">
+                    <!-- Now recurse into sections, appendix  -->
+                    <!-- with a faux chapter, using "article" -->
+                    <chapter>
+                        <id>
+                            <xsl:apply-templates select="." mode="html-id"/>
+                        </id>
+                        <title>
+                            <xsl:apply-templates select="." mode="title-full"/>
+                        </title>
+                        <xsl:apply-templates select="*" mode="runestone-manifest"/>
+                    </chapter>
+                </xsl:when>
+            </xsl:choose>
         </manifest>
     </exsl:document>
 </xsl:template>
@@ -8399,7 +8820,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <title>
             <xsl:apply-templates select="." mode="title-full"/>
         </title>
-    <!-- recurse into PTX sections -->
+    <!-- Recurse into PTX sections, or if the chapter is not structured, -->
+    <!-- then pick up inline exercises directly within a chapter         -->
     <xsl:apply-templates select="*" mode="runestone-manifest"/>
     </chapter>
 </xsl:template>
@@ -8416,21 +8838,61 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <title>
             <xsl:apply-templates select="." mode="title-full"/>
         </title>
-        <!-- nearly a dead end, recurse only into exercises      -->
-        <!-- within this RS "subchapter", but at *any* PTX depth -->
-        <xsl:apply-templates select=".//exercise"  mode="runestone-manifest"/>
+        <!-- nearly a dead end, recurse into exercises at *any* PTX depth, -->
+        <!-- but recurse into &PROJECT-LIKE; as children of "section"      -->
+        <xsl:apply-templates select=".//exercise|project|activity|exploration|investigation"  mode="runestone-manifest"/>
     </subchapter>
     <!-- dead end structurally, no more recursion, even if "subsection", etc. -->
+</xsl:template>
+
+<!-- A Runestone exercise needs to identify itself when an instructor wants   -->
+<!-- to select it for assignment, so we want to provide enough identification -->
+<!-- in the manifest, via a "label" element full of raw text.                 -->
+<xsl:template match="exercise|project|activity|exploration|investigation" mode="runestone-manifest-label">
+    <label>
+        <xsl:apply-templates select="." mode="type-name"/>
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="." mode="number"/>
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="." mode="title-full"/>
+    </label>
 </xsl:template>
 
 <!-- Exercises to the Runestone manifest -->
 <!--   - every "exercise" in a "reading-questions" division -->
 <!--   - every multiple choice "exercise"                   -->
+<!--   - every "exercise" with an interactive "program"     -->
 <!-- Note, 2020-05-29: multiple choice not yet merged, markup is speculative -->
 <xsl:template match="exercise[parent::reading-questions]|exercise[choices]" mode="runestone-manifest">
     <question>
+        <xsl:apply-templates select="." mode="runestone-manifest-label"/>
         <xsl:apply-templates select="." mode="exercise-components"/>
     </question>
+</xsl:template>
+
+<xsl:template match="exercise[webwork-reps]" mode="runestone-manifest">
+    <question>
+        <xsl:apply-templates select="." mode="runestone-manifest-label"/>
+        <!-- N.B.  Better here to ask for "exercise-components"? -->
+        <xsl:apply-templates select="introduction|webwork-reps|conclusion"/>
+    </question>
+</xsl:template>
+
+<!-- Coding Exercise to the Runestone manifest -->
+<!--   "exercise" with "program" *outside* of "statement" -->
+<!--   &PROJECT-LIKE; only at top-level                   -->
+<xsl:template match="exercise[program]|project[program]|activity[program]|exploration[program]|investigation[program]" mode="runestone-manifest">
+    <xsl:variable name="active-language">
+        <xsl:apply-templates select="program" mode="active-language"/>
+    </xsl:variable>
+    <!-- if elected as interactive AND @language is supported -->
+    <xsl:if test="not($active-language = '')">
+        <question>
+            <!-- label is from the "exercise" -->
+            <xsl:apply-templates select="." mode="runestone-manifest-label"/>
+            <xsl:apply-templates select="." mode="exercise-components"/>
+        </question>
+    </xsl:if>
 </xsl:template>
 
 <!-- Appendix is explicitly no-op, so we do not recurse into "section"  -->
@@ -9038,10 +9500,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- in the host anonymous course.   It is incorporated only if   -->
 <!-- "webwork-reps" element is present                            -->
 <!-- TODO: should also depend on whether all are presented as static -->
+<!-- TODO: it is unclear if MathView should be loaded here at all; -->
 <xsl:template name="webwork">
     <xsl:if test="$b-has-webwork-reps">
-        <link href="{$webwork-server}/webwork2_files/js/apps/MathView/mathview.css" rel="stylesheet" />
-        <script src="{$webwork-server}/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
+        <link href="{$webwork-domain}/webwork2_files/js/apps/MathView/mathview.css" rel="stylesheet" />
+        <xsl:choose>
+            <xsl:when test="$webwork-reps-version = 1">
+                <script src="{$webwork-domain}/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
+            </xsl:when>
+            <xsl:when test="$webwork-reps-version = 2">
+                <script src="{$html.js.server}/js/{$html.js.version}/pretext-webwork.js"></script>
+            </xsl:when>
+        </xsl:choose>
     </xsl:if>
 </xsl:template>
 
@@ -9053,111 +9523,123 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The guts of a WeBWorK problem realized in HTML -->
 <!-- This is heart of an external knowl version, or -->
 <!-- what is born visible under control of a switch -->
-<xsl:template match="webwork-reps[ancestor::exercises]">
+<xsl:template match="webwork-reps">
     <xsl:param name="b-original" select="true()"/>
+    <xsl:variable name="b-has-hint" select="(ancestor::exercises and $b-has-divisional-hint) or
+                                            (ancestor::reading-questions and $b-has-reading-hint) or
+                                            (ancestor::worksheet and $b-has-worksheet-hint) or
+                                            (not(ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-hint)" />
+    <xsl:variable name="b-has-answer" select="(ancestor::exercises and $b-has-divisional-answer) or
+                                              (ancestor::reading-questions and $b-has-reading-answer) or
+                                              (ancestor::worksheet and $b-has-worksheet-answer) or
+                                              (not(ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-answer)" />
+    <xsl:variable name="b-has-solution" select="(ancestor::exercises and $b-has-divisional-solution) or
+                                                (ancestor::reading-questions and $b-has-reading-solution) or
+                                                (ancestor::worksheet and $b-has-worksheet-solution) or
+                                                (not(ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-solution)"/>
+    <xsl:variable name="b-static" select="(ancestor::exercises and ($webwork.divisional.static = 'yes')) or
+                                          (ancestor::reading-questions and ($webwork.reading.static = 'yes')) or
+                                          (ancestor::worksheet and ($webwork.worksheet.static = 'yes')) or
+                                          (not(ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and ($webwork.inline.static = 'yes'))"/>
     <xsl:choose>
-        <xsl:when test="$webwork.divisional.static = 'yes'">
-            <!-- static, usual HTML treatment -->
+        <!-- We print the static version when that is explicitly directed -->
+        <!-- but also when the static has no "answer" element. This means -->
+        <!-- the problem had no answer input fields, so why make it       -->
+        <!-- interactive? This includes problems with only essay fields.  -->
+        <!-- NB: for Runestone, we may want to allow essay answer fields  -->
+        <!-- to make live problems, and Runestone records submissions.    -->
+        <xsl:when test="($b-static = 'yes') or not(static/answer or static/stage/answer)">
             <xsl:apply-templates select="static" mode="exercise-components">
-                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="b-original"      select="$b-original"/>
                 <xsl:with-param name="b-has-statement" select="true()"/>
-                <xsl:with-param name="b-has-hint"      select="$b-has-divisional-hint"/>
-                <xsl:with-param name="b-has-answer"    select="$b-has-divisional-answer"/>
-                <xsl:with-param name="b-has-solution"  select="$b-has-divisional-solution"/>
+                <xsl:with-param name="b-has-hint"      select="$b-has-hint"/>
+                <xsl:with-param name="b-has-answer"    select="$b-has-answer"/>
+                <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
             </xsl:apply-templates>
         </xsl:when>
-        <xsl:otherwise>
-            <!-- dynamic, iframe -->
-            <xsl:apply-templates select="." mode="webwork-iframe">
-                <xsl:with-param name="b-has-hint"     select="$b-has-divisional-hint"/>
-                <xsl:with-param name="b-has-solution" select="$b-has-divisional-solution"/>
-            </xsl:apply-templates>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<xsl:template match="webwork-reps[ancestor::reading-questions]">
-    <xsl:param name="b-original" select="true()"/>
-    <xsl:choose>
-        <xsl:when test="$webwork.reading.static = 'yes'">
-            <!-- static, usual HTML treatment -->
-            <xsl:apply-templates select="static" mode="exercise-components">
-                <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="b-has-statement" select="true()"/>
-                <xsl:with-param name="b-has-hint"      select="$b-has-reading-hint"/>
-                <xsl:with-param name="b-has-answer"    select="$b-has-reading-answer"/>
-                <xsl:with-param name="b-has-solution"  select="$b-has-reading-solution"/>
-            </xsl:apply-templates>
-        </xsl:when>
-        <xsl:otherwise>
-            <!-- dynamic, iframe -->
-            <xsl:apply-templates select="." mode="webwork-iframe">
-                <xsl:with-param name="b-has-hint"     select="$b-has-reading-hint"/>
-                <xsl:with-param name="b-has-solution" select="$b-has-reading-solution"/>
-            </xsl:apply-templates>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<xsl:template match="webwork-reps[ancestor::worksheet]">
-    <xsl:param name="b-original" select="true()"/>
-    <xsl:choose>
-        <xsl:when test="$webwork.worksheet.static = 'yes'">
-            <!-- static, usual HTML treatment -->
-            <xsl:apply-templates select="static" mode="exercise-components">
-                <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="b-has-statement" select="true()"/>
-                <xsl:with-param name="b-has-hint"      select="$b-has-worksheet-hint"/>
-                <xsl:with-param name="b-has-answer"    select="$b-has-worksheet-answer"/>
-                <xsl:with-param name="b-has-solution"  select="$b-has-worksheet-solution"/>
-            </xsl:apply-templates>
-        </xsl:when>
-        <xsl:otherwise>
-            <!-- dynamic, iframe -->
-            <xsl:apply-templates select="." mode="webwork-iframe">
-                <xsl:with-param name="b-has-hint"     select="$b-has-worksheet-hint"/>
-                <xsl:with-param name="b-has-solution" select="$b-has-worksheet-solution"/>
-            </xsl:apply-templates>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- NB: Context is not "exercise", so do not -->
-<!-- use "boolean(&INLINE-EXERCISE-FILTER;)"  -->
-<!-- Maybe when webwork-reps is removed?      -->
-<xsl:template match="webwork-reps[not(ancestor::exercises or ancestor::reading-questions or ancestor::worksheet)]">
-    <xsl:param name="b-original" select="true()"/>
-    <xsl:choose>
-        <xsl:when test="$webwork.inline.static = 'yes'">
-            <!-- static, usual HTML treatment -->
-            <xsl:apply-templates select="static" mode="exercise-components">
-                <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="b-has-statement" select="true()"/>
-                <xsl:with-param name="b-has-hint"      select="$b-has-inline-hint"/>
-                <xsl:with-param name="b-has-answer"    select="$b-has-inline-answer"/>
-                <xsl:with-param name="b-has-solution"  select="$b-has-inline-solution"/>
-            </xsl:apply-templates>
-        </xsl:when>
-        <xsl:otherwise>
-            <!-- dynamic, iframe -->
+        <xsl:when test="$webwork-reps-version = 1">
             <xsl:if test="$b-webwork-inline-randomize">
                 <xsl:apply-templates select="." mode="webwork-randomize-buttons"/>
             </xsl:if>
             <xsl:apply-templates select="." mode="webwork-iframe">
-                <xsl:with-param name="b-has-hint"     select="$b-has-inline-hint"/>
-                <xsl:with-param name="b-has-solution" select="$b-has-inline-solution"/>
+                <xsl:with-param name="b-has-hint"     select="$b-has-hint"/>
+                <xsl:with-param name="b-has-solution" select="$b-has-solution"/>
             </xsl:apply-templates>
-        </xsl:otherwise>
+        </xsl:when>
+        <xsl:when test="$webwork-reps-version = 2">
+            <xsl:apply-templates select="." mode="webwork-interactive-div">
+                <xsl:with-param name="b-original"     select="$b-original"/>
+                <xsl:with-param name="b-has-hint"     select="$b-has-hint"/>
+                <xsl:with-param name="b-has-answer"   select="$b-has-answer"/>
+                <xsl:with-param name="b-has-solution" select="$b-has-solution"/>
+            </xsl:apply-templates>
+        </xsl:when>
     </xsl:choose>
 </xsl:template>
 
+<!-- Make a div with a button, where pretext-webwork.js can   -->
+<!-- replace the div content with a live, interactive problem -->
+<xsl:template match="webwork-reps" mode="webwork-interactive-div">
+    <xsl:param name="b-original"/>
+    <xsl:param name="b-has-hint"/>
+    <xsl:param name="b-has-answer"/>
+    <xsl:param name="b-has-solution"/>
+    <xsl:element name="div">
+        <xsl:attribute name="id">
+            <xsl:value-of select="@ww-id"/>
+        </xsl:attribute>
+        <xsl:attribute name="class">
+            <xsl:text>exercise-wrapper</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="data-domain">
+            <xsl:value-of select="$webwork-domain"/>
+        </xsl:attribute>
+        <xsl:attribute name="data-seed" >
+            <xsl:value-of select="static/@seed"/>
+        </xsl:attribute>
+        <xsl:choose>
+            <xsl:when test="server-data/@problemSource">
+                <xsl:attribute name="data-problemSource">
+                    <xsl:value-of select="server-data/@problemSource"/>
+                </xsl:attribute>
+            </xsl:when>
+            <xsl:when test="server-data/@sourceFilePath">
+                <xsl:attribute name="data-sourceFilePath">
+                    <xsl:value-of select="server-data/@sourceFilePath"/>
+                </xsl:attribute>
+            </xsl:when>
+        </xsl:choose>
+        <xsl:attribute name="data-courseID">
+            <xsl:value-of select="server-data/@course-id"/>
+        </xsl:attribute>
+        <xsl:attribute name="data-userID">
+            <xsl:value-of select="server-data/@user-id"/>
+        </xsl:attribute>
+        <xsl:attribute name="data-coursePassword">
+            <xsl:value-of select="server-data/@course-password"/>
+        </xsl:attribute>
+        <xsl:attribute name="aria-live">
+            <xsl:value-of select="'polite'"/>
+        </xsl:attribute>
+        <xsl:apply-templates select="static" mode="exercise-components">
+            <xsl:with-param name="b-original"      select="$b-original"/>
+            <xsl:with-param name="b-has-statement" select="true()"/>
+            <xsl:with-param name="b-has-hint"      select="$b-has-hint"/>
+            <xsl:with-param name="b-has-answer"    select="$b-has-answer"/>
+            <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
+        </xsl:apply-templates>
+        <div>
+            <button class="webwork-button" onclick="initWW('{@ww-id}')">Make Interactive</button>
+        </div>
+    </xsl:element>
+</xsl:template>
 
 <!-- Select the correct URL from four pre-generated choices -->
 <!-- and package up as an iframe for interactive version    -->
+<!-- Used with 2.15- WW servers (webwork-reps version 1)    -->
 <xsl:template match="webwork-reps" mode="webwork-iframe">
     <xsl:param name="b-has-hint"/>
     <xsl:param name="b-has-solution"/>
-
     <xsl:variable name="the-url">
         <xsl:choose>
             <xsl:when test="$b-has-hint and $b-has-solution">
@@ -9179,12 +9661,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <iframe name="{@ww-id}" width="{$design-width}" src="{$the-url}" data-seed="{static/@seed}"/>
     <script>
         <xsl:text>iFrameResize({log:true,inPageLinks:true,resizeFrom:'child',checkOrigin:["</xsl:text>
-        <xsl:value-of select="$webwork-server" />
+        <xsl:value-of select="$webwork-domain" />
         <xsl:text>"]})</xsl:text>
     </script>
 </xsl:template>
 
-<!-- Buttons for randomizing the seed of a live WeBWorK problem      -->
+<!-- Buttons for randomizing the seed of a live WeBWorK problem            -->
+<!-- Undocumented. Only designed to work with 2.15 and earlier WW servers. -->
 <xsl:template match="webwork-reps" mode="webwork-randomize-buttons">
     <div class="WW-randomize-buttons">
         <button class="WW-randomize" type="button" onclick="WWiframeReseed('{@ww-id}')">Randomize</button>
@@ -9262,7 +9745,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- webwork's iframeResizer needs to come before sage -->
             <xsl:call-template name="webwork" />
             <xsl:apply-templates select="." mode="sagecell" />
-            <xsl:call-template name="google-code-prettifier" />
+            <xsl:call-template name="syntax-highlight-header"/>
             <xsl:call-template name="google-search-box-js" />
             <xsl:call-template name="mathbook-js" />
             <xsl:call-template name="knowl" />
@@ -9354,7 +9837,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="google-universal"/>
             <xsl:call-template name="google-gst"/>
             <xsl:call-template name="pytutor-footer" />
+            <xsl:call-template name="syntax-highlight-footer" />
             <xsl:call-template name="aim-login-footer" />
+            <xsl:call-template name="extra-js-footer"/>
         </body>
     </html>
     </exsl:document>
@@ -9403,6 +9888,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="google-classic"/>
             <xsl:call-template name="google-universal"/>
             <xsl:call-template name="google-gst"/>
+            <xsl:call-template name="extra-js-footer"/>
         </body>
     </html>
     </exsl:document>
@@ -10589,11 +11075,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Program Listings from Google -->
-<!--   ?skin=sunburst  on end of src URL gives black terminal look -->
-<xsl:template name="google-code-prettifier">
+<!-- Program Listings highlighted by Prism -->
+<xsl:template name="syntax-highlight-header">
     <xsl:if test="$b-has-program">
-        <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+        <link href="https://unpkg.com/prismjs@v1.22.0/themes/prism.css" rel="stylesheet"/>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template name="syntax-highlight-footer">
+    <xsl:if test="$b-has-program">
+        <script src="https://unpkg.com/prismjs@v1.22.0/components/prism-core.min.js"></script>
+        <script src="https://unpkg.com/prismjs@v1.22.0/plugins/autoloader/prism-autoloader.min.js"></script>
     </xsl:if>
 </xsl:template>
 
@@ -10601,19 +11093,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Empty if not enabled via presence of cx number -->
 <xsl:template name="google-search-box-js">
     <xsl:if test="$b-google-cse">
-        <xsl:element name="script">
-            <xsl:text>(function() {&#xa;</xsl:text>
-            <xsl:text>  var cx = '</xsl:text>
-            <xsl:value-of select="$google-search-cx" />
-            <xsl:text>';&#xa;</xsl:text>
-            <xsl:text>  var gcse = document.createElement('script');&#xa;</xsl:text>
-            <xsl:text>  gcse.type = 'text/javascript';&#xa;</xsl:text>
-            <xsl:text>  gcse.async = true;&#xa;</xsl:text>
-            <xsl:text>  gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;&#xa;</xsl:text>
-            <xsl:text>  var s = document.getElementsByTagName('script')[0];&#xa;</xsl:text>
-            <xsl:text>  s.parentNode.insertBefore(gcse, s);&#xa;</xsl:text>
-            <xsl:text>})();&#xa;</xsl:text>
-        </xsl:element>
+        <script async="">
+            <xsl:attribute name="src">
+                <xsl:text>https://cse.google.com/cse.js?cx=</xsl:text>
+                <xsl:value-of select="$google-search-cx"/>
+            </xsl:attribute>
+        </script>
     </xsl:if>
 </xsl:template>
 
@@ -10631,7 +11116,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Knowl header -->
 <xsl:template name="knowl">
-<script src="{$html.js.server}/js/lib/knowl.js"></script>
+    <script src="{$html.js.server}/js/lib/knowl.js"></script>
+    <!-- Variables are defined to defaults in knowl.js and  -->
+    <!-- we can override them with new values here          -->
+    <xsl:comment>knowl.js code controls Sage Cells within knowls</xsl:comment>
+    <script>
+        <!-- button text, internationalized -->
+        <xsl:text>sagecellEvalName='</xsl:text>
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'evaluate'" />
+        </xsl:call-template>
+        <xsl:text> (</xsl:text>
+        <!-- $language-text hard-coded since language  -->
+        <!-- support within knowls is not yet settled -->
+        <xsl:text>Sage</xsl:text>
+        <xsl:text>)</xsl:text>
+        <xsl:text>';&#xa;</xsl:text>
+    </script>
 </xsl:template>
 
 <!-- Header information for favicon -->
@@ -10731,6 +11232,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- A place to put *one* Javascript file at the *end* of an  -->
+<!-- HTML page/file.  Not present in *every* page implemented -->
+<!-- in this file, such as knowls.                            -->
+<xsl:template name="extra-js-footer">
+    <xsl:if test="not($html.js.extra = '')">
+        <script src="{$html.js.extra}"></script>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- ############## -->
 <!-- LaTeX Preamble -->
@@ -10751,7 +11261,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- sneaking in packages, which load first, in       -->
 <!-- case authors want to build on these macros       -->
 <xsl:template name="latex-macros">
-    <div class="hidden-content" style="display:none">
+    <div id="latex-macros" class="hidden-content" style="display:none">
         <xsl:if test="$b-braille">
             <xsl:attribute name="data-braille">
                 <xsl:text>latex-macros</xsl:text>
@@ -10788,6 +11298,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="google-classic">
     <xsl:if test="$b-google-classic">
         <xsl:comment>Start: Google Classic code</xsl:comment>
+        <xsl:comment>*** DO NOT COPY ANOTHER PROJECT'S MAGIC NUMBERS/ID ***</xsl:comment>
+        <xsl:comment>***           GET YOUR OWN FROM GOOGLE             ***</xsl:comment>
         <xsl:text>&#xa;</xsl:text>
         <script>
             <xsl:text>&#xa;</xsl:text>
@@ -10811,6 +11323,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="google-universal">
     <xsl:if test="$b-google-universal">
         <xsl:comment>Start: Google Universal code</xsl:comment>
+        <xsl:comment>*** DO NOT COPY ANOTHER PROJECT'S MAGIC NUMBERS/ID ***</xsl:comment>
+        <xsl:comment>***           GET YOUR OWN FROM GOOGLE             ***</xsl:comment>
         <xsl:text>&#xa;</xsl:text>
         <script>
             <xsl:text>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){&#xa;</xsl:text>
@@ -10836,6 +11350,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$google-gst-tracking"/>
         </xsl:variable>
         <xsl:comment>Start: Google Global Site Tag code</xsl:comment>
+        <xsl:comment>*** DO NOT COPY ANOTHER PROJECT'S MAGIC NUMBERS/ID ***</xsl:comment>
+        <xsl:comment>***           GET YOUR OWN FROM GOOGLE             ***</xsl:comment>
         <xsl:text>&#xa;</xsl:text>
         <script async="" src="{$gst-url}"></script>
         <script>
@@ -10863,6 +11379,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>/1/</xsl:text>
         </xsl:variable>
         <xsl:comment>Start: StatCounter code</xsl:comment>
+        <xsl:comment>*** DO NOT COPY ANOTHER PROJECT'S MAGIC NUMBERS/ID ***</xsl:comment>
+        <xsl:comment>***        GET YOUR OWN FROM STATCOUNTER           ***</xsl:comment>
         <script>
         <xsl:text>&#xa;</xsl:text>
         <xsl:text>var sc_project=</xsl:text>
@@ -10928,87 +11446,5 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Uninteresting Code, aka the Bad Bank                    -->
 <!-- Deprecated, unmaintained, etc, parked here out of sight -->
-
-<!-- "solution-list" was supported by elaborate -->
-<!-- modal templates, which are now renamed     -->
-<!-- 2018-07-04: some day remove all this code  -->
-
-<xsl:template match="solution-list">
-    <xsl:apply-templates select="$document-root//exercises" mode="obsolete-backmatter" />
-</xsl:template>
-
-<!-- This is a hack that should go away when backmatter exercises are rethought -->
-<xsl:template match="title" mode="obsolete-backmatter" />
-
-<xsl:template match="exercises" mode="obsolete-backmatter">
-    <!-- see if an "exercises" section has any solutions -->
-    <xsl:variable name="nonempty" select="(.//hint and $exercise.backmatter.hint='yes') or
-                                          (.//answer and $exercise.backmatter.answer='yes') or
-                                          (.//solution and $exercise.backmatter.solution='yes')" />
-
-    <xsl:if test="$nonempty='true'">
-        <!-- these sections do not have HTML id, so no way to point to them -->
-        <!-- maybe there is a way to generate a reasonable internal-id      -->
-        <section class="exercises">
-            <h1 class="heading">
-                <span class="type">Exercises</span>
-                <xsl:text> </xsl:text>
-                <span class="codenumber">
-                    <xsl:apply-templates select="." mode="number" />
-                </span>
-                <xsl:text> </xsl:text>
-                <span class="title">
-                    <xsl:apply-templates select="." mode="title-full" />
-                </span>
-            </h1>
-            <!-- ignore introduction, conclusion, exercise groups -->
-            <xsl:apply-templates select=".//exercise" mode="obsolete-backmatter" />
-        </section>
-    </xsl:if>
-</xsl:template>
-
-<!-- Print exercises with some solution component -->
-<!-- Respect switches about visibility            -->
-<xsl:template match="exercise" mode="obsolete-backmatter">
-    <xsl:if test="hint or answer or solution">
-        <!-- Lead with the problem number and some space -->
-        <xsl:variable name="xref">
-            <xsl:apply-templates select="." mode="visible-id" />
-        </xsl:variable>
-        <article class="exercise-like" id="{$xref}">
-            <h6 class="heading hidden-type">
-            <span class="type">
-                <xsl:apply-templates select="." mode="type-name" />
-            </span>
-            <xsl:text> </xsl:text>
-            <span class="codenumber">
-                <xsl:apply-templates select="." mode="serial-number" />
-            </span>
-            <xsl:text> </xsl:text>
-            <xsl:if test="title">
-                <span class="title">
-                    <xsl:apply-templates select="." mode="title-full" />
-                </span>
-            </xsl:if>
-            </h6>
-            <xsl:if test="$exercise.backmatter.statement='yes'">
-                <xsl:apply-templates select="statement" />
-            </xsl:if>
-            <!-- default templates will produce hidden knowls -->
-            <div class="solutions">
-                <xsl:if test="hint and $exercise.backmatter.hint='yes'">
-                    <xsl:apply-templates select="hint" />
-                </xsl:if>
-                <xsl:if test="answer and $exercise.backmatter.answer='yes'">
-                    <xsl:apply-templates select="answer" />
-                </xsl:if>
-                <xsl:if test="solution and $exercise.backmatter.solution='yes'">
-                    <xsl:apply-templates select="solution" />
-                </xsl:if>
-            </div>
-        </article>
-    </xsl:if>
-</xsl:template>
-
 
 </xsl:stylesheet>

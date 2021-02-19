@@ -765,25 +765,23 @@
             <paragraphs>
                 <title><tage>ie</tage>, <tage>eg</tage>, <tage>ca</tage>, <tage>vs</tage>, <tage>etc</tage>, <ie />, <eg />, <ca />, <vs />, <etc /></title>
                 <p>A small collection of frequently-used Latin abbreviations, with attempts to handle the tricky periods wisely in <latex /> output.  Strictly speaking <bc /> is not Latin, but we include it for completeness.  Tags are always lowercase, no punctuation, usually two letters.</p>
-                <sidebyside>
-                    <tabular>
-                        <row><cell>Tag</cell><cell>Realization</cell><cell>Meaning</cell></row>
-                        <!--  -->
-                        <row><cell><c>ad</c></cell>    <cell><ad/>    </cell><cell><foreign>anno Domini</foreign>, in the year of the Lord</cell>      </row>
-                        <row><cell><c>am</c></cell>    <cell><am/>    </cell><cell><foreign>ante meridiem</foreign>, before midday</cell>              </row>
-                        <row><cell><c>bc</c></cell>    <cell><bc/>    </cell><cell>English, before Christ</cell>                                       </row>
-                        <row><cell><c>ca</c></cell>    <cell><ca/>    </cell><cell><foreign>circa</foreign>, about</cell>                              </row>
-                        <row><cell><c>eg</c></cell>    <cell><eg/>    </cell><cell><foreign>exempli gratia</foreign>, for example</cell>               </row>
-                        <row><cell><c>etal</c></cell>  <cell><etal/>  </cell><cell><foreign>et alia</foreign>, and others</cell>                       </row>
-                        <row><cell><c>etc</c></cell>   <cell><etc/>   </cell><cell><foreign>et caetera</foreign>, and the rest</cell>                  </row>
-                        <row><cell><c>ie</c></cell>    <cell><ie/>    </cell><cell><foreign>id est</foreign>, in other words</cell>                    </row>
-                        <row><cell><c>nb</c></cell>    <cell><nb/>    </cell><cell><foreign>nota bene</foreign>, note well</cell>                      </row>
-                        <row><cell><c>pm</c></cell>    <cell><pm/>    </cell><cell><foreign>post meridiem</foreign>, after midday</cell>               </row>
-                        <row><cell><c>ps</c></cell>    <cell><ps/>    </cell><cell><foreign>post scriptum</foreign>, after what has been written</cell></row>
-                        <row><cell><c>vs</c></cell>    <cell><vs/>    </cell><cell><foreign>versus</foreign>, against</cell>                           </row>
-                        <row><cell><c>viz</c></cell>   <cell><viz/>   </cell><cell><foreign>videlicet</foreign>, namely</cell>                         </row>
-                    </tabular>
-                </sidebyside>
+                <tabular>
+                    <row><cell>Tag</cell><cell>Realization</cell><cell>Meaning</cell></row>
+                    <!--  -->
+                    <row><cell><c>ad</c></cell>    <cell><ad/>    </cell><cell><foreign>anno Domini</foreign>, in the year of the Lord</cell>      </row>
+                    <row><cell><c>am</c></cell>    <cell><am/>    </cell><cell><foreign>ante meridiem</foreign>, before midday</cell>              </row>
+                    <row><cell><c>bc</c></cell>    <cell><bc/>    </cell><cell>English, before Christ</cell>                                       </row>
+                    <row><cell><c>ca</c></cell>    <cell><ca/>    </cell><cell><foreign>circa</foreign>, about</cell>                              </row>
+                    <row><cell><c>eg</c></cell>    <cell><eg/>    </cell><cell><foreign>exempli gratia</foreign>, for example</cell>               </row>
+                    <row><cell><c>etal</c></cell>  <cell><etal/>  </cell><cell><foreign>et alia</foreign>, and others</cell>                       </row>
+                    <row><cell><c>etc</c></cell>   <cell><etc/>   </cell><cell><foreign>et caetera</foreign>, and the rest</cell>                  </row>
+                    <row><cell><c>ie</c></cell>    <cell><ie/>    </cell><cell><foreign>id est</foreign>, in other words</cell>                    </row>
+                    <row><cell><c>nb</c></cell>    <cell><nb/>    </cell><cell><foreign>nota bene</foreign>, note well</cell>                      </row>
+                    <row><cell><c>pm</c></cell>    <cell><pm/>    </cell><cell><foreign>post meridiem</foreign>, after midday</cell>               </row>
+                    <row><cell><c>ps</c></cell>    <cell><ps/>    </cell><cell><foreign>post scriptum</foreign>, after what has been written</cell></row>
+                    <row><cell><c>vs</c></cell>    <cell><vs/>    </cell><cell><foreign>versus</foreign>, against</cell>                           </row>
+                    <row><cell><c>viz</c></cell>   <cell><viz/>   </cell><cell><foreign>videlicet</foreign>, namely</cell>                         </row>
+                </tabular>
             </paragraphs>
 
             <paragraphs>
@@ -1015,7 +1013,7 @@
             <title>Variations</title>
 
             <p>There are some variant uses for the <tag>xref</tag> tag.<ul>
-                <li>Replace <attr>ref</attr> by <attr>provisional</attr> and give it a value with some simple text like <c>subsection on eagle habitat</c> and you will get reminders that once you write this future subsection you need to link it in right here.  This is just a convenience for authors during the early stages of a writing project.</li>
+                <li>Replace <attr>ref</attr> by <attr>provisional</attr> and give it a value with some simple text like <c>subsection on eagle habitat</c> and you will get reminders that once you write this future subsection you need to link it in right here.  This is just a convenience for authors during the early stages of a writing project (see <xref ref="processing-author-tools" /> for details).</li>
 
                 <li>Replace <attr>ref</attr> by the pair <attr>first</attr> and <attr>last</attr>.  Provide attribute values just as you would for <attr>ref</attr>.  The code will check that the targets have the exact same tag, and that the order is correct.  You will get a link that looks like a range, separated by an en dash.  As a link, only <attr>first</attr> will be used for the linking mechanism (<ie />, one link is generated, not two).  Experiment with <attr>text</attr> and content overrides.</li>
 
@@ -1187,6 +1185,8 @@
 
         <p>A division <em>must</em> contain a <tag>title</tag>, and may contain one or more index entries (see <xref ref="topic-index" />), which should appear before anything else.  Any division may be unstructured, with just a sequence of <term>top-level content</term><idx>top-level content</idx> such as paragraphs, figures, lists, theorems, <etc />  Or a division may be structured, and in this case it must follow a prescribed pattern.  There may be a single, optional <tag>introduction</tag>, filled with top-level content, followed by a sequence of at least one of the appropriate divisions, ending with a single, optional <tag>conclusion</tag>, filled with top-level content.  It is an error to begin with a run of top-level content inside a division and then begin to use divisions.  (The solution is to make the initial content an <tag>introduction</tag> and/or one or several divisions.)</p>
 
+        <p>A <tag>book</tag> may be structured into parts.  After the <tag>frontmatter</tag> and before the <tag>backmatter</tag> there may be a sequence of <tag>part</tag>.  These elements may carry a <tag>title</tag>, and not much else, besides a substantial sequence of <tag>chapter</tag>.  The main effect is to get an extra level of division in the Table of Contents.  For print and <init>PDF</init> there is an entire page devoted to the title and number of the part.  The default numbering is <term>decorative</term>, which means that the chapters are numbered consecutively from the start of the book and do not reset to one at the start of each part.  It is as if the parts were not even there.  The alternative is that parts are <term>structural</term>.  Now each part begins with Chapter 1.  There are other more subtle differences, such as cross-references use a part number if, and only if,  the trip from the cross-reference to its target crosses a boundary of two parts.  The two approaches to part structure may be set via the publisher file, see <xref ref="publisher-file-numbering"/>.</p>
+
         <p>There are exceptions to the above.  For one, <tag>paragraphs</tag> is an anomalous division, as a sort of lightweight sectioning command.  It may appear in any division, at any location within a division, it may not be divided further (it is a leaf of the document tree), it never gets a number, and its title is formatted in a subsidiary way.  I especially like to use this in a two- or three-page <tag>article</tag> that has no other divisions at all.  Typical presentation has the title in bold, without much change in font size (if at all), inline with the first paragraph, and perhaps a bit of vertical space as it begins and ends.  Despite the name, it may contain more than just paragraphs, so may contain any top-level-content that would go in any other division.</p>
 
         <p>Two other anomalous divisions are <tag>exercises</tag> and <tag>references</tag>.  These can be placed as a final component of any division from <tag>chapter</tag> on down.  So for example, an <tag>exercises</tag> could be a peer of several <tag>section</tag>s, contained within a structured <tag>chapter</tag>, and in this case would behave similar to the other <tag>section</tag>s.  Or an unstructured <tag>chapter</tag> may have a sequence of paragraphs, figures, examples, and the like, and conclude with a single <tag>exercises</tag>.  Detail on allowed content and behavior are in <xref ref="topic-exercises" /> and <xref ref="topic-references" />, respectively.</p>
@@ -1197,7 +1197,7 @@
         <idx>mathematics</idx>
 
         <introduction>
-            <p>As mentioned in the overview, <xref ref="overview-math" />, we use <latex /> syntax for mathematics.  In order to allow for quality display in <init>HTML</init>, and other electronic formats, this limits us to the subset of <latex /> supported by the very capable <url href="https://www.mathjax.org/">MathJax</url> Javascript library.  Generally this looks like the <c>amsmath</c><idx><c>amsmath</c></idx> package maintained by the American Mathematical Society at their <url href="http://www.ams.org/publications/authors/tex/amslatex">AMS-LaTeX page</url>.  For a complete and precise list of what MathJax supports, see MathJax's <url href="http://docs.mathjax.org/en/latest/input/tex/macros/">Supported <tex/>/<latex/> commands</url><fn><c>http://docs.mathjax.org/en/latest/input/tex/macros/</c></fn> (2019-11-10: this link may be specific to MathJax 3.0, which we have not yet adopted.)</p>
+            <p>As mentioned in the overview, <xref ref="overview-math" />, we use <latex /> syntax for mathematics.  In order to allow for quality display in <init>HTML</init>, and other electronic formats, this limits us to the subset of <latex /> supported by the very capable <url href="https://www.mathjax.org/">MathJax</url> Javascript library.  Generally this looks like the <c>amsmath</c><idx><c>amsmath</c></idx> package maintained by the American Mathematical Society at their <url href="http://www.ams.org/publications/authors/tex/amslatex">AMS-LaTeX page</url>.  For a complete and precise list of what MathJax supports, see MathJax's <url href="http://docs.mathjax.org/en/latest/input/tex/macros/">Supported <tex/>/<latex/> commands</url><fn><c>http://docs.mathjax.org/en/latest/input/tex/macros/</c></fn> (2019-11-10: this link may be specific to MathJax 3.0, which we have not yet adopted.)  Once you have digested this more general section, be sure to also consult <xref ref="topic-mathematics-practices"/> for some very specific suggestions.</p>
         </introduction>
 
         <subsection>
@@ -1206,6 +1206,16 @@
             <p>Use the <tag>m</tag> to place variables or very short expressions within a sentence of a paragraph, the content of a <tag>title</tag>, a <tag>cell</tag> of a table, a footnote, or other similar locations of sentence-like text.  You can't cross-reference this text, nor make a knowl with it.  Though you can typically cross-reference a containing element.</p>
 
             <p>Do not use <latex />-isms like <c>\displaystyle</c> to try to end-run the inline nature.  It will just lead to poor results.</p>
+
+            <note>
+                <title>Keep Inline Mathematics Short</title>
+
+                <p>Longer mathematical expressions in an <tag>m</tag> element can lead to awkward line breaks, both in <init>HTML</init> output, and especially in <init>PDF</init> generated from <latex/>.  And complicated fractions or integrals can introduce abnormal line-spacing that is distracting to a reader.  As a rough rule-of-thumb, keep an inline expression shorter than a moderately-long regular word and avoid tall constructions.  This should allow <latex/>'s line-breaking algorithms the best chance of success.</p>
+
+                <p>So a simple, short equality such as <m>x=2</m> should not cause a problem, but if you want to claim that the probability distribution of the normal distribution has the right scaling factors, <m>\int_{-\infty}^{\infty}\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\frac{\left(x-\mu\right)^2}{\sigma}} dx = 1</m>, there is a good chance it will do less harm to your paragraph of you display it
+                <me>\int_{-\infty}^{\infty}\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\frac{\left(x-\mu\right)^2}{\sigma}} dx = 1</me>
+                using the <tag>me</tag> element described next.</p>
+            </note>
         </subsection>
 
         <subsection>
@@ -1225,7 +1235,7 @@
         </subsection>
 
         <subsection xml:id="mathematics-xml-characters">
-            <title>exceptional characters</title>
+            <title>Exceptional Characters</title>
 
             <p>The <latex /> macros, <c>\amp</c>, <c>\lt</c>, and <c>\gt</c> are always available within these mathematics elements, so that you can avoid the exceptional XML characters <c>&amp;</c>, <c>&lt;</c> and <c>&gt;</c>.  See <xref ref="overview-exceptional-characters" /> for this same information, but in the broader context of your entire document.</p>
         </subsection>
@@ -1245,6 +1255,18 @@
                 <cline>           -7 \amp \text{otherwise} \end{cases}&lt;/me&gt;</cline>
             </cd>produces
             <me>f(x) = \begin{cases}x^2\amp\text{if }x\gt 0\\-7\amp\text{otherwise}\end{cases}</me>.  This example amply illustrates the use of macros for XML exceptional characters (twice), appropriate use of the <c>\text{}</c> macro (twice), spaces in the <c>\text{}</c> macro (once), sentence-ending punctuation (see the source, the period is <em>not</em> inside the <tag>me</tag> element) and yes, we did think twice about the <c>\\</c> (an exception to the rule).</p>
+        </subsection>
+
+        <subsection xml:id="color-in-math">
+            <title>Color in Mathematics</title>
+
+            <p>There is a temptation to use color to indicate or highlight portions of mathematics, especially for electronic outputs where color is easy and cheap.  But before you leap, how will this work in black-and-white printed output?  How will it work for a blind reader using a screen-reader or a braille version?</p>
+
+            <p>If you must, be aware that for older versions of MathJax that we support for HTML output (v2.7, as of 2020-08-19), the relevant macros have slightly different behavior than for standard <latex/>.  But you can make both work if you are careful.  This should not be an issue with MathJax 3.</p>
+
+            <p>With careful use of <tex/> grouping (<c>{...}</c>) you can make the two behaviors of <c>\color</c> effective.  For example, go:<cd>
+                <cline>{\color{blue}{x^2}}</cline>
+            </cd></p>
         </subsection>
 
         <subsection>
@@ -1296,7 +1318,7 @@
             <p>For print output, do nothing additional and <latex /> will do its best to break your display between lines.  You can turn this behavior off by setting the <attr>break</attr> attribute on the <tag>md</tag> or <tag>mdn</tag> to the value <c>no</c>.  Once you do this, you can then selectively allow a page break after a given <tag>mrow</tag> by setting the <attr>break</attr> attribute on the <tag>mrow</tag> to the value <c>yes</c>.</p>
         </subsection>
 
-        <subsection>
+        <subsection xml:id="mathematics-macros">
             <title>Your Macros</title>
 
             <p>These go in the <tag>docinfo</tag> section, wrapped in a <tag>macros</tag><idx>macro</idx> element.  Keep them simple<mdash />one or two arguments, and one-line definitions.  This is not the place to be fancy, and not the place to try to end-run the structural aspects of <pretext />.  The idea is to define something like <c>\adjoint{A}</c> for the matrix <c>A</c> to be a superscript asterisk, and later you can change your mind and use a superscript dagger instead.  Keep in the spirit of <pretext /> and use readable, semantic macros.  For example, do not use <c>\a{A}</c> for the adjoint of <c>A</c>.</p>
@@ -1344,7 +1366,7 @@
             <p>Note that <em>any</em> text, other than whitespace, outside the <tag>m</tag> tag will disable this feature, <em>including punctuation</em>. However, according to the Chicago Manual of Style, 14e, 6.127, <q>Items carry no closing punctuation unless they consist of complete sentences.</q> So that comma at the end of your equation probably doesn't belong there anyway.</p>
         </subsection>
 
-        <subsection>
+        <subsection xml:id="mathematics-latex-packages">
             <title>Additional Packages</title>
 
             <p>Generally, you cannot add additional packages for use within mathematics.  The exception is a package with support available optionally within MathJax.  And it must have the same name as its normal <latex /> version.  Then set a <c>docinfo/latex-preamble/package</c> element to be the common name of the package.   (The <c>cancel</c> package is one such example.)</p>
@@ -1357,6 +1379,48 @@
 
             <p>There are two existing additional options, which we might want to remove some day for technical reasons.  Macros from the <c>extpfeil</c> extensible arrows package are available by default, and an <c>\sfrac{}{}</c> macro is available for appealing inline <q>slanted fractions.</q></p>
         </subsection>
+
+        <subsection xml:id="mathematics-notes">
+            <title>Notes</title>
+
+            <p>As mentioned at the start of this section, your use of <latex/> needs to also be supported by MathJax so that it may be rendered as part of an <init>HTML</init> page displayed in a web broswer.  In addition to the information at the start of <xref ref="topic-mathematics"/>, this subsection has some notes that may help you navigate this situation.<ol>
+                <li>Generally, MathJax supports commands available in the <c>amsmath</c> package.</li>
+                <li>You can construct, and use, your own macros, <em>but only for mathematics</em>, not for document structure or document management.  See <xref ref="mathematics-macros"/>.</li>
+                <li>Support for loading <q>extra</q> packages is extremely limited.  See <xref ref="mathematics-latex-packages"/>.</li>
+                <li>The <c>\matrix{}</c> command, and its friends (such as <c>\pmatrix{}</c>) are not supported by <latex/>, despite being recognized by MathJax.  So use environments like <c>\begin{matrix}</c> and <c>\begin{pmatrix}</c> (with their corresponding <c>\end{}</c>, of course) and you will get accurate results for both formats.</li>
+            </ol></p>
+        </subsection>
+    </section>
+
+    <section xml:id="topic-mathematics-practices">
+        <title>Mathematics Best Practices</title>
+        <idx><h>mathematics</h><h>best practices</h></idx>
+
+        <p>This is an incomplete list of suggestions you can consider when authoring mathematics in <latex/> syntax.  Some are definitely technical, and we are only aware of them from authors' experience and reports.  Many are meant to help in the conversion to braille.  Additions welcome.
+        <ol>
+            <li>
+                <title>Operator names</title>
+                <p>Sean Fitzpatrick reports on 2021-01-06 that the <latex/> macro construction<cd>\newcommand{\foo}{\operatorname{foo}}</cd> behaves better in Asymptote diagrams than<cd>
+                \DeclareMathOperator{\foo}{foo}</cd></p>
+            </li>
+            <li>
+                <title>Ratios</title>
+                <p>If you really intend to communicate a ratio with a colon, keep it super-simple, like <c>3:2</c> or <c>a:b</c>.  Do not wrap it in parentheses or other decorations, since then the colon will be communicated literally in braille.  For example, the index of a subgroup, <c>[G:H]</c>, should not be confused with a ratio.  If your ratio is kept simple, braille will use special syntax designed for ratios.</p>
+            </li>
+            <li>
+                <title>Avoid Nesting</title>
+                <p>It may seem  convenient to nest custom macro definitions. For example:
+                    <cd>
+                        <cline>\newcommand{\makered}[1]{{\color{red}{#1}}}</cline>
+                        <cline>\newcommand{\MAKERED}[1]{\textbf{\makered{#1}}}</cline>
+                    </cd>
+                The second macro definition uses the first macro. At least one <pretext/> conversion isolates macro defintions for use only on an as-needed basis. So here, if the author used <c>\MAKERED</c> without also using <c>\makered</c> close nearby, it would lead to an issue under that conversion, because <c>\makered</c> would be locally undefined. So we recommend defining each macro from the ground up. In this case:
+                    <cd>
+                        <cline>\newcommand{\MAKERED}[1]{\textbf{\color{red}{#1}}}</cline>
+                    </cd>
+                </p>
+            </li>
+        </ol></p>
     </section>
 
     <section xml:id="topic-lists">
@@ -1730,6 +1794,17 @@
                 <cline>  &lt;/solutions&gt;</cline>
                 <cline>&lt;/section&gt;</cline>
             </cd>would generate an entire subsection with hints and solutions to every worksheet and every project, located anywhere (including in subsections and subsubsections) in the section on Birds of Paradise.</p>
+
+            <p>
+                An <attr>admit</attr> attribute specifies some feature of an exercise's serial number
+                to determine whether its components are admitted into the solutions division.
+                (For example, the <q>serial number</q> of Exercise 1.2.3 is 3.)
+                Presently, the only options are <c>odd</c>, <c>even</c>, and the default <c>all</c>.
+                So, <pretext/> source like
+                <cd>&lt;solutions divisional="answer" admit="odd"&gt;</cd>
+                would generate a subsection with answers to only the odd-numbered divisional exercises.
+            </p>
+
         </subsection>
     </section>
 
@@ -1740,22 +1815,22 @@
         <subsection xml:id="topic-images-raster">
             <title>Raster Images</title>
 
-            <p>A <term>raster image</term><idx>raster image</idx><idx><h>image</h><h>raster image</h></idx> is an image described pixel-by-pixel, with different colors and intensities.  Photographs are good examples.  Common formats are Portable Network Graphics (PNG) and Joint Photographic Experts Group (JPEG, JPG), which will both work with <c>pdflatex</c> and modern browsers.  JPEG are a good choice for photographs since they are compressed on the assumption they will be viewed by a human, while PNG is a lossless format and good for line art, diagrams and similar images (if you do not have vector graphics versions, see below).</p>
+            <p>A <term>raster image</term><idx>raster image</idx><idx><h>image</h><h>raster image</h></idx> is an image described pixel-by-pixel, with different colors and intensities.  Photographs are good examples.  Common formats are Portable Network Graphics (PNG) and Joint Photographic Experts Group (JPEG, JPG), which will both work with <c>pdflatex</c> and modern web browsers.  JPEG is a good choice for photographs since they are compressed on the assumption they will be viewed by a human, while PNG is a lossless format and good for line art, diagrams and similar images (if you do not have vector graphics versions, see below).</p>
 
-            <p>To use these images, you simply provide the filename, with a relative path.  A subdirectory such as <c>images</c> is a good choice for a place to put them.  It is your responsibility to place these images where the <latex /> output will find them or where the HTML output will find them.  The XML would look like:</p>
+            <p>To use these images, you simply provide the complete filename, with a relative path.  A subdirectory such as <c>images</c> is a good choice for a place to put them.  It is your responsibility to place these images where the <latex /> output will find them or where the HTML output will find them.  Your <pretext/> source would look like:</p>
 
             <pre>
             <![CDATA[<image source="images/crocodiles.png" width="50%" />]]>
             </pre>
 
-            <p>Typically you would wrap this in a <tag>figure</tag> that might have an <attr>xml:id</attr> attribute for cross-references, with or without a caption.  There is no <attr>height</attr> attribute, so the aspect ratio of your image is your responsibility outside of <pretext />.  The <attr>width</attr> attribute is a percentage of the available width of the text (outside of a <tag>sidebyside</tag> panel).  Default width is typically 90%.</p>
+            <p>Typically you would wrap this in a <tag>figure</tag> that might have an <attr>xml:id</attr> attribute for cross-references, with or without a caption.  There is no <attr>height</attr> attribute, so the aspect ratio of your image is your responsibility outside of <pretext />.  The <attr>width</attr> attribute is a percentage of the available width of the text (outside of a <tag>sidebyside</tag> panel).</p>
 
-            <p>You may also provide a <tag>description</tag> which will aid accessibility for electronic formats.  Keep such readers in mind and provide as much description as possible.  Keep the markup simple, since this will typically migrate to an HTML attribute that cannot contain any structure.  Be careful to avoid double-quotes.  For example,</p>
+            <p>You may also provide a <tag>description</tag> which will aid accessibility for electronic formats.  Keep such readers in mind and provide as much description as possible.  Keep the markup simple, since this will typically migrate to an HTML attribute that cannot contain any structure.  Be careful to avoid double-quotes.  For example:</p>
 
             <pre>
             <![CDATA[
             <image source="images/crocodiles.jpeg" width="50%">
-                <description>Five crocodiles partially submerged in the shallows.</description>
+                <description>Five crocodiles partially submerged.</description>
             </image>
             ]]>
             </pre>
@@ -1764,36 +1839,660 @@
         <subsection xml:id="topic-images-vector">
             <title>Vector Graphics</title>
 
-            <p>An image is a <term>vector graphic</term><idx>vector graphic</idx><idx><h>image</h><h>vector graphic</h></idx> if the file describes the geometric shapes that constitute the image.  So a simple diagram would be a good candidate, but a photograph would not.  Popular formats are Portable Document Format (PDF) and Scalable Vector Graphics (SVG).  You will get the best results with PDF images in <latex /> output and SVG images for HTML.  The principal advantage of these formats is that they scale (big or small) smoothly, along with fonts.  This is critical when you cannot predict the screen size for a reader of an electronic version.</p>
+            <p>An image is a <term>vector graphic</term><idx>vector graphic</idx><idx><h>image</h><h>vector graphic</h></idx> if the file describes the geometric shapes that constitute the image.  So a simple diagram would be a good candidate, but a photograph would not.  Popular formats are Portable Document Format (<init>PDF</init>) and Scalable Vector Graphics (<init>SVG</init>).  You will get the best results with <init>PDF</init> images in <latex/> output and <init>SVG</init> images for <init>HTML</init>.  The principal advantage of these formats is that they scale (big or small) smoothly, along with fonts.  This is critical when you cannot predict the screen size for a reader of an electronic version.</p>
 
-            <p>Unless you describe these images with a language (see next subsection), you are responsible for providing the PDF and SVG versions.  The <c>pdf2svg</c> utility is very useful if you have PDF images only.  To use these images, you simply follow the instructions above, but do not include a file extension.  This alerts the conversion to use the best possible choice.  So presuming we had files <c>images/toad-life-cycle.pdf</c> and <c>images/toad-life-cycle.svg</c>, an example would be:</p>
+            <p>Unless you describe these images with a language (see <xref ref="topic-images-source"/>), you are responsible for providing the <init>PDF</init> and <init>SVG</init> versions.  The <c>pdf2svg</c> utility is very useful if you have <init>PDF</init> images only.  To have these different images used for different output formats, you simply follow the instructions above, but <em>do not include a file extension</em>.  This alerts the conversion to use the best possible choice for any given output, and to embed it correctly.  So presuming you made available the files <c>images/toad-life-cycle.pdf</c> and <c>images/toad-life-cycle.svg</c>, the following example would incorporate the <init>PDF</init> version with <latex/> output and the <init>SVG</init> version for <init>HTML</init> outut.</p>
 
             <pre>
             <![CDATA[
             <image source="images/toad-life-cycle" width="85%">
-                <description>Diagram of the four stages of a toad's life.</description>
+                <description>The four stages of a toad's life.</description>
             </image>
             ]]>
             </pre>
 
-            <p>Vector graphics images can be created with source code in different languages (<xref ref="topic-images-source"/>) or with applications, such as Inkscape (<xref ref="processing-images-inkscape"/>).</p>
+            <p>Vector graphics images can be created with source code in different languages (<xref ref="topic-images-source"/>) or with applications, such as Inkscape (<xref ref="processing-images-inkscape"/>).  If you are creating non-technical graphics that have lots of geometric shapes and simple text (a look like a movie poster), then using a tool like Inkscape is a great choice since its native file format is an enhanced version of <init>SVG</init> and a faithful <init>PDF</init> is easy to create.</p>
         </subsection>
 
         <subsection xml:id="topic-images-source">
-            <title>(*) Images Described by Source Code</title>
+            <title>Images Described by Source Code</title>
 
             <introduction>
-                <p>To be written once elements and tags solidify, see sample article for examples.</p>
+                <p>There are various languages which may be used to describe diagrams, geometric objects, or data plots.  A key strategy enabled by <pretext/> is to put these specifications of such images <em>directly in your document's source</em> rather than losing track of them over time.</p>
+
+                <p>So we have various elements which are children of <tag>image</tag> that hold these source code descriptions.  Then <pretext/> provides techniques for realizing these in the best formats for various devices and print.  So if you are accustomed to the idea of a <attr>source</attr> attribute pointing to a file, think of these elements as alternative specifications.</p>
             </introduction>
 
             <subsubsection>
-                <title>(*) Asymptote</title>
+                <title>Asymptote</title>
 
-                <p>Two temporary notes:<ol>
-                    <li>The <c>pretext</c> script will run the Asymptote executable with the <c>-norpc</c> switch.  So <q>rotatable</q> 3D images rendered by the proprietary viewer, Adobe Acrobat, are not created.</li>
+                <p><url href="https://asymptote.sourceforge.io/">Asymptote</url><fn><c>asymptote.sourceforge.io/</c></fn> is a vector graphics language that produces high-quality output in <init>WebGL</init>, <init>SVG</init>, and <init>PDF</init> formats.  You can describe 2-D or 3-D objects, and the 3-D objects are interactive in online output.  <latex/> may be used, and your macros are automatically available for use.</p>
 
-                    <li>The <c>pretext</c> script can request the Asymptote executable to create <init>SVG</init> images supplying the <c>-svg</c> switch.  These may be unsuitable, especially for 3D images.  An alternative is to produce <init>PDF</init> images and use a utility like <c>pdf2svg</c> to convert to <init>SVG</init>.</li>
-                </ol></p>
+                <p>Authoring is straight-forward.  Inside an <tag>image</tag> include a child <tag>asymptote</tag> to hold the code.  For example:</p>
+
+                <pre>
+                &lt;image xml:id="gaussian-histogram"&gt;
+                    &lt;description&gt;A histogram of Gaussian data.&lt;/description&gt;
+                    &lt;asymptote&gt;
+                    import graph;
+                    import stats;
+
+                    size(400,200,IgnoreAspect);
+
+                    int n=10000;
+                    real[] a=new real[n];
+                    for(int i=0; i &lt; n; ++i) a[i]=Gaussrand();
+
+                    draw(graph(Gaussian,min(a),max(a)),blue);
+
+                    // Optionally calculate "optimal" number
+                    // of bins a la Shimazaki and Shinomoto.
+                    int N=bins(a);
+
+                    histogram(a,min(a),max(a),N,normalize=true,low=0,lightred,black,bars=false);
+
+                    xaxis("$x$",BottomTop,LeftTicks);
+                    yaxis("$dP/dx$",LeftRight,RightTicks(trailingzero));
+                    &lt;/asymptote&gt;
+                &lt;/image&gt;
+                </pre>
+
+                <p>Here is the result.  Look elsewhere for examples of 3-D output from Asymptote.</p>
+
+                <image xml:id="gaussian-histogram" width="60%">
+                    <description>A histogram of Gaussian data.</description>
+                    <asymptote>
+                    import graph;
+                    import stats;
+
+                    size(400,200,IgnoreAspect);
+
+                    int n=10000;
+                    real[] a=new real[n];
+                    for(int i=0; i &lt; n; ++i) a[i]=Gaussrand();
+
+                    draw(graph(Gaussian,min(a),max(a)),blue);
+
+                    // Optionally calculate "optimal" number
+                    // of bins a la Shimazaki and Shinomoto.
+                    int N=bins(a);
+
+                    histogram(a,min(a),max(a),N,normalize=true,low=0,lightred,black,bars=false);
+
+                    xaxis("$x$",BottomTop,LeftTicks);
+                    yaxis("$dP/dx$",LeftRight,RightTicks(trailingzero));
+                    </asymptote>
+                </image>
+
+                <p>Notes:<ul>
+                    <li>Notice the necessity of escaping the less-than in the for-loop.  See <xref ref="topic-exceptional-characters"/>.</li>
+                    <li>Setting a <attr>xml:id</attr> is necessary to have a stable name for graphics files that will be generated.</li>
+                    <li>The <tag>description</tag> is an important part of making your output accessible.</li>
+                    <li>Notice the use of <latex/> for the label on the vertical axis.  All of your macros defined in <c>docinfo</c> are available for use, so you can keep notation consistent.</li>
+                    <li>You need to produce <init>PDF</init> versions of your diagrams for use in a conversion to <latex/>.</li>
+                    <li>
+                        <p>You need to produce <init>HTML</init> versions of your diagrams for use in a conversion to an electronic format based on <init>HTML</init>.  For a 2-D diagram these are a thin wrapper around an <init>SVG</init> image.  For a 3-D diagram these are interactive WebGL objects.</p>
+
+                        <p>It is very important to note that these <init>HTML</init> versions contain the height and width of the diagram and these are queried by a conversion of your document to <init>HTML</init> format in order to compute the aspect ratio.  Therefore they need to be available with your other source files (typically in an <c>images</c> directory).  So in a very real sense these files become part of your source.</p>
+                    </li>
+                    <li>You may want to produce <init>SVG</init> versions of your diagrams for conversion to <init>EPUB</init>, and <init>PNG</init> versions for conversion to the <init>EPUB</init> precursor for Kindle format.</li>
+                    <li><init>PDF</init> versions produced by the <c>pretext</c> script will not include the RPC extensions.  So <q>rotatable</q> 3D images rendered by the proprietary viewer, Adobe Acrobat, are not created, consistent with our open source philosophy.</li>
+                    
+                    <li>
+                        <p>Colors in Asymptote can be hard-coded using <c>rgb</c> syntax. Colors can also be defined at the top of an Asymptote file, to be referred to later. You may wish to produce <init>PDF</init> in both color (electronic) and black and white (print on demand) formats, and you probably do not want to maintain parallel source for both versions. Rather than writing (for example) <c>pen p=rgb(0,0,.7);</c> in your Asymptote code, you can write <c>pen p=curvepen1;</c>. Then, in the <tag>docinfo</tag> section of your document, you can add an <tag>asymptote-preamble</tag> and include the line <c>pen curvepen1=rgb(0,0,.7);</c>. Once you are ready to produce your black and white version, you need only change the definition of <c>curvepen1</c> in your <tag>asymptote-preamble</tag>.</p>
+
+                        <p>One note of caution: if your preamble includes Asymptote code that only works once certain libraries are loaded, you must include lines to import those libraries in your preamble. For example, to define a <c>material</c> you must first have the line <c>import three;</c>.</p>
+                    </li>
+                </ul></p>
+
+                <p>At this writing (2020-07-16) the <c>pretext</c> Python script requires a very new version of Asymptote in order to accurately produce all the versions described above.  There is no real way to do otherwise.  However, Asymptote provides a very useful <url href="http://asymptote.ualberta.ca/">web application</url><fn><c>asymptote.ualberta.ca</c></fn> written by Pedram Emami.  So you can create various output files <q>by hand</q> and download them for use.  More importantly, the web application is a great place to learn, experiment, and iterate as you become more skilled at building high-quality graphics to illustrate the concepts in your document.</p>
+
+                <note>
+                    <title>Build 3-D Asymptote Figures</title>
+
+                    <p>If your project uses geometric or mathematical objects that are three-dimensional, invest some time in learning the Asymptote vector graphics language.  The interactive diagrams for your <init>HTML</init> output produced by Asymptote, in <init>WebGL</init> format, are outstanding and will greatly enhance your project.  (And the other static formats are similarly excellent.)</p>
+                </note>
+
+            </subsubsection>
+
+            <subsubsection xml:id="topic-latex-images">
+                <title>Images in <latex/> Syntax</title>
+
+                <p>There are a variety of <latex/> packages for authoring a diagram, plot, or graph.  Examples include: TikZ, PGF, Xy-pic, and PSTricks.  Generally, the <tag>latex-image</tag> tag allows you to incorporate this code into your source and <pretext/> realizes these descriptions as images in your output.</p>
+
+                <p>Much like the <tag>asymptote</tag> tag, the <tag>latex-image</tag> tag is used as a child of <tag>image</tag> and can be thought of as an alternative to the <attr>source</attr> attribute of <tag>image</tag>.  The contents need to be a complete specification of the image.  For example, a TikZ image will typically begin with <c>\begin{tikzpicture}</c>.  Inside of your document's <tag>docinfo</tag> you will likely need to employ a <tag>latex-image-preamble</tag> element to hold necessary <c>\usepackage</c> commands and any global settings, such as the style for tick-marks and labels on axes of graphs.  The source code in this next example is greatly abbreviated and mildly edited, see the source for the complete example.</p>
+
+                <pre><![CDATA[
+                <docinfo>
+                    <latex-image-preamble>
+                    \usepackage{tikz}
+                    </latex-image-preamble>
+                </docinfo>
+                ]]></pre>
+
+                <pre><![CDATA[
+                <figure>
+                    <caption>RNA Codons Table, by Florian Hollandt</caption>
+                    <image xml:id="rna-codons-table" width="100%">
+                        <description>A table of the RNA codons.</description>
+                        <latex-image>
+                        \begin{tikzpicture}
+                        \footnotesize
+                        \tikzstyle{every node}=[inner sep=1.7pt,anchor=center]
+                        % to_x and from_x styles denote bonds terminating
+                        % or starting in labeled nodes. x denotes the
+                        % number of letters in the node label.
+                        \tikzstyle{to_1}=[shorten >=5pt]
+                        \tikzstyle{to_1i}=[shorten >=6pt]
+                        \tikzstyle{to_2}=[shorten >=7pt]
+                        \tikzstyle{to_3}=[shorten >=8pt]
+                        ...
+                        \begin{scope}[scale=0.5]    % Asparagine
+                        \draw[ultra thick,shorten >=2pt,shorten &lt;=2pt] (90-2*5.625:8.2)
+                                        arc(90-2*5.625:90-4*5.625:8.2);
+                        \path (90-3.5*3.625-3:13.3) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_2]  (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {}
+                                        -- +(30:1) node (Cd) {NH$_{\mbox{2}}$};
+                        \draw[to_1i] (Cc.center)    -- +(270:1) node (O) {};
+                        \draw[to_1]  (Cc.210)       -- (O.150);
+                        \path (O.center) node {O};
+                        \end{scope}
+                        ...
+                        \node at (90-55*5.625:4.5) {C};
+                        \node at (90-58*5.625:4.5) {S};
+                        \node at (90-61*5.625:4.5) {L};
+                        \node at (90-63*5.625:4.5) {F};
+                        \end{tikzpicture}
+                        </latex-image>
+                    </image>
+                </figure>
+                ]]></pre>
+
+                <p>This will result in:</p>
+
+                <figure>
+                    <caption>RNA Codons Table, by Florian Hollandt, from <url href="https://texample.net/tikz/examples/rna-codons-table/"><tex/>ample.net</url><fn><c>texample.net/tikz/examples/rna-codons-table/</c></fn></caption>
+                    <image xml:id="rna-codons-table" width="100%">
+                        <description>A table of the RNA codons, together with the amino acids they encode.</description>
+                        <latex-image>
+                        \begin{tikzpicture}
+                        \footnotesize
+                        \tikzstyle{every node}=[inner sep=1.7pt,anchor=center]
+                        %   to_x and from_x styles denote bonds terminating or starting in labeled nodes. x denotes the number of letters in the node label.
+                        \tikzstyle{to_1}=[shorten >=5pt]
+                        \tikzstyle{to_1i}=[shorten >=6pt]
+                        \tikzstyle{to_2}=[shorten >=7pt]
+                        \tikzstyle{to_3}=[shorten >=8pt]
+                        \tikzstyle{from_1}=[shorten &lt;=5pt]
+                        \tikzstyle{from_1i}=[shorten &lt;=6pt]
+                        \tikzstyle{from_2}=[shorten &lt;=8pt]
+                        \begin{scope}
+                        \draw [ultra thick] circle(1cm);
+                        \draw [ultra thick] (0:4)--(180:4) (90:4)--(270:4);
+                        \foreach \a/\l in {45/A,135/G,225/C,315/U}{
+                            \node at (90-\a:0.5cm) {\l};
+                        }
+                        \draw [very thick] circle(2cm);
+                        \foreach \A in {90,0,270,180}{
+                            \foreach \a/\l in {22.5/A,45/G,67.5/C,90/U}{
+                                \draw [very thick] (\A+\a:1) -- (\A+\a:4);
+                                \node at (\A-\a+11.25:1.5) {\l};
+                            }
+                        }
+                        \draw circle(4cm) (0:4)--(180:4) (90:4)--(270:4);
+                        \foreach \A in {90,180,270,0}{
+                            \foreach \a in {0,22.5,45,67.5}{
+                                \foreach \i/\l in {5.625/A,11.25/G,16.875/C,22.5/U}{
+                                    \draw (\A+\a+\i:2) -- (\A+\a+\i:4);
+                                    \node at (\A-\a-\i+2.8125:3) {\l};
+                                }
+                            }
+                        }
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Lysine
+                        \draw[ultra thick,shorten >=2pt,shorten &lt;=2pt] (90:8.2)
+                                        arc(90:90-2*5.625:8.2);
+                        \path (90-0.8*5.625:14.3) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_3]  (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {}
+                                        -- ++(270:1) node (Cd) {}
+                                        -- ++(210:1) node (Ce) {}
+                                        -- ++(150:1) node (Cf) {NH$_{\mbox{2}}$};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Asparagine
+                        \draw[ultra thick,shorten >=2pt,shorten &lt;=2pt] (90-2*5.625:8.2)
+                                        arc(90-2*5.625:90-4*5.625:8.2);
+                        \path (90-3.5*3.625-3:13.3) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_2]  (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {}
+                                        -- +(30:1) node (Cd) {NH$_{\mbox{2}}$};
+                        \draw[to_1i] (Cc.center)    -- +(270:1) node (O) {};
+                        \draw[to_1]  (Cc.210)       -- (O.150);
+                        \path (O.center) node {O};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Arginine
+                        \draw[ultra thick,shorten >=2pt,shorten &lt;=2pt] (90-22.5:8.2)
+                                        arc(90-22.5:90-33.75:8.2);
+                        \path (90-3.7*5.625:16) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_2]  (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {}
+                                        -- ++(270:1) node (Cd) {}
+                                        -- ++(330:1) node (NH1) {NH};
+                        \draw[from_2,to_3]  (NH1.center)    -- ++(30:1) node (Ce) {}
+                                        -- ++(330:1) node {NH$_{\mbox{2}}$};
+                        \draw[to_1i] (Ce.center)    -- ++(90:1) node (N2) {};
+                        \draw[to_1]  (Ce.150)       -- (N2.210);
+                        \path (N2) node {N};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Serine
+                        \draw[ultra thick,shorten >=1pt,shorten &lt;=2pt] (90-22.5-2*5.625:8.2)
+                                        arc(90-33.75:90-33.75-11.25:8.2);
+                        \path (90-7*5.625:12.5) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_2]  (zero.center)  -- ++(270:1) node(Cb){} -- ++(210:1) node (Cc) {OH};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Threonine
+                        \draw[ultra thick,shorten >=1pt,shorten &lt;=2pt] (90-45:8.2)
+                                        arc(90-45:90-67.5:8.2);
+                        \path (90-45-0.8*11.25:12.5) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_2]  (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {} (Cb.center)
+                                        -- +(210:1) node {OH};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Methionine
+                        \draw[ultra thick,shorten >=1pt,shorten &lt;=2pt] (90-67.5:8.2)
+                                        arc(90-67.5:90-67.5-5.625:8.2);
+                        \path (90-67.5-0.5*5.625:14) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_1]  (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {}
+                                        -- ++(30:1) node (Cd) {S};
+                        \draw[from_1] (Cd.center)   -- +(330:1);
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Isoleucine
+                        \draw[ultra thick,shorten >=1pt,shorten &lt;=2pt] (0:8.2)
+                                        arc(0:11.25:8.2);
+                        \path (1.0*5.625:12.4) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw        (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {}
+                                        -- +(30:1) node (Cd) {} (Cb.center)
+                                        -- +(210:1) node (Ce) {};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Glutamic acid
+                        \draw[ultra thick,shorten >=1pt,shorten &lt;=2pt] (0:8.2)
+                                        arc(0:-11.25:8.2);
+                        \path (-1.3*5.625:15) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_1i] (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {}
+                                        -- ++(270:1) node (Cd) {}
+                                        -- ++(330:1) node (NH) {OH};
+                        \draw[to_1]  (Cd.center)    -- +(210:1) node (O) {};
+                        \draw[to_1i] (Cd.270)       -- (O.300);
+                        \path (O.center) node {O};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Aspartic acid
+                        \draw[ultra thick,shorten >=1pt,shorten &lt;=2pt] (-11.25:8.2)
+                                        arc(-11.25:-22.5:8.2);
+                        \path (-11.25-5.625:12) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_2]  (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {}
+                                        -- +(30:1) node (Cd) {OH};
+                        \draw[to_1i] (Cc.center)    -- +(270:1) node (O) {};
+                        \draw[to_1]  (Cc.210)       -- (O.150);
+                        \path (O.center) node {O};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Glycine
+                        \draw[ultra thick,shorten >=1pt,shorten &lt;=2pt] (-22.5:8.2)
+                                        arc(-22.5:-45:8.2);
+                        \path (-33.75-1*5.625:12) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Alanine
+                        \draw[ultra thick,shorten >=1pt,shorten &lt;=2pt] (-45:8.2)
+                                        arc(-45:-68.25:8.2);
+                        \path (-45-11.25:12) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw        (zero.center)  -- ++(270:1) node(Cb){};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Valine
+                        \draw[ultra thick,shorten >=1pt,shorten &lt;=2pt] (-68.25:8.2)
+                                        arc(-68.25:-90:8.2);
+                        \path (-68.25-0.8*11.25:12) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw (zero.center)     -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Glutamine
+                        \draw[ultra thick,shorten >=1pt,shorten &lt;=2pt] (-90:8.2)
+                                        arc(-90:-101.25:8.2);
+                        \path (-90.25-5.625:12.5) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_2]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_3]  (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {}
+                                        -- ++(270:1) node (Cd) {}
+                                        -- ++(330:1) node (NH) {NH$_{\mbox{2}}$};
+                        \draw[to_1]  (Cd.center)    -- +(210:1) node (O) {};
+                        \draw[to_1i] (Cd.270)       -- (O.300);
+                        \path (O.center) node {O};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Histidine
+                        \draw[ultra thick,shorten >=1pt,shorten &lt;=2pt] (-101.25:8.2)
+                                        arc(-101.25:-101.25-11.25:8.2);
+                        \path (-101.25-1.2*5.625:15.5) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw        (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node(Cc){};
+                        \draw[to_2]  (Cc.center)    -- ++(108-1*72:1) node (Cd) {}
+                                        -- ++(108-2*72:1) node (Ce) {NH};
+                        \draw[from_1,to_1] (Ce.center)  -- ++(108-3*72:1) node (Cf) {}
+                                        -- ++(108-4*72:1) node (Cg) {};
+                        \draw[from_1] (Cg.center)   -- (Cc.center);
+                        \draw         (Cc.198+2*72) -- (Cd.198+1*72);
+                        \draw[from_1] (Cg.72)       -- (Cf.198+4*72);
+                        \draw (Cg.center) node {N};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Arginine
+                        \draw[ultra thick,shorten >=2pt,shorten &lt;=2pt] (-90-22.5:8.2)
+                                        arc(-90-22.5:-90-45:8.2);
+                        \path (-90-7.7*5.625:12.3) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_2]  (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {}
+                                        -- ++(270:1) node (Cd) {}
+                                        -- ++(330:1) node (NH1) {NH};
+                        \draw[from_1i,to_3] (NH1.center)-- ++(30:1) node (Ce) {}
+                                        -- ++(330:1) node {NH$_{\mbox{2}}$};
+                        \draw[to_1]  (Ce.center)    -- ++(90:1) node (N2) {};
+                        \draw[shorten >=4pt] (Ce.150)   -- (N2.210);
+                        \path (N2) node {N};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Proline
+                        \draw[ultra thick,shorten >=2pt,shorten &lt;=2pt] (-90-45:8.2)
+                                        arc(-90-45:-90-45-22.25:8.2);
+                        \path (-90-10.5*5.625:12) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_2]  (zero.center)  -- ++(150:1) node (nh) {NH$_{\mbox{2}}^+$};
+                        \draw        (zero.center)  -- ++(270:1) node(Cb){};
+                        \path        (Cb.center)    -- +(150:1) node (x) {};
+                        \path        (x.center)     +(170:1) node (Cd) {};
+                        \path        (x.center)     +(250:1) node (Cc) {};
+                        \draw[to_3]  (Cb.center)    -- (Cc.center)
+                                        -- (Cd.center)
+                                        -- (nh.center);
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Leucine
+                        \draw[ultra thick,shorten >=2pt,shorten &lt;=2pt] (180:8.2)
+                                        arc(180:180+22.25:8.2);
+                        \path (-90-14.5*5.625:13) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw (zero.center)     -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {}
+                                        -- +(30:1) node (Cd) {} (Cc.center)
+                                        -- +(270:1) node (Ce) {};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Tyrosine
+                        \draw[ultra thick,shorten >=2pt,shorten &lt;=2pt] (180-11.25:8.2)
+                                        arc(180-11.25:180-22.5:8.2);
+                        \path (180-3*5.625:16) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw        (zero.center)  -- ++(270:1) node(Cb){};
+                        \draw        (Cb.center)    -- ++(330:1) node (Cc) {}
+                                        -- ++(30:1) node (Cd) {}
+                                        -- ++(330:1) node (Ce) {}
+                                        -- ++(270:1) node (Cf) {}
+                                        -- ++(210:1) node (Cg) {}
+                                        -- ++(150:1) node (Ch) {}
+                                        -- ++(90:1);
+                        \draw        (Cc.330)       -- (Cd.270);
+                        \draw        (Ce.210)       -- (Cf.150);
+                        \draw        (Cg.90)        -- (Ch.30);
+                        \draw[to_1i] (Cf.center)    -- +(330:1) node (OH) {OH};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Tryptophane
+                        \draw[ultra thick,shorten >=2pt,shorten &lt;=2pt] (180-22.5-5.625:8.2)
+                                        arc(180-22.5-5.625:180-22.5-11.25:8.2);
+                        \path (180-22.5-1.8*5.625:16) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw        (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node(Cc){};
+                        \draw[to_2]  (Cc.center)    -- ++(108-1*72:1) node (Cd) {}
+                                        -- ++(108-2*72:1) node (Ce) {NH};
+                        \draw[from_1](Ce.center)    -- ++(108-3*72:1) node (Cf) {}
+                                        -- ++(108-4*72:1) node (Cg) {};
+                        \draw        (Cg.center)    -- (Cc.center);
+                        \draw        (Cc.198+2*72)  -- (Cd.198+1*72);
+                        \draw        (Cg.72)        -- (Cf.198+4*72);
+                        \draw        (Cg.center)    -- ++(240:1) node (Ch) {}
+                                        -- ++(300:1) node (Ci) {}
+                                        -- ++(0:1) node (Cj) {}
+                                        -- ++(60:1) node (Ck) {}
+                                        -- ++(120:1) node (Cl) {};
+                        \draw        (Ch.0)     -- (Ci.60);
+                        \draw        (Cj.120)       -- (Ck.180);
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Cysteine
+                        \draw[ultra thick,shorten >=2pt,shorten &lt;=2pt] (180-45+11.25:8.2)
+                                        arc(180-45+11.25:180-45:8.2);
+                        \path (180-45+11.25-1*7.625:12) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_2]  (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(210:1) node (Cc) {SH};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Serine
+                        \draw[ultra thick,shorten >=1pt,shorten &lt;=2pt] (90+45:8.2)
+                                        arc(90+45:90+45-22.5:8.2);
+                        \path (90+45-11.25+0*5.625:14) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_2]  (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {OH};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Leucine
+                        \draw[ultra thick,shorten >=2pt,shorten &lt;=2pt] (90+22.5:8.2)
+                                        arc(90+22.5:90+11.25:8.2);
+                        \path (90+22.5-1.2*5.625:16) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw        (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(210:1) node (Cc) {}
+                                        -- +(150:1) node (Cd) {} (Cc.center)
+                                        -- +(270:1) node (Ce) {};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Phenylalanine
+                        \draw[ultra thick,shorten >=2pt,shorten &lt;=2pt] (90+11.25:8.2)
+                                        arc(90+11.25:90:8.2);
+                        \path (90+1.5*5.625:13) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw        (zero.center)  -- ++(270:1) node(Cb){};
+                        \draw        (Cb.center)    -- ++(210:1) node (Cc) {}
+                                        -- ++(150:1) node (Cd) {}
+                                        -- ++(210:1) node (Ce) {}
+                                        -- ++(270:1) node (Cf) {}
+                                        -- ++(330:1) node (Cg) {}
+                                        -- ++(30:1) node (Ch) {}
+                                        -- ++(90:1);
+                        \draw        (Cc.210)       -- (Cd.270);
+                        \draw        (Ce.330)       -- (Cf.30);
+                        \draw        (Cg.90)        -- (Ch.150);
+                        \end{scope}
+                        \node at (90-1*5.625:4.5) {K};
+                        \node at (90-3*5.625:4.5) {N};
+                        \node at (90-5*5.625:4.5) {R};
+                        \node at (90-7*5.625:4.5) {S};
+                        \node at (90-10*5.625:4.5) {T};
+                        \node at (90-12.5*5.625:4.5) {I};
+                        \node at (90-13.7*5.625:4.7) {M / $\star$};
+                        \node at (90-15*5.625:4.5) {I};
+                        \node at (90-17*5.625:4.5) {E};
+                        \node at (90-19*5.625:4.5) {D};
+                        \node at (90-22*5.625:4.5) {G};
+                        \node at (90-26*5.625:4.5) {A};
+                        \node at (90-30*5.625:4.5) {V};
+                        \node at (90-33*5.625:4.5) {Q};
+                        \node at (90-35*5.625:4.5) {H};
+                        \node at (90-38*5.625:4.5) {R};
+                        \node at (90-42*5.625:4.5) {P};
+                        \node at (90-46*5.625:4.5) {L};
+                        \node at (90-49*5.625:4.5) {$\dagger$};
+                        \node at (90-51*5.625:4.5) {Y};
+                        \node at (90-52.3*5.625:4.5) {$\dagger$};
+                        \node at (90-53.3*5.625:4.5) {W};
+                        \node at (90-55*5.625:4.5) {C};
+                        \node at (90-58*5.625:4.5) {S};
+                        \node at (90-61*5.625:4.5) {L};
+                        \node at (90-63*5.625:4.5) {F};
+                        \end{tikzpicture}
+                        </latex-image>
+                    </image>
+                </figure>
+
+                <p>For <latex/> output the procedure is transparent<mdash/><pretext/> simply incorporates the preamble information and the image's code in the correct places in the <latex/> output.  Then traditional processing (typically with <c>pdflatex</c>) will do the right thing.  For output to other non-<latex/> formats, such as <init>HTML</init> or <init>EPUB</init>, we need some help from the <c>pretext</c> script (<xref ref="pretext-script"/>).  This script will isolate the image's code and bundle it up with the necessary preamble to make a complete single-purpose <latex/> file.  Once converted by <latex/> to a <init>PDF</init> version, other tools can convert the image into other formats, such as <init>SVG</init>.  In this way, you can use <latex/> packages for describing images, use mathematically-correct labels in <latex/> syntax, and use your own macros for consistency in notation, yet also employ the resulting images in more modern output formats.  It takes some work to get the <c>pretext</c> script setup, but it will automate the process and spare you many technical headaches surrounding the conversions.  See <xref ref="pretext-script"/> for details.</p>
+
+                <p>Notice that when you produce these images for use with non-<latex/> formats such as <init>HTML</init>, it is your responsibility to move the images into the correct location where your output expects them, typically in a subdirectory named <c>images</c>.  Also note that as of 2020-07-24, limited testing indicates that PSTricks needs to be processed with the <c>xelatex</c> engine, and the <c>pstricks-add</c> package might also be necessary.  Any updates, especially using <c>pdflatex</c> would be appreciated.  Finally, processing with <c>xelatex</c> might be necessary if your labels use Unicode characters.</p>
+            </subsubsection>
+
+            <subsubsection>
+                <title>Images in Sage Syntax</title>
+
+                <p>Sometimes the necessary computations for an image are not part of the capabilities of whatever system is actually realizing the image.  We have good support for Sage in other parts of your document, and Sage has an extremely wide variety of computational capabilities, in addition to letting you program your own computations in Python syntax with the full support of the Sage library.  Rather than translating Sage output as input to some other graphics program, we simply capture the graphics output from Sage.</p>
+
+                <p>Use the <tag>sageplot</tag> tag, in a manner entirely similar to the <tag>asymptote</tag> tag and the <tag>latex-image</tag> tag, as a child of <tag>image</tag>, and containing the necessary Sage code to construct the image.  There is one twist.  The last line of your Sage code <alert>must</alert> return a Sage <c>Graphics</c> object (or 3D plot).  The <c>pretext</c> script (<xref ref="pretext-script"/>) will isolate this last line, use it as the right-hand side of an assignment statement, and the Sage <c>.save()</c> method will automatically be called to generate the image in a file, which is either a Portable Document Format (PDF) file amenable to <latex /> output, or a Scalable Vector Graphics (SVG) file amenable to HTML output.  For visualizations of 3D plots, Sage will only produce Portable Network Graphics (PNG) files, which can be included in HTML pages or <latex /> output.  Pay careful attention to the requirement that the last line of your code evaluates to be a graphics object.  In particular, while <c>show()</c> might appear to do the right thing during testing, it evaluates to Python's <c>None</c> object and that is just what you will get for your image.  The example below illustrates creating two graphics objects and combining them into an expression on the last line that evaluates to the graphics object that will be created in the desired graphics file.</p>
+
+                <pre><![CDATA[
+                <figure>
+                    <caption>Negative multiple of a curve</caption>
+                    <image xml:id="negative-curve" width="65%">
+                        <description>Plot of x^4 - 1 and its negative.</description>
+                        <sageplot>
+                        f(x) = x^4 - 1
+                        g(x) = -x^4 + 1
+                        up = plot(f, (x, -1.5, 1.5), color='blue', thickness=2)
+                        down = plot(g, (x, -1.5, 1.5), color='red', thickness=2)
+                        up + down
+                        </sageplot>
+                    </image>
+                </figure>
+                ]]></pre>
+
+                <p>This will result in:</p>
+
+                <figure>
+                    <caption>Negative multiple of a curve</caption>
+                    <image xml:id="negative-curve" width="65%">
+                        <description>Plot of x^4 - 1 and its negative.</description>
+                        <sageplot>
+                        f(x) = x^4 - 1
+                        g(x) = -x^4 + 1
+                        up = plot(f, (x, -1.5, 1.5), color='blue', thickness=2)
+                        down = plot(g, (x, -1.5, 1.5), color='red', thickness=2)
+                        up + down
+                        </sageplot>
+                    </image>
+                </figure>
+
+                <p>Note the necessity of using the <c>pretext</c> script (<xref ref="pretext-script"/>) to independently invoke Sage, no matter what sort of output is being created for your document.</p>
             </subsubsection>
         </subsection>
 
@@ -1862,10 +2561,20 @@
         <title>(*) Tables and Tabulars</title>
 
         <!-- Reprise:  <title>Bully Pulpit: Vertical Rules in Tables</title> -->
+        <!-- copy in table of possible attributes/features from sample article, -->
+        <!-- and replace hacked \times with a proper typographic "x" element    -->
 
-        <p>This section needs much more work.</p>
+        <introduction>
+            <p>This section needs much more work, and we are slowly adding material as we work on features.</p>
 
-        <p>Note that tables may be constructed using the <url href="http://www.latex-tables.com/"><latex /> Complex Table Editor</url> tool online at <c>latex-tables.com</c>and then exported in <pretext /> syntax.</p>
+            <p>Note that tables may be constructed using the <url href="http://www.latex-tables.com/"><latex /> Complex Table Editor</url> tool online at <c>latex-tables.com</c>and then exported in <pretext /> syntax.</p>
+        </introduction>
+
+        <subsection xml:id="table-headers">
+            <title>Table Headers</title>
+
+            <p>To achieve <em>column</em> headings, you indicate that a <em>row</em> contains headings.  Typically, the contents of every cell in this row will then be rendered in bold, or some other style.  The <tag>row</tag> element accepts a <attr>header</attr> attribute with possible values of <c>no</c> (the default), <c>yes</c>, or <c>vertical</c>.  The latter is useful if space is at a premium (which always seems to be the case with tables), and the cells of a column are narrow and the heading is long.  The one restriction is that rows identified as having headers must be the initial (top) rows of the table and must be contiguous.</p>
+        </subsection>
     </section>
 
     <section xml:id="topic-program-listings">
@@ -1994,12 +2703,12 @@
             <p></p>
         </subsection>
 
-        <subsection>
-            <title>(*) Automatic Lists</title>
+        <subsection xml:id="automatic-lists">
+            <title>Automatic Lists</title>
 
             <p></p>
         </subsection>
-
+            <p>The <tag>row</tag> element accepts a <attr>header</attr> attribute with possible values of <c>no</c> (the default), <c>yes</c>, or <c>vertical</c>.  The latter is useful if space is at a premium (which always seems to be the case with tables), and the cells of a column are narrow and the heading is long.  The one restriction is that rows identified as having headers must be the initial (top) rows of the table and must be contiguous.</p>
         <subsection>
             <title>(*) Solutions</title>
 
@@ -2232,13 +2941,34 @@
 
 
     <section xml:id="topic-notation">
-        <title>(*) Notation</title>
-        <p>TODO</p>
+        <title>Notation</title>
+        <idx>notation</idx>
+        <idx>notation list</idx>
+        <idx><h>list</h><h>of notation</h></idx>
+
+        <p>We continue the introduction at <xref ref="overview-index-notation"/>.  A notation list, like an index, is a specialized collection of cross-references.  So some of the philosophy here applies equally well to the <tag>idx</tag> and <tag>index-list</tag> elements, and vice-versa.  (See <xref ref="topic-index"/>.)</p>
+
+        <p>To generate a list of notation employed in a book or article, use the <tage>notation-list</tage> element.  This empty element belongs in an <tag>appendix</tag>.  Likely it is the only content, or you might include some preliminary material.  The title of the <tag>appendix</tag> is up to you and is not automatic.</p>
+
+        <p>Some authors like to make definitions inside of paragraphs, ideally using a <tag>term</tag> element.  This is a natural place for a <tag>notation</tag> element.  So this approach gives an author a lot of flexibility in location.</p>
+
+        <p>Other authors like to make definitions using the <tag>definition</tag> element, since it creates a heading and number, allows a <tag>title</tag>, and can easily serve as the target of a cross-reference.  So this is another good place for a <tag>notation</tag> element.  But now, associate it clearly with the <tag>defintion</tag> by placing it in the metadata, early on, after the <tag>title</tag>.  And not in some subsequent paragraph.  The reason will be clear in just a bit.</p>
+
+        <p>How is a <tag>notation</tag> element constructed?  It has two elements.  The <tag>usage</tag> should be a sample piece of mathematics using the necessary symbols.  Do not wrap it in an <tag>m</tag> element, that is assumed and will be provided.  The second element is <tag>description</tag> and should be a short phrase, or sentence-like material, decoding the sample usage, and may include <tag>m</tag> elements.  The reader sees nothing in the output at the location of the <tag>notation</tag> element.</p>
+
+        <p>The automatically-generated notation list is then a three-column table, in the order of appearance, with the sample usage, the description, and a <term>locator</term>.  For output derived from <latex/>, such as print or <init>PDF</init>, the locator will be the page number of wherever you placed the <tag>notation</tag> element.  For <init>HTML</init> the locator is much better<mdash/>it is a knowl, for either a paragraph or for an entire definition.  The latter possibility explains why it is better to place the <tag>notation</tag> element inside a <tag>definition</tag>, if possible, rather than in a paragraph that is a constituent of a <tag>definition</tag>.</p>
     </section>
 
     <section xml:id="topic-automatic-lists">
-        <title>(*) Automatic Lists</title>
-        <p></p>
+        <title>Automatic Lists</title>
+
+        <p>Sometimes it is useful to have an automatic list of various elements of one kind in a book, other than the ones already available in a <pretext/> document.  The predefined ones include an index (see <xref ref="topic-index"/>) and a list of notation (see <xref ref="topic-notation"/>).  Examples of lists one might wish to create could include lists of titled figures, computational listing, or theorems.</p>
+
+        <p>To construct an automatic list, one uses a <tage>list-of</tage> element.  This tag has a required <attr>elements</attr> attribute, where the author limits the list to a certain tag.  This could be <c>elements="theorem"</c>, or a space-delimited list of tags like <c>elements="theorem fact corollary"</c>.</p>
+
+        <p>Although automatic lists may be most useful in backmatter, it is possible to use them for summarizing results or other items in a smaller part of your document.  Use the <attr>scope</attr> attribute to limit to the current <c>"section"</c> or <c>"part"</c>.  To organize the list better, use the <attr>divisions</attr> attribute to give structure with headings, such as <c>divisions="section subsection"</c> to organize at two levels.  Finally, the <attr>empty</attr> attribute can be set to <c>"yes"</c> or <c>"no"</c> (default), depending on whether you wish to show any divisions that have none of the requested elements (obviously only useful if you set <c>divisions</c> to something nonempty).</p>
+
+        <p>Note that an automatic list gets no title or visual separation from surrounding material, so use the usual subdivision elements to make that happen.</p>
     </section>
 
     <section xml:id="topic-url">
@@ -2567,7 +3297,8 @@
                     <li>You can navigate (explore) the expression tree with the up, down, left, and right arrow keys.  The subtitles will change as you do this.</li>
                 </ol></p>
                 <p>From the MathJax demonstration page, Maxwell's equations for practice:<idx>Maxwell's equations</idx><md>
-                    <mrow>\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &amp; = \frac{4\pi}{c}\vec{\mathbf{j}}</mrow>
+                    <mrow>\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t}
+                    &amp; = \frac{4\pi}{c}\vec{\boldsymbol{\jmath}}</mrow>
                     <mrow>\nabla \cdot \vec{\mathbf{E}} &amp; = 4 \pi \rho</mrow>
                     <mrow>\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} &amp; = \vec{\mathbf{0}}</mrow>
                     <mrow>\nabla \cdot \vec{\mathbf{B}} &amp; = 0</mrow>
@@ -2595,6 +3326,13 @@
             <li>
                 <title>Colors</title>
                 <p>We are sensitive to the fact that some readers have difficulty distinguishing between certain colors.  So we do our best to distinguish text, or other elements, without relying exclusively on color.  For example, the <tag>delete</tag> and <tag>insert</tag> elements may render text with strike-through and underlining (respectively) to show the distinction.</p>
+
+                <p>But you can help as you author.  For example, see <xref ref="color-in-math"/>.</p>
+            </li>
+
+            <li>
+                <title>Justified Text</title>
+                <p>Right-justified text (an even right margin) can sometimes lead to spaced-out text that is difficult for some readers.  For print, our use of <latex/> as an intermediate format, leads to <init>PDF</init> output where right-justified text can be superior to the alternative, <term>ragged right</term> text.  For more see <xref ref="print-justification"/> and <xref ref="styling-justification"/>.</p>
             </li>
         </dl></p>
 
@@ -2698,4 +3436,34 @@ A minimal working example may be found in the
 </url><fn><c>examples/sample-slideshow/sample-slideshow.xml</c></fn>.
         </p>
     </section>
+
+    <section xml:id="topic-literate-programming">
+        <title>Literate Programming</title>
+        <idx>literate programming</idx>
+
+        <p>We continue (and do not repeat) the introduction at <xref ref="overview-literate-programming"/>.  <pretext/> implements the literate programming paradigm with two primary elements, <tag>fragment</tag> and <tag>fragref</tag>.</p>
+
+        <p>A <tag>fragment</tag> is a chunk of code.  Almost always it has a <attr>xml:id</attr> attribute.  It begins with a mandatory <tag>title</tag>.  It may have index entries, but see below for advice using the <tag>list-of</tag> element.  Then there is a mix of <tag>code</tag> and <tag>fragref</tag> elements.  The <tag>code</tag> element holds the actual text in whatever computer language you are using.  Line breaks are respected.  Use the <init>XML</init> escape characters <c>&amp;lt;</c> and <c>&amp;amp;</c> if your code needs the <c>&lt;</c> or <c>&amp;</c> characters.  Do not try to use <init>XML</init> markup inside the <tag>code</tag> element.</p>
+
+        <p>A <tag>fragref</tag> is a reference to some other <tag>fragment</tag>.  This is accomplished via the <attr>ref</attr> attribute which points to the target via an <attr>xml:id</attr>.  So this is very similar to an <tag>xref</tag> (<xref ref="overview-cross-references"/>), but not enough alike to have the same element name.   The most important distinction is that the <c>xsl/pretext-litprog.xsl</c> stylesheet will <em>replace</em> the <tag>fragref</tag> with the <em>contents</em> of the target <tag>fragment</tag>.  In other conversions, the <tag>fragref</tag> will be a visual expression of the target <tag>fragment</tag>, possibly with some active means to visit or examine the target (hyperlink, knowl), more similar to an <element>xref</element>.</p>
+
+        <p>So the <c>xsl/pretext-litprog.xsl</c> stylesheet will course through your fragments converting the tree-like structure given by the references in the <tag>fragref</tag> elements into a depth-first traversal that will assemble the <tag>code</tag> elements, and only the <tag>code</tag> elements, linearly into a program.  Notice that it is your job as the author of the program to be certain that this rearrangement results in a syntactically correct program.  (<pretext/> is good, but not that good.)</p>
+
+        <p>If you are with us this far, you are wondering just where the root of this tree is?  In other words, just <em>which</em> <tag>fragment</tag> does this traversal begin with?  Good question.  At least one <tag>fragment</tag> must have a <attr>filename</attr> attribute.  Then a traversal will begin here and your program will be output to the file with the name you specify.  You are not limited to one file/root, so if your program has multiple source files they may be documented/collected into a single <pretext/> source file.  (Notice this implies that every <tag>fragment</tag> <em>must</em> have an <attr>xml:id</attr> or a <attr>filename</attr>.)</p>
+
+        <p>You can place a <tag>fragment</tag> most anywhere you might place any other numbered block (such as <tag>example</tag>), though we would tend to place them as children of divisions.  The remainder of your document can have all the usual <pretext/> features: a table of contents, a preface, divisions, an index, references, etc.  Then a conversion to <init>PDF</init>, <init>HTML</init>, or other formats, will include your code, but in an order that might be more human-readable, and with careful documentation in close proximity.</p>
+
+        <p>Automatically migrating each <tag>fragment</tag> to an index is a bad idea.  (We already experimented.)  Instead you can try putting<cd>
+            <cline>&lt;list-of elements="fragment"/&gt;</cline>
+        </cd>into an <tag>appendix</tag>.  Perhaps a pointer early on to its existence will help your reader.  This list can be subdivided with the use of the <attr>divisions</attr> attribute.  See <xref ref="topic-automatic-lists"/>.  Note that you might still want to provide an index, but remember that its construction is a job for an author (<xref ref="topic-index-advice"/>).</p>
+
+        <p>Literate programming has been developed to support the authoritative <init>RELAX-NG</init> version of the <pretext/> schema.  Since <init>RELAX-NG</init> is a declarative language, the rearrangement of code hunks is not quite as critical.  But still, see <c>schema/pretext.xml</c> for a non-trivial example.  As of 2020-11-11 there are a few caveats.  Start a discussion on the development forum if you have a need.<ul>
+            <li>The conversion to a program has no explicit support for languages which interpret indentation meaningfully (e.g. Python).  The <tag>code</tag> element makes <em>no changes</em>, so you could succeed if authored carefully.  Some sort of relative indentation attribute might be a good solution.</li>
+
+            <li>We do not syntax-highlight the code.  A language attribute might allow us to recycle existing features.</li>
+
+            <li>Numbering is serial from the start of the document.  Raise a feature request if you think hierarchical numbering is indicated.</li>
+        </ul></p>
+    </section>
+
 </chapter>

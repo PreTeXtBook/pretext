@@ -32,17 +32,36 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <p>A private solution.</p>
     </solution>
 
-    <!-- "inline-exercise" is "An Inline Exercise" -->
-    <hint ref="inline-exercise">
-        <p>A private hint.</p>
-    </hint>
+    <!-- The "pi:privatessolutionsdivision" is not necessary for a   -->
+    <!-- *single* file holding private solutions.  But if you choose -->
+    <!-- to spread your solutions across several files with the      -->
+    <!-- "xi:include" mechanism, hten you need each file to have a   -->
+    <!-- single overall (root) XML element.  So this element is only -->
+    <!-- meant to play that role.  It can be nested arbitrarily.     -->
+    <!-- We only use it here for testing purposes  - it is not       -->
+    <!-- necessary, nor is it harmful in this case.                  -->
 
-    <solution ref="inline-exercise">
-        <p>First of two private solutions.</p>
+    <pi:privatessolutionsdivision>
+        <!-- "inline-exercise" is "An Inline Exercise" -->
+        <hint ref="inline-exercise">
+            <p>A private hint.</p>
+        </hint>
+
+        <solution ref="inline-exercise">
+            <p>First of two private solutions.</p>
+        </solution>
+
+        <solution ref="inline-exercise">
+            <p>Second of two private solutions.</p>
+        </solution>
+    </pi:privatessolutionsdivision>
+
+    <!-- a terminal task in "A very structured project" -->
+    <answer ref="deep-terminal-task">
+        <p>A private answer to a nested task.</p>
+    </answer>
+
+    <solution ref="deep-terminal-task">
+        <p>A private solution to a nested task.</p>
     </solution>
-
-    <solution ref="inline-exercise">
-        <p>Second of two private solutions.</p>
-    </solution>
-
 </pi:privatesolutions>

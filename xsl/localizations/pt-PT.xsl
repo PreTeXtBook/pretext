@@ -61,6 +61,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='volume'><xsl:text>Volume</xsl:text></localization>
     <localization string-id='book'><xsl:text>Livro</xsl:text></localization>
     <localization string-id='article'><xsl:text>Artigo</xsl:text></localization>
+    <!-- <localization string-id='slideshow'><xsl:text>Slideshow</xsl:text></localization> -->
     <localization string-id='letter'><xsl:text>Carta</xsl:text></localization>
     <localization string-id='memo'><xsl:text>Memorando</xsl:text></localization>
     <localization string-id='presentation'><xsl:text>Apresentação</xsl:text></localization>
@@ -73,6 +74,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='section'><xsl:text>Secção</xsl:text></localization>
     <localization string-id='subsection'><xsl:text>Subsecção</xsl:text></localization>
     <localization string-id='subsubsection'><xsl:text>Subsubsecção</xsl:text></localization>
+    <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
+    <!-- <localization string-id='slide'><xsl:text>Slide</xsl:text></localization> -->
     <localization string-id='introduction'><xsl:text>Introdução</xsl:text></localization>
     <localization string-id='conclusion'><xsl:text>Conclusão</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Exercícios</xsl:text></localization>
@@ -138,6 +141,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'><xsl:text>Parágrafo</xsl:text></localization>
     <!-- <localization string-id='blockquote'><xsl:text>Quotation</xsl:text></localization> -->
+    <!-- Literate programming, a chunk of computer code -->
+    <!-- <localization string-id='fragment'><xsl:text>Fragment</xsl:text></localization> -->
     <!-- Parts of an exercise and its solution -->
     <localization string-id='divisionalexercise'><xsl:text>Exercício</xsl:text></localization>
     <!-- Translation needed for Portugal Portugese -->

@@ -81,20 +81,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure xml:id="figure-z8-mult">
                     <caption>Multiplication table for <m>{\mathbb Z_8}</m></caption>
-                    <sidebyside>
-                        <p><me>\begin{array}{c|cccccccc}
-                        <![CDATA[\cdot & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
-                        \hline
-                        0       & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-                        1       & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
-                        2       & 0 & 2 & 4 & 6 & 0 & 2 & 4 & 6 \\
-                        3       & 0 & 3 & 6 & 1 & 4 & 7 & 2 & 5 \\
-                        4       & 0 & 4 & 0 & 4 & 0 & 4 & 0 & 4 \\
-                        5       & 0 & 5 & 2 & 7 & 4 & 1 & 6 & 3 \\
-                        6       & 0 & 6 & 4 & 2 & 0 & 6 & 4 & 2 \\
-                        7       & 0 & 7 & 6 & 5 & 4 & 3 & 2 & 1 ]]>
-                        \end{array}</me></p>
-                    </sidebyside>
+                    <p><me>\begin{array}{c|cccccccc}
+                    <![CDATA[\cdot & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+                    \hline
+                    0       & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+                    1       & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+                    2       & 0 & 2 & 4 & 6 & 0 & 2 & 4 & 6 \\
+                    3       & 0 & 3 & 6 & 1 & 4 & 7 & 2 & 5 \\
+                    4       & 0 & 4 & 0 & 4 & 0 & 4 & 0 & 4 \\
+                    5       & 0 & 5 & 2 & 7 & 4 & 1 & 6 & 3 \\
+                    6       & 0 & 6 & 4 & 2 & 0 & 6 & 4 & 2 \\
+                    7       & 0 & 7 & 6 & 5 & 4 & 3 & 2 & 1 ]]>
+                    \end{array}</me></p>
                 </figure>
             </example>
 
@@ -338,19 +336,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <figure xml:id="figure-s3">
                 <caption>Symmetries of an equilateral triangle</caption>
-
-                <sidebyside>
-                    <p><me>\begin{array}{c|cccccc}
-                    <![CDATA[\circ  & id     & \rho_1 & \rho_2 & \mu_1 & \mu_2 & \mu_3 \\
-                    \hline
-                    id     & id     & \rho_1 & \rho_2 & \mu_1 & \mu_2 & \mu_3 \\
-                    \rho_1 & \rho_1 & \rho_2 & id     & \mu_3 & \mu_1 & \mu_2 \\
-                    \rho_2 & \rho_2 & id     & \rho_1 & \mu_2 & \mu_3 & \mu_1 \\
-                    \mu_1  & \mu_1  & \mu_2  & \mu_3  & id    & \rho_1& \rho_2\\
-                    \mu_2  & \mu_2  & \mu_3  & \mu_1  & \rho_2 & id    & \rho_1\\
-                    \mu_3  & \mu_3  & \mu_1  & \mu_2  & \rho_1 & \rho_2& id]]>
-                    \end{array}</me></p>
-                </sidebyside>
+                <p><me>\begin{array}{c|cccccc}
+                <![CDATA[\circ  & id     & \rho_1 & \rho_2 & \mu_1 & \mu_2 & \mu_3 \\
+                \hline
+                id     & id     & \rho_1 & \rho_2 & \mu_1 & \mu_2 & \mu_3 \\
+                \rho_1 & \rho_1 & \rho_2 & id     & \mu_3 & \mu_1 & \mu_2 \\
+                \rho_2 & \rho_2 & id     & \rho_1 & \mu_2 & \mu_3 & \mu_1 \\
+                \mu_1  & \mu_1  & \mu_2  & \mu_3  & id    & \rho_1& \rho_2\\
+                \mu_2  & \mu_2  & \mu_3  & \mu_1  & \rho_2 & id    & \rho_1\\
+                \mu_3  & \mu_3  & \mu_1  & \mu_2  & \rho_1 & \rho_2& id]]>
+                \end{array}</me></p>
             </figure>
 
         </subsection>
@@ -392,19 +387,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure xml:id="figure-z5-cayley">
                     <caption>Cayley table for <m>({\mathbb Z_5}, +)</m></caption>
-
-                    <sidebyside>
-                        <p><me>\begin{array}{c|ccccc}
-                        <![CDATA[+ & 0 & 1 & 2 & 3 & 4 \\
-                        \hline
-                          0 & 0 & 1 & 2 & 3 & 4 \\
-                          1 & 1 & 2 & 3 & 4 & 0 \\
-                          2 & 2 & 3 & 4 & 0 & 1 \\
-                          3 & 3 & 4 & 0 & 1 & 2 \\
-                          4 & 4 & 0 & 1 & 2 & 3]]>
-                        \end{array}</me></p>
-                    </sidebyside>
-
+                    <p><me>\begin{array}{c|ccccc}
+                    <![CDATA[+ & 0 & 1 & 2 & 3 & 4 \\
+                    \hline
+                      0 & 0 & 1 & 2 & 3 & 4 \\
+                      1 & 1 & 2 & 3 & 4 & 0 \\
+                      2 & 2 & 3 & 4 & 0 & 1 \\
+                      3 & 3 & 4 & 0 & 1 & 2 \\
+                      4 & 4 & 0 & 1 & 2 & 3]]>
+                    \end{array}</me></p>
                 </figure>
             </example>
 
@@ -420,16 +411,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure xml:id="figure-cayley-u8">
                     <caption>Multiplication table for <m>U(8)</m></caption>
-                    <sidebyside>
-                        <p><me>\begin{array}{c|cccc}
-                        <![CDATA[\cdot & 1 & 3 & 5 & 7 \\
-                        \hline
-                        1       & 1 & 3 & 5 & 7 \\
-                        3       & 3 & 1 & 7 & 5 \\
-                        5       & 5 & 7 & 1 & 3 \\
-                        7       & 7 & 5 & 3 & 1]]>
-                        \end{array}</me></p>
-                    </sidebyside>
+                    <p><me>\begin{array}{c|cccc}
+                    <![CDATA[\cdot & 1 & 3 & 5 & 7 \\
+                    \hline
+                    1       & 1 & 3 & 5 & 7 \\
+                    3       & 3 & 1 & 7 & 5 \\
+                    5       & 5 & 7 & 1 & 3 \\
+                    7       & 7 & 5 & 3 & 1]]>
+                    \end{array}</me></p>
                 </figure>
             </example>
 
@@ -672,17 +661,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure xml:id="figure-z2xz2">
                     <caption>Addition table for <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m></caption>
-
-                    <sidebyside>
-                        <p><me>\begin{array}{c|cccc}
-                        <![CDATA[+     & (0,0) & (0,1) & (1,0) & (1,1) \\
-                        \hline
-                        (0,0) & (0,0) & (0,1) & (1,0) & (1,1) \\
-                        (0,1) & (0,1) & (0,0) & (1,1) & (1,0) \\
-                        (1,0) & (1,0) & (1,1) & (0,0) & (0,1) \\
-                        (1,1) & (1,1) & (1,0) & (0,1) & (0,0)]]>
-                        \end{array}</me></p>
-                    </sidebyside>
+                    <p><me>\begin{array}{c|cccc}
+                    <![CDATA[+     & (0,0) & (0,1) & (1,0) & (1,1) \\
+                    \hline
+                    (0,0) & (0,0) & (0,1) & (1,0) & (1,1) \\
+                    (0,1) & (0,1) & (0,0) & (1,1) & (1,0) \\
+                    (1,0) & (1,0) & (1,1) & (0,0) & (0,1) \\
+                    (1,1) & (1,1) & (1,0) & (0,1) & (0,0)]]>
+                    \end{array}</me></p>
                 </figure>
             </example>
 

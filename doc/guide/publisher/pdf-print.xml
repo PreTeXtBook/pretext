@@ -9,35 +9,47 @@
 
 <chapter xml:id="pdf-print">
     <title>Conversion to PDF and Print</title>
+    <idx><h>print option</h><h>LaTeX, PDF</h></idx>
+    <idx><h>electronic option</h><h>LaTeX, PDF</h></idx>
+    <idx><h>LaTeX</h><h>print option</h></idx>
+    <idx><h>LaTeX</h><h>electronic option</h></idx>
+    <idx><h>PDF</h><h>print option</h></idx>
+    <idx><h>PDF</h><h>electronic option</h></idx>
 
     <introduction>
-        <p>This chapter describes ways a publisher can adjust the presentation of <pretext/> content for a print format, or an lectronic facsimile (i.e. <init>PDF</init>), without actually changing that content.</p>
+        <p>This chapter describes ways a publisher can adjust the presentation of <pretext/> content for a print format, or an electronic facsimile (i.e. <init>PDF</init>).</p>
+    </introduction>
 
-        <p>
-            <idx><h>PDF</h><h>electronic</h></idx>
-            <idx><h>PDF</h><h>print</h></idx>
-            The stylesheet <c>pretext-latex.xsl</c> can produce two very similar outputs.  Each is a file in <latex/> syntax, which can be converted to a <init>PDF</init> with a <latex/> executable (<q>engine</q>).  However, there are two purposes for such a <init>PDF</init>.  The first is a document which is meant to be read on a screen.  We call this an <term>electronic PDF</term>.  The second is meant to be printed as a physical book, so it would be the file you provide to a copy shop, campus bookstore, or print-on-demand service (see <xref ref="print-on-demand"/>).  We call this a <term>print PDF</term>.  As you read this, keep in mind that that <latex/> conversion is really two-converters-in-one.
-        </p>
+    <section xml:id="electronic-or-print">
+        <title>Electronic versus Print</title>
+
+        <p>The stylesheet <c>pretext-latex.xsl</c> can produce two very similar outputs.  Each is a file in <latex/> syntax, which can be converted to a <init>PDF</init> with a <latex/> executable (<q>engine</q>).  However, there are two purposes for such a <init>PDF</init>.  The first is a document which is meant to be read on a screen.  We call this an <term>electronic PDF</term>.  The second is meant to be printed as a physical book, so it would be the file you provide to a copy shop, campus bookstore, or print-on-demand service (see <xref ref="print-on-demand"/>).  We call this a <term>print PDF</term>.  So as you read this, keep in mind that the <latex/> conversion is really two-converters-in-one.</p>
 
         <p>As an illustration of the difference, an electronic <init>PDF</init> will contain cross-references that are active, and colored to be obvious to the reader.  For the print <init>PDF</init> the same cross-reference will be black, inactive, and by default contain the page number of the target.</p>
 
-        <p>The <c>latex.print</c> switch controls the selection of the two output modes of this single stylesheet.  The default is <c>no</c> for the electronic version, and <c>yes</c> will change to the print version.  In this chapter, we describe both of these two, slightly dissimilar, conversions together.</p>
-    </introduction>
+        <p>The publisher file entry <c>latex/@print</c> controls the selection of the two output modes of this single stylesheet.  The default is <c>no</c> for the electronic version, and <c>yes</c> will change to the print version.  See <xref ref="latex-print-options"/> for the specifics of this entry.</p>
 
-    <section>
-        <title>Text Justification and Alignment</title>
-
-        <p>The <c>text.alignment</c> switch will control how text is aligned (such as in paragraphs).  The value <c>justify</c> is the default, and <c>raggedright</c> will cause alignment on the left, with an uneven right edge, employing less hypenation.</p>
+        <p>In this chapter, we describe both of these two conversions together, since they are only slightly dissimilar.</p>
     </section>
 
-    <section>
+    <section xml:id="print-justification">
+        <title>Text Justification and Alignment</title>
+
+        <p><latex/> is engineered around placing boxes on the page.  Characters in boxes are built up to be words, then words in boxes become lines, and then lines in boxes become pages.  Or something close to that.  As a consequence <latex/> excels at right-justified text.  For this reason, and also because we think it looks more like a commercial published book and therefore more professional, right-justified text is the default.  If your opinions on this come from experience with some other word processor, keep an open mind.</p>
+
+        <p>However, we provide the <c>text.alignment</c> switch to control how text is aligned (such as in paragraphs).  The value <c>justify</c> is the default, and <c>raggedright</c> will cause alignment on the left, with an uneven right edge.  Paradoxically, this can lead to greater amounts of hyphenation.</p>
+
+        <p>See <xref ref="styling-justification"/> for greater control over some aspects of right-justified text and also read about justified text in <xref ref="topic-accessibility"/>.</p>
+    </section>
+
+    <section xml:id="print-sides">
         <title>One-Sided or Two-Sided</title>
 
-        <p>An electronic <init>PDF</init> will default to page layout appropriate for a document printed single-sided, which makes the most sense for a document that may not be printed, or which might be printed on a personal printer.</p>
+        <p>An electronic <init>PDF</init> will default to page layout appropriate for a document printed single-sided, which makes the most sense for a document that may not ever be printed, or which possibly might be printed on a personal printer.</p>
 
         <p>A print <init>PDF</init> will default to page layout appropriate for a document printed two-sided, which makes the most sense for a document that may be sent to a print-on-demand service or printed on a printer that will print on both sides of a sheet of paper.</p>
 
-        <p>These defaults may be overridden with the <c>latex.sides</c> switch with values <c>one</c> and <c>two</c>.</p>
+        <p>These defaults may be overridden with the publisher entry <c>latex/@sides</c> switch with values <c>one</c> and <c>two</c>.  See <xref ref="latex-sides-options"/> for the specifics of this entry.</p>
 
         <p>One-sided layout will default to symmetric left/right margins, and page headers with the page numbers <em>always</em> placed in the upper-right corner as part of default page headers.  There will be no blank pages between chapters of a book.</p>
 
@@ -56,6 +68,12 @@
             <li>Use aspect ratio to compute an overall height (about 6.5 inches)</li>
             <li>Subtract quarter-inch top and bottom margins to obtain text height</li>
         </ol>Then you can provide the <c>geometry</c> package the overall size as the <c>papersize</c> and the text width and text height as the <c>total</c> size of the body, resulting in equal (tight) margins all around, and good use of limited screen real estate.  These parameters create a <init>PDF</init> that is very legible on a larger smart phone, and for fine detail, rotating the device to landscape works well.  Really.</p>
+    </section>
+
+    <section xml:id="latex-asymptote-links">
+        <title>Asymptote Links</title>
+
+        <p>An image described by an <tag>asymptote</tag> element will produce standalone <init>HTML</init> files as part of the convversion to <init>HTML</init> output.  For 3D images, these are interactive (rotate, scale).  If you set a base <init>URL</init> for your project (<xref ref="online-base-url"/>) and request this feature through a publisher switch, then each image in an electronic <init>PDF</init> (<xref ref="electronic-or-print"/>) will be a link to the <init>HTML</init> version. See <xref ref="latex-asymptote-link-options"/> for the specifics of this entry.  This feature is off by default.</p>
     </section>
 
     <section>

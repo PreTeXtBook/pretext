@@ -62,6 +62,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='book'><xsl:text>Book</xsl:text></localization>
     <localization string-id='article'><xsl:text>Article</xsl:text></localization>
     <localization string-id='letter'><xsl:text>Letter</xsl:text></localization>
+    <localization string-id='slideshow'><xsl:text>Slideshow</xsl:text></localization>
     <localization string-id='memo'><xsl:text>Memo</xsl:text></localization>
     <localization string-id='presentation'><xsl:text>Presentation</xsl:text></localization>
     <!-- Parts of a document -->
@@ -73,6 +74,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='section'><xsl:text>Section</xsl:text></localization>
     <localization string-id='subsection'><xsl:text>Subsection</xsl:text></localization>
     <localization string-id='subsubsection'><xsl:text>Subsubsection</xsl:text></localization>
+    <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
+    <localization string-id='slide'><xsl:text>Slide</xsl:text></localization>
     <localization string-id='introduction'><xsl:text>Introduction</xsl:text></localization>
     <localization string-id='conclusion'><xsl:text>Conclusion</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Exercises</xsl:text></localization>
@@ -135,6 +138,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'><xsl:text>Paragraph</xsl:text></localization>
     <localization string-id='blockquote'><xsl:text>Quotation</xsl:text></localization>
+    <!-- Literate programming, a chunk of computer code -->
+    <localization string-id='fragment'><xsl:text>Fragment</xsl:text></localization>
     <!-- Parts of an exercise and its solution -->
     <!-- An "exercise", at any level, within an "exercises" division is a          -->
     <!-- "divisional" exercise and the string employed is 'divisionalexercise'.    -->

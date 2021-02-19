@@ -78,12 +78,13 @@ PGOUT      = $(SCRATCH)/pg
 HTMLOUT    = $(SCRATCH)/html
 PDFOUT     = $(SCRATCH)/pdf
 EPUBOUT    = $(SCRATCH)/epub
-WWOUT      = $(SCRATCH)/webwork-extraction
+WWOUT      = $(SCRATCH)/webwork-representations
 
 # Some aspects of producing these examples require a WeBWorK server.
 # Either specify only the protocol and domain (like https://webwork.yourschool.edu)
 # or specify a 5-tuple with quotes exactly as in this example
 # SERVER = "(https://webwork-ptx.aimath.org,courseID,userID,password,course_password)"
+# NOTE: it is IMPORTANT to get the protocol correct for your server (HTTP versus HTTPS)
 SERVER = https://webwork-ptx.aimath.org
 
 
@@ -91,31 +92,23 @@ SERVER = https://webwork-ptx.aimath.org
 #Targets for make
 ################
 
+# TODO: generate "latex images" for the sample chapter, using the pretext
+# script AND using the publisher file, to be certain the one such image
+# has the right automatic xml:id  (2020-07-28)
+
 #  Extract webwork problems into a single XML file called
-#  webwork-extraction.xml which holds multiple versions of each problem.
+#  webwork-representations.xml which holds multiple versions of each problem.
 #  Also locally store images from the WeBWorK server.
 
-sample-chapter-extraction:
+sample-chapter-representations:
 	install -d $(WWOUT)
-	-rm $(WWOUT)/webwork-extraction.xml
+	-rm $(WWOUT)/webwork-representations.ptx
 	$(MB)/pretext/pretext -v -c webwork -d $(WWOUT) -s $(SERVER) $(SMPCHP)
 
-mini-extraction:
+mini-representations:
 	install -d $(WWOUT)
-	-rm $(WWOUT)/webwork-extraction.xml
+	-rm $(WWOUT)/webwork-representations.ptx
 	$(MB)/pretext/pretext -v -c webwork -d $(WWOUT) -s $(SERVER) $(MINI)
-
-#  Make a new PTX file from the source tree, with webwork elements replaced
-#  by the webwork-reps from webwork-extraction.xml. (So run the above at
-#  least once first.) Subsequent templates are applied to the result.
-
-sample-chapter-merge:
-	cd $(SCRATCH); \
-	xsltproc --stringparam webwork.extraction $(WWOUT)/webwork-extraction.xml $(MBXSL)/pretext-merge.xsl $(SMPCHP) > sample-chapter-merge.ptx
-
-mini-merge:
-	cd $(SCRATCH); \
-	xsltproc --stringparam webwork.extraction $(WWOUT)/webwork-extraction.xml $(MBXSL)/pretext-merge.xsl $(MINI) > mini-merge.ptx
 
 # LaTeX and PDF versions
 # See prerequisite above about merge files.
@@ -127,8 +120,9 @@ sample-chapter-pdf:
 	-rm $(PDFOUT)/*.*
 	-rm $(PDFOUT)/images/*
 	cp -a $(WWOUT)/*.png $(PDFOUT)/images
+	cp $(WWOUT)/webwork-representations.ptx $(WWEXAMPLE)/sample-chapter
 	cd $(PDFOUT); \
-	xsltproc -o sample-ww-chapter.tex $(MBXSL)/pretext-latex.xsl $(SCRATCH)/sample-chapter-merge.ptx; \
+	xsltproc -stringparam publisher publication.xml -o sample-ww-chapter.tex $(MBXSL)/pretext-latex.xsl  $(SMPCHP); \
 	xelatex sample-ww-chapter.tex; \
 	xelatex sample-ww-chapter.tex; \
 
@@ -137,9 +131,10 @@ mini-pdf:
 	install -d $(PDFOUT)/images
 	-rm $(PDFOUT)/*.*
 	-rm $(PDFOUT)/images/*
-	cp -a $(WWOUT)/*.png $(PDFOUT)/images
+	-cp -a $(WWOUT)/*.png $(PDFOUT)/images
+	cp $(WWOUT)/webwork-representations.ptx $(WWEXAMPLE)/minimal
 	cd $(PDFOUT); \
-	xsltproc -o webwork-mini.tex $(MBXSL)/pretext-latex.xsl $(SCRATCH)/mini-merge.ptx; \
+	xsltproc -stringparam publisher publication.xml -o webwork-mini.tex $(MBXSL)/pretext-latex.xsl $(MINI); \
 	xelatex webwork-mini.tex; \
 	xelatex webwork-mini.tex; \
 
@@ -150,15 +145,17 @@ sample-chapter-html:
 	-rm $(HTMLOUT)/*.html
 	-rm $(HTMLOUT)/knowl/*.html
 	cp -a $(WWEXAMPLE)/sample-chapter/images $(HTMLOUT)
+	cp $(WWOUT)/webwork-representations.ptx $(WWEXAMPLE)/sample-chapter
 	cd $(HTMLOUT); \
-	xsltproc --stringparam webwork.divisional.static no $(MBXSL)/pretext-html.xsl $(SCRATCH)/sample-chapter-merge.ptx;
+	xsltproc -stringparam publisher publication.xml -stringparam webwork.divisional.static no $(MBXSL)/pretext-html.xsl $(SMPCHP);
 
 mini-html:
 	install -d $(HTMLOUT)
 	-rm $(HTMLOUT)/*.html
 	-rm $(HTMLOUT)/knowl/*.html
+	cp $(WWOUT)/webwork-representations.ptx $(WWEXAMPLE)/minimal
 	cd $(HTMLOUT); \
-	xsltproc $(MBXSL)/pretext-html.xsl $(SCRATCH)/mini-merge.ptx;
+	xsltproc -stringparam publisher publication.xml $(MBXSL)/pretext-html.xsl $(MINI);
 
 #  Make an archive of webwork problem sets for each "section" (as specified
 #  by chunk level) with set definition files, set header files, and problem
@@ -167,15 +164,17 @@ mini-html:
 
 sample-chapter-problem-sets:
 	install -d $(PGOUT)
+	cp $(WWOUT)/webwork-representations.ptx $(WWEXAMPLE)/sample-chapter
 	cd $(PGOUT); \
 	rm -r Integrating_WeBWorK_into_Textbooks; \
-	xsltproc --stringparam chunk.level 1 $(MBXSL)/pretext-ww-problem-sets.xsl $(SCRATCH)/sample-chapter-merge.ptx
+ 	xsltproc -stringparam publisher publication.xml -stringparam chunk.level 1 $(MBXSL)/pretext-ww-problem-sets.xsl $(SMPCHP)
 
 mini-problem-sets:
 	install -d $(PGOUT)
+	cp $(WWOUT)/webwork-representations.ptx $(WWEXAMPLE)/minimal
 	cd $(PGOUT); \
 	rm -r WeBWorK_Minimal_Example; \
-	xsltproc --stringparam chunk.level 1 $(MBXSL)/pretext-ww-problem-sets.xsl $(SCRATCH)/mini-merge.ptx
+	xsltproc -stringparam publisher publication.xml -stringparam chunk.level 1 $(MBXSL)/pretext-ww-problem-sets.xsl $(MINI)
 
 ###########
 # Utilities

@@ -53,7 +53,7 @@
 
         <p>Since the value of an <attr>xml:id</attr> is also used in a variety of ways, such as to construct some file names, some care should be taken in how you author them.  We limit the possible characters to letters and numbers (<c>a-z</c>, <c>A-Z</c>, <c>0-9</c>), with hyphens and underscores (<c>-_</c>) available as word-separators.  Our advice is to stick to lowercase letters, though we are not yet aware of any problems with case-insensitivity.  So in short, use <term>kebab-case</term> or <term>snake-case</term> for your <attr>xml:id</attr> values.</p>
 
-        <p>For more, see <xref ref="topic-cross-referencing" /> because cross-references have many features. But first, here are two features you do not want to miss.  In the early stages of writing, you can author <c>&lt;xref provisional="subsection-flowers" /&gt;</c> to point to a subsection you are contemplating (but have not written yet) and you will get various polite reminders to get that straightened out eventually.  Also the default behavior is to automatically provide the generic name of the target, so you will get something like <q>Subsection 4.3.2</q> without ever typing the <q>Subsection</q> part.  If you move the target, the generic name will adjust if necessary, and if you switch to one of the supported languages, the generic name will switch language (see <xref provisional="topic-on-languages" />.</p>
+        <p>For more, see <xref ref="topic-cross-referencing" /> because cross-references have many features. But first, here are two features you do not want to miss.  In the early stages of writing, you can author <c>&lt;xref provisional="subsection-flowers" /&gt;</c> to point to a subsection you are contemplating (but have not written yet) and you will get various polite reminders to get that straightened out eventually (see <xref ref="processing-author-tools" /> for details).  Also the default behavior is to automatically provide the generic name of the target, so you will get something like <q>Subsection 4.3.2</q> without ever typing the <q>Subsection</q> part.  If you move the target, the generic name will adjust if necessary, and if you switch to one of the supported languages, the generic name will switch language (see <xref provisional="topic-on-languages" />.</p>
     </section>
 
     <section xml:id="overview-title">
@@ -65,6 +65,28 @@
         <p>A division will also support an optional <tag>shortitle</tag>.  The full <tag>title</tag> will be used where the division is born, but in other places where the title is used for navigation, such as a Table of Contents, print page header, or HTML summary page, the <tag>shortitle</tag> will be used preferentially.  To avoid confusing your readers, use this feature sparingly, and ideally only when you have a really, really, really long title and then use a short title that is easily recognizable as a variant of the long title.  Your first option should be to ask if your long title must absolutely be so long.</p>
 
         <p>Many, many other structures admit titles.  Experiment, or look at specific descriptions of the structure you are interested in.  Titles are very integral to <pretext />, much like cross-references.  Titles migrate to the Table of Contents, get used in page headers for print output, can be used in lists (such as a List of Figures), and can be used as the text of a cross-reference, instead of a number.  You might not be inclined to give a <tag>remark</tag> a title, but it would be good practice to do so.  If you use knowls in your <init>HTML</init> output for structures such as <tag>example</tag> (or if somebody else may someday choose to), then your readers will be spared a lot of confusion if you supply informative titles for each. Your electronic outputs will be much more useful to your readers if you routinely title every structure that allows it (perhaps excepting <tag>exercise</tag> which can be known by their number).</p>
+
+        <note xml:id="best-practice-titles">
+            <title>Provide Informative Titles Liberally</title>
+            <p>Provisions for titles in many situations is a key <pretext/> feature.  And then they are used for various purposes to benefit readers.  A good example is when the <init>HTML</init> conversion is used to place content in a <term>knowl</term>, a unit of content that begins hidden, but can be revealed (and hidden again) with one click of a mouse.  Since a reader cannot see the content originally, we will migrate a title into the clickable text.  But we cannot read your mind<mdash/>it is your job as the author to provide a title, and to provide a good one.</p>
+
+            <p>Even if you are not yet sure what a knowl is, and even if you think you do not want to use them, there are other good reasons to have a title (such as automatic lists, see <xref ref="topic-automatic-lists"/>).  Constructing them on-the-fly is much easier than making a big chore out of going back and doing it later.</p>
+
+            <p><dl width="narrow">
+                <li>
+                    <title>Bad</title>
+                    <p>Example 5.10</p>
+                </li>
+                <li>
+                    <title>Better</title>
+                    <p>Example 5.10 A cool lizard trick.</p>
+                </li>
+                <li>
+                    <title>Best</title>
+                    <p>Example 5.10 Various colors and markings of a chameleon.</p>
+                </li>
+            </dl></p>
+        </note>
     </section>
 
     <section xml:id="overview-math">
@@ -86,13 +108,13 @@
         <title>Images</title>
         <idx>image</idx>
 
-        <p>You can include an image via the <tag>image</tag><idx>image</idx> tag.  You can use the <attr>source</attr> attribute to provide a filename, likely prefixed by a relative path, that points at an image file.  It is your responsibility to locate that file properly relative to your output, and that the file format is compatible.  So, for example, suppose your source contained <c>&lt;image source="images/butterflies.jpg" /&gt;</c>.  Then you would want to have a directory named <c>images</c> below wherever you process your <latex /> output, or wherever you place your HTML output on a web server.  The <attr>width</attr> attribute can be used to control the size of the image.   Widths are expressed as a percentage of the available width, such as <c>width="60%"</c>.</p>
+        <p>You can include an image via the <tag>image</tag><idx>image</idx> tag.  You can use the <attr>source</attr> attribute to provide a filename, likely prefixed by a relative path, that points at an image file.  It is your responsibility to locate that file properly relative to your output, and that the file format is compatible.  So, for example, suppose your source contained <c>&lt;image source="images/butterflies.jpg"/&gt;</c>.  Then you would want to have a directory named <c>images</c> below wherever you process your <latex /> output, or wherever you place your HTML output on a web server.  The <attr>width</attr> attribute can be used to control the size of the image.   Widths are expressed as a percentage of the available width, such as <c>width="60%"</c>.  Instead of a width, you can also specify margins and the width will be deduced.</p>
 
         <p>You may want to wrap your image in a <tag>figure</tag> to have it centered, and to have some vertical separation above and below.  A <tag>figure</tag> must also have a <tag>caption</tag>, and the figure will be numbered.</p>
 
-        <p>If you want to place an anonymous image (no caption, no number), then you must wrap it in a <tag>sidebyside</tag>.  Note also that the <tag>sidebyside</tag> tag provides some very flexible options for placing several images (<xref ref="overview-sidebyside" />) together, or combining figures with subcaptions.</p>
+        <p>You can also place an <q>anonymous</q> image (no caption, no number) almost anywhere you might place a paragraph (but not <em>within</em> a paragraph).  Note also that the <tag>sidebyside</tag> tag provides some very flexible options for placing several images (<xref ref="overview-sidebyside" />) together, or combining figures with subcaptions.</p>
 
-        <p>If you wish to construct technical diagrams, with editable source, and perhaps including the use of <latex /> macros, <pretext /> provides support for graphics languages like PGF, TikZ, and Asymptote, in addition to using Sage code to describe a plot or image.  In most cases output can be obtained as smoothly-scalable SVG images, in addition to other formats like PDF or PNG.  Making all this happen is one of the more technical aspects of <pretext />, so we save the discussion for one of the topics, <xref provisional="topic-image-languages" />.</p>
+        <p>If you wish to construct technical diagrams, with editable source, and perhaps including the use of <latex/> macros, <pretext/> provides support for authoring with graphics languages such as Asymptote, TikZ, PGF, PSTricks, and xy-pic in addition to using Sage code to describe a plot or image.  In most cases output can be obtained as smoothly-scalable <init>SVG</init> images, in addition to other formats like <init>PDF</init> or <init>PNG</init>.  Making all this happen is one of the more technical aspects of <pretext/>, so read the details in <xref ref="topic-images"/> along with frequent references there to the <c>pretext</c> script described in <xref ref="pretext-script"/>.</p>
     </section>
 
     <section xml:id="overview-lists">
@@ -129,7 +151,7 @@
             </li>
             <li>
                 <title>Project</title>
-                <p>A <tag>project</tag> is a bit different than the prior situations, since this element is structured with <tag>task</tag>.  But it has many common features, such as allowing optional <tag>hint</tag>, <tag>answer</tag>, <tag>solution</tag>.</p>
+                <p>A <tag>project</tag> is a bit different than the prior situations, since this element is structured with <tag>task</tag>.  But it has many common features, such as allowing optional <tag>title</tag>, <tag>hint</tag>, <tag>answer</tag>, <tag>solution</tag>.</p>
             </li>
         </dl></p>
 
@@ -360,20 +382,20 @@
     <section xml:id="overview-index-notation">
         <title>Index and Notation Entries</title>
         <idx>index</idx>
-        <idx>list of notation</idx>
-        <idx><h>notation list</h><see>list of notation</see></idx>
+        <idx>notation</idx>
+        <idx>notation list</idx>
+        <idx><h>list</h><h>of notation</h></idx>
 
         <p>Construction of an index<idx>index</idx> and a list of notation<idx>notation</idx> is accomplished by placing information into your text in the appropriate places in the right way.</p>
 
         <p>The <tag>idx</tag> tags denote an index entry<idx><h>index</h><h>index entry</h></idx>.  These should be placed within the element that they describe.  By this we mean that an <tag>idx</tag> element can be placed within a <tag>theorem</tag> to refer to just that theorem, or it might be placed within a <tag>subsection</tag> to refer to that subsection.  When you do this, a natural place to place the <tag>idx</tag> is right after the <tag>title</tag> and similar metadata.  In this way, electronic versions of your work can have an index that is more informative than a traditional index that uses just page numbers, since it will be apparent while reading and using the index just what type of object the entry refers to.  (See the end of this Guide in an electronic format for an example, <xref ref="the-index" text="title"/>).  Note that the text contained within the <tag>idx</tag> tags does not actually appear in the article<mdash />it only serves to mark the location the index entry points to. You can have several levels of headings by structuring your <tag>idx</tag> element with up to three <tag>h</tag> tags (<q>h</q> for <q>heading</q>).  Additionally, you can use <tag>see</tag> or <tag>seealso</tag> for cross-references within the index.</p>
 
-<p>See <xref ref="topic-index"/> for more details and the finer points of creating index entries.</p>
+        <p>See <xref ref="topic-index"/> for more details and the finer points of creating index entries.</p>
 
         <p>A similar device is used to create a list of notation for a technical (mathematical) work.
-            <idx>list of notation</idx>
-            <idx><h>notation</h><h>list of</h></idx>
         Place a <tag>notation</tag> element as close as possible to the place where notation is first introduced.  If you use the <tag>definition</tag> tag for your definitions, then this is a very natural place to also introduce notation.  Inside of <tag>notation</tag> use the <tag>usage</tag> tag to include a short example of the notation in use.  This will be treated as mathematics, so imagine that it will be wrapped in an <tag>m</tag> tag and use <latex/> syntax.  The <tag>description</tag> tag should contain a very short description in words of what the notation is for.  So <q>center of a group</q> would be a good description to accompany the usage <q><m>Z(G)</m>.</q></p>
 
+        <p>See <xref ref="topic-notation"/> for more details and the finer points of creating notation entries.</p>
     </section>
 
     <section xml:id="overview-webwork">
@@ -469,5 +491,16 @@
         Also, future support for annotating <pretext/> books and articles to export <pretext/> slides
         is in the works, but not yet available.
       </p>
+    </section>
+
+    <section xml:id="overview-literate-programming">
+        <title>Literate Programming</title>
+        <idx>literate programming</idx>
+
+        <p>If you know what <term>literate programming</term> is, then you may not be surprised to learn that <pretext/> provides excellent support primarily with two additional elements: <tag>fragment</tag> and <tag>fragref</tag>.</p>
+
+        <p>If you have never heard of literate programming, it is a way to mix code and documentation for a computer program in a single file.  But rather than typographically simple code comments, you have the full power of every other feature in <pretext/> and all of the possible output formats.  Furthermore, you can arrange your code in an order that might make more sense to a human (top-down, bottom-up, a mixture, or <ellipsis/>) and <pretext/> will rearrange the code into an order that the compiler or interpreter understands.</p>
+
+        <p>So the idea is that from one file you get a program for the compiler, and a beautiful, typeset explanation for a human reader in any format <pretext/> supports.  An accessible introduction is Knuth's description of his <c>WEB</c> system for the Pascal programming language <xref ref="knuth-literate-programming"/>, or many more resources are at <url href="http://www.literateprogramming.com/">the literate programming site</url><fn><c>www.literateprogramming.com</c></fn>.  Full details on the <pretext/> implementation are at <xref ref="topic-literate-programming"/>.</p>
     </section>
 </chapter>

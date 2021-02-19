@@ -21,12 +21,10 @@
 
         <p><c>xsltproc</c> is typically installed by default on Linux systems and as part of Mac OS.  See the <pretext /> website for details for Windows systems.  The most basic operation is to provide <c>xsltproc</c> with an XSL stylesheet from the <pretext /> distribution and an XML document of your creation that is valid <pretext />.  This is done at the command-line, inside of a terminal or shell.  Describing command-line operations, along with file and directory management, is beyond the scope of this guide, so consult another resource if this is unfamiliar.  So here is a hypothetical simple example:</p>
 
-        <sidebyside>
-            <console>
-                <prompt>rob@lava:~/mathbook$ </prompt>
-                <input>xsltproc xsl/pretext-html.xsl ~/books/aota/animals.xml</input>
-            </console>
-        </sidebyside>
+        <console>
+            <prompt>rob@lava:~/mathbook$ </prompt>
+            <input>xsltproc xsl/pretext-html.xsl ~/books/aota/animals.xml</input>
+        </console>
 
         <p>By default, <c>xsltproc</c> writes output to <c>stdout</c> (the screen), which you could redirect to a file, or you could use the <c>-o</c> switch to send the output to a named file.  However, <pretext /> automatically writes to a file whose name is derived from the <attr>xml:id</attr> attribute of the top-level <tag>book</tag> or <tag>article</tag> tag.  If no such attribute is given the filename will be derived from <c>book-1</c> or <c>article-1</c>.  All output is produced in whatever the current default directory is, so you will likely want to set this beforehand.</p>
 
@@ -54,7 +52,7 @@
             <li><p>Begin small and start a project <em>without</em> using modular files.  Modularizing seems to add a layer of complexity that sometimes obscures other beginner's errors.  So get comfortable with a single source file before branching out.</p></li>
             <li><p>I am forever forgetting the <c>-xinclude</c> switch.  Empty output, or cryptic error messages, are your first clue to this simple, but common, mistake.</p></li>
             <li><p>The <init>XML</init> specification requires that a source file only contain a single outermost element.  So for example, two <tag>chapter</tag> elements cannot go into the same file as simultaneous outermost elements.</p></li>
-            <li><p>Any file that uses an <tag>xi:include</tag> element will need the <c>xml:ns</c> delaration on the outermost element.  So in our animal book example, the <q>master</q> file, which presumably includes several chapter files, would need this declaration on the <tag>mathbook</tag> element.</p></li>
+            <li><p>Any file that uses an <tag>xi:include</tag> element will need the <c>xml:ns</c> declaration on the outermost element.  So in our animal book example, the <q>master</q> file, which presumably includes several chapter files, would need this declaration on the <tag>pretext</tag> element.</p></li>
             <li><p>In practice, there is not a lot to be gained by creating a subdirectory structure mirroring your modularization<mdash />all your source files can go into one big directory and the XML hierarchy will take care of the organization.  I do sometimes like to name my files accordingly, so for example <c>chapter-mammals.xml</c> and <c>section-monkeys.xml</c>.</p></li>
             <li><p>Just as you provide only the master source file to <c>xsltproc</c>, it is the same when you validate your source (see <xref ref="processing-dtd"/> and <xref ref="schema"/>).</p></li>
         </ul></p>
@@ -87,13 +85,11 @@
 
         <p>Suppose you want to make a large-font version of your textbook for a student who has limited vision.  Look inside the top of <c>xsl/pretext-latex.xsl</c> and find the <c>latex.font.size</c> parameter.  The preceding comments in this file suggest <c>20pt</c> is the maximum supported.  So you would use a command-line like the following (possibly with <c>--xinclude</c>, <etc />).</p>
 
-        <sidebyside>
-            <console>
-                <prompt>$ </prompt>
-                <input>xsltproc -o animals.tex --stringparam latex.font.size "20pt"</input>
-                <input>  /path/to/xsl/pretext-latex.xsl ~/books/aota/animals.xml</input>
-            </console>
-        </sidebyside>
+        <console>
+            <prompt>$ </prompt>
+            <input>xsltproc -o animals.tex --stringparam latex.font.size "20pt"</input>
+            <input>  /path/to/xsl/pretext-latex.xsl ~/books/aota/animals.xml</input>
+        </console>
 
         <p>You can use as many stringparam as you like on the command-line (or in your scripts).  The quotation marks are not strictly needed in this example, but if the value of the parameter has spaces, slashes, <etc />, then you need to quote-protect the string from the command-line processor, and either single or double quotes will work (and protect the other kind).</p>
 
@@ -237,41 +233,33 @@
 
         <p>To process a directory with multiple source files, I would proceed as follows.  First make three temporary directories, <c>/tmp/original</c>, <c>/tmp/normal</c>, <c>/tmp/clean</c>, and copy my source files into <c>/tmp/original</c>.  Then, using a BASH shell, and inputting the command all on one long line,</p>
 
-        <sidebyside>
-            <console>
-                <prompt>rob@lava:/tmp/original$ </prompt>
-                <input>for f in *.xml; do xsltproc -o ../normal/$f -stringparam fix normalize</input>
-                <input>  /home/rob/mathbook/xsl/utilities/fix-deprecations.xsl $f; done</input>
-            </console>
-        </sidebyside>
+        <console>
+            <prompt>rob@lava:/tmp/original$ </prompt>
+            <input>for f in *.xml; do xsltproc -o ../normal/$f -stringparam fix normalize</input>
+            <input>  /home/rob/mathbook/xsl/utilities/fix-deprecations.xsl $f; done</input>
+        </console>
 
         <p>This will loop over every <init>XML</init> file in the current working directory, <c>/tmp/original</c>, running the normalization conversion on each file, with the output files using the same filename, but now being placed in the <c>/tmp/normal</c> directory.  If you change to the <c>/tmp</c> directory, then you can compare the results.  I like to use the <c>diff</c> utility provided by <c>git</c>.</p>
 
-        <sidebyside>
-            <console>
-                <prompt>rob@lava:/tmp$ </prompt>
-                <input>git diff original normal</input>
-            </console>
-        </sidebyside>
+        <console>
+            <prompt>rob@lava:/tmp$ </prompt>
+            <input>git diff original normal</input>
+        </console>
 
         <p>Or, try this for a view that might be more informative.</p>
 
-        <sidebyside>
-            <console>
-                <prompt>rob@lava:/tmp$ </prompt>
-                <input>git diff --word-diff original normal</input>
-            </console>
-        </sidebyside>
+        <console>
+            <prompt>rob@lava:/tmp$ </prompt>
+            <input>git diff --word-diff original normal</input>
+        </console>
 
         <p>You may only do the above once, on your first use of this conversion stylesheet.  You will see how your style of authoring <init>XML</init> will undergo some minor changes.  We can repeat the above to actual make the changes necessary due to <pretext /> deprecations.  Make <c>/tmp/normal</c> the working directory.</p>
 
-        <sidebyside>
-            <console>
-                <prompt>rob@lava:/tmp/normal$ </prompt>
-                <input>for f in *.xml; do xsltproc -o ../clean/$f -stringparam fix all</input>
-                <input>  /home/rob/mathbook/xsl/utilities/fix-deprecations.xsl $f; done</input>
-            </console>
-        </sidebyside>
+        <console>
+            <prompt>rob@lava:/tmp/normal$ </prompt>
+            <input>for f in *.xml; do xsltproc -o ../clean/$f -stringparam fix all</input>
+            <input>  /home/rob/mathbook/xsl/utilities/fix-deprecations.xsl $f; done</input>
+        </console>
 
         <p>And as above, you can now compare the <c>normal</c> and <c>clean</c> directories to see actual changes.  If you are satisfied with the changes, you can copy the files in the <c>clean</c> directory back onto your source files.  If you are using revision-control (you are, aren't you?) then you can make a commit that holds these changes. (See <pubtitle><url ref="https://pretextbook.org/gfa/html/">Git for Authors</url></pubtitle>.) Or maybe even make two commits, one from the normalization step, and a second with the substantive changes.</p>
     </section>
@@ -351,7 +339,7 @@
 
         <p>One of our main motivations for this project was mixing in code from the powerful, open source, mathematical software project, Sage (<xref ref="overview-sage" />).  When you add example Sage code to illustrate mathematical ideas, you are then encouraged to also include expected output in the <tag>output</tag> element.  Here comes one of the powerful advantages of XML source and XSL processing.</p>
 
-        <p>The <c>mathbook/xsl/pretext-sage-doctest.xsl</c> stylesheet, used in the usual way, will create one (or several, depending on the <c>chunk.level</c> stringparam) file(s), in <em>exactly</em> the format Sage expects for automated testing.  So all your words are gone, and all your Sage input and output is packaged so Sage can run all the <tag>input</tag> and compare the results to the expected <tag>output</tag>.</p>
+        <p>The <c>mathbook/xsl/pretext-sage-doctest.xsl</c> stylesheet, used in the usual way, will create one, or several file(s), in <em>exactly</em> the format Sage expects for automated testing.  So all your words are gone, and all your Sage input and output is packaged so Sage can run all the <tag>input</tag> and compare the results to the expected <tag>output</tag>.  See <xref ref="common-chunking-options"/> for details on obtaining more than one file.</p>
 
         <p>We have many years' experience testing hundreds of non-trivial Sage examples from textbooks, for linear algebra and abstract algebra.  Roughly every six months, we discover ten to twenty examples that fail.  Frequently the failures are trivial (usually output gets re-ordered), but some are significant changes in behavior that leads us to re-word surrounding guidance in the text, and in a few cases the failures have exposed bugs introduced into Sage.  It has been relatively easy to do this maintenance on a regular basis, and if it had not been done, the accumulated errors would be enough to greatly degrade confidence in the accuracy of the examples.</p>
 

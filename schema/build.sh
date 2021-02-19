@@ -26,6 +26,7 @@
 #  2017-06-19  Initiated
 #  2017-07-21  For release
 #  2019-05-24  Updates as DocFlex becomes FlexDoc (and v1.12.3)
+#  2020-11-11  FlexDoc v1.12.5
 
 #  This is designed for use in distributing derived products
 #  from the PreTeXt schema.  So make a copy and adjust paths
@@ -40,7 +41,7 @@ shopt -s -o nounset
 # PreTeXt distribution
 declare MB=${HOME}/mathbook/mathbook
 # FlexDoc installation
-declare FDH=/opt/flexdoc/flexdoc-xml-1.12.3
+declare FDH=/opt/flexdoc/flexdoc-xml-1.12.5
 
 # DocFlex output directory
 declare FDOUTDIR=${HOME}/mathbook/website/pretextbook.org/doc/schema
@@ -72,17 +73,6 @@ trang -I rnc -O rng pretext.rnc pretext.rng
 # System trang conversion to W3C XSD schema
 # "abstract groups" make schema browser too obtuse
 trang -o disable-abstract-elements -I rnc -O xsd pretext.rnc pretext.xsd
-
-# ***************
-# Rule generation
-# ***************
-
-# Generate author's stylesheet using PreTeXt
-# extensions to Schematron's main tool,
-# Note: The stylesheet used here has the hard-coded path:
-# /home/rob/mathbook/schematron/trunk/schematron/code/iso_schematron_skeleton_for_xslt1.xsl
-xsltproc ${MB}/schema/iso_schematron_cli.xsl ${MB}/schema/pretext.sch > ${MB}/schema/pretext-schematron.xsl
-
 
 # ************************
 # Documentation Generation

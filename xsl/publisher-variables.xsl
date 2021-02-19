@@ -55,17 +55,580 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- ############## -->
 <!-- Common Options -->
-<!-- ############### -->
+<!-- ############## -->
+
+<xsl:variable name="chunks">
+    <xsl:choose>
+        <!-- debugging tool overrides anything else -->
+        <xsl:when test="not($debug.chunk = '')">
+            <xsl:value-of select="$debug.chunk"/>
+        </xsl:when>
+        <!-- consult publisher file -->
+        <xsl:when test="$publication/common/chunking/@level">
+            <xsl:value-of select="$publication/common/chunking/@level"/>
+        </xsl:when>
+        <!-- respect legacy string parameter -->
+        <xsl:when test="not($chunk.level = '')">
+            <xsl:value-of select="$chunk.level"/>
+        </xsl:when>
+    </xsl:choose>
+</xsl:variable>
+<!-- We do not convert this to a number since various   -->
+<!-- conversions will consume this and produce their    -->
+<!-- own defaults, and we need to recognize "no choice" -->
+<!-- as an empty string -->
+<xsl:variable name="chunk-level-entered" select="string($chunks)"/>
+
+<!-- A book must have a chapter              -->
+<!-- An article need not have a section      -->
+<!-- This gets replaced in -latex stylehseet -->
+<xsl:variable name="toc-level-entered">
+    <xsl:choose>
+        <xsl:when test="$publication/common/tableofcontents/@level">
+            <xsl:value-of select="$publication/common/tableofcontents/@level"/>
+        </xsl:when>
+        <!-- legacy, respect string parameter -->
+        <xsl:when test="$toc.level != ''">
+            <xsl:value-of select="$toc.level" />
+        </xsl:when>
+        <!-- defaults purely by structure, not by output format -->
+        <xsl:when test="$root/book/part/chapter/section">3</xsl:when>
+        <xsl:when test="$root/book/part/chapter">2</xsl:when>
+        <xsl:when test="$root/book/chapter/section">2</xsl:when>
+        <xsl:when test="$root/book/chapter">1</xsl:when>
+        <xsl:when test="$root/article/section/subsection">2</xsl:when>
+        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
+        <xsl:when test="$root/article">0</xsl:when>
+        <xsl:when test="$root/slideshow">0</xsl:when>
+        <xsl:when test="$root/letter">0</xsl:when>
+        <xsl:when test="$root/memo">0</xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:ERROR: Table of Contents level not determined</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="toc-level" select="number($toc-level-entered)"/>
+
+<!-- Flag Table of Contents, or not, with boolean variable -->
+<xsl:variable name="b-has-toc" select="$toc-level > 0" />
 
 
+<!-- ############## -->
+<!-- Source Options -->
+<!-- ############## -->
+
+<!-- A directory of images that *are not* generated, or reproducible,     -->
+<!-- from an author's source.  Canonical example would be a photograph.   -->
+<!-- The directory specified is always a relative path rooted at the      -->
+<!-- author's source file containing the "pretext" element (i.e. if       -->
+<!-- source is modularized, the "master" or "top-level" file).            -->
+<!-- Historically, authors were 100% responsible for this path, so the    -->
+<!-- default is empty.  With this publisher file specification, a         -->
+<!-- redundance in these paths (a common leading path) may be specified   -->
+<!-- once, and source can assume less about the location of these images. -->
+<!-- A leading slash is an error, since that'd be an absolute path,       -->
+<!-- while a trailing slash will be reliably added if                     -->
+<!--     (a) not present in publisher file specification                  -->
+<!--     (b) the path is not empty                                        -->
+<xsl:variable name="source-image-directory">
+    <xsl:variable name="raw-input">
+        <xsl:choose>
+            <xsl:when test="$publication/source/@source-images">
+                <xsl:value-of select="$publication/source/@source-images"/>
+            </xsl:when>
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+        <!-- leading path separator is an error -->
+        <xsl:when test="substring($raw-input, 1, 1) = '/'">
+            <xsl:message>PTX:ERROR:   a source image directory (source/@source-images in the publisher file) must be a relative path and not begin with "/" as in "<xsl:value-of select="$raw-input"/>".  Proceeding with the default, which is an empty string, and may lead to unexpected results.</xsl:message>
+            <xsl:text/>
+        </xsl:when>
+        <!-- trailing path separator is good and -->
+        <!-- we know it is not due to simply '/' -->
+        <xsl:when test="substring($raw-input, string-length($raw-input), 1) = '/'">
+            <xsl:value-of select="$raw-input"/>
+        </xsl:when>
+        <!-- if there is substance, we need to add a trailing slash -->
+        <xsl:when test="string-length($raw-input) > 0">
+            <xsl:value-of select="concat($raw-input, '/')"/>
+        </xsl:when>
+        <!-- specification must be empty, so we leave it that way -->
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Historically this was given by the "images" directory as a default, -->
+<!-- and it seems almost every author just ran with this.                -->
+<xsl:variable name="generated-image-directory">
+    <xsl:variable name="raw-input">
+        <xsl:choose>
+            <xsl:when test="$publication/source/@generated-images">
+                <xsl:value-of select="$publication/source/@generated-images"/>
+            </xsl:when>
+            <xsl:when test="not($directory.images = '')">
+                <xsl:value-of select="$directory.images"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>images/</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+        <!-- trailing path separator is good -->
+        <xsl:when test="substring($raw-input, string-length($raw-input), 1) = '/'">
+            <xsl:value-of select="$raw-input"/>
+        </xsl:when>
+        <!-- if there is substance, we need to add a trailing slash -->
+        <xsl:when test="string-length($raw-input) > 0">
+            <xsl:value-of select="concat($raw-input, '/')"/>
+        </xsl:when>
+        <!-- specification must be empty, so we leave it that way -->
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- For backward-compatibility, we want to know if the collection of  -->
+<!-- generated images is structured by their production method (newer) -->
+<!-- or not (older, historical).  So we create a boolean based on the  -->
+<!-- presence of the publisher file specification.                     -->
+<xsl:variable name="b-structured-generated-images" select="boolean($publication/source/@generated-images)"/>
+
+<!-- A file of hint|answer|solution, with @ref back to "exercise" -->
+<!-- so that the solutions can see limited distribution.  No real -->
+<!-- error-checking.  If not set/present, then an empty string    -->
+
+<xsl:variable name="private-solutions-file">
+    <xsl:choose>
+        <xsl:when test="$publication/source/@private-solutions">
+            <xsl:value-of select="$publication/source/@private-solutions"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- WeBWork problem representations are formed by the           -->
+<!-- pretext/pretext script communicating with a WeBWorK server. -->
+<xsl:variable name="webwork-representations-file">
+    <xsl:choose>
+        <xsl:when test="$publication/source/@webwork-problems">
+            <xsl:value-of select="$publication/source/@webwork-problems"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- File of  custom/@name  elements, whose content is a custom -->
+<!-- replacement for a corresponding  custom/@ref  element in   -->
+<!-- the source.                                                -->
+<xsl:variable name="customizations-file">
+    <xsl:choose>
+        <xsl:when test="$publication/source/@customizations">
+            <xsl:value-of select="$publication/source/@customizations"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+
+<!-- ######### -->
+<!-- Numbering -->
+<!-- ######### -->
+
+
+<!-- User-supplied Numbering for Maximum Level     -->
+<!-- Respect switch, or provide sensible defaults  -->
+<!-- NB: level number counts the number of         -->
+<!-- separators (periods) present once qualified   -->
+<!-- with a numbered item contained within         -->
+<!-- NB: If we were to allow multiple (hence       -->
+<!-- numbered) specialized divisions of a          -->
+<!-- "subsubsection", then the non-zero maximums   -->
+<!-- below would go up by 1                        -->
+<!--   article/section: s.ss.sss => 3              -->
+<!--   book:            c.s.ss.sss => 4            -->
+<!--   book/part:       p.c.s.ss.sss => 5          -->
+<xsl:variable name="numbering-maxlevel-entered">
+    <!-- these are the maximum possible for a given document type -->
+    <!-- the default, and also an error-check upper-limit         -->
+    <xsl:variable name="max-feasible">
+        <xsl:choose>
+            <xsl:when test="$root/book/part">5</xsl:when>
+            <xsl:when test="$root/book">4</xsl:when>
+            <xsl:when test="$root/article/section|$root/article/worksheet">3</xsl:when>
+            <xsl:when test="$root/article">0</xsl:when>
+            <xsl:when test="$root/letter">0</xsl:when>
+            <xsl:when test="$root/slideshow">0</xsl:when>
+            <xsl:when test="$root/memo">0</xsl:when>
+            <xsl:otherwise>
+                <xsl:message>PTX:BUG: a document type needs a maximum division level defined</xsl:message>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="candidate-maxlevel">
+        <xsl:choose>
+            <!-- go with publisher file, check for numerical value -->
+            <xsl:when test="$publication/numbering/divisions/@level">
+                <xsl:variable name="the-number" select="$publication/numbering/divisions/@level"/>
+                <xsl:choose>
+                    <!-- NaN does not equal *anything*, so tests if a number -->
+                    <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
+                        <xsl:message>PTX:ERROR:   numbering level for divisions given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
+                        <xsl:value-of select="$max-feasible"/>
+                        </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$publication/numbering/divisions/@level"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <!-- respect deprecated analog -->
+            <xsl:when test="not($numbering.maximum.level = '')">
+                <xsl:value-of select="$numbering.maximum.level" />
+            </xsl:when>
+            <!-- various defaults are the maximum possible -->
+            <xsl:otherwise>
+                <xsl:value-of select="$max-feasible"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- check $candidate against upper bound, $max-feasible -->
+    <xsl:choose>
+        <xsl:when test="$candidate-maxlevel > $max-feasible">
+            <xsl:message>PTX:ERROR:   numbering level set for divisions ("<xsl:value-of select="$candidate-maxlevel"/>") is greater than the maximum possible ("<xsl:value-of select="$max-feasible"/>") for this document type.  The default value will be used instead</xsl:message>
+            <xsl:value-of select="$max-feasible"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$candidate-maxlevel"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="numbering-maxlevel" select="number($numbering-maxlevel-entered)"/>
+
+<!-- TODO: next five variables have wildly similar structure,  -->
+<!-- and could best be created/defined with a single template, -->
+<!-- parameterized by (a) publisher file entry, (b) old        -->
+<!-- deprecated stringparam (or docinfo coming soon),          -->
+<!-- (c) string for messages (e.g. "footnotes").               -->
+<!-- EZ: make one "default" variable, since they all look identical -->
+
+<!-- User-supplied Numbering for Theorems, etc    -->
+<!-- Respect switch, or provide sensible defaults -->
+<xsl:variable name="numbering-blocks-entered">
+    <xsl:variable name="default-blocks">
+        <xsl:choose>
+            <xsl:when test="$root/book/part">3</xsl:when>
+            <xsl:when test="$root/book">2</xsl:when>
+            <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
+            <xsl:when test="$root/article">0</xsl:when>
+            <xsl:when test="$root/slideshow">0</xsl:when>
+            <xsl:when test="$root/letter">0</xsl:when>
+            <xsl:when test="$root/memo">0</xsl:when>
+            <xsl:otherwise>
+                <xsl:message>PTX:BUG: a document type needs a default block numbering level defined</xsl:message>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="candidate-blocks">
+        <xsl:choose>
+            <!-- go with publisher file, check for numerical value -->
+            <xsl:when test="$publication/numbering/blocks/@level">
+                <xsl:variable name="the-number" select="$publication/numbering/blocks/@level"/>
+                <xsl:choose>
+                    <!-- NaN does not equal *anything*, so tests if a number -->
+                    <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
+                        <xsl:message>PTX:ERROR:   numbering level for blocks given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
+                        <xsl:value-of select="$default-blocks"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$publication/numbering/blocks/@level"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <!-- respect deprecated analog -->
+            <xsl:when test="$numbering.theorems.level != ''">
+                <xsl:value-of select="$numbering.theorems.level" />
+            </xsl:when>
+            <!-- use a default -->
+            <xsl:otherwise>
+                <xsl:value-of select="$default-blocks"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- check $candidate-blocks against upper bound, $numbering-maxlevel -->
+    <xsl:choose>
+        <xsl:when test="$candidate-blocks > $numbering-maxlevel">
+            <xsl:message>PTX:ERROR:   numbering level set for blocks ("<xsl:value-of select="$candidate-blocks"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
+            <xsl:value-of select="$default-blocks"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$candidate-blocks"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="numbering-blocks" select="number($numbering-blocks-entered)"/>
+
+<!-- User-supplied Numbering for Projects, etc    -->
+<!-- Respect switch, or provide sensible defaults -->
+<!-- PROJECT-LIKE -->
+<!-- NB: this should become elective, more like the -->
+<!-- schemes for inline exercises and figure-like.  -->
+<xsl:variable name="numbering-projects-entered">
+    <xsl:variable name="default-projects">
+        <xsl:choose>
+        <xsl:when test="$root/book/part">3</xsl:when>
+        <xsl:when test="$root/book">2</xsl:when>
+        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
+        <xsl:when test="$root/article">0</xsl:when>
+        <xsl:when test="$root/slideshow">0</xsl:when>
+        <xsl:when test="$root/letter">0</xsl:when>
+        <xsl:when test="$root/memo">0</xsl:when>
+            <xsl:otherwise>
+                <xsl:message>PTX:BUG: a document type needs a default project level defined</xsl:message>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="candidate-projects">
+        <xsl:choose>
+            <!-- go with publisher file, check for numerical value -->
+            <xsl:when test="$publication/numbering/projects/@level">
+                <xsl:variable name="the-number" select="$publication/numbering/projects/@level"/>
+                <xsl:choose>
+                    <!-- NaN does not equal *anything*, so tests if a number -->
+                    <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
+                        <xsl:message>PTX:ERROR:   numbering level for projects given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
+                        <xsl:value-of select="$default-projects"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$publication/numbering/projects/@level"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <!-- respect deprecated analog -->
+            <xsl:when test="$numbering.projects.level != ''">
+                <xsl:value-of select="$numbering.projects.level" />
+            </xsl:when>
+            <!-- use a default -->
+            <xsl:otherwise>
+                <xsl:value-of select="$default-projects"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- check $candidate-projects against upper bound, $numbering-maxlevel -->
+    <xsl:choose>
+        <xsl:when test="$candidate-projects > $numbering-maxlevel">
+            <xsl:message>PTX:ERROR:   numbering level set for projects ("<xsl:value-of select="$candidate-projects"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
+            <xsl:value-of select="$default-projects"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$candidate-projects"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="numbering-projects" select="number($numbering-projects-entered)"/>
+
+<!-- User-supplied Numbering for Equations        -->
+<!-- Respect switch, or provide sensible defaults -->
+<xsl:variable name="numbering-equations-entered">
+    <xsl:variable name="default-equations">
+        <xsl:choose>
+        <xsl:when test="$root/book/part">3</xsl:when>
+        <xsl:when test="$root/book">2</xsl:when>
+        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
+        <xsl:when test="$root/article">0</xsl:when>
+        <xsl:when test="$root/slideshow">0</xsl:when>
+        <xsl:when test="$root/letter">0</xsl:when>
+        <xsl:when test="$root/memo">0</xsl:when>
+            <xsl:otherwise>
+                <xsl:message>PTX:BUG: a document type needs a default equation project level defined</xsl:message>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="candidate-equations">
+        <xsl:choose>
+            <!-- go with publisher file, check for numerical value -->
+            <xsl:when test="$publication/numbering/equations/@level">
+                <xsl:variable name="the-number" select="$publication/numbering/equations/@level"/>
+                <xsl:choose>
+                    <!-- NaN does not equal *anything*, so tests if a number -->
+                    <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
+                        <xsl:message>PTX:ERROR:   numbering level for equations given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
+                        <xsl:value-of select="$default-equations"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$publication/numbering/equations/@level"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <!-- respect deprecated analog -->
+            <xsl:when test="$numbering.equations.level != ''">
+                <xsl:value-of select="$numbering.equations.level" />
+            </xsl:when>
+            <!-- use a default -->
+            <xsl:otherwise>
+                <xsl:value-of select="$default-equations"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- check $candidate-equations against upper bound, $numbering-maxlevel -->
+    <xsl:choose>
+        <xsl:when test="$candidate-equations > $numbering-maxlevel">
+            <xsl:message>PTX:ERROR:   numbering level set for equations ("<xsl:value-of select="$candidate-equations"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
+            <xsl:value-of select="$default-equations"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$candidate-equations"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="numbering-equations" select="number($numbering-equations-entered)"/>
+
+<!-- User-supplied Numbering for Footnotes        -->
+<!-- Respect switch, or provide sensible defaults -->
+<xsl:variable name="numbering-footnotes-entered">
+    <xsl:variable name="default-footnotes">
+        <xsl:choose>
+        <xsl:when test="$root/book/part">3</xsl:when>
+        <xsl:when test="$root/book">2</xsl:when>
+        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
+        <xsl:when test="$root/article">0</xsl:when>
+        <xsl:when test="$root/slideshow">0</xsl:when>
+        <xsl:when test="$root/letter">0</xsl:when>
+        <xsl:when test="$root/memo">0</xsl:when>
+            <xsl:otherwise>
+                <xsl:message>PTX:BUG: a document type needs a default footnote project level defined</xsl:message>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="candidate-footnotes">
+        <xsl:choose>
+            <!-- go with publisher file, check for numerical value -->
+            <xsl:when test="$publication/numbering/footnotes/@level">
+                <xsl:variable name="the-number" select="$publication/numbering/footnotes/@level"/>
+                <xsl:choose>
+                    <!-- NaN does not equal *anything*, so tests if a number -->
+                    <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
+                        <xsl:message>PTX:ERROR:   numbering level for footnotes given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
+                        <xsl:value-of select="$default-footnotes"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$publication/numbering/footnotes/@level"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <!-- respect deprecated analog -->
+            <xsl:when test="$numbering.footnotes.level != ''">
+                <xsl:value-of select="$numbering.footnotes.level" />
+            </xsl:when>
+            <!-- use a default -->
+            <xsl:otherwise>
+                <xsl:value-of select="$default-footnotes"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- check $candidate-footnotes against upper bound, $numbering-maxlevel -->
+    <xsl:choose>
+        <xsl:when test="$candidate-footnotes > $numbering-maxlevel">
+            <xsl:message>PTX:ERROR:   numbering level set for footnotes ("<xsl:value-of select="$candidate-footnotes"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
+            <xsl:value-of select="$default-footnotes"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$candidate-footnotes"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="numbering-footnotes" select="number($numbering-footnotes-entered)"/>
+
+<xsl:variable name="chapter-start-entered">
+    <xsl:choose>
+        <xsl:when test="$publication/numbering/divisions/@chapter-start">
+            <xsl:variable name="the-number" select="$publication/numbering/divisions/@chapter-start"/>
+            <xsl:choose>
+                <!-- NaN does not equal *anything*, so tests if a number -->
+                <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
+                    <xsl:message>PTX:ERROR:   starting number for chapters given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
+                    <xsl:value-of select="1"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$publication/numbering/divisions/@chapter-start"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- default if not specified -->
+        <xsl:otherwise>
+            <xsl:value-of select="1"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="chapter-start" select="number($chapter-start-entered)"/>
+
+<!-- Status quo, for no-part books and articles is "absent".     -->
+<!-- The "structural" option will change numbers and numbering   -->
+<!-- substantially.  The "decorative" option is the default for  -->
+<!-- books with parts, and it looks just like the LaTeX default. -->
+<xsl:variable name="parts">
+    <xsl:choose>
+        <!-- no parts, just record as absent,  -->
+        <!-- but warn of ill-advised attempts  -->
+        <xsl:when test="not($document-root/part)">
+            <xsl:choose>
+                <xsl:when test="$publication/numbering/divisions/@part-structure">
+                    <xsl:message>PTX:WARNING: your document is not a book with parts, so the publisher file  numbering/divisions/@part-structure  entry is being ignored</xsl:message>
+                </xsl:when>
+                <xsl:when test="$docinfo/numbering/division/@part">
+                    <xsl:message>PTX:WARNING: your document is not a book with parts, and docinfo/numbering/division/@part is deprecated anyway and is being ignored</xsl:message>
+                </xsl:when>
+            </xsl:choose>
+            <!-- flag this situation -->
+            <xsl:text>absent</xsl:text>
+        </xsl:when>
+        <!-- now we have parts to deal with -->
+        <!-- first via publisher file       -->
+        <xsl:when test="$publication/numbering/divisions/@part-structure">
+            <xsl:choose>
+                <xsl:when test="$publication/numbering/divisions/@part-structure = 'structural'">
+                    <xsl:text>structural</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/numbering/divisions/@part-structure = 'decorative'">
+                    <xsl:text>decorative</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: the publisher file  numbering/divisions/@part-structure  entry should be "decorative" or "structural", not "<xsl:value-of select="$publication/numbering/divisions/@part-structure" />".  The default will be used instead.</xsl:message>
+                    <xsl:text>decorative</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- Preserve much of old behavior, warning is elsewhere -->
+        <xsl:when test="$docinfo/numbering/division/@part">
+            <xsl:choose>
+                <xsl:when test="$docinfo/numbering/division/@part = 'structural'">
+                    <xsl:text>structural</xsl:text>
+                </xsl:when>
+                <xsl:when test="$docinfo/numbering/division/@part = 'decorative'">
+                    <xsl:text>decorative</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: the  docinfo/numbering/division/@part  entry should be "decorative" or "structural", not "<xsl:value-of select="$docinfo/numbering/division/@part"/>".  The default will be used instead.</xsl:message>
+                    <xsl:text>decorative</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- no specification, use default -->
+        <xsl:otherwise>
+            <xsl:text>decorative</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
 
 <!-- ##################### -->
 <!-- HTML-Specific Options -->
 <!-- ##################### -->
-
-<!--                          -->
-<!-- HTML Index Page Redirect -->
-<!--                          -->
 
 <!-- Calculator -->
 <!-- Possible values are geogebra-classic, geogebra-graphing -->
@@ -106,6 +669,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="b-has-calculator" select="not($html-calculator = 'none')" />
 
+
+<!--                          -->
+<!-- HTML Index Page Redirect -->
+<!--                          -->
 
 <!-- A generic "index.html" page will be built to redirect to an     -->
 <!-- existing page from the HTML build/chunking.  The default is the -->
@@ -169,6 +736,567 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!--                   -->
+<!-- HTML Knowlization -->
+<!--                   -->
+
+<!-- A multitude of switches to control whether various HTML "blocks"      -->
+<!-- are born hidden as knowls.  Most names of resulting variables are     -->
+<!-- self-explanatory, the ones for exercises come in different varities.  -->
+<!-- Each template here ALWAYS produces "yes" or "no".  We do not make     -->
+<!-- boolean variables, since these are consumed (exclusively) in modal    -->
+<!-- "is-hidden" templates that produce string "true" or "false"           -->
+<!-- (respectively).  Some HTML-based conversions cannot accomodate knowls -->
+<!-- (EPUB, braille) so we turn off the "is-hidden" templates rather       -->
+<!-- than override these variables.                                        -->
+
+<xsl:variable name="knowl-theorem">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@theorem">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@theorem = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@theorem = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "theorem" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@theorem"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.theorem = '')">
+            <xsl:value-of select="$html.knowl.theorem"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-proof">
+    <xsl:variable name="knowl-default" select="'yes'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@proof">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@proof = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@proof = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "proof" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@proof"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.proof = '')">
+            <xsl:value-of select="$html.knowl.proof"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-definition">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@definition">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@definition = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@definition = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "definition" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@definition"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.definition = '')">
+            <xsl:value-of select="$html.knowl.definition"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-example">
+    <xsl:variable name="knowl-default" select="'yes'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@example">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@example = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@example = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "example" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@example"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.example = '')">
+            <xsl:value-of select="$html.knowl.example"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-project">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@project">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@project = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@project = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "project" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@project"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.project = '')">
+            <xsl:value-of select="$html.knowl.project"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-task">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@task">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@task = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@task = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "task" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@task"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.task = '')">
+            <xsl:value-of select="$html.knowl.task"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-list">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@list">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@list = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@list = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "list" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@list"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.list = '')">
+            <xsl:value-of select="$html.knowl.list"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-remark">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@remark">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@remark = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@remark = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "remark" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@remark"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.remark = '')">
+            <xsl:value-of select="$html.knowl.remark"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-objectives">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@objectives">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@objectives = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@objectives = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "objectives" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@objectives"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.objectives = '')">
+            <xsl:value-of select="$html.knowl.objectives"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-outcomes">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@outcomes">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@outcomes = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@outcomes = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "outcomes" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@outcomes"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.outcomes = '')">
+            <xsl:value-of select="$html.knowl.outcomes"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-figure">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@figure">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@figure = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@figure = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "figure" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@figure"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.figure = '')">
+            <xsl:value-of select="$html.knowl.figure"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-table">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@table">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@table = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@table = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "table" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@table"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.table = '')">
+            <xsl:value-of select="$html.knowl.table"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-listing">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@listing">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@listing = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@listing = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "listing" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@listing"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.listing = '')">
+            <xsl:value-of select="$html.knowl.listing"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-exercise-inline">
+    <xsl:variable name="knowl-default" select="'yes'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@exercise-inline">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@exercise-inline = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@exercise-inline = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "exercise-inline" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@exercise-inline"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.exercise.inline = '')">
+            <xsl:value-of select="$html.knowl.exercise.inline"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-exercise-divisional">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@exercise-divisional">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@exercise-divisional = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@exercise-divisional = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "exercise-divisional" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@exercise-divisional"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.exercise.sectional = '')">
+            <xsl:value-of select="$html.knowl.exercise.sectional"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-exercise-worksheet">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@exercise-worksheet">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@exercise-worksheet = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@exercise-worksheet = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "exercise-worksheet" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@exercise-worksheet"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.exercise.worksheet = '')">
+            <xsl:value-of select="$html.knowl.exercise.worksheet"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="knowl-exercise-readingquestion">
+    <xsl:variable name="knowl-default" select="'no'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@exercise-readingquestion">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@exercise-readingquestion = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@exercise-readingquestion = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "exercise-readingquestion" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@exercise-readingquestion"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- legacy behavior with old-style string parameter, deprecation  -->
+        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
+        <xsl:when test="not($html.knowl.exercise.readingquestion = '')">
+            <xsl:value-of select="$html.knowl.exercise.readingquestion"/>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+
+<!--               -->
+<!-- HTML Base URL -->
+<!--               -->
+
+<!-- This is used to build/reference standalone pages.    -->
+<!-- Specified as a property of the HTML conversion, it   -->
+<!-- actually gets used in the LaTeX conversion to form   -->
+<!-- QR codes and make links to HTML versions of          -->
+<!-- Asymptote figures.                                   -->
+<!-- NB: We add a trailing slash, if not authored already -->
+<xsl:variable name="baseurl">
+    <xsl:variable name="raw-input">
+        <xsl:choose>
+            <!-- if publisher file has a base url, use it -->
+            <xsl:when test="$publication/html/baseurl/@href">
+                <xsl:value-of select="$publication/html/baseurl/@href"/>
+            </xsl:when>
+            <!-- reluctantly query the old docinfo version -->
+            <xsl:when test="$docinfo/html/baseurl/@href">
+                <xsl:value-of select="$docinfo/html/baseurl/@href"/>
+            </xsl:when>
+            <!-- otherwise use the default, is empty as sentinel -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$raw-input =''"/>
+        <xsl:otherwise>
+            <xsl:value-of select="$raw-input"/>
+            <xsl:if test="not(substring($raw-input, string-length($raw-input), 1) = '/')">
+                <xsl:text>/</xsl:text>
+            </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!--                              -->
 <!-- HTML CSS Style Specification -->
 <!--                              -->
@@ -180,6 +1308,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="debug.colors" select="''"/>
 <!-- A space-separated list of CSS URLs (points to servers or local files) -->
 <xsl:param name="html.css.extra"  select="''" />
+<!-- A single JS file for development purposes -->
+<xsl:param name="html.js.extra" select="''" />
 
 <xsl:variable name="html-css-colorfile">
     <xsl:choose>
@@ -467,6 +1597,310 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- LaTeX-Specific Options -->
 <!-- ###################### -->
 
+<!-- Sides are given as "one" or "two".  And we cannot think of    -->
+<!-- any other options.  So we build, and use, a boolean variable.   -->
+<!-- But if a third option aries, we can use it, and switch away  -->
+<!-- from the boolean variable without the author knowing. -->
+<xsl:variable name="latex-sides">
+    <!-- default depends on character of output -->
+    <xsl:variable name="default-sides">
+        <xsl:choose>
+            <xsl:when test="$b-latex-print">
+                <xsl:text>two</xsl:text>
+            </xsl:when>
+            <xsl:otherwise> <!-- electronic -->
+                <xsl:text>one</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$publication/latex/@sides = 'two'">
+            <xsl:text>two</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/latex/@sides = 'one'">
+            <xsl:text>one</xsl:text>
+        </xsl:when>
+        <!-- not recognized, so warn and default -->
+        <xsl:when test="$publication/latex/@sides">
+            <xsl:message>PTX:WARNING: LaTeX @sides in publisher file should be "one" or "two", not "<xsl:value-of select="$publication/latex/@sides"/>".  Proceeding with default value, which depends on if you are making electronic ("one") or print ("two") output</xsl:message>
+            <xsl:value-of select="$default-sides"/>
+        </xsl:when>
+        <!-- inspect deprecated string parameter  -->
+        <!-- no error-checking, shouldn't be used -->
+        <xsl:when test="not($latex.sides = '')">
+            <xsl:value-of select="$latex.sides"/>
+        </xsl:when>
+        <!-- default depends -->
+        <xsl:otherwise>
+            <xsl:value-of select="$default-sides"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- We have "one" or "two", or junk from the deprecated string parameter -->
+<xsl:variable name="b-latex-two-sides" select="$latex-sides = 'two'"/>
+
+<!-- Print versus electronic.  Historically "yes" versus "no" -->
+<!-- and that seems stable enough, as in, we don't need to    -->
+<!-- contemplate some third variant of LaTeX output.          -->
+<xsl:variable name="latex-print">
+    <xsl:choose>
+        <xsl:when test="$publication/latex/@print = 'yes'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/latex/@print = 'no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- not recognized, so warn and default -->
+        <xsl:when test="$publication/latex/@print">
+            <xsl:message>PTX:WARNING: LaTeX @print in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/latex/@print"/>".  Proceeding with default value: "no"</xsl:message>
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- inspect deprecated string parameter  -->
+        <!-- no error-checking, shouldn't be used -->
+        <xsl:when test="not($latex.print = '')">
+            <xsl:value-of select="$latex.print"/>
+        </xsl:when>
+        <!-- default is "no" -->
+        <xsl:otherwise>
+            <xsl:text>no</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- We have "yes" or "no", or possibly junk from the deprecated string    -->
+<!-- parameter, so we want the default (false) to be more likely than not. -->
+<xsl:variable name="b-latex-print" select="not($latex-print = 'no')"/>
+
+<!-- Add a boolean variable to toggle links for Asymptote images in PDF.    -->
+<!-- If a baseurl is set, and an HTML version is available with interactive -->
+<!-- WebGL images the publisher may want static images in the PDF to link   -->
+<!-- to the interactive images online.                                      -->
+<xsl:variable name="asymptote-links">
+    <xsl:choose>
+        <!-- fail automatically and silently for print -->
+        <xsl:when test="$b-latex-print">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- proceed when requested, so long as there is a base URL -->
+        <xsl:when test="$publication/latex/asymptote/@links = 'yes'">
+            <xsl:choose>
+                <!-- fail when no base URL is given -->
+                <xsl:when test="$baseurl = ''">
+                    <xsl:message>PTX WARNING: baseurl must be set in publisher file to enable links from Asymptote images</xsl:message>
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>yes</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:when test="$publication/latex/asymptote/@links = 'no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- set, but not correct, so inform and use default -->
+        <xsl:when test="$publication/latex/asymptote/@links">
+            <xsl:message>PTX WARNING: LaTeX links to Asymptote publisher file should be "yes" (links to HTML) or "no" (no links), not "<xsl:value-of select="$publication/latex/asymptote/@links"/>". Proceeding with default value: "no" (no links)</xsl:message>
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- unset, use the default, which is "no" since -->
+        <!-- it also needs action to set base URL        -->
+        <xsl:otherwise>
+            <xsl:text>no</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-asymptote-links" select="$asymptote-links = 'yes'"/>
+
+
+<!-- ########################### -->
+<!-- Reveal.js Slideshow Options -->
+<!-- ########################### -->
+
+<!-- Reveal.js Theme -->
+
+<xsl:variable name="reveal-theme">
+    <xsl:choose>
+        <!-- if theme is specified, use it -->
+        <xsl:when test="$publication/revealjs/appearance/@theme">
+            <xsl:value-of select="$publication/revealjs/appearance/@theme"/>
+        </xsl:when>
+        <!-- otherwise use "simple" as the default -->
+        <xsl:otherwise>
+            <xsl:text>simple</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Reveal.js Controls Back Arrows -->
+
+<xsl:variable name="reveal-control-backarrow">
+    <xsl:choose>
+        <!-- if publisher.xml file has laout specified, use it -->
+        <xsl:when test="($publication/revealjs/controls/@backarrows = 'faded') or ($publication/revealjs/controls/@backarrows = 'hidden') or ($publication/revealjs/controls/@backarrows = 'visible')">
+            <xsl:value-of select="$publication/revealjs/controls/@backarrows"/>
+        </xsl:when>
+        <xsl:when test="$publication/revealjs/controls/@backarrows">
+            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/controls/@backarrows" should be "faded", "hidden", or "visible" not "<xsl:value-of select="$publication/revealjs/controls/@backarrows"/>".  Default value will be used instead.</xsl:message>
+            <xsl:text>faded</xsl:text>
+        </xsl:when>
+        <!-- otherwise use "faded" as the default -->
+        <xsl:otherwise>
+            <xsl:text>faded</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Reveal.js Controls (on-screen navigation) -->
+
+<xsl:variable name="control-display">
+    <xsl:choose>
+        <!-- if publisher.xml file has theme specified, use it -->
+        <xsl:when test="($publication/revealjs/controls/@display = 'yes') or ($publication/revealjs/controls/@display = 'no')">
+            <xsl:value-of select="$publication/revealjs/controls/@display"/>
+        </xsl:when>
+        <xsl:when test="$publication/revealjs/controls/@display">
+            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/controls/@display" should be "yes" or "no" not "<xsl:value-of select="$publication/revealjs/controls/@display"/>".  Default value will be used instead.</xsl:message>
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <!-- otherwise use "yes" as the default -->
+        <xsl:otherwise>
+            <xsl:text>yes</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- Convert "yes"/"no" to a boolean variable -->
+<xsl:variable name="b-reveal-control-display" select="$control-display= 'yes'"/>
+
+<!-- Reveal.js Controls Layout -->
+
+<xsl:variable name="reveal-control-layout">
+    <xsl:choose>
+        <!-- if publisher.xml file has laout specified, use it -->
+        <xsl:when test="($publication/revealjs/controls/@layout = 'edges') or ($publication/revealjs/controls/@layout = 'bottom-right')">
+            <xsl:value-of select="$publication/revealjs/controls/@layout"/>
+        </xsl:when>
+        <xsl:when test="$publication/revealjs/controls/@layout">
+            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/controls/@layout" should be "edges" or "bottom-right" not "<xsl:value-of select="$publication/revealjs/controls/@layout"/>".  Default value will be used instead.</xsl:message>
+            <xsl:text>bottom-right</xsl:text>
+        </xsl:when>
+        <!-- otherwise use "bottom-right" as the default -->
+        <xsl:otherwise>
+            <xsl:text>bottom-right</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Reveal.js Controls Tutorial (animated arrows) -->
+
+<xsl:variable name="control-tutorial">
+    <xsl:choose>
+        <!-- if publisher.xml file has theme specified, use it -->
+        <xsl:when test="($publication/revealjs/controls/@tutorial = 'yes') or ($publication/revealjs/controls/@tutorial = 'no')">
+            <xsl:value-of select="$publication/revealjs/controls/@tutorial"/>
+        </xsl:when>
+        <xsl:when test="$publication/revealjs/controls/@tutorial">
+            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/controls/@tutorial" should be "yes" or "no" not "<xsl:value-of select="$publication/revealjs/controls/@tutorial"/>".  Default value will be used instead.</xsl:message>
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <!-- otherwise use "yes" as the default -->
+        <xsl:otherwise>
+            <xsl:text>yes</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- Convert "yes"/"no" to a boolean variable -->
+<xsl:variable name="b-reveal-control-tutorial" select="$control-tutorial= 'yes'"/>
+
+<!-- Reveal.js Navigation Mode -->
+
+<xsl:variable name="reveal-navigation-mode">
+    <xsl:choose>
+        <!-- if publisher.xml file has laout specified, use it -->
+        <xsl:when test="($publication/revealjs/navigation/@mode = 'default') or ($publication/revealjs/navigation/@mode = 'linear') or ($publication/revealjs/navigation/@mode = 'grid')">
+            <xsl:value-of select="$publication/revealjs/navigation/@mode"/>
+        </xsl:when>
+        <xsl:when test="$publication/revealjs/navigation/@mode">
+            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/navigation/@mode" should be "default", "linear", or "grid" not "<xsl:value-of select="$publication/revealjs/navigation/@mode"/>".  Default value will be used instead.</xsl:message>
+            <xsl:text>default</xsl:text>
+        </xsl:when>
+        <!-- otherwise use "default" as the default -->
+        <xsl:otherwise>
+            <xsl:text>default</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Reveal.js Resources file location -->
+
+<!-- String to prefix  reveal.js  resources -->
+<xsl:variable name="reveal-root">
+    <!-- CDN is used twice, so just edit here -->
+    <!-- NB: deprecation is frozen -->
+    <xsl:variable name="cdn-url">
+        <xsl:text>https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0</xsl:text>
+    </xsl:variable>
+
+    <xsl:choose>
+        <!-- if publisher.xml file has CDN option specified, use it       -->
+        <!-- keep this URL updated, but not for the deprecation situation -->
+        <xsl:when test="$publication/revealjs/resources/@host = 'cdn'">
+            <xsl:value-of select="$cdn-url"/>
+        </xsl:when>
+        <!-- if publisher.xml file has the local option specified, use it -->
+        <xsl:when test="$publication/revealjs/resources/@host = 'local'">
+            <xsl:text>.</xsl:text>
+        </xsl:when>
+        <!-- Experimental - just some file path/url -->
+        <xsl:when test="$publication/revealjs/resources/@host">
+            <xsl:value-of select="$publication/revealjs/resources/@host"/>
+        </xsl:when>
+        <!-- default to the CDN if no specification -->
+        <xsl:otherwise>
+            <xsl:value-of select="$cdn-url"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Reveal.js Minified CSS/JS -->
+<!-- Resources from a CDN come in a minified version typically.    -->
+<!-- But a local version does not have these files available.      -->
+<!-- So we provide sensible defaults and let a publisher override. -->
+
+<xsl:variable name="minified">
+    <xsl:choose>
+        <!-- explict is recognized first, only "yes" activates minified -->
+        <xsl:when test="$publication/revealjs/resources/@minified">
+            <xsl:choose>
+                <xsl:when test="$publication/revealjs/resources/@minified = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>no</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- for PTX-supplied CDN, assume minified is best -->
+        <xsl:when test="$publication/revealjs/resources/@host = 'cdn'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <!-- and for a local copy, assume no minified copy exists -->
+        <xsl:when test="$publication/revealjs/resources/@host = 'local'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- else some host, but we don't have any idea -->
+        <!-- so don't get fancy, and go without minified -->
+        <xsl:when test="$publication/revealjs/resources/@host">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- no @minified, and no @host, so we have     -->
+        <!-- defaulted to CDN and minified is suggested -->
+        <xsl:otherwise>
+            <xsl:text>yes</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- Convert "yes"/"no" to a boolean variable -->
+<xsl:variable name="b-reveal-minified" select="$minified = 'yes'"/>
 
 
 <!-- ######################### -->
@@ -501,6 +1935,52 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The autoname parameter is deprecated (2017-07-25) -->
 <!-- Replace with docinfo/cross-references/@text       -->
 <xsl:param name="autoname" select="''" />
+<!-- 2020-11-22: latex.print to publisher file -->
+<xsl:param name="latex.print" select="''"/>
+<!-- 2020-11-22 sidedness to publisher file -->
+<xsl:param name="latex.sides" select="''"/>
+
+
+<!-- Deprecated 2020-11-23 in favor of publisher file -->
+<!-- specification, but will still be respected       -->
+<xsl:param name="directory.images" select="'images'" />
+
+<!-- 2021-01-03 chunk.level to publisher file -->
+<xsl:param name="chunk.level" select="''" />
+<!-- 2021-01-03 toc.level to publisher file -->
+<xsl:param name="toc.level" select="''" />
+
+
+<!-- Deprecated 2021-01-23, but still respected -->
+<xsl:param name="html.knowl.theorem" select="''" />
+<xsl:param name="html.knowl.proof" select="''" />
+<xsl:param name="html.knowl.definition" select="''" />
+<xsl:param name="html.knowl.example" select="''" />
+<xsl:param name="html.knowl.project" select="''" />
+<xsl:param name="html.knowl.task" select="''" />
+<xsl:param name="html.knowl.list" select="''" />
+<xsl:param name="html.knowl.remark" select="''" />
+<xsl:param name="html.knowl.objectives" select="''" />
+<xsl:param name="html.knowl.outcomes" select="''" />
+<xsl:param name="html.knowl.figure" select="''" />
+<xsl:param name="html.knowl.table" select="''" />
+<xsl:param name="html.knowl.listing" select="''" />
+<xsl:param name="html.knowl.exercise.inline" select="''" />
+<xsl:param name="html.knowl.exercise.sectional" select="''" />
+<xsl:param name="html.knowl.exercise.worksheet" select="''" />
+<xsl:param name="html.knowl.exercise.readingquestion" select="''" />
+
+<!-- Deprecated 2021-02-14 but still respected -->
+<!-- maxlevel -> divisions.level, theorems.level -> blocks.level -->
+<xsl:param name="numbering.theorems.level" select="''" />
+<xsl:param name="numbering.projects.level" select="''" />
+<xsl:param name="numbering.equations.level" select="''" />
+<xsl:param name="numbering.footnotes.level" select="''" />
+<xsl:param name="numbering.maximum.level" select="''" />
+
+<!-- Deprecated 2021-02-14, now ignored, but warning exists -->
+<xsl:param name="debug.chapter.start" select="''" />
+
 
 <!-- ################# -->
 <!-- Variable Bad Bank -->
@@ -523,20 +2003,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- exercises have been deprecated as of 2018-11-07.  We keep  -->
 <!-- these here as we have tried to preserve their intent, and  -->
 <!-- we are generating warnings if they are ever set.           -->
+<!-- 2020-08-31 exercise.backmatter.* only remain for warnings  -->
 <xsl:param name="exercise.text.statement" select="''" />
 <xsl:param name="exercise.text.hint" select="''" />
 <xsl:param name="exercise.text.answer" select="''" />
 <xsl:param name="exercise.text.solution" select="''" />
-<xsl:param name="exercise.backmatter.statement" select="''" />
-<xsl:param name="exercise.backmatter.hint" select="''" />
-<xsl:param name="exercise.backmatter.answer" select="''" />
-<xsl:param name="exercise.backmatter.solution" select="''" />
 <xsl:param name="project.text.hint" select="''" />
 <xsl:param name="project.text.answer" select="''" />
 <xsl:param name="project.text.solution" select="''" />
 <xsl:param name="task.text.hint" select="''" />
 <xsl:param name="task.text.answer" select="''" />
 <xsl:param name="task.text.solution" select="''" />
+<xsl:param name="exercise.backmatter.statement" select="''" />
+<xsl:param name="exercise.backmatter.hint" select="''" />
+<xsl:param name="exercise.backmatter.answer" select="''" />
+<xsl:param name="exercise.backmatter.solution" select="''" />
 
 <!-- These are deprecated in favor of watermark.text and watermark.scale -->
 <!-- which are now managed in common. These still "work" for now.        -->
@@ -566,5 +2047,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- DEPRECATED: 2020-05-29  In favor of       -->
 <!-- html/calculator/@model  in publisher file -->
 <xsl:param name="html.calculator" select="''" />
+
+<!-- RETIRED: 2020-11-22 Not a deprecation, this is a string parameter that             -->
+<!-- was never used at all.  Probably no real harm in parking it here for now.          -->
+<!-- N.B. This has no effect, and may never.  xelatex and lualatex support is automatic -->
+<xsl:param name="latex.engine" select="'pdflatex'" />
+
+<!-- RETIRED: 2020-11-23 this parameter was never used, now    -->
+<!-- silently moved here, which should make no real difference -->
+<xsl:param name="directory.media"  select="''" />
+
+<!-- RETIRED: 2020-11-23 this parameter was never used, now    -->
+<!-- silently moved here, which should make no real difference -->
+<xsl:param name="directory.knowls"  select="''" />
 
 </xsl:stylesheet>

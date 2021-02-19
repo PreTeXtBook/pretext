@@ -61,6 +61,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='volume'><xsl:text>Volumen</xsl:text></localization>
     <localization string-id='book'><xsl:text>Libro</xsl:text></localization>
     <localization string-id='article'><xsl:text>Artículo</xsl:text></localization>
+    <!-- <localization string-id='slideshow'><xsl:text>Slideshow</xsl:text></localization> -->
     <localization string-id='letter'><xsl:text>Carta</xsl:text></localization>
     <localization string-id='memo'><xsl:text>Memorándum</xsl:text></localization>
     <localization string-id='presentation'><xsl:text>Presentación</xsl:text></localization>
@@ -72,6 +73,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='section'><xsl:text>Sección</xsl:text></localization>
     <localization string-id='subsection'><xsl:text>Subsección</xsl:text></localization>
     <localization string-id='subsubsection'><xsl:text>Subsubsección</xsl:text></localization>
+    <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
+    <!-- <localization string-id='slide'><xsl:text>Slide</xsl:text></localization> -->
     <localization string-id='introduction'><xsl:text>Introducción</xsl:text></localization>
     <localization string-id='conclusion'><xsl:text>Conclusión</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Ejercicios</xsl:text></localization>
@@ -137,6 +140,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'><xsl:text>Párrafo</xsl:text></localization>
     <!-- <localization string-id='blockquote'><xsl:text>Quotation</xsl:text></localization> -->
+    <!-- Literate programming, a chunk of computer code -->
+    <!-- <localization string-id='fragment'><xsl:text>Fragment</xsl:text></localization> -->
     <!-- Parts of an exercise and its solution -->
     <localization string-id='divisionalexercise'><xsl:text>Ejercicio</xsl:text></localization>
     <!-- Translation needed for Spain Spanish -->

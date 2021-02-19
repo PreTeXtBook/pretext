@@ -231,6 +231,14 @@ skip div,data-braille,latex-macros
 
 displaymath div,class,displaymath
 
+##########
+# Verbatim
+##########
+
+# Same class name as stock PreTeXt HTML
+
+preformatted pre,class,code-block
+
 ############
 # Sage Cells
 ############
@@ -264,7 +272,6 @@ changetable div,sage-code
 
 htmllink a,href
 htmltarget a,name
-code pre
 
 
 

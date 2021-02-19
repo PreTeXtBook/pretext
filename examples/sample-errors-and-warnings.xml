@@ -101,6 +101,8 @@ systems.
 
         <section>
             <title>Bad Math</title>
+            <!-- we mean this construction to provide a link back to a "contributor" -->
+            <author><xref ref="errors-and-warnings"/></author>
 
             <p>Some math that gives the Sage notebook trouble:  first the fixed version, where we use a small negative space followed by a small positive space to breakup the triple braces: <m>x^2{{\!\,{y^3}}}</m></p>
 

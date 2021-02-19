@@ -59,6 +59,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='volume'><xsl:text>Díl</xsl:text></localization>
     <localization string-id='book'><xsl:text>Kniha</xsl:text></localization>
     <localization string-id='article'><xsl:text>Článek</xsl:text></localization>
+    <!-- <localization string-id='slideshow'><xsl:text>Slideshow</xsl:text></localization> -->
     <localization string-id='letter'><xsl:text>Dopis</xsl:text></localization>
     <localization string-id='memo'><xsl:text>Sdělení</xsl:text></localization>
     <localization string-id='presentation'><xsl:text>Prezentace</xsl:text></localization>
@@ -70,6 +71,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='section'><xsl:text>Sekce</xsl:text></localization>
     <localization string-id='subsection'><xsl:text>Podsekce</xsl:text></localization>
     <localization string-id='subsubsection'><xsl:text>Podpodsekce</xsl:text></localization>
+    <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
+    <!-- <localization string-id='slide'><xsl:text>Slide</xsl:text></localization> -->
     <localization string-id='introduction'><xsl:text>Úvod</xsl:text></localization>
     <localization string-id='conclusion'><xsl:text>Závěr</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Cvičení</xsl:text></localization>
@@ -133,6 +136,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'><xsl:text>Odstavec</xsl:text></localization>
     <localization string-id='blockquote'><xsl:text>Citát</xsl:text></localization>
+    <!-- Literate programming, a chunk of computer code -->
+    <!-- <localization string-id='fragment'><xsl:text>Fragment</xsl:text></localization> -->
     <!-- Parts of an exercise and its solution -->
     <localization string-id='divisionalexercise'><xsl:text>Cvičení</xsl:text></localization>
     <!-- Translation needed for Czech Czech -->

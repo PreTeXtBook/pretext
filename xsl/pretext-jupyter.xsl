@@ -44,14 +44,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- iPython files as output -->
 <xsl:variable name="file-extension" select="'.ipynb'" />
 
-<!-- Examples, proofs and inline exercises are knowled     -->
-<!-- by default in HTML conversion.  While a THEOREM-LIKE  -->
-<!-- is one big unit, so proofs are not even considered    -->
-<!-- as knowls, EXAMPLE-LIKE do need protection.           -->
-
-<xsl:param name="html.knowl.proof" select="'no'" />
-<xsl:param name="html.knowl.example" select="'no'" />
-<xsl:param name="html.knowl.exercise.inline" select="'no'" />
 <xsl:param name="jupyter.kernel" select="''" />
 
 <!-- ############## -->
@@ -72,7 +64,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="banner-warning">
         <xsl:with-param name="warning">Jupyter notebook conversion is experimental and incomplete&#xa;Requests to fix/implement specific constructions welcome</xsl:with-param>
     </xsl:call-template>
-    <xsl:apply-templates select="mathbook" mode="deprecation-warnings" />
+    <xsl:apply-templates select="." mode="generic-warnings"/>
+    <xsl:apply-templates select="." mode="deprecation-warnings"/>
     <xsl:apply-templates mode="chunking" />
 </xsl:template>
 
@@ -324,13 +317,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- after same.  Adjustments are: different overall       -->
 <!-- delimiters, and no enclosing div to hide content      -->
 <!-- (thereby avoiding the need for serialization).        -->
+<!-- We *remove* our defintion of \lt since MathJax does   -->
+<!-- it anyway and Jupyter adds it in as part of a         -->
+<!-- conversion to LateX.  Bad practice?  Maybe better to  -->
+<!-- go back to -common and rework the entire latex-macro  -->
+<!-- generation scheme?                                    -->
 <xsl:template name="latex-macros">
     <xsl:call-template name="markdown-cell">
         <xsl:with-param name="content">
             <xsl:call-template name="begin-string" />
             <xsl:call-template name="begin-inline-math" />
             <xsl:value-of select="$latex-packages-mathjax" />
-            <xsl:value-of select="$latex-macros" />
+            <!-- Sequence replacements if \gt and/or \amp need to go -->
+            <xsl:value-of select="str:replace($latex-macros,'\newcommand{\lt}{&lt;}&#xa;', '')"/>
             <xsl:call-template name="end-inline-math" />
             <xsl:call-template name="end-string" />
         </xsl:with-param>
@@ -341,6 +340,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################# -->
 <!-- Block Level Items -->
 <!-- ################# -->
+
+<!-- Everything configurable by author, 2020-01-02         -->
+<!-- Roughly in the order of old  html.knowl.*  switches   -->
+<!-- Similar HTML templates return string for boolean test -->
+<!-- Jupyter is hostile to knowls code, so we don't knowl  -->
+<!-- anything and ignore any choice in a publisher file    -->
+<!-- https://github.com/jupyter/notebook/pull/2947         -->
+<xsl:template match="&THEOREM-LIKE;|proof|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&REMARK-LIKE;|&GOAL-LIKE;|exercise" mode="is-hidden">
+    <xsl:text>false</xsl:text>
+</xsl:template>
 
 <!-- These are "top-level" items, children of divisions    -->
 <!-- and pseudo-divisions.  Normally they would get a high -->
@@ -643,26 +652,14 @@ TODO: (overall)
 <!-- few gotchas need adjustment.  So we override.             -->
 <xsl:template match="c">
     <!-- grab content literally -->
-    <xsl:variable name="text">
-        <xsl:value-of select="."/>
-    </xsl:variable>
-
-    <!-- We wrap verbatim inline text with an HTML "code" element. -->
-    <!-- When there are to in close proximity (same paragraph)     -->
-    <!-- certain characters can pair up (as Markdown, or MathJax,  -->
-    <!-- delimiters?) and wreak havoc.  But escaped versions seem  -->
-    <!-- to perform well in all cases, so we make these            -->
-    <!-- replacements first.                                       -->
-    <xsl:variable name="backtick-fixed"   select="str:replace($text,           '`',  '\`' )"/>
-    <xsl:variable name="asterisk-fixed"   select="str:replace($backtick-fixed, '*',  '\*' )"/>
-    <xsl:variable name="underscore-fixed" select="str:replace($asterisk-fixed, '_',  '\_' )"/>
+    <xsl:variable name="text" select="string(.)"/>
 
     <!-- Jupyter notebook is careful about XML special characters, -->
     <!-- but if you want to write about the escaped versions, they -->
     <!-- just get converted to the real thing.  So in these five   -->
     <!-- very special situations we escape the leading ampersand   -->
     <!-- and whatever conversion is happening is satiated.         -->
-    <xsl:variable name="escaped-ampersand-fixed"    select="str:replace($underscore-fixed,           '&amp;amp;',  '&amp;amp;amp;' )"/>
+    <xsl:variable name="escaped-ampersand-fixed"    select="str:replace($text,                       '&amp;amp;',  '&amp;amp;amp;' )"/>
     <xsl:variable name="escaped-leftbracket-fixed"  select="str:replace($escaped-ampersand-fixed,    '&amp;lt;',   '&amp;amp;lt;' )"/>
     <xsl:variable name="escaped-rightbracket-fixed" select="str:replace($escaped-leftbracket-fixed,  '&amp;gt;',   '&amp;amp;gt;' )"/>
     <xsl:variable name="escaped-apostrophe-fixed"   select="str:replace($escaped-rightbracket-fixed, '&amp;apos;', '&amp;amp;apos;' )"/>
@@ -675,7 +672,8 @@ TODO: (overall)
     <!-- version and let that convert to the character.                -->
     <xsl:variable name="leftbracket-fixed" select="str:replace($escaped-quote-fixed, '&lt;', '&amp;lt;' )"/>
 
-    <!-- We enclose with PreTeXt's HTML, serializing by hand -->
+    <!-- We wrap verbatim inline text with an HTML "code" element. -->
+    <!-- We enclose with PreTeXt's HTML, serializing by hand.      -->
     <xsl:text>&lt;code class="code-inline tex2jax_ignore"&gt;</xsl:text>
         <xsl:value-of select="$leftbracket-fixed"/>
     <xsl:text>&lt;/code&gt;</xsl:text>

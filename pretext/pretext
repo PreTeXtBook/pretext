@@ -30,17 +30,6 @@ import pretext as ptx
 # by author/publisher on the command line
 # Use pretext module console messaging routines
 
-def verify_input_directory(inputdir):
-    """Verify directory exists, or raise error.  Return absolute path"""
-    import os.path # isdir(), abspath()
-
-    ptx._verbose('verifying and expanding input directory: {}'.format(inputdir))
-    if not(os.path.isdir(inputdir)):
-        raise ValueError('directory {} does not exist'.format(inputdir))
-    absdir = os.path.abspath(inputdir)
-    ptx._verbose('input directory expanded to absolute path: {}'.format(absdir))
-    return absdir
-
 def verify_input_file(f):
     """Verify file exists, or raise error.  Return absolute path"""
     import os.path # isfile(), abspath()
@@ -51,6 +40,27 @@ def verify_input_file(f):
     absf = os.path.abspath(f)
     ptx._verbose('input file expanded to absolute path: {}'.format(absf))
     return absf
+
+def get_output_file(file_path):
+    """Expand provided filename, or return None"""
+    import os # getcwd
+
+    # if specified, return absolute path
+    # does not need to exist
+    if file_path:
+        return os.path.abspath(file_path)
+    # else leave unspecified
+    return None
+
+def get_destination_directory(directory):
+    """Check and expand provided directory, or return current working directory"""
+    import os # getcwd
+
+    # if specified, check, sanitize, return absolute path
+    if directory:
+        return ptx.verify_input_directory(directory)
+    # else default to current directory
+    return os.getcwd()
 
 def string_parameters_as_dict(pairs):
     """Convert flat list of consecutive keys and values into a dictionary"""
@@ -97,30 +107,34 @@ def get_cli_arguments():
     parser.add_argument('-c', '--component', help=component_help, action="store", dest="component")
 
     format_info = [
-        ('svg', 'Scalable Vector Graphicsfile(s)'),
+        ('svg', 'Scalable Vector Graphics file(s)'),
         ('pdf', 'Portable Document Format file(s)'),
         ('png', 'Portable Network Graphics file(s)'),
         ('eps', 'Encapsulated Post Script file(s)'),
-        ('braille', 'Nemeth Braille (math elements)'),
+        ('mml', 'MathML (math elements)'),
+        ('braille', 'Nemeth Braille (math elements only)'),
+        ('braille-emboss', 'UEB + Nemeth braille, for print'),
+        ('braille-electronic', 'UEB + Nemeth Braille, for one-line display'),
         ('speech', 'Speech (math elements)'),
         ('source', 'Standalone source files'),
         ('latex', 'LaTeX source file'),
-        ('html', 'HyperText Markup Language (web pages)'),
+        ('html', 'HyperText Markup Language (online/web pages)'),
         ('epub-svg', 'EPUB container, math as SVG'),
         ('epub-mml', 'EPUB container, math as MathML'),
         ('epub-speech', 'EPUB container, math as speech'),
+        ('epub-kindle', 'EPUB container, math as MathML, PNG images'),
         ('sagenb', 'Sage worksheet conversion (removed)'),
         ('all', 'All available output formats'),
     ]
     format_help = 'Output formats are:\n' + '\n'.join(['  {} - {}'.format(info[0], info[1]) for info in format_info])
     parser.add_argument('-f', '--format', help=format_help, action="store", dest='format')
 
+    parser.add_argument('-p', '--publisher', help='filename for publisher file', action="store", dest='publisher_file')
     # "nargs" allows multiple options following the flag
     # separate by spaces, can't use "-stringparam"
     # stringparams is a list of strings on return, defaults to empty list
-    parser.add_argument('-p', '--parameters', nargs='+', help='stringparam options to pass to XSLT extraction stylesheet (multiple option/value pairs, not as last argument)',
+    parser.add_argument('-x', '--parameters', nargs='+', help='extra stringparam options to pass to XSLT extraction stylesheet (multiple option/value pairs, not as last argument)',
                          action="store", dest='stringparams', default=[])
-    parser.add_argument('-x', '--publisher', help='filename for publisher file', action="store", dest='publisher_file')
     # default to an empty string, which signals root to XSL stylesheet
     parser.add_argument('-r', '--restrict', help='restrict to subtree rooted at element with specified xml:id',
                          action="store", dest='xmlid', default='')
@@ -128,7 +142,7 @@ def get_cli_arguments():
     parser.add_argument('-s', '--server', help='base URL for server (webwork only)', action="store", dest='server')
 
     parser.add_argument('-i', '--include', help='external data directory, relative to source, latex-image only', action="store", dest='data_dir')
-    parser.add_argument('-o', '--output', help='file for output', action="store", dest='out')
+    parser.add_argument('-o', '--output', help='file for output (supersedes -d)', action="store", dest='out')
     parser.add_argument('-d', '--directory', help='directory for output, defaults to current directory', action="store", dest='dir')
     parser.add_argument('-a', '--abort', help='abort script upon recoverable errors', action="store_true", dest='abort')
 
@@ -142,7 +156,8 @@ def get_cli_arguments():
 
 def main():
     """React to command-line switches in order to perform basic tasks"""
-    import os # getcwd
+    import os # .sep
+    # TODO: isolate two os.sep into getters
 
     # always check version, raises error for Python 2 or less
     ptx.check_python_version()
@@ -177,60 +192,56 @@ def main():
     ptx._debug('executables in configuration file: {}'.format(dict(ptx.get_config_info()['executables'])))
 
     # directory/file locations provided on command-line by user
-    # output directory, default to cwd
-    if args.dir:
-        dest_dir = verify_input_directory(args.dir)
-    else:
-        dest_dir = os.getcwd()
+    # Expanded here to be complete paths, or set to defaults
+    # output file expanded; if not specified, then no
+    # natural default, so could be left undefined (None)
+    # We don't assume it exists, it is being created
+    out_file = get_output_file(args.out)
+    # output directory: CLI switch or default to cwd
+    # must exist first if given, return value always exists
+    dest_dir = get_destination_directory(args.dir)
+    # check and sanitize XML source, presumed to exiast
     xml_source = verify_input_file(args.xml_file)
     # data directory is optional, so allow for None here
     if args.data_dir:
-        data_dir = verify_input_directory(args.data_dir)
+        data_dir = ptx.verify_input_directory(args.data_dir)
     else:
         data_dir = None
+    # publisher file is optional, so allow for None here
+    if args.publisher_file:
+        publisher_file = verify_input_file(args.publisher_file)
+        #ensure forward slash to pass to xsltproc:
+        publisher_file = publisher_file.replace(os.sep, '/')
+    else:
+        publisher_file = None
 
     # convert list of string parameters into a dictionary
     # routines in module expect a dictionary, so convert here and now
     stringparams = string_parameters_as_dict(args.stringparams)
+    # if 'publisher' is passed as stringparam, pull it out
+    # as 'publisher_file' and ensure correct slashes
+    # but do not stomp on a file passed with dedicated switch
+    if ('publisher' in stringparams) and not(publisher_file):
+        publisher_file = verify_input_file(stringparams['publisher'])
+        publisher_file = publisher_file.replace(os.sep, '/')
+        del stringparams['publisher']
 
     ptx._verbose('Done examining environment and initializing setup info')
 
     # The big switch
     if args.component == 'asy':
-        if args.format == 'html':
-            ptx.asymptote_conversion(xml_source, stringparams, args.xmlid, dest_dir, 'html')
-        elif args.format == 'pdf':
-            ptx.asymptote_conversion(xml_source, stringparams, args.xmlid, dest_dir, 'pdf')
-        elif args.format == 'svg':
-            ptx.asymptote_conversion(xml_source, stringparams, args.xmlid, dest_dir, 'svg')
-        elif args.format == 'eps':
-            ptx.asymptote_conversion(xml_source, stringparams, args.xmlid, dest_dir, 'eps')
-        elif args.format == 'source':
-            ptx.asymptote_conversion(xml_source, stringparams, args.xmlid, dest_dir, 'source')
+        if args.format in ['html', 'pdf', 'svg', 'png', 'eps', 'source']:
+            ptx.asymptote_conversion(xml_source, publisher_file, stringparams, args.xmlid, dest_dir, args.format)
         else:
             raise NotImplementedError('cannot make Asymptote diagrams in "{}" format'.format(args.format))
-    elif args.component == 'sageplot':
-        if args.format == 'pdf':
-            ptx.sage_conversion(xml_source, args.xmlid, dest_dir, 'pdf')
-        elif args.format == 'svg':
-            ptx.sage_conversion(xml_source, args.xmlid, dest_dir, 'svg')
-        elif args.format == 'source':
-            ptx.sage_conversion(xml_source, args.xmlid, dest_dir, 'source')
+    elif  args.component == 'sageplot':
+        if args.format in ['pdf', 'svg', 'source']:
+            ptx.sage_conversion(xml_source, publisher_file, stringparams, args.xmlid, dest_dir, args.format)
         else:
             raise NotImplementedError('cannot make Sage graphics in "{}" format'.format(args.format))
     elif args.component == 'latex-image':
-        if args.format == 'pdf':
-            ptx.latex_image_conversion(xml_source, stringparams, args.xmlid, data_dir, dest_dir, 'pdf')
-        elif args.format == 'svg':
-            ptx.latex_image_conversion(xml_source, stringparams, args.xmlid, data_dir, dest_dir, 'svg')
-        elif args.format == 'source':
-            ptx.latex_image_conversion(xml_source, stringparams, args.xmlid, data_dir, dest_dir, 'source')
-        elif args.format == 'png':
-            ptx.latex_image_conversion(xml_source, stringparams, args.xmlid, data_dir, dest_dir, 'png')
-        elif args.format == 'eps':
-            ptx.latex_image_conversion(xml_source, stringparams, args.xmlid, data_dir, dest_dir, 'eps')
-        elif args.format == 'all':
-            ptx.latex_image_conversion(xml_source, stringparams, args.xmlid, data_dir, dest_dir, 'all')
+        if args.format in ['pdf', 'svg', 'png', 'eps', 'source', 'all']:
+            ptx.latex_image_conversion(xml_source, publisher_file, stringparams, args.xmlid, data_dir, dest_dir, args.format)
         else:
             raise NotImplementedError('cannot make LaTeX pictures in "{}" format'.format(args.format))
     elif args.component == 'webwork-tex':
@@ -238,44 +249,53 @@ def main():
                  'and behaves very differently')
         raise NotImplementedError(wtdep)
     elif args.component == 'webwork':
-        ptx.webwork_to_xml(xml_source, args.abort, args.server, dest_dir)
+        ptx.webwork_to_xml(xml_source, publisher_file, stringparams, args.abort, args.server, dest_dir)
     elif args.component == 'youtube':
-        ptx.youtube_thumbnail(xml_source, args.xmlid, dest_dir)
+        ptx.youtube_thumbnail(xml_source, publisher_file, stringparams, args.xmlid, dest_dir)
     elif args.component == 'preview':
-        ptex.preview_images(xml_source, args.xmlid, dest_dir)
+        ptx.preview_images(xml_source, publisher_file, stringparams, args.xmlid, dest_dir)
     elif args.component == 'mom':
-        ptx.mom_static_problems(xml_source, args.xmlid, dest_dir)
+        ptx.mom_static_problems(xml_source, publisher_file, stringparams, args.xmlid, dest_dir)
     elif args.component == 'math':
-        if args.format in ['svg']:
-            outfile = os.path.abspath(args.out)
-            mathjax_latex(args.xml_file, outfile, args.format)
-        elif args.format in ['braille', 'speech']: # migrate to "if"
-            raise NotImplementedError('conversion of math elements to "{}" format not yet implemened'.format(args.format))
+        if args.format in ['svg', 'mml', 'braille', 'speech']:
+            ptx.mathjax_latex(xml_source, publisher_file, out_file, dest_dir, args.format)
         else:
             raise NotImplementedError('cannot convert math elements to "{}" format'.format(args.format))
     elif args.component == 'all':
         if args.format == 'html':
-            raise NotImplementedError("conversion to HTML version not integrated yet, use command line")
+            ptx.html(xml_source, publisher_file, stringparams, dest_dir)
         elif args.format == 'latex':
-            raise NotImplementedError("conversion to LaTeX version not integrated yet, use command line")
-        elif args.format == 'braille':
-            ptx.braille(args.xml_file, args.publisher_file, dest_dir)
+            ptx.latex(xml_source, publisher_file, stringparams, out_file, dest_dir)
+        elif args.format == 'braille-emboss':
+            ptx.braille(xml_source, publisher_file, stringparams, out_file, dest_dir, 'emboss')
+        elif args.format == 'braille-electronic':
+            ptx.braille(xml_source, publisher_file, stringparams, out_file, dest_dir, 'electronic')
         elif args.format == 'epub-svg':
-            ptx.epub(args.xml_file, args.publisher_file, dest_dir, 'svg')
+            ptx.epub(xml_source, publisher_file, out_file, dest_dir, 'svg')
         elif args.format == 'epub-mml':
-            ptx.epub(args.xml_file, args.publisher_file, dest_dir, 'mml')
+            ptx.epub(xml_source, publisher_file, out_file, dest_dir, 'mml')
         elif args.format == 'epub-speech':
-            ptx.epub(args.xml_file, args.publisher_file, dest_dir, 'speech')
+            ptx.epub(xml_source, publisher_file, out_file, dest_dir, 'speech')
+        elif args.format == 'epub-kindle':
+            ptx.epub(xml_source, publisher_file, out_file, dest_dir, 'kindle')
         # 2020-05-19 MathBookXMLtoSWS class removed
         elif args.format == 'sagenb':
             raise NotImplementedError("conversion to Sage notebook format removed (2020-05-18)")
+        #2020-08-19 Deprecated in favor of -emboss, -electronic
+        elif args.format == 'braille':
+            raise NotImplementedError("'braille' format deprecated (2020-08-19), 'braille-emboss' is replacement")
         else:
             raise NotImplementedError('cannot make entire document in "{}" format'.format(args.format))
+    elif args.component == 'images':
+        ptx.all_images(xml_source, publisher_file, stringparams, args.xmlid)
     # 2020-05-19 tikz_conversion() function removed
     elif args.component == 'tikz':
         raise NotImplementedError('conversion of TikZ pictures has been subsumed into the "latex-image" component (2020-05-19)')
     else:
         raise ValueError('the "{}" component is not a conversion option'.format(args.component))
+
+    # Cleanup, if execution does not raise errors
+    ptx.release_temporary_directories()
 
 
 # Do it - lone top-level command

@@ -52,8 +52,8 @@
 <!-- We default to one massive def file -->
 <xsl:variable name="chunk-level">
     <xsl:choose>
-        <xsl:when test="$chunk.level != ''">
-            <xsl:value-of select="$chunk.level" />
+        <xsl:when test="$chunk-level-entered != ''">
+            <xsl:value-of select="$chunk-level-entered" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>0</xsl:text>

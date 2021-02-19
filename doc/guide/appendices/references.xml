@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2020  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<references xml:id="references">
+    <!-- Let title internationalize itself -->
+
+    <biblio type="raw" xml:id="knuth-literate-programming">
+        Knuth, Donald E., <title>Literate Programming</title>.  <journal>The Computer Journal</journal>, 1983, <url href="http://www.literateprogramming.com/knuthweb.pdf"><c>www.literateprogramming.com/knuthweb.pdf</c></url>.
+    </biblio>
+
+    <biblio type="raw" xml:id="indexing-guide">Fred Leise, Kate Mertes, Nan Badgett, <title>Indexing for Editors and Authors: A Practical Guide to Understanding Indexes</title>, American Society of Indexers, 2008</biblio>
+
+</references>

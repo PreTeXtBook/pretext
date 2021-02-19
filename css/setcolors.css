@@ -1,0 +1,144 @@
+
+/* This file assigns the main colors, using variables that
+   have been set previously. */
+
+#masthead #title-container > .heading, #masthead .title-container > .heading,#masthead #title-container > .heading a:link, #masthead #title-container > .heading a:visited, #masthead .title-container > .heading a:link, #masthead .title-container > .heading a:visited, #masthead #title-container > .heading a:hover, #masthead #title-container > .heading a:focus, #masthead .title-container > .heading a:hover, #masthead .title-container > .heading a:focus, #masthead #logo-link:empty:hover:before, #masthead .logo-link:empty:hover:before, #masthead #byline a:hover, #masthead #byline a:focus, #masthead .byline a:hover, #masthead .byline a:focus {
+  color: #2a5ea4;
+  color: var(--documenttitle);
+}
+
+#masthead #title-container > .heading a:active, #masthead .title-container > .heading a:active, #masthead #logo-link:empty:active:before, #masthead .logo-link:empty:active:before, #masthead #byline a:active, #masthead .byline a:active {
+  color: #932c1c;
+  color: var(--bodytitle);
+}
+#toc > ul > li > a, #toc > ul > li > a:link, #toc > ul > li > a:visited {
+  color: #505050;
+  color: var(--chaptertoctext);
+  background-color: #dbf5ff;
+  background-color: var(--chaptertoc);
+  border-color: #afc2e5;
+  border-color: var(--tocborder);
+}
+
+#toc ul li ul a, #toc ul li ul a:link, #toc ul li ul a:visited {
+  color: #404040;
+  color: var(--sectiontoctext);
+  background-color: #ffffff;
+  background-color: var(--sectiontoc);
+}
+
+#toc ul li a.active {
+  color: #404040;
+  color: var(--chaptertoctextactive);
+  background-color: #fae5b6;
+  background-color: var(--chaptertocactive);
+  border-color: #d7b772;
+  border-color: var(--highlighttocborder);
+}
+#toc ul li ul a.active {
+  color: #404040;
+  color: var(--sectiontoctextactive);
+  background-color: #fae5b6;
+  background-color: var(--sectiontocactive);
+  border-color: #d7b772;
+  border-color: var(--highlighttocborder);
+}
+
+#toc ul li a:hover {
+  color: #321a0c;
+  color: var(--highlighttoctext);
+  background-color: #fac793;
+  background-color: var(--highlighttoc);
+  border-color: #ec704b;
+  border-color: var(--highlighttocborder);
+}
+#toc ul li ul a:hover {
+  color: #321a0c;
+  color: var(--highlighttoctext);
+  background-color: #fac793;
+  background-color: var(--highlighttoc);
+  border-color: #ec704b;
+  border-color: var(--highlighttocborder);
+}
+
+#toc ul li.part a {
+    margin-top: 15px;
+/*
+    padding-top: 6px;
+    padding-bottom: 6px;
+*/
+    border-bottom: none;
+}
+#toc ul li.part a,
+#toc ul li.frontmatter > a:first-child,
+#toc ul li.backmatter > a:first-child {
+    color: #222222;
+    background-color: var(--bodytitlehighlight);
+    font-size: 110%;
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+#toc ul li.part a:hover,
+#toc ul li.frontmatter a:hover,
+#toc ul li.backmatter a:hover {
+    color: #ffffff;
+    background-color: var(--highlighttoc);
+}
+
+.sidebar-content .extras a:hover {
+  border-top: 1px solid var(--highlighttocborder);
+}
+
+.pretext-content .summary-links a {
+  color: var(--sectiontoctext);
+}
+.pretext-content .summary-links a:hover, .pretext-content .summary-links a:focus {
+  color: var(--highlighttoctext);
+  background: var(--highlighttoc);
+}
+
+.pretext-content [data-knowl], .pretext-content [data-knowl]:hover, .pretext-content [data-knowl]:active, .pretext-content [data-knowl].active {
+    color: var(--bodytitle);
+}
+.pretext-content [data-knowl]:hover, .pretext-content [data-knowl]:active, .pretext-content [data-knowl].active {
+    background-color: var(--bodytitlehighlight);
+}
+
+/* next two groups concern accessibility, so check when making changes */
+.pretext-content a.internal {
+    color: var(--bodytitle);
+}
+.pretext-content a.external {
+    color: var(--bodysubtitle);
+}
+.pretext-content a.internal:hover, .pretext-content a.internal:hover *,
+.pretext-content a.internal:focus, .pretext-content a.internal:focus * {
+    background-color: var(--bodytitlehighlight);
+}
+.pretext-content a.external:hover, .pretext-content a.external:hover *,
+.pretext-content a.external:focus, .pretext-content a.external:focus * {
+    background-color: var(--bodysubtitlehighlight);
+}
+
+.pretext-content .playvideo {
+    background-color: var(--videoplay);
+}
+
+.pretext-content .goal-like {
+  border-color: var(--chaptertoc);
+}
+
+.pretext-content .assemblage-like {
+    border-color: var(--assemblageborder);
+    background-color: var(--assemblagebackground);
+}
+
+.knowl-output {
+    border-color: var(--knowlborder);
+    background-color: var(--knowlbackground);
+}
+.knowl-footer {
+    background-color: var(--knowlborder);
+}
+
+

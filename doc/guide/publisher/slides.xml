@@ -33,6 +33,38 @@
             or you may arrange to copy the necessary files from reveal.js and store them locally (your hard disk, your website).
             See <xref ref="revealjs-resources-options"/> for the necessary details.
         </p>
+        <p>
+            Reveal.js will render <latex/> syntax with MathJax,
+            entirely similar to how MathJax is used in the <pretext/> conversion to <init>HTML</init>.
+            This is accomplished with the Reveal.js <c>math</c> plugin, which is loaded automatically as part of your output.  When you specify that resources come from a CDN, then this plugin will also get MathJax from a CDN.
+            When you specify that resources are available locally (your hard disk, your website),
+            then this plugin simply expects that you have installed a complete copy of MathJax.
+            So a local version may only be practical if you are careful not to include <em>any</em> mathematics in your document.
+        </p>
+        <p>
+            We are not enthusiastic about <init>PDF</init> as an electronic format.
+            But it might be a good choice as an archival format.
+            So exporting your slideshow to a <init>PDF</init> could be a good choice for a long-term archive.
+            On 2020-08-01 Andrew Rechnitzer suggests the <url href="https://github.com/astefanutti/decktape"><c>decktape</c></url><fn><c>github.com/astefanutti/decktape</c></fn> node (Javascript) program.
+            The <c>reveal</c> plugin works well once you settle on a resolution (the <c>-s</c> option).
+            The <c>generic</c> plugin, along with the default key action (<c>ArrowRight</c>) can capture the behavior of slides built using the <attr>pause</attr> attribute.
+            A local web server can also be employed to serve up the slides, see <xref ref="processing-testing-html"/>.
+        </p>
+        <p>
+            Reveal.js has various options of the visibility of arrows a presenter can click on in order to move through a presentation.
+            The visibility of these can be controlled via options in the publisher file.  See <xref ref="revealjs-control-options"/>.
+        </p>
+        <p>
+            Reveal.js imagines slides laid out on a 2-D grid.  Each <pretext/> section gives rise to a title slide and these are organized left-to-right.  <em>Below</em> each of these slides, arranged vertically, are the slides comprising the section.  We use the attribute value <c>grid</c> to refer to this arrangement.
+        </p>
+        <p>
+            If public speaking makes you nervous and going left-to-right and top-to-bottom
+            nearly simultaneously means you get lost and even less confident (we've seen it),
+            we have an option for you.
+            The attribute value <c>linear</c> arranges <em>all</em> your slides from left-to-right.
+            Aah, that's better.
+            See <xref ref="revealjs-navigation-options"/> for details on setting the navigation mode for your slideshow.
+        </p>
     </section>
     <section xml:id="publisher-beamer">
         <title>Beamer <latex/></title>

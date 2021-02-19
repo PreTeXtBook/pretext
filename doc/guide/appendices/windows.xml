@@ -188,7 +188,6 @@
     <title>Installing git</title>
     <introduction>
       <p>In this section we install the <c>git</c> version control system and some tools to interact with it, including a fairly full-featured emulation of the <c>bash</c> command line shell. I strongly recommend you use the Git Bash shell or another <c>bash</c> emulation, so that you can use Linux commands referenced elsewhere.</p>
-      <p>One feature in particular, <c>pdfcrop</c>, has not been made to work in the normal Windows <c>cmd</c> shell, although the rest of <pretext /> has. To generate images using the <c>pretext</c> script <xref ref="section-pretext-on-windows" />, you will need the Git Bash shell or something like it.</p>
     </introduction>
     <subsection xml:id="install-git">
       <title>Steps to install git</title>
@@ -233,7 +232,7 @@
     </ol></p>
 
     <p>Congratulations, you have successfully installed Python.</p>
-    <p>If you do not care about images, you can stop here. Much of the <pretext/> functionality is already present. However, to use the <c>pretext</c> script to create SVG images from sources like PDF/PNG images, Sage, Asymptote, or TikZ, you need to install ImageMagick and Ghostscript using the directions in <xref ref ="installing-imagemagick" /> and <xref ref ="installing-ghostscript" />.</p>
+    <p>If you do not care about images, you can stop here. Much of the <pretext/> functionality is already present. However, to use the <c>pretext/pretext</c> script to create SVG images from sources like PDF/PNG images, Sage, Asymptote, or TikZ, you need to install ImageMagick using the directions in <xref ref ="installing-imagemagick"/>.</p>
   </section>
 
   <section xml:id="installing-imagemagick">
@@ -265,46 +264,6 @@
     <p>Congratulations, you have successfully installed ImageMagick.</p>
   </section>
 
-  <section xml:id="installing-ghostscript">
-    <title>Installing Ghostscript</title>
-    <introduction>
-      <p>Visit the <url href="http://www.ghostscript.com/download/gsdnld.html">Ghostscript download area</url> and download the most current binary for either 64-bit or 32-bit Windows (<xref ref="do-i-have-64-bit-windows" /> ). Run the installer. You can accept almost all the default options. As with ImageMagick (<xref ref="installing-imagemagick" />), it is probably best to choose an installation location whose path name is free of spaces, such as <c>c:\gs</c>. We refer to this installation location as <c>&lt;gs&gt;</c> below.</p>
-    </introduction>
-    <subsection xml:id="change-path-environment-variable-ghostscript">
-      <title>Change PATH environment variable</title>
-      <p>The <c>pdfcrop</c> utility needs to be told which Ghostscript command to use. We need to add the file <c>gswin64c.exe</c> to the Windows PATH. This is similar to what is done above, in <xref ref="change-path-environment-variable-xsltproc" />.</p>
-      <list xml:id="steps-change-path-environment-variable-ghostscript">
-        <title>Path Environment Variable for <c>ghostscript</c></title>
-        <ol>
-          <li>
-            <p>Open the Start menu and start typing <q>Edit the system environment variables</q>. Select this option when it becomes visible.</p>
-          </li>
-          <li>
-            <p>Click the Environment Variables button near the bottom of the dialog.</p>
-          </li>
-          <li>
-            <p>In the bottom part of the dialog labeled <q>System environment variables</q>, look for a variable named <c>PATH</c>. You may need to scroll.</p>
-          </li>
-          <li>
-            <p>If you do find the <c>PATH</c> variable, select it and click the Edit... button.</p>
-          </li>
-          <li>
-            <p>You should see a dialog with two text fields. Your variable name should be <c>PATH</c>.</p>
-          </li>
-          <li>
-            <p>Place the cursor in the existing value and press the End key, so that the cursor moves to the back of the line. The <c>PATH</c> string is a <c>;</c>-delimited list of full path names, so append the string <c>&lt;gs&gt;;</c> (note the semicolon) to the existing value. If you named &lt;gs&gt; as we suggested above, then the last part of your <c>PATH</c> variable is now <c>C:\gs;</c>.</p>
-          </li>
-          <li>
-            <p>Click OK to save changes.</p>
-          </li>
-        </ol>
-      </list>
-    </subsection>
-    <conclusion>
-      <p>Congratulations, you have successfully installed Ghostscript.</p>
-    </conclusion>
-  </section>
-
   <section xml:id="section-installing-pdf2svg">
     <title>Installing <c>pdf2svg</c></title>
     <introduction>
@@ -312,7 +271,7 @@
     </introduction>
     <subsection xml:id="subsection-change-path-environment-variable-pdf2svg">
       <title>Change PATH environment variable</title>
-      <p>We need to add the <c>pdf2svg</c> program to the Windows PATH. This is similar to what is done above, in <xref ref="change-path-environment-variable-xsltproc" /> and <xref ref="change-path-environment-variable-ghostscript" />.</p>
+      <p>We need to add the <c>pdf2svg</c> program to the Windows PATH. This is similar to what is done above, in <xref ref="change-path-environment-variable-xsltproc" />.</p>
       <list xml:id="steps-change-path-environment-variable-pdf2svg">
         <title>Path Environment Variable for <c>pdf2svg</c></title>
         <ol>

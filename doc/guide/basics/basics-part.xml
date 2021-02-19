@@ -1025,35 +1025,20 @@
         into your source files. <c>xsltproc</c> basically just dumps your code out to your <latex/> file so that it compiles nicely.
         However, for <init>HTML</init> display,
         you will need <init>SVG</init> graphic files.
-        This is where the <c>pretext</c> script comes in.
-        Running the <c>pretext</c> script frequently requires patience,
+        This is where the <c>pretext/pretext</c> script comes in.
+        Running the <c>pretext/pretext</c> script frequently requires patience,
         particularly on Windows,
-        so settle in with an experienced user before attempting the steps in this section.
+        so settle in with an experienced user before attempting the steps in this section.  See <xref ref="pretext-script"/> for complete details.
       </p>
       <aside>
           <title>The <c>pretext</c> script</title>
           <idx><h sortby="pretext script"><c>pretext</c> script</h><h>prerequisites</h></idx>
         <p>
-          The <c>pretext</c> script has a number of prerequisites to use its full power.
-          As a baseline, <c>python</c> is required.
-          (Both version 2 and version 3 are generally supported.)
-          This comes pretty much by default with Mac, Linux,
-          and CoCalc/cloud environments,
-          and so they tend to work better than Windows.
-          If you're a Windows user who just needs one graphic produced quickly,
-          consider going with CoCalc on a temporary basis.
-          It is definitely possible to have a fully functional configuration for the <c>pretext</c> script on Windows,
-          and the <pretext/> support email list will provide plenty of assistance when you get stuck.
+          The <c>pretext/pretext</c> script requires a working Python installation, and works best with a virtual Python environment.   See <xref ref="python"/>.
         </p>
 
         <p>
-          In addition to <c>python</c>,
-          you will need a working <latex/> installation
-          (with Ghostscript,
-          which can sometimes be the source of configuration headaches for Windows users)
-          to make graphics from TikZ
-          (or similar)
-          code to include in your <init>HTML</init> pages. <c>pdf2svg</c> is also a piece of the toolchain that may need to be installed separately,
+          <c>pdf2svg</c> is also a piece of the toolchain that may need to be installed separately,
           including on macOS. To generate graphics using SageMath,
           you'll need a working installation of it with a proper configuration of its path in the <c>pretext.cfg</c> file.
           Linux and CoCalc can probably get away without extra configuration here,
@@ -1099,21 +1084,15 @@
         your browser will display an error message about not being able to find the graphic file,
         since it doesn't exist.
         To generate the image,
-        we have to run the <c>pretext</c> script.<fn>
-        Will the script someday be renamed the <c>ptx</c> script?
-        Tune in again next time to find out!
-        </fn> To do this, on the command line we run the following command
+        we have to run the <c>pretext/pretex</c> script.
+        To do this, on the command line we run the following command
         (on a single line).
       </p>
 
-      <sidebyside width="80%" margins="10% 10%">
-
+      <console width="80%" margins="10% 10%">
         <!-- <idx><h><c>pretext</c> script</h><h>for latex-image</h></idx> -->
-<pre>
-  [path to mathbook]/script/pretext -c latex-image -f svg
--d ./images [path to PTX source file]
-</pre>
-      </sidebyside>
+        <input>[path to mathbook]/script/pretext -c latex-image -f svg -d ./images [path to PTX source file]</input>
+      </console>
 
       <p>
         This command assumes that we're in the directory where we usually run <c>xsltproc</c> to produce our <init>HTML</init> and that we want to put the images in a directory called <c>images</c> inside that directory.
@@ -1183,9 +1162,9 @@
             numbers in PreTeXt.  Some approximate quotes about tables from CMOS: 
             <ul>
                 <li>facts that are easy to scan and compare</li>
-                <li>a reader unfamiliar with the material should still be ale to make 
-                sense of the table </li>
-                <li>tables are numbered and have titles (and not captions) </li>
+                <li>a reader unfamiliar with the material should still be able to make 
+                sense of the table</li>
+                <li>tables are numbered and have titles (and not captions)</li>
             </ul>
             </p>
             <p>My take-away is that a CMOS table is a supplement to what is written 
@@ -1245,10 +1224,11 @@
         Sometimes you don't want to provide an interactive SageMath environment in the middle of your book
         (or a chunk of code)
         but you would like to produce a figure to include in your project by using SageMath.
-        The cleanest way to do this his to put the SageMath code right in your <pretext/> project and use the <c>pretext</c> script to produce the image files required for your chosen output formats.
-        This is accomplished by using <tag>sageplot</tag> and the <c>pretext</c> script that we discussed in <xref ref="basics-s-latex-fig"/>.
-        (In particular,
-        see the aside in that section about the additional packages that must be installed and configured to use the <c>pretext</c> script.)
+        The cleanest way to do this his to put the SageMath code right in your <pretext/> project and use the <c>pretext</c> script
+	that we discussed in <xref ref="basics-s-latex-fig"/> to produce the image files required for your chosen output formats.
+        This is accomplished by using <tag>sageplot</tag> with the script.
+        (The <c>pretext</c> script is fully discussed in <xref ref="pretext-script"/>, but at least
+        see the aside in <xref ref="basics-s-latex-fig"/> about the additional packages that must be installed and configured to use it properly.)
       </p>
 
       <listing xml:id="basics-l-sageplot">
@@ -1275,17 +1255,13 @@
 
       <!-- <idx><h><c>pretext</c> script</h><h>for sageplot to svg</h></idx> -->
       <!-- <idx><h><c>pretext</c> script</h><h>for sageplot to pdf</h></idx> -->
-      <sidebyside widths="80%" margins="10% 10%">
+      <console width="80%" margins="10% 10%">
+        <input>[path to mathbook]/script/pretext -c sageplot -f svg -d ./images [path to PTX source file]</input>
+      </console>
 
-<pre>[path to mathbook]/script/pretext -c sageplot -f svg
--d ./images [path to PTX source file]</pre>
-      </sidebyside>
-
-      <sidebyside widths="80%" margins="10% 10%">
-
-<pre>[path to mathbook]/script/pretext -c sageplot -f pdf
--d ./images [path to PTX source file]</pre>
-      </sidebyside>
+      <console width="80%" margins="10% 10%">
+        <input>[path to mathbook]/script/pretext -c sageplot -f pdf -d ./images [path to PTX source file]</input>
+      </console>
 
       <p>
         The code in <xref ref="basics-l-sageplot"/> produces the following output.

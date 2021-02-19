@@ -75,13 +75,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="xelatex-font-check">
         <xsl:with-param name="font-name" select="'Libertinus Sans'"/>
     </xsl:call-template>
-    <xsl:text>\newfontfamily{\divisionfont}{Libertinus Sans}[Numbers=Lining]&#xa;</xsl:text>
-    <xsl:text>\newfontfamily{\contentsfont}{Libertinus Sans}[Numbers=Lining]&#xa;</xsl:text>
-    <xsl:text>\newfontfamily{\pagefont}{Libertinus Sans}[Numbers=Lining]&#xa;</xsl:text>
-    <xsl:text>\newfontfamily{\blocktitlefont}{Libertinus Serif}[Numbers=Lining]&#xa;</xsl:text>
-    <xsl:text>\newfontfamily{\tabularfont}{Libertinus Serif}[Numbers={Monospaced,Lining}]&#xa;</xsl:text>
-    <xsl:text>\newfontfamily{\xreffont}{Libertinus Serif}[Numbers=Lining]&#xa;</xsl:text>
-    <xsl:text>\newfontfamily{\titlepagefont}{Libertinus Serif}[Numbers=Lining]&#xa;</xsl:text>
+    <xsl:text>\renewfontfamily{\divisionfont}{Libertinus Sans}[Numbers=Lining]&#xa;</xsl:text>
+    <xsl:text>\renewfontfamily{\contentsfont}{Libertinus Sans}[Numbers=Lining]&#xa;</xsl:text>
+    <xsl:text>\renewfontfamily{\pagefont}{Libertinus Sans}[Numbers=Lining]&#xa;</xsl:text>
+    <xsl:text>\renewfontfamily{\blocktitlefont}{Libertinus Serif}[Numbers=Lining]&#xa;</xsl:text>
+    <xsl:text>\renewfontfamily{\tabularfont}{Libertinus Serif}[Numbers={Monospaced,Lining}]&#xa;</xsl:text>
+    <xsl:text>\renewfontfamily{\xreffont}{Libertinus Serif}[Numbers=Lining]&#xa;</xsl:text>
+    <xsl:text>\renewfontfamily{\titlepagefont}{Libertinus Serif}[Numbers=Lining]&#xa;</xsl:text>
     <xsl:text>\newfontfamily{\ornamental}{Libertinus Serif}&#xa;</xsl:text>
 </xsl:template>
 

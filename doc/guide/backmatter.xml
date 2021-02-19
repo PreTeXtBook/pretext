@@ -17,8 +17,10 @@
         <title>Best Practices</title>
         <list-of elements="note"/>
     </appendix>
+    <xi:include href="appendices/python.xml"/>
     <xi:include href="appendices/editors.xml"/>
     <xi:include href="appendices/schema-install.xml"/>
+    <xi:include href="appendices/offline-mathjax.xml"/>
     <xi:include href="appendices/git.xml"/>
     <xi:include href="appendices/latex-conversion.xml"/>
     <xi:include href="appendices/mac-os.xml"/>
@@ -31,9 +33,7 @@
     </appendix>
     <xi:include href="appendices/gfdl-pretext.xml"/>
     <xi:include href="appendices/glossary.xml"/>
-    <references xml:id="references">
-        <biblio type="raw" xml:id="indexing-guide">Fred Leise, Kate Mertes, Nan Badgett, <title>Indexing for Editors and Authors: A Practical Guide to Understanding Indexes</title>, American Society of Indexers, 2008</biblio>
-    </references>
+    <xi:include href="appendices/references.xml"/>
 
     <index xml:id="the-index">
         <title>Index</title>

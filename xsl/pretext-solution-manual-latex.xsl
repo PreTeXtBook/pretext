@@ -121,6 +121,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="chapter[1]|article/section[1]">
     <xsl:apply-templates select="$document-root" mode="solutions-generator">
         <xsl:with-param name="purpose" select="'solutionmanual'" />
+        <xsl:with-param name="admit" select="'all'" />
         <xsl:with-param name="b-inline-statement"     select="$b-has-inline-statement" />
         <xsl:with-param name="b-inline-hint"          select="$b-has-inline-hint"  />
         <xsl:with-param name="b-inline-answer"        select="$b-has-inline-answer"  />
@@ -232,5 +233,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Exercise numbers are always hard-coded at birth, given -->
 <!-- complications of numbering, placement, duplication     -->
+
+<!-- Since divisions have hard-coded numbers, a \label{}   -->
+<!-- on an equation will be inaccurate.  These are reduced -->
+<!-- versions of the templates for hard-coded equation     -->
+<!-- numbers in the HTML conversion.                       -->
+
+<xsl:template match="men|mrow" mode="tag">
+    <xsl:text>\tag{</xsl:text>
+    <xsl:apply-templates select="." mode="number" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<xsl:template match="mrow[@tag]" mode="tag">
+    <xsl:text>\tag{</xsl:text>
+    <xsl:apply-templates select="@tag" mode="tag-symbol" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
 
 </xsl:stylesheet>

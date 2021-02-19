@@ -53,6 +53,7 @@
             <xi:include href="publisher/online-html.xml"/>
             <xi:include href="publisher/pdf-print.xml"/>
             <xi:include href="publisher/epub.xml"/>
+            <xi:include href="publisher/runestone.xml"/>
             <xi:include href="publisher/slides.xml"/>
             <xi:include href="publisher/jupyter-notebook.xml"/>
             <xi:include href="publisher/instructor-version.xml"/>
@@ -72,6 +73,7 @@
             <title>Developer's Guide</title>
 
             <xi:include href="developer/coding.xml"/>
+            <xi:include href="developer/debugging.xml"/>
             <xi:include href="developer/git.xml"/>
         </part>
 

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<appendix xml:id="python">
+    <title>Python</title>
+
+    <section xml:id="python-executable">
+        <title>Python Executable</title>
+
+        <p>While the majority of the processing of your text is accomplished with <init>XSL</init> transforms, we rely on Python for numerous other tasks and conveniences.  So, sooner or later, you will want, or need, to get Python working on your system.  Part of our attraction to Python is that is very popular and so should run very similarly (identically?) on a variety of systems: Linux, Mac, and Windows.  So the quicker we can get you to a platform-neutral setup, the better.</p>
+
+        <p>On Linux and Mac, you will likely have at least some version of Python already installed.  On Windows, you may need to explicitly install it.  (We hope to provide some more careful advice here for Windows users.  For now, see <xref ref="installing-anaconda"/> and <xref ref="windows-subsystem-linux"/>.)</p>
+
+        <p>Python 2 is no longer being developed and is officially dead.  That does not mean you do not have it on your system.  And for older systems, it may well be the default.  <pretext/> requires at least Python 3.4 (current as of 2020-07-27).  At a command-line, or in a terminal or console, or at a command-prompt, try<cd>
+            <cline>python --version</cline>
+        </cd>and if the result is unacceptable, then try<cd>
+            <cline>python3 --version</cline>
+        </cd>Remember which variant you need<mdash/>we will just routinely use the generic <c>python</c>.</p>
+    </section>
+
+    <section xml:id="python-virtual">
+        <title>Python Virtual Environment</title>
+
+        <p>There is a very good chance your system has a version of Python
+        installed already since various other programs rely on it.  You will be much happier if various Python programs you need for <pretext/> do not get entangled with your Python programs installed as system software.  And if we need to help you debug some related problems we will ask you to work in a virtual environment anyway.  We will follow a <url href="https://realpython.com/python-virtual-environments-a-primer/">primer</url><fn><c>realpython.com/python-virtual-environments-a-primer/</c></fn> that has been recommended by Brad Miller, founder of Runestone Interactive.  See that page for more details.</p>
+
+        <p>These are condensed instructions without much explanation.<ol>
+            <li>Do not install the old-school <c>virtualenv</c> module.</li>
+            <li>Make a directory anywhere you like named <c>virtual-python</c> and change into it.</li>
+            <li>Python 3.6 or later: <c>python3 -m venv ptx</c> makes a virtual environment named <c>ptx</c>.</li>
+            <li>Python 3.4: Use the <c>pyvenv</c> command-line tool.</li>
+        </ol>Done.  But how do you use it?<ol>
+            <li>
+                <p>To activate your virtual environment, be sure you are in the <c>virtual-python</c> directory.
+                For Mac or Linux, with a bash shell go<cd>
+                    <cline>source ptx/bin/activate</cline>
+                    <cline>(ptx) $</cline>
+                </cd>
+                There are other scripts for other shells, take a look around.</p>
+                <p>For Windows, go<cd>
+                    <cline>ptx/Scripts/activate.bat</cline>
+                    <cline>(ptx) &gt;</cline>
+                </cd>Notice that your prompt has changed to remind you that now anything you do with Python will be <q>sandboxed</q> in this virtual environment and not get mixed up with your system Python.</p>
+            </li>
+            <li>Now you can do any Python-related task using your virtual environment, and can change directories if desired.</li>
+            <li>
+                <p>When you are finished with your virtual environment, on Mac or Linux with a bash shell you simply go<cd>
+                    <cline>(ptx) $ deactivate</cline>
+                    <cline>$</cline>
+                </cd></p>
+                <p>For Windows, similarly<cd>
+                    <cline>(ptx) &gt; deactivate</cline>
+                    <cline>&gt;</cline>
+                </cd></p>
+            </li>
+        </ol></p>
+    </section>
+
+    <section xml:id="pip-install">
+        <title><init>PIP</init> Install</title>
+
+        <p><init>PIP</init>, in the open source tradition of recursive acronyms,
+        stands for <q>PIP Installs Packages</q>.  This package manager helps you obtain software and keep it up-to-date.  There are three packages that are indispensable for use with <pretext/> so you can practice doing installations now via your virtual environment.</p>
+
+        <p>In your virtual environment, go<cd>
+            <cline>(ptx) $ pip install lxml</cline>
+        </cd>Now you have a collection of Python routines that interface with the same base libraries for <init>XSL</init> processing as the <c>xsltproc</c> executable.  A second library is <c>requests</c> which moderates communications with online servers and is necessary to communicate with WeBWorK servers and with a YouTube server that provides thumbnail images for static versions of videos.  Finally, the <c>pdfCropMargins</c> package provides a tool that will crop images during their production with the <c>pretext</c> script.</p>
+
+        <table>
+            <title>PIP-installable Python Packages</title>
+
+            <tabular>
+                <col/>
+                <col width="60%"/>
+                <row bottom="major">
+                    <cell>Package</cell>
+                    <cell>Purpose</cell>
+                </row>
+                <row>
+                    <cell><c>lxml</c></cell>
+                    <cell><p>XSL processing</p></cell>
+                </row>
+                <row>
+                    <cell><c>requests</c></cell>
+                    <cell><p>Communication with online servers</p></cell>
+                </row>
+                <row>
+                    <cell><c>pdfCropMargins</c></cell>
+                    <cell><p>Crop images during production</p></cell>
+                </row>
+            </tabular>
+        </table>
+    </section>
+</appendix>

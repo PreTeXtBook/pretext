@@ -26,7 +26,7 @@
       for use in the <q>traditional</q> way.
     </p>
     <p>
-      See the <pretext/> Publisher Guide for how to configure a <webwork/> course and server to process your <webwork/> problems,
+      See <xref ref="webwork-publisher"/> for how to configure a <webwork/> course and server to process your <webwork/> problems,
       and then how to process them.
     </p>
   </introduction>
@@ -36,7 +36,7 @@
 
     <introduction>
       <p>
-        <alert>You must extract <webwork/> content as described in the Publisher Guide
+        <alert>You must extract <webwork/> content as described in the <xref ref="webwork-publisher" text="custom">Publisher Guide</xref>
         before you will be able to see any <webwork/> content in your output.</alert>
       </p>
       <p>

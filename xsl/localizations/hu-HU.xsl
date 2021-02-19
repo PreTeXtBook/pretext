@@ -61,6 +61,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='volume'><xsl:text>Kötet</xsl:text></localization>
     <localization string-id='book'><xsl:text>Könyv</xsl:text></localization>
     <localization string-id='article'><xsl:text>Cikk</xsl:text></localization>
+    <!-- <localization string-id='slideshow'><xsl:text>Slideshow</xsl:text></localization> -->
     <localization string-id='letter'><xsl:text>Letter</xsl:text></localization>
     <localization string-id='memo'><xsl:text>Emlékeztető</xsl:text></localization>
     <localization string-id='presentation'><xsl:text>Prezentáció</xsl:text></localization>
@@ -72,6 +73,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='section'><xsl:text>Pont</xsl:text></localization>
     <localization string-id='subsection'><xsl:text>Alpont</xsl:text></localization>
     <localization string-id='subsubsection'><xsl:text>alpont</xsl:text></localization>
+    <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
+    <!-- <localization string-id='slide'><xsl:text>Slide</xsl:text></localization> -->
     <localization string-id='introduction'><xsl:text>Bevezetés</xsl:text></localization>
     <localization string-id='conclusion'><xsl:text>Következtetés</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Feladatok</xsl:text></localization>
@@ -133,6 +136,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'><xsl:text>Paragrafus</xsl:text></localization>
     <localization string-id='blockquote'><xsl:text>Idézet</xsl:text></localization>
+    <!-- Literate programming, a chunk of computer code -->
+    <!-- <localization string-id='fragment'><xsl:text>Fragment</xsl:text></localization> -->
     <!-- Parts of an exercise and its solution -->
     <localization string-id='divisionalexercise'><xsl:text>Feladat</xsl:text></localization>
     <!-- Translation needed for Hungary Hungarian -->

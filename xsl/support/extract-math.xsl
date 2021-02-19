@@ -44,6 +44,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Plus variables post-assembly         -->
 <xsl:import href="../mathbook-common.xsl" />
 <!-- Process to enhanced source before relying on IDs -->
+<!-- So we expect the publisher file, which might for -->
+<!-- example point to (static) representations of     -->
+<!-- WeBWorK problems with math elements              -->
 <xsl:import href="../pretext-assembly.xsl"/>
 <!-- Use the HTML variants, as we are making input for MathJax -->
 <xsl:import href="../mathbook-html.xsl" />
@@ -67,6 +70,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- construction of the math element should produce the right action.  -->
 <xsl:param name="math.punctuation" select="'none'"/>
 <xsl:variable name="math.punctuation.include" select="$math.punctuation"/>
+
+<!-- We import the HTML stylesheet since we want HTML versions of -->
+<!-- the math bits, but we don't need all the chunking machinery  -->
+<!-- for extracting math, since we are building a single file,    -->
+<!-- so we set the level to control associated templates          -->
+<xsl:variable name="chunk-level" select="number(0)"/>
 
 <!-- No special wrapping needed, so just copy the content -->
 <xsl:template match="me|men|md|mdn" mode="display-math-wrapper">
@@ -119,6 +128,30 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="."/>
     </div>
 </xsl:template>
+
+<!-- We want the hard-coded "tags" (numbered equations) that PreTeXt -->
+<!-- supplies, but we do not want the "\label{}" that comes along as -->
+<!-- part of MathJax's semi-automatic linking mechanism.  Since we   -->
+<!-- disassociate the math from its surroundings, any sort of        -->
+<!-- cross-referencing of equations should be handled another way.   -->
+<!-- But we do need to "name" equations.                             -->
+<!--                                                                 -->
+<!-- These are stripped-down versions from the (imported) -html      -->
+<!-- conversion.  It is possible they will become identical some     -->
+<!-- day and then these versions can go away.                        -->
+
+<xsl:template match="men|mrow" mode="tag">
+    <xsl:text>\tag{</xsl:text>
+    <xsl:apply-templates select="." mode="number" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<xsl:template match="mrow[@tag]" mode="tag">
+    <xsl:text>\tag{</xsl:text>
+    <xsl:apply-templates select="@tag" mode="tag-symbol" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
 
 <!-- An "xref" inside of math is a delicate matter.                                   -->
 <!--                                                                                  -->

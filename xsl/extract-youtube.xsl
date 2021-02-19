@@ -42,7 +42,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:output method="text" />
 
 <!-- Enclosing structure is a Python list -->
-<!-- So wrap at outermost level           -->
+<!-- So wrap at outermost level and       -->
+<!-- return control to extract-identity   -->
 <xsl:template match="/">
     <xsl:text>[</xsl:text>
     <xsl:apply-imports />
@@ -50,7 +51,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- YouTube ID, and internal id as a Python pair -->
-<xsl:template match="video[@youtube]">
+<xsl:template match="video[@youtube]" mode="extraction">
     <!-- replace commas with spaces, then normalize space,                       -->
     <!-- then tack on a space at the end, then grab content prior to first space -->
     <xsl:variable name="first-video-id" select="substring-before(concat(normalize-space(str:replace(@youtube, ',', ' ')), ' '), ' ')" />

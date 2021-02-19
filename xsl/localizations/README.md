@@ -43,5 +43,6 @@ Current (partially) implemented language codes and contributors
 * en-US, English (United States), Robert A. Beezer
 * fr-FR, French (France), Thomas W. Judson
 * hu-HU, Hungarian (Hungary), Sándor Czirbusz
+* it-IT, Italian (Italy), Valerio Monti
 * pt-BR, Portugese (Brazil), Igor Morgado
 * pt-PT, Portugese (Portugal), António Pereira

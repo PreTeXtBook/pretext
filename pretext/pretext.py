@@ -25,14 +25,17 @@
 #
 #############################
 
-def mathjax_latex(xml_source, result, math_format):
+def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     """Convert PreTeXt source to a structured file of representations of mathematics"""
-    # formats:  'svg', 'mml', 'nemeth', 'speech'
+    # formats:  'svg', 'mml', 'nemeth', 'speech', 'kindle'
+    # Internal calls will specify out_file with complete path
+    # External calls might only specify a destination directory
     import os.path, subprocess
     import re, os, fileinput # for &nbsp; fix
 
+
     _verbose('converting LaTeX from {} into {} format'.format(xml_source, math_format))
-    _debug('converting LaTeX from {} into {} format placed into {}'.format(xml_source, math_format, result))
+    _debug('converting LaTeX from {} into {} format'.format(xml_source, math_format))
 
     # construct filenames for pre- and post- XSL stylesheets in xsl/support
     extraction_xslt = os.path.join(get_ptx_xsl_path(), 'support/extract-math.xsl')
@@ -51,40 +54,38 @@ def mathjax_latex(xml_source, result, math_format):
     # SVG, MathML, and PNG are visual and we help authors move punctuation into
     # displays, but not into inline versions.  Nemeth braille and speech are not,
     # so we leave punctuation outside.
-    if math_format in ['svg', 'mml']:
+    if math_format in ['svg', 'mml', 'kindle']:
         punctuation = 'display'
     elif math_format in ['nemeth', 'speech']:
         punctuation = 'none'
     params = {}
     params['math.punctuation'] = punctuation
+    if pub_file:
+        params['publisher'] = pub_file
     xsltproc(extraction_xslt, xml_source, mjinput, None, params)
 
-    # shell out to process with MathJax
-    # mjpage can return "innerHTML" w/ --fragment, which we
-    # could wrap into our own particular version of mjoutput
+    # shell out to process with MathJax/SRE node program
     _debug('calling MathJax to convert LaTeX from {} into raw representations in {}'.format(mjinput, mjoutput))
 
-    # process with  mjpage  executable from  mathjax-node-page  package
-    mjpage_exec = get_executable('mjpage')
-    if math_format == 'svg':
-        # kill caching to keep glyphs within SVG
-        # versus having a font cache at the end
-        mjpage_cmd = [mjpage_exec, '--output', 'SVG', '--noGlobalSVG', 'true']
-    elif math_format == 'mml':
-        mjpage_cmd = [mjpage_exec, '--output', 'MML']
-    elif math_format in ['nemeth', 'speech']:
-        # MathML is precursor for SRE outputs
-        mjpage_cmd = [mjpage_exec, '--output', 'MML']
-    else:
+    # process with  pretext.js  executable from  MathJax (Davide Cervone, Volker Sorge)
+    node_exec_cmd = get_executable_cmd('node')
+    mjsre_page = os.path.join(get_ptx_path(), 'script', 'mjsre', 'mj-sre-page.js')
+    output = {
+        'svg': 'svg',
+        'kindle': 'mathml',
+        'nemeth': 'braille',
+        'speech': 'speech',
+        'mml': 'mathml'
+    }
+    try:
+        mj_var = output[math_format]
+    except KeyError:
         raise ValueError('PTX:ERROR: incorrect format ("{}") for MathJax conversion'.format(math_format))
-
-    infile = open(mjinput)
-    if math_format in ['nemeth', 'speech']:
-        # braille is a two-pass pipeline
-        outfile = open(mjintermediate, 'w')
-    else:
-        outfile = open(mjoutput, 'w')
-    subprocess.run(mjpage_cmd, stdin=infile, stdout=outfile)
+    mj_option = '--' + mj_var
+    mj_tag = 'mj-' + mj_var
+    mjpage_cmd = node_exec_cmd + [mjsre_page, mj_option, mjinput]
+    outfile = open(mjoutput, 'w')
+    subprocess.run(mjpage_cmd, stdout=outfile)
 
     # the 'mjpage' executable converts spaces inside of a LaTeX
     # \text{} into &nbsp; entities, which is a good idea, and
@@ -102,22 +103,16 @@ def mathjax_latex(xml_source, result, math_format):
     # to kill the "extra" newline that print() creates
     owd = os.getcwd()
     os.chdir(tmp_dir)
-    if  math_format in ['nemeth', 'speech']:
-        html_file = mjintermediate
-    else:
-        html_file = mjoutput
+    html_file = mjoutput
     for line in fileinput.input(html_file, inplace=1):
         print(xhtml_elt.sub(repl, line), end='')
     os.chdir(owd)
 
-    if math_format in ['nemeth', 'speech']:
-        mjsre_exec = os.path.join(get_ptx_path(), 'script', 'braille', 'mjpage-sre.js')
-        mjsre_cmd=[mjsre_exec, math_format, mjintermediate, mjoutput]
-        subprocess.run(mjsre_cmd)
-
     # clean up and package MJ representations, font data, etc
-    _debug('packaging math as {} from {} into XML file {}'.format(math_format, mjoutput, result))
-    xsltproc(cleaner_xslt, mjoutput, result)
+    derivedname = get_output_filename(xml_source, out_file, dest_dir, '-' + math_format + '.xml')
+    _debug('packaging math as {} from {} into XML file {}'.format(math_format, mjoutput, out_file))
+    xsltproc(cleaner_xslt, mjoutput, derivedname)
+    _verbose('XML file of math representations deposited as {}'.format(derivedname))
 
 
 ##############################################
@@ -126,7 +121,7 @@ def mathjax_latex(xml_source, result, math_format):
 #
 ##############################################
 
-def asymptote_conversion(xml_source, stringparams, xmlid_root, dest_dir, outformat):
+def asymptote_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat):
     """Extract asymptote code for diagrams and convert to graphics formats"""
     # stringparams is a dictionary, best for lxml parsing
     import os.path # join()
@@ -135,16 +130,20 @@ def asymptote_conversion(xml_source, stringparams, xmlid_root, dest_dir, outform
     _verbose('converting Asymptote diagrams from {} to {} graphics for placement in {}'.format(xml_source, outformat.upper(), dest_dir))
     tmp_dir = get_temporary_directory()
     _debug("temporary directory: {}".format(tmp_dir))
-    asy_executable = get_executable('asy')
-    _debug("asy executable: {}".format(asy_executable))
+    asy_executable_cmd = get_executable_cmd('asy')
+    # TODO why this debug line? get_executable_cmd() outputs the same debug info
+    _debug("asy executable: {}".format(asy_executable_cmd[0]))
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-asymptote.xsl')
-    # support subtree argument
+    # support publisher file, subtree argument
+    if pub_file:
+        stringparams['publisher'] = pub_file
     if xmlid_root:
         stringparams['subtree'] = xmlid_root
     # no output (argument 3), stylesheet writes out per-image file
     # outputs a list of ids, but we just loop over created files
     _verbose("extracting Asymptote diagrams from {}".format(xml_source))
+    _verbose('string parameters passed to extraction stylesheet: {}'.format(stringparams))
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
     # Resulting *.asy files are in tmp_dir, switch there to work
     os.chdir(tmp_dir)
@@ -152,94 +151,62 @@ def asymptote_conversion(xml_source, stringparams, xmlid_root, dest_dir, outform
     # perhaps replace following stock advisory with a real version
     # check using the (undocumented) distutils.version module, see:
     # https://stackoverflow.com/questions/11887762/how-do-i-compare-version-numbers-in-python
-    if outformat == 'html':
-        # https://stackoverflow.com/questions/4514751/pipe-subprocess-standard-output-to-a-variable
-        proc = subprocess.Popen([asy_executable, '--version'], stderr=subprocess.PIPE)
-        asyversion = proc.stderr.read()
-        _verbose("#####################################################")
-        _verbose("Asymptote 3D HTML output is experimental (2020-05-18)")
-        _verbose("it is only supported by Asymptote 2.62 and newer,")
-        _verbose("and will produce best results with Asymptote 2.66 and")
-        _verbose("newer.  Your Asymptote executable in use reports:")
-        _verbose(asyversion)
-        _verbose("#####################################################")
-    for asydiagram in os.listdir(tmp_dir):
-        if outformat == 'source':
+    proc = subprocess.Popen([asy_executable_cmd[0], '--version'], stderr=subprocess.PIPE)
+    # bytes -> ASCII, strip final newline
+    asyversion = proc.stderr.read().decode('ascii')[:-1]
+    # simply copy for source file output
+    if outformat == 'source':
+        for asydiagram in os.listdir(tmp_dir):
+            _verbose("copying source file {}".format(asydiagram))
             shutil.copy2(asydiagram, dest_dir)
-        elif outformat == 'html':
+    # consolidated process for four possible output formats
+    if outformat in ['html', 'svg', 'png', 'pdf', 'eps']:
+        # build command line to suit
+        asy_cli = [asy_executable, '-f', outformat]
+        if outformat in ['pdf', 'eps']:
+            asy_cli += ['-noprc', '-iconify', '-tex', 'xelatex', '-batchMask']
+        elif outformat in ['svg', 'png']:
+            asy_cli += ['-render=4', '-tex', 'xelatex', '-iconify']
+        # loop over files, doing conversions
+        for asydiagram in os.listdir(tmp_dir):
             filebase, _ = os.path.splitext(asydiagram)
             asyout = "{}.{}".format(filebase, outformat)
-            asysvg = "{}.svg".format(filebase)
-            asypng = "{}_*.png".format(filebase)
-            asy_cmd = [asy_executable,
-                       '-f', 'html',
-                       asydiagram
-                       ]
+            asy_cmd = asy_cli + [asydiagram]
             _verbose("converting {} to {}".format(asydiagram, asyout))
             _debug("asymptote conversion {}".format(asy_cmd))
             subprocess.call(asy_cmd, stdout=devnull, stderr=subprocess.STDOUT)
-            if os.path.exists(asyout) == True:
+            if os.path.exists(asyout):
                 shutil.copy2(asyout, dest_dir)
             else:
-                shutil.copy2(asysvg, dest_dir)
-                # Sometimes Asymptotes SVGs include multiple PNGs for colored regions
-                for f in glob.glob(asypng):
-                    shutil.copy2(f, dest_dir)
-        elif outformat == 'svg':
-            filebase, _ = os.path.splitext(asydiagram)
-            asyout = "{}.{}".format(filebase, outformat)
-            # asysvg = "{}.svg".format(filebase)
-            asypng = "{}_*.png".format(filebase)
-            asy_cmd = [asy_executable,
-                       '-f', 'svg',
-                       '-render=4', '-iconify',
-                       asydiagram
-                       ]
-            _verbose("converting {} to {}".format(asydiagram, asyout))
-            _debug("asymptote conversion {}".format(asy_cmd))
-            subprocess.call(asy_cmd, stdout=devnull, stderr=subprocess.STDOUT)
-            shutil.copy2(asyout, dest_dir)
-            # Sometimes Asymptotes SVGs include multiple PNGs for colored regions
-            for f in glob.glob(asypng):
-                shutil.copy2(f, dest_dir)
-        # 2020-05-18, EPS, PDF not really examined
-        else:
-            filebase, _ = os.path.splitext(asydiagram)
-            asyout = "{}.{}".format(filebase, outformat)
-            asypng = "{}_*.png".format(filebase)
-            asy_cmd = [asy_executable, '-noprc', '-iconify', '-batchMask', '-f', outformat, asydiagram]
-            _verbose("converting {} to {}".format(asydiagram, asyout))
-            _debug("asymptote conversion {}".format(asy_cmd))
-            subprocess.call(asy_cmd, stdout=devnull, stderr=subprocess.STDOUT)
-            shutil.copy2(asyout, dest_dir)
-            # Sometimes Asymptotes SVGs include multiple PNGs for colored regions
-            for f in glob.glob(asypng):
-                shutil.copy2(f, dest_dir)
+                msg = [
+                'PTX:WARNING: the Asymptote output {} was not built'.format(asyout),
+                '             1. Perhaps your code has errors (try testing in the Asymptote web app).',
+                '             2. Or your copy of Asymtote may precede version 2.66 that we expect.',
+                '                Not every image can be built in every possible format.',
+                '',
+                '                Your Asymptote reports its version within the following:',
+                '                {}'.format(asyversion)]
+                print('\n'.join(msg))
 
 
-def sage_conversion(xml_source, xmlid_root, dest_dir, outformat):
+def sage_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat):
     import tempfile, os, os.path, subprocess, shutil, glob
     _verbose('converting Sage diagrams from {} to {} graphics for placement in {}'.format(xml_source, outformat.upper(), dest_dir))
     tmp_dir = get_temporary_directory()
     _debug("temporary directory: {}".format(tmp_dir))
-    xslt_executable = get_executable('xslt')
-    _debug("xslt executable: {}".format(xslt_executable))
-    sage_executable = get_executable('sage')
-    _debug("sage executable: {}".format(sage_executable))
+    sage_executable_cmd = get_executable_cmd('sage')
+    # TODO why this debug line? get_executable_cmd() outputs the same debug info
+    _debug("sage executable: {}".format(sage_executable_cmd[0]))
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-sageplot.xsl')
-    extract_cmd = [xslt_executable,
-        '--stringparam', 'subtree', xmlid_root,
-        '--xinclude',
-        extraction_xslt,
-        xml_source
-        ]
     _verbose("extracting Sage diagrams from {}".format(xml_source))
-    # Run conversion with temporary directory as current working directory
-    # do not pass (cross-platform, Windows) pathnames into stylesheets
-    # Be certain pathnames are not relative to original (user) working directory
+    # support publisher file, subtree argument
+    if pub_file:
+        stringparams['publisher'] = pub_file
+    if xmlid_root:
+        stringparams['subtree'] = xmlid_root
+    xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
     os.chdir(tmp_dir)
-    subprocess.call(extract_cmd)
     devnull = open(os.devnull, 'w')
     for sageplot in os.listdir(tmp_dir):
         if outformat == 'source':
@@ -248,7 +215,7 @@ def sage_conversion(xml_source, xmlid_root, dest_dir, outformat):
             filebase, _ = os.path.splitext(sageplot)
             sageout = "{0}.{1}".format(filebase, outformat)
             sagepng = "{0}.png".format(filebase, outformat)
-            sage_cmd = [sage_executable,  sageplot, outformat]
+            sage_cmd = sage_executable_cmd + [sageplot, outformat]
             _verbose("converting {} to {} (or {} for 3D)".format(sageplot, sageout, sagepng))
             _debug("sage conversion {}".format(sage_cmd))
             subprocess.call(sage_cmd, stdout=devnull, stderr=subprocess.STDOUT)
@@ -258,7 +225,7 @@ def sage_conversion(xml_source, xmlid_root, dest_dir, outformat):
             for f in glob.glob(sagepng):
                 shutil.copy2(f, dest_dir)
 
-def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_dir, outformat):
+def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, data_dir, dest_dir, outformat):
     # stringparams is a dictionary, best for lxml parsing
     import platform # system, machine()
     import os.path # join()
@@ -266,7 +233,6 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
     import os, shutil
 
     _verbose('converting latex-image pictures from {} to {} graphics for placement in {}'.format(xml_source, outformat, dest_dir))
-    _verbose('string parameters passed to extraction stylesheet: {}'.format(stringparams))
     # for killing output
     devnull = open(os.devnull, 'w')
     tmp_dir = get_temporary_directory()
@@ -276,9 +242,12 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
         copy_data_directory(xml_source, data_dir, tmp_dir)
     ptx_xsl_dir = get_ptx_xsl_path()
     _verbose("extracting latex-image pictures from {}".format(xml_source))
-    # support subtree argument
+    # support publisher file, subtree argument
+    if pub_file:
+        stringparams['publisher'] = pub_file
     if xmlid_root:
         stringparams['subtree'] = xmlid_root
+    _verbose('string parameters passed to extraction stylesheet: {}'.format(stringparams))
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-latex-image.xsl')
     # no output (argument 3), stylesheet writes out per-image file
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
@@ -296,49 +265,45 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
             latex_image_svg = "{}.svg".format(filebase)
             latex_image_png = "{}.png".format(filebase)
             latex_image_eps = "{}.eps".format(filebase)
-            tex_executable = get_executable('tex')
-            _debug("tex executable: {}".format(tex_executable))
-            latex_cmd = [tex_executable, "-interaction=batchmode", latex_image]
+            tex_executable_cmd = get_executable_cmd('tex')
+            # TODO why this debug line? get_executable_cmd() outputs the same debug info
+            _debug("tex executable: {}".format(tex_executable_cmd[0]))
+            latex_cmd = tex_executable_cmd + ["-interaction=batchmode", latex_image]
             _verbose("converting {} to {}".format(latex_image, latex_image_pdf))
             subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
-            pdfcrop_executable = get_executable('pdfcrop')
-            _debug("pdfcrop executable: {}".format(pdfcrop_executable))
-            if platform.system() == "Windows":
-                _debug("using pdfcrop is not reliable on Windows unless you are using a linux-like shell, e.g. Git Bash or SageMathCloud terminal")
-                # Test for 32-bit v. 64-bit OS
-                # http://stackoverflow.com/questions/2208828/
-                # detect-64-bit-os-windows-in-python
-                if platform.machine().endswith('64'):
-                    pdfcrop_cmd = [pdfcrop_executable, "--gscmd", "gswin64c.exe", latex_image_pdf, latex_image_pdf]
-                else:
-                    pdfcrop_cmd = [pdfcrop_executable, "--gscmd", "gswin32c.exe", latex_image_pdf, latex_image_pdf]
-            else:
-                pdfcrop_cmd = [pdfcrop_executable, latex_image_pdf, latex_image_pdf]
+            if not os.path.exists(latex_image_pdf):
+                print('PTX:ERROR: There was a problem compiling {} and {} was not created'.format(latex_image,latex_image_pdf))
+            pcm_executable_cmd = get_executable_cmd('pdfcrop')
+            pcm_cmd = pcm_executable_cmd + [latex_image_pdf, "-o", "cropped-"+latex_image_pdf, "-p", "0", "-a", "-1"]
             _verbose("cropping {} to {}".format(latex_image_pdf, latex_image_pdf))
-            subprocess.call(pdfcrop_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+            subprocess.call(pcm_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+            shutil.move("cropped-"+latex_image_pdf, latex_image_pdf)
             if outformat == 'all':
                 shutil.copy2(latex_image, dest_dir)
             if (outformat == 'pdf' or outformat == 'all'):
                 shutil.copy2(latex_image_pdf, dest_dir)
             if (outformat == 'svg' or outformat == 'all'):
-                pdfsvg_executable = get_executable('pdfsvg')
-                _debug("pdfsvg executable: {}".format(pdfsvg_executable))
-                svg_cmd = [pdfsvg_executable, latex_image_pdf, latex_image_svg]
+                pdfsvg_executable_cmd = get_executable_cmd('pdfsvg')
+                # TODO why this debug line? get_executable_cmd() outputs the same debug info
+                _debug("pdfsvg executable: {}".format(pdfsvg_executable_cmd[0]))
+                svg_cmd = pdfsvg_executable_cmd + [latex_image_pdf, latex_image_svg]
                 _verbose("converting {} to {}".format(latex_image_pdf, latex_image_svg))
                 subprocess.call(svg_cmd)
                 shutil.copy2(latex_image_svg, dest_dir)
             if (outformat == 'png' or outformat == 'all'):
                 # create high-quality png, presumes "convert" executable
-                pdfpng_executable = get_executable('pdfpng')
-                _debug("pdfpng executable: {}".format(pdfpng_executable))
-                png_cmd = [pdfpng_executable, "-density", "300",  latex_image_pdf, "-quality", "100", latex_image_png]
+                pdfpng_executable_cmd = get_executable_cmd('pdfpng')
+                # TODO why this debug line? get_executable_cmd() outputs the same debug info
+                _debug("pdfpng executable: {}".format(pdfpng_executable_cmd[0]))
+                png_cmd = pdfpng_executable_cmd + ["-density", "300",  latex_image_pdf, "-quality", "100", latex_image_png]
                 _verbose("converting {} to {}".format(latex_image_pdf, latex_image_png))
                 subprocess.call(png_cmd)
                 shutil.copy2(latex_image_png, dest_dir)
             if (outformat == 'eps' or outformat == 'all'):
-                pdfeps_executable = get_executable('pdfeps')
-                _debug("pdfeps executable: {}".format(pdfeps_executable))
-                eps_cmd = [pdfeps_executable, '-eps', latex_image_pdf, latex_image_eps]
+                pdfeps_executable_cmd = get_executable_cmd('pdfeps')
+                # TODO why this debug line? get_executable_cmd() outputs the same debug info
+                _debug("pdfeps executable: {}".format(pdfeps_executable_cmd[0]))
+                eps_cmd = pdfeps_executable_cmd + ['-eps', latex_image_pdf, latex_image_eps]
                 _verbose("converting {} to {}".format(latex_image_pdf, latex_image_eps))
                 subprocess.call(eps_cmd)
                 shutil.copy2(latex_image_eps, dest_dir)
@@ -349,12 +314,14 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
 #
 ################################
 
-def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
-    import subprocess, os.path, xml.dom.minidom
+def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_params, dest_dir):
+    import subprocess, os.path
     import sys # version_info
     import urllib.parse # urlparse()
     import re     # regular expressions for parsing
     import base64  # b64encode()
+    import lxml.etree as ET
+    import copy
     # at least on Mac installations, requests module is not standard
     try:
         import requests
@@ -362,48 +329,34 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
         msg = 'PTX:ERROR: failed to import requests module, is it installed?'
         raise ValueError(msg)
 
-    # execute XSL extraction to get back four dictionaries
+    # N.B. accepting a publisher file and passing it the extraction step
+    # runs the risk of specifying a representations file, so there is then
+    # nothing left to extract after substitutions.  Only relevant if an
+    # assembly step is needed, such as adding in private solutions
+
+    # support publisher file, but not subtree argument
+    if pub_file:
+        stringparams['publisher'] = pub_file
+    _verbose('string parameters passed to extraction stylesheet: {}'.format(stringparams))
+    # execute XSL extraction to get back five dictionaries
     # where the keys are the internal-ids for the problems
-    # origin, seed, source, pg
-    xslt_executable = get_executable('xslt')
-    _debug("xslt executable command: {}".format(xslt_executable))
+    # origin, seed, source, pghuman, pgdense
     ptx_xsl_dir = get_ptx_xsl_path()
-    xsl_transform = 'extract-pg.xsl'
-    extraction_xslt = os.path.join(ptx_xsl_dir, xsl_transform)
-    cmd = [xslt_executable, '--xinclude', extraction_xslt, xml_source]
-    try:
-        problem_dictionaries = subprocess.check_output(cmd)
-    except subprocess.CalledProcessError as e:
-        root_cause = str(e)
-        msg = 'xsltproc command failed, tried: "{}"\n'.format(' '.join(cmd))
-        raise ValueError(msg + root_cause)
+    extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-pg.xsl')
 
-    # execute XSL extraction to get back the dictionary
-    # where the keys are the internal-ids for the problems
-    # pgptx
-    xsl_transform_pgptx = 'extract-pg-ptx.xsl'
-    extraction_xslt_pgptx = os.path.join(ptx_xsl_dir, xsl_transform_pgptx)
-    cmd = [xslt_executable, '--xinclude', extraction_xslt_pgptx, xml_source]
-    try:
-        problem_dictionary_pgptx = subprocess.check_output(cmd)
-    except subprocess.CalledProcessError as e:
-        root_cause = str(e)
-        msg = 'xsltproc command failed, tried: "{}"\n'.format(' '.join(cmd))
-        raise ValueError(msg + root_cause)
-
+    # Build dictionaries into a scratch directory/file
+    tmp_dir = get_temporary_directory()
+    ww_filename = os.path.join(tmp_dir, 'webwork-dicts.txt')
+    _debug('WeBWorK dictionaries temporarily in {}'.format(ww_filename))
+    xsltproc(extraction_xslt, xml_source, ww_filename, None, stringparams)
+    # "run" an assignment for the list of triples of strings
+    ww_file = open(ww_filename, 'r')
+    problem_dictionaries = ww_file.read()
+    ww_file.close()
     # "run" the dictionaries
     # protect backslashes in LaTeX code
-    # globals() necessary for success in both Python 2 and 3
-    exec(problem_dictionaries.decode('utf-8').replace('\\','\\\\'), globals())
-    exec(problem_dictionary_pgptx.decode('utf-8').replace('\\','\\\\'), globals())
-
-    # initialize more dictionaries
-    pgbase64 = {}
-    pgbase64['hint_yes_solution_yes'] = {}
-    pgbase64['hint_yes_solution_no'] = {}
-    pgbase64['hint_no_solution_yes'] = {}
-    pgbase64['hint_no_solution_no'] = {}
-    static = {}
+    # globals() necessary for success
+    exec(problem_dictionaries.replace('\\','\\\\'), globals())
 
     # verify, construct problem format requestor
     # remove any surrounding white space
@@ -411,29 +364,29 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
     if (server_params.startswith("(") and server_params.endswith(")")):
         server_params=server_params.strip('()')
         split_server_params = server_params.split(',')
-        server_url = sanitize_url(split_server_params[0])
+        ww_domain = sanitize_url(split_server_params[0])
         courseID = sanitize_alpha_num_underscore(split_server_params[1])
         userID = sanitize_alpha_num_underscore(split_server_params[2])
         password = sanitize_alpha_num_underscore(split_server_params[3])
         course_password = sanitize_alpha_num_underscore(split_server_params[4])
     else:
-        server_url = sanitize_url(server_params)
+        ww_domain = sanitize_url(server_params)
         courseID = 'anonymous'
         userID = 'anonymous'
         password = 'anonymous'
         course_password = 'anonymous'
 
-    ww2url = server_url + "webwork2/"
-    wwurl = ww2url + "html2xml"
+    ww_domain_ww2 = ww_domain + '/webwork2/'
+    ww_domain_path = ww_domain_ww2 + 'html2xml'
 
     # Establish WeBWorK version
     try:
-        landing_page = requests.get(ww2url)
+        landing_page = requests.get(ww_domain_ww2)
     except Exception as e:
         root_cause = str(e)
         msg = ("PTX:ERROR:   There was a problem contacting the WeBWorK server.\n" +
                "             Is there a WeBWorK landing page at {}?\n")
-        raise ValueError(msg.format(ww2url) + root_cause)
+        raise ValueError(msg.format(ww_domain_ww2) + root_cause)
 
     landing_page_text = landing_page.text
     ww_version_match = re.search(r"WW.VERSION:\s*((\d+)\.(\d+))",landing_page_text,re.I)
@@ -446,36 +399,32 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
         msg =  ("PTX:ERROR:   PreTeXt was unable to discern the version of the WeBWorK server.\n" +
                 "                         Is there a WeBWorK landing page at {}?\n" +
                 "                         And does it display the WeBWorK version?\n")
-        raise ValueError(msg.format(ww2url))
+        raise ValueError(msg.format(ww_domain_ww2))
 
     if (ww_major_version != 2 or ww_minor_version < 14):
         msg = ("PTX:ERROR:   PreTeXt supports WeBWorK 2.14 and later, and it appears you are attempting to use version: {}\n" +
                "                         Server: {}\n")
-        raise ValueError(msg.format(ww_version,server_url))
+        raise ValueError(msg.format(ww_version,ww_domain))
 
-
-    # Begin preparation for getting static versions
+    ww_reps_version = ''
+    if (ww_major_version == 2 and (ww_minor_version == 14 or ww_minor_version == 15)):
+        # version 1: live problems are embedded in an iframe
+        ww_reps_version = '1'
+    elif (ww_major_version == 2 and ww_minor_version >= 16):
+        # version 1: live problems are injected into a div using javascript
+        ww_reps_version = '2'
 
     # using a "Session()" will pool connection information
     # since we always hit the same server, this should increase performance
     session = requests.Session()
 
-    # XML content comes back
-    # these delimit what we want
-    start_marker = re.compile('<!--BEGIN PROBLEM-->')
-    end_marker = re.compile('<!--END PROBLEM-->')
-
-    # End preparation for getting static versions
-
-    # begin writing single .xml file with all webwork representations
-    include_file_name = os.path.join(dest_dir, "webwork-extraction.xml")
-    try:
-         with open(include_file_name, 'w') as include_file:
-            include_file.write('<?xml version="1.0" encoding="UTF-8" ?>\n<webwork-extraction>\n')
-    except Exception as e:
-        root_cause = str(e)
-        msg = "PTX:ERROR: there was a problem writing a problem to the file: {}\n"
-        raise ValueError(msg.format(include_file_name) + root_cause)
+    # begin XML tree
+    # then we loop through all problems, appending children
+    NSMAP = {"xml" : "http://www.w3.org/XML/1998/namespace"}
+    XML = "http://www.w3.org/XML/1998/namespace"
+    webwork_representations = ET.Element('webwork-representations', nsmap = NSMAP)
+    # lines like this next one micromanage newlines and indentation when we print to file
+    webwork_representations.text = "\n  "
 
     # Choose one of the dictionaries to take its keys as what to loop through
     for problem in sorted(origin):
@@ -484,50 +433,33 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
         # and PTX problems by internal ID
         problem_identifier = problem if (origin[problem] == 'ptx') else source[problem]
 
-        #remove outer webwork tag (and attributes) from authored source
-        if origin[problem] == 'ptx':
-            source[problem] = re.sub(r"<webwork.*?>",'',source[problem]).replace('</webwork>','')
-
-        #use "webwork-reps" as parent tag for the various representations of a problem
-        try:
-            with open(include_file_name, 'a') as include_file:
-                webwork_reps = '  <webwork-reps xml:id="extracted-{}" ww-id="{}">\n'
-                include_file.write(webwork_reps.format(problem,problem))
-        except Exception as e:
-            root_cause = str(e)
-            msg = "PTX:ERROR: there was a problem writing a problem to the file: {}\n"
-            raise ValueError(msg.format(include_file_name) + root_cause)
-
         if origin[problem] == 'server':
-            msg = 'writing representations of server-based WeBWorK problem'
+            msg = 'building representations of server-based WeBWorK problem'
         elif origin[problem] == 'ptx':
-            msg = 'writing representations of PTX-authored WeBWorK problem'
+            msg = 'building representations of PTX-authored WeBWorK problem'
         else:
             raise ValueError("PTX:ERROR: problem origin should be 'server' or 'ptx', not '{}'".format(origin[problem]))
         _verbose(msg)
 
         # make base64 for PTX problems
         if origin[problem] == 'ptx':
-            for hint_sol in ['hint_yes_solution_yes','hint_yes_solution_no','hint_no_solution_yes','hint_no_solution_no']:
-                pgbase64[hint_sol][problem] = base64.b64encode(bytes(pgptx[hint_sol][problem], 'utf-8'))
+            if (ww_reps_version == '2'):
+                pgbase64 = base64.b64encode(bytes(pgdense[problem], 'utf-8')).decode("utf-8")
+            elif (ww_reps_version == '1'):
+                pgbase64 = {}
+                for hint_sol in ['hint_yes_solution_yes','hint_yes_solution_no','hint_no_solution_yes','hint_no_solution_no']:
+                    pgbase64[hint_sol] = base64.b64encode(bytes(pgdense[hint_sol][problem], 'utf-8'))
 
-        # First write authored
-        if origin[problem] == 'ptx':
-            try:
-                with open(include_file_name, 'a') as include_file:
-                    authored_tag = '    <authored>\n{}\n    </authored>\n\n'
-                    include_file.write(authored_tag.format(re.sub(re.compile('^(?=.)', re.MULTILINE),'      ',source[problem])))
-            except Exception as e:
-                root_cause = str(e)
-                msg = "PTX:ERROR: there was a problem writing the authored source of {} to the file: {}\n"
-                raise ValueError(msg.format(problem_identifier, include_file_name) + root_cause)
-
-        # Now begin getting static version from server
-
+        # Construct URL to get static version from server
         # WW server can react to a
         #   URL of a problem stored there already
         #   or a base64 encoding of a problem
         # server_params is tuple rather than dictionary to enforce consistent order in url parameters
+        if (ww_reps_version == '2'):
+            server_params_source = ('sourceFilePath',source[problem]) if origin[problem] == 'server' else ('problemSource',pgbase64)
+        elif (ww_reps_version == '1'):
+            server_params_source = ('sourceFilePath',source[problem]) if origin[problem] == 'server' else ('problemSource',pgbase64['hint_yes_solution_yes'])
+
         server_params = (('answersSubmitted','0'),
                          ('displayMode','PTX'),
                          ('courseID',courseID),
@@ -535,23 +467,87 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
                          ('password',password),
                          ('course_password',course_password),
                          ('outputformat','ptx'),
-                         ('sourceFilePath',source[problem]) if origin[problem] == 'server' else ('problemSource',pgbase64['hint_yes_solution_yes'][problem]),
+                         server_params_source,
                          ('problemSeed',seed[problem]))
 
         msg = "sending {} to server to save in {}: origin is '{}'"
         _verbose(msg.format(problem, dest_dir, origin[problem]))
         if origin[problem] == 'server':
-            _debug('server-to-ptx: {} {} {} {}'.format(source[problem], wwurl, dest_dir, problem))
+            _debug('server-to-ptx: {} {} {} {}'.format(source[problem], ww_domain_path, dest_dir, problem))
         elif origin[problem] == 'ptx':
-            _debug('server-to-ptx: {} {} {} {}'.format(pgptx['hint_yes_solution_yes'][problem], wwurl, dest_dir, problem))
+            if (ww_reps_version == '2'):
+                _debug('server-to-ptx: {} {} {} {}'.format(pgdense[problem], ww_domain_path, dest_dir, problem))
+            elif (ww_reps_version == '1'):
+                _debug('server-to-ptx: {} {} {} {}'.format(pgdense['hint_yes_solution_yes'][problem], ww_domain_path, dest_dir, problem))
 
         # Ready, go out on the wire
         try:
-            response = session.get(wwurl, params=server_params)
+            response = session.get(ww_domain_path, params=server_params)
         except requests.exceptions.RequestException as e:
             root_cause = str(e)
             msg = "PTX:ERROR: there was a problem collecting a problem,\n Server: {}\nRequest Parameters: {}\n"
-            raise ValueError(msg.format(wwurl, server_params) + root_cause)
+            raise ValueError(msg.format(ww_domain_path, server_params) + root_cause)
+
+        # Check for errors with PG processing
+        # Get booleans signaling badness: file_empty, no_compile, bad_xml, no_statement
+        file_empty = 'ERROR:  This problem file was empty!' in response.text
+
+        no_compile = 'ERROR caught by Translator while processing problem file:' in response.text
+
+        bad_xml = False
+        try:
+            response_root = ET.fromstring(response.text)
+        except:
+            response_root = ET.Element('webwork')
+            bad_xml = True
+
+        no_statement = False
+        if not bad_xml:
+            if response_root.find('.//statement') is None:
+                no_statement = True
+        badness = file_empty or no_compile or bad_xml or no_statement
+
+        # Custom responses for each type of badness
+        # message for terminal log
+        # tip reminding about -a (abort) option
+        # value for @failure attribute in static element
+        # base64 for a shell PG problem that simply indicates there was an issue and says what the issue was
+        badness_msg = ''
+        badness_tip = ''
+        badness_type = ''
+        badness_base64 = ''
+        if file_empty:
+            badness_msg = "PTX:ERROR: WeBWorK problem {} was empty\n"
+            badness_tip = ''
+            badness_type = 'empty'
+            badness_base64 = 'RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBGaWxlIFdhcyBFbXB0eQoKRU5EX1BHTUwKCkVORERPQ1VNRU5UKCk7'
+        elif no_compile:
+            badness_msg = "PTX:ERROR: WeBWorK problem {} with seed {} did not compile  \n{}\n"
+            badness_tip = '  Use -a to halt with full PG and returned content' if (origin[problem] == 'ptx') else '  Use -a to halt with returned content'
+            badness_type = 'compile'
+            badness_base64 = 'RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBEaWQgTm90IENvbXBpbGUKCkVORF9QR01MCgpFTkRET0NVTUVOVCgpOw=='
+        elif bad_xml:
+            badness_msg = "PTX:ERROR: WeBWorK problem {} with seed {} does not return valid XML  \n  It may not be PTX compatible  \n{}\n"
+            badness_tip = '  Use -a to halt with returned content'
+            badness_type = 'xml'
+            badness_base64 = 'RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBEaWQgTm90IEdlbmVyYXRlIFZhbGlkIFhNTAoKRU5EX1BHTUwKCkVORERPQ1VNRU5UKCk7'
+        elif no_statement:
+            badness_msg = "PTX:ERROR: WeBWorK problem {} with seed {} does not have a statement tag \n  Maybe it uses something other than BEGIN_TEXT or BEGIN_PGML to print the statement in its PG code \n{}\n"
+            badness_tip = '  Use -a to halt with returned content'
+            badness_type = 'statement'
+            badness_base64 = 'RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBEaWQgTm90IEhhdmUgYSBbfHN0YXRlbWVudHxdKiBUYWcKCkVORF9QR01MCgpFTkRET0NVTUVOVCgpOw=='
+
+        # If we are aborting upon recoverable errors...
+        if abort_early:
+            if badness:
+                debugging_help = response.text
+                if origin[problem] == 'ptx' and no_compile:
+                    debugging_help += "\n" + pghuman[problem]
+                raise ValueError(badness_msg.format(problem_identifier, seed[problem], debugging_help))
+
+        # Now a block where we edit the text from the response before using it to build XML
+        # First some special handling for verbatim in answers.
+        # Then change targets of img (while downloading the original target as an image file)
 
         # When a PG Math Object is a text string that has to be rendered in a math environment,
         # depending on the string's content and the version of WeBworK, it can come back as:
@@ -599,130 +595,6 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
             else:
                 response_text += item
 
-        # Check for errors with PG processing
-        # Get booleans signaling badness: file_empty, no_compile, bad_xml, no_statement
-        file_empty = 'ERROR:  This problem file was empty!' in response_text
-        no_compile = 'ERROR caught by Translator while processing problem file:' in response_text
-        bad_xml = False
-        no_statement = False
-        try:
-            from xml.etree import ElementTree
-        except ImportError:
-            msg = 'PTX:ERROR: failed to import ElementTree from xml.etree'
-            raise ValueError(msg)
-        try:
-            problem_root = ElementTree.fromstring(response_text)
-        except:
-            bad_xml = True
-        if not bad_xml:
-            if problem_root.find('.//statement') is None:
-                no_statement = True
-        badness = file_empty or no_compile or bad_xml or no_statement
-
-        # Custom responses for each type of badness
-        # message for terminal log
-        # tip reminding about -a (abort) option
-        # value for @failure attribute in static element
-        # base64 for a shell PG problem that simply indicates there was an issue and says what the issue was
-        if file_empty:
-            badness_msg = "PTX:ERROR: WeBWorK problem {} was empty\n"
-            badness_tip = ''
-            badness_type = 'empty'
-            badness_base64 = 'RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBGaWxlIFdhcyBFbXB0eQoKRU5EX1BHTUwKCkVORERPQ1VNRU5UKCk7'
-        elif no_compile:
-            badness_msg = "PTX:ERROR: WeBWorK problem {} with seed {} did not compile  \n{}\n"
-            badness_tip = '  Use -a to halt with full PG and returned content' if (origin[problem] == 'ptx') else '  Use -a to halt with returned content'
-            badness_type = 'compile'
-            badness_base64 = 'RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBEaWQgTm90IENvbXBpbGUKCkVORF9QR01MCgpFTkRET0NVTUVOVCgpOw%3D%3D'
-        elif bad_xml:
-            badness_msg = "PTX:ERROR: WeBWorK problem {} with seed {} does not return valid XML  \n  It may not be PTX compatible  \n{}\n"
-            badness_tip = '  Use -a to halt with returned content'
-            badness_type = 'xml'
-            badness_base64 = 'RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBEaWQgTm90IEdlbmVyYXRlIFZhbGlkIFhNTAoKRU5EX1BHTUwKCkVORERPQ1VNRU5UKCk7'
-        elif no_statement:
-            badness_msg = "PTX:ERROR: WeBWorK problem {} with seed {} does not have a statement tag \n  Maybe it uses something other than BEGIN_TEXT or BEGIN_PGML to print the statement in its PG code \n{}\n"
-            badness_tip = '  Use -a to halt with returned content'
-            badness_type = 'statement'
-            badness_base64 = 'RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBEaWQgTm90IEhhdmUgYSBbfHN0YXRlbWVudHxdKiBUYWcKCkVORF9QR01MCgpFTkRET0NVTUVOVCgpOw%3D%3D'
-
-        # If we are aborting upon recoverable errors...
-        if abort_early:
-            if badness:
-                debugging_help = response_text
-                if origin[problem] == 'ptx' and no_compile:
-                    debugging_help += "\n" + pg[problem]
-                raise ValueError(badness_msg.format(problem_identifier, seed[problem], debugging_help))
-
-        # If there is "badness"...
-        # Build 'shell' problems to indicate failures
-        if badness:
-            print(badness_msg.format(problem_identifier, seed[problem], badness_tip))
-            static_skeleton = "<static failure='{}'>\n<statement>\n  <p>\n    {}  </p>\n</statement>\n</static>\n"
-            static[problem] = static_skeleton.format(badness_type, badness_msg.format(problem_identifier, seed[problem], badness_tip))
-
-        else:
-            # add to dictionary
-            static[problem] = response_text
-            # strip out actual PTX code between markers
-            start = start_marker.split(static[problem], maxsplit=1)
-            static[problem] = start[1]
-            end = end_marker.split(static[problem], maxsplit=1)
-            static[problem] = end[0]
-            # change element from webwork to static and indent
-            static[problem] = static[problem].replace('<webwork>', '<static>')
-            static[problem] = static[problem].replace('</webwork>', '</static>')
-
-        # Convert answerhashes XML to a sequence of answer elements
-        # This is crude text operation on the XML
-        # If correct_ans_latex_string is nonempty, use it, encased in <p><m>
-        # Else if correct_ans is nonempty, use it, encased in just <p>
-        # Else we have no answer to print out
-        answerhashes = re.findall(r'<AnSwEr\d+ (.*?) />', static[problem], re.DOTALL)
-        if answerhashes:
-            answer = ''
-            for answerhash in answerhashes:
-                try:
-                    correct_ans = re.search('correct_ans="(.*?)"', answerhash, re.DOTALL).group(1)
-                except:
-                    correct_ans = ''
-                try:
-                    correct_ans_latex_string = re.search('correct_ans_latex_string="(.*?)"', answerhash, re.DOTALL).group(1)
-                except:
-                    correct_ans_latex_string = ''
-
-                if correct_ans_latex_string or correct_ans:
-                    answer += "<answer>\n  <p>"
-                    if not correct_ans_latex_string:
-                        answer += correct_ans
-                    else:
-                        answer += '<m>' + correct_ans_latex_string + '</m>'
-                    answer += "</p>\n</answer>\n"
-
-            # Now we need to cut out the answerhashes that came from the server.
-            beforehashes = re.compile('<answerhashes>').split(static[problem])[0]
-            afterhashes = re.compile('</answerhashes>').split(static[problem])[1]
-            static[problem] = beforehashes + afterhashes
-
-            # We don't just replace it with the answer we just built. To be
-            # schema-compliant, the answer should come right after the latter of
-            # (last closing statement, last closing hint)
-            # By reversing the string, we can just target first match
-            reverse = static[problem][::-1]
-            parts = re.split(r"(\n>tnemetats/<|\n>tnih/<)",reverse, 1)
-            static[problem] = parts[2][::-1] + parts[1][::-1] + answer + parts[0][::-1]
-
-        # nice to know what seed was used
-        static[problem] = static[problem].replace('<static', '<static seed="' + seed[problem] + '"')
-
-        # nice to know sourceFilePath for server problems
-        if origin[problem] == 'server':
-            static[problem] = static[problem].replace('<static', '<static source="' + source[problem] + '"')
-
-        # adjust indentation
-        static[problem] = re.sub(re.compile('^(?=.)', re.MULTILINE),'      ',static[problem]).replace('  <static','<static').replace('  </static','</static')
-        # remove excess blank lines that come at the end from the server
-        static[problem] = re.sub(re.compile('\n+( *</static>)', re.MULTILINE),r"\n\1",static[problem])
-
         # need to loop through content looking for images with pattern:
         #
         #   <image source="relative-path-to-temporary-image-on-server"
@@ -732,7 +604,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
         # replace filenames, download images with new filenames
         count = 0
         # ww_image_url will be the URL to an image file used by the problem on the ww server
-        for match in re.finditer(graphics_pattern, static[problem]):
+        for match in re.finditer(graphics_pattern, response_text):
             ww_image_url = match.group(1)
             # strip away the scheme and location, if present (e.g 'https://webwork-ptx.aimath.org/')
             ww_image_url_parsed = urllib.parse.urlparse(ww_image_url)
@@ -743,19 +615,19 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
             ww_image_path, ww_image_filename = os.path.split(ww_image_full_path)
             # split the filename into (name, extension). extension can be empty or like '.png'.
             ww_image_name, image_extension = os.path.splitext(ww_image_filename)
-            # rename, eg, webwork-extraction/webwork-5-image-3.png
+            # rename, eg, webwork-representations/webwork-5-image-3.png
             ptx_image_name =  problem + '-image-' + str(count)
             ptx_image_filename = ptx_image_name + image_extension
             if ww_image_scheme:
                 image_url = ww_image_url
             else:
-                image_url = server_url + ww_image_full_path
+                image_url = ww_domain + '/' + ww_image_full_path
             # modify PTX problem source to include local versions
-            static[problem] = static[problem].replace(ww_image_full_path, 'images/' + ptx_image_filename)
+            response_text = response_text.replace(ww_image_full_path, 'images/' + ptx_image_filename)
             # download actual image files
             # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests
             try:
-                response = session.get(image_url)
+                image_response = session.get(image_url)
             except requests.exceptions.RequestException as e:
                 root_cause = str(e)
                 msg = "PTX:ERROR: there was a problem downloading an image file,\n URL: {}\n"
@@ -763,89 +635,322 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
             # and save the image itself
             try:
                 with open(os.path.join(dest_dir, ptx_image_filename), 'wb') as image_file:
-                    image_file.write(response.content)
+                    image_file.write(image_response.content)
             except Exception as e:
                 root_cause = str(e)
                 msg = "PTX:ERROR: there was a problem saving an image file,\n Filename: {}\n"
                 raise ValueError(os.path.join(dest_dir, ptx_filename) + root_cause)
 
-        # place static content
-        # we open the file in binary mode to preserve the \r characters that may be present
-        try:
-            with open(include_file_name, 'ab') as include_file:
-                include_file.write(bytes(static[problem] + '\n', encoding='utf-8'))
-        except Exception as e:
-            root_cause = str(e)
-            msg = "PTX:ERROR: there was a problem writing a problem to the file: {}\n"
-            raise ValueError(msg.format(include_file_name) + root_cause)
 
-        # Write urls for interactive version
-        for hint in ['yes','no']:
-            for solution in ['yes','no']:
-                hintsol = 'hint_' + hint + '_solution_' + solution
-                url_tag = '    <server-url hint="{}" solution="{}">{}?courseID={}&amp;userID={}&amp;password={}&amp;course_password={}&amp;answersSubmitted=0&amp;displayMode=MathJax&amp;outputformat=simple&amp;problemSeed={}&amp;{}</server-url>\n\n'
-                source_selector = 'problemSource=' if (badness or origin[problem] == 'ptx') else 'sourceFilePath='
-                if badness:
-                    source_value = badness_base64
-                else:
-                    if origin[problem] == 'server':
-                        source_value = source[problem]
-                    else:
-                        source_value = urllib.parse.quote_plus(pgbase64[hintsol][problem])
-                source_query = source_selector + source_value
+        # Start appending XML children
+        # Use "webwork-reps" as parent tag for the various representations of a problem
+        response_root = ET.fromstring(response_text)
+        webwork_reps = ET.SubElement(webwork_representations,'webwork-reps')
+        webwork_reps.set('version',ww_reps_version)
+        webwork_reps.set("{%s}id" % (XML),'extracted-' + problem)
+        webwork_reps.set('ww-id',problem)
+        webwork_reps.text = "\n    "
+        webwork_reps.tail = "\n  "
+        static = ET.SubElement(webwork_reps,'static')
+        static.text = "\n      "
+        static.set('seed',seed[problem])
+        if (origin[problem] == 'server'):
+            static.set('source',source[problem])
+
+        # If there is "badness"...
+        # Build 'shell' problems to indicate failures
+        if badness:
+            print(badness_msg.format(problem_identifier, seed[problem], badness_tip))
+            static.set('failure',badness_type)
+            statement = ET.SubElement(static, 'statement')
+            p = ET.SubElement(statement, 'p')
+            p.text = badness_msg.format(problem_identifier, seed[problem], badness_tip)
+            continue
+
+        # Exericse schema is: (statement, hint*, answer*, solution*)
+        # Incoming WW may have multiple statement, so we merge them into one.
+        # Then write hints in original order.
+        # Then convert answerhashes to a sequence of answer.
+        # Lastly, write all solutions in original order.
+        # For problems with stages, more care is needed to get hints, answers, solutions within the right stage
+
+        # First handle problems where there are no stages
+        if response_root.find('.//stage') is None:
+            statement = ET.SubElement(static, 'statement')
+            statement.text = "\n"
+            statements = response_root.findall('.//statement')
+            for st in list(statements):
+                for child in st:
+                    # response_root is an element tree from the response
+                    # webwork_represenations is an element tree
+                    # we use deepcopy to make sure that when we append we are making new nodes,
+                    # not intertangling the two trees
+                    chcopy = copy.deepcopy(child)
+                    statement.append(chcopy)
+            # blocks like this next one micromanage newlines and indentation when we print to file
+            for elem in statement.getiterator():
                 try:
-                    with open(include_file_name, 'a') as include_file:
-                        include_file.write(url_tag.format(hint,solution,wwurl,courseID,userID,password,course_password,seed[problem],source_query))
-                except Exception as e:
-                    root_cause = str(e)
-                    msg = "PTX:ERROR: there was a problem writing URLs for {} to the file: {}\n"
-                    raise ValueError(msg.format(problem_identifier, include_file_name) + root_cause)
+                    elem.text = elem.text.replace("\n","\n        ")
+                except AttributeError:
+                    pass
+                try:
+                    elem.tail = elem.tail.replace("\n","\n        ")
+                except AttributeError:
+                    pass
+            # blocks like this next one micromanage newlines and indentation when we print to file
+            last = statement.xpath('./*[last()]')
+            if last:
+                last[0].tail = "\n      "
+            else:
+                print('PTX:WARNING: a statement in {} has no content'.format(problem_identifier))
+            statement.tail = "\n      "
 
-        # Write PG. For server problems, just include source as attribute and close pg tag
+            hints = response_root.findall('.//hint')
+            for ht in list(hints):
+                htcopy = copy.deepcopy(ht)
+                for elem in htcopy.getiterator():
+                    try:
+                        elem.text = elem.text.replace("\n","\n        ")
+                    except AttributeError:
+                        pass
+                    try:
+                        elem.tail = elem.tail.replace("\n","\n        ")
+                    except AttributeError:
+                        pass
+
+                last = htcopy.xpath('./*[last()]')
+                if last:
+                    last[0].tail = "\n      "
+                else:
+                    print('PTX:WARNING: a hint in {} has no content'.format(problem_identifier))
+                htcopy.text = "\n        "
+                htcopy.tail = "\n      "
+
+                static.append(htcopy)
+
+            answer_hashes = response_root.find('.//answerhashes')
+            if answer_hashes is not None:
+                for ans in list(answer_hashes):
+                    correct_ans = ans.get('correct_ans','')
+                    correct_ans_latex_string = ans.get('correct_ans_latex_string','')
+                    if (correct_ans != '' or correct_ans_latex_string != ''):
+                        answer = ET.SubElement(static,'answer')
+                        answer.text = "\n        "
+                        p = ET.SubElement(answer,'p')
+                        if correct_ans_latex_string:
+                            m = ET.SubElement(p, 'm')
+                            m.text = correct_ans_latex_string
+                        elif correct_ans:
+                            p.text = correct_ans
+                        p.tail = "\n      "
+                        answer.tail = "\n      "
+
+            solutions = response_root.findall('.//solution')
+            for sol in list(solutions):
+                solcopy = copy.deepcopy(sol)
+                for elem in solcopy.getiterator():
+                    try:
+                        elem.text = elem.text.replace("\n","\n        ")
+                    except AttributeError:
+                        pass
+                    try:
+                        elem.tail = elem.tail.replace("\n","\n        ")
+                    except AttributeError:
+                        pass
+
+                last = solcopy.xpath('./*[last()]')
+                if last:
+                    last[0].tail = "\n      "
+                else:
+                    print('PTX:WARNING: a solution in {} has no content'.format(problem_identifier))
+                solcopy.text = "\n        "
+                solcopy.tail = "\n      "
+
+                static.append(solcopy)
+
+        else:
+            stages = response_root.findall('.//stage')
+            for stg in list(stages):
+                stage = ET.SubElement(static,'stage')
+                stage.text = "\n        "
+                statement = ET.SubElement(stage, 'statement')
+                statement.text = "\n"
+                statements = stg.findall('.//statement')
+                for st in list(statements):
+                    for child in st:
+                        chcopy = copy.deepcopy(child)
+                        statement.append(chcopy)
+                for elem in statement.getiterator():
+                    try:
+                        elem.text = elem.text.replace("\n","\n          ")
+                    except AttributeError:
+                        pass
+                    try:
+                        elem.tail = elem.tail.replace("\n","\n          ")
+                    except AttributeError:
+                        pass
+
+                last = statement.xpath('./*[last()]')
+                if last:
+                    last[0].tail = "\n        "
+                else:
+                    print('PTX:WARNING: a statement in {} has no content'.format(problem_identifier))
+                statement.tail = "\n        "
+
+                hints = stg.findall('.//hint')
+                for ht in list(hints):
+                    htcopy = copy.deepcopy(ht)
+                    for elem in htcopy.getiterator():
+                        try:
+                            elem.text = elem.text.replace("\n","\n          ")
+                        except AttributeError:
+                            pass
+                        try:
+                            elem.tail = elem.tail.replace("\n","\n          ")
+                        except AttributeError:
+                            pass
+
+                    last = htcopy.xpath('./*[last()]')
+                    if last:
+                        last[0].tail = "\n        "
+                    else:
+                        print('PTX:WARNING: a hint in {} has no content'.format(problem_identifier))
+                    htcopy.text = "\n          "
+                    htcopy.tail = "\n        "
+
+                    stage.append(htcopy)
+
+                answer_hashes = response_root.find('.//answerhashes')
+                if answer_hashes is not None:
+                    for ans in answer_hashes:
+                        name = ans.tag
+                        answer_inputs = stg.find(".//*[@name='%s']" % (name))
+                        if answer_inputs is not None:
+                            correct_ans = ans.get('correct_ans','')
+                            correct_ans_latex_string = ans.get('correct_ans_latex_string','')
+                            if (correct_ans != '' or correct_ans_latex_string != ''):
+                                answer = ET.SubElement(stage,'answer')
+                                answer.text = "\n          "
+                                p = ET.SubElement(answer,'p')
+                                if correct_ans_latex_string:
+                                    m = ET.SubElement(p, 'm')
+                                    m.text = correct_ans_latex_string
+                                elif correct_ans:
+                                    p.text = correct_ans
+                                p.tail = "\n        "
+                                answer.tail = "\n        "
+
+                solutions = stg.findall('.//solution')
+                for sol in list(solutions):
+                    solcopy = copy.deepcopy(sol)
+                    for elem in solcopy.getiterator():
+                        try:
+                            elem.text = elem.text.replace("\n","\n          ")
+                        except AttributeError:
+                            pass
+                        try:
+                            elem.tail = elem.tail.replace("\n","\n          ")
+                        except AttributeError:
+                            pass
+
+                    last = solcopy.xpath('./*[last()]')
+                    if last:
+                        last[0].tail = "\n        "
+                    else:
+                        print('PTX:WARNING: a solution in {} has no content'.format(problem_identifier))
+                    solcopy.text = "\n          "
+                    solcopy.tail = "\n        "
+
+                    stage.append(solcopy)
+
+                last = stage.xpath('./*[last()]')
+                last[0].tail = "\n      "
+                stage.tail = "\n      "
+
+        last = static.xpath('./*[last()]')
+        if last:
+            last[0].tail = "\n    "
+        else:
+            print('PTX:WARNING: {} has no content'.format(problem_identifier))
+        static.tail = "\n    "
+
+        # Add elements for interactivity
+        if (ww_reps_version == '2'):
+            # Add server-data element with attribute data for rendering a problem
+            source_key = 'problemSource' if (badness or origin[problem] == 'ptx') else 'sourceFilePath'
+            if badness:
+                source_value = badness_base64
+            else:
+                if origin[problem] == 'server':
+                    source_value = source[problem]
+                else:
+                    source_value = pgbase64
+
+            server_data = ET.SubElement(webwork_reps,'server-data')
+            server_data.set(source_key,source_value)
+            server_data.set('domain',ww_domain)
+            server_data.set('course-id',courseID)
+            server_data.set('user-id',userID)
+            server_data.set('course-password',course_password)
+            server_data.tail = "\n    "
+
+        elif (ww_reps_version == '1'):
+            # Add server-url elements for putting into the @src of an iframe
+            for hint in ['yes','no']:
+                for solution in ['yes','no']:
+                    hintsol = 'hint_' + hint + '_solution_' + solution
+                    source_selector = 'problemSource=' if (badness or origin[problem] == 'ptx') else 'sourceFilePath='
+                    if badness:
+                        source_value = urllib.parse.quote(badness_base64)
+                    else:
+                        if origin[problem] == 'server':
+                            source_value = source[problem]
+                        else:
+                            source_value = urllib.parse.quote_plus(pgbase64[hintsol])
+                    source_query = source_selector + source_value
+
+                    server_url = ET.SubElement(webwork_reps,'server-url')
+                    server_url.set('hint',hint)
+                    server_url.set('solution',solution)
+                    server_url.set('domain',ww_domain)
+                    url_shell = "{}?courseID={}&amp;userID={}&amp;password={}&amp;course_password={}&amp;answersSubmitted=0&amp;displayMode=MathJax&amp;outputformat=simple&amp;problemSeed={}&amp;{}"
+                    server_url.text = url_shell.format(ww_domain_path,courseID,userID,password,course_password,seed[problem],source_query)
+                    server_url.tail = "\n    "
+
+        # Add PG for PTX-authored problems
+        # Empty tag with @source for server problems
+        pg = ET.SubElement(webwork_reps,'pg')
         if origin[problem] == 'ptx':
-            pg_tag = '    <pg>\n{}\n    </pg>\n\n'
             if badness:
                 pg_shell = "DOCUMENT();\nloadMacros('PGstandard.pl','PGML.pl','PGcourse.pl');\nTEXT(beginproblem());\nBEGIN_PGML\n{}END_PGML\nENDDOCUMENT();"
                 formatted_pg = pg_shell.format(badness_msg.format(problem_identifier, seed[problem], badness_tip))
             else:
-                formatted_pg = pg[problem]
+                formatted_pg = pghuman[problem]
             # opportunity to cut out extra blank lines
             formatted_pg = re.sub(re.compile(r"(\n *\n)( *\n)*", re.MULTILINE),r"\n\n",formatted_pg)
-
-            try:
-                with open(include_file_name, 'a') as include_file:
-                    include_file.write(pg_tag.format(formatted_pg))
-            except Exception as e:
-                root_cause = str(e)
-                msg = "PTX:ERROR: there was a problem writing the PG for {} to the file: {}\n"
-                raise ValueError(msg.format(problem_identifier, include_file_name) + root_cause)
+            pg.text = ET.CDATA("\n" + formatted_pg)
         elif origin[problem] == 'server':
-            try:
-                with open(include_file_name, 'a') as include_file:
-                    pg_tag = '    <pg source="{}" />\n\n'
-                    include_file.write(pg_tag.format(source[problem]))
-            except Exception as e:
-                root_cause = str(e)
-                msg = "PTX:ERROR: there was a problem writing the PG for {} to the file: {}\n"
-                raise ValueError(msg.format(problem_identifier, include_file_name) + root_cause)
+            pg.set('source',source[problem])
+        pg.tail = "\n    "
 
-        # close webwork-reps tag
-        try:
-            with open(include_file_name, 'a') as include_file:
-                include_file.write('  </webwork-reps>\n\n')
-        except Exception as e:
-            root_cause = str(e)
-            msg = "PTX:ERROR: there was a problem writing a problem to the file: {}\n"
-            raise ValueError(msg.format(include_file_name) + root_cause)
+        last = webwork_reps.xpath('./*[last()]')
+        last[0].tail = "\n  "
 
-    # close webwork-extraction tag and finish
+    last = webwork_representations.xpath('./*[last()]')
+    last[0].tail = "\n "
+
+    # write to file
+    include_file_name = os.path.join(dest_dir, "webwork-representations.ptx")
     try:
-        with open(include_file_name, 'a') as include_file:
-            include_file.write('</webwork-extraction>')
+        with open(include_file_name, 'wb') as include_file:
+            include_file.write( ET.tostring(webwork_representations, encoding="utf-8", xml_declaration=True) )
     except Exception as e:
         root_cause = str(e)
         msg = "PTX:ERROR: there was a problem writing a problem to the file: {}\n"
         raise ValueError(msg.format(include_file_name) + root_cause)
+
+    #close session to avoid resource wanrnings
+    session.close()
 
 
 ##############################
@@ -854,33 +959,29 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
 #
 ##############################
 
-def youtube_thumbnail(xml_source, xmlid_root, dest_dir):
+def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     import os.path  # join()
     import subprocess, shutil
     import requests
 
     _verbose('downloading YouTube thumbnails from {} for placement in {}'.format(xml_source, dest_dir))
-    xslt_executable = get_executable('xslt')
-    _debug("xslt executable: {}".format(xslt_executable))
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-youtube.xsl')
-    # No temporary directory involved,
-    # results land directly in dest_dir
-    cmd = [xslt_executable,
-            '--xinclude',
-            '--stringparam', 'subtree', xmlid_root,
-            extraction_xslt,
-            xml_source]
-    try:
-        thumb_list = subprocess.check_output(cmd)
-    except subprocess.CalledProcessError as e:
-        root_cause = str(e)
-        msg = 'xsltproc command failed, tried: "{}"\n'.format(' '.join(cmd))
-        raise ValueError(msg + root_cause)
+    # support publisher file, subtree argument
+    if pub_file:
+        stringparams['publisher'] = pub_file
+    if xmlid_root:
+        stringparams['subtree'] = xmlid_root
+    # Build list of id's into a scratch directory/file
+    tmp_dir = get_temporary_directory()
+    id_filename = os.path.join(tmp_dir, 'youtube-ids.txt')
+    _debug('YouTube id list temporarily in {}'.format(id_filename))
+    xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
     # "run" an assignment for the list of triples of strings
-    thumbs = eval(thumb_list.decode('ascii'))
+    id_file = open(id_filename, 'r')
+    thumb_list = id_file.readline()
+    thumbs = eval(thumb_list)
 
-    session = requests.Session()
     for thumb in thumbs:
         url = 'http://i.ytimg.com/vi/{}/default.jpg'.format(thumb[0])
         path = os.path.join(dest_dir, thumb[1] + '.jpg')
@@ -904,36 +1005,32 @@ def youtube_thumbnail(xml_source, xmlid_root, dest_dir):
 #
 #####################################
 
-def preview_images(xml_source, xmlid_root, dest_dir):
+def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     import subprocess, shutil
+    import os  # chdir
     import os.path # join()
 
     suffix = 'png'
 
     _verbose('creating interactive previews from {} for placement in {}'.format(xml_source, dest_dir))
 
-    # see below, pageres-cli writes into current working directory
-    needs_moving = not( os.getcwd() == os.path.normpath(dest_dir) )
-
-    xslt_executable = get_executable('xslt')
-    _debug("xslt executable: {}".format(xslt_executable))
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-interactive.xsl')
-    # No temporary directory involved,
-    # results land directly in dest_dir
-    cmd = [xslt_executable,
-            '--xinclude',
-            '--stringparam','subtree',xmlid_root,
-            extraction_xslt,
-            xml_source]
-    try:
-        interactive_list = subprocess.check_output(cmd)
-    except subprocess.CalledProcessError as e:
-        root_cause = str(e)
-        msg = 'xsltproc command failed, tried: "{}"\n'.format(' '.join(cmd))
-        raise ValueError(msg + root_cause)
+    # support publisher file, subtree argument
+    if pub_file:
+        stringparams['publisher'] = pub_file
+    if xmlid_root:
+        stringparams['subtree'] = xmlid_root
+    # Build list of id's into a scratch directory/file
+    tmp_dir = get_temporary_directory()
+    id_filename = os.path.join(tmp_dir, 'interactives-ids.txt')
+    _debug('Interactives id list temporarily in {}'.format(id_filename))
+    xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
+
     # "run" an assignment for the list of problem numbers
-    interactives = eval(interactive_list.decode('ascii'))
+    id_file = open(id_filename, 'r')
+    interactive_list = id_file.readline()
+    interactives = eval(interactive_list)
 
     # Cheating a bit, base URL is *always* first item
     # Presumed to not have a trailing slash
@@ -941,24 +1038,33 @@ def preview_images(xml_source, xmlid_root, dest_dir):
     # call will need to accept the override as a stringparam
     baseurl = interactives[0]
 
-    pageres_executable = get_executable('pageres')
-    _debug("pageres executable: {}".format(pageres_executable))
+    pageres_executable_cmd = get_executable_cmd('pageres')
+    # TODO why this debug line? get_executable_cmd() outputs the same debug info
+    _debug("pageres executable: {}".format(pageres_executable_cmd[0]))
     _debug("interactives identifiers: {}".format(interactives))
+
+    # pageres-cli writes into current working directory
+    # so change to temporary directory, and copy out
+    owd = os.getcwd()
+    os.chdir(tmp_dir)
 
     # Start after the leading base URL sneakiness
     for preview in interactives[1:]:
         input_page = os.path.join(baseurl, preview + '.html')
+        page_with_fragment = ''.join([input_page, '#', preview])
         selector_option = '--selector=#' + preview
         # file suffix is provided by pageres
         format_option = '--format=' + suffix
         filename_option = '--filename=' + preview + '-preview'
         filename = preview + '-preview.' + suffix
+        page_with_fragment = ''.join([input_page, '#', preview])
+        _verbose('converting {} to {}'.format(page_with_fragment, filename))
 
         # pageres invocation
         # Overwriting files prevents numbered versions (with spaces!)
         # 3-second delay allows Javascript, etc to settle down
         # --transparent, --crop do not seem very effective
-        cmd = [pageres_executable,
+        cmd = pageres_executable_cmd + [
         "-v",
         "--overwrite",
         '-d5',
@@ -971,10 +1077,107 @@ def preview_images(xml_source, xmlid_root, dest_dir):
         _debug("pageres command: {}".format(cmd))
 
         subprocess.call(cmd)
-        # 2018-04-27  CLI pageres only writes into current directory
-        # and it is an error to move a file onto itself, so we are careful
-        if needs_moving:
-            shutil.move(filename, dest_dir)
+        shutil.copy2(filename, dest_dir)
+
+    # restore working directory
+    os.chdir(owd)
+
+
+############
+# All Images
+############
+
+def all_images(xml, pub_file, stringparams, xmlid_root):
+    """All images, in all necessary formats, in subdirectories, for production of any project"""
+    import os  # mkdir()
+    import os.path  # join(), isdir()
+    import lxml.etree as ET
+
+    # parse source, no harm to assume
+    # xinclude modularization is necessary
+    src_tree = ET.parse(xml)
+    src_tree.xinclude()
+
+    # explore source for various PreTeXt elements needing assistance
+    # no element => empty list => boolean is False
+    has_latex_image = bool(src_tree.xpath("/pretext/*[not(docinfo)]//latex-image"))
+    has_asymptote = bool(src_tree.xpath("/pretext/*[not(docinfo)]//asymptote"))
+    has_sageplot = bool(src_tree.xpath("/pretext/*[not(docinfo)]//sageplot"))
+    has_youtube = bool(src_tree.xpath("/pretext/*[not(docinfo)]//video[@youtube]"))
+    has_preview = bool(src_tree.xpath("/pretext/*[not(docinfo)]//interactive[not(@preview)]"))
+
+    # debugging comment/uncomment or True/False
+    # has_latex_image = False
+    # has_asymptote = False
+    # has_sageplot = False
+    # has_youtube = False
+    # has_preview = False
+
+    # get the target output directory from the publisher file
+    # this is *required* so fail if pieces are missing
+    if not(pub_file):
+        msg = ' '.join(["creating all images requires a directory specification",
+                        "in a publisher file, and no publisher file has been given"])
+        raise ValueError(msg)
+    generated_dir, data_dir, _ = get_image_directories(xml, pub_file)
+    # correct attribute and not a directory gets caught earlier
+    # but could have publisher file and bad elements/attributes
+    if not(generated_dir):
+        msg = ' '.join(["creating all images requires a directory specified in the",
+                        "publisher file in the attribute /publication/source/@generated-images" ])
+        raise ValueError(msg)
+
+    # first stanza has code comments, and subsequent follow this
+    # model so only comments are for important distinctions
+
+    # latex-image
+    #
+    if has_latex_image:
+        # empty last part implies directory separator
+        dest_dir = os.path.join(generated_dir, 'latex-image', '')
+        # make directory if not already present
+        if not(os.path.isdir(dest_dir)):
+            os.mkdir(dest_dir)
+        latex_image_conversion(xml, pub_file, stringparams, xmlid_root, data_dir, dest_dir, 'pdf')
+        latex_image_conversion(xml, pub_file, stringparams, xmlid_root, data_dir, dest_dir, 'svg')
+
+    # Asymptote
+    #
+    if has_asymptote:
+        dest_dir = os.path.join(generated_dir, 'asymptote', '')
+        if not(os.path.isdir(dest_dir)):
+            os.mkdir(dest_dir)
+        asymptote_conversion(xml, pub_file, stringparams, xmlid_root, dest_dir, 'pdf')
+        asymptote_conversion(xml, pub_file, stringparams, xmlid_root, dest_dir, 'html')
+
+    # Sage plots
+    #
+    if has_sageplot:
+        dest_dir = os.path.join(generated_dir, 'sageplot', '')
+        if not(os.path.isdir(dest_dir)):
+            os.mkdir(dest_dir)
+        # for 3D images might produce a single PNG instead of an SVG and a PDF
+        # conversions look for this PNG as a fallback absent SVG or PDF
+        sage_conversion(xml, pub_file, stringparams, xmlid_root, dest_dir, 'pdf')
+        sage_conversion(xml, pub_file, stringparams, xmlid_root, dest_dir, 'svg')
+
+    # YouTube previews
+    #
+    if has_youtube:
+        dest_dir = os.path.join(generated_dir, 'youtube', '')
+        if not(os.path.isdir(dest_dir)):
+            os.mkdir(dest_dir)
+        # no format, they are what they are (*.jpg)
+        youtube_thumbnail(xml, pub_file, stringparams, xmlid_root, dest_dir)
+
+    # Previews (headless screenshots)
+    #
+    if has_preview:
+        dest_dir = os.path.join(generated_dir, 'preview', '')
+        if not(os.path.isdir(dest_dir)):
+            os.mkdir(dest_dir)
+        # no format, they are what they are (*.png)
+        preview_images(xml, pub_file, stringparams, xmlid_root, dest_dir)
 
 
 #####################################
@@ -983,33 +1186,29 @@ def preview_images(xml_source, xmlid_root, dest_dir):
 #
 #####################################
 
-def mom_static_problems(xml_source, xmlid_root, dest_dir):
+def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     import os.path # join()
     import subprocess, shutil
     import requests
 
     _verbose('downloading MyOpenMath static problems from {} for placement in {}'.format(xml_source, dest_dir))
-    xslt_executable = get_executable('xslt')
-    _debug("xslt executable: {}".format(xslt_executable))
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-mom.xsl')
-    # No temporary directory involved,
-    # results land directly in dest_dir
-    cmd = [xslt_executable,
-            '--xinclude',
-            '--stringparam', 'subtree', xmlid_root,
-            extraction_xslt,
-            xml_source]
-    try:
-        problem_list = subprocess.check_output(cmd)
-    except subprocess.CalledProcessError as e:
-        root_cause = str(e)
-        msg = 'xsltproc command failed, tried: "{}"\n'.format(' '.join(cmd))
-        raise ValueError(msg + root_cause)
+    # support publisher file, subtree argument
+    if pub_file:
+        stringparams['publisher'] = pub_file
+    if xmlid_root:
+        stringparams['subtree'] = xmlid_root
+    # Build list of id's into a scratch directory/file
+    tmp_dir = get_temporary_directory()
+    id_filename = os.path.join(tmp_dir, 'mom-ids.txt')
+    _debug('MyOpenMath id list temporarily in {}'.format(id_filename))
+    xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
     # "run" an assignment for the list of problem numbers
-    problems = eval(problem_list.decode('ascii'))
+    id_file = open(id_filename, 'r')
+    problem_list = id_file.readline()
+    problems = eval(problem_list)
     xml_header = '<?xml version="1.0" encoding="UTF-8" ?>\n'
-    session = requests.Session()
     for problem in problems:
         url = 'https://www.myopenmath.com/util/mbx.php?id={}'.format(problem)
         path = os.path.join(dest_dir, 'mom-{}.xml'.format(problem))
@@ -1031,7 +1230,7 @@ def mom_static_problems(xml_source, xmlid_root, dest_dir):
 # Conversion to Braille
 #######################
 
-def braille(xml_source, pub_file, dest_dir):
+def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format):
     """Produce a complete document in BRF format ( = Braille ASCII, plus formatting control)"""
     import os.path # join()
     import subprocess # run()
@@ -1054,31 +1253,42 @@ def braille(xml_source, pub_file, dest_dir):
     # ripping out LaTeX as math representations
     msg = 'converting raw LaTeX from {} into clean {} format placed into {}'
     _debug(msg.format(xml_source, math_format, math_representations))
-    mathjax_latex(xml_source, math_representations, math_format)
+    mathjax_latex(xml_source, pub_file, math_representations, None, math_format)
 
     msg = 'converting source ({}) and clean representations ({}) into liblouis precursor XML file ({})'
     _debug(msg.format(xml_source, math_representations, liblouis_xml))
-    params = {}
-    params['mathfile'] = math_representations
+    stringparams['mathfile'] = math_representations
     if pub_file:
-        params['publisher'] = pub_file
-    xsltproc(braille_xslt, xml_source, None, tmp_dir, params)
+        stringparams['publisher'] = pub_file
+    xsltproc(braille_xslt, xml_source, None, tmp_dir, stringparams)
 
+    # Main configuration file, two page format files
     liblouis_cfg = os.path.join(get_ptx_path(), 'script', 'braille', 'pretext-liblouis.cfg')
-    final_brf = os.path.join(dest_dir, 'book.brf')
-    liblouis_exec = get_executable('liblouis')
-    msg = 'applying liblouis to {} with configuration {}, creating BRF {}'
-    _debug(msg.format(liblouis_xml, liblouis_cfg, final_brf))
-    liblouis_cmd = [liblouis_exec, '-f', liblouis_cfg, liblouis_xml, final_brf]
+    liblouis_emboss_cfg = os.path.join(get_ptx_path(), 'script', 'braille', 'pretext-liblouis-emboss.cfg')
+    liblouis_electronic_cfg = os.path.join(get_ptx_path(), 'script', 'braille', 'pretext-liblouis-electronic.cfg')
+    # comma-separated configuration files, with no space
+    # so as to not confuse the command construction
+    if page_format == 'emboss':
+        cfg = liblouis_cfg + ',' + liblouis_emboss_cfg
+    elif page_format == 'electronic':
+        cfg = liblouis_cfg + ',' + liblouis_electronic_cfg
+    else:
+        raise ValueError('PTX:BUG: braille page format not recognized')
+    final_brf = get_output_filename(xml_source, out_file, dest_dir, '.brf')
+    liblouis_exec_cmd = get_executable_cmd('liblouis')
+    msg = 'applying liblouis to {} with configurations {}, creating BRF {}'
+    _debug(msg.format(liblouis_xml, cfg, final_brf))
+    liblouis_cmd = liblouis_exec_cmd + ['-f', cfg, liblouis_xml, final_brf]
 
     subprocess.run(liblouis_cmd)
+    _verbose('BRF file deposited as {}'.format(final_brf))
 
 
 ####################
 # Conversion to EPUB
 ####################
 
-def epub(xml_source, pub_file, dest_dir, math_format):
+def epub(xml_source, pub_file, out_file, dest_dir, math_format):
     """Produce complete document in an EPUB container"""
     # math_format is a string that parameterizes this process
     #   'svg': mathematics as SVG
@@ -1115,9 +1325,9 @@ def epub(xml_source, pub_file, dest_dir, math_format):
     # ripping out LaTeX as math representations
     msg = 'converting raw LaTeX from {} into clean {} format placed into {}'
     _debug(msg.format(xml_source, math_format, math_representations))
-    mathjax_latex(xml_source, math_representations, math_format)
+    mathjax_latex(xml_source, pub_file, math_representations, None, math_format)
 
-    # Build necessary content and infrastructure EPUB files, 
+    # Build necessary content and infrastructure EPUB files,
     # using SVG images of math.  Most output goes into the
     # EPUB/xhtml directory via exsl:document templates in
     # the EPUB XSL conversion.  The stylesheet does record,
@@ -1155,9 +1365,9 @@ def epub(xml_source, pub_file, dest_dir, math_format):
     # bits of info necessary for packaging
     packaging_tree = ET.parse(packaging_file)
 
-    # Stage CSS files in EPUB/css, coordinate 
+    # Stage CSS files in EPUB/css, coordinate
     # with names in manifest and *.xhtml via XSL.
-    # CSS files live in distribution in "css" directory, 
+    # CSS files live in distribution in "css" directory,
     # which is a peer of the "xsl" directory
     # EPUB exists from above xsltproc call
     css_dir = os.path.join(tmp_dir, 'EPUB', 'css')
@@ -1214,8 +1424,10 @@ def epub(xml_source, pub_file, dest_dir, math_format):
 
     # Python 3.7 - compress level 0 to 9
 
-    epub_file = 'book-{}.epub'.format(math_format)
-    _verbose('packaging an EPUB as {}'.format(epub_file))
+    title_file_element = packaging_tree.xpath('/packaging/filename')[0]
+    title_file = ET.tostring(title_file_element, method="text").decode('ascii')
+    epub_file = '{}-{}.epub'.format(title_file, math_format)
+    _verbose('packaging an EPUB temporarily as {}'.format(epub_file))
     owd = os.getcwd()
     os.chdir(tmp_dir)
     with ZIP.ZipFile(epub_file, mode='w', compression=ZIP.ZIP_DEFLATED) as epub:
@@ -1229,8 +1441,46 @@ def epub(xml_source, pub_file, dest_dir, math_format):
         for root, dirs, files in os.walk('css'):
             for name in files:
                 epub.write(os.path.join(root, name))
-    shutil.copy2(epub_file, dest_dir)
+    derivedname = get_output_filename(xml_source, out_file, dest_dir, '.epub')
+    _verbose('EPUB file deposited as {}'.format(derivedname))
+    shutil.copy2(epub_file, derivedname)
     os.chdir(owd)
+
+
+####################
+# Conversion to HTML
+####################
+
+def html(xml, pub_file, stringparams, dest_dir):
+    """Convert XML source to HTML files in destination directory"""
+    import os.path # join()
+
+    # support publisher file, not subtree argument
+    if pub_file:
+        stringparams['publisher'] = pub_file
+    extraction_xslt = os.path.join(get_ptx_xsl_path(), 'pretext-html.xsl')
+    # Write output into working directory, no scratch space needed
+    _verbose('converting {} to HTML in {}'.format(xml, dest_dir))
+    xsltproc(extraction_xslt, xml, None, dest_dir, stringparams)
+
+
+#####################
+# Conversion to LaTeX
+#####################
+
+def latex(xml, pub_file, stringparams, out_file, dest_dir):
+    """Convert XML source to LateX and then a PDF in destination directory"""
+    import os.path # join()
+
+    # support publisher file, not subtree argument
+    if pub_file:
+        stringparams['publisher'] = pub_file
+    extraction_xslt = os.path.join(get_ptx_xsl_path(), 'pretext-latex.xsl')
+    # form output filename based on source filename
+    derivedname = get_output_filename(xml, out_file, dest_dir, '.tex')
+    # Write output into working directory, no scratch space needed
+    _verbose('converting {} to LaTeX as {}'.format(xml, derivedname))
+    xsltproc(extraction_xslt, xml, derivedname, None, stringparams)
 
 
 #################
@@ -1250,6 +1500,11 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
     output_dir   - a directory for exsl:document() templates to write to
     stringparams - a dictionary of option/value string:string pairs to
                    pass to  xsl:param  elements of the stylesheet
+
+    N.B. The value of a "publisher" string parameter passed in the
+    "stringparams" argument must be a complete path, since a relative
+    path can be rendered incorrect by the change to an "output_dir"
+    different than that at the time of the command-line invocation.
     """
     import os
     import lxml.etree as ET
@@ -1282,7 +1537,15 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
     owd = os.getcwd()
     if output_dir:
         os.chdir(output_dir)
+    # clear global errors, apply the xsl transform
+    ET.clear_error_log()
     result_tree = xslt(src_tree, **stringparams)
+    # report any errors
+    messages = xslt.error_log
+    if messages:
+        print('Messages from application of {}:'.format(xsl))
+        for m in messages:
+            print(m.message)
     os.chdir(owd)
 
     # write a serialized version to a file if
@@ -1378,40 +1641,44 @@ def get_source_path(source_file):
     _verbose("discovering source file's directory name: {}".format(source_dir))
     return os.path.normpath(source_dir)
 
-def get_executable(exec_name):
+def get_executable_cmd(exec_name):
     """Queries configuration file for executable name, verifies existence in Unix"""
     import os
     import platform
     import subprocess
+    import shutil # .which()
 
     # parse user configuration(s), contains locations of executables
     # in the "executables" section of the INI-style file
     config = get_config_info()
 
-    # http://stackoverflow.com/questions/11210104/check-if-a-program-exists-from-a-python-script
-    # suggests  where.exe  as Windows equivalent (post Windows Server 2003)
-    # which  = 'where.exe' if platform.system() == 'Windows' else 'which'
-
     # get the name, but then see if it really, really works
     _debug('locating "{}" in [executables] section of configuration file'.format(exec_name))
-    config_name = config.get('executables', exec_name)
+    config_cmd_line = config.get('executables', exec_name).split()
 
-    devnull = open(os.devnull, 'w')
-    try:
-        result_code = subprocess.call(['which', config_name], stdout=devnull, stderr=subprocess.STDOUT)
-    except OSError:
-        print('PTX:WARNING: executable existence-checking was not performed (e.g. on Windows)')
-        result_code = 0  # perhaps a lie on Windows
-    if result_code != 0:
-        error_message = '\n'.join([
-                        'PTX:ERROR: cannot locate executable with configuration name "{}" as command "{}"',
-                        '*** Edit the configuration file and/or install the necessary program ***'])
-        raise OSError(error_message.format(exec_name, config_name))
-    _debug("{} executable: {}".format(exec_name, config_name))
-    return config_name
+    # Returns the full-path version of the command, as if the PATH was employed
+    # "None" indicates the executable does not exist on the system
+    # https://stackoverflow.com/questions/377017/test-if-executable-exists-in-python
+    normalized_exec = shutil.which(config_cmd_line[0])
+
+    error_messages = []
+    if normalized_exec == None:
+        error_messages += [
+            'PTX:ERROR: cannot locate executable with configuration name `{}` as command `{}`'.format(exec_name, config_cmd_line[0]),
+            '*** Edit the configuration file and/or install the necessary program ***'
+        ]
+    if config_cmd_line[0] == "pdfcrop":
+        error_messages += [
+            'PTX:ERROR: Program "pdfcrop" was replaced by "pdf-crop-margins" as of 2020-07-07.',
+            'Install with "pip install pdfCropMargins" and update your configuration file with "pdfcrop = pdf-crop-margins".'
+        ]
+    if error_messages:
+        raise OSError('\n'.join(error_messages))
+    _debug("{} executable: {}, options: {}".format(exec_name, config_cmd_line[0], ' '.join(config_cmd_line[1:])))
+    return config_cmd_line
 
 def sanitize_url(url):
-    """Verify a server address, append a slash"""
+    """Verify a server address"""
     _verbose('validating, cleaning server URL: {}'.format(url))
     import requests
     try:
@@ -1420,10 +1687,6 @@ def sanitize_url(url):
         root_cause = str(e)
         msg = "PTX:ERROR: there was a problem with the server URL, {}\n".format(url)
         raise ValueError(msg + root_cause)
-    # We expect relative paths to locations on the server
-    # So we add a slash if there is not one already
-    if url[-1] != "/":
-        url = url + "/"
     return url
 
 def sanitize_alpha_num_underscore(param):
@@ -1484,21 +1747,117 @@ def copy_data_directory(source_file, data_dir, tmp_dir):
     shutil.copytree(data_dir, destination_root)
 
 def get_temporary_directory():
-    """Create scratch directory and return a fully-qualified filename"""
-    import tempfile # gettempdir()
-    import os       # times(), makedirs()
-    import os.path  # join()
+    """Create, record, and return a scratch directory"""
+    import tempfile #  mkdtemp()
+    global _temps   #  cache of temporary directories
 
-    # TODO: condition on debugging switch to
-    # make self-cleaning temporary directories
+    temp_dir = tempfile.mkdtemp()
+    # Register the directory for cleanup at the end of successful
+    # execution iff the verbosity is set to level 2 ("debug")
+    # So errors, or requesting gross debugging info, will leave the
+    # directories behind for inspection, otherwise they get removed
+    _temps.append(temp_dir)
+    return temp_dir
 
-    # https://stackoverflow.com/questions/847850/
-    # cross-platform-way-of-getting-temp-directory-in-python
-    # TODO: convert hash value to unsigned hex?
-    # t = os.path.join(tempfile.gettempdir(), 'pretext{}'.format(hash(os.times())))
-    # os.makedirs(t)
-    # return t
-    return tempfile.mkdtemp()
+def get_output_filename(xml, out_file, dest_dir, suffix):
+    """Formulate a filename for single-file output"""
+    #  out_file  is None, or full path
+    #  dest_dir is at least current working directory
+    import os.path # split(), splitext()
+
+    if out_file:
+        return out_file
+    # split off source filename, replace suffix
+    derivedname = os.path.splitext(os.path.split(xml)[1])[0]  + suffix
+    return os.path.join(dest_dir, derivedname)
+
+def release_temporary_directories():
+    """Release scratch directories unless requesting debugging info"""
+    import shutil #  rmtree()
+    global _temps #  cache of temporary directories
+
+    _debug('Temporary directories left behind for inspection: {}'.format(_temps))
+    if _verbosity < 2:
+        for td in _temps:
+            _verbose('Removing temporary directory {}'.format(td))
+            # conservatively, raise exception on errors
+            shutil.rmtree(td, ignore_errors=False)
+
+def verify_input_directory(inputdir):
+    """Verify directory exists, or raise error.  Return absolute path"""
+    import os.path # isdir(), abspath()
+
+    _verbose('verifying and expanding input directory: {}'.format(inputdir))
+    if not(os.path.isdir(inputdir)):
+        raise ValueError('directory {} does not exist'.format(inputdir))
+    absdir = os.path.abspath(inputdir)
+    _verbose('input directory expanded to absolute path: {}'.format(absdir))
+    return absdir
+
+def get_image_directories(xml_source, pub_file):
+    """Returns triple: (generated, data, external) absolute paths, derived from publisher file"""
+    import os.path # isabs, split
+    import lxml.etree as ET  # XML source
+
+    # N.B. manage attributes carefully to distinguish
+    # absent (None) versus empty string value ('')
+
+    # Examine /publication/source element carefully for
+    # attributes which we code here for convenience
+    gen_attr = 'generated-images'
+    data_attr = 'data-images'
+    ext_attr = 'source-images'
+
+    # prepare for relative paths later
+    source_dir = get_source_path(xml_source)
+
+    # Unknown until running the gauntlet
+    generated = None
+    data = None
+    external = None
+    if pub_file:
+        # parse publisher file, xinclude is conceivable
+        # for multiple similar files with common parts
+        pub_tree = ET.parse(pub_file)
+        pub_tree.xinclude()
+        # "source" element => single-item list
+        # no "source" element => empty list => triple of None returned
+        element_list = pub_tree.xpath("/publication/source")
+        if element_list:
+            attributes_dict = element_list[0].attrib
+            # attribute absent => None
+            if gen_attr in attributes_dict.keys():
+                raw_path = attributes_dict[gen_attr]
+                if os.path.isabs(raw_path):
+                    abs_path = raw_path
+                else:
+                    abs_path = os.path.join(source_dir, raw_path)
+                generated = verify_input_directory(abs_path)
+            # attribute absent => None
+            if data_attr in attributes_dict.keys():
+                raw_path = attributes_dict[data_attr]
+                if os.path.isabs(raw_path):
+                    msg = ' '.join(['the directory path to data for images, given in the',
+                          'publisher file as "source/@{}" must be relative to',
+                          'the PreTeXt source file location, and not the absolute path "{}"'])
+                    raise ValueError(msg.format(data_attr, raw_path))
+                else:
+                    abs_path = os.path.join(source_dir, raw_path)
+                data = verify_input_directory(abs_path)
+            # attribute absent => None
+            if ext_attr in attributes_dict.keys():
+                raw_path = attributes_dict[ext_attr]
+                if os.path.isabs(raw_path):
+                    msg = ' '.join(['the directory path to source images, given in the',
+                          'publisher file as "source/@{}" must be relative to',
+                          'the PreTeXt source file location, and not the absolute path "{}"'])
+                    raise ValueError(msg.format(ext_attr, raw_path))
+                else:
+                    abs_path = os.path.join(source_dir, raw_path)
+                external = verify_input_directory(abs_path)
+    # triple of discovered paths
+    return (generated, data, external)
+
 
 ########
 #
@@ -1529,3 +1888,5 @@ set_ptx_path()
 # Parse configuration file once
 _config = None
 set_config_info()
+
+_temps = []

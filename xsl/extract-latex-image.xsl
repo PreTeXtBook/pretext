@@ -33,6 +33,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Get internal ID's for filenames, etc -->
 <xsl:import href="./pretext-common.xsl" />
 
+<!-- We use some common code to make the actual LaTeX code used      -->
+<!-- for the image.  The extract-identity stylesheet will override   -->
+<!-- the entry template, so we just access some templates as needed. -->
+<xsl:import href="./pretext-latex.xsl"/>
+
 <!-- Get a "subtree" xml:id value   -->
 <!-- Then walk the XML source tree  -->
 <!-- applying specializations below -->
@@ -40,6 +45,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Output LaTeX as text -->
 <xsl:output method="text" />
+
+<!-- Stylesheet is parametrized based on intended output   -->
+<!--   regular: PDF that can be cropped, manipulated, etc  -->
+<!--   braille: enhanced for dvisvgm, SVG to receive  BRF  -->
+<!-- 2020-10-20: 'braille' is not implemented              -->
+<xsl:param name="output-style" select="'regular'"/>
 
 <!-- NB: Code between lines of hashes is cut/paste    -->
 <!-- from the LaTeX conversion.  Until we do a better -->
@@ -100,9 +111,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <!-- latex graphics to standalone file        -->
-<xsl:template match="image/latex-image-code|image/latex-image">
+<!-- Intercept "extraction" process at identical template in -latex -->
+<xsl:template match="image[latex-image]" mode="extraction">
     <xsl:variable name="filebase">
-        <xsl:apply-templates select=".." mode="visible-id" />
+        <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
     <!-- Do not use directories here, as Windows paths will get mangled -->
     <!-- Instead, set working directory before applying stylesheet      -->
@@ -153,11 +165,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex-macros" />
         <xsl:text>\begin{document}&#xa;</xsl:text>
         <xsl:text>\pagestyle{empty}&#xa;</xsl:text>
-        <xsl:call-template name="sanitize-text">
-            <xsl:with-param name="text" select="." />
-        </xsl:call-template>
+        <!-- These templates are in pretext-latex.xsl -->
+        <xsl:apply-templates select="latex-image"/>
         <xsl:text>\end{document}&#xa;</xsl:text>
     </exsl:document>
-  </xsl:template>
+</xsl:template>
+
+<!-- We override the standard production of visual labels, but simply   -->
+<!-- "apply-imports" for that case.  When a consumer of this stylesheet -->
+<!-- (a script) specifies output for use with braille we will create a  -->
+<!-- sequence of braille-cell sized rectangles to make space for BRF    -->
+<!-- that will be printed/embossed as braille cells.                    -->
+<!-- (No implementation yet.)                                           -->
+<xsl:template match="label">
+    <xsl:choose>
+        <xsl:when test="$output-style = 'regular'">
+            <xsl:apply-imports/>
+        </xsl:when>
+        <xsl:when test="$output-style = 'braille'">
+            <xsl:message terminate="yes">'braille' option for latex-image extraction stylesheet is not implemented</xsl:message>
+        </xsl:when>
+        <xsl:otherwise/>  <!-- warning? sanitize above? -->
+    </xsl:choose>
+</xsl:template>
 
 </xsl:stylesheet>
