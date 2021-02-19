@@ -112,7 +112,7 @@
   margin-bottom: 1em;
 }
 
-.pretext-content .goal-like .heading {
+.pretext-content .goal-like > .heading {
   margin-top: -1.5em;
   background-color: white;
   display: table;
@@ -122,11 +122,11 @@
   font-size: 120%;
 }
 
-.pretext-content .goal-like .codenumber {
+.pretext-content .goal-like > .heading .codenumber {
   display:none;
 }
 
-.pretext-content .goal-like .heading::after {
+.pretext-content .goal-like > .heading::after {
   display:none;
 }
 

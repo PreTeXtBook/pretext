@@ -21,6 +21,10 @@ a {
     position: relative;
 }
 
+/* Oscar leving figured out the cause of chrome showing a funny border focus */
+.pretext-content .knowl p {
+    position: unset;
+}
 
 /* CSS defult values:
 https://www.w3schools.com/cssref/css_default_values.asp
@@ -164,7 +168,7 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .pretext-content li {
     margin-bottom: 0;
 }
-.pretext-content section li .heading {
+.pretext-content section li > .heading {
     font-size: 100%;
     font-weight: normal;
     font-style: italic;
