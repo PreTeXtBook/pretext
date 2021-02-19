@@ -8335,69 +8335,69 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:when>
         <!-- clear of errors, so on to main event -->
         <xsl:otherwise>
-    <xsl:variable name="ref" select="normalize-space(@ref)" />
-    <xsl:variable name="target" select="id($ref)" />
-    <!-- Determine style of visible text in link -->
-    <xsl:variable name="text-style">
-        <xsl:apply-templates select="." mode="get-text-style" />
-    </xsl:variable>
-    <!-- if target is a bibliography item, generic -->
-    <!-- text template only makes a number, we add -->
-    <!-- brackets before link manufacture          -->
-    <xsl:variable name="b-is-biblio-target" select="boolean($target/self::biblio)" />
-    <!-- form text of the clickable, wrap biblio target -->
-    <!-- since xref-text outputs just a number          -->
-    <xsl:variable name="text">
-        <xsl:if test="parent::mrow">
-            <xsl:text>\text{</xsl:text>
-        </xsl:if>
-        <xsl:if test="$b-is-biblio-target">
-            <xsl:text>[</xsl:text>
-        </xsl:if>
-        <xsl:apply-templates select="." mode="xref-text" >
-            <xsl:with-param name="target" select="$target" />
-            <xsl:with-param name="text-style" select="$text-style" />
-            <!-- pass content as an RTF, test vs. empty string, use copy-of -->
-            <xsl:with-param name="custom-text">
-                <xsl:apply-templates />
-            </xsl:with-param>
-        </xsl:apply-templates>
-        <!-- a bibliography citation (only) may have extra @detail          -->
-        <!-- maybe the detail should migrate to content of a xref to biblio -->
-        <xsl:if test="@detail">
-            <xsl:choose>
-                <xsl:when test="$b-is-biblio-target">
-                    <xsl:text>,</xsl:text>
-                    <xsl:call-template name="nbsp-character"/>
-                    <!-- this info should not be in an attribute! -->
-                    <xsl:apply-templates select="@detail" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>MBX:WARNING: &lt;xref @detail="<xsl:value-of select="@detail" />" /&gt; only implemented for single references to &lt;biblio&gt; elements</xsl:message>
-                    <xsl:apply-templates select="." mode="location-report" />
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:if>
-        <xsl:if test="$b-is-biblio-target">
-            <xsl:text>]</xsl:text>
-        </xsl:if>
-        <xsl:if test="parent::mrow">
-            <xsl:text>}</xsl:text>
-        </xsl:if>
-    </xsl:variable>
-    <!-- Send the text representation for link and target to a    -->
-    <!-- format-specific and target-specific link manufacture.    -->
-    <!-- This depends primarly on the $target, but the context is -->
-    <!-- holds the location of the link.  Example: a link in      -->
-    <!-- display mathematics (rendered by MathJax for HTML)       -->
-    <!-- requires radically different constructions as a knowl,   -->
-    <!-- or as a hyperlink.  LaTeX barely cares.  We do wrap the  -->
-    <!-- xref-text in \text{} for receipt in display mathematics. -->
-    <!-- NB: could a xref with title text have math in it and mess-up here? -->
-    <xsl:apply-templates select="." mode="xref-link">
-        <xsl:with-param name="target" select="$target" />
-        <xsl:with-param name="content" select="$text" />
-    </xsl:apply-templates>
+            <xsl:variable name="ref" select="normalize-space(@ref)" />
+            <xsl:variable name="target" select="id($ref)" />
+            <!-- Determine style of visible text in link -->
+            <xsl:variable name="text-style">
+                <xsl:apply-templates select="." mode="get-text-style" />
+            </xsl:variable>
+            <!-- if target is a bibliography item, generic -->
+            <!-- text template only makes a number, we add -->
+            <!-- brackets before link manufacture          -->
+            <xsl:variable name="b-is-biblio-target" select="boolean($target/self::biblio)" />
+            <!-- form text of the clickable, wrap biblio target -->
+            <!-- since xref-text outputs just a number          -->
+            <xsl:variable name="text">
+                <xsl:if test="parent::mrow">
+                    <xsl:text>\text{</xsl:text>
+                </xsl:if>
+                <xsl:if test="$b-is-biblio-target">
+                    <xsl:text>[</xsl:text>
+                </xsl:if>
+                <xsl:apply-templates select="." mode="xref-text" >
+                    <xsl:with-param name="target" select="$target" />
+                    <xsl:with-param name="text-style" select="$text-style" />
+                    <!-- pass content as an RTF, test vs. empty string, use copy-of -->
+                    <xsl:with-param name="custom-text">
+                        <xsl:apply-templates />
+                    </xsl:with-param>
+                </xsl:apply-templates>
+                <!-- a bibliography citation (only) may have extra @detail          -->
+                <!-- maybe the detail should migrate to content of a xref to biblio -->
+                <xsl:if test="@detail">
+                    <xsl:choose>
+                        <xsl:when test="$b-is-biblio-target">
+                            <xsl:text>,</xsl:text>
+                            <xsl:call-template name="nbsp-character"/>
+                            <!-- this info should not be in an attribute! -->
+                            <xsl:apply-templates select="@detail" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:message>MBX:WARNING: &lt;xref @detail="<xsl:value-of select="@detail" />" /&gt; only implemented for single references to &lt;biblio&gt; elements</xsl:message>
+                            <xsl:apply-templates select="." mode="location-report" />
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:if>
+                <xsl:if test="$b-is-biblio-target">
+                    <xsl:text>]</xsl:text>
+                </xsl:if>
+                <xsl:if test="parent::mrow">
+                    <xsl:text>}</xsl:text>
+                </xsl:if>
+            </xsl:variable>
+            <!-- Send the text representation for link and target to a    -->
+            <!-- format-specific and target-specific link manufacture.    -->
+            <!-- This depends primarly on the $target, but the context is -->
+            <!-- holds the location of the link.  Example: a link in      -->
+            <!-- display mathematics (rendered by MathJax for HTML)       -->
+            <!-- requires radically different constructions as a knowl,   -->
+            <!-- or as a hyperlink.  LaTeX barely cares.  We do wrap the  -->
+            <!-- xref-text in \text{} for receipt in display mathematics. -->
+            <!-- NB: could a xref with title text have math in it and mess-up here? -->
+            <xsl:apply-templates select="." mode="xref-link">
+                <xsl:with-param name="target" select="$target" />
+                <xsl:with-param name="content" select="$text" />
+            </xsl:apply-templates>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -8423,91 +8423,91 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:when>
         <!-- clear of errors, so on to main event -->
         <xsl:otherwise>
-    <xsl:variable name="ref-one" select="normalize-space(@first)" />
-    <xsl:variable name="target-one" select="id($ref-one)" />
-    <xsl:variable name="ref-two" select="normalize-space(@last)" />
-    <xsl:variable name="target-two" select="id($ref-two)" />
-    <!-- Determine style of visible text in link -->
-    <xsl:variable name="text-style-one">
-        <xsl:apply-templates select="." mode="get-text-style" />
-    </xsl:variable>
-    <!-- Adjust/set style for end of range          -->
-    <!-- Basically supress text manufacture of type -->
-    <!-- Also, no content is passed with @last      -->
-    <xsl:variable name="text-style-two">
-        <xsl:choose>
-            <!-- do not replicate type name -->
-            <xsl:when test="$text-style-one = 'type-global'">
-                <xsl:text>global</xsl:text>
-            </xsl:when>
-            <xsl:when test="$text-style-one = 'type-local'">
-                <xsl:text>local</xsl:text>
-            </xsl:when>
-            <!-- pass through 'global', 'local', 'title', 'phrase-global' -->
-            <xsl:otherwise>
-                <xsl:value-of select="$text-style-one" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- enforce @first, @last point to same kind of element, -->
-    <!-- since we implicitly recycle the type-name of @first  -->
-    <!-- Schematron: possible by inserting id() into XPath test? -->
-    <!-- TODO: (2017-07-24) convert to a fatal error after some time? -->
-    <xsl:if test="not(local-name($target-one) = local-name($target-two))">
-        <xsl:message terminate="no">MBX:ERROR:   &lt;xref @first="<xsl:value-of select="$ref-one" />" @last="<xsl:value-of select="$ref-two" />" /&gt; references two elements with different tags (<xsl:value-of select="local-name($target-one)" /> vs. <xsl:value-of select="local-name($target-two)" />), so are incompatible as endpoints of a range.  Rewrite using two &lt;xref&gt; elements</xsl:message>
-    </xsl:if>
-    <!-- courtesy check that range is not out-of-order               -->
-    <!-- NB: different schemes for "exercise" can make this look odd -->
-    <xsl:if test="count($target-one/preceding::*) > count($target-two/preceding::*)">
-        <xsl:message>MBX:WARNING: &lt;xref @first="<xsl:value-of select="$ref-one" />" @last="<xsl:value-of select="$ref-two" />" /&gt; references two elements that appear to be in the wrong order</xsl:message>
-    </xsl:if>
-    <!-- Biblio check assumes targets are equal       -->
-    <!-- If target is a bibliography item, generic    -->
-    <!-- text template only makes numbers, we add     -->
-    <!-- brackets and detail before link manufacture  -->
-    <!-- Content passes with @first, not with @second -->
-    <xsl:variable name="b-is-biblio-target" select="boolean($target-one/self::biblio)" />
-    <!-- Compose two text parts with an ndash, perhaps wrappped -->
-    <xsl:variable name="text">
-        <xsl:if test="parent::mrow">
-            <xsl:text>\text{</xsl:text>
-        </xsl:if>
-        <xsl:if test="$b-is-biblio-target">
-            <xsl:text>[</xsl:text>
-        </xsl:if>
-        <xsl:apply-templates select="." mode="xref-text" >
-            <xsl:with-param name="target" select="$target-one" />
-            <xsl:with-param name="text-style" select="$text-style-one" />
-            <!-- pass content as an RTF, test vs. empty string, use copy-of -->
-            <xsl:with-param name="custom-text">
-                <xsl:apply-templates />
-            </xsl:with-param>
-        </xsl:apply-templates>
-        <xsl:call-template name="ndash-character"/>
-        <xsl:apply-templates select="." mode="xref-text" >
-            <xsl:with-param name="target" select="$target-two" />
-            <xsl:with-param name="text-style" select="$text-style-two" />
-        </xsl:apply-templates>
-        <xsl:if test="$b-is-biblio-target">
-            <xsl:text>]</xsl:text>
-        </xsl:if>
-        <xsl:if test="parent::mrow">
-            <xsl:text>}</xsl:text>
-        </xsl:if>
-    </xsl:variable>
-    <!-- Send the text representation for link and target to a    -->
-    <!-- format-specific and target-specific link manufacture.    -->
-    <!-- This depends primarly on the $target, but the context is -->
-    <!-- holds the location of the link.  Example: a link in      -->
-    <!-- display mathematics (rendered by MathJax for HTML)       -->
-    <!-- requires radically different constructions as a knowl,   -->
-    <!-- or as a hyperlink.  LaTeX barely cares.  We do wrap the  -->
-    <!-- xref-text in \text{} for receipt in display mathematics. -->
-    <!-- NB: could a xref with title text have math in it and mess-up here? -->
-    <xsl:apply-templates select="." mode="xref-link">
-        <xsl:with-param name="target" select="$target-one" />
-        <xsl:with-param name="content" select="$text" />
-    </xsl:apply-templates>
+            <xsl:variable name="ref-one" select="normalize-space(@first)" />
+            <xsl:variable name="target-one" select="id($ref-one)" />
+            <xsl:variable name="ref-two" select="normalize-space(@last)" />
+            <xsl:variable name="target-two" select="id($ref-two)" />
+            <!-- Determine style of visible text in link -->
+            <xsl:variable name="text-style-one">
+                <xsl:apply-templates select="." mode="get-text-style" />
+            </xsl:variable>
+            <!-- Adjust/set style for end of range          -->
+            <!-- Basically supress text manufacture of type -->
+            <!-- Also, no content is passed with @last      -->
+            <xsl:variable name="text-style-two">
+                <xsl:choose>
+                    <!-- do not replicate type name -->
+                    <xsl:when test="$text-style-one = 'type-global'">
+                        <xsl:text>global</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="$text-style-one = 'type-local'">
+                        <xsl:text>local</xsl:text>
+                    </xsl:when>
+                    <!-- pass through 'global', 'local', 'title', 'phrase-global' -->
+                    <xsl:otherwise>
+                        <xsl:value-of select="$text-style-one" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <!-- enforce @first, @last point to same kind of element, -->
+            <!-- since we implicitly recycle the type-name of @first  -->
+            <!-- Schematron: possible by inserting id() into XPath test? -->
+            <!-- TODO: (2017-07-24) convert to a fatal error after some time? -->
+            <xsl:if test="not(local-name($target-one) = local-name($target-two))">
+                <xsl:message terminate="no">MBX:ERROR:   &lt;xref @first="<xsl:value-of select="$ref-one" />" @last="<xsl:value-of select="$ref-two" />" /&gt; references two elements with different tags (<xsl:value-of select="local-name($target-one)" /> vs. <xsl:value-of select="local-name($target-two)" />), so are incompatible as endpoints of a range.  Rewrite using two &lt;xref&gt; elements</xsl:message>
+            </xsl:if>
+            <!-- courtesy check that range is not out-of-order               -->
+            <!-- NB: different schemes for "exercise" can make this look odd -->
+            <xsl:if test="count($target-one/preceding::*) > count($target-two/preceding::*)">
+                <xsl:message>MBX:WARNING: &lt;xref @first="<xsl:value-of select="$ref-one" />" @last="<xsl:value-of select="$ref-two" />" /&gt; references two elements that appear to be in the wrong order</xsl:message>
+            </xsl:if>
+            <!-- Biblio check assumes targets are equal       -->
+            <!-- If target is a bibliography item, generic    -->
+            <!-- text template only makes numbers, we add     -->
+            <!-- brackets and detail before link manufacture  -->
+            <!-- Content passes with @first, not with @second -->
+            <xsl:variable name="b-is-biblio-target" select="boolean($target-one/self::biblio)" />
+            <!-- Compose two text parts with an ndash, perhaps wrappped -->
+            <xsl:variable name="text">
+                <xsl:if test="parent::mrow">
+                    <xsl:text>\text{</xsl:text>
+                </xsl:if>
+                <xsl:if test="$b-is-biblio-target">
+                    <xsl:text>[</xsl:text>
+                </xsl:if>
+                <xsl:apply-templates select="." mode="xref-text" >
+                    <xsl:with-param name="target" select="$target-one" />
+                    <xsl:with-param name="text-style" select="$text-style-one" />
+                    <!-- pass content as an RTF, test vs. empty string, use copy-of -->
+                    <xsl:with-param name="custom-text">
+                        <xsl:apply-templates />
+                    </xsl:with-param>
+                </xsl:apply-templates>
+                <xsl:call-template name="ndash-character"/>
+                <xsl:apply-templates select="." mode="xref-text" >
+                    <xsl:with-param name="target" select="$target-two" />
+                    <xsl:with-param name="text-style" select="$text-style-two" />
+                </xsl:apply-templates>
+                <xsl:if test="$b-is-biblio-target">
+                    <xsl:text>]</xsl:text>
+                </xsl:if>
+                <xsl:if test="parent::mrow">
+                    <xsl:text>}</xsl:text>
+                </xsl:if>
+            </xsl:variable>
+            <!-- Send the text representation for link and target to a    -->
+            <!-- format-specific and target-specific link manufacture.    -->
+            <!-- This depends primarly on the $target, but the context is -->
+            <!-- holds the location of the link.  Example: a link in      -->
+            <!-- display mathematics (rendered by MathJax for HTML)       -->
+            <!-- requires radically different constructions as a knowl,   -->
+            <!-- or as a hyperlink.  LaTeX barely cares.  We do wrap the  -->
+            <!-- xref-text in \text{} for receipt in display mathematics. -->
+            <!-- NB: could a xref with title text have math in it and mess-up here? -->
+            <xsl:apply-templates select="." mode="xref-link">
+                <xsl:with-param name="target" select="$target-one" />
+                <xsl:with-param name="content" select="$text" />
+            </xsl:apply-templates>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -8530,19 +8530,19 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:when>
         <!-- clear of errors, so on to main event -->
         <xsl:otherwise>
-    <!-- Determine style of visible text in link -->
-    <xsl:variable name="text-style">
-        <xsl:apply-templates select="." mode="get-text-style" />
-    </xsl:variable>
-    <!-- commas to blanks, normalize, add trailing blank for parsing   -->
-    <!-- initialize with empty previous node, recurse through the list -->
-    <xsl:variable name="normalized-ref-list"
-        select="concat(normalize-space(str:replace(@ref,',', ' ')), ' ')" />
-    <xsl:apply-templates select="." mode="process-ref-list">
-        <xsl:with-param name="previous-target" select="/.." />
-        <xsl:with-param name="ref-list" select="$normalized-ref-list" />
-        <xsl:with-param name="text-style" select="$text-style" />
-    </xsl:apply-templates>
+            <!-- Determine style of visible text in link -->
+            <xsl:variable name="text-style">
+                <xsl:apply-templates select="." mode="get-text-style" />
+            </xsl:variable>
+            <!-- commas to blanks, normalize, add trailing blank for parsing   -->
+            <!-- initialize with empty previous node, recurse through the list -->
+            <xsl:variable name="normalized-ref-list"
+                select="concat(normalize-space(str:replace(@ref,',', ' ')), ' ')" />
+            <xsl:apply-templates select="." mode="process-ref-list">
+                <xsl:with-param name="previous-target" select="/.." />
+                <xsl:with-param name="ref-list" select="$normalized-ref-list" />
+                <xsl:with-param name="text-style" select="$text-style" />
+            </xsl:apply-templates>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
