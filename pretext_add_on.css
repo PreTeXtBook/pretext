@@ -3312,6 +3312,10 @@ label.incorrect .feedback {
     display: inline;
 */
 }
+p > #edit_menu_holder,
+.creator > #edit_menu_holder {
+    display: inline;
+}
 /*
 article > #edit_menu_holder {
     bottom: 3.7em;
@@ -3377,7 +3381,7 @@ p > #edit_menu_holder {
 }
 
 p > #edit_menu_holder > #enter_choice {
-    bottom: -4.2em;
+    bottom: -2.7em;
 }
 blockquote > #edit_menu_holder > #enter_choice {
     bottom: -1.2em;
