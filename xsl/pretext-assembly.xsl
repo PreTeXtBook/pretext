@@ -26,6 +26,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
     extension-element-prefixes="exsl date"
+    exclude-result-prefixes="pi"
 >
 
 <!-- This is the once-mythical pre-processor, though we prefer     -->
