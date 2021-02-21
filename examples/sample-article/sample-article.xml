@@ -10222,8 +10222,9 @@ the xsltproc executable.
 
                 <p>And a mildly more complicated structure (a list) as the variable text.</p>
 
+                <!-- List in "custom" so no space after "are" -->
                 <blockquote>
-                    <p>Some of our favorite colors are <custom ref="color-list"/></p>
+                    <p>Some of our favorite colors are<custom ref="color-list"/></p>
                 </blockquote>
 
                 <p>A cross-reference to test, since context is critical.</p>
@@ -10232,7 +10233,7 @@ the xsltproc executable.
                     <p>See also <custom ref="xref-to-result"/>.</p>
                 </blockquote>
 
-                <p>The URLs used as a replacment have the <attr>visual</attr> attribute which is also managed by the assembly pre-processor to provide a footnote.  But this is not organized properly and so this provokes a known bug.  Placing it here should expose the fix during testing of new phases of the pre-processor.</p>
+                <p>The URLs used as a replacement have the <attr>visual</attr> attribute which is also managed by the assembly pre-processor to provide a footnote.  So this is a good test of the organization of the multiple passes employed by the pre-processor.</p>
 
                 <blockquote>
                     <p>A <init>URL</init> that should have a footnote: <custom ref="a-URL"/>.</p>
