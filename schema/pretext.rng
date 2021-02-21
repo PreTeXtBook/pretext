@@ -2405,9 +2405,15 @@
   <define name="WebWorkAuthored">
     <element name="webwork">
       <optional>
+        <ref name="UniqueID"/>
+      </optional>
+      <optional>
         <attribute name="seed">
           <data type="integer"/>
         </attribute>
+      </optional>
+      <optional>
+        <attribute name="copy"/>
       </optional>
       <optional>
         <element name="description">

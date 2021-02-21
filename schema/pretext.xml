@@ -1798,7 +1798,9 @@
                 }
             WebWorkAuthored =
                 element webwork {
+                    UniqueID?,
                     attribute seed {xsd:integer}?,
+                    attribute copy {text}?,
                     element description {
                         (
                             TextSimple |
