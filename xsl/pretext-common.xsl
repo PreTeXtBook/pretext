@@ -10350,7 +10350,8 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:apply-templates select="." mode="literate-programming-warning" />
     <xsl:apply-templates select="." mode="xinclude-warnings" />
     <xsl:apply-templates select="." mode="xmlid-warning" />
-    <xsl:apply-templates select="." mode="check-duplicate-identifiers"/>
+    <!-- This check is very unreliable, unclear why                           -->
+    <!-- <xsl:apply-templates select="." mode="check-duplicate-identifiers"/> -->
     <xsl:apply-templates select="." mode="text-element-warning" />
     <xsl:apply-templates select="." mode="subdivision-structure-warning" />
 </xsl:template>
