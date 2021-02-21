@@ -284,9 +284,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:message>PTX:WARNING:   lookup for a "custom" element with @name set to "<xsl:value-of select="$the-ref"/>" has failed, while consulting the customization file "<xsl:value-of select="$customizations-file"/>".  Output will contain "[MISSING CUSTOM CONTENT HERE]" instead</xsl:message>
             <xsl:apply-templates select="$the-custom" mode="location-report"/>
         </xsl:if>
-        <!-- Can we recursively process this chunk of source?  Do we want -->
-        <!-- to?  Easy enough for an author to make cyclic references...  -->
-        <xsl:copy-of select="$the-lookup"/>
+        <!-- Copying the contents of "custom" via the "assembly" templates -->
+        <!-- will keep the "pi" namespace from appearing in palces, as it  -->
+        <!-- will with an "xsl:copy-of" on the same node set.  But it      -->
+        <!-- allows nested "custom" elements.                              -->
+        <!--                                                               -->
+        <!-- Do we want authors to potentially create cyclic references?   -->
+        <!-- A simple 2-cycle test failed quickly and obviously, so it     -->
+        <!-- will be caught quite easily, it seems.                        -->
+        <xsl:apply-templates select="$the-lookup/node()" mode="assembly"/>
     </xsl:for-each>
 </xsl:template>
 
