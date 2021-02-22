@@ -173,8 +173,10 @@ function knowl_click_handler($el) {
            // this is sloppy, because this is called again later.
               MathJax.Hub.Queue(['Typeset', MathJax.Hub, $output.get(0)]);
 // not sure of the use case for this:
+ $(".knowl-output .hidden-content .hidden-sagecell-sage").attr("class", "doubly-hidden-sagecell-sage");
  $(".knowl-output .hidden-sagecell-sage").attr("class", "sagecell-sage");
  sagecell.makeSagecell({inputLocation: ".sagecell-sage",  linked: true, evalButtonText: sagecellEvalName });
+ $(".knowl-output .hidden-content .doubly-hidden-sagecell-sage").attr("class", "hidden-sagecell-sage");
     }
      });
     };
@@ -212,8 +214,10 @@ function knowl_click_handler($el) {
         $("a[data-knowl]").attr("href", "");
         }]);
 // if this is before the MathJax, big problems
+ $(".knowl-output .hidden-content .hidden-sagecell-sage").attr("class", "doubly-hidden-sagecell-sage");
 $(".knowl-output .hidden-sagecell-sage").attr("class", "sagecell-sage");
 sagecell.makeSagecell({inputLocation: ".sagecell-sage",  linked: true, evalButtonText: sagecellEvalName});
+ $(".knowl-output .hidden-content .doubly-hidden-sagecell-sage").attr("class", "hidden-sagecell-sage");
       }
   }
 } //~~ end click handler for *[data-knowl] elements
