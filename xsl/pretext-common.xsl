@@ -4511,36 +4511,29 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:variable name="identifier-mapping-rtf">
     <xsl:apply-templates select="$root" mode="id-mapping"/>
 </xsl:variable>
-<!-- sort by @namevalue, which will make error messages    -->
-<!-- for duplicates adjacent and so a bit less haphazard,  -->
-<!-- since we simply repeat the message for each duplicate -->
-<xsl:variable name="identifier-mapping-sorted">
-    <xsl:for-each select="exsl:node-set($identifier-mapping-rtf)/idmap">
-        <xsl:sort select="@namevalue"/>
-        <!-- simply duplicate as action on sorted list -->
-        <xsl:copy-of select="."/>
-    </xsl:for-each>
-</xsl:variable>
-<xsl:variable name="identifier-mapping" select="exsl:node-set($identifier-mapping-sorted)"/>
+<xsl:variable name="identifier-mapping" select="exsl:node-set($identifier-mapping-rtf)"/>
 
 <!-- Key retrieves internal "idmap" elements, with access -->
 <!-- via the string obtained by a @name value.            -->
 <xsl:key name="nameid-key" match="idmap" use="@namevalue"/>
 
-<!-- We check this list for duplicates.  @xml:id does this        -->
-<!-- automatically, but we have forsaken that feature, so we do   -->
-<!-- the check on duplicate @namevalue (the lookup key) ourselves -->
-<!-- NB: match/context are irrelevant, just matching style        -->
+<!-- We check this list for duplicates.  @xml:id does this -->
+<!-- automatically, but only within a file (modularized    -->
+<!-- source?), so we have forsaken that feature, and we do -->
+<!-- the check on duplicate @namevalue (the lookup key)    -->
+<!-- ourselves.                                            -->
+<!-- Sort by @namevalue, which will make error messages    -->
+<!-- for duplicates adjacent and so a bit less haphazard,  -->
+<!-- since we simply repeat the message for each duplicate -->
+<!-- NB: match/context are irrelevant, just matching style -->
 <xsl:template match="*" mode="check-duplicate-identifiers">
     <!-- context shift for use with key -->
     <xsl:for-each select="$identifier-mapping">
-        <!-- true loop over mapping pairs -->
-        <!-- BUG? "count(key())" construction created spurious duplication -->
+        <!-- true loop over mapping pairs, sorted -->
         <xsl:for-each select="idmap">
-            <xsl:variable name="the-maps" select="key('nameid-key', string(@namevalue))"/>
-            <xsl:variable name="the-count" select="count($the-maps)"/>
-            <!-- <xsl:message>name: <xsl:value-of select="@namevalue"/>  id: <xsl:value-of select="@idvalue"/> count: <xsl:value-of select="$the-count"/> </xsl:message> -->
-            <xsl:if test="$the-count > 1">
+            <xsl:sort select="@namevalue"/>
+            <xsl:variable name="the-count" select="count(key('nameid-key', string(@namevalue)))"/>
+            <xsl:if test="not($the-count = 1)">
                 <xsl:message>PTX:ERROR:   the identifier "<xsl:value-of select="@namevalue"/>" is repeated <xsl:value-of select="$the-count"/> times (and this message also repeats)</xsl:message>
             </xsl:if>
         </xsl:for-each>
@@ -10350,8 +10343,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:apply-templates select="." mode="literate-programming-warning" />
     <xsl:apply-templates select="." mode="xinclude-warnings" />
     <xsl:apply-templates select="." mode="xmlid-warning" />
-    <!-- This check is very unreliable, unclear why                           -->
-    <!-- <xsl:apply-templates select="." mode="check-duplicate-identifiers"/> -->
+    <xsl:apply-templates select="." mode="check-duplicate-identifiers"/>
     <xsl:apply-templates select="." mode="text-element-warning" />
     <xsl:apply-templates select="." mode="subdivision-structure-warning" />
 </xsl:template>
