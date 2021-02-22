@@ -6670,7 +6670,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- @start is a marker for END of a range   -->
 <!-- End of page range duplicates it's start -->
 <xsl:template match="index[@start] | idx[@start]">
-    <xsl:variable name="start" select="id(@start)" />
+    <xsl:variable name="start-id">
+        <xsl:call-template name="id-lookup-by-name">
+            <xsl:with-param name="name" select="string(@start)"/>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="start" select="id($start-id)" />
     <xsl:text>\index{</xsl:text>
     <xsl:apply-templates select="$start/h" />
     <xsl:apply-templates select="$start/main" />
@@ -10639,7 +10644,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- so convert to a visual representation of a pointer to a target,      -->
 <!-- with a hyperlink to the target (as a page number for print)          -->
 <xsl:template match="fragref">
-    <xsl:variable name="target" select="id(@ref)"/>
+    <xsl:variable name="target-id">
+        <xsl:call-template name="id-lookup-by-name">
+            <xsl:with-param name="name" select="string(@ref)"/>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="target" select="id($target-id)"/>
     <xsl:call-template name="langle-character"/>
     <xsl:apply-templates select="$target" mode="title-full"/>
     <xsl:text> </xsl:text>

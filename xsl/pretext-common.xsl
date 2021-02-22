@@ -8471,8 +8471,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:when>
         <!-- clear of errors, so on to main event -->
         <xsl:otherwise>
-            <xsl:variable name="ref" select="normalize-space(@ref)" />
-            <xsl:variable name="target" select="id($ref)" />
+            <xsl:variable name="target-id">
+                <xsl:call-template name="id-lookup-by-name">
+                    <xsl:with-param name="name" select="normalize-space(@ref)"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:variable name="target" select="id($target-id)"/>
             <!-- Determine style of visible text in link -->
             <xsl:variable name="text-style">
                 <xsl:apply-templates select="." mode="get-text-style" />
