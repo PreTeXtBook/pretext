@@ -41,7 +41,8 @@ Current (partially) implemented language codes and contributors
 * de-DE, German (Germany), Karl-Dieter Crisman
 * es-ES, Spanish (Spain), Juan José Torrens
 * en-US, English (United States), Robert A. Beezer
-* fr-FR, French (France), Thomas W. Judson
+* fr-CA, French (Canada), Jean-Sébastien Turcotte
+* fr-FR, French (France), Thomas W. Judson, Julien Giol, Jean-Sébastien Turcotte
 * hu-HU, Hungarian (Hungary), Sándor Czirbusz
 * it-IT, Italian (Italy), Valerio Monti
 * pt-BR, Portugese (Brazil), Igor Morgado
