@@ -162,7 +162,7 @@ def asymptote_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
     # consolidated process for four possible output formats
     if outformat in ['html', 'svg', 'png', 'pdf', 'eps']:
         # build command line to suit
-        asy_cli = [asy_executable, '-f', outformat]
+        asy_cli = asy_executable_cmd + ['-f', outformat]
         if outformat in ['pdf', 'eps']:
             asy_cli += ['-noprc', '-iconify', '-tex', 'xelatex', '-batchMask']
         elif outformat in ['svg', 'png']:
