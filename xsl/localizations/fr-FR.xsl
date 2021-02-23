@@ -4,19 +4,15 @@
 
 <!--********************************************************************
 Copyright 2016 Robert A. Beezer
-
 This file is part of MathBook XML.
-
 MathBook XML is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 2 or version 3 of the
 License (at your option).
-
 MathBook XML is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
-
 You should have received a copy of the GNU General Public License
 along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
@@ -28,6 +24,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Julien Giol, julien.giol@gmail.com, 2018-02-05   -->
 <!-- Jean-Sébastien Turcotte, js.turcotte@cgodin.qc.ca, 2021-02-19-->   
 
+<!-- If/when a new string-id gets translated in French for the first time, it should also be translated into fr-CA -->
 <xsl:variable name="fr-FR">
     <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
@@ -87,8 +84,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='references'><xsl:text>Références</xsl:text></localization>
     <localization string-id='backmatter'><xsl:text>Annexes</xsl:text></localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
+    <!--<localization string-id='commentary'><xsl:text>Commentaire</xsl:text></localization> -->  
     <localization string-id='paragraphs'><xsl:text>Paragraphes</xsl:text></localization>  <!--checked-->
-    <!--<localization string-id='commentary'><xsl:text>Commentaire</xsl:text></localization> -->  <!-- What is the use case of a commentary? -->
     <localization string-id='subparagraph'><xsl:text>Sous-paragraphe</xsl:text></localization> <!--checked-->
     <!-- Components of the narrative -->
     <!-- REMARK-LIKE blocks -->
