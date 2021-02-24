@@ -1544,13 +1544,21 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
         os.chdir(output_dir)
     # clear global errors, apply the xsl transform
     ET.clear_error_log()
-    result_tree = xslt(src_tree, **stringparams)
-    # report any errors
-    messages = xslt.error_log
-    if messages:
-        print('Messages from application of {}:'.format(xsl))
-        for m in messages:
-            print(m.message)
+    try:
+        result_tree = xslt(src_tree, **stringparams)
+        # report any messages, even if successful (indented)
+        messages = xslt.error_log
+        if messages:
+            print('PTX: Successful application of {}, but with messages:'.format(xsl))
+            for m in messages:
+                print('    * ', m.message)
+    except:
+        # report any errors on failure (indented)
+        messages = xslt.error_log
+        if messages:
+            print('PTX: Failed application of {}, with messages:'.format(xsl))
+            for m in messages:
+                print('    * ', m.message)
     os.chdir(owd)
 
     # write a serialized version to a file if
