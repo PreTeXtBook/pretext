@@ -1124,7 +1124,7 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
         msg = ' '.join(["creating all images requires a directory specification",
                         "in a publisher file, and no publisher file has been given"])
         raise ValueError(msg)
-    generated_dir, data_dir, _ = get_image_directories(xml, pub_file)
+    generated_dir, data_dir, _, _, _, _ = get_image_directories(xml, pub_file)
     # correct attribute and not a directory gets caught earlier
     # but could have publisher file and bad elements/attributes
     if not(generated_dir):
@@ -1817,59 +1817,63 @@ def get_image_directories(xml_source, pub_file):
 
     # Examine /publication/source element carefully for
     # attributes which we code here for convenience
-    gen_attr = 'generated-images'
-    data_attr = 'data-images'
-    ext_attr = 'source-images'
+    gen_attr = 'generated'
+    data_attr = 'data'
+    ext_attr = 'external'
 
     # prepare for relative paths later
     source_dir = get_source_path(xml_source)
 
     # Unknown until running the gauntlet
+    generated_abs = None
+    data_abs = None
+    external_abs = None
     generated = None
     data = None
     external = None
     if pub_file:
         # parse publisher file, xinclude is conceivable
-        # for multiple similar files with common parts
+        # for multiple similar publisher files with common parts
         pub_tree = ET.parse(pub_file)
         pub_tree.xinclude()
         # "source" element => single-item list
         # no "source" element => empty list => triple of None returned
-        element_list = pub_tree.xpath("/publication/source")
+        element_list = pub_tree.xpath("/publication/source/images")
         if element_list:
             attributes_dict = element_list[0].attrib
+            # common error message
+            abs_path_error = ' '.join(['the directory path to data for images, given in the',
+                             'publisher file as "source/images/@{}" must be relative to',
+                             'the PreTeXt source file location, and not the absolute path "{}"'])
             # attribute absent => None
             if gen_attr in attributes_dict.keys():
                 raw_path = attributes_dict[gen_attr]
                 if os.path.isabs(raw_path):
-                    abs_path = raw_path
+                    raise ValueError(abs_path_error.format(data_attr, raw_path))
                 else:
                     abs_path = os.path.join(source_dir, raw_path)
-                generated = verify_input_directory(abs_path)
+                generated = raw_path
+                generated_abs = verify_input_directory(abs_path)
             # attribute absent => None
             if data_attr in attributes_dict.keys():
                 raw_path = attributes_dict[data_attr]
                 if os.path.isabs(raw_path):
-                    msg = ' '.join(['the directory path to data for images, given in the',
-                          'publisher file as "source/@{}" must be relative to',
-                          'the PreTeXt source file location, and not the absolute path "{}"'])
-                    raise ValueError(msg.format(data_attr, raw_path))
+                    raise ValueError(abs_path_error.format(data_attr, raw_path))
                 else:
                     abs_path = os.path.join(source_dir, raw_path)
-                data = verify_input_directory(abs_path)
+                data = raw_path
+                data_abs = verify_input_directory(abs_path)
             # attribute absent => None
             if ext_attr in attributes_dict.keys():
                 raw_path = attributes_dict[ext_attr]
                 if os.path.isabs(raw_path):
-                    msg = ' '.join(['the directory path to source images, given in the',
-                          'publisher file as "source/@{}" must be relative to',
-                          'the PreTeXt source file location, and not the absolute path "{}"'])
-                    raise ValueError(msg.format(ext_attr, raw_path))
+                    raise ValueError(abs_path_error.format(ext_attr, raw_path))
                 else:
                     abs_path = os.path.join(source_dir, raw_path)
-                external = verify_input_directory(abs_path)
+                external = raw_path
+                external_abs = verify_input_directory(abs_path)
     # triple of discovered paths
-    return (generated, data, external)
+    return (generated_abs, data_abs, external_abs, generated, data, external)
 
 
 ########
