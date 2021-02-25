@@ -1474,7 +1474,7 @@ def html(xml, pub_file, stringparams, dest_dir):
 #####################
 
 def latex(xml, pub_file, stringparams, out_file, dest_dir):
-    """Convert XML source to LateX and then a PDF in destination directory"""
+    """Convert XML source to LaTeX in destination directory"""
     import os.path # join()
 
     # support publisher file, not subtree argument
@@ -1486,6 +1486,39 @@ def latex(xml, pub_file, stringparams, out_file, dest_dir):
     # Write output into working directory, no scratch space needed
     _verbose('converting {} to LaTeX as {}'.format(xml, derivedname))
     xsltproc(extraction_xslt, xml, derivedname, None, stringparams)
+
+
+###################
+# Conversion to PDF
+###################
+
+def pdf(xml, pub_file, stringparams, out_file, dest_dir):
+    """Convert XML source to a PDF (incomplete)"""
+    import os.path # join()
+    import shutil # copytree
+
+    warning = '\n'.join(['************************************************',
+                         'Conversion to PDF is experimental and incomplete',
+                         '************************************************'])
+    print(warning)
+    #
+    generated_abs, _, external_abs, generated, _, external = get_image_directories(xml, pub_file)
+    # perhaps necessary (so drop "if"), but maybe not; needs to be supported
+    if pub_file:
+        stringparams['publisher'] = pub_file
+    # names for scratch directories
+    tmp_dir = get_temporary_directory()
+    generated_dir = os.path.join(tmp_dir, generated)
+    external_dir = os.path.join(tmp_dir, external)
+    # make the LateX source file in scratch directory
+    latex(xml, pub_file, stringparams, None, tmp_dir)
+    # copy managed, generated images
+    shutil.copytree(generated_abs, generated_dir, dirs_exist_ok=True)
+    # copy externally manufactured images
+    shutil.copytree(external_abs, external_dir, dirs_exist_ok=True)
+
+
+
 
 
 #################

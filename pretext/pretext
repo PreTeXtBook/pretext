@@ -264,6 +264,8 @@ def main():
     elif args.component == 'all':
         if args.format == 'html':
             ptx.html(xml_source, publisher_file, stringparams, dest_dir)
+        if args.format == 'pdf':
+            ptx.pdf(xml_source, publisher_file, stringparams, out_file, dest_dir)
         elif args.format == 'latex':
             ptx.latex(xml_source, publisher_file, stringparams, out_file, dest_dir)
         elif args.format == 'braille-emboss':
