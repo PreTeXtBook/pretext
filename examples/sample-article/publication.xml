@@ -35,7 +35,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </common>
 
     <!-- we use customizations-two for the oscarlevin style example -->
-    <source customizations="customizations-one.xml"/>
+    <source customizations="customizations-one.xml">
+        <!-- uncomment to test managed images -->
+        <!-- <images generated="blatzo" external="images"/> -->
+    </source>
 
     <!-- For an "article" with "section" we can only go 3 levels    -->
     <!-- deep (section > subsection > subsubsection) and this is    -->
