@@ -7147,13 +7147,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\resizebox{!}{\qrsize}{\genericpreview}</xsl:text>
         </xsl:when>
         <!-- nothing specified, look for scraped via visible-id -->
-        <xsl:otherwise>
+        <xsl:when test="@youtube">
             <xsl:text>\includegraphics[width=0.80\linewidth,height=\qrsize,keepaspectratio]{</xsl:text>
-            <xsl:value-of select="$directory.images" />
-            <xsl:text>/</xsl:text>
+            <xsl:value-of select="$generated-image-directory"/>
+            <xsl:if test="$b-managed-generated-images">
+                <xsl:text>youtube/</xsl:text>
+            </xsl:if>
             <xsl:apply-templates select="." mode="visible-id" />
             <xsl:text>.jpg</xsl:text>
             <xsl:text>}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\mono{No preview image available}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -7170,8 +7175,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Critical: coordinate with "extract-interactive.xsl" -->
         <xsl:otherwise>
             <xsl:variable name="default-preview-image">
-                <xsl:value-of select="$directory.images" />
-                <xsl:text>/</xsl:text>
+                <xsl:value-of select="$generated-image-directory"/>
+                <xsl:if test="$b-managed-generated-images">
+                    <xsl:text>preview/</xsl:text>
+                </xsl:if>
                 <xsl:apply-templates select="." mode="visible-id" />
                 <xsl:text>-preview.png</xsl:text>
             </xsl:variable>
@@ -8781,6 +8788,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:text>\includegraphics[width=\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
+    <xsl:value-of select="$external-image-directory"/>
     <xsl:value-of select="@source"/>
     <xsl:if test="not($extension)">
         <xsl:text>.pdf&#xa;</xsl:text>
@@ -8791,30 +8799,44 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Asymptote graphics language  -->
 <!-- PDF's produced by mbx script -->
 <xsl:template match="image[asymptote]" mode="image-inclusion">
-  <xsl:choose>
-      <xsl:when test="$b-asymptote-links">
-        <xsl:text>\href{</xsl:text>
-        <xsl:value-of select="$baseurl" />
-        <xsl:text>images/</xsl:text>
+    <!-- need image filename in two different scenarios -->
+    <xsl:variable name="image-file-name">
+        <xsl:value-of select="$generated-image-directory"/>
+        <xsl:if test="$b-managed-generated-images">
+            <xsl:text>asymptote/</xsl:text>
+        </xsl:if>
         <xsl:apply-templates select="." mode="visible-id" />
-        <xsl:text>.html}</xsl:text>
+        <xsl:text>.pdf</xsl:text>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="$b-asymptote-links">
+        <xsl:variable name="image-html-url">
+            <xsl:value-of select="$baseurl"/>
+            <xsl:value-of select="$generated-image-directory"/>
+            <xsl:if test="$b-managed-generated-images">
+                <xsl:text>asymptote/</xsl:text>
+            </xsl:if>
+            <xsl:apply-templates select="." mode="visible-id" />
+            <xsl:text>.html</xsl:text>
+        </xsl:variable>
+        <xsl:text>\href{</xsl:text>
+        <xsl:value-of select="$image-html-url"/>
+        <xsl:text>}</xsl:text>
         <xsl:text>{\includegraphics[width=\linewidth]</xsl:text>
         <xsl:text>{</xsl:text>
-        <xsl:value-of select="$directory.images" />
-        <xsl:text>/</xsl:text>
-        <xsl:apply-templates select="." mode="visible-id" />
-        <xsl:text>.pdf}}&#xa;</xsl:text>
+        <xsl:value-of select="$image-file-name"/>
+        <xsl:text>}</xsl:text>
+        <xsl:text>}</xsl:text>
       </xsl:when>
       <xsl:otherwise>
         <xsl:text>\includegraphics[width=\linewidth]</xsl:text>
         <xsl:text>{</xsl:text>
-        <xsl:value-of select="$directory.images" />
-        <xsl:text>/</xsl:text>
-        <xsl:apply-templates select="." mode="visible-id" />
-        <xsl:text>.pdf}&#xa;</xsl:text>
+        <xsl:value-of select="$image-file-name"/>
+        <xsl:text>}</xsl:text>
       </xsl:otherwise>
-  </xsl:choose>
-
+    </xsl:choose>
+    <!-- end line universally -->
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Sage graphics plots          -->
@@ -8822,20 +8844,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- PNGs are fallback for 3D     -->
 <xsl:template match="image[sageplot]" mode="image-inclusion">
     <xsl:text>\IfFileExists{</xsl:text>
-    <xsl:value-of select="$directory.images" />
-    <xsl:text>/</xsl:text>
+    <xsl:value-of select="$generated-image-directory"/>
+    <xsl:if test="$b-managed-generated-images">
+        <xsl:text>sageplot/</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.pdf}%&#xa;</xsl:text>
     <xsl:text>{\includegraphics[width=\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:value-of select="$directory.images" />
-    <xsl:text>/</xsl:text>
+    <xsl:value-of select="$generated-image-directory"/>
+    <xsl:if test="$b-managed-generated-images">
+        <xsl:text>sageplot/</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.pdf}}%&#xa;</xsl:text>
     <xsl:text>{\includegraphics[width=\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:value-of select="$directory.images" />
-    <xsl:text>/</xsl:text>
+    <xsl:value-of select="$generated-image-directory"/>
+    <xsl:if test="$b-managed-generated-images">
+        <xsl:text>sageplot/</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.png}}&#xa;</xsl:text>
 </xsl:template>
@@ -8863,10 +8891,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This template (and those it employs) are also used  -->
 <!-- in "extract-latex-image.xsl" so check consequences  -->
 <!-- there if this changes.                              -->
-<!-- We do not really support legacy "latex-image-code", -->
-<!-- but following should just see a single large text   -->
-<!-- node and reproduce it.  Just like before structure, -->
-<!-- such as "label" was introduced.                     -->
 <xsl:template match="latex-image">
     <xsl:call-template name="sanitize-text">
         <xsl:with-param name="text">
