@@ -6685,7 +6685,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="index[@start] | idx[@start]">
     <xsl:variable name="start-id">
         <xsl:call-template name="id-lookup-by-name">
-            <xsl:with-param name="name" select="string(@start)"/>
+            <xsl:with-param name="name" select="@start"/>
         </xsl:call-template>
     </xsl:variable>
     <xsl:variable name="start" select="id($start-id)" />
@@ -10691,7 +10691,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="fragref">
     <xsl:variable name="target-id">
         <xsl:call-template name="id-lookup-by-name">
-            <xsl:with-param name="name" select="string(@ref)"/>
+            <xsl:with-param name="name" select="@ref"/>
         </xsl:call-template>
     </xsl:variable>
     <xsl:variable name="target" select="id($target-id)"/>

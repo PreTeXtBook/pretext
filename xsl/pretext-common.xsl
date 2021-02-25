@@ -7336,8 +7336,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <!-- First check that the scope is reasonable, i.e. it -->
             <!-- exists and is one of the elements defined for the -->
             <!-- "solutions-generator" template                    -->
-            <xsl:variable name="scope" select="id(@scope)"/>
-
+            <xsl:variable name="scope-id">
+                <xsl:call-template name="id-lookup-by-name">
+                    <xsl:with-param name="name" select="@scope"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:variable name="scope" select="id($scope-id)"/>
             <xsl:if test="not(exsl:node-set($scope))">
                 <xsl:message>PTX:WARNING: unresolved @scope ("<xsl:value-of select="@scope"/>") for a &lt;solutions&gt; division</xsl:message>
                 <xsl:apply-templates select="." mode="location-report" />
@@ -8487,7 +8491,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:otherwise>
             <xsl:variable name="target-id">
                 <xsl:call-template name="id-lookup-by-name">
-                    <xsl:with-param name="name" select="normalize-space(@ref)"/>
+                    <xsl:with-param name="name" select="@ref"/>
                 </xsl:call-template>
             </xsl:variable>
             <xsl:variable name="target" select="id($target-id)"/>
@@ -8577,10 +8581,18 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:when>
         <!-- clear of errors, so on to main event -->
         <xsl:otherwise>
-            <xsl:variable name="ref-one" select="normalize-space(@first)" />
-            <xsl:variable name="target-one" select="id($ref-one)" />
-            <xsl:variable name="ref-two" select="normalize-space(@last)" />
-            <xsl:variable name="target-two" select="id($ref-two)" />
+            <xsl:variable name="ref-one-id">
+                <xsl:call-template name="id-lookup-by-name">
+                    <xsl:with-param name="name" select="@first"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:variable name="target-one" select="id($ref-one-id)"/>
+            <xsl:variable name="ref-two-id">
+                <xsl:call-template name="id-lookup-by-name">
+                    <xsl:with-param name="name" select="@last"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:variable name="target-two" select="id($ref-two-id)" />
             <!-- Determine style of visible text in link -->
             <xsl:variable name="text-style-one">
                 <xsl:apply-templates select="." mode="get-text-style" />
@@ -8606,9 +8618,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <!-- enforce @first, @last point to same kind of element, -->
             <!-- since we implicitly recycle the type-name of @first  -->
             <!-- Schematron: possible by inserting id() into XPath test? -->
-            <!-- TODO: (2017-07-24) convert to a fatal error after some time? -->
             <xsl:if test="not(local-name($target-one) = local-name($target-two))">
-                <xsl:message terminate="no">MBX:ERROR:   &lt;xref @first="<xsl:value-of select="$ref-one" />" @last="<xsl:value-of select="$ref-two" />" /&gt; references two elements with different tags (<xsl:value-of select="local-name($target-one)" /> vs. <xsl:value-of select="local-name($target-two)" />), so are incompatible as endpoints of a range.  Rewrite using two &lt;xref&gt; elements</xsl:message>
+                <xsl:message>PTX:ERROR:   &lt;xref @first="<xsl:value-of select="@first" />" @last="<xsl:value-of select="@last" />" /&gt; references two elements with different tags (<xsl:value-of select="local-name($target-one)" /> vs. <xsl:value-of select="local-name($target-two)" />), so are incompatible as endpoints of a range.  Rewrite using two &lt;xref&gt; elements</xsl:message>
             </xsl:if>
             <!-- courtesy check that range is not out-of-order               -->
             <!-- NB: different schemes for "exercise" can make this look odd -->
@@ -8718,7 +8729,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:variable name="trailing" select="substring-after($ref-list, ' ')" />
     <!-- now work with one $ref and the configured $text-style -->
     <!-- get the target as a node -->
-    <xsl:variable name="target" select="id($ref)" />
+    <xsl:variable name="target-id">
+        <xsl:call-template name="id-lookup-by-name">
+            <xsl:with-param name="name" select="$ref"/>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="target" select="id($target-id)" />
     <!-- bibiographic targets are special -->
     <xsl:variable name="b-is-biblio-target" select="$target/self::biblio" />
     <!-- if starting, begin bibliography list wrapping -->
@@ -8889,11 +8905,17 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <!-- pass on a completely assembled source, so the id()    -->
             <!-- function does not need to survey multiple documents.  -->
             <xsl:variable name="hits">
+                <!-- TODO: test dropping the two "exsl:node-set()" (and another by @scope) -->
                 <!-- always do a context shift to $original -->
                 <xsl:for-each select="$original">
-                    <xsl:if test="exsl:node-set(id($initial))">
+                    <xsl:variable name="initial-id">
+                        <xsl:call-template name="id-lookup-by-name">
+                            <xsl:with-param name="name" select="$initial"/>
+                        </xsl:call-template>
+                    </xsl:variable>
+                    <xsl:if test="exsl:node-set(id($initial-id))">
                         <xsl:text>X</xsl:text>
-                        <xsl:variable name="target" select="exsl:node-set(id($initial))"/>
+                        <xsl:variable name="target" select="exsl:node-set(id($initial-id))"/>
                         <xsl:variable name="is-a-target">
                             <xsl:apply-templates select="$target" mode="is-xref-target"/>
                         </xsl:variable>

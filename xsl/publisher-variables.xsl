@@ -689,6 +689,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="html-index-page">
     <!-- needs to be realized as a *string*, not a node -->
     <xsl:variable name="entered-ref" select="string($publication/html/index-page/@ref)"/>
+    <xsl:variable name="entered-id">
+        <xsl:call-template name="id-lookup-by-name">
+            <xsl:with-param name="name" select="$entered-ref"/>
+        </xsl:call-template>
+    </xsl:variable>
     <xsl:variable name="sanitized-ref">
         <xsl:choose>
             <!-- signal no choice with empty string-->
@@ -696,7 +701,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text/>
             </xsl:when>
             <!-- bad choice, set to empty string -->
-            <xsl:when test="not(id($entered-ref))">
+            <xsl:when test="not(id($entered-id))">
                 <xsl:message>PTX:WARNING:   the requested HTML index page cannot be constructed since "<xsl:value-of select="$entered-ref"/>" is not an @xml:id anywhere in the document.  Defaults will be used instead</xsl:message>
                 <xsl:text/>
             </xsl:when>
@@ -704,10 +709,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:otherwise>
                 <!-- true/false values if node creates a web page -->
                 <xsl:variable name="is-intermediate">
-                    <xsl:apply-templates select="id($entered-ref)" mode="is-intermediate"/>
+                    <xsl:apply-templates select="id($entered-id)" mode="is-intermediate"/>
                 </xsl:variable>
                 <xsl:variable name="is-chunk">
-                    <xsl:apply-templates select="id($entered-ref)" mode="is-chunk"/>
+                    <xsl:apply-templates select="id($entered-id)" mode="is-chunk"/>
                 </xsl:variable>
                 <xsl:choose>
                     <!-- really is a web-page -->

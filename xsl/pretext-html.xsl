@@ -8253,7 +8253,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- @ref is simply a pointer to a fragment, so -->
 <!-- convert title into a knowl for the target  -->
 <xsl:template match="fragref">
-    <xsl:variable name="target" select="id(@ref)"/>
+    <xsl:variable name="target-id">
+        <xsl:call-template name="id-lookup-by-name">
+            <xsl:with-param name="name" select="@ref"/>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="target" select="id($target-id)"/>
     <span>
         <xsl:call-template name="langle-character"/>
         <xsl:apply-templates select="." mode="xref-link">

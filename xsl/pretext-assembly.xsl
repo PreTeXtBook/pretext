@@ -196,6 +196,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$b-extracting-pg">
             <xsl:choose>
                 <xsl:when test="@copy">
+                    <!-- this will need to switch to a document-wide search     -->
+                    <!-- for a match on the @name value, once that attribute    -->
+                    <!-- is in place, since we do not yet have the              -->
+                    <!-- @name -> @xml:id  mapping until we are done assembling -->
                     <xsl:variable name="target" select="id(@copy)"/>
                     <xsl:choose>
                         <xsl:when test="$target/statement|$target/stage">
@@ -408,6 +412,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$b-extracting-pg">
         <xsl:variable name="webwork-with-copy" select="$original//webwork[@copy]"/>
         <xsl:for-each select="$webwork-with-copy">
+            <!-- this will need to switch to a document-wide search     -->
+            <!-- for a match on the @name value, once that attribute    -->
+            <!-- is in place, since we do not yet have the              -->
+            <!-- @name -> @xml:id  mapping until we are done assembling -->
             <xsl:variable name="target" select="id(@copy)"/>
             <xsl:choose>
                 <xsl:when test="$target/statement|$target/stage"/>
