@@ -2096,8 +2096,7 @@ Book (with parts), "section" at level 3
 <!-- Provide an empty cell to scribble in     -->
 <!-- Or break text cells in the Sage notebook -->
 <!-- This cell does respect @language         -->
-<!-- @copy deprecated  2017-12-21 -->
-<xsl:template match="sage[not(input) and not(output) and not(@type) and not(@copy)]">
+<xsl:template match="sage[not(input) and not(output) and not(@type)]">
     <xsl:param name="block-type"/>
 
     <xsl:apply-templates select="." mode="sage-active-markup">
@@ -2128,15 +2127,6 @@ Book (with parts), "section" at level 3
         <xsl:with-param name="in" select="'# Practice area (not linked for Sage Cell use)&#xa;'"/>
         <xsl:with-param name="out" select="''" />
     </xsl:apply-templates>
-</xsl:template>
-
-<!-- @copy deprecated  2017-12-21 -->
-<!-- Type: "copy"; used for replays     -->
-<!-- Mostly when HTML is chunked        -->
-<!-- Just handle the same way as others -->
-<!-- TODO: HTML copies will get same id! -->
-<xsl:template match="sage[@copy]">
-    <xsl:apply-templates select="id(@copy)" />
 </xsl:template>
 
 <!-- Type: "display"; input portion as uneditable, unevaluatable -->
@@ -3877,23 +3867,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:with-param name="b-original" select="$b-original"/>
         </xsl:apply-templates>
     </xsl:if>
-</xsl:template>
-
-<!-- ################ -->
-<!-- Copies of Images -->
-<!-- ################ -->
-
-<!-- @copy deprecated  2017-12-21 -->
-<xsl:template match="image[@copy]">
-    <xsl:variable name="target" select="id(@copy)" />
-    <xsl:choose>
-        <xsl:when test="$target">
-            <xsl:apply-templates select="$target" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>MBX:WARNING: &lt;image&gt; failure due to unknown reference @copy="<xsl:value-of select="@copy"/>"</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
 </xsl:template>
 
 <!-- #################################### -->
@@ -10772,20 +10745,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="$document-root//c/@latexsep|$document-root//cd/@latexsep" />
         <xsl:with-param name="date-string" select="'2017-12-07'" />
         <xsl:with-param name="message" select="'the &quot;@latexsep&quot; attribute on the &quot;c&quot; and &quot;cd&quot; elements is no longer necessary.  It is being ignored, and can be removed'" />
-    </xsl:call-template>
-    <!--  -->
-    <!-- 2017-12-21  remove sage/@copy -->
-    <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//sage/@copy" />
-        <xsl:with-param name="date-string" select="'2017-12-21'" />
-        <xsl:with-param name="message" select="'@copy on a &quot;sage&quot; element is deprecated, use the xinclude mechanism with common code in an external file'" />
-    </xsl:call-template>
-    <!--  -->
-    <!-- 2017-12-21  remove image/@copy -->
-    <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//image/@copy" />
-        <xsl:with-param name="date-string" select="'2017-12-21'" />
-        <xsl:with-param name="message" select="'@copy on an &quot;image&quot; element is deprecated, possibly use the xinclude mechanism with common source code in an external file'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2018-02-04  geogebra-applet gone -->
