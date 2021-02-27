@@ -1598,7 +1598,7 @@ body > a.assistive:focus {
   }
 }
 
-/* delete all the -narrow in the next CSS version */
+/* delete all the -narrow in the next CSS version (post 0.31) */
 .pretext-content dl.description-list-narrow {
     margin-left: 0;
 }
