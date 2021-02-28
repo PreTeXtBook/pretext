@@ -1076,321 +1076,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\lititle}[1]{{\slshape#1}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%% End: Semantic Macros&#xa;</xsl:text>
-    <!-- ################## -->
-    <!-- Division Numbering -->
-    <!-- ################## -->
-    <xsl:text>%% Division Numbering: Chapters, Sections, Subsections, etc&#xa;</xsl:text>
-    <xsl:text>%% Division numbers may be turned off at some level ("depth")&#xa;</xsl:text>
-    <xsl:text>%% A section *always* has depth 1, contrary to us counting from the document root&#xa;</xsl:text>
-    <xsl:text>%% The latex default is 3.  If a larger number is present here, then&#xa;</xsl:text>
-    <xsl:text>%% removing this command may make some cross-references ambiguous&#xa;</xsl:text>
-    <xsl:text>%% The precursor variable $numbering-maxlevel is checked for consistency in the common XSL file&#xa;</xsl:text>
-    <xsl:text>\setcounter{secnumdepth}{</xsl:text>
-        <xsl:value-of select="$latex-numbering-maxlevel" />
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>%%&#xa;</xsl:text>
-    <xsl:text>%% AMS "proof" environment is no longer used, but we leave previously&#xa;</xsl:text>
-    <xsl:text>%% implemented \qedhere in place, should the LaTeX be recycled&#xa;</xsl:text>
-    <xsl:text>\newcommand{\qedhere}{\relax}&#xa;</xsl:text>
-    <!--  -->
-    <xsl:text>%%&#xa;</xsl:text>
-    <xsl:text>%% A faux tcolorbox whose only purpose is to provide common numbering&#xa;</xsl:text>
-    <xsl:text>%% facilities for most blocks (possibly not projects, 2D displays)&#xa;</xsl:text>
-    <xsl:text>%% Controlled by  numbering.theorems.level  processing parameter&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox[auto counter</xsl:text>
-    <!-- control the levels of the numbering -->
-    <!-- global (no periods) is the default  -->
-    <xsl:if test="not($numbering-blocks = 0)">
-        <xsl:text>, number within=</xsl:text>
-        <xsl:call-template name="level-to-name">
-            <xsl:with-param name="level" select="$numbering-blocks" />
-        </xsl:call-template>
-    </xsl:if>
-    <xsl:text>]{block}{}&#xa;</xsl:text>
-    <!-- should condition on $project-reps, but it is not defined yet -->
-    <xsl:if test="$b-number-project-distinct">
-        <xsl:text>%%&#xa;</xsl:text>
-        <xsl:text>%% This document is set to number PROJECT-LIKE on a separate numbering scheme&#xa;</xsl:text>
-        <xsl:text>%% So, a faux tcolorbox whose only purpose is to provide this numbering&#xa;</xsl:text>
-        <xsl:text>%% Controlled by  numbering.projects.level  processing parameter&#xa;</xsl:text>
-        <xsl:text>\newtcolorbox[auto counter</xsl:text>
-        <!-- control the levels of the numbering -->
-        <!-- global (no periods) is the default  -->
-        <xsl:if test="not($numbering-projects = 0)">
-            <xsl:text>, number within=</xsl:text>
-            <xsl:call-template name="level-to-name">
-                <xsl:with-param name="level" select="$numbering-projects" />
-            </xsl:call-template>
-        </xsl:if>
-        <xsl:text>]{project-distinct}{}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$b-number-exercise-distinct">
-        <xsl:text>%%&#xa;</xsl:text>
-        <xsl:text>%% This document is set to number inline exercises on a separate numbering scheme&#xa;</xsl:text>
-        <xsl:text>%% So, a faux tcolorbox whose only purpose is to provide this numbering&#xa;</xsl:text>
-        <xsl:text>\newtcolorbox[auto counter</xsl:text>
-        <!-- control the levels of the numbering -->
-        <!-- global (no periods) is the default  -->
-        <xsl:if test="not($numbering-exercises = 0)">
-            <xsl:text>, number within=</xsl:text>
-            <xsl:call-template name="level-to-name">
-                <xsl:with-param name="level" select="$numbering-exercises" />
-            </xsl:call-template>
-        </xsl:if>
-        <xsl:text>]{exercise-distinct}{}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$b-number-figure-distinct">
-        <xsl:text>%%&#xa;</xsl:text>
-        <xsl:text>%% This document is set to number figure, table, list, listing on a separate numbering scheme&#xa;</xsl:text>
-        <xsl:text>%% So, a faux tcolorbox whose only purpose is to provide this numbering&#xa;</xsl:text>
-        <xsl:text>\newtcolorbox[auto counter</xsl:text>
-        <!-- control the levels of the numbering -->
-        <!-- global (no periods) is the default  -->
-        <xsl:if test="not($numbering-exercises = 0)">
-            <xsl:text>, number within=</xsl:text>
-            <xsl:call-template name="level-to-name">
-                <xsl:with-param name="level" select="$numbering-figures" />
-            </xsl:call-template>
-        </xsl:if>
-        <xsl:text>]{figure-distinct}{}&#xa;</xsl:text>
-    </xsl:if>
-    <!-- TODO: condition of figure/*/figure-like, or $subfigure-reps -->
-    <xsl:text>%% A faux tcolorbox whose only purpose is to provide common numbering&#xa;</xsl:text>
-    <xsl:text>%% facilities for 2D displays which are subnumbered as part of a "sidebyside"&#xa;</xsl:text>
-    <!-- faux subdisplay requires manipulating low-level counters -->
-    <!-- TODO: condition on presence of (plain) 2-D displays to limit use? -->
-    <xsl:text>\makeatletter&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox[auto counter</xsl:text>
-    <!-- control the levels of the numbering -->
-    <!-- global (no periods) is the default  -->
-    <xsl:text>, number within=</xsl:text>
-    <xsl:choose>
-        <xsl:when test="$b-number-figure-distinct">
-            <xsl:text>tcb@cnt@figure-distinct</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>tcb@cnt@block</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>, number freestyle={\noexpand\thetcb@cnt@block(\noexpand\alph{\tcbcounter})}</xsl:text>
-    <xsl:text>]{subdisplay}{}&#xa;</xsl:text>
-    <!-- faux subdisplay requires manipulating low-level counters -->
-    <xsl:text>\makeatother&#xa;</xsl:text>
-   <!-- Groups of environments/blocks -->
-    <!-- Variables hold exactly one node of each type in use -->
-    <!-- "environment" template constructs...environments -->
-    <!-- THEOREM-LIKE -->
-    <xsl:variable name="theorem-reps" select="
-        ($document-root//theorem)[1]|
-        ($document-root//lemma)[1]|
-        ($document-root//corollary)[1]|
-        ($document-root//algorithm)[1]|
-        ($document-root//proposition)[1]|
-        ($document-root//claim)[1]|
-        ($document-root//fact)[1]|
-        ($document-root//identity)[1]"/>
-    <xsl:if test="$theorem-reps">
-        <xsl:text>%%&#xa;</xsl:text>
-        <xsl:text>%% tcolorbox, with styles, for THEOREM-LIKE&#xa;</xsl:text>
-        <xsl:text>%%&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:for-each select="$theorem-reps">
-        <xsl:apply-templates select="." mode="environment"/>
-    </xsl:for-each>
-    <!-- AXIOM-LIKE -->
-    <xsl:variable name="axiom-reps" select="
-        ($document-root//axiom)[1]|
-        ($document-root//conjecture)[1]|
-        ($document-root//principle)[1]|
-        ($document-root//heuristic)[1]|
-        ($document-root//hypothesis)[1]|
-        ($document-root//assumption)[1]"/>
-    <xsl:if test="$axiom-reps">
-        <xsl:text>%%&#xa;</xsl:text>
-        <xsl:text>%% tcolorbox, with styles, for AXIOM-LIKE&#xa;</xsl:text>
-        <xsl:text>%%&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:for-each select="$axiom-reps">
-        <xsl:apply-templates select="." mode="environment"/>
-    </xsl:for-each>
-    <!-- DEFINITION-LIKE -->
-    <xsl:variable name="definition-reps" select="
-        ($document-root//definition)[1]"/>
-    <xsl:if test="$definition-reps">
-        <xsl:text>%%&#xa;</xsl:text>
-        <xsl:text>%% tcolorbox, with styles, for DEFINITION-LIKE&#xa;</xsl:text>
-        <xsl:text>%%&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:for-each select="$definition-reps">
-        <xsl:apply-templates select="." mode="environment"/>
-    </xsl:for-each>
-    <!-- REMARK-LIKE -->
-    <!-- NB: a "note" in "biblio" is a (harmless?) false positive here -->
-    <xsl:variable name="remark-reps" select="
-        ($document-root//remark)[1]|
-        ($document-root//convention)[1]|
-        ($document-root//note)[1]|
-        ($document-root//observation)[1]|
-        ($document-root//warning)[1]|
-        ($document-root//insight)[1]"/>
-    <xsl:if test="$remark-reps">
-        <xsl:text>%%&#xa;</xsl:text>
-        <xsl:text>%% tcolorbox, with styles, for REMARK-LIKE&#xa;</xsl:text>
-        <xsl:text>%%&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:for-each select="$remark-reps">
-        <xsl:apply-templates select="." mode="environment"/>
-    </xsl:for-each>
-    <!-- COMPUTATION-LIKE -->
-    <xsl:variable name="computation-reps" select="
-        ($document-root//computation)[1]|
-        ($document-root//technology)[1]"/>
-    <xsl:if test="$computation-reps">
-        <xsl:text>%%&#xa;</xsl:text>
-        <xsl:text>%% tcolorbox, with styles, for COMPUTATION-LIKE&#xa;</xsl:text>
-        <xsl:text>%%&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:for-each select="$computation-reps">
-        <xsl:apply-templates select="." mode="environment"/>
-    </xsl:for-each>
-    <!-- EXAMPLE-LIKE -->
-    <xsl:variable name="example-reps" select="
-        ($document-root//example)[1]|
-        ($document-root//question)[1]|
-        ($document-root//problem)[1]"/>
-    <xsl:if test="$example-reps">
-        <xsl:text>%%&#xa;</xsl:text>
-        <xsl:text>%% tcolorbox, with styles, for EXAMPLE-LIKE&#xa;</xsl:text>
-        <xsl:text>%%&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:for-each select="$example-reps">
-        <xsl:apply-templates select="." mode="environment"/>
-    </xsl:for-each>
-    <!-- Inline Exercises -->
-    <xsl:variable name="inlineexercise-reps" select="
-        ($document-root//exercise[boolean(&INLINE-EXERCISE-FILTER;)])[1]"/>
-    <xsl:if test="$inlineexercise-reps">
-        <xsl:text>%%&#xa;</xsl:text>
-        <xsl:text>%% tcolorbox, with styles, for inline exercises&#xa;</xsl:text>
-        <xsl:text>%%&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:for-each select="$inlineexercise-reps">
-        <xsl:apply-templates select="." mode="environment"/>
-    </xsl:for-each>
-    <!-- PROJECT-LIKE -->
-    <!-- Used three times, search on $project-reps -->
-    <xsl:variable name="project-reps" select="
-        ($document-root//project)[1]|
-        ($document-root//activity)[1]|
-        ($document-root//exploration)[1]|
-        ($document-root//investigation)[1]"/>
-    <xsl:if test="$project-reps">
-        <xsl:text>%%&#xa;</xsl:text>
-        <xsl:text>%% tcolorbox, with styles, for PROJECT-LIKE&#xa;</xsl:text>
-        <xsl:text>%%&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:for-each select="$project-reps">
-        <xsl:apply-templates select="." mode="environment"/>
-    </xsl:for-each>
-    <!-- GOAL-LIKE -->
-    <xsl:variable name="goal-reps" select="
-        ($document-root//objectives)[1]|
-        ($document-root//outcomes)[1]"/>
-    <xsl:if test="$goal-reps">
-        <xsl:text>%%&#xa;</xsl:text>
-        <xsl:text>%% tcolorbox, with styles, for GOAL-LIKE&#xa;</xsl:text>
-        <xsl:text>%%&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:for-each select="$goal-reps">
-        <xsl:apply-templates select="." mode="environment"/>
-    </xsl:for-each>
-    <!-- ASIDE-LIKE -->
-    <xsl:variable name="aside-reps" select="
-        ($document-root//aside)[1]|
-        ($document-root//historical)[1]|
-        ($document-root//biographical)[1]"/>
-    <xsl:if test="$aside-reps">
-        <xsl:text>%%&#xa;</xsl:text>
-        <xsl:text>%% tcolorbox, with styles, for ASIDE-LIKE&#xa;</xsl:text>
-        <xsl:text>%%&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:for-each select="$aside-reps">
-        <xsl:apply-templates select="." mode="environment"/>
-    </xsl:for-each>
-    <!-- FIGURE-LIKE -->
-    <!-- subcaptioned are separate and next, condition on "figure"   -->
-    <!-- ancestor to not mistakenly pick up a 'subtable' (say) here  -->
-    <!-- instead of a 'plain' table (which was once a bug)           -->
-    <xsl:variable name="figure-reps" select="
-        ($document-root//figure[not(ancestor::figure)])[1]|
-        ($document-root//table[not(ancestor::figure)])[1]|
-        ($document-root//listing[not(ancestor::figure)])[1]|
-        ($document-root//list[not(ancestor::figure)])[1]"/>
-    <xsl:if test="$figure-reps">
-        <xsl:text>%%&#xa;</xsl:text>
-        <xsl:text>%% tcolorbox, with styles, for FIGURE-LIKE&#xa;</xsl:text>
-        <xsl:text>%%&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:for-each select="$figure-reps">
-        <xsl:apply-templates select="." mode="environment"/>
-    </xsl:for-each>
-    <!-- (SUB)FIGURE-LIKE -->
-    <!-- subcaptioned versions, if contained by overall figure -->
-    <xsl:variable name="subfigure-reps" select="
-        ($document-root//figure/sidebyside/figure|$document-root//figure/sbsgroup/sidebyside/figure)[1]|
-        ($document-root//figure/sidebyside/table|$document-root//figure/sbsgroup/sidebyside/table)[1]|
-        ($document-root//figure/sidebyside/listing|$document-root//figure/sbsgroup/sidebyside/listing)[1]|
-        ($document-root//figure/sidebyside/list|$document-root//figure/sbsgroup/sidebyside/list)[1]"/>
-    <xsl:if test="$subfigure-reps">
-        <xsl:text>%%&#xa;</xsl:text>
-        <xsl:text>%% tcolorbox, with styles, for (SUB)FIGURE-LIKE&#xa;</xsl:text>
-        <xsl:text>%%&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:for-each select="$subfigure-reps">
-        <xsl:apply-templates select="." mode="environment"/>
-    </xsl:for-each>
-    <!-- INTRODUCTION, CONCLUSION (divisional) -->
-    <xsl:variable name="introduction-reps" select="
-        ($root/article/introduction|$document-root//chapter/introduction|$document-root//section/introduction|$document-root//subsection/introduction|$document-root//appendix/introduction|$document-root//exercises/introduction|$document-root//solutions/introduction|$document-root//worksheet/introduction|$document-root//reading-questions/introduction|$document-root//glossary/introduction|$document-root//references/introduction)[1]|
-        ($root/article/conclusion|$document-root//chapter/conclusion|$document-root//section/conclusion|$document-root//subsection/conclusion|$document-root//appendix/conclusion|$document-root//exercises/conclusion|$document-root//solutions/conclusion|$document-root//worksheet/conclusion|$document-root//reading-questions/conclusion|$document-root//glossary/conclusion|$document-root//references/conclusion)[1]"/>
-    <xsl:if test="$introduction-reps">
-        <xsl:text>%%&#xa;</xsl:text>
-        <xsl:text>%% xparse environments for introductions and conclusions of divisions&#xa;</xsl:text>
-        <xsl:text>%%&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:for-each select="$introduction-reps">
-        <xsl:apply-templates select="." mode="environment"/>
-    </xsl:for-each>
-    <!-- MISCELLANEOUS -->
-    <!-- "paragraphs" are partly like a division, -->
-    <!-- but we include it here as a one-off      -->
-    <xsl:variable name="miscellaneous-reps" select="
-        ($document-root//defined-term)[1]|
-        ($document-root//proof[parent::hint|parent::answer|parent::solution])[1]|
-        ($document-root//proof[not(parent::hint|parent::answer|parent::solution)])[1]|
-        ($document-root//case)[1]|
-        ($document-root//assemblage)[1]|
-        ($document-root//backmatter/colophon)[1]|
-        ($document-root//paragraphs)[1]"/>
-    <xsl:if test="$miscellaneous-reps">
-        <xsl:text>%%&#xa;</xsl:text>
-        <xsl:text>%% tcolorbox, with styles, for miscellaneous environments&#xa;</xsl:text>
-        <xsl:text>%%&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:for-each select="$miscellaneous-reps">
-        <xsl:apply-templates select="." mode="environment"/>
-    </xsl:for-each>
-    <!-- Commentary -->
-    <!-- "commentary" is elective, with global switch set at startup -->
-    <xsl:if test="$b-commentary">
-        <xsl:variable name="instance" select="($document-root//commentary)[1]"/>
-        <xsl:if test="$instance">
-            <xsl:text>%%&#xa;</xsl:text>
-            <xsl:text>%% tcolorbox, with style, for elected commentary&#xa;</xsl:text>
-            <xsl:text>%%&#xa;</xsl:text>
-            <xsl:apply-templates select="$instance" mode="environment"/>
-        </xsl:if>
-    </xsl:if>
+    <xsl:call-template name="create-numbered-tcolorbox"/>
     <xsl:if test="$document-root//solutions or $b-needs-solution-styles">
         <xsl:text>%% begin: environments for duplicates in solutions divisions&#xa;</xsl:text>
         <!-- Solutions present, check for exercise types     -->
@@ -1433,6 +1119,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>{divisionsolutionegcolstyle, title={\hyperlink{#3}{#1}.\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
         </xsl:if>
         <!-- solutions to PROJECT-LIKE -->
+        <!-- "project-rep" variable defined twice (each local) -->
+        <xsl:variable name="project-reps" select="
+            ($document-root//project)[1]|
+            ($document-root//activity)[1]|
+            ($document-root//exploration)[1]|
+            ($document-root//investigation)[1]"/>
         <xsl:for-each select="$project-reps">
             <xsl:variable name="elt-name">
                 <xsl:value-of select="local-name(.)"/>
@@ -2216,7 +1908,332 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\contributorname}[1]{\textsc{#1}\\[0.25\baselineskip]}&#xa;</xsl:text>
         <xsl:text>\newcommand{\contributorinfo}[1]{\hspace*{0.05\linewidth}\parbox{0.95\linewidth}{\textsl{#1}}}&#xa;</xsl:text>
     </xsl:if>
+</xsl:template>
 
+<!-- As of 2021-02-28 we have begun modularizing the components of the -->
+<!-- preamble, into topical, similar/related groups of commands and    -->
+<!-- definitions.  This was prompted by the necessity of  tcolorbox's  -->
+<!-- numbering scheme needing to *follow* the introduction of the      -->
+<!-- hyperref  package, contrary to the usual advice.  Routines here   -->
+<!-- should mimic the order of their use in the real template.         -->
+
+<xsl:template name="create-numbered-tcolorbox">
+    <!-- ################## -->
+    <!-- Division Numbering -->
+    <!-- ################## -->
+    <xsl:text>%% Division Numbering: Chapters, Sections, Subsections, etc&#xa;</xsl:text>
+    <xsl:text>%% Division numbers may be turned off at some level ("depth")&#xa;</xsl:text>
+    <xsl:text>%% A section *always* has depth 1, contrary to us counting from the document root&#xa;</xsl:text>
+    <xsl:text>%% The latex default is 3.  If a larger number is present here, then&#xa;</xsl:text>
+    <xsl:text>%% removing this command may make some cross-references ambiguous&#xa;</xsl:text>
+    <xsl:text>%% The precursor variable $numbering-maxlevel is checked for consistency in the common XSL file&#xa;</xsl:text>
+    <xsl:text>\setcounter{secnumdepth}{</xsl:text>
+        <xsl:value-of select="$latex-numbering-maxlevel" />
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
+    <xsl:text>%% AMS "proof" environment is no longer used, but we leave previously&#xa;</xsl:text>
+    <xsl:text>%% implemented \qedhere in place, should the LaTeX be recycled&#xa;</xsl:text>
+    <xsl:text>\newcommand{\qedhere}{\relax}&#xa;</xsl:text>
+    <!--  -->
+    <xsl:text>%%&#xa;</xsl:text>
+    <xsl:text>%% A faux tcolorbox whose only purpose is to provide common numbering&#xa;</xsl:text>
+    <xsl:text>%% facilities for most blocks (possibly not projects, 2D displays)&#xa;</xsl:text>
+    <xsl:text>%% Controlled by  numbering.theorems.level  processing parameter&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox[auto counter</xsl:text>
+    <!-- control the levels of the numbering -->
+    <!-- global (no periods) is the default  -->
+    <xsl:if test="not($numbering-blocks = 0)">
+        <xsl:text>, number within=</xsl:text>
+        <xsl:call-template name="level-to-name">
+            <xsl:with-param name="level" select="$numbering-blocks" />
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:text>]{block}{}&#xa;</xsl:text>
+    <!-- should condition on $project-reps, but it is not defined yet -->
+    <xsl:if test="$b-number-project-distinct">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% This document is set to number PROJECT-LIKE on a separate numbering scheme&#xa;</xsl:text>
+        <xsl:text>%% So, a faux tcolorbox whose only purpose is to provide this numbering&#xa;</xsl:text>
+        <xsl:text>%% Controlled by  numbering.projects.level  processing parameter&#xa;</xsl:text>
+        <xsl:text>\newtcolorbox[auto counter</xsl:text>
+        <!-- control the levels of the numbering -->
+        <!-- global (no periods) is the default  -->
+        <xsl:if test="not($numbering-projects = 0)">
+            <xsl:text>, number within=</xsl:text>
+            <xsl:call-template name="level-to-name">
+                <xsl:with-param name="level" select="$numbering-projects" />
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:text>]{project-distinct}{}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$b-number-exercise-distinct">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% This document is set to number inline exercises on a separate numbering scheme&#xa;</xsl:text>
+        <xsl:text>%% So, a faux tcolorbox whose only purpose is to provide this numbering&#xa;</xsl:text>
+        <xsl:text>\newtcolorbox[auto counter</xsl:text>
+        <!-- control the levels of the numbering -->
+        <!-- global (no periods) is the default  -->
+        <xsl:if test="not($numbering-exercises = 0)">
+            <xsl:text>, number within=</xsl:text>
+            <xsl:call-template name="level-to-name">
+                <xsl:with-param name="level" select="$numbering-exercises" />
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:text>]{exercise-distinct}{}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$b-number-figure-distinct">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% This document is set to number figure, table, list, listing on a separate numbering scheme&#xa;</xsl:text>
+        <xsl:text>%% So, a faux tcolorbox whose only purpose is to provide this numbering&#xa;</xsl:text>
+        <xsl:text>\newtcolorbox[auto counter</xsl:text>
+        <!-- control the levels of the numbering -->
+        <!-- global (no periods) is the default  -->
+        <xsl:if test="not($numbering-exercises = 0)">
+            <xsl:text>, number within=</xsl:text>
+            <xsl:call-template name="level-to-name">
+                <xsl:with-param name="level" select="$numbering-figures" />
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:text>]{figure-distinct}{}&#xa;</xsl:text>
+    </xsl:if>
+    <!-- TODO: condition of figure/*/figure-like, or $subfigure-reps -->
+    <xsl:text>%% A faux tcolorbox whose only purpose is to provide common numbering&#xa;</xsl:text>
+    <xsl:text>%% facilities for 2D displays which are subnumbered as part of a "sidebyside"&#xa;</xsl:text>
+    <!-- faux subdisplay requires manipulating low-level counters -->
+    <!-- TODO: condition on presence of (plain) 2-D displays to limit use? -->
+    <xsl:text>\makeatletter&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox[auto counter</xsl:text>
+    <!-- control the levels of the numbering -->
+    <!-- global (no periods) is the default  -->
+    <xsl:text>, number within=</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$b-number-figure-distinct">
+            <xsl:text>tcb@cnt@figure-distinct</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>tcb@cnt@block</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>, number freestyle={\noexpand\thetcb@cnt@block(\noexpand\alph{\tcbcounter})}</xsl:text>
+    <xsl:text>]{subdisplay}{}&#xa;</xsl:text>
+    <!-- faux subdisplay requires manipulating low-level counters -->
+    <xsl:text>\makeatother&#xa;</xsl:text>
+   <!-- Groups of environments/blocks -->
+    <!-- Variables hold exactly one node of each type in use -->
+    <!-- "environment" template constructs...environments -->
+    <!-- THEOREM-LIKE -->
+    <xsl:variable name="theorem-reps" select="
+        ($document-root//theorem)[1]|
+        ($document-root//lemma)[1]|
+        ($document-root//corollary)[1]|
+        ($document-root//algorithm)[1]|
+        ($document-root//proposition)[1]|
+        ($document-root//claim)[1]|
+        ($document-root//fact)[1]|
+        ($document-root//identity)[1]"/>
+    <xsl:if test="$theorem-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for THEOREM-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$theorem-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+    <!-- AXIOM-LIKE -->
+    <xsl:variable name="axiom-reps" select="
+        ($document-root//axiom)[1]|
+        ($document-root//conjecture)[1]|
+        ($document-root//principle)[1]|
+        ($document-root//heuristic)[1]|
+        ($document-root//hypothesis)[1]|
+        ($document-root//assumption)[1]"/>
+    <xsl:if test="$axiom-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for AXIOM-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$axiom-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+    <!-- DEFINITION-LIKE -->
+    <xsl:variable name="definition-reps" select="
+        ($document-root//definition)[1]"/>
+    <xsl:if test="$definition-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for DEFINITION-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$definition-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+    <!-- REMARK-LIKE -->
+    <!-- NB: a "note" in "biblio" is a (harmless?) false positive here -->
+    <xsl:variable name="remark-reps" select="
+        ($document-root//remark)[1]|
+        ($document-root//convention)[1]|
+        ($document-root//note)[1]|
+        ($document-root//observation)[1]|
+        ($document-root//warning)[1]|
+        ($document-root//insight)[1]"/>
+    <xsl:if test="$remark-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for REMARK-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$remark-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+    <!-- COMPUTATION-LIKE -->
+    <xsl:variable name="computation-reps" select="
+        ($document-root//computation)[1]|
+        ($document-root//technology)[1]"/>
+    <xsl:if test="$computation-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for COMPUTATION-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$computation-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+    <!-- EXAMPLE-LIKE -->
+    <xsl:variable name="example-reps" select="
+        ($document-root//example)[1]|
+        ($document-root//question)[1]|
+        ($document-root//problem)[1]"/>
+    <xsl:if test="$example-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for EXAMPLE-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$example-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+    <!-- Inline Exercises -->
+    <xsl:variable name="inlineexercise-reps" select="
+        ($document-root//exercise[boolean(&INLINE-EXERCISE-FILTER;)])[1]"/>
+    <xsl:if test="$inlineexercise-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for inline exercises&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$inlineexercise-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+    <!-- PROJECT-LIKE -->
+    <!-- "project-rep" variable defined twice (each local) -->
+    <!-- Used several times, search on "project-reps"      -->
+    <xsl:variable name="project-reps" select="
+        ($document-root//project)[1]|
+        ($document-root//activity)[1]|
+        ($document-root//exploration)[1]|
+        ($document-root//investigation)[1]"/>
+    <xsl:if test="$project-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for PROJECT-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$project-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+    <!-- GOAL-LIKE -->
+    <xsl:variable name="goal-reps" select="
+        ($document-root//objectives)[1]|
+        ($document-root//outcomes)[1]"/>
+    <xsl:if test="$goal-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for GOAL-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$goal-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+    <!-- ASIDE-LIKE -->
+    <xsl:variable name="aside-reps" select="
+        ($document-root//aside)[1]|
+        ($document-root//historical)[1]|
+        ($document-root//biographical)[1]"/>
+    <xsl:if test="$aside-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for ASIDE-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$aside-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+    <!-- FIGURE-LIKE -->
+    <!-- subcaptioned are separate and next, condition on "figure"   -->
+    <!-- ancestor to not mistakenly pick up a 'subtable' (say) here  -->
+    <!-- instead of a 'plain' table (which was once a bug)           -->
+    <xsl:variable name="figure-reps" select="
+        ($document-root//figure[not(ancestor::figure)])[1]|
+        ($document-root//table[not(ancestor::figure)])[1]|
+        ($document-root//listing[not(ancestor::figure)])[1]|
+        ($document-root//list[not(ancestor::figure)])[1]"/>
+    <xsl:if test="$figure-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for FIGURE-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$figure-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+    <!-- (SUB)FIGURE-LIKE -->
+    <!-- subcaptioned versions, if contained by overall figure -->
+    <xsl:variable name="subfigure-reps" select="
+        ($document-root//figure/sidebyside/figure|$document-root//figure/sbsgroup/sidebyside/figure)[1]|
+        ($document-root//figure/sidebyside/table|$document-root//figure/sbsgroup/sidebyside/table)[1]|
+        ($document-root//figure/sidebyside/listing|$document-root//figure/sbsgroup/sidebyside/listing)[1]|
+        ($document-root//figure/sidebyside/list|$document-root//figure/sbsgroup/sidebyside/list)[1]"/>
+    <xsl:if test="$subfigure-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for (SUB)FIGURE-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$subfigure-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+    <!-- INTRODUCTION, CONCLUSION (divisional) -->
+    <xsl:variable name="introduction-reps" select="
+        ($root/article/introduction|$document-root//chapter/introduction|$document-root//section/introduction|$document-root//subsection/introduction|$document-root//appendix/introduction|$document-root//exercises/introduction|$document-root//solutions/introduction|$document-root//worksheet/introduction|$document-root//reading-questions/introduction|$document-root//glossary/introduction|$document-root//references/introduction)[1]|
+        ($root/article/conclusion|$document-root//chapter/conclusion|$document-root//section/conclusion|$document-root//subsection/conclusion|$document-root//appendix/conclusion|$document-root//exercises/conclusion|$document-root//solutions/conclusion|$document-root//worksheet/conclusion|$document-root//reading-questions/conclusion|$document-root//glossary/conclusion|$document-root//references/conclusion)[1]"/>
+    <xsl:if test="$introduction-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% xparse environments for introductions and conclusions of divisions&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$introduction-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+    <!-- MISCELLANEOUS -->
+    <!-- "paragraphs" are partly like a division, -->
+    <!-- but we include it here as a one-off      -->
+    <xsl:variable name="miscellaneous-reps" select="
+        ($document-root//defined-term)[1]|
+        ($document-root//proof[parent::hint|parent::answer|parent::solution])[1]|
+        ($document-root//proof[not(parent::hint|parent::answer|parent::solution)])[1]|
+        ($document-root//case)[1]|
+        ($document-root//assemblage)[1]|
+        ($document-root//backmatter/colophon)[1]|
+        ($document-root//paragraphs)[1]"/>
+    <xsl:if test="$miscellaneous-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for miscellaneous environments&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$miscellaneous-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+    <!-- Commentary -->
+    <!-- "commentary" is elective, with global switch set at startup -->
+    <xsl:if test="$b-commentary">
+        <xsl:variable name="instance" select="($document-root//commentary)[1]"/>
+        <xsl:if test="$instance">
+            <xsl:text>%%&#xa;</xsl:text>
+            <xsl:text>%% tcolorbox, with style, for elected commentary&#xa;</xsl:text>
+            <xsl:text>%%&#xa;</xsl:text>
+            <xsl:apply-templates select="$instance" mode="environment"/>
+        </xsl:if>
+    </xsl:if>
 </xsl:template>
 
 <!-- Text Alignment -->
