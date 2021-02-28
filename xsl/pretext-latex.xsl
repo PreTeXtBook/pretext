@@ -1745,31 +1745,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!--                                                                 -->
     <!-- \renewcommand{\thechapter}{\thepart.\arabic{chapter}}           -->
     <!--                                                                 -->
-    <!-- http://tex.stackexchange.com/questions/106159/why-i-shouldnt-load-pdftex-option-with-hyperref -->
-    <xsl:text>%% hyperref driver does not need to be specified, it will be detected&#xa;</xsl:text>
-    <xsl:text>%% Footnote marks in tcolorbox have broken linking under&#xa;</xsl:text>
-    <xsl:text>%% hyperref, so it is necessary to turn off all linking&#xa;</xsl:text>
-    <xsl:text>%% It *must* be given as a package option, not with \hypersetup&#xa;</xsl:text>
-    <xsl:text>\usepackage[hyperfootnotes=false]{hyperref}&#xa;</xsl:text>
-    <!-- http://tex.stackexchange.com/questions/79051/how-to-style-text-in-hyperref-url -->
-    <xsl:if test="$document-root//url">
-    <xsl:text>%% configure hyperref's  \url  to match listings' inline verbatim&#xa;</xsl:text>
-        <xsl:text>\renewcommand\UrlFont{\small\ttfamily}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="not($b-latex-print)">
-        <xsl:text>%% Hyperlinking active in electronic PDFs, all links solid and blue&#xa;</xsl:text>
-        <xsl:text>\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$b-latex-print">
-        <xsl:text>%% "print" version, all hyperlinks black and inactive&#xa;</xsl:text>
-        <xsl:text>\hypersetup{draft}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:text>\hypersetup{pdftitle={</xsl:text>
-    <xsl:apply-templates select="." mode="title-short" />
-    <xsl:text>}}&#xa;</xsl:text>
-    <!-- http://tex.stackexchange.com/questions/44088/when-do-i-need-to-invoke-phantomsection -->
-    <xsl:text>%% If you manually remove hyperref, leave in this next command&#xa;</xsl:text>
-    <xsl:text>\providecommand\phantomsection{}&#xa;</xsl:text>
+    <xsl:call-template name="load-configure-hyperref"/>
     <!-- The "xwatermark" package has way more options, including the -->
     <!-- possibility of putting the watermark onto the foreground     -->
     <!-- (above shaded/colored "tcolorbox").  But on 2018-10-24,      -->
@@ -1916,6 +1892,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- numbering scheme needing to *follow* the introduction of the      -->
 <!-- hyperref  package, contrary to the usual advice.  Routines here   -->
 <!-- should mimic the order of their use in the real template.         -->
+
+<!-- http://tex.stackexchange.com/questions/106159/why-i-shouldnt-load-pdftex-option-with-hyperref -->
+<xsl:template name="load-configure-hyperref">
+    <xsl:text>%% hyperref driver does not need to be specified, it will be detected&#xa;</xsl:text>
+    <xsl:text>%% Footnote marks in tcolorbox have broken linking under&#xa;</xsl:text>
+    <xsl:text>%% hyperref, so it is necessary to turn off all linking&#xa;</xsl:text>
+    <xsl:text>%% It *must* be given as a package option, not with \hypersetup&#xa;</xsl:text>
+    <xsl:text>\usepackage[hyperfootnotes=false]{hyperref}&#xa;</xsl:text>
+    <!-- http://tex.stackexchange.com/questions/79051/how-to-style-text-in-hyperref-url -->
+    <xsl:if test="$document-root//url">
+    <xsl:text>%% configure hyperref's  \url  to match listings' inline verbatim&#xa;</xsl:text>
+        <xsl:text>\renewcommand\UrlFont{\small\ttfamily}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="not($b-latex-print)">
+        <xsl:text>%% Hyperlinking active in electronic PDFs, all links solid and blue&#xa;</xsl:text>
+        <xsl:text>\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$b-latex-print">
+        <xsl:text>%% "print" version, all hyperlinks black and inactive&#xa;</xsl:text>
+        <xsl:text>\hypersetup{draft}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>\hypersetup{pdftitle={</xsl:text>
+    <xsl:apply-templates select="." mode="title-short" />
+    <xsl:text>}}&#xa;</xsl:text>
+    <!-- http://tex.stackexchange.com/questions/44088/when-do-i-need-to-invoke-phantomsection -->
+    <xsl:text>%% If you manually remove hyperref, leave in this next command&#xa;</xsl:text>
+    <xsl:text>\providecommand\phantomsection{}&#xa;</xsl:text>
+</xsl:template>
 
 <xsl:template name="create-numbered-tcolorbox">
     <!-- ################## -->
