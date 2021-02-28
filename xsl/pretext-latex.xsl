@@ -8424,7 +8424,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="sanitize-text">
             <xsl:with-param name="text" select="input" />
         </xsl:call-template>
-        <xsl:text>\end{program}%&#xa;</xsl:text>
+        <!-- Concluding line is still being parsed as verbatim text, -->
+        <!-- so *any* extra characters will produce a LaTeX warning  -->
+        <!-- starting with "Character dropped after \end{program}"   -->
+        <!-- So...do not put a % (or anything else extra) here       -->
+        <xsl:text>\end{program}&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
 
@@ -8471,7 +8475,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$right-margin"/>
     <xsl:text>}&#xa;</xsl:text>
     <xsl:apply-templates select="input|output" />
-    <xsl:text>\end{console}%&#xa;</xsl:text>
+    <!-- Concluding line is still being parsed as verbatim text, -->
+    <!-- so *any* extra characters will produce a LaTeX warning  -->
+    <!-- starting with "Character dropped after \end{console}"   -->
+    <!-- So...do not put a % (or anything else extra) here       -->
+    <xsl:text>\end{console}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- match immediately preceding, only if a prompt:                   -->
