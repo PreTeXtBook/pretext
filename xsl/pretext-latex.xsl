@@ -1076,7 +1076,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\lititle}[1]{{\slshape#1}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%% End: Semantic Macros&#xa;</xsl:text>
-    <xsl:call-template name="create-numbered-tcolorbox"/>
     <xsl:if test="$document-root//solutions or $b-needs-solution-styles">
         <xsl:text>%% begin: environments for duplicates in solutions divisions&#xa;</xsl:text>
         <!-- Solutions present, check for exercise types     -->
@@ -1746,6 +1745,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- \renewcommand{\thechapter}{\thepart.\arabic{chapter}}           -->
     <!--                                                                 -->
     <xsl:call-template name="load-configure-hyperref"/>
+    <!-- We create counters and numbered  tcolorbox  environments -->
+    <!-- *after* loading the  hyperref  package, so as to avoid a -->
+    <!-- pdfTeX warning about duplicate identifiers.              -->
+    <xsl:call-template name="create-numbered-tcolorbox"/>
     <!-- The "xwatermark" package has way more options, including the -->
     <!-- possibility of putting the watermark onto the foreground     -->
     <!-- (above shaded/colored "tcolorbox").  But on 2018-10-24,      -->
