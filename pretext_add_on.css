@@ -173,6 +173,10 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     font-weight: normal;
     font-style: italic;
 }
+.pretext-content section article.theorem-like li > .heading {
+    font-weight: bold;
+    font-style: normal;
+}
 
 .pretext-content figure {
     margin-bottom: 0;
