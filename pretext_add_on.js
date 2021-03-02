@@ -31,7 +31,7 @@ function getScrollbarWidth() {
     // add innerdiv
     var inner = document.createElement("div");
     inner.style.width = "100%";
-    outer.appendChild(inner);        
+    outer.appendChild(inner);
 
     var widthWithScroll = inner.offsetWidth;
 
@@ -39,6 +39,118 @@ function getScrollbarWidth() {
     outer.parentNode.removeChild(outer);
 
     return widthNoScroll - widthWithScroll;
+}
+
+/*
+  generate permalink description
+*/
+function permalinkDescription(elem) {
+    var retStr;
+    var typeStr = "";
+    const nodeName = elem.nodeName;
+    var isExerciseGroup = false;
+    if ((nodeName == 'P') && (elem.parentElement.parentElement.classList.contains("exercisegroup"))) {
+        isExerciseGroup = true;
+    }
+    // the data we need will be either in an element with class .heading or in a figcaption element
+    // but for:
+    //   exercisegroup -- the heading element will be further up the tree
+    //   hidden knowl  -- the heading element will be further down the tree (this is the 'a > .heading' selector)
+    var headerNode;
+    if (isExerciseGroup)  {
+        headerNode = elem.parentElement.parentElement.querySelector(':scope > .heading');
+    } else {
+        headerNode = elem.querySelector(':scope > .heading, :scope > figcaption, :scope > a > .heading');
+    }
+    var numberStr = "";
+    var titleStr = "";
+    var resultNodes;
+    if (nodeName == 'P') {
+        if (isExerciseGroup) {
+            typeStr = "Exercise Group";
+        } else {
+            typeStr = "Paragraph";
+        }
+    } else if (!headerNode) {
+        // handles assemblages with no title
+        var className = elem.className.split(' ')[0]
+        typeStr = className.charAt(0).toUpperCase() + className.slice(1);
+    } else {
+        if ((nodeName == 'ARTICLE') && (elem.classList.contains('exercise')) ) {
+            typeStr = "Exercise";
+        } else {
+            resultNodes = headerNode.getElementsByClassName("type");
+            if (resultNodes.length > 0) {
+                typeStr = resultNodes[0].innerText;
+            }
+        }
+    }
+    if (headerNode) {
+        if (typeStr.length > 0) {
+            resultNodes = headerNode.getElementsByClassName("codenumber");
+            if (resultNodes.length > 0) {
+                numberStr = resultNodes[0].innerText;
+            }
+        }
+        resultNodes = headerNode.getElementsByClassName("title");
+        if (resultNodes.length > 0) {
+            titleStr = resultNodes[0].innerText;
+        }
+    }
+    retStr = typeStr;
+    if ((typeStr.length > 0) && (numberStr.length > 0)) {
+        retStr += " " + numberStr;
+    }
+    if (titleStr.length > 0) {
+        if (retStr.length > 0) {
+            if (typeStr != titleStr) {
+                retStr += ": " + titleStr;
+            }
+        } else {
+            retStr = titleStr;
+        }
+    }
+    var lastChr = retStr.charAt(retStr.length - 1);
+    if ((lastChr == '.') || (lastChr == ':'))  {
+        retStr = retStr.slice(0,retStr.length - 1);
+    }
+    return retStr;
+}
+
+/*
+  copy permalink address to clipboard
+  requires browser support, otherwise does nothing
+*/
+async function copyPermalink(elem) {
+    // structure borrowed from https://flaviocopes.com/clipboard-api/
+    if (!navigator.clipboard) {
+        // Clipboard API not available
+        return
+    }
+    const this_permalink_url = this_url + "#" + elem.parentElement.id;
+    const this_permalink_description = elem.getAttribute('data-description');
+    var link = "<a href=\"" + this_permalink_url + "\">" + this_permalink_description + "</a>";
+    var text_fallback = this_permalink_description + " \r\n" + this_permalink_url;
+    try {
+        // Kludge because Firefox doesn't yet support ClipboardItem
+        // Also, firefox users *may* need
+        //    dom.events.asyncClipboard.dataTransfer
+        // set to True in about:config  ?
+        if (navigator.userAgent.indexOf("Firefox") != -1 ) {
+            console.log("permalink-to-clipboard: Firefox kludge");
+            await navigator.clipboard.writeText(text_fallback);
+        } else {
+            await navigator.clipboard.write([
+                new ClipboardItem({
+                    'text/html': new Blob([link], { type: 'text/html' }),
+                    'text/plain': new Blob([text_fallback], { type: 'text/plain' }),
+                })
+            ]);
+            console.log(`copied '${this_permalink_url}' to clipboard`);
+        }
+    } catch (err) {
+        console.error('Failed to copy link to clipboard!', err);
+    }
 }
 
 window.addEventListener("load",function(event) {
@@ -54,11 +166,11 @@ window.addEventListener("load",function(event) {
 /* temporary, so that aside-like knowls open in the body of the document */
 /* later the addafter will be inserted by PTX? */
     $("a").each(function() {
-    if($(this).parents('.aside-like').length) {
-        $(this).attr("addafter", "#" + $(this).closest('.aside-like').attr('id') );
-        $(this).closest('.aside-like').attr("tabindex", "0");
-    }
-});
+        if($(this).parents('.aside-like').length) {
+            $(this).attr("addafter", "#" + $(this).closest('.aside-like').attr('id') );
+            $(this).closest('.aside-like').attr("tabindex", "0");
+        }
+    });
 
     /* click an image to magnify */
     $('body').on('click','.image-box > img:not(.draw_on_me):not(.mag_popup), .sbspanel > img:not(.draw_on_me):not(.mag_popup), figure > img:not(.draw_on_me):not(.mag_popup), figure > div > img:not(.draw_on_me):not(.mag_popup)', function(){
@@ -127,7 +239,7 @@ console.log("this is e", e);
     console.log("adding permalinks");
     /* add permalinks to all sections and articles */
     items_needing_permalinks = document.querySelectorAll('main section:not(.introduction), main section > p, main section > article, main section > figure, main section > .exercisegroup > .introduction > p, main section > .exercisegroup article, main section article.exercise');
- //   items_needing_permalinks = document.querySelectorAll('body section article');
+    //   items_needing_permalinks = document.querySelectorAll('body section article');
     this_url = window.location.href.split('#')[0];
     permalink_word = "permalink";
     permalink_word = "&#x1F517;";
@@ -139,13 +251,16 @@ console.log("this is e", e);
   //          this_permalink_container = document.createElement('div');
   //          this_permalink_container.setAttribute('style', "position: relative; width: 0; height: 0");
   //          this_permalink_container.innerHTML = '<span class="autopermalink">' + permalink_word + '</span>';
-           this_permalink_container = document.createElement('div');
-           this_permalink_container.setAttribute('class', 'autopermalink');
-           this_permalink_container.innerHTML = '<a href="' + this_permalink_url + '">' + permalink_word + '</a>';
+            const this_permalink_description = permalinkDescription(this_item);
+            this_permalink_container = document.createElement('div');
+            this_permalink_container.setAttribute('class', 'autopermalink');
+            this_permalink_container.setAttribute('onclick', 'copyPermalink(this)');
+            this_permalink_container.setAttribute('data-description', this_permalink_description);
+            this_permalink_container.innerHTML = '<a href="' + this_permalink_url + '">' + permalink_word + '</a>';
 
-           this_item.insertAdjacentElement("afterbegin", this_permalink_container);
+            this_item.insertAdjacentElement("afterbegin", this_permalink_container);
         } else {
-            console.log("      no permalink, because no id", this_item) 
+            console.log("      no permalink, because no id", this_item)
         }
     }
 
@@ -193,14 +308,14 @@ console.log("this is e", e);
        console.log("make big: ", this_video);
        original_width =  this.getAttribute("data-width");
        original_height =  this.getAttribute("data-height");
-       
+
        browser_width = $(window).width();
        width_ratio = browser_width/original_width;
        console.log("the browser is wider by a factor of",width_ratio);
        this_video.setAttribute("width", width_ratio*original_width);
        this_video.setAttribute("height", width_ratio*original_height);
        this_video.setAttribute("style", "position:relative; left:-260px; z-index:1000");
-       
+
        this.setAttribute("class", "videosmall");
        this.innerHTML = "make small";
       $(".videosmall").click(function(){
