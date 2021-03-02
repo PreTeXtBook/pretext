@@ -53,15 +53,14 @@ function permalinkDescription(elem) {
         isExerciseGroup = true;
     }
     // the data we need will be either in an element with class .heading or in a figcaption element
-    // but for exercisegroup that heading element will be further up the tree
+    // but for:
+    //   exercisegroup -- the heading element will be further up the tree
+    //   hidden knowl  -- the heading element will be further down the tree (this is the 'a > .heading' selector)
     var headerNode;
     if (isExerciseGroup)  {
         headerNode = elem.parentElement.parentElement.querySelector(':scope > .heading');
     } else {
-        headerNode = elem.querySelector(':scope > .heading');
-        if (! headerNode) {
-            headerNode = elem.querySelector(':scope > figcaption');
-        }
+        headerNode = elem.querySelector(':scope > .heading, :scope > figcaption, :scope > a > .heading');
     }
     var numberStr = "";
     var titleStr = "";
