@@ -5084,8 +5084,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (existing) enclosing "div" on display mathematics.  That       -->
 <!-- might be better for EPUB, speech, etc, in addition to braille. -->
 
-<xsl:template match="me" mode="tag" />
-
 <xsl:template match="men|mrow" mode="tag">
     <xsl:param name="b-original" />
     <xsl:if test="$b-original and @xml:id">
@@ -5110,9 +5108,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- \qedhere device is LaTeX only -->
-<xsl:template match="me|men|mrow" mode="qed-here" />
-
 
 <!-- Displayed Multi-Line Math ("md", "mdn") -->
 
@@ -5135,12 +5130,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="md|mdn" mode="heading-xref-knowl" />
 
 <!-- Rows of Displayed Multi-Line Math ("mrow") -->
-<!-- Template in -common is sufficient with abstract templates -->
+<!-- Template in -common is sufficient with base templates     -->
 <!--                                                           -->
-<!-- (1) "display-page-break"                                  -->
-<!-- (2) "qed-here"                                            -->
-
-<xsl:template match="mrow" mode="display-page-break" />
+<!-- (1) "display-page-break" (LaTeX only)                     -->
+<!-- (2) "qed-here" (LaTeX only)                               -->
 
 <!-- Intertext -->
 <!-- A LaTeX construct really, we just jump out/in of    -->

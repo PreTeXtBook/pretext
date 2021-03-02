@@ -1515,7 +1515,7 @@ Book (with parts), "section" at level 3
 <!--                                                                 -->
 <!-- (2) tag                                                         -->
 <!--       Equation-numbering, per equation                          -->
-<!--       Never for "men", always for "me"                          -->
+<!--       Never for "me", always for "men"                          -->
 <!--                                                                 -->
 <!-- (3) qed-here                                                    -->
 <!--       Slick device, LaTeX only                                  -->
@@ -1528,6 +1528,25 @@ Book (with parts), "section" at level 3
 <!-- This is the HTML "body" template, which other conversions       -->
 <!-- can just call trivially with some implementations of the        -->
 <!-- abstract templates                                              -->
+
+<!-- Default implementations of specialized templates -->
+<xsl:template name="display-math-visual-blank-line"/>
+
+<xsl:template match="me" mode="tag"/>
+
+<xsl:template match="men" mode="tag">
+    <xsl:message>PTX:ERROR:   the modal "tag" template needs an implementation for "men" in the current conversion</xsl:message>
+</xsl:template>
+
+<xsl:template match="me|men" mode="qed-here"/>
+
+<!-- All displayed mathematics gets wrapped by  -->
+<!-- an abstract template, a necessity for HTML -->
+<!-- output.  Otherwise, just a copy machine.   -->
+<xsl:template match="me|men" mode="display-math-wrapper">
+    <xsl:param name="content" />
+    <xsl:value-of select="$content" />
+</xsl:template>
 
 <xsl:template match="me|men" mode="body">
     <!-- block-type parameter is ignored, since the          -->
@@ -1632,6 +1651,7 @@ Book (with parts), "section" at level 3
 <!--                                                                -->
 <!-- (1) display-math-visual-blank-line                             -->
 <!--       Just a line in source to help visually (% for LaTeX)     -->
+<!--       named template, defined earlier                          -->
 <!--                                                                -->
 <!-- (2) display-math-wrapper                                       -->
 <!--       An enclosing environment for any displayed mathematics   -->
@@ -1640,6 +1660,16 @@ Book (with parts), "section" at level 3
 <!-- This is the HTML "body" template, which other conversions      -->
 <!-- can just call trivially with some implementations of the       -->
 <!-- abstract templates                                             -->
+
+<!-- Default implementations of specialized templates -->
+
+<!-- All displayed mathematics gets wrapped by  -->
+<!-- an abstract template, a necessity for HTML -->
+<!-- output.  Otherwise, just a copy machine.   -->
+<xsl:template match="md|mdn" mode="display-math-wrapper">
+    <xsl:param name="content" />
+    <xsl:value-of select="$content" />
+</xsl:template>
 
 <xsl:template match="md|mdn" mode="body">
     <!-- block-type parameter is ignored, since the          -->
@@ -1827,10 +1857,19 @@ Book (with parts), "section" at level 3
 <!-- Abstract Templates                                        -->
 <!--                                                           -->
 <!-- (1) display-page-break                                    -->
-<!--       LaTeX scheme, no-op in HTML                         -->
-<!-- (2) qed-here                                              -->
+<!--       LaTeX scheme, no-op here as base                    -->
+<!-- (2) tag                                                   -->
+<!--       similar to for "men", but on *rows* of multiline    -->
+<!-- (3) qed-here                                              -->
 <!--       Identical to "me", "men" behavior                   -->
 <!--       So defined in the vicinity of those                 -->
+
+<!-- Default implementations of specialized templates -->
+<xsl:template match="mrow" mode="display-page-break"/>
+<xsl:template match="mrow" mode="tag">
+     <xsl:message>PTX:ERROR:   the modal "tag" template needs an implementation for "mrow" in the current conversion</xsl:message>
+</xsl:template>
+<xsl:template match="mrow" mode="qed-here"/>
 
 <xsl:template match="mrow">
     <xsl:param name="b-original" select="true()" />
@@ -1899,8 +1938,8 @@ Book (with parts), "section" at level 3
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:apply-templates select="." mode="tag">
-                    <xsl:with-param name="b-original" select="$b-original" />
-                </xsl:apply-templates>
+                        <xsl:with-param name="b-original" select="$b-original" />
+                    </xsl:apply-templates>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>

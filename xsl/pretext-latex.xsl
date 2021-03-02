@@ -6520,16 +6520,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Displayed Single-Line Math ("me", "men") -->
 
-<!-- All displayed mathematics gets wrapped by  -->
-<!-- an abstract template, a necessity for HTML -->
-<!-- output.  It is unnecessary for LaTeX, and  -->
-<!-- so just a copy machine.                    -->
-<xsl:template match="me|men|md|mdn" mode="display-math-wrapper">
-    <xsl:param name="content" />
-    <xsl:value-of select="$content" />
-</xsl:template>
-
-
 <!-- The default template just calls the modal "body"      -->
 <!-- template needed for the HTML knowl production scheme. -->
 <!-- The variables in the "body" template have the right   -->
@@ -6541,9 +6531,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="display-math-visual-blank-line">
     <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
-
-<!-- "me" is not numbered, not a cross-reference target -->
-<xsl:template match="me" mode="tag" />
 
 <!-- Simply apply modal "label" template,  -->
 <!-- to allow for LaTeX equation numbering -->
@@ -6584,7 +6571,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--          (we don't differentiate whitespace policy here)      -->
 <!--   (6) Having survived all this write a \qedhere               -->
 <!-- TODO: \qedhere also functions at the end of a list            -->
-<xsl:template match="men" mode="qed-here" />
+
+<!-- This is default in -common, but explicit here -->
+<xsl:template match="men" mode="qed-here"/>
 
 <xsl:template match="mrow|me" mode="qed-here">
     <!-- <xsl:message>here</xsl:message> -->
@@ -6621,13 +6610,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Template in -common is sufficient with abstract templates -->
 <!--                                                           -->
 <!-- (1) "display-page-break"                                  -->
-<!-- (2) "qed-here"                                            -->
+<!-- (2) "qed-here" (implemented above)                        -->
 
 <!-- Page Breaks within Display Math -->
 <!-- \allowdisplaybreaks is on globally always          -->
 <!-- If parent has  break="no"  then surpress with a *  -->
 <!-- Unless "mrow" has  break="yes" then leave alone    -->
-<!-- no-op for the HTML version, where it is irrelevant -->
+<!-- no-op for the base version, where it is irrelevant -->
 
 <xsl:template match="mrow" mode="display-page-break">
     <xsl:if test="parent::*/@break='no' and not(@break='yes')">
