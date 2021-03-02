@@ -131,7 +131,7 @@ async function copyPermalink(elem) {
     const this_permalink_url = this_url + "#" + elem.parentElement.id;
     const this_permalink_description = elem.getAttribute('data-description');
     var link = "<a href=\"" + this_permalink_url + "\">" + this_permalink_description + "</a>";
-    var text_fallback = this_permalink_description + "\n" + this_permalink_url;
+    var text_fallback = this_permalink_description + " \r\n" + this_permalink_url;
     try {
         // Kludge because Firefox doesn't yet support ClipboardItem
         // Also, firefox users *may* need
