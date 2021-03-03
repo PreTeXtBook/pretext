@@ -8780,14 +8780,14 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- A convenience for authors in early stages of writing -->
 <!-- Just drop a reminder in text                         -->
 <xsl:template match="xref[@provisional]">
-    <xsl:variable name="warning-ref">
+    <xsl:variable name="warning-rtf">
         <c>
             <xsl:text>[provisional cross-reference: </xsl:text>
             <xsl:value-of select="@provisional"/>
             <xsl:text>]</xsl:text>
         </c>
     </xsl:variable>
-    <xsl:variable name="warning" select="exsl:node-set($warning-ref)"/>
+    <xsl:variable name="warning" select="exsl:node-set($warning-rtf)"/>
     <xsl:apply-templates select="$warning/c"/>
 </xsl:template>
 
