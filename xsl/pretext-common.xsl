@@ -4492,14 +4492,15 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <!--  -->
     <xsl:if test="@xml:id">
         <!-- create a bona fide mapping/pair -->
+        <!-- we sanitize all authored attribute values -->
         <idmap>
             <xsl:attribute name="namevalue">
                 <xsl:choose>
                     <xsl:when test="@name">
-                        <xsl:value-of select="@name"/>
+                        <xsl:value-of select="normalize-space(@name)"/>
                     </xsl:when>
                     <xsl:when test="@xml:id">
-                        <xsl:value-of select="@xml:id"/>
+                        <xsl:value-of select="normalize-space(@xml:id)"/>
                     </xsl:when>
                     <xsl:otherwise>
                         <!-- Default (old) operation once made empty/empty pairs -->
@@ -4508,7 +4509,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 </xsl:choose>
             </xsl:attribute>
             <xsl:attribute name="idvalue">
-                <xsl:value-of select="@xml:id"/>
+                <xsl:value-of select="normalize-space(@xml:id)"/>
             </xsl:attribute>
         </idmap>
     </xsl:if>
@@ -4564,10 +4565,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- The interface, described above.    -->
 <!-- NB: no context, text in, text out. -->
 <xsl:template name="id-lookup-by-name">
+    <!-- we santitize the $name value here, when employed -->
     <xsl:param name="name" select="''"/>
     <!-- set context for "document" to use for lookup table -->
     <xsl:for-each select="$identifier-mapping">
-        <xsl:variable name="a-mapping" select="key('nameid-key', $name)"/>
+        <xsl:variable name="a-mapping" select="key('nameid-key', normalize-space($name))"/>
         <!-- result is string used to identify element via its @xml:id -->
         <xsl:value-of select="$a-mapping/@idvalue"/>
     </xsl:for-each>
