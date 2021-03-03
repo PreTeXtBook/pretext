@@ -7342,7 +7342,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 </xsl:call-template>
             </xsl:variable>
             <xsl:variable name="scope" select="id($scope-id)"/>
-            <xsl:if test="not(exsl:node-set($scope))">
+            <xsl:if test="not($scope)">
                 <xsl:message>PTX:WARNING: unresolved @scope ("<xsl:value-of select="@scope"/>") for a &lt;solutions&gt; division</xsl:message>
                 <xsl:apply-templates select="." mode="location-report" />
             </xsl:if>
@@ -8905,7 +8905,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <!-- pass on a completely assembled source, so the id()    -->
             <!-- function does not need to survey multiple documents.  -->
             <xsl:variable name="hits">
-                <!-- TODO: test dropping the two "exsl:node-set()" (and another by @scope) -->
                 <!-- always do a context shift to $original -->
                 <xsl:for-each select="$original">
                     <xsl:variable name="initial-id">
@@ -8913,9 +8912,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                             <xsl:with-param name="name" select="$initial"/>
                         </xsl:call-template>
                     </xsl:variable>
-                    <xsl:if test="exsl:node-set(id($initial-id))">
+                    <xsl:if test="id($initial-id)">
                         <xsl:text>X</xsl:text>
-                        <xsl:variable name="target" select="exsl:node-set(id($initial-id))"/>
+                        <xsl:variable name="target" select="id($initial-id)"/>
                         <xsl:variable name="is-a-target">
                             <xsl:apply-templates select="$target" mode="is-xref-target"/>
                         </xsl:variable>
