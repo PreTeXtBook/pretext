@@ -7275,6 +7275,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- primary version, as described above -->
         <xsl:when test="not($b-host-runestone)">
             <xsl:choose>
+                <xsl:when test="@name">
+                    <xsl:value-of select="@name"/>
+                </xsl:when>
                 <xsl:when test="@permid">
                     <xsl:value-of select="@permid"/>
                 </xsl:when>

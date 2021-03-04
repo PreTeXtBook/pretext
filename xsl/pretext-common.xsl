@@ -4595,6 +4595,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <!-- version of previous internal-id     -->
         <xsl:when test="$b-fast-ids">
             <xsl:choose>
+                <xsl:when test="@name">
+                    <xsl:value-of select="@name"/>
+                </xsl:when>
                 <xsl:when test="@xml:id">
                     <xsl:value-of select="@xml:id" />
                 </xsl:when>
@@ -4615,6 +4618,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <!-- internal-id previously in use exclusively -->
         <xsl:otherwise>
             <xsl:choose>
+                <xsl:when test="@name">
+                    <xsl:value-of select="@name"/>
+                </xsl:when>
                 <xsl:when test="@xml:id">
                     <xsl:value-of select="@xml:id" />
                 </xsl:when>
