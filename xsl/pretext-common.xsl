@@ -1145,6 +1145,7 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- To change default from old-slow-style                          -->
 <!--   1.  move match on empty to "no" result                       -->
 <!--   2.  flip otherwise clause                                    -->
+<!-- 2021-03-03: move to Bad Bank once deactivated -->
 <xsl:param name="oldids" select="''"/>
 <xsl:variable name="oldstyle">
     <xsl:choose>
@@ -11365,7 +11366,14 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2021-02-14'" />
         <xsl:with-param name="message" select="'docinfo/numbering/division/@part has been replaced by the  numbering/divisions/@part-structure  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'"/>
     </xsl:call-template>
-    <!-- -->
+    <!--  -->
+    <!-- 2021-03-03  switch never tested, experiment never enacted, ids improved anyway -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-03-03'" />
+        <xsl:with-param name="message" select="'the  oldids  string parameter was used for testing, and is now deprecated.  Code has not yet been removed, but will soon be, and this message will change to say so.'" />
+        <xsl:with-param name="incorrect-use" select="($oldids != '')" />
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
