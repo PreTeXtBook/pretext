@@ -87,6 +87,14 @@
     </section>
 
     <section>
+        <title>Permalinks</title>
+
+        <p>If you place a mouse pointer in the left margin, to the left of a heading for an item, then an icon with two links of a chain will appear.  This is a link to the item.  Instead of a doing a right-click for a context menu that has an option like <q>Copy Link Location</q>, rather do a normal (left-) click.  This will copy the heading (<q>Example 4.5 Chameleon Colors</q>), and also the link itself, to your clipboard, along with some formatting.  You can then paste this into course materials, or email it to a reader who had a question.</p>
+
+        <p>You might want to make this feature known to your readers, perhaps via a preface explaining some of the more novel features of the <init>HTML</init> version of a <pretext/> document.</p>
+    </section>
+
+    <section>
         <title>Lists</title>
 
         <p>On a description list (<tag>dl</tag>), only <attr>width</attr> values of <c>narrow</c> and <c>medium</c> are implemented. (2018-03-28)</p>
