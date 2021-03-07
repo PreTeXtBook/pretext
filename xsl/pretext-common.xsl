@@ -833,17 +833,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- historically false -->
 <xsl:variable name="b-number-exercise-distinct" select="boolean($docinfo/numbering/exercises)" />
 
-
-<!-- We read the document language translation -->
-<!-- nodes out of the right file, which relies -->
-<!-- on filenames with country codes           -->
-<xsl:variable name="localization-file">
-    <xsl:text>localizations/</xsl:text>
-    <xsl:value-of select="$document-language" />
-    <xsl:text>.xsl</xsl:text>
-</xsl:variable>
-<xsl:variable name="translation-nodes" select="document($localization-file)" />
-
 <!-- Document may exist in a variety of formats in  -->
 <!-- various locations.  These parameters can be    -->
 <!-- hard-coded in the docinfo and/or specified on  -->
@@ -4196,15 +4185,26 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
+<!-- The  xsl/localizations/localizations.xml  file contains the base -->
+<!-- filenames for the individual (per-language) files.  We form a    -->
+<!-- node-set of these filenames in the  $locale-files  variable.     -->
+<!-- Then the  document()  function will read multiple files and      -->
+<!-- form one grand node-set with all of the translations for         -->
+<!-- all languages.  The  xi:include  device is possible within the   -->
+<!-- localizations  directory, but would require activating that      -->
+<!-- feature (e.g.  xsltproc -xinclude) for even the simplest         -->
+<!-- (non-modular) documents.  Better to accomplish the consolidation -->
+<!-- with standard XSLT.                                              -->
+<xsl:variable name="locale-files" select="document('localizations/localizations.xml')/localizations/locale" />
+<xsl:variable name="localizations" select="document($locale-files)" />
+
+<xsl:key name="localization-key" match="localization" use="concat(../@language, @string-id)"/>
+
 <!-- This template translates an string to an upper-case language-equivalent -->
 <!-- Sometimes we must call this directly, but usually better to apply the   -->
 <!-- template mode="type-name" to the node, which then calls this routine    -->
-<!-- NB: this key concatenation might appear more complicated than           -->
-<!--     necessary but may make supporting multiple languages easier?        -->
 <!-- TODO: perhaps allow mixed languages, so don't set document language globally,  -->
 <!-- but search up through parents until you find a lang tag                        -->
-<xsl:key name="localization-key" match="localization" use="concat(../@name, @string-id)"/>
-
 <xsl:template name="type-name">
     <xsl:param name="string-id" />
     <xsl:variable name="translation">
@@ -4223,8 +4223,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <xsl:apply-templates select="$docinfo/rename[@element=$string-id and not(@lang) and not(@xml:lang)]"/>
             </xsl:when>
             <!-- Finally, default to a lookup from the localization file's nodes -->
+            <!-- Use a "for-each" to effect a context switch for the look-up     -->
             <xsl:otherwise>
-                <xsl:for-each select="$translation-nodes">
+                <xsl:for-each select="$localizations">
                     <xsl:value-of select="key('localization-key', concat($document-language,$string-id) )"/>
                 </xsl:for-each>
             </xsl:otherwise>

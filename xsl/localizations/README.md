@@ -30,6 +30,8 @@ There is a [general overview of language tags](http://www.w3.org/International/a
 
 Contibutions of new languages are always welcome and especially encouraged! Search on "Translation needed" to see where you can help. Use the  en-US  file as a template for a new language file, since it is always most complete.  It is understood that certain English words and phrases have subtleties that can be very hard to capture in another language.  Do your best to concoct a close approximation -- something should be better than nothing.  And it might improve with additions from others later.  We try to address some of this in the  en-US  file, so do be certain to look there for explanations of how these strings are employed.  Comments about your own decisions, within the relevant language file, can be very helpful later.
 
+NEW LANGUAGES: for a new file to be effective, a single line needs to be added to the `xsl/localizations/localizations.xml` file.  It should be obvious what to do by looking at the other lines of that file.
+
 Additions to incomplete files, or new files for additional languages, are very welcome and are a huge help in making PreTeXt useable for more authors.  A GitHub pull request is preferable.  If you do not know GitHub well, then emailing the entire language file (as an attachment) is very welcome and just as easy to deal with on our end.
 
 To test, or use: place  `xml:lang="es-ES"`, or similar, as an attribute on your `<pretext>` element.  `en-US` is the default if no `@xml:lang` attribute is given on the `pretext` element.
