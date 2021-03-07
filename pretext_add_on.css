@@ -314,6 +314,9 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .pretext-content section .heading + article, .pretext-content section header + article {
     margin-top: 1em;
 }
+.pretext-content section .heading + .sidebyside {
+    margin-top: 1em;
+}
 
 .pretext-content a > .heading { display: inline;}
 
