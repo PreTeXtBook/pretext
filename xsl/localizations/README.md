@@ -1,5 +1,5 @@
 <!--********************************************************************
-Copyright 2013-2016 Robert A. Beezer
+Copyright 2013-2021 Robert A. Beezer
 
 This file is part of PreTeXt.
 
@@ -20,9 +20,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 PreTeXt Localizations
 =====================
 
-Each file in this directory provides translations of various strings used in titles and headings (and other places) to a specific language.  Filenames reflect the code for language (lowercase) and then the code for the region (uppercase).  This is a requirement, so that the right file is located for the language code given in the source XML.
+Each file in this directory provides translations of various strings used in titles and headings (and other places) to a specific language.  Filenames reflect the code for language (lowercase) and then the code for the region (uppercase).  This is a requirement.
 
-For each file of translations, the "name" attribute of the variables are used to reference the language code and the "string-id" of the localization element is the lookup identifier. Element content is the language-specific string. The English version ("en-US") is carefully documented, so additions of new languages do not necessarily require new documentation, though it could help other implementers. See `xsl/pretext-common.xsl` for the two routines which make use of this information, one is a named template and the other (largely) uses the name of an element as the string-id.
+For each file of translations, the "language" attribute of the "locale" element used to reference the language code and the "string-id" of each "localization" element is the lookup key. Element content is the language-specific string. The English version ("en-US") is carefully documented, so additions of new languages do not necessarily require new documentation, though it could help other implementers. See `xsl/pretext-common.xsl` for the two routines which make use of this information, one is a named template and the other (largely) uses the name of an element as the string-id.
 
 Some items peculiar to LaTeX are explained [here](http://www.tex.ac.uk/cgi-bin/texfaq2html?label=fixnam)
 
