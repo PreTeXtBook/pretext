@@ -22,7 +22,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See  xsl/localizations/README.md  for an explanation of this file -->
 
 <!-- cs-CZ, Czech (Czechia) -->
-<!-- Jiri Lebl, lebl@okstate.edu, 2018-10-13   -->
+<!-- Jiri Lebl, lebl@okstate.edu, 2021-03-07   -->
 
 <locale language="cs-CZ">
     <!-- THEOREM-LIKE blocks -->
@@ -57,7 +57,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='volume'>Díl</localization>
     <localization string-id='book'>Kniha</localization>
     <localization string-id='article'>Článek</localization>
-    <!-- <localization string-id='slideshow'>Slideshow</localization> -->
+    <localization string-id='slideshow'>Prezentace</localization>
     <localization string-id='letter'>Dopis</localization>
     <localization string-id='memo'>Sdělení</localization>
     <localization string-id='presentation'>Prezentace</localization>
@@ -70,7 +70,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='subsection'>Podsekce</localization>
     <localization string-id='subsubsection'>Podpodsekce</localization>
     <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
-    <!-- <localization string-id='slide'>Slide</localization> -->
+    <localization string-id='slide'>Slajd</localization>
     <localization string-id='introduction'>Úvod</localization>
     <localization string-id='conclusion'>Závěr</localization>
     <localization string-id='exercises'>Cvičení</localization>
@@ -135,7 +135,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='p'>Odstavec</localization>
     <localization string-id='blockquote'>Citát</localization>
     <!-- Literate programming, a chunk of computer code -->
-    <!-- <localization string-id='fragment'>Fragment</localization> -->
+    <localization string-id='fragment'>Fragment</localization>
     <!-- Parts of an exercise and its solution -->
     <localization string-id='divisionalexercise'>Cvičení</localization>
     <!-- Translation needed for Czech Czech -->
