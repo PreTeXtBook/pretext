@@ -472,6 +472,11 @@ from Jiří Lebl */
     margin-bottom: 0.5em;
 }
 
+.pretext-content .knowl-content > article:first-child,
+.pretext-content .knowl-content > .solution:first-child {
+/* padding, not margin, to det colored background (and not be absorbed) */
+    padding-top: 0.5em;
+}
 
 
 .pretext-content section p.credit + p.credit {
@@ -2726,11 +2731,14 @@ body.sidebar-left-closed .searchwrapper {
 
 /*
 nested tasks. see
-http://mathbook.pugetsound.edu/examples/sample-article/html/interesting-corollary.html
+https://pretextbook.org/examples/sample-article/html/interesting-corollary.html#aBc
 */
 
 .pretext-content .exercise-like > .exercise-like {
     margin-left: 40px;
+}
+.pretext-content .exercise-like > .exercise-like.task {
+    margin-left: 20px;
 }
 .pretext-content .exercise-like > .exercise-like > p {
     margin-top: 1.25em;
