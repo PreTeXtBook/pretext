@@ -2177,7 +2177,9 @@ figure figcaption.wrap {
 }
 .pretext-content .image-box img,  /* See sample article Graphics section */
 .pretext-content .sbspanel img {
+   /* previously these were hard-coded in the HTML */
     width: 100%;
+    height: auto;
 }
 
 /* In 0.2 all of the below are needed.  Possibly in a later version
