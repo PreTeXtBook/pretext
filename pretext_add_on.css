@@ -2193,16 +2193,18 @@ figure figcaption.wrap {
 }
 .pretext-content img.mag_popup {
     border: 1px solid #666;
-    box-shadow: 5px 10px 5px #999;
+    box-shadow: 4px 6px 4px #999;
     cursor: zoom-out;
     max-width: 600px;
+/*
     margin-right: 50px;
+*/
 }
 .pretext-content .mag_popup_container {
     width:100%;
     position:absolute;
     z-index:1001;
-    overflow-x: auto;
+    overflow-x: visible;
 }
 
 .pretext-content .image-box,
