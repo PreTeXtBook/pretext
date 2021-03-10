@@ -10316,6 +10316,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Languages, Scripts -->
 <!-- ################## -->
 
+<!-- TODO: the @xml:lang attribute serves more than one purpose. -->
+<!-- For LaTeX it is both localization of terms ("Theorem"),     -->
+<!-- especially in multilingual documents or translations, but   -->
+<!-- also a selection of necessary fonts/glyphs/scripts.  We     -->
+<!-- might wish for a more robust method of determing which      -->
+<!-- languages have supported fonts than just an empty return    -->
+<!-- from the "country-to-language" template.                    -->
+<!-- TODO: these would be more XSLT-ish if there were wrapper    -->
+<!-- templates rather than a begin template and an end template. -->
+
 <!-- Absent @xml:lang, do nothing -->
 <xsl:template match="*" mode="begin-language" />
 <xsl:template match="*" mode="end-language" />
@@ -10323,27 +10333,47 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- More specifically, change language                -->
 <!-- This assumes element is enabled for this behavior -->
 <xsl:template match="*[@xml:lang]" mode="begin-language">
-    <xsl:text>\begin{</xsl:text>
-    <xsl:apply-templates select="." mode="country-to-language" />
-    <xsl:text>}&#xa;</xsl:text>
+    <xsl:variable name="language">
+        <xsl:apply-templates select="." mode="country-to-language"/>
+    </xsl:variable>
+    <xsl:if test="not($language = '')">
+        <xsl:text>\begin{</xsl:text>
+        <xsl:value-of select="$language"/>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="*[@xml:lang]" mode="end-language">
-    <xsl:text>\end{</xsl:text>
-    <xsl:apply-templates select="." mode="country-to-language" />
-    <xsl:text>}&#xa;</xsl:text>
+    <xsl:variable name="language">
+        <xsl:apply-templates select="." mode="country-to-language"/>
+    </xsl:variable>
+    <xsl:if test="not($language = '')">
+        <xsl:text>\end{</xsl:text>
+        <xsl:value-of select="$language"/>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- Even more specifically, we provide an inline version -->
 <!-- This should be more readable in LaTex source         -->
 <xsl:template match="foreign[@xml:lang]" mode="begin-language">
-    <xsl:text>\text</xsl:text>
-    <xsl:apply-templates select="." mode="country-to-language" />
-    <xsl:text>{</xsl:text>
+    <xsl:variable name="language">
+        <xsl:apply-templates select="." mode="country-to-language"/>
+    </xsl:variable>
+    <xsl:if test="not($language = '')">
+        <xsl:text>\text</xsl:text>
+        <xsl:value-of select="$language"/>
+        <xsl:text>{</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="foreign[@xml:lang]" mode="end-language">
-    <xsl:text>}</xsl:text>
+    <xsl:variable name="language">
+        <xsl:apply-templates select="." mode="country-to-language"/>
+    </xsl:variable>
+    <xsl:if test="not($language = '')">
+        <xsl:text>}</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- Assumes element has an xml:lang attribute      -->
@@ -10368,6 +10398,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="@xml:lang='vi-VN'">
             <xsl:text>vietnamese</xsl:text>
         </xsl:when>
+        <!-- no supported language, return nothing -->
+        <xsl:otherwise/>
     </xsl:choose>
 </xsl:template>
 
