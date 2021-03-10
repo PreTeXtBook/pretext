@@ -113,7 +113,7 @@ base_menu_for = {
             ["theorem-like", "theorem-like"],
             ["remark-like"],
             ["example-like", "example-like"],
-            ["image/video/sound", "display-like", "v"],
+            ["image/video/sound", "image-like", "v"],
             ["math/chemistry/code", "math-like", "c"],
             ["project/exercise-like", "project-like", "j"],
             ["blockquote/poem/music/etc", "quoted"],
@@ -126,12 +126,12 @@ base_menu_for = {
 "article": [["paragraph", "p"],  //  this is for theorem-like and similar
             ["list or table", "list-like"],
             ["math/chemistry/code", "math-like", "c"],
-            ["image/video/sound", "display-like", "v"]],
+            ["image/video/sound", "image-like", "v"]],
 "li": [["new list item", "li", "i"],
             ["paragraph", "p"],
             ["list or table", "list-like"],
             ["math/chemistry/code", "math-like", "c"],
-            ["image/video/sound", "display-like", "v"]],
+            ["image/video/sound", "image-like", "v"]],
 "p": [["emphasis-like"], ["formula"], ["abbreviation"], ["symbol"], ["ref or link", "ref"]]
 }
 
@@ -167,7 +167,8 @@ var the_inner_menu = {
 "project-like": [["exercise"], ["activitiy"], ["investigation"], ["exploration", "exploration", "x"], ["project"]],
 "remark-like": [["remark"], ["warning"], ["note"], ["observation"], ["convention"], ["insight"]],
 "example-like": [["example"], ["question"], ["problem"]],
-"display-like": [["image"], ["image with caption", "imagecaption", "m"], ["video"], ["video with caption", "videocaption", "d"], ["audio"]],
+// "display-like": [["image"], ["image with caption", "imagecaption", "m"], ["video"], ["video with caption", "videocaption", "d"], ["audio"]],
+"image-like": [["image"], ["video"], ["audio"]],
 "aside-like": [["aside"], ["historical"], ["biographical"]],
 "layout-like": [["side-by-side"], ["assemblage"], ["biographical aside"], ["titled paragraph", "paragraphs"]],
 "math-like": [["math display", "mathdisplay"], ["chemistry display", "chemistrydisplay"], ["code listing", "code", "l"]],
@@ -393,7 +394,6 @@ function menu_options_for(object_id, component_type, level) {
          component_items = [["paragraph", "p"],
             ["list or table", "list-like"],
             ["math/chemistry/code", "math-like", "c"]]
-      //      ["image/video/sound", "display-like", "v"]]
      }
 
      this_menu = "";
@@ -666,6 +666,14 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
         var new_p_id = randomstring();
         internalSource[new_p_id] = {"xml:id": new_p_id, "permid": "", "ptxtag": "p", "content": "", "parent": [new_li_id, "content"]}
         internalSource[new_li_id] = {"xml:id": new_li_id, "permid": "", "ptxtag": "li", "content": "<&>" + new_p_id + "<;>", "parent": [new_id, "content"] }
+        new_source["content"] = "<&>" + new_li_id + "<;>";
+        current_editing_actions.push(["new", "li", new_li_id]);
+    } else if (new_tag == "bareimage") {  // creating a list, which needs one item to begin.
+                                   // that item is an li contining a p
+        var new_imagebox_id = randomstring();
+        var new_img_id = randomstring();
+        internalSource[new_img_id] = {"xml:id": new_img_id, "permid": "", "ptxtag": "img", "content": "<&>" + new_p_id + "<;>", "parent": [new_id, "content"] }
+        internalSource[new_imagebox_id] = {"xml:id": new_imagebox_id, "permid": "", "ptxtag": "bareimage", "content": "", "parent": [new_li_id, "content"]}
         new_source["content"] = "<&>" + new_li_id + "<;>";
         current_editing_actions.push(["new", "li", new_li_id]);
     } else if (editing_container_for["theorem-like"].includes(new_tag) ||
@@ -1242,8 +1250,11 @@ var internalSource = {  // currently the key is the HTML id
            "content": "<&>Xqr<;><&>ssiiddee<;><&>DxA<;>"},
    "Xqr": {"xml:id": "", "permid": "Xqr", "ptxtag": "p", "parent": ["yNH","content"],
            "content": "After excavating for weeks, you finally arrive at the burial chamber.\nThe room is empty except for two large chests.\n On each is carved a message (strangely in English):"},
-   "ssiiddee": {"xml:id": "", "permid": "", "ptxtag": "sidebyside", "parent": ["yNH","content"],
-           "content": "should be a refrence to the div.sbsrow"},
+   "ssiiddee": {"xml:id": "", "permid": "", "ptxtag": "bareimage", "parent": ["yNH","content"],
+           "content": "<&>ppccii<;>",
+           "attributes": [ ["class", "image-box"], ["style", "width: 80%; margin-right: 10%; margin-left: 10%"] ]},
+   "ppccii": {"xml:id": "", "permid": "", "ptxtag": "img", "parent": ["ssiiddee","content"],
+           "attributes": [ ["src", "images/two-chests.svg"], ["alt", "alt text goes here"] ]},
    "DxA": {"xml:id": "", "permid": "", "ptxtag": "p", "parent": ["yNH","content"],
            "content": "You know exactly one of these messages is true.\nWhat should you do?"}
 }
@@ -1549,6 +1560,50 @@ function html_from_internal_id(the_id, is_inner) {
         html_of_this_object.setAttribute("id", the_id);
 
         html_of_this_object.innerHTML = the_content
+        the_html_objects.push(html_of_this_object);
+    } else if (ptxtag == "bareimage") {
+        var the_content = the_object["content"];
+        console.log("inserting a bare image with content", the_content);
+        the_content = expand_condensed_source_html(the_content, is_inner);
+        console.log("which now has content", the_content);
+
+//        if ("edit inner".includes(is_inner)) {
+//                // should the id be the_id ?
+//            var opening_tag = '<div id="' + the_id + '"';
+//            opening_tag += ' data-editable="98" tabindex="-1"';
+//            opening_tag += ' class="image-box"';
+//            opening_tag += '>';
+//            var closing_tag = '</div>';
+//            return opening_tag + the_content + closing_tag
+//        }
+
+        html_of_this_object = document.createElement('div');
+        html_of_this_object.setAttribute("data-editable", 98);
+        html_of_this_object.setAttribute("tabindex", -1);
+        html_of_this_object.setAttribute("id", the_id);
+        html_of_this_object.setAttribute("class", image-box);
+
+        html_of_this_object.innerHTML = the_content
+        the_html_objects.push(html_of_this_object);
+    } else if (ptxtag == "img") {
+        var the_url = the_object["attributes"]["url"];
+        console.log("inserting an img with url", the_url);
+
+//        if ("edit inner".includes(is_inner)) {
+//                // should the id be the_id ?
+//            var opening_tag = '<div id="' + the_id + '"';
+//            opening_tag += ' data-editable="98" tabindex="-1"';
+//            opening_tag += ' class="image-box"';
+//            opening_tag += '>';
+//            var closing_tag = '</div>';
+//            return opening_tag + the_content + closing_tag
+//        }
+
+        html_of_this_object = document.createElement('img');
+        html_of_this_object.setAttribute("id", the_id);
+        html_of_this_object.setAttribute("class", image-box);
+
+  //      html_of_this_object.innerHTML = the_content
         the_html_objects.push(html_of_this_object);
     } else if (ptxtag in inline_tags) {   // assume is_inner?
         var opening_tag = inline_tags[ptxtag][1][0];
