@@ -23,6 +23,11 @@ this_char = "";
 prev_char = "";
 prev_prev_char = "";
 
+// for resizing and layout changes
+// clobal variables so we can adjust them dynamically
+move_scale = 1;
+magnify_scale = 1;
+
 final_added_object = "";
 previous_added_object = "";
 
@@ -168,7 +173,7 @@ var the_inner_menu = {
 "remark-like": [["remark"], ["warning"], ["note"], ["observation"], ["convention"], ["insight"]],
 "example-like": [["example"], ["question"], ["problem"]],
 // "display-like": [["image"], ["image with caption", "imagecaption", "m"], ["video"], ["video with caption", "videocaption", "d"], ["audio"]],
-"image-like": [["image"], ["video"], ["audio"]],
+"image-like": [["image", "bareimage"], ["video"], ["audio"]],
 "aside-like": [["aside"], ["historical"], ["biographical"]],
 "layout-like": [["side-by-side"], ["assemblage"], ["biographical aside"], ["titled paragraph", "paragraphs"]],
 "math-like": [["math display", "mathdisplay"], ["chemistry display", "chemistrydisplay"], ["code listing", "code", "l"]],
@@ -177,6 +182,7 @@ var the_inner_menu = {
 "metadata": [["index entries"], ["notation"]],
 "emphasis-like": [["emphasis"], ["foreign word", "foreign"], ["book title"], ["article title"], ["inline quote"], ["name of a ship"]],
 // "abbreviation": ["ie", "eg", "etc", "et al"],  // i.e., etc., ellipsis, can just be typed.
+"imagebox": [["make larger"], ["make smaller"], ["shift left"], ["shift right"], ["arrow controls"], ["finished making changes"]],
 "symbol": [["trademark"], ["copyright"], ["money"]],
 "money": [["$ dollar"], ["&euro; euro"], ["&pound; pound"], ["&yen; yen"]],
 "ref": [["reference withing this document"], ["citation"], ["hyperlink"]],
@@ -196,6 +202,7 @@ editing_container_for = { "p": 1,
 "ol": ["item"],
 "li": [""],
 "list": [""],
+"bareimage": [""],
 "proof": [""]  //just a guess
 }
 
@@ -366,6 +373,34 @@ function menu_options_for(object_id, component_type, level) {
          console.log("made this_menu", this_menu);
          return this_menu
      }
+     else if (level == "modify") {
+         console.log("CZ menu options for", component_type);
+         var m_d_options;
+         var component_parent = internalSource[object_id]["parent"][0];
+         var component_parent_tag = internalSource[component_parent]["ptxtag"];
+         if (component_type == "bareimage") {
+             m_d_options = [
+                 ["modify", "enlarge", "make larger"],
+                 ["modify", "shrink", "make smaller"],
+                 ["modify", "left", "shift left"],
+                 ["modify", "right", "shift right"],
+                 ["modify", "done", "done modifying"]
+             ];
+         } else {
+             alert("don;t know how to make that menu")
+             m_d_options = []
+         }
+         var this_menu = "";
+         for (var i=0; i < m_d_options.length; ++i) {
+             this_menu += '<li tabindex="-1" data-action="' + m_d_options[i][0] + '" data-modifier="' + m_d_options[i][1] + '"';
+             if (i==0) { this_menu += ' id="choose_current"'}
+             this_menu += '>';
+             this_menu += m_d_options[i][2]
+             this_menu += '</li>';
+         }
+         console.log("made this_menu", this_menu);
+         return this_menu
+     }
      else if (level == "change") {
          console.log("C1 menu options for", component_type);
          objectclass = object_class_of(component_type);
@@ -467,6 +502,8 @@ function top_menu_options_for(this_obj) {
             if (editable_children.length) {
                 this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_obj_environment + '</li>';
             }
+        } else if (this_obj.classList.contains("image-box")) {
+            this_list = '<li tabindex="-1" id="choose_current" data-env="imagebox" data-action="modify">Modify layout<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
         } else {
             this_list += '<li tabindex="-1" id="choose_current" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_obj_environment + '</li>';
        }
@@ -570,6 +607,8 @@ function edit_menu_for(this_obj_or_id, motion) {
             this_obj_environment = internalSource[this_obj_parent_id]["ptxtag"];
             edit_option.innerHTML = '<li id="choose_current" tabindex="-1" data-action="change-env">Change "' + this_obj_environment + '" to <div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
             edit_option.setAttribute('data-location', 'inline');
+        } else if (this_obj.classList.contains("image-box")) {
+            edit_option.innerHTML = "<b>modify</b> this image layout, or add near here?";
         } else if (this_obj.classList.contains("creator") || this_obj.classList.contains("title")) {
             // need to code this better:  over-writing edit_option
             edit_option = document.createElement('ol');
@@ -668,14 +707,14 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
         internalSource[new_li_id] = {"xml:id": new_li_id, "permid": "", "ptxtag": "li", "content": "<&>" + new_p_id + "<;>", "parent": [new_id, "content"] }
         new_source["content"] = "<&>" + new_li_id + "<;>";
         current_editing_actions.push(["new", "li", new_li_id]);
-    } else if (new_tag == "bareimage") {  // creating a list, which needs one item to begin.
-                                   // that item is an li contining a p
-        var new_imagebox_id = randomstring();
+    } else if (new_tag == "bareimage") {  // creating a bareimage(container), which needs an img
         var new_img_id = randomstring();
-        internalSource[new_img_id] = {"xml:id": new_img_id, "permid": "", "ptxtag": "img", "content": "<&>" + new_p_id + "<;>", "parent": [new_id, "content"] }
-        internalSource[new_imagebox_id] = {"xml:id": new_imagebox_id, "permid": "", "ptxtag": "bareimage", "content": "", "parent": [new_li_id, "content"]}
-        new_source["content"] = "<&>" + new_li_id + "<;>";
-        current_editing_actions.push(["new", "li", new_li_id]);
+        internalSource[new_img_id] = {"xml:id": new_img_id, "permid": "", "ptxtag": "img", "src": "pLACEholder", "parent": [new_id, "content"], "alt": "" }
+        new_source["content"] = "<&>" + new_img_id + "<;>";
+        new_source["class"] = "image-box";
+           // future bug:  these percents are also hard-coded in the div which is iniitally inserted
+        new_source["style"] = "width: 50%; margin-right: 25%; margin-left: 25%";
+  //      current_editing_actions.push(["new", "li", new_li_id]);
     } else if (editing_container_for["theorem-like"].includes(new_tag) ||
                editing_container_for["definition-like"].includes(new_tag) ||
                editing_container_for["remark-like"].includes(new_tag) ||
@@ -778,7 +817,7 @@ function edit_in_place(obj, oldornew) {
         this_content_container.setAttribute('data-age', oldornew);
         $("#" + thisID).replaceWith(this_content_container);
 
-        var idOfEditContainer = thisID + '_input';
+ //       var idOfEditContainer = thisID + '_input';
         var idOfEditText = 'editing' + '_input_text';
         var paragraph_editable = document.createElement('div');
         paragraph_editable.setAttribute('contenteditable', 'true');
@@ -802,6 +841,45 @@ function edit_in_place(obj, oldornew) {
         console.log("Whth content GG" + document.getElementById(idOfEditText).textContent + "HH");
         this_char = "";
         prev_char = "";
+
+      } else if (new_tag == "bareimage") {
+        var this_content_container = document.createElement('div');
+        this_content_container.setAttribute('id', "actively_editing");
+        this_content_container.setAttribute('data-age', oldornew);
+        this_content_container.setAttribute('style', "width:50%; margin-left:auto; margin-right: auto; padding: 2em 3em 3em 3em; background: #fed");
+        $("#" + thisID).replaceWith(this_content_container);
+
+ //       var idOfEditContainer = thisID + '_input';
+        var idOfEditText = 'editing' + '_input_text';
+        var image_editable = document.createElement('div');
+        image_editable.setAttribute('contenteditable', 'true');
+        image_editable.setAttribute('class', 'image_source');
+        image_editable.setAttribute('id', idOfEditText);
+        image_editable.setAttribute('style', "background: #fff");
+        image_editable.setAttribute('data-source_id', thisID);
+        image_editable.setAttribute('data-parent_id', internalSource[thisID]["parent"][0]);
+        image_editable.setAttribute('data-parent_component', internalSource[thisID]["parent"][1]);
+
+        document.getElementById('actively_editing').insertAdjacentElement("afterbegin", image_editable);
+
+        var edit_instructions = document.createElement('span');
+        edit_instructions.setAttribute('style', "font-size: 90%");
+        edit_instructions.innerHTML = "URL of image:"
+        document.getElementById('actively_editing').insertAdjacentElement("afterbegin", edit_instructions);
+
+        console.log("setting", $('#' + idOfEditText), "to have contents", internalSource[thisID]["content"]);
+        the_contents = internalSource[thisID]["content"];
+        the_contents = expand_condensed_source_html(the_contents, "edit");
+        $('#' + idOfEditText).html(the_contents);
+        document.getElementById(idOfEditText).focus();
+        console.log("made edit box for", thisID);
+        console.log("which is", document.getElementById(idOfEditText));
+        console.log("Whth content CC" + document.getElementById(idOfEditText).innerHTML + "DD");
+        console.log("Whth content EE" + document.getElementById(idOfEditText).innerText + "FF");
+        console.log("Whth content GG" + document.getElementById(idOfEditText).textContent + "HH");
+        this_char = "";
+        prev_char = "";
+
       } else if (new_tag == "li") {  // this is confusing, because really we are editing the p in the li
         var this_new_li = document.createElement('li');
         this_new_li.setAttribute('id', thisID);
@@ -812,7 +890,7 @@ function edit_in_place(obj, oldornew) {
         document.getElementById(thisID).insertAdjacentElement("afterbegin", this_content_container);
 
         console.log("NOT: inserted li, with #actively_editing inside it");
-        var idOfEditContainer = thisID + '_input';
+ //       var idOfEditContainer = thisID + '_input';
         var idOfEditText = 'editing' + '_input_text';
         var paragraph_editable = document.createElement('div');
         paragraph_editable.setAttribute('contenteditable', 'true');
@@ -861,7 +939,7 @@ function edit_in_place(obj, oldornew) {
         document.getElementById(id_of_li).insertAdjacentElement("afterbegin", this_content_container);
 
         console.log(": inserted li, with #actively_editing inside it");
-        var idOfEditContainer = thisID + '_input';
+ //       var idOfEditContainer = thisID + '_input';
         var idOfEditText = 'editing' + '_input_text';
         var paragraph_editable = document.createElement('div');
         paragraph_editable.setAttribute('contenteditable', 'true');
@@ -973,6 +1051,72 @@ function edit_in_place(obj, oldornew) {
         console.log("What is known:", internalSource)
      }
 }
+
+function modify_by_id(theid, modifier) {
+
+    var the_sizes = internalSource[theid]["style"];
+
+//modify: enlarge, shrink, left, right, ??? done
+
+// make the data structure better, then delete this comment
+// currently style looks like "width: 66%; margin-right: 17%; margin-left: 17%"
+    the_sizes = the_sizes.replace(/( |%)/g, "");
+    the_sizes = the_sizes.replace(/;/g, ":");
+    console.log("the_sizes, modified", the_sizes);
+    console.log("the_sizes, split", the_sizes.split(":"));
+    var [,width, , marginright, , marginleft] = the_sizes.split(":");
+    console.log('width, , marginright, , marginleft', width, "mr", marginright, "ml",  marginleft);
+    width = parseInt(width);
+    marginright = parseInt(marginright);
+    marginleft = parseInt(marginleft);
+
+    var scale_direction = 1;
+    var moving_direction = 1;
+    if (modifier == "shrink") { scale_direction = -1 }
+    else if (modifier == "left") { moving_direction = -1 }
+    if ("enlarge shrink".includes(modifier)) {
+        if ((width == 100 && scale_direction == 1) || (width == 100 && scale_direction == 1)) {
+            console.log("can't go above 100 or below 0");
+            return
+        } else {
+            width += 2*scale_direction*magnify_scale;
+        }
+        if ((marginleft > 0 && marginright > 0)) {  //  || scale_direction < 0) {
+          marginleft += -1*scale_direction*magnify_scale;
+          marginright += -1*scale_direction*magnify_scale;
+        } else if (marginleft > 0) {
+            marginleft += -2*scale_direction*magnify_scale;
+        } else if (marginright > 0) {
+            marginright += -2*scale_direction*magnify_scale;
+        } else {
+            // do nothing:  this is a placeholder which is reached when both margins are 0
+            console.log("already have no margins, width is", width);
+        }
+    } else if ("left right".includes(modifier)) {
+        console.log("marginleft*moving_direction", marginleft*moving_direction, "marginright*moving_direction", marginright*moving_direction);
+        if ((marginleft > 0 && marginright > 0) || (marginright*moving_direction > 0) || (marginleft*moving_direction < 0)) {
+            marginleft += moving_direction*move_scale;
+            marginright += -1*moving_direction*move_scale;
+//        } else if (marginright*moving_direction > 0) {
+//            marginright += -1*moving_direction*move_scale;
+//        } else if (marginleft*moving_direction < 0) {
+//            marginleft += moving_direction*move_scale;
+        } else { 
+            // do nothing:  this is a placeholder which is reached when both margins are 0
+            // we choose to prioritize scale, so a 100% image cannot be shifted
+            console.log("already at 100%, width is", width);
+        }
+    }
+
+    var the_new_sizes = "width: " + width + "%;";
+    the_new_sizes += "margin-right: " + marginright + "%;";
+    the_new_sizes += "margin-left: " + marginleft + "%;";
+
+    internalSource[theid]["style"] = the_new_sizes;
+
+    document.getElementById(theid).setAttribute("style", the_new_sizes);
+}
+
 
 function move_by_id_local(theid, thehandleid) {
     // when moving an object within a page, we create a phantomobject that is manipulated
@@ -1252,9 +1396,10 @@ var internalSource = {  // currently the key is the HTML id
            "content": "After excavating for weeks, you finally arrive at the burial chamber.\nThe room is empty except for two large chests.\n On each is carved a message (strangely in English):"},
    "ssiiddee": {"xml:id": "", "permid": "", "ptxtag": "bareimage", "parent": ["yNH","content"],
            "content": "<&>ppccii<;>",
-           "attributes": [ ["class", "image-box"], ["style", "width: 80%; margin-right: 10%; margin-left: 10%"] ]},
+           "class": "image-box",   // maybe that is inherent to bareimage ?
+           "style": "width: 66%; margin-right: 17%; margin-left: 17%"},
    "ppccii": {"xml:id": "", "permid": "", "ptxtag": "img", "parent": ["ssiiddee","content"],
-           "attributes": [ ["src", "images/two-chests.svg"], ["alt", "alt text goes here"] ]},
+           "src": "images/two-chests.svg", "alt": "alt text goes here"},
    "DxA": {"xml:id": "", "permid": "", "ptxtag": "p", "parent": ["yNH","content"],
            "content": "You know exactly one of these messages is true.\nWhat should you do?"}
 }
@@ -1472,6 +1617,37 @@ function assemble_internal_version_changes() {
         internalSource[owner_of_change][component_being_changed] = line_content;
         possibly_changed_ids_and_entry.push([owner_of_change, "creator"]);
 
+    } else if (object_being_edited.classList.contains("image_source")) {
+        // currently this only handles images by URL.
+        // later do the case of uploading an image.
+        var image_src = object_being_edited.innerHTML;
+
+        // what is the right way to do this?
+        image_src = image_src.replace(/<div>/g, "");
+        image_src = image_src.replace(/<\/div>/g, "");
+        image_src = image_src.trim();
+        console.log("changing img src to", image_src);
+
+        var owner_of_change = object_being_edited.getAttribute("data-source_id");
+        // the owner_of_change is bareimage, but the src is in the img in its contents
+        var image_being_changed = internalSource[owner_of_change]["content"];
+        // strip off <&> and <;>
+   //     image_being_changed = image_being_changed[3:-3];
+        image_being_changed = image_being_changed.replace(/<&>(.*?)<;>/, '$1')
+        console.log("image_being_changed ", image_being_changed);
+        console.log("object being changed ", internalSource[owner_of_change]);
+        console.log("image being changed was", internalSource[image_being_changed]);
+
+        if (internalSource[image_being_changed]["src"]) {
+            current_editing_actions.push(["changed", "src", image_being_changed]);
+        } else {
+            current_editing_actions.push(["added", "src", image_being_changed]);
+        }
+        internalSource[image_being_changed]["src"] = image_src;
+        console.log("image being changed is", internalSource[image_being_changed]);
+        possibly_changed_ids_and_entry.push([owner_of_change, "bareimage"]);
+
+
     } else {
         alert("don;t know how to assemble internal_version_changes of", object_being_edited.tagName)
     }
@@ -1581,27 +1757,25 @@ function html_from_internal_id(the_id, is_inner) {
         html_of_this_object.setAttribute("data-editable", 98);
         html_of_this_object.setAttribute("tabindex", -1);
         html_of_this_object.setAttribute("id", the_id);
-        html_of_this_object.setAttribute("class", image-box);
+        html_of_this_object.setAttribute("class", "image-box");
+        html_of_this_object.setAttribute("style", "width: 66%; margin-right: 17%; margin-left: 17%");
 
         html_of_this_object.innerHTML = the_content
         the_html_objects.push(html_of_this_object);
     } else if (ptxtag == "img") {
-        var the_url = the_object["attributes"]["url"];
-        console.log("inserting an img with url", the_url);
+        var the_src = the_object["src"];
+        console.log("inserting an img with src", the_src);
 
-//        if ("edit inner".includes(is_inner)) {
-//                // should the id be the_id ?
-//            var opening_tag = '<div id="' + the_id + '"';
-//            opening_tag += ' data-editable="98" tabindex="-1"';
-//            opening_tag += ' class="image-box"';
-//            opening_tag += '>';
-//            var closing_tag = '</div>';
-//            return opening_tag + the_content + closing_tag
-//        }
+        if ("edit".includes(is_inner)) {
+                // should the id be the_id ?
+            return the_src
+        }
 
         html_of_this_object = document.createElement('img');
         html_of_this_object.setAttribute("id", the_id);
-        html_of_this_object.setAttribute("class", image-box);
+        html_of_this_object.setAttribute("src", the_src);
+
+        html_of_this_object = '<img src="' + the_src + '" id="' + the_id + '">';
 
   //      html_of_this_object.innerHTML = the_content
         the_html_objects.push(html_of_this_object);
@@ -1765,6 +1939,20 @@ function insert_html_version(these_changes) {
             object_as_html.innerHTML = ptx_to_html(this_object[this_object_entry]);
             console.log("inserting",object_as_html,"before",location_of_change);
             location_of_change.insertAdjacentElement('beforebegin', object_as_html);
+
+        } else if (this_object_entry == "bareimage") {
+            var object_as_html = document.createElement('div');
+            object_as_html.setAttribute("data-editable", 98);
+            object_as_html.setAttribute("tabindex", -1);
+            object_as_html.setAttribute("id", this_object_id);
+            object_as_html.setAttribute("class", "image-box");
+            object_as_html.setAttribute("style", "width: 50%; margin-right: 25%; margin-left: 25%");
+
+            console.log("this_object", this_object);
+            object_as_html.innerHTML = ptx_to_html(this_object["content"]);
+            console.log("inserting",object_as_html,"before",location_of_change);
+            location_of_change.insertAdjacentElement('beforebegin', object_as_html);
+
         } else {
             console.log("trouble making", this_object);
          //   alert("I don; tknow how to make a", this_object["ptxtag"]);
@@ -2079,6 +2267,7 @@ function main_menu_navigator(e) {  // we are not currently editing
         var theChooseCurrent = document.getElementById("choose_current");
         var dataLocation = theChooseCurrent.getAttribute("data-location");  // may be null
         var dataAction = theChooseCurrent.getAttribute("data-action");  // may be null
+        var dataModifier = theChooseCurrent.getAttribute("data-modifier");  // may be null
         var dataEnv = theChooseCurrent.getAttribute("data-env");  // may be null
         var dataEnvParent = theChooseCurrent.getAttribute("data-env-parent");  // may be null
         var object_of_interest;
@@ -2243,91 +2432,111 @@ function main_menu_navigator(e) {  // we are not currently editing
 
           else if (dataAction) {
             if (dataAction == "edit") {
-               console.log("going to edit", object_of_interest);
-               edit_in_place(object_of_interest, "old");
+                console.log("going to edit", object_of_interest);
+                edit_in_place(object_of_interest, "old");
             } else if (dataAction == "change-env-to") {
                  // shoudl use dataEnv ?
-                    var new_env = theChooseCurrent.getAttribute("data-env");
-                    console.log("changing environment to", new_env);
+                var new_env = theChooseCurrent.getAttribute("data-env");
+                console.log("changing environment to", new_env);
                        // #edit_menu_holder is in span.type, inside .heading, inside article
-                    to_be_edited = document.getElementById('edit_menu_holder').parentElement.parentElement.parentElement;
-                    console.log("to_be_edited", to_be_edited);
-                    var id_of_object = to_be_edited.id;
-                    var this_object_source = internalSource[id_of_object];
-                    console.log("current envoronemnt", this_object_source);
-                    var old_env = internalSource[id_of_object]["ptxtag"];
-                    internalSource[id_of_object]["ptxtag"] = new_env;
-                    recent_editing_actions.push([old_env, new_env, id_of_object]);
-                    console.log("the change was", "changed " + old_env + " to " + new_env + " " + id_of_object);
-                    var the_whole_object = html_from_internal_id(id_of_object);
-                    console.log("B: the_whole_object", the_whole_object);
-                    $("#" + id_of_object).replaceWith(the_whole_object[0]);  // later handle multiple additions
-                    console.log("just edited", $("#" + id_of_object));
-                    // since we changed an object which is in 
-                    console.log("curent_editing level", current_editing["level"], "with things", current_editing["tree"][current_editing["level"]]);
-                    current_editing["level"] -= 1;
-                    current_editing["tree"][current_editing["level"]] = next_editable_of(document.getElementById(id_of_object).parentElement, "children");
-                    console.log("now curent_editing level", current_editing["level"], "with things", current_editing["tree"][current_editing["level"]]);
-                    edit_menu_from_current_editing("entering");
-                    return ""
+                to_be_edited = document.getElementById('edit_menu_holder').parentElement.parentElement.parentElement;
+                console.log("to_be_edited", to_be_edited);
+                var id_of_object = to_be_edited.id;
+                var this_object_source = internalSource[id_of_object];
+                console.log("current envoronemnt", this_object_source);
+                var old_env = internalSource[id_of_object]["ptxtag"];
+                internalSource[id_of_object]["ptxtag"] = new_env;
+                recent_editing_actions.push([old_env, new_env, id_of_object]);
+                console.log("the change was", "changed " + old_env + " to " + new_env + " " + id_of_object);
+                var the_whole_object = html_from_internal_id(id_of_object);
+                console.log("B: the_whole_object", the_whole_object);
+                $("#" + id_of_object).replaceWith(the_whole_object[0]);  // later handle multiple additions
+                console.log("just edited", $("#" + id_of_object));
+                // since we changed an object which is in 
+                console.log("curent_editing level", current_editing["level"], "with things", current_editing["tree"][current_editing["level"]]);
+                current_editing["level"] -= 1;
+                current_editing["tree"][current_editing["level"]] = next_editable_of(document.getElementById(id_of_object).parentElement, "children");
+                console.log("now curent_editing level", current_editing["level"], "with things", current_editing["tree"][current_editing["level"]]);
+                edit_menu_from_current_editing("entering");
+                return ""
 
             } else if (dataAction == 'change-env') {
                        // #edit_menu_holder is in span.type, inside .heading, inside article
-                    current_env = document.getElementById('edit_menu_holder').parentElement.parentElement.parentElement;
+                current_env = document.getElementById('edit_menu_holder').parentElement.parentElement.parentElement;
+                current_env_id = current_env.id;
+
+                theChooseCurrent.parentElement.classList.add("past");
+                theChooseCurrent.removeAttribute("id");
+                theChooseCurrent.classList.add("chosen");
+
+                var edit_submenu = document.createElement('ol');
+                console.log("J1 lookinh for menu options for", current_env_id);
+                edit_submenu.innerHTML = menu_options_for(current_env_id, "", "change");
+                console.log("just inserted inner menu_options_for(parent_type)", menu_options_for(current_env_id, "", "change"));
+                theChooseCurrent.insertAdjacentElement("beforeend", edit_submenu);
+                document.getElementById('choose_current').focus();
+                console.log("focus is on", $(":focus"));
+            } else if (dataAction == 'modify') {
+                       // #edit_menu_holder is in span.type, inside .heading, inside article
+                    current_env = document.getElementById('edit_menu_holder').parentElement;
                     current_env_id = current_env.id;
 
+                    if (!dataModifier) {
                     theChooseCurrent.parentElement.classList.add("past");
                     theChooseCurrent.removeAttribute("id");
                     theChooseCurrent.classList.add("chosen");
 
                     var edit_submenu = document.createElement('ol');
-                    console.log("J1 lookinh for menu options for", current_env_id);
-                    edit_submenu.innerHTML = menu_options_for(current_env_id, "", "change");
-                    console.log("just inserted inner menu_options_for(parent_type)", menu_options_for(current_env_id, "change"));
+                    console.log("J2a lookinh for menu options for", current_env_id);
+                    edit_submenu.innerHTML = menu_options_for(current_env_id, "", "modify");
+                    console.log("just inserted inner menu_options_for(parent_type)", menu_options_for(current_env_id, "", "modify"));
                     theChooseCurrent.insertAdjacentElement("beforeend", edit_submenu);
                     document.getElementById('choose_current').focus();
                     console.log("focus is on", $(":focus"));
+                } else {
+                    modify_by_id(current_env_id, dataModifier)
+                }
             } else if (dataAction == "move-or-delete") {
                 // almost all repeats from dataAction == 'change-env' 
                 //  except for current_env and menu_options_for.  Consolidate
                 //  maybe also separate actions which give anotehr menu, from actions which change content
-                    current_env = document.getElementById('edit_menu_holder').parentElement;
-                    console.log("current_env", current_env);
-                    current_env_id = current_env.id;
+                current_env = document.getElementById('edit_menu_holder').parentElement;
+                console.log("current_env", current_env);
+                current_env_id = current_env.id;
 
-                    theChooseCurrent.parentElement.classList.add("past");
-                    theChooseCurrent.removeAttribute("id");
-                    theChooseCurrent.classList.add("chosen");
+                theChooseCurrent.parentElement.classList.add("past");
+                theChooseCurrent.removeAttribute("id");
+                theChooseCurrent.classList.add("chosen");
 
-                    var edit_submenu = document.createElement('ol');
-                    console.log("J3 looking for menu options for", current_env_id);
-                    edit_submenu.innerHTML = menu_options_for(current_env_id, "", "move-or-delete");
-                    console.log("just inserted inner menu_options_for(parent_type)", menu_options_for(current_env_id, "", "move-or-delete"));
-                    theChooseCurrent.insertAdjacentElement("beforeend", edit_submenu);
-                    document.getElementById('choose_current').focus();
-                    console.log("focus is on", $(":focus"));
+                var edit_submenu = document.createElement('ol');
+                console.log("J3 looking for menu options for", current_env_id);
+                edit_submenu.innerHTML = menu_options_for(current_env_id, "", "move-or-delete");
+                console.log("just inserted inner menu_options_for(parent_type)", menu_options_for(current_env_id, "", "move-or-delete"));
+                theChooseCurrent.insertAdjacentElement("beforeend", edit_submenu);
+                document.getElementById('choose_current').focus();
+                console.log("focus is on", $(":focus"));
             } else if (dataAction == "delete") {
-                    current_env = document.getElementById('edit_menu_holder').parentElement;
-                    console.log("current_env", current_env);
-                    current_env_id = current_env.id;
-                    delete_by_id(current_env_id, "choice")
+                current_env = document.getElementById('edit_menu_holder').parentElement;
+                console.log("current_env", current_env);
+                current_env_id = current_env.id;
+                delete_by_id(current_env_id, "choice")
             } else if (["move-local", "move-local-p", "move-local-li"].includes(dataAction)) {
-                    current_env = document.getElementById('edit_menu_holder').parentElement;
-                    current_env_id = current_env.id;
-                    handle_env_id = current_env_id;   // we were focused on that p, even though
+                current_env = document.getElementById('edit_menu_holder').parentElement;
+                current_env_id = current_env.id;
+                handle_env_id = current_env_id;   // we were focused on that p, even though
                                                       // we are moving an li.  Later refocus on p
-                    if (dataAction == "move-local-li") {
-                        current_env.classList.remove("may_select");
-                        current_env = current_env.parentElement;
-                        current_env.classList.add("may_select");
-                        current_env_id = current_env.id;
-                    }
-                    console.log("current_env", current_env);
-                    move_by_id_local(current_env_id, handle_env_id)
+                if (dataAction == "move-local-li") {
+                    current_env.classList.remove("may_select");
+                    current_env = current_env.parentElement;
+                    current_env.classList.add("may_select");
+                    current_env_id = current_env.id;
+                }
+                console.log("current_env", current_env);
+                move_by_id_local(current_env_id, handle_env_id)
             } else if (dataAction == "change-title") {
                 console.log("change-title not implemented yet")
             } else {
-                alert("I don;t know what to do llllllll dataAction", dataAction)
+                alert("I don;t know what to do llllllll dataAction " + dataAction)
             }
         }  // dataAction
           else if (dataEnv) {  // this has to come after dataAction, because if both occur,
