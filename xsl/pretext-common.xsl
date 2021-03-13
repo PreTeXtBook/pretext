@@ -265,15 +265,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$docinfo/numbering/figures/@level"/>
 </xsl:variable>
 
-<!-- Document language comes from the mathbook element -->
-<!-- or defaults to US English if not present          -->
+<!-- Document language comes from the "pretext" element   -->
+<!-- or defaults to US English if not supported or absent -->
 <xsl:variable name="document-language">
+    <!-- obtain, and check language on root "pretext" element -->
+    <xsl:variable name="supported-language">
+        <xsl:apply-templates select="$root" mode="localization-language"/>
+    </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$root/@xml:lang">
-            <xsl:value-of select="$root/@xml:lang" />
+        <!-- language has a localization file -->
+        <xsl:when test="not($supported-language = '')">
+            <xsl:value-of select="$supported-language" />
         </xsl:when>
+        <!-- an attempt to specify, but not supported, -->
+        <!-- then supply US English as default         -->
+        <xsl:when test="$root/@xml:lang">
+            <xsl:message>PTX:ERROR:   the top-level language code ("<xsl:value-of select="$root/@xml:lang"/>") is not supported or not recognized.  Using the default instead (en-US)</xsl:message>
+            <xsl:text>en-US</xsl:text>
+        </xsl:when>
+        <!-- failed in first stanza, since simply not   -->
+        <!-- present, then supply US English as default -->
         <xsl:otherwise>
-            <xsl:value-of select="'en-US'" />
+            <xsl:text>en-US</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
