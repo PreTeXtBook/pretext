@@ -182,6 +182,7 @@ var the_inner_menu = {
 "metadata": [["index entries"], ["notation"]],
 "emphasis-like": [["emphasis"], ["foreign word", "foreign"], ["book title"], ["article title"], ["inline quote"], ["name of a ship"]],
 // "abbreviation": ["ie", "eg", "etc", "et al"],  // i.e., etc., ellipsis, can just be typed.
+// next one not used?
 "imagebox": [["make larger"], ["make smaller"], ["shift left"], ["shift right"], ["arrow controls"], ["finished making changes"]],
 "symbol": [["trademark"], ["copyright"], ["money"]],
 "money": [["$ dollar"], ["&euro; euro"], ["&pound; pound"], ["&yen; yen"]],
@@ -384,6 +385,7 @@ function menu_options_for(object_id, component_type, level) {
                  ["modify", "shrink", "make smaller"],
                  ["modify", "left", "shift left"],
                  ["modify", "right", "shift right"],
+                 ["modify", "arrows", "use arrow keys (not implemented yet)"],
                  ["modify", "done", "done modifying"]
              ];
          } else {
@@ -709,7 +711,7 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
         current_editing_actions.push(["new", "li", new_li_id]);
     } else if (new_tag == "bareimage") {  // creating a bareimage(container), which needs an img
         var new_img_id = randomstring();
-        internalSource[new_img_id] = {"xml:id": new_img_id, "permid": "", "ptxtag": "img", "src": "pLACEholder", "parent": [new_id, "content"], "alt": "" }
+        internalSource[new_img_id] = {"xml:id": new_img_id, "permid": "", "ptxtag": "img", "src": "", "parent": [new_id, "content"], "alt": "" }
         new_source["content"] = "<&>" + new_img_id + "<;>";
         new_source["class"] = "image-box";
            // future bug:  these percents are also hard-coded in the div which is iniitally inserted
@@ -850,7 +852,7 @@ function edit_in_place(obj, oldornew) {
         $("#" + thisID).replaceWith(this_content_container);
 
  //       var idOfEditContainer = thisID + '_input';
-        var idOfEditText = 'editing' + '_input_text';
+        var idOfEditText = 'editing' + '_input_image';
         var image_editable = document.createElement('div');
         image_editable.setAttribute('contenteditable', 'true');
         image_editable.setAttribute('class', 'image_source');
@@ -1075,19 +1077,22 @@ function modify_by_id(theid, modifier) {
     if (modifier == "shrink") { scale_direction = -1 }
     else if (modifier == "left") { moving_direction = -1 }
     if ("enlarge shrink".includes(modifier)) {
-        if ((width == 100 && scale_direction == 1) || (width == 100 && scale_direction == 1)) {
+        if ((width >= 100 && scale_direction == 1) || (width <= 0 && scale_direction == -1)) {
             console.log("can't go above 100 or below 0");
             return
         } else {
             width += 2*scale_direction*magnify_scale;
         }
-        if ((marginleft > 0 && marginright > 0)) {  //  || scale_direction < 0) {
+        if (marginleft > 0 && marginright > 0) {
           marginleft += -1*scale_direction*magnify_scale;
           marginright += -1*scale_direction*magnify_scale;
         } else if (marginleft > 0) {
             marginleft += -2*scale_direction*magnify_scale;
         } else if (marginright > 0) {
             marginright += -2*scale_direction*magnify_scale;
+        } else if (scale_direction < 0) {  // applies when we shrink a 100 width image
+          marginleft += -1*scale_direction*magnify_scale;
+          marginright += -1*scale_direction*magnify_scale;
         } else {
             // do nothing:  this is a placeholder which is reached when both margins are 0
             console.log("already have no margins, width is", width);
@@ -2006,8 +2011,8 @@ function local_editing_action(e) {
             this_char = "";
             prev_char = "";
             save_edits()
-
-        } else if (e.code == "Escape" || (prev_char.code == "Enter" && prev_prev_char.code == "Enter")) {
+// editing_input_image
+        } else if (e.code == "Escape" || (prev_char.code == "Enter" && prev_prev_char.code == "Enter") || document.getElementById("editing_input_image")) {
             console.log("need to save");
 console.log("    HHH current_editing", current_editing);
 
@@ -2482,20 +2487,24 @@ function main_menu_navigator(e) {  // we are not currently editing
                     current_env_id = current_env.id;
 
                     if (!dataModifier) {
-                    theChooseCurrent.parentElement.classList.add("past");
-                    theChooseCurrent.removeAttribute("id");
-                    theChooseCurrent.classList.add("chosen");
+                        theChooseCurrent.parentElement.classList.add("past");
+                        theChooseCurrent.removeAttribute("id");
+                        theChooseCurrent.classList.add("chosen");
 
-                    var edit_submenu = document.createElement('ol');
-                    console.log("J2a lookinh for menu options for", current_env_id);
-                    edit_submenu.innerHTML = menu_options_for(current_env_id, "", "modify");
-                    console.log("just inserted inner menu_options_for(parent_type)", menu_options_for(current_env_id, "", "modify"));
-                    theChooseCurrent.insertAdjacentElement("beforeend", edit_submenu);
-                    document.getElementById('choose_current').focus();
-                    console.log("focus is on", $(":focus"));
-                } else {
-                    modify_by_id(current_env_id, dataModifier)
-                }
+                        var edit_submenu = document.createElement('ol');
+                        console.log("J2a lookinh for menu options for", current_env_id);
+                        edit_submenu.innerHTML = menu_options_for(current_env_id, "", "modify");
+                        console.log("just inserted inner menu_options_for(parent_type)", menu_options_for(current_env_id, "", "modify"));
+                        theChooseCurrent.insertAdjacentElement("beforeend", edit_submenu);
+                        document.getElementById('choose_current').focus();
+                        console.log("focus is on", $(":focus"));
+                    } else if (dataModifier == "done") {
+                        edit_menu_from_current_editing("entering");
+                    } else if (dataModifier == "arrows") {
+                        // setup_arrow_modify()   // is different for images and SBSs
+                    } else {
+                        modify_by_id(current_env_id, dataModifier)
+                    }
             } else if (dataAction == "move-or-delete") {
                 // almost all repeats from dataAction == 'change-env' 
                 //  except for current_env and menu_options_for.  Consolidate
