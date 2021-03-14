@@ -8926,7 +8926,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <question>
             <!-- label is from the "exercise" -->
             <xsl:apply-templates select="." mode="runestone-manifest-label"/>
-            <xsl:apply-templates select="." mode="exercise-components"/>
+            <!-- need to set controls on what gets produced by "exercise-components"     -->
+            <!-- TODO: this is a band-aid, why isn't it necessary for reading questions? -->
+            <xsl:apply-templates select="." mode="exercise-components">
+                <xsl:with-param name="b-has-statement" select="true()"/>
+            </xsl:apply-templates>
         </question>
     </xsl:if>
 </xsl:template>
