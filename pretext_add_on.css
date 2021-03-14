@@ -2941,6 +2941,58 @@ and condider having this replace line 3338 of the general code (which uses .head
     .has-sidebar-left.mathbook-loaded.sidebar-left-open .page .main #content.pretext-content section .heading { margin-top:0 }
 }
 
+/* one-page documents in the browser */
+
+body.standalone.worksheet .pretext-content .onepage > .heading {
+    margin-top: 0;
+    font-size: 1.3em;
+}
+.pretext-content .onepage {
+    padding: 40px 45px 45px 55px;
+    border: 2px solid grey;
+    margin: 0;
+/* height: 1243px; */
+}
+.pretext-content .onepage + .onepage {
+    margin-top: 10px;
+}
+.pretext-content .onepage > p:first-child {
+    margin-top: 0;
+}
+
+body.standalone .autopermalink {
+    display: none;
+}
+body.standalone.worksheet #sidebar-left {
+    display: none;
+}
+body.has-sidebar-left.mathbook-loaded.standalone.worksheet .page .main {
+    margin-left: 0;
+}
+body.standalone.worksheet .page > .main #content {
+    max-width: 1030px;
+    width: 1030px;
+    margin-right: 0;
+}
+body.standalone.worksheet .pretext-content .goal-like {
+    border: none;
+    padding: 0;
+}
+body.standalone.worksheet .pretext-content .goal-like > .heading {
+    margin-top: -0.5em;
+    padding: 0;
+    margin: 0;
+    font-size: 1.1em;
+}
+body.standalone.worksheet .pretext-content section > .heading {
+    display: inline;
+    font-size: 1.1em;
+}
+body.standalone.worksheet .pretext-content section > .heading + p {
+    display: inline;
+}
+
+
 /* printing for one-page worksheets */
 
 @media print {
@@ -2963,7 +3015,7 @@ and condider having this replace line 3338 of the general code (which uses .head
         height: 1243px;
         border: none;
      }
-    body.standalone.worksheet .pretext-content > .worksheet {
+    body.standalone.worksheet .pretext-content > .onepage {
         font-size: 62%;
     }
     body.standalone.worksheet .page  .main {
