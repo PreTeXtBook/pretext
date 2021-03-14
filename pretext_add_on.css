@@ -2941,6 +2941,41 @@ and condider having this replace line 3338 of the general code (which uses .head
     .has-sidebar-left.mathbook-loaded.sidebar-left-open .page .main #content.pretext-content section .heading { margin-top:0 }
 }
 
+/* printing for one-page worksheets */
+
+@media print {
+    body.standalone.worksheet #masthead {
+        display: none;
+    }
+
+    body.standalone.worksheet.has-sidebar-left.mathbook-loaded .page .main {
+        margin: 0;
+    }
+
+    body.standalone.worksheet .page > .main #content {
+        margin: 0;
+    }
+    body.standalone.worksheet .pretext-content .onepage {
+        max-height: 100%;
+        margin: 0;
+        overflow: hidden;
+        page-break-after: always;
+        height: 1243px;
+        border: none;
+     }
+    body.standalone.worksheet .pretext-content > .worksheet {
+        font-size: 62%;
+    }
+    body.standalone.worksheet .page  .main {
+        padding: 0;
+    }
+
+    body.standalone.worksheet.mathbook-loaded .page .main #content.pretext-content section { margin:0 }
+
+    @page { margin: 0 }
+}
+
+
 .ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-draggable.ui-resizable {
     left: 0 !important;
     top: 0 !important;
