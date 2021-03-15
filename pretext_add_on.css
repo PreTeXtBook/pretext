@@ -114,7 +114,7 @@ so that we can set our own later */
 
 /* this > may be too restrictive.  The purpose is to not put a
    top margin on an article at the top of a knowl */
-.pretext-content section > article {
+.pretext-content section > article, .pretext-content .paragraphs > article {
     margin-top: 1.25em;
 }
 .pretext-content section article + article,
@@ -2959,10 +2959,46 @@ body.standalone.worksheet .pretext-content .onepage > .heading {
 .pretext-content .onepage > p:first-child {
     margin-top: 0;
 }
+.pretext-content .onepage .sbspanel + .sbspanel {
+    padding-left: 1.25em;
+    border-left: 1px solid grey;
+    margin-left: -1.25em;
+}
+
+body.standalone.worksheet .pretext-content section article.task {
+    margin-left: 0;
+}
+body.standalone.worksheet .pretext-content section article.task > .heading {
+    font-weight: normal;
+}
 
 body.standalone .autopermalink {
     display: none;
 }
+
+body.standalone.worksheet .pretext-content .onepage .workspace {
+    border: 2px dotted grey;
+    background: #efe;
+}
+
+body.standalone.worksheet .pretext-content .onepage .workspace.squashed.tight {
+    border: 4px solid red;
+    padding-left: 50px;
+    background: none;
+    background-image: url("https://aimath.org/~farmer/tmp/double-sided-arrow.png");
+    background-size: auto 100%;
+    background-origin: content-box;
+    background-repeat: space;
+/*
+    background: repeating-linear-gradient(
+      45deg,
+      #fff,
+      #fff 25px,
+      #000 30px
+    );
+*/
+}
+
 body.standalone.worksheet #sidebar-left {
     display: none;
 }
@@ -3015,14 +3051,24 @@ body.standalone.worksheet .pretext-content section > .heading + p {
         height: 1243px;
         border: none;
      }
+/*
     body.standalone.worksheet .pretext-content > .onepage {
         font-size: 62%;
     }
+*/
+    body.standalone.worksheet .pretext-content .onepage .workspace,
+    body.standalone.worksheet .pretext-content .onepage .workspace.squashed.tight {
+        border: none;
+        padding: 0;
+        background: none;
+        background-image: none;
+    }
+
     body.standalone.worksheet .page  .main {
         padding: 0;
     }
 
-    body.standalone.worksheet.mathbook-loaded .page .main #content.pretext-content section { margin:0 }
+    body.standalone.worksheet.mathbook-loaded .page .main #content.pretext-content section.onepage { margin:0 }
 
     @page { margin: 0 }
 }
