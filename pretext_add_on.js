@@ -238,7 +238,7 @@ console.log("this is e", e);
 
     console.log("adding permalinks");
     /* add permalinks to all sections and articles */
-    items_needing_permalinks = document.querySelectorAll('main section:not(.introduction), main section > p, main section > article, main section > figure, main section > .exercisegroup > .introduction > p, main section > .exercisegroup article, main section article.exercise');
+    items_needing_permalinks = document.querySelectorAll('main section:not(.introduction), main section > p, main section article, main section > figure, main section > .exercisegroup > .introduction > p, main section > .exercisegroup article, main section article.exercise, main section article.paragraphs > p, main section article.paragraphs > figure');
     //   items_needing_permalinks = document.querySelectorAll('body section article');
     this_url = window.location.href.split('#')[0];
     permalink_word = "permalink";
@@ -605,7 +605,7 @@ function scaleWorkspaceIn(obj, scale, tmporfinal) {
         if (this_proportion.endsWith("in")) {
             this_proportion_number *= 10.0;
         } else if (this_proportion.endsWith("cm")) {
-            this_proportion_number *= 2.54;
+            this_proportion_number *= 3.94;  /* 10/2.54 */
         } else {
             console.log("No units on workspace size:  expect unexpected behavior", this_work)
         }
@@ -617,9 +617,30 @@ function scaleWorkspaceIn(obj, scale, tmporfinal) {
             this_work.classList.remove("squashed")
         }
         if (tmporfinal == "final") {
-            console.log(this_work, "getBoundingClientRect", this_work.getBoundingClientRect())
+            var enclosingspace = this_work.parentElement.parentElement;
+            console.log("enclosingspace was", enclosingspace)
+            if (enclosingspace.tagName == "ARTICLE") {
+                enclosingspace = enclosingspace.parentElement;
+                console.log("enclosingspace is now", enclosingspace)
+            }
+            var enclosingspacebottom =  enclosingspace.getBoundingClientRect()["bottom"];
+            /* there should be an easier way to do this */
+            /* when the enclosing parent has padding, we want to ignore that */
+            enclosingspacepadding = parseFloat(getComputedStyle(enclosingspace)["padding-bottom"].slice(0, -2));
+            enclosingspacebottom = enclosingspacebottom - enclosingspacepadding;
+            console.log(enclosingspace, "enclosingspace padding-bottom", getComputedStyle(enclosingspace)["padding-bottom"]);
+            var lastsibling = enclosingspace.lastElementChild;
+            var lastworkspacebottom = lastsibling.getBoundingClientRect()["bottom"];
+            console.log("XX", this_work, "oo", enclosingspace, "pp", enclosingspacebottom, "xx", lastworkspacebottom, "diff", enclosingspacebottom - lastworkspacebottom);
+            if (enclosingspacebottom - lastworkspacebottom < 5) {
+                this_work.classList.add("tight")
+            } else {
+                this_work.classList.remove("tight")
+            }
+/*
             console.log(this_work.parentElement, "iparent rectangle", this_work.parentElement.getBoundingClientRect())
             console.log(this_work.parentElement.parentElement, "parent parent rectangle", this_work.parentElement.parentElement.getBoundingClientRect())
+*/
         }
     }
     return obj.clientHeight
@@ -661,7 +682,7 @@ window.addEventListener("load",function(event) {
   if (document.body.classList.contains("worksheet")) {
 
   /* not the right way:  need to figure out what this needs to wait for */
-      window.setTimeout(adjustWorkspace, 1000)
+      window.setTimeout(adjustWorkspace, 500)
   }
 });
 
