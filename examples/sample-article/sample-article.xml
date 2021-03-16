@@ -10376,7 +10376,7 @@ the xsltproc executable.
                 </sidebyside>
                 <p>In this exercise, we'll use vectors to show that the medians of any triangle (<xref ref="figure-triangle-cyclic-vectors" text="type-global"/>) intersect at a point. Recall that medians are the lines connecting the vertices of the triangle to the midpoints of their opposite edges, as in the figure. We'll do this in a few steps.</p>
               </introduction>
-              <exercise xml:id="ex-cyclic" workspace="30%">
+              <exercise xml:id="ex-cyclic" workspace="4in">
                 <statement>
                   <p>What is the value of <m>\vec{A} + \vec{B} + \vec{C}</m>?</p>
                 </statement>
@@ -10407,7 +10407,7 @@ the xsltproc executable.
                 </image>
               </figure>
               <sidebyside margins="0%" widths="30% 60%" valign="top">
-                <exercise xml:id="exercise-vector-addition" workspace="40%">
+                <exercise xml:id="exercise-vector-addition" workspace="5.5in">
                   <statement>
                     <p>Show that <m>\vec{M}_{1} + \vec{M}_{2} + \vec{M}_{3} = 0</m>.</p>
                   </statement>
@@ -10415,7 +10415,7 @@ the xsltproc executable.
                     <p>Use <xref ref="ex-cyclic" text="type-global"/>.</p>
                   </hint>
                 </exercise>
-                <exercise workspace="40%">
+                <exercise workspace="2in">
                   <statement>
                     <p>To show that the point <m>P</m> exists (as the common intersection of the <m>\vec{M}_{i}</m>), show that <me>
                       \vec{A} + \frac{2}{3} \vec{M}_{3} = \frac{2}{3} \vec{M}_{2} = <fillin characters="10"/>
@@ -10423,7 +10423,7 @@ the xsltproc executable.
                   </statement>
                 </exercise>
               </sidebyside>
-              <exercise workspace="5%">
+              <exercise workspace="2.54cm">
                 <p>If you have time, try to devise a vector proof of Euclid's result presented at the beginning of the workshop. Recall that a <term>parallelogram</term> is a four-sided polygon whose opposite sides are parallel.</p>
               </exercise>
               <conclusion>
@@ -10488,7 +10488,7 @@ the xsltproc executable.
                 <pagebreak/>
 
                 <sidebyside width="45%" margins="0%">
-                    <exercise workspace="12%">
+                    <exercise workspace="1.5in">
                         <statement>
                         <p>For the simple network pictured, calculuate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
                         <image xml:id="worksheet-simple-network">
@@ -10509,7 +10509,7 @@ the xsltproc executable.
                        </statement>
                     </exercise>
 
-                    <exercise workspace="12%">
+                    <exercise workspace="2in">
                         <statement>
                         <p> Compare it with a parallel circuit network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
                         <image xml:id="worksheet-parallel-circuit">
@@ -10533,7 +10533,7 @@ the xsltproc executable.
                     </exercise>
                 </sidebyside>
 
-                <exercise workspace="12%">
+                <exercise workspace="1in">
                     <statement>
                     <p> Now for a more complicated network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
                     <image xml:id="worksheet-complicated-network">
@@ -10564,7 +10564,7 @@ the xsltproc executable.
 
                 <pagebreak/>
 
-                <exercise workspace="30%">
+                <exercise workspace="3in">
                     <statement>
                         <p> Now generalize these ideas to a context outside of electrical circuits. Consider the network of streets given in the diagram (with one-way directions as indicated).</p>
 
@@ -10660,13 +10660,13 @@ the xsltproc executable.
                 </introduction>
 
                 <sidebyside width="45%" margins="0%">
-                    <exercise workspace="5%">
+                    <exercise workspace="1in">
                         <statement>
                             <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
                         </statement>
                     </exercise>
 
-                    <exercise workspace="10%">
+                    <exercise workspace="1.8in">
                         <statement>
                             <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
                         </statement>
@@ -10675,7 +10675,7 @@ the xsltproc executable.
 
                 <p>A two-line paragraph interspersed to check on spacing, breaks and all that.</p>
 
-                <exercise workspace="8%">
+                <exercise workspace="1.5in">
                     <title>A full-width exercise</title>
                     <statement>
                         <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
@@ -10683,7 +10683,7 @@ the xsltproc executable.
                     </statement>
                 </exercise>
 
-                <p>A two-line paragraph interspersed to check on spacing, breaks and all that.</p>
+                <p>Another two-line paragraph interspersed to check on spacing, breaks and all that.</p>
 
                 <sidebyside width="30%" margins="0%">
                     <exercise>
@@ -10692,14 +10692,14 @@ the xsltproc executable.
                         </statement>
                     </exercise>
 
-                    <exercise workspace="12%">
+                    <exercise workspace="1in">
                         <!-- <title>The Tallest</title> -->
                         <statement>
                             <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
                         </statement>
                     </exercise>
 
-                    <exercise workspace="12%">
+                    <exercise workspace="1in">
                         <statement>
                             <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
                         </statement>
@@ -10718,20 +10718,20 @@ the xsltproc executable.
                 </activity>
 
                 <sidebyside widths="25% 40% 25%" margins="0%">
-                    <exercise workspace="4%">
+                    <exercise workspace="0.5in">
                         <statement>
                             <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
                         </statement>
                     </exercise>
 
-                    <exercise workspace="4%">
+                    <exercise workspace="0.5in">
                         <!-- <title>Balanced Heights</title> -->
                         <statement>
                             <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
                         </statement>
                     </exercise>
 
-                    <exercise workspace="4%">
+                    <exercise workspace="0.5in">
                         <statement>
                             <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
                         </statement>
@@ -10760,19 +10760,19 @@ the xsltproc executable.
                              Find the values of the following expressions:</p>
                         </introduction>
 
-<task workspace="10">
+<task workspace="1in">
   <m>{\vec v}_1 \cdot {\vec v}_2 = <fillin/></m>
 </task>
-<task workspace="10">
+<task workspace="1.0in">
   <m>{\vec v}_3 \cdot {\vec v}_4 = <fillin/></m>
 </task>
-<task workspace="10">
+<task workspace="1in">
   <m>\lVert{\vec v}_1\rVert = <fillin/></m>
 </task>
-<task workspace="10">
+<task workspace="1in">
   <m>\lVert{\vec v}_4\rVert = <fillin/></m>
 </task>
-<task workspace="10">
+<task workspace="1in">
   <p>
   Are any of these vectors perpendicular to each other?
   <fillin/>
@@ -10780,7 +10780,7 @@ the xsltproc executable.
 </task>
                     </exercise>
 
-                    <exercise workspace="40">
+                    <exercise workspace="3in">
                         <statement>
                             <p>The vectors <m>\vec a = (3,9)</m> and <m>\vec u = (4,2)</m>
 are pictured below.  Derive the formula for projection on a line and use it to find the
@@ -10804,23 +10804,23 @@ m \begin{bmatrix}2 \\ 5\end{bmatrix} = \begin{bmatrix}3 \\ 7\end{bmatrix}
 </me>.
 </p>
                     </introduction>
-<task workspace="10">
+<task workspace="1in">
 <p>Check that there is no solution <m>m</m> that makes the equation true.</p>
 </task>
 
-<task workspace="20">
+<task workspace="2in">
 <p>Use projection to find the best approximation <m>\hat m</m>.</p>
 </task>
 
-<task workspace="5">
+<task workspace="1.0in">
 <p>Compute <m>\hat m \begin{bmatrix}2 \\ 5\end{bmatrix} </m>.</p>
 </task>
 
-<task workspace="15">
+<task workspace="1.5in">
 <p>Compute the residual vector.</p>
 </task>
 
-<task workspace="10">
+<task workspace="2.5in">
 <p>Compute the length of the residual vector and explain what it means.</p>
 </task>
                 </exercise>
@@ -10838,15 +10838,15 @@ m \begin{bmatrix}2 \\ 5\end{bmatrix} = \begin{bmatrix}3 \\ 7\end{bmatrix}
 </md>.
 </p>
                     </introduction>
-<task workspace="20">
+<task workspace="2in">
 <p>Write the system in vector form.</p>
 </task>
 
-<task workspace="30">
+<task workspace="3.9in">
 <p>Find the best estimate, <m>\hat t</m>, of <m>t</m> using projection.</p>
 </task>
 
-<task workspace="10">
+<task workspace="2in">
 <p>Compute the length of the residual vector.</p>
 </task>
                 </exercise>
