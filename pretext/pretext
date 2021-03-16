@@ -257,7 +257,7 @@ def main():
     elif args.component == 'mom':
         ptx.mom_static_problems(xml_source, publisher_file, stringparams, args.xmlid, dest_dir)
     elif args.component == 'math':
-        if args.format in ['svg', 'mml', 'braille', 'speech']:
+        if args.format in ['svg', 'mml', 'nemeth', 'speech']:
             ptx.mathjax_latex(xml_source, publisher_file, out_file, dest_dir, args.format)
         else:
             raise NotImplementedError('cannot convert math elements to "{}" format'.format(args.format))
