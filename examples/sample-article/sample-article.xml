@@ -10738,8 +10738,121 @@ the xsltproc executable.
                     </exercise>
                 </sidebyside>
             </worksheet>
-        </section>
 
+
+
+            <worksheet courseid="MAT-150" series="Activity" seriescode="13">
+              <title>Dot products and projection</title>
+<!--
+                <introduction>
+                    <p>No introduction, because space is at a premium.</p>
+                </introduction>
+-->
+
+                <sidebyside width="45%" margins="0%">
+                    <exercise>
+                        <introduction>
+                            <p>Let
+<m>{\vec v}_1 = (-4,1)</m>,
+<m>{\vec v}_2 = (2,2)</m>,
+<m>{\vec v}_3 = (1,2,3)</m>,
+<m>{\vec v}_4 = (-2,1,0)</m>.
+                             Find the values of the following expressions:</p>
+                        </introduction>
+
+<task workspace="10">
+  <m>{\vec v}_1 \cdot {\vec v}_2 = <fillin/></m>
+</task>
+<task workspace="10">
+  <m>{\vec v}_3 \cdot {\vec v}_4 = <fillin/></m>
+</task>
+<task workspace="10">
+  <m>\lVert{\vec v}_1\rVert = <fillin/></m>
+</task>
+<task workspace="10">
+  <m>\lVert{\vec v}_4\rVert = <fillin/></m>
+</task>
+<task workspace="10">
+  <p>
+  Are any of these vectors perpendicular to each other?
+  <fillin/>
+  </p>
+</task>
+                    </exercise>
+
+                    <exercise workspace="40">
+                        <statement>
+                            <p>The vectors <m>\vec a = (3,9)</m> and <m>\vec u = (4,2)</m>
+are pictured below.  Derive the formula for projection on a line and use it to find the
+projection of <m>\vec a</m> on the line spanned by <m>\vec u</m>.
+Also compute the length of the residual vector.</p>
+<image width="100%" source="images/projection1.png">
+                        <description>two vectors...</description>
+                    </image>
+                        </statement>
+                    </exercise>
+                </sidebyside>
+
+      <pagebreak/>
+
+              <sidebyside width="48%" margins="0%">
+                <exercise>
+                    <introduction>
+                        <p>Consider the vector equation
+<me>
+m \begin{bmatrix}2 \\ 5\end{bmatrix} = \begin{bmatrix}3 \\ 7\end{bmatrix}
+</me>.
+</p>
+                    </introduction>
+<task workspace="10">
+<p>Check that there is no solution <m>m</m> that makes the equation true.</p>
+</task>
+
+<task workspace="20">
+<p>Use projection to find the best approximation <m>\hat m</m>.</p>
+</task>
+
+<task workspace="5">
+<p>Compute <m>\hat m \begin{bmatrix}2 \\ 5\end{bmatrix} </m>.</p>
+</task>
+
+<task workspace="15">
+<p>Compute the residual vector.</p>
+</task>
+
+<task workspace="10">
+<p>Compute the length of the residual vector and explain what it means.</p>
+</task>
+                </exercise>
+
+                <exercise>
+ <introduction>
+                        <p>Consider the system of equations
+<md>
+<mrow>
+3t \amp =5
+</mrow>
+<mrow>
+ 2t \amp = 9
+</mrow>
+</md>.
+</p>
+                    </introduction>
+<task workspace="20">
+<p>Write the system in vector form.</p>
+</task>
+
+<task workspace="30">
+<p>Find the best estimate, <m>\hat t</m>, of <m>t</m> using projection.</p>
+</task>
+
+<task workspace="10">
+<p>Compute the length of the residual vector.</p>
+</task>
+                </exercise>
+              </sidebyside>
+            </worksheet>
+        </section>
 
         <section xml:id="exercises-single">
             <title>Exercises, One Subsection</title>
