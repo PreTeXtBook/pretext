@@ -5017,11 +5017,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates/>
 </xsl:template>
 
-<!-- Page Break in a Worksheet -->
-<!-- Not very semantic, but worksheet construction for        -->
-<!-- print does involve some layout. Only with a "worksheet". -->
-<!-- NB: A "page" grouping interferes with numbering that     -->
-<!-- looks to the parent.                                     -->
+<!-- Pages in a Worksheet -->
+<!-- Produce a  \clearpage  indicating the end -->
+<!-- of a page, but not for the last page.     -->
+
+<xsl:template match="worksheet/page">
+    <xsl:apply-templates/>
+    <xsl:if test="following-sibling::page">
+        <xsl:text>\clearpage&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- 2020-03-17: Empty element, since originally a       -->
+<!-- "page" element interrupted numbering of contents.   -->
+<!-- Now deprecated in favor of a proper "page" element. -->
 <xsl:template match="worksheet/pagebreak">
     <xsl:text>\clearpage&#xa;</xsl:text>
 </xsl:template>
