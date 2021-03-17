@@ -149,6 +149,7 @@ so that we can set our own later */
 /* see Ex 29 https://yoshiwarabooks.org/linear-functions.html 
 and ex 2.91 in 
 https://yoshiwarabooks.org/mfg/MathModels.html */
+.pretext-content .introduction + .sidebyside,
 .pretext-content p + .sidebyside,
 .pretext-content ol + .sidebyside,
 .pretext-content ul + .sidebyside {
@@ -348,7 +349,6 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .pretext-content section section > .heading {
     font-size: 1.5em;
     line-height: 1.25em;
-    margin-top: 1em;
 }
 .pretext-content section section section > .heading {
     font-size: 1.40em;
@@ -817,7 +817,18 @@ body > a.assistive:focus {
 .pretext-content .sbspanel {
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
 }
+.pretext-content .sbspanel.top {  /* also the default */
+    justify-content: flex-start;
+}
+.pretext-content .sbspanel.middle {
+    justify-content: center;
+}
+.pretext-content .sbspanel.bottom {
+    justify-content: flex-end;
+}
+
 .pretext-content .sbspanel > p:first-child {
     margin-top: 0;
 }
@@ -2699,23 +2710,6 @@ body.sidebar-left-closed .searchwrapper {
     padding-right: 0.5em;
     font-family: monospace;
 }
-/*
-.pretext-content .image-archive > a:not(:last-child) {
-    padding-right: 1em;
-}
-.pretext-content .image-archive > a:not(:last-child):after {
-    content: " ";
-}
-*/
-
-/*
-.pretext-content .sbspanel object {
-*/
-/*
-.pretext-content .sbspanel object:not(:last-child) {
-    margin-bottom: 0 !important;
-}
-*/
 
 .pretext-content iframe {
     margin: 0;
@@ -2983,20 +2977,27 @@ body.standalone.worksheet .pretext-content .onepage .workspace {
 
 body.standalone.worksheet .pretext-content .onepage .workspace.squashed.tight {
     border: 4px solid red;
-    padding-left: 50px;
-    background: none;
-    background-image: url("https://aimath.org/~farmer/tmp/double-sided-arrow.png");
-    background-size: auto 100%;
-    background-origin: content-box;
-    background-repeat: space;
-/*
-    background: repeating-linear-gradient(
-      45deg,
-      #fff,
-      #fff 25px,
-      #000 30px
-    );
-*/
+    background: linear-gradient(
+        #ff0 0%, #ff0 8%,
+        #000 8%, #000 9%,
+        #ff6 9%, #ff6 17%,
+        #555 17%, #555 19%,
+        #ff8 19%, #ff8 26%,
+        #777 26%, #777 29%,
+        #ffa 29%, #ffa 37%,
+        #aaa 37%, #aaa 41%,
+        #ffd 41%, #ffd 48%,
+        #ccc 48%, #ccc 52%,
+        #ffd 52%, #ffd 59%,
+        #aaa 59%, #aaa 63%,
+        #ffa 63%, #ffa 71%,
+        #777 71%, #777 74%,
+        #ff8 74%, #ff8 81%,
+        #555 81%, #555 83%,
+        #ff6 83%, #ff6 91%,
+        #000 91%, #000 92%,
+        #ff0 92%, #ff0 100%
+        );
 }
 
 body.standalone.worksheet #sidebar-left {
