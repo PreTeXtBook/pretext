@@ -11446,14 +11446,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Miscellaneous -->
 
-<!-- Page Break in a Worksheet -->
-<!-- Not very semantic, but worksheet construction -->
-<!-- for print does involve some layout. We can    -->
-<!-- style an indicator in the HTML version.       -->
+<!-- Pages in a Worksheet -->
+<!-- Produce a "hr" element indicating the end -->
+<!-- of a page, but not for the last page.     -->
+<xsl:template match="worksheet/page">
+    <xsl:apply-templates/>
+    <xsl:if test="following-sibling::page">
+        <hr class="pagebreak"/>
+    </xsl:if>
+</xsl:template>
+
+<!-- 2020-03-17: Empty element, since originally a       -->
+<!-- "page" element interrupted numbering of contents.   -->
+<!-- Now deprecated in favor of a proper "page" element. -->
 <xsl:template match="worksheet/pagebreak">
     <hr class="pagebreak"/>
 </xsl:template>
-
 
 <!-- Inline warnings go into text, no matter what -->
 <!-- They are colored for an author's report -->
