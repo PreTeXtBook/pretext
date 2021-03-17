@@ -2953,7 +2953,20 @@ body.standalone.worksheet .pretext-content .onepage > .heading {
 .pretext-content .onepage > p:first-child {
     margin-top: 0;
 }
+/* not good, because of image next to image
 .pretext-content .onepage .sbspanel + .sbspanel {
+    padding-left: 1.25em;
+    border-left: 1px solid grey;
+    margin-left: -1.25em;
+}
+*/
+.pretext-content .onepage .sbspanel + .sbspanel > .exercise::before {
+    content: "";
+position: absolute;
+top: 0;
+bottom: 0;
+right: 0;
+left: 0;
     padding-left: 1.25em;
     border-left: 1px solid grey;
     margin-left: -1.25em;
@@ -2973,6 +2986,10 @@ body.standalone .autopermalink {
 body.standalone.worksheet .pretext-content .onepage .workspace {
     border: 2px dotted grey;
     background: #efe;
+}
+body.standalone.worksheet .pretext-content .onepage .workspace.squashed {
+    border: 2px dotted grey;
+    background: #ffe;
 }
 
 body.standalone.worksheet .pretext-content .onepage .workspace.squashed.tight {
