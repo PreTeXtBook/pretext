@@ -11416,12 +11416,20 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="incorrect-use" select="($oldids != '')" />
     </xsl:call-template>
     <!--  -->
+    <!-- 2021-03-17  deprecate worksheet/pagebreak in favor of worksheet/page -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//worksheet/pagebreak" />
+        <xsl:with-param name="date-string" select="'2021-03-17'" />
+        <xsl:with-param name="message" select="'use of the empty &quot;pagebreak&quot; element has been deprecated in favor of a &quot;page&quot; element.  We will attempt to honor the empty element, but new features may only be available with the new element.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
 
 <!-- A "pagebreak" should have limited availability, -->
 <!-- so we explicitly kill it here.                  -->
+<!-- Deprecated 2021-03-17                           -->
 <xsl:template match="pagebreak"/>
 
 <!-- ToDo's are silent unless requested as part of an -->
