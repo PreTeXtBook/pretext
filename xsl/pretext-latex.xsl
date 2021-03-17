@@ -6075,6 +6075,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
                 <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
             </xsl:apply-templates>
+            <!-- this is a bit rough -->
+            <xsl:if test="not(task) and @workspace and ancestor::worksheet">
+                <xsl:text>\\\rule{\workspacestrutwidth}{</xsl:text>
+                <xsl:apply-templates select="." mode="sanitize-workspace"/>
+                <xsl:text>}%&#xa;</xsl:text>
+            </xsl:if>
         </xsl:if>
     </xsl:for-each>
 
