@@ -682,7 +682,7 @@ window.addEventListener("load",function(event) {
   if (document.body.classList.contains("worksheet")) {
 
   /* not the right way:  need to figure out what this needs to wait for */
-      window.setTimeout(adjustWorkspace, 500)
+      window.setTimeout(adjustWorkspace, 1000)
   }
 });
 
