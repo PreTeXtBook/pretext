@@ -238,7 +238,7 @@ console.log("this is e", e);
 
     console.log("adding permalinks");
     /* add permalinks to all sections and articles */
-    items_needing_permalinks = document.querySelectorAll('main section:not(.introduction), main section > p, main section > article, main section > figure, main section > .exercisegroup > .introduction > p, main section > .exercisegroup article, main section article.exercise');
+    items_needing_permalinks = document.querySelectorAll('main section:not(.introduction), main section > p, main section article, main section > figure, main section > .exercisegroup > .introduction > p, main section > .exercisegroup article, main section article.exercise, main section article.paragraphs > p, main section article.paragraphs > figure');
     //   items_needing_permalinks = document.querySelectorAll('body section article');
     this_url = window.location.href.split('#')[0];
     permalink_word = "permalink";
@@ -591,6 +591,98 @@ window.addEventListener("load",function(event) {
            }
        }
    }
+});
+
+/* .onepage  worksheets  adjust workspace to fit printed page length */
+
+function scaleWorkspaceIn(obj, scale, tmporfinal) {
+    these_workspaces = obj.querySelectorAll('.workspace');
+    for (var j=0; j<these_workspaces.length; ++j) {
+        this_work = these_workspaces[j];
+        this_proportion = this_work.getAttribute("data-space");
+        this_proportion_number = parseFloat(this_proportion.slice(0, -2));
+        if (this_proportion.endsWith("in")) {
+            this_proportion_number *= 10.0;
+        } else if (this_proportion.endsWith("cm")) {
+            this_proportion_number *= 3.94;  /* 10/2.54 */
+        } else {
+            console.log("No units on workspace size:  expect unexpected behavior", this_work)
+        }
+        this_proportion_scaled = scale * this_proportion_number;
+        this_work.setAttribute('style', 'height: ' + this_proportion_scaled + 'px');
+        if (tmporfinal == "final" && scale < 11) {
+            this_work.classList.add("squashed")
+        } else {
+            this_work.classList.remove("squashed")
+        }
+        if (tmporfinal == "final") {
+            var enclosingspace = this_work.parentElement.parentElement;
+            console.log("enclosingspace was", enclosingspace)
+            if (enclosingspace.tagName == "ARTICLE") {
+                enclosingspace = enclosingspace.parentElement;
+                console.log("enclosingspace is now", enclosingspace)
+            }
+            var enclosingspacebottom =  enclosingspace.getBoundingClientRect()["bottom"];
+            /* there should be an easier way to do this */
+            /* when the enclosing parent has padding, we want to ignore that */
+            enclosingspacepadding = parseFloat(getComputedStyle(enclosingspace)["padding-bottom"].slice(0, -2));
+            enclosingspacebottom = enclosingspacebottom - enclosingspacepadding;
+            console.log(enclosingspace, "enclosingspace padding-bottom", getComputedStyle(enclosingspace)["padding-bottom"]);
+            var lastsibling = enclosingspace.lastElementChild;
+            var lastworkspacebottom = lastsibling.getBoundingClientRect()["bottom"];
+            console.log("XX", this_work, "oo", enclosingspace, "pp", enclosingspacebottom, "xx", lastworkspacebottom, "diff", enclosingspacebottom - lastworkspacebottom);
+            if (enclosingspacebottom - lastworkspacebottom < 5) {
+                this_work.classList.add("tight")
+            } else {
+                this_work.classList.remove("tight")
+            }
+/*
+            console.log(this_work.parentElement, "iparent rectangle", this_work.parentElement.getBoundingClientRect())
+            console.log(this_work.parentElement.parentElement, "parent parent rectangle", this_work.parentElement.parentElement.getBoundingClientRect())
+*/
+        }
+    }
+    return obj.clientHeight
+}
+
+function adjustWorkspace() {
+    var all_pages = document.querySelectorAll('body .onepage');
+    var a = 15.0;
+    var b = 10.0;
+    var heightA, heightB, this_item;
+
+    for (var i = 0; i < all_pages.length; i++) {
+        this_item = all_pages[i];
+        console.log(this_item.clientHeight, "ccc", this_item);
+    }
+    for (var i = 0; i < all_pages.length; i++) {
+       this_item = all_pages[i];
+       heightA = scaleWorkspaceIn(this_item, a, "tmp");
+       heightB = scaleWorkspaceIn(this_item, b, "tmp");
+       console.log("heights", heightA, " xx ", heightB, "oo", this_item);
+       /* a magicscale makes the output the height of the minimum specified input */
+       var magicscale = 12;
+       if (heightA != heightB) {
+/*
+         magicscale = (1328 - 2*height10 + 1*height20)/(height20 - height10)
+         magicscale = (1324 - 2*height10 + 1*height20)/(height20 - height10)
+*/
+         magicscale = (1324*(a - b) + b*heightA - a*heightB)/(heightA - heightB)
+       }
+       console.log("magicscale", magicscale, "of", this_item);
+       scaleWorkspaceIn(this_item, magicscale, "final")
+
+       console.log(this_item.clientHeight, "ccc", this_item);
+    }
+}
+
+window.addEventListener("load",function(event) {
+
+  if (document.body.classList.contains("worksheet")) {
+
+  /* not the right way:  need to figure out what this needs to wait for */
+      window.setTimeout(adjustWorkspace, 500)
+  }
 });
 
 /*
