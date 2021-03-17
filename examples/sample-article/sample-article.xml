@@ -10309,6 +10309,7 @@ the xsltproc executable.
             <worksheet>
               <title>A Geometric Prelude</title>
               <!-- <author>Dave Rosoff</author> -->
+    <page>
               <objectives xml:id="objectives">
                 <ul>
                   <li>Practice visualizing vector addition</li>
@@ -10381,9 +10382,9 @@ the xsltproc executable.
                   <p>What is the value of <m>\vec{A} + \vec{B} + \vec{C}</m>?</p>
                 </statement>
               </exercise>
+    </page>
 
-              <pagebreak/>
-
+    <page>
               <p><xref ref="figure-triangle-cyclic-medians" text="type-global"/> from the previous page is reproduced for your convenience.</p>
               <figure xml:id="figure-triangle-cyclic-medians-copy">
                 <caption>The medians of the triangle are <m>\vec{M}_1</m>, <m>\vec{M}_2</m>, and <m>\vec{M}_3</m>.</caption>
@@ -10430,12 +10431,14 @@ the xsltproc executable.
                 <title>Wrap-up</title>
                 <p>It's possible to do interesting things with vector arithmetic in a coordinate-free way: we didn't specify an origin, or any entries of any vectors in the examples.</p>
               </conclusion>
+    </page>
             </worksheet>
 
             <worksheet top="3cm" bottom="100pt">
                 <title>Networks Worksheet</title>
                 <!-- <subtitle>An Activity Using Linear Algebra to Solve Network Applications</subtitle> -->
 
+    <page>
                 <introduction>
                     <title>Basic laws for electrical circuits</title>
 
@@ -10484,9 +10487,9 @@ the xsltproc executable.
                     <p> Kirchoffs Current Law and Kirkoffs Voltage Law combined with Ohms Law gives for any circuit of resistors and sources a linear system that may (or may not) determine the currents.
                     </p>
                 </introduction>
+    </page>
 
-                <pagebreak/>
-
+    <page>
                 <sidebyside width="45%" margins="0%">
                     <exercise workspace="1.5in">
                         <statement>
@@ -10561,9 +10564,9 @@ the xsltproc executable.
                     </image>
                     </statement>
                 </exercise>
+    </page>
 
-                <pagebreak/>
-
+    <page>
                 <exercise workspace="3in">
                     <statement>
                         <p> Now generalize these ideas to a context outside of electrical circuits. Consider the network of streets given in the diagram (with one-way directions as indicated).</p>
@@ -10652,9 +10655,11 @@ the xsltproc executable.
                         <p> Use a variable for each segment inside of the network and set up a system of linear equations restricting the flow. Solve the system.  Note that you should not get a unique solution as traffic should be able to flow through the network in various ways. </p>
                     </statement>
                 </exercise>
+    </page>
             </worksheet>
 
             <worksheet margin="1cm">
+    <page>
                 <introduction>
                     <p>This is a mock one-page worksheet for testing purposes. We have specified an overall margin just slightly less than the default.</p>
                 </introduction>
@@ -10737,18 +10742,14 @@ the xsltproc executable.
                         </statement>
                     </exercise>
                 </sidebyside>
+    </page>
             </worksheet>
 
 
 
             <worksheet courseid="MAT-150" series="Activity" seriescode="13">
               <title>Dot products and projection</title>
-<!--
-                <introduction>
-                    <p>No introduction, because space is at a premium.</p>
-                </introduction>
--->
-
+    <page>
                 <sidebyside width="45%" margins="0%">
                     <exercise>
                         <introduction>
@@ -10792,9 +10793,9 @@ Also compute the length of the residual vector.</p>
                         </statement>
                     </exercise>
                 </sidebyside>
+    </page>
 
-      <pagebreak/>
-
+    <page>
               <sidebyside width="48%" margins="0%">
                 <exercise>
                     <introduction>
@@ -10826,7 +10827,7 @@ m \begin{bmatrix}2 \\ 5\end{bmatrix} = \begin{bmatrix}3 \\ 7\end{bmatrix}
                 </exercise>
 
                 <exercise>
- <introduction>
+         <introduction>
                         <p>Consider the system of equations
 <md>
 <mrow>
@@ -10837,7 +10838,7 @@ m \begin{bmatrix}2 \\ 5\end{bmatrix} = \begin{bmatrix}3 \\ 7\end{bmatrix}
 </mrow>
 </md>.
 </p>
-                    </introduction>
+        </introduction>
 <task workspace="2in">
 <p>Write the system in vector form.</p>
 </task>
@@ -10851,6 +10852,7 @@ m \begin{bmatrix}2 \\ 5\end{bmatrix} = \begin{bmatrix}3 \\ 7\end{bmatrix}
 </task>
                 </exercise>
               </sidebyside>
+    </page>
             </worksheet>
         </section>
 
