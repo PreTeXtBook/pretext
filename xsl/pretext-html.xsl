@@ -8874,9 +8874,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <title>
             <xsl:apply-templates select="." mode="title-full"/>
         </title>
-        <!-- nearly a dead end, recurse into exercises at *any* PTX depth, -->
-        <!-- but recurse into &PROJECT-LIKE; as children of "section"      -->
-        <xsl:apply-templates select=".//exercise|project|activity|exploration|investigation"  mode="runestone-manifest"/>
+        <!-- nearly a dead end, recurse into "exercise" and PROJECT-LIKE at *any* PTX -->
+        <!-- depth, for example within a "subsection" (which Runestone does not have) -->
+        <xsl:apply-templates select=".//exercise|.//project|.//activity|.//exploration|.//investigation"  mode="runestone-manifest"/>
     </subchapter>
     <!-- dead end structurally, no more recursion, even if "subsection", etc. -->
 </xsl:template>
