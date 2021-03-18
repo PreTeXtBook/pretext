@@ -163,7 +163,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <statement>
                 <p>Similar to above, but we provide a starting point for the exercise.</p>
             </statement>
-            <program xml:id="coding-exercise-partial" language="c">
+            <program xml:id="coding-exercise-partial-one" language="c">
                 <input>
                 #include
 
@@ -179,7 +179,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <statement>
                 <p>Similar to above, but now as an <tag>activity</tag>.  This demonstrates the possibility to use any <q>project-like</q> block (<tag>project</tag>, <tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag>), but not in the case when structured with <tag>task</tag>.</p>
             </statement>
-            <program xml:id="coding-exercise-partial" language="c">
+            <program xml:id="coding-exercise-partial-two" language="c">
                 <input>
                 #include
 
@@ -214,6 +214,56 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <video youtube="X1-UNHUajfk" width="60%" margins="5% 35%"/>
 
         <p>The margins here are asymmetric just as a test.  And this text is here to see where the video ends.</p>
+    </section>
+
+    <section>
+        <title>Deeper</title>
+
+        <introduction>
+            <p>This is a stub of a <tag>section</tag>, but it contains two <tag>subsection</tag> which each contain a PROJECT-LIKE item that includes a <tag>program</tag> element, and thus is a coding exercise.  This tests migration to the Runestone assignment area, though Runestone only has divisions two-deep (<q>chapter</q> and <q>subchapter</q>, so both will show up associated with the same <tag>section</tag><mdash/>this one.</p>
+        </introduction>
+
+        <subsection>
+            <title>Subsection One</title>
+
+            <p>An <tag>activity</tag> next.</p>
+
+            <activity>
+                <title>Activity in a Subsection</title>
+
+                <statement>
+                    <p>We would suggest you do something here.</p>
+                </statement>
+                <program xml:id="coding-exercise-partial-three" language="c">
+                    <input>
+                    #include
+
+                    int main(void)
+                    </input>
+                </program>
+            </activity>
+        </subsection>
+
+        <subsection>
+            <title>Subsection Two</title>
+
+            <p>An <tag>exploration</tag> next.</p>
+
+            <exploration>
+                <title>Exploration in a Subsection</title>
+
+                <statement>
+                    <p>We would suggest now that you explore something here.</p>
+                </statement>
+                <program xml:id="coding-exercise-partial-four" language="c">
+                    <input>
+                    #include
+
+                    int main(void)
+                    </input>
+                </program>
+            </exploration>
+        </subsection>
     </section>
 
     <reading-questions>
