@@ -596,8 +596,19 @@ window.addEventListener("load",function(event) {
 
 /* .onepage  worksheets  adjust workspace to fit printed page length */
 
-function scaleWorkspaceIn(obj, scale, tmporfinal) {
-    these_workspaces = obj.querySelectorAll('.workspace');
+function scaleWorkspaceIn(obj, subobj, scale, tmporfinal) {
+    console.log("initial height", obj.clientHeight);
+    these_workspaces = subobj.querySelectorAll('.workspace');
+    if (obj != subobj) {
+        console.log("distinct subobj", obj, subobj);
+        console.log("these_workspaces", these_workspaces);
+        /* this is starting to look like a hack */
+        if (subobj.classList.contains("workspace")) {  //we were given one workspace
+            console.log("we were handed a workspace");
+            these_workspaces = [subobj]
+        }
+        console.log("now these_workspaces", these_workspaces);
+    }
     for (var j=0; j<these_workspaces.length; ++j) {
         this_work = these_workspaces[j];
         this_proportion = this_work.getAttribute("data-space");
@@ -658,8 +669,8 @@ function adjustWorkspace() {
     }
     for (var i = 0; i < all_pages.length; i++) {
        this_item = all_pages[i];
-       heightA = scaleWorkspaceIn(this_item, a, "tmp");
-       heightB = scaleWorkspaceIn(this_item, b, "tmp");
+       heightA = scaleWorkspaceIn(this_item, this_item, a, "tmp");
+       heightB = scaleWorkspaceIn(this_item, this_item, b, "tmp");
        console.log("heights", heightA, " xx ", heightB, "oo", this_item);
        /* a magicscale makes the output the height of the minimum specified input */
        var magicscale = 12;
@@ -671,9 +682,25 @@ function adjustWorkspace() {
          magicscale = (1324*(a - b) + b*heightA - a*heightB)/(heightA - heightB)
        }
        console.log("magicscale", magicscale, "of", this_item);
-       scaleWorkspaceIn(this_item, magicscale, "final")
+       scaleWorkspaceIn(this_item, this_item, magicscale, "final")
 
-       console.log(this_item.clientHeight, "ccc", this_item);
+       var this_height = this_item.clientHeight;
+       console.log(this_height, "ccc", this_item);
+
+       /* now go back and see if any of the squashed non-tight items can be expanded */
+       var these_squashed = this_item.querySelectorAll('.squashed:not(.tight)');
+       console.log("these_squashed", these_squashed);
+       console.log('are squashed by', magicscale);
+       for (var j=0; j < these_squashed.length; ++j) {
+           var this_q = these_squashed[j];
+           heightA = scaleWorkspaceIn(this_item, this_q, 12, "tmp");
+           console.log("heightA", heightA);
+           if (heightA <= this_height) {
+               scaleWorkspaceIn(this_item, this_q, 12, "final");
+           } else {
+               scaleWorkspaceIn(this_item, this_q, magicscale, "final");
+           }
+       }
     }
 }
 
