@@ -2941,14 +2941,39 @@ body.standalone.worksheet .pretext-content .onepage > .heading {
     margin-top: 0;
     font-size: 1.3em;
 }
-.pretext-content .onepage {
+body.standalone.worksheet .pretext-content .onepage .solutions {
+    display: none;
+}
+body.standalone .pretext-content .onepage {
     padding: 40px 45px 45px 55px;
     border: 2px solid grey;
     margin: 0;
 /* height: 1243px; */
 }
 .pretext-content .onepage + .onepage {
+    margin-top: 2.5em;
+    padding-top: 1.5em;
+    border-top: 1px dashed #aaa;
+}
+.pretext-content .onepage + .onepage::before {
+    content: "pagebreak";
+//    width: 80%;
+    text-align: center;
+    margin-left: 40%;
+    padding-left: 1em;
+    padding-right: 1em;
+    position: absolute;
+    top: -0.8em;
+    font-size: 80%;
+    font-style: italic;
+    background: white;
+}
+
+body.standalone .pretext-content .onepage + .onepage {
     margin-top: 10px;
+}
+body.standalone .pretext-content .onepage + .onepage::before {
+    content: none;
 }
 .pretext-content .onepage > p:first-child {
     margin-top: 0;
@@ -2960,7 +2985,7 @@ body.standalone.worksheet .pretext-content .onepage > .heading {
     margin-left: -1.25em;
 }
 */
-.pretext-content .onepage .sbspanel + .sbspanel > .exercise::before {
+body.worksheet .pretext-content .onepage .sbspanel + .sbspanel > .exercise::before {
     content: "";
 position: absolute;
 top: 0;
@@ -3063,11 +3088,11 @@ body.standalone.worksheet .pretext-content section > .heading + p {
     }
     body.standalone.worksheet .pretext-content .onepage {
         max-height: 100%;
-        margin: 0;
         overflow: hidden;
         page-break-after: always;
         height: 1243px;
         border: none;
+        page-break-inside: avoid;
      }
 /*
     body.standalone.worksheet .pretext-content > .onepage {
@@ -3086,7 +3111,11 @@ body.standalone.worksheet .pretext-content section > .heading + p {
         padding: 0;
     }
 
-    body.standalone.worksheet.mathbook-loaded .page .main #content.pretext-content section.onepage { margin:0 }
+    body.standalone.worksheet.mathbook-loaded .page .main #content.pretext-content section.onepage {
+        padding-bottom: 20px;  /* to help prevent flow onto the next page, particularly in Safari */
+                              /* the page is not full length, but what is missing was blank anyway */
+        margin: 0;
+    }
 
     @page { margin: 0 }
 }
