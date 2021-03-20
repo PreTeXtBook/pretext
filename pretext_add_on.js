@@ -659,9 +659,12 @@ function scaleWorkspaceIn(obj, subobj, scale, tmporfinal) {
 
 function adjustWorkspace() {
     var all_pages = document.querySelectorAll('body .onepage');
-    var a = 15.0;
+    var a = 14.0;
     var b = 10.0;
     var heightA, heightB, this_item;
+
+    var pagelayout = "letter";
+    if (document.body.classList.contains("A4")) { pagelayout = "A4" } 
 
     for (var i = 0; i < all_pages.length; i++) {
         this_item = all_pages[i];
@@ -679,7 +682,14 @@ function adjustWorkspace() {
          magicscale = (1328 - 2*height10 + 1*height20)/(height20 - height10)
          magicscale = (1324 - 2*height10 + 1*height20)/(height20 - height10)
 */
-         magicscale = (1324*(a - b) + b*heightA - a*heightB)/(heightA - heightB)
+         if (pagelayout == "A4") {
+             magicscale = (1413*(a - b) + b*heightA - a*heightB)/(heightA - heightB)
+         } else if (pagelayout == "letter") {
+             magicscale = (1324*(a - b) + b*heightA - a*heightB)/(heightA - heightB)
+         } else {
+             console.log("Error: unknown pagelayout", pagelayout)
+         }
+         
        }
        console.log("magicscale", magicscale, "of", this_item);
        scaleWorkspaceIn(this_item, this_item, magicscale, "final")
