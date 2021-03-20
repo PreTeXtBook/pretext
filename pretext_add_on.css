@@ -3053,6 +3053,11 @@ body.standalone.worksheet .page > .main #content {
     width: 1030px;
     margin-right: 0;
 }
+body.standalone.worksheet.A4 .page > .main #content {
+    max-width: 1001px;
+    width: 1001px;
+}
+
 body.standalone.worksheet .pretext-content .goal-like {
     border: none;
     padding: 0;
@@ -3094,11 +3099,9 @@ body.standalone.worksheet .pretext-content section > .heading + p {
         border: none;
         page-break-inside: avoid;
      }
-/*
-    body.standalone.worksheet .pretext-content > .onepage {
-        font-size: 62%;
+    body.standalone.worksheet.A4 .pretext-content .onepage {
+        height: 1320px;
     }
-*/
     body.standalone.worksheet .pretext-content .onepage .workspace,
     body.standalone.worksheet .pretext-content .onepage .workspace.squashed.tight {
         border: none;
