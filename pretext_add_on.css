@@ -1206,6 +1206,44 @@ body > a.assistive:focus {
 .pretext-content section section section > .heading {
   display: inline-block;
 }
+/* maybe delete the above and always do like worksheet after 0.31? */
+.pretext-content section.worksheet > .heading,
+.pretext-content section section.worksheet > .heading,
+.pretext-content section section section.worksheet > .heading {
+  display: block;
+}
+.pretext-content section.worksheet > .heading > .codenumber {
+    display: inline-block;
+    vertical-align: top;
+}
+.pretext-content section.worksheet > .heading > .title {
+    display: inline-block;
+    max-width: 70%;
+}
+.pretext-content .heading .print-links {
+    display: inline-block;
+    float: right;
+    vertical-align: top;
+    width: 19%;
+    text-align: right;
+}
+.pretext-content .heading .print-links > a {
+    font-family: "Open Sans";
+    font-size: 0.6em;
+    font-weight: bold;
+    padding: 0.1em 0.2em;
+    background: #ffa;
+    border: 2px solid green;
+}
+.pretext-content .heading .print-links > a.us {
+    background: #eef;
+    color: #9b1c2c;
+    border-color: #041E42;
+}
+.pretext-content .heading .print-links > a + a {
+    margin-left: 0.25em;
+}
+
 .pretext-content section .heading + a.permalink {
     opacity: 0.2;
     color: #d00;
@@ -2935,6 +2973,7 @@ and condider having this replace line 3338 of the general code (which uses .head
     .has-sidebar-left.mathbook-loaded.sidebar-left-open .page .main #content.pretext-content section .heading { margin-top:0 }
 }
 
+/* also see section > heading for worksheets, maybe around line 1200 */
 /* one-page documents in the browser */
 
 body.standalone.worksheet .pretext-content .onepage > .heading {
