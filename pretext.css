@@ -1209,33 +1209,6 @@
   }
 }
 
-
-/* line 458, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
-.pretext-content .summary-links a:active {
-  position: relative;
-  color: white;
-  background: #932919;
-  text-decoration: none;
-  box-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px 5px inset;
-}
-/* line 465, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
-.pretext-content .summary-links a:active:after {
-  width: 0;
-  height: 0;
-  border-top: 0.4em solid transparent;
-  border-bottom: 0.4em solid transparent;
-  border-left: 0.4em solid white;
-}
-/* line 473, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
-.pretext-content .summary-links a:focus {
-  outline: thin dotted #333;
-  outline-offset: -2px;
-  /**
-   * Remove stupid inner dotted border applied by Firefox on focus
-   * See http://stackoverflow.com/a/199319/1599617
-   */
-}
-
 /*
  * Reposition MathJax loading message so it overlays content instead of navbar
  * when there is a toc.

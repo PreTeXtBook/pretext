@@ -2991,6 +2991,29 @@ and condider having this replace line 3338 of the general code (which uses .head
   margin-right: 0.41667em;
 }
 
+.pretext-content .summary-links a:active {
+  position: relative;
+  color: white;
+  background: #932919;  
+  text-decoration: none;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px 5px inset;
+}
+.pretext-content .summary-links a:active:after {
+  width: 0;
+  height: 0;
+  border-top: 0.4em solid transparent;
+  border-bottom: 0.4em solid transparent;
+  border-left: 0.4em solid white;
+}
+.pretext-content .summary-links a:focus {
+  outline: thin dotted #333;
+  outline-offset: -2px;
+  /**
+   * Remove stupid inner dotted border applied by Firefox on focus
+   * See http://stackoverflow.com/a/199319/1599617
+   */
+}
+
 
 @media print {
     .navbar { display:none; }
