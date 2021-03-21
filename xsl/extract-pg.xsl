@@ -1519,13 +1519,6 @@
     <xsl:apply-templates select="." mode="number" />
 </xsl:template>
 
-<!-- In common template, but have to point -->
-<!-- to it since it is a modal template    -->
-<xsl:template match="exercisegroup" mode="xref-number">
-    <xsl:apply-imports />
-</xsl:template>
-
-
 <!-- ######### -->
 <!-- PGML Math -->
 <!-- ######### -->
