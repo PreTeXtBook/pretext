@@ -119,12 +119,6 @@
   font-weight: normal;
   /* Much classier */
 }
-/* line 115, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
-/*
-#masthead #title-container > .heading .subtitle:before, #masthead .title-container > .heading .subtitle:before {
-  content: ": ";
-}
-*/
 @media screen and (max-width: 800px) {
   /* line 112, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
   #masthead #title-container > .heading .subtitle, #masthead .title-container > .heading .subtitle {
@@ -177,16 +171,10 @@
 }
 /* line 169, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
 #masthead #logo-link:empty:before, .mathbook-book #masthead #logo-link:empty:before, #masthead .logo-link:empty:before, .mathbook-book #masthead .logo-link:empty:before {
-/*
-  content: "\f2d0";
-*/
   content: "\2211";
 }
 /* line 173, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
 .mathbook-article #masthead #logo-link:empty:before, .mathbook-article #masthead .logo-link:empty:before {
-/*
-  content: "\f12e";
-*/
   content: "\2211";
 }
 /* line 189, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
@@ -391,7 +379,6 @@
 }
 /* line 284, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
 #primary-navbar .sidebar-left-toggle-button:before, #primary-navbar-sticky-wrapper .sidebar-left-toggle-button:before {
-  content: "\f20d";
   content: "\2630";
   text-align: center;
   font-size: 24px;
@@ -422,7 +409,6 @@
   }
   /* line 284, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
   #primary-navbar .sidebar-left-toggle-button:before, #primary-navbar-sticky-wrapper .sidebar-left-toggle-button:before {
-    content: "\f20d";
     content: "\2630";
     text-align: center;
     font-size: 30px;
@@ -451,10 +437,8 @@
 }
 /* line 284, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
 #primary-navbar .up-button:before, #primary-navbar-sticky-wrapper .up-button:before {
-  content: "\f126";
   content: "^";
   text-align: center;
-  font-size: 16px;
   font-size: 24px;
   font-family: "Open Sans";
 /*
@@ -481,24 +465,13 @@
     white-space: nowrap;
     overflow: hidden;
   }
-  /* line 284, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
+
   #primary-navbar .up-button:before, #primary-navbar-sticky-wrapper .up-button:before {
-    content: "\f126";
-    content: "^";
-    text-align: center;
-    font-size: 20px;
     font-size: 36px;
-    font-family: "Open Sans";
     line-height: 44.2px;
     width: 44.2px;
-    text-indent: 0;
     padding-top: 5px;
     /* So text isn't removed from this too */
-    display: inline-block;
-    vertical-align: middle;
-  }
-  /* line 320, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
-  #primary-navbar .up-button:before, #primary-navbar-sticky-wrapper .up-button:before {
     position: absolute;
     left: 50%;
     right: auto;
@@ -510,10 +483,8 @@
 }
 /* line 284, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
 #primary-navbar .previous-button:before, #primary-navbar-sticky-wrapper .previous-button:before {
-  content: "\f124";
   content: "<";
   text-align: center;
-  font-size: 16px;
   font-size: 24px;
   font-family: "Open Sans";
 
@@ -545,25 +516,13 @@
   }
   /* line 284, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
   #primary-navbar .previous-button:before, #primary-navbar-sticky-wrapper .previous-button:before {
-    content: "\f124";
-    content: "<";
-    text-align: center;
-    font-size: 20px;
     font-size: 40px;
-    font-family: "Open Sans";
     line-height: 36px;
     width: 44.2px;
-    text-indent: 0;
     /* So text isn't removed from this too */
-    display: inline-block;
     padding-top: 5px;
-    vertical-align: baseline;
-    vertical-align: middle;
-  }
-  /* line 320, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
-  #primary-navbar .previous-button:before, #primary-navbar-sticky-wrapper .previous-button:before {
     position: absolute;
-    left: 50%;
+    left: 55%;
     right: auto;
     margin-left: -22.1px;
     top: 50%;
@@ -577,10 +536,8 @@
 }
 /* line 284, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
 #primary-navbar .next-button:after, #primary-navbar-sticky-wrapper .next-button:after {
-  content: "\f125";
   content: ">";
   text-align: center;
-  font-size: 16px;
   font-size: 24px;
   font-family: "Open Sans";
 /*
@@ -610,24 +567,14 @@
   }
   /* line 284, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
   #primary-navbar .next-button:after, #primary-navbar-sticky-wrapper .next-button:after {
-    content: "\f125";
-    content: ">";
-    text-align: center;
-    font-size: 20px;
     font-size: 40px;
-    font-family: "Open Sans";
     line-height: 36px;
     width: 44.2px;
-    text-indent: 0;
     padding-top: 5px;
+    padding-left: 5px;
     /* So text isn't removed from this too */
-    display: inline-block;
-    vertical-align: baseline;
-  }
-  /* line 320, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
-  #primary-navbar .next-button:after, #primary-navbar-sticky-wrapper .next-button:after {
     position: absolute;
-    left: 50%;
+    left: 55%;
     right: auto;
     margin-left: -22.1px;
     top: 50%;

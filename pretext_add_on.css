@@ -362,11 +362,11 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
         margin-top: 1em;
     }
     .pretext-content section section > .heading {
-        font-size: 1.35em;
+        font-size: 1.3em;
         line-height: 1.15em;
     }
     .pretext-content section section section > .heading {
-        font-size: 1.20em;
+        font-size: 1.15;
         line-height: 1em;
     }
 }
