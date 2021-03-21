@@ -355,6 +355,21 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     line-height: 1.15em;
     margin-top: 0.75em;
 }
+@media screen and (max-width: 480px) {
+    .pretext-content section > .heading {
+        font-size: 1.5em;
+        line-height: 1.33em;
+        margin-top: 1em;
+    }
+    .pretext-content section section > .heading {
+        font-size: 1.35em;
+        line-height: 1.15em;
+    }
+    .pretext-content section section section > .heading {
+        font-size: 1.20em;
+        line-height: 1em;
+    }
+}
 
 .pretext-content section article > .heading,
 .pretext-content section section article > .heading,
