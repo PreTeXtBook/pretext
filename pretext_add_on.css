@@ -2023,6 +2023,51 @@ a.mjx-svg-href  {
 .pretext-content .sage-interact.sagecell {
     margin: 0;
 }
+
+.pretext-content .sagecell_evalButton {
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  padding: 0 0.65em;
+}
+.pretext-content .sagecell_evalButton {
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  /* Disable accidental text-selection */
+  user-select: none;
+  /* Truncate overflowing text with ellipsis */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-width: 1px;
+  border-style: solid;
+  font-weight: bold;
+  border-radius: 3px;
+}
+.pretext-content .sagecell_evalButton {
+  color: #383838;
+  background-image: linear-gradient(#f7f7f7, #bbbbbb);
+  border-color: #c4c4c4;
+}
+.pretext-content .sagecell_evalButton:hover {
+  color: #181868;
+  background-image: linear-gradient(#bbbbbb, #f7f7f7);
+}
+.pretext-content .sagecell_evalButton:focus,
+.pretext-content .sagecell_evalButton:active {
+  color: #20160b;
+  background-image: linear-gradient(#ff6852, #ffd7d1);
+  border-color: #ff2822;
+}
+
+.pretext-content .sagecell .sagecell_editor {
+  margin-bottom: 8px;
+}
+
+
 /*
 .pretext-content .sagecell .CodeMirror-fullscreen {
     z-index: 400;
