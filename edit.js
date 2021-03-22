@@ -687,6 +687,13 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
     var new_statement_p_id = randomstring();  // theorem-like, definition-like, remark-like, example-like, exercise-like
     var edit_placeholder = document.createElement("span");
     edit_placeholder.setAttribute('id', new_id);
+
+    // a sbs is passed as sbsN, where N is the number of columns
+    var numcols = 0;
+    if (new_tag.startsWith("sbs")) {
+        numcols = parseInteger(new_tag.slice(-1));
+        new_tag = "sbs";
+    }
         // when adding an li, you are actually focused on somethign inside an li
         // but, maybe that distinction shoud be mede before calling create_object_to_edit ?
     if (new_tag == "li") { new_objects_sibling = new_objects_sibling.parentElement }
@@ -709,6 +716,34 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
         internalSource[new_li_id] = {"xml:id": new_li_id, "permid": "", "ptxtag": "li", "content": "<&>" + new_p_id + "<;>", "parent": [new_id, "content"] }
         new_source["content"] = "<&>" + new_li_id + "<;>";
         current_editing_actions.push(["new", "li", new_li_id]);
+
+    } else if (new_tag == "sbs") {  // creating an sbs, which contains one sbsrow, which contains several sbspanels
+        var new_sbsrow_id = randomstring();
+        internalSource[new_sbsrow_id] = {"xml:id": new_sbsrow_id, "permid": "", "ptxtag": "sbsrow",
+                 "margin-left": 0, "margin-right": 0, "parent": [new_id, "content"]}
+
+        var col_content = "";
+        var col_default_width = [0, 100, 48, 31, 23, 19];
+        for (var j=0; j < numcols; ++j) {
+            var new_col_id = randomstring();
+            col_content += "<&>" + new_col_id + "<;>";
+            internalSource[new_col_id] = {"xml:id": new_col_id, "permid": "", "ptxtag": "sbspanel", 
+                "width": col_default_width[numcols], "content": "", "parent": [new_sbsrow_id, "content"]}
+        }
+
+        internalSource[new_sbsrow_id]["content"] = col_content;
+        new_source["content"] = "<&>" + new_sbsrow_id + "<;>";
+        current_editing_actions.push(["new", "sbs", new_id]);
+    } else if (new_tag == "list") {  // creating a list, which needs one item to begin.
+                                   // that item is an li contining a p
+        var new_li_id = randomstring();
+        var new_p_id = randomstring();
+        internalSource[new_p_id] = {"xml:id": new_p_id, "permid": "", "ptxtag": "p", "content": "", "parent": [new_li_id, "content"]}
+        internalSource[new_li_id] = {"xml:id": new_li_id, "permid": "", "ptxtag": "li", "content": "<&>" + new_p_id + "<;>", "parent": [new_id, "content"] }
+        new_source["content"] = "<&>" + new_li_id + "<;>";
+        current_editing_actions.push(["new", "li", new_li_id]);
+
+
     } else if (new_tag == "bareimage") {  // creating a bareimage(container), which needs an img
         var new_img_id = randomstring();
         internalSource[new_img_id] = {"xml:id": new_img_id, "permid": "", "ptxtag": "img", "src": "", "parent": [new_id, "content"], "alt": "" }
