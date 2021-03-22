@@ -305,14 +305,13 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .pretext-content article > .heading + p {
     margin-top: 0;
 }
-/* go back and delete the header case when no longer needed */
-.pretext-content section .heading + p, .pretext-content section header + p,
+.pretext-content section .heading + p, /* , .pretext-content section header + p, */
 .pretext-content section .heading + .introduction > p:first-child,
 .pretext-content section .blob > p:first-child,
 .pretext-content section .permalink + p {
     margin-top: 0.25em;
 }
-.pretext-content section .heading + article, .pretext-content section header + article {
+.pretext-content section .heading + article { /* , .pretext-content section header + article { */
     margin-top: 1em;
 }
 .pretext-content section .heading + .sidebyside {
@@ -1242,6 +1241,37 @@ body > a.assistive:focus {
     width: 19%;
     text-align: right;
 }
+.standalone .pretext-content .heading .print-links {
+    display: none;
+}
+.standalone.worksheet #previousbutton,
+.standalone.worksheet #upbutton,
+.standalone.worksheet #nextbutton {
+    display: none;
+}
+.standalone.worksheet #primary-navbar .sidebar-left-toggle-button {
+    display: none;
+}
+.standalone.worksheet.has-sidebar-left #primary-navbar .navbar-top-buttons > .toolbar,
+.standalone.worksheet.has-sidebar-left #primary-navbar-sticky-wrapper .navbar-top-buttons > .toolbar {
+    margin-left: 0;
+}
+.standalone.worksheet .pretext-content [data-knowl]:hover,
+.standalone.worksheet .pretext-content [data-knowl]:active,
+.standalone.worksheet .pretext-content [data-knowl].active {
+    background: none;
+    color: black;
+}
+.standalone.worksheet .pretext-content [data-knowl]::after {
+    border: none;
+}
+.standalone.worksheet .pretext-content .knowl-content {
+    padding: 0;
+}
+.standalone.worksheet .pretext-content article > .knowl-output.original {
+    margin: 0;
+}
+
 .pretext-content .heading .print-links > a {
     font-family: "Open Sans";
     font-size: 0.6em;
@@ -1872,7 +1902,7 @@ a.mjx-svg-href  {
 }
 .pretext-content .exercisegroup > .introduction > p:first-child::before {
     content: '\25a0\2009';
-   // font-size: 70%;
+   /* font-size: 70%; */
     color: #06a;
     position: relative;
     top: -1px;
@@ -3063,6 +3093,12 @@ body.standalone.worksheet .pretext-content .onepage > .heading {
     margin-top: 0;
     font-size: 1.3em;
 }
+body.standalone.worksheet .pretext-content .onepage > .introduction {
+    margin-top: 0.4em;
+}
+body.standalone.worksheet .pretext-content .onepage > .introduction > .heading {
+    font-size: 1.1em;
+}
 body.standalone.worksheet .pretext-content .onepage .solutions {
     display: none;
 }
@@ -3079,7 +3115,6 @@ body.standalone .pretext-content .onepage {
 }
 .pretext-content .onepage + .onepage::before {
     content: "pagebreak";
-//    width: 80%;
     text-align: center;
     margin-left: 40%;
     padding-left: 1em;
@@ -3175,7 +3210,7 @@ body.standalone.worksheet .page > .main #content {
     width: 1030px;
     margin-right: 0;
 }
-body.standalone.worksheet.A4 .page > .main #content {
+body.standalone.worksheet.a4 .page > .main #content {
     max-width: 1001px;
     width: 1001px;
 }
@@ -3221,7 +3256,7 @@ body.standalone.worksheet .pretext-content section > .heading + p {
         border: none;
         page-break-inside: avoid;
      }
-    body.standalone.worksheet.A4 .pretext-content .onepage {
+    body.standalone.worksheet.a4 .pretext-content .onepage {
         height: 1320px;
     }
     body.standalone.worksheet .pretext-content .onepage .workspace,
@@ -3230,6 +3265,9 @@ body.standalone.worksheet .pretext-content section > .heading + p {
         padding: 0;
         background: none;
         background-image: none;
+    }
+    body.standalone.worksheet a {
+        color: black;
     }
 
     body.standalone.worksheet .page  .main {

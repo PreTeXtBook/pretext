@@ -370,16 +370,17 @@
   width: 240px;
 }
 @media screen and (min-width: 801px) {
-  /* line 194, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
-  #primary-navbar .sidebar-left-toggle-button.active, #primary-navbar-sticky-wrapper .sidebar-left-toggle-button.active {
+  #primary-navbar .sidebar-left-toggle-button.active,
+  #primary-navbar-sticky-wrapper .sidebar-left-toggle-button.active {
     /* Show text if hidden and match sidebar width */
     text-indent: 0;
     width: 240px;
   }
 }
-/* line 284, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
-#primary-navbar .sidebar-left-toggle-button:before, #primary-navbar-sticky-wrapper .sidebar-left-toggle-button:before {
+#primary-navbar .sidebar-left-toggle-button:before,
+#primary-navbar-sticky-wrapper .sidebar-left-toggle-button:before {
   content: "\2630";
+  aria-hidden="true";  /* not valid.  the hamburger shoudl appear in the source with this attr on its span */
   text-align: center;
   font-size: 24px;
   line-height: 35.36px;
@@ -393,8 +394,8 @@
   *display: inline;
 }
 @media screen and (max-width: 800px) {
-  /* line 183, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
-  #primary-navbar .sidebar-left-toggle-button, #primary-navbar-sticky-wrapper .sidebar-left-toggle-button {
+  #primary-navbar .sidebar-left-toggle-button,
+  #primary-navbar-sticky-wrapper .sidebar-left-toggle-button {
     /* Disable ellipsis */
     white-space: normal;
     overflow: visible;
@@ -407,9 +408,10 @@
     white-space: nowrap;
     overflow: hidden;
   }
-  /* line 284, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
-  #primary-navbar .sidebar-left-toggle-button:before, #primary-navbar-sticky-wrapper .sidebar-left-toggle-button:before {
+  #primary-navbar .sidebar-left-toggle-button:before,
+  #primary-navbar-sticky-wrapper .sidebar-left-toggle-button:before {
     content: "\2630";
+    aria-hidden=”true”;
     text-align: center;
     font-size: 30px;
     line-height: 36px;
@@ -420,8 +422,8 @@
     vertical-align: auto;
     zoom: 1;
   }
-  /* line 320, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
-  #primary-navbar .sidebar-left-toggle-button:before, #primary-navbar-sticky-wrapper .sidebar-left-toggle-button:before {
+  #primary-navbar .sidebar-left-toggle-button:before,
+  #primary-navbar-sticky-wrapper .sidebar-left-toggle-button:before {
     position: absolute;
     left: 50%;
     right: auto;
