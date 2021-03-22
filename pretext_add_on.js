@@ -664,7 +664,7 @@ function adjustWorkspace() {
     var heightA, heightB, this_item;
 
     var pagelayout = "letter";
-    if (document.body.classList.contains("A4")) { pagelayout = "A4" } 
+    if (document.body.classList.contains("a4")) { pagelayout = "a4" } 
 
     for (var i = 0; i < all_pages.length; i++) {
         this_item = all_pages[i];
@@ -682,7 +682,7 @@ function adjustWorkspace() {
          magicscale = (1328 - 2*height10 + 1*height20)/(height20 - height10)
          magicscale = (1324 - 2*height10 + 1*height20)/(height20 - height10)
 */
-         if (pagelayout == "A4") {
+         if (pagelayout == "a4") {
              magicscale = (1413*(a - b) + b*heightA - a*heightB)/(heightA - heightB)
          } else if (pagelayout == "letter") {
              magicscale = (1324*(a - b) + b*heightA - a*heightB)/(heightA - heightB)
@@ -718,6 +718,11 @@ window.addEventListener("load",function(event) {
 
   if (document.body.classList.contains("worksheet")) {
 
+      var born_hidden_knowls = document.querySelectorAll('article > a[data-knowl]');
+      console.log("born_hidden_knowls", born_hidden_knowls);
+      for (var j=0; j < born_hidden_knowls.length; ++j) {
+          born_hidden_knowls[j].click()
+      }
   /* not the right way:  need to figure out what this needs to wait for */
       window.setTimeout(adjustWorkspace, 1000)
   }
