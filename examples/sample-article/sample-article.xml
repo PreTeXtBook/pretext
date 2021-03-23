@@ -10376,15 +10376,16 @@ the xsltproc executable.
                 </sidebyside>
                 <p>In this exercise, we'll use vectors to show that the medians of any triangle (<xref ref="figure-triangle-cyclic-vectors" text="type-global"/>) intersect at a point. Recall that medians are the lines connecting the vertices of the triangle to the midpoints of their opposite edges, as in the figure. We'll do this in a few steps.</p>
               </introduction>
-    <page>
-              <exercise xml:id="ex-cyclic" workspace="4in">
-                <statement>
-                  <p>What is the value of <m>\vec{A} + \vec{B} + \vec{C}</m>?</p>
-                </statement>
-              </exercise>
-    </page>
 
-    <page>
+              <page>
+                <exercise xml:id="ex-cyclic" workspace="4in">
+                  <statement>
+                    <p>What is the value of <m>\vec{A} + \vec{B} + \vec{C}</m>?</p>
+                  </statement>
+                </exercise>
+              </page>
+
+              <page>
               <p><xref ref="figure-triangle-cyclic-medians" text="type-global"/> from the previous page is reproduced for your convenience.</p>
               <figure xml:id="figure-triangle-cyclic-medians-copy">
                 <caption>The medians of the triangle are <m>\vec{M}_1</m>, <m>\vec{M}_2</m>, and <m>\vec{M}_3</m>.</caption>
@@ -10427,7 +10428,8 @@ the xsltproc executable.
               <exercise workspace="2.54cm">
                 <p>If you have time, try to devise a vector proof of Euclid's result presented at the beginning of the workshop. Recall that a <term>parallelogram</term> is a four-sided polygon whose opposite sides are parallel.</p>
               </exercise>
-    </page>
+              </page>
+
               <conclusion>
                 <title>Wrap-up</title>
                 <p>It's possible to do interesting things with vector arithmetic in a coordinate-free way: we didn't specify an origin, or any entries of any vectors in the examples.</p>
@@ -10486,176 +10488,178 @@ the xsltproc executable.
                     <p> Kirchoffs Current Law and Kirkoffs Voltage Law combined with Ohms Law gives for any circuit of resistors and sources a linear system that may (or may not) determine the currents.
                     </p>
                 </introduction>
-    <page>
-    </page>
 
-    <page>
-                <sidebyside width="45%" margins="0%">
-                    <exercise workspace="1.5in">
-                        <statement>
-                        <p>For the simple network pictured, calculuate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
-                        <image xml:id="worksheet-simple-network">
-                            <latex-image>
-                            \begin{circuitikz}
-                            \draw (0,0)
-                            to[V, v=$11\quad \mbox{volt}$](0, 3)
-                            to[short](2,3)
-                            to[R, R=$4\quad \mbox{ohm}$] (3, 3)
-                            to[short](4,3)
-                            to[R, R=$3\quad \mbox{ohm}$](4,0)
-                            to[short](3,0)
-                            to[R, R=$3\quad \mbox{ohm}$](2,0)
-                            to[short](0,0);
-                            \end{circuitikz}
-                            </latex-image>
-                        </image>
-                       </statement>
-                    </exercise>
 
-                    <exercise workspace="2in">
+                <page>
+                </page>
+
+                <page>
+                    <sidebyside width="45%" margins="0%">
+                        <exercise workspace="1.5in">
+                            <statement>
+                            <p>For the simple network pictured, calculuate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
+                            <image xml:id="worksheet-simple-network">
+                                <latex-image>
+                                \begin{circuitikz}
+                                \draw (0,0)
+                                to[V, v=$11\quad \mbox{volt}$](0, 3)
+                                to[short](2,3)
+                                to[R, R=$4\quad \mbox{ohm}$] (3, 3)
+                                to[short](4,3)
+                                to[R, R=$3\quad \mbox{ohm}$](4,0)
+                                to[short](3,0)
+                                to[R, R=$3\quad \mbox{ohm}$](2,0)
+                                to[short](0,0);
+                                \end{circuitikz}
+                                </latex-image>
+                            </image>
+                           </statement>
+                        </exercise>
+
+                        <exercise workspace="2in">
+                            <statement>
+                            <p> Compare it with a parallel circuit network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
+                            <image xml:id="worksheet-parallel-circuit">
+                                <latex-image>
+                                \begin{circuitikz}
+                                \draw(0,0)
+                                to[V, v=$11\quad \mbox{volt}$](0, 3)
+                                to[short](5,3)
+                                to[R, R=$4\quad \mbox{ohm}$](6,3)
+                                to[short](7,3)
+                                to[R, R=$3\quad \mbox{ohm}$](7,0)
+                                to[short](6,0)
+                                to[R, R=$3\quad \mbox{ohm}$](5,0)
+                                to[short](0,0);
+                                \draw(4,0)
+                                to[R, R=$3\quad \mbox{ohm}$](4,3);
+                                \end{circuitikz}
+                                </latex-image>
+                            </image>
+                            </statement>
+                        </exercise>
+                    </sidebyside>
+
+                    <exercise workspace="1in">
                         <statement>
-                        <p> Compare it with a parallel circuit network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
-                        <image xml:id="worksheet-parallel-circuit">
+                        <p> Now for a more complicated network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
+                        <image xml:id="worksheet-complicated-network">
                             <latex-image>
                             \begin{circuitikz}
                             \draw(0,0)
-                            to[V, v=$11\quad \mbox{volt}$](0, 3)
+                            to[V, v=$11 \quad \mbox{volt}$](0, 3)
                             to[short](5,3)
-                            to[R, R=$4\quad \mbox{ohm}$](6,3)
-                            to[short](7,3)
-                            to[R, R=$3\quad \mbox{ohm}$](7,0)
+                            to[R, R=$4 \quad \mbox{ohm}$](6,3)
+                            to[short](9,3)
+                            to[R, R=$4 \quad \mbox{ohm}$](10,3)
+                            to[short](11,3)
+                            to[R, R=$3 \quad \mbox{ohm}$](11, 0)
+                            to[short](10,0)
+                            to[R, R=$2\quad \mbox{ohm}$](9,0)
                             to[short](6,0)
-                            to[R, R=$3\quad \mbox{ohm}$](5,0)
+                            to[R, R=$2\quad \mbox{ohm}$](5,0)
                             to[short](0,0);
                             \draw(4,0)
                             to[R, R=$3\quad \mbox{ohm}$](4,3);
+                            \draw(8,0)
+                            to[R, R=$1\quad \mbox{ohm}$](8,3);
                             \end{circuitikz}
                             </latex-image>
                         </image>
                         </statement>
                     </exercise>
-                </sidebyside>
+                </page>
 
-                <exercise workspace="1in">
-                    <statement>
-                    <p> Now for a more complicated network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
-                    <image xml:id="worksheet-complicated-network">
-                        <latex-image>
-                        \begin{circuitikz}
-                        \draw(0,0)
-                        to[V, v=$11 \quad \mbox{volt}$](0, 3)
-                        to[short](5,3)
-                        to[R, R=$4 \quad \mbox{ohm}$](6,3)
-                        to[short](9,3)
-                        to[R, R=$4 \quad \mbox{ohm}$](10,3)
-                        to[short](11,3)
-                        to[R, R=$3 \quad \mbox{ohm}$](11, 0)
-                        to[short](10,0)
-                        to[R, R=$2\quad \mbox{ohm}$](9,0)
-                        to[short](6,0)
-                        to[R, R=$2\quad \mbox{ohm}$](5,0)
-                        to[short](0,0);
-                        \draw(4,0)
-                        to[R, R=$3\quad \mbox{ohm}$](4,3);
-                        \draw(8,0)
-                        to[R, R=$1\quad \mbox{ohm}$](8,3);
-                        \end{circuitikz}
-                        </latex-image>
-                    </image>
-                    </statement>
-                </exercise>
-    </page>
+                <page>
+                    <exercise workspace="3in">
+                        <statement>
+                            <p> Now generalize these ideas to a context outside of electrical circuits. Consider the network of streets given in the diagram (with one-way directions as indicated).</p>
 
-    <page>
-                <exercise workspace="3in">
-                    <statement>
-                        <p> Now generalize these ideas to a context outside of electrical circuits. Consider the network of streets given in the diagram (with one-way directions as indicated).</p>
+                            <image xml:id="worksheet-street-network" width="65%">
+                                <latex-image>
+                                <![CDATA[
+                                \begin{tikzpicture}[>=stealth]
+                                \draw[->, very thick] (0,0) -- (10, 0) node[midway, below]{East Bound Winooski Ave};
+                                \draw[<-, very thick] (0, 1) -- (10, 1) node[midway, above]{West Bound Winooski Ave};
+                                    \draw[<-, very thick] (0, 4) -- (10, 4) node[midway, above]{Shelburne St};
+                                    \draw[<-, very thick] (1, -1) -- (1, 5) node[midway, above, sloped]{Willow};
+                                    \draw[->, very thick] (9, -1) -- (9, 5) node[midway, above, sloped]{Jay};
+                                    \end{tikzpicture}
+                                ]]>
+                                </latex-image>
+                            </image>
 
-                        <image xml:id="worksheet-street-network" width="65%">
-                            <latex-image>
-                            <![CDATA[
-                            \begin{tikzpicture}[>=stealth]
-                            \draw[->, very thick] (0,0) -- (10, 0) node[midway, below]{East Bound Winooski Ave};
-                            \draw[<-, very thick] (0, 1) -- (10, 1) node[midway, above]{West Bound Winooski Ave};
-                                \draw[<-, very thick] (0, 4) -- (10, 4) node[midway, above]{Shelburne St};
-                                \draw[<-, very thick] (1, -1) -- (1, 5) node[midway, above, sloped]{Willow};
-                                \draw[->, very thick] (9, -1) -- (9, 5) node[midway, above, sloped]{Jay};
-                                \end{tikzpicture}
-                            ]]>
-                            </latex-image>
-                        </image>
+                            <p>A traffic engineer counts the hourly flow of cars into and out of this network at the entrances.  They get (EB = East Bound; WB = West Bound): </p>
 
-                        <p>A traffic engineer counts the hourly flow of cars into and out of this network at the entrances.  They get (EB = East Bound; WB = West Bound): </p>
+                            <table>
+                                <title>Estimated hourly traffic flow for the road network</title>
+                                <tabular>
+                                    <row>
+                                        <cell>
+                                        </cell>
+                                        <cell>
+                                            EB Winooski
+                                        </cell>
+                                        <cell>
+                                            WB Winooski
+                                        </cell>
+                                        <cell>
+                                            Shelburne St
+                                        </cell>
+                                        <cell>
+                                            Willow
+                                        </cell>
+                                        <cell>
+                                            Jay
+                                        </cell>
+                                    </row>
+                                    <row>
+                                        <cell>
+                                            into
+                                        </cell>
+                                        <cell>
+                                            50
+                                        </cell>
+                                        <cell>
+                                            400
+                                        </cell>
+                                        <cell>
+                                            0
+                                        </cell>
+                                        <cell>
+                                            10
+                                        </cell>
+                                        <cell>
+                                            50
+                                        </cell>
+                                    </row>
+                                    <row>
+                                        <cell>
+                                            out of
+                                        </cell>
+                                        <cell>
+                                            55
+                                        </cell>
+                                        <cell>
+                                            390
+                                        </cell>
+                                        <cell>
+                                            20
+                                        </cell>
+                                        <cell>
+                                            15
+                                        </cell>
+                                        <cell>
+                                            30
+                                        </cell>
+                                    </row>
+                                </tabular>
+                            </table>
 
-                        <table>
-                            <title>Estimated hourly traffic flow for the road network</title>
-                            <tabular>
-                                <row>
-                                    <cell>
-                                    </cell>
-                                    <cell>
-                                        EB Winooski
-                                    </cell>
-                                    <cell>
-                                        WB Winooski
-                                    </cell>
-                                    <cell>
-                                        Shelburne St
-                                    </cell>
-                                    <cell>
-                                        Willow
-                                    </cell>
-                                    <cell>
-                                        Jay
-                                    </cell>
-                                </row>
-                                <row>
-                                    <cell>
-                                        into
-                                    </cell>
-                                    <cell>
-                                        50
-                                    </cell>
-                                    <cell>
-                                        400
-                                    </cell>
-                                    <cell>
-                                        0
-                                    </cell>
-                                    <cell>
-                                        10
-                                    </cell>
-                                    <cell>
-                                        50
-                                    </cell>
-                                </row>
-                                <row>
-                                    <cell>
-                                        out of
-                                    </cell>
-                                    <cell>
-                                        55
-                                    </cell>
-                                    <cell>
-                                        390
-                                    </cell>
-                                    <cell>
-                                        20
-                                    </cell>
-                                    <cell>
-                                        15
-                                    </cell>
-                                    <cell>
-                                        30
-                                    </cell>
-                                </row>
-                            </tabular>
-                        </table>
-
-                        <p> Use a variable for each segment inside of the network and set up a system of linear equations restricting the flow. Solve the system.  Note that you should not get a unique solution as traffic should be able to flow through the network in various ways. </p>
-                    </statement>
-                </exercise>
-    </page>
+                            <p> Use a variable for each segment inside of the network and set up a system of linear equations restricting the flow. Solve the system.  Note that you should not get a unique solution as traffic should be able to flow through the network in various ways. </p>
+                        </statement>
+                    </exercise>
+                </page>
             </worksheet>
 
             <worksheet margin="1cm">
@@ -10663,196 +10667,179 @@ the xsltproc executable.
                     <p>This is a mock one-page worksheet for testing purposes. We have specified an overall margin just slightly less than the default.</p>
                 </introduction>
 
-    <page>
-                <sidebyside width="45%" margins="0%">
-                    <exercise workspace="1in">
+                <page>
+                    <sidebyside width="45%" margins="0%">
+                        <exercise workspace="1in">
+                            <statement>
+                                <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+                            </statement>
+                        </exercise>
+
+                        <exercise workspace="1.8in">
+                            <statement>
+                                <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+                            </statement>
+                        </exercise>
+                    </sidebyside>
+
+                    <p>A two-line paragraph interspersed to check on spacing, breaks and all that.</p>
+
+                    <exercise workspace="1.5in">
+                        <title>A full-width exercise</title>
                         <statement>
                             <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
-                        </statement>
-                    </exercise>
-
-                    <exercise workspace="1.8in">
-                        <statement>
-                            <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
-                        </statement>
-                    </exercise>
-                </sidebyside>
-
-                <p>A two-line paragraph interspersed to check on spacing, breaks and all that.</p>
-
-                <exercise workspace="1.5in">
-                    <title>A full-width exercise</title>
-                    <statement>
-                        <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
-                        <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
-                    </statement>
-                </exercise>
-
-                <p>Another two-line paragraph interspersed to check on spacing, breaks and all that.</p>
-
-                <sidebyside width="30%" margins="0%">
-                    <exercise>
-                        <statement>
-                            <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
-                        </statement>
-                    </exercise>
-
-                    <exercise workspace="1in">
-                        <!-- <title>The Tallest</title> -->
-                        <statement>
                             <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
                         </statement>
                     </exercise>
 
-                    <exercise workspace="1in">
+                    <p>Another two-line paragraph interspersed to check on spacing, breaks and all that.</p>
+
+                    <sidebyside width="30%" margins="0%">
+                        <exercise>
+                            <statement>
+                                <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+                            </statement>
+                        </exercise>
+
+                        <exercise workspace="1in">
+                            <!-- <title>The Tallest</title> -->
+                            <statement>
+                                <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+                            </statement>
+                        </exercise>
+
+                        <exercise workspace="1in">
+                            <statement>
+                                <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+                            </statement>
+                        </exercise>
+                    </sidebyside>
+
+                    <activity>
+                        <title>A Mock Activity</title>
+
                         <statement>
-                            <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+                            <p>The problem, as we see it.</p>
                         </statement>
-                    </exercise>
-                </sidebyside>
+                        <hint>
+                            <p>A worksheet could have hints, no?  But no spacing. Note row below has widths set to balance the heights.</p>
+                        </hint>
+                    </activity>
 
-                <activity>
-                    <title>A Mock Activity</title>
+                    <sidebyside widths="25% 40% 25%" margins="0%">
+                        <exercise workspace="0.5in">
+                            <statement>
+                                <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+                            </statement>
+                        </exercise>
 
-                    <statement>
-                        <p>The problem, as we see it.</p>
-                    </statement>
-                    <hint>
-                        <p>A worksheet could have hints, no?  But no spacing. Note row below has widths set to balance the heights.</p>
-                    </hint>
-                </activity>
+                        <exercise workspace="0.5in">
+                            <!-- <title>Balanced Heights</title> -->
+                            <statement>
+                                <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+                            </statement>
+                        </exercise>
 
-                <sidebyside widths="25% 40% 25%" margins="0%">
-                    <exercise workspace="0.5in">
-                        <statement>
-                            <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
-                        </statement>
-                    </exercise>
-
-                    <exercise workspace="0.5in">
-                        <!-- <title>Balanced Heights</title> -->
-                        <statement>
-                            <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
-                        </statement>
-                    </exercise>
-
-                    <exercise workspace="0.5in">
-                        <statement>
-                            <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
-                        </statement>
-                    </exercise>
-                </sidebyside>
-    </page>
+                        <exercise workspace="0.5in">
+                            <statement>
+                                <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+                            </statement>
+                        </exercise>
+                    </sidebyside>
+                </page>
             </worksheet>
-
-
 
             <worksheet courseid="MAT-150" series="Activity" seriescode="13">
               <title>Dot products and projection</title>
-    <page>
-                <sidebyside width="45%" margins="0%">
-                    <exercise>
-                        <introduction>
-                            <p>Let
-<m>{\vec v}_1 = (-4,1)</m>,
-<m>{\vec v}_2 = (2,2)</m>,
-<m>{\vec v}_3 = (1,2,3)</m>,
-<m>{\vec v}_4 = (-2,1,0)</m>.
-                             Find the values of the following expressions:</p>
-                        </introduction>
+                <page>
+                    <sidebyside width="45%" margins="0%">
+                        <exercise>
+                            <introduction>
+                                <p>Let
+                                <m>{\vec v}_1 = (-4,1)</m>,
+                                <m>{\vec v}_2 = (2,2)</m>,
+                                <m>{\vec v}_3 = (1,2,3)</m>,
+                                <m>{\vec v}_4 = (-2,1,0)</m>.
+                                Find the values of the following expressions:</p>
+                            </introduction>
+                            <task workspace="1in">
+                              <m>{\vec v}_1 \cdot {\vec v}_2 = <fillin/></m>
+                            </task>
+                            <task workspace="1.0in">
+                              <m>{\vec v}_3 \cdot {\vec v}_4 = <fillin/></m>
+                            </task>
+                            <task workspace="1in">
+                              <m>\lVert{\vec v}_1\rVert = <fillin/></m>
+                            </task>
+                            <task workspace="1in">
+                              <m>\lVert{\vec v}_4\rVert = <fillin/></m>
+                            </task>
+                            <task workspace="1in">
+                              <p>Are any of these vectors perpendicular to each other? <fillin/></p>
+                          </task>
+                        </exercise>
 
-<task workspace="1in">
-  <m>{\vec v}_1 \cdot {\vec v}_2 = <fillin/></m>
-</task>
-<task workspace="1.0in">
-  <m>{\vec v}_3 \cdot {\vec v}_4 = <fillin/></m>
-</task>
-<task workspace="1in">
-  <m>\lVert{\vec v}_1\rVert = <fillin/></m>
-</task>
-<task workspace="1in">
-  <m>\lVert{\vec v}_4\rVert = <fillin/></m>
-</task>
-<task workspace="1in">
-  <p>
-  Are any of these vectors perpendicular to each other?
-  <fillin/>
-  </p>
-</task>
-                    </exercise>
+                        <exercise workspace="3in">
+                            <statement>
+                                <p>The vectors <m>\vec a = (3,9)</m> and <m>\vec u = (4,2)</m> are pictured below.  Derive the formula for projection on a line and use it to find the projection of <m>\vec a</m> on the line spanned by <m>\vec u</m>. Also compute the length of the residual vector.</p>
+                                <image width="100%" source="images/projection1.png">
+                                    <description>two vectors...</description>
+                                </image>
+                            </statement>
+                        </exercise>
+                    </sidebyside>
+                </page>
 
-                    <exercise workspace="3in">
-                        <statement>
-                            <p>The vectors <m>\vec a = (3,9)</m> and <m>\vec u = (4,2)</m>
-are pictured below.  Derive the formula for projection on a line and use it to find the
-projection of <m>\vec a</m> on the line spanned by <m>\vec u</m>.
-Also compute the length of the residual vector.</p>
-<image width="100%" source="images/projection1.png">
-                        <description>two vectors...</description>
-                    </image>
-                        </statement>
-                    </exercise>
-                </sidebyside>
-    </page>
+                <page>
+                    <sidebyside width="48%" margins="0%">
+                        <exercise>
+                            <introduction>
+                                <p>Consider the vector equation
+                                <me>
+                                m \begin{bmatrix}2 \\ 5\end{bmatrix} = \begin{bmatrix}3 \\ 7\end{bmatrix}
+                                </me>.</p>
+                            </introduction>
+                            <task workspace="1in">
+                                <p>Check that there is no solution <m>m</m> that makes the equation true.</p>
+                            </task>
 
-    <page>
-              <sidebyside width="48%" margins="0%">
-                <exercise>
-                    <introduction>
-                        <p>Consider the vector equation
-<me>
-m \begin{bmatrix}2 \\ 5\end{bmatrix} = \begin{bmatrix}3 \\ 7\end{bmatrix}
-</me>.
-</p>
-                    </introduction>
-<task workspace="1in">
-<p>Check that there is no solution <m>m</m> that makes the equation true.</p>
-</task>
+                            <task workspace="2in">
+                                <p>Use projection to find the best approximation <m>\hat m</m>.</p>
+                            </task>
 
-<task workspace="2in">
-<p>Use projection to find the best approximation <m>\hat m</m>.</p>
-</task>
+                            <task workspace="1.0in">
+                                <p>Compute <m>\hat m \begin{bmatrix}2 \\ 5\end{bmatrix} </m>.</p>
+                            </task>
 
-<task workspace="1.0in">
-<p>Compute <m>\hat m \begin{bmatrix}2 \\ 5\end{bmatrix} </m>.</p>
-</task>
+                            <task workspace="1.5in">
+                                <p>Compute the residual vector.</p>
+                            </task>
 
-<task workspace="1.5in">
-<p>Compute the residual vector.</p>
-</task>
+                            <task workspace="2.5in">
+                                <p>Compute the length of the residual vector and explain what it means.</p>
+                            </task>
+                        </exercise>
 
-<task workspace="2.5in">
-<p>Compute the length of the residual vector and explain what it means.</p>
-</task>
-                </exercise>
-
-                <exercise>
-         <introduction>
-                        <p>Consider the system of equations
-<md>
-<mrow>
-3t \amp =5
-</mrow>
-<mrow>
- 2t \amp = 9
-</mrow>
-</md>.
-</p>
-        </introduction>
-<task workspace="2in">
-<p>Write the system in vector form.</p>
-</task>
-
-<task workspace="3.9in">
-<p>Find the best estimate, <m>\hat t</m>, of <m>t</m> using projection.</p>
-</task>
-
-<task workspace="2in">
-<p>Compute the length of the residual vector.</p>
-</task>
-                </exercise>
-              </sidebyside>
-    </page>
+                        <exercise>
+                            <introduction>
+                                <p>Consider the system of equations
+                                <md>
+                                    <mrow>3t \amp =5</mrow>
+                                    <mrow> 2t \amp = 9 </mrow>
+                                </md>.</p>
+                            </introduction>
+                            <task workspace="2in">
+                                <p>Write the system in vector form.</p>
+                            </task>
+                            <task workspace="3.9in">
+                                <p>Find the best estimate, <m>\hat t</m>, of <m>t</m> using projection.</p>
+                            </task>
+                            <task workspace="2in">
+                                <p>Compute the length of the residual vector.</p>
+                            </task>
+                        </exercise>
+                    </sidebyside>
+                </page>
             </worksheet>
         </section>
 
