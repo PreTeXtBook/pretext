@@ -11444,16 +11444,44 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- Miscellaneous -->
+<!-- ############### -->
+<!-- Worksheet Pages -->
+<!-- ############### -->
 
-<!-- Pages in a Worksheet -->
-<!-- Produce a "hr" element indicating the end -->
-<!-- of a page, but not for the last page.     -->
+<!-- A worksheet is (mostly) structured by "page", but we incorporate -->
+<!-- certain beginning/ending items into a strict stucture organized  -->
+<!-- by pages (HTML section.onepage), only, for printing purposes     -->
+<!-- NB: extras print in document order, we are not imposing one here -->
 <xsl:template match="worksheet/page">
-    <xsl:apply-templates/>
-    <xsl:if test="following-sibling::page">
-        <hr class="pagebreak"/>
-    </xsl:if>
+    <xsl:param name="purpose" select="'viewable'"/>
+
+    <section class="onepage">
+        <!-- There is no enclosing HTML structure in the standalone, -->
+        <!-- printable version, so we print a title/heading within   -->
+        <!-- the first "section.onepage".  The is the only purpose   -->
+        <!-- of the $purpose parameter. ("viewable" is usual HTML.)  -->
+        <xsl:variable name="b-is-printable" select="$purpose = 'printable'"/>
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="html-id"/>
+        </xsl:attribute>
+        <!-- incorporate "extras" into Page 1 when printable -->
+        <xsl:if test="not(preceding-sibling::page) and $b-is-printable">
+            <!-- title of entire worksheet absorbed first into first page -->
+            <!-- masthead is "h1", so specify "h2"?                       -->
+            <xsl:apply-templates select=".." mode="section-header">
+                <xsl:with-param name="heading-level" select="'2'"/>
+            </xsl:apply-templates>
+            <!-- other overall-worksheet times to absorb into first page -->
+            <xsl:apply-templates select="../objectives|../introduction"/>
+        </xsl:if>
+        <!-- main content of *all* pages, especially intermediate pages,  -->
+        <!-- whether viewable or printable (could kill banned items here) -->
+        <xsl:apply-templates/>
+        <!-- incorporate "extras" into Page N (even if N=1) when printable -->
+        <xsl:if test="not(following-sibling::page) and $b-is-printable">
+            <xsl:apply-templates select="../conclusion|../outcomes"/>
+        </xsl:if>
+    </section>
 </xsl:template>
 
 <!-- 2020-03-17: Empty element, since originally a       -->
@@ -11462,6 +11490,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="worksheet/pagebreak">
     <hr class="pagebreak"/>
 </xsl:template>
+
+<!-- Miscellaneous -->
 
 <!-- Inline warnings go into text, no matter what -->
 <!-- They are colored for an author's report -->
