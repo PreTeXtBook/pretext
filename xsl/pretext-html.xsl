@@ -4122,18 +4122,45 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:if>
                 </div>
             </xsl:if>
+            <!-- optionally, an indication of workspace -->
+            <!-- for a print version of a worksheet     -->
+            <xsl:apply-templates select="." mode="worksheet-workspace"/>
         </xsl:when>
+        <!-- TODO: contained "if" should just be a new "when"? (look around for similar)" -->
         <xsl:otherwise>
             <!-- no explicit "statement", so all content is the statement -->
+            <!-- the "dry-run" templates should prevent an empty shell  -->
             <xsl:if test="$b-has-statement">
                 <xsl:apply-templates>
                     <xsl:with-param name="b-original" select="$b-original" />
                     <xsl:with-param name="block-type" select="$block-type"/>
                 </xsl:apply-templates>
                 <!-- no separator, since no trailing components -->
+                <!-- optionally, an indication of workspace     -->
+                <!-- for a print version of a worksheet         -->
+                <xsl:apply-templates select="." mode="worksheet-workspace"/>
             </xsl:if>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- All of the items matching the previous template (except perhaps   -->
+<!-- the WW exercises) can appear in a worksheet with some room to     -->
+<!-- work a problem given by a @workspace attribute.  (But we are not  -->
+<!-- careful with the match, given the limited reach here.)  The "div" -->
+<!-- we drop here is controlled by the Javascript - on a "normal" page -->
+<!-- displaying a worksheet it is ineffective, and on a printable,     -->
+<!-- standalone page it produces space that is visually apparent, but  -->
+<!-- prints invisible.  No @workspace attribute, nothing is added.     -->
+<!-- We rely on a template in -common to error-check the value of      -->
+<!-- the attribute.                                                    -->
+<xsl:template match="*" mode="worksheet-workspace">
+    <xsl:variable name="vertical-space">
+        <xsl:apply-templates select="." mode="sanitize-workspace"/>
+    </xsl:variable>
+    <xsl:if test="not($vertical-space = '')">
+        <div class="workspace" data-space="{$vertical-space}"/>
+    </xsl:if>
 </xsl:template>
 
 <!-- The next few implementions support theorems,       -->
