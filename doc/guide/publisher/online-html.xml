@@ -83,7 +83,7 @@
 
         <p>An author does not need to be conscious of knowls. The structure and content of the document should not <q>be aware</q> that there will be knowls in the online output.  But instead the publisher has control over whether or not certain medium-sized pieces of content (examples, exercises, figures, etc.) are born as knowls or not.</p>
 
-        <p>Note that some of these switches are for broad categories of items, for example, <c>html.knowl.theorem</c> will also knowl <tag>lemma</tag>s, <tag>corollary</tag>s, <tag>fact</tag>s, and more.  This choice applies document-wide, there is no plan to support electing this on a case-by-case basis.</p>
+        <p>Note that some of these switches are for broad categories of items, for example, choosing to knowl theorems will also knowl <tag>lemma</tag>s, <tag>corollary</tag>s, <tag>fact</tag>s, and more.  See <xref ref="online-knowlization-options"/> for precise details.  This choice applies document-wide, there is no plan to support electing this on a case-by-case basis.</p>
     </section>
 
     <section>
