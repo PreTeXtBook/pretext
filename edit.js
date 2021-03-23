@@ -184,7 +184,7 @@ var the_inner_menu = {
 "emphasis-like": [["emphasis"], ["foreign word", "foreign"], ["book title"], ["article title"], ["inline quote"], ["name of a ship"]],
 // "abbreviation": ["ie", "eg", "etc", "et al"],  // i.e., etc., ellipsis, can just be typed.
 // next one not used?
-"imagebox": [["make larger"], ["make smaller"], ["shift left"], ["shift right"], ["arrow controls"], ["finished making changes"]],
+// "imagebox": [["make larger"], ["make smaller"], ["shift left"], ["shift right"], ["arrow controls"], ["finished making changes"]],
 "symbol": [["trademark"], ["copyright"], ["money"]],
 "money": [["$ dollar"], ["&euro; euro"], ["&pound; pound"], ["&yen; yen"]],
 "ref": [["reference withing this document"], ["citation"], ["hyperlink"]],
@@ -520,6 +520,8 @@ function top_menu_options_for(this_obj) {
             }
         } else if (this_obj.classList.contains("image-box")) {
             this_list = '<li tabindex="-1" id="choose_current" data-env="imagebox" data-action="modify">Modify layout<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+        } else if (this_obj.classList.contains("sbspanel")) {
+            this_list = '<li tabindex="-1" id="choose_current" data-env="sbspanel" data-action="modify">Modify layout<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
         } else {
             this_list += '<li tabindex="-1" id="choose_current" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_obj_environment + '</li>';
        }
@@ -625,6 +627,8 @@ function edit_menu_for(this_obj_or_id, motion) {
             edit_option.setAttribute('data-location', 'inline');
         } else if (this_obj.classList.contains("image-box")) {
             edit_option.innerHTML = "<b>modify</b> this image layout, or add near here?";
+        } else if (this_obj.classList.contains("sbspanel")) {
+            edit_option.innerHTML = "<b>modify</b> this panel layout, or change panel contents?";
         } else if (this_obj.classList.contains("creator") || this_obj.classList.contains("title")) {
             // need to code this better:  over-writing edit_option
             edit_option = document.createElement('ol');
@@ -739,7 +743,7 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
                  "margin-left": 0, "margin-right": 0, "parent": [new_id, "content"]}
 
         var col_content = "";
-        var col_default_width = [0, 100, 48, 31, 23, 19];
+        var col_default_width = [0, 100, 40, 31, 23, 19];
         for (var j=0; j < numcols; ++j) {
             var new_col_id = randomstring();
             col_content += "<&>" + new_col_id + "<;>";
@@ -940,14 +944,30 @@ function edit_in_place(obj, oldornew) {
         this_content_container.setAttribute('id', thisID);
         $("#" + thisID).replaceWith(this_content_container);
 
-        var idOfSBSRow = "test1";
+        console.log('internalSource[thisID]', internalSource[thisID]);
+        var idOfSBSRow = internalSource[thisID]["content"];  // sbs only contains an sbsrow
+        console.log('idOfSBSRow', idOfSBSRow);
+        idOfSBSRow = idOfSBSRow.replace(/<.>/g, "");
+        console.log('idOfSBSRow', idOfSBSRow);
         var this_sbsrow = document.createElement('div');
         this_sbsrow.setAttribute('class', 'sbsrow');
         this_sbsrow.setAttribute('id', idOfSBSRow);
         this_sbsrow.setAttribute('style', "margin-left: 5%; margin-right: 5%;");
 
-        var these_panels = '<div class="sbspanel top" id="testA" data-editable="90" style="width:25%; background-color:#fdd">aa asd asda dsasd </div>';
-        these_panels += '<div class="sbspanel top" id="testB" data-editable="90" style="width:50%; background-color:#ddf">aasda as a abb</div>';
+        var panelwidths = [[25, 50], [25, 25, 40], [20, 20, 20, 30]];
+        var idsOfSBSPanel = internalSource[idOfSBSRow]["content"]
+        idsOfSBSPanel = idsOfSBSPanel.replace(/^ *<&>/, '');
+        idsOfSBSPanel = idsOfSBSPanel.replace(/<;> *$/, '');
+        console.log('a idsOfSBSPanel', idsOfSBSPanel);
+        idsOfSBSPanel = idsOfSBSPanel.replace(/> +</g, '><');
+        console.log('b idsOfSBSPanel', idsOfSBSPanel);
+        var idsOfSBSPanelList = idsOfSBSPanel.split("<;><&>");
+        console.log('c idsOfSBSPanel', idsOfSBSPanelList);
+        var these_panelwidths = panelwidths[idsOfSBSPanelList.length - 2];
+        var these_panels = '';
+        for (var j=0; j < idsOfSBSPanelList.length; ++j) {
+            these_panels += '<div class="sbspanel top" id="' + idsOfSBSPanelList[j] + '" data-editable="90" style="width:' + these_panelwidths[j] + '%; background-color:#ddf">aasda as' + j + ' a abb</div>';
+        }
         this_sbsrow.innerHTML = these_panels;
   //      document.getElementById('actively_editing').insertAdjacentElement("afterbegin", this_sbsrow);
         document.getElementById(thisID).insertAdjacentElement("afterbegin", this_sbsrow);
@@ -1126,7 +1146,7 @@ function edit_in_place(obj, oldornew) {
      }
 }
 
-function modify_by_id(theid, modifier) {
+function modify_by_id_img(theid, modifier) {
 
     var the_sizes = internalSource[theid]["style"];
 
@@ -1194,6 +1214,98 @@ function modify_by_id(theid, modifier) {
     document.getElementById(theid).setAttribute("style", the_new_sizes);
 }
 
+function modify_by_id_sbs(theid, modifier) {
+
+    var this_sbs_source = internalSource[theid];
+    var this_width = this_sbs_source["width"];
+    var this_sbsrow_source = internalSource[this_sbs_source["parent"][0]];
+    console.log("this_sbsrow_source", this_sbsrow_source);
+    var marginleft = this_sbsrow_source["margin-left"];
+    var marginright = this_sbsrow_source["margin-right"];
+    var these_siblings = this_sbsrow_source["content"];
+    these_siblings = these_siblings.replace(/^ *<&> */, "");
+    these_siblings = these_siblings.replace(/ *<;> *$/, "");
+    these_siblings = these_siblings.replace(/> *</, "><");
+    console.log("these_siblings", these_siblings);
+    these_siblings_list = these_siblings.split("<;><&>");
+    var this_panel_index = these_siblings_list.indexOf(theid);
+    console.log("this panel", theid, "is", this_panel_index, "within", these_siblings_list);
+    these_panel_widths = [];
+    total_width = 0;
+    for(var j=0; j < these_siblings_list.length; ++j) {
+        var t_wid = internalSource[these_siblings_list[j]]["width"];
+        console.log("adding width", t_wid);
+        total_width += t_wid;
+        these_panel_widths.push(t_wid);
+    }
+    if (this_width != these_panel_widths[this_panel_index]) {
+        console.log("error: width", this_width, "not on list", these_panel_widths)
+    } else {
+        console.log("width", this_width, "on list", these_panel_widths)
+    }
+    this_width = parseInt(this_width);
+    marginright = parseInt(marginright);
+    marginleft = parseInt(marginleft);
+
+    console.log("occ", marginleft, "u", total_width, "pi", marginright, "ed", marginleft + total_width + marginright)
+    var remaining_space = 100 - (marginleft + total_width + marginright);
+    console.log("remaining_space", remaining_space);
+
+//modify: enlarge, shrink, left, right, ??? done
+
+// make the data structure better, then delete this comment
+// currently style looks like "width: 66%; margin-right: 17%; margin-left: 17%"
+    console.log('width, , marginright, , marginleft', this_width, "mr", marginright, "ml",  marginleft);
+
+    var scale_direction = 1;
+    var moving_direction = 1;
+    if (modifier == "shrink") { scale_direction = -1 }
+    else if (modifier == "left") { moving_direction = -1 }
+    if ("enlarge shrink".includes(modifier)) {
+        if ((this_width >= 100 && scale_direction == 1) || (this_width <= 0 && scale_direction == -1)) {
+            console.log("can't go above 100 or below 0");
+            return
+        } else {
+            this_width += 2*scale_direction*magnify_scale;
+        }
+        if (marginleft > 0 && marginright > 0) {
+          marginleft += -1*scale_direction*magnify_scale;
+          marginright += -1*scale_direction*magnify_scale;
+        } else if (marginleft > 0) {
+            marginleft += -2*scale_direction*magnify_scale;
+        } else if (marginright > 0) {
+            marginright += -2*scale_direction*magnify_scale;
+        } else if (scale_direction < 0) {  // applies when we shrink a 100 width image
+          marginleft += -1*scale_direction*magnify_scale;
+          marginright += -1*scale_direction*magnify_scale;
+        } else {
+            // do nothing:  this is a placeholder which is reached when both margins are 0
+            console.log("already have no margins, width is", this_width);
+        }
+    } else if ("left right".includes(modifier)) {
+        console.log("marginleft*moving_direction", marginleft*moving_direction, "marginright*moving_direction", marginright*moving_direction);
+        if ((marginleft > 0 && marginright > 0) || (marginright*moving_direction > 0) || (marginleft*moving_direction < 0)) {
+            marginleft += moving_direction*move_scale;
+            marginright += -1*moving_direction*move_scale;
+//        } else if (marginright*moving_direction > 0) {
+//            marginright += -1*moving_direction*move_scale;
+//        } else if (marginleft*moving_direction < 0) {
+//            marginleft += moving_direction*move_scale;
+        } else { 
+            // do nothing:  this is a placeholder which is reached when both margins are 0
+            // we choose to prioritize scale, so a 100% image cannot be shifted
+            console.log("already at 100%, width is", this_width);
+        }
+    }
+
+    var the_new_sizes = "width: " + this_width + "%;";
+    the_new_sizes += "margin-right: " + marginright + "%;";
+    the_new_sizes += "margin-left: " + marginleft + "%;";
+
+    internalSource[theid]["style"] = the_new_sizes;
+
+    document.getElementById(theid).setAttribute("style", the_new_sizes);
+}
 
 function move_by_id_local(theid, thehandleid) {
     // when moving an object within a page, we create a phantomobject that is manipulated
@@ -1710,7 +1822,7 @@ function assemble_internal_version_changes() {
         var image_being_changed = internalSource[owner_of_change]["content"];
         // strip off <&> and <;>
    //     image_being_changed = image_being_changed[3:-3];
-        image_being_changed = image_being_changed.replace(/<&>(.*?)<;>/, '$1')
+        image_being_changed = image_being_changed.replace(/<&>(.*?)<;>/, '$1');
         console.log("image_being_changed ", image_being_changed);
         console.log("object being changed ", internalSource[owner_of_change]);
         console.log("image being changed was", internalSource[image_being_changed]);
@@ -2575,7 +2687,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                     } else if (dataModifier == "arrows") {
                         // setup_arrow_modify()   // is different for images and SBSs
                     } else {
-                        modify_by_id(current_env_id, dataModifier)
+                        modify_by_id_sbs(current_env_id, dataModifier)
                     }
             } else if (dataAction == "move-or-delete") {
                 // almost all repeats from dataAction == 'change-env' 
@@ -2647,6 +2759,8 @@ function main_menu_navigator(e) {  // we are not currently editing
                   var new_obj = create_object_to_edit(dataEnv, object_of_interest, before_after);
                   console.log("new_obj", new_obj);
                   edit_in_place(new_obj, "new");
+                  var new_obj_id = new_obj.id;
+                  console.log("are we editing id", new_obj_id);
                   console.log("are we editing", new_obj);
                   console.log("  JJJ  current_editing", current_editing["level"], current_editing["location"].length, current_editing["tree"].length, current_editing["tree"][current_editing["level"]]);
                   console.log("    current_editing", current_editing);
@@ -2654,11 +2768,10 @@ function main_menu_navigator(e) {  // we are not currently editing
                   object_of_interest.classList.remove("may_enter");
                   document.getElementById('edit_menu_holder').remove();
                   if (dataEnv.startsWith("sbs")) {
-                      console.log("added sbs, not add to it");
-                make_current_editing_from_id("testA");
-
-
-                edit_menu_from_current_editing("entering");
+                      console.log("added sbs, now add to it");
+                      var first_panel_id = document.getElementById(new_obj_id).firstChild.firstChild.id;
+                      make_current_editing_from_id(first_panel_id);
+                      edit_menu_from_current_editing("entering");
                   }
 // sbssbs
               } else {
