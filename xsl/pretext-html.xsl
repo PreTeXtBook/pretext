@@ -466,6 +466,54 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </section>
+    <!-- For a "worksheet" (only), we do it again TWICE, -->
+    <!-- to generate standalone printable versions       -->
+    <xsl:if test="self::worksheet">
+        <xsl:apply-templates select="." mode="standalone-worksheets"/>
+    </xsl:if>
+</xsl:template>
+
+<!-- Worksheets generate two additional versions, each -->
+<!-- designed for printing, on US Letter or A4 paper.  -->
+<!-- TODO: worth making one template to use twice?     -->
+<xsl:template match="worksheet" mode="standalone-worksheets">
+    <xsl:variable name="base-filename">
+        <xsl:apply-templates select="." mode="visible-id"/>
+    </xsl:variable>
+    <!-- US Letter version, indicated by class on the HTML body element -->
+    <xsl:apply-templates select="." mode="file-wrap">
+        <xsl:with-param name="filename">
+            <xsl:apply-templates select="." mode="standalone-filename-letter"/>
+        </xsl:with-param>
+        <xsl:with-param name="extra-body-classes">
+            <!-- Hack, include leading space -->
+            <xsl:text> standalone worksheet letter</xsl:text>
+        </xsl:with-param>
+        <xsl:with-param name="content">
+            <!-- No enclosing structure, just sequence of pages -->
+            <!-- parameterized as 'printable' (not 'viewable')  -->
+            <xsl:apply-templates select="page">
+                <xsl:with-param name="purpose" select="'printable'"/>
+            </xsl:apply-templates>
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <!-- A4 version, indicated by (lower-case) class on the HTML body element -->
+    <xsl:apply-templates select="." mode="file-wrap">
+        <xsl:with-param name="filename">
+            <xsl:apply-templates select="." mode="standalone-filename-A4"/>
+        </xsl:with-param>
+        <xsl:with-param name="extra-body-classes">
+            <!-- Hack, include leading space -->
+            <xsl:text> standalone worksheet a4</xsl:text>
+        </xsl:with-param>
+        <xsl:with-param name="content">
+            <!-- No enclosing structure, just sequence of pages -->
+            <!-- parameterized as 'printable' (not 'viewable')  -->
+            <xsl:apply-templates select="page">
+                <xsl:with-param name="purpose" select="'printable'"/>
+            </xsl:apply-templates>
+        </xsl:with-param>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Modal template for content of a summary page   -->
@@ -9759,10 +9807,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- * page content (exclusive of banners, navigation etc) -->
 <xsl:template match="*" mode="file-wrap">
     <xsl:param name="content" />
-    <xsl:variable name="filename">
-        <xsl:apply-templates select="." mode="containing-filename" />
+    <!-- Hack, include leading space for now -->
+    <xsl:param name="extra-body-classes"/>
+    <xsl:param name="filename" select="''"/>
+
+    <xsl:variable name="the-filename">
+        <xsl:choose>
+            <xsl:when test="not($filename = '')">
+                <xsl:value-of select="$filename"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="containing-filename" />
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:variable>
-    <exsl:document href="{$filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
+    <exsl:document href="{$the-filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
     <xsl:call-template name="converter-blurb-html" />
     <html lang="{$document-language}"> <!-- dir="rtl" here -->
         <head>
@@ -9811,6 +9870,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:if test="$b-has-toc">
                     <xsl:text> has-toc has-sidebar-left</xsl:text> <!-- note space, later add right -->
                 </xsl:if>
+                <xsl:value-of select="$extra-body-classes"/>
             </xsl:attribute>
             <!-- assistive "Skip to main content" link    -->
             <!-- this *must* be first for maximum utility -->
@@ -11482,6 +11542,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="../conclusion|../outcomes"/>
         </xsl:if>
     </section>
+</xsl:template>
+
+<!-- Templates ensure standalone page creation, -->
+<!-- and links to same, are consistent          -->
+<xsl:template match="worksheet" mode="standalone-filename-letter">
+    <xsl:apply-templates select="." mode="visible-id"/>
+    <xsl:text>-letter.html</xsl:text>
+</xsl:template>
+
+<xsl:template match="worksheet" mode="standalone-filename-A4">
+    <xsl:apply-templates select="." mode="visible-id"/>
+    <xsl:text>-A4.html</xsl:text>
 </xsl:template>
 
 <!-- 2020-03-17: Empty element, since originally a       -->
