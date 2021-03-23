@@ -8716,7 +8716,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <!-- courtesy check that range is not out-of-order               -->
             <!-- NB: different schemes for "exercise" can make this look odd -->
             <xsl:if test="count($target-one/preceding::*) > count($target-two/preceding::*)">
-                <xsl:message>MBX:WARNING: &lt;xref @first="<xsl:value-of select="$ref-one" />" @last="<xsl:value-of select="$ref-two" />" /&gt; references two elements that appear to be in the wrong order</xsl:message>
+                <xsl:message>MBX:WARNING: &lt;xref @first="<xsl:value-of select="@first" />" @last="<xsl:value-of select="@last" />" /&gt; references two elements that appear to be in the wrong order</xsl:message>
             </xsl:if>
             <!-- Biblio check assumes targets are equal       -->
             <!-- If target is a bibliography item, generic    -->
