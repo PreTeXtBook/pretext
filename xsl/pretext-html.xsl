@@ -3304,7 +3304,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Born-hidden behavior is configurable -->
 <xsl:template match="&EXAMPLE-LIKE;" mode="is-hidden">
     <xsl:value-of select="$knowl-example = 'yes'" />
-</xsl:template>
+    <!-- Preserving a way to not knowl anything in a worksheet -->
+    <!-- 
+    <xsl:choose>
+        <xsl:when test="ancestor::worksheet">
+            <xsl:value-of select="false()"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-example = 'yes'" />
+        </xsl:otherwise>
+    </xsl:choose>
+    -->
+ </xsl:template>
 
 <!-- Overall enclosing element -->
 <xsl:template match="&EXAMPLE-LIKE;" mode="body-element">
