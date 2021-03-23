@@ -543,7 +543,6 @@ window.addEventListener("load",function(event) {
            }
 }});
 
-
 // this is to open every knowl on a page
 // (this code is not actually used anywhere)
 window.addEventListener("load",function(event) {

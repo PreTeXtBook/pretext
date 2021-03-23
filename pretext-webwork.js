@@ -241,6 +241,14 @@ function initWW(ww_id) {
         // place focus
         ww_container.setAttribute('tabindex','-1')
         ww_container.focus()
+        // run script inside the problem
+        Array.from(ww_container.querySelectorAll("script")).forEach( oldScript => {
+          const newScript = document.createElement("script");
+          Array.from(oldScript.attributes)
+            .forEach( attr => newScript.setAttribute(attr.name, attr.value) );
+          newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+          oldScript.parentNode.replaceChild(newScript, oldScript);
+        });
     });
 }
 
