@@ -7326,32 +7326,53 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- This template should only be called for worksheet/exercise and      -->
+<!-- This template is called for items in a worksheet that can have work space       -->
 <!-- terminal task of an activity-like that have a @workspace attribute. -->
-<xsl:template match="exercise[@workspace]|task[@workspace and not(task)]" mode="sanitize-workspace">
-    <xsl:variable name="raw-workspace" select="normalize-space(@workspace)"/>
-    <xsl:choose>
-        <!-- old-style fraction of a page, indicated by a % at end   -->
-        <!-- warn and convert to inches based on 10-inch page height -->
-        <!-- ( (percent div 100) * 10 inch = div 10 )                -->
-        <xsl:when test="substring($raw-workspace, string-length($raw-workspace) - 0) = '%'">
-            <xsl:variable name="approximate-inches" select="concat(substring($raw-workspace, 1, string-length($raw-workspace) - 1) div 10, 'in')"/>
-            <xsl:value-of select="$approximate-inches"/>
-            <xsl:message>PTX:ERROR:  as of 2020-03-17 worksheet exercises' workspace should be specified in 'in' or in 'cm'.  Approximating a page fraction of <xsl:value-of select="@workspace"/> by <xsl:value-of select="$approximate-inches"/>.</xsl:message>
-            <xsl:apply-templates select="." mode="location-report"/>
-        </xsl:when>
-        <xsl:when test="substring($raw-workspace, string-length($raw-workspace) - 1) = 'in'">
-            <xsl:value-of select="$raw-workspace"/>
-        </xsl:when>
-        <xsl:when test="substring($raw-workspace, string-length($raw-workspace) - 1) = 'cm'">
-            <xsl:value-of select="$raw-workspace"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>PTX:ERROR:  a worksheet exercises' or tasks' workspace should be specified with units of 'in' or 'cm', and not as "<xsl:value-of select="@workspace"/>".  Using a default of "2in".</xsl:message>
-            <xsl:text>2in</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+<xsl:template match="&PROJECT-LIKE;|exercise|task" mode="sanitize-workspace">
+    <!-- bail out quickly and empty if not on a worksheet -->
+    <!-- bail out if structured, and not yet terminal     -->
+    <xsl:if test="ancestor::worksheet and not(child::task)">
+        <!-- First element with @workspace, confined to the worksheet  -->
+        <!-- Could be empty node-set, which will be empty string later -->
+        <xsl:variable name="workspaced" select="ancestor-or-self::*[@workspace and ancestor::worksheet][1]"/>
+        <xsl:variable name="raw-workspace" select="normalize-space($workspaced/@workspace)"/>
+        <xsl:choose>
+            <!-- bail out empty if empty or absent -->
+            <xsl:when test="$raw-workspace = ''"/>
+            <!-- old-style fraction of a page, indicated by a % at end   -->
+            <!-- warn and convert to inches based on 10-inch page height -->
+            <!-- ( (percent div 100) * 10 inch = div 10 )                -->
+            <xsl:when test="substring($raw-workspace, string-length($raw-workspace) - 0) = '%'">
+                <xsl:variable name="approximate-inches" select="concat(substring($raw-workspace, 1, string-length($raw-workspace) - 1) div 10, 'in')"/>
+                <xsl:value-of select="$approximate-inches"/>
+                <xsl:message>PTX:ERROR:  as of 2020-03-17 worksheet exercises' workspace should be specified in 'in' or in 'cm'.  Approximating a page fraction of <xsl:value-of select="@workspace"/> by <xsl:value-of select="$approximate-inches"/>.</xsl:message>
+                <xsl:apply-templates select="." mode="location-report"/>
+            </xsl:when>
+            <xsl:when test="substring($raw-workspace, string-length($raw-workspace) - 1) = 'in'">
+                <xsl:value-of select="$raw-workspace"/>
+            </xsl:when>
+            <xsl:when test="substring($raw-workspace, string-length($raw-workspace) - 1) = 'cm'">
+                <xsl:value-of select="$raw-workspace"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message>PTX:ERROR:  a worksheet exercises', project-likes' or tasks' workspace should be specified with units of 'in' or 'cm', and not as "<xsl:value-of select="@workspace"/>".  Using a default of "2in".</xsl:message>
+                <xsl:text>2in</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:if>
 </xsl:template>
+
+<!-- We have a restrictive match above on a modal template,            -->
+<!-- but it is employed with a wider variety of objects so we          -->
+<!-- need an implementation that does nothing                          -->
+<!-- We kill the worksheet @workspace option for WW exercises until    -->
+<!-- we have a better understanding of just how this will be specified -->
+<!-- A no-op, just remove to enable, but will need testing             -->
+<!-- EXAMPLE-LIKE look like things to do, but are not, and so do       -->
+<!-- not have @workspace inside a worksheet                            -->
+<xsl:template match="webwork-reps/static|webwork-reps/static/stage|&EXAMPLE-LIKE;" mode="sanitize-workspace"/>
+
+
 
 
 <!-- ####################################### -->
