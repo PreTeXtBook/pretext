@@ -392,6 +392,16 @@ function menu_options_for(object_id, component_type, level) {
                  ["modify", "arrows", "use arrow keys (not implemented yet)"],
                  ["modify", "done", "done modifying"]
              ];
+         } else if (component_type == "sbspanel") {
+             m_d_options = [
+                 ["modify", "enlarge", "make wider"],
+                 ["modify", "shrink", "make narrower"],
+                 ["modify", "leftminus", "decrease left margin"],
+                 ["modify", "leftplus", "increase left margin"],
+                 ["modify", "rightminus", "decrease right margin"],
+                 ["modify", "rightplus", "increase right margin"],
+                 ["modify", "done", "done modifying"]
+             ];
          } else {
              alert("don;t know how to make that menu")
              m_d_options = []
@@ -665,7 +675,7 @@ function next_editable_of(obj, relationship) {
     var next_to_edit;
     console.log("finding", relationship, "editable of", obj);
     if (relationship == "children") {
-        next_to_edit = $(obj).find('> li > [data-editable], > .heading > [data-editable], > [data-editable]')
+        next_to_edit = $(obj).find('> .sidebyside > .sbsrow > [data-editable], > li > [data-editable], > .heading > [data-editable], > [data-editable]')
     } else if (relationship == "outer-block") {  // for example, a direct child of a section
         next_to_edit = $(obj).find(' > [data-editable]')
     } else if (relationship == "inner-block") {  // typically a paragraph
@@ -936,8 +946,8 @@ function edit_in_place(obj, oldornew) {
         this_sbsrow.setAttribute('id', idOfSBSRow);
         this_sbsrow.setAttribute('style', "margin-left: 5%; margin-right: 5%;");
 
-        var these_panels = '<div class="sbspanel top" id="testA" style="width:25%; background-color:#fdd">aa asd asda dsasd </div>';
-        these_panels += '<div class="sbspanel top" id="testB" style="width:50%; background-color:#ddf">aasda as a abb</div>';
+        var these_panels = '<div class="sbspanel top" id="testA" data-editable="90" style="width:25%; background-color:#fdd">aa asd asda dsasd </div>';
+        these_panels += '<div class="sbspanel top" id="testB" data-editable="90" style="width:50%; background-color:#ddf">aasda as a abb</div>';
         this_sbsrow.innerHTML = these_panels;
   //      document.getElementById('actively_editing').insertAdjacentElement("afterbegin", this_sbsrow);
         document.getElementById(thisID).insertAdjacentElement("afterbegin", this_sbsrow);
@@ -2643,6 +2653,14 @@ function main_menu_navigator(e) {  // we are not currently editing
                   object_of_interest.classList.remove("may_select");
                   object_of_interest.classList.remove("may_enter");
                   document.getElementById('edit_menu_holder').remove();
+                  if (dataEnv.startsWith("sbs")) {
+                      console.log("added sbs, not add to it");
+                make_current_editing_from_id("testA");
+
+
+                edit_menu_from_current_editing("entering");
+                  }
+// sbssbs
               } else {
                   console.log("Error: unknown dataEnv", dataEnv);
                   console.log("moving up the menu -- not");
@@ -2707,8 +2725,8 @@ function logKeyDown(e) {
 // xx 
 
 document.addEventListener('focus', function() {
-  console.log('focused:', document.activeElement)
-  console.log('which has content XX' + document.activeElement.innerHTML + "VV")
+//  console.log('focused:', document.activeElement)
+//  console.log('which has content XX' + document.activeElement.innerHTML + "VV")
   prev_prev_focused_element = prev_focused_element;
   prev_focused_element = this_focused_element;
   this_focused_element = document.activeElement;
