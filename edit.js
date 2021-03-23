@@ -175,7 +175,8 @@ var the_inner_menu = {
 // "display-like": [["image"], ["image with caption", "imagecaption", "m"], ["video"], ["video with caption", "videocaption", "d"], ["audio"]],
 "image-like": [["image", "bareimage"], ["video"], ["audio"]],
 "aside-like": [["aside"], ["historical"], ["biographical"]],
-"layout-like": [["side-by-side"], ["assemblage"], ["biographical aside"], ["titled paragraph", "paragraphs"]],
+"layout-like": [["side-by-side panels", "sbs"], ["assemblage"], ["biographical aside"], ["titled paragraph", "paragraphs"]],
+"sbs": [["2 panels", "sbs2"], ["3 panels", "sbs3"], ["4 panels", "sbs4"]],
 "math-like": [["math display", "mathdisplay"], ["chemistry display", "chemistrydisplay"], ["code listing", "code", "l"]],
 "quoted": [["blockquote"], ["poem"], ["music"]],
 "interactives": [["sage cell", "sagecell"], ["webwork"], ["asymptote"], ["musical score", "musicalscore"]],
@@ -204,6 +205,9 @@ editing_container_for = { "p": 1,
 "li": [""],
 "list": [""],
 "bareimage": [""],
+"sbs2": [""],
+"sbs3": [""],
+"sbs4": [""],
 "proof": [""]  //just a guess
 }
 
@@ -691,9 +695,11 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
     // a sbs is passed as sbsN, where N is the number of columns
     var numcols = 0;
     if (new_tag.startsWith("sbs")) {
-        numcols = parseInteger(new_tag.slice(-1));
+        numcols = parseInt(new_tag.slice(-1));
         new_tag = "sbs";
     }
+    console.log("new_tag", new_tag, "numcols", numcols);
+
         // when adding an li, you are actually focused on somethign inside an li
         // but, maybe that distinction shoud be mede before calling create_object_to_edit ?
     if (new_tag == "li") { new_objects_sibling = new_objects_sibling.parentElement }
@@ -734,6 +740,7 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
         internalSource[new_sbsrow_id]["content"] = col_content;
         new_source["content"] = "<&>" + new_sbsrow_id + "<;>";
         current_editing_actions.push(["new", "sbs", new_id]);
+        console.log("new sbs", new_source);
     } else if (new_tag == "list") {  // creating a list, which needs one item to begin.
                                    // that item is an li contining a p
         var new_li_id = randomstring();
@@ -916,6 +923,26 @@ function edit_in_place(obj, oldornew) {
         console.log("Whth content GG" + document.getElementById(idOfEditText).textContent + "HH");
         this_char = "";
         prev_char = "";
+
+      } else if (new_tag == "sbs") {
+        var this_content_container = document.createElement('div');
+        this_content_container.setAttribute('class', "sidebyside");
+        this_content_container.setAttribute('id', thisID);
+        $("#" + thisID).replaceWith(this_content_container);
+
+        var idOfSBSRow = "test1";
+        var this_sbsrow = document.createElement('div');
+        this_sbsrow.setAttribute('class', 'sbsrow');
+        this_sbsrow.setAttribute('id', idOfSBSRow);
+        this_sbsrow.setAttribute('style', "margin-left: 5%; margin-right: 5%;");
+
+        var these_panels = '<div class="sbspanel top" id="testA" style="width:25%; background-color:#fdd">aa asd asda dsasd </div>';
+        these_panels += '<div class="sbspanel top" id="testB" style="width:50%; background-color:#ddf">aasda as a abb</div>';
+        this_sbsrow.innerHTML = these_panels;
+  //      document.getElementById('actively_editing').insertAdjacentElement("afterbegin", this_sbsrow);
+        document.getElementById(thisID).insertAdjacentElement("afterbegin", this_sbsrow);
+
+        console.log("made sbs", thisID);
 
       } else if (new_tag == "li") {  // this is confusing, because really we are editing the p in the li
         var this_new_li = document.createElement('li');
