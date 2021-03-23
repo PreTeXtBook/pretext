@@ -690,6 +690,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="title">
         <xsl:apply-templates select="." mode="title-full" />
     </span>
+    <!-- Links to the "printable" version(s), meant only for "viewable" -->
+    <!-- worksheet, so CSS can kill on the "printable" versions         -->
+    <xsl:if test="self::worksheet">
+        <xsl:variable name="letter">
+            <xsl:apply-templates select="." mode="standalone-filename-letter"/>
+        </xsl:variable>
+        <xsl:variable name="A4">
+            <xsl:apply-templates select="." mode="standalone-filename-A4"/>
+        </xsl:variable>
+        <div class="print-links">
+            <a href="{$A4}" class="a4">A4</a>
+            <a href="{$letter}" class="us">US</a>
+        </div>
+    </xsl:if>
 </xsl:template>
 
 <!-- Recursively finds enclosing structural node -->
