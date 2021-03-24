@@ -394,8 +394,10 @@ function menu_options_for(object_id, component_type, level) {
              ];
          } else if (component_type == "sbspanel") {
              m_d_options = [
-                 ["modify", "enlarge", "make wider"],
-                 ["modify", "shrink", "make narrower"],
+                 ["modify", "enlarge", "make this panel wider"],
+                 ["modify", "shrink", "make this panel narrower"],
+                 ["modify", "enlargeall", "make all panels wider"],
+                 ["modify", "shrinkall", "make all panels narrower"],
                  ["modify", "leftminus", "decrease left margin"],
                  ["modify", "leftplus", "increase left margin"],
                  ["modify", "rightminus", "decrease right margin"],
@@ -740,7 +742,7 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
     } else if (new_tag == "sbs") {  // creating an sbs, which contains one sbsrow, which contains several sbspanels
         var new_sbsrow_id = randomstring();
         internalSource[new_sbsrow_id] = {"xml:id": new_sbsrow_id, "permid": "", "ptxtag": "sbsrow",
-                 "margin-left": 0, "margin-right": 0, "parent": [new_id, "content"]}
+                 "margin-left": 5, "margin-right": 5, "parent": [new_id, "content"]}
 
         var col_content = "";
         var col_default_width = [0, 100, 40, 31, 23, 19];
@@ -952,9 +954,8 @@ function edit_in_place(obj, oldornew) {
         var this_sbsrow = document.createElement('div');
         this_sbsrow.setAttribute('class', 'sbsrow');
         this_sbsrow.setAttribute('id', idOfSBSRow);
-        this_sbsrow.setAttribute('style', "margin-left: 5%; margin-right: 5%;");
+        this_sbsrow.setAttribute('style', "margin-left:" + internalSource[idOfSBSRow]["margin-left"] + "%; margin-right:" + internalSource[idOfSBSRow]["margin-right"] + "%;");
 
-        var panelwidths = [[25, 50], [25, 25, 40], [20, 20, 20, 30]];
         var idsOfSBSPanel = internalSource[idOfSBSRow]["content"]
         idsOfSBSPanel = idsOfSBSPanel.replace(/^ *<&>/, '');
         idsOfSBSPanel = idsOfSBSPanel.replace(/<;> *$/, '');
@@ -963,10 +964,9 @@ function edit_in_place(obj, oldornew) {
         console.log('b idsOfSBSPanel', idsOfSBSPanel);
         var idsOfSBSPanelList = idsOfSBSPanel.split("<;><&>");
         console.log('c idsOfSBSPanel', idsOfSBSPanelList);
-        var these_panelwidths = panelwidths[idsOfSBSPanelList.length - 2];
         var these_panels = '';
         for (var j=0; j < idsOfSBSPanelList.length; ++j) {
-            these_panels += '<div class="sbspanel top" id="' + idsOfSBSPanelList[j] + '" data-editable="90" style="width:' + these_panelwidths[j] + '%; background-color:#ddf">aasda as' + j + ' a abb</div>';
+            these_panels += '<div class="sbspanel top" id="' + idsOfSBSPanelList[j] + '" data-editable="90" style="width:' + internalSource[idsOfSBSPanelList[j]]["width"] + '%; background-color:#ddf">aasda as' + j + ' a abb</div>';
         }
         this_sbsrow.innerHTML = these_panels;
   //      document.getElementById('actively_editing').insertAdjacentElement("afterbegin", this_sbsrow);
@@ -1218,7 +1218,8 @@ function modify_by_id_sbs(theid, modifier) {
 
     var this_sbs_source = internalSource[theid];
     var this_width = this_sbs_source["width"];
-    var this_sbsrow_source = internalSource[this_sbs_source["parent"][0]];
+    var this_sbsrow_id = this_sbs_source["parent"][0];
+    var this_sbsrow_source = internalSource[this_sbsrow_id];
     console.log("this_sbsrow_source", this_sbsrow_source);
     var marginleft = this_sbsrow_source["margin-left"];
     var marginright = this_sbsrow_source["margin-right"];
@@ -1232,6 +1233,8 @@ function modify_by_id_sbs(theid, modifier) {
     console.log("this panel", theid, "is", this_panel_index, "within", these_siblings_list);
     these_panel_widths = [];
     total_width = 0;
+    console.log("these html siblings",document.getElementById(these_siblings_list[0])," and ", document.getElementById(these_siblings_list[1]))
+    console.log("these siblings source",      internalSource[these_siblings_list[0]], "and",  internalSource[these_siblings_list[1]]);
     for(var j=0; j < these_siblings_list.length; ++j) {
         var t_wid = internalSource[these_siblings_list[j]]["width"];
         console.log("adding width", t_wid);
@@ -1257,54 +1260,71 @@ function modify_by_id_sbs(theid, modifier) {
 // currently style looks like "width: 66%; margin-right: 17%; margin-left: 17%"
     console.log('width, , marginright, , marginleft', this_width, "mr", marginright, "ml",  marginleft);
 
+    console.log("modifier", modifier);
+
     var scale_direction = 1;
     var moving_direction = 1;
-    if (modifier == "shrink") { scale_direction = -1 }
-    else if (modifier == "left") { moving_direction = -1 }
-    if ("enlarge shrink".includes(modifier)) {
-        if ((this_width >= 100 && scale_direction == 1) || (this_width <= 0 && scale_direction == -1)) {
-            console.log("can't go above 100 or below 0");
-            return
+
+    if (modifier == "enlargeall") {
+        console.log("enlarging all");
+        if (remaining_space >= these_panel_widths.length) {
+            for (var j=0; j < these_panel_widths.length; ++j) {
+                these_panel_widths[j] += 1
+            }
+   // probablu the next case handles the first case
+        } else if (remaining_space + marginleft + marginright >= these_panel_widths.length) {
+            for (var j=0; j < these_panel_widths.length; ++j) {
+                these_panel_widths[j] += 1
+            }
+            var missing_length = these_panel_widths.length - remaining_space;
+            while (missing_length) {
+                missing_length -= 1;
+                if (missing_length % 2) {
+                    if (marginleft) { marginleft -= 1 }
+                    else { marginright -= 1 }
+                } else {
+                    if (marginright) { marginright -= 1 }
+                    else { marginleft -= 1 }
+                }
+            }
         } else {
-            this_width += 2*scale_direction*magnify_scale;
+            console.log("Problem: not implemented yet")
         }
-        if (marginleft > 0 && marginright > 0) {
-          marginleft += -1*scale_direction*magnify_scale;
-          marginright += -1*scale_direction*magnify_scale;
-        } else if (marginleft > 0) {
-            marginleft += -2*scale_direction*magnify_scale;
-        } else if (marginright > 0) {
-            marginright += -2*scale_direction*magnify_scale;
-        } else if (scale_direction < 0) {  // applies when we shrink a 100 width image
-          marginleft += -1*scale_direction*magnify_scale;
-          marginright += -1*scale_direction*magnify_scale;
-        } else {
-            // do nothing:  this is a placeholder which is reached when both margins are 0
-            console.log("already have no margins, width is", this_width);
+    } else if (modifier == "shrinkall") {
+        for (var j=0; j < these_panel_widths.length; ++j) {
+            if (these_panel_widths[j]) { these_panel_widths[j] -= 1 }
         }
-    } else if ("left right".includes(modifier)) {
-        console.log("marginleft*moving_direction", marginleft*moving_direction, "marginright*moving_direction", marginright*moving_direction);
-        if ((marginleft > 0 && marginright > 0) || (marginright*moving_direction > 0) || (marginleft*moving_direction < 0)) {
-            marginleft += moving_direction*move_scale;
-            marginright += -1*moving_direction*move_scale;
-//        } else if (marginright*moving_direction > 0) {
-//            marginright += -1*moving_direction*move_scale;
-//        } else if (marginleft*moving_direction < 0) {
-//            marginleft += moving_direction*move_scale;
-        } else { 
-            // do nothing:  this is a placeholder which is reached when both margins are 0
-            // we choose to prioritize scale, so a 100% image cannot be shifted
-            console.log("already at 100%, width is", this_width);
-        }
+    } else if (modifier == "enlarge") {
+        console.log("enlarging one");
+        if (remaining_space) { these_panel_widths[this_panel_index] += 1 }
+    } else if (modifier == "shrink") {
+        console.log("shrinking one");
+        if (these_panel_widths[this_panel_index]) { these_panel_widths[this_panel_index] -= 1 }
+    } else if (modifier == "leftplus") {
+        if (remaining_space) { marginleft += 1 }
+    } else if (modifier == "leftminus") {
+        if (marginleft) { marginleft -= 1 }
+    } else if (modifier == "rightplus") {
+        if (remaining_space) { marginright += 1 }
+    } else if (modifier == "rightminus") { 
+        if (marginright) { marginright -= 1 }
     }
+    console.log("now these_panel_widths", these_panel_widths);
 
-    var the_new_sizes = "width: " + this_width + "%;";
-    the_new_sizes += "margin-right: " + marginright + "%;";
-    the_new_sizes += "margin-left: " + marginleft + "%;";
+// many missing cases!!!
 
-    internalSource[theid]["style"] = the_new_sizes;
+    for (var j=0; j < these_siblings_list.length; ++j) {
+        var this_id = these_siblings_list[j];
+        internalSource[this_id]["width"] = these_panel_widths[j];
+        document.getElementById(this_id).style.width = these_panel_widths[j] + "%";
+    }
+    console.log("NOW these html siblings",document.getElementById(these_siblings_list[0])," and ", document.getElementById(these_siblings_list[1]))
+    console.log("NOW these siblings source",      internalSource[these_siblings_list[0]], "and",  internalSource[these_siblings_list[1]]);
+    internalSource[this_sbsrow_id]["margin-left"] = marginleft;
+    internalSource[this_sbsrow_id]["margin-right"] = marginright;
+    document.getElementById(this_sbsrow_id).style.marginLeft = marginleft + "%";
+    document.getElementById(this_sbsrow_id).style.marginRight = marginright + "%";
 
-    document.getElementById(theid).setAttribute("style", the_new_sizes);
 }
 
 function move_by_id_local(theid, thehandleid) {
