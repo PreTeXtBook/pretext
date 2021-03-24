@@ -164,6 +164,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="conclusion" />
 </xsl:template>
 
+<!-- ########## -->
+<!-- Worksheets -->
+<!-- ########## -->
+
+<!-- Worksheets are a great feature for a Jupyter notebook.  But we need -->
+<!-- to adjust the page-oriented flavor of the base HTML (which exists   -->
+<!-- as part of accomodating printing from a web browser). All children  -->
+<!-- of a "page" get processed, and elsewhere get recognized as items    -->
+<!-- deserving of their own cells.                                       -->
+<xsl:template match="worksheet/page">
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
 <!-- File Structure -->
 <!-- Gross structure of a Jupyter notebook -->
 <!-- TODO: need to make a "simple file wrap" template?  Or just call this?-->
@@ -356,7 +369,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- priority, but we want them to have the same low       -->
 <!-- priority as a generic (default) wilcard match         -->
 <!-- TODO: remove filter on paragraphs once we add stack for sidebyside -->
-<xsl:template match="*[parent::*[&STRUCTURAL-FILTER; or self::paragraphs[not(ancestor::sidebyside)] or self::introduction[parent::*[&STRUCTURAL-FILTER;]] or self::conclusion[parent::*[&STRUCTURAL-FILTER;]]]]" priority="-0.5">
+<xsl:template match="*[parent::*[&STRUCTURAL-FILTER; or self::paragraphs[not(ancestor::sidebyside)] or self::introduction[parent::*[&STRUCTURAL-FILTER;]] or self::conclusion[parent::*[&STRUCTURAL-FILTER;]]]]|*[parent::page]" priority="-0.5">
     <!-- <xsl:message>G:<xsl:value-of select="local-name(.)" />:G</xsl:message> -->
     <xsl:variable name="html-rtf">
         <xsl:apply-imports />
