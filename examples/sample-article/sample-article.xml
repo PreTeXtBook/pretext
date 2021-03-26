@@ -1439,7 +1439,7 @@ the xsltproc executable.
                 <subsubsection>
                     <title>Test Two</title>
 
-                    <p>An intervening subsection section which contains an <tag>exercises</tag> division which must at the level of a Subsubsubsection.</p>
+                    <p>An intervening subsection section which contains an <tag>exercises</tag> division which must be at the level of a Subsubsubsection.</p>
 
                     <exercises>
                         <exercise>
@@ -2607,7 +2607,7 @@ the xsltproc executable.
 
                 <p>We also disrupt certain constructions from <latex/>.  Attempting to sneak-in any traditional macro for the purposes of <latex/>-only output, such as, say a \newpage, will fail since the leading backslash will be caught and converted to <c>\textbackslash</c>.  (See?  It just happened twice.)  For technical reasons we want to particularly test \textbackslash, \textbraceleft, and \textbraceright.</p>
 
-                <p>Four <q><tex/> ligatures</q>, <c>--</c>, <c>---</c>, <c>``</c>, and <c>''</c>, authored in running text, --, ---, ``, ''.  It may be hard to tell that the two consecutive apostrophes have not coalesced into a curly left smart quote, but see below, the spacing is subtely different.</p>
+                <p>Four <q><tex/> ligatures</q>, <c>--</c>, <c>---</c>, <c>``</c>, and <c>''</c>, authored in running text, --, ---, ``, ''.  It may be hard to tell that the two consecutive apostrophes have not coalesced into a curly left smart quote, but see below, the spacing is subtly different.</p>
 
                 <p>We want the double quote mark from your keyboard, <c>"</c>, to not morph into some other character: "<nbsp/>.</p>
 
