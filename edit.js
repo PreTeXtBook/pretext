@@ -177,6 +177,7 @@ var the_inner_menu = {
 "aside-like": [["aside"], ["historical"], ["biographical"]],
 "layout-like": [["side-by-side panels", "sbs"], ["assemblage"], ["biographical aside"], ["titled paragraph", "paragraphs"]],
 "sbs": [["2 panels", "sbs2"], ["3 panels", "sbs3"], ["4 panels", "sbs4"]],
+"sbs2": [["full across XXX", "sbs2_0_50_50_0"], ["gap but no margin", "sbs2_0_40_40_0"], ["spaced equally", "sbs2_5_40_40_5"]],
 "math-like": [["math display", "mathdisplay"], ["chemistry display", "chemistrydisplay"], ["code listing", "code", "l"]],
 "quoted": [["blockquote"], ["poem"], ["music"]],
 "interactives": [["sage cell", "sagecell"], ["webwork"], ["asymptote"], ["musical score", "musicalscore"]],
@@ -528,8 +529,13 @@ function top_menu_options_for(this_obj) {
             this_list += '<li tabindex="-1" id="choose_current" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_obj_environment + '</li>';
        }
 
-        this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="beforebegin">Insert before<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+        if (this_obj.classList.contains("sbspanel")) {
+            this_list += '<li tabindex="-1" data-env="' + 'sbspanel' + '" data-location="afterbegin">Insert in panel<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+        }
+
+        this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="beforebegin">XInsert before<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
         this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="afterend">Insert after<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+
         this_list += '<li tabindex="-1" data-action="move-or-delete">Move or delete<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
         this_list += '<li tabindex="-1" data-env="' + "metaadata" + '">Metadata<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
         this_list += '<li tabindex="-1" data-env="' + "undo" + '">Revert<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
@@ -698,6 +704,7 @@ function next_editable_of(obj, relationship) {
 
 function create_object_to_edit(new_tag, new_objects_sibling, relative_placement) {
 
+    // when relative_placement is "afterbegin", the new_objects_sibling is actually its parent
     console.log("create_object_to_edit", new_tag, new_objects_sibling, relative_placement);
               // first insert a placeholder to edit-in-place
     var new_id = randomstring();
@@ -808,6 +815,9 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
     console.log("new_objects_sibling",new_objects_sibling);
     var sibling_id = new_objects_sibling.id;
     var parent_description = internalSource[sibling_id]["parent"];  
+    if (relative_placement == "afterbegin") {  // when adding to a sbs panel
+        parent_description = [new_id, "content"];
+    }
     new_source["parent"] = parent_description;
     internalSource[new_id] = new_source
    // we have made the new object, but we still have to put it in the correct location
@@ -823,13 +833,13 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
     var current_level = current_editing["level"];
     var current_location = current_editing["location"][current_level];
     console.log("  UUU  current_editing", current_editing["level"], current_editing["location"].length, current_editing["tree"].length, current_editing["tree"][current_editing["level"]])
-    if (relative_placement == "beforebegin") {  
+    if (relative_placement == "beforebegin" || relative_placement == "afterbegin") {  
         neighbor_with_new = '<&>' + new_id + '<;>\n' + '$1';
     }
-    else {
+    else if (relative_placement == "afterend"){
         neighbor_with_new = '$1' + '\n<&>' + new_id + '<;>'
         current_location += 1
-        }
+    }
     new_arrangement = the_current_arrangement.replace(object_neighbor, neighbor_with_new);
     internalSource[parent_description[0]][parent_description[1]] = new_arrangement;
     if (new_tag == "list") {
@@ -966,8 +976,9 @@ function edit_in_place(obj, oldornew) {
         console.log('c idsOfSBSPanel', idsOfSBSPanelList);
         var these_panels = '';
         for (var j=0; j < idsOfSBSPanelList.length; ++j) {
-            these_panels += '<div class="sbspanel top" id="' + idsOfSBSPanelList[j] + '" data-editable="90" style="width:' + internalSource[idsOfSBSPanelList[j]]["width"] + '%; background-color:#ddf">aasda as' + j + ' a abb</div>';
+            these_panels += '<div class="sbspanel top" id="' + idsOfSBSPanelList[j] + '" data-editable="90" style="width:' + internalSource[idsOfSBSPanelList[j]]["width"] + '%"></div>';
         }
+        console.log("these_panels", these_panels);
         this_sbsrow.innerHTML = these_panels;
   //      document.getElementById('actively_editing').insertAdjacentElement("afterbegin", this_sbsrow);
         document.getElementById(thisID).insertAdjacentElement("afterbegin", this_sbsrow);
@@ -1069,7 +1080,7 @@ function edit_in_place(obj, oldornew) {
                 editing_container_for["example-like"].includes(new_tag) ||
                 editing_container_for["section-like"].includes(new_tag)) {
 // only good for creating a new theorem or definition, not editing in place
-// think about thaat use case:  once it exists, do we ever edit the theorem as a unit?
+// think about that use case:  once it exists, do we ever edit the theorem as a unit?
 
         console.log("edit in place", obj);
         var objecttype = object_class_of(new_tag);
@@ -1952,16 +1963,6 @@ function html_from_internal_id(the_id, is_inner) {
         the_content = expand_condensed_source_html(the_content, is_inner);
         console.log("which now has content", the_content);
 
-//        if ("edit inner".includes(is_inner)) {
-//                // should the id be the_id ?
-//            var opening_tag = '<div id="' + the_id + '"';
-//            opening_tag += ' data-editable="98" tabindex="-1"';
-//            opening_tag += ' class="image-box"';
-//            opening_tag += '>';
-//            var closing_tag = '</div>';
-//            return opening_tag + the_content + closing_tag
-//        }
-
         html_of_this_object = document.createElement('div');
         html_of_this_object.setAttribute("data-editable", 98);
         html_of_this_object.setAttribute("tabindex", -1);
@@ -2492,8 +2493,8 @@ function main_menu_navigator(e) {  // we are not currently editing
         console.log("dataAction ", dataAction);
           // we have an active menu, and have selected an item
           // there are three main sub-cases, depending on whether there is a data-location attribute,
-          // a data-action attribute, or a data-env attribute
-
+          // a data-action attribute, or a data-env attribute.
+          // That is the primary order in which those attributes are considered
           // however, some actions (such as Tab and shift-Tab) are the same
           // in each sub-case (because all we are doing is moving up and down the
           // current list of options), so we handle those first.
@@ -2619,7 +2620,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                  edit_menu_for(editableChildren[0], "entering");
 
                 return ""
-            } else if ((dataLocation == "beforebegin") || (dataLocation == "afterend")) {  // should be the only other options
+            } else if ((dataLocation == "beforebegin") || (dataLocation == "afterend") || (dataLocation == "afterbegin")) {  // should be the only other options
                 theChooseCurrent.parentElement.classList.add("past");
                 theChooseCurrent.removeAttribute("id");
                 theChooseCurrent.classList.add("chosen");
