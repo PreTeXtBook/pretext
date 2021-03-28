@@ -5550,9 +5550,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="src">
                     <xsl:value-of select="@source" />
                 </xsl:attribute>
-                <!-- replace with a CSS class -->
-                <xsl:attribute name="style">
-                    <xsl:text>width: 100%; height: auto;</xsl:text>
+                <xsl:attribute name="class">
+                    <xsl:text>contained</xsl:text>
                 </xsl:attribute>
                 <!-- alt attribute for accessibility -->
                 <xsl:attribute name="alt">
@@ -5701,9 +5700,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="role">
             <xsl:text>img</xsl:text>
         </xsl:attribute>
-        <!-- replace with a CSS class                           -->
-        <xsl:attribute name="style">
-            <xsl:text>width: 100%; height: auto;</xsl:text>
+        <xsl:attribute name="class">
+            <xsl:text>contained</xsl:text>
         </xsl:attribute>
         <!-- alt attribute for accessibility -->
         <xsl:attribute name="alt">
