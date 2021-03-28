@@ -687,7 +687,8 @@ function next_editable_of(obj, relationship) {
     var next_to_edit;
     console.log("finding", relationship, "editable of", obj);
     if (relationship == "children") {
-        next_to_edit = $(obj).find('> .sidebyside > .sbsrow > [data-editable], > li > [data-editable], > .heading > [data-editable], > [data-editable]')
+ //       next_to_edit = $(obj).find('> .sidebyside > .sbsrow, > .sidebyside > .sbsrow > [data-editable], > li > [data-editable], > .heading > [data-editable], > [data-editable]')
+        next_to_edit = $(obj).find('> .sidebyside > .sbsrow, > li > [data-editable], > .heading > [data-editable], > [data-editable]')
     } else if (relationship == "outer-block") {  // for example, a direct child of a section
         next_to_edit = $(obj).find(' > [data-editable]')
     } else if (relationship == "inner-block") {  // typically a paragraph
