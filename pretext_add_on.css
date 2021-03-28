@@ -2314,6 +2314,7 @@ figure figcaption.wrap {
     margin-top: 0;
 }
 .pretext-content .image-box img,  /* See sample article Graphics section */
+.pretext-content img.contained,  /* See sample article Graphics section */
 .pretext-content .sbspanel img {
    /* previously these were hard-coded in the HTML */
     width: 100%;
