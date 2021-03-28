@@ -69,6 +69,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='part'>Parte</localization>
     <localization string-id='chapter'>Capitolo</localization>
     <localization string-id='appendix'>Appendice</localization>
+    <!-- Next is the plural of Appendix, used to identify a group of appendix -->
+    <!-- <localization string-id='appendices'>Appendices</localization> -->
     <localization string-id='section'>Paragrafo</localization>
     <localization string-id='subsection'>Sottoparagrafo</localization>
     <localization string-id='subsubsection'>Sotto-sottoparagrafo</localization>

@@ -71,6 +71,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='part'>Част</localization>
     <localization string-id='chapter'>Глава</localization>
     <localization string-id='appendix'>Приложение</localization>
+    <!-- Next is the plural of Appendix, used to identify a group of appendix -->
+    <!-- <localization string-id='appendices'>Appendices</localization> -->
     <localization string-id='section'>Параграф</localization>
     <localization string-id='subsection'>Точка</localization>
     <localization string-id='subsubsection'>Подточка</localization>

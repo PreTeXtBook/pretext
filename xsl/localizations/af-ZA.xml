@@ -69,6 +69,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='part'>Deel</localization>
     <localization string-id='chapter'>Hoofstuk</localization>
     <localization string-id='appendix'>Bylaag</localization>
+    <!-- Next is the plural of Appendix, used to identify a group of appendix -->
+    <!-- <localization string-id='appendices'>Appendices</localization> -->
     <localization string-id='section'>Afdeling</localization>
     <localization string-id='subsection'>Onderafdeling</localization>
     <localization string-id='subsubsection'>Onderonderafdeling</localization>

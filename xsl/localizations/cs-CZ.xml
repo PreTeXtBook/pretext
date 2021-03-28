@@ -66,6 +66,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='part'>Část</localization>
     <localization string-id='chapter'>Kapitola</localization>
     <localization string-id='appendix'>Appendix</localization>
+    <!-- Next is the plural of Appendix, used to identify a group of appendix -->
+    <!-- <localization string-id='appendices'>Appendices</localization> -->
     <localization string-id='section'>Sekce</localization>
     <localization string-id='subsection'>Podsekce</localization>
     <localization string-id='subsubsection'>Podpodsekce</localization>

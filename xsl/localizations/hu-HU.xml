@@ -68,6 +68,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='part'>Rész</localization>
     <localization string-id='chapter'>Fejezet</localization>
     <localization string-id='appendix'>Függelék</localization>
+    <!-- Next is the plural of Appendix, used to identify a group of appendix -->
+    <!-- <localization string-id='appendices'>Appendices</localization> -->
     <localization string-id='section'>Pont</localization>
     <localization string-id='subsection'>Alpont</localization>
     <localization string-id='subsubsection'>alpont</localization>
