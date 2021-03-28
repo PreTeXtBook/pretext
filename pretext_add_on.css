@@ -827,6 +827,10 @@ body > a.assistive:focus {
     font-size: 1em;
 }
 
+.pretext-content .sbspanel:empty { /* can only happen when partially created */
+    height: 10em;
+    background-color: rgb(221, 221, 255);
+}
 /* containers of desired width for actual content */
 .pretext-content .sbspanel {
     display: flex;
@@ -837,7 +841,7 @@ body > a.assistive:focus {
     justify-content: flex-start;
 }
 .pretext-content .sbspanel.middle {
-    justify-content: center;
+    justify-content: center;  /* should that be space-between? */
 }
 .pretext-content .sbspanel.bottom {
     justify-content: flex-end;
@@ -3167,7 +3171,13 @@ body.standalone .autopermalink {
 
 body.standalone.worksheet .pretext-content .onepage .workspace {
     border: 2px dotted grey;
-    background: #efe;
+    background: #f3fff3;
+/*  Sally suggests light and dark blue 
+    background: linear-gradient(
+        #eef 0px, #eef 200px,
+        #eef 200px, #99f 205px,
+        #99f 205px, #99f 100%)
+*/
 }
 body.standalone.worksheet .pretext-content .onepage .workspace.squashed {
     border: 2px dotted grey;
@@ -3175,7 +3185,15 @@ body.standalone.worksheet .pretext-content .onepage .workspace.squashed {
 }
 
 body.standalone.worksheet .pretext-content .onepage .workspace.squashed.tight {
-    border: 4px solid red;
+    border: 15px solid;
+    border-image: repeating-linear-gradient(
+      -35deg,
+      #f33,
+      #f33 10px,
+      #000 10px,
+      #000 20px
+    ) 20; 
+/*
     background: linear-gradient(
         #ff0 0%, #ff0 8%,
         #000 8%, #000 9%,
@@ -3197,6 +3215,8 @@ body.standalone.worksheet .pretext-content .onepage .workspace.squashed.tight {
         #000 91%, #000 92%,
         #ff0 92%, #ff0 100%
         );
+*/
+    background: yellow;
 }
 
 body.standalone.worksheet #sidebar-left {
@@ -3263,8 +3283,7 @@ body.standalone.worksheet .pretext-content section > .heading + p {
     body.standalone.worksheet .pretext-content .onepage .workspace.squashed.tight {
         border: none;
         padding: 0;
-        background: none;
-        background-image: none;
+        background: none !important;
     }
     body.standalone.worksheet a {
         color: black;
@@ -3901,6 +3920,20 @@ article.may_leave + #edit_menu_holder #enter_choice {
     border-top: 0.5em solid yellow;
     border-bottom: 0.5em solid yellow;
 }
+.sbspanel.may_select {
+    margin-top: 0;
+}
+sbspanel:empty { /* can only happen when partially created */
+    height: 10em;
+    background-color: rgb(221, 221, 255);
+}
+.pretext-content .sbspanel:empty + .sbspanel:empty {
+    background-color: #dfd;
+}
+.pretext-content .sbspanel:empty + .sbspanel:empty + .sbspanel:empty {
+    background-color: #eee;
+}
+
 .may_leave {
     box-shadow: -10px 5px 5px #FFD6D9;
     background: #ffeeee !important;
