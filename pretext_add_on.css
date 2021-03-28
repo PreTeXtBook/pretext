@@ -114,8 +114,7 @@ so that we can set our own later */
 
 /* this > may be too restrictive.  The purpose is to not put a
    top margin on an article at the top of a knowl */
-/* delete the .paragraphs after 0.31 */
-.pretext-content section > article, .pretext-content .paragraphs > article {
+.pretext-content section > article, .pretext-content section > section.paragraphs, .pretext-content .paragraphs > article {
     margin-top: 1.25em;
 }
 .pretext-content section article + article,
@@ -350,6 +349,10 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     font-size: 1.5em;
     line-height: 1.25em;
 }
+.pretext-content section section.paragraphs > .heading {
+    font-size: 1.125em;
+    line-height: 1.125em;
+}
 .pretext-content section section section > .heading {
     font-size: 1.40em;
     line-height: 1.15em;
@@ -382,6 +385,7 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     display: inline;
 }
 .pretext-content section article > .heading::after,
+.pretext-content section section.paragraphs > .heading::after,
 .pretext-content section section article > .heading::after,
 .pretext-content section article > a > .heading::after,
 .pretext-content section section article > a > .heading::after,
