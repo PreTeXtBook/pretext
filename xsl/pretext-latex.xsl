@@ -1920,7 +1920,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="title-short" />
     <xsl:text>}}&#xa;</xsl:text>
     <!-- http://tex.stackexchange.com/questions/44088/when-do-i-need-to-invoke-phantomsection -->
+    <!-- NB: \phantomsection is rarely used - literate programming fragments and the ToC      -->
     <xsl:text>%% If you manually remove hyperref, leave in this next command&#xa;</xsl:text>
+    <xsl:text>%% This will allow LaTeX compilation, employing this no-op command&#xa;</xsl:text>
     <xsl:text>\providecommand\phantomsection{}&#xa;</xsl:text>
 </xsl:template>
 
@@ -4311,29 +4313,92 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Back Matter -->
 <!-- ############ -->
 
-<!-- <backmatter> is structural -->
-<!-- Noted in an book           -->
-<!-- But not in an article      -->
+<!-- A PreTeXt "backmatter" includes appendices, references, index,  -->
+<!-- colophon, etc.  However, LaTeX uses \appendix to morph chapters -->
+<!-- into appendices (name and numbering), and then uses \backmatter -->
+<!-- to switch to un-numbered chapters, though we should write these -->
+<!-- as un-numbered anyway, since the "article" class has no         -->
+<!-- \backmatter command anyway.  So our "backmatter" is not a       -->
+<!-- significant marker for LaTeX conversion.  We instead process    -->
+<!-- appendices and solutions (specialized appendices), and then     -->
+<!-- everything left in "backmatter".                                -->
+<!-- NB: could restrict the second "select" further                  -->
+<!-- NB: these two templates are similar logically, but merging      -->
+<!-- them had too many exceptions and they became unreadable         -->
+<!--                                                                 -->
+<!-- A LaTeX "article" can only have sections (i.e. at most) so we   -->
+<!-- just add visual breaks into the ToC, which already works well   -->
+<!-- in a PDF sidebar.  A LaTeX "book" can have parts.  Whether or   -->
+<!-- not the PreTeXt "book" has parts, using a LaTeX part works very -->
+<!-- well in either case.                                            -->
+
 <xsl:template match="article/backmatter">
-    <xsl:apply-templates />
+    <xsl:variable name="appendices-name">
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'appendices'" />
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:if test="appendix|solutions">
+        <xsl:text>%&#xa;</xsl:text>
+        <xsl:text>\appendix%&#xa;</xsl:text>
+        <xsl:text>%&#xa;</xsl:text>
+        <xsl:text>%% A lineskip in table of contents as a transition to the appendices&#xa;</xsl:text>
+        <xsl:text>\addtocontents{toc}{\vspace{\normalbaselineskip}}%&#xa;</xsl:text>
+        <!-- backmatter solutions divisions are realized as appendices -->
+        <xsl:apply-templates select="appendix|solutions"/>
+    </xsl:if>
+    <xsl:if test="*[not(self::appendix|self::solutions)]">
+        <!-- Some vertical separation into ToC prior to backmatter is useful -->
+        <xsl:text>%% A lineskip in table of contents as a transition to the rest of the backmatter&#xa;</xsl:text>
+        <xsl:text>\addtocontents{toc}{\vspace{\normalbaselineskip}}&#xa;</xsl:text>
+        <xsl:text>%&#xa;</xsl:text>
+        <xsl:apply-templates select="*[not(self::appendix|self::solutions)]"/>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="book/backmatter">
-    <!-- If no appendices, go straight to book backmatter,      -->
-    <!-- which automatically produces divisions with no numbers -->
-    <!-- Otherwise \appendix,...\backmatter is handled in the   -->
-    <!-- template for general subdivisions                      -->
-    <xsl:if test="ancestor::book and not(appendix)">
+    <xsl:if test="appendix|solutions">
         <xsl:text>%&#xa;</xsl:text>
-        <xsl:text>\backmatter&#xa;</xsl:text>
+        <xsl:text>\appendix%&#xa;</xsl:text>
         <xsl:text>%&#xa;</xsl:text>
+        <!-- A book without parts gets a ToC entry, which is functional, -->
+        <!-- while a book with parts gets a full-fledged part that is a  -->
+        <!-- page of its own, etc, along with a ToC entry                -->
+        <xsl:choose>
+            <xsl:when test="$parts = 'absent'">
+                <!-- make sure we are on a fresh page and drop a target -->
+                <xsl:text>\clearpage\phantomsection%&#xa;</xsl:text>
+                <xsl:text>\addcontentsline{toc}{part}{</xsl:text>
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'appendices'" />
+                </xsl:call-template>
+                <xsl:text>}%&#xa;</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>\part*{</xsl:text>
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'appendices'" />
+                </xsl:call-template>
+                <xsl:text>}%&#xa;</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+        <!-- backmatter solutions divisions are realized as appendices -->
+        <xsl:apply-templates select="appendix|solutions"/>
     </xsl:if>
-    <!-- Some vertical separation into backmatter contents is useful -->
-    <xsl:text>%&#xa;</xsl:text>
-    <xsl:text>%% A lineskip in table of contents as transition to appendices, backmatter&#xa;</xsl:text>
-    <xsl:text>\addtocontents{toc}{\vspace{\normalbaselineskip}}&#xa;</xsl:text>
-    <xsl:text>%&#xa;</xsl:text>
-    <xsl:apply-templates />
+    <xsl:if test="*[not(self::appendix|self::solutions)]">
+        <xsl:text>%&#xa;</xsl:text>
+        <xsl:text>\backmatter%&#xa;</xsl:text>
+        <xsl:text>%&#xa;</xsl:text>
+        <!-- make sure we are on a fresh page and drop a target -->
+        <xsl:text>\clearpage\phantomsection%&#xa;</xsl:text>
+        <!-- We only *enhance* the ToC, parts or not -->
+        <xsl:text>\addcontentsline{toc}{part}{</xsl:text>
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'backmatter'" />
+        </xsl:call-template>
+        <xsl:text>}%&#xa;</xsl:text>
+        <xsl:apply-templates select="*[not(self::appendix|self::solutions)]"/>
+    </xsl:if>
 </xsl:template>
 
 <!-- The back colophon of a book goes on its own recto page -->
@@ -4757,18 +4822,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Divisions, "part" to "subsubsection", and specialized -->
 <xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|worksheet|reading-questions|solutions|glossary|references">
-    <!-- appendices are peers of chapters (book) or sections (article)  -->
-    <!-- so we need to slip this in first, with book's \backmatter later-->
-    <!-- NB: if no appendices, the backmatter template does \backmatter -->
     <xsl:apply-templates select="." mode="console-typeout" />
     <xsl:apply-templates select="." mode="begin-language" />
-    <!-- To make LaTeX produce "lettered" appendices we issue the \appendix -->
-    <!-- macro prior to the first to the first "appendix" or backmatter/solutions.                            -->
-    <xsl:if test="(self::appendix or self::solutions[parent::backmatter]) and not(preceding-sibling::appendix|preceding-sibling::solutions)">
-        <xsl:text>%&#xa;</xsl:text>
-        <xsl:text>\appendix&#xa;</xsl:text>
-        <xsl:text>%&#xa;</xsl:text>
-    </xsl:if>
     <xsl:apply-templates select="." mode="latex-division-heading" />
     <!-- Process the contents, title, idx killed, but avoid author -->
     <!-- "solutions" content needs to call content generator       -->
@@ -4782,13 +4837,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
     <xsl:apply-templates select="." mode="latex-division-footing" />
     <xsl:apply-templates select="." mode="end-language" />
-    <!-- transition to LaTeX's book backmatter, which is not -->
-    <!-- our backmatter: identify last appendix or solutions  -->
-    <xsl:if test="ancestor::book and ancestor::backmatter and (self::appendix or self::solutions) and not(following-sibling::appendix or following-sibling::solutions)">
-        <xsl:text>%&#xa;</xsl:text>
-        <xsl:text>\backmatter&#xa;</xsl:text>
-        <xsl:text>%&#xa;</xsl:text>
-    </xsl:if>
 </xsl:template>
 
 <!-- Information to console for latex run -->
