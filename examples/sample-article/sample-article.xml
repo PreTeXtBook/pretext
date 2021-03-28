@@ -11464,20 +11464,6 @@ the xsltproc executable.
                 </paragraphs>
             </appendix>
 
-            <!-- Bibliography/References can appear anywhere,  -->
-            <!-- but these are in the backmatter, hence global -->
-
-            <references xml:id="references-backmatter">
-                <title>References</title>
-
-                <biblio type="raw" xml:id="biblio-judson-AATA">Tom Judson, <title>Abstract Algebra: Theory and Applications</title>.
-                <note xml:id="note-judson-AATA"><p>Another online, open-source offering.</p></note>
-                </biblio>
-
-                <biblio type="raw" xml:id="biblio-lay-article">David C. Lay, <title>Subspaces and Echelon Forms</title>. <journal>The College Mathematics Journal</journal>, January 1993, <volume>24</volume> <number>1</number>, 57<ndash />62.</biblio>
-
-            </references>
-
             <appendix xml:id="references">
                 <title>Multiple References</title>
 
@@ -11501,6 +11487,20 @@ the xsltproc executable.
                     <biblio type="raw" xml:id="biblio-strang-article-tres">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash />855.</biblio>
                 </references>
              </appendix>
+
+            <!-- Bibliography/References can appear anywhere,  -->
+            <!-- but these are in the backmatter, hence global -->
+
+            <references xml:id="references-backmatter">
+                <title>References</title>
+
+                <biblio type="raw" xml:id="biblio-judson-AATA">Tom Judson, <title>Abstract Algebra: Theory and Applications</title>.
+                <note xml:id="note-judson-AATA"><p>Another online, open-source offering.</p></note>
+                </biblio>
+
+                <biblio type="raw" xml:id="biblio-lay-article">David C. Lay, <title>Subspaces and Echelon Forms</title>. <journal>The College Mathematics Journal</journal>, January 1993, <volume>24</volume> <number>1</number>, 57<ndash />62.</biblio>
+
+            </references>
 
             <index>
                 <title>Index</title>
