@@ -5865,6 +5865,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:if test="self::table or self::tabular">
                 <xsl:text> fixed-width</xsl:text>
             </xsl:if>
+            <!-- assumes "sbspanel" class set vertical direction -->
+            <!-- the CSS class equals the source attribute, but that may change -->
+            <xsl:choose>
+                <xsl:when test="$valign = 'top'">
+                    <xsl:text> top</xsl:text>
+                </xsl:when>
+                <xsl:when test="$valign = 'middle'">
+                    <xsl:text> middle</xsl:text>
+                </xsl:when>
+                <xsl:when test="$valign = 'bottom'">
+                    <xsl:text> bottom</xsl:text>
+                </xsl:when>
+            </xsl:choose>
         </xsl:attribute>
         <xsl:attribute name="style">
             <xsl:text>width:</xsl:text>
@@ -5873,20 +5886,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="left-margin"  select="$left-margin" />
                 <xsl:with-param name="right-margin" select="$right-margin" />
             </xsl:call-template>
-            <xsl:text>;</xsl:text>
-            <!-- assumes "sbspanel" class set vertical direction -->
-            <xsl:text>justify-content:</xsl:text>
-            <xsl:choose>
-                <xsl:when test="$valign = 'top'">
-                    <xsl:text>flex-start</xsl:text>
-                </xsl:when>
-                <xsl:when test="$valign = 'middle'">
-                    <xsl:text>center</xsl:text>
-                </xsl:when>
-                <xsl:when test="$valign = 'bottom'">
-                    <xsl:text>flex-end</xsl:text>
-                </xsl:when>
-            </xsl:choose>
             <xsl:text>;</xsl:text>
             <xsl:if test="$sbsdebug">
                 <xsl:text>box-sizing: border-box;</xsl:text>
