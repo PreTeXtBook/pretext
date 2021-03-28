@@ -3166,7 +3166,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Overall enclosing element -->
 <xsl:template match="paragraphs" mode="body-element">
-    <xsl:text>article</xsl:text>
+    <xsl:text>section</xsl:text>
 </xsl:template>
 
 <!-- And its CSS class -->
