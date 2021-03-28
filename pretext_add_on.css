@@ -114,6 +114,7 @@ so that we can set our own later */
 
 /* this > may be too restrictive.  The purpose is to not put a
    top margin on an article at the top of a knowl */
+/* delete the .paragraphs after 0.31 */
 .pretext-content section > article, .pretext-content .paragraphs > article {
     margin-top: 1.25em;
 }
@@ -717,6 +718,7 @@ body > a.assistive:focus {
     margin: 0;
 }
 
+/* delete the .paragraphs after 0.31 */
 .pretext-content .paragraphs .heading {
     display: inline;
 }
@@ -725,34 +727,22 @@ body > a.assistive:focus {
     display: inline;
 }
 
-/* obsolete once paragraph spacing refactored */
-/*
-.pretext-content .paragraphs .heading + p:after {
-    content: "";
-    display: block;
-    margin-bottom: 1.25em;
-}
-*/
-/*
-.pretext-content .paragraphs p:last-child::after {
-    margin-bottom: 0;
-}
-*/
-
-
 /* the next are to avoid styping a p as inline, because
  * inline styling messes up the meaning of line-height.
  * */
 
+/* delete the .paragraphs after 0.31 */
 .pretext-content .paragraphs p .title {
     font-family: "PT Serif", "Times New Roman", Times, serif;
     font-size: 1.125em;
     font-weight: 700;
 }
 
+/* can that happen?
 .pretext-content .paragraphs p .heading {
     display: inline;
 }
+*/
 
 .pretext-content section .paragraphs .heading {
     margin-top: 0;
@@ -762,7 +752,12 @@ body > a.assistive:focus {
     margin-top: 3em;
 }
 
-.pretext-content .sidebyside > p, .pretext-content .sidebyside > figure, .pretext-content .sidebyside > img, .pretext-content .sidebyside > table, .pretext-content .sidebyside > tabular, .pretext-content .sidebyside > .paragraphs {
+.pretext-content section section + section {
+    margin-top: 3em;
+}
+
+
+.pretext-content .sidebyside > p, .pretext-content .sidebyside > figure, .pretext-content .sidebyside > img, .pretext-content .sidebyside > table, .pretext-content .sidebyside > tabular, .pretext-content .sidebyside > section, .pretext-content .sidebyside > .paragraphs {
     display: inline-block;
     margin: 0;
 }
