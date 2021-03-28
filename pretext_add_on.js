@@ -626,6 +626,14 @@ function scaleWorkspaceIn(obj, subobj, scale, tmporfinal) {
         } else {
             this_work.classList.remove("squashed")
         }
+        if (tmporfinal == "final" && scale > 13) {
+            console.log("showing extra space");
+            var this_proportion_scaledX = 12*this_proportion_number;
+            this_work.style.background = "linear-gradient( #eef 0px, #eef " + this_proportion_scaledX + "px, #eef " + this_proportion_scaledX + "px, #99f " + (this_proportion_scaledX + 5) + "px, #99f " + (this_proportion_scaledX + 5) + "px, #99f 100%)";
+  //          this_work.style.background = "linear-gradient( #eef 0px, #eef 200px, #eef 200px, #99f 205px, #99f 205px, #99f 100%)";
+        } else {
+             this_work.style.background = null;
+        }
         if (tmporfinal == "final") {
             var enclosingspace = this_work.parentElement.parentElement;
             console.log("enclosingspace was", enclosingspace)
