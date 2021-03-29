@@ -688,7 +688,8 @@ function next_editable_of(obj, relationship) {
     console.log("finding", relationship, "editable of", obj);
     if (relationship == "children") {
  //       next_to_edit = $(obj).find('> .sidebyside > .sbsrow, > .sidebyside > .sbsrow > [data-editable], > li > [data-editable], > .heading > [data-editable], > [data-editable]')
-        next_to_edit = $(obj).find('> .sidebyside > .sbsrow, > li > [data-editable], > .heading > [data-editable], > [data-editable]')
+//        next_to_edit = $(obj).find('> .sidebyside > .sbsrow > [data-editable],  > .sbsrow > [data-editable],  > li > [data-editable], > .heading > [data-editable], > [data-editable]')
+        next_to_edit = $(obj).find('> .sidebyside > [data-editable],  > li > [data-editable], > .heading > [data-editable], > [data-editable]')
     } else if (relationship == "outer-block") {  // for example, a direct child of a section
         next_to_edit = $(obj).find(' > [data-editable]')
     } else if (relationship == "inner-block") {  // typically a paragraph
@@ -965,6 +966,7 @@ function edit_in_place(obj, oldornew) {
         var this_sbsrow = document.createElement('div');
         this_sbsrow.setAttribute('class', 'sbsrow');
         this_sbsrow.setAttribute('id', idOfSBSRow);
+        this_sbsrow.setAttribute('data-editable', "89");
         this_sbsrow.setAttribute('style', "margin-left:" + internalSource[idOfSBSRow]["margin-left"] + "%; margin-right:" + internalSource[idOfSBSRow]["margin-right"] + "%;");
 
         var idsOfSBSPanel = internalSource[idOfSBSRow]["content"]
@@ -2792,6 +2794,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                   if (dataEnv.startsWith("sbs")) {
                       console.log("added sbs, now add to it");
                       var first_panel_id = document.getElementById(new_obj_id).firstChild.firstChild.id;
+                      console.log("first_panel_id", first_panel_id, document.getElementById(first_panel_id));
                       make_current_editing_from_id(first_panel_id);
                       edit_menu_from_current_editing("entering");
                   }
