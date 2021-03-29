@@ -26,8 +26,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:exsl="http://exslt.org/common"
-    extension-element-prefixes="exsl"
+    extension-element-prefixes="pi exsl"
 >
 
 <!-- Get internal ID's for filenames, etc -->
@@ -46,11 +47,59 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Output LaTeX as text -->
 <xsl:output method="text" />
 
-<!-- Stylesheet is parametrized based on intended output   -->
-<!--   regular: PDF that can be cropped, manipulated, etc  -->
-<!--   braille: enhanced for dvisvgm, SVG to receive  BRF  -->
-<!-- 2020-10-20: 'braille' is not implemented              -->
-<xsl:param name="output-style" select="'regular'"/>
+<!-- Stylesheet is parametrized by format for output           -->
+<!--   latex:   for PDF to be cropped, manipulated, etc        -->
+<!--   tactile: placeholder rectangle for braille cells, meant -->
+<!--            to survive latex -> DVI, dvisvgm -> SVG        -->
+<xsl:param name="format" select="''"/>
+<xsl:variable name="outformat-entered">
+    <xsl:choose>
+        <xsl:when test="$format = 'latex'">
+            <xsl:text>latex</xsl:text>
+        </xsl:when>
+        <xsl:when test="$format = 'tactile'">
+            <xsl:text>tactile</xsl:text>
+        </xsl:when>
+        <!-- nothing, silently use default -->
+        <xsl:when test="$format = ''">
+            <xsl:text>latex</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:WARNING: the "extract-latex-image.xsl" stylesheet expects the "format" string parameter to be "latex" or "tactile", not "<xsl:value-of select="$format"/>".  The default will be used instead.</xsl:message>
+            <xsl:text>tactile</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- binary right now, so we can use a boolean -->
+<xsl:variable name="b-tactile" select="$outformat-entered = 'tactile'"/>
+
+
+<!-- Necessary to get braille'd labels, Grade 1 + Nemeth when labels    -->
+<!-- are meant to hold braille.  An empty string for the filename seems -->
+<!-- to silently execute/fail so this will not hold up use for the      -->
+<!-- case of LaTeX labels.  We perform a check in the entry template.   -->
+<xsl:param name="labelfile" select="''"/>
+<xsl:variable name="braille-labels"  select="document($labelfile)/pi:braille-labels"/>
+
+<!-- We refine the template for the document root so we get one    -->
+<!-- overall check on the necessity of a file of braille'd labels. -->
+<!-- And then resume extraction through the remainder              -->
+<xsl:template match="/pretext/*[not(self::docinfo)]" mode="extraction">
+    <xsl:choose>
+        <xsl:when test="$b-tactile">
+            <xsl:if test="$labelfile = ''">
+                <xsl:message terminate='yes'>PTX:ERROR:   the "extract-latex-image.xsl" stylesheet with braille labels, needs a file of the same, via the "labelfile" string parameter and it appears you have not supplied such a file.  Quitting...</xsl:message>
+            </xsl:if>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:if test="not($labelfile = '')">
+                <xsl:message>PTX:WARNING: the "extract-latex-image.xsl" stylesheet is ignoring your file of braille labels ("<xsl:value-of select="$labelfile"/>") since you did not elect a conversion with braille labels via the "format" string parameter.</xsl:message>
+            </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:apply-templates select="@*|node()" mode="extraction"/>
+</xsl:template>
+
 
 <!-- NB: Code between lines of hashes is cut/paste    -->
 <!-- from the LaTeX conversion.  Until we do a better -->
@@ -110,8 +159,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ######################################### -->
 
 
-<!-- latex graphics to standalone file        -->
-<!-- Intercept "extraction" process at identical template in -latex -->
+<!-- LaTeX graphics to a standalone file for subsequent processing.     -->
+<!-- Intercept "extraction" process in extract-identity.xsl stylesheet. -->
 <xsl:template match="image[latex-image]" mode="extraction">
     <xsl:variable name="filebase">
         <xsl:apply-templates select="." mode="visible-id" />
@@ -121,6 +170,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exsl:document href="{$filebase}.tex" method="text">
         <xsl:text>\documentclass[</xsl:text>
         <xsl:value-of select="$font-size" />
+        <!-- braille version goes to  dvisvgm  next -->
+        <xsl:if test="$b-tactile">
+            <xsl:text>,dvisvgm</xsl:text>
+        </xsl:if>
         <xsl:text>]{</xsl:text>
         <xsl:value-of select="$document-class-prefix" />
         <xsl:text>article}&#xa;</xsl:text>
@@ -176,17 +229,46 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (a script) specifies output for use with braille we will create a  -->
 <!-- sequence of braille-cell sized rectangles to make space for BRF    -->
 <!-- that will be printed/embossed as braille cells.                    -->
-<!-- (No implementation yet.)                                           -->
 <xsl:template match="label">
     <xsl:choose>
-        <xsl:when test="$output-style = 'regular'">
+        <xsl:when test="$b-tactile">
+            <xsl:apply-templates select="." mode="braille-spacing"/>
+        </xsl:when>
+        <xsl:otherwise>
             <xsl:apply-imports/>
-        </xsl:when>
-        <xsl:when test="$output-style = 'braille'">
-            <xsl:message terminate="yes">'braille' option for latex-image extraction stylesheet is not implemented</xsl:message>
-        </xsl:when>
-        <xsl:otherwise/>  <!-- warning? sanitize above? -->
+        </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<xsl:template match="label" mode="braille-spacing">
+    <!-- All in mm -->
+    <!-- experimental from 6-cell label, spec might be 6.1mm -->
+    <xsl:variable name="cell-width" select="number(6.35)"/>
+    <!-- 6.5mm bounding height, plus 0.3125mm gap * 2 -->
+    <xsl:variable name="cell-height" select="number(7.125)"/>
+    <xsl:variable name="id">
+         <xsl:apply-templates select="." mode="visible-id"/>
+    </xsl:variable>
+    <xsl:variable name="label" select="$braille-labels/pi:braille-label[@id = $id]"/>
+    <xsl:variable name="label-count" select="string-length($label)"/>
+    <xsl:variable name="label-width" select="$label-count * $cell-width"/>
+    <xsl:text>\node [</xsl:text>
+    <xsl:value-of select="@direction"/>
+    <xsl:text>] at (</xsl:text>
+    <xsl:value-of select="@location"/>
+    <xsl:text>) {</xsl:text>
+    <xsl:text>\special{dvisvgm:raw &lt;g class="PTX-rectangle" id="</xsl:text>
+    <xsl:value-of select="$id"/>
+    <xsl:text>"&gt;}</xsl:text>
+    <xsl:text>\rule{</xsl:text>
+    <xsl:value-of select="$label-width"/>
+    <xsl:text>mm</xsl:text>
+    <xsl:text>}{</xsl:text>
+    <xsl:value-of select="$cell-height"/>
+    <xsl:text>mm</xsl:text>
+    <xsl:text>}</xsl:text>
+    <xsl:text>\special{dvisvgm:raw &lt;/g&gt;}</xsl:text>
+    <xsl:text>};&#xa;</xsl:text>    <!-- FINISH tikz node -->
 </xsl:template>
 
 </xsl:stylesheet>
