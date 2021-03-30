@@ -1100,6 +1100,7 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
 
     # parse source, no harm to assume
     # xinclude modularization is necessary
+    # NB: see general  "xsltproc()"  for construction of a HUGE parser
     src_tree = ET.parse(xml)
     src_tree.xinclude()
 
@@ -1555,9 +1556,13 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
     # but the values need to be prepped for lxml use, always
     stringparams = {key:ET.XSLT.strparam(value) for (key, value) in stringparams.items()}
 
-    # parse source, no harm to assume
-    # xinclude modularization is necessary
-    src_tree = ET.parse(xml)
+    # Parse source, no harm to assume
+    # xinclude modularization is necessary.
+    # We build a custom parser without limitations
+    # Seems a depth of 256 was exceeded for an SVG image:
+    # lxml.etree.XMLSyntaxError: Excessive depth in document: 256 use XML_PARSE_HUGE option
+    huge_parser = ET.XMLParser(huge_tree=True)
+    src_tree = ET.parse(xml, parser=huge_parser)
     src_tree.xinclude()
 
     # parse xsl, and build a transformation object
