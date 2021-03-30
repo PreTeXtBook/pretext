@@ -70,12 +70,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='chapter'>Capitolo</localization>
     <localization string-id='appendix'>Appendice</localization>
     <!-- Next is the plural of Appendix, used to identify a group of appendix -->
-    <!-- <localization string-id='appendices'>Appendices</localization> -->
+    <localization string-id='appendices'>Appendici</localization>
     <localization string-id='section'>Paragrafo</localization>
     <localization string-id='subsection'>Sottoparagrafo</localization>
     <localization string-id='subsubsection'>Sotto-sottoparagrafo</localization>
     <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
-    <!-- <localization string-id='slide'>Slide</localization> -->
+    <localization string-id='slide'>Diapositiva</localization>
     <localization string-id='introduction'>Introduzione</localization>
     <localization string-id='conclusion'>Conclusione</localization>
     <localization string-id='exercises'>Esercizi</localization>
