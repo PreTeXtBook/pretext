@@ -308,6 +308,131 @@ def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, data_
                 subprocess.call(eps_cmd)
                 shutil.copy2(latex_image_eps, dest_dir)
 
+
+#######################
+#
+#  LaTeX Tactile Images
+#
+#######################
+
+def latex_tactile_image_conversion(xml_source, pub_file, stringparams, data_dir, dest_dir, outformat):
+    import os # .chdir()
+    import os.path # join()
+    import subprocess # run() is Python 3.5 (run() is preferable to call())
+    import lxml.etree as ET
+
+    # Outline:
+    #   1.  Locate, isolate, convert math to Unicode braille
+    #   2.  Locate, isolate labels in images, replace math
+    #   3.  Translate labels to Grade 1 + Nemeth, save as XML
+    #   for each image:
+    #     4.  Locate, isolate in TeX file, replace label by exact space for labels' cells
+    #     5.  Process with "latex" to a DVI file
+    #     6.  Process DVI file with  dvisvgm  to make a structured SVG
+    #     7.  Process with XSL to insert braille and other modifications
+
+    # NB: latex (in (5)) and dvisvgm (in (6)) are hard-coded
+
+    _verbose('converting latex-image from {} to {} graphics for placement in {}'.format(xml_source, outformat, dest_dir))
+    # for killing output
+    devnull = open(os.devnull, 'w')
+    tmp_dir = get_temporary_directory()
+    _debug("temporary directory for latex-image tactile graphics: {}".format(tmp_dir))
+    ptx_xsl_dir = get_ptx_xsl_path()
+
+    # 1. Create an XML file of Nemeth representations for entire
+    # document, which will include any math in a label (overkill)
+    math_file = os.path.join(tmp_dir, 'math-representations.xml')
+    mathjax_latex(xml_source, pub_file, math_file, tmp_dir, 'nemeth')
+
+    # 2. Extract labels themselves and replace math bits by Nemeth from (1)
+    # support publisher file, but not subtree argument
+    if pub_file:
+        stringparams['publisher'] = pub_file
+    # Pass the just-created math representation file
+    stringparams['mathfile'] = math_file
+    _verbose('string parameters passed to label extraction stylesheet: {}'.format(stringparams))
+    label_file = os.path.join(tmp_dir, 'latex-image-labels.xml')
+    extraction_xslt = os.path.join(ptx_xsl_dir, 'support', 'extract-latex-image-labels.xsl')
+    # Output is a single file, whose name includes the temporary directory
+    xsltproc(extraction_xslt, xml_source, label_file, None, stringparams)
+
+    # 3. Read all the labels that are a mix of text and Unicode for the math.
+    # Convert each one into ASCII/BRF using the liblouis  lou_translate  tool.
+    # Save into an XML file.
+    label_tree = ET.parse(label_file)
+    label_tree.xinclude()
+    NSMAP = {"pi" : "http://pretextbook.org/2020/pretext/internal"}
+    # Grab internal label elements from label file
+    labels = label_tree.xpath('/pi:latex-image-labels/pi:latex-image-label', namespaces=NSMAP)
+    # initiate XML structure to hold braille labels
+    root = ET.Element('{http://pretextbook.org/2020/pretext/internal}braille-labels', nsmap=NSMAP)
+    # Unicode braille gets translated to ASCII automatically
+    # Convert the remainder to Grade 1
+    liblouis_cmd = ['lou_translate','--forward', 'en-us-g1.ctb']
+    for alabel in labels:
+        # Following is from Python 3.5 documentation
+        # input is basically piped to stdin, which is how lou_translate functions
+        # Setting stdout is necessary and sufficient
+        # universal_newlines is necessary to treat input and output as strings, not byte sequences
+        # may need  to replace universal_newlines by text=True  in later versions
+        result = subprocess.run(liblouis_cmd, input=alabel.text, stdout=subprocess.PIPE, universal_newlines=True)
+        label_element = ET.Element('{http://pretextbook.org/2020/pretext/internal}braille-label', id=alabel.get('id'))
+        label_element.text = result.stdout
+        root.append(label_element)
+    # output the constructed XML full of BRF labels
+    braille_label_file = os.path.join(tmp_dir, 'braille-labels.xml')
+    with open(braille_label_file, 'wb') as bf:
+        bf.write( ET.tostring(root, pretty_print=True, encoding="utf-8", xml_declaration=True) )
+
+    # 4.  Convert each  latex-image  into its own *.tex file, but with a
+    # parameter to the standard stylesheet, have labels replaced by a LaTeX
+    # \rule{}{} that simply creates space for TikZ to place carefully
+    _verbose('applying latex-image-extraction stylesheet with tactile option')
+    extraction_params = stringparams
+    extraction_params['format'] = 'tactile'
+    extraction_params['labelfile'] = braille_label_file
+    extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-latex-image.xsl')
+    # Output is multiple *.tex files
+    xsltproc(extraction_xslt, xml_source, None, tmp_dir, extraction_params)
+
+    # now work in temporary directory for latex runs
+    os.chdir(tmp_dir)
+    # files *only*, from top-level
+    files = list(filter(os.path.isfile, os.listdir(tmp_dir)))
+    for latex_image in files:
+        filebase, extension = os.path.splitext(latex_image)
+        # avoid some XML files left around
+        if extension == '.tex':
+            latex_image_dvi = "{}.dvi".format(filebase)
+            latex_image_svg = "{}.svg".format(filebase)
+
+            # 5. Process to DVI with old-school LaTeX
+            _verbose("converting {} to {}".format(latex_image, latex_image_dvi))
+            latex_cmd = ['latex', "-interaction=batchmode", latex_image]
+            subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+            if not os.path.exists(latex_image_dvi):
+                print('PTX:ERROR: There was a problem compiling {}, so {} was not created'.format(latex_image, latex_image_dvi))
+
+            # 6. Process to SVG with  dvisvgm  utility
+            _verbose("converting {} to {}".format(latex_image_dvi, latex_image_svg))
+            divsvgm_cmd = ['dvisvgm', latex_image_dvi]
+            subprocess.call(divsvgm_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+            if not os.path.exists(latex_image_svg):
+                print('PTX:ERROR: There was a problem processing {}, so {} was not created'.format(latex_image, latex_image_svg))
+
+            # 7.  Place the label content as SVG "text" elements using SVG
+            # rectangles as the guide to placement, via an XSL stylesheet
+            _verbose('applying latex-image-extraction stylesheet with tactile option')
+            manipulation_params = stringparams
+            manipulation_params['labelfile'] = braille_label_file
+            manipulation_params['rectangles'] = 'no'
+            svg_source = os.path.join(tmp_dir, latex_image_svg)
+            svg_result = os.path.join(dest_dir, latex_image_svg)
+            manipulation_xslt = os.path.join(ptx_xsl_dir, 'support', 'tactile-svg.xsl')
+            xsltproc(manipulation_xslt, svg_source, svg_result, None, manipulation_params)
+
+
 ################################
 #
 #  WeBWorK Extraction Processing
