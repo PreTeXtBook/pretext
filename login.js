@@ -93,6 +93,25 @@ function login_form(mode="login") {
   theform.innerHTML = the_form;
 }
 
+function survey_form(surveylink) {
+    var the_form = "";
+
+/*    the_form += '<div id="theloginform" class="modal login">';
+*/
+    the_form += '<div class="modal-content">';
+    the_form += '<p class="instructions">Can you take a brief survey<br>about your use of this book?</p>';
+    the_form += '<button class="surveyresponse" id="takesurvey">Yes, I can take the survey<br>(opens new window)</button>';
+    the_form += '<button class="surveyresponse" id="remindlater">Not now.  Please remind me later.</button>';
+    the_form += '</div>\n';
+  
+  theform = document.createElement('div');
+  theform.id = "the" + "survey" + "form";
+  theform.className = "modal survey";
+  document.body.appendChild(theform);
+  theform.innerHTML = the_form;
+}
+
+
 function loadScript(script) {
   if (typeof js_version === 'undefined') { js_version = '0.12' }
   var newscript = document.createElement('script');
@@ -296,6 +315,6 @@ if (pageIdentifier) {
 } else {
     console.log("login not enabled because document not identified")
 }
-    console.log("the role", role);
+ //   console.log("the role", role);
 });
 

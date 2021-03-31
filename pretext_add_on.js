@@ -531,17 +531,109 @@ var newscript = document.createElement('script');
 });
 
 
+/* next two are temporary hacks for the survey experiment */
+function loadScriptX(script) {
+  if (typeof js_version === 'undefined') { js_version = '0.13' }
+  var newscript = document.createElement('script');
+  newscript.type = 'text/javascript';
+//  newscript.async = true;
+  newscript.src = 'https://pretextbook.org/js/' + js_version + '/' + script + '.js';
+  var allscripts = document.getElementsByTagName('script');
+  var s = allscripts[allscripts.length - 1];
+  console.log('s',s);
+  console.log("adding a script", newscript);
+  s.parentNode.insertBefore(newscript, s.nextSibling);
+}
+function loadLinkX(link) {
+  if (typeof css_version === 'undefined') { css_version = '0.31' }
+  var newlink = document.createElement('link');
+  newlink.type = 'text/css';
+  newlink.rel = 'stylesheet';
+  newlink.href = 'https://pretextbook.org/css/' + css_version + '/' + link + '.css';
+  var alllinks = document.getElementsByTagName('link');
+  var s = alllinks[alllinks.length - 1];
+  console.log('s',s);
+  console.log("adding a links", newlink);
+  s.parentNode.insertBefore(newlink, s.nextSibling);
+}
+function loadResource(type, file) {
+  /* type should be js or css */
+  if (typeof js_version === 'undefined') { js_version = '0.13' }
+  if (typeof css_version === 'undefined') { css_version = '0.31' }
+  var newresource, allresources, s;
+  if (type == "css") {
+      newresource = document.createElement('link');
+      newresource.type = 'text/css';
+      newresource.rel = 'stylesheet';
+      newresource.href = 'https://pretextbook.org/css/' + css_version + '/' + file + '.css';
+      allresources = document.getElementsByTagName('link');
+  } else if (type == "js") {
+      newresource = document.createElement('script');
+      newresource.type = 'text/javascript';
+//  newscript.async = true;
+      newresource.src = 'https://pretextbook.org/js/' + js_version + '/' + script + '.js';
+      allresources = document.getElementsByTagName('script');
+  }
+  var s = allresources[allresources.length - 1];
+  console.log('s',s);
+  console.log("adding a resource", newresource);
+  s.parentNode.insertBefore(newresource, s.nextSibling);
+}
+
+
 window.addEventListener("load",function(event) {
        if($('body').attr('id') == "levin-DMOI") {
            console.log("            found DMOI");
            if (typeof uname === "undefined") { uname = "" }
            console.log("aaaa", uname, "  uname");
            if(uname == "editor") {
-                loadScript('edit');
+                loadScriptX('edit');
            } else {
                 console.log("not enabling editing")
            }
-}});
+        } else if ($('body').attr('id') == "pugetsound-SW") {
+/* a bunch of temporary exploration for a Sound Writing survey */
+            console.log("please take our survey");
+console.log(window.location.href);
+console.log(window.location.href.includes("soundwriting.pugetsound"));
+
+loadResource("js", "login");
+loadResource("css", "features");
+setTimeout( loadResource("js", "survey"), 1000);  /* I know: sloppy */
+
+/*
+
+var sw_didsurvey = readCookie('sw_didsurvey');
+if (sw_didsurvey) {
+    console.log("no need to remind, because survey was done")
+} else {
+    var sw_reminder = readCookie('sw_reminder');
+    if (sw_reminder) {
+        console.log("will remind later", sw_reminder)
+    } else {
+       survey_form("url goes here");
+       console.log(" need a popup to offer survey ");
+    $("#takesurvey").click(function(){
+    $("#thesurveyform").css('display','none');
+    console.log("open survey window");
+    window.open("https://SURVEYGOESHERE");
+    createCookie('sw_didsurvey',"survey opened",0)
+    console.log("set 'did it' cookie");
+    });
+    $("#remindlater").click(function(){
+    $("#thesurveyform").css('display','none');
+    console.log("set 'remind later' cookie");
+    createCookie('sw_reminder',"please laterrr",0.5)
+    console.log("set cookie");
+    });
+
+
+    }
+}
+ */
+}
+
+});
 
 // this is to open every knowl on a page
 // (this code is not actually used anywhere)
