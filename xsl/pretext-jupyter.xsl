@@ -95,6 +95,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <xsl:message>S:<xsl:value-of select="local-name(.)" />:S</xsl:message> -->
     <xsl:apply-templates select="." mode="pretext-heading" />
     <xsl:apply-templates />
+    <!-- A worksheet is always a leaf of the gross document structure, as -->
+    <!-- a specialized division, but we would always like to have them as -->
+    <!-- standalone worksheets, not matter the chunking level in effect.  -->
+    <xsl:if test="self::worksheet">
+        <xsl:apply-templates select="." mode="standalone-worksheet"/>
+    </xsl:if>
 </xsl:template>
 
 <!-- Some structural nodes do not need their title,                -->
@@ -177,14 +183,44 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*"/>
 </xsl:template>
 
+<!-- We manufacture a single (additional?) notebook for each worksheet, -->
+<!-- irrespective of the chunking in effect.  The standalone version is -->
+<!-- identical to a version produced by chunking, but the metadata will -->
+<!-- contain different filenames.                                       -->
+<xsl:template match="worksheet" mode="standalone-worksheet">
+    <xsl:variable name="worksheet-filename">
+        <xsl:apply-templates select="." mode="visible-id"/>
+        <xsl:text>-standalone.ipynb</xsl:text>
+    </xsl:variable>
+    <xsl:apply-templates select="." mode="file-wrap">
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="." mode="pretext-heading"/>
+            <xsl:apply-templates select="*"/>
+        </xsl:with-param>
+        <xsl:with-param name="filename" select="$worksheet-filename"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+
+<!-- ############## -->
 <!-- File Structure -->
+<!-- ############## -->
+
 <!-- Gross structure of a Jupyter notebook -->
 <!-- TODO: need to make a "simple file wrap" template?  Or just call this?-->
 <xsl:template match="*" mode="file-wrap">
     <xsl:param name="content" />
+    <xsl:param name="filename" select="''"/>
     <!--  -->
-    <xsl:variable name="filename">
-        <xsl:apply-templates select="." mode="containing-filename" />
+    <xsl:variable name="the-filename">
+        <xsl:choose>
+            <xsl:when test="not($filename = '')">
+                <xsl:value-of select="$filename"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="containing-filename" />
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:variable>
     <xsl:variable name="cell-list">
         <!-- a code cell for reader to load CSS -->
@@ -196,7 +232,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- the real content of the page -->
         <xsl:copy-of select="$content" />
     </xsl:variable>
-    <exsl:document href="{$filename}" method="text">
+    <exsl:document href="{$the-filename}" method="text">
         <!-- <xsl:call-template name="converter-blurb-html" /> -->
         <!-- begin outermost group -->
         <xsl:text>{&#xa;</xsl:text>
@@ -270,7 +306,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>"version": "3.6.4"</xsl:text>
         <xsl:text>}, </xsl:text>
         <xsl:text>"name": "</xsl:text>
-        <xsl:value-of select="$filename" />
+        <xsl:value-of select="$the-filename" />
         <xsl:text>"</xsl:text>
         <xsl:text>}&#xa;</xsl:text>
         <!-- end outermost group -->
