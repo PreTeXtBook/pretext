@@ -3575,35 +3575,35 @@ the xsltproc executable.
 
                                 \draw [->]  (negative-x-axis) -- (positive-x-axis);
                                 \draw [->]  (negative-y-axis) -- (positive-y-axis);
-                                <label xml:id="origin" location="origin" direction="below right"><m>0</m></label>
-                                <label xml:id="posx" location="positive-x-axis" direction="above"><m>x</m>-axis</label>
-                                <label xml:id="posy" location="positive-y-axis" direction="right"><m>y</m>-axis</label>
+                                <label xml:id="origin" location="origin" direction="southeast"><m>0</m></label>
+                                <label xml:id="posx" location="positive-x-axis" direction="north"><m>x</m>-axis</label>
+                                <label xml:id="posy" location="positive-y-axis" direction="east"><m>y</m>-axis</label>
 
                             \draw (origin) circle (1);
 
                                     \filldraw[fill=black, draw=black] (zero)   circle (\pointsize);
-                                    <label xml:id="power-zero" location="zero" direction="below right"><m>1</m></label>
+                                    <label xml:id="power-zero" location="zero" direction="southeast"><m>1</m></label>
 
                                     \filldraw[fill=black, draw=black] (one)    circle (\pointsize);
-                                    <label xml:id="power-one" location="one" direction="above right"><m>\omega</m></label>
+                                    <label xml:id="power-one" location="one" direction="northeast"><m>\omega</m></label>
 
                                     \filldraw[fill=black, draw=black] (two)    circle (\pointsize);
-                                    <label xml:id="power-two" location="two" direction="above right"><m>i</m></label>
+                                    <label xml:id="power-two" location="two" direction="northeast"><m>i</m></label>
 
                                     \filldraw[fill=black, draw=black] (three)  circle (\pointsize);
-                                    <label xml:id="power-three" location="three" direction="above left"><m>\omega^3</m></label>
+                                    <label xml:id="power-three" location="three" direction="northwest"><m>\omega^3</m></label>
 
                                     \filldraw[fill=black, draw=black] (four)    circle (\pointsize);
-                                    <label xml:id="power-four" location="four" direction="below left"><m>-1</m></label>
+                                    <label xml:id="power-four" location="four" direction="southwest"><m>-1</m></label>
 
                                     \filldraw[fill=black, draw=black] (five)   circle (\pointsize);
-                                    <label xml:id="power-five" location="five" direction="below left"><m>\omega^5</m></label>
+                                    <label xml:id="power-five" location="five" direction="southwest"><m>\omega^5</m></label>
 
                                     \filldraw[fill=black, draw=black] (six)    circle (\pointsize);
-                                    <label xml:id="power-six" location="six" direction="below right"><m>-i</m></label>
+                                    <label xml:id="power-six" location="six" direction="southeast"><m>-i</m></label>
 
                                     \filldraw[fill=black, draw=black] (seven)  circle (\pointsize);
-                                    <label xml:id="power-seven" location="seven" direction="below right"><m>\omega^7</m></label>
+                                    <label xml:id="power-seven" location="seven" direction="southeast"><m>\omega^7</m></label>
                         \end{tikzpicture}
                         </latex-image>
                     </image>

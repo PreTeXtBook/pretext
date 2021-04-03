@@ -8995,11 +8995,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
-<!-- This is producing TikZ code, so will not be effective in any sort    -->
-<!-- of "LaTeX image" scenario.  Thus the experimental designation above. -->
+<!-- This is producing TikZ code, so will not be effective in all poassible -->
+<!-- "LaTeX image" scenarios.  Thus the experimental designation above.     -->
 <xsl:template match="label">
     <xsl:text>\node [</xsl:text>
-    <xsl:value-of select="@direction"/>
+    <xsl:apply-templates select="@direction" mode="tikz-direction"/>
     <xsl:text>] at (</xsl:text>
     <xsl:value-of select="@location"/>
     <xsl:text>) {</xsl:text>
@@ -9007,6 +9007,55 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- like contents of a paragraph     -->
     <xsl:apply-templates/>
     <xsl:text>};</xsl:text>
+</xsl:template>
+
+<!-- We translate PreTeXt directions from an 8-wind compass rose into -->
+<!-- TikZ shorthand for anchors.  TikZ places a node by placing the   -->
+<!-- node's center onto a specific point.  Instead, you can specify   -->
+<!-- a location around the perimeter of the node to be an "anchor"    -->
+<!-- instead.  Choosing a "south" anchor would place the label        -->
+<!-- *above* the point.                                               -->
+<!--                                                                  -->
+<!-- 1.  PreTeXt uses compass directions, which we can refine later   -->
+<!-- into more (sub)directions.                                       -->
+<!--                                                                  -->
+<!-- 2.  TikZ shorthand (e.g. "below right") allow the specification  -->
+<!-- of an offset (e.g. below right=20) which we should find useful   -->
+<!-- internally, and perhaps useful as author markup later.           -->
+<xsl:template match="@direction" mode="tikz-direction">
+    <xsl:choose>
+        <xsl:when test=". = 'north'">
+            <xsl:text>above</xsl:text>
+        </xsl:when>
+        <xsl:when test=". = 'northeast'">
+            <xsl:text>above right</xsl:text>
+        </xsl:when>
+        <xsl:when test=". = 'east'">
+            <xsl:text>right</xsl:text>
+        </xsl:when>
+        <xsl:when test=". = 'southeast'">
+            <xsl:text>below right</xsl:text>
+        </xsl:when>
+        <xsl:when test=". = 'south'">
+            <xsl:text>below</xsl:text>
+        </xsl:when>
+        <xsl:when test=". = 'southwest'">
+            <xsl:text>below left</xsl:text>
+        </xsl:when>
+        <xsl:when test=". = 'west'">
+            <xsl:text>left</xsl:text>
+        </xsl:when>
+        <xsl:when test=". = 'northwest'">
+            <xsl:text>above left</xsl:text>
+        </xsl:when>
+        <!-- this will allow tikz to continue, but perhaps incorrectly -->
+        <!-- schema should catch incorrect values                      -->
+        <xsl:otherwise>
+            <xsl:text>above</xsl:text>
+            <xsl:message>PTX:ERROR:   a label @direction ("<xsl:value-of select="."/>") is not recognized, using "above" as a default</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- EXPERIMENTAL -->

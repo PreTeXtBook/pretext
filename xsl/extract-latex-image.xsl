@@ -253,8 +253,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="label-count" select="string-length($label)"/>
     <xsl:variable name="label-width" select="$label-count * $cell-width"/>
     <xsl:text>\node [</xsl:text>
-    <xsl:value-of select="@direction"/>
+    <!-- convert PreTeXt compass directions to TikZ anchor -->
+    <!-- shorthand (template resides in pretext-latex.xsl) -->
+    <xsl:apply-templates select="@direction" mode="tikz-direction"/>
+    <!-- could apply/interpret an @offset here, e.g."=10"  -->
     <xsl:text>] at (</xsl:text>
+    <!-- a shift can prefix this coordinate, augmenting, -->
+    <!-- or replacing, the direction/anchor option prior -->
     <xsl:value-of select="@location"/>
     <xsl:text>) {</xsl:text>
     <xsl:text>\special{dvisvgm:raw &lt;g class="PTX-rectangle" id="</xsl:text>
