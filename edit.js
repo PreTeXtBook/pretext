@@ -4,7 +4,26 @@ objectStructure = {
     "html": {
         "tag": "h6",
         "cssclass": "heading",
-        "pieces": ["type", "space", "codenumber", "period",  "space", "title"]
+        "pieces": ["type", "space", "codenumber", "period",  "space"]
+    }
+  },
+  "section_like_heading": {
+    "html": {
+        "tag": "h2",
+        "cssclass": "heading hide-type",
+        "pieces": ["type", "codenumber", "title"]
+    }
+  },
+
+  "section": {
+    "html": {
+        "tag": "section",
+        "cssclass": "section",
+        "pieces": ["heading", "content"],
+        "heading": "section_like_heading"
+    },
+    "ptx": {
+        "pieces": ["title", "content"]
     }
   },
 
@@ -24,15 +43,76 @@ objectStructure = {
     "parent": "definition_like",
     "html": {
         "csssubclass": "definition",  /* has to be a different key, because we merge dictionaries */
-        "data_editable": "95"
+        "data_editable": "950"
     },
     "ptx": {
          "tag": "definition"
+    }
+  },
+  "conjecture": {
+    "parent": "definition_like",
+    "html": {
+        "csssubclass": "conjecture",
+        "data_editable": "951"
+    },
+    "ptx": {
+         "tag": "conjecture"
+    }
+  },
+  "axiom": {
+    "parent": "definition_like",
+    "html": {
+        "csssubclass": "axiom",  
+        "data_editable": "952"
+    },
+    "ptx": {
+         "tag": "axiom"
+    }
+  },
+  "principle": {
+    "parent": "definition_like",
+    "html": {
+        "csssubclass": "principle",  
+        "data_editable": "953"
+    },
+    "ptx": {
+         "tag": "principle"
+    }
+  },
+  "heuristic": {
+    "parent": "definition_like",
+    "html": {
+        "csssubclass": "heuristic",  
+        "data_editable": "954"
+    },
+    "ptx": {
+         "tag": "heuristic"
+    }
+  },
+  "hypothesis": {
+    "parent": "definition_like",
+    "html": {
+        "csssubclass": "hypothesis",  
+        "data_editable": "955"
+    },
+    "ptx": {
+         "tag": "hypothesis"
+    }
+  },
+  "assumption": {
+    "parent": "definition_like",
+    "html": {
+        "csssubclass": "assumption",  
+        "data_editable": "956"
+    },
+    "ptx": {
+         "tag": "assumption"
     }
   }
 }
 
 function content_from_source(name, src) {
+    console.log("     content_from_source src", src);
     var content;
 
     if (name == "space") { content = " " }
@@ -40,7 +120,7 @@ function content_from_source(name, src) {
     if (name == "title") { content = src.title }
     if (name == "codenumber") { content = "NN" }
     if (name == "type") { 
-        var content_raw = "definiTION";
+        var content_raw = src["ptxtag"];
         content = content_raw.charAt(0).toUpperCase() + content_raw.slice(1);
     }
 
@@ -697,6 +777,7 @@ function edit_menu_for(this_obj_or_id, motion) {
             edit_option.setAttribute('data-location', 'inline');
         } else {
             if (next_editable_of(this_obj, "children").length) {
+                console.log("this_obj", this_obj);
                 edit_option.innerHTML = "<b>enter</b> this " + internalSource[this_obj.id]["ptxtag"] + ", or add near here?";
             } else {
                 edit_option.innerHTML = "<b>edit</b> this paragraph, or add near here?";
@@ -2084,26 +2165,61 @@ function html_from_internal_id(the_id, is_inner) {
                editing_container_for["exercise-like"].includes(ptxtag) ||
                editing_container_for["section-like"].includes(ptxtag)) {
 
-      if (ptxtag == "definition") {
+      if (true || ptxtag == "definition") {
         thestructure = objectStructure[ptxtag];
         theparentstructure = objectStructure[thestructure.parent];
-        thehtmltitlestructure = objectStructure[theparentstructure.html.heading];
         thehtmlstructure = Object.assign({}, theparentstructure.html, thestructure.html);
         console.log(" ");
         console.log("thehtmlstructure", thehtmlstructure);
-        console.log("thehtmltitlestructure", thehtmltitlestructure);
         console.log("subclass", thehtmlstructure.csssubclass);
         console.log("class", thehtmlstructure.cssclass);
 
         object_in_html = document.createElement(thehtmlstructure.tag);
+        object_in_html.setAttribute("id", the_id);
         object_in_html.setAttribute("class", thehtmlstructure.cssclass + " " + thehtmlstructure.subclass);
         object_in_html.setAttribute("tabindex", -1);
         object_in_html.setAttribute("data-editable", thehtmlstructure.data_editable);
 
-        // no make the heading anc contents, to insert into object_in_html
-        
+        var object_html_pieces = thehtmlstructure.pieces;
+        // typically heading and contents
+        var object_html_pieces_html = {};
+        for (var j=0; j < object_html_pieces.length; ++j) {
+            var this_piece_html = "";
+            var piece_type = object_html_pieces[j];
+            if (piece_type == "heading") {
+                thehtmltitlestructure = objectStructure[theparentstructure.html.heading];
+                this_piece_html = '<' + thehtmltitlestructure.html.tag;
+                this_piece_html += ' class="' + thehtmltitlestructure.html.cssclass + '"';
+     // why data-parent_id, instead of looking up the tree to find the parent?
+                this_piece_html += ' data-parent_id="' + the_id + '"';
+                this_piece_html += '>';
+                heading_pieces = thehtmltitlestructure.html.pieces;
+                for (var k=0; k < heading_pieces.length; ++k) {
+                    piece_name = heading_pieces[k];
+                    this_piece_html += '<span';
+                    this_piece_html += ' class="' + piece_name + '">' + content_from_source(piece_name, the_object);
+                    this_piece_html += '</span>';
+                }
+                this_piece_html += '</' + thehtmltitlestructure.html.tag + ">";
+            } else if (["statement", "contents"].includes(piece_type)) {
+                var object_statement = the_object[piece_type];
 
-    //    object_heading_html = "TMP placeholder";
+                this_piece_html =  expand_condensed_source_html(object_statement);
+                console.log("statement statement is", this_piece_html);
+            }
+        object_html_pieces_html[piece_type] = this_piece_html
+        }
+
+        object_all_contents_html = "";
+        for (var j=0; j < object_html_pieces.length; ++j) {
+            var piece_type = object_html_pieces[j];
+            object_all_contents_html += object_html_pieces_html[piece_type]
+        }
+//        object_in_html.innerHTML = object_heading_html + object_statement_html;
+        object_in_html.innerHTML = object_all_contents_html;
+
+        the_html_objects.push(object_in_html)
+/*
         object_heading_html = '<' + thehtmltitlestructure.html.tag;
         object_heading_html += ' class="' + thehtmltitlestructure.html.cssclass + '"';
         object_heading_html += ' data-parent_id="' + the_id + '"';
@@ -2116,6 +2232,7 @@ function html_from_internal_id(the_id, is_inner) {
             object_heading_html += '</span>';
         }
         object_heading_html += '</' + thehtmltitlestructure.html.tag + ">";
+*/
 
 /*
         object_heading_html += ' class="heading" data-parent_id="' + the_id + '">';
@@ -2125,6 +2242,8 @@ function html_from_internal_id(the_id, is_inner) {
         object_heading_html += '<span class="codenumber">' + "#N" + '</span>';
 */
 
+/*
+
         var object_statement_ptx = the_object["statement"];
 
         object_statement_html =  expand_condensed_source_html(object_statement_ptx);
@@ -2133,6 +2252,7 @@ function html_from_internal_id(the_id, is_inner) {
         object_in_html.innerHTML = object_heading_html + object_statement_html;
 
         the_html_objects.push(object_in_html);
+*/
 
 
       } else {
