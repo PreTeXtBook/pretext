@@ -1,4 +1,54 @@
 
+objectStructure = {
+  "theorem_like_heading": {
+    "html": {
+        "tag": "h6",
+        "cssclass": "heading",
+        "pieces": ["type", "space", "codenumber", "period",  "space", "title"]
+    }
+  },
+
+  "definition_like": {
+    "html": {
+        "tag": "article",
+        "cssclass": "definition-like",
+        "pieces": ["heading", "statement"],
+        "heading": "theorem_like_heading"
+    },
+    "ptx": {
+        "pieces": ["title", "statement"]
+    }
+  },
+
+  "definition": {
+    "parent": "definition_like",
+    "html": {
+        "csssubclass": "definition",  /* has to be a different key, because we merge dictionaries */
+        "data_editable": "95"
+    },
+    "ptx": {
+         "tag": "definition"
+    }
+  }
+}
+
+function content_from_source(name, src) {
+    var content;
+
+    if (name == "space") { content = " " }
+    if (name == "period") { content = "." }
+    if (name == "title") { content = src.title }
+    if (name == "codenumber") { content = "NN" }
+    if (name == "type") { 
+        var content_raw = "definiTION";
+        content = content_raw.charAt(0).toUpperCase() + content_raw.slice(1);
+    }
+
+    return content
+}
+
+
+
 /* preliminary hacks */
 
 
@@ -2033,6 +2083,60 @@ function html_from_internal_id(the_id, is_inner) {
                editing_container_for["example-like"].includes(ptxtag) ||
                editing_container_for["exercise-like"].includes(ptxtag) ||
                editing_container_for["section-like"].includes(ptxtag)) {
+
+      if (ptxtag == "definition") {
+        thestructure = objectStructure[ptxtag];
+        theparentstructure = objectStructure[thestructure.parent];
+        thehtmltitlestructure = objectStructure[theparentstructure.html.heading];
+        thehtmlstructure = Object.assign({}, theparentstructure.html, thestructure.html);
+        console.log(" ");
+        console.log("thehtmlstructure", thehtmlstructure);
+        console.log("thehtmltitlestructure", thehtmltitlestructure);
+        console.log("subclass", thehtmlstructure.csssubclass);
+        console.log("class", thehtmlstructure.cssclass);
+
+        object_in_html = document.createElement(thehtmlstructure.tag);
+        object_in_html.setAttribute("class", thehtmlstructure.cssclass + " " + thehtmlstructure.subclass);
+        object_in_html.setAttribute("tabindex", -1);
+        object_in_html.setAttribute("data-editable", thehtmlstructure.data_editable);
+
+        // no make the heading anc contents, to insert into object_in_html
+        
+
+    //    object_heading_html = "TMP placeholder";
+        object_heading_html = '<' + thehtmltitlestructure.html.tag;
+        object_heading_html += ' class="' + thehtmltitlestructure.html.cssclass + '"';
+        object_heading_html += ' data-parent_id="' + the_id + '"';
+        object_heading_html += '>';
+        heading_pieces = thehtmltitlestructure.html.pieces;
+        for (var j=0; j < heading_pieces.length; ++j) {
+            piece_name = heading_pieces[j];
+            object_heading_html += '<span';
+            object_heading_html += ' class="' + piece_name + '">' + content_from_source(piece_name, the_object); 
+            object_heading_html += '</span>';
+        }
+        object_heading_html += '</' + thehtmltitlestructure.html.tag + ">";
+
+/*
+        object_heading_html += ' class="heading" data-parent_id="' + the_id + '">';
+        var objecttype_capped = ptxtag.charAt(0).toUpperCase() + ptxtag.slice(1);
+        object_heading_html += '<span class="type" data-editable="70" tabindex="-1">' + objecttype_capped + '</span>';
+        object_heading_html += '<span class="space">' + " " + '</span>';
+        object_heading_html += '<span class="codenumber">' + "#N" + '</span>';
+*/
+
+        var object_statement_ptx = the_object["statement"];
+
+        object_statement_html =  expand_condensed_source_html(object_statement_ptx);
+        console.log("statement statement is", object_statement_html);
+
+        object_in_html.innerHTML = object_heading_html + object_statement_html;
+
+        the_html_objects.push(object_in_html);
+
+
+      } else {
+
         // this is messed up:  need a better way to track *-like
         var objectclass = object_class_of(ptxtag);
         var headertag = "h6";
@@ -2085,6 +2189,7 @@ function html_from_internal_id(the_id, is_inner) {
         object_in_html.innerHTML = object_heading_html + object_statement_html;
 
         the_html_objects.push(object_in_html);
+      }
 
     } else {
          alert("don't know how to make html from", the_object)
