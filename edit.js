@@ -7,6 +7,13 @@ objectStructure = {
         "pieces": ["type", "space", "codenumber", "period",  "space"]
     }
   },
+  "proof_heading": {
+    "html": {
+        "tag": "h6",
+        "cssclass": "heading",
+        "pieces": ["type", "period"]
+    }
+  },
   "section_like_heading": {
     "html": {
         "tag": "h2",
@@ -24,6 +31,31 @@ objectStructure = {
     },
     "ptx": {
         "pieces": ["title", "content"]
+    }
+  },
+
+  "bareimage": {
+    "html": {
+        "tag": "div",
+        "cssclass": "image-box",
+        "pieces": ["content"],
+        "heading": "",
+        "style": "width: 66%; margin-right: 17%; margin-left: 17%"
+    },
+    "ptx": {
+        "pieces": ["content"]
+    }
+  },
+
+  "proof": {
+    "html": {
+        "tag": "article",
+        "cssclass": "proof",
+        "pieces": ["content"],
+        "heading": "proof_heading"
+    },
+    "ptx": {
+        "pieces": ["content"]
     }
   },
 
@@ -2091,7 +2123,7 @@ function html_from_internal_id(the_id, is_inner) {
 
         html_of_this_object.innerHTML = the_content
         the_html_objects.push(html_of_this_object);
-    } else if (ptxtag == "bareimage") {
+    } else if (false && ptxtag == "bareimage") {
         var the_content = the_object["content"];
         console.log("inserting a bare image with content", the_content);
         the_content = expand_condensed_source_html(the_content, is_inner);
@@ -2139,7 +2171,7 @@ function html_from_internal_id(the_id, is_inner) {
             closing_tag = math_tags[ptxtag][1][1];
         }
         return opening_tag + spacemath_to_tex(the_object["content"]) + closing_tag
-    } else if (ptxtag == "proof") {  // maybe consolidate with remark-like
+    } else if (false && ptxtag == "proof") {  // maybe consolidate with remark-like
         object_in_html = document.createElement("article");
         object_in_html.setAttribute("id", the_id);
         object_in_html.setAttribute("class", ptxtag);
@@ -2158,7 +2190,10 @@ function html_from_internal_id(the_id, is_inner) {
         object_in_html.innerHTML = object_heading_html + object_statement_html;
         the_html_objects.push(object_in_html);
 
-    } else if (editing_container_for["definition-like"].includes(ptxtag) ||
+    } else if (
+               ptxtag == "bareimage" ||
+               ptxtag == "proof" ||
+               editing_container_for["definition-like"].includes(ptxtag) ||
                editing_container_for["theorem-like"].includes(ptxtag) ||
                editing_container_for["remark-like"].includes(ptxtag) ||
                editing_container_for["example-like"].includes(ptxtag) ||
@@ -2167,8 +2202,12 @@ function html_from_internal_id(the_id, is_inner) {
 
       if (true || ptxtag == "definition") {
         thestructure = objectStructure[ptxtag];
-        theparentstructure = objectStructure[thestructure.parent];
-        thehtmlstructure = Object.assign({}, theparentstructure.html, thestructure.html);
+        if ("parent" in thestructure) {
+            theparentstructure = objectStructure[thestructure.parent];
+            thehtmlstructure = Object.assign({}, theparentstructure.html, thestructure.html);
+        } else {
+            thehtmlstructure = thestructure.html
+        }
         console.log(" ");
         console.log("thehtmlstructure", thehtmlstructure);
         console.log("subclass", thehtmlstructure.csssubclass);
@@ -2187,7 +2226,7 @@ function html_from_internal_id(the_id, is_inner) {
             var this_piece_html = "";
             var piece_type = object_html_pieces[j];
             if (piece_type == "heading") {
-                thehtmltitlestructure = objectStructure[theparentstructure.html.heading];
+                thehtmltitlestructure = objectStructure[thehtmlstructure.heading];
                 this_piece_html = '<' + thehtmltitlestructure.html.tag;
                 this_piece_html += ' class="' + thehtmltitlestructure.html.cssclass + '"';
      // why data-parent_id, instead of looking up the tree to find the parent?
@@ -2196,6 +2235,7 @@ function html_from_internal_id(the_id, is_inner) {
                 heading_pieces = thehtmltitlestructure.html.pieces;
                 for (var k=0; k < heading_pieces.length; ++k) {
                     piece_name = heading_pieces[k];
+                      // should we first check of the content is nonempty?
                     this_piece_html += '<span';
                     this_piece_html += ' class="' + piece_name + '">' + content_from_source(piece_name, the_object);
                     this_piece_html += '</span>';
@@ -2255,7 +2295,7 @@ function html_from_internal_id(the_id, is_inner) {
 */
 
 
-      } else {
+      } else if (false) {
 
         // this is messed up:  need a better way to track *-like
         var objectclass = object_class_of(ptxtag);
