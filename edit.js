@@ -34,13 +34,25 @@ objectStructure = {
     }
   },
 
+  "p": {
+    "html": {
+        "tag": "p",
+        "pieces": ["content"],
+        "data_editable": "99"
+    },
+    "ptx": {
+        "tag": "p",
+        "pieces": ["content"]
+    }
+  },
+
   "bareimage": {
     "html": {
         "tag": "div",
         "cssclass": "image-box",
         "pieces": ["content"],
-        "heading": "",
-        "style": "width: 66%; margin-right: 17%; margin-left: 17%"
+        "data_editable": "30",
+        "style": "width: 50%; margin-right: 25%; margin-left: 25%"
     },
     "ptx": {
         "pieces": ["content"]
@@ -51,7 +63,7 @@ objectStructure = {
     "html": {
         "tag": "article",
         "cssclass": "proof",
-        "pieces": ["content"],
+        "pieces": ["heading", "content"],
         "heading": "proof_heading"
     },
     "ptx": {
@@ -1323,6 +1335,15 @@ function edit_in_place(obj, oldornew) {
      }
 }
 
+// temporary:  need to unify img and sbs layout
+function modify_by_id(theid, modifier) {
+    if (internalSource[theid]["ptxtag"] == "sbspanel") {
+        modify_by_id_sbs(theid, modifier)
+    } else {
+        modify_by_id_img(theid, modifier)
+    }
+}
+
 function modify_by_id_img(theid, modifier) {
 
     var the_sizes = internalSource[theid]["style"];
@@ -1403,7 +1424,7 @@ function modify_by_id_sbs(theid, modifier) {
     var these_siblings = this_sbsrow_source["content"];
     these_siblings = these_siblings.replace(/^ *<&> */, "");
     these_siblings = these_siblings.replace(/ *<;> *$/, "");
-    these_siblings = these_siblings.replace(/> *</, "><");
+    these_siblings = these_siblings.replace(/>\s*</g, "><");
     console.log("these_siblings", these_siblings);
     these_siblings_list = these_siblings.split("<;><&>");
     var this_panel_index = these_siblings_list.indexOf(theid);
@@ -2067,6 +2088,9 @@ function expand_condensed_src_edit(match, the_id) {
 function html_from_internal_id(the_id, is_inner) {
        // the outer element needs to be constructed as document.createElement
        // but the inner content is just plain text
+       // maybe saying it better:  sometimes we want to create an object and
+       // insert it into the DOM.  Other times we just want to construct the
+       // HTML markup fo rthe object and return that.
     var the_object = internalSource[the_id];
     console.log("making html of", the_object, "is_inner", is_inner, "the_id", the_id);
     var ptxtag = the_object["ptxtag"];
@@ -2074,7 +2098,7 @@ function html_from_internal_id(the_id, is_inner) {
 
     var the_html_objects = [];
 
-    if (ptxtag == "p") {
+    if (false && ptxtag == "p") {
         console.log("need to decide if a p is a p or a div");
         var the_content = the_object["content"];
         var opening_tag="<p ", closing_tag="</p>";
@@ -2130,7 +2154,7 @@ function html_from_internal_id(the_id, is_inner) {
         console.log("which now has content", the_content);
 
         html_of_this_object = document.createElement('div');
-        html_of_this_object.setAttribute("data-editable", 98);
+        html_of_this_object.setAttribute("data-editable", 333);
         html_of_this_object.setAttribute("tabindex", -1);
         html_of_this_object.setAttribute("id", the_id);
         html_of_this_object.setAttribute("class", "image-box");
@@ -2191,6 +2215,8 @@ function html_from_internal_id(the_id, is_inner) {
         the_html_objects.push(object_in_html);
 
     } else if (
+/* bareimage is handled by insert_html_version, apparently */
+               ptxtag == "p" ||
                ptxtag == "bareimage" ||
                ptxtag == "proof" ||
                editing_container_for["definition-like"].includes(ptxtag) ||
@@ -2201,9 +2227,10 @@ function html_from_internal_id(the_id, is_inner) {
                editing_container_for["section-like"].includes(ptxtag)) {
 
       if (true || ptxtag == "definition") {
-        thestructure = objectStructure[ptxtag];
+        var thestructure = objectStructure[ptxtag];
+        var thehtmlstructure;
         if ("parent" in thestructure) {
-            theparentstructure = objectStructure[thestructure.parent];
+            var theparentstructure = objectStructure[thestructure.parent];
             thehtmlstructure = Object.assign({}, theparentstructure.html, thestructure.html);
         } else {
             thehtmlstructure = thestructure.html
@@ -2213,11 +2240,13 @@ function html_from_internal_id(the_id, is_inner) {
         console.log("subclass", thehtmlstructure.csssubclass);
         console.log("class", thehtmlstructure.cssclass);
 
+/*
         object_in_html = document.createElement(thehtmlstructure.tag);
         object_in_html.setAttribute("id", the_id);
         object_in_html.setAttribute("class", thehtmlstructure.cssclass + " " + thehtmlstructure.subclass);
         object_in_html.setAttribute("tabindex", -1);
         object_in_html.setAttribute("data-editable", thehtmlstructure.data_editable);
+*/
 
         var object_html_pieces = thehtmlstructure.pieces;
         // typically heading and contents
@@ -2225,6 +2254,7 @@ function html_from_internal_id(the_id, is_inner) {
         for (var j=0; j < object_html_pieces.length; ++j) {
             var this_piece_html = "";
             var piece_type = object_html_pieces[j];
+            console.log("making the piece", piece_type);
             if (piece_type == "heading") {
                 thehtmltitlestructure = objectStructure[thehtmlstructure.heading];
                 this_piece_html = '<' + thehtmltitlestructure.html.tag;
@@ -2241,24 +2271,48 @@ function html_from_internal_id(the_id, is_inner) {
                     this_piece_html += '</span>';
                 }
                 this_piece_html += '</' + thehtmltitlestructure.html.tag + ">";
-            } else if (["statement", "contents"].includes(piece_type)) {
+            } else if (["statement", "content"].includes(piece_type)) {
+                console.log("making", piece_type, "from", the_object);
                 var object_statement = the_object[piece_type];
 
                 this_piece_html =  expand_condensed_source_html(object_statement);
                 console.log("statement statement is", this_piece_html);
             }
-        object_html_pieces_html[piece_type] = this_piece_html
+            console.log("made the piece", this_piece_html);
+            object_html_pieces_html[piece_type] = this_piece_html
         }
 
-        object_all_contents_html = "";
+        var object_all_contents_html = "";
         for (var j=0; j < object_html_pieces.length; ++j) {
             var piece_type = object_html_pieces[j];
             object_all_contents_html += object_html_pieces_html[piece_type]
         }
 //        object_in_html.innerHTML = object_heading_html + object_statement_html;
-        object_in_html.innerHTML = object_all_contents_html;
 
-        the_html_objects.push(object_in_html)
+        if (is_inner == "edit") {
+            return object_all_contents_html
+        } else if (is_inner == "inner") {
+            var inner_form = '<' + thehtmlstructure.tag;
+            inner_form += ' id="' + the_id + '"';
+            inner_form += ' class="' + thehtmlstructure.cssclass + " " + thehtmlstructure.subclass + '"';
+            inner_form += ' tabindex="-1"';
+            inner_form += ' data-editable="' + thehtmlstructure.data_editable + '"';
+            inner_form += '>';
+            inner_form += object_all_contents_html
+            inner_form += '</' + thehtmlstructure.tag + '>';
+
+            return inner_form
+        } else {
+            var object_in_html = document.createElement(thehtmlstructure.tag);
+            object_in_html.setAttribute("id", the_id);
+            if (thehtmlstructure.cssclass || thehtmlstructure.subclass) {
+                object_in_html.setAttribute("class", thehtmlstructure.cssclass + " " + thehtmlstructure.subclass);
+            }
+            object_in_html.setAttribute("tabindex", -1);
+            object_in_html.setAttribute("data-editable", thehtmlstructure.data_editable);
+            object_in_html.innerHTML = object_all_contents_html;
+            the_html_objects.push(object_in_html)
+        }
 /*
         object_heading_html = '<' + thehtmltitlestructure.html.tag;
         object_heading_html += ' class="' + thehtmltitlestructure.html.cssclass + '"';
@@ -2420,7 +2474,7 @@ function insert_html_version(these_changes) {
 
         } else if (this_object_entry == "bareimage") {
             var object_as_html = document.createElement('div');
-            object_as_html.setAttribute("data-editable", 98);
+            object_as_html.setAttribute("data-editable", 29);
             object_as_html.setAttribute("tabindex", -1);
             object_as_html.setAttribute("id", this_object_id);
             object_as_html.setAttribute("class", "image-box");
@@ -2439,7 +2493,7 @@ function insert_html_version(these_changes) {
     }
     location_of_change.remove();
 
-    console.log("returning from", insert_html_version);
+    console.log("returning from insert html version");
     // call mathjax, in case the new content contains math
     return object_as_html // the most recently added object, which we may want to
                            // do something, like add an editing menu
@@ -2976,7 +3030,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                     } else if (dataModifier == "arrows") {
                         // setup_arrow_modify()   // is different for images and SBSs
                     } else {
-                        modify_by_id_sbs(current_env_id, dataModifier)
+                        modify_by_id(current_env_id, dataModifier)
                     }
             } else if (dataAction == "move-or-delete") {
                 // almost all repeats from dataAction == 'change-env' 
