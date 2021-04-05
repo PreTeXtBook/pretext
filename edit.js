@@ -4,7 +4,7 @@ objectStructure = {
     "html": {
         "tag": "h6",
         "cssclass": "heading",
-        "pieces": ["type", "space", "codenumber", "period",  "space"]
+        "pieces": ["type", "space", "codenumber", "period",  "space", "title"]
     }
   },
   "proof_heading": {
@@ -22,7 +22,7 @@ objectStructure = {
     }
   },
 
-  "section": {
+  "section": {  /* not currently implemented, so probably wrong */
     "html": {
         "tag": "section",
         "cssclass": "section",
@@ -30,7 +30,7 @@ objectStructure = {
         "heading": "section_like_heading"
     },
     "ptx": {
-        "pieces": ["title", "content"]
+        "pieces": [["title", "*"], ["content", "p"]]
     }
   },
 
@@ -42,7 +42,32 @@ objectStructure = {
     },
     "ptx": {
         "tag": "p",
-        "pieces": ["content"]
+        "pieces": [["content", ""]]
+    }
+  },
+
+  "li": {
+    "html": {
+        "tag": "li",
+        "pieces": ["content"],
+        "data_editable": "980"
+    },
+    "ptx": {
+        "tag": "li",
+        "pieces": [["title", ""], ["content", "p"]]
+    }
+  },
+
+  "list": {
+    "html": {
+        "tag": "ol",
+        "pieces": ["content"],
+        "data_editable": "9??"
+    },
+    "ptx": {
+        "tag": "list",
+        "pieces": [["title", ""], ["content", "li"]],
+        "attributes": [["list-style-type", "A"]]
     }
   },
 
@@ -52,10 +77,12 @@ objectStructure = {
         "cssclass": "image-box",
         "pieces": ["content"],
         "data_editable": "30",
-        "style": "width: 50%; margin-right: 25%; margin-left: 25%"
+        "style": "width: 50%; margin-right: 25%; margin-left: 25%"  /* should come from ptx source? */
     },
     "ptx": {
-        "pieces": ["content"]
+        "pieces": [["content",""]],
+        "attributes": [["class", "image-box"], ["style", "width: 50%; margin-right: 25%; margin-left: 25%"],
+                       ["alt", ""]]
     }
   },
 
@@ -67,7 +94,7 @@ objectStructure = {
         "heading": "proof_heading"
     },
     "ptx": {
-        "pieces": ["content"]
+        "pieces": [["content", "p"]]
     }
   },
 
@@ -79,7 +106,7 @@ objectStructure = {
         "heading": "theorem_like_heading"
     },
     "ptx": {
-        "pieces": ["title", "statement"]
+        "pieces": [["title", ""], ["statement", "p"]]
     }
   },
 
@@ -879,6 +906,82 @@ function next_editable_of(obj, relationship) {
     return next_to_edit
 }
 
+function create_new_internal_object(new_tag, new_id, parent_description) {
+
+    var new_source = {"xml:id": new_id, "ptxtag": new_tag, "parent": parent_description, "title": ""}
+
+    console.log("create_new_internal_object", new_tag, "new_id", new_id, "parent_description", parent_description);
+    if (new_tag.startsWith("sbs")) {  // creating an sbs, which contains one sbsrow, which contains several sbspanels
+        var numcols = parseInt(new_tag.slice(-1));
+        var new_sbsrow_id = randomstring();
+        internalSource[new_sbsrow_id] = {"xml:id": new_sbsrow_id, "permid": "", "ptxtag": "sbsrow",
+                 "margin-left": 5, "margin-right": 5, "parent": [new_id, "content"]}
+
+        var col_content = "";
+        var col_default_width = [0, 100, 40, 31, 23, 19];
+        for (var j=0; j < numcols; ++j) {
+            var new_col_id = randomstring();
+            col_content += "<&>" + new_col_id + "<;>";
+            internalSource[new_col_id] = {"xml:id": new_col_id, "permid": "", "ptxtag": "sbspanel",
+                "width": col_default_width[numcols], "content": "", "parent": [new_sbsrow_id, "content"]}
+        }
+
+        internalSource[new_sbsrow_id]["content"] = col_content;
+        new_source["content"] = "<&>" + new_sbsrow_id + "<;>";
+        console.log("new sbs", new_source);
+
+    } else {
+
+      var thisstructure = objectStructure[new_tag];
+      var thisparentptxstructure = {};
+      if ("parent" in thisstructure) {
+          var thisparentstructure = objectStructure[thisstructure.parent];
+          thisparentptxstructure = thisparentstructure.ptx;
+      }
+      var thisptxstructure = Object.assign({},thisparentptxstructure, thisstructure.ptx);
+
+      console.log("thisptxstructure", thisptxstructure);
+
+      if ("attributes" in thisptxstructure) {
+          these_ptx_attributes = thisptxstructure.attributes;
+          for (var j=0; j < these_ptx_attributes.length; ++j) {
+          console.log("adding", j, "attribute", these_ptx_attributes[j]);
+              new_source[these_ptx_attributes[j][0]] = these_ptx_attributes[j][1]
+          }
+      }
+
+/* her need to also use the parent structure */
+      these_ptx_pieces = thisptxstructure.pieces;
+      for (var j=0; j < these_ptx_pieces.length; ++j) {
+          console.log("adding a piece", these_ptx_pieces[j]);
+          var [this_piece, this_piece_contains] = these_ptx_pieces[j];
+          if (this_piece_contains) {
+              new_child_id = randomstring();
+              new_source[this_piece] = "<&>" + new_child_id + "<;>";
+              create_new_internal_object(this_piece_contains, new_child_id, [new_id, this_piece]);
+          } else {
+              new_source[this_piece] = ""
+          }
+      }
+
+    }
+
+    internalSource[new_id] = new_source;
+
+    console.log("parent_description", parent_description, "new_tag", new_tag, "new_id", new_id);
+    console.log("internalSource", internalSource);
+    if (new_tag == "list") {
+        // do nothing, because it is the child "li" which we are really creating
+        // chack that:  maybe do add, if the stack is in the proper order
+    } else if (new_tag == "p"){
+        // p is the default, so no need to keep track of it
+    } else if (new_tag.startsWith("sbs")){
+        current_editing_actions.push(["new", "sbs", new_id]);
+    } else {
+        current_editing_actions.push(["new", new_tag, new_id]);
+    }
+}
+
 function create_object_to_edit(new_tag, new_objects_sibling, relative_placement) {
 
     // when relative_placement is "afterbegin", the new_objects_sibling is actually its parent
@@ -887,11 +990,15 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
     var new_id = randomstring();
     recent_editing_actions.push(["new", new_tag, new_id]);
         // we won;t need all of these, so re-think when these are created
-    var new_content_p_id = randomstring();  // section-like
-    var new_statement_p_id = randomstring();  // theorem-like, definition-like, remark-like, example-like, exercise-like
     var edit_placeholder = document.createElement("span");
     edit_placeholder.setAttribute('id', new_id);
 
+/*
+    var new_content_p_id = randomstring();  // section-like
+    var new_statement_p_id = randomstring();  // theorem-like, definition-like, remark-like, example-like, exercise-like
+*/
+
+/*
     // a sbs is passed as sbsN, where N is the number of columns
     var numcols = 0;
     if (new_tag.startsWith("sbs")) {
@@ -899,15 +1006,54 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
         new_tag = "sbs";
     }
     console.log("new_tag", new_tag, "numcols", numcols);
+*/
 
         // when adding an li, you are actually focused on somethign inside an li
         // but, maybe that distinction shoud be mede before calling create_object_to_edit ?
     if (new_tag == "li") { new_objects_sibling = new_objects_sibling.parentElement }
     new_objects_sibling.insertAdjacentElement(relative_placement, edit_placeholder);
 
-                  // then create the empty internalSource for the new object
+/*
     new_source = {"xml:id": new_id, "permid": "", "ptxtag": new_tag, "title": ""}
-    if (new_tag == "p") {
+*/
+                  // and describe where it goes
+    console.log("new_objects_sibling",new_objects_sibling);
+    var sibling_id = new_objects_sibling.id;
+    var parent_description = internalSource[sibling_id]["parent"];
+    if (relative_placement == "afterbegin") {  // when adding to a sbs panel
+        parent_description = [new_id, "content"];
+    }
+/*
+    new_source["parent"] = parent_description;
+*/
+
+                  // then create the empty internalSource for the new object
+
+    create_new_internal_object(new_tag, new_id, parent_description);
+
+
+
+    if (false && new_tag.startsWith("sbs")) {  // creating an sbs, which contains one sbsrow, which contains several sbspanels
+        var new_sbsrow_id = randomstring();
+        internalSource[new_sbsrow_id] = {"xml:id": new_sbsrow_id, "permid": "", "ptxtag": "sbsrow",
+                 "margin-left": 5, "margin-right": 5, "parent": [new_id, "content"]}
+
+        var col_content = "";
+        var col_default_width = [0, 100, 40, 31, 23, 19];
+        for (var j=0; j < numcols; ++j) {
+            var new_col_id = randomstring();
+            col_content += "<&>" + new_col_id + "<;>";
+            internalSource[new_col_id] = {"xml:id": new_col_id, "permid": "", "ptxtag": "sbspanel",
+                "width": col_default_width[numcols], "content": "", "parent": [new_sbsrow_id, "content"]}
+        }
+
+        internalSource[new_sbsrow_id]["content"] = col_content;
+        new_source["content"] = "<&>" + new_sbsrow_id + "<;>";
+        current_editing_actions.push(["new", "sbs", new_id]);
+        console.log("new sbs", new_source);
+    } else if (true) {
+        console.log("skipping the old code")
+    } else if (new_tag == "p") {
         new_source["content"] = "";
     } else if (new_tag == "li") {  // creating an li, which needs one p inside
         var new_p_id = randomstring();
@@ -923,24 +1069,6 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
         new_source["content"] = "<&>" + new_li_id + "<;>";
         current_editing_actions.push(["new", "li", new_li_id]);
 
-    } else if (new_tag == "sbs") {  // creating an sbs, which contains one sbsrow, which contains several sbspanels
-        var new_sbsrow_id = randomstring();
-        internalSource[new_sbsrow_id] = {"xml:id": new_sbsrow_id, "permid": "", "ptxtag": "sbsrow",
-                 "margin-left": 5, "margin-right": 5, "parent": [new_id, "content"]}
-
-        var col_content = "";
-        var col_default_width = [0, 100, 40, 31, 23, 19];
-        for (var j=0; j < numcols; ++j) {
-            var new_col_id = randomstring();
-            col_content += "<&>" + new_col_id + "<;>";
-            internalSource[new_col_id] = {"xml:id": new_col_id, "permid": "", "ptxtag": "sbspanel", 
-                "width": col_default_width[numcols], "content": "", "parent": [new_sbsrow_id, "content"]}
-        }
-
-        internalSource[new_sbsrow_id]["content"] = col_content;
-        new_source["content"] = "<&>" + new_sbsrow_id + "<;>";
-        current_editing_actions.push(["new", "sbs", new_id]);
-        console.log("new sbs", new_source);
     } else if (new_tag == "list") {  // creating a list, which needs one item to begin.
                                    // that item is an li contining a p
         var new_li_id = randomstring();
@@ -988,6 +1116,7 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
         internalSource[new_content_p_id] = { "xml:id": new_content_p_id, "permid": "", ptxtag: "p",
                       content: "", "parent": [new_id, "content"] }
     }
+/*
                   // and describe where it goes
     console.log("new_objects_sibling",new_objects_sibling);
     var sibling_id = new_objects_sibling.id;
@@ -996,7 +1125,12 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
         parent_description = [new_id, "content"];
     }
     new_source["parent"] = parent_description;
+*/
+
+
+/*
     internalSource[new_id] = new_source
+*/
    // we have made the new object, but we still have to put it in the correct location
 
     var the_current_arrangement = internalSource[parent_description[0]][parent_description[1]];
@@ -1127,7 +1261,10 @@ function edit_in_place(obj, oldornew) {
         this_char = "";
         prev_char = "";
 
-      } else if (new_tag == "sbs") {
+ //     } else if (new_tag == "sbs") {
+      } else if (new_tag.startsWith("sbs")) {
+        numcols = parseInt(new_tag.slice(-1));
+        new_tag = "sbs";
         var this_content_container = document.createElement('div');
         this_content_container.setAttribute('class', "sidebyside");
         this_content_container.setAttribute('id', thisID);
@@ -2125,7 +2262,7 @@ function html_from_internal_id(the_id, is_inner) {
         html_of_this_object.innerHTML = the_content
         the_html_objects.push(html_of_this_object);
 
-    } else if (ptxtag == "li") {   // assume is_inner?
+    } else if (false && ptxtag == "li") {   // assume is_inner?
         var the_content = the_object["content"];
         console.log("inserting an li with content", the_content);
         the_content = expand_condensed_source_html(the_content, is_inner);
@@ -2217,6 +2354,7 @@ function html_from_internal_id(the_id, is_inner) {
     } else if (
 /* bareimage is handled by insert_html_version, apparently */
                ptxtag == "p" ||
+               ptxtag == "li" ||   /* this li option seems to never be used? */
                ptxtag == "bareimage" ||
                ptxtag == "proof" ||
                editing_container_for["definition-like"].includes(ptxtag) ||
@@ -2588,6 +2726,7 @@ console.log("    LLL current_editing", current_editing, current_editing["tree"][
                 console.log("PP", current_editing_actions.length, " current_editing_actions", current_editing_actions);
             }
             // if there is an editing paragraph ahead, go there.  Otherwise menu the last thing added
+            // note: 4/5/21 this use case no longer supported:  all additions are separate
             if (document.querySelector('.paragraph_input')) {
                 next_textarea = document.querySelector('.paragraph_input');
                 console.log("focus to next_textarea", next_textarea);
@@ -3111,7 +3250,8 @@ function main_menu_navigator(e) {  // we are not currently editing
                   object_of_interest.classList.remove("may_enter");
                   document.getElementById('edit_menu_holder').remove();
                   if (dataEnv.startsWith("sbs")) {
-                      console.log("added sbs, now add to it");
+                      console.log("added sbs, now add to it", new_obj_id);
+                      console.log("document.getElementById(new_obj_id)", document.getElementById(new_obj_id));
                       var first_panel_id = document.getElementById(new_obj_id).firstChild.firstChild.id;
                       console.log("first_panel_id", first_panel_id, document.getElementById(first_panel_id));
                       make_current_editing_from_id(first_panel_id);

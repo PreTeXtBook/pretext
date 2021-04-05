@@ -33,6 +33,7 @@ function eraseCookie(name) {
 Storage.prototype.setObject = function(key, value) {
 //    this.setItem(key, JSON.stringify(value));
     this.setItem(key, JSON.stringify(value, function(key, val) {
+//    console.log("key", key, "value", value, "val", val);
     return val.toFixed ? Number(val.toFixed(3)) : val;
 }));
 }
