@@ -98,6 +98,18 @@ objectStructure = {
     }
   },
 
+  "remark_like": {
+    "html": {
+        "tag": "article",
+        "cssclass": "remakr-like",
+        "pieces": ["heading", "statement"],
+        "heading": "theorem_like_heading"
+    },
+    "ptx": {
+        "pieces": [["title", ""], ["statement", "p"]]
+    }
+  },
+
   "definition_like": {
     "html": {
         "tag": "article",
@@ -180,6 +192,21 @@ objectStructure = {
          "tag": "assumption"
     }
   }
+}
+
+var remark_like_environments = ["remark", "warning", "note", "observation", "convention", "insight"];
+for (var j=0; j < remark_like_environments.length; ++j) {
+    var this_tag = remark_like_environments[j];
+    objectStructure[this_tag] = {
+        "parent": "remark_like",
+        "html": {
+            "csssubclass": this_tag,
+            "data_editable": "92" + toString(j)
+        },
+        "ptx": {
+             "tag": this_tag
+        }
+    }     
 }
 
 function content_from_source(name, src) {
