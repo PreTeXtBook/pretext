@@ -72,7 +72,21 @@ objectStructure = {
     }
   },
 
-  "bareimage": {
+  "img": {
+    "html": {
+        "tag": "img",
+        "cssclass": "image-box",
+        "pieces": ["content"],
+        "data_editable": "30",
+        "style": "width: 50%; margin-right: 25%; margin-left: 25%"  /* should come from ptx source? */
+    },
+    "ptx": {
+        "pieces": [["src",""]],
+        "attributes": [["alt", ""]]
+    }
+  },
+
+  "bareimage": {  /* actually, the holder of an img */
     "html": {
         "tag": "div",
         "cssclass": "image-box",
@@ -81,9 +95,8 @@ objectStructure = {
         "style": "width: 50%; margin-right: 25%; margin-left: 25%"  /* should come from ptx source? */
     },
     "ptx": {
-        "pieces": [["content",""]],
-        "attributes": [["class", "image-box"], ["style", "width: 50%; margin-right: 25%; margin-left: 25%"],
-                       ["alt", ""]]
+        "pieces": [["content","img"]],
+        "attributes": [["class", "image-box"], ["style", "width: 50%; margin-right: 25%; margin-left: 25%"]]
     }
   },
 
@@ -140,7 +153,7 @@ var definition_like_environments = ["definition", "conjecture", "axiom", "princi
 for (var j=0; j < definition_like_environments.length; ++j) {
     var this_tag = definition_like_environments[j];
     objectStructure[this_tag] = {
-        "parent": "definition_like",
+        "owner": "definition_like",
         "html": {
             "csssubclass": this_tag,
             "data_editable": "95" + toString(j)
@@ -154,7 +167,7 @@ var remark_like_environments = ["remark", "warning", "note", "observation", "con
 for (var j=0; j < remark_like_environments.length; ++j) {
     var this_tag = remark_like_environments[j];
     objectStructure[this_tag] = {
-        "parent": "remark_like",
+        "owner": "remark_like",
         "html": {
             "csssubclass": this_tag,
             "data_editable": "92" + toString(j)
@@ -168,7 +181,7 @@ var theorem_like_environments = ["lemma", "proposition", "theorem", "corollary",
 for (var j=0; j < theorem_like_environments.length; ++j) {
     var this_tag = theorem_like_environments[j];
     objectStructure[this_tag] = {
-        "parent": "theorem_like",
+        "owner": "theorem_like",
         "html": {
             "csssubclass": this_tag,
             "data_editable": "93" + toString(j)
@@ -340,13 +353,10 @@ base_menu_for = {
 
 function inner_menu_for() {
 
-//    console.log("recent_editing_actions", recent_editing_actions, "xx", recent_editing_actions != []);
     var the_past_edits = [];
     if(recent_editing_actions.length) {
          the_past_edits = recent_editing_actions.map(x => [x.join(" ")])}
     else { the_past_edits = [["no chnages yet"]] }
-
- //   console.log("the_past_edits", the_past_edits);
 
 var the_inner_menu = {
 "theorem-like": [["lemma"],
@@ -930,12 +940,12 @@ function create_new_internal_object(new_tag, new_id, parent_description) {
     } else {
 
       var thisstructure = objectStructure[new_tag];
-      var thisparentptxstructure = {};
-      if ("parent" in thisstructure) {
-          var thisparentstructure = objectStructure[thisstructure.parent];
-          thisparentptxstructure = thisparentstructure.ptx;
+      var thisownerptxstructure = {};
+      if ("owner" in thisstructure) {
+          var thisownerstructure = objectStructure[thisstructure.owner];
+          thisownerptxstructure = thisownerstructure.ptx;
       }
-      var thisptxstructure = Object.assign({},thisparentptxstructure, thisstructure.ptx);
+      var thisptxstructure = Object.assign({},thisownerptxstructure, thisstructure.ptx);
 
       console.log("thisptxstructure", thisptxstructure);
 
@@ -947,7 +957,7 @@ function create_new_internal_object(new_tag, new_id, parent_description) {
           }
       }
 
-/* here need to also use the parent structure */
+/* here need to also use the owner structure */
       these_ptx_pieces = thisptxstructure.pieces;
       for (var j=0; j < these_ptx_pieces.length; ++j) {
           console.log("adding a piece", these_ptx_pieces[j]);
@@ -2014,7 +2024,8 @@ function assemble_internal_version_changes() {
           console.log("this_arrangement_of_objects was",  internalSource[parent_and_location[0]][parent_and_location[1]]);
           internalSource[parent_and_location[0]][parent_and_location[1]] = this_arrangement_of_objects;
           console.log("this_arrangement_of_objects is", this_arrangement_of_objects);
-    } else if (object_being_edited.tagName == "INPUT") {
+//    } else if (object_being_edited.tagName == "INPUT") {
+    } else if (object_being_edited.getAttribute('data-component') == "title") {
 
   // current code assume the INPUT is a title.  Other cases?
 
@@ -2342,7 +2353,8 @@ function local_editing_action(e) {
         local_menu_navigator(e);
     } else if (e.code == "Escape" || e.code == "Enter") {
         console.log("I saw a Rettttt");
-        if (document.activeElement.tagName == "INPUT") {
+   //     if (document.activeElement.tagName == "INPUT") {
+        if (document.activeElement.getAttribute('data-component') == "title") {
             console.log("probably saving a title");
             e.preventDefault();
             these_changes = assemble_internal_version_changes();
@@ -2967,7 +2979,8 @@ function logKeyDown(e) {
     console.log("are we editing", document.getElementById('actively_editing'));
     console.log("is there already an edit menu?", document.getElementById('edit_menu_holder'));
 
-    var input_region = document.activeElement.tagName;
+//    var input_region = document.activeElement.tagName;
+    var input_region = document.activeElement;
     console.log("input_region", input_region);
     // if we are writing something, keystrokes usually are just text input
     if (document.getElementById('actively_editing')) {
@@ -2976,8 +2989,9 @@ function logKeyDown(e) {
             console.log("document.getElementById('local_menu_holder')", document.getElementById('local_menu_holder'));
             local_menu_navigator(e)
         }  else {
-            if (input_region == "INPUT") {
-                console.log("Enter in an INPUT, so time to save it")
+          //  if (input_region == "INPUT") {
+            if (input_region.getAttribute('data-component') == "title") {
+                console.log("Enter in an INPUT, so time to save it");   // when if it isn;t a title?
                 local_editing_action(e)
             }
             else { // input_region is TEXTAREA
