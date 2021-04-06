@@ -3542,9 +3542,113 @@ the xsltproc executable.
             <subsection>
                 <title>Experimental Tactile Graphics</title>
 
-                <p>This subsection is a work-in-progress which will eventually allow some limited markup within the code for a TikZ diagram and allow the production of an SVG that can be embossed as a braille page that may be explored by a blind reader.  Until that work is completed, this diagram should render nicely for other formats, such as HTML and <latex/>.  In other words, right now this image is being used for development <em>and</em> test that existing routines have been modified in ways that preserve the creation of this image in the usual ways.</p>
+                <p>This subsection is a work-in-progress which will eventually allow some limited markup within the code for a TikZ diagram and allow the production of an SVG that can be embossed as a braille page that may be explored by a blind reader.  Until that work is completed, this diagram should render nicely for other formats, such as HTML and <latex/>.  In other words, right now these images are being used for development <em>and</em> to test that existing routines have been modified in ways that preserve the creation of this image in the usual ways.</p>
 
-                <p>This is a diagram of the complex 8-th roots of unity, from Judson's <pubtitle>Abstract Algebra: Theory and Applications</pubtitle>.  It has been significantly reworked for this new approach, but retains the pedagogical intent of the original.</p>
+                <p>It is possible that images may be missing in HTML output or may not be consistent with current code (document or processing).  The <latex/> version should be accurate, but may be meaningless.</p>
+
+                <figure xml:id="tactile-labels-exterior-figure">
+                    <caption>Simple label positioning (exterior)</caption>
+                    <!-- lesser width to account for 1.5/1.65 discrepancy -->
+                    <image xml:id="tactile-labels-exterior" width="55%">
+                        <latex-image>
+                        \begin{tikzpicture}
+
+                        \pgfmathsetmacro{\pointsize}{0.09}
+
+                        <!-- 5 cm radius for the circle -->
+                        \draw (0,0) circle (5);
+
+                        <!-- locations in polar coordinates -->
+                        \coordinate (zero)  at (0:5);
+                        \coordinate (one)   at (45:5);
+                        \coordinate (two)   at (90:5);
+                        \coordinate (three) at (135:5);
+                        \coordinate (four)  at (180:5);
+                        \coordinate (five)  at (225:5);
+                        \coordinate (six)   at (270:5);
+                        \coordinate (seven) at (315:5);
+
+                        \filldraw[fill=black, draw=black] (zero)   circle (\pointsize);
+                        <label xml:id="label-exterior-zero" location="zero" direction="east">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (one)    circle (\pointsize);
+                        <label xml:id="label-exterior-one" location="one" direction="northeast">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (two)    circle (\pointsize);
+                        <label xml:id="label-exterior-two" location="two" direction="north">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (three)  circle (\pointsize);
+                        <label xml:id="label-exterior-three" location="three" direction="northwest">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (four)    circle (\pointsize);
+                        <label xml:id="label-exterior-four" location="four" direction="west">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (five)   circle (\pointsize);
+                        <label xml:id="label-exterior-five" location="five" direction="southwest">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (six)    circle (\pointsize);
+                        <label xml:id="label-exterior-six" location="six" direction="south">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (seven)  circle (\pointsize);
+                        <label xml:id="label-exterior-seven" location="seven" direction="southeast">yyyyy</label>
+
+                        \end{tikzpicture}
+                        </latex-image>
+                    </image>
+                </figure>
+
+                <figure xml:id="tactile-labels-interior-figure">
+                    <caption>Simple label positioning (interior)</caption>
+                    <!-- lesser width to account for 1.5/1.65 discrepancy -->
+                    <image xml:id="tactile-labels-interior" width="55%">
+                        <latex-image>
+                        \begin{tikzpicture}
+
+                        \pgfmathsetmacro{\pointsize}{0.09}
+
+                        <!-- 5 cm radius for the circle -->
+                        \draw (0,0) circle (5);
+
+                        <!-- locations in polar coordinates -->
+                        \coordinate (zero)  at (0:5);
+                        \coordinate (one)   at (45:5);
+                        \coordinate (two)   at (90:5);
+                        \coordinate (three) at (135:5);
+                        \coordinate (four)  at (180:5);
+                        \coordinate (five)  at (225:5);
+                        \coordinate (six)   at (270:5);
+                        \coordinate (seven) at (315:5);
+
+                        \filldraw[fill=black, draw=black] (zero)   circle (\pointsize);
+                        <label xml:id="label-interior-zero" location="zero" direction="west">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (one)    circle (\pointsize);
+                        <label xml:id="label-interior-one" location="one" direction="southwest">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (two)    circle (\pointsize);
+                        <label xml:id="label-interior-two" location="two" direction="south">yyyyyyyyyyyyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (three)  circle (\pointsize);
+                        <label xml:id="label-interior-three" location="three" direction="southeast">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (four)    circle (\pointsize);
+                        <label xml:id="label-interior-four" location="four" direction="east">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (five)   circle (\pointsize);
+                        <label xml:id="label-interior-five" location="five" direction="northeast">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (six)    circle (\pointsize);
+                        <label xml:id="label-interior-six" location="six" direction="north">yyyyyyyyyyyyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (seven)  circle (\pointsize);
+                        <label xml:id="label-interior-seven" location="seven" direction="northwest">yyyyy</label>
+
+                        \end{tikzpicture}
+                        </latex-image>
+                    </image>
+                </figure>
+
+                <p>This is a diagram of the complex 8-th roots of unity, from Judson's <pubtitle>Abstract Algebra: Theory and Applications</pubtitle>.  It has been significantly reworked for this new approach, but retains the pedagogical intent of the original.  It is being scaled by a factor of <m>1.65</m> which may complicate scaling to a full embossed page for tactile graphics.</p>
 
                 <figure xml:id="tactile-experiment">
                     <caption>The complex <m>8^\text{th}</m> roots of unity</caption>
@@ -3602,6 +3706,70 @@ the xsltproc executable.
 
                                     \filldraw[fill=black, draw=black] (seven)  circle (\pointsize);
                                     <label xml:id="power-seven" location="seven" direction="southeast"><m>\omega^7</m></label>
+                        \end{tikzpicture}
+                        </latex-image>
+                    </image>
+                </figure>
+
+                <p>Same diagram, but we have scaled to <q>natural</q> TikZ units, i.e.<nbsp/>centimeters.  Really, for convenience we have multiplied by <m>1.5</m>, not <m>1.65</m>.  We have also labeled the axes with just <m>x</m> and <m>y</m> to test the use of Nemeth indicators since every label is a single inline <tag>m</tag> element.</p>
+
+                <figure xml:id="tactile-experiment-noscale">
+                    <caption>The complex <m>8^\text{th}</m> roots of unity</caption>
+                    <!-- lesser width to account for 1.5/1.65 discrepancy -->
+                    <image xml:id="roots-of-unity-noscale" width="55%">
+                        <latex-image>
+                        <!-- indentation expects forthcoming groupings, -->
+                        <!-- so the diffs might be more informative     -->
+                        \begin{tikzpicture}
+                        \coordinate (negative-y-axis) at (0,-2.25);
+                        \coordinate (positive-y-axis) at (0,2.25);
+                        \coordinate (negative-x-axis) at (-2.625,0);
+                        \coordinate (positive-x-axis) at (2.625,0);
+                        \coordinate (origin) at (0,0);
+
+                        \pgfmathsetmacro{\pointsize}{0.09}
+
+                        <!-- locations in polar coordinates -->
+                        \coordinate (zero)  at (0:1.5);
+                        \coordinate (one)   at (45:1.5);
+                        \coordinate (two)   at (90:1.5);
+                        \coordinate (three) at (135:1.5);
+                        \coordinate (four)  at (180:1.5);
+                        \coordinate (five)  at (225:1.5);
+                        \coordinate (six)   at (270:1.5);
+                        \coordinate (seven) at (315:1.5);
+
+                                \draw [->]  (negative-x-axis) -- (positive-x-axis);
+                                \draw [->]  (negative-y-axis) -- (positive-y-axis);
+                                <label xml:id="n-origin" location="origin" direction="southeast"><m>0</m></label>
+                                <label xml:id="n-posx" location="positive-x-axis" direction="north"><m>x</m></label>
+                                <label xml:id="n-posy" location="positive-y-axis" direction="north"><m>y</m></label>
+
+                            \draw (origin) circle (1.5);
+
+                                    \filldraw[fill=black, draw=black] (zero)   circle (\pointsize);
+                                    <label xml:id="n-power-zero" location="zero" direction="southeast"><m>1</m></label>
+
+                                    \filldraw[fill=black, draw=black] (one)    circle (\pointsize);
+                                    <label xml:id="n-power-one" location="one" direction="northeast"><m>\omega</m></label>
+
+                                    \filldraw[fill=black, draw=black] (two)    circle (\pointsize);
+                                    <label xml:id="n-power-two" location="two" direction="northeast"><m>i</m></label>
+
+                                    \filldraw[fill=black, draw=black] (three)  circle (\pointsize);
+                                    <label xml:id="n-power-three" location="three" direction="northwest"><m>\omega^3</m></label>
+
+                                    \filldraw[fill=black, draw=black] (four)    circle (\pointsize);
+                                    <label xml:id="n-power-four" location="four" direction="southwest"><m>-1</m></label>
+
+                                    \filldraw[fill=black, draw=black] (five)   circle (\pointsize);
+                                    <label xml:id="n-power-five" location="five" direction="southwest"><m>\omega^5</m></label>
+
+                                    \filldraw[fill=black, draw=black] (six)    circle (\pointsize);
+                                    <label xml:id="n-power-six" location="six" direction="southeast"><m>-i</m></label>
+
+                                    \filldraw[fill=black, draw=black] (seven)  circle (\pointsize);
+                                    <label xml:id="n-power-seven" location="seven" direction="southeast"><m>\omega^7</m></label>
                         \end{tikzpicture}
                         </latex-image>
                     </image>
