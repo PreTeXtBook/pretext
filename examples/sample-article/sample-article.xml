@@ -2918,8 +2918,7 @@ the xsltproc executable.
                         <description>A pgfplots example, with external data plotted.</description>
                         <latex-image>
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
-                        <![CDATA[\tikzset{%
-                        }
+                        <![CDATA[
                         \begin{tikzpicture}
                         \begin{axis}[
                             xmin=0,xmax=100,ymin=-20,ymax=100,
@@ -3425,8 +3424,7 @@ the xsltproc executable.
                     <image xml:id="pgfplots-data-demo-solo" width="20%" margins="40% 40%">
                         <latex-image>
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
-                        <![CDATA[\tikzset{%
-                        }
+                        <![CDATA[
                         \begin{tikzpicture}
                         \begin{axis}[
                             xmin=0,xmax=100,ymin=-20,ymax=100,
