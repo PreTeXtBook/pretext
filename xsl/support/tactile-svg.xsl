@@ -108,6 +108,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$b-debugging-rectangle">
         <!-- maintain pretty-printing from divsvgm -->
         <xsl:text>&#xa;</xsl:text>
+        <!-- A red rectangle that outlines braille cells -->
         <xsl:copy>
             <!-- Just the necessary attributes to draw a rectangle -->
             <xsl:apply-templates select="@x|@y|@height|@width" mode="add-braille"/>
@@ -115,7 +116,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:attribute name="style">
                 <xsl:text>stroke: red; fill: none; stroke-width: 0.1px;</xsl:text>
             </xsl:attribute>
-            <xsl:apply-templates select="node()" mode="add-braille"/>
         </xsl:copy>
     </xsl:if>
 </xsl:template>
