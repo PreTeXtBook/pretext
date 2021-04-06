@@ -4,7 +4,8 @@ objectStructure = {
     "html": {
         "tag": "h6",
         "cssclass": "heading",
-        "pieces": ["type", "space", "codenumber", "period",  "space", "title"]
+        "pieces": ["type*", "space", "codenumber", "period",  "space", "title"]
+          // * means editable piece
     }
   },
   "proof_heading": {
@@ -122,78 +123,33 @@ objectStructure = {
     }
   },
 
-  "definition": {
-    "parent": "definition_like",
+  "theorem_like": {
     "html": {
-        "csssubclass": "definition",  /* has to be a different key, because we merge dictionaries */
-        "data_editable": "950"
+        "tag": "article",
+        "cssclass": "theorem-like",
+        "pieces": ["heading", "statement"],
+        "heading": "theorem_like_heading"
     },
     "ptx": {
-         "tag": "definition"
-    }
-  },
-  "conjecture": {
-    "parent": "definition_like",
-    "html": {
-        "csssubclass": "conjecture",
-        "data_editable": "951"
-    },
-    "ptx": {
-         "tag": "conjecture"
-    }
-  },
-  "axiom": {
-    "parent": "definition_like",
-    "html": {
-        "csssubclass": "axiom",  
-        "data_editable": "952"
-    },
-    "ptx": {
-         "tag": "axiom"
-    }
-  },
-  "principle": {
-    "parent": "definition_like",
-    "html": {
-        "csssubclass": "principle",  
-        "data_editable": "953"
-    },
-    "ptx": {
-         "tag": "principle"
-    }
-  },
-  "heuristic": {
-    "parent": "definition_like",
-    "html": {
-        "csssubclass": "heuristic",  
-        "data_editable": "954"
-    },
-    "ptx": {
-         "tag": "heuristic"
-    }
-  },
-  "hypothesis": {
-    "parent": "definition_like",
-    "html": {
-        "csssubclass": "hypothesis",  
-        "data_editable": "955"
-    },
-    "ptx": {
-         "tag": "hypothesis"
-    }
-  },
-  "assumption": {
-    "parent": "definition_like",
-    "html": {
-        "csssubclass": "assumption",  
-        "data_editable": "956"
-    },
-    "ptx": {
-         "tag": "assumption"
+        "pieces": [["title", ""], ["statement", "p"]]
     }
   }
 }
 
+var definition_like_environments = ["definition", "conjecture", "axiom", "principle", "heuristic", "hypothesis", "assumption"];
+for (var j=0; j < definition_like_environments.length; ++j) {
+    var this_tag = definition_like_environments[j];
+    objectStructure[this_tag] = {
+        "parent": "definition_like",
+        "html": {
+            "csssubclass": this_tag,
+            "data_editable": "95" + toString(j)
+        },
+        "ptx": {
+             "tag": this_tag
+        }
+    }
+}
 var remark_like_environments = ["remark", "warning", "note", "observation", "convention", "insight"];
 for (var j=0; j < remark_like_environments.length; ++j) {
     var this_tag = remark_like_environments[j];
@@ -207,6 +163,20 @@ for (var j=0; j < remark_like_environments.length; ++j) {
              "tag": this_tag
         }
     }     
+}
+var theorem_like_environments = ["lemma", "proposition", "theorem", "corollary", "claim", "fact", "identity", "algorithm"];
+for (var j=0; j < theorem_like_environments.length; ++j) {
+    var this_tag = theorem_like_environments[j];
+    objectStructure[this_tag] = {
+        "parent": "theorem_like",
+        "html": {
+            "csssubclass": this_tag,
+            "data_editable": "93" + toString(j)
+        },
+        "ptx": {
+             "tag": this_tag
+        }
+    }
 }
 
 function content_from_source(name, src) {
@@ -977,7 +947,7 @@ function create_new_internal_object(new_tag, new_id, parent_description) {
           }
       }
 
-/* her need to also use the parent structure */
+/* here need to also use the parent structure */
       these_ptx_pieces = thisptxstructure.pieces;
       for (var j=0; j < these_ptx_pieces.length; ++j) {
           console.log("adding a piece", these_ptx_pieces[j]);
@@ -1020,29 +990,11 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
     var edit_placeholder = document.createElement("span");
     edit_placeholder.setAttribute('id', new_id);
 
-/*
-    var new_content_p_id = randomstring();  // section-like
-    var new_statement_p_id = randomstring();  // theorem-like, definition-like, remark-like, example-like, exercise-like
-*/
-
-/*
-    // a sbs is passed as sbsN, where N is the number of columns
-    var numcols = 0;
-    if (new_tag.startsWith("sbs")) {
-        numcols = parseInt(new_tag.slice(-1));
-        new_tag = "sbs";
-    }
-    console.log("new_tag", new_tag, "numcols", numcols);
-*/
-
         // when adding an li, you are actually focused on somethign inside an li
         // but, maybe that distinction shoud be mede before calling create_object_to_edit ?
     if (new_tag == "li") { new_objects_sibling = new_objects_sibling.parentElement }
     new_objects_sibling.insertAdjacentElement(relative_placement, edit_placeholder);
 
-/*
-    new_source = {"xml:id": new_id, "permid": "", "ptxtag": new_tag, "title": ""}
-*/
                   // and describe where it goes
     console.log("new_objects_sibling",new_objects_sibling);
     var sibling_id = new_objects_sibling.id;
@@ -1050,114 +1002,9 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
     if (relative_placement == "afterbegin") {  // when adding to a sbs panel
         parent_description = [new_id, "content"];
     }
-/*
-    new_source["parent"] = parent_description;
-*/
-
                   // then create the empty internalSource for the new object
-
     create_new_internal_object(new_tag, new_id, parent_description);
 
-
-
-    if (false && new_tag.startsWith("sbs")) {  // creating an sbs, which contains one sbsrow, which contains several sbspanels
-        var new_sbsrow_id = randomstring();
-        internalSource[new_sbsrow_id] = {"xml:id": new_sbsrow_id, "permid": "", "ptxtag": "sbsrow",
-                 "margin-left": 5, "margin-right": 5, "parent": [new_id, "content"]}
-
-        var col_content = "";
-        var col_default_width = [0, 100, 40, 31, 23, 19];
-        for (var j=0; j < numcols; ++j) {
-            var new_col_id = randomstring();
-            col_content += "<&>" + new_col_id + "<;>";
-            internalSource[new_col_id] = {"xml:id": new_col_id, "permid": "", "ptxtag": "sbspanel",
-                "width": col_default_width[numcols], "content": "", "parent": [new_sbsrow_id, "content"]}
-        }
-
-        internalSource[new_sbsrow_id]["content"] = col_content;
-        new_source["content"] = "<&>" + new_sbsrow_id + "<;>";
-        current_editing_actions.push(["new", "sbs", new_id]);
-        console.log("new sbs", new_source);
-    } else if (true) {
-        console.log("skipping the old code")
-    } else if (new_tag == "p") {
-        new_source["content"] = "";
-    } else if (new_tag == "li") {  // creating an li, which needs one p inside
-        var new_p_id = randomstring();
-        internalSource[new_p_id] = {"xml:id": new_p_id, "permid": "", "ptxtag": "p", "content": "", "parent": [new_id, "content"]}
-        new_source["content"] = "<&>" + new_p_id + "<;>";
-        current_editing_actions.push(["new", "li", new_id]);
-    } else if (new_tag == "list") {  // creating a list, which needs one item to begin.
-                                   // that item is an li contining a p
-        var new_li_id = randomstring();
-        var new_p_id = randomstring();
-        internalSource[new_p_id] = {"xml:id": new_p_id, "permid": "", "ptxtag": "p", "content": "", "parent": [new_li_id, "content"]}
-        internalSource[new_li_id] = {"xml:id": new_li_id, "permid": "", "ptxtag": "li", "content": "<&>" + new_p_id + "<;>", "parent": [new_id, "content"] }
-        new_source["content"] = "<&>" + new_li_id + "<;>";
-        current_editing_actions.push(["new", "li", new_li_id]);
-
-    } else if (new_tag == "list") {  // creating a list, which needs one item to begin.
-                                   // that item is an li contining a p
-        var new_li_id = randomstring();
-        var new_p_id = randomstring();
-        internalSource[new_p_id] = {"xml:id": new_p_id, "permid": "", "ptxtag": "p", "content": "", "parent": [new_li_id, "content"]}
-        internalSource[new_li_id] = {"xml:id": new_li_id, "permid": "", "ptxtag": "li", "content": "<&>" + new_p_id + "<;>", "parent": [new_id, "content"] }
-        new_source["content"] = "<&>" + new_li_id + "<;>";
-        current_editing_actions.push(["new", "li", new_li_id]);
-
-
-    } else if (new_tag == "bareimage") {  // creating a bareimage(container), which needs an img
-        var new_img_id = randomstring();
-        internalSource[new_img_id] = {"xml:id": new_img_id, "permid": "", "ptxtag": "img", "src": "", "parent": [new_id, "content"], "alt": "" }
-        new_source["content"] = "<&>" + new_img_id + "<;>";
-        new_source["class"] = "image-box";
-           // future bug:  these percents are also hard-coded in the div which is iniitally inserted
-        new_source["style"] = "width: 50%; margin-right: 25%; margin-left: 25%";
-  //      current_editing_actions.push(["new", "li", new_li_id]);
-    } else if (editing_container_for["theorem-like"].includes(new_tag) ||
-               editing_container_for["definition-like"].includes(new_tag) ||
-               editing_container_for["remark-like"].includes(new_tag) ||
-               editing_container_for["example-like"].includes(new_tag) ||
-               editing_container_for["exercise-like"].includes(new_tag) ) {
-        new_source["statement"] = "<&>" + new_statement_p_id + "<;>";
-        internalSource[new_statement_p_id] = { "xml:id": new_statement_p_id, "permid": "", ptxtag: "p",
-                      content: "", "parent": [new_id, "statement"] }
-        if (editing_container_for["theorem-like"].includes(new_tag)) {
-            var new_proof_id = randomstring();
-            var new_proof_p_id = randomstring();
-            new_source["proof"] = "<&>" + new_proof_id + "<;>";
-            internalSource[new_proof_id] = { "xml:id": new_proof_id, "permid": "", ptxtag: "proof",
-                          content: "<&>" + new_proof_p_id + "<;>", "parent": [new_id, "proof"] }
-            internalSource[new_proof_p_id] = { "xml:id": new_proof_p_id, "permid": "", ptxtag: "p",
-                          content: "", "parent": [new_proof_id, "content"] }
-        } else if (editing_container_for["example-like"].includes(new_tag) ||
-               editing_container_for["exercise-like"].includes(new_tag) ) {
-            console.log("suggestions (hint, asnwer, solution) not implemented yet")
-        }
-    } else if (editing_container_for["section-like"].includes(new_tag)) {
-        new_source["content"] = "<&>" + new_content_p_id + "<;>";
-        internalSource[new_content_p_id] = { "xml:id": new_content_p_id, "permid": "", ptxtag: "p",
-                      content: "", "parent": [new_id, "content"] }
-    }  else {   // note: not all cases have been covered
-        new_source["content"] = "<&>" + new_content_p_id + "<;>";
-        internalSource[new_content_p_id] = { "xml:id": new_content_p_id, "permid": "", ptxtag: "p",
-                      content: "", "parent": [new_id, "content"] }
-    }
-/*
-                  // and describe where it goes
-    console.log("new_objects_sibling",new_objects_sibling);
-    var sibling_id = new_objects_sibling.id;
-    var parent_description = internalSource[sibling_id]["parent"];  
-    if (relative_placement == "afterbegin") {  // when adding to a sbs panel
-        parent_description = [new_id, "content"];
-    }
-    new_source["parent"] = parent_description;
-*/
-
-
-/*
-    internalSource[new_id] = new_source
-*/
    // we have made the new object, but we still have to put it in the correct location
 
     var the_current_arrangement = internalSource[parent_description[0]][parent_description[1]];
@@ -2262,76 +2109,11 @@ function html_from_internal_id(the_id, is_inner) {
 
     var the_html_objects = [];
 
-    if (false && ptxtag == "p") {
-        console.log("need to decide if a p is a p or a div");
-        var the_content = the_object["content"];
-        var opening_tag="<p ", closing_tag="</p>";
-
-        if(is_inner == "edit") {
-            opening_tag= ""; //"<div ";
-            closing_tag= ""; // "</div>";
-
-            return opening_tag + expand_condensed_source_html(the_content, is_inner) + closing_tag
-
-        } else if (is_inner == "inner") {
-            opening_tag += 'id="' + the_id + '"';
-            opening_tag += ' data-editable="99" tabindex="-1"';
-
-            opening_tag += '>';
-            return opening_tag + expand_condensed_source_html(the_content, is_inner) + closing_tag
-        }
-
-        html_of_this_object = document.createElement('p');
-        html_of_this_object.setAttribute("data-editable", 99);
-        html_of_this_object.setAttribute("tabindex", -1);
-        html_of_this_object.setAttribute("id", the_id);
-
-        html_of_this_object.innerHTML = the_content
-        the_html_objects.push(html_of_this_object);
-
-    } else if (false && ptxtag == "li") {   // assume is_inner?
-        var the_content = the_object["content"];
-        console.log("inserting an li with content", the_content);
-        the_content = expand_condensed_source_html(the_content, is_inner);
-        console.log("which now has content", the_content);
-
-        if ("edit inner".includes(is_inner)) {
-                // should the id be the_id ?
-            var opening_tag = '<li id="' + the_id + '"';
-            opening_tag += ' data-editable="98" tabindex="-1"';
-            opening_tag += '>';
-            var closing_tag = '</li>';
-            return opening_tag + the_content + closing_tag
-        }
-
-        html_of_this_object = document.createElement('li');
-        html_of_this_object.setAttribute("data-editable", 98);
-        html_of_this_object.setAttribute("tabindex", -1);
-        html_of_this_object.setAttribute("id", the_id);
-
-        html_of_this_object.innerHTML = the_content
-        the_html_objects.push(html_of_this_object);
-    } else if (false && ptxtag == "bareimage") {
-        var the_content = the_object["content"];
-        console.log("inserting a bare image with content", the_content);
-        the_content = expand_condensed_source_html(the_content, is_inner);
-        console.log("which now has content", the_content);
-
-        html_of_this_object = document.createElement('div');
-        html_of_this_object.setAttribute("data-editable", 333);
-        html_of_this_object.setAttribute("tabindex", -1);
-        html_of_this_object.setAttribute("id", the_id);
-        html_of_this_object.setAttribute("class", "image-box");
-        html_of_this_object.setAttribute("style", "width: 66%; margin-right: 17%; margin-left: 17%");
-
-        html_of_this_object.innerHTML = the_content
-        the_html_objects.push(html_of_this_object);
-    } else if (ptxtag == "img") {
+    if (ptxtag == "img") {
         var the_src = the_object["src"];
         console.log("inserting an img with src", the_src);
 
-        if ("edit".includes(is_inner)) {
-                // should the id be the_id ?
+        if (is_inner == "edit") {
             return the_src
         }
 
@@ -2359,39 +2141,9 @@ function html_from_internal_id(the_id, is_inner) {
             closing_tag = math_tags[ptxtag][1][1];
         }
         return opening_tag + spacemath_to_tex(the_object["content"]) + closing_tag
-    } else if (false && ptxtag == "proof") {  // maybe consolidate with remark-like
-        object_in_html = document.createElement("article");
-        object_in_html.setAttribute("id", the_id);
-        object_in_html.setAttribute("class", ptxtag);
-        object_in_html.setAttribute("tabindex", -1);
-        object_in_html.setAttribute("data-editable", 60);
-        var headertag = "h6";
-        object_heading_html = '<' + headertag;
-        object_heading_html += ' class="heading" data-parent_id="' + the_id + '">';
-        object_heading_html += '<span class="type">Proof</span>';
-        object_heading_html += '<span class="period">' + "." + '</span>';
-        object_heading_html += '</' + headertag + '>';
 
-        var object_statement_ptx = the_object["content"];
-        object_statement_html =  expand_condensed_source_html(object_statement_ptx);
-        console.log("proof statement is", object_statement_html);
-        object_in_html.innerHTML = object_heading_html + object_statement_html;
-        the_html_objects.push(object_in_html);
+    } else {
 
-    } else if (
-/* bareimage is handled by insert_html_version, apparently */
-               ptxtag == "p" ||
-               ptxtag == "li" ||   /* this li option seems to never be used? */
-               ptxtag == "bareimage" ||
-               ptxtag == "proof" ||
-               editing_container_for["definition-like"].includes(ptxtag) ||
-               editing_container_for["theorem-like"].includes(ptxtag) ||
-               editing_container_for["remark-like"].includes(ptxtag) ||
-               editing_container_for["example-like"].includes(ptxtag) ||
-               editing_container_for["exercise-like"].includes(ptxtag) ||
-               editing_container_for["section-like"].includes(ptxtag)) {
-
-      if (true || ptxtag == "definition") {
         var thestructure = objectStructure[ptxtag];
         var thehtmlstructure;
         if ("parent" in thestructure) {
@@ -2404,14 +2156,6 @@ function html_from_internal_id(the_id, is_inner) {
         console.log("thehtmlstructure", thehtmlstructure);
         console.log("subclass", thehtmlstructure.csssubclass);
         console.log("class", thehtmlstructure.cssclass);
-
-/*
-        object_in_html = document.createElement(thehtmlstructure.tag);
-        object_in_html.setAttribute("id", the_id);
-        object_in_html.setAttribute("class", thehtmlstructure.cssclass + " " + thehtmlstructure.subclass);
-        object_in_html.setAttribute("tabindex", -1);
-        object_in_html.setAttribute("data-editable", thehtmlstructure.data_editable);
-*/
 
         var object_html_pieces = thehtmlstructure.pieces;
         // typically heading and contents
@@ -2432,6 +2176,10 @@ function html_from_internal_id(the_id, is_inner) {
                     piece_name = heading_pieces[k];
                       // should we first check of the content is nonempty?
                     this_piece_html += '<span';
+                    if (piece_name.endsWith("*")) {
+                        piece_name = piece_name.slice(0, -1); 
+                        this_piece_html += ' data-editable="70" tabindex="-1"';
+                    }
                     this_piece_html += ' class="' + piece_name + '">' + content_from_source(piece_name, the_object);
                     this_piece_html += '</span>';
                 }
@@ -2452,7 +2200,6 @@ function html_from_internal_id(the_id, is_inner) {
             var piece_type = object_html_pieces[j];
             object_all_contents_html += object_html_pieces_html[piece_type]
         }
-//        object_in_html.innerHTML = object_heading_html + object_statement_html;
 
         if (is_inner == "edit") {
             return object_all_contents_html
@@ -2478,100 +2225,6 @@ function html_from_internal_id(the_id, is_inner) {
             object_in_html.innerHTML = object_all_contents_html;
             the_html_objects.push(object_in_html)
         }
-/*
-        object_heading_html = '<' + thehtmltitlestructure.html.tag;
-        object_heading_html += ' class="' + thehtmltitlestructure.html.cssclass + '"';
-        object_heading_html += ' data-parent_id="' + the_id + '"';
-        object_heading_html += '>';
-        heading_pieces = thehtmltitlestructure.html.pieces;
-        for (var j=0; j < heading_pieces.length; ++j) {
-            piece_name = heading_pieces[j];
-            object_heading_html += '<span';
-            object_heading_html += ' class="' + piece_name + '">' + content_from_source(piece_name, the_object); 
-            object_heading_html += '</span>';
-        }
-        object_heading_html += '</' + thehtmltitlestructure.html.tag + ">";
-*/
-
-/*
-        object_heading_html += ' class="heading" data-parent_id="' + the_id + '">';
-        var objecttype_capped = ptxtag.charAt(0).toUpperCase() + ptxtag.slice(1);
-        object_heading_html += '<span class="type" data-editable="70" tabindex="-1">' + objecttype_capped + '</span>';
-        object_heading_html += '<span class="space">' + " " + '</span>';
-        object_heading_html += '<span class="codenumber">' + "#N" + '</span>';
-*/
-
-/*
-
-        var object_statement_ptx = the_object["statement"];
-
-        object_statement_html =  expand_condensed_source_html(object_statement_ptx);
-        console.log("statement statement is", object_statement_html);
-
-        object_in_html.innerHTML = object_heading_html + object_statement_html;
-
-        the_html_objects.push(object_in_html);
-*/
-
-
-      } else if (false) {
-
-        // this is messed up:  need a better way to track *-like
-        var objectclass = object_class_of(ptxtag);
-        var headertag = "h6";
-        if (editing_container_for["section-like"].includes(ptxtag)) {
-             headertag = "h2"  // need to make that dynamic
-        }
-
-        object_in_html = document.createElement("article");
-        object_in_html.setAttribute("class", objectclass + " " + ptxtag);
-        object_in_html.setAttribute("tabindex", -1);
-        if (editing_container_for["section-like"].includes(ptxtag)) {
-            object_in_html.setAttribute("data-editable", 66);
-        } else {
-            object_in_html.setAttribute("data-editable", 95);
-        }
-
-        object_title = the_object["title"];
-        object_creator = the_object["creator"];
-
-        object_in_html.setAttribute("id", the_id);
-
-        object_heading_html = '<' + headertag;
-        object_heading_html += ' class="heading" data-parent_id="' + the_id + '">';
-        var objecttype_capped = ptxtag.charAt(0).toUpperCase() + ptxtag.slice(1);
-        object_heading_html += '<span class="type" data-editable="70" tabindex="-1">' + objecttype_capped + '</span>';
-        object_heading_html += '<span class="space">' + " " + '</span>';
-        object_heading_html += '<span class="codenumber">' + "#N" + '</span>';
-
-        if (object_title) {
-            object_heading_html += '<span class="title" data-editable="75" tabindex="-1">' + object_title + '</span>';
-        }
-        if (object_creator) {
-            object_heading_html += '<span class="space">' + " " + '</span>';
-            object_heading_html += '<span class="creator" data-editable="73" tabindex="-1">(' + object_creator + ')</span>';
-        }
-
-        object_heading_html += '<span class="period">' + "." + '</span>';
-        object_heading_html += '</' + headertag + '>';
-
-        var object_statement_ptx = the_object["statement"];
-        if (editing_container_for["section-like"].includes(ptxtag)) {
-            var object_statement_ptx = the_object["content"];
-        } else {
-            var object_statement_ptx = the_object["statement"];
-        }
-
-        object_statement_html =  expand_condensed_source_html(object_statement_ptx);
-        console.log("statement statement is", object_statement_html);
-
-        object_in_html.innerHTML = object_heading_html + object_statement_html;
-
-        the_html_objects.push(object_in_html);
-      }
-
-    } else {
-         alert("don't know how to make html from", the_object)
     }
     console.log("    RRRR returning the_html_objects", the_html_objects);
     return the_html_objects
