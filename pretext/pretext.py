@@ -416,7 +416,7 @@ def latex_tactile_image_conversion(xml_source, pub_file, stringparams, data_dir,
 
             # 6. Process to SVG with  dvisvgm  utility
             _verbose("converting {} to {}".format(latex_image_dvi, latex_image_svg))
-            divsvgm_cmd = ['dvisvgm', latex_image_dvi]
+            divsvgm_cmd = ['dvisvgm', latex_image_dvi, '--bbox=papersize']
             subprocess.call(divsvgm_cmd, stdout=devnull, stderr=subprocess.STDOUT)
             if not os.path.exists(latex_image_svg):
                 print('PTX:ERROR: There was a problem processing {}, so {} was not created'.format(latex_image, latex_image_svg))

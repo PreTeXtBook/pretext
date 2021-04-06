@@ -100,7 +100,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="@*|node()" mode="extraction"/>
 </xsl:template>
 
-
 <!-- NB: Code between lines of hashes is cut/paste    -->
 <!-- from the LaTeX conversion.  Until we do a better -->
 <!-- job of ensuring they remain in-sync, please      -->
@@ -178,34 +177,56 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$document-class-prefix" />
         <xsl:text>article}&#xa;</xsl:text>
         <xsl:text>\usepackage{geometry}&#xa;</xsl:text>
-        <!-- ######################################### -->
-        <!-- Determine height of text block, assumes US letterpaper (11in height) -->
-        <!-- Could react to document type, paper, margin specs                    -->
-        <xsl:variable name="text-height">
-            <xsl:text>9.0in</xsl:text>
-        </xsl:variable>
-        <!-- Bringhurst: 30x => 66 chars, so 34x => 75 chars -->
-        <xsl:variable name="text-width">
-            <xsl:value-of select="34 * substring-before($font-size, 'pt')" />
-            <xsl:text>pt</xsl:text>
-        </xsl:variable>
-        <!-- (These are actual TeX comments in the main document's LaTeX output) -->
-        <!-- Text height identically 9 inches, text width varies on point size   -->
-        <!-- See Bringhurst 2.1.1 on measure for recommendations                 -->
-        <!-- 75 characters per line (count spaces, punctuation) is target        -->
-        <!-- which is the upper limit of Bringhurst's recommendations            -->
-        <xsl:text>\geometry{letterpaper,total={</xsl:text>
-        <xsl:value-of select="$text-width" />
-        <xsl:text>,</xsl:text>
-        <xsl:value-of select="$text-height" />
-        <xsl:text>}}&#xa;</xsl:text>
-        <xsl:text>%% Custom Page Layout Adjustments (use latex.geometry)&#xa;</xsl:text>
-        <xsl:if test="$latex.geometry != ''">
-            <xsl:text>\geometry{</xsl:text>
-            <xsl:value-of select="$latex.geometry" />
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:if>
-        <!-- ######################################### -->
+        <xsl:choose>
+            <!-- maybe adjust this based on discovery of environments? -->
+            <xsl:when test="not($b-tactile)">
+                <!-- ######################################### -->
+                <!-- Determine height of text block, assumes US letterpaper (11in height) -->
+                <!-- Could react to document type, paper, margin specs                    -->
+                <xsl:variable name="text-height">
+                    <xsl:text>9.0in</xsl:text>
+                </xsl:variable>
+                <!-- Bringhurst: 30x => 66 chars, so 34x => 75 chars -->
+                <xsl:variable name="text-width">
+                    <xsl:value-of select="34 * substring-before($font-size, 'pt')" />
+                    <xsl:text>pt</xsl:text>
+                </xsl:variable>
+                <!-- (These are actual TeX comments in the main document's LaTeX output) -->
+                <!-- Text height identically 9 inches, text width varies on point size   -->
+                <!-- See Bringhurst 2.1.1 on measure for recommendations                 -->
+                <!-- 75 characters per line (count spaces, punctuation) is target        -->
+                <!-- which is the upper limit of Bringhurst's recommendations            -->
+                <xsl:text>\geometry{letterpaper,total={</xsl:text>
+                <xsl:value-of select="$text-width" />
+                <xsl:text>,</xsl:text>
+                <xsl:value-of select="$text-height" />
+                <xsl:text>}}&#xa;</xsl:text>
+                <xsl:text>%% Custom Page Layout Adjustments (use latex.geometry)&#xa;</xsl:text>
+                <xsl:if test="$latex.geometry != ''">
+                    <xsl:text>\geometry{</xsl:text>
+                    <xsl:value-of select="$latex.geometry" />
+                    <xsl:text>}&#xa;</xsl:text>
+                </xsl:if>
+                <!-- ######################################### -->
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>%% Dimensions of an embossed braille page&#xa;</xsl:text>
+                <xsl:text>\newlength{\braillepagewidth}&#xa;</xsl:text>
+                <xsl:text>\setlength{\braillepagewidth}{11.5in}&#xa;</xsl:text>
+                <xsl:text>\newlength{\braillepageheight}&#xa;</xsl:text>
+                <xsl:text>\setlength{\braillepageheight}{11in}&#xa;</xsl:text>
+                <xsl:text>%% Dimensions of the area for scaled-up image&#xa;</xsl:text>
+                <xsl:text>\newlength{\brailleareawidth}&#xa;</xsl:text>
+                <xsl:text>\setlength{\brailleareawidth}{10in}&#xa;</xsl:text>
+                <xsl:text>\newlength{\brailleareaheight}&#xa;</xsl:text>
+                <xsl:text>\setlength{\brailleareaheight}{10in}&#xa;</xsl:text>
+                <!-- page dimensions, no matter what for an embossed tactile image -->
+                <xsl:text>%% 10in x 10in body, 1/2 inch gutter, 1/2 inch margins, some room for overfull</xsl:text>
+                <xsl:text>\geometry{paperwidth=\braillepagewidth, paperheight=\braillepageheight, </xsl:text>
+                <xsl:text>left=1in, right=0.4in, top=0.5in, bottom=0.4in</xsl:text>
+                <xsl:text>}&#xa;</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
         <xsl:text>\usepackage{amsmath,amssymb}&#xa;</xsl:text>
         <xsl:call-template name="sanitize-text">
             <xsl:with-param name="text">
@@ -218,8 +239,86 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex-macros" />
         <xsl:text>\begin{document}&#xa;</xsl:text>
         <xsl:text>\pagestyle{empty}&#xa;</xsl:text>
-        <!-- These templates are in pretext-latex.xsl -->
-        <xsl:apply-templates select="latex-image"/>
+        <!-- The "latex-image" template is in  pretext-latex.xsl      -->
+        <!-- We save off the code for discovery and possible          -->
+        <!-- manipulation for scaling and spacing as tactile graphics -->
+        <xsl:variable name="the-latex-image">
+            <xsl:apply-templates select="latex-image"/>
+        </xsl:variable>
+        <!-- Analyze the type of image we have, and save markers as universal  -->
+        <!-- variables.  An empty result will signal a "latex-image" we cannot -->
+        <!-- yet modify predictably                                            -->
+        <xsl:variable name="env-begin">
+            <xsl:choose>
+                <xsl:when test="contains($the-latex-image, '\begin{tikzpicture}')">
+                    <xsl:text>\begin{tikzpicture}</xsl:text>
+                </xsl:when>
+                <xsl:when test="contains($the-latex-image, '\begin{circuittikz}')">
+                    <xsl:text>\begin{circuittikz}</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="env-end">
+            <xsl:choose>
+                <xsl:when test="$env-begin = '\begin{tikzpicture}'">
+                    <xsl:text>\end{tikzpicture}</xsl:text>
+                </xsl:when>
+                <xsl:when test="$env-begin = '\begin{circuittikz}'">
+                    <xsl:text>\end{circuittikz}</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:choose>
+            <!-- If tactile versions requested, and we support the   -->
+            <!-- type of latex-image, based on environment discovery -->
+            <xsl:when test="$b-tactile and not($env-begin = '')">
+                <!-- make a "sighted" version in a box to measure -->
+                <xsl:text>%% Sighted version measured in a box&#xa;</xsl:text>
+                <xsl:text>%% Scale factor lands in \tikzscale&#xa;</xsl:text>
+                <xsl:text>\makeatletter&#xa;</xsl:text>
+                <xsl:text>\newsavebox{\measure@tikzpicture}&#xa;</xsl:text>
+                <xsl:text>\begin{lrbox}{\measure@tikzpicture}%&#xa;</xsl:text>
+                <xsl:value-of select="$the-latex-image"/>
+                <xsl:text>\end{lrbox}%&#xa;</xsl:text>
+                <!-- https://tex.stackexchange.com/questions/18771/store-pgfmathresult-in-a-variable -->
+                <!-- else: \pgfmathparse{...}, then \edef\tikzscale{\pgfmathresult} -->
+                <!-- reducing scaling for page-fitting experiments works well here  -->
+                <xsl:text>\pgfmathsetmacro\tikzscale{min(\brailleareawidth/\wd\measure@tikzpicture,\brailleareaheight/\ht\measure@tikzpicture)}%&#xa;</xsl:text>
+                <!-- <xsl:text>\edef\tikzscale{\pgfmathresult}&#xa;</xsl:text> -->
+                <xsl:text>\makeatother&#xa;</xsl:text>
+                <!-- <xsl:text>FOO\quad \pgfmathresult\\% Render the picture with new scaling factor&#xa;</xsl:text> -->
+                <!-- <xsl:text>BAR \verb!</xsl:text> -->
+                <!-- <xsl:text>!\\</xsl:text> -->
+                <!-- Decompose the code based on begin/end environment markers so -->
+                <!-- adjustments can be reliably added and the code reconstructed -->
+                <xsl:variable name="pre-environment" select="substring-before($the-latex-image, $env-begin)"/>
+                <xsl:variable name="post-environment" select="substring-after($the-latex-image, $env-begin)"/>
+                <xsl:variable name="options" select="substring-before($post-environment, '&#xa;')"/>
+                <xsl:variable name="post-options" select="substring-after($post-environment, '&#xa;')"/>
+                <xsl:variable name="body" select="substring-before($post-options, $env-end)"/>
+                <xsl:variable name="finish" select="substring-after($post-options, $env-end)"/>
+                <!-- Put the code back together with some additions  -->
+                <!-- just after the start and just before the end    -->
+                <!-- vertical spacing is ad-hoc, noindent seems prudent -->
+                <xsl:text>%% Tactile version for production, with scaling and spacing adjustments&#xa;</xsl:text>
+                <xsl:value-of select="concat($pre-environment, '\vspace*{\stretch{1}}\noindent{}', $env-begin, $options)"/>
+                <xsl:text>&#xa;\tikzset{scale=\tikzscale}&#xa;</xsl:text>
+                <!-- debugging, messes up some images -->
+                <!-- <xsl:text>\node at (0.5,0.5) {FOO x \tikzscale x };&#xa;</xsl:text> -->
+                <xsl:value-of select="$body"/>
+                <!-- add calculation of bounding box additions -->
+                <xsl:value-of select="$env-end"/>
+                <xsl:value-of select="$finish"/>
+                <xsl:text>\vspace*{\stretch{1}}</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- A latex-image we do not know how to manipulate, or  -->
+                <!-- do not want to manipulate.  So leave unadulterated, -->
+                <!-- anything goes, and process normally (i.e. not a     -->
+                <!-- tactile version).                                   -->
+                <xsl:value-of select="$the-latex-image"/>
+            </xsl:otherwise>
+        </xsl:choose>
         <xsl:text>\end{document}&#xa;</xsl:text>
     </exsl:document>
 </xsl:template>
@@ -243,6 +342,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="label" mode="braille-spacing">
     <!-- All in mm -->
     <!-- experimental from 6-cell label, spec might be 6.1mm -->
+    <!-- experimentally observed 6.35mm exactly equals 18pt   -->
     <xsl:variable name="cell-width" select="number(6.35)"/>
     <!-- 6.5mm bounding height, plus 0.3125mm gap * 2 -->
     <xsl:variable name="cell-height" select="number(7.125)"/>
@@ -256,15 +356,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- convert PreTeXt compass directions to TikZ anchor -->
     <!-- shorthand (template resides in pretext-latex.xsl) -->
     <xsl:apply-templates select="@direction" mode="tikz-direction"/>
-    <!-- could apply/interpret an @offset here, e.g."=10"  -->
     <xsl:text>] at (</xsl:text>
+    <!-- scale offsets via a macro, = 1 normally, measured otherwise -->
+    <!-- .09cm = .9mm radius * 2.54 scale factor -->
+    <!-- <xsl:text>=2.285mm, inner sep=4mm, fill=white] at (</xsl:text> -->
     <!-- a shift can prefix this coordinate, augmenting, -->
     <!-- or replacing, the direction/anchor option prior -->
     <xsl:value-of select="@location"/>
     <xsl:text>) {</xsl:text>
-    <xsl:text>\special{dvisvgm:raw &lt;g class="PTX-rectangle" id="</xsl:text>
+    <xsl:text>\special{dvisvgm:raw &lt;g class="PTX-rectangle"</xsl:text>
+    <xsl:text> id="</xsl:text>
     <xsl:value-of select="$id"/>
-    <xsl:text>"&gt;}</xsl:text>
+    <xsl:text>"</xsl:text>
+    <!-- we record direction, as data-* attribute -->
+    <xsl:text> data-direction="</xsl:text>
+    <xsl:value-of select="@direction"/>
+    <xsl:text>"</xsl:text>
+    <!-- we record label cell count, as data-* attribute -->
+    <xsl:text> data-ncells="</xsl:text>
+    <xsl:value-of select="$label-count"/>
+    <xsl:text>"</xsl:text>
+    <xsl:text>&gt;}</xsl:text>
     <xsl:text>\rule{</xsl:text>
     <xsl:value-of select="$label-width"/>
     <xsl:text>mm</xsl:text>
