@@ -3620,28 +3620,28 @@ the xsltproc executable.
                         \coordinate (seven) at (315:5);
 
                         \filldraw[fill=black, draw=black] (zero)   circle (\pointsize);
-                        <label xml:id="label-interior-zero" location="zero" direction="west">yyyyy</label>
+                        <label xml:id="label-interior-zero" location="zero" direction="west" offset="0.9mm">yyyyy</label>
 
                         \filldraw[fill=black, draw=black] (one)    circle (\pointsize);
-                        <label xml:id="label-interior-one" location="one" direction="southwest">yyyyy</label>
+                        <label xml:id="label-interior-one" location="one" direction="southwest" offset="0.9mm">yyyyy</label>
 
                         \filldraw[fill=black, draw=black] (two)    circle (\pointsize);
-                        <label xml:id="label-interior-two" location="two" direction="south">yyyyyyyyyyyyyyy</label>
+                        <label xml:id="label-interior-two" location="two" direction="south" offset="0.9mm">yyyyyyyyyyyyyyy</label>
 
                         \filldraw[fill=black, draw=black] (three)  circle (\pointsize);
-                        <label xml:id="label-interior-three" location="three" direction="southeast">yyyyy</label>
+                        <label xml:id="label-interior-three" location="three" direction="southeast" offset="0.9mm">yyyyy</label>
 
                         \filldraw[fill=black, draw=black] (four)    circle (\pointsize);
-                        <label xml:id="label-interior-four" location="four" direction="east">yyyyy</label>
+                        <label xml:id="label-interior-four" location="four" direction="east" offset="0.9mm">yyyyy</label>
 
                         \filldraw[fill=black, draw=black] (five)   circle (\pointsize);
-                        <label xml:id="label-interior-five" location="five" direction="northeast">yyyyy</label>
+                        <label xml:id="label-interior-five" location="five" direction="northeast" offset="0.9mm">yyyyy</label>
 
                         \filldraw[fill=black, draw=black] (six)    circle (\pointsize);
-                        <label xml:id="label-interior-six" location="six" direction="north">yyyyyyyyyyyyyyy</label>
+                        <label xml:id="label-interior-six" location="six" direction="north" offset="0.9mm">yyyyyyyyyyyyyyy</label>
 
                         \filldraw[fill=black, draw=black] (seven)  circle (\pointsize);
-                        <label xml:id="label-interior-seven" location="seven" direction="northwest">yyyyy</label>
+                        <label xml:id="label-interior-seven" location="seven" direction="northwest" offset="0.9mm">yyyyy</label>
 
                         \end{tikzpicture}
                         </latex-image>
