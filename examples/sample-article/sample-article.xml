@@ -3539,12 +3539,14 @@ the xsltproc executable.
                 <p>In the early stages of a writing project, it may be best not to track provisional image files built with <c>pretext</c> under version control, and just regenerate them periodically (see the <c>-r</c> option for <c>pretext</c>).  As a project matures, then it makes sense to put stable files under version control for collaborators and others.  In every case, managing graphics files (and other aspects of production), is much more pleasurable with a script (shell, Makefile, etc.)</p>
             </subsection>
 
-            <subsection>
+            <subsection xml:id="subsection-tactile-graphics">
                 <title>Experimental Tactile Graphics</title>
 
                 <p>This subsection is a work-in-progress which will eventually allow some limited markup within the code for a TikZ diagram and allow the production of an SVG that can be embossed as a braille page that may be explored by a blind reader.  Until that work is completed, this diagram should render nicely for other formats, such as HTML and <latex/>.  In other words, right now these images are being used for development <em>and</em> to test that existing routines have been modified in ways that preserve the creation of this image in the usual ways.</p>
 
                 <p>It is possible that images may be missing in HTML output or may not be consistent with current code (document or processing).  The <latex/> version should be accurate, but may be meaningless.</p>
+
+                <p>Some preliminary documentation follows the examples, none of which is guaranteed.</p>
 
                 <figure xml:id="tactile-labels-exterior-figure">
                     <caption>Simple label positioning (exterior)</caption>
@@ -3774,6 +3776,27 @@ the xsltproc executable.
                         </latex-image>
                     </image>
                 </figure>
+
+                <paragraphs>
+                    <title>General Advice</title>
+
+                    <p>It is best to design your diagram without using an overall scale factor later to compensate for not doing it carefully first.  The default units in TikZ are centimeters.</p>
+
+                    <p>Labels are discussed next.  Scaling (magnification) as a tactile image works best if the bounding box of your diagram is determined by the bounding box of just the graphics elements.  Rather than having labels extend outside the graphics bounding box to define a larger overall bounding box.  This is a consequence of how TikZ scales an image (graphics scale, text does not).</p>
+                </paragraphs>
+
+                <paragraphs>
+                    <title>Accessible Labels</title>
+
+                    <p>In a TikZ diagram, name locations of interest explicitly, with the <c>\coordinate</c> macro, such as<cd>\coordinate (positive-y-axis) at (4,6);</cd>Both Cartesian and polar coordinates are supported by TikZ using different syntax.  These names will not be seen by your reader, they are just used in the TikZ code.</p>
+
+                    <p>Then use the names of these locations for the placement of labels.  A large filled circle is a good shape to use.  A radius that will scale to a radius of about 3 millimeters is a good choice.  You will want to move your label away from the shape so there is no overlap, and thus the radius of your circle would be a good offset.  The label can move in one of eight directions:  <c>south</c>, <c>southwest</c>, <c>west</c>, etc.  Try to arrange the direction of your label so that it does not overwrite other graphics elements of your diagram<mdash/>this will be confusing to a blind reader.  So an example (spread over two lines) is<cd>
+                        <cline>&lt;label xml:id="pos-y-axis" location="positive-y-axis"</cline>
+                        <cline>direction="northeast" offset="3mm"&gt;&lt;m&gt;y&lt;/m&gt;-axis&lt;/label&gt;</cline>
+                    </cd>The <attr>xml:id</attr> is not strictly necessary, but can be useful for debugging.</p>
+
+                    <p>When producing a tactile version of this diagram, the graphics elements of the diagram will be scaled up as much as possible to fit a whole 11.5 inch by 11 inch embossable page.  The content will be replaced by braille cells (which are not scaled).  The braille cells will get a 4 millimeter margin all around them, which will be a no-emboss zone.  Finally, the offset will be scaled along with the graphics so the label should stay off of the shape being labeled.</p>
+                </paragraphs>
             </subsection>
         </section>
 
