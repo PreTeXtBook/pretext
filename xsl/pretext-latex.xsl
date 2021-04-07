@@ -9000,6 +9000,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="label">
     <xsl:text>\node [</xsl:text>
     <xsl:apply-templates select="@direction" mode="tikz-direction"/>
+    <xsl:text>=</xsl:text>
+    <!-- Always an offset, default is 4pt, about a "normal space" -->
+    <xsl:apply-templates select="." mode="get-label-offset"/>
     <xsl:text>] at (</xsl:text>
     <xsl:value-of select="@location"/>
     <xsl:text>) {</xsl:text>
@@ -9054,6 +9057,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>above</xsl:text>
             <xsl:message>PTX:ERROR:   a label @direction ("<xsl:value-of select="."/>") is not recognized, using "above" as a default</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- TikZ's "inner sep" functions like our offset but is a           -->
+<!-- horizontal and vertical shift, while the TikZ offset with the   -->
+<!-- anchor mechanism is a straight line distance.                   -->
+<!-- Section 11.8 at                                                 -->
+<!-- https://stuff.mit.edu/afs/athena/contrib/                       -->
+<!-- tex-contrib/beamer/pgf-1.01/doc/generic/pgf/                    -->
+<!-- version-for-tex4ht/en/pgfmanualse11.html                        -->
+<!-- says:                                                           -->
+<!-- "An additional (invisible) separation space of <dimension> will -->
+<!-- be added inside the shape, between the text and the shape’s     -->
+<!-- background path. The effect is as if you had added appropriate  -->
+<!-- horizontal and vertical skips at the beginning and end of the   -->
+<!-- text to make it a bit “larger.” The default inner sep is the    -->
+<!-- size of a normal space."                                        -->
+<!--                                                                 -->
+<!-- We use a default of 4pt, and this template is employed for      -->
+<!-- consistency, such as in the more elaborate template for tactile -->
+<!-- versions, located  elsewhere.                                   -->
+<xsl:template match="label" mode="get-label-offset">
+    <xsl:choose>
+        <xsl:when test="@offset">
+            <xsl:value-of select="@offset"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>4pt</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>

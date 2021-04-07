@@ -355,7 +355,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\node [</xsl:text>
     <!-- convert PreTeXt compass directions to TikZ anchor -->
     <!-- shorthand (template resides in pretext-latex.xsl) -->
+    <!-- along with a scaled offset from the coordinate    -->
     <xsl:apply-templates select="@direction" mode="tikz-direction"/>
+    <xsl:text> = \tikzscale * </xsl:text>
+    <!-- Always an offset, default is 4pt, about a "normal space" -->
+    <xsl:apply-templates select="." mode="get-label-offset"/>
+    <xsl:text>, inner sep=4mm, fill=white</xsl:text>
     <xsl:text>] at (</xsl:text>
     <!-- scale offsets via a macro, = 1 normally, measured otherwise -->
     <!-- .09cm = .9mm radius * 2.54 scale factor -->
