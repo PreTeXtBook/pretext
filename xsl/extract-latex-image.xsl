@@ -221,7 +221,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>\newlength{\brailleareaheight}&#xa;</xsl:text>
                 <xsl:text>\setlength{\brailleareaheight}{10in}&#xa;</xsl:text>
                 <!-- page dimensions, no matter what for an embossed tactile image -->
-                <xsl:text>%% 10in x 10in body, 1/2 inch gutter, 1/2 inch margins, some room for overfull</xsl:text>
+                <xsl:text>%% 10in x 10in body, 1/2 inch gutter, 1/2 inch margins, some room for overfull&#xa;</xsl:text>
                 <xsl:text>\geometry{paperwidth=\braillepagewidth, paperheight=\braillepageheight, </xsl:text>
                 <xsl:text>left=1in, right=0.4in, top=0.5in, bottom=0.4in</xsl:text>
                 <xsl:text>}&#xa;</xsl:text>
@@ -274,10 +274,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="$b-tactile and not($env-begin = '')">
                 <!-- make a "sighted" version in a box to measure -->
                 <xsl:text>%% Sighted version measured in a box&#xa;</xsl:text>
-                <xsl:text>%% Scale factor lands in \tikzscale&#xa;</xsl:text>
+                <xsl:text>%% Scale factor lands in more global \tikzscale&#xa;</xsl:text>
                 <xsl:text>\makeatletter&#xa;</xsl:text>
                 <xsl:text>\newsavebox{\measure@tikzpicture}&#xa;</xsl:text>
                 <xsl:text>\begin{lrbox}{\measure@tikzpicture}%&#xa;</xsl:text>
+                <!-- We scale the offset of a label for a magnified version -->
+                <!-- by the \tikzscale factor, so we just set it to 1 for   -->
+                <!-- right now in the masurement of the original.  Inside   -->
+                <!-- the lrbox environment maybe it is local as well.       -->
+                <xsl:text>\def\tikzscale{1}&#xa;</xsl:text>
                 <xsl:value-of select="$the-latex-image"/>
                 <xsl:text>\end{lrbox}%&#xa;</xsl:text>
                 <!-- https://tex.stackexchange.com/questions/18771/store-pgfmathresult-in-a-variable -->
@@ -390,7 +395,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>mm</xsl:text>
     <xsl:text>}</xsl:text>
     <xsl:text>\special{dvisvgm:raw &lt;/g&gt;}</xsl:text>
-    <xsl:text>};&#xa;</xsl:text>    <!-- FINISH tikz node -->
+    <xsl:text>};&#xa;</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>

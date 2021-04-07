@@ -426,7 +426,6 @@ def latex_tactile_image_conversion(xml_source, pub_file, stringparams, data_dir,
             _verbose('applying latex-image-extraction stylesheet with tactile option')
             manipulation_params = stringparams
             manipulation_params['labelfile'] = braille_label_file
-            manipulation_params['rectangles'] = 'no'
             svg_source = os.path.join(tmp_dir, latex_image_svg)
             svg_result = os.path.join(dest_dir, latex_image_svg)
             manipulation_xslt = os.path.join(ptx_xsl_dir, 'support', 'tactile-svg.xsl')
