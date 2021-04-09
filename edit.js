@@ -50,8 +50,7 @@ objectStructure = {
   "li": {
     "html": {
         "tag": "li",
-        "pieces": ["content"],
-        "data_editable": "980"
+        "pieces": ["content"]
     },
     "ptx": {
         "tag": "li",
@@ -77,7 +76,7 @@ objectStructure = {
         "tag": "img",
         "cssclass": "image-box",
         "pieces": ["content"],
-        "data_editable": "30",
+        "data_editable": "31",
         "style": "width: 50%; margin-right: 25%; margin-left: 25%"  /* should come from ptx source? */
     },
     "ptx": {
@@ -105,6 +104,7 @@ objectStructure = {
         "tag": "article",
         "cssclass": "proof",
         "pieces": ["heading", "content"],
+        "data_editable": "60",
         "heading": "proof_heading"
     },
     "ptx": {
@@ -199,7 +199,7 @@ function content_from_source(name, src) {
     if (name == "space") { content = " " }
     if (name == "period") { content = "." }
     if (name == "title") { content = src.title }
-    if (name == "codenumber") { content = "NN" }
+    if (name == "codenumber") { content = "N.mm" }
     if (name == "type") { 
         var content_raw = src["ptxtag"];
         content = content_raw.charAt(0).toUpperCase() + content_raw.slice(1);
@@ -1148,7 +1148,6 @@ function edit_in_place(obj, oldornew) {
         this_char = "";
         prev_char = "";
 
- //     } else if (new_tag == "sbs") {
       } else if (new_tag.startsWith("sbs")) {
         numcols = parseInt(new_tag.slice(-1));
         new_tag = "sbs";
@@ -1187,7 +1186,31 @@ function edit_in_place(obj, oldornew) {
 
         console.log("made sbs", thisID);
 
-      } else if (new_tag == "li") {  // this is confusing, because really we are editing the p in the li
+      } else if (true) {
+
+        console.log("create the object, then edit p in place", obj);
+
+        var this_object = html_from_internal_id(new_id, "");
+        $("#" + thisID).replaceWith(this_object);
+
+        var empty_p_child = $(this_object).find("p:empty");
+        console.log("found the empty p", empty_p_child);
+        edit_in_place(empty_p_child[0], "new");
+
+      } else if (false && new_tag == "li") {  // this is confusing, because really we are editing the p in the li
+
+        console.log("create li, then edit in place", obj);
+
+        var this_object = html_from_internal_id(new_id, "");
+        $("#" + thisID).replaceWith(this_object);
+
+        var empty_p_child = $(this_object).find("p:empty");
+        console.log("found the empty p", empty_p_child);
+        edit_in_place(empty_p_child[0], "new");
+
+
+/*
+
         var this_new_li = document.createElement('li');
         this_new_li.setAttribute('id', thisID);
         $("#" + thisID).replaceWith(this_new_li);
@@ -1222,8 +1245,21 @@ function edit_in_place(obj, oldornew) {
         console.log("made edit box for", thisID);
         this_char = "";
         prev_char = "";
+*/
 
-     } else if (new_tag == "list") {
+     } else if (false && new_tag == "list") {
+
+
+        console.log("create list, then edit in place", obj);
+
+        var this_object = html_from_internal_id(new_id, "");
+        $("#" + thisID).replaceWith(this_object);
+
+        var empty_p_child = $(this_object).find("p:empty");
+        console.log("found the empty p", empty_p_child);
+        edit_in_place(empty_p_child[0], "new");
+
+/*
         console.log("list edit in place", obj)
         var this_new_list = document.createElement('ol');   // later distinguish between ol and ul
         this_new_list.setAttribute('id', thisID);
@@ -1274,13 +1310,14 @@ function edit_in_place(obj, oldornew) {
         prev_char = "";
 
         make_current_editing_from_id("actively_editing");
+*/
 
-      } else if (editing_container_for["definition-like"].includes(new_tag) ||
+      } else if (false && (editing_container_for["definition-like"].includes(new_tag) ||
                 editing_container_for["theorem-like"].includes(new_tag) ||
                 editing_container_for["remark-like"].includes(new_tag) ||
                 editing_container_for["exercise-like"].includes(new_tag) ||
                 editing_container_for["example-like"].includes(new_tag) ||
-                editing_container_for["section-like"].includes(new_tag)) {
+                editing_container_for["section-like"].includes(new_tag) ) ) {
 // only good for creating a new theorem or definition, not editing in place
 // think about that use case:  once it exists, do we ever edit the theorem as a unit?
 
@@ -1361,7 +1398,7 @@ function edit_in_place(obj, oldornew) {
         $("#" + thisID).replaceWith(this_content_container);
         $("#actively_editing_title").focus();
 */
-      } else if (new_tag == "proof") {
+      } else if (false && new_tag == "proof") {
 
         var this_proof = html_from_internal_id(new_id, "");
         $("#" + thisID).replaceWith(this_proof);
@@ -1412,9 +1449,13 @@ function edit_in_place(obj, oldornew) {
 
 */
 
+      }
+
+/*
       } else {
           console.log("I do not know how to edit", new_tag)
      }
+*/
    } else {
         console.log("Error: edit in place of object that is not already known", obj);
         console.log("What is known:", internalSource)
@@ -2286,8 +2327,10 @@ function html_from_internal_id(the_id, is_inner) {
             if (thehtmlstructure.cssclass || thehtmlstructure.csssubclass) {
                 inner_form += ' class="' + thehtmlstructure.cssclass + " " + thehtmlstructure.subclass + '"';
             }
-            inner_form += ' tabindex="-1"';
-            inner_form += ' data-editable="' + thehtmlstructure.data_editable + '"';
+            if (thehtmlstructure.data_editable) {
+                inner_form += ' tabindex="-1"';
+                inner_form += ' data-editable="' + thehtmlstructure.data_editable + '"';
+            }
             inner_form += '>';
             inner_form += object_all_contents_html
             inner_form += '</' + thehtmlstructure.tag + '>';
@@ -2300,8 +2343,11 @@ function html_from_internal_id(the_id, is_inner) {
                 console.log("adding CLASS", thehtmlstructure.cssclass, "and", thehtmlstructure.csssubclass);
                 object_in_html.setAttribute("class", thehtmlstructure.cssclass + " " + thehtmlstructure.csssubclass);
             }
-            object_in_html.setAttribute("tabindex", -1);
-            object_in_html.setAttribute("data-editable", thehtmlstructure.data_editable);
+            if (thehtmlstructure.data_editable) {
+                // not everything is seen by the editor. li, for example
+                object_in_html.setAttribute("tabindex", -1);
+                object_in_html.setAttribute("data-editable", thehtmlstructure.data_editable);
+            }
             object_in_html.innerHTML = object_all_contents_html;
             the_html_objects.push(object_in_html)
         }
@@ -2422,7 +2468,7 @@ function local_editing_action(e) {
         local_menu_navigator(e);
     } else if (e.code == "Escape" || e.code == "Enter") {
         console.log("I saw a Rettttt");
-   //     if (document.activeElement.tagName == "INPUT") {
+   //     if (document.activeElement.tagName == "INPUT") 
         if (document.activeElement.getAttribute('data-component') == "title") {
             console.log("probably saving a title");
             e.preventDefault();
@@ -2486,6 +2532,7 @@ console.log("    LLL current_editing", current_editing, current_editing["tree"][
                 }
                 console.log("PP", current_editing_actions.length, " current_editing_actions", current_editing_actions);
             }
+/*
             // if there is an editing paragraph ahead, go there.  Otherwise menu the last thing added
             // note: 4/5/21 this use case no longer supported:  all additions are separate
             if (document.querySelector('.paragraph_input')) {
@@ -2493,7 +2540,9 @@ console.log("    LLL current_editing", current_editing, current_editing["tree"][
                 console.log("focus to next_textarea", next_textarea);
                 next_textarea.focus();
        //         next_textarea.setSelectionRange(0,0);
-            } else if (final_added_object) { //  && document.getElementById("actively_editing")) {
+            } else 
+*/
+            if (final_added_object) { //  && document.getElementById("actively_editing")) 
 
               if(document.getElementById("actively_editing")) {
 console.log("    SSS current_editing", current_editing, current_editing["tree"][current_editing["level"]]);
@@ -2547,17 +2596,16 @@ console.log("    GGG current_editing", current_editing, current_editing["tree"][
            //         alert("now editing the new li");
                 } else {
 
-                var editing_parent = current_editing["tree"][ current_editing["level"] -1 ][ current_editing["location"][ current_editing["level"] - 1 ] ];
-                console.log("going to make the new tree from parent of", this_parent, "which is", editing_parent, "and has children", next_editable_of(editing_parent, "children"));
-                current_editing["tree"][current_editing["level"]] = next_editable_of(editing_parent, "children");    
-                console.log("updated tree", current_editing["tree"]);
+                    var editing_parent = current_editing["tree"][ current_editing["level"] -1 ][ current_editing["location"][ current_editing["level"] - 1 ] ];
+                    console.log("going to make the new tree from parent of", this_parent, "which is", editing_parent, "and has children", next_editable_of(editing_parent, "children"));
+                    current_editing["tree"][current_editing["level"]] = next_editable_of(editing_parent, "children");    
+                    console.log("updated tree", current_editing["tree"]);
 console.log("    QQQ current_editing", current_editing, current_editing["tree"][current_editing["level"]]);
 console.log("    final_added_object", final_added_object);
 
-                make_current_editing_from_id(final_added_object.id);
+                    make_current_editing_from_id(final_added_object.id);
 
-
-                edit_menu_from_current_editing("entering");
+                    edit_menu_from_current_editing("entering");
 
                 }
 
