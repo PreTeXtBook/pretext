@@ -1039,9 +1039,9 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
     new_arrangement = the_current_arrangement.replace(object_neighbor, neighbor_with_new);
     internalSource[parent_description[0]][parent_description[1]] = new_arrangement;
     if (new_tag == "list") {
-        current_editing["level"] += 1;
-        current_editing["location"].push(0);
-        current_editing["tree"].push([document.getElementById(new_p_id)])
+  //      current_editing["level"] += 1;
+  //      current_editing["location"].push(0);
+  //      current_editing["tree"].push([document.getElementById(new_p_id)])
     }  else {
         current_editing["location"][current_level] = current_location;
     }
@@ -1285,6 +1285,15 @@ function edit_in_place(obj, oldornew) {
 // think about that use case:  once it exists, do we ever edit the theorem as a unit?
 
         console.log("edit in place", obj);
+
+        var this_object = html_from_internal_id(new_id, "");
+        $("#" + thisID).replaceWith(this_object);
+
+        var empty_p_child = $(this_object).find("p:empty");
+        console.log("found the empty p", empty_p_child);
+        edit_in_place(empty_p_child[0], "new");
+
+/*
         var objecttype = object_class_of(new_tag);
         var this_content_container = document.createElement('div');
         this_content_container.setAttribute('id', "actively_editing");
@@ -1312,10 +1321,11 @@ function edit_in_place(obj, oldornew) {
         statement += statementeditingregion;
         statement += editingregion_container_end + statement_container_end;
         console.log("made the statement");
+*/
 
-        var proof = "";
-        var suggestions = "";
-        if (editing_container_for["theorem-like"].includes(new_tag)) {
+   //     var proof = "";
+   //     var suggestions = "";
+        if (false && editing_container_for["theorem-like"].includes(new_tag)) {
             var proof_container_start = '<div class="editing_proof">';
             var proof_container_end = '</div>';
             var proofinstructions = '<span class="group_description">optional proof (paragraphs, images, lists, etc)</span>';
@@ -1331,8 +1341,8 @@ function edit_in_place(obj, oldornew) {
             proof += proofinstructions;
             proof += proofeditingregion;
             proof += editingregion_container_end + proof_container_end;
-        } else if (editing_container_for["example-like"].includes(new_tag) ||
-                   editing_container_for["exercise-like"].includes(new_tag)) {
+        } else if (false && (editing_container_for["example-like"].includes(new_tag) ||
+                   editing_container_for["exercise-like"].includes(new_tag)) ) {
             console.log("suggesitons not fully implemented yet");
             var suggestions_container_start = '<div class="editing_suggestions">';
             var suggestions_container_end = '</div>';
@@ -1345,22 +1355,20 @@ function edit_in_place(obj, oldornew) {
             suggestions += editingregion_container_end + suggestions_container_end;
         }
 
+/*
         this_content_container.innerHTML = title + statement + (proof || suggestions);
 
         $("#" + thisID).replaceWith(this_content_container);
         $("#actively_editing_title").focus();
+*/
       } else if (new_tag == "proof") {
 
         var this_proof = html_from_internal_id(new_id, "");
-
-         $("#" + thisID).replaceWith(this_proof);
+        $("#" + thisID).replaceWith(this_proof);
 
         var empty_p_child = $(this_proof).find("p:empty");
-
         console.log("found the empty p", empty_p_child);
-
         edit_in_place(empty_p_child[0], "new");
-
 /*
         var this_content_container = document.createElement('article');
         this_content_container.setAttribute('id', new_id);
