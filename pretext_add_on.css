@@ -1895,6 +1895,9 @@ a.mjx-svg-href  {
 .pretext-content .exercisegroup-exercises > article {
     margin-left: 2em;
 }
+.pretext-content .exercisegroup .cols2 > article {
+    margin-left: 1.25em;
+}
 .pretext-content .exercisegroup > .introduction,
 .pretext-content .exercisegroup > .conclusion {
     margin-left: 0;
@@ -3656,9 +3659,14 @@ label.incorrect .feedback {
 /* next is realted to having exercises start in-line with their exercise number,
    including when a static WW problem is made interactive */
 /* not sure this was the right way to do it */
+/* see https://opentext.uleth.ca/apex-calculus/sec_antider.html#exercise-722 */
 .pretext-content .heading + .exercise-wrapper {
     display: inline-block;
-    width: 90%;
+    max-width: 95%;
+}
+.pretext-content .cols2 .heading + .exercise-wrapper,
+.pretext-content .exercisegroup .heading + .exercise-wrapper {
+    width: auto;
 }
 
 /*  does not work as intended in Chrome dark mode 
