@@ -238,15 +238,18 @@ console.log("this is e", e);
 
     console.log("adding permalinks");
     /* add permalinks to all sections and articles */
-    items_needing_permalinks = document.querySelectorAll('main section:not(.introduction), main section > p, main section article, main section > figure, main section  .exercisegroup > .introduction > p, main section  .exercisegroup article, main section article.exercise, main section article.paragraphs > p, main section article.paragraphs > figure');
+    items_needing_permalinks = document.querySelectorAll('main section:not(.introduction), main section > p, main section article, main section > figure, main section > figure > figcaption, main section  .exercisegroup > .introduction > p, main section  .exercisegroup article, main section article.exercise, main section article.paragraphs > p, main section article.paragraphs > figure');
     //   items_needing_permalinks = document.querySelectorAll('body section article');
     this_url = window.location.href.split('#')[0];
     permalink_word = "permalink";
     permalink_word = "&#x1F517;";
     for (var i = 0; i < items_needing_permalinks.length; i++) {
         this_item = items_needing_permalinks[i];
-        if(this_item.id) {
-            this_permalink_url = this_url + "#" + this_item.id;
+        var this_anchor = this_item.id;
+        if (this_item.tagName == "FIGCAPTION") { this_anchor  = this_item.parentElement.id }
+        if(this_anchor) {
+      //      this_permalink_url = this_url + "#" + this_item.id;
+            this_permalink_url = this_url + "#" + this_anchor;
   //          console.log("        needs permalink", this_permalink_url, "  xx ", this_item);
   //          this_permalink_container = document.createElement('div');
   //          this_permalink_container.setAttribute('style', "position: relative; width: 0; height: 0");
