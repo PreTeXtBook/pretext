@@ -525,13 +525,17 @@ function make_current_editing_from_id(theid) {
 }
 
 function standard_title_form(object_id) {
-    the_object = internalSource[object_id];
+    var the_object = internalSource[object_id];
+    var the_title = the_object.title;
+/*
     object_type = the_object["ptxtag"];  // need to use that to determin the object_type_name
     object_type_name = object_type;
     the_parent = the_object["parent"];
     the_parent_id = the_parent[0];
     the_parent_component = the_parent[1];
+*/
 
+/*
     var title_form = "<div><b>" + object_type_name + "&nbsp;#N</b>&nbsp;";
     title_form += '<span id="editing_title_holder">';
     title_form += '<input id="actively_editing_title" class="starting_point_for_editing" data-source_id="' + object_id + '" data-component="' + 'title' + '" placeholder="Optional title" type="text"/>';
@@ -539,6 +543,11 @@ function standard_title_form(object_id) {
     title_form += '&nbsp;<span class="group_description">(' + editing_tip_for("title") + ')</span>';
     title_form += '</span>';  // #editing_title_holder
     title_form += '</div>';
+*/
+
+//    var title_form = '<input id="actively_editing" class="starting_point_for_editing" data-source_id="' + object_id + '" data-component="' + 'title' + '" placeholder="Optional title" type="text"/>';
+
+    var title_form = '<span id="actively_editing" class="starting_point_for_editing" data-source_id="' + object_id + '" data-component="' + 'title' + '" contenteditable="true">' + the_title + '</span>';
 
     return title_form
 }
@@ -850,6 +859,7 @@ function edit_menu_for(this_obj_or_id, motion) {
             // need to code this better:  over-writing edit_option
             edit_option = document.createElement('ol');
             edit_option.setAttribute('id', 'edit_menu');
+            console.log("this_obj", this_obj);
             this_obj_parent_id = this_obj.parentElement.parentElement.id;
             this_obj_environment = internalSource[this_obj_parent_id]["ptxtag"];
             edit_option.innerHTML = '<li id="choose_current" tabindex="-1" data-action="change-title">Change title</li>';
@@ -2138,7 +2148,7 @@ function assemble_internal_version_changes() {
 
         nature_of_the_change = "replace";
         var line_being_edited = object_being_edited;  //document.getElementById('actively_editing_p');
-        var line_content = line_being_edited.value;
+        var line_content = line_being_edited.innerHTML;
         line_content = line_content.trim();
         console.log("the content (is it a title?) is", line_content);
         var owner_of_change = object_being_edited.getAttribute("data-source_id");
@@ -2412,8 +2422,13 @@ function insert_html_version(these_changes) {
         } else if (this_object_entry == "title") {
             var object_as_html = document.createElement('span');
             object_as_html.setAttribute("class", "title");
+            object_as_html.setAttribute('data-editable', 20);
+            object_as_html.setAttribute('tabindex', -1);
             object_as_html.innerHTML = ptx_to_html(this_object[this_object_entry]);
             console.log("inserting",object_as_html,"before",location_of_change);
+            // location_of_change is the .header .  We want it to be the .title
+            location_of_change = location_of_change.querySelector("#actively_editing");
+            console.log("now location_of_change",location_of_change);
             location_of_change.insertAdjacentElement('beforebegin', object_as_html);
 
         } else if (this_object_entry == "bareimage") {
@@ -2437,7 +2452,7 @@ function insert_html_version(these_changes) {
     }
     location_of_change.remove();
 
-    console.log("returning from insert html version");
+    console.log("returning from insert html version", object_as_html);
     // call mathjax, in case the new content contains math
     return object_as_html // the most recently added object, which we may want to
                            // do something, like add an editing menu
@@ -2478,11 +2493,16 @@ function local_editing_action(e) {
             recent_editing_actions.unshift(most_recent_edit);
             console.log("most_recent_edit should be title change", most_recent_edit);
             console.log("final_added_object", final_added_object);
-            document.getElementById("actively_editing_statement").focus();
+     //       document.getElementById("actively_editing_statement").focus();
       //      document.getElementById("actively_editing_statement").setSelectionRange(0,0);
             this_char = "";
             prev_char = "";
-            save_edits()
+            save_edits();
+
+            // .title is in a .heading, and neither have an id
+            make_current_editing_from_id(final_added_object.parentElement.parentElement.id);
+            edit_menu_from_current_editing("entering");
+
 // editing_input_image
         } else if (e.code == "Escape" || (prev_char.code == "Enter" && prev_prev_char.code == "Enter") || document.getElementById("editing_input_image")) {
             console.log("need to save");
@@ -2622,6 +2642,7 @@ console.log("    final_added_object", final_added_object);
         console.log("e.code was not one of those we were looking for", e)
     }
     console.log("leaving local_editing_action")
+
 }
 
 function main_menu_navigator(e) {  // we are not currently editing
@@ -3018,7 +3039,13 @@ function main_menu_navigator(e) {  // we are not currently editing
                 console.log("current_env", current_env);
                 move_by_id_local(current_env_id, handle_env_id)
             } else if (dataAction == "change-title") {
-                console.log("change-title not implemented yet")
+                var this_heading = document.getElementById('edit_menu_holder').parentElement.parentElement;
+                var this_env_id = this_heading.getAttribute("data-parent_id");
+                var new_title_form = standard_title_form(this_env_id);
+                document.getElementById('edit_menu_holder').parentElement.insertAdjacentHTML("afterend",new_title_form);
+                document.getElementById('edit_menu_holder').parentElement.remove();
+                console.log("change-title in progress")
+                document.getElementById('actively_editing').focus();
             } else {
                 alert("I don;t know what to do llllllll dataAction " + dataAction)
             }
