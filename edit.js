@@ -236,7 +236,7 @@ var menu_active_background = "#fdd";
 
 var recent_editing_actions = [];  // we unshift to this, so most recent edit is first.
      // currently just a human-readable list
-var current_editing_actions = [];
+var ongoing_editing_actions = [];
 var old_content = {};   // to hold old versions of changed materials
 
 // what will happen with internationalization?
@@ -266,6 +266,12 @@ function removeItemFromList(lis, value) {
   }
   return lis;
 }
+
+function rescale(width, max, margin_left, margin_right) {
+    var available_width = max - parseFloat(margin_left) - parseFloat(margin_right);
+    return width * 100 / available_width
+}
+
 
 function spacemath_to_tex(text) {
 
@@ -348,7 +354,10 @@ var the_inner_menu = {
 "aside-like": [["aside"], ["historical"], ["biographical"]],
 "layout-like": [["side-by-side panels", "sbs"], ["assemblage"], ["biographical aside"], ["titled paragraph", "paragraphs"]],
 "sbs": [["2 panels", "sbs2"], ["3 panels", "sbs3"], ["4 panels", "sbs4"]],
-"sbs2": [["full across XXX", "sbs2_0_50_50_0"], ["gap but no margin", "sbs2_0_40_40_0"], ["spaced equally", "sbs2_5_40_40_5"]],
+//"sbs2": [["full across XXX", "sbs2_0_50_50_0"], ["gap but no margin", "sbs2_0_40_40_0"], ["spaced equally", "sbs2_5_40_40_5"]],
+"sbs2": [["full across", "sbs_0_60_60_0"], ["gap but no margin", "sbs_0_48_48_0"], ["spaced equally", "sbs_5_48_48_5"]],
+"sbs3": [["full across", "sbs_0_40_40_40_0"], ["gap but no margin", "sbs_0_33_33_33_0"], ["spaced equally", "sbs_5_33_33_33_5"]],
+"sbs4": [["full across", "sbs_0_30_30_30_30_0"], ["gap but no margin", "sbs_0_25_25_25_25_0"], ["spaced equally", "sbs_4_25_25_25_25_4"]],
 "math-like": [["math display", "mathdisplay"], ["chemistry display", "chemistrydisplay"], ["code listing", "code", "l"]],
 "quoted": [["blockquote"], ["poem"], ["music"]],
 "interactives": [["sage cell", "sagecell"], ["webwork"], ["asymptote"], ["musical score", "musicalscore"]],
@@ -390,6 +399,7 @@ inline_tags = {'em': ['em', ['<em class="emphasis"', "</em>"]],
 }
 math_tags = {'m': ['m', ['\\(', '\\)']] }
 
+/*
 title_like_tags = {
     "h1": [],   //  all the hN are .heading, so probably should use that
     "h2": [],
@@ -399,26 +409,7 @@ title_like_tags = {
     "h6": [],  // title or creator or ...
     "figcaption": []  // plain text betweem last </span> and </figcaption>
 }
-
-editing_tips = {
-    "p": ["two RETurns to separate paragraphs",
-          "three RETurns to end editing a paragraph",
-          "TAB to insert emphasis, math, special characters, etc",
-          "ESC to stop editing and save",
-          "TAB to insert a reference or index entry",
-          "TAB to insert musical characters, species name, inline code, etc"],
-    "title": ["RETurn to save title",
-              "TAB for a reference, special characters, etc"]
-}
-          
-function editing_tip_for(obj_type) {
-    if (user_level != "novice") { return "" }
-    if (obj_type in editing_tips) {
-        possible_tips = editing_tips[obj_type];
-        this_tip = possible_tips[Math.floor(Math.random()*possible_tips.length)];
-    } else { this_tip = "" }
-    return this_tip;
-}
+*/
 
 /*
 var url = "https://github.com/oscarlevin/discrete-book/blob/master/ptx/sec_intro-intro.ptx";
@@ -705,9 +696,7 @@ function top_menu_options_for(this_obj) {
 
 function edit_menu_from_current_editing(motion) {
         // obviously we need to think a bit about current_editing and how it is used
-    console.log("in edit_menu_from_current_editing, level:", current_editing["level"],"location:", current_editing["location"], "tree:", current_editing["tree"]);
     var object_of_interest = current_editing["tree"][ current_editing["level"] ][ current_editing["location"][ current_editing["level"] ] ];
-    console.log("object_of_interest", object_of_interest); 
     edit_menu_for(object_of_interest, motion);
 }
 
@@ -782,11 +771,14 @@ function edit_menu_for(this_obj_or_id, motion) {
         if (this_obj.tagName.toLowerCase() in inline_tags) {
             edit_option.innerHTML = "change this?";
             edit_option.setAttribute('data-location', 'inline');
+/*
         } else if (this_obj.tagName.toLowerCase() in title_like_tags) { 
 // can this happen?
             edit_option.innerHTML = "modify this?";
             edit_option.setAttribute('data-location', 'inline');
+*/
         } else if (this_obj.classList.contains("type")) {
+            // e.g., changing "proposition" to "theorem"
             // need to code this better:  over-writing edit_option
             edit_option = document.createElement('ol');
             edit_option.setAttribute('id', 'edit_menu');
@@ -798,14 +790,18 @@ function edit_menu_for(this_obj_or_id, motion) {
             edit_option.innerHTML = "<b>modify</b> this image layout, or add near here?";
         } else if (this_obj.classList.contains("sbspanel")) {
             edit_option.innerHTML = "<b>modify</b> this panel layout, or change panel contents?";
-        } else if (this_obj.classList.contains("title") || this_obj.classList.contains("title")) {
+        } else if (this_obj.classList.contains("title")) {
             // need to code this better:  over-writing edit_option
             edit_option = document.createElement('ol');
             edit_option.setAttribute('id', 'edit_menu');
             console.log("this_obj", this_obj);
             this_obj_parent_id = this_obj.parentElement.parentElement.id;
             this_obj_environment = internalSource[this_obj_parent_id]["ptxtag"];
-            edit_option.innerHTML = '<li id="choose_current" tabindex="-1" data-action="change-title">Change title</li>';
+            if (this_obj.innerHTML) {
+                edit_option.innerHTML = '<li id="choose_current" tabindex="-1" data-action="change-title">Change title</li>';
+            } else {
+                edit_option.innerHTML = '<li id="choose_current" tabindex="-1" data-action="change-title">Add a title</li>';
+            }
             edit_option.setAttribute('data-location', 'inline');
         } else {
             if (next_editable_of(this_obj, "children").length) {
@@ -866,18 +862,23 @@ function create_new_internal_object(new_tag, new_id, parent_description) {
 
     console.log("create_new_internal_object", new_tag, "new_id", new_id, "parent_description", parent_description);
     if (new_tag.startsWith("sbs")) {  // creating an sbs, which contains one sbsrow, which contains several sbspanels
-        var numcols = parseInt(new_tag.slice(-1));
+        var sbs_layout = new_tag.split("_");
+  //      var numcols = parseInt(new_tag.slice(-1));
+ //       var numcols = parseInt(sbs_layout[0].slice(-1));
+        var [margin_left, margin_right] = [sbs_layout[1], sbs_layout[sbs_layout.length - 1]];
+        console.log("sbs side margins", margin_left, "jj", margin_right);
         var new_sbsrow_id = randomstring();
         internalSource[new_sbsrow_id] = {"xml:id": new_sbsrow_id, "permid": "", "ptxtag": "sbsrow",
-                 "margin-left": 5, "margin-right": 5, "parent": [new_id, "content"]}
+                 "margin-left": margin_left, "margin-right": margin_right, "parent": [new_id, "content"]}
 
         var col_content = "";
-        var col_default_width = [0, 100, 40, 31, 23, 19];
-        for (var j=0; j < numcols; ++j) {
+  //      var col_default_width = [0, 100, 40, 31, 23, 19];
+        for (var j=2; j <= sbs_layout.length - 2; ++j) {
             var new_col_id = randomstring();
             col_content += "<&>" + new_col_id + "<;>";
             internalSource[new_col_id] = {"xml:id": new_col_id, "permid": "", "ptxtag": "sbspanel",
-                "width": col_default_width[numcols], "content": "", "parent": [new_sbsrow_id, "content"]}
+                "width": sbs_layout[j], "content": "", "parent": [new_sbsrow_id, "content"]}
+//                "width": col_default_width[numcols], "content": "", "parent": [new_sbsrow_id, "content"]}
         }
 
         internalSource[new_sbsrow_id]["content"] = col_content;
@@ -930,9 +931,9 @@ function create_new_internal_object(new_tag, new_id, parent_description) {
     } else if (new_tag == "p"){
         // p is the default, so no need to keep track of it
     } else if (new_tag.startsWith("sbs")){
-        current_editing_actions.push(["new", "sbs", new_id]);
+        ongoing_editing_actions.push(["new", "sbs", new_id]);
     } else {
-        current_editing_actions.push(["new", new_tag, new_id]);
+        ongoing_editing_actions.push(["new", new_tag, new_id]);
     }
 }
 
@@ -1105,11 +1106,12 @@ function edit_in_place(obj, oldornew) {
         console.log('idOfSBSRow', idOfSBSRow);
         idOfSBSRow = idOfSBSRow.replace(/<.>/g, "");
         console.log('idOfSBSRow', idOfSBSRow);
+        var [margin_left, margin_right] = [internalSource[idOfSBSRow]["margin-left"], internalSource[idOfSBSRow]["margin-right"]];
         var this_sbsrow = document.createElement('div');
         this_sbsrow.setAttribute('class', 'sbsrow');
         this_sbsrow.setAttribute('id', idOfSBSRow);
         this_sbsrow.setAttribute('data-editable', "89");
-        this_sbsrow.setAttribute('style', "margin-left:" + internalSource[idOfSBSRow]["margin-left"] + "%; margin-right:" + internalSource[idOfSBSRow]["margin-right"] + "%;");
+        this_sbsrow.setAttribute('style', "margin-left:" + margin_left/1.2 + "%; margin-right:" + margin_right/1.2 + "%;");
 
         var idsOfSBSPanel = internalSource[idOfSBSRow]["content"]
         idsOfSBSPanel = idsOfSBSPanel.replace(/^ *<&>/, '');
@@ -1121,7 +1123,10 @@ function edit_in_place(obj, oldornew) {
         console.log('c idsOfSBSPanel', idsOfSBSPanelList);
         var these_panels = '';
         for (var j=0; j < idsOfSBSPanelList.length; ++j) {
-            these_panels += '<div class="sbspanel top" id="' + idsOfSBSPanelList[j] + '" data-editable="90" style="width:' + internalSource[idsOfSBSPanelList[j]]["width"] + '%"></div>';
+   //         these_panels += '<div class="sbspanel top" id="' + idsOfSBSPanelList[j] + '" data-editable="90" style="width:' + internalSource[idsOfSBSPanelList[j]]["width"] + '%"></div>';
+            var width = rescale(internalSource[idsOfSBSPanelList[j]]["width"], 120, margin_left, margin_right);
+            these_panels += '<div class="sbspanel top" id="' + idsOfSBSPanelList[j] + '" data-editable="90"';
+            these_panels += ' style="width:' + width + '%"></div>';
         }
         console.log("these_panels", these_panels);
         this_sbsrow.innerHTML = these_panels;
@@ -1179,7 +1184,7 @@ function modify_by_id_img(theid, modifier) {
     if (modifier == "shrink") { scale_direction = -1 }
     else if (modifier == "left") { moving_direction = -1 }
     if ("enlarge shrink".includes(modifier)) {
-        if ((width >= 100 && scale_direction == 1) || (width <= 0 && scale_direction == -1)) {
+        if ((width >= 120 && scale_direction == 1) || (width <= 0 && scale_direction == -1)) {
             console.log("can't go above 100 or below 0");
             return
         } else {
@@ -1227,8 +1232,8 @@ function modify_by_id_sbs(theid, modifier) {
     var this_sbsrow_id = this_sbs_source["parent"][0];
     var this_sbsrow_source = internalSource[this_sbsrow_id];
     console.log("this_sbsrow_source", this_sbsrow_source);
-    var marginleft = this_sbsrow_source["margin-left"];
-    var marginright = this_sbsrow_source["margin-right"];
+    var marginleft = parseInt(this_sbsrow_source["margin-left"]);
+    var marginright = parseInt(this_sbsrow_source["margin-right"]);
     var these_siblings = this_sbsrow_source["content"];
     these_siblings = these_siblings.replace(/^ *<&> */, "");
     these_siblings = these_siblings.replace(/ *<;> *$/, "");
@@ -1242,7 +1247,7 @@ function modify_by_id_sbs(theid, modifier) {
     console.log("these html siblings",document.getElementById(these_siblings_list[0])," and ", document.getElementById(these_siblings_list[1]))
     console.log("these siblings source",      internalSource[these_siblings_list[0]], "and",  internalSource[these_siblings_list[1]]);
     for(var j=0; j < these_siblings_list.length; ++j) {
-        var t_wid = internalSource[these_siblings_list[j]]["width"];
+        var t_wid = parseInt(internalSource[these_siblings_list[j]]["width"]);
         console.log("adding width", t_wid);
         total_width += t_wid;
         these_panel_widths.push(t_wid);
@@ -1256,15 +1261,15 @@ function modify_by_id_sbs(theid, modifier) {
     marginright = parseInt(marginright);
     marginleft = parseInt(marginleft);
 
-    console.log("occ", marginleft, "u", total_width, "pi", marginright, "ed", marginleft + total_width + marginright)
-    var remaining_space = 100 - (marginleft + total_width + marginright);
+    console.log("occ", marginleft, "u", total_width, "pi", marginright, "total", marginleft + total_width + marginright, "ratio", marginright/total_width)
+    var remaining_space = 120 - (marginleft + total_width + marginright);
     console.log("remaining_space", remaining_space);
 
 //modify: enlarge, shrink, left, right, ??? done
 
 // make the data structure better, then delete this comment
 // currently style looks like "width: 66%; margin-right: 17%; margin-left: 17%"
-    console.log('width, , marginright, , marginleft', this_width, "mr", marginright, "ml",  marginleft);
+    console.log('width', this_width, "mr", marginright, "ml",  marginleft);
 
     console.log("modifier", modifier);
 
@@ -1272,7 +1277,7 @@ function modify_by_id_sbs(theid, modifier) {
     var moving_direction = 1;
 
     if (modifier == "enlargeall") {
-        console.log("enlarging all");
+        console.log("enlarging all", "remaining space", remaining_space);
         if (remaining_space >= these_panel_widths.length) {
             for (var j=0; j < these_panel_widths.length; ++j) {
                 these_panel_widths[j] += 1
@@ -1317,20 +1322,22 @@ function modify_by_id_sbs(theid, modifier) {
     }
     console.log("now these_panel_widths", these_panel_widths);
 
-// many missing cases!!!
+// missing cases??
+
+    internalSource[this_sbsrow_id]["margin-left"] = marginleft;
+    internalSource[this_sbsrow_id]["margin-right"] = marginright;
+    document.getElementById(this_sbsrow_id).style.marginLeft = marginleft/1.2 + "%";
+    document.getElementById(this_sbsrow_id).style.marginRight = marginright/1.2 + "%";
 
     for (var j=0; j < these_siblings_list.length; ++j) {
         var this_id = these_siblings_list[j];
         internalSource[this_id]["width"] = these_panel_widths[j];
-        document.getElementById(this_id).style.width = these_panel_widths[j] + "%";
+        var width = rescale(these_panel_widths[j], 120, marginleft, marginright)
+  //      document.getElementById(this_id).style.width = these_panel_widths[j] + "%";
+        document.getElementById(this_id).style.width = width + "%";
     }
     console.log("NOW these html siblings",document.getElementById(these_siblings_list[0])," and ", document.getElementById(these_siblings_list[1]))
     console.log("NOW these siblings source",      internalSource[these_siblings_list[0]], "and",  internalSource[these_siblings_list[1]]);
-    internalSource[this_sbsrow_id]["margin-left"] = marginleft;
-    internalSource[this_sbsrow_id]["margin-right"] = marginright;
-    document.getElementById(this_sbsrow_id).style.marginLeft = marginleft + "%";
-    document.getElementById(this_sbsrow_id).style.marginRight = marginright + "%";
-
 }
 
 function move_by_id_local(theid, thehandleid) {
@@ -1344,7 +1351,7 @@ function move_by_id_local(theid, thehandleid) {
 
     moved_content = internalSource[theid];
     moved_content_tag = moved_content["ptxtag"];
-    current_editing_actions.push(["moved", moved_content_tag, theid]);
+    ongoing_editing_actions.push(["moved", moved_content_tag, theid]);
     moved_parent_and_location = moved_content["parent"];
     console.log("moving", theid);
     console.log("moved_parent_and_location", moved_parent_and_location);
@@ -1491,7 +1498,7 @@ function move_object(e) {
         // and the navigation information
         make_current_editing_from_id(handle_of_moving_object);
 
-        var most_recent_edit = current_editing_actions.pop();
+        var most_recent_edit = ongoing_editing_actions.pop();
         recent_editing_actions.unshift(most_recent_edit);
 
         edit_menu_from_current_editing("entering");
@@ -1522,7 +1529,7 @@ function delete_by_id(theid, thereason) {
         old_content[theid] = [deleted_content]
     }
     if (thereason != "newempty") {
-        current_editing_actions.push(["deleted ", deleted_content["ptxtag"], theid]);
+        ongoing_editing_actions.push(["deleted ", deleted_content["ptxtag"], theid]);
     }
         // update the parent of the object
     var current_level = current_editing["level"];
@@ -1772,14 +1779,14 @@ function assemble_internal_version_changes() {
                     this_paragraph_contents = extract_internal_contents(this_paragraph_contents);
                     if (internalSource[prev_id]["content"] != this_paragraph_contents) {
                         if (internalSource[prev_id]["content"]) {
-                            current_editing_actions.push(["changed", "p", prev_id]);
+                            ongoing_editing_actions.push(["changed", "p", prev_id]);
                         } else if (this_paragraph_contents) {
-                            current_editing_actions.push(["new", "p", prev_id]);
+                            ongoing_editing_actions.push(["new", "p", prev_id]);
                         }
                         internalSource[prev_id]["content"] = this_paragraph_contents;
                         console.log("changed content of", prev_id)
                     } else if (!this_paragraph_contents) {  // adding an empty paragraph
-                        current_editing_actions.push(["empty", "p", prev_id]);
+                        ongoing_editing_actions.push(["empty", "p", prev_id]);
                     } else {
                         // this means the contents are nonempty and unchanged, so don't record is as a change
                     }
@@ -1804,7 +1811,7 @@ function assemble_internal_version_changes() {
                 this_object_internal["content"] = this_paragraph_contents;
                 internalSource[this_object_label] = this_object_internal
                 console.log("just inserted at label", this_object_label, "content starting", this_paragraph_contents.substring(0,11));
-                current_editing_actions.push(["added", "p", this_object_label]);
+                ongoing_editing_actions.push(["added", "p", this_object_label]);
 // here is where we can record that somethign is empty, hence should be deleted
                 possibly_changed_ids_and_entry.push([this_object_label, "content", "new"]);
             }
@@ -1825,9 +1832,9 @@ function assemble_internal_version_changes() {
         console.log("component_being_changed", component_being_changed, "within", owner_of_change);
         // update the title of the object
         if (internalSource[owner_of_change][component_being_changed]) {
-            current_editing_actions.push(["changed", "title", owner_of_change]);
+            ongoing_editing_actions.push(["changed", "title", owner_of_change]);
         } else {
-            current_editing_actions.push(["added", "title", owner_of_change]);
+            ongoing_editing_actions.push(["added", "title", owner_of_change]);
         }
         internalSource[owner_of_change][component_being_changed] = line_content;
         possibly_changed_ids_and_entry.push([owner_of_change, "title"]);
@@ -1854,9 +1861,9 @@ function assemble_internal_version_changes() {
         console.log("image being changed was", internalSource[image_being_changed]);
 
         if (internalSource[image_being_changed]["src"]) {
-            current_editing_actions.push(["changed", "src", image_being_changed]);
+            ongoing_editing_actions.push(["changed", "src", image_being_changed]);
         } else {
-            current_editing_actions.push(["added", "src", image_being_changed]);
+            ongoing_editing_actions.push(["added", "src", image_being_changed]);
         }
         internalSource[image_being_changed]["src"] = image_src;
         console.log("image being changed is", internalSource[image_being_changed]);
@@ -2152,7 +2159,7 @@ function local_editing_action(e) {
             e.preventDefault();
             these_changes = assemble_internal_version_changes();
             final_added_object = insert_html_version(these_changes);
-            most_recent_edit = current_editing_actions.pop();
+            most_recent_edit = ongoing_editing_actions.pop();
             recent_editing_actions.unshift(most_recent_edit);
             console.log("most_recent_edit should be title change", most_recent_edit);
             console.log("final_added_object", final_added_object);
@@ -2175,7 +2182,7 @@ console.log("    HHH current_editing", current_editing);
             these_changes = assemble_internal_version_changes();
             console.log("    CCC these_changes", these_changes);
             console.log("    CCC0 these_changes[0]", these_changes[0]);
-            console.log("current_editing_actions", current_editing_actions);
+            console.log("ongoing_editing_actions", ongoing_editing_actions);
             console.log("actively_editing", document.getElementById("actively_editing"));
 console.log("    III current_editing", current_editing, current_editing["tree"][current_editing["level"]]);
             previous_added_object = final_added_object;
@@ -2184,34 +2191,34 @@ console.log("    III current_editing", current_editing, current_editing["tree"][
 console.log("    LLL current_editing", current_editing, current_editing["tree"][current_editing["level"]]);
             console.log("the final_added_object", final_added_object);
             console.log("the actively_editing", document.getElementById("actively_editing"));
-            console.log("OO", current_editing_actions.length, " current_editing_actions", current_editing_actions);
-            console.log("current_editing_actions[0]", current_editing_actions[0]);
-            console.log("current_editing_actions[0][2]", current_editing_actions[0][2]);
+            console.log("OO", ongoing_editing_actions.length, " ongoing_editing_actions", ongoing_editing_actions);
+            console.log("ongoing_editing_actions[0]", ongoing_editing_actions[0]);
+            console.log("ongoing_editing_actions[0][2]", ongoing_editing_actions[0][2]);
                 // maybe this next if only handles when we delete by removing the letters in a p?
             if (these_changes[0] == "empty") {
-                console.log("NN", current_editing_actions.length, " current_editing_actions", current_editing_actions);
-                console.log("current_editing_actions[0]", current_editing_actions[0]);
-                console.log("current_editing_actions[0][2]", current_editing_actions[0][2]);
+                console.log("NN", ongoing_editing_actions.length, " ongoing_editing_actions", ongoing_editing_actions);
+                console.log("ongoing_editing_actions[0]", ongoing_editing_actions[0]);
+                console.log("ongoing_editing_actions[0][2]", ongoing_editing_actions[0][2]);
                 console.log("            going to delete", these_changes[2][0]);
                 // this is sort-of a hack to detext the end of inserting li
-                if (current_editing_actions.length == 2 &&
-                    current_editing_actions[1][0] == "empty" &&
-                    current_editing_actions[1][1] == "p" &&
-                    current_editing_actions[0][0] == "new" &&
-                    current_editing_actions[0][1] == "li") {
-                    current_editing_actions.pop();   // content was empty, so there is no editing action
-                    current_editing_actions.pop();
+                if (ongoing_editing_actions.length == 2 &&
+                    ongoing_editing_actions[1][0] == "empty" &&
+                    ongoing_editing_actions[1][1] == "p" &&
+                    ongoing_editing_actions[0][0] == "new" &&
+                    ongoing_editing_actions[0][1] == "li") {
+                    ongoing_editing_actions.pop();   // content was empty, so there is no editing action
+                    ongoing_editing_actions.pop();
                     delete_by_id(these_changes[2][0][0], "newempty");
                     current_editing["location"][current_editing["level"]] -= 1
                     final_added_object = previous_added_object;  // this approach makes the updating of current_editing moot?
                 } else {
                     delete_by_id(these_changes[2][0][0], "empty");
                 }
-                console.log("MM", current_editing_actions.length, " current_editing_actions", current_editing_actions);
-                for (var j=0; j<current_editing_actions.length; ++j ) {
-                    console.log(j, "current_editing_actions[j]", current_editing_actions[j]);
+                console.log("MM", ongoing_editing_actions.length, " ongoing_editing_actions", ongoing_editing_actions);
+                for (var j=0; j<ongoing_editing_actions.length; ++j ) {
+                    console.log(j, "ongoing_editing_actions[j]", ongoing_editing_actions[j]);
                 }
-                console.log("PP", current_editing_actions.length, " current_editing_actions", current_editing_actions);
+                console.log("PP", ongoing_editing_actions.length, " ongoing_editing_actions", ongoing_editing_actions);
             }
             if (final_added_object) { //  && document.getElementById("actively_editing")) 
 
@@ -2243,8 +2250,8 @@ console.log("    DDD current_editing", current_editing, current_editing["tree"][
               }
 
                 most_recent_edit = ["","",""];
-                while (current_editing_actions.length) {
-                    most_recent_edit = current_editing_actions.pop();
+                while (ongoing_editing_actions.length) {
+                    most_recent_edit = ongoing_editing_actions.pop();
                     recent_editing_actions.unshift(most_recent_edit);
                     console.log("      most_recent_edit", most_recent_edit);
                 }
