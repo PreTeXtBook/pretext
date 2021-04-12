@@ -112,7 +112,7 @@ objectStructure = {
     }
   },
 
-  "remark_like": {
+  "remark-like": {
     "html": {
         "tag": "article",
         "cssclass": "remark-like",
@@ -125,7 +125,7 @@ objectStructure = {
     }
   },
 
-  "definition_like": {
+  "definition-like": {
     "html": {
         "tag": "article",
         "cssclass": "definition-like",
@@ -138,7 +138,7 @@ objectStructure = {
     }
   },
 
-  "theorem_like": {
+  "theorem-like": {
     "html": {
         "tag": "article",
         "cssclass": "theorem-like",
@@ -153,9 +153,9 @@ objectStructure = {
 }
 
 var environment_instances = {
-    "definition_like": ["definition", "conjecture", "axiom", "principle", "heuristic", "hypothesis", "assumption"],
-    "theorem_like": ["lemma", "proposition", "theorem", "corollary", "claim", "fact", "identity", "algorithm"],
-    "remark_like": ["remark", "warning", "note", "observation", "convention", "insight"]
+    "definition-like": ["definition", "conjecture", "axiom", "principle", "heuristic", "hypothesis", "assumption"],
+    "theorem-like": ["lemma", "proposition", "theorem", "corollary", "claim", "fact", "identity", "algorithm"],
+    "remark-like": ["remark", "warning", "note", "observation", "convention", "insight"]
 }
 
 for (const [owner, instances] of Object.entries(environment_instances)) {
@@ -176,50 +176,10 @@ for (const [owner, instances] of Object.entries(environment_instances)) {
     }
 }
 
-/*
-var definition_like_environments = ["definition", "conjecture", "axiom", "principle", "heuristic", "hypothesis", "assumption"];
-for (var j=0; j < definition_like_environments.length; ++j) {
-    var this_tag = definition_like_environments[j];
-    objectStructure[this_tag] = {
-        "owner": "definition_like",
-        "html": {
-            "csssubclass": this_tag,
-            "data_editable": "95" + j.toString()
-        },
-        "ptx": {
-             "tag": this_tag
-        }
-    }
+function object_class_of(tag) {
+    console.log("X finding object_class_of", tag);
+    return objectStructure[tag].owner || "unknown"
 }
-var remark_like_environments = ["remark", "warning", "note", "observation", "convention", "insight"];
-for (var j=0; j < remark_like_environments.length; ++j) {
-    var this_tag = remark_like_environments[j];
-    objectStructure[this_tag] = {
-        "owner": "remark_like",
-        "html": {
-            "csssubclass": this_tag,
-            "data_editable": "92" + j.toString()
-        },
-        "ptx": {
-             "tag": this_tag
-        }
-    }     
-}
-var theorem_like_environments = ["lemma", "proposition", "theorem", "corollary", "claim", "fact", "identity", "algorithm"];
-for (var j=0; j < theorem_like_environments.length; ++j) {
-    var this_tag = theorem_like_environments[j];
-    objectStructure[this_tag] = {
-        "owner": "theorem_like",
-        "html": {
-            "csssubclass": this_tag,
-            "data_editable": "93" + j.toString()
-        },
-        "ptx": {
-             "tag": this_tag
-        }
-    }
-}
-*/
 
 function content_from_source(name, src) {
     console.log("     content_from_source src", src);
@@ -315,28 +275,6 @@ function spacemath_to_tex(text) {
 
     return thetext
 
-}
-
-var renamable = {
-    "definition-like": ["definition", "conjecture", "axiom", "principle", "heuristic", "hypothesis", "assumption"],
-    "theorem-like": ["lemma", "proposition", "theorem", "corollary", "claim", "fact", "identity", "algorithm"],
-    "remark-like": ["remark", "warning", "note", "observation", "convention", "insight"],
-    "section-like": ["section", "subsection", "exercises"]
-}
-
-function object_class_of(tag) {
-    console.log("finding object_class_of", tag);
-    var known_types = ["theorem-like", "definition-like", "remark-like", "section-like",
-                       "example-like", "exercise-like"];
-
-    for (var j=0; j<known_types.length; ++j) {
-        if (editing_container_for[known_types[j]].includes(tag)) {
-            return known_types[j]
-        }
-
-    }
-
-    return "unknown"
 }
 
 /* need to distinguish between the list of objects of a type,
@@ -647,7 +585,7 @@ function menu_options_for(object_id, component_type, level) {
          console.log("C1 menu options for", component_type);
          objectclass = object_class_of(component_type);
          console.log("which has class",objectclass);
-         var equivalent_objects = renamable[objectclass].slice();
+         var equivalent_objects = environment_instances[objectclass].slice();
          var replacement_list = removeItemFromList(equivalent_objects, component_type);
          console.log("equivalent_objects", equivalent_objects);
          var this_menu = "";
@@ -845,6 +783,7 @@ function edit_menu_for(this_obj_or_id, motion) {
             edit_option.innerHTML = "change this?";
             edit_option.setAttribute('data-location', 'inline');
         } else if (this_obj.tagName.toLowerCase() in title_like_tags) { 
+// can this happen?
             edit_option.innerHTML = "modify this?";
             edit_option.setAttribute('data-location', 'inline');
         } else if (this_obj.classList.contains("type")) {
@@ -901,11 +840,6 @@ function local_menu_for(this_obj_id) {
 
     document.getElementById("local_menu_holder").insertAdjacentElement("afterbegin", enter_option);
 }
-
-/*
-let response = await fetch(url);
-console.log("status of response",response.status);
-*/
 
 function next_editable_of(obj, relationship) {
     var next_to_edit;
@@ -2016,7 +1950,6 @@ function html_from_internal_id(the_id, is_inner) {
         }
         console.log(" ");
         console.log("thehtmlstructure", thehtmlstructure);
-  //      console.log("subclass", thehtmlstructure.csssubclass);
         console.log("class", thehtmlstructure.cssclass);
 
         var object_html_pieces = thehtmlstructure.pieces;
@@ -2068,8 +2001,6 @@ function html_from_internal_id(the_id, is_inner) {
         } else if (is_inner == "inner") {
             var inner_form = '<' + thehtmlstructure.tag;
             inner_form += ' id="' + the_id + '"';
- //           if (thehtmlstructure.cssclass || thehtmlstructure.csssubclass) {
- //               inner_form += ' class="' + thehtmlstructure.cssclass + " " + thehtmlstructure.subclass + '"';
             if (thehtmlstructure.cssclass) {
                 inner_form += ' class="' + thehtmlstructure.cssclass + '"';
             }
@@ -2085,7 +2016,6 @@ function html_from_internal_id(the_id, is_inner) {
         } else {
             var object_in_html = document.createElement(thehtmlstructure.tag);
             object_in_html.setAttribute("id", the_id);
-      //      if (thehtmlstructure.cssclass || thehtmlstructure.csssubclass) {
             if (thehtmlstructure.cssclass) {
                 console.log("adding CLASS", thehtmlstructure.cssclass);
                 object_in_html.setAttribute("class", thehtmlstructure.cssclass);
