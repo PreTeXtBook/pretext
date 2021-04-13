@@ -822,6 +822,7 @@ function edit_menu_for(this_obj_or_id, motion) {
     document.getElementById('edit_menu_holder').focus();
 }
 
+/*
 function local_menu_for(this_obj_id) { 
     console.log("make local edit menu for", this_obj_id);
     var local_menu_holder = document.createElement('div');
@@ -837,6 +838,7 @@ function local_menu_for(this_obj_id) {
 
     document.getElementById("local_menu_holder").insertAdjacentElement("afterbegin", enter_option);
 }
+*/
 
 function next_editable_of(obj, relationship) {
     var next_to_edit;
@@ -1629,14 +1631,51 @@ var internalSource = {  // currently the key is the HTML id
 
 
 
-function local_menu_navigator(e) {
+function create_local_menu() {
+
+// this does not work, but local menu navigator would not have worked either
+
+            console.log("make local edit menu for", this_obj_id);
+            var local_menu_holder = document.createElement('div');
+            local_menu_holder.setAttribute('id', 'local_menu_holder');
+            local_menu_holder.setAttribute('tabindex', '-1');
+            console.log("adding local menu for", this_obj_id);
+            document.getElementById(this_obj_id).insertAdjacentElement("afterbegin", local_menu_holder);
+
+            var enter_option = document.createElement('ol');
+            enter_option.setAttribute('id', 'edit_menu');
+
+            enter_option.innerHTML = menu_options_for(this_obj_id, "XunusedX", "base");
+
+            document.getElementById("local_menu_holder").insertAdjacentElement("afterbegin", enter_option);
+
+}
+
+
+function XXlocal_menu_navigator(e) {
     e.preventDefault();
-    console.log("in the local_menu_navigator");
+    console.log("in the local menu navigator");
     if (e.code == "Tab") {
         if (!document.getElementById('local_menu_holder')) {  // no local menu, so make one
-            local_menu_for('actively_editing');
+
+            console.log("make local edit menu for", this_obj_id);
+            var local_menu_holder = document.createElement('div');
+            local_menu_holder.setAttribute('id', 'local_menu_holder');
+            local_menu_holder.setAttribute('tabindex', '-1');
+            console.log("adding local menu for", this_obj_id);
+            document.getElementById(this_obj_id).insertAdjacentElement("afterbegin", local_menu_holder);
+
+            var enter_option = document.createElement('ol');
+            enter_option.setAttribute('id', 'edit_menu');
+
+            enter_option.innerHTML = menu_options_for(this_obj_id, "XunusedX", "base");
+
+            document.getElementById("local_menu_holder").insertAdjacentElement("afterbegin", enter_option);
+
+   //         local_menu_for('actively_editing');
+
         }  else {  //Tab must be cycling through a menu
-            // this is copied from main_menu_navigator, so maybe consolidate
+            // this is copied from main menu navigator, so maybe consolidate
             current_active_menu_item = document.getElementById('choose_current');
             next_menu_item = current_active_menu_item.nextSibling;
             console.log("current_active_menu_item", current_active_menu_item, "next_menu_item", next_menu_item);
@@ -1649,7 +1688,7 @@ function local_menu_navigator(e) {
             next_menu_item.focus();
         }
     } else {
-        console.log("local_menu_navigator calling main_menu_navigator");
+        console.log("local menu navigator calling main menu navigator");
         main_menu_navigator(e)
     }
 }
@@ -2147,13 +2186,16 @@ function retrieve_previous_editing() {
 }
 
 function local_editing_action(e) {
-    console.log("in local_editing_action for" ,e.code);
+    console.log("in local editing action for" ,e.code);
     var most_recent_edit;
+/*
     if (e.code == "Tab") {
         e.preventDefault();
-        console.log("making a local menu");
+        console.log("Error: Should be unreachable");
         local_menu_navigator(e);
-    } else if (e.code == "Escape" || e.code == "Enter") {
+    } else 
+*/
+    if (e.code == "Escape" || e.code == "Enter") {
         console.log("I saw a Rettttt");
         if (document.activeElement.getAttribute('data-component') == "title") {
             console.log("probably saving a title");
@@ -2240,7 +2282,6 @@ console.log("    SSS current_editing", current_editing, current_editing["tree"][
                     console.log("   X", j, "the_whole_object[j]", the_whole_object[j]);
                     document.getElementById("actively_editing").insertAdjacentElement("afterend", the_whole_object[j])
                     MathJax.Hub.Queue(['Typeset', MathJax.Hub, the_whole_object[j]]);
-
                 }
                 
                 console.log("here is where we need to update current_editing", "parent:", this_parent,"which is",document.getElementById(this_parent[0]), "level:", current_editing["level"], "loation:", current_editing["location"], "tree:", current_editing["tree"]);
@@ -2275,17 +2316,19 @@ console.log("    GGG current_editing", current_editing, current_editing["tree"][
 
                 } else {
 
+/* obsolete, because we re-make the tree from scratch
+
                     var editing_parent = current_editing["tree"][ current_editing["level"] -1 ][ current_editing["location"][ current_editing["level"] - 1 ] ];
                     console.log("going to make the new tree from parent of", this_parent, "which is", editing_parent, "and has children", next_editable_of(editing_parent, "children"));
                     current_editing["tree"][current_editing["level"]] = next_editable_of(editing_parent, "children");    
                     console.log("updated tree", current_editing["tree"]);
 console.log("    QQQ current_editing", current_editing, current_editing["tree"][current_editing["level"]]);
 console.log("    final_added_object", final_added_object);
-
+*/
+                    console.log("re-making the tree");
                     make_current_editing_from_id(final_added_object.id);
-
+                    console.log("and then adding a menu");
                     edit_menu_from_current_editing("entering");
-
                 }
 
             } else if ( document.getElementById("actively_editing")) {
@@ -2300,8 +2343,7 @@ console.log("    final_added_object", final_added_object);
       else {
         console.log("e.code was not one of those we were looking for", e)
     }
-    console.log("leaving local_editing_action")
-
+    console.log("leaving local editing action")
 }
 
 function main_menu_navigator(e) {  // we are not currently editing
@@ -2767,7 +2809,7 @@ function main_menu_navigator(e) {  // we are not currently editing
         console.log("key that is not meaningful when navigating a menu:", e.code)
     }
     }
-}
+}  // main menu navigator
 
 console.log("adding tab listener");
 
@@ -2787,20 +2829,25 @@ function logKeyDown(e) {
     // if we are writing something, keystrokes usually are just text input
     if (document.getElementById('actively_editing')) {
         console.log("                 we are actively editing");
+
+        if (e.code == "Tab" && !document.getElementById('local_menu_holder')) {
+            create_local_menu()
+        } else if (document.getElementById('local_menu_holder')) {
+            main_menu_navigator(e);
+        } else {
+            local_editing_action(e)
+        }
+
+/*
+
+
         if (document.getElementById('local_menu_holder')) {  // we are editing, but are doing so through a local menu
             console.log("document.getElementById('local_menu_holder')", document.getElementById('local_menu_holder'));
             local_menu_navigator(e)
         }  else {
-            if (input_region.getAttribute('data-component') == "title") {
-                console.log("Enter in a title, so time to save it");   // when if it isn;t a title?
-                local_editing_action(e)
-            }
-            else {
-                console.log("about to do local_editing_action", this_char.code, prev_char.code, prev_prev_char.code);
-                local_editing_action(e)
-            }
+            local_editing_action(e)
         }
-
+*/
     } else if (document.getElementById('phantomobject')) {
         var the_phantomobject = document.getElementById('phantomobject');
 
