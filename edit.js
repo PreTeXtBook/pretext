@@ -791,16 +791,17 @@ function edit_menu_for(this_obj_or_id, motion) {
         } else if (this_obj.classList.contains("sbspanel")) {
             edit_option.innerHTML = "<b>modify</b> this panel layout, or change panel contents?";
         } else if (this_obj.classList.contains("title")) {
-            // need to code this better:  over-writing edit_option
             edit_option = document.createElement('ol');
             edit_option.setAttribute('id', 'edit_menu');
             console.log("this_obj", this_obj);
+            console.log("this_obj.innerHTML", this_obj.innerHTML);
+            console.log("menu only?", this_obj.innerHTML == '<div id="edit_menu_holder" tabindex="-1"></div>');
             this_obj_parent_id = this_obj.parentElement.parentElement.id;
             this_obj_environment = internalSource[this_obj_parent_id]["ptxtag"];
-            if (this_obj.innerHTML) {
-                edit_option.innerHTML = '<li id="choose_current" tabindex="-1" data-action="change-title">Change title</li>';
-            } else {
+            if (this_obj.innerHTML == '<div id="edit_menu_holder" tabindex="-1"></div>') {
                 edit_option.innerHTML = '<li id="choose_current" tabindex="-1" data-action="change-title">Add a title</li>';
+            } else {
+                edit_option.innerHTML = '<li id="choose_current" tabindex="-1" data-action="change-title">Change title</li>';
             }
             edit_option.setAttribute('data-location', 'inline');
         } else {
@@ -814,7 +815,7 @@ function edit_menu_for(this_obj_or_id, motion) {
         }
     } else {
         edit_option.setAttribute('data-location', 'stay');
-        edit_option.innerHTML = "continue editing " + this_obj.tagName;
+        edit_option.innerHTML = "continue editing this " + internalSource[this_obj.id]["ptxtag"];
     }
     console.log("edit_option", edit_option);
     document.getElementById("edit_menu_holder").insertAdjacentElement("afterbegin", edit_option);
@@ -2562,8 +2563,8 @@ function main_menu_navigator(e) {  // we are not currently editing
                 console.log("with some children", editableChildren);
                // put  menu on the item at the top of the block_we_are_reentering
                    // this is a repeat of a Tab case, so consolidate
-            console.log("menu place 10");
-            console.log("document.activeElement", document.activeElement);
+                console.log("menu place 10");
+                console.log("document.activeElement", document.activeElement);
 
                  console.log("menu on", editableChildren[0]);
                  edit_menu_for(editableChildren[0], "entering");
