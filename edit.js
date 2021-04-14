@@ -125,6 +125,20 @@ objectStructure = {
     }
   },
 
+  "project-like": {
+    "html": {
+        "tag": "article",
+        "cssclass": "project-like",
+        "data_editable": "94",
+        "pieces": ["heading", "statement", "task*"],
+        "heading": "theorem_like_heading"
+    },
+    "ptx": {
+        "pieces": [["title", ""], ["statement", "p"], ["task*", ""]],
+        "attributes": [["workspace", "3cm"]]
+    }
+  },
+
   "definition-like": {
     "html": {
         "tag": "article",
@@ -155,7 +169,8 @@ objectStructure = {
 var environment_instances = {
     "definition-like": ["definition", "conjecture", "axiom", "principle", "heuristic", "hypothesis", "assumption"],
     "theorem-like": ["lemma", "proposition", "theorem", "corollary", "claim", "fact", "identity", "algorithm"],
-    "remark-like": ["remark", "warning", "note", "observation", "convention", "insight"]
+    "remark-like": ["remark", "warning", "note", "observation", "convention", "insight"],
+    "project-like": ["exercise", "activity", "investigation", "exploration", "project"]
 }
 
 for (const [owner, instances] of Object.entries(environment_instances)) {
@@ -176,10 +191,23 @@ for (const [owner, instances] of Object.entries(environment_instances)) {
     }
 }
 
+var sidebyside_instances = {
+"sbs": [["2 panels", "sbs2"], ["3 panels", "sbs3"], ["4 panels", "sbs4"]],
+//"sbs2": [["full across XXX", "sbs2_0_50_50_0"], ["gap but no margin", "sbs2_0_40_40_0"], ["spaced equally", "sbs2_5_40_40_5"]],
+"sbs2": [["full across", "sbs_0_60_60_0"], ["gap but no margin", "sbs_0_48_48_0"], ["spaced equally", "sbs_5_48_48_5"]],
+"sbs3": [["full across", "sbs_0_40_40_40_0"], ["gap but no margin", "sbs_0_33_33_33_0"], ["spaced equally", "sbs_5_33_33_33_5"]],
+"sbs4": [["full across", "sbs_0_30_30_30_30_0"], ["gap but no margin", "sbs_0_25_25_25_25_0"], ["spaced equally", "sbs_4_25_25_25_25_4"]]
+}
+
+Object.assign(objectStructure, sidebyside_instances);
+
+
+/* unused
 function object_class_of(tag) {
     console.log("X finding object_class_of", tag);
     return objectStructure[tag].owner || "unknown"
 }
+*/
 
 function content_from_source(name, src) {
     console.log("     content_from_source src", src);
@@ -312,6 +340,10 @@ base_menu_for = {
             ["list or table", "list-like"],
             ["math/chemistry/code", "math-like", "c"],
             ["image/video/sound", "image-like", "v"]],
+"proof": [["paragraph", "p"],  //  this is for theorem-like and similar
+            ["list or table", "list-like"],
+            ["math/chemistry/code", "math-like", "c"],
+            ["image/video/sound", "image-like", "v"]],
 "li": [["new list item", "li", "i"],
             ["paragraph", "p"],
             ["list or table", "list-like"],
@@ -346,7 +378,7 @@ var the_inner_menu = {
 "list-like": [["itemized list", "list"], ["dictionary list", "dl"], ["table"]],
 "ol": [["list item", "li"]],
 "section-like": [["section"], ["subsection", "subsection", "b"], ["titled paragraph", "paragraphs"], ["reading questions", "rq"], ["exercises"]],
-"project-like": [["exercise"], ["activitiy"], ["investigation"], ["exploration", "exploration", "x"], ["project"]],
+"project-like": [["exercise"], ["activity"], ["investigation"], ["exploration", "exploration", "x"], ["project"]],
 "remark-like": [["remark"], ["warning"], ["note"], ["observation"], ["convention"], ["insight"]],
 "example-like": [["example"], ["question"], ["problem"]],
 // "display-like": [["image"], ["image with caption", "imagecaption", "m"], ["video"], ["video with caption", "videocaption", "d"], ["audio"]],
@@ -530,8 +562,7 @@ function menu_options_for(object_id, component_type, level) {
          }
          console.log("made this_menu", this_menu);
          return this_menu
-     }
-     else if (level == "modify") {
+     } else if (level == "modify") {
          console.log("CZ menu options for", component_type);
          var m_d_options;
          var component_parent = internalSource[object_id]["parent"][0];
@@ -571,10 +602,9 @@ function menu_options_for(object_id, component_type, level) {
          }
          console.log("made this_menu", this_menu);
          return this_menu
-     }
-     else if (level == "change") {
+     } else if (level == "change") {
          console.log("C1 menu options for", component_type);
-         objectclass = object_class_of(component_type);
+         objectclass = objectStructure[component_type].owner;
          console.log("which has class",objectclass);
          var equivalent_objects = environment_instances[objectclass].slice();
          var replacement_list = removeItemFromList(equivalent_objects, component_type);
@@ -596,6 +626,7 @@ function menu_options_for(object_id, component_type, level) {
          component_items = menu_for[component_type]
      } else {
          // is this a reasbable default for what can go anywhere?
+         alert("default menu for" + component_type);
          component_items = [["paragraph", "p"],
             ["list or table", "list-like"],
             ["math/chemistry/code", "math-like", "c"]]
@@ -636,7 +667,6 @@ function menu_options_for(object_id, component_type, level) {
                  // little right triangle if there is a submenu
          if (this_item_label in inner_menu_for()) { this_menu += '<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div>' }
          this_menu += '</li>';
-         
      }
 
      return this_menu
@@ -913,12 +943,14 @@ function create_new_internal_object(new_tag, new_id, parent_description) {
       for (var j=0; j < these_ptx_pieces.length; ++j) {
           console.log("adding a piece", these_ptx_pieces[j]);
           var [this_piece, this_piece_contains] = these_ptx_pieces[j];
-          if (this_piece_contains) {
-              new_child_id = randomstring();
-              new_source[this_piece] = "<&>" + new_child_id + "<;>";
-              create_new_internal_object(this_piece_contains, new_child_id, [new_id, this_piece]);
-          } else {
-              new_source[this_piece] = ""
+          if (!this_piece.endsWith("*")) {  // non-optional pieces
+              if (this_piece_contains) {
+                  new_child_id = randomstring();
+                  new_source[this_piece] = "<&>" + new_child_id + "<;>";
+                  create_new_internal_object(this_piece_contains, new_child_id, [new_id, this_piece]);
+              } else {
+                  new_source[this_piece] = ""
+              }
           }
       }
 
@@ -1651,7 +1683,7 @@ function create_local_menu() {
 
 }
 
-
+/*
 function XXlocal_menu_navigator(e) {
     e.preventDefault();
     console.log("in the local menu navigator");
@@ -1692,6 +1724,7 @@ function XXlocal_menu_navigator(e) {
         main_menu_navigator(e)
     }
 }
+*/
 
 function ptx_to_html(input_text) {
     output_text = input_text;
@@ -2769,7 +2802,8 @@ function main_menu_navigator(e) {  // we are not currently editing
                   document.getElementById('choose_current').focus();
 
                            // determine whether both of these next cases can occur
-              } else if ( (dataEnv in editing_container_for) || (dataEnvParent in editing_container_for) ) {
+        //      } else if ( (dataEnv in editing_container_for) || (dataEnvParent in editing_container_for) ) {
+              } else if (dataEnv in objectStructure || dataEnvParent in objectStructure) {
               // we just selected an action, so do it
                       // that probably involves adding something before or after a given object
                   console.log("making a new", dataEnv, "within", dataEnvParent);
@@ -2797,6 +2831,7 @@ function main_menu_navigator(e) {  // we are not currently editing
 // sbssbs
               } else {
                   console.log("Error: unknown dataEnv", dataEnv);
+                  console.log("Or maybe unknown dataEnvParent", dataEnvParent);
                   console.log("moving up the menu -- not");
                   alert("Sorry, not implemented yet!");
                   theChooseCurrent.classList.remove("chosen");
