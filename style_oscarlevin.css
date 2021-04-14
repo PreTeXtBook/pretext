@@ -318,6 +318,9 @@
     width: 1.5em;
 }
 
+.pretext-content section > .proof {
+    margin-bottom: 1em;
+}
 
 
 /* where does this appear? */

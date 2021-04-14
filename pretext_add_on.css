@@ -16,6 +16,7 @@ a {
 .pretext-content section,
 .pretext-content article,
 .pretext-content figure,
+.pretext-content figcaption,
 .pretext-content .exercisegroup,
 .pretext-content p {
     position: relative;
@@ -1320,6 +1321,7 @@ body > a.assistive:focus {
     display: inline;
 }
 
+/* after version 0.31, check the pretext code if a.permalink can still occur */
 .pretext-content .heading a.permalink:hover {
     opacity: 1;
     color: #a32;
@@ -3695,6 +3697,8 @@ label.incorrect .feedback {
 }
 */
 
+
+
 /* CAT  */
 
 #edit_menu_holder {
@@ -3705,6 +3709,9 @@ label.incorrect .feedback {
 /*
     display: inline;
 */
+}
+#edit_menu_holder li {
+    font-style: normal;
 }
 p > #edit_menu_holder,
 .creator > #edit_menu_holder {
@@ -3954,9 +3961,21 @@ sbspanel:empty { /* can only happen when partially created */
     width: 8em;
     margin-bottom: 0;
 }
-#actively_editing_title {
-    size: 25;
+#actively_editing[data-component="title"] {
+    display: inline-block;
+    min-width: 10em;
+    margin-top: 0;
+    margin-left: 0.75em;
+    background: #fff;
+    border: 1px dotted black;
 }
+.title > #edit_menu_holder {
+    display: inline;
+}
+.space + .title {
+    margin-left: 0.5em;
+}
+
 .in_edit_tree {
     border-right: 1px solid blue;
     margin-right: 0.25em;
