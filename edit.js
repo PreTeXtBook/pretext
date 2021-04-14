@@ -2,7 +2,7 @@
 objectStructure = {
   "theorem_like_heading": {
     "html": {
-        "tag": "h6",
+        "tag": "h4",
         "cssclass": "heading",
         "pieces": ["type*", "space", "codenumber", "period",  "space", "title*"]
           // * means editable piece
@@ -10,7 +10,7 @@ objectStructure = {
   },
   "proof_heading": {
     "html": {
-        "tag": "h6",
+        "tag": "h5",
         "cssclass": "heading",
         "pieces": ["type", "period"]
     }
@@ -20,6 +20,13 @@ objectStructure = {
         "tag": "h2",
         "cssclass": "heading hide-type",
         "pieces": ["type", "codenumber", "title"]
+    }
+  },
+  "task_like_heading": {
+    "html": {
+        "tag": "h6",
+        "cssclass": "heading",
+        "pieces": ["codenumber", "space", "title*"]
     }
   },
 
@@ -130,11 +137,11 @@ objectStructure = {
         "tag": "article",
         "cssclass": "project-like",
         "data_editable": "94",
-        "pieces": ["heading", "statement", "task*"],
+        "pieces": ["heading", "statement", "solution", "workspace", "tasks*"],
         "heading": "theorem_like_heading"
     },
     "ptx": {
-        "pieces": [["title", ""], ["statement", "p"], ["task*", ""]],
+        "pieces": [["title", ""], ["statement", "p"], ["tasks*", ""], ["solution*", ""]],
         "attributes": [["workspace", "3cm"]]
     }
   },
@@ -161,8 +168,50 @@ objectStructure = {
         "heading": "theorem_like_heading"
     },
     "ptx": {
-        "pieces": [["title", ""], ["statement", "p"]]
+        "pieces": [["title", ""], ["statement", "p"], ["proof*", ""]]
     }
+  },
+
+  "task": {
+    "html": {
+        "tag": "article",
+        "cssclass": "exercise-like task",
+        "data_editable": "94",
+        "pieces": ["heading", "statement"],
+        "heading": "task_like_heading"
+    },
+    "ptx": {
+        "pieces": [["title", ""], ["statement", "p"], ["solution*", ""]],
+        "attributes": [["workspace", "1in"]]
+    }
+  },
+
+  "solution": {
+    "html": {
+        "tag": "article",
+        "cssclass": "solution-like solution",
+        "data_editable": "452",
+        "pieces": ["heading", "statement"],
+        "heading": "proof_heading"
+    },
+    "ptx": {
+        "pieces": [["statement", "p"]]
+    }
+  },
+
+  "workspace": {
+    "html": {
+        "tag": "div",
+        "cssclass": "workspace",
+        "attributes": ["data-space"]
+    }
+/*
+,
+    "ptx": {
+        "pieces": [["title", ""], ["statement", "p"], ["solution*", ""]],
+        "attributes": [["workspace", "1in"]]
+    }
+*/
   }
 }
 
@@ -214,10 +263,14 @@ function content_from_source(name, src) {
     var content;
 
     if (name == "space") { content = " " }
-    if (name == "period") { content = "." }
-    if (name == "title") { content = src.title }
-    if (name == "codenumber") { content = "N.mm" }
-    if (name == "type") { 
+    else if (name == "period") { content = "." }
+    else if (name == "title") { content = src.title }
+    else if (name == "codenumber") {
+        content = "N.mm"
+        if (src.ptxtag == "task") { content = "(" + content + ")" }
+    }
+    else if (name == "data-space") { content = "2.2in" }
+    else if (name == "type") { 
         var content_raw = src["ptxtag"];
         content = content_raw.charAt(0).toUpperCase() + content_raw.slice(1);
     }
@@ -714,6 +767,10 @@ function top_menu_options_for(this_obj) {
             this_list += '<li tabindex="-1" data-env="' + 'sbspanel' + '" data-location="afterbegin">Insert in panel<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
         }
 
+        if (this_obj.classList.contains("project-like")) {
+            this_list += '<li tabindex="-1" data-env="' + 'task' + '">Add a task</li>';
+        }
+
         this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="beforebegin">XInsert before<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
         this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="afterend">Insert after<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
 
@@ -956,6 +1013,8 @@ function create_new_internal_object(new_tag, new_id, parent_description) {
 
     }
 
+    console.log("made the new_source", new_source);
+
     internalSource[new_id] = new_source;
 
     console.log("parent_description", parent_description, "new_tag", new_tag, "new_id", new_id);
@@ -986,6 +1045,9 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
         // when adding an li, you are actually focused on somethign inside an li
         // but, maybe that distinction shoud be mede before calling create_object_to_edit ?
     if (new_tag == "li") { new_objects_sibling = new_objects_sibling.parentElement }
+
+    if (new_tag == "task") {relative_placement = "beforeend";
+    }
     new_objects_sibling.insertAdjacentElement(relative_placement, edit_placeholder);
 
                   // and describe where it goes
@@ -2062,9 +2124,40 @@ function html_from_internal_id(the_id, is_inner) {
             } else if (["statement", "content"].includes(piece_type)) {
                 console.log("making", piece_type, "from", the_object);
                 var object_statement = the_object[piece_type];
-
+                console.log("object_statement", object_statement);
                 this_piece_html =  expand_condensed_source_html(object_statement);
                 console.log("statement statement is", this_piece_html);
+            } else if (["hint", "answer", "solution"].includes(piece_type)) {
+                console.log("making", piece_type, "from", the_object);
+                var object_statement = the_object[piece_type];
+                console.log("object_statement", object_statement);
+
+                if (object_statement) {
+                    this_piece_html =  expand_condensed_source_html(object_statement);
+                } else {
+                    this_piece_html = '<div class="placeholder ' + piece_type + '" data-placeholder';
+                    this_piece_html += ' data-parent_id="' + the_id + '"';
+                    this_piece_html += ' tabindex="-1" data-editable="000"';
+                    this_piece_html += '></div>'
+                }
+                console.log("statement statement is", this_piece_html);
+
+            } else if (["workspace"].includes(piece_type)) {
+                console.log("making (not really)", piece_type, "from", the_object);
+                this_piece_html = '<div class="workspace" data-space="1.1in"';
+                this_piece_html += ' data-parent_id="' + the_id + '"';
+                this_piece_html += ' tabindex="-1" data-editable="440"';
+                this_piece_html += '></div>'
+            } else {
+                console.log("not sure how to make the piece", piece_type)
+                var object_statement = the_object[piece_type];
+                if (piece_type.endsWith("*")) {
+                    console.log("skipping optional piece", piece_type)
+                } else if (false) {
+                    console.log("object_statement", object_statement);
+                    this_piece_html =  expand_condensed_source_html(object_statement);
+                    console.log("but we tried anyway, and now have", this_piece_html)
+                }
             }
             console.log("made the piece", this_piece_html);
             object_html_pieces_html[piece_type] = this_piece_html
