@@ -662,7 +662,8 @@ function scaleWorkspaceIn(obj, subobj, scale, tmporfinal) {
         } else if (this_proportion.endsWith("cm")) {
             this_proportion_number *= 3.94;  /* 10/2.54 */
         } else {
-            console.log("No units on workspace size:  expect unexpected behavior", this_work)
+            console.log("No units on workspace size:  interpreting as mm", this_work)
+            this_proportion_number = this_proportion * 40;
         }
         this_proportion_scaled = scale * this_proportion_number;
         this_work.setAttribute('style', 'height: ' + this_proportion_scaled + 'px');
