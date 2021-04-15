@@ -177,12 +177,12 @@ objectStructure = {
         "tag": "article",
         "cssclass": "exercise-like task",
         "data_editable": "94",
-        "pieces": ["heading", "statement"],
+        "pieces": ["heading", "statement","answer", "workspace"],
         "heading": "task_like_heading"
     },
     "ptx": {
-        "pieces": [["title", ""], ["statement", "p"], ["solution*", ""]],
-        "attributes": [["workspace", "1in"]]
+        "pieces": [["title", ""], ["statement", "p"], ["answer*", ""]],
+        "attributes": [["workspace", "25"]]
     }
   },
 
@@ -950,7 +950,7 @@ function create_new_internal_object(new_tag, new_id, parent_description) {
 
     var new_source = {"xml:id": new_id, "ptxtag": new_tag, "parent": parent_description, "title": ""}
 
-    console.log("create_new_internal_object", new_tag, "new_id", new_id, "parent_description", parent_description);
+    console.log("create new internal object", new_tag, "new_id", new_id, "parent_description", parent_description);
     if (new_tag.startsWith("sbs")) {  // creating an sbs, which contains one sbsrow, which contains several sbspanels
         var sbs_layout = new_tag.split("_");
   //      var numcols = parseInt(new_tag.slice(-1));
@@ -996,13 +996,16 @@ function create_new_internal_object(new_tag, new_id, parent_description) {
       }
 
 /* here need to also use the owner structure */
-      these_ptx_pieces = thisptxstructure.pieces;
+      var these_ptx_pieces = thisptxstructure.pieces;
       for (var j=0; j < these_ptx_pieces.length; ++j) {
           console.log("adding a piece", these_ptx_pieces[j]);
           var [this_piece, this_piece_contains] = these_ptx_pieces[j];
-          if (!this_piece.endsWith("*")) {  // non-optional pieces
+          if (this_piece.endsWith("*")) {
+              this_piece = this_piece.slice(0, -1);
+              new_source[this_piece] = this_piece_contains;  // presumably = "" ?
+          } else {
               if (this_piece_contains) {
-                  new_child_id = randomstring();
+                  var new_child_id = randomstring();
                   new_source[this_piece] = "<&>" + new_child_id + "<;>";
                   create_new_internal_object(this_piece_contains, new_child_id, [new_id, this_piece]);
               } else {
@@ -1034,7 +1037,7 @@ function create_new_internal_object(new_tag, new_id, parent_description) {
 function create_object_to_edit(new_tag, new_objects_sibling, relative_placement) {
 
     // when relative_placement is "afterbegin", the new_objects_sibling is actually its parent
-    console.log("create_object_to_edit", new_tag, new_objects_sibling, relative_placement);
+    console.log("create object to edit", new_tag, new_objects_sibling, relative_placement);
               // first insert a placeholder to edit-in-place
     var new_id = randomstring();
     recent_editing_actions.push(["new", new_tag, new_id]);
@@ -1043,20 +1046,22 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
     edit_placeholder.setAttribute('id', new_id);
 
         // when adding an li, you are actually focused on somethign inside an li
-        // but, maybe that distinction shoud be mede before calling create_object_to_edit ?
+        // but, maybe that distinction shoud be mede before calling create object to edit ?
     if (new_tag == "li") { new_objects_sibling = new_objects_sibling.parentElement }
-
-    if (new_tag == "task") {relative_placement = "beforeend";
-    }
-    new_objects_sibling.insertAdjacentElement(relative_placement, edit_placeholder);
 
                   // and describe where it goes
     console.log("new_objects_sibling",new_objects_sibling);
     var sibling_id = new_objects_sibling.id;
     var parent_description = internalSource[sibling_id]["parent"];
     if (relative_placement == "afterbegin") {  // when adding to a sbs panel
+                           // redo the condition so that it explicitly usus sbs
         parent_description = [new_id, "content"];
     }
+    if (new_tag == "task") {
+        relative_placement = "beforeend";
+        parent_description = [sibling_id, "tasks"];
+    }
+
                   // then create the empty internalSource for the new object
     create_new_internal_object(new_tag, new_id, parent_description);
 
@@ -1064,6 +1069,7 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
 
     var the_current_arrangement = internalSource[parent_description[0]][parent_description[1]];
     console.log("         the_current_arrangement", the_current_arrangement);
+    console.log("         from parent_description[0]", parent_description[0], "internalSource[parent_description[0]]", internalSource[parent_description[0]]);
     console.log("    current_editing", current_editing);
 
 // maybe the changes to current_editing is different for lists?
@@ -1094,6 +1100,7 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
     console.log("    updated current_editing", current_editing);
     console.log("  VVV  current_editing", current_editing["level"], current_editing["location"].length, current_editing["tree"].length, current_editing["tree"][current_editing["level"]])
 
+    new_objects_sibling.insertAdjacentElement(relative_placement, edit_placeholder);
     return edit_placeholder
 }
 
@@ -2901,7 +2908,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                       // that probably involves adding something before or after a given object
                   console.log("making a new", dataEnv, "within", dataEnvParent);
                   var before_after = $("#edit_menu_holder > #edit_menu > .chosen").attr("data-location");
-                  console.log("create_object_to_edit",dataEnv, object_of_interest, before_after);
+                  console.log("create object to edit",dataEnv, object_of_interest, before_after);
                   var new_obj = create_object_to_edit(dataEnv, object_of_interest, before_after);
                   console.log("new_obj", new_obj);
                   edit_in_place(new_obj, "new");
