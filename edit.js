@@ -137,12 +137,12 @@ objectStructure = {
         "tag": "article",
         "cssclass": "project-like",
         "data_editable": "94",
-        "pieces": ["heading", "statement", "solution", "workspace", "tasks*"],
+        "pieces": ["heading", "statement", "hint", "answer", "solution", "workspace", "tasks*"],
         "heading": "theorem_like_heading"
     },
     "ptx": {
-        "pieces": [["title", ""], ["statement", "p"], ["tasks*", ""], ["solution*", ""]],
-        "attributes": [["workspace", "3cm"]]
+        "pieces": [["title", ""], ["statement", "p"], ["tasks*", ""], ["hint*", ""], ["answer*", ""], ["solution*", ""]],
+        "attributes": [["workspace", "30"]]
     }
   },
 
@@ -186,11 +186,38 @@ objectStructure = {
     }
   },
 
+/* consolidate H/A/S */
   "solution": {
     "html": {
         "tag": "article",
         "cssclass": "solution-like solution",
         "data_editable": "452",
+        "pieces": ["heading", "statement"],
+        "heading": "proof_heading"
+    },
+    "ptx": {
+        "pieces": [["statement", "p"]]
+    }
+  },
+
+  "answer": {
+    "html": {
+        "tag": "article",
+        "cssclass": "solution-like answer",
+        "data_editable": "453",
+        "pieces": ["heading", "statement"],
+        "heading": "proof_heading"
+    },
+    "ptx": {
+        "pieces": [["statement", "p"]]
+    }
+  },
+
+  "hint": {
+    "html": {
+        "tag": "article",
+        "cssclass": "solution-like hint",
+        "data_editable": "454",
         "pieces": ["heading", "statement"],
         "heading": "proof_heading"
     },
@@ -269,7 +296,7 @@ function content_from_source(name, src) {
         content = "N.mm"
         if (src.ptxtag == "task") { content = "(" + content + ")" }
     }
-    else if (name == "data-space") { content = "2.2in" }
+    else if (name == "data-space") { content = "51" }
     else if (name == "type") { 
         var content_raw = src["ptxtag"];
         content = content_raw.charAt(0).toUpperCase() + content_raw.slice(1);
@@ -641,6 +668,14 @@ function menu_options_for(object_id, component_type, level) {
                  ["modify", "rightplus", "increase right margin"],
                  ["modify", "done", "done modifying"]
              ];
+         } else if (component_type == "exercise") {  // actually workspace, and not onle exercise
+             m_d_options = [
+                 ["modify", "enlarge", "more space"],
+                 ["modify", "shrink", "less space"],
+                 ["modify", "enlargeslightly", "slightly more space"],
+                 ["modify", "shrinkslightly", "slightly less space"],
+                 ["modify", "done", "done adjusting"]
+             ];
          } else {
              alert("don;t know how to make that menu")
              m_d_options = []
@@ -891,6 +926,25 @@ function edit_menu_for(this_obj_or_id, motion) {
                 edit_option.innerHTML = '<li id="choose_current" tabindex="-1" data-action="change-title">Change title</li>';
             }
             edit_option.setAttribute('data-location', 'inline');
+        } else if ((this_obj.classList.contains("placeholder") && (this_obj.classList.contains("hint") ||
+                  this_obj.classList.contains("answer") ||
+                  this_obj.classList.contains("solution") )) ) {
+//            var theverb = "edit";
+ //           if (this_obj.classList.contains("placeholder")) {
+                var theverb = "add"
+  //          }
+            var thenoun = this_obj.getAttribute("data-HAS");
+            edit_option.setAttribute('id', 'choose_current');
+            edit_option.setAttribute('data-env', thenoun);
+            edit_option.setAttribute('data-parent_id', this_obj.getAttribute("data-parent_id"));
+            edit_option.innerHTML = "<b>" + theverb + "</b>" + " " + thenoun;
+        } else if (this_obj.classList.contains('workspace')) {
+            edit_option.setAttribute('id', 'choose_current');
+            edit_option.setAttribute('data-env', 'workspace');
+            edit_option.setAttribute('data-action', 'modify');
+            edit_option.setAttribute('data-parent_id', this_obj.getAttribute("data-parent_id"));
+
+            edit_option.innerHTML = "<b>" + "adjust" + "</b>" + " " + "workspace";
         } else {
             if (next_editable_of(this_obj, "children").length) {
                 console.log("this_obj", this_obj);
@@ -1049,10 +1103,31 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
         // but, maybe that distinction shoud be mede before calling create object to edit ?
     if (new_tag == "li") { new_objects_sibling = new_objects_sibling.parentElement }
 
+    var sibling_id, parent_description, object_neighbor;
+
+//    if (new_tag == "solution") {   // this is only the case that a solution does not already exist
+    if (["hint", "answer", "solution"].includes(new_tag)) {   // this is only the case that a solution does not already exist
+
+        
+
+// create_new
+
+
+        parent_description = [new_objects_sibling.parentElement.id, new_tag];
+        relative_placement = "afterend";
+        console.log(new_tag, "parent_description", parent_description);
+        object_neighbor = new RegExp('');
+
+
+    } else {
+
                   // and describe where it goes
-    console.log("new_objects_sibling",new_objects_sibling);
-    var sibling_id = new_objects_sibling.id;
-    var parent_description = internalSource[sibling_id]["parent"];
+        console.log("new_objects_sibling",new_objects_sibling);
+        sibling_id = new_objects_sibling.id;
+        parent_description = internalSource[sibling_id]["parent"];
+        object_neighbor = new RegExp('(<&>' + sibling_id + '<;>)');
+    }
+
     if (relative_placement == "afterbegin") {  // when adding to a sbs panel
                            // redo the condition so that it explicitly usus sbs
         parent_description = [new_id, "content"];
@@ -1074,7 +1149,7 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
 
 // maybe the changes to current_editing is different for lists?
 
-    var object_neighbor = new RegExp('(<&>' + sibling_id + '<;>)');
+//    var object_neighbor = new RegExp('(<&>' + sibling_id + '<;>)');
     var neighbor_with_new = '';
     var current_level = current_editing["level"];
     var current_location = current_editing["location"][current_level];
@@ -1101,6 +1176,9 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
     console.log("  VVV  current_editing", current_editing["level"], current_editing["location"].length, current_editing["tree"].length, current_editing["tree"][current_editing["level"]])
 
     new_objects_sibling.insertAdjacentElement(relative_placement, edit_placeholder);
+
+    if (["hint", "answer", "solution"].includes(new_tag)) { new_objects_sibling.remove() }  // also remake current editing tree?
+
     return edit_placeholder
 }
 
@@ -1258,13 +1336,40 @@ function edit_in_place(obj, oldornew) {
 
 // temporary:  need to unify img and sbs layout
 function modify_by_id(theid, modifier) {
+    console.log("modifying by id", theid);
     if (internalSource[theid]["ptxtag"] == "sbspanel") {
         modify_by_id_sbs(theid, modifier)
+    } else if (internalSource[theid]["ptxtag"] == "exercise") {
+        modify_by_id_workspace(theid, modifier)
     } else {
         modify_by_id_img(theid, modifier)
     }
 }
 
+
+function modify_by_id_workspace(theid, modifier) {
+
+    var the_height = internalSource[theid]["workspace"];
+
+//modify: enlarge, shrink, enlargeslightly, shrinkslightly, done
+
+    the_height = parseInt(the_height);
+    console.log('the_height, ', the_height);
+
+    if (modifier == "enlarge") { the_height += 10 }
+    else if (modifier == "shrink") { the_height -= 10 }
+    else if (modifier == "enlargeslightly") { the_height += 1 }
+    else if (modifier == "shrinkslightly") { the_height -= 1 }
+
+    if (the_height < 0) { the_height = 0 }
+
+    internalSource[theid]["workspace"] = the_height;
+    console.log("the_height is now", the_height);
+
+    var this_workspace = document.getElementById(theid).querySelector(".workspace");
+    this_workspace.setAttribute("style", "height:" + the_height*10 + "px");
+}
+ 
 function modify_by_id_img(theid, modifier) {
 
     var the_sizes = internalSource[theid]["style"];
@@ -2144,6 +2249,7 @@ function html_from_internal_id(the_id, is_inner) {
                 } else {
                     this_piece_html = '<div class="placeholder ' + piece_type + '" data-placeholder';
                     this_piece_html += ' data-parent_id="' + the_id + '"';
+                    this_piece_html += ' data-HAS="' + piece_type + '"';
                     this_piece_html += ' tabindex="-1" data-editable="000"';
                     this_piece_html += '></div>'
                 }
@@ -2151,7 +2257,7 @@ function html_from_internal_id(the_id, is_inner) {
 
             } else if (["workspace"].includes(piece_type)) {
                 console.log("making (not really)", piece_type, "from", the_object);
-                this_piece_html = '<div class="workspace" data-space="1.1in"';
+                this_piece_html = '<div class="workspace" data-space="28"';
                 this_piece_html += ' data-parent_id="' + the_id + '"';
                 this_piece_html += ' tabindex="-1" data-editable="440"';
                 this_piece_html += '></div>'
@@ -2822,6 +2928,12 @@ function main_menu_navigator(e) {  // we are not currently editing
                         theChooseCurrent.classList.add("chosen");
 
                         var edit_submenu = document.createElement('ol');
+                           // this may only hapen when adjusting workspace:
+                        if (!current_env_id) {
+                            edit_submenu.setAttribute('id', 'edit_menu');
+                            current_env_id = current_env.getAttribute("data-parent_id");
+                            console.log("current_env_id", current_env_id);
+                        }
                         console.log("J2a lookinh for menu options for", current_env_id);
                         edit_submenu.innerHTML = menu_options_for(current_env_id, "", "modify");
                         console.log("just inserted inner menu_options_for(parent_type)", menu_options_for(current_env_id, "", "modify"));
@@ -2833,11 +2945,16 @@ function main_menu_navigator(e) {  // we are not currently editing
                     } else if (dataModifier == "arrows") {
                         // setup_arrow_modify()   // is different for images and SBSs
                     } else {
+                           // this may only hapen when adjusting workspace:
+                        if (!current_env_id) {
+                            current_env_id = current_env.getAttribute("data-parent_id");
+                            console.log("current_env_id from parent", current_env_id);
+                        }
                         modify_by_id(current_env_id, dataModifier)
                     }
             } else if (dataAction == "move-or-delete") {
                 // almost all repeats from dataAction == 'change-env' 
-                //  except for current_env and menu_options_for.  Consolidate
+                //  except for current_env and menu options for.  Consolidate
                 //  maybe also separate actions which give anotehr menu, from actions which change content
                 current_env = document.getElementById('edit_menu_holder').parentElement;
                 console.log("current_env", current_env);
