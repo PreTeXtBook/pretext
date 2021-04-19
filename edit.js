@@ -207,7 +207,7 @@ objectStructure = {
     "html": {
         "tag": "article",
         "cssclass": "solution-like answer",
-        "data_editable": "453",
+/*        "data_editable": "453", */
         "pieces": ["heading", "content"],
         "heading": "proof_heading"
     },
@@ -221,7 +221,8 @@ objectStructure = {
     "html": {
         "tag": "article",
         "cssclass": "solution-like hint",
-        "data_editable": "454",
+// go back and make the lack of data_editable automatically make the contained p editable
+/*        "data_editable": "454", */
         "pieces": ["heading", "content"],
         "heading": "proof_heading"
     },
@@ -258,6 +259,7 @@ for (const [owner, instances] of Object.entries(environment_instances)) {
     var data_editable_base = objectStructure[owner].html.data_editable;
     var cssclass_base = objectStructure[owner].html.cssclass;
     var ptx_pieces = objectStructure[owner].ptx.pieces;
+    var ptx_attributes = (objectStructure[owner].ptx.attributes || []);
     for (var j=0; j < instances.length; ++j) {
         var this_tag = instances[j];
         objectStructure[this_tag] = {
@@ -268,7 +270,8 @@ for (const [owner, instances] of Object.entries(environment_instances)) {
             },
             "ptx": {
                  "tag": this_tag,
-                 "pieces": ptx_pieces
+                 "pieces": ptx_pieces,
+                 "attributes": ptx_attributes
     //             "pieces": [["title", ""], ["statement", "p"]]
             }
         }
@@ -966,7 +969,7 @@ function edit_menu_for(this_obj_or_id, motion) {
                 console.log("this_obj", this_obj);
                 edit_option.innerHTML = "<b>enter</b> this " + internalSource[this_obj.id]["ptxtag"] + ", or add near here?";
             } else {
-                edit_option.innerHTML = "<b>edit</b> this paragraph, or add near here?";
+                edit_option.innerHTML = "<b>edit</b> this passage, or add near here?";
             }
             edit_option.setAttribute('data-location', 'next');
         }
@@ -1001,7 +1004,7 @@ function next_editable_of(obj, relationship) {
     var next_to_edit;
     console.log("finding", relationship, "editable of", obj);
     if (relationship == "children") {
-        next_to_edit = $(obj).find('> .sidebyside > [data-editable],  > li > [data-editable], > .heading > [data-editable], > [data-editable]')
+        next_to_edit = $(obj).find('> .sidebyside > [data-editable],  > li > [data-editable], > .heading > [data-editable], > [data-editable], > .hint > [data-editable], > .answer > [data-editable]')
     } else if (relationship == "outer-block") {  // for example, a direct child of a section
         next_to_edit = $(obj).find(' > [data-editable]')
     } else if (relationship == "inner-block") {  // typically a paragraph
@@ -1876,7 +1879,7 @@ var internalSource = {  // currently the key is the HTML id
    "112233": {"xml:id": "", "permid": "", "ptxtag": "m", "parent": ["ACU","content"],
            "content": "f(x)=x^2"},
    "udO": {"xml:id": "", "permid": "udO", "ptxtag": "investigation", "parent": ["hPw","content"],
-           "content": "<&>Iht<;><&>ooC<;>"},
+           "statement": "<&>Iht<;><&>ooC<;>"},
    "Iht": {"xml:id": "", "permid": "Iht", "ptxtag": "p", "parent": ["udO","content"],
            "content": "Note: Throughout the text you will see <em>Investigate!</em>\nactivities like this one.\nAnswer the questions in these as best you can to give yourself a feel for what is coming next."},
    "ooC": {"xml:id": "", "permid": "ooC", "ptxtag": "list", "parent": ["udO","content"],
@@ -2199,12 +2202,17 @@ function assemble_internal_version_changes() {
     return [nature_of_the_change, location_of_change, possibly_changed_ids_and_entry]
 }
 
-function wrap_tag(tag, content, layout) {
+function wrap_tag(tag, content, layout, attribute_values) {
     // layout: inline or block or title
     // is this the right place to handle empty content?
     if (!content) { return "" }
 
-    var opening_tag = "<" + tag + ">";
+    var opening_tag = "<" + tag;
+    for (var j=0; j < attribute_values.length; ++j) {
+        var [name, value] = attribute_values[j];
+        opening_tag += ' ' + name + '="' + value + '"'
+    }
+    opening_tag += ">";
     var closing_tag = "</" + tag + ">";
     if (["block", "title"].includes(layout)) {
         opening_tag = "\n" + opening_tag;
@@ -2216,6 +2224,7 @@ function wrap_tag(tag, content, layout) {
     }
     return opening_tag + content + closing_tag
 }
+
 function pretext_from_source(text) {
     if (text.includes("<&>")) {
         return text.replace(/<&>(.*?)<;>/g, pretext_from_id)
@@ -2226,7 +2235,7 @@ function pretext_from_source(text) {
 
 function pretext_from_id(match, the_id) {
     var the_answer = "";
-    var tag_display = "block";   // that shoudl be in the source
+    var tag_display = "block";   // that shoudl be in the source description (objectStructure)?
     console.log("expanding the_id", the_id);
     var the_object = internalSource[the_id];
     if (!the_object) {
@@ -2251,11 +2260,24 @@ function pretext_from_id(match, the_id) {
     var pretext_tag = src_structure.tag;
     if (pretext_tag == "title") { tag_display = "title" }
 
-    console.log("src_structure", src_structure);
+    var pretext_attributes = [];
+    if ("attributes" in src_structure) {
+        pretext_attributes = src_structure.attributes;
+    }
+    var pretext_attributes_values = [];
+    for (var j=0; j < pretext_attributes.length; ++j) {
+        var attr_name = pretext_attributes[j][0];
+        var attr_val = the_object[attr_name];
+        pretext_attributes_values.push([attr_name, attr_val])
+    }
+
+    console.log("src_structure", pretext_tag, "is", src_structure);
     for (var j=0; j < src_structure.pieces.length; ++j) {
         var this_piece = src_structure.pieces[j][0];
         if (this_piece in the_object) {
-            this_piece_src = pretext_from_source(the_object[this_piece])
+            this_piece_src = pretext_from_source(the_object[this_piece]);
+            the_answer += this_piece_src
+/*
             if (["content", "tasks"].includes(this_piece)) {  // "pass through" tags
                 the_answer += this_piece_src
             } else {  // typically title or statement
@@ -2266,13 +2288,14 @@ function pretext_from_id(match, the_id) {
                 }
             //    the_answer += "<" + this_piece + ">" + this_piece_src + "</" + this_piece + ">"
             }
+*/
         } else {
             console.log("possible error:", pretext_tag, "with no", this_piece)
         }
     }
 
     // the_answer = opening_tag + the_answer + closing_tag;
-    the_answer = wrap_tag(pretext_tag, the_answer, tag_display)
+    the_answer = wrap_tag(pretext_tag, the_answer, tag_display, pretext_attributes_values)
 
     return the_answer
 }
@@ -3111,8 +3134,11 @@ function main_menu_navigator(e) {  // we are not currently editing
                         edit_submenu.innerHTML = menu_options_for(current_env_id, "", "modify");
                         console.log("just inserted inner menu_options_for(parent_type)", menu_options_for(current_env_id, "", "modify"));
         //////////                theChooseCurrent.insertAdjacentElement("beforeend", edit_submenu);
-                 // wrong       $("#enter_choice").replaceWith(edit_submenu);
-                        theChooseCurrent.replaceWith(edit_submenu);
+                        if (theChooseCurrent.tagName == "SPAN") {  // when adjusting workspace
+                            theChooseCurrent.replaceWith(edit_submenu);
+                        } else {
+                            theChooseCurrent.insertAdjacentElement("beforeend", edit_submenu);
+                        }
                         document.getElementById('choose_current').focus();
                         console.log("focus is on", $(":focus"));
                     } else if (dataModifier == "done") {
