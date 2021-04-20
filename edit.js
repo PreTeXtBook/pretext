@@ -1,4 +1,14 @@
 
+/* the structure of each object, and its realization as PreTeXt source or in HTML,
+   is recorded in the objectStructure dictionary.
+
+{"xml:id": new_id, "sourcetag": new_tag, "parent": parent_description, "title": ""}
+
+In pretext, pieces are of teh form ["piecename", "tag"], while
+in source, pieces are of teh form ["piecename", "required_component"], while
+
+*/
+
 objectStructure = {
   "theorem_like_heading": {
     "html": {
@@ -37,7 +47,11 @@ objectStructure = {
         "pieces": ["heading", "content"],
         "heading": "section_like_heading"
     },
-    "ptx": {
+    "pretext": {
+        "tag": "section",
+        "pieces": [["title", "title"], ["content", ""]]
+    },
+    "source": {
         "tag": "section",
         "pieces": [["title", "*"], ["content", "p"]]
     }
@@ -49,8 +63,11 @@ objectStructure = {
         "pieces": ["content"],
         "data_editable": "99"
     },
-    "ptx": {
+    "pretext": {
         "tag": "p",
+        "pieces": [["content", ""]]
+    },
+    "source": {
         "pieces": [["content", ""]]
     }
   },
@@ -60,7 +77,11 @@ objectStructure = {
         "tag": "li",
         "pieces": ["content"]
     },
-    "ptx": {
+    "pretext": {
+        "tag": "li",
+        "pieces": [["title", "title"], ["content", ""]]
+    },
+    "source": {
         "tag": "li",
         "pieces": [["title", ""], ["content", "p"]]
     }
@@ -72,24 +93,35 @@ objectStructure = {
         "pieces": ["content"],
         "data_editable": "9??"
     },
-    "ptx": {
+    "pretext": {
+        "tag": "ol",
+        "pieces": [["content", ""]],
+        "attributes": ["list-style-type"]
+    },
+    "source": {
         "tag": "list",
         "pieces": [["title", ""], ["content", "li"]],
         "attributes": [["list-style-type", "A"]]
     }
   },
 
-  "img": {
+  "image": {
     "html": {
         "tag": "img",
         "cssclass": "image-box",
         "pieces": ["content"],
         "data_editable": "31",
-        "style": "width: 50%; margin-right: 25%; margin-left: 25%"  /* should come from ptx source? */
+        "style": "width: 50%; margin-right: 25%; margin-left: 25%"  /* should come from source source? */
     },
-    "ptx": {
-        "pieces": [["src",""]],
-        "attributes": [["alt", ""]]
+    "pretext": {
+        "tag": "image",
+        "pieces": [],
+        "attributes": ["src", "alt"]
+    },
+    "source": {
+        "tag": "image",
+        "pieces": [["",""]],
+        "attributes": [["source", ""], ["width", ""], ["alt", ""]]
     }
   },
 
@@ -99,9 +131,13 @@ objectStructure = {
         "cssclass": "image-box",
         "pieces": ["content"],
         "data_editable": "30",
-        "style": "width: 50%; margin-right: 25%; margin-left: 25%"  /* should come from ptx source? */
+        "style": "width: 50%; margin-right: 25%; margin-left: 25%"  /* should come from source source? */
     },
-    "ptx": {
+    "pretext": {
+        "tag": "",
+        "pieces": []
+    },
+    "source": {
         "pieces": [["content","img"]],
         "attributes": [["class", "image-box"], ["style", "width: 50%; margin-right: 25%; margin-left: 25%"]]
     }
@@ -115,7 +151,11 @@ objectStructure = {
         "data_editable": "60",
         "heading": "proof_heading"
     },
-    "ptx": {
+    "pretext": {
+        "tag": "proof",
+        "pieces": [["content", ""]]
+    },
+    "source": {
         "pieces": [["content", "p"]]
     }
   },
@@ -128,7 +168,10 @@ objectStructure = {
         "pieces": ["heading", "statement"],
         "heading": "theorem_like_heading"
     },
-    "ptx": {
+    "pretext": {
+        "pieces": [["title", "title"], ["statement", "statement"]]
+    },
+    "source": {
         "pieces": [["title", ""], ["statement", "p"]]
     }
   },
@@ -141,7 +184,11 @@ objectStructure = {
         "pieces": ["heading", "statement", "hint", "answer", "solution", "workspace", "tasks*"],
         "heading": "theorem_like_heading"
     },
-    "ptx": {
+    "pretext": {
+        "pieces": [["title", "title"], ["statement", "statement"], ["hint", ""], ["answer", ""], ["solution", ""], ["tasks", ""]],
+        "attributes": ["workspace"]
+    },
+    "source": {
         "pieces": [["title", ""], ["statement", "p"], ["tasks", ""], ["hint", ""], ["answer", ""], ["solution", ""]],
         "attributes": [["workspace", "0"]]
     }
@@ -155,7 +202,10 @@ objectStructure = {
         "pieces": ["heading", "statement"],
         "heading": "theorem_like_heading"
     },
-    "ptx": {
+    "pretext": {
+        "pieces": [["title", "title"], ["statement", "statement"]]
+    },
+    "source": {
         "pieces": [["title", ""], ["statement", "p"]]
     }
   },
@@ -168,7 +218,10 @@ objectStructure = {
         "pieces": ["heading", "statement"],
         "heading": "theorem_like_heading"
     },
-    "ptx": {
+    "pretext": {
+        "pieces": [["title", "title"], ["statement", "statement"], ["proof", ""]]
+    },
+    "source": {
         "pieces": [["title", ""], ["statement", "p"], ["proof", ""]]
     }
   },
@@ -181,7 +234,12 @@ objectStructure = {
         "pieces": ["heading", "statement","hint", "answer", "solution", "workspace"],
         "heading": "task_like_heading"
     },
-    "ptx": {
+    "pretext": {
+        "tag": "task",
+        "pieces": [["title", "title"], ["statement", "statement"], ["hint", ""], ["answer", ""], ["solution", ""]],
+        "attributes": ["workspace"]
+    },
+    "source": {
         "tag": "task",
         "pieces": [["title", ""], ["statement", "p"], ["hint", ""], ["answer", ""], ["solution", ""]],
         "attributes": [["workspace", "0"]]
@@ -197,7 +255,11 @@ objectStructure = {
         "pieces": ["heading", "content"],
         "heading": "proof_heading"
     },
-    "ptx": {
+    "pretext": {
+        "tag": "solution",
+        "pieces": [["title", "title"], ["content", ""]]
+    },
+    "source": {
         "tag": "solution",
         "pieces": [["content", "p"]]
     }
@@ -211,7 +273,11 @@ objectStructure = {
         "pieces": ["heading", "content"],
         "heading": "proof_heading"
     },
-    "ptx": {
+    "pretext": {
+        "tag": "answer",
+        "pieces": [["title", "title"], ["content", ""]]
+    },
+    "source": {
         "tag": "answer",
         "pieces": [["content", "p"]]
     }
@@ -226,7 +292,11 @@ objectStructure = {
         "pieces": ["heading", "content"],
         "heading": "proof_heading"
     },
-    "ptx": {
+    "pretext": {
+        "tag": "hint",
+        "pieces": [["title", "title"], ["content", ""]]
+    },
+    "source": {
         "tag": "hint",
         "pieces": [["content", "p"]]
     }
@@ -240,7 +310,7 @@ objectStructure = {
     }
 /*
 ,
-    "ptx": {
+    "source": {
         "pieces": [["title", ""], ["statement", "p"], ["solution*", ""]],
         "attributes": [["workspace", "1in"]]
     }
@@ -258,8 +328,9 @@ var environment_instances = {
 for (const [owner, instances] of Object.entries(environment_instances)) {
     var data_editable_base = objectStructure[owner].html.data_editable;
     var cssclass_base = objectStructure[owner].html.cssclass;
-    var ptx_pieces = objectStructure[owner].ptx.pieces;
-    var ptx_attributes = (objectStructure[owner].ptx.attributes || []);
+    var source_pieces = objectStructure[owner].source.pieces;
+    var pretext_pieces = objectStructure[owner].pretext.pieces;
+    var source_attributes = (objectStructure[owner].source.attributes || []);
     for (var j=0; j < instances.length; ++j) {
         var this_tag = instances[j];
         objectStructure[this_tag] = {
@@ -268,11 +339,14 @@ for (const [owner, instances] of Object.entries(environment_instances)) {
                 "cssclass": cssclass_base + " " + this_tag,
                 "data_editable": data_editable_base + j.toString()
             },
-            "ptx": {
+            "pretext": {
+                "tag": this_tag,
+                "pieces": pretext_pieces
+            },
+            "source": {
                  "tag": this_tag,
-                 "pieces": ptx_pieces,
-                 "attributes": ptx_attributes
-    //             "pieces": [["title", ""], ["statement", "p"]]
+                 "pieces": source_pieces,
+                 "attributes": source_attributes
             }
         }
     }
@@ -280,7 +354,7 @@ for (const [owner, instances] of Object.entries(environment_instances)) {
 
 var sidebyside_instances = {
 "sbs": [["2 panels", "sbs2"], ["3 panels", "sbs3"], ["4 panels", "sbs4"]],
-//"sbs2": [["full across XXX", "sbs2_0_50_50_0"], ["gap but no margin", "sbs2_0_40_40_0"], ["spaced equally", "sbs2_5_40_40_5"]],
+//"sbs2": [["full across XX", "sbs2_0_50_50_0"], ["gap but no margin", "sbs2_0_40_40_0"], ["spaced equally", "sbs2_5_40_40_5"]],
 "sbs2": [["full across", "sbs_0_60_60_0"], ["gap but no margin", "sbs_0_48_48_0"], ["spaced equally", "sbs_5_48_48_5"]],
 "sbs3": [["full across", "sbs_0_40_40_40_0"], ["gap but no margin", "sbs_0_33_33_33_0"], ["spaced equally", "sbs_5_33_33_33_5"]],
 "sbs4": [["full across", "sbs_0_30_30_30_30_0"], ["gap but no margin", "sbs_0_25_25_25_25_0"], ["spaced equally", "sbs_4_25_25_25_25_4"]]
@@ -288,6 +362,7 @@ var sidebyside_instances = {
 
 Object.assign(objectStructure, sidebyside_instances);
 
+var pretext_empty_tags = ["image"];
 
 /* unused
 function object_class_of(tag) {
@@ -305,14 +380,14 @@ function content_from_source(name, src) {
     else if (name == "title") { content = src.title }
     else if (name == "codenumber") {
         content = "N.mm"
-        if (src.ptxtag == "task") { content = "(" + content + ")" }
+        if (src.sourcetag == "task") { content = "(" + content + ")" }
     }
     else if (name == "data-space") {
         content = 0;
         if(src["workspace"]) { content = src["workspace"] }
     }
     else if (name == "type") { 
-        var content_raw = src["ptxtag"];
+        var content_raw = src["sourcetag"];
         content = content_raw.charAt(0).toUpperCase() + content_raw.slice(1);
     }
 
@@ -520,7 +595,7 @@ editing_container_for = { "p": 1,
 "proof": [""]  //just a guess
 }
 
-// each tag has [ptx_tag, [html_start, html_end]]
+// each tag has [source_tag, [html_start, html_end]]
 // Note: end of html_start is missing, to make it easier to add attributes
 inline_tags = {'em': ['em', ['<em class="emphasis"', "</em>"]], 
                'term': ['term', ['<dfn class="terminology"', '</dfn>']]
@@ -622,7 +697,7 @@ function menu_options_for(object_id, component_type, level) {
         //  p in li vs p child of section, for example
      var menu_for;
 
-     if (!component_type) { component_type = internalSource[object_id]["ptxtag"] }
+     if (!component_type) { component_type = internalSource[object_id]["sourcetag"] }
      console.log("component_tag", component_type);
      if (level == "base") {
          menu_for = base_menu_for
@@ -630,7 +705,7 @@ function menu_options_for(object_id, component_type, level) {
          console.log("C0 menu options for", component_type);
          var m_d_options;
          var component_parent = internalSource[object_id]["parent"][0];
-         var component_parent_tag = internalSource[component_parent]["ptxtag"];
+         var component_parent_tag = internalSource[component_parent]["sourcetag"];
          if (component_type == "p" && component_parent_tag == "li") {
              m_d_options = [
                  ["move-local-p", "Move these words within this page"],
@@ -665,7 +740,7 @@ function menu_options_for(object_id, component_type, level) {
          console.log("CZ menu options for", component_type);
          var m_d_options;
          var component_parent = internalSource[object_id]["parent"][0];
-         var component_parent_tag = internalSource[component_parent]["ptxtag"];
+         var component_parent_tag = internalSource[component_parent]["sourcetag"];
          if (component_type == "bareimage") {
              m_d_options = [
                  ["modify", "enlarge", "make larger"],
@@ -789,7 +864,7 @@ function top_menu_options_for(this_obj) {
         console.log("heading options for bbb", this_obj_parent); 
         var this_obj_parent_id = this_obj_parent.id;
         var this_obj_parent_source = internalSource[this_obj_parent_id];
-        var this_obj_environment = this_obj_parent_source["ptxtag"];
+        var this_obj_environment = this_obj_parent_source["sourcetag"];
 
         console.log("this_obj_environment", this_obj_environment);
         
@@ -801,7 +876,7 @@ function top_menu_options_for(this_obj) {
         this_obj_id = this_obj.id;
         this_obj_source = internalSource[this_obj_id];
         console.log("this_obj_source", this_obj_source);
-        this_obj_environment = this_obj_source["ptxtag"];
+        this_obj_environment = this_obj_source["sourcetag"];
         if (this_object_type == "P") {
             this_list = '<li tabindex="-1" id="choose_current" data-env="p" data-action="edit">Edit ' + this_obj_environment + '</li>';
             var editable_children = next_editable_of(this_obj, "children");
@@ -924,7 +999,7 @@ function edit_menu_for(this_obj_or_id, motion) {
             edit_option = document.createElement('ol');
             edit_option.setAttribute('id', 'edit_menu');
             this_obj_parent_id = this_obj.parentElement.parentElement.id;
-            this_obj_environment = internalSource[this_obj_parent_id]["ptxtag"];
+            this_obj_environment = internalSource[this_obj_parent_id]["sourcetag"];
             edit_option.innerHTML = '<li id="choose_current" tabindex="-1" data-action="change-env">Change "' + this_obj_environment + '" to <div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
             edit_option.setAttribute('data-location', 'inline');
         } else if (this_obj.classList.contains("image-box")) {
@@ -938,7 +1013,7 @@ function edit_menu_for(this_obj_or_id, motion) {
             console.log("this_obj.innerHTML", this_obj.innerHTML);
             console.log("menu only?", this_obj.innerHTML == '<div id="edit_menu_holder" tabindex="-1"></div>');
             this_obj_parent_id = this_obj.parentElement.parentElement.id;
-            this_obj_environment = internalSource[this_obj_parent_id]["ptxtag"];
+            this_obj_environment = internalSource[this_obj_parent_id]["sourcetag"];
             if (this_obj.innerHTML == '<div id="edit_menu_holder" tabindex="-1"></div>') {
                 edit_option.innerHTML = '<li id="choose_current" tabindex="-1" data-action="change-title">Add a title</li>';
             } else {
@@ -967,7 +1042,7 @@ function edit_menu_for(this_obj_or_id, motion) {
         } else {
             if (next_editable_of(this_obj, "children").length) {
                 console.log("this_obj", this_obj);
-                edit_option.innerHTML = "<b>enter</b> this " + internalSource[this_obj.id]["ptxtag"] + ", or add near here?";
+                edit_option.innerHTML = "<b>enter</b> this " + internalSource[this_obj.id]["sourcetag"] + ", or add near here?";
             } else {
                 edit_option.innerHTML = "<b>edit</b> this passage, or add near here?";
             }
@@ -975,7 +1050,7 @@ function edit_menu_for(this_obj_or_id, motion) {
         }
     } else {
         edit_option.setAttribute('data-location', 'stay');
-        edit_option.innerHTML = "continue editing this " + internalSource[this_obj.id]["ptxtag"];
+        edit_option.innerHTML = "continue editing this " + internalSource[this_obj.id]["sourcetag"];
     }
     console.log("edit_option", edit_option);
     document.getElementById("edit_menu_holder").insertAdjacentElement("afterbegin", edit_option);
@@ -1021,7 +1096,7 @@ function next_editable_of(obj, relationship) {
 
 function create_new_internal_object(new_tag, new_id, parent_description) {
 
-    var new_source = {"xml:id": new_id, "ptxtag": new_tag, "parent": parent_description, "title": ""}
+    var new_source = {"xml:id": new_id, "sourcetag": new_tag, "parent": parent_description, "title": ""}
 
     console.log("create new internal object", new_tag, "new_id", new_id, "parent_description", parent_description);
     console.log("within", internalSource[parent_description[0]]);
@@ -1032,7 +1107,7 @@ function create_new_internal_object(new_tag, new_id, parent_description) {
         var [margin_left, margin_right] = [sbs_layout[1], sbs_layout[sbs_layout.length - 1]];
         console.log("sbs side margins", margin_left, "jj", margin_right);
         var new_sbsrow_id = randomstring();
-        internalSource[new_sbsrow_id] = {"xml:id": new_sbsrow_id, "permid": "", "ptxtag": "sbsrow",
+        internalSource[new_sbsrow_id] = {"xml:id": new_sbsrow_id, "permid": "", "sourcetag": "sbsrow",
                  "margin-left": margin_left, "margin-right": margin_right, "parent": [new_id, "content"]}
 
         var col_content = "";
@@ -1040,7 +1115,7 @@ function create_new_internal_object(new_tag, new_id, parent_description) {
         for (var j=2; j <= sbs_layout.length - 2; ++j) {
             var new_col_id = randomstring();
             col_content += "<&>" + new_col_id + "<;>";
-            internalSource[new_col_id] = {"xml:id": new_col_id, "permid": "", "ptxtag": "sbspanel",
+            internalSource[new_col_id] = {"xml:id": new_col_id, "permid": "", "sourcetag": "sbspanel",
                 "width": sbs_layout[j], "content": "", "parent": [new_sbsrow_id, "content"]}
 //                "width": col_default_width[numcols], "content": "", "parent": [new_sbsrow_id, "content"]}
         }
@@ -1053,28 +1128,28 @@ function create_new_internal_object(new_tag, new_id, parent_description) {
 
       console.log("new_tag", new_tag);
       var thisstructure = objectStructure[new_tag];
-      var thisownerptxstructure = {};
+      var thisownersourcestructure = {};
       if ("owner" in thisstructure) {
           var thisownerstructure = objectStructure[thisstructure.owner];
-          thisownerptxstructure = thisownerstructure.ptx;
+          thisownersourcestructure = thisownerstructure.source;
       }
-      var thisptxstructure = Object.assign({},thisownerptxstructure, thisstructure.ptx);
+      var thissourcestructure = Object.assign({},thisownersourcestructure, thisstructure.source);
 
-      console.log("thisptxstructure", thisptxstructure);
+      console.log("thissourcestructure", thissourcestructure);
 
-      if ("attributes" in thisptxstructure) {
-          these_ptx_attributes = thisptxstructure.attributes;
-          for (var j=0; j < these_ptx_attributes.length; ++j) {
-          console.log("adding", j, "attribute", these_ptx_attributes[j]);
-              new_source[these_ptx_attributes[j][0]] = these_ptx_attributes[j][1]
+      if ("attributes" in thissourcestructure) {
+          these_source_attributes = thissourcestructure.attributes;
+          for (var j=0; j < these_source_attributes.length; ++j) {
+          console.log("adding", j, "attribute", these_source_attributes[j]);
+              new_source[these_source_attributes[j][0]] = these_source_attributes[j][1]
           }
       }
 
 /* here need to also use the owner structure */
-      var these_ptx_pieces = thisptxstructure.pieces;
-      for (var j=0; j < these_ptx_pieces.length; ++j) {
-          console.log("adding a piece", these_ptx_pieces[j]);
-          var [this_piece, this_piece_contains] = these_ptx_pieces[j];
+      var these_source_pieces = thissourcestructure.pieces;
+      for (var j=0; j < these_source_pieces.length; ++j) {
+          console.log("adding a piece", these_source_pieces[j]);
+          var [this_piece, this_piece_contains] = these_source_pieces[j];
 
               if (this_piece_contains) {
                   var new_child_id = randomstring();
@@ -1278,7 +1353,7 @@ function edit_in_place(obj, oldornew) {
      // this only works for paragraphs,
      // whing may be right, becaise ixisting content is mostly titles and paragraphs
     if ( internalSource[thisID] ) {
-      var new_tag = internalSource[thisID]["ptxtag"];
+      var new_tag = internalSource[thisID]["sourcetag"];
       var new_id = thisID;  // track down why new_id is in the code
       console.log("new_tag is", new_tag, "from thisID", thisID, "from", internalSource[thisID]);
       if (new_tag == "p") {
@@ -1411,9 +1486,9 @@ function edit_in_place(obj, oldornew) {
 // temporary:  need to unify img and sbs layout
 function modify_by_id(theid, modifier) {
     console.log("modifying by id", theid);
-    if (internalSource[theid]["ptxtag"] == "sbspanel") {
+    if (internalSource[theid]["sourcetag"] == "sbspanel") {
         modify_by_id_sbs(theid, modifier)
-    } else if (internalSource[theid]["ptxtag"] == "exercise") {
+    } else if (internalSource[theid]["sourcetag"] == "exercise") {
         modify_by_id_workspace(theid, modifier)
     } else {
         modify_by_id_img(theid, modifier)
@@ -1634,7 +1709,7 @@ function move_by_id_local(theid, thehandleid) {
     document.getElementById(theid).classList.remove("may_select");
 
     moved_content = internalSource[theid];
-    moved_content_tag = moved_content["ptxtag"];
+    moved_content_tag = moved_content["sourcetag"];
     ongoing_editing_actions.push(["moved", moved_content_tag, theid]);
     moved_parent_and_location = moved_content["parent"];
     console.log("moving", theid);
@@ -1713,7 +1788,7 @@ function move_by_id_local(theid, thehandleid) {
     //  if we are moving a p which has parent li, and it is the only p there, then delete the parent li
     //  note:  this will be wrong if there is other non-p siblings inside the li
     var moving_object_replace = moving_object;
-    if (moved_content_tag == "p" && internalSource[moved_parent_and_location[0]]["ptxtag"] == "li") {
+    if (moved_content_tag == "p" && internalSource[moved_parent_and_location[0]]["sourcetag"] == "li") {
         // check if that p is the only thing inside the li (so the li is empty when we move the p), and if so,
         // remove that li from internalSource and also the HTML, and the reverence to it in internalSource
         if (moving_object.parentElement.getElementsByTagName("p").length == 1) {
@@ -1813,7 +1888,7 @@ function delete_by_id(theid, thereason) {
         old_content[theid] = [deleted_content]
     }
     if (thereason != "newempty") {
-        ongoing_editing_actions.push(["deleted ", deleted_content["ptxtag"], theid]);
+        ongoing_editing_actions.push(["deleted ", deleted_content["sourcetag"], theid]);
     }
         // update the parent of the object
     var current_level = current_editing["level"];
@@ -1825,7 +1900,7 @@ function delete_by_id(theid, thereason) {
         // if the parent is empty, delete it
     if (!(where_it_is.trim()) && (parent_and_location[1] == "content" || parent_and_location[1] == "statement")) {
         document.getElementById(theid).removeAttribute("data-editable");  // so it is invisible to next-editable-of as we delete its parent
-        if (internalSource[parent_and_location[0]][ "ptxtag" ] == "li") {
+        if (internalSource[parent_and_location[0]][ "sourcetag" ] == "li") {
             console.log("not going up a level, because it is a list element")
         } else {
             current_editing["level"] -= 1;
@@ -1856,59 +1931,62 @@ function delete_by_id(theid, thereason) {
 }
 
 var internalSource = {  // currently the key is the HTML id
-   "hPw": {"xml:id": "", "permid": "hPw", "ptxtag": "section", "title": "What is Discrete Mathematics?",
+   "hPw": {"xml:id": "", "permid": "hPw", "sourcetag": "section", "title": "What is Discrete Mathematics?",
            "content": "<&>akX<;>\n<&>UvL<;>\n<&>ACU<;>\n<&>gKd<;>\n<&>MRm<;>\n<&>udO<;>\n<&>sYv<;>\n<&>ZfE<;>"},
-   "gKd": {"xml:id": "", "permid": "", "ptxtag": "p", "title": "", "parent": ["hPw","content"],
+   "gKd": {"xml:id": "", "permid": "", "sourcetag": "p", "title": "", "parent": ["hPw","content"],
            "content": "Discrete math could still ask about the range of a function, but the set would not be an interval. Consider the function which gives the number of children of each person reading this. What is the range? I'm guessing it is something like <m>\{0, 1, 2, 3\}</m>. Maybe 4 is in there too.\nBut certainly there is nobody reading this that has 1.32419 children. This output set <em class='emphasis'>is</em> discrete because the elements are separate. The inputs to the function also form a discrete set because each input is an individual person."},
-   "MRm": {"xml:id": "", "permid": "MRm", "ptxtag": "p", "title": "", "parent": ["hPw","content"],
+   "MRm": {"xml:id": "", "permid": "MRm", "sourcetag": "p", "title": "", "parent": ["hPw","content"],
            "content": "One way to get a feel for the subject is to consider the types of problems you solve in discrete math.\nHere are a few simple examples:"},
-   "ZfE": {"xml:id": "", "permid": "cak", "ptxtag": "p", "title": "", "parent": ["hPw","content"],
+   "ZfE": {"xml:id": "", "permid": "cak", "sourcetag": "p", "title": "", "parent": ["hPw","content"],
            "content": "Ultimately the best way to learn what discrete math is about is to <em>do</em> it. Let's get started! Before we can begin answering more complicated (and fun) problems, we must lay down some foundation. We start by reviewing mathematical statements, sets, and functions in the framework of discrete mathematics."},
-   "cak": {"xml:id": "", "permid": "cak", "ptxtag": "p", "title": "", "parent": ["akX","content"],
+   "cak": {"xml:id": "", "permid": "cak", "sourcetag": "p", "title": "", "parent": ["akX","content"],
            "content": "<&>357911<;>: separate - detached - distinct - abstract."},
-   "akX": {"xml:id": "", "permid": "akX", "ptxtag": "blockquote", "title": "", "parent": ["hPw","content"],
+   "akX": {"xml:id": "", "permid": "akX", "sourcetag": "blockquote", "title": "", "parent": ["hPw","content"],
            "content": "<&>PLS<;>\n<&>vTb<;>\n<&>cak<;>"},
-   "UvL": {"xml:id": "", "permid": "UvL", "ptxtag": "p", "title": "","parent": ["hPw","content"],
+   "UvL": {"xml:id": "", "permid": "UvL", "sourcetag": "p", "title": "","parent": ["hPw","content"],
            "content": "    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n <ellipsis/>.\n Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n What sort of problems?\n Okay, those that involve numbers,\n functions, lines, triangles,\n <ellipsis/>.\n Whatever your conception of what mathematics is,\n try applying the concept of <q>discrete</q> to it, as defined above.\n Some math fundamentally deals with <em>stuff</em>\n that is individually separate and distinct."},
-   "357911": {"xml:id": "356711", "permid": "", "ptxtag": "em", "title": "",
+   "357911": {"xml:id": "356711", "permid": "", "sourcetag": "em", "title": "",
            "content": 'Synonyms'},
-   "sYv": {"xml:id": "", "permid": "sYv", "ptxtag": "p", "parent": ["hPw","content"],
+   "sYv": {"xml:id": "", "permid": "sYv", "sourcetag": "p", "parent": ["hPw","content"],
            "content": "One way to get a feel for the subject is to consider the types of problems you solve in discrete math. Here are a few simple examples:"},
-   "ACU": {"xml:id": "", "permid": "ACU", "ptxtag": "p", "parent": ["hPw","content"],
+   "ACU": {"xml:id": "", "permid": "ACU", "sourcetag": "p", "parent": ["hPw","content"],
            "content": "In an algebra or calculus class, you might have found a particular set of numbers (maybe the set of numbers in the range of a function). You would represent this set as an interval: <&>223344<;> is the range of <&>112233<;> since the set of outputs of the function are all real numbers <m>0</m> and greater. This set of numbers is NOT discrete. The numbers in the set are not separated by much at all. In fact, take any two numbers in the set and there are infinitely many more between them which are also in the set."},
-   "112233": {"xml:id": "", "permid": "", "ptxtag": "m", "parent": ["ACU","content"],
+   "112233": {"xml:id": "", "permid": "", "sourcetag": "m", "parent": ["ACU","content"],
            "content": "f(x)=x^2"},
-   "udO": {"xml:id": "", "permid": "udO", "ptxtag": "investigation", "parent": ["hPw","content"],
+   "udO": {"xml:id": "", "permid": "udO", "sourcetag": "investigation", "parent": ["hPw","content"],
            "statement": "<&>Iht<;><&>ooC<;>"},
-   "Iht": {"xml:id": "", "permid": "Iht", "ptxtag": "p", "parent": ["udO","content"],
+   "Iht": {"xml:id": "", "permid": "Iht", "sourcetag": "p", "parent": ["udO","content"],
            "content": "Note: Throughout the text you will see <em>Investigate!</em>\nactivities like this one.\nAnswer the questions in these as best you can to give yourself a feel for what is coming next."},
-   "ooC": {"xml:id": "", "permid": "ooC", "ptxtag": "list", "parent": ["udO","content"],
+   "ooC": {"xml:id": "", "permid": "ooC", "sourcetag": "list", "parent": ["udO","content"],
            "content": "<&>mzp<;><&>SGy<;><&>yNH<;><&>eUQ<;>"},
-   "eUQ": {"xml:id": "", "permid": "eUQ", "ptxtag": "li", "parent": ["ooC","content"],
+   "eUQ": {"xml:id": "", "permid": "eUQ", "sourcetag": "li", "parent": ["ooC","content"],
            "content": "<&>jEJ<;>"},
-   "jEJ": {"xml:id": "", "permid": "jEJ", "ptxtag": "p", "parent": ["eUQ","content"],
+   "jEJ": {"xml:id": "", "permid": "jEJ", "sourcetag": "p", "parent": ["eUQ","content"],
            "content": "Back in the days of yore, five small towns decided they wanted to build roads directly connecting each pair of towns. While the towns had plenty of money to build roads as long and as winding as they wished, it was very important that the roads not intersect with each other (as stop signs had not yet been invented). Also, tunnels and bridges were not allowed. Is it possible for each of these towns to build a road to each of the four other towns without creating any intersections?"},
-   "mzp": {"xml:id": "", "permid": "mzp", "ptxtag": "li", "parent": ["ooC","content"],
+   "mzp": {"xml:id": "", "permid": "mzp", "sourcetag": "li", "parent": ["ooC","content"],
            "content": "<&>LbZ<;>"},
-   "LbZ": {"xml:id": "", "permid": "LbZ", "ptxtag": "p", "parent": ["mzp","content"],
+   "LbZ": {"xml:id": "", "permid": "LbZ", "sourcetag": "p", "parent": ["mzp","content"],
            "content": "The most popular mathematician in the world is throwing a party for all of his friends.\n As a way to kick things off, they decide that everyone should shake hands.\n Assuming all 10 people at the party each shake hands with every other person\n (but not themselves,\n obviously)\n exactly once, how many handshakes take place?"},
-   "SGy": {"xml:id": "", "permid": "SGy", "ptxtag": "li", "parent": ["ooC","content"],
+   "SGy": {"xml:id": "", "permid": "SGy", "sourcetag": "li", "parent": ["ooC","content"],
            "content": "<&>rji<;>"},
-   "rji": {"xml:id": "", "permid": "rji", "ptxtag": "p", "parent": ["SGy","content"],
+   "rji": {"xml:id": "", "permid": "rji", "sourcetag": "p", "parent": ["SGy","content"],
            "content": "At the warm-up event for Oscar's All Star Hot Dog Eating Contest, Al ate one hot dog.\n Bob then showed him up by eating three hot dogs.\n Not to be outdone, Carl ate five.\n This continued with each contestant eating two more hot dogs than the previous contestant.\n How many hot dogs did Zeno (the 26th and final contestant) eat?\n How many hot dogs were eaten all together?"},
-   "223344": {"xml:id": "", "permid": "", "ptxtag": "m", "parent": ["ACU","content"],
+   "223344": {"xml:id": "", "permid": "", "sourcetag": "m", "parent": ["ACU","content"],
            "content": "[0, \\infty)"},
-   "yNH": {"xml:id": "", "permid": "yNH", "ptxtag": "li", "parent": ["ooC","content"],
+   "yNH": {"xml:id": "", "permid": "yNH", "sourcetag": "li", "parent": ["ooC","content"],
            "content": "<&>Xqr<;><&>ssiiddee<;><&>DxA<;>"},
-   "Xqr": {"xml:id": "", "permid": "Xqr", "ptxtag": "p", "parent": ["yNH","content"],
+   "Xqr": {"xml:id": "", "permid": "Xqr", "sourcetag": "p", "parent": ["yNH","content"],
            "content": "After excavating for weeks, you finally arrive at the burial chamber.\nThe room is empty except for two large chests.\n On each is carved a message (strangely in English):"},
-   "ssiiddee": {"xml:id": "", "permid": "", "ptxtag": "bareimage", "parent": ["yNH","content"],
+   "ssiiddee": {"xml:id": "", "permid": "", "sourcetag": "image", "parent": ["yNH","content"],
+           "src": "images/two-chests.svg",
+           "width": "66%", "margin-right": "17%", "margin-left": "17%"},
+   "OLDssiiddee": {"xml:id": "", "permid": "", "sourcetag": "bareimage", "parent": ["yNH","content"],
            "content": "<&>ppccii<;>",
            "class": "image-box",   // maybe that is inherent to bareimage ?
            "style": "width: 66%; margin-right: 17%; margin-left: 17%"},
-   "ppccii": {"xml:id": "", "permid": "", "ptxtag": "img", "parent": ["ssiiddee","content"],
+   "ppccii": {"xml:id": "", "permid": "", "sourcetag": "img", "parent": ["ssiiddee","content"],
            "src": "images/two-chests.svg", "alt": "alt text goes here"},
-   "DxA": {"xml:id": "", "permid": "", "ptxtag": "p", "parent": ["yNH","content"],
+   "DxA": {"xml:id": "", "permid": "", "sourcetag": "p", "parent": ["yNH","content"],
            "content": "You know exactly one of these messages is true.\nWhat should you do?"}
 }
 
@@ -1977,13 +2055,13 @@ function XXlocal_menu_navigator(e) {
 }
 */
 
-function ptx_to_html(input_text) {
+function source_to_html(input_text) {
     output_text = input_text;
 
 // there are two types of expansion to be done:
 //    expand internal tags
-//    convert hand-written ptx to HTML
-    output_text = expand_condensed_source_html(output_text, "ptx");
+//    convert hand-written source to HTML
+    output_text = expand_condensed_source_html(output_text, "source");
 
     output_text = output_text.replace(/<term>/g, "<b>"); 
     output_text = output_text.replace(/<\/term>/g, "</b>"); 
@@ -2008,7 +2086,7 @@ function extract_internal_contents(some_text) {
 
 function extract_new_math(match, sp_before, math_content, sp_after) {
     new_math_id = randomstring();
-    internalSource[new_math_id] = { "xml:id": new_math_id, "permid": "", "ptxtag": "m",
+    internalSource[new_math_id] = { "xml:id": new_math_id, "permid": "", "sourcetag": "m",
                           "content": math_content}
     return sp_before + "<&>" + new_math_id + "<;>" + sp_after
 }
@@ -2120,7 +2198,7 @@ function assemble_internal_version_changes() {
                     console.log("error:  existing tag from input", prev_id, "not in internalSource")
                 }
             } else {  // a newly created paragraph
-                var this_object_internal = {"ptxtag": "p", "title": ""}; //p don't have title
+                var this_object_internal = {"sourcetag": "p", "title": ""}; //p don't have title
                 this_object_label = randomstring();
                 this_object_internal["xmlid"] = this_object_label;
                 this_object_internal["permid"] = "";
@@ -2205,15 +2283,31 @@ function assemble_internal_version_changes() {
 function wrap_tag(tag, content, layout, attribute_values) {
     // layout: inline or block or title
     // is this the right place to handle empty content?
-    if (!content) { return "" }
+    if (!content && !tag) { return "" }
+    if (!content && !pretext_empty_tags.includes(tag)) { return "" }
 
-    var opening_tag = "<" + tag;
-    for (var j=0; j < attribute_values.length; ++j) {
-        var [name, value] = attribute_values[j];
-        opening_tag += ' ' + name + '="' + value + '"'
+    if (attribute_values.length) {
+        console.log("tag", tag, "has attribute_values", attribute_values)
     }
-    opening_tag += ">";
-    var closing_tag = "</" + tag + ">";
+
+    var opening_tag = closing_tag = "";
+
+    if (tag) {
+        opening_tag = "<" + tag;
+        for (var j=0; j < attribute_values.length; ++j) {
+            var [name, value] = attribute_values[j];
+            opening_tag += ' ' + name + '="' + value + '"'
+        }
+  //      opening_tag += ">";
+        closing_tag = "</" + tag + ">";
+    }
+    if (!content && pretext_empty_tags.includes(tag)) {
+        opening_tag += "/>";
+        closing_tag = "";
+    } else if (tag) {
+        opening_tag += ">";
+    }
+
     if (["block", "title"].includes(layout)) {
         opening_tag = "\n" + opening_tag;
         closing_tag = closing_tag + "\n"
@@ -2242,17 +2336,17 @@ function pretext_from_id(match, the_id) {
         console.log("error: no content for", the_id);
         return the_id
     }
-    var src_tag = the_object.ptxtag;
+    var src_tag = the_object.sourcetag;
     console.log("the_object",the_object);
     var src_structure;
     if (src_tag in objectStructure) {
-        src_structure = objectStructure[src_tag].ptx;
+        src_structure = objectStructure[src_tag].pretext;
     } else {
         console.log("concern: unknown structure:", src_tag);
         // so make reasonable assumptions about the structure
         src_structure = {
             "tag": src_tag,
-            "pieces": [["content", ""]]
+            "pieces": ["content"]
         }
         tag_display = "inline"
     }
@@ -2266,17 +2360,26 @@ function pretext_from_id(match, the_id) {
     }
     var pretext_attributes_values = [];
     for (var j=0; j < pretext_attributes.length; ++j) {
-        var attr_name = pretext_attributes[j][0];
+    //    var attr_name = pretext_attributes[j][0];
+        var attr_name = pretext_attributes[j];
         var attr_val = the_object[attr_name];
-        pretext_attributes_values.push([attr_name, attr_val])
+        if (attr_val) {
+            pretext_attributes_values.push([attr_name, attr_val])
+        }
     }
 
     console.log("src_structure", pretext_tag, "is", src_structure);
+    console.log("pretext_attributes_values", pretext_attributes_values);
     for (var j=0; j < src_structure.pieces.length; ++j) {
-        var this_piece = src_structure.pieces[j][0];
+        var this_display = "";   // how do we determin that?  3rd entry needed in pieces?
+        var [this_piece, this_tag] = src_structure.pieces[j];
+   //     var this_piece = src_structure.pieces[j];
+        console.log("this_piece", this_piece);
         if (this_piece in the_object) {
             this_piece_src = pretext_from_source(the_object[this_piece]);
-            the_answer += this_piece_src
+     //       the_answer += this_piece_src
+            if (this_tag) { console.log("     WRAP on tag", this_tag, "from", this_piece)};
+            the_answer += wrap_tag(this_tag, this_piece_src, this_display, [])
 /*
             if (["content", "tasks"].includes(this_piece)) {  // "pass through" tags
                 the_answer += this_piece_src
@@ -2330,12 +2433,12 @@ function html_from_internal_id(the_id, is_inner) {
        // HTML markup fo rthe object and return that.
     var the_object = internalSource[the_id];
     console.log("making html of", the_object, "is_inner", is_inner, "the_id", the_id);
-    var ptxtag = the_object["ptxtag"];
-    console.log("which has tag", ptxtag);
+    var sourcetag = the_object["sourcetag"];
+    console.log("which has tag", sourcetag);
 
     var the_html_objects = [];
 
-    if (ptxtag == "img") {
+    if (sourcetag == "img") {
         var the_src = the_object["src"];
         console.log("inserting an img with src", the_src);
 
@@ -2350,26 +2453,26 @@ function html_from_internal_id(the_id, is_inner) {
         html_of_this_object = '<img src="' + the_src + '" id="' + the_id + '">';
 
         the_html_objects.push(html_of_this_object);
-    } else if (ptxtag in inline_tags) {   // assume is_inner?
-        var opening_tag = inline_tags[ptxtag][1][0];
+    } else if (sourcetag in inline_tags) {   // assume is_inner?
+        var opening_tag = inline_tags[sourcetag][1][0];
         opening_tag += ' id="' + the_id + '"data-editable="50" tabindex="-1">';
-        var closing_tag = inline_tags[ptxtag][1][1];
+        var closing_tag = inline_tags[sourcetag][1][1];
         return opening_tag + the_object["content"] + closing_tag
-    } else if (ptxtag in math_tags) {
+    } else if (sourcetag in math_tags) {
         // here we are assuming the tag is 'm'
         var opening_tag = '<span class="edit_inline_math"';
         var closing_tag = '</span>';
         if (is_inner == "edit") {
             opening_tag += ' id="' + the_id + '"data-editable="42" tabindex="-1">';
         } else {
-            opening_tag = math_tags[ptxtag][1][0];
-            closing_tag = math_tags[ptxtag][1][1];
+            opening_tag = math_tags[sourcetag][1][0];
+            closing_tag = math_tags[sourcetag][1][1];
         }
         return opening_tag + spacemath_to_tex(the_object["content"]) + closing_tag
 
     } else {
 
-        var thestructure = objectStructure[ptxtag];
+        var thestructure = objectStructure[sourcetag];
         var thehtmlstructure;
         if ("owner" in thestructure) {
             var theownerstructure = objectStructure[thestructure.owner];
@@ -2529,9 +2632,9 @@ function insert_html_version(these_changes) {
         this_object_oldornew = possibly_changed_ids_and_entry[j][2];
         this_object = internalSource[this_object_id];
         console.log(j, "this_object", this_object);
-        if (this_object["ptxtag"] == "p" || this_object["ptxtag"] == "li") {
-            object_as_html = document.createElement(this_object["ptxtag"]);
-            if (this_object["ptxtag"] == "p") {
+        if (this_object["sourcetag"] == "p" || this_object["sourcetag"] == "li") {
+            object_as_html = document.createElement(this_object["sourcetag"]);
+            if (this_object["sourcetag"] == "p") {
                 object_as_html.setAttribute("data-editable", 99);
             } else {
                 object_as_html.setAttribute("data-editable", 98);
@@ -2540,7 +2643,7 @@ function insert_html_version(these_changes) {
             object_as_html.setAttribute("id", this_object_id);
             object_as_html.setAttribute("data-age", this_object_oldornew);
             console.log("now making inner HTML", this_object[this_object_entry].substring(0,12));
-            object_as_html.innerHTML = ptx_to_html(this_object[this_object_entry]);
+            object_as_html.innerHTML = source_to_html(this_object[this_object_entry]);
             location_of_change.insertAdjacentElement('beforebegin', object_as_html);
             var editing_parent = current_editing["tree"][ current_editing["level"] -1 ][ current_editing["location"][ current_editing["level"] - 1 ] ];
             console.log("               editing_parent", editing_parent);
@@ -2551,7 +2654,7 @@ function insert_html_version(these_changes) {
             object_as_html.setAttribute("class", "title");
             object_as_html.setAttribute('data-editable', 20);
             object_as_html.setAttribute('tabindex', -1);
-            object_as_html.innerHTML = ptx_to_html(this_object[this_object_entry]);
+            object_as_html.innerHTML = source_to_html(this_object[this_object_entry]);
             console.log("inserting",object_as_html,"before",location_of_change);
             // location_of_change is the .header .  We want it to be the .title
             location_of_change = location_of_change.querySelector("#actively_editing");
@@ -2567,7 +2670,7 @@ function insert_html_version(these_changes) {
             object_as_html.setAttribute("style", "width: 50%; margin-right: 25%; margin-left: 25%");
 
             console.log("this_object", this_object);
-            object_as_html.innerHTML = ptx_to_html(this_object["content"]);
+            object_as_html.innerHTML = source_to_html(this_object["content"]);
             console.log("inserting",object_as_html,"before",location_of_change);
             location_of_change.insertAdjacentElement('beforebegin', object_as_html);
 
@@ -2689,7 +2792,7 @@ console.log("    SSS current_editing", current_editing, current_editing["tree"][
                 console.log("final_added_object parent", this_parent);
                 var the_whole_object = html_from_internal_id(this_parent[0]);
                 console.log("the_whole_object", the_whole_object);
-                if (internalSource[this_parent[0]]["ptxtag"] == "proof") { // insert the theorem-like statement
+                if (internalSource[this_parent[0]]["sourcetag"] == "proof") { // insert the theorem-like statement
                     var the_parent_object = html_from_internal_id(internalSource[this_parent[0]]["parent"][0]);
                     the_whole_object = the_parent_object.concat(the_whole_object)
                 }
@@ -3081,8 +3184,8 @@ function main_menu_navigator(e) {  // we are not currently editing
                 var id_of_object = to_be_edited.id;
                 var this_object_source = internalSource[id_of_object];
                 console.log("current envoronemnt", this_object_source);
-                var old_env = internalSource[id_of_object]["ptxtag"];
-                internalSource[id_of_object]["ptxtag"] = new_env;
+                var old_env = internalSource[id_of_object]["sourcetag"];
+                internalSource[id_of_object]["sourcetag"] = new_env;
                 recent_editing_actions.push([old_env, new_env, id_of_object]);
                 console.log("the change was", "changed " + old_env + " to " + new_env + " " + id_of_object);
                 var the_whole_object = html_from_internal_id(id_of_object);
