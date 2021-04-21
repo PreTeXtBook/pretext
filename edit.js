@@ -87,6 +87,23 @@ objectStructure = {
     }
   },
 
+  "blockquote": {
+    "html": {
+        "tag": "blockquote",
+        "pieces": ["content", "attribution"],
+        "cssclass": "blockquote",
+        "data_editable": "44?"
+    },
+    "pretext": {
+        "tag": "blockquote",
+        "pieces": [["content", ""], ["attribution", "attribution"]],
+    },
+    "source": {
+        "tag": "blockquote",
+        "pieces": [["content", "p"], ["attribution", ""]]  // attribution can contain a "line".  come back to that
+    }
+  },
+
   "list": {
     "html": {
         "tag": "ol",
@@ -108,9 +125,9 @@ objectStructure = {
   "image": {
     "html": {
         "tag": "img",
-        "cssclass": "image-box",
-        "pieces": ["content"],
+        "pieces": [],   /* can we just omit this line? */
         "data_editable": "31",
+        "attributes": ["src", "alt"],
         "style": "width: 50%; margin-right: 25%; margin-left: 25%"  /* should come from source source? */
     },
     "pretext": {
@@ -121,7 +138,7 @@ objectStructure = {
     "source": {
         "tag": "image",
         "pieces": [["",""]],
-        "attributes": [["source", ""], ["width", ""], ["alt", ""]]
+        "attributes": [["src", ""], ["width", ""], ["alt", ""]]
     }
   },
 
@@ -138,7 +155,7 @@ objectStructure = {
         "pieces": []
     },
     "source": {
-        "pieces": [["content","img"]],
+        "pieces": [["content","image"]],
         "attributes": [["class", "image-box"], ["style", "width: 50%; margin-right: 25%; margin-left: 25%"]]
     }
   },
@@ -330,6 +347,7 @@ for (const [owner, instances] of Object.entries(environment_instances)) {
     var cssclass_base = objectStructure[owner].html.cssclass;
     var source_pieces = objectStructure[owner].source.pieces;
     var pretext_pieces = objectStructure[owner].pretext.pieces;
+    var pretext_attributes = (objectStructure[owner].pretext.attributes || []);
     var source_attributes = (objectStructure[owner].source.attributes || []);
     for (var j=0; j < instances.length; ++j) {
         var this_tag = instances[j];
@@ -341,16 +359,19 @@ for (const [owner, instances] of Object.entries(environment_instances)) {
             },
             "pretext": {
                 "tag": this_tag,
-                "pieces": pretext_pieces
+                "pieces": pretext_pieces,
+                "attributes": pretext_attributes
             },
             "source": {
-                 "tag": this_tag,
-                 "pieces": source_pieces,
-                 "attributes": source_attributes
+                "tag": this_tag,
+                "pieces": source_pieces,
+                "attributes": source_attributes
             }
         }
     }
 }
+
+console.log('objectStructure["exercise"]', objectStructure["exercise"]);
 
 var sidebyside_instances = {
 "sbs": [["2 panels", "sbs2"], ["3 panels", "sbs3"], ["4 panels", "sbs4"]],
@@ -762,7 +783,8 @@ function menu_options_for(object_id, component_type, level) {
                  ["modify", "rightplus", "increase right margin"],
                  ["modify", "done", "done modifying"]
              ];
-         } else if (component_type == "exercise") {  // actually workspace, and not onle exercise
+         } else if (environment_instances["project-like"].includes(component_type)) {
+                     // needs to also include exercise-like
              m_d_options = [
                  ["modify", "enlarge", "more space"],
                  ["modify", "shrink", "less space"],
@@ -1488,7 +1510,8 @@ function modify_by_id(theid, modifier) {
     console.log("modifying by id", theid);
     if (internalSource[theid]["sourcetag"] == "sbspanel") {
         modify_by_id_sbs(theid, modifier)
-    } else if (internalSource[theid]["sourcetag"] == "exercise") {
+//    } else if (internalSource[theid]["sourcetag"] == "exercise") {
+    } else if (environment_instances["project-like"].includes(internalSource[theid]["sourcetag"])) {
         modify_by_id_workspace(theid, modifier)
     } else {
         modify_by_id_img(theid, modifier)
@@ -1499,6 +1522,7 @@ function modify_by_id(theid, modifier) {
 function modify_by_id_workspace(theid, modifier) {
 
     var the_height = internalSource[theid]["workspace"];
+    console.log("the_height", the_height, "from", internalSource[theid]);
 
 //modify: enlarge, shrink, enlargeslightly, shrinkslightly, done
 
@@ -2393,7 +2417,7 @@ function pretext_from_id(match, the_id) {
             }
 */
         } else {
-            console.log("possible error:", pretext_tag, "with no", this_piece)
+            console.log("missing piece:", pretext_tag, "with no", this_piece)
         }
     }
 
@@ -2438,7 +2462,7 @@ function html_from_internal_id(the_id, is_inner) {
 
     var the_html_objects = [];
 
-    if (sourcetag == "img") {
+    if (sourcetag == "image") {
         var the_src = the_object["src"];
         console.log("inserting an img with src", the_src);
 
@@ -2446,6 +2470,7 @@ function html_from_internal_id(the_id, is_inner) {
             return the_src
         }
 
+// why to we create an object and then do it as text?
         html_of_this_object = document.createElement('img');
         html_of_this_object.setAttribute("id", the_id);
         html_of_this_object.setAttribute("src", the_src);
@@ -2669,7 +2694,7 @@ function insert_html_version(these_changes) {
             object_as_html.setAttribute("class", "image-box");
             object_as_html.setAttribute("style", "width: 50%; margin-right: 25%; margin-left: 25%");
 
-            console.log("this_object", this_object);
+            console.log("bareimage, this_object", this_object);
             object_as_html.innerHTML = source_to_html(this_object["content"]);
             console.log("inserting",object_as_html,"before",location_of_change);
             location_of_change.insertAdjacentElement('beforebegin', object_as_html);
@@ -2685,7 +2710,7 @@ function insert_html_version(these_changes) {
     // call mathjax, in case the new content contains math
     return object_as_html // the most recently added object, which we may want to
                            // do something, like add an editing menu
-}
+}  // insert html version
 
 function save_edits() {
 
