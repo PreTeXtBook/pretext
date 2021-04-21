@@ -122,7 +122,7 @@ objectStructure = {
     }
   },
 
-  "image": {
+  "OLDimage": {
     "html": {
         "tag": "img",
         "pieces": [],   /* can we just omit this line? */
@@ -142,7 +142,27 @@ objectStructure = {
     }
   },
 
-  "bareimage": {  /* actually, the holder of an img */
+  "image": {
+    "html": {
+        "tag": "div",
+        "pieces": ["bareimage"],
+        "data_editable": "31",
+        "cssclass": "image-box",
+        "style": "width: 40%; margin-right: 35%; margin-left: 25%"  /* should come from source source? */
+    },
+    "pretext": {
+        "tag": "image",
+        "pieces": [],
+        "attributes": ["src", "alt"]
+    },
+    "source": {
+        "tag": "image",
+        "pieces": [["",""]],
+        "attributes": [["src", ""], ["width", ""], ["alt", ""]]
+    }
+  },
+
+  "OLDbareimage": {  /* actually, the holder of an img */
     "html": {
         "tag": "div",
         "cssclass": "image-box",
@@ -157,6 +177,17 @@ objectStructure = {
     "source": {
         "pieces": [["content","image"]],
         "attributes": [["class", "image-box"], ["style", "width: 50%; margin-right: 25%; margin-left: 25%"]]
+    }
+  },
+
+  "bareimage": {
+    "html": {
+        "tag": "img",
+        "cssclass": "contained",
+        "pieces": [],
+        "attributes": ["src", "alt"],
+        "data_editable": "30",
+        "style": "width: 50%; margin-right: 25%; margin-left: 25%"  /* should come from source source? */
     }
   },
 
@@ -392,8 +423,8 @@ function object_class_of(tag) {
 }
 */
 
-function content_from_source(name, src) {
-    console.log("     content_from_source src", src);
+function value_from_source(name, src) {
+    console.log("     value_from_source src", src);
     var content;
 
     if (name == "space") { content = " " }
@@ -573,7 +604,7 @@ var the_inner_menu = {
 "remark-like": [["remark"], ["warning"], ["note"], ["observation"], ["convention"], ["insight"]],
 "example-like": [["example"], ["question"], ["problem"]],
 // "display-like": [["image"], ["image with caption", "imagecaption", "m"], ["video"], ["video with caption", "videocaption", "d"], ["audio"]],
-"image-like": [["image", "bareimage"], ["video"], ["audio"]],
+"image-like": [["image", "image"], ["video"], ["audio"]],
 "aside-like": [["aside"], ["historical"], ["biographical"]],
 "layout-like": [["side-by-side panels", "sbs"], ["assemblage"], ["biographical aside"], ["titled paragraph", "paragraphs"]],
 "sbs": [["2 panels", "sbs2"], ["3 panels", "sbs3"], ["4 panels", "sbs4"]],
@@ -608,7 +639,7 @@ editing_container_for = { "p": 1,
 "ol": ["item"],
 "li": [""],
 "list": [""],
-"bareimage": [""],
+"image": [""],
 "sbs2": [""],
 "sbs3": [""],
 "sbs4": [""],
@@ -762,7 +793,7 @@ function menu_options_for(object_id, component_type, level) {
          var m_d_options;
          var component_parent = internalSource[object_id]["parent"][0];
          var component_parent_tag = internalSource[component_parent]["sourcetag"];
-         if (component_type == "bareimage") {
+         if (component_type == "image") {
              m_d_options = [
                  ["modify", "enlarge", "make larger"],
                  ["modify", "shrink", "make smaller"],
@@ -1229,10 +1260,12 @@ function show_source(sibling, relative_placement) {
     the_source.setAttribute('id', "newsource");
     the_source.setAttribute('style', "width: 100%; height:30em");
 //    the_source.innerHTML = "sdad \ndasdadsasd";
-    the_source.innerHTML = pretext_from_id("", "hPw");
+    var the_pretext_source =  pretext_from_id("", "hPw", "pretext");
+//    the_source.innerHTML = the_pretext_source;
 //  expand from top section:  hPw  or top_level_id
 
-    edit_placeholder.replaceWith(the_source);
+ //   edit_placeholder.replaceWith(the_source);
+    edit_placeholder.insertAdjacentHTML('afterend', '<textarea id="newsource" style="width: 100%; height:30em">' + the_pretext_source + '</textares>')
 }
 
 
@@ -1409,7 +1442,7 @@ function edit_in_place(obj, oldornew) {
         this_char = "";
         prev_char = "";
 
-      } else if (new_tag == "bareimage") {
+      } else if (new_tag == "image") {
         var this_content_container = document.createElement('div');
         this_content_container.setAttribute('id', "actively_editing");
         this_content_container.setAttribute('data-age', oldornew);
@@ -1433,10 +1466,12 @@ function edit_in_place(obj, oldornew) {
         edit_instructions.innerHTML = "URL of image:"
         document.getElementById('actively_editing').insertAdjacentElement("afterbegin", edit_instructions);
 
+/*
         console.log("setting", $('#' + idOfEditText), "to have contents", internalSource[thisID]["content"]);
         the_contents = internalSource[thisID]["content"];
         the_contents = expand_condensed_source_html(the_contents, "edit");
         $('#' + idOfEditText).html(the_contents);
+*/
         document.getElementById(idOfEditText).focus();
         console.log("made edit box for", thisID);
         console.log("which is", document.getElementById(idOfEditText));
@@ -2277,14 +2312,21 @@ function assemble_internal_version_changes() {
         console.log("changing img src to", image_src);
 
         var owner_of_change = object_being_edited.getAttribute("data-source_id");
-        // the owner_of_change is bareimage, but the src is in the img in its contents
-        var image_being_changed = internalSource[owner_of_change]["content"];
+        // the owner_of_change is bareimage(?? out of date?), but the src is in the img in its contents
+//        var image_being_changed = internalSource[owner_of_change]["content"];
+
+  // if next line is correct, do back and eliminate a variable
+        var image_being_changed = owner_of_change;
         // strip off <&> and <;>
    //     image_being_changed = image_being_changed[3:-3];
+/*
         image_being_changed = image_being_changed.replace(/<&>(.*?)<;>/, '$1');
+*/
         console.log("image_being_changed ", image_being_changed);
         console.log("object being changed ", internalSource[owner_of_change]);
+/*
         console.log("image being changed was", internalSource[image_being_changed]);
+*/
 
         if (internalSource[image_being_changed]["src"]) {
             ongoing_editing_actions.push(["changed", "src", image_being_changed]);
@@ -2293,7 +2335,7 @@ function assemble_internal_version_changes() {
         }
         internalSource[image_being_changed]["src"] = image_src;
         console.log("image being changed is", internalSource[image_being_changed]);
-        possibly_changed_ids_and_entry.push([owner_of_change, "bareimage"]);
+        possibly_changed_ids_and_entry.push([owner_of_change, "image"]);
 
 
     } else {
@@ -2343,15 +2385,16 @@ function wrap_tag(tag, content, layout, attribute_values) {
     return opening_tag + content + closing_tag
 }
 
-function pretext_from_source(text) {
+function pretext_from_source(text, format) {
     if (text.includes("<&>")) {
-        return text.replace(/<&>(.*?)<;>/g, pretext_from_id)
+    //    return text.replace(/<&>(.*?)<;>/g, pretext_from_id)
+        return text.replace(/<&>(.*?)<;>/g, function (match, newid) { return pretext_from_id(match, newid, format)})
     } else {
         return text
     }
 }
 
-function pretext_from_id(match, the_id) {
+function pretext_from_id(match, the_id, format) {
     var the_answer = "";
     var tag_display = "block";   // that shoudl be in the source description (objectStructure)?
     console.log("expanding the_id", the_id);
@@ -2364,7 +2407,8 @@ function pretext_from_id(match, the_id) {
     console.log("the_object",the_object);
     var src_structure;
     if (src_tag in objectStructure) {
-        src_structure = objectStructure[src_tag].pretext;
+     //   src_structure = objectStructure[src_tag].pretext;
+        src_structure = objectStructure[src_tag][format];
     } else {
         console.log("concern: unknown structure:", src_tag);
         // so make reasonable assumptions about the structure
@@ -2400,7 +2444,7 @@ function pretext_from_id(match, the_id) {
    //     var this_piece = src_structure.pieces[j];
         console.log("this_piece", this_piece);
         if (this_piece in the_object) {
-            this_piece_src = pretext_from_source(the_object[this_piece]);
+            this_piece_src = pretext_from_source(the_object[this_piece], format);
      //       the_answer += this_piece_src
             if (this_tag) { console.log("     WRAP on tag", this_tag, "from", this_piece)};
             the_answer += wrap_tag(this_tag, this_piece_src, this_display, [])
@@ -2462,7 +2506,7 @@ function html_from_internal_id(the_id, is_inner) {
 
     var the_html_objects = [];
 
-    if (sourcetag == "image") {
+    if (false && sourcetag == "image") {
         var the_src = the_object["src"];
         console.log("inserting an img with src", the_src);
 
@@ -2532,7 +2576,7 @@ function html_from_internal_id(the_id, is_inner) {
                         piece_name = piece_name.slice(0, -1); 
                         this_piece_html += ' data-editable="70" tabindex="-1"';
                     }
-                    this_piece_html += ' class="' + piece_name + '">' + content_from_source(piece_name, the_object);
+                    this_piece_html += ' class="' + piece_name + '">' + value_from_source(piece_name, the_object);
                     this_piece_html += '</span>';
                 }
                 this_piece_html += '</' + thehtmltitlestructure.html.tag + ">";
@@ -2561,7 +2605,7 @@ function html_from_internal_id(the_id, is_inner) {
             } else if (["workspace"].includes(piece_type)) {
                 console.log("making (not really)", piece_type, "from", the_object);
                 this_piece_html = '<div class="workspace"';
-                this_piece_html += ' data-space="' + content_from_source("data-space", the_object) + '"';
+                this_piece_html += ' data-space="' + value_from_source("data-space", the_object) + '"';
                 this_piece_html += ' data-parent_id="' + the_id + '"';
                 this_piece_html += ' tabindex="-1" data-editable="440"';
                 this_piece_html += '></div>'
@@ -2686,16 +2730,20 @@ function insert_html_version(these_changes) {
             console.log("now location_of_change",location_of_change);
             location_of_change.insertAdjacentElement('beforebegin', object_as_html);
 
-        } else if (this_object_entry == "bareimage") {
+        } else if (this_object_entry == "image") {
             var object_as_html = document.createElement('div');
+/*
             object_as_html.setAttribute("data-editable", 29);
             object_as_html.setAttribute("tabindex", -1);
             object_as_html.setAttribute("id", this_object_id);
             object_as_html.setAttribute("class", "image-box");
             object_as_html.setAttribute("style", "width: 50%; margin-right: 25%; margin-left: 25%");
+*/
 
-            console.log("bareimage, this_object", this_object);
-            object_as_html.innerHTML = source_to_html(this_object["content"]);
+            console.log("image, this_object", this_object);
+   //         object_as_html.innerHTML = source_to_html(this_object["content"]);
+ object_as_html.innerHTML = html_from_internal_id(this_object_id);
+       //     object_as_html.innerHTML = source_to_html(this_object);
             console.log("inserting",object_as_html,"before",location_of_change);
             location_of_change.insertAdjacentElement('beforebegin', object_as_html);
 
