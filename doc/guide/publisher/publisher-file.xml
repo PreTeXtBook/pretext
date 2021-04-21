@@ -15,7 +15,7 @@
     <title>Publisher File Reference</title>
 
     <introduction>
-        <p>This chapter is reference material for the <term>publisher file</term>, whose employment is described in <xref ref="publisher-file"/>.</p>
+        <p>This chapter is reference material for the <term>publisher file</term>, whose employment is described in <xref ref="publisher-file"/>, where you can also find an explanation of the shorthand syntax used here to describe elements of this file.</p>
     </introduction>
 
     <section xml:id="publisher-file-common">

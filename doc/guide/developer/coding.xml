@@ -53,6 +53,21 @@
             <li>There is a template with <c>mode="location-report"</c> you can use to provide standardized assistance for an author or publisher looking for the place to correct a problem (in lieu of line numbers, which are not available).</li>
         </ul></p>
     </section>
+
+    <section>
+        <title>Locating Other Nodes</title>
+
+        <p>Should you need to locate a node some other place in a document, via some sort of a reference by an identifier, be sure to use the interface provided by the  <c>id-lookup-by-name</c> named template.  It accepts a string (the value of the identifier in the reference) and returns an <c>xml:id</c> value that can be used with the <init>XSL</init> <c>id()</c> function to return the desired node (as a node-set).  Use a pattern such as the following, paying particular attention to the name of the variable supplied to the <c>id()</c> function.</p>
+
+        <pre><![CDATA[
+            <xsl:variable name="target-id">
+                <xsl:call-template name="id-lookup-by-name">
+                    <xsl:with-param name="name" select="normalize-space(@ref)"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:variable name="target" select="id($target-id)" />]]>
+        </pre>
+    </section>
 </chapter>
 
 

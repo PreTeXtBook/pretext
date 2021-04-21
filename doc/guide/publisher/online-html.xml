@@ -83,7 +83,15 @@
 
         <p>An author does not need to be conscious of knowls. The structure and content of the document should not <q>be aware</q> that there will be knowls in the online output.  But instead the publisher has control over whether or not certain medium-sized pieces of content (examples, exercises, figures, etc.) are born as knowls or not.</p>
 
-        <p>Note that some of these switches are for broad categories of items, for example, <c>html.knowl.theorem</c> will also knowl <tag>lemma</tag>s, <tag>corollary</tag>s, <tag>fact</tag>s, and more.  This choice applies document-wide, there is no plan to support electing this on a case-by-case basis.</p>
+        <p>Note that some of these switches are for broad categories of items, for example, choosing to knowl theorems will also knowl <tag>lemma</tag>s, <tag>corollary</tag>s, <tag>fact</tag>s, and more.  See <xref ref="online-knowlization-options"/> for precise details.  This choice applies document-wide, there is no plan to support electing this on a case-by-case basis.</p>
+    </section>
+
+    <section>
+        <title>Permalinks</title>
+
+        <p>If you place a mouse pointer in the left margin, to the left of a heading for an item, then an icon with two links of a chain will appear.  This is a link to the item.  Instead of a doing a right-click for a context menu that has an option like <q>Copy Link Location</q>, rather do a normal (left-) click.  This will copy the heading (<q>Example 4.5 Chameleon Colors</q>), and also the link itself, to your clipboard, along with some formatting.  You can then paste this into course materials, or email it to a reader who had a question.</p>
+
+        <p>You might want to make this feature known to your readers, perhaps via a preface explaining some of the more novel features of the <init>HTML</init> version of a <pretext/> document.</p>
     </section>
 
     <section>

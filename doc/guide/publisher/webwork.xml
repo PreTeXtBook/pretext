@@ -178,7 +178,7 @@
 
       <p>You now have custody of the <c>webwork-representations.ptx</c>.  It contains multiple versions of each of your <webwork/> exercises, each appropriate for different output formats.  Early in a project, you may regenerate this file frequently as your project changes.  Later in a project you might consider it to be (generated/manufactured/derived) source material.  More on this in a bit.  For now, you need to set up how the file is communicated to a conversion.  This is accomplished with the publisher file (see <xref ref="publisher-file"/>).</p>
 
-      <p>The publisher file has a place where you can specify the name of the file with the representations, by default, <c>webwork-representations.ptx</c>.  You are welcome to change the name at this juncture, but perhaps there is no point.  We will procede with the default.  The absolute simplest publisher file you can create would look like<cd>
+      <p>The publisher file has a place where you can specify the name of the file with the representations, by default, <c>webwork-representations.ptx</c>.  You are welcome to change the name at this juncture, but perhaps there is no point.  We will proceed with the default.  The absolute simplest publisher file you can create would look like<cd>
         <cline>&lt;publication&gt;</cline>
         <cline>  &lt;source webwork-problems="webwork-representations.ptx"/&gt;</cline>
         <cline>&lt;/publication&gt;</cline>
@@ -353,7 +353,7 @@
           <p>
             Anything that is the numbered target of a cross-reference, such as a figure,
             may not be inside a <webwork/> exercise.
-            The exericse may go on to have a life of its own independent of its parent <pretext/> project,
+            The exercise may go on to have a life of its own independent of its parent <pretext/> project,
             and then such a number makes no sense.
           </p>
         </li>

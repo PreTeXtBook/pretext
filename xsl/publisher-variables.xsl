@@ -130,19 +130,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- while a trailing slash will be reliably added if                     -->
 <!--     (a) not present in publisher file specification                  -->
 <!--     (b) the path is not empty                                        -->
-<xsl:variable name="source-image-directory">
+<xsl:variable name="external-image-directory">
     <xsl:variable name="raw-input">
         <xsl:choose>
-            <xsl:when test="$publication/source/@source-images">
-                <xsl:value-of select="$publication/source/@source-images"/>
+            <xsl:when test="$publication/source/images/@external">
+                <xsl:value-of select="$publication/source/images/@external"/>
             </xsl:when>
+            <!-- absent is empty -->
             <xsl:otherwise/>
         </xsl:choose>
     </xsl:variable>
     <xsl:choose>
         <!-- leading path separator is an error -->
         <xsl:when test="substring($raw-input, 1, 1) = '/'">
-            <xsl:message>PTX:ERROR:   a source image directory (source/@source-images in the publisher file) must be a relative path and not begin with "/" as in "<xsl:value-of select="$raw-input"/>".  Proceeding with the default, which is an empty string, and may lead to unexpected results.</xsl:message>
+            <xsl:message>PTX:ERROR:   an external-image directory (source/images/@external in the publisher file) must be a relative path and not begin with "/" as in "<xsl:value-of select="$raw-input"/>".  Proceeding with the default, which is an empty string, and may lead to unexpected results.</xsl:message>
             <xsl:text/>
         </xsl:when>
         <!-- trailing path separator is good and -->
@@ -164,9 +165,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="generated-image-directory">
     <xsl:variable name="raw-input">
         <xsl:choose>
-            <xsl:when test="$publication/source/@generated-images">
-                <xsl:value-of select="$publication/source/@generated-images"/>
+            <xsl:when test="$publication/source/images/@generated">
+                <xsl:value-of select="$publication/source/images/@generated"/>
             </xsl:when>
+            <!-- Should issue a deprecation warning (elsewhere) for this -->
             <xsl:when test="not($directory.images = '')">
                 <xsl:value-of select="$directory.images"/>
             </xsl:when>
@@ -176,6 +178,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
     <xsl:choose>
+        <xsl:when test="substring($raw-input, 1, 1) = '/'">
+            <xsl:message>PTX:ERROR:   a generated-image directory (source/images/@generated in the publisher file) must be a relative path and not begin with "/" as in "<xsl:value-of select="$raw-input"/>".  Proceeding with the default, which is an empty string, and may lead to unexpected results.</xsl:message>
+            <xsl:text/>
+        </xsl:when>
         <!-- trailing path separator is good -->
         <xsl:when test="substring($raw-input, string-length($raw-input), 1) = '/'">
             <xsl:value-of select="$raw-input"/>
@@ -193,7 +199,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- generated images is structured by their production method (newer) -->
 <!-- or not (older, historical).  So we create a boolean based on the  -->
 <!-- presence of the publisher file specification.                     -->
-<xsl:variable name="b-structured-generated-images" select="boolean($publication/source/@generated-images)"/>
+<xsl:variable name="b-managed-generated-images" select="boolean($publication/source/images/@generated)"/>
 
 <!-- A file of hint|answer|solution, with @ref back to "exercise" -->
 <!-- so that the solutions can see limited distribution.  No real -->
@@ -683,6 +689,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="html-index-page">
     <!-- needs to be realized as a *string*, not a node -->
     <xsl:variable name="entered-ref" select="string($publication/html/index-page/@ref)"/>
+    <xsl:variable name="entered-id">
+        <xsl:call-template name="id-lookup-by-name">
+            <xsl:with-param name="name" select="$entered-ref"/>
+        </xsl:call-template>
+    </xsl:variable>
     <xsl:variable name="sanitized-ref">
         <xsl:choose>
             <!-- signal no choice with empty string-->
@@ -690,7 +701,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text/>
             </xsl:when>
             <!-- bad choice, set to empty string -->
-            <xsl:when test="not(id($entered-ref))">
+            <xsl:when test="not(id($entered-id))">
                 <xsl:message>PTX:WARNING:   the requested HTML index page cannot be constructed since "<xsl:value-of select="$entered-ref"/>" is not an @xml:id anywhere in the document.  Defaults will be used instead</xsl:message>
                 <xsl:text/>
             </xsl:when>
@@ -698,10 +709,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:otherwise>
                 <!-- true/false values if node creates a web page -->
                 <xsl:variable name="is-intermediate">
-                    <xsl:apply-templates select="id($entered-ref)" mode="is-intermediate"/>
+                    <xsl:apply-templates select="id($entered-id)" mode="is-intermediate"/>
                 </xsl:variable>
                 <xsl:variable name="is-chunk">
-                    <xsl:apply-templates select="id($entered-ref)" mode="is-chunk"/>
+                    <xsl:apply-templates select="id($entered-id)" mode="is-chunk"/>
                 </xsl:variable>
                 <xsl:choose>
                     <!-- really is a web-page -->

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2015-2021 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- See  xsl/localizations/README.md  for an explanation of this file -->
+
+<!-- pt-PT, Portugese (Portugal) -->
+<!-- António Pereira, apereiraua@gmail.com, 2015-07-26 -->
+
+<locale language="pt-PT">
+    <!-- THEOREM-LIKE blocks -->
+    <!-- Environments which have proofs, plus proofs themselves -->
+    <localization string-id="theorem">Teorema</localization>
+    <localization string-id="corollary">Corolário</localization>
+    <localization string-id="lemma">Lema</localization>
+    <localization string-id='algorithm'>Algoritmo</localization>
+    <localization string-id='proposition'>Proposição</localization>
+    <localization string-id='claim'>Afirmação</localization>
+    <localization string-id='fact'>Facto</localization>
+    <!-- <localization string-id='identity'>Identity</localization> -->
+    <localization string-id='proof'>Demonstração</localization>
+    <!-- <localization string-id='case'>Case</localization> -->
+    <!-- Mathematical statements without proofs -->
+    <!-- AXIOM-LIKE blocks -->
+    <localization string-id='axiom'>Axioma</localization>
+    <localization string-id='conjecture'>Conjectura</localization>
+    <localization string-id='principle'>Princípio</localization>
+    <!-- <localization string-id='heuristic'>Heuristic</localization> -->
+    <!-- <localization string-id='hypothesis'>Hypothesis</localization> -->
+    <!-- <localization string-id='assumption'>Assumption</localization> -->
+    <!-- Definitions -->
+    <localization string-id='definition'>Definição</localization>
+    <!-- Single Line Mathematics -->
+    <localization string-id='me'>Equação</localization>
+    <localization string-id='men'>Equação</localization>
+    <localization string-id='mrow'>Equação</localization>
+    <!-- Display Mathematics -->
+    <!-- the translations for 'display mathematics' need revision! -->
+    <localization string-id='md'>Equação</localization>
+    <localization string-id='mdn'>Equação</localization>
+    <!-- Types of documents, mostly for informational messages -->
+    <localization string-id='volume'>Volume</localization>
+    <localization string-id='book'>Livro</localization>
+    <localization string-id='article'>Artigo</localization>
+    <!-- <localization string-id='slideshow'>Slideshow</localization> -->
+    <localization string-id='letter'>Carta</localization>
+    <localization string-id='memo'>Memorando</localization>
+    <localization string-id='presentation'>Apresentação</localization>
+    <!-- Parts of a document -->
+    <!-- 'Front Matter' and 'Back matter' translations need more thinking... -->
+    <localization string-id='frontmatter'>Pré Texto</localization>
+    <localization string-id='part'>Parte</localization>
+    <localization string-id='chapter'>Capítulo</localization>
+    <localization string-id='appendix'>Apêndice</localization>
+    <!-- Next is the plural of Appendix, used to identify a group of appendix -->
+    <!-- <localization string-id='appendices'>Appendices</localization> -->
+    <localization string-id='section'>Secção</localization>
+    <localization string-id='subsection'>Subsecção</localization>
+    <localization string-id='subsubsection'>Subsubsecção</localization>
+    <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
+    <!-- <localization string-id='slide'>Slide</localization> -->
+    <localization string-id='introduction'>Introdução</localization>
+    <localization string-id='conclusion'>Conclusão</localization>
+    <localization string-id='exercises'>Exercícios</localization>
+    <!-- <localization string-id='worksheet'>Worksheet</localization> -->
+    <!-- <localization string-id='reading-questions'>Reading Questions</localization> -->
+    <!-- <localization string-id='solutions'>Solutions</localization> -->
+    <!-- <localization string-id='glossary'>Glossary</localization> -->
+    <localization string-id='references'>Referências</localization>
+    <localization string-id='backmatter'>Pós Texto</localization>
+    <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
+    <localization string-id='paragraphs'>Parágrafos</localization>
+    <!-- <localization string-id='commentary'>Commentary</localization> -->
+    <localization string-id='subparagraph'>Subparágrafo</localization>
+    <!-- Components of the narrative -->
+    <!-- REMARK-LIKE blocks -->
+    <!-- "note" is used within "biblio", likely to change -->
+    <localization string-id='remark'>Observação</localization>
+    <!-- <localization string-id='convention'>Convention</localization> -->
+    <localization string-id='note'>Nota</localization>
+    <!-- <localization string-id='observation'>Observation</localization> -->
+    <!-- <localization string-id='warning'>Warning</localization> -->
+    <!-- <localization string-id='insight'>Insight</localization> -->
+    <!-- <localization string-id='computation'>Computation</localization> -->
+    <!-- <localization string-id='technology'>Technology</localization> -->
+    <!-- ASIDE-LIKE blocks -->
+    <!-- <localization string-id='aside'>Aside</localization> -->
+    <!-- <localization string-id='biographical'>Biographical Aside</localization> -->
+    <!-- <localization string-id='historical'>Historical Aside</localization> -->
+    <!-- EXAMPLE-LIKE blocks -->
+    <localization string-id='example'>Exemplo</localization>
+    <!-- <localization string-id='question'>Question</localization> -->
+    <!-- <localization string-id='problem'>Problem</localization> -->
+    <!-- PROJECT-LIKE blocks -->
+    <!-- <localization string-id='project'>Project</localization> -->
+    <!-- <localization string-id='activity'>Activity</localization> -->
+    <!-- <localization string-id='exploration'>Exploration</localization> -->
+    <!-- <localization string-id='task'>Task</localization> -->
+    <!-- <localization string-id='investigation'>Investigation</localization> -->
+    <!--  -->
+    <!-- assemblages are collections of minimally structured material -->
+    <!-- <localization string-id='assemblage'>Assemblage</localization> -->
+    <!-- <localization string-id='poem'>Poem</localization> -->
+    <!-- Objectives is the block, objective is a list item within -->
+    <!-- <localization string-id='objectives'>Objectives</localization> -->
+    <!-- <localization string-id='objective'>Objective</localization> -->
+    <!-- Outcomes is the block, outcome is a list item within (different) -->
+    <!-- <localization string-id='outcomes'>Outcomes</localization> -->
+    <!-- <localization string-id='outcome'>Outcome</localization> -->
+    <!--  -->
+    <localization string-id='figure'>Figura</localization>
+    <localization string-id='table'>Tabela</localization>
+    <!-- Translation needed for Portugal Portugese -->
+    <!-- <localization string-id='listing'>Listing</localization> -->
+    <localization string-id='fn'>Nota de rodapé</localization>
+    <!-- Translation needed for Portugal Portugese -->
+    <!-- <localization string-id='contributor'>Contributor</localization> -->
+    <!-- Lists and their items -->
+    <!-- Translations needed for Portugal Portugese -->
+    <!-- <localization string-id='list'>List</localization> -->
+    <!-- <localization string-id='li'>Item</localization> -->
+    <!-- A term (word) defined in a glossary -->
+    <!-- <localization string-id='defined-term'>Term</localization> -->
+    <!-- A regular paragraph, not the old sectioning structure -->
+    <localization string-id='p'>Parágrafo</localization>
+    <!-- <localization string-id='blockquote'>Quotation</localization> -->
+    <!-- Literate programming, a chunk of computer code -->
+    <!-- <localization string-id='fragment'>Fragment</localization> -->
+    <!-- Parts of an exercise and its solution -->
+    <localization string-id='divisionalexercise'>Exercício</localization>
+    <!-- Translation needed for Portugal Portugese -->
+    <!-- See en-US file for distinctions here, do not repeat previous translation -->
+    <!-- <localization string-id='inlineexercise'>Checkpoint</localization> -->
+    <!-- <localization string-id='worksheetexercise'>Worksheet Exercise</localization> -->
+    <!-- <localization string-id='readingquestion'>Reading Question</localization> -->
+    <localization string-id='webwork'>WeBWorK</localization>
+    <localization string-id='hint'>Dica</localization>
+    <localization string-id='answer'>Resposta</localization>
+    <localization string-id='solution'>Solução</localization>
+    <!-- Translation needed for Portugal Portugese -->
+    <!-- A group of divisional exercises (with introduction and conclusion) -->
+    <!-- <localization string-id='exercisegroup'>Exercise Group</localization> -->
+    <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
+    <!-- the term 'Bibliographic Item' could be just 'Referência'... -->
+    <localization string-id='biblio'>Referência Bibliográfica</localization>
+    <!-- Front matter components -->
+    <!-- Other possible names for 'toc' are: Conteúdo, Sumário, Índice -->
+    <localization string-id='toc'>Sumário</localization>
+    <localization string-id='abstract'>Resumo</localization>
+    <localization string-id='preface'>Prefácio</localization>
+    <localization string-id='acknowledgement'>Agradecimentos</localization>
+    <localization string-id='biography'>Biografia do Autor</localization>
+    <!-- singular and plural titles for biography subdivision -->
+    <!-- <localization string-id='about-author'>About the Author</localization> -->
+    <!-- <localization string-id='about-authors'>About the Authors</localization> -->
+    <!-- Other possible names for 'foreword': Prefácio -->
+    <localization string-id='foreword'>Prefácio</localization>
+    <localization string-id='dedication'>Dedicatória</localization>
+    <localization string-id='colophon'>Ficha técnica</localization>
+    <!-- Back matter components -->
+    <!-- index-part is deprecated, but not abandoned          -->
+    <!-- NB: repurpose translations, maybe move appendix here -->
+    <localization string-id='index-part'>Índice Remissivo</localization>
+    <!-- <localization string-id='jump-to'>Jump to:</localization> -->
+    <!-- Parts of the Index -->
+    <localization string-id='index'>Índice Remissivo</localization>
+    <localization string-id='see'>Veja</localization>
+    <localization string-id='also'>Veja também</localization>
+    <!-- Notation List headings/foot -->
+    <localization string-id='symbol'>Símbolo</localization>
+    <localization string-id='description'>Descrição</localization>
+    <!-- Translation needed for Portugal Portugese -->
+    <!-- <localization string-id='location'>Location</localization> -->
+    <localization string-id='page'>Página</localization>
+    <localization string-id='continued'>Continua na página seguinte</localization>
+    <!-- Navigation Interface elements -->
+    <!-- Assistive "skip to content" link -->
+    <!-- <localization string-id='skip-to-content'>Skip to main content</localization> -->
+    <localization string-id='previous'>Anterior</localization>
+    <localization string-id='up'>Acima</localization>
+    <localization string-id='next'>Seguinte</localization>
+    <!-- Keep these short, so buttons are not overly wide, 4 characters maximum -->
+    <!-- TODO: SHORTEN THESE -->
+    <localization string-id='previous-short'>Anterior</localization>
+    <localization string-id='up-short'>Acima</localization>
+    <localization string-id='next-short'>Seguinte</localization>
+    <!-- NB: Use toc from above for both headings and navigation sidebar-->
+    <localization string-id='annotations'>Anotações</localization>
+    <localization string-id='feedback'>Comentário</localization>
+    <localization string-id='authored'>Produzido com PreTeXt</localization>
+    <!-- Parts of memos and letters -->
+    <localization string-id='to'>Para</localization>
+    <localization string-id='from'>De</localization>
+    <localization string-id='subject'>Assunto</localization>
+    <localization string-id='date'>Data</localization>
+    <localization string-id='copy'>Cópia</localization>
+    <localization string-id='enclosure'>Anexo</localization>
+    <!-- Various -->
+    <localization string-id='todo'>Para fazer</localization>
+    <localization string-id='editor'>Editor</localization>
+    <!-- <localization string-id='edition'>Edition</localization> -->
+    <!-- <localization string-id='website'>Website</localization> -->
+    <localization string-id='copyright'>Copyright</localization>
+    <!-- HTML clickables (lowercase strings to click on) -->
+    <!-- Translation needed for Portugal Portugese -->
+    <!-- <localization string-id='permalink'>permalink</localization> -->
+    <!-- <localization string-id='incontext'>in-context</localization> -->
+    <!-- Sage Cell evaluate button      -->
+    <!-- eg, "Evaluate (Maxima)"        -->
+    <!-- 2017-05-14: 'code' is obsolete -->
+    <!-- This needs to be defined to *something* (English)       -->
+    <!-- else whatever crud ends up on the button kills the cell -->
+    <!-- Translate at first opportunity, please                  -->
+    <localization string-id='evaluate'>Evaluate</localization>
+    <!-- <localization string-id='code'>Code</localization> -->
+</locale>

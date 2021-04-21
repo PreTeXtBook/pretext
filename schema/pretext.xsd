@@ -2211,7 +2211,9 @@
               <xs:element maxOccurs="unbounded" ref="stage"/>
             </xs:choice>
           </xs:sequence>
+          <xs:attribute ref="xml:id"/>
           <xs:attribute name="seed" type="xs:integer"/>
+          <xs:attribute name="copy"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>

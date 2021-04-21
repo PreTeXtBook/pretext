@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2014-2021 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- See  xsl/localizations/README.md  for an explanation of this file -->
+
+<!-- bg-BG, Bulgarian (Bulgaria) -->
+<!-- Boyko Bantchev, bantchev@gmail.com, 2019-07-04 -->
+
+<locale language="bg-BG">
+    <!-- THEOREM-LIKE blocks -->
+    <!-- Environments which have proofs, plus proofs themselves -->
+    <localization string-id='theorem'>Теорема</localization>
+    <localization string-id='corollary'>Следствие</localization>
+    <localization string-id='lemma'>Лема</localization>
+    <localization string-id='algorithm'>Алгоритъм</localization>
+    <localization string-id='proposition'>Предложение</localization>
+    <localization string-id='claim'>Твърдение</localization>
+    <localization string-id='fact'>Факт</localization>
+    <localization string-id='identity'>Тъждество</localization>
+    <localization string-id='proof'>Доказателство</localization>
+    <localization string-id='case'>Случай</localization>
+    <!-- Components of the narrative -->
+    <!-- Mathematical statements without proofs -->
+    <!-- AXIOM-LIKE blocks -->
+    <localization string-id='axiom'>Аксиома</localization>
+    <localization string-id='conjecture'>Хипотеза</localization>
+    <localization string-id='principle'>Принцип</localization>
+<!--
+    <localization string-id='heuristic'>Heuristic</localization>
+    <localization string-id='hypothesis'>Хипотеза</localization>
+-->
+    <localization string-id='assumption'>Постулат</localization>
+    <!-- Definitions -->
+    <localization string-id='definition'>Определение</localization>
+    <!-- Single Line Mathematics -->
+    <localization string-id='me'>Уравнение</localization>
+    <localization string-id='men'>Уравнение</localization>
+    <localization string-id='mrow'>Уравнение</localization>
+    <!-- Display Mathematics -->
+    <localization string-id='md'>Изнесена формула</localization>
+    <localization string-id='mdn'>Изнесена формула</localization>
+    <!-- Types of documents, mostly for informational messages -->
+    <localization string-id='volume'>Том</localization>
+    <localization string-id='book'>Книга</localization>
+    <localization string-id='article'>Статия</localization>
+    <!-- <localization string-id='slideshow'>Slideshow</localization> -->
+    <localization string-id='letter'>Писмо</localization>
+    <localization string-id='memo'>Паметна записка</localization>
+    <localization string-id='presentation'>Презентация</localization>
+    <!-- Parts of a document -->
+    <!-- "part" will also be used for a "stage" of a WeBWorK problem -->
+    <localization string-id='frontmatter'>Титулни страници</localization>
+    <localization string-id='part'>Част</localization>
+    <localization string-id='chapter'>Глава</localization>
+    <localization string-id='appendix'>Приложение</localization>
+    <!-- Next is the plural of Appendix, used to identify a group of appendix -->
+    <!-- <localization string-id='appendices'>Appendices</localization> -->
+    <localization string-id='section'>Параграф</localization>
+    <localization string-id='subsection'>Точка</localization>
+    <localization string-id='subsubsection'>Подточка</localization>
+    <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
+    <!-- <localization string-id='slide'>Slide</localization> -->
+    <localization string-id='introduction'>Увод</localization>
+    <localization string-id='conclusion'>Заключение</localization>
+    <localization string-id='exercises'>Упражнения</localization>
+<!--
+    <localization string-id='worksheet'>Worksheet</localization>
+    <localization string-id='reading-questions'>Reading Questions</localization>
+-->
+    <localization string-id='solutions'>Решения</localization>
+    <localization string-id='glossary'>Речник на термините</localization>
+    <localization string-id='references'>Библиография</localization>
+    <localization string-id='backmatter'>Издателско каре</localization>
+    <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
+<!--
+    <localization string-id='paragraphs'>Paragraphs</localization>
+-->
+    <localization string-id='commentary'>Коментар</localization>
+<!--
+    <localization string-id='subparagraph'>Subparagraph</localization>
+-->
+    <!-- Components of the narrative -->
+    <!-- REMARK-LIKE blocks -->
+    <!-- "note" is used within "biblio", likely to change -->
+<!--
+    <localization string-id='remark'>Remark</localization>
+    <localization string-id='convention'>Convention</localization>
+-->
+    <localization string-id='note'>Забележка</localization>
+<!--
+    <localization string-id='observation'>Observation</localization>
+    <localization string-id='warning'>Warning</localization>
+    <localization string-id='insight'>Insight</localization>
+    <localization string-id='computation'>Computation</localization>
+    <localization string-id='technology'>Technology</localization>
+-->
+    <!-- ASIDE-LIKE blocks -->
+    <localization string-id='aside'>Странична бележка</localization>
+    <localization string-id='biographical'>Библиографична бележка</localization>
+    <localization string-id='historical'>Историческа бележка</localization>
+    <!-- EXAMPLE-LIKE blocks -->
+    <localization string-id='example'>Пример</localization>
+    <localization string-id='question'>Въпрос</localization>
+    <localization string-id='problem'>Задача</localization>
+    <!-- PROJECT-LIKE blocks -->
+    <localization string-id='project'>Задание</localization>
+    <localization string-id='activity'>Дейност</localization>
+    <localization string-id='exploration'>Проучване</localization>
+    <localization string-id='task'>Задача</localization>
+    <localization string-id='investigation'>Изследване</localization>
+    <!-- assemblages are collections of minimally structured material -->
+    <localization string-id='assemblage'>Сборник</localization>
+    <localization string-id='poem'>Стихотворение</localization>
+    <!-- Objectives is the block, objective is a list item within -->
+    <localization string-id='objectives'>Цели</localization>
+    <localization string-id='objective'>Цел</localization>
+    <!-- Outcomes is the block, outcome is a list item within (different) -->
+    <!-- These two words need to be different, to avoid ambiguous cross-references -->
+    <localization string-id='outcomes'>Резултати</localization>
+    <localization string-id='outcome'>Резултат</localization>
+    <!--  -->
+    <localization string-id='figure'>Фигура</localization>
+    <localization string-id='table'>Таблица</localization>
+    <localization string-id='listing'>Списък</localization>
+    <localization string-id='fn'>Бележка под линия</localization>
+<!--
+    <localization string-id='contributor'>Contributor</localization>
+-->
+    <!-- Lists and their items -->
+    <localization string-id='list'>Списък</localization>
+    <localization string-id='li'>Точка</localization>
+    <!-- A term (word) defined in a glossary -->
+    <localization string-id='defined-term'>Термин</localization>
+    <!-- A regular paragraph, not the old sectioning structure -->
+    <localization string-id='p'>Абзац</localization>
+    <localization string-id='blockquote'>Цитат</localization>
+    <!-- Literate programming, a chunk of computer code -->
+    <!-- <localization string-id='fragment'>Fragment</localization> -->
+    <!-- Parts of an exercise and its solution -->
+    <!-- An "exercise", at any level, within an "exercises" division is a          -->
+    <!-- "divisional" exercise and the string employed is 'divisionalexercise'.    -->
+    <!-- An "exercise" whose parent is a division (chapter, section, etc) we       -->
+    <!-- call an "inline exercise" and the string employed is 'inlineexercise'.    -->
+    <!-- And an "exercise" in a "worksheet" is a 'worksheetexercise'.              -->
+    <!-- And an "exercise" in a "reading-questions" is a 'readingquestion'.         -->
+    <!-- It is important to use different translations so that a text with         -->
+    <!-- different types of exercises do not have ambiguous cross-references       -->
+    <!-- (there is an example of this at the start of one of the later             -->
+    <!-- sections of the sample article).                                          -->
+    <!--                                                                           -->
+    <!-- In English, an "Exercise" is something you do that has a beneficial       -->
+    <!-- outcome, such as "I am going to the gym to exercise."  A "Checkpoint"     -->
+    <!-- is something you must do before you do something else.  Another use of    -->
+    <!-- the term is a location on a roadway where you must stop for the      -->
+    <!-- police to do an inspection. A worksheet is a collection of activities or  -->
+    <!-- problems, typically printed on paper, which might be used in a classroom. -->
+    <localization string-id='divisionalexercise'>Упражнение</localization>
+<!--
+    <localization string-id='inlineexercise'>Checkpoint</localization>
+    <localization string-id='worksheetexercise'>Worksheet Exercise</localization>
+    <localization string-id='readingquestion'>Reading Question</localization>
+    <localization string-id='webwork'>WeBWorK</localization>
+-->
+    <localization string-id='hint'>Подсказка</localization>
+    <localization string-id='answer'>Отговор</localization>
+    <localization string-id='solution'>Решение</localization>
+    <!-- A group of divisional exercises (with introduction and conclusion) -->
+<!--
+    <localization string-id='exercisegroup'>Exercise Group</localization>
+-->
+    <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
+<!--
+    <localization string-id='biblio'>Bibliographic Entry</localization>
+-->
+    <!-- Front matter components -->
+    <localization string-id='toc'>Съдържание</localization>
+    <localization string-id='abstract'>Резюме</localization>  <!-- за книга е по-добре „Анотация“ -->
+    <localization string-id='preface'>Предговор</localization><!-- от автора -->
+    <localization string-id='acknowledgement'>Благодарности</localization>
+    <localization string-id='biography'>Биография на автора</localization>
+    <!-- singular and plural titles for biography subdivision -->
+    <localization string-id='about-author'>За автора</localization>
+    <localization string-id='about-authors'>За авторите</localization>
+    <localization string-id='foreword'>Предговор</localization><!-- от другиго -->
+    <localization string-id='dedication'>Посвещение</localization>
+    <localization string-id='colophon'>Библиографско каре</localization>
+    <!-- Back matter components -->
+    <!-- index-part is deprecated, but not abandoned          -->
+    <!-- NB: repurpose translations, maybe move appendix here -->
+<!--
+    <localization string-id='index-part'>Index</localization>
+    <localization string-id='jump-to'>Jump to:</localization>
+-->
+    <!-- Parts of the Index -->
+    <localization string-id='index'>Азбучен показалец</localization>
+    <localization string-id='see'>Виж</localization>
+    <localization string-id='also'>Виж също</localization>
+    <!-- Notation List headings/foot -->
+    <localization string-id='symbol'>Означение</localization>
+    <localization string-id='description'>Описание</localization>
+    <localization string-id='location'>Местоположение</localization>
+    <localization string-id='page'>Страница</localization>
+    <localization string-id='continued'>Продължава на следващата страница</localization>
+    <!-- Navigation Interface elements -->
+    <!-- Assistive "skip to content" link -->
+    <localization string-id='skip-to-content'>Главна</localization>
+    <localization string-id='previous'>Предишна</localization>
+    <localization string-id='up'>Нагоре</localization>
+    <localization string-id='next'>Следваща</localization>
+    <!-- Keep these short, so buttons are not overly wide, 4 characters maximum -->
+    <localization string-id='previous-short'>Пред</localization>
+    <localization string-id='up-short'>Наг</localization>
+    <localization string-id='next-short'>След</localization>
+    <!-- NB: Use toc from above for both headings and navigation sidebar-->
+<!--
+    <localization string-id='annotations'>Annotations</localization>
+    <localization string-id='feedback'>Feedback</localization>
+-->
+    <localization string-id='authored'>Направено с</localization>
+    <!-- Parts of memos and letters -->
+    <localization string-id='to'>До</localization>
+    <localization string-id='from'>От</localization>
+    <localization string-id='subject'>Тема</localization>
+    <localization string-id='date'>Дата</localization>
+    <localization string-id='copy'>Също до</localization>
+    <localization string-id='enclosure'>Прикачено</localization>
+    <!-- Various -->
+<!--
+    <localization string-id='todo'>To Do</localization>
+    <localization string-id='editor'>Editor</localization>
+    <localization string-id='edition'>Edition</localization>
+    <localization string-id='website'>Website</localization>
+    <localization string-id='copyright'>Copyright</localization>
+-->
+    <!-- HTML clickables (lowercase strings to click on) -->
+    <localization string-id='permalink'>permalink</localization>
+    <localization string-id='incontext'>in-context</localization>
+    <!-- Sage Cell evaluate button      -->
+    <!-- eg, "Evaluate (Maxima)"        -->
+    <!-- 2017-05-14: 'code' is obsolete -->
+    <!-- This needs to be defined to *something* (always)       -->
+    <!-- else whatever crud ends up on the button kills the cell -->
+<!--
+    <localization string-id='evaluate'>Evaluate</localization>
+    <localization string-id='evaluate'>Evaluate</localization>
+-->
+    <!-- <localization string-id='code'>Code</localization> -->
+</locale>

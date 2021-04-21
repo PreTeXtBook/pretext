@@ -329,7 +329,40 @@
 
     <subsection>
       <title>Reusing a <tag>webwork</tag> by <attr>xml:id</attr></title>
-      <p>Planned.</p>
+      <p>
+        If a <tag>webwork</tag> has an <attr>xml:id</attr>,
+        then another <tag>webwork</tag> can <q>copy</q> the first one simply by using a <attr>copy</attr> attribute
+        whose value is the first <tag>webwork</tag>'s <attr>xml:id</attr>.
+        The <attr>seed</attr> of the first <tag>webwork</tag> is ignored,
+        and the second <tag>webwork</tag> may set its own <attr>seed</attr>.
+        For example:
+      </p>
+      <pre>
+        <![CDATA[
+        <exercise>
+          <webwork xml:id="foo" seed="1">
+            <pg-code>
+              $a = random(1,9,1);
+              $answer = $a+1;
+            </pg-code>
+            <statement>
+              <p>
+                Enter <m><var name="$a"/>+1</m>.  <var name="$answer" width="10"/>
+              </p>
+            </statement>
+          </webwork>
+        </exercise>
+
+        <exercise>
+          <webwork copy="foo" seed="2"/>
+        </exercise>
+        ]]>
+      </pre>
+      <p>
+        The <attr>copy</attr> attribute should point to a <tag>webwork</tag> that has <pretext/>-authored source,
+        not to a <tag>webwork</tag> with a <attr>source</attr> attribute.
+        (If you want to copy one with a <attr>source</attr> attribute, just reuse the same <attr>source</attr> value.)
+      </p>
     </subsection>
 
     <subsection>

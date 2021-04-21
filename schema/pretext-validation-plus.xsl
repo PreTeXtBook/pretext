@@ -92,6 +92,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
+<!-- 2017-12-21 remove sage/@copy               -->
+<!-- 2021-02-25 remove all code due to id() use -->
+<xsl:template match="sage[@copy]">
+    <xsl:apply-templates select="." mode="messaging">
+        <xsl:with-param name="severity" select="'error'"/>
+        <xsl:with-param name="message">
+            <xsl:text>@copy on a &quot;sage&quot; element was deprecated (2017-12-21)</xsl:text>
+            <xsl:text>Use the xinclude mechanism with common code in an external file</xsl:text>
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- 2017-12-21 remove image/@copy              -->
+<!-- 2021-02-25 remove all code due to id() use -->
+<xsl:template match="image[@copy]">
+    <xsl:apply-templates select="." mode="messaging">
+        <xsl:with-param name="severity" select="'error'"/>
+        <xsl:with-param name="message">
+            <xsl:text>@copy on an &quot;image&quot; element was deprecated (2017-12-21)</xsl:text>
+            <xsl:text>Perhaps use the xinclude mechanism with common code in an external file</xsl:text>
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
 
 <!-- ################ -->
 <!-- Real-Time Checks -->

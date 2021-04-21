@@ -1439,7 +1439,7 @@ the xsltproc executable.
                 <subsubsection>
                     <title>Test Two</title>
 
-                    <p>An intervening subsection section which contains an <tag>exercises</tag> division which must at the level of a Subsubsubsection.</p>
+                    <p>An intervening subsection section which contains an <tag>exercises</tag> division which must be at the level of a Subsubsubsection.</p>
 
                     <exercises>
                         <exercise>
@@ -2607,7 +2607,7 @@ the xsltproc executable.
 
                 <p>We also disrupt certain constructions from <latex/>.  Attempting to sneak-in any traditional macro for the purposes of <latex/>-only output, such as, say a \newpage, will fail since the leading backslash will be caught and converted to <c>\textbackslash</c>.  (See?  It just happened twice.)  For technical reasons we want to particularly test \textbackslash, \textbraceleft, and \textbraceright.</p>
 
-                <p>Four <q><tex/> ligatures</q>, <c>--</c>, <c>---</c>, <c>``</c>, and <c>''</c>, authored in running text, --, ---, ``, ''.  It may be hard to tell that the two consecutive apostrophes have not coalesced into a curly left smart quote, but see below, the spacing is subtely different.</p>
+                <p>Four <q><tex/> ligatures</q>, <c>--</c>, <c>---</c>, <c>``</c>, and <c>''</c>, authored in running text, --, ---, ``, ''.  It may be hard to tell that the two consecutive apostrophes have not coalesced into a curly left smart quote, but see below, the spacing is subtly different.</p>
 
                 <p>We want the double quote mark from your keyboard, <c>"</c>, to not morph into some other character: "<nbsp/>.</p>
 
@@ -2918,8 +2918,7 @@ the xsltproc executable.
                         <description>A pgfplots example, with external data plotted.</description>
                         <latex-image>
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
-                        <![CDATA[\tikzset{%
-                        }
+                        <![CDATA[
                         \begin{tikzpicture}
                         \begin{axis}[
                             xmin=0,xmax=100,ymin=-20,ymax=100,
@@ -3425,8 +3424,7 @@ the xsltproc executable.
                     <image xml:id="pgfplots-data-demo-solo" width="20%" margins="40% 40%">
                         <latex-image>
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
-                        <![CDATA[\tikzset{%
-                        }
+                        <![CDATA[
                         \begin{tikzpicture}
                         \begin{axis}[
                             xmin=0,xmax=100,ymin=-20,ymax=100,
@@ -3541,12 +3539,118 @@ the xsltproc executable.
                 <p>In the early stages of a writing project, it may be best not to track provisional image files built with <c>pretext</c> under version control, and just regenerate them periodically (see the <c>-r</c> option for <c>pretext</c>).  As a project matures, then it makes sense to put stable files under version control for collaborators and others.  In every case, managing graphics files (and other aspects of production), is much more pleasurable with a script (shell, Makefile, etc.)</p>
             </subsection>
 
-            <subsection>
+            <subsection xml:id="subsection-tactile-graphics">
                 <title>Experimental Tactile Graphics</title>
 
-                <p>This subsection is a work-in-progress which will eventually allow some limited markup within the code for a TikZ diagram and allow the production of an SVG that can be embossed as a braille page that may be explored by a blind reader.  Until that work is completed, this diagram should render nicely for other formats, such as HTML and <latex/>.  In other words, right now this image is being used for development <em>and</em> test that existing routines have been modified in ways that preserve the creation of this image in the usual ways.</p>
+                <p>This subsection is a work-in-progress which will eventually allow some limited markup within the code for a TikZ diagram and allow the production of an SVG that can be embossed as a braille page that may be explored by a blind reader.  Until that work is completed, this diagram should render nicely for other formats, such as HTML and <latex/>.  In other words, right now these images are being used for development <em>and</em> to test that existing routines have been modified in ways that preserve the creation of this image in the usual ways.</p>
 
-                <p>This is a diagram of the complex 8-th roots of unity, from Judson's <pubtitle>Abstract Algebra: Theory and Applications</pubtitle>.  It has been significantly reworked for this new approach, but retains the pedagogical intent of the original.</p>
+                <p>It is possible that images may be missing in HTML output or may not be consistent with current code (document or processing).  The <latex/> version should be accurate, but may be meaningless.</p>
+
+                <p>Some preliminary documentation follows the examples, none of which is guaranteed.</p>
+
+                <figure xml:id="tactile-labels-exterior-figure">
+                    <caption>Simple label positioning (exterior)</caption>
+                    <!-- lesser width to account for 1.5/1.65 discrepancy -->
+                    <image xml:id="tactile-labels-exterior" width="55%">
+                        <latex-image>
+                        \begin{tikzpicture}
+
+                        \pgfmathsetmacro{\pointsize}{0.09}
+
+                        <!-- 5 cm radius for the circle -->
+                        \draw (0,0) circle (5);
+
+                        <!-- locations in polar coordinates -->
+                        \coordinate (zero)  at (0:5);
+                        \coordinate (one)   at (45:5);
+                        \coordinate (two)   at (90:5);
+                        \coordinate (three) at (135:5);
+                        \coordinate (four)  at (180:5);
+                        \coordinate (five)  at (225:5);
+                        \coordinate (six)   at (270:5);
+                        \coordinate (seven) at (315:5);
+
+                        \filldraw[fill=black, draw=black] (zero)   circle (\pointsize);
+                        <label xml:id="label-exterior-zero" location="zero" direction="east">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (one)    circle (\pointsize);
+                        <label xml:id="label-exterior-one" location="one" direction="northeast">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (two)    circle (\pointsize);
+                        <label xml:id="label-exterior-two" location="two" direction="north">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (three)  circle (\pointsize);
+                        <label xml:id="label-exterior-three" location="three" direction="northwest">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (four)    circle (\pointsize);
+                        <label xml:id="label-exterior-four" location="four" direction="west">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (five)   circle (\pointsize);
+                        <label xml:id="label-exterior-five" location="five" direction="southwest">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (six)    circle (\pointsize);
+                        <label xml:id="label-exterior-six" location="six" direction="south">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (seven)  circle (\pointsize);
+                        <label xml:id="label-exterior-seven" location="seven" direction="southeast">yyyyy</label>
+
+                        \end{tikzpicture}
+                        </latex-image>
+                    </image>
+                </figure>
+
+                <figure xml:id="tactile-labels-interior-figure">
+                    <caption>Simple label positioning (interior)</caption>
+                    <!-- lesser width to account for 1.5/1.65 discrepancy -->
+                    <image xml:id="tactile-labels-interior" width="55%">
+                        <latex-image>
+                        \begin{tikzpicture}
+
+                        \pgfmathsetmacro{\pointsize}{0.09}
+
+                        <!-- 5 cm radius for the circle -->
+                        \draw (0,0) circle (5);
+
+                        <!-- locations in polar coordinates -->
+                        \coordinate (zero)  at (0:5);
+                        \coordinate (one)   at (45:5);
+                        \coordinate (two)   at (90:5);
+                        \coordinate (three) at (135:5);
+                        \coordinate (four)  at (180:5);
+                        \coordinate (five)  at (225:5);
+                        \coordinate (six)   at (270:5);
+                        \coordinate (seven) at (315:5);
+
+                        \filldraw[fill=black, draw=black] (zero)   circle (\pointsize);
+                        <label xml:id="label-interior-zero" location="zero" direction="west" offset="0.9mm">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (one)    circle (\pointsize);
+                        <label xml:id="label-interior-one" location="one" direction="southwest" offset="0.9mm">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (two)    circle (\pointsize);
+                        <label xml:id="label-interior-two" location="two" direction="south" offset="0.9mm">yyyyyyyyyyyyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (three)  circle (\pointsize);
+                        <label xml:id="label-interior-three" location="three" direction="southeast" offset="0.9mm">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (four)    circle (\pointsize);
+                        <label xml:id="label-interior-four" location="four" direction="east" offset="0.9mm">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (five)   circle (\pointsize);
+                        <label xml:id="label-interior-five" location="five" direction="northeast" offset="0.9mm">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (six)    circle (\pointsize);
+                        <label xml:id="label-interior-six" location="six" direction="north" offset="0.9mm">yyyyyyyyyyyyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (seven)  circle (\pointsize);
+                        <label xml:id="label-interior-seven" location="seven" direction="northwest" offset="0.9mm">yyyyy</label>
+
+                        \end{tikzpicture}
+                        </latex-image>
+                    </image>
+                </figure>
+
+                <p>This is a diagram of the complex 8-th roots of unity, from Judson's <pubtitle>Abstract Algebra: Theory and Applications</pubtitle>.  It has been significantly reworked for this new approach, but retains the pedagogical intent of the original.  It is being scaled by a factor of <m>1.65</m> which may complicate scaling to a full embossed page for tactile graphics.</p>
 
                 <figure xml:id="tactile-experiment">
                     <caption>The complex <m>8^\text{th}</m> roots of unity</caption>
@@ -3575,39 +3679,124 @@ the xsltproc executable.
 
                                 \draw [->]  (negative-x-axis) -- (positive-x-axis);
                                 \draw [->]  (negative-y-axis) -- (positive-y-axis);
-                                <label xml:id="origin" location="origin" direction="below right"><m>0</m></label>
-                                <label xml:id="posx" location="positive-x-axis" direction="above"><m>x</m>-axis</label>
-                                <label xml:id="posy" location="positive-y-axis" direction="right"><m>y</m>-axis</label>
+                                <label xml:id="origin" location="origin" direction="southeast"><m>0</m></label>
+                                <label xml:id="posx" location="positive-x-axis" direction="north"><m>x</m>-axis</label>
+                                <label xml:id="posy" location="positive-y-axis" direction="east"><m>y</m>-axis</label>
 
                             \draw (origin) circle (1);
 
                                     \filldraw[fill=black, draw=black] (zero)   circle (\pointsize);
-                                    <label xml:id="power-zero" location="zero" direction="below right"><m>1</m></label>
+                                    <label xml:id="power-zero" location="zero" direction="southeast"><m>1</m></label>
 
                                     \filldraw[fill=black, draw=black] (one)    circle (\pointsize);
-                                    <label xml:id="power-one" location="one" direction="above right"><m>\omega</m></label>
+                                    <label xml:id="power-one" location="one" direction="northeast"><m>\omega</m></label>
 
                                     \filldraw[fill=black, draw=black] (two)    circle (\pointsize);
-                                    <label xml:id="power-two" location="two" direction="above right"><m>i</m></label>
+                                    <label xml:id="power-two" location="two" direction="northeast"><m>i</m></label>
 
                                     \filldraw[fill=black, draw=black] (three)  circle (\pointsize);
-                                    <label xml:id="power-three" location="three" direction="above left"><m>\omega^3</m></label>
+                                    <label xml:id="power-three" location="three" direction="northwest"><m>\omega^3</m></label>
 
                                     \filldraw[fill=black, draw=black] (four)    circle (\pointsize);
-                                    <label xml:id="power-four" location="four" direction="below left"><m>-1</m></label>
+                                    <label xml:id="power-four" location="four" direction="southwest"><m>-1</m></label>
 
                                     \filldraw[fill=black, draw=black] (five)   circle (\pointsize);
-                                    <label xml:id="power-five" location="five" direction="below left"><m>\omega^5</m></label>
+                                    <label xml:id="power-five" location="five" direction="southwest"><m>\omega^5</m></label>
 
                                     \filldraw[fill=black, draw=black] (six)    circle (\pointsize);
-                                    <label xml:id="power-six" location="six" direction="below right"><m>-i</m></label>
+                                    <label xml:id="power-six" location="six" direction="southeast"><m>-i</m></label>
 
                                     \filldraw[fill=black, draw=black] (seven)  circle (\pointsize);
-                                    <label xml:id="power-seven" location="seven" direction="below right"><m>\omega^7</m></label>
+                                    <label xml:id="power-seven" location="seven" direction="southeast"><m>\omega^7</m></label>
                         \end{tikzpicture}
                         </latex-image>
                     </image>
                 </figure>
+
+                <p>Same diagram, but we have scaled to <q>natural</q> TikZ units, i.e.<nbsp/>centimeters.  Really, for convenience we have multiplied by <m>1.5</m>, not <m>1.65</m>.  We have also labeled the axes with just <m>x</m> and <m>y</m> to test the use of Nemeth indicators since every label is a single inline <tag>m</tag> element.</p>
+
+                <figure xml:id="tactile-experiment-noscale">
+                    <caption>The complex <m>8^\text{th}</m> roots of unity</caption>
+                    <!-- lesser width to account for 1.5/1.65 discrepancy -->
+                    <image xml:id="roots-of-unity-noscale" width="55%">
+                        <latex-image>
+                        <!-- indentation expects forthcoming groupings, -->
+                        <!-- so the diffs might be more informative     -->
+                        \begin{tikzpicture}
+                        \coordinate (negative-y-axis) at (0,-2.25);
+                        \coordinate (positive-y-axis) at (0,2.25);
+                        \coordinate (negative-x-axis) at (-2.625,0);
+                        \coordinate (positive-x-axis) at (2.625,0);
+                        \coordinate (origin) at (0,0);
+
+                        \pgfmathsetmacro{\pointsize}{0.09}
+
+                        <!-- locations in polar coordinates -->
+                        \coordinate (zero)  at (0:1.5);
+                        \coordinate (one)   at (45:1.5);
+                        \coordinate (two)   at (90:1.5);
+                        \coordinate (three) at (135:1.5);
+                        \coordinate (four)  at (180:1.5);
+                        \coordinate (five)  at (225:1.5);
+                        \coordinate (six)   at (270:1.5);
+                        \coordinate (seven) at (315:1.5);
+
+                                \draw [->]  (negative-x-axis) -- (positive-x-axis);
+                                \draw [->]  (negative-y-axis) -- (positive-y-axis);
+                                <label xml:id="n-origin" location="origin" direction="southeast"><m>0</m></label>
+                                <label xml:id="n-posx" location="positive-x-axis" direction="north"><m>x</m></label>
+                                <label xml:id="n-posy" location="positive-y-axis" direction="north"><m>y</m></label>
+
+                            \draw (origin) circle (1.5);
+
+                                    \filldraw[fill=black, draw=black] (zero)   circle (\pointsize);
+                                    <label xml:id="n-power-zero" location="zero" direction="southeast"><m>1</m></label>
+
+                                    \filldraw[fill=black, draw=black] (one)    circle (\pointsize);
+                                    <label xml:id="n-power-one" location="one" direction="northeast"><m>\omega</m></label>
+
+                                    \filldraw[fill=black, draw=black] (two)    circle (\pointsize);
+                                    <label xml:id="n-power-two" location="two" direction="northeast"><m>i</m></label>
+
+                                    \filldraw[fill=black, draw=black] (three)  circle (\pointsize);
+                                    <label xml:id="n-power-three" location="three" direction="northwest"><m>\omega^3</m></label>
+
+                                    \filldraw[fill=black, draw=black] (four)    circle (\pointsize);
+                                    <label xml:id="n-power-four" location="four" direction="southwest"><m>-1</m></label>
+
+                                    \filldraw[fill=black, draw=black] (five)   circle (\pointsize);
+                                    <label xml:id="n-power-five" location="five" direction="southwest"><m>\omega^5</m></label>
+
+                                    \filldraw[fill=black, draw=black] (six)    circle (\pointsize);
+                                    <label xml:id="n-power-six" location="six" direction="southeast"><m>-i</m></label>
+
+                                    \filldraw[fill=black, draw=black] (seven)  circle (\pointsize);
+                                    <label xml:id="n-power-seven" location="seven" direction="southeast"><m>\omega^7</m></label>
+                        \end{tikzpicture}
+                        </latex-image>
+                    </image>
+                </figure>
+
+                <paragraphs>
+                    <title>General Advice</title>
+
+                    <p>It is best to design your diagram without using an overall scale factor later to compensate for not doing it carefully first.  The default units in TikZ are centimeters.</p>
+
+                    <p>Labels are discussed next.  Scaling (magnification) as a tactile image works best if the bounding box of your diagram is determined by the bounding box of just the graphics elements.  Rather than having labels extend outside the graphics bounding box to define a larger overall bounding box.  This is a consequence of how TikZ scales an image (graphics scale, text does not).</p>
+                </paragraphs>
+
+                <paragraphs>
+                    <title>Accessible Labels</title>
+
+                    <p>In a TikZ diagram, name locations of interest explicitly, with the <c>\coordinate</c> macro, such as<cd>\coordinate (positive-y-axis) at (4,6);</cd>Both Cartesian and polar coordinates are supported by TikZ using different syntax.  These names will not be seen by your reader, they are just used in the TikZ code.</p>
+
+                    <p>Then use the names of these locations for the placement of labels.  A large filled circle is a good shape to use.  A radius that will scale to a radius of about 3 millimeters is a good choice.  You will want to move your label away from the shape so there is no overlap, and thus the radius of your circle would be a good offset.  The label can move in one of eight directions:  <c>south</c>, <c>southwest</c>, <c>west</c>, etc.  Try to arrange the direction of your label so that it does not overwrite other graphics elements of your diagram<mdash/>this will be confusing to a blind reader.  So an example (spread over two lines) is<cd>
+                        <cline>&lt;label xml:id="pos-y-axis" location="positive-y-axis"</cline>
+                        <cline>direction="northeast" offset="3mm"&gt;&lt;m&gt;y&lt;/m&gt;-axis&lt;/label&gt;</cline>
+                    </cd>The <attr>xml:id</attr> is not strictly necessary, but can be useful for debugging.</p>
+
+                    <p>When producing a tactile version of this diagram, the graphics elements of the diagram will be scaled up as much as possible to fit a whole 11.5 inch by 11 inch embossable page.  The content will be replaced by braille cells (which are not scaled).  The braille cells will get a 4 millimeter margin all around them, which will be a no-emboss zone.  Finally, the offset will be scaled along with the graphics so the label should stay off of the shape being labeled.</p>
+                </paragraphs>
             </subsection>
         </section>
 
@@ -10222,8 +10411,9 @@ the xsltproc executable.
 
                 <p>And a mildly more complicated structure (a list) as the variable text.</p>
 
+                <!-- List in "custom" so no space after "are" -->
                 <blockquote>
-                    <p>Some of our favorite colors are <custom ref="color-list"/></p>
+                    <p>Some of our favorite colors are<custom ref="color-list"/></p>
                 </blockquote>
 
                 <p>A cross-reference to test, since context is critical.</p>
@@ -10232,7 +10422,7 @@ the xsltproc executable.
                     <p>See also <custom ref="xref-to-result"/>.</p>
                 </blockquote>
 
-                <p>The URLs used as a replacment have the <attr>visual</attr> attribute which is also managed by the assembly pre-processor to provide a footnote.  But this is not organized properly and so this provokes a known bug.  Placing it here should expose the fix during testing of new phases of the pre-processor.</p>
+                <p>The URLs used as a replacement have the <attr>visual</attr> attribute which is also managed by the assembly pre-processor to provide a footnote.  So this is a good test of the organization of the multiple passes employed by the pre-processor.</p>
 
                 <blockquote>
                     <p>A <init>URL</init> that should have a footnote: <custom ref="a-URL"/>.</p>
@@ -10375,14 +10565,16 @@ the xsltproc executable.
                 </sidebyside>
                 <p>In this exercise, we'll use vectors to show that the medians of any triangle (<xref ref="figure-triangle-cyclic-vectors" text="type-global"/>) intersect at a point. Recall that medians are the lines connecting the vertices of the triangle to the midpoints of their opposite edges, as in the figure. We'll do this in a few steps.</p>
               </introduction>
-              <exercise xml:id="ex-cyclic" workspace="30%">
-                <statement>
-                  <p>What is the value of <m>\vec{A} + \vec{B} + \vec{C}</m>?</p>
-                </statement>
-              </exercise>
 
-              <pagebreak/>
+              <page>
+                <exercise xml:id="ex-cyclic" workspace="4in">
+                  <statement>
+                    <p>What is the value of <m>\vec{A} + \vec{B} + \vec{C}</m>?</p>
+                  </statement>
+                </exercise>
+              </page>
 
+              <page>
               <p><xref ref="figure-triangle-cyclic-medians" text="type-global"/> from the previous page is reproduced for your convenience.</p>
               <figure xml:id="figure-triangle-cyclic-medians-copy">
                 <caption>The medians of the triangle are <m>\vec{M}_1</m>, <m>\vec{M}_2</m>, and <m>\vec{M}_3</m>.</caption>
@@ -10406,7 +10598,7 @@ the xsltproc executable.
                 </image>
               </figure>
               <sidebyside margins="0%" widths="30% 60%" valign="top">
-                <exercise xml:id="exercise-vector-addition" workspace="40%">
+                <exercise xml:id="exercise-vector-addition" workspace="4.5in">
                   <statement>
                     <p>Show that <m>\vec{M}_{1} + \vec{M}_{2} + \vec{M}_{3} = 0</m>.</p>
                   </statement>
@@ -10414,7 +10606,7 @@ the xsltproc executable.
                     <p>Use <xref ref="ex-cyclic" text="type-global"/>.</p>
                   </hint>
                 </exercise>
-                <exercise workspace="40%">
+                <exercise workspace="2in">
                   <statement>
                     <p>To show that the point <m>P</m> exists (as the common intersection of the <m>\vec{M}_{i}</m>), show that <me>
                       \vec{A} + \frac{2}{3} \vec{M}_{3} = \frac{2}{3} \vec{M}_{2} = <fillin characters="10"/>
@@ -10422,9 +10614,11 @@ the xsltproc executable.
                   </statement>
                 </exercise>
               </sidebyside>
-              <exercise workspace="5%">
+              <exercise workspace="2.54cm">
                 <p>If you have time, try to devise a vector proof of Euclid's result presented at the beginning of the workshop. Recall that a <term>parallelogram</term> is a four-sided polygon whose opposite sides are parallel.</p>
               </exercise>
+              </page>
+
               <conclusion>
                 <title>Wrap-up</title>
                 <p>It's possible to do interesting things with vector arithmetic in a coordinate-free way: we didn't specify an origin, or any entries of any vectors in the examples.</p>
@@ -10484,173 +10678,177 @@ the xsltproc executable.
                     </p>
                 </introduction>
 
-                <pagebreak/>
 
-                <sidebyside width="45%" margins="0%">
-                    <exercise workspace="12%">
-                        <statement>
-                        <p>For the simple network pictured, calculuate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
-                        <image xml:id="worksheet-simple-network">
-                            <latex-image>
-                            \begin{circuitikz}
-                            \draw (0,0)
-                            to[V, v=$11\quad \mbox{volt}$](0, 3)
-                            to[short](2,3)
-                            to[R, R=$4\quad \mbox{ohm}$] (3, 3)
-                            to[short](4,3)
-                            to[R, R=$3\quad \mbox{ohm}$](4,0)
-                            to[short](3,0)
-                            to[R, R=$3\quad \mbox{ohm}$](2,0)
-                            to[short](0,0);
-                            \end{circuitikz}
-                            </latex-image>
-                        </image>
-                       </statement>
-                    </exercise>
+                <page>
+                </page>
 
-                    <exercise workspace="12%">
+                <page>
+                    <sidebyside width="45%" margins="0%">
+                        <exercise workspace="1.5in">
+                            <statement>
+                            <p>For the simple network pictured, calculuate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
+                            <image xml:id="worksheet-simple-network">
+                                <latex-image>
+                                \begin{circuitikz}
+                                \draw (0,0)
+                                to[V, v=$11\quad \mbox{volt}$](0, 3)
+                                to[short](2,3)
+                                to[R, R=$4\quad \mbox{ohm}$] (3, 3)
+                                to[short](4,3)
+                                to[R, R=$3\quad \mbox{ohm}$](4,0)
+                                to[short](3,0)
+                                to[R, R=$3\quad \mbox{ohm}$](2,0)
+                                to[short](0,0);
+                                \end{circuitikz}
+                                </latex-image>
+                            </image>
+                           </statement>
+                        </exercise>
+
+                        <exercise workspace="2in">
+                            <statement>
+                            <p> Compare it with a parallel circuit network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
+                            <image xml:id="worksheet-parallel-circuit">
+                                <latex-image>
+                                \begin{circuitikz}
+                                \draw(0,0)
+                                to[V, v=$11\quad \mbox{volt}$](0, 3)
+                                to[short](5,3)
+                                to[R, R=$4\quad \mbox{ohm}$](6,3)
+                                to[short](7,3)
+                                to[R, R=$3\quad \mbox{ohm}$](7,0)
+                                to[short](6,0)
+                                to[R, R=$3\quad \mbox{ohm}$](5,0)
+                                to[short](0,0);
+                                \draw(4,0)
+                                to[R, R=$3\quad \mbox{ohm}$](4,3);
+                                \end{circuitikz}
+                                </latex-image>
+                            </image>
+                            </statement>
+                        </exercise>
+                    </sidebyside>
+
+                    <exercise workspace="1in">
                         <statement>
-                        <p> Compare it with a parallel circuit network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
-                        <image xml:id="worksheet-parallel-circuit">
+                        <p> Now for a more complicated network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
+                        <image xml:id="worksheet-complicated-network">
                             <latex-image>
                             \begin{circuitikz}
                             \draw(0,0)
-                            to[V, v=$11\quad \mbox{volt}$](0, 3)
+                            to[V, v=$11 \quad \mbox{volt}$](0, 3)
                             to[short](5,3)
-                            to[R, R=$4\quad \mbox{ohm}$](6,3)
-                            to[short](7,3)
-                            to[R, R=$3\quad \mbox{ohm}$](7,0)
+                            to[R, R=$4 \quad \mbox{ohm}$](6,3)
+                            to[short](9,3)
+                            to[R, R=$4 \quad \mbox{ohm}$](10,3)
+                            to[short](11,3)
+                            to[R, R=$3 \quad \mbox{ohm}$](11, 0)
+                            to[short](10,0)
+                            to[R, R=$2\quad \mbox{ohm}$](9,0)
                             to[short](6,0)
-                            to[R, R=$3\quad \mbox{ohm}$](5,0)
+                            to[R, R=$2\quad \mbox{ohm}$](5,0)
                             to[short](0,0);
                             \draw(4,0)
                             to[R, R=$3\quad \mbox{ohm}$](4,3);
+                            \draw(8,0)
+                            to[R, R=$1\quad \mbox{ohm}$](8,3);
                             \end{circuitikz}
                             </latex-image>
                         </image>
                         </statement>
                     </exercise>
-                </sidebyside>
+                </page>
 
-                <exercise workspace="12%">
-                    <statement>
-                    <p> Now for a more complicated network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
-                    <image xml:id="worksheet-complicated-network">
-                        <latex-image>
-                        \begin{circuitikz}
-                        \draw(0,0)
-                        to[V, v=$11 \quad \mbox{volt}$](0, 3)
-                        to[short](5,3)
-                        to[R, R=$4 \quad \mbox{ohm}$](6,3)
-                        to[short](9,3)
-                        to[R, R=$4 \quad \mbox{ohm}$](10,3)
-                        to[short](11,3)
-                        to[R, R=$3 \quad \mbox{ohm}$](11, 0)
-                        to[short](10,0)
-                        to[R, R=$2\quad \mbox{ohm}$](9,0)
-                        to[short](6,0)
-                        to[R, R=$2\quad \mbox{ohm}$](5,0)
-                        to[short](0,0);
-                        \draw(4,0)
-                        to[R, R=$3\quad \mbox{ohm}$](4,3);
-                        \draw(8,0)
-                        to[R, R=$1\quad \mbox{ohm}$](8,3);
-                        \end{circuitikz}
-                        </latex-image>
-                    </image>
-                    </statement>
-                </exercise>
+                <page>
+                    <exercise workspace="3in">
+                        <statement>
+                            <p> Now generalize these ideas to a context outside of electrical circuits. Consider the network of streets given in the diagram (with one-way directions as indicated).</p>
 
-                <pagebreak/>
+                            <image xml:id="worksheet-street-network" width="65%">
+                                <latex-image>
+                                <![CDATA[
+                                \begin{tikzpicture}[>=stealth]
+                                \draw[->, very thick] (0,0) -- (10, 0) node[midway, below]{East Bound Winooski Ave};
+                                \draw[<-, very thick] (0, 1) -- (10, 1) node[midway, above]{West Bound Winooski Ave};
+                                    \draw[<-, very thick] (0, 4) -- (10, 4) node[midway, above]{Shelburne St};
+                                    \draw[<-, very thick] (1, -1) -- (1, 5) node[midway, above, sloped]{Willow};
+                                    \draw[->, very thick] (9, -1) -- (9, 5) node[midway, above, sloped]{Jay};
+                                    \end{tikzpicture}
+                                ]]>
+                                </latex-image>
+                            </image>
 
-                <exercise workspace="30%">
-                    <statement>
-                        <p> Now generalize these ideas to a context outside of electrical circuits. Consider the network of streets given in the diagram (with one-way directions as indicated).</p>
+                            <p>A traffic engineer counts the hourly flow of cars into and out of this network at the entrances.  They get (EB = East Bound; WB = West Bound): </p>
 
-                        <image xml:id="worksheet-street-network" width="65%">
-                            <latex-image>
-                            <![CDATA[
-                            \begin{tikzpicture}[>=stealth]
-                            \draw[->, very thick] (0,0) -- (10, 0) node[midway, below]{East Bound Winooski Ave};
-                            \draw[<-, very thick] (0, 1) -- (10, 1) node[midway, above]{West Bound Winooski Ave};
-                                \draw[<-, very thick] (0, 4) -- (10, 4) node[midway, above]{Shelburne St};
-                                \draw[<-, very thick] (1, -1) -- (1, 5) node[midway, above, sloped]{Willow};
-                                \draw[->, very thick] (9, -1) -- (9, 5) node[midway, above, sloped]{Jay};
-                                \end{tikzpicture}
-                            ]]>
-                            </latex-image>
-                        </image>
+                            <table>
+                                <title>Estimated hourly traffic flow for the road network</title>
+                                <tabular>
+                                    <row>
+                                        <cell>
+                                        </cell>
+                                        <cell>
+                                            EB Winooski
+                                        </cell>
+                                        <cell>
+                                            WB Winooski
+                                        </cell>
+                                        <cell>
+                                            Shelburne St
+                                        </cell>
+                                        <cell>
+                                            Willow
+                                        </cell>
+                                        <cell>
+                                            Jay
+                                        </cell>
+                                    </row>
+                                    <row>
+                                        <cell>
+                                            into
+                                        </cell>
+                                        <cell>
+                                            50
+                                        </cell>
+                                        <cell>
+                                            400
+                                        </cell>
+                                        <cell>
+                                            0
+                                        </cell>
+                                        <cell>
+                                            10
+                                        </cell>
+                                        <cell>
+                                            50
+                                        </cell>
+                                    </row>
+                                    <row>
+                                        <cell>
+                                            out of
+                                        </cell>
+                                        <cell>
+                                            55
+                                        </cell>
+                                        <cell>
+                                            390
+                                        </cell>
+                                        <cell>
+                                            20
+                                        </cell>
+                                        <cell>
+                                            15
+                                        </cell>
+                                        <cell>
+                                            30
+                                        </cell>
+                                    </row>
+                                </tabular>
+                            </table>
 
-                        <p>A traffic engineer counts the hourly flow of cars into and out of this network at the entrances.  They get (EB = East Bound; WB = West Bound): </p>
-
-                        <table>
-                            <title>Estimated hourly traffic flow for the road network</title>
-                            <tabular>
-                                <row>
-                                    <cell>
-                                    </cell>
-                                    <cell>
-                                        EB Winooski
-                                    </cell>
-                                    <cell>
-                                        WB Winooski
-                                    </cell>
-                                    <cell>
-                                        Shelburne St
-                                    </cell>
-                                    <cell>
-                                        Willow
-                                    </cell>
-                                    <cell>
-                                        Jay
-                                    </cell>
-                                </row>
-                                <row>
-                                    <cell>
-                                        into
-                                    </cell>
-                                    <cell>
-                                        50
-                                    </cell>
-                                    <cell>
-                                        400
-                                    </cell>
-                                    <cell>
-                                        0
-                                    </cell>
-                                    <cell>
-                                        10
-                                    </cell>
-                                    <cell>
-                                        50
-                                    </cell>
-                                </row>
-                                <row>
-                                    <cell>
-                                        out of
-                                    </cell>
-                                    <cell>
-                                        55
-                                    </cell>
-                                    <cell>
-                                        390
-                                    </cell>
-                                    <cell>
-                                        20
-                                    </cell>
-                                    <cell>
-                                        15
-                                    </cell>
-                                    <cell>
-                                        30
-                                    </cell>
-                                </row>
-                            </tabular>
-                        </table>
-
-                        <p> Use a variable for each segment inside of the network and set up a system of linear equations restricting the flow. Solve the system.  Note that you should not get a unique solution as traffic should be able to flow through the network in various ways. </p>
-                    </statement>
-                </exercise>
+                            <p> Use a variable for each segment inside of the network and set up a system of linear equations restricting the flow. Solve the system.  Note that you should not get a unique solution as traffic should be able to flow through the network in various ways. </p>
+                        </statement>
+                    </exercise>
+                </page>
             </worksheet>
 
             <worksheet margin="1cm">
@@ -10658,87 +10856,181 @@ the xsltproc executable.
                     <p>This is a mock one-page worksheet for testing purposes. We have specified an overall margin just slightly less than the default.</p>
                 </introduction>
 
-                <sidebyside width="45%" margins="0%">
-                    <exercise workspace="5%">
+                <page>
+                    <sidebyside width="45%" margins="0%">
+                        <exercise workspace="1in">
+                            <statement>
+                                <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+                            </statement>
+                        </exercise>
+
+                        <exercise workspace="1in">
+                            <statement>
+                                <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+                            </statement>
+                        </exercise>
+                    </sidebyside>
+
+                    <p>A two-line paragraph interspersed to check on spacing, breaks and all that.</p>
+
+                    <exercise workspace="1.5in">
+                        <title>A full-width exercise</title>
                         <statement>
                             <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
-                        </statement>
-                    </exercise>
-
-                    <exercise workspace="10%">
-                        <statement>
-                            <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
-                        </statement>
-                    </exercise>
-                </sidebyside>
-
-                <p>A two-line paragraph interspersed to check on spacing, breaks and all that.</p>
-
-                <exercise workspace="8%">
-                    <title>A full-width exercise</title>
-                    <statement>
-                        <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
-                        <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
-                    </statement>
-                </exercise>
-
-                <p>A two-line paragraph interspersed to check on spacing, breaks and all that.</p>
-
-                <sidebyside width="30%" margins="0%">
-                    <exercise>
-                        <statement>
-                            <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
-                        </statement>
-                    </exercise>
-
-                    <exercise workspace="12%">
-                        <!-- <title>The Tallest</title> -->
-                        <statement>
                             <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
                         </statement>
                     </exercise>
 
-                    <exercise workspace="12%">
+                    <p>Another two-line paragraph interspersed to check on spacing, breaks and all that.</p>
+
+                    <sidebyside width="30%" margins="0%">
+                        <exercise>
+                            <statement>
+                                <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+                            </statement>
+                        </exercise>
+
+                        <exercise workspace="0.5in">
+                            <!-- <title>The Tallest</title> -->
+                            <statement>
+                                <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+                            </statement>
+                        </exercise>
+
+                        <exercise workspace="1in">
+                            <statement>
+                                <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+                            </statement>
+                        </exercise>
+                    </sidebyside>
+
+                    <activity>
+                        <title>A Mock Activity</title>
+
                         <statement>
-                            <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+                            <p>The problem, as we see it.</p>
                         </statement>
-                    </exercise>
-                </sidebyside>
+                        <hint>
+                            <p>A worksheet could have hints, no?  But no spacing. Note row below has widths set to balance the heights.</p>
+                        </hint>
+                    </activity>
 
-                <activity>
-                    <title>A Mock Activity</title>
+                    <sidebyside widths="25% 40% 25%" margins="0%">
+                        <exercise workspace="0.5in">
+                            <statement>
+                                <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+                            </statement>
+                        </exercise>
 
-                    <statement>
-                        <p>The problem, as we see it.</p>
-                    </statement>
-                    <hint>
-                        <p>A worksheet could have hints, no?  But no spacing. Note row below has widths set to balance the heights.</p>
-                    </hint>
-                </activity>
+                        <exercise workspace="0.5in">
+                            <!-- <title>Balanced Heights</title> -->
+                            <statement>
+                                <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+                            </statement>
+                        </exercise>
 
-                <sidebyside widths="25% 40% 25%" margins="0%">
-                    <exercise workspace="4%">
-                        <statement>
-                            <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
-                        </statement>
-                    </exercise>
+                        <exercise workspace="0.5in">
+                            <statement>
+                                <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+                            </statement>
+                        </exercise>
+                    </sidebyside>
+                </page>
+            </worksheet>
 
-                    <exercise workspace="4%">
-                        <!-- <title>Balanced Heights</title> -->
-                        <statement>
-                            <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
-                        </statement>
-                    </exercise>
+            <worksheet courseid="MAT-150" series="Activity" seriescode="13">
+              <title>Dot products and projection</title>
+                <page>
+                    <sidebyside width="45%" margins="0%">
+                        <exercise>
+                            <introduction>
+                                <p>Let
+                                <m>{\vec v}_1 = (-4,1)</m>,
+                                <m>{\vec v}_2 = (2,2)</m>,
+                                <m>{\vec v}_3 = (1,2,3)</m>,
+                                <m>{\vec v}_4 = (-2,1,0)</m>.
+                                Find the values of the following expressions:</p>
+                            </introduction>
+                            <task workspace="1in">
+                              <m>{\vec v}_1 \cdot {\vec v}_2 = <fillin/></m>
+                            </task>
+                            <task workspace="1.0in">
+                              <m>{\vec v}_3 \cdot {\vec v}_4 = <fillin/></m>
+                            </task>
+                            <task workspace="1in">
+                              <m>\lVert{\vec v}_1\rVert = <fillin/></m>
+                            </task>
+                            <task workspace="1in">
+                              <m>\lVert{\vec v}_4\rVert = <fillin/></m>
+                            </task>
+                            <task workspace="1in">
+                              <p>Are any of these vectors perpendicular to each other? <fillin/></p>
+                          </task>
+                        </exercise>
 
-                    <exercise workspace="4%">
-                        <statement>
-                            <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
-                        </statement>
-                    </exercise>
-                </sidebyside>
+                        <exercise workspace="3in">
+                            <statement>
+                                <p>The vectors <m>\vec a = (3,9)</m> and <m>\vec u = (4,2)</m> are pictured below.  Derive the formula for projection on a line and use it to find the projection of <m>\vec a</m> on the line spanned by <m>\vec u</m>. Also compute the length of the residual vector.</p>
+                                <image width="100%" source="images/projection1.png">
+                                    <description>two vectors...</description>
+                                </image>
+                            </statement>
+                        </exercise>
+                    </sidebyside>
+                </page>
+
+                <page>
+                    <sidebyside width="48%" margins="0%">
+                        <exercise workspace="1.25in">
+                            <introduction>
+                                <p>Consider the vector equation
+                                <me>
+                                m \begin{bmatrix}2 \\ 5\end{bmatrix} = \begin{bmatrix}3 \\ 7\end{bmatrix}
+                                </me>.</p>
+                            </introduction>
+                            <task>
+                                <p>Check that there is no solution <m>m</m> that makes the equation true.</p>
+                            </task>
+
+                            <task>
+                                <p>Use projection to find the best approximation <m>\hat m</m>.</p>
+                            </task>
+
+                            <task>
+                                <p>Compute <m>\hat m \begin{bmatrix}2 \\ 5\end{bmatrix} </m>.</p>
+                            </task>
+
+                            <task>
+                                <p>Compute the residual vector.</p>
+                            </task>
+
+                            <task>
+                                <p>Compute the length of the residual vector and explain what it means.</p>
+                            </task>
+                        </exercise>
+
+                        <exercise>
+                            <introduction>
+                                <p>Consider the system of equations
+                                <md>
+                                    <mrow>3t \amp =5</mrow>
+                                    <mrow> 2t \amp = 9 </mrow>
+                                </md>.</p>
+                            </introduction>
+                            <task workspace="2in">
+                                <p>Write the system in vector form.</p>
+                            </task>
+                            <task workspace="3.9in">
+                                <p>Find the best estimate, <m>\hat t</m>, of <m>t</m> using projection.</p>
+                            </task>
+                            <task workspace="2in">
+                                <p>Compute the length of the residual vector.</p>
+                            </task>
+                        </exercise>
+                    </sidebyside>
+                </page>
             </worksheet>
         </section>
-
 
         <section xml:id="exercises-single">
             <title>Exercises, One Subsection</title>
@@ -11361,20 +11653,6 @@ the xsltproc executable.
                 </paragraphs>
             </appendix>
 
-            <!-- Bibliography/References can appear anywhere,  -->
-            <!-- but these are in the backmatter, hence global -->
-
-            <references xml:id="references-backmatter">
-                <title>References</title>
-
-                <biblio type="raw" xml:id="biblio-judson-AATA">Tom Judson, <title>Abstract Algebra: Theory and Applications</title>.
-                <note xml:id="note-judson-AATA"><p>Another online, open-source offering.</p></note>
-                </biblio>
-
-                <biblio type="raw" xml:id="biblio-lay-article">David C. Lay, <title>Subspaces and Echelon Forms</title>. <journal>The College Mathematics Journal</journal>, January 1993, <volume>24</volume> <number>1</number>, 57<ndash />62.</biblio>
-
-            </references>
-
             <appendix xml:id="references">
                 <title>Multiple References</title>
 
@@ -11398,6 +11676,20 @@ the xsltproc executable.
                     <biblio type="raw" xml:id="biblio-strang-article-tres">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash />855.</biblio>
                 </references>
              </appendix>
+
+            <!-- Bibliography/References can appear anywhere,  -->
+            <!-- but these are in the backmatter, hence global -->
+
+            <references xml:id="references-backmatter">
+                <title>References</title>
+
+                <biblio type="raw" xml:id="biblio-judson-AATA">Tom Judson, <title>Abstract Algebra: Theory and Applications</title>.
+                <note xml:id="note-judson-AATA"><p>Another online, open-source offering.</p></note>
+                </biblio>
+
+                <biblio type="raw" xml:id="biblio-lay-article">David C. Lay, <title>Subspaces and Echelon Forms</title>. <journal>The College Mathematics Journal</journal>, January 1993, <volume>24</volume> <number>1</number>, 57<ndash />62.</biblio>
+
+            </references>
 
             <index>
                 <title>Index</title>

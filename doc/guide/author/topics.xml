@@ -1240,7 +1240,7 @@
             <p>The <latex /> macros, <c>\amp</c>, <c>\lt</c>, and <c>\gt</c> are always available within these mathematics elements, so that you can avoid the exceptional XML characters <c>&amp;</c>, <c>&lt;</c> and <c>&gt;</c>.  See <xref ref="overview-exceptional-characters" /> for this same information, but in the broader context of your entire document.</p>
         </subsection>
 
-        <subsection>
+        <subsection xml:id="text-in-mathematics">
             <title>Text in Mathematics</title>
 
             <p>Once in a while, you need a little bit of <q>regular</q> text within an expression and you do not want it to look like a product of a bunch of one-letter variables.  Use the <c>\text{}</c> macro for these.  Only.  Other ways of switching out of math-mode and into some sort of <q>regular</q> text will appear inferior, and can raise errors in certain conversions.<ul>
@@ -1396,31 +1396,73 @@
         <title>Mathematics Best Practices</title>
         <idx><h>mathematics</h><h>best practices</h></idx>
 
-        <p>This is an incomplete list of suggestions you can consider when authoring mathematics in <latex/> syntax.  Some are definitely technical, and we are only aware of them from authors' experience and reports.  Many are meant to help in the conversion to braille.  Additions welcome.
-        <ol>
-            <li>
-                <title>Operator names</title>
-                <p>Sean Fitzpatrick reports on 2021-01-06 that the <latex/> macro construction<cd>\newcommand{\foo}{\operatorname{foo}}</cd> behaves better in Asymptote diagrams than<cd>
-                \DeclareMathOperator{\foo}{foo}</cd></p>
-            </li>
-            <li>
-                <title>Ratios</title>
-                <p>If you really intend to communicate a ratio with a colon, keep it super-simple, like <c>3:2</c> or <c>a:b</c>.  Do not wrap it in parentheses or other decorations, since then the colon will be communicated literally in braille.  For example, the index of a subgroup, <c>[G:H]</c>, should not be confused with a ratio.  If your ratio is kept simple, braille will use special syntax designed for ratios.</p>
-            </li>
-            <li>
-                <title>Avoid Nesting</title>
-                <p>It may seem  convenient to nest custom macro definitions. For example:
-                    <cd>
-                        <cline>\newcommand{\makered}[1]{{\color{red}{#1}}}</cline>
-                        <cline>\newcommand{\MAKERED}[1]{\textbf{\makered{#1}}}</cline>
-                    </cd>
-                The second macro definition uses the first macro. At least one <pretext/> conversion isolates macro defintions for use only on an as-needed basis. So here, if the author used <c>\MAKERED</c> without also using <c>\makered</c> close nearby, it would lead to an issue under that conversion, because <c>\makered</c> would be locally undefined. So we recommend defining each macro from the ground up. In this case:
-                    <cd>
-                        <cline>\newcommand{\MAKERED}[1]{\textbf{\color{red}{#1}}}</cline>
-                    </cd>
-                </p>
-            </li>
-        </ol></p>
+        <p>This section addresses some finer points of authoring mathematics with <latex/>, motivated in large part by helping MathJax create the most accessible output possible, which in many instances will also create a superior typographical result across all conversions.  We try to provide justification and explanation, though that might not be easy in all cases.   Some are definitely technical, and we are only aware of them from authors' experience and reports.  Many are meant to help in the conversion to braille.  This is an incomplete list so additional reports and additions are welcome.</p>
+
+        <paragraphs>
+            <title>Large Numbers</title>
+            <p>Using a separator to aid in reading a large number should avoid using a space as a separator.  So <m>234,766,544</m> or <m>234.766.544</m> is preferable to <m>234\,766\,544</m>.  (We have used a <latex/> <q>thin space</q>, <c> \, </c>, in the latter.)</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Ratios</title>
+            <p>If you really intend to communicate a ratio with a colon, keep it super-simple, like <c>3:2</c> or <c>a:b</c>.  Do not wrap it in parentheses or other decorations, since then the colon will be communicated literally in braille.  For example, the index of a subgroup, <c>[G:H]</c>, will not be confused with a ratio, due to the brackets.  But <c>(4:5)</c> will not be output in a conversion to braille in a way that communicates that it is a ratio.  If you keep your ratios simple, braille output will use special syntax designed for ratios.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Function and Operator Names</title>
+            <!-- https://tex.stackexchange.com/questions/84302/what-is-the-difference-of-mathop-operatorname-and-declaremathoperator -->
+
+            <p>Common mathematical functions, like <m>\sin</m> (<c>\sin</c>) and <m>\det</m> (<c>\det</c>), are built into <latex/>, well-known, and commonly used.  Compare with the versions authored as simple sequences of letters <m>sin</m> and <m>det</m>, which <latex/> interprets (and typesets) as a product of three individual variables.</p>
+
+            <p>Instead, use the <latex/> <c>\DeclareMathOperator</c> macro as we will illustrate.  Suppose you want to discuss the set of homomorphisms from the vector space <m>U</m> to the vector space <m>V</m>, <m>\Hom{U}{V}</m>.  Define the macros
+            <cd>
+                <cline>\DeclareMathOperator{\homop}{Hom}</cline>
+                <cline>\newcommand{\Hom}[2]{\homop\left(#1,\,#2\right)}</cline>
+            </cd> and employ as <c>\Hom{U}{V}</c>, which yields <m>\Hom{U}{V}</m>.  Compare with the no-macro, no-special-care, version, <m>Hom(U,V)</m>.  Grouping <c>Hom</c> as a unit will prevent <latex/> from rendering it as a product of three variables, use the correct font, and will preserve the meaning in Nemeth braille.  Notice that the <c>\homop</c> macro is never used in your source.</p>
+
+            <p>Directly contradicting this general advice, Sean Fitzpatrick reports on 2021-01-06 that the <latex/> macro construction
+                <cd>\newcommand{\foo}{\operatorname{foo}}</cd>
+            behaves better in Asymptote diagrams than
+                <cd>\DeclareMathOperator{\foo}{foo}</cd>
+            So perhaps you need to define a second macro for use in Asymptote diagrams.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Permutations in Cycle Notation</title>
+
+            <p>The permutation in cycle notation, <m>(1246)(35)</m>, is difficult to distinguish from a product of two integers and gets entirely different treatment than intended as Nemeth braille.  And when the points of the permutation group involve multiple digits, some other notation will become necessary anyway.  Commas work, as in <m>(1,2,4,6)(3,5)</m>.  Or if commas look too cluttered, then spaces are possible, as in <m>(1\;2\;4\;6)(3\;5)</m>, where we have used the <latex/> medium space, <c> \; </c>.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Text in Math</title>
+
+            <p>We have discussed this one already, but it is important for a conversion to braille.  If you use a word inside of math, such as describing a condition for membership in a set, put any spaces inside of a <c>\text{}</c> macro, not on either side of it.  So <c>\text{ and }</c> is preferable to <c>\ \text{and}\ </c>.  Similarly, do not put any math inside a <c>\text{}</c> macro.  For example,<cd>
+                <cline>\text{ for -3 \lt  x \lt  -2 }</cline>
+            </cd>will lead to poor results due to the inequalties mixed in with the text.  A better version would be<cd>
+                <cline>\text{ for }-3 \lt  x \lt  -2</cline>
+            </cd>and now the numbers will be treated as mathematics.  Review <xref ref="text-in-mathematics"/> for more details.</p>
+       </paragraphs>
+
+        <paragraphs>
+            <title>Math as Text</title>
+
+            <p>Do not use symbols from mathematics in non-mathematical situations such as the <latex/> construction <c>73^\circ</c> to indicate a temperature in degrees, outside of a mathematical or scientific setting, such as in a <tag>poem</tag> about springtime weather.  In this particular case, we provide a <tage>degree</tage> element that can be used in non-mathematical contexts, so we can get 73<degree/>, which will behave well in a variety of conversions (and can also be used for latitude and longitude in your poem).  Similarly, we advocate writing ordinal numbers with text on the baseline, rather than a <latex/> construction like <c>2^\mathrm{nd}</c>.  So use 1st, 2nd, 3rd, 4th, etc.</p>
+
+        </paragraphs>
+
+        <paragraphs>
+            <title>Avoid Nesting</title>
+            <p>It may seem  convenient to nest custom macro definitions. For example:
+                <cd>
+                    <cline>\newcommand{\makered}[1]{{\color{red}{#1}}}</cline>
+                    <cline>\newcommand{\MAKERED}[1]{\textbf{\makered{#1}}}</cline>
+                </cd>
+            The second macro definition uses the first macro. At least one <pretext/> conversion isolates macro defintions for use only on an as-needed basis. So here, if the author used <c>\MAKERED</c> without also using <c>\makered</c> close nearby, it would lead to an issue under that conversion, because <c>\makered</c> would be locally undefined. So we recommend defining each macro from the ground up. In this case:
+                <cd>
+                    <cline>\newcommand{\MAKERED}[1]{\textbf{\color{red}{#1}}}</cline>
+                </cd>
+            This also contradicts our advice above on operator names.</p>
+        </paragraphs>
     </section>
 
     <section xml:id="topic-lists">
@@ -3434,6 +3476,7 @@ A minimal working example may be found in the
 <url href="https://github.com/rbeezer/mathbook/blob/dev/examples/sample-slideshow/sample-slideshow.xml">
   Examples folder of the PreTeXt repo on GitHub
 </url><fn><c>examples/sample-slideshow/sample-slideshow.xml</c></fn>.
+See publishing details for various outputs in <xref ref="publisher-slides"/>.
         </p>
     </section>
 

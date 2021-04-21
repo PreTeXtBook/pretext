@@ -23,6 +23,26 @@
         <p>So the first step is to install both <c>node</c> and <c>npm</c> on your system.  These programs are meant to be cross-platform, so once you do these two operating-system-specific installations, we can proceed with generic instructions. (2020-11-09: we could add instructions for specific operating systems to other appendices?)</p>
 
         <p><c>node</c> should be on your path after installation, and you can try <cd>which node</cd> to see if your operating system can locate it automatically.  If not, then you will need to edit your peronal copy of the <c>pretext.cfg</c> configuration file to have the <c>node</c> key provide a path to the executable (2020-11-10: needs a cross-reference to the script's configuration file).</p>
+
+        <p>Some useful <c>npm</c> commands, in the form of examples.</p>
+
+        <table>
+            <title>Useful <c>npm</c> commands</title>
+            <tabular>
+                <row>
+                    <cell><c>npm list</c></cell>
+                    <cell>Full tree of installed packages (local)</cell>
+                </row>
+                <row>
+                    <cell><c>npm list mathjax-full</c></cell>
+                    <cell>Just one package</cell>
+                </row>
+                <row>
+                    <cell><c>npm view speech-rule-engine version</c></cell>
+                    <cell><em>Available</em> version</cell>
+                </row>
+            </tabular>
+        </table>
     </section>
 
     <section xml:id="install-mathjax">

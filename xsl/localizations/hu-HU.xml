@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2014-2021 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- See  xsl/localizations/README.md  for an explanation of this file -->
+
+<!-- hu-HU, Hungarian (Hungary) -->
+<!-- Sándor Czirbusz, czirbusz@gmail.com, 2017-04-09 -->
+
+<locale language="hu-HU">
+    <!-- THEOREM-LIKE blocks -->
+    <!-- Environments which have proofs, plus proofs themselves -->
+    <localization string-id='theorem'>Tétel</localization>
+    <localization string-id='corollary'>Következmény</localization>
+    <localization string-id='lemma'>Lemma</localization>
+    <localization string-id='algorithm'>Algoritmus</localization>
+    <localization string-id='proposition'>Állítás</localization>
+    <localization string-id='claim'>Állítás</localization>
+    <localization string-id='fact'>Tény</localization>
+    <localization string-id='identity'>Azonosság</localization>
+    <localization string-id='proof'>Bizonyítás</localization>
+    <localization string-id='case'>Eset</localization>
+    <!-- Components of the narrative -->
+    <!-- Mathematical statements without proofs -->
+    <!-- AXIOM-LIKE blocks -->
+    <localization string-id='axiom'>Axióma</localization>
+    <localization string-id='conjecture'>Sejtés</localization>
+    <localization string-id='principle'>Elv</localization>
+    <localization string-id='heuristic'>Heurisztikus</localization>
+    <localization string-id='hypothesis'>Hipotézis</localization>
+    <localization string-id='assumption'>Feltevés</localization>
+    <!-- Definitions -->
+    <localization string-id='definition'>Definíció</localization>
+    <!-- Single Line Mathematics -->
+    <localization string-id='me'>Egyenlet</localization>
+    <localization string-id='men'>Egyenlet</localization>
+    <localization string-id='mrow'>Egyenlet</localization>
+    <!-- Display Mathematics -->
+    <localization string-id='md'>Matematikai megjelenítés</localization>
+    <localization string-id='mdn'>Matematikai megjelenítés</localization>
+    <!-- Types of documents, mostly for informational messages -->
+    <localization string-id='volume'>Kötet</localization>
+    <localization string-id='book'>Könyv</localization>
+    <localization string-id='article'>Cikk</localization>
+    <!-- <localization string-id='slideshow'>Slideshow</localization> -->
+    <localization string-id='letter'>Letter</localization>
+    <localization string-id='memo'>Emlékeztető</localization>
+    <localization string-id='presentation'>Prezentáció</localization>
+    <!-- Parts of a document -->
+    <localization string-id='frontmatter'>Bevezető rész</localization>
+    <localization string-id='part'>Rész</localization>
+    <localization string-id='chapter'>Fejezet</localization>
+    <localization string-id='appendix'>Függelék</localization>
+    <!-- Next is the plural of Appendix, used to identify a group of appendix -->
+    <!-- <localization string-id='appendices'>Appendices</localization> -->
+    <localization string-id='section'>Pont</localization>
+    <localization string-id='subsection'>Alpont</localization>
+    <localization string-id='subsubsection'>alpont</localization>
+    <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
+    <!-- <localization string-id='slide'>Slide</localization> -->
+    <localization string-id='introduction'>Bevezetés</localization>
+    <localization string-id='conclusion'>Következtetés</localization>
+    <localization string-id='exercises'>Feladatok</localization>
+    <!-- <localization string-id='worksheet'>Worksheet</localization> -->
+    <!-- <localization string-id='reading-questions'>Reading Questions</localization> -->
+    <!-- <localization string-id='solutions'>Solutions</localization> -->
+    <!-- <localization string-id='glossary'>Glossary</localization> -->
+    <localization string-id='references'>Hivatkozások</localization>
+    <localization string-id='backmatter'>Záró rész</localization>
+    <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
+    <localization string-id='paragraphs'>Paragrafusok</localization>
+    <!-- <localization string-id='commentary'>Commentary</localization> -->
+    <localization string-id='subparagraph'>Al-paragrafus</localization>
+    <!-- Components of the narrative -->
+    <!-- REMARK-LIKE blocks -->
+    <!-- "note" is used within "biblio", likely to change -->
+    <localization string-id='remark'>Megjegyzés</localization>
+    <localization string-id='convention'>Konvenció</localization>
+    <localization string-id='note'>Megjegyzés</localization>
+    <localization string-id='observation'>Megfigyelés</localization>
+    <localization string-id='warning'>Figyelmeztetés</localization>
+    <localization string-id='insight'>Bepillantás</localization>
+    <localization string-id='computation'>Számítás</localization>
+    <localization string-id='technology'>Technológia</localization>
+    <!-- ASIDE-LIKE blocks -->
+    <localization string-id='aside'>Kiegészítés</localization>
+    <localization string-id='biographical'>Életrajzi kiegészítés</localization>
+    <localization string-id='historical'>Történeti kiegészítés</localization>
+    <!-- EXAMPLE-LIKE blocks -->
+    <localization string-id='example'>Példa</localization>
+    <localization string-id='question'>Kérdéa</localization>
+    <localization string-id='problem'>Probléma</localization>
+    <!-- PROJECT-LIKE blocks -->
+    <localization string-id='project'>Projekt</localization>
+    <localization string-id='activity'>Aktivitás</localization>
+    <localization string-id='exploration'>Kutatás</localization>
+    <localization string-id='task'>Feladat</localization>
+    <localization string-id='investigation'>Vizsgálat</localization>
+    <!-- assemblages are collections of minimally structured material -->
+    <localization string-id='assemblage'>Összeállítás</localization>
+    <localization string-id='poem'>Vers</localization>
+    <!-- Objectives is the block, objective is a list item within -->
+    <localization string-id='objectives'>Célkitűzések</localization>
+    <localization string-id='objective'>Célkitűzés</localization>
+    <!-- Outcomes is the block, outcome is a list item within (different) -->
+    <!-- <localization string-id='outcomes'>Outcomes</localization> -->
+    <!-- <localization string-id='outcome'>Outcome</localization> -->
+    <!--  -->
+    <localization string-id='figure'>Ábra</localization>
+    <localization string-id='table'>Táblázat</localization>
+    <localization string-id='listing'>Felsorolás</localization>
+    <localization string-id='fn'>Lábjegyzet</localization>
+    <localization string-id='contributor'>Résztvevő</localization>
+    <!-- Lists and their items -->
+    <localization string-id='list'>Lista</localization>
+    <localization string-id='li'>Tétel</localization>
+    <!-- A term (word) defined in a glossary -->
+    <!-- <localization string-id='defined-term'>Term</localization> -->
+    <!-- A regular paragraph, not the old sectioning structure -->
+    <localization string-id='p'>Paragrafus</localization>
+    <localization string-id='blockquote'>Idézet</localization>
+    <!-- Literate programming, a chunk of computer code -->
+    <!-- <localization string-id='fragment'>Fragment</localization> -->
+    <!-- Parts of an exercise and its solution -->
+    <localization string-id='divisionalexercise'>Feladat</localization>
+    <!-- Translation needed for Hungary Hungarian -->
+    <!-- See en-US file for distinctions here, do not repeat previous translation -->
+    <!-- <localization string-id='inlineexercise'>Checkpoint</localization> -->
+    <!-- <localization string-id='worksheetexercise'>Worksheet Exercise</localization> -->
+    <!-- <localization string-id='readingquestion'>Reading Question</localization> -->
+    <localization string-id='webwork'>WeBWorK</localization>
+    <localization string-id='hint'>Tipp</localization>
+    <localization string-id='answer'>Vélasz</localization>
+    <localization string-id='solution'>Megoldás</localization>
+    <!-- A group of divisional exercises (with introduction and conclusion) -->
+    <localization string-id='exercisegroup'>Feladatcsoport</localization>
+    <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
+    <localization string-id='biblio'>Életrajzi bejegyzés</localization>
+    <!-- Front matter components -->
+    <localization string-id='toc'>Tartalom</localization>
+    <localization string-id='abstract'>Absztrakt</localization>
+    <localization string-id='preface'>Előszó</localization>
+    <localization string-id='acknowledgement'>Köszönetnyilvánítás</localization>
+    <localization string-id='biography'>Szerzői életrajz</localization>
+    <!-- singular and plural titles for biography subdivision -->
+    <localization string-id='about-author'>A szerzőről</localization>
+    <localization string-id='about-authors'>A szerzőkről</localization>
+    <localization string-id='foreword'>Előszó</localization>
+    <localization string-id='dedication'>Ajánlás</localization>
+    <localization string-id='colophon'>Záradék</localization>
+    <!-- Back matter components -->
+    <!-- index-part is deprecated, but not abandoned          -->
+    <!-- NB: repurpose translations, maybe move appendix here -->
+    <localization string-id='index-part'>Index</localization>
+    <localization string-id='jump-to'>Ugrás ide:</localization>
+    <!-- Parts of the Index -->
+    <localization string-id='index'>Index</localization>
+    <localization string-id='see'>Lásd</localization>
+    <localization string-id='also'>Lásd még</localization>
+    <!-- Notation List headings/foot -->
+    <localization string-id='symbol'>szimbólum</localization>
+    <localization string-id='description'>Leírás</localization>
+    <localization string-id='location'>Hely</localization>
+    <localization string-id='page'>Lap</localization>
+    <localization string-id='continued'>Folytatás a következő lapon</localization>
+    <!-- Navigation Interface elements -->
+    <!-- Assistive "skip to content" link -->
+    <localization string-id='skip-to-content'>Ugrás a fő tartalomjegyzékre</localization>
+    <localization string-id='previous'>Előző</localization>
+    <localization string-id='up'>Fel</localization>
+    <localization string-id='next'>Következő</localization>
+    <!-- Keep these short, so buttons are not overly wide, 4 characters maximum -->
+    <localization string-id='previous-short'>El.</localization>
+    <localization string-id='up-short'>Fel</localization>
+    <localization string-id='next-short'>Köv.</localization>
+    <!-- NB: Use toc from above for both headings and navigation sidebar-->
+    <localization string-id='annotations'>Magyarázatok</localization>
+    <localization string-id='feedback'>Visszacsatolás</localization>
+    <localization string-id='authored'>Authored in</localization>
+    <!-- Parts of memos and letters -->
+    <localization string-id='to'>Kinek:</localization>
+    <localization string-id='from'>Kitől:</localization>
+    <localization string-id='subject'>Tárgy</localization>
+    <localization string-id='date'>Dátum</localization>
+    <localization string-id='copy'>cc</localization>
+    <localization string-id='enclosure'>beleértve</localization>
+    <!-- Various -->
+    <localization string-id='todo'>Tennivaló</localization>
+    <localization string-id='editor'>Szerkesztő</localization>
+    <localization string-id='edition'>Kiadás</localization>
+    <localization string-id='website'>Weboldal</localization>
+    <localization string-id='copyright'>Szerzői jog</localization>
+    <!-- HTML clickables (lowercase strings to click on) -->
+    <localization string-id='permalink'>permalink</localization>
+    <localization string-id='incontext'>szövegkörnyezet</localization>
+    <!-- Sage Cell evaluate button      -->
+    <!-- eg, "Evaluate (Maxima)"        -->
+    <!-- 2017-05-14: 'code' is obsolete -->
+    <!-- This needs to be defined to *something* (English)       -->
+    <!-- else whatever crud ends up on the button kills the cell -->
+    <!-- Translate at first opportunity, please                  -->
+    <localization string-id='evaluate'>Evaluate</localization>
+    <!-- <localization string-id='code'>Kód</localization> -->
+</locale>

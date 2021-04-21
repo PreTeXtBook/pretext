@@ -162,7 +162,7 @@ def asymptote_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
     # consolidated process for four possible output formats
     if outformat in ['html', 'svg', 'png', 'pdf', 'eps']:
         # build command line to suit
-        asy_cli = [asy_executable, '-f', outformat]
+        asy_cli = asy_executable_cmd + ['-f', outformat]
         if outformat in ['pdf', 'eps']:
             asy_cli += ['-noprc', '-iconify', '-tex', 'xelatex', '-batchMask']
         elif outformat in ['svg', 'png']:
@@ -308,6 +308,130 @@ def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, data_
                 subprocess.call(eps_cmd)
                 shutil.copy2(latex_image_eps, dest_dir)
 
+
+#######################
+#
+#  LaTeX Tactile Images
+#
+#######################
+
+def latex_tactile_image_conversion(xml_source, pub_file, stringparams, data_dir, dest_dir, outformat):
+    import os # .chdir()
+    import os.path # join()
+    import subprocess # run() is Python 3.5 (run() is preferable to call())
+    import lxml.etree as ET
+
+    # Outline:
+    #   1.  Locate, isolate, convert math to Unicode braille
+    #   2.  Locate, isolate labels in images, replace math
+    #   3.  Translate labels to Grade 1 + Nemeth, save as XML
+    #   for each image:
+    #     4.  Locate, isolate in TeX file, replace label by exact space for labels' cells
+    #     5.  Process with "latex" to a DVI file
+    #     6.  Process DVI file with  dvisvgm  to make a structured SVG
+    #     7.  Process with XSL to insert braille and other modifications
+
+    # NB: latex (in (5)) and dvisvgm (in (6)) are hard-coded
+
+    _verbose('converting latex-image from {} to {} graphics for placement in {}'.format(xml_source, outformat, dest_dir))
+    # for killing output
+    devnull = open(os.devnull, 'w')
+    tmp_dir = get_temporary_directory()
+    _debug("temporary directory for latex-image tactile graphics: {}".format(tmp_dir))
+    ptx_xsl_dir = get_ptx_xsl_path()
+
+    # 1. Create an XML file of Nemeth representations for entire
+    # document, which will include any math in a label (overkill)
+    math_file = os.path.join(tmp_dir, 'math-representations.xml')
+    mathjax_latex(xml_source, pub_file, math_file, tmp_dir, 'nemeth')
+
+    # 2. Extract labels themselves and replace math bits by Nemeth from (1)
+    # support publisher file, but not subtree argument
+    if pub_file:
+        stringparams['publisher'] = pub_file
+    # Pass the just-created math representation file
+    stringparams['mathfile'] = math_file
+    _verbose('string parameters passed to label extraction stylesheet: {}'.format(stringparams))
+    label_file = os.path.join(tmp_dir, 'latex-image-labels.xml')
+    extraction_xslt = os.path.join(ptx_xsl_dir, 'support', 'extract-latex-image-labels.xsl')
+    # Output is a single file, whose name includes the temporary directory
+    xsltproc(extraction_xslt, xml_source, label_file, None, stringparams)
+
+    # 3. Read all the labels that are a mix of text and Unicode for the math.
+    # Convert each one into ASCII/BRF using the liblouis  lou_translate  tool.
+    # Save into an XML file.
+    label_tree = ET.parse(label_file)
+    label_tree.xinclude()
+    NSMAP = {"pi" : "http://pretextbook.org/2020/pretext/internal"}
+    # Grab internal label elements from label file
+    labels = label_tree.xpath('/pi:latex-image-labels/pi:latex-image-label', namespaces=NSMAP)
+    # initiate XML structure to hold braille labels
+    root = ET.Element('{http://pretextbook.org/2020/pretext/internal}braille-labels', nsmap=NSMAP)
+    # Unicode braille gets translated to ASCII automatically
+    # Convert the remainder to Grade 1
+    liblouis_cmd = ['lou_translate','--forward', 'en-us-g1.ctb']
+    for alabel in labels:
+        # Following is from Python 3.5 documentation
+        # input is basically piped to stdin, which is how lou_translate functions
+        # Setting stdout is necessary and sufficient
+        # universal_newlines is necessary to treat input and output as strings, not byte sequences
+        # may need  to replace universal_newlines by text=True  in later versions
+        result = subprocess.run(liblouis_cmd, input=alabel.text, stdout=subprocess.PIPE, universal_newlines=True)
+        label_element = ET.Element('{http://pretextbook.org/2020/pretext/internal}braille-label', id=alabel.get('id'))
+        label_element.text = result.stdout
+        root.append(label_element)
+    # output the constructed XML full of BRF labels
+    braille_label_file = os.path.join(tmp_dir, 'braille-labels.xml')
+    with open(braille_label_file, 'wb') as bf:
+        bf.write( ET.tostring(root, pretty_print=True, encoding="utf-8", xml_declaration=True) )
+
+    # 4.  Convert each  latex-image  into its own *.tex file, but with a
+    # parameter to the standard stylesheet, have labels replaced by a LaTeX
+    # \rule{}{} that simply creates space for TikZ to place carefully
+    _verbose('applying latex-image-extraction stylesheet with tactile option')
+    extraction_params = stringparams
+    extraction_params['format'] = 'tactile'
+    extraction_params['labelfile'] = braille_label_file
+    extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-latex-image.xsl')
+    # Output is multiple *.tex files
+    xsltproc(extraction_xslt, xml_source, None, tmp_dir, extraction_params)
+
+    # now work in temporary directory for latex runs
+    os.chdir(tmp_dir)
+    # files *only*, from top-level
+    files = list(filter(os.path.isfile, os.listdir(tmp_dir)))
+    for latex_image in files:
+        filebase, extension = os.path.splitext(latex_image)
+        # avoid some XML files left around
+        if extension == '.tex':
+            latex_image_dvi = "{}.dvi".format(filebase)
+            latex_image_svg = "{}.svg".format(filebase)
+
+            # 5. Process to DVI with old-school LaTeX
+            _verbose("converting {} to {}".format(latex_image, latex_image_dvi))
+            latex_cmd = ['latex', "-interaction=batchmode", latex_image]
+            subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+            if not os.path.exists(latex_image_dvi):
+                print('PTX:ERROR: There was a problem compiling {}, so {} was not created'.format(latex_image, latex_image_dvi))
+
+            # 6. Process to SVG with  dvisvgm  utility
+            _verbose("converting {} to {}".format(latex_image_dvi, latex_image_svg))
+            divsvgm_cmd = ['dvisvgm', latex_image_dvi, '--bbox=papersize']
+            subprocess.call(divsvgm_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+            if not os.path.exists(latex_image_svg):
+                print('PTX:ERROR: There was a problem processing {}, so {} was not created'.format(latex_image, latex_image_svg))
+
+            # 7.  Place the label content as SVG "text" elements using SVG
+            # rectangles as the guide to placement, via an XSL stylesheet
+            _verbose('applying latex-image-extraction stylesheet with tactile option')
+            manipulation_params = stringparams
+            manipulation_params['labelfile'] = braille_label_file
+            svg_source = os.path.join(tmp_dir, latex_image_svg)
+            svg_result = os.path.join(dest_dir, latex_image_svg)
+            manipulation_xslt = os.path.join(ptx_xsl_dir, 'support', 'tactile-svg.xsl')
+            xsltproc(manipulation_xslt, svg_source, svg_result, None, manipulation_params)
+
+
 ################################
 #
 #  WeBWorK Extraction Processing
@@ -338,9 +462,9 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
     if pub_file:
         stringparams['publisher'] = pub_file
     _verbose('string parameters passed to extraction stylesheet: {}'.format(stringparams))
-    # execute XSL extraction to get back five dictionaries
+    # execute XSL extraction to get back six dictionaries
     # where the keys are the internal-ids for the problems
-    # origin, seed, source, pghuman, pgdense
+    # origin, copy, seed, source, pghuman, pgdense
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-pg.xsl')
 
@@ -913,13 +1037,18 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
                     server_url.set('hint',hint)
                     server_url.set('solution',solution)
                     server_url.set('domain',ww_domain)
-                    url_shell = "{}?courseID={}&amp;userID={}&amp;password={}&amp;course_password={}&amp;answersSubmitted=0&amp;displayMode=MathJax&amp;outputformat=simple&amp;problemSeed={}&amp;{}"
+                    url_shell = "{}?courseID={}&userID={}&password={}&course_password={}&answersSubmitted=0&displayMode=MathJax&outputformat=simple&problemSeed={}&{}"
                     server_url.text = url_shell.format(ww_domain_path,courseID,userID,password,course_password,seed[problem],source_query)
                     server_url.tail = "\n    "
 
         # Add PG for PTX-authored problems
         # Empty tag with @source for server problems
         pg = ET.SubElement(webwork_reps,'pg')
+        try:
+            pg.set('copied-from',copiedfrom[problem])
+        except Exception:
+            pass
+
         if origin[problem] == 'ptx':
             if badness:
                 pg_shell = "DOCUMENT();\nloadMacros('PGstandard.pl','PGML.pl','PGcourse.pl');\nTEXT(beginproblem());\nBEGIN_PGML\n{}END_PGML\nENDDOCUMENT();"
@@ -1095,6 +1224,7 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
 
     # parse source, no harm to assume
     # xinclude modularization is necessary
+    # NB: see general  "xsltproc()"  for construction of a HUGE parser
     src_tree = ET.parse(xml)
     src_tree.xinclude()
 
@@ -1119,7 +1249,7 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
         msg = ' '.join(["creating all images requires a directory specification",
                         "in a publisher file, and no publisher file has been given"])
         raise ValueError(msg)
-    generated_dir, data_dir, _ = get_image_directories(xml, pub_file)
+    generated_dir, data_dir, _, _, _, _ = get_image_directories(xml, pub_file)
     # correct attribute and not a directory gets caught earlier
     # but could have publisher file and bad elements/attributes
     if not(generated_dir):
@@ -1469,7 +1599,7 @@ def html(xml, pub_file, stringparams, dest_dir):
 #####################
 
 def latex(xml, pub_file, stringparams, out_file, dest_dir):
-    """Convert XML source to LateX and then a PDF in destination directory"""
+    """Convert XML source to LaTeX in destination directory"""
     import os.path # join()
 
     # support publisher file, not subtree argument
@@ -1481,6 +1611,39 @@ def latex(xml, pub_file, stringparams, out_file, dest_dir):
     # Write output into working directory, no scratch space needed
     _verbose('converting {} to LaTeX as {}'.format(xml, derivedname))
     xsltproc(extraction_xslt, xml, derivedname, None, stringparams)
+
+
+###################
+# Conversion to PDF
+###################
+
+def pdf(xml, pub_file, stringparams, out_file, dest_dir):
+    """Convert XML source to a PDF (incomplete)"""
+    import os.path # join()
+    import shutil # copytree
+
+    warning = '\n'.join(['************************************************',
+                         'Conversion to PDF is experimental and incomplete',
+                         '************************************************'])
+    print(warning)
+    #
+    generated_abs, _, external_abs, generated, _, external = get_image_directories(xml, pub_file)
+    # perhaps necessary (so drop "if"), but maybe not; needs to be supported
+    if pub_file:
+        stringparams['publisher'] = pub_file
+    # names for scratch directories
+    tmp_dir = get_temporary_directory()
+    generated_dir = os.path.join(tmp_dir, generated)
+    external_dir = os.path.join(tmp_dir, external)
+    # make the LateX source file in scratch directory
+    latex(xml, pub_file, stringparams, None, tmp_dir)
+    # copy managed, generated images
+    shutil.copytree(generated_abs, generated_dir, dirs_exist_ok=True)
+    # copy externally manufactured images
+    shutil.copytree(external_abs, external_dir, dirs_exist_ok=True)
+
+
+
 
 
 #################
@@ -1517,9 +1680,13 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
     # but the values need to be prepped for lxml use, always
     stringparams = {key:ET.XSLT.strparam(value) for (key, value) in stringparams.items()}
 
-    # parse source, no harm to assume
-    # xinclude modularization is necessary
-    src_tree = ET.parse(xml)
+    # Parse source, no harm to assume
+    # xinclude modularization is necessary.
+    # We build a custom parser without limitations
+    # Seems a depth of 256 was exceeded for an SVG image:
+    # lxml.etree.XMLSyntaxError: Excessive depth in document: 256 use XML_PARSE_HUGE option
+    huge_parser = ET.XMLParser(huge_tree=True)
+    src_tree = ET.parse(xml, parser=huge_parser)
     src_tree.xinclude()
 
     # parse xsl, and build a transformation object
@@ -1539,13 +1706,21 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
         os.chdir(output_dir)
     # clear global errors, apply the xsl transform
     ET.clear_error_log()
-    result_tree = xslt(src_tree, **stringparams)
-    # report any errors
-    messages = xslt.error_log
-    if messages:
-        print('Messages from application of {}:'.format(xsl))
-        for m in messages:
-            print(m.message)
+    try:
+        result_tree = xslt(src_tree, **stringparams)
+        # report any messages, even if successful (indented)
+        messages = xslt.error_log
+        if messages:
+            print('PTX: Successful application of {}, but with messages:'.format(xsl))
+            for m in messages:
+                print('    * ', m.message)
+    except:
+        # report any errors on failure (indented)
+        messages = xslt.error_log
+        if messages:
+            print('PTX: Failed application of {}, with messages:'.format(xsl))
+            for m in messages:
+                print('    * ', m.message)
     os.chdir(owd)
 
     # write a serialized version to a file if
@@ -1804,59 +1979,63 @@ def get_image_directories(xml_source, pub_file):
 
     # Examine /publication/source element carefully for
     # attributes which we code here for convenience
-    gen_attr = 'generated-images'
-    data_attr = 'data-images'
-    ext_attr = 'source-images'
+    gen_attr = 'generated'
+    data_attr = 'data'
+    ext_attr = 'external'
 
     # prepare for relative paths later
     source_dir = get_source_path(xml_source)
 
     # Unknown until running the gauntlet
+    generated_abs = None
+    data_abs = None
+    external_abs = None
     generated = None
     data = None
     external = None
     if pub_file:
         # parse publisher file, xinclude is conceivable
-        # for multiple similar files with common parts
+        # for multiple similar publisher files with common parts
         pub_tree = ET.parse(pub_file)
         pub_tree.xinclude()
         # "source" element => single-item list
         # no "source" element => empty list => triple of None returned
-        element_list = pub_tree.xpath("/publication/source")
+        element_list = pub_tree.xpath("/publication/source/images")
         if element_list:
             attributes_dict = element_list[0].attrib
+            # common error message
+            abs_path_error = ' '.join(['the directory path to data for images, given in the',
+                             'publisher file as "source/images/@{}" must be relative to',
+                             'the PreTeXt source file location, and not the absolute path "{}"'])
             # attribute absent => None
             if gen_attr in attributes_dict.keys():
                 raw_path = attributes_dict[gen_attr]
                 if os.path.isabs(raw_path):
-                    abs_path = raw_path
+                    raise ValueError(abs_path_error.format(data_attr, raw_path))
                 else:
                     abs_path = os.path.join(source_dir, raw_path)
-                generated = verify_input_directory(abs_path)
+                generated = raw_path
+                generated_abs = verify_input_directory(abs_path)
             # attribute absent => None
             if data_attr in attributes_dict.keys():
                 raw_path = attributes_dict[data_attr]
                 if os.path.isabs(raw_path):
-                    msg = ' '.join(['the directory path to data for images, given in the',
-                          'publisher file as "source/@{}" must be relative to',
-                          'the PreTeXt source file location, and not the absolute path "{}"'])
-                    raise ValueError(msg.format(data_attr, raw_path))
+                    raise ValueError(abs_path_error.format(data_attr, raw_path))
                 else:
                     abs_path = os.path.join(source_dir, raw_path)
-                data = verify_input_directory(abs_path)
+                data = raw_path
+                data_abs = verify_input_directory(abs_path)
             # attribute absent => None
             if ext_attr in attributes_dict.keys():
                 raw_path = attributes_dict[ext_attr]
                 if os.path.isabs(raw_path):
-                    msg = ' '.join(['the directory path to source images, given in the',
-                          'publisher file as "source/@{}" must be relative to',
-                          'the PreTeXt source file location, and not the absolute path "{}"'])
-                    raise ValueError(msg.format(ext_attr, raw_path))
+                    raise ValueError(abs_path_error.format(ext_attr, raw_path))
                 else:
                     abs_path = os.path.join(source_dir, raw_path)
-                external = verify_input_directory(abs_path)
+                external = raw_path
+                external_abs = verify_input_directory(abs_path)
     # triple of discovered paths
-    return (generated, data, external)
+    return (generated_abs, data_abs, external_abs, generated, data, external)
 
 
 ########

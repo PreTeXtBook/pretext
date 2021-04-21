@@ -115,6 +115,7 @@ def get_cli_arguments():
         ('braille', 'Nemeth Braille (math elements only)'),
         ('braille-emboss', 'UEB + Nemeth braille, for print'),
         ('braille-electronic', 'UEB + Nemeth Braille, for one-line display'),
+        ('tactile', 'Images with braille labels, etc. (latex-image graphics only)'),
         ('speech', 'Speech (math elements)'),
         ('source', 'Standalone source files'),
         ('latex', 'LaTeX source file'),
@@ -242,6 +243,8 @@ def main():
     elif args.component == 'latex-image':
         if args.format in ['pdf', 'svg', 'png', 'eps', 'source', 'all']:
             ptx.latex_image_conversion(xml_source, publisher_file, stringparams, args.xmlid, data_dir, dest_dir, args.format)
+        elif args.format in ['tactile']:
+            ptx.latex_tactile_image_conversion(xml_source, publisher_file, stringparams, data_dir, dest_dir, args.format)
         else:
             raise NotImplementedError('cannot make LaTeX pictures in "{}" format'.format(args.format))
     elif args.component == 'webwork-tex':
@@ -257,13 +260,15 @@ def main():
     elif args.component == 'mom':
         ptx.mom_static_problems(xml_source, publisher_file, stringparams, args.xmlid, dest_dir)
     elif args.component == 'math':
-        if args.format in ['svg', 'mml', 'braille', 'speech']:
+        if args.format in ['svg', 'mml', 'nemeth', 'speech']:
             ptx.mathjax_latex(xml_source, publisher_file, out_file, dest_dir, args.format)
         else:
             raise NotImplementedError('cannot convert math elements to "{}" format'.format(args.format))
     elif args.component == 'all':
         if args.format == 'html':
             ptx.html(xml_source, publisher_file, stringparams, dest_dir)
+        elif args.format == 'pdf':
+            ptx.pdf(xml_source, publisher_file, stringparams, out_file, dest_dir)
         elif args.format == 'latex':
             ptx.latex(xml_source, publisher_file, stringparams, out_file, dest_dir)
         elif args.format == 'braille-emboss':
