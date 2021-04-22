@@ -145,7 +145,7 @@ objectStructure = {
   "image": {
     "html": {
         "tag": "div",
-        "pieces": ["bareimage"],
+        "pieces": [["[bareimage]",""]],
         "data_editable": "31",
         "cssclass": "image-box",
         "style": "width: 40%; margin-right: 35%; margin-left: 25%"  /* should come from source source? */
@@ -1194,7 +1194,7 @@ function show_source(sibling, relative_placement) {
     var the_pretext_source =  pretext_from_id("", "hPw", "pretext");
 //  expand from top section:  hPw  or top_level_id
 
-    edit_placeholder.insertAdjacentHTML('afterend', '<textarea id="newsource" style="width: 100%; height:30em">' + the_pretext_source + '</textares>')
+    edit_placeholder.insertAdjacentHTML('afterend', '<textarea id="newsource" style="width: 100%; height:30em">' + the_pretext_source + '</textarea>')
 }
 
 
@@ -1909,6 +1909,10 @@ var internalSource = {  // currently the key is the HTML id
            "content": "One way to get a feel for the subject is to consider the types of problems you solve in discrete math.\nHere are a few simple examples:"},
    "ZfE": {"xml:id": "", "permid": "cak", "sourcetag": "p", "title": "", "parent": ["hPw","content"],
            "content": "Ultimately the best way to learn what discrete math is about is to <em>do</em> it. Let's get started! Before we can begin answering more complicated (and fun) problems, we must lay down some foundation. We start by reviewing mathematical statements, sets, and functions in the framework of discrete mathematics."},
+   "PLS": {"xml:id": "", "permid": "PLS", "sourcetag": "p", "title": "", "parent": ["akX","content"],
+           "content": "dis·crete / dis'krët."},
+   "vTb": {"xml:id": "", "permid": "vTb", "sourcetag": "p", "title": "", "parent": ["akX","content"],
+           "content": "<em>Adjective</em>: Individually separate and distinct."},
    "cak": {"xml:id": "", "permid": "cak", "sourcetag": "p", "title": "", "parent": ["akX","content"],
            "content": "<&>357911<;>: separate - detached - distinct - abstract."},
    "akX": {"xml:id": "", "permid": "akX", "sourcetag": "blockquote", "title": "", "parent": ["hPw","content"],
@@ -2188,7 +2192,8 @@ function assemble_internal_version_changes() {
         }
         internalSource[image_being_changed]["src"] = image_src;
         console.log("image being changed is", internalSource[image_being_changed]);
-        possibly_changed_ids_and_entry.push([owner_of_change, "image"]);
+    //    possibly_changed_ids_and_entry.push([owner_of_change, "image"]);
+        possibly_changed_ids_and_entry.push([image_being_changed, "image"]);
 
 
     } else {
@@ -2238,7 +2243,52 @@ function wrap_tag(tag, content, layout, attribute_values) {
     return opening_tag + content + closing_tag
 }
 
-function pretext_from_source(text, format) {
+function output_from_source(the_object, output_structure, format) {
+
+    // format: html, pretext (or source?)
+    var the_answer = "";
+    var output_tag = output_structure.tag;
+    var tag_display = "block";
+
+    var output_attributes = [];
+    if ("attributes" in output_structure) {
+        output_attributes = output_structure.attributes;
+    }
+    var output_attributes_values = [];
+    for (var j=0; j < output_attributes.length; ++j) {
+        var attr_name = output_attributes[j];
+        var attr_val = the_object[attr_name];
+        if (attr_val) {
+            output_attributes_values.push([attr_name, attr_val])
+        }
+    }
+
+    console.log("output_structure", output_tag, "is", output_structure);
+    console.log("output_attributes_values", output_attributes_values);
+    for (var j=0; j < output_structure.pieces.length; ++j) {
+        var this_piece_output = "";
+        var this_display = "";   // how do we determin that?  3rd entry needed in pieces?
+        var [this_piece, this_tag] = output_structure.pieces[j];
+        console.log("this_piece", this_piece);
+        if (this_piece.startsWith("[")) {
+            this_piece = this_piece.slice(1,-1);
+  //// ?????          this_piece_output += output_from_source(contained_text, the_object, objectStructure[this_piece], format)
+            this_piece_output += output_from_source(the_object, objectStructure[this_piece], format)
+        } else if (this_piece in the_object) {
+            this_piece_output = output_from_text(the_object[this_piece], format);
+        } else {
+            console.log("missing piece:", this_tag, "with no", this_piece)
+        }
+        if (this_tag) { console.log("     WRAP on tag", this_tag, "from", this_piece)};
+        the_answer += wrap_tag(this_tag, this_piece_output, this_display, [])
+    }
+
+    the_answer = wrap_tag(output_tag, the_answer, tag_display, output_attributes_values)
+
+    return the_answer
+}
+
+function output_from_text(text, format) {
     if (text.includes("<&>")) {
         return text.replace(/<&>(.*?)<;>/g, function (match, newid) { return pretext_from_id(match, newid, format)})
     } else {
@@ -2257,20 +2307,29 @@ function pretext_from_id(match, the_id, format) {
     }
     var src_tag = the_object.sourcetag;
     console.log("the_object",the_object);
-    var src_structure;
+    var output_structure;
     if (src_tag in objectStructure) {
-        src_structure = objectStructure[src_tag][format];
+        output_structure = objectStructure[src_tag][format];
     } else {
         console.log("concern: unknown structure:", src_tag);
         // so make reasonable assumptions about the structure
-        src_structure = {
+        output_structure = {
             "tag": src_tag,
-            "pieces": ["content"]
+            "pieces": [["content", ""]]
         }
         tag_display = "inline"
     }
 
-    var pretext_tag = src_structure.tag;
+    console.log("output_structure", output_structure);
+    var output_tag = output_structure.tag;
+
+
+    the_answer = output_from_source(the_object, output_structure, format);
+
+    return the_answer
+
+/*
+
     if (pretext_tag == "title") { tag_display = "title" }
 
     var pretext_attributes = [];
@@ -2293,7 +2352,7 @@ function pretext_from_id(match, the_id, format) {
         var [this_piece, this_tag] = src_structure.pieces[j];
         console.log("this_piece", this_piece);
         if (this_piece in the_object) {
-            this_piece_src = pretext_from_source(the_object[this_piece], format);
+            this_piece_src = output_from_text(the_object[this_piece], format);
             if (this_tag) { console.log("     WRAP on tag", this_tag, "from", this_piece)};
             the_answer += wrap_tag(this_tag, this_piece_src, this_display, [])
         } else {
@@ -2304,6 +2363,7 @@ function pretext_from_id(match, the_id, format) {
     the_answer = wrap_tag(pretext_tag, the_answer, tag_display, pretext_attributes_values)
 
     return the_answer
+*/
 }
 
 function expand_condensed_source_html(text, context) {
@@ -2446,6 +2506,12 @@ function html_from_internal_id(the_id, is_inner) {
                 this_piece_html += '></div>'
             } else {
                 console.log("not sure how to make the piece", piece_type)
+
+                if (!piece_type.endsWith("*")) { // temporary work-around
+                this_piece_html = pretext_from_id("", the_id, "html");
+                }
+
+/*
                 var object_statement = the_object[piece_type];
                 if (piece_type.endsWith("*")) {
                     console.log("skipping optional piece", piece_type)
@@ -2454,6 +2520,7 @@ function html_from_internal_id(the_id, is_inner) {
                     this_piece_html =  expand_condensed_source_html(object_statement);
                     console.log("but we tried anyway, and now have", this_piece_html)
                 }
+*/
             }
             console.log("made the piece", this_piece_html);
             object_html_pieces_html[piece_type] = this_piece_html
@@ -2534,6 +2601,7 @@ function insert_html_version(these_changes) {
         this_object_id = possibly_changed_ids_and_entry[j][0];
         this_object_entry = possibly_changed_ids_and_entry[j][1];
         this_object_oldornew = possibly_changed_ids_and_entry[j][2];
+        console.log("j=", j, "this thing", possibly_changed_ids_and_entry[j]);
         this_object = internalSource[this_object_id];
         console.log(j, "this_object", this_object);
         if (this_object["sourcetag"] == "p" || this_object["sourcetag"] == "li") {
