@@ -415,6 +415,10 @@ var sidebyside_instances = {
 Object.assign(objectStructure, sidebyside_instances);
 
 var pretext_empty_tags = ["image"];
+var tag_display = {  /* the default is "block" */
+    "inline": ["m", "em", "ellipsis"], 
+    "title": ["title", "idx"]
+} 
 
 function value_from_source(name, src) {
     console.log("     value_from_source src", src);
@@ -795,7 +799,7 @@ function menu_options_for(object_id, component_type, level) {
                  ["modify", "rightplus", "increase right margin"],
                  ["modify", "done", "done modifying"]
              ];
-         } else if (environment_instances["project-like"].includes(component_type)) {
+         } else if (environment_instances["project-like"].includes(component_type) || component_type == "task") {
                      // needs to also include exercise-like
              m_d_options = [
                  ["modify", "enlarge", "more space"],
@@ -1264,17 +1268,17 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
     var current_location = current_editing["location"][current_level];
     console.log("  UUU  current_editing", current_editing["level"], current_editing["location"].length, current_editing["tree"].length, current_editing["tree"][current_editing["level"]])
     if (relative_placement == "beforebegin" || relative_placement == "afterbegin") {  
-        neighbor_with_new = '<&>' + new_id + '<;>\n' + '$1';
+        neighbor_with_new = '<&>' + new_id + '<;>' + '$1';
     }
     else if (relative_placement == "afterend" || relative_placement == "beforeend"){
-        neighbor_with_new = '$1' + '\n<&>' + new_id + '<;>'
+        neighbor_with_new = '$1' + '<&>' + new_id + '<;>'
         current_location += 1
     }
     console.log("makking new_arrangement from", object_neighbor, "by", neighbor_with_new);
 
     if (relative_placement == "atend" || relative_placement == "replace" ) {
    // this is not quire gight, but it works for hint/answer/solution
-        new_arrangement = the_current_arrangement + '\n<&>' + new_id + '<;>';
+        new_arrangement = the_current_arrangement + '<&>' + new_id + '<;>';
     } else {
         new_arrangement = the_current_arrangement.replace(object_neighbor, neighbor_with_new);
     }
@@ -1414,10 +1418,10 @@ function edit_in_place(obj, oldornew) {
         this_sbsrow.setAttribute('style', "margin-left:" + margin_left/1.2 + "%; margin-right:" + margin_right/1.2 + "%;");
 
         var idsOfSBSPanel = internalSource[idOfSBSRow]["content"]
-        idsOfSBSPanel = idsOfSBSPanel.replace(/^ *<&>/, '');
-        idsOfSBSPanel = idsOfSBSPanel.replace(/<;> *$/, '');
+        idsOfSBSPanel = idsOfSBSPanel.replace(/^\s*<&>/, '');
+        idsOfSBSPanel = idsOfSBSPanel.replace(/<;>\s*$/, '');
         console.log('a idsOfSBSPanel', idsOfSBSPanel);
-        idsOfSBSPanel = idsOfSBSPanel.replace(/> +</g, '><');
+        idsOfSBSPanel = idsOfSBSPanel.replace(/>\s+</g, '><');
         console.log('b idsOfSBSPanel', idsOfSBSPanel);
         var idsOfSBSPanelList = idsOfSBSPanel.split("<;><&>");
         console.log('c idsOfSBSPanel', idsOfSBSPanelList);
@@ -1457,7 +1461,8 @@ function modify_by_id(theid, modifier) {
     if (internalSource[theid]["sourcetag"] == "sbspanel") {
         modify_by_id_sbs(theid, modifier)
 //    } else if (internalSource[theid]["sourcetag"] == "exercise") {
-    } else if (environment_instances["project-like"].includes(internalSource[theid]["sourcetag"])) {
+    } else if (environment_instances["project-like"].includes(internalSource[theid]["sourcetag"]) 
+                || internalSource[theid]["sourcetag"] == "task") {
         modify_by_id_workspace(theid, modifier)
     } else {
         modify_by_id_img(theid, modifier)
@@ -1564,8 +1569,8 @@ function modify_by_id_sbs(theid, modifier) {
     var marginleft = parseInt(this_sbsrow_source["margin-left"]);
     var marginright = parseInt(this_sbsrow_source["margin-right"]);
     var these_siblings = this_sbsrow_source["content"];
-    these_siblings = these_siblings.replace(/^ *<&> */, "");
-    these_siblings = these_siblings.replace(/ *<;> *$/, "");
+    these_siblings = these_siblings.replace(/^\s*<&>\s*/, "");
+    these_siblings = these_siblings.replace(/\s*<;>\s*$/, "");
     these_siblings = these_siblings.replace(/>\s*</g, "><");
     console.log("these_siblings", these_siblings);
     these_siblings_list = these_siblings.split("<;><&>");
@@ -1918,7 +1923,7 @@ var internalSource = {  // currently the key is the HTML id
    "akX": {"xml:id": "", "permid": "akX", "sourcetag": "blockquote", "title": "", "parent": ["hPw","content"],
            "content": "<&>PLS<;>\n<&>vTb<;>\n<&>cak<;>"},
    "UvL": {"xml:id": "", "permid": "UvL", "sourcetag": "p", "title": "","parent": ["hPw","content"],
-           "content": "    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n <ellipsis/>.\n Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n What sort of problems?\n Okay, those that involve numbers,\n functions, lines, triangles,\n <ellipsis/>.\n Whatever your conception of what mathematics is,\n try applying the concept of <q>discrete</q> to it, as defined above.\n Some math fundamentally deals with <em>stuff</em>\n that is individually separate and distinct."},
+           "content": "    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n     In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n <ellipsis/>.\n Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n What sort of problems?\n Okay, those that involve numbers,\n functions, lines, triangles,\n <ellipsis/>.\n Whatever your conception of what mathematics is,\n try applying the concept of <q>discrete</q> to it, as defined above.\n Some math fundamentally deals with <em>stuff</em>\n that is individually separate and distinct."},
    "357911": {"xml:id": "356711", "permid": "", "sourcetag": "em", "title": "",
            "content": 'Synonyms'},
    "sYv": {"xml:id": "", "permid": "sYv", "sourcetag": "p", "parent": ["hPw","content"],
@@ -2204,11 +2209,12 @@ function assemble_internal_version_changes() {
     return [nature_of_the_change, location_of_change, possibly_changed_ids_and_entry]
 }
 
-function wrap_tag(tag, content, layout, attribute_values) {
+function wrap_tag(tag, content, attribute_values) {
     // layout: inline or block or title
     // is this the right place to handle empty content?
     if (!content && !tag) { return "" }
     if (!content && !pretext_empty_tags.includes(tag)) { return "" }
+    if (!tag) { return content }
 
     if (attribute_values.length) {
         console.log("tag", tag, "has attribute_values", attribute_values)
@@ -2216,6 +2222,7 @@ function wrap_tag(tag, content, layout, attribute_values) {
 
     var opening_tag = closing_tag = "";
 
+    if (content.includes("hard")) { console.log("content",content) }
     if (tag) {
         opening_tag = "<" + tag;
         for (var j=0; j < attribute_values.length; ++j) {
@@ -2231,15 +2238,20 @@ function wrap_tag(tag, content, layout, attribute_values) {
     } else if (tag) {
         opening_tag += ">";
     }
+    if (content.includes("hard")) { console.log("2 ---- content",content); console.log("opening_tag", opening_tag) }
 
-    if (["block", "title"].includes(layout)) {
+    if (tag_display["inline"].includes(tag)) {
+        // do nothing
+    } else if (tag_display["title"].includes(tag)) {
         opening_tag = "\n" + opening_tag;
         closing_tag = closing_tag + "\n"
+    } else {  //the default
+        opening_tag = "\n" + opening_tag + "\n";
+        if (closing_tag) {
+            closing_tag = "\n" + closing_tag + "\n"
+        }
     }
-    if (["block"].includes(layout)) {
-        opening_tag = opening_tag + "\n";
-        closing_tag = "\n" + closing_tag
-    }
+    if (content.includes("hard")) { console.log("3 ----- content",content); console.log("opening_tag", opening_tag) }
     return opening_tag + content + closing_tag
 }
 
@@ -2248,7 +2260,6 @@ function output_from_source(the_object, output_structure, format) {
     // format: html, pretext (or source?)
     var the_answer = "";
     var output_tag = output_structure.tag;
-    var tag_display = "block";
 
     var output_attributes = [];
     if ("attributes" in output_structure) {
@@ -2267,7 +2278,6 @@ function output_from_source(the_object, output_structure, format) {
     console.log("output_attributes_values", output_attributes_values);
     for (var j=0; j < output_structure.pieces.length; ++j) {
         var this_piece_output = "";
-        var this_display = "";   // how do we determin that?  3rd entry needed in pieces?
         var [this_piece, this_tag] = output_structure.pieces[j];
         console.log("this_piece", this_piece);
         if (this_piece.startsWith("[")) {
@@ -2280,17 +2290,17 @@ function output_from_source(the_object, output_structure, format) {
             console.log("missing piece:", this_tag, "with no", this_piece)
         }
         if (this_tag) { console.log("     WRAP on tag", this_tag, "from", this_piece)};
-        the_answer += wrap_tag(this_tag, this_piece_output, this_display, [])
+        the_answer += wrap_tag(this_tag, this_piece_output, [])
     }
 
-    the_answer = wrap_tag(output_tag, the_answer, tag_display, output_attributes_values)
+    the_answer = wrap_tag(output_tag, the_answer, output_attributes_values)
 
     return the_answer
 }
 
 function output_from_text(text, format) {
     if (text.includes("<&>")) {
-        return text.replace(/<&>(.*?)<;>/g, function (match, newid) { return pretext_from_id(match, newid, format)})
+        return text.replace(/\s*<&>(.*?)<;>\s*/g, function (match, newid) { return pretext_from_id(match, newid, format)})
     } else {
         return text
     }
@@ -2371,9 +2381,9 @@ function expand_condensed_source_html(text, context) {
     if (text.includes("<&>")) {
         console.log("     qqqqq      expand_condensed_source_html", text);
         if (context == "edit") {
-            return text.replace(/<&>(.*?)<;>/g,expand_condensed_src_edit)
+            return text.replace(/\s*<&>(.*?)<;>\s*/g,expand_condensed_src_edit)
          } else {
-            return text.replace(/<&>(.*?)<;>/g,expand_condensed_src_html)
+            return text.replace(/\s*<&>(.*?)<;>\s*/g,expand_condensed_src_html)
          }
     } else {
     console.log("returning text XX" + text.substring(0,17) + "YY");
