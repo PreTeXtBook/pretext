@@ -345,7 +345,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="($exercise.inline.statement = 'yes') or
                         ($exercise.inline.statement = 'no')">
-            <xsl:value-of select="$exercise.inline.hint" />
+            <xsl:value-of select="$exercise.inline.statement" />
         </xsl:when>
         <!-- deprecated, but still honored, though with no error-checking, -->
         <!-- erroneous values will fall into default of replacement switch -->
