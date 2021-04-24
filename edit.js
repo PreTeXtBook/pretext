@@ -60,8 +60,9 @@ objectStructure = {
   "p": {
     "html": {
         "tag": "p",
-        "pieces": ["content"],
-        "data_editable": "99"
+        "pieces": [["content", ""]],
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>[data_editable]<;>"', 'tabindex="-1"'],
+        "data_editable": "99a"
     },
     "pretext": {
         "tag": "p",
@@ -75,14 +76,15 @@ objectStructure = {
   "li": {
     "html": {
         "tag": "li",
-        "pieces": ["content"]
+        "pieces": [["content", ""]],
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>[data_editable]<;>"', 'tabindex="-1"'],
+        "data_editable": "98a"
     },
     "pretext": {
         "tag": "li",
         "pieces": [["title", "title"], ["content", ""]]
     },
     "source": {
-        "tag": "li",
         "pieces": [["title", ""], ["content", "p"]]
     }
   },
@@ -90,7 +92,8 @@ objectStructure = {
   "blockquote": {
     "html": {
         "tag": "blockquote",
-        "pieces": ["content", "attribution"],
+        "pieces": [["content", ""], ["attribution", ""]],
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>[data_editable]<;>"', 'tabindex="-1"', 'class="<&>[cssclass]"'],
         "cssclass": "blockquote",
         "data_editable": "44?"
     },
@@ -99,7 +102,6 @@ objectStructure = {
         "pieces": [["content", ""], ["attribution", "attribution"]],
     },
     "source": {
-        "tag": "blockquote",
         "pieces": [["content", "p"], ["attribution", ""]]  // attribution can contain a "line".  come back to that
     }
   },
@@ -107,38 +109,17 @@ objectStructure = {
   "list": {
     "html": {
         "tag": "ol",
-        "pieces": ["content"],
-        "data_editable": "9??"
+        "pieces": [["content", ""]],
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>[data_editable]<;>"', 'tabindex="-1"']
     },
     "pretext": {
         "tag": "ol",
         "pieces": [["content", ""]],
-        "attributes": ["list-style-type"]
+        "attributes": [["list-style-type", "A"]]
     },
     "source": {
-        "tag": "list",
         "pieces": [["title", ""], ["content", "li"]],
         "attributes": [["list-style-type", "A"]]
-    }
-  },
-
-  "OLDimage": {
-    "html": {
-        "tag": "img",
-        "pieces": [],   /* can we just omit this line? */
-        "data_editable": "31",
-        "attributes": ["src", "alt"],
-        "style": "width: 50%; margin-right: 25%; margin-left: 25%"  /* should come from source source? */
-    },
-    "pretext": {
-        "tag": "image",
-        "pieces": [],
-        "attributes": ["src", "alt"]
-    },
-    "source": {
-        "tag": "image",
-        "pieces": [["",""]],
-        "attributes": [["src", ""], ["width", ""], ["alt", ""]]
     }
   },
 
@@ -146,48 +127,28 @@ objectStructure = {
     "html": {
         "tag": "div",
         "pieces": [["[bareimage]",""]],
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>[data_editable]<;>"', 'tabindex="-1"', 'class="<&>[cssclass]<;>"', 'style="width: <&>width<;>%; margin-right: <&>marginright<;>%; margin-left: <&>marginleft<;>%"'],
         "data_editable": "31",
         "cssclass": "image-box",
-        "style": "width: 40%; margin-right: 35%; margin-left: 25%"  /* should come from source source? */
+        "style": "width: 20%; margin-right: 55%; margin-left: 25%"  /* not used / should come from source source? */
     },
     "pretext": {
         "tag": "image",
         "pieces": [],
-        "attributes": ["src", "alt"]
+        "attributes": ['src="<&>src<;>"', 'alt="<&>alt<;>"']
     },
     "source": {
         "tag": "image",
         "pieces": [["",""]],
-        "attributes": [["src", ""], ["width", ""], ["alt", ""]]
-    }
-  },
-
-  "OLDbareimage": {  /* actually, the holder of an img */
-    "html": {
-        "tag": "div",
-        "cssclass": "image-box",
-        "pieces": ["content"],
-        "data_editable": "30",
-        "style": "width: 50%; margin-right: 25%; margin-left: 25%"  /* should come from source source? */
-    },
-    "pretext": {
-        "tag": "",
-        "pieces": []
-    },
-    "source": {
-        "pieces": [["content","image"]],
-        "attributes": [["class", "image-box"], ["style", "width: 50%; margin-right: 25%; margin-left: 25%"]]
+        "attributes": [["src", ""], ["width", "40"], ["marginleft", "20"], ["marginright", "40"], ["alt", ""]]
     }
   },
 
   "bareimage": {
     "html": {
         "tag": "img",
-        "cssclass": "contained",
         "pieces": [],
-        "attributes": ["src", "alt"],
-        "data_editable": "30",
-        "style": "width: 50%; margin-right: 25%; margin-left: 25%"  /* should come from source source? */
+        "attributes": ['src="<&>src<;>"', 'alt="<&>alt<;>"', 'style="contained"'],
     }
   },
 
@@ -195,9 +156,9 @@ objectStructure = {
     "html": {
         "tag": "article",
         "cssclass": "proof",
-        "pieces": ["heading", "content"],
-        "data_editable": "60",
-        "heading": "proof_heading"
+        "pieces": ["proof_heading", "content"],
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>[data_editable]<;>"', 'tabindex="-1"', 'class="<&>[cssclass]<;>"'],
+        "data_editable": "60"
     },
     "pretext": {
         "tag": "proof",
@@ -213,7 +174,8 @@ objectStructure = {
         "tag": "article",
         "cssclass": "remark-like",
         "data_editable": "92",
-        "pieces": ["heading", "statement"],
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>[data_editable]<;>"', 'tabindex="-1"', 'class="<&>[cssclass]<;>"'],
+        "pieces": ["[heading]", "statement"],
         "heading": "theorem_like_heading"
     },
     "pretext": {
@@ -246,8 +208,10 @@ objectStructure = {
     "html": {
         "tag": "article",
         "cssclass": "definition-like",
-        "data_editable": "95",
-        "pieces": ["heading", "statement"],
+        "data_editable": "95a",
+ //       "pieces": [["[theorem_like_heading]", ""], ["statement", ""]],
+        "pieces": [["statement", ""]],
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>[data_editable]<;>"', 'tabindex="-1"', 'class="<&>[cssclass]<;>"'],
         "heading": "theorem_like_heading"
     },
     "pretext": {
@@ -385,8 +349,12 @@ for (const [owner, instances] of Object.entries(environment_instances)) {
         objectStructure[this_tag] = {
             "owner": owner,
             "html": {
+                "tag":  objectStructure[owner].html.tag,
+                "pieces": objectStructure[owner].html.pieces,
+                "attributes": objectStructure[owner].html.attributes,
                 "cssclass": cssclass_base + " " + this_tag,
-                "data_editable": data_editable_base + j.toString()
+                "data_editable": data_editable_base + j.toString(),
+                "heading": objectStructure[owner].html.heading
             },
             "pretext": {
                 "tag": this_tag,
@@ -414,10 +382,12 @@ var sidebyside_instances = {
 
 Object.assign(objectStructure, sidebyside_instances);
 
-var pretext_empty_tags = ["image"];
+// shoudl we distinguish empty tags by format?
+// these tags are html an dpretext
+var pretext_empty_tags = ["img", "image"];
 var tag_display = {  /* the default is "block" */
-    "inline": ["m", "em", "ellipsis"], 
-    "title": ["title", "idx"]
+    "inline": ["m", "em", "ellipsis", "span"], 
+    "title": ["title", "idx", "h1", "h2", "h3", "h4", "h5", "h6"]
 } 
 
 function value_from_source(name, src) {
@@ -1442,10 +1412,20 @@ function edit_in_place(obj, oldornew) {
         console.log("create the object, then edit p in place", obj);
 
         var this_object = html_from_internal_id(new_id, "");
-        $("#" + thisID).replaceWith(this_object);
+  //      $("#" + thisID).replaceWith(this_object[0]);    // why [0]?  decide what html_from_internal_id should return
+        var where_it_goes = document.getElementById(thisID);
+        where_it_goes.insertAdjacentHTML('afterend', this_object[0]);
+        where_it_goes.remove();
+        var where_it_is = document.getElementById(thisID);
+      
 
-        var empty_p_child = $(this_object).find("p:empty");
+        console.log("added this_object", this_object);
+        console.log("where it is", where_it_is);
+
+ //       var empty_p_child = $(this_object).find("p:empty");
+        var empty_p_child = $(where_it_is).find("p");
         console.log("found the empty p", empty_p_child);
+        console.log("found the empty p[0]", empty_p_child[0]);
         edit_in_place(empty_p_child[0], "new");
       }
 
@@ -1497,17 +1477,20 @@ function modify_by_id_workspace(theid, modifier) {
  
 function modify_by_id_img(theid, modifier) {
 
-    var the_sizes = internalSource[theid]["style"];
+//    var the_sizes = internalSource[theid]["style"];
 
 //modify: enlarge, shrink, left, right, ??? done
 
 // make the data structure better, then delete this comment
 // currently style looks like "width: 66%; margin-right: 17%; margin-left: 17%"
-    the_sizes = the_sizes.replace(/( |%)/g, "");
-    the_sizes = the_sizes.replace(/;/g, ":");
-    console.log("the_sizes, modified", the_sizes);
-    console.log("the_sizes, split", the_sizes.split(":"));
-    var [,width, , marginright, , marginleft] = the_sizes.split(":");
+//    the_sizes = the_sizes.replace(/( |%)/g, "");
+//    the_sizes = the_sizes.replace(/;/g, ":");
+//    console.log("the_sizes, modified", the_sizes);
+//    console.log("the_sizes, split", the_sizes.split(":"));
+//    var [,width, , marginright, , marginleft] = the_sizes.split(":");
+    var width = internalSource[theid]["width"];
+    var marginleft = internalSource[theid]["marginleft"];
+    var marginright = internalSource[theid]["marginright"];
     console.log('width, , marginright, , marginleft', width, "mr", marginright, "ml",  marginleft);
     width = parseInt(width);
     marginright = parseInt(marginright);
@@ -1518,7 +1501,7 @@ function modify_by_id_img(theid, modifier) {
     if (modifier == "shrink") { scale_direction = -1 }
     else if (modifier == "left") { moving_direction = -1 }
     if ("enlarge shrink".includes(modifier)) {
-        if ((width >= 120 && scale_direction == 1) || (width <= 0 && scale_direction == -1)) {
+        if ((width >= 100 && scale_direction == 1) || (width <= 0 && scale_direction == -1)) {
             console.log("can't go above 100 or below 0");
             return
         } else {
@@ -1554,7 +1537,10 @@ function modify_by_id_img(theid, modifier) {
     the_new_sizes += "margin-right: " + marginright + "%;";
     the_new_sizes += "margin-left: " + marginleft + "%;";
 
-    internalSource[theid]["style"] = the_new_sizes;
+//    internalSource[theid]["style"] = the_new_sizes;
+    internalSource[theid]["width"] = width;
+    internalSource[theid]["marginleft"] = marginleft;
+    internalSource[theid]["marginright"] = marginright;
 
     document.getElementById(theid).setAttribute("style", the_new_sizes);
 }
@@ -2136,7 +2122,7 @@ function assemble_internal_version_changes() {
             } else {  // a newly created paragraph
                 var this_object_internal = {"sourcetag": "p", "title": ""}; //p don't have title
                 this_object_label = randomstring();
-                this_object_internal["xmlid"] = this_object_label;
+                this_object_internal["xml:id"] = this_object_label;
                 this_object_internal["permid"] = "";
                 this_object_internal["parent"] = parent_and_location;
 
@@ -2212,8 +2198,9 @@ function assemble_internal_version_changes() {
 function wrap_tag(tag, content, attribute_values) {
     // layout: inline or block or title
     // is this the right place to handle empty content?
+    console.log("calling wrap_tag", "tag", tag, "content", content, "attribute_values", attribute_values);
     if (!content && !tag) { return "" }
-    if (!content && !pretext_empty_tags.includes(tag)) { return "" }
+    if (!content && !pretext_empty_tags.includes(tag) && tag != "p") { return "" }
     if (!tag) { return content }
 
     if (attribute_values.length) {
@@ -2226,8 +2213,9 @@ function wrap_tag(tag, content, attribute_values) {
     if (tag) {
         opening_tag = "<" + tag;
         for (var j=0; j < attribute_values.length; ++j) {
-            var [name, value] = attribute_values[j];
-            opening_tag += ' ' + name + '="' + value + '"'
+     //       var [name, value] = attribute_values[j];
+     //       opening_tag += ' ' + name + '="' + value + '"'
+            opening_tag += ' ' + attribute_values[j]
         }
   //      opening_tag += ">";
         closing_tag = "</" + tag + ">";
@@ -2250,13 +2238,14 @@ function wrap_tag(tag, content, attribute_values) {
         if (closing_tag) {
             closing_tag = "\n" + closing_tag + "\n"
         }
-    }
+	    }
     if (content.includes("hard")) { console.log("3 ----- content",content); console.log("opening_tag", opening_tag) }
     return opening_tag + content + closing_tag
 }
 
 function output_from_source(the_object, output_structure, format) {
 
+    console.log("calling output_from_source", "the_object", the_object, "output_structure", output_structure, "format", format);
     // format: html, pretext (or source?)
     var the_answer = "";
     var output_tag = output_structure.tag;
@@ -2268,9 +2257,19 @@ function output_from_source(the_object, output_structure, format) {
     var output_attributes_values = [];
     for (var j=0; j < output_attributes.length; ++j) {
         var attr_name = output_attributes[j];
-        var attr_val = the_object[attr_name];
+ //       var attr_val = the_object[attr_name];
+        var attr_val = attr_name;
+        attr_val = attr_val.replace(/<&>(.*?)<;>/g, function (match, newid) { 
+               if (newid.startsWith("[")) {
+                   newid = newid.slice(1,-1);
+                   return output_structure[newid]
+               } else {
+                   return the_object[newid]
+               }
+             });
         if (attr_val) {
-            output_attributes_values.push([attr_name, attr_val])
+      //      output_attributes_values.push([attr_name, attr_val])
+            output_attributes_values.push(attr_val)
         }
     }
 
@@ -2279,11 +2278,11 @@ function output_from_source(the_object, output_structure, format) {
     for (var j=0; j < output_structure.pieces.length; ++j) {
         var this_piece_output = "";
         var [this_piece, this_tag] = output_structure.pieces[j];
-        console.log("this_piece", this_piece);
+        console.log(j, "this_piece", this_piece);
         if (this_piece.startsWith("[")) {
             this_piece = this_piece.slice(1,-1);
   //// ?????          this_piece_output += output_from_source(contained_text, the_object, objectStructure[this_piece], format)
-            this_piece_output += output_from_source(the_object, objectStructure[this_piece], format)
+            this_piece_output += output_from_source(the_object, objectStructure[this_piece][format], format)
         } else if (this_piece in the_object) {
             this_piece_output = output_from_text(the_object[this_piece], format);
         } else {
@@ -2293,12 +2292,14 @@ function output_from_source(the_object, output_structure, format) {
         the_answer += wrap_tag(this_tag, this_piece_output, [])
     }
 
+    console.log("outer wrap tag");
     the_answer = wrap_tag(output_tag, the_answer, output_attributes_values)
 
     return the_answer
 }
 
 function output_from_text(text, format) {
+    console.log("output_from_text of ", text, "with format", format);
     if (text.includes("<&>")) {
         return text.replace(/\s*<&>(.*?)<;>\s*/g, function (match, newid) { return pretext_from_id(match, newid, format)})
     } else {
@@ -2308,7 +2309,6 @@ function output_from_text(text, format) {
 
 function pretext_from_id(match, the_id, format) {
     var the_answer = "";
-    var tag_display = "block";   // that shoudl be in the source description (objectStructure)?
     console.log("expanding the_id", the_id);
     var the_object = internalSource[the_id];
     if (!the_object) {
@@ -2327,12 +2327,10 @@ function pretext_from_id(match, the_id, format) {
             "tag": src_tag,
             "pieces": [["content", ""]]
         }
-        tag_display = "inline"
     }
 
     console.log("output_structure", output_structure);
-    var output_tag = output_structure.tag;
-
+ //   var output_tag = output_structure.tag;
 
     the_answer = output_from_source(the_object, output_structure, format);
 
@@ -2409,6 +2407,7 @@ function html_from_internal_id(the_id, is_inner) {
     var sourcetag = the_object["sourcetag"];
     console.log("which has tag", sourcetag);
 
+    var html_of_this_object;
     var the_html_objects = [];
 
     if (false && sourcetag == "image") {
@@ -2427,6 +2426,22 @@ function html_from_internal_id(the_id, is_inner) {
         html_of_this_object = '<img src="' + the_src + '" id="' + the_id + '">';
 
         the_html_objects.push(html_of_this_object);
+    } else if (sourcetag == "image") {
+
+        html_of_this_object = pretext_from_id("", the_id, "html");
+        console.log("html_of_this_object", html_of_this_object);
+        the_html_objects.push(html_of_this_object);
+
+    } else if (sourcetag == "p") {
+        html_of_this_object = pretext_from_id("", the_id, "html");
+        console.log("html_of_this_object", html_of_this_object);
+        the_html_objects.push(html_of_this_object);
+
+    } else if (sourcetag == "definition") {
+        html_of_this_object = pretext_from_id("", the_id, "html");
+        console.log("html_of_this_object", html_of_this_object);
+        the_html_objects.push(html_of_this_object);
+
     } else if (sourcetag in inline_tags) {   // assume is_inner?
         var opening_tag = inline_tags[sourcetag][1][0];
         opening_tag += ' id="' + the_id + '"data-editable="50" tabindex="-1">';
@@ -2615,6 +2630,13 @@ function insert_html_version(these_changes) {
         this_object = internalSource[this_object_id];
         console.log(j, "this_object", this_object);
         if (this_object["sourcetag"] == "p" || this_object["sourcetag"] == "li") {
+
+            var this_new_object = html_from_internal_id(this_object_id);
+            console.log("inserting",this_new_object,"before",location_of_change);
+            location_of_change.insertAdjacentHTML('beforebegin', this_new_object[0]);
+            object_as_html = document.getElementById(this_object_id);
+
+/*
             object_as_html = document.createElement(this_object["sourcetag"]);
             if (this_object["sourcetag"] == "p") {
                 object_as_html.setAttribute("data-editable", 99);
@@ -2626,11 +2648,18 @@ function insert_html_version(these_changes) {
             object_as_html.setAttribute("data-age", this_object_oldornew);
             console.log("now making inner HTML", this_object[this_object_entry].substring(0,12));
             object_as_html.innerHTML = source_to_html(this_object[this_object_entry]);
+            console.log("inserting", object_as_html);
             location_of_change.insertAdjacentElement('beforebegin', object_as_html);
+
             var editing_parent = current_editing["tree"][ current_editing["level"] -1 ][ current_editing["location"][ current_editing["level"] - 1 ] ];
             console.log("               editing_parent", editing_parent);
             console.log("       EEE   ", current_editing["level"], "     current_editing[tree]", current_editing["tree"], " EEE ", current_editing["tree"][current_editing["level"]]);
             current_editing["tree"][current_editing["level"]] = next_editable_of(editing_parent, "children");
+
+*/
+
+
+
         } else if (this_object_entry == "title") {
             var object_as_html = document.createElement('span');
             object_as_html.setAttribute("class", "title");
@@ -2644,7 +2673,7 @@ function insert_html_version(these_changes) {
             location_of_change.insertAdjacentElement('beforebegin', object_as_html);
 
         } else if (this_object_entry == "image") {
-            var object_as_html = document.createElement('div');
+   //         var object_as_html = document.createElement('div');
 /*
             object_as_html.setAttribute("data-editable", 29);
             object_as_html.setAttribute("tabindex", -1);
@@ -2655,10 +2684,13 @@ function insert_html_version(these_changes) {
 
             console.log("image, this_object", this_object);
    //         object_as_html.innerHTML = source_to_html(this_object["content"]);
- object_as_html.innerHTML = html_from_internal_id(this_object_id);
+// object_as_html.innerHTML = html_from_internal_id(this_object_id);
+            var this_new_object = html_from_internal_id(this_object_id);
        //     object_as_html.innerHTML = source_to_html(this_object);
-            console.log("inserting",object_as_html,"before",location_of_change);
-            location_of_change.insertAdjacentElement('beforebegin', object_as_html);
+            console.log("inserting",this_new_object,"before",location_of_change);
+       //     location_of_change.insertAdjacentElement('beforebegin', this_new_object[0]);
+            location_of_change.insertAdjacentHTML('beforebegin', this_new_object[0]);
+            object_as_html = document.getElementById(this_object_id);
 
         } else {
             console.log("trouble making", this_object);
@@ -2666,6 +2698,8 @@ function insert_html_version(these_changes) {
         MathJax.Hub.Queue(['Typeset', MathJax.Hub, this_object_id]);
     }
     location_of_change.remove();
+
+    make_current_editing_from_id(this_object_id);
 
     console.log("returning from insert html version", object_as_html);
     // call mathjax, in case the new content contains math
@@ -2813,7 +2847,7 @@ console.log("    GGG current_editing", current_editing, current_editing["tree"][
 
                 } else {
 
-                    console.log("re-making the tree");
+                    console.log("re-making the tree from final_added_object", final_added_object);
                     make_current_editing_from_id(final_added_object.id);
                     console.log("and then adding a menu");
                     edit_menu_from_current_editing("entering");
