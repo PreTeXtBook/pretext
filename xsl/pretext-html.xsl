@@ -10985,34 +10985,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>&#xa;</xsl:text>
         <!-- // contrib directory for accessibility menu, moot after v2.6+ -->
         <!-- MathJax.Ajax.config.path["Contrib"] = "<some-url>";           -->
-        <xsl:text>MathJax.Hub.Config({&#xa;</xsl:text>
-        <xsl:text>    tex2jax: {&#xa;</xsl:text>
-        <xsl:text>        inlineMath: [['\\(','\\)']]&#xa;</xsl:text>
-        <xsl:text>    },&#xa;</xsl:text>
-        <xsl:text>    asciimath2jax: {&#xa;</xsl:text>
-        <xsl:text>        ignoreClass: ".*",&#xa;</xsl:text>
-        <xsl:text>        processClass: "has_am"&#xa;</xsl:text>
-        <xsl:text>    },&#xa;</xsl:text>
-        <xsl:text>    jax: ["input/AsciiMath"],&#xa;</xsl:text>
-        <xsl:text>    extensions: ["asciimath2jax.js"],&#xa;</xsl:text>
-        <xsl:text>    TeX: {&#xa;</xsl:text>
-        <xsl:text>        extensions: ["extpfeil.js", "autobold.js", "https://pretextbook.org/js/lib/mathjaxknowl.js", "AMScd.js", ],&#xa;</xsl:text>
-        <xsl:text>        // scrolling to fragment identifiers is controlled by other Javascript&#xa;</xsl:text>
-        <xsl:text>        positionToHash: false,&#xa;</xsl:text>
-        <xsl:text>        equationNumbers: { autoNumber: "none", useLabelIds: true, },&#xa;</xsl:text>
-        <xsl:text>        TagSide: "right",&#xa;</xsl:text>
-        <xsl:text>        TagIndent: ".8em",&#xa;</xsl:text>
-        <xsl:text>    },&#xa;</xsl:text>
-        <!-- key needs quotes since it is not a valid identifier by itself-->
-        <xsl:text>    // HTML-CSS output Jax to be dropped for MathJax 3.0&#xa;</xsl:text>
-        <xsl:text>    "HTML-CSS": {&#xa;</xsl:text>
-        <xsl:text>        scale: 88,&#xa;</xsl:text>
-        <xsl:text>        mtextFontInherit: true,&#xa;</xsl:text>
-        <xsl:text>    },&#xa;</xsl:text>
-        <xsl:text>    CommonHTML: {&#xa;</xsl:text>
-        <xsl:text>        scale: 88,&#xa;</xsl:text>
-        <xsl:text>        mtextFontInherit: true,&#xa;</xsl:text>
-        <xsl:text>    },&#xa;</xsl:text>
+        <xsl:text>window.MathJax = {&#xa;</xsl:text>
+        <xsl:text>  tex: {&#xa;</xsl:text>
+        <xsl:text>    inlineMath: [['\\(','\\)']],&#xa;</xsl:text>
+        <xsl:text>    tags: "none",&#xa;</xsl:text>
+        <xsl:text>    useLabelIds: true,&#xa;</xsl:text>
+        <xsl:text>    tagSide: "right",&#xa;</xsl:text>
+        <xsl:text>    tagIndent: ".8em",&#xa;</xsl:text>
+        <xsl:text>    packages: ['base', 'extpfeil', 'amscd']&#xa;</xsl:text>
+        <xsl:text>  },&#xa;</xsl:text>
+        <xsl:text>  options: {&#xa;</xsl:text>
+        <xsl:text>    ignoreHtmlClass: ".*",&#xa;</xsl:text>
+        <xsl:text>    processHtmlClass: "has_am"&#xa;</xsl:text>
+        <xsl:text>  },&#xa;</xsl:text>
+        <xsl:text>  chtml: {&#xa;</xsl:text>
+        <xsl:text>    scale: 0.88,&#xa;</xsl:text>
+        <xsl:text>    mtextInheritFont: true&#xa;</xsl:text>
+        <xsl:text>  },&#xa;</xsl:text>
+        <xsl:text>  loader: {&#xa;</xsl:text>
+        <xsl:text>    load: ['input/asciimath', '[tex]/extpfeil', '[tex]/amscd']&#xa;</xsl:text>
+        <xsl:text>  }&#xa;</xsl:text>
+        <xsl:text>};&#xa;</xsl:text>
         <!-- optional presentation mode gets clickable, large math -->
         <xsl:if test="$b-html-presentation">
             <xsl:text>    menuSettings:{&#xa;</xsl:text>
@@ -11043,7 +11036,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- mathjax javascript -->
     <xsl:element name="script">
         <xsl:attribute name="src">
-            <xsl:text>https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML-full</xsl:text>
+            <xsl:text>https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js</xsl:text>
         </xsl:attribute>
     </xsl:element>
 </xsl:template>
