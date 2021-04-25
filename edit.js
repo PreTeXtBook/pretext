@@ -13,7 +13,7 @@ objectStructure = {
   "type": {
     "html": {
         "tag": "span",
-        "attributes": ['class="type"'],
+        "attributes": ['class="type"', 'data-editable="70XX"', 'tabindex="-1"'],
         "pieces": [["sourcetag", ""]]  // need to transform the sourcetag
     }
   },
@@ -264,8 +264,8 @@ objectStructure = {
         "tag": "article",
         "cssclass": "theorem-like",
         "data_editable": "93",
-        "pieces": ["heading", "statement"],
-        "heading": "theorem_like_heading"
+        "pieces": [["{theorem_like_heading}", ""], ["statement", ""]],
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"']
     },
     "pretext": {
         "pieces": [["title", "title"], ["statement", "statement"], ["proof", ""]]
@@ -1930,66 +1930,66 @@ function delete_by_id(theid, thereason) {
 }
 
 var internalSource = {  // currently the key is the HTML id
-   "hPw": {"xml:id": "", "permid": "hPw", "sourcetag": "section", "title": "What is Discrete Mathematics?",
+   "hPw": {"xml:id": "hPw", "sourcetag": "section", "title": "What is Discrete Mathematics?",
            "content": "<&>akX<;>\n<&>UvL<;>\n<&>ACU<;>\n<&>gKd<;>\n<&>MRm<;>\n<&>udO<;>\n<&>sYv<;>\n<&>ZfE<;>"},
-   "gKd": {"xml:id": "", "permid": "", "sourcetag": "p", "title": "", "parent": ["hPw","content"],
+   "gKd": {"xml:id": "gKd", "sourcetag": "p", "title": "", "parent": ["hPw","content"],
            "content": "Discrete math could still ask about the range of a function, but the set would not be an interval. Consider the function which gives the number of children of each person reading this. What is the range? I'm guessing it is something like <m>\{0, 1, 2, 3\}</m>. Maybe 4 is in there too.\nBut certainly there is nobody reading this that has 1.32419 children. This output set <em class='emphasis'>is</em> discrete because the elements are separate. The inputs to the function also form a discrete set because each input is an individual person."},
-   "MRm": {"xml:id": "", "permid": "MRm", "sourcetag": "p", "title": "", "parent": ["hPw","content"],
+   "MRm": {"xml:id": "MRm", "sourcetag": "p", "title": "", "parent": ["hPw","content"],
            "content": "One way to get a feel for the subject is to consider the types of problems you solve in discrete math.\nHere are a few simple examples:"},
-   "ZfE": {"xml:id": "", "permid": "cak", "sourcetag": "p", "title": "", "parent": ["hPw","content"],
+   "ZfE": {"xml:id": "cak", "sourcetag": "p", "title": "", "parent": ["hPw","content"],
            "content": "Ultimately the best way to learn what discrete math is about is to <em>do</em> it. Let's get started! Before we can begin answering more complicated (and fun) problems, we must lay down some foundation. We start by reviewing mathematical statements, sets, and functions in the framework of discrete mathematics."},
-   "PLS": {"xml:id": "", "permid": "PLS", "sourcetag": "p", "title": "", "parent": ["akX","content"],
+   "PLS": {"xml:id": "PLS", "sourcetag": "p", "title": "", "parent": ["akX","content"],
            "content": "dis·crete / dis'krët."},
-   "vTb": {"xml:id": "", "permid": "vTb", "sourcetag": "p", "title": "", "parent": ["akX","content"],
+   "vTb": {"xml:id": "vTb", "sourcetag": "p", "title": "", "parent": ["akX","content"],
            "content": "<em>Adjective</em>: Individually separate and distinct."},
-   "cak": {"xml:id": "", "permid": "cak", "sourcetag": "p", "title": "", "parent": ["akX","content"],
+   "cak": {"xml:id": "cak", "sourcetag": "p", "title": "", "parent": ["akX","content"],
            "content": "<&>357911<;>: separate - detached - distinct - abstract."},
-   "akX": {"xml:id": "", "permid": "akX", "sourcetag": "blockquote", "title": "", "parent": ["hPw","content"],
+   "akX": {"xml:id": "akX", "sourcetag": "blockquote", "title": "", "parent": ["hPw","content"],
            "content": "<&>PLS<;>\n<&>vTb<;>\n<&>cak<;>"},
-   "UvL": {"xml:id": "", "permid": "UvL", "sourcetag": "p", "title": "","parent": ["hPw","content"],
+   "UvL": {"xml:id": "UvL", "sourcetag": "p", "title": "","parent": ["hPw","content"],
            "content": "    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n     In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n <ellipsis/>.\n Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n What sort of problems?\n Okay, those that involve numbers,\n functions, lines, triangles,\n <ellipsis/>.\n Whatever your conception of what mathematics is,\n try applying the concept of <q>discrete</q> to it, as defined above.\n Some math fundamentally deals with <em>stuff</em>\n that is individually separate and distinct."},
    "357911": {"xml:id": "356711", "permid": "", "sourcetag": "em", "title": "",
            "content": 'Synonyms'},
-   "sYv": {"xml:id": "", "permid": "sYv", "sourcetag": "p", "parent": ["hPw","content"],
+   "sYv": {"xml:id": "sYv", "sourcetag": "p", "parent": ["hPw","content"],
            "content": 'One reason it is difficult to define discrete math is that it is a very broad description which encapsulates a large number of subjects. In this course we will study four main topics: <dfn class="terminology">combinatorics</dfn> (the theory of ways things <em class="emphasis">combine</em>; in particular, how to count these ways), <dfn class="terminology">sequences</dfn>, <dfn class="terminology">symbolic logic</dfn>, and <dfn class="terminology">graph theory</dfn>. However, there are other topics that belong under the discrete umbrella, including computer science, abstract algebra, number theory, game theory, probability, and geometry (some of these, particularly the last two, have both discrete and non-discrete variants).'},
-   "ACU": {"xml:id": "", "permid": "ACU", "sourcetag": "p", "parent": ["hPw","content"],
+   "ACU": {"xml:id": "ACU", "sourcetag": "p", "parent": ["hPw","content"],
            "content": "In an algebra or calculus class, you might have found a particular set of numbers (maybe the set of numbers in the range of a function). You would represent this set as an interval: <&>223344<;> is the range of <&>112233<;> since the set of outputs of the function are all real numbers <m>0</m> and greater. This set of numbers is NOT discrete. The numbers in the set are not separated by much at all. In fact, take any two numbers in the set and there are infinitely many more between them which are also in the set."},
-   "112233": {"xml:id": "", "permid": "", "sourcetag": "m", "parent": ["ACU","content"],
+   "112233": {"xml:id": "", "sourcetag": "m", "parent": ["ACU","content"],
            "content": "f(x)=x^2"},
-   "udO": {"xml:id": "", "permid": "udO", "sourcetag": "investigation", "parent": ["hPw","content"],
+   "udO": {"xml:id": "udO", "sourcetag": "investigation", "parent": ["hPw","content"],
            "statement": "<&>Iht<;><&>ooC<;>"},
-   "Iht": {"xml:id": "", "permid": "Iht", "sourcetag": "p", "parent": ["udO","content"],
+   "Iht": {"xml:id": "Iht", "sourcetag": "p", "parent": ["udO","content"],
            "content": "Note: Throughout the text you will see <em>Investigate!</em>\nactivities like this one.\nAnswer the questions in these as best you can to give yourself a feel for what is coming next."},
-   "ooC": {"xml:id": "", "permid": "ooC", "sourcetag": "list", "parent": ["udO","content"],
+   "ooC": {"xml:id": "ooC", "sourcetag": "list", "parent": ["udO","content"],
            "content": "<&>mzp<;><&>SGy<;><&>yNH<;><&>eUQ<;>"},
-   "eUQ": {"xml:id": "", "permid": "eUQ", "sourcetag": "li", "parent": ["ooC","content"],
+   "eUQ": {"xml:id": "eUQ", "sourcetag": "li", "parent": ["ooC","content"],
            "content": "<&>jEJ<;>"},
-   "jEJ": {"xml:id": "", "permid": "jEJ", "sourcetag": "p", "parent": ["eUQ","content"],
+   "jEJ": {"xml:id": "jEJ", "sourcetag": "p", "parent": ["eUQ","content"],
            "content": "Back in the days of yore, five small towns decided they wanted to build roads directly connecting each pair of towns. While the towns had plenty of money to build roads as long and as winding as they wished, it was very important that the roads not intersect with each other (as stop signs had not yet been invented). Also, tunnels and bridges were not allowed. Is it possible for each of these towns to build a road to each of the four other towns without creating any intersections?"},
-   "mzp": {"xml:id": "", "permid": "mzp", "sourcetag": "li", "parent": ["ooC","content"],
+   "mzp": {"xml:id": "mzp", "sourcetag": "li", "parent": ["ooC","content"],
            "content": "<&>LbZ<;>"},
-   "LbZ": {"xml:id": "", "permid": "LbZ", "sourcetag": "p", "parent": ["mzp","content"],
+   "LbZ": {"xml:id": "LbZ", "sourcetag": "p", "parent": ["mzp","content"],
            "content": "The most popular mathematician in the world is throwing a party for all of his friends.\n As a way to kick things off, they decide that everyone should shake hands.\n Assuming all 10 people at the party each shake hands with every other person\n (but not themselves,\n obviously)\n exactly once, how many handshakes take place?"},
-   "SGy": {"xml:id": "", "permid": "SGy", "sourcetag": "li", "parent": ["ooC","content"],
+   "SGy": {"xml:id": "SGy", "sourcetag": "li", "parent": ["ooC","content"],
            "content": "<&>rji<;>"},
-   "rji": {"xml:id": "", "permid": "rji", "sourcetag": "p", "parent": ["SGy","content"],
+   "rji": {"xml:id": "rji", "sourcetag": "p", "parent": ["SGy","content"],
            "content": "At the warm-up event for Oscar's All Star Hot Dog Eating Contest, Al ate one hot dog.\n Bob then showed him up by eating three hot dogs.\n Not to be outdone, Carl ate five.\n This continued with each contestant eating two more hot dogs than the previous contestant.\n How many hot dogs did Zeno (the 26th and final contestant) eat?\n How many hot dogs were eaten all together?"},
-   "223344": {"xml:id": "", "permid": "", "sourcetag": "m", "parent": ["ACU","content"],
+   "223344": {"xml:id": "", "sourcetag": "m", "parent": ["ACU","content"],
            "content": "[0, \\infty)"},
-   "yNH": {"xml:id": "", "permid": "yNH", "sourcetag": "li", "parent": ["ooC","content"],
+   "yNH": {"xml:id": "yNH", "sourcetag": "li", "parent": ["ooC","content"],
            "content": "<&>Xqr<;><&>ssiiddee<;><&>DxA<;>"},
-   "Xqr": {"xml:id": "", "permid": "Xqr", "sourcetag": "p", "parent": ["yNH","content"],
+   "Xqr": {"xml:id": "Xqr", "sourcetag": "p", "parent": ["yNH","content"],
            "content": "After excavating for weeks, you finally arrive at the burial chamber.\nThe room is empty except for two large chests.\n On each is carved a message (strangely in English):"},
-   "ssiiddee": {"xml:id": "", "permid": "", "sourcetag": "image", "parent": ["yNH","content"],
+   "ssiiddee": {"xml:id": "", "sourcetag": "image", "parent": ["yNH","content"],
            "src": "images/two-chests.svg",
            "width": "66", "marginright": "17", "marginleft": "17"},
-   "OLDssiiddee": {"xml:id": "", "permid": "", "sourcetag": "bareimage", "parent": ["yNH","content"],
+   "OLDssiiddee": {"xml:id": "", "sourcetag": "bareimage", "parent": ["yNH","content"],
            "content": "<&>ppccii<;>",
            "class": "image-box",   // maybe that is inherent to bareimage ?
            "style": "width: 66%; margin-right: 17%; margin-left: 17%"},
-   "ppccii": {"xml:id": "", "permid": "", "sourcetag": "img", "parent": ["ssiiddee","content"],
+   "ppccii": {"xml:id": "", "sourcetag": "img", "parent": ["ssiiddee","content"],
            "src": "images/two-chests.svg", "alt": "alt text goes here"},
-   "DxA": {"xml:id": "", "permid": "", "sourcetag": "p", "parent": ["yNH","content"],
+   "DxA": {"xml:id": "", "sourcetag": "p", "parent": ["yNH","content"],
            "content": "You know exactly one of these messages is true.\nWhat should you do?"}
 }
 
@@ -2510,6 +2510,11 @@ function html_from_internal_id(the_id, is_inner) {
             closing_tag = math_tags[sourcetag][1][1];
         }
         return opening_tag + spacemath_to_tex(the_object["content"]) + closing_tag
+
+    } else if (true) {
+        html_of_this_object = pretext_from_id("", the_id, "html");
+        console.log("html_of_this_object", html_of_this_object);
+        the_html_objects.push(html_of_this_object);
 
     } else {
 
