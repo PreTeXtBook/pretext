@@ -10,11 +10,49 @@ in source, pieces are of teh form ["piecename", "required_component"], while
 */
 
 objectStructure = {
+  "type": {
+    "html": {
+        "tag": "span",
+        "attributes": ['class="type"'],
+        "pieces": [["sourcetag", ""]]  // need to transform the sourcetag
+    }
+  },
+  "codenumber": { 
+    "html": {
+        "tag": "span",
+        "attributes": ['class="type"'],
+        "pieces": [["(codenumber)", ""]]  // maybe () was a bad idea?  do we need a triple?
+    }
+  },
+  "period": {
+    "html": {
+        "tag": "span",
+        "attributes": ['class="period"'],
+        "pieces": [["", ""]]  // need to implement the "."
+    }
+  },
+  "space": {
+    "html": {
+        "tag": "span",
+        "attributes": ['class="space"'],
+        "pieces": [["", ""]]  // need to implement the " "
+    }
+  },
+  "title": {
+    "html": {
+        "tag": "span",
+        "attributes": ['class="title"', 'data-editable="70"', 'tabindex="-1"'],
+        "pieces": [["title", ""]]
+    }
+  },
+
   "theorem_like_heading": {
     "html": {
         "tag": "h4",
         "cssclass": "heading",
-        "pieces": ["type*", "space", "codenumber", "period",  "space", "title*"]
+        "attributes": ['class="<&>{cssclass}<;>"', 'data-parent_id="<&>xml:id<;>"'],
+   //     "pieces": [["[type]", ""], ["[space]", ""], ["[codenumber]", ""], ["[period]", ""],  ["[space]", ""], ["[title]", ""]]
+        "pieces": [["{type}", ""], ["{space}", ""], ["{codenumber}", ""], ["{period}", ""],  ["{space}", ""], ["{title}", ""]]
           // * means editable piece
     }
   },
@@ -61,7 +99,7 @@ objectStructure = {
     "html": {
         "tag": "p",
         "pieces": [["content", ""]],
-        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>[data_editable]<;>"', 'tabindex="-1"'],
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
         "data_editable": "99a"
     },
     "pretext": {
@@ -77,7 +115,7 @@ objectStructure = {
     "html": {
         "tag": "li",
         "pieces": [["content", ""]],
-        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>[data_editable]<;>"', 'tabindex="-1"'],
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
         "data_editable": "98a"
     },
     "pretext": {
@@ -93,7 +131,7 @@ objectStructure = {
     "html": {
         "tag": "blockquote",
         "pieces": [["content", ""], ["attribution", ""]],
-        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>[data_editable]<;>"', 'tabindex="-1"', 'class="<&>[cssclass]"'],
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
         "cssclass": "blockquote",
         "data_editable": "44?"
     },
@@ -110,12 +148,12 @@ objectStructure = {
     "html": {
         "tag": "ol",
         "pieces": [["content", ""]],
-        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>[data_editable]<;>"', 'tabindex="-1"']
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"']
     },
     "pretext": {
         "tag": "ol",
         "pieces": [["content", ""]],
-        "attributes": [["list-style-type", "A"]]
+        "attributes": ['list-style-type="A"']
     },
     "source": {
         "pieces": [["title", ""], ["content", "li"]],
@@ -126,8 +164,8 @@ objectStructure = {
   "image": {
     "html": {
         "tag": "div",
-        "pieces": [["[bareimage]",""]],
-        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>[data_editable]<;>"', 'tabindex="-1"', 'class="<&>[cssclass]<;>"', 'style="width: <&>width<;>%; margin-right: <&>marginright<;>%; margin-left: <&>marginleft<;>%"'],
+        "pieces": [["{bareimage}",""]],
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"', 'style="width: <&>width<;>%; margin-right: <&>marginright<;>%; margin-left: <&>marginleft<;>%"'],
         "data_editable": "31",
         "cssclass": "image-box",
         "style": "width: 20%; margin-right: 55%; margin-left: 25%"  /* not used / should come from source source? */
@@ -135,7 +173,7 @@ objectStructure = {
     "pretext": {
         "tag": "image",
         "pieces": [],
-        "attributes": ['src="<&>src<;>"', 'alt="<&>alt<;>"']
+        "attributes": ['xml:id="<&>xml:id<;>"', 'source="<&>src<;>"', 'alt="<&>alt<;>"', 'width="<&>width<;>%"', 'margins="<&>marginleft<;>% <&>marginright<;>%"']
     },
     "source": {
         "tag": "image",
@@ -157,7 +195,7 @@ objectStructure = {
         "tag": "article",
         "cssclass": "proof",
         "pieces": ["proof_heading", "content"],
-        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>[data_editable]<;>"', 'tabindex="-1"', 'class="<&>[cssclass]<;>"'],
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
         "data_editable": "60"
     },
     "pretext": {
@@ -174,9 +212,8 @@ objectStructure = {
         "tag": "article",
         "cssclass": "remark-like",
         "data_editable": "92",
-        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>[data_editable]<;>"', 'tabindex="-1"', 'class="<&>[cssclass]<;>"'],
-        "pieces": ["[heading]", "statement"],
-        "heading": "theorem_like_heading"
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
+        "pieces": [["{theorem_like_heading}", ""], ["statement",""]]
     },
     "pretext": {
         "pieces": [["title", "title"], ["statement", "statement"]]
@@ -195,8 +232,9 @@ objectStructure = {
         "heading": "theorem_like_heading"
     },
     "pretext": {
+        "tag": "sourcetag",
         "pieces": [["title", "title"], ["statement", "statement"], ["hint", ""], ["answer", ""], ["solution", ""], ["tasks", ""]],
-        "attributes": ["workspace"]
+        "attributes": ['workspace="<&>workspace<;>"']
     },
     "source": {
         "pieces": [["title", ""], ["statement", "p"], ["tasks", ""], ["hint", ""], ["answer", ""], ["solution", ""]],
@@ -209,10 +247,9 @@ objectStructure = {
         "tag": "article",
         "cssclass": "definition-like",
         "data_editable": "95a",
- //       "pieces": [["[theorem_like_heading]", ""], ["statement", ""]],
-        "pieces": [["statement", ""]],
-        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>[data_editable]<;>"', 'tabindex="-1"', 'class="<&>[cssclass]<;>"'],
-        "heading": "theorem_like_heading"
+        "pieces": [["{theorem_like_heading}", ""], ["statement", ""]],
+ //       "pieces": [["statement", ""]],
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"']
     },
     "pretext": {
         "pieces": [["title", "title"], ["statement", "statement"]]
@@ -384,7 +421,8 @@ Object.assign(objectStructure, sidebyside_instances);
 
 // shoudl we distinguish empty tags by format?
 // these tags are html an dpretext
-var pretext_empty_tags = ["img", "image"];
+var always_empty_tags = ["img", "image"];
+var allowed_empty_tags = ["span", "p"];
 var tag_display = {  /* the default is "block" */
     "inline": ["m", "em", "ellipsis", "span"], 
     "title": ["title", "idx", "h1", "h2", "h3", "h4", "h5", "h6"]
@@ -1913,7 +1951,7 @@ var internalSource = {  // currently the key is the HTML id
    "357911": {"xml:id": "356711", "permid": "", "sourcetag": "em", "title": "",
            "content": 'Synonyms'},
    "sYv": {"xml:id": "", "permid": "sYv", "sourcetag": "p", "parent": ["hPw","content"],
-           "content": "One way to get a feel for the subject is to consider the types of problems you solve in discrete math. Here are a few simple examples:"},
+           "content": 'One reason it is difficult to define discrete math is that it is a very broad description which encapsulates a large number of subjects. In this course we will study four main topics: <dfn class="terminology">combinatorics</dfn> (the theory of ways things <em class="emphasis">combine</em>; in particular, how to count these ways), <dfn class="terminology">sequences</dfn>, <dfn class="terminology">symbolic logic</dfn>, and <dfn class="terminology">graph theory</dfn>. However, there are other topics that belong under the discrete umbrella, including computer science, abstract algebra, number theory, game theory, probability, and geometry (some of these, particularly the last two, have both discrete and non-discrete variants).'},
    "ACU": {"xml:id": "", "permid": "ACU", "sourcetag": "p", "parent": ["hPw","content"],
            "content": "In an algebra or calculus class, you might have found a particular set of numbers (maybe the set of numbers in the range of a function). You would represent this set as an interval: <&>223344<;> is the range of <&>112233<;> since the set of outputs of the function are all real numbers <m>0</m> and greater. This set of numbers is NOT discrete. The numbers in the set are not separated by much at all. In fact, take any two numbers in the set and there are infinitely many more between them which are also in the set."},
    "112233": {"xml:id": "", "permid": "", "sourcetag": "m", "parent": ["ACU","content"],
@@ -1944,7 +1982,7 @@ var internalSource = {  // currently the key is the HTML id
            "content": "After excavating for weeks, you finally arrive at the burial chamber.\nThe room is empty except for two large chests.\n On each is carved a message (strangely in English):"},
    "ssiiddee": {"xml:id": "", "permid": "", "sourcetag": "image", "parent": ["yNH","content"],
            "src": "images/two-chests.svg",
-           "width": "66%", "margin-right": "17%", "margin-left": "17%"},
+           "width": "66", "marginright": "17", "marginleft": "17"},
    "OLDssiiddee": {"xml:id": "", "permid": "", "sourcetag": "bareimage", "parent": ["yNH","content"],
            "content": "<&>ppccii<;>",
            "class": "image-box",   // maybe that is inherent to bareimage ?
@@ -2198,9 +2236,9 @@ function assemble_internal_version_changes() {
 function wrap_tag(tag, content, attribute_values) {
     // layout: inline or block or title
     // is this the right place to handle empty content?
-    console.log("calling wrap_tag", "tag", tag, "content", content, "attribute_values", attribute_values);
+//    console.log("calling wrap_tag", "tag", tag, "content", content, "attribute_values", attribute_values);
     if (!content && !tag) { return "" }
-    if (!content && !pretext_empty_tags.includes(tag) && tag != "p") { return "" }
+    if (!content && !always_empty_tags.includes(tag) && !allowed_empty_tags.includes(tag)) { return "" }
     if (!tag) { return content }
 
     if (attribute_values.length) {
@@ -2209,7 +2247,6 @@ function wrap_tag(tag, content, attribute_values) {
 
     var opening_tag = closing_tag = "";
 
-    if (content.includes("hard")) { console.log("content",content) }
     if (tag) {
         opening_tag = "<" + tag;
         for (var j=0; j < attribute_values.length; ++j) {
@@ -2220,13 +2257,14 @@ function wrap_tag(tag, content, attribute_values) {
   //      opening_tag += ">";
         closing_tag = "</" + tag + ">";
     }
-    if (!content && pretext_empty_tags.includes(tag)) {
+    if (!content && always_empty_tags.includes(tag)) {
         opening_tag += "/>";
         closing_tag = "";
-    } else if (tag) {
+//    } else if (tag) {
+    } else {
         opening_tag += ">";
     }
-    if (content.includes("hard")) { console.log("2 ---- content",content); console.log("opening_tag", opening_tag) }
+//    if (content.includes("hard")) { console.log("2 ---- content",content); console.log("opening_tag", opening_tag) }
 
     if (tag_display["inline"].includes(tag)) {
         // do nothing
@@ -2239,7 +2277,7 @@ function wrap_tag(tag, content, attribute_values) {
             closing_tag = "\n" + closing_tag + "\n"
         }
 	    }
-    if (content.includes("hard")) { console.log("3 ----- content",content); console.log("opening_tag", opening_tag) }
+//    if (content.includes("hard")) { console.log("3 ----- content",content); console.log("opening_tag", opening_tag) }
     return opening_tag + content + closing_tag
 }
 
@@ -2259,15 +2297,25 @@ function output_from_source(the_object, output_structure, format) {
         var attr_name = output_attributes[j];
  //       var attr_val = the_object[attr_name];
         var attr_val = attr_name;
+        console.log("attr_val", attr_val);
         attr_val = attr_val.replace(/<&>(.*?)<;>/g, function (match, newid) { 
-               if (newid.startsWith("[")) {
+               if (newid.startsWith("{")) {
                    newid = newid.slice(1,-1);
-                   return output_structure[newid]
+                   if (newid in output_structure) {
+                       return output_structure[newid]
+                   } else {  // don;t want to return 'undefined'
+                       return ""
+                   }
                } else {
-                   return the_object[newid]
+                   if (newid in the_object) {
+                       return the_object[newid]
+                   } else {
+                       return ""
+                   }
                }
              });
-        if (attr_val) {
+        console.log("         attr_val", attr_val);
+        if (attr_val && !attr_val.includes('""')) {
       //      output_attributes_values.push([attr_name, attr_val])
             output_attributes_values.push(attr_val)
         }
@@ -2278,22 +2326,26 @@ function output_from_source(the_object, output_structure, format) {
     for (var j=0; j < output_structure.pieces.length; ++j) {
         var this_piece_output = "";
         var [this_piece, this_tag] = output_structure.pieces[j];
-        console.log(j, "this_piece", this_piece);
-        if (this_piece.startsWith("[")) {
+        console.log(j, "this_piece", this_piece, "output_tag", output_tag);
+        if (this_piece.startsWith("{")) {
             this_piece = this_piece.slice(1,-1);
   //// ?????          this_piece_output += output_from_source(contained_text, the_object, objectStructure[this_piece], format)
-            this_piece_output += output_from_source(the_object, objectStructure[this_piece][format], format)
+            this_piece_output += output_from_source(the_object, objectStructure[this_piece][format], format);
+            console.log("wrapping in bracketed tag", this_tag);
+            the_answer += wrap_tag(this_tag, this_piece_output, [])
+        } else if (this_piece.startsWith("(")) {
+            the_answer += wrap_tag(this_tag, "3.14", [])
         } else if (this_piece in the_object) {
             this_piece_output = output_from_text(the_object[this_piece], format);
+            the_answer += wrap_tag(this_tag, this_piece_output, [])
         } else {
             console.log("missing piece:", this_tag, "with no", this_piece)
         }
-        if (this_tag) { console.log("     WRAP on tag", this_tag, "from", this_piece)};
-        the_answer += wrap_tag(this_tag, this_piece_output, [])
     }
 
-    console.log("outer wrap tag");
+//    console.log("outer wrap tag", output_tag, "with attributes", output_attributes_values, "answer was", the_answer);
     the_answer = wrap_tag(output_tag, the_answer, output_attributes_values)
+//    console.log("now the answer is", the_answer);
 
     return the_answer
 }
@@ -2437,7 +2489,7 @@ function html_from_internal_id(the_id, is_inner) {
         console.log("html_of_this_object", html_of_this_object);
         the_html_objects.push(html_of_this_object);
 
-    } else if (sourcetag == "definition") {
+    } else if (sourcetag == "definition" || sourcetag == "remark") {
         html_of_this_object = pretext_from_id("", the_id, "html");
         console.log("html_of_this_object", html_of_this_object);
         the_html_objects.push(html_of_this_object);
