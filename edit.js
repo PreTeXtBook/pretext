@@ -116,7 +116,7 @@ objectStructure = {
         "tag": "li",
         "pieces": [["content", ""]],
         "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
-        "data_editable": "98a"
+        "data_editable": "98aZ"
     },
     "pretext": {
         "tag": "li",
@@ -148,7 +148,7 @@ objectStructure = {
     "html": {
         "tag": "ol",
         "pieces": [["content", ""]],
-        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"']
+        "attributes": ['id="<&>xml:id<;>"', 'list-style-type="A"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"']
     },
     "pretext": {
         "tag": "ol",
@@ -1098,7 +1098,7 @@ function next_editable_of(obj, relationship) {
     var next_to_edit;
     console.log("finding", relationship, "editable of", obj);
     if (relationship == "children") {
-        next_to_edit = $(obj).find('> .sidebyside > [data-editable],  > li > [data-editable], > .heading > [data-editable], > [data-editable], > .hint > [data-editable], > .answer > [data-editable]')
+        next_to_edit = $(obj).find(' > [data-editable], > .sidebyside > [data-editable],  > li > [data-editable], > .heading > [data-editable], > .hint > [data-editable], > .answer > [data-editable]')
     } else if (relationship == "outer-block") {  // for example, a direct child of a section
         next_to_edit = $(obj).find(' > [data-editable]')
     } else if (relationship == "inner-block") {  // typically a paragraph
@@ -1124,14 +1124,14 @@ function create_new_internal_object(new_tag, new_id, parent_description) {
         var [margin_left, margin_right] = [sbs_layout[1], sbs_layout[sbs_layout.length - 1]];
         console.log("sbs side margins", margin_left, "jj", margin_right);
         var new_sbsrow_id = randomstring();
-        internalSource[new_sbsrow_id] = {"xml:id": new_sbsrow_id, "permid": "", "sourcetag": "sbsrow",
+        internalSource[new_sbsrow_id] = {"xml:id": new_sbsrow_id, "sourcetag": "sbsrow",
                  "margin-left": margin_left, "margin-right": margin_right, "parent": [new_id, "content"]}
 
         var col_content = "";
         for (var j=2; j <= sbs_layout.length - 2; ++j) {
             var new_col_id = randomstring();
             col_content += "<&>" + new_col_id + "<;>";
-            internalSource[new_col_id] = {"xml:id": new_col_id, "permid": "", "sourcetag": "sbspanel",
+            internalSource[new_col_id] = {"xml:id": new_col_id, "sourcetag": "sbspanel",
                 "width": sbs_layout[j], "content": "", "parent": [new_sbsrow_id, "content"]}
         }
 
@@ -1483,7 +1483,7 @@ function modify_by_id(theid, modifier) {
                 || internalSource[theid]["sourcetag"] == "task") {
         modify_by_id_workspace(theid, modifier)
     } else {
-        modify_by_id_img(theid, modifier)
+        modify_by_id_image(theid, modifier)
     }
 }
 
@@ -1513,7 +1513,7 @@ function modify_by_id_workspace(theid, modifier) {
     this_workspace.setAttribute("data-space", the_height);
 }
  
-function modify_by_id_img(theid, modifier) {
+function modify_by_id_image(theid, modifier) {
 
 //    var the_sizes = internalSource[theid]["style"];
 
@@ -1948,13 +1948,13 @@ var internalSource = {  // currently the key is the HTML id
            "content": "<&>PLS<;>\n<&>vTb<;>\n<&>cak<;>"},
    "UvL": {"xml:id": "UvL", "sourcetag": "p", "title": "","parent": ["hPw","content"],
            "content": "    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n     In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n <ellipsis/>.\n Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n What sort of problems?\n Okay, those that involve numbers,\n functions, lines, triangles,\n <ellipsis/>.\n Whatever your conception of what mathematics is,\n try applying the concept of <q>discrete</q> to it, as defined above.\n Some math fundamentally deals with <em>stuff</em>\n that is individually separate and distinct."},
-   "357911": {"xml:id": "356711", "permid": "", "sourcetag": "em", "title": "",
+   "357911": {"xml:id": "356711", "sourcetag": "em", "title": "",
            "content": 'Synonyms'},
    "sYv": {"xml:id": "sYv", "sourcetag": "p", "parent": ["hPw","content"],
            "content": 'One reason it is difficult to define discrete math is that it is a very broad description which encapsulates a large number of subjects. In this course we will study four main topics: <dfn class="terminology">combinatorics</dfn> (the theory of ways things <em class="emphasis">combine</em>; in particular, how to count these ways), <dfn class="terminology">sequences</dfn>, <dfn class="terminology">symbolic logic</dfn>, and <dfn class="terminology">graph theory</dfn>. However, there are other topics that belong under the discrete umbrella, including computer science, abstract algebra, number theory, game theory, probability, and geometry (some of these, particularly the last two, have both discrete and non-discrete variants).'},
    "ACU": {"xml:id": "ACU", "sourcetag": "p", "parent": ["hPw","content"],
            "content": "In an algebra or calculus class, you might have found a particular set of numbers (maybe the set of numbers in the range of a function). You would represent this set as an interval: <&>223344<;> is the range of <&>112233<;> since the set of outputs of the function are all real numbers <m>0</m> and greater. This set of numbers is NOT discrete. The numbers in the set are not separated by much at all. In fact, take any two numbers in the set and there are infinitely many more between them which are also in the set."},
-   "112233": {"xml:id": "", "sourcetag": "m", "parent": ["ACU","content"],
+   "112233": {"xml:id": "112233", "sourcetag": "m", "parent": ["ACU","content"],
            "content": "f(x)=x^2"},
    "udO": {"xml:id": "udO", "sourcetag": "investigation", "parent": ["hPw","content"],
            "statement": "<&>Iht<;><&>ooC<;>"},
@@ -1974,22 +1974,22 @@ var internalSource = {  // currently the key is the HTML id
            "content": "<&>rji<;>"},
    "rji": {"xml:id": "rji", "sourcetag": "p", "parent": ["SGy","content"],
            "content": "At the warm-up event for Oscar's All Star Hot Dog Eating Contest, Al ate one hot dog.\n Bob then showed him up by eating three hot dogs.\n Not to be outdone, Carl ate five.\n This continued with each contestant eating two more hot dogs than the previous contestant.\n How many hot dogs did Zeno (the 26th and final contestant) eat?\n How many hot dogs were eaten all together?"},
-   "223344": {"xml:id": "", "sourcetag": "m", "parent": ["ACU","content"],
+   "223344": {"xml:id": "223344", "sourcetag": "m", "parent": ["ACU","content"],
            "content": "[0, \\infty)"},
    "yNH": {"xml:id": "yNH", "sourcetag": "li", "parent": ["ooC","content"],
            "content": "<&>Xqr<;><&>ssiiddee<;><&>DxA<;>"},
    "Xqr": {"xml:id": "Xqr", "sourcetag": "p", "parent": ["yNH","content"],
            "content": "After excavating for weeks, you finally arrive at the burial chamber.\nThe room is empty except for two large chests.\n On each is carved a message (strangely in English):"},
-   "ssiiddee": {"xml:id": "", "sourcetag": "image", "parent": ["yNH","content"],
+   "ssiiddee": {"xml:id": "ssiiddee", "sourcetag": "image", "parent": ["yNH","content"],
            "src": "images/two-chests.svg",
            "width": "66", "marginright": "17", "marginleft": "17"},
-   "OLDssiiddee": {"xml:id": "", "sourcetag": "bareimage", "parent": ["yNH","content"],
+   "OLDssiiddee": {"xml:id": "OLDssiiddee", "sourcetag": "bareimage", "parent": ["yNH","content"],
            "content": "<&>ppccii<;>",
            "class": "image-box",   // maybe that is inherent to bareimage ?
            "style": "width: 66%; margin-right: 17%; margin-left: 17%"},
-   "ppccii": {"xml:id": "", "sourcetag": "img", "parent": ["ssiiddee","content"],
+   "ppccii": {"xml:id": "ppccii", "sourcetag": "image", "parent": ["ssiiddee","content"],
            "src": "images/two-chests.svg", "alt": "alt text goes here"},
-   "DxA": {"xml:id": "", "sourcetag": "p", "parent": ["yNH","content"],
+   "DxA": {"xml:id": "DxA", "sourcetag": "p", "parent": ["yNH","content"],
            "content": "You know exactly one of these messages is true.\nWhat should you do?"}
 }
 
@@ -2046,7 +2046,7 @@ function extract_internal_contents(some_text) {
 
 function extract_new_math(match, sp_before, math_content, sp_after) {
     new_math_id = randomstring();
-    internalSource[new_math_id] = { "xml:id": new_math_id, "permid": "", "sourcetag": "m",
+    internalSource[new_math_id] = { "xml:id": new_math_id, "sourcetag": "m",
                           "content": math_content}
     return sp_before + "<&>" + new_math_id + "<;>" + sp_after
 }
@@ -2161,7 +2161,6 @@ function assemble_internal_version_changes() {
                 var this_object_internal = {"sourcetag": "p", "title": ""}; //p don't have title
                 this_object_label = randomstring();
                 this_object_internal["xml:id"] = this_object_label;
-                this_object_internal["permid"] = "";
                 this_object_internal["parent"] = parent_and_location;
 
                 // put the new p after the previous p in the string describing the neighboring contents
@@ -2209,7 +2208,7 @@ function assemble_internal_version_changes() {
         image_src = image_src.replace(/<div>/g, "");
         image_src = image_src.replace(/<\/div>/g, "");
         image_src = image_src.trim();
-        console.log("changing img src to", image_src);
+        console.log("changing image src to", image_src);
 
         var image_being_changed = object_being_edited.getAttribute("data-source_id");
         console.log("image_being_changed ", image_being_changed);
@@ -2464,7 +2463,7 @@ function html_from_internal_id(the_id, is_inner) {
 
     if (false && sourcetag == "image") {
         var the_src = the_object["src"];
-        console.log("inserting an img with src", the_src);
+        console.log("inserting an image with src", the_src);
 
         if (is_inner == "edit") {
             return the_src
