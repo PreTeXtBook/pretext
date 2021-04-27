@@ -115,7 +115,8 @@ objectStructure = {
     "html": {
         "tag": "li",
         "pieces": [["content", ""]],
-        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+   //     "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+        "attributes": ['id="<&>xml:id<;>"'],
         "data_editable": "98aZ"
     },
     "pretext": {
@@ -148,7 +149,8 @@ objectStructure = {
     "html": {
         "tag": "ol",
         "pieces": [["content", ""]],
-        "attributes": ['id="<&>xml:id<;>"', 'list-style-type="A"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"']
+        "attributes": ['id="<&>xml:id<;>"', 'list-style-type="a"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+        "data_editable": "AAA"
     },
     "pretext": {
         "tag": "ol",
@@ -679,6 +681,9 @@ function make_current_editing_from_id(theid) {
 //current_editing keeps track of where we are in the tree.  maybe need a better name?
 
     console.log("     OOOOO make_current_editing_from_id", theid);
+    console.log("     which has internalSource", internalSource[theid]);
+    console.log("     within", internalSource);
+    console.log("     and the DOM object is", document.getElementById(theid));
     // the existing current_editing know the top level id
     var top_id = current_editing["tree"][0][0].id;
 
@@ -1920,11 +1925,13 @@ function delete_by_id(theid, thereason) {
   //  (in HTML and internalSource)
 
         // update current_editing
+/*
         var editing_parent = current_editing["tree"][ current_level - 1 ][ current_editing["location"][ current_level - 1 ] ];
         current_editing["tree"][current_editing["level"]] = next_editable_of(editing_parent, "children");
         if (current_editing["location"] >= current_editing["tree"][ current_level ].length ) {
             current_editing["location"] = current_editing["tree"][ current_level ].length - 1
         }
+*/
         edit_menu_from_current_editing("entering");
     }
 }
@@ -2755,7 +2762,8 @@ function insert_html_version(these_changes) {
     }
     location_of_change.remove();
 
-    make_current_editing_from_id(this_object_id);
+// this should be called after this funciotn returns
+//    make_current_editing_from_id(this_object_id);
 
     console.log("returning from insert html version", object_as_html);
     // call mathjax, in case the new content contains math
@@ -2878,41 +2886,43 @@ console.log("    DDD current_editing", current_editing, current_editing["tree"][
 
               }
 
-                most_recent_edit = ["","",""];
-                while (ongoing_editing_actions.length) {
-                    most_recent_edit = ongoing_editing_actions.pop();
-                    recent_editing_actions.unshift(most_recent_edit);
-                    console.log("      most_recent_edit", most_recent_edit);
-                }
-                console.log("      final_added_object", final_added_object);
+              most_recent_edit = ["","",""];
+              while (ongoing_editing_actions.length) {
+                  most_recent_edit = ongoing_editing_actions.pop();
+                  recent_editing_actions.unshift(most_recent_edit);
+                  console.log("      most_recent_edit", most_recent_edit);
+              }
+              console.log("     8888 final_added_object", final_added_object);
 
-                save_edits()
+              save_edits()
 
-                // is this in the right place?
-                console.log("most_recent_edit", most_recent_edit);
+              // is this in the right place?
+              console.log("most_recent_edit", most_recent_edit);
 
-                // sometimes, such as when adding items to a list, you want to
-                // automatically start adding something else.
-                // maybe refactor theorem to add proof after?
-                if (most_recent_edit[1] == "li") {  // added to a list, so try adding again
-                      //  note that when adding an li, the neichbor is a p within the actual li neighbor
-                    var new_obj = create_object_to_edit("li", document.getElementById(most_recent_edit[2]).firstElementChild, "afterend")
-                    edit_in_place(new_obj, "new");
-                    console.log("now editing the assumed new li");
+              // sometimes, such as when adding items to a list, you want to
+              // automatically start adding something else.
+              // maybe refactor theorem to add proof after?
+              if (most_recent_edit[1] == "li") {  // added to a list, so try adding again
+                    //  note that when adding an li, the neichbor is a p within the actual li neighbor
+                  var new_obj = create_object_to_edit("li", document.getElementById(most_recent_edit[2]).firstElementChild, "afterend")
+                  edit_in_place(new_obj, "new");
+                  console.log("now editing the assumed new li");
 console.log("    GGG current_editing", current_editing, current_editing["tree"][current_editing["level"]]);
 
-                } else {
+              } else {
 
-                    console.log("re-making the tree from final_added_object", final_added_object);
-                    make_current_editing_from_id(final_added_object.id);
-                    console.log("and then adding a menu");
-                    edit_menu_from_current_editing("entering");
-                }
+                  console.log("re-making the tree from final_added_object", final_added_object);
+                  make_current_editing_from_id(final_added_object.id);
+                  console.log("and then adding a menu");
+                  edit_menu_from_current_editing("entering");
+              }
 
             } else if ( document.getElementById("actively_editing")) {
-                 document.getElementById("actively_editing").remove();
+                document.getElementById("actively_editing").remove();
+                // were actively editing, and now just re-making the menu
                 edit_menu_from_current_editing("entering");
             } else {
+                // default makng the menu
                 edit_menu_from_current_editing("entering");
             }   
         }  //  esc or enter enter enter
