@@ -233,7 +233,7 @@ objectStructure = {
         "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
         "cssclass": "project-like",
         "data_editable": "94",
-        "pieces": [["{theorem_like_heading}", ""], ["statement",""], ["hint", ""], ["answer", ""], ["solution", ""], ["workspace", ""], ["tasks*", ""]]
+        "pieces": [["{theorem_like_heading}", ""], ["statement",""], ["hint", ""], ["answer", ""], ["solution", ""], ["{workspace}", ""], ["tasks*", ""]]
     },
     "pretext": {
         "tag": "sourcetag",
@@ -283,14 +283,14 @@ objectStructure = {
     "html": {
         "tag": "article",
         "cssclass": "exercise-like task",
-        "data_editable": "94ZZZZ",
+        "data_editable": "94ZZZA",
         "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
-        "pieces": [["{task_like_heading}", ""], ["statement",""], ["hint", ""], ["answer", ""], ["solution", ""], ["workspace", ""]]
+        "pieces": [["{task_like_heading}", ""], ["statement",""], ["hint", ""], ["answer", ""], ["solution", ""], ["{workspace}", ""]]
     },
     "pretext": {
         "tag": "task",
         "pieces": [["title", "title"], ["statement", "statement"], ["hint", ""], ["answer", ""], ["solution", ""]],
-        "attributes": ["workspace"]
+        "attributes": ['workspace="<&>workspace<;>"']
     },
     "source": {
         "tag": "task",
@@ -359,7 +359,9 @@ objectStructure = {
     "html": {
         "tag": "div",
         "cssclass": "workspace",
-        "attributes": ["data-space"]
+        "data_editable": "WwW",
+        "attributes": ['data-parent_id="<&>xml:id<;>"', 'data-space="<&>workspace<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
+        "pieces": []
     }
 /*
 ,
@@ -426,7 +428,7 @@ Object.assign(objectStructure, sidebyside_instances);
 // shoudl we distinguish empty tags by format?
 // these tags are html an dpretext
 var always_empty_tags = ["img", "image"];
-var allowed_empty_tags = ["span", "p"];
+var allowed_empty_tags = ["div", "span", "p"];
 var tag_display = {  /* the default is "block" */
     "inline": ["m", "em", "ellipsis", "span"], 
     "title": ["title", "idx", "h1", "h2", "h3", "h4", "h5", "h6"]
