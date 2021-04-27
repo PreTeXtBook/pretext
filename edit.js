@@ -60,7 +60,8 @@ objectStructure = {
     "html": {
         "tag": "h5",
         "cssclass": "heading",
-        "pieces": ["type", "period"]
+        "attributes": ['class="<&>{cssclass}<;>"', 'xml:id="<&>xml:id<;>"'],
+        "pieces": [["{type}", ""], ["{period}", ""]]
     }
   },
   "section_like_heading": {
@@ -74,7 +75,8 @@ objectStructure = {
     "html": {
         "tag": "h6",
         "cssclass": "heading",
-        "pieces": ["codenumber", "space", "title*"]
+        "attributes": ['class="<&>{cssclass}<;>"', 'data-parent_id="<&>xml:id<;>"'],
+        "pieces": [["{codenumber}", ""], ["{space}", ""], ["{title}", ""]]
     }
   },
 
@@ -196,7 +198,7 @@ objectStructure = {
     "html": {
         "tag": "article",
         "cssclass": "proof",
-        "pieces": ["proof_heading", "content"],
+        "pieces": [["{proof_heading}", ""], ["content",""]],
         "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
         "data_editable": "60"
     },
@@ -228,10 +230,10 @@ objectStructure = {
   "project-like": {
     "html": {
         "tag": "article",
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
         "cssclass": "project-like",
         "data_editable": "94",
-        "pieces": ["heading", "statement", "hint", "answer", "solution", "workspace", "tasks*"],
-        "heading": "theorem_like_heading"
+        "pieces": [["{theorem_like_heading}", ""], ["statement",""], ["hint", ""], ["answer", ""], ["solution", ""], ["workspace", ""], ["tasks*", ""]]
     },
     "pretext": {
         "tag": "sourcetag",
@@ -281,9 +283,9 @@ objectStructure = {
     "html": {
         "tag": "article",
         "cssclass": "exercise-like task",
-        "data_editable": "94",
-        "pieces": ["heading", "statement","hint", "answer", "solution", "workspace"],
-        "heading": "task_like_heading"
+        "data_editable": "94ZZZZ",
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
+        "pieces": [["{task_like_heading}", ""], ["statement",""], ["hint", ""], ["answer", ""], ["solution", ""], ["workspace", ""]]
     },
     "pretext": {
         "tag": "task",
