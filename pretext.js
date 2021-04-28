@@ -394,7 +394,7 @@ if(typeof MathJax == 'undefined' ) {
         self.setMathJaxOverrides = function() {
             if(typeof MathJax !== "undefined") {
               var mjvers = MathJax.version;
-              mjvers = parseFloat(mjvers.substring(0,2));
+              mjvers = parseFloat(mjvers.substring(0,3));
               console.log("MathJax version", mjvers);
               if (mjvers < 3) {
                 // Before MathJax applies the page's configuration
