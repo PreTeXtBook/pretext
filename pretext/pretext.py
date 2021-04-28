@@ -1662,7 +1662,8 @@ def latex(xml, pub_file, stringparams, out_file, dest_dir):
     if pub_file:
         stringparams['publisher'] = pub_file
     extraction_xslt = os.path.join(get_ptx_xsl_path(), 'pretext-latex.xsl')
-    # form output filename based on source filename
+    # form output filename based on source filename,
+    # unless an  out_file  has been specified
     derivedname = get_output_filename(xml, out_file, dest_dir, '.tex')
     # Write output into working directory, no scratch space needed
     _verbose('converting {} to LaTeX as {}'.format(xml, derivedname))
@@ -1675,8 +1676,10 @@ def latex(xml, pub_file, stringparams, out_file, dest_dir):
 
 def pdf(xml, pub_file, stringparams, out_file, dest_dir):
     """Convert XML source to a PDF (incomplete)"""
-    import os.path # join()
-    import shutil # copytree
+    import os # chdir()
+    import os.path # join(), split(), splitext()
+    import shutil # copytree(), copy2()
+    import subprocess # run()
 
     warning = '\n'.join(['************************************************',
                          'Conversion to PDF is experimental and incomplete',
@@ -1684,24 +1687,63 @@ def pdf(xml, pub_file, stringparams, out_file, dest_dir):
                          '************************************************'])
     print(warning)
     #
-    generated_abs, _, external_abs, generated, _, external = get_image_directories(xml, pub_file)
+    generated_abs, data_abs, external_abs, generated, data, external = get_image_directories(xml, pub_file)
     # perhaps necessary (so drop "if"), but maybe not; needs to be supported
     if pub_file:
         stringparams['publisher'] = pub_file
     # names for scratch directories
     tmp_dir = get_temporary_directory()
-    generated_dir = os.path.join(tmp_dir, generated)
-    external_dir = os.path.join(tmp_dir, external)
-    # make the LateX source file in scratch directory
+
+    # make the LaTeX source file in scratch directory
+    # (1) pass None as out_file to derive from XML source filename
+    # (2) pass tmp_dir (scratch) as destination directory
     latex(xml, pub_file, stringparams, None, tmp_dir)
+
     # "dirs_exist_ok" keyword is Python 3.8; necessary?
-    # copy managed, generated images
-    shutil.copytree(generated_abs, generated_dir, dirs_exist_ok=True)
-    # copy externally manufactured images
-    shutil.copytree(external_abs, external_dir, dirs_exist_ok=True)
 
+    # Create localized filenames for pdflatex conversion step
+    # sourcename  needs to match behavior of latex() with above arguments
+    basename = os.path.splitext(os.path.split(xml)[1])[0]
+    sourcename = basename + '.tex'
+    pdfname = basename + '.pdf'
 
+    # Copy directories as indicated in publisher file
+    # A "None" value will indicate there was no information
+    # (an empty string is impossible due to a slash always being present?)
 
+    # Managed, generated images
+    if generated:
+        generated_dir = os.path.join(tmp_dir, generated)
+        shutil.copytree(generated_abs, generated_dir, dirs_exist_ok=True)
+    # externally manufactured images
+    if external:
+        external_dir = os.path.join(tmp_dir, external)
+        shutil.copytree(external_abs, external_dir, dirs_exist_ok=True)
+    # data files
+    if data:
+        data_dir = os.path.join(tmp_dir, data)
+        shutil.copytree(data_abs, data_dir, dirs_exist_ok=True)
+
+    # now work in temporary directory since LaTeX is a bit incapable
+    # of working outside of the current working directory
+    os.chdir(tmp_dir)
+    # process with a  pdflatex  engine
+    latex_exec_cmd = get_executable_cmd('tex')
+    # In flux during development, now nonstop
+    # -halt-on-error will give an exit code to examine
+    # perhaps behavior depends on -v, -vv
+    # Two passes to resolve cross-references,
+    # we may need a third for tcolorbox adjustments
+    latex_cmd = latex_exec_cmd + ['-halt-on-error', sourcename]
+    subprocess.run(latex_cmd)
+    subprocess.run(latex_cmd)
+
+    # out_file: not(None) only if provided in CLI
+    # dest_dir: always defined, if only current directory of CLI invocation
+    if out_file:
+        shutil.copy2(pdfname, out_file)
+    else:
+        shutil.copy2(pdfname, dest_dir)
 
 
 #################
@@ -2041,7 +2083,7 @@ def get_image_directories(xml_source, pub_file):
     # N.B. manage attributes carefully to distinguish
     # absent (None) versus empty string value ('')
 
-    # Examine /publication/source element carefully for
+    # Examine /publication/source/images element carefully for
     # attributes which we code here for convenience
     gen_attr = 'generated'
     data_attr = 'data'
@@ -2069,13 +2111,13 @@ def get_image_directories(xml_source, pub_file):
             attributes_dict = element_list[0].attrib
             # common error message
             abs_path_error = ' '.join(['the directory path to data for images, given in the',
-                             'publisher file as "source/images/@{}" must be relative to',
+                             'publisher file as "source/media/@{}" must be relative to',
                              'the PreTeXt source file location, and not the absolute path "{}"'])
             # attribute absent => None
             if gen_attr in attributes_dict.keys():
                 raw_path = attributes_dict[gen_attr]
                 if os.path.isabs(raw_path):
-                    raise ValueError(abs_path_error.format(data_attr, raw_path))
+                    raise ValueError(abs_path_error.format(gen_attr, raw_path))
                 else:
                     abs_path = os.path.join(source_dir, raw_path)
                 generated = raw_path
