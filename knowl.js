@@ -37,6 +37,14 @@ var knowl_focus_stack_uid = [];
 var knowl_focus_stack = [];
 
 var sagecellEvalName = "Evaluate";
+
+var mjvers = 0;
+if (window.MathJax !== undefined) {
+  mjvers = MathJax.version;
+  mjvers = parseFloat(mjvers.substring(0,3));
+}
+console.log("               mjvers", mjvers);
+
  
 function knowl_click_handler($el) {
   // the knowl attribute holds the id of the knowl
@@ -171,7 +179,11 @@ function knowl_click_handler($el) {
        }
        else {
            // this is sloppy, because this is called again later.
+         if (mjvers && mjvers < 3) {
               MathJax.Hub.Queue(['Typeset', MathJax.Hub, $output.get(0)]);
+         } else if (mjvers > 3) {
+              MathJax.typesetPromise([$output.get(0)]);
+         }
 // not sure of the use case for this:
  $(".knowl-output .hidden-content .hidden-sagecell-sage").attr("class", "doubly-hidden-sagecell-sage");
  $(".knowl-output .hidden-sagecell-sage").attr("class", "sagecell-sage");
@@ -191,11 +203,12 @@ function knowl_click_handler($el) {
    if(window.MathJax == undefined) {
             $knowl.slideDown("slow");
    } else {
-     $knowl.addClass("processing");
+     if (mjvers < 3) {
+       $knowl.addClass("processing");
 //     $(".knowl-output .hidden-sagecell-sage").attr("class", "sagecell-sage");
 //     sagecell.makeSagecell({inputLocation: ".sagecell-sage"});
-     MathJax.Hub.Queue(['Typeset', MathJax.Hub, $output.get(0)]);
-     MathJax.Hub.Queue([ function() {
+       MathJax.Hub.Queue(['Typeset', MathJax.Hub, $output.get(0)]);
+       MathJax.Hub.Queue([ function() {
        $knowl.removeClass("processing");
        $knowl.slideDown("slow");
 
@@ -214,11 +227,38 @@ function knowl_click_handler($el) {
         $("a[data-knowl]").attr("href", "");
         }]);
 // if this is before the MathJax, big problems
- $(".knowl-output .hidden-content .hidden-sagecell-sage").attr("class", "doubly-hidden-sagecell-sage");
-$(".knowl-output .hidden-sagecell-sage").attr("class", "sagecell-sage");
-sagecell.makeSagecell({inputLocation: ".sagecell-sage",  linked: true, evalButtonText: sagecellEvalName});
- $(".knowl-output .hidden-content .doubly-hidden-sagecell-sage").attr("class", "hidden-sagecell-sage");
-      }
+        $(".knowl-output .hidden-content .hidden-sagecell-sage").attr("class", "doubly-hidden-sagecell-sage");
+        $(".knowl-output .hidden-sagecell-sage").attr("class", "sagecell-sage");
+        sagecell.makeSagecell({inputLocation: ".sagecell-sage",  linked: true, evalButtonText: sagecellEvalName});
+        $(".knowl-output .hidden-content .doubly-hidden-sagecell-sage").attr("class", "hidden-sagecell-sage");
+     } else if (mjvers > 3) {
+       console.log("processing for MJ3");
+       $knowl.addClass("processing");
+  //      MathJax.typesetPromise([$output.get(0)]);
+  //      MathJax.typesetPromise([ function() {
+        MathJax.typesetPromise([$output.get(0)]);
+       $knowl.removeClass("processing");
+       $knowl.slideDown("slow");
+
+       console.log("just did slideDown");
+       // if replacing, then need to hide what was there
+       // (and also do some other things so that toggling works -- not implemented yet)
+       if($el.attr("replace")) {
+          var the_replaced_thing = $($el.attr("replace"));
+          the_replaced_thing.hide("slow");
+        }
+
+        var thisknowlid = 'kuid-'.concat(uid)
+        document.getElementById(thisknowlid).tabIndex=0;
+        document.getElementById(thisknowlid).focus();
+        knowl_focus_stack_uid.push(uid);
+        knowl_focus_stack.push($el);
+        $("a[data-knowl]").attr("href", "");
+//        }]);
+     } else {
+        $knowl.slideDown("slow");
+     }
+    }
   }
 } //~~ end click handler for *[data-knowl] elements
 
