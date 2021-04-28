@@ -392,7 +392,11 @@ if(typeof MathJax == 'undefined' ) {
         * so things work nicely with our sticky header
         */
         self.setMathJaxOverrides = function() {
-            if(typeof MathJax !== "undefined" ) {
+            if(typeof MathJax !== "undefined") {
+              var mjvers = MathJax.version;
+              mjvers = parseFloat(mjvers.substring(0,2));
+              console.log("MathJax version", mjvers);
+              if (mjvers < 3) {
                 // Before MathJax applies the page's configuration
                 MathJax.Hub.Register.StartupHook("Begin Config", function() {
                     // Modify that configuration to apply overrides
@@ -405,6 +409,9 @@ if(typeof MathJax == 'undefined' ) {
                 MathJax.Hub.Register.StartupHook("End Typeset", function () {
                     self.postMathJax();
                 });
+              } else {  // need to actually do something for MJ3
+                self.postMathJax();
+              }
             } else {
                 self.postMathJax();
             }
