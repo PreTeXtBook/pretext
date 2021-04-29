@@ -233,7 +233,7 @@ objectStructure = {
         "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
         "cssclass": "project-like",
         "data_editable": "94",
-        "pieces": [["{theorem_like_heading}", ""], ["statement",""], ["hint", ""], ["answer", ""], ["solution", ""], ["{workspace}", ""], ["tasks*", ""]]
+        "pieces": [["{theorem_like_heading}", ""], ["statement",""], ["%hint%", ""], ["%answer%", ""], ["%solution%", ""], ["{workspace}", ""], ["tasks*", ""]]
     },
     "pretext": {
         "tag": "sourcetag",
@@ -2343,6 +2343,11 @@ function output_from_source(the_object, output_structure, format) {
             this_piece_output += output_from_source(the_object, objectStructure[this_piece][format], format);
             console.log("wrapping in bracketed tag", this_tag);
             the_answer += wrap_tag(this_tag, this_piece_output, [])
+        } else if (this_piece.startsWith("%")) {
+     // need to distinguish between the case where this object exists,
+     // and when it does not exist and we want a placeholder
+            this_piece = this_piece.slice(1,-1);
+            the_answer += wrap_tag("div", "", ['class="placeholder ' + this_piece + '"', 'data-parent_id="' + the_object['xml:id'] + '"', 'tabindex="-1"', 'data-editable="123456"', 'data-placeholder=""'])
         } else if (this_piece.startsWith("(")) {
             the_answer += wrap_tag(this_tag, "3.14", [])
         } else if (this_piece in the_object) {
