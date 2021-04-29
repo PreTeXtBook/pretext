@@ -56,7 +56,7 @@ objectStructure = {
           // * means editable piece
     }
   },
-  "proof_heading": {
+  "proof_like_heading": {
     "html": {
         "tag": "h5",
         "cssclass": "heading",
@@ -198,7 +198,7 @@ objectStructure = {
     "html": {
         "tag": "article",
         "cssclass": "proof",
-        "pieces": [["{proof_heading}", ""], ["content",""]],
+        "pieces": [["{proof_like_heading}", ""], ["content",""]],
         "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
         "data_editable": "60"
     },
@@ -300,57 +300,60 @@ objectStructure = {
   },
 
 /* consolidate H/A/S */
+  "hint": { 
+    "html": {
+        "tag": "article",
+        "cssclass": "solution-like hint",
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
+        "pieces": [["{proof_like_heading}", ""], ["content",""]],
+// go back and make the lack of data_editable automatically make the contained p editable
+/*        "data_editable": "454", */
+        "data_editable": "hhhh"
+    },
+    "pretext": {
+        "tag": "hint",
+        "pieces": [["title", "title"], ["content", ""]]
+    },
+    "source": {
+        "tag": "hint",
+        "pieces": [["content", "p"]]
+    }
+  },
+  "answer": { 
+    "html": {
+        "tag": "article",
+        "cssclass": "solution-like answer",
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
+        "pieces": [["{proof_like_heading}", ""], ["content",""]],
+// go back and make the lack of data_editable automatically make the contained p editable
+/*        "data_editable": "454", */
+        "data_editable": "hhhh"
+    },
+    "pretext": {
+        "tag": "answer",
+        "pieces": [["title", "title"], ["content", ""]]
+    },
+    "source": {
+        "tag": "answer",
+        "pieces": [["content", "p"]]
+    }
+  },
   "solution": {
     "html": {
         "tag": "article",
         "cssclass": "solution-like solution",
-        "data_editable": "452",
-        "pieces": ["heading", "content"],
-        "heading": "proof_heading"
-    },
-    "pretext": {
-        "tag": "solution",
-        "pieces": [["title", "title"], ["content", ""]]
-    },
-    "source": {
-        "tag": "solution",
-        "pieces": [["content", "p"]]
-    }
-  },
-
-  "answer": {
-    "html": {
-        "tag": "article",
-        "cssclass": "solution-like answer",
-/*        "data_editable": "453", */
-        "pieces": ["heading", "content"],
-        "heading": "proof_heading"
-    },
-    "pretext": {
-        "tag": "answer",
-        "pieces": [["title", "title"], ["content", ""]]
-    },
-    "source": {
-        "tag": "answer",
-        "pieces": [["content", "p"]]
-    }
-  },
-
-  "hint": {
-    "html": {
-        "tag": "article",
-        "cssclass": "solution-like hint",
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
+        "pieces": [["{proof_like_heading}", ""], ["content",""]],
 // go back and make the lack of data_editable automatically make the contained p editable
 /*        "data_editable": "454", */
-        "pieces": ["heading", "content"],
-        "heading": "proof_heading"
+        "data_editable": "hhhh"
     },
     "pretext": {
-        "tag": "hint",
+        "tag": "solution",
         "pieces": [["title", "title"], ["content", ""]]
     },
     "source": {
-        "tag": "hint",
+        "tag": "solution",
         "pieces": [["content", "p"]]
     }
   },
@@ -1330,7 +1333,7 @@ function edit_in_place(obj, oldornew) {
          // previous comment probebly wrong/out of date
 
     var thisID;
-    console.log("in edit in place");
+    console.log("in edit in place", obj);
     if (thisID = obj.getAttribute("id")) {
         console.log("will edit in place id", thisID, "which is", obj);
         thisTagName = obj.tagName.toLowerCase();
@@ -2347,7 +2350,7 @@ function output_from_source(the_object, output_structure, format) {
      // need to distinguish between the case where this object exists,
      // and when it does not exist and we want a placeholder
             this_piece = this_piece.slice(1,-1);
-            the_answer += wrap_tag("div", "", ['class="placeholder ' + this_piece + '"', 'data-parent_id="' + the_object['xml:id'] + '"', 'tabindex="-1"', 'data-editable="123456"', 'data-placeholder=""'])
+            the_answer += wrap_tag("div", "", ['class="placeholder ' + this_piece + '"', 'data-parent_id="' + the_object['xml:id'] + '"', 'data-has="' + this_piece + '"', 'tabindex="-1"', 'data-editable="123456"', 'data-placeholder=""'])
         } else if (this_piece.startsWith("(")) {
             the_answer += wrap_tag(this_tag, "3.14", [])
         } else if (this_piece in the_object) {
