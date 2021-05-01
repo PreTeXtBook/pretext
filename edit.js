@@ -92,7 +92,6 @@ objectStructure = {
         "pieces": [["title", "title"], ["content", ""]]
     },
     "source": {
-        "tag": "section",
         "pieces": [["title", "*"], ["content", "p"]]
     }
   },
@@ -171,8 +170,7 @@ objectStructure = {
         "pieces": [["{bareimage}",""]],
         "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"', 'style="width: <&>width<;>%; margin-right: <&>marginright<;>%; margin-left: <&>marginleft<;>%"'],
         "data_editable": "31",
-        "cssclass": "image-box",
-        "style": "width: 20%; margin-right: 55%; margin-left: 25%"  /* not used / should come from source source? */
+        "cssclass": "image-box"
     },
     "pretext": {
         "tag": "image",
@@ -180,7 +178,6 @@ objectStructure = {
         "attributes": ['xml:id="<&>xml:id<;>"', 'source="<&>src<;>"', 'alt="<&>alt<;>"', 'width="<&>width<;>%"', 'margins="<&>marginleft<;>% <&>marginright<;>%"']
     },
     "source": {
-        "tag": "image",
         "pieces": [["",""]],
         "attributes": [["src", ""], ["width", "40"], ["marginleft", "20"], ["marginright", "40"], ["alt", ""]]
     }
@@ -191,6 +188,59 @@ objectStructure = {
         "tag": "img",
         "pieces": [],
         "attributes": ['src="<&>src<;>"', 'alt="<&>alt<;>"', 'style="contained"'],
+    }
+  },
+
+  "sidebyside": {
+    "html": {
+        "tag": "div",
+        "pieces": [["{sbsrow}",""]],
+        "attributes": ['id="<&>xml:id<;>"', 'class="<&>{cssclass}<;>"'],
+        "cssclass": "sidebyside"
+    },
+    "pretext": {
+        "tag": "sidebyside",
+        "pieces": [],
+        "attributes": ['xml:id="<&>xml:id<;>"'],
+    },
+    "source": {
+        "pieces": [["content",""]],
+        "attributes": [["marginleft", "20"], ["marginright", "40"]]
+    }
+  },
+  "sbsrow": {
+    "html": {
+        "tag": "div",
+        "pieces": [["{sbsrow}",""]],
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"', 'style="width: <&>width<;>%; margin-right: <&>marginright<;>%; margin-left: <&>marginleft<;>%"'],
+        "data_editable": "31",
+        "cssclass": "sbsrow"
+    },
+    "pretext": {
+        "tag": "sidebyside",
+        "pieces": [],
+        "attributes": ['xml:id="<&>xml:id<;>"'],
+    },
+    "source": {
+        "pieces": [["content",""]],
+        "attributes": [["marginleft", "20"], ["marginright", "40"]]
+    }
+  },
+  "sbspanel": {
+    "html": {
+        "tag": "div",
+        "pieces": [["{sbsrow}",""]],
+        "attributes": ['id="<&>xml:id<;>"', 'class="<&>{cssclass}<;>"'],
+        "cssclass": "sbspanel"
+    },
+    "pretext": {
+        "tag": "stack",
+        "pieces": [["content", ""]],
+        "attributes": ['xml:id="<&>xml:id<;>"', 'source="<&>src<;>"', 'alt="<&>alt<;>"', 'width="<&>width<;>%"', 'margins="<&>marginleft<;>% <&>marginright<;>%"']
+    },
+    "source": {
+        "pieces": [["",""]],
+        "attributes": [["src", ""], ["width", "40"], ["marginleft", "20"], ["marginright", "40"], ["alt", ""]]
     }
   },
 
@@ -555,26 +605,26 @@ function spacemath_to_tex(text) {
 */
 base_menu_for = {
 "section": [["paragraph", "p"],
+            ["display math/chemistry/code", "math-like", "c"],
             ["list or table", "list-like"],
+            ["example-like", "example-like"],
             ["definition-like", "definition-like"],
             ["theorem-like", "theorem-like"],
             ["remark-like"],
-            ["example-like", "example-like"],
-            ["image/video/sound", "image-like", "v"],
-            ["math/chemistry/code", "math-like", "c"],
             ["project/exercise-like", "project-like", "j"],
+            ["image/video/sound", "image-like", "v"],
             ["blockquote/poem/music/etc", "quoted"],
             ["aside-like", "aside-like", "d"],
-            ["proof", "proof", "o"],
             ["interactives"],
+            ["proof", "proof", "o"],
             ["layout-like"],
             ["section-like"],
             ["source"]],
 "blockquote": [["paragraph", "p"]],
 // "ol": [["list item", "li"]],
 "article": [["paragraph", "p"],  //  this is for theorem-like and similar
-            ["list or table", "list-like"],
             ["math/chemistry/code", "math-like", "c"],
+            ["list or table", "list-like"],
             ["image/video/sound", "image-like", "v"]],
 "proof": [["paragraph", "p"],  //  this is for theorem-like and similar
             ["list or table", "list-like"],
@@ -868,8 +918,9 @@ function menu_options_for(object_id, component_type, level) {
          // is this a reasbable default for what can go anywhere?
          alert("default menu for" + component_type);
          component_items = [["paragraph", "p"],
+            ["math/chemistry/code", "math-like", "c"],
             ["list or table", "list-like"],
-            ["math/chemistry/code", "math-like", "c"]]
+            ["image/video/sound", "image-like", "v"]]
      }
 
      this_menu = "";
@@ -1256,7 +1307,7 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
         object_neighbor = new RegExp('(<&>' + sibling_id + '<;>)');
     }
 
-    if (relative_placement == "afterbegin") {  // when adding to a sbs panel
+    if (relative_placement == "afterbegin" && new_tag != "image") {  // when adding to a sbs panel
                            // redo the condition so that it explicitly usus sbs
         parent_description = [new_id, "content"];
     }
@@ -1268,8 +1319,8 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
     }
     if (["hint", "answer", "solution"].includes(new_tag)) {   // this is only for the case that a solution does not already exist
         relative_placement = "replace";
-        console.log(new_tag, "parent_description", parent_description);
     }
+    console.log(new_tag, "parent_description", parent_description);
 
                   // then create the empty internalSource for the new object
     create_new_internal_object(new_tag, new_id, parent_description);
@@ -2316,7 +2367,7 @@ function output_from_source(the_object, output_structure, format) {
                    newid = newid.slice(1,-1);
                    if (newid in output_structure) {
                        return output_structure[newid]
-                   } else {  // don;t want to return 'undefined'
+                   } else {  // don't want to return 'undefined'
                        return ""
                    }
                } else {
