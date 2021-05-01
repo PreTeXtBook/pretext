@@ -4001,6 +4001,40 @@ sbspanel:empty { /* can only happen when partially created */
     display: none;
 }
 
+.in_edit_tree > .workspace {
+    min-height: 3em;
+    background: #efe;
+    border: 1px dotted #aaa;
+}
+.in_edit_tree > .workspace::before {
+    content: "optional workspace (in printed worksheet)";
+    font-size: 90%;
+    font-style: italic;
+    padding-left: 0.25em;
+}
+.in_edit_tree > .placeholder.hint,
+.in_edit_tree > .placeholder.answer, 
+.in_edit_tree > .placeholder.solution {
+    min-height: 1em;
+    background: #fee;
+} 
+.in_edit_tree > .placeholder.hint::before,
+.in_edit_tree > .placeholder.answer::before,
+.in_edit_tree > .placeholder.solution::before {
+    font-size: 90%;
+    font-style: italic;
+    padding-left: 0.25em;
+}
+.in_edit_tree > .placeholder.hint::before {
+    content: "optional hint";
+}
+.in_edit_tree > .placeholder.answer::before {
+    content: "optional answer";
+}
+.in_edit_tree > .placeholder.solution::before {
+    content: "optional solution";
+}
+
 .group_description {
     font-size: 75%;
     font-color: #caa;
