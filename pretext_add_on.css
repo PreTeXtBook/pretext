@@ -3153,14 +3153,15 @@ body.standalone .pretext-content .onepage + .onepage::before {
 */
 body.worksheet .pretext-content .onepage .sbspanel + .sbspanel > .exercise::before {
     content: "";
-position: absolute;
-top: 0;
-bottom: 0;
-right: 0;
-left: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
     padding-left: 1.25em;
     border-left: 1px solid grey;
     margin-left: -1.25em;
+    z-index: -100;  /* to not block editable content */
 }
 
 body.standalone.worksheet .pretext-content section article.task {
