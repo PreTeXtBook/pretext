@@ -14,28 +14,28 @@ objectStructure = {
     "html": {
         "tag": "span",
         "attributes": ['class="type"', 'data-editable="70XX"', 'tabindex="-1"'],
-        "pieces": [["sourcetag", ""]]  // need to transform the sourcetag
+        "pieces": [["(capitalize,sourcetag)", ""]]  // need to transform the sourcetag
     }
   },
   "codenumber": { 
     "html": {
         "tag": "span",
         "attributes": ['class="type"'],
-        "pieces": [["(codenumber)", ""]]  // maybe () was a bad idea?  do we need a triple?
+        "pieces": [["(codenumber,)", ""]]  // maybe () was a bad idea?  do we need a triple?
     }
   },
   "period": {
     "html": {
         "tag": "span",
         "attributes": ['class="period"'],
-        "pieces": [["", ""]]  // need to implement the "."
+        "pieces": [["(period,)", ""]]  // need to implement the "."
     }
   },
   "space": {
     "html": {
         "tag": "span",
         "attributes": ['class="space"'],
-        "pieces": [["", ""]]  // need to implement the " "
+        "pieces": [["(space,)", ""]]  // need to implement the " "
     }
   },
   "title": {
@@ -487,8 +487,33 @@ var tag_display = {  /* the default is "block" */
     "title": ["title", "idx", "h1", "h2", "h3", "h4", "h5", "h6"]
 } 
 
+function process_value_from_source(fcn, piece, src) {
+
+    console.log("process_value_from_source", piece, "in", src);
+    var content_raw = "";
+    if (piece in src) {
+        content_raw = src[piece]
+    }
+
+    if (fcn == "capitalize") {
+        content = content_raw.charAt(0).toUpperCase() + content_raw.slice(1);
+    } else if (fcn == "space") {
+        content = content_raw + " "
+    } else if (fcn == "period") {
+        content = content_raw + "."
+    } else if (fcn == "codenumber") {
+        content = "N.mm"
+    } else {
+         content = content_raw
+    }
+
+    return content
+}
+
+//  delete this in cleanup after refactoring
 function value_from_source(name, src) {
     console.log("     value_from_source src", src);
+    alert("value_from_source shoulf no longer be used");
     var content;
 
     if (name == "space") { content = " " }
@@ -2403,7 +2428,11 @@ function output_from_source(the_object, output_structure, format) {
             this_piece = this_piece.slice(1,-1);
             the_answer += wrap_tag("div", "", ['class="placeholder ' + this_piece + '"', 'data-parent_id="' + the_object['xml:id'] + '"', 'data-has="' + this_piece + '"', 'tabindex="-1"', 'data-editable="123456"', 'data-placeholder=""'])
         } else if (this_piece.startsWith("(")) {
-            the_answer += wrap_tag(this_tag, "3.14", [])
+            this_piece = this_piece.slice(1,-1);
+            var this_fcn;
+            [this_fcn, this_piece] = this_piece.split(",");
+            var this_content = process_value_from_source(this_fcn, this_piece, the_object)
+            the_answer += wrap_tag(this_tag, this_content, [])
         } else if (this_piece in the_object) {
             this_piece_output = output_from_text(the_object[this_piece], format);
             the_answer += wrap_tag(this_tag, this_piece_output, [])
