@@ -711,6 +711,10 @@ function scaleWorkspaceIn(obj, subobj, scale, tmporfinal) {
 }
 
 function adjustWorkspace() {
+
+    $(".workspace").attr("contenteditable", "true");
+    document.execCommand("defaultParagraphSeparator", false, "br");
+
     var all_pages = document.querySelectorAll('body .onepage');
     var a = 14.0;
     var b = 10.0;
