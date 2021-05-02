@@ -200,18 +200,18 @@ objectStructure = {
     },
     "pretext": {
         "tag": "sidebyside",
-        "pieces": [],
-        "attributes": ['xml:id="<&>xml:id<;>"'],
+        "pieces": [["", ""]],
+        "attributes": ['xml:id="<&>xml:id<;>"', 'margins="<&>marginleft<;>% <&>marginright<;>%"', 'width="<&>(percentlist,widths)<;>"'],
     },
     "source": {
         "pieces": [["content",""]],
-        "attributes": [["marginleft", "20"], ["marginright", "40"]]
+        "attributes": [["marginleft", ""], ["marginright", ""], ["widths", ""]]
     }
   },
   "sbsrow": {
     "html": {
         "tag": "div",
-        "pieces": [["{sbsrow}",""]],
+        "pieces": [["content",""]],   // ????
         "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"', 'style="width: <&>width<;>%; margin-right: <&>marginright<;>%; margin-left: <&>marginleft<;>%"'],
         "data_editable": "31",
         "cssclass": "sbsrow"
@@ -229,7 +229,7 @@ objectStructure = {
   "sbspanel": {
     "html": {
         "tag": "div",
-        "pieces": [["{sbsrow}",""]],
+        "pieces": [["content",""]],
         "attributes": ['id="<&>xml:id<;>"', 'class="<&>{cssclass}<;>"'],
         "cssclass": "sbspanel"
     },
@@ -501,6 +501,8 @@ function process_value_from_source(fcn, piece, src) {
         content = content_raw + " "
     } else if (fcn == "period") {
         content = content_raw + "."
+    } else if (fcn == "list_to_percent") {
+        content = content_raw.join("% ")
     } else if (fcn == "codenumber") {
         content = "N.mm"
     } else {
@@ -1208,15 +1210,20 @@ function create_new_internal_object(new_tag, new_id, parent_description) {
     console.log("create new internal object", new_tag, "new_id", new_id, "parent_description", parent_description);
     console.log("within", internalSource[parent_description[0]]);
     if (new_tag.startsWith("sbs")) {  // creating an sbs, which contains one sbsrow, which contains several sbspanels
+        new_source.sourcetag = "sidebyside";
         var sbs_layout = new_tag.split("_");
         var [margin_left, margin_right] = [sbs_layout[1], sbs_layout[sbs_layout.length - 1]];
         console.log("sbs side margins", margin_left, "jj", margin_right);
+        new_source.marginleft = margin_left;
+        new_source.marginright = margin_right;
         var new_sbsrow_id = randomstring();
         internalSource[new_sbsrow_id] = {"xml:id": new_sbsrow_id, "sourcetag": "sbsrow",
                  "margin-left": margin_left, "margin-right": margin_right, "parent": [new_id, "content"]}
 
         var col_content = "";
+        var widths = [];
         for (var j=2; j <= sbs_layout.length - 2; ++j) {
+            widths.push(sbs_layout[j]);
             var new_col_id = randomstring();
             col_content += "<&>" + new_col_id + "<;>";
             internalSource[new_col_id] = {"xml:id": new_col_id, "sourcetag": "sbspanel",
