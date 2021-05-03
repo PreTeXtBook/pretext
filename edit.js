@@ -200,7 +200,7 @@ objectStructure = {
     },
     "pretext": {
         "tag": "sidebyside",
-        "pieces": [["", ""]],
+        "pieces": [["content", ""]],
         "attributes": ['xml:id="<&>xml:id<;>"', 'margins="<&>marginleft<;>% <&>marginright<;>%"', 'width="<&>(percentlist,widths)<;>"'],
     },
     "source": {
@@ -213,14 +213,14 @@ objectStructure = {
         "tag": "div",
         "pieces": [["content",""]],   // ????
    //     "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"', 'style="width: <&>width<;>%; margin-right: <&>marginright<;>%; margin-left: <&>marginleft<;>%"'],
-        "attributes": ['class="<&>{cssclass}<;>"', 'style="margin-right: <&>marginright<;>%; margin-left: <&>marginleft<;>%"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+        "attributes": ['class="<&>{cssclass}<;>"', 'style="margin-right: <&>marginright<;>%; margin-left: <&>marginleft<;>%"'],
         "data_editable": "89",
         "cssclass": "sbsrow"
     },
     "pretext": {
-        "tag": "sidebyside",
-        "pieces": [],
-        "attributes": ['xml:id="<&>xml:id<;>"'],
+        "tag": "",
+        "pieces": [["content",""]],
+        "attributes": []
     },
     "source": {
         "pieces": [["content",""]],
@@ -231,18 +231,17 @@ objectStructure = {
     "html": {
         "tag": "div",
         "pieces": [["content",""]],
-        "attributes": ['id="<&>xml:id<;>"', 'class="<&>{cssclass}<;>"', 'style="width:20%"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+        "attributes": ['id="<&>xml:id<;>"', 'class="<&>{cssclass}<;>"', 'style="width:<&>(nthitem,widths)<;>%"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
         "data_editable": "90",
         "cssclass": "sbspanel"
     },
     "pretext": {
         "tag": "stack",
         "pieces": [["content", ""]],
-        "attributes": ['xml:id="<&>xml:id<;>"', 'source="<&>src<;>"', 'alt="<&>alt<;>"', 'width="<&>width<;>%"', 'margins="<&>marginleft<;>% <&>marginright<;>%"']
+        "attributes": ['xml:id="<&>xml:id<;>"']
     },
     "source": {
-        "pieces": [["",""]],
-        "attributes": [["src", ""], ["width", "40"], ["marginleft", "20"], ["marginright", "40"], ["alt", ""]]
+        "pieces": [["content",""]]
     }
   },
 
@@ -473,9 +472,9 @@ console.log('objectStructure["exercise"]', objectStructure["exercise"]);
 var sidebyside_instances = {
 "sbs": [["2 panels", "sbs2"], ["3 panels", "sbs3"], ["4 panels", "sbs4"]],
 //"sbs2": [["full across XX", "sbs2_0_50_50_0"], ["gap but no margin", "sbs2_0_40_40_0"], ["spaced equally", "sbs2_5_40_40_5"]],
-"sbs2": [["full across", "sbs_0_60_60_0"], ["gap but no margin", "sbs_0_48_48_0"], ["spaced equally", "sbs_5_48_48_5"]],
-"sbs3": [["full across", "sbs_0_40_40_40_0"], ["gap but no margin", "sbs_0_33_33_33_0"], ["spaced equally", "sbs_5_33_33_33_5"]],
-"sbs4": [["full across", "sbs_0_30_30_30_30_0"], ["gap but no margin", "sbs_0_25_25_25_25_0"], ["spaced equally", "sbs_4_25_25_25_25_4"]]
+"sbs2": [["full across", "sbs_0_50_50_0"], ["gap but no margin", "sbs_0_45_45_0"], ["spaced equally", "sbs_5_40_40_5"]],
+"sbs3": [["full across", "sbs_0_34_32_34_0"], ["gap but no margin", "sbs_0_28_28_38_0"], ["spaced equally", "sbs_5_25_26_25_5"]],
+"sbs4": [["full across", "sbs_0_25_25_25_25_0"], ["gap but no margin", "sbs_0_20_20_20_20_0"], ["spaced equally", "sbs_3_18_18_18_18_3"]]
 }
 
 Object.assign(objectStructure, sidebyside_instances);
@@ -483,7 +482,7 @@ Object.assign(objectStructure, sidebyside_instances);
 // shoudl we distinguish empty tags by format?
 // these tags are html an dpretext
 var always_empty_tags = ["img", "image"];
-var allowed_empty_tags = ["div", "span", "p"];
+var allowed_empty_tags = ["div", "span", "p", "stack"];
 var tag_display = {  /* the default is "block" */
     "inline": ["m", "em", "ellipsis", "span"], 
     "title": ["title", "idx", "h1", "h2", "h3", "h4", "h5", "h6", "div"]
@@ -495,6 +494,13 @@ function process_value_from_source(fcn, piece, src) {
     var content_raw = "";
     if (piece in src) {
         content_raw = src[piece]
+    } else {
+        var parent_src = internalSource[src["parent"][0]];
+        if (piece in parent_src) {
+            content_raw = parent_src[piece]
+        } else {
+            console.log("Error: piece", piece, "not in src or parent_src")
+        }
     }
 
     if (fcn == "capitalize") {
@@ -503,8 +509,13 @@ function process_value_from_source(fcn, piece, src) {
         content = content_raw + " "
     } else if (fcn == "period") {
         content = content_raw + "."
-    } else if (fcn == "list_to_percent") {
-        content = content_raw.join("% ")
+    } else if (fcn == "percentlist") {
+        content = content_raw.join("% ") + "%"
+    } else if (fcn == "nthitem") {
+
+        console.log("calculating nthitem", piece, "from ", content_raw, "within", src);
+        var item_index = 0;  // need to be its location among siblings
+        content = content_raw[item_index];
     } else if (fcn == "codenumber") {
         content = "N.mm"
     } else {
@@ -702,9 +713,9 @@ var the_inner_menu = {
 "layout-like": [["side-by-side panels", "sbs"], ["assemblage"], ["biographical aside"], ["titled paragraph", "paragraphs"]],
 "sbs": [["2 panels", "sbs2"], ["3 panels", "sbs3"], ["4 panels", "sbs4"]],
 //"sbs2": [["full across XXX", "sbs2_0_50_50_0"], ["gap but no margin", "sbs2_0_40_40_0"], ["spaced equally", "sbs2_5_40_40_5"]],
-"sbs2": [["full across", "sbs_0_60_60_0"], ["gap but no margin", "sbs_0_48_48_0"], ["spaced equally", "sbs_5_48_48_5"]],
-"sbs3": [["full across", "sbs_0_40_40_40_0"], ["gap but no margin", "sbs_0_33_33_33_0"], ["spaced equally", "sbs_5_33_33_33_5"]],
-"sbs4": [["full across", "sbs_0_30_30_30_30_0"], ["gap but no margin", "sbs_0_25_25_25_25_0"], ["spaced equally", "sbs_4_25_25_25_25_4"]],
+"sbs2": [["full across", "sbs_0_50_50_0"], ["gap but no margin", "sbs_0_45_45_0"], ["spaced equally", "sbs_5_40_40_5"]],
+"sbs3": [["full across", "sbs_0_34_32_34_0"], ["gap but no margin", "sbs_0_28_28_28_0"], ["spaced equally", "sbs_5_25_26_25_5"]],
+"sbs4": [["full across", "sbs_0_25_25_25_25_0"], ["gap but no margin", "sbs_0_20_20_20_20_0"], ["spaced equally", "sbs_3_18_18_18_18_3"]],
 "math-like": [["math display", "mathdisplay"], ["chemistry display", "chemistrydisplay"], ["code listing", "code", "l"]],
 "quoted": [["blockquote"], ["poem"], ["music"]],
 "interactives": [["sage cell", "sagecell"], ["webwork"], ["asymptote"], ["musical score", "musicalscore"]],
@@ -945,7 +956,7 @@ function menu_options_for(object_id, component_type, level) {
          component_items = menu_for[component_type]
      } else {
          // is this a reasbable default for what can go anywhere?
-         alert("default menu for" + component_type);
+         console.log("default menu for" + component_type);
          component_items = [["paragraph", "p"],
             ["math/chemistry/code", "math-like", "c"],
             ["list or table", "list-like"],
@@ -1190,7 +1201,7 @@ function next_editable_of(obj, relationship) {
     var next_to_edit;
     console.log("finding", relationship, "editable of", obj);
     if (relationship == "children") {
-        next_to_edit = $(obj).find(' > [data-editable], > .sidebyside > [data-editable],  > li > [data-editable], > .heading > [data-editable], > .hint > [data-editable], > .answer > [data-editable]')
+        next_to_edit = $(obj).find(' > [data-editable], > .sidebyside > .sbsrow > [data-editable],  > li > [data-editable], > .heading > [data-editable], > .hint > [data-editable], > .answer > [data-editable]')
     } else if (relationship == "outer-block") {  // for example, a direct child of a section
         next_to_edit = $(obj).find(' > [data-editable]')
     } else if (relationship == "inner-block") {  // typically a paragraph
@@ -1243,7 +1254,7 @@ function create_new_internal_object(new_tag, new_id, parent_description) {
             var new_col_id = randomstring();
             col_content += "<&>" + new_col_id + "<;>";
             internalSource[new_col_id] = {"xml:id": new_col_id, "sourcetag": "sbspanel",
-                "width": sbs_layout[j], "content": "", "parent": [new_id, "content"]}
+                "content": "", "parent": [new_id, "content"]}
         }
         new_source.widths = widths;
         new_source.content = col_content;
@@ -1347,6 +1358,12 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
         console.log(new_tag, "parent_description", parent_description);
         object_neighbor = "" ; // will not be used
 
+    } else if(new_objects_sibling.classList.contains("sbspanel")) {  //bad hack!  use internalCOntents!
+        sibling_id = new_objects_sibling.id;
+        console.log("special case for empty sbspanel",sibling_id);
+        alert("special sbspanel case");
+        parent_description = [sibling_id, "content"]
+        object_neighbor = "" ; // will not be used???
     } else {
                   // and describe where it goes
         console.log("new_objects_sibling",new_objects_sibling);
@@ -1357,7 +1374,8 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
 
     if (relative_placement == "afterbegin" && new_tag != "image") {  // when adding to a sbs panel
                            // redo the condition so that it explicitly usus sbs
-        parent_description = [new_id, "content"];
+       // redundant with the "special case" above?
+  //      parent_description = [new_id, "content"];
     }
     var object_neighbor = new RegExp('(<&>' + sibling_id + '<;>)');
     if (new_tag == "task" && !(new_objects_sibling.classList.contains("task"))) {
@@ -1398,10 +1416,13 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
     if (relative_placement == "atend" || relative_placement == "replace" ) {
    // this is not quire gight, but it works for hint/answer/solution
         new_arrangement = the_current_arrangement + '<&>' + new_id + '<;>';
-    } else {
+    } else if(the_current_arrangement) {
         new_arrangement = the_current_arrangement.replace(object_neighbor, neighbor_with_new);
+    } else {
+        new_arrangement = '<&>' + new_id + '<;>';
     }
     console.log("which became", new_arrangement);
+    alert("here");
     internalSource[parent_description[0]][parent_description[1]] = new_arrangement;
     if (new_tag == "list") {
   //      current_editing["level"] += 1;
@@ -1537,7 +1558,7 @@ if (false) {
         this_sbsrow.setAttribute('class', 'sbsrow');
         this_sbsrow.setAttribute('id', idOfSBSRow);
         this_sbsrow.setAttribute('data-editable', "89");
-        this_sbsrow.setAttribute('style', "margin-left:" + margin_left/1.2 + "%; margin-right:" + margin_right/1.2 + "%;");
+        this_sbsrow.setAttribute('style', "margin-left:" + margin_left + "%; margin-right:" + margin_right + "%;");
 
         var idsOfSBSPanel = internalSource[idOfSBSRow]["content"]
         idsOfSBSPanel = idsOfSBSPanel.replace(/^\s*<&>/, '');
@@ -1549,7 +1570,7 @@ if (false) {
         console.log('c idsOfSBSPanel', idsOfSBSPanelList);
         var these_panels = '';
         for (var j=0; j < idsOfSBSPanelList.length; ++j) {
-            var width = rescale(internalSource[idsOfSBSPanelList[j]]["width"], 120, margin_left, margin_right);
+            var width = rescale(internalSource[idsOfSBSPanelList[j]]["width"], 100, margin_left, margin_right);
             these_panels += '<div class="sbspanel top" id="' + idsOfSBSPanelList[j] + '" data-editable="90"';
             these_panels += ' style="width:' + width + '%"></div>';
         }
@@ -1709,7 +1730,7 @@ function modify_by_id_image(theid, modifier) {
     document.getElementById(theid).setAttribute("style", the_new_sizes);
 }
 
-function modify_by_id_sbs(theid, modifier) {
+function OLDUNUSEDmodify_by_id_sbs(theid, modifier) {
 
     var this_sbs_source = internalSource[theid];
     var this_width = this_sbs_source["width"];
@@ -1746,7 +1767,7 @@ function modify_by_id_sbs(theid, modifier) {
     marginleft = parseInt(marginleft);
 
     console.log("occ", marginleft, "u", total_width, "pi", marginright, "total", marginleft + total_width + marginright, "ratio", marginright/total_width)
-    var remaining_space = 120 - (marginleft + total_width + marginright);
+    var remaining_space = 100 - (marginleft + total_width + marginright);
     console.log("remaining_space", remaining_space);
 
 //modify: enlarge, shrink, left, right, ??? done
@@ -1810,18 +1831,142 @@ function modify_by_id_sbs(theid, modifier) {
 
     internalSource[this_sbsrow_id]["margin-left"] = marginleft;
     internalSource[this_sbsrow_id]["margin-right"] = marginright;
-    document.getElementById(this_sbsrow_id).style.marginLeft = marginleft/1.2 + "%";
-    document.getElementById(this_sbsrow_id).style.marginRight = marginright/1.2 + "%";
+    document.getElementById(this_sbsrow_id).style.marginLeft = marginleft + "%";
+    document.getElementById(this_sbsrow_id).style.marginRight = marginright + "%";
 
     for (var j=0; j < these_siblings_list.length; ++j) {
         var this_id = these_siblings_list[j];
         internalSource[this_id]["width"] = these_panel_widths[j];
-        var width = rescale(these_panel_widths[j], 120, marginleft, marginright)
+        var width = rescale(these_panel_widths[j], 100, marginleft, marginright)
   //      document.getElementById(this_id).style.width = these_panel_widths[j] + "%";
         document.getElementById(this_id).style.width = width + "%";
     }
     console.log("NOW these html siblings",document.getElementById(these_siblings_list[0])," and ", document.getElementById(these_siblings_list[1]))
     console.log("NOW these siblings source",      internalSource[these_siblings_list[0]], "and",  internalSource[these_siblings_list[1]]);
+}
+
+function modify_by_id_sbs(theid, modifier) {
+
+    var this_panel_source = internalSource[theid];
+//    var this_width = this_panel_source["width"];
+    var this_sbs_id = this_panel_source["parent"][0];
+    var this_sbs_source = internalSource[this_sbs_id];
+    console.log("this_sbs_source", this_sbs_source);
+    var marginleft = parseInt(this_sbs_source["marginleft"]);
+    var marginright = parseInt(this_sbs_source["marginright"]);
+    var these_siblings = this_sbs_source["content"];
+    these_siblings = these_siblings.replace(/^\s*<&>\s*/, "");
+    these_siblings = these_siblings.replace(/\s*<;>\s*$/, "");
+    these_siblings = these_siblings.replace(/>\s*</g, "><");
+    console.log("these_siblings", these_siblings);
+    var these_siblings_list = these_siblings.split("<;><&>");
+    var this_panel_index = these_siblings_list.indexOf(theid);
+    console.log("this panel", theid, "is", this_panel_index, "within", these_siblings_list);
+    var these_panel_widths = this_sbs_source.widths;
+    var this_width = parseInt(these_panel_widths[this_panel_index]);
+    var total_width = 0;
+    console.log("these html siblings",document.getElementById(these_siblings_list[0])," and ", document.getElementById(these_siblings_list[1]))
+    console.log("these siblings source",      internalSource[these_siblings_list[0]], "and",  internalSource[these_siblings_list[1]]);
+    for(var j=0; j < these_siblings_list.length; ++j) {
+    //    var t_wid = parseInt(internalSource[these_siblings_list[j]]["width"]);
+        var t_wid = parseInt(these_panel_widths[j]);
+        these_panel_widths[j] = t_wid;  // put it back as an integer
+        console.log("adding width", t_wid);
+        total_width += t_wid;
+ //       these_panel_widths.push(t_wid);
+    }
+//    if (this_width != these_panel_widths[this_panel_index]) {
+//        console.log("error: width", this_width, "not on list", these_panel_widths)
+//    } else {
+//        console.log("width", this_width, "on list", these_panel_widths)
+//    }
+
+    console.log("occ", marginleft, "u", total_width, "pi", marginright, "total", marginleft + total_width + marginright, "ratio", marginright/total_width)
+    var remaining_space = 100 - (marginleft + total_width + marginright);
+    console.log("remaining_space", remaining_space);
+
+//modify: enlarge, shrink, left, right, ??? done
+
+// make the data structure better, then delete this comment
+// currently style looks like "width: 66%; margin-right: 17%; margin-left: 17%"
+    console.log('width', this_width, "mr", marginright, "ml",  marginleft);
+
+    console.log("modifier", modifier);
+
+    var scale_direction = 1;
+    var moving_direction = 1;
+
+    if (modifier == "enlargeall") {
+        console.log("enlarging all", "remaining space", remaining_space);
+        if (remaining_space >= these_panel_widths.length) {
+            for (var j=0; j < these_panel_widths.length; ++j) {
+                these_panel_widths[j] += 1
+            }
+   // probablu the next case handles the first case
+        } else if (remaining_space + marginleft + marginright >= these_panel_widths.length) {
+            for (var j=0; j < these_panel_widths.length; ++j) {
+                these_panel_widths[j] += 1
+            }
+            var missing_length = these_panel_widths.length - remaining_space;
+            while (missing_length) {
+                missing_length -= 1;
+                if (missing_length % 2) {
+                    if (marginleft) { marginleft -= 1 }
+                    else { marginright -= 1 }
+                } else {
+                    if (marginright) { marginright -= 1 }
+                    else { marginleft -= 1 }
+                }
+            }
+        } else {
+            console.log("Problem: not implemented yet")
+        }
+    } else if (modifier == "shrinkall") {
+        for (var j=0; j < these_panel_widths.length; ++j) {
+            if (these_panel_widths[j]) { these_panel_widths[j] -= 1 }
+        }
+    } else if (modifier == "enlarge") {
+        console.log("enlarging one");
+        if (remaining_space) { these_panel_widths[this_panel_index] += 1 }
+    } else if (modifier == "shrink") {
+        console.log("shrinking one");
+        if (these_panel_widths[this_panel_index]) { these_panel_widths[this_panel_index] -= 1 }
+    } else if (modifier == "leftplus") {
+        if (remaining_space) { marginleft += 1 }
+    } else if (modifier == "leftminus") {
+        if (marginleft) { marginleft -= 1 }
+    } else if (modifier == "rightplus") {
+        if (remaining_space) { marginright += 1 }
+    } else if (modifier == "rightminus") { 
+        if (marginright) { marginright -= 1 }
+    }
+    console.log("now these_panel_widths", these_panel_widths);
+
+// missing cases??
+
+    internalSource[this_sbs_id]["marginleft"] = marginleft;
+    internalSource[this_sbs_id]["marginright"] = marginright;
+    internalSource[this_sbs_id]["widths"] = these_panel_widths;
+
+// next is wrong, becuase the sbsrow does not have an id
+/*
+    document.getElementById(this_sbs_id).style.marginLeft = marginleft + "%";
+    document.getElementById(this_sbs_id).style.marginRight = marginright + "%";
+*/
+    document.getElementById(theid).parentElement.style.marginLeft = marginleft + "%";
+    document.getElementById(theid).parentElement.style.marginRight = marginright + "%";
+
+    for (var j=0; j < these_siblings_list.length; ++j) {
+        var this_id = these_siblings_list[j];
+//        internalSource[this_id]["width"] = these_panel_widths[j];
+        var width = rescale(these_panel_widths[j], 100, marginleft, marginright)
+  //      document.getElementById(this_id).style.width = these_panel_widths[j] + "%";
+        document.getElementById(this_id).style.width = width + "%";
+    }
+    console.log("NOW these html siblings",document.getElementById(these_siblings_list[0])," and ", document.getElementById(these_siblings_list[1]))
+    console.log("NOW these siblings source",      internalSource[these_siblings_list[0]], "and",  internalSource[these_siblings_list[1]]);
+    console.log("and internalSource[this_id]", internalSource[this_id]);
+    console.log("and also internalSource[this_sbs_id]", internalSource[this_sbs_id]);
 }
 
 function move_by_id_local(theid, thehandleid) {
@@ -2410,7 +2555,7 @@ function wrap_tag(tag, content, attribute_values) {
 
 function output_from_source(the_object, output_structure, format) {
 
-    console.log("calling output_from_source", "the_object", the_object, "output_structure", output_structure, "format", format);
+    console.log("calling output from_source", "the_object", the_object, "output_structure", output_structure, "format", format);
     // format: html, pretext (or source?)
     var the_answer = "";
     var output_tag = output_structure.tag;
@@ -2433,6 +2578,11 @@ function output_from_source(the_object, output_structure, format) {
                    } else {  // don't want to return 'undefined'
                        return ""
                    }
+               } else if (newid.startsWith("(")) {
+                   var this_piece = newid.slice(1,-1);
+                   var this_fcn;
+                   [this_fcn, this_piece] = this_piece.split(",");
+                   return process_value_from_source(this_fcn, this_piece, the_object)
                } else {
                    if (newid in the_object) {
                        return the_object[newid]
@@ -2456,7 +2606,6 @@ function output_from_source(the_object, output_structure, format) {
         console.log(j, "this_piece", this_piece, "output_tag", output_tag);
         if (this_piece.startsWith("{")) {
             this_piece = this_piece.slice(1,-1);
-  //// ?????          this_piece_output += output_from_source(contained_text, the_object, objectStructure[this_piece], format)
             this_piece_output += output_from_source(the_object, objectStructure[this_piece][format], format);
             console.log("wrapping in bracketed tag", this_tag);
             the_answer += wrap_tag(this_tag, this_piece_output, [])
@@ -3356,6 +3505,10 @@ function main_menu_navigator(e) {  // we are not currently editing
                 theChooseCurrent.classList.add("chosen");
 
                 var parent_id = document.getElementById('edit_menu_holder').parentElement.parentElement.id;
+                if (!parent_id) {
+                    console.log(document.getElementById('edit_menu_holder').parentElement.parentElement, "has no id, so going down one level");
+                    parent_id = document.getElementById('edit_menu_holder').parentElement.id;
+                }
                 console.log("making a menu for", parent_id);
                 var edit_submenu = document.createElement('ol');
                 edit_submenu.innerHTML = menu_options_for(parent_id, "", "base");
