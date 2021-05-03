@@ -212,8 +212,9 @@ objectStructure = {
     "html": {
         "tag": "div",
         "pieces": [["content",""]],   // ????
-        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"', 'style="width: <&>width<;>%; margin-right: <&>marginright<;>%; margin-left: <&>marginleft<;>%"'],
-        "data_editable": "31",
+   //     "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"', 'style="width: <&>width<;>%; margin-right: <&>marginright<;>%; margin-left: <&>marginleft<;>%"'],
+        "attributes": ['class="<&>{cssclass}<;>"', 'style="margin-right: <&>marginright<;>%; margin-left: <&>marginleft<;>%"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+        "data_editable": "89",
         "cssclass": "sbsrow"
     },
     "pretext": {
@@ -230,7 +231,8 @@ objectStructure = {
     "html": {
         "tag": "div",
         "pieces": [["content",""]],
-        "attributes": ['id="<&>xml:id<;>"', 'class="<&>{cssclass}<;>"'],
+        "attributes": ['id="<&>xml:id<;>"', 'class="<&>{cssclass}<;>"', 'style="width:20%"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+        "data_editable": "90",
         "cssclass": "sbspanel"
     },
     "pretext": {
@@ -484,7 +486,7 @@ var always_empty_tags = ["img", "image"];
 var allowed_empty_tags = ["div", "span", "p"];
 var tag_display = {  /* the default is "block" */
     "inline": ["m", "em", "ellipsis", "span"], 
-    "title": ["title", "idx", "h1", "h2", "h3", "h4", "h5", "h6"]
+    "title": ["title", "idx", "h1", "h2", "h3", "h4", "h5", "h6", "div"]
 } 
 
 function process_value_from_source(fcn, piece, src) {
@@ -1216,6 +1218,7 @@ function create_new_internal_object(new_tag, new_id, parent_description) {
         console.log("sbs side margins", margin_left, "jj", margin_right);
         new_source.marginleft = margin_left;
         new_source.marginright = margin_right;
+/*
         var new_sbsrow_id = randomstring();
         internalSource[new_sbsrow_id] = {"xml:id": new_sbsrow_id, "sourcetag": "sbsrow",
                  "margin-left": margin_left, "margin-right": margin_right, "parent": [new_id, "content"]}
@@ -1232,6 +1235,19 @@ function create_new_internal_object(new_tag, new_id, parent_description) {
 
         internalSource[new_sbsrow_id]["content"] = col_content;
         new_source["content"] = "<&>" + new_sbsrow_id + "<;>";
+*/
+        var col_content = "";
+        var widths = [];
+        for (var j=2; j <= sbs_layout.length - 2; ++j) {
+            widths.push(sbs_layout[j]);
+            var new_col_id = randomstring();
+            col_content += "<&>" + new_col_id + "<;>";
+            internalSource[new_col_id] = {"xml:id": new_col_id, "sourcetag": "sbspanel",
+                "width": sbs_layout[j], "content": "", "parent": [new_id, "content"]}
+        }
+        new_source.widths = widths;
+        new_source.content = col_content;
+
         console.log("new sbs", new_source);
 
     } else {
@@ -1500,7 +1516,10 @@ function edit_in_place(obj, oldornew) {
         this_char = "";
         prev_char = "";
 
-      } else if (new_tag.startsWith("sbs")) {
+//      } else if (new_tag.startsWith("sbs")) {
+      } else if (false && new_tag.startsWith("sidebyside")) {
+
+if (false) {
         numcols = parseInt(new_tag.slice(-1));
         new_tag = "sbs";
         var this_content_container = document.createElement('div');
@@ -1537,12 +1556,14 @@ function edit_in_place(obj, oldornew) {
         console.log("these_panels", these_panels);
         this_sbsrow.innerHTML = these_panels;
         document.getElementById(thisID).insertAdjacentElement("afterbegin", this_sbsrow);
+}
 
+        alert("bypass sbs");
         console.log("made sbs", thisID);
 
       } else {
 
-        console.log("create the object, then edit p in place", obj);
+        console.log(new_tag, "create the object, then edit p in place", obj);
 
         var this_object = html_from_internal_id(new_id, "");
   //      $("#" + thisID).replaceWith(this_object[0]);    // why [0]?  decide what html_from_internal_id should return
@@ -1555,11 +1576,21 @@ function edit_in_place(obj, oldornew) {
         console.log("added this_object", this_object);
         console.log("where it is", where_it_is);
 
- //       var empty_p_child = $(this_object).find("p:empty");
-        var empty_p_child = $(where_it_is).find("p");
-        console.log("found the empty p", empty_p_child);
-        console.log("found the empty p[0]", empty_p_child[0]);
-        edit_in_place(empty_p_child[0], "new");
+        var this_source = internalSource[thisID];
+        if (this_source.sourcetag == "sidebyside") {  // generalize to container was added
+             console.log("added an sbs", document.getElementById(thisID));
+             console.log("its .firstChild", document.getElementById(thisID).firstElementChild);
+             console.log("its .firstChild.firstchild", document.getElementById(thisID).firstElementChild.firstElementChild);
+             var first_panel_id = document.getElementById(thisID).firstElementChild.firstElementChild.id;
+             console.log("first_panel_id", first_panel_id, document.getElementById(first_panel_id));
+             make_current_editing_from_id(first_panel_id);
+             edit_menu_from_current_editing("entering");
+        } else {
+            var empty_p_child = $(where_it_is).find("p");
+            console.log("found the empty p", empty_p_child);
+            console.log("found the empty p[0]", empty_p_child[0]);
+            edit_in_place(empty_p_child[0], "new");
+        }
       }
 
    } else {
@@ -3519,7 +3550,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                   if (dataEnv.startsWith("sbs")) {
                       console.log("added sbs, now add to it", new_obj_id);
                       console.log("document.getElementById(new_obj_id)", document.getElementById(new_obj_id));
-                      var first_panel_id = document.getElementById(new_obj_id).firstChild.firstChild.id;
+                      var first_panel_id = document.getElementById(new_obj_id).firstElementChild.firstElementChild.id;
                       console.log("first_panel_id", first_panel_id, document.getElementById(first_panel_id));
                       make_current_editing_from_id(first_panel_id);
                       edit_menu_from_current_editing("entering");
