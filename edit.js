@@ -1325,8 +1325,9 @@ function show_source(sibling, relative_placement) {
 
     console.log("just added", edit_placeholder);
 
-    var the_pretext_source =  pretext_from_id("", "hPw", "pretext");
-//  expand from top section:  hPw  or top_level_id
+    var the_pretext_source =  pretext_from_id("", top_level_id, "pretext");
+
+    the_pretext_source = the_pretext_source.replace(/\n\n/g, '\n');
 
     edit_placeholder.insertAdjacentHTML('afterend', '<textarea id="newsource" style="width: 100%; height:30em">' + the_pretext_source + '</textarea>')
 }
@@ -2629,6 +2630,9 @@ function output_from_source(the_object, output_structure, format) {
     }
 
 //    console.log("outer wrap tag", output_tag, "with attributes", output_attributes_values, "answer was", the_answer);
+    if (format == "pretext") {
+        the_answer = the_answer.replace(/(^|\n)( *(\w|<))/g, "$1  $2");
+    }
     the_answer = wrap_tag(output_tag, the_answer, output_attributes_values)
 //    console.log("now the answer is", the_answer);
 
