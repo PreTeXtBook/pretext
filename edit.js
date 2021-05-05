@@ -101,7 +101,7 @@ objectStructure = {
         "tag": "p",
         "pieces": [["content", ""]],
         "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
-        "data_editable": "99a"
+        "data_editable": "99"
     },
     "pretext": {
         "tag": "p",
@@ -431,7 +431,7 @@ var environment_instances = {
     "definition-like": ["definition", "conjecture", "axiom", "principle", "heuristic", "hypothesis", "assumption"],
     "theorem-like": ["lemma", "proposition", "theorem", "corollary", "claim", "fact", "identity", "algorithm"],
     "remark-like": ["remark", "warning", "note", "observation", "convention", "insight"],
-    "project-like": ["exercise", "activity", "investigation", "exploration", "project"]
+    "project-like": ["exercise", "activity", "investigation", "exploration", "project"],
 }
 
 for (const [owner, instances] of Object.entries(environment_instances)) {
@@ -636,6 +636,21 @@ function spacemath_to_tex(text) {
 
 }
 
+var submenu_options = {  // revise as these are handled previously
+"image-like": [["image"], ["video"], ["audio"]],
+"aside-like": [["aside"], ["historical"], ["biographical"]],
+"list-like": [["itemized list", "list"], ["dictionary list", "dl"], ["table"]],
+"layout-like": [["side-by-side panels", "sbs"], ["assemblage"], ["biographical aside"], ["titled paragraph", "paragraphs"]],
+"sbs": [["2 panels", "sbs2"], ["3 panels", "sbs3"], ["4 panels", "sbs4"]],
+"list-like": [["itemized list", "list"], ["dictionary list", "dl"], ["table"]],
+"example-like": ["example", "question", "problem"]
+}
+
+Object.assign(submenu_options, sidebyside_instances);
+
+Object.assign(submenu_options, environment_instances);  // wrong because string not list
+                           // or not wrong, if the code is more clever
+
 /* need to distinguish between the list of objects of a type,
    and the list of types that can go in a location.
    OR, is it okay that these are all in one list?
@@ -678,7 +693,8 @@ base_menu_for = {
 "p": [["emphasis-like"], ["formula"], ["abbreviation"], ["symbol"], ["ref or link", "ref"]]
 }
 
-function inner_menu_for() {
+//  need a replacement for past edits  
+function UNUSEDinner_menu_for() {
 
     var the_past_edits = [];
     if(recent_editing_actions.length) {
@@ -826,7 +842,7 @@ function make_current_editing_from_id(theid) {
     console.log("current_editing[location]", current_editing["location"]);
     console.log("current_editing[tree]", current_editing["tree"])
 
-    console.log("     OOOOO   done with  make_current_editing_from_id", theid);
+    console.log("     OOOOO   done with  make_current_editing_from_id", theid, document.getElementById(theid));
 
 }
 
@@ -949,7 +965,8 @@ function menu_options_for(object_id, component_type, level) {
          }
          console.log("made this_menu", this_menu);
          return this_menu
-     } else { menu_for = inner_menu_for() }
+  //   } else { menu_for = inner_menu_for() }
+     } else { menu_for = submenu_options }
      console.log("C2 in menu options for", component_type, "or", object_id);
      console.log("menu_for", menu_for);
      if (component_type in menu_for) {
@@ -967,15 +984,21 @@ function menu_options_for(object_id, component_type, level) {
      for (var i=0; i < component_items.length; ++i) {
          this_item = component_items[i];
 
-         this_item_name = this_item[0];
-         this_item_label = this_item_name;
-         this_item_shortcut = "";
-         if (this_item.length == 3) {
-             this_item_label = this_item[1];
-             this_item_shortcut = this_item[2];
-         } else if (this_item.length == 2) { 
-             this_item_label = this_item[1];
-         } 
+         if (typeof this_item == "string") {
+             this_item_name = this_item;
+             this_item_label = this_item;
+             this_item_shortcut = "";
+         } else {  // list
+             this_item_name = this_item[0];
+             this_item_label = this_item_name;
+             this_item_shortcut = "";
+             if (this_item.length == 3) {
+                 this_item_label = this_item[1];
+                 this_item_shortcut = this_item[2];
+             } else if (this_item.length == 2) { 
+                 this_item_label = this_item[1];
+             } 
+         }
          this_menu += '<li tabindex="-1" data-env="' + this_item_label + '"';
          this_menu += ' data-env-parent="' + component_type + '"';
          if (this_item_shortcut) { 
@@ -996,7 +1019,8 @@ function menu_options_for(object_id, component_type, level) {
 
          this_menu += this_item_name 
                  // little right triangle if there is a submenu
-         if (this_item_label in inner_menu_for()) { this_menu += '<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div>' }
+  //       if (this_item_label in inner_menu_for()) { this_menu += '<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div>' }
+         if (this_item_label in submenu_options) { this_menu += '<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div>' }
          this_menu += '</li>';
      }
 
@@ -2170,6 +2194,7 @@ function delete_by_id(theid, thereason) {
     internalSource[parent_and_location[0]][ parent_and_location[1] ] = where_it_is;
         // if the parent is empty, delete it
     if (!(where_it_is.trim()) && (parent_and_location[1] == "content" || parent_and_location[1] == "statement")) {
+        console.log("      deleted from within", internalSource[parent_and_location[0]]);
         document.getElementById(theid).removeAttribute("data-editable");  // so it is invisible to next-editable-of as we delete its parent
         if (internalSource[parent_and_location[0]][ "sourcetag" ] == "li") {
             console.log("not going up a level, because it is a list element")
@@ -2188,6 +2213,14 @@ function delete_by_id(theid, thereason) {
             setTimeout(() => {  document.getElementById("deleting").remove(); }, 600);
         }
 
+        var current_index = current_editing["location"][current_level] + 1;  // +1 because the deleted item is still in the current_editing tree
+        if (current_index >= current_editing["tree"][ current_level ].length) {
+            current_index = current_editing["tree"][ current_level ].length - 2;
+        }
+        console.log("current_index", current_index, "in", current_editing["tree"][ current_level ]);
+        console.log("current_level", current_level, "on", current_editing["tree"]);
+        make_current_editing_from_id(current_editing["tree"][ current_level ][ current_index].id);
+        
   //  ERROR:  if deleting that element leaves an empty content or statement, then delete the parent
   //  (in HTML and internalSource)
 
@@ -3113,8 +3146,10 @@ console.log("    LLL current_editing", current_editing, current_editing["tree"][
             console.log("the final_added_object", final_added_object);
             console.log("the actively_editing", document.getElementById("actively_editing"));
             console.log("OO", ongoing_editing_actions.length, " ongoing_editing_actions", ongoing_editing_actions);
+/*
             console.log("ongoing_editing_actions[0]", ongoing_editing_actions[0]);
             console.log("ongoing_editing_actions[0][2]", ongoing_editing_actions[0][2]);
+*/
                 // maybe this next if only handles when we delete by removing the letters in a p?
             if (these_changes[0] == "empty") {
                 console.log("NN", ongoing_editing_actions.length, " ongoing_editing_actions", ongoing_editing_actions);
@@ -3671,7 +3706,8 @@ function main_menu_navigator(e) {  // we are not currently editing
               theChooseCurrent.removeAttribute("id");
               theChooseCurrent.setAttribute('class', 'chosen');
 
-              if (dataEnv in inner_menu_for()) {  // object names a collection, so make submenu
+        //      if (dataEnv in inner_menu_for()) {  // object names a collection, so make submenu
+              if (dataEnv in submenu_options) {  // object names a collection, so make submenu
                   console.log("making a menu for", dataEnv);
                   var edit_submenu = document.createElement('ol');
                   edit_submenu.innerHTML = menu_options_for("", dataEnv, "inner");
