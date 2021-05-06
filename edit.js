@@ -20,7 +20,7 @@ objectStructure = {
   "codenumber": { 
     "html": {
         "tag": "span",
-        "attributes": ['class="type"'],
+        "attributes": ['class="codenumber"'],
         "pieces": [["(codenumber,)", ""]]  // maybe () was a bad idea?  do we need a triple?
     }
   },
@@ -51,7 +51,6 @@ objectStructure = {
         "tag": "h4",
         "cssclass": "heading",
         "attributes": ['class="<&>{cssclass}<;>"', 'data-parent_id="<&>xml:id<;>"'],
-   //     "pieces": [["[type]", ""], ["[space]", ""], ["[codenumber]", ""], ["[period]", ""],  ["[space]", ""], ["[title]", ""]]
         "pieces": [["{type}", ""], ["{space}", ""], ["{codenumber}", ""], ["{period}", ""],  ["{space}", ""], ["{title}", ""]]
           // * means editable piece
     }
@@ -68,7 +67,8 @@ objectStructure = {
     "html": {
         "tag": "h2",
         "cssclass": "heading hide-type",
-        "pieces": ["type", "codenumber", "title"]
+        "attributes": ['class="<&>{cssclass}<;>"'],
+        "pieces": [["{type}", ""], ["{codenumber}", ""], ["{space}", ""], ["{title}", ""]]
     }
   },
   "task_like_heading": {
@@ -83,12 +83,12 @@ objectStructure = {
   "section": {  /* not currently implemented, so probably wrong */
     "html": {
         "tag": "section",
-        "cssclass": "section",
-        "pieces": ["heading", "content"],
-        "heading": "section_like_heading"
+        "attributes": ['class="<&>section<;>"', 'id="<&>xml:id<;>"'],
+        "pieces": [["{section_like_heading}", ""], ["content", ""]],
     },
     "pretext": {
         "tag": "section",
+        "attributes": ['xml:id="<&>xml:id<;>"'],
         "pieces": [["title", "title"], ["content", ""]]
     },
     "source": {
@@ -490,16 +490,20 @@ var tag_display = {  /* the default is "block" */
 
 function process_value_from_source(fcn, piece, src) {
 
-    console.log("process_value_from_source", piece, "in", src);
+    console.log(fcn, "process_value_from_source", piece, "in", src);
     var content_raw = "";
     if (piece in src) {
         content_raw = src[piece]
     } else {
+        if ("parent" in src) {
         var parent_src = internalSource[src["parent"][0]];
-        if (piece in parent_src) {
-            content_raw = parent_src[piece]
+            if (piece in parent_src) {
+                content_raw = parent_src[piece]
+            } else {
+                console.log("Error: piece", piece, "not in src or parent_src")
+            }
         } else {
-            console.log("Error: piece", piece, "not in src or parent_src")
+            console.log("at the top, or else there is an error")
         }
     }
 
@@ -517,7 +521,7 @@ function process_value_from_source(fcn, piece, src) {
         var item_index = 0;  // need to be its location among siblings
         content = content_raw[item_index];
     } else if (fcn == "codenumber") {
-        content = "N.mm"
+        content = "N.mn"
     } else {
          content = content_raw
     }
@@ -526,7 +530,7 @@ function process_value_from_source(fcn, piece, src) {
 }
 
 //  delete this in cleanup after refactoring
-function value_from_source(name, src) {
+function UNUSEDvalue_from_source(name, src) {
     console.log("     value_from_source src", src);
     alert("value_from_source shoulf no longer be used");
     var content;
@@ -798,7 +802,8 @@ function make_current_editing_from_id(theid) {
     console.log("     within", internalSource);
     console.log("     and the DOM object is", document.getElementById(theid));
     // the existing current_editing know the top level id
-    var top_id = current_editing["tree"][0][0].id;
+//    var top_id = current_editing["tree"][0][0].id;
+    var top_id = top_level_id;
 
     // but now we need to start over and go bottom-up
     current_editing = {
@@ -814,7 +819,7 @@ function make_current_editing_from_id(theid) {
     while (current_id != top_id && ct < 10) {
         ct += 1;
         console.log("ct", ct);
-        console.log("looking to match current_element", current_element);
+        console.log("looking to match current_element", current_element, "until we hit", top_id);
         selectable_parent = current_element.parentElement.closest("[data-editable]");
         current_element_siblings = next_editable_of(selectable_parent, "children");
         current_id = selectable_parent.id;
@@ -1079,6 +1084,7 @@ function top_menu_options_for(this_obj) {
         this_list += '<li tabindex="-1" data-action="move-or-delete">Move or delete<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
         this_list += '<li tabindex="-1" data-env="' + "metaadata" + '">Metadata<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
         this_list += '<li tabindex="-1" data-env="' + "undo" + '">Revert<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+        this_list += '<li tabindex="-1" data-action="' + "replace" + '">Regenerate HTML</li>';
     }
     return this_list
 }
@@ -1645,6 +1651,20 @@ if (false) {
      }
 }
 
+function replace_by_id(theid, format) {
+
+    if (format != "html") { return "" }
+
+    var this_object_new = pretext_from_id("",theid, format);
+
+    document.getElementById(theid).setAttribute("id", "delete_me");
+    document.getElementById("delete_me").insertAdjacentHTML('beforebegin', this_object_new);
+    document.getElementById("delete_me").remove();
+
+    make_current_editing_from_id(theid);
+    edit_menu_from_current_editing("entering");
+}
+
 // temporary:  need to unify img and sbs layout
 function modify_by_id(theid, modifier) {
     console.log("modifying by id", theid);
@@ -1658,7 +1678,6 @@ function modify_by_id(theid, modifier) {
         modify_by_id_image(theid, modifier)
     }
 }
-
 
 function modify_by_id_workspace(theid, modifier) {
 
@@ -2549,6 +2568,8 @@ function wrap_tag(tag, content, attribute_values) {
 
     if (attribute_values.length) {
         console.log("tag", tag, "has attribute_values", attribute_values)
+    } else {
+        console.log("tag", tag, "has no attribute_values:", attribute_values)
     }
 
     var opening_tag = closing_tag = "";
@@ -2583,7 +2604,8 @@ function wrap_tag(tag, content, attribute_values) {
             closing_tag = "\n" + closing_tag + "\n"
         }
 	    }
-//    if (content.includes("hard")) { console.log("3 ----- content",content); console.log("opening_tag", opening_tag) }
+    if (content.includes("N.m")) { console.log("3 ----- content",content); console.log("opening_tag", opening_tag) }
+
     return opening_tag + content + closing_tag
 }
 
@@ -2627,7 +2649,6 @@ function output_from_source(the_object, output_structure, format) {
              });
         console.log("         attr_val", attr_val);
         if (attr_val && !attr_val.includes('""')) {
-      //      output_attributes_values.push([attr_name, attr_val])
             output_attributes_values.push(attr_val)
         }
     }
@@ -2637,7 +2658,7 @@ function output_from_source(the_object, output_structure, format) {
     for (var j=0; j < output_structure.pieces.length; ++j) {
         var this_piece_output = "";
         var [this_piece, this_tag] = output_structure.pieces[j];
-        console.log(j, "this_piece", this_piece, "output_tag", output_tag);
+        console.log(j, "this_piece", this_piece, "this_tag", this_tag, "output_tag", output_tag);
         if (this_piece.startsWith("{")) {
             this_piece = this_piece.slice(1,-1);
             this_piece_output += output_from_source(the_object, objectStructure[this_piece][format], format);
@@ -2649,10 +2670,12 @@ function output_from_source(the_object, output_structure, format) {
             this_piece = this_piece.slice(1,-1);
             the_answer += wrap_tag("div", "", ['class="placeholder ' + this_piece + '"', 'data-parent_id="' + the_object['xml:id'] + '"', 'data-has="' + this_piece + '"', 'tabindex="-1"', 'data-editable="123456"', 'data-placeholder=""'])
         } else if (this_piece.startsWith("(")) {
+            console.log("whole this_piece", this_piece);
             this_piece = this_piece.slice(1,-1);
             var this_fcn;
             [this_fcn, this_piece] = this_piece.split(",");
             var this_content = process_value_from_source(this_fcn, this_piece, the_object)
+            console.log(j, "parenthesized content", this_content, "this_piece", this_piece, "XX", this_tag)
             the_answer += wrap_tag(this_tag, this_content, [])
         } else if (this_piece in the_object) {
             this_piece_output = output_from_text(the_object[this_piece], format);
@@ -3400,6 +3423,7 @@ function main_menu_navigator(e) {  // we are not currently editing
         current_siblings = current_editing["tree"][current_level];
         console.log("in choose_current", dataLocation, "of", object_of_interest);
         console.log("dataAction ", dataAction);
+        console.log("dataLocation ", dataLocation);
           // we have an active menu, and have selected an item
           // there are three main sub-cases, depending on whether there is a data-location attribute,
           // a data-action attribute, or a data-env attribute.
@@ -3519,7 +3543,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                 object_to_be_entered.classList.remove("may_select");
                 object_to_be_entered.classList.remove("may_enter");
                 object_to_be_entered.classList.remove("may_leave");
-                console.log('next_editable_of(object_to_be_entered, "children")', next_editable_of(object_to_be_entered));
+                console.log('next_editable_of(object_to_be_entered, "children")');
                 editableChildren = next_editable_of(object_to_be_entered, "children");
                 current_level += 1;
                 current_editing["level"] = current_level;
@@ -3566,6 +3590,9 @@ function main_menu_navigator(e) {  // we are not currently editing
             if (dataAction == "edit") {
                 console.log("going to edit", object_of_interest);
                 edit_in_place(object_of_interest, "old");
+            } else if (dataAction == "replace") {
+                console.log("replace", object_of_interest, "by id", object_of_interest.id),
+                replace_by_id(object_of_interest.id, "html")
             } else if (dataAction == "change-env-to") {
                  // shoudl use dataEnv ?
                 var new_env = theChooseCurrent.getAttribute("data-env");
@@ -3693,6 +3720,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                 console.log("change-title in progress")
                 document.getElementById('actively_editing').focus();
             } else {
+                console.log("unknown dataAction", dataAction);
                 alert("I don;t know what to do llllllll dataAction " + dataAction)
             }
         }  // dataAction
