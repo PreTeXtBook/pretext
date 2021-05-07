@@ -4,8 +4,8 @@
 
 {"xml:id": new_id, "sourcetag": new_tag, "parent": parent_description, "title": ""}
 
-In pretext, pieces are of teh form ["piecename", "tag"], while
-in source, pieces are of teh form ["piecename", "required_component"], while
+In pretext, pieces are of the form ["piecename", "tag"], while
+in source, pieces are of the form ["piecename", "required_component"], while
 
 */
 
@@ -14,14 +14,14 @@ objectStructure = {
     "html": {
         "tag": "span",
         "attributes": ['class="type"', 'data-editable="70XX"', 'tabindex="-1"'],
-        "pieces": [["(capitalize,sourcetag)", ""]]  // need to transform the sourcetag
+        "pieces": [["(capitalize,sourcetag)", ""]]
     }
   },
   "sectiontype": {
     "html": {
         "tag": "span",
         "attributes": ['class="type"'],  // the type of a section is not editable?
-        "pieces": [["(capitalize,sourcetag)", ""]]  // need to transform the sourcetag
+        "pieces": [["(capitalize,sourcetag)", ""]]
     }
   },
   "codenumber": { 
@@ -35,14 +35,14 @@ objectStructure = {
     "html": {
         "tag": "span",
         "attributes": ['class="period"'],
-        "pieces": [["(period,)", ""]]  // need to implement the "."
+        "pieces": [["(period,)", ""]]
     }
   },
   "space": {
     "html": {
         "tag": "span",
         "attributes": ['class="space"'],
-        "pieces": [["(space,)", ""]]  // need to implement the " "
+        "pieces": [["(space,)", ""]]
     }
   },
   "title": {
@@ -87,7 +87,7 @@ objectStructure = {
     }
   },
 
-  "section": {  /* not currently implemented, so probably wrong */
+  "section": {
     "html": {
         "tag": "section",
         "attributes": ['class="<&>section<;>"', 'id="<&>xml:id<;>"', 'data-editable="XYX"', 'tabindex="-1"'],
@@ -123,7 +123,6 @@ objectStructure = {
     "html": {
         "tag": "li",
         "pieces": [["content", ""]],
-   //     "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
         "attributes": ['id="<&>xml:id<;>"'],
         "data_editable": "98aZ"
     },
@@ -219,7 +218,6 @@ objectStructure = {
     "html": {
         "tag": "div",
         "pieces": [["content",""]],   // ????
-   //     "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"', 'style="width: <&>width<;>%; margin-right: <&>marginright<;>%; margin-left: <&>marginleft<;>%"'],
         "attributes": ['class="<&>{cssclass}<;>"', 'style="margin-right: <&>marginright<;>%; margin-left: <&>marginleft<;>%"'],
         "data_editable": "89",
         "cssclass": "sbsrow"
@@ -310,7 +308,6 @@ objectStructure = {
         "cssclass": "definition-like",
         "data_editable": "95a",
         "pieces": [["{theorem_like_heading}", ""], ["statement", ""]],
- //       "pieces": [["statement", ""]],
         "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"']
     },
     "pretext": {
@@ -351,7 +348,6 @@ objectStructure = {
         "attributes": ['workspace="<&>workspace<;>"']
     },
     "source": {
- //       "tag": "task",
         "pieces": [["title", ""], ["statement", "p"], ["hint", ""], ["answer", ""], ["solution", ""]],
         "attributes": [["workspace", "0"]]
     }
@@ -373,7 +369,6 @@ objectStructure = {
         "pieces": [["title", "title"], ["content", ""]]
     },
     "source": {
-//        "tag": "hint",
         "pieces": [["content", "p"]]
     }
   },
@@ -392,7 +387,6 @@ objectStructure = {
         "pieces": [["title", "title"], ["content", ""]]
     },
     "source": {
-//        "tag": "answer",
         "pieces": [["content", "p"]]
     }
   },
@@ -411,7 +405,6 @@ objectStructure = {
         "pieces": [["title", "title"], ["content", ""]]
     },
     "source": {
-//        "tag": "solution",
         "pieces": [["content", "p"]]
     }
   },
@@ -440,7 +433,62 @@ objectStructure = {
       "source": {
           "pieces": [["content", ""]]
       }
+  },
+
+  "em": {    // need to mark it as inline
+      "html": {
+          "tag": "em",
+          "attributes": ['class="emphasis"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+          "data_editable": "eemm",
+          "pieces": [["content", ""]]
+      },
+      "pretext": {
+          "tag": "em",
+          "pieces": [["content", ""]]
+      },
+      "source": {
+          "pieces": [["content", ""]]
+      }
+  },
+
+  "m": {    // need to mark it as inline
+      "html": {
+          "tag_opening": "\\(",
+          "tag_closing": "\\)",
+          "pieces": [["content", ""]]
+      },
+      "pretext": {
+          "tag": "m",
+          "pieces": [["content", ""]]
+      },
+      "source": {
+          "pieces": [["content", ""]]
+      }
+  },
+
+  "me": {    // need to mark it as inline
+      "html": {
+          "tag": "div",
+          "attributes": ['id="<&>xml:id<;>"', 'class="displaymath"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+          "data_editable": "42",
+          "pieces": [["{me_raw}", ""]]
+      },
+      "pretext": {
+          "tag": "me",
+          "pieces": [["content", ""]]
+      },
+      "source": {
+          "pieces": [["content", ""]]
+      }
+  },
+  "me_raw": {    // need to mark it as inline
+      "html": {
+          "tag_opening": "\\begin{equation*}",
+          "tag_closing": "\\end{equation*}",
+          "pieces": [["content", ""]]
+      }
   }
+
 }
 
 var environment_instances = {
@@ -545,32 +593,6 @@ function process_value_from_source(fcn, piece, src) {
     return content
 }
 
-//  delete this in cleanup after refactoring
-function UNUSEDvalue_from_source(name, src) {
-    console.log("     value_from_source src", src);
-    alert("value_from_source shoulf no longer be used");
-    var content;
-
-    if (name == "space") { content = " " }
-    else if (name == "period") { content = "." }
-    else if (name == "title") { content = src.title }
-    else if (name == "codenumber") {
-        content = "N.mm"
-        if (src.sourcetag == "task") { content = "(" + content + ")" }
-    }
-    else if (name == "data-space") {
-        content = 0;
-        if(src["workspace"]) { content = src["workspace"] }
-    }
-    else if (name == "type") { 
-        var content_raw = src["sourcetag"];
-        content = content_raw.charAt(0).toUpperCase() + content_raw.slice(1);
-    }
-
-    return content
-}
-
-
 $(".autopermalink > a").attr("tabindex", -1);
 
 var editable_objects = [["p", 99], ["ol", 97], ["ul", 96], ["article", 95], ["blockquote", 80], ["section", 66],
@@ -647,16 +669,15 @@ function rescale(width, max, margin_left, margin_right) {
 
 
 function spacemath_to_tex(text) {
-
     thetext = text;
 
     thetext = thetext.replace(/ d([a-zA-Z])(\s|$)/, " \\,d$1$2");
 
     return thetext
-
 }
 
 var submenu_options = {  // revise as these are handled previously
+"math-like": [["me"], ["chem"], ["code"]],
 "image-like": [["image"], ["video"], ["audio"]],
 "aside-like": [["aside"], ["historical"], ["biographical"]],
 "list-like": [["itemized list", "list"], ["dictionary list", "dl"], ["table"]],
@@ -713,59 +734,15 @@ base_menu_for = {
 "p": [["emphasis-like"], ["formula"], ["abbreviation"], ["symbol"], ["ref or link", "ref"]]
 }
 
-//  need a replacement for past edits  
-function UNUSEDinner_menu_for() {
+//  not currently used
+function past_edits() {
 
     var the_past_edits = [];
     if(recent_editing_actions.length) {
          the_past_edits = recent_editing_actions.map(x => [x.join(" ")])}
     else { the_past_edits = [["no chnages yet"]] }
 
-var the_inner_menu = {
-"theorem-like": [["lemma"],
-                 ["proposition"],
-                 ["theorem"],
-                 ["corollary"],
-                 ["claim", "claim", "m"],
-                 ["fact"],
-                 ["identity"],
-                 ["algorithm"]],
-"definition-like": [["definition"],
-                   ["conjecture", "conjecture"],
-                   ["axiom", "axiom", "x"],
-                   ["principle", "principle"],
-                   ["heuristic", "heuristic", "u"],
-                   ["hypothesis", "hypothesis", "y"],
-                   ["assumption", "assumption", "s"]],
-"list-like": [["itemized list", "list"], ["dictionary list", "dl"], ["table"]],
-"ol": [["list item", "li"]],
-"section-like": [["section"], ["subsection", "subsection", "b"], ["titled paragraph", "paragraphs"], ["reading questions", "rq"], ["exercises"]],
-"project-like": [["exercise"], ["activity"], ["investigation"], ["exploration", "exploration", "x"], ["project"]],
-"remark-like": [["remark"], ["warning"], ["note"], ["observation"], ["convention"], ["insight"]],
-"example-like": [["example"], ["question"], ["problem"]],
-// "display-like": [["image"], ["image with caption", "imagecaption", "m"], ["video"], ["video with caption", "videocaption", "d"], ["audio"]],
-"image-like": [["image", "image"], ["video"], ["audio"]],
-"aside-like": [["aside"], ["historical"], ["biographical"]],
-"layout-like": [["side-by-side panels", "sbs"], ["assemblage"], ["biographical aside"], ["titled paragraph", "paragraphs"]],
-"sbs": [["2 panels", "sbs2"], ["3 panels", "sbs3"], ["4 panels", "sbs4"]],
-//"sbs2": [["full across XXX", "sbs2_0_50_50_0"], ["gap but no margin", "sbs2_0_40_40_0"], ["spaced equally", "sbs2_5_40_40_5"]],
-"sbs2": [["full across", "sbs_0_50_50_0"], ["gap but no margin", "sbs_0_45_45_0"], ["spaced equally", "sbs_5_40_40_5"]],
-"sbs3": [["full across", "sbs_0_34_32_34_0"], ["gap but no margin", "sbs_0_28_28_28_0"], ["spaced equally", "sbs_5_25_26_25_5"]],
-"sbs4": [["full across", "sbs_0_25_25_25_25_0"], ["gap but no margin", "sbs_0_20_20_20_20_0"], ["spaced equally", "sbs_3_18_18_18_18_3"]],
-"math-like": [["math display", "mathdisplay"], ["chemistry display", "chemistrydisplay"], ["code listing", "code", "l"]],
-"quoted": [["blockquote"], ["poem"], ["music"]],
-"interactives": [["sage cell", "sagecell"], ["webwork"], ["asymptote"], ["musical score", "musicalscore"]],
-"metadata": [["index entries"], ["notation"]],
-"emphasis-like": [["emphasis"], ["foreign word", "foreign"], ["book title"], ["article title"], ["inline quote"], ["name of a ship"]],
-// "abbreviation": ["ie", "eg", "etc", "et al"],  // i.e., etc., ellipsis, can just be typed.
-// next one not used?
-// "imagebox": [["make larger"], ["make smaller"], ["shift left"], ["shift right"], ["arrow controls"], ["finished making changes"]],
-"symbol": [["trademark"], ["copyright"], ["money"]],
-"money": [["$ dollar"], ["&euro; euro"], ["&pound; pound"], ["&yen; yen"]],
-"ref": [["reference withing this document"], ["citation"], ["hyperlink"]],
-"undo": the_past_edits
-}
-    return the_inner_menu
+    return the_past_edits
 }
 
 // this should be created from inner_menu_for
@@ -809,11 +786,11 @@ fetch(url)
 console.log("then here");
 */
 
-function make_current_editing_from_id(theid) {
+function make_current_editing_tree_from_id(theid) {
 
 //current_editing keeps track of where we are in the tree.  maybe need a better name?
 
-    console.log("     OOOOO make_current_editing_from_id", theid);
+    console.log("     OOOOO make_current_editing_tree_from_id", theid);
     console.log("     which has internalSource", internalSource[theid]);
     console.log("     within", internalSource);
     console.log("     and the DOM object is", document.getElementById(theid));
@@ -863,7 +840,7 @@ function make_current_editing_from_id(theid) {
     console.log("current_editing[location]", current_editing["location"]);
     console.log("current_editing[tree]", current_editing["tree"])
 
-    console.log("     OOOOO   done with  make_current_editing_from_id", theid, document.getElementById(theid));
+    console.log("     OOOOO   done with  make_current_editing_tree_from_id", theid, document.getElementById(theid));
 
 }
 
@@ -1071,7 +1048,7 @@ function top_menu_options_for(this_obj) {
         this_obj_source = internalSource[this_obj_id];
         console.log("this_obj_source", this_obj_source);
         this_obj_environment = this_obj_source["sourcetag"];
-        if (this_object_type == "P") {
+        if (this_object_type == "P" || this_object_type == "DIV") {  // wrong:  hack for me math
             this_list = '<li tabindex="-1" id="choose_current" data-env="p" data-action="edit">Edit ' + this_obj_environment + '</li>';
             var editable_children = next_editable_of(this_obj, "children");
             console.log("editable_children", editable_children);
@@ -1275,24 +1252,7 @@ function create_new_internal_object(new_tag, new_id, parent_description) {
         console.log("sbs side margins", margin_left, "jj", margin_right);
         new_source.marginleft = margin_left;
         new_source.marginright = margin_right;
-/*
-        var new_sbsrow_id = randomstring();
-        internalSource[new_sbsrow_id] = {"xml:id": new_sbsrow_id, "sourcetag": "sbsrow",
-                 "margin-left": margin_left, "margin-right": margin_right, "parent": [new_id, "content"]}
 
-        var col_content = "";
-        var widths = [];
-        for (var j=2; j <= sbs_layout.length - 2; ++j) {
-            widths.push(sbs_layout[j]);
-            var new_col_id = randomstring();
-            col_content += "<&>" + new_col_id + "<;>";
-            internalSource[new_col_id] = {"xml:id": new_col_id, "sourcetag": "sbspanel",
-                "width": sbs_layout[j], "content": "", "parent": [new_sbsrow_id, "content"]}
-        }
-
-        internalSource[new_sbsrow_id]["content"] = col_content;
-        new_source["content"] = "<&>" + new_sbsrow_id + "<;>";
-*/
         var col_content = "";
         var widths = [];
         for (var j=2; j <= sbs_layout.length - 2; ++j) {
@@ -1520,7 +1480,7 @@ function edit_in_place(obj, oldornew) {
       var new_tag = internalSource[thisID]["sourcetag"];
       var new_id = thisID;  // track down why new_id is in the code
       console.log("new_tag is", new_tag, "from thisID", thisID, "from", internalSource[thisID]);
-      if (new_tag == "p") {
+      if (new_tag == "p" || new_tag == "me") {  // make into a category?
         var this_content_container = document.createElement('div');
         this_content_container.setAttribute('id', "actively_editing");
         this_content_container.setAttribute('data-age', oldornew);
@@ -1584,57 +1544,11 @@ function edit_in_place(obj, oldornew) {
         this_char = "";
         prev_char = "";
 
-//      } else if (new_tag.startsWith("sbs")) {
-      } else if (false && new_tag.startsWith("sidebyside")) {
-
-if (false) {
-        numcols = parseInt(new_tag.slice(-1));
-        new_tag = "sbs";
-        var this_content_container = document.createElement('div');
-        this_content_container.setAttribute('class', "sidebyside");
-        this_content_container.setAttribute('id', thisID);
-        $("#" + thisID).replaceWith(this_content_container);
-
-        console.log('internalSource[thisID]', internalSource[thisID]);
-        var idOfSBSRow = internalSource[thisID]["content"];  // sbs only contains an sbsrow
-        console.log('idOfSBSRow', idOfSBSRow);
-        idOfSBSRow = idOfSBSRow.replace(/<.>/g, "");
-        console.log('idOfSBSRow', idOfSBSRow);
-        var [margin_left, margin_right] = [internalSource[idOfSBSRow]["margin-left"], internalSource[idOfSBSRow]["margin-right"]];
-        var this_sbsrow = document.createElement('div');
-        this_sbsrow.setAttribute('class', 'sbsrow');
-        this_sbsrow.setAttribute('id', idOfSBSRow);
-        this_sbsrow.setAttribute('data-editable', "89");
-        this_sbsrow.setAttribute('style', "margin-left:" + margin_left + "%; margin-right:" + margin_right + "%;");
-
-        var idsOfSBSPanel = internalSource[idOfSBSRow]["content"]
-        idsOfSBSPanel = idsOfSBSPanel.replace(/^\s*<&>/, '');
-        idsOfSBSPanel = idsOfSBSPanel.replace(/<;>\s*$/, '');
-        console.log('a idsOfSBSPanel', idsOfSBSPanel);
-        idsOfSBSPanel = idsOfSBSPanel.replace(/>\s+</g, '><');
-        console.log('b idsOfSBSPanel', idsOfSBSPanel);
-        var idsOfSBSPanelList = idsOfSBSPanel.split("<;><&>");
-        console.log('c idsOfSBSPanel', idsOfSBSPanelList);
-        var these_panels = '';
-        for (var j=0; j < idsOfSBSPanelList.length; ++j) {
-            var width = rescale(internalSource[idsOfSBSPanelList[j]]["width"], 100, margin_left, margin_right);
-            these_panels += '<div class="sbspanel top" id="' + idsOfSBSPanelList[j] + '" data-editable="90"';
-            these_panels += ' style="width:' + width + '%"></div>';
-        }
-        console.log("these_panels", these_panels);
-        this_sbsrow.innerHTML = these_panels;
-        document.getElementById(thisID).insertAdjacentElement("afterbegin", this_sbsrow);
-}
-
-        alert("bypass sbs");
-        console.log("made sbs", thisID);
-
       } else {
 
         console.log(new_tag, "create the object, then edit p in place", obj);
 
         var this_object = html_from_internal_id(new_id, "");
-  //      $("#" + thisID).replaceWith(this_object[0]);    // why [0]?  decide what html_from_internal_id should return
         var where_it_goes = document.getElementById(thisID);
         where_it_goes.insertAdjacentHTML('afterend', this_object[0]);
         where_it_goes.remove();
@@ -1651,13 +1565,17 @@ if (false) {
              console.log("its .firstChild.firstchild", document.getElementById(thisID).firstElementChild.firstElementChild);
              var first_panel_id = document.getElementById(thisID).firstElementChild.firstElementChild.id;
              console.log("first_panel_id", first_panel_id, document.getElementById(first_panel_id));
-             make_current_editing_from_id(first_panel_id);
+             make_current_editing_tree_from_id(first_panel_id);
              edit_menu_from_current_editing("entering");
         } else {
             var empty_p_child = $(where_it_is).find("p");
-            console.log("found the empty p", empty_p_child);
-            console.log("found the empty p[0]", empty_p_child[0]);
-            edit_in_place(empty_p_child[0], "new");
+            if (empty_p_child[0]) {
+                console.log("found the empty p", empty_p_child);
+                console.log("found the empty p[0]", empty_p_child[0]);
+                edit_in_place(empty_p_child[0], "new");
+            } else {
+                console.log("error:  no empty p to edit")
+            }
         }
       }
 
@@ -1677,7 +1595,10 @@ function replace_by_id(theid, format) {
     document.getElementById("delete_me").insertAdjacentHTML('beforebegin', this_object_new);
     document.getElementById("delete_me").remove();
 
-    make_current_editing_from_id(theid);
+// need to also work with MJ3
+    MathJax.Hub.Queue(['Typeset', MathJax.Hub, document.getElementById(theid)]);
+
+    make_current_editing_tree_from_id(theid);
     edit_menu_from_current_editing("entering");
 }
 
@@ -1788,121 +1709,6 @@ function modify_by_id_image(theid, modifier) {
     internalSource[theid]["marginright"] = marginright;
 
     document.getElementById(theid).setAttribute("style", the_new_sizes);
-}
-
-function OLDUNUSEDmodify_by_id_sbs(theid, modifier) {
-
-    var this_sbs_source = internalSource[theid];
-    var this_width = this_sbs_source["width"];
-    var this_sbsrow_id = this_sbs_source["parent"][0];
-    var this_sbsrow_source = internalSource[this_sbsrow_id];
-    console.log("this_sbsrow_source", this_sbsrow_source);
-    var marginleft = parseInt(this_sbsrow_source["margin-left"]);
-    var marginright = parseInt(this_sbsrow_source["margin-right"]);
-    var these_siblings = this_sbsrow_source["content"];
-    these_siblings = these_siblings.replace(/^\s*<&>\s*/, "");
-    these_siblings = these_siblings.replace(/\s*<;>\s*$/, "");
-    these_siblings = these_siblings.replace(/>\s*</g, "><");
-    console.log("these_siblings", these_siblings);
-    these_siblings_list = these_siblings.split("<;><&>");
-    var this_panel_index = these_siblings_list.indexOf(theid);
-    console.log("this panel", theid, "is", this_panel_index, "within", these_siblings_list);
-    these_panel_widths = [];
-    total_width = 0;
-    console.log("these html siblings",document.getElementById(these_siblings_list[0])," and ", document.getElementById(these_siblings_list[1]))
-    console.log("these siblings source",      internalSource[these_siblings_list[0]], "and",  internalSource[these_siblings_list[1]]);
-    for(var j=0; j < these_siblings_list.length; ++j) {
-        var t_wid = parseInt(internalSource[these_siblings_list[j]]["width"]);
-        console.log("adding width", t_wid);
-        total_width += t_wid;
-        these_panel_widths.push(t_wid);
-    }
-    if (this_width != these_panel_widths[this_panel_index]) {
-        console.log("error: width", this_width, "not on list", these_panel_widths)
-    } else {
-        console.log("width", this_width, "on list", these_panel_widths)
-    }
-    this_width = parseInt(this_width);
-    marginright = parseInt(marginright);
-    marginleft = parseInt(marginleft);
-
-    console.log("occ", marginleft, "u", total_width, "pi", marginright, "total", marginleft + total_width + marginright, "ratio", marginright/total_width)
-    var remaining_space = 100 - (marginleft + total_width + marginright);
-    console.log("remaining_space", remaining_space);
-
-//modify: enlarge, shrink, left, right, ??? done
-
-// make the data structure better, then delete this comment
-// currently style looks like "width: 66%; margin-right: 17%; margin-left: 17%"
-    console.log('width', this_width, "mr", marginright, "ml",  marginleft);
-
-    console.log("modifier", modifier);
-
-    var scale_direction = 1;
-    var moving_direction = 1;
-
-    if (modifier == "enlargeall") {
-        console.log("enlarging all", "remaining space", remaining_space);
-        if (remaining_space >= these_panel_widths.length) {
-            for (var j=0; j < these_panel_widths.length; ++j) {
-                these_panel_widths[j] += 1
-            }
-   // probablu the next case handles the first case
-        } else if (remaining_space + marginleft + marginright >= these_panel_widths.length) {
-            for (var j=0; j < these_panel_widths.length; ++j) {
-                these_panel_widths[j] += 1
-            }
-            var missing_length = these_panel_widths.length - remaining_space;
-            while (missing_length) {
-                missing_length -= 1;
-                if (missing_length % 2) {
-                    if (marginleft) { marginleft -= 1 }
-                    else { marginright -= 1 }
-                } else {
-                    if (marginright) { marginright -= 1 }
-                    else { marginleft -= 1 }
-                }
-            }
-        } else {
-            console.log("Problem: not implemented yet")
-        }
-    } else if (modifier == "shrinkall") {
-        for (var j=0; j < these_panel_widths.length; ++j) {
-            if (these_panel_widths[j]) { these_panel_widths[j] -= 1 }
-        }
-    } else if (modifier == "enlarge") {
-        console.log("enlarging one");
-        if (remaining_space) { these_panel_widths[this_panel_index] += 1 }
-    } else if (modifier == "shrink") {
-        console.log("shrinking one");
-        if (these_panel_widths[this_panel_index]) { these_panel_widths[this_panel_index] -= 1 }
-    } else if (modifier == "leftplus") {
-        if (remaining_space) { marginleft += 1 }
-    } else if (modifier == "leftminus") {
-        if (marginleft) { marginleft -= 1 }
-    } else if (modifier == "rightplus") {
-        if (remaining_space) { marginright += 1 }
-    } else if (modifier == "rightminus") { 
-        if (marginright) { marginright -= 1 }
-    }
-    console.log("now these_panel_widths", these_panel_widths);
-
-// missing cases??
-
-    internalSource[this_sbsrow_id]["margin-left"] = marginleft;
-    internalSource[this_sbsrow_id]["margin-right"] = marginright;
-    document.getElementById(this_sbsrow_id).style.marginLeft = marginleft + "%";
-    document.getElementById(this_sbsrow_id).style.marginRight = marginright + "%";
-
-    for (var j=0; j < these_siblings_list.length; ++j) {
-        var this_id = these_siblings_list[j];
-        internalSource[this_id]["width"] = these_panel_widths[j];
-        var width = rescale(these_panel_widths[j], 100, marginleft, marginright)
-  //      document.getElementById(this_id).style.width = these_panel_widths[j] + "%";
-        document.getElementById(this_id).style.width = width + "%";
-    }
-    console.log("NOW these html siblings",document.getElementById(these_siblings_list[0])," and ", document.getElementById(these_siblings_list[1]))
-    console.log("NOW these siblings source",      internalSource[these_siblings_list[0]], "and",  internalSource[these_siblings_list[1]]);
 }
 
 function modify_by_id_sbs(theid, modifier) {
@@ -2185,7 +1991,7 @@ function move_object(e) {
 
 
         // and the navigation information
-        make_current_editing_from_id(handle_of_moving_object);
+        make_current_editing_tree_from_id(handle_of_moving_object);
 
         var most_recent_edit = ongoing_editing_actions.pop();
         recent_editing_actions.unshift(most_recent_edit);
@@ -2254,19 +2060,7 @@ function delete_by_id(theid, thereason) {
         }
         console.log("current_index", current_index, "in", current_editing["tree"][ current_level ]);
         console.log("current_level", current_level, "on", current_editing["tree"]);
-        make_current_editing_from_id(current_editing["tree"][ current_level ][ current_index].id);
-        
-  //  ERROR:  if deleting that element leaves an empty content or statement, then delete the parent
-  //  (in HTML and internalSource)
-
-        // update current_editing
-/*
-        var editing_parent = current_editing["tree"][ current_level - 1 ][ current_editing["location"][ current_level - 1 ] ];
-        current_editing["tree"][current_editing["level"]] = next_editable_of(editing_parent, "children");
-        if (current_editing["location"] >= current_editing["tree"][ current_level ].length ) {
-            current_editing["location"] = current_editing["tree"][ current_level ].length - 1
-        }
-*/
+        make_current_editing_tree_from_id(current_editing["tree"][ current_level ][ current_index].id);
         edit_menu_from_current_editing("entering");
     }
 }
@@ -2303,7 +2097,11 @@ var internalSource = {  // currently the key is the HTML id
    "udO": {"xml:id": "udO", "sourcetag": "investigation", "parent": ["hPw","content"],
            "statement": "<&>Iht<;><&>ooC<;>"},
    "Iht": {"xml:id": "Iht", "sourcetag": "p", "parent": ["udO","content"],
-           "content": "Note: Throughout the text you will see <em>Investigate!</em>\nactivities like this one.\nAnswer the questions in these as best you can to give yourself a feel for what is coming next."},
+           "content": "<&>Ihtem<;>"},
+   "Ihtem": {"xml:id": "Ihtem", "sourcetag": "em", "parent": ["Iht","content"],
+           "content": "Note: Throughout the text you will see <&>em1a<;>\nactivities like this one.\nAnswer the questions in these as best you can to give yourself a feel for what is coming next."},
+   "em1a": {"xml:id": "em1", "sourcetag": "em", "parent": ["Iht","content"],
+           "content": "Investigate!"},
    "ooC": {"xml:id": "ooC", "sourcetag": "list", "parent": ["udO","content"],
            "content": "<&>mzp<;><&>SGy<;><&>yNH<;><&>eUQ<;>"},
    "eUQ": {"xml:id": "eUQ", "sourcetag": "li", "parent": ["ooC","content"],
@@ -2357,19 +2155,6 @@ function create_local_menu() {
 
             document.getElementById("local_menu_holder").insertAdjacentElement("afterbegin", enter_option);
 
-}
-
-function source_to_html(input_text) {
-    output_text = input_text;
-
-// there are two types of expansion to be done:
-//    expand internal tags
-//    convert hand-written source to HTML
-    output_text = expand_condensed_source_html(output_text, "source");
-
-    output_text = output_text.replace(/<term>/g, "<b>"); 
-    output_text = output_text.replace(/<\/term>/g, "</b>"); 
-    return(output_text)
 }
 
 function extract_internal_contents(some_text) {
@@ -2577,6 +2362,8 @@ function assemble_internal_version_changes() {
 }
 
 function wrap_tag(tag, content, attribute_values) {
+    // tag is either an XML tag name, or [opening_tag, closing_tag]
+
     // layout: inline or block or title
     // is this the right place to handle empty content?
 //    console.log("calling wrap_tag", "tag", tag, "content", content, "attribute_values", attribute_values);
@@ -2584,44 +2371,46 @@ function wrap_tag(tag, content, attribute_values) {
     if (!content && !always_empty_tags.includes(tag) && !allowed_empty_tags.includes(tag)) { return "" }
     if (!tag) { return content }
 
+/*
     if (attribute_values.length) {
         console.log("tag", tag, "has attribute_values", attribute_values)
     } else {
         console.log("tag", tag, "has no attribute_values:", attribute_values)
     }
+*/
 
     var opening_tag = closing_tag = "";
 
-    if (tag) {
+    if (typeof tag == "string") {
+      if (tag) {
         opening_tag = "<" + tag;
         for (var j=0; j < attribute_values.length; ++j) {
-     //       var [name, value] = attribute_values[j];
-     //       opening_tag += ' ' + name + '="' + value + '"'
             opening_tag += ' ' + attribute_values[j]
         }
-  //      opening_tag += ">";
         closing_tag = "</" + tag + ">";
-    }
-    if (!content && always_empty_tags.includes(tag)) {
+      }
+      if (!content && always_empty_tags.includes(tag)) {
         opening_tag += "/>";
         closing_tag = "";
-//    } else if (tag) {
-    } else {
+      } else {
         opening_tag += ">";
-    }
-//    if (content.includes("hard")) { console.log("2 ---- content",content); console.log("opening_tag", opening_tag) }
+      }
 
-    if (tag_display["inline"].includes(tag)) {
+      if (tag_display["inline"].includes(tag)) {
         // do nothing
-    } else if (tag_display["title"].includes(tag)) {
+      } else if (tag_display["title"].includes(tag)) {
         opening_tag = "\n" + opening_tag;
         closing_tag = closing_tag + "\n"
-    } else {  //the default
+      } else {  //the default
         opening_tag = "\n" + opening_tag + "\n";
         if (closing_tag) {
             closing_tag = "\n" + closing_tag + "\n"
         }
-	    }
+      }
+    } else {
+        [opening_tag, closing_tag] = tag
+    }
+
     if (content.includes("N.m")) { console.log("3 ----- content",content); console.log("opening_tag", opening_tag) }
 
     return opening_tag + content + closing_tag
@@ -2633,6 +2422,9 @@ function output_from_source(the_object, output_structure, format) {
     // format: html, pretext (or source?)
     var the_answer = "";
     var output_tag = output_structure.tag;
+    if (!output_tag) {
+        output_tag = [output_structure.tag_opening, output_structure.tag_closing]
+    }
 
     var output_attributes = [];
     if ("attributes" in output_structure) {
@@ -2751,43 +2543,6 @@ function output_from_id(match, the_id, format) {
     the_answer = output_from_source(the_object, output_structure, format);
 
     return the_answer
-
-/*
-
-    if (pretext_tag == "title") { tag_display = "title" }
-
-    var pretext_attributes = [];
-    if ("attributes" in src_structure) {
-        pretext_attributes = src_structure.attributes;
-    }
-    var pretext_attributes_values = [];
-    for (var j=0; j < pretext_attributes.length; ++j) {
-        var attr_name = pretext_attributes[j];
-        var attr_val = the_object[attr_name];
-        if (attr_val) {
-            pretext_attributes_values.push([attr_name, attr_val])
-        }
-    }
-
-    console.log("src_structure", pretext_tag, "is", src_structure);
-    console.log("pretext_attributes_values", pretext_attributes_values);
-    for (var j=0; j < src_structure.pieces.length; ++j) {
-        var this_display = "";   // how do we determin that?  3rd entry needed in pieces?
-        var [this_piece, this_tag] = src_structure.pieces[j];
-        console.log("this_piece", this_piece);
-        if (this_piece in the_object) {
-            this_piece_src = output_from_text(the_object[this_piece], format);
-            if (this_tag) { console.log("     WRAP on tag", this_tag, "from", this_piece)};
-            the_answer += wrap_tag(this_tag, this_piece_src, this_display, [])
-        } else {
-            console.log("missing piece:", pretext_tag, "with no", this_piece)
-        }
-    }
-
-    the_answer = wrap_tag(pretext_tag, the_answer, tag_display, pretext_attributes_values)
-
-    return the_answer
-*/
 }
 
 function expand_condensed_source_html(text, context) {
@@ -2826,23 +2581,7 @@ function html_from_internal_id(the_id, is_inner) {
     var html_of_this_object;
     var the_html_objects = [];
 
-    if (false && sourcetag == "image") {
-        var the_src = the_object["src"];
-        console.log("inserting an image with src", the_src);
-
-        if (is_inner == "edit") {
-            return the_src
-        }
-
-// why to we create an object and then do it as text?
-        html_of_this_object = document.createElement('img');
-        html_of_this_object.setAttribute("id", the_id);
-        html_of_this_object.setAttribute("src", the_src);
-
-        html_of_this_object = '<img src="' + the_src + '" id="' + the_id + '">';
-
-        the_html_objects.push(html_of_this_object);
-    } else if (sourcetag == "image") {
+    if (sourcetag == "image") {
 
         html_of_this_object = output_from_id("", the_id, "html");
         console.log("html_of_this_object", html_of_this_object);
@@ -2853,7 +2592,7 @@ function html_from_internal_id(the_id, is_inner) {
         console.log("html_of_this_object", html_of_this_object);
         the_html_objects.push(html_of_this_object);
 
-    } else if (sourcetag == "definition" || sourcetag == "remark") {
+    } else if (false && (sourcetag == "definition" || sourcetag == "remark")) {
         html_of_this_object = output_from_id("", the_id, "html");
         console.log("html_of_this_object", html_of_this_object);
         the_html_objects.push(html_of_this_object);
@@ -2875,142 +2614,13 @@ function html_from_internal_id(the_id, is_inner) {
         }
         return opening_tag + spacemath_to_tex(the_object["content"]) + closing_tag
 
-    } else if (true) {
+    } else {
         html_of_this_object = output_from_id("", the_id, "html");
         console.log("html_of_this_object", html_of_this_object);
         the_html_objects.push(html_of_this_object);
 
-    } else {
+    } 
 
-        var thestructure = objectStructure[sourcetag];
-        var thehtmlstructure;
-        if ("owner" in thestructure) {
-            var theownerstructure = objectStructure[thestructure.owner];
-            thehtmlstructure = Object.assign({}, theownerstructure.html, thestructure.html);
-        } else {
-            thehtmlstructure = thestructure.html
-        }
-        console.log(" ");
-        console.log("thehtmlstructure", thehtmlstructure);
-        console.log("class", thehtmlstructure.cssclass);
-
-        var object_html_pieces = thehtmlstructure.pieces;
-        // typically heading and contents
-        var object_html_pieces_html = {};
-        for (var j=0; j < object_html_pieces.length; ++j) {
-            var this_piece_html = "";
-            var piece_type = object_html_pieces[j];
-            console.log("making the piece", piece_type);
-            if (piece_type == "heading") {
-                thehtmltitlestructure = objectStructure[thehtmlstructure.heading];
-                this_piece_html = '<' + thehtmltitlestructure.html.tag;
-                this_piece_html += ' class="' + thehtmltitlestructure.html.cssclass + '"';
-     // why data-parent_id, instead of looking up the tree to find the parent?
-                this_piece_html += ' data-parent_id="' + the_id + '"';
-                this_piece_html += '>';
-                heading_pieces = thehtmltitlestructure.html.pieces;
-                for (var k=0; k < heading_pieces.length; ++k) {
-                    piece_name = heading_pieces[k];
-                      // should we first check of the content is nonempty?
-                    this_piece_html += '<span';
-                    if (piece_name.endsWith("*")) {
-                        piece_name = piece_name.slice(0, -1); 
-                        this_piece_html += ' data-editable="70" tabindex="-1"';
-                    }
-                    this_piece_html += ' class="' + piece_name + '">' + value_from_source(piece_name, the_object);
-                    this_piece_html += '</span>';
-                }
-                this_piece_html += '</' + thehtmltitlestructure.html.tag + ">";
-            } else if (["statement", "content"].includes(piece_type)) {
-                console.log("making", piece_type, "from", the_object);
-                var object_statement = the_object[piece_type];
-                console.log("object_statement", object_statement);
-                this_piece_html =  expand_condensed_source_html(object_statement);
-                console.log("statement statement is", this_piece_html);
-            } else if (["hint", "answer", "solution"].includes(piece_type)) {
-                console.log("making", piece_type, "from", the_object);
-                var object_statement = the_object[piece_type];
-                console.log("object_statement", object_statement);
-
-                if (object_statement) {
-                    this_piece_html =  expand_condensed_source_html(object_statement);
-                } else {
-                    this_piece_html = '<div class="placeholder ' + piece_type + '" data-placeholder';
-                    this_piece_html += ' data-parent_id="' + the_id + '"';
-                    this_piece_html += ' data-HAS="' + piece_type + '"';
-                    this_piece_html += ' tabindex="-1" data-editable="000"';
-                    this_piece_html += '></div>'
-                }
-                console.log("statement statement is", this_piece_html);
-
-            } else if (["workspace"].includes(piece_type)) {
-                console.log("making (not really)", piece_type, "from", the_object);
-                this_piece_html = '<div class="workspace"';
-                this_piece_html += ' data-space="' + value_from_source("data-space", the_object) + '"';
-                this_piece_html += ' data-parent_id="' + the_id + '"';
-                this_piece_html += ' tabindex="-1" data-editable="440"';
-                this_piece_html += '></div>'
-            } else {
-                console.log("not sure how to make the piece", piece_type)
-
-                if (!piece_type.endsWith("*")) { // temporary work-around
-                this_piece_html = output_from_id("", the_id, "html");
-                }
-
-/*
-                var object_statement = the_object[piece_type];
-                if (piece_type.endsWith("*")) {
-                    console.log("skipping optional piece", piece_type)
-                } else if (false) {
-                    console.log("object_statement", object_statement);
-                    this_piece_html =  expand_condensed_source_html(object_statement);
-                    console.log("but we tried anyway, and now have", this_piece_html)
-                }
-*/
-            }
-            console.log("made the piece", this_piece_html);
-            object_html_pieces_html[piece_type] = this_piece_html
-        }
-
-        var object_all_contents_html = "";
-        for (var j=0; j < object_html_pieces.length; ++j) {
-            var piece_type = object_html_pieces[j];
-            object_all_contents_html += object_html_pieces_html[piece_type]
-        }
-
-        if (is_inner == "edit") {
-            return object_all_contents_html
-        } else if (is_inner == "inner") {
-            var inner_form = '<' + thehtmlstructure.tag;
-            inner_form += ' id="' + the_id + '"';
-            if (thehtmlstructure.cssclass) {
-                inner_form += ' class="' + thehtmlstructure.cssclass + '"';
-            }
-            if (thehtmlstructure.data_editable) {
-                inner_form += ' tabindex="-1"';
-                inner_form += ' data-editable="' + thehtmlstructure.data_editable + '"';
-            }
-            inner_form += '>';
-            inner_form += object_all_contents_html
-            inner_form += '</' + thehtmlstructure.tag + '>';
-
-            return inner_form
-        } else {
-            var object_in_html = document.createElement(thehtmlstructure.tag);
-            object_in_html.setAttribute("id", the_id);
-            if (thehtmlstructure.cssclass) {
-                console.log("adding CLASS", thehtmlstructure.cssclass);
-                object_in_html.setAttribute("class", thehtmlstructure.cssclass);
-            }
-            if (thehtmlstructure.data_editable) {
-                // not everything is seen by the editor. li, for example
-                object_in_html.setAttribute("tabindex", -1);
-                object_in_html.setAttribute("data-editable", thehtmlstructure.data_editable);
-            }
-            object_in_html.innerHTML = object_all_contents_html;
-            the_html_objects.push(object_in_html)
-        }
-    }
     console.log("    RRRR returning the_html_objects", the_html_objects);
     return the_html_objects
 }
@@ -3050,43 +2660,20 @@ function insert_html_version(these_changes) {
         console.log("j=", j, "this thing", possibly_changed_ids_and_entry[j]);
         this_object = internalSource[this_object_id];
         console.log(j, "this_object", this_object);
-        if (this_object["sourcetag"] == "p" || this_object["sourcetag"] == "li") {
+        if (this_object["sourcetag"] == "p" || this_object["sourcetag"] == "li" || this_object["sourcetag"] == "me") {
 
             var this_new_object = html_from_internal_id(this_object_id);
             console.log("inserting",this_new_object,"before",location_of_change);
             location_of_change.insertAdjacentHTML('beforebegin', this_new_object[0]);
             object_as_html = document.getElementById(this_object_id);
 
-/*
-            object_as_html = document.createElement(this_object["sourcetag"]);
-            if (this_object["sourcetag"] == "p") {
-                object_as_html.setAttribute("data-editable", 99);
-            } else {
-                object_as_html.setAttribute("data-editable", 98);
-            }
-            object_as_html.setAttribute("tabindex", -1);
-            object_as_html.setAttribute("id", this_object_id);
-            object_as_html.setAttribute("data-age", this_object_oldornew);
-            console.log("now making inner HTML", this_object[this_object_entry].substring(0,12));
-            object_as_html.innerHTML = source_to_html(this_object[this_object_entry]);
-            console.log("inserting", object_as_html);
-            location_of_change.insertAdjacentElement('beforebegin', object_as_html);
-
-            var editing_parent = current_editing["tree"][ current_editing["level"] -1 ][ current_editing["location"][ current_editing["level"] - 1 ] ];
-            console.log("               editing_parent", editing_parent);
-            console.log("       EEE   ", current_editing["level"], "     current_editing[tree]", current_editing["tree"], " EEE ", current_editing["tree"][current_editing["level"]]);
-            current_editing["tree"][current_editing["level"]] = next_editable_of(editing_parent, "children");
-
-*/
-
-
-
         } else if (this_object_entry == "title") {
             var object_as_html = document.createElement('span');
             object_as_html.setAttribute("class", "title");
             object_as_html.setAttribute('data-editable', 20);
             object_as_html.setAttribute('tabindex', -1);
-            object_as_html.innerHTML = source_to_html(this_object[this_object_entry]);
+       // next line should apply a transform to the source
+            object_as_html.innerHTML = this_object[this_object_entry];
             console.log("inserting",object_as_html,"before",location_of_change);
             // location_of_change is the .header .  We want it to be the .title
             location_of_change = location_of_change.querySelector("#actively_editing");
@@ -3094,22 +2681,9 @@ function insert_html_version(these_changes) {
             location_of_change.insertAdjacentElement('beforebegin', object_as_html);
 
         } else if (this_object_entry == "image") {
-   //         var object_as_html = document.createElement('div');
-/*
-            object_as_html.setAttribute("data-editable", 29);
-            object_as_html.setAttribute("tabindex", -1);
-            object_as_html.setAttribute("id", this_object_id);
-            object_as_html.setAttribute("class", "image-box");
-            object_as_html.setAttribute("style", "width: 50%; margin-right: 25%; margin-left: 25%");
-*/
-
             console.log("image, this_object", this_object);
-   //         object_as_html.innerHTML = source_to_html(this_object["content"]);
-// object_as_html.innerHTML = html_from_internal_id(this_object_id);
             var this_new_object = html_from_internal_id(this_object_id);
-       //     object_as_html.innerHTML = source_to_html(this_object);
             console.log("inserting",this_new_object,"before",location_of_change);
-       //     location_of_change.insertAdjacentElement('beforebegin', this_new_object[0]);
             location_of_change.insertAdjacentHTML('beforebegin', this_new_object[0]);
             object_as_html = document.getElementById(this_object_id);
 
@@ -3121,7 +2695,7 @@ function insert_html_version(these_changes) {
     location_of_change.remove();
 
 // this should be called after this funciotn returns
-//    make_current_editing_from_id(this_object_id);
+//    make_current_editing_tree_from_id(this_object_id);
 
     console.log("returning from insert html version", object_as_html);
     // call mathjax, in case the new content contains math
@@ -3164,7 +2738,7 @@ function local_editing_action(e) {
             save_edits();
 
             // .title is in a .heading, and neither have an id
-            make_current_editing_from_id(final_added_object.parentElement.parentElement.id);
+            make_current_editing_tree_from_id(final_added_object.parentElement.parentElement.id);
             edit_menu_from_current_editing("entering");
 
 // editing_input_image
@@ -3272,7 +2846,7 @@ console.log("    GGG current_editing", current_editing, current_editing["tree"][
               } else {
 
                   console.log("re-making the tree from final_added_object", final_added_object);
-                  make_current_editing_from_id(final_added_object.id);
+                  make_current_editing_tree_from_id(final_added_object.id);
                   console.log("and then adding a menu");
                   edit_menu_from_current_editing("entering");
               }
@@ -3428,10 +3002,10 @@ function main_menu_navigator(e) {  // we are not currently editing
         } else {
             console.log("something is confused:  should be a menu, but isn't");
             if (theChooseCurrent.id) {
-                make_current_editing_from_id(theChooseCurrent.id);
+                make_current_editing_tree_from_id(theChooseCurrent.id);
                 object_of_interest = theChooseCurrent
             } else {
-                make_current_editing_from_id(theChooseCurrent.parentElement.id);
+                make_current_editing_tree_from_id(theChooseCurrent.parentElement.id);
                 object_of_interest = theChooseCurrent.parentElement
             }
             console.log("made entering menu for", object_of_interest);
@@ -3792,7 +3366,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                       console.log("document.getElementById(new_obj_id)", document.getElementById(new_obj_id));
                       var first_panel_id = document.getElementById(new_obj_id).firstElementChild.firstElementChild.id;
                       console.log("first_panel_id", first_panel_id, document.getElementById(first_panel_id));
-                      make_current_editing_from_id(first_panel_id);
+                      make_current_editing_tree_from_id(first_panel_id);
                       edit_menu_from_current_editing("entering");
                   }
               } else {
