@@ -17,6 +17,13 @@ objectStructure = {
         "pieces": [["(capitalize,sourcetag)", ""]]  // need to transform the sourcetag
     }
   },
+  "sectiontype": {
+    "html": {
+        "tag": "span",
+        "attributes": ['class="type"'],  // the type of a section is not editable?
+        "pieces": [["(capitalize,sourcetag)", ""]]  // need to transform the sourcetag
+    }
+  },
   "codenumber": { 
     "html": {
         "tag": "span",
@@ -67,8 +74,8 @@ objectStructure = {
     "html": {
         "tag": "h2",
         "cssclass": "heading hide-type",
-        "attributes": ['class="<&>{cssclass}<;>"'],
-        "pieces": [["{type}", ""], ["{codenumber}", ""], ["{space}", ""], ["{title}", ""]]
+        "attributes": ['class="<&>{cssclass}<;>"', 'data-parent_id="<&>xml:id<;>"'],
+        "pieces": [["{sectiontype}", ""], ["{codenumber}", ""], ["{space}", ""], ["{title}", ""]]
     }
   },
   "task_like_heading": {
@@ -83,7 +90,7 @@ objectStructure = {
   "section": {  /* not currently implemented, so probably wrong */
     "html": {
         "tag": "section",
-        "attributes": ['class="<&>section<;>"', 'id="<&>xml:id<;>"'],
+        "attributes": ['class="<&>section<;>"', 'id="<&>xml:id<;>"', 'data-editable="XYX"', 'tabindex="-1"'],
         "pieces": [["{section_like_heading}", ""], ["content", ""]],
     },
     "pretext": {
@@ -344,7 +351,7 @@ objectStructure = {
         "attributes": ['workspace="<&>workspace<;>"']
     },
     "source": {
-        "tag": "task",
+ //       "tag": "task",
         "pieces": [["title", ""], ["statement", "p"], ["hint", ""], ["answer", ""], ["solution", ""]],
         "attributes": [["workspace", "0"]]
     }
@@ -366,7 +373,7 @@ objectStructure = {
         "pieces": [["title", "title"], ["content", ""]]
     },
     "source": {
-        "tag": "hint",
+//        "tag": "hint",
         "pieces": [["content", "p"]]
     }
   },
@@ -385,7 +392,7 @@ objectStructure = {
         "pieces": [["title", "title"], ["content", ""]]
     },
     "source": {
-        "tag": "answer",
+//        "tag": "answer",
         "pieces": [["content", "p"]]
     }
   },
@@ -404,7 +411,7 @@ objectStructure = {
         "pieces": [["title", "title"], ["content", ""]]
     },
     "source": {
-        "tag": "solution",
+//        "tag": "solution",
         "pieces": [["content", "p"]]
     }
   },
@@ -417,13 +424,22 @@ objectStructure = {
         "attributes": ['data-parent_id="<&>xml:id<;>"', 'data-space="<&>workspace<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
         "pieces": []
     }
-/*
-,
-    "source": {
-        "pieces": [["title", ""], ["statement", "p"], ["solution*", ""]],
-        "attributes": [["workspace", "1in"]]
-    }
-*/
+  },
+
+  "term": {    // need to mark it as inline
+      "html": {
+          "tag": "dfn",
+          "attributes": ['id="<&>xml:id<;>"', 'class="terminology"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+          "data_editable": "ttt",
+          "pieces": [["content", ""]]
+      },
+      "pretext": {
+          "tag": "term",
+          "pieces": [["content", ""]]
+      },
+      "source": {
+          "pieces": [["content", ""]]
+      }
   }
 }
 
@@ -484,7 +500,7 @@ Object.assign(objectStructure, sidebyside_instances);
 var always_empty_tags = ["img", "image"];
 var allowed_empty_tags = ["div", "span", "p", "stack"];
 var tag_display = {  /* the default is "block" */
-    "inline": ["m", "em", "ellipsis", "span"], 
+    "inline": ["m", "em", "ellipsis", "span", "term"], 
     "title": ["title", "idx", "h1", "h2", "h3", "h4", "h5", "h6", "div"]
 } 
 
@@ -1355,7 +1371,7 @@ function show_source(sibling, relative_placement) {
 
     console.log("just added", edit_placeholder);
 
-    var the_pretext_source =  pretext_from_id("", top_level_id, "pretext");
+    var the_pretext_source =  output_from_id("", top_level_id, "pretext");
 
     the_pretext_source = the_pretext_source.replace(/\n\n/g, '\n');
 
@@ -1655,7 +1671,7 @@ function replace_by_id(theid, format) {
 
     if (format != "html") { return "" }
 
-    var this_object_new = pretext_from_id("",theid, format);
+    var this_object_new = output_from_id("",theid, format);
 
     document.getElementById(theid).setAttribute("id", "delete_me");
     document.getElementById("delete_me").insertAdjacentHTML('beforebegin', this_object_new);
@@ -2276,8 +2292,10 @@ var internalSource = {  // currently the key is the HTML id
            "content": "    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n     In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n <ellipsis/>.\n Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n What sort of problems?\n Okay, those that involve numbers,\n functions, lines, triangles,\n <ellipsis/>.\n Whatever your conception of what mathematics is,\n try applying the concept of <q>discrete</q> to it, as defined above.\n Some math fundamentally deals with <em>stuff</em>\n that is individually separate and distinct."},
    "357911": {"xml:id": "356711", "sourcetag": "em", "title": "",
            "content": 'Synonyms'},
+   "term1": {"xml:id": "term1a", "sourcetag": "term", "parent": ["sYv","content"],
+             "content": "symbolic logic"},
    "sYv": {"xml:id": "sYv", "sourcetag": "p", "parent": ["hPw","content"],
-           "content": 'One reason it is difficult to define discrete math is that it is a very broad description which encapsulates a large number of subjects. In this course we will study four main topics: <dfn class="terminology">combinatorics</dfn> (the theory of ways things <em class="emphasis">combine</em>; in particular, how to count these ways), <dfn class="terminology">sequences</dfn>, <dfn class="terminology">symbolic logic</dfn>, and <dfn class="terminology">graph theory</dfn>. However, there are other topics that belong under the discrete umbrella, including computer science, abstract algebra, number theory, game theory, probability, and geometry (some of these, particularly the last two, have both discrete and non-discrete variants).'},
+           "content": 'One reason it is difficult to define discrete math is that it is a very broad description which encapsulates a large number of subjects.\nIn this course we will study four main topics: <term>combinatorics</term> (the theory of ways things <em class="emphasis">combine</em>; in particular, how to count these ways), <dfn class="terminology">sequences</dfn>, <&>term1<;>, and <dfn class="terminology">graph theory</dfn>. However, there are other topics that belong under the discrete umbrella, including computer science, abstract algebra, number theory, game theory, probability, and geometry (some of these, particularly the last two, have both discrete and non-discrete variants).'},
    "ACU": {"xml:id": "ACU", "sourcetag": "p", "parent": ["hPw","content"],
            "content": "In an algebra or calculus class, you might have found a particular set of numbers (maybe the set of numbers in the range of a function). You would represent this set as an interval: <&>223344<;> is the range of <&>112233<;> since the set of outputs of the function are all real numbers <m>0</m> and greater. This set of numbers is NOT discrete. The numbers in the set are not separated by much at all. In fact, take any two numbers in the set and there are infinitely many more between them which are also in the set."},
    "112233": {"xml:id": "112233", "sourcetag": "m", "parent": ["ACU","content"],
@@ -2685,8 +2703,8 @@ function output_from_source(the_object, output_structure, format) {
         }
     }
 
-//    console.log("outer wrap tag", output_tag, "with attributes", output_attributes_values, "answer was", the_answer);
-    if (format == "pretext") {
+    // pretty print the output
+    if (format == "pretext" && !(output_tag in inline_tags) && !(output_tag in math_tags)) {
         the_answer = the_answer.replace(/(^|\n)( *(\w|<))/g, "$1  $2");
     }
     the_answer = wrap_tag(output_tag, the_answer, output_attributes_values)
@@ -2698,13 +2716,14 @@ function output_from_source(the_object, output_structure, format) {
 function output_from_text(text, format) {
     console.log("output_from_text of ", text, "with format", format);
     if (text.includes("<&>")) {
-        return text.replace(/\s*<&>(.*?)<;>\s*/g, function (match, newid) { return pretext_from_id(match, newid, format)})
+  //      return text.replace(/\s*<&>(.*?)<;>\s*/g, function (match, newid) { return output_from_id(match, newid, format)})
+        return text.replace(/<&>(.*?)<;>/g, function (match, newid) { return output_from_id(match, newid, format)})
     } else {
         return text
     }
 }
 
-function pretext_from_id(match, the_id, format) {
+function output_from_id(match, the_id, format) {
     var the_answer = "";
     console.log("expanding the_id", the_id);
     var the_object = internalSource[the_id];
@@ -2825,17 +2844,17 @@ function html_from_internal_id(the_id, is_inner) {
         the_html_objects.push(html_of_this_object);
     } else if (sourcetag == "image") {
 
-        html_of_this_object = pretext_from_id("", the_id, "html");
+        html_of_this_object = output_from_id("", the_id, "html");
         console.log("html_of_this_object", html_of_this_object);
         the_html_objects.push(html_of_this_object);
 
     } else if (sourcetag == "p") {
-        html_of_this_object = pretext_from_id("", the_id, "html");
+        html_of_this_object = output_from_id("", the_id, "html");
         console.log("html_of_this_object", html_of_this_object);
         the_html_objects.push(html_of_this_object);
 
     } else if (sourcetag == "definition" || sourcetag == "remark") {
-        html_of_this_object = pretext_from_id("", the_id, "html");
+        html_of_this_object = output_from_id("", the_id, "html");
         console.log("html_of_this_object", html_of_this_object);
         the_html_objects.push(html_of_this_object);
 
@@ -2857,7 +2876,7 @@ function html_from_internal_id(the_id, is_inner) {
         return opening_tag + spacemath_to_tex(the_object["content"]) + closing_tag
 
     } else if (true) {
-        html_of_this_object = pretext_from_id("", the_id, "html");
+        html_of_this_object = output_from_id("", the_id, "html");
         console.log("html_of_this_object", html_of_this_object);
         the_html_objects.push(html_of_this_object);
 
@@ -2935,7 +2954,7 @@ function html_from_internal_id(the_id, is_inner) {
                 console.log("not sure how to make the piece", piece_type)
 
                 if (!piece_type.endsWith("*")) { // temporary work-around
-                this_piece_html = pretext_from_id("", the_id, "html");
+                this_piece_html = output_from_id("", the_id, "html");
                 }
 
 /*
