@@ -1450,11 +1450,52 @@
         <subsection xml:id="mathematics-macros">
             <title>Your Macros</title>
 
-            <p>These go in the <tag>docinfo</tag> section, wrapped in a <tag>macros</tag><idx>macro</idx> element.  Keep them simple<mdash />one or two arguments, and one-line definitions.  This is not the place to be fancy, and not the place to try to end-run the structural aspects of <pretext />.  The idea is to define something like <c>\adjoint{A}</c> for the matrix <c>A</c> to be a superscript asterisk, and later you can change your mind and use a superscript dagger instead.  Keep in the spirit of <pretext /> and use readable, semantic macros.  For example, do not use <c>\a{A}</c> for the adjoint of <c>A</c>.</p>
+            <p>These go in the <tag>docinfo</tag> section, wrapped in a <tag>macros</tag><idx>macro</idx> element.  Keep them simple<mdash />one or two arguments, and one-line definitions.  This is not the place to be fancy, and not the place to try to end-run the structural aspects of <pretext/>.  The idea is to define something like <c>\adjoint{A}</c> for the matrix <c>A</c> to be a superscript asterisk, and later you can change your mind and use a superscript dagger instead.  Keep in the spirit of <pretext/> and use readable, semantic macros.  For example, do not use <c>\a{A}</c> for the adjoint of <c>A</c>.</p>
 
-            <p><pretext /> will use your macros correctly for print and for <init>HTML</init>, after erasing whitespace from the left margin, and stripping <latex /> comments.</p>
+            <p><pretext/> will use your macros correctly for print and for <init>HTML</init>, after erasing whitespace from the left margin, and stripping <latex/> comments.</p>
 
             <p>The name of your macros also cannot contain any numbers, otherwise MathJax will <q>silently</q> fail and may not read any subsequent macros you might have. This is important because <pretext/> will place custom macros for you at the end of your own, defined at <xref ref="mathematics-xml-characters"/>, to be used. Those would fail to be processed by MathJax if your own macros caused it to stop reading.</p>
+        </subsection>
+
+        <subsection xml:id="semantic-macros">
+            <title>Semantic Macros</title>
+
+            <introduction>
+                <p>We have resisted using overly-verbose MathML for mathematics, or worse, inventing our own <init>XML</init> vocabulary for mathematics.  <latex/> syntax generally works great, but to work even better within <pretext/> an author needs to take a few extra steps.  Your work will translate better to a variety of formats, and will be easier to maintain, with well-designed macros.  A well-designed macro will convey the mathematical <em>meaning</em> of the object to a reader of your source, without them looking at your <em>definition</em> of the macro.  In situations where a mathematical object might be written with different notation, it should be trivial to change the macro's definition and preserve the mathematical meaning.  For example, consider two versions of a binomial coefficient:
+                <md>
+                    <mrow>&amp;{n\choose r} &amp; &amp;\operatorname{C}(n,r)</mrow>
+                </md>which could both equally well be the realization of <c>\binomial{n}{r}</c>.</p>
+
+                <p>Here we describe some notation which often carries multiple mathematical meanings and/or may be created with <latex/> in multiple ways.</p>
+            </introduction>
+
+            <subsubsection>
+                <title>Vertical Bars</title>
+
+                <p>Vertical bars are used for a variety of mathematical objects.  Paired to create functions of expressions: absolute value, <m>\left\lvert x-1\right\rvert</m>; norm of a vector, <m>\left\lVert \mathbf{v}\right\rVert</m>; cardinality of a set, <m>\left\lvert X\right\rvert</m>; and the determinant of a matrix, <m>\left\lvert A^k\right\rvert</m>.  As relations:  division, <m>a\mid b</m>; parallel lines <m>L_1\parallel L_2</m>.  Sets are another use: <m>E=\left\{x\in{\mathbb Z}\,\middle\vert\, x\equiv 0\pmod 2\right\}</m>.</p>
+
+                <p><latex/> <c>\vert</c>, <c>\Vert</c>, <c>\lvert</c>, <c>\rvert</c>, <c>\lVert</c>, <c>\rVert</c> are the delimiters, where <c>l</c> and <c>r</c> refer to left and right, and the capitalized versions are a pair of vertical lines.  The qualifiers <c>\left</c> and <c>\right</c> can be used to have the length of the bar grow to match what it encloses.   Note that there is a <c>\middle</c> that we have used above with <c>\vert</c> for the set <m>E</m>, and we have added space on either side.  <c>\mid</c> and <c>\parallel</c> are relations, used above to indicate divisibility and parallel lines, and so automatically get an extra bit of spacing on either side.</p>
+
+                <p>When using <c>\left</c> or <c>\right</c> in isolation, <c>\left.</c> or <c>\right.</c> can be used to define a group that only has a bar on one end.  For example:<md>
+                    <mrow>\int_0^1\,\sin^{-1}(x)\,dx = \left.\frac{1}{\sqrt{1-x^2}}\right\rvert_{x=0}^{x=1}</mrow>
+                </md>.</p>
+            </subsubsection>
+
+            <subsubsection>
+                <title>Times</title>
+
+                <p>The <q>times</q> symbol sees many uses that are different: dimensions, multiplication, and more complicated products (such as a Cartesian product of two sets).  Macros <c>\product</c>, <c>\times</c>, and <c>by</c> could carry different meanings, even if each one is defined by the <c>\times</c> symbol, <m>\times</m>.  For example:</p>
+
+                <pre>
+                Chess is played on an &lt;m&gt;8 \by 8&lt;/m&gt; grid, which
+                contains &lt;m&gt;8 \times 8 = 64&lt;/m&gt; little squares.
+                </pre>
+
+                <pre>
+                If &lt;m&gt;G&lt;/m&gt; and &lt;m&gt;H&lt;/m&gt; are finite groups, then
+                &lt;m&gt;\card(G \product H) = \card(G) \times \card(H)&lt;/m&gt;.
+                </pre>
+            </subsubsection>
         </subsection>
 
         <subsection xml:id="punctuation-display-math">
