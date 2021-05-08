@@ -1967,6 +1967,7 @@ function move_object(e) {
         e.preventDefault();
         console.log(" decided where to put moving_object", moving_object);
         var id_of_moving_object = document.getElementById('phantomobject').getAttribute("data-moving_id");
+        console.log("moving object started as", internalSource[id_of_moving_object]);
         var handle_of_moving_object = document.getElementById('phantomobject').getAttribute("data-handle_id");
         document.getElementById('phantomobject').remove();
         var new_anchor_and_position = movement_location_options[movement_location]
@@ -1976,18 +1977,26 @@ function move_object(e) {
         // the html appears to be updated, but we still need to update both the internal source:
         var new_neighbor_id = new_anchor_and_position[0].id;
         console.log("new_neighbor_id", new_neighbor_id);
+        console.log("which has source", internalSource[new_neighbor_id]);
         var new_neighbor_rel_pos = new_anchor_and_position[1];
         var [new_neighbor_parent, new_neighbor_location] = internalSource[new_neighbor_id]["parent"];
         var new_neighbor_in_context = internalSource[new_neighbor_parent][new_neighbor_location];
+        console.log("new_neighbor_in_context was", new_neighbor_in_context);
         var neighbor_tag = '<&>' + new_neighbor_id + '<;>';
-        var moving_object_tag = '<&>' + new_neighbor_id + '<;>';
+        var neighbor_tag_re = new RegExp(neighbor_tag);
+
+        var moving_object_tag = '<&>' + id_of_moving_object + '<;>';
         if (new_neighbor_rel_pos == "beforebegin") {
-            new_neighbor_in_context.replace(neighbor_tag, moving_object_tag + "\n" + neighbor_tag)
+       //     new_neighbor_in_context.replace(neighbor_tag, moving_object_tag + "\n" + neighbor_tag)
+//  RegExp
+            new_neighbor_in_context = new_neighbor_in_context.replace(neighbor_tag_re, moving_object_tag + "\n" + neighbor_tag)
         } else {
-            new_neighbor_in_context.replace(neighbor_tag, neighbor_tag + "\n" + moving_object_tag)
+            new_neighbor_in_context = new_neighbor_in_context.replace(neighbor_tag_re, neighbor_tag + "\n" + moving_object_tag)
         }
+        console.log("new_neighbor_in_context is", new_neighbor_in_context);
         internalSource[new_neighbor_parent][new_neighbor_location] = new_neighbor_in_context;
         internalSource[id_of_moving_object]["parent"] = [new_neighbor_parent, new_neighbor_location];
+        console.log("moving object ended as", internalSource[id_of_moving_object]);
 
 
         // and the navigation information
