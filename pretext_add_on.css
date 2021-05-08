@@ -3649,6 +3649,11 @@ label.incorrect .feedback {
     display: inline-block;
     vertical-align: top;
 }
+.pretext-content .knowl .exercise-wrapper,
+.pretext-content .knowl .exercise-wrapper form,
+.pretext-content .knowl .exercise-wrapper form > div:first-child {
+    width: 100%;
+}
 /*
 .pretext-content .exercise-wrapper form {
      max-width: 95%;
