@@ -10979,12 +10979,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="mathjax">
     <!-- mathjax configuration -->
     <xsl:element name="script">
-        <xsl:attribute name="type">
-            <xsl:text>text/x-mathjax-config</xsl:text>
-        </xsl:attribute>
-        <xsl:text>&#xa;</xsl:text>
-        <!-- // contrib directory for accessibility menu, moot after v2.6+ -->
-        <!-- MathJax.Ajax.config.path["Contrib"] = "<some-url>";           -->
         <xsl:text>window.MathJax = {&#xa;</xsl:text>
         <xsl:text>  tex: {&#xa;</xsl:text>
         <xsl:text>    inlineMath: [['\\(','\\)']],&#xa;</xsl:text>
@@ -10992,10 +10986,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>    useLabelIds: true,&#xa;</xsl:text>
         <xsl:text>    tagSide: "right",&#xa;</xsl:text>
         <xsl:text>    tagIndent: ".8em",&#xa;</xsl:text>
-        <xsl:text>    packages: ['base', 'extpfeil', 'amscd']&#xa;</xsl:text>
+        <xsl:text>    packages: {'[+]': ['base', 'extpfeil', 'ams', 'amscd', 'newcommand', 'knowl']}&#xa;</xsl:text>
         <xsl:text>  },&#xa;</xsl:text>
         <xsl:text>  options: {&#xa;</xsl:text>
-        <xsl:text>    ignoreHtmlClass: ".*",&#xa;</xsl:text>
+        <xsl:text>    ignoreHtmlClass: "tex2jax_ignore",&#xa;</xsl:text>
         <xsl:text>    processHtmlClass: "has_am"&#xa;</xsl:text>
         <xsl:text>  },&#xa;</xsl:text>
         <xsl:text>  chtml: {&#xa;</xsl:text>
@@ -11003,7 +10997,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>    mtextInheritFont: true&#xa;</xsl:text>
         <xsl:text>  },&#xa;</xsl:text>
         <xsl:text>  loader: {&#xa;</xsl:text>
-        <xsl:text>    load: ['input/asciimath', '[tex]/extpfeil', '[tex]/amscd']&#xa;</xsl:text>
+        <xsl:text>    load: ['input/asciimath', '[tex]/extpfeil', '[tex]/amscd', '[tex]/newcommand', '[pretext]/mathjaxknowl3.js'],&#xa;</xsl:text>
+        <xsl:text>    paths: {pretext: "https://pretextbook.org/js/lib"},&#xa;</xsl:text>
         <xsl:text>  }&#xa;</xsl:text>
         <xsl:text>};&#xa;</xsl:text>
         <!-- optional presentation mode gets clickable, large math -->
@@ -11013,8 +11008,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>      zscale:"300%"&#xa;</xsl:text>
             <xsl:text>    },&#xa;</xsl:text>
         </xsl:if>
-        <!-- close of MathJax.Hub.Config -->
-        <xsl:text>});&#xa;</xsl:text>
         <!-- optional beveled fraction support -->
         <xsl:if test="$b-has-sfrac">
             <xsl:text>/* support for the sfrac command in MathJax (Beveled fraction) */&#xa;</xsl:text>
