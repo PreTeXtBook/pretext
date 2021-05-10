@@ -41,6 +41,7 @@ var sagecellEvalName = "Evaluate";
 var mjvers = 0;
 if (window.MathJax !== undefined) {
   mjvers = MathJax.version;
+  console.log("mjvers", mjvers);
   mjvers = parseFloat(mjvers.substring(0,3));
 }
 console.log("               mjvers", mjvers);
@@ -116,7 +117,7 @@ function knowl_click_handler($el) {
         where_it_goes = $el.after();
     } else {
        // otherwise, typically put it after the nearest enclosing block element
-    
+
       // check, if the knowl is inside a td or th in a table
       if($el.parent().is("td") || $el.parent().is("th") ) {
         // assume we are in a td or th tag, go 2 levels up
@@ -134,6 +135,9 @@ function knowl_click_handler($el) {
         where_it_goes = $el.parent();
       } else if ($el.parent().parent().css('display') == "block" || $el.parent().parent().is("p") || $el.parent().parent().hasClass("hidden-knowl-wrapper") || $el.parent().parent().hasClass("kohere")) {
         where_it_goes = $el.parent().parent();
+      }
+      else if ($el.parent().prop("tagName").startsWith("MJX")) {
+          where_it_goes = $el.closest("mjx-container")
       } else {
         //  is this a reasonable last case?
         //  if we omit the else, then if goes after $el
