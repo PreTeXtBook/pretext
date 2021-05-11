@@ -1077,6 +1077,9 @@ function top_menu_options_for(this_obj) {
         this_list += '<li tabindex="-1" data-action="move-or-delete">Move or delete<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
         this_list += '<li tabindex="-1" data-env="' + "metaadata" + '">Metadata<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
         this_list += '<li tabindex="-1" data-env="' + "undo" + '">Revert<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+        if (previous_editing()) {
+            this_list += '<li tabindex="-1" data-action="' + "resume" + '">Resume previous editing</li>';
+        }
         this_list += '<li tabindex="-1" data-action="' + "replace" + '">Regenerate HTML</li>';
     }
     return this_list
@@ -1585,6 +1588,11 @@ function edit_in_place(obj, oldornew) {
      }
 }
 
+function resume_editing() {
+    internalSource = previous_editing();
+    replace_by_id(internalSource["root_data"]["id"], "html")
+}
+
 function replace_by_id(theid, format) {
 
     if (format != "html") { return "" }
@@ -1607,7 +1615,6 @@ function modify_by_id(theid, modifier) {
     console.log("modifying by id", theid);
     if (internalSource[theid]["sourcetag"] == "sbspanel") {
         modify_by_id_sbs(theid, modifier)
-//    } else if (internalSource[theid]["sourcetag"] == "exercise") {
     } else if (environment_instances["project-like"].includes(internalSource[theid]["sourcetag"]) 
                 || internalSource[theid]["sourcetag"] == "task") {
         modify_by_id_workspace(theid, modifier)
@@ -1643,17 +1650,6 @@ function modify_by_id_workspace(theid, modifier) {
  
 function modify_by_id_image(theid, modifier) {
 
-//    var the_sizes = internalSource[theid]["style"];
-
-//modify: enlarge, shrink, left, right, ??? done
-
-// make the data structure better, then delete this comment
-// currently style looks like "width: 66%; margin-right: 17%; margin-left: 17%"
-//    the_sizes = the_sizes.replace(/( |%)/g, "");
-//    the_sizes = the_sizes.replace(/;/g, ":");
-//    console.log("the_sizes, modified", the_sizes);
-//    console.log("the_sizes, split", the_sizes.split(":"));
-//    var [,width, , marginright, , marginleft] = the_sizes.split(":");
     var width = internalSource[theid]["width"];
     var marginleft = internalSource[theid]["marginleft"];
     var marginright = internalSource[theid]["marginright"];
@@ -1703,7 +1699,6 @@ function modify_by_id_image(theid, modifier) {
     the_new_sizes += "margin-right: " + marginright + "%;";
     the_new_sizes += "margin-left: " + marginleft + "%;";
 
-//    internalSource[theid]["style"] = the_new_sizes;
     internalSource[theid]["width"] = width;
     internalSource[theid]["marginleft"] = marginleft;
     internalSource[theid]["marginright"] = marginright;
@@ -2075,6 +2070,7 @@ function delete_by_id(theid, thereason) {
 }
 
 var internalSource = {  // currently the key is the HTML id
+   "root_data": {"id": "hPw"},
    "hPw": {"xml:id": "hPw", "sourcetag": "section", "title": "What is Discrete Mathematics?",
            "content": "<&>akX<;>\n<&>UvL<;>\n<&>ACU<;>\n<&>gKd<;>\n<&>MRm<;>\n<&>udO<;>\n<&>sYv<;>\n<&>ZfE<;>"},
    "gKd": {"xml:id": "gKd", "sourcetag": "p", "title": "", "parent": ["hPw","content"],
@@ -2721,11 +2717,9 @@ function save_edits() {
     return "";
 }
 
-function retrieve_previous_editing() {
+function previous_editing() {
     var old_internal_source = localStorage.getObject("savededits");
-    if (old_internal_source) {
-        internalSource = old_internal_source
-    }
+    return  (old_internal_source || "")
 }
 
 function local_editing_action(e) {
@@ -3193,8 +3187,11 @@ function main_menu_navigator(e) {  // we are not currently editing
                 console.log("going to edit", object_of_interest);
                 edit_in_place(object_of_interest, "old");
             } else if (dataAction == "replace") {
-                console.log("replace", object_of_interest, "by id", object_of_interest.id),
+                console.log("replace", object_of_interest, "by id", object_of_interest.id);
                 replace_by_id(object_of_interest.id, "html")
+            } else if (dataAction == "resume") {
+                console.log("resuming previous editing session");
+                resume_editing()
             } else if (dataAction == "change-env-to") {
                  // shoudl use dataEnv ?
                 var new_env = theChooseCurrent.getAttribute("data-env");
