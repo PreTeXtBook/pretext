@@ -1231,7 +1231,7 @@ function next_editable_of(obj, relationship) {
     } else if (relationship == "outer-block") {  // for example, a direct child of a section
         next_to_edit = $(obj).find(' > [data-editable]')
     } else if (relationship == "inner-block") {  // typically a paragraph
-        next_to_edit = $(obj).find('section > [data-editable], [data-editable="99"]')
+        next_to_edit = $(obj).find('section > [data-editable], [data-editable="99"], [data-editable="42"]')
     } else if (relationship == "li-only") {  // typically a paragraph
         next_to_edit = $(obj).find('li')
     } else {
@@ -1621,6 +1621,7 @@ function modify_by_id(theid, modifier) {
     } else {
         modify_by_id_image(theid, modifier)
     }
+    save_edits()
 }
 
 function modify_by_id_workspace(theid, modifier) {
@@ -1993,6 +1994,7 @@ function move_object(e) {
         internalSource[id_of_moving_object]["parent"] = [new_neighbor_parent, new_neighbor_location];
         console.log("moving object ended as", internalSource[id_of_moving_object]);
 
+        save_edits();
 
         // and the navigation information
         make_current_editing_tree_from_id(handle_of_moving_object);
@@ -2067,6 +2069,7 @@ function delete_by_id(theid, thereason) {
         make_current_editing_tree_from_id(current_editing["tree"][ current_level ][ current_index].id);
         edit_menu_from_current_editing("entering");
     }
+    save_edits()
 }
 
 var internalSource = {  // currently the key is the HTML id
@@ -2612,7 +2615,7 @@ function html_from_internal_id(the_id, is_inner) {
         var opening_tag = '<span class="edit_inline_math"';
         var closing_tag = '</span>';
         if (is_inner == "edit") {
-            opening_tag += ' id="' + the_id + '"data-editable="42" tabindex="-1">';
+            opening_tag += ' id="' + the_id + '"data-editable="44" tabindex="-1">';
         } else {
             opening_tag = math_tags[sourcetag][1][0];
             closing_tag = math_tags[sourcetag][1][1];
