@@ -1028,6 +1028,8 @@ function menu_options_for(object_id, component_type, level) {
 function top_menu_options_for(this_obj) {
     console.log("top menu options for aa", this_obj);
 
+// maybe the "classList" in this function shoudl instead look at the internalSource?
+
     var this_list = "";
 
     if (this_obj.classList.contains("heading")) {
@@ -1047,8 +1049,9 @@ function top_menu_options_for(this_obj) {
         this_obj_id = this_obj.id;
         this_obj_source = internalSource[this_obj_id];
         console.log("this_obj_source", this_obj_source);
+        console.log("this_obj", this_obj, "classList", this_obj.classList, "T/F", this_obj.classList.contains("image-box"));
         this_obj_environment = this_obj_source["sourcetag"];
-        if (this_object_type == "P" || this_object_type == "DIV") {  // wrong:  hack for me math
+        if (this_object_type == "P" || this_obj.classList.contains("displaymath")) {  
             this_list = '<li tabindex="-1" id="choose_current" data-env="p" data-action="edit">Edit ' + this_obj_environment + '</li>';
             var editable_children = next_editable_of(this_obj, "children");
             console.log("editable_children", editable_children);
@@ -1056,6 +1059,7 @@ function top_menu_options_for(this_obj) {
                 this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_obj_environment + '</li>';
             }
         } else if (this_obj.classList.contains("image-box")) {
+            console.log("found an image-box");
             this_list = '<li tabindex="-1" id="choose_current" data-env="imagebox" data-action="modify">Modify layout<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
         } else if (this_obj.classList.contains("sbspanel")) {
             this_list = '<li tabindex="-1" id="choose_current" data-env="sbspanel" data-action="modify">Modify layout<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
@@ -1152,7 +1156,7 @@ function edit_menu_for(this_obj_or_id, motion) {
     console.log("does", this_obj.classList, "include type", this_obj.classList.contains("type"));
 
     this_obj.insertAdjacentElement(menu_location, edit_menu_holder);
-    console.log("added edit_menu_holder", document.getElementById("edit_menu_holder"));
+    console.log("added edit_menu_holder", document.getElementById("edit_menu_holder"), motion);
 
     var edit_option = document.createElement('span');
     edit_option.setAttribute('id', 'enter_choice');
@@ -2985,7 +2989,7 @@ function main_menu_navigator(e) {  // we are not currently editing
 
             var to_be_edited = object_of_interest;
             console.log("to_be_edited", to_be_edited);
-            console.log("option", top_menu_options_for(to_be_edited));
+     //       console.log("option", top_menu_options_for(to_be_edited));
             edit_submenu.innerHTML = top_menu_options_for(to_be_edited);
             $("#enter_choice").replaceWith(edit_submenu);
             document.getElementById('choose_current').focus();
