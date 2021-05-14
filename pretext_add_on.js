@@ -63,6 +63,7 @@ function permalinkDescription(elem) {
         headerNode = elem.querySelector(':scope > .heading, :scope > figcaption, :scope > a > .heading');
     }
     var numberStr = "";
+    var numberSep = " ";
     var titleStr = "";
     var resultNodes;
     if (nodeName == 'P') {
@@ -78,6 +79,9 @@ function permalinkDescription(elem) {
     } else {
         if ((nodeName == 'ARTICLE') && (elem.classList.contains('exercise')) ) {
             typeStr = "Exercise";
+        } else if ((nodeName == 'ARTICLE') && (elem.classList.contains('task')) ) {
+            typeStr = elem.parentElement.firstChild.getAttribute('data-description');
+            numberSep = "";
         } else {
             resultNodes = headerNode.getElementsByClassName("type");
             if (resultNodes.length > 0) {
@@ -99,7 +103,7 @@ function permalinkDescription(elem) {
     }
     retStr = typeStr;
     if ((typeStr.length > 0) && (numberStr.length > 0)) {
-        retStr += " " + numberStr;
+        retStr += numberSep + numberStr;
     }
     if (titleStr.length > 0) {
         if (retStr.length > 0) {
@@ -129,7 +133,8 @@ async function copyPermalink(elem) {
     }
     const this_permalink_url = this_url + "#" + elem.parentElement.id;
     const this_permalink_description = elem.getAttribute('data-description');
-    var link = "<a href=\"" + this_permalink_url + "\">" + this_permalink_description + "</a>";
+    var link     = "<a href=\""                    + this_permalink_url + "\">" + this_permalink_description + "</a>";
+    var msg_link = "<a class=\"internal\" href=\"" + this_permalink_url + "\">" + this_permalink_description + "</a>";
     var text_fallback = this_permalink_description + " \r\n" + this_permalink_url;
     try {
         // Kludge because Firefox doesn't yet support ClipboardItem
@@ -148,6 +153,14 @@ async function copyPermalink(elem) {
             ]);
             console.log(`copied '${this_permalink_url}' to clipboard`);
         }
+        // temporary element to alert user that link was copied
+        let copied_msg = document.createElement('p');
+        // copied_msg.className = "permalink-alert";
+        copied_msg.innerHTML = "<em class=\"alert\">Link to " + msg_link  + " copied to clipboard!</em>";
+        elem.parentElement.insertBefore(copied_msg, elem);
+        // wait 5 seconds
+        await new Promise((resolve, reject) => setTimeout(resolve, 5000));
+        copied_msg.remove();
     } catch (err) {
         console.error('Failed to copy link to clipboard!', err);
     }
