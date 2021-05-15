@@ -11037,14 +11037,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>    }&#xa;</xsl:text>
             <xsl:text>  },&#xa;</xsl:text>
         </xsl:if>
-        <xsl:text>};&#xa;</xsl:text>
         <!-- optional presentation mode gets clickable, large math -->
         <xsl:if test="$b-html-presentation">
-            <xsl:text>    menuSettings:{&#xa;</xsl:text>
-            <xsl:text>      zoom:"Click",&#xa;</xsl:text>
-            <xsl:text>      zscale:"300%"&#xa;</xsl:text>
-            <xsl:text>    },&#xa;</xsl:text>
+            <xsl:text>  options: {&#xa;</xsl:text>
+            <xsl:text>    menuOptions: {&#xa;</xsl:text>
+            <xsl:text>      settings: {&#xa;</xsl:text>
+            <xsl:text>        zoom: 'Click',&#xa;</xsl:text>
+            <xsl:text>        zscale: '300%',&#xa;</xsl:text>
+            <xsl:text>      },&#xa;</xsl:text>
+            <xsl:text>    }&#xa;</xsl:text>
+            <xsl:text>  },&#xa;</xsl:text>
         </xsl:if>
+        <xsl:text>};&#xa;</xsl:text>
     </xsl:element>
     <!-- mathjax javascript -->
     <xsl:element name="script">
