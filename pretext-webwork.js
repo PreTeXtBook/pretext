@@ -237,7 +237,7 @@ function initWW(ww_id) {
         // insert the form
         ww_container.appendChild(form)
         // run MathJax on our new rendering
-        MathJax.Hub.Typeset(ww_container)
+        MathJax.typesetPromise([ww_container])
         // place focus
         ww_container.setAttribute('tabindex','-1')
         ww_container.focus()
@@ -428,7 +428,7 @@ function updateWW(ww_id,task) {
             }
         }
         // run MathJax on our new rendering
-        MathJax.Hub.Typeset(ww_container)
+        MathJax.typesetPromise([ww_container])
     });
 }
 
@@ -493,7 +493,7 @@ function WWshowCorrect(ww_id, answers) {
       }
     }
 
-    MathJax.Hub.Typeset(body)
+    MathJax.typesetPromise([body])
 }
 
 function adjustSrcHrefs(container,ww_domain) {
