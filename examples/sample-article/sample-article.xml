@@ -1994,6 +1994,14 @@ the xsltproc executable.
                     \end{CD}</me>
                 While this package is not as flexible as some generic drawing packages, it has the advantage of full support by MathJax, and thus the <init>HTML</init> version will be more accessible.</p>
             </subsection>
+
+            <subsection xml:id="line-breaking-math">
+                <title>Line-Breaking after Mathematics</title>
+
+                <p>As of 2021-05-14, in <init>HTML</init> output the next sentence should just fill a full line across the page.  We take active measures to bind the concluding period to the final bit of mathematics, the variable <m>x</m>.  The prevents a bad line break which could see the period <em>begin</em> a new line, all by itself.  In the event that the line-breaking siutation improves, we could relax these measures.  This testing is only relevant to <init>HTML</init> output, not <latex/> output.</p>
+
+                <p>xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx <m>x</m>.</p>
+            </subsection>
         </section>
 
         <section xml:id="text-in-paragraphs">

@@ -7357,7 +7357,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- the ids on equations are manufactured -->
         <!-- by MathJax to look this way           -->
         <xsl:if test="self::men|self::mrow">
-            <xsl:text>mjx-eqn-</xsl:text>
+            <xsl:text>mjx-eqn:</xsl:text>
         </xsl:if>
         <xsl:apply-templates select="." mode="html-id" />
     </xsl:if>
@@ -10979,71 +10979,81 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="mathjax">
     <!-- mathjax configuration -->
     <xsl:element name="script">
-        <xsl:attribute name="type">
-            <xsl:text>text/x-mathjax-config</xsl:text>
-        </xsl:attribute>
-        <xsl:text>&#xa;</xsl:text>
-        <!-- // contrib directory for accessibility menu, moot after v2.6+ -->
-        <!-- MathJax.Ajax.config.path["Contrib"] = "<some-url>";           -->
-        <xsl:text>MathJax.Hub.Config({&#xa;</xsl:text>
-        <xsl:text>    tex2jax: {&#xa;</xsl:text>
-        <xsl:text>        inlineMath: [['\\(','\\)']]&#xa;</xsl:text>
-        <xsl:text>    },&#xa;</xsl:text>
-        <xsl:text>    asciimath2jax: {&#xa;</xsl:text>
-        <xsl:text>        ignoreClass: ".*",&#xa;</xsl:text>
-        <xsl:text>        processClass: "has_am"&#xa;</xsl:text>
-        <xsl:text>    },&#xa;</xsl:text>
-        <xsl:text>    jax: ["input/AsciiMath"],&#xa;</xsl:text>
-        <xsl:text>    extensions: ["asciimath2jax.js"],&#xa;</xsl:text>
-        <xsl:text>    TeX: {&#xa;</xsl:text>
-        <xsl:text>        extensions: ["extpfeil.js", "autobold.js", "https://pretextbook.org/js/lib/mathjaxknowl.js", "AMScd.js", ],&#xa;</xsl:text>
-        <xsl:text>        // scrolling to fragment identifiers is controlled by other Javascript&#xa;</xsl:text>
-        <xsl:text>        positionToHash: false,&#xa;</xsl:text>
-        <xsl:text>        equationNumbers: { autoNumber: "none", useLabelIds: true, },&#xa;</xsl:text>
-        <xsl:text>        TagSide: "right",&#xa;</xsl:text>
-        <xsl:text>        TagIndent: ".8em",&#xa;</xsl:text>
-        <xsl:text>    },&#xa;</xsl:text>
-        <!-- key needs quotes since it is not a valid identifier by itself-->
-        <xsl:text>    // HTML-CSS output Jax to be dropped for MathJax 3.0&#xa;</xsl:text>
-        <xsl:text>    "HTML-CSS": {&#xa;</xsl:text>
-        <xsl:text>        scale: 88,&#xa;</xsl:text>
-        <xsl:text>        mtextFontInherit: true,&#xa;</xsl:text>
-        <xsl:text>    },&#xa;</xsl:text>
-        <xsl:text>    CommonHTML: {&#xa;</xsl:text>
-        <xsl:text>        scale: 88,&#xa;</xsl:text>
-        <xsl:text>        mtextFontInherit: true,&#xa;</xsl:text>
-        <xsl:text>    },&#xa;</xsl:text>
-        <!-- optional presentation mode gets clickable, large math -->
-        <xsl:if test="$b-html-presentation">
-            <xsl:text>    menuSettings:{&#xa;</xsl:text>
-            <xsl:text>      zoom:"Click",&#xa;</xsl:text>
-            <xsl:text>      zscale:"300%"&#xa;</xsl:text>
-            <xsl:text>    },&#xa;</xsl:text>
+        <xsl:text>window.MathJax = {&#xa;</xsl:text>
+        <xsl:text>  tex: {&#xa;</xsl:text>
+        <xsl:text>    inlineMath: [['\\(','\\)']],&#xa;</xsl:text>
+        <xsl:text>    tags: "none",&#xa;</xsl:text>
+        <xsl:text>    useLabelIds: true,&#xa;</xsl:text>
+        <xsl:text>    tagSide: "right",&#xa;</xsl:text>
+        <xsl:text>    tagIndent: ".8em",&#xa;</xsl:text>
+        <xsl:text>    packages: {'[+]': ['base', 'extpfeil', 'ams', 'amscd', 'newcommand', 'knowl'</xsl:text>
+        <!-- only add in faux sfrac package (below) if indicated -->
+        <xsl:if test="$b-has-sfrac">
+            <xsl:text>, 'sfrac'</xsl:text>
         </xsl:if>
-        <!-- close of MathJax.Hub.Config -->
-        <xsl:text>});&#xa;</xsl:text>
-        <!-- optional beveled fraction support -->
+        <xsl:text>]}&#xa;</xsl:text>
+        <xsl:text>  },&#xa;</xsl:text>
+        <xsl:text>  options: {&#xa;</xsl:text>
+        <xsl:text>    ignoreHtmlClass: "tex2jax_ignore",&#xa;</xsl:text>
+        <xsl:text>    processHtmlClass: "has_am"&#xa;</xsl:text>
+        <xsl:text>  },&#xa;</xsl:text>
+        <xsl:text>  chtml: {&#xa;</xsl:text>
+        <xsl:text>    scale: 0.88,&#xa;</xsl:text>
+        <xsl:text>    mtextInheritFont: true&#xa;</xsl:text>
+        <xsl:text>  },&#xa;</xsl:text>
+        <xsl:text>  loader: {&#xa;</xsl:text>
+        <xsl:text>    load: ['input/asciimath', '[tex]/extpfeil', '[tex]/amscd', '[tex]/newcommand', '[pretext]/mathjaxknowl3.js'],&#xa;</xsl:text>
+        <xsl:text>    paths: {pretext: "https://pretextbook.org/js/lib"},&#xa;</xsl:text>
+        <xsl:text>  },&#xa;</xsl:text>
+        <!-- trailing comma is legal as we lead into optional beveled fraction support -->
         <xsl:if test="$b-has-sfrac">
             <xsl:text>/* support for the sfrac command in MathJax (Beveled fraction) */&#xa;</xsl:text>
-            <xsl:text>/* see: https://github.com/mathjax/MathJax-docs/wiki/Beveled-fraction-like-sfrac,-nicefrac-bfrac */&#xa;</xsl:text>
-            <xsl:text>MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {&#xa;</xsl:text>
-            <xsl:text>  var MML = MathJax.ElementJax.mml,&#xa;</xsl:text>
-            <xsl:text>      TEX = MathJax.InputJax.TeX;&#xa;</xsl:text>
-            <xsl:text>  TEX.Definitions.macros.sfrac = "myBevelFraction";&#xa;</xsl:text>
-            <xsl:text>  TEX.Parse.Augment({&#xa;</xsl:text>
-            <xsl:text>    myBevelFraction: function (name) {&#xa;</xsl:text>
-            <xsl:text>      var num = this.ParseArg(name),&#xa;</xsl:text>
-            <xsl:text>          den = this.ParseArg(name);&#xa;</xsl:text>
-            <xsl:text>      this.Push(MML.mfrac(num,den).With({bevelled: true}));&#xa;</xsl:text>
+            <xsl:text>  startup: {&#xa;</xsl:text>
+            <xsl:text>    ready() {&#xa;</xsl:text>
+            <xsl:text>      //&#xa;</xsl:text>
+            <xsl:text>      // Creating a simple "sfrac" package on-the-fly&#xa;</xsl:text>
+            <xsl:text>      //&#xa;</xsl:text>
+            <xsl:text>      const Configuration = MathJax._.input.tex.Configuration.Configuration;&#xa;</xsl:text>
+            <xsl:text>      const CommandMap = MathJax._.input.tex.SymbolMap.CommandMap;&#xa;</xsl:text>
+            <xsl:text>      &#xa;</xsl:text>
+            <xsl:text>      new CommandMap('sfrac', {&#xa;</xsl:text>
+            <xsl:text>        sfrac: 'SFrac'&#xa;</xsl:text>
+            <xsl:text>        }, {&#xa;</xsl:text>
+            <xsl:text>        SFrac(parser, name) {&#xa;</xsl:text>
+            <xsl:text>        const num = parser.ParseArg(name);&#xa;</xsl:text>
+            <xsl:text>        const den = parser.ParseArg(name);&#xa;</xsl:text>
+            <xsl:text>        const frac = parser.create('node', 'mfrac', [num, den], {bevelled: true});&#xa;</xsl:text>
+            <xsl:text>        parser.Push(frac);&#xa;</xsl:text>
+            <xsl:text>        }&#xa;</xsl:text>
+            <xsl:text>      });&#xa;</xsl:text>
+            <xsl:text>      //&#xa;</xsl:text>
+            <xsl:text>      // Create the package for the overridden macros&#xa;</xsl:text>
+            <xsl:text>      //&#xa;</xsl:text>
+            <xsl:text>      Configuration.create('sfrac', {&#xa;</xsl:text>
+            <xsl:text>        handler: {macro: ['sfrac']}&#xa;</xsl:text>
+            <xsl:text>      });&#xa;</xsl:text>
+            <xsl:text>      &#xa;</xsl:text>
+            <xsl:text>    MathJax.startup.defaultReady();&#xa;</xsl:text>
             <xsl:text>    }&#xa;</xsl:text>
-            <xsl:text>  });&#xa;</xsl:text>
-            <xsl:text>});&#xa;</xsl:text>
+            <xsl:text>  },&#xa;</xsl:text>
         </xsl:if>
+        <!-- optional presentation mode gets clickable, large math -->
+        <xsl:if test="$b-html-presentation">
+            <xsl:text>  options: {&#xa;</xsl:text>
+            <xsl:text>    menuOptions: {&#xa;</xsl:text>
+            <xsl:text>      settings: {&#xa;</xsl:text>
+            <xsl:text>        zoom: 'Click',&#xa;</xsl:text>
+            <xsl:text>        zscale: '300%',&#xa;</xsl:text>
+            <xsl:text>      },&#xa;</xsl:text>
+            <xsl:text>    }&#xa;</xsl:text>
+            <xsl:text>  },&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:text>};&#xa;</xsl:text>
     </xsl:element>
     <!-- mathjax javascript -->
     <xsl:element name="script">
         <xsl:attribute name="src">
-            <xsl:text>https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML-full</xsl:text>
+            <xsl:text>https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js</xsl:text>
         </xsl:attribute>
     </xsl:element>
 </xsl:template>
