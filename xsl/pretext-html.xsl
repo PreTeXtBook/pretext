@@ -10995,7 +10995,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>  },&#xa;</xsl:text>
         <xsl:text>  options: {&#xa;</xsl:text>
         <xsl:text>    ignoreHtmlClass: "tex2jax_ignore",&#xa;</xsl:text>
-        <xsl:text>    processHtmlClass: "has_am"&#xa;</xsl:text>
+        <xsl:text>    processHtmlClass: "has_am",&#xa;</xsl:text>
+        <xsl:if test="$b-has-webwork-reps">
+            <xsl:text>    renderActions: {&#xa;</xsl:text>
+            <xsl:text>        findScript: [10, function (doc) {&#xa;</xsl:text>
+            <xsl:text>            document.querySelectorAll('script[type^="math/tex"]').forEach(function(node) {&#xa;</xsl:text>
+            <xsl:text>                var display = !!node.type.match(/; *mode=display/);&#xa;</xsl:text>
+            <xsl:text>                var math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);&#xa;</xsl:text>
+            <xsl:text>                var text = document.createTextNode('');&#xa;</xsl:text>
+            <xsl:text>                node.parentNode.replaceChild(text, node);&#xa;</xsl:text>
+            <xsl:text>                math.start = {node: text, delim: '', n: 0};&#xa;</xsl:text>
+            <xsl:text>                math.end = {node: text, delim: '', n: 0};&#xa;</xsl:text>
+            <xsl:text>                doc.math.push(math);&#xa;</xsl:text>
+            <xsl:text>            });&#xa;</xsl:text>
+            <xsl:text>        }, '']&#xa;</xsl:text>
+            <xsl:text>    },&#xa;</xsl:text>
+        </xsl:if>
         <xsl:text>  },&#xa;</xsl:text>
         <xsl:text>  chtml: {&#xa;</xsl:text>
         <xsl:text>    scale: 0.88,&#xa;</xsl:text>
