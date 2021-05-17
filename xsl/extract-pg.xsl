@@ -1401,7 +1401,7 @@
     <xsl:value-of select="substring-before($width, '%') div 100 * $design-width-pg"/>
     <xsl:if test="description">
         <xsl:text>, extra_html_tags=&gt;qq!alt="</xsl:text>
-        <xsl:apply-templates select="description" mode="pg" />
+        <xsl:apply-templates select="description" />
         <xsl:text>"!</xsl:text>
     </xsl:if>
     <xsl:text>)@]* </xsl:text>
