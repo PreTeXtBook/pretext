@@ -610,6 +610,8 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
         # Ready, go out on the wire
         try:
             response = session.get(ww_domain_path, params=server_params)
+            _verbose('Getting problem response from: ' + response.url)
+
         except requests.exceptions.RequestException as e:
             root_cause = str(e)
             msg = "PTX:ERROR: there was a problem collecting a problem,\n Server: {}\nRequest Parameters: {}\n"
