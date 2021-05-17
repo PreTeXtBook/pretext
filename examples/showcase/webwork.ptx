@@ -167,48 +167,6 @@
     </introduction>
     <webwork>
       <pg-code>
-        # draw Venn diagram
-        Context()->variables->are(t=>'Real');
-        $x[0] = Formula("2.5*cos(t)+5");
-        $y[0] = Formula("2.5*sin(t)+6");
-        $x[1] = Formula("2.5*cos(t)+4");
-        $y[1] = Formula("2.5*sin(t)+4");
-        $x[2] = Formula("2.5*cos(t)+6");
-        $y[2] = Formula("2.5*sin(t)+4");
-        $vd = init_graph(0,0,10,10, size=>[300,300]);
-        for my $i (0,1,2) {
-          $f[$i] = new Fun( $x[$i]->perlFunction, $y[$i]->perlFunction, $vd );
-          $f[$i]->domain(0,6.28);
-          $f[$i]->steps(90);
-          $f[$i]->weight(2);
-          $f[$i]->color('black');
-        }
-        $vd->lb(new Label(1,9,'Salmon','black','center','middle','giant'));
-        $vd->lb(new Label(5,8,'Jellyfish','black','center','middle','giant'));
-        $vd->lb(new Label(2.5,3.5,'Duck','black','center','middle','giant'));
-        $vd->lb(new Label(7.5,3.5,'Beaver','black','center','middle','giant'));
-        $vd->lb(new Label(5,4.8,'?','black','center','middle','giant'));
-        $vd->new_color("lightred",     255,102,102);
-        $vd->fillRegion([5,8,"lightred"]);
-        $vd->new_color("lightyellow",  255,255,102);
-        $vd->fillRegion([3,3,"lightyellow"]);
-        $vd->new_color("lightblue",  102,178,255);
-        $vd->fillRegion([7,3,"lightblue"]);
-        $vd->new_color("lightorange",  255,178,102);
-        $vd->fillRegion([3.3,5.7,"lightorange"]);
-        $vd->new_color("lightgreen",  102,255,102);
-        $vd->fillRegion([5,3,"lightgreen"]);
-        $vd->new_color("lightpurple",  255,102,178);
-        $vd->fillRegion([6.7,5.7,"lightpurple"]);
-        $vd->new_color("lightbrown",  210,180,140);
-        $vd->fillRegion([5,5,"lightbrown"]);
-        $vd->lb(new Label(1.7,2.5,'Has a','black','right','bottom','large'));
-        $vd->lb(new Label(1.7,2.5,'Bill','black','right','top','large'));
-        $vd->lb(new Label(8.3,2.5,'Has','black','left','bottom','large'));
-        $vd->lb(new Label(8.3,2.5,'Fur','black','left','top','large'));
-        $vd->lb(new Label(5,8.7,'Is Venemous','black','center','bottom','large'));
-
-        # define answer
         Context("ArbitraryString");
         $platypus = Compute("platypus")->cmp(checker => sub {
           my ($correct,$student,$ans) = @_;
@@ -225,7 +183,13 @@
         <p>
           This Venn Diagram groups animals by certain characteristics.
         </p>
-        <image pg-name="$vd" width="50%"/>
+        <image width="50%">
+          <latex-image syntax="PGtikz">
+            \draw[fill=red, opacity=0.5] (0,0) circle (2cm) node[below left=1.5cm, opacity=1] {Has a Bill} node[below left, opacity=1] {Duck};
+            \draw[fill=green, opacity=0.5] (60:2cm) circle (2cm) node [above=2.1cm, opacity=1] {Is Venemous} node[above=0.5cm, opacity=1] {Jellyfish};
+            \draw[fill=blue, opacity=0.5] (0:2cm) circle (2cm) node [below right=1.5cm, opacity=1] {Has Fur} node[below right, opacity=1] {Beaver};
+          </latex-image>
+        </image>
         <p>
           Name an animal that belongs in the center region. Spelling counts!
         </p>

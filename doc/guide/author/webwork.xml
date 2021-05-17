@@ -366,6 +366,49 @@
     </subsection>
 
     <subsection>
+      <title>Images</title>
+      <subsubsection>
+        <title>Using a Local image file</title>
+        <p>Planned.</p>
+      </subsubsection>
+
+      <subsubsection>
+        <title>Using <c>Tikz</c></title>
+        <p>
+          In a problem statement (or hint, or solution), you may use an <tag>image</tag> with a <tag>latex-image</tag> child
+          that has <attr>syntax="PGtikz"</attr>. (This requires the <webwork/> server to be version 2.16 or later.)
+        </p>
+        <p>
+          The content of the <tag>latex-image</tag> should be Tikz code
+          that one might insert inside a <c>\begin{tikzpicture}...\end{tikzpicture}</c>
+          when writing a TeX document.
+          That is, you should not include <c>\begin{tikzpicture}</c> and <c>\end{tikzpicture}</c>
+          in your image code.
+        </p>
+        <p>
+          Your image code can use variables that you defined in the <tag>pg-code</tag> section.
+          Include variables just as you would anywhere else in a problem statement,
+          like <c>&lt;var name="$a"/></c>.
+        </p>
+        <p>
+          See the <webwork/> sample chapter for examples.
+        </p>
+      </subsubsection>
+
+      <subsubsection>
+        <title>Using <attr>pg-name</attr></title>
+        <p>
+          In a problem statement (or hint, or solution), you may use an <tag>image</tag> with a <attr>pg-name</attr>.
+          This attribute's values should be the name of an image created in the <tag>pg-code</tag> section.
+          For example, an image created using <c>init_graph</c> from <c>PGgraphmacros.pl</c>.
+        </p>
+        <p>
+          See the <webwork/> sample chapter for examples.
+        </p>
+      </subsubsection>
+    </subsection>
+
+    <subsection>
       <title>Using a Local PG Problem File</title>
       <p>Planned.</p>
     </subsection>

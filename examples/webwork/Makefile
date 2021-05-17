@@ -120,6 +120,7 @@ sample-chapter-pdf:
 	-rm $(PDFOUT)/*.*
 	-rm $(PDFOUT)/images/*
 	cp -a $(WWOUT)/*.png $(PDFOUT)/images
+	cp -a $(WWOUT)/*.pdf $(PDFOUT)/images
 	cp $(WWOUT)/webwork-representations.ptx $(WWEXAMPLE)/sample-chapter
 	cd $(PDFOUT); \
 	xsltproc -stringparam publisher publication.xml -o sample-ww-chapter.tex $(MBXSL)/pretext-latex.xsl  $(SMPCHP); \
@@ -145,6 +146,8 @@ sample-chapter-html:
 	-rm $(HTMLOUT)/*.html
 	-rm $(HTMLOUT)/knowl/*.html
 	cp -a $(WWEXAMPLE)/sample-chapter/images $(HTMLOUT)
+	cp -a $(WWOUT)/*.svg $(HTMLOUT)/images
+	cp -a $(WWOUT)/*.png $(HTMLOUT)/images
 	cp $(WWOUT)/webwork-representations.ptx $(WWEXAMPLE)/sample-chapter
 	cd $(HTMLOUT); \
 	xsltproc -stringparam publisher publication.xml -stringparam webwork.divisional.static no $(MBXSL)/pretext-html.xsl $(SMPCHP);
