@@ -446,6 +446,7 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
     import base64  # b64encode()
     import lxml.etree as ET
     import copy
+    import tarfile
     # at least on Mac installations, requests module is not standard
     try:
         import requests
@@ -484,6 +485,8 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
 
     # verify, construct problem format requestor
     # remove any surrounding white space
+    if server_params is None:
+        raise ValueError("No WeBWorK server declared")
     server_params = server_params.strip()
     if (server_params.startswith("(") and server_params.endswith(")")):
         server_params=server_params.strip('()')
@@ -742,12 +745,16 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
             # rename, eg, webwork-representations/webwork-5-image-3.png
             ptx_image_name =  problem + '-image-' + str(count)
             ptx_image_filename = ptx_image_name + image_extension
+            if image_extension == '.tgz':
+                ptx_image = ptx_image_name
+            else:
+                ptx_image = ptx_image_name + image_extension
             if ww_image_scheme:
                 image_url = ww_image_url
             else:
                 image_url = ww_domain + '/' + ww_image_full_path
             # modify PTX problem source to include local versions
-            response_text = response_text.replace(ww_image_full_path, 'images/' + ptx_image_filename)
+            response_text = response_text.replace(ww_image_full_path, 'images/' + ptx_image)
             # download actual image files
             # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests
             try:
@@ -764,7 +771,16 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
                 root_cause = str(e)
                 msg = "PTX:ERROR: there was a problem saving an image file,\n Filename: {}\n"
                 raise ValueError(os.path.join(dest_dir, ptx_filename) + root_cause)
-
+            # unpack if it's a tgz
+            if image_extension == '.tgz':
+                tgzfile = tarfile.open(os.path.join(dest_dir, ptx_image_filename))
+                tgzfile.extractall(os.path.join(dest_dir))
+                tgzfile.close()
+                os.rename(os.path.join(dest_dir, 'image.tex'),os.path.join(dest_dir, ptx_image_name + '.tex'))
+                os.rename(os.path.join(dest_dir, 'image.pdf'),os.path.join(dest_dir, ptx_image_name + '.pdf'))
+                os.rename(os.path.join(dest_dir, 'image.svg'),os.path.join(dest_dir, ptx_image_name + '.svg'))
+                os.rename(os.path.join(dest_dir, 'image.png'),os.path.join(dest_dir, ptx_image_name + '.png'))
+                os.remove(os.path.join(dest_dir, ptx_image_filename))
 
         # Start appending XML children
         # Use "webwork-reps" as parent tag for the various representations of a problem
