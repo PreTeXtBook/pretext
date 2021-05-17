@@ -677,7 +677,7 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
         # Then change targets of img (while downloading the original target as an image file)
 
         # When a PG Math Object is a text string that has to be rendered in a math environment,
-        # depending on the string's content and the version of WeBworK, it can come back as:
+        # depending on the string's content and the version of WeBWorK, it can come back as:
 
         # \text{string}            only when the string is built solely from -A-Za-z0-9 ,.;:+=?()[]
         # \verb\x85string\x85      version 2.14 and earlier
