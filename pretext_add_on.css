@@ -3330,7 +3330,7 @@ body.standalone.worksheet .pretext-content section > .heading + p {
 }
 .pretext-content a.url:hover,
 .pretext-content a.external:hover {
-    background-color: #ffd;
+    background: #ffd;
 }
 
 .pretext-content a.internal:hover,
