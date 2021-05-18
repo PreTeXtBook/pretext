@@ -260,6 +260,7 @@ objectStructure = {
     },
     "pretext": {
         "tag": "proof",
+        "attributes": ['xml:id="<&>xml:id<;>"'],
         "pieces": [["content", ""]]
     },
     "source": {
@@ -276,6 +277,7 @@ objectStructure = {
         "pieces": [["{theorem_like_heading}", ""], ["statement",""]]
     },
     "pretext": {
+        "attributes": ['xml:id="<&>xml:id<;>"'],
         "pieces": [["title", "title"], ["statement", "statement"]]
     },
     "source": {
@@ -294,7 +296,7 @@ objectStructure = {
     "pretext": {
         "tag": "sourcetag",
         "pieces": [["title", "title"], ["statement", "statement"], ["hint", ""], ["answer", ""], ["solution", ""], ["tasks", ""]],
-        "attributes": ['workspace="<&>workspace<;>"']
+        "attributes": ['xml:id="<&>xml:id<;>"', 'workspace="<&>workspace<;>"']
     },
     "source": {
         "pieces": [["title", ""], ["statement", "p"], ["tasks", ""], ["hint", ""], ["answer", ""], ["solution", ""]],
@@ -311,6 +313,7 @@ objectStructure = {
         "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"']
     },
     "pretext": {
+        "attributes": ['xml:id="<&>xml:id<;>"'],
         "pieces": [["title", "title"], ["statement", "statement"]]
     },
     "source": {
@@ -323,10 +326,11 @@ objectStructure = {
         "tag": "article",
         "cssclass": "theorem-like",
         "data_editable": "93",
-        "pieces": [["{theorem_like_heading}", ""], ["statement", ""]],
+        "pieces": [["{theorem_like_heading}", ""], ["statement", ""], ["%proof%",]],
         "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"']
     },
     "pretext": {
+        "attributes": ['xml:id="<&>xml:id<;>"'],
         "pieces": [["title", "title"], ["statement", "statement"], ["proof", ""]]
     },
     "source": {
@@ -366,6 +370,7 @@ objectStructure = {
     },
     "pretext": {
         "tag": "hint",
+        "attributes": ['xml:id="<&>xml:id<;>"'],
         "pieces": [["title", "title"], ["content", ""]]
     },
     "source": {
@@ -384,6 +389,7 @@ objectStructure = {
     },
     "pretext": {
         "tag": "answer",
+        "attributes": ['xml:id="<&>xml:id<;>"'],
         "pieces": [["title", "title"], ["content", ""]]
     },
     "source": {
@@ -402,6 +408,7 @@ objectStructure = {
     },
     "pretext": {
         "tag": "solution",
+        "attributes": ['xml:id="<&>xml:id<;>"'],
         "pieces": [["title", "title"], ["content", ""]]
     },
     "source": {
@@ -475,6 +482,7 @@ objectStructure = {
       },
       "pretext": {
           "tag": "me",
+          "attributes": ['xml:id="<&>xml:id<;>"'],
           "pieces": [["content", ""]]
       },
       "source": {
@@ -1195,7 +1203,8 @@ function edit_menu_for(this_obj_or_id, motion) {
             edit_option.setAttribute('data-location', 'inline');
         } else if ((this_obj.classList.contains("placeholder") && (this_obj.classList.contains("hint") ||
                   this_obj.classList.contains("answer") ||
-                  this_obj.classList.contains("solution") )) ) {
+                  this_obj.classList.contains("solution") ||
+                  this_obj.classList.contains("proof")) ) ) {
             var theverb = "add"
             var thenoun = this_obj.getAttribute("data-HAS");
             edit_option.setAttribute('id', 'choose_current');
@@ -1363,7 +1372,7 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
 
     var sibling_id, parent_description, object_neighbor;
 
-    if (["hint", "answer", "solution"].includes(new_tag)) {   // this is only for the case that a solution does not already exist
+    if (["hint", "answer", "solution", "proof"].includes(new_tag)) {   // this is only for the case that a solution does not already exist
 // create_new
 
         sibling_id = new_objects_sibling.parentElement.id;
@@ -1397,7 +1406,7 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
         relative_placement = "atend";
         parent_description = [sibling_id, "tasks"];
     }
-    if (["hint", "answer", "solution"].includes(new_tag)) {   // this is only for the case that a solution does not already exist
+    if (["hint", "answer", "solution", "proof"].includes(new_tag)) {   // this is only for the case that a solution does not already exist
         relative_placement = "replace";
     }
     console.log(new_tag, "parent_description", parent_description);
@@ -1449,6 +1458,7 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
     console.log("tried to insert", new_id, "next to", sibling_id, "in", the_current_arrangement)
     console.log("    updated current_editing", current_editing);
     console.log("  VVV  current_editing", current_editing["level"], current_editing["location"].length, current_editing["tree"].length, current_editing["tree"][current_editing["level"]])
+    console.log("relative_placement", relative_placement, "edit_placeholder", edit_placeholder);
 
      if (relative_placement == "atend") {
         new_objects_sibling.insertAdjacentElement("beforeend", edit_placeholder);
