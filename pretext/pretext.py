@@ -275,9 +275,12 @@ def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, data_
                 print('PTX:ERROR: There was a problem compiling {} and {} was not created'.format(latex_image,latex_image_pdf))
             pcm_executable_cmd = get_executable_cmd('pdfcrop')
             pcm_cmd = pcm_executable_cmd + [latex_image_pdf, "-o", "cropped-"+latex_image_pdf, "-p", "0", "-a", "-1"]
-            _verbose("cropping {} to {}".format(latex_image_pdf, latex_image_pdf))
+            _verbose("cropping {} to {}".format(latex_image_pdf, "cropped-"+latex_image_pdf))
             subprocess.call(pcm_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+            if not os.path.exists("cropped-"+latex_image_pdf):
+                print('PTX:ERROR: There was a problem cropping {} and {} was not created'.format(latex_image_pdf,"cropped-"+latex_image_pdf))
             shutil.move("cropped-"+latex_image_pdf, latex_image_pdf)
+            _verbose("renaming {} to {}".format("cropped-"+latex_image_pdf,latex_image_pdf))
             if outformat == 'all':
                 shutil.copy2(latex_image, dest_dir)
             if (outformat == 'pdf' or outformat == 'all'):
@@ -289,6 +292,8 @@ def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, data_
                 svg_cmd = pdfsvg_executable_cmd + [latex_image_pdf, latex_image_svg]
                 _verbose("converting {} to {}".format(latex_image_pdf, latex_image_svg))
                 subprocess.call(svg_cmd)
+                if not os.path.exists(latex_image_svg):
+                    print('PTX:ERROR: There was a problem converting {} to svg and {} was not created'.format(latex_image_pdf,latex_image_svg))
                 shutil.copy2(latex_image_svg, dest_dir)
             if (outformat == 'png' or outformat == 'all'):
                 # create high-quality png, presumes "convert" executable
@@ -298,6 +303,8 @@ def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, data_
                 png_cmd = pdfpng_executable_cmd + ["-density", "300",  latex_image_pdf, "-quality", "100", latex_image_png]
                 _verbose("converting {} to {}".format(latex_image_pdf, latex_image_png))
                 subprocess.call(png_cmd)
+                if not os.path.exists(latex_image_png):
+                    print('PTX:ERROR: There was a problem converting {} to png and {} was not created'.format(latex_image_pdf,latex_image_png))
                 shutil.copy2(latex_image_png, dest_dir)
             if (outformat == 'eps' or outformat == 'all'):
                 pdfeps_executable_cmd = get_executable_cmd('pdfeps')
@@ -306,6 +313,8 @@ def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, data_
                 eps_cmd = pdfeps_executable_cmd + ['-eps', latex_image_pdf, latex_image_eps]
                 _verbose("converting {} to {}".format(latex_image_pdf, latex_image_eps))
                 subprocess.call(eps_cmd)
+                if not os.path.exists(latex_image_eps):
+                    print('PTX:ERROR: There was a problem converting {} to eps and {} was not created'.format(latex_image_pdf,latex_image_eps))
                 shutil.copy2(latex_image_eps, dest_dir)
 
 
