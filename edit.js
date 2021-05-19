@@ -337,6 +337,15 @@ objectStructure = {
         "pieces": [["title", ""], ["statement", "p"], ["proof", ""]]
     }
   },
+  "theorem-body": {
+    "html": {
+        "tag": "article",
+        "cssclass": "theorem-like",
+        "data_editable": "93",
+        "pieces": [["{theorem_like_heading}", ""], ["statement", ""], ["%proof%",]],
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"']
+    }
+  },
 
   "task": {
     "html": {
@@ -2032,6 +2041,7 @@ function move_object(e) {
 function delete_by_id(theid, thereason) {
     // reasons to delete something:  author wants it deleted, it is empty, ...
         // first delete the specific object
+    final_added_object = "";
     console.log("deleting by theid", theid, "with content", internalSource[theid]);
     var deleted_content = internalSource[theid];
     var parent_and_location = deleted_content["parent"];
@@ -2043,7 +2053,7 @@ function delete_by_id(theid, thereason) {
     } else {
         old_content[theid] = [deleted_content]
     }
-    if (thereason != "newempty") {
+    if (thereason != "newempty") {  // not sure newempty can still happen
         ongoing_editing_actions.push(["deleted ", deleted_content["sourcetag"], theid]);
     }
         // update the parent of the object
@@ -2065,20 +2075,28 @@ function delete_by_id(theid, thereason) {
         delete_by_id(parent_and_location[0], thereason)
     } else {  // else, because the parent is going to be deleted, so no need to delete the child
         // delete from the html
+        var current_index = current_editing["location"][current_level] + 1;  // +1 because the deleted item is still in the current_editing tree
         if (thereason == "empty" || thereason == "newempty") {
-            document.getElementById(theid).remove()
+            console.log("removing from DOM", document.getElementById(theid));
+            document.getElementById(theid).remove();
+            current_index -= 1;
+            if (current_editing["tree"][ current_level ][ current_index ].id == theid) {
+                current_editing["tree"][ current_level ].splice(current_index, 1)
+            }
+            console.log("empty or newempty", thereason)
         } else {
+            console.log("deleting for another reason", thereason)
             document.getElementById("edit_menu_holder").remove()
             document.getElementById(theid).setAttribute("id", "deleting");
             document.getElementById("deleting").removeAttribute("data-editable");  // so it is invisible to next-editable-of
             setTimeout(() => {  document.getElementById("deleting").remove(); }, 600);
         }
 
-        var current_index = current_editing["location"][current_level] + 1;  // +1 because the deleted item is still in the current_editing tree
         if (current_index >= current_editing["tree"][ current_level ].length) {
             current_index = current_editing["tree"][ current_level ].length - 2;
         }
         console.log("current_index", current_index, "in", current_editing["tree"][ current_level ]);
+        console.log("object of interest", current_editing["tree"][ current_level ][ current_index ]);
         console.log("current_level", current_level, "on", current_editing["tree"]);
         make_current_editing_tree_from_id(current_editing["tree"][ current_level ][ current_index].id);
         edit_menu_from_current_editing("entering");
