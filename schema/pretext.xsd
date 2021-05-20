@@ -1619,7 +1619,6 @@
             <xs:element ref="poem"/>
             <xs:element ref="tabular"/>
             <xs:group ref="Image"/>
-            <xs:group ref="ImageWW"/>
             <xs:element ref="video"/>
             <xs:element ref="program"/>
             <xs:element ref="console"/>
@@ -1691,7 +1690,7 @@
               </xs:complexType>
             </xs:element>
             <xs:choice>
-              <xs:element ref="latex-image"/>
+              <xs:element name="latex-image" type="xs:string"/>
               <xs:element ref="asymptote"/>
               <xs:element ref="sageplot"/>
             </xs:choice>
@@ -1705,7 +1704,6 @@
       </xs:element>
     </xs:sequence>
   </xs:group>
-  <xs:element name="latex-image" type="xs:string"/>
   <xs:element name="asymptote" type="xs:string"/>
   <xs:element name="sageplot" type="xs:string"/>
   <xs:group name="ImageWW">
@@ -1719,6 +1717,17 @@
                   <xs:group ref="TextShort"/>
                   <xs:element ref="var"/>
                 </xs:choice>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="latex-image">
+              <xs:complexType>
+                <xs:attribute name="syntax" use="required">
+                  <xs:simpleType>
+                    <xs:restriction base="xs:token">
+                      <xs:enumeration value="PGtikz"/>
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
               </xs:complexType>
             </xs:element>
           </xs:sequence>

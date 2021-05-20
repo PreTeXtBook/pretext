@@ -1775,7 +1775,6 @@
           <ref name="Poem"/>
           <ref name="Tabular"/>
           <ref name="Image"/>
-          <ref name="ImageWW"/>
           <ref name="Video"/>
           <ref name="Program"/>
           <ref name="Console"/>
@@ -1885,6 +1884,13 @@
               <ref name="WWVariable"/>
             </choice>
           </zeroOrMore>
+        </element>
+      </optional>
+      <optional>
+        <element name="latex-image">
+          <attribute name="syntax">
+            <value>PGtikz</value>
+          </attribute>
         </element>
       </optional>
     </element>

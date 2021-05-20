@@ -715,7 +715,6 @@
                         Poem |
                         Tabular |
                         Image |
-                        ImageWW |
                         Video |
                         Program |
                         Console |
@@ -765,7 +764,10 @@
                 element image {
                     attribute pg-name {text}?,
                     attribute width {text}?,
-                    element description {(TextShort | WWVariable)*}?
+                    element description {(TextShort | WWVariable)*}?,
+                    element latex-image {
+                        attribute syntax {"PGtikz"}
+                    }?
                 }
             
             BorderThickness = "none" | "minor" | "medium" | "major"
