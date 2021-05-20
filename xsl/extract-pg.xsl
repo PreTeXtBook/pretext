@@ -1454,7 +1454,10 @@
 </xsl:template>
 
 <xsl:template match="text()" mode="latex-image">
-    <xsl:value-of select="."/>
+    <xsl:variable name="dollar-fixed"  select="str:replace(.,             '\$', '\~~$')"/>
+    <xsl:variable name="percent-fixed" select="str:replace($dollar-fixed, '\%', '\~~%')"/>
+    <xsl:variable name="at-fixed"      select="str:replace($percent-fixed, '@',  '~~@')"/>
+    <xsl:value-of select="$at-fixed"/>
 </xsl:template>
 
 <!-- An "instruction" is a peer of p, only within a webwork. The purpose   -->

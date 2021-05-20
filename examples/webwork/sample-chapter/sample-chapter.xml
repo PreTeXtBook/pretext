@@ -1119,6 +1119,34 @@
                 </webwork>
             </exercise>
 
+            <exercise>
+                <title>Special characters</title>
+                <introduction>
+                    <p>
+                        This exercise is to test that special characters behave.
+                    </p>
+                </introduction>
+                <webwork>
+                    <pg-code>
+                        $refreshCachedImages = 1;
+                    </pg-code>
+                    <statement>
+                        <p>
+                            The code below has a printed dollar sign, a printed percent sign,
+                            a printed at sign, and a percent sign used as a comment marker.
+                        </p>
+                        <image width="50%">
+                            <latex-image syntax="PGtikz">
+                                \node at (0,0) {I need about \$3.50.};
+                                \node at (0,1) {You gotta give 110\%.};  %This is a comment.
+                                \node at (0,2) {Send email user@domain.com.};
+                            </latex-image>
+                        </image>
+                    </statement>
+                </webwork>
+            </exercise>
+
+
             <!-- TODO: Support for packages, such as pgfplots -->
 
             <p>
