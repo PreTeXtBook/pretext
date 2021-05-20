@@ -8,7 +8,7 @@
 <!-- See the file COPYING for copying conditions.             -->
 
 <chapter xml:id="webwork-publisher">
-  <title><webwork /> Exercises</title>
+  <title><webwork/> Exercises</title>
   <idx>
     <h><webwork/></h>
     <h><webwork/> exercises</h>
@@ -147,7 +147,7 @@
       </p>
       <p>
         <c>-s</c> specifies the <webwork/> server.
-        The <webwork /> server needs to be version 2.14 or later, specified with its protocol and domain,
+        The <webwork/> server needs to be version 2.14 or later, specified with its protocol and domain,
         like <c>https://webwork-ptx.aimath.org</c>.
         It is <em>important</em> to get the protocol correct for your server (<c>http</c> versus <c>https</c>).
         If you do not have a server, you may use <c>https://webwork-ptx.aimath.org</c>.
