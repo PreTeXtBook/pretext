@@ -1099,8 +1099,26 @@
             </xsl:choose>
         </xsl:for-each>
     </xsl:variable>
+    <!-- PTX-built macros file -->
+    <xsl:variable name="ptx-pg-macros">
+        <xsl:variable name="ptx-pg-macros-filename">
+            <xsl:choose>
+                <xsl:when test="$docinfo/initialism">
+                    <xsl:value-of select="$docinfo/initialism"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="$document-root" mode="title-filesafe"/>
+                </xsl:otherwise>
+            </xsl:choose>
+            <text>.pl</text>
+        </xsl:variable>
+        <xsl:call-template name="macro-padding">
+            <xsl:with-param name="string" select="$ptx-pg-macros-filename"/>
+            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
+        </xsl:call-template>
+    </xsl:variable>
     <!-- always finish with PG course macro -->
-    <xsl:variable name="course-macro">
+    <xsl:variable name="course-macros">
         <xsl:call-template name="macro-padding">
             <xsl:with-param name="string" select="'PGcourse.pl'"/>
             <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
@@ -1115,7 +1133,10 @@
         <xsl:value-of select="$standard-macros" />
         <xsl:value-of select="$implied-macros" />
         <xsl:value-of select="$user-macros" />
-        <xsl:value-of select="$course-macro" />
+        <xsl:if test=".//latex-image">
+            <xsl:value-of select="$ptx-pg-macros" />
+        </xsl:if>
+        <xsl:value-of select="$course-macros" />
         <xsl:text>);</xsl:text>
         <xsl:if test="$b-human-readable">
             <xsl:text>&#xa;</xsl:text>
@@ -1447,9 +1468,18 @@
     <xsl:variable name="pg-name" select="concat('$', translate($visible-id,'-','_'))"/>
     <xsl:value-of select="$pg-name"/>
     <xsl:text> = createTikZImage();&#xa;</xsl:text>
+    <xsl:if test="$docinfo/latex-image-preamble[@syntax = 'PGtikz']">
+        <xsl:value-of select="$pg-name"/>
+        <xsl:text>->addToPreamble(latexImagePreamble());&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:variable name="pg-tikz-code">
+        <xsl:apply-templates select="latex-image/text()|latex-image/var" mode="latex-image"/>
+    </xsl:variable>
     <xsl:value-of select="$pg-name"/>
     <xsl:text>->BEGIN_TIKZ&#xa;</xsl:text>
-    <xsl:apply-templates select="latex-image/text()|latex-image/var" mode="latex-image"/>
+    <xsl:call-template name="sanitize-text">
+        <xsl:with-param name="text" select="$pg-tikz-code"/>
+    </xsl:call-template>
     <xsl:text>&#xa;END_TIKZ&#xa;</xsl:text>
 </xsl:template>
 

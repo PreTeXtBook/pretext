@@ -64,10 +64,16 @@
              <!-- <text>My Button Text</text>  -->
         </feedback>
 
-        <latex-image-preamble>
-        <![CDATA[
-        \usepackage{pgfplots}
-        ]]>
+        <latex-image-preamble syntax="PGtikz">
+            \usepackage{pgfplots}
+            \pgfplotsset{
+                every axis/.append style={
+                    axis lines=middle,
+                    xlabel={$x$},
+                    ylabel={$y$},
+                    grid = both,
+                }
+            }
         </latex-image-preamble>
 
     </docinfo>
@@ -1035,10 +1041,10 @@
             </p>
             <p>
                 If your <webwork/> server is version 2.16 or later,
-                <webwork/> problems can process Tikz code. Here is an example.
+                <webwork/> problems can process TikZ code. Here is an example.
             </p>
             <exercise>
-                <title>A static tikz graph</title>
+                <title>A static TikZ graph</title>
                 <webwork>
                     <pg-code>
                         Context("IntegerFunctions");
@@ -1086,7 +1092,7 @@
             </exercise>
 
             <exercise>
-                <title>A randomized tikz graph</title>
+                <title>A randomized TikZ graph</title>
                 <introduction>
                     <p>
                         These images may depend on the random seed.
@@ -1114,6 +1120,44 @@
                         </image>
                         <p>
                             <var name="$area" width="20"/>
+                        </p>
+                    </statement>
+                </webwork>
+            </exercise>
+
+            <exercise>
+                <title>A TikZ graph affected by <tag>latex-image-preamble</tag></title>
+                <introduction>
+                    <p>
+                        This sample chapter's <tag>docinfo</tag> has a <tag>latex-image-preamble</tag>
+                        with <attr>syntax</attr> set to <c>PGtikz</c>. This exercise has graph styling that is affected by that.
+                    </p>
+                </introduction>
+                <webwork>
+                    <pg-code>
+                        @roots = (-3..3)[NchooseK(7,3)];
+                        @roots = num_sort(@roots);
+                        $answer = List(@roots);
+                        $xmin = min(-1,@roots)-1;
+                        $xmax = max(1,@roots)+1;
+                    </pg-code>
+                    <statement>
+                        <p>
+                            What are the roots of this polynomial?
+                        </p>
+                        <image width="50%">
+                            <description>
+                                the graph of a polynomial that crosses the x-axis at <var name="$roots[0]"/>,
+                                <var name="$roots[1]"/>, and <var name="$roots[2]"/>.
+                            </description>
+                            <latex-image syntax="PGtikz">
+                                \begin{axis}
+                                    \addplot[domain=<var name="$xmin"/>:<var name="$xmax"/>,smooth] {(x-<var name="$roots[0]"/>)*(x-<var name="$roots[1]"/>)*(x-<var name="$roots[2]"/>)};
+                                \end{axis}
+                            </latex-image>
+                        </image>
+                        <p>
+                            <var name="$answer" width="20"/>
                         </p>
                     </statement>
                 </webwork>

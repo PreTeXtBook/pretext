@@ -1108,6 +1108,20 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
     #close session to avoid resource wanrnings
     session.close()
 
+################################
+#
+#  WeBWorK PG Macro Library
+#
+################################
+
+def pg_macros(xml_source, dest_dir):
+    import os.path  # join()
+
+    ptx_xsl_dir = get_ptx_xsl_path()
+    extraction_xslt = os.path.join(ptx_xsl_dir, 'support/pretext-pg-macros.xsl')
+    os.chdir(dest_dir)
+    xsltproc(extraction_xslt, xml_source, None)
+
 
 ##############################
 #

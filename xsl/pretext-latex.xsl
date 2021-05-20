@@ -1785,11 +1785,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\usepackage{showkeys}&#xa;</xsl:text>
         <xsl:text>\usepackage[letter,cam,center,pdflatex]{crop}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$docinfo/latex-image-preamble">
+    <xsl:if test="$latex-image-preamble">
         <xsl:text>%% Graphics Preamble Entries&#xa;</xsl:text>
-        <xsl:call-template name="sanitize-text">
-            <xsl:with-param name="text" select="$docinfo/latex-image-preamble" />
-        </xsl:call-template>
+        <xsl:value-of select="$latex-image-preamble"/>
     </xsl:if>
     <xsl:text>%% If tikz has been loaded, replace ampersand with \amp macro&#xa;</xsl:text>
     <xsl:if test="$document-root//latex-image">

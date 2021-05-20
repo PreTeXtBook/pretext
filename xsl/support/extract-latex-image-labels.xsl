@@ -20,10 +20,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
 
-<!-- This stylesheet locates <latex-image> elements    -->
-<!-- and wraps them for LaTeX processing               -->
-<!-- This includes the LaTeX macros present in docinfo -->
-<!-- and the document's docinfo/latex-image-preamble   -->
+<!-- This stylesheet locates <label> elements in a -->
+<!-- <latex-image> and builds an xml document that -->
+<!-- records them all. This makes it possible to   -->
+<!-- convert labels to Braille to be inserted into -->
+<!-- an image file later.                          -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
