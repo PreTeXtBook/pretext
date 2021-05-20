@@ -1780,12 +1780,18 @@ def set_verbosity(v):
     _verbosity = v
 
 def _verbose(msg):
-    """Write a message to the console on program progress"""
+    """Write a concise message to the console on program progress"""
+    # N.B.: this should be an informative progress indicator for an impatient
+    # author who wonders if anything is happening.  Use _debug() for messages
+    # with content useful for location or solving problems.
     if _verbosity >= 1:
         print('PTX: {}'.format(msg))
 
 def _debug(msg):
-    """Write a message to the console with some raw information"""
+    """Write a message to the console with some useful raw information"""
+    # N.B. This can be as detailed and infotrmative as possible,
+    # and should be helpful in locating where a problem occurs
+    # or what scenario caused that problem.
     if _verbosity >= 2:
         print('PTX:DEBUG: {}'.format(msg))
 
