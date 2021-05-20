@@ -609,17 +609,17 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
         msg = "sending {} to server to save in {}: origin is '{}'"
         _verbose(msg.format(problem, dest_dir, origin[problem]))
         if origin[problem] == 'server':
-            _debug('server-to-ptx: {} {} {} {}'.format(source[problem], ww_domain_path, dest_dir, problem))
+            _debug("server-to-ptx: {}\n{}\n{}\n{}".format(problem, ww_domain_path, source[problem], dest_dir))
         elif origin[problem] == 'ptx':
             if (ww_reps_version == '2'):
-                _debug('server-to-ptx: {} {} {} {}'.format(pgdense[problem], ww_domain_path, dest_dir, problem))
+                _debug("server-to-ptx: {}\n{}\n{}\n{}".format(problem, ww_domain_path, pgdense[problem], dest_dir))
             elif (ww_reps_version == '1'):
-                _debug('server-to-ptx: {} {} {} {}'.format(pgdense['hint_yes_solution_yes'][problem], ww_domain_path, dest_dir, problem))
+                _debug("server-to-ptx: {}\n{}\n{}\n{}".format(problem, ww_domain_path, pgdense['hint_yes_solution_yes'][problem], dest_dir))
 
         # Ready, go out on the wire
         try:
             response = session.get(ww_domain_path, params=server_params)
-            _verbose('Getting problem response from: ' + response.url)
+            _debug('Getting problem response from: ' + response.url)
 
         except requests.exceptions.RequestException as e:
             root_cause = str(e)
