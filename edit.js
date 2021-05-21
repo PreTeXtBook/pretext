@@ -177,11 +177,11 @@ objectStructure = {
     "pretext": {
         "tag": "ol",
         "pieces": [["content", ""]],
-        "attributes": ['list-style-type="A"']
+        "attributes": ['label="A"']
     },
     "source": {
         "pieces": [["title", ""], ["content", "li"]],
-        "attributes": [["list-style-type", "A"]]
+        "attributes": [["label", "A"]]
     }
   },
 
@@ -494,6 +494,17 @@ objectStructure = {
           "pieces": [["content", ""]]
       }
   },
+  "ellipsis": {    // need to mark it as inline
+      "html": {
+          "pieces": [["(literal,&hellip;)", ""]]
+      },
+      "pretext": {
+          "tag": "ellipsis",
+           "pieces": []
+      },
+      "source": {
+      }
+  },
 
   "m": {    // need to mark it as inline
       "html": {
@@ -590,7 +601,7 @@ Object.assign(objectStructure, sidebyside_instances);
 
 // shoudl we distinguish empty tags by format?
 // these tags are html an dpretext
-var always_empty_tags = ["img", "image"];
+var always_empty_tags = ["img", "image", "ellipsis"];
 var allowed_empty_tags = ["div", "span", "p", "stack"];
 var tag_display = {  /* the default is "block" */
     "inline": ["m", "em", "ellipsis", "span", "term"], 
@@ -619,6 +630,9 @@ function process_value_from_source(fcn, piece, src) {
     content_raw = content_raw.replace(/-standalone$/, "")  // hack because we need alternate to sourcetag
     if (fcn == "capitalize") {
         content = content_raw.charAt(0).toUpperCase() + content_raw.slice(1);
+    } else if (fcn == "literal") {
+        console.log("literally", piece);
+        content = piece
     } else if (fcn == "space") {
         content = content_raw + " "
     } else if (fcn == "period") {
@@ -640,7 +654,7 @@ function process_value_from_source(fcn, piece, src) {
         if (src["xml:id"] == top_level_id) {
             // no need to add locan number
         } else {
-            content += ".1"
+            content += ".N"
         }
     } else {
          content = content_raw
@@ -2177,8 +2191,10 @@ var internalSource = {  // currently the key is the HTML id
            "content": "<&>357911<;>: separate - detached - distinct - abstract."},
    "akX": {"xml:id": "akX", "sourcetag": "blockquote", "title": "", "parent": ["hPw","content"],
            "content": "<&>PLS<;>\n<&>vTb<;>\n<&>cak<;>"},
+   "ell1": {"xml:id": "ell1a", "sourcetag": "ellipsis", "parent": ["UvL","content"]},
+   "ell2": {"xml:id": "ell1b", "sourcetag": "ellipsis", "parent": ["UvL","content"]},
    "UvL": {"xml:id": "UvL", "sourcetag": "p", "title": "","parent": ["hPw","content"],
-           "content": "    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n     In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n <ellipsis/>.\n Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n What sort of problems?\n Okay, those that involve numbers,\n functions, lines, triangles,\n <ellipsis/>.\n Whatever your conception of what mathematics is,\n try applying the concept of <q>discrete</q> to it, as defined above.\n Some math fundamentally deals with <em>stuff</em>\n that is individually separate and distinct."},
+           "content": "    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n     In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n <&>ell2<;>.\n Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n What sort of problems?\n Okay, those that involve numbers,\n functions, lines, triangles,\n <&>ell1<;>.\n Whatever your conception of what mathematics is,\n try applying the concept of <q>discrete</q> to it, as defined above.\n Some math fundamentally deals with <em>stuff</em>\n that is individually separate and distinct."},
    "357911": {"xml:id": "356711", "sourcetag": "em", "title": "",
            "content": 'Synonyms'},
    "term1": {"xml:id": "term1a", "sourcetag": "term", "parent": ["sYv","content"],
@@ -3538,6 +3554,9 @@ function logKeyDown(e) {
         console.log("                 we are actively editing");
 
         if (e.code == "Tab" && !document.getElementById('local_menu_holder')) {
+   // disabled for now
+            e.preventDefault();
+            return ""
             create_local_menu()
         } else if (document.getElementById('local_menu_holder')) {
             main_menu_navigator(e);
