@@ -46,6 +46,13 @@ objectStructure = {
         "pieces": [["(period,)", ""]]
     }
   },
+  "titleperiod": {
+    "html": {
+        "tag": "span",
+        "attributes": ['class="period"'],
+        "pieces": [["(titleperiod,)", ""]]
+    }
+  },
   "space": {
     "html": {
         "tag": "span",
@@ -66,7 +73,7 @@ objectStructure = {
         "tag": "h4",
         "cssclass": "heading",
         "attributes": ['class="<&>{cssclass}<;>"', 'data-parent_id="<&>xml:id<;>"'],
-        "pieces": [["{type}", ""], ["{space}", ""], ["{codenumber}", ""], ["{period}", ""],  ["{space}", ""], ["{title}", ""]]
+        "pieces": [["{type}", ""], ["{space}", ""], ["{codenumber}", ""], ["{period}", ""],  ["{space}", ""], ["{title}", ""], ["{titleperiod}", ""]]
           // * means editable piece
     }
   },
@@ -275,6 +282,23 @@ objectStructure = {
         "pieces": [["content", "p"]]
     }
   },
+  "proof-standalone": {
+    "html": {
+        "tag": "article",
+        "cssclass": "proof",
+        "pieces": [["{proof_like_heading}", ""], ["content",""]],
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
+        "data_editable": "60"
+    },
+    "pretext": {
+        "tag": "proof",
+        "attributes": ['xml:id="<&>xml:id<;>"'],
+        "pieces": [["content", ""]]
+    },
+    "source": {
+        "pieces": [["content", "p"]]
+    }
+  },
 
   "remark-like": {
     "html": {
@@ -299,7 +323,7 @@ objectStructure = {
         "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
         "cssclass": "project-like",
         "data_editable": "94",
-        "pieces": [["{theorem_like_heading}", ""], ["statement",""], ["%hint%", "hint"], ["%answer%", ""], ["%solution%", ""], ["{workspace}", ""], ["tasks*", ""]]
+        "pieces": [["{theorem_like_heading}", ""], ["statement",""], ["%hint%", "hint"], ["%answer%", "answer"], ["%solution%", "solution"], ["{workspace}", ""], ["tasks", ""]]
     },
     "pretext": {
         "tag": "sourcetag",
@@ -357,7 +381,7 @@ objectStructure = {
         "cssclass": "exercise-like task",
         "data_editable": "94ZZZA",
         "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
-        "pieces": [["{task_like_heading}", ""], ["statement",""], ["hint", ""], ["answer", ""], ["solution", ""], ["{workspace}", ""]]
+        "pieces": [["{task_like_heading}", ""], ["statement",""], ["%hint%", "hint"], ["%answer%", "answer"], ["%solution%", "solution"], ["{workspace}", ""]]
     },
     "pretext": {
         "tag": "task",
@@ -592,12 +616,17 @@ function process_value_from_source(fcn, piece, src) {
         }
     }
 
+    content_raw = content_raw.replace(/-standalone$/, "")  // hack because we need alternate to sourcetag
     if (fcn == "capitalize") {
         content = content_raw.charAt(0).toUpperCase() + content_raw.slice(1);
     } else if (fcn == "space") {
         content = content_raw + " "
     } else if (fcn == "period") {
         content = content_raw + "."
+    } else if (fcn == "titleperiod") {
+        if (src.title && !(/[!?]$/.test(src.title))) {
+            content = content_raw + "."
+        }
     } else if (fcn == "percentlist") {
         content = content_raw.join("% ") + "%"
     } else if (fcn == "nthitem") {
@@ -606,7 +635,13 @@ function process_value_from_source(fcn, piece, src) {
         var item_index = 0;  // need to be its location among siblings
         content = content_raw[item_index];
     } else if (fcn == "codenumber") {
-        content = "N.mn"
+        console.log("   CODENUMBER", src);
+        content = internalSource.root_data.number_base;
+        if (src["xml:id"] == top_level_id) {
+            // no need to add locan number
+        } else {
+            content += ".1"
+        }
     } else {
          content = content_raw
     }
@@ -657,14 +692,6 @@ var old_content = {};   // to hold old versions of changed materials
 
 // what will happen with internationalization?
 var keyletters = ["KeyA", "KeyB", "KeyC", "KeyD", "KeyE", "KeyF", "KeyG", "KeyH", "KeyI", "KeyJ", "KeyK", "KeyL", "KeyM", "KeyN", "KeyO", "KeyP", "KeyQ", "KeyR", "KeyS", "KeyT", "KeyU", "KeyV", "KeyW", "KeyX", "KeyY", "KeyZ"];
-
-var top_level_id = "hPw";
-
-var current_editing = {
-    "level": 0,
-    "location": [0],
-    "tree": [ [document.getElementById(top_level_id)] ]
-}
 
 var movement_location_options = [];
 var movement_location = 0;
@@ -733,10 +760,10 @@ base_menu_for = {
             ["blockquote/poem/music/etc", "quoted"],
             ["aside-like", "aside-like", "d"],
             ["interactives"],
-            ["proof", "proof", "o"],
+            ["proof", "proof-standalone", "o"],
             ["layout-like"],
             ["section-like"],
-            ["source"]],
+            ["PreTeXt source", "source"]],
 "blockquote": [["paragraph", "p"]],
 // "ol": [["list item", "li"]],
 "article": [["paragraph", "p"],  //  this is for theorem-like and similar
@@ -782,6 +809,7 @@ editing_container_for = { "p": 1,
 "sbs3": [""],
 "sbs4": [""],
 "source": 1,
+"proof-standalone": [""],  //just a guess
 "proof": [""]  //just a guess
 }
 
@@ -1048,6 +1076,8 @@ function menu_options_for(object_id, component_type, level) {
 
 function top_menu_options_for(this_obj) {
     console.log("top menu options for aa", this_obj);
+    var this_id = this_obj.id;
+    console.log("which has id", this_id);
 
 // maybe the "classList" in this function shoudl instead look at the internalSource?
 
@@ -1096,13 +1126,17 @@ function top_menu_options_for(this_obj) {
             this_list += '<li tabindex="-1" data-env="' + 'task' + '">Add a task</li>';
         }
 
-        this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="beforebegin">XInsert before<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
-        this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="afterend">Insert after<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+        if (this_id != top_level_id) {
+            this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="beforebegin">Insert before<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+            this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="afterend">Insert after<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
 
-        this_list += '<li tabindex="-1" data-action="move-or-delete">Move or delete<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+            this_list += '<li tabindex="-1" data-action="move-or-delete">Move or delete<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+        }
         this_list += '<li tabindex="-1" data-env="' + "metaadata" + '">Metadata<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
-        this_list += '<li tabindex="-1" data-env="' + "undo" + '">Revert<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
-        if (previous_editing()) {
+        if (this_id != top_level_id) {
+            this_list += '<li tabindex="-1" data-env="' + "undo" + '">Revert<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
+        }
+        if (previous_editing() && this_id == top_level_id) {
             this_list += '<li tabindex="-1" data-action="' + "resume" + '">Resume previous editing</li>';
         }
         this_list += '<li tabindex="-1" data-action="' + "replace" + '">Regenerate HTML</li>';
@@ -1150,6 +1184,7 @@ function edit_menu_for(this_obj_or_id, motion) {
     } else {
         this_obj = this_obj_or_id
     }
+    var this_id = this_obj.id;
 
     if (motion == "entering") {
         menu_location = "afterbegin";
@@ -1234,7 +1269,11 @@ function edit_menu_for(this_obj_or_id, motion) {
         } else {
             if (next_editable_of(this_obj, "children").length) {
                 console.log("this_obj", this_obj);
-                edit_option.innerHTML = "<b>enter</b> this " + internalSource[this_obj.id]["sourcetag"] + ", or add near here?";
+                if (this_id == top_level_id) {
+                    edit_option.innerHTML = "<b>enter</b> this " + internalSource[this_obj.id]["sourcetag"] + "?";
+                } else {
+                    edit_option.innerHTML = "<b>enter</b> this " + internalSource[this_obj.id]["sourcetag"] + ", or add near here?";
+                }
             } else {
                 edit_option.innerHTML = "<b>edit</b> this passage, or add near here?";
             }
@@ -1301,6 +1340,7 @@ function create_new_internal_object(new_tag, new_id, parent_description) {
       console.log("new_tag", new_tag);
       var thisstructure = objectStructure[new_tag];
       var thisownersourcestructure = {};
+      if (!thisstructure) { alert(new_tag + " not implemented yet"); return "" }
       if ("owner" in thisstructure) {
           var thisownerstructure = objectStructure[thisstructure.owner];
           thisownersourcestructure = thisownerstructure.source;
@@ -1351,9 +1391,12 @@ function create_new_internal_object(new_tag, new_id, parent_description) {
     } else {
         ongoing_editing_actions.push(["new", new_tag, new_id]);
     }
+  return new_tag
 }
 
 function show_source(sibling, relative_placement) {
+//    var current_source = document.getElementById("newpretextsource");
+//    if (current_source) { console.log("curr sou", current_source); alert("curr sour"); current_source.remove() }
     var edit_placeholder = document.createElement("span");
     edit_placeholder.setAttribute('id', "newsource");
     sibling.insertAdjacentElement(relative_placement, edit_placeholder);
@@ -1364,7 +1407,8 @@ function show_source(sibling, relative_placement) {
 
     the_pretext_source = the_pretext_source.replace(/\n\n/g, '\n');
 
-    edit_placeholder.insertAdjacentHTML('afterend', '<textarea id="newsource" style="width: 100%; height:30em">' + the_pretext_source + '</textarea>')
+    edit_placeholder.insertAdjacentHTML('afterend', '<textarea id="newpretextsource" style="width: 100%; height:30em">' + the_pretext_source + '</textarea>');
+    document.getElementById("newsource").remove();
 }
 
 
@@ -1425,7 +1469,8 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
     console.log(new_tag, "parent_description", parent_description);
 
                   // then create the empty internalSource for the new object
-    create_new_internal_object(new_tag, new_id, parent_description);
+    var new_obj = create_new_internal_object(new_tag, new_id, parent_description);
+    if (!new_obj) { return "" }
 
    // we have made the new object, but we still have to put it in the correct location
 
@@ -1458,7 +1503,7 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
         new_arrangement = '<&>' + new_id + '<;>';
     }
     console.log("which became", new_arrangement);
-    alert("here");
+//    alert("here");
     internalSource[parent_description[0]][parent_description[1]] = new_arrangement;
     if (new_tag == "list") {
   //      current_editing["level"] += 1;
@@ -2084,6 +2129,12 @@ function delete_by_id(theid, thereason) {
             console.log("removing from DOM", document.getElementById(theid));
             document.getElementById(theid).remove();
             current_index -= 1;
+            console.log("current_index", current_index, "current_level", current_level);
+            console.log(current_editing["tree"][ current_level ]);
+                // hack because adding a list (inside a defn?) is not updating the tree properly
+            if (current_index > current_editing["tree"][ current_level ].length - 1) {
+                current_index = current_editing["tree"][ current_level ].length - 1
+            }
             if (current_editing["tree"][ current_level ][ current_index ].id == theid) {
                 current_editing["tree"][ current_level ].splice(current_index, 1)
             }
@@ -2109,7 +2160,7 @@ function delete_by_id(theid, thereason) {
 }
 
 var internalSource = {  // currently the key is the HTML id
-   "root_data": {"id": "hPw"},
+   "root_data": {"id": "hPw", "number_base": "0.1" },
    "hPw": {"xml:id": "hPw", "sourcetag": "section", "title": "What is Discrete Mathematics?",
            "content": "<&>akX<;>\n<&>UvL<;>\n<&>ACU<;>\n<&>gKd<;>\n<&>MRm<;>\n<&>udO<;>\n<&>sYv<;>\n<&>ZfE<;>"},
    "gKd": {"xml:id": "gKd", "sourcetag": "p", "title": "", "parent": ["hPw","content"],
@@ -2179,6 +2230,13 @@ var internalSource = {  // currently the key is the HTML id
            "content": "You know exactly one of these messages is true.\nWhat should you do?"}
 }
 
+var top_level_id = internalSource.root_data.id;
+
+var current_editing = {
+    "level": 0,
+    "location": [0],
+    "tree": [ [document.getElementById(top_level_id)] ]
+}
 
 
 function create_local_menu() {
@@ -2873,6 +2931,7 @@ console.log("    SSS current_editing", current_editing, current_editing["tree"][
                 var the_whole_object = html_from_internal_id(this_parent[0]);
                 console.log("the_whole_object", the_whole_object);
                 if (internalSource[this_parent[0]]["sourcetag"] == "proof") { // insert the theorem-like statement
+                    alert("something about a proof");
                     var the_parent_object = html_from_internal_id(internalSource[this_parent[0]]["parent"][0]);
                     the_whole_object = the_parent_object.concat(the_whole_object)
                 }
@@ -3423,6 +3482,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                    }
                   console.log("create object to edit",dataEnv, object_of_interest, before_after);
                   var new_obj = create_object_to_edit(dataEnv, object_of_interest, before_after);
+                  if (!new_obj) { edit_menu_from_current_editing("entering"); return "" }
                   console.log("new_obj", new_obj);
                   edit_in_place(new_obj, "new");
                   var new_obj_id = new_obj.id;
