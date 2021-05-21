@@ -1,0 +1,53 @@
+<project>
+  <title>A structured project</title>
+  <introduction>
+    <p>
+      Here is where we describe what the reader will accomplish in the project.
+    </p>
+  </introduction>
+
+  <task>
+    <statement>
+      <p>
+        The first step to do.
+      </p>
+    </statement>
+    <hint>
+      <p>
+        A little hint.
+      </p>
+    </hint>
+    <answer>
+      <p>
+        Just the answer.
+      </p>
+    </answer>
+    <solution>
+      <p>
+        All the glorious details about how to do the first step.
+      </p>
+    </solution>
+  </task>
+
+  <task>
+    <statement>
+      <p>
+        The second step to do.
+        We'll be lazy and just include an answer.
+      </p>
+    </statement>
+    <answer>
+      <p>
+        Just the answer.
+      </p>
+    </answer>
+  </task>
+
+  <conclusion>
+    <p>
+      A little wrap up.
+    </p>
+  </conclusion>
+
+</project>
+

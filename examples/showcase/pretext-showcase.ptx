@@ -15,6 +15,7 @@
     </images>
 
     <macros>
+      \newcommand{\order}[1]{\left\lvert#1\right\rvert}
     </macros>
 
     <latex-image-preamble>
@@ -33,12 +34,15 @@
       <favicon/>
       <baseurl href="https://pretextbook.org/examples/pretext-showcase/html" />
     </html>
+
+    <rename element="fact" xml:lang="en-US">Self Evident Fact</rename>
+
   </docinfo>
 
   <article xml:id="pretext-showcase">
     <title><pretext/> Showcase</title>
 
-    <frontmatter xml:id="index">
+    <frontmatter xml:id="frontmatter">
       <titlepage>
         <author>
           <personname>Many Contributors</personname>
@@ -63,7 +67,10 @@
     </frontmatter>
 
     <xi:include href="mathematics.ptx" />
+    <xi:include href="environments.ptx" />
     <xi:include href="latex-image.ptx" />
+    <xi:include href="exercises.ptx" />
+    <xi:include href="webwork.ptx" />
 
     <backmatter>
       <index>

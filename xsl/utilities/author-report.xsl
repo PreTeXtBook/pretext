@@ -29,8 +29,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace" >
 
+<!-- NB: (2020-06-07) xref/@provisional gets replaced by placeholder -->
+<!-- text in the "assembly" phase, so think carefully about whether  -->
+<!-- or not this stylesheet should run against orginal source or     -->
+<!-- enhanced source, they *are* different.                          -->
+
 <!-- Uses "strip-leading-whitespace" and more -->
-<xsl:import href="../mathbook-common.xsl"/>
+<xsl:import href="../pretext-common.xsl"/>
 
 <!-- ASCII output intended, consistent with -common -->
 <xsl:output method="text" />

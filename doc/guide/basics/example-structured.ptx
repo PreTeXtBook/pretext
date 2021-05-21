@@ -1,0 +1,20 @@
+<example>
+  <title>Differentiating a polynomial</title>
+  <statement>
+    <p>
+      Differentiate the function <m>f(x) = 3x^5-7x+5</m>.
+    </p>
+  </statement>
+  <answer>
+    <p>
+      <m>f'(x) = 15x^4-7</m>
+    </p>
+  </answer>
+  <solution>
+    <p>
+      We use the power, sum,
+      and constant multiple rules and find that the derivative is <m>f'(x) = 15x^4-7</m>.
+    </p>
+  </solution>
+</example>
+

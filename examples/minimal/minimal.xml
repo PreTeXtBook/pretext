@@ -22,22 +22,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- To process this file do                                                                      -->
 <!--                                                                                              -->
 <!-- (1) LaTeX/PDF:                                                                               -->
-<!--     xsltproc -o minimal.tex mathbook/xsl/mathbook-latex.xsl minimal.xml                      -->
+<!--     xsltproc -o minimal.tex mathbook/xsl/pretext-latex.xsl minimal.xml                       -->
 <!--     pdflatex minimal.tex                                                                     -->
 <!--     xelatex minimal.tex                                                                      -->
 <!--                                                                                              -->
 <!-- (2) HTML:                                                                                    -->
-<!--     xsltproc mathbook/xsl/mathbook-html.xsl minimal.xml                                      -->
-<!--     <browswer>  minimal.html                                                                 -->
+<!--     xsltproc mathbook/xsl/pretext-html.xsl minimal.xml                                       -->
+<!--     <browser>  minimal.html                                                                  -->
 <!--                                                                                              -->
 <!-- (3) CoCalc worksheet (parameter causes a single file for output)                             -->
 <!--     REMOVE the "X" in the double dash (which is not legal in an XML comment)                 -->
-<!--     xsltproc -X-stringparam chunk.level 0 mathbook/xsl/mathbook-smc.xsl minimal.xml          -->
+<!--     xsltproc -X-stringparam chunk.level 0 mathbook/xsl/pretext-smc.xsl minimal.xml           -->
 <!--     <CoCalc> minimal.sagews                                                                  -->
 <!--                                                                                              -->
 <!-- (4) Sage doctesting                                                                          -->
 <!--     REMOVE the "X" in the double dash (which is not legal in an XML comment)                 -->
-<!--     xsltproc -X-stringparam chunk.level 0 mathbook/xsl/mathbook-sage-doctest.xsl minimal.xml -->
+<!--     xsltproc -X-stringparam chunk.level 0 mathbook/xsl/pretext-sage-doctest.xsl minimal.xml  -->
 <!--     <read further instructions in> minimal.py                                                -->
 
 <pretext>

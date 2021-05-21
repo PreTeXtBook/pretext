@@ -25,6 +25,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <book>
         <title>A Test Book</title>
+        <subtitle>Converting <pretext/> to Braille</subtitle>
 
         <frontmatter>
             <titlepage>
@@ -35,15 +36,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <email>beezer@pugetsound.edu</email>
                 </author>
 
+                <editor>
+                    <personname>Al Maneki</personname>
+                </editor>
+
+                <editor>
+                    <personname>Karen Herstein</personname>
+                </editor>
+
+                <colophon>
+                    <edition>Preliminary Edition, Summer 2019</edition>
+                </colophon>
+
                 <date><today /></date>
             </titlepage>
 
             <preface>
-                <p>This is a <pretext/> book designed to test conversions to Braille without too much extraneous material.  We will describe here what should have been apparent in the front matter.  This will be expanded as we get more and more parts of the book under control.  The title of the entire book is <q>A Test Book</q> and the author is <q>Robert A. Beezer</q>.  The date will change, but should be something recent.</p>
+                <p>This is a <pretext/> book designed to test conversions to Braille without too much extraneous material.  We will describe here what should have been apparent on the title page.  This will be expanded as we get more and more parts of the book under control.  The title of the entire book is <q>A Test Book</q> with the subtitle <q>Converting PreTeXt to Braille</q>.  The author is <q>Robert A. Beezer</q>, with editors <q>Al Maneki</q> and <q>Karen Herstein</q>. The edition is <q>Preliminary Edition, Summer 2019</q>.  The date will change, but should be something recent.  Nota bene: if the sentence above that ends with <q>Herstein</q> is followed by <em>two</em> spaces, then one will migrate to the start of a new line and appear almost like the start of a new paragraph.  It seems that any number of extra characters will migrate.  In contrast, any number of newlines behave just fine.  So maybe pretty-printed source will avoid this fate.</p>
 
-                <p>Note: 2019-05-27, this next paragraph is wrong, the preface is being formatted like a section.  Problem is understood, but a fix has wide implications, so has not been attempted. </p>
+                <p>This preface should have formatting similar to a chapter, which is described carefully in <xref ref="chapter-divisions"/>.  (The cross-reference to Chapter 1 should be realized very plain in print, and does not yet have any extra information in Braille.)  The one difference is that a preface is not numbered, so there will be just a title, centered, followed by a blank line.  We can give a preface a title, such as <articletitle>Preface to the Second Edition</articletitle>, but here we have let <pretext/> provide a default title.</p>
 
-                <p>This preface should have formatting similar to a chapter, which is described carefully in <xref ref="chapter-divisions"/>.  The one difference is that a preface is not numbered, so there will be just a title, centered, followed by a blank line.  We can give a preface a title, such as <articletitle>Preface to the Second Edition</articletitle>, but here we have let <pretext/> provide a default title.</p>
+                <p>Title pages of print and Braille will not always match.  BANA suggests a different set of items than what default <pretext/> uses.  Also, we do not yet producing a Table of Contents for Braille.  Later.</p>
             </preface>
 
             <!-- colophon later -->
@@ -55,42 +68,66 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <introduction>
                 <p>We test headings of divisions.  Chapter, Section, Subdivision, Subsubdivision.  Each will have a title, and each will be structured as a <pretext/> <q>introduction</q> followed by a single subdivision.  This is the introduction to the chapter.  In Braille, it will start a new page, have the word <q>Chapter</q>, followed by a number on a centered line all by itself, followed by a line with the text of the title, and then a blank line will separate the first line of content.</p>
 
-                <p>The word <q>Chapter</q> is supplied automatically in the language of the book (French, Portugese, etc.).  But it could be ommitted if the formatting (page break, etc.) is enough to indicate a new chapter.</p>
+                <p>The word <q>Chapter</q> is supplied automatically in the language of the book (French, Portuguese, etc.).  But it could be omitted if the formatting (page break, etc.) is enough to indicate a new chapter.</p>
             </introduction>
 
             <section>
                 <title>A Section Heading</title>
 
                 <introduction>
-                    <p>The introduction to the section with some extra text to run onto a new line of the BRF output that may not be indented.</p>
+                    <p>The introduction to the section with some extra text to run onto a new line of the BRF output that may not be indented.  Since this sample book has more than 3 levels of divisions (chapter, section, subsection, subsubsection) this should have a centered heading.</p>
 
-                    <p>Sections, subsections, and subsubsections (which all follow) have a blank line prior, indentation of four spaces, then the word for the division (e.g. <q>subsection</q>) followed by a number.  Content begins on the next line, typically indented two spaces because a paragraph starts there.</p>
-
-                    <p>The word for the division could be omitted if we thought the hierachical number was enough to let the reader know how deep they are in the divisions.  In other words, <q>5.6.2</q> must be the number of a subsection, so writing <q>Subsection</q> could be considered redundant.  Most <pretext/> conversions only use <q>Chapter</q> in these situations.</p>
+                    <p>Most <pretext/> conversions supply the word <q>Chapter</q>, but omit words like <q>Section</q> and <q>Subsection</q>.  BANA says to follow the lead of print.  A hierarchical number will help also.</p>
                 </introduction>
 
                 <subsection>
                     <title>A Subsection Heading</title>
 
                     <introduction>
-                        <p>The introduction to the subsection with some extra text to run onto a new line of the BRF output that may not be indented.</p>
+                        <p>The introduction to the subsection with some extra text to run onto a new line of the BRF output that may not be indented.  The heading of this subsection begins in cell-5, and is a block when occupying more than one line.  Since this sample book has 4 levels of divisions (chapter, section, sub section, subsubsection) this should have a cell-5 heading.</p>
                     </introduction>
 
                     <subsubsection>
                         <title>A Subsubsection Heading</title>
 
-                        <p>The subsubsection is terminal, so this is the actual content of the division, rather than an introduction to a further division.</p>
+                        <p>The subsubsection is terminal, so this is the actual content of the division, rather than an introduction to a further division.  The heading of this subsubsection begins in cell-7.</p>
 
-                        <p>However, any division may contain a <pretext/> construct called a <q>paragraphs</q>.  It has a title and some content, and cannot be subdivided.  We test one next.</p>
+                        <p>However, any division may contain a <pretext/> construct called a <q>paragraphs</q>.  It has a title and some content, and cannot be subdivided.  We test one next.  In print we use a run-in title, but that is hard to do with our tools.</p>
 
                         <paragraphs>
                             <title>A Paragraphs Heading</title>
 
-                            <p>(2019-05-27:  Have not attempted to make the title in <q>run-in</q> style yet, but it should be do-able.)  The content of a lightweight, terminal, <q>pargraphs</q> division with some extra text to run onto a new line of the BRF output that may not be indented.</p>
+                            <p>The <q>paragraphs</q> element is a lightweight division, which we realize much the same way as <q>blocks</q> elsewhere.  It is a <pretext/> invention, so no good precedent or guidance.</p>
+                            <p>This second paragraph tests that it is correct, since we want to see just which paragraphs are contained in this structure.</p>
                         </paragraphs>
+
+                        <p>This paragraph is part of the subsubsection, and not part of the <tag>paragraphs</tag> element so should clearly be outside.</p>
                     </subsubsection>
                 </subsection>
             </section>
+        </chapter>
+
+        <chapter>
+            <title>Mathematics</title>
+
+            <p>Our motivation is the automatic translation of texts in mathematics.  We will do serious testing of mathematics elsewhere, but will include some here as both demonstration and for testing.</p>
+
+            <p>The third sentence has some single-letter Latin variables, interspersed with Greek variables and other simple inline math expressions.  The single-letter variables should be italicized.  We let <m>x</m> equal the value of <m>T</m>, but not <m>\theta</m> nor the value of <m>a+b</m>, but it could also be <m>\rho</m> or <m>g</m>.</p>
+
+            <p>For the previous line, <q>x</q> and <q>T</q> should be italicized (single Latin letter variable). <q>a+b</q> is meant to not be italicized (an expression).  <q>theta</q> and <q>rho</q> should not be italicized (Greek).  The last variable is a Latin <q>g</q>, not a Greek <q>gamma.</q>  So it should simply be italicized, since it is a lone Latin letter as math.</p>
+
+            <!-- testing hacks for multi-line mathematics -->
+            <p>And a multi-row equation, authored as two <tag>mrow</tag> within a <tag>md</tag> and including alignment:<md>
+                <mrow>a^2 + b^2 &amp;= c^2</mrow>
+                <mrow>x^3 + y^3 &amp;= z^3</mrow>
+            </md>.</p>
+
+            <p>And a single displayed equation, but authored as a single <tag>mrow</tag> within a <tag>md</tag>, with alignment:<md>
+                <mrow>p^4 + q^4 &amp;= r^4</mrow>
+            </md>.  Adjust to a single displayed equation, but authored as a single <tag>mrow</tag> within a <tag>md</tag>, without alignment:<md>
+                <mrow>r^5 + s^5 = t^5</mrow>
+            </md>.  Plus as an <tag>me</tag>, which cannot have alignment:<me>p^4 + q^4 = r^4</me>.</p>
+
         </chapter>
 
         <chapter>
@@ -107,19 +144,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>We emphasize the word <em>emphasis</em>.</p>
 
-                <p>An <alert>alert</alert> is more imperative, like a warning.  Default presentation is bold-italic, but we have not figured out how to make liblouis react correctly to nesting the two.  Perhaps we need to creat a new liblouis style.  For now, just plain bold is an acceptable presentation for this element.</p>
+                <p>An <alert>alert</alert> is more imperative, like a warning.  Default presentation is bold-italic, but we have not figured out how to make liblouis react correctly to nesting the two.  Perhaps we need to create a new liblouis style.  Trying to make a new emphasis class was a failure.  Perhaps two HTML elements (bold, italic) will be better.  For now, just plain bold is an acceptable presentation for this element.</p>
 
                 <p>A <term>definition</term> mid-sentence is terminology.</p>
 
                 <p>We used <q>enclosing double quotes</q> earlier, since we knew they behaved properly.</p>
 
-                <p>Maybe <sq>enclosing single quotes</sq> are not so useful, but still necessary.  Apparently an apostrophe and a single right quote are a real problem for Braille translation (and this problem is not limited to Braille).  I think I can have <pretext/> output the Unicode dot patterns and then liblouis will create the right ASCII character for the BRF file.  Can you tell me the exact dot patterns for an opening (left) single quote and a (closing) right single quote?  This may be a place where <pretext/> can shine.</p>
+                <p>An apostrophe and a single right quote are a real problem for Braille translation (and this problem is not limited to Braille).  Maybe <sq>enclosing single quotes</sq> are not so useful, but still necessary, and that construction was very tricky since the words ended with the letter <q>s</q> and <c>liblouis</c> thought it was a (non-Braille) contraction and really wanted to use an apostrophe.  A word like <sq>quote</sq> is easier it turns out.  This is a place where <pretext/> can shine.</p>
 
                 <p>We employ a <c>heavyweight monospace font</c> for literal text, especially in technical situations.  Right now, we do not distinguish this text.  However, see the liblouis documentation for compbrl and changeTable to perhaps get <q>Computer Braille</q> for inline code.</p>
 
                 <p>A <foreign>phrase from a foreign language</foreign> is usually distinguished.</p>
 
-                <p>The title of this publication is <pubtitle>A Test Book</pubtitle>.</p>
+                <p>The title of this publication is <pubtitle>A Test Book</pubtitle>.  It appears the italic indicators got confused between a single letter, two words, and a total of three items (so a phrase).  We'll try again: <pubtitle>Introduction to Calculus for Engineers</pubtitle>. Hmm, not perfect either.  OK, now <pubtitle>One Book Title</pubtitle>.  This one has me confused.  See lists below, where behavior is better.</p>
 
                 <p>A shorter document might be referenced as a <articletitle>A Test Article</articletitle>.</p>
 
@@ -128,15 +165,37 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Esoteric: text can be grouped in <dblbrackets>double brackets</dblbrackets>.  Now simply two brackets repeated.</p>
 
                 <p>There is much more to check, but above is a good start on common constructions.  In the <pretext/> schema chase through the <q>TextLong</q> definition to find more.</p>
+
+                <p>Different indicators are used for emphasis of a letter, a word, or a phrase.  It appears a phrase is defined to be three words.  We test with the <tag>foreign</tag> element:<ul>
+                    <li>Single letter: <foreign>A</foreign></li>
+                    <li>Two words: <foreign>One Two</foreign></li>
+                    <li>Three words: <foreign>One Two Three</foreign></li>
+                    <li>Four words: <foreign>One Two Three Four</foreign></li>
+                    <li>Five words: <foreign>One Two Three Four Five</foreign></li>
+                </ul></p>
+
+                <p>Now, all over again with the <tag>pubtitle</tag> element, which is normally used to italicize titles of publications:<ul>
+                    <li>Single letter: <pubtitle>A</pubtitle></li>
+                    <li>Two words: <pubtitle>One Two</pubtitle></li>
+                    <li>Three words: <pubtitle>One Two Three</pubtitle></li>
+                    <li>Four words: <pubtitle>One Two Three Four</pubtitle></li>
+                    <li>Five words: <pubtitle>One Two Three Four Five</pubtitle></li>
+                </ul></p>
             </section>
         </chapter>
 
         <chapter>
             <title>Environments, Blocks</title>
 
-            <p><pretext/> has many chunks of text with a heading and a number.  We can proably decide to do this in a way that makes sense for mathematics texts.  Theorems are more complicated, since they have associated proofs.  We will start simple with a defintion and an example, and iterate to more types and more complicated structures.</p>
+            <p><pretext/> has many chunks of text with a heading and a number.  I call them blocks, others call them environments.  They qualify as the <q>boxed material</q> of the BANA transcription guide.  Experiments here are the <pretext/> <q>definition</q> and <q>example</q>.  Theorems are more complicated, since they have associated proofs.  We will start simple and iterate to more types and more complicated structures.</p>
 
-            <p>The <q>box lines</q> are configured and provided by liblouis.  I have intentionally used a different character for the top line versus the bottom line.  These characters can change, and if you suggested dot patterns I may be able to configure those choices.  The blank line before each seems to be non-negotiable.  Of course, we do not need to have either line at all<mdash/>the start is obvious from the heading.  But the conclusion needs some sort of device to not have it run into <q>regular</q> text following.</p>
+            <p><c>liblouis</c> allows giving the characters to use for the top and bottom line, but is a bit vague.  BANA transcription guide clearly says dot patterns 2356 and 1245 for top and bottom respectively.  In 6-dot braille these appear to be the characters seven and capital-g, which is what I have put into the <c>liblouis</c> configuration.  But the BRF file seems to end up with the characters six and open-square-bracket.  Al reports that when embossed these yield dot patterns 246 and 235 (possibly reversed), consistent with the six and open-square-bracket in the BRF file.  I've tried many things, but cannot seem to configure <c>liblouis</c> to generate the seven and capital-G, nor can I see any rhyme nor reason to the results I get when experimenting.</p>
+
+            <p>BANA is pretty clear about <q>boxed material</q>, and <c>liblouis</c> supports a style option called <q>boxline</q>.  It'll be contrary to BANA, and technically more unnatural to try to just use inline markers.  Yes, two blank lines, and two boxlines, will use more paper, but this sort of material is a key feature of PreTeXt material.  So for now, I'd lobby for following the BANA and liblouis recommendations.  (Yes, I know the paper is expensive!)  Al has agreed to this.</p>
+
+            <p>To get a blank line after the bottom line of the box, I had to use a style parameter.  The blank line after the content, and before the bottom line, strikes me as a bug.  No combination of parameters is making it go away.</p>
+
+            <p>I have put the headings of boxed material onto their own lines, which is different than print.  I think that is fine<mdash/>part of the PreTeXt philosophy is that different output formats will have different expressions of the content.  And it will be really difficult to meld the title with the first bit of content.</p>
 
             <definition>
                 <title>Right Triangle</title>
@@ -152,17 +211,57 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <example>
                 <statement>
                     <p>This is an example of an example.  We did not include a title (as we did for the definition) to test this option.</p>
-                    <p>A second paragraph of the example.  Eventually we will add a hint, and maybe two different solutions.  Perhaps each starting on a new line with text like <q>Hint</q> or <q>Hint:</q>.  Advice welcome.</p>
+                    <p>A second paragraph of the example.  Then we add a hint, and two different solutions.  Al suggests the colon.</p>
                 </statement>
+                <hint>
+                    <p>A small hint to get a student going in the right direction.  Not numbered, since it is the only one.</p>
+                    <p>A second paragraph of the hint to test formatting of a hint, answer or solution.</p>
+                </hint>
+                <solution>
+                    <p>A long complete solution.  Numbered as first.</p>
+                </solution>
+                <solution>
+                    <p>Another long complete solution.  Numbered as second.</p>
+                </solution>
             </example>
 
             <p>Final paragraph of the chapter on environments and blocks.</p>
         </chapter>
 
         <chapter>
+            <title>Verbatim Material</title>
+
+            <p>This chapter has examples of material that is meant to be a computer program, or commands typed exactly as shown.  In other words, text formatted to be used or copied literally.</p>
+
+            <p>This next paragraph is a Java computer program to write <q>Hello, World!</q></p>
+
+            <pre>
+            import javax.swing.JFrame;
+            import javax.swing.JLabel;
+            public class HelloWorld {
+              public static void main(String[] args) {
+                JFrame frame = new JFrame();
+                frame.setTitle("Hi!");
+                frame.add(new JLabel("Hello, world!"));
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+              }
+            }
+            </pre>
+
+            <p>An intervening normal paragraph.</p>
+
+            <p>Sometimes we break in the middle of a paragraph to make a small bit of displayed text that is verbatim for reasons similar to before.  Perhaps we have some commands to display.  Here are two ways to spin up a local web server, depending on if you are stuck back on Python 2 or have moved ahead to Python 3.<cd>
+                <cline>python2 -m SimpleHTTPServer</cline>
+                <cline>    python3 -m http.server</cline>
+            </cd>They are both very simple, even if only one uses that term in its name.  We indented the second one by 4 spaces simply as a test<mdash/>it doesn't mean anything.</p>
+        </chapter>
+
+        <chapter>
             <title>Lists</title>
 
-            <p>These lists can have more complicated items (structured with paragraphs), and lists can be nested.  We start simple.</p>
+            <p>These lists can have more complicated items (structured with paragraphs), and lists can be nested.  We start simple.  I cannot see a way to use <c>liblouis</c> styling to insert a blank line before and after a list, HTML empty <c>p</c> and <c>br</c> elements are not effective.</p>
 
             <p>A super-simple ordered list, which <pretext/> requires to be authored inside a paragraph.<ol>
                 <li>Create a perpendicular bisector.</li>
@@ -170,39 +269,74 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <li>Create a circle of radius <m>b</m> centered at <m>a</m>.</li>
             </ol>And this sentence finishes the paragraph holding the ordered list.</p>
 
-            <p>A super-simple unordered list, which <pretext/> requires to be authored inside a paragraph.  I have used an asterisk as the marker for the start of each list item.  Perhaps it is not necessary (given indentation?) or you may want to suggest a different character (via a dot pattern?).<ul>
+            <p>A super-simple unordered list, which <pretext/> requires to be authored inside a paragraph.  This defaults to a symbol known as a bullet or disc, which BANA transcription guide says is dot pattern 456-256.<ul>
                 <li>Copy lengths.</li>
                 <li>Bisect segments.</li>
                 <li>Create arcs.</li>
             </ul>And this sentence finishes the paragraph holding the unordered list.</p>
 
-            <p>TODO: list items structured with paragraphs, nested lists, description lists.</p>
+            <p>Two more unordered lists in this paragraph.  To make legitimate HTML, <pretext/> explodes the paragraph into three, we need to use styles to mark the lead paragraph for indentation, and mark the later ones to not have indentation.  This seems unavoidable as one step of the pipeline is doing this breakup anyway.  An unordered list with a circle as a marker (not a <em>filled</em> circle), BANA says a Grade 1 indicator first, so dot pattern 56-1246-123456:<ul label="circle">
+                <li>One with a circle</li>
+                <li>Two with a circle</li>
+                <li>Three with a circle</li>
+            </ul>Now with a solid (filled) square.  BANA says dot pattern 456-1246-3456-145, and the <c>liblouis</c> files clearly suggest a Grade 1 indicator here (dots 5-6?).  BANA suggests Grade 1 indicaor is not needed.  We can overrule <c>liblouis</c><mdash/>just a fiddle.<ul label="square">
+                <li>One with a square</li>
+                <li>Two with a square</li>
+                <li>Three with a square</li>
+            </ul>This concludes the paragraph, which will be an apparent third paragraph.</p>
+
+            <p>A <pretext/> description list has a single word, or simple phrase, which then has a definition or an explanation, which may be several paragraphs.  We render this much differently in HTML versus print, and also somewhat differently here in Braille.  Defined term is on a line of its own, in bold.  Then the actual description, which can be quite variable follows, and is indented to help convey the structure.<dl>
+                <li>
+                    <title>First Item</title>
+                    <p>This text is a description of the first item, whicn is a paragraph.</p>
+                </li>
+                <li>
+                    <title>Second Item</title>
+                    <p>Describes second item.  In a paragraph for openers.</p>
+                    <p>This is a second paragraph, helping to describe the second item of the list.</p>
+                </li>
+                <li>
+                    <title>Third Item</title>
+                    <p>Describes third item.  The descriptions are indented for each item to help keep the groupings together.</p>
+                </li>
+            </dl></p>
+
+            <p>TODO: list items structured with paragraphs, nested lists.</p>
 
         </chapter>
 
         <chapter>
             <title>Tables</title>
 
-            <p>A table of names of colors, with a title (a coming change in <pretext/>), with two rows and three columns.  Note: the title is not being displayed yet.</p>
+            <p>A table of names of colors, with a title, with three rows and five columns.  Designed to have runover lines.  The title is presently being displayed below, but can move to just prior.  Need to experiment with multi-column cells.</p>
 
+            <!-- https://digitalsynopsis.com/design/color-thesaurus-correct-names-of-shades/ -->
             <table>
                 <title>Some Colors</title>
                 <tabular>
                     <row>
                         <cell>Red</cell>
-                        <cell>Green</cell>
-                        <cell>Yellow</cell>
+                        <cell>Blood</cell>
+                        <cell>Mahogany</cell>
+                        <cell>Crimson</cell>
+                        <cell>Lipstick</cell>
+                    </row>
+                    <row>
+                        <cell>White</cell>
+                        <cell>Alabaster</cell>
+                        <cell>Chiffon</cell>
+                        <cell>Porcelain</cell>
+                        <cell>Parchment</cell>
                     </row>
                     <row>
                         <cell>Blue</cell>
-                        <cell>White</cell>
-                        <cell>Pink</cell>
+                        <cell>Admiral</cell>
+                        <cell>Cerulean</cell>
+                        <cell>Peacock</cell>
+                        <cell>Sapphire</cell>
                     </row>
                 </tabular>
             </table>
-
-            <p>Lots more to do here: a table row that exceeds the 40-character width and multi-column cells.  See how an upcoming <pretext/> implementation of a title on a table behaves here.</p>
-
         </chapter>
 
         <chapter>
@@ -223,7 +357,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>It seems that <c>liblouis</c> converts Unicode quote marks into opening and closing variants, and recognizes double versus single.  Patterns are 2-3-6 and 3-5-6 for the double quote marks, with a shift/capital indicator for the single versions.  Two tests from Alex Jordan, where we just employ our standard conversion to <q>smart</q> Unicode variants and we let <c>liblouis</c> do the rest. <q>Life is about making an impact, not making an income.</q> <sq>Whatever the mind of man can conceive and believe, it can achieve.</sq>  Here we test individual words:  <q>double</q> and <q>single</q>.  And the four relevant characters isolated inside parentheses:  (<lq/>), (<rq/>), (<lsq/>), (<rsq/>).</p>
 
-                <p>Now we try a block quotation from Dr.<nbsp/>Seuss.  We have done nothing extra to try to get the attribution correct yet, though it appears to convert the quotation dash into a hyphen (good).  Just now, when using his name, we put a non-breaking space between the abbreciation for Doctor and his surname, as we might commonly do in light of other conversions' behavior.  It seems to have become nothing special (which is also good).</p>
+                <p>Now we try a block quotation from Dr.<nbsp/>Seuss.  We have done nothing extra to try to get the attribution correct yet, though it appears to convert the quotation dash into a hyphen (good).  Just now, when using his name, we put a non-breaking space between the abbreviation for Doctor and his surname, as we might commonly do in light of other conversions' behavior.  It seems to have become nothing special (which is also good).</p>
 
                 <blockquote xml:id="blockquote-seuss">
                     <p>The problem with writing a book in verse is, to be successful, it has to sound like you knocked it off on a rainy Friday afternoon. It has to sound easy. When you can do it, it helps tremendously because it's a thing that forces kids to read on. You have this unconsummated feeling if you stop.</p>

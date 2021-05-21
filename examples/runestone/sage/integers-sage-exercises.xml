@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+
+<!--********************************************************************
+Copyright 2015 Robert A. Beezer
+
+This file is part of MathBook XML.
+
+MathBook XML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+MathBook XML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+<!-- This file was originally part of the book     -->
+<!-- (as copied on 2015/07/12)                     -->
+<!--                                               -->
+<!--   Abstract Algebra: Theory and Applications   -->
+<!--                                               -->
+<!-- Copyright (C) 2010-2014  Robert A. Beezer     -->
+
+<exercises xml:id="integers-sage-exercises">
+    <title>Sage Exercises</title>
+
+    <introduction>
+        <p>These exercises are about investigating basic properties of the integers, something we will frequently do when investigating groups.  Use the editing capabilities of a Sage worksheet to annotate and explain your work.</p>
+    </introduction>
+
+    <exercise number="1">
+        <statement>
+            <p>Use the <c>next_prime()</c> command to construct two different 8-digit prime numbers and save them in variables named <c>a</c> and <c>b</c>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="2">
+        <statement>
+            <p>Use the <c>.is_prime()</c> method to verify that your primes <c>a</c> and <c>b</c> are really prime.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="3">
+        <statement>
+            <p>Verify that <m>1</m> is the greatest common divisor of your two primes from the previous exercises.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="4">
+        <statement>
+            <p>Find two integers that make a <q>linear combination</q> of your two primes equal to <m>1</m>.  Include a verification of your result.</p>
+        </statement>
+    </exercise>
+
+
+    <exercise number="5">
+        <statement>
+            <p>Determine a factorization into powers of primes for <m>c=4\,598\,037\,234</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="6">
+        <statement>
+            <p>Write a compute cell that defines the same value of <c>c</c> again, and then defines a candidate divisor of <c>c</c> named <c>d</c>.  The third line of the cell should return <c>True</c> if and only if <c>d</c> is a divisor of <c>c</c>.  Illustrate the use of your cell by testing your code with <m>d=7</m> and in a new copy of the cell, testing your code with <m>d=11</m>.</p>
+        </statement>
+    </exercise>
+
+</exercises>

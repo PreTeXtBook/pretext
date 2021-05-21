@@ -1,0 +1,949 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<appendix xml:id="editors">
+    <title>Text Editors, Spell Check</title>
+
+    <introduction>
+        <p>This appendix has information about using various text editors efficiently with <pretext/> source, along with suggestions for spell-checking.  The choice of an editor that suits you is a big part of being a productive author.  Despite not being open source, we are partial to Sublime Text, due to its unlimited trial period, reasonable licensing (cost and terms), range of features, community support (plug-ins), and cross-platform support (Linux, Mac, and Windows).  So we lead with Sublime Text, but also include Emacs, XML Copy Editor, Atom, Visual Studio Code, and vi/vim.  A summary table of schema-aware editors can be found at <xref ref="editors-supporting-schema" />.</p>
+    </introduction>
+
+    <section xml:id="section-sublime-text">
+        <title>Sublime Text</title>
+        <author>Dave Rosoff</author>
+
+        <introduction>
+            <p>Sublime Text is a fast cross-platform editor with thousands of user-contributed packages implemented in its Python <init>API</init>. It is not free or open-source, although most of the user-contributed packages are both. Development is active as of June<nbsp />2016.</p>
+            <p>Here we outline several of the most important Sublime Text features that will help you to minimize your typing overhead and work more efficiently with your MathBook <init>XML</init> project. We also introduce the MBXTools package designed to help MathBook <init>XML</init> authors work more efficiently.</p>
+            <p>Sublime Text 2 and 3 are both available for an unlimited evaluation period, but a licence must be purchased for continued use. I have found the additional features of Sublime Text 3 to be well worth the cost of the license.</p>
+        </introduction>
+        <subsection xml:id="subsection-settings">
+            <title>Settings</title>
+            <p>Sublime Text settings are stored and managed in a collection of <init>JSON</init> files as key-value pairs, in files that have a <c>.sublime-settings</c> extension. You change the settings by visiting these files and editing the values away from their defaults.</p>
+            <p>To edit your Sublime Text settings, you can use the Preferences/Settings <mdash /> User menu (Sublime Text/Preferences<ellipsis /> on <init>OS X</init>). Make sure that when you go to edit Settings, you always choose the User option. Changes to Default settings files will be overwritten when Sublime Text updates. It is recommended to use the Default files to see what settings are available to change. There are a lot, and not all are documented.</p>
+            <p>All Sublime Text users should be aware that a particular view (buffer) may receive settings in several different ways, e.g., from global default settings, from global <init>OS</init>-specific settings, from package-provided settings, from user-provided settings, and so on.</p>
+            <p>Key bindings are also stored in files with a similar format. There
+            are only a limited number of keyboard shortcuts available, although Sublime Text does support multistep shortcuts like Emacs. If you find that you wish to reassign shortcuts, this is certainly possible through the Preferences/Key Bindings <mdash /> User menu (Sublime Text/Preferences<ellipsis /> on <init>OS X</init>).</p>
+        </subsection>
+        <subsection xml:id="subsection-package-control">
+            <title>Package Control</title>
+            <p>Sublime Text's Python <init>API</init> exposes a lot of the Sublime Text internals to plugin and package authors. Packages extend Sublime Text's functionality, much like Emacs major modes. A package usually consists of some Python scripts that define Sublime Text events and actions, some text-based configuration files (<init>XML</init>/<init>JSON</init>/<init>YAML</init> files defining language syntax, symbol recognition, custom snippet insertion triggers and contexts, keybindings for new and old commands, <etc />), and perhaps some other stuff too. These typically get bundled into a <c>.zip</c> archive that is disguised with the unusual extension <c>.sublime-package</c>. These archives live in the Packages directory, accessible via the Preferences menu (the Sublime Text/Preferences menu on <init>OS X</init>). Sublime Text monitors the <c>Packages</c> directory for changes and reloads all affected plugins on the fly.</p>
+            <p>The first thing you should do after installing Sublime Text is install the Package Control package. This package manager operates within Sublime Text to automatically fetch updates for packages you have installed (unless you disable this feature). You can also list currently installed packages, find new packages to investigate, remove packages, <etc /></p>
+            <p>Thousands of user-contributed packages are available for easy installation via Package Control. It is possible to maintain packages by hand, since most package authors publish via GitHub, but Package Control is the universally recommended method of obtaining, managing, and removing packages for your installation.<ol>
+                <li><p>Visit the <url href="https://packagecontrol.io/">Package Control download site</url>.</p></li>
+                <li><p>Find the Sublime Text console command (make sure the correct version of Sublime Text is selected) and copy it to the clipboard.</p></li>
+                <li><p>Open the Sublime Text console (<c>Ctrl-`</c>) and paste the command into the window that appears, then press <c>Enter</c>.</p></li>
+            </ol></p>
+            <p>Having installed Package Control, you can use the command palette to deploy its commands, such as Install Package, List Packages, and Remove Package. See the documentation for more. A few packages that are especially useful are recommended throughout this section, and summarized in <xref ref="subsection-recommended-packages" />.</p>
+        </subsection>
+        <subsection xml:id="subsection-keyboard-shortcuts">
+            <title>(*) Keyboard Shortcuts</title>
+            <p>To be written.</p>
+        </subsection>
+        <subsection xml:id="subsection-project-management">
+            <title>Project Management</title>
+            <introduction>
+                <p>Like many modern editors, Sublime Text has good project management features. These allow files that are part of a larger project to work together. For example, Sublime's Goto Anything command allows quick access to any file in a project. The Find in Project command permits users to search and replace (with or without regular expressions) across an entire project. Matches are displayed in a text buffer and double-clicking opens the relevant file at the appropriate position.</p>
+                <p>The sidebar provides a convenient view of all of the files and directories in a project<mdash />or, if you like, a filtered view, where files of your choice are excluded. The MBXTools package (<xref ref="subsection-mbxtools" />) also makes some use of project-specific settings in order to provide some of its functionality.</p>
+            </introduction>
+            <subsubsection xml:id="subsubsection-the-open-folder-command">
+                <title>The Open Folder Command</title>
+                <p>The easiest way to make use of the project management functionality is to store related files in a single directory and its subdirectories. If you then use the File/Open Folder<ellipsis /> command, the entire directory is opened and all its subdirectories and files are shown in the sidebar. You can toggle the sidebar with either the command palette or directly with <c>Ctrl+K, Ctrl+B</c> (<c>Cmd+K, Cmd+B</c> on <init>OS X</init>).</p>
+                <p>By making use of this command you are already using project management, even if you never save your project. Sublime Text always has an implicit project open if you don't open an explicit one. This is good enough for many users a lot of the time, since it provides the most useful feature (Find/Find in Project). The Goto/Go To Symbol in Project command is also useful, but not fully implemented in MBXTools (<xref ref="subsection-mbxtools" />). Some of the benefits of explicit project management are outlined below.</p>
+            </subsubsection>
+            <subsubsection xml:id="subsubsection-explicit-projects">
+                <title>Explicit Projects</title>
+                <p>To save your project explicitly, use the Project menu to choose Save As Project<ellipsis /> and choose an appropriate name and location. For a MathBook <init>XML</init> project, this would probably be the same name and location as the document root file. Use the Project menu commands to open and close your project.</p>
+                <p>There are a few benefits to using an explicit project to group files.<ul>
+                    <li><p>You can group together files and folders in different parts of the file system, instead of being restricted to subtrees.</p></li>
+                    <li><p>You can have project-specific settings that are different from Sublime Text's defaults and different from your user preferences (<xref provisional="subsection-settings" />).</p></li>
+                    <li><p>Sublime's project workspaces will remember which files you had open when you last closed the project, and at which positions.</p></li>
+                    <li><p>If you get very fancy, you can have multiple workspaces for the same project, with different filters and views for different purposes.</p></li>
+                    <li><p>It is fine to include <c>.sublime-project</c> files in Git repositories, but <c>.sublime-workspace</c> files should <alert>never</alert> be so included (according to the Sublime Text documentation).</p></li>
+                </ul></p>
+            </subsubsection>
+            <subsubsection xml:id="subsubsection-using-the-sidebar">
+                <title>Using the Sidebar</title>
+                <p>The project sidebar allows you to view the entire directory tree (rooted at the folder you opened with the Open Folder command), or, if you've opened an explicit project as described above, all of its files and folders. You can use the sidebar to copy, move, rename, delete, and duplicate files, for example, as well as opening them.</p>
+                <p>The package SideBarEnhancements is highly recommended (install via Package Control). It makes the sidebar much more useful.</p>
+                <p>An alternative to the sidebar that Emacs users especially will find helpful is the <url href="https://github.com/daverosoff/dired">dired package</url>. The link is to a git repository since the package is no longer available from Package Control. This package allows you to browse the directory tree in a Sublime Text buffer. You can rename and move files within it<mdash />using all your favorite Sublime commands, including multiple selections (<xref ref="subsection-multiple-selections" />). You might also try the SublimeFileBrowser package, which is actively maintained, available in Package Control, and seems to provide similar functionality.</p>
+            </subsubsection>
+        </subsection>
+        <subsection xml:id="subsection-multiple-selections">
+            <title>Multiple selections</title>
+            <p>Multiple selections are the single most useful and irreplaceable feature of Sublime Text, the one that will keep you coming back. From the documentation:</p>
+            <blockquote>
+                <p>Any praise about multiple selections is an understatement.</p>
+            </blockquote>
+            <p>The base functionality of multiple selections is simple. Hold down the <c>Ctrl</c> key (<c>Cmd</c> on <init>OS X</init>), and click somewhere in the open view to get a second cursor. Continue to add more cursors. All of them will behave together when you type: text will be inserted, most snippets or other text commands function as usual, etc. Even mouse commands work in an intuitive way with multiple selections. </p>
+            <p>It is hard to explain exactly what makes multiple selections so powerful. You just have to try it for yourself. Here is a typical example. In a structured document, many bits of text occur quite frequently<mdash />element and attribute names, for example. You may want to update several occurrences of a fragment at once<mdash />making several identical changes. Sublime's Quick Add Next command (<c>Ctrl+D</c>/<c>Cmd+D</c>) makes this a snap.<ol>
+                <li>
+                    <p>Place the caret somewhere in the word you'd like to modify.</p>
+                </li>
+                <li>
+                    <p>Use Quick Add Next to expand your (empty) selection to the current word.</p>
+                </li>
+                <li>
+                    <p>Use Quick Add Next again to add the next instance to the selection, which will then typically be disconnected.</p>
+                </li>
+                <li>
+                    <p>Continue to Quick Add Next as many times as you like. Use Quick Skip Next (<c>Ctrl+K, Ctrl+D</c>/<c>Cmd+K, Cmd+D</c>) to jump over instances you would like to leave alone. If you go too far and select in error, hit <c>Ctrl+U/Cmd+U</c> to undo.</p>
+                </li>
+                <li>
+                    <p>Make your modification, only one time.</p>
+                </li>
+            </ol></p>
+            <p>Another example that occurs frequently when authoring <init>XML</init> is when you use the Wrap with Tag snippet (<c>Alt+Shift+W</c>/<c>Ctrl+Shift+W</c>). This snippet wraps the selection(s) in a <tag>p</tag> tag, with the tag name highlighted in both the start and end tags. If the <c>p</c> element is not what you wanted, just type. Both tags are replaced. This is a huge benefit to the <init>XML</init> author that makes essential use of multiple selections, even though you are barely aware of this as you use the feature.</p>
+            <p>Column selection allows you to select a rectangular area of a file.
+            This is unbelievably useful when editing a structured document. There
+            are lots of ways to do it (<url
+            href="http://docs.sublimetext.info/en/latest/editing/editing.html">see the Sublime Text documentation</url> for an almost exhaustive list), but the most frequently used is to hold down <c>Shift</c> while clicking and dragging with the right mouse button (on <init>OS X</init>, hold down <c>Option</c> while dragging with the right mouse button). See the documentation for keyboard-based shortcuts.</p>
+            <p>Column selection becomes even more useful when used in combination with the keyboard shortcuts for moving and selecting, such as <c>Ctrl+Shift+Right</c> (select to end of word) and <c>Shift+End</c> (select to end of line).</p>
+            <p>Yet another example of the appallingly great utility of multiple selection comes when copying and pasting from a different file format. Suppose you have copied some lines of text and wish each such line to become a list item in your MathBook <init>XML</init> source.<ol>
+                <li>
+                    <p>Use column selection, as described above, to select each line individually.</p>
+                </li>
+                <li>
+                    <p>Use Wrap with Tag to wrap each of the selected lines with matched begin/end <tag>li</tag> tags, all at once.</p>
+                </li>
+                <li>
+                    <p>Now you have to select the lines again, to wrap them with matched begin/end <tag>p</tag> tags. First, hit <c>Shift+End</c> to select to end of line.</p>
+                </li>
+                <li>
+                    <p>If your lines are wrapped, you may need to hit <c>Shift+End</c> again to get to the end of the wrapped lines.</p>
+                </li>
+                <li>
+                    <p>Now you've selected too far: the <c>&lt;/li&gt;</c> are selected as well. Hold down <c>Ctrl+Shift</c> and hit the left arrow twice (unselect by word). (After a little practice, steps like this seem automatic.)</p>
+                </li>
+                <li>
+                    <p>Use Wrap with Tag to wrap each of the selected lines with matched begin/end <tag>p</tag> tags, all at once.</p>
+                </li>
+            </ol></p>
+            <p>This does take a little mouse-work, but the keystroke savings can be considerable. (The Emmet package, described in <xref ref="subsection-emmet" />, provides an even quicker way to do this task and much more complicated ones.)</p>
+            <p>There are so many incredibly handy ways to use multiple selections that we will forgo any further examples to leave the reader the pleasure of discovering her own favorites. One particularly helpful package is Text Pastry, which provides some autonumbering and text insertion commands that work nicely with multiple selections. There are also a handful of packages that extend multiple selection functionality, such as PowerCursors and MultiEditUtils. PowerCursors allows you to add cursors and manipulate them without using the mouse. MultiEditUtils provides additional text processing commands designed to work with multiple selections.</p>
+        </subsection>
+        <subsection xml:id="subsection-emmet">
+            <title>Emmet</title>
+            <p>Emmet is the most downloaded plugin for Sublime Text (1.82 million installs via Package Control). It is mostly used by HTML and CSS authors and provides a lot of functionality for them. It is also useful for writing <init>XML</init>, as we see below. The main benefits of working with Emmet are ease of tag creation, manipulation, and removal.</p>
+            <p>Emmet by default overrides Sublime's binding for the <c>Tab</c> key, endowing it with new behavior (the command Expand Abbreviation). This new behavior is to create a matching <init>XML</init> tag pair for whatever word is to the left of the caret, or with whatever words are selected. For example, if you were to type <q>ol</q> and press the <c>Tab</c> key, the resulting text would be<cd>&lt;ol&gt;&lt;/ol&gt;</cd>with the caret positioned between the two newly created tags. Pressing <c>Tab</c> a further time moves the caret to the right of the end tag.</p>
+            <p>Emmet will produce any word it does not recognize into a matched tag pair when the Expand Abbreviation command is run. Some <init>XML</init> elements are empty, though. Within a matched tag pair, the command Split/Join Tag (<c>Ctrl+Shift+`</c>/<c>Cmd+Shift+`</c>) will contract it into an empty tag, removing any text between the existing begin and end tags. (If the caret is <em>inside</em> a tag for an empty element, this command replaces the empty element with a matching begin/end tag pair.)</p>
+            <p>The default behavior (creating tag pairs whenever <c>Tab</c> is pressed) interferes with Sublime Text's usual Tab-completion, which may be undesirable. It may be disabled by setting<cd>"disabled_keymap_actions": "expand_abbreviation_by_tab"</cd>in the Preferences/Package Settings/Emmet/Settings <mdash /> User file. The functionality of Expand Abbreviation will still be available through <c>Ctrl+E</c>.</p>
+            <p>For a more involved example of abbreviations, suppose you have pasted the items of an ordered list. Now you need to structure it with <c>ol</c>, <c>li</c>, and so on.</p>
+            <pre>
+                Lists are often good.
+                You can provide list items with &lt;c&gt;@xml:id&lt;/c&gt;.
+                You probably don't want to number them, though.
+            </pre>
+            <p>The desired output is:</p>
+            <pre>
+                &lt;ol&gt;
+                    &lt;li xml:id="item1"&gt;Lists are often good.&lt;/li&gt;
+                    &lt;li xml:id="item2"&gt;You can provide list items with &lt;c&gt;@xml:id&lt;/c&gt;.&lt;/li&gt;
+                    &lt;li xml:id="item3"&gt;You probably don't want to number them, though.&lt;/li&gt;
+                &lt;/ol&gt;
+            </pre>
+            <p>Using Emmet, one produces it by executing the Wrap as you Type command (<c>Ctrl+Shift+G</c>/<c>Ctrl+W</c>) and entering the following expression in the minibuffer.</p>
+            <pre>
+                ol&gt;li[xml:id=item$]*&gt;p
+            </pre>
+            <p>The <c>&gt;</c> symbol denotes a child element, the square brackets (with or without assignment) denote an attribute list, the <c>$</c> provides the line-based numbering, and the <c>*</c> specifies wrapping each selected line with the indicated subtree (so each line is wrapped with <tag>li</tag><tag>p</tag>, instead of the entire selection).</p>
+            <p>Emmet can produce a large hierarchy of nested <init>XML</init> tags at various levels using this abbreviation syntax. For example, suppose you know that you will need to produce a tag structure of the following form.</p>
+            <pre>
+                &lt;section xml:id=""&gt;
+                    &lt;introduction&gt;
+                        &lt;p&gt;&lt;/p&gt;
+                    &lt;/introduction&gt;
+                    &lt;subsection xml:id=""&gt;
+                        &lt;p&gt;&lt;/p&gt;
+                        &lt;p&gt;&lt;/p&gt;
+                        &lt;figure&gt;&lt;/figure&gt;
+                        &lt;p&gt;&lt;/p&gt;
+                        &lt;ol&gt;
+                            &lt;li&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;/li&gt;
+                        &lt;/ol&gt;
+                    &lt;/subsection&gt;
+                    &lt;conclusion&gt;
+                        &lt;p&gt;&lt;/p&gt;
+                    &lt;/conclusion&gt;
+                &lt;/section&gt;
+            </pre>
+            <p>Admittedly, this is a bit much, but it makes the point. The Emmet <q>abbreviation</q> for this structure is:</p>
+            <pre>section[xml:id]&gt;introduction&gt;p^(subsection[xml:id]&gt;p*2+figure+p+ol&gt;li*3)^^conclusion&gt;p</pre>
+            <p>Upon typing this string and placing the caret to the right of it, hit <c>Ctrl+E</c> (or <c>Tab</c>, if you didn't disable the Emmet default). The entire tree structure is created immediately, with tab stops for the missing attribute values and for each matching begin/end pair.</p>
+            <p>The Expand Abbreviation As You Type command allows you to tweak such abbreviations interactively. Hit <c>Ctrl+Alt+Enter</c> and type the expression above into the minibuffer at the bottom of the window, watching the tree appear as you type. </p>
+            <p>Emmet is a very powerful package that can do much more than is outlined here. However, it is by default mostly adapted to writing CSS and HTML. Customizing it to work more directly with MathBook <init>XML</init> is an ongoing project. You can discover more about Emmet by examining the <url href="http://docs.emmet.io/">Emmet documentation</url> or poking around in the Settings and Keymap files.</p>
+        </subsection>
+        <subsection xml:id="subsection-mbxtools">
+            <title>MBXTools<mdash />a Sublime Text package for MathBook <init>XML</init></title>
+            <introduction>
+                <p>MBXTools is a Sublime Text package designed to assist authors using MathBook <init>XML</init>. It is very experimental and may behave unexpectedly.</p>
+                <p>The package owes its inspiration and much of its code to the excellent <url href="https://github.com/SublimeText/LaTeXTools">LaTeXTools</url> package. Please let the author know of any bugs you find or any features you would like to see included in MBXTools by <url href="https://github.com/daverosoff/mbxtools/issues">creating a GitHub issue</url>.</p>
+            </introduction>
+            <subsubsection xml:id="subsubsection-mbxtools-install">
+                <title>Installation</title>
+                <paragraphs xml:id="paragraphs-mbxtools-install-via-package-control">
+                    <title>via Package Control</title>
+                    <p>It is recommended to install MBXTools via <url href = "https://packagecontrol.io">Package Control</url>. If you have not installed Package Control yet, you should do that first (and restart Sublime Text afterwards).</p>
+                    <p>After Package Control is installed, use the <c>Install Package</c> command to search for the MBXTools package, and select it from the Quick Panel to install. This method of installation allows Package Control to automatically update your installation and show you appropriate release notes.</p>
+                </paragraphs>
+                <paragraphs xml:id="paragraphs-mbxtools-install-via-git">
+                    <title>via git</title>
+                    <p>You may also install MBXTools via <c>git</c>. Change directories into your <c>Packages</c> folder. To find the <c>Packages</c> folder, select Browse Packages from the Preferences menu (from the Sublime Text 3 menu on OS X). Make sure you are in the <c>Packages</c> folder and <em>not</em> <c>Packages/User</c>.</p>
+                    <p>Then, run<cd>git clone https://github.com/daverosoff/MBXTools.git</cd>and restart Sublime Text (probably not necessary).</p>
+                </paragraphs>
+            </subsubsection>
+            <subsubsection xml:id="mbxtools-usage">
+                <title>Usage</title>
+                <p>You can activate the package features by enabling the MathBook <init>XML</init> syntax. The syntax definition looks for <c>.mbx</c> file extensions, which most of us do not use (yet?). If your MathBook <init>XML</init> files end with <c>.xml</c>, you will either need to add a comment to the first line of each file (after the <init>XML</init> declaration):<cd>&lt;!-- MBX --&gt;</cd>or you will need to enable the syntax manually using the command palette. To enable it manually, open a MathBook <init>XML</init> file and press <c>Ctrl+Shift+P</c> (<c>Cmd+Shift+P</c> on <init>OS X</init>) and type <c>pretext</c>. Select <q>Set Syntax: MathBook <init>XML</init></q> from the list of options.</p>
+                <p>You should see the text <q>MathBook <init>XML</init></q> in the lower right corner if you have the status bar visible (command palette: Toggle Status Bar).</p>
+                <p>There are only a few features implemented so far.<ol>
+                    <li>
+                        <p>If you have some sectioning in your MBX file, hit <c>Ctrl+R</c> (<c>Cmd+R</c> on <init>OS X</init>) to run the Go To Symbol command. You should see a panel showing all the divisions' <attr>xml:id</attr> names.</p>
+                    </li>
+                    <li>
+                        <p>If you have been using <attr>xml:id</attr> to label your stuff, try typing <c>&lt;xref ref="</c> (the beginning of a cross-reference). Sublime Text should show you a panel containing all <attr>xml:id</attr> values along with the elements they go with. Choose one to insert it at the caret and close the <c>xref</c> tag. Alternatively, type <c>ref</c> and hit <c>Tab</c> to activate the <c>xref</c> snippet. Then hit <c>Ctrl+l</c> followed by <c>x</c> or <c>Ctrl+l</c> followed by <c>Ctrl+Space</c> to bring up the completions menu. There are several variants of the <c>ref</c> snippet, namely <c>refa</c>, <c>refp</c>, and <c>refpa</c>.</p>
+                    </li>
+                    <li>
+                        <p>Type <c>chp</c>, <c>sec</c>, <c>ssec</c>, or <c>sssec</c> and hit <c>Tab</c> to activate the division snippets. A blank <c>title</c> element is provided and the cursor positioned within it. As you type, the <attr>xml:id</attr> field for the division is filled with similar text mirroring the title you are entering.</p>
+                    </li>
+                </ol></p>
+            </subsubsection>
+            <subsubsection xml:id="mbxtools-known-issues">
+                <title>Known issues</title>
+                <p><ol>
+                    <li>
+                        <p>When manually adding an <c>xref</c> (not using the snippets or autocomplete), you will frequently see a spurious <q>Unrecognized format</q> error.</p>
+                    </li>
+                    <li>
+                        <p>The <c>ref</c> snippet does not bring up the quick panel. Should it?</p>
+                    </li>
+                    <li>
+                        <p>Recursive search through included files for labels is not yet implemented.</p>
+                        <p>This will only work for <c>xref</c> completion, not Go To Symbol.</p>
+                    </li>
+                    <li>
+                        <p>Nothing has been tested on OS X or Linux.</p>
+                    </li>
+                </ol></p>
+            </subsubsection>
+        </subsection>
+        <subsection xml:id="subsection-sublime-linter">
+            <title>(*) Sublime Linter</title>
+            <p>To be written.</p>
+        </subsection>
+        <subsection xml:id="subsection-recommended-packages">
+            <title>Recommended Packages</title>
+            <p><ol>
+                <li><p>Package Control</p></li>
+                <li><p>Emmet</p></li>
+                <li><p>SideBarEnhancements</p></li>
+                <li><p>PowerCursors</p></li>
+                <li><p>MultiEditUtils</p></li>
+                <li><p>Text Pastry</p></li>
+                <li><p>Git or SublimeGit</p></li>
+                <li><p>SublimeLinter</p></li>
+                <li><p>MBXTools</p></li>
+            </ol></p>
+        </subsection>
+    </section>
+
+    <section xml:id="aspell">
+        <title>Aspell</title> <!-- lowercase "s" -->
+
+        <p>Aspell is a spell-checker which you can easily configure to skip every piece of text used as a name of an <init>XML</init> element, and to skip <pretext/> elements that are likely to contain text that is not really made up of words and sentences.  For example, the element <tag>chapter</tag> might not be flagged by some mainstream spell checkers, but most likely the element <tage>mdash</tage> will be flagged by every spell checker, including the default configuration of Aspell.  And your <tag>m</tag> elements are full of <latex/>, not words.  Unfortunately, Aspell will not follow your <c>xi:xinclude</c> directives, so you need to run it against each of your files if you have modularized your source.  A command-line invocation would like like:<cd>
+            <cline>aspell -c ~/aota/src/fish.xml</cline>
+        </cd></p>
+
+        <p>Installation on Linux should be straightforward through your distribution's package manager.  On a Mac, the executable, and a dictionary for your language, can be installed easily via MacPorts (<xref provisional="macports"/>).  Recent improvements on Windows (ca. 2019-06-06) perhaps imply that <init>WSL</init> or the Ubuntu Linux install may provide an easy avenue.  Please report steps that result in a successful Windows installation, so we can include them here.</p>
+
+        <p>Configuration is achieved via a <q>hidden</q> file at the top of your home directory, namely <c>.aspell.conf</c>.  A Mac will try to keep you away from hidden files, which are the ones whose name begins with a period.  Let SublimeText give you an assist here.  In <xref ref="aspell-configuration"/> we show a first run at a useful configuration file.  You <em>definitely</em> want to add the <init>SGML</init> filter, since this is what tells Aspell that you are working on <init>XML</init> files<fn><init>SGML</init> is the precursor of <init>XML</init>.</fn>, so that all element names, attributes, etc. will not be checked.  The remainder is a suggested list of <pretext/> elements to skip.  Suggestions for additions are welcome here.</p>
+
+        <listing xml:id="aspell-configuration">
+            <caption>Aspell Configuration File</caption>
+
+            <program>
+                <input>
+                add-filter sgml
+
+                # elements with lots of code
+                # but not "pre", since it is like a "p"
+                add-sgml-skip c
+                add-sgml-skip cd
+                add-sgml-skip program
+                add-sgml-skip console
+                add-sgml-skip sage
+
+                # image formats
+                add-sgml-skip latex-image
+                add-sgml-skip asymptote
+                add-sgml-skip sageplot
+
+                # elements that display XML elements
+                add-sgml-skip tag
+                add-sgml-skip tage
+                add-sgml-skip attr
+
+                # initialisms and friends
+                add-sgml-skip init
+                add-sgml-skip acro
+                add-sgml-skip abbr
+
+                # math (latex)
+                add-sgml-skip m
+                add-sgml-skip me
+                add-sgml-skip men
+                add-sgml-skip md
+                add-sgml-skip mdn
+                add-sgml-skip usage # in "notation"
+
+                # not really content, by and large
+                add-sgml-skip docinfo
+                </input>
+            </program>
+        </listing>
+
+        <p>You can run Aspell in a sort of batch, non-interactive mode by adding the <c>-a</c> switch and then providing your source on standard input and directing results from standard output.  But I do not find it very useful.</p>
+    </section>
+
+    <section xml:id="emacs">
+        <title>emacs</title>
+
+        <p>Jason Underdown reports on 2016-05-12 that emacs' <url href="https://www.gnu.org/software/emacs/manual/html_mono/nxml-mode.html" visual="www.gnu.org/software/emacs/manual/html_mono/nxml-mode.html">nXML mode</url> works well with a schema, and Mitch Keller reports on 2021-04-18 that specifically a <acro>RELAX-NG</acro> schema may be used.  The two versions of the <acro>RELAX-NG</acro> schema for <pretext/> can be found at<cd>
+            <cline>mathbook/schema/pretext.rng</cline>
+            <cline>mathbook/schema/pretext.rnc</cline>
+        </cd>The first is the <q>real</q> version, while the second is an entirely equivalent (compact) syntax that is meant to be a bit more human-readable, so perhaps either may be employed.</p>
+
+        <p>On 2021-04-18, Mitch Keller reports success with placing the following <c>schemas.xml</c> file in his <pretext/> source file directories.  Note that you may need to adjust the path in the <attr>uri</attr> attribute, and the <attr>pattern</attr> attribute implies that Mitch has used a <c>.ptx</c> suffix for all his source filenames.  If you are already using emacs, you should have no trouble making the necessary adjustments.</p>
+
+        <pre><![CDATA[
+        <?xml version="1.0"?>
+        <locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0">
+          <uri pattern="*.ptx" uri="../../mathbook/schema/pretext.rnc"/>
+        </locatingRules>
+        ]]>
+        </pre>
+
+        <blockquote>
+            <p>You simply put your cursor at any point in the document, start a new tag with <c>&lt;</c> and then call the <c>completion-at-point</c> function (I bound it to the key-chord: <c>C-&lt;return&gt;</c>) to get a list of possible completions. Or you can start typing a few characters to narrow the list of possibilities. It will also let you know if the element you are trying to insert is invalid.</p>
+            <attribution>Jason Underdown</attribution>
+        </blockquote>
+    </section>
+
+    <section xml:id="xmlcopyeditor">
+        <title>XML Copy Editor</title>
+
+        <p>Michael Doob reports on 2017-02-03 that <url href="http://xml-copy-editor.sourceforge.net/">XML Copy Editor</url><fn><c>xml-copy-editor.sourceforge.net</c></fn> works well, in particular on Windows.  This is an open source program, for Windows and a variety of popular Linux distributions, that supports both <init>DTD</init> and <acro>RELAX-NG</acro> schemas.  It is less of a general programmer's editor and more like dedicated tools for working strictly with <init>XML</init> documents.</p>
+    </section>
+
+    <section xml:id="atom">
+        <title>Atom</title>
+        <author>Oscar Levin</author>
+        <p>
+            An open source alternative to Sublime Text with many of the same features is <url href="https://atom.io">Atom</url><fn><c>atom.io</c></fn>, made by the folks at GitHub.  Much of the advice given in <xref ref="section-sublime-text"/> also applies to Atom, although the shortcuts and packages might be slightly different.  Atom is available for Windows, Mac, and Linux.
+        </p>
+
+        <p>
+            There are two packages specifically for <pretext /> that can speed up writing.  First, <url href="https://atom.io/packages/language-pretext">language-pretext</url><fn><c>atom.io/packages/language-pretext</c></fn> provides syntax highlighting and <em>snippets</em> for <pretext /> documents.  This should highlight math enclosed in <tag>m</tag> tags and in fact allow you to use <latex /> snippets there.  The <pretext /> snippets allow you to, for example, start typing <c>example</c> and upon hitting return or tab, expand to the tags needed to write an example.  Particularly helpful are the snippets for <tag>p</tag>, <tag>li</tag>, and <tag>m</tag>, as these put your cursor in the right spot (hitting tab again should pop you out of the <tag>m</tag> tags).
+        </p>
+
+        <p>
+            Second, <url href="https://atom.io/packages/linter-spell-pretext">linter-spell-pretext</url><fn><c>atom.io/packages/linter-spell-pretext</c></fn> provides spell checking that is <pretext/> aware (so it should only check your text, not tags for spelling errors).  This requires the linter-spell package, which in turn requires that you have aspell or hunspell installed.
+        </p>
+    </section>
+
+    <section xml:id="vscode">
+        <title>Visual Studio Code</title>
+        <author>Oscar Levin</author>
+        <p>
+            VS Code is a free and open source, cross platform text editor from Microsoft, with many of the same features as Sublime Text and Atom.  The package <url href="https://marketplace.visualstudio.com/items?itemName=oscarlevin.pretext-tools">PreTeXt-tools</url><fn><c>marketplace.visualstudio.com/items?itemName=oscarlevin.pretext-tools</c></fn> provides highlighting and snippets for <pretext/> by extending the XML language support of VS Code.
+        </p>
+    </section>
+
+    <section xml:id="vi">
+        <title>vi, vim</title>
+
+        <subsection>
+        <title>Using vi and <pretext /> together</title>
+            <introduction>
+            <p>
+            Any smart editor, and vi is no exception, allows the addition of new commands
+            to make repetitive tasks easier. Since creating documents
+            with <pretext /> markup often is repetitive, it makes sense to
+            explore the techniques of creating additional commands in vi to make editing
+            easier.
+            </p>
+            <p>
+            The expectation for this section is that the reader is able to
+            use vi to create and edit files, but no greater depth of knowledge
+            is assumed. The term <em>vi</em> is meant to be inclusive, that is,
+            it includes vim, gvim and the like.
+            </p>
+            </introduction>
+
+            <subsubsection xml:id="vi-modes">
+            <title>Modes of vi: Command, Normal, and Insert</title>
+            <p>
+            One of the most fundamental properties of vi is that every editing task
+            may be accomplished using the keyboard. For different editing contexts,
+            it is advantageous to have the keyboard strokes have different meaning;
+            these different interpretations are called the <em>modes</em> of vi.
+            </p>
+
+            <p>
+            Here are the pertinent modes of vi:
+            <ul>
+            <li> <em>Normal mode: </em> This mode is for changing position within the file.
+                For example, <c>j</c> moves down, <c>2w</c> moves forward two words,
+                and <c>-2}</c> moves backwards two paragraphs. It is also used for block
+                operations on text:
+                <c>-3dd</c> is used to delete three previous lines,
+                or <c>2.yy</c> will yank the next two sentences.
+                Usually vi starts in normal mode.
+            </li>
+            <li> <em>Insert mode: </em> This mode is for inserting new text into the file.
+                Typing <c>Galloping Gertie leapt into the air.</c> causes that text
+                to be inserted at the current position in the file.
+            </li>
+            <li> <em>Command mode: </em> This mode is to execute commands.
+                Typing <c>/abc</c> in normal mode initiates a forward search for the
+                first occurrence of
+                <q>abc</q> via the command mode. Similarly <c>:w</c> will use command
+                mode to write out the current working material (buffer) to the disk.
+            </li>
+            </ul>
+            </p>
+
+            <p>
+            Now a quick review of the keys used to move between modes:
+            From a given position in a file in Normal mode, using
+            <kbd>i</kbd>   or <kbd>a</kbd>  will change to Insert mode and
+            insert text before or after that position.
+            Similarly, <kbd>I</kbd> or <kbd>A</kbd> will insert text in front of or
+            directly following the current line,
+            and <kbd>O</kbd> or <kbd>o</kbd> will insert text above or below
+            the current line. Returning to Normal mode is done using
+            <kbd>Esc</kbd>.
+            </p>
+
+            <p>
+            If <kbd>/</kbd>, <kbd>?</kbd>, or <kbd>:</kbd> is typed when in
+            normal mode, a small one-line window opens up (called the <em>command line</em>)
+            to receive text. This entered text is terminated by <kbd>Enter</kbd>.
+            The <kbd>/</kbd> or <kbd>?</kbd> initiates a forward or backward search
+            for the entered text. The <kbd>:</kbd> sends the entered text to the
+            vi program for further processing.
+            </p>
+
+            <p>
+            <xref ref="vimodesfigure" />  show the keys used to move between modes.
+            </p>
+
+            <figure xml:id="vimodesfigure">
+            <caption>Keys for moving between different modes in vi</caption>
+                <image xml:id="vimodes">
+                <asymptote>
+                unitsize(1.0cm);
+                void modebox(string s, pair P) {
+                label("\setlength{\fboxrule}{2.0pt}
+                \framebox[72pt]{\vbox{\begin{center}"+s+"\\mode\end{center}}}",P);
+                }
+                void keybox(string s, pair C, real w, real h, real r) {
+                  real c1=C.x, c2=C.y;
+                  pair []  X = {
+                    (c1-w+r,c2-h),   (c1+w-r,c2-h), (c1+w-r,c2-h+r), (c1+w,c2+h-r),
+                    (c1+w-r,c2+h-r), (c1-w+r,c2+h), (c1-w+r,c2+h-r), (c1-w,c2-h+r),
+                    (c1-w+r,c2-h+r)
+                  };
+                  path P =
+                    X[0]--X[1]-- arc(X[2],r,270,0,direction=CCW)--
+                    X[3]-- arc(X[4],r,0,90)--
+                    X[5]-- arc(X[6],r,90,180)--
+                    X[7]-- arc(X[8],r,180,270)
+                    --cycle;
+                  filldraw(shift(.05,-.05)*P,gray);
+                  filldraw(P,lightgray);
+                  label("\footnotesize "+s,C);
+                }
+                pair C=(0,0), N=(5,0), I=(10,0); //LL of Control, Normal, Insert boxes
+                modebox("Command",C);
+                modebox("Normal",N);
+                modebox("Insert",I);
+                pair L=(1.5,0.3), R=(6.5,0.3), XD=(2.2,0), YD=(0,-0.7);
+                draw (L..L+XD,Arrow);
+                draw (L+YD+XD..L+YD,Arrow);
+                draw (R..R+XD,Arrow);
+                draw (R+YD+XD..R+YD,Arrow);
+                real w=0.25, h=0.27, r=0.12; // default width, height, radius of curvature
+                keybox("/",    L+0.5*XD+2*YD,  w,     h,r);
+                keybox("?",    L+0.5*XD+3.0*YD,w,     h,r);
+                keybox(":",    L+0.5*XD+4*YD,  w,     h,r);
+                keybox("Esc",  R+0.5*XD+2*YD,  w+0.12,h,r);
+                keybox("Enter",L+0.5*XD-1.5*YD,w+0.3, h,r);
+                keybox("i",    R+0.5*XD-1.0*YD,w,     h,r);
+                keybox("a",    R+0.5*XD-2.0*YD,w,     h,r);
+                keybox("o",    R+0.5*XD-3.0*YD,w,     h,r);
+                </asymptote>
+                </image>
+            </figure>
+
+            <p>
+            An exclamation point prefix  <c>!</c> in Command mode
+            sends that command to the operating system.
+            For example, entering  <c>:!date</c> will cause the results
+            of the operating system command <c>date</c> to be displayed
+            on the command line. In addition the percent character
+            <c>%</c> gets expanded to the name of the file being edited.
+            If your operating system uses <c>ls -l</c> to list file information,
+            then <c>:!ls -l %</c> will give the properties of the file being edited.
+            </p>
+            </subsubsection>
+
+            <subsubsection>
+            <title>Using :set</title>
+            <p>
+            The Command mode in vi allows users to change their interaction with the editor.
+            (Remember that entering <c>:</c> changes to Command mode,
+            and any text string entered in Command mode is terminated by <kbd>Enter</kbd>.)
+            For example, entering <c>:set number</c> will cause line numbers to appear on
+            the left.
+            They are not in the file itself, of course, but are there for the convenience
+            of the user.
+            Entering <c>:set nonumber</c> will remove these line numbers.
+            Similarly <c>:set autoindent</c> will cause a new line to preserve the
+            indentation of the previous one and <c>:set expandtab</c> will replace the tab
+            character by an appropriate number of spaces (both are very useful for writing
+            <pretext /> documents).
+            Some useful set commands are given in <xref ref="setcommands" />.
+            </p>
+
+            <table xml:id="setcommands">
+            <title>Some useful parameters for the set command</title>
+                <tabular halign="center">
+                <row bottom="minor">
+                    <cell right="minor">Command</cell>
+                    <cell>Resulting change</cell>
+                </row>
+                <row>
+                    <cell right="minor">:set autoindent</cell>
+                    <cell>A new line preserves indentation</cell>
+                </row>
+                <row>
+                    <cell right="minor">:set expandtab</cell>
+                    <cell>Inserted tabs converted to spaces</cell>
+                </row>
+                <row>
+                    <cell right="minor">:set rows<m>=</m>n</cell>
+                    <cell>Set number of lines displayed </cell>
+                </row>
+                <row>
+                    <cell right="minor">:set columns<m>=</m>n</cell>
+                    <cell>Set the display size of each line</cell>
+                </row>
+                <row>
+                    <cell right="minor">:set list</cell>
+                    <cell>Show tabs and carriage returns </cell>
+                </row>
+                <row>
+                    <cell right="minor">:set tabstops<m>=</m>n</cell>
+                    <cell><kbd>Tab</kbd> inserts <m>n</m> spaces </cell>
+                </row>
+                <row>
+                    <cell right="minor">:set </cell>
+                    <cell>Show all current settings</cell>
+                </row>
+                </tabular>
+            </table>
+            </subsubsection>
+
+            <subsubsection>
+            <title>A little editing etiquette</title>
+            <p>
+            The <init>xml</init> files used with <pretext/> are ordinary text files.
+            This makes it easy for  coauthors to email them back and forth in order
+            to expand and improve the content. There are a few potential problems,
+            and hence some useful precautions.
+            </p>
+            <ul>
+                <li>
+                If a <kbd>Tab</kbd> is entered and not expanded to spaces, different editors may
+                display the text with different alignments.
+                </li>
+                <li>
+                If there are extra spaces at the end of a line, there may be odd line wrapping.
+                </li>
+            </ul>
+
+            <p>
+            Fortunately, these are easy to avoid.
+            </p>
+            <ul>
+                <li>
+                A tab character may be found in the usual manner for searches:
+                <kbd>:</kbd> <kbd>/</kbd> <kbd>Tab</kbd> will find the next tab;
+                it can be removed and replaced by spaces.
+                </li>
+                <li>
+                A space before the end of a line can be found with the search
+                <kbd>:</kbd> <kbd>/</kbd> <kbd>Space</kbd> <kbd>$</kbd>
+                (vi will interpret <kbd>$</kbd> as the end of a line rather than
+                as a dollar sign). The spaces at the end of the line can then
+                be removed.
+                </li>
+            </ul>
+            <p>
+            There is another feature of vi that is helpful in this respect.
+            Using <c>:set list</c> will make the tab and end of line characters visual
+            as <c>^I</c> and <c>$</c>.
+            This makes the appropriate deletions easy. It is good editing etiquette to do so.
+            </p>
+            </subsubsection>
+
+            <subsubsection>
+            <title>Abbreviations</title>
+            <p>
+            The <c>:abbreviation</c> command allows the replacement of longer expressions
+            by shorter ones. Try this: in Command mode enter
+            <cd>:abbreviate ups University of Puget Sound</cd>
+            and then (in Insert mode) type
+            <cd>I enjoyed my visit to the ups.</cd>
+            If all goes well, the abbreviation is expanded and the
+            text is
+            <cd>I enjoyed my visit to the University of Puget Sound.</cd>
+            Now suppose you want to write
+            <c>My favourite letter of the Greek alphabet is upsilon.</c>
+            Looks like trouble with the last word, but in fact all is well.
+            Abbreviations are not expanded until the next character after the
+            abbreviation is read. If the next character after
+            the abbreviation is either a letter or a number, no expansion
+            takes place. Careful observation of the original example reveals that
+            the abbreviation is not expanded until the period is entered.
+            Here is another example: You want to write <c>I love pushups.</c>
+            What about the end of the last word? No problem!
+            The <c>ups</c> is expanded only if it is at the beginning of a word.
+            </p>
+
+            <p>
+            Amusingly enough, when in Command mode, the <c>abbreviate</c> command
+            can itself be abbreviated to <c>ab</c>.
+            </p>
+
+            <p>
+            The choice of an abbreviation is essentially arbitrary. However, if
+            desiring an abbreviation within
+            <q>I enjoyed my visit to the Technische Hogeschool Eindhoven</q>,
+            it would be folly to use <c>:ab the  Technische Hogeschool Eindhoven</c>.
+            The abbreviation should be mnemonic, but avoid actual words.
+            </p>
+
+            <p>Now consider the following problem: what if the <kbd>Enter</kbd> key
+            is one of the desired characters in the abbreviation? Since that key
+            terminates Command mode, it appears impossible.
+            Not so! The characters <c>&lt;enter&gt;</c> (that's seven of them) will be
+            replaced by a single character equivalent to <kbd>Enter</kbd>.
+            </p>
+
+            <p>
+            There are other characters that are treated in the same manner:
+            </p>
+
+            <table>
+            <title>Text equivalents to keyboard entries</title>
+                <tabular halign="center">
+                <row bottom="minor">
+                    <cell>Desired key</cell>
+                    <cell>Text equivalent (not case sensitive)</cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd>Enter</kbd></cell>
+                    <cell>&lt;enter&gt; or &lt;cr&gt; </cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd>Backspace</kbd></cell>
+                    <cell>&lt;bs&gt; </cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd>Insert</kbd></cell>
+                    <cell>&lt;ins&gt; </cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd>Delete</kbd></cell>
+                    <cell>&lt;del&gt; </cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd>Esc</kbd></cell>
+                    <cell>&lt;esc&gt; </cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd name="left"/></cell>
+                    <cell>&lt;left&gt; </cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd name="right"/></cell>
+                    <cell>&lt;right&gt; </cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd name="up"/></cell>
+                    <cell>&lt;up&gt; </cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd name="down"/></cell>
+                    <cell>&lt;down&gt; </cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd>Home</kbd></cell>
+                    <cell>&lt;home&gt; </cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd>End</kbd></cell>
+                    <cell>&lt;end&gt; </cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd>Ctrl</kbd>+<kbd>x</kbd></cell>
+                    <cell>&lt;C-x&gt; </cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd>Alt</kbd> + <kbd>y</kbd></cell>
+                    <cell>&lt;M-y&gt; </cell>
+                </row>
+                </tabular>
+            </table>
+
+            <p>
+            Here is a useful <pretext /> example:
+            Define the abbreviation
+            <cd>
+            ab gm &lt;m&gt;&lt;/m&gt;&lt;left&gt;&lt;left&gt;&lt;left&gt;&lt;left&gt;
+            </cd>
+            and then enter (in Insert mode)
+            <cd>It follows from gm\log(\theta)=0 that gm\theta=1.</cd>
+            It will (almost) be expanded to
+            <cd>
+            It follows from &lt;m&gt;\log(\theta)=0&lt;/m&gt; that &lt;m&gt;\theta=1&lt;/m&gt;.
+            </cd>
+            That's <q>almost</q> because it is necessary to move the cursor past the
+            <c>&lt;/m&gt;</c> when leaving the mathematics input. It's pretty easy to see how
+            this abbreviation works. The first seven characters <c>&lt;m&gt;&lt;/m&gt;</c>
+            are expanded unchanged and then the cursor moves to the left four times to put it
+            right where it needs to be to enter the mathematics. Careful observation
+            will reveal a little trick used in this example: <c>gm</c> is followed by
+            a <c>\</c> and so terminated the abbreviation correctly. If the variable were <m>x</m>,
+            then inputting <c>gmx</c> would not work. A workaround: enter a <kbd>Space</kbd> after
+            the <c>gm</c>. This terminates the abbreviation and it will work as desired. (Actually,
+            there will be an extra space before the <m>x</m>, which causes no ill effect, but if
+            true perfection is desired, using <c>gm</c><kbd>Space</kbd>  <kbd>Backspace</kbd>
+            will eliminate it.)
+            </p>
+
+            <p>
+            When <c>:ab </c> is used, it is in effect in all modes. When abbreviations
+            are for Input mode only (as is the present case), then <c>iab:</c> may be used
+            and is usually preferable.
+            </p>
+
+            <p>
+            Here is another useful (nonmathematical) example.
+            Define (for use in Input mode)
+            <cd>:iab gp &lt;p&gt;&lt;cr&gt;&lt;/p&gt;&lt;up&gt;.</cd>
+            Then entering <q>gp<kbd>Enter</kbd></q> on a new line will create three lines
+            appearing like:
+            </p>
+            <pre>
+            &lt;p&gt;
+
+            &lt;/p&gt;
+            </pre>
+            <p>
+            That is, the first and third line start and end a paragraph and the cursor,
+            represented by <c>|</c> is
+            at the beginning of the second line. If autoindent is set,
+            (see <xref ref="setcommands" />),
+            the line indentations are preserved. With this definition, the frequent
+            task of starting a new paragraph appropriately formatted
+            may be carried out using only three key strokes.
+            </p>
+
+            <p>
+            A further example:
+            <cd>:iab gcom &lt;!--&lt;CR&gt;&lt;CR&gt;--&gt;&lt;Up&gt;</cd>
+            is useful to entering comments.  Starting a line with
+            <q>gcom <kbd>Tab</kbd></q> will help create nicely indented comments.
+            </p>
+            <p>
+            Want to know what abbreviations are in effect? Just enter <c>:ab</c>
+            and they will be listed.
+            </p>
+            </subsubsection>
+
+            <subsubsection>
+            <title>Maps</title>
+            <p>
+            Maps, like abbreviations, are shortcuts that save extra key strokes.
+            There is a difference in method: the <c>map</c>  command uses
+            <em>key bindings</em> that (re)define the meanings of key strokes.
+            For example, inputting (while in Normal mode)
+            <c>:map &lt;C-X&gt; :w&lt;CR&gt;</c> will define (map) the
+            <kbd>Ctrl</kbd> +<kbd>X</kbd> key combination so that it is equivalent
+            to typing the rest of the definition, <c>:w&lt;CR&gt;</c>.
+            This three-key sequence, of course, just changes to Command mode,
+            writes the current buffer to disk, and returns to Normal mode.
+            </p>
+
+            <p>
+            Presumably this newly defined key binding is meant to be invoked in Normal mode.
+            To do so in Insert mode would be a mistake;
+            to avoid this, there is an <c>nmap</c> command that defines key binding
+            for Normal mode only. Similarly, there is an <c>imap</c> command for Insert mode only.
+            Thus defining a key binding using <c>:nmap &lt;C-X&gt; :w&lt;CR&gt;</c>
+            will make it valid only in Normal mode.
+            Unlike abbreviations, the binding takes effect the moment the key is pressed.
+            </p>
+            <p>
+            There is a cute technique to use the same binding in Normal and Insert modes.
+            The key binding
+            <c>:imap &lt;C-X&gt; &lt;esc&gt;&lt;C-X&gt;a</c>
+            defines a binding for Insert mode. The first character,
+            <c> &lt;esc&gt;</c>, changes to Normal mode; the next character,
+            <c>&lt;C-X&gt;</c>, will use the the Normal mode definition of
+            <c>&lt;C-X&gt;</c>.  The final character <c>a</c> returns to the
+            previous position in Insert mode.
+            </p>
+            <p>
+            We can make special use of the special characters
+            <c>!</c> and <c>%</c>
+            as described at the end of <xref ref="vi-modes"/>.
+            </p>
+
+            <p>
+            The author using <pretext /> usually edits an <init>xml</init> file, say <c>myfile.xml</c> .
+            This file is then processed using xsltproc in conjunction with an <init>xsl</init>
+            file, say <c>myfile.xsl</c>.
+            Often the <init>xsl</init> file is <c>pretext-html.xsl</c> or <c>pretext-latex.xsl</c>.
+            The usual command used by the author is <c>xsltproc myfile.xsl myfile.xml</c>.
+            With this in mind, we could define a map:
+            <c>:nmap &lt;C-X&gt; !xsltproc myfile.xsl myfile.xml&lt;CR&gt;</c>
+            so that the <init>xml</init> file could be processed with a single keystroke.
+            Even better:
+            <c>:nmap &lt;C-X&gt; :w&lt;cr&gt;:!xsltproc myfile.xsl %&lt;CR&gt;</c>
+            defines a map that first writes the file being edited to disk and then
+            processes it with xsltproc. This command is independent of the
+            particular file being edited.
+            </p>
+
+            <p>
+            A final somewhat complicated but very useful definition:
+            <cd>
+            imap &lt;C-A&gt; &lt;Esc&gt;yiwi&lt;&lt;Esc&gt;ea&gt;&lt;/&lt;Esc&gt;pa&gt;&lt;Esc&gt;F&lt;i
+            </cd>
+            which is a truly cryptic sequence of key strokes. Here is what they do:
+            </p>
+
+            <table>
+            <title />
+                <tabular halign="center">
+                <row bottom="minor">
+                    <cell right="minor">Key strokes</cell>
+                    <cell>Interpretation</cell>
+                </row>
+                <row>
+                    <cell right="minor">&lt;esc&gt;</cell>
+                    <cell>Leave input mode</cell>
+                </row>
+                <row>
+                    <cell right="minor">yiw</cell>
+                    <cell>Save (yank) word above cursor</cell>
+                </row>
+                <row>
+                    <cell right="minor">i&lt;</cell>
+                    <cell>Insert <c>&lt;</c> </cell>
+                </row>
+                <row>
+                    <cell right="minor">&lt;esc&gt;</cell>
+                    <cell>Go to to Normal mode</cell>
+                </row>
+                <row>
+                    <cell right="minor">e</cell>
+                    <cell>Move to end of word</cell>
+                </row>
+                <row>
+                    <cell right="minor">a&gt;&lt;/&lt;esc&gt;</cell>
+                    <cell>append <c> &gt;&lt;/</c> and return
+                to Normal mode</cell>
+                </row>
+                <row>
+                    <cell right="minor">p</cell>
+                    <cell>Paste the saved word</cell>
+                </row>
+                <row>
+                    <cell right="minor">a&gt;&lt;Esc&gt;</cell>
+                    <cell>append <c>&gt;</c> and leave Insert mode</cell>
+                </row>
+                <row>
+                    <cell right="minor">F&lt;</cell>
+                    <cell>Move to  preceding &lt;</cell>
+                </row>
+                <row>
+                    <cell right="minor">i</cell>
+                    <cell>Go to Insert mode</cell>
+                </row>
+                </tabular>
+            </table>
+
+            <p>
+            The effect of this map: Entering <c>abc&lt;C-A&gt;</c> will change
+            <c>abc</c> to <c>&lt;abc&gt;|&lt;/abc&gt;</c> where <c>|</c> is the
+            position of the cursor.
+            </p>
+            <aside>
+            <p>
+            The definition needs to be a bit convoluted so that it works with both single
+            letter and multiple-letter words.
+            </p>
+            </aside>
+            <p>
+            To list all of your defined maps, just use <c>:map</c>.
+            </p>
+            </subsubsection>
+
+            <subsubsection>
+            <title>Saving abbreviations and maps</title>
+            <p>
+            The abbreviations and maps defined during an editing session disappear when
+            the session is over. There are a number of ways to retain them over different
+            sessions.
+            <ul>
+            <li>Ephemeral use in one file:
+                For most versions of vi, after entering Command mode the history may be
+                accessed using the <kbd>\(\uparrow\)</kbd> key. Backing up to the previous
+                definition of an abbreviation or map and pressing <kbd>Enter</kbd>
+                will reinstate the definition. The line can also be edited if changes are desired
+                (very useful while developing new abbreviations and maps). This history
+                is preserved between editing sessions.
+            </li>
+            <li>Repeated use in several files in one directory:
+                The abbreviations and maps can be saved in a text file, say <c>mymaps.txt</c>.
+                A line within the file might look like
+                <cd>:ab ups University of Puget Sound</cd>
+                Vi is then started with the <c>-s mymaps.txt</c> option
+                to initialize the definitions.
+            </li>
+            <li>Repeated use for files in different directories:
+                Put the abbreviations and maps in the file <c>.vimrc</c>
+                (<c>_vimrc</c> for Windows) in your home directory.
+            </li>
+            </ul>
+            </p>
+            </subsubsection>
+        </subsection>
+    </section>
+
+</appendix>
+
+

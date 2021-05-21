@@ -830,12 +830,12 @@ figcaption .type + .codenumber::before {
 }
 
 figcaption .codenumber:after {
-    content: ".\2002";  /* en space */
+    content: "";  /* en space */
 }
 
 figcaption .codenumber:last-child:after {
     display: inline;
-    content: ". ";
+    content: " ";
 }
 
 .definition-like p > em {
@@ -970,12 +970,12 @@ figcaption .codenumber{
     font-family: "PT Serif", "Times New Roman", Times, serif;
 }
 .sidebyside figcaption .codenumber:after {
-    content: ".\2002";  /* en space */
+    content: "\2002";  /* en space */
 }
 
 .sidebyside figcaption .codenumber:last-child:after {
     display: inline;
-    content: ". ";
+    content: " ";
 }
 
 
@@ -1725,7 +1725,8 @@ ul.circle {
     list-style-type: circle;
 }
 ol.no-marker,
-ul.no-marker {
+ul.no-marker,
+li.no-marker {
     list-style-type: none;
 }
 
@@ -2173,7 +2174,7 @@ article > a > .heading > .title:not(.punctuated):last-child::after {
 article > .heading .type:last-child::after,
 article > .heading .codenumber:last-child::after,
 article > .heading .title:not(:empty):not(.punctuated):last-child::after {
-    content: ".\2009 ";
+    content: "";
 }
 .aside-like > .heading .type:last-child::after,
 .aside-like > .heading .codenumber:last-child::after,
@@ -2194,7 +2195,7 @@ a article > .heading .codenumber:not(:empty)::after {
 }
 
 .exercise-like > .heading .codenumber:not(:empty):after {
-    content: ".\2009 ";
+    content: "\2009 ";
 }
 
 .objectives > .heading {

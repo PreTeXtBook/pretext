@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2015 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- This is the "decorative" version for use when testing or     -->
+<!-- building samples for the website, keep in sync with the      -->
+<!-- "structural" version, which is  "publication-structural.xml" -->
+
+<publication>
+
+    <!-- EPUB-Specific Options -->
+    <!-- Specification of image locations, relative to main source file -->
+    <epub cover="images/cover_aata_2014.png" image-directory="images"/>
+
+    <numbering>
+        <!-- defaults for a book with parts -->
+        <!-- we do not set a division level, since we remove parts    -->
+        <!-- with sed in the script building examples for the website -->
+        <divisions part-structure="decorative"/>
+    </numbering>
+
+    <!-- HTML-Specific Options -->
+    <html>
+        <!-- @xml:id of a page to be target of index.html redirect -->
+        <!-- This is the @xml:id of the "frontmatter", so this is  -->
+        <!-- default behavior, but we do this as a test and as an  -->
+        <!-- illustration                                          -->
+        <index-page ref="sample-book"/>
+        <!-- specify the style of the html by giving names to      -->
+        <!-- override defaults.  Ex: to use "style_oscarlevin.css" -->
+        <!-- put <css style="oscarlevin"/>                         -->
+        <!-- @colors now implemented                               -->
+        <!-- also @knowls, @toc, and @banner, although no          -->
+        <!-- alternative styles exist yet for those.               -->
+        <css style="default" colors="blue_red"/>
+        <!-- Magic IDs identify HTML pages to analytics services   -->
+        <!-- Presence implies relevant Javascript will be added    -->
+        <!-- StatCounter requires both values to be set            -->
+        <analytics google-gst="UA-48811660-1"
+                   statcounter-project="9664088"
+                   statcounter-security="6e60c510"/>
+        <!-- Google search, via masthead textbox is switched on    -->
+        <!-- and associated with a Google account via CX number    -->
+        <!-- <search google-cx=""/> -->
+    </html>
+
+</publication>

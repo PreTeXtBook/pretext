@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2015 Robert A. Beezer
+
+This file is part of MathBook XML.
+
+MathBook XML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+MathBook XML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+<!-- This file was originally part of the book     -->
+<!-- (as copied on 2015/07/12)                     -->
+<!--                                               -->
+<!--   Abstract Algebra: Theory and Applications   -->
+<!--                                               -->
+<!-- Copyright (C) 2010-2014  Robert A. Beezer     -->
+
+<section xml:id="groups-sage" xmlns:xi="http://www.w3.org/2001/XInclude">
+    <title>Sage</title>
+
+    <introduction>
+        <p>Many of the groups discussed in this chapter are available for study in Sage.  It is important to understand that sets that form algebraic objects (groups in this chapter) are called <q>parents</q> in Sage, and elements of these objects are called, well, <q>elements.</q>  So every element belongs to a parent (in other words, is contained in some set).  We can ask about properties of parents (finite? order? abelian?), and we can ask about properties of individual elements (identity? inverse?).  In the following we will show you how to create some of these common groups and begin to explore their properties with Sage.</p>
+    </introduction>
+
+    <subsection>
+        <title>Integers mod n</title>
+
+        <sage>
+            <input>
+            Z8 = Integers(8)
+            Z8
+            </input>
+            <output>Ring of integers modulo 8</output>
+        </sage>
+
+        <sage>
+            <input>Z8.list()</input>
+            <output>[0, 1, 2, 3, 4, 5, 6, 7]</output>
+        </sage>
+
+        <sage>
+            <input>a = Z8.an_element(); a</input>
+            <output>0</output>
+        </sage>
+
+        <sage>
+            <input>a.parent()</input>
+            <output>Ring of integers modulo 8</output>
+        </sage>
+
+        <p>We would like to work with elements of <c>Z8</c>.  If you were to type a <c>6</c> into a compute cell right now, what would you mean?  The integer <m>6</m>, the rational number <m>\frac{6}{1}</m>, the real number <m>6.00000</m>, or the complex number <m>6.00000+0.00000i</m>?  Or perhaps you really do want the integer <m>6</m> mod <m>8</m>?  Sage really has no idea what you mean or want.  To make this clear, you can <q>coerce</q> <c>6</c> into <c>Z8</c> with the syntax <c>Z8(6)</c>.  Without this, Sage will treat a input number like <c>6</c> as an integer, the simplest possible interpretation in some sense.  Study the following carefully, where we first work with <q>normal</q> integers and then with integers mod 8.</p>
+
+        <sage>
+            <input>
+            a = 6
+            a
+            </input>
+            <output>6</output>
+        </sage>
+
+        <sage>
+            <input>a.parent()</input>
+            <output>Integer Ring</output>
+        </sage>
+
+        <sage>
+            <input>
+            b = 7
+            c = a + b; c
+            </input>
+            <output>13</output>
+        </sage>
+
+        <sage>
+            <input>
+            d = Z8(6)
+            d
+            </input>
+            <output>6</output>
+        </sage>
+
+        <sage>
+            <input>d.parent()</input>
+            <output>Ring of integers modulo 8</output>
+        </sage>
+
+        <sage>
+            <input>
+            e = Z8(7)
+            f = d+e; f
+            </input>
+            <output>5</output>
+        </sage>
+
+        <sage>
+            <input>g = Z8(85); g</input>
+            <output>5</output>
+        </sage>
+
+        <sage>
+            <input>f == g</input>
+            <output>True</output>
+        </sage>
+
+        <p><c>Z8</c> is a bit unusual as a first example, since it has two operations defined, both addition and multiplication, with addition forming a group, and multiplication not forming a group.  Still, we can work with the additive portion, here forming the Cayley table for the addition.</p>
+
+        <sage>
+            <input>Z8.addition_table(names='elements')</input>
+            <output>
+            +  0 1 2 3 4 5 6 7
+             +----------------
+            0| 0 1 2 3 4 5 6 7
+            1| 1 2 3 4 5 6 7 0
+            2| 2 3 4 5 6 7 0 1
+            3| 3 4 5 6 7 0 1 2
+            4| 4 5 6 7 0 1 2 3
+            5| 5 6 7 0 1 2 3 4
+            6| 6 7 0 1 2 3 4 5
+            7| 7 0 1 2 3 4 5 6
+            </output>
+        </sage>
+
+        <p>When <m>n</m> is a prime number, the multipicative structure (excluding zero), will also form a group.</p>
+
+        <p>The integers mod <m>n</m> are very important, so Sage implements both addition and multiplication together.  Groups of symmetries are a better example of how Sage implements groups, since there is just one operation present.</p>
+
+        <sage type="practice" />
+
+    </subsection>
+
+    <subsection>
+        <title>Groups of symmetries</title>
+
+        <!-- Two references to Chapter 5 are hard-coded here in sample, since it is abbreviated -->
+
+        <p>The symmetries of some geometric shapes are already defined in Sage, albeit with different names.  They are implemented as <q>permutation groups</q> which we will begin to study carefully in Chapter<nbsp />5.</p>
+
+        <p>Sage uses integers to label vertices, starting the count at <c>1</c>, instead of letters.  Elements by default are printed using <q>cycle notation</q> which we will see described carefully in Chapter<nbsp />5.    Here is an example, with both the mathematics and Sage.  For the Sage part, we create the group of symmetries and then create the symmetry <m>\rho_2</m> with coercion, followed by outputting the element in cycle notation.  Then we create just the <em>bottom row</em> of the notation we are using for permutations.  <me>\rho_2=
+        \begin{pmatrix}<![CDATA[
+        A & B & C\\
+        C & A & B
+        ]]>\end{pmatrix}
+        =
+        \begin{pmatrix}<![CDATA[
+        1 & 2 & 3\\
+        3 & 1 & 2
+        ]]>\end{pmatrix}</me>
+        </p>
+
+        <sage>
+            <input>
+            triangle = SymmetricGroup(3)
+            rho2 = triangle([3,1,2])
+            rho2
+            </input>
+            <output>(1,3,2)</output>
+        </sage>
+
+        <sage>
+            <input>[rho2(x) for x in triangle.domain()]</input>
+            <output>[3, 1, 2]</output>
+        </sage>
+
+        <p>The final list comprehension deserves comment.  The <c>.domain()</c> method gives a lait of the symbols used for the permutation group <c>triangle</c> and then <c>rho2</c> is employed with syntax like it is a function (it <em>is</em> a function) to create the images that would occupy the bottom row.</p>
+
+        <p>With a double list comprehension we can list all six elements of the group in the <q>bottom row</q> format.  A good exercise would be to pair up each element with its name as given in <xref ref="figure-s3-symmetry" />.</p>
+
+        <sage>
+            <input>[[a(x) for x in triangle.domain()] for a in triangle]</input>
+            <output>[[1, 2, 3], [2, 1, 3], [2, 3, 1], [3, 1, 2], [1, 3, 2], [3, 2, 1]]</output>
+        </sage>
+
+        <p>Different books, different authors, different software all have different ideas about the order in which to write multiplication of functions.  This textbook builds on the idea of composition of functions, so that <m>fg</m> is the composition <m>(fg)(x)=f(g(x))</m> and it is natural to apply <m>g</m> first.  Sage takes the opposite view and since we write <m>fg</m>, Sage will understand that we want to do <m>f</m> first.  Neither approach is wrong, and neither is necessarily superior, they are just different and there are good arguments for either one.  When you consult other books that work with permutation groups, you want to first determine which approach it takes.</p>
+
+        <p>The translation here between the text and Sage will be worthwhile practice.  Here we will reprise the discussion at the end of <xref ref="section-mod-n-sym" />, but reverse the order on each product to compute Sage-style and exactly mirror what the text does.</p>
+
+        <sage>
+            <input>
+            mu1 = triangle([1,3,2])
+            mu2 = triangle([3,2,1])
+            mu3 = triangle([2,1,3])
+            rho1 = triangle([2,3,1])
+            product = rho1*mu1
+            product == mu2
+            </input>
+            <output>True</output>
+        </sage>
+
+        <sage>
+            <input>[product(x) for x in triangle.domain()]</input>
+            <output>[3, 2, 1]</output>
+        </sage>
+
+        <sage>
+            <input>rho1*mu1 == mu1*rho1</input>
+            <output>False</output>
+        </sage>
+
+        <sage>
+            <input>mu1*rho1 == mu3</input>
+            <output>True</output>
+        </sage>
+
+        <p>Now that we understand that Sage does multiplication in reverse, we can compute the Cayley table for this group.  Default behavior is to just name elements of a group as letters, <c>a, b, c</c>, \dots{} in the same order that the <c>.list()</c> command would produce the elements of the group.  But you can also print the elements in the table as themselves (that uses cycle notation here), or you can give the elements names.  We will use <c>u</c> as shorthand for <m>\mu</m> and <c>r</c> as shorthand for <m>\rho</m>.</p>
+
+        <sage>
+            <input>triangle.cayley_table()</input>
+            <output>
+            *  a b c d e f
+             +------------
+            a| a b c d e f
+            b| b a f e d c
+            c| c e d a f b
+            d| d f a c b e
+            e| e c b f a d
+            f| f d e b c a
+            </output>
+        </sage>
+
+        <sage>
+            <input>triangle.cayley_table(names='elements')</input>
+            <output>
+                  *       ()   (1,2) (1,2,3) (1,3,2)   (2,3)   (1,3)
+                   +------------------------------------------------
+                 ()|      ()   (1,2) (1,2,3) (1,3,2)   (2,3)   (1,3)
+              (1,2)|   (1,2)      ()   (1,3)   (2,3) (1,3,2) (1,2,3)
+            (1,2,3)| (1,2,3)   (2,3) (1,3,2)      ()   (1,3)   (1,2)
+            (1,3,2)| (1,3,2)   (1,3)      () (1,2,3)   (1,2)   (2,3)
+              (2,3)|   (2,3) (1,2,3)   (1,2)   (1,3)      () (1,3,2)
+              (1,3)|   (1,3) (1,3,2)   (2,3)   (1,2) (1,2,3)      ()
+            </output>
+        </sage>
+
+        <sage>
+            <input>triangle.cayley_table(names=['id','u1','u3','r1','r2','u2'])</input>
+            <output>
+             *  id u1 u3 r1 r2 u2
+              +------------------
+            id| id u1 u3 r1 r2 u2
+            u1| u1 id u2 r2 r1 u3
+            u3| u3 r2 r1 id u2 u1
+            r1| r1 u2 id u3 u1 r2
+            r2| r2 u3 u1 u2 id r1
+            u2| u2 r1 r2 u1 u3 id
+            </output>
+        </sage>
+
+        <p>You should verify that the table above is correct, just like Table 3.2 is correct.  Remember that the convention is to multiply a row label times a column label, in that order.  However, to do a check across the two tables, you will need to recall the difference in ordering between your textbook and Sage.</p>
+
+        <sage type="practice" />
+
+    </subsection>
+
+    <subsection>
+        <title>Quaternions</title>
+
+        <p>Sage implements the quaternions, but the elements are not matrices, but rather are permutations.  Despite appearances the structure is identical.  It should not matter which version you have in mind (matrices or permutations) if you build the Cayley table and use the default behavior of using letters to name the elements.  As permutations, or as letters, can you identify <m>-1</m>, <m>I</m>, <m>J</m> and <m>K</m>?</p>
+
+        <sage>
+            <input>
+            Q = QuaternionGroup()
+            [[a(x) for x in Q.domain()] for a in Q]
+            </input>
+            <output>
+            [[1, 2, 3, 4, 5, 6, 7, 8], [2, 3, 4, 1, 6, 7, 8, 5],
+             [5, 8, 7, 6, 3, 2, 1, 4], [3, 4, 1, 2, 7, 8, 5, 6],
+             [6, 5, 8, 7, 4, 3, 2, 1], [8, 7, 6, 5, 2, 1, 4, 3],
+             [4, 1, 2, 3, 8, 5, 6, 7], [7, 6, 5, 8, 1, 4, 3, 2]]
+            </output>
+        </sage>
+
+        <sage>
+            <input>Q.cayley_table()</input>
+            <output>
+            *  a b c d e f g h
+             +----------------
+            a| a b c d e f g h
+            b| b d f g c h a e
+            c| c e d h g b f a
+            d| d g h a f e b c
+            e| e h b f d a c g
+            f| f c g e a d h b
+            g| g a e b h c d f
+            h| h f a c b g e d
+            </output>
+        </sage>
+
+        <p>It should be fairly obvious that <c>a</c> is the identity element of the group (<m>1</m>), either from its behavior in the table, or from its <q>bottom row</q> representation in the list above.  And if you prefer, you can ask Sage.</p>
+
+        <sage>
+            <input>
+            id = Q.identity()
+            [id(x) for x in Q.domain()]
+            </input>
+            <output>[1, 2, 3, 4, 5, 6, 7, 8]</output>
+        </sage>
+
+        <p>Now <m>-1</m> should have the property that <m>-1\cdot -1= 1</m>.  We see that the identity element <c>a</c> is on the diagonal of the Cayley table only when we compute <c>c*c</c>.  We can verify this easily, borrowing the third <q>bottom row</q> element from the list above.  With this information, once we locate <m>I</m>, we can easily compute <m>-I</m>, and so on.</p>
+
+        <sage>
+            <input>
+            minus_one = Q([3, 4, 1, 2, 7, 8, 5, 6])
+            minus_one*minus_one == Q.identity()
+            </input>
+            <output>True</output>
+        </sage>
+
+        <p>See if you can pair up the letters with all eight elements of the quaternions.  Be a bit careful with your names, the symbol <c>I</c> is used by Sage for the imaginary number <m>i</m> (which we will use below), but Sage will silently let you redefine it to be anything you like.  Same goes for lower-case <c>i</c>.  So call your elements of the quaternions something like <c>QI, QJ, QK</c> to avoid confusion.</p>
+
+        <p>As we begin to work with groups it is instructive to work with the actual elements.  But many properties of groups are totally independent of the order we use for multiplication, or the names or representations we use for the elements.  Here are facts about the quaternions we can compute without any knowledge of just how the elements are written or multiplied.</p>
+
+        <sage>
+            <input>Q.is_finite()</input>
+            <output>True</output>
+        </sage>
+
+        <sage>
+            <input>Q.order()</input>
+            <output>8</output>
+        </sage>
+
+        <sage>
+            <input>Q.is_abelian()</input>
+            <output>False</output>
+        </sage>
+
+        <sage type="practice" />
+
+    </subsection>
+
+    <subsection>
+        <title>Subgroups</title>
+
+        <p>The best techniques for creating subgroups will come in future chapters, but we can create some groups that are naturally subgroups of other groups.</p>
+
+        <p>Elements of the quaternions were represented by certain permutations of the integers 1 through 8.  We can also build the group of <em>all</em> permutations of these eight integers.  It gets pretty big, so do not list it unless you want a lot of output!  (I dare you.)</p>
+
+        <sage>
+            <input><xi:include href="../code/symmetric-group-8.sage" parse="text" /></input>
+            <output>[5, 2, 6, 4, 1, 8, 3, 7]</output>
+        </sage>
+
+        <p>As a demonstration of reusing chunks of Sage code, we duplicate the previous example.  But in each case the code lives in an external file, just once.  So if you wanted to use setup code in more than one division, you could put it in a file and incorporate it similarly.  Here we do not test the second instance, and so do not include expected output either.  Typically, you would do this copy somewhere further away.</p>
+
+        <sage doctest="not tested">
+            <input><xi:include href="../code/symmetric-group-8.sage" parse="text" /></input>
+        </sage>
+
+        <sage>
+            <input>S8.order()</input>
+            <output>40320</output>
+        </sage>
+
+
+        <p>The quaternions, <c>Q</c>, is a subgroup of the full group of all permutations, the symmetric group <m>S_8</m> or <c>S8</c>, and Sage regards this as a property of <c>Q</c>.</p>
+
+        <sage>
+            <input>Q.is_subgroup(S8)</input>
+            <output>True</output>
+        </sage>
+
+        <p>In Sage the complex numbers are known by the name <c>CC</c>.  We can create a list of the elements in the subgroup described in <xref ref="example-groups-c-star" />.  Then we can verify that this set is a subgroup by examining the Cayley table, using multiplication as the operation.</p>
+
+        <sage>
+            <input>
+            H = [CC(1), CC(-1), CC(I), CC(-I)]
+            CC.multiplication_table(elements=H,
+                                    names=['1', '-1', 'i', '-i'])
+            </input>
+            <output>
+            *   1 -1  i -i
+              +------------
+             1|  1 -1  i -i
+            -1| -1  1 -i  i
+             i|  i -i -1  1
+            -i| -i  i  1 -1
+            </output>
+        </sage>
+
+        <sage type="practice" />
+
+    </subsection>
+</section>

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2014-2021 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- See  xsl/localizations/README.md  for an explanation of this file -->
+
+<!-- af-ZA, Afrikaans (South Africa) -->
+<!-- Dirk Basson, djbasson@sun.ac.za, 2018-03-23 -->
+
+<locale language="af-ZA">
+    <!-- THEOREM-LIKE blocks -->
+    <!-- Environments which have proofs, plus proofs themselves -->
+    <localization string-id='theorem'>Stelling</localization>
+    <localization string-id='corollary'>Gevolg</localization>
+    <localization string-id='lemma'>Hulpstelling</localization> <!-- Or "Lemma" as well -->
+    <localization string-id='algorithm'>Algoritme</localization>
+    <localization string-id='proposition'>Stelling</localization>
+    <localization string-id='claim'>Aanvoering</localization> <!-- This was a difficult one for me. The most obvious candidate is "bewering", but this is already used as a technical term for a mathematical statement. Words like "veronderstelling", "eis", "postuleer" all convey slightly the wrong meaning. "Aanvoering" is slightly awkward, but the best I could think of. -D.Basson -->
+    <localization string-id='fact'>Feit</localization>
+    <localization string-id='identity'>Identiteit</localization>
+    <localization string-id='proof'>Bewys</localization>
+    <localization string-id='case'>Geval</localization>
+    <!-- Components of the narrative -->
+    <!-- Mathematical statements without proofs -->
+    <!-- AXIOM-LIKE blocks -->
+    <localization string-id='axiom'>Aksioma</localization>
+    <localization string-id='conjecture'>Vermoede</localization>
+    <localization string-id='principle'>Beginsel</localization>
+    <localization string-id='heuristic'>Heuristiek</localization>
+    <localization string-id='hypothesis'>Hipotese</localization>
+    <localization string-id='assumption'>Aanname</localization>
+    <!-- Definitions -->
+    <localization string-id='definition'>Definisie</localization>
+    <!-- Single Line Mathematics -->
+    <localization string-id='me'>Vergelyking</localization>
+    <localization string-id='men'>Vergelyking</localization>
+    <localization string-id='mrow'>Vergelyking</localization>
+    <!-- Display Mathematics -->
+    <localization string-id='md'>Vertoon Wiskunde</localization>
+    <localization string-id='mdn'>Vertoon Wiskunde</localization>
+    <!-- Types of documents, mostly for informational messages -->
+    <localization string-id='volume'>Volume</localization>
+    <localization string-id='book'>Boek</localization>
+    <localization string-id='article'>Artikel</localization>
+    <localization string-id='slideshow'>Skyfie Vertoning</localization>
+    <localization string-id='letter'>Brief</localization>
+    <localization string-id='memo'>Memo</localization>
+    <localization string-id='presentation'>Aanbieding</localization>
+    <!-- Parts of a document -->
+    <!-- "part" will also be used for a "stage" of a WeBWorK problem -->
+    <localization string-id='frontmatter'>Voorsake</localization> <!-- Can't find this anywhere, so I made it up. -->
+    <localization string-id='part'>Deel</localization>
+    <localization string-id='chapter'>Hoofstuk</localization>
+    <localization string-id='appendix'>Bylaag</localization>
+    <!-- Next is the plural of Appendix, used to identify a group of appendix -->
+    <!-- <localization string-id='appendices'>Appendices</localization> -->
+    <localization string-id='section'>Afdeling</localization>
+    <localization string-id='subsection'>Onderafdeling</localization>
+    <localization string-id='subsubsection'>Onderonderafdeling</localization>
+    <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
+    <localization string-id='slide'>Skyfie</localization>
+    <localization string-id='introduction'>Inleiding</localization>
+    <localization string-id='conclusion'>Slot</localization>
+    <localization string-id='exercises'>Oefeninge</localization>
+    <localization string-id='worksheet'>Werkblad</localization>
+    <localization string-id='reading-questions'>Leesvrae</localization>
+    <localization string-id='solutions'>Oplossings</localization>
+    <localization string-id='glossary'>Woordelys</localization>
+    <localization string-id='references'>Verwysings</localization>
+    <localization string-id='backmatter'>Nasake</localization> <!-- Can't find this anywhere, so I made it up. -->
+    <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
+    <localization string-id='paragraphs'>Paragrawe</localization>
+    <localization string-id='commentary'>Kommentaar</localization>
+    <localization string-id='subparagraph'>Onderparagrawe</localization>
+    <!-- Components of the narrative -->
+    <!-- REMARK-LIKE blocks -->
+    <!-- "note" is used within "biblio", likely to change -->
+    <localization string-id='remark'>Opmerking</localization>
+    <localization string-id='convention'>Konvensie</localization>
+    <localization string-id='note'>Nota</localization>
+    <localization string-id='observation'>Waarneming</localization>
+    <localization string-id='warning'>Waarskuwing</localization>
+    <localization string-id='insight'>Insig</localization>
+    <localization string-id='computation'>Berekening</localization>
+    <localization string-id='technology'>Tegnologie</localization>
+    <!-- ASIDE-LIKE blocks -->
+    <localization string-id='aside'>Ter Syde</localization>
+    <localization string-id='biographical'>Biografiese Ter Syde</localization>
+    <localization string-id='historical'>Geskiedkundige Ter Syde</localization>
+    <!-- EXAMPLE-LIKE blocks -->
+    <localization string-id='example'>Voorbeeld</localization>
+    <localization string-id='question'>Vraag</localization>
+    <localization string-id='problem'>Probleem</localization>
+    <!-- PROJECT-LIKE blocks -->
+    <localization string-id='project'>Projek</localization>
+    <localization string-id='activity'>Aktiwiteit</localization>
+    <localization string-id='exploration'>Verkenning</localization>
+    <localization string-id='task'>Taak</localization>
+    <localization string-id='investigation'>Ondersoek</localization>
+    <!-- assemblages are collections of minimally structured material -->
+    <localization string-id='assemblage'>Samevatting</localization>
+    <localization string-id='poem'>Gedig</localization>
+    <!-- Objectives is the block, objective is a list item within -->
+    <localization string-id='objectives'>Doelstellings</localization>
+    <localization string-id='objective'>Doelstelling</localization>
+    <!-- Outcomes is the block, outcome is a list item within (different) -->
+    <!-- These two words need to be different, to avoid ambiguous cross-references -->
+    <localization string-id='outcomes'>Uitkomstes</localization>
+    <localization string-id='outcome'>Uitkoms</localization>
+    <!--  -->
+    <localization string-id='figure'>Figuur</localization>
+    <localization string-id='table'>Tabel</localization>
+    <localization string-id='listing'>Lys</localization>
+    <localization string-id='fn'>Voetnota</localization>
+    <localization string-id='contributor'>Bydraer</localization>
+    <!-- Lists and their items -->
+    <localization string-id='list'>Lys</localization>
+    <localization string-id='li'>Item</localization>
+    <!-- A term (word) defined in a glossary -->
+    <localization string-id='defined-term'>Term</localization>
+    <!-- A regular paragraph, not the old sectioning structure -->
+    <localization string-id='p'>Paragraaf</localization>
+    <localization string-id='blockquote'>Aanhaling</localization>
+    <!-- Literate programming, a chunk of computer code -->
+    <localization string-id='fragment'>Fragment</localization>
+    <!-- Parts of an exercise and its solution -->
+    <!-- An "exercise", at any level, within an "exercises" division is a          -->
+    <!-- "divisional" exercise and the string employed is 'divisionalexercise'.    -->
+    <!-- An "exercise" whose parent is a division (chapter, section, etc) we       -->
+    <!-- call an "inline exercise" and the string employed is 'inlineexercise'.    -->
+    <!-- And an "exercise" in a "worksheet" is a 'worksheetexercise'.              -->
+    <!-- And an "exercise" in a "reading-questions" is a 'readingquestion'.         -->
+    <!-- It is important to use different translations so that a text with         -->
+    <!-- different types of exercises do not have ambiguous cross-references       -->
+    <!-- (there is an example of this at the start of one of the later             -->
+    <!-- sections of the sample article).                                          -->
+    <!--                                                                           -->
+    <!-- In English, an "Exercise" is something you do that has a beneficial       -->
+    <!-- outcome, such as "I am going to the gym to exercise."  A "Checkpoint"     -->
+    <!-- is something you must do before you do something else.  Another use of    -->
+    <!-- the term is a location on a roadway where you must stop for the      -->
+    <!-- police to do an inspection. A worksheet is a collection of activities or  -->
+    <!-- problems, typically printed on paper, which might be used in a classroom. -->
+    <localization string-id='divisionalexercise'>Oefening</localization>
+    <localization string-id='inlineexercise'>Kontrolepunt</localization>
+    <localization string-id='worksheetexercise'>Werkbladoefening</localization>
+    <localization string-id='readingquestion'>Leesvraag</localization>
+    <localization string-id='webwork'>WeBWorK</localization>
+    <localization string-id='hint'>Wenk</localization>
+    <localization string-id='answer'>Antwoord</localization>
+    <localization string-id='solution'>Oplossing</localization>
+    <!-- A group of divisional exercises (with introduction and conclusion) -->
+    <localization string-id='exercisegroup'>Oefening Groep</localization>
+    <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
+    <localization string-id='biblio'>Bibliografiese Inskrywing</localization>
+    <!-- Front matter components -->
+    <localization string-id='toc'>Inhoudsopgawe</localization>
+    <localization string-id='abstract'>Abstrak</localization>
+    <localization string-id='preface'>Voorwoord</localization>
+    <localization string-id='acknowledgement'>Erkennings</localization>
+    <localization string-id='biography'>Skrywer Biografie</localization>
+    <!-- singular and plural titles for biography subdivision -->
+    <localization string-id='about-author'>Oor die skrywer</localization>
+    <localization string-id='about-authors'>Oor die skrywers</localization>
+    <localization string-id='foreword'>Voorwoord</localization>
+    <localization string-id='dedication'>Toewyding</localization>
+    <localization string-id='colophon'>Kolofon</localization> <!-- I have never heard of an Afrikaans version of colophon. Google Translate gives "slottitel" for the Dutch, meaning "Summary title". So , I just made this up. -D.Basson -->
+    <!-- Back matter components -->
+    <!-- index-part is deprecated, but not abandoned          -->
+    <!-- NB: repurpose translations, maybe move appendix here -->
+    <localization string-id='index-part'>Indeks</localization>
+    <localization string-id='jump-to'>Spring na</localization>
+    <!-- Parts of the Index -->
+    <localization string-id='index'>Indeks</localization>
+    <localization string-id='see'>Sien</localization>
+    <localization string-id='also'>Sien ook</localization>
+    <!-- Notation List headings/foot -->
+    <localization string-id='symbol'>Simbool</localization>
+    <localization string-id='description'>Beskrywing</localization>
+    <localization string-id='location'>Plek</localization>
+    <localization string-id='page'>Bladsy</localization>
+    <localization string-id='continued'>Voortgesit op volgende bladsy</localization>
+    <!-- Navigation Interface elements -->
+    <!-- Assistive "skip to content" link -->
+    <localization string-id='skip-to-content'>Slaan oor na hoofinhoud</localization>
+    <localization string-id='previous'>Vorige</localization>
+    <localization string-id='up'>Op</localization>
+    <localization string-id='next'>Volgende</localization>
+    <!-- Keep these short, so buttons are not overly wide, 4 characters maximum -->
+    <localization string-id='previous-short'>Vorig</localization>
+    <localization string-id='up-short'>Op</localization>
+    <localization string-id='next-short'>Volg</localization>
+    <!-- NB: Use toc from above for both headings and navigation sidebar-->
+    <localization string-id='annotations'>Aantekeninge</localization>
+    <localization string-id='feedback'>Terugvoer</localization>
+    <!-- This phrase should suggest that PreTeXt is the source -->
+    <!-- language that makes a particular output possible      -->
+    <localization string-id='authored'>Geskryf in</localization>
+    <!-- Parts of memos and letters -->
+    <localization string-id='to'>Aan</localization>
+    <localization string-id='from'>Van</localization>
+    <localization string-id='subject'>Onderwerp</localization>
+    <localization string-id='date'>Datum</localization>
+    <localization string-id='copy'>cc</localization>
+    <localization string-id='enclosure'>bylae</localization>
+    <!-- Various -->
+    <localization string-id='todo'>Om Te Doen</localization>
+    <localization string-id='editor'>Redakteur</localization>
+    <localization string-id='edition'>Uitgawe</localization>
+    <localization string-id='website'>Webtuiste</localization>
+    <localization string-id='copyright'>Kopiereg</localization>
+    <!-- HTML clickables (lowercase strings to click on) -->
+    <localization string-id='permalink'>perma-skakel</localization>
+    <localization string-id='incontext'>in-konteks</localization>
+    <!-- Sage Cell evaluate button      -->
+    <!-- eg, "Evaluate (Maxima)"        -->
+    <!-- 2017-05-14: 'code' is obsolete -->
+    <!-- This needs to be defined to *something* (always)       -->
+    <!-- else whatever crud ends up on the button kills the cell -->
+    <localization string-id='evaluate'>Evalueer</localization>
+    <localization string-id='evaluate'>Evalueer</localization>
+    <!-- <localization string-id='code'>Kode</localization> -->
+</locale>

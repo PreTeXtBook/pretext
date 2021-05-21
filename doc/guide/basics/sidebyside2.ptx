@@ -1,0 +1,19 @@
+<figure>
+  <caption>A graphic next to a paragraph of
+  text.</caption>
+  <sidebyside widths="25% 35%" margins="0% 0%"
+    valigns="bottom top">
+    <image source="images/small_graph" />
+
+    <p>
+      We can put a paragraph here.
+      Yes, a paragraph.
+      Isn't this the most exciting paragraph that you've ever seen?
+      It goes on and on and on and on and on and on.
+      We want to put enough here to make it wrap, really, is all.
+      Let's hope that this is enough.
+    </p>
+  </sidebyside>
+
+</figure>
+

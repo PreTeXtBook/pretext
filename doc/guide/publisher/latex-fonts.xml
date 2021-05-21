@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2017  Robert A. Beezer, David Farmer  -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="latex-fonts">
+    <title><latex /> Fonts</title>
+
+    <introduction>
+        <p>Part of a book's style is the choice of fonts.  As of 2019-11-09 we have a better understanding of the use of fonts in <latex/> to the point where we can design interfaces that will make it simpler for you to experiment with different choices and preserve various features that <pretext/> enables.</p>
+
+        <p>The first thing to understand is that the <c>xelatex</c> engine is much more capable of employing modern fonts.  <tex/> was built in the late 1970's when computer resources were at a premium, and the idea of mixing mathematics with non-Western languages and scripts may have been fanciful.  The <c>pdflatex</c> engine is rooted in this history.  We now have the Unicode standard, thoroughly integrated into web browsers, and companion scalable OpenType fonts.  In contrast to <tex/>, XeTeX was designed to work better with a multitude of fonts.  So we organize this section by this distinction.</p>
+    </introduction>
+
+    <section>
+        <title>Processing with <c>pdflatex</c></title>
+
+        <p>Fonts used by <latex/> come in <term>encodings</term>.  The original encoding is known as <c>OT1</c> and organizes glyphs (shapes of individual characters) 128 at a time.  Since this puts regular Latin letters in one group, and accented letters into another group, this makes automatic hyphenation impossible if accented letters are used (as in many European countries and much of the Americas).  The 1990 <tex/> Users Group (<acro>TUG</acro>) meeting in Cork, Ireland, formulated new and improved encodings.  The <c>T1</c> encoding is one result, and so it is known as the <term>Cork</term> encoding (and also as <c>EC</c>).  It groups 256 glyphs together at a time.  So you need only know that a <c>T1</c> encoding is better than an <c>OT1</c> encoding.  If you want to know more (much more), locate <articletitle><latex/> font encodings</articletitle> by Mittlebach, Fairbairns, &amp; Lemberg.</p>
+
+        <p>The <latex/> Font Catalogue<fn><url href="http://www.tug.dk/FontCatalogue/"/></fn> is a great resource for locating different fonts.  The fonts and their packages are likely already installed (this information is provided), or there is enough information about how to install the package in a standard way.  Each gives exact directions on how to enable the font for a document.  For example, Iwona<fn><url href="http://www.tug.dk/FontCatalogue/iwona/"/></fn>, a sans-serif font with support for mathematics, can be employed as the document font simply by including the following in the preamble:<cd>
+            <cline>\usepackage[math]{iwona}</cline>
+            <cline>\usepackage[T1]{fontenc}</cline>
+        </cd>This suggested use of <c>fontenc</c> package (not to be confused with the <c>fontspec</c> package) indicates the availability of a <c>T1</c> encoding.</p>
+        <p>Note: when the <latex/> Font Catalogue says <q><init>OTF</init> or <init>TTF</init> available</q> then the font can also be used with <c>xelatex</c>.  When it says <q><init>OTF</init> or <init>TTF</init> only</q> then the font <em>cannot</em> be used via <c>pdflatex</c>.  Read on.</p>
+    </section>
+
+    <section>
+        <title>Processing with <c>xelatex</c></title>
+
+        <p>TrueType fonts (<init>TTF</init>, <c>*.ttf</c> files) have been improved upon by the creation of OpenType fonts (<init>OTF</init>, <c>*.otf</c> files).  The main difference is that <init>OTF</init> fonts have a variety of <term>features</term> which can be selected or not.  It is also easier to directly select a particular glyph (realization of a character) by specifying its numerical code point as a Unicode character.  For the remainder, we will reference <init>OTF</init> fonts only, but nearly everything applies equally well to <init>TTF</init> fonts.</p>
+
+        <p>The main difference with <c>xelatex</c> and <init>OTF</init> fonts is that <c>xelatex</c> expects the font files to be part of the system software and are managed by the operating system and its tools.  So, for example, in the example above installing the <c>iwona</c> package will place files into your <term>texmf</term> tree, where they remain unknown to your operating system.  So you will need to learn how to use your operating system to locate and install <init>OTF</init> files (or make them known to your operating system).  With luck, popular fonts may be easy to install using your system's package manager.</p>
+
+        <p>So installing fonts into a system is a bit of a hurdle, and as a style writer, you are reliant on authors who use your style to understand this requirement.</p>
+
+        <!-- https://askubuntu.com/questions/3697/how-do-i-install-fonts -->
+        <paragraphs>
+            <title>Locating an <init>OTF</init> font</title>
+
+            <p>Since I have the <latex/> <c>iwona</c> package, I can expect the <init>OTF</init> version of the font to be somewhere.  I know I have the <latex/> package by using a TeXLive tool to search for the style file.<cd>
+                <cline>kpsewhich iwona.sty</cline>
+            </cd>will return the full path to that file.</p>
+
+            <p>On my Linux system, with TeXLive installed via a Debian/Ubuntu package, I can locate the main <init>OTF</init> file for the Iwona font by exploring the relevant directories (<c>fonts/opentype</c> looks promising), or I can use the system <c>find</c> utility to search for filenames with <c>iwona</c> or <c>Iwona</c> in the name.  There it is:<cd>
+                <cline>/usr/share/texlive/texmf-dist/fonts/opentype/nowacki/iwona/Iwona-Regular.otf</cline>
+            </cd></p>
+
+            <p>You can simultaneously determine if you have a font, and if it is known to your system with the <c>fc-list</c> command from the <c>fontconfig</c> utility.  The produces a lot of output, with one line per file, but it includes file names and the human-readable name of each font.  You can pipe the output through <c>grep</c> to find what you are looking for, for example<cd>
+                <cline>fc-list | grep "Latin Modern"</cline>
+            </cd></p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Making an <init>OTF</init> font known to the system</title>
+
+            <p>On my Linux system,  I need to copy this file (and its companions) into the system directory<cd>
+                <cline>/usr/local/share/fonts</cline>
+            </cd>and reboot, or rebuild the font cache with<cd>
+                <cline>fc-cache -f -v</cline>
+            </cd>Finally, I can check that the font is known to the system with<cd>
+                <cline>fc-list</cline>
+            </cd></p>
+
+            <p>On a Mac, we have several reports for how to do this.
+                <ul>
+                    <li>
+                        <p>Mitch Keller reports on 2019-01-02 that <q>I opened the directory on my hard drive containing the <init>OTF</init> file, double clicked on the font (opens the macOS application Font Book, which comes with the OS), and then clicked the <c>Install Font</c> button.</q></p>
+                    </li>
+                    <li>
+                        <p>Karl-Dieter Crisman reports on 2019-07-01 that <q>I was able to use some fonts already existing in TeXLive with a symbolic link to the Font Book, as suggested at <url href="https://apple.stackexchange.com/a/225824/189102">Ask Different</url><fn><c>apple.stackexchange.com/a/225824/189102</c></fn>:
+                        <cd>
+                            <cline>ln -s</cline>
+                            <cline>  /usr/local/texlive/2018/texmf-dist/fonts/opentype/public/lm/</cline>
+                            <cline>  '/Library/Fonts/Latin Modern'</cline>
+                        </cd>where 2018 indicates when I updated my <tex/>Live distribution.</q></p>
+                    </li>
+                </ul></p>
+       </paragraphs>
+
+        <paragraphs>
+            <title>Information about an <init>OTF</init> font</title>
+
+            <p>To learn more about this particular font TeXLive provides an executable, <c>otfinfo</c>, which I can use as (omitting the long directory path here for clarity)<cd>
+                <cline>otfinfo -i Iwona-Regular.otf</cline>
+            </cd>  The first part of the output is
+            <cd>
+            Family:              Iwona
+            Subfamily:           Regular
+            Full name:           Iwona-Regular
+            PostScript name:     Iwona-Regular
+            </cd>  The critical piece of information here is the font's name: <c>Iwona-Regular</c>.  I can also learn which OpenType features are available
+            <cd>
+            $ otfinfo -f Iwona-Regular.otf
+
+            aalt    Access All Alternates
+            c2sc    Small Capitals From Capitals
+            cpsp    Capital Spacing
+            dlig    Discretionary Ligatures
+            dnom    Denominators
+            frac    Fractions
+            hist    Historical Forms
+            kern    Kerning
+            liga    Standard Ligatures
+            lnum    Lining Figures
+            numr    Numerators
+            onum    Oldstyle Figures
+            ordn    Ordinals
+            pnum    Proportional Figures
+            sinf    Scientific Inferiors
+            smcp    Small Capitals
+            ss02    Stylistic Set 2
+            sups    Superscript
+            tnum    Tabular Figures
+            zero    Slashed Zero
+            </cd>This will all be useful shortly.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Using an <init>OTF</init> font with <c>xelatex</c></title>
+
+            <p>Depending on the package, now it can be as simple as simply including <c>\usepackage{}</c> in your preamble and the font can be used with different weights and shapes, and certain features are enabled.  However, sometimes you want more control, or you want to use more than one font in a document.  Now the <c>fontspec</c> package is your tool of choice.</p>
+
+            <p>The simplest example of using <c>fontspec</c> would be to recall the font name from above, and in your preamble use<cd>
+                <cline>\setmainfont{Iwona-Regular}</cline>
+            </cd>This font name has the hyphen in lieu of a space, but names with spaces are just fine.  An optional argument will let you customize the use of the font, such as turning on some of the features.  Read the <c>fontspec</c> documentation for all the finer points.  Hopefully this has given you a start.</p>
+
+            <p>Note that <c>fontspec</c> has a <c>Path=</c> option.  A tempting shortcut is to just point to the <init>*.otf</init> file in your <c>texmf</c> tree.  But as a style writer, this is a really bad idea, since other authors who use your style may have their font files in a different location.  Better to employ the font <em>by name</em> and require authors to understand (or learn) their system software.</p>
+        </paragraphs>
+
+        <exercise>
+            <p>Create a <latex/> file (from scratch) containing some Myanmar (Burmese) characters.  The <pubtitle>Kermit Project UTF-* Sampler</pubtitle><fn><url href="http://kermitproject.org/utf8.html"/></fn> is a great source for these sorts of experiments.  The Noto font is a project to make a huge collection of harmonious fonts for much of the world's languages.  Use what you have learned here to render your sample using a Noto font via both <c>pdflatex</c> and <c>xelatex</c>.  Extra credit if you can explain the name Noto.</p>
+        </exercise>
+
+        <paragraphs>
+            <title>Plans, as of 2019-11-09</title>
+
+            <p>We have experimental code in place to allow a style writer to place font information into the <latex/> preamble in the right place.  We are adding font-changing commands into other configurations in the preamble, so that pieces of a document (e.g.<nbsp/>the page header) will automatically use a particular font easily.</p>
+
+            <p>We have long been using the <latex/> <c>polyglossia</c> package to manage multiple languages in one document, and will continue to do so, perhaps.  This package relies heavily on <c>fontspec</c>.  We intend to hide the details of <c>polyglossia</c> from authors and from style writers, relying on just the specification of <attr>xml:lang</attr> attributes to control font changes.</p>
+        </paragraphs>
+    </section>
+
+    <section>
+        <title>Font Notes</title>
+
+        <subsection>
+            <title>Dyslexic Font</title>
+
+            <p>There is an <init>OTF</init> font, with an open license, that purports to help readers with dyslexia.<ul>
+                <li>Website is <url href="https://opendyslexic.org/"><c>opendyslexic.org/</c></url>.</li>
+                <li>In Debian/Ubuntu it is available in a package called <c>fonts-opendyslexic</c>.</li>
+                <li>When used with <c>xelatex</c> the relevant names of the font are <c>OpenDyslexic</c> and <c>OpenDyslexicMono</c>.</li>
+            </ul></p>
+        </subsection>
+    </section>
+
+    <section>
+        <title>LaTeX Font Configuration (Ubuntu/Debian Linux)</title>
+
+        <p>Actual font installation is missing here, since I (RAB) cannot recall just when or how certain fonts arrived on my system.  Certainly they were almost all via Ubuntu/Debian packages, though they could have been specific to <tex/>Live.  Specifically, the <c>texlive-fonts-recommended</c> and <c>texlive-fonts-extra</c> are two packages that will make many fonts available to <tex/>/<latex/> on an Ubuntu/Debian system.  The following is offered in the hope that it will be useful to other publishers on other Unix-like systems.</p>
+
+        <p>There is a system directory<cd>
+            <cline>/etc/fonts/conf.d</cline>
+        </cd>with a wide variety of configuration files for various fonts, or collections of fonts.  Here I find files (symlinks, really)<cd>
+            <cline>65-fonts-lmodern.conf</cline>
+            <cline>65-fonts-texgyre.conf</cline>
+        </cd>The first points to the extensive Latin Modern fonts, which are an improved version of the original Computer Modern fonts, and are <pretext/>'s default font for out-of-the-box <latex/>.  We have never had a report of these not being available in an author's <tex/> distribution.  The file indicates that the fonts can be found at<cd>
+            <cline>/usr/share/texmf/fonts/opentype/public/lm</cline>
+            <cline>/usr/share/texmf/fonts/opentype/public/lm-math</cline>
+        </cd>The second configuration file points to multiple fonts from the <url href="http://www.gust.org.pl/projects/e-foundry/tex-gyre/index_html">TeX Gyre Collection</url><fn><c>www.gust.org.pl/projects/e-foundry/tex-gyre/</c></fn> of GUST: Polska Grupa Użytkowników Systemu <tex/>.  Examining the file indicates these fonts can be found at:<cd>
+            <cline>/usr/share/texmf/fonts/opentype/public/tex-gyre</cline>
+            <cline>/usr/share/texmf/fonts/opentype/public/tex-gyre-math</cline>
+        </cd></p>
+
+        <p>As of 2019-11-09 these were the only <tex/> fonts known to my system in <init>OTF</init> format.  This despite having directories full of fonts at:<cd>
+            <cline>/usr/share/texlive/texmf-dist/fonts/opentype</cline>
+            <cline>/usr/share/texlive/texmf-dist/fonts/truetype</cline>
+        </cd>and more.  You might have similar directories with the year of your version of <tex/>Live as a directory.  The solution is to create a new file (as root) named<cd>
+            <cline>/etc/fonts/conf.d/09-texlive-fontconfig.conf</cline>
+        </cd>with contents<cd>
+            <cline>&lt;?xml version="1.0"?&gt;</cline>
+            <cline>&lt;!DOCTYPE fontconfig SYSTEM "fonts.dtd"&gt;</cline>
+            <cline>&lt;fontconfig&gt;</cline>
+            <cline>  &lt;dir&gt;/usr/share/texlive/texmf-dist/fonts/opentype&lt;/dir&gt;</cline>
+            <cline>  &lt;dir&gt;/usr/share/texlive/texmf-dist/fonts/truetype&lt;/dir&gt;</cline>
+            <cline>&lt;/fontconfig&gt;</cline>
+        </cd>and then running <c>fc-cache -f -v</c> to update what fonts are known to the system.  It is possible that you can put this file somewhere in your home directory if you do not have administrative access, but we have not tested that approach.  Note that some versions of the above file that you might find online will include a <c>type1</c> directory.  It is best to <em>not</em> include this directory, since these fonts are best used only with <c>pdflatex</c> and if known to the system they can mistakenly be incorporated by <c>xelatex</c>, with disasterous results.  Typically you will get an unusable <init>PDF</init> and your <c>xelatex</c> run will have the error message<cd>
+            <cline>xdvipdfmx:fatal: pdf_ref_obj(): passed invalid object</cline>
+        </cd>near the very end of the command-line output.</p>
+
+        <p>Apparently, the <c>texlive-fontconfig.conf</c> file is not distributed with Debian Linux as this <url href="https://packages.debian.org/search?arch=any&amp;mode=filename&amp;searchon=contents&amp;keywords=fontconfig.conf">search</url><fn><c>packages.debian.org/search?arch=any&amp;mode=filename&amp;searchon=contents&amp;keywords=fontconfig.conf</c></fn> will demonstrate.  Please report any change in this situation.</p>
+
+        <p>When installing the Open Dyslexic font via an Ubuntu package (2020-04-28), <c>xelatex</c> became confused by the presence of Web Open Font Format (<init>WOFF</init>) versions which were installed along with the OTF versions.  
+        The solution is to create a new file (as root) named<cd>
+            <cline>/etc/fonts/conf.d/70-no-woff.conf</cline>
+        </cd>with contents<cd>
+            <cline>&lt;fontconfig&gt;</cline>
+            <cline>  &lt;selectfont&gt;</cline>
+            <cline>    &lt;rejectfont&gt;</cline>
+            <cline>      &lt;glob&gt;/usr/share/fonts/woff/*&lt;/glob&gt;</cline>
+            <cline>    &lt;/rejectfont&gt;</cline>
+            <cline>  &lt;/selectfont&gt;</cline>
+            <cline>&lt;/fontconfig&gt;</cline>
+        </cd>and then running <c>fc-cache -f -v</c> to update what fonts are known to the system.  See the <url href="https://tex.stackexchange.com/questions/392144/xelatex-and-fontspec-crash-trying-to-find-woff-file-for-some-fonts-but-not-other"><c>tex.stackexchange.com</c></url><fn><c>tex.stackexchange.com/questions/392144</c></fn> post.</p>
+    </section>
+</chapter>

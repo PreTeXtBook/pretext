@@ -1,2 +1,6 @@
 user/*
 examples/webwork/Makefile.paths
+examples/webwork/minimal/webwork-representations.ptx
+examples/webwork/sample-chapter/webwork-representations.ptx
+doc/guide/webwork-representations.ptx
+pretext/__pycache__/**

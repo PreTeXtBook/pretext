@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<appendix xml:id="windows-install-notes">
+  <title>Windows Installation Notes</title>
+  <author>Dave Rosoff</author>
+
+  <introduction>
+    <p>This appendix explains the best known way to install the <pretext /> toolchain in a Windows environment, rather than a Unix-flavored operating system (such as Linux and Apple's <init>OS X</init>). It has been tested on Windows 7, 8, and 10. We assume that none of the listed tools or equivalents have been previously installed. That may complicate matters. This is especially true if you use Cygwin, or if you have already installed Python on your machine. <pretext /> compatibility with existing Python installations is addressed elsewhere in this document (<xref provisional="python-pretext-compatibility" />).</p>
+
+    <p>If you have Windows 10, be sure to read about <init>WSL</init> in <xref ref="windows-subsystem-linux" />, which could be a whole lot easier to setup and maintain.</p>
+  </introduction>
+
+  <section xml:id="setup">
+    <title>Setup</title>
+
+    <introduction>
+      <p>In this section, we do some initial setup, establish notation, and issue warnings. Some of the steps in this process are dangerous. Typos could lead to an unstable system, or possibly even to unrecoverable system errors. Double-check everything.</p>
+    </introduction>
+
+    <subsection xml:id="notation">
+      <title>Notation</title>
+      <p>Strings enclosed in <c>&lt;angle brackets&gt;</c> are variables whose values you should substitute in typed expressions. <c>&lt;username&gt;</c>, for example, should be replaced with your Windows username (<eg />, mine is <c>drosoff</c>). Throughout this installation process it is very important to pay attention to the direction of slashes <c>/</c> and backslashes <c>\</c>.</p>
+    </subsection>
+
+    <subsection xml:id="initial-windows-setup">
+      <title>Initial Windows setup</title>
+      <p>It is easier to see what is happening if your Windows file browser is not set up to hide file extensions from you. Disable the <q>hide file extensions</q> behavior before proceeding. In Windows 7/8, this can be done through the Control Panel. In Windows 10, there is a checkbox somewhere in the ribbon for it.</p>
+      <list xml:id="initial-windows-setup-steps">
+        <title>Initial Windows Setup</title>
+        <ul>
+          <li>
+            <p>On Windows 7 or 8:<ol>
+              <li><p>Open the Start Menu and type <q>Control Panel</q>. Select the <c>Control Panel</c> entry from the popup list.</p></li>
+              <li><p>Type <q>Folder Options</q> into the search box in the Control Panel window. Select <c>Folder Options</c> when it appears.</p></li>
+              <li><p>Select the View tab.</p></li>
+              <li><p>Uncheck the box for <q>Hide extensions for known file types</q>.</p></li>
+              <li><p>Click OK until there are no more OKs to click.</p></li>
+            </ol></p>
+          </li>
+          <li>
+            <p>On Windows 10:<ol>
+              <li><p>Open the Start Menu (icon shaped like a Window at the bottom left, typically).  Select the <c>File Explorer</c> option, right above <c>Settings</c>, from the popup list.</p></li>
+              <li><p>Click on this, and then select <c>View</c> from the <q>ribbon lists</q> of options along the top.</p></li>
+              <li><p>After clicking this, on the right there should be a check box for <q>File Name Extensions</q>.  Click this box; that should do it.</p></li>
+            </ol></p>
+          </li>
+        </ul>
+      </list>
+    </subsection>
+
+    <subsection xml:id="a-word-on-path-names">
+      <title>A word on path names</title>
+      <p>An appallingly large fraction of the difficulties of using GNU/Linux-based utilities with Windows come from the differences in formatting path names. Windows path names begin with a drive letter (usually <q>C</q>) and a colon. Like all path names, they describe a path in a rooted tree. The root directory (folder) in Windows is called <c>\</c>, a backslash. Note the direction carefully. Children of the root node are either subdirectories or files in the root directory (leaves). The path to my downloads folder is:</p>
+      <pre>C:\Users\drosoff\Downloads\</pre>
+      <p>The trailing backslash is often unnecessary, but it is an easy way to see immediately whether a path name refers to a file or to a directory. Windows path names are not case-sensitive.</p>
+      <p>Linux/Mac OS X path names are quite similar, but lack drive letters, start with an explicit reference to the root, use forward slashes, and are case-sensitive (more or less so, in Mac's case). A path to a typical Linux user's download folder might be</p>
+      <pre>/home/typical.username/Downloads</pre>
+      <p>Again, Linux pathnames are case-sensitive and Mac OS X pathnames are typically <sq>case-preserving</sq>. The Git Bash shell for Windows is an emulation of a Linux environment, and the utilities within it expect path names that follow Linux conventions. So we conform to this expectation as follows.<ol>
+        <!-- http://apple.stackexchange.com/questions/22297/is-bash-in-osx-case-insensitive -->
+        <li><p>Remove the colon, but keep the drive letter.</p></li>
+        <li><p>All backslashes <c>\</c> become slashes <c>/</c>.</p></li>
+        <li><p>Add an initial slash preceding the drive letter.</p></li>
+      </ol></p>
+      <p>The path name to my Windows download folder becomes</p>
+      <pre>/c/users/drosoff/Downloads</pre>
+      <p>Even though Git Bash is pretending to be a Linux shell, path names are still the underlying Windows path names, and therefore are not case sensitive. You can verify this using tab-completion.</p>
+      <p>Path names that begin with the drive letter (Windows) or the root <c>/</c> (Linux/Mac OS X) are called <term>absolute path names</term>. Their referents do not depend on the location from which the path name is invoked. <term>Relative path names</term>, on the other hand, begin in the so-called <term>current working directory</term>. A relative pathname might look something like this:</p>
+      <pre>../../examples/sample-article/sample-article.xml</pre>
+      <p>The symbol <c>..</c> is a shortcut for the parent of the current directory. Thus, the relative path name above means from where we are, ascend two levels, then descend into the <c>examples</c> and <c>sample-article</c> subdirectories, and find the file <c>sample-article.xml</c>.</p>
+      <p>Path names that contain spaces are <em>evil</em>, and should be avoided in many cases. Unfortunately, all Windows default program installation locations contain at least one space (directory name <q>Program Files</q>). This does not appear to cause problems, except when installing ImageMagick (<xref ref="installing-imagemagick" />). To be extra careful, you could always choose an installation location that is free of space characters.</p>
+
+    </subsection>
+
+    <subsection xml:id="do-i-have-64-bit-windows">
+      <title>Do I have 64-bit Windows?</title>
+      <p>Find out on Windows 7:<ol>
+        <li><p>Open the start menu and type <q>Computer</q>. Right-click the <c>Computer</c> item in the popup menu.</p></li>
+        <li><p>Select <c>Properties</c> from the drop-down menu.</p></li>
+        <li><p>Read in the right-hand side of the pane to find the <q>System</q> heading.</p></li>
+        <li><p>From the <q>System type</q> entry, read whether you have a 32- or a 64-bit OS.</p></li>
+      </ol></p>
+    </subsection>
+
+    <conclusion>
+      <p>Now you are ready to begin installing the various pieces of the <pretext /> puzzle. The first one, <c>xsltproc</c> (<xref ref="installing-xsltproc" />), is the most annoying. You might want to go get a snack or another cup of coffee.</p>
+    </conclusion>
+  </section>
+
+  <section xml:id="installing-xsltproc">
+    <title>Installing xsltproc</title>
+
+    <subsection xml:id="download-and-install-executables-and-linked-libraries">
+      <title>xsltproc binaries</title>
+
+      <p>This is the most annoying part of the installation. Obtain four zip archives from <url href="ftp://ftp.zlatkovic.com/libxml/"> Igor Zlatkovic's FTP site</url> that hosts the most recent Libxml binaries for Windows. At the time of this writing, the 64-bit binaries were considered experimental. I have had no trouble using the 32-bit binaries on my 64-bit Windows 7 system, so I suggest that all <pretext/> users download the most recent 32-bit version of the following libraries:</p>
+      <list xml:id="list-zip-files-xsltproc">
+        <title><c>xsltproc</c> Zip Files</title>
+        <ol>
+          <li><p><c>iconv</c> (filename something like <c>iconv-1.9.2.win32.zip</c>)</p></li>
+          <li><p><c>libxml2</c> (filename something like <c>libxml2-2.7.8.win32.zip</c>)</p></li>
+          <li><p><c>libxslt</c> (filename something like <c>libxslt-1.1.26.win32.zip</c>)</p></li>
+          <li><p><c>zlib</c> (filename something like <c>zlib-1.2.5.win32.zip</c>)</p></li>
+        </ol>
+      </list>
+      <p>We only need a handful of files from these archives. So the simplest thing is to leave them in your Downloads folder and grab what we need. Create a new folder <c>C:\xsltproc</c> (it can be anywhere, as long as it's a new location). We'll call this location <c>&lt;xsltproc&gt;</c> in case you named your folder something different.</p>
+      <p>Extract the following files from the four zip archives you downloaded above into <c>&lt;xsltproc&gt;</c>:</p>
+      <list xml:id="list-extracted-files-from-zips-xsltproc">
+        <title><c>xsltproc</c> Extracted Zip Files</title>
+        <ol>
+          <li>
+            <p>From <c>iconv-*.win32.zip</c>:<ol>
+              <li><p><c>iconv-*.win32\bin\iconv.dll</c></p></li>
+            </ol></p>
+          </li>
+          <li>
+            <p>From <c>libxml2-*.win32.zip</c>:<ol>
+              <li><p><c>libxml2-*.win32\bin\libxml2.dll</c></p></li>
+              <li><p><c>libxml2-*.win32\bin\xmllint.exe</c></p></li>
+            </ol></p>
+          </li>
+          <li>
+            <p>From <c>libxslt-*.win32.zip</c>:<ol>
+              <li><p><c>libxslt-*.win32\bin\libexslt.dll</c></p></li>
+              <li><p><c>libxslt-*.win32\bin\libxslt.dll</c></p></li>
+              <li><p><c>libxslt-*.win32\bin\xsltproc.exe</c></p></li>
+            </ol></p>
+          </li>
+          <li>
+            <p>From <c>zlib-*.win32.zip</c>:<ol>
+              <li><p><c>zlib-*.win32\bin\zlib1.dll</c></p></li>
+            </ol></p>
+          </li>
+        </ol>
+      </list>
+    </subsection>
+
+    <subsection xml:id="change-path-environment-variable-xsltproc">
+      <title>Change PATH environment variable</title>
+      <p><em>Note: if you prefer not to meddle with this, it can be avoided</em>.  Now, we need to make sure your system can find these files when we need them.</p>
+      <list xml:id="steps-change-path-environment-variable-xsltproc">
+        <title>Path Environment Variable for <c>xsltproc</c></title>
+        <ol>
+          <li>
+            <p>Open the Start menu and start typing <q>Edit the system environment variables</q>. Select this option when it becomes visible.</p>
+          </li>
+          <li>
+            <p>Click the Environment Variables button near the bottom of the dialog.</p>
+          </li>
+          <li>
+            <p>In the bottom part of the dialog labeled <q>System environment variables</q>, look for a variable named <c>PATH</c>. You may need to scroll.<ol>
+              <li>
+                <p>If you do not find one, create it using the New... button. Make sure to use all capital letters. (This really shouldn't happen. Make sure you are editing the <em>system</em> environment variables, not the <em>user</em> environment variables.)</p>
+              </li>
+              <li>
+                <p>If you do find the <c>PATH</c> variable, select it and click the Edit... button.</p>
+              </li>
+            </ol></p>
+          </li>
+          <li>
+            <p>Regardless of which of steps 1 and 2 you followed, now you should see a dialog with two text fields. Your variable name should be <c>PATH</c>.</p>
+          </li>
+          <li>
+            <p>If you created this variable, populate the second field with the full path name of <c>&lt;xsltproc&gt;</c>, the location where you put the seven files from Igor's zip archives. For me this looks like <c>C:\xsltproc</c>.</p>
+          </li>
+          <li>
+            <p>If you are editing the <c>PATH</c> variable, place the cursor in the existing value and press the End key, so that the cursor moves to the back of the line. The <c>PATH</c> string is a <c>;</c>-delimited list of full path names, so append the string <c>&lt;xsltproc&gt;;</c> (note the semicolon) to the existing value. If you named &lt;xsltproc&gt; as we suggested above, then the last part of your <c>PATH</c> variable is now <c>C:\xsltproc;</c>.</p>
+          </li>
+          <li>
+            <p>Click OK to save changes.</p> </li>
+        </ol>
+      </list>
+    </subsection>
+
+    <conclusion>
+      <p>Congratulations, you have successfully installed <c>xsltproc</c>.</p>
+      <p>Note that you have installed the <c>xmllint</c> utility as part of this procedure. This utility will allow some text editors to <term>lint</term> your <pretext /> files, that is, to automatically detect and highlight errors, and perhaps even to explain them.</p>
+    </conclusion>
+  </section>
+
+  <section xml:id="installing-git">
+    <title>Installing git</title>
+    <introduction>
+      <p>In this section we install the <c>git</c> version control system and some tools to interact with it, including a fairly full-featured emulation of the <c>bash</c> command line shell. I strongly recommend you use the Git Bash shell or another <c>bash</c> emulation, so that you can use Linux commands referenced elsewhere.</p>
+    </introduction>
+    <subsection xml:id="install-git">
+      <title>Steps to install git</title>
+      <list xml:id="steps-install-git">
+        <title>git Installation</title>
+        <ol>
+          <li>
+            <p>Visit the official <c>git</c> <url href="https://git-scm.com/download/win">download page</url> (download starts automatically) and obtain the latest binary for your system.</p>
+          </li>
+          <li>
+            <p>Find the installer in your Download location and run it.</p>
+          </li>
+          <li>
+            <p>Choose whatever location you like for the <c>git</c> installation folder. I recommend you use the default.</p>
+          </li>
+          <li>
+            <p>At the <q>Adjusting your PATH environment</q> dialog, select either of the first two items. I recommend the second, <q>Add git executable to Windows PATH</q>. This will allow you to use <c>git</c> from within other Windows programs, such as Sublime Text or other text editors, which can be extremely convenient. If you are apprehensive about adding <c>git</c> to the Windows PATH, select the first option. I do not recommend the third option.</p>
+          </li>
+          <li>
+            <p>Accept the default options for all the remaining prompts.</p>
+          </li>
+        </ol>
+      </list>
+    </subsection>
+    <subsection xml:id="changing-path-with-bashrc">
+      <title>Changing the path with .bashrc</title>
+      <p>In <xref ref="change-path-environment-variable-xsltproc" />, we promised that you could avoid messing with the Windows environment variables. If you install something else later that wants to use <c>xsltproc</c>, then this might not be the best idea. But if you are only going to use it from within Git Bash, then this will work fine.</p>
+      <p>From the Git Bash command prompt, enter this line of text and hit Enter. Do not make any typos. You should substitute your value of <c>&lt;xsltproc&gt;</c> where indicated, but make sure to conform to the conventions at the end of <xref ref="a-word-on-path-names" /> regarding Windows path names in Git Bash. (I warned you this was going to be annoying.)<cd>echo "export PATH=&lt;xsltproc&gt;:$PATH" &gt;&gt; ~/.bashrc</cd>You may get a message from Git Bash the next time you run it about <c>.bash_profile</c>, which you may safely ignore.</p>
+    </subsection>
+    <conclusion>
+      <p>Congratulations, you have successfully installed <c>git</c>.</p>
+    </conclusion>
+  </section>
+
+  <section xml:id="installing-anaconda">
+    <title>Installing Anaconda</title>
+    <p>Anaconda is a well-regulated development environment for Python under Windows, and I recommend it for users who do not already have Python installed. The essential <c>pretext</c> script has <url href="https://github.com/rbeezer/mathbook/pull/252">recently been updated</url> to support both Python 2 and Python 3. Therefore we make no recommendation about which Python version to choose.</p>
+    <p>If you already have a working Python installation, skip to <xref ref="installing-imagemagick" />.</p>
+    <p>You have some choice with your Anaconda installation. It actually supports the installation of several independent Pythons side-by-side (since both 2.7 and 3.x are in active use, this is more reasonable than it seems). If you do not need Python for anything else or are simply a minimalist, Miniconda is also an option. Miniconda installs no packages, but these can be installed via the <c>conda</c> utility at the command line later.<ol>
+      <li><p>Download either Miniconda, Python 2.7, or Python 3.5 from the <url href="https://www.continuum.io/downloads">Anaconda download page</url>.</p></li>
+      <li><p>Run the installer and accept all the default suggestions.</p></li>
+    </ol></p>
+
+    <p>Congratulations, you have successfully installed Python.</p>
+    <p>If you do not care about images, you can stop here. Much of the <pretext/> functionality is already present. However, to use the <c>pretext/pretext</c> script to create SVG images from sources like PDF/PNG images, Sage, Asymptote, or TikZ, you need to install ImageMagick using the directions in <xref ref ="installing-imagemagick"/>.</p>
+  </section>
+
+  <section xml:id="installing-imagemagick">
+    <title>Installing ImageMagick</title>
+    <p>Visit the <url href="https://imagemagick.org/script/download.php#windows">ImageMagick downloads page</url> and grab a binary. If you have a 64-bit Windows installation (<xref ref="do-i-have-64-bit-windows" />), use the recommended version. If you have a 32-bit installation, find the version whose filename is obtained from that of the recommended version by substituting <c>x86</c> for <c>x64</c>. For example, if the recommended version's filename is:</p>
+    <pre>ImageMagick-7.0.1-6-Q16-x64-dll.exe</pre>
+    <p>then a good choice for a 32-bit Windows would be</p>
+    <pre>ImageMagick-7.0.1-6-Q16-x86-dll.exe</pre>
+    <list xml:id="installing-imagemagick-steps">
+      <title>imagemagick Installation</title>
+      <ol>
+        <li>
+          <p>Run the installer from your download location.</p>
+        </li>
+        <li>
+          <p>Accept the license agreement.</p>
+        </li>
+        <li>
+          <p>Choose a default installation location that has no spaces in its folder name. The default choice <q>Program Files</q> causes problems because of path name issues. I chose<cd>c:\ImageMagick-7.0.1-Q16\</cd>It matters because the ImageMagick utility <c>convert</c> is used by the <c>pretext</c> script to convert your images into different formats. The <c>pretext</c> script will have a lot of trouble with path names that contain spaces.</p>
+        </li>
+        <li>
+          <p>When confronted with <q>Select additional tasks</q>, make sure that the boxes for <q>Add application directory to your system path</q> and <q>Install legacy utilities</q> are checked.</p>
+        </li>
+        <li>
+          <p>If you like, carry out the procedure to verify your installation.</p>
+        </li>
+      </ol>
+    </list>
+    <p>Congratulations, you have successfully installed ImageMagick.</p>
+  </section>
+
+  <section xml:id="section-installing-pdf2svg">
+    <title>Installing <c>pdf2svg</c></title>
+    <introduction>
+      <p>The installation procedure uses <c>git</c>. Open Git Bash and change to your root directory:<cd>cd /c</cd>Clone the repository into <c>C:\pdf2svg</c>:<cd>git clone https://github.com/jalios/pdf2svg-windows.git pdf2svg</cd></p>
+    </introduction>
+    <subsection xml:id="subsection-change-path-environment-variable-pdf2svg">
+      <title>Change PATH environment variable</title>
+      <p>We need to add the <c>pdf2svg</c> program to the Windows PATH. This is similar to what is done above, in <xref ref="change-path-environment-variable-xsltproc" />.</p>
+      <list xml:id="steps-change-path-environment-variable-pdf2svg">
+        <title>Path Environment Variable for <c>pdf2svg</c></title>
+        <ol>
+          <li>
+            <p>Open the Start menu and start typing <q>Edit the system environment variables</q>. Select this option when it becomes visible.</p>
+          </li>
+          <li>
+            <p>Click the Environment Variables button near the bottom of the dialog.</p>
+          </li>
+          <li>
+            <p>In the bottom part of the dialog labeled <q>System environment variables</q>, look for a variable named <c>PATH</c>. You may need to scroll.</p>
+          </li>
+          <li>
+            <p>If you do find the <c>PATH</c> variable, select it and click the Edit... button.</p>
+          </li>
+          <li>
+            <p>You should see a dialog with two text fields. Your variable name should be <c>PATH</c>.</p>
+          </li>
+          <li>
+            <p>Place the cursor in the existing value and press the End key, so that the cursor moves to the back of the line. The <c>PATH</c> string is a <c>;</c>-delimited list of full path names, so append the string <c>C:\pdf2svg\dist-32bits;</c> or <c>C:\pdf2svg\dist-64bits;</c> (note the semicolon) to the existing value. </p>
+          </li>
+          <li>
+            <p>Click OK to save changes.</p>
+          </li>
+        </ol>
+      </list>
+    </subsection>
+    <conclusion>
+      <p>Congratulations, you have successfully installed <c>pdf2svg</c>.</p>
+    </conclusion>
+  </section>
+
+  <section xml:id="section-jing">
+    <title>Installing jing</title>
+    <p>
+      The <c>jing</c> utility for schema validation can be installed in Windows.
+      To install, first make sure Java is installed on your machine.
+      You can either install the official Oracle JDK from
+      <url href="https://www.oracle.com/technetwork/java/javase/downloads/index.html" />
+      or, if you prefer an open license, <url href="https://jdk.java.net/12/" />.
+      Download the <c>.zip</c> file, and extract to a folder such as <c>C:\Java</c>.
+      (Avoid installing to the Program Files folder due to the space in the folder name.)
+    </p>
+
+    <p>
+      Next, follow the installation instructions in <xref ref="jing-trang" />,
+      ignoring the <c>BUILD FAILED</c> message. You will almost certainly want
+      to copy the file <c>xercesImpl.jar</c> from the <c>lib.</c> folder into <c>build</c>.
+    </p>
+
+    <p>
+      If you are using Git Bash for processing, you may want to set up a command shortcut
+      to avoid the rather lengthy command given in <xref ref="jing-trang" />, especially
+      if you have modularized source. Before proceeding, make sure that you have configured
+      your Windows environment variables to include a path to Java.
+      For example, if you installed JDK 12.0.1 in <c>C:\Java</c> you will want the path
+      <c>C:\Java\jdk-12.0.1\bin</c>.
+    </p>
+
+    <p>
+      As suggested in <xref ref="jing-trang" />, you can set up a command in <c>.bashrc</c>.
+      Git Bash on Windows requires a <c>.bash-profile</c> to load <c>.bashrc</c>.
+      Open Git Bash and change to your user directory: <c>cd /c/Users/your.name</c>.
+      Windows does not like file names beginning with a period, so if they do not already
+      exist, you'll need to create them in Git Bash. Do <c>touch .bash-profile</c> and
+      <c>touch .bashrc</c> to create the files. Use your favorite text editor to add the line
+      <cd>
+        <cline>if [ -f ~/.bashrc ]; then . ~/.bashrc; fi</cline>
+      </cd>
+      to <c>.bash-profile</c>
+    </p>
+
+    <p>
+      You can then create the <c>ptx-check</c> command as in <xref ref="jing-trang" />.
+      Absolute paths are recommended. Using the Git Bash syntax for Windows paths,
+      your definition in <c>.bashrc</c> will look something like the following:
+      <cd>
+        <cline>ptx-check() {</cline>
+        <cline>  java\</cline>
+        <cline>    -classpath /c/jing-trang/build\</cline>
+        <cline>    -Dorg.apache.xerces.xni.parser.XMLParserConfiguration=</cline>
+        <cline>      org.apache.xerces.parsers.XIncludeParserConfiguration\</cline>
+        <cline>    -jar /c/jing-trang/build/jing.jar\</cline>
+        <cline>    /c/PreTeXt/mathbook/schema/pretext.rng "$1"</cline>
+        <cline>}</cline>
+      </cd>
+      The above assumes that <c>jing-trang</c> is installed at <c>C:\jing-trang</c>
+      and that PreTeXt has been cloned at <c>C:\PreTeXt\mathbook</c>.
+      Adjust your paths as needed. You can now run validation from Git Bash using
+      <cd>
+        <cline>ptx-check ~/path/to/project/index.ptx > jing_report.txt</cline>
+      </cd>
+      and the <c>jing_report.txt</c> file will be created in your working directory.
+    </p>
+
+  </section>
+
+  <section xml:id="whats-missing">
+    <title>What's Missing</title>
+    <p>Development of a Windows-compatible <c>pretext</c> script (<xref ref="pretext-script" />) is mostly complete. If you need help with <c>pretext</c>, contact Dave Rosoff. There are still a few use cases that haven't been tested, mostly those to do with Asymptote.</p>
+    <p>A Windows installer for Sage is available from several mirrors at
+      <url href="http://www.sagemath.org/download-windows.html" />.
+      The installer provides Sage Math, the Sage Math Shell,
+      and the Sage Math Notebook (Jupyter).</p>
+  </section>
+
+  <conclusion>
+    <p>If you find any problems or bugs, please let us know at the <pretext /> Support group in Google Groups, or email <c>drosoff</c> AT <c>collegeofidaho</c> DOT <c>edu</c>.</p>
+  </conclusion>
+
+</appendix>

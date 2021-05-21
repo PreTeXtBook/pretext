@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- This file is part of the PreTeXt Showcase article. -->
+<!--                                                    -->
+<!-- Copyright (©) 2019 The PreTeXt Organization.       -->
+<!-- See the README file for contributing guidelines.   -->
+
+<section xml:id="webwork">
+  <title><webwork/></title>
+
+  <p>
+    These exercises demonstrate some <webwork/> features.
+  </p>
+  <!-- TODO: Add an array answer once the current WW distribution is returning PTX content for that. -->
+
+  <exercise>
+    <title>Answer Type Variety</title>
+    <idx><h><webwork/></h><h>answer types</h></idx>
+    <introduction>
+      <p>
+        This problem demonstrates that <webwork/> can process many kinds of answers.
+      </p>
+    </introduction>
+    <webwork>
+      <pg-code>
+        Context("Numeric");
+        $f = Formula("sqrt(x)");
+        $derivative = Formula("1/(2sqrt(x))");
+        $popup = PopUp(['?','power','exponential','linear','quadratic'],1);
+        $radio = RadioButtons([
+          'It shares ancestry with "radius", as in the radius of a circle.',
+          'It shares ancestry with "radish", a vegetable.',
+          'It shares ancestry with "radler", a mixture of beer and grapefruit soda.',
+        ],1);
+        Context("LimitedRadical");
+        $a = Formula("2sqrt(3)");
+        Context("LimitedNumeric");
+        $b = Real(sqrt(12));
+        Context("Interval");
+        $domain = Interval("[0,inf)");
+        Context("Point");
+        $point = Point("(4,2)");
+        Context("RestrictedDomains");
+        $restricted = Formula("x, x >= 0");
+      </pg-code>
+      <statement>
+        <p>
+          Consider the function <m>f</m> defined by <m>f(x)=<var name="$f"/></m>.
+          <ol>
+            <li>
+              <p>
+                The exact value of <m>f(12)</m> is <var name="$a" width="10"/>
+                and a decimal approximation for this is <var name="$b" width="10"/>.
+              </p>
+            </li>
+            <li>
+              <p>
+                The domain of this function, in interval notation, is <var name="$domain" width="10"/>.
+              </p>
+            </li>
+            <li>
+              <p>
+                The graph of <m>y=<var name="$f"/></m> intersects the graph of <m>y=6-x</m> at <var name="$point" width="10"/>.
+              </p>
+            </li>
+            <li>
+              <p>
+                <m>\frac{d}{dx}<var name="$f"/>={}</m> <var name="$derivative" width="10"/>.
+              </p>
+            </li>
+            <li>
+              <p>
+                The formula for <m>f(x)^2</m>, including its restricted domain, is <var name="$restricted" width="20"/>.
+              </p>
+            </li>
+            <li>
+              <p>
+                <m>f</m> is a <var name="$popup" form="popup"/> function.
+              </p>
+            </li>
+            <li>
+              <p>
+                Which is true of the word <q>radical</q>?
+              </p>
+              <p>
+                <var name="$radio" form="buttons"/>
+              </p>
+            </li>
+          </ol>
+        </p>
+      </statement>
+    </webwork>
+  </exercise>
+
+  <exercise>
+    <title>Special Feedback</title>
+    <idx><h><webwork/></h><h>custom feedback</h></idx>
+    <idx><h><webwork/></h><h>hint</h></idx>
+    <idx><h><webwork/></h><h>solution</h></idx>
+    <introduction>
+      <p>
+        Try multiplying the exponents to see what feedback you get.
+        Also, try something no one should get credit for, like <c>x^2*x^5</c>.
+      </p>
+    </introduction>
+    <webwork>
+      <pg-code>
+        Context()->operators->set(
+        '*' => {class => 'bizarro::BOP::multiply', isCommand => 1},
+        ' *' => {class => 'bizarro::BOP::multiply', isCommand => 1},
+        '* ' => {class => 'bizarro::BOP::multiply', isCommand => 1},
+        );
+        $given = Formula("x^2 x^5");
+        $answer = Formula("x^7");
+        $special = Formula("x^10");
+        $evaluator = $answer -> cmp(
+          checker=>sub{
+            my ( $correct, $student, $ansHash ) = @_;
+            Value::Error("When multiplying powers with the same base, you do not multiply the exponents.") if ($special == $student);
+            return 0 if $ansHash->{isPreview} || $correct != $student;
+            Context()->flags->set(bizarroMul=>1);
+            delete $correct->{test_values}; delete $student->{test_values};
+            my $OK = ($correct == $student);
+            Context()->flags->set(bizarroMul=>0);
+            Value::Error(
+              "Your answer is equivalent to the correct answer, but not in the expected form.
+              Maybe it needs to be simplified, factored, expanded, have its denominator rationalized, etc."
+            ) unless $OK;
+            return $OK;
+          }
+        );
+      </pg-code>
+      <statement>
+        <p>
+          Simplify the expression <m><var name="$given"/></m>.
+        </p>
+        <p>
+          <var name="$evaluator" width="10"/>
+        </p>
+      </statement>
+      <hint>
+        <p>
+          Add the exponents.
+        </p>
+      </hint>
+      <solution>
+        <p>
+          To simplify the product of two powers of the same base,
+          add the exponents.
+          <md>
+            <mrow><var name="$given"/>\amp=x^{2+5}</mrow>
+            <mrow>\amp=<var name="$answer"/></mrow>
+          </md>
+        </p>
+      </solution>
+    </webwork>
+  </exercise>
+
+  <exercise>
+    <title>String Answers</title>
+    <idx><h><webwork/></h><h>string answers</h></idx>
+    <idx><h><webwork/></h><h>algorithmic image</h></idx>
+    <introduction>
+      <p>
+        Spelling counts, but not capitalization or spaces.
+      </p>
+    </introduction>
+    <webwork>
+      <pg-code>
+        Context("ArbitraryString");
+        $platypus = Compute("platypus")->cmp(checker => sub {
+          my ($correct,$student,$ans) = @_;
+          $correct = $correct->value;
+          $student = $student->value;
+          $student = lc($student);
+          $student =~ s/ +/ /;
+          $student =~ s/^ //;
+          $student =~ s/ $//;
+          return ($student eq $correct);
+        });
+      </pg-code>
+      <statement>
+        <p>
+          This Venn Diagram groups animals by certain characteristics.
+        </p>
+        <image width="50%">
+          <latex-image syntax="PGtikz">
+            \draw[fill=red, opacity=0.5] (0,0) circle (2cm) node[below left=1.5cm, opacity=1] {Has a Bill} node[below left, opacity=1] {Duck};
+            \draw[fill=green, opacity=0.5] (60:2cm) circle (2cm) node [above=2.1cm, opacity=1] {Is Venemous} node[above=0.5cm, opacity=1] {Jellyfish};
+            \draw[fill=blue, opacity=0.5] (0:2cm) circle (2cm) node [below right=1.5cm, opacity=1] {Has Fur} node[below right, opacity=1] {Beaver};
+          </latex-image>
+        </image>
+        <p>
+          Name an animal that belongs in the center region. Spelling counts!
+        </p>
+        <p>
+          <var name="$platypus" width="30"/>
+        </p>
+      </statement>
+    </webwork>
+  </exercise>
+
+  <exercise>
+    <title>Open Problem Library</title>
+    <idx><h><webwork/></h><h>Open Problem Library</h></idx>
+    <introduction>
+      <p>
+        <webwork/> has an Open Problem Library with over 40,000 exercises.
+        One of them is this exercise, with file path
+        <url href="https://github.com/openwebwork/webwork-open-problem-library/blob/master/OpenProblemLibrary/PCC/BasicAlgebra/NumberBasics/FactorInteger10.pg"><c>Library/PCC/BasicAlgebra/NumberBasics/FactorInteger10.pg</c></url>.
+      </p>
+    </introduction>
+    <webwork source="Library/PCC/BasicAlgebra/NumberBasics/FactorInteger10.pg"/>
+  </exercise>
+
+  <exercise>
+    <title>Multiple Stages</title>
+    <idx><h><webwork/></h><h>stages</h></idx>
+    <idx><h><webwork/></h><h>flexible answer syntax</h></idx>
+    <introduction>
+      <p>
+        This problem has multiple parts that must be completed in order.
+        Try answering the second part with various things you might expect a user to enter.
+      </p>
+    </introduction>
+    <webwork>
+      <pg-code>
+        Context("Fraction");
+        $quadratic = Formula("2 x^2 - 7 x - 15")->reduce;
+        $x1 = Fraction(5,1);
+        $x2 = Fraction(-3,2);
+        Context()->flags->set(reduceConstants=>0,reduceConstantFunctions=>0);
+        Context("FiniteSolutionSets");
+        $solutions = Formula("-3/2,5");
+      </pg-code>
+      <stage>
+        <title>Identify Coefficients</title>
+        <statement>
+          <p>
+            Consider the equation
+            <me><var name="$quadratic" /> = 0</me>
+            Identify the coefficients for the quadratic equation using the standard form from
+            <xref ref="subsection-the-quadratic-formula" />.
+          </p>
+          <p>
+            <m>a=</m> <var name="2" width="4"/>,
+            <m>b=</m> <var name="-7" width="4"/>,
+            <m>c=</m> <var name="-15" width="4"/>
+          </p>
+        </statement>
+        <solution>
+          <p>
+            Take the coefficient of <m>x^2</m> for the value of <m>a</m>,
+            the coefficient of <m>x</m> for <m>b</m>, and the constant for <m>c</m>.
+            <em>In this case</em>, they are <m>a = 2</m>,
+            <m>b = -7</m>, <m>c = -15</m>.
+          </p>
+        </solution>
+      </stage>
+      <stage>
+        <title>Use the Quadratic Formula</title>
+        <statement>
+          <p>
+            Use the quadratic formula to find the solution set to
+            <me><var name="$quadratic"/>=0</me>
+          </p>
+          <p>
+            <var name="$solutions" width="30"/>
+          </p>
+        </statement>
+        <solution>
+          <p>
+            Recall that the quadratic formula is given in <xref ref="subsection-the-quadratic-formula" />.
+          </p>
+          <p>
+            You already identified <m>a = 2</m>, <m>b = -7</m>, and <m>c = -15</m>,
+            and the results from using these in the quadratic formula are <m>-\frac{3}{2}</m> and <m>5</m>.
+          </p>
+        </solution>
+      </stage>
+    </webwork>
+  </exercise>
+
+  <exercise>
+    <title>Units in Answers</title>
+    <idx><h><webwork/></h><h>unit answers</h></idx>
+    <introduction>
+      <p>
+        The answers in this exercise require that units be used.
+      </p>
+    </introduction>
+    <webwork>
+      <pg-code>
+        $newUnits = [
+          {name=>'gallons',conversion=>{factor=>0.00378541,m=>3}},
+          {name=>'gallon',conversion=>{factor=>0.00378541,m=>3}},
+          {name=>'gal',conversion=>{factor=>0.00378541,m=>3}},
+        ];
+        Context()->flags->set(tolType=>'absolute',tolerance=>0.1);
+        $volume = NumberWithUnits("20/2.78 gal", {newUnit=>$newUnits});
+        Context("Percent");
+        Context()->flags->set(tolerance=>0.01);
+        $increase = Percent(352/278-1);
+        Context("Currency");
+        $cost = Currency(3.52*1.028);
+      </pg-code>
+      <statement>
+        <p>
+          <ol>
+            <li>
+              <p>
+                The average cost of gasoline in the United States in 2010 was $2.78 per gallon.
+                How much gasoline would $20 get you in 2010, on average?
+              </p>
+              <p>
+                <var name="$volume" width="10"/>
+              </p>
+            </li>
+            <li>
+              <p>
+                In 2011, the average cost was $3.52 per gallon. What percent increase was that from 2010?
+              </p>
+              <p>
+                <var name="$increase" width="10"/>
+              </p>
+            </li>
+            <li>
+              <p>
+                In 2012, the cost had risen 2.8% from the 2011 cost.
+                What was the cost of a gallon of gasoline in 2012?
+              </p>
+              <p>
+                <var name="$cost" width="10"/>
+              </p>
+            </li>
+          </ol>
+        </p>
+      </statement>
+    </webwork>
+  </exercise>
+</section>

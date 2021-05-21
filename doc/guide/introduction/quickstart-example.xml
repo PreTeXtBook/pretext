@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="quickstart-example">
+    <title>A Careful, Quick, Minimal Example</title>
+
+    <introduction>
+        <p>We are going to walk you through a simple example carefully, with some explanation along the way.  There are two steps.  First we will author your source and then after some setup, we will process your source file into output.</p>
+    </introduction>
+
+    <section xml:id="quickstart-author">
+        <title>Authoring</title>
+
+        <p>Having read already about text editors in <xref ref="introduction-to-source-formatting" />, fire up your text editor and begin a text file that you will name <c>quickstart.xml</c>.</p>
+
+        <p>Though it is optional, it will be good practice to always make the first line of your file the following.  This will identify your source file as an XML file, but the exact particulars are not important now.</p>
+
+        <pre>
+        &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+        </pre>
+
+        <p>Every <pretext /> document is enclosed inside <tag>pretext</tag> tags and we will be writing an <tag>article</tag>.  So extend your source to the following.</p>
+
+        <pre>
+        <![CDATA[
+        <?xml version="1.0" encoding="UTF-8"?>
+        <pretext>
+          <article>
+          </article>
+        </pretext>
+        ]]>
+        </pre>
+
+        <p>Notice how every opening tag (no slash) has a paired closing tag (with a slash, plus the identical name).  We would like to our article to have some content, so we will add a short paragraph with a single sentence.  So finish your file off as follows and save it.</p>
+
+        <pre>
+        <![CDATA[
+        <?xml version="1.0" encoding="UTF-8"?>
+        <pretext>
+          <article>
+            <p>
+              This is a short sentence.
+            </p>
+          </article>
+        </pretext>
+        ]]>
+        </pre>
+
+        <p>That's it.  You now have a complete, properly-formed <pretext /> document.  You are ready to organize the two tools necessary to process your source into different formats.</p>
+    </section>
+
+    <section xml:id="quickstart-setup">
+        <title>Setup</title>
+
+        <p>There are two components to processing your document, the <pretext /> stylesheets and the <c>xsltproc</c> program.  We work at the <term>command-line</term><idx>command-line</idx> inside of a <term>terminal</term><idx>terminal</idx> or <term>console</term><idx>console</idx>.  If you do not know what this is, it will seem very primitive at first.  Sometimes the old ways are the best ways.  This will be called a <q>Command Prompt</q> in Windows or a <q>Terminal</q> on a Mac.  In Linux it may be known as a <q>console</q> or a <q>shell</q>.  A tutorial, which is Linux-specific, can be found at <url href="http://ryanstutorials.net/linuxtutorial/">Ryan's Tutorials</url><fn><c>ryanstutorials.net/linuxtutorial/</c></fn> and certainly others exist.</p>
+
+        <p>The operating system on a Mac is built on Unix, which is very similar to Linux, so most of the directions here will be little changed between the two.  Procedures can be very different in Windows (<xref ref="windows-install-notes" />, <xref ref="windows-subsystem-linux" />).  One alternative is <url href="https://cocalc.com/">CoCalc</url><fn><c>cocalc.com</c></fn> which provides a full Linux computer for free in your web browser, so that may be an excellent place for initial experiments (<xref ref="topic-build-in-cocalc" />).</p>
+
+        <paragraphs>
+            <title>Step 1: <pretext /></title>
+
+            <p>You need to obtain the <pretext /> stylesheets, which are the main part of <pretext />.  Since you are reading this, it may be possible that you have this already.  You can use <c>git</c> to <term>clone</term> the <pretext /> from the GitHub repository, and then be sure to checkout the <c>dev</c> branch to have the latest version.  This is the best way to go, and you should only download the repository as a zip file once for an initial experiment, and then switch to using a clone instead.</p>
+
+            <p>Once you have a clone of the repository, you can issue <c>git pull</c>, and git will update your local copy with any recent changes.  You should do this <em>regularly</em><mdash />meaning on the order of <em>daily</em>.  See the <xref ref="faq-pull-regularly" text="custom">FAQ entry</xref> for more about why we <em>expect</em> you to do this.</p>
+
+            <p>See the <url href="https://pretextbook.org/"><pretext/> site</url> at <c>pretextbook.org</c> for details and commands for this step, right on the main page.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Step 2: <c>xsltproc</c></title>
+
+            <p>This is the command-line program which takes your document and a <pretext /> stylesheet to together produce output.  On Linux or a Mac you probably already have it installed as part of system software.  On Windows it is not so simple.</p>
+
+            <p>In either case see the website for details abut verifying you have this, or how to install it.</p>
+        </paragraphs>
+
+    </section>
+
+    <section xml:id="quickstart-processing">
+        <title>Processing</title>
+
+        <p>At a command prompt in your terminal or console adjust the pathnames for the two files and execute:<cd>
+            <cline>xsltproc /path/to/mathbook/xsl/pretext-html.xsl /path/to/quickstart.xml</cline>
+        </cd>In the current working directory you should now find the file <c>article-1.html</c> which you can view in a web browser.  (You will want an internet connection since various parts of the page come from the network.  Someday we will create output for the offline situation.)  It will look very plain, but you should be able to read the sentence.</p>
+
+        <p>Now, try the following, again with adjusted paths, and all on one line:<cd>
+            <cline>xsltproc -o quick.tex /path/to/mathbook/xsl/pretext-latex.xsl</cline>
+            <cline>/path/to/quickstart.xml</cline>
+        </cd></p>
+
+        <p>In the current working directory you should now find the file <c>quick.tex</c> which you can process with <c>pdflatex</c> or <c>xelatex</c> at the command line as below.  If you do not have <latex /> installed on your system, you could process this file within a variety of online services, and CoCalc would be an obvious choice.<cd>
+            <cline>pdflatex quick.tex</cline>
+        </cd>In the current working directory you should now find the file <c>quick.pdf</c> which you can view or print with standard PDF viewing software.  You could even send it to a print-on-demand service to get nice hardback books, though I suspect sales will not be great.</p>
+
+        <p> Note that if your project includes multiple files you will need to pass the <c>-xinclude</c> flag to <c>xsltproc</c>, though this is not needed for this simple example.
+        An example of this is the command
+        <cd><cline>xsltproc -xinclude /path/to/mathbook/xsl/pretext-html.xsl /path/to/index.xml</cline></cd>
+        For more on this see <xref ref="topic-xinclude"/> and <xref ref="processing-modular"/>.
+        </p>
+
+        <p>That's it.  You now know all the basics of authoring with <pretext />, since you have produced two radically different output formats with identical content from the exact same structured input, via two different command lines.  Everything you need to author a complete article or textbook, and produce it in many different formats, is just an extension or variation on what you just did.  Let us look at a few simple extensions right away before being more methodical.</p>
+    </section>
+
+    <section xml:id="quickstart-extend-minimal-example">
+        <title>Extending the Minimal Example</title>
+
+        <p>We will not keep reproducing the entire example but instead suggest a series of modifications.  After each edit, process the file again to make sure your syntax is correct (before you get too far along) and to see the changes.</p>
+
+        <p>The generic name of the resulting files is pretty bland, and it would be nice to have a title for our article.  We will add an <term>attribute</term><idx>attribute</idx> to the <tag>article</tag> tag, specifically <attr>xml:id</attr>, which is a very important part of <pretext /> and used frequently.  For now, it will be used to generate the names of the output files.  (The <q>at</q> symbol is a way of reminding you that it is an attribute, it is not part of what you author.)</p>
+
+        <p>So make the following modifications:</p>
+
+        <pre>
+        <![CDATA[
+        <article xml:id="quickly">
+          <title>My First Small Example</title>
+
+          <p>
+            This is a short sentence.
+          </p>
+        </article>
+        ]]>
+        </pre>
+
+        <p>Your outputs should now have a title, and more importantly, the HTML filename will be <c>quickly.html</c>.</p>
+
+        <p>Let us give our article a bit of structure.  We will have an introduction and two sections with their own titles.  So replace the one-sentence paragraph by the following, all following the article title and contained within the <tag>article</tag> tags.</p>
+
+        <pre>
+        <![CDATA[
+        <introduction>
+          <p>
+            Let's get started.
+          </p>
+        </introduction>
+
+        <section xml:id="section-short">
+          <title>Beginnings</title>
+
+          <p>
+            This is a short sentence.
+          </p>
+        </section>
+
+        <section xml:id="section-multiple-paragraph">
+          <title>Endings</title>
+
+          <p>
+            This is a longer sentence that is followed by another sentence.
+            Two sentences, and a second paragraph to follow.
+          </p>
+
+          <p>
+            One more short paragraph.
+          </p>
+        </section>
+        ]]>
+        </pre>
+
+        <p>The <latex />/PDF output will be a bit odd looking since every paragraph is so short, but all the content should be there.  Notice that the HTML output now has a table of contents to the left and active navigation buttons.  Also the two sections are in their own files and the URLs have been constructed from the supplied values of the <attr>xml:id</attr> attribute.</p>
+
+        <p>One last experiment<mdash />let us add some mathematics.  We use XML tags, <tag>m</tag> for <q>inline</q> mathematics and <tag>me</tag> for a <q>math equation</q> which will be rendered with a bit of vertical separation and centered from left to right.  We use <latex /> syntax for mathematics, which has been the standard for working mathematicians for decades.  For electronic presentation, we rely on the excellent <url href="https://www.mathjax.org/">MathJax</url><fn><c>www.mathjax.org</c></fn> project which basically supports all the syntax of the <url href="https://www.ctan.org/pkg/amsmath?lang=en">amsmath</url><fn><c>www.ctan.org/pkg/amsmath</c></fn> package from the American Mathematical Society.  Add the following sentence to any of the paragraphs of your article.</p>
+
+        <pre>
+        <![CDATA[
+        If the two sides of a right triangle have lengths
+        <m>a</m> and <m>b</m> and the hypotenuse has length
+        <m>c</m>, then the equation <me>a^2 + b^2 = c^2</me>
+        will always hold.
+        ]]>
+        </pre>
+
+        <p>So your final source file might look like the following.  You now have many of the basic skills you would need to write an entire research article in mathematics, and should be in a position to learn the remainder easily and quickly.</p>
+
+        <pre>
+        <![CDATA[
+        <pretext>
+          <article xml:id="quickly">
+            <title>My First Small Example</title>
+
+            <introduction>
+              <p>
+                Let's get started.
+              </p>
+            </introduction>
+
+            <section xml:id="section-short">
+                <title>Beginnings</title>
+
+                <p>
+                  This is a short sentence.
+                </p>
+            </section>
+
+            <section xml:id="section-multiple-paragraph">
+                <title>Endings</title>
+
+                <p>
+                  This is a longer sentence that is followed
+                  by another sentence. Two sentences, and a
+                  second paragraph to follow.
+                </p>
+
+                <p>
+                  One more short paragraph.  If the two sides of a
+                  right triangle have lengths <m>a</m> and <m>b</m>
+                  and the hypotenuse has length <m>c</m>, then the
+                  equation <me>a^2 + b^2 = c^2</me> will always hold.
+                </p>
+            </section>
+          </article>
+        </pretext>
+        ]]>
+        </pre>
+    </section>
+</chapter>

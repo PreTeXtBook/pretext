@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="publisher-faq">
+    <title>Publisher FAQ: Frequently Asked Questions</title>
+
+    <p>This is a list of answers to frequent questions, in no particular order.</p>
+
+    <p><ol>
+        <li>
+            <title>Why does the conversion to HTML use a fixed width for the text?</title>
+            <p>There is an optimal number of characters per line for human readers,
+               based on research and centuries of book design.
+               So we set a fixed width such that the default font comes close to achieving this optimal value.
+               We also use responsive design to accomodate the constraints of a small screen as best as possible.
+               A reader will not want to have to carefully resize a browser window to achieve the optimal width,
+               nor should a line of text spread to many, many characters across a very expansive screen.
+               See <xref ref="principle-good-design" text="type-local">Principle</xref>.</p>
+        </li>
+
+        <li>
+            <title>I do not want my examples in knowls (nor my inline exercises, nor proofs)</title>
+            <p>You can change that!  See <xref ref="knowled-content"/>.</p>
+        </li>
+
+        <li>
+            <title>Knowls are fantastic!  Can I have more?</title>
+            <p>Start at <xref ref="knowled-content"/> and follow a cross-reference to details on the various options.</p>
+        </li>
+
+        <li>
+            <title>Why are my knowls empty?</title>
+            <p>When viewing the HTML version on your laptop or local computer as files, do not expect knowls to render properly.  This is a known bug/feature, and there is nothing to be done about it, unless you run a web server on your own machine, which fortunately is a very easy thing to do (see the section of the Author's Guide about testing <init>HTML</init> output locally). Think of it this way: the knowl content comes from a server, but on your laptop there is no web server.  You are just looking at files.</p>
+            <p>A possible added confusion is that some knowls, such as proofs, will appear.
+               That is because their content is embedded in the page, not taken from a file.</p>
+        </li>
+
+        <li>
+            <title>How can I change the colors in the HTML version?</title>
+
+            <p>
+              Start at <xref ref="online-style-options"/> to learn about how to specify alternate styles for <init>HTML</init> output,
+              including an easy way to specify an existing alternate color file.
+            </p>
+        </li>
+
+        <li>
+            <title>Something looks wrong in the HTML output. How can I customize the layout of the HTML version?</title>
+            <p>
+                If there are some anomalies in the HTML version of your book,
+                probably that was just an oversight and can be fixed easily.
+                Send a message to <c>pretext-support@googlegroups.com</c>
+                describing the problem and
+                <em>including a live link to the page showing the error</em>.
+                Do not make a minimal example. (CSS issues are handled in a
+                completely different way than other software issues.)
+              </p>
+
+              <p>
+                The long-term plan is to have a variety of different layout options,
+                which can be chosen as easily as choosing a color scheme.
+                See <xref ref="principle-output-styles" text="type-local">Principle</xref>.
+                The first step is to rewrite the current CSS
+                so that it is easy to develop alternate layouts.
+                That should be done by the end of Spring, 2018.
+                Then people can develop new styles!  Until that happens, either suffer
+                with the current style, or hack away at your own peril.  (Note that
+                the <pretext/> support groups will not provide any help with hacking
+                the layout, but a lot of help will be available when it is time to
+                develop alternate layouts.)
+              </p>
+        </li>
+
+        <li>
+            <title>Why does the HTML output load so many external resources?</title>
+            <p>The subtext perhaps being, <q>Why shouldn't I host these on my own server?</q>  A main goal for <pretext /> is to spare authors the headaches of learning new technologies just so they can get their content in front of readers.  That knowledge should be built into software, so an author can work at a higher level, explaining the intricacies of their discipline.  So we only assume an author can place locally-built HTML output onto some public server they have permission to use.  Any extra enabling techology we do not want to create ourselves gets pulled from other public servers.  MathJax, both code and fonts, is a good example, as one of the enabling projects.  Perhaps it is <em>the</em> enabling project.</p>
+
+            <p>This way,<ul>
+                <li>Authors can concentrate on their writing, not updating services on their server.</li>
+                <li>Servers that are hostile to ad-hoc configurations (think <q>learning management systems</q>) are not an impediment to hosting projects.</li>
+                <li>For the most part, updates to external resources happen automatically.  This allows authors and <pretext /> developers to concentrate on other aspects of their work.</li>
+            </ul></p>
+
+            <p>We get MathJax from a <term>content delivery network</term> (CDN).  Once we have that dependency, then fonts and search from Google, CSS and Javascript from the American Institute of Mathematics, and other components, all have the same dependency: a decent internet connection.  Our experience over several years is that these resources have good uptimes and good bandwidth, and so are not a source of problems.  A good offline version, with resources packaged via a script, would be a good long-term project.</p>
+
+            <p>Finally, we do not load minor resources indiscriminately.  Something in your source should suggest they are necessary and we perform those checks, document-wide.  However, since a cross-reference is usually implemented as a knowl, and we cannot be sure what a knowl might contain, we do tend to load resources on <em>every</em> page, even if only needed once.  We hope to improve this situation.  And you are enouraged to help if you have technical skills in these areas.</p>
+        </li>
+
+        <li>
+            <title>Searching my <init>PDF</init> output is broken</title>
+            <p><pretext /> goes to great lengths to make a high-quality <init>PDF</init>, but if you manipulate it by adding in new pages, or adjust the intermediate <latex /> to use other fonts, you run the risk of breaking some of the features.</p>
+
+            <p>A ligature is a combination of two characters into one, like a lower-case <q>f</q> followed closely by a lower-case <q>i</q> without a dot.  These can confuse a search.  Verbatim text sometimes ends up with <q>smart</q> quotes, where left and right versions are inverted.  This frustrates copying source code into an actual program.  And so on.  If you see problems like this with un-customized <init>PDF</init> output, we would like to hear about it.</p>
+        </li>
+
+        <li>
+            <title>My LMS breaks my HTML</title>
+            <p>Suppose your <init>HTML</init> output seems to work fine, but once you place it inside your university's Learning Management System (<init>LMS</init>) it no longer works very well.</p>
+            <p>A likely culprit is that your <init>LMS</init> is adding material to your files, ruining them in the process.</p>
+        </li>
+
+        <li>
+            <title>I get a bad line break in HTML with a hyphen between text and mathematics</title>
+            <p>When you author something like <c>&lt;m&gt;x&lt;/m&gt;-axis</c> the code produced by MathJax may allow a web browser to break a line just before the hyphen.  Yes, this looks very bad.  No, it is not a problem <pretext/> can easily solve.  So we will wait for MathJax and web browsers to do a better job.  You might let us know when this happens?</p>
+        </li>
+    </ol></p>
+</chapter>

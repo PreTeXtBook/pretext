@@ -22,12 +22,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--
 To process this file, at the command-line issue:
 
-xsltproc /path/to/mathbook/xsl/mathbook-html.xsl /path/to/mathbook/examples/fonts-and-characters.xml
+xsltproc /path/to/mathbook/xsl/pretext-html.xsl /path/to/mathbook/examples/fonts-and-characters.xml
 
 then find  "fonts-and-characters.html"  in the current working directory
 and use a web browser to view.  For PDF/print, issue:
 
-xsltproc -o fonts.tex /path/to/mathbook/xsl/mathbook-latex.xsl /path/to/mathbook/examples/fonts-and-characters.xml
+xsltproc -o fonts.tex /path/to/mathbook/xsl/pretext-latex.xsl /path/to/mathbook/examples/fonts-and-characters.xml
 
 and apply  xelatex  to  "fonts.tex"  in the current working directory.
 (pdflatex *will not* give satisfactory results)
@@ -70,7 +70,7 @@ and apply  xelatex  to  "fonts.tex"  in the current working directory.
             <p>This next sections contain examples from various languages.  The characters should render in HTML, but without any special support for subtle variations of how a language is used (<eg /> date formats).  For <latex /> output, the <c>polyglossia</c> package may handle details like hyphenation.  Here we mostly test characters and fonts.  Improvements from those knowledgeable about the use of particular languages within  <latex /> are especially welcome, as are requests for particular languages.</p>
 
             <list>
-                <caption>Supported Languages</caption>
+                <title>Supported Languages</title>
                 <ol>
                     <li>Greek (modern), 2016-07-25</li>
                     <li>Korean, 2016-12-08</li>
@@ -99,7 +99,7 @@ and apply  xelatex  to  "fonts.tex"  in the current working directory.
             <p><ul>
                 <li>Language code: <c>el</c></li>
                 <li>Font: <c>CMU Serif</c> (Computer Modern Unicode)</li>
-                <li>Source: NA</li><!-- get info from Jarhme -->
+                <li>Source: Opening lines of the Odyssey</li>
             </ul></p>
 
             <p>ἄνδρα μοι ἔννεπε, μοῦσα, πολύτροπον, ὃς μάλα πολλὰ πλάγχθη, ἐπεὶ Τροίης ἱερὸν πτολίεθρον ἔπερσεν: πολλῶν δ᾽ ἀνθρώπων ἴδεν ἄστεα καὶ νόον ἔγνω, πολλὰ δ᾽ ὅ γ᾽ ἐν πόντῳ πάθεν ἄλγεα ὃν κατὰ θυμόν, ἀρνύμενος ἥν τε ψυχὴν καὶ νόστον ἑταίρων. ἀλλ᾽ οὐδ᾽ ὣς ἑτάρους ἐρρύσατο, ἱέμενός περ: αὐτῶν γὰρ σφετέρῃσιν ἀτασθαλίῃσιν ὄλοντο, νήπιοι, οἳ κατὰ βοῦς Ὑπερίονος Ἠελίοιο ἤσθιον: αὐτὰρ ὁ τοῖσιν ἀφείλετο νόστιμον ἦμαρ. τῶν ἁμόθεν γε, θεά, θύγατερ Διός, εἰπὲ καὶ ἡμῖν. ἔνθ᾽ ἄλλοι μὲν πάντες, ὅσοι φύγον αἰπὺν ὄλεθρον, οἴκοι ἔσαν, πόλεμόν τε πεφευγότες ἠδὲ θάλασσαν: τὸν δ᾽ οἶον νόστου κεχρημένον ἠδὲ γυναικὸς νύμφη πότνι᾽ ἔρυκε Καλυψὼ δῖα θεάων ἐν σπέσσι γλαφυροῖσι, λιλαιομένη πόσιν εἶναι. ἀλλ᾽ ὅτε δὴ ἔτος ἦλθε περιπλομένων ἐνιαυτῶν, τῷ οἱ ἐπεκλώσαντο θεοὶ οἶκόνδε νέεσθαι εἰς Ἰθάκην, οὐδ᾽ ἔνθα πεφυγμένος ἦεν ἀέθλων καὶ μετὰ οἷσι φίλοισι. θεοὶ δ᾽ ἐλέαιρον ἅπαντες νόσφι Ποσειδάωνος: ὁ δ᾽ ἀσπερχὲς μενέαινεν ἀντιθέῳ Ὀδυσῆι πάρος ἣν γαῖαν ἱκέσθαι. ἀλλ᾽ ὁ μὲν Αἰθίοπας μετεκίαθε τηλόθ᾽ ἐόντας, Αἰθίοπας τοὶ διχθὰ δεδαίαται, ἔσχατοι ἀνδρῶν, οἱ μὲν δυσομένου Ὑπερίονος οἱ δ᾽ ἀνιόντος, ἀντιόων ταύρων τε καὶ ἀρνειῶν ἑκατόμβης. ἔνθ᾽ ὅ γ᾽ ἐτέρπετο δαιτὶ παρήμενος: οἱ δὲ δὴ ἄλλοι Ζηνὸς ἐνὶ μεγάροισιν Ὀλυμπίου ἁθρόοι ἦσαν. τοῖσι δὲ μύθων ἦρχε πατὴρ ἀνδρῶν τε θεῶν τε: μνήσατο γὰρ κατὰ θυμὸν ἀμύμονος Αἰγίσθοιο, τόν ῥ᾽ Ἀγαμεμνονίδης τηλεκλυτὸς ἔκταν᾽ Ὀρέστης: τοῦ ὅ γ᾽ ἐπιμνησθεὶς ἔπε᾽ ἀθανάτοισι μετηύδα: ὢ πόποι, οἷον δή νυ θεοὺς βροτοὶ αἰτιόωνται: ἐξ ἡμέων γάρ φασι κάκ᾽ ἔμμεναι, οἱ δὲ καὶ αὐτοὶ σφῇσιν ἀτασθαλίῃσιν ὑπὲρ μόρον ἄλγε᾽ ἔχουσιν, ὡς καὶ νῦν Αἴγισθος ὑπὲρ μόρον Ἀτρεΐδαο γῆμ᾽ ἄλοχον μνηστήν, τὸν δ᾽ ἔκτανε νοστήσαντα, εἰδὼς αἰπὺν ὄλεθρον, ἐπεὶ πρό οἱ εἴπομεν ἡμεῖς, Ἑρμείαν πέμψαντες, ἐύσκοπον ἀργεϊφόντην, μήτ᾽ αὐτὸν κτείνειν μήτε μνάασθαι ἄκοιτιν: ἐκ γὰρ Ὀρέσταο τίσις ἔσσεται Ἀτρεΐδαο, ὁππότ᾽ ἂν ἡβήσῃ τε καὶ ἧς ἱμείρεται αἴης. ὣς ἔφαθ᾽ Ἑρμείας, ἀλλ᾽ οὐ φρένας Αἰγίσθοιο πεῖθ᾽ ἀγαθὰ φρονέων: νῦν δ᾽ ἁθρόα πάντ᾽ ἀπέτισεν.</p>
@@ -228,7 +228,7 @@ and apply  xelatex  to  "fonts.tex"  in the current working directory.
                 <p>Other elements have language support.  We are starting with <c>foreign</c>, which also italicizes the content.</p>
 
                 <list>
-                    <caption>I Can Eat Glass</caption>
+                    <title>I Can Eat Glass</title>
 
                     <introduction>
                         <p>From the <url href="http://kermitproject.org/">Kermit Project</url> a <url href="http://kermitproject.org/utf8.html#notes">startling phrase</url> in many languages.</p>
@@ -273,7 +273,7 @@ and apply  xelatex  to  "fonts.tex"  in the current working directory.
                 <!-- ex &#x0020; space, not visible  -->
 
                 <table>
-                    <caption>Basic Latin, Regular</caption>
+                    <title>Basic Latin, Regular</title>
                 <tabular>
                     <row><cell />
                     <cell><c>0</c></cell>
@@ -316,7 +316,7 @@ and apply  xelatex  to  "fonts.tex"  in the current working directory.
                 <!-- ex &#x0000; - &#x001F; controls -->
                 <!-- ex &#x007F; control             -->
                 <table>
-                    <caption>Basic Latin, Monospace</caption>
+                    <title>Basic Latin, Monospace</title>
                     <tabular>
                         <row><cell />
                         <cell><c>0</c></cell>
@@ -364,7 +364,7 @@ and apply  xelatex  to  "fonts.tex"  in the current working directory.
                 <!-- ex &#x00A0; non-breaking space  -->
                 <!-- ex &#x00AD; soft hyphen         -->
                 <table>
-                    <caption>Latin-1 Supplement, Regular</caption>
+                    <title>Latin-1 Supplement, Regular</title>
                 <tabular>
                     <row><cell />
                     <cell><c>0</c></cell>
@@ -408,7 +408,7 @@ and apply  xelatex  to  "fonts.tex"  in the current working directory.
                 <!-- ex &#x00A0; non-breaking space  -->
                 <!-- ex &#x00AD; soft hyphen         -->
                 <table>
-                    <caption>Latin-1 Supplement, Monospace</caption>
+                    <title>Latin-1 Supplement, Monospace</title>
                     <tabular>
                         <row><cell />
                         <cell><c>0</c></cell>
@@ -449,7 +449,7 @@ and apply  xelatex  to  "fonts.tex"  in the current working directory.
                 <p>Good success rendering with <c>xelatex</c> and no extra setup, subject to glyphs actually being available in whatever font you use.  Our default font is Latin Modern.  About 25% of these are missing when rendered with <c>pdflatex</c>.</p>
 
                 <table>
-                    <caption>Latin Extended-A</caption>
+                    <title>Latin Extended-A</title>
                 <tabular>
                     <row><cell />
                     <cell><c>0</c></cell>
@@ -501,7 +501,7 @@ and apply  xelatex  to  "fonts.tex"  in the current working directory.
                 <p>Rendering with <c>xelatex</c> and no extra setup, with default latin Modern fonts, maybe 50% missing, and some constructions of accents are clearly wrong.  Almost none of these appear when rendered with <c>pdflatex</c>. (When processed with <c>lualatex</c> the incorrectly accented characters are not even visible, but we have not learned much about using fonts in LuaTeX.)  Latin Modern does not claim to support any of this range.</p>
 
                 <table>
-                    <caption>Latin Extended-B</caption>
+                    <title>Latin Extended-B</title>
                 <tabular>
                     <row><cell />
                     <cell><c>0</c></cell>
@@ -554,7 +554,7 @@ and apply  xelatex  to  "fonts.tex"  in the current working directory.
                 <p>Latin Modern, our default font, supports this range of 256 characters, which includes 90 Vietnamese characters.  Their documentation shows about 140 characters rendered correctly, which seems to jibe with the examples here that render properly.</p>
 
                 <table>
-                    <caption>Latin Extended Additional</caption>
+                    <title>Latin Extended Additional</title>
                 <tabular>
                     <row><cell />
                     <cell><c>0</c></cell>

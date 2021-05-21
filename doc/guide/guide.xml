@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- This file is part of the documentation of PreTeXt              -->
+<!--                                                                -->
+<!--         The PreTeXt Guide                                      -->
+<!--                                                                -->
+<!-- Copyright (C) 2013-2019                                        -->
+<!-- Robert A. Beezer, David Farmer, Alex Jordan, Mitchel T. Keller -->
+<!-- See the file COPYING for copying conditions.                   -->
+
+<pretext xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <xi:include href="guideinfo.xml"/>
+
+    <book xml:id="guide-toc">
+        <title>The <pretext /> Guide</title>
+
+        <!-- Front Matter -->
+        <xi:include href="frontmatter.xml"/>
+
+        <part xml:id="part-introduction">
+            <title>Introduction</title>
+
+            <xi:include href="introduction/start-here.xml"/>
+            <xi:include href="introduction/quickstart-example.xml"/>
+        </part>
+
+        <part xml:id="part-author">
+            <title>Author's Guide</title>
+
+            <xi:include href="author/overview.xml"/>
+            <xi:include href="author/topics.xml"/>
+            <xi:include href="author/processing.xml"/>
+            <xi:include href="author/schema.xml"/>
+            <xi:include href="author/pretext-script.xml"/>
+            <xi:include href="author/webwork.xml"/>
+            <xi:include href="author/advice.xml"/>
+            <!-- keep the Author's FAQ last within part -->
+            <xi:include href="author/author-faq.xml"/>
+        </part>
+
+        <!-- The Basics Reference could be split out  -->
+        <!-- into a series of chapters, one per file  -->
+        <!-- with the "part" and "title" obvious here -->
+        <xi:include href="basics/basics-part.xml"/>
+
+        <part xml:id="part-publisher">
+            <title>Publisher's Guide</title>
+
+            <xi:include href="publisher/production.xml"/>
+            <xi:include href="publisher/open-licenses.xml"/>
+            <xi:include href="publisher/conversions.xml"/>
+            <xi:include href="publisher/online-html.xml"/>
+            <xi:include href="publisher/pdf-print.xml"/>
+            <xi:include href="publisher/epub.xml"/>
+            <xi:include href="publisher/runestone.xml"/>
+            <xi:include href="publisher/slides.xml"/>
+            <xi:include href="publisher/jupyter-notebook.xml"/>
+            <xi:include href="publisher/instructor-version.xml"/>
+            <xi:include href="publisher/ancillaries.xml"/>
+            <xi:include href="publisher/webwork.xml"/>
+            <xi:include href="publisher/web-hosting.xml"/>
+            <xi:include href="publisher/latex-fonts.xml"/>
+            <xi:include href="publisher/latex-styling.xml"/>
+            <xi:include href="publisher/cover-design.xml"/>
+            <xi:include href="publisher/publisher-file.xml"/>
+            <xi:include href="publisher/print-on-demand.xml"/>
+            <!-- keep the Publisher's FAQ last within part -->
+            <xi:include href="publisher/publisher-faq.xml"/>
+        </part>
+
+        <part xml:id="part-developer">
+            <title>Developer's Guide</title>
+
+            <xi:include href="developer/coding.xml"/>
+            <xi:include href="developer/debugging.xml"/>
+            <xi:include href="developer/git.xml"/>
+        </part>
+
+        <!-- Appendices -->
+        <xi:include href="backmatter.xml"/>
+
+    </book>
+</pretext>

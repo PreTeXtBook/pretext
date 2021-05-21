@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--********************************************************************
+Copyright 2019 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+<pretext>
+
+    <docinfo>
+        <macros>
+        \newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4}
+        </macros>
+    </docinfo>
+
+    <slideshow>
+        <title>PreTeXt</title>
+        <subtitle>A Slideshow</subtitle>
+
+        <frontmatter>
+            <titlepage>
+                <author>
+                    <personname>Robert A. Beezer</personname>
+                    <institution>University of Puget Sound</institution>
+                </author>
+                <event>At a Test Conference</event>
+                <date><today/></date>
+            </titlepage>
+
+            <abstract>
+                <p>An <tag>abstract</tag> can appear on an early slide, optionally.  This is a standard component of a <pretext/> <tag>article</tag> (but not of a <tag>book</tag>).</p>
+
+                <p>This is a second paragraph of the abstract for this wonderful talk, just so we have something a bit more substantial.</p>
+            </abstract>
+        </frontmatter>
+
+        <section>
+            <title>Explanation</title>
+
+            <slide>
+                <title>What This Is</title>
+
+                <p>This is a <pretext/> <c>slideshow</c> designed mostly for testing new features.  As of 2019-11-16 it is only initiated, and not comprehensive.  If you improve a feature, please add examples here.</p>
+            </slide>
+        </section>
+
+        <section>
+            <title>Lists</title>
+
+
+            <slide>
+                <title>Ordered Lists, All At Once</title>
+
+                <p><ol>
+                    <li>Two conversions: print-on-demand, electronic <init>PDF</init></li>
+                    <li>Extensive use of the <c>tcolorbox</c> package (CSS-like)</li>
+                    <li>Evolving styling/themes (Andrew Rechnitzer, David Farmer)</li>
+                </ol></p>
+            </slide>
+
+
+            <slide>
+                <title>Ordered Lists, With Pauses</title>
+
+                <p><ol pause="yes">
+                    <li>Two conversions: print-on-demand, electronic <init>PDF</init></li>
+                    <li>Extensive use of the <c>tcolorbox</c> package (CSS-like)</li>
+                    <li>Evolving styling/themes (Andrew Rechnitzer, David Farmer)</li>
+                </ol></p>
+            </slide>
+
+
+            <slide>
+                <title>Unordered Lists, All At Once</title>
+
+                <p><ul>
+                    <li><p>XML syntax is a nested hierarchy (a tree)<ul>
+                        <li><tag>foo</tag><ellipsis/><tag>/foo</tag></li>
+                        <li><tage>bar</tage></li>
+                        <li><c>&lt;baz qux="corge"&gt;</c></li>
+                    </ul></p></li>
+                    <li>Does not have to be <em>UGLY</em>!</li>
+                    <li><pretext/> is <q>author-friendly</q> (Principle #2)</li>
+                </ul></p>
+            </slide>
+
+
+            <slide>
+                <title>Unordered Lists, With Pause</title>
+
+                <!-- Pauses in interior list only acts oddly -->
+                <p><ul pause="yes">
+                    <li><p>XML syntax is a nested hierarchy (a tree)<ul pause="yes">
+                        <li><tag>foo</tag><ellipsis/><tag>/foo</tag></li>
+                        <li><tage>bar</tage></li>
+                        <li><c>&lt;baz qux="corge"&gt;</c></li>
+                    </ul></p></li>
+                    <li>Does not have to be <em>UGLY</em>!</li>
+                    <li><pretext/> is <q>author-friendly</q> (Principle #2)</li>
+                </ul></p>
+            </slide>
+
+
+            <slide>
+                <title>Description Lists, All At Once</title>
+
+                <p><dl>
+                    <li>
+                        <title>Central Processing Unit (CPU)</title>
+                        <p>Controls most of the activities of the computer, performs the arithmetic and logical operations, and contains a small amount of very fast memory.</p>
+                    </li>
+
+                    <li>
+                        <title>Memory</title>
+                        <p>Provides storage for the instructions for the CPU and the data they manipulate.</p>
+                    </li>
+
+                    <li>
+                        <title>Input/Output (I/O)</title>
+                        <p>Communicates with the outside world and with mass storage devices (e.g., disks).</p>
+                    </li>
+
+                    <li>
+                        <title>Bus!</title>
+                        <p>A communication pathway with a protocol specifying exactly how the pathway is used. (The punctuation is just for testing.)</p>
+                    </li>
+                </dl></p>
+            </slide>
+
+            <slide>
+                <title>Description Lists, With Pauses</title>
+
+                <p><dl pause="yes">
+                    <li>
+                        <title>Central Processing Unit (CPU)</title>
+                        <p>Controls most of the activities of the computer, performs the arithmetic and logical operations, and contains a small amount of very fast memory.</p>
+                    </li>
+
+                    <li>
+                        <title>Memory</title>
+                        <p>Provides storage for the instructions for the CPU and the data they manipulate.</p>
+                    </li>
+
+                    <li>
+                        <title>Input/Output (I/O)</title>
+                        <p>Communicates with the outside world and with mass storage devices (e.g., disks).</p>
+                    </li>
+
+                    <li>
+                        <title>Bus!</title>
+                        <p>A communication pathway with a protocol specifying exactly how the pathway is used. (The punctuation is just for testing.)</p>
+                    </li>
+                </dl></p>
+            </slide>
+
+            <slide>
+                <title>Blocks: <tag>definition</tag></title>
+
+                <definition xml:id="definition-indefinite-integral">
+                    <idx>indefinite integral</idx><idx><h>integral</h><h>indefinite integral</h></idx>
+                    <notation>
+                        <usage>\int\,f(x)\,dx</usage>
+                        <description>indefinite integral of <m>f(x)</m></description>
+                    </notation>
+                    <statement>
+                        <p>Suppose that <m>\frac{d}{dx}F(x)=f(x)</m>.  Then the <term>indefinite integral</term> of <m>f(x)</m> is <m>F(x)</m> and is written as <me>\int\,f(x)\,dx=F(x)</me>.</p>
+                    </statement>
+                </definition>
+            </slide>
+
+            <slide>
+                <title>Blocks: <tag>theorem</tag></title>
+
+                <p>This should also test other <q>theorem-like</q>, such as <tag>corollary</tag>.</p>
+
+                <theorem xml:id="theorem-FTC">
+                    <title>The Fundamental Theorem of Calculus</title>
+                    <idx><h>Fundamental Theorem of Calculus</h></idx>
+
+                    <statement>
+                        <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me><idx><h>test: buried in theorem/statement/p</h></idx></p>
+                    </statement>
+                    <proof>
+                        <p>Left to the reader.</p>
+                    </proof>
+                </theorem>
+            </slide>
+
+        </section>
+
+        <section>
+            <title>Sage Cell</title>
+
+            <slide>
+                <title>Ramanujan and Integration</title>
+
+                <p>This Sage Cell should execute properly, but some extra CSS is being applied.  It is also difficult to edit properly.  Perhaps the two are related.  You may need to zoom out your browser to see all the content, especially after running the cell.</p>
+
+                <p>We have some mathematics on the page, to look for Javascript interference with MathJax.  An identity due to Ramanujan:<me>\frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} = 1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}} {1+\frac{e^{-8\pi}} {1+\ldots} } } }</me>.</p>
+
+                <sage>
+                    <input>numerical_integral(sin(x)^2, (0, 2))</input>
+                    <!-- need to use wildcard matching to make this doctestable -->
+                    <output>(1.189200623826982, 1.320277913471315e-14)</output>
+                </sage>
+
+                <p>And some more mathematics.  An identity due to Ramanujan:<me>\frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} = 1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}} {1+\frac{e^{-8\pi}} {1+\ldots} } } }</me>.</p>
+            </slide>
+        </section>
+
+        <section>
+            <title>Other features</title>
+
+            <slide>
+                <title>Pausing</title>
+
+                <p>Pausing doesn't always act how you expect from <latex />.  The first and third lines are always visible.</p>
+
+                <p pause="yes">But this one needs you to advance the slide.</p>
+
+                <p>(Visible from the outset.)</p>
+            </slide>
+
+            <slide>
+                <title>Subslides</title>
+
+                <p>Subslides are another way to achieve pausing without lists.</p>
+
+                <subslide>
+                    <p>This is a subslide.  It always comes after a pause.</p>
+                    <p><ul pause="yes">
+                        <li>You can also pause within it.</li>
+                        <li>Of course!</li>
+                    </ul></p>
+                </subslide>
+
+                <p>But this is still visible from the outset.</p>
+            </slide>
+
+        </section>
+    </slideshow>
+</pretext>

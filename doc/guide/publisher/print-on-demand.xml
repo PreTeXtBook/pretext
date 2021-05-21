@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2017  Robert A. Beezer, David Farmer  -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="print-on-demand">
+    <title>Print-On-Demand</title>
+    <idx>print-on-demand</idx>
+
+    <p>If you are both author and publisher, you may wish to make your book available in a physical form, but may be reluctant to purchase and store thousands of copies, or to take orders and arrange shipments.  Then <term>print-on-demand</term> might be the solution for you.</p>
+
+    <p>A print-on-demand service is a manufacturer and distributor of printed books, which are typically only printed once ordered, or in extremely small quantities.  They can provide many of the manufacturing and fulfillment services a traditional supplies.  Some provide services you pay for that will produce a cover, provide editorial services, or assist with marketing.</p>
+
+    <p>We list three such services below, but first describe some commonalities, pro and con.<dl width="narrow">
+        <li>
+            <title>Updates</title>
+            <p>Generally, you provide a <init>PDF</init> of your text, and we have tried, with the <c>latex.print</c> option, to make output that is amenable to this situation.  A real advantage of print-on-demand is that you can usually update this <init>PDF</init> at any time, without much trouble.  You will need to decide how to indicate versions (or printings?) of your work.  Perhaps we will have tools and advice about this soon.</p>
+        </li>
+
+        <li>
+            <title>Covers</title>
+            <p>You may need to provide a cover, typically as a <init>PDF</init> meeting some exact specifications.  Though you may be able to choose a fairly generic look through a template or wizard.  Or pay to have one created for you.  See also <xref ref="latex-cover-images"/> and <xref ref="cover-design"/>.</p>
+        </li>
+
+        <li>
+            <title>Price</title>
+            <p>You may choose to sell at your cost, or you may wish to make a profit on each sale.  (Note: as copyright-holder you can do this, no matter what license you have chosen, review <xref ref="open-licenses" />).  A 450-page hardcover book might be sold by a print-on-demand manufacturer to an online bookstore, including some profit for the manufacturer, for $23.  If you, as author, want $5 profit, and the online bookstore wants $7 for fulfillment, shipping, and profit, the cost to your reader is now $35.  In order for the online bookstore to give the appearance of discounting your book to $35, you may need to declare a suggested retail price of $49.95.  So pricing takes a bit of thought.  Or guesswork, since the discounting algorithm is not public.</p>
+
+            <p>Note in the above scenario, the print-on-demand manufacturer may sell you, the  publisher, small quantities at a better price, such as ten copies for $170, shipping included.</p>
+        </li>
+
+        <li>
+            <title><init>ISBN</init></title>
+            <idx><init>ISBN</init></idx>
+            <p>An <term>International Standard Book Number</term> is a unique identifier of books and necessary for others to distibute and sell your book.  See details for each manufacturer below.  Much like a domain name for your book's website (see <xref ref="web-hosting" />), this may be something you wish to control and own, foregoing the convenience of someody else providing and owning it for you.</p>
+        </li>
+    </dl></p>
+
+    <p>In order of increasing professionalism and decreasing convenience, we describe three print-on-demand manufacturers we are familiar with, plus two others. Additions, corrections, updates, and alternatives are all welcome.<dl width="narrow">
+
+        <li>
+            <title>Lulu.com</title>
+            <idx>Lulu.com</idx>
+            <p>This site caters to people making photo books for relatives, in addition to more serious projects.  Account setup may be trivial, an ISBN number may not even be needed, and you may have options for distribution beyond readers simply ordering direct from the site.  This might be a good choice for drafts you will use in your own classes, if having your university bookstore print copies is not a good alternative. (2017-11-25)</p>
+        </li>
+
+        <li>
+            <title>Kindle Direct Publishing</title>
+            <idx>Kindle Direct Publishing</idx>
+            <idx>Amazon.com</idx>
+
+            <p>Until early 2018, Kindle Direct Publishing (<init>KDP</init>) was a service known as CreateSpace.  Some of the information below refers to this predecessor.  (2021-04-21).</p>
+
+            <p>This company is owned by Amazon.com.  They manufacture and distribute serious books, in addition to music and film.  Distribution through Amazon is nearly automatic.  There is also <q>Expanded Distribution</q>, which starts to look more like Ingram (next).  If royalties are small, using direct deposit might be the most convenient (international sales all get converted to dollars for authors in the US).  (2017-11-25)</p>
+
+            <p>CreateSpace attempts to make sure you have the rights to your content.  So if they find your book freely available on the Internet, their <q>Content Validation Request Team</q> becomes suspicious and investigates.  This has caused a few authors a few headaches and delays in making their book available for sale, though all have been successful eventually.  (2018-03-06)</p>
+
+            <p>If you want to offer your project electronically for no cost, you may need to do an end run.  We have a report that you can put your project on <init>KDP</init> for a low price (e.g.<nbsp/>$1), then offer it on Apple's similar service for free, and then exercise a price match guarantee back on <init>KDP</init>.  Reports on this technique encouraged.  (2021-04-21)</p>
+        </li>
+
+        <li>
+            <title>Ingram Spark</title>
+            <idx>Lightning Source</idx>
+            <idx>IngramSpark</idx>
+            <idx>Ingram</idx>
+            <p>IngramSpark (formerly Lightning Source) is a division of Ingram, which is a very large printer, also providing services to major publishers.  Creating an account is not trivial, and you need to provide your own <init>ISBN</init> number.  In return, your book is available at Amazon.com and many other online bookstores automatically, and is in many ways indistinguishable from offerings of large commercial publishers.  There are also options for international distribution.  You can also control settings for discounts and returns.  (2018-03-06)</p>
+        </li>
+
+        <li>
+            <title>Blurb</title>
+            <idx>Blurb</idx>
+            <p>Blurb specializes in photo books, and uses Ingram for printing.  Sizes are limited, and costs are more that the other services.  Direct experiences would be a welcome addition.  (2018-03-06)</p>
+        </li>
+
+        <li>
+            <title>Nook Press</title>
+            <idx>Nook Press</idx>
+            <p>Nook Press is a service of Barnes &amp; Noble, and books appear only through their online store.  We have no additional information, so direct experiences would be a welcome addition.  (2018-03-06)</p>
+        </li>
+
+    </dl></p>
+
+    <p>We currently have no good information about distributing <init>EPUB</init> or Kindle electronic versions for profit.  (2017-11-25).</p>
+
+</chapter>

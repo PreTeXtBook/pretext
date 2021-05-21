@@ -1,0 +1,18 @@
+<theorem>
+    <title>Optional</title>
+    <creator>I. Newton</creator>
+  <statement>
+    <p>
+      Here's the statement of the theorem.
+    </p>
+  </statement>
+
+  <proof>
+    <p>
+      You don't actually need a proof,
+      but put it inside the <c>theorem</c>.
+      You can actually put another <c>proof</c> right after this one if you want to.
+    </p>
+  </proof>
+</theorem>
+

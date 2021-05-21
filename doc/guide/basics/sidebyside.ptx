@@ -1,0 +1,16 @@
+<sidebyside widths="25% 25%" valign="middle">
+  <figure>
+    <caption>Small graph</caption>
+    <image source="images/small_graph" />
+  </figure>
+
+  <p>
+    We can put a paragraph here.
+    Yes, a paragraph.
+    Isn't this the most exciting paragraph that you've ever seen?
+    It goes on and on and on and on and on and on.
+    We want to put enough here to make it wrap, really, is all.
+    Let's hope that this is enough.
+  </p>
+</sidebyside>
+

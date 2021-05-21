@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2016 Robert A. Beezer
+
+This file is part of MathBook XML.
+
+MathBook XML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+MathBook XML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+<!-- This file was originally part of the book     -->
+<!-- (as copied on 2016/03/25)                     -->
+<!--                                               -->
+<!--   Abstract Algebra: Theory and Applications   -->
+<!--                                               -->
+<!-- Copyright (C) 1997-2014  Thomas W. Judson     -->
+
+<remark>
+    <title>Sage</title>
+
+    <p>Sage support for cyclic groups is a little spotty <mdash /> but we can still make effective use of Sage and perhaps this situation could change soon.</p>
+</remark>

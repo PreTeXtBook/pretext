@@ -27,13 +27,14 @@
 
 <!-- Some more of our own design -->
 <!ENTITY DIGIT "'0123456789'">
-<!ENTITY SIMPLECHAR "'0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'">
+<!ENTITY ALPHABET "'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'">
+<!ENTITY SIMPLECHAR "concat(&DIGIT;,&ALPHABET;)">
 
 <!-- for match/select -->
-<!ENTITY STRUCTURAL "book|article|letter|memo|frontmatter|part|chapter|appendix|index[index-list]|index-part|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|worksheet|reading-questions|solutions|references|glossary|backmatter">
+<!ENTITY STRUCTURAL "book|article|slideshow|letter|memo|frontmatter|part|chapter|appendix|index[index-list]|index-part|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|slide|exercises|worksheet|reading-questions|solutions|references|glossary|backmatter">
 
 <!-- for filtering nodes, eg *[&STRUCTURAL-FILTER;], *[not(&STRUCTURAL-FILTER;)] -->
-<!ENTITY STRUCTURAL-FILTER "self::book or self::article or self::letter or self::memo or self::frontmatter or self::part or self::chapter or self::appendix or self::index[index-list] or self::index-part or self::preface or self::acknowledgement or self::biography or self::foreword or self::dedication or self::colophon or self::section or self::subsection or self::subsubsection or self::exercises or self::worksheet or self::reading-questions or self::solutions or self::references or self::glossary or self::backmatter">
+<!ENTITY STRUCTURAL-FILTER "self::book or self::article or self::slideshow or self::letter or self::memo or self::frontmatter or self::part or self::chapter or self::appendix or self::index[index-list] or self::index-part or self::preface or self::acknowledgement or self::biography or self::foreword or self::dedication or self::colophon or self::section or self::subsection or self::subsubsection or self::slide or self::exercises or self::worksheet or self::reading-questions or self::solutions or self::references or self::glossary or self::backmatter">
 
 <!-- NB: (2019-06-12)  Only the two metadata "filters" seem to          -->
 <!-- be in use, so only those are being maintained.  grep'ing on        -->
@@ -95,6 +96,11 @@
 <!-- save off lab, laboratory, experiment for science -->
 <!ENTITY PROJECT-LIKE "project|activity|exploration|investigation">
 <!ENTITY PROJECT-FILTER "self::project or self::activity or self::exploration or self::investigation">
+
+<!-- blocks with meta-information in lists -->
+<!-- TODO: add in "standards", "goals"     -->
+<!ENTITY GOAL-LIKE "objectives|outcomes">
+<!ENTITY GOAL-FILTER "self::objectives or self::outcomes">
 
 <!-- displays with captions -->
 <!ENTITY FIGURE-LIKE "figure|table|listing|list">

@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="processing">
+    <title>Processing, Tools and Workflow</title>
+
+    <introduction>
+        <p>This chapter explains in full detail how to combine your source file with an XSL stylesheet to produce output.  It expands on the simple example in <xref ref="quickstart-example" /> and should also be read in conjunction with the chapter on the <c>pretext</c> script (<xref ref="pretext-script" />).</p>
+    </introduction>
+
+    <section xml:id="processing-basic">
+        <title>Basic Processing</title>
+
+        <p>The executable program <c>xsltproc</c><idx><c>xsltproc</c></idx> implements Version 1.0 of the <term>eXtensible Stylesheet Language (XSL)</term><idx>XSL</idx>.  This is a declarative language that walks the hierarchical tree of an XML source file, and for each element describes some output to produce before, and after, recursively processing the contained elements.  (That is a simplified description.)</p>
+
+        <p><c>xsltproc</c> is typically installed by default on Linux systems and as part of Mac OS.  See the <pretext /> website for details for Windows systems.  The most basic operation is to provide <c>xsltproc</c> with an XSL stylesheet from the <pretext /> distribution and an XML document of your creation that is valid <pretext />.  This is done at the command-line, inside of a terminal or shell.  Describing command-line operations, along with file and directory management, is beyond the scope of this guide, so consult another resource if this is unfamiliar.  So here is a hypothetical simple example:</p>
+
+        <console>
+            <prompt>rob@lava:~/mathbook$ </prompt>
+            <input>xsltproc xsl/pretext-html.xsl ~/books/aota/animals.xml</input>
+        </console>
+
+        <p>By default, <c>xsltproc</c> writes output to <c>stdout</c> (the screen), which you could redirect to a file, or you could use the <c>-o</c> switch to send the output to a named file.  However, <pretext /> automatically writes to a file whose name is derived from the <attr>xml:id</attr> attribute of the top-level <tag>book</tag> or <tag>article</tag> tag.  If no such attribute is given the filename will be derived from <c>book-1</c> or <c>article-1</c>.  All output is produced in whatever the current default directory is, so you will likely want to set this beforehand.</p>
+
+        <p>The <c>xsl</c> subdirectory of the <pretext /> distribution contains a variety of XSL stylesheets<idx>XSL stylesheet</idx>, which I will also refer to as <term>converters</term><idx><h>converter</h><see>XSL stylesheet</see></idx> or <term>conversions</term><idx><h>conversion</h><see>XSL stylesheet</see></idx>.  The ones that you will use as an author all have filenames of the form <c>xsl/pretext-XXX.xsl</c>, where <c>XXX</c> is some indication of the output produced.  Conversions to <latex /> or HTML output are the two most mature converters.</p>
+
+        <p>Note that authors are not responsible for creating XSL stylesheets.  Stock conversions are part of the <pretext /> distribution, and anybody is welcome to assume a source document is valid <pretext /> and create new conversions to process it to existing, or as yet unimagined, formats.</p>
+    </section>
+
+    <section xml:id="processing-modular">
+        <title>Modular Source Files</title>
+        <idx>modular source files</idx>
+        <idx><h>including files</h><see>modular source files</see></idx>
+
+        <p>For a large project, such as a book, you will likely want to split up your source into logical units, such as chapters and sections.  <c>xsltproc</c> supports an include mechanism that makes this possible.  Let us suppose that your <c>book</c> on animals has a <c>chapter</c> on mammals with a <c>section</c> on monkeys.  Then you need to do the following:<ol>
+            <li><p>For the file containing the <tag>chapter</tag> tag for the chapter on mammals, place the attribute<cd>
+                <cline>xmlns:xi="http://www.w3.org/2001/XInclude"</cline>
+            </cd> on the outermost tag in the file.</p></li>
+            <li><p>Within the <tag>chapter</tag> element for the chapter on mammals, add the line <c>&lt;xi:include href="monkeys.xml" /&gt;</c> to <q>pull in</q> the section on monkeys at that location.  The <attr>href</attr> attribute can point to a file in a subdirectory, but will be interpreted relative to the location of the file containing the mammal chapter element.</p></li>
+            <li><p>Add the switch <c>-xinclude</c> to your invocation of <c>xsltproc</c>, just after <c>xsltproc</c>, but before the filenames for the stylesheet and the master source file.  Note that for some versions of <c>xsltproc</c> it might be necessary to use two dashes for the switch, <c>--xinclude</c>.</p></li>
+        </ol>So now a typical invocation (using one dash) might look like<cd>
+            <cline>xsltproc -xinclude xsl/pretext-html.xsl ~/books/aota/animals.xml</cline>
+        </cd></p>
+
+        <p>Note that when you invoke <c>xsltproc</c> the default directory can be far away from your source, and the processor will locate all the component files of your project through the relative file locations in the <attr>href</attr> attribute.  Several comments are in order.<ul>
+            <li><p>Begin small and start a project <em>without</em> using modular files.  Modularizing seems to add a layer of complexity that sometimes obscures other beginner's errors.  So get comfortable with a single source file before branching out.</p></li>
+            <li><p>I am forever forgetting the <c>-xinclude</c> switch.  Empty output, or cryptic error messages, are your first clue to this simple, but common, mistake.</p></li>
+            <li><p>The <init>XML</init> specification requires that a source file only contain a single outermost element.  So for example, two <tag>chapter</tag> elements cannot go into the same file as simultaneous outermost elements.</p></li>
+            <li><p>Any file that uses an <tag>xi:include</tag> element will need the <c>xml:ns</c> declaration on the outermost element.  So in our animal book example, the <q>master</q> file, which presumably includes several chapter files, would need this declaration on the <tag>pretext</tag> element.</p></li>
+            <li><p>In practice, there is not a lot to be gained by creating a subdirectory structure mirroring your modularization<mdash />all your source files can go into one big directory and the XML hierarchy will take care of the organization.  I do sometimes like to name my files accordingly, so for example <c>chapter-mammals.xml</c> and <c>section-monkeys.xml</c>.</p></li>
+            <li><p>Just as you provide only the master source file to <c>xsltproc</c>, it is the same when you validate your source (see <xref ref="processing-dtd"/> and <xref ref="schema"/>).</p></li>
+        </ul></p>
+
+        <p>The sample book in <c>examples/sample-book</c> amply demonstrates different ways to modularize parts of a project (but in no way should be taken as best practice in this regard).  This guide, in <c>doc/author-guide</c> is a simple example of modular source files, and might be a good template to follow for your book.  See <xref ref="topic-xinclude" /> for some of the finer points of this topic.</p>
+    </section>
+
+    <section xml:id="processing-dtd">
+        <title>Verifying your Source</title>
+
+        <p>A <term>schema</term><idx>schema</idx>, in our case a <init>RELAX-NG</init> schema,  is a formal specification of an <init>XML</init> vocabulary<idx><h>schema</h><seealso>XML vocabulary</seealso></idx><idx>XML vocabulary</idx> (the allowed tags and attributes), and how they relate to each other.  So, for example, the restrictions that say you cannot nest a <tag>book</tag> inside of a <tag>chapter</tag>, nor can you nest a <tag>subsection</tag> in a <tag>chapter</tag> without an intervening <tag>section</tag>, are expressed and enforced by the schema.  One of the beauties of the schema is that it is written using a very specific syntax and then there are tools that use a schema as input.  In particular, a <pretext /> source file that conforms to the <pretext /> schema is said to be <term>valid</term><idx>valid schema</idx>.  You should strive to always, always, always have valid source files, and therefore you want to regularly verify that this is the case.</p>
+
+        <p>You can find the <pretext /> schema in the <c>schema</c> directory.  The version we author and maintain is <c>pretext.xml</c>, which is used to create <c>pretext.rnc</c>, which uses the compact syntax of the RELAX-NG specification.  By providing the schema and your source to a program called a <term>validator</term><idx>validator</idx> you can check if your source is valid, and if not, why.  See <xref ref="schema" /> for the details on doing this.</p>
+
+        <p>If you author source that is valid <pretext />, then a conversion of your source to another format should succeed.  And maybe in the future, somebody will create a new conversion to a new output format, and your source should still produce faithful output, with no extra effort from you.  Think of the schema as a contract between authors of source files and developers of converters.  This is different than performing a conversion and getting good-looking output<ndash />that can just be a happy accident and your source may not succeed with some other conversion.</p>
+
+        <p>We cannot stress enough the importance of setting up and performing regular validation and preventing many consistent errors of the same type.  You will learn what elements are allowed where, and which are not, from the messages produced by validation errors.  And when a conversion fails, or produces spectacularly incorrect output, validating your source should be your first reaction.  Always.</p>
+
+        <p>The other beauty of a schema is that you can supply it to a text editor (<xref ref="introduction-to-source-formatting" />) and then you will get context-sensitive help that greatly assists you in using only the tags and attributes that are allowed in a given location of your source.  <url href="http://xml-copy-editor.sourceforge.net/">XML Copy Editor</url> is the one editor like this we have tried, but we do not have extensive experience.</p>
+
+        <p>We have devoted an entire chapter (<xref ref="schema" />) to amplifying this introduction and providing more details, such as where to find details on installing a validator.</p>
+    </section>
+
+    <section xml:id="processing-publisher-stringparam">
+        <title>Customizations, Publisher File, String Parameters</title>
+
+        <p>There are some aspects of your output that are entirely divorced from the actual content, and are presumably all about how that content is presented.  Two good examples are the size of the font used in <latex />/PDF/print output, and the granularity of web pages in HTML output (by this we mean, is each web page a whole chapter, a whole section, a whole subsection?).  Producing output with varying values of these parameters does absolutely nothing to change your content in any way, and so should not be a part of your source.</p>
+
+        <p>At this writing (2019-07-10) we have begun to transition between two different ways to accomplish this.  The new method is to create a <term>publisher file</term> that is an <init>XML</init> file that specifies options that are independent of your source material.  See <xref ref="publisher-file"/> in <xref ref="part-publisher"/> for details.  We continue to provide many of the values for these parameters on the command-line <em>at processing time</em>.  They have become known as <term>stringparam</term><idx>stringparam</idx> for a soon-to-be obvious reason.</p>
+
+        <p>Suppose you want to make a large-font version of your textbook for a student who has limited vision.  Look inside the top of <c>xsl/pretext-latex.xsl</c> and find the <c>latex.font.size</c> parameter.  The preceding comments in this file suggest <c>20pt</c> is the maximum supported.  So you would use a command-line like the following (possibly with <c>--xinclude</c>, <etc />).</p>
+
+        <console>
+            <prompt>$ </prompt>
+            <input>xsltproc -o animals.tex --stringparam latex.font.size "20pt"</input>
+            <input>  /path/to/xsl/pretext-latex.xsl ~/books/aota/animals.xml</input>
+        </console>
+
+        <p>You can use as many stringparam as you like on the command-line (or in your scripts).  The quotation marks are not strictly needed in this example, but if the value of the parameter has spaces, slashes, <etc />, then you need to quote-protect the string from the command-line processor, and either single or double quotes will work (and protect the other kind).</p>
+
+        <p>These parameters are documented in the XSL files themselves, principally <c>-common</c>, <c>-latex</c> and <c>-html</c>, and occur near the top.  They assume sensible defaults for beginners, and error-checking is careful and robust.  They will be easier to locate and use when we have the time to document them more carefully here in the Author's Guide.</p>
+
+        <p>One caveat for using these is that experience has taught us that some of the parameters we created early on really do affect your content.  We will change some of these, but always provide a smooth upgrade path through deprecations, with little or no disruption to your workflow.</p>
+    </section>
+
+    <section xml:id="processing-thin-xsl">
+        <title>Customizations, Thin XSL Stylesheets</title>
+
+        <p>Stringparams (<xref ref="processing-publisher-stringparam"/>) are an easy way to effect global changes in the presentation of your writing.  But putting ten of them on every command-line gets old and cumbersome fast.</p>
+
+        <p>You may also wish to customize your output in some stylistic way.  This might be especially true for <latex />/PDF/print output.  For example, you might wish to have every chapter heading of your book in a nice shade of light blue, with the title flush right to the margin, countered by a thick solid rule extending all the way right, to the edge of the paper.  Notice that this does not affect your content, it is strictly presentation.</p>
+
+        <p>We have done several things to encourage such customizations.  We have tried to put as much stylistic information as possible in the <latex /> preamble and keep as much as possible out of the body.  (There is always room for improvement on this score, please be in touch if you have a need.)  For small adjustments the <c>latex.preamble.early</c> and <c>latex.preamble.late</c> stringparam are possible vehicles, though all the <latex /> code to make light blue, flush-right rules is going to be messy on the command-line.</p>
+
+        <p>Instead, you can make a small XSL file<idx>thin XSL stylesheet</idx><idx><h>XSL stylesheet</h><seealso>thin XSL stylesheet</seealso></idx>, to use as input to <c>xsltproc</c>.  The first thing it should do is import the stock <pretext /> file for the type of output you want to create.  You can use an absolute path to the <pretext /> distribution (which will not be very portable), or utilize the <c>mathbook/user</c> directory and a relative path from there.  The easiest thing to put in this file is elements like
+            <cd>&lt;xsl:param name="latex.font.size" select="'20pt'" /&gt;</cd>
+        which is functionally equivalent to our example in <xref ref="processing-publisher-stringparam"/>.  Values given on the command-line supersede those given in an XSL file this way.</p>
+
+        <p>You can augment the <latex /> preamble with as much <latex /> code as you like in the following way.</p>
+
+        <pre>
+        &lt;xsl:param name="latex.preamble.late"&gt;
+            &lt;xsl:text&gt;% Proof environment with heading in small caps&amp;#xa;&lt;/xsl:text&gt;
+            &lt;xsl:text&gt;\expandafter\let\expandafter\oldp\csname\string\proof\endcsname&amp;#xa;&lt;/xsl:text&gt;
+            &lt;xsl:text&gt;\let\oldep\endproof&amp;#xa;&lt;/xsl:text&gt;
+            &lt;xsl:text&gt;\renewenvironment{proof}[1][\proofname]{\oldp[\scshape #1]}{\oldep}&amp;#xa;&lt;/xsl:text&gt;
+        &lt;/xsl:param&gt;
+        </pre>
+
+        <p>There are a variety of things you can do generally, by overriding the imported XSL templates to change behavior, but such modifications are beyond the scope of this guide.</p>
+    </section>
+
+    <section xml:id="processing-images-inkscape">
+        <title>Creating Images with Inkscape</title>
+        <idx>Inkscape</idx>
+        <idx><h>vector graphics</h><h>Inkscape</h></idx> 
+
+        <p>A strength of <pretext/> is the ability to create diagrams and images with editable source code, embedded alongside your other <pretext/> source material (<xref ref="topic-images-source"/>, <xref ref="processing-images-pretext"/>).  But sometimes you want, or need, to be more artistic.  <url href="https://inkscape.org/">Inkscape</url><fn><c>inkscape.org/</c></fn> is a great tool for creating images.  It ticks all the boxes: open source, mature, cross-platform, standards-compliant.  Bethany Llewellyn heped research Inkscape capabilities for this section.</p>
+
+        <p>Inkscape's native file format is Scalable Vector Graphics (<init>SVG</init>).  As the name suggests, this translates into excellent support for vector graphics.  (See <xref ref="topic-images-raster"/> and <xref ref="topic-images-vector"/> for the distinction.)  Why use Inkscape?<ul>
+            <li><init>SVG</init> files are small and scale smoothly when you zoom in on a web page.  So this format is our top choice for how images are realized in the <init>HTML</init> output.  They will also work well in formats based on <init>HTML</init>, such as <init>EPUB</init>.</li>
+            <li>The <init>SVG</init> format is how Inkscape works with images internally.  The file format it calls <q>Inkscape SVG</q> is valid <init>SVG</init>, along with additional information to make editing better and/or easier.  So any author may come back and easily edit an image saved in this format.</li>
+            <li>Inkscape will export easily and efficiently to Portable Document Format (<init>PDF</init>), another vector format.  This is our top choice for realizing images in <latex/> output, which will become print or <init>PDF</init> output.</li>
+            <li><init>SVG</init> is an <init>XML</init> format, just like <pretext/>.</li>
+        </ul></p>
+
+        <p>When would you use Inkscape?<ul>
+            <li>Your image is more free-form and artistic than what a source language like TikZ or Asymptote will provide, and you do not need to embed any mathematical symbols.</li>
+            <li>You do not want to learn some new source language (there <em>is</em> a significant learning curve for most of these).</li>
+            <li>You want to annotate screenshots (see <xref ref="list-annotate-screenshot"/>).</li>
+        </ul></p>
+
+        <p>Note that when you save an image as <init>SVG</init> from within Inkscape, you have two choices: <q>Plain SVG</q> and <q>Inkscape SVG</q>.  The latter contains additions to the former which make subsequent editing better and/or easier.  So, you can choose to use <q>Plain</q> as the format used for your <init>HTML</init> output, and it will be smaller and provide great performance.  But you can also make an <q>Inkscape</q> version of the same name, and distribute it with your source files in a different directory, so you and others can edit it easily later.</p>
+
+        <list xml:id="list-annotate-screenshot">
+            <title>Annotated Screenshot</title>
+
+            <introduction>
+                <p>Suppose you want to include a screenshot of some application, and point out some aspect of it.</p>
+            </introduction>
+
+            <ol>
+                <li>View the application on the highest-resolution monitor you can get your hands on.  Not a laptop and not a phone.</li>
+
+                <li>Zoom in, so the area of interest fills as much of the screen as possible.  You are trying to capture as many pixels as possible.</li>
+
+                <li>Use a screen-capture tool that allows you to save the result as Portable Network Graphics (<init>PNG</init>).  This is a lossless format, and you may be able to elect a high level of compression as part of the file-saving process.</li>
+
+                <li>The only raster format explicitly supported by Inkscape is <init>PNG</init>.  So you can import the screenshot into Inkscape, and use the tools there to add arrows, red ovals, etc. to highlight key parts of the image.</li>
+
+                <li>Save the result as <init>PNG</init>, since it already has a significant raster component, for use in <init>HTML</init> conversions.  And save again as <init>PDF</init> for use in print and <init>PDF</init> output.</li>
+            </ol>
+        </list>
+    </section>
+
+    <section xml:id="processing-images-pretext">
+        <title>Images and the <c>pretext</c> Script</title>
+
+        <p>We believe it is important to preserve a record of how diagrams and other graphics are produced.  This can be easy when a graphics language is employed to describe the graphical elements, rather than creating a bit-mapped image with some other interface.  So we have <tag>asymptote</tag>, <tag>latex-image</tag>, and <tag>sageplot</tag> for elements holding code to produce diagrams or images<idx>image</idx>.</p>
+
+        <p>The upside to this is that small edits to the code can easily accomplish minor changes or corrections necessary for the images.  The <latex /> macros provided by an author can be used in the text <em>and</em> in a diagram, leading to greater consistency between the two.  Finally, starting from source, we can do the best possible job of producing image formats that are compatible with the document output formats and which scale smoothly in PDFs and in web browsers.</p>
+
+        <p>The downside to this is that XSL is not a general purpose programming language, and so in particular, cannot call <q>helper</q> programs such as <c>asy</c>, <c>pdflatex</c>, and <c>sage</c>.  The general strategy is to use XSL to identify and isolate the parts of a document that lie in the elements designed for graphics languages.  A Python script, the <c>pretext</c> script, employs these XSL stylesheets and then feeds each image file to the appropriate helper program.</p>
+
+        <p>This script has a variety of options, so we document it fully in <xref ref="pretext-script" />.</p>
+    </section>
+
+    <section xml:id="processing-author-tools">
+        <title>Author Tools</title>
+        <idx>author tools</idx>
+
+        <p>While your writing project is getting underway, you may want to go in several directions at once.  We have two devices, and three reports, which can help you manage this.</p>
+
+        <p>You may want to make a forward-reference to some future, not-yet-written material.  So you can go<cd>
+            <cline>&lt;xref provisional="a reminder of future material"/&gt;</cline>
+        </cd>in your source.  In your output, you will get a temporary place-holder of sorts.</p>
+
+        <p>Comments in the source code of a computer program, labeled <c>TODO</c>, is a common device to help a programmer remember tasks that need to be completed.  You can use a similar device in your <pretext/> source.  Use an XML comment, delimited by <c>&lt;!--</c> and <c>--&gt;</c>, and make the first four non-blank characters spell <c>todo</c>, using any combination of lower- and upper-case you like.  Your Author's Report (next) will look even better if you follow that with a colon and a space, but this is not required.  So, for example, go<cd>
+             <cline>&lt;!-- ToDo: include a section on salamanders and their life-cycle --&gt;</cline>
+        </cd>  As an XML comment, you can place this anywhere.  Contents need to be plain characters, no XML will be active here.  Remember to escape the two XML characters, and also be aware that <c>--</c> is banned in comments outside of the delimiters.</p>
+
+        <p>The <c>authors-report.xsl</c> stylesheet, found in the <c>xsl/utilities</c> directory will report all of the provisional cross-references and all of the properly prefixed todo-comments.  Apply it just like you would any of the other stylesheets achieving more complicated conversions (<xref ref="processing-basic"/>).  The report is organized by all of the divisions in use in your project.  It is meant to be simple in appearance, just text.</p>
+
+        <p>Use the <c>author.tools</c><idx><c>author.tools</c></idx> parameter set equal to <c>yes</c> and your <latex/> and <init>HTML</init> output will be annotated.  (See <xref ref="processing-publisher-stringparam"/> for more on parameters.)  Provisional cross-references and todo-comments will be visible and highlighted, and in particular, the <latex/> output will display an abundance of extra information (maybe too much).  The <latex />-specific parameter <c>latex.draft</c> set to <c>yes</c> will automatically activate the previous features, in addition to a few others appropriate to the printed page.  The intent here is to make a rough draft, for an author or collaborator only, reporting as much as possible that is incomplete, pending, or hidden, in the usual output.</p>
+    </section>
+
+    <section xml:id="processing-updating-source">
+        <title>Keeping Your Source Up-to-Date</title>
+
+        <p>Once in a while it becomes necessary to adjust how the <pretext /> vocabulary is arranged, which involves adding or removing elements or attributes, or changing their behavior.  When elements or attributes are removed, or their relationships with other elements change, we say that certain items or behaviors are <term>deprecated</term><idx>deprecated</idx>.  Fortunately, we can often automate the changes.</p>
+
+        <p>When there is a deprecation, a warning is added so that any conversion will report the presence of the old use in the console.  Sometimes we can preserve the old behavior, so there is no rush to make changes to your source.  Sometimes a change needs to be more urgent.  And frequently old behaviors do not get updates or bug-fixes.  Our warnings provide advice and information about what you need to do.  There are also announcements on public discussion groups, clearly marked as deprecations.  Also, the schema will change as part of any deprecation, so the old elements or old use will be reported.</p>
+
+        <p>The rest of this section describes a tool you can use to automate the process of adjusting your source when there are deprecations.  Generally, there is an <init>XSLT</init> stylesheet which will convert your <init>XML</init> source to another <init>XML</init> source file, fixing many of the deprecations automatically.  However, it is the nature of <init>XML</init> processing that your source file will undergo some cosmetic changes.  For example, the order of attributes is never relevant, so an <init>XML</init>-to-<init>XML</init> conversion is free to re-order the attributes of an element, perhaps different from how you like to author them.</p>
+
+        <p>So you have two choices:<ul>
+            <li>Process your source with any of the provided conversions and edit by hand until the warnings all disappear.</li>
+            <li>Run the deprecation-fixing conversion and accept the changes in <init>XML</init> formatting. (Read on for more specifics about these changes.)</li>
+        </ul></p>
+
+        <p>You perform this conversion using <c>xsl/utilities/fix-deprecations.xsl</c> on an <init>XML</init> source file in the usual way.  By default, output appears on the console, so you will want to specify an output file, for example with the <c>-o</c> flag of <c>xsltproc</c>.  You will discover a safety measure that requires you to also use a parameter, which you can pass in to <c>xsltproc</c> with the <c>-stringparam</c> command-line argument.</p>
+
+        <p>One choice of the parameter will result in just <q>copying</q> your source file and making all the cosmetic source format changes (we refer to this here as <term>normalization</term><idx>normalization</idx>).  This might be a useful thing to do first, all by itself, either as a first step, or an exploratory experiment.  The other value of the parameter will actually make changes, and report some information about progress.</p>
+
+        <p>Here are some notes:<ol>
+            <li><p>Be sure to experiment on copies of your source in a scratch directory.  Send your output to another directory.  When finished, use a <c>diff</c> tool to inspect the actual changes made.  You can record your eventual changes using revision-control. (See <pubtitle><url ref="https://pretextbook.org/gfa/html/">Git for Authors</url></pubtitle>.)</p></li>
+            <li><p>Do not enable <c>xinclude</c> processing or else your several files will all be merged into one as output and any modularity of your source will be lost.</p></li>
+            <li><p>Every single bit of indentation and whitespace in your source will be preserved, except perhaps for some blank lines near the top of your source files, and limited exceptions noted below.</p></li>
+            <li><p>Attributes will likely be re-ordered, with normalized spacing between them.</p></li>
+            <li><p>Empty elements will have any spaces removed from the end of the tag.</p></li>
+            <li><p>Elements with no content may be written with a single empty tag.</p></li>
+            <li xml:id="deprecation-fixer-cdata"><p><abbr>CDATA</abbr> sections will be converted to text acceptable to the <init>XML</init> parser.  In other words, the <abbr>CDATA</abbr> wrapper will be removed and dangerous characters (&amp;, &lt;, &gt;) will be replaced by equivalent entities (such as <c>&amp;amp;</c>).  If you have many matrices expressed in <latex /> and wrapped in a <abbr>CDATA</abbr>, this might be a big change.  See <xref ref="topic-exceptional-characters"/> for background.</p></li>
+            <li><p>The output files will be labeled as having <c>UTF-8</c> encoding.</p></li>
+            <li><p>It could be necessary to run this conversion more than once if deprecations build on one another.  In other words, we do not update specific conversions, but rely on regular use to keep source up-to-date.</p></li>
+            <li><p>It should be safe to run this conversion repeatedly, even after new deprecations are added.  In fact, it is encouraged.</p></li>
+            <li><p>The <pretext /> source file <c>examples/sample-errors-and-warnings.xml</c> is intentionally full of lots of bad stuff.  You can experiment with it, should you want to see interesting things happen.  We have already performed the normalization step, so you can concentrate on substantive changes.</p></li>
+        </ol></p>
+
+        <p>To process a directory with multiple source files, I would proceed as follows.  First make three temporary directories, <c>/tmp/original</c>, <c>/tmp/normal</c>, <c>/tmp/clean</c>, and copy my source files into <c>/tmp/original</c>.  Then, using a BASH shell, and inputting the command all on one long line,</p>
+
+        <console>
+            <prompt>rob@lava:/tmp/original$ </prompt>
+            <input>for f in *.xml; do xsltproc -o ../normal/$f -stringparam fix normalize</input>
+            <input>  /home/rob/mathbook/xsl/utilities/fix-deprecations.xsl $f; done</input>
+        </console>
+
+        <p>This will loop over every <init>XML</init> file in the current working directory, <c>/tmp/original</c>, running the normalization conversion on each file, with the output files using the same filename, but now being placed in the <c>/tmp/normal</c> directory.  If you change to the <c>/tmp</c> directory, then you can compare the results.  I like to use the <c>diff</c> utility provided by <c>git</c>.</p>
+
+        <console>
+            <prompt>rob@lava:/tmp$ </prompt>
+            <input>git diff original normal</input>
+        </console>
+
+        <p>Or, try this for a view that might be more informative.</p>
+
+        <console>
+            <prompt>rob@lava:/tmp$ </prompt>
+            <input>git diff --word-diff original normal</input>
+        </console>
+
+        <p>You may only do the above once, on your first use of this conversion stylesheet.  You will see how your style of authoring <init>XML</init> will undergo some minor changes.  We can repeat the above to actual make the changes necessary due to <pretext /> deprecations.  Make <c>/tmp/normal</c> the working directory.</p>
+
+        <console>
+            <prompt>rob@lava:/tmp/normal$ </prompt>
+            <input>for f in *.xml; do xsltproc -o ../clean/$f -stringparam fix all</input>
+            <input>  /home/rob/mathbook/xsl/utilities/fix-deprecations.xsl $f; done</input>
+        </console>
+
+        <p>And as above, you can now compare the <c>normal</c> and <c>clean</c> directories to see actual changes.  If you are satisfied with the changes, you can copy the files in the <c>clean</c> directory back onto your source files.  If you are using revision-control (you are, aren't you?) then you can make a commit that holds these changes. (See <pubtitle><url ref="https://pretextbook.org/gfa/html/">Git for Authors</url></pubtitle>.) Or maybe even make two commits, one from the normalization step, and a second with the substantive changes.</p>
+    </section>
+
+    <section xml:id="processing-file-management">
+        <title>File Management</title>
+
+        <p><pretext />, at its core, is the formal specification of the XML vocabulary, as expressed in the DTD (<xref ref="processing-dtd" />).  We have provided converters to process source files into useful output.  However, we have not yet built a point-and-click application for the production of a book.  So you need to take some responsibility in a large project for managing your files, both input and output.  We have tried to provide flexible tools to make an author's job easier. The following is advice and practices we have successfully employed in several book projects.</p>
+
+        <paragraphs>
+            <title>Source</title>
+
+            <p>I am fond of describing my own books with an initialism formed from the title.  So <pubtitle>A First Course in Linear Algebra</pubtitle> becomes <acro>FCLA</acro>, and in file and directory names becomes <c>fcla</c>.  So I have a top-level directory <c>books</c> and then <c>books/fcla</c>, but this directory is not the book itself, this is all the extra stuff that goes along with writing a book, much of it in <c>books/fcla/local</c>.  The actual book, the part everybody sees with an open license, lives in <c>books/fcla/fcla</c>.  This subdirectory has files like <c>COPYING</c>, which is a free software standard for license information, and <c>README.md</c> which is a file in the simplistic Markdown format that is picked up automatically by GitHub and displayed nicely at the book's repository's main page.  Subdirectories include <c>src</c> for the actual XML files, <c>xsl</c> for any customizing XSL (<xref ref="processing-thin-xsl" />), and <c>script</c> for shell scripts used to process the book (see below).</p>
+
+            <p>I do not use any additional directory structure below <c>src</c> to manage modular files for a book, since the XML and the <c>--xinclude</c> mechanism manage that just fine.  I see little benefit to extra subdirectories for organization and some resulting inconvenience.  I do typically have a single subdirectory <c>src/images</c> for raster images and other graphics files.</p>
+
+            <p>I believe it is critically important to put your project under revision control, and if licensed openly, in a public GitHub repository.  So the <c>books/fcla/fcla</c> directory and all of its contents and subdirectories is tracked as a <c>git</c> repository and hosted on GitHub.  Because this directory is <em>source</em> I try very hard to <em>never</em> have any temporary files in these directories since I do not want to accidentally incorporate them into the <c>git</c> repository.  As a general rule-of-thumb, only original material goes in this directory and anything that can be re-created belongs outside.</p>
+
+            <p>A tutorial on <c>git</c> would be way outside the scope of this guide, but Beezer and Farmer <em>have</em> written <pubtitle>Git For Authors</pubtitle>, so perhaps look for that.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Image Files</title>
+
+            <p>Some images are raster images (<eg /> photographs) that are not easily changed, and perhaps unlikely to be changed.  Other images will come from source-level languages via the <c>pretext</c> script.  For your convenience, this script has a command-line option that allows you to direct output (graphics files) to a directory of your choice.</p>
+
+            <p>In the early stages of writing a book, I put image files<idx>image</idx> produced from source code in a directory outside of what is tracked by <c>git</c>. It is only when a project is very mature that I begin to include completed graphics files into the <c>src/images</c> directory for tracking by <c>git</c>.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Build Scripts</title>
+
+            <p>When you have a mature book project, the various files, processing options, and a desire for multiple outputs can all get a bit confusing.  Writing simple scripts<idx>script</idx> is a good idea and the investment of time doing this early in a project will pay off through the course of further writing and editing.  The particular setup you employ is less important.</p>
+
+            <p>I have fallen into the habit of using the <c>make</c> program.  It allows me to define common variables upfront (such as paths to the <pretext /> distribution and the main directory for the project it applies to).  Then I can easily make <q>targets</q> for different outputs.  So, for example I typically go <c>make pdf</c> or <c>make html</c> to produce output, and have simple companion targets so that I can go <c>make viewpdf</c> or <c>make viewhtml</c>.  Other targets do things like checking my source against the DTD (<xref ref="processing-dtd" />).  I have split out the variable definitions in a way that a collaborator can join the project and simply edit the file of definitions just once to reflect their setup, and still participate in future upgrades to the script by pulling from GitHub and not overwrite their local information.</p>
+
+            <p>My use of <c>make</c> is a bit of an abuse, since it is really designed for large software projects, with the aim of reducing duplicative compilations and that is not at all the purpose.  You could likely have exactly the same effect with a shell script and a case (or switch) statement.</p>
+
+            <p>My general strategy is to assemble all the necessary files into a temporary directory (under <c>/tmp</c> in Linux) by copying them out of their permanent home, copy customizing XSL into the right place (typically <c>mathbook/user</c>), run the <c>pretext</c> script as necessary and direct the results to the right place, and finally copy results out of the temporary directory if they are meant to be permanent.  Interesting, an exception to staging all these files is the source of the book itself which is only read for each conversion and then not needed for the output.  So you can just point directly to a master file and the <c>xinclude</c> mechanism locates any other necessary source files.</p>
+
+            <p>A good example of this general strategy is the use and placement of image files for HTML output.  It is your responsibility to place images into the location your resulting HTML files expect to locate them.  By default, this is a subdirectory of the directory holding the HTML files, named <c>images</c>.  You will want to copy images, such as photographs, out of your main source directory (<c>src/images</c>?). But you may be actively modifying source code for diagrams, and you want to re-run the <c>pretext</c> script for each run, and make sure the output of the script is directed to the correct subdirectory for the HTML output.  Running the <c>pretext</c> script frequently can get tiresome, so maybe you have a makefile target <c>make diagrams</c> that updates a permanent directory, outside of your tracked files in the repository, and you copy those files into the correct subdirectory for the output.  That way, you can update images only when you are actively editing them, or when you are producing a draft that you want to be as up-to-date as possible.  As a project matures, you can add images into the directory tracked by <c>git</c> so they are available to others without getting involved with the <c>pretext</c> script.</p>
+
+            <p>We did not say it would be easy, but we feel much of this sort of project management is outside the scope of the <pretext /> project itself, while in its initial stages, and existing tools to manage the complexity are available and documented.  (We <em>have</em> been encouraged to create sample scripts, which we may do.)  Just remember the strategy: stage necessary components in a temporary directory, build output in that directory, copy out desired semi-permanent results, and limit additions to the source directory to that which is original, or mature and time-consuming to reproduce.</p>
+        </paragraphs>
+    </section>
+
+    <section xml:id="processing-testing-html">
+        <title>Testing <init>HTML</init> Output Locally</title>
+
+        <p>Certain complicated parts of <init>HTML</init> output will not always function when you look at <pretext /> output by just opening files in your web browser.  These include knowls, Sage cells, and YouTube videos.  This is a consequence of security policies and so will vary from browser to browser.  A solution is to run a web server on your own machine, which is much easier than it sounds.  The one prerequisite is that you have Python installed, as is normally the case on any Linux or Mac computer.  On Windows, you may need to install Python yourself, but you may eventually need it for the <c>pretext</c> script anyway (<xref ref="pretext-script" />).  The following has been tested on Ubuntu Linux 16.10 and MacOS 10.12 (2017-08-06).</p>
+
+        <p>Python 2 and Python 3 are different in some regards, and that is the case here.  Your system may have commands <c>python2</c>, <c>python3</c>, and/or plain <c>python</c>.  Experiment with variants of the following two commands.  First, at a command-line, set your working directory to be the location of a directory containing the <init>HTML</init> files you want to test.<cd>
+            <cline>python3 -m http.server</cline>
+            <cline />
+            <cline>python2 -m SimpleHTTPServer </cline>
+        </cd>Use <c>--help</c> if you want to see the (limited) options for configuration.  Then go to the address bar of your browser and use<cd>
+            <cline>http://0.0.0.0:8000/index.html</cline>
+        </cd>to actually view the files from a web server.  Running the Python command should tell you which address to use (the <c>0.0.0.0</c>) and your project might not have an <c>index.html</c> file, so adjust accordingly.</p>
+
+        <p>Official documentation: <url href="https://docs.python.org/3/library/http.server.html">Python 3</url> and <url href="https://docs.python.org/2/library/simplehttpserver.html">Python 2</url>.</p>
+
+        <p>You may also be able to configure your <c>hosts</c> file so that this webserver looks like it lives somewhere else.  Clues at <url href="https://bowerwebsolutions.com/how-to-edit-your-local-host-file-for-testing-web-sites/"><c>bowerwebsolutions.com</c></url>.</p>
+    </section>
+
+    <section xml:id="processing-testing-html-globally">
+        <title>Testing <init>HTML</init> Output Globally</title>
+
+        <p>Just like testing files locally can sometimes be misleading, testing on your own server can sometimes be misleading.  For example, on some university campuses, frequently accessed content (your textbook!) can be cached.  So when you update your files, it might not look like anything has changed.  An easy, free, quick solution is to place your <init>HTML</init> temporarily at <url href="https://app.netlify.com/drop">Netlify Drop</url><fn><c>https://app.netlify.com/drop</c></fn> as a double-check on the source of any problems.</p>
+
+        <p>This can also be a great solution if you do not have a server setup and want help from the <pretext/> community with your <init>HTML</init> output.  (See <xref ref="github-issues"/>.)</p>
+    </section>
+
+    <section xml:id="processing-doctest-sage">
+        <title>Doctesting Sage Code</title>
+
+        <p>Adding computer code to your textbook is a tricky proposition.  You can propose that it is merely an illustration, and not meant to have all the necessary details, or you can make it exact, correct and executable, and then risk inevitable changes to render your code obsolete.  At least you have the option of editing and reposting online versions quickly and easily.</p>
+
+        <p>One of our main motivations for this project was mixing in code from the powerful, open source, mathematical software project, Sage (<xref ref="overview-sage" />).  When you add example Sage code to illustrate mathematical ideas, you are then encouraged to also include expected output in the <tag>output</tag> element.  Here comes one of the powerful advantages of XML source and XSL processing.</p>
+
+        <p>The <c>mathbook/xsl/pretext-sage-doctest.xsl</c> stylesheet, used in the usual way, will create one, or several file(s), in <em>exactly</em> the format Sage expects for automated testing.  So all your words are gone, and all your Sage input and output is packaged so Sage can run all the <tag>input</tag> and compare the results to the expected <tag>output</tag>.  See <xref ref="common-chunking-options"/> for details on obtaining more than one file.</p>
+
+        <p>We have many years' experience testing hundreds of non-trivial Sage examples from textbooks, for linear algebra and abstract algebra.  Roughly every six months, we discover ten to twenty examples that fail.  Frequently the failures are trivial (usually output gets re-ordered), but some are significant changes in behavior that leads us to re-word surrounding guidance in the text, and in a few cases the failures have exposed bugs introduced into Sage.  It has been relatively easy to do this maintenance on a regular basis, and if it had not been done, the accumulated errors would be enough to greatly degrade confidence in the accuracy of the examples.</p>
+
+        <p>Exact details for this process can be found in <xref ref="topic-doctest-sage" />.  Note that Sage is really just a huge Python library, so it might be possible to test pure Python code with this facility, but we have not tested this at all.  Similar support for other languages can be considered if requested for use in a serious project.</p>
+    </section>
+
+    <section xml:id="topic-build-in-cocalc">
+        <title>Building Output in CoCalc</title>
+
+        <p>CoCalc <url href="https://cocalc.com/"><c>cocalc.com</c></url><idx>CoCalc</idx> has <em>all</em> the tools you need to author with MathBook <init>XML</init>.  You will need an upgrade from a subscription to allow Internet connectivity, but at a minimum a colleague with a paid plan can spare you one, they are plentiful and meant to be shared.<ul>
+            <li><p>Text editor: reasonably good, partially <init>XML</init> syntax-aware.</p></li>
+            <li><p><c>git</c>: installed (so you can clone/pull <pretext/>).</p></li>
+            <li><p><c>jing</c>: installed, so you can do <init>RELAX-NG</init> validation.</p></li>
+            <li><p><latex />: installed with many additional packages.</p></li>
+            <li><p>Python: installed, necessary for <c>pretext</c> script.</p></li>
+            <li><p><init>PDF</init> viewer: handed off to your browser.</p></li>
+            <li><p><init>HTML</init> viewer: get a context menu on the cloud icon in the file view, and open in a new tab or new window.</p></li>
+            <li><p><init>HTML</init> server: nope.  Zip up output and host elsewhere.</p></li>
+        </ul></p>
+    </section>
+</chapter>

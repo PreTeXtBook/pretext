@@ -1,0 +1,15 @@
+<figure xml:id="fig-sage-cubic">
+  <caption>A cubic plotted by SageMath on
+  <m>[-3,2]</m></caption>
+  <image xml:id="sageplot-cubic" width="50%">
+    <description>A cubic function on the interval
+    [-3,2]</description>
+
+<sageplot>
+f(x) = (x-1)*(x+1)*(x-2)
+plot(f, (x, -3, 2), color='blue', thickness=3)
+</sageplot>
+  </image>
+
+</figure>
+

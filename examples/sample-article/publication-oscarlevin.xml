@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2020 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<publication>
+
+    <!-- we use customizations-one for the plain sample article -->
+    <source customizations="customizations-two.xml"/>
+
+    <!-- HTML-Specific Options -->
+    <html>
+        <!-- Several embedded calculators are available            -->
+        <!-- Use "none" to turn this off (or remove the element)   -->
+        <calculator model="geogebra-classic"/>
+        <!-- @xml:id of a page to be target of index.html redirect -->
+        <!-- This is the @xml:id of the "article", which is not    -->
+        <!-- default behavior, but we do this as a test and as an  -->
+        <!-- illustration                                          -->
+        <index-page ref="derivatives"/>
+        <!-- specify the style of the html by giving names to      -->
+        <!-- override defaults.  Ex: to use "style_oscarlevin.css" -->
+        <!-- put <css style="oscarlevin"/>                         -->
+        <!-- @colors currently unimplementd.                       -->
+        <css style="oscarlevin" colors="blue_red"/>
+        <!-- Magic IDs identify HTML pages to analytics services   -->
+        <!-- Presence implies relevant Javascript will be added    -->
+        <!-- StatCounter requires both values to be set            -->
+        <analytics google-gst="UA-48811660-1"
+                   statcounter-project="9664088"
+                   statcounter-security="6e60c510"/>
+        <!-- Google search, via masthead textbox is switched on    -->
+        <!-- and associated with a Google account via CX number    -->
+        <!-- <search google-cx=""/> -->
+    </html>
+
+</publication>

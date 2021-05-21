@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2014-2021 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- See  xsl/localizations/README.md  for an explanation of this file -->
+
+<!-- de-DE, German (Germany) -->
+<!-- Karl-Dieter Crisman, kcrisman@gmail.com, 2020-06-01   -->
+
+<locale language="de-DE">
+    <!-- THEOREM-LIKE blocks -->
+    <!-- Environments which have proofs, plus proofs themselves -->
+    <localization string-id='theorem'>Satz</localization>
+    <localization string-id='corollary'>Korollar</localization>
+    <localization string-id='lemma'>Hilfssatz</localization>
+    <localization string-id='algorithm'>Algorithmus</localization>
+    <localization string-id='proposition'>Proposition</localization>
+    <localization string-id='claim'>Behauptung</localization>
+    <localization string-id='fact'>Fakt</localization>
+    <localization string-id='identity'>Identität</localization>
+    <localization string-id='proof'>Beweis</localization>
+    <localization string-id='case'>Fall</localization>
+    <!-- Components of the narrative -->
+    <!-- Mathematical statements without proofs -->
+    <!-- AXIOM-LIKE blocks -->
+    <localization string-id='axiom'>Axiom</localization>
+    <localization string-id='conjecture'>Vermutung</localization>
+    <localization string-id='principle'>Prinzip</localization>
+<!--    <localization string-id='heuristic'>Heuristic</localization> -->
+    <localization string-id='hypothesis'>Hypothese</localization>
+    <localization string-id='assumption'>Voraussetzung</localization>
+    <!-- Definitions -->
+    <localization string-id='definition'>Definition</localization>
+    <!-- Single Line Mathematics -->
+    <localization string-id='me'>Gleichung</localization>
+    <localization string-id='men'>Gleichung</localization>
+    <localization string-id='mrow'>Gleichung</localization>
+    <!-- Display Mathematics -->
+<!--    <localization string-id='md'>Display Mathematics</localization> -->
+<!--    <localization string-id='mdn'>Display Mathematics</localization> -->
+    <!-- Types of documents, mostly for informational messages -->
+    <localization string-id='volume'>Band</localization>
+    <localization string-id='book'>Buch</localization>
+    <localization string-id='article'>Artikel</localization>
+    <!-- <localization string-id='slideshow'>Slideshow</localization> -->
+    <localization string-id='letter'>Brief</localization>
+    <localization string-id='memo'>Memo</localization> <!-- oder Memorandum? -->
+    <localization string-id='presentation'>Vortrag</localization>
+    <!-- Parts of a document -->
+    <!-- "part" will also be used for a "stage" of a WeBWorK problem -->
+<!--    <localization string-id='frontmatter'>Front Matter</localization> -->
+    <localization string-id='part'>Teil</localization>
+    <localization string-id='chapter'>Kapitel</localization>
+    <localization string-id='appendix'>Anhang</localization>
+    <!-- Next is the plural of Appendix, used to identify a group of appendix -->
+    <!-- <localization string-id='appendices'>Appendices</localization> -->
+    <localization string-id='section'>Abschnitt</localization>
+    <localization string-id='subsection'>Unterabschnitt</localization>
+    <localization string-id='subsubsection'>Unterunterabschnitt</localization>
+    <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
+    <!-- <localization string-id='slide'>Slide</localization> -->
+    <localization string-id='introduction'>Einleitung</localization>
+    <localization string-id='conclusion'>Schluss</localization>
+    <localization string-id='exercises'>Übungen</localization>
+    <localization string-id='worksheet'>Arbeitsblatt</localization>
+    <localization string-id='reading-questions'>Lesefragen</localization>
+    <localization string-id='solutions'>Lösungen</localization>
+    <!-- Wörterverzeichnis scheint viel weniger benutzt zu sein, s. Google ngram -->
+    <localization string-id='glossary'>Glossar</localization> 
+    <!-- oder Bibliographie wird auch benutzt -->
+    <localization string-id='references'>Literaturverzeichnis</localization>
+<!--    <localization string-id='backmatter'>Back Matter</localization> -->
+    <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
+    <localization string-id='paragraphs'>Absätze</localization>
+    <localization string-id='commentary'>Kommentar</localization>
+    <localization string-id='subparagraph'>Unterabsatz</localization>
+    <!-- Components of the narrative -->
+    <!-- REMARK-LIKE blocks -->
+    <!-- "note" is used within "biblio", likely to change -->
+    <localization string-id='remark'>Bemerkung</localization>
+<!--    <localization string-id='convention'>Convention</localization> -->
+    <localization string-id='note'>Vermerk</localization>
+    <!-- Bemerkung versus Anmerkung - I have reserved Anmerkung for footnote -->
+    <localization string-id='observation'>Bemerkung</localization>
+    <localization string-id='warning'>Warnung</localization>
+<!--    <localization string-id='insight'>Insight</localization> -->
+<!--    <localization string-id='computation'>Computation</localization> -->
+    <localization string-id='technology'>Technologie</localization>
+    <!-- ASIDE-LIKE blocks -->
+<!--    <localization string-id='aside'>Aside</localization> -->
+<!--    <localization string-id='biographical'>Biographical Aside</localization> -->
+<!--    <localization string-id='historical'>Historical Aside</localization> -->
+    <!-- EXAMPLE-LIKE blocks -->
+    <localization string-id='example'>Beispiel</localization>
+    <localization string-id='question'>Frage</localization>
+    <localization string-id='problem'>Problem</localization>
+    <!-- PROJECT-LIKE blocks -->
+<!--    <localization string-id='project'>Project</localization> -->
+<!--    <localization string-id='activity'>Activity</localization> -->
+<!--    <localization string-id='exploration'>Exploration</localization> -->
+    <localization string-id='task'>Aufgabe</localization>
+<!--    <localization string-id='investigation'>Investigation</localization> -->
+    <!-- assemblages are collections of minimally structured material -->
+<!--    <localization string-id='assemblage'>Assemblage</localization> -->
+    <localization string-id='poem'>Gedicht</localization>
+    <!-- Objectives is the block, objective is a list item within -->
+<!--    <localization string-id='objectives'>Objectives</localization> -->
+<!--    <localization string-id='objective'>Objective</localization> -->
+    <!-- Outcomes is the block, outcome is a list item within (different) -->
+    <!-- These two words need to be different, to avoid ambiguous cross-references -->
+<!--    <localization string-id='outcomes'>Outcomes</localization> -->
+<!--    <localization string-id='outcome'>Outcome</localization> -->
+    <localization string-id='figure'>Figur</localization> <!-- Duden 4b für Figur -->
+    <localization string-id='table'>Tabelle</localization>
+<!--    <localization string-id='listing'>Listing</localization> -->
+    <localization string-id='fn'>Anmerkung</localization>
+<!--    <localization string-id='contributor'>Contributor</localization> -->
+    <!-- Lists and their items -->
+    <localization string-id='list'>Liste</localization>
+<!--    <localization string-id='li'>Item</localization> -->
+    <!-- A term (word) defined in a glossary -->
+<!--    <localization string-id='defined-term'>Term</localization> -->
+    <!-- A regular paragraph, not the old sectioning structure -->
+    <localization string-id='p'>Absatz</localization>
+    <localization string-id='blockquote'>Zitat</localization>
+    <!-- Literate programming, a chunk of computer code -->
+    <!-- <localization string-id='fragment'>Fragment</localization> -->
+    <!-- Parts of an exercise and its solution -->
+    <!-- An "exercise", at any level, within an "exercises" division is a          -->
+    <!-- "divisional" exercise and the string employed is 'divisionalexercise'.    -->
+    <!-- An "exercise" whose parent is a division (chapter, section, etc) we       -->
+    <!-- call an "inline exercise" and the string employed is 'inlineexercise'.    -->
+    <!-- And an "exercise" in a "worksheet" is a 'worksheetexercise'.              -->
+    <!-- And an "exercise" in a "reading-questions" is a 'readingquestion'.         -->
+    <!-- It is important to use different translations so that a text with         -->
+    <!-- different types of exercises do not have ambiguous cross-references       -->
+    <!-- (there is an example of this at the start of one of the later             -->
+    <!-- sections of the sample article).                                          -->
+    <!--                                                                           -->
+    <!-- In English, an "Exercise" is something you do that has a beneficial       -->
+    <!-- outcome, such as "I am going to the gym to exercise."  A "Checkpoint"     -->
+    <!-- is something you must do before you do something else.  Another use of    -->
+    <!-- the term is a location on a on a roadway where you must stop for the      -->
+    <!-- police to do an inspection. A worksheet is a collection of activities or  -->
+    <!-- problems, typically printed on paper, which might be used in a classroom. -->
+    <localization string-id='divisionalexercise'>Übung</localization>
+<!--    <localization string-id='inlineexercise'>Checkpoint</localization> -->
+    <localization string-id='worksheetexercise'>Arbeitsübung</localization>
+    <localization string-id='readingquestion'>Lesefrage</localization>
+    <localization string-id='webwork'>WeBWorK</localization>
+    <localization string-id='hint'>Andeutung</localization>
+    <localization string-id='answer'>Antwort</localization>
+    <localization string-id='solution'>Lösung</localization>
+    <!-- A group of divisional exercises (with introduction and conclusion) -->
+    <localization string-id='exercisegroup'>Übungsgruppe</localization>
+    <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
+<!--    <localization string-id='biblio'>Bibliographic Entry</localization> -->
+    <!-- Front matter components -->
+    <!-- this one is tough because for short version like in navigation bar Inhalt is fine, but long one in print probably Inhaltsverzeichnis -->
+    <localization string-id='toc'>Inhalt</localization>
+    <localization string-id='abstract'>Zusammenfassung</localization><!-- or is Abstrakt used? -->
+    <localization string-id='preface'>Einleitung</localization>
+<!--    <localization string-id='acknowledgement'>Acknowledgements</localization> -->
+<!--    <localization string-id='biography'>Author Biography</localization> -->
+    <!-- singular and plural titles for biography subdivision -->
+<!--    <localization string-id='about-author'>About the Author</localization> -->
+<!--    <localization string-id='about-authors'>About the Authors</localization> -->
+    <localization string-id='foreword'>Vorwort</localization>
+<!--    <localization string-id='dedication'>Dedication</localization> -->
+<!--    <localization string-id='colophon'>Colophon</localization> -->
+    <!-- Back matter components -->
+    <!-- index-part is deprecated, but not abandoned          -->
+    <!-- NB: repurpose translations, maybe move appendix here -->
+    <!-- oder auch Index, siehe http://www.d-indexer.org/frag/grundsatz.html#index -->
+    <localization string-id='index-part'>Register</localization>
+<!--    <localization string-id='jump-to'>Jump to:</localization> -->
+    <!-- Parts of the Index -->
+    <!-- see https://online.liverpooluniversitypress.co.uk/doi/pdf/10.3828/indexer.2006.21 for lots more info on peculiarities of German indexing we cannot hope to follow -->
+    <localization string-id='index'>Register</localization>
+    <localization string-id='see'>siehe</localization>
+    <localization string-id='also'>siehe auch</localization>
+    <!-- Notation List headings/foot -->
+    <localization string-id='symbol'>Symbol</localization>
+    <localization string-id='description'>Beschreibung</localization>
+    <localization string-id='location'>Stelle</localization>
+    <localization string-id='page'>Seite</localization>
+    <localization string-id='continued'>Nächste Seite weiter</localization>
+    <!-- Navigation Interface elements -->
+    <!-- Assistive "skip to content" link -->
+    <localization string-id='skip-to-content'>Weiter zum Hauptinhalt</localization>
+    <!-- I am not at all sure of the state of the art on this convention -->
+    <localization string-id='previous'>Zurück</localization>
+    <localization string-id='up'>Oben</localization>
+    <localization string-id='next'>Weiter</localization>
+    <!-- Keep these short, so buttons are not overly wide, 4 characters maximum -->
+    <!-- I am even less sure here - can one really shorten "Weiter"? -->
+    <localization string-id='previous-short'>Zu</localization>
+    <localization string-id='up-short'>Ob</localization>
+    <localization string-id='next-short'>We</localization>
+    <!-- NB: Use toc from above for both headings and navigation sidebar-->
+<!--    <localization string-id='annotations'>Annotations</localization> -->
+<!--    <localization string-id='feedback'>Feedback</localization> -->
+    <!-- This phrase should suggest that PreTeXt is the source -->
+    <!-- language that makes a particular output possible      -->
+    <localization string-id='authored'>Mit PreTeXt gebaut</localization>
+    <!-- Parts of memos and letters -->
+    <localization string-id='to'>An</localization>
+    <localization string-id='from'>Von</localization>
+<!--    <localization string-id='subject'>Subject</localization> -->
+<!--    <localization string-id='date'>Date</localization> -->
+<!--    <localization string-id='copy'>cc</localization> -->
+<!--    <localization string-id='enclosure'>encl</localization> -->
+    <!-- Various -->
+<!--    <localization string-id='todo'>To Do</localization> -->
+    <!-- Herausgeber seems more at publisher, but not always -->
+    <localization string-id='editor'>Redakteur</localization>
+    <localization string-id='edition'>Auflage</localization>
+    <localization string-id='website'>Website</localization>
+    <localization string-id='copyright'>Urheberrechte</localization>
+    <!-- HTML clickables (lowercase strings to click on) -->
+    <localization string-id='permalink'>Permalink</localization>
+    <localization string-id='incontext'>im Zusammenhang</localization>
+    <!-- Sage Cell evaluate button      -->
+    <!-- eg, "Evaluate (Maxima)"        -->
+    <!-- 2017-05-14: 'code' is obsolete -->
+    <!-- This needs to be defined to *something* (always)       -->
+    <!-- else whatever crud ends up on the button kills the cell -->
+    <!-- Though at least one Sage cell installation uses Auswerten instead -->
+    <localization string-id='evaluate'>Ausführen</localization>
+<!--    <localization string-id='code'>Code</localization> -->
+</locale>

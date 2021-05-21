@@ -34,6 +34,49 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Deprecations that can be fixed with a transformation -->
 <!-- In reverse chronological order, with dates           -->
 
+<!-- 2020-03-13  webwork setup obsolete -->
+<xsl:template match="webwork/setup">
+    <xsl:apply-templates select="@* | node()" />
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2020-03-13</xsl:with-param>
+        <xsl:with-param name="message">Removing &lt;setup&gt; wrapper from a &lt;webwork&gt;, preserving contents (&lt;pg-code&gt;?)</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- 2019-06-28  deprecate captioned lists to be titled lists -->
+<xsl:template match="list[title]/caption">
+    <xsl:comment>
+        <xsl:text>Commented list/caption: </xsl:text>
+        <xsl:apply-templates select="*|text()" />
+    </xsl:comment>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-06-28</xsl:with-param>
+        <xsl:with-param name="message">Converting a &lt;list&gt;/&lt;caption&gt; to a source comment</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- 2019-06-28  deprecate captioned lists to be titled lists -->
+<xsl:template match="list[not(title)]/caption">
+    <title>
+        <xsl:apply-templates select="@* | node()" />
+    </title>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-06-28</xsl:with-param>
+        <xsl:with-param name="message">Converting a &lt;list&gt;/&lt;caption&gt; to a &lt;list&gt;/&lt;title&gt;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- 2019-06-28  deprecate captioned tables to be titled tables -->
+<xsl:template match="table/caption">
+    <title>
+        <xsl:apply-templates select="@* | node()" />
+    </title>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-06-28</xsl:with-param>
+        <xsl:with-param name="message">Converting a &lt;table&gt;/&lt;caption&gt; to a &lt;table&gt;/&lt;title&gt;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
 <!-- 2019-02-10  todo element replaced by a prefixed XML comment -->
 <xsl:template match="todo">
     <xsl:comment>
@@ -222,34 +265,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
-<!-- 2017-12-22  latex-image-code to simply latex-image -->
-<xsl:template match="latex-image-code">
-    <latex-image>
-        <xsl:apply-templates select="@* | node()" />
-    </latex-image>
-    <xsl:call-template name="deprecation-fix-report">
-        <xsl:with-param name="date">2017-12-22</xsl:with-param>
-        <xsl:with-param name="message">Replacing &lt;latex-image-code&gt; by &lt;latex-image&gt;</xsl:with-param>
-    </xsl:call-template>
-</xsl:template>
-
 <!-- 2017-12-07  "c" content totally escaped for LaTeX -->
 <xsl:template match="c/@latexsep|cd/@latexsep">
     <!-- do nothing, just drop it and report -->
     <xsl:call-template name="deprecation-fix-report">
         <xsl:with-param name="date">2017-12-07</xsl:with-param>
         <xsl:with-param name="message">Removing &lt;@latexsep&gt; from a &lt;c&gt; or &lt;cd&gt; element</xsl:with-param>
-    </xsl:call-template>
-</xsl:template>
-
-<!-- 2017-08-25  deprecate named lists to be captioned lists -->
-<xsl:template match="list[not(caption)]/title">
-    <caption>
-        <xsl:apply-templates select="@* | node()" />
-    </caption>
-    <xsl:call-template name="deprecation-fix-report">
-        <xsl:with-param name="date">2017-08-25</xsl:with-param>
-        <xsl:with-param name="message">Converting a &lt;list&gt;/&lt;title&gt; to a &lt;list&gt;/&lt;caption&gt;</xsl:with-param>
     </xsl:call-template>
 </xsl:template>
 
@@ -374,7 +395,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- 2017-07-05:  convert top-level caption-less figure/table/listing to a side-by-side  -->
-<xsl:template match="figure[not(caption) and not(parent::sidebyside)] | table[not(caption) and not(parent::sidebyside)] | listing[not(caption) and not(parent::sidebyside)]">
+<!-- 2019-06-28:  removed fixes for tables, since they now have titles                   -->
+<xsl:template match="figure[not(caption) and not(parent::sidebyside)] | listing[not(caption) and not(parent::sidebyside)]">
     <sidebyside>
         <!-- migrate an image width attribute -->
         <xsl:if test="self::figure and image[@width]">
@@ -395,7 +417,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </image>
 </xsl:template>
 
-<xsl:template match="figure[not(caption) and parent::sidebyside] | table[not(caption) and parent::sidebyside] | listing[not(caption) and parent::sidebyside]">
+<xsl:template match="figure[not(caption) and parent::sidebyside] | listing[not(caption) and parent::sidebyside]">
     <xsl:if test="@xml:id">
         <xsl:comment>NOTE: @xml:id=<xsl:value-of select="@xml:id" /> from a &lt;<xsl:value-of select="local-name(.)" />&gt; was dropped while fixing deprecations.  The @xml:id may belong on an element just below, though it is unlikely a caption-less item was ever the target of a cross-reference.</xsl:comment>
     </xsl:if>
@@ -512,40 +534,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="deprecation-fix-report">
         <xsl:with-param name="date">2015-03-13</xsl:with-param>
         <xsl:with-param name="message">Replacing &lt;paragraph&gt; by &lt;paragraphs&gt;</xsl:with-param>
-    </xsl:call-template>
-</xsl:template>
-
-<!-- 2015-02-20: tikz element generalized to latex-image-code  -->
-<xsl:template match="image/tikz">
-    <latex-image-code>
-        <xsl:copy>
-            <xsl:apply-templates select="node()" />
-        </xsl:copy>
-    </latex-image-code>
-    <!--  -->
-    <xsl:call-template name="deprecation-fix-report">
-        <xsl:with-param name="date">2015-02-20</xsl:with-param>
-        <xsl:with-param name="message">Replacing &lt;tikz&gt; by &lt;latex-image-code&gt;</xsl:with-param>
-    </xsl:call-template>
-</xsl:template>
-
-<!-- 2015-02-08: graphics languages are source for images,  -->
-<!-- so need a wrapper and their  xml:id  should move -->
-<xsl:template match="tikz[not(parent::image)]|asymptote[not(parent::image)]|sageplot[not(parent::image)]">
-    <image>
-        <xsl:if test="@xml:id">
-            <xsl:attribute name="xml:id">
-                <xsl:value-of select="@xml:id" />
-            </xsl:attribute>
-        </xsl:if>
-        <xsl:copy>
-            <xsl:apply-templates select="node()" />
-        </xsl:copy>
-    </image>
-    <!--  -->
-    <xsl:call-template name="deprecation-fix-report">
-        <xsl:with-param name="date">2015-02-08</xsl:with-param>
-        <xsl:with-param name="message">&lt;tikz&gt;, &lt;asymptote&gt;, or &lt;sageplot&gt; element is being wrapped inside an &lt;image&gt; element, and any @xml:id attribute is being moved to the wrapper.  Rerun this conversion to obsolete the &lt;tikz&gt; element</xsl:with-param>
     </xsl:call-template>
 </xsl:template>
 

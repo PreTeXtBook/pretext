@@ -1,0 +1,49 @@
+<exercises xml:id="basics-s-sample-exercises">
+  <exercisegroup>
+
+    <introduction>
+      <p>
+        Here's where you put the common instructions.
+      </p>
+    </introduction>
+
+    <exercise>
+      <statement>
+        <p>
+          First exercise.
+          The <c>statement</c> is mandatory.
+          <idx><h sortby="statement"><tag>statement</tag></h><h sortby="of an exercise">of an <tag>exercise</tag></h></idx>
+          <idx><h sortby="exercise"><tag>exercise</tag></h><h sortby="statement"><tag>statement</tag></h></idx>
+          You can add all the usual bells and whistles after,
+          but we'll keep it short here.
+        </p>
+      </statement>
+    </exercise>
+
+    <exercise>
+      <statement>
+        <p>
+          Second exercise.
+        </p>
+      </statement>
+    </exercise>
+
+    <exercise>
+      <statement>
+        <p>
+          Third exercise.
+        </p>
+      </statement>
+    </exercise>
+
+  </exercisegroup>
+
+  <exercise>
+    <statement>
+      <p>
+        This <c>exercise</c> is not inside the <c>exercisegroup</c>.
+      </p>
+    </statement>
+  </exercise>
+
+</exercises>

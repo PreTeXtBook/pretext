@@ -1,0 +1,297 @@
+<?xml version="1.0"?>
+
+<!--********************************************************************
+Copyright 2015 Robert A. Beezer
+
+This file is part of MathBook XML.
+
+MathBook XML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+MathBook XML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+<!-- This file was originally part of the book     -->
+<!-- (as copied on 2015/07/12)                     -->
+<!--                                               -->
+<!--   Abstract Algebra: Theory and Applications   -->
+<!--                                               -->
+<!-- Copyright (C) 1997-2014  Thomas W. Judson     -->
+<exercises xml:id="exercises-integers">
+    <title>Exercises</title>
+
+    <exercise number="1">
+        <statement>
+            <p>Prove that
+                <me>1^2 + 2^2 + \cdots + n^2 = \frac{n(n + 1)(2n + 1)}{6}</me>
+            for <m>n \in {\mathbb N}</m>.</p>
+        </statement>
+        <answer>
+            <p>The base case, <m>S(1): [1(1 + 1)(2(1) + 1)]/6 = 1 = 1^2</m> is true.</p>
+            <p>Assume that <m>S(k): 1^2 + 2^2 + \cdots + k^2 = [k(k + 1)(2k + 1)]/6</m> is true. Then<md>
+                <mrow>1^2 + 2^2 + \cdots + k^2 + (k + 1)^2 &amp; = [k(k + 1)(2k + 1)]/6 + (k + 1)^2</mrow>
+                <mrow>&amp; = [(k + 1)((k + 1) + 1)(2(k + 1) + 1)]/6,</mrow>
+            </md>and so <m>S(k + 1)</m> is true. Thus, <m>S(n)</m> is true for all positive integers <m>n</m>.</p>
+        </answer>
+
+    </exercise>
+
+    <exercise number="2">
+        <statement>
+            <p>Prove that
+                <me>1^3 + 2^3 + \cdots + n^3 = \frac{n^2(n + 1)^2}{4}</me>
+            for <m>n \in {\mathbb N}</m>.</p>
+        </statement>
+
+    </exercise>
+
+    <exercise number="3">
+        <statement>
+            <p>Prove that <m>n! \gt 2^n</m> for <m>n \geq 4</m>.</p>
+        </statement>
+        <answer>
+            <p>The base case, <m>S(4): 4! = 24 \gt 16 =2^4</m> is true. Assume <m>S(k): k! \gt 2^k</m> is true. Then <m>(k + 1)! = k! (k + 1) \gt 2^k \cdot 2 = 2^{k + 1}</m>, so <m>S(k + 1)</m> is true. Thus, <m>S(n)</m> is true for all positive integers <m>n</m>.</p>
+        </answer>
+
+    </exercise>
+
+    <exercise number="4">
+        <statement>
+            <p>Prove that
+                <me>x + 4x + 7x + \cdots + (3n - 2)x = \frac{n(3n - 1)x}{2}</me>
+            for <m>n \in {\mathbb N}</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="5">
+        <statement>
+            <p>Prove that <m>10^{n + 1} + 10^n + 1</m> is divisible by 3 for <m>n \in {\mathbb N}</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="6">
+        <statement>
+            <p>Prove that <m>4 \cdot 10^{2n} + 9 \cdot 10^{2n - 1} + 5</m> is divisible by 99 for <m>n \in {\mathbb N}</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="7">
+        <statement>
+            <p>Show that
+                <me>\sqrt[n]{a_1 a_2 \cdots a_n} \leq \frac{1}{n} \sum_{k = 1}^{n} a_k.</me></p>
+        </statement>
+    </exercise>
+
+    <exercise number="8">
+        <statement>
+            <p>Prove the Leibniz rule for <m>f^{(n)} (x)</m>, where <m>f^{(n)}</m> is the <m>n</m>th derivative of <m>f</m>; that is, show that 
+                <me>(fg)^{(n)}(x) = \sum_{k = 0}^{n} \binom{n}{k} f^{(k)}(x) g^{(n - k)}(x).</me></p>
+        </statement>
+        <hint>
+            <p>Follow the proof in <xref ref="example-integers-binomial-theorem"/>.</p>
+        </hint>
+    </exercise>
+
+    <exercise number="9">
+        <statement>
+            <p>Use induction to prove that <m>1 + 2 + 2^2 + \cdots + 2^n = 2^{n + 1} - 1</m> for <m>n \in {\mathbb N}</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="10">
+        <statement>
+            <p>Prove that
+                <me>\frac{1}{2}+ \frac{1}{6} + \cdots + \frac{1}{n(n + 1)} = \frac{n}{n + 1} </me>
+            for <m>n \in {\mathbb N}</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="11">
+        <statement>
+            <p>If <m>x</m> is a nonnegative real number, then show that <m>(1 + x)^n - 1 \geq nx</m> for <m>n = 0, 1, 2, \ldots</m>.</p>
+        </statement>
+        <hint>
+            <p>The base case, <m>S(0): (1 + x)^0 - 1 = 0 \geq 0 = 0 \cdot x</m> is true. Assume <m>S(k): (1 + x)^k -1 \geq kx</m> is true. Then<md>
+                <mrow>(1 + x)^{k + 1} - 1 &amp; = (1 + x)(1 + x)^k -1</mrow>
+                <mrow>&amp; = (1 + x)^k + x(1 + x)^k - 1</mrow>
+                <mrow>&amp; \geq kx + x(1 + x)^k</mrow>
+                <mrow>&amp; \geq kx + x</mrow>
+                <mrow>&amp; = (k + 1)x,</mrow>
+            </md>so <m>S(k + 1)</m> is true. Therefore, <m>S(n)</m> is true for all positive integers <m>n</m>.</p>
+        </hint>
+    </exercise>
+
+    <exercise number="12">
+        <title>Power Sets</title>
+        <statement>
+            <p>Let <m>X</m> be a set. Define the <term>power set</term> of <m>X</m>, denoted <m>{\mathcal P}(X)</m>, to be the set of all subsets  of <m>X</m>.  <notation><usage>\mathcal P(X)</usage><description>power set of <m>X</m></description></notation> For example,  
+                <me>{\mathcal P}( \{a, b\} ) = \{ \emptyset, \{a\}, \{b\}, \{a, b\} \}.</me>
+            For every positive integer <m>n</m>, show that a set with exactly <m>n</m> elements has a power set with exactly <m>2^n</m> elements.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="13">
+        <statement>
+            <p>Prove that the two principles of mathematical induction stated in <xref ref="section-math-induction"/> are equivalent.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="14">
+        <statement>
+            <p>Show that the Principle of Well-Ordering for the natural numbers implies that 1 is the smallest natural number.  Use this result to show that the Principle of Well-Ordering implies the Principle of Mathematical Induction; that is, show that if <m>S \subset {\mathbb N}</m> such that <m>1 \in S</m> and <m>n + 1 \in S</m> whenever <m>n \in S</m>, then <m>S = {\mathbb N}</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="15">
+        <statement>
+            <p>For each of the following pairs of numbers <m>a</m> and <m>b</m>, calculate <m>\gcd(a,b)</m> and find integers <m>r</m> and <m>s</m> such that  <m>\gcd(a,b) = ra + sb</m>.</p>
+            <ol cols="2">
+                <li><p>14 and 39</p></li>
+                <li><p>234 and 165</p></li>
+                <li><p>1739 and 9923</p></li>
+                <li><p>471 and 562</p></li>
+                <li><p>23,771 and 19,945</p></li>
+                <li><p><m>-4357</m> and 3754</p></li>
+            </ol>
+        </statement>
+    </exercise>
+
+    <exercise number="16" xml:id="exercise-integers-gcd-1">
+        <statement>
+            <p>Let <m>a</m> and <m>b</m> be nonzero integers. If there exist integers <m>r</m> and <m>s</m> such that <m>ar + bs =1</m>, show that <m>a</m> and <m>b</m> are relatively prime.</p>
+        </statement>
+    </exercise>
+
+    <!-- Todo: Check references to the Fibonacci numbers -->
+
+    <exercise number="17">
+        <title>Fibonacci Numbers</title>
+        <statement>
+            <p>The Fibonacci numbers are
+                <me>1, 1, 2, 3, 5, 8, 13, 21, \ldots.</me>
+            We can define them inductively by <m>f_1 = 1</m>, <m>f_2 = 1</m>, and <m>f_{n + 2} = f_{n + 1} + f_n</m> for <m>n \in {\mathbb N}</m>.</p>
+            <ol>
+                <li xml:id="fn_ineq"><p>Prove that <m>f_n \lt 2^n</m>.</p></li>
+                <li xml:id="fn_prod"><p>Prove that <m>f_{n + 1} f_{n - 1} = f^2_n + (-1)^n</m>, <m>n \geq 2</m>.</p></li>
+                <li xml:id="fn_formula"><p>Prove that <m>f_n = [(1 + \sqrt{5}\, )^n - (1 - \sqrt{5}\, )^n]/ 2^n \sqrt{5}</m>.</p></li>
+                <li xml:id="fn_ratio"><p>Show that <m>\lim_{n \rightarrow \infty} f_n / f_{n + 1} = (\sqrt{5} - 1)/2</m>.</p></li>
+                <li xml:id="fn_coprime"><p>Prove that <m>f_n</m> and <m>f_{n + 1}</m> are relatively prime.</p></li>
+            </ol>
+        </statement>
+        <hint>
+            <p>For <xref ref="fn_ineq"/> and <xref ref="fn_prod"/> use mathematical induction.
+               <xref ref="fn_formula"/> Show that <m>f_1 = 1</m>, <m>f_2 = 1</m>, and <m>f_{n + 2} = f_{n + 1} + f_n</m>.
+               <xref ref="fn_ratio"/>  Use part <xref ref="fn_formula"/>.
+               <xref ref="fn_coprime"/> Use part <xref ref="fn_prod"/> and <xref ref="exercise-integers-gcd-1"/>.</p>
+        </hint>
+    </exercise>
+
+    <exercise number="18">
+        <statement>
+            <p>Let <m>a</m> and <m>b</m> be integers such that <m>\gcd(a,b) = 1</m>.  Let <m>r</m> and <m>s</m> be integers such that <m>ar + bs =1</m>.  Prove that 
+                <me>\gcd(a,s) = \gcd(r,b) = \gcd(r,s) =  1.</me></p>
+        </statement>
+    </exercise>
+
+    <exercise number="19">
+        <statement>
+            <p>Let <m>x, y \in {\mathbb N}</m> be relatively prime.  If <m>xy</m> is a perfect square, prove that <m>x</m> and <m>y</m> must both be perfect squares.</p>
+        </statement>
+        <hint>
+            <p>Use the Fundamental Theorem of Arithmetic.</p>
+        </hint>
+    </exercise>
+
+    <exercise number="20">
+        <statement>
+            <p>Using the division algorithm, show that every perfect square is of the form <m>4k</m> or <m>4k + 1</m> for some nonnegative integer <m>k</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="21">
+        <statement>
+            <p>Suppose that <m>a, b, r, s</m> are pairwise relatively prime and that<md>
+                <mrow>a^2 + b^2 &amp; = r^2</mrow>
+                <mrow>a^2 - b^2 &amp; = s^2.</mrow>
+            </md></p>
+            <p>Prove that <m>a</m>, <m>r</m>, and <m>s</m> are odd and <m>b</m> is even.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="22">
+        <statement>
+            <p>Let <m>n \in {\mathbb N}</m>.  Use the division algorithm to prove that every integer is congruent mod <m>n</m> to precisely one of the integers <m>0, 1, \ldots, n-1</m>. Conclude that if <m>r</m> is an integer, then there is exactly one <m>s</m> in <m>{\mathbb Z}</m> such that <m>0 \leq s \lt n</m> and <m>[r] = [s]</m>. Hence, the integers are indeed partitioned by congruence mod <m>n</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="23">
+        <statement>
+            <p>Define the <term>least common multiple</term> of two nonzero integers <m>a</m> and <m>b</m>, denoted by <m>\lcm(a,b)</m>, to be the nonnegative integer <m>m</m> such that both <m>a</m> and <m>b</m> divide <m>m</m>, and if <m>a</m> and <m>b</m>  divide any other integer <m>n</m>, then <m>m</m> also divides <m>n</m>. <notation><usage>\lcm(m,n)</usage><description>the least common multiple of <m>m</m> and <m>n</m></description></notation> Prove that any two integers <m>a</m> and <m>b</m> have a unique least common multiple.</p>
+        </statement>
+        <hint>
+            <p>Let <m>S = \{s \in {\mathbb N} : a \mid s</m>, <m>b \mid s \}</m>. Then <m>S \neq \emptyset</m>, since <m>|ab| \in S</m>. By the Principle of Well-Ordering, <m>S</m> contains a least element <m>m</m>. To show uniqueness, suppose that <m>a \mid n</m> and <m>b \mid n</m> for some <m>n \in {\mathbb N}</m>. By the division algorithm, there exist unique integers <m>q</m> and <m>r</m> such that <m>n = mq + r</m>, where <m>0 \leq r \lt m</m>. Since <m>a</m> and <m>b</m> divide both <m>m</m>, and <m>n</m>, it must be the case that  <m>a</m> and <m>b</m> both divide <m>r</m>.  Thus, <m>r = 0</m> by the minimality of <m>m</m>. Therefore, <m>m \mid n</m>.</p>
+        </hint>
+    </exercise>
+
+    <exercise number="24" xml:id="exercise-integers-lcm-gcd">
+        <statement>
+            <p>If <m>d= \gcd(a, b)</m> and <m>m = \lcm(a, b)</m>, prove that <m>dm = |ab|</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="25">
+        <statement>
+            <p>Show that <m>\lcm(a,b) = ab</m> if and only if <m>\gcd(a,b) = 1</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="26">
+        <statement>
+            <p>Prove that <m>\gcd(a,c) = \gcd(b,c) =1</m> if and only if <m>\gcd(ab,c) = 1</m> for integers <m>a</m>, <m>b</m>, and <m>c</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="27">
+        <statement>
+            <p>Let <m>a, b, c \in {\mathbb Z}</m>.  Prove that if <m>\gcd(a,b) = 1</m> and <m>a  \mid bc</m>, then <m>a  \mid  c</m>. </p>
+        </statement>
+        <hint>
+            <p>Since <m>\gcd(a,b) = 1</m>, there exist integers <m>r</m> and <m>s</m> such that <m>ar + bs = 1</m>.   Thus, <m>acr + bcs = c</m>. Since <m>a</m> divides both <m>bc</m> and itself, <m>a</m> must divide <m>c</m>.</p>
+        </hint>
+    </exercise>
+
+    <exercise number="28">
+        <statement>
+            <p>Let <m>p \geq 2</m>.  Prove that if <m>2^p - 1</m> is prime, then <m>p</m> must also be prime.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="29">
+        <statement>
+            <p>Prove that there are an infinite number of primes of the form <m>6n + 5</m>. </p>
+        </statement>
+        <hint>
+            <p>Every prime must be of the form 2, 3, <m>6n + 1</m>, or <m>6n + 5</m>.   Suppose there are only finitely many primes of the form <m>6k + 5</m>.</p>
+        </hint>
+    </exercise>
+
+    <exercise number="30">
+        <statement>
+            <p>Prove that there are an infinite number of primes of the form <m>4n - 1</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="31">
+        <statement>
+            <p>Using the fact that 2 is prime, show that there do not exist integers <m>p</m> and <m>q</m> such that <m>p^2 = 2 q^2</m>. Demonstrate that therefore <m>\sqrt{2}</m> cannot be a rational number.</p>
+        </statement>
+    </exercise>
+
+</exercises>

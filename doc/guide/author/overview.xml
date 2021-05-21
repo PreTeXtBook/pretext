@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="overview">
+    <title>Overview of Features</title>
+
+    <introduction>
+        <p>This chapter is a high-level view of the important concepts, features and design decisions that go into the creation of <pretext />.  For careful exact descriptions of details, we will direct you to one of the many sections in the <xref ref="topics" text="title" /> chapter.  So this chapter should make you aware of what is possible and expand on the philosophy described earlier in <xref ref="philosophy" />, while also giving you examples of many basic constructions you can use to get started quickly.</p>
+    </introduction>
+
+    <section xml:id="overview-structure">
+        <title>Structure</title>
+
+        <p>A <pretext /> document is a nested sequence of <term>structural divisions</term><idx>structural division</idx>.  For a book, these would go <tag>part</tag>, <tag>chapter</tag>, <tag>section</tag>, <tag>subsection</tag>, and <tag>subsubsection</tag>.  Using <tag>part</tag> is optional, but a book must always use <tag>chapter</tag> (or else it is not a book!).  No skipping over divisions.  For example, you cannot divide a <tag>section</tag> directly into several <tag>subsubsection</tag>s without an intervening <tag>subsection</tag>.</p>
+
+        <p>An <tag>article</tag> starts divisions from <tag>section</tag>, though it may choose to have no divisions at all.  <tag>paragraphs</tag> are exceptional.  They lack a full set of features, but can be used to divide anything, in books or in articles, though they are always terminal since you cannot divide them further.  You will have noticed that we prefer the generic term <term>division</term><idx><h>division</h><seealso>structural division</seealso></idx> (rather than <q>section</q>) since a <tag>section</tag> is a very particular division.</p>
+
+        <p>A division may be unstructured, in which case you fill it with paragraphs and lists and figures and theorems and so on.  But if you choose to structure a division it must look like an optional <tag>introduction</tag>, followed by multiple divisions of the next finer granularity, with an optional <tag>conclusion</tag>.  Either version may have a single <tag>exercises</tag> division at the end.  The structured version may have more than one <tag>exercises</tag>.  Finally, there may be a single <tag>references</tag> within a division.</p>
+
+        <p>Every division tag can carry an <attr>xml:id</attr> attribute, and it is a good practice to (a) provide one, (b) use a very short list of words describing the content, and (c) adopt a consistent pattern of your choosing.  Do not use numbers, you may later regret it.  These are optional, and with practice you will learn how best to use them. See <xref ref="overview-cross-references" /> just below for more on this.</p>
+
+        <p>The <tag>exercises</tag> and <tag>references</tag> tags are special divisions, see <xref ref="topic-exercises" /> and <xref ref="topic-references" />.</p>
+
+        <p>This explanation is expanded and reiterated at <xref ref="topic-divisions" /> and is worth reading earlier rather than later.</p>
+    </section>
+
+    <section xml:id="overview-paragraphs">
+        <title>Paragraphs</title>
+        <idx>paragraph</idx>
+
+        <p>Once you have divisions, what do you put into them?  Most likely, paragraphs<idx>paragraph</idx>.  We use long, exact names for tags that are used infrequently, like <tag>subsubsection</tag>.  But for frequently used elements, we use abbreviated tags, often identical to names used in <init>HTML</init>.  So a paragraph is delimited by simply the <tag>p</tag> tag.</p>
+
+        <p>Lots of things can happen in paragraphs, some things can <em>only</em> happen in a paragraph, and some things are <em>banned</em> in paragraphs.  Inside a paragraph, you can emphasize some text (<tag>em</tag>), you can quote some text (<tag>q</tag>), you can mark a phrase as being from another language (<tag>foreign</tag>), and much more.  You can use almost any character your keyboard can produce, but need to be careful with the three <init>XML</init> exceptional characters: ampersand (&amp;), less than (&lt;), and rarely, greater than (&gt;).  (See <xref ref="overview-exceptional-characters"/>.) You must put a list inside a paragraph, and all mathematics (<xref ref="overview-math" />) will occur inside a paragraph.  You cannot put a <tag>table</tag> or a <tag>figure</tag> in a paragraph, and many other structured components are prohibited in paragraphs.</p>
+
+        <p>Paragraphs are also used as part of the structure of other parts of your document.  For example, a <tag>remark</tag> could be composed of several <tag>p</tag>.  As you get started with <pretext />, remember that much of your actual writing will occur inside of a <tag>p</tag> and you will have a collection of tags you can use there to express your meaning to your readers.</p>
+
+        <p>So early in your writing project, familiarize yourself with the components of a paragraph detailed in <xref ref="topic-paragraphs" />.</p>
+    </section>
+
+    <section xml:id="overview-cross-references">
+        <title>Cross-References</title>
+        <idx>cross-reference</idx>
+
+        <p>Cross-references in a <pretext /> document are easy, powerful and flexible.  So it is worth familiarizing yourselves with them early, here and then ahead in <xref ref="topic-cross-referencing" />.</p>
+
+        <p>Any element that you place a <attr>xml:id</attr> on can become the target of a cross-reference<idx>cross-reference</idx>.  This could be a division, a remark, a bibliographic entry, or a figure.  So for example, suppose your source had <c>&lt;subsection xml:id="subsection-flowers"&gt;</c> and someplace else you wrote <c>&lt;xref ref="subsection-flowers" /&gt;</c>.  Then at the latter location you would get a reference to the Subsection that discusses flowers.  In print this might just be the number for the subsection, but in various electronic output formats, these cross-references can be very powerful interactive ways to explore the content.  And the mechanism is always the same, pair up an <attr>xml:id</attr> on a target with a <attr>ref</attr> on an <tag>xref</tag> cross-reference.</p>
+
+        <p>Since the value of an <attr>xml:id</attr> is also used in a variety of ways, such as to construct some file names, some care should be taken in how you author them.  We limit the possible characters to letters and numbers (<c>a-z</c>, <c>A-Z</c>, <c>0-9</c>), with hyphens and underscores (<c>-_</c>) available as word-separators.  Our advice is to stick to lowercase letters, though we are not yet aware of any problems with case-insensitivity.  So in short, use <term>kebab-case</term> or <term>snake-case</term> for your <attr>xml:id</attr> values.</p>
+
+        <p>For more, see <xref ref="topic-cross-referencing" /> because cross-references have many features. But first, here are two features you do not want to miss.  In the early stages of writing, you can author <c>&lt;xref provisional="subsection-flowers" /&gt;</c> to point to a subsection you are contemplating (but have not written yet) and you will get various polite reminders to get that straightened out eventually (see <xref ref="processing-author-tools" /> for details).  Also the default behavior is to automatically provide the generic name of the target, so you will get something like <q>Subsection 4.3.2</q> without ever typing the <q>Subsection</q> part.  If you move the target, the generic name will adjust if necessary, and if you switch to one of the supported languages, the generic name will switch language (see <xref provisional="topic-on-languages" />.</p>
+    </section>
+
+    <section xml:id="overview-title">
+        <title>Titles</title>
+        <idx>title</idx>
+
+        <p>Divisions always need titles, you accomplish this with a <tag>title</tag><idx>title</idx> tag first thing.  Almost everything that you can use in a paragraph can be used in a title, but a few constructions are banned, such as a displayed mathematical equation (for good reason).  Try to avoid using footnotes in titles, even if we have tried to make them possible.</p>
+
+        <p>A division will also support an optional <tag>shortitle</tag>.  The full <tag>title</tag> will be used where the division is born, but in other places where the title is used for navigation, such as a Table of Contents, print page header, or HTML summary page, the <tag>shortitle</tag> will be used preferentially.  To avoid confusing your readers, use this feature sparingly, and ideally only when you have a really, really, really long title and then use a short title that is easily recognizable as a variant of the long title.  Your first option should be to ask if your long title must absolutely be so long.</p>
+
+        <p>Many, many other structures admit titles.  Experiment, or look at specific descriptions of the structure you are interested in.  Titles are very integral to <pretext />, much like cross-references.  Titles migrate to the Table of Contents, get used in page headers for print output, can be used in lists (such as a List of Figures), and can be used as the text of a cross-reference, instead of a number.  You might not be inclined to give a <tag>remark</tag> a title, but it would be good practice to do so.  If you use knowls in your <init>HTML</init> output for structures such as <tag>example</tag> (or if somebody else may someday choose to), then your readers will be spared a lot of confusion if you supply informative titles for each. Your electronic outputs will be much more useful to your readers if you routinely title every structure that allows it (perhaps excepting <tag>exercise</tag> which can be known by their number).</p>
+
+        <note xml:id="best-practice-titles">
+            <title>Provide Informative Titles Liberally</title>
+            <p>Provisions for titles in many situations is a key <pretext/> feature.  And then they are used for various purposes to benefit readers.  A good example is when the <init>HTML</init> conversion is used to place content in a <term>knowl</term>, a unit of content that begins hidden, but can be revealed (and hidden again) with one click of a mouse.  Since a reader cannot see the content originally, we will migrate a title into the clickable text.  But we cannot read your mind<mdash/>it is your job as the author to provide a title, and to provide a good one.</p>
+
+            <p>Even if you are not yet sure what a knowl is, and even if you think you do not want to use them, there are other good reasons to have a title (such as automatic lists, see <xref ref="topic-automatic-lists"/>).  Constructing them on-the-fly is much easier than making a big chore out of going back and doing it later.</p>
+
+            <p><dl width="narrow">
+                <li>
+                    <title>Bad</title>
+                    <p>Example 5.10</p>
+                </li>
+                <li>
+                    <title>Better</title>
+                    <p>Example 5.10 A cool lizard trick.</p>
+                </li>
+                <li>
+                    <title>Best</title>
+                    <p>Example 5.10 Various colors and markings of a chameleon.</p>
+                </li>
+            </dl></p>
+        </note>
+    </section>
+
+    <section xml:id="overview-math">
+        <title>Mathematics</title>
+        <idx>mathematics</idx>
+
+        <p>With experience, you may realize that <pretext /> utilizes three principal languages.  One is the narrative of everyday sentences and paragraphs.  Most of what you write in a paragraph, or a table cell, or a title, or a caption, or an index heading, is in this language.  Then there is the structural language, which is the majority of the elements in <pretext />, such as <tag>chapter</tag>, <tag>theorem</tag>, or <tag>figure</tag>.  Then finally, there is the language of mathematical symbols and notation.</p>
+
+        <p>A key design decision is that mathematical symbols, expressions and equations are authored using <latex /> syntax.  More precisely, we support the symbols and constructions provided by <url href="https://www.mathjax.org/">MathJax</url>, which quite closely follows the <c>amsmath</c> package maintained by the American Mathematical Society.  Neither you nor I want to write <url href="https://en.wikipedia.org/wiki/MathML">MathML</url> by hand!</p>
+
+        <p>The symbols and macros supported by MathJax can be found at their <url href="http://docs.mathjax.org/en/latest/tex.html#supported-latex-commands">Supported <latex/> commands</url><fn><c>docs.mathjax.org/en/latest/tex.html#supported-latex-commands</c></fn> documentation.  Look here to see which parts of <latex/> may be used in your mathematical expressions.</p>
+
+        <p>For <term>inline</term> mathematics<idx><h>mathematics</h><h>inline mathematics</h></idx>, use the short <tag>m</tag> tag within a <tag>p</tag> (or within a <tag>title</tag> or <tag>caption</tag>).  For example, <c>&lt;m&gt;\alpha^2 + \beta^4&lt;/m&gt;</c> will do what you expect, in print and in electronic outputs.  To get a single equation, centered, with some vertical separation before and after, use the <tag>me</tag> tag (<q>math equation</q>) in the same way within a <tag>p</tag>, but do not try using it within a <tag>title</tag>.  For example, <c>&lt;me&gt;\rho = \alpha^2 + \beta^4&lt;/me&gt;</c>.  If you want your equation numbered, switch to the <tag>men</tag> tag (<c>n</c> = <q>numbered</q>).</p>
+
+        <p>There is a way to incorporate your own (simple) custom <latex /> macros within mathematics (only).  They will be effective in your print and electronic outputs, and can be employed in graphics languages like <c>tikz</c> and Asymptote.  You can also author multi-line <term>display mathematics</term><idx><h>mathematics</h><h>display mathematics</h></idx> using the <tag>md</tag> tag surrounding a sequence of <tag>mrow</tag> elements (or the <tag>mdn</tag> variant for numbered equations).  We defer the details to <xref ref="topic-mathematics" />.</p>
+    </section>
+
+    <section xml:id="overview-images">
+        <title>Images</title>
+        <idx>image</idx>
+
+        <p>You can include an image via the <tag>image</tag><idx>image</idx> tag.  You can use the <attr>source</attr> attribute to provide a filename, likely prefixed by a relative path, that points at an image file.  It is your responsibility to locate that file properly relative to your output, and that the file format is compatible.  So, for example, suppose your source contained <c>&lt;image source="images/butterflies.jpg"/&gt;</c>.  Then you would want to have a directory named <c>images</c> below wherever you process your <latex /> output, or wherever you place your HTML output on a web server.  The <attr>width</attr> attribute can be used to control the size of the image.   Widths are expressed as a percentage of the available width, such as <c>width="60%"</c>.  Instead of a width, you can also specify margins and the width will be deduced.</p>
+
+        <p>You may want to wrap your image in a <tag>figure</tag> to have it centered, and to have some vertical separation above and below.  A <tag>figure</tag> must also have a <tag>caption</tag>, and the figure will be numbered.</p>
+
+        <p>You can also place an <q>anonymous</q> image (no caption, no number) almost anywhere you might place a paragraph (but not <em>within</em> a paragraph).  Note also that the <tag>sidebyside</tag> tag provides some very flexible options for placing several images (<xref ref="overview-sidebyside" />) together, or combining figures with subcaptions.</p>
+
+        <p>If you wish to construct technical diagrams, with editable source, and perhaps including the use of <latex/> macros, <pretext/> provides support for authoring with graphics languages such as Asymptote, TikZ, PGF, PSTricks, and xy-pic in addition to using Sage code to describe a plot or image.  In most cases output can be obtained as smoothly-scalable <init>SVG</init> images, in addition to other formats like <init>PDF</init> or <init>PNG</init>.  Making all this happen is one of the more technical aspects of <pretext/>, so read the details in <xref ref="topic-images"/> along with frequent references there to the <c>pretext</c> script described in <xref ref="pretext-script"/>.</p>
+    </section>
+
+    <section xml:id="overview-lists">
+        <title>Lists</title>
+        <idx>list</idx>
+
+        <p>Ordered lists (numbered)<idx><h>list</h><h>ordered list</h></idx>, unordered lists (bullets)<idx><h>list</h><h>unordered list</h></idx> and description lists (defined terms)<idx><h>list</h><h>description list</h></idx> are all supported, and syntax generally follows <init>HTML</init>.  Lists usually live within a paragraph (<tag>p</tag>), though there are limited exceptions.  Their structure is given by the <tag>ol</tag>, <tag>ul</tag>, <tag>dl</tag> tags (respectively).  These can specify a variety of options for the labels via attributes, as described in <xref ref="topic-lists"/>.</p>
+
+        <p>List items, for any of the three types, are delimited with the <tag>li</tag> tag.  What is different from <init>HTML</init> is that the contents of a list item may be structured, with paragraphs (<tag>p</tag>) being the most likely and frequent element.  So to nest lists you begin a paragraph in a list item of the outer list, then begin the inner list within that paragraph.  However, a simple list item may be authored just like you were authoring within a paragraph, much like writing sentences elsewhere.  A structured  list item may begin with <tag>title</tag> for ordered and unordered lists, and is mandatory for a description list.  In this latter case, the text of the <tag>title</tag> will become the text that is being described (the label of the list item).   For the optional uses, the title will be rendered as its own paragraph, with a different font (perhaps italics or oblique).  A description list cannot be contained within another list.  In other words, it is a <q>top-level</q> list.</p>
+
+        <p>Lists are more complicated than they appear, so be sure to read the details at <xref ref="topic-lists"/> before you start designing really involved lists.</p>
+    </section>
+
+    <section xml:id="overview-exercises">
+        <title>Exercises</title>
+        <idx>exercise</idx>
+
+        <p>Textbooks in many disciplines have exercises for the reader.  In <pretext/> there are five places where you can set a question for the reader to pursue.<dl>
+            <li>
+                <title>Divisional</title>
+                <p>There is a special <tag>exercises</tag><idx><h>exercise</h><h>divisional exercise</h></idx> division and an <tag>exercise</tag> placed there is then known as a <term>divisional exercise</term>.  This division supports extra features designed for exercises, such as an <tag>exercisegroup</tag> for short exercises with common instructions.  The <tag>exercises</tag> division can be used at any level.  In other words, it can be a peer of any other division.</p>
+            </li>
+            <li>
+                <title>Inline</title>
+                <p>Immediately within any division, you can interrupt the narrative with an <term>inline exercise</term>.<idx><h>exercise</h><h>inline exercise</h></idx>  It will be rendered similar to a <tag>theorem</tag> or other block, with a number, and a optional <tag>title</tag>.</p>
+            </li>
+            <li>
+                <title>Reading Question</title>
+                <p>Another specialized division, <tag>reading-questions</tag>, can be used to house <tag>exercise</tag> designed to test or guide a reader's comprehension of the material in that division.</p>
+            </li>
+            <li>
+                <title>Worksheet</title>
+                <p>The main component of a <tag>worksheet</tag> is an <tag>exercise</tag> (<xref ref="overview-worksheet"/>).  Notably the exercises in a worksheet may be arranged with a <tag>sidebyside</tag> element (<xref ref="overview-sidebyside"/>).</p>
+            </li>
+            <li>
+                <title>Project</title>
+                <p>A <tag>project</tag> is a bit different than the prior situations, since this element is structured with <tag>task</tag>.  But it has many common features, such as allowing optional <tag>title</tag>, <tag>hint</tag>, <tag>answer</tag>, <tag>solution</tag>.</p>
+            </li>
+        </dl></p>
+
+        <p>If an <tag>exercise</tag> is simply a statement of the question, then it may be authored with paragraphs (<tag>p</tag>) and similar elements.  If an <tag>exercise</tag> has hints, answers, or solutions, then it must be structured with a <tag>statement</tag>, followed by (possibly several) optional <tag>hint</tag>, <tag>answer</tag> and/or <tag>solution</tag>.  Conceptually, an <tag>answer</tag> is a short final result, while a <tag>solution</tag> provides details about the route to the answer.  Each of these four components is structured further, with paragraph-like elements, and the exercise itself may have a <tag>title</tag>.  A title is strongly encouraged for inline exercises, and nearly-mandatory if you plan to have inline exercises rendered in knowls in a conversion to <init>HTML</init>.</p>
+
+        <p>You need (and want) to have the hints, answers and solutions grouped with the statement as you author, but there is a lot of flexibility on making these available at the location of the exercise, or in the back matter.  See <xref ref="topic-exercises-solutions" /> for more.</p>
+
+        <p>An inline exercise typically gets a fully qualified unique number and is rendered similar to an <tag>example</tag> or a <tag>remark</tag>.  A divisional exercise (including reading questions and worksheet exercises) only gets a sequential number, though this can be overridden with the <attr>number</attr> attribute if you want to maintain stable numbering in response to edits.  (Be careful, once you override the sequential numbering, you probably need to manually specify every subsequent number, so save overrides for when your project matures.)</p>
+
+        <p>Within a run of divisional exercises a subgroup can be delimited as an <tag>exercisegroup</tag>, which allows an <tag>introduction</tag> and/or <tag>conclusion</tag> to explain some commonality.  An <tag>exercisegroup</tag> should be rendered in some way that makes it clear to the reader that they are a group.</p>
+    </section>
+
+    <section xml:id="overview-worksheet">
+        <title>Worksheets</title>
+        <idx>worksheet</idx>
+
+        <p>Another division is a <tag>worksheet</tag>.  It is similar to a <tag>chapter</tag>, <tag>section</tag>, and so on, but with some variations to support a worksheet or in-class activity.  Here we recognize the primacy of printed output (perhaps to bring into a classroom), and the online version is a less-capable representation.</p>
+
+        <p>There is no limit to what you can place in a <tag>worksheet</tag> division: objectives, an introduction, theorems, figures, images, and so on.  But the principal element is an <tag>exercise</tag>, which mostly behaves like an <tag>exercise</tag> in an <tag>exercises</tag> division, but with additional capabilities.</p>
+
+        <p>An <tag>exercise</tag> in a <tag>worksheet</tag> can have a specified width when included in a <tag>sidebyside</tag>, and in any case may have a specified additional blank working space of specified height.  Page breaks can be specified, and the four margins on a page can be independently controlled.  So if you want to create ancillary worksheets for your project, and you like to use <em>all</em> of the space on a printed page, then there is some layout control to support that.</p>
+
+        <p>Notice that all of this layout control is an exception to the philosophy of <pretext />.  So in particular, margins and working space do not appear in the <init>HTML</init> output.  We do give a visual indication where a page break in a <tag>worksheet</tag> is placed.  An author might wish to collect all of the worksheets in a book, for printing as an <q>activity book</q>, and so there are plans (2018-08-11) to support and automate that process.  Details for authoring worksheets can be found in <xref ref="topic-worksheet"/>.</p>
+    </section>
+
+    <section xml:id="overview-references">
+        <title>References</title>
+        <idx>reference</idx>
+
+        <p>Like <tag>exercises</tag>, a <tag>references</tag> division may go anywhere a more typical division could go.  This allows for things like a <q>Further Reading</q> list at the end of every chapter of a book.  These are populated with <tag>biblio</tag> items that are individual bibliographic entries.  Support is presently very minimal, but is planned to improve.</p>
+    </section>
+
+    <section xml:id="overview-figures-tables">
+        <title>Figures and Tables</title>
+        <idx>figure</idx>
+        <idx>table</idx>
+
+        <p>Figures and tables are outer structures, <tag>figure</tag><idx>figure</idx> and <tag>table</tag><idx>table</idx>. A <tag>table</tag> has a <tag>title</tag> and a <tag>figure</tag> has a <tag>caption</tag>.</p>
+
+        <p>A <tag>table</tag> may only contain a <tag>tabular</tag>, which is the structure containing the rows and columns of a table.  Details can be found in <xref ref="topic-tabular" />.</p>
+
+        <p>A <tag>figure</tag> is more liberal than a <tag>table</tag> and may contain a variety of items.  Most probably, you will include an <tag>image</tag> (see <xref ref="overview-images" />).</p>
+    </section>
+
+    <section xml:id="overview-programs">
+        <title>Programs and Consoles</title>
+        <idx>program</idx>
+        <idx>console</idx>
+
+        <p>If you are writing about scientific or engineering topics, you may wish to include sample computer programs, or command-line sessions.</p>
+
+        <p>A <tag>program</tag> will be treated as verbatim text (see <xref ref="overview-verbatim-literal" />), subject to all the exceptions for exceptional characters.  Indentation will be preserved, though an equal amount of leading whitespace will be stripped from every line, so as to keep the code shifted left as far as possible.  So you can indent your code consistently along with your XML indentation.  For this reason it is best to indent with spaces, and not tabs.  A mix will almost surely end badly, and in some programming languages tabs are discouraged (<eg /> Python).</p>
+
+        <p>The <attr>language</attr> attribute may be used to get some degree of language-specific syntax highlighting.  See <xref ref="topic-program-listings" /> for details.</p>
+
+        <p>A <tag>console</tag> is a transcript of an interactive session in a terminal at a command-line.  It is a sequence of the following elements, in this order, possibly repeated many times as a group: <tag>prompt</tag>, <tag>input</tag>, and <tag>output</tag>.  The <tag>output</tag> is optional, and a <tag>prompt</tag> is only displayed when there is an immediately subsequent <tag>input</tag> (which could be empty).  The content is treated as verbatim text (see <xref ref="overview-verbatim-literal" />), subject to all the exceptions for exceptional characters.</p>
+
+        <p>A <tag>program</tag> or <tag>console</tag> may be wrapped in a <tag>listing</tag>, which is analogous to a <tag>figure</tag> or <tag>table</tag>.  A <tag>listing</tag> may contain a <tag>title</tag> for use in cross-references or lists.  A <tag>caption</tag> will be displayed and will generate a number.</p>
+    </section>
+
+    <section xml:id="overview-exceptional-characters">
+        <title>Exceptional Characters</title>
+        <idx>exceptional characters</idx>
+        <idx><h>characters</h><h>exceptional</h></idx>
+
+        <p>An advantage of XML syntax is that very few characters are reserved for the language's use, and thus very few characters need to be escaped.  Of course, there is always the need to escape the escape character.</p>
+
+        <p>The escape character for XML is the ampersand, &amp;.  The other dangerous character is the left angle bracket, the <q>less than,</q> &lt;.  If you like to be symmetric, you can also handle the right angle bracket, the <q>greater than,</q> &gt;, similarly.  Single and double quotation marks are used to delimit attributes, so are part of the XML specification, but do not present difficulties in narrative text.</p>
+
+        <p>These first two characters are interpreted by the <init>XML</init> processor very early in the analysis of your source.  So they need to be authored specially via the <term>XML entities</term> <c>&amp;amp;</c> and <c>&amp;lt;</c>.  In practice, escaping <c>&gt;</c> is rarely necessary.  So fundamentally within <pretext/> there are just two characters to type carefully or exceptionally.</p>
+
+        <p>If you consistently follow the prescription in the previous paragraph you will avoid a descent into escape-character hell and avoid a lot of head-scratching.  In particular, you should have no need of the <c>&lt;![CDATA[</c><nbsp /><c>]]&gt;</c> mechanism of <init>XML</init>, so <em>please</em> just forget we even mentioned it.  But see <xref ref="topic-exceptional-characters"/> if you are curious, or want a more thorough discussion.</p>
+    </section>
+
+    <section xml:id="overview-nontrivial-characters">
+        <title>Nontrivial Characters</title>
+        <idx>nontrivial characters</idx>
+        <idx><h>characters</h><h>nontrivial</h></idx>
+
+        <p>Quality typography is more expansive than the limited capabilities of computer keyboards, whose history is rooted in the machines known as typewriters.  Some characters are never present on a keyboard (e.g., a pilcrow), while others are ambiguous.  Is a diagonal line a slash used to separate information (either/or), or is it a solidus used to form a simple fraction such as 3<solidus/>4? <xref ref="table-nontrivial-characters"/> is a <em>sample</em> of how <pretext/> addresses this.  (The last two are the technical exceptions imposed by using a markup language, see <xref ref="overview-exceptional-characters"/>.) See <xref ref="topic-paragraphs"/> for a more comprehensive and detailed discussion.</p>
+
+        <table xml:id="table-nontrivial-characters">
+            <title>Nontrivial Characters</title>
+            <tabular halign="left">
+                <col halign="center"/>
+                <col halign="left" right="medium"/>
+                <col halign="center"/>
+                <col halign="left"/>
+                <row bottom="medium">
+                    <cell>To get this:</cell>
+                    <cell>Type this:</cell>
+                    <cell>To get this:</cell>
+                    <cell>Type this</cell>
+                </row>
+
+                <row>
+                    <cell><ellipsis/></cell>
+                    <cell><tage>ellipsis</tage></cell>
+                    <cell><fillin/></cell>
+                    <cell><tage>fillin</tage></cell>
+                </row>
+                <row>
+                    <cell><icon name="gear"/></cell>
+                    <cell><c>&lt;icon name="gear"/&gt;</c></cell>
+                    <cell><icon name="wrench"/></cell>
+                    <cell><c>&lt;icon name="wrench"/&gt;</c></cell>
+                </row>
+                <row>
+                    <cell><kbd>PrtScn</kbd></cell>
+                    <cell><c>&lt;kbd&gt;PrtScn&lt;/kbd&gt;</c></cell>
+                    <cell><kbd name="shift"/></cell>
+                    <cell><c>&lt;kbd name="shift"/&gt;</c></cell>
+                </row>
+                <row>
+                    <cell><ndash/></cell>
+                    <cell><tage>ndash</tage></cell>
+                    <cell><mdash/></cell>
+                    <cell><tage>mdash</tage></cell>
+                </row>
+                <row>
+                    <cell><registered/></cell>
+                    <cell><tage>registered</tage></cell>
+                    <cell><copyright/></cell>
+                    <cell><tage>copyright</tage></cell>
+                </row>
+                <row>
+                    <cell><permille/></cell>
+                    <cell><tage>permille</tage></cell>
+                    <cell><pilcrow/></cell>
+                    <cell><tage>pilcrow</tage></cell>
+                </row>
+                <row>
+                    <cell><section-mark/></cell>
+                    <cell><tage>section-mark</tage></cell>
+                    <cell><midpoint/></cell>
+                    <cell><tage>midpoint</tage></cell>
+                </row>
+                <row>
+                    <cell><trademark/></cell>
+                    <cell><tage>trademark</tage></cell>
+                    <cell><swungdash/></cell>
+                    <cell><tage>swungdash</tage></cell>
+                </row>
+                <row>
+                    <cell><times/></cell>
+                    <cell><tage>times</tage></cell>
+                    <cell><plusminus/></cell>
+                    <cell><tage>plusminus</tage></cell>
+                </row>
+                <row>
+                    <cell><solidus/></cell>
+                    <cell><tage>solidus</tage></cell>
+                    <cell><obelus/></cell>
+                    <cell><tage>obelus</tage></cell>
+                </row>
+                <row>
+                    <cell>&amp;</cell>
+                    <cell><c>&amp;amp;</c></cell>
+                    <cell>&lt;</cell>
+                    <cell><c>&amp;lt;</c></cell>
+                </row>
+            </tabular>
+         </table>
+
+    </section>
+
+    <section xml:id="overview-verbatim-literal">
+        <title>Verbatim and Literal Text</title>
+        <idx>verbatim text</idx>
+        <idx>literal text</idx>
+
+        <p>Typesetting literal text, usually in a monospace font, can sometimes be tricky.  For short bits of such text, as part of a sentence in a paragraph, or in a caption or title, use the <tag>c</tag> tag, which is short for <q>code.</q>  For much longer blocks of literal text, with line breaks that are to be preserved, use the <tag>cd</tag> element within a paragraph (<q>code display</q>).  Outside a paragraph, most anywhere you could place a regular paragraph, use the <tag>pre</tag> tag, which is short for <q>pre-formatted</q>.</p>
+
+        <p>For the content of a <tag>pre</tag> element, the indentation will be preserved, though an equal amount of leading whitespace will be stripped from every line, so as to keep the code shifted left as far as possible.</p>
+
+        <p>The behavior of these two tags is to preserve characters exactly.  Certainly the <acro>ASCII</acro> character set will behave as expected, and Unicode characters will migrate successfully to output formats based on <init>HTML</init>.  As mentioned in <xref ref="overview-exceptional-characters" /> the ampersand and left angle bracket will confuse the initial XML processing.  So use the XML entities <c>&amp;amp;</c> and <c>&amp;lt;</c> to represent these characters to the XML processor, <c>xsltproc</c>.  See <xref ref="topic-verbatim-literal" /> for further details.</p>
+    </section>
+
+    <section xml:id="overview-sage">
+        <title>Sage</title>
+
+        <p><url href="http://www.sagemath.org/">Sage</url><idx>Sage</idx> is an open source library of computational routines for symbolic, exact and numerical mathematics.  It is designed to be a <q>viable free open source alternative to Magma, Maple, Mathematica, and Matlab.</q>  <pretext /> contains extensive support for including example Sage into your document.</p>
+
+        <p>A typical use of the <tag>sage</tag> tag is to include an <tag>input</tag> element, followed by an <tag>output</tag> element.  The content of the <tag>input</tag> element may be presented statically in PDF output, or dynamically as a Sage Cell<idx>Sage cell</idx> in an output format based on HTML.  Of course, for output as a CoCalc or Jupyter worksheet, the Sage code is presented in the worksheet's native format.</p>
+
+        <p>The content of the <tag>output</tag> element is included in PDF output, but not in dynamic instances, since it can be re-computed.  Notably, there is a conversion which pairs input and output into a single file in the format used by Sage's <c>doctest</c> framework.  So if expected output is provided, it becomes automatic to identify when Sage has diverged from your expectations, and you can adjust your examples accordingly.</p>
+
+        <p>The Sage Cell Server can also be configured to interpret different languages, because Sage by default contains everything needed to evaluate code in these languages.  This is done by providing a <attr>language</attr> attribute, where possible values are <c>sage</c>, <c>gap</c>, <c>gp</c>, <c>html</c>, <c>maxima</c>, <c>octave</c>, <c>python</c>, <c>r</c>, and <c>singular</c>. The default is <c>sage</c>.</p>
+
+        <p>Note that the dynamic formats (including the Sage Cell) may run Sage <q>interacts,</q> so that is possible to embed interactive demonstrations into your dynamic output formats.</p>
+    </section>
+
+    <section xml:id="overview-sidebyside">
+        <title>Side-by-Side Panels</title>
+        <idx>side-by-side panel</idx>
+
+        <p>A <tag>sidebyside</tag><idx>side-by-side panel</idx> is a useful organization of elements in a horizontal layout, and so begins to blur the line between content and presentation.  While we default to organizing information in a vertical sequence, it is often desirable to organize smaller elements adjacent to each other horizontally.  Specifically, images, tabular, figures, tables, paragraphs, and more, may all be combined and there is good control over vertical and horizontal alignment.  Captioning, both overall and individually, is especially flexible.  An <tag>sbsgroup</tag>  (<q>side-by-side group</q><idx>side-by-side group</idx>) collects multiple <tag>sidebyside</tag> to stack vertically, which allows for displays in grids.  See <xref ref="topic-sidebyside" /> for details.</p>
+    </section>
+
+    <section xml:id="overview-math-results">
+        <title>Mathematical Results</title>
+        <idx><h>mathematics</h><h>mathematical results</h></idx>
+        <idx><h>mathematics</h><h>mathematical results</h><seealso>theorem-like elements</seealso></idx>
+        
+        <p>Definitions, theorems, corollaries, <etc /> are supported by the tags:  <tag>theorem</tag>, <tag>corollary</tag>, <tag>lemma</tag>, <tag>algorithm</tag>, <tag>proposition</tag>, <tag>claim</tag>, <tag>fact</tag>, <tag>definition</tag>, <tag>conjecture</tag>, <tag>axiom</tag>, and <tag>principle</tag>.  Each may have a <tag>title</tag> (strongly encouraged), and then contains a <tag>statement</tag> which is a sequence of paragraphs and other elements.  As appropriate, some of these elements (such as a <tag>lemma</tag>) may contain an optional <tag>proof</tag> (or several), while other elements may not have a <tag>proof</tag> (such as a <tag>conjecture</tag>).</p>
+
+        <p>A <tag>definition</tag> is a natural place to define notation as well (see <xref ref="overview-index-notation" />), and to use the <tag>term</tag> tag to identify the terminology being defined.</p>
+
+        <p>In order to assist readers locating numbered items, these items are all numbered consecutively in a group that includes <tag>example</tag>s, <tag>remark</tag>s and inline <tag>exercise</tag>s.</p>
+    </section>
+
+    <section xml:id="overview-frontmatter">
+        <title>Front Matter</title>
+        <idx>front matter</idx>
+
+        <p>In the beginning of your <tag>book</tag> or <tag>article</tag> you can have a <tag>frontmatter</tag><idx>front matter</idx> element that contains various items that would precede your first <tag>chapter</tag> or <tag>section</tag> (respectively).  Possibilities include <tag>titlepage</tag>, <tag>colophon</tag>, <tag>biography</tag>, <tag>abstract</tag>, <tag>dedication</tag>, <tag>acknowledgment</tag>, <tag>foreword</tag>, and <tag>preface</tag>.  Some of these may be duplicated (e.g., several prefaces for multiple editions), many of these items are restricted to books (e.g., a foreword), and some items are restricted to articles (e.g., an abstract).  The schema (<xref ref="schema"/>) will help you place them in the right order in your source.  See <xref ref="topic-front-matter"/> for details.</p>
+
+        <p>The <tag>frontmatter</tag> is also employed in other types of documents, such as a <tag>slideshow</tag>, in similar, but not identical, ways.</p>
+    </section>
+
+    <section xml:id="overview-backmatter">
+        <title>Back Matter</title>
+        <idx>back matter</idx>
+
+        <p>Similar to front matter, there is material you might wish to include after your book's final <tag>chapter</tag> or your article's final <tag>section</tag>.  Possibilities to place in a <tag>backmatter</tag><idx>back matter</idx> include <tag>appendix</tag>, <tag>references</tag>, <tag>glossary</tag>, <tag>solutions</tag>, <tag>index</tag>, and <tag>colophon</tag>.  There are empty tags you can place into an appendix to generate lists of notation, or lists of particular elements of your choice, such as a list of figures.  A similar empty element actually generates the index, <tag>index-list</tag>, but you will almost always want to place it into the <tag>index</tag> division.  See <xref ref="topic-back-matter"/> for details on the back matter generally, and <xref ref="topic-automatic-lists"/> for more on automatic lists.</p>
+    </section>
+
+    <section xml:id="overview-index-notation">
+        <title>Index and Notation Entries</title>
+        <idx>index</idx>
+        <idx>notation</idx>
+        <idx>notation list</idx>
+        <idx><h>list</h><h>of notation</h></idx>
+
+        <p>Construction of an index<idx>index</idx> and a list of notation<idx>notation</idx> is accomplished by placing information into your text in the appropriate places in the right way.</p>
+
+        <p>The <tag>idx</tag> tags denote an index entry<idx><h>index</h><h>index entry</h></idx>.  These should be placed within the element that they describe.  By this we mean that an <tag>idx</tag> element can be placed within a <tag>theorem</tag> to refer to just that theorem, or it might be placed within a <tag>subsection</tag> to refer to that subsection.  When you do this, a natural place to place the <tag>idx</tag> is right after the <tag>title</tag> and similar metadata.  In this way, electronic versions of your work can have an index that is more informative than a traditional index that uses just page numbers, since it will be apparent while reading and using the index just what type of object the entry refers to.  (See the end of this Guide in an electronic format for an example, <xref ref="the-index" text="title"/>).  Note that the text contained within the <tag>idx</tag> tags does not actually appear in the article<mdash />it only serves to mark the location the index entry points to. You can have several levels of headings by structuring your <tag>idx</tag> element with up to three <tag>h</tag> tags (<q>h</q> for <q>heading</q>).  Additionally, you can use <tag>see</tag> or <tag>seealso</tag> for cross-references within the index.</p>
+
+        <p>See <xref ref="topic-index"/> for more details and the finer points of creating index entries.</p>
+
+        <p>A similar device is used to create a list of notation for a technical (mathematical) work.
+        Place a <tag>notation</tag> element as close as possible to the place where notation is first introduced.  If you use the <tag>definition</tag> tag for your definitions, then this is a very natural place to also introduce notation.  Inside of <tag>notation</tag> use the <tag>usage</tag> tag to include a short example of the notation in use.  This will be treated as mathematics, so imagine that it will be wrapped in an <tag>m</tag> tag and use <latex/> syntax.  The <tag>description</tag> tag should contain a very short description in words of what the notation is for.  So <q>center of a group</q> would be a good description to accompany the usage <q><m>Z(G)</m>.</q></p>
+
+        <p>See <xref ref="topic-notation"/> for more details and the finer points of creating notation entries.</p>
+    </section>
+
+    <section xml:id="overview-webwork">
+        <title><webwork/> Exercises</title>
+        <idx><h><webwork/></h><h><webwork/> exercise</h></idx>
+
+        <p>It is possible to author <webwork/> automated homework problems<idx><h><webwork /></h><h><webwork /> exercise</h></idx> directly within your source.  A static version will be rendered in your <latex />/PDF/print output, and a <q>live</q> version will be rendered into HTML output (though a student is not able to authenticate against a course).  However, you can also extract <em>all</em> of the <webwork/> questions from a textbook into a single archive suitable for uploading into a traditional <webwork/> server.  This is a big topic, so see the dedicated <xref ref="webwork-author" /> for details.</p>
+    </section>
+
+    <section xml:id="overview-url">
+        <title><init>URL</init>s and External References</title>
+        <idx>URL</idx>
+        <idx>external reference</idx><idx><h>external reference</h><seealso>URL</seealso></idx>
+
+        <p>The <tag>url</tag><idx>URL</idx> tag always requires an <attr>href</attr> attribute.  Usually this will be some external web page, or other resource.  If the <tag>url</tag> is empty, then the value of the <attr>href</attr> attribute will be the link text, typically in a monospace font.  You can also provide your own content, using elements much like any other piece of text that would occur in a paragraph.  Of course, there is no need to anticipate any problems with <latex /> output and special characters like a tilde.  Use the character itself in the <attr>href</attr>, and use the <tag>tilde</tag> element in the content (or wrap the content in the <tag>c</tag> element and use the literal character).</p>
+
+        <p>This element may also be used to link to external data files.  See <xref ref="topic-url" /> for details.</p>
+
+    </section>
+
+    <section xml:id="overview-video">
+        <title>Video</title>
+        <idx>video</idx>
+
+        <p>Videos<idx>video</idx>, either author-hosted, via a <init>URL</init>, or hosted on YouTube, may be embedded in a <pretext /> document that is converted to <init>HTML</init>, and may be optionally <q>popped-out</q> to view on another page.  For a YouTube video, it is simplicity itself, as an author need only supply the identification string, and all the details of the embedding are handled by <pretext />.  See <xref ref="topic-video" /> for details.</p>
+    </section>
+
+    <section xml:id="overview-si-units">
+        <title>Scientific Units</title>
+        <idx>scientific units</idx>
+        <idx><h>SI units</h><see>scientific units</see></idx>
+        <idx><h>units</h><see>scientific units</see></idx>
+
+        <p>If you are writing about science or engineering, or even if you are not, there is extensive support for scientific units<idx>scientific units</idx>.  So, for example, you could author a force in metric units as</p>
+
+        <pre>
+        &lt;quantity&gt;
+            &lt;mag&gt;20.7&lt;/mag&gt;
+            &lt;unit prefix="kilo" base="gram" /&gt;
+            &lt;unit base="meter" /&gt;
+            &lt;per  base="second" exp="2" /&gt;
+        &lt;/quantity&gt;
+        </pre>
+
+        <p>This would be rendered as <quantity><mag>20.7</mag><unit prefix="kilo" base="gram"/><unit base="meter"/><per base="second" exp="2"/></quantity>.  More in <xref ref="topic-units-measure" />.</p>
+    </section>
+
+    <section xml:id="overview-localization">
+        <title>Localization</title>
+        <idx>localization</idx>
+        <idx>internationalization</idx>
+
+        <p>We are interested in helping authors produce documents with open licenses around the entirety of the world.  <pretext/> provides infrastructure for doing so (or <term>internationalization</term>) in accordance with guidelines of the <url href="https://www.w3.org/International/">W3C Internationalization (I18n) Activity</url><fn><c>www.w3.org/International/</c></fn> at <init>W3C</init> (<c>www.w3.org</c>).</p>
+
+        <p>In order to actually adapt <pretext /> to another language (<term>localization</term>), there are two requirements:
+          <ul>
+            <li>A file for localization into the desired locale.</li>
+            <li>The author adds an <c>xml:lang</c> attribute on the <tag>pretext</tag> element.</li>
+        </ul>See <xref ref="topic-localization" /> for more details.</p>
+
+    </section>
+
+    <section xml:id="overview-accessibility">
+        <title>Accessibility</title>
+        <idx>accessibility</idx>
+        <idx>web accessibility</idx>
+
+
+        <p>The <url href="https://www.w3.org/standards/webdesign/accessibility">Web Accessibility Initiative</url> at <init>W3C</init> (<c>www.w3.org</c>) says:</p>
+
+        <blockquote>
+            <p>The Web is fundamentally designed to work for all people, whatever their hardware, software, language, culture, location, or physical or mental ability. When the Web meets this goal, it is accessible to people with a diverse range of hearing, movement, sight, and cognitive ability.</p>
+
+            <p>Thus the impact of disability is radically changed on the Web because the Web removes barriers to communication and interaction that many people face in the physical world. However, when websites, web technologies, or web tools are badly designed, they can create barriers that exclude people from using the Web.</p>
+        </blockquote>
+
+        <p>Since we are interested in helping authors produce documents with open licenses, and we concentrate on employing open standards for the <init>HTML</init> output we create, we are ideally positioned to help you easily create highly-accessible documents.  There are many technical features which happen automatically, and there are some features which we make available for your use as an author and which only an author can provide, or elect to use.  Before getting too deep into your project, review <xref ref="topic-accessibility" /> for full details and ways you can make the <init>HTML</init> version of your document more accessible, and more useful for a wider audience.</p>
+    </section>
+    <section xml:id="overview-slides">
+      <title>Slides</title>
+      <idx>slides</idx>
+      <p>
+        In addition to articles and books, support for authoring slideshows is also available,
+        but is experimental (so tags and attributes are subject to change).
+      </p>
+      <p>
+        Currently, support for producing <url href="https://revealjs.com">Reveal.js</url><fn><c>revealjs.com</c></fn>
+        and <url href="https://en.wikipedia.org/wiki/Beamer_(LaTeX)">Beamer <latex/></url><fn><c>en.wikipedia.org/wiki/Beamer_(LaTeX)</c></fn>
+        slideshows is available. Details on authoring may be found in <xref ref="topic-slides"/>,
+        and publishing details are in <xref ref="publisher-slides"/>.
+      </p>
+      <p>
+        Also, future support for annotating <pretext/> books and articles to export <pretext/> slides
+        is in the works, but not yet available.
+      </p>
+    </section>
+
+    <section xml:id="overview-literate-programming">
+        <title>Literate Programming</title>
+        <idx>literate programming</idx>
+
+        <p>If you know what <term>literate programming</term> is, then you may not be surprised to learn that <pretext/> provides excellent support primarily with two additional elements: <tag>fragment</tag> and <tag>fragref</tag>.</p>
+
+        <p>If you have never heard of literate programming, it is a way to mix code and documentation for a computer program in a single file.  But rather than typographically simple code comments, you have the full power of every other feature in <pretext/> and all of the possible output formats.  Furthermore, you can arrange your code in an order that might make more sense to a human (top-down, bottom-up, a mixture, or <ellipsis/>) and <pretext/> will rearrange the code into an order that the compiler or interpreter understands.</p>
+
+        <p>So the idea is that from one file you get a program for the compiler, and a beautiful, typeset explanation for a human reader in any format <pretext/> supports.  An accessible introduction is Knuth's description of his <c>WEB</c> system for the Pascal programming language <xref ref="knuth-literate-programming"/>, or many more resources are at <url href="http://www.literateprogramming.com/">the literate programming site</url><fn><c>www.literateprogramming.com</c></fn>.  Full details on the <pretext/> implementation are at <xref ref="topic-literate-programming"/>.</p>
+    </section>
+</chapter>

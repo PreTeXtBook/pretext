@@ -1,0 +1,33 @@
+% Cyclic 8-th roots of unity
+% NB: comments are in TeX, not XML
+%
+\begin{tikzpicture}[scale=1.65]
+
+\draw [->]  (0,-1.5) -- (0,1.5);
+\draw  [->] (-1.75,0) -- (1.75,0);
+\node [right] at (0,1.5) {$y$};
+\node [below] at (1.75,0) {$x$};
+\node [below] at (0.1,0) {$0$};
+
+\draw (0,0) circle (1);
+
+\filldraw[fill=black, draw=black] (0:1) circle (0.03);
+\filldraw[fill=black, draw=black] (45:1) circle (0.03);
+\filldraw[fill=black, draw=black] (90:1) circle (0.03);
+\filldraw[fill=black, draw=black] (135:1) circle (0.03);
+\filldraw[fill=black, draw=black] (180:1) circle (0.03);
+\filldraw[fill=black, draw=black] (225:1) circle (0.03);
+\filldraw[fill=black, draw=black] (270:1) circle (0.03);
+\filldraw[fill=black, draw=black] (315:1) circle (0.03);
+
+
+\node [right] at (1,-0.15) {1};
+\node [right] at (45:1) {$\omega$};
+\node [left] at (0,1.15) {$i$};
+\node [left] at (135:1) {$\omega^3$};
+\node [left] at (-1,-0.15) {$-1$};
+\node [left] at (225:1) {$\omega^5$};
+\node [left] at (0,-1.15) {$-i$};
+\node [right] at (315:1) {$\omega^7$};
+
+\end{tikzpicture}

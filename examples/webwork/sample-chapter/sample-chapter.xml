@@ -76,7 +76,7 @@
         <title>Integrating <webwork /> into Textbooks</title>
         <subtitle>Sample Exercises</subtitle>
 
-        <frontmatter xml:id="index">
+        <frontmatter xml:id="frontmatter">
 
             <!-- Items typically at the top of the first page of an article -->
             <titlepage>
@@ -121,27 +121,27 @@
 
             <p>Some questions with quantitative answers.</p>
 
-            <exercise>
+            <exercise xml:id="integer-addition">
                 <title>Adding Single-Digit Integers</title>
 
                 <introduction>
                     <p>A simple, but functional example to begin with. If you are just learning how to add, you can test yourself here.</p>
                 </introduction>
 
-                <webwork xml:id="integer-addition">
-                    <title>Integer Addition</title>
+                <webwork xml:id="webwork-add-numbers">
+                    <description>
+                        Add two positive single-digit integers.
+                    </description>
 
-                    <setup>
-                        <pg-code>
-                            $a = Compute(random(1, 9, 1));
-                            $b = Compute(random(1, 9, 1));
-                            $c = $a + $b;
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        $a = random(1, 9, 1);
+                        $b = random(1, 9, 1);
+                        $c = Compute($a + $b);
+                    </pg-code>
 
                     <statement>
                         <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
-                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="2" category="integer" /></p>
+                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="5" category="integer" /></p>
                     </statement>
 
                     <solution>
@@ -156,57 +156,35 @@
 
             <p>If you are familiar with <webwork />, then it may be a surprise to you to be interacting with a <webwork /> problem this way, without having logged in to <webwork />.</p>
 
-            <exercise>
+            <exercise xml:id="integer-addition-with-seed">
                 <title>Declaring a Problem Seed</title>
 
                 <introduction>
-                    <p>You can also declare a <c>seed</c> to specify a version of any problem that has randomization. Here is the same problem, but with a <c>seed</c> specified.</p>
+                    <p>You can also declare a <c>seed</c> to specify a version of any problem that has randomization. Here is the same problem (<q>copied</q> in the <pretext/> source), but with a <c>seed</c> specified.</p>
                 </introduction>
 
-                <webwork xml:id="integer-addition-with-seed" seed="510">
-                    <title>Integer Addition</title>
+                <webwork copy="webwork-add-numbers" seed="510"/>
 
-                    <setup>
-                        <pg-code>
-                            $a = Compute(random(1, 9, 1));
-                            $b = Compute(random(1, 9, 1));
-                            $c = $a + $b;
-                        </pg-code>
-                    </setup>
-
-                    <statement>
-                        <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
-                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="2" category="integer" /></p>
-                    </statement>
-
-                    <solution>
-                        <p><m><var name="$a" /> + <var name="$b" /> = <var name="$c" /></m>.</p>
-                    </solution>
-                </webwork>
             </exercise>
 
-            <exercise>
+            <exercise xml:id="integer-addition-with-control-seed">
                 <title>Controlling Randomness</title>
 
                 <introduction>
-                    <p>You can code your problem with randomization, but then use a specific <c>seed</c> and <webwork />'s <c>$envir{problemSeed}</c> to override that randomization for the purposes of the version that will appear in HTML and print putput.</p>
+                    <p>You can code your problem with randomization, but then use a specific <c>seed</c> and <webwork />'s <c>$envir{problemSeed}</c> to override that randomization for the purposes of the version that will appear in HTML and print output.</p>
                 </introduction>
 
-                <webwork xml:id="integer-addition-with-control-seed" seed="1">
-                    <title>Integer Addition</title>
-
-                    <setup>
-                        <pg-code>
-                            $a = Compute(random(1, 9, 1));
-                            $b = Compute(random(1, 9, 1));
-                            if ($envir{problemSeed}==1){$a=1;$b=2};
-                            $c = $a + $b;
-                        </pg-code>
-                    </setup>
+                <webwork seed="1">
+                    <pg-code>
+                        $a = random(1, 9, 1);
+                        $b = random(1, 9, 1);
+                        if ($envir{problemSeed}==1){$a=1;$b=2};
+                        $c = Compute($a + $b);
+                    </pg-code>
 
                     <statement>
                         <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
-                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="2" category="integer" /></p>
+                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="5" category="integer" /></p>
                     </statement>
 
                     <solution>
@@ -228,37 +206,30 @@
                 </introduction>
 
                 <webwork>
-                    <title>Multiplication with Exponents</title>
-                    <pg-macros>
-                        <macro-file>contextLimitedPolynomial.pl</macro-file>
-                    </pg-macros>
+                    <pg-code>
+                        $a = random(1, 9, 1);
+                        $b = random(1, 9, 1);
+                        $c = $a + $b;
+                        $expression = Formula("x^($a)*x^($b)");
 
-                    <setup>
-                        <pg-code>
-                            $a = Compute(random(1, 9, 1));
-                            $b = Compute(random(1, 9, 1));
-                            $c = $a + $b;
-                            $expression = Formula("x^($a)*x^($b)");
+                        Context("LimitedPolynomial-Strict");
+                        # custom error message
+                        Context()->{error}{msg}{"A variable can appear only once in each term of a polynomial"}
+                            = "Your answer must be fully simplified";
 
-                            Context("LimitedPolynomial-Strict");
-                            # custom error message
-                            Context()->{error}{msg}{"A variable can appear only once in each term of a polynomial"}
-                                = "Your answer must be fully simplified";
-
-                            $answer = Formula("x^($c)");
-                            $product = $a*$b;
-                            $evaluator = $answer->cmp()->withPostFilter(AnswerHints(
-                                [Compute("x^($product)")] =>
-                                "When multiplying terms with the same base, you do not multiply the exponents."));
-                        </pg-code>
-                    </setup>
+                        $answer = Formula("x^($c)");
+                        $product = $a*$b;
+                        $evaluator = $answer->cmp()->withPostFilter(AnswerHints(
+                            [Compute("x^($product)")] =>
+                            "When multiplying terms with the same base, you do not multiply the exponents."));
+                    </pg-code>
 
                     <statement>
                         <p>Use the properties of exponents to simplify <m><var name="$expression" /></m>.</p>
 
                         <instruction>To enter a power, use a <c>^</c>, as in <c>x^2</c> for <m>x^2</m>.</instruction>
 
-                        <p><m><var name="$expression" />=</m><var name="$answer" evaluator="$evaluator" width="8" category="formula" /></p>
+                        <p><m><var name="$expression" />=</m> <var name="$answer" evaluator="$evaluator" width="8" category="formula" /></p>
 
                     </statement>
 
@@ -278,26 +249,23 @@
                 </introduction>
 
                 <webwork>
-                    <title>Multiplication with Exponents</title>
-                    <setup>
-                        <pg-code>
-                            do {
-                                $a = Compute(list_random(2,3,5,6));
-                                $b = Compute(random(1, 5, 1));
-                               } until (gcd($a,$b) == 1);
-                            $c = $a * $b**2;
-                            Context()->flags->set(reduceConstantFunctions=>0);
-                            $expression = Formula("sqrt($c)");
+                    <pg-code>
+                        do {
+                            $a = list_random(2,3,5,6);
+                            $b = random(1, 5, 1);
+                           } until (gcd($a,$b) == 1);
+                        $c = $a * $b**2;
+                        Context()->flags->set(reduceConstantFunctions=>0);
+                        $expression = Formula("sqrt($c)");
 
-                            Context("LimitedRadical");
+                        Context("LimitedRadical");
 
-                            $answer = Formula("$b sqrt($a)");
-                        </pg-code>
-                    </setup>
+                        $answer = Formula("$b sqrt($a)");
+                    </pg-code>
 
                     <statement>
                         <p>Simplify the expression <m><var name="$expression"/></m>.</p>
-                        <p><m><var name="$expression"/>=</m><var name="$answer" width="10"/></p>
+                        <p><m><var name="$expression"/>=</m> <var name="$answer" width="10"/></p>
                     </statement>
 
                     <hint>
@@ -317,7 +285,7 @@
                 </introduction>
                 <webwork>
                     <statement>
-                        <p><m>1+2=</m><var name="3" width="5" /></p>
+                        <p><m>1+2=</m> <var name="3" width="5" /></p>
                     </statement>
                 </webwork>
                 <conclusion>
@@ -354,14 +322,16 @@
                 </proof>
             </theorem>
 
-            <exercise>
+            <exercise xml:id="quadratic-equation">
                 <title>Solving Quadratic Equations</title>
 
-                <webwork xml:id="quadratic-equation">
+                <webwork>
+                    <description>
+                        <line>Find a quadratic equation's solutions.</line>
+                        <line>One positive integer solution and one negative fraction solution.</line>
+                    </description>
 
-                    <setup>
-                        <!-- TODO: move out context shift -->
-                        <pg-code>
+                    <pg-code>
                         Context("Fraction");
 
                         $a = Compute(random(2,6,1));
@@ -401,14 +371,11 @@
                                 return (0,1) if $c1 == $s2 or $c2 == $s2;
                                 return (0,0);
                              }
-                          );
-
-                        </pg-code>
-                    </setup>
+                        );
+                    </pg-code>
 
                     <stage>
-                        <title>Part 1: Identify the coefficients</title>
-
+                        <title>Identify Coefficients</title>
                         <statement>
                             <p>Consider the quadratic equation given by <me><var name="$quadratic" /> = 0\text{.}</me>  First, identify the coefficients for the quadratic equation using the standard form from <xref ref="theorem-quadratic-formula" />.</p>
 
@@ -421,8 +388,7 @@
                     </stage>
 
                     <stage>
-                        <title>Part 2: Solve using the quadratic formula</title>
-
+                        <title>Use the Quadratic Formula</title>
                         <statement>
                             <p>Using the quadratic formula, solve <m><var name="$quadratic"/>=0</m>.</p>
                             <p><m>x=</m> <var name="$multians1" width="15"/> or <m>x=</m> <var name="$multians1" width="15"/></p>
@@ -445,7 +411,7 @@
 
                 <p>The <url href="http://webwork.maa.org/wiki/Open_Problem_Library">Open Problem Library</url> (OPL) is a repository of curated <webwork /> problems. At last count it had something like 30,000 problems, searchable by topic.</p>
 
-                <p>Most of the problems in this sample chapter have their source authored within the same document as the narrative.  However the problems in this section are from the OPL and elsewhere on the server that is hosting the <webwork /> caclulations.  For HTML output we can connect to the server and render the problem here in an interactive fashion.  For print/PDF we use the <c>mbx</c> script to connect to the server to produce <pretext /> code for the problem.  We can use the <c>exercise.text.*</c> switches to control which parts of the problem (statements, solutions, hints) are incorporated.</p>
+                <p>Most of the problems in this sample chapter have their source authored within the same document as the narrative.  However the problems in this section are from the OPL and elsewhere on the server that is hosting the <webwork /> caclulations.  For HTML output we can connect to the server and render the problem here in an interactive fashion.  For print/PDF we use the <c>pretext</c> script to connect to the server to produce <pretext /> code for the problem.  We can use the <c>exercise.text.*</c> switches to control which parts of the problem (statements, solutions, hints) are incorporated.</p>
 
                 <p>Problems do not have to be in the OPL to reside on a server; any problem that is accessbile from the <webwork /> course which is hosting the <webwork /> computation may be used this way.</p>
 
@@ -458,6 +424,16 @@
 
                 <webwork source="Library/PCC/BasicAlgebra/Geometry/CylinderVolume10.pg" seed="8435"/>
             </exercise>
+
+            <p>This uninteresting image, authored in <latex/> syntax, is here only to make sure its automatically-assigned identifier is correct, given that the <init>OPL</init> problem just above is going to generate another image for its static representation.</p>
+
+            <image>
+                <latex-image>
+                    \begin{tikzpicture}
+                        \draw[fill=white] (0,0) ellipse (3 and 0.45);
+                    \end{tikzpicture}
+                </latex-image>
+            </image>
 
             <warning>
                 <title>Incompatible Problems</title>
@@ -560,7 +536,181 @@
                     </webwork>
                 </exercise>
 
+                <exercisegroup cols="2">
+                    <introduction>
+                        <p>
+                            For the given function <m>f</m>, find <m>\indefiniteintegral{f(x)}{x}</m>.
+                        </p>
+                        <p>
+                            Note that these common instructions are phrased in such a way
+                            that they would read well if they were applied to only one exercise at a time.
+                            That will happen if these exercises are exported as <c>.pg</c> files,
+                            for example to be used in online homework from a <webwork/> server.
+                        </p>
+                    </introduction>
+
+                    <exercise>
+                        <webwork>
+                            <pg-code>
+                                $answer = FormulaUpToConstant("-cos(x)");
+                            </pg-code>
+                            <statement>
+                                <p>
+                                    <m>f(x)=\sin(x)</m>
+                                </p>
+                                <p>
+                                    <var name="$answer" width="20"/>
+                                </p>
+                            </statement>
+                        </webwork>
+                    </exercise>
+
+                    <exercise>
+                        <webwork>
+                            <pg-code>
+                                $answer = FormulaUpToConstant("e^x");
+                            </pg-code>
+                            <statement>
+                                <p>
+                                    <m>f(x)=e^x</m>
+                                </p>
+                                <p>
+                                    <var name="$answer" width="20"/>
+                                </p>
+                            </statement>
+                        </webwork>
+                    </exercise>
+                </exercisegroup>
+
+                <exercise xml:id="ww-use-the-definition-of-the-derivative">
+                    <title>Show Your Work</title>
+                    <introduction>
+                        <p>
+                            Sometimes you would like a student to give a <q>simple</q> answer that <webwork/> can automatically assess,
+                            but you would also like the student to show their work or reasoning.
+                            Perhaps there is a particular method that you want to see the student use to find the answer.
+                            So you have a regular answer blank and also an essay blank.
+                            For practical reasons, you may wish to use the same problem on your <webwork/> server, but omit the essay part.
+                            For example, if you want to use that problem but leave out the manual grading.
+                            For this, <webwork/> has the <c>explanation_box</c> tool, demonstrated here.
+                        </p>
+                    </introduction>
+
+                    <webwork>
+                        <pg-code>
+                            $answer = Formula('2x');
+                            $showwork = '[@ explanation_box(message => "Show your work.") @]*';
+                        </pg-code>
+                        <statement>
+                            <p>
+                                Use the definition of the derivative to find <m>\frac{d}{dx}x^2</m>.
+                            </p>
+                            <p>
+                                <var name="$answer" width="10"/>
+                            </p>
+                            <p>
+                                <var name="$showwork" data="pgml"/>
+                            </p>
+                        </statement>
+                    </webwork>
+                </exercise>
+
             </exercises>
+        </section>
+
+        <section>
+            <title>Math Content</title>
+
+            <p>
+                This section helps with testing aspects of math content.
+            </p>
+
+            <exercise>
+                <title>Math Elements and Alignment</title>
+                <introduction>
+                    <p>
+                        In this exercise we demonstrate the allowed math elements: <tag>m</tag>, <tag>me</tag>, and <tag>md</tag>.
+                        The last of these may have attribute <attr>alignment</attr> with options <c>gather</c>, <c>align</c>, or <c>alignat</c>.
+                        The first two are used by default, depending on if you have <c>&amp;</c> or <c>\amp</c> in your math.
+                    </p>
+                </introduction>
+                <webwork>
+                    <statement>
+                        <p>
+                            If <m>a=5</m> and <m>b=12</m>, then <me>a^2+b^2=13^2</me>.
+                        </p>
+                        <p>
+                            Here, we solve an equation.
+                            <md>
+                                <mrow>2x+1 \amp= 3</mrow>
+                                <mrow>2x   \amp= 2</mrow>
+                                <mrow>x    \amp= 1</mrow>
+                            </md>
+                            Here we have a three-way inequality to solve.
+                            <md>
+                                <mrow>1 \lt 2x+1 \lt 3</mrow>
+                                <mrow>0 \lt 2x   \lt 2</mrow>
+                                <mrow>0 \lt x    \lt 1</mrow>
+                            </md>
+                            And here, we see a system of equations.
+                            <md alignment="alignat">
+                                <mrow>2x + 2y \amp {}+{} \amp z \amp {}={} \amp 10</mrow>
+                                <mrow>y \amp {}-{} \amp  4z \amp {}={} \amp 9</mrow>
+                                <mrow>\amp\amp   3z \amp {}={} \amp -6</mrow>
+                            </md>
+                        </p>
+                    </statement>
+                </webwork>
+            </exercise>
+
+            <exercise>
+                <title>Intertext</title>
+                <introduction>
+                    <p>
+                        With an <tag>md</tag> you might have <tag>intertext</tag> among the rows.
+                    </p>
+                </introduction>
+                <webwork>
+                    <statement>
+                        <p>
+                            Here, we solve an equation.
+                            <md>
+                                <mrow>2x+1 \amp= 3</mrow>
+                                <intertext> Now subtract <m>1</m> from each side.</intertext>
+                                <mrow>2x   \amp= 2</mrow>
+                                <intertext> Now divide by <m>2</m> on each side.</intertext>
+                                <mrow>x    \amp= 1</mrow>
+                            </md>
+                        </p>
+                        <p>
+                            We should also test when the <tag>md</tag> is within a list.
+                            <ol>
+                                <li>
+                                    <p>
+                                        Start a list.
+                                    </p>
+                                </li>
+                                <li>
+                                    <p>
+                                        <md>
+                                            <mrow>2x+1 \amp= 3</mrow>
+                                            <intertext> Now subtract <m>1</m> from each side.</intertext>
+                                            <mrow>2x   \amp= 2</mrow>
+                                            <intertext> Now divide by <m>2</m> on each side.</intertext>
+                                            <mrow>x    \amp= 1</mrow>
+                                        </md>
+                                    </p>
+                                </li>
+                                <li>
+                                    <p>
+                                        Still in the list?
+                                    </p>
+                                </li>
+                            </ol>
+                        </p>
+                    </statement>
+                </webwork>
+            </exercise>
         </section>
 
         <section>
@@ -578,7 +728,7 @@
                         <p>Regular apostrophes: My siblings' mother's daughter isn't my daughter's siblings' mother.</p>
                         <p>Emphasis: <em>very important</em></p>
                         <p>Alert: <alert>do not</alert> do it</p>
-                        <p>Braces: <braces>text that looks like a set</braces></p>
+                        <p>Braces: {text that looks like a set}</p>
                         <!-- uncomment next to test, will not activate generally in sample document -->
                         <!-- <p>Verbatim: code, <c>with banned substring: [|</c></p>                -->
                         <pre>
@@ -641,25 +791,24 @@
 
             <exercise>
                 <webwork>
-                    <setup>
-                        <pg-code>
-                            $xmlchars = q(&lt;>&amp;'";);
-                            $latex0 = '#%&amp;&lt;>\^_`|~';
-                            $latex1 = '${}';
-                            $alphanumeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-                            $otherchars = '!()*+,-./:=?@[]';
-                            Context()->strings->add($xmlchars=>{});
-                            Context()->strings->add($latex0=>{});
-                            Context()->strings->add($latex1=>{});
-                            Context()->strings->add($alphanumeric=>{});
-                            Context()->strings->add($otherchars=>{});
-                            $xmlcharsMO = String($xmlchars);
-                            $latex0MO = String($latex0);
-                            $latex1MO = String($latex1);
-                            $alphanumericMO = String($alphanumeric);
-                            $othercharsMO = String($otherchars);
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        $xmlchars = q(&lt;>&amp;'";);
+                        $latex0 = '#%&amp;&lt;>\^_`|~';
+                        $latex1 = '${}';
+                        $alphanumeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                        $otherchars = '!()*+,-./:=?@[]';
+                        Context()->strings->add($xmlchars=>{});
+                        Context()->strings->add($latex0=>{});
+                        Context()->strings->add($latex1=>{});
+                        Context()->strings->add($alphanumeric=>{});
+                        Context()->strings->add($otherchars=>{});
+                        $xmlcharsMO = String($xmlchars);
+                        $latex0MO = String($latex0);
+                        $latex1MO = String($latex1);
+                        $alphanumericMO = String($alphanumeric);
+                        $othercharsMO = String($otherchars);
+                    </pg-code>
+
                     <statement>
                         <p><ol>
                             <li>
@@ -693,6 +842,28 @@
                 </webwork>
             </exercise>
 
+            <p>
+                Occasionally (and probably very rarely) your PG code will include a string variable where the content is PGML syntax.
+                If this is put into the exercise statement, it will be inserted <em>after</em> PGML processing is done,
+                and therefore it won't render as you might expect. To insert this content and also have it processed as PGML,
+                use <c>data="pgml"</c>. (This is not in the <pretext/> schema as of 3/26/2020, and is subject to change.)
+            </p>
+
+            <exercise>
+                <webwork>
+                    <pg-code>
+                        $statement = 'some PGML math: [`\frac{1}{2}+\frac{3}{2}=2`]; and some *bold text*';
+                    </pg-code>
+                    <statement>
+                        <p>
+                            <var name="$statement"/> makes:
+                        </p>
+                        <p>
+                            <var name="$statement" data="pgml"/>
+                        </p>
+                    </statement>
+                </webwork>
+            </exercise>
         </section>
 
         <section>
@@ -709,14 +880,12 @@
 
                 <webwork>
 
-                    <setup>
-                        <pg-code>
-                            $rational = PopUp(
-                                ["?","is","is not",],
-                                "is not",
-                            );
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        $rational = PopUp(
+                            ["?","is","is not",],
+                            "is not",
+                        );
+                    </pg-code>
 
                     <statement>
                         <p>The number <m>\sqrt{2}</m> <var name="$rational" form="popup"/> rational.</p>
@@ -735,14 +904,12 @@
 
                 <webwork>
 
-                    <setup>
-                        <pg-code>
-                            $theorem = RadioButtons(
-                              ["The Quadratic Formula","The Fundamental Theorem of Calculus","The Fundamental Theorem of Arithmetic","None of these"],
-                              1, # index of correct answer; could also just be the correct answer
-                            );
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        $theorem = RadioButtons(
+                          ["The Quadratic Formula","The Fundamental Theorem of Calculus","The Fundamental Theorem of Arithmetic","None of these"],
+                          1, # index of correct answer; could also just be the correct answer
+                        );
+                    </pg-code>
 
                     <statement>
                         <p>Which of the following suggest that differentiation and integration are inverse processes?</p>
@@ -756,29 +923,26 @@
                 </webwork>
             </exercise>
 
-            <!--Checkboxes not yet implemented fully. See note in mathbook-webwork-pg.xsl -->
+            <!--Checkboxes not yet implemented fully. See note in pretext-webwork-pg.xsl -->
             <!--<exercise>
                 <title>Choose several</title>
 
                 <webwork>
 
-                    <setup>
-                        <pg-code>
-                            $expressions = new_checkbox_multiple_choice();
-                            $expressions -> qa (
-                            "A question can go here, but PTX ignores this",
-                            "\( e^{x^2} e^{1/x} \)$BR",
-                            "\( e^{x^2} e^{x^{-1}} \)$BR",
-                            "\( e^{ (x^3+1) / x } \)$BR",
-                            );
-                            $expressions -> extra(
-                            "\( \displaystyle \frac{ e^{x^2} }{ e^x } \)$BR",
-                            "\( e^{x^2} + e^{1/x} \)$BR",
-                            );
-                            $expressions -> makeLast("None of the above");
-
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        $expressions = new_checkbox_multiple_choice();
+                        $expressions -> qa (
+                        "A question can go here, but PTX ignores this",
+                        "\( e^{x^2} e^{1/x} \)$BR",
+                        "\( e^{x^2} e^{x^{-1}} \)$BR",
+                        "\( e^{ (x^3+1) / x } \)$BR",
+                        );
+                        $expressions -> extra(
+                        "\( \displaystyle \frac{ e^{x^2} }{ e^x } \)$BR",
+                        "\( e^{x^2} + e^{1/x} \)$BR",
+                        );
+                        $expressions -> makeLast("None of the above");
+                    </pg-code>
 
                     <statement>
                         <p>Select all expressions that are equivalent to <m>e^{x^2 + 1/x}</m>.  There may be more than one correct answer.</p>
@@ -796,70 +960,64 @@
         <section>
             <title>Tables</title>
 
-            <p>Although a <webwork /> problem written in <pretext /> source can't have a <q>table</q> (which would be captioned and cause trouble with free-standing PG output), they can have a <q>tabular</q> (which must be a child of a <q>sidebyside</q>). Tabulars can be made using the existing syntax and options that PTX offers for table-making, with some exceptions. As of summer 2017, the exceptions are that individual cells cannot have <c>bottom</c> border attributes and individual columns cannot have <c>top</c> border attributes. Also, while PTX table borders are generally <c>minor</c>, <c>medium</c>, or <c>major</c>, when these borders are used in a <webwork /> problem that is rendered as a hard copy problem from within <webwork />, the only thickness option corresponds to <c>minor</c>. Several more features (like rules in general) do not carry through to static output (print or HTML-preview). However we hope this is only temporary.</p>
+            <p>Although a <webwork /> problem written in <pretext /> source can't have a <q>table</q> (which would be captioned and cause trouble with free-standing PG output), they can have a <q>tabular</q>. Tabulars can be made using the existing syntax and options that PTX offers for table-making, with some exceptions. As of summer 2017, the exceptions are that individual cells cannot have <c>bottom</c> border attributes and individual columns cannot have <c>top</c> border attributes. Also, while PTX table borders are generally <c>minor</c>, <c>medium</c>, or <c>major</c>, when these borders are used in a <webwork /> problem that is rendered as a hard copy problem from within <webwork />, the only thickness option corresponds to <c>minor</c>. Several more features (like rules in general) do not carry through to static output (print or HTML-preview). However we hope this is only temporary.</p>
 
             <exercise>
                 <title>Complete this Table</title>
 
                 <webwork>
-                    <setup>
-                        <pg-code>
-                            @a = (random(2,9,1),random(2,9,1));
-                            @b = (random(2,9,1),random(2,9,1));
-                            for my$i(0..3){$p[$i]=$a[int($i/2)]*$b[$i % 2]};
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        @a = (random(2,9,1),random(2,9,1));
+                        @b = (random(2,9,1),random(2,9,1));
+                        for my$i(0..3){$p[$i]=$a[int($i/2)]*$b[$i % 2]};
+                    </pg-code>
 
                     <statement>
                         <p>Complete this multiplication table.</p>
 
-                        <sidebyside>
-                            <tabular bottom="minor" right="minor" halign="center">
-                                <col halign="right" right="major"/>
-                                <col />
-                                <col />
-                                <row bottom="major">
-                                    <cell><m>\times</m></cell>
-                                    <cell><m><var name="$a[0]"/></m></cell>
-                                    <cell><m><var name="$a[1]"/></m></cell>
-                                </row>
-                                <row>
-                                    <cell><m><var name="$b[0]"/></m></cell>
-                                    <cell><var name="$p[0]" form="none" category="integer"/></cell>
-                                    <cell><var name="$p[2]" form="none" category="integer"/></cell>
-                                </row>
-                                <row>
-                                    <cell><m><var name="$b[1]"/></m></cell>
-                                    <cell><var name="$p[1]" form="none" category="integer"/></cell>
-                                    <cell><var name="$p[3]" form="none" category="integer"/></cell>
-                                </row>
-                            </tabular>
-                        </sidebyside>
+                        <tabular bottom="minor" right="minor" halign="center">
+                            <col halign="right" right="major"/>
+                            <col />
+                            <col />
+                            <row bottom="major">
+                                <cell><m>\times</m></cell>
+                                <cell><m><var name="$a[0]"/></m></cell>
+                                <cell><m><var name="$a[1]"/></m></cell>
+                            </row>
+                            <row>
+                                <cell><m><var name="$b[0]"/></m></cell>
+                                <cell><var name="$p[0]" form="none" category="integer"/></cell>
+                                <cell><var name="$p[2]" form="none" category="integer"/></cell>
+                            </row>
+                            <row>
+                                <cell><m><var name="$b[1]"/></m></cell>
+                                <cell><var name="$p[1]" form="none" category="integer"/></cell>
+                                <cell><var name="$p[3]" form="none" category="integer"/></cell>
+                            </row>
+                        </tabular>
                     </statement>
 
                     <solution>
-                        <sidebyside>
-                            <tabular bottom="minor" right="minor" halign="center">
-                                <col halign="right" right="major"/>
-                                <col />
-                                <col />
-                                <row bottom="major">
-                                    <cell><m>\times</m></cell>
-                                    <cell><m><var name="$a[0]"/></m></cell>
-                                    <cell><m><var name="$a[1]"/></m></cell>
-                                </row>
-                                <row>
-                                    <cell><m><var name="$b[0]"/></m></cell>
-                                    <cell><m><var name="$p[0]"/></m></cell>
-                                    <cell><m><var name="$p[2]"/></m></cell>
-                                </row>
-                                <row>
-                                    <cell><m><var name="$b[1]"/></m></cell>
-                                    <cell><m><var name="$p[1]"/></m></cell>
-                                    <cell><m><var name="$p[3]"/></m></cell>
-                                </row>
-                            </tabular>
-                        </sidebyside>
+                        <tabular bottom="minor" right="minor" halign="center">
+                            <col halign="right" right="major"/>
+                            <col />
+                            <col />
+                            <row bottom="major">
+                                <cell><m>\times</m></cell>
+                                <cell><m><var name="$a[0]"/></m></cell>
+                                <cell><m><var name="$a[1]"/></m></cell>
+                            </row>
+                            <row>
+                                <cell><m><var name="$b[0]"/></m></cell>
+                                <cell><m><var name="$p[0]"/></m></cell>
+                                <cell><m><var name="$p[2]"/></m></cell>
+                            </row>
+                            <row>
+                                <cell><m><var name="$b[1]"/></m></cell>
+                                <cell><m><var name="$p[1]"/></m></cell>
+                                <cell><m><var name="$p[3]"/></m></cell>
+                            </row>
+                        </tabular>
 
                     </solution>
                 </webwork>
@@ -870,65 +1028,182 @@
 
         <section>
             <title>Graphics in Exercises</title>
-            <p>It is natural to want to write exercises that rely on graphics. For example, an exericse might produce a chart of some kind, and ask the reader to extract some information from that chart.</p>
-            <p>At present, this can be done using the same mechanism one would use to insert a graphic into a <webwork /> problem when writing regular <webwork /> problems. (And this is what is done below.) In the future, there will be a nicer option that will be able to make use of PTX's <c>latex-image-code</c>. This requires some <webwork /> development first, which is underway.</p>
-
+            <p>
+                It is natural for exercises to have graphics.
+                For example, an exercise might produce a graph of some kind,
+                and ask the reader to extract some information from that graph.
+            </p>
+            <p>
+                If your <webwork/> server is version 2.16 or later,
+                <webwork/> problems can process Tikz code. Here is an example.
+            </p>
             <exercise>
-                <title>Solve using a graph</title>
-
+                <title>A static tikz graph</title>
                 <webwork>
-
-                    <setup>
-                        <pg-code>
-                            $answer = random(1,3,1);
-                            $gr = init_graph(-1,-1,4,4,
-                            axes=>[0,0],
-                            grid=>[5,5],
-                            size=>[300,300]
-                            );
-                            add_functions($gr, "x^3/$answer^3 for x in &lt;-1,4&gt; using color:blue and weight:2");
-                            $second_x = Real($answer*2**(1/3));
-
-                            $solgr = init_graph(-1,-1,4,4,
-                            axes=>[0,0],
-                            grid=>[5,5],
-                            size=>[300,300]
-                            );
-                            add_functions($solgr, "x^3/$answer^3 for x in &lt;-1,4&gt; using color:blue and weight:2");
-                            $solgr->moveTo(0,1);
-                            $solgr->lineTo($answer,1,'black',3);
-                            $solgr->arrowTo($answer,0,'black',3);
-
-                        </pg-code>
-                    </setup>
-
+                    <pg-code>
+                        Context("IntegerFunctions");
+                        Context()->variables->are(n=>'Real');
+                        $answer = OneOf(Formula("C(n+1,2)"),Formula("(n+1)n/2"));
+                    </pg-code>
                     <statement>
-                        <p>The graph below is a graph of <m>y=f(x)</m>. Use the graph to solve the equation <m>f(x)=1</m>.</p>
-
-                        <sidebyside widths="50%">
-                            <image pg-name="$gr">
-                                <description>a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points (<var name="$answer"/>,1) and (<var name="$second_x"/>,2) before leaving the graph moving more and more upward and to the right.</description>
-                            </image>
-                        </sidebyside>
-
-                        <p><m>x=</m> <var name="$answer" width="5" category="number"/></p>
+                        <p>
+                            This image is a visual proof that <m>\sum_{k=1}^{n}k</m> equals what?
+                        </p>
+                        <image width="50%">
+                           <description>
+                                21 blue balls are arranged in a triangular formation,
+                                with one at the top, then a row of two, a row of three,
+                                and so on until a row of six;
+                                there is a seventh row with seven orange balls;
+                                one blue ball is highlighted, and two lines extend downward from that ball,
+                                one to the left and one to the right, parallel to the sides of the triangle,
+                                until they intersect two orange balls;
+                                the effect is that each of the 1+2+3+4+5+6 blue balls corresponds
+                                to one pair from the 7 orange balls
+                            </description>
+                            <latex-image syntax="PGtikz">
+                                \draw[dashed] (0.5-0.5*6.5,-0.866025*6.5) -&#x2d; (7-0.5*6.5,-0.866025*6.5);
+                                \draw[very thick] (2-0.5*7,-0.866025*7) -&#x2d; (2-0.5*4,-0.866025*4) -&#x2d; (5-0.5*7,-0.866025*7);
+                                \foreach \x in {1,...,6}
+                                    \foreach \y in {1,...,\x}
+                                        \shade[ball color=blue!30] (\y-0.5*\x,-0.866025*\x) circle (0.2cm);
+                                \foreach \y in {1,...,7}
+                                    \shade[ball color=orange!40] (\y-0.5*7,-0.866025*7) circle (0.2cm);
+                                \node at (2.5,-0.5) [anchor=north west]{\(\color{blue}\sum\limits_{k=1}^nk\color{black}\)};
+                                \shade[ball color=blue] (2-0.5*4,-0.866025*4) circle (0.2cm);
+                                \shade[ball color=orange] (2-0.5*7,-0.866025*7) circle (0.2cm);
+                                \shade[ball color=orange] (5-0.5*7,-0.866025*7) circle (0.2cm);
+                            </latex-image>
+                        </image>
+                        <instruction>
+                            You may enter the answer using <c>C(n,k)</c> notation.
+                        </instruction>
+                        <p>
+                            <var name="$answer" width="20"/>
+                        </p>
                     </statement>
-
-                    <solution>
-
-                        <p>The graph reveals that the only solution to <m>f(x)=1</m> is <m>x=<var name="$answer"/></m>.</p>
-
-                        <sidebyside widths="50%">
-                            <image pg-name="$solgr">
-                                <description>a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points ($answer,1) and ($second_x,2) before leaving the graph moving more and more upward and to the right; a horizontal line segment moves rightward from y=1 on the y-axis until it reaches a point on the curve; a vertical line segment moves down from this point to x=$answer on the x-axis.</description>
-                            </image>
-                        </sidebyside>
-
-                    </solution>
-
                 </webwork>
             </exercise>
 
+            <exercise>
+                <title>A randomized tikz graph</title>
+                <introduction>
+                    <p>
+                        These images may depend on the random seed.
+                        In this problem, the height and width of the rectangle are randomized.
+                    </p>
+                </introduction>
+                <webwork>
+                    <pg-code>
+                        $a = random(4,6,1);
+                        $b = $a + random(2,4,1);
+                        $area = NumberWithUnits($a*$b, 'cm^2');
+                    </pg-code>
+                    <statement>
+                        <p>
+                            Find the area of the rectangle.
+                        </p>
+                        <image width="50%">
+                            <description>
+                                a rectangle whose width is labeled <var name="$b"/> cm
+                                and height is labeled <var name="$b"/> cm
+                            </description>
+                            <latex-image syntax="PGtikz">
+                                \draw[fill=blue!20] (0,0) -&#x2d;++ (6,0) node[pos=0.5,below] {\(<var name="$b"/>\)\,cm} -&#x2d;++ (0,4) node[pos=0.5,right] {\(<var name="$a"/>\)\,cm} -&#x2d;++ (-6,0) -&#x2d; cycle;
+                            </latex-image>
+                        </image>
+                        <p>
+                            <var name="$area" width="20"/>
+                        </p>
+                    </statement>
+                </webwork>
+            </exercise>
+
+            <exercise>
+                <title>Special characters</title>
+                <introduction>
+                    <p>
+                        This exercise is to test that special characters behave.
+                    </p>
+                </introduction>
+                <webwork>
+                    <pg-code>
+                        $refreshCachedImages = 1;
+                    </pg-code>
+                    <statement>
+                        <p>
+                            The code below has a printed dollar sign, a printed percent sign,
+                            a printed at sign, and a percent sign used as a comment marker.
+                        </p>
+                        <image width="50%">
+                            <latex-image syntax="PGtikz">
+                                \node at (0,0) {I need about \$3.50.};
+                                \node at (0,1) {You gotta give 110\%.};  %This is a comment.
+                                \node at (0,2) {Send email user@domain.com.};
+                            </latex-image>
+                        </image>
+                    </statement>
+                </webwork>
+            </exercise>
+
+
+            <!-- TODO: Support for packages, such as pgfplots -->
+
+            <p>
+                An older mechanism for creating images is supported
+                and demonstrated here.
+            </p>
+
+            <exercise>
+                <title>Solve using a graph</title>
+                <webwork>
+                    <pg-code>
+                        $a = random(1,3,1);
+                        $gr = init_graph(-1,-1,4,4,
+                        axes=>[0,0],
+                        grid=>[5,5],
+                        size=>[300,180]
+                        );
+                        add_functions($gr, "x^3/$a^3 for x in &lt;-1,4&gt; using color:blue and weight:2");
+                        $second_x = Real($a*2**(1/3));
+                        $solgr = init_graph(-1,-1,4,4,
+                        axes=>[0,0],
+                        grid=>[5,5],
+                        size=>[300,300]
+                        );
+                        add_functions($solgr, "x^3/$a^3 for x in &lt;-1,4&gt; using color:blue and weight:2");
+                        $solgr->moveTo(0,1);
+                        $solgr->lineTo($a,1,'black',3);
+                        $solgr->arrowTo($a,0,'black',3);
+                        Context("FiniteSolutionSets");
+                        $answer = Formula("{$a}");
+                    </pg-code>
+                    <statement>
+                        <p>
+                            The graph below is a graph of <m>y=f(x)</m>.
+                            Use the graph to solve the equation <m>f(x)=1</m>.
+                        </p>
+                        <image pg-name="$gr" width="50%">
+                            <description>
+                                a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points (<var name="$a"/>,1) and (<var name="$second_x"/>,2) before leaving the graph moving more and more upward and to the right.
+                            </description>
+                        </image>
+                        <p>
+                            <var name="$answer" width="5" category="number"/>
+                        </p>
+                    </statement>
+                    <solution>
+                        <p>
+                            The graph reveals that the solution set to <m>f(x)=1</m> is <m><var name="$answer"/></m>.
+                        </p>
+                        <image pg-name="$solgr" width="50%">
+                            <description>
+                                a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points (<var name="$a"/>,1) and (<var name="$second_x"/>,2) before leaving the graph moving more and more upward and to the right; a horizontal line segment moves rightward from y=1 on the y-axis until it reaches a point on the curve; a vertical line segment moves down from this point to x=<var name="$a"/> on the x-axis.
+                            </description>
+                        </image>
+                    </solution>
+                </webwork>
+            </exercise>
         </section>
 
         <section>
@@ -936,19 +1211,17 @@
 
             <p>This section samples the subject area template problems found on the <webwork /> wiki at <url href="http://webwork.maa.org/wiki/SubjectAreaTemplates"/>.</p>
 
-            <exercise>
-            <title>Answer is a number or a function</title>
+            <exercise xml:id="number-or-function">
+                <title>Answer is a number or a function</title>
 
-                <webwork xml:id="number-or-function">
+                <webwork>
 
-                    <setup>
-                        <pg-code>
-                            $a = non_zero_random(-9,9,1);
-                            do { $b = random(2,9,1); } until ( $b != $a );
-                            $answer1 = Compute("$a");
-                            $answer2 = Compute("($a x^($b) + $b)/x")->reduce();
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        $a = non_zero_random(-9,9,1);
+                        do { $b = random(2,9,1); } until ( $b != $a );
+                        $answer1 = Compute("$a");
+                        $answer2 = Compute("($a x^($b) + $b)/x")->reduce();
+                    </pg-code>
 
                     <statement>
                         <p><ol>
@@ -978,21 +1251,19 @@
                 </webwork>
             </exercise>
 
-            <exercise>
+            <exercise xml:id="function-with-domain-issues">
                 <title>Answer is a function with domain issues</title>
 
-                <webwork xml:id="function-with-domain-issues">
+                <webwork>
 
-                    <setup>
-                        <pg-code>
-                            $a = random(2,5,1);
-                            $answer1 = Compute("sqrt(x-$a)");
-                            $answer1->{limits} = [$a+1,$a+4];
-                            $answer2 = Compute("ln(abs( x / (x-$a) ))");
-                            $answer2->{test_points} = [[-5],[-4],[1],[$a-1],[7],[8]];
-                            $answer2evaluator = $answer2 -> cmp() -> withPostFilter( AnswerHints( [Compute("ln(abs((x-$a)/x))"),] => "This is the opposite of correct...",));
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        $a = random(2,5,1);
+                        $answer1 = Compute("sqrt(x-$a)");
+                        $answer1->{limits} = [$a+1,$a+4];
+                        $answer2 = Compute("ln(abs( x / (x-$a) ))");
+                        $answer2->{test_points} = [[-5],[-4],[1],[$a-1],[7],[8]];
+                        $answer2evaluator = $answer2 -> cmp() -> withPostFilter( AnswerHints( [Compute("ln(abs((x-$a)/x))"),] => "This is the opposite of correct...",));
+                    </pg-code>
 
                     <statement>
                         <p><ol>
@@ -1022,20 +1293,18 @@
                 </webwork>
             </exercise>
 
-            <exercise>
-                <!--Checkbox not implemented yet; see note in mathbook-webwork-pg.xsl  -->
+            <exercise xml:id="multiple-choice-popup-or-radio-buttons">
+                <!--Checkbox not implemented yet; see note in pretext-webwork-pg.xsl  -->
                 <title>Multiple choice by popup, radio buttons<!--, or checkbox--></title>
 
-                <webwork xml:id="multiple-choice-popup-or-radio-buttons">
+                <webwork>
 
-                    <setup>
                         <pg-code>
                             $color1 = PopUp(["?","Red","Blue","Green"], 2);
 
                             $color2 = RadioButtons(["Red","Blue","Green","None of these"], 1);
-
                         </pg-code>
-                     <!-- include below in pg-code once checkboxes implemented
+                        <!-- include below in pg-code once checkboxes implemented
                             $mc = new_checkbox_multiple_choice();
                             $mc -> qa (
                             "A question can go here, but PTX ignores this",
@@ -1049,7 +1318,6 @@
                             );
                             $mc -> makeLast("None of the above");
                         -->
-                    </setup>
 
                     <statement>
                         <p>My favorite color is <var name="$color1" form="popup"/>.</p>
@@ -1072,13 +1340,16 @@
 
             <exercise>
                 <webwork>
-                    <setup>
-                        <pg-code>
-                              $expressions = RadioButtons(['\(x\)','\(x^2\)','\(2^x\)'], 2);
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                          $expressions = RadioButtons(['\(x\)','\(x^2\)','\(2^x\)'], 2);
+                    </pg-code>
                     <statement>
-                        <p>There is math in each option for this question. Which expression is not a polynomial? <var name="$expressions" form="buttons"/></p>
+                        <p>
+                            There is math in each option for this question. Which expression is not a polynomial?
+                        </p>
+                        <p>
+                            <var name="$expressions" form="buttons"/>
+                        </p>
                     </statement>
                     <solution>
                         <p>The answer is <var name="$expressions"/>.</p>
@@ -1087,62 +1358,56 @@
 
             </exercise>
 
-            <exercise>
+            <exercise xml:id="tables">
                 <title>Tables</title>
 
-                <webwork xml:id="tables">
+                <webwork>
 
-                    <setup>
-                        <pg-code>
-                            $x = Real(5);
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        $x = Real(5);
+                    </pg-code>
 
                     <statement>
                         <p>A table with minimal XML source.</p>
 
-                        <sidebyside>
-                            <tabular>
-                                <row>
-                                    <cell>A</cell>
-                                    <cell>B</cell>
-                                    <cell>C</cell>
-                                </row>
-                                <row>
-                                    <cell>D</cell>
-                                    <cell>E</cell>
-                                    <cell>F</cell>
-                                </row>
-                                <row>
-                                    <cell>G</cell>
-                                    <cell>H</cell>
-                                    <cell>I</cell>
-                                </row>
-                            </tabular>
-                        </sidebyside>
+                        <tabular>
+                            <row>
+                                <cell>A</cell>
+                                <cell>B</cell>
+                                <cell>C</cell>
+                            </row>
+                            <row>
+                                <cell>D</cell>
+                                <cell>E</cell>
+                                <cell>F</cell>
+                            </row>
+                            <row>
+                                <cell>G</cell>
+                                <cell>H</cell>
+                                <cell>I</cell>
+                            </row>
+                        </tabular>
                         <p>Finish this table.</p>
 
-                        <sidebyside>
-                            <tabular top="major" left="major" bottom="major" right="minor" halign="center">
-                                <col halign="right" top="minor"/>
-                                <col right="medium"/>
-                                <col halign="left"/>
-                                <row bottom="none" left="none">
-                                <cell right="minor">1</cell>
-                                    <cell>two</cell>
-                                    <cell><m>\lfloor\pi\rfloor</m></cell>
-                                </row>
-                                <row valign="bottom">
-                                    <cell bottom="minor"><line><m>\text{I}+\text{I}</m></line><line><m>{}+\text{I}+\text{I}</m></line></cell>
-                                    <cell><var name="$x" form="none" category="integer"/></cell>
-                                    <cell>six</cell>
-                                </row>
-                                <row halign="right">
-                                    <cell><m>2^3-1</m></cell>
-                                    <cell colspan="2" halign="center">VIII</cell>
-                                </row>
-                            </tabular>
-                        </sidebyside>
+                        <tabular top="major" left="major" bottom="major" right="minor" halign="center">
+                            <col halign="right" top="minor"/>
+                            <col right="medium"/>
+                            <col halign="left"/>
+                            <row bottom="none" left="none">
+                            <cell right="minor">1</cell>
+                                <cell>two</cell>
+                                <cell><m>\lfloor\pi\rfloor</m></cell>
+                            </row>
+                            <row valign="bottom">
+                                <cell bottom="minor"><line><m>\text{I}+\text{I}</m></line><line><m>{}+\text{I}+\text{I}</m></line></cell>
+                                <cell><var name="$x" form="none" category="integer"/></cell>
+                                <cell>six</cell>
+                            </row>
+                            <row halign="right">
+                                <cell><m>2^3-1</m></cell>
+                                <cell colspan="2" halign="center">VIII</cell>
+                            </row>
+                        </tabular>
                     </statement>
 
                     <solution>
@@ -1161,59 +1426,39 @@
             <exercise>
                 <title>PTX problem source with server-generated images</title>
                 <webwork>
-                    <setup>
-                        <pg-code>
-                            for my $i(0..7){$gr[$i] = init_graph(-1,-1,4,4,axes=>[0,0],grid=>[5,5],size=>[150,150]);};
-                            add_functions($gr[0], "1 for x in &lt;-1,4> using color:blue and weight:2");
-                            add_functions($gr[1], "x for x in &lt;-1,4> using color:blue and weight:2");
-                            add_functions($gr[2], "x^2 for x in &lt;-1,4> using color:blue and weight:2");
-                            add_functions($gr[3], "x^3 for x in &lt;-1,4> using color:blue and weight:2");
-                            add_functions($gr[4], "e^x for x in &lt;-1,4> using color:blue and weight:2");
-                            add_functions($gr[5], "sin(x) for x in &lt;-1,4> using color:blue and weight:2");
-                            add_functions($gr[6], "cos(x) for x in &lt;-1,4> using color:blue and weight:2");
-                            add_functions($gr[7], "exp(-x^2) for x in &lt;-1,4> using color:blue and weight:2");
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        for my $i(0..7){$gr[$i] = init_graph(-1,-1,4,4,axes=>[0,0],grid=>[5,5],size=>[150,150]);};
+                        add_functions($gr[0], "1 for x in &lt;-1,4> using color:blue and weight:2");
+                        add_functions($gr[1], "x for x in &lt;-1,4> using color:blue and weight:2");
+                        add_functions($gr[2], "x^2 for x in &lt;-1,4> using color:blue and weight:2");
+                        add_functions($gr[3], "x^3 for x in &lt;-1,4> using color:blue and weight:2");
+                        add_functions($gr[4], "e^x for x in &lt;-1,4> using color:blue and weight:2");
+                        add_functions($gr[5], "sin(x) for x in &lt;-1,4> using color:blue and weight:2");
+                        add_functions($gr[6], "cos(x) for x in &lt;-1,4> using color:blue and weight:2");
+                        add_functions($gr[7], "exp(-x^2) for x in &lt;-1,4> using color:blue and weight:2");
+                    </pg-code>
                     <stage>
                         <statement>
-                            <sidebyside widths="25%">
-                                <image pg-name="$gr[0]" />
-                            </sidebyside>
-                            <sidebyside widths="25%">
-                                <image pg-name="$gr[1]" />
-                            </sidebyside>
+                            <image pg-name="$gr[0]" width="25%"/>
+                            <image pg-name="$gr[1]" width="25%"/>
                         </statement>
                         <solution>
-                            <sidebyside widths="25%">
-                                <image pg-name="$gr[2]" />
-                            </sidebyside>
+                            <image pg-name="$gr[2]" width="25%"/>
                         </solution>
                     </stage>
                     <stage>
                         <statement>
-                            <sidebyside widths="25%">
-                                <image pg-name="$gr[3]" />
-                            </sidebyside>
-                            <sidebyside widths="25%">
-                                <image pg-name="$gr[4]" />
-                            </sidebyside>
-                            <sidebyside widths="25%">
-                                <image pg-name="$gr[5]" />
-                            </sidebyside>
+                            <image pg-name="$gr[3]" width="25%"/>
+                            <image pg-name="$gr[4]" width="25%"/>
+                            <image pg-name="$gr[5]" width="25%"/>
                         </statement>
-                        <!-- No hints for now because with displayMode=tex, the anonymous problem rendering is not -->
-                        <!--generating a hints section at all. Will have to work with Mike to investigate this.    -->
-                        <!--<hint>
-                            <sidebyside widths="25%">
-                                <image pg-name="$gr[6]" />
-                            </sidebyside>
-                        </hint>-->
+                        <hint>
+                            <image pg-name="$gr[6]" width="25%"/>
+                        </hint>
                         <solution>
-                            <sidebyside widths="25%">
-                                <image pg-name="$gr[7]" />
-                            </sidebyside>
+                            <image pg-name="$gr[7]" width="25%"/>
                         </solution>
-                  </stage>
+                    </stage>
                 </webwork>
             </exercise>
 
@@ -1487,31 +1732,22 @@
             <exercise>
                 <title>Checking Proper Indentation In Lists with Images and Tables</title>
                 <webwork>
-                    <setup>
-                        <pg-code>
-                            $g=init_graph(-1,-1,1,1,axes=>[0,0]);
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        $g=init_graph(-1,-1,1,1,axes=>[0,0]);
+                    </pg-code>
                     <statement>
                         <p><ol>
                             <li>
                                 <p>Structured item</p>
-                                <sidebyside widths="17%">
-                                    <image pg-name="$g" />
-                                </sidebyside>
+                                <image pg-name="$g" width="17%"/>
                             </li>
                             <li>
-                                <sidebyside widths="17%">
-                                    <image pg-name="$g" />
-                                </sidebyside>
+                                <image pg-name="$g" width="17%"/>
                                 <p>Structured item</p>
                             </li>
                             <li>
                                 <p>Structured item</p>
-                                <sidebyside widths="17%">
-                                    <image pg-name="$g" />
-                                </sidebyside>
-                                <p>Second paragraph</p>
+                                <image pg-name="$g" width="17%"/>
                             </li>
                             <li>
                                 <p>Structured item</p>
@@ -1521,57 +1757,51 @@
                         <p><ol>
                             <li>
                                 <p>Structured item</p>
-                                <sidebyside>
-                                    <tabular>
-                                        <row>
-                                            <cell>a</cell>
-                                            <cell>b</cell>
-                                        </row>
-                                        <row>
-                                            <cell>c</cell>
-                                            <cell>d</cell>
-                                        </row>
-                                    </tabular>
-                                </sidebyside>
+                                <tabular>
+                                    <row>
+                                        <cell>a</cell>
+                                        <cell>b</cell>
+                                    </row>
+                                    <row>
+                                        <cell>c</cell>
+                                        <cell>d</cell>
+                                    </row>
+                                </tabular>
                             </li>
                             <li>
-                                <sidebyside>
-                                    <tabular top="major" left="major" bottom="major" right="minor" halign="center">
-                                        <col halign="right" top="minor"/>
-                                        <col right="medium"/>
-                                        <col halign="left"/>
-                                        <row bottom="none" left="none">
-                                        <cell right="minor">1</cell>
-                                            <cell>two</cell>
-                                            <cell><m>\lfloor\pi\rfloor</m></cell>
-                                        </row>
-                                        <row valign="bottom">
-                                            <cell bottom="minor"><line><m>\text{I}+\text{I}</m></line><line><m>{}+\text{I}+\text{I}</m></line></cell>
-                                            <cell><m>5</m></cell>
-                                            <cell>six</cell>
-                                        </row>
-                                        <row halign="right">
-                                            <cell><m>2^3-1</m></cell>
-                                            <cell colspan="2" halign="center">VIII</cell>
-                                        </row>
-                                    </tabular>
-                                </sidebyside>
+                                <tabular top="major" left="major" bottom="major" right="minor" halign="center">
+                                    <col halign="right" top="minor"/>
+                                    <col right="medium"/>
+                                    <col halign="left"/>
+                                    <row bottom="none" left="none">
+                                    <cell right="minor">1</cell>
+                                        <cell>two</cell>
+                                        <cell><m>\lfloor\pi\rfloor</m></cell>
+                                    </row>
+                                    <row valign="bottom">
+                                        <cell bottom="minor"><line><m>\text{I}+\text{I}</m></line><line><m>{}+\text{I}+\text{I}</m></line></cell>
+                                        <cell><m>5</m></cell>
+                                        <cell>six</cell>
+                                    </row>
+                                    <row halign="right">
+                                        <cell><m>2^3-1</m></cell>
+                                        <cell colspan="2" halign="center">VIII</cell>
+                                    </row>
+                                </tabular>
                                 <p>Structured item</p>
                             </li>
                             <li>
                                 <p>Structured item</p>
-                                <sidebyside>
-                                    <tabular>
-                                        <row>
-                                            <cell>a</cell>
-                                            <cell>b</cell>
-                                        </row>
-                                        <row>
-                                            <cell>c</cell>
-                                            <cell>d</cell>
-                                        </row>
-                                    </tabular>
-                                </sidebyside>
+                                <tabular>
+                                    <row>
+                                        <cell>a</cell>
+                                        <cell>b</cell>
+                                    </row>
+                                    <row>
+                                        <cell>c</cell>
+                                        <cell>d</cell>
+                                    </row>
+                                </tabular>
                                 <p>Second paragraph</p>
                             </li>
                             <li>
@@ -1622,6 +1852,19 @@
                             </ul></p></li>
                             <li><p>Level 1, third.</p></li>
                         </ul></p>
+                    </statement>
+                </webwork>
+            </exercise>
+
+            <exercise>
+                <introduction>
+                    <p>
+                        This exercise has no content in its statement.
+                        It should throw a PTX warning during the representations build.
+                    </p>
+                </introduction>
+                <webwork>
+                    <statement>
                     </statement>
                 </webwork>
             </exercise>

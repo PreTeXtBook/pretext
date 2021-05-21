@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- This file is part of the documentation of PreTeXt              -->
+<!--                                                                -->
+<!--         The PreTeXt Guide                                      -->
+<!--                                                                -->
+<!-- Copyright (C) 2013-2019                                        -->
+<!-- Robert A. Beezer, David Farmer, Alex Jordan, Mitchel T. Keller -->
+<!-- See the file COPYING for copying conditions.                   -->
+
+<preface xml:id="preface">
+    <paragraphs>
+        <title>Introduction</title>
+
+        <p>This part is the place to begin if you are new to <pretext/>.  <xref ref="start-here"/> is the introduction, overview, and philosophy.  Then <xref ref="quickstart-example"/> intends to get you started quickly by authoring a simple example and converting it to <init>HTML</init> and <init>PDF</init> output formats.</p>
+    </paragraphs>
+
+    <paragraphs>
+        <title>Author's Guide</title>
+
+        <p>This guide will help you <em>author</em> a <pretext /> document.  So it serves as a description of the <pretext/> <init>XML</init> vocabulary, along with the mechanics of creating the source and common output formats.  <xref ref="overview"/> is meant to be a short overview of the majority of <pretext/>'s features, which can be skimmed to get a sense of <pretext/>'s capabilities.  Or it can be read quickly as you begin authoring and you can return as you need certain features.  The roughly parallel <xref ref="topics"/> is much more comprehensive and is the first place to go for details not addressed in the overview.  Note that the <pubtitle>Author's Guide</pubtitle> is not concerned with <em>publishing</em> your document, which is described in the <pubtitle>Publisher's Guide</pubtitle>.</p>
+    </paragraphs>
+
+    <paragraphs>
+        <title>Basic Reference</title>
+
+        <p>This part provides a quick overview of the minimal syntax for a variety of key <pretext/> features. Unlike the sample article, which is designed to demonstrate and stress test all aspects of <pretext/>, this guide will illustrate only the key elements of some of the most universally-used features of the language. In many cases, in addition to features not discussed, there may be alternative structures that are not given here.</p>
+    </paragraphs>
+
+    <paragraphs>
+        <title>Publisher's Guide</title>
+
+        <p>Even if you intend to distribute your document with an open license, and you are both author <em>and</em> publisher, it is still helpful and instructive to understand, and separate, the two different steps and roles.  So visit this part of the <pubtitle>Guide</pubtitle> to learn how you can present, distribute, and maintain what you have authored.</p>
+    </paragraphs>
+
+    <paragraphs>
+        <title>Developer's Guide</title>
+
+        <p>This part provides advice, suggestions, and conventions for contributing to <pretext/>.  For anything not answered here please use the <url href="https://groups.google.com/forum/#!forum/pretext-dev"><c>pretext-dev</c></url><fn><c>https://groups.google.com/forum/#!forum/pretext-dev</c></fn> Google Group.  Make a membership request and it will be processed quickly.</p>
+    </paragraphs>
+
+    <paragraphs>
+        <title>Appendices</title>
+
+        <p>In addition to the usual items you might expect in the back matter, such as an <xref ref="appendix-gfdl" text="custom">open license</xref>, <xref ref="glossary" text="custom">glossary</xref>, <xref ref="references" text="custom">references</xref>, and an <xref ref="the-index" text="custom">index</xref>, there are numerous more specialized additions, mostly describing the installation of, or effective use of, various technical tools that are independent of <pretext/> (but useful or necessary).</p>
+    </paragraphs>
+</preface>

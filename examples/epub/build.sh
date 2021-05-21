@@ -58,29 +58,47 @@ declare OUTFILE=sampler.epub
 
 # removal of detritus (clear $SCRATCH by hand before execution)
 
+# sed -i is different depending on if you have BSD sed (macOS)
+# or GNU sed (Linux and Windows Subystem for Linux)
+# To deal with this, we see which is in use and define a function called
+# sed_i that we invoke rather than plain sed.
+# https://unix.stackexchange.com/questions/92895/how-can-i-achieve-portability-with-sed-i-in-place-editing
+case $(sed --help 2>&1) in
+  *GNU*) sed_i () { sed -i "$@"; };;
+  *) sed_i () { sed -i '' "$@"; };;
+esac
+
 # create directory structure
 install -d ${EPUBOUT} ${EPUBOUT}/EPUB/xhtml ${EPUBOUT}/EPUB/xhtml/images
 install -d ${EPUBOUT}/EPUB/css
 # debugging directory
 install -d ${DEBUG}
 
-# copy/place image files
-# move cover image to stock name (fix this in XSL transform)
-# fix up SVGs
-cp -a ${SRC}/images ${EPUBOUT}/EPUB/xhtml
-mv ${EPUBOUT}/EPUB/xhtml/images/${COVERIMAGE} ${EPUBOUT}/EPUB/xhtml/images/cover.png
-for f in ${EPUBOUT}/EPUB/xhtml/images/*.svg; do 
-    sed -i -f ${EPUBSCRIPT}/mbx-epub-images.sed $f
-done
-
 # make files via xsltproc, into existing directory structure
 cd ${EPUBOUT}
 xsltproc --xinclude  ${MBXSL}/mathbook-epub.xsl ${SRCMASTER}
 
+# copy/place image files
+# create the image directory
+install -d ${EPUBOUT}/EPUB/xhtml/images
+# read in the image-list.txt file and copy over
+# only the images actually used in the EPUB
+INPUT="${EPUBOUT}/xhtml/image-list.txt"
+while IFS= read -r LINE
+do
+    IMGFILE=${LINE//[$'\t\r\n']}
+    cp -a ${SRC}/${IMGFILE} ${EPUBOUT}/EPUB/xhtml/${IMGFILE}
+done < "$INPUT"
+# make sure the image list doesn't get bundled in the EPUB
+rm ${EPUBOUT}/xhtml/image-list.txt #${EPUBOUT}
+
+# move cover image to stock name (fix this in XSL transform)
+cp -a ${SRC}/images/${COVERIMAGE} ${EPUBOUT}/EPUB/xhtml/images/cover.png
+
 # fixup file header to make obviously XHTML
 declare GLOBIGNORE="${EPUBOUT}/EPUB/xhtml/cover-page.xhtml:${EPUBOUT}/EPUB/xhtml/title-page.xhtml:${EPUBOUT}/EPUB/xhtml/table-contents.xhtml"
 for f in ${EPUBOUT}/EPUB/xhtml/*.xhtml; do
-    sed -i -f ${EPUBSCRIPT}/mbx-epub-xhtml-header.sed $f
+    sed_i -f ${EPUBSCRIPT}/mbx-epub-xhtml-header.sed $f
 done
 unset GLOBIGNORE
 
@@ -100,21 +118,9 @@ for f in ${EPUBOUT}/EPUB/xhtml/*.xhtml; do
     # rm $f.temp;
     mv $f.temp ${DEBUG};
     cp -a $f ${DEBUG};
-    sed -i -f ${EPUBSCRIPT}/mbx-epub.sed $f;
+    sed_i -f ${EPUBSCRIPT}/mbx-epub.sed $f;
 done
 unset GLOBIGNORE
-
-# Remove any PDFs from the images directory, since
-# those images are meant for PDF output and are never
-# embedded into the XHTML files that we create
-#
-# TODO: We really should only include the images we put
-# in the manifest
-rm ${EPUBOUT}/EPUB/xhtml/images/*.pdf
-# This image list is being produced, but not consulted
-# In any event, we need to remove it before it ends up in the zip file
-rm ${EPUBOUT}/xhtml/image-list.txt
-rmdir ${EPUBOUT}/xhtml
 
 # Back to usual default directory
 # zip with  mimetype  first

@@ -1,0 +1,31 @@
+<section>
+  <title>Mandatory</title>
+  <introduction>
+    <p>
+      Introductory text.
+      (Optional.)
+    </p>
+  </introduction>
+
+  <subsection>
+    <title>Mandatory</title>
+    <p>
+      Subsection content.
+    </p>
+  </subsection>
+
+  <subsection>
+    <title>Mandatory</title>
+    <p>
+      Subsection content.
+    </p>
+  </subsection>
+
+  <conclusion>
+    <p>
+      Concluding text.
+      (Optional.)
+    </p>
+  </conclusion>
+</section>
+

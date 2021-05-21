@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--        PreTeXt Developer's Guide                         -->
+<!--                                                          -->
+<!-- Copyright (C) 2019-2019                                  -->
+<!-- Robert A. Beezer, David Farmer, Alex Jordan              -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="coding">
+    <title>Coding Conventions</title>
+
+    <section xml:id="developer-coding">
+        <title>Author and Publisher Input</title>
+
+        <p>When an author or publisher provides input to regulate some change in how their content is realized follow these procedures.<ul>
+            <li>String parameters (which are discouraged anyway) should default to an empty string initially when defined.  For technical reasons, this makes them easier to deprecate later.</li>
+            <li>Input should produce a global variable, whose possible values are known exactly.  This variable should be set in one location, with other similar variables, and then it should be used later.  There should be no need to further error-check this variable later.  In other words, do not mix error-checking input and employment of that input<mdash/>rigorously separate them (like separating content from presentation!).</li>
+            <li>
+                <p>Use a <tag>xsl:choose</tag> inside a <tag>xsl:variable</tag> that first parrots legitimate input.   Next check for attempts to set the input to something <q>invalid</q>.  Use <tag>xsl:message</tag> to report:<ul>
+                    <li>the name of the input being checked</li>
+                    <li>a description of valid values</li>
+                    <li><q>, not</q> followed by the invalid value supplied (via <tage>xsl:value-of</tage> typically)</li>
+                    <li><q>Using the default value</q>, followed by that value</li>
+                </ul></p>
+            </li>
+            <li>Then don't forget to actually set the default value, either due to no input, or erroneous input.</li>
+            <li>Done right, this variable will usually meet the requirements above.</li>
+            <li>If input is binary, have the variable just described take on one of two values.  Only.  Then construct a new boolean variable based on these two strings.  Name the variable with a <c>b-</c> prefix.  This will be more reliable to use later.</li>
+        </ul></p>
+    </section>
+
+    <section>
+        <title>Run-Time Messages</title>
+
+        <p><init>XSL</init> provides a <tag>xsl:message</tag> element, which writes to the console (the <c>stderr</c> stream really, I believe).  This makes it useful for debugging (like a <c>print</c> statement in another language).  A mix of text, <tage>xsl:apply-templates</tage>, and <tage>xsl:value-of</tage> works well.  Include delimiters (colons perhaps) so you don't get fooled by unexpected empty strings that are part of your problem anyway.</p>
+
+        <p>But our point here is to discuss messages broadcast to an author or publisher.<ul>
+            <li>Use <tag>xsl:message</tag> to communicate with authors and publishers as described above in <xref ref="developer-coding"/> while negotiating their input used to control their content.</li>
+            <li>Otherwise, during actual processing, use <tag>xsl:message</tag> <em>only</em> when there is the potential for a real disaster in the output, such as a <latex/> file that will not compile at all, meaning more than simple recoverable errors.</li>
+            <li>Do not duplicate parent-child relationships that are expressed in the schema.  There are good validation tools for that job.</li>
+            <li>Consider using our auxiliary <q>validation-plus</q> stylesheet for detecting more complicated relationships that the schema cannot, or does not, detect.</li>
+            <li>See the advice above (<xref ref="developer-coding"/>) about checking author and publisher input and providing a <q>safe</q> result so there is no danger of creating broken output and thus less temptation to use <tag>xsl:message</tag> at all.</li>
+            <li>Reserve adding <c>terminate="yes"</c> for extreme situations where there is absolutely no hope of recovery.  This should be a last resort.</li>
+            <li>Place <c>terminate="no"</c> (the default) in your code only when some future removal of deprecated code means this message will transition to <c>terminate="yes"</c>.  Include clear code comments describing the situation.</li>
+            <li><p>Prefix messages with<ul>
+                <li><c>PTX:WARNING:</c> for advisories</li>
+                <li><c>PTX:ERROR:</c> for recoverable problems</li>
+                <li><c>PTX:FATAL:</c> for case when processing terminates</li>
+                <li><c>PTX:BUG:</c> for situations that are unexpected (and problematic)</li>
+            </ul>and align the start of messages in column 14 (so they all line up).</p></li>
+            <li>There is a template with <c>mode="location-report"</c> you can use to provide standardized assistance for an author or publisher looking for the place to correct a problem (in lieu of line numbers, which are not available).</li>
+        </ul></p>
+    </section>
+
+    <section>
+        <title>Locating Other Nodes</title>
+
+        <p>Should you need to locate a node some other place in a document, via some sort of a reference by an identifier, be sure to use the interface provided by the  <c>id-lookup-by-name</c> named template.  It accepts a string (the value of the identifier in the reference) and returns an <c>xml:id</c> value that can be used with the <init>XSL</init> <c>id()</c> function to return the desired node (as a node-set).  Use a pattern such as the following, paying particular attention to the name of the variable supplied to the <c>id()</c> function.</p>
+
+        <pre><![CDATA[
+            <xsl:variable name="target-id">
+                <xsl:call-template name="id-lookup-by-name">
+                    <xsl:with-param name="name" select="normalize-space(@ref)"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:variable name="target" select="id($target-id)" />]]>
+        </pre>
+    </section>
+</chapter>
+
+

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2019  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<appendix xml:id="mac-os-install-notes">
+    <title>MacOS Installation Notes</title>
+
+    <introduction>
+       <p>This appendix explains how to install necessary software on Apple's Mac.</p>
+    </introduction>
+
+    <section xml:id="mac-os-java">
+        <title>Java</title>
+
+        <p>The <c>jing</c> and <c>trang</c> schema tools (<xref ref="schema-install"/>) require the Java Development Kit (<init>JDK</init>).  These instructions come from Mitch Keller and Jane Butterfield on 2019-07-23.  You may need to change some version numbers over time.</p>
+
+        <list>
+            <title>Install Java on MacOS</title>
+
+            <ol>
+                <li><p>From <url href="https://jdk.java.net/12/"/> get an open source <init>JDK</init>.  In other words, not the proprietary version from Oracle.</p></li>
+
+                <li><p>Unzip the file you download until you have a directory called <c>jdk-12.0.1.jdk</c>. Put that directory somewhere useful. We will pretend that you put it in your home directory and that your user is called <c>jane</c>, which means that the directory is now at <c>/Users/jane/jdk-12.0.1.jdk</c>.</p></li>
+
+                <li><p>In a Terminal, run<cd>export JAVA_HOME=/Users/jane/jdk-12.0.2.jdk/Contents/Home</cd>adjusted appropriately.  A good check is to get this same directory back from the command<cd><cline>echo $(/usr/libexec/java_home)</cline></cd></p></li>
+
+                <li><p>If you are doing this to install <c>jing</c> and <c>trang</c>, then, <em>in the same Terminal window</em>, <c>cd</c> into the <c>jing-trang</c> directory and run <c>./ant</c>.</p></li>
+            </ol>
+        </list>
+  </section>
+</appendix>

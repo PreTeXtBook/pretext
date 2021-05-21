@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+
+<!--********************************************************************
+Copyright 2015 Robert A. Beezer
+
+This file is part of MathBook XML.
+
+MathBook XML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+MathBook XML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+<!-- This file was originally part of the book     -->
+<!-- (as copied on 2015/07/12)                     -->
+<!--                                               -->
+<!--   Abstract Algebra: Theory and Applications   -->
+<!--                                               -->
+<!-- Copyright (C) 2010-2014  Robert A. Beezer     -->
+
+<exercises xml:id="groups-sage-exercises">
+    <title>Sage Exercises</title>
+
+    <introduction>
+        <p>These exercises are about becoming comfortable working with groups in Sage.</p>
+    </introduction>
+
+    <exercise number="1">
+        <statement>
+            <p>Create the groups <c>CyclicPermutationGroup(8)</c> and <c>DihedralGroup(4)</c> and name these groups <c>C</c> and <c>D</c>, respectively.  We will understand these constructions better shortly, but for now just understand that both objects you create are actually groups.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="2">
+        <statement>
+            <p>Check that <c>C</c> and <c>D</c> have the same size by using the <c>.order()</c> method.  Determine which group is abelian, and which is not, by using the <c>.is_abelian()</c> method.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="3">
+        <statement>
+            <p>Use the <c>.cayley_table()</c> method to create the Cayley table for each group.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="4">
+        <statement>
+            <p>Write a nicely formatted discussion identifying differences between the two groups that are discernible in properties of their Cayley tables.  In other words, what is {\em different} about these two groups that you can <q>see</q> in the Cayley tables?  (In the Sage notebook, a Shift-click on a blue bar will bring up a mini-word-processor, and you can use use dollar signs to embed mathematics formatted using <tex/> syntax.)</p>
+        </statement>
+    </exercise>
+
+    <exercise number="5">
+        <statement>
+            <p>For <c>C</c> locate the one subgroup of order <m>4</m>.  The group <c>D</c> has three subgroups of order <m>4</m>.  Select one of the three subgroups of <c>D</c> that has a different structure than the subgroup you obtained from <c>C</c>.</p>
+
+            <p>The <c>.subgroups()</c> method will give you a list of all of the subgroups to help you get started.  A Cayley table will help you tell the difference between the two subgroups.  What properties of these tables did you use to determine the difference in the structure of the subgroups?</p>
+        </statement>
+    </exercise>
+
+    <exercise number="6">
+        <statement>
+            <p>The <c>.subgroup(elt_list)</c> method of a group will create the smallest subgroup containing the specified elements of the group, when given the elements as a list <c>elt_list</c>.  Use this command to discover the shortest list of elements necessary to recreate the subgroups you found in the previous exercise.  The equality comparison, <c>==</c>, can be used to test if two subgroups are equal.</p>
+        </statement>
+    </exercise>
+
+</exercises>

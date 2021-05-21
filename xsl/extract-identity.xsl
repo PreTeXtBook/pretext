@@ -20,19 +20,45 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
 <!-- This stylesheet does nothing but traverse the tree         -->
-<!-- Possible restricting to a subtree based on xml:id          -->
+<!-- Possibly restricting to a subtree based on xml:id          -->
 <!-- An importing stylesheet can concentrate on a specific task -->
-<!-- It does define a "scratch" directory for placing output    -->
-<!-- to presumably be process further by external program       -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
+<xsl:import href="./publisher-variables.xsl" />
+<xsl:import href="./pretext-assembly.xsl" />
+
 <!-- We do not specify an output method since nothing gets output from here -->
 
-<!-- Input/Output work/scratch directory from command line (eg, remove X)  -->
-<!-- -X-stringparam scratch <some directory string, no trailing backslash> -->
-<!-- TODO: this parameter really does not belong here, but is convenient   -->
-<xsl:param name="scratch" select="'.'"/>
+<!-- This template serves two purposes.                                   -->
+<!--                                                                      -->
+<!-- 1.  It provides an entry template.                                   -->
+<!--                                                                      -->
+<!-- At the document root (after assembly) or at the root of some subtree -->
+<!-- passed in and indicated by an xml:id for that root.  So a stylesheet -->
+<!-- that uses this stylesheet must import this utility stylesheet *last* -->
+<!-- so that any entry template of some conversion is overridden.         -->
+<!--                                                                      -->
+<!--                                                                      -->
+<!-- 2.  It establishes a tree walker with mode "extraction".             -->
+<!--                                                                      -->
+<!-- The modal template here walks the tree and does *nothing* at each    -->
+<!-- node, but descend into children and attributes.  So a consuming      -->
+<!-- stylesheet can provide its own "extraction" templates to interrupt   -->
+<!-- this giant no-op and do something interesting.  Note that this modal -->
+<!-- template allows plain/generic templates from established conversions -->
+<!-- to be employed, and conceivably overridden, without disturbing the   -->
+<!-- tree walk.                                                           -->
+
+<!-- 2020-05-19: This general-purpose template formerly obtained a      -->
+<!-- "scratch directory" where intermediate results might be processed. -->
+<!-- But if a pathname, in Windows syntax, was passed in, then the      -->
+<!-- slashes all got butchered.  Better to set a working directory      -->
+<!-- and have "extracttion" worksheets write files, sans paths, into    -->
+<!-- that directory.  We leave a warning behind if there is an attempt  -->
+<!-- to set this, which will likely be something overlooked in a        -->
+<!-- calling script. -->
+<xsl:param name="scratch" select="''"/>
 
 <!-- The xml:id of an element to use as the root                -->
 <!-- no "subtree" stringparam denotes starting at document root -->
@@ -42,16 +68,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- subtree rooted at an element identified -->
 <!-- by an author-supplied xml:id            -->
 <xsl:template match="/">
+    <!-- Fail if a scratch directory is set -->
+    <xsl:if test="not($scratch = '')">
+        <xsl:message terminate="yes">PTX:BUG:     scratch directory provided ("<xsl:value-of select="$scratch" />") which is not supported.  Please report the circumstances revealing this mistake.  Quitting...</xsl:message>
+    </xsl:if>
     <xsl:choose>
         <xsl:when test="$subtree=''">
-            <xsl:apply-templates />
+            <xsl:apply-templates select="$root" mode="extraction"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:variable name="subtree-root" select="id($subtree)" />
-            <xsl:if test="not($subtree-root)">
-                <xsl:message terminate="yes">MBX:ERROR:   xml:id provided ("<xsl:value-of select="$subtree" />") for restriction to a subtree does not exist.  Quitting...</xsl:message>
-            </xsl:if>
-            <xsl:apply-templates select="$subtree-root" />
+            <!-- Context is root of *original* source as we are in the entry template. -->
+            <!-- The "for-each" allows a switch to the duplicate (assembled) source,   -->
+            <!-- so the id() function scans the enhanced tree.                         -->
+            <xsl:for-each select="$root">
+                <xsl:variable name="subtree-root" select="id($subtree)"/>
+                <xsl:if test="not($subtree-root)">
+                    <xsl:message terminate="yes">MBX:FATAL:   xml:id provided ("<xsl:value-of select="$subtree"/>") for restriction to a subtree does not exist.  Quitting...</xsl:message>
+                </xsl:if>
+                <xsl:apply-templates select="$subtree-root" mode="extraction"/>
+            </xsl:for-each>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -59,8 +94,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Traverse the tree,       -->
 <!-- looking for things to do -->
 <!-- http://stackoverflow.com/questions/3776333/stripping-all-elements-except-one-in-xml-using-xslt -->
-<xsl:template match="@*|node()">
-    <xsl:apply-templates select="@*|node()"/>
+<xsl:template match="@*|node()" mode="extraction">
+    <xsl:apply-templates select="@*|node()" mode="extraction"/>
 </xsl:template>
 
 </xsl:stylesheet>

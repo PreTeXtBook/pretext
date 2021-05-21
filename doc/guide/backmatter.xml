@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- This file is part of the documentation of PreTeXt              -->
+<!--                                                                -->
+<!--         The PreTeXt Guide                                      -->
+<!--                                                                -->
+<!-- Copyright (C) 2013-2019                                        -->
+<!-- Robert A. Beezer, David Farmer, Alex Jordan, Mitchel T. Keller -->
+<!-- See the file COPYING for copying conditions.                   -->
+
+<backmatter xml:id="backmatter" xmlns:xi="http://www.w3.org/2001/XInclude">
+    <title>Appendices</title>
+
+    <xi:include href="appendices/welcome.xml"/>
+    <!-- collect references to each Best Practice note -->
+    <appendix xml:id="best-practices">
+        <title>Best Practices</title>
+        <list-of elements="note"/>
+    </appendix>
+    <xi:include href="appendices/python.xml"/>
+    <xi:include href="appendices/editors.xml"/>
+    <xi:include href="appendices/schema-install.xml"/>
+    <xi:include href="appendices/offline-mathjax.xml"/>
+    <xi:include href="appendices/git.xml"/>
+    <xi:include href="appendices/latex-conversion.xml"/>
+    <xi:include href="appendices/mac-os.xml"/>
+    <xi:include href="appendices/windows.xml"/>
+    <xi:include href="appendices/windows-wsl.xml"/>
+    <xi:include href="appendices/vagrant.xml"/>
+    <appendix>
+        <title>Example List of Notation</title>
+        <notation-list />
+    </appendix>
+    <xi:include href="appendices/gfdl-pretext.xml"/>
+    <xi:include href="appendices/glossary.xml"/>
+    <xi:include href="appendices/references.xml"/>
+
+    <index xml:id="the-index">
+        <title>Index</title>
+        <index-list />
+    </index>
+</backmatter>
+
+

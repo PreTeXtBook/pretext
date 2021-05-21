@@ -29,6 +29,9 @@ s/<svg style/<svg xmlns="http:\/\/www.w3.org\/2000\/svg" style/g
 s/role="img"//g
 s/focusable="false"//g
 
+# Validator doesn't like the <defs aria-hidden="true"> that mjpage produces
+s/defs aria-hidden="true"/defs/g
+
 # MML, per-file, macro-container left-behind, remove entirely
 /<div style="display:none;"><math xmlns="http:\/\/www.w3.org\/1998\/Math\/MathML"><\/math><\/div>/d
 

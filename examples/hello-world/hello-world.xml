@@ -29,10 +29,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                                                                    -->
 <!-- 3.  Check that  xsltproc  is installed                                             -->
 <!--                                                                                    -->
-<!-- 4.  xsltproc /path/to/xsl/mathbook-html.xsl /path/to/hello-world.xml               -->
+<!-- 4.  xsltproc /path/to/xsl/pretext-html.xsl /path/to/hello-world.xml                -->
 <!-- Locate  hello-world.html  in default directory and view in a web browser           -->
 <!--                                                                                    -->
-<!-- 5.  xsltproc -o hello.tex /path/to/xsl/mathbook-latex.xsl /path/to/hello-world.xml -->
+<!-- 5.  xsltproc -o hello.tex /path/to/xsl/pretext-latex.xsl /path/to/hello-world.xml  -->
 <!-- Locate  hello.tex  in default directory and process with pdflatex                  -->
 <!--                                                                                    -->
 <!-- 6.  Experiment with other available conversions                                    -->

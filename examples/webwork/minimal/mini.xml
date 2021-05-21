@@ -21,54 +21,47 @@
 <!-- ********************************************************************* -->
 
 
-<!-- This is a skeleton file to hold any number of -->
-<!-- WeBWorK problems authored with MathBook XML.  -->
-<!-- mathbook/article structure needed for default -->
-<!-- variable assignments in  mathbook-common.xsl. -->
+<!-- This is a skeleton file to hold WeBWorK problems authored in PreTeXt. -->
 
 <pretext>
-    <article xml:id="webwork-mini">
-        <title><webwork /> Minimal Example</title>
-        <frontmatter>
-            <titlepage>
-                <author>
-                    <personname>Jane Doe</personname>
-                </author>
-            </titlepage>
-        </frontmatter>
-        <section>
-            <title><webwork /> Minimal Section</title>
-            <exercise>
-                <webwork>
-                    <title>Integer Addition</title>
-                    <setup>
-                        <var name="$a">
-                            <static>9</static>
-                        </var>
-                        <var name="$b">
-                            <static>8</static>
-                        </var>
-                        <var name="$c">
-                            <static>17</static>
-                        </var>
-                        <pg-code>
-                            $a = Compute(random(1, 9, 1));
-                            $b = Compute(random(1, 9, 1));
-                            $c = $a + $b;
-                        </pg-code>
-                    </setup>
-                    <statement>
-                        <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
-                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="2" /></p>
-                    </statement>
-                    <hint>
-                        <p>Add <m><var name="$a" /></m> and <m><var name="$b" /></m> together.</p>
-                    </hint>
-                    <solution>
-                        <p><m><var name="$a" /> + <var name="$b" /> = <var name="$c" /></m>.</p>
-                    </solution>
-                </webwork>
-            </exercise>
-        </section>
-    </article>
+  <article xml:id="webwork-mini">
+    <title><webwork /> Minimal Example</title>
+    <frontmatter>
+      <titlepage>
+        <author>
+          <personname>Jane Doe</personname>
+        </author>
+      </titlepage>
+    </frontmatter>
+    <section>
+      <title><webwork /> Minimal Section</title>
+      <exercise>
+        <webwork>
+          <pg-code>
+            $a = Compute(random(1, 9, 1));
+            $b = Compute(random(1, 9, 1));
+            $c = $a + $b;
+          </pg-code>
+          <statement>
+            <p>
+              Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:
+            </p>
+            <p>
+              <m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="2" />
+            </p>
+          </statement>
+          <hint>
+            <p>
+              Add <m><var name="$a" /></m> and <m><var name="$b" /></m> together.
+            </p>
+          </hint>
+          <solution>
+            <p>
+              <m><var name="$a" /> + <var name="$b" /> = <var name="$c" /></m>.
+            </p>
+          </solution>
+        </webwork>
+      </exercise>
+    </section>
+  </article>
 </pretext>

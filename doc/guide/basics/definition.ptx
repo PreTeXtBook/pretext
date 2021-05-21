@@ -1,0 +1,15 @@
+<definition>
+
+  <notation>
+    <usage>\binom{n}{k}</usage>
+    <description>binomial coefficient</description>
+  </notation>
+
+  <statement>
+    <p>
+      The <term>binomial coefficient</term>
+      <m>\binom{n}{k}</m> is the number of <m>k</m>-element subsets of an <m>n</m>-element set.
+    </p>
+  </statement>
+</definition>
+

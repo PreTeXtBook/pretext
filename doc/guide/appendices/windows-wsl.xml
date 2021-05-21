@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<appendix xml:id="windows-subsystem-linux">
+    <title>Windows Subsystem for Linux</title>
+
+    <p>
+    The <term>Windows Subsystem for Linux</term> (<init>WSL</init>)
+    may be installed on computers running Windows 10.
+    Several distributions of Linux are available.
+    We will use  Ubuntu as an example; working with other distributions is quite similar.
+    The latest news and announcements about <init>WSL</init> may be found at
+    <url href="https://msdn.microsoft.com/commandline/wsl/about" />.
+    </p>
+
+    <aside>
+    <title> What is my OS build?</title>
+    <p>
+    An easy way to find your OS Build:
+    Hold down the Windows key and R key simultaneously.
+    Enter <c>winver.exe</c> in the resulting new window.
+    The next window that opens will have the OS Build in small type near the top.
+        </p>
+    </aside>
+
+    <paragraphs>
+        <title>Installing WSL</title>
+        <p>
+	    If you have Windows 10 with OS Build greater than 16215 (August 2016),
+        then installing <init>WSL</init> is not difficult. Just follow the
+        (reasonably straightforward) instructions given by Microsoft at the address
+        <url href="https://msdn.microsoft.com/en-us/commandline/wsl/install_guide" />.
+        </p>
+        <p>
+        Upon completion of the installation, you should
+        <ul>
+        <li><p>be able to use the <c>bash</c> command from the <c>PowerShell</c> window,</p></li>
+        <li><p>have your own <init>WSL</init> userid (distinct from Windows),</p></li>
+        <li><p>have your own <init>WSL</init> password (distinct from Windows).</p></li>
+        </ul>
+        </p>
+    </paragraphs>
+
+    <aside>
+        <title>A little background about using about the command line</title>
+
+        <p>
+        <ul>
+        <li><p>
+            You type in commands (terminated by the Enter key) and
+            the operating system responds. For example, if you type in
+            <c>date</c>, the
+            operating system responds with (what it considers to be) the date.
+            Using the command line is an ongoing conversation between you and
+            the operating system.
+        </p></li>
+        <li><p>
+            The <c>sudo</c> command:
+            when a command starts with <c>sudo</c>, the rest of
+            the command is executed with administrative privileges.
+            This is needed, for example, to install software or
+            update the operating system. You must give your
+            password when you run <c>sudo</c> (although you get
+            a little window of time after the first usage when
+            it is not necessary to do so).
+        </p></li>
+        <li><p>
+            The <c>sudo apt-get update</c> command: this is used to
+            resynchronize the local listing of installed packages
+            with those in the official repository.
+        </p></li>
+        <li><p>
+            The <c>sudo apt-get upgrade</c> command: this is used to
+            bring all the local software up to date with
+            those in the official repository.
+        </p></li>
+        </ul>
+        </p>
+        <p>
+        Run <c>sudo apt-get update</c> followed
+        by <c>sudo apt-get upgrade</c> with a newly system to bring it
+        up to date. It is a good idea to repeat this frequently to have
+        the latest software on your computer.
+        </p>
+    </aside>
+
+    <paragraphs>
+        <title>Installing software</title>
+        <p>
+        The default configuration of <init>WSL</init> does not have the software needed
+        for creating documents with <pretext/>.
+        </p>
+        <p>
+        The program <term>xsltproc</term> is used to create your readable documents.
+        It is installed with the command <c>sudo apt-get install xsltproc</c>.
+        </p>
+        <p>
+         You are now ready to set up <pretext/>.
+        </p>
+    </paragraphs>
+
+    <paragraphs>
+        <title>Putting <pretext/> on your computer</title>
+        <p>
+        Here are the steps necessary to get the <pretext/> software onto
+        your computer:
+        <ul>
+        <li><p>Make a new directory <c>mkdir mathbook</c></p></li>
+        <li><p>Make your own clone of the <pretext/> repository
+            <c>git clone https://github.com/rbeezer/mathbook.git</c></p></li>
+        <li><p>Move to the new directory <c>cd mathbook</c></p></li>
+        <li><p>Initialize the new directory with <c>git pull</c></p></li>
+        </ul>
+        This last command synchronizes your files with those in the official repository.
+        You should run it frequently to keep your files up to date.
+        </p>
+    </paragraphs>
+
+    <paragraphs>
+        <title>The simplest example</title>
+        <p>
+        Here is a brief description of the use of <init>WSL</init> to create 
+        readable files.
+        You, as the author, create the <init>xml</init> file.
+        The system will contain an appropriate <init>xsl</init> file that translates 
+        your <init>xml</init> file to something readable.
+        </p>
+        <p>
+        Several editors come with <init>WSL</init> by default including
+        <init>nano</init>, <init>pico</init>, <init>vi</init>,  and <init>vim</init>.
+        In addition, editing is possible using <init>notebook.exe</init>.
+        Here are the steps to follow:
+        <ol>
+        <li>
+        <p>
+        Type the command <c>cd</c> to align yourself in your home directory.
+        </p>
+        </li>
+        <li><p>
+            Use one of the editors to create a file called <c>hw.xml</c>
+            (you could use the command <c>nano hw.xml</c>), and add
+            the following text:
+            <cd>
+            &lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+            &lt;pretext&gt;
+                &lt;article xml:id="hw"&gt;
+                &lt;p&gt;Hello, World!&lt;/p&gt;
+                &lt;/article&gt;
+            &lt;/pretext&gt;
+            </cd></p>
+        </li>
+        <li><p>
+            Run the command
+            <c>xsltproc mathbook/xsl/pretext-html.xsl hw.xml</c>
+            Upon completion, your should have a file called <c>hw.html</c>.
+        </p></li>
+        <li><p>
+            You now want to view the <c>hw.html</c> file in a browser,
+	    This is done with the command <c>explorer.exe hw.html</c>.
+        </p></li>
+        </ol>
+        The <c>edit-xsltproc-view</c> cycle just given may seem daunting at first blush.
+        Some things that can help:
+        <ul>
+        <li><p>
+            Pressing the up arrow when at the command line displays the previously
+            executed commands.  Hitting the enter key while such a command is displayed
+            executes it. This saves a lot of retyping.
+        </p></li>
+        <li><p>
+            It is possible to define aliases to shorten commands. Your local Linux guru can
+            show how this is done.
+        </p></li>
+        <li><p>
+            It is possible to define scripts to shorten multiple commands.
+            Your local Linux guru can show how this is done.
+        </p></li>
+        </ul>
+        </p>
+    </paragraphs>
+
+</appendix>

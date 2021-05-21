@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="schema">
+    <title><pretext /> Vocabulary Specification</title>
+
+    <introduction>
+        <p>This Author's Guide, along with the sample article and sample book distributed with the <pretext /> source, provide a wealth of examples of how to author in <pretext />. However, at some point, you will undoubtedly encounter a situation where some of your text fails to appear in your output or <c>xsltproc</c> produces an error. Those are good moments to start investigating the formal specifications of the <pretext /> vocabulary, as most likely you tried to use something in a way incompatible with those specifications.  This chapter will help you understand, and work with, the formal specification of <pretext />.</p>
+    </introduction>
+
+    <section xml:id="schema-relaxng">
+        <title><acro>RELAX-NG</acro> Schema</title>
+
+        <p>A <term>schema</term><idx>schema</idx> is a set of patterns which describe how the elements of a language may be combined.  The <pretext /> vocabulary is described by a <acro>RELAX-NG</acro> schema, which is included in the <pretext /> distribution.  (<acro>RELAX-NG</acro><idx><acro>RELAX-NG</acro></idx> stands for <q>REgular LAnguage for XML Next Generation</q> and is pronounced <q>relaxing</q>.)  In general terms, the schema tells you which elements are available, which attributes they may carry, and which other elements they may contain.  You can then infer where you can place an element.  The schema also indicates if an element is required or optional, if it may be repeated, or if it needs to appear in a prescribed order with other elements, and may limit attribute values.</p>
+
+        <p>Besides providing a concise formal description of the <pretext /> vocabulary, your <init>XML</init> source and the <acro>RELAX-NG</acro> schema can be provided to tools which will automatically <term>validate</term> your source against the formal definition.  The best validators<idx>validator</idx> will provide accurate and helpful messages about errors in your source.  Further, some editing tools will use a schema to provide context-sensitive assistance on available elements and attributes as you write, sparing you typographical errors, misplaced elements, and the need to frequently context-switch in order to consult reference material.</p>
+
+        <p>The schema does not tell you anything about how an element or attribute will behave.  But hopefully there is not much ambiguity about the behavior of the content of a <tag>title</tag> element nested within a <tag>chapter</tag> element.  You would not be surprised to see that content duplicated in the Table of Contents of a book.  The purpose of this guide, and other documentation, is to help you understand what to expect.  It is better to think of the schema as a contract between you and the developers of conversion tools.  If your source conforms to the schema, then a conversion tool will produce reasonable output that conveys the structure and meaning of your writing.  Twenty years from now, when <init>GEFF</init> is the dominant document format, a conversion of your source will preserve your meaning, while also taking advantage of the amazing features of <init>GEFF</init>.  (<init>GEFF</init> stands for <q>Great Electronic Format of the Future</q>.)</p>
+
+        <p>In summary, the <acro>RELAX-NG</acro> schema<ul>
+            <li>is the formal specification of the <pretext /> vocabulary,</li>
+            <li>is a key input to validation,</li>
+            <li>can be incredibly helpful in the editing process, and</li>
+            <li>provides guidance to implementors of conversions.</li>
+        </ul>As such, we are very deliberate about changes, and hope over time to make changes only very rarely.</p>
+    </section>
+
+    <section xml:id="validation-plus">
+        <title>Validation Plus</title>
+        <idx><h>validation</h><h>additional</h></idx>
+
+        <p>The <acro>RELAX-NG</acro> schema is very good at specifying <q>parent-child</q> relationships, in other words, which elements can nest directly under/within other elements.  But we have situations where the possible elements depend on grandparents, great-grandparents, or older ancestors.  An example is the <tag>var</tag> element, which is only useful if it is contained <em>somewhere</em> within a <tag>webwork</tag> element.  You can describe these situations with <acro>RELAX-NG</acro>, but it becomes cumbersome and redundant.  So our stategy is to allow some prohibited situations in the <acro>RELAX-NG</acro> schema, and use an additional stylesheet to identify the prohibited situations.  Continuing our <webwork/> example, the <acro>RELAX-NG</acro> schema makes it appear that <tag>var</tag> can be used many places, but the <q>validation-plus</q> stylesheet provides a helpful message indicating you have used it outside the context of a <webwork/> problem.</p>
+
+        <p>To use this stylesheet, simply apply it at the command-line with <c>xsltproc</c> like any other stylesheet.<cd>
+            <cline>xsltproc -xinclude -o report.txt</cline>
+            <cline>    schema/pretext-validation-plus.xsl aota/animals.xml</cline>
+        </cd>The output will be a text file that indicates the suspect element by its location in the document tree.</p>
+
+        <p>We once used Schematron for this purpose.  Its author, Rick Jelliffe, says <q>Schematron is a feather duster to reach the corners that other schema languages cannot reach.</q>  Our additional stylesheet is similar.</p>
+
+        <p>Why do we have two tools for validation?  We have explained the necessity of an <em>extra</em> stylesheet.  Why not describe the entire grammar in this stylesheet?  The reason is that RELAX-NG is a recognized standard, and so can be converted to other formats, and may also be utilized by XML editors or integrated development environments (<init>IDE</init>) to provide features like code completion.  Besides, it would be very tedious to provide all the code for checking everything that is possible and everything that is not.</p>
+    </section>
+
+    <section xml:id="schema-products">
+        <title>Versions of the Schema</title>
+        <idx>literate programming</idx>
+
+
+        <p>The schema is born within a <pretext/> document, <c>schema/pretext.xml</c>, where surrounding text provides documentation and guidance on implementation.  The literate programming support in <pretext/> (start at <xref ref="overview-literate-programming"/>) is used to produce a file, <c>schema/pretext.rnc</c>, which is a <acro>RELAX-NG</acro> specification in compact syntax.  <init>HTML</init> and <init>PDF</init> versions are available on the <pretext/> website as documentation.  We provide some guidance below on reading the compact syntax.</p>
+
+        <p>The compact syntax is a faithful representation of the more verbose <init>XML</init> syntax.  And vice-versa, so it is possible to translate back-and-forth between the two syntaxes.  In practice, we convert the compact version to the <init>XML</init> version, producing a file <c>schema/pretext.rng</c>.  Some tools require this latter (100% equivalent) version.  We perform this conversion with <c>trang</c><idx><c>trang</c></idx>, an open source program written by James Clark, one of the authors of <acro>RELAX-NG</acro>.  (<c>trang</c> stands for <q>TRAnslator for relax NG</q>.)  The compact syntax is often indicated as <init>RNC</init> and the <init>XML</init> syntax is often indicated as <init>RNG</init>.</p>
+        <!-- acronym suggested at bottom of: http://www.thaiopensource.com/relaxng/convert-to-xsd-talk.html -->
+
+        <p><init>XSD</init><idx>XSD</idx> (<init>XML</init> Schema Definition), from the World Wide Web Consortium (<init>W3C</init>), is an alternative to the <acro>RELAX-NG</acro> syntax.  It cannot express as many situations as the <acro>RELAX-NG</acro> syntax, but we have created the <pretext /> schema in a way that <c>trang</c> can convert to an <init>XSD</init> specification without introducing any more-permissive <q>approximations.</q>  But the <init>XSD</init> version seems to have a few small inaccuracies, and in particular should not be used for validation.  That said, <c>schema/pretext.xsd</c> may be useful for tools (<eg /> editors) that require it.</p>
+
+        <p>The files <c>pretext.xml</c>, <c>pretext.rnc</c>, <c>pretext.rng</c>, and <c>pretext.xsd</c> are all provided in the <c>schema</c> directory under revision control, and are updated by the <c>schema/build.sh</c> script when changes are made to <c>pretext.xml</c>.  So as an author, you do not need to install or run <c>trang</c> and should just link to the (continually updated) copies in your <c>mathbook</c> directory.</p>
+
+        <p>We once provided a <term>document type definition</term><idx>document type definition</idx> (<init>DTD</init><idx><h>DTD</h><see>document type definition</see></idx>) as a description of the <pretext /> vocabulary.  <url href="http://rellek.net/home/">Mitch Keller</url> wrote an excellent initial version of this chapter to help others understand similar principles in the context of the <init>DTD</init>.  However, the <init>DTD</init> was not sufficiently flexible to handle elements that behave differently in different locations, such as an <tag>introduction</tag> to a <tag>chapter</tag> versus an <tag>introduction</tag> to an <tag>exercisegroup</tag>.  As further evidence, <c>trang</c> will knowingly refuse to convert the <pretext /> schema to a <init>DTD</init> since the <init>DTD</init> syntax is not sufficiently expressive to describe <pretext />.</p>
+
+        <p>If you are interested in conversions, more tools can be found at <url href="http://relaxng.org/"><c>relaxng.org</c></url> and we have information on installation in <xref ref="schema-install" />.  We would be pleased to learn more about authors' experiences with other converters.</p>
+    </section>
+
+    <section xml:id="schema-reading-relaxng">
+        <title>Reading <acro>RELAX-NG</acro> Compact Syntax</title>
+
+        <p>The compact syntax might remind you of Java or C++ syntax.  We do not provide a tutorial here, but do provide some hints on the various delimiters and special symbols, which may make it fairly easy to see your way through to the meaning.  The fundamental object of the schema is a <term>pattern</term><idx>pattern</idx>, and <term>named patterns</term><idx>named pattern</idx><idx><h>pattern</h><h>named pattern</h></idx> can be reused in order to reuse common patterns<idx>common pattern</idx><idx><h>pattern</h><h>common pattern</h></idx> and modularize the description.  One approach to validation is to remove portions of your source that match required patterns until only optional material remains.  Notice that if you were to chase your way through substituting the named patterns with their employment, you would have a single (large) pattern which every possible <pretext /> document would match, and by definition an <init>XML</init> document that does not match is not <pretext />.  (OK, that is a slight exaggeration, see <xref ref="validation-plus" />.)</p>
+
+        <table>
+            <title><acro>RELAX-NG</acro> Compact Syntax Summary</title>
+
+            <tabular>
+                <!--  -->
+                <row><cell>element foo { }</cell>
+                <cell>Define <tag>foo</tag> and children</cell></row>
+                <!--  -->
+                <row><cell>attribute bar { }</cell>
+                <cell>Define <attr>bar</attr> and values</cell></row>
+                <!--  -->
+                <row><cell>text</cell>
+                <cell>Sequence of characters (any length)</cell></row>
+                <!--  -->
+                <row><cell>mixed { }</cell>
+                <cell>Mixed-content, characters interleaved in pattern</cell></row>
+                <!--  -->
+                <row><cell></cell>
+                <cell>Exactly one (required)</cell></row>
+                <!--  -->
+                <row><cell>+</cell>
+                <cell>One or more (required)</cell></row>
+                <!--  -->
+                <row><cell>*</cell>
+                <cell>Zero or more (optional)</cell></row>
+                <!--  -->
+                <row><cell>?</cell>
+                <cell>Zero or one (optional)</cell></row>
+                <!--  -->
+                <row><cell>,</cell>
+                <cell>Sequence, in prescribed order</cell></row>
+                <!--  -->
+                <row><cell>|</cell>
+                <cell>Choice</cell></row>
+                <!--  -->
+                <row><cell>&amp;</cell>
+                <cell>Sequence, any order</cell></row>
+                <!--  -->
+                <row><cell>(  )</cell>
+                <cell>Grouping</cell></row>
+                <!--  -->
+                <row><cell>=</cell>
+                <cell>Define named pattern</cell></row>
+                <!--  -->
+                <row><cell>|=</cell>
+                <cell>Accumulate named pattern as a choice</cell></row>
+            </tabular>
+        </table>
+    </section>
+
+    <section xml:id="schema-validation">
+        <title>Validation</title>
+
+        <p>We cannot stress enough the importance of validating<idx>valid schema</idx> your source early and frequently.  Error conditions and messages can be built into processing (we have some anyway), but they are much better accomodated by tools built for just this purpose.  If your processing with <c>xsltproc</c> suddenly fails, or if chunks of your content fail to materialize, it is highly likely that a validation check will tell you where the problem lies.  If you integrate regular checks into your workflow, then sudden problems can be traced to recent changes.  (Perhaps paired with using <c>git bisect</c>, in the extreme.  You are using revision control, aren't you?)</p>
+
+        <p>We use <c>jing</c><idx><c>jing</c></idx> for the first step, <acro>RELAX-NG</acro> validation.  This is an open source companion to the <c>trang</c> converter described above.  As a Java program, it should be cross-platform.  It is also packaged for Debian and Ubuntu Linux, and is installed in CoCalc (see <xref ref="topic-build-in-cocalc"/>).  It provides messages keyed to the line number and character number of your source, and the messages are very clear and informative.  See notes on installation in <xref ref="schema-install"/>.  We would be pleased to learn more about authors' experiences with other validators.</p>
+
+        <p>You might get a lot of error messages the first time you use <c>jing</c>. If so, it might be that many of them are the same situation.  If you pipe the output of <c>jing</c> through <c>sort -k 2</c> then the output will group similar messages together.</p>
+
+        <p>If you use <c>xsltproc</c> as your <init>XSLT</init> processor, then you likely automatically also have the <c>xmllint</c><idx><c>xmllint</c></idx> program, which will perform validation with <acro>RELAX-NG</acro> schema.  Our experience is that it bails out at the first warning, or at least does not process the remainder of the current subtree, and that the error messages are often very misleading.  We will not support questions about validation based on output from <c>xmllint</c>.</p>
+
+        <p>The second step is easier, since it is an <init>XSL</init> transform.  In other words, it is just another stylesheet, which you run against your source, with a processor like <c>xsltproc</c>.  This stylesheet encoding additional restrictions is unique to <pretext/> and will report exceptions that are too difficult to express with <acro>RELAX-NG</acro>.  So validation is two complementary steps.  See <xref ref="validation-plus" /> for the exact syntax for using this stylesheet.</p>
+    </section>
+
+    <section xml:id="schema-browser">
+        <title>Schema Browser</title>
+
+        <p>We use the excellent <url href="http://www.flexdoc.xyz/flexdoc-xml/xsddoc/">FlexDoc/XML - XSDDoc (XML Schema Documentation Generator)</url><fn><c>www.flexdoc.xyz/flexdoc-xml/xsddoc/</c></fn><idx>FlexDoc/XML/XML XML schema documentation generator</idx> from <url href="http://www.filigris.com/">Filigris Works</url><fn><c>www.filigris.com</c></fn> to automatically produce hyperlinked documentation of the schema as part of the online documentation at the <pretext /> website, located at <url href="https://pretextbook.org/doc/schema/"><c>pretextbook.org/doc/schema/</c></url>.  Because this is produced from the <init>XSD</init> version of the schema, it will reproduce the small inaccuracies mentioned above.  But it is still a very convenient and informative way to explore the schema, or use it for reference.   If you know of a similar tool of the same quality, but which documents <acro>RELAX-NG</acro> schema, a report would be greatly appreciated.</p>
+
+        <p>Do not be intimidated by the list of roughly 300 elements in the left navigation panel.  Many are configuration options, many are special-purpose, and many you will never use.  (Someday we will do lexical analysis on a substantial range of <pretext /> texts to see just which elements do get used most frequently).  Instead, scroll down to the 70 or so <q>Element Groups</q>.  These are thematic bundles of related elements, named to help you locate them later.  The right panel will list the elements near the top as part of the <q>Complex Content Model.</q>  Just below you will see the <q>Known Usage Locations</q> which list places every element in the group may appear.  Similarly, if you explore a particular element, you can see the pattern describing the attributes and elements allowed as children, and lists of the possible parents.</p>
+
+        <p>Elements which have complicated restrictions that cannot be expressed with the schema will have some written documentation to this effect as part of their page within the schema browser.</p>
+
+        <p>The XML Schema Documentation Generator<idx>XML schema documentation generator</idx><idx><h>XML schema documentation generator</h><seealso>DocFlex/XML XML schema documentation generator</seealso></idx> is a commercial program.  In particular, as an author you should not need to install or use this program.  (Filigris Works provided trial versions and a free license in the early days of the project.  Thanks!)</p>
+    </section>
+
+    <section xml:id="editors-supporting-schema">
+        <title>Editor Support for Schema</title>
+
+        <p>We collect summary information about editors that make use of schema.  See <xref ref="editors" /> for more specific information, links, <etc />.</p>
+
+        <table>
+            <title>Schema Support in Editors</title>
+
+            <tabular>
+                <!--  -->
+                <row bottom="minor">
+                    <cell>Editor</cell>
+                    <cell>Formats</cell>
+                    <cell>Notes</cell>
+                </row>
+                <!--  -->
+                <row>
+                    <cell>emacs</cell>
+                    <cell>RNC</cell>
+                    <cell>Schema-sensitive editing, open source</cell>
+                </row>
+                <!--  -->
+                <row>
+                    <cell>XML Copy Editor</cell>
+                    <cell>RNG, XSD</cell>
+                    <cell>Validation, <q>tag completion</q>, open source</cell>
+                </row>
+                <!--  -->
+                <row>
+                    <cell>oXygen</cell>
+                    <cell>RNC, RNG</cell>
+                    <cell>Validation and completion, commercial</cell>
+                </row>
+                <!--  -->
+            </tabular>
+        </table>
+    </section>
+</chapter>

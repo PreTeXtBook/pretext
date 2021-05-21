@@ -1,0 +1,35 @@
+
+:root {
+  --documenttitle: #932919;
+  --bodytitle: #A62E1C;  /* often a darker version of documenttitle  */
+  --bodysubtitle: #2B5F82;  /* can be the same as bodytitle  */
+  --bodytitlehighlight: #e0e9ff;  /* light, and contrasting to bodytitle  */
+  --bodysubtitlehighlight: #fce5e4;  /* light, and contrasting to bodysubtitle  */
+     /*
+       The bodytitle and bodysubtitle colors must have at least a 3:1 contrast
+       ratio with black, and at least 5:1 ratio with with the corresponding highlight.
+       (The second condition will guarantee an adequate contrast with white.)
+     */
+
+  --chaptertoc: #3572a0;
+  --chaptertoctext: white;
+  --chaptertocactive: var(--documenttitle);   /* often the same as documenttitle */
+  --chaptertoctextactive: white;
+  --sectiontoc: white;   /* can also write it as #ffffff  */
+  --sectiontoctext: #662211;
+  --sectiontocactive: var(--documenttitle);   /* often the same as documenttitle */
+  --sectiontoctextactive: white;
+  --tocborder: #185f65;
+
+  --highlighttoc: #671d12;   /* often a dark version of documenttitle */
+  --highlighttoctext: white;
+  --highlighttocborder: var(--chaptertoc);
+
+  --videoplay: var(--bodytitle);
+  --assemblageborder: #5B2F82;
+  --assemblagebackground: #f5f8ff;
+
+  --knowlborder: var(--bodytitlehighlight);
+  --knowlbackground: var(--assemblagebackground);
+}
+

@@ -1,0 +1,37 @@
+<table>
+  <title>A simple table</title>
+  <tabular halign="center">
+    <row bottom="minor" >
+      <cell><m>x</m></cell>
+      <cell><m>y</m></cell>
+      <cell><m>x\wedge y</m></cell>
+      <cell><m>x\vee y</m></cell>
+    </row>
+    <row>
+      <cell>T</cell>
+      <cell>T</cell>
+      <cell>T</cell>
+      <cell>T</cell>
+    </row>
+    <row>
+      <cell>T</cell>
+      <cell>F</cell>
+      <cell>F</cell>
+      <cell>T</cell>
+    </row>
+    <row>
+      <cell>F</cell>
+      <cell>T</cell>
+      <cell>F</cell>
+      <cell>T</cell>
+    </row>
+    <row>
+      <cell>F</cell>
+      <cell>F</cell>
+      <cell>F</cell>
+      <cell>F</cell>
+    </row>
+  </tabular>
+
+</table>
+

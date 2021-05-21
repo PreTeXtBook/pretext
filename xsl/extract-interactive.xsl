@@ -31,10 +31,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 >
 
 <!-- Get internal ID's for filenames, etc -->
-<xsl:import href="./mathbook-common.xsl" />
+<xsl:import href="./pretext-common.xsl" />
 
-<!-- Get "scratch" directory        -->
-<!-- and a "subtree" xml:id value   -->
+<!-- Get a "subtree" xml:id value   -->
 <!-- Then walk the XML source tree  -->
 <!-- applying specializations below -->
 <xsl:import href="./extract-identity.xsl" />
@@ -42,8 +41,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Output Python as text -->
 <xsl:output method="text" />
 
-<!-- Enclosing structure is a Python list    -->
-<!-- So wrap at outermost level              -->
+<!-- Enclosing structure is a Python list -->
+<!-- So wrap at outermost level and       -->
+<!-- return control to extract-identity   -->
 <!-- Sneak in baseurl as first item, rather  -->
 <!-- than some involved nested stucture      -->
 <xsl:template match="/">
@@ -57,7 +57,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "visible-id" of each interactive -->
 <!-- Simple, just list of strings      -->
 <!-- @preview indicates custom image   -->
-<xsl:template match="interactive[not(@preview)]">
+<xsl:template match="interactive[not(@preview)]" mode="extraction">
     <xsl:text>'</xsl:text>
     <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>', </xsl:text>

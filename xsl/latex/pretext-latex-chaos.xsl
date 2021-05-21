@@ -31,7 +31,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 >
 
 <!-- Override specific tenplates of the standard conversion -->
-<xsl:import href="../mathbook-latex.xsl" />
+<xsl:import href="../pretext-latex.xsl" />
 
 <!-- Intend output for rendering by pdflatex -->
 <xsl:output method="text" />
@@ -146,9 +146,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>bwminimalstyle, fonttitle=\normalfont\bfseries, attach title to upper, after title={\qquad}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- "objectives", "outcomes" -->
-<!-- Green and ugly, plus identical, via the dual match -->
-<xsl:template match="objectives|outcomes" mode="tcb-style">
+<!-- "objectives", "outcomes", etc -->
+<!-- Green and ugly, plus identical, via the entity match -->
+<xsl:template match="&GOAL-LIKE;" mode="tcb-style">
     <xsl:text>size=minimal, attach title to upper, after title={\space}, fonttitle=\bfseries, coltitle=black, colback=green</xsl:text>
 </xsl:template>
 
@@ -310,9 +310,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Seems to be missing U+0060, "accent grave"             -->
 <!-- Seems to be missing U+00B4, "accent acute"             -->
 <!-- Seems to be missing superior numbers (1, 2, 3)         -->
-<xsl:template name="font-pdflatex-style">
+<xsl:template name="font-pdflatex-main">
     <xsl:text>\usepackage[math]{iwona}&#xa;</xsl:text>
     <xsl:text>\usepackage[T1]{fontenc}&#xa;</xsl:text>
 </xsl:template>
+
+<!-- Iwona does not seem to have a monospace/typewriter face.        -->
+<!-- Just as an illustration, we override the use of the Inconsolata -->
+<!-- font, so we probably get the default Computer Modern version.   -->
+<xsl:template name="font-pdflatex-mono"/>
 
 </xsl:stylesheet>

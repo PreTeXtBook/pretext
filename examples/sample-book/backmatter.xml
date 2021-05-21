@@ -36,8 +36,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <notation-list />
     </appendix>
 
+    <solutions divisional="hint answer solution" admit="odd">
+        <title>Hints and Answers to Selected Odd Exercises</title>
+    </solutions>
+
+    <solutions divisional="hint answer solution" admit="even">
+        <title>Hints and Answers to Selected Even Exercises</title>
+    </solutions>
+
     <solutions divisional="hint answer solution">
-        <title>Hints and Solutions to Selected Exercises</title>
+        <title>Hints and Answers to Selected Exercises</title>
     </solutions>
 
     <appendix>
@@ -58,6 +66,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </paragraphs>
                 </subsubsection>
             </subsection>
+        </section>
+
+        <section>
+            <title>Numbering in the Back Matter</title>
+
+            <p>Numbered blocks in an <tag>appendix</tag> in the <tag>backmatter</tag> of a <tag>book</tag> with <tag>part</tag> were once getting an extra level in <init>HTML</init> output.  With standard defaults, the number of the following <tag>example</tag> should have two periods as separators, just like an example in the main matter when the part number is not included.</p>
+
+            <example>
+                <title>An Example Example</title>
+
+                <p>What's my number?</p>
+            </example>
         </section>
     </appendix>
 

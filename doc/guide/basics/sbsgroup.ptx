@@ -1,0 +1,24 @@
+<sbsgroup widths="25% 50%" margins="5% 10%">
+    <sidebyside>
+        <image source="images/small_graph" />
+    <p>
+      A longer piece of text.
+      It goes on and on and on.
+      And on and on and on.
+      And eventually we will let it end,
+      but we want to show the width.
+    </p>
+  </sidebyside>
+
+  <sidebyside>
+    <p>
+      Another little snippet of text.
+      This time a bit longer so that it will wrap.
+    </p>
+
+    <p>
+      We're going to keep this paragraph shorter.
+    </p>
+  </sidebyside>
+</sbsgroup>
+

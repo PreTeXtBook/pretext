@@ -56,11 +56,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>The integers mod <m>n</m> have become indispensable in the theory and applications of algebra.  In mathematics they are used in cryptography, coding theory, and the detection of errors in identification codes.</p>
 
             <p>We have already seen that two integers <m>a</m> and <m>b</m> are equivalent mod <m>n</m> if <m>n</m> divides <m>a - b</m>.  The integers mod <m>n</m> also partition <m>{\mathbb Z}</m> into <m>n</m> different equivalence classes; we will denote the set of these equivalence classes by <m>{\mathbb Z}_n</m>. <notation><usage>\mathbb Z_n</usage><description>the integers modulo <m>n</m></description></notation> Consider the integers modulo 12 and the corresponding partition of the integers:<md>
-                <mrow>{[0]} &amp; = \{ \ldots, -12, 0, 12, 24, \ldots \},</mrow>
-                <mrow> {[1]} &amp; = \{ \ldots, -11, 1, 13, 25, \ldots \},</mrow>
+                <mrow>{[0]} &amp; = \{ \ldots, -12, 0, 12, 24, \ldots \}</mrow>
+                <mrow> {[1]} &amp; = \{ \ldots, -11, 1, 13, 25, \ldots \}</mrow>
                 <mrow> &amp; \vdots</mrow>
-                <mrow> {[11]} &amp; = \{ \ldots, -1, 11, 23, 35, \ldots \}.</mrow>
-            </md></p>
+                <mrow> {[11]} &amp; = \{ \ldots, -1, 11, 23, 35, \ldots \}</mrow>
+            </md>.</p>
 
             <p>When no confusion can arise, we will use <m>0, 1, \ldots, 11</m> to indicate the equivalence classes  <m>{[0]}, {[1]}, \ldots, {[11]}</m> respectively.  We can do arithmetic on <m>{\mathbb Z}_n</m>.  For two integers <m>a</m> and <m>b</m>, define addition modulo <m>n</m> to be <m>(a + b) \pmod{n}</m>; that is, the remainder when <m>a + b</m> is divided by <m>n</m>.  Similarly, multiplication modulo <m>n</m> is defined as <m>(a  b) \pmod{ n}</m>, the remainder when <m>a  b</m> is divided by <m>n</m>.</p>
 
@@ -69,8 +69,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>The following examples illustrate integer arithmetic modulo <m>n</m>:<md>
                     <mrow>7 + 4  &amp; \equiv  1 \pmod{ 5}   &amp; 7 \cdot 3 &amp; \equiv 1 \pmod{ 5}</mrow> 
                     <mrow>3 + 5  &amp; \equiv  0 \pmod{ 8}   &amp; 3 \cdot 5 &amp; \equiv 7 \pmod{ 8}</mrow>
-                    <mrow>3 + 4  &amp; \equiv  7 \pmod{ 12}  &amp; 3 \cdot 4 &amp; \equiv 0 \pmod{ 12}.</mrow>
-                </md></p>
+                    <mrow>3 + 4  &amp; \equiv  7 \pmod{ 12}  &amp; 3 \cdot 4 &amp; \equiv 0 \pmod{ 12}</mrow>
+                </md>.</p>
 
                 <p>In particular, notice that it is possible that the product of two nonzero numbers modulo <m>n</m> can be equivalent to <m>0 </m> modulo <m>n</m>.</p>
             </example>
@@ -81,20 +81,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure xml:id="figure-z8-mult">
                     <caption>Multiplication table for <m>{\mathbb Z_8}</m></caption>
-                    <sidebyside>
-                        <p><me>\begin{array}{c|cccccccc}
-                        <![CDATA[\cdot & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
-                        \hline
-                        0       & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-                        1       & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
-                        2       & 0 & 2 & 4 & 6 & 0 & 2 & 4 & 6 \\
-                        3       & 0 & 3 & 6 & 1 & 4 & 7 & 2 & 5 \\
-                        4       & 0 & 4 & 0 & 4 & 0 & 4 & 0 & 4 \\
-                        5       & 0 & 5 & 2 & 7 & 4 & 1 & 6 & 3 \\
-                        6       & 0 & 6 & 4 & 2 & 0 & 6 & 4 & 2 \\
-                        7       & 0 & 7 & 6 & 5 & 4 & 3 & 2 & 1 ]]>
-                        \end{array}</me></p>
-                    </sidebyside>
+                    <p><me>\begin{array}{c|cccccccc}
+                    <![CDATA[\cdot & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+                    \hline
+                    0       & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+                    1       & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+                    2       & 0 & 2 & 4 & 6 & 0 & 2 & 4 & 6 \\
+                    3       & 0 & 3 & 6 & 1 & 4 & 7 & 2 & 5 \\
+                    4       & 0 & 4 & 0 & 4 & 0 & 4 & 0 & 4 \\
+                    5       & 0 & 5 & 2 & 7 & 4 & 1 & 6 & 3 \\
+                    6       & 0 & 6 & 4 & 2 & 0 & 6 & 4 & 2 \\
+                    7       & 0 & 7 & 6 & 5 & 4 & 3 & 2 & 1 ]]>
+                    \end{array}</me></p>
                 </figure>
             </example>
 
@@ -111,31 +109,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <li>
                             <p>Addition and multiplication are associative:<md>
                                 <mrow> (a + b) + c  &amp; \equiv  a + (b + c)\pmod{ n}</mrow>
-                                <mrow> (a  b)  c    &amp; \equiv  a   (b  c) \pmod{ n}.</mrow>
-                            </md></p>
+                                <mrow> (a  b)  c    &amp; \equiv  a   (b  c) \pmod{ n}</mrow>
+                            </md>.</p>
                         </li>
 
                         <li>
                             <p>There are both additive and multiplicative identities:<md>
                                 <mrow> a + 0  &amp; \equiv  a \pmod{ n}</mrow>
-                                <mrow> a \cdot  1  &amp; \equiv  a \pmod{ n}.</mrow>
-                            </md></p>
+                                <mrow> a \cdot  1  &amp; \equiv  a \pmod{ n}</mrow>
+                            </md>.</p>
                         </li>
 
                         <li>
                             <p>Multiplication distributes over addition:<md>
-                                <mrow>a  (b  + c)  \equiv a  b + a  c  \pmod{ n}.</mrow>
-                            </md></p>
+                                <mrow>a  (b  + c)  \equiv a  b + a  c  \pmod{ n}</mrow>
+                            </md>.</p>
                         </li>
 
                         <li>
                             <p>For every integer <m>a</m> there is an additive inverse <m>-a</m>:<md>
-                                <mrow> a + (-a)  \equiv 0 \pmod{ n}.</mrow>
-                            </md></p>
+                                <mrow> a + (-a)  \equiv 0 \pmod{ n}</mrow>
+                            </md>.</p>
                         </li>
 
                         <li>
-                            <p>Let <m>a</m> be a nonzero integer.  Then <m>\gcd(a,n) = 1</m> if and only if there exists a multiplicative inverse <m>b</m> for <m>a \pmod{n}</m>; that is, a nonzero integer <m>b</m> such that <me> a  b  \equiv 1 \pmod{ n}.</me></p>
+                            <p>Let <m>a</m> be a nonzero integer.  Then <m>\gcd(a,n) = 1</m> if and only if there exists a multiplicative inverse <m>b</m> for <m>a \pmod{n}</m>; that is, a nonzero integer <m>b</m> such that <me> a  b  \equiv 1 \pmod{ n}</me>.</p>
                         </li>
                     </ol></p>
                 </statement>
@@ -323,14 +321,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <me>\begin{pmatrix}<![CDATA[
                 A & B & C \\
                 B & C & A
-                ]]>\end{pmatrix}.</me>
+                ]]>\end{pmatrix}</me>.
             Notice that this particular permutation corresponds to the rigid motion of rotating the triangle by <m>120^{\circ}</m> in a clockwise direction.  In fact, every permutation gives rise to a symmetry of the triangle.  All of these symmetries are shown in <xref ref="figure-s3-symmetry" />.</p>
 
             <p>A natural question to ask is what happens if one motion of the triangle <m>\bigtriangleup ABC</m> is followed by another.  Which symmetry is <m>\mu_1 \rho_1</m>; that is, what happens when we do the permutation <m>\rho_1</m> and then the permutation <m>\mu_1</m>?  <em>Remember that we are composing functions here.  Although we usually multiply left to right, we compose functions right to left.</em> We have<md>
                 <mrow>(\mu_1 \rho_1)(A) &amp; = \mu_1( \rho_1( A ) ) = \mu_1( B ) = C</mrow>
                 <mrow>(\mu_1 \rho_1)(B) &amp; = \mu_1( \rho_1( B ) ) = \mu_1( C ) = B</mrow>
-                <mrow>(\mu_1 \rho_1)(C) &amp; = \mu_1( \rho_1( C ) ) = \mu_1( A ) = A.</mrow>
-            </md></p>
+                <mrow>(\mu_1 \rho_1)(C) &amp; = \mu_1( \rho_1( C ) ) = \mu_1( A ) = A</mrow>
+            </md>.</p>
 
             <p>This is the same symmetry as <m>\mu_2</m>. Suppose we do these motions in the opposite order, <m>\rho_1</m> then <m>\mu_1</m>.  It is easy to determine that this is the same as the symmetry <m>\mu_3</m>; hence, <m>\rho_1 \mu_1 \neq \mu_1 \rho_1</m>.  A multiplication table for the symmetries of an equilateral triangle <m>\bigtriangleup ABC</m> is given in <xref ref="figure-s3" />.</p>
 
@@ -338,19 +336,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <figure xml:id="figure-s3">
                 <caption>Symmetries of an equilateral triangle</caption>
-
-                <sidebyside>
-                    <p><me>\begin{array}{c|cccccc}
-                    <![CDATA[\circ  & id     & \rho_1 & \rho_2 & \mu_1 & \mu_2 & \mu_3 \\
-                    \hline
-                    id     & id     & \rho_1 & \rho_2 & \mu_1 & \mu_2 & \mu_3 \\
-                    \rho_1 & \rho_1 & \rho_2 & id     & \mu_3 & \mu_1 & \mu_2 \\
-                    \rho_2 & \rho_2 & id     & \rho_1 & \mu_2 & \mu_3 & \mu_1 \\
-                    \mu_1  & \mu_1  & \mu_2  & \mu_3  & id    & \rho_1& \rho_2\\
-                    \mu_2  & \mu_2  & \mu_3  & \mu_1  & \rho_2 & id    & \rho_1\\
-                    \mu_3  & \mu_3  & \mu_1  & \mu_2  & \rho_1 & \rho_2& id]]>
-                    \end{array}</me></p>
-                </sidebyside>
+                <p><me>\begin{array}{c|cccccc}
+                <![CDATA[\circ  & id     & \rho_1 & \rho_2 & \mu_1 & \mu_2 & \mu_3 \\
+                \hline
+                id     & id     & \rho_1 & \rho_2 & \mu_1 & \mu_2 & \mu_3 \\
+                \rho_1 & \rho_1 & \rho_2 & id     & \mu_3 & \mu_1 & \mu_2 \\
+                \rho_2 & \rho_2 & id     & \rho_1 & \mu_2 & \mu_3 & \mu_1 \\
+                \mu_1  & \mu_1  & \mu_2  & \mu_3  & id    & \rho_1& \rho_2\\
+                \mu_2  & \mu_2  & \mu_3  & \mu_1  & \rho_2 & id    & \rho_1\\
+                \mu_3  & \mu_3  & \mu_1  & \mu_2  & \rho_1 & \rho_2& id]]>
+                \end{array}</me></p>
             </figure>
 
         </subsection>
@@ -366,9 +361,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>Definition of a Group</title>
 
             <p>The integers mod <m>n</m> and the symmetries of a triangle or a rectangle are examples of groups.  A <term>binary operation</term><idx><h>Binary operation</h></idx> or <term>law of composition</term> on a set <m>G</m> is a function <m>G \times G \rightarrow G</m> that assigns to each pair <m>(a,b) \in G \times G</m> a unique element <m>a \circ b</m>, or <m>ab</m> in <m>G</m>, called the composition of <m>a</m> and <m>b</m>.  A <term>group</term><idx><h>Group</h><h>definition of</h></idx> <m>(G, \circ )</m> is a set <m>G</m> together with a law of composition <m>(a,b) \mapsto a \circ b</m> that satisfies the following axioms.<ul>
-                <li><p> The law of composition is <term>associative</term>. That is, <me> (a \circ b) \circ c = a \circ (b \circ c) </me> for <m>a, b, c \in G</m>.</p></li>
-                <li><p> There exists an element <m>e \in G</m>, called the <term>identity element</term><idx><h>Element</h><h>identity</h></idx>, such that for any element <m>a \in G</m> <me> e \circ a = a \circ e = a. </me></p></li>
-                <li><p> For each element <m>a \in G</m>, there exists an <term>inverse element</term><idx><h>Element</h><h>inverse</h></idx> in G, denoted by <m>a^{-1}</m>, such that <me> a \circ a^{-1} = a^{-1} \circ a = e. </me></p></li>
+                <li><p> The law of composition is <term>associative</term>. That is, <me>(a \circ b) \circ c = a \circ (b \circ c)</me> for <m>a, b, c \in G</m>.</p></li>
+                <li><p> There exists an element <m>e \in G</m>, called the <term>identity element</term><idx><h>Element</h><h>identity</h></idx>, such that for any element <m>a \in G</m> <me>e \circ a = a \circ e = a</me>.</p></li>
+                <li><p> For each element <m>a \in G</m>, there exists an <term>inverse element</term><idx><h>Element</h><h>inverse</h></idx> in G, denoted by <m>a^{-1}</m>, such that <me>a \circ a^{-1} = a^{-1} \circ a = e</me>.</p></li>
             </ul></p>
 
             <p>A group <m>G</m> with the property that <m>a \circ b = b \circ a</m> for all <m>a, b \in G</m> is called <term>abelian</term><idx><h>Abelian group</h></idx><idx><h>Group</h><h>abelian</h></idx> or <term>commutative</term><idx><h>Group</h><h>commutative</h></idx>.  Groups not satisfying this property are said to be  <term>nonabelian</term><idx><h>Group</h><h>nonabelian</h></idx> or <term>noncommutative</term><idx><h>Group</h><h>noncommutative</h></idx>.</p>
@@ -392,19 +387,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure xml:id="figure-z5-cayley">
                     <caption>Cayley table for <m>({\mathbb Z_5}, +)</m></caption>
-
-                    <sidebyside>
-                        <p><me>\begin{array}{c|ccccc}
-                        <![CDATA[+ & 0 & 1 & 2 & 3 & 4 \\
-                        \hline
-                          0 & 0 & 1 & 2 & 3 & 4 \\
-                          1 & 1 & 2 & 3 & 4 & 0 \\
-                          2 & 2 & 3 & 4 & 0 & 1 \\
-                          3 & 3 & 4 & 0 & 1 & 2 \\
-                          4 & 4 & 0 & 1 & 2 & 3]]>
-                        \end{array}</me></p>
-                    </sidebyside>
-
+                    <p><me>\begin{array}{c|ccccc}
+                    <![CDATA[+ & 0 & 1 & 2 & 3 & 4 \\
+                    \hline
+                      0 & 0 & 1 & 2 & 3 & 4 \\
+                      1 & 1 & 2 & 3 & 4 & 0 \\
+                      2 & 2 & 3 & 4 & 0 & 1 \\
+                      3 & 3 & 4 & 0 & 1 & 2 \\
+                      4 & 4 & 0 & 1 & 2 & 3]]>
+                    \end{array}</me></p>
                 </figure>
             </example>
 
@@ -413,23 +404,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Not every set with a binary operation is a group.  For example, if we let modular multiplication be the binary operation on <m>{\mathbb Z}_n</m>, then <m>{\mathbb Z}_n</m> fails to be a group.  The element 1 acts as a group identity since <m>1 \cdot k = k \cdot 1 = k</m> for any <m>k \in {\mathbb Z}_n</m>; however, a multiplicative inverse for <m>0</m> does not exist since <m>0 \cdot k = k \cdot 0 = 0</m> for every <m>k</m> in <m>{\mathbb Z}_n</m>.  Even if we consider the set <m>{\mathbb Z}_n \setminus \{0 \}</m>, we still may not have a group.  For instance, let <m>2 \in {\mathbb Z}_6</m>. Then 2 has no multiplicative inverse since<md>
                     <mrow> 0 \cdot 2 &amp; = 0 \qquad 1 \cdot 2 = 2</mrow>
                     <mrow> 2 \cdot 2 &amp; = 4 \qquad 3 \cdot 2 = 0</mrow>
-                    <mrow> 4 \cdot 2 &amp; = 2 \qquad 5 \cdot 2 = 4.</mrow>
-                </md></p>
+                    <mrow> 4 \cdot 2 &amp; = 2 \qquad 5 \cdot 2 = 4</mrow>
+                </md>.</p>
 
                 <p>By <xref ref="proposition-zn-equiv-classes" />, every nonzero <m>k</m> does have an inverse in <m>{\mathbb Z}_n</m> if <m>k</m> is relatively prime to <m>n</m>.  Denote the set of all such nonzero elements in <m>{\mathbb Z}_n</m> by <m>U(n)</m>. <notation><usage>U(n)</usage><description>group of units in <m>\mathbb Z_n</m></description></notation>  Then <m>U(n)</m> is a group called the <term>group of units</term><idx><h>Group</h><h>of units</h></idx> of <m>{\mathbb Z}_n</m>.  <xref ref="figure-cayley-u8" /> is a Cayley table for the group <m>U(8)</m>.</p>
 
                 <figure xml:id="figure-cayley-u8">
                     <caption>Multiplication table for <m>U(8)</m></caption>
-                    <sidebyside>
-                        <p><me>\begin{array}{c|cccc}
-                        <![CDATA[\cdot & 1 & 3 & 5 & 7 \\
-                        \hline
-                        1       & 1 & 3 & 5 & 7 \\
-                        3       & 3 & 1 & 7 & 5 \\
-                        5       & 5 & 7 & 1 & 3 \\
-                        7       & 7 & 5 & 3 & 1]]>
-                        \end{array}</me></p>
-                    </sidebyside>
+                    <p><me>\begin{array}{c|cccc}
+                    <![CDATA[\cdot & 1 & 3 & 5 & 7 \\
+                    \hline
+                    1       & 1 & 3 & 5 & 7 \\
+                    3       & 3 & 1 & 7 & 5 \\
+                    5       & 5 & 7 & 1 & 3 \\
+                    7       & 7 & 5 & 3 & 1]]>
+                    \end{array}</me></p>
                 </figure>
             </example>
 
@@ -452,14 +441,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     \begin{pmatrix}<![CDATA[
                     1 & 0 \\
                     0 & 1
-                    ]]>\end{pmatrix}.</me>
+                    ]]>\end{pmatrix}</me>.
                 The inverse of <m>A \in GL_2( {\mathbb R})</m> is
                     <me>A^{-1} =
                     \frac{1}{ad-bc}
                     \begin{pmatrix}<![CDATA[
                     d & -b \\
                     -c & a
-                    ]]>\end{pmatrix}.</me>
+                    ]]>\end{pmatrix}</me>.
                 The product of two invertible matrices is again invertible. Matrix multiplication is associative, satisfying the other group axiom. For matrices it is not true in general that <m>AB = BA</m>; hence, <m>GL_2({\mathbb R})</m> is another example of a nonabelian group.</p>
             </example>
 
@@ -490,8 +479,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     \begin{pmatrix}<![CDATA[
                     i & 0\\
                     0 & -i
-                    ]]>\end{pmatrix},</mrow>
-                </md>where <m>i^2 = -1</m>. Then the relations <m>I^2 = J^2 = K^2 = -1</m>, <m>IJ=K</m>, <m>JK = I</m>, <m>KI = J</m>, <m>JI = -K</m>, <m>KJ = -I</m>, and <m>IK = -J</m> hold. The set <m>Q_8 = \{\pm 1, \pm I, \pm J, \pm K  \}</m> is a group called the <term>quaternion group</term>. Notice that <m>Q_8</m> is noncommutative.<notation>
+                    ]]>\end{pmatrix}</mrow>
+                </md>, where <m>i^2 = -1</m>. Then the relations <m>I^2 = J^2 = K^2 = -1</m>, <m>IJ=K</m>, <m>JK = I</m>, <m>KI = J</m>, <m>JI = -K</m>, <m>KJ = -I</m>, and <m>IK = -J</m> hold. The set <m>Q_8 = \{\pm 1, \pm I, \pm J, \pm K  \}</m> is a group called the <term>quaternion group</term>. Notice that <m>Q_8</m> is noncommutative.<notation>
                     <usage>Q_8</usage>
                     <description>the group of quaternions</description>
                 </notation><idx>
@@ -547,7 +536,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </statement>
 
                 <proof>
-                    <p> Observe that <m>a^{-1} (a^{-1})^{-1} = e</m>. Consequently, multiplying both sides of this equation by <m>a</m>, we have <me>(a^{-1})^{-1} = e (a^{-1})^{-1} = a a^{-1} (a^{-1})^{-1} = ae = a.</me></p>
+                    <p> Observe that <m>a^{-1} (a^{-1})^{-1} = e</m>. Consequently, multiplying both sides of this equation by <m>a</m>, we have <me>(a^{-1})^{-1} = e (a^{-1})^{-1} = a a^{-1} (a^{-1})^{-1} = ae = a</me>.</p>
                 </proof>
             </proposition>
 
@@ -574,9 +563,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>This proposition tells us that the <term>right and  left cancellation laws</term><idx><h>Cancellation law</h><h>for groups</h></idx> are true in groups.  We leave the proof as an exercise.</p>
 
             <p>We can use exponential notation for groups just as we do in ordinary algebra. If <m>G</m> is a group and <m>g \in G</m>, then we define <m>g^0 = e</m>. For <m>n \in {\mathbb N}</m>, we define 
-            <me>g^n = \underbrace{g \cdot g \cdots g}_{n \; \text{times}} </me> 
+            <me>g^n = \underbrace{g \cdot g \cdots g}_{n \; \text{times}}</me> 
             and 
-            <me>g^{-n} = \underbrace{g^{-1} \cdot g^{-1} \cdots g^{-1}}_{n \; \text{times}}.</me></p>
+            <me>g^{-n} = \underbrace{g^{-1} \cdot g^{-1} \cdots g^{-1}}_{n \; \text{times}}</me>.</p>
 
             <theorem xml:id="theorem-exponent-laws">
                 <statement>
@@ -643,7 +632,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 \begin{pmatrix}<![CDATA[
                 d  & -b \\
                 -c &  a
-                ]]>\end{pmatrix}.</me>
+                ]]>\end{pmatrix}</me>.
                 It remains to show that multiplication is closed; that is, that the product of two matrices of determinant one also has determinant one. We will leave this task as an exercise. The group <m>SL_2({\mathbb R})</m> is called the <term>special linear group</term><idx><h>Group</h><h>special linear</h></idx>.</p>
             </example>
 
@@ -672,17 +661,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure xml:id="figure-z2xz2">
                     <caption>Addition table for <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m></caption>
-
-                    <sidebyside>
-                        <p><me>\begin{array}{c|cccc}
-                        <![CDATA[+     & (0,0) & (0,1) & (1,0) & (1,1) \\
-                        \hline
-                        (0,0) & (0,0) & (0,1) & (1,0) & (1,1) \\
-                        (0,1) & (0,1) & (0,0) & (1,1) & (1,0) \\
-                        (1,0) & (1,0) & (1,1) & (0,0) & (0,1) \\
-                        (1,1) & (1,1) & (1,0) & (0,1) & (0,0)]]>
-                        \end{array}</me></p>
-                    </sidebyside>
+                    <p><me>\begin{array}{c|cccc}
+                    <![CDATA[+     & (0,0) & (0,1) & (1,0) & (1,1) \\
+                    \hline
+                    (0,0) & (0,0) & (0,1) & (1,0) & (1,1) \\
+                    (0,1) & (0,1) & (0,0) & (1,1) & (1,0) \\
+                    (1,0) & (1,0) & (1,1) & (0,0) & (0,1) \\
+                    (1,1) & (1,1) & (1,0) & (0,1) & (0,0)]]>
+                    \end{array}</me></p>
                 </figure>
             </example>
 
@@ -758,7 +744,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <statement>
                 <p>Universal Product Code<idx><h>Universal Product Code</h></idx> (UPC) symbols are found on most products in grocery and retail stores. The UPC symbol is a 12-digit code identifying the manufacturer of a product and the product itself (<xref ref="figure-upc-codes" />). The first 11 digits contain information about the product; the twelfth digit is used for error detection. If <m>d_1 d_2 \cdots d_{12}</m> is a valid UPC number, then 
-                <me>3 \cdot d_1 + 1 \cdot d_2 + 3 \cdot d_3 + \cdots + 3 \cdot d_{11} + 1 \cdot d_{12} \equiv 0 \pmod{10}.</me></p>
+                <me>3 \cdot d_1 + 1 \cdot d_2 + 3 \cdot d_3 + \cdots + 3 \cdot d_{11} + 1 \cdot d_{12} \equiv 0 \pmod{10}</me>.</p>
 
                 <ol>
                     <li><p>Show that the UPC number  0-50000-30042-6, which appears in <xref ref="figure-upc-codes" />, is a valid UPC number.</p></li>
@@ -781,7 +767,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>It is often useful to use an inner product notation for this type of error detection scheme; hence, we will use the notion
                     <me>(d_1, d_2, \ldots, d_k ) \cdot (w_1, w_2, \ldots, w_k ) \equiv 0 \pmod{ n }</me>
                 to mean
-                    <me>d_1 w_1 +  d_2 w_2 + \cdots +  d_k w_k  \equiv 0  \pmod{ n}.</me></p>
+                    <me>d_1 w_1 +  d_2 w_2 + \cdots +  d_k w_k  \equiv 0  \pmod{ n}</me>.</p>
 
                 <p>Suppose that <m>(d_1, d_2, \ldots, d_k ) \cdot (w_1, w_2, \ldots, w_k ) \equiv 0 \pmod{ n}</m> is an error detection scheme for the <m>k</m>-digit identification number <m>d_1 d_2 \cdots d_k</m>, where <m>0 \leq d_i \lt n</m>.  Prove that all single-digit errors are detected if and only if <m>\gcd( w_i, n ) = 1</m> for  <m>1 \leq i \leq k</m>.</p>
             </statement>
@@ -798,7 +784,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <statement>
                 <p>Every book has an International Standard Book Number<idx><h>International standard book number</h></idx> (ISBN) code.  This is a 10-digit code indicating the book's publisher and title.  The tenth digit is a check digit satisfying 
-                    <me>(d_1, d_2, \ldots, d_{10} ) \cdot (10, 9, \ldots, 1 )  \equiv 0 \pmod{11}.</me>
+                    <me>(d_1, d_2, \ldots, d_{10} ) \cdot (10, 9, \ldots, 1 )  \equiv 0 \pmod{11}</me>.
                 One problem is that <m>d_{10}</m> might have to be a 10 to make the inner product zero; in this case, 11 digits would be  needed to make this scheme work.  Therefore, the character X is used for the eleventh digit.  So ISBN 3-540-96035-X is a valid ISBN code.</p>
 
                 <ol>

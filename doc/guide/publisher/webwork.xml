@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="webwork-publisher">
+  <title><webwork/> Exercises</title>
+  <idx>
+    <h><webwork/></h>
+    <h><webwork/> exercises</h>
+  </idx>
+  <author>Alex Jordan</author>
+
+  <introduction>
+    <p>
+      With a <webwork/> server
+      (version 2.14 or higher, or <url href="https://webwork-ptx.aimath.org"><c>webwork-ptx.aimath.org</c></url>)
+      and a little setup work, you can embed <webwork/> exercises in your <pretext/> project.
+      HTML output can have interactive problem cells or print problems in <q>static</q> form.
+      PDF output will print static versions.
+      And all such exercises can be archived into a file tree to be uploaded onto a <webwork/> server
+      for use in the <q>traditional</q> way.
+    </p>
+    <p>
+      See <xref ref="webwork-author"/> for how to include or create <webwork/> problems in your source.
+    </p>
+  </introduction>
+
+  <section xml:id="webwork-configuration">
+    <title>Configuring a <webwork/> Course for <pretext/></title>
+    <p>
+      To make use of <webwork/> in your <pretext/> project, you need to use a <webwork/> server.
+      If someone else is providing a <webwork/> server for you, like the AIM <webwork/> server
+      at <url href="https://webwork-ptx.aimath.org"><c>webwork-ptx.aimath.org</c></url>,
+      then we assume they have already configured a course for use with <pretext/>,
+      and you may skip this section and move on to <xref ref="webwork-processing">Section</xref>.
+    </p>
+    <p>
+      If you are configuring your own <webwork/> server to use with <pretext/>,
+      we assume a mild familiarity with administrating a <webwork/> server.
+      The version of <webwork/> needs to be 2.14 or later for use with <pretext/>.
+      Using the <c>admin</c> course, create a course named <c>anonymous</c>.
+      (You could name it something else, but we assume the name is <c>anonymous</c> in this guide.)
+      In the course's Course Configuration menu, set all permissions to <c>admin</c>
+      (or perhaps set some to the even more restrictive <c>nobody</c>).
+      Except set <q>Allowed to login to the course</q> to <c>login_proctor</c>.
+    </p>
+    <p>
+      In the Classlist Editor, add a user named <c>anonymous</c> (again, you could use some other name),
+      and set that user's permission level to <c>login_proctor</c>, the permission level one higher than <c>student</c>.
+      Set that user's password to <c>anonymous</c> (again, you could use some other password).
+      Note that because this is public information, anyone will be able to log into this course as this user.
+      This is why setting the permissions earlier is very important. (Especially preventing this user from changing its own password.)
+    </p>
+    <p>
+      Add the following lines to the <c>course.conf</c> file (which lives in the parent folder of the <c>templates/</c> folder.)
+    </p>
+    <pre>
+      # Hide message about previewing hints and solutions for instructors
+      $pg{specialPGEnvironmentVars}{ALWAYS_SHOW_HINT_PERMISSION_LEVEL} = 100;
+      $pg{specialPGEnvironmentVars}{ALWAYS_SHOW_SOLUTION_PERMISSION_LEVEL} = 100;
+    </pre>
+    <p>
+      In the <c>templates/macros/</c> folder, edit <c>PGcourse.pl</c> (or create it if need be) and add the following lines.
+    </p>
+    <pre>
+      #### Replace essay boxes with a message
+      sub essay_box {
+        my $out = MODES(
+          TeX => '',
+          Latex2HTML => '',
+          HTML => qq!&lt;P>
+            If you were logged into a WeBWorK course
+            and this problem were assigned to you,
+            you would be able to submit an essay answer
+            that would be graded later by a human being.
+          &lt;/P>!,
+          PTX => '',
+        );
+        $out;
+      };
+
+      #### Suppress essay help link
+      sub essay_help {};
+
+      #### How many attempts until hint is available
+      $showHint = -1;
+      # May be a bug that WeBWorK requires -1 instead of 0
+      # for immediate access to hints
+
+      1;
+    </pre>
+    <p>
+      Now <pretext/> will be able to communicate with this course to retrieve what is needed.
+    </p>
+  </section>
+
+  <section xml:id="webwork-processing">
+    <title>Processing <webwork/> Exercises</title>
+
+    <subsection xml:id="webwork-representations">
+      <title>Extraction and Processing</title>
+      <p>
+        Before anything else can be done, a <pretext/> project with <webwork/> problems must first have its <webwork/> content extracted and processed into multiple representations, which are then collected into an auxiliary XML file.
+        We do this with the <c>pretext/pretext</c> script which uses Python and the Python <c>requests</c> module.
+        It is not uncommon for your computer to not have <c>requests</c> installed,
+        so you should check if it is there and install it if need be.
+        You can check if it is installed from the command line with:
+        <cd>
+          python -c "import requests"
+        </cd>
+        And if it isn't, you can install it with <c>pip</c>, specifically with:
+        <cd>
+          sudo pip install requests
+        </cd>
+        (If you don't have <c>pip</c> installed, you could use:
+        <cd>
+          sudo easy_install pip
+        </cd>
+        to install it.)
+      </p>
+      <p>
+        Once you know that you have the <c>requests</c> package installed,
+        use the <c>pretext</c> script to extract <pretext/> content from the <webwork/> server into a <em>folder</em>,
+        which you might call <c>webwork-representations/</c> as in this example:
+      </p>
+      <console>
+        <prompt>$ </prompt>
+        <input>pretext -c webwork -s &lt;server&gt; -d webwork-representations aota.ptx</input>
+      </console>
+      <warning>
+        <title>File Paths</title>
+        <p>
+          In the previous example and those that follow, you should specify paths as needed.
+          For example, the <c>pretext</c> script is typically at <c>~/mathbook/script/pretext</c>.
+          And the <c>-d</c> option is specifying a directory to place the auxiliary file,
+          and if you literally use <c>-d webwork-extraction</c> instead of a full path,
+          the expectation is that <c>webwork-extraction</c> is a folder in your current working folder.
+        </p>
+      </warning>
+      <p>
+        <c>-c webwork</c> means you are processing the <webwork/> components.
+      </p>
+      <p>
+        <c>-s</c> specifies the <webwork/> server.
+        The <webwork/> server needs to be version 2.14 or later, specified with its protocol and domain,
+        like <c>https://webwork-ptx.aimath.org</c>.
+        It is <em>important</em> to get the protocol correct for your server (<c>http</c> versus <c>https</c>).
+        If you do not have a server, you may use <c>https://webwork-ptx.aimath.org</c>.
+      </p>
+      <p>
+        If any of your hosting course, user for that course, password for the site, or password for the course user are not <q>anonymous</q>,
+        then specify the server like
+        <cd>-s "(https://webwork-ptx.aimath.org,courseID,userID,site_password,course_password)"</cd>
+        The <c>site_password</c> is probably <q>anonymous</q>,
+        but could be something different. Only server administrators can set this.
+        Again, it is <em>important</em> to get the protocol correct for your server (<c>http</c> versus <c>https</c>).
+      </p>
+      <p>
+        <c>-d</c> specifies a path to the folder where the auxiliary files will be stored.
+        That folder is named <c>webwork-representations</c> in the example.
+        Any image files that the <webwork/> server generates will be stored inside this folder.
+        An auxiliary XML <em>file</em> called <c>webwork-representations.ptx</c> will be created in this folder.
+        (Note that you can name the folder whatever you like,
+        but the auxiliary file that is created will <em>always</em> be named <c>webwork-representations.ptx</c>.)
+      </p>
+      <p>
+        <c>aota.ptx</c> in the example is the root file for your <pretext/> project.
+      </p>
+    </subsection>
+
+    <subsection xml:id="representations-publisher">
+      <title>Representations and the Publisher File</title>
+
+      <p>You now have custody of the <c>webwork-representations.ptx</c>.  It contains multiple versions of each of your <webwork/> exercises, each appropriate for different output formats.  Early in a project, you may regenerate this file frequently as your project changes.  Later in a project you might consider it to be (generated/manufactured/derived) source material.  More on this in a bit.  For now, you need to set up how the file is communicated to a conversion.  This is accomplished with the publisher file (see <xref ref="publisher-file"/>).</p>
+
+      <p>The publisher file has a place where you can specify the name of the file with the representations, by default, <c>webwork-representations.ptx</c>.  You are welcome to change the name at this juncture, but perhaps there is no point.  We will proceed with the default.  The absolute simplest publisher file you can create would look like<cd>
+        <cline>&lt;publication&gt;</cline>
+        <cline>  &lt;source webwork-problems="webwork-representations.ptx"/&gt;</cline>
+        <cline>&lt;/publication&gt;</cline>
+      </cd>But there is an important caveat.  The use of a relative path in this filename indicates the path to the file is relative to the location of the primary <pretext/> source file.  So as written above, the <c>webwork-representations.ptx</c> file would be expected to be <em>in the same directory</em> as the <pretext/> source.  If you are having with trouble with subsequent steps locating this file, try specifying the complete filename with a path starting from the very top of your filesystem.  This publisher option is described at <xref ref="publisher-file-source"/>.</p>
+
+      <p>Realize that any changes to any of your WeBWorK problems, adding new ones, removing any, or rearranging the order will mean you need to regenerate <c>webwork-representations.ptx</c>.  Together with the previous paragraph this suggests three approaches, and you might use all three during the life of your project.<ol>
+        <li>Use a script to copy your source files into some scratch area, generate <c>webwork-representations.ptx</c> as part of every build since your project is changing rapidly, and copy these representations into the scratch area.  (See <xref ref="processing-file-management"/>.)</li>
+        <li>Regenerate <c>webwork-representations.ptx</c> only when necessary since your project is not changing much, and you have many problems, which takes significant time for your <webwork/> server to process.  Copy it into a location relative to your source files (even if your build script then copies everything over to a scratch area).</li>
+        <li>Same as the previous step, but track <c>webwork-representations.ptx</c> (and the image files generated) as part of a git repository.  You will want to be aware of when the result has changed (beyond just the timestamps).</li>
+      </ol></p>
+
+    </subsection>
+
+    <subsection xml:id="webwork-html-output">
+      <title>HTML output</title>
+
+      <p>
+        When you execute <c>xsltproc</c><idx><c>xsltproc</c></idx> using <c>pretext-html.xsl</c>,
+        now supply the publisher file to incorporate the representations. For example:
+      </p>
+      <console>
+        <prompt>$ </prompt>
+        <input>xsltproc -stringparam publisher publication.ptx pretext-html.xsl aota.ptx</input>
+      </console>
+      <p>
+        You may need to specify paths to these files.
+      </p>
+      <p>
+        There are several string parameters you may pass to <c>xsltproc</c>.
+      </p>
+      <tabular valign="top">
+        <col />
+        <col width="60%" />
+        <row bottom="major">
+          <cell>stringparam</cell>
+          <cell>options</cell>
+        </row>
+        <row bottom="minor">
+          <cell><c>webwork.inline.static</c></cell>
+          <cell>
+            <p>
+              <c>'no'</c> (default) means inline exercises render as interactive.
+            </p>
+            <p>
+              <c>'yes'</c> means inline exercises render as static.
+            </p>
+            <p>
+              <c>'preview'</c> (planned) means inline exercises render as static until you click to activate them.
+            </p>
+          </cell>
+        </row>
+        <row bottom="minor">
+          <cell><c>webwork.divisional.static</c></cell>
+          <cell>
+            <p>
+              <c>'no'</c> means divisional exercises render as interactive.
+            </p>
+            <p>
+              <c>'yes'</c> (default) means divisional exercises render as static.
+            </p>
+            <p>
+              <c>'preview'</c> (planned) means divisional exercises render as static until you click to activate them.
+            </p>
+          </cell>
+        </row>
+        <row bottom="minor">
+          <cell><c>html.knowl.exercise.inline</c></cell>
+          <cell>
+            <p>
+              <c>'no'</c> means inline exercises appear on page load.
+            </p>
+            <p>
+              <c>'yes'</c> (default) means inline exercises are hidden in knowls.
+            </p>
+          </cell>
+        </row>
+        <row bottom="minor">
+          <cell><c>html.knowl.exercise.sectional</c></cell>
+          <cell>
+            <p>
+              <c>'no'</c> (default) means divisional exercises appear on page load.
+            </p>
+            <p>
+              <c>'yes'</c> means divisional exercises are hidden in knowls.
+            </p>
+          </cell>
+        </row>
+      </tabular>
+      <p>
+        If your <webwork/> processing produced image files from the <webwork/> server
+        and you are rendering the corresponding problems as static,
+        then you need to copy the images files (from where your file of representations was output) over to where your HTML output assumes images files are located.
+      </p>
+    </subsection>
+
+    <subsection xml:id="webwork-latex-output">
+      <title><latex/> output</title>
+
+      <p>
+        When you execute <c>xsltproc</c><idx><c>xsltproc</c></idx> using <c>pretext-latex.xsl</c>,
+        now supply the publisher file to incorporate the representations. For example, a single line:
+      </p>
+      <console>
+        <prompt>$ </prompt>
+        <input>xsltproc -stringparam publisher publication.ptx</input>
+        <input>       -o mybook.tex pretext-latex.xsl aota.ptx</input>
+      </console>
+      <p>
+        You may need to specify paths to these files.
+      </p>
+      <p>
+        One string parameter you can pass to <c>xsltproc</c> is <c>latex.fillin.style</c>,
+        which can take values <c>'underline'</c> (the default) or <c>'box'</c>.
+      </p>
+      <p>
+        If your <webwork/> processing produced image image files from the <webwork/> server,
+        then you need to copy the images files (from where your extracted auxiliary XML file was placed)
+        over to where your TeX output assumes images files are located.
+      </p>
+    </subsection>
+
+    <subsection>
+      <title>Creating Files for Uploading to <webwork/></title>
+
+      <p>
+        All of the <tag>webwork</tag> that you have written into your project can be <q>harvested</q>
+        and put into their own <c>.pg</c> files by the <c>pretext</c> script.
+        These files are created with a folder structure that follows the chunking scheme you specify.
+        This process also creates set definition files (<c>.def</c>) for each chunk (say, for each section):
+        one for inline exercises (checkpoints) and one for divisional exercises.
+        For <tag>webwork</tag> problems that come from the <webwork/> server,
+        the <c>.def</c> file will include them as well.
+        This archiving process creates set header <c>.pg</c> files for each set definition.
+      </p>
+      <p>
+        As with other <webwork/> processing, you must create the representations and specify a publisher file
+        as described in <xref ref="webwork-representations"/> and <xref ref="representations-publisher"/>.
+        Then use <c>xsltproc</c> with the <c>pretext-ww-problem-sets.xsl</c> stylesheet.
+        For example, a single line:
+      </p>
+      <console>
+        <prompt>$ </prompt>
+        <input>xsltproc -stringparam publisher publication.ptx</input>
+        <input>  pretext-ww-problem-sets.xsl aota.ptx</input>
+      </console>
+      <p>
+        You may need to specify paths to these files.
+      </p>
+      <p>
+        With a book, you can break up your problem set into multiple files according to a chosen depth of the hierarchy.  See <xref ref="common-chunking-options"/> for details on how to specify this.
+      </p>
+      <p>
+        This creates a folder named after your book title,
+        which has a folder tree with all of the <c>.pg</c> and <c>.def</c> files laid out according to your chunk level.
+        You can compress this folder and upload it into an active <webwork/> course
+        where you may then assign the sets to your students (and modify, as you like).
+      </p>
+    </subsection>
+  </section>
+
+  <section>
+    <title>Unachievable Conversions</title>
+
+    <p>
+      By authoring <webwork/> problems within <pretext/> you do not need to learn all the ins and outs of <init>PGML</init> markup
+      and you can concentrate on simply becoming proficient with <pretext/>.
+      However, there are a few <pretext/> constructions which are not achievable in a <webwork/> problem
+      for one reason or another.
+      We list exceptions here, and also try to use source-checking tools to alert you to any differences.
+      <ul>
+        <li>
+          <p>
+            Anything that is the numbered target of a cross-reference, such as a figure,
+            may not be inside a <webwork/> exercise.
+            The exercise may go on to have a life of its own independent of its parent <pretext/> project,
+            and then such a number makes no sense.
+          </p>
+        </li>
+        <li>
+          <p>
+            Certain aspects of specifying borders of a <pretext/> <tag>tabular</tag>
+            are not realizable in a <init>PGML</init> table. Specifically,
+            <ul>
+              <li>
+                <p>
+                  Specifying column-specific top border attributes are not implemented.
+                </p>
+              </li>
+              <li>
+                <p>
+                  Cell-specific bottom border attributes are not implemented.
+                </p>
+              </li>
+              <li>
+                <p>
+                  <c>medium</c> and <c>major</c> table rule-thickness attributes will be handled as if they were <c>minor</c>.
+                </p>
+              </li>
+            </ul>
+          </p>
+        </li>
+        <li>
+          <p>
+            When constructing a list (<tag>ul</tag> or <tag>ol</tag>)
+            specifying some number of columns (using the <attr>cols</attr> attribute)
+            will be ignored. PGML markup has no way to declare multicolumn lists.
+          </p>
+        </li>
+      </ul>
+    </p>
+  </section>
+
+</chapter>

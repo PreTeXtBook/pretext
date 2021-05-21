@@ -1,0 +1,26 @@
+<exercise>
+  <statement>
+    <p>
+      The <c>statement</c> is mandatory.
+    </p>
+  </statement>
+  <hint>
+    <p>
+      Optional.
+      Just an suggestion of what to try.
+    </p>
+  </hint>
+  <answer>
+    <p>
+      Optional.
+      Just the <q>final answer</q>.
+    </p>
+  </answer>
+  <solution>
+    <p>
+      Optional.
+      All the gory details.
+    </p>
+  </solution>
+</exercise>
+

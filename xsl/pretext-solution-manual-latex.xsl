@@ -34,12 +34,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     extension-element-prefixes="exsl date str"
 >
 
-<xsl:import href="./mathbook-latex.xsl" />
+<!-- This import will include the assembly phase, which is -->
+<!-- necessary as support for a private solutions file     -->
+<xsl:import href="./pretext-latex.xsl" />
 
 <!-- Intend output for rendering by pdflatex -->
 <xsl:output method="text" />
 
-<!-- These variables are interpreted in mathbook-common.xsl and  -->
+<!-- These variables are interpreted in pretext-common.xsl and  -->
 <!-- so may be used/set in a custom XSL stylesheet for a         -->
 <!-- project's solution manual.                                  -->
 <!--                                                             -->
@@ -65,7 +67,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- project.solution                                            -->
 <!--                                                             -->
 <!-- The second set of variables are internal, and are derived   -->
-<!-- from the above via careful routines in mathbook-common.xsl. -->
+<!-- from the above via careful routines in pretext-common.xsl. -->
 <!--                                                             -->
 <!-- b-has-inline-statement                                      -->
 <!-- b-has-inline-hint                                           -->
@@ -92,12 +94,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- to keep links (such as a solution number linking back to   -->
 <!-- the original) from being seen/interpreted as actual links. -->
 <xsl:param name="latex.print" select="'yes'"/>
+<!-- There are not even labels for page numbers, beside -->
+<!-- the fact that they don't make much sense           -->
+<xsl:param name="latex.pageref" select="'no'"/>
 
 <!-- We have a switch for just this situation, to force -->
 <!-- (overrule) the auto-detetion of the necessity for  -->
 <!-- LaTeX styles for the solutions to exercises.       -->
-<!-- See  mathbook-latex.xsl  for more explanation.     -->
+<!-- See  pretext-latex.xsl  for more explanation.     -->
 <xsl:variable name="b-needs-solution-styles" select="true()"/>
+
+<!-- We hardcode the numbers of 2D displays so they are correct where  -->
+<!-- born, this switch could be expanded to the cross-references -->
+<xsl:variable name="b-latex-hardcode-numbers" select="true()"/>
 
 <!-- For a "book" we replace the first chapter by a call to the        -->
 <!-- solutions generator.  So we burrow into parts to get at chapters. -->
@@ -112,6 +121,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="chapter[1]|article/section[1]">
     <xsl:apply-templates select="$document-root" mode="solutions-generator">
         <xsl:with-param name="purpose" select="'solutionmanual'" />
+        <xsl:with-param name="admit" select="'all'" />
         <xsl:with-param name="b-inline-statement"     select="$b-has-inline-statement" />
         <xsl:with-param name="b-inline-hint"          select="$b-has-inline-hint"  />
         <xsl:with-param name="b-inline-answer"        select="$b-has-inline-answer"  />
@@ -224,49 +234,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Exercise numbers are always hard-coded at birth, given -->
 <!-- complications of numbering, placement, duplication     -->
 
-<!-- Captioned items are permitted in exercises.  We need   -->
-<!-- to hard-code their numbers.  Following is an edited    -->
-<!-- duplication of the code in the LaTeX conversion, which -->
-<!-- needs to be kept in-sync.  Ideally a LaTeX (internal)  -->
-<!-- switch would make these changes.                       -->
+<!-- Since divisions have hard-coded numbers, a \label{}   -->
+<!-- on an equation will be inaccurate.  These are reduced -->
+<!-- versions of the templates for hard-coded equation     -->
+<!-- numbers in the HTML conversion.                       -->
 
-<!-- Captions for Figures, Tables, Listings, Lists -->
-<!-- xml:id is on parent, but LaTeX generates number with caption -->
-<xsl:template match="caption">
-    <xsl:choose>
-      <xsl:when test="parent::table/parent::sidebyside">
-            <xsl:text>\captionof*{table}{</xsl:text>
-      </xsl:when>
-      <xsl:when test="parent::figure/parent::sidebyside">
-            <xsl:text>\captionof*{figure}{</xsl:text>
-      </xsl:when>
-      <xsl:when test="parent::listing">
-            <xsl:text>\captionof*{listingcap}{</xsl:text>
-        </xsl:when>
-      <xsl:when test="parent::list">
-            <xsl:text>\captionof*{namedlistcap}{</xsl:text>
-        </xsl:when>
-      <xsl:otherwise>
-          <xsl:text>\caption*{</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>\textbf{</xsl:text>
-    <xsl:apply-templates select="parent::*" mode="type-name"/>
-    <xsl:text> </xsl:text>
-    <xsl:apply-templates select="parent::*" mode="number"/>
-    <xsl:text>:} </xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>}&#xa;</xsl:text>
+<xsl:template match="men|mrow" mode="tag">
+    <xsl:text>\tag{</xsl:text>
+    <xsl:apply-templates select="." mode="number" />
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- Subcaptions showup in side-by-side -->
-<xsl:template match="caption" mode="subcaption">
-    <xsl:text>\subcaption*{</xsl:text>
-    <xsl:text>\textbf{</xsl:text>
-    <xsl:apply-templates select="parent::*" mode="serial-number"/>
-    <xsl:text>} </xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>}&#xa;</xsl:text>
+<xsl:template match="mrow[@tag]" mode="tag">
+    <xsl:text>\tag{</xsl:text>
+    <xsl:apply-templates select="@tag" mode="tag-symbol" />
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>

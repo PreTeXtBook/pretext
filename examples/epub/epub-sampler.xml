@@ -24,6 +24,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <docinfo>
         <macros>
         \newcommand{\doubler}[1]{2#1}
+        \newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4} % this comment will be stripped
         </macros>
     </docinfo>
 
@@ -42,22 +43,52 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>One</title>
 
             <p>The quick brown fox jumps over the lazy dog.</p>
+
+            <p>Some test cross-references:<ul>
+                <li>To the next chapter: <xref ref="nonsense-chapter"/></li>
+                <li>To a figure much later: <xref ref="figure-cubic-polynomial"/></li>
+            </ul></p>
+
         </chapter>
 
-        <chapter>
+        <chapter xml:id="nonsense-chapter">
             <title>Two</title>
-
+            <introduction><p>This is the introduction to the chapter.</p></introduction>
+            <section>
+                <title>A silly section.</title>
+                <p>This section just exists so that we can add <tag>introduction</tag> and <tag>conclusion</tag> tags to this chapter.
+                </p>
             <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ultricies purus sit amet rutrum dictum. Donec sit amet ligula quis orci vestibulum tempor id in erat. Ut ut placerat lacus, sit amet feugiat lorem. Pellentesque sodales risus at eros malesuada, eget ultrices est consectetur. Praesent fermentum, ligula sit amet fermentum varius, elit eros imperdiet lectus, tempus condimentum quam elit in elit. Sed molestie mauris sem, sed laoreet elit iaculis ut. In mattis blandit ex, nec rutrum purus ullamcorper eget. Nullam maximus magna non elit euismod, non ornare nisl porttitor. Pellentesque commodo tempus viverra.</p>
 
             <p>Curabitur ac hendrerit ligula. Aenean vitae nunc id elit convallis efficitur. Sed ultricies ut justo quis elementum. Sed eget eros venenatis, pellentesque risus sed, fermentum mi. Proin ipsum arcu, porta nec sem sit amet, sollicitudin faucibus erat. Quisque lacus lectus, pellentesque ut imperdiet sed, euismod vitae nibh. Donec dolor diam, elementum ac pharetra vitae, volutpat mollis augue.</p>
+            <aside>
+                <title>Look at this!</title>
+                <p>This is an aside. Please don't let it distract you.</p>
+            </aside>
 
             <p>Maecenas ex enim, lobortis et blandit sit amet, pretium in ante. Sed mollis sollicitudin nibh non consectetur. Vestibulum eget tortor sit amet felis iaculis fermentum. Sed eu nisl a urna cursus congue at nec nulla. Mauris lacinia molestie tristique. Maecenas aliquet rutrum venenatis. Vivamus quis metus sit amet est feugiat facilisis quis et massa. Aenean dui sem, dapibus at imperdiet ac, auctor sit amet arcu. Vestibulum eget porttitor est. Aliquam id pellentesque quam, vitae rhoncus metus. In congue condimentum malesuada. Mauris in condimentum eros, eget mattis nibh. Praesent et ex porttitor, lobortis nibh sed, cursus ante. Suspendisse dapibus vel risus eu pellentesque. </p>
+            </section>
+            <conclusion>
+                <title>Wrapping up</title>
+                <p>This is the conclusion.</p>
+            </conclusion>
         </chapter>
 
         <chapter>
             <title>A Bit of Math</title>
 
-            <p>This paragraph has some inline math, a Diophantine equation, <m>x^2 + \doubler{y^2} = z^2</m>.  And some display math about infinite series: <me>\sum_{n=1}^\infty\,\frac{1}{n^2} = \frac{\pi^2}{6}.</me>  Look at the XML source to see how <latex /> macros are employed.</p>
+            <p><idx>Diophantine equation</idx>This paragraph has some inline math, a Diophantine equation, <m>x^2 + \doubler{y^2} = z^2</m>.  And some display math about infinite series: <me>\sum_{n=1}^\infty\,\frac{1}{n^2} = \frac{\pi^2}{6}.</me>  Look at the XML source to see how <latex /> macros are employed.</p>
+
+            <p>And a bit of multi-line display math:<mdn>
+                <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
+                <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
+                <mrow xml:id="equation-conclude">&amp;=f(x)-0 = f(x)</mrow>
+            </mdn>.</p>
+
+            <p>And multi-line math with an embedded cross-reference to a figure:<md>
+                <mrow>x^2 + y^2 &amp;= z^2&amp;&amp;<xref ref="complete-graph"/></mrow>
+                <mrow>a^2 + b^2 &amp;= c^2&amp;&amp;</mrow>
+            </md></p>
 
             <p>Nice.</p>
         </chapter>
@@ -65,21 +96,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <chapter>
             <title>Some Images</title>
 
-            <p>A Portable Network Graphics (PNG) image created externally in Sage and then included directly here.</p>
+            <p><idx>Portable Network Graphics (PNG)</idx><idx><h>PNG</h><see>Portable Network Graphics</see></idx>A Portable Network Graphics (PNG) image created externally in Sage and then included directly here.</p>
 
-            <figure>
+            <figure xml:id="figure-cubic-polynomial">
                 <caption>A cubic polynomial and its derivative</caption>
                 <image source="images/cubic-function.png" width="60%"/>
             </figure>
 
             <p>A Scalable Vector Graphics (SVG) image created externally in Sage and then included here as a vector image (no file extension given).</p>
 
-            <figure width="20%">
+            <figure xml:id="complete-graph" width="20%">
                 <caption>A complete graph on 16 vertices</caption>
                 <image source="images/complete-graph" width="70%"/>
             </figure>
 
-            <p>A Scalable Vector Graphics (SVG) image described by Sage commands, which is produced by the <c>mbx</c> script.</p>
+            <p>A Scalable Vector Graphics (SVG) image described by Sage commands, which is produced by the <c>pretext</c> script.</p>
 
             <figure xml:id="figure-sage-multigraph">
                 <caption>A Sage multigraph of a sentence</caption>
@@ -99,7 +130,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <caption>TikZ Electronics Diagram</caption>
                 <image xml:id="tikz-electronics">
                     <description>A pile of electronic components wired together</description>
-                    <latex-image-code>
+                    <latex-image>
                     <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
                     <![CDATA[\tikzset{%
                       block/.style    = {draw, thick, rectangle, minimum height = 3em,
@@ -178,12 +209,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         \draw [color=gray,thick](-0.5,-9) rectangle (12.5,-5);
                         \node at (-0.5,-9) [below=5mm, right=0mm] {\textsc{second-order noise shaper}};
                     \end{tikzpicture}]]>
-                    </latex-image-code>
+                    </latex-image>
                 </image>
             </figure>
-            <p><q>There</q></p>
+
+            <p>We repeat an image created from an external file, because the EPUB format only wants the file noted once.</p>
+
+            <image source="images/complete-graph" width="70%"/>
+
+            <p>We like to put <init>URL</init>s into footnotes, especially for formats like this where they may not be active.  This output is from <url href="https://pretextbook.org"><pretext/></url><fn><c>pretextbook.org</c></fn>.</p>
+
+            <exercise>
+                <statement>
+                    <p>A sample exercise, where a <tag>hint</tag> and a <tag>solution</tag> should be visible (rather than in a knowl).</p>
+                </statement>
+                <hint>
+                    <p>Just a little help.</p>
+                </hint>
+                <solution>
+                    <p>The whole story with all the details.</p>
+                </solution>
+            </exercise>
 
         </chapter>
+        <backmatter>
+            <appendix>
+                <title>Maybe the license</title>
+                <p>Lots of books written in <pretext/> include the terms of their license in an appendix, so let's use this as a test.</p>
+            </appendix>
+            <index>
+                <title>Index</title>
+                <index-list/>
+            </index>
+        </backmatter>
 
     </book>
 </pretext>

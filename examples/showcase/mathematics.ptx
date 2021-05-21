@@ -8,7 +8,7 @@
 <section xml:id="mathematics">
   <title>Mathematics</title>
 
-  <subsection>
+  <subsection xml:id="subsection-the-quadratic-formula">
     <title>The Quadratic Formula</title>
 
     <p>

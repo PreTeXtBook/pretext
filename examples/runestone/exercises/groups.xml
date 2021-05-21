@@ -1,0 +1,520 @@
+<?xml version="1.0"?>
+
+<!--********************************************************************
+Copyright 2015 Robert A. Beezer
+
+This file is part of MathBook XML.
+
+MathBook XML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+MathBook XML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+<!-- This file was originally part of the book     -->
+<!-- (as copied on 2015/07/12)                     -->
+<!--                                               -->
+<!--   Abstract Algebra: Theory and Applications   -->
+<!--                                               -->
+<!-- Copyright (C) 1997-2014  Thomas W. Judson     -->
+<exercises xml:id="exercises-groups">
+    <title>Exercises</title>
+
+    <exercise number="1">
+        <statement>
+            <p>Find all <m>x \in {\mathbb Z}</m> satisfying each of the following equations.</p>
+            <ol cols="2">
+                <li><p><m>3x \equiv 2 \pmod{7}</m></p></li>
+                <li><p><m>5x + 1 \equiv 13 \pmod{23}</m></p></li>
+                <li><p><m>5x + 1 \equiv 13 \pmod{26}</m></p></li>
+                <li><p><m>9x \equiv 3 \pmod{5}</m></p></li>
+                <li><p><m>5x \equiv 1 \pmod{6}</m></p></li>
+                <li><p><m>3x \equiv 1 \pmod{6}</m></p></li>
+            </ol>
+        </statement>
+        <hint>
+            <p>(a) <m>3 + 7 \mathbb Z = \{ \ldots, -4, 3, 10, \ldots \}</m>;  (c) <m>18 + 26 \mathbb Z</m>;  (e) <m>5 + 6 \mathbb Z</m>.</p>
+        </hint>
+    </exercise>
+
+    <exercise number="2">
+    <statement>
+        <p>Which of the following multiplication tables defined on the set <m>G = \{ a, b, c, d \}</m> form a group? Support your answer in each case.</p>
+        <ol cols="2">
+
+            <li><p><me>\begin{array}{c|cccc}
+            \circ &amp; a &amp; b &amp; c &amp; d \\
+            \hline
+            a &amp; a &amp; c &amp; d &amp; a \\
+            b &amp; b &amp; b &amp; c &amp; d \\
+            c &amp; c &amp; d &amp; a &amp; b \\
+            d &amp; d &amp; a &amp; b &amp; c
+            \end{array}</me></p></li>
+
+            <li><p><me>\begin{array}{c|cccc}
+            \circ &amp; a &amp; b &amp; c &amp; d \\
+            \hline
+            a &amp; a &amp; b &amp; c &amp; d \\
+            b &amp; b &amp; a &amp; d &amp; c \\
+            c &amp; c &amp; d &amp; a &amp; b \\
+            d &amp; d &amp; c &amp; b &amp; a
+            \end{array}</me></p></li>
+
+            <li><p><me>\begin{array}{c|cccc}
+            \circ &amp; a &amp; b &amp; c &amp; d \\
+            \hline
+            a &amp; a &amp; b &amp; c &amp; d \\
+            b &amp; b &amp; c &amp; d &amp; a \\
+            c &amp; c &amp; d &amp; a &amp; b \\
+            d &amp; d &amp; a &amp; b &amp; c
+            \end{array}</me></p></li>
+
+            <li><p><me>\begin{array}{c|cccc}
+            \circ &amp; a &amp; b &amp; c &amp; d \\
+            \hline
+            a &amp; a &amp; b &amp; c &amp; d \\
+            b &amp; b &amp; a &amp; c &amp; d \\
+            c &amp; c &amp; b &amp; a &amp; d \\
+            d &amp; d &amp; d &amp; b &amp; c
+            \end{array}</me></p></li>
+
+        </ol>
+    </statement>
+    <hint>
+        <p>(a) Not a group; (c) a group.</p>
+    </hint>
+    </exercise>
+
+    <exercise number="3" xml:id="exercise-groups-rectangle-symmetries">
+        <statement>
+            <p>Write out Cayley tables for groups formed by the symmetries of a rectangle and for <m>({\mathbb Z}_4, +)</m>. How many elements are in each group? Are the groups the same? Why or why not? </p>
+        </statement>
+    </exercise>
+
+    <exercise number="4">
+        <statement>
+            <p>Describe the symmetries of a rhombus and prove that the set of symmetries forms a group. Give Cayley tables for both the symmetries of a rectangle and the symmetries of a rhombus. Are the symmetries of a rectangle and those of a rhombus the same?</p>
+        </statement>
+    </exercise>
+
+    <exercise number="5">
+        <statement>
+            <p>Describe the symmetries of a square and prove that the set of symmetries is a group. Give a Cayley table for the symmetries. How many ways can the vertices of a square be permuted? Is each permutation necessarily a symmetry of the square?  The symmetry group of the square is denoted by <m>D_4</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="6">
+        <statement>
+            <p>Give a multiplication table for the group <m>U(12)</m>.</p>
+        </statement>
+        <hint>
+            <p><me>\begin{array}{c|cccc}
+                \cdot &amp; 1  &amp; 5  &amp; 7  &amp; 11 \\
+                \hline
+                1 &amp; 1 &amp; 5 &amp; 7 &amp; 11 \\ 5 &amp; 5 &amp; 1 &amp; 11 &amp; 7 \\
+                7 &amp; 7 &amp; 11 &amp; 1 &amp; 5 \\ 11 &amp; 11 &amp; 7 &amp; 5 &amp; 1
+                \end{array}</me></p>
+            </hint>
+    </exercise>
+
+    <exercise number="7">
+        <statement>
+            <p>Let <m>S = {\mathbb R} \setminus \{ -1 \}</m> and define a binary operation on <m>S</m> by <m>a \ast b = a + b + ab</m>. Prove that <m>(S, \ast)</m> is an abelian group.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="8">
+        <statement>
+            <p>Give an example of two elements <m>A</m> and <m>B</m> in <m>GL_2({\mathbb R})</m> with <m>AB \neq BA</m>.</p>
+        </statement>
+        <hint>
+            <p>Pick two matrices. Almost any pair will work.</p>
+        </hint>
+    </exercise>
+
+    <exercise number="9">
+        <statement>
+        <p>Prove that the product of two matrices in <m>SL_2({\mathbb R})</m> has determinant one.</p>
+        </statement>
+    </exercise>
+
+    <!-- todo: Check references to Heisenberg group -->
+
+    <exercise number="10">
+        <statement>
+            <p>Prove that the set of matrices of the form
+                <me>\begin{pmatrix}
+                1 &amp; x &amp; y \\
+                0 &amp; 1 &amp; z \\
+                0 &amp; 0 &amp; 1
+                \end{pmatrix}</me>
+            is a group under matrix multiplication.  This group, known as the
+            <term>Heisenberg group</term>, is important in quantum physics. Matrix multiplication in the Heisenberg group is defined by  
+                <me>\begin{pmatrix}
+                1 &amp; x &amp; y \\
+                0 &amp; 1 &amp; z \\
+                0 &amp; 0 &amp; 1
+                \end{pmatrix}
+                \begin{pmatrix}
+                1 &amp; x' &amp; y' \\
+                0 &amp; 1 &amp; z' \\
+                0 &amp; 0 &amp; 1
+                \end{pmatrix}
+                =
+                \begin{pmatrix}
+                1 &amp; x+x' &amp; y+y'+xz' \\
+                0 &amp; 1 &amp; z+z' \\
+                0 &amp; 0 &amp; 1
+                \end{pmatrix}.</me></p>
+        </statement>
+    </exercise>
+
+    <exercise number="11">
+        <statement>
+            <p>Prove that <m>\det(AB) = \det(A) \det(B)</m> in <m>GL_2({\mathbb R})</m>. Use this result to show that the binary operation in the group <m>GL_2({\mathbb R})</m> is closed; that is, if <m>A</m> and <m>B</m> are in <m>GL_2({\mathbb R})</m>, then <m>AB \in GL_2({\mathbb R})</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="12">
+        <statement>
+            <p>Let <m>{\mathbb Z}_2^n = \{ (a_1, a_2, \ldots, a_n) : a_i \in {\mathbb Z}_2 \}</m>. Define a binary operation on <m>{\mathbb Z}_2^n</m> by
+                <me>(a_1, a_2, \ldots, a_n) + (b_1, b_2, \ldots, b_n) = (a_1 + b_1, a_2 + b_2, \ldots, a_n + b_n).</me>
+            Prove that <m>{\mathbb Z}_2^n</m> is a group under this operation. This group is important in algebraic coding theory.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="13">
+        <statement>
+            <p>Show that <m>{\mathbb R}^{\ast} = {\mathbb R} \setminus \{0 \}</m> is a group under the operation of multiplication. </p>
+        </statement>
+    </exercise>
+
+    <exercise number="14">
+        <statement>
+            <p>Given the groups  <m>{\mathbb R}^{\ast}</m> and <m>{\mathbb Z}</m>, let <m>G = {\mathbb R}^{\ast}  \times {\mathbb Z}</m>. Define a binary operation <m>\circ</m> on <m>G</m> by <m>(a,m) \circ (b,n) = (ab, m + n)</m>. Show that <m>G</m> is a group under this operation.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="15">
+        <statement>
+            <p>Prove or disprove that every group containing six elements is abelian.</p>
+        </statement>
+        <hint>
+            <p>There is a nonabelian group containing six elements.</p>
+        </hint>
+    </exercise>
+
+    <exercise number="16">
+        <statement>
+            <p>Give a specific example of some group <m>G</m> and elements <m>g, h \in G</m> where <m>(gh)^n \neq g^nh^n</m>.</p>
+        </statement>
+        <hint>
+            <p>Look at the symmetry group of an equilateral triangle or a square.</p>
+        </hint>
+    </exercise>
+
+    <exercise number="17">
+        <statement>
+            <p>Give an example of three different groups with eight elements. Why are the groups different?</p>
+        </statement>
+        <hint>
+            <p>The are five different groups of order 8.</p>
+        </hint>
+    </exercise>
+
+    <exercise number="18">
+        <statement>
+            <p>Show that there are <m>n!</m> permutations of a set containing <m>n</m> items. </p>
+        </statement>
+        <hint>
+            <p>Let
+                <me>\sigma =
+                \begin{pmatrix}
+                1 &amp; 2 &amp; \cdots &amp; n \\ a_1 &amp; a_2 &amp; \cdots &amp; a_n
+                \end{pmatrix}</me>
+            be in <m>S_n</m>. All of the <m>a_i</m>s must be distinct. There are <m>n</m> ways to choose <m>a_1</m>, <m>n-1</m> ways to choose <m>a_2</m>, <m>\ldots</m>, 2 ways to choose <m>a_{n - 1}</m>, and only one way to choose <m>a_n</m>. Therefore, we can form <m>\sigma</m> in <m>n(n - 1) \cdots 2 \cdot 1 = n!</m> ways.</p>
+        </hint>
+    </exercise>
+
+    <exercise number="19">
+        <statement>
+            <p>Show that 
+                <me>0 + a  \equiv a + 0  \equiv a \pmod{ n }</me>
+            for all <m>a \in {\mathbb Z}_n</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="20">
+        <statement>
+            <p>Prove that there is  a multiplicative identity for the integers modulo <m>n</m>: 
+                <me>a \cdot  1   \equiv  a \pmod{n}.</me></p>
+        </statement>
+    </exercise>
+
+    <exercise number="21">
+        <statement>
+            <p>For each <m>a \in {\mathbb Z}_n</m> find an element <m>b \in {\mathbb Z}_n</m> such that
+                <me>a + b \equiv b + a  \equiv 0 \pmod{ n}.</me></p>
+        </statement>
+    </exercise>
+
+    <exercise number="22">
+        <statement>
+            <p>Show that addition and multiplication mod $n$ are well defined operations.  That is, show that the operations do not depend on the choice of the representative from the equivalence classes mod <m>n</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="23">
+        <statement>
+            <p>Show that addition and multiplication mod <m>n</m> are associative operations.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="24">
+        <statement>
+            <p>Show that multiplication distributes over addition modulo <m>n</m>:
+                <me>a(b  + c)  \equiv ab + ac  \pmod{n}.</me></p>
+        </statement>
+    </exercise>
+
+    <exercise number="25">
+        <statement>
+            <p>Let <m>a</m> and <m>b</m> be elements in a group <m>G</m>.  Prove that <m>ab^na^{-1} = (aba^{-1})^n</m> for <m>n \in \mathbb Z</m>. </p>
+        </statement>
+        <hint>
+            <p><md>
+                <mrow>(aba^{-1})^n &amp; = (aba^{-1})(aba^{-1}) \cdots (aba^{-1})</mrow>
+                <mrow>&amp; = ab(aa^{-1})b(aa^{-1})b \cdots b(aa^{-1})ba^{-1}</mrow>
+                <mrow>&amp; = ab^na^{-1}.</mrow>
+            </md></p>
+        </hint>
+    </exercise>
+
+    <exercise number="26">
+        <statement>
+            <p>Let <m>U(n)</m> be the group of units in <m>{\mathbb Z}_n</m>. If <m>n \gt 2</m>, prove that there is an element <m>k \in U(n)</m> such that <m>k^2 = 1</m> and <m>k \neq 1</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="27">
+        <statement>
+            <p>Prove that the inverse of <m>g _1 g_2 \cdots g_n</m> is <m>g_n^{-1} g_{n-1}^{-1} \cdots g_1^{-1}</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="28">
+        <statement>
+            <p>Prove the remainder of <xref ref="proposition-group-equations"/>: if <m>G</m> is a group and <m>a, b \in G</m>, then the equation <m>xa = b</m> has a unique solution in <m>G</m>. </p>
+        </statement>
+    </exercise>
+
+    <exercise number="29">
+        <statement>
+            <p>Prove <xref ref="theorem-exponent-laws"/>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="30">
+        <statement>
+            <p>Prove the right and left cancellation laws for a group <m>G</m>; that is, show that in the group <m>G</m>, <m>ba = ca</m> implies <m>b = c</m> and <m>ab = ac</m> implies <m>b = c</m> for elements <m>a, b, c \in G</m>.  </p>
+        </statement>
+    </exercise>
+
+    <exercise number="31">
+        <statement>
+            <p>Show that if <m>a^2 = e</m> for all elements <m>a</m> in a group <m>G</m>, then <m>G</m> must be abelian. </p>
+        </statement>
+        <hint>
+            <p>Since <m>abab = (ab)^2 = e = a^2 b^2 = aabb</m>, we know that <m>ba = ab</m>.</p>
+        </hint>
+    </exercise>
+
+    <exercise number="32">
+        <statement>
+            <p>Show that if <m>G</m> is a finite group of even order, then there is an <m>a \in G</m> such that <m>a</m> is not the identity and <m>a^2 = e</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="33">
+        <statement>
+            <p>Let <m>G</m> be a group and suppose that <m>(ab)^2 = a^2b^2</m> for all <m>a</m> and <m>b</m> in <m>G</m>.  Prove that <m>G</m> is an abelian group. </p>
+        </statement>
+    </exercise>
+
+    <exercise number="34">
+        <statement>
+            <p>Find all the subgroups of <m>{\mathbb Z}_3 \times {\mathbb Z}_3</m>. Use this information to show that <m>{\mathbb Z}_3 \times {\mathbb Z}_3</m> is not the same group as <m>{\mathbb Z}_9</m>.  (See <xref ref="example-groups-z2xz2"/>  for a short description of the product of groups.)</p>
+        </statement>
+    </exercise>
+
+    <exercise number="35">
+        <statement>
+            <p>Find all the subgroups of the symmetry group of an equilateral triangle.</p>
+        </statement>
+        <hint>
+            <p><m>H_1 = \{ id \}</m>, <m>H_2 = \{ id, \rho_1, \rho_2 \}</m>, <m>H_3 = \{ id, \mu_1 \}</m>, <m>H_4 = \{ id, \mu_2 \}</m>, <m>H_5 = \{ id, \mu_3 \}</m>, <m>S_3</m>.</p>
+        </hint>
+    </exercise>
+
+    <exercise number="36">
+        <statement>
+            <p>Compute the subgroups of the symmetry group of a square.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="37">
+        <statement>
+            <p>Let <m>H = \{2^k : k \in {\mathbb Z} \}</m>. Show that <m>H</m> is a subgroup of <m>{\mathbb Q}^*</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="38">
+        <statement>
+            <p>Let <m>n = 0, 1, 2, \ldots</m> and <m>n {\mathbb Z} = \{ nk : k \in  {\mathbb Z} \}</m>. Prove that <m>n {\mathbb Z}</m> is a subgroup of <m>{\mathbb Z}</m>.  Show that these subgroups are the only subgroups of <m>\mathbb{Z}</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="39" xml:id="exercise-groups-circle-group">
+        <statement>
+            <p>Let <m>{\mathbb T} = \{ z \in  {\mathbb C}^* : |z| =1 \}</m>. Prove that <m>{\mathbb T}</m> is a subgroup of <m>{\mathbb C}^*</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="40">
+        <statement>
+            <p><me>\begin{pmatrix}
+                \cos \theta &amp; -\sin \theta \\
+                \sin \theta &amp; \cos \theta
+                \end{pmatrix}</me>
+            where <m>\theta \in {\mathbb R}</m>. Prove that <m>G</m> is a subgroup of <m>SL_2({\mathbb R})</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="41">
+        <statement>
+            <p>Prove that
+                <me>G = \{ a + b \sqrt{2} : a, b \in {\mathbb Q} \text{ and } a \text{ and } b \text{ are not both zero} \}</me>
+            is a subgroup of <m>{\mathbb R}^{\ast}</m> under the group operation of multiplication.</p>
+        </statement>
+        <hint>
+            <p>The identity of <m>G</m> is <m>1 = 1 + 0 \sqrt{2}</m>. Since <m>(a + b \sqrt{2}\, )(c + d \sqrt{2}\, ) = (ac + 2bd) + (ad + bc)\sqrt{2}</m>, <m>G</m> is closed under multiplication.  Finally,  <m>(a + b \sqrt{2}\, )^{-1} = a/(a^2 - 2b^2) - b\sqrt{2}/(a^2 - 2 b^2)</m>.</p>
+        </hint>
+    </exercise>
+
+    <exercise number="42">
+        <statement>
+            <p>Let <m>G</m> be the group of <m>2 \times 2</m> matrices under addition and
+                <me>H =
+                \left\{
+                \begin{pmatrix}
+                a &amp; b \\
+                c &amp; d
+                \end{pmatrix} :
+                a + d = 0
+                \right\}.</me>
+            Prove that <m>H</m> is a subgroup of <m>G</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="43">
+        <statement>
+            <p>Prove or disprove: <m>SL_2( {\mathbb Z} )</m>, the set of <m>2 \times 2</m> matrices with integer entries and determinant one, is a subgroup of <m>SL_2( {\mathbb R} )</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="44">
+        <statement>
+            <p>List the subgroups of the quaternion group, <m>Q_8</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="45">
+        <statement>
+            <p>Prove that the intersection of two subgroups of a group <m>G</m> is also a subgroup of <m>G</m>.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="46">
+        <statement>
+            <p>Prove or disprove:  If <m>H</m> and <m>K</m> are subgroups of a group <m>G</m>, then <m>H \cup K</m> is a subgroup of <m>G</m>. </p>
+        </statement>
+        <hint>
+            <p>Look at <m>S_3</m>.</p>
+        </hint>
+    </exercise>
+
+    <exercise number="47">
+        <statement>
+            <p>Prove or disprove: If <m>H</m> and <m>K</m> are subgroups of a group <m>G</m>, then <m>H K = \{hk : h \in H \text{ and } k \in K \}</m> is a subgroup of <m>G</m>. What if <m>G</m> is abelian?</p>
+        </statement>
+    </exercise>
+
+    <exercise number="48">
+        <statement>
+            <p>Let <m>G</m> be a group and <m>g \in G</m>. Show that
+            <me>Z(G) = \{ x \in G : gx = xg \text{ for all } g \in G \}</me> is a subgroup of <m>G</m>. This subgroup is called the <term>center</term> of <m>G</m>. <notation><usage>Z(G)</usage><description>the center of a group</description></notation></p>
+        </statement>
+    </exercise>
+
+    <exercise number="49">
+        <statement>
+            <p>Let <m>a</m> and <m>b</m> be elements of a group <m>G</m>. If <m>a^4b = ba</m> and <m>a^3 = e</m>, prove that <m>ab = ba</m>.</p>
+        </statement>
+        <hint>
+            <p>Since <m>a^4b = ba</m>, it must be the case that <m>b = a^6 b = a^2 b a</m>, and we can conclude that <m> ab = a^3 b a = ba</m>.</p>
+        </hint>
+    </exercise>
+
+    <exercise number="50">
+        <statement>
+            <p>Give an example of an infinite group in which every nontrivial subgroup is infinite.</p>
+        </statement>
+    </exercise>
+
+    <!-- Todo: Move the old Exercise 50 to struct.xml -->
+
+    <!--
+    <exercise number="50">
+        <statement>
+            <p>Give an example of an infinite group in which every proper subgroup is finite.</p>
+        </statement>
+        <solution>
+            <p>Such groups exist, but the answer is complicated.</p>
+        </solution>
+    </exercise>
+    -->
+
+    <exercise number="51">
+        <statement>
+            <p>If <m>xy = x^{-1} y^{-1}</m> for all <m>x</m> and <m>y</m> in <m>G</m>, prove that <m>G</m> must be abelian.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="52">
+        <statement>
+            <p>Prove or disprove: Every proper subgroup of an nonabelian group is nonabelian.</p>
+        </statement>
+    </exercise>
+
+    <exercise number="53">
+        <statement>
+            <p>Let <m>H</m> be a subgroup of <m>G</m> and
+                <me>C(H) = \{ g \in G : gh = hg \text{ for all } h \in H \}.</me>
+            Prove <m>C(H)</m> is a subgroup of <m>G</m>.  This subgroup is called the <term>centralizer</term> of <m>H</m> in <m>G</m>. </p>
+        </statement>
+    </exercise>
+
+    <exercise number="54">
+        <statement>
+            <p>Let <m>H</m> be a subgroup of <m>G</m>.  If <m>g \in G</m>, show that <m>gHg^{-1} =  \{g^{-1}hg : h\in H\}</m> is also a subgroup of <m>G</m>.</p>
+        </statement>
+    </exercise>
+
+</exercises>

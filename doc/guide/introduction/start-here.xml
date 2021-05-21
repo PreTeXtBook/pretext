@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="start-here">
+    <title>Starting</title>
+
+    <introduction>
+        <p>Welcome to the Author's Guide for <pretext />.  You are likely eager to get started, but familiarizing yourself with this chapter should save you a lot of time in the long run.  We will try to keep it short and at the end of early chapters we will guide you on where to go next.  Not everything we say here will make sense on your first reading, so come back after your first few trial runs.  When you are ready to seek further help, or ask questions, please read the <xref ref="welcome" text="title"/> in <xref ref="welcome"/>.</p>
+    </introduction>
+
+    <section xml:id="philosophy">
+        <title>Philosophy</title>
+
+        <p><pretext /> is a <term>markup language</term><idx>markup language</idx>, which means that you explicitly specify the logical parts of your document and not how these parts should be displayed.  This is very liberating for an author, since it frees you to concentrate on capturing your ideas to share with others, leaving the construction of the visual presentation to the software.  As an example, you might specify the content of the title of a chapter to be <c>Further Experiments</c>, but you will not be concerned if a 36 point sans-serif font in black will be used for this title in the print version of your book, or a CSS class specifying 18 pixel height in blue is used for a title in an online web version of your book.  You can just trust that a reasonable choice has been made for displaying a title of a chapter in a way that a reader will recognize it as a name for a chapter.  (And if all that talk of fonts was unfamiliar, all the more reason to trust the design to software.)</p>
+
+        <p>You are also freed from the technical details of presenting your ideas in the plethora of new formats available as a consequence of the advances in computers (including tablets and smartphones) and networks (global and wireless).  Your output <q>just works</q> and the software keeps up with technical advances and the introduction of new formats, while you concentrate on the content of your book (or article, or report, or proposal, or<nbsp /><ellipsis />).</p>
+
+        <p>If you have never used a markup language, it can be unfamiliar at first.  Even if you have used a markup language before (such as HTML or basic <latex />) you will need to make a few adjustments.  Most word-processors are WYSIWYG (<q>what you see is what you get</q>).  That approach is likely very helpful if you are designing the front page of a newspaper, but not if you are writing about the life-cycle of a salamander.  In the old days, programs like <url href="https://en.wikipedia.org/wiki/Troff"><c>troff</c></url> and its predecessor, <url href="https://en.wikipedia.org/wiki/TYPSET_and_RUNOFF"><c>RUNOFF</c></url> (1964), implemented simple markup languages to allow early computers to do limited text-formatting.  Sometimes the old ways are the best ways.</p>
+
+        <p><pretext /> is what is called an <term>XML application</term><idx>XML application</idx><idx><h>XML application</h><seealso>XML vocabulary</seealso></idx> or an <term>XML vocabulary</term><idx>XML vocabulary</idx><idx><h>XML vocabulary</h><seealso>XML application</seealso></idx> (I prefer the latter). Authoring in XML might seem cumbersome at first, but you will eventually appreciate the long-run economies, so keep an open mind.  And if you are already familiar with XML, realize we have been very careful to design this vocabulary with human authors foremost in our mind.</p>
+
+        <paragraphs>
+            <title>Principles</title>
+
+            <p>The creation, design, development and maintenance of <pretext /> is guided by the following list of principles.  They may not be fully understood on a first reading, but should be useful as you become more familiar with authoring texts with <pretext /> and should amplify some of the previous discussion.</p>
+
+            <list xml:id="list-principles">
+                <title><pretext /> Principles</title>
+
+                <ol>
+                    <li xml:id="principle-markup"><pretext /> is a markup language that captures the structure of textbooks and research papers.</li>
+
+                    <li xml:id="principle-readable"><pretext /> is human-readable and human-writable.</li>
+
+                    <li xml:id="principle-multiple-outputs"><pretext /> documents serve as a single source which can be easily converted to multiple other formats, current and future.</li>
+
+                    <li xml:id="principle-good-design"><pretext /> respects the good design practices which have been developed over the past centuries.</li>
+
+                    <li xml:id="principle-common-and-reasonable"><pretext /> makes it easy for authors to implement features which are both common and reasonable.</li>
+
+                    <li xml:id="principle-web-versions"><pretext /> supports online documents which make use of the full capabilities of the Web.</li>
+
+                    <li xml:id="principle-output-styles"><pretext /> output is styled by selecting from a list of available templates, relieving the author of the burden involved in micromanaging the output format.</li>
+
+                    <li xml:id="principle-open-software"><pretext /> is free: the software is available at no cost, with an open license. The use of <pretext /> does not impose any constraints on documents prepared with the system.</li>
+
+                    <li xml:id="principle-open"><pretext /> is not a closed system: documents can be converted to <latex /> and then developed using standard <latex /> tools.</li>
+
+                    <li xml:id="principle-users"><pretext /> recognizes that scholarly documents involve the interaction of authors, publishers, scholars, instructors, students, and readers, with each group having its own needs and goals.</li>
+
+                    <li xml:id="principle-accessibility"><pretext/> recognizes the inherent value in producing material that is accessible to everyone.</li>
+                </ol>
+            </list>
+        </paragraphs>
+    </section>
+
+    <section xml:id="introduction-to-source-formatting">
+        <title>Formatting Your Source</title>
+
+        <p>There are a lot of details related to how you prepare your <term>source</term><idx>source</idx>: the actual files that you, and you alone, will create.  At least skim through the following, come back here often, and also consult <xref provisional="exhaustive-chapter-on-source-files" />.</p>
+
+        <paragraphs>
+            <title>File Format</title>
+
+            <p>Your source should be plain <term>ASCII files</term><idx>ASCII file</idx> which you will create with a text editor.  In other words, do not create your source with Word, LibreOffice, WordPerfect, AbiWord, Pages or similar programs.  Popular text editors include vi, emacs, Notepad, Notepad++, Atom, TextWrangler, and BBEdit.  I have had a very good experience with Sublime Text, which is cross-platform (Windows, OS X, Linux), and can be used for free, though it has a very liberal license and is well worth the cost.  Sometimes these editors are known as a <term>programmer's editor</term><idx>programmer's editor</idx> (though we will be doing no programming).  Support for writing HTML sometimes translates directly to good support for XML.</p>
+
+            <p>There are <term>XML editors</term><idx>XML editor</idx>, which I have generally found too complex for authoring in <pretext />.  They do have some advantages and XML Copy Editor is one that I have found that is possibly useful.</p>
+
+            <p>We have one recommendation for a spell checker, which you can read about later in <xref ref="aspell"/>.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Learn to Use Your Editor</title>
+
+            <p>Because XML requires a closing tag for every opening tag, it feels like a lot of typing.  Your editor should know what tag to close next and there should be a simple command to do that.  Discover this first and consider switching editors if it is not available.  For me, in Sublime Text on Linux, I just press <c>Alt-Period</c> and get a closing tag.  Not only is this quick and easy, I often recognize that I am not getting the tag I expected since I forgot to close one earlier.  This one shortcut can pretty much cut your authoring overhead in half.</p>
+
+            <p>If your editor can predict your opening tag, all the better.  Sublime Text recognizes that I already have a <tag>section</tag> elsewhere, so when I start my second section, I very quickly (and automatically) get a short list of choices as I type, with the one I want at the top of the list, or close to it.</p>
+
+            <p>Invest a little time early on to learn, and configure, your editor and you can be even more efficient about capturing your ideas with a minimum of overhead and interference.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Revision Control</title>
+
+            <p>If you are writing a book, or if you are collaborating with co-authors, then you owe it to yourself and your co-authors to learn how to use revision control<idx>revision control</idx>, which works well with <pretext />.  The hands-down favorite is <c>git</c> which has a steep learning curve, and so is beyond the scope of this guide.  But see <xref provisional="topic-git-coexistence" /> which has hints on how to best use <c>git</c> together with a <pretext /> project and look for Beezer and Farmer's <pubtitle>Git For Authors</pubtitle>.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Whitespace</title>
+
+            <p>The term <term>whitespace</term><idx>whitespace</idx> refers to characters you type but typically do not see.  For us they are <term>space</term>, <term>non-breaking space</term>, <term>tab</term> and <term>newline</term> (also known as a <q>carriage return</q> and/or <q>line feed</q>).  Unlike some other markup languages, <pretext /> <em>does not ever use whitespace</em> to convey formatting information.</p>
+
+            <p>In some parts of a <pretext /> document, every single whitespace character is important and will be transmitted to your output, such as in the <tag>input</tag> and <tag>output</tag> portions of a <tag>sage</tag> element.  Since Sage code mostly follows Python syntax, indentation is important and leading spaces must be preserved.  But you can indent all of your code to match your <init>XML</init> indentation and the entire <tag>input</tag> (or <tag>output</tag>) content will be uniformly shifted left to the margin in your final output.</p>
+
+            <p>In other parts of a <pretext /> document, every single whitespace character is ignored, and you have the freedom to use indentation and blank lines to help you understand the logical structure of your document.  An example is that you can add as much whitespace as you like between the paragraphs of a section, such as a preceding blank line and indentation, and none of it will affect your output in any way.</p>
+
+            <p>Never use tabs, they can only cause problems.  You may be able to set your editor to translate the tab key to a certain number of spaces, or to translate tabs to spaces when you save a file (and these behaviors are useful).  I have Sublime Text configured to show me every single space as a small faint dot, since I like to be certain I have no stray whitespace <em>anywhere</em>.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Structure of your Source</title>
+
+            <p>XML is hierarchical, like a family tree.  Books contain chapters, chapters contain sections, sections contain paragraphs, <etc />  I like to reflect each new level of containment by consistently indenting four spaces (you might prefer two spaces).  A good editor will visually respect this indentation, and help you with maintaining the right indentation with each new line, so much so, that you will forget how much assistance it is providing.</p>
+
+            <p>Develop a style and stick with it.  I put titles on a new line (indented) after I create a new chapter or section, some people like them on the same line, immediately adjacent.  I put a single blank line before each new paragraph, but not after the last.  And so on.  The choice is yours, but consistency will pay off when you inevitably come back to edit something.  You have put a lot of work and effort into your source.  You will be rewarded with fewer problems if you keep it neat and tidy, and you will also get very clean output.</p>
+        </paragraphs>
+    </section>
+
+    <section xml:id="start-next">
+        <title>Where Next?</title>
+
+        <p>If you are impatient (sometimes a good quality!), then <xref ref="quickstart-example"/> should be next, where we show you how to construct and process a short example and then expand it slightly with several additions.</p>
+
+        <p>If you would like a general, high-level overview of features skip ahead to <xref ref="overview"/>.</p>
+
+        <p>In-depth, comprehensive use of features is in <xref ref="topics"/>.</p>
+
+        <p>If you have an existing project authored in <latex/> you may be interested in the conversion process described in <xref ref="latex-conversion"/>.</p>
+    </section>
+
+</chapter>
