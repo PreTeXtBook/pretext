@@ -17,6 +17,14 @@ objectStructure = {
         "pieces": [["(capitalize,sourcetag)", ""]]
     }
   },
+  "type-child": {
+    "html": {
+        "tag": "span",
+        "attributes": ['class="type"', 'data-editable="70YY"', 'tabindex="-1"'],
+        "pieces": [["(capitalize,sourcetag)", ""]]
+   //     "pieces": [["(capitalize,type-contained)", ""]]
+    }
+  },
   "sectiontype": {
     "html": {
         "tag": "span",
@@ -67,7 +75,7 @@ objectStructure = {
         "tag": "h5",
         "cssclass": "heading",
         "attributes": ['class="<&>{cssclass}<;>"', 'xml:id="<&>xml:id<;>"'],
-        "pieces": [["{type}", ""], ["{period}", ""]]
+        "pieces": [["{type-child}", ""], ["{period}", ""]]
     }
   },
   "section_like_heading": {
@@ -291,7 +299,7 @@ objectStructure = {
         "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
         "cssclass": "project-like",
         "data_editable": "94",
-        "pieces": [["{theorem_like_heading}", ""], ["statement",""], ["%hint%", ""], ["%answer%", ""], ["%solution%", ""], ["{workspace}", ""], ["tasks*", ""]]
+        "pieces": [["{theorem_like_heading}", ""], ["statement",""], ["%hint%", "hint"], ["%answer%", ""], ["%solution%", ""], ["{workspace}", ""], ["tasks*", ""]]
     },
     "pretext": {
         "tag": "sourcetag",
@@ -326,7 +334,7 @@ objectStructure = {
         "tag": "article",
         "cssclass": "theorem-like",
         "data_editable": "93",
-        "pieces": [["{theorem_like_heading}", ""], ["statement", ""], ["%proof%",]],
+        "pieces": [["{theorem_like_heading}", ""], ["statement", ""], ["%proof%", "proof"]],
         "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"']
     },
     "pretext": {
@@ -337,13 +345,9 @@ objectStructure = {
         "pieces": [["title", ""], ["statement", "p"], ["proof", ""]]
     }
   },
-  "theorem-body": {
+  "proof-body":  {
     "html": {
-        "tag": "article",
-        "cssclass": "theorem-like",
-        "data_editable": "93",
-        "pieces": [["{theorem_like_heading}", ""], ["statement", ""], ["%proof%",]],
-        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"']
+        "pieces": [["{proof}", ]]
     }
   },
 
@@ -2447,9 +2451,14 @@ function wrap_tag(tag, content, attribute_values) {
             closing_tag = "\n" + closing_tag + "\n"
         }
       }
-    } else {
+    } else if (tag) {
         [opening_tag, closing_tag] = tag
+    } else {
+        opening_tag = "";
+        closing_tag = "";
     }
+    if (!opening_tag) { opening_tag = "" }
+    if (!closing_tag) { closing_tag = "" }
 
     if (content.includes("N.m")) { console.log("3 ----- content",content); console.log("opening_tag", opening_tag) }
 
@@ -2457,6 +2466,8 @@ function wrap_tag(tag, content, attribute_values) {
 }
 
 function output_from_source(the_object, output_structure, format) {
+
+    if (!the_object) { return ""}
 
     console.log("calling output from_source", "the_object", the_object, "output_structure", output_structure, "format", format);
     // format: html, pretext (or source?)
@@ -2467,8 +2478,10 @@ function output_from_source(the_object, output_structure, format) {
     }
 
     var output_attributes = [];
-    if ("attributes" in output_structure) {
+    if ("attributes" in output_structure && output_structure.attributes) {
         output_attributes = output_structure.attributes;
+    } else {
+        output_attributes = []
     }
     var output_attributes_values = [];
     for (var j=0; j < output_attributes.length; ++j) {
@@ -2505,9 +2518,11 @@ function output_from_source(the_object, output_structure, format) {
 
     console.log("output_structure", output_tag, "is", output_structure);
     console.log("output_attributes_values", output_attributes_values);
+    console.log("output_structure.pieces", output_structure.pieces);
     for (var j=0; j < output_structure.pieces.length; ++j) {
         var this_piece_output = "";
         var [this_piece, this_tag] = output_structure.pieces[j];
+            // when this_piece is provisional, then this_tag is actually the key for the required content
         console.log(j, "this_piece", this_piece, "this_tag", this_tag, "output_tag", output_tag);
         if (this_piece.startsWith("{")) {
             this_piece = this_piece.slice(1,-1);
@@ -2518,7 +2533,23 @@ function output_from_source(the_object, output_structure, format) {
      // need to distinguish between the case where this object exists,
      // and when it does not exist and we want a placeholder
             this_piece = this_piece.slice(1,-1);
-            the_answer += wrap_tag("div", "", ['class="placeholder ' + this_piece + '"', 'data-parent_id="' + the_object['xml:id'] + '"', 'data-has="' + this_piece + '"', 'tabindex="-1"', 'data-editable="123456"', 'data-placeholder=""'])
+            console.log("% % % % % % % % % ", this_piece, "this_tag", this_tag, "the_object",  the_object);
+            console.log("% % % % % % % % % ", the_object[this_piece]);
+            console.log("% % % % % % % % % ", the_object[this_tag]);
+            if (the_object[this_tag]) {
+                var sub_object = {};
+                Object.assign(sub_object, the_object);
+                sub_object['type-contained'] = this_tag;
+                console.log("sub_object", sub_object);
+         //       this_piece_output = output_from_source(sub_object, objectStructure[this_piece][format], format);
+                this_piece_output = expand_condensed_source_html(the_object[this_tag],"html?");
+    //            this_piece_output = output_from_source(sub_object, objectStructure[this_piece][format], format);
+                the_answer += this_piece_output;
+                console.log("this piece exists", this_piece, "this_piece_output", this_piece_output)
+            } else {
+                console.log("making placeholder for", this_piece);
+                the_answer += wrap_tag("div", "", ['class="placeholder ' + this_piece + '"', 'data-parent_id="' + the_object['xml:id'] + '"', 'data-has="' + this_piece + '"', 'tabindex="-1"', 'data-editable="123456"', 'data-placeholder=""'])
+            }
         } else if (this_piece.startsWith("(")) {
             console.log("whole this_piece", this_piece);
             this_piece = this_piece.slice(1,-1);
