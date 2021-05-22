@@ -2722,9 +2722,9 @@ function expand_condensed_source_html(text, context) {
     if (text.includes("<&>")) {
         console.log("     qqqqq      expand_condensed_source_html", text);
         if (context == "edit") {
-            return text.replace(/\s*<&>(.*?)<;>\s*/g,expand_condensed_src_edit)
+            return text.replace(/<&>(.*?)<;>/g,expand_condensed_src_edit)
          } else {
-            return text.replace(/\s*<&>(.*?)<;>\s*/g,expand_condensed_src_html)
+            return text.replace(/<&>(.*?)<;>/g,expand_condensed_src_html)
          }
     } else {
     console.log("returning text XX" + text.substring(0,17) + "YY");
