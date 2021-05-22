@@ -18,6 +18,7 @@
 # along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 # *********************************************************************
 
+# 2021-05-21: this script expects Python 3.6 or newer
 # 2020-05-20: this script expects Python 3.4 or newer
 
 # This is an extremely simple demonstration of how to

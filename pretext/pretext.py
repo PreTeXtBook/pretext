@@ -17,6 +17,16 @@
 # along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 # *********************************************************************
 
+# Python Version History
+# vermin is a great linter/checker to check versions required
+#     https://github.com/netromdk/vermin.git
+# 2021-05-21: this module expects Python 3.6 or newer
+#     in reality:
+#     shutil.copytree(dirs_exist_ok) requires Python 3.8
+#         (only in experimental code right now)
+#     subprocess.run() requires Python 3.5
+#     shutil.which() member requires 3.3
+#     otherwise Python 3.0 might be sufficient
 # 2020-05-20: this module expects Python 3.4 or newer
 
 #############################
@@ -1651,6 +1661,7 @@ def pdf(xml, pub_file, stringparams, out_file, dest_dir):
 
     warning = '\n'.join(['************************************************',
                          'Conversion to PDF is experimental and incomplete',
+                         '   (Temporarily requires Python version 3.8)    ',
                          '************************************************'])
     print(warning)
     #
@@ -1664,6 +1675,7 @@ def pdf(xml, pub_file, stringparams, out_file, dest_dir):
     external_dir = os.path.join(tmp_dir, external)
     # make the LateX source file in scratch directory
     latex(xml, pub_file, stringparams, None, tmp_dir)
+    # "dirs_exist_ok" keyword is Python 3.8; necessary?
     # copy managed, generated images
     shutil.copytree(generated_abs, generated_dir, dirs_exist_ok=True)
     # copy externally manufactured images
@@ -1807,7 +1819,7 @@ def check_python_version():
 
     # This test could be more precise,
     # but only handling 2to3 switch when introduced
-    msg = ''.join(["PreTeXt script/module expects Python 3.4, not Python 2 or older\n",
+    msg = ''.join(["PreTeXt script/module expects Python 3.6, not Python 2 or older\n",
                    "You have Python {}\n",
                    "** Try prefixing your command-line with 'python3 ' **"])
     if sys.version_info[0] <= 2:

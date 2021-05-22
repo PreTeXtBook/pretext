@@ -18,6 +18,8 @@
 # along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 # *********************************************************************
 
+# 2021-05-21: this script expects Python 3.6 or newer
+#     argparse is backported to 3.1 (?)
 # 2020-05-20: this script expects Python 3.4 or newer
 
 import pretext as ptx
@@ -84,7 +86,8 @@ def string_parameters_as_dict(pairs):
 def get_cli_arguments():
     """Return the CLI arguments in parser object"""
     import argparse
-    parser = argparse.ArgumentParser(description='PreTeXt utility script', formatter_class=argparse.RawTextHelpFormatter)
+    parser = argparse.ArgumentParser(description='PreTeXt utility script (requires Python 3.6)',
+                                     formatter_class=argparse.RawTextHelpFormatter)
 
     verbose_help = '\n'.join(["verbosity of information on progress of the program",
                               "  -v  is actions being performed",
@@ -160,7 +163,7 @@ def main():
     import os # .sep
     # TODO: isolate two os.sep into getters
 
-    # always check version, raises error for Python 2 or less
+    # always check version, raises fatal error for Python 2 or less
     ptx.check_python_version()
 
     # grab command line arguments
@@ -181,7 +184,7 @@ def main():
     ptx._debug("Parsed CLI args {}".format(vars(args)))
 
     # Report Python version in debugging output
-    ptx._debug("Python version: {} (expecting 3.4 or newer)".format(ptx.python_version()))
+    ptx._debug("Python version: {} (expecting 3.6 or newer)".format(ptx.python_version()))
 
     # Check discovering directory locations as
     # realized by PreTeXt installation
