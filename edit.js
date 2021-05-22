@@ -2280,24 +2280,51 @@ function extract_internal_contents(some_text) {
     // some_text must be a paragraph with mixed content only contining
     // non-nested tags
     the_text = some_text;
- //   console.log("            xxxxxxxxxx  the_text is", the_text);
+    console.log("            xxxxxxxxxx  the_text is", the_text);
     console.log("extract_internal_contents");
-    if (the_text.includes('data-editable="99" tabindex="-1">')) {
-        return the_text.replace(/<([^<]+) data-editable="99" tabindex="-1">(.*?)<[^<]+>/g, save_internal_cont)
+/*
+    if (the_text.includes('data-editable="44" tabindex="-1">')) {
+        the_text = the_text.replace(/<([^<]+) data-editable="44" tabindex="-1">(.*?)<[^<]+>/g, save_internal_cont)
     } else if(the_text.includes('$ ')) {   // not general enough
-         return the_text.replace(/(^|\s)\$([^\$]+)\$(\s|$|[.,!?;:])/g, extract_new_math)
+         the_text = the_text.replace(/(^|\s)\$([^\$]+)\$(\s|$|[.,!?;:])/g, extract_new_math)
+    } else if(the_text.includes('&lt;m&gt;')) {   // not general enough
+         the_text = the_text.replace(/(^|\s)&lt;m&gt;(.*?)&lt;\/m&gt;(\s|$)/g, extract_new_math)
     } else {
-    return the_text
+         //  nothing
     }
+*/
+
+    // inline from previous editing
+    the_text = the_text.replace(/<([^<]+) data-editable="44" tabindex="-1">(.*?)<[^<]+>/g, save_internal_cont)
+    // new $math$
+    the_text = the_text.replace(/(^|\s)\$([^\$]+)\$(\s|$|[.,!?;:])/g, extract_new_math)
+    // new <m>math</m>
+    the_text = the_text.replace(/(^|\s)&lt;m&gt;(.*?)&lt;\/m&gt;(\s|$)/g, extract_new_math)
+
+    for (var this_tag in inline_tags) {
+        var this_tag_search = "&lt;(" + this_tag + ")&gt;" + "(.*?)" + "&lt;\\/" + this_tag + "&gt;";
+        var this_tag_search_re = new RegExp(this_tag_search,"g");
+        the_text = the_text.replace(this_tag_search_re, extract_new_inline)
+    }
+
+    return the_text
 }
 
 function extract_new_math(match, sp_before, math_content, sp_after) {
-    new_math_id = randomstring();
+    var new_math_id = randomstring();
     internalSource[new_math_id] = { "xml:id": new_math_id, "sourcetag": "m",
                           "content": math_content}
     return sp_before + "<&>" + new_math_id + "<;>" + sp_after
 }
+function extract_new_inline(match, the_tag, the_content) {
+    var new_id = randomstring();
+    console.log("extracting", the_content, "inside", the_tag);
+    internalSource[new_id] = { "xml:id": new_id, "sourcetag": the_tag,
+                          "content": the_content};
+    return "<&>" + new_id + "<;>"
+}
 
+// rename this next function
 function save_internal_cont(match, contains_id, the_contents) {
     this_id = contains_id.replace(/.*id="(.+?)".*/, '$1');
 
@@ -2365,7 +2392,7 @@ function assemble_internal_version_changes() {
             else { paragraph_content_list_trimmed.push(this_paragraph_contents_raw) }
        //     console.log("this_paragraph_contents_raw", this_paragraph_contents_raw);
             console.log("done transforming paragraph", j, "with object_being_edited",object_being_edited);
-            console.log("which has contents", this_paragraph_contents_raw.substring(0,20))
+            console.log("which has contents", this_paragraph_contents_raw.substring(0,50))
         }
 
         if (!paragraph_content_list_trimmed.length ) { 
