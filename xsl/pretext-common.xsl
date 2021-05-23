@@ -2029,14 +2029,15 @@ Book (with parts), "section" at level 3
 <!-- #################### -->
 
 <!-- A docinfo may have latex-image-preamble without a  -->
-<!-- @syntax. There may be more than one. They are      -->
-<!-- concatenated here and stored in a common variable. -->
-<!-- Otherwise, this variable is empty.                 -->
+<!-- @syntax. There should only be one, but schema does -->
+<!-- not enforce that. It is stored here as a variable  -->
+<!-- (possibly empty) to facilitate having other        -->
+<!-- latex-image-preamble that do have special @syntax. -->
 <xsl:variable name="latex-image-preamble">
     <xsl:choose>
         <xsl:when test="$docinfo/latex-image-preamble[not(@syntax)]">
             <xsl:call-template name="sanitize-text">
-                <xsl:with-param name="text" select="$docinfo/latex-image-preamble[not(@syntax)]" />
+                <xsl:with-param name="text" select="$docinfo/latex-image-preamble[not(@syntax)][1]" />
             </xsl:call-template>
         </xsl:when>
         <xsl:otherwise/>
