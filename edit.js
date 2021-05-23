@@ -1120,7 +1120,7 @@ function top_menu_options_for(this_obj) {
             this_list = '<li tabindex="-1" id="choose_current" data-env="p" data-action="edit">Edit ' + this_obj_environment + '</li>';
             var editable_children = next_editable_of(this_obj, "children");
             console.log("editable_children", editable_children);
-            if (editable_children.length) {
+            if (editable_children.length  && !(this_object_type == "P")) {
                 this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_obj_environment + '</li>';
             }
         } else if (this_obj.classList.contains("image-box")) {
@@ -1203,7 +1203,7 @@ function edit_menu_for(this_obj_or_id, motion) {
     if (motion == "entering") {
         menu_location = "afterbegin";
         this_obj.classList.remove("may_leave"); 
-        if (next_editable_of(this_obj, "children").length) {
+        if (next_editable_of(this_obj, "children").length && !(this_obj.tagName == "P")) {
             this_obj.classList.add("may_enter");
         } else {
             this_obj.classList.add("may_select");
@@ -1281,7 +1281,7 @@ function edit_menu_for(this_obj_or_id, motion) {
 
             edit_option.innerHTML = "<b>" + "adjust" + "</b>" + " " + "workspace";
         } else {
-            if (next_editable_of(this_obj, "children").length) {
+            if (next_editable_of(this_obj, "children").length && this_obj.tagName != "P") {
                 console.log("this_obj", this_obj);
                 if (this_id == top_level_id) {
                     edit_option.innerHTML = "<b>enter</b> this " + internalSource[this_obj.id]["sourcetag"] + "?";
@@ -2295,7 +2295,7 @@ function extract_internal_contents(some_text) {
 */
 
     // inline from previous editing
-    the_text = the_text.replace(/<([^<]+) data-editable="44" tabindex="-1">(.*?)<[^<]+>/g, save_internal_cont)
+    the_text = the_text.replace(/<([^<]+) data-editable="[^"]+" tabindex="-1">(.*?)<[^<]+>/g, save_internal_cont)
     // new $math$
     the_text = the_text.replace(/(^|\s)\$([^\$]+)\$(\s|$|[.,!?;:])/g, extract_new_math)
     // new <m>math</m>
@@ -2303,6 +2303,7 @@ function extract_internal_contents(some_text) {
 
     for (var this_tag in inline_tags) {
         var this_tag_search = "&lt;(" + this_tag + ")&gt;" + "(.*?)" + "&lt;\\/" + this_tag + "&gt;";
+        console.log("searching for", this_tag_search);
         var this_tag_search_re = new RegExp(this_tag_search,"g");
         the_text = the_text.replace(this_tag_search_re, extract_new_inline)
     }
@@ -2770,6 +2771,11 @@ function html_from_internal_id(the_id, is_inner) {
         the_html_objects.push(html_of_this_object);
 
     } else if (sourcetag in inline_tags) {   // assume is_inner?
+
+
+// the opening and closing tags should come from someowhere else, right?
+
+
         var opening_tag = inline_tags[sourcetag][1][0];
         opening_tag += ' id="' + the_id + '"data-editable="50" tabindex="-1">';
         var closing_tag = inline_tags[sourcetag][1][1];
