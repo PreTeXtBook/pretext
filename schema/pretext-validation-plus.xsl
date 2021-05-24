@@ -142,6 +142,38 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates/>
 </xsl:template>
 
+<!-- Docinfo should have at most one latex-image-preamble -->
+<!-- of each value for @syntax (including no @syntax)     -->
+<xsl:template match="latex-image-preamble[not(@syntax)][1]">
+    <xsl:if test="count(parent::docinfo/latex-image-preamble[not(@syntax)]) > 1">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message">
+                <xsl:text>There should be at most one &lt;latex-image-preamble&gt; without a&#xa;</xsl:text>
+                <xsl:text>@syntax within the &lt;docinfo&gt; element. There are more than one,&#xa;</xsl:text>
+                <xsl:text>and they should be consolidated.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- recurse further -->
+    <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="latex-image-preamble[@syntax = 'PGtikz'][1]">
+    <xsl:if test="count(parent::docinfo/latex-image-preamble[@syntax = 'PGtikz']) > 1">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message">
+                <xsl:text>There should be at most one &lt;latex-image-preamble&gt; with @syntax&#xa;</xsl:text>
+                <xsl:text>having value 'PGtikz' within the &lt;docinfo&gt; element. There are&#xa;</xsl:text>
+                <xsl:text>more than one, and they should be consolidated.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- recurse further -->
+    <xsl:apply-templates/>
+</xsl:template>
+
 <!-- ########## -->
 <!-- Advisories -->
 <!-- ########## -->

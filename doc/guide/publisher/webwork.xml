@@ -99,6 +99,32 @@
     </p>
   </section>
 
+  <section xml:id="webwork-pg-macros">
+    <title>PG Macros from the <pretext/> Source</title>
+    <p>
+      The project's <webwork/> exercises may rely on PG macros that are written into the project's source.
+      For example, the exercises might have TikZ images that rely on <tag>docinfo/latex-image-preamble</tag>
+      with <attr>syntax</attr> set to <c>PGtikz</c>.
+    </p>
+    <p>
+      For this, a PG macro library file must be built and placed in the host course's <c>templates/macros/</c>
+      folder <em>before</em> attempting to process the <webwork/> exercises. To build this macro library, run:
+      <cd>
+        pretext -c pg-macros aota.ptx
+      </cd>
+      <c>aota.ptx</c> in the example is the root file for your <pretext/> project.
+      You could also specify a location to place the resulting macro library file:
+      <cd>
+        pretext -c pg-macros -d some/file/path aota.ptx
+      </cd>
+    </p>
+    <p>
+      Once you have the macro library file, upload it to the host <webwork/> course's <c>templates/macros</c> folder.
+      If your project relies on the AIM <webwork/> server and you need to supply a macro library file
+      to a host course on that server, post to <email>pretex-support@googlegroups.com</email> and we can help with that.
+    </p>
+  </section>
+
   <section xml:id="webwork-processing">
     <title>Processing <webwork/> Exercises</title>
 
@@ -132,14 +158,17 @@
         <prompt>$ </prompt>
         <input>pretext -c webwork -s &lt;server&gt; -d webwork-representations aota.ptx</input>
       </console>
+      <p>
+        <c>aota.ptx</c> in the example is the root file for your <pretext/> project.
+      </p>
       <warning>
         <title>File Paths</title>
         <p>
           In the previous example and those that follow, you should specify paths as needed.
-          For example, the <c>pretext</c> script is typically at <c>~/mathbook/script/pretext</c>.
+          For example, the <c>pretext</c> script is typically at <c>~/mathbook/pretext/pretext</c>.
           And the <c>-d</c> option is specifying a directory to place the auxiliary file,
-          and if you literally use <c>-d webwork-extraction</c> instead of a full path,
-          the expectation is that <c>webwork-extraction</c> is a folder in your current working folder.
+          and if you literally use <c>-d webwork-representations</c> instead of a full path,
+          the expectation is that <c>webwork-representations</c> is a folder in your current working folder.
         </p>
       </warning>
       <p>
@@ -167,9 +196,6 @@
         An auxiliary XML <em>file</em> called <c>webwork-representations.ptx</c> will be created in this folder.
         (Note that you can name the folder whatever you like,
         but the auxiliary file that is created will <em>always</em> be named <c>webwork-representations.ptx</c>.)
-      </p>
-      <p>
-        <c>aota.ptx</c> in the example is the root file for your <pretext/> project.
       </p>
     </subsection>
 

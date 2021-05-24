@@ -256,6 +256,8 @@ def main():
         raise NotImplementedError(wtdep)
     elif args.component == 'webwork':
         ptx.webwork_to_xml(xml_source, publisher_file, stringparams, args.abort, args.server, dest_dir)
+    elif args.component == 'pg-macros':
+        ptx.pg_macros(xml_source, dest_dir)
     elif args.component == 'youtube':
         ptx.youtube_thumbnail(xml_source, publisher_file, stringparams, args.xmlid, dest_dir)
     elif args.component == 'preview':
