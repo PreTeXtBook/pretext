@@ -512,8 +512,9 @@ objectStructure = {
 
   "q": {    // need to mark it as inline
       "html": {
-          "tag_opening": '"',
-          "tag_closing": '"',
+          "tag": "q",
+          "attributes": ['id="<&>xml:id<;>"', 'class="quote"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+          "data_editable": "qqq",
           "pieces": [["content", ""]]
       },
       "pretext": {
@@ -625,9 +626,12 @@ Object.assign(objectStructure, sidebyside_instances);
 var always_empty_tags = ["img", "image", "ellipsis"];
 var allowed_empty_tags = ["div", "span", "p", "stack"];
 var tag_display = {  /* the default is "block" */
-    "inline": ["m", "em", "ellipsis", "span", "term", "q"], 
+    "inline": ["m", "em", "ellipsis", "span", "term", "dfn", "q"], 
     "title": ["title", "idx", "h1", "h2", "h3", "h4", "h5", "h6", "div"]
 } 
+
+inline_tags = tag_display["inline"];
+inline_math = ["m"];
 
 function process_value_from_source(fcn, piece, src) {
 
@@ -849,13 +853,6 @@ editing_container_for = { "p": 1,
 "proof-standalone": [""],  //just a guess
 "proof": [""]  //just a guess
 }
-
-// each tag has [source_tag, [html_start, html_end]]
-// Note: end of html_start is missing, to make it easier to add attributes
-inline_tags = {'em': ['em', ['<em class="emphasis"', "</em>"]], 
-               'term': ['term', ['<dfn class="terminology"', '</dfn>']]
-}
-inline_math = {'m': ['m', ['\\(', '\\)']] }
 
 /*
 var url = "https://github.com/oscarlevin/discrete-book/blob/master/ptx/sec_intro-intro.ptx";
@@ -1231,7 +1228,7 @@ function edit_menu_for(this_obj_or_id, motion) {
         } else {
             this_obj.classList.add("may_select");
         }
-        if (this_obj.tagName.toLowerCase() in inline_tags) {
+        if (inline_tags.includes(this_obj.tagName.toLowerCase())) {
             this_obj.classList.add("inline");
         }
     } else { menu_location = "afterend";
@@ -1256,7 +1253,7 @@ function edit_menu_for(this_obj_or_id, motion) {
 
     if (motion == "entering") {
         editorLog("inline_tags", inline_tags, "tag", this_obj.tagName.toLowerCase());
-        if (this_obj.tagName.toLowerCase() in inline_tags) {
+        if (inline_tags.includes(this_obj.tagName.toLowerCase())) {
             edit_option.innerHTML = "change this?";
             edit_option.setAttribute('data-location', 'inline');
         } else if (this_obj.classList.contains("type")) {
@@ -2201,15 +2198,23 @@ var internalSource = {  // currently the key is the HTML id
    "hPw": {"xml:id": "hPw", "sourcetag": "section", "title": "What is Discrete Mathematics?",
            "content": "<&>akX<;>\n<&>UvL<;>\n<&>ACU<;>\n<&>gKd<;>\n<&>MRm<;>\n<&>udO<;>\n<&>sYv<;>\n<&>ZfE<;>"},
    "gKd": {"xml:id": "gKd", "sourcetag": "p", "title": "", "parent": ["hPw","content"],
-           "content": "Discrete math could still ask about the range of a function, but the set would not be an interval. Consider the function which gives the number of children of each person reading this. What is the range? I'm guessing it is something like <script type='math/tex'>\\{0, 1, 2, 3\\}</script>. Maybe 4 and 5 are in there too.\nBut certainly there is nobody reading this that has 1.32419 children. This output set <em class='emphasis'>is</em> discrete because the elements are separate. The inputs to the function also form a discrete set because each input is an individual person."},
+           "content": "Discrete math could still ask about the range of a function, but the set would not be an interval. Consider the function which gives the number of children of each person reading this. What is the range? I'm guessing it is something like <&>mset<;>. Maybe 4 and 5 are in there too.\nBut certainly there is nobody reading this that has 1.32419 children. This output set <&>emis<;> discrete because the elements are separate. The inputs to the function also form a discrete set because each input is an individual person."},
+   "mset": {"xml:id": "mset", "sourcetag": "m", "parent": ["gKd","content"],
+           "content": "\\{0, 1, 2, 3\\}"},
+   "emis": {"xml:id": "emis", "sourcetag": "em", "parent": ["gKd","content"],
+           "content": "is"},
+   "emdo": {"xml:id": "emdo", "sourcetag": "em", "parent": ["ZfE","content"],
+           "content": "do"},
+   "emadj": {"xml:id": "emadj", "sourcetag": "em", "parent": ["vTb","content"],
+           "content": "Adjective"},
    "MRm": {"xml:id": "MRm", "sourcetag": "p", "title": "", "parent": ["hPw","content"],
            "content": "One way to get a feel for the subject is to consider the types of problems you solve in discrete math.\nHere are a few simple examples:"},
    "ZfE": {"xml:id": "cak", "sourcetag": "p", "title": "", "parent": ["hPw","content"],
-           "content": "Ultimately the best way to learn what discrete math is about is to <em>do</em> it. Let's get started! Before we can begin answering more complicated (and fun) problems, we must lay down some foundation. We start by reviewing mathematical statements, sets, and functions in the framework of discrete mathematics."},
+           "content": "Ultimately the best way to learn what discrete math is about is to <&>emdo<;> it. Let's get started! Before we can begin answering more complicated (and fun) problems, we must lay down some foundation. We start by reviewing mathematical statements, sets, and functions in the framework of discrete mathematics."},
    "PLS": {"xml:id": "PLS", "sourcetag": "p", "title": "", "parent": ["akX","content"],
            "content": "dis·crete / dis'krët."},
    "vTb": {"xml:id": "vTb", "sourcetag": "p", "title": "", "parent": ["akX","content"],
-           "content": "<em>Adjective</em>: Individually separate and distinct."},
+           "content": "<&>emadj<;>: Individually separate and distinct."},
    "cak": {"xml:id": "cak", "sourcetag": "p", "title": "", "parent": ["akX","content"],
            "content": "<&>357911<;>: separate - detached - distinct - abstract."},
    "akX": {"xml:id": "akX", "sourcetag": "blockquote", "title": "", "parent": ["hPw","content"],
@@ -2218,17 +2223,31 @@ var internalSource = {  // currently the key is the HTML id
    "ell2": {"xml:id": "ell1", "sourcetag": "ellipsis", "parent": ["UvL","content"]},
    "qqq1": {"xml:id": "qqq1", "sourcetag": "q", "parent": ["UvL","content"], "content": "discrete"},
    "UvL": {"xml:id": "UvL", "sourcetag": "p", "title": "","parent": ["hPw","content"],
-           "content": "    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n     In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n <&>ell2<;>.\n Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n What sort of problems?\n Okay, those that involve numbers,\n functions, lines, triangles,\n <&>ell1<;>.\n Whatever your conception of what mathematics is,\n try applying the concept of <&>qqq1<;> to it, as defined above.\n Some math fundamentally deals with <&>eee1a<;>\n that is individually separate and distinct."},
+           "content": "    Defining <&>eee1c<;>\n    is hard because defining <&>eee1d<;> is hard.\n    What is mathematics?\n    The study of numbers?\n     In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n <&>ell2<;>.\n Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n What sort of problems?\n Okay, those that involve numbers,\n functions, lines, triangles,\n <&>ell1<;>.\n Whatever your conception of what mathematics is,\n try applying the concept of <&>qqq1<;> to it, as defined above.\n Some math fundamentally deals with <&>eee1a<;>\n that is individually separate and distinct."},
+   "eee1c": {"xml:id": "eee1c", "sourcetag": "em", "parent": ["UvL", "content"],
+           "content": 'discrete mathematics'},
+   "eee1d": {"xml:id": "eee1d", "sourcetag": "em", "parent": ["UvL", "content"],
+           "content": 'mathematics'},
    "eee1a": {"xml:id": "eee1a", "sourcetag": "em", "parent": ["UvL", "content"],
            "content": 'stuff'},
+   "eee1b": {"xml:id": "eee1b", "sourcetag": "em", "parent": ["UvL", "content"],
+           "content": 'combine'},
    "357911": {"xml:id": "357911", "sourcetag": "em", "parent": ["cak", "content"],
            "content": 'Synonyms'},
    "term1a": {"xml:id": "term1a", "sourcetag": "term", "parent": ["sYv","content"],
              "content": "symbolic logic"},
+   "term1b": {"xml:id": "term1b", "sourcetag": "term", "parent": ["sYv","content"],
+             "content": "combinatorics"},
+   "term1c": {"xml:id": "term1c", "sourcetag": "term", "parent": ["sYv","content"],
+             "content": "sequences"},
+   "term1d": {"xml:id": "term1d", "sourcetag": "term", "parent": ["sYv","content"],
+             "content": "graph theory"},
+   "m0": {"xml:id": "m0", "sourcetag": "m", "parent": ["ACU","content"],
+             "content": "0"},
    "sYv": {"xml:id": "sYv", "sourcetag": "p", "parent": ["hPw","content"],
-           "content": 'One reason it is difficult to define discrete math is that it is a very broad description which encapsulates a large number of subjects.\nIn this course we will study four main topics: <term>combinatorics</term> (the theory of ways things <em class="emphasis">combine</em>; in particular, how to count these ways), <dfn class="terminology">sequences</dfn>, <&>term1a<;>, and <dfn class="terminology">graph theory</dfn>. However, there are other topics that belong under the discrete umbrella, including computer science, abstract algebra, number theory, game theory, probability, and geometry (some of these, particularly the last two, have both discrete and non-discrete variants).'},
+           "content": 'One reason it is difficult to define discrete math is that it is a very broad description which encapsulates a large number of subjects.\nIn this course we will study four main topics: <&>term1b<;> (the theory of ways things <&>eee1b<;>; in particular, how to count these ways), <&>term1c<;>, <&>term1a<;>, and <&>term1d<;>. However, there are other topics that belong under the discrete umbrella, including computer science, abstract algebra, number theory, game theory, probability, and geometry (some of these, particularly the last two, have both discrete and non-discrete variants).'},
    "ACU": {"xml:id": "ACU", "sourcetag": "p", "parent": ["hPw","content"],
-           "content": "In an algebra or calculus class, you might have found a particular set of numbers (maybe the set of numbers in the range of a function). You would represent this set as an interval: <&>223344<;> is the range of <&>112233<;> since the set of outputs of the function are all real numbers <m>0</m> and greater. This set of numbers is NOT discrete. The numbers in the set are not separated by much at all. In fact, take any two numbers in the set and there are infinitely many more between them which are also in the set."},
+           "content": "In an algebra or calculus class, you might have found a particular set of numbers (maybe the set of numbers in the range of a function). You would represent this set as an interval: <&>223344<;> is the range of <&>112233<;> since the set of outputs of the function are all real numbers <&>m0<;> and greater. This set of numbers is NOT discrete. The numbers in the set are not separated by much at all. In fact, take any two numbers in the set and there are infinitely many more between them which are also in the set."},
    "112233": {"xml:id": "112233", "sourcetag": "m", "parent": ["ACU","content"],
            "content": "f(x)=x^2"},
    "udO": {"xml:id": "udO", "sourcetag": "investigation", "parent": ["hPw","content"],
@@ -2329,7 +2348,9 @@ function extract_internal_contents(some_text) {
     // new <m>math</m>
     the_text = the_text.replace(/(^|.)&lt;m&gt;(.*?)&lt;\/m&gt;(.|$)/g, extract_new_math)
 
-    for (var this_tag in inline_tags) {
+    for (var j=0; j < inline_tags.length; ++j) {
+        var this_tag = inline_tags[j];
+        editorLog("this_tag", this_tag);
         var this_tag_search = "&lt;(" + this_tag + ")&gt;" + "(.*?)" + "&lt;\\/" + this_tag + "&gt;";
         editorLog("searching for", this_tag_search);
         var this_tag_search_re = new RegExp(this_tag_search,"g");
@@ -2361,20 +2382,20 @@ function save_internal_cont(match, contains_id, the_contents) {
     internalSource[this_id]["content"] = the_contents;
     return "<&>" + this_id + "<;>"
 }
-function assemble_internal_version_changes() {
+function assemble_internal_version_changes(object_being_edited) {
     editorLog("in assemble_internal_version_changes");
-    editorLog("current active element to be saved", document.activeElement);
-    editorLog("which has parent", document.activeElement.parentElement);
-    editorLog("whose age is", document.activeElement.parentElement.getAttribute("data-age"));
+    editorLog("current active element to be saved", object_being_edited);
+    editorLog("which has parent", object_being_edited.parentElement);
+    editorLog("whose age is", object_being_edited.parentElement.getAttribute("data-age"));
 
-    var oldornew = document.activeElement.parentElement.getAttribute("data-age");
-    if (!oldornew) { oldornew = document.activeElement.getAttribute("data-age") }
+    var oldornew = object_being_edited.parentElement.getAttribute("data-age");
+    if (!oldornew) { oldornew = object_being_edited.getAttribute("data-age") }
     editorLog("    OLDorNEW", oldornew);
 
     var possibly_changed_ids_and_entry = [];
     var nature_of_the_change = "";
 
-    var object_being_edited = document.activeElement;
+//    var object_being_edited = document.activeElement;
     var location_of_change = object_being_edited.parentElement;
 
     if (object_being_edited.classList.contains("paragraph_input")) {
@@ -2527,7 +2548,11 @@ function assemble_internal_version_changes() {
         possibly_changed_ids_and_entry.push([image_being_changed, "image"]);
 
 
+    } else if (inline_tags.includes(object_being_edited.tagName.toLowerCase())) {
+        editorLog(object_being_edited, "is inline, so processing parent");
+        return assemble_internal_version_changes(object_being_edited.parentElement)
     } else {
+        errorLog("trouble editing", object_being_edited, "AAA", object_being_edited.tagName.toLowerCase(), "not in", inline_tags);
         alert("don;t know how to assemble internal_version_changes of " + object_being_edited.tagName)
     }
     editorLog("finished assembling internal version, which is now:",internalSource);
@@ -2697,7 +2722,7 @@ function output_from_source(the_object, output_structure, format) {
     }
 
     // pretty print the output
-    if (format == "pretext" && !(output_tag in inline_tags) && !(output_tag in inline_math)) {
+    if (format == "pretext" && !(inline_tags.includes(output_tag)) && !(inline_math.includes(output_tag))) {
         the_answer = the_answer.replace(/(^|\n)( *(\w|<))/g, "$1  $2");
     }
     the_answer = wrap_tag(output_tag, the_answer, output_attributes_values)
@@ -2779,6 +2804,8 @@ function html_from_internal_id(the_id, is_inner) {
     var sourcetag = the_object["sourcetag"];
     editorLog("which has tag", sourcetag);
 
+    editorLog("m in inline_math", inline_math.includes("m"));
+
     var html_of_this_object;
     var the_html_objects = [];
 
@@ -2820,7 +2847,7 @@ function html_from_internal_id(the_id, is_inner) {
         }
         return opening_tag + spacemath_to_tex(the_object["content"]) + closing_tag
 
-    } else if (sourcetag in inline_math && is_inner == "edit") {
+    } else if (inline_math.includes(sourcetag) && is_inner == "edit") {
         // here we are assuming the tag is 'm'
         var opening_tag = '<span class="edit_inline_math"';
         var closing_tag = '</span>';
@@ -2937,7 +2964,7 @@ function local_editing_action(e) {
         if (document.activeElement.getAttribute('data-component') == "title") {
             editorLog("probably saving a title");
             e.preventDefault();
-            these_changes = assemble_internal_version_changes();
+            these_changes = assemble_internal_version_changes(document.activeElement);
             final_added_object = insert_html_version(these_changes);
             most_recent_edit = ongoing_editing_actions.pop();
             recent_editing_actions.unshift(most_recent_edit);
@@ -2959,7 +2986,7 @@ editorLog("    HHH current_editing", current_editing);
             e.preventDefault();
             this_char = "";
             prev_char = "";
-            these_changes = assemble_internal_version_changes();
+            these_changes = assemble_internal_version_changes(document.activeElement);
             editorLog("    CCC these_changes", these_changes);
             editorLog("    CCC0 these_changes[0]", these_changes[0]);
             editorLog("ongoing_editing_actions", ongoing_editing_actions);
