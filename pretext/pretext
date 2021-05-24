@@ -32,15 +32,34 @@ import pretext as ptx
 # by author/publisher on the command line
 # Use pretext module console messaging routines
 
-def verify_input_file(f):
+def verify_input_file(f, file_type):
     """Verify file exists, or raise error.  Return absolute path"""
+    # file_type is 'source' or 'publisher'
+    #    the source gets fed into the lxml routines and so we
+    #    let Python deal with separators, etc.  However the
+    #    publisher file is passed around until an XSL stylesheet
+    #    actually opens it for reading, so we need to make
+    #    separators all of a style the XSL command expects
+    #    Bonus, we can customize logging messages
+    import os # .sep
     import os.path # isfile(), abspath()
 
-    ptx._verbose('verifying and expanding input file: {}'.format(f))
+    # print representation AND error-check
+    if file_type == 'source':
+        file_descriptor = 'XML source'
+    elif file_type == 'publisher':
+        file_descriptor = 'publisher'
+    else:
+        msg = "input file verification should receive 'source' or 'publisher' parameter, not '{}'"
+        raise ValueError(msg.format(file_type))
+
+    ptx._verbose('verifying and expanding {} file: {}'.format(file_descriptor, f))
     if not(os.path.isfile(f)):
         raise ValueError('file {} does not exist'.format(f))
     absf = os.path.abspath(f)
-    ptx._verbose('input file expanded to absolute path: {}'.format(absf))
+    if file_type == 'publisher':
+        absf = absf.replace(os.sep, '/')
+    ptx._verbose('input {} file expanded to absolute path: {}'.format(file_descriptor, absf))
     return absf
 
 def get_output_file(file_path):
@@ -206,7 +225,7 @@ def main():
     # must exist first if given, return value always exists
     dest_dir = get_destination_directory(args.dir)
     # check and sanitize XML source, presumed to exiast
-    xml_source = verify_input_file(args.xml_file)
+    xml_source = verify_input_file(args.xml_file, 'source')
     # data directory is optional, so allow for None here
     if args.data_dir:
         data_dir = ptx.verify_input_directory(args.data_dir)
@@ -214,9 +233,7 @@ def main():
         data_dir = None
     # publisher file is optional, so allow for None here
     if args.publisher_file:
-        publisher_file = verify_input_file(args.publisher_file)
-        #ensure forward slash to pass to xsltproc:
-        publisher_file = publisher_file.replace(os.sep, '/')
+        publisher_file = verify_input_file(args.publisher_file, 'publisher')
     else:
         publisher_file = None
 
@@ -227,8 +244,7 @@ def main():
     # as 'publisher_file' and ensure correct slashes
     # but do not stomp on a file passed with dedicated switch
     if ('publisher' in stringparams) and not(publisher_file):
-        publisher_file = verify_input_file(stringparams['publisher'])
-        publisher_file = publisher_file.replace(os.sep, '/')
+        publisher_file = verify_input_file(stringparams['publisher'], 'publisher')
         del stringparams['publisher']
 
     ptx._verbose('Done examining environment and initializing setup info')
