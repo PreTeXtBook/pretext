@@ -99,6 +99,7 @@ def get_cli_arguments():
         ('sageplot', 'Sage graphics'),
         ('latex-image', 'LaTeX pictures'),
         ('webwork', 'WeBWorK problems in authored, PG, url, and static representations'),
+        ('pg-macros', 'Server-side macros for WeBWorK problem generation'),
         ('youtube', 'Thumbnails for YouTube videos (JPEG only)'),
         ('preview', 'Static preview images for interactives'),
         ('mom', 'MyOpenMath problem files, static versions'),
