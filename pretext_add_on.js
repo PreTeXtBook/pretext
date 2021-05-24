@@ -65,6 +65,7 @@ function permalinkDescription(elem) {
     var numberStr = "";
     var numberSep = " ";
     var titleStr = "";
+    var typeStr = "";
     var resultNodes;
     if (nodeName == 'P') {
         if (isExerciseGroup) {
@@ -89,6 +90,7 @@ function permalinkDescription(elem) {
             }
         }
     }
+    typeStr = typeStr || "";  // hack because of error from https://pretextbook.org/examples/sample-article/html/interesting-corollary.html#p-206
     if (headerNode) {
         if (typeStr.length > 0) {
             resultNodes = headerNode.getElementsByClassName("codenumber");
@@ -155,11 +157,11 @@ async function copyPermalink(elem) {
         }
         // temporary element to alert user that link was copied
         let copied_msg = document.createElement('p');
-        // copied_msg.className = "permalink-alert";
-        copied_msg.innerHTML = "<em class=\"alert\">Link to " + msg_link  + " copied to clipboard!</em>";
+        copied_msg.className = "permalink-alert";
+        copied_msg.innerHTML = "Link to " + msg_link  + " copied to clipboard";
         elem.parentElement.insertBefore(copied_msg, elem);
-        // wait 5 seconds
-        await new Promise((resolve, reject) => setTimeout(resolve, 5000));
+        // show confirmation for a couple seconds
+        await new Promise((resolve, reject) => setTimeout(resolve, 1500));
         copied_msg.remove();
     } catch (err) {
         console.error('Failed to copy link to clipboard!', err);
@@ -272,7 +274,7 @@ console.log("this is e", e);
             this_permalink_container.setAttribute('class', 'autopermalink');
             this_permalink_container.setAttribute('onclick', 'copyPermalink(this)');
             this_permalink_container.setAttribute('data-description', this_permalink_description);
-            this_permalink_container.innerHTML = '<a href="' + this_permalink_url + '">' + permalink_word + '</a>';
+            this_permalink_container.innerHTML = '<span href="' + this_permalink_url + '">' + permalink_word + '</span>';
 
             this_item.insertAdjacentElement("afterbegin", this_permalink_container);
         } else {
