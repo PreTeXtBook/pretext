@@ -180,8 +180,6 @@ def get_cli_arguments():
 
 def main():
     """React to command-line switches in order to perform basic tasks"""
-    import os # .sep
-    # TODO: isolate two os.sep into getters
 
     # always check version, raises fatal error for Python 2 or less
     ptx.check_python_version()

@@ -1125,6 +1125,7 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
 ################################
 
 def pg_macros(xml_source, dest_dir):
+    import os # chdir()
     import os.path  # join()
 
     ptx_xsl_dir = get_ptx_xsl_path()
