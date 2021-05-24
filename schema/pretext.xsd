@@ -3465,7 +3465,17 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="package" type="xs:string"/>
-  <xs:element name="latex-image-preamble" type="xs:string"/>
+  <xs:element name="latex-image-preamble">
+    <xs:complexType mixed="true">
+      <xs:attribute name="syntax">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="PGtikz"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="asymptote-preamble" type="xs:string"/>
   <xs:element name="macros" type="xs:string"/>
   <xs:element name="cross-references">

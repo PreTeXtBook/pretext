@@ -1491,7 +1491,10 @@
                     element package {text}*
                 }
             Configuration |=
-                element latex-image-preamble {text}
+                element latex-image-preamble {
+                    attribute syntax {"PGtikz"}?,
+                    text
+                }
             Configuration |=
                 element asymptote-preamble {text}
             
