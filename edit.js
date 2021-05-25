@@ -532,7 +532,7 @@ objectStructure = {
   "ellipsis": {    // need to mark it as inline
       "html": {
           "tag": "span",
-          "attributes": ['id="<&>xml:id<;>"', 'class="abbrev"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+          "attributes": ['id="<&>xml:id<;>"', 'class="abbrev"', 'contenteditable="false"'],
           "data_editable": "abbr",
           "pieces": [["(literal,&hellip;)", ""]]
       },
@@ -546,8 +546,7 @@ objectStructure = {
   "etc": {    // need to mark it as inline
       "html": {
           "tag": "span",
-          "attributes": ['id="<&>xml:id<;>"', 'class="abbrev"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
-          "data_editable": "abbr",
+          "attributes": ['id="<&>xml:id<;>"', 'class="abbrev"', 'contenteditable="false"'],
           "pieces": [["(literal,etc)", ""]]
       },
       "pretext": {
