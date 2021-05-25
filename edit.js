@@ -498,12 +498,60 @@ objectStructure = {
           "pieces": [["content", ""]]
       }
   },
+  "alert": {    // need to mark it as inline
+      "html": {
+          "tag": "em",
+          "attributes": ['id="<&>xml:id<;>"', 'class="alert"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+          "data_editable": "aall",
+          "pieces": [["content", ""]]
+      },
+      "pretext": {
+          "tag": "alert",
+          "pieces": [["content", ""]]
+      },
+      "source": {
+          "pieces": [["content", ""]]
+      }
+  },
+  "c": {    // need to mark it as inline
+      "html": {    
+          "tag": "code",
+          "attributes": ['id="<&>xml:id<;>"', 'class="code-inline tex2jax_ignore"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+          "data_editable": "ccoo",
+          "pieces": [["content", ""]]
+      },   
+      "pretext": {
+          "tag": "c",
+          "pieces": [["content", ""]]
+      },
+      "source": {
+          "pieces": [["content", ""]]
+      }
+  },
+
   "ellipsis": {    // need to mark it as inline
       "html": {
+          "tag": "span",
+          "attributes": ['id="<&>xml:id<;>"', 'class="abbrev"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+          "data_editable": "abbr",
           "pieces": [["(literal,&hellip;)", ""]]
       },
       "pretext": {
           "tag": "ellipsis",
+           "pieces": []
+      },
+      "source": {
+      }
+  },
+  "etc": {    // need to mark it as inline
+      "html": {
+          "tag": "span",
+          "attributes": ['id="<&>xml:id<;>"', 'class="abbrev"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+          "data_editable": "abbr",
+          "pieces": [["(literal,etc)", ""]]
+      },
+      "pretext": {
+          "tag": "etc",
            "pieces": []
       },
       "source": {
@@ -626,12 +674,13 @@ Object.assign(objectStructure, sidebyside_instances);
 var always_empty_tags = ["img", "image", "ellipsis"];
 var allowed_empty_tags = ["div", "span", "p", "stack"];
 var tag_display = {  /* the default is "block" */
-    "inline": ["m", "em", "ellipsis", "span", "term", "dfn", "q"], 
+    "inline": ["m", "em", "ellipsis", "span", "term", "dfn", "q", "c", "code", "alert"], 
     "title": ["title", "idx", "h1", "h2", "h3", "h4", "h5", "h6", "div"]
 } 
 
 inline_tags = tag_display["inline"];
 inline_math = ["m"];
+inline_abbrev = ["ellipsis", "ie", "eg", "etc"];
 
 function process_value_from_source(fcn, piece, src) {
 
@@ -2348,6 +2397,23 @@ function extract_internal_contents(some_text) {
     // new <m>math</m>
     the_text = the_text.replace(/(^|.)&lt;m&gt;(.*?)&lt;\/m&gt;(.|$)/g, extract_new_math)
 
+    // "..." to <ellipsis/>, which will then be processed
+    the_text = the_text.replace(/\.\.\./g, '&lt;ellipsis\/&gt;');
+    // same for etc
+    the_text = the_text.replace(/(\s)etc([^a-zA-Z])/g, '$1&lt;etc\/&gt;$2');
+
+    for (var j=0; j < inline_abbrev.length; ++j) {
+        var this_tag = inline_abbrev[j];
+        editorLog("this_tag", this_tag);
+        var this_tag_search = "&lt;(" + this_tag + ")\\/&gt;";
+        editorLog("searching for", this_tag_search);
+        var this_tag_search_re = new RegExp(this_tag_search,"g");
+        the_text = the_text.replace(this_tag_search_re, extract_new_inline)
+    }
+
+    // "quote" to <q>quote</q>, which will then be processed
+    the_text = the_text.replace(/(^|\s)"([^"]+)"(\s|$|[.,!?;:])/g, '$1&lt;q&gt;$2&lt;\/q&gt;$3');
+
     for (var j=0; j < inline_tags.length; ++j) {
         var this_tag = inline_tags[j];
         editorLog("this_tag", this_tag);
@@ -2371,6 +2437,12 @@ function extract_new_inline(match, the_tag, the_content) {
     editorLog("extracting", the_content, "inside", the_tag);
     internalSource[new_id] = { "xml:id": new_id, "sourcetag": the_tag,
                           "content": the_content};
+    return "<&>" + new_id + "<;>"
+}
+function extract_new_abbrev(match, the_tag) {
+    var new_id = randomstring();
+    editorLog("extracting", the_content, "inside", the_tag);
+    internalSource[new_id] = { "xml:id": new_id, "sourcetag": the_tag};
     return "<&>" + new_id + "<;>"
 }
 
