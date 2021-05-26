@@ -670,10 +670,10 @@ Object.assign(objectStructure, sidebyside_instances);
 
 // shoudl we distinguish empty tags by format?
 // these tags are html an dpretext
-var always_empty_tags = ["img", "image", "ellipsis"];
+var always_empty_tags = ["img", "image", "ellipsis", "ie", "eg", "etc"];
 var allowed_empty_tags = ["div", "span", "p", "stack"];
 var tag_display = {  /* the default is "block" */
-    "inline": ["m", "em", "ellipsis", "span", "term", "dfn", "q", "c", "code", "alert"], 
+    "inline": ["m", "em", "ellipsis", "span", "term", "dfn", "q", "c", "code", "alert", "ie", "eg", "etc"], 
     "title": ["title", "idx", "h1", "h2", "h3", "h4", "h5", "h6", "div"]
 } 
 
@@ -2246,7 +2246,7 @@ var internalSource = {  // currently the key is the HTML id
    "hPw": {"xml:id": "hPw", "sourcetag": "section", "title": "What is Discrete Mathematics?",
            "content": "<&>akX<;>\n<&>UvL<;>\n<&>ACU<;>\n<&>gKd<;>\n<&>MRm<;>\n<&>udO<;>\n<&>sYv<;>\n<&>ZfE<;>"},
    "gKd": {"xml:id": "gKd", "sourcetag": "p", "title": "", "parent": ["hPw","content"],
-           "content": "Discrete math could still ask about the range of a function, but the set would not be an interval. Consider the function which gives the number of children of each person reading this. What is the range? I'm guessing it is something like <&>mset<;>. Maybe 4 and 5 are in there too.\nBut certainly there is nobody reading this that has 1.32419 children. This output set <&>emis<;> discrete because the elements are separate. The inputs to the function also form a discrete set because each input is an individual person."},
+           "content": "Discrete math could still ask about the range of a function, but the set would not be an interval. Consider the function which gives the number of children of each person reading this. What is the range? I'm guessing it is something like <&>mset<;>. Maybe 4 is in there too.\nBut certainly there is nobody reading this that has 1.32419 children. This output set <&>emis<;> discrete because the elements are separate. The inputs to the function also form a discrete set because each input is an individual person."},
    "mset": {"xml:id": "mset", "sourcetag": "m", "parent": ["gKd","content"],
            "content": "\\{0, 1, 2, 3\\}"},
    "emis": {"xml:id": "emis", "sourcetag": "em", "parent": ["gKd","content"],
@@ -2329,10 +2329,6 @@ var internalSource = {  // currently the key is the HTML id
    "ssiiddee": {"xml:id": "ssiiddee", "sourcetag": "image", "parent": ["yNH","content"],
            "src": "images/two-chests.svg",
            "width": "66", "marginright": "17", "marginleft": "17"},
-   "OLDssiiddee": {"xml:id": "OLDssiiddee", "sourcetag": "bareimage", "parent": ["yNH","content"],
-           "content": "<&>ppccii<;>",
-           "class": "image-box",   // maybe that is inherent to bareimage ?
-           "style": "width: 66%; margin-right: 17%; margin-left: 17%"},
    "ppccii": {"xml:id": "ppccii", "sourcetag": "image", "parent": ["ssiiddee","content"],
            "src": "images/two-chests.svg", "alt": "alt text goes here"},
    "DxA": {"xml:id": "DxA", "sourcetag": "p", "parent": ["yNH","content"],
@@ -2375,20 +2371,10 @@ function extract_internal_contents(some_text) {
     the_text = some_text;
     editorLog("            xxxxxxxxxx  the_text is", the_text);
     editorLog("extract_internal_contents");
-/*
-    if (the_text.includes('data-editable="44" tabindex="-1">')) {
-        the_text = the_text.replace(/<([^<]+) data-editable="44" tabindex="-1">(.*?)<[^<]+>/g, save_internal_cont)
-    } else if(the_text.includes('$ ')) {   // not general enough
-         the_text = the_text.replace(/(^|\s)\$([^\$]+)\$(\s|$|[.,!?;:])/g, extract_new_math)
-    } else if(the_text.includes('&lt;m&gt;')) {   // not general enough
-         the_text = the_text.replace(/(^|\s)&lt;m&gt;(.*?)&lt;\/m&gt;(\s|$)/g, extract_new_math)
-    } else {
-         //  nothing
-    }
-*/
 
     // inline from previous editing
     the_text = the_text.replace(/<([^<]+) data-editable="[^"]+" tabindex="-1">(.*?)<[^<]+>/g, save_internal_cont)
+    the_text = the_text.replace(/<([^<]+) contenteditable="false">(.*?)<[^<]+>/g, save_internal_cont)
     // new $math$
     the_text = the_text.replace(/(^|\s)\$([^\$]+)\$(\s|$|[.,!?;:])/g, extract_new_math)
     // new \\(math\\)
@@ -2399,7 +2385,7 @@ function extract_internal_contents(some_text) {
     // "..." to <ellipsis/>, which will then be processed
     the_text = the_text.replace(/\.\.\./g, '&lt;ellipsis\/&gt;');
     // same for etc
-    the_text = the_text.replace(/(\s)etc([^a-zA-Z])/g, '$1&lt;etc\/&gt;$2');
+    the_text = the_text.replace(/(\s)etc\.?([^a-zA-Z])/g, '$1&lt;etc\/&gt;$2');
 
     for (var j=0; j < inline_abbrev.length; ++j) {
         var this_tag = inline_abbrev[j];
@@ -2450,7 +2436,9 @@ function save_internal_cont(match, contains_id, the_contents) {
     this_id = contains_id.replace(/.*id="(.+?)".*/, '$1');
 
     editorLog("id", this_id, "now has contents", the_contents);
-    internalSource[this_id]["content"] = the_contents;
+    if ("content" in internalSource[this_id]) {   // not all objects have content
+        internalSource[this_id]["content"] = the_contents;
+    }
     return "<&>" + this_id + "<;>"
 }
 function assemble_internal_version_changes(object_being_edited) {
@@ -2640,14 +2628,6 @@ function wrap_tag(tag, content, attribute_values) {
     if (!content && !tag) { return "" }
     if (!content && !always_empty_tags.includes(tag) && !allowed_empty_tags.includes(tag)) { return "" }
     if (!tag) { return content }
-
-/*
-    if (attribute_values.length) {
-        editorLog("tag", tag, "has attribute_values", attribute_values)
-    } else {
-        editorLog("tag", tag, "has no attribute_values:", attribute_values)
-    }
-*/
 
     var opening_tag = closing_tag = "";
 
@@ -2890,34 +2870,6 @@ function html_from_internal_id(the_id, is_inner) {
         html_of_this_object = output_from_id("", the_id, "html");
         editorLog("html_of_this_object", html_of_this_object);
         the_html_objects.push(html_of_this_object);
-
-    } else if (false && (sourcetag == "definition" || sourcetag == "remark")) {
-        html_of_this_object = output_from_id("", the_id, "html");
-        editorLog("html_of_this_object", html_of_this_object);
-        the_html_objects.push(html_of_this_object);
-
-    } else if (false && sourcetag in inline_tags) {   // assume is_inner?
-
-// the opening and closing tags should come from someowhere else, right?
-
-// and the data-editable should come from its definition
-
-        var opening_tag = inline_tags[sourcetag][1][0];
-        opening_tag += ' id="' + the_id + '"data-editable="50" tabindex="-1">';
-        var closing_tag = inline_tags[sourcetag][1][1];
-        return opening_tag + the_object["content"] + closing_tag
-    } else if (false && sourcetag in inline_math) {
-        // here we are assuming the tag is 'm'
-        var opening_tag = '<span class="edit_inline_math"';
-        var closing_tag = '</span>';
-        if (is_inner == "edit") {
-            opening_tag += ' id="' + the_id + '"data-editable="44" tabindex="-1">';
-        } else {
-            opening_tag = inline_math[sourcetag][1][0];
-            closing_tag = inline_math[sourcetag][1][1];
-        }
-        return opening_tag + spacemath_to_tex(the_object["content"]) + closing_tag
-
     } else if (inline_math.includes(sourcetag) && is_inner == "edit") {
         // here we are assuming the tag is 'm'
         var opening_tag = '<span class="edit_inline_math"';
