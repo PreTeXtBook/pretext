@@ -391,8 +391,14 @@
         </p>
         <p>
           Your image code can use variables that you defined in the <tag>pg-code</tag> section.
-          Include variables just as you would anywhere else in a problem statement,
-          like <c>&lt;var name="$a"/></c>.
+          Scalar variables may be used simply by using their perl names including the dollar sign sigil.
+          For example, <c>\draw ($a,$b) -- ($c,$d);</c> where <c>$a</c>, <c>$b</c>, <c>$c</c>, and <c>$d</c> are variables.
+          However, any instance of <c>\$</c> in code will be interpreted as an escaped dollar sign first,
+          so rare situations may require you to be more explicit.
+          The alternative is to include variables just as you would anywhere else in a problem statement,
+          using a <tag>var</tag> element like <c>&lt;var name="$a"/></c>.
+          You would also need to use a <tag>var</tag> element if you would like to insert a perl array,
+          for example <c>&lt;var name="@a"/></c>.
         </p>
         <p>
           In perl, <c>$</c>, <c>@</c>, and <c>%</c> each have special meaning.
@@ -400,7 +406,7 @@
           The short answer is that you should use them just as you would use them in a regular <latex/>/TikZ document.
           So when you would like a dollar sign, write <c>\$</c>.
           For a percent sign, use <c>\%</c>.
-          And an at character does not need escaping, so write <c>@</c>.
+          An <q>at</q> character does not need escaping, so write <c>@</c>.
         </p>
         <p>
           As mentioned above, <em>do not</em> use a dollar sign for math.
