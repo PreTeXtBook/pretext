@@ -607,6 +607,8 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
             server_params_source = ('sourceFilePath',source[problem]) if origin[problem] == 'server' else ('problemSource',pgbase64['hint_yes_solution_yes'])
 
         server_params = (('answersSubmitted','0'),
+                         ('showSolutions','1'),
+                         ('showHints','1'),
                          ('displayMode','PTX'),
                          ('courseID',courseID),
                          ('userID',userID),
