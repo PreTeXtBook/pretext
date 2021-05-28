@@ -97,6 +97,12 @@
 <xsl:template match="/">
     <xsl:apply-templates select="mathbook|pretext" mode="generic-warnings" />
     <xsl:apply-templates select="mathbook|pretext" mode="deprecation-warnings" />
+    <!-- Get language, if there is one -->
+    <xsl:if test="pretext/@xml:lang">
+        <xsl:text>localization = '</xsl:text>
+        <xsl:value-of select="pretext/@xml:lang"/>
+        <xsl:text>'&#xa;</xsl:text>
+    </xsl:if>
     <!-- Initialize empty dictionaries, then define key-value pairs -->
     <xsl:text>origin = {}&#xa;</xsl:text>
     <xsl:text>copiedfrom = {}&#xa;</xsl:text>
