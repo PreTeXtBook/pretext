@@ -786,6 +786,11 @@ function adjustWorkspace() {
     }
 }
 
+function urlattribute() {
+        var this_urlstub = window.location.hostname;
+        document.body.setAttribute("data-urlstub", this_urlstub);
+}
+
 window.addEventListener("load",function(event) {
 
   if (document.body.classList.contains("worksheet")) {
@@ -796,8 +801,11 @@ window.addEventListener("load",function(event) {
           born_hidden_knowls[j].click()
       }
   /* not the right way:  need to figure out what this needs to wait for */
-      window.setTimeout(adjustWorkspace, 1000)
+      window.setTimeout(adjustWorkspace, 1000);
+
+      window.setTimeout(urlattribute, 1500);
   }
+
 });
 
 /*
