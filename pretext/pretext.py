@@ -485,10 +485,11 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
     # execute XSL extraction to get back six dictionaries
     # where the keys are the internal-ids for the problems
     # origin, copy, seed, source, pghuman, pgdense
+    # also get the localization as a string
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-pg.xsl')
 
-    # Build dictionaries into a scratch directory/file
+    # Build dictionaries and localization string into a scratch directory/file
     tmp_dir = get_temporary_directory()
     ww_filename = os.path.join(tmp_dir, 'webwork-dicts.txt')
     _debug('WeBWorK dictionaries temporarily in {}'.format(ww_filename))
@@ -497,7 +498,7 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
     ww_file = open(ww_filename, 'r')
     problem_dictionaries = ww_file.read()
     ww_file.close()
-    # "run" the dictionaries
+    # "run" the dictionaries and localization string
     # protect backslashes in LaTeX code
     # globals() necessary for success
     exec(problem_dictionaries.replace('\\','\\\\'), globals())
@@ -1055,6 +1056,7 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
             server_data.set('course-id',courseID)
             server_data.set('user-id',userID)
             server_data.set('course-password',course_password)
+            server_data.set('language',localization)
             server_data.tail = "\n    "
 
         elif (ww_reps_version == '1'):
@@ -1076,8 +1078,8 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
                     server_url.set('hint',hint)
                     server_url.set('solution',solution)
                     server_url.set('domain',ww_domain)
-                    url_shell = "{}?courseID={}&userID={}&password={}&course_password={}&answersSubmitted=0&displayMode=MathJax&outputformat=simple&problemSeed={}&{}"
-                    server_url.text = url_shell.format(ww_domain_path,courseID,userID,password,course_password,seed[problem],source_query)
+                    url_shell = "{}?courseID={}&userID={}&password={}&course_password={}&answersSubmitted=0&displayMode=MathJax&outputformat=simple&language={}&problemSeed={}&{}"
+                    server_url.text = url_shell.format(ww_domain_path,courseID,userID,password,course_password,localization,seed[problem],source_query)
                     server_url.tail = "\n    "
 
         # Add PG for PTX-authored problems
