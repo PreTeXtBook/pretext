@@ -1358,11 +1358,12 @@ body > a.assistive:focus {
 .pretext-content .glossary > .autopermalink {
     margin-top: 1em;
 }
+.pretext-content .appendix > .autopermalink,
 .pretext-content .chapter > .autopermalink,
 .pretext-content .index > .autopermalink,
 .pretext-content .section > .autopermalink,
 .pretext-content .subsection > .autopermalink {
-    margin-top: 2em;
+    margin-top: 2.7em;
 }
 
 .pretext-content .autopermalink:hover {
