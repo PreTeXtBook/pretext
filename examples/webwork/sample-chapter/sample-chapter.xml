@@ -69,8 +69,8 @@
             \pgfplotsset{
                 every axis/.append style={
                     axis lines=middle,
-                    xlabel={$x$},
-                    ylabel={$y$},
+                    xlabel={\(x\)},
+                    ylabel={\(y\)},
                     grid = both,
                 }
             }
@@ -1115,7 +1115,7 @@
                                 and height is labeled <var name="$b"/> cm
                             </description>
                             <latex-image syntax="PGtikz">
-                                \draw[fill=blue!20] (0,0) -&#x2d;++ (6,0) node[pos=0.5,below] {\(<var name="$b"/>\)\,cm} -&#x2d;++ (0,4) node[pos=0.5,right] {\(<var name="$a"/>\)\,cm} -&#x2d;++ (-6,0) -&#x2d; cycle;
+                                \draw[fill=blue!20] (0,0) -&#x2d;++ (6,0) node[pos=0.5,below] {\($b\)\,cm} -&#x2d;++ (0,4) node[pos=0.5,right] {\($a\)\,cm} -&#x2d;++ (-6,0) -&#x2d; cycle;
                             </latex-image>
                         </image>
                         <p>
@@ -1152,7 +1152,7 @@
                             </description>
                             <latex-image syntax="PGtikz">
                                 \begin{axis}
-                                    \addplot[domain=<var name="$xmin"/>:<var name="$xmax"/>,smooth] {(x-<var name="$roots[0]"/>)*(x-<var name="$roots[1]"/>)*(x-<var name="$roots[2]"/>)};
+                                    \addplot[domain=$xmin:$xmax,smooth] {(x-$roots[0])*(x-$roots[1])*(x-$roots[2])};
                                 \end{axis}
                             </latex-image>
                         </image>
