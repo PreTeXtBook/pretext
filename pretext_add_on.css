@@ -1212,12 +1212,14 @@ body > a.assistive:focus {
 }
 
 /* this should be obsolete, because the permalink is outside of the .heading */
+/*
 .pretext-content section .heading a.permalink {
     opacity: 0.1;
     font-size: 70%;
     color: #d00;
     display: inline-block;
 }
+*/
 
 .pretext-content section > .heading,
 .pretext-content section section > .heading,
@@ -1293,6 +1295,7 @@ body > a.assistive:focus {
     margin-left: 0.25em;
 }
 
+/* obsolete? */
 .pretext-content section .heading + a.permalink {
     opacity: 0.2;
     color: #d00;
@@ -1340,7 +1343,7 @@ body > a.assistive:focus {
     color: #a00;
     opacity: 0.05
 }
-.pretext-content .autopermalink a {
+.pretext-content .autopermalink > * {
     padding-left: 0.2em;
     padding-right: 0.2em;
 }
@@ -1365,6 +1368,14 @@ body > a.assistive:focus {
 .pretext-content .autopermalink:hover {
     opacity: 1;
     background: #eeddff;
+}
+.pretext-content .permalink-alert {
+    position: absolute;
+    top: -3em;
+    left: 5em;
+    padding: 1.5em 2em;
+    background: #fff;
+    border: 3px solid blue;
 }
 
 .mininav {
@@ -3259,6 +3270,17 @@ body.standalone.worksheet .pretext-content section > .heading + p {
     display: inline;
 }
 
+/* [data-urlstub="calcvr.org"] temporary for worksheets in the browser */
+
+body[data-urlstub="calcvr.org"].standalone.worksheet .page > .main #content {
+    width: auto;
+}
+
+body[data-urlstub="calcvr.org"].standalone.worksheet .pretext-content .onepage .workspace,
+body[data-urlstub="calcvr.org"].standalone.worksheet .pretext-content .onepage .workspace.squashed.tight {
+        background: #eef !important;
+}
+
 
 /* printing for one-page worksheets */
 
@@ -3269,6 +3291,10 @@ body.standalone.worksheet .pretext-content section > .heading + p {
 
     body.standalone.worksheet.has-sidebar-left.mathbook-loaded .page .main {
         margin: 0;
+    }
+
+    body[data-urlstub="calcvr.org"].standalone.worksheet .page > .main #content {
+        width: 1030px;
     }
 
     body.standalone.worksheet .page > .main #content {
@@ -3285,6 +3311,8 @@ body.standalone.worksheet .pretext-content section > .heading + p {
     body.standalone.worksheet.a4 .pretext-content .onepage {
         height: 1320px;
     }
+    body[data-urlstub="calcvr.org"].standalone.worksheet .pretext-content .onepage .workspace,
+    body[data-urlstub="calcvr.org"].standalone.worksheet .pretext-content .onepage .workspace.squashed.tight,
     body.standalone.worksheet .pretext-content .onepage .workspace,
     body.standalone.worksheet .pretext-content .onepage .workspace.squashed.tight {
         border: none;
@@ -3307,7 +3335,6 @@ body.standalone.worksheet .pretext-content section > .heading + p {
 
     @page { margin: 0 }
 }
-
 
 .ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-draggable.ui-resizable {
     left: 0 !important;
@@ -4018,18 +4045,24 @@ sbspanel:empty { /* can only happen when partially created */
     font-style: italic;
     padding-left: 0.25em;
 }
+/* why not collapse the next groups of 4? */
+.in_edit_tree > .placeholder.proof,
 .in_edit_tree > .placeholder.hint,
 .in_edit_tree > .placeholder.answer, 
 .in_edit_tree > .placeholder.solution {
     min-height: 1em;
     background: #fee;
 } 
+.in_edit_tree > .placeholder.proof::before,
 .in_edit_tree > .placeholder.hint::before,
 .in_edit_tree > .placeholder.answer::before,
 .in_edit_tree > .placeholder.solution::before {
     font-size: 90%;
     font-style: italic;
     padding-left: 0.25em;
+}
+.in_edit_tree > .placeholder.proof::before {
+    content: "optional proof";
 }
 .in_edit_tree > .placeholder.hint::before {
     content: "optional hint";
@@ -4070,6 +4103,18 @@ sbspanel:empty { /* can only happen when partially created */
 }
 #actively_editing em {
     background-color: #fdf;
+}
+#actively_editing q {
+    background-color: #eef;
+}
+#actively_editing span {
+    background-color: #dfd;
+}
+#actively_editing code {
+    background-color: #ddd;
+}
+#actively_editing dfn {
+    background-color: #fee;
 }
 .pretext-content section.may_enter > .heading {
     margin-top: 0;
