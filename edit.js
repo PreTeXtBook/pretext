@@ -2241,7 +2241,7 @@ function delete_by_id(theid, thereason) {
     save_edits()
 }
 
-var originalsource = '<section xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="sec_intro-intro" permid="hPw">\n  <title>What is Discrete Mathematics?</title>\n  <blockquote permid="akX">\n    <p permid="PLS">\n      dis<midpoint/>crete / dis\'krët.\n    </p>\n\n    <p permid="vTb">\n      <em>Adjective</em>: Individually separate and distinct.\n    </p>\n\n    <p permid="cak">\n      <em>Synonyms</em>: separate - detached - distinct - abstract.\n    </p>\n  </blockquote>\n\n  <p permid="UvL">\n    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n    In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n    <ellipsis/>.\n    Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n    What sort of problems?\n    Okay, those that involve numbers,\n    functions, lines, triangles,\n    <ellipsis/>.\n    Whatever your conception of what mathematics is,\n    try applying the concept of <q>discrete</q> to it, as defined above.\n    Some math fundamentally deals with <em>stuff</em>\n    that is individually separate and distinct.\n  </p>\n\n  <p permid="ACU">\n    In an algebra or calculus class,\n    you might have found a particular set of numbers\n    (maybe the set of numbers in the range of a function).\n    You would represent this set as an interval:\n    <m>[0,\\infty)</m> is the range of <m>f(x) = x^2</m> since the set\n    of outputs of the function are all real numbers 0 and greater.\n    This set of numbers is NOT discrete.\n    The numbers in the set are not separated by much at all.\n    In fact, take any two numbers in the set and there are infinitely many more between\n    them which are also in the set.\n  </p>\n  <p permid="gKd">\n    Discrete math could still ask about the range of a function,\n    but the set would not be an interval.\n    Consider the function which gives the number of children of each person reading this.\n    What is the range?\n    I\'m guessing\n    it is something like <m>\\{0, 1, 2, 3\\}</m>.\n    Maybe 4 is in there too.\n    But certainly there is nobody reading this that has 1.32419 children.\n    This output set <em>is</em> discrete because the elements are separate.\n    The inputs to the function also form a discrete set because each input is an individual person.\n  </p>\n\n  <p permid="MRm">\n    One way to get a feel for the subject is to consider the types of problems you solve in discrete math.\n    Here are a few simple examples:\n  </p>\n  <investigation permid="udO">\n    <p permid="Iht">\n      <em>Note: Throughout the text you will see <em>Investigate!</em>\n      activities like this one.\n      Answer the questions in these as best you can to give yourself a feel for what is coming next.</em>\n    </p>\n\n    <p permid="ooC">\n      <ol permid="Gsg">\n        <li permid="mzp">\n          <p permid="LbZ">\n            The most popular mathematician in the world is throwing a party for all of his friends.\n            As a way to kick things off, they decide that everyone should shake hands.\n            Assuming all 10 people at the party each shake hands with every other person\n            (but not themselves,\n            obviously)\n            exactly once, how many handshakes take place?\n          </p>\n        </li>\n\n        <li permid="SGy">\n          <p permid="rji">\n            At the warm-up event for Oscar\'s All Star Hot Dog Eating Contest, Al ate one hot dog.\n            Bob then showed him up by eating three hot dogs.\n            Not to be outdone, Carl ate five.\n            This continued with each contestant eating two more hot dogs than the previous contestant.\n            How many hot dogs did Zeno (the 26th and final contestant) eat?\n            How many hot dogs were eaten all together?\n          </p>\n        </li>\n\n        <li permid="yNH">\n          <p permid="Xqr">\n            After excavating for weeks, you finally arrive at the burial chamber.\n            The room is empty except for two large chests.\n            On each is carved a message (strangely in English):\n          </p>\n\n          <sidebyside width="80%" permid="NWF">\n\n            <image xml:id="two-chests" permid="FmN">\n\n      <latex-image>\\begin{tikzpicture}\n          \\node[shape=rectangle, draw=brown, thick, fill=brown!20!white, inner sep=5mm, minimum height=3cm, minimum width=3.5cm, text width=3.5cm, align=center] (a) { If this chest is empty, then the other chest\'s message is true.};\n          \\node[shape=rectangle, draw=brown, thick, fill=brown!20!white, inner sep=5mm, minimum height=3cm, minimum width=3.5cm, text width=3.5cm, align=center, right=of a] {\n               This chest is filled with treasure or the other chest contains deadly scorpions.\n              };\n      \\end{tikzpicture}</latex-image>\n            </image>\n\n          </sidebyside>\n\n          <p permid="DxA">\n            You know exactly one of these messages is true.\n            What should you do?\n          </p>\n        </li>\n\n        <li permid="eUQ">\n          <p permid="jEJ">\n            Back in the days of yore,\n            five small towns decided they wanted to build roads directly connecting each pair of towns.\n            While the towns had plenty of money to build roads as long and as winding as they wished,\n            it was very important that the roads not intersect\n            with each other\n            (as stop signs had not yet been invented).\n            Also, tunnels and bridges were not allowed.\n            Is it possible for each of these towns to build a road to each of the four other towns without creating any intersections?\n          </p>\n        </li>\n      </ol>\n    </p>\n  </investigation>\n  <p permid="sYv">\n    One reason it is difficult to define discrete math is that it is a very broad description which encapsulates a large number of subjects.\n    In this course we will study four main topics:\n    <term>combinatorics</term>\n    (the theory of ways things <em>combine</em>;\n    in particular, how to count these ways),\n    <term>sequences</term>, <term>symbolic logic</term>,\n    and <term>graph theory</term>.\n    However, there are other topics that belong under the discrete umbrella,\n    including computer science, abstract algebra,\n    number theory, game theory,\n    probability, and geometry\n    (some of these, particularly the last two,\n    have both discrete and non-discrete variants).\n  </p>\n\n  <p permid="ZfE">\n    Ultimately the best way to learn what discrete math is about is to <em>do</em> it.\n    Let\'s get started!\n    Before we can begin answering more complicated\n    (and fun)\n    problems, we must lay down some foundation.\n    We start by reviewing mathematical statements, sets, and functions in\n    the framework of discrete mathematics.\n  </p>\n</section>';
+var originalsource = '<section xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="sec_intro-intro" permid="hPw">\n  <title>What is Discrete Mathematics?</title>\n  <blockquote permid="akX">\n    <p permid="PLS">\n      dis<midpoint/>crete / dis\'krët.\n    </p>\n\n    <p permid="vTb">\n      <em>Adjective</em>: Individually separate and distinct.\n    </p>\n\n    <p permid="cak">\n      <em>Synonyms</em>: separate - detached - distinct - abstract.\n    </p>\n  </blockquote>\n\n  <p permid="UvL">\n    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n    In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n    <ellipsis/>.\n    Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n    What sort of problems?\n    Okay, those that involve numbers,\n    functions, lines, triangles,\n    <ellipsis/>.\n    Whatever your conception of what mathematics is,\n    try applying the concept of <q>discrete</q> to it, as defined above.\n    Some math fundamentally deals with <em>stuff</em>\n    that is individually separate and distinct.\n  </p>\n\n  <p permid="ACU">\n    In an algebra or calculus class,\n    you might have found a particular set of numbers\n    (maybe the set of numbers in the range of a function).\n    You would represent this set as an interval:\n    <m>[0,\\infty)</m> is the range of <m>f(x) = x^2</m> since the set\n    of outputs of the function are all real numbers 0 and greater.\n    This set of numbers is NOT discrete.\n    The numbers in the set are not separated by much at all.\n    In fact, take any two numbers in the set and there are infinitely many more between\n    them which are also in the set.\n  </p>\n  <p permid="gKd">\n    Discrete math could still ask about the range of a function,\n    but the set would not be an interval.\n    Consider the function which gives the number of children of each person reading this.\n    What is the range?\n    I\'m guessing\n    it is something like <m>\\{0, 1, 2, 3\\}</m>.\n    Maybe 4 is in there too.\n    But certainly there is nobody reading this that has 1.32419 children.\n    This output set <em>is</em> discrete because the elements are separate.\n    The inputs to the function also form a discrete set because each input is an individual person.\n  </p>\n\n  <p permid="MRm">\n    One way to get a feel for the subject is to consider the types of problems you solve in discrete math.\n    Here are a few simple examples:\n  </p>\n  <investigation permid="udO">\n    <p permid="Iht">\n      <em>Note: Throughout the text you will see <alert>Investigate!</alert>\n      activities like this one.\n      Answer the questions in these as best you can to give yourself a feel for what is coming next.</em>\n    </p>\n\n    <p permid="ooC">\n      <ol permid="Gsg">\n        <li permid="mzp">\n          <p permid="LbZ">\n            The most popular mathematician in the world is throwing a party for all of his friends.\n            As a way to kick things off, they decide that everyone should shake hands.\n            Assuming all 10 people at the party each shake hands with every other person\n            (but not themselves,\n            obviously)\n            exactly once, how many handshakes take place?\n          </p>\n        </li>\n\n        <li permid="SGy">\n          <p permid="rji">\n            At the warm-up event for Oscar\'s All Star Hot Dog Eating Contest, Al ate one hot dog.\n            Bob then showed him up by eating three hot dogs.\n            Not to be outdone, Carl ate five.\n            This continued with each contestant eating two more hot dogs than the previous contestant.\n            How many hot dogs did Zeno (the 26th and final contestant) eat?\n            How many hot dogs were eaten all together?\n          </p>\n        </li>\n\n        <li permid="yNH">\n          <p permid="Xqr">\n            After excavating for weeks, you finally arrive at the burial chamber.\n            The room is empty except for two large chests.\n            On each is carved a message (strangely in English):\n          </p>\n\n          <sidebyside width="80%" permid="NWF">\n\n            <image xml:id="two-chests" permid="FmN">\n\n      <latex-image>\\begin{tikzpicture}\n          \\node[shape=rectangle, draw=brown, thick, fill=brown!20!white, inner sep=5mm, minimum height=3cm, minimum width=3.5cm, text width=3.5cm, align=center] (a) { If this chest is empty, then the other chest\'s message is true.};\n          \\node[shape=rectangle, draw=brown, thick, fill=brown!20!white, inner sep=5mm, minimum height=3cm, minimum width=3.5cm, text width=3.5cm, align=center, right=of a] {\n               This chest is filled with treasure or the other chest contains deadly scorpions.\n              };\n      \\end{tikzpicture}</latex-image>\n            </image>\n\n          </sidebyside>\n\n          <p permid="DxA">\n            You know exactly one of these messages is true.\n            What should you do?\n          </p>\n        </li>\n\n        <li permid="eUQ">\n          <p permid="jEJ">\n            Back in the days of yore,\n            five small towns decided they wanted to build roads directly connecting each pair of towns.\n            While the towns had plenty of money to build roads as long and as winding as they wished,\n            it was very important that the roads not intersect\n            with each other\n            (as stop signs had not yet been invented).\n            Also, tunnels and bridges were not allowed.\n            Is it possible for each of these towns to build a road to each of the four other towns without creating any intersections?\n          </p>\n        </li>\n      </ol>\n    </p>\n  </investigation>\n  <p permid="sYv">\n    One reason it is difficult to define discrete math is that it is a very broad description which encapsulates a large number of subjects.\n    In this course we will study four main topics:\n    <term>combinatorics</term>\n    (the theory of ways things <em>combine</em>;\n    in particular, how to count these ways),\n    <term>sequences</term>, <term>symbolic logic</term>,\n    and <term>graph theory</term>.\n    However, there are other topics that belong under the discrete umbrella,\n    including computer science, abstract algebra,\n    number theory, game theory,\n    probability, and geometry\n    (some of these, particularly the last two,\n    have both discrete and non-discrete variants).\n  </p>\n\n  <p permid="ZfE">\n    Ultimately the best way to learn what discrete math is about is to <em>do</em> it.\n    Let\'s get started!\n    Before we can begin answering more complicated\n    (and fun)\n    problems, we must lay down some foundation.\n    We start by reviewing mathematical statements, sets, and functions in\n    the framework of discrete mathematics.\n  </p>\n</section>';
 
 var internalSource = {  // currently the key is the HTML id
    "root_data": {"id": "hPw", "number_base": "0.1" },
@@ -2306,7 +2306,7 @@ var internalSource = {  // currently the key is the HTML id
            "content": "<&>Ihtem<;>"},
    "Ihtem": {"xml:id": "Ihtem", "sourcetag": "em", "parent": ["Iht","content"],
            "content": "Note: Throughout the text you will see <&>em1a<;>\nactivities like this one.\nAnswer the questions in these as best you can to give yourself a feel for what is coming next."},
-   "em1a": {"xml:id": "em1", "sourcetag": "em", "parent": ["Iht","content"],
+   "em1a": {"xml:id": "em1", "sourcetag": "alert", "parent": ["Iht","content"],
            "content": "Investigate!"},
    "ooC": {"xml:id": "ooC", "sourcetag": "list", "parent": ["udO","content"],
            "content": "<&>mzp<;><&>SGy<;><&>yNH<;><&>eUQ<;>"},
@@ -3723,50 +3723,123 @@ e_location = current_editing["location"];
 editorLog("e_location", e_location);
 edit_menu_for(e_tree[e_level][e_location], "entering")
 
-xmlToJson = function(xml_st) {
-var xml;
-if (typeof xml_st == "string") {
- //   console.log("xml starts", xml_st.slice(0,50));
-    xml = $.parseXML(xml_st);
-} else {
-    xml = xml_st
-}
-console.log("xml", xml);
-var obj = {};
-if (xml.nodeType == 1) {                
+function xml_id_of(xml) {
+    var this_id = "";
     if (xml.attributes.length > 0) {
-        obj["@attributes"] = {};
+// bad code because I dopied and was too lazy to rewrite
+        console.log(xml.nodeName, "has attributes", xml.attributes);
         for (var j = 0; j < xml.attributes.length; j++) {
             var attribute = xml.attributes.item(j);
-            obj["@attributes"][attribute.nodeName] = attribute.nodeValue;
+            if (attribute.nodeName == "permid") { this_id = attribute.nodeValue }
+      // these look backward, but that seems to be how PTX does it currently
+            if (!this_id && attribute.nodeName == "xml:id") { this_id = attribute.nodeValue }
         }
     }
-} else if (xml.nodeType == 3) { 
-    obj = xml.nodeValue;
-} 
-if (xml.hasChildNodes()) {
-    for (var i = 0; i < xml.childNodes.length; i++) {
-        var item = xml.childNodes.item(i);
-        var nodeName = item.nodeName;
-        if (typeof (obj[nodeName]) == "undefined") {
-            obj[nodeName] = xmlToJson(item);
-        } else {
-            if (typeof (obj[nodeName].push) == "undefined") {
-                var old = obj[nodeName];
-                obj[nodeName] = [];
-                obj[nodeName].push(old);
-            }
-            obj[nodeName].push(xmlToJson(item));
-        }
+    if (!this_id) {
+        this_id = randomstring()
     }
+    return this_id
 }
-return obj;
- }
 
-/*
-originalsourceasJSON = xmlToJson(originalsource);
+var sourceobj = {};
 
-console.log("original source");
-console.log("original source ", typeof originalsourceasJSON);
-console.log(originalsourceasJSON);
-*/
+function xmlToObject(xml_st) {
+  var xml;
+  if (typeof xml_st == "string") {
+ //   console.log("xml starts", xml_st.slice(0,50));
+    parser = new DOMParser();
+    xml = parser.parseFromString(xml_st, "text/xml");
+//    xml = $.parseXML(xml_st);
+  } else {
+    xml = xml_st
+  }
+
+  console.log("xml", xml);
+  console.log("xml.nodeName", xml.nodeName, "xml.nodeType", xml.nodeType);
+//  var obj = {};
+  var this_id = "";
+  var this_node_content = xml.nodeValue;
+
+  if (xml.nodeType == 9) {  // document              
+      xml = xml.documentElement;
+  }
+
+  console.log("this_node_content", this_node_content);
+
+  if (xml.nodeType == 1) {                
+    this_id = xml_id_of(xml);
+    console.log("found this_id", this_id);
+    var this_entry = {};
+    this_entry["xml:id"] = this_id;
+    this_entry["sourcetag"] = xml.nodeName;
+
+    this_node_content = "";
+    if (xml.hasChildNodes()) {
+      for (var i = 0; i < xml.childNodes.length; i++) {
+        var item = xml.childNodes.item(i);
+        if (item.nodeType == 8) {
+            //comment, so skip
+        } else if (item.nodeType == 3) {
+            this_node_content += item.nodeValue
+        } else if (item.nodeType == 1) {
+            if (item.nodeName == "title") {
+                  // next may reguire processing markup inside the title
+                this_entry["title"] = item.firstChild.nodeValue;
+                continue
+            }
+            var sub_node_id = xmlToObject(item);
+            this_node_content += "<&>" + sub_node_id + "<;>"
+        } else {
+            console.log("what to do with this node?", item)
+        }
+      }
+    }    
+    if (this_node_content) {
+        this_entry["content"] = this_node_content;
+    }
+    sourceobj[this_id] = this_entry
+    return this_id
+  } else if (xml.nodeType == 8) {
+      // comment node, so do nothign
+      this_node_content = ""
+  } else if (xml.nodeType == 3) { 
+      // can this, or the previous case, actually happen?
+  } else {
+      console.log("failed to deal with", xml)
+  }
+}
+
+function record_children(internal_src) {
+    for (key in internal_src) {
+        var this_item = internal_src[key];
+        if ("content" in this_item) { // skip empty tags
+            var this_content = this_item["content"];
+            console.log("this_content", this_content);
+            var child_items = this_content.match(/<&>.*?<;>/g) || "";
+            for (var j=0; j < child_items.length; ++j) {
+                var this_child = child_items[j].slice(3,-3);
+                console.log("this_child", this_child, "has a parent", key);
+                internal_src[this_child]["parent"] = [key, "content"]
+            }
+        }
+    }
+    return internal_src
+}
+
+parser = new DOMParser();
+var tmp_xml = parser.parseFromString(originalsource, "text/xml");
+
+//var tmp_xml = $.parseXML(originalsource);
+
+console.log("x tmp_xml", tmp_xml);
+
+var top_tag = xmlToObject(originalsource);
+sourceobj["root_data"] = {"id": top_tag, "number_base": "0.1" };
+
+console.log("top_tag", top_tag, "transformed source");
+console.log(sourceobj);
+sourceobj = record_children(sourceobj);
+console.log("updated transformed source");
+console.log(sourceobj);
+
+internalSource = sourceobj;
