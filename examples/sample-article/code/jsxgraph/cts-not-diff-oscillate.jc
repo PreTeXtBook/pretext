@@ -1,0 +1,33 @@
+$board.setView([-2,2,2,-2], false);
+point(0, 0) << id: 'OO',
+             name: 'OO',
+             fixed: true,
+             priv: true,
+             visible: false >>;
+point(1, 0) << id: 'E1',
+             name: 'E1',
+             fixed: true,
+             priv: true,
+             visible: false >>;
+point(0, 1) << id: 'E2',
+             name: 'E2',
+             fixed: true,
+             priv: true,
+             visible: false >>;
+xax = axis(OO, E1) << name: 'x' >>;
+yax = axis(OO, E2) << name: 'y' >>;
+xax.visible = false;
+yax.visible = false;
+f = function(x) {
+    return x*sin(1/x);
+};
+plot( function(x) {return f(x);} )
+    << strokeWidth: 2 >>;
+xax.visible = true;
+yax.visible = true;
+point(0,0) << id: "P", size: 2, color: "black", label: false >>;
+point(1,0) << id: "Q", size: 5, color: "red", label: false >>;
+Q.glide(xax);
+point( function() { return Q.X(); }, function() { return f(Q.X()); } )
+    << id: "R", label: false, size: 2, color: "black" >>;
+line(P,R) << color: "red", strokeWidth: 1 >>;

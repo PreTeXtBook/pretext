@@ -5957,6 +5957,89 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
+                <title>JessieCode</title>
+                <idx>JessieCode</idx>
+
+                <p><url href="https://jsxgraph.uni-bayreuth.de/wp/docs_jessiecode/">JessieCode</url> is a scripting language for JSXGraph. It provides the core geometric and graphing features of JSXGraph without accessing the underlying JavaScript. In order to use JessieCode, you simply create the HTML <tag>div</tag> element as you would for any other JSXGraph interactive plot and then provide the JessieCode script, which focuses on the geometric elements.</p>
+
+                <p>Because JessieCode is provided by JSXGraph, the interactive platform is <c>jsxgraph</c>. The <tag>slate</tag>, however, uses <attr>surface="jessiecode"</attr>. The script can be embedded directly in your code. As usual, you would need to remember to escape the special characters. JessieCode uses <c>&lt;</c> and <c>&gt;</c> for inequalities as well as for declaring objects used to style geometric elements, and <c>&amp;&amp;</c> is the boolean AND operator. Alternatively, you can provide the file as a separate resource, providing the URL with a <attr>source</attr> attribute. Attributes defining the JSXBoard at the time it is created should be included as attributes of the <tag>slate</tag>, including <attr>boundingbox</attr>, <attr>axis</attr>, and <attr>grid</attr>.</p>
+
+                <p>For this first example, the JessieCode was included directly in the XML source as the contents of the associated slate.</p>
+
+                <figure xml:id="figure-quadratic-slope">
+                    <caption>Finding the Tangent Line of a Quadratic Function</caption>
+
+                    <!-- Aspect ratio should be 20:7, the ":8" is to avoid extra scroll bars -->
+                    <interactive xml:id="interactive-quadratic-tangent" platform="jsxgraph" width="80%">
+                        <slate xml:id="quadratic-tangent-plot"  surface="jessiecode" axis="true" grid="false">
+                            a = slider([-4.5,4], [-1.5,4], [-2,1,2])
+                                &lt;&lt;
+                                    name:"a",
+                                    snapWidth:0.25,
+                                    point1: &lt;&lt; frozen: true &gt;&gt;,
+                                    point2: &lt;&lt; frozen: true &gt;&gt;
+                                &gt;&gt;;
+                            b = slider([-4.5,3.5], [-1.5,3.5], [-4,-1,4])
+                                &lt;&lt;
+                                    name:"b",
+                                    snapWidth:0.5,
+                                    point1: &lt;&lt; frozen: true &gt;&gt;,
+                                    point2: &lt;&lt; frozen: true &gt;&gt;
+                                &gt;&gt;;
+                            c = slider([-4.5,3], [-1.5,3], [-4,0,4])
+                                &lt;&lt;
+                                    name:"c",
+                                    snapWidth:0.5,
+                                    point1: &lt;&lt; frozen: true &gt;&gt;,
+                                    point2: &lt;&lt; frozen: true &gt;&gt;
+                                &gt;&gt;;
+                            fGraph = functiongraph(function(x) {
+                              return a.Value()*x^2 + b.Value()*x + c.Value();
+                            });
+                            P = glider(1,0, fGraph);
+                            Q = point(2,2)
+                                &lt;&lt; name:"P" &gt;&gt;;
+                            secant = line(P,Q)
+                              &lt;&lt; color: (function() {
+                                      m = (Q.Y() - P.Y())/(Q.X() - P.X());
+                                      dydx = 2*a.Value()*P.X() + b.Value();
+                                      cVal = "red";
+                                      if (abs(m-dydx) &lt; 0.001) {
+                                          cVal = "blue";
+                                      }
+                                      return cVal;
+                                  })
+                              &gt;&gt;;
+                            dydxValue = text(-4, 1.5, function() {
+                                    m = 2*a.Value()*P.X() + b.Value();
+                                    return ("dy/dx = " + trunc(m,3));
+                                })
+                                &lt;&lt; frozen: true &gt;&gt;;
+                            mValue = text(-4, 1, function() {
+                                  m = (Q.Y() - P.Y())/(Q.X() - P.X());
+                                  return ("m = " + trunc(m,3));
+                              })
+                              &lt;&lt; frozen: true &gt;&gt;;
+                        </slate>
+                        <instructions>
+                            <p>Use the sliders to set the parameters of the quadratic <m>f(x)=ax^2+bx+c</m>. Drag the point <m>A</m> on the graph and the point <m>P</m> to define a line. Try to make the line tangent at the point at <m>A</m> and observe the resulting slope of the tangent line.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+
+                <p>For this second example, the JessieCode was included through an associated script file, loaded by the browser.</p>
+                <figure xml:id="figure-nondifferentiable-oscillation">
+                  <caption>Graph of a function that is continuous but not differentiable at <m>x=0</m> because the slope of the secant line has no limit.</caption>
+                  <interactive xml:id="interactive-oscillating-secant" platform="jsxgraph" width="90%">
+                      <slate xml:id="graph-cts-not-diff-function" surface="jessiecode" source="code/jsxgraph/cts-not-diff-oscillate.jc" axis="true" />
+                      <instructions>
+                          <p>Drag the point <m>B</m> to move the point on the graph and change the secant line. Notice that there is no well-defined limiting tangent line as <m>x \to 0</m>.</p>
+                      </instructions>
+                  </interactive>
+                </figure>
+            </subsection>
+
+            <subsection>
                 <title>Sage Interacts</title>
                 <idx><h>Sage</h><h>interacts</h></idx>
 

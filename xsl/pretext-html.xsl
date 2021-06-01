@@ -9506,25 +9506,74 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
       </xsl:attribute>
   </xsl:element>
   <!-- Add a script wrapper to parse using JSXGraph -->
-  <xsl:element name="script">
-      <xsl:attribute name="type">
-          <xsl:text>text/javascript</xsl:text>
-      </xsl:attribute>
-      <xsl:text>(function() { &#xa;let board = JXG.JSXGraph.initBoard('</xsl:text>
-      <xsl:apply-templates select="." mode="visible-id" />
-      <xsl:text>', {boundingbox: [-5, 5, 5, -5], keepaspectratio:true});&#xa;</xsl:text>
-      <xsl:text>board.jc = new JXG.JessieCode();&#xa;</xsl:text>
-      <xsl:text>board.jc.use(board);&#xa;</xsl:text>
-      <xsl:text>board.suspendUpdate();&#xa;</xsl:text>
-      <xsl:text>board.jc.parse(`</xsl:text>
-      <xsl:if test="text()">
-          <xsl:call-template name="sanitize-text">
-              <xsl:with-param name="text" select="." />
-          </xsl:call-template>
-      </xsl:if>
-      <xsl:text>`);&#xa;</xsl:text>
-      <xsl:text>board.unsuspendUpdate();&#xa;})();</xsl:text>
-  </xsl:element>
+  <xsl:choose>
+      <xsl:when test="text()">
+          <xsl:element name="script">
+              <xsl:attribute name="type">
+                  <xsl:text>text/jessiecode</xsl:text>
+              </xsl:attribute>
+              <!-- Put the board in the appropriate container. -->
+              <xsl:attribute name="container">
+                  <xsl:apply-templates select="." mode="visible-id" />
+              </xsl:attribute>
+              <xsl:if test="@boundingbox">
+                  <xsl:attribute name="boundingbox">
+                      <xsl:value-of select="@boundingbox" />
+                  </xsl:attribute>
+              </xsl:if>
+              <xsl:if test="@axis">
+                  <xsl:attribute name="axis">
+                      <xsl:value-of select="@axis" />
+                  </xsl:attribute>
+              </xsl:if>
+              <xsl:if test="@grid">
+                  <xsl:attribute name="grid">
+                      <xsl:value-of select="@grid" />
+                  </xsl:attribute>
+              </xsl:if>
+              <!-- Add the script -->
+              <xsl:call-template name="sanitize-text">
+                  <xsl:with-param name="text" select="." />
+              </xsl:call-template>
+          </xsl:element>
+      </xsl:when>
+      <xsl:when test="@source">
+          <xsl:element name="script">
+              <xsl:attribute name="type">
+                  <xsl:text>text/javascript</xsl:text>
+              </xsl:attribute>
+              <xsl:text>function parseJessie(code) {&#xa;</xsl:text>
+              <xsl:text>  let board = JXG.JSXGraph.initBoard('</xsl:text>
+              <xsl:apply-templates select="." mode="visible-id" />
+              <xsl:text>', {</xsl:text>
+              <xsl:if test="@boundingbox">
+                  <xsl:text>boundingbox:[</xsl:text>
+                  <xsl:value-of select="@boundingbox" />
+                  <xsl:text>], </xsl:text>
+              </xsl:if>
+              <xsl:if test="@axis">
+                  <xsl:text>axis:</xsl:text>
+                  <xsl:value-of select="@axis" />
+                  <xsl:text>, </xsl:text>
+              </xsl:if>
+              <xsl:if test="@grid">
+                  <xsl:text>grid:</xsl:text>
+                  <xsl:value-of select="@grid" />
+                  <xsl:text>, </xsl:text>
+              </xsl:if>
+              <xsl:text>keepaspectratio:true});&#xa;</xsl:text>
+              <xsl:text>  board.jc = new JXG.JessieCode();&#xa;</xsl:text>
+              <xsl:text>  board.jc.use(board);&#xa;</xsl:text>
+              <xsl:text>  board.suspendUpdate();&#xa;</xsl:text>
+              <xsl:text>  board.jc.parse(code);&#xa;</xsl:text>
+              <xsl:text>  board.unsuspendUpdate();&#xa;</xsl:text>
+              <xsl:text>}&#xa;</xsl:text>
+              <xsl:text>fetch('</xsl:text>
+              <xsl:value-of select="@source" />
+              <xsl:text>').then(function(response) { response.text().then( function(text) { parseJessie(text); }); });&#xa;</xsl:text>
+          </xsl:element>
+      </xsl:when>
+  </xsl:choose>
 </xsl:template>
 
 <!-- Utilities -->
