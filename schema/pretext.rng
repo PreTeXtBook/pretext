@@ -3738,6 +3738,11 @@
   </define>
   <define name="Configuration" combine="choice">
     <element name="latex-image-preamble">
+      <optional>
+        <attribute name="syntax">
+          <value>PGtikz</value>
+        </attribute>
+      </optional>
       <text/>
     </element>
   </define>

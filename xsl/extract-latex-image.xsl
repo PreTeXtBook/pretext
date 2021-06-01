@@ -22,7 +22,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This stylesheet locates <latex-image> elements    -->
 <!-- and wraps them for LaTeX processing               -->
 <!-- This includes the LaTeX macros present in docinfo -->
-<!-- and the document's docinfo/latex-image-preamble   -->
+<!-- and the $latex-image-preamble from common.        -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
@@ -228,11 +228,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
         <xsl:text>\usepackage{amsmath,amssymb}&#xa;</xsl:text>
-        <xsl:call-template name="sanitize-text">
-            <xsl:with-param name="text">
-                <xsl:value-of select="$docinfo/latex-image-preamble"/>
-            </xsl:with-param>
-        </xsl:call-template>
+        <xsl:value-of select="$latex-image-preamble"/>
         <xsl:text>\ifdefined\tikzset&#xa;</xsl:text>
         <xsl:text>\tikzset{ampersand replacement = \amp}&#xa;</xsl:text>
         <xsl:text>\fi&#xa;</xsl:text>

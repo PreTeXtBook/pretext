@@ -510,11 +510,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
   </xsl:if>
 
   <xsl:apply-templates select="/pretext/docinfo/macros"/>
-  <xsl:if test="$docinfo/latex-image-preamble">
+  <xsl:if test="$latex-image-preamble">
     <xsl:text>%% Graphics Preamble Entries&#xa;</xsl:text>
-    <xsl:call-template name="sanitize-text">
-      <xsl:with-param name="text" select="$docinfo/latex-image-preamble" />
-    </xsl:call-template>
+    <xsl:value-of select="$latex-image-preamble"/>
   </xsl:if>
   <xsl:text>&#xa;&#xa;%%%% End of PreTeXt generated preamble %%%%% &#xa;&#xa;</xsl:text>
 </xsl:template>

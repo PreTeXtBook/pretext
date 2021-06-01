@@ -2024,6 +2024,25 @@ Book (with parts), "section" at level 3
 <!-- so we do not even try to provide a base             -->
 <!-- implementation with abstract portions.              -->
 
+<!-- #################### -->
+<!-- LaTeX Image Preamble -->
+<!-- #################### -->
+
+<!-- A docinfo may have latex-image-preamble without a  -->
+<!-- @syntax. There should only be one, but schema does -->
+<!-- not enforce that. It is stored here as a variable  -->
+<!-- (possibly empty) to facilitate having other        -->
+<!-- latex-image-preamble that do have special @syntax. -->
+<xsl:variable name="latex-image-preamble">
+    <xsl:choose>
+        <xsl:when test="$docinfo/latex-image-preamble[not(@syntax)]">
+            <xsl:call-template name="sanitize-text">
+                <xsl:with-param name="text" select="$docinfo/latex-image-preamble[not(@syntax)][1]" />
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:variable>
 
 <!-- ############## -->
 <!-- LaTeX Preamble -->

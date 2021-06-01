@@ -17,6 +17,16 @@
 # along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 # *********************************************************************
 
+# Python Version History
+# vermin is a great linter/checker to check versions required
+#     https://github.com/netromdk/vermin.git
+# 2021-05-21: this module expects Python 3.6 or newer
+#     in reality:
+#     shutil.copytree(dirs_exist_ok) requires Python 3.8
+#         (only in experimental code right now)
+#     subprocess.run() requires Python 3.5
+#     shutil.which() member requires 3.3
+#     otherwise Python 3.0 might be sufficient
 # 2020-05-20: this module expects Python 3.4 or newer
 
 #############################
@@ -475,10 +485,11 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
     # execute XSL extraction to get back six dictionaries
     # where the keys are the internal-ids for the problems
     # origin, copy, seed, source, pghuman, pgdense
+    # also get the localization as a string
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-pg.xsl')
 
-    # Build dictionaries into a scratch directory/file
+    # Build dictionaries and localization string into a scratch directory/file
     tmp_dir = get_temporary_directory()
     ww_filename = os.path.join(tmp_dir, 'webwork-dicts.txt')
     _debug('WeBWorK dictionaries temporarily in {}'.format(ww_filename))
@@ -487,7 +498,7 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
     ww_file = open(ww_filename, 'r')
     problem_dictionaries = ww_file.read()
     ww_file.close()
-    # "run" the dictionaries
+    # "run" the dictionaries and localization string
     # protect backslashes in LaTeX code
     # globals() necessary for success
     exec(problem_dictionaries.replace('\\','\\\\'), globals())
@@ -597,6 +608,8 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
             server_params_source = ('sourceFilePath',source[problem]) if origin[problem] == 'server' else ('problemSource',pgbase64['hint_yes_solution_yes'])
 
         server_params = (('answersSubmitted','0'),
+                         ('showSolutions','1'),
+                         ('showHints','1'),
                          ('displayMode','PTX'),
                          ('courseID',courseID),
                          ('userID',userID),
@@ -609,17 +622,17 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
         msg = "sending {} to server to save in {}: origin is '{}'"
         _verbose(msg.format(problem, dest_dir, origin[problem]))
         if origin[problem] == 'server':
-            _debug('server-to-ptx: {} {} {} {}'.format(source[problem], ww_domain_path, dest_dir, problem))
+            _debug("server-to-ptx: {}\n{}\n{}\n{}".format(problem, ww_domain_path, source[problem], dest_dir))
         elif origin[problem] == 'ptx':
             if (ww_reps_version == '2'):
-                _debug('server-to-ptx: {} {} {} {}'.format(pgdense[problem], ww_domain_path, dest_dir, problem))
+                _debug("server-to-ptx: {}\n{}\n{}\n{}".format(problem, ww_domain_path, pgdense[problem], dest_dir))
             elif (ww_reps_version == '1'):
-                _debug('server-to-ptx: {} {} {} {}'.format(pgdense['hint_yes_solution_yes'][problem], ww_domain_path, dest_dir, problem))
+                _debug("server-to-ptx: {}\n{}\n{}\n{}".format(problem, ww_domain_path, pgdense['hint_yes_solution_yes'][problem], dest_dir))
 
         # Ready, go out on the wire
         try:
             response = session.get(ww_domain_path, params=server_params)
-            _verbose('Getting problem response from: ' + response.url)
+            _debug('Getting problem response from: ' + response.url)
 
         except requests.exceptions.RequestException as e:
             root_cause = str(e)
@@ -1043,6 +1056,7 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
             server_data.set('course-id',courseID)
             server_data.set('user-id',userID)
             server_data.set('course-password',course_password)
+            server_data.set('language',localization)
             server_data.tail = "\n    "
 
         elif (ww_reps_version == '1'):
@@ -1064,8 +1078,8 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
                     server_url.set('hint',hint)
                     server_url.set('solution',solution)
                     server_url.set('domain',ww_domain)
-                    url_shell = "{}?courseID={}&userID={}&password={}&course_password={}&answersSubmitted=0&displayMode=MathJax&outputformat=simple&problemSeed={}&{}"
-                    server_url.text = url_shell.format(ww_domain_path,courseID,userID,password,course_password,seed[problem],source_query)
+                    url_shell = "{}?courseID={}&userID={}&password={}&course_password={}&answersSubmitted=0&displayMode=MathJax&outputformat=simple&language={}&problemSeed={}&{}"
+                    server_url.text = url_shell.format(ww_domain_path,courseID,userID,password,course_password,localization,seed[problem],source_query)
                     server_url.tail = "\n    "
 
         # Add PG for PTX-authored problems
@@ -1107,6 +1121,21 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
 
     #close session to avoid resource wanrnings
     session.close()
+
+################################
+#
+#  WeBWorK PG Macro Library
+#
+################################
+
+def pg_macros(xml_source, dest_dir):
+    import os # chdir()
+    import os.path  # join()
+
+    ptx_xsl_dir = get_ptx_xsl_path()
+    extraction_xslt = os.path.join(ptx_xsl_dir, 'support/pretext-pg-macros.xsl')
+    os.chdir(dest_dir)
+    xsltproc(extraction_xslt, xml_source, None)
 
 
 ##############################
@@ -1651,6 +1680,7 @@ def pdf(xml, pub_file, stringparams, out_file, dest_dir):
 
     warning = '\n'.join(['************************************************',
                          'Conversion to PDF is experimental and incomplete',
+                         '   (Temporarily requires Python version 3.8)    ',
                          '************************************************'])
     print(warning)
     #
@@ -1664,6 +1694,7 @@ def pdf(xml, pub_file, stringparams, out_file, dest_dir):
     external_dir = os.path.join(tmp_dir, external)
     # make the LateX source file in scratch directory
     latex(xml, pub_file, stringparams, None, tmp_dir)
+    # "dirs_exist_ok" keyword is Python 3.8; necessary?
     # copy managed, generated images
     shutil.copytree(generated_abs, generated_dir, dirs_exist_ok=True)
     # copy externally manufactured images
@@ -1780,12 +1811,18 @@ def set_verbosity(v):
     _verbosity = v
 
 def _verbose(msg):
-    """Write a message to the console on program progress"""
+    """Write a concise message to the console on program progress"""
+    # N.B.: this should be an informative progress indicator for an impatient
+    # author who wonders if anything is happening.  Use _debug() for messages
+    # with content useful for location or solving problems.
     if _verbosity >= 1:
         print('PTX: {}'.format(msg))
 
 def _debug(msg):
-    """Write a message to the console with some raw information"""
+    """Write a message to the console with some useful raw information"""
+    # N.B. This can be as detailed and infotrmative as possible,
+    # and should be helpful in locating where a problem occurs
+    # or what scenario caused that problem.
     if _verbosity >= 2:
         print('PTX:DEBUG: {}'.format(msg))
 
@@ -1801,7 +1838,7 @@ def check_python_version():
 
     # This test could be more precise,
     # but only handling 2to3 switch when introduced
-    msg = ''.join(["PreTeXt script/module expects Python 3.4, not Python 2 or older\n",
+    msg = ''.join(["PreTeXt script/module expects Python 3.6, not Python 2 or older\n",
                    "You have Python {}\n",
                    "** Try prefixing your command-line with 'python3 ' **"])
     if sys.version_info[0] <= 2:

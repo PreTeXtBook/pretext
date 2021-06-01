@@ -100,6 +100,13 @@ SERVER = https://webwork-ptx.aimath.org
 #  webwork-representations.xml which holds multiple versions of each problem.
 #  Also locally store images from the WeBWorK server.
 
+#  For HTML and problem set output, we turn off dates in file headers,
+#  so when we use these for testing we can get more accurate diffs.
+#  Dates are useful for single file output (or at least less of an
+#  annoyance).  This should not be taken as necessary or best practice
+#  for a real PreTeXt project using WeBWorK problems.
+#  This looks like "-stringparam debug.datedfiles no".
+
 sample-chapter-representations:
 	install -d $(WWOUT)
 	-rm $(WWOUT)/webwork-representations.ptx
@@ -150,7 +157,7 @@ sample-chapter-html:
 	cp -a $(WWOUT)/*.png $(HTMLOUT)/images
 	cp $(WWOUT)/webwork-representations.ptx $(WWEXAMPLE)/sample-chapter
 	cd $(HTMLOUT); \
-	xsltproc -stringparam publisher publication.xml -stringparam webwork.divisional.static no $(MBXSL)/pretext-html.xsl $(SMPCHP);
+	xsltproc -stringparam publisher publication.xml -stringparam webwork.divisional.static no -stringparam debug.datedfiles no $(MBXSL)/pretext-html.xsl $(SMPCHP);
 
 mini-html:
 	install -d $(HTMLOUT)
@@ -158,7 +165,7 @@ mini-html:
 	-rm $(HTMLOUT)/knowl/*.html
 	cp $(WWOUT)/webwork-representations.ptx $(WWEXAMPLE)/minimal
 	cd $(HTMLOUT); \
-	xsltproc -stringparam publisher publication.xml $(MBXSL)/pretext-html.xsl $(MINI);
+	xsltproc -stringparam publisher publication.xml -stringparam debug.datedfiles no $(MBXSL)/pretext-html.xsl $(MINI);
 
 #  Make an archive of webwork problem sets for each "section" (as specified
 #  by chunk level) with set definition files, set header files, and problem
@@ -170,14 +177,14 @@ sample-chapter-problem-sets:
 	cp $(WWOUT)/webwork-representations.ptx $(WWEXAMPLE)/sample-chapter
 	cd $(PGOUT); \
 	rm -r Integrating_WeBWorK_into_Textbooks; \
- 	xsltproc -stringparam publisher publication.xml -stringparam chunk.level 1 $(MBXSL)/pretext-ww-problem-sets.xsl $(SMPCHP)
+	xsltproc -stringparam publisher publication.xml -stringparam chunk.level 1 -stringparam debug.datedfiles no $(MBXSL)/pretext-ww-problem-sets.xsl $(SMPCHP)
 
 mini-problem-sets:
 	install -d $(PGOUT)
 	cp $(WWOUT)/webwork-representations.ptx $(WWEXAMPLE)/minimal
 	cd $(PGOUT); \
 	rm -r WeBWorK_Minimal_Example; \
-	xsltproc -stringparam publisher publication.xml -stringparam chunk.level 1 $(MBXSL)/pretext-ww-problem-sets.xsl $(MINI)
+	xsltproc -stringparam publisher publication.xml -stringparam chunk.level 1 -stringparam debug.datedfiles no $(MBXSL)/pretext-ww-problem-sets.xsl $(MINI)
 
 ###########
 # Utilities
