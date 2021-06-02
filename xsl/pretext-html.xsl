@@ -9497,13 +9497,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
       <xsl:attribute name="class">
           <xsl:text>jxgbox</xsl:text>
       </xsl:attribute>
-      <xsl:attribute name="style">
-          <xsl:text>width:</xsl:text>
-          <xsl:value-of select="$width" />
-          <xsl:text>px; height:</xsl:text>
-          <xsl:value-of select="$height" />
-          <xsl:text>px;</xsl:text>
-      </xsl:attribute>
+      <xsl:apply-templates select="." mode="size-pixels-style-attribute" />
   </xsl:element>
   <!-- Add a script wrapper to parse using JSXGraph -->
   <xsl:choose>
