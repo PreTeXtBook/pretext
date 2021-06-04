@@ -200,11 +200,11 @@ objectStructure = {
     "pretext": {
         "tag": "image",
         "pieces": [],
-        "attributes": ['xml:id="<&>xml:id<;>"', 'source="<&>src<;>"', 'alt="<&>alt<;>"', 'width="<&>width<;>%"', 'margins="<&>marginleft<;>% <&>marginright<;>%"']
+        "attributes": ['xml:id="<&>xml:id<;>"', 'source="<&>source<;>"', 'alt="<&>alt<;>"', 'width="<&>width<;>%"', 'margins="<&>marginleft<;>% <&>marginright<;>%"']
     },
     "source": {
         "pieces": [["",""]],
-        "attributes": [["src", ""], ["width", "40"], ["marginleft", "20"], ["marginright", "40"], ["alt", ""]]
+        "attributes": [["source", ""], ["width", "40"], ["marginleft", "20"], ["marginright", "40"], ["alt", ""]]
     }
   },
 
@@ -212,7 +212,7 @@ objectStructure = {
     "html": {
         "tag": "img",
         "pieces": [],
-        "attributes": ['src="<&>src<;>"', 'alt="<&>alt<;>"', 'style="contained"'],
+        "attributes": ['src="<&>source<;>"', 'alt="<&>alt<;>"', 'style="contained"'],
     }
   },
 
@@ -331,11 +331,11 @@ objectStructure = {
     },
     "pretext": {
         "tag": "sourcetag",
-        "pieces": [["title", "title"], ["statement", "statement"], ["hint", ""], ["answer", ""], ["solution", ""], ["tasks", ""]],
+        "pieces": [["title", "title"], ["content", ""], ["hint", ""], ["answer", ""], ["solution", ""], ["tasks", ""]],
         "attributes": ['xml:id="<&>xml:id<;>"', 'workspace="<&>workspace<;>"']
     },
     "source": {
-        "pieces": [["title", ""], ["statement", "p"], ["tasks", ""], ["hint", ""], ["answer", ""], ["solution", ""]],
+        "pieces": [["title", ""], ["content", "p"], ["tasks", ""], ["hint", ""], ["answer", ""], ["solution", ""]],
         "attributes": [["workspace", "0"]]
     }
   },
@@ -693,7 +693,7 @@ function process_value_from_source(fcn, piece, src) {
             if (piece in parent_src) {
                 content_raw = parent_src[piece]
             } else {
-                errorLog("Error: piece", piece, "not in src or parent_src")
+                errorLog("Error: piece", piece, "from", parent_src, "not in src or parent_src")
             }
         } else {
             errorLog("at the top, or else there is an error")
@@ -1656,6 +1656,15 @@ function edit_in_place(obj, oldornew) {
         document.getElementById('actively_editing').insertAdjacentElement("afterbegin", paragraph_editable);
 
         editorLog("setting", $('#' + idOfEditText), "to have contents", internalSource[thisID]["content"]);
+
+// from https://stackoverflow.com/questions/21257688/paste-rich-text-into-content-editable-div-and-only-keep-bold-and-italics-formatt
+
+// figure out better how to do this as needed.
+$('[contenteditable]').on('paste',function(e) {
+    e.preventDefault();
+    var text = (e.originalEvent || e).clipboardData.getData('text/plain') || prompt('Paste something..');
+    document.execCommand('insertText', false, text);
+});
         the_contents = internalSource[thisID]["content"]; 
         the_contents = expand_condensed_source_html(the_contents, "edit");
         $('#' + idOfEditText).html(the_contents);
@@ -2241,7 +2250,7 @@ function delete_by_id(theid, thereason) {
     save_edits()
 }
 
-var originalsource = '<section xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="sec_intro-intro" permid="hPw">\n  <title>What is Discrete Mathematics?</title>\n  <blockquote permid="akX">\n    <p permid="PLS">\n      dis<midpoint/>crete / dis\'krët.\n    </p>\n\n    <p permid="vTb">\n      <em>Adjective</em>: Individually separate and distinct.\n    </p>\n\n    <p permid="cak">\n      <em>Synonyms</em>: separate - detached - distinct - abstract.\n    </p>\n  </blockquote>\n\n  <p permid="UvL">\n    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n    In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n    <ellipsis/>.\n    Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n    What sort of problems?\n    Okay, those that involve numbers,\n    functions, lines, triangles,\n    <ellipsis/>.\n    Whatever your conception of what mathematics is,\n    try applying the concept of <q>discrete</q> to it, as defined above.\n    Some math fundamentally deals with <em>stuff</em>\n    that is individually separate and distinct.\n  </p>\n\n  <theorem><statement><p>Statement of the <m>e^x = 8</m> theorem.</p></statement></theorem><p permid="ACU">\n    In an algebra or calculus class,\n    you might have found a particular set of numbers\n    (maybe the set of numbers in the range of a function).\n    You would represent this set as an interval:\n    <m>[0,\\infty)</m> is the range of <m>f(x) = x^2</m> since the set\n    of outputs of the function are all real numbers 0 and greater.\n    This set of numbers is NOT discrete.\n    The numbers in the set are not separated by much at all.\n    In fact, take any two numbers in the set and there are infinitely many more between\n    them which are also in the set.\n  </p>\n  <p permid="gKd">\n    Discrete math could still ask about the range of a function,\n    but the set would not be an interval.\n    Consider the function which gives the number of children of each person reading this.\n    What is the range?\n    I\'m guessing\n    it is something like <m>\\{0, 1, 2, 3\\}</m>.\n    Maybe 4 is in there too.\n    But certainly there is nobody reading this that has 1.32419 children.\n    This output set <em>is</em> discrete because the elements are separate.\n    The inputs to the function also form a discrete set because each input is an individual person.\n  </p>\n\n  <p permid="MRm">\n    One way to get a feel for the subject is to consider the types of problems you solve in discrete math.\n    Here are a few simple examples:\n  </p>\n  <investigation permid="udO">\n    <p permid="Iht">\n      <em>Note: Throughout the text you will see <alert>Investigate!</alert>\n      activities like this one.\n      Answer the questions in these as best you can to give yourself a feel for what is coming next.</em>\n    </p>\n\n    <p permid="ooC">\n      <ol permid="Gsg">\n        <li permid="mzp">\n          <p permid="LbZ">\n            The most popular mathematician in the world is throwing a party for all of his friends.\n            As a way to kick things off, they decide that everyone should shake hands.\n            Assuming all 10 people at the party each shake hands with every other person\n            (but not themselves,\n            obviously)\n            exactly once, how many handshakes take place?\n          </p>\n        </li>\n\n        <li permid="SGy">\n          <p permid="rji">\n            At the warm-up event for Oscar\'s All Star Hot Dog Eating Contest, Al ate one hot dog.\n            Bob then showed him up by eating three hot dogs.\n            Not to be outdone, Carl ate five.\n            This continued with each contestant eating two more hot dogs than the previous contestant.\n            How many hot dogs did Zeno (the 26th and final contestant) eat?\n            How many hot dogs were eaten all together?\n          </p>\n        </li>\n\n        <li permid="yNH">\n          <p permid="Xqr">\n            After excavating for weeks, you finally arrive at the burial chamber.\n            The room is empty except for two large chests.\n            On each is carved a message (strangely in English):\n          </p>\n\n          <sidebyside width="80%" permid="NWF">\n\n            <image xml:id="two-chests" permid="FmN">\n\n      <latex-image>\\begin{tikzpicture}\n          \\node[shape=rectangle, draw=brown, thick, fill=brown!20!white, inner sep=5mm, minimum height=3cm, minimum width=3.5cm, text width=3.5cm, align=center] (a) { If this chest is empty, then the other chest\'s message is true.};\n          \\node[shape=rectangle, draw=brown, thick, fill=brown!20!white, inner sep=5mm, minimum height=3cm, minimum width=3.5cm, text width=3.5cm, align=center, right=of a] {\n               This chest is filled with treasure or the other chest contains deadly scorpions.\n              };\n      \\end{tikzpicture}</latex-image>\n            </image>\n\n          </sidebyside>\n\n          <p permid="DxA">\n            You know exactly one of these messages is true.\n            What should you do?\n          </p>\n        </li>\n\n        <li permid="eUQ">\n          <p permid="jEJ">\n            Back in the days of yore,\n            five small towns decided they wanted to build roads directly connecting each pair of towns.\n            While the towns had plenty of money to build roads as long and as winding as they wished,\n            it was very important that the roads not intersect\n            with each other\n            (as stop signs had not yet been invented).\n            Also, tunnels and bridges were not allowed.\n            Is it possible for each of these towns to build a road to each of the four other towns without creating any intersections?\n          </p>\n        </li>\n      </ol>\n    </p>\n  </investigation>\n  <p permid="sYv">\n    One reason it is difficult to define discrete math is that it is a very broad description which encapsulates a large number of subjects.\n    In this course we will study four main topics:\n    <term>combinatorics</term>\n    (the theory of ways things <em>combine</em>;\n    in particular, how to count these ways),\n    <term>sequences</term>, <term>symbolic logic</term>,\n    and <term>graph theory</term>.\n    However, there are other topics that belong under the discrete umbrella,\n    including computer science, abstract algebra,\n    number theory, game theory,\n    probability, and geometry\n    (some of these, particularly the last two,\n    have both discrete and non-discrete variants).\n  </p>\n\n  <p permid="ZfE">\n    Ultimately the best way to learn what discrete math is about is to <em>do</em> it.\n    Let\'s get started!\n    Before we can begin answering more complicated\n    (and fun)\n    problems, we must lay down some foundation.\n    We start by reviewing mathematical statements, sets, and functions in\n    the framework of discrete mathematics.\n  </p>\n</section>';
+var originalsource = '<section xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="sec_intro-intro" permid="hPw">\n  <title>What is Discrete Mathematics?</title>\n  <blockquote permid="akX">\n    <p permid="PLS">\n      dis<midpoint/>crete / dis\'krët.\n    </p>\n\n    <p permid="vTb">\n      <em>Adjective</em>: Individually separate and distinct.\n    </p>\n\n    <p permid="cak">\n      <em>Synonyms</em>: separate - detached - distinct - abstract.\n    </p>\n  </blockquote>\n\n  <p permid="UvL">\n    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n    In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n    <ellipsis/>.\n    Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n    What sort of problems?\n    Okay, those that involve numbers,\n    functions, lines, triangles,\n    <ellipsis/>.\n    Whatever your conception of what mathematics is,\n    try applying the concept of <q>discrete</q> to it, as defined above.\n    Some math fundamentally deals with <em>stuff</em>\n    that is individually separate and distinct.\n  </p>\n\n  <theorem><statement><p>Statement of the <m>e^x = 8</m> theorem.</p></statement></theorem><p permid="ACU">\n    In an algebra or calculus class,\n    you might have found a particular set of numbers\n    (maybe the set of numbers in the range of a function).\n    You would represent this set as an interval:\n    <m>[0,\\infty)</m> is the range of <m>f(x) = x^2</m> since the set\n    of outputs of the function are all real numbers 0 and greater.\n    This set of numbers is NOT discrete.\n    The numbers in the set are not separated by much at all.\n    In fact, take any two numbers in the set and there are infinitely many more between\n    them which are also in the set.\n  </p>\n  <p permid="gKd">\n    Discrete math could still ask about the range of a function,\n    but the set would not be an interval.\n    Consider the function which gives the number of children of each person reading this.\n    What is the range?\n    I\'m guessing\n    it is something like <m>\\{0, 1, 2, 3\\}</m>.\n    Maybe 4 is in there too.\n    But certainly there is nobody reading this that has 1.32419 children.\n    This output set <em>is</em> discrete because the elements are separate.\n    The inputs to the function also form a discrete set because each input is an individual person.\n  </p>\n\n  <p permid="MRm">\n    One way to get a feel for the subject is to consider the types of problems you solve in discrete math.\n    Here are a few simple examples:\n  </p>\n  <investigation permid="udO">\n    <p permid="Iht">\n      <em>Note: Throughout the text you will see <alert>Investigate!</alert>\n      activities like this one.\n      Answer the questions in these as best you can to give yourself a feel for what is coming next.</em>\n    </p>\n\n    <p permid="ooC">\n      <ol permid="Gsg">\n        <li permid="mzp">\n          <p permid="LbZ">\n            The most popular mathematician in the world is throwing a party for all of his friends.\n            As a way to kick things off, they decide that everyone should shake hands.\n            Assuming all 10 people at the party each shake hands with every other person\n            (but not themselves,\n            obviously)\n            exactly once, how many handshakes take place?\n          </p>\n        </li>\n\n        <li permid="SGy">\n          <p permid="rji">\n            At the warm-up event for Oscar\'s All Star Hot Dog Eating Contest, Al ate one hot dog.\n            Bob then showed him up by eating three hot dogs.\n            Not to be outdone, Carl ate five.\n            This continued with each contestant eating two more hot dogs than the previous contestant.\n            How many hot dogs did Zeno (the 26th and final contestant) eat?\n            How many hot dogs were eaten all together?\n          </p>\n        </li>\n\n        <li permid="yNH">\n          <p permid="Xqr">\n            After excavating for weeks, you finally arrive at the burial chamber.\n            The room is empty except for two large chests.\n            On each is carved a message (strangely in English):\n          </p>\n\n      <image xml:id="two-chests" permid="FmNprocessed" source="http://discrete.openmathbooks.org/dmoi3/images/two-chests.svg" width="80%"></image>      \n          <p permid="DxA">\n            You know exactly one of these messages is true.\n            What should you do?\n          </p>\n        </li>\n\n        <li permid="eUQ">\n          <p permid="jEJ">\n            Back in the days of yore,\n            five small towns decided they wanted to build roads directly connecting each pair of towns.\n            While the towns had plenty of money to build roads as long and as winding as they wished,\n            it was very important that the roads not intersect\n            with each other\n            (as stop signs had not yet been invented).\n            Also, tunnels and bridges were not allowed.\n            Is it possible for each of these towns to build a road to each of the four other towns without creating any intersections?\n          </p>\n        </li>\n      </ol>\n    </p>\n  </investigation>\n  <p permid="sYv">\n    One reason it is difficult to define discrete math is that it is a very broad description which encapsulates a large number of subjects.\n    In this course we will study four main topics:\n    <term>combinatorics</term>\n    (the theory of ways things <em>combine</em>;\n    in particular, how to count these ways),\n    <term>sequences</term>, <term>symbolic logic</term>,\n    and <term>graph theory</term>.\n    However, there are other topics that belong under the discrete umbrella,\n    including computer science, abstract algebra,\n    number theory, game theory,\n    probability, and geometry\n    (some of these, particularly the last two,\n    have both discrete and non-discrete variants).\n  </p>\n\n  <p permid="ZfE">\n    Ultimately the best way to learn what discrete math is about is to <em>do</em> it.\n    Let\'s get started!\n    Before we can begin answering more complicated\n    (and fun)\n    problems, we must lay down some foundation.\n    We start by reviewing mathematical statements, sets, and functions in\n    the framework of discrete mathematics.\n  </p>\n</section>';
 
 var internalSource = {  // currently the key is the HTML id
    "root_data": {"id": "hPw", "number_base": "0.1" },
@@ -2329,10 +2338,15 @@ var internalSource = {  // currently the key is the HTML id
    "Xqr": {"xml:id": "Xqr", "sourcetag": "p", "parent": ["yNH","content"],
            "content": "After excavating for weeks, you finally arrive at the burial chamber.\nThe room is empty except for two large chests.\n On each is carved a message (strangely in English):"},
    "ssiiddee": {"xml:id": "ssiiddee", "sourcetag": "image", "parent": ["yNH","content"],
+           "source": "http://discrete.openmathbooks.org/dmoi3/images/two-chests.svg",
+           "width": "66", "marginright": "17", "marginleft": "17"},
+/*
+   "ssiiddee": {"xml:id": "ssiiddee", "sourcetag": "image", "parent": ["yNH","content"],
            "src": "images/two-chests.svg",
            "width": "66", "marginright": "17", "marginleft": "17"},
    "ppccii": {"xml:id": "ppccii", "sourcetag": "image", "parent": ["ssiiddee","content"],
            "src": "images/two-chests.svg", "alt": "alt text goes here"},
+*/
    "DxA": {"xml:id": "DxA", "sourcetag": "p", "parent": ["yNH","content"],
            "content": "You know exactly one of these messages is true.\nWhat should you do?"}
 }
@@ -2600,12 +2614,12 @@ function assemble_internal_version_changes(object_being_edited) {
         var image_being_changed = object_being_edited.getAttribute("data-source_id");
         editorLog("image_being_changed ", image_being_changed);
 
-        if (internalSource[image_being_changed]["src"]) {
-            ongoing_editing_actions.push(["changed", "src", image_being_changed]);
+        if (internalSource[image_being_changed]["source"]) {
+            ongoing_editing_actions.push(["changed", "source", image_being_changed]);
         } else {
-            ongoing_editing_actions.push(["added", "src", image_being_changed]);
+            ongoing_editing_actions.push(["added", "source", image_being_changed]);
         }
-        internalSource[image_being_changed]["src"] = image_src;
+        internalSource[image_being_changed]["source"] = image_src;
         editorLog("image being changed is", internalSource[image_being_changed]);
     //    possibly_changed_ids_and_entry.push([owner_of_change, "image"]);
         possibly_changed_ids_and_entry.push([image_being_changed, "image"]);
@@ -2747,10 +2761,10 @@ function output_from_source(the_object, output_structure, format) {
             editorLog("% % % % % % % % % ", the_object[this_piece]);
             editorLog("% % % % % % % % % ", the_object[this_tag]);
             if (the_object[this_tag]) {
-                var sub_object = {};
+ //               var sub_object = {};
                 Object.assign(sub_object, the_object);
-                sub_object['type-contained'] = this_tag;
-                editorLog("sub_object", sub_object);
+  //              sub_object['type-contained'] = this_tag;
+  //              editorLog("sub_object", sub_object);
          //       this_piece_output = output_from_source(sub_object, objectStructure[this_piece][format], format);
                 this_piece_output = expand_condensed_source_html(the_object[this_tag],"html?");
     //            this_piece_output = output_from_source(sub_object, objectStructure[this_piece][format], format);
@@ -3773,7 +3787,11 @@ function xmlToObject(xml_st) {
     console.log("found this_id", this_id);
     var this_entry = {};
     this_entry["xml:id"] = this_id;
-    this_entry["sourcetag"] = xml.nodeName;
+    if (["ol", "ul", "dl"].includes(xml.nodeName)) {
+        this_entry["sourcetag"] = "list"
+    } else {
+        this_entry["sourcetag"] = xml.nodeName;
+    }
 
     this_node_content = "";
     if (xml.hasChildNodes()) {
@@ -3804,7 +3822,41 @@ function xmlToObject(xml_st) {
       }
     }    
     if (this_node_content) {
-        this_entry["content"] = this_node_content;
+        this_entry["content"] = this_node_content.trim();
+    }
+
+    if (xml.attributes.length > 0) {
+      //  console.log(xml.nodeName, "has attributes", xml.attributes);
+        for (var j = 0; j < xml.attributes.length; j++) {
+            var attribute = xml.attributes.item(j);
+            if (attribute.nodeName == "source") { this_entry["source"] = attribute.nodeValue }
+  // width for images, widths for sbs
+            else if (attribute.nodeName == "width") {
+                var widthvalue = attribute.nodeValue;
+                if (widthvalue.endsWith("%")) { widthvalue = widthvalue.slice(0,-1); }
+                this_entry["width"] = widthvalue
+            } else if (attribute.nodeName == "margins") {
+                var marginsvalues = attribute.nodeValue.split(' ');
+                if (marginsvalues.length == 1) {
+                    var margin = marginsvalues[0];
+                    if (margin.endsWith("%")) { margin = margin.slice(0,-1); }
+                    this_entry["marginleft"] = margin;
+                    this_entry["marginright"] = margin;
+                } else if (marginsvalues.length == 2) {
+                    var [marginleft, marginright] = marginsvalues;
+                    if (marginleft.endsWith("%")) { marginleft = marginleft.slice(0,-1); }
+                    if (marginright.endsWith("%")) { marginright = marginright.slice(0,-1); }
+                    this_entry["marginleft"] = marginleft;
+                    this_entry["marginright"] = marginright;
+                } else {
+                    console.log("Error: too many margins in", xml)
+                }
+            }
+        }
+    }
+
+    if (xml.attributes) {
+        console.log(xml, "has attributes", xml.attributes)
     }
     if (["title", "statement"].includes(xml.nodeName)) {
         return this_node_content
@@ -3827,12 +3879,23 @@ function record_children(internal_src) {
         var this_item = internal_src[key];
         if ("content" in this_item) { // skip empty tags
             var this_content = this_item["content"];
-            console.log("this_content", this_content);
+     //       console.log("this_content", this_content);
             var child_items = this_content.match(/<&>.*?<;>/g) || "";
             for (var j=0; j < child_items.length; ++j) {
                 var this_child = child_items[j].slice(3,-3);
-                console.log("this_child", this_child, "has a parent", key);
+      //          console.log("this_child", this_child, "has a parent", key);
                 internal_src[this_child]["parent"] = [key, "content"]
+            }
+        }
+  // need to handle content and statement better
+        if ("statement" in this_item) { // skip empty tags
+            var this_statement = this_item["statement"];
+       //     console.log("this_statement", this_statement);
+            var child_items = this_statement.match(/<&>.*?<;>/g) || "";
+            for (var j=0; j < child_items.length; ++j) {
+                var this_child = child_items[j].slice(3,-3);
+        //        console.log("this_child", this_child, "has a parent", key);
+                internal_src[this_child]["parent"] = [key, "statement"]
             }
         }
     }
@@ -3855,4 +3918,36 @@ sourceobj = record_children(sourceobj);
 console.log("updated transformed source");
 console.log(sourceobj);
 
-// internalSource = sourceobj;
+// transofrm again, to un-wrap list in p
+
+for (var id in sourceobj) {
+    var this_item = sourceobj[id];
+    if (this_item["sourcetag"] == "list") {
+        console.log("found a list", this_item);
+        var [parent_id, parent_content] = this_item["parent"];
+        console.log("with parent", sourceobj[parent_id]);
+        if (sourceobj[parent_id]["sourcetag"] == "p") {
+            var [parent_parent_id, parent_parent_content] = sourceobj[parent_id]["parent"];
+            console.log("with parents parent", sourceobj[parent_parent_id]);
+            // need to skip the intermediate parent
+            var old_p_p_content = sourceobj[parent_parent_id][parent_parent_content];
+            var new_p_p_content = old_p_p_content.replace("<&>" + parent_id + "<;>", "<&>" + id + "<;>");
+            sourceobj[parent_parent_id][parent_parent_content] = new_p_p_content;
+            sourceobj[id]["parent"] = [parent_parent_id, parent_parent_content];
+            // then eliminate the intermediate parent
+            console.log("deleting", parent_id);
+            delete sourceobj[parent_id];
+            console.log("now sourceobj[parent_parent_id]", sourceobj[parent_parent_id])
+        }
+    } else if (this_item["sourcetag"] == "image") {
+        if ("width" in this_item && !("marginleft" in this_item)) {
+            console.log("no width in" + this_item["xml:id"])
+            var width = parseInt(this_item["width"]);
+            var margins = (100 - width)*0.5;
+            this_item["marginleft"] = margins;
+            this_item["marginright"] = margins;
+        }
+    }
+}
+internalSource = sourceobj;
+
