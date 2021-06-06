@@ -384,6 +384,15 @@ function WWiframeReseed(iframe, seed) {
   this_problem.src = this_problem_url;
 }
 
+function process_workspace() {
+    console.log("processing workspace");
+// next does not work, because the cursor does back to the beginning
+// so:  need to handle the cursor
+//    the_text = document.activeElement.innerHTML;
+//    the_text = the_text.replace(/(^|\s)\$([^\$]+)\$(\s|$|[.,!?;:])/g, "\1\\(\2\\)\3")
+//    document.activeElement.innerHTML = the_text
+    MathJax.typesetPromise();
+}
 /* for the GeoGebra calculator */
 
 function pretext_geogebra_calculator_onload() {
@@ -485,6 +494,8 @@ window.addEventListener("load",function(event) {
                  just_hit_escape = false;
                  if($(document.activeElement).hasClass("aside-like")) {
                     $(document.activeElement).toggleClass("front")
+                 } else if ($(document.activeElement).hasClass("workspace")) {
+                    process_workspace()
                  }
             case 27: //esc
          //       var parent_sage_cell = $(this).closest(".sagecell_editor");
@@ -812,26 +823,5 @@ window.addEventListener("load",function(event) {
 window.setInterval(function(){
     console.log('$(":focus")', $(":focus"));
 }, 5000);
-*/
-/*
-window.onload = function()
-{
-    document.onkeyup = function(event)
-    {                   
-        var e = (!event) ? window.event : event;
-        switch(e.keyCode)
-        {                       
-            case 80:  //p 
-                window.location.href = document.getElementById('previousbutton').href;
-                break;                  
-            case 78: //n        
-                window.location.href = document.getElementById('nextbutton').href;
-                break;                  
-            case 85: //u        
-                window.location.href = document.getElementById('upbutton').href;
-            break;                      
-        }                   
-};              
-};      
 */
 
