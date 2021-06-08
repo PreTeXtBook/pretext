@@ -131,13 +131,12 @@ function knowl_click_handler($el) {
       else if ($el.parent().parent().is("li")) {
         where_it_goes = $el.parent().parent();
         // the '.is("p")' is for the first paragraph of a theorem or proof
+      } else if ($el.parent().prop("tagName").startsWith("MJX")) {
+          where_it_goes = $el.closest("mjx-container")
       } else if ($el.parent().css('display') == "block" || $el.parent().is("p") || $el.parent().hasClass("hidden-knowl-wrapper") || $el.parent().hasClass("kohere")) {
         where_it_goes = $el.parent();
       } else if ($el.parent().parent().css('display') == "block" || $el.parent().parent().is("p") || $el.parent().parent().hasClass("hidden-knowl-wrapper") || $el.parent().parent().hasClass("kohere")) {
         where_it_goes = $el.parent().parent();
-      }
-      else if ($el.parent().prop("tagName").startsWith("MJX")) {
-          where_it_goes = $el.closest("mjx-container")
       } else {
         //  is this a reasonable last case?
         //  if we omit the else, then if goes after $el
