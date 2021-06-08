@@ -129,10 +129,13 @@ function permalinkDescription(elem) {
 */
 async function copyPermalink(elem) {
     // structure borrowed from https://flaviocopes.com/clipboard-api/
+//    elem.preventDefault();
     if (!navigator.clipboard) {
         // Clipboard API not available
+        console.log("Error: Clipboard API not available");
         return
     }
+    console.log("copying permalink for", elem);
     const this_permalink_url = this_url + "#" + elem.parentElement.id;
     const this_permalink_description = elem.getAttribute('data-description');
     var link     = "<a href=\""                    + this_permalink_url + "\">" + this_permalink_description + "</a>";
@@ -274,13 +277,18 @@ console.log("this is e", e);
             this_permalink_container.setAttribute('class', 'autopermalink');
             this_permalink_container.setAttribute('onclick', 'copyPermalink(this)');
             this_permalink_container.setAttribute('data-description', this_permalink_description);
-            this_permalink_container.innerHTML = '<span href="' + this_permalink_url + '">' + permalink_word + '</span>';
+   //         this_permalink_container.innerHTML = '<span href="' + this_permalink_url + '">' + permalink_word + '</span>';
+            this_permalink_container.innerHTML = '<a href="' + this_permalink_url + '">' + permalink_word + '</a>';
 
             this_item.insertAdjacentElement("afterbegin", this_permalink_container);
         } else {
             console.log("      no permalink, because no id", this_item)
         }
     }
+
+    $(".pretext-content .autopermalink a").on("click", function(event){
+        event.preventDefault();
+    });
 
     console.log("adding video popouts");
     all_iframes = document.querySelectorAll('body iframeXXXX');
@@ -590,7 +598,8 @@ function loadResource(type, file) {
 
 
 window.addEventListener("load",function(event) {
-       if($('body').attr('id') == "levin-DMOI") {
+//       if($('body').attr('id') == "levin-DMOI") {
+       if($('body').attr('id') == "pretext-SA") {
            console.log("            found DMOI");
            if (typeof uname === "undefined") { uname = "" }
            console.log("aaaa", uname, "  uname");
@@ -738,6 +747,7 @@ function scaleWorkspaceIn(obj, subobj, scale, tmporfinal) {
 
 function adjustWorkspace() {
 
+    console.log("adjusting workspace");
     $(".workspace").attr("contenteditable", "true");
     document.execCommand("defaultParagraphSeparator", false, "br");
 
@@ -795,6 +805,7 @@ function adjustWorkspace() {
            }
        }
     }
+    console.log("finished adjusting workspace");
 }
 
 function urlattribute() {
@@ -804,7 +815,8 @@ function urlattribute() {
 
 window.addEventListener("load",function(event) {
 
-  if (document.body.classList.contains("worksheet")) {
+  if (document.body.classList.contains("XXXXworksheet")) {
+      console.log("begin adjusting workspace");
 
       var born_hidden_knowls = document.querySelectorAll('article > a[data-knowl]');
       console.log("born_hidden_knowls", born_hidden_knowls);
@@ -816,6 +828,7 @@ window.addEventListener("load",function(event) {
 
       window.setTimeout(urlattribute, 1500);
   }
+  console.log("done adjusting workspace");
 
 });
 
