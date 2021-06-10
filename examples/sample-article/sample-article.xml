@@ -1963,6 +1963,18 @@ the xsltproc executable.
                     <mrow>&amp;=D+E&amp;&amp;<xref ref="theorem-FTC" text="title" /></mrow>
                     <mrow>&amp;=F+G&amp;&amp;<xref ref="theorem-number-01" text="custom">A nice result</xref></mrow>
                 </md>.</p>
+
+                <p>Scott Beaver likes to write short chains of equalities all in one line, with the cross-references sitting on each equals sign.  Here we test the <latex/> <c>\overset</c> and <c>\underset</c> macros wrapping a <pretext/> <tag>xref</tag>, with and without content, inside an <tag>me</tag> element.  Note that  <c>\stackrel</c> is obsolete, and <c>\overunderset</c> is not yet supported by MathJax (but see <url href="https://github.com/mathjax/MathJax/issues/2704" visual="github.com/mathjax/MathJax/issues/2704">GitHub #2704</url>).  The mathematics is Scott's, the reasons are totally unrelated to the math.
+                    <me>AC-AD
+                        \overset{<xref ref="theorem-FTC" text="global"/>}{=}
+                        A(C-D)
+                        \underset{<xref ref="definition-indefinite-integral" text="global"/>}{=}
+                        A0_{n\times p}
+                        \overset{<xref ref="theorem-FTC" text="global">Thm.</xref>}{=}
+                        0_{m\times p}
+                    </me>
+                We suggest using cross-references that only display numbers (<tag>xref</tag> with <attr>text</attr> set to <c>global</c>) since if you stick to elements like <tag>theorem</tag>, <tag>lemma</tag>, <tag>definition</tag>, or <tag>axiom</tag>, then the numbers will be unambiguous and the target of the cross-reference will contain full information.  But note that if you mix in divisions, or perhaps figures, as reasons then there is a possibility that numbers will need to be qualified by their type.  We have provided an abbreviation for one cross-reference to <xref ref="theorem-FTC" text="type-global"/> (which will not benefit from automatic translation to other languages).
+                </p>
             </subsection>
 
             <subsection>
