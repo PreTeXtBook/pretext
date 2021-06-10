@@ -1114,6 +1114,10 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <xsl:param name="debug.webwork.inline.randomize" select="''"/>
 <xsl:variable name="b-webwork-inline-randomize" select="$debug.webwork.inline.randomize = 'yes'"/>
 
+<!-- MathJax SVG option (yes/no, could be generalized to -->
+<!-- specifying various options).  Totally unsupported.  -->
+<xsl:param name ="debug.mathjax.svg" select="''"/>
+
 <!-- Maybe not debugging, but transitional variables -->
 
 <!-- Prior to January 2017 we treated all whitespace as -->

@@ -11157,7 +11157,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- mathjax javascript -->
     <xsl:element name="script">
         <xsl:attribute name="src">
-            <xsl:text>https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js</xsl:text>
+            <xsl:text>https://cdn.jsdelivr.net/npm/mathjax@3/es5/</xsl:text>
+            <!-- CHTML is the default, SVG is for debugging -->
+            <xsl:choose>
+                <xsl:when test="$debug.mathjax.svg = 'yes'">
+                    <xsl:text>tex-svg.js</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>tex-chtml.js</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:attribute>
     </xsl:element>
 </xsl:template>
