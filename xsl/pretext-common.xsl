@@ -1574,10 +1574,10 @@ Book (with parts), "section" at level 3
     <xsl:variable name="raw-latex">
         <xsl:choose>
             <xsl:when test="ancestor::webwork">
-                <xsl:apply-templates select="text()|var" />
+                <xsl:apply-templates select="text()|xref|var" />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:apply-templates select="text()|fillin" />
+                <xsl:apply-templates select="text()|xref|fillin" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>

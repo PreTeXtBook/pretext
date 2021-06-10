@@ -7266,7 +7266,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- 2nd exceptional case, xref in mrow of display math  -->
         <!--   with Javascript (pure HTML) we can make knowls    -->
         <!--   without Javascript (EPUB) we use plain text       -->
-        <xsl:when test="parent::mrow">
+        <xsl:when test="parent::mrow or parent::me or parent::men">
             <xsl:apply-templates select="." mode="xref-link-display-math">
                 <xsl:with-param name="target" select="$target"/>
                 <xsl:with-param name="content" select="$content"/>
