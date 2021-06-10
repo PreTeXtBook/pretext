@@ -599,7 +599,7 @@ function loadResource(type, file) {
 
 window.addEventListener("load",function(event) {
 //       if($('body').attr('id') == "levin-DMOI") {
-       if($('body').attr('id') == "pretext-SA") {
+       if(false && $('body').attr('id') == "pretext-SA") {
            console.log("            found DMOI");
            if (typeof uname === "undefined") { uname = "" }
            console.log("aaaa", uname, "  uname");
@@ -612,14 +612,16 @@ window.addEventListener("load",function(event) {
         } else if (window.location.href.includes("soundwriting.pugetsound")) {
 /* a bunch of temporary exploration for a Sound Writing survey */
             console.log("please take our survey");
-console.log(window.location.href);
-console.log(window.location.href.includes("soundwriting.pugetsound"));
+            console.log(window.location.href);
+            console.log(window.location.href.includes("soundwriting.pugetsound"));
 
-loadResource("js", "login");
-loadResource("css", "features");
-setTimeout( loadResource("js", "survey"), 1000);  /* I know: sloppy */
+            loadResource("js", "login");
+            loadResource("css", "features");
+            setTimeout( loadResource("js", "survey"), 1000);  /* I know: sloppy */
 
-}
+        } else if ((typeof online_editable !== 'undefined') &&  online_editable) {
+            loadResource('js', 'edit')
+        }
 
 });
 
@@ -815,7 +817,7 @@ function urlattribute() {
 
 window.addEventListener("load",function(event) {
 
-  if (document.body.classList.contains("XXXXworksheet")) {
+  if (document.body.classList.contains("worksheet")) {
       console.log("begin adjusting workspace");
 
       var born_hidden_knowls = document.querySelectorAll('article > a[data-knowl]');
