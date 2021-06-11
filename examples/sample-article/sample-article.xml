@@ -487,6 +487,13 @@ the xsltproc executable.
                 <output>12.005</output>
             </sage>
 
+            <p>Sage has some functions which affect output, generally making mathematics look more like mathematics via <latex/> syntax.  This is a simple test, and you should see the variable and superscript in italics, properly formatted as output when viewed within HTML output.  We have provided expected output for doctesting, but it is sort of silly to have this as part of <latex/> output, even if it is instructive.</p>
+
+            <sage>
+                <input>pretty_print(html("$a^2$"))</input>
+                <output>&lt;script type="math/tex"&gt;a^2&lt;/script&gt;</output>
+            </sage>
+
             <!-- keep R index entry, collides with sortby attribute elsewhere -->
             <p>Sage, and by extension, the Sage Cell Server, can interpret several languages.  The next example has code in the <c>R</c> language,<idx><h>R</h></idx> a popular open source language for statistics.  As an author, you add the attribute <c>language="r"</c> to your <c>sage</c> element.  (The default language is Sage, so you do not need to indicate that repeatedly.)  Note that a language like <c>R</c> likes to use a <q>less than</q> character, &lt;, special character in XML.  You need to escape it by writing <c>&amp;lt;</c> as we have done in the source for this example.  (See the discussion in <xref ref="subsection-xml-escape" text="type-global"/>.)</p>
 
