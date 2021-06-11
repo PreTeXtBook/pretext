@@ -9404,7 +9404,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- In PTX source, use the commands one per line, as in:     -->
         <!-- setCoordSystem(0, 20, 0, 10);                            -->
         <!-- enableShiftDragZoom(false);                              -->
-        <xsl:if test="text()">
+        <xsl:if test="normalize-space(text())">
             <xsl:text>var </xsl:text>
             <xsl:value-of select="$applet-onload" />
             <xsl:text> = function(</xsl:text>
@@ -9456,7 +9456,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>,&#xa;</xsl:text>
         <xsl:text>height:</xsl:text><xsl:value-of select="$height" />
         <xsl:text>,&#xa;</xsl:text>
-        <xsl:if test="text()">
+        <xsl:if test="normalize-space(text())">
             <xsl:text>appletOnLoad:</xsl:text>
             <xsl:value-of select="$applet-onload" />
         </xsl:if>
