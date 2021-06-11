@@ -6129,7 +6129,16 @@ the xsltproc executable.
                     </interactive>
                 </figure>
 
-                <p>The same can be done with a <c>.ggb</c> file. Here we use two provided by David Rosoff, and one provided by Tevian Dray. The path to the file needs to be relative. We modify David's applet in a few ways. Remove the modifications to see the original.</p>
+                <p>The same can be done with a <c>.ggb</c> file. Here we use two provided by David Rosoff, and one provided by Tevian Dray. The path to the file needs to be relative. First, David's original.</p>
+
+                <figure>
+                    <caption>GeoGebra: <c>.ggb</c> file</caption>
+                    <interactive xml:id="geogebra-astroid-original" platform="geogebra" width="100%" aspect="4:3">
+                        <slate xml:id="astroid-original" surface="geogebra" source="code/rosoff/astroid.ggb" aspect="4:3"/>
+                    </interactive>
+                </figure>
+
+                <p>Now we modify David's applet in a few ways.</p>
 
                 <figure>
                     <caption>GeoGebra: modified from <c>.ggb</c> file</caption>
