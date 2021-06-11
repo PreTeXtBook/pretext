@@ -11085,7 +11085,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>  options: {&#xa;</xsl:text>
         <xsl:text>    ignoreHtmlClass: "tex2jax_ignore",&#xa;</xsl:text>
         <xsl:text>    processHtmlClass: "has_am",&#xa;</xsl:text>
-        <xsl:if test="$b-has-webwork-reps">
+        <xsl:if test="$b-has-webwork-reps or $b-has-sage">
             <xsl:text>    renderActions: {&#xa;</xsl:text>
             <xsl:text>        findScript: [10, function (doc) {&#xa;</xsl:text>
             <xsl:text>            document.querySelectorAll('script[type^="math/tex"]').forEach(function(node) {&#xa;</xsl:text>
