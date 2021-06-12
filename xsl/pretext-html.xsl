@@ -8691,6 +8691,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>;&#xa;</xsl:text>
         </script>
     </xsl:if>
+    <xsl:if test="$debug.editable = 'yes'">
+        <script>
+            <xsl:text>var online_editable=true;</xsl:text>
+        </script>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template name="aim-login-footer">
@@ -9959,6 +9964,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
+
+    <!-- Experimental - companion, chunked HTML -->
+    <xsl:if test="$debug.editable = 'yes'">
+        <xsl:variable name="the-source-filename">
+            <xsl:value-of select="str:replace($the-filename, '.html', '.ptx')"/>
+        </xsl:variable>
+        <exsl:document href="{$the-source-filename}" method="xml" omit-xml-declaration="no" indent="yes" encoding="UTF-8">
+            <xsl:copy-of select="."/>
+        </exsl:document>
+    </xsl:if>
+
     <exsl:document href="{$the-filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
     <xsl:call-template name="converter-blurb-html" />
     <html lang="{$document-language}"> <!-- dir="rtl" here -->

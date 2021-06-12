@@ -1116,7 +1116,10 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 
 <!-- MathJax SVG option (yes/no, could be generalized to -->
 <!-- specifying various options).  Totally unsupported.  -->
-<xsl:param name ="debug.mathjax.svg" select="''"/>
+<xsl:param name="debug.mathjax.svg" select="''"/>
+
+<!-- Definitely not debugging.  Transitional.  Top-secret. -->
+<xsl:param name="debug.editable" select="''"/>
 
 <!-- Maybe not debugging, but transitional variables -->
 
