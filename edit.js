@@ -105,6 +105,14 @@ objectStructure = {
         "pieces": [["{codenumber}", ""], ["{space}", ""], ["{title}", ""]]
     }
   },
+  "caption_like_heading": {
+    "html": {
+        "tag": "",
+        "cssclass": "figcaption",
+        "attributes": ['class="<&>{cssclass}<;>"', 'data-parent_id="<&>xml:id<;>"'],
+        "pieces": [["{type}", ""], ["{space}", ""], ["{codenumber}", ""], ["{period}", ""], ["{space}", ""]]
+    }
+  },
 
   "section": {
     "html": {
@@ -186,6 +194,25 @@ objectStructure = {
     "source": {
         "pieces": [["title", ""], ["content", "li"]],
         "attributes": [["label", "A"]]
+    }
+  },
+
+  "figure": {
+    "html": {
+        "tag": "figure",
+        "pieces": [["content",""],["{caption}", ""]],
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
+        "data_editable": "32",
+        "cssclass": "figure figure-like"
+    },
+    "pretext": {
+        "tag": "figure",
+        "pieces": [["caption","content"]],
+        "attributes": ['xml:id="<&>xml:id<;>"']
+    },
+    "source": {
+        "pieces": [["caption","content"]],
+        "attributes": []
     }
   },
 
@@ -301,6 +328,23 @@ objectStructure = {
     },
     "source": {
         "pieces": [["content", "p"]]
+    }
+  },
+
+  "caption": {
+    "html": {
+        "tag": "figcaption",
+        "data_editable": "321",
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+        "pieces": [["{caption_like_heading}", ""], ["caption",""]]
+   //     "pieces": [["(literal, caption goes here)",""]]
+    },
+    "pretext": {
+        "attributes": [],
+        "pieces": [["content", ""]]
+    },
+    "source": {
+        "pieces": [["content", ""]]
     }
   },
 
@@ -707,6 +751,7 @@ function process_value_from_source(fcn, piece, src) {
         content = content_raw.charAt(0).toUpperCase() + content_raw.slice(1);
     } else if (fcn == "literal") {
         editorLog("literally", piece);
+        alert(piece);
         content = piece
     } else if (fcn == "space") {
         content = content_raw + " "
@@ -938,6 +983,7 @@ function make_current_editing_tree_from_id(theid) {
 
     var current_id = theid;
     var current_element = document.getElementById(current_id);
+    console.log("current_id", current_id, "current_element", current_element);
     var selectable_parent, current_element_siblings, selectable_parent_id;
     var ct=0;
     while (current_id != top_id && ct < 10) {
@@ -1767,10 +1813,20 @@ function replace_by_id(theid, format) {
     document.getElementById("delete_me").remove();
 
 // need to also work with MJ3
-    MathJax.Hub.Queue(['Typeset', MathJax.Hub, document.getElementById(theid)]);
+//    MathJax.Hub.Queue(['Typeset', MathJax.Hub, document.getElementById(theid)]);
+    MathJax.typesetPromise(document.getElementById(theid));
+
+/*
+
+
 
     make_current_editing_tree_from_id(theid);
     edit_menu_from_current_editing("entering");
+
+
+
+
+*/
 }
 
 // temporary:  need to unify img and sbs layout
@@ -2253,7 +2309,8 @@ function delete_by_id(theid, thereason) {
 var originalsource = '<section xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="sec_intro-intro" permid="hPw">\n  <title>What is Discrete Mathematics?</title>\n  <blockquote permid="akX">\n    <p permid="PLS">\n      dis<midpoint/>crete / dis\'krët.\n    </p>\n\n    <p permid="vTb">\n      <em>Adjective</em>: Individually separate and distinct.\n    </p>\n\n    <p permid="cak">\n      <em>Synonyms</em>: separate - detached - distinct - abstract.\n    </p>\n  </blockquote>\n\n  <p permid="UvL">\n    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n    In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n    <ellipsis/>.\n    Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n    What sort of problems?\n    Okay, those that involve numbers,\n    functions, lines, triangles,\n    <ellipsis/>.\n    Whatever your conception of what mathematics is,\n    try applying the concept of <q>discrete</q> to it, as defined above.\n    Some math fundamentally deals with <em>stuff</em>\n    that is individually separate and distinct.\n  </p>\n\n  <theorem><statement><p>Statement of the <m>e^x = 8</m> theorem.</p></statement></theorem><p permid="ACU">\n    In an algebra or calculus class,\n    you might have found a particular set of numbers\n    (maybe the set of numbers in the range of a function).\n    You would represent this set as an interval:\n    <m>[0,\\infty)</m> is the range of <m>f(x) = x^2</m> since the set\n    of outputs of the function are all real numbers 0 and greater.\n    This set of numbers is NOT discrete.\n    The numbers in the set are not separated by much at all.\n    In fact, take any two numbers in the set and there are infinitely many more between\n    them which are also in the set.\n  </p>\n  <p permid="gKd">\n    Discrete math could still ask about the range of a function,\n    but the set would not be an interval.\n    Consider the function which gives the number of children of each person reading this.\n    What is the range?\n    I\'m guessing\n    it is something like <m>\\{0, 1, 2, 3\\}</m>.\n    Maybe 4 is in there too.\n    But certainly there is nobody reading this that has 1.32419 children.\n    This output set <em>is</em> discrete because the elements are separate.\n    The inputs to the function also form a discrete set because each input is an individual person.\n  </p>\n\n  <p permid="MRm">\n    One way to get a feel for the subject is to consider the types of problems you solve in discrete math.\n    Here are a few simple examples:\n  </p>\n  <investigation permid="udO">\n    <p permid="Iht">\n      <em>Note: Throughout the text you will see <alert>Investigate!</alert>\n      activities like this one.\n      Answer the questions in these as best you can to give yourself a feel for what is coming next.</em>\n    </p>\n\n    <p permid="ooC">\n      <ol permid="Gsg">\n        <li permid="mzp">\n          <p permid="LbZ">\n            The most popular mathematician in the world is throwing a party for all of his friends.\n            As a way to kick things off, they decide that everyone should shake hands.\n            Assuming all 10 people at the party each shake hands with every other person\n            (but not themselves,\n            obviously)\n            exactly once, how many handshakes take place?\n          </p>\n        </li>\n\n        <li permid="SGy">\n          <p permid="rji">\n            At the warm-up event for Oscar\'s All Star Hot Dog Eating Contest, Al ate one hot dog.\n            Bob then showed him up by eating three hot dogs.\n            Not to be outdone, Carl ate five.\n            This continued with each contestant eating two more hot dogs than the previous contestant.\n            How many hot dogs did Zeno (the 26th and final contestant) eat?\n            How many hot dogs were eaten all together?\n          </p>\n        </li>\n\n        <li permid="yNH">\n          <p permid="Xqr">\n            After excavating for weeks, you finally arrive at the burial chamber.\n            The room is empty except for two large chests.\n            On each is carved a message (strangely in English):\n          </p>\n\n      <image xml:id="two-chests" permid="FmNprocessed" source="http://discrete.openmathbooks.org/dmoi3/images/two-chests.svg" width="80%"></image>      \n          <p permid="DxA">\n            You know exactly one of these messages is true.\n            What should you do?\n          </p>\n        </li>\n\n        <li permid="eUQ">\n          <p permid="jEJ">\n            Back in the days of yore,\n            five small towns decided they wanted to build roads directly connecting each pair of towns.\n            While the towns had plenty of money to build roads as long and as winding as they wished,\n            it was very important that the roads not intersect\n            with each other\n            (as stop signs had not yet been invented).\n            Also, tunnels and bridges were not allowed.\n            Is it possible for each of these towns to build a road to each of the four other towns without creating any intersections?\n          </p>\n        </li>\n      </ol>\n    </p>\n  </investigation>\n  <p permid="sYv">\n    One reason it is difficult to define discrete math is that it is a very broad description which encapsulates a large number of subjects.\n    In this course we will study four main topics:\n    <term>combinatorics</term>\n    (the theory of ways things <em>combine</em>;\n    in particular, how to count these ways),\n    <term>sequences</term>, <term>symbolic logic</term>,\n    and <term>graph theory</term>.\n    However, there are other topics that belong under the discrete umbrella,\n    including computer science, abstract algebra,\n    number theory, game theory,\n    probability, and geometry\n    (some of these, particularly the last two,\n    have both discrete and non-discrete variants).\n  </p>\n\n  <p permid="ZfE">\n    Ultimately the best way to learn what discrete math is about is to <em>do</em> it.\n    Let\'s get started!\n    Before we can begin answering more complicated\n    (and fun)\n    problems, we must lay down some foundation.\n    We start by reviewing mathematical statements, sets, and functions in\n    the framework of discrete mathematics.\n  </p>\n</section>';
 
 var internalSource = {  // currently the key is the HTML id
-   "root_data": {"id": "hPw", "number_base": "0.1" },
+//   "root_data": {"id": "hPw", "number_base": "0.1" },
+   "root_data": {"id": "page-1", "number_base": "0.1" },
    "hPw": {"xml:id": "hPw", "sourcetag": "section", "title": "What is Discrete Mathematics?",
            "content": "<&>akX<;>\n<&>UvL<;>\n<&>ACU<;>\n<&>gKd<;>\n<&>MRm<;>\n<&>udO<;>\n<&>sYv<;>\n<&>ZfE<;>"},
    "gKd": {"xml:id": "gKd", "sourcetag": "p", "title": "", "parent": ["hPw","content"],
@@ -3258,7 +3315,6 @@ function main_menu_navigator(e) {  // we are not currently editing
 
             var to_be_edited = object_of_interest;
             editorLog("to_be_edited", to_be_edited);
-     //       editorLog("option", top_menu_options_for(to_be_edited));
             edit_submenu.innerHTML = top_menu_options_for(to_be_edited);
             $("#enter_choice").replaceWith(edit_submenu);
             document.getElementById('choose_current').focus();
@@ -3727,17 +3783,100 @@ document.addEventListener('focus', function() {
   }
 }, true);
 
-// retrieve_previous_editing();
-// editorLog("retrieved previous", internalSource);
+function initialize_editing(xml_st) {
+
+    xmlToObject(xml_st);
+    record_children(sourceobj);
+    internalSource = re_transform_source();
+
+    console.log("mostly done initializing");
+    console.log(internalSource);
+
+    current_editing = {
+        "level": 0,
+        "location": [0],
+ //       "tree": [ [document.getElementById(top_level_id)] ]
+        "tree": [ [internalSource.root_data.id] ]
+    }
+    console.log("initial current_editing", current_editing);
+
+    e_tree = current_editing["tree"];
+    editorLog("e_tree", e_tree);
+    e_level = current_editing["level"];
+    editorLog("e_level", e_level);
+    e_location = current_editing["location"];
+    editorLog("e_location", e_location);
+    console.log("               making the initial menu for", e_tree[e_level][e_location]);
+
+    document.getElementById("content").firstElementChild.setAttribute("id", internalSource.root_data.id);
+    replace_by_id(internalSource.root_data.id, "html");
+
+//    edit_menu_for(e_tree[e_level][e_location], "entering")
+
+    console.log("internalSource internalSource internalSource internalSource internalSource internalSource", internalSource);
+}
+
+async function fetch_source() {
+
+/* in curent development: source in at the same url, with html replace by src */
+    console.log("fetching source");
+    var source_url = window.location.href;
+    source_url = source_url.replace(/(#|\?).*/, "");
+    source_url = source_url.replace(/html$/, "src");
+    console.log("source_url", source_url);
+    const response = await fetch(source_url);
+    const thisdata = await response.text();
+    return thisdata
+//    var source_as_text = fetch(source_url).then(response => response.text());
+/*
+    fetch(source_url).then(function (response) {
+        return response.text()
+    }).then(function (data) {
+        console.log("we have data");
+        var thisdata = data;
+    });
+*/
+}
+
+// var this_source_txt = fetch_source();
+
+var this_source_txt;    
+var source_url = window.location.href;
+source_url = source_url.replace(/(#|\?).*/, "");
+source_url = source_url.replace(/html$/, "src");
+//var source_url = "https://aimath.org/~farmer/demo/worksheet-1-letter.src";
+fetch(source_url).then(
+        function(u){ return u.text();}
+      ).then(
+        function(text){
+          this_source_txt = text;
+  //        console.log("ppppppppppp  this_source_txt",this_source_txt)
+          if (this_source_txt.includes("404 Not")) {
+              console.log("Error: source unavailable")
+          } else {
+              initialize_editing(this_source_txt)
+          }
+        }
+      );
+
+    // console.log("12345",data, "678910")});
+// console.log("source_as_text", source_as_text.then(body));
+console.log("fetched source");
+console.log("this_source_txt",this_source_txt);
+
 
 // make the top level menu
+/* make a function which is called after the source is imported 
+
 e_tree = current_editing["tree"];
 editorLog("e_tree", e_tree);
 e_level = current_editing["level"];
 editorLog("e_level", e_level);
 e_location = current_editing["location"];
 editorLog("e_location", e_location);
+console.log("               making the initial menu for", e_tree[e_level][e_location]);
 edit_menu_for(e_tree[e_level][e_location], "entering")
+*/
 
 function xml_id_of(xml) {
     var this_id = "";
@@ -3758,6 +3897,7 @@ function xml_id_of(xml) {
 }
 
 var sourceobj = {};
+var new_top_id = "";
 
 function xmlToObject(xml_st) {
   var xml;
@@ -3784,6 +3924,10 @@ function xmlToObject(xml_st) {
 
   if (xml.nodeType == 1) {                
     this_id = xml_id_of(xml);
+    if (!new_top_id) {
+        new_top_id = this_id;
+        sourceobj["root_data"] =  {"id": new_top_id, "number_base": "X.Y"}
+    }
     console.log("found this_id", this_id);
     var this_entry = {};
     this_entry["xml:id"] = this_id;
@@ -3811,7 +3955,7 @@ function xmlToObject(xml_st) {
             }
 */
             var sub_node_id = xmlToObject(item);  // the contents, in certain cases
-            if (["title", "statement"].includes(item.nodeName)) {
+            if (["title", "statement", "caption"].includes(item.nodeName)) {
                 this_entry[item.nodeName] = sub_node_id
             } else {
                 this_node_content += "<&>" + sub_node_id + "<;>"
@@ -3858,7 +4002,7 @@ function xmlToObject(xml_st) {
     if (xml.attributes) {
         console.log(xml, "has attributes", xml.attributes)
     }
-    if (["title", "statement"].includes(xml.nodeName)) {
+    if (["title", "statement", "caption"].includes(xml.nodeName)) {
         return this_node_content
     } else {
         sourceobj[this_id] = this_entry
@@ -3902,10 +4046,9 @@ function record_children(internal_src) {
     return internal_src
 }
 
+/* 
 parser = new DOMParser();
 var tmp_xml = parser.parseFromString(originalsource, "text/xml");
-
-//var tmp_xml = $.parseXML(originalsource);
 
 console.log("x tmp_xml", tmp_xml);
 
@@ -3917,10 +4060,13 @@ console.log(sourceobj);
 sourceobj = record_children(sourceobj);
 console.log("updated transformed source");
 console.log(sourceobj);
+*/
 
 // transofrm again, to un-wrap list in p
 
-for (var id in sourceobj) {
+/* rewrite with sourceobj not global */
+function re_transform_source() {
+  for (var id in sourceobj) {
     var this_item = sourceobj[id];
     if (this_item["sourcetag"] == "list") {
         console.log("found a list", this_item);
@@ -3948,6 +4094,8 @@ for (var id in sourceobj) {
             this_item["marginright"] = margins;
         }
     }
+  }
+  return sourceobj;
 }
-internalSource = sourceobj;
 
+// internalSource = re_transform_source();
