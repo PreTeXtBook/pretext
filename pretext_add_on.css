@@ -1105,7 +1105,9 @@ body > a.assistive:focus {
 .pretext-content table tr.header-vertical th {
     writing-mode: vertical-rl;
     padding-left: 2em;
+/*
     transform: rotate(180deg);
+*/
 }
 
 .pretext-content table + article {
@@ -1361,9 +1363,14 @@ body > a.assistive:focus {
 .pretext-content .appendix > .autopermalink,
 .pretext-content .chapter > .autopermalink,
 .pretext-content .index > .autopermalink,
-.pretext-content .section > .autopermalink,
-.pretext-content .subsection > .autopermalink {
+.pretext-content .section > .autopermalink {
     margin-top: 2.7em;
+}
+.pretext-content .subsection > .autopermalink {
+    margin-top: 2.0em;
+}
+.pretext-content .subsubsection > .autopermalink {
+    margin-top: 1.4em;
 }
 
 .pretext-content .autopermalink:hover {
@@ -1377,6 +1384,7 @@ body > a.assistive:focus {
     padding: 1.5em 2em;
     background: #fff;
     border: 3px solid blue;
+    z-index: 2001;
 }
 
 .mininav {
@@ -1756,6 +1764,11 @@ body > a.assistive:focus {
      display: inline-block;
 }
 */
+
+.pretext-content [data-knowl] > mjx-mrow .TEX-I {
+    font-family: MJXZERO !important;
+    font-style: normal !important;
+}
 
 /* to stop things being blue when rendering MathJax with SVG */
 a.mjx-svg-href  {
