@@ -7824,29 +7824,25 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template match="list-of">
     <xsl:param name="heading-level"/>
 
-    <!-- Ring-fence terms so matches are not mistaken substrings -->
-    <xsl:variable name="elements">
-        <xsl:text>|</xsl:text>
-        <xsl:value-of select="str:replace(normalize-space(@elements), ' ', '|')" />
-        <xsl:text>|</xsl:text>
-    </xsl:variable>
-    <xsl:variable name="divisions">
-        <xsl:text>|</xsl:text>
-        <xsl:value-of select="str:replace(normalize-space(@divisions), ' ', '|')" />
-        <xsl:text>|</xsl:text>
-    </xsl:variable>
+    <!-- "str:tokenize()" in this form makes a node-set, which has no root -->
+    <!-- the elements may be "token" but that is irrelevant for use below  -->
+    <!-- Documentation may say spaces, we also allow comma as a delimiter  -->
+    <xsl:variable name="elements" select="str:tokenize(@elements, ', ')"/>
+    <xsl:variable name="divisions" select="str:tokenize(@divisions, ', ')"/>
     <!-- display subdivision headers with empty contents? -->
-    <xsl:variable name="empty">
+    <xsl:variable name="entered-empty">
         <xsl:choose>
             <xsl:when test="not(@empty)">
                 <xsl:text>no</xsl:text>
             </xsl:when>
-            <!-- DTD should restrict to 'yes'|'no' -->
             <xsl:otherwise>
                 <xsl:value-of select="@empty" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
+    <!-- Schema restricts to 'yes' or 'no'.  Thus we can just interpret -->
+    <!-- absent or anything-but-yes indicating to skip empty divisions. -->
+    <xsl:variable name="b-empty" select="$entered-empty = 'yes'"/>
     <!-- root of the document subtree for list formation     -->
     <!-- defaults to document-wide                           -->
     <!-- DTD should enforce subdivisions as values for scope -->
@@ -7854,16 +7850,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <!-- and protect against both a @scope and a @ref  -->
     <xsl:variable name="scope">
         <xsl:choose>
-            <xsl:when test="not(@scope)">
-                <xsl:choose>
-                    <xsl:when test="$root/book"><xsl:text>book</xsl:text></xsl:when>
-                    <xsl:when test="$root/article"><xsl:text>article</xsl:text></xsl:when>
-                    <xsl:when test="$root/letter"><xsl:text>letter</xsl:text></xsl:when>
-                    <xsl:when test="$root/memo"><xsl:text>memo</xsl:text></xsl:when>
-                </xsl:choose>
+            <xsl:when test="@scope">
+                <xsl:value-of select="@scope" />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="@scope" />
+                <xsl:value-of select="local-name($document-root)"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -7875,7 +7866,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:with-param name="heading-level" select="$heading-level"/>
         <xsl:with-param name="elements" select="$elements"/>
         <xsl:with-param name="divisions" select="$divisions"/>
-        <xsl:with-param name="empty" select="$empty"/>
+        <xsl:with-param name="b-empty" select="$b-empty"/>
     </xsl:apply-templates>
     <xsl:call-template name="list-of-end" />
 </xsl:template>
@@ -7884,42 +7875,50 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:param name="heading-level"/>
     <xsl:param name="elements"/>
     <xsl:param name="divisions"/>
-    <xsl:param name="empty"/>
+    <xsl:param name="b-empty"/>
 
-    <!-- write a division header, perhaps              -->
-    <!-- check if desired, check if empty and unwanted -->
-    <xsl:if test="contains($divisions, concat(concat('|', local-name(.)), '|'))">
-        <xsl:choose>
-            <xsl:when test="$empty='no'">
-                <!-- probe subtree, even if we found empty super-tree earlier -->
-                <xsl:variable name="all-elements" select=".//*[contains($elements, concat(concat('|', local-name(.)), '|'))]" />
-                <xsl:if test="$all-elements">
+    <!-- Check if we are at a divison that needs a heading                      -->
+    <!-- Equality of string (local-name() result) and the node-set ($divisions) -->
+    <!-- is true when the *string-value* of *one* node in the set is identical  -->
+    <xsl:variable name="b-division-element" select="local-name(.) = $divisions"/>
+    <xsl:choose>
+        <xsl:when test="$b-division-element">
+            <!-- handling a division element that *may* need a heading -->
+            <xsl:choose>
+                <xsl:when test="not($b-empty)">
+                    <!-- probe subtree, even if we found empty super-tree earlier -->
+                    <!-- to see if a heading is *needed*, author has elected to   -->
+                    <!-- not have a heading if there are no elements to list      -->
+                    <xsl:variable name="all-elements" select=".//*[local-name(.) = $elements]" />
+                    <xsl:if test="$all-elements">
+                        <xsl:apply-templates select="." mode="list-of-header">
+                            <xsl:with-param name="heading-level" select="$heading-level"/>
+                        </xsl:apply-templates>
+                    </xsl:if>
+                </xsl:when>
+                <xsl:when test="$b-empty">
+                    <!-- always write a heading, even if there will be no items listed -->
                     <xsl:apply-templates select="." mode="list-of-header">
                         <xsl:with-param name="heading-level" select="$heading-level"/>
                     </xsl:apply-templates>
-                </xsl:if>
-            </xsl:when>
-            <xsl:when test="$empty='yes'">
-                <xsl:apply-templates select="." mode="list-of-header">
-                    <xsl:with-param name="heading-level" select="$heading-level"/>
-                </xsl:apply-templates>
-            </xsl:when>
-        </xsl:choose>
-    </xsl:if>
-    <!-- if a desired element, write out summary/link -->
-    <xsl:if test="contains($elements, concat(concat('|', local-name(.)), '|'))='true'">
-        <xsl:apply-templates select="." mode="list-of-element" />
-    </xsl:if>
-    <!-- recurse into children -->
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- not at a division, so test element for inclusion -->
+            <xsl:if test="local-name(.) = $elements">
+                <xsl:apply-templates select="." mode="list-of-element" />
+            </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- recurse into children; recursion ends when no children   -->
     <!-- increment heading-level, correct right now for divisions -->
-    <xsl:if test="*">
-        <xsl:apply-templates select="*" mode="list-of-content">
-            <xsl:with-param name="heading-level" select="$heading-level + 1"/>
-            <xsl:with-param name="elements" select="$elements"/>
-            <xsl:with-param name="divisions" select="$divisions"/>
-            <xsl:with-param name="empty" select="$empty"/>
-        </xsl:apply-templates>
-    </xsl:if>
+    <xsl:apply-templates select="*" mode="list-of-content">
+        <xsl:with-param name="heading-level" select="$heading-level + 1"/>
+        <xsl:with-param name="elements" select="$elements"/>
+        <xsl:with-param name="divisions" select="$divisions"/>
+        <xsl:with-param name="b-empty" select="$b-empty"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Stub implementations, with warnings -->
