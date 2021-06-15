@@ -1527,6 +1527,12 @@ body > a.assistive:focus {
 .pretext-content .cols2 + *, .pretext-content .cols3 + *, .pretext-content .cols4 + *, .pretext-content .cols5 + *, .pretext-content .cols6 + * {
     clear: both;
 }
+/* does the next line eliminate the need for the previous line? */
+.pretext-content .cols2::after, .pretext-content .cols3::after, .pretext-content .cols4::after, .pretext-content .cols5::after, .pretext-content .cols6::after {
+    content: "";
+    display: block;
+    clear: both;
+}
 
 .pretext-content section > ol:last-child,
 .pretext-content section > ul:last-child {
@@ -1542,11 +1548,14 @@ body > a.assistive:focus {
     padding-bottom: 0em;
 }
 
+/* does this do anything which is not accomplished by the colsN::after above? */
+/* seems not
 .pretext-content .cols2:last-child::after, .pretext-content .cols3:last-child::after, .pretext-content .cols4:last-child::after, .pretext-content .cols5:last-child::after, .pretext-content .cols6:last-child::after {
     content: "";
     display: block;
     clear: both;
 }
+*/
 
 .pretext-content .cols2 > li:nth-child(2n+1),
 .pretext-content .cols3 > li:nth-child(3n+1),
@@ -2743,6 +2752,8 @@ code.inline {
 
 /* because .colsN uses float, the margin-top of the folowing
 element is ignored */
+/* but now this is not needed because we add an "::after" on cols n,
+   which is an empty non-floating block 
 .pretext-content .cols2 > li:last-child,
 .pretext-content .cols3 > li:last-child,
 .pretext-content .cols4 > li:last-child,
@@ -2750,6 +2761,7 @@ element is ignored */
 .pretext-content .cols6 > li:last-child {
     padding-bottom: 1em;
 }
+*/
 
 /* A colsN in a knowl needs to be narrower because of the margin/padding of the knowl */
 .pretext-content .knowl .exercise-like > .cols2 > li { width: calc(49% - 2em)}
