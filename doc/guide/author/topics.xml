@@ -2750,7 +2750,7 @@
 
             <p></p>
         </subsection>
-            <p>The <tag>row</tag> element accepts a <attr>header</attr> attribute with possible values of <c>no</c> (the default), <c>yes</c>, or <c>vertical</c>.  The latter is useful if space is at a premium (which always seems to be the case with tables), and the cells of a column are narrow and the heading is long.  The one restriction is that rows identified as having headers must be the initial (top) rows of the table and must be contiguous.</p>
+
         <subsection>
             <title>(*) Solutions</title>
 
