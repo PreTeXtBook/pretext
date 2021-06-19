@@ -11733,6 +11733,19 @@ the xsltproc executable.
                 <list-of elements="  theorem corollary" divisions="section    subsection " empty="no" />
             </appendix>
 
+            <appendix xml:id="appendix-exercise-lists">
+                <title>Lists of Exercises</title>
+
+                <p>Since <tag>exercise</tag> come in several flavors, we use <term>pseudo-elements</term> to specify the distinct types.  There are not many reading questions<mdash/>but here is a list of all of them, by section, using a <c>readingquestion</c> pseudo-element.</p>
+
+                <list-of elements="readingquestion" divisions="section" empty="no"/>
+
+                <p>And now a list of all the inline exercises, and including the title of every <tag>section</tag>, even if there is no inline exercise contained inside it.  The pseudo-element is <c>inlineexercise</c>.</p>
+
+                <list-of elements="inlineexercise" divisions="section" empty="yes"/>
+
+            </appendix>
+
             <appendix>
                 <title>A Structured Appendix</title>
                 <introduction><p>A deeply-structured appendix for testing purposes.</p></introduction>
