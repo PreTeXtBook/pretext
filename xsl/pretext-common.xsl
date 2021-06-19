@@ -7829,6 +7829,22 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <!-- Documentation may say spaces, we also allow comma as a delimiter  -->
     <xsl:variable name="elements" select="str:tokenize(@elements, ', ')"/>
     <xsl:variable name="divisions" select="str:tokenize(@divisions, ', ')"/>
+    <!-- Lists of various types of exercises can be useful, but they are         -->
+    <!-- categorized by their ancestors.  So we recognize certain strings        -->
+    <!-- as "pseudo-elements".  We do this once and then pass them along.        -->
+    <!--                                                                         -->
+    <!--   * inlineexercise                                                      -->
+    <!--   * divisionexercise                                                    -->
+    <!--   * worksheetexercise                                                   -->
+    <!--   * readingquestion                                                     -->
+    <!--                                                                         -->
+    <!-- Equality of strings (e.g. 'inlineexercise') and the node-set ($elements)-->
+    <!-- is true when the *string-value* of *one* node in the set is identical   -->
+    <!-- NB: if this gets out-of-hand, it should be passed as a structure        -->
+    <xsl:variable name="b-inline-exercises" select="'inlineexercise' = $elements"/>
+    <xsl:variable name="b-division-exercises" select="'divisionexercise' = $elements"/>
+    <xsl:variable name="b-worksheet-exercises" select="'worksheetexercise' = $elements"/>
+    <xsl:variable name="b-reading-questions" select="'readingquestion' = $elements"/>
     <!-- display subdivision headers with empty contents? -->
     <xsl:variable name="entered-empty">
         <xsl:choose>
@@ -7867,6 +7883,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:with-param name="elements" select="$elements"/>
         <xsl:with-param name="divisions" select="$divisions"/>
         <xsl:with-param name="b-empty" select="$b-empty"/>
+        <xsl:with-param name="b-inline-exercises" select="$b-inline-exercises"/>
+        <xsl:with-param name="b-division-exercises" select="$b-division-exercises"/>
+        <xsl:with-param name="b-worksheet-exercises" select="$b-worksheet-exercises"/>
+        <xsl:with-param name="b-reading-questions" select="$b-reading-questions"/>
     </xsl:apply-templates>
     <xsl:call-template name="list-of-end" />
 </xsl:template>
@@ -7876,10 +7896,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:param name="elements"/>
     <xsl:param name="divisions"/>
     <xsl:param name="b-empty"/>
+    <xsl:param name="b-inline-exercises"/>
+    <xsl:param name="b-division-exercises"/>
+    <xsl:param name="b-worksheet-exercises"/>
+    <xsl:param name="b-reading-questions"/>
 
     <!-- Check if we are at a divison that needs a heading                      -->
-    <!-- Equality of string (local-name() result) and the node-set ($divisions) -->
-    <!-- is true when the *string-value* of *one* node in the set is identical  -->
     <xsl:variable name="b-division-element" select="local-name(.) = $divisions"/>
     <xsl:choose>
         <xsl:when test="$b-division-element">
@@ -7889,8 +7911,17 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                     <!-- probe subtree, even if we found empty super-tree earlier -->
                     <!-- to see if a heading is *needed*, author has elected to   -->
                     <!-- not have a heading if there are no elements to list      -->
-                    <xsl:variable name="all-elements" select=".//*[local-name(.) = $elements]" />
-                    <xsl:if test="$all-elements">
+                    <!-- N.B. these booleans look rather expensive, owing to the  -->
+                    <!-- extensive searching for "exercise", but we hope the      -->
+                    <!-- booleans passed in will short-circuit and result in no   -->
+                    <!-- searching when it is not necessary                       -->
+                    <xsl:variable name="by-name-elements" select="boolean(.//*[local-name(.) = $elements])" />
+                    <xsl:variable name="division-exercises" select="$b-division-exercises and .//exercise[ancestor::exercises]"/>
+                    <xsl:variable name="worksheet-exercises" select="$b-worksheet-exercises and .//exercise[ancestor::worksheet]"/>
+                    <xsl:variable name="reading-questions" select="$b-reading-questions and .//exercise[ancestor::reading-questions]"/>
+                    <xsl:variable name="inline-exercises" select="$b-inline-exercises and .//exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]"/>
+                    <xsl:variable name="any-elements" select="$by-name-elements or $inline-exercises or $division-exercises or $worksheet-exercises or $reading-questions"/>
+                    <xsl:if test="$any-elements">
                         <xsl:apply-templates select="." mode="list-of-header">
                             <xsl:with-param name="heading-level" select="$heading-level"/>
                         </xsl:apply-templates>
@@ -7906,7 +7937,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:when>
         <xsl:otherwise>
             <!-- not at a division, so test element for inclusion -->
-            <xsl:if test="local-name(.) = $elements">
+            <xsl:if test="(local-name(.) = $elements)
+                       or ($b-division-exercises and self::exercise and ancestor::exercises)
+                       or ($b-worksheet-exercises and self::exercise and ancestor::worksheet)
+                       or ($b-reading-questions and self::exercise and ancestor::reading-questions)
+                       or ($b-inline-exercises and self::exercise and not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions))">
                 <xsl:apply-templates select="." mode="list-of-element" />
             </xsl:if>
         </xsl:otherwise>
@@ -7918,6 +7953,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:with-param name="elements" select="$elements"/>
         <xsl:with-param name="divisions" select="$divisions"/>
         <xsl:with-param name="b-empty" select="$b-empty"/>
+        <xsl:with-param name="b-inline-exercises" select="$b-inline-exercises"/>
+        <xsl:with-param name="b-division-exercises" select="$b-division-exercises"/>
+        <xsl:with-param name="b-worksheet-exercises" select="$b-worksheet-exercises"/>
+        <xsl:with-param name="b-reading-questions" select="$b-reading-questions"/>
     </xsl:apply-templates>
 </xsl:template>
 
