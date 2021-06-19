@@ -2730,7 +2730,7 @@
         <subsection>
             <title>(*) Appendices</title>
 
-            <p></p>
+            <p>Automatic lists (<xref ref="topic-automatic-lists"/>) can appear anywhere, but an appendix is a very natural place to place one.</p>
         </subsection>
 
         <subsection>
@@ -2741,12 +2741,6 @@
 
         <subsection>
             <title>(*) References</title>
-
-            <p></p>
-        </subsection>
-
-        <subsection xml:id="automatic-lists">
-            <title>Automatic Lists</title>
 
             <p></p>
         </subsection>
@@ -3004,13 +2998,31 @@
     <section xml:id="topic-automatic-lists">
         <title>Automatic Lists</title>
 
-        <p>Sometimes it is useful to have an automatic list of various elements of one kind in a book, other than the ones already available in a <pretext/> document.  The predefined ones include an index (see <xref ref="topic-index"/>) and a list of notation (see <xref ref="topic-notation"/>).  Examples of lists one might wish to create could include lists of titled figures, computational listing, or theorems.</p>
+        <p>Sometimes it is useful to have an automatic list of various elements of one kind in a book, other than the ones already available in a <pretext/> document.  The predefined ones include an index (see <xref ref="topic-index"/>) and a list of notation (see <xref ref="topic-notation"/>).  Examples of lists one might wish to create could include lists figures, computational listings, or theorems.</p>
 
-        <p>To construct an automatic list, one uses a <tage>list-of</tage> element.  This tag has a required <attr>elements</attr> attribute, where the author limits the list to a certain tag.  This could be <c>elements="theorem"</c>, or a space-delimited list of tags like <c>elements="theorem fact corollary"</c>.</p>
+        <p>There is a very flexible way to make a list of various blocks (or perhaps other items) in your text.  Use an empty <tage>list-of</tage> element as a child of a division.  A very natural use would be to create an <tag>appendix</tag> for the sole purpose of holding one such list.  This is why this feature is frequently used in the back matter.  But you could place an <term>automatic list</term> many other places.</p>
 
-        <p>Although automatic lists may be most useful in backmatter, it is possible to use them for summarizing results or other items in a smaller part of your document.  Use the <attr>scope</attr> attribute to limit to the current <c>"section"</c> or <c>"part"</c>.  To organize the list better, use the <attr>divisions</attr> attribute to give structure with headings, such as <c>divisions="section subsection"</c> to organize at two levels.  Finally, the <attr>empty</attr> attribute can be set to <c>"yes"</c> or <c>"no"</c> (default), depending on whether you wish to show any divisions that have none of the requested elements (obviously only useful if you set <c>divisions</c> to something nonempty).</p>
+        <p>We will illustrate with an example.  Suppose you know your book has theoretical results only in <tag>theorem</tag> and <tag>lemma</tag> elements.  So, for example, you never use <tag>corollary</tag> elements.  Then you could author</p>
 
-        <p>Note that an automatic list gets no title or visual separation from surrounding material, so use the usual subdivision elements to make that happen.</p>
+        <pre><![CDATA[
+        <appendix xml:id="appendix-list-results">
+          <title>List of Results</title>
+
+          <list-of elements="theorem lemma" divisions="chapter" empty="yes"/>
+        </appendix>
+        ]]>
+        </pre>
+
+        <p>The result will be a link to every <tag>theorem</tag> and <tag>lemma</tag> in the entire book, using a clickable with its type, number and title.  See <xref ref="best-practices"/> for an example. In <init>HTML</init> output the clickables will usually be knowls, which is especially handy.  The list will be organized with the titles of the chapters as headings.  The <attr>divisions</attr> attribute can have several types of divisions listed, such as both <tag>chapter</tag> <em>and</em> <tag>section</tag>.  The <attr>empty</attr> attribute set to <c>yes</c> indicates that a division heading should be used even if there is nothing on the list contained within.  The default for <attr>empty</attr> is <c>no</c>.</p>
+
+        <p>This feature is best used when the items in the list have been authored with titles, which greatly increases the utility of the list for your reader.  Review <xref ref="best-practice-titles"/> if this advice is new to you.</p>
+
+        <p>There is a <attr>scope</attr> attribute, which should be the name of an element which is a division containing the location of the <tag>list-of</tag> element.  Then the list is restricted to items within the specified division.  For example, if you have the <tag>list-of</tag> inside a <tag>subsection</tag> built for this purpose, and you use <c>@scope="section"</c> then the list will have all the items from throughout the section containing the list.</p>
+
+        <p>There are four types of exercises, based on their location: inline, divisional, worksheet, and reading questions.  These may be specified inside <attr>elements</attr> by the <term>pseudo-elements</term>: <c>'inlineexercise'</c>, <c>'divisionexercise'</c>, <c>'worksheetexercise'</c>, <c>'readingquestion'</c>.  (These are just strings meant for this purpose, and are not <em>real</em> <pretext/> elements.)</p>
+
+        <p>There may be an argument for a <attr>ref</attr> attribute that would behave similar to <attr>scope</attr>.  Make a feature request if you need it?</p>
+
     </section>
 
     <section xml:id="topic-url">
