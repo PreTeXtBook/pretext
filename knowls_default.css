@@ -23,6 +23,9 @@
     transition-property: background-color;
     transition-duration: 0ms;
 }
+table [data-knowl] {
+    white-space: pre-line;
+}
 
 [data-knowl]:hover, [data-knowl]:active, [data-knowl].active {
     color: #8a1200;
