@@ -279,6 +279,7 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 }
 .pretext-content .frontmatter .credit .author {
     font-size: 0.9em;
+    margin-top: 0.75em;
 }
 .pretext-content .frontmatter .author-info {
     font-size: 90%;
@@ -1777,6 +1778,11 @@ body > a.assistive:focus {
 .pretext-content [data-knowl] > mjx-mrow .TEX-I {
     font-family: MJXZERO !important;
     font-style: normal !important;
+}
+/* remove this when MathJax fixes the bug that was setting the width to 0 */
+/* as in  $x=0$.  becomes  $x=0\text{.}$ */
+.pretext-content .knowl mjx-mtext > mjx-utext {
+    width: revert !important;
 }
 
 /* to stop things being blue when rendering MathJax with SVG */
