@@ -2612,6 +2612,22 @@
             <p>Note that tables may be constructed using the <url href="http://www.latex-tables.com/"><latex /> Complex Table Editor</url> tool online at <c>latex-tables.com</c>and then exported in <pretext /> syntax.</p>
         </introduction>
 
+        <subsection>
+            <title>Placeholder</title>
+
+            <note>
+                <title>Tables are Difficult</title>
+
+                <p>Width is always at a premium, and then when a <tag>tabular</tag> has more than a few columns, the width becomes even more dear.  When a <tag>cell</tag> has text that looks like a phrase or a sentence, rather than numerical data or symbols, it can be even harder to pack it all in.  A common example is a schedule of talks at a small professional conference where each time slot (rows) might have two or three talks simultaneously in parallel sessions (columns).</p>
+
+                <p>We offer <term>paragraph cells</term> which automatically break lines, but you need to specify a <attr>width</attr> on the <tag>col</tag> as a percentage to indicate where line-breaking happens.  For manual line-breaking, a <tag>cell</tag> can be structured entirely by <tag>line</tag> elements.</p>
+
+                <p>The next complication is that the <latex/> used for <init>PDF</init> output tends to make columns as wide as necessary and will not break lines without the devices mentioned in the previous paragraph.  The <init>HTML</init> output can sometimes be a bit more forgiving and flexible.  So we suggest building the <latex/> output first and getting that right, and then the <init>HTML</init> is likely to follow along and not need much futher refinement.</p>
+
+                <p>In contrast to most of <pretext/>, you may need to experiment, refine your approach, iterate, and maybe do things contrary to usual best practices elsewhere.  For example, the clickables for <init>URL</init>s and knowls might need to be short and less-informative in order to save some width.  Abbreviations, initialisms, and acronyms can also save some width.</p>
+            </note>
+        </subsection>
+
         <subsection xml:id="table-headers">
             <title>Table Headers</title>
 
