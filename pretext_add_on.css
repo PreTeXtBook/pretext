@@ -1787,10 +1787,12 @@ a.mjx-svg-href  {
 
 /* for long math formulas and tables to scroll on small screens */
 @media screen and (max-width: 943px) {
-  /* adapted from line 192, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_sliding-sidebars.scss */
   .pretext-content .displaymath {
      position: relative;
+     overflow-x: auto;
   }
+/* maybe the remainder of this case is subsumed by the above,
+   and also does not apply to MJ3 */
   .pretext-content .mjx-chtml.MJXc-display {
     /*Allow users on smaller screens to scroll equations*/
     /*horizontally when they don't fit on the screen*/
