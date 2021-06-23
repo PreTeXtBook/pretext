@@ -5612,10 +5612,7 @@ the xsltproc executable.
         </section>
 
         <section xml:id="section-interactive-authored">
-            <title>
-                <line>Interactive Elements</line>
-                <line>Authored in Javascript</line>
-            </title>
+            <title>Interactive Elements, Authored in Javascript</title>
             <shorttitle>Interactive Elements, Authored</shorttitle>
             <idx><h>interactive elements</h><h>authored</h></idx>
             <idx><h>embedded interactive elements</h><h>authored</h></idx>
