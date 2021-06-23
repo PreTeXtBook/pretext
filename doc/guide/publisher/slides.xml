@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <chapter xml:id="publisher-slides">
-    <idx>slides</idx>
     <title>Conversion to Slides</title>
+    <idx>slides</idx>
     <introduction>
         <p>
             As discussed in <xref ref="overview-slides"/> and <xref ref="topic-slides"/>,

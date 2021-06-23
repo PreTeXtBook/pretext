@@ -147,7 +147,7 @@
         <title>Analytics</title>
         <idx>analytics</idx>
 
-        <p><pretext/> makes it as easy as possible to have services provide data about visitors to the <init>HTML</init> version of your book.  We support <url hef="https://analytics.google.com/analytics/web/">Google Analytics</url><fn><c>analytics.google.com/analytics/web/</c></fn> and <url hef="https://statcounter.com/">StatCounter</url><fn><c>statcounter.com/</c></fn>.</p>
+        <p><pretext/> makes it as easy as possible to have services provide data about visitors to the <init>HTML</init> version of your book.  We support <url href="https://analytics.google.com/analytics/web/">Google Analytics</url><fn><c>analytics.google.com/analytics/web/</c></fn> and <url href="https://statcounter.com/">StatCounter</url><fn><c>statcounter.com/</c></fn>.</p>
 
         <p>In each case, use is similar.  Begin at the service's site and follow their instructions for enabling data collection for your book's site.  We will not document those instructions here.  <em>Do not copy the identification numbers from another project<mdash/>be sure to obtain your own for your project.</em>  When completed, you can request (or will be shown) sample Javascript code to add to pages on your site.  Except, <pretext/> is going to do that part for you.  You only need to provide the unique identifiers used by the service that identify your project.  Because these sign-ups are dependent on your site, this is a publisher activity, and hence configured with the publisher file (<xref ref="publisher-file"/>), see <xref ref="online-analytics-options"/> for details.</p>
 

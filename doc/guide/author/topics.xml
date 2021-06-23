@@ -3477,7 +3477,6 @@
         <idx>slides</idx>
         <p>
 Slideshows may be authored in <pretext/> by using the following tags.
-        </p>
         <ul>
           <li>
 <c>slideshow</c> replaces the usual <c>article</c> or <c>book</c> tag to
@@ -3499,6 +3498,7 @@ value <c>yes</c> to allow stepping through
 parts of a slide (e.g. it inserts a Beamer <c>\pause</c>).
           </li>
         </ul>
+        </p>
         <p>
 A minimal working example may be found in the
 <url href="https://github.com/rbeezer/mathbook/blob/dev/examples/sample-slideshow/sample-slideshow.xml">
@@ -3516,7 +3516,7 @@ See publishing details for various outputs in <xref ref="publisher-slides"/>.
 
         <p>A <tag>fragment</tag> is a chunk of code.  Almost always it has a <attr>xml:id</attr> attribute.  It begins with a mandatory <tag>title</tag>.  It may have index entries, but see below for advice using the <tag>list-of</tag> element.  Then there is a mix of <tag>code</tag> and <tag>fragref</tag> elements.  The <tag>code</tag> element holds the actual text in whatever computer language you are using.  Line breaks are respected.  Use the <init>XML</init> escape characters <c>&amp;lt;</c> and <c>&amp;amp;</c> if your code needs the <c>&lt;</c> or <c>&amp;</c> characters.  Do not try to use <init>XML</init> markup inside the <tag>code</tag> element.</p>
 
-        <p>A <tag>fragref</tag> is a reference to some other <tag>fragment</tag>.  This is accomplished via the <attr>ref</attr> attribute which points to the target via an <attr>xml:id</attr>.  So this is very similar to an <tag>xref</tag> (<xref ref="overview-cross-references"/>), but not enough alike to have the same element name.   The most important distinction is that the <c>xsl/pretext-litprog.xsl</c> stylesheet will <em>replace</em> the <tag>fragref</tag> with the <em>contents</em> of the target <tag>fragment</tag>.  In other conversions, the <tag>fragref</tag> will be a visual expression of the target <tag>fragment</tag>, possibly with some active means to visit or examine the target (hyperlink, knowl), more similar to an <element>xref</element>.</p>
+        <p>A <tag>fragref</tag> is a reference to some other <tag>fragment</tag>.  This is accomplished via the <attr>ref</attr> attribute which points to the target via an <attr>xml:id</attr>.  So this is very similar to an <tag>xref</tag> (<xref ref="overview-cross-references"/>), but not enough alike to have the same element name.   The most important distinction is that the <c>xsl/pretext-litprog.xsl</c> stylesheet will <em>replace</em> the <tag>fragref</tag> with the <em>contents</em> of the target <tag>fragment</tag>.  In other conversions, the <tag>fragref</tag> will be a visual expression of the target <tag>fragment</tag>, possibly with some active means to visit or examine the target (hyperlink, knowl), more similar to an <tag>xref</tag>.</p>
 
         <p>So the <c>xsl/pretext-litprog.xsl</c> stylesheet will course through your fragments converting the tree-like structure given by the references in the <tag>fragref</tag> elements into a depth-first traversal that will assemble the <tag>code</tag> elements, and only the <tag>code</tag> elements, linearly into a program.  Notice that it is your job as the author of the program to be certain that this rearrangement results in a syntactically correct program.  (<pretext/> is good, but not that good.)</p>
 

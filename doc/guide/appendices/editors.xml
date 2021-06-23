@@ -570,7 +570,6 @@
             This makes it easy for  coauthors to email them back and forth in order
             to expand and improve the content. There are a few potential problems,
             and hence some useful precautions.
-            </p>
             <ul>
                 <li>
                 If a <kbd>Tab</kbd> is entered and not expanded to spaces, different editors may
@@ -580,10 +579,10 @@
                 If there are extra spaces at the end of a line, there may be odd line wrapping.
                 </li>
             </ul>
+            </p>
 
             <p>
             Fortunately, these are easy to avoid.
-            </p>
             <ul>
                 <li>
                 A tab character may be found in the usual manner for searches:
@@ -598,6 +597,7 @@
                 be removed.
                 </li>
             </ul>
+            </p>
             <p>
             There is another feature of vi that is helpful in this respect.
             Using <c>:set list</c> will make the tab and end of line characters visual
