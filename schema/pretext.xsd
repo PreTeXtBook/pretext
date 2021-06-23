@@ -1720,7 +1720,7 @@
               </xs:complexType>
             </xs:element>
             <xs:element minOccurs="0" name="latex-image">
-              <xs:complexType>
+              <xs:complexType mixed="true">
                 <xs:attribute name="syntax" use="required">
                   <xs:simpleType>
                     <xs:restriction base="xs:token">

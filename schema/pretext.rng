@@ -1891,6 +1891,7 @@
           <attribute name="syntax">
             <value>PGtikz</value>
           </attribute>
+          <text/>
         </element>
       </optional>
     </element>

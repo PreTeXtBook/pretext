@@ -766,7 +766,8 @@
                     attribute width {text}?,
                     element description {(TextShort | WWVariable)*}?,
                     element latex-image {
-                        attribute syntax {"PGtikz"}
+                        attribute syntax {"PGtikz"},
+                        text
                     }?
                 }
             
