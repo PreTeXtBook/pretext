@@ -1231,6 +1231,7 @@
             Url =
                 element url {
                     attribute href {text},
+                    attribute visual {text}?,
                     TextShort
                 }
             Xref =

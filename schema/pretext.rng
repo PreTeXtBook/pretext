@@ -3025,6 +3025,9 @@
   <define name="Url">
     <element name="url">
       <attribute name="href"/>
+      <optional>
+        <attribute name="visual"/>
+      </optional>
       <ref name="TextShort"/>
     </element>
   </define>

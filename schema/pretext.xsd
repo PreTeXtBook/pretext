@@ -2692,6 +2692,7 @@
     <xs:complexType mixed="true">
       <xs:group ref="TextShort"/>
       <xs:attribute name="href" use="required"/>
+      <xs:attribute name="visual"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="xref">
