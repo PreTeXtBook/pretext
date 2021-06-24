@@ -5823,7 +5823,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- the original source, and not the enhanced source, and -->
     <!-- causes the relative file name to resolve according    -->
     <!-- to the correct location.   Experiments with the       -->
-    <xsl:variable name="filename" select="concat(concat('problems/mom-', myopenmath/@problem), '.xml')" />
+    <xsl:variable name="filename">
+        <xsl:if test="$b-managed-generated-images">
+            <xsl:value-of select="$generated-image-directory"/>
+        </xsl:if>
+        <xsl:text>problems/mom-</xsl:text>
+        <xsl:value-of select="myopenmath/@problem"/>
+        <xsl:text>.xml</xsl:text>
+    </xsl:variable>
     <xsl:apply-templates select="document($filename, $original)/myopenmath" mode="exercise-components">
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="purpose" select="$purpose" />
@@ -7213,6 +7220,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- has @preview -->
         <xsl:when test="@preview">
             <xsl:text>\includegraphics[width=0.80\linewidth,height=\qrsize,keepaspectratio]{</xsl:text>
+            <xsl:if test="$b-managed-generated-images">
+                <xsl:value-of select="$external-image-directory"/>
+            </xsl:if>
             <xsl:value-of select="@preview" />
             <xsl:text>}</xsl:text>
         </xsl:when>
@@ -7242,6 +7252,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- has @preview -->
         <xsl:when test="@preview">
             <xsl:text>\includegraphics[width=0.80\linewidth,height=\qrsize,keepaspectratio]{</xsl:text>
+            <xsl:if test="$b-managed-generated-images">
+                <xsl:value-of select="$external-image-directory"/>
+            </xsl:if>
             <xsl:value-of select="@preview" />
             <xsl:text>}</xsl:text>
         </xsl:when>
