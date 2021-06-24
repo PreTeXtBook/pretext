@@ -1920,18 +1920,26 @@
       </xs:attribute>
       <xs:attribute name="preview"/>
       <xs:attribute name="source"/>
+      <xs:attribute name="href"/>
       <xs:attribute name="youtube"/>
       <xs:attribute name="youtubeplaylist"/>
+      <xs:attribute name="vimeo"/>
     </xs:complexType>
   </xs:element>
   <xs:attributeGroup name="AttributesSourceFile">
     <xs:attribute name="source" use="required"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="AttributesNetwork">
+    <xs:attribute name="href" use="required"/>
   </xs:attributeGroup>
   <xs:attributeGroup name="AttributesYouTube">
     <xs:attribute name="youtube" use="required"/>
   </xs:attributeGroup>
   <xs:attributeGroup name="AttributesYouTubePlaylist">
     <xs:attribute name="youtubeplaylist" use="required"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="AttributesVimeo">
+    <xs:attribute name="vimeo" use="required"/>
   </xs:attributeGroup>
   <xs:group name="ExerciseBody">
     <xs:sequence>

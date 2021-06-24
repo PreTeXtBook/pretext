@@ -2122,19 +2122,27 @@
       </optional>
       <choice>
         <ref name="AttributesSourceFile"/>
+        <ref name="AttributesNetwork"/>
         <ref name="AttributesYouTube"/>
         <ref name="AttributesYouTubePlaylist"/>
+        <ref name="AttributesVimeo"/>
       </choice>
     </element>
   </define>
   <define name="AttributesSourceFile">
     <attribute name="source"/>
   </define>
+  <define name="AttributesNetwork">
+    <attribute name="href"/>
+  </define>
   <define name="AttributesYouTube">
     <attribute name="youtube"/>
   </define>
   <define name="AttributesYouTubePlaylist">
     <attribute name="youtubeplaylist"/>
+  </define>
+  <define name="AttributesVimeo">
+    <attribute name="vimeo"/>
   </define>
   <define name="ExerciseBody">
     <oneOrMore>
