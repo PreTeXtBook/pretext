@@ -2083,8 +2083,8 @@ def get_image_directories(xml_source, pub_file):
     # N.B. manage attributes carefully to distinguish
     # absent (None) versus empty string value ('')
 
-    # Examine /publication/source/images element carefully for
-    # attributes which we code here for convenience
+    # Examine /publication/source/media element carefully
+    # for attributes which we code here for convenience
     gen_attr = 'generated'
     data_attr = 'data'
     ext_attr = 'external'
@@ -2106,7 +2106,7 @@ def get_image_directories(xml_source, pub_file):
         pub_tree.xinclude()
         # "source" element => single-item list
         # no "source" element => empty list => triple of None returned
-        element_list = pub_tree.xpath("/publication/source/images")
+        element_list = pub_tree.xpath("/publication/source/media")
         if element_list:
             attributes_dict = element_list[0].attrib
             # common error message
