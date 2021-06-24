@@ -6338,18 +6338,18 @@ the xsltproc executable.
 
             <figure>
                 <caption>MP3 Piano Trill (<c>www.kozco.com/tech/soundtests.html</c>)</caption>
-                <audio xml:id="audio-piano-trill" source="http://www.kozco.com/tech/piano2-CoolEdit.mp3" width="80%"/>
+                <audio xml:id="audio-piano-trill" href="http://www.kozco.com/tech/piano2-CoolEdit.mp3" width="80%"/>
             </figure>
 
             <p>Now, naked, between a couple of paragraphs, with specified asymmetric margins, and a computed width.</p>
 
-            <audio xml:id="audio-piano-trill-two" source="http://www.kozco.com/tech/piano2-CoolEdit.mp3" margins="30% 15%"/>
+            <audio xml:id="audio-piano-trill-two" href="http://www.kozco.com/tech/piano2-CoolEdit.mp3" margins="30% 15%"/>
 
             <p>Now in a <tag>sidebyside</tag> with an <q>Organ Finale</q> WAV file on the left, and on the right, Bach in OGG format at a very low bit rate (32 kps).  From <url href="http://www.music.helsinki.fi/tmt/opetus/uusmedia/esim/index-e.html"/>.</p>
 
             <sidebyside>
-                <audio xml:id="audio-organ-finale" source="https://www.kozco.com/tech/organfinale.wav" width="30%"/>
-                <audio xml:id="audio-bach" source="http://www.music.helsinki.fi/tmt/opetus/uusmedia/esim/a2002011001-e02-32k.ogg" width="60%"/>
+                <audio xml:id="audio-organ-finale" href="https://www.kozco.com/tech/organfinale.wav" width="30%"/>
+                <audio xml:id="audio-bach" href="http://www.music.helsinki.fi/tmt/opetus/uusmedia/esim/a2002011001-e02-32k.ogg" width="60%"/>
             </sidebyside>
         </section>
 
@@ -6395,32 +6395,32 @@ the xsltproc executable.
 
                 <figure>
                     <caption>Big Buck Bunny from <q>Video for Everybody</q> Test Page at <url href="http://camendesign.com/code/video_for_everybody/test.htm"><c>camendesign.com/code/video_for_everybody/test.htm</c></url></caption>
-                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="70%" preview="preview/big-buck-bunny-frame-one.jpg" />
+                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="70%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <figure>
                     <caption>Big Buck Bunny, Controlled Start/End, Asymmetric Margins</caption>
-                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" start="16" end="30" margins="25% 5%" width="70%" preview="preview/big-buck-bunny-frame-one.jpg" />
+                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" start="16" end="30" margins="25% 5%" width="70%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <figure>
                     <caption>Big Buck Bunny, Ogg container, <c>*.ogv</c> extension</caption>
-                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.ogv" width="60%" preview="preview/big-buck-bunny-frame-one.jpg" />
+                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.ogv" width="60%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <figure>
                     <caption>Big Buck Bunny, MP4 format</caption>
-                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" width="50%" preview="preview/big-buck-bunny-frame-one.jpg" />
+                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" width="50%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <figure>
                     <caption>Big Buck Bunny, WebM format</caption>
-                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="40%" preview="preview/big-buck-bunny-frame-one.jpg" />
+                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="40%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <figure>
                     <caption>Big Buck Bunny, Automatic best format (temporarily broken)</caption>
-                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny" width="30%" preview="preview/big-buck-bunny-frame-one.jpg" />
+                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny" width="30%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <!-- A Coursera URL that expires via digital signature scheme:
@@ -6613,14 +6613,14 @@ the xsltproc executable.
                 <p>Experimental support for captions and subtitles first.  Look at the source, which mimics the actual HTML.  The words of the titles and/or subcaptions (there is a difference!) come from a file in <url href="https://en.wikipedia.org/wiki/WebVTT" visual="wikipedia.org/wiki/WebVTT">Web Video Text Tracks</url> (<init>WEBVVT</init>) format.</p>
                 <figure>
                     <caption>Big Buck Bunny with subtitles adapted from <url href="https://sites.google.com/site/chrisfoo/subtitles"><c>https://sites.google.com/site/chrisfoo/subtitles</c></url></caption>
-                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="preview/big-buck-bunny-frame-one.jpg">
+                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="preview/big-buck-bunny-frame-one.jpg">
                         <track kind="subtitles" label="US English" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt"/>
                     </video>
                 </figure>
 
                 <p>This video is identical to the previous one, except it tests the use of a default <tag>track</tag>.  The <attr>default</attr> attribute on <tag>track</tag> can be set to the value <c>yes</c> to make one set of captions the default (and only one!).  Test is a bit lame, the two <tag>track</tag> use the same file, but just have different labels for the player's menu.  Track named <c>US English Two</c> will show as in-use at start-up.</p>
 
-                <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="preview/big-buck-bunny-frame-one.jpg">
+                <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="preview/big-buck-bunny-frame-one.jpg">
                     <track kind="subtitles" label="US English One" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt"/>
                     <track kind="subtitles" label="US English Two" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt" default="yes"/>
                 </video>
