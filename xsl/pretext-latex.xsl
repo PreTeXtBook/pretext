@@ -7172,7 +7172,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Eventually match on all interactives                            -->
 <!-- NB: baseurl is assumed to have a trailing slash                 -->
 
-<xsl:template match="audio[@source]|video[@source]|interactive" mode="static-url">
+<xsl:template match="audio[@source|@href]|video[@source|@href]|interactive" mode="static-url">
     <xsl:value-of select="$baseurl"/>
     <xsl:apply-templates select="." mode="standalone-filename" />
 </xsl:template>
@@ -7282,7 +7282,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="audio[@source]|video[@source]" mode="static-caption">
+<xsl:template match="audio[@source|@href]|video[@source|@href]" mode="static-caption">
     <xsl:choose>
         <!-- author-supplied override -->
         <xsl:when test="caption">

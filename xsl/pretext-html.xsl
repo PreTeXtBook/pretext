@@ -6278,11 +6278,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- NB: here, and elesewhere, references -->
 <!-- to "video" should become "media"     -->
-<xsl:template match="audio[@source]" mode="media-embed">
+<xsl:template match="audio[@source|@href]" mode="media-embed">
     <xsl:param name="preview" select="'false'" />
     <xsl:param name="autoplay" select="'false'" />
 
-    <xsl:variable name="location" select="concat($external-image-directory, @source)"/>
+    <xsl:variable name="location">
+        <xsl:choose>
+            <xsl:when test="@href">
+                <xsl:value-of select="@href"/>
+            </xsl:when>
+            <!-- Now, must have a @source. For backwards -->
+            <!-- compatibility, consider a @source that  -->
+            <!-- really appears to be a @href. Might be  -->
+            <!-- http or https.                          -->
+            <xsl:when test="substring(@source,1,4) = 'http'">
+                <xsl:value-of select="@source"/>
+            </xsl:when>
+            <!-- else a local filename in @source -->
+            <xsl:otherwise>
+                <xsl:value-of select="$external-image-directory"/>
+                <xsl:value-of select="@source"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
 
     <xsl:element name="audio">
         <xsl:attribute name="id">
@@ -6303,7 +6321,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- First, grab extension of source URL in PTX @source -->
         <xsl:variable name="extension">
             <xsl:call-template name="file-extension">
-                <xsl:with-param name="filename" select="@source" />
+                <xsl:with-param name="filename" select="$location" />
             </xsl:call-template>
         </xsl:variable>
         <!-- "source" elements, children of HTML5 audio -->
@@ -6364,11 +6382,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- dimensions and autoplay as parameters        -->
 <!-- Normally $preview is true, and not passed in -->
 <!-- 'false' is an override for standalone pages  -->
-<xsl:template match="video[@source]" mode="media-embed">
+<xsl:template match="video[@source|@href]" mode="media-embed">
     <xsl:param name="preview" select="'true'" />
     <xsl:param name="autoplay" select="'false'" />
 
-    <xsl:variable name="location" select="concat($external-image-directory, @source)"/>
+    <xsl:variable name="location">
+        <xsl:choose>
+            <xsl:when test="@href">
+                <xsl:value-of select="@href"/>
+            </xsl:when>
+            <!-- Now, must have a @source. For backwards -->
+            <!-- compatibility, consider a @source that  -->
+            <!-- really appears to be a @href. Might be  -->
+            <!-- http or https.                          -->
+            <xsl:when test="substring(@source,1,4) = 'http'">
+                <xsl:value-of select="@source"/>
+            </xsl:when>
+            <!-- else a local filename in @source -->
+            <xsl:otherwise>
+                <xsl:value-of select="$external-image-directory"/>
+                <xsl:value-of select="@source"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
 
     <!-- we need to build the element, since @autoplay is optional -->
     <xsl:element name="video">
@@ -6402,7 +6439,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- First, grab extension of source URL in PTX @source -->
         <xsl:variable name="extension">
             <xsl:call-template name="file-extension">
-                <xsl:with-param name="filename" select="@source" />
+                <xsl:with-param name="filename" select="$location" />
             </xsl:call-template>
         </xsl:variable>
         <!-- "source" elements, children of HTML5 video -->

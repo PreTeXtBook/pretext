@@ -11536,6 +11536,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'use of the empty &quot;pagebreak&quot; element has been deprecated in favor of a &quot;page&quot; element.  We will attempt to honor the empty element, but new features may only be available with the new element.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2021-06-24  deprecate @source to specify media on network -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//video[substring(@source,1,4) = 'http']|$document-root//audio[substring(@source,1,4) = 'http']" />
+        <xsl:with-param name="date-string" select="'2021-06-24'" />
+        <xsl:with-param name="message" select="'use of a &quot;@source&quot; attribute on a &quot;video&quot; or &quot;audio&quot; element to specify a network location (leading with &quot;http&quot;) has been deprecated, but will still be effective.  Replace with a &quot;@href&quot; attribute.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
