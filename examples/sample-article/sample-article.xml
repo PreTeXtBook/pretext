@@ -64,7 +64,7 @@ the xsltproc executable.
         16th Century Art Book Cover, 176x240 pixels, Public Domain, due to age
         http://commons.wikimedia.org/wiki/File:Book_Cover_-_Google_Art_Project.jpg
         -->
-        <brandlogo url="https://pretextbook.org" source="images/book-cover-google-art-project.jpg" />
+        <brandlogo url="https://pretextbook.org" source="misc/book-cover-google-art-project.jpg" />
         <!--
         LaTeX packages that are also implemented as MathJax extensions
         may be specified here and any macros they have in common may be
@@ -137,7 +137,8 @@ the xsltproc executable.
         <document-id>pretext-SA</document-id>
         <!-- Items peculiar to an HTML output -->
         <html>
-            <!-- Expects favicon/favicon-32x32.png, and favicon/favicon-16x16.png -->
+            <!-- Expects favicon/favicon-32x32.png, and favicon/favicon-16x16.png,       -->
+            <!-- possibly in external images directory, when specified in publisher file -->
             <favicon/>
         </html>
         <!--
@@ -5638,7 +5639,7 @@ the xsltproc executable.
                 <figure xml:id="figure-simple-eigenvector">
                     <caption>A simple eigenvector demonstration</caption>
 
-                    <interactive xml:id="interactive-simple-eigenvector" platform="javascript" width="60%" source="code/austin/figures.js code/austin/simple-ev.js" preview="images/simple-eigenvector-preview.jpg">
+                    <interactive xml:id="interactive-simple-eigenvector" platform="javascript" width="60%" source="code/austin/figures.js code/austin/simple-ev.js" preview="preview/simple-eigenvector-preview.jpg">
                         <slate xml:id="eigenvector" surface="canvas" />
                         <instructions>
                             <p>Let <m>\vec{x}</m> be represented by the red arrow, and <m>A\vec{x}</m> by the grey arrow, for some particular <m>2\times 2</m> matrix <m>A</m>.  Drag the <em>tip</em> of the red arrow to see the grey arrow change.</p>
@@ -5653,7 +5654,7 @@ the xsltproc executable.
                 <figure xml:id="figure-eigenvectors">
                     <caption>Eigenvector demonstration</caption>
 
-                    <interactive xml:id="interactive-eigenvectors" platform="javascript" width="90%" aspect="4:5" source="code/austin/figures.js code/austin/eigenvectors.js" preview="images/eigenvectors-preview.jpg">
+                    <interactive xml:id="interactive-eigenvectors" platform="javascript" width="90%" aspect="4:5" source="code/austin/figures.js code/austin/eigenvectors.js" preview="preview/eigenvectors-preview.jpg">
                         <slate xml:id="sliders"      aspect="4:1" surface="canvas" />
                         <slate xml:id="eigenvectors" aspect="4:4" surface="canvas" />
                         <instructions>
@@ -5669,7 +5670,7 @@ the xsltproc executable.
 
                     <!-- The "10" in the "12:10" should really be a "9".  I suspect -->
                     <!-- there is some inline element that induces scroll bars      -->
-                    <interactive xml:id="interactive-animation" platform="javascript" width="100%" aspect="12:10" source="code/austin/animation.js" preview="images/animation-preview.jpg">
+                    <interactive xml:id="interactive-animation" platform="javascript" width="100%" aspect="12:10" source="code/austin/animation.js" preview="preview/animation-preview.jpg">
                         <sbsgroup>
                             <sidebyside>
                                 <slate xml:id="a" surface="canvas" aspect="4:1" />
@@ -5746,7 +5747,7 @@ the xsltproc executable.
 
                 <figure>
                     <caption>Force layout and collision detection</caption>
-                    <interactive xml:id="interactive-d3-collision" platform="d3" version="3" width="80%" aspect="1:1" source="code/d3/collision.js" preview="images/collision-preview.png">
+                    <interactive xml:id="interactive-d3-collision" platform="d3" version="3" width="80%" aspect="1:1" source="code/d3/collision.js" preview="preview/collision-preview.png">
                         <slate xml:id="d3-collision" surface="div" aspect="1:1"/>
                         <instructions>
                             <p>Place your mouse/pointer at the center of the interactive to repel the 200 circles.</p>
@@ -5763,7 +5764,7 @@ the xsltproc executable.
 
                 <figure>
                     <caption>Graph Layout</caption>
-                    <interactive xml:id="interactive-d3-graph-layout" platform="d3" version="4" width="60%" aspect="1:1" source="code/d3/graph-layout.js" preview="images/graph-layout-preview.png">
+                    <interactive xml:id="interactive-d3-graph-layout" platform="d3" version="4" width="60%" aspect="1:1" source="code/d3/graph-layout.js" preview="preview/graph-layout-preview.png">
                         <slate xml:id="d3-graph-layout" surface="div" aspect="1:1"/>
                         <instructions>
                             <p>Drag a vertex to a new location to see the graph adjust its layout.</p>
@@ -5800,7 +5801,7 @@ the xsltproc executable.
 
                 <figure>
                     <caption>Tweet mentions within the Welsh Assembly</caption>
-                    <interactive xml:id="interactive-d3-welsh" platform="d3" version="4" width="100%" aspect="1:2" source="code/d3/welsh.js" css="code/d3/welsh.css" preview="images/welsh-assembly-preview.png">
+                    <interactive xml:id="interactive-d3-welsh" platform="d3" version="4" width="100%" aspect="1:2" source="code/d3/welsh.js" css="code/d3/welsh.css" preview="preview/welsh-assembly-preview.png">
                         <slate xml:id="d3-welsh" surface="div" aspect="1:2"/>
                         <instructions>
                             <p>Hover on the name of an Assembly Member to concentrate on their tweet mentions.</p>
@@ -6220,7 +6221,7 @@ the xsltproc executable.
 
                 <figure xml:id="figure-threejs-splines">
                     <caption><c>threejs</c> webgl_geometry_extrude_splines example</caption>
-                    <interactive xml:id="interactive-threejs-splines" platform="javascript" width="75%" aspect="1:1" preview="images/threejs-splines.png" source="https://threejs.org/build/three.js https://threejs.org/examples/js/controls/OrbitControls.js https://threejs.org/examples/js/curves/CurveExtras.js https://threejs.org/examples/js/libs/dat.gui.min.js code/threejs/splines.js">
+                    <interactive xml:id="interactive-threejs-splines" platform="javascript" width="75%" aspect="1:1" preview="preview/threejs-splines.png" source="https://threejs.org/build/three.js https://threejs.org/examples/js/controls/OrbitControls.js https://threejs.org/examples/js/curves/CurveExtras.js https://threejs.org/examples/js/libs/dat.gui.min.js code/threejs/splines.js">
                         <slate xml:id="threejs-splines" surface="div" aspect="1:1" />
                     </interactive>
                 </figure>
@@ -6368,7 +6369,7 @@ the xsltproc executable.
 
                 <figure>
                     <caption>University of Puget Sound Promotional Video</caption>
-                    <video source="images/ups-visitor-guide-360" width="80%" preview="images/ups-promo-frame-one.jpg" />
+                    <video source="video/ups-visitor-guide-360" width="80%" preview="preview/ups-promo-frame-one.jpg" />
                 </figure>
 
                 <p>You can replace the <q>preview</q> image of a video with one of your own making.  <init>HTML</init> refers to this as the <term>poster</term>, presumably because it advertises the video.  The image you make should be of the same quality as the video, and with the same aspect-ratio, and is presumably one of the frames of the video.  So a screenshot is the likely avenue.  (Maybe we will have advice on how to do this easily, or see <url href="https://github.com/rbeezer/mathbook/issues/853" />.)
@@ -6378,14 +6379,14 @@ the xsltproc executable.
 
                 <figure>
                     <caption>University of Puget Sound Promotional Video</caption>
-                    <video source="images/ups-visitor-guide-360" width="80%" preview="images/ups-promo-preview.jpg" />
+                    <video source="video/ups-visitor-guide-360" width="80%" preview="preview/ups-promo-preview.jpg" />
                 </figure>
 
                 <p>If you find the posters provided automatically for a video to be distracting or objectionable, you can cover them up by requesting a generic poster with the attribute-value pair: <c>preview = "generic"</c>.</p>
 
                 <figure>
                     <caption>University of Puget Sound Promotional Video</caption>
-                    <video source="images/ups-visitor-guide-360" width="80%" preview="generic" />
+                    <video source="video/ups-visitor-guide-360" width="80%" preview="generic" />
                 </figure>
 
                 <p>You can use a very similar construction to point to a video hosted somewhere on the Internet, just use a complete <init>URL</init> for the <tag>source</tag> attribute.  Note that if the URL has a query string (parameters following a question-mark), then any ampersands (&amp;) will need to be escaped, so as to not confuse the <init>XML</init> processor (<ie /> use <c>&amp;amp</c>).  Also, the question-mark character needs to <em>not</em> be <init>URL</init>-encoded (<c>%3F</c>), so presumably edit the <init>URL</init> to be the character.  Here are several examples, the second one uses the <attr>start</attr> and <attr>stop</attr> attributes to limit the video to just the time between the 16-second and 30-second locations, and has asymmetric margins.</p>
@@ -6394,32 +6395,32 @@ the xsltproc executable.
 
                 <figure>
                     <caption>Big Buck Bunny from <q>Video for Everybody</q> Test Page at <url href="http://camendesign.com/code/video_for_everybody/test.htm"><c>camendesign.com/code/video_for_everybody/test.htm</c></url></caption>
-                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="70%" preview="images/big-buck-bunny-frame-one.jpg" />
+                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="70%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <figure>
                     <caption>Big Buck Bunny, Controlled Start/End, Asymmetric Margins</caption>
-                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" start="16" end="30" margins="25% 5%" width="70%" preview="images/big-buck-bunny-frame-one.jpg" />
+                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" start="16" end="30" margins="25% 5%" width="70%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <figure>
                     <caption>Big Buck Bunny, Ogg container, <c>*.ogv</c> extension</caption>
-                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.ogv" width="60%" preview="images/big-buck-bunny-frame-one.jpg" />
+                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.ogv" width="60%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <figure>
                     <caption>Big Buck Bunny, MP4 format</caption>
-                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" width="50%" preview="images/big-buck-bunny-frame-one.jpg" />
+                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" width="50%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <figure>
                     <caption>Big Buck Bunny, WebM format</caption>
-                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="40%" preview="images/big-buck-bunny-frame-one.jpg" />
+                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="40%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <figure>
                     <caption>Big Buck Bunny, Automatic best format (temporarily broken)</caption>
-                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny" width="30%" preview="images/big-buck-bunny-frame-one.jpg" />
+                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny" width="30%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <!-- A Coursera URL that expires via digital signature scheme:
@@ -6458,7 +6459,7 @@ the xsltproc executable.
                     <caption>Kashmir (Live), Led Zeppelin. O2 Arena, London. December 10, 2007. (8:55)</caption>
                     <idx><h>Led Zeppelin video</h></idx>
 
-                    <video xml:id="led-zeppelin-kashmir" youtube="hAzdgU_kpGo" width="70%" preview="images/jimmy-page.jpg" />
+                    <video xml:id="led-zeppelin-kashmir" youtube="hAzdgU_kpGo" width="70%" preview="preview/jimmy-page.jpg" />
                 </figure>
 
                 <p>And if you don't want to be reminded of Plant, Page, Bonham, or Jones, you can cover them up entirely.</p>
@@ -6473,7 +6474,7 @@ the xsltproc executable.
 
                 <p>Videos were first designed mostly on the assumption that they are wrapped in a <c>figure</c> with a <c>title</c> (which is distinct from a <c>caption</c>).  But you can just place a video <q>naked</q> inbetween a couple of paragraphs.  This is nice if you don't want the clutter of numbers, and/or if you plan to exclude videos from some edition of your document.</p>
 
-                <video xml:id="led-zeppelin-kashmir-solo" youtube="hAzdgU_kpGo" width="50%" preview="images/jimmy-page.jpg" />
+                <video xml:id="led-zeppelin-kashmir-solo" youtube="hAzdgU_kpGo" width="50%" preview="preview/jimmy-page.jpg" />
 
                 <p>We can pack two videos side-by-side, with a lot of horizontal control, using two panels in the <c>sidebyside</c> element.  We have simply chosen here to not provide a caption (overall, or separately) as an illustration.  The sizes are purposely a bit odd.  See <xref ref="section-side-by-side" text="type-global"/> for much more on side-by-side panels.  These videos come from the <q>Topic</q> and <q>VEVO</q> areas of YouTube (respectively) and both have start/end times.</p>
 
@@ -6495,7 +6496,7 @@ the xsltproc executable.
                     <!-- UPS promo -->
                     <figure>
                         <caption>UPS Promo</caption>
-                        <video xml:id="ups-promo-sbs" source="images/ups-visitor-guide-360" preview="images/ups-promo-frame-one.jpg"/>
+                        <video xml:id="ups-promo-sbs" source="video/ups-visitor-guide-360" preview="preview/ups-promo-frame-one.jpg"/>
                     </figure>
                 </sidebyside>
 
@@ -6556,15 +6557,15 @@ the xsltproc executable.
                 <sidebyside margins="0%" width="30%">
                     <figure>
                         <caption>Medium Length</caption>
-                        <video xml:id="ups-promo-1" source="images/ups-visitor-guide-360" preview="images/ups-promo-preview.jpg"/>
+                        <video xml:id="ups-promo-1" source="video/ups-visitor-guide-360" preview="preview/ups-promo-preview.jpg"/>
                     </figure>
                     <figure>
                         <caption>Short</caption>
-                        <video xml:id="ups-promo-2" source="images/ups-visitor-guide-360" start="4" end="10" preview="images/ups-promo-preview.jpg"/>
+                        <video xml:id="ups-promo-2" source="video/ups-visitor-guide-360" start="4" end="10" preview="preview/ups-promo-preview.jpg"/>
                     </figure>
                     <figure>
                         <caption>A Really Long Caption That Will Wrap onto a New Line</caption>
-                        <video xml:id="ups-promo-3" source="images/ups-visitor-guide-360" preview="images/ups-promo-preview.jpg"/>
+                        <video xml:id="ups-promo-3" source="video/ups-visitor-guide-360" preview="preview/ups-promo-preview.jpg"/>
                     </figure>
                 </sidebyside>
 
@@ -6575,15 +6576,15 @@ the xsltproc executable.
                     <sidebyside margins="0%" width="30%">
                         <figure>
                             <caption>Medium Length</caption>
-                            <video xml:id="ups-promo-4" source="images/ups-visitor-guide-360" preview="images/ups-promo-preview.jpg"/>
+                            <video xml:id="ups-promo-4" source="video/ups-visitor-guide-360" preview="preview/ups-promo-preview.jpg"/>
                         </figure>
                         <figure>
                             <caption>Short</caption>
-                            <video xml:id="ups-promo-5" source="images/ups-visitor-guide-360" start="4" end="10" preview="images/ups-promo-preview.jpg"/>
+                            <video xml:id="ups-promo-5" source="video/ups-visitor-guide-360" start="4" end="10" preview="preview/ups-promo-preview.jpg"/>
                         </figure>
                         <figure>
                             <caption>A Really Long Caption That Will Wrap onto a New Line</caption>
-                            <video xml:id="ups-promo-6" source="images/ups-visitor-guide-360" preview="images/ups-promo-preview.jpg"/>
+                            <video xml:id="ups-promo-6" source="video/ups-visitor-guide-360" preview="preview/ups-promo-preview.jpg"/>
                         </figure>
                     </sidebyside>
                 </figure>
@@ -6596,13 +6597,13 @@ the xsltproc executable.
 
                 <figure>
                     <caption><articletitle>MOVE</articletitle>, by <url href="https://vimeo.com/rickmereki">Rick Mereki</url>, <c>vimeo.com/rickmereki</c></caption>
-                    <video xml:id="vimeo-move" vimeo="27246366" width="80%" preview="images/vimeo-move.jpg"/>
+                    <video xml:id="vimeo-move" vimeo="27246366" width="80%" preview="preview/vimeo-move.jpg"/>
                 </figure>
 
                 <p>Now with an author-supplied poster.</p>
                 <figure>
                     <caption><articletitle>MOVE</articletitle>, by <url href="https://vimeo.com/rickmereki">Rick Mereki</url>, <c>vimeo.com/rickmereki</c></caption>
-                    <video vimeo="27246366" width="80%" preview="images/move.png"/>
+                    <video vimeo="27246366" width="80%" preview="preview/move.png"/>
                 </figure>
             </subsection>
 
@@ -6612,16 +6613,16 @@ the xsltproc executable.
                 <p>Experimental support for captions and subtitles first.  Look at the source, which mimics the actual HTML.  The words of the titles and/or subcaptions (there is a difference!) come from a file in <url href="https://en.wikipedia.org/wiki/WebVTT" visual="wikipedia.org/wiki/WebVTT">Web Video Text Tracks</url> (<init>WEBVVT</init>) format.</p>
                 <figure>
                     <caption>Big Buck Bunny with subtitles adapted from <url href="https://sites.google.com/site/chrisfoo/subtitles"><c>https://sites.google.com/site/chrisfoo/subtitles</c></url></caption>
-                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="images/big-buck-bunny-frame-one.jpg">
-                        <track kind="subtitles" label="US English" xml:lang="en" source="images/BigBuckBunnyAcapella.vtt"/>
+                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="preview/big-buck-bunny-frame-one.jpg">
+                        <track kind="subtitles" label="US English" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt"/>
                     </video>
                 </figure>
 
                 <p>This video is identical to the previous one, except it tests the use of a default <tag>track</tag>.  The <attr>default</attr> attribute on <tag>track</tag> can be set to the value <c>yes</c> to make one set of captions the default (and only one!).  Test is a bit lame, the two <tag>track</tag> use the same file, but just have different labels for the player's menu.  Track named <c>US English Two</c> will show as in-use at start-up.</p>
 
-                <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="images/big-buck-bunny-frame-one.jpg">
-                    <track kind="subtitles" label="US English One" xml:lang="en" source="images/BigBuckBunnyAcapella.vtt"/>
-                    <track kind="subtitles" label="US English Two" xml:lang="en" source="images/BigBuckBunnyAcapella.vtt" default="yes"/>
+                <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="preview/big-buck-bunny-frame-one.jpg">
+                    <track kind="subtitles" label="US English One" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt"/>
+                    <track kind="subtitles" label="US English Two" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt" default="yes"/>
                 </video>
 
             </subsection>
@@ -9117,7 +9118,7 @@ the xsltproc executable.
 
             <sidebyside  margins="5%" widths="40% 45%">
                 <!-- Hosted -->
-                <video source="images/ups-visitor-guide-360" width="80%" preview="images/ups-promo-frame-one.jpg"/>
+                <video source="video/ups-visitor-guide-360" width="80%" preview="preview/ups-promo-frame-one.jpg"/>
                 <!-- Airborne Toxic Event -->
                 <video xml:id="airborne-midnight-1" youtube="UYPoMjR6-Ao" />
             </sidebyside>
@@ -9275,7 +9276,7 @@ the xsltproc executable.
 
                 <p>All by itsef, with no layout specified, so showing the default size and placement.  Vivamus in congue massa. Morbi condimentum ac magna at accumsan. Vestibulum ac augue eu lorem semper gravida.</p>
 
-                <video xml:id="ups-promo-7" source="images/ups-visitor-guide-360" preview="images/ups-promo-preview.jpg"/>
+                <video xml:id="ups-promo-7" source="video/ups-visitor-guide-360" preview="preview/ups-promo-preview.jpg"/>
 
                 <p>Vestibulum facilisis ligula lectus, ac tristique nisl aliquet non. Quisque ornare felis arcu. Vivamus suscipit diam eget mi cursus viverra.</p>
 
@@ -9283,7 +9284,7 @@ the xsltproc executable.
 
                 <p>Width set at 40%, so equal margins and thus centered.  Aenean faucibus augue tellus, et sollicitudin tortor finibus non. Maecenas semper dolor quis diam placerat, iaculis sollicitudin augue finibus. Vestibulum facilisis ligula lectus, ac tristique nisl aliquet non.</p>
 
-                <video xml:id="ups-promo-8" source="images/ups-visitor-guide-360" width="40%" preview="images/ups-promo-preview.jpg"/>
+                <video xml:id="ups-promo-8" source="video/ups-visitor-guide-360" width="40%" preview="preview/ups-promo-preview.jpg"/>
 
                 <p>Vestibulum facilisis ligula lectus, ac tristique nisl aliquet non. Quisque ornare felis arcu. Vivamus suscipit diam eget mi cursus viverra.</p>
 
@@ -9291,7 +9292,7 @@ the xsltproc executable.
 
                 <p>Asymmetric margins of 20% and 40% given, implying 40% width, equal to previous instance.  Vivamus suscipit diam eget mi cursus viverra.</p>
 
-                <video xml:id="ups-promo-9" source="images/ups-visitor-guide-360" margins="20% 40%" preview="images/ups-promo-preview.jpg"/>
+                <video xml:id="ups-promo-9" source="video/ups-visitor-guide-360" margins="20% 40%" preview="preview/ups-promo-preview.jpg"/>
 
                 <p>Vestibulum facilisis ligula lectus, ac tristique nisl aliquet non. Quisque ornare felis arcu. Vivamus suscipit diam eget mi cursus viverra.</p>
 
@@ -9300,7 +9301,7 @@ the xsltproc executable.
                 <p>As a plain component of a <tag>sidebyside</tag>.  Widths here are 20% and 30%, margins and gaps are automatic, default alignment on top edges.  Nulla pharetra imperdiet elit, in sodales nibh blandit ultricies. Maecenas efficitur ac felis ut pharetra.</p>
 
                 <sidebyside widths="20% 30%">
-                    <video xml:id="ups-promo-10" source="images/ups-visitor-guide-360" preview="images/ups-promo-preview.jpg"/>
+                    <video xml:id="ups-promo-10" source="video/ups-visitor-guide-360" preview="preview/ups-promo-preview.jpg"/>
                     <video xml:id="pre-roll-countdown-10" youtube="Srmdij0CU1U"/>
                 </sidebyside>
 
@@ -9308,7 +9309,7 @@ the xsltproc executable.
 
                 <figure>
                     <caption>University of Puget Sound Promotional Video</caption>
-                    <video xml:id="ups-promo-11" source="images/ups-visitor-guide-360" preview="images/ups-promo-preview.jpg"/>
+                    <video xml:id="ups-promo-11" source="video/ups-visitor-guide-360" preview="preview/ups-promo-preview.jpg"/>
                 </figure>
 
                 <p>Vestibulum facilisis ligula lectus, ac tristique nisl aliquet non. Quisque ornare felis arcu. Vivamus suscipit diam eget mi cursus viverra.</p>
@@ -9322,7 +9323,7 @@ the xsltproc executable.
 
                 <figure>
                     <caption>University of Puget Sound Promotional Video</caption>
-                    <video xml:id="ups-promo-12" source="images/ups-visitor-guide-360" margins="30% 60%" preview="images/ups-promo-preview.jpg"/>
+                    <video xml:id="ups-promo-12" source="video/ups-visitor-guide-360" margins="30% 60%" preview="preview/ups-promo-preview.jpg"/>
                 </figure>
 
                 <p>Vestibulum facilisis ligula lectus, ac tristique nisl aliquet non. Quisque ornare felis arcu. Vivamus suscipit diam eget mi cursus viverra.</p>
@@ -9341,7 +9342,7 @@ the xsltproc executable.
                     </figure>
                     <figure>
                         <caption>University of Puget Sound Promotional Video</caption>
-                        <video xml:id="ups-promo-13" source="images/ups-visitor-guide-360" preview="images/ups-promo-preview.jpg"/>
+                        <video xml:id="ups-promo-13" source="video/ups-visitor-guide-360" preview="preview/ups-promo-preview.jpg"/>
                     </figure>
                 </sidebyside>
 
@@ -9356,7 +9357,7 @@ the xsltproc executable.
                         </figure>
                         <figure xml:id="ups-video">
                             <caption>University of Puget Sound Promotional Video</caption>
-                            <video xml:id="ups-promo-14" source="images/ups-visitor-guide-360" preview="images/ups-promo-preview.jpg"/>
+                            <video xml:id="ups-promo-14" source="video/ups-visitor-guide-360" preview="preview/ups-promo-preview.jpg"/>
                         </figure>
                     </sidebyside>
                 </figure>

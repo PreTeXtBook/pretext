@@ -36,8 +36,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- we use customizations-two for the oscarlevin style example -->
     <source customizations="customizations-one.xml">
-        <!-- uncomment to test managed images -->
-        <!-- <images generated="blatzo" external="images"/> -->
+        <media external="media" generated="generated" data="data"/>
     </source>
 
     <!-- For an "article" with "section" we can only go 3 levels    -->
