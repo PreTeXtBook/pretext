@@ -37,7 +37,8 @@ var simulation = d3.forceSimulation()
     .force("center", d3.forceCenter(width / 2, height / 2));
 
 // load the graph
-d3.json("code/d3/mention_network.json", function(error, graph) {
+// maybe this file belongs in the data directory?
+d3.json("media/code/d3/mention_network.json", function(error, graph) {
     // set the nodes
     var nodes = graph.nodes;
     // links between nodes

@@ -5796,7 +5796,7 @@ the xsltproc executable.
                     <li>We have adjusted the margins in an attempt to keep names visible on the right side, but without giving up too much space.</li>
                     <li>We have adjust the repelling force, and the collision buffer, to better fit the available space.</li>
                     <li>This example required its own <init>CSS</init>, which we have included as part of the <tag>interactive</tag>.</li>
-                    <li>The data collected from the Twitter analysis is contained in a <init>JSON</init> file, <c>mention_network.json</c>, and where the script loads that file, it needs a path relative to the <init>HTML</init> file where the interactive is viewed.</li>
+                    <li>The data collected from the Twitter analysis is contained in a <init>JSON</init> file, <c>mention_network.json</c>, and where the script loads that file, it has a hardcoded path.  So this example is a bit brittle, should that file move.</li>
                 </ul></p>
 
                 <figure>
