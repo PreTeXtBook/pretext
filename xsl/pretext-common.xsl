@@ -1114,6 +1114,13 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <xsl:param name="debug.webwork.inline.randomize" select="''"/>
 <xsl:variable name="b-webwork-inline-randomize" select="$debug.webwork.inline.randomize = 'yes'"/>
 
+<!-- MathJax SVG option (yes/no, could be generalized to -->
+<!-- specifying various options).  Totally unsupported.  -->
+<xsl:param name="debug.mathjax.svg" select="''"/>
+
+<!-- Definitely not debugging.  Transitional.  Top-secret. -->
+<xsl:param name="debug.editable" select="''"/>
+
 <!-- Maybe not debugging, but transitional variables -->
 
 <!-- Prior to January 2017 we treated all whitespace as -->
@@ -1570,10 +1577,10 @@ Book (with parts), "section" at level 3
     <xsl:variable name="raw-latex">
         <xsl:choose>
             <xsl:when test="ancestor::webwork">
-                <xsl:apply-templates select="text()|var" />
+                <xsl:apply-templates select="text()|xref|var" />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:apply-templates select="text()|fillin" />
+                <xsl:apply-templates select="text()|xref|fillin" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -2024,6 +2031,25 @@ Book (with parts), "section" at level 3
 <!-- so we do not even try to provide a base             -->
 <!-- implementation with abstract portions.              -->
 
+<!-- #################### -->
+<!-- LaTeX Image Preamble -->
+<!-- #################### -->
+
+<!-- A docinfo may have latex-image-preamble without a  -->
+<!-- @syntax. There should only be one, but schema does -->
+<!-- not enforce that. It is stored here as a variable  -->
+<!-- (possibly empty) to facilitate having other        -->
+<!-- latex-image-preamble that do have special @syntax. -->
+<xsl:variable name="latex-image-preamble">
+    <xsl:choose>
+        <xsl:when test="$docinfo/latex-image-preamble[not(@syntax)]">
+            <xsl:call-template name="sanitize-text">
+                <xsl:with-param name="text" select="$docinfo/latex-image-preamble[not(@syntax)][1]" />
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:variable>
 
 <!-- ############## -->
 <!-- LaTeX Preamble -->
@@ -7798,29 +7824,41 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template match="list-of">
     <xsl:param name="heading-level"/>
 
-    <!-- Ring-fence terms so matches are not mistaken substrings -->
-    <xsl:variable name="elements">
-        <xsl:text>|</xsl:text>
-        <xsl:value-of select="str:replace(normalize-space(@elements), ' ', '|')" />
-        <xsl:text>|</xsl:text>
-    </xsl:variable>
-    <xsl:variable name="divisions">
-        <xsl:text>|</xsl:text>
-        <xsl:value-of select="str:replace(normalize-space(@divisions), ' ', '|')" />
-        <xsl:text>|</xsl:text>
-    </xsl:variable>
+    <!-- "str:tokenize()" in this form makes a node-set, which has no root -->
+    <!-- the elements may be "token" but that is irrelevant for use below  -->
+    <!-- Documentation may say spaces, we also allow comma as a delimiter  -->
+    <xsl:variable name="elements" select="str:tokenize(@elements, ', ')"/>
+    <xsl:variable name="divisions" select="str:tokenize(@divisions, ', ')"/>
+    <!-- Lists of various types of exercises can be useful, but they are         -->
+    <!-- categorized by their ancestors.  So we recognize certain strings        -->
+    <!-- as "pseudo-elements".  We do this once and then pass them along.        -->
+    <!--                                                                         -->
+    <!--   * inlineexercise                                                      -->
+    <!--   * divisionexercise                                                    -->
+    <!--   * worksheetexercise                                                   -->
+    <!--   * readingquestion                                                     -->
+    <!--                                                                         -->
+    <!-- Equality of strings (e.g. 'inlineexercise') and the node-set ($elements)-->
+    <!-- is true when the *string-value* of *one* node in the set is identical   -->
+    <!-- NB: if this gets out-of-hand, it should be passed as a structure        -->
+    <xsl:variable name="b-inline-exercises" select="'inlineexercise' = $elements"/>
+    <xsl:variable name="b-division-exercises" select="'divisionexercise' = $elements"/>
+    <xsl:variable name="b-worksheet-exercises" select="'worksheetexercise' = $elements"/>
+    <xsl:variable name="b-reading-questions" select="'readingquestion' = $elements"/>
     <!-- display subdivision headers with empty contents? -->
-    <xsl:variable name="empty">
+    <xsl:variable name="entered-empty">
         <xsl:choose>
             <xsl:when test="not(@empty)">
                 <xsl:text>no</xsl:text>
             </xsl:when>
-            <!-- DTD should restrict to 'yes'|'no' -->
             <xsl:otherwise>
                 <xsl:value-of select="@empty" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
+    <!-- Schema restricts to 'yes' or 'no'.  Thus we can just interpret -->
+    <!-- absent or anything-but-yes indicating to skip empty divisions. -->
+    <xsl:variable name="b-empty" select="$entered-empty = 'yes'"/>
     <!-- root of the document subtree for list formation     -->
     <!-- defaults to document-wide                           -->
     <!-- DTD should enforce subdivisions as values for scope -->
@@ -7828,16 +7866,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <!-- and protect against both a @scope and a @ref  -->
     <xsl:variable name="scope">
         <xsl:choose>
-            <xsl:when test="not(@scope)">
-                <xsl:choose>
-                    <xsl:when test="$root/book"><xsl:text>book</xsl:text></xsl:when>
-                    <xsl:when test="$root/article"><xsl:text>article</xsl:text></xsl:when>
-                    <xsl:when test="$root/letter"><xsl:text>letter</xsl:text></xsl:when>
-                    <xsl:when test="$root/memo"><xsl:text>memo</xsl:text></xsl:when>
-                </xsl:choose>
+            <xsl:when test="@scope">
+                <xsl:value-of select="@scope" />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="@scope" />
+                <xsl:value-of select="local-name($document-root)"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -7849,7 +7882,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:with-param name="heading-level" select="$heading-level"/>
         <xsl:with-param name="elements" select="$elements"/>
         <xsl:with-param name="divisions" select="$divisions"/>
-        <xsl:with-param name="empty" select="$empty"/>
+        <xsl:with-param name="b-empty" select="$b-empty"/>
+        <xsl:with-param name="b-inline-exercises" select="$b-inline-exercises"/>
+        <xsl:with-param name="b-division-exercises" select="$b-division-exercises"/>
+        <xsl:with-param name="b-worksheet-exercises" select="$b-worksheet-exercises"/>
+        <xsl:with-param name="b-reading-questions" select="$b-reading-questions"/>
     </xsl:apply-templates>
     <xsl:call-template name="list-of-end" />
 </xsl:template>
@@ -7858,42 +7895,69 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:param name="heading-level"/>
     <xsl:param name="elements"/>
     <xsl:param name="divisions"/>
-    <xsl:param name="empty"/>
+    <xsl:param name="b-empty"/>
+    <xsl:param name="b-inline-exercises"/>
+    <xsl:param name="b-division-exercises"/>
+    <xsl:param name="b-worksheet-exercises"/>
+    <xsl:param name="b-reading-questions"/>
 
-    <!-- write a division header, perhaps              -->
-    <!-- check if desired, check if empty and unwanted -->
-    <xsl:if test="contains($divisions, concat(concat('|', local-name(.)), '|'))">
-        <xsl:choose>
-            <xsl:when test="$empty='no'">
-                <!-- probe subtree, even if we found empty super-tree earlier -->
-                <xsl:variable name="all-elements" select=".//*[contains($elements, concat(concat('|', local-name(.)), '|'))]" />
-                <xsl:if test="$all-elements">
+    <!-- Check if we are at a divison that needs a heading                      -->
+    <xsl:variable name="b-division-element" select="local-name(.) = $divisions"/>
+    <xsl:choose>
+        <xsl:when test="$b-division-element">
+            <!-- handling a division element that *may* need a heading -->
+            <xsl:choose>
+                <xsl:when test="not($b-empty)">
+                    <!-- probe subtree, even if we found empty super-tree earlier -->
+                    <!-- to see if a heading is *needed*, author has elected to   -->
+                    <!-- not have a heading if there are no elements to list      -->
+                    <!-- N.B. these booleans look rather expensive, owing to the  -->
+                    <!-- extensive searching for "exercise", but we hope the      -->
+                    <!-- booleans passed in will short-circuit and result in no   -->
+                    <!-- searching when it is not necessary                       -->
+                    <xsl:variable name="by-name-elements" select="boolean(.//*[local-name(.) = $elements])" />
+                    <xsl:variable name="division-exercises" select="$b-division-exercises and .//exercise[ancestor::exercises]"/>
+                    <xsl:variable name="worksheet-exercises" select="$b-worksheet-exercises and .//exercise[ancestor::worksheet]"/>
+                    <xsl:variable name="reading-questions" select="$b-reading-questions and .//exercise[ancestor::reading-questions]"/>
+                    <xsl:variable name="inline-exercises" select="$b-inline-exercises and .//exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]"/>
+                    <xsl:variable name="any-elements" select="$by-name-elements or $inline-exercises or $division-exercises or $worksheet-exercises or $reading-questions"/>
+                    <xsl:if test="$any-elements">
+                        <xsl:apply-templates select="." mode="list-of-header">
+                            <xsl:with-param name="heading-level" select="$heading-level"/>
+                        </xsl:apply-templates>
+                    </xsl:if>
+                </xsl:when>
+                <xsl:when test="$b-empty">
+                    <!-- always write a heading, even if there will be no items listed -->
                     <xsl:apply-templates select="." mode="list-of-header">
                         <xsl:with-param name="heading-level" select="$heading-level"/>
                     </xsl:apply-templates>
-                </xsl:if>
-            </xsl:when>
-            <xsl:when test="$empty='yes'">
-                <xsl:apply-templates select="." mode="list-of-header">
-                    <xsl:with-param name="heading-level" select="$heading-level"/>
-                </xsl:apply-templates>
-            </xsl:when>
-        </xsl:choose>
-    </xsl:if>
-    <!-- if a desired element, write out summary/link -->
-    <xsl:if test="contains($elements, concat(concat('|', local-name(.)), '|'))='true'">
-        <xsl:apply-templates select="." mode="list-of-element" />
-    </xsl:if>
-    <!-- recurse into children -->
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- not at a division, so test element for inclusion -->
+            <xsl:if test="(local-name(.) = $elements)
+                       or ($b-division-exercises and self::exercise and ancestor::exercises)
+                       or ($b-worksheet-exercises and self::exercise and ancestor::worksheet)
+                       or ($b-reading-questions and self::exercise and ancestor::reading-questions)
+                       or ($b-inline-exercises and self::exercise and not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions))">
+                <xsl:apply-templates select="." mode="list-of-element" />
+            </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- recurse into children; recursion ends when no children   -->
     <!-- increment heading-level, correct right now for divisions -->
-    <xsl:if test="*">
-        <xsl:apply-templates select="*" mode="list-of-content">
-            <xsl:with-param name="heading-level" select="$heading-level + 1"/>
-            <xsl:with-param name="elements" select="$elements"/>
-            <xsl:with-param name="divisions" select="$divisions"/>
-            <xsl:with-param name="empty" select="$empty"/>
-        </xsl:apply-templates>
-    </xsl:if>
+    <xsl:apply-templates select="*" mode="list-of-content">
+        <xsl:with-param name="heading-level" select="$heading-level + 1"/>
+        <xsl:with-param name="elements" select="$elements"/>
+        <xsl:with-param name="divisions" select="$divisions"/>
+        <xsl:with-param name="b-empty" select="$b-empty"/>
+        <xsl:with-param name="b-inline-exercises" select="$b-inline-exercises"/>
+        <xsl:with-param name="b-division-exercises" select="$b-division-exercises"/>
+        <xsl:with-param name="b-worksheet-exercises" select="$b-worksheet-exercises"/>
+        <xsl:with-param name="b-reading-questions" select="$b-reading-questions"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Stub implementations, with warnings -->
@@ -11470,6 +11534,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="$document-root//worksheet/pagebreak" />
         <xsl:with-param name="date-string" select="'2021-03-17'" />
         <xsl:with-param name="message" select="'use of the empty &quot;pagebreak&quot; element has been deprecated in favor of a &quot;page&quot; element.  We will attempt to honor the empty element, but new features may only be available with the new element.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2021-06-24  deprecate @source to specify media on network -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//video[substring(@source,1,4) = 'http']|$document-root//audio[substring(@source,1,4) = 'http']" />
+        <xsl:with-param name="date-string" select="'2021-06-24'" />
+        <xsl:with-param name="message" select="'use of a &quot;@source&quot; attribute on a &quot;video&quot; or &quot;audio&quot; element to specify a network location (leading with &quot;http&quot;) has been deprecated, but will still be effective.  Replace with a &quot;@href&quot; attribute.'"/>
     </xsl:call-template>
     <!--  -->
 </xsl:template>

@@ -1775,7 +1775,6 @@
           <ref name="Poem"/>
           <ref name="Tabular"/>
           <ref name="Image"/>
-          <ref name="ImageWW"/>
           <ref name="Video"/>
           <ref name="Program"/>
           <ref name="Console"/>
@@ -1885,6 +1884,14 @@
               <ref name="WWVariable"/>
             </choice>
           </zeroOrMore>
+        </element>
+      </optional>
+      <optional>
+        <element name="latex-image">
+          <attribute name="syntax">
+            <value>PGtikz</value>
+          </attribute>
+          <text/>
         </element>
       </optional>
     </element>
@@ -2115,19 +2122,27 @@
       </optional>
       <choice>
         <ref name="AttributesSourceFile"/>
+        <ref name="AttributesNetwork"/>
         <ref name="AttributesYouTube"/>
         <ref name="AttributesYouTubePlaylist"/>
+        <ref name="AttributesVimeo"/>
       </choice>
     </element>
   </define>
   <define name="AttributesSourceFile">
     <attribute name="source"/>
   </define>
+  <define name="AttributesNetwork">
+    <attribute name="href"/>
+  </define>
   <define name="AttributesYouTube">
     <attribute name="youtube"/>
   </define>
   <define name="AttributesYouTubePlaylist">
     <attribute name="youtubeplaylist"/>
+  </define>
+  <define name="AttributesVimeo">
+    <attribute name="vimeo"/>
   </define>
   <define name="ExerciseBody">
     <oneOrMore>
@@ -3018,6 +3033,9 @@
   <define name="Url">
     <element name="url">
       <attribute name="href"/>
+      <optional>
+        <attribute name="visual"/>
+      </optional>
       <ref name="TextShort"/>
     </element>
   </define>
@@ -3732,6 +3750,11 @@
   </define>
   <define name="Configuration" combine="choice">
     <element name="latex-image-preamble">
+      <optional>
+        <attribute name="syntax">
+          <value>PGtikz</value>
+        </attribute>
+      </optional>
       <text/>
     </element>
   </define>

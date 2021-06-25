@@ -22,7 +22,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <publication>
 
     <!-- we use customizations-one for the plain sample article -->
-    <source customizations="customizations-two.xml"/>
+    <source customizations="customizations-two.xml">
+        <media external="media" generated="generated" data="data"/>
+    </source>
 
     <!-- HTML-Specific Options -->
     <html>

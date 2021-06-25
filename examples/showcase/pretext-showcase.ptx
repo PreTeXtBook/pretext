@@ -76,12 +76,10 @@
       <index>
         <title>Index</title>
 
-        <introduction>
           <p>
             Entries are alphabetized word-by-word, not letter-by-letter.
             Topics indexed are <pretext/> features, not any actual content.
           </p>
-        </introduction>
 
         <index-list />
       </index>

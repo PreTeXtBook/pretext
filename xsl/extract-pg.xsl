@@ -97,6 +97,9 @@
 <xsl:template match="/">
     <xsl:apply-templates select="mathbook|pretext" mode="generic-warnings" />
     <xsl:apply-templates select="mathbook|pretext" mode="deprecation-warnings" />
+    <xsl:text>localization = '</xsl:text>
+    <xsl:value-of select="$document-language"/>
+    <xsl:text>'&#xa;</xsl:text>
     <!-- Initialize empty dictionaries, then define key-value pairs -->
     <xsl:text>origin = {}&#xa;</xsl:text>
     <xsl:text>copiedfrom = {}&#xa;</xsl:text>
@@ -404,6 +407,8 @@
     <xsl:call-template name="sanitize-text">
         <xsl:with-param name="text" select=".//pg-code" />
     </xsl:call-template>
+    <!-- if there are latex-image in the problem, put their code here -->
+    <xsl:apply-templates select=".//image[latex-image/@syntax = 'PGtikz']" mode="latex-image-code"/>
 </xsl:template>
 
 
@@ -744,6 +749,13 @@
         <xsl:if test=".//image[@pg-name]">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'PGgraphmacros.pl'"/>
+                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
+            </xsl:call-template>
+        </xsl:if>
+        <!-- when there is a PGtikz graph -->
+        <xsl:if test=".//latex-image[@syntax = 'PGtikz']">
+            <xsl:call-template name="macro-padding">
+                <xsl:with-param name="string" select="'PGtikz.pl'"/>
                 <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
@@ -1090,8 +1102,26 @@
             </xsl:choose>
         </xsl:for-each>
     </xsl:variable>
+    <!-- PTX-built macros file -->
+    <xsl:variable name="ptx-pg-macros">
+        <xsl:variable name="ptx-pg-macros-filename">
+            <xsl:choose>
+                <xsl:when test="$docinfo/initialism">
+                    <xsl:value-of select="$docinfo/initialism"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="$document-root" mode="title-filesafe"/>
+                </xsl:otherwise>
+            </xsl:choose>
+            <text>.pl</text>
+        </xsl:variable>
+        <xsl:call-template name="macro-padding">
+            <xsl:with-param name="string" select="$ptx-pg-macros-filename"/>
+            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
+        </xsl:call-template>
+    </xsl:variable>
     <!-- always finish with PG course macro -->
-    <xsl:variable name="course-macro">
+    <xsl:variable name="course-macros">
         <xsl:call-template name="macro-padding">
             <xsl:with-param name="string" select="'PGcourse.pl'"/>
             <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
@@ -1106,7 +1136,10 @@
         <xsl:value-of select="$standard-macros" />
         <xsl:value-of select="$implied-macros" />
         <xsl:value-of select="$user-macros" />
-        <xsl:value-of select="$course-macro" />
+        <xsl:if test=".//latex-image">
+            <xsl:value-of select="$ptx-pg-macros" />
+        </xsl:if>
+        <xsl:value-of select="$course-macros" />
         <xsl:text>);</xsl:text>
         <xsl:if test="$b-human-readable">
             <xsl:text>&#xa;</xsl:text>
@@ -1179,6 +1212,9 @@
     <xsl:value-of select="@name"/>
 </xsl:template>
 
+<xsl:template match="latex-image[@syntax = 'PGtikz']/var" mode="latex-image">
+    <xsl:value-of select="@name" />
+</xsl:template>
 
 <!-- ############ -->
 <!-- PGML answers -->
@@ -1389,8 +1425,35 @@
     <xsl:value-of select="substring-before($width, '%') div 100 * $design-width-pg"/>
     <xsl:if test="description">
         <xsl:text>, extra_html_tags=&gt;qq!alt="</xsl:text>
-        <xsl:apply-templates select="description" mode="pg" />
+        <xsl:apply-templates select="description" />
         <xsl:text>"!</xsl:text>
+    </xsl:if>
+    <xsl:text>)@]* </xsl:text>
+</xsl:template>
+
+<xsl:template match="image[latex-image/@syntax = 'PGtikz']" mode="components">
+    <xsl:variable name="visible-id">
+        <xsl:apply-templates select="." mode="visible-id"/>
+    </xsl:variable>
+    <xsl:variable name="pg-name" select="concat('$', translate($visible-id,'-','_'))"/>
+    <xsl:variable name="width">
+        <xsl:apply-templates select="." mode="get-width-percentage" />
+    </xsl:variable>
+    <xsl:text>[@image(insertGraph(</xsl:text>
+    <xsl:value-of select="$pg-name"/>
+    <xsl:text>), width=&gt;</xsl:text>
+    <xsl:value-of select="substring-before($width, '%') div 100 * $design-width-pg"/>
+    <xsl:if test="description">
+        <xsl:variable name="delimiter">
+            <xsl:call-template name="find-unused-character">
+                <xsl:with-param name="string" select="description"/>
+                <xsl:with-param name="charset" select="concat('&quot;|/\?:;.,=+-_~`!^&amp;*',&SIMPLECHAR;)"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:text>, alt=&gt;qq</xsl:text>
+        <xsl:value-of select="$delimiter"/>
+        <xsl:apply-templates select="description" />
+        <xsl:value-of select="$delimiter"/>
     </xsl:if>
     <xsl:text>)@]* </xsl:text>
 </xsl:template>
@@ -1399,6 +1462,35 @@
 <!-- Puts the description into an "alt" tag.                               -->
 <xsl:template match="image[@pg-name]/description">
     <xsl:apply-templates select="text()|var"/>
+</xsl:template>
+
+<xsl:template match="image[latex-image/@syntax = 'PGtikz']" mode="latex-image-code">
+    <xsl:variable name="visible-id">
+        <xsl:apply-templates select="." mode="visible-id"/>
+    </xsl:variable>
+    <xsl:variable name="pg-name" select="concat('$', translate($visible-id,'-','_'))"/>
+    <xsl:value-of select="$pg-name"/>
+    <xsl:text> = createTikZImage();&#xa;</xsl:text>
+    <xsl:if test="$docinfo/latex-image-preamble[@syntax = 'PGtikz']">
+        <xsl:value-of select="$pg-name"/>
+        <xsl:text>->addToPreamble(latexImagePreamble());&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:variable name="pg-tikz-code">
+        <xsl:apply-templates select="latex-image/text()|latex-image/var" mode="latex-image"/>
+    </xsl:variable>
+    <xsl:value-of select="$pg-name"/>
+    <xsl:text>->BEGIN_TIKZ&#xa;</xsl:text>
+    <xsl:call-template name="sanitize-text">
+        <xsl:with-param name="text" select="$pg-tikz-code"/>
+    </xsl:call-template>
+    <xsl:text>&#xa;END_TIKZ&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="text()" mode="latex-image">
+    <xsl:variable name="dollar-fixed"  select="str:replace(.,             '\$', '\~~$')"/>
+    <xsl:variable name="percent-fixed" select="str:replace($dollar-fixed, '\%', '\~~%')"/>
+    <xsl:variable name="at-fixed"      select="str:replace($percent-fixed, '@',  '~~@')"/>
+    <xsl:value-of select="$at-fixed"/>
 </xsl:template>
 
 <!-- An "instruction" is a peer of p, only within a webwork. The purpose   -->

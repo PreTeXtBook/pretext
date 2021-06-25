@@ -930,6 +930,7 @@
             Url =
                 element url {
                     attribute href {text},
+                    attribute visual {text}?,
                     TextShort
                 }
             Xref =
@@ -1454,8 +1455,6 @@
 
         <p>A group of side-by-sides is designed to stack vertically with common controls on widths, etc.  Its implementation is entirely experimental right now, even if we are relatively confident of the markup.</p>
 
-        <p>For <webwork/> the NoCaption variant allows <c>Tabular</c> and <c>ImageWW</c>.  This may change if these two items are liberated from <tag>sidebyside</tag>.  Presently, there should only be a single item inside a <c>sidebyside</c> inside a <c>webwork</c>, but we do not have a rule for that.</p>
-
         <fragment xml:id="sidebyside">
             <title>Side-by-side layouts</title>
             <code>
@@ -1501,7 +1500,6 @@
                         Poem |
                         Tabular |
                         Image |
-                        ImageWW |
                         Video |
                         Program |
                         Console |
@@ -1564,7 +1562,11 @@
                 element image {
                     attribute pg-name {text}?,
                     attribute width {text}?,
-                    element description {(TextShort | WWVariable)*}?
+                    element description {(TextShort | WWVariable)*}?,
+                    element latex-image {
+                        attribute syntax {"PGtikz"},
+                        text
+                    }?
                 }
             </code>
         </fragment>
@@ -1629,15 +1631,19 @@
                     attribute end {xsd:integer}?,
                     attribute play-at {"embed" | "popout" | "select"}?,
                     attribute preview {"default" | "generic" | text}?,
-                    (AttributesSourceFile | AttributesYouTube |
-                     AttributesYouTubePlaylist)
+                    (AttributesSourceFile | AttributesNetwork | AttributesYouTube |
+                     AttributesYouTubePlaylist | AttributesVimeo)
                 }
             AttributesSourceFile =
                 attribute source {text}
+            AttributesNetwork =
+                attribute href {text}
             AttributesYouTube =
                 attribute youtube {text}
             AttributesYouTubePlaylist =
                 attribute youtubeplaylist {text}
+            AttributesVimeo =
+                attribute vimeo {text}
             </code>
         </fragment>
     </section>
@@ -2301,7 +2307,10 @@
                     element package {text}*
                 }
             Configuration |=
-                element latex-image-preamble {text}
+                element latex-image-preamble {
+                    attribute syntax {"PGtikz"}?,
+                    text
+                }
             Configuration |=
                 element asymptote-preamble {text}
             </code>

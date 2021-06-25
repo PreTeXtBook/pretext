@@ -1785,11 +1785,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\usepackage{showkeys}&#xa;</xsl:text>
         <xsl:text>\usepackage[letter,cam,center,pdflatex]{crop}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$docinfo/latex-image-preamble">
+    <xsl:if test="$latex-image-preamble">
         <xsl:text>%% Graphics Preamble Entries&#xa;</xsl:text>
-        <xsl:call-template name="sanitize-text">
-            <xsl:with-param name="text" select="$docinfo/latex-image-preamble" />
-        </xsl:call-template>
+        <xsl:value-of select="$latex-image-preamble"/>
     </xsl:if>
     <xsl:text>%% If tikz has been loaded, replace ampersand with \amp macro&#xa;</xsl:text>
     <xsl:if test="$document-root//latex-image">
@@ -5825,7 +5823,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- the original source, and not the enhanced source, and -->
     <!-- causes the relative file name to resolve according    -->
     <!-- to the correct location.   Experiments with the       -->
-    <xsl:variable name="filename" select="concat(concat('problems/mom-', myopenmath/@problem), '.xml')" />
+    <xsl:variable name="filename">
+        <xsl:if test="$b-managed-generated-images">
+            <xsl:value-of select="$generated-image-directory"/>
+        </xsl:if>
+        <xsl:text>problems/mom-</xsl:text>
+        <xsl:value-of select="myopenmath/@problem"/>
+        <xsl:text>.xml</xsl:text>
+    </xsl:variable>
     <xsl:apply-templates select="document($filename, $original)/myopenmath" mode="exercise-components">
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="purpose" select="$purpose" />
@@ -7167,7 +7172,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Eventually match on all interactives                            -->
 <!-- NB: baseurl is assumed to have a trailing slash                 -->
 
-<xsl:template match="audio[@source]|video[@source]|interactive" mode="static-url">
+<xsl:template match="audio[@source|@href]|video[@source|@href]|interactive" mode="static-url">
     <xsl:value-of select="$baseurl"/>
     <xsl:apply-templates select="." mode="standalone-filename" />
 </xsl:template>
@@ -7215,6 +7220,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- has @preview -->
         <xsl:when test="@preview">
             <xsl:text>\includegraphics[width=0.80\linewidth,height=\qrsize,keepaspectratio]{</xsl:text>
+            <xsl:if test="$b-managed-generated-images">
+                <xsl:value-of select="$external-image-directory"/>
+            </xsl:if>
             <xsl:value-of select="@preview" />
             <xsl:text>}</xsl:text>
         </xsl:when>
@@ -7244,6 +7252,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- has @preview -->
         <xsl:when test="@preview">
             <xsl:text>\includegraphics[width=0.80\linewidth,height=\qrsize,keepaspectratio]{</xsl:text>
+            <xsl:if test="$b-managed-generated-images">
+                <xsl:value-of select="$external-image-directory"/>
+            </xsl:if>
             <xsl:value-of select="@preview" />
             <xsl:text>}</xsl:text>
         </xsl:when>
@@ -7271,7 +7282,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="audio[@source]|video[@source]" mode="static-caption">
+<xsl:template match="audio[@source|@href]|video[@source|@href]" mode="static-caption">
     <xsl:choose>
         <!-- author-supplied override -->
         <xsl:when test="caption">

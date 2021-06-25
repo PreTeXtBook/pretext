@@ -11,7 +11,7 @@
     <title>A Careful, Quick, Minimal Example</title>
 
     <introduction>
-        <p>We are going to walk you through a simple example carefully, with some explanation along the way.  There are two steps.  First we will author your source and then after some setup, we will process your source file into output.</p>
+        <p>We are going to walk you through a simple example carefully, with some explanation along the way.  There are two steps.  First we will author your source and then after some setup, we will process your source file into output.  You can find a similar, but not identical, <foreign xml:lang="fr-FR">guide de démarrage rapide</foreign>, in French, at <url href="https://juliengiol.github.io/dap" visual="juliengiol.github.io/dap"><foreign xml:lang="fr-FR">Démarrer avec <pretext/></foreign></url>.</p>
     </introduction>
 
     <section xml:id="quickstart-author">

@@ -19,6 +19,8 @@ a Python application.
 
 A Python "helper" script to do things XSL will not do, or cannot do easily.
 
+Requires Python 3.6, as of 2021-05-21.
+
 Execute  pretext -h  to see the various command-line options.
 
 Example: TikZ code for graphics images can be extracted and written

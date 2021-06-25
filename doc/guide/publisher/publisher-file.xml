@@ -127,7 +127,7 @@
         <idx><h>publisher options</h><h>HTML</h></idx>
 
         <introduction>
-            <p>These options affect the base conversion to web pages (online, <init>HTML</init>).  Many, but not all, will affect subsequent conversions based on <init>HTML</init>, such as a conversion to <itnit>EPUB</itnit> or Jupyter notebooks.  See <xref ref="online-html"/>  for a more general overview of this conversion, including options that will eventually migrate here.</p>
+            <p>These options affect the base conversion to web pages (online, <init>HTML</init>).  Many, but not all, will affect subsequent conversions based on <init>HTML</init>, such as a conversion to <init>EPUB</init> or Jupyter notebooks.  See <xref ref="online-html"/>  for a more general overview of this conversion, including options that will eventually migrate here.</p>
         </introduction>
 
         <subsection xml:id="online-analytics-options">
@@ -429,9 +429,7 @@
         <idx>source publisher options</idx>
         <idx><h>publisher options</h><h>source</h></idx>
 
-        <introduction>
-            <p>Some source material is optional, and may be included based on the publisher and the audience.  The values of the attributes below are filenames.  They could be absolute paths (which is not very portable, and so likely a bad idea), or relative paths.  In teh latter case, they are relative to the source file that contains the <tag>pretext</tag> element (the <q>main</q> file if you have modularized your source).  Temporarily using an absolute path can be useful when you are having problems with any of these files and want to eliminate one variable while debugging.</p>
-        </introduction>
+        <p>Some source material is optional, and may be included based on the publisher and the audience.  The values of the attributes below are filenames.  They could be absolute paths (which is not very portable, and so likely a bad idea), or relative paths.  In teh latter case, they are relative to the source file that contains the <tag>pretext</tag> element (the <q>main</q> file if you have modularized your source).  Temporarily using an absolute path can be useful when you are having problems with any of these files and want to eliminate one variable while debugging.</p>
 
         <p>The<cd>
             <cline>/publication/source</cline>

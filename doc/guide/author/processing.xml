@@ -218,7 +218,7 @@
         <p>One choice of the parameter will result in just <q>copying</q> your source file and making all the cosmetic source format changes (we refer to this here as <term>normalization</term><idx>normalization</idx>).  This might be a useful thing to do first, all by itself, either as a first step, or an exploratory experiment.  The other value of the parameter will actually make changes, and report some information about progress.</p>
 
         <p>Here are some notes:<ol>
-            <li><p>Be sure to experiment on copies of your source in a scratch directory.  Send your output to another directory.  When finished, use a <c>diff</c> tool to inspect the actual changes made.  You can record your eventual changes using revision-control. (See <pubtitle><url ref="https://pretextbook.org/gfa/html/">Git for Authors</url></pubtitle>.)</p></li>
+            <li><p>Be sure to experiment on copies of your source in a scratch directory.  Send your output to another directory.  When finished, use a <c>diff</c> tool to inspect the actual changes made.  You can record your eventual changes using revision-control. (See <pubtitle><url href="https://pretextbook.org/gfa/html/">Git for Authors</url></pubtitle>.)</p></li>
             <li><p>Do not enable <c>xinclude</c> processing or else your several files will all be merged into one as output and any modularity of your source will be lost.</p></li>
             <li><p>Every single bit of indentation and whitespace in your source will be preserved, except perhaps for some blank lines near the top of your source files, and limited exceptions noted below.</p></li>
             <li><p>Attributes will likely be re-ordered, with normalized spacing between them.</p></li>
@@ -261,7 +261,7 @@
             <input>  /home/rob/mathbook/xsl/utilities/fix-deprecations.xsl $f; done</input>
         </console>
 
-        <p>And as above, you can now compare the <c>normal</c> and <c>clean</c> directories to see actual changes.  If you are satisfied with the changes, you can copy the files in the <c>clean</c> directory back onto your source files.  If you are using revision-control (you are, aren't you?) then you can make a commit that holds these changes. (See <pubtitle><url ref="https://pretextbook.org/gfa/html/">Git for Authors</url></pubtitle>.) Or maybe even make two commits, one from the normalization step, and a second with the substantive changes.</p>
+        <p>And as above, you can now compare the <c>normal</c> and <c>clean</c> directories to see actual changes.  If you are satisfied with the changes, you can copy the files in the <c>clean</c> directory back onto your source files.  If you are using revision-control (you are, aren't you?) then you can make a commit that holds these changes. (See <pubtitle><url href="https://pretextbook.org/gfa/html/">Git for Authors</url></pubtitle>.) Or maybe even make two commits, one from the normalization step, and a second with the substantive changes.</p>
     </section>
 
     <section xml:id="processing-file-management">

@@ -64,10 +64,16 @@
              <!-- <text>My Button Text</text>  -->
         </feedback>
 
-        <latex-image-preamble>
-        <![CDATA[
-        \usepackage{pgfplots}
-        ]]>
+        <latex-image-preamble syntax="PGtikz">
+            \usepackage{pgfplots}
+            \pgfplotsset{
+                every axis/.append style={
+                    axis lines=middle,
+                    xlabel={\(x\)},
+                    ylabel={\(y\)},
+                    grid = both,
+                }
+            }
         </latex-image-preamble>
 
     </docinfo>
@@ -1028,58 +1034,220 @@
 
         <section>
             <title>Graphics in Exercises</title>
-            <p>It is natural to want to write exercises that rely on graphics. For example, an exericse might produce a chart of some kind, and ask the reader to extract some information from that chart.</p>
-            <p>At present, this can be done using the same mechanism one would use to insert a graphic into a <webwork /> problem when writing regular <webwork /> problems. (And this is what is done below.) In the future, there will be a nicer option that will be able to make use of PTX's <c>latex-image-code</c>. This requires some <webwork /> development first, which is underway.</p>
+            <p>
+                It is natural for exercises to have graphics.
+                For example, an exercise might produce a graph of some kind,
+                and ask the reader to extract some information from that graph.
+            </p>
+            <p>
+                If your <webwork/> server is version 2.16 or later,
+                <webwork/> problems can process TikZ code. Here is an example.
+            </p>
+            <exercise>
+                <title>A static TikZ graph</title>
+                <webwork>
+                    <pg-code>
+                        Context("IntegerFunctions");
+                        Context()->variables->are(n=>'Real');
+                        $answer = OneOf(Formula("C(n+1,2)"),Formula("(n+1)n/2"));
+                    </pg-code>
+                    <statement>
+                        <p>
+                            This image is a visual proof that <m>\sum_{k=1}^{n}k</m> equals what?
+                        </p>
+                        <image width="50%">
+                           <description>
+                                21 blue balls are arranged in a triangular formation,
+                                with one at the top, then a row of two, a row of three,
+                                and so on until a row of six;
+                                there is a seventh row with seven orange balls;
+                                one blue ball is highlighted, and two lines extend downward from that ball,
+                                one to the left and one to the right, parallel to the sides of the triangle,
+                                until they intersect two orange balls;
+                                the effect is that each of the 1+2+3+4+5+6 blue balls corresponds
+                                to one pair from the 7 orange balls
+                            </description>
+                            <latex-image syntax="PGtikz">
+                                \draw[dashed] (0.5-0.5*6.5,-0.866025*6.5) -&#x2d; (7-0.5*6.5,-0.866025*6.5);
+                                \draw[very thick] (2-0.5*7,-0.866025*7) -&#x2d; (2-0.5*4,-0.866025*4) -&#x2d; (5-0.5*7,-0.866025*7);
+                                \foreach \x in {1,...,6}
+                                    \foreach \y in {1,...,\x}
+                                        \shade[ball color=blue!30] (\y-0.5*\x,-0.866025*\x) circle (0.2cm);
+                                \foreach \y in {1,...,7}
+                                    \shade[ball color=orange!40] (\y-0.5*7,-0.866025*7) circle (0.2cm);
+                                \node at (2.5,-0.5) [anchor=north west]{\(\color{blue}\sum\limits_{k=1}^nk\color{black}\)};
+                                \shade[ball color=blue] (2-0.5*4,-0.866025*4) circle (0.2cm);
+                                \shade[ball color=orange] (2-0.5*7,-0.866025*7) circle (0.2cm);
+                                \shade[ball color=orange] (5-0.5*7,-0.866025*7) circle (0.2cm);
+                            </latex-image>
+                        </image>
+                        <instruction>
+                            You may enter the answer using <c>C(n,k)</c> notation.
+                        </instruction>
+                        <p>
+                            <var name="$answer" width="20"/>
+                        </p>
+                    </statement>
+                </webwork>
+            </exercise>
+
+            <exercise>
+                <title>A randomized TikZ graph</title>
+                <introduction>
+                    <p>
+                        These images may depend on the random seed.
+                        In this problem, the height and width of the rectangle are randomized.
+                    </p>
+                </introduction>
+                <webwork>
+                    <pg-code>
+                        $a = random(4,6,1);
+                        $b = $a + random(2,4,1);
+                        $area = NumberWithUnits($a*$b, 'cm^2');
+                    </pg-code>
+                    <statement>
+                        <p>
+                            Find the area of the rectangle.
+                        </p>
+                        <image width="50%">
+                            <description>
+                                a rectangle whose width is labeled <var name="$b"/> cm
+                                and height is labeled <var name="$b"/> cm
+                            </description>
+                            <latex-image syntax="PGtikz">
+                                \draw[fill=blue!20] (0,0) -&#x2d;++ (6,0) node[pos=0.5,below] {\($b\)\,cm} -&#x2d;++ (0,4) node[pos=0.5,right] {\($a\)\,cm} -&#x2d;++ (-6,0) -&#x2d; cycle;
+                            </latex-image>
+                        </image>
+                        <p>
+                            <var name="$area" width="20"/>
+                        </p>
+                    </statement>
+                </webwork>
+            </exercise>
+
+            <exercise>
+                <title>A TikZ graph affected by <tag>latex-image-preamble</tag></title>
+                <introduction>
+                    <p>
+                        This sample chapter's <tag>docinfo</tag> has a <tag>latex-image-preamble</tag>
+                        with <attr>syntax</attr> set to <c>PGtikz</c>. This exercise has graph styling that is affected by that.
+                    </p>
+                </introduction>
+                <webwork>
+                    <pg-code>
+                        @roots = (-3..3)[NchooseK(7,3)];
+                        @roots = num_sort(@roots);
+                        $answer = List(@roots);
+                        $xmin = min(-1,@roots)-1;
+                        $xmax = max(1,@roots)+1;
+                    </pg-code>
+                    <statement>
+                        <p>
+                            What are the roots of this polynomial?
+                        </p>
+                        <image width="50%">
+                            <description>
+                                the graph of a polynomial that crosses the x-axis at <var name="$roots[0]"/>,
+                                <var name="$roots[1]"/>, and <var name="$roots[2]"/>.
+                            </description>
+                            <latex-image syntax="PGtikz">
+                                \begin{axis}
+                                    \addplot[domain=$xmin:$xmax,smooth] {(x-$roots[0])*(x-$roots[1])*(x-$roots[2])};
+                                \end{axis}
+                            </latex-image>
+                        </image>
+                        <p>
+                            <var name="$answer" width="20"/>
+                        </p>
+                    </statement>
+                </webwork>
+            </exercise>
+
+            <exercise>
+                <title>Special characters</title>
+                <introduction>
+                    <p>
+                        This exercise is to test that special characters behave.
+                    </p>
+                </introduction>
+                <webwork>
+                    <pg-code>
+                        $refreshCachedImages = 1;
+                    </pg-code>
+                    <statement>
+                        <p>
+                            The code below has a printed dollar sign, a printed percent sign,
+                            a printed at sign, and a percent sign used as a comment marker.
+                        </p>
+                        <image width="50%">
+                            <latex-image syntax="PGtikz">
+                                \node at (0,0) {I need about \$3.50.};
+                                \node at (0,1) {You gotta give 110\%.};  %This is a comment.
+                                \node at (0,2) {Send email user@domain.com.};
+                            </latex-image>
+                        </image>
+                    </statement>
+                </webwork>
+            </exercise>
+
+
+            <!-- TODO: Support for packages, such as pgfplots -->
+
+            <p>
+                An older mechanism for creating images is supported
+                and demonstrated here.
+            </p>
 
             <exercise>
                 <title>Solve using a graph</title>
-
                 <webwork>
-
                     <pg-code>
-                        $answer = random(1,3,1);
+                        $a = random(1,3,1);
                         $gr = init_graph(-1,-1,4,4,
                         axes=>[0,0],
                         grid=>[5,5],
-                        size=>[300,300]
+                        size=>[300,180]
                         );
-                        add_functions($gr, "x^3/$answer^3 for x in &lt;-1,4&gt; using color:blue and weight:2");
-                        $second_x = Real($answer*2**(1/3));
-
+                        add_functions($gr, "x^3/$a^3 for x in &lt;-1,4&gt; using color:blue and weight:2");
+                        $second_x = Real($a*2**(1/3));
                         $solgr = init_graph(-1,-1,4,4,
                         axes=>[0,0],
                         grid=>[5,5],
                         size=>[300,300]
                         );
-                        add_functions($solgr, "x^3/$answer^3 for x in &lt;-1,4&gt; using color:blue and weight:2");
+                        add_functions($solgr, "x^3/$a^3 for x in &lt;-1,4&gt; using color:blue and weight:2");
                         $solgr->moveTo(0,1);
-                        $solgr->lineTo($answer,1,'black',3);
-                        $solgr->arrowTo($answer,0,'black',3);
+                        $solgr->lineTo($a,1,'black',3);
+                        $solgr->arrowTo($a,0,'black',3);
+                        Context("FiniteSolutionSets");
+                        $answer = Formula("{$a}");
                     </pg-code>
-
                     <statement>
-                        <p>The graph below is a graph of <m>y=f(x)</m>. Use the graph to solve the equation <m>f(x)=1</m>.</p>
-
+                        <p>
+                            The graph below is a graph of <m>y=f(x)</m>.
+                            Use the graph to solve the equation <m>f(x)=1</m>.
+                        </p>
                         <image pg-name="$gr" width="50%">
-                            <description>a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points (<var name="$answer"/>,1) and (<var name="$second_x"/>,2) before leaving the graph moving more and more upward and to the right.</description>
+                            <description>
+                                a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points (<var name="$a"/>,1) and (<var name="$second_x"/>,2) before leaving the graph moving more and more upward and to the right.
+                            </description>
                         </image>
-
-                        <p><m>x=</m> <var name="$answer" width="5" category="number"/></p>
+                        <p>
+                            <var name="$answer" width="5" category="number"/>
+                        </p>
                     </statement>
-
                     <solution>
-
-                        <p>The graph reveals that the only solution to <m>f(x)=1</m> is <m>x=<var name="$answer"/></m>.</p>
-
+                        <p>
+                            The graph reveals that the solution set to <m>f(x)=1</m> is <m><var name="$answer"/></m>.
+                        </p>
                         <image pg-name="$solgr" width="50%">
-                            <description>a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points ($answer,1) and ($second_x,2) before leaving the graph moving more and more upward and to the right; a horizontal line segment moves rightward from y=1 on the y-axis until it reaches a point on the curve; a vertical line segment moves down from this point to x=$answer on the x-axis.</description>
+                            <description>
+                                a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points (<var name="$a"/>,1) and (<var name="$second_x"/>,2) before leaving the graph moving more and more upward and to the right; a horizontal line segment moves rightward from y=1 on the y-axis until it reaches a point on the curve; a vertical line segment moves down from this point to x=<var name="$a"/> on the x-axis.
+                            </description>
                         </image>
-
                     </solution>
-
                 </webwork>
             </exercise>
-
         </section>
 
         <section>

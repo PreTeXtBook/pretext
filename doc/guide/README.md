@@ -17,4 +17,4 @@ If you wish to build from source, possibly as part of contributing improvements,
 If you are contributing new material, note that there are three important elements in use.  Please make use of them in your contribution.
 * `tag` - for element names
 * `tage` - for names of empty elements
-* `attribute` - for names of attributes
+* `attr` - for names of attributes

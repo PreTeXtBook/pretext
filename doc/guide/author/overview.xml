@@ -376,7 +376,7 @@
         <title>Back Matter</title>
         <idx>back matter</idx>
 
-        <p>Similar to front matter, there is material you might wish to include after your book's final <tag>chapter</tag> or your article's final <tag>section</tag>.  Possibilities to place in a <tag>backmatter</tag><idx>back matter</idx> include <tag>appendix</tag>, <tag>references</tag>, <tag>glossary</tag>, <tag>solutions</tag>, <tag>index</tag>, and <tag>colophon</tag>.  There are empty tags you can place into an appendix to generate lists of notation, or lists of particular elements of your choice, such as a list of figures.  A similar empty element actually generates the index, <tag>index-list</tag>, but you will almost always want to place it into the <tag>index</tag> division.  See <xref ref="topic-back-matter"/> for details on the back matter generally, and <xref ref="topic-automatic-lists"/> for more on automatic lists.</p>
+        <p>Similar to front matter, there is material you might wish to include after your book's final <tag>chapter</tag> or your article's final <tag>section</tag>.  Possibilities to place in a <tag>backmatter</tag><idx>back matter</idx> include <tag>appendix</tag>, <tag>references</tag>, <tag>glossary</tag>, <tag>solutions</tag>, <tag>index</tag>, and <tag>colophon</tag>.  There are empty tags you can place into an appendix to generate lists of notation, or lists of particular elements of your choice, such as a list of figures.  A similar empty element actually generates the index, <tag>index-list</tag>, but you will almost always want to place it into the <tag>index</tag> division.  See <xref ref="topic-back-matter"/> for details on the back matter generally.  Also, be sure to read about the powerful and flexible automatic list feature (<xref ref="topic-automatic-lists"/>), which is not restricted to just the back matter.</p>
     </section>
 
     <section xml:id="overview-index-notation">
@@ -399,10 +399,10 @@
     </section>
 
     <section xml:id="overview-webwork">
-        <title><webwork /> Exercises</title>
-        <idx><h><webwork /></h><h><webwork /> exercise</h></idx>
+        <title><webwork/> Exercises</title>
+        <idx><h><webwork/></h><h><webwork/> exercise</h></idx>
 
-        <p>It is possible to author <webwork /> automated homework problems<idx><h><webwork /></h><h><webwork /> exercise</h></idx> directly within your source.  A static version will be rendered in your <latex />/PDF/print output, and a <q>live</q> version will be rendered into HTML output (though a student is not able to authenticate against a course).  However, you can also extract <em>all</em> of the <webwork /> questions from a textbook into a single archive suitable for uploading into a traditional <webwork /> server.  This is a big topic, so see the dedicated <xref ref="webwork-author" /> for details.</p>
+        <p>It is possible to author <webwork/> automated homework problems<idx><h><webwork /></h><h><webwork /> exercise</h></idx> directly within your source.  A static version will be rendered in your <latex />/PDF/print output, and a <q>live</q> version will be rendered into HTML output (though a student is not able to authenticate against a course).  However, you can also extract <em>all</em> of the <webwork/> questions from a textbook into a single archive suitable for uploading into a traditional <webwork/> server.  This is a big topic, so see the dedicated <xref ref="webwork-author" /> for details.</p>
     </section>
 
     <section xml:id="overview-url">

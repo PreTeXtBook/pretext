@@ -753,7 +753,7 @@
             </paragraphs>
 
             <paragraphs>
-                <title><tage>tex</tage>, <tage>latex</tage>, <tage>pretext</tage>, <tage>webwork</tage>, <tex />, <latex />, <pretext />, <webwork /></title>
+                <title><tage>tex</tage>, <tage>latex</tage>, <tage>pretext</tage>, <tage>webwork</tage>, <tex />, <latex />, <pretext />, <webwork/></title>
                 <p>Conveniences for frequently-mentioned accessories to <pretext />.</p>
             </paragraphs>
 
@@ -2612,6 +2612,22 @@
             <p>Note that tables may be constructed using the <url href="http://www.latex-tables.com/"><latex /> Complex Table Editor</url> tool online at <c>latex-tables.com</c>and then exported in <pretext /> syntax.</p>
         </introduction>
 
+        <subsection>
+            <title>Placeholder</title>
+
+            <note>
+                <title>Tables are Difficult</title>
+
+                <p>Width is always at a premium, and then when a <tag>tabular</tag> has more than a few columns, the width becomes even more dear.  When a <tag>cell</tag> has text that looks like a phrase or a sentence, rather than numerical data or symbols, it can be even harder to pack it all in.  A common example is a schedule of talks at a small professional conference where each time slot (rows) might have two or three talks simultaneously in parallel sessions (columns).</p>
+
+                <p>We offer <term>paragraph cells</term> which automatically break lines, but you need to specify a <attr>width</attr> on the <tag>col</tag> as a percentage to indicate where line-breaking happens.  For manual line-breaking, a <tag>cell</tag> can be structured entirely by <tag>line</tag> elements.</p>
+
+                <p>The next complication is that the <latex/> used for <init>PDF</init> output tends to make columns as wide as necessary and will not break lines without the devices mentioned in the previous paragraph.  The <init>HTML</init> output can sometimes be a bit more forgiving and flexible.  So we suggest building the <latex/> output first and getting that right, and then the <init>HTML</init> is likely to follow along and not need much futher refinement.</p>
+
+                <p>In contrast to most of <pretext/>, you may need to experiment, refine your approach, iterate, and maybe do things contrary to usual best practices elsewhere.  For example, the clickables for <init>URL</init>s and knowls might need to be short and less-informative in order to save some width.  Abbreviations, initialisms, and acronyms can also save some width.</p>
+            </note>
+        </subsection>
+
         <subsection xml:id="table-headers">
             <title>Table Headers</title>
 
@@ -2730,7 +2746,7 @@
         <subsection>
             <title>(*) Appendices</title>
 
-            <p></p>
+            <p>Automatic lists (<xref ref="topic-automatic-lists"/>) can appear anywhere, but an appendix is a very natural place to place one.</p>
         </subsection>
 
         <subsection>
@@ -2745,12 +2761,6 @@
             <p></p>
         </subsection>
 
-        <subsection xml:id="automatic-lists">
-            <title>Automatic Lists</title>
-
-            <p></p>
-        </subsection>
-            <p>The <tag>row</tag> element accepts a <attr>header</attr> attribute with possible values of <c>no</c> (the default), <c>yes</c>, or <c>vertical</c>.  The latter is useful if space is at a premium (which always seems to be the case with tables), and the cells of a column are narrow and the heading is long.  The one restriction is that rows identified as having headers must be the initial (top) rows of the table and must be contiguous.</p>
         <subsection>
             <title>(*) Solutions</title>
 
@@ -3004,13 +3014,31 @@
     <section xml:id="topic-automatic-lists">
         <title>Automatic Lists</title>
 
-        <p>Sometimes it is useful to have an automatic list of various elements of one kind in a book, other than the ones already available in a <pretext/> document.  The predefined ones include an index (see <xref ref="topic-index"/>) and a list of notation (see <xref ref="topic-notation"/>).  Examples of lists one might wish to create could include lists of titled figures, computational listing, or theorems.</p>
+        <p>Sometimes it is useful to have an automatic list of various elements of one kind in a book, other than the ones already available in a <pretext/> document.  The predefined ones include an index (see <xref ref="topic-index"/>) and a list of notation (see <xref ref="topic-notation"/>).  Examples of lists one might wish to create could include lists figures, computational listings, or theorems.</p>
 
-        <p>To construct an automatic list, one uses a <tage>list-of</tage> element.  This tag has a required <attr>elements</attr> attribute, where the author limits the list to a certain tag.  This could be <c>elements="theorem"</c>, or a space-delimited list of tags like <c>elements="theorem fact corollary"</c>.</p>
+        <p>There is a very flexible way to make a list of various blocks (or perhaps other items) in your text.  Use an empty <tage>list-of</tage> element as a child of a division.  A very natural use would be to create an <tag>appendix</tag> for the sole purpose of holding one such list.  This is why this feature is frequently used in the back matter.  But you could place an <term>automatic list</term> many other places.</p>
 
-        <p>Although automatic lists may be most useful in backmatter, it is possible to use them for summarizing results or other items in a smaller part of your document.  Use the <attr>scope</attr> attribute to limit to the current <c>"section"</c> or <c>"part"</c>.  To organize the list better, use the <attr>divisions</attr> attribute to give structure with headings, such as <c>divisions="section subsection"</c> to organize at two levels.  Finally, the <attr>empty</attr> attribute can be set to <c>"yes"</c> or <c>"no"</c> (default), depending on whether you wish to show any divisions that have none of the requested elements (obviously only useful if you set <c>divisions</c> to something nonempty).</p>
+        <p>We will illustrate with an example.  Suppose you know your book has theoretical results only in <tag>theorem</tag> and <tag>lemma</tag> elements.  So, for example, you never use <tag>corollary</tag> elements.  Then you could author</p>
 
-        <p>Note that an automatic list gets no title or visual separation from surrounding material, so use the usual subdivision elements to make that happen.</p>
+        <pre><![CDATA[
+        <appendix xml:id="appendix-list-results">
+          <title>List of Results</title>
+
+          <list-of elements="theorem lemma" divisions="chapter" empty="yes"/>
+        </appendix>
+        ]]>
+        </pre>
+
+        <p>The result will be a link to every <tag>theorem</tag> and <tag>lemma</tag> in the entire book, using a clickable with its type, number and title.  See <xref ref="best-practices"/> for an example. In <init>HTML</init> output the clickables will usually be knowls, which is especially handy.  The list will be organized with the titles of the chapters as headings.  The <attr>divisions</attr> attribute can have several types of divisions listed, such as both <tag>chapter</tag> <em>and</em> <tag>section</tag>.  The <attr>empty</attr> attribute set to <c>yes</c> indicates that a division heading should be used even if there is nothing on the list contained within.  The default for <attr>empty</attr> is <c>no</c>.</p>
+
+        <p>This feature is best used when the items in the list have been authored with titles, which greatly increases the utility of the list for your reader.  Review <xref ref="best-practice-titles"/> if this advice is new to you.</p>
+
+        <p>There is a <attr>scope</attr> attribute, which should be the name of an element which is a division containing the location of the <tag>list-of</tag> element.  Then the list is restricted to items within the specified division.  For example, if you have the <tag>list-of</tag> inside a <tag>subsection</tag> built for this purpose, and you use <c>@scope="section"</c> then the list will have all the items from throughout the section containing the list.</p>
+
+        <p>There are four types of exercises, based on their location: inline, divisional, worksheet, and reading questions.  These may be specified inside <attr>elements</attr> by the <term>pseudo-elements</term>: <c>'inlineexercise'</c>, <c>'divisionexercise'</c>, <c>'worksheetexercise'</c>, <c>'readingquestion'</c>.  (These are just strings meant for this purpose, and are not <em>real</em> <pretext/> elements.)</p>
+
+        <p>There may be an argument for a <attr>ref</attr> attribute that would behave similar to <attr>scope</attr>.  Make a feature request if you need it?</p>
+
     </section>
 
     <section xml:id="topic-url">
@@ -3449,7 +3477,6 @@
         <idx>slides</idx>
         <p>
 Slideshows may be authored in <pretext/> by using the following tags.
-        </p>
         <ul>
           <li>
 <c>slideshow</c> replaces the usual <c>article</c> or <c>book</c> tag to
@@ -3471,6 +3498,7 @@ value <c>yes</c> to allow stepping through
 parts of a slide (e.g. it inserts a Beamer <c>\pause</c>).
           </li>
         </ul>
+        </p>
         <p>
 A minimal working example may be found in the
 <url href="https://github.com/rbeezer/mathbook/blob/dev/examples/sample-slideshow/sample-slideshow.xml">
@@ -3488,7 +3516,7 @@ See publishing details for various outputs in <xref ref="publisher-slides"/>.
 
         <p>A <tag>fragment</tag> is a chunk of code.  Almost always it has a <attr>xml:id</attr> attribute.  It begins with a mandatory <tag>title</tag>.  It may have index entries, but see below for advice using the <tag>list-of</tag> element.  Then there is a mix of <tag>code</tag> and <tag>fragref</tag> elements.  The <tag>code</tag> element holds the actual text in whatever computer language you are using.  Line breaks are respected.  Use the <init>XML</init> escape characters <c>&amp;lt;</c> and <c>&amp;amp;</c> if your code needs the <c>&lt;</c> or <c>&amp;</c> characters.  Do not try to use <init>XML</init> markup inside the <tag>code</tag> element.</p>
 
-        <p>A <tag>fragref</tag> is a reference to some other <tag>fragment</tag>.  This is accomplished via the <attr>ref</attr> attribute which points to the target via an <attr>xml:id</attr>.  So this is very similar to an <tag>xref</tag> (<xref ref="overview-cross-references"/>), but not enough alike to have the same element name.   The most important distinction is that the <c>xsl/pretext-litprog.xsl</c> stylesheet will <em>replace</em> the <tag>fragref</tag> with the <em>contents</em> of the target <tag>fragment</tag>.  In other conversions, the <tag>fragref</tag> will be a visual expression of the target <tag>fragment</tag>, possibly with some active means to visit or examine the target (hyperlink, knowl), more similar to an <element>xref</element>.</p>
+        <p>A <tag>fragref</tag> is a reference to some other <tag>fragment</tag>.  This is accomplished via the <attr>ref</attr> attribute which points to the target via an <attr>xml:id</attr>.  So this is very similar to an <tag>xref</tag> (<xref ref="overview-cross-references"/>), but not enough alike to have the same element name.   The most important distinction is that the <c>xsl/pretext-litprog.xsl</c> stylesheet will <em>replace</em> the <tag>fragref</tag> with the <em>contents</em> of the target <tag>fragment</tag>.  In other conversions, the <tag>fragref</tag> will be a visual expression of the target <tag>fragment</tag>, possibly with some active means to visit or examine the target (hyperlink, knowl), more similar to an <tag>xref</tag>.</p>
 
         <p>So the <c>xsl/pretext-litprog.xsl</c> stylesheet will course through your fragments converting the tree-like structure given by the references in the <tag>fragref</tag> elements into a depth-first traversal that will assemble the <tag>code</tag> elements, and only the <tag>code</tag> elements, linearly into a program.  Notice that it is your job as the author of the program to be certain that this rearrangement results in a syntactically correct program.  (<pretext/> is good, but not that good.)</p>
 

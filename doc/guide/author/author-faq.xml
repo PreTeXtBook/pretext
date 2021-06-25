@@ -14,43 +14,38 @@
 
     <p><ol>
         <li>
-          <title>On my local machine, why are the knowls/Sage cells empty?</title>
+          <title>On my local machine, why is the <fillin characters="8"/> not working?</title>
+
             <p>
-              Viewing a file on your computer is not the same as visiting a
-              web page.  There is no web server, so you should assume that
+              The <q><fillin characters="8"/></q> could be a knowl that appears empty.
+              Or a sage cell that appears empty.
+              Or an interactive element of some sort that seems broken.
+              Or any component of the HTML page that is <q>fancy</q>.
+            </p>
+
+            <p>
+              Viewing an HTML file on your own computer is not the same as visiting
+              it on a website. There is no web server, so you should assume that
               things will be different.
             </p>
 
             <p>
-              The cause of the difficulty is that some browsers
-              (Chrome and Safari, for example)
-              will not fetch the content of knowls when viewing a file on
-              your local computer.
-              Those browsers consider opening a local knowl to be a security risk.
-              As of the time of this writing, Firefox will open those knowls.
+              The cause of the difficulty is that some web browsers will behave
+              differently when viewing a local file compared with viewing it on a website.
+              If there are other resources to fetch (for example, the content of a knowl)
+              the browser may consider it a security risk to fetch them while viewing
+              a local file.
             </p>
 
             <p>
-              Your options are to use Firefox,
-              to transfer the files to an online server,
-              or to set up a local web server so that local files operate in the usual way.
+              Try viewing your HTML file using a different browser, and you may find that
+              the feature is working there. However the real test is to transfer the
+              files to an actual web server, or to set up a local web server so that local
+              files operate in the usual way.
             </p>
 
             <p>
-              To set up a local server:
-              <ol>
-                <li>In a terminal, go to the directory containing the HTML files.</li>
-                <li>Do:  <c>python -m SimpleHTTPServer</c></li>
-                <li>Note the port indicated in the output (let's assume it is <c>8000</c>)</li>
-                <li>Go to <c>http://127.0.0.1:8000/</c> to see a listing of the files.
-                  Click on a file and you will be viewing it exactly as if it was on the Web.</li>
-              </ol>
-            </p>
-
-            <p>
-              The instructions above are for Python<nbsp/>2.  For Python<nbsp />3,
-              as well as further discussion, see the
-              <url href="https://pretextbook.org/doc/author-guide/html/processing-testing-html.html">Author's Guide</url>.
+              To set up a local server, see <xref ref="processing-testing-html"/>.
             </p>
         </li>
 
