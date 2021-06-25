@@ -5523,12 +5523,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="filename" select="@source" />
         </xsl:call-template>
     </xsl:variable>
+    <!-- location of image, based on configured directory in publisher file -->
+    <xsl:variable name="location" select="concat($external-image-directory, @source)"/>
     <xsl:choose>
-        <!-- no extension, presume SVG manufactured -->
+        <!-- no extension, presume SVG provided as external image -->
         <xsl:when test="$extension=''">
             <xsl:call-template name="svg-wrapper">
                 <xsl:with-param name="svg-filename">
-                    <xsl:value-of select="@source" />
+                    <xsl:value-of select="$location"/>
                     <xsl:text>.svg</xsl:text>
                 </xsl:with-param>
                 <xsl:with-param name="png-fallback-filename" />
@@ -5541,14 +5543,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:call-template>
             <!-- possibly annotate with archive links -->
             <xsl:apply-templates select="." mode="archive">
-                <xsl:with-param name="base-pathname" select="@source" />
+                <xsl:with-param name="base-pathname" select="$location"/>
             </xsl:apply-templates>
         </xsl:when>
         <!-- with extension, just include it -->
         <xsl:otherwise>
-            <xsl:element name="img">
+            <img>
                 <xsl:attribute name="src">
-                    <xsl:value-of select="@source" />
+                    <xsl:value-of select="$location"/>
                 </xsl:attribute>
                 <xsl:attribute name="class">
                     <xsl:text>contained</xsl:text>
@@ -5557,12 +5559,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="alt">
                     <xsl:apply-templates select="description" />
                 </xsl:attribute>
-            </xsl:element>
+            </img>
             <!-- possibly annotate with archive links -->
             <xsl:apply-templates select="." mode="archive">
                 <xsl:with-param name="base-pathname">
+                    <xsl:value-of select="$external-image-directory"/>
                     <xsl:call-template name="substring-before-last">
-                        <xsl:with-param name="input" select="@source" />
+                        <xsl:with-param name="input" select="$location" />
                         <xsl:with-param name="substr" select="'.'" />
                     </xsl:call-template>
                 </xsl:with-param>
@@ -5576,10 +5579,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   LaTeX source code images                       -->
 <!--   Sage graphics plots, w/ PNG fallback for 3D    -->
 <!--   Match style is duplicated in mathbook-epub.xsl -->
-<xsl:template match="image[latex-image-code]|image[latex-image]|image[sageplot]" mode="image-inclusion">
+<xsl:template match="image[latex-image]|image[sageplot]" mode="image-inclusion">
     <xsl:variable name="base-pathname">
-        <xsl:value-of select="$directory.images" />
-        <xsl:text>/</xsl:text>
+        <xsl:value-of select="$generated-image-directory"/>
+        <xsl:if test="$b-managed-generated-images">
+            <xsl:choose>
+                <xsl:when test="latex-image">
+                    <xsl:text>latex-image/</xsl:text>
+                </xsl:when>
+                <xsl:when test="sageplot">
+                    <xsl:text>sageplot/</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:if>
         <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
     <xsl:call-template name="svg-wrapper">
@@ -5608,8 +5620,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="image[asymptote]" mode="image-inclusion">
     <!-- base-pathname needed later for archive link production -->
     <xsl:variable name="base-pathname">
-        <xsl:value-of select="$directory.images" />
-        <xsl:text>/</xsl:text>
+        <xsl:value-of select="$generated-image-directory"/>
+        <xsl:if test="$b-managed-generated-images">
+            <xsl:text>asymptote/</xsl:text>
+        </xsl:if>
         <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
     <xsl:variable name="html-filename" select="concat($base-pathname, '.html')" />
@@ -5688,7 +5702,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="png-fallback-filename" select="''" />
     <xsl:param name="image-width" />
     <xsl:param name="image-description" select="''" />
-    <xsl:element name="img">
+    <img>
         <!-- source file attribute for img element, the SVG image -->
         <xsl:attribute name="src">
             <xsl:value-of select="$svg-filename" />
@@ -5717,7 +5731,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>';this.onerror=null;</xsl:text>
             </xsl:attribute>
         </xsl:if>
-    </xsl:element>
+    </img>
 </xsl:template>
 
 <!-- Image Archives -->
@@ -6268,6 +6282,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="preview" select="'false'" />
     <xsl:param name="autoplay" select="'false'" />
 
+    <xsl:variable name="location" select="concat($external-image-directory, @source)"/>
+
     <xsl:element name="audio">
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="html-id"/>
@@ -6297,7 +6313,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$extension = '' or $extension = 'ogg'">
             <xsl:element name="source">
                 <xsl:attribute name="src">
-                    <xsl:value-of select="@source"/>
+                    <xsl:value-of select="$location"/>
                     <!-- augment no-extension form -->
                     <xsl:if test="$extension = ''">
                         <xsl:text>.ogg</xsl:text>
@@ -6312,7 +6328,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$extension = '' or $extension = 'mp3'">
             <xsl:element name="source">
                 <xsl:attribute name="src">
-                    <xsl:value-of select="@source"/>
+                    <xsl:value-of select="$location"/>
                     <!-- augment no-extension form -->
                     <xsl:if test="$extension = ''">
                         <xsl:text>.mp3</xsl:text>
@@ -6327,7 +6343,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$extension = '' or $extension = 'wav'">
             <xsl:element name="source">
                 <xsl:attribute name="src">
-                    <xsl:value-of select="@source"/>
+                    <xsl:value-of select="$location"/>
                     <!-- augment no-extension form -->
                     <xsl:if test="$extension = ''">
                         <xsl:text>.wav</xsl:text>
@@ -6351,6 +6367,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="video[@source]" mode="media-embed">
     <xsl:param name="preview" select="'true'" />
     <xsl:param name="autoplay" select="'false'" />
+
+    <xsl:variable name="location" select="concat($external-image-directory, @source)"/>
 
     <!-- we need to build the element, since @autoplay is optional -->
     <xsl:element name="video">
@@ -6394,7 +6412,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$extension = '' or $extension = 'ogv'">
             <xsl:element name="source">
                 <xsl:attribute name="src">
-                    <xsl:value-of select="@source"/>
+                    <xsl:value-of select="$location"/>
                     <!-- augment no-extension form -->
                     <xsl:if test="$extension = ''">
                         <xsl:text>.ogv</xsl:text>
@@ -6409,7 +6427,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$extension = '' or $extension = 'webm'">
             <xsl:element name="source">
                 <xsl:attribute name="src">
-                    <xsl:value-of select="@source"/>
+                    <xsl:value-of select="$location"/>
                     <!-- augment no-extension form -->
                     <xsl:if test="$extension = ''">
                         <xsl:text>.webm</xsl:text>
@@ -6424,7 +6442,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$extension = '' or $extension = 'mp4'">
             <xsl:element name="source">
                 <xsl:attribute name="src">
-                    <xsl:value-of select="@source"/>
+                    <xsl:value-of select="$location"/>
                     <!-- augment no-extension form -->
                     <xsl:if test="$extension = ''">
                         <xsl:text>.mp4</xsl:text>
@@ -6443,7 +6461,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$extension = '' or $extension = 'oog'">
             <xsl:element name="source">
                 <xsl:attribute name="src">
-                    <xsl:value-of select="@source"/>
+                    <xsl:value-of select="$location"/>
                     <!-- augment no-extension form -->
                     <xsl:if test="$extension = ''">
                         <xsl:text>.ogg</xsl:text>
@@ -6467,6 +6485,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The HTML @default attribute functions simply by being -->
 <!-- present, so we do not provide a value.                -->
 <xsl:template match="track">
+    <xsl:variable name="location" select="concat($external-image-directory, @source)"/>
+
     <track>
         <xsl:if test="@default='yes'">
             <xsl:attribute name="default"/>
@@ -6481,7 +6501,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="@xml:lang"/>
         </xsl:attribute>
         <xsl:attribute name="src">
-            <xsl:value-of select="@source"/>
+            <xsl:value-of select="$location"/>
         </xsl:attribute>
     </track>
 </xsl:template>
@@ -8648,6 +8668,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$hid" />
         </xsl:attribute>
         <xsl:attribute name="data-tracefile">
+            <xsl:if test="$b-managed-generated-images">
+                <xsl:value-of select="$external-image-directory"/>
+            </xsl:if>
             <xsl:text>pytutor/</xsl:text>
             <xsl:value-of select="$hid" />
             <xsl:text>.json</xsl:text>
@@ -9442,6 +9465,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <xsl:when test="@source">
                 <xsl:text>filename:"</xsl:text>
+                <xsl:if test="$b-managed-generated-images">
+                    <xsl:value-of select="$external-image-directory"/>
+                </xsl:if>
                 <xsl:value-of select="@source" />
                 <xsl:text>",&#xa;</xsl:text>
             </xsl:when>
@@ -9568,6 +9594,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
               <xsl:text>  board.unsuspendUpdate();&#xa;</xsl:text>
               <xsl:text>}&#xa;</xsl:text>
               <xsl:text>fetch('</xsl:text>
+              <xsl:if test="$b-managed-generated-images">
+                <xsl:value-of select="$external-image-directory"/>
+              </xsl:if>
               <xsl:value-of select="@source" />
               <xsl:text>').then(function(response) { response.text().then( function(text) { parseJessie(text); }); });&#xa;</xsl:text>
           </xsl:element>
@@ -9576,6 +9605,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Utilities -->
+
+<!-- These can be vastly improved with a call to "tokenize()"   -->
+<!-- and then a "for-each" can effectively loop over the pieces -->
 
 <!-- @source attribute to multiple script tags -->
 <xsl:template match="interactive[@platform]/@source">
@@ -9595,8 +9627,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$token-list = ''" />
         <xsl:otherwise>
             <script>
+                <!-- this is a hack to allow for local files and network resources,   -->
+                <!-- with or without managed directories.  There should be a seperate -->
+                <!-- attribute like an @href used for audio and video, and then any   -->
+                <!-- "http"-leading string should be flagged as a deprecation         -->
+                <xsl:variable name="location">
+                    <xsl:variable name="raw-location" select="substring-before($token-list, ' ')"/>
+                    <xsl:choose>
+                        <xsl:when test="substring($raw-location,1,4) = 'http'">
+                            <xsl:value-of select="$raw-location"/>
+                        </xsl:when>
+                        <xsl:when test="not($b-managed-generated-images)">
+                            <xsl:value-of select="$raw-location"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="$external-image-directory"/>
+                            <xsl:value-of select="$raw-location"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
                 <xsl:attribute name="src">
-                    <xsl:value-of select="substring-before($token-list, ' ')" />
+                    <xsl:value-of select="$location" />
                 </xsl:attribute>
             </script>
             <xsl:call-template name="one-script">
@@ -11427,8 +11478,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Needs two image files in root of HTML output -->
 <xsl:template name="favicon">
     <xsl:if test="$docinfo/html/favicon">
-        <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png"/>
-        <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png"/>
+        <xsl:variable name="res32">
+            <xsl:if test="$b-managed-generated-images">
+                <xsl:value-of select="$external-image-directory"/>
+            </xsl:if>
+            <xsl:text>favicon/favicon-32x32.png</xsl:text>
+        </xsl:variable>
+        <xsl:variable name="res16">
+            <xsl:if test="$b-managed-generated-images">
+                <xsl:value-of select="$external-image-directory"/>
+            </xsl:if>
+            <xsl:text>favicon/favicon-16x16.png</xsl:text>
+        </xsl:variable>
+        <link rel="icon" type="image/png" sizes="32x32" href="{$res32}"/>
+        <link rel="icon" type="image/png" sizes="16x16" href="{$res16}"/>
     </xsl:if>
 </xsl:template>
 
@@ -11569,12 +11632,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="brand-logo">
     <xsl:choose>
         <xsl:when test="$docinfo/brandlogo">
+            <xsl:variable name="location" select="concat($external-image-directory, $docinfo/brandlogo/@source)"/>
             <a id="logo-link" href="{$docinfo/brandlogo/@url}" target="_blank" >
-                <img src="{$docinfo/brandlogo/@source}" alt="Logo image"/>
+                <img src="{$location}" alt="Logo image"/>
             </a>
         </xsl:when>
         <xsl:otherwise>
-            <a id="logo-link" href="" />
+            <a id="logo-link" href=""/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
