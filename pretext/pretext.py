@@ -1640,11 +1640,33 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format):
 def html(xml, pub_file, stringparams, dest_dir):
     """Convert XML source to HTML files in destination directory"""
     import os.path # join()
+    import shutil # copytree()
+
+    warning = '\n'.join(['*************************************************',
+                         'Conversion to HTML is experimental and incomplete',
+                         '    (Temporarily requires Python version 3.8)    ',
+                         '*************************************************'])
+    print(warning)
+
+    # Consult publisher file for locations of images
+    # data directory likely only needed for latex compilation
+    generated_abs, _, external_abs, generated, _, external = get_image_directories(xml, pub_file)
 
     # support publisher file, not subtree argument
     if pub_file:
         stringparams['publisher'] = pub_file
     extraction_xslt = os.path.join(get_ptx_xsl_path(), 'pretext-html.xsl')
+
+    # copy externally manufactured media to  dest_dir
+    if external:
+        external_dir = os.path.join(dest_dir, external)
+        shutil.copytree(external_abs, external_dir, dirs_exist_ok=True)
+
+    # copy generated to  dest_dir
+    if generated:
+        generated_dir = os.path.join(dest_dir, generated)
+        shutil.copytree(generated_abs, generated_dir, dirs_exist_ok=True)
+
     # Write output into working directory, no scratch space needed
     _verbose('converting {} to HTML in {}'.format(xml, dest_dir))
     xsltproc(extraction_xslt, xml, None, dest_dir, stringparams)
