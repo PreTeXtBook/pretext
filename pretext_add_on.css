@@ -4224,3 +4224,6 @@ sbspanel:empty { /* can only happen when partially created */
 .pretext-content .may_enter q {
     background: #ddf;
 }
+.pretext-content .may_enter abbr {
+    background: #adf;
+}
