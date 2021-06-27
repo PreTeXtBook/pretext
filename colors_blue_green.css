@@ -38,8 +38,8 @@
 
 :root {
   --documenttitle: #2a5ea4;
-  --bodytitle: #2B5F82; 
-  --bodysubtitle: #A62E1C;
+  --bodytitle: #2b5f82; 
+  --bodysubtitle: #a62e1c;
   --bodytitlehighlight: #e0e9ff;  /* light, and contrasting to bodytitle  */
   --bodysubtitlehighlight: #fce5e4;  /* light, and contrasting to bodysubtitle  */
      /*
@@ -68,5 +68,38 @@
 
   --knowlborder: var(--bodytitlehighlight);
   --knowlbackground: var(--assemblagebackground);
+
+  /* Colors for block envirornments: */
+  /* 
+  We specify 4 color families (hues), each with 5 hue/lightness options, to be used by style files if they wish.  
+  Primary and secondary are taken from the TOC color theme.
+  Info is targeted to non-core content (asides, technology tips, etc)
+  Alert is a jaring highling color (for warnings, cautions, etc).
+  Each color has *light, *dark variants (adjusting the lightness of hsl) and *rich, *dull variants (adjusting the saturation).
+  The *dark, if specified, should always contrast correctly with white text (we could later specify a *dark-text to be the correct contrast with *dark).
+  */
+  --primary: hsl(246, 60%, 60%);  /* #1100aa */
+  --primarylight: hsl(246, 60%, 90%);  /* #1100aa */
+  --primarydark: hsl(246, 60%, 20%);  /* #1100aa */
+  --primaryrich: hsl(246, 100%, 60%);  /* #1100aa */
+  --primarydull: hsl(246, 10%, 60%);  /* #1100aa */
+
+  --secondary: hsl(136, 52%, 60%); /* chaptertoc */
+  --secondarylight: hsl(136, 52%, 90%); /* same hue as chaptertoc */
+  --secondarydark: hsl(136, 52%, 15%); /* chaptertoc */
+  --secondaryrich: hsl(136, 100%, 50%); /* chaptertoc */
+  --secondarydull: hsl(136, 10%, 50%); /* chaptertoc */
+
+  --info: hsl(204, 86%, 60%);	
+  --infolight: hsl(204, 86%, 90%);	
+  --infodark: hsl(204, 86%, 20%);	
+  --inforich: hsl(204, 100%, 50%);	
+  --infodull: hsl(204, 15%, 60%);	
+
+  --alert: hsl(8, 60%, 38%);
+  --alertlight: hsl(8, 60%, 85%);
+  --alertdark: hsl(8, 60%, 20%);
+  --alertrich: hsl(8, 100%, 50%);
+  --alertdull: hsl(8, 15%, 60%);
 }
 
