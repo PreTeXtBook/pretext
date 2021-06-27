@@ -4217,3 +4217,10 @@ sbspanel:empty { /* can only happen when partially created */
 .pretext-content #phantomobject.move .movearrow > * {
     display: inline-block;
 }
+
+.pretext-content .ref.tmp {
+    background: #dfd;
+}
+.pretext-content .may_enter q {
+    background: #ddf;
+}
