@@ -71,35 +71,48 @@
 
   /* Colors for block envirornments: */
   /* 
-  We specify 4 color families (hues), each with 5 hue/lightness options, to be used by style files if they wish.  
-  Primary and secondary are taken from the TOC color theme.
-  Info is targeted to non-core content (asides, technology tips, etc)
-  Alert is a jaring highling color (for warnings, cautions, etc).
-  Each color has *light, *dark variants (adjusting the lightness of hsl) and *rich, *dull variants (adjusting the saturation).
-  The *dark, if specified, should always contrast correctly with white text (we could later specify a *dark-text to be the correct contrast with *dark).
+  We specify 6 color families (hues), each with 5 hue/lightness options, to be used by style files if they wish. 
+
+  The hues should roughly corrspond to red, orange, yellow, green, blue, violet, but should be consistent with the colors specified for titles and toc defined above. 
+  
+  Each color has *light, *dark variants (adjusting the lightness of hsl) and *rich, *dull variants (adjusting the saturation). *light and *dull should work for a main background. The standard and *riche should work for borders. For a bold title background, the *dark could be used.
+
+  The *dark should always contrast correctly with white text (we could later specify a *dark-text to be the correct contrast with *dark). All other variants should contrast correctly with black text.
   */
-  --primary: hsl(246, 60%, 60%);  /* #1100aa */
-  --primarylight: hsl(246, 60%, 90%);  /* #1100aa */
-  --primarydark: hsl(246, 60%, 20%);  /* #1100aa */
-  --primaryrich: hsl(246, 100%, 60%);  /* #1100aa */
-  --primarydull: hsl(246, 10%, 60%);  /* #1100aa */
+  --red: hsl(345, 60%, 60%);  
+  --redlight: hsl(345, 60%, 80%);  
+  --reddark: hsl(345, 60%, 15%);  
+  --redrich: hsl(345, 100%, 60%);  
+  --reddull: hsl(345, 20%, 60%);  
 
-  --secondary: hsl(136, 52%, 60%); /* chaptertoc */
-  --secondarylight: hsl(136, 52%, 90%); /* same hue as chaptertoc */
-  --secondarydark: hsl(136, 52%, 15%); /* chaptertoc */
-  --secondaryrich: hsl(136, 100%, 50%); /* chaptertoc */
-  --secondarydull: hsl(136, 10%, 50%); /* chaptertoc */
+  --orange: hsl(30, 70%, 60%);  
+  --orangelight: hsl(30, 60%, 80%);  
+  --orangedark: hsl(30, 60%, 15%);  
+  --orangerich: hsl(30, 100%, 60%);  
+  --orangedull: hsl(30, 30%, 60%);  
 
-  --info: hsl(204, 86%, 60%);	
-  --infolight: hsl(204, 86%, 90%);	
-  --infodark: hsl(204, 86%, 20%);	
-  --inforich: hsl(204, 100%, 50%);	
-  --infodull: hsl(204, 15%, 60%);	
+  --yellow: hsl(58, 60%, 60%);  
+  --yellowlight: hsl(58, 60%, 80%);  
+  --yellowdark: hsl(58, 60%, 15%);  
+  --yellowrich: hsl(58, 100%, 60%);  
+  --yellowdull: hsl(58, 30%, 60%);  
+  
+  --green: hsl(136, 52%, 33%);
+  --greenlight: hsl(136, 52%, 80%);  
+  --greendark: hsl(136, 52%, 15%);  
+  --greenrich: hsl(136, 100%, 60%);  
+  --greendull: hsl(136, 20%, 60%);
+    
+  --blue: hsl(214, 59%, 60%);
+  --bluelight: hsl(214, 59%, 80%);  
+  --bluedark: hsl(214, 59%, 15%);  
+  --bluerich: hsl(214, 100%, 50%);  
+  --bluedull: hsl(214, 20%, 50%);
 
-  --alert: hsl(8, 60%, 38%);
-  --alertlight: hsl(8, 60%, 85%);
-  --alertdark: hsl(8, 60%, 20%);
-  --alertrich: hsl(8, 100%, 50%);
-  --alertdull: hsl(8, 15%, 60%);
+  --violet: hsl(259, 60%, 60%);  
+  --violetlight: hsl(259, 60%, 80%);  
+  --violetdark: hsl(259, 60%, 15%);  
+  --violetrich: hsl(259, 100%, 60%);  
+  --violetdull: hsl(259, 20%, 60%);  
 }
 

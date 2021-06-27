@@ -1,113 +1,88 @@
 
-/*
 :root {
-  --documenttitle: #395E66;
-  --bodytitle: #A62E1C;
-  --bodysubtitle: #2B5F82;
-  --bodytitlehighlight: #e0e9ff;
-  --bodysubtitlehighlight: #FCE5E4;
-
-  --chaptertoc: #395E66;
-  --chaptertoctext: white;
-  --chaptertocactive: #00A092;
-  --chaptertoctextactive: white;
-  --sectiontoc: #f0f0f0;
-  --sectiontoctext: #395E66;
-  --sectiontocactive: var(--chaptertocactive);
-  --sectiontoctextactive: var(--chaptertoctextactive);
-  --tocborder: #1f4283;
-
-  --highlighttoc: #223843;
-  --highlighttoctext: white;
-  --highlighttocborder: white;
-
-  --assembborder: #bfd5ec;
-  --assembbackground: #e9eff5;
-
-  --knowlborder: #e0e9ff;
-  --knowlbackground: #f5f8ff;
-
-}
-*/
-
-
-:root {
-/* Set colors for blocks */
+/* Set colors for environments */
   
-  --assembbackground: var(--infolight, hsl(210, 40%, 94%));
-  --assembborder: var(--info, hsl(210, 40%, 75%));
-  --assembheading: var(--infodark, hsl(210, 40%, 25%));
-  --definitionbackground: var(--secondarylight, hsl(180, 40%, 94%));
-  --definitionborder: var(--secondarydull, hsl(180, 40%, 75%));
-  --definitiondarkborder: var(--secondaryrich, hsl(180, 40%, 25%));
-  --theorembackground: var(--primarylight, hsl(270, 40%, 94%));
-  --theoremborder: var(--primary, hsl(270, 40%, 75%));
-  --theoremdarkborder: var(--primarydark, hsl(270, 40%, 25%));
-  --examplebackground: var(--primarylight, hsl(240, 40%, 94%));
-  --example: var(--primary, hsl(240, 40%, 75%));
-  --exampledark: var(--primarydark, hsl(240, 40%, 25%));
-  --projectbackground: var(--primarylight, hsl(180, 40%, 94%));
-  --projectborder: var(--primary, hsl(180, 40%, 75%));
-  --investigateborder: var(--primaryrich, hsl(180, 40%, 25%));
+  --assembbody: var(--bluelight, hsl(210, 90%, 80%));
+  --assembborder: var(--blue, hsl(210, 40%, 60%));
+  --assembhead: var(--blue, hsl(210, 40%, 60%));
+  --definitionbody: var(--greenlight, hsl(180, 40%, 80%));
+  --definitionborder: var(--green, hsl(180, 40%, 50%));
+  --definitionhead: var(--green, hsl(180, 40%, 50%));
+  --theorembody: var(--violetlight, hsl(270, 40%, 94%));
+  --theoremborder: var(--violet, hsl(270, 40%, 75%));
+  --theoremhead: var(--violetdark, hsl(270, 40%, 25%));
+  --examplebody: var(--bluedull, hsl(240, 40%, 90%));
+  --exampleborder: var(--bluedark, hsl(240, 40%, 25%));
+  --examplehead: var(--exampleborder);
+  --examplelikebody: var(--examplebody);
+  --examplelikeborder: var(--bluedull, hsl(240, 40%, 75%));
+  --examplelikehead: var(--examplelikeborder);
+  --projectbody: var(--greenlight, hsl(180, 40%, 94%));
+  --projectborder: var(--green, hsl(180, 40%, 75%));
+  --projecthead: var(--green, hsl(180, 40%, 75%));
+  --investigateborder: var(--bluerich, hsl(180, 40%, 25%));
+  --goalborder: var(--violetrich, hsl(270, 90%, 25%));
+  --remarklikebody: var(--yellowlight, hsl(59, 55%, 85%));
+  --remarklikeborder: var(--yellow, hsl(59, 55%, 50%));
+  --remarklikehead: var(--yellow, hsl(59, 55%, 50%));
+  --computationborder: var(--orangedull, hsl(180, 40%, 75%));
 
-  /* --knowlborder: var(--bodytitlehighlight);
-  --knowlborder: white;
-  --knowlbackground: var(--assembbackground);
-  --knowlbackground: white; */
+  /* temporary workaround for setcolors.css use of assemblage */
+  --asemblagebackground: var(--assembbody) !important;
+  --assemblageborder: var(--assembborder) !important;
 }
 
-/* Remove Greg-L on assemblage and everything else */
-/*
-.pretext-content article.theorem-like::after, .pretext-content article.definition-like::after, .pretext-content article.example-like::after, .pretext-content article.project-like::after, .pretext-content article.objectives::after, .pretext-content article.outcomes::after, .pretext-content article.remark-like::after {
-  border-bottom: none;
-}
+/* We can style all the *-like environments: 
+    definition-like, 
+    theorem-like, 
+    example-like, 
+    project-like, 
+    remark-like, 
+    computation-like, 
+    goal-like, and
+    assemblage-like. 
+  We also could do something for proofs, and commentary. 
+
+  (should we style aside-like?  Or just copy from style_default?)
+  
+  We define the style of environments in three steps: first the shape, then the color, and finally the shape and color of the heading/title.  The only reason to group these as such is that we can then have a common shape for differet *-like elements, but still allow for different colors to distinguish them.
+
+  Start with the important custom environments (theorem might be different from the other theorem-like, etc.), then clean up any standard *-like.
+  
 */
 
+/* definitions, theorems, assemblages, with theorem-like.theorem distinguished */
 .pretext-content .assemblage-like,
 .pretext-content .definition-like,
-.pretext-content .theorem-like {
-    margin-top: 1.25em;
+.pretext-content .theorem-like.theorem {
+    margin-top: 1.75em;
     padding: 1em;
-    border-radius: 3px;
+    border-radius: 2px;
     margin-bottom: 1em;
 }
 
-/* backgrounds and borders: */
+.pretext-content .theorem-like {
+  margin-top: 1.25em;
+  padding: 1em;
+  border-radius: 2px;
+  margin-bottom: 1em;
+}
+
 .pretext-content .assemblage-like{
-    background-color: var(--assembbackground);
+    background-color: var(--assembbody);
     border: 2px solid var(--assembborder);
 }
 
-.pretext-content .theorem-like {
-  background-color: var(--theorembackground);
-/*  border-left: 2px solid var(--theoremborder);
-*/
-  border: 2px solid var(--theoremborder);
-
+.pretext-content .definition-like {
+  background-color: var(--definitionbody);
+  border: 2px solid var(--definitionborder);
 }
 
 .pretext-content .theorem-like.theorem,
-.pretext-content .theorem-like.principle {
-    background-color: var(--theorembackground);
-    border: 2px solid var(--theoremborder);
+.pretext-content .theorem-like {
+  background-color: var(--theorembody);
+  border: 2px solid var(--theoremborder);
 }
-
-.pretext-content .definition-like {
-    background-color: var(--definitionbackground);
-    border: 2px solid var(--definitionborder);
-}
-
-/* .pretext-content .example-like {
-    background-color: var(--examplebackground);
-    border: 2px solid var(--exampleborder);
-} */
-
-/* .pretext-content .theorem-like.proposition,
-.pretext-content .theorem-like.lemma,
-.pretext-content .theorem-like.corollary {
-    background-color: var(--theorembackground);
-    border-left: 2px solid var(--theoremborder);
-} */
 
 .pretext-content .assemblage-like .heading,
 .pretext-content .definition-like .heading,
@@ -119,7 +94,7 @@
 }
 
 .pretext-content .assemblage-like .heading {
-  background-color: var(--assembborder);
+  background-color: var(--assembhead);
   color: #000;
 }
 
@@ -132,34 +107,94 @@
   background-color: var(--theoremborder);
   color: #000;
 }
-/* .pretext-content .theorem-like.corollary .heading {
-    background-color: var(--bodysubtitlehighlight);
-    border: 2px solid var(--bodysubtitle);
-}
-.pretext-content .theorem-like.principle .heading {
-    background-color: var(--assembborder);
-} */
 
-.pretext-content .assemblage-like .heading::after,
-.pretext-content .theorem-like.theorem .heading::after,
-.pretext-content .theorem-like.principle .heading::after {
-    content: "";
-}
+
 .pretext-content .assemblage-like .heading + p,
 .pretext-content .theorem-like.theorem .heading + p,
 .pretext-content .definition-like .heading + p {
-    display: block;
+  display: block;
+  margin-top: .5em;
 }
 
-/* These gradients need to be adjusted to match background colors */
-.pretext-content .assemblage-like .MJXc-display,
-.pretext-content .definition-like .MJXc-display,
-.pretext-content .theorem-like.theorem .MJXc-display {
-    background-image: linear-gradient(to right, #e9eff5, #e9eff5), linear-gradient(to right, #e9eff5, #e9eff5), linear-gradient(to right, rgba(0,0,0,.25), rgba(242,242,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(242,242,254,0));
+/* Examples and example-like; computation-like styled same as example-like with different colors */
+.pretext-content .example-like,
+.pretext-content .computation-like {
+  padding-left: 0.8em;
+  padding-bottom: 0.5em;
 }
-.pretext-content .theorem-like.corollary .MJXc-display {
-    background-image: linear-gradient(to right, var(--bodytitlehighlight), var(--bodytitlehighlight)), linear-gradient(to right, var(--bodytitlehighlight), var(--bodytitlehighlight)), linear-gradient(to right, rgba(0,0,0,.25), rgba(242,242,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(242,242,254,0));
+
+.pretext-content .example-like.example {
+  border-left: 0.1em solid var(--examplehead);
+  border-bottom: 0.1em solid var(--examplehead);
 }
+
+.pretext-content .example-like {
+  border-left: 0.1em solid var(--examplelikeborder);
+  border-bottom: 0.1em solid var(--examplelikeborder);
+}
+
+.pretext-content .computation-like {
+  border-left: 0.1em solid var(--computationborder);
+  border-bottom: 0.1em solid var(--computationborder);
+}
+
+.pretext-content .example-like > .heading,
+.pretext-content .computation-like > .heading {
+  display: inline-block;
+  padding: 0.3em 0.5em;
+  margin-left: -0.8em;
+}
+
+
+.pretext-content .example-like.example > .heading {
+  border: 0.1em solid var(--examplehead);   /* maybe no border-left? */
+  background: var(--examplehead);
+  color: white;
+}
+
+.pretext-content .example-like > .heading {
+  background: var(--examplelikeborder);
+  color: black;
+}
+
+.pretext-content .computation-like > .heading {
+  background: var(--computationborder);
+  color: black;
+}
+
+.pretext-content .example-like > .heading + p,
+.pretext-content .computation-like > .heading + p,
+.pretext-content .example-like > .heading + .introduction, 
+.pretext-content .computation-like > .heading + .introduction {
+  display: block;
+  padding-top: 0.3em;
+}
+
+/* Project-like */
+.pretext-content .project-like {
+  background-color: white;
+  border: solid 3px var(--projectborder);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 1em;
+}
+
+.pretext-content .project-like.investigation {
+  border-color: var(--investigateborder);
+}
+
+.pretext-content .project-like > .heading {
+  margin-top: -1.5em;
+  background-color: white;
+  display: table !important;
+  padding: 5px 1em;
+  margin-left: 10px;
+  font-style: italic;
+  font-size: 120% !important;
+}
+
+
+/* Goal-like */
 
 .pretext-content .goal-like {
   background-color: white;
@@ -168,12 +203,12 @@
   margin-bottom: 1em;
 }
 .pretext-content .goal-like.objectives {
-  border-top: solid 3px var(--bodysubtitle);
-  border-bottom: solid 3px var(--bodysubtitle);
+  border-top: solid 3px var(--goalborder);
+  border-bottom: solid 3px var(--goalborder);
 }
 .pretext-content .goal-like.outcomes {
-  border-top: solid 3px var(--bodytitle);
-  border-bottom: solid 3px var(--bodytitle);
+  border-top: solid 3px var(--goalborder);
+  border-bottom: solid 3px var(--goalborder);
 }
 
 .pretext-content .goal-like .heading {
@@ -186,132 +221,238 @@
   font-size: 120%;
 }
 
-/* .pretext-content .goal-like .codenumber {
-  display:none;
+/* remark-like */
+
+.pretext-content .remark-like {
+  margin-top: 1.25em;
+  padding: 1em;
+  margin-bottom: 1em;
+  border-radius: 0px;
+  border-left: 5px solid var(--remarklikeborder);
+  background-color: var(--remarklikebody);
 }
 
-.pretext-content .goal-like .heading::after {
-  display:none;
-} */
 
+/* proofs */
 
-.pretext-content section article.project-like {
-  background-color: white;
-  border: solid 3px var(--projectborder);
-  border-radius: 10px;
-  padding: 10px;
+.pretext-content section > .proof {
   margin-bottom: 1em;
 }
 
-.pretext-content section article.project-like.investigation {
-  border-color: var(--investigateborder);
+
+/* Common fixes? */
+.pretext-content .assemblage-like .heading::after,
+.pretext-content .theorem-like.theorem .heading::after,
+.pretext-content .theorem-like .heading::after,
+.pretext-content .example-like > .heading::after,
+.pretext-content .project-like > .heading::after {
+  content: "";
 }
 
-.pretext-content section article.project-like > .heading {
-  margin-top: -1.5em;
-  background-color: white;
-  display: table !important;
-  padding: 5px 1em;
-  margin-left: 10px;
-  font-style: italic;
-  font-size: 120% !important;
+/* Fixes for mathjax: */
+/* These gradients need to be adjusted to match background colors */
+.pretext-content .assemblage-like .MJXc-display,
+.pretext-content .definition-like .MJXc-display,
+.pretext-content .theorem-like.theorem .MJXc-display {
+    background-image: linear-gradient(to right, #e9eff5, #e9eff5), linear-gradient(to right, #e9eff5, #e9eff5), linear-gradient(to right, rgba(0,0,0,.25), rgba(242,242,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(242,242,254,0));
+}
+.pretext-content .theorem-like.corollary .MJXc-display {
+    background-image: linear-gradient(to right, var(--bodytitlehighlight), var(--bodytitlehighlight)), linear-gradient(to right, var(--bodytitlehighlight), var(--bodytitlehighlight)), linear-gradient(to right, rgba(0,0,0,.25), rgba(242,242,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(242,242,254,0));
 }
 
-.pretext-content section article.example-like {
-    padding-left: 0.8em;
-    padding-bottom: 0.5em;
-}
+/* 
+END OF STYLE_OSCARLEVIN
+(below is only stuff copied from style_default)
+*/
 
-.pretext-content section article.example-like {
-    border-left: 0.1em solid var(--exampleborder);
-    border-bottom: 0.1em solid var(--exampleborder);
-}
-.pretext-content section article.example-like.example {
-    border-left: 0.1em solid var(--exampledarkborder);
-    border-bottom: 0.1em solid var(--exampledarkborder);
-}
-.pretext-content section article article.example-like,
-.pretext-content section article article.example-like.example {
+
+
+/* Assides, copied directly from style_default.css */
+/* next selector first part of the following is due to the mistake of
+   putting paragraph spacing in the margin-bottom 
+   Redo when we fix that error */
+.pretext-content .aside-like {
+ /*   margin-top: -1.25em;
+*/
+    position: absolute;
+    margin-left: 45%;
+    z-index: -10;
+    overflow-x: hidden;
+    max-width: 495px;
+    max-height: 7em;
+    overflow-y: hidden;
     border: none;
+    padding: 4px 10px 0 10px;
+    color: #888;
+}
+.pretext-content .example-like .aside-like {
+    margin-top: 0;
+    position: absolute;
+}
+.pretext-content .aside-like {
+    font-size: 90%;
+}
+.pretext-content .aside-like {
+  margin-bottom: 5px;
+  background-color: #f5faff;
+  box-shadow: 0 0 1.0em 0.2em #fff inset;
+}
+.pretext-content .aside-like:first-child {
+    margin-top: -2.25em;
+}
+.pretext-content .aside-like:after {
+  content  : "";
+  position : absolute;
+  z-index  : 1;
+  top   : 0em;  
+  bottom   : 0;
+  left     : 0;
+  pointer-events   : none;
+  background-image : linear-gradient(to bottom, 
+                    rgba(255,255,255, 0.4), 
+                    rgba(255,255,255, 1) 90%);
+  width    : 550px;
+  height   : 8em;
+}
+/* example of where the following is needed? */
+/*
+.pretext-content .aside-like * {
+    background-color: #f5faff !important;
+}
+*/
+.pretext-content .aside-like.front, .pretext-content .example-like .aside-like.front {
+  position: relative;
+  z-index: 0;
+  padding: 8px 15px 10px 15px;
+  padding: 2px 10px;
+  margin: 5px 0px 5px 10px;
+  border: 2px solid #dcebfa;
+  max-height: none;
+  max-width: 550px;
+  color: inherit;
+  font-size: 100%;
+  box-shadow: none;
+}
+.pretext-content .aside-like.front:after, .pretext-content .example-like .aside-like.front:after {
+    background-image: none;
+}
+.pretext-content .example-like .aside-like.front {
+    margin-top: 1.25em;
+}
+
+.pretext-content .aside-like.front + p{
+    margin-top: 1.25em !important;
+    padding-top: 0;
 }
 
 
-.pretext-content section article.example-like > .heading {
-    display: inline-block;
-    padding: 0.3em 0.5em;
-    margin-left: -0.8em;
+
+.pretext-content .aside-like .aside-like {
+  background-color: #fafff5;
+  border: 1px dotted #aaa;
 }
 
-
-.pretext-content section article.example-like.example > .heading {
-  border: 0.1em solid var(--exampledark);   /* maybe no border-left? */
+.pretext-content article.aside-like > p:first-child {
+    margin-top: 0;
 }
 
-
-.pretext-content section article.example-like > .heading {
-  background: var(--example);
-  color: black;
+.pretext-content .aside-like > .heading {
+    font-size: 95%;
 }
 
-.pretext-content section article.example-like.example > .heading {
-  background: var(--exampledark);
-  color: #fff;
+.pretext-content .aside-like + *{
+    margin-top: 3em !important;
+    margin-right: 3em;
 }
 
+/* on sufficiently large screens, there is enough of a margin to see part of the aside */
 
-.pretext-content section article.example-like > .heading::after,
-.pretext-content section article.project-like.project > .heading::after,
-.pretext-content section article.project-like.activity > .heading::after,
-.pretext-content section article.project-like.exploration > .heading::after {
-    content: "";
+@media screen and (min-width: 943px) {
+  .pretext-content .aside-like + * {
+      margin-right: 0;
+  }
 }
 
-.pretext-content section article.example-like > .heading + p,
-.pretext-content section article.example-like > .heading + .introduction {
-    display: block;
-    padding-top: 0.3em;
+/* on a wide screen, asides should appear in the right margin */
+@media screen and (min-width: 1100px) {
+  .pretext-content .aside-like, .pretext-content .aside-like.front, .pretext-content .example-like .aside-like, .pretext-content .example-like .aside-like.front {
+      position: absolute;
+      margin-top: -2em;
+      margin-left: 660px;
+      max-width: 200px;  /* for some reason the width was too small, so I had to put width (next line) */
+      width: 200px;
+      color: inherit;
+  }
+  .pretext-content .aside-like.front, .pretext-content .example-like .aside-like.front {
+      max-height: none;
+      max-width: 223px;
+      border: 2px solid #dcebfa;
+}
+  .pretext-content .example-like .aside-like, .pretext-content .example-like .aside-like.front {
+      margin-left: 654px;  /* because .example-like has 6px of padding */
+  }
+
+  .pretext-content .aside-like + * {
+      margin-top: 1.25em !important;
+  /*    background: none;  */
+      margin-right: 0;
+  }
+
+  .pretext-content .aside-like.front:after, .pretext-content .example-like .aside-like.front:after {
+    background-image: none;
+  }
+
+  .pretext-content .aside-like:nth-of-type(3n+1) {
+    margin-left: 660px;
+}
+  .pretext-content .aside-like:nth-of-type(3n) {
+    margin-left: 680px;
+}
+  .pretext-content .aside-like:nth-of-type(3n+2) {
+    margin-left: 640px;
+}
 }
 
-/* remark-like notes get a dotted Greg's L */
-.pretext-content .remark-like.note {
-    padding-left: 0.5em;
-    border-left: 1px dotted #569;
-}
-.pretext-content .remark-like.note::after {
-    content:'';
-    border-bottom: 1px dotted #569;
-    display: block;
-    margin-right: auto;
-    margin-left: -0.5em;
-    padding-top: 0.25em;
-    width: 1.5em;
-}
-/* theorem-like claims get a slightly wide solid Greg's L in the subtitle color */
-.pretext-content .theorem-like.claim {
-    padding-left: 0.5em;
-    border-left: 2px solid var(--bodysubtitle);
-}
-.pretext-content .theorem-like.claim::after {
-    content:'';
-    border-bottom: 2px solid var(--bodysubtitle);
-    display: block;
-    margin-right: auto;
-    margin-left: -0.5em;
-    padding-top: 0.25em;
-    width: 1.5em;
+.pretext-content .aside-like:hover:after, .pretext-content .aside-like:focus:after {
+    top: 3em;
+    height: auto;
+    background-image : none;
 }
 
-.pretext-content section > .proof {
-    margin-bottom: 1em;
+.pretext-content .aside-like:hover, .pretext-content .aside-like:focus {
+    color: inherit;
+    padding: 2px 8px 0 8px;
+    border: 2px solid #dcebfa;
+    height: auto;
+    max-height: none;
+}
+.pretext-content .aside-like.front:hover, .pretext-content .aside-like.front:focus {
+    padding: 4px 10px;
 }
 
+/* find a better way to handle asides in content that has a wide left margin */
+/* see http://pretext.jahrme.com/aside-in-knowl/section-1.html */
+.pretext-content section dl dd .aside-like {
+    margin-top: 0 !important;
+    margin-left: 100px !important;
+}
+.pretext-content section dl dd .aside-like.front {
+    margin-left: -300px !important;
+}
 
-/* where does this appear? */
-/* .posterior {
-  margin-left: 1ex;
-  padding-left: 1ex;
-  margin-top: -1.25em;
-  padding-top: 1ex;
-  border-left: solid 1pt gray;
-} */
-
+@media screen and (max-width: 1099px) {
+  .pretext-content aside.aside-like {
+    position: relative;
+    float: right;
+    z-index: 0;
+    overflow-x: hidden;
+    margin-left: 1em;
+    margin-top: 1em;
+    max-width: 195px;
+    max-height: 4em;
+    margin-right: -8em;
+}
+  .pretext-content li > aside.aside-like:last-child {
+    position: absolute;
+}
+}
