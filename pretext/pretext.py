@@ -1499,7 +1499,8 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format):
     #   package.opf
     #   css
     #   xhtml
-    #     images (customizable)
+    #     generated images (customizable)
+    #     external images (customizable)
     # META-INF
 
     source_dir = get_source_path(xml_source)
@@ -1520,6 +1521,8 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format):
     # and produce some information needed for the packaging here.
     _verbose('converting source ({}) and clean representations ({}) into EPUB files'.format(xml_source, math_representations))
     params = {}
+
+    # the EPUB production is parmameterized by how math is produced
     params['mathfile'] = math_representations
     params['math.format'] = math_format
     if pub_file:
@@ -1566,21 +1569,21 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format):
 
     # directory of images, relative to master source file, given by publisher
     # build the same directory relative to the XHTML files
-    #imdir = packaging_tree.xpath('/packaging/images/@image-directory')[0]
-    #source_image_dir = os.path.join(source_dir, str(imdir))
-    #os.mkdir(os.path.join(tmp_dir, 'EPUB', 'xhtml', str(imdir)))
-    source_image_dir = os.path.join(source_dir, 'images')
-    os.mkdir(os.path.join(tmp_dir, 'EPUB', 'xhtml', 'images'))
+
     # position cover file
     cov = packaging_tree.xpath('/packaging/cover/@filename')[0]
     cover_source = os.path.join(source_dir, str(cov))
-    cover_dest = os.path.join(tmp_dir, 'EPUB', 'xhtml', str(cov))
+    cover_dest = os.path.join(xhtml_dir, str(cov))
+    # https://stackoverflow.com/questions/2793789, Python 3.2
+    os.makedirs(os.path.dirname(cover_dest), exist_ok=True)
     shutil.copy2(cover_source, cover_dest)
+
     # position image files
     images = packaging_tree.xpath('/packaging/images/image/@filename')
     for im in images:
         source = os.path.join(source_dir, str(im))
-        dest = os.path.join(tmp_dir, 'EPUB', 'xhtml', str(im))
+        dest = os.path.join(xhtml_dir, str(im))
+        os.makedirs(os.path.dirname(dest), exist_ok=True)
         shutil.copy2(source, dest)
 
     # clean-up the trash
