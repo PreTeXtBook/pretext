@@ -1367,7 +1367,9 @@ body > a.assistive:focus {
 .pretext-content .section > .autopermalink {
     margin-top: 2.7em;
 }
-.pretext-content .subsection > .autopermalink {
+.pretext-content .subsection > .autopermalink,
+.pretext-content .references > .autopermalink,
+.pretext-content .exercises > .autopermalink {
     margin-top: 2.0em;
 }
 .pretext-content .subsubsection > .autopermalink {
