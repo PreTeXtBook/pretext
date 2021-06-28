@@ -22,6 +22,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <publication>
 
     <html>
+	<baseurl href="https://pretextbook.org/examples/pretext-showcase/html" />
         <calculator model="geogebra-classic"/>
         <css style="default" colors="blue_red"/>
     </html>

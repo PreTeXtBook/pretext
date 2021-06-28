@@ -32,7 +32,6 @@
 
     <html>
       <favicon/>
-      <baseurl href="https://pretextbook.org/examples/pretext-showcase/html" />
     </html>
 
     <rename element="fact" xml:lang="en-US">Self Evident Fact</rename>
@@ -70,6 +69,7 @@
     <xi:include href="environments.ptx" />
     <xi:include href="latex-image.ptx" />
     <xi:include href="exercises.ptx" />
+    <xi:include href="worksheets.ptx" />
     <xi:include href="webwork.ptx" />
 
     <backmatter>
