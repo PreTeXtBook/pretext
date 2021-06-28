@@ -450,9 +450,11 @@
         </filename>
         <cover filename="{$cover-filename}"/>
         <css stylefile="{$html-css-stylefile}" colorfile="{$html-css-colorfile}"/>
-        <images image-directory="{$publication/epub/@image-directory}">
+        <!-- Decide what to do with preview images, etc. -->
+        <images>
             <xsl:for-each select="$document-root//image">
                 <image>
+                    <!-- filename begins with directories from publisher file -->
                     <xsl:attribute name="filename">
                         <xsl:apply-templates select="." mode="epub-base-filename"/>
                     </xsl:attribute>
@@ -675,6 +677,7 @@ width: 100%
                 </xsl:call-template>
             </xsl:variable>
             <!-- PDF LaTeX, SVG HTML, PNG Kindle if not indicated -->
+            <xsl:value-of select="$external-image-directory"/>
             <xsl:apply-templates select="@source" />
             <xsl:if test="$extension=''">
                 <xsl:choose>
@@ -688,7 +691,18 @@ width: 100%
             </xsl:if>
         </xsl:when>
         <xsl:when test="latex-image|sageplot|asymptote">
-            <xsl:value-of select="$directory.images" />
+            <xsl:value-of select="$generated-image-directory"/>
+            <xsl:choose>
+                <xsl:when test="latex-image">
+                    <xsl:text>latex-image</xsl:text>
+                </xsl:when>
+                <xsl:when test="sageplot">
+                    <xsl:text>sageplot</xsl:text>
+                </xsl:when>
+                <xsl:when test="asymptote">
+                    <xsl:text>asymptote</xsl:text>
+                </xsl:when>
+            </xsl:choose>
             <xsl:text>/</xsl:text>
             <xsl:apply-templates select="." mode="visible-id" />
             <xsl:choose>
