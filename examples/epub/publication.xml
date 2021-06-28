@@ -21,11 +21,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <publication>
 
-
+    <source>
+        <media external="external" generated="generated"/>
+    </source>
 
     <!-- EPUB-Specific Options -->
-    <epub cover="images/Verne_Tour_du_Monde.png" image-directory="images">
-    </epub>
+    <!-- cover image file is presumed to be within  media/@external -->
+    <epub cover="Verne_Tour_du_Monde.png"/>
 
     <!-- HTML-Specific Options -->
     <html>

@@ -100,14 +100,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <figure xml:id="figure-cubic-polynomial">
                 <caption>A cubic polynomial and its derivative</caption>
-                <image source="images/cubic-function.png" width="60%"/>
+                <image source="cubic-function.png" width="60%"/>
             </figure>
 
             <p>A Scalable Vector Graphics (SVG) image created externally in Sage and then included here as a vector image (no file extension given).</p>
 
             <figure xml:id="complete-graph" width="20%">
                 <caption>A complete graph on 16 vertices</caption>
-                <image source="images/complete-graph" width="70%"/>
+                <image source="complete-graph" width="70%"/>
             </figure>
 
             <p>A Scalable Vector Graphics (SVG) image described by Sage commands, which is produced by the <c>pretext</c> script.</p>
@@ -215,7 +215,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>We repeat an image created from an external file, because the EPUB format only wants the file noted once.</p>
 
-            <image source="images/complete-graph" width="70%"/>
+            <image source="complete-graph" width="70%"/>
 
             <p>We like to put <init>URL</init>s into footnotes, especially for formats like this where they may not be active.  This output is from <url href="https://pretextbook.org"><pretext/></url><fn><c>pretextbook.org</c></fn>.</p>
 
