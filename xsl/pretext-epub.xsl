@@ -99,6 +99,12 @@
 <!-- responsible for integrating PNG images in place of SVG -->
 <xsl:param name="math.format"/>
 
+<!-- Cover image filename, once -->
+<xsl:variable name="cover-filename">
+    <xsl:value-of select="$external-image-directory"/>
+    <xsl:value-of select="$publication/epub/@cover"/>
+</xsl:variable>
+
 <!-- Kindle needs various tweaks, way beyond just math as MathML -->
 <!-- and PNG images.  So a misnomer to call it a "math format",  -->
 <!-- but a a boolean sure helps                                  -->
@@ -331,7 +337,7 @@
         <item id="css-setclr" href="{$css-dir}/setcolors.css"         media-type="text/css"/>
         <item id="cover-page" href="{$xhtml-dir}/cover-page.xhtml" media-type="application/xhtml+xml"/>
         <item id="table-contents" href="{$xhtml-dir}/table-contents.xhtml" properties="nav" media-type="application/xhtml+xml"/>
-        <item id="cover-image" href="{$xhtml-dir}/{$publication/epub/@cover}" properties="cover-image" media-type="image/png"/>
+        <item id="cover-image" href="{$xhtml-dir}/{$cover-filename}" properties="cover-image" media-type="image/png"/>
 
         <!-- cruise found objects, including comments we generate to help debug       -->
         <!-- NB: * could be just "item", but we generally want all elements           -->
@@ -442,7 +448,7 @@
             <!-- for actual EPUB file eventually output -->
             <xsl:apply-templates select="$document-root" mode="title-filesafe"/>
         </filename>
-        <cover filename="{$publication/epub/@cover}"/>
+        <cover filename="{$cover-filename}"/>
         <css stylefile="{$html-css-stylefile}" colorfile="{$html-css-colorfile}"/>
         <images image-directory="{$publication/epub/@image-directory}">
             <xsl:for-each select="$document-root//image">
@@ -556,7 +562,7 @@ width: 100%
                 <!-- https://www.opticalauthoring.com/inside-the-epub-format-the-cover-image/   -->
                 <!-- says the "figure" is necessary, and does not seem to hurt (CSS could style)-->
                 <figure>
-                    <img src="{$publication/epub/@cover}"/>
+                    <img src="{$cover-filename}"/>
                 </figure>
             </body>
         </html>
