@@ -693,6 +693,7 @@ function scaleWorkspaceIn(obj, subobj, scale, tmporfinal) {
     for (var j=0; j<these_workspaces.length; ++j) {
         this_work = these_workspaces[j];
         this_proportion = this_work.getAttribute("data-space");
+        if (!this_proportion) { this_proportion = "1.00" }
         this_proportion_number = parseFloat(this_proportion.slice(0, -2));
         if (this_proportion.endsWith("in")) {
             this_proportion_number *= 10.0;
