@@ -1,6 +1,9 @@
 
 editorLog = console.log;
 errorLog = console.log;
+debugLog = console.log;
+// parseLog = console.log;
+parseLog = function(){};
 // editorLog = function(){};
 
 /* the structure of each object, and its realization as PreTeXt source or in HTML,
@@ -17,7 +20,7 @@ objectStructure = {
   "type": {
     "html": {
         "tag": "span",
-        "attributes": ['class="type"', 'data-editable="70XX"', 'tabindex="-1"'],
+        "attributes": ['class="type"', 'data-parent_id="<&>xml:id<;>"', 'data-editable="70XX"', 'tabindex="-1"'],
         "pieces": [["(capitalize,sourcetag)", ""]]
     }
   },
@@ -26,6 +29,14 @@ objectStructure = {
         "tag": "span",
         "attributes": ['class="type"', 'data-editable="70YY"', 'tabindex="-1"'],
         "pieces": [["(capitalize,sourcetag)", ""]]
+   //     "pieces": [["(capitalize,type-contained)", ""]]
+    }
+  },
+  "type-proof": {
+    "html": {
+        "tag": "span",
+        "attributes": ['class="type"', 'data-editable="70YY"', 'tabindex="-1"'],
+        "pieces": [["(literal,Proof)", ""]]
    //     "pieces": [["(capitalize,type-contained)", ""]]
     }
   },
@@ -71,6 +82,45 @@ objectStructure = {
         "pieces": [["title", ""]]
     }
   },
+  "nbsp": {
+    "html": {
+        "tag": "",
+        "pieces": [["(literal,&nbsp;)", ""]],
+    },
+    "pretext": {
+        "tag": "nbsp",
+        "pieces": []
+    },
+    "source": {
+        "pieces": []
+    }
+  },
+  "idx": {
+    "html": {
+        "tag": "",
+        "pieces": [],
+    },
+    "pretext": {
+        "tag": "idx",
+        "pieces": [["content", ""]]
+    },
+    "source": {
+        "pieces": [["content", ""]]
+    }
+  },
+  "h": {
+    "html": {
+        "tag": "",
+        "pieces": [],
+    },  
+    "pretext": {
+        "tag": "h",
+        "pieces": [["content", ""]]
+    },
+    "source": {
+        "pieces": [["content", ""]]
+    }
+  },
 
   "theorem_like_heading": {
     "html": {
@@ -87,6 +137,14 @@ objectStructure = {
         "cssclass": "heading",
         "attributes": ['class="<&>{cssclass}<;>"', 'xml:id="<&>xml:id<;>"'],
         "pieces": [["{type-child}", ""], ["{period}", ""]]
+    }
+  },
+  "proof_heading": {
+    "html": {
+        "tag": "h5",
+        "cssclass": "heading",
+        "attributes": ['class="<&>{cssclass}<;>"', 'xml:id="<&>xml:id<;>"'],
+        "pieces": [["{type-proof}", ""], ["{period}", ""]]
     }
   },
   "section_like_heading": {
@@ -113,11 +171,72 @@ objectStructure = {
         "pieces": [["{type}", ""], ["{space}", ""], ["{codenumber}", ""], ["{period}", ""], ["{space}", ""]]
     }
   },
+  "xref": {
+    "html": {
+        "tag": "span",
+        "attributes": ['class="ref tmp"', 'id="<&>xml:id<;>"'],
+        "pieces": [["(literal,REF)", ""], ["(literal,&nbsp;)", ""], ["{codenumber}", ""]],
+    },
+    "pretext": {
+        "tag": "xref",
+        "attributes": ['ref="<&>ref<;>"', 'text="<&>text<;>"'],
+        "pieces": [["content", ""]]
+    },
+    "source": {
+        "pieces": [["content", ""]],
+        "attributes": [["ref", "*"], ["text", ""]]
+    }
+  },
+  "introduction": {
+    "html": {
+        "tag": "section",
+        "attributes": ['class="introduction"', 'id="<&>xml:id<;>"', 'data-editable="XYX"', 'tabindex="-1"'],
+        "pieces": [["content", ""]],
+    },
+    "pretext": {
+        "tag": "introduction",
+        "attributes": ['xml:id="<&>xml:id<;>"'],
+        "pieces": [["title", "title"], ["content", ""]]
+    },
+    "source": {
+        "pieces": [["title", "*"], ["content", "p"]]
+    }
+  },
+  "conclusion": {
+    "html": {
+        "tag": "section",
+        "attributes": ['class="conclusion"', 'id="<&>xml:id<;>"', 'data-editable="XYX"', 'tabindex="-1"'],
+        "pieces": [["{proof_like_heading}", ""], ["content", ""]],
+    },
+    "pretext": {
+        "tag": "conclusion",
+        "attributes": ['xml:id="<&>xml:id<;>"'],
+        "pieces": [["title", "title"], ["content", ""]]
+    },
+    "source": {
+        "pieces": [["title", "*"], ["content", "p"]]
+    }
+  },
 
+  "worksheet": {
+    "html": {
+        "tag": "section",
+        "attributes": ['class="worksheet"', 'id="<&>xml:id<;>"', 'data-editable="XYX"', 'tabindex="-1"'],
+        "pieces": [["{section_like_heading}", ""], ["content", ""]],
+    },
+    "pretext": {
+        "tag": "worksheet",
+        "attributes": ['xml:id="<&>xml:id<;>"'],
+        "pieces": [["title", "title"], ["content", ""]]
+    },
+    "source": {
+        "pieces": [["title", "*"], ["content", "p"]]
+    }
+  },
   "section": {
     "html": {
         "tag": "section",
-        "attributes": ['class="<&>section<;>"', 'id="<&>xml:id<;>"', 'data-editable="XYX"', 'tabindex="-1"'],
+        "attributes": ['class="section"', 'id="<&>xml:id<;>"', 'data-editable="XYX"', 'tabindex="-1"'],
         "pieces": [["{section_like_heading}", ""], ["content", ""]],
     },
     "pretext": {
@@ -129,6 +248,87 @@ objectStructure = {
         "pieces": [["title", "*"], ["content", "p"]]
     }
   },
+  "subsection": {
+    "html": {
+        "tag": "section",
+        "attributes": ['class="subsection"', 'id="<&>xml:id<;>"', 'data-editable="XYX"', 'tabindex="-1"'],
+        "pieces": [["{section_like_heading}", ""], ["content", ""]],
+    },
+    "pretext": {
+        "tag": "subsection",
+        "attributes": ['xml:id="<&>xml:id<;>"'],
+        "pieces": [["title", "title"], ["content", ""]]
+    },
+    "source": {
+        "pieces": [["title", "*"], ["content", "p"]]
+    }
+  },
+  "exercises": {
+    "html": {
+        "tag": "section",
+        "attributes": ['class="exercises"', 'id="<&>xml:id<;>"', 'data-editable="XYX"', 'tabindex="-1"'],
+        "pieces": [["{section_like_heading}", ""], ["content", ""]],
+    },
+    "pretext": {
+        "tag": "exercises",
+        "attributes": ['xml:id="<&>xml:id<;>"'],
+        "pieces": [["title", "title"], ["content", ""]]
+    },
+    "source": {
+        "pieces": [["title", "*"], ["content", "p"]]
+    }
+  },
+  "exercisegroup": {
+    "html": {
+        "tag": "section",
+        "attributes": ['class="exercisegroup"', 'id="<&>xml:id<;>"', 'data-editable="XYX"', 'tabindex="-1"'],
+        "pieces": [["{section_like_heading}", ""], ["content", ""]],
+    },
+    "pretext": {
+        "tag": "exercisegroup",
+        "attributes": ['xml:id="<&>xml:id<;>"'],
+        "pieces": [["title", "title"], ["content", ""]]
+    },
+    "source": {
+        "pieces": [["title", "*"], ["content", "p"]]
+    }
+  },
+
+
+  "page": {
+    "html": {
+        "tag": "section",
+        "attributes": ['class="onepage"', 'id="<&>xml:id<;>"', 'data-editable="PPP"', 'tabindex="-1"'],
+        "pieces": [["content", ""]],
+    },
+    "pretext": {
+        "tag": "page",
+        "attributes": ['xml:id="<&>xml:id<;>"'],
+        "pieces": [["content", ""]]
+    },
+    "source": {
+        "pieces": [["content", "p"]]
+    }
+  },
+  "objectives": {
+    "html": {
+        "tag": "article",
+        "cssclass": "objectives",
+        "pieces": [["{proof_like_heading}", ""], ["content",""]],
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
+        "data_editable": "160"
+    },
+    "pretext": {
+        "tag": "objectives",
+        "attributes": ['xml:id="<&>xml:id<;>"'],
+        "pieces": [["content", ""]]
+    },
+    "source": {
+        "pieces": [["content", "p"]]
+    }
+  },
+
+
 
   "p": {
     "html": {
@@ -239,7 +439,7 @@ objectStructure = {
     "html": {
         "tag": "img",
         "pieces": [],
-        "attributes": ['src="<&>source<;>"', 'alt="<&>alt<;>"', 'style="contained"'],
+        "attributes": ['src="<&>source<;>"', 'alt="<&>alt<;>"', 'class="contained"'],
     }
   },
 
@@ -300,7 +500,7 @@ objectStructure = {
     "html": {
         "tag": "article",
         "cssclass": "proof",
-        "pieces": [["{proof_like_heading}", ""], ["content",""]],
+        "pieces": [["{proof_heading}", ""], ["proof",""]],
         "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
         "data_editable": "60"
     },
@@ -317,7 +517,7 @@ objectStructure = {
     "html": {
         "tag": "article",
         "cssclass": "proof",
-        "pieces": [["{proof_like_heading}", ""], ["content",""]],
+        "pieces": [["{proof_heading}", ""], ["content",""]],
         "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
         "data_editable": "60"
     },
@@ -365,21 +565,39 @@ objectStructure = {
     }
   },
 
+  "project-like-tasks": {
+    "html": {
+        "tag": "article",
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
+        "cssclass": "project-like",
+        "data_editable": "194",
+        "pieces": [["{theorem_like_heading}", ""], ["content",""], ["tasks", ""]]
+    },
+    "pretext": {
+        "tag": "sourcetag",
+        "pieces": [["title", "title"], ["content", ""], ["tasks", ""]],
+        "attributes": ['xml:id="<&>xml:id<;>"']
+    },
+    "source": {
+        "pieces": [["title", ""], ["content", "p"], ["tasks", ""]]
+ //       "attributes": [["workspace", "0"]]
+    }
+  },
   "project-like": {
     "html": {
         "tag": "article",
         "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
         "cssclass": "project-like",
         "data_editable": "94",
-        "pieces": [["{theorem_like_heading}", ""], ["content",""], ["%hint%", "hint"], ["%answer%", "answer"], ["%solution%", "solution"], ["{workspace}", ""], ["tasks", ""]]
+        "pieces": [["{theorem_like_heading}", ""], ["statement",""], ["%hint%", "hint"], ["%answer%", "answer"], ["%solution%", "solution"], ["{workspace}", ""]]
     },
     "pretext": {
         "tag": "sourcetag",
-        "pieces": [["title", "title"], ["content", ""], ["hint", ""], ["answer", ""], ["solution", ""], ["tasks", ""]],
+        "pieces": [["title", "title"], ["statement", "statement"], ["hint", "hint"], ["answer", "answer"], ["solution", "solution"]],
         "attributes": ['xml:id="<&>xml:id<;>"', 'workspace="<&>workspace<;>"']
     },
     "source": {
-        "pieces": [["title", ""], ["content", "p"], ["tasks", ""], ["hint", ""], ["answer", ""], ["solution", ""]],
+        "pieces": [["title", ""], ["statement", "p"], ["hint", ""], ["answer", ""], ["solution", ""]],
         "attributes": [["workspace", "0"]]
     }
   },
@@ -406,20 +624,15 @@ objectStructure = {
         "tag": "article",
         "cssclass": "theorem-like",
         "data_editable": "93",
-        "pieces": [["{theorem_like_heading}", ""], ["statement", ""], ["%proof%", "proof"]],
+        "pieces": [["{theorem_like_heading}", ""], ["statement", ""], ["{proof}", ""]],
         "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"']
     },
     "pretext": {
         "attributes": ['xml:id="<&>xml:id<;>"'],
-        "pieces": [["title", "title"], ["statement", "statement"], ["proof", ""]]
+        "pieces": [["title", "title"], ["statement", "statement"], ["%proof%", "proof"]]
     },
     "source": {
         "pieces": [["title", ""], ["statement", "p"], ["proof", ""]]
-    }
-  },
-  "proof-body":  {
-    "html": {
-        "pieces": [["{proof}", ]]
     }
   },
 
@@ -542,6 +755,23 @@ objectStructure = {
           "pieces": [["content", ""]]
       }
   },
+  "fn": {    // need to mark it as inline
+      "html": {
+          "tag": "a",
+          "attributes": ['id="<&>xml:id<;>"', 'class="id-ref fn-knowl original"', 'data-knowl=" "', 'href=" "', 'data-refid="hk-<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+          "data_editable": "fnfnfn",
+//          "pieces": [["content", "sup"]]
+          "pieces": [["(literal,footnote)", "sup"]]
+      },
+      "pretext": {
+          "tag": "fn",
+          "attributes": ['xml:id="<&>xml:id<;>"'],
+          "pieces": [["content", ""]]
+      },
+      "source": {
+          "pieces": [["content", ""]]
+      }
+  },
   "alert": {    // need to mark it as inline
       "html": {
           "tag": "em",
@@ -551,6 +781,21 @@ objectStructure = {
       },
       "pretext": {
           "tag": "alert",
+          "pieces": [["content", ""]]
+      },
+      "source": {
+          "pieces": [["content", ""]]
+      }
+  },
+  "init": {    // need to mark it as inline
+      "html": {
+          "tag": "abbr",
+          "attributes": ['id="<&>xml:id<;>"', 'class="initialism"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+          "data_editable": "iinniitt",
+          "pieces": [["content", ""]]
+      },
+      "pretext": {
+          "tag": "init",
           "pieces": [["content", ""]]
       },
       "source": {
@@ -619,9 +864,9 @@ objectStructure = {
 
   "m": {    // need to mark it as inline
       "html": {
-//          "tag_opening": "\\(",
-//          "tag_closing": "\\)",
-          "tag": "script",
+          "tag_opening": "\\(",
+          "tag_closing": "\\)",
+ //         "tag": "script",
           "attributes": ['type="math/tex"'],
           "pieces": [["content", ""]]
       },
@@ -664,7 +909,8 @@ var environment_instances = {
     "definition-like": ["definition", "conjecture", "axiom", "principle", "heuristic", "hypothesis", "assumption"],
     "theorem-like": ["lemma", "proposition", "theorem", "corollary", "claim", "fact", "identity", "algorithm"],
     "remark-like": ["remark", "warning", "note", "observation", "convention", "insight"],
-    "project-like": ["exercise", "activity", "investigation", "exploration", "project"],
+    "project-like-tasks": ["investigation", "exploration", "project"],
+    "project-like": ["exercise", "activity"]
 }
 
 for (const [owner, instances] of Object.entries(environment_instances)) {
@@ -714,11 +960,11 @@ Object.assign(objectStructure, sidebyside_instances);
 
 // shoudl we distinguish empty tags by format?
 // these tags are html an dpretext
-var always_empty_tags = ["img", "image", "ellipsis", "ie", "eg", "etc"];
-var allowed_empty_tags = ["div", "span", "p", "stack"];
+var always_empty_tags = ["img", "image", "ellipsis", "ie", "eg", "etc", "nbsp"];
+var allowed_empty_tags = ["div", "span", "p", "stack", "xref"];
 var tag_display = {  /* the default is "block" */
-    "inline": ["m", "em", "ellipsis", "span", "term", "dfn", "q", "c", "code", "alert", "ie", "eg", "etc"], 
-    "title": ["title", "idx", "h1", "h2", "h3", "h4", "h5", "h6", "div"]
+    "inline": ["m", "em", "ellipsis", "span", "term", "dfn", "q", "c", "code", "alert", "ie", "eg", "etc", "nbsp", "xref", "idx", "h", "init"], 
+    "title": ["title", "idx", "h1", "h2", "h3", "h4", "h5", "h6", "div", "usage"]
 } 
 
 inline_tags = tag_display["inline"];
@@ -733,7 +979,7 @@ function process_value_from_source(fcn, piece, src) {
         content_raw = src[piece]
     } else {
         if ("parent" in src) {
-        var parent_src = internalSource[src["parent"][0]];
+            var parent_src = internalSource[src["parent"][0]];
             if (piece in parent_src) {
                 content_raw = parent_src[piece]
             } else {
@@ -751,7 +997,7 @@ function process_value_from_source(fcn, piece, src) {
         content = content_raw.charAt(0).toUpperCase() + content_raw.slice(1);
     } else if (fcn == "literal") {
         editorLog("literally", piece);
-        alert(piece);
+    //    alert(piece);
         content = piece
     } else if (fcn == "space") {
         content = content_raw + " "
@@ -762,7 +1008,11 @@ function process_value_from_source(fcn, piece, src) {
             content = content_raw + "."
         }
     } else if (fcn == "percentlist") {
-        content = content_raw.join("% ") + "%"
+        if (content_raw) {
+            content = content_raw.join("% ") + "%"
+        } else {
+            content = "MISSING" + "%"
+        }
     } else if (fcn == "nthitem") {
 
         editorLog("calculating nthitem", piece, "from ", content_raw, "within", src);
@@ -830,6 +1080,19 @@ var keyletters = ["KeyA", "KeyB", "KeyC", "KeyD", "KeyE", "KeyF", "KeyG", "KeyH"
 var movement_location_options = [];
 var movement_location = 0;
 var first_move = true;  // used when starting to move, because object no longer occupies its original location
+
+Storage.prototype.setObject = function(key, value) {
+//    this.setItem(key, JSON.stringify(value));
+    this.setItem(key, JSON.stringify(value, function(key, val) {
+//    console.log("key", key, "value", value, "val", val);
+    return val.toFixed ? Number(val.toFixed(3)) : val;
+}));
+}
+
+Storage.prototype.getObject = function(key) {
+    var value = this.getItem(key);
+    return value && JSON.parse(value);
+}
 
 function randomstring(len) {
     if (!len) { len = 10 }
@@ -904,10 +1167,6 @@ base_menu_for = {
             ["math/chemistry/code", "math-like", "c"],
             ["list or table", "list-like"],
             ["image/video/sound", "image-like", "v"]],
-"proof": [["paragraph", "p"],  //  this is for theorem-like and similar
-            ["list or table", "list-like"],
-            ["math/chemistry/code", "math-like", "c"],
-            ["image/video/sound", "image-like", "v"]],
 "li": [["new list item", "li", "i"],
             ["paragraph", "p"],
             ["list or table", "list-like"],
@@ -915,6 +1174,9 @@ base_menu_for = {
             ["image/video/sound", "image-like", "v"]],
 "p": [["emphasis-like"], ["formula"], ["abbreviation"], ["symbol"], ["ref or link", "ref"]]
 }
+base_menu_for["proof"] = base_menu_for["article"];
+base_menu_for["page"] = base_menu_for["section"];
+
 
 //  not currently used
 function past_edits() {
@@ -1205,7 +1467,6 @@ function menu_options_for(object_id, component_type, level) {
 function top_menu_options_for(this_obj) {
     editorLog("top menu options for aa", this_obj);
     var this_id = this_obj.id;
-    editorLog("which has id", this_id);
 
 // maybe the "classList" in this function shoudl instead look at the internalSource?
 
@@ -1226,6 +1487,10 @@ function top_menu_options_for(this_obj) {
         var this_object_type = this_obj.tagName;   //  needs to examine other attributes and then look up a reasonable name
 //consolidate this redundancy
         this_obj_id = this_obj.id;
+        if (!this_obj_id) {
+            this_obj_id=this_obj.getAttribute("data-parent_id")
+            editorLog("now has id", this_obj_id);
+        }
         this_obj_source = internalSource[this_obj_id];
         editorLog("this_obj_source", this_obj_source);
         editorLog("this_obj", this_obj, "classList", this_obj.classList, "T/F", this_obj.classList.contains("image-box"));
@@ -1347,7 +1612,7 @@ function edit_menu_for(this_obj_or_id, motion) {
 
     if (motion == "entering") {
         editorLog("inline_tags", inline_tags, "tag", this_obj.tagName.toLowerCase());
-        if (inline_tags.includes(this_obj.tagName.toLowerCase())) {
+        if (false && inline_tags.includes(this_obj.tagName.toLowerCase())) {
             edit_option.innerHTML = "change this?";
             edit_option.setAttribute('data-location', 'inline');
         } else if (this_obj.classList.contains("type")) {
@@ -1814,19 +2079,12 @@ function replace_by_id(theid, format) {
 
 // need to also work with MJ3
 //    MathJax.Hub.Queue(['Typeset', MathJax.Hub, document.getElementById(theid)]);
-    MathJax.typesetPromise(document.getElementById(theid));
-
-/*
-
-
+    console.log("MathJax on", theid, document.getElementById(theid));
+//    MathJax.typesetPromise(document.getElementById(theid));
+    MathJax.typesetPromise();
 
     make_current_editing_tree_from_id(theid);
     edit_menu_from_current_editing("entering");
-
-
-
-
-*/
 }
 
 // temporary:  need to unify img and sbs layout
@@ -2408,6 +2666,7 @@ var internalSource = {  // currently the key is the HTML id
            "content": "You know exactly one of these messages is true.\nWhat should you do?"}
 }
 
+/* top_level_id is a mistake:  just use internalSource.root_data.id */
 var top_level_id = internalSource.root_data.id;
 
 var current_editing = {
@@ -2749,6 +3008,7 @@ function wrap_tag(tag, content, attribute_values) {
 function output_from_source(the_object, output_structure, format) {
 
     if (!the_object) { return ""}
+    if (!output_structure) { return "MISSING STRUCTURE"}
 
     editorLog("calling output from_source", "the_object", the_object, "output_structure", output_structure, "format", format);
     // format: html, pretext (or source?)
@@ -2819,7 +3079,9 @@ function output_from_source(the_object, output_structure, format) {
             editorLog("% % % % % % % % % ", the_object[this_tag]);
             if (the_object[this_tag]) {
  //               var sub_object = {};
-                Object.assign(sub_object, the_object);
+
+//                Object.assign(sub_object, the_object);
+
   //              sub_object['type-contained'] = this_tag;
   //              editorLog("sub_object", sub_object);
          //       this_piece_output = output_from_source(sub_object, objectStructure[this_piece][format], format);
@@ -2870,6 +3132,7 @@ function output_from_text(text, format) {
 function output_from_id(match, the_id, format) {
     var the_answer = "";
     editorLog("expanding the_id", the_id);
+    debugLog("expanding the_id", the_id);
     var the_object = internalSource[the_id];
     if (!the_object) {
         errorLog("error: no content for", the_id);
@@ -3027,7 +3290,8 @@ function insert_html_version(these_changes) {
         } else {
             editorLog("trouble making", this_object);
         }
-        MathJax.Hub.Queue(['Typeset', MathJax.Hub, this_object_id]);
+        MathJax.typesetPromise();
+//        MathJax.Hub.Queue(['Typeset', MathJax.Hub, this_object_id]);
     }
     location_of_change.remove();
 
@@ -3146,7 +3410,8 @@ editorLog("    SSS current_editing", current_editing, current_editing["tree"][cu
                 for (var j = the_whole_object.length - 1; j >= 0; --j) {
                     editorLog("   X", j, "the_whole_object[j]", the_whole_object[j]);
                     document.getElementById("actively_editing").insertAdjacentElement("afterend", the_whole_object[j])
-                    MathJax.Hub.Queue(['Typeset', MathJax.Hub, the_whole_object[j]]);
+                    MathJax.typesetPromise();
+         //           MathJax.Hub.Queue(['Typeset', MathJax.Hub, the_whole_object[j]]);
                 }
                 
                 editorLog("here is where we need to update current_editing", "parent:", this_parent,"which is",document.getElementById(this_parent[0]), "level:", current_editing["level"], "loation:", current_editing["location"], "tree:", current_editing["tree"]);
@@ -3811,39 +4076,17 @@ function initialize_editing(xml_st) {
     document.getElementById("content").firstElementChild.setAttribute("id", internalSource.root_data.id);
     replace_by_id(internalSource.root_data.id, "html");
 
-//    edit_menu_for(e_tree[e_level][e_location], "entering")
+    edit_menu_for(e_tree[e_level][e_location], "entering")
 
     console.log("internalSource internalSource internalSource internalSource internalSource internalSource", internalSource);
+    editorLog = console.log;
 }
-
-async function fetch_source() {
-
-/* in curent development: source in at the same url, with html replace by src */
-    console.log("fetching source");
-    var source_url = window.location.href;
-    source_url = source_url.replace(/(#|\?).*/, "");
-    source_url = source_url.replace(/html$/, "src");
-    console.log("source_url", source_url);
-    const response = await fetch(source_url);
-    const thisdata = await response.text();
-    return thisdata
-//    var source_as_text = fetch(source_url).then(response => response.text());
-/*
-    fetch(source_url).then(function (response) {
-        return response.text()
-    }).then(function (data) {
-        console.log("we have data");
-        var thisdata = data;
-    });
-*/
-}
-
-// var this_source_txt = fetch_source();
 
 var this_source_txt;    
 var source_url = window.location.href;
 source_url = source_url.replace(/(#|\?).*/, "");
-source_url = source_url.replace(/html$/, "src");
+// source_url = source_url.replace(/html$/, "src");
+source_url = source_url.replace(/html$/, "ptx");
 //var source_url = "https://aimath.org/~farmer/demo/worksheet-1-letter.src";
 fetch(source_url).then(
         function(u){ return u.text();}
@@ -3862,7 +4105,6 @@ fetch(source_url).then(
     // console.log("12345",data, "678910")});
 // console.log("source_as_text", source_as_text.then(body));
 console.log("fetched source");
-console.log("this_source_txt",this_source_txt);
 
 
 // make the top level menu
@@ -3882,7 +4124,7 @@ function xml_id_of(xml) {
     var this_id = "";
     if (xml.attributes.length > 0) {
 // bad code because I dopied and was too lazy to rewrite
-        console.log(xml.nodeName, "has attributes", xml.attributes);
+        parseLog(xml.nodeName, "has attributes", xml.attributes);
         for (var j = 0; j < xml.attributes.length; j++) {
             var attribute = xml.attributes.item(j);
             if (attribute.nodeName == "permid") { this_id = attribute.nodeValue }
@@ -3902,7 +4144,7 @@ var new_top_id = "";
 function xmlToObject(xml_st) {
   var xml;
   if (typeof xml_st == "string") {
- //   console.log("xml starts", xml_st.slice(0,50));
+ //   parseLog("xml starts", xml_st.slice(0,50));
     parser = new DOMParser();
     xml = parser.parseFromString(xml_st, "text/xml");
 //    xml = $.parseXML(xml_st);
@@ -3910,8 +4152,8 @@ function xmlToObject(xml_st) {
     xml = xml_st
   }
 
-  console.log("xml", xml);
-  console.log("xml.nodeName", xml.nodeName, "xml.nodeType", xml.nodeType);
+  parseLog("xml", xml);
+  parseLog("xml.nodeName", xml.nodeName, "xml.nodeType", xml.nodeType);
 //  var obj = {};
   var this_id = "";
   var this_node_content = xml.nodeValue;
@@ -3920,15 +4162,16 @@ function xmlToObject(xml_st) {
       xml = xml.documentElement;
   }
 
-  console.log("this_node_content", this_node_content);
+  parseLog("this_node_content", this_node_content);
 
   if (xml.nodeType == 1) {                
     this_id = xml_id_of(xml);
     if (!new_top_id) {
         new_top_id = this_id;
+        top_level_id = new_top_id;
         sourceobj["root_data"] =  {"id": new_top_id, "number_base": "X.Y"}
     }
-    console.log("found this_id", this_id);
+    parseLog("found this_id", this_id);
     var this_entry = {};
     this_entry["xml:id"] = this_id;
     if (["ol", "ul", "dl"].includes(xml.nodeName)) {
@@ -3955,13 +4198,13 @@ function xmlToObject(xml_st) {
             }
 */
             var sub_node_id = xmlToObject(item);  // the contents, in certain cases
-            if (["title", "statement", "caption"].includes(item.nodeName)) {
+            if (["title", "statement", "caption", "proof"].includes(item.nodeName)) {
                 this_entry[item.nodeName] = sub_node_id
             } else {
                 this_node_content += "<&>" + sub_node_id + "<;>"
             }
         } else {
-            console.log("what to do with this node?", item)
+            parseLog("what to do with this node?", item)
         }
       }
     }    
@@ -3970,10 +4213,12 @@ function xmlToObject(xml_st) {
     }
 
     if (xml.attributes.length > 0) {
-      //  console.log(xml.nodeName, "has attributes", xml.attributes);
+      //  parseLog(xml.nodeName, "has attributes", xml.attributes);
         for (var j = 0; j < xml.attributes.length; j++) {
             var attribute = xml.attributes.item(j);
             if (attribute.nodeName == "source") { this_entry["source"] = attribute.nodeValue }
+            else if (attribute.nodeName == "ref") { this_entry["ref"] = attribute.nodeValue }
+            else if (attribute.nodeName == "text") { this_entry["text"] = attribute.nodeValue }
   // width for images, widths for sbs
             else if (attribute.nodeName == "width") {
                 var widthvalue = attribute.nodeValue;
@@ -4000,9 +4245,9 @@ function xmlToObject(xml_st) {
     }
 
     if (xml.attributes) {
-        console.log(xml, "has attributes", xml.attributes)
+        parseLog(xml, "has attributes", xml.attributes)
     }
-    if (["title", "statement", "caption"].includes(xml.nodeName)) {
+    if (["title", "statement", "caption", "proof"].includes(xml.nodeName)) {
         return this_node_content
     } else {
         sourceobj[this_id] = this_entry
@@ -4023,44 +4268,38 @@ function record_children(internal_src) {
         var this_item = internal_src[key];
         if ("content" in this_item) { // skip empty tags
             var this_content = this_item["content"];
-     //       console.log("this_content", this_content);
+     //       parseLog("this_content", this_content);
             var child_items = this_content.match(/<&>.*?<;>/g) || "";
             for (var j=0; j < child_items.length; ++j) {
                 var this_child = child_items[j].slice(3,-3);
-      //          console.log("this_child", this_child, "has a parent", key);
+      //          parseLog("this_child", this_child, "has a parent", key);
                 internal_src[this_child]["parent"] = [key, "content"]
             }
         }
   // need to handle content and statement better
         if ("statement" in this_item) { // skip empty tags
             var this_statement = this_item["statement"];
-       //     console.log("this_statement", this_statement);
+       //     parseLog("this_statement", this_statement);
             var child_items = this_statement.match(/<&>.*?<;>/g) || "";
             for (var j=0; j < child_items.length; ++j) {
                 var this_child = child_items[j].slice(3,-3);
-        //        console.log("this_child", this_child, "has a parent", key);
+        //        parseLog("this_child", this_child, "has a parent", key);
                 internal_src[this_child]["parent"] = [key, "statement"]
+            }
+        }
+        if ("proof" in this_item) { // skip empty tags
+            var this_proof = this_item["proof"];
+       //     parseLog("this_statement", this_statement);
+            var child_items = this_proof.match(/<&>.*?<;>/g) || "";
+            for (var j=0; j < child_items.length; ++j) {
+                var this_child = child_items[j].slice(3,-3);
+        //        parseLog("this_child", this_child, "has a parent", key);
+                internal_src[this_child]["parent"] = [key, "proof"]
             }
         }
     }
     return internal_src
 }
-
-/* 
-parser = new DOMParser();
-var tmp_xml = parser.parseFromString(originalsource, "text/xml");
-
-console.log("x tmp_xml", tmp_xml);
-
-var top_tag = xmlToObject(originalsource);
-sourceobj["root_data"] = {"id": top_tag, "number_base": "0.1" };
-
-console.log("top_tag", top_tag, "transformed source");
-console.log(sourceobj);
-sourceobj = record_children(sourceobj);
-console.log("updated transformed source");
-console.log(sourceobj);
-*/
 
 // transofrm again, to un-wrap list in p
 
@@ -4069,25 +4308,25 @@ function re_transform_source() {
   for (var id in sourceobj) {
     var this_item = sourceobj[id];
     if (this_item["sourcetag"] == "list") {
-        console.log("found a list", this_item);
+        parseLog("found a list", this_item);
         var [parent_id, parent_content] = this_item["parent"];
-        console.log("with parent", sourceobj[parent_id]);
+        parseLog("with parent", sourceobj[parent_id]);
         if (sourceobj[parent_id]["sourcetag"] == "p") {
             var [parent_parent_id, parent_parent_content] = sourceobj[parent_id]["parent"];
-            console.log("with parents parent", sourceobj[parent_parent_id]);
+            parseLog("with parents parent", sourceobj[parent_parent_id]);
             // need to skip the intermediate parent
             var old_p_p_content = sourceobj[parent_parent_id][parent_parent_content];
             var new_p_p_content = old_p_p_content.replace("<&>" + parent_id + "<;>", "<&>" + id + "<;>");
             sourceobj[parent_parent_id][parent_parent_content] = new_p_p_content;
             sourceobj[id]["parent"] = [parent_parent_id, parent_parent_content];
             // then eliminate the intermediate parent
-            console.log("deleting", parent_id);
+            parseLog("deleting", parent_id);
             delete sourceobj[parent_id];
-            console.log("now sourceobj[parent_parent_id]", sourceobj[parent_parent_id])
+            parseLog("now sourceobj[parent_parent_id]", sourceobj[parent_parent_id])
         }
     } else if (this_item["sourcetag"] == "image") {
         if ("width" in this_item && !("marginleft" in this_item)) {
-            console.log("no width in" + this_item["xml:id"])
+            parseLog("no width in" + this_item["xml:id"])
             var width = parseInt(this_item["width"]);
             var margins = (100 - width)*0.5;
             this_item["marginleft"] = margins;

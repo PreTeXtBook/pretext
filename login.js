@@ -29,7 +29,7 @@ function eraseCookie(name) {
 	createCookie(name,"",-1);
 }
 
-
+/* next two also in edit.js.  Need to clean up */
 Storage.prototype.setObject = function(key, value) {
 //    this.setItem(key, JSON.stringify(value));
     this.setItem(key, JSON.stringify(value, function(key, val) {
