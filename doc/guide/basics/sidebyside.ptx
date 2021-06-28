@@ -1,6 +1,7 @@
 <sidebyside widths="25% 25%" valign="middle">
   <figure>
-    <caption>Small graph</caption>
+    <caption>Small graph with the caption only associated to the
+    image. </caption>
     <image source="images/small_graph" />
   </figure>
 

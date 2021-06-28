@@ -20,5 +20,10 @@
       We're going to keep this paragraph shorter.
     </p>
   </sidebyside>
+  <sidebyside widths="75% 10%">
+    <p>Here is some text in a row where we have overridden the widths
+    specified above. Isn't this grand?</p>
+    <p>Super duper narrow. Look at me!</p>
+  </sidebyside>
 </sbsgroup>
 

@@ -1,6 +1,6 @@
 <figure>
   <caption>A graphic next to a paragraph of
-  text.</caption>
+  text with the caption assigned to both.</caption>
   <sidebyside widths="25% 35%" margins="0% 0%"
     valigns="bottom top">
     <image source="images/small_graph" />
