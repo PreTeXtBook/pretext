@@ -1915,26 +1915,32 @@ def check_python_version():
     if sys.version_info[0] <= 2:
         raise(OSError(msg.format(python_version())))
 
-def set_ptx_path():
-    """Discover and set path to root of PreTeXt distribution"""
+def set_ptx_path(path=None):
+    """Set (or discover) path to root of PreTeXt distribution"""
     # necessary to locate configuration files, XSL stylesheets
     # since authors can drop distribution *anywhere* in their system
-    global _ptx_path
+    # Default (path=None) will assume the location is relative to
+    # this module in the PreTeXt distribution.  Otherwise, a
+    # simple assignment is made
     import os.path # abspath(), split()
+    global __ptx_path
 
-    # full path to module itself
-    ptx_path = os.path.abspath(__file__)
-    # split "python.py" off module's filename
-    module_dir, _ = os.path.split(ptx_path)
-    # split "pretext" path off executable
-    _ptx_path, _ = os.path.split(module_dir)
+    if path:
+        __ptx_path = path
+    else:
+        # full path to module itself
+        ptx_path = os.path.abspath(__file__)
+        # split "python.py" off module's filename
+        module_dir, _ = os.path.split(ptx_path)
+        # split "pretext" path off executable
+        __ptx_path, _ = os.path.split(module_dir)
     return None
 
 def get_ptx_path():
     """Returns path to root of PreTeXt distribution"""
-    global _ptx_path
+    global __ptx_path
 
-    return _ptx_path
+    return __ptx_path
 
 def get_ptx_xsl_path():
     """Returns path of PreTeXt XSL directory"""
@@ -2187,7 +2193,7 @@ def get_image_directories(xml_source, pub_file):
 #
 #  __verbosity - level of detail in console output
 #
-#  _ptx_path - root directory of installed PreTeXt distribution
+#  __ptx_path - root directory of installed PreTeXt distribution
 #              necessary to locate stylesheets and other support
 #
 #  _config - parsed values from an INI-style configuration file
@@ -2201,7 +2207,7 @@ __verbosity = None
 set_verbosity(0)
 
 # Discover and set distribution path once at start-up
-_ptx_path = None
+__ptx_path = None
 set_ptx_path()
 
 # Parse configuration file once
