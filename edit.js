@@ -36,7 +36,7 @@ objectStructure = {
     "html": {
         "tag": "span",
         "attributes": ['class="type"', 'data-editable="70YY"', 'tabindex="-1"'],
-        "pieces": [["(literal,Proof)", ""]]
+        "pieces": [["(literal,Prooooooof)", ""]]
    //     "pieces": [["(capitalize,type-contained)", ""]]
     }
   },
@@ -507,7 +507,7 @@ objectStructure = {
     "pretext": {
         "tag": "proof",
         "attributes": ['xml:id="<&>xml:id<;>"'],
-        "pieces": [["content", ""]]
+        "pieces": [["proof", ""]]
     },
     "source": {
         "pieces": [["content", "p"]]
@@ -517,7 +517,7 @@ objectStructure = {
     "html": {
         "tag": "article",
         "cssclass": "proof",
-        "pieces": [["{proof_heading}", ""], ["content",""]],
+        "pieces": [["{XXXXXnorbeingusedXXXXXXX_proof_heading}", ""], ["content",""]],
         "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
         "data_editable": "60"
     },
@@ -629,7 +629,7 @@ objectStructure = {
     },
     "pretext": {
         "attributes": ['xml:id="<&>xml:id<;>"'],
-        "pieces": [["title", "title"], ["statement", "statement"], ["%proof%", "proof"]]
+        "pieces": [["title", "title"], ["statement", "statement"], ["{proof}", ""]]
     },
     "source": {
         "pieces": [["title", ""], ["statement", "p"], ["proof", ""]]
@@ -4040,12 +4040,17 @@ document.addEventListener('focus', function() {
   prev_focused_element = this_focused_element;
   this_focused_element = document.activeElement;
   $('.in_edit_tree').removeClass('in_edit_tree');
+//  $(':focus').parent().addClass('in_edit_tree');
+  $('#edit_menu_holder:first-child').parent().addClass('in_edit_tree');
+  $('#edit_menu_holder').prev().addClass('in_edit_tree');
+/*
   var edit_tree = $(':focus').parents();
   // put little lines on teh right, to show the local heirarchy
   for (var i=0; i < edit_tree.length; ++i) {
       if (edit_tree[i].getAttribute('id') == "content") { break }
       edit_tree[i].classList.add('in_edit_tree')
   }
+*/
 }, true);
 
 function initialize_editing(xml_st) {
