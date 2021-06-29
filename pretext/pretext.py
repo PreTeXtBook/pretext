@@ -2016,9 +2016,9 @@ def sanitize_alpha_num_underscore(param):
 
 def set_config_info():
     """Create configuation in object for querying"""
-    global _config
     import os.path # join()
     import configparser # ConfigParser()
+    global __config
 
     ptx_dir = get_ptx_path()
     config_filename = 'pretext.cfg'
@@ -2030,23 +2030,21 @@ def set_config_info():
     config_file_list = [default_config_file, stale_user_config_file, user_config_file]
     # ConfigParser module was renamed to configparser in Python 3
     # and object was renamed from SafeConfigParser() to ConfigParser()
-    _config = configparser.ConfigParser()
+    __config = configparser.ConfigParser()
 
     _verbose("parsing possible configuration files: {}".format(config_file_list))
-    files_read = _config.read(config_file_list)
+    files_read = __config.read(config_file_list)
     _debug("configuration files actually used/read: {}".format(files_read))
     if not(user_config_file in files_read):
         msg = "using default configuration only, custom configuration file not used at {}"
         _verbose(msg.format(user_config_file))
-    return _config
-
-# def debug_config_info():
+    return __config
 
 def get_config_info():
     """Return configuation in object for querying"""
-    global _config
+    global __config
 
-    return _config
+    return __config
 
 def copy_data_directory(source_file, data_dir, tmp_dir):
     """Stage directory from CLI argument into the working directory"""
@@ -2196,7 +2194,7 @@ def get_image_directories(xml_source, pub_file):
 #  __ptx_path - root directory of installed PreTeXt distribution
 #              necessary to locate stylesheets and other support
 #
-#  _config - parsed values from an INI-style configuration file
+#  __config - parsed values from an INI-style configuration file
 #
 #  __temps - created temporary directories, to report or release
 
@@ -2211,7 +2209,7 @@ __ptx_path = None
 set_ptx_path()
 
 # Parse configuration file once
-_config = None
+__config = None
 set_config_info()
 
 #  cache of temporary directories
