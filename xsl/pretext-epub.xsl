@@ -101,7 +101,7 @@
 
 <!-- Cover image filename, once -->
 <xsl:variable name="cover-filename">
-    <xsl:value-of select="$external-image-directory"/>
+    <xsl:value-of select="$external-directory"/>
     <xsl:value-of select="$publication/epub/@cover"/>
 </xsl:variable>
 
@@ -123,6 +123,8 @@
 <!-- and we process it with the chunking template called below              -->
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/">
+    <xsl:message>E:<xsl:value-of select="$external-directory"/></xsl:message>
+    <xsl:message><xsl:value-of select="$cover-filename"/></xsl:message>
     <xsl:call-template name="banner-warning">
         <xsl:with-param name="warning">EPUB conversion is experimental and not supported.  In particular,&#xa;the XSL conversion alone is not sufficient to create an EPUB.</xsl:with-param>
     </xsl:call-template>
@@ -677,7 +679,7 @@ width: 100%
                 </xsl:call-template>
             </xsl:variable>
             <!-- PDF LaTeX, SVG HTML, PNG Kindle if not indicated -->
-            <xsl:value-of select="$external-image-directory"/>
+            <xsl:value-of select="$external-directory"/>
             <xsl:apply-templates select="@source" />
             <xsl:if test="$extension=''">
                 <xsl:choose>
@@ -691,7 +693,7 @@ width: 100%
             </xsl:if>
         </xsl:when>
         <xsl:when test="latex-image|sageplot|asymptote">
-            <xsl:value-of select="$generated-image-directory"/>
+            <xsl:value-of select="$generated-directory"/>
             <xsl:choose>
                 <xsl:when test="latex-image">
                     <xsl:text>latex-image</xsl:text>

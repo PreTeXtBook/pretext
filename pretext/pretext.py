@@ -2108,7 +2108,7 @@ def get_image_directories(xml_source, pub_file):
     # N.B. manage attributes carefully to distinguish
     # absent (None) versus empty string value ('')
 
-    # Examine /publication/source/media element carefully
+    # Examine /publication/source/directories element carefully
     # for attributes which we code here for convenience
     gen_attr = 'generated'
     data_attr = 'data'
@@ -2131,12 +2131,12 @@ def get_image_directories(xml_source, pub_file):
         pub_tree.xinclude()
         # "source" element => single-item list
         # no "source" element => empty list => triple of None returned
-        element_list = pub_tree.xpath("/publication/source/media")
+        element_list = pub_tree.xpath("/publication/source/directories")
         if element_list:
             attributes_dict = element_list[0].attrib
             # common error message
             abs_path_error = ' '.join(['the directory path to data for images, given in the',
-                             'publisher file as "source/media/@{}" must be relative to',
+                             'publisher file as "source/directories/@{}" must be relative to',
                              'the PreTeXt source file location, and not the absolute path "{}"'])
             # attribute absent => None
             if gen_attr in attributes_dict.keys():
