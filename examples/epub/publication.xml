@@ -22,7 +22,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <publication>
 
     <source>
-        <media external="external" generated="generated"/>
+        <directories external="external" generated="generated"/>
     </source>
 
     <!-- EPUB-Specific Options -->
