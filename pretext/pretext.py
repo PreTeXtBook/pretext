@@ -1871,18 +1871,20 @@ def set_verbosity(v):
     # 0 - nothing
     # 1 - _verbose() only
     # 2 - _verbose() and _debug()
-    global _verbosity
+    global __verbosity
 
     if ((v != 0) and (v !=1 ) and (v!= 2)):
         raise ValueError('PTX:ERROR: verbosity level is 0, 1, or 2, not {}'.format(v))
-    _verbosity = v
+    __verbosity = v
 
 def _verbose(msg):
     """Write a concise message to the console on program progress"""
     # N.B.: this should be an informative progress indicator for an impatient
     # author who wonders if anything is happening.  Use _debug() for messages
     # with content useful for location or solving problems.
-    if _verbosity >= 1:
+    global __verbosity
+
+    if __verbosity >= 1:
         print('PTX: {}'.format(msg))
 
 def _debug(msg):
@@ -1890,7 +1892,9 @@ def _debug(msg):
     # N.B. This can be as detailed and infotrmative as possible,
     # and should be helpful in locating where a problem occurs
     # or what scenario caused that problem.
-    if _verbosity >= 2:
+    global __verbosity
+
+    if __verbosity >= 2:
         print('PTX:DEBUG: {}'.format(msg))
 
 def python_version():
@@ -2055,14 +2059,14 @@ def copy_data_directory(source_file, data_dir, tmp_dir):
 def get_temporary_directory():
     """Create, record, and return a scratch directory"""
     import tempfile #  mkdtemp()
-    global _temps   #  cache of temporary directories
+    global __temps   #  cache of temporary directories
 
     temp_dir = tempfile.mkdtemp()
     # Register the directory for cleanup at the end of successful
     # execution iff the verbosity is set to level 2 ("debug")
     # So errors, or requesting gross debugging info, will leave the
     # directories behind for inspection, otherwise they get removed
-    _temps.append(temp_dir)
+    __temps.append(temp_dir)
     return temp_dir
 
 def get_output_filename(xml, out_file, dest_dir, suffix):
@@ -2080,11 +2084,12 @@ def get_output_filename(xml, out_file, dest_dir, suffix):
 def release_temporary_directories():
     """Release scratch directories unless requesting debugging info"""
     import shutil #  rmtree()
-    global _temps #  cache of temporary directories
+    global __verbosity
+    global __temps
 
-    _debug('Temporary directories left behind for inspection: {}'.format(_temps))
-    if _verbosity < 2:
-        for td in _temps:
+    _debug('Temporary directories left behind for inspection: {}'.format(__temps))
+    if __verbosity < 2:
+        for td in __temps:
             _verbose('Removing temporary directory {}'.format(td))
             # conservatively, raise exception on errors
             shutil.rmtree(td, ignore_errors=False)
@@ -2176,19 +2181,23 @@ def get_image_directories(xml_source, pub_file):
 ########
 
 # One-time set-up for global use in the module
-# Module provides, and depends on:
+# Module provides, and depends on these variables,
+# whose scope is the module, so must be declared
+# by employing routines as non-local ("global")
 #
-#  _verbosity - level of detail in console output
+#  __verbosity - level of detail in console output
 #
 #  _ptx_path - root directory of installed PreTeXt distribution
 #              necessary to locate stylesheets and other support
 #
 #  _config - parsed values from an INI-style configuration file
+#
+#  __temps - created temporary directories, to report or release
 
 # verbosity parameter defaults to 0 at startup
 # employing application can use set_verbosity()
 # to override via application's methodology
-_verbosity = None
+__verbosity = None
 set_verbosity(0)
 
 # Discover and set distribution path once at start-up
@@ -2199,4 +2208,5 @@ set_ptx_path()
 _config = None
 set_config_info()
 
-_temps = []
+#  cache of temporary directories
+__temps = []
