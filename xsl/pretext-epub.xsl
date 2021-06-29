@@ -123,8 +123,6 @@
 <!-- and we process it with the chunking template called below              -->
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/">
-    <xsl:message>E:<xsl:value-of select="$external-directory"/></xsl:message>
-    <xsl:message><xsl:value-of select="$cover-filename"/></xsl:message>
     <xsl:call-template name="banner-warning">
         <xsl:with-param name="warning">EPUB conversion is experimental and not supported.  In particular,&#xa;the XSL conversion alone is not sufficient to create an EPUB.</xsl:with-param>
     </xsl:call-template>
