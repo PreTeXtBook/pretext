@@ -1664,12 +1664,12 @@ def html(xml, pub_file, stringparams, dest_dir):
 
     # copy externally manufactured media to  dest_dir
     if external:
-        external_dir = os.path.join(dest_dir, external)
+        external_dir = os.path.join(dest_dir, 'external')
         shutil.copytree(external_abs, external_dir, dirs_exist_ok=True)
 
     # copy generated to  dest_dir
     if generated:
-        generated_dir = os.path.join(dest_dir, generated)
+        generated_dir = os.path.join(dest_dir, 'generated')
         shutil.copytree(generated_abs, generated_dir, dirs_exist_ok=True)
 
     # Write output into working directory, no scratch space needed
@@ -1740,15 +1740,15 @@ def pdf(xml, pub_file, stringparams, out_file, dest_dir):
 
     # Managed, generated images
     if generated:
-        generated_dir = os.path.join(tmp_dir, generated)
+        generated_dir = os.path.join(tmp_dir, 'generated')
         shutil.copytree(generated_abs, generated_dir, dirs_exist_ok=True)
     # externally manufactured images
     if external:
-        external_dir = os.path.join(tmp_dir, external)
+        external_dir = os.path.join(tmp_dir, 'external')
         shutil.copytree(external_abs, external_dir, dirs_exist_ok=True)
     # data files
     if data:
-        data_dir = os.path.join(tmp_dir, data)
+        data_dir = os.path.join(tmp_dir, 'data')
         shutil.copytree(data_abs, data_dir, dirs_exist_ok=True)
 
     # now work in temporary directory since LaTeX is a bit incapable
@@ -2024,8 +2024,7 @@ def copy_data_directory(source_file, data_dir, tmp_dir):
     # in other words, data directory is a peer of source file
     _verbose("formulating data directory location")
     source_full_path, _ = os.path.split(source_file)
-    data_last_step = os.path.basename(data_dir)
-    destination_root = os.path.join(tmp_dir, data_last_step)
+    destination_root = os.path.join(tmp_dir, 'data')
     _debug("copying data directory {} to working location {}".format(data_dir, destination_root))
     shutil.copytree(data_dir, destination_root)
 
