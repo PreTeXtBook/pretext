@@ -26,7 +26,6 @@
     <xi:include href="appendices/mac-os.xml"/>
     <xi:include href="appendices/windows.xml"/>
     <xi:include href="appendices/windows-wsl.xml"/>
-    <xi:include href="appendices/vagrant.xml"/>
     <appendix>
         <title>Example List of Notation</title>
         <notation-list />
@@ -40,5 +39,3 @@
         <index-list />
     </index>
 </backmatter>
-
-
