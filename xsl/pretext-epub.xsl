@@ -408,7 +408,7 @@
         <itemref idref="table-contents" linear="yes"/>
         <itemref idref="cover-page" linear="yes" />
         <xsl:apply-templates select="$document-root" mode="spine" />
-        <itemref idref="endnotes" linear="yes" />
+        <itemref idref="endnotes" linear="no" />
     </spine>
 </xsl:template>
 
@@ -843,8 +843,6 @@ width: 100%
     </xsl:variable>
     <aside epub:type="footnote" id="{$hid}">
         <!-- mode="body" gets too much CSS -->
-        <xsl:text>Aside: </xsl:text>
-        <xsl:apply-templates select="." mode="title-full"/>
         <xsl:apply-templates select="." mode="wrapped-content"/>
     </aside>
 </xsl:template>
