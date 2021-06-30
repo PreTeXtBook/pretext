@@ -1959,20 +1959,19 @@ def get_source_path(source_file):
     _verbose("discovering source file's directory name: {}".format(source_dir))
     return os.path.normpath(source_dir)
 
+def set_executables(adict):
+    global __executables
+
+    __executables = adict
+
 def get_executable_cmd(exec_name):
     """Queries configuration file for executable name, verifies existence in Unix"""
-    import os
-    import platform
-    import subprocess
     import shutil # .which()
-
-    # parse user configuration(s), contains locations of executables
-    # in the "executables" section of the INI-style file
-    config = get_config_info()
+    global __executables
 
     # get the name, but then see if it really, really works
     _debug('locating "{}" in [executables] section of configuration file'.format(exec_name))
-    config_cmd_line = config.get('executables', exec_name).split()
+    config_cmd_line = __executables[exec_name].split()
 
     # Returns the full-path version of the command, as if the PATH was employed
     # "None" indicates the executable does not exist on the system
@@ -2015,38 +2014,6 @@ def sanitize_alpha_num_underscore(param):
     if not(set(param) <= allowed):
         raise ValueError('PTX:ERROR: param {} contains characters other than a-zA-Z0-9_ '.format(param))
     return param
-
-def set_config_info():
-    """Create configuation in object for querying"""
-    import os.path # join()
-    import configparser # ConfigParser()
-    global __config
-
-    ptx_dir = get_ptx_path()
-    config_filename = 'pretext.cfg'
-    default_config_file = os.path.join(ptx_dir, 'pretext', config_filename)
-    user_config_file = os.path.join(ptx_dir, 'user', config_filename)
-    # 2020-05-21: obsolete'd mbx script and associated config filenames
-    # Try to read old version, but prefer new version
-    stale_user_config_file = os.path.join(ptx_dir, 'user', 'mbx.cfg')
-    config_file_list = [default_config_file, stale_user_config_file, user_config_file]
-    # ConfigParser module was renamed to configparser in Python 3
-    # and object was renamed from SafeConfigParser() to ConfigParser()
-    __config = configparser.ConfigParser()
-
-    _verbose("parsing possible configuration files: {}".format(config_file_list))
-    files_read = __config.read(config_file_list)
-    _debug("configuration files actually used/read: {}".format(files_read))
-    if not(user_config_file in files_read):
-        msg = "using default configuration only, custom configuration file not used at {}"
-        _verbose(msg.format(user_config_file))
-    return __config
-
-def get_config_info():
-    """Return configuation in object for querying"""
-    global __config
-
-    return __config
 
 def copy_data_directory(source_file, data_dir, tmp_dir):
     """Stage directory from CLI argument into the working directory"""
@@ -2210,9 +2177,8 @@ set_verbosity(0)
 __ptx_path = None
 set_ptx_path()
 
-# Parse configuration file once
-__config = None
-set_config_info()
+# Configuration as a dictionary
+__executables = None
 
 #  cache of temporary directories
 __temps = []
