@@ -3991,19 +3991,23 @@ article.may_leave + #edit_menu_holder #enter_choice {
 .text_source {
     font-size: 95%;
 }
+/*
 .may_select {
     box-shadow: -10px -5px 5px yellow;
     margin-top: 1.25em;
     background: #ffffee;
 }
+*/
 .may_select > p:first-of-type {
     margin-top: 0;
 }
+/*
 .may_select.inline {
     box-shadow: none;
     border-top: 0.5em solid yellow;
     border-bottom: 0.5em solid yellow;
 }
+*/
 .sbspanel.may_select {
     margin-top: 0;
 }
@@ -4018,10 +4022,12 @@ sbspanel:empty { /* can only happen when partially created */
     background-color: #eee;
 }
 
+/*
 .may_leave {
     box-shadow: -10px 5px 5px #FFD6D9;
     background: #ffeeee !important;
 }
+*/
 #actively_editing {
     margin-top: 1em;
 }
@@ -4045,10 +4051,12 @@ sbspanel:empty { /* can only happen when partially created */
     margin-left: 0.5em;
 }
 
+/*
 .in_edit_tree {
     border-right: 1px solid blue;
     margin-right: 0.25em;
 }
+*/
 /* do we really need the top and bottom edge of the structure bracket?  It messes up some other things
 .in_edit_tree:before,
 .in_edit_tree:after {
@@ -4228,4 +4236,34 @@ sbspanel:empty { /* can only happen when partially created */
 }
 .pretext-content .may_enter abbr {
     background: #adf;
+}
+
+/* new editing css */
+.pretext-content p.may_select {
+    display: block !important;
+}
+.pretext-content .may_select {
+    background: #fef;
+    border: 2px solid #999;
+}
+
+.pretext-content p.in_edit_tree,
+.pretext-content section.in_edit_tree,
+.pretext-content article.in_edit_tree,
+.pretext-content .in_edit_tree p,
+.pretext-content .in_edit_tree .displaymath,
+.pretext-content .in_edit_tree section,
+.pretext-content .in_edit_tree article {
+    border: 3px solid blue !important;
+    padding: 0.5em;
+}
+
+.pretext-content .in_edit_tree .heading + p {
+    display: block;
+}
+.pretext-content .in_edit_tree::before,
+.pretext-content .in_edit_tree::after,
+.pretext-content .in_edit_tree *::before,
+.pretext-content .in_edit_tree *::after {
+    all: reset;
 }
