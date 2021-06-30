@@ -133,7 +133,7 @@
 <xsl:variable name="b-kindle" select="$math.format = 'kindle'"/>
 
 <!-- If there are footnotes, we'll build and package a "endnotes.xhtml" file -->
-<xsl:variable name="b-has-endnotes" select="boolean($document-root//fn|$document-root//aside)"/>
+<xsl:variable name="b-has-endnotes" select="boolean($document-root//fn|$document-root//&ASIDE-LIKE;|$document-root//hint)"/>
 
 
 <!-- ############## -->
@@ -146,7 +146,7 @@
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/">
     <xsl:call-template name="banner-warning">
-        <xsl:with-param name="warning">EPUB conversion is experimental and not supported.  In particular,&#xa;the XSL conversion alone is not sufficient to create an EPUB.</xsl:with-param>
+        <xsl:with-param name="warning">EPUB conversion is experimental and not supported.  In particular,&#xa;creating an EPUB requires the pretext/pretext script.</xsl:with-param>
     </xsl:call-template>
     <!-- analyze authored source, which will repair "mathbook" -->
     <xsl:apply-templates select="pretext|mathbook" mode="deprecation-warnings" />
@@ -200,6 +200,14 @@
                 <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
                 <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
                 <xsl:call-template name="mathjax-css"/>
+		<xsl:choose>
+		  <xsl:when test="$b-kindle">
+                    <link href="../{$css-dir}/kindle.css"            rel="stylesheet" type="text/css"/>
+		  </xsl:when>
+		  <xsl:otherwise>
+                    <link href="../{$css-dir}/epub.css"            rel="stylesheet" type="text/css"/>
+		  </xsl:otherwise>
+		</xsl:choose>
             </head>
             <!-- use class to repurpose HTML CSS work -->
             <body class="pretext-content epub">
@@ -357,6 +365,14 @@
         <item id="css-style"  href="{$css-dir}/{$html-css-stylefile}" media-type="text/css"/>
         <item id="css-color"  href="{$css-dir}/{$html-css-colorfile}" media-type="text/css"/>
         <item id="css-setclr" href="{$css-dir}/setcolors.css"         media-type="text/css"/>
+	<xsl:choose>
+	  <xsl:when test="$b-kindle">
+            <item id="css-kindle" href="{$css-dir}/kindle.css"            media-type="text/css"/>
+	  </xsl:when>
+	  <xsl:otherwise>
+            <item id="css-epub" href="{$css-dir}/epub.css"            media-type="text/css"/>
+	  </xsl:otherwise>
+	</xsl:choose>
         <item id="cover-page" href="{$xhtml-dir}/cover-page.xhtml" media-type="application/xhtml+xml"/>
         <item id="table-contents" href="{$xhtml-dir}/table-contents.xhtml" properties="nav" media-type="application/xhtml+xml"/>
         <item id="cover-image" href="{$xhtml-dir}/{$cover-filename}" properties="cover-image" media-type="image/png"/>
@@ -604,6 +620,14 @@ width: 100%
                 <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
                 <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
                 <xsl:call-template name="mathjax-css"/>
+		<xsl:choose>
+		  <xsl:when test="$b-kindle">
+		    <link href="../{$css-dir}/kindle.css"            rel="stylesheet" type="text/css"/>
+		  </xsl:when>
+		  <xsl:otherwise>
+		    <link href="../{$css-dir}/epub.css"            rel="stylesheet" type="text/css"/>
+		  </xsl:otherwise>
+		</xsl:choose>
             </head>
             <body class="pretext-content epub" epub:type="frontmatter">
                 <nav epub:type="toc" id="toc">
@@ -659,12 +683,12 @@ width: 100%
     <xsl:param name="in" />
     <xsl:param name="out" />
     <xsl:if test="$in!=''">
-        <pre>
+        <pre class="code input">
             <xsl:value-of select="$in" />
         </pre>
     </xsl:if>
     <xsl:if test="$out!=''">
-        <pre>
+        <pre class="code output">
             <xsl:value-of select="$out" />
         </pre>
     </xsl:if>
@@ -846,30 +870,50 @@ width: 100%
 <!-- recognizable by their "-kindle-return" suffix.  See 10.3.12:   -->
 <!-- https://kindlegen.s3.amazonaws.com/AmazonKindlePublishingGuidelines.pdf -->
 
-<!-- Asides -->
+<!-- Asides and hints -->
 <!-- EPUB has a semi-natural mechanism for this, though -->
 <!-- the text we drop could use some work. The marker,  -->
 <!-- a simple title/paragraph, tostyle minimally        -->
-<xsl:template match="aside">
+<xsl:template match="&ASIDE-LIKE;|hint">
     <xsl:variable name="hid">
         <xsl:apply-templates select="." mode="html-id" />
     </xsl:variable>
     <p>
-        <a class="url" epub:type="noteref" href="{$endnote-file}#{$hid}">
-            <xsl:text>Aside: </xsl:text>
-            <xsl:apply-templates select="." mode="title-full"/>
-        </a>
+      <a class="url" epub:type="noteref" href="{$endnote-file}#{$hid}">
+	<!-- Older Kindles don't always support pop-ups, so -->
+	<!-- create infrastructure for endnotes to jump back-->
+        <xsl:if test="$b-kindle">
+          <xsl:attribute name="id">
+            <xsl:value-of select="$hid"/>
+            <xsl:text>-kindle-return</xsl:text>
+          </xsl:attribute>
+        </xsl:if>
+	<xsl:apply-templates select="." mode="heading-simple" />
+      </a>
     </p>
 </xsl:template>
 
 <!-- The content, unwrapped from HTML infrastructure -->
-<xsl:template match="aside" mode="endnote-content">
+<xsl:template match="&ASIDE-LIKE;|hint" mode="endnote-content">
     <xsl:variable name="hid">
         <xsl:apply-templates select="." mode="html-id" />
     </xsl:variable>
+    <!-- Older Kindles don't always support pop-ups, so -->
+    <!-- create infrastructure for endnotes to jump back-->
+    <xsl:if test="$b-kindle">
+      <a epub:type="noteref">
+        <xsl:attribute name="href">
+          <xsl:apply-templates select="." mode="containing-filename"/>
+          <xsl:text>#</xsl:text>
+          <xsl:value-of select="$hid"/>
+          <xsl:text>-kindle-return</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates select="." mode="heading-full"/>
+      </a>
+    </xsl:if>
     <aside epub:type="footnote" id="{$hid}">
-        <!-- mode="body" gets too much CSS -->
-        <xsl:apply-templates select="." mode="wrapped-content"/>
+      <!-- mode="body" gets too much CSS -->
+      <xsl:apply-templates select="." mode="wrapped-content"/>
     </aside>
 </xsl:template>
 
@@ -941,12 +985,20 @@ width: 100%
                     <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
                     <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
                     <xsl:call-template name="mathjax-css"/>
+		    <xsl:choose>
+		      <xsl:when test="$b-kindle">
+			<link href="../{$css-dir}/kindle.css"            rel="stylesheet" type="text/css"/>
+		      </xsl:when>
+		      <xsl:otherwise>
+			<link href="../{$css-dir}/epub.css"            rel="stylesheet" type="text/css"/>
+		      </xsl:otherwise>
+		    </xsl:choose>
                 </head>
                 <!-- use class to repurpose HTML CSS work -->
                 <body class="pretext-content epub">
                     <h4>Endnotes</h4>
                     <!-- structure according to footnote level -->
-                    <xsl:apply-templates select="$document-root//fn|$document-root//aside" mode="endnote-content"/>
+                    <xsl:apply-templates select="$document-root//fn|$document-root//&ASIDE-LIKE;|$document-root//hint" mode="endnote-content"/>
                 </body>
             </html>
         </exsl:document>
@@ -1006,6 +1058,13 @@ width: 100%
                 </xsl:when>
             </xsl:choose>
         </xsl:attribute>
+	<!-- Kindle needs @style on the span containing math -->
+	<!-- So we copy that attribute up here, but only for Kindle -->
+	<!-- <xsl:if test="$b-kindle"> -->
+	<!--   <xsl:attribute name="style"> -->
+	<!--     <xsl:value-of select="$math/div[@class = 'mathml']/math:math/@style" /> -->
+	<!--   </xsl:attribute> -->
+	<!-- </xsl:if> -->
         <!-- Finally, drop a "svg" element, "math" element, or ASCII speech -->
         <xsl:choose>
             <xsl:when test="$math.format = 'svg'">
