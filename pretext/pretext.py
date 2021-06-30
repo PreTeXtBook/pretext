@@ -1531,10 +1531,11 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format):
 
     # XHTML files lack an overall namespace,
     # while EPUB validation expects it
+    # Kindle needs an encoding declaration to avoid assuming ASCII
     # regex inplace to end up with:
     # <html xmlns="http://www.w3.org/1999/xhtml">
     orig = '<html'
-    repl = '<html xmlns="http://www.w3.org/1999/xhtml"'
+    repl = '<?xml version="1.0" encoding="UTF-8"?>\n<html xmlns="http://www.w3.org/1999/xhtml"'
     # the inoplace facility of the fileinput module gets
     # confused about temporary backup files if the working
     # directory is not where the file lives
