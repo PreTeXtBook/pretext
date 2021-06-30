@@ -3734,6 +3734,7 @@ label.incorrect .feedback {
 .pretext-content .heading + .exercise-wrapper {
     display: inline-block;
     max-width: 95%;
+    width: 100%;
 }
 .pretext-content .cols2 .heading + .exercise-wrapper,
 .pretext-content .exercisegroup .heading + .exercise-wrapper {
@@ -3839,7 +3840,8 @@ p > #edit_menu_holder {
     background: #ccccee;
 }
 .may_enter {
-    box-shadow: -10px -10px 5px #ccccee;
+/*    box-shadow: -10px -10px 5px #ccccee;
+*/
     margin-top: 1.25em;
     background: #eeeeff !important;
 }
@@ -4249,7 +4251,10 @@ sbspanel:empty { /* can only happen when partially created */
 
 .pretext-content p.in_edit_tree,
 .pretext-content section.in_edit_tree,
-.pretext-content article.in_edit_tree,
+.pretext-content article.in_edit_tree {
+    border: 3px solid #666 !important;
+    padding: 0.5em;
+}
 .pretext-content .in_edit_tree p,
 .pretext-content .in_edit_tree .displaymath,
 .pretext-content .in_edit_tree section,
@@ -4257,6 +4262,27 @@ sbspanel:empty { /* can only happen when partially created */
     border: 3px solid blue !important;
     padding: 0.5em;
 }
+.pretext-content .in_edit_tree p {
+    border: 3px solid #4a9 !important;
+    background: #ffd;
+}
+.pretext-content .in_edit_tree .displaymath {
+    border: 3px solid #92a !important;
+    background: #efe;
+}
+.pretext-content .in_edit_tree * section,
+.pretext-content .in_edit_tree * article {
+    border: 3px solid green !important;
+    padding: 0.5em;
+}
+.pretext-content .in_edit_tree * * p,
+.pretext-content .in_edit_tree * * .displaymath,
+.pretext-content .in_edit_tree * * section,
+.pretext-content .in_edit_tree * * article {
+    border: 3px dashed grey !important;
+    padding: 0.5em;
+}
+
 
 .pretext-content .in_edit_tree .heading + p {
     display: block;
