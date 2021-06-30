@@ -5,7 +5,7 @@
 .pretext-content .mjpage {
     margin-bottom: 0 !important;
 }
-.pretext-content .solution-like .type {
+.pretext-content .solution-like > .type {
     font-weight: bold;
 }
 .pretext-content .solution-like .type + p {
