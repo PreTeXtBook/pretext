@@ -21,4 +21,17 @@
     margin-top: -1em;
 }
 
+.pretext-content section article > .heading {
+    break-after: avoid;
+}
+.pretext-content section article > .heading + p,
+.pretext-content section article > .heading + .introduction {
+     display: block;
+     break-before: avoid;
+}
+
+.pretext-content .mjpage {
+    vertical-align: -.68ex;
+}
+
 
