@@ -8846,18 +8846,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- no .enable_chatcodes -->
             </xsl:when>
             <!-- Dev, testing: $runestone-dev = 'yes' -->
+            <!-- 2021-07-01: to become universal HTML -->
             <xsl:otherwise>
+                <xsl:comment>** eBookCongig is necessary to configure interactive       **</xsl:comment>
+                <xsl:comment>** Runestone components to run locally in reader's browser **</xsl:comment>
+                <xsl:comment>** No external communication:                              **</xsl:comment>
+                <xsl:comment>**     log level is 0, Runestone Services are disabled     **</xsl:comment>
                 <xsl:text>eBookConfig.useRunestoneServices = false;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.host = 'http://127.0.0.1:8000';&#xa;</xsl:text>
                 <!-- no .app -->
                 <xsl:text>eBookConfig.course = 'PTX Course: Title Here';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.basecourse = 'PTX Base Course';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.isLoggedIn = false;&#xa;</xsl:text>
-                <xsl:text>eBookConfig.email = 'somebody@nobody.com';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.email = '';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.isInstructor = false;&#xa;</xsl:text>
                 <!-- no .ajaxURL since no .app -->
-                <xsl:text>eBookConfig.logLevel = 10;&#xa;</xsl:text>
-                <xsl:text>eBookConfig.username = 'Somebody Nobody';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.logLevel = 0;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.username = '';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.readings = null;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.activities = null;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.downloadsEnabled = false;&#xa;</xsl:text>
