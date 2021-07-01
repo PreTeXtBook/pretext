@@ -1350,7 +1350,7 @@
         </xs:sequence>
         <xs:sequence>
           <xs:group minOccurs="0" ref="IntroductionStatement"/>
-          <xs:element maxOccurs="unbounded" ref="task"/>
+          <xs:group maxOccurs="unbounded" ref="Task"/>
           <xs:group minOccurs="0" ref="ConclusionStatement"/>
         </xs:sequence>
       </xs:choice>
@@ -1383,7 +1383,7 @@
             </xs:sequence>
             <xs:sequence>
               <xs:group minOccurs="0" ref="IntroductionStatement"/>
-              <xs:element maxOccurs="unbounded" ref="task"/>
+              <xs:group maxOccurs="unbounded" ref="Task"/>
               <xs:group minOccurs="0" ref="ConclusionStatement"/>
             </xs:sequence>
           </xs:choice>
@@ -1405,28 +1405,32 @@
   <xs:element name="investigation" type="ProjectLike"/>
   <xs:element name="exploration" type="ProjectLike"/>
   <xs:element name="project" type="ProjectLike"/>
-  <xs:element name="task">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:group ref="MetaDataTitleOptional"/>
-        <xs:choice>
-          <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+  <xs:group name="Task">
+    <xs:sequence>
+      <xs:element name="task">
+        <xs:complexType>
           <xs:sequence>
-            <xs:group ref="Statement"/>
-            <xs:group minOccurs="0" maxOccurs="unbounded" ref="Hint"/>
-            <xs:element minOccurs="0" maxOccurs="unbounded" ref="answer"/>
-            <xs:group minOccurs="0" maxOccurs="unbounded" ref="Solution"/>
+            <xs:group ref="MetaDataTitleOptional"/>
+            <xs:choice>
+              <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+              <xs:sequence>
+                <xs:group ref="Statement"/>
+                <xs:group minOccurs="0" maxOccurs="unbounded" ref="Hint"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="answer"/>
+                <xs:group minOccurs="0" maxOccurs="unbounded" ref="Solution"/>
+              </xs:sequence>
+              <xs:sequence>
+                <xs:group minOccurs="0" ref="IntroductionStatement"/>
+                <xs:group maxOccurs="unbounded" ref="Task"/>
+                <xs:group minOccurs="0" ref="ConclusionStatement"/>
+              </xs:sequence>
+            </xs:choice>
           </xs:sequence>
-          <xs:sequence>
-            <xs:group minOccurs="0" ref="IntroductionStatement"/>
-            <xs:element maxOccurs="unbounded" ref="task"/>
-            <xs:group minOccurs="0" ref="ConclusionStatement"/>
-          </xs:sequence>
-        </xs:choice>
-      </xs:sequence>
-      <xs:attributeGroup ref="MetaDataTitleOptional"/>
-    </xs:complexType>
-  </xs:element>
+          <xs:attributeGroup ref="MetaDataTitleOptional"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
   <xs:complexType name="RemarkLike">
     <xs:sequence>
       <xs:group ref="MetaDataTitleOptional"/>
@@ -1991,7 +1995,7 @@
           </xs:sequence>
           <xs:sequence>
             <xs:group minOccurs="0" ref="IntroductionStatement"/>
-            <xs:element maxOccurs="unbounded" ref="task"/>
+            <xs:group maxOccurs="unbounded" ref="Task"/>
             <xs:group minOccurs="0" ref="ConclusionStatement"/>
           </xs:sequence>
           <xs:sequence>
@@ -2225,6 +2229,11 @@
                 <xs:group minOccurs="0" ref="HintWW"/>
                 <xs:group minOccurs="0" ref="SolutionWW"/>
               </xs:sequence>
+              <xs:sequence>
+                <xs:group minOccurs="0" ref="IntroductionText"/>
+                <xs:group maxOccurs="unbounded" ref="TaskWW"/>
+                <xs:group minOccurs="0" ref="ConclusionText"/>
+              </xs:sequence>
               <xs:element maxOccurs="unbounded" ref="stage"/>
             </xs:choice>
           </xs:sequence>
@@ -2262,6 +2271,30 @@
             <xs:group ref="BlockStatementWW"/>
             <xs:element ref="instruction"/>
           </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="TaskWW">
+    <xs:sequence>
+      <xs:element name="task">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group ref="MetaDataTitleOptional"/>
+            <xs:choice>
+              <xs:sequence>
+                <xs:group ref="StatementExerciseWW"/>
+                <xs:group minOccurs="0" ref="HintWW"/>
+                <xs:group minOccurs="0" ref="SolutionWW"/>
+              </xs:sequence>
+              <xs:sequence>
+                <xs:group minOccurs="0" ref="IntroductionText"/>
+                <xs:group maxOccurs="unbounded" ref="TaskWW"/>
+                <xs:group minOccurs="0" ref="ConclusionText"/>
+              </xs:sequence>
+            </xs:choice>
+          </xs:sequence>
+          <xs:attributeGroup ref="MetaDataTitleOptional"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>

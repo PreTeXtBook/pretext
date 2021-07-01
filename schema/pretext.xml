@@ -1818,6 +1818,8 @@
                     (
                         (StatementExerciseWW, HintWW?, SolutionWW?)
                     |
+                        (IntroductionText?, TaskWW+, ConclusionText?)
+                    |
                         element stage {
                             Title?,
                             StatementExerciseWW,
@@ -1834,6 +1836,14 @@
             StatementExerciseWW =
                 element statement {
                     (BlockStatementWW|WWInstruction)+
+                }
+            TaskWW =
+                element task {
+                    MetaDataTitleOptional,
+                    (
+                        (StatementExerciseWW, HintWW?, SolutionWW?) |
+                        (IntroductionText?, TaskWW+, ConclusionText?)
+                    )
                 }
             WWMacros =
                 element pg-macros {

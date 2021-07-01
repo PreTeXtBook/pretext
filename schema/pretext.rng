@@ -2458,6 +2458,17 @@
             <ref name="SolutionWW"/>
           </optional>
         </group>
+        <group>
+          <optional>
+            <ref name="IntroductionText"/>
+          </optional>
+          <oneOrMore>
+            <ref name="TaskWW"/>
+          </oneOrMore>
+          <optional>
+            <ref name="ConclusionText"/>
+          </optional>
+        </group>
         <oneOrMore>
           <element name="stage">
             <optional>
@@ -2491,6 +2502,33 @@
           <ref name="WWInstruction"/>
         </choice>
       </oneOrMore>
+    </element>
+  </define>
+  <define name="TaskWW">
+    <element name="task">
+      <ref name="MetaDataTitleOptional"/>
+      <choice>
+        <group>
+          <ref name="StatementExerciseWW"/>
+          <optional>
+            <ref name="HintWW"/>
+          </optional>
+          <optional>
+            <ref name="SolutionWW"/>
+          </optional>
+        </group>
+        <group>
+          <optional>
+            <ref name="IntroductionText"/>
+          </optional>
+          <oneOrMore>
+            <ref name="TaskWW"/>
+          </oneOrMore>
+          <optional>
+            <ref name="ConclusionText"/>
+          </optional>
+        </group>
+      </choice>
     </element>
   </define>
   <define name="WWMacros">
