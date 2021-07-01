@@ -134,7 +134,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="raw-input">
         <xsl:choose>
             <xsl:when test="$publication/source/directories/@external">
-                <xsl:value-of select="$publication/source/directories/@external"/>
+                <xsl:value-of select="'external'"/>
             </xsl:when>
             <!-- absent is empty -->
             <xsl:otherwise/>
@@ -166,7 +166,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="raw-input">
         <xsl:choose>
             <xsl:when test="$publication/source/directories/@generated">
-                <xsl:value-of select="$publication/source/directories/@generated"/>
+                <xsl:value-of select="'generated'"/>
             </xsl:when>
             <!-- Should issue a deprecation warning (elsewhere) for this -->
             <xsl:when test="not($directory.images = '')">
@@ -208,7 +208,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="raw-input">
         <xsl:choose>
             <xsl:when test="$publication/source/directories/@data">
-                <xsl:value-of select="$publication/source/directories/@data"/>
+                <xsl:value-of select="'data'"/>
             </xsl:when>
             <xsl:otherwise/>
         </xsl:choose>
