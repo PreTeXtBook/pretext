@@ -21,9 +21,9 @@
 # vermin is a great linter/checker to check versions required
 #     https://github.com/netromdk/vermin.git
 # 2021-05-21: this module expects Python 3.6 or newer
-#     in reality:
-#     shutil.copytree(dirs_exist_ok) requires Python 3.8
-#         (only in experimental code right now)
+#     copying HTML into cwd twice, might be better with
+#     shutil.copytree(dirs_exist_ok), requires Python 3.8
+#
 #     subprocess.run() requires Python 3.5
 #     shutil.which() member requires 3.3
 #     otherwise Python 3.0 might be sufficient
@@ -1647,12 +1647,6 @@ def html(xml, pub_file, stringparams, dest_dir):
     import os.path # join()
     import shutil # copytree()
 
-    warning = '\n'.join(['*************************************************',
-                         'Conversion to HTML is experimental and incomplete',
-                         '    (Temporarily requires Python version 3.8)    ',
-                         '*************************************************'])
-    print(warning)
-
     # Consult publisher file for locations of images
     # data directory likely only needed for latex compilation
     generated_abs, _, external_abs, generated, _, external = get_image_directories(xml, pub_file)
@@ -1665,12 +1659,12 @@ def html(xml, pub_file, stringparams, dest_dir):
     # copy externally manufactured media to  dest_dir
     if external:
         external_dir = os.path.join(dest_dir, 'external')
-        shutil.copytree(external_abs, external_dir, dirs_exist_ok=True)
+        shutil.copytree(external_abs, external_dir)
 
     # copy generated to  dest_dir
     if generated:
         generated_dir = os.path.join(dest_dir, 'generated')
-        shutil.copytree(generated_abs, generated_dir, dirs_exist_ok=True)
+        shutil.copytree(generated_abs, generated_dir)
 
     # Write output into working directory, no scratch space needed
     _verbose('converting {} to HTML in {}'.format(xml, dest_dir))
@@ -1708,12 +1702,6 @@ def pdf(xml, pub_file, stringparams, out_file, dest_dir):
     import shutil # copytree(), copy2()
     import subprocess # run()
 
-    warning = '\n'.join(['************************************************',
-                         'Conversion to PDF is experimental and incomplete',
-                         '   (Temporarily requires Python version 3.8)    ',
-                         '************************************************'])
-    print(warning)
-    #
     generated_abs, data_abs, external_abs, generated, data, external = get_image_directories(xml, pub_file)
     # perhaps necessary (so drop "if"), but maybe not; needs to be supported
     if pub_file:
@@ -1741,15 +1729,15 @@ def pdf(xml, pub_file, stringparams, out_file, dest_dir):
     # Managed, generated images
     if generated:
         generated_dir = os.path.join(tmp_dir, 'generated')
-        shutil.copytree(generated_abs, generated_dir, dirs_exist_ok=True)
+        shutil.copytree(generated_abs, generated_dir)
     # externally manufactured images
     if external:
         external_dir = os.path.join(tmp_dir, 'external')
-        shutil.copytree(external_abs, external_dir, dirs_exist_ok=True)
+        shutil.copytree(external_abs, external_dir)
     # data files
     if data:
         data_dir = os.path.join(tmp_dir, 'data')
-        shutil.copytree(data_abs, data_dir, dirs_exist_ok=True)
+        shutil.copytree(data_abs, data_dir)
 
     # now work in temporary directory since LaTeX is a bit incapable
     # of working outside of the current working directory
