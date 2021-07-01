@@ -6028,7 +6028,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We make sure a nested list has content, before starting (and    -->
 <!-- later ending) a list to hold the tasks.  Only terminal tasks    -->
 <!-- have statement|hint|answer|solution.                            -->
-<xsl:template match="exercise[task]|project[task]|activity[task]|exploration[task]|investigation[task]|example[task]|question[task]|problem[task]|task[task]" mode="exercise-components">
+<xsl:template match="exercise[task]|webwork-reps/static[task]|project[task]|activity[task]|exploration[task]|investigation[task]|example[task]|question[task]|problem[task]|task[task]" mode="exercise-components">
     <xsl:param name="b-original" />
     <xsl:param name="purpose" />
     <xsl:param name="b-component-heading"/>
@@ -6155,7 +6155,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- hint|answer|solution that might appear somewhere else.  Since there     -->
 <!-- could be multiple targets, we use the heuristic of choosing main matter -->
 <!-- over back matter.  Unclear what happens if there are multiple targets.  -->
-<xsl:template match="exercise|webwork-reps/static|webwork-reps/static/stage|myopenmath|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task[not(task)]" mode="exercise-components">
+<xsl:template match="exercise|webwork-reps/static[not(task)]|webwork-reps/static/stage|myopenmath|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task[not(task)]" mode="exercise-components">
     <xsl:param name="b-original" />
     <xsl:param name="purpose" />
     <xsl:param name="b-component-heading"/>

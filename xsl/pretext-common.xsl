@@ -7147,8 +7147,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:choose>
         <!-- return nothing if not admitted -->
         <xsl:when test="not($b-admitted)"/>
-        <xsl:when test="webwork-reps/static/stage">
-            <xsl:apply-templates select="webwork-reps/static/stage" mode="dry-run">
+        <xsl:when test="webwork-reps/static/task|webwork-reps/static/stage">
+            <xsl:apply-templates select="webwork-reps/static/task|webwork-reps/static/stage" mode="dry-run">
                 <xsl:with-param name="b-has-statement" select="$b-has-statement" />
                 <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
                 <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
