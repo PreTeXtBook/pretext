@@ -31,7 +31,7 @@ number when that changes.  At a minimum, change the date and
 commit that as a record of a "no-change" update.
 
 CSS version: 0.31
-Date: 2020-07-01
+Date: 2021-07-01
 
 
 Experimental Jupyter Notebook CSS

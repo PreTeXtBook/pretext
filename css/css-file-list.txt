@@ -19,3 +19,4 @@ https://pretextbook.org/css/0.31/colors_red_blue.css
 https://pretextbook.org/css/0.31/colors_ruby_amethyst.css
 https://pretextbook.org/css/0.31/colors_ruby_emerald.css
 https://pretextbook.org/css/0.31/colors_ruby_turquoise.css
+https://pretextbook.org/css/0.31/kindle.css

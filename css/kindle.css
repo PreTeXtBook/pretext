@@ -1,0 +1,32 @@
+
+.pretext-content .mjpage + p {
+    margin-top: -0.5em !important;
+}
+.pretext-content .mjpage {
+    margin-bottom: 0 !important;
+}
+.pretext-content .solution-like > .type {
+    font-weight: bold;
+}
+.pretext-content .solution-like .type + p {
+    display: inline;
+}
+
+.pretext-content article.theorem-like::after,
+.pretext-content article.definition-like::after,
+.pretext-content article.example-like::after,
+.pretext-content article.project-like::after,
+.pretext-content article.remark-like::after,
+.pretext-content article.computation-like::after {
+    margin-top: -1em;
+}
+
+.pretext-content section article > .heading {
+    break-after: avoid;
+}
+.pretext-content section article > .heading + p,
+.pretext-content section article > .heading + .introduction {
+     display: block;
+     break-before: avoid;
+}
+
