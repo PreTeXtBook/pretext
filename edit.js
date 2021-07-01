@@ -339,6 +339,7 @@ objectStructure = {
     },
     "pretext": {
         "tag": "p",
+        "attributes": ['id="<&>xml:id<;>"'],
         "pieces": [["content", ""]]
     },
     "source": {
@@ -1096,7 +1097,7 @@ Storage.prototype.getObject = function(key) {
 
 function randomstring(len) {
     if (!len) { len = 10 }
-    return (Math.random() + 1).toString(36).substring(2,len)
+    return "tMP" + (Math.random() + 1).toString(36).substring(2,len)
 }
 
 function removeItemFromList(lis, value) {
