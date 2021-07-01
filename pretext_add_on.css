@@ -4249,6 +4249,13 @@ sbspanel:empty { /* can only happen when partially created */
     border: 2px solid #999;
 }
 
+.pretext-content .onepage.in_edit_tree,
+.pretext-content .in_edit_tree .onepage {
+    border: 6px double #600 !important;
+    padding: 0.5em;
+}
+
+
 .pretext-content p.in_edit_tree,
 .pretext-content section.in_edit_tree,
 .pretext-content article.in_edit_tree {
@@ -4265,10 +4272,20 @@ sbspanel:empty { /* can only happen when partially created */
 .pretext-content .in_edit_tree p {
     border: 3px solid #4a9 !important;
     background: #ffd;
+    padding: 0.5em;
 }
-.pretext-content .in_edit_tree .displaymath {
+.pretext-content .in_edit_tree figcaption,
+.pretext-content .in_edit_tree img,
+.pretext-content .in_edit_tree blockquote {
+    border: 3px dotted #9a0 !important;
+    background: #efd;
+    padding: 0.5em;
+}
+.pretext-content .in_edit_tree .displaymath,
+.pretext-content .in_edit_tree figure {
     border: 3px solid #92a !important;
     background: #efe;
+    padding: 0.5em;
 }
 .pretext-content .in_edit_tree * section,
 .pretext-content .in_edit_tree * article {
