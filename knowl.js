@@ -124,6 +124,10 @@ function knowl_click_handler($el) {
         where_it_goes = $el.parent().parent();
         var cols = $el.parent().parent().children().length;
         knowl = "<tr><td colspan='"+cols+"' class='knowl-td'>"+knowl+"</td></tr>";
+      } else if ($el.parent().is("p") && $el.parent().parent().is("td")) {
+        where_it_goes = $el.parent().parent().parent();
+        var cols = $el.parent().parent().parent().children().length;
+        knowl = "<tr><td colspan='"+cols+"' class='knowl-td'>"+knowl+"</td></tr>";
       } else if ($el.parent().is("li")) {
         where_it_goes = $el.parent();
       } 
