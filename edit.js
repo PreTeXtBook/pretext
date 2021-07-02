@@ -1533,7 +1533,7 @@ function top_menu_options_for(this_obj) {
         if (previous_editing() && this_id == top_level_id) {
             this_list += '<li tabindex="-1" data-action="' + "resume" + '">Resume previous editing</li>';
         }
-        this_list += '<li tabindex="-1" data-action="' + "replace" + '">Regenerate HTML</li>';
+        this_list += '<li tabindex="-1" data-action="' + "replace" + '">Stop editing</li>';
     }
     return this_list
 }
@@ -2084,8 +2084,10 @@ function replace_by_id(theid, format) {
 //    MathJax.typesetPromise(document.getElementById(theid));
     MathJax.typesetPromise();
 
-    make_current_editing_tree_from_id(theid);
-    edit_menu_from_current_editing("entering");
+    console.log("adjusting workspace");
+    adjustWorkspace();
+//    make_current_editing_tree_from_id(theid);
+//    edit_menu_from_current_editing("entering");
 }
 
 // temporary:  need to unify img and sbs layout

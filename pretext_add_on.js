@@ -754,7 +754,7 @@ function adjustWorkspace() {
     $(".workspace").attr("contenteditable", "true");
     document.execCommand("defaultParagraphSeparator", false, "br");
 
-    var all_pages = document.querySelectorAll('body .onepage');
+    var all_pages = document.querySelectorAll('body .worksheet .onepage');
     var a = 14.0;
     var b = 10.0;
     var heightA, heightB, this_item;
@@ -764,6 +764,8 @@ function adjustWorkspace() {
 
     for (var i = 0; i < all_pages.length; i++) {
         this_item = all_pages[i];
+        if (i == 0) { this_item.classList.add("firstpage") }
+        else if (i == all_pages.length - 1) { this_item.classList.add("lastpage") }
         console.log(this_item.clientHeight, "ccc", this_item);
     }
     for (var i = 0; i < all_pages.length; i++) {
@@ -772,6 +774,33 @@ function adjustWorkspace() {
        heightB = scaleWorkspaceIn(this_item, this_item, b, "tmp");
        console.log("heights", heightA, " xx ", heightB, "oo", this_item);
        /* a magicscale makes the output the height of the minimum specified input */
+       /* not sure if this is the place to do it, but the first page might
+          have items before it, and the last page mught have items after it */
+       var offsetHeightAbove = 0;
+       if (this_item.classList.contains("firstpage")) {
+           console.log("this_item",this_item.getBoundingClientRect(),this_item.getBoundingClientRect()["y"]);
+           console.log("this_item parent",this_item.parentElement.getBoundingClientRect(),this_item.parentElement.getBoundingClientRect()["y"]);
+           var prev_sib = this_item.previousElementSibling;
+           while (prev_sib) {
+               console.log("prev_sib", prev_sib, "with height", prev_sib.offsetHeight);
+               offsetHeightAbove += prev_sib.offsetHeight;
+               prev_sib = prev_sib.previousElementSibling;
+           }
+       }
+       var offsetHeightBelow = 0;
+       if (this_item.classList.contains("lastpage")) {
+           console.log(this_item.getBoundingClientRect());
+           var next_sib = this_item.nextElementSibling;
+           while (next_sib) {
+               console.log("next_sib", next_sib, "with height", next_sib.offsetHeight);
+               offsetHeightBelow += next_sib.offsetHeight;
+               next_sib = next_sib.nextElementSibling;
+           } 
+       }
+       heightA += offsetHeightAbove + offsetHeightBelow;
+       heightB += offsetHeightAbove + offsetHeightBelow;
+       console.log(i, "i", offsetHeightAbove, "offsetHeightAbove", offsetHeightBelow, "offsetHeightBelow");
+//       alert(toString(i) + " offsetHeightAbove " + toString(offsetHeightAbove) + " offsetHeightBelow " + toString(offsetHeightBelow));
        var magicscale = 12;
        if (heightA != heightB) {
 /*
