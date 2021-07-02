@@ -2267,8 +2267,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="heading-simple">
     <!-- the name of the object, its "type" -->
     <span class="type">
-        <xsl:apply-templates select="." mode="type-name" />
+      <xsl:apply-templates select="." mode="type-name" />
+      <xsl:text>.</xsl:text>
     </span>
+    <xsl:text> </xsl:text>
     <xsl:variable name="the-number">
         <xsl:apply-templates select="." mode="non-singleton-number" />
     </xsl:variable>
