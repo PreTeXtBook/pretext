@@ -49,7 +49,8 @@ def main():
                          'colors_ruby_amethyst.css', 
                          'colors_ruby_emerald.css', 
                          'colors_ruby_turquoise.css', 
-                         'kindle.css']
+                         'kindle.css',
+                         'epub.css']
     for filename in css_file_list:
         url = baseurl + filename
         r = requests.get(url, allow_redirects=True)

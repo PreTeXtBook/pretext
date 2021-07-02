@@ -43,7 +43,7 @@
 /* sage cell code goes in a pre.  What else goes there? */
 .pretext-content pre {
     font-size: 95%;
-    padding-top: 0.5em;
+    padding-top: 0.3em;
     padding-bottom: 0.5em;
     padding-left: 0.5em;
     background: #f0f0f0;
@@ -74,5 +74,8 @@
 }
 .pretext-content figure .image-box {
     break-after: avoid !important;
+}
+.pretext-content figure {
+    break-inside: avoid;
 }
 
