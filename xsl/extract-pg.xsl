@@ -111,7 +111,7 @@
     <xsl:text>pgdense['hint_no_solution_yes'] = {}&#xa;</xsl:text>
     <xsl:text>pgdense['hint_yes_solution_no'] = {}&#xa;</xsl:text>
     <xsl:text>pgdense['hint_yes_solution_yes'] = {}&#xa;</xsl:text>
-    <xsl:apply-templates select="$document-root//webwork[statement|stage|@source]" mode="dictionaries"/>
+    <xsl:apply-templates select="$document-root//webwork[statement|task|stage|@source]" mode="dictionaries"/>
 </xsl:template>
 
 <xsl:template match="webwork[@source]" mode="dictionaries">
@@ -137,7 +137,7 @@
     <xsl:text>"&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="webwork[statement|stage]" mode="dictionaries">
+<xsl:template match="webwork[statement|task|stage]" mode="dictionaries">
     <!-- Define values for the visible-id as key -->
     <xsl:variable name="problem">
         <xsl:apply-templates select="." mode="visible-id" />
@@ -165,6 +165,8 @@
     <xsl:value-of select="$problem" />
     <xsl:text>"] = """</xsl:text>
     <xsl:apply-templates select=".">
+        <xsl:with-param name="b-hint" select="true()" />
+        <xsl:with-param name="b-solution" select="true()" />
         <xsl:with-param name="b-human-readable" select="true()" />
     </xsl:apply-templates>
     <xsl:text>"""&#xa;</xsl:text>
@@ -293,8 +295,8 @@
 
 
 <xsl:template match="webwork[statement]">
-    <xsl:param name="b-hint" select="true()" />
-    <xsl:param name="b-solution" select="true()" />
+    <xsl:param name="b-hint" />
+    <xsl:param name="b-solution" />
     <xsl:param name="b-human-readable" />
     <xsl:if test="$b-human-readable">
         <xsl:call-template name="converter-blurb-webwork" />
@@ -336,10 +338,9 @@
     </xsl:call-template>
 </xsl:template>
 
-
-<xsl:template match="webwork[stage]">
-    <xsl:param name="b-hint" select="true()" />
-    <xsl:param name="b-solution" select="true()" />
+<xsl:template match="webwork[task|stage]">
+    <xsl:param name="b-hint" />
+    <xsl:param name="b-solution" />
     <xsl:param name="b-human-readable" />
     <xsl:if test="$b-human-readable">
         <xsl:call-template name="converter-blurb-webwork" />
@@ -361,18 +362,34 @@
     <xsl:call-template name="pg-header">
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
-    <xsl:apply-templates select="." mode="pg-code" >
+    <xsl:apply-templates select="." mode="pg-code">
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
+    <xsl:call-template name="begin-block">
+        <xsl:with-param name="block-title">Body</xsl:with-param>
+        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
+    </xsl:call-template>
+    <xsl:if test="ancestor::exercisegroup/introduction|introduction">
+        <xsl:text>&#xa;BEGIN_PGML&#xa;</xsl:text>
+        <xsl:if test="$b-human-readable">
+            <xsl:apply-templates select="ancestor::exercisegroup/introduction">
+                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
+            </xsl:apply-templates>
+        </xsl:if>
+        <xsl:apply-templates select="introduction">
+            <xsl:with-param name="b-human-readable" select="$b-human-readable" />
+        </xsl:apply-templates>
+        <xsl:text>&#xa;END_PGML&#xa;</xsl:text>
+    </xsl:if>
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">Scaffold</xsl:with-param>
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
-    <xsl:text>Scaffold::Begin();</xsl:text>
+    <xsl:text>Scaffold::Begin(numbered=>1);</xsl:text>
     <xsl:if test="$b-human-readable">
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="stage">
+    <xsl:apply-templates select="task|stage">
         <xsl:with-param name="b-hint" select="$b-hint" />
         <xsl:with-param name="b-solution" select="$b-solution" />
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
@@ -384,46 +401,30 @@
     <xsl:if test="$b-human-readable">
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
+    <xsl:if test="conclusion">
+        <xsl:text>&#xa;BEGIN_PGML&#xa;</xsl:text>
+        <xsl:apply-templates select="conclusion">
+            <xsl:with-param name="b-human-readable" select="$b-human-readable" />
+        </xsl:apply-templates>
+        <xsl:text>&#xa;END_PGML&#xa;</xsl:text>
+    </xsl:if>
     <xsl:call-template name="end-problem">
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="webwork" mode="pg-code">
-    <xsl:param name="b-human-readable" />
-    <xsl:call-template name="begin-block">
-        <xsl:with-param name="block-title">PG Setup Code</xsl:with-param>
-        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
-    </xsl:call-template>
-    <!-- All our problems load MathObjects, and so should have at least    -->
-    <!-- one explicit Context() load.                                      -->
-    <xsl:if test="not(contains(.//pg-code,'Context('))">
-        <xsl:text>Context('Numeric');</xsl:text>
-        <xsl:if test="$b-human-readable">
-            <xsl:text>&#xa;</xsl:text>
-        </xsl:if>
-    </xsl:if>
-    <!-- pg-code verbatim, but trim indentation -->
-    <xsl:call-template name="sanitize-text">
-        <xsl:with-param name="text" select=".//pg-code" />
-    </xsl:call-template>
-    <!-- if there are latex-image in the problem, put their code here -->
-    <xsl:apply-templates select=".//image[latex-image/@syntax = 'PGtikz']" mode="latex-image-code"/>
-</xsl:template>
-
-
-<!-- A stage is part of a multi-stage problem. WeBWorK calls these         -->
-<!-- "scaffold" problems, which have "section"s                            -->
-<xsl:template match="stage">
-    <xsl:param name="b-hint" select="true()" />
-    <xsl:param name="b-solution" select="true()" />
+<xsl:template match="task[statement]|stage">
+    <xsl:param name="b-hint" />
+    <xsl:param name="b-solution" />
     <xsl:param name="b-human-readable" />
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">Section</xsl:with-param>
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
     <xsl:text>Section::Begin("</xsl:text>
-    <xsl:apply-templates select="title" />
+    <xsl:if test="title">
+        <xsl:apply-templates select="." mode="title-xref"/>
+    </xsl:if>
     <xsl:text>");</xsl:text>
     <xsl:if test="$b-human-readable">
         <xsl:text>&#xa;</xsl:text>
@@ -450,8 +451,89 @@
     </xsl:if>
 </xsl:template>
 
+<xsl:template match="task[task]">
+    <xsl:param name="b-hint" />
+    <xsl:param name="b-solution" />
+    <xsl:param name="b-human-readable" />
+    <xsl:call-template name="begin-block">
+        <xsl:with-param name="block-title">Section</xsl:with-param>
+        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
+    </xsl:call-template>
+    <xsl:text>Section::Begin("</xsl:text>
+    <xsl:if test="title">
+        <xsl:apply-templates select="." mode="title-xref"/>
+    </xsl:if>
+    <xsl:text>");</xsl:text>
+    <xsl:if test="$b-human-readable">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="introduction">
+        <xsl:text>&#xa;BEGIN_PGML&#xa;</xsl:text>
+        <xsl:apply-templates select="introduction">
+            <xsl:with-param name="b-human-readable" select="$b-human-readable" />
+        </xsl:apply-templates>
+        <xsl:text>&#xa;END_PGML&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:call-template name="begin-block">
+        <xsl:with-param name="block-title">Scaffold</xsl:with-param>
+        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
+    </xsl:call-template>
+    <xsl:text>Scaffold::Begin(numbered=>1);</xsl:text>
+    <xsl:if test="$b-human-readable">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="task">
+        <xsl:with-param name="b-hint" select="$b-hint" />
+        <xsl:with-param name="b-solution" select="$b-solution" />
+        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
+    </xsl:apply-templates>
+    <xsl:if test="$b-human-readable">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>Scaffold::End();</xsl:text>
+    <xsl:if test="$b-human-readable">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="conclusion">
+        <xsl:text>&#xa;BEGIN_PGML&#xa;</xsl:text>
+        <xsl:apply-templates select="conclusion">
+            <xsl:with-param name="b-human-readable" select="$b-human-readable" />
+        </xsl:apply-templates>
+        <xsl:text>&#xa;END_PGML&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$b-human-readable">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>Section::End();</xsl:text>
+    <xsl:if test="$b-human-readable">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="webwork" mode="pg-code">
+    <xsl:param name="b-human-readable" />
+    <xsl:call-template name="begin-block">
+        <xsl:with-param name="block-title">PG Setup Code</xsl:with-param>
+        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
+    </xsl:call-template>
+    <!-- All our problems load MathObjects, and so should have at least    -->
+    <!-- one explicit Context() load.                                      -->
+    <xsl:if test="not(contains(.//pg-code,'Context('))">
+        <xsl:text>Context('Numeric');</xsl:text>
+        <xsl:if test="$b-human-readable">
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:if>
+    </xsl:if>
+    <!-- pg-code verbatim, but trim indentation -->
+    <xsl:call-template name="sanitize-text">
+        <xsl:with-param name="text" select=".//pg-code" />
+    </xsl:call-template>
+    <!-- if there are latex-image in the problem, put their code here -->
+    <xsl:apply-templates select=".//image[latex-image/@syntax = 'PGtikz']" mode="latex-image-code"/>
+</xsl:template>
+
 <!-- default template, for complete presentation -->
-<xsl:template match="stage/statement|statement">
+<xsl:template match="statement">
     <xsl:param name="b-human-readable" />
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">Body</xsl:with-param>
@@ -469,8 +551,17 @@
     <xsl:text>&#xa;END_PGML&#xa;</xsl:text>
 </xsl:template>
 
+<xsl:template match="task/statement">
+    <xsl:param name="b-human-readable" />
+    <xsl:text>&#xa;BEGIN_PGML&#xa;</xsl:text>
+    <xsl:apply-templates>
+        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
+    </xsl:apply-templates>
+    <xsl:text>&#xa;END_PGML&#xa;</xsl:text>
+</xsl:template>
+
 <!-- default template, for solution -->
-<xsl:template match="stage/solution|solution">
+<xsl:template match="solution">
     <xsl:param name="b-human-readable" />
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">Solution</xsl:with-param>
@@ -484,7 +575,7 @@
 </xsl:template>
 
 <!-- default template, for hint -->
-<xsl:template match="stage/hint|hint">
+<xsl:template match="hint">
     <xsl:param name="b-human-readable" />
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">Hint</xsl:with-param>
@@ -498,7 +589,7 @@
     <xsl:text>&#xa;END_PGML_HINT&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="exercisegroup/introduction">
+<xsl:template match="introduction|conclusion">
     <xsl:param name="b-human-readable" />
     <xsl:apply-templates>
         <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
@@ -711,7 +802,7 @@
             </xsl:call-template>
         </xsl:if>
         <!-- multistage problems ("scaffolded") -->
-        <xsl:if test=".//stage">
+        <xsl:if test="task|stage">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'scaffold.pl'"/>
                 <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
@@ -1193,7 +1284,7 @@
 <!-- ############## -->
 
 <!-- PGML markup for Perl variable in LaTeX expression -->
-<xsl:template match="statement//var|hint//var|solution//var">
+<xsl:template match="var">
     <xsl:text>[</xsl:text>
     <xsl:value-of select="@name" />
     <xsl:if test="@form='checkboxes'">

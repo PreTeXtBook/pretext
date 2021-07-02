@@ -570,9 +570,6 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
     NSMAP = {"xml" : "http://www.w3.org/XML/1998/namespace"}
     XML = "http://www.w3.org/XML/1998/namespace"
     webwork_representations = ET.Element('webwork-representations', nsmap = NSMAP)
-    # lines like this next one micromanage newlines and indentation when we print to file
-    webwork_representations.text = "\n  "
-
     # Choose one of the dictionaries to take its keys as what to loop through
     for problem in sorted(origin):
 
@@ -813,10 +810,7 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
         webwork_reps.set('version',ww_reps_version)
         webwork_reps.set("{%s}id" % (XML),'extracted-' + problem)
         webwork_reps.set('ww-id',problem)
-        webwork_reps.text = "\n    "
-        webwork_reps.tail = "\n  "
         static = ET.SubElement(webwork_reps,'static')
-        static.text = "\n      "
         static.set('seed',seed[problem])
         if (origin[problem] == 'server'):
             static.set('source',source[problem])
@@ -831,212 +825,82 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
             p.text = badness_msg.format(problem_identifier, seed[problem], badness_tip)
             continue
 
-        # Exericse schema is: (statement, hint*, answer*, solution*)
-        # Incoming WW may have multiple statement, so we merge them into one.
-        # Then write hints in original order.
-        # Then convert answerhashes to a sequence of answer.
-        # Lastly, write all solutions in original order.
-        # For problems with stages, more care is needed to get hints, answers, solutions within the right stage
+        # This recursive function is needed in the case of nested tasks.
+        # It is written in such a way to handle task with no nesting, and even an exercise without any task.
 
-        # First handle problems where there are no stages
-        if response_root.find('.//stage') is None:
-            statement = ET.SubElement(static, 'statement')
-            statement.text = "\n"
-            statements = response_root.findall('.//statement')
-            for st in list(statements):
-                for child in st:
-                    # response_root is an element tree from the response
-                    # webwork_represenations is an element tree
-                    # we use deepcopy to make sure that when we append we are making new nodes,
-                    # not intertangling the two trees
-                    chcopy = copy.deepcopy(child)
-                    statement.append(chcopy)
-            # blocks like this next one micromanage newlines and indentation when we print to file
-            for elem in statement.getiterator():
-                try:
-                    elem.text = elem.text.replace("\n","\n        ")
-                except AttributeError:
-                    pass
-                try:
-                    elem.tail = elem.tail.replace("\n","\n        ")
-                except AttributeError:
-                    pass
-            # blocks like this next one micromanage newlines and indentation when we print to file
-            last = statement.xpath('./*[last()]')
-            if last:
-                last[0].tail = "\n      "
+        def static_webwork_level(write,read):
+            # (tree we are building, tree we take from)
+            # since write is a tree and read is a tree, we use deepcopy to make sure
+            # that when we append nodes we are appending new ones, not intertwining the trees
+
+            tasks = read.findall('./task')
+            if tasks:
+                titles = read.xpath('./title')
+                if titles:
+                    for ttl in list(titles):
+                        title = copy.deepcopy(ttl)
+                        write.append(title)
+                introductions = read.xpath('./statement[following-sibling::task]|./statement[following-sibling::stage]')
+                if introductions:
+                    introduction = ET.SubElement(write, 'introduction')
+                    for intro in list(introductions):
+                        for child in intro:
+                            chcopy = copy.deepcopy(child)
+                            introduction.append(chcopy)
+                for tsk in list(tasks):
+                    task = ET.SubElement(write, 'task')
+                    static_webwork_level(task,tsk)
+                conclusions = read.xpath('./statement[preceding-sibling::task]')
+                if conclusions:
+                    conclusion = ET.SubElement(write, 'conclusion')
+                    for conc in list(conclusions):
+                        for child in conc:
+                            chcopy = copy.deepcopy(child)
+                            conclusion.append(chcopy)
             else:
-                print('PTX:WARNING: a statement in {} has no content'.format(problem_identifier))
-            statement.tail = "\n      "
-
-            hints = response_root.findall('.//hint')
-            for ht in list(hints):
-                htcopy = copy.deepcopy(ht)
-                for elem in htcopy.getiterator():
-                    try:
-                        elem.text = elem.text.replace("\n","\n        ")
-                    except AttributeError:
-                        pass
-                    try:
-                        elem.tail = elem.tail.replace("\n","\n        ")
-                    except AttributeError:
-                        pass
-
-                last = htcopy.xpath('./*[last()]')
-                if last:
-                    last[0].tail = "\n      "
-                else:
-                    print('PTX:WARNING: a hint in {} has no content'.format(problem_identifier))
-                htcopy.text = "\n        "
-                htcopy.tail = "\n      "
-
-                static.append(htcopy)
-
-            answer_hashes = response_root.find('.//answerhashes')
-            if answer_hashes is not None:
-                for ans in list(answer_hashes):
-                    correct_ans = ans.get('correct_ans','')
-                    correct_ans_latex_string = ans.get('correct_ans_latex_string','')
-                    if (correct_ans != '' or correct_ans_latex_string != ''):
-                        answer = ET.SubElement(static,'answer')
-                        answer.text = "\n        "
-                        p = ET.SubElement(answer,'p')
-                        if correct_ans_latex_string:
-                            m = ET.SubElement(p, 'm')
-                            m.text = correct_ans_latex_string
-                        elif correct_ans:
-                            p.text = correct_ans
-                        p.tail = "\n      "
-                        answer.tail = "\n      "
-
-            solutions = response_root.findall('.//solution')
-            for sol in list(solutions):
-                solcopy = copy.deepcopy(sol)
-                for elem in solcopy.getiterator():
-                    try:
-                        elem.text = elem.text.replace("\n","\n        ")
-                    except AttributeError:
-                        pass
-                    try:
-                        elem.tail = elem.tail.replace("\n","\n        ")
-                    except AttributeError:
-                        pass
-
-                last = solcopy.xpath('./*[last()]')
-                if last:
-                    last[0].tail = "\n      "
-                else:
-                    print('PTX:WARNING: a solution in {} has no content'.format(problem_identifier))
-                solcopy.text = "\n        "
-                solcopy.tail = "\n      "
-
-                static.append(solcopy)
-
-        else:
-            stages = response_root.findall('.//stage')
-            for stg in list(stages):
-                stage = ET.SubElement(static,'stage')
-                stage.text = "\n        "
-                statement = ET.SubElement(stage, 'statement')
-                statement.text = "\n"
-                statements = stg.findall('.//statement')
-                for st in list(statements):
-                    for child in st:
-                        chcopy = copy.deepcopy(child)
-                        statement.append(chcopy)
-                for elem in statement.getiterator():
-                    try:
-                        elem.text = elem.text.replace("\n","\n          ")
-                    except AttributeError:
-                        pass
-                    try:
-                        elem.tail = elem.tail.replace("\n","\n          ")
-                    except AttributeError:
-                        pass
-
-                last = statement.xpath('./*[last()]')
-                if last:
-                    last[0].tail = "\n        "
-                else:
-                    print('PTX:WARNING: a statement in {} has no content'.format(problem_identifier))
-                statement.tail = "\n        "
-
-                hints = stg.findall('.//hint')
-                for ht in list(hints):
-                    htcopy = copy.deepcopy(ht)
-                    for elem in htcopy.getiterator():
-                        try:
-                            elem.text = elem.text.replace("\n","\n          ")
-                        except AttributeError:
-                            pass
-                        try:
-                            elem.tail = elem.tail.replace("\n","\n          ")
-                        except AttributeError:
-                            pass
-
-                    last = htcopy.xpath('./*[last()]')
-                    if last:
-                        last[0].tail = "\n        "
-                    else:
-                        print('PTX:WARNING: a hint in {} has no content'.format(problem_identifier))
-                    htcopy.text = "\n          "
-                    htcopy.tail = "\n        "
-
-                    stage.append(htcopy)
-
-                answer_hashes = response_root.find('.//answerhashes')
+                titles = read.xpath('./title')
+                if titles:
+                    for ttl in list(titles):
+                        title = copy.deepcopy(ttl)
+                        write.append(title)
+                statements = read.xpath('./statement[not(preceding-sibling::task or following-sibling::task)]')
+                if statements:
+                    statement = ET.SubElement(write, 'statement')
+                    for stat in list(statements):
+                        for child in stat:
+                            chcopy = copy.deepcopy(child)
+                            statement.append(chcopy)
+                hints = read.xpath('./hint')
+                if hints:
+                    hint = ET.SubElement(write, 'hint')
+                    for hnt in list(hints):
+                        for child in hnt:
+                            chcopy = copy.deepcopy(child)
+                            hint.append(chcopy)
+                answer_names = read.xpath('.//fillin/@name|.//var/@name')
+                answer_hashes = response_root.find('./answerhashes')
                 if answer_hashes is not None:
-                    for ans in answer_hashes:
-                        name = ans.tag
-                        answer_inputs = stg.find(".//*[@name='%s']" % (name))
-                        if answer_inputs is not None:
+                    for ans in list(answer_hashes):
+                        if ans.get('ans_name') in list(answer_names):
                             correct_ans = ans.get('correct_ans','')
                             correct_ans_latex_string = ans.get('correct_ans_latex_string','')
                             if (correct_ans != '' or correct_ans_latex_string != ''):
-                                answer = ET.SubElement(stage,'answer')
-                                answer.text = "\n          "
+                                answer = ET.SubElement(write,'answer')
                                 p = ET.SubElement(answer,'p')
                                 if correct_ans_latex_string:
                                     m = ET.SubElement(p, 'm')
                                     m.text = correct_ans_latex_string
                                 elif correct_ans:
                                     p.text = correct_ans
-                                p.tail = "\n        "
-                                answer.tail = "\n        "
+                solutions = read.xpath('./solution')
+                if solutions:
+                    solution = ET.SubElement(write, 'solution')
+                    for sol in list(solutions):
+                        for child in sol:
+                            chcopy = copy.deepcopy(child)
+                            solution.append(chcopy)
 
-                solutions = stg.findall('.//solution')
-                for sol in list(solutions):
-                    solcopy = copy.deepcopy(sol)
-                    for elem in solcopy.getiterator():
-                        try:
-                            elem.text = elem.text.replace("\n","\n          ")
-                        except AttributeError:
-                            pass
-                        try:
-                            elem.tail = elem.tail.replace("\n","\n          ")
-                        except AttributeError:
-                            pass
-
-                    last = solcopy.xpath('./*[last()]')
-                    if last:
-                        last[0].tail = "\n        "
-                    else:
-                        print('PTX:WARNING: a solution in {} has no content'.format(problem_identifier))
-                    solcopy.text = "\n          "
-                    solcopy.tail = "\n        "
-
-                    stage.append(solcopy)
-
-                last = stage.xpath('./*[last()]')
-                last[0].tail = "\n      "
-                stage.tail = "\n      "
-
-        last = static.xpath('./*[last()]')
-        if last:
-            last[0].tail = "\n    "
-        else:
-            print('PTX:WARNING: {} has no content'.format(problem_identifier))
-        static.tail = "\n    "
+        static_webwork_level(static,response_root)
 
         # Add elements for interactivity
         if (ww_reps_version == '2'):
@@ -1057,7 +921,6 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
             server_data.set('user-id',userID)
             server_data.set('course-password',course_password)
             server_data.set('language',localization)
-            server_data.tail = "\n    "
 
         elif (ww_reps_version == '1'):
             # Add server-url elements for putting into the @src of an iframe
@@ -1080,7 +943,6 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
                     server_url.set('domain',ww_domain)
                     url_shell = "{}?courseID={}&userID={}&password={}&course_password={}&answersSubmitted=0&displayMode=MathJax&outputformat=simple&language={}&problemSeed={}&{}"
                     server_url.text = url_shell.format(ww_domain_path,courseID,userID,password,course_password,localization,seed[problem],source_query)
-                    server_url.tail = "\n    "
 
         # Add PG for PTX-authored problems
         # Empty tag with @source for server problems
@@ -1101,19 +963,12 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
             pg.text = ET.CDATA("\n" + formatted_pg)
         elif origin[problem] == 'server':
             pg.set('source',source[problem])
-        pg.tail = "\n    "
-
-        last = webwork_reps.xpath('./*[last()]')
-        last[0].tail = "\n  "
-
-    last = webwork_representations.xpath('./*[last()]')
-    last[0].tail = "\n "
 
     # write to file
     include_file_name = os.path.join(dest_dir, "webwork-representations.ptx")
     try:
         with open(include_file_name, 'wb') as include_file:
-            include_file.write( ET.tostring(webwork_representations, encoding="utf-8", xml_declaration=True) )
+            include_file.write( ET.tostring(webwork_representations, encoding="utf-8", xml_declaration=True, pretty_print=True) )
     except Exception as e:
         root_cause = str(e)
         msg = "PTX:ERROR: there was a problem writing a problem to the file: {}\n"
