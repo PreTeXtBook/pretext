@@ -841,8 +841,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- from other blocks.  A configuration element  -->
 <!-- in "docinfo" is indicative of this           -->
 <xsl:variable name="b-number-figure-distinct" select="boolean($docinfo/numbering/figures)" />
-<!-- project historical default, switch it -->
-<xsl:variable name="b-number-project-distinct" select="true()" />
+<!-- project historical default, switch it     -->
+<!-- 2021-07-02: debug variable is unsupported -->
+<xsl:variable name="b-number-project-distinct" select="$debug.project.number = ''" />
 <!-- historically false -->
 <xsl:variable name="b-number-exercise-distinct" select="boolean($docinfo/numbering/exercises)" />
 
@@ -1120,6 +1121,10 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 
 <!-- Definitely not debugging.  Transitional.  Top-secret. -->
 <xsl:param name="debug.editable" select="''"/>
+
+<!-- 2021-07-02: any non-empty string will cause project-like  -->
+<!-- to run on the same counter as other blocks. Un-supported. -->
+<xsl:param name="debug.project.number" select="''"/>
 
 <!-- Maybe not debugging, but transitional variables -->
 
