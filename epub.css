@@ -16,15 +16,12 @@
 
 
 /* these "break-(before/after) might not actually do anything */
-.pretext-content section article > .heading,
 .pretext-content section > .heading {
     display: block;
     margin-top: 0;
     break-after: avoid !important;
 }
-.pretext-content section > .heading + p,
-.pretext-content section article > .heading + p,
-.pretext-content section article > .heading + .introduction {
+.pretext-content section > .heading + p {
      display: block;
      break-before: avoid !important;
 }
@@ -34,4 +31,6 @@
 .pretext-content figure .image-box {
     break-after: avoid !important;
 }
-
+.pretext-content figure {
+    break-inside: avoid;
+}

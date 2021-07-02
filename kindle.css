@@ -26,7 +26,6 @@
 .pretext-content article.project-like::after,
 .pretext-content article.remark-like::after,
 .pretext-content article.computation-like::after {
-    break-before: avoid;
     margin-top: -1em;
 }
 
