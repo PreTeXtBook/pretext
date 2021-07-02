@@ -442,7 +442,6 @@ function handleWW(ww_id, action) {
             .popover-title.correct {
                 background-color: #8F8;
             }
-            /* TODO: Add this style after accordion opens */
             .accordion-body.expanded {
                 overflow-y: visible;
                 overflow-x: clip;
@@ -481,8 +480,8 @@ function handleWW(ww_id, action) {
                 });
 
                 iframe.contentDocument.querySelectorAll('.collapse.in').forEach(collapse => collapse.classList.add('expanded'));
-                iframe.contentWindow.jQuery('.collapse').on('shown', function() { this.classList.add('expanded'); });
-                iframe.contentWindow.jQuery('.collapse').on('hide', function() { this.classList.remove('expanded'); });
+                iframe.contentWindow.jQuery('.collapse').on('shown', function(e) { if (e.target != this) return; this.classList.add('expanded'); });
+                iframe.contentWindow.jQuery('.collapse').on('hide', function(e) { if (e.target != this) return; this.classList.remove('expanded'); });
 
                 iframe.contentDocument.querySelectorAll("button.ww-feedback[data-content]").forEach(button => {
                     iframe.contentWindow.jQuery(button).popover("show");
