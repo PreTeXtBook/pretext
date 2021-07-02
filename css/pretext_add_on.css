@@ -16,11 +16,16 @@ a {
 .pretext-content section,
 .pretext-content article,
 .pretext-content figure,
+.pretext-content figcaption,
 .pretext-content .exercisegroup,
 .pretext-content p {
     position: relative;
 }
 
+/* Oscar leving figured out the cause of chrome showing a funny border focus */
+.pretext-content .knowl p {
+    position: unset;
+}
 
 /* CSS defult values:
 https://www.w3schools.com/cssref/css_default_values.asp
@@ -46,6 +51,8 @@ so that we can set our own later */
     line-height: 1.1;
 }
 
+/* spacing around and after p, and around and after article */
+
 .pretext-content p {
     margin-top: 1.25em;
     margin-bottom: 0;
@@ -53,39 +60,62 @@ so that we can set our own later */
 }
 .pretext-content .aside-like > p:first-child,
 .pretext-content td > p:first-child,
-.pretext-content .solution > p:first-child {
+.pretext-content .solution-like > p:first-child {
     margin-top: 0;
+}
+/* for assemblages without a title */
+.pretext-content .assemblage-like > p:first-of-type {
+    margin-top: 0.25em;
 }
 .pretext-content p.intertext {
     margin-top: -0.25em;
     text-indent: 0;
 }
 
-.pretext-content ol, .pretext-content ul {
-    margin-bottom: 0;
-}
-.pretext-content li {
-    margin-bottom: 0;
-}
-.pretext-content section li .heading {
-    font-size: 100%;
-    font-weight: normal;
-    font-style: italic;
+.pretext-content p + table {
+    margin-top: 1em;
 }
 
-.pretext-content figure {
-    margin-bottom: 0;
+.pretext-content table tr td p + p {
+    margin-top: 1em;
+}
+
+.pretext-content table + p {
+    margin-top: 1.5em;
+}
+
+.pretext-content p + figure.figure-like > table {
+    margin-top: 1em;
+}
+
+/* 1.25 = ol top + li top ?  looked too big with 0.75 below */
+.pretext-content .exercise-like p + ol {  
+    margin-top: 0.5em;
+}
+
+.pretext-content p + pre.prettyprint,
+.pretext-content p + pre.plainprint {
+    margin-top: 1.25em;
+}
+.pretext-content p + .code-box {
+    margin-top: 1.25em;
+}
+.pretext-content .code-box > .console{
+    margin-left: 1.5em;
 }
 
 
-.pretext-content .heading {
-    margin-top: 0;
-    margin-bottom: 0;
-}
+
+
+
+
+
+
+
 
 /* this > may be too restrictive.  The purpose is to not put a
    top margin on an article at the top of a knowl */
-.pretext-content section > article {
+.pretext-content section > article, .pretext-content section > section.paragraphs, .pretext-content .paragraphs > article {
     margin-top: 1.25em;
 }
 .pretext-content section article + article,
@@ -102,12 +132,63 @@ so that we can set our own later */
 .pretext-content article + .posterior {
     margin-top: 0.5em;
 }
+.pretext-content section p + .tabular-box {
+    margin-top: 0.75em;
+}
 .pretext-content section .proof {
     margin-top: 0.75em;
 }
 
 .pretext-content section > pre, .pretext-content p + pre {
     margin-top: 1.25em;
+}
+
+.pretext-content ol p + p, .pretext-content ul p + p {
+    margin-top: 1em;
+}
+
+/* see Ex 29 https://yoshiwarabooks.org/linear-functions.html 
+and ex 2.91 in 
+https://yoshiwarabooks.org/mfg/MathModels.html */
+.pretext-content .introduction + .sidebyside,
+.pretext-content p + .sidebyside,
+.pretext-content ol + .sidebyside,
+.pretext-content ul + .sidebyside {
+    margin-top: 1em;
+}
+
+
+
+
+
+
+
+
+.pretext-content ol, .pretext-content ul {
+    margin-bottom: 0;
+}
+.pretext-content li {
+    margin-bottom: 0;
+}
+.pretext-content section li > .heading {
+    font-size: 100%;
+    font-weight: normal;
+    font-style: italic;
+}
+.pretext-content section article.theorem-like li > .heading {
+    font-weight: 600;
+    font-style: normal;
+    font-size: 96%;
+}
+
+.pretext-content figure {
+    margin-bottom: 0;
+}
+
+
+.pretext-content .heading {
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 .pretext-content .conclusion {
@@ -142,10 +223,6 @@ so that we can set our own later */
 
 .pretext-content ol ol, .pretext-content ol ul,  .pretext-content ul ol, .pretext-content ul ul {
     margin-top: 0.5em;
-}
-
-.pretext-content ol p + p, .pretext-content ul p + p {
-    margin-top: 1em;
 }
 
 .pretext-content dl dt, .pretext-content dl dd {
@@ -202,6 +279,7 @@ so that we can set our own later */
 }
 .pretext-content .frontmatter .credit .author {
     font-size: 0.9em;
+    margin-top: 0.75em;
 }
 .pretext-content .frontmatter .author-info {
     font-size: 90%;
@@ -229,14 +307,16 @@ so that we can set our own later */
 .pretext-content article > .heading + p {
     margin-top: 0;
 }
-/* go back and delete the header case when no longer needed */
-.pretext-content section .heading + p, .pretext-content section header + p,
+.pretext-content section .heading + p, /* , .pretext-content section header + p, */
 .pretext-content section .heading + .introduction > p:first-child,
 .pretext-content section .blob > p:first-child,
 .pretext-content section .permalink + p {
     margin-top: 0.25em;
 }
-.pretext-content section .heading + article, .pretext-content section header + article {
+.pretext-content section .heading + article { /* , .pretext-content section header + article { */
+    margin-top: 1em;
+}
+.pretext-content section .heading + .sidebyside {
     margin-top: 1em;
 }
 
@@ -248,6 +328,14 @@ so that we can set our own later */
     font-weight: 700;
     color: inherit;
 }
+.pretext-content article .exercise-stage {
+    font-family: "PT Serif", "Times New Roman", Times, serif;
+    font-weight: 700;
+    color: inherit;
+    font-size: 100%;
+    margin-top: 0.4em;
+}
+
 /*
 .pretext-content a article .heading {
     font-weight: 500;
@@ -262,12 +350,30 @@ so that we can set our own later */
 .pretext-content section section > .heading {
     font-size: 1.5em;
     line-height: 1.25em;
-    margin-top: 1em;
+}
+.pretext-content section section.paragraphs > .heading {
+    font-size: 1.125em;
+    line-height: 1.125em;
 }
 .pretext-content section section section > .heading {
     font-size: 1.40em;
     line-height: 1.15em;
     margin-top: 0.75em;
+}
+@media screen and (max-width: 480px) {
+    .pretext-content section > .heading {
+        font-size: 1.5em;
+        line-height: 1.33em;
+        margin-top: 1em;
+    }
+    .pretext-content section section > .heading {
+        font-size: 1.3em;
+        line-height: 1.15em;
+    }
+    .pretext-content section section section > .heading {
+        font-size: 1.15;
+        line-height: 1em;
+    }
 }
 
 .pretext-content section article > .heading,
@@ -281,6 +387,7 @@ so that we can set our own later */
     display: inline;
 }
 .pretext-content section article > .heading::after,
+.pretext-content section section.paragraphs > .heading::after,
 .pretext-content section section article > .heading::after,
 .pretext-content section article > a > .heading::after,
 .pretext-content section section article > a > .heading::after,
@@ -340,7 +447,9 @@ so that we can set our own later */
 from Jiří Lebl */
 .pretext-content .MJXc-display, .pretext-content .knowl-output .knowl-output .knowl-output .knowl-output .MJXc-display ,
 .pretext-content pre.prettyprint,
-.pretext-content pre.plainprint {
+.pretext-content pre.plainprint, 
+.pretext-content pre.console,
+.pretext-content .code-box {
     background-image: linear-gradient(to right, white, white), linear-gradient(to right, white, white), linear-gradient(to right, rgba(0,0,0,.25), rgba(255,255,255,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(255,255,255,0));
     background-position: left center, right center, left center, right center;
     background-repeat: no-repeat;
@@ -384,6 +493,11 @@ from Jiří Lebl */
     margin-bottom: 0.5em;
 }
 
+.pretext-content .knowl-content > article:first-child,
+.pretext-content .knowl-content > .solution:first-child {
+/* padding, not margin, to det colored background (and not be absorbed) */
+    padding-top: 0.5em;
+}
 
 
 .pretext-content section p.credit + p.credit {
@@ -538,6 +652,7 @@ body > a.assistive:focus {
 
 .pretext-content figure.table-like figcaption:first-child {
     font-style: oblique;
+    margin-top: 0;
 }
 .pretext-content figure.table-like figcaption:first-child .type,
 .pretext-content figure.table-like figcaption:first-child .codenumber {
@@ -549,13 +664,6 @@ body > a.assistive:focus {
     font-weight: 700;
     font-size: inherit;
 }
-
-/*
-.pretext-content figcaption .heading + .codenumber::before,
-.pretext-content figcaption .type + .codenumber::before {
-    content: " ";
-}
-*/
 
 .pretext-content figcaption .codenumber:after {
     content: "\2002";
@@ -579,6 +687,10 @@ body > a.assistive:focus {
 }
 .pretext-content figcaption + .named-list-content > .introduction > p:first-child {
     margin-top: 0;
+}
+.pretext-content figcaption + table,
+.pretext-content figcaption + .tabular-box {
+    margin-top: 0.5em;
 }
 
 /* should be .emphasis instead of em */
@@ -612,6 +724,7 @@ body > a.assistive:focus {
     margin: 0;
 }
 
+/* delete the .paragraphs after 0.31 */
 .pretext-content .paragraphs .heading {
     display: inline;
 }
@@ -620,34 +733,22 @@ body > a.assistive:focus {
     display: inline;
 }
 
-/* obsolete once paragraph spacing refactored */
-/*
-.pretext-content .paragraphs .heading + p:after {
-    content: "";
-    display: block;
-    margin-bottom: 1.25em;
-}
-*/
-/*
-.pretext-content .paragraphs p:last-child::after {
-    margin-bottom: 0;
-}
-*/
-
-
 /* the next are to avoid styping a p as inline, because
  * inline styling messes up the meaning of line-height.
  * */
 
+/* delete the .paragraphs after 0.31 */
 .pretext-content .paragraphs p .title {
     font-family: "PT Serif", "Times New Roman", Times, serif;
     font-size: 1.125em;
     font-weight: 700;
 }
 
+/* can that happen?
 .pretext-content .paragraphs p .heading {
     display: inline;
 }
+*/
 
 .pretext-content section .paragraphs .heading {
     margin-top: 0;
@@ -657,9 +758,23 @@ body > a.assistive:focus {
     margin-top: 3em;
 }
 
-.pretext-content .sidebyside > p, .pretext-content .sidebyside > figure, .pretext-content .sidebyside > img, .pretext-content .sidebyside > table, .pretext-content .sidebyside > tabular, .pretext-content .sidebyside > .paragraphs {
+.pretext-content section section + section {
+    margin-top: 3em;
+}
+
+
+.pretext-content .sidebyside > p, .pretext-content .sidebyside > figure, .pretext-content .sidebyside > img, .pretext-content .sidebyside > table, .pretext-content .sidebyside > tabular, .pretext-content .sidebyside > section, .pretext-content .sidebyside > .paragraphs {
     display: inline-block;
     margin: 0;
+}
+.pretext-content .sidebyside .sbspanel > table {
+/* see Sec 23.12 of sample article */
+ /*   display: block;
+    width: 100%;
+*/
+    overflow-x: auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .pretext-content .sidebyside figcaption {
@@ -669,17 +784,8 @@ body > a.assistive:focus {
     margin: 0.75em 0 0 0;
 }
 
-/*
-.pretext-content .sidebyside figcaption .heading, .pretext-content .sidebyside figcaption .codenumber {
-    font-weight: 700;
-}
-*/
 
-/* .pretext-content .sidebyside figcaption .heading:after {
-    content: "\00a0";
-} */
-
-.pretext-content figcaption .codenumber{
+.pretext-content figcaption {
     font-family: "PT Serif", "Times New Roman", Times, serif;
 }
 
@@ -708,15 +814,6 @@ body > a.assistive:focus {
     width: 100%;
 }
 
-/* see Ex 29 https://yoshiwarabooks.org/linear-functions.html 
-and ex 2.91 in 
-https://yoshiwarabooks.org/mfg/MathModels.html */
-.pretext-content p + .sidebyside,
-.pretext-content ol + .sidebyside,
-.pretext-content ul + .sidebyside {
-    margin-top: 1em;
-}
-
 .pretext-content .sbsrow {
     display: flex;
     justify-content: space-between;
@@ -731,11 +828,26 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     font-size: 1em;
 }
 
+.pretext-content .sbspanel:empty { /* can only happen when partially created */
+    height: 10em;
+    background-color: rgb(221, 221, 255);
+}
 /* containers of desired width for actual content */
 .pretext-content .sbspanel {
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
 }
+.pretext-content .sbspanel.top {  /* also the default */
+    justify-content: flex-start;
+}
+.pretext-content .sbspanel.middle {
+    justify-content: center;  /* should that be space-between? */
+}
+.pretext-content .sbspanel.bottom {
+    justify-content: flex-end;
+}
+
 .pretext-content .sbspanel > p:first-child {
     margin-top: 0;
 }
@@ -760,10 +872,6 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     overflow-x: scroll;
 }
 */
-
-.pretext-content p + table {
-    margin-top: 1em;
-}
 
 .pretext-content table {
     border-spacing: 0;
@@ -990,22 +1098,30 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     margin-left: 1em;
 }
 
-.pretext-content table tr td p + p {
-    margin-top: 1em;
-}
-
-.pretext-content table + p {
-    margin-top: 1.5em;
-}
-
 .pretext-content table tr td span.decimal {
     float: left;
     text-align: right;
 }
 
+.pretext-content table tr.header-vertical th {
+    writing-mode: vertical-rl;
+    padding-left: 2em;
+/*
+    transform: rotate(180deg);
+*/
+}
+
 .pretext-content table + article {
     margin-top: 1em;
 }
+
+/*
+#pretext-SA #table-12 table  tr:first-of-type th {
+    background: #faa;
+    writing-mode: vertical-rl;
+    transform: none!important;
+}
+*/
 
 .pretext-content .hidden-knowl-wrapper .hiddenproof,
 .pretext-content .blob > article.hiddenproof,
@@ -1021,15 +1137,12 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     overflow: auto;
 }
 .pretext-content figure.figure-like {
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 0;
+    margin-right: 0;
 }
 .pretext-content figure.table-like {
     margin-left: 30px;
     margin-right: 30px;
-}
-.pretext-content p + figure.figure-like > table {
-    margin-top: 1em;
 }
 
 .pretext-content figure.figure-like figcaption {
@@ -1102,18 +1215,90 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 }
 
 /* this should be obsolete, because the permalink is outside of the .heading */
+/*
 .pretext-content section .heading a.permalink {
     opacity: 0.1;
     font-size: 70%;
     color: #d00;
     display: inline-block;
 }
+*/
 
 .pretext-content section > .heading,
 .pretext-content section section > .heading,
 .pretext-content section section section > .heading {
   display: inline-block;
 }
+/* maybe delete the above and always do like worksheet after 0.31? */
+.pretext-content section.worksheet > .heading,
+.pretext-content section section.worksheet > .heading,
+.pretext-content section section section.worksheet > .heading {
+  display: block;
+}
+.pretext-content section.worksheet > .heading > .codenumber {
+    display: inline-block;
+    vertical-align: top;
+}
+.pretext-content section.worksheet > .heading > .title {
+    display: inline-block;
+    max-width: 70%;
+}
+.pretext-content .heading .print-links {
+    display: inline-block;
+    float: right;
+    vertical-align: top;
+    width: 19%;
+    text-align: right;
+}
+.standalone .pretext-content .heading .print-links {
+    display: none;
+}
+.standalone.worksheet #previousbutton,
+.standalone.worksheet #upbutton,
+.standalone.worksheet #nextbutton {
+    display: none;
+}
+.standalone.worksheet #primary-navbar .sidebar-left-toggle-button {
+    display: none;
+}
+.standalone.worksheet.has-sidebar-left #primary-navbar .navbar-top-buttons > .toolbar,
+.standalone.worksheet.has-sidebar-left #primary-navbar-sticky-wrapper .navbar-top-buttons > .toolbar {
+    margin-left: 0;
+}
+.standalone.worksheet .pretext-content [data-knowl]:hover,
+.standalone.worksheet .pretext-content [data-knowl]:active,
+.standalone.worksheet .pretext-content [data-knowl].active {
+    background: none;
+    color: black;
+}
+.standalone.worksheet .pretext-content [data-knowl]::after {
+    border: none;
+}
+.standalone.worksheet .pretext-content .knowl-content {
+    padding: 0;
+}
+.standalone.worksheet .pretext-content article > .knowl-output.original {
+    margin: 0;
+}
+
+.pretext-content .heading .print-links > a {
+    font-family: "Open Sans";
+    font-size: 0.6em;
+    font-weight: bold;
+    padding: 0.1em 0.2em;
+    background: #ffa;
+    border: 2px solid green;
+}
+.pretext-content .heading .print-links > a.us {
+    background: #eef;
+    color: #9b1c2c;
+    border-color: #041E42;
+}
+.pretext-content .heading .print-links > a + a {
+    margin-left: 0.25em;
+}
+
+/* obsolete? */
 .pretext-content section .heading + a.permalink {
     opacity: 0.2;
     color: #d00;
@@ -1128,6 +1313,21 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     font-size: 80%;
 }
 
+/* temporary for runestone */
+/*
+.pretext-content section article .heading + div,
+.pretext-content section article.exercise  .heading + div,
+.pretext-content section article.exercise  .heading + div > p:first-child,
+.pretext-content section article .heading + div.exercisegroup > div:first-child,
+.pretext-content section article .heading + div.exercisegroup > div:first-child > p:first-child,
+*/
+.pretext-content section article .heading + div.runestone,
+.pretext-content section article .heading + div.runestone > div:first-child,
+.pretext-content section article .heading + div.runestone > div:first-child > p:first-child {
+    display: inline;
+}
+
+/* after version 0.31, check the pretext code if a.permalink can still occur */
 .pretext-content .heading a.permalink:hover {
     opacity: 1;
     color: #a32;
@@ -1140,70 +1340,54 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .pretext-content .autopermalink {
     position: absolute;
     display: inline-block;
-/*
-    max-width: 3em;
-    padding-left: 0.5em;
-    padding-right: 0.5em;
-*/
     top: 3px;
     left: -1.9em;
     font-size: 85%;
     color: #a00;
     opacity: 0.05
 }
-.pretext-content .autopermalink a {
+.pretext-content .autopermalink > * {
     padding-left: 0.2em;
     padding-right: 0.2em;
 }
 /* when jumping to a permalink, push down so sticky navbar does not cover */
-:target::before {
-  content: "";
-  display: block;
-  height: 42px;
-  padding: -42px 0 0;
-  border: 0;
-}
-/* when there is a sage cell evaluate button before  the target, the button was being covered */
-/*
-iii.sagecell + :target::before {
-    height: 0;
-    margin: 0;
-}
-iii.indexletter + :target::before {
-    height: 20px;
-    margin: -20px 0 0;
-}
-*/
-
-:target > div.autopermalink {
-  top: 45px;
+:target {
+    /* scroll-snap-margin-top: 45px;   for safari, except it doesn't work */
+    scroll-margin-top: 45px;
 }
 
-/*
-.pretext-content .autopermalink {
-    position: absolute;
-    top: 0px;
-    right: -120px;
-    font-size: 85%;
-    color: #a00;
-    opacity: 0.02
-}
-*/
 .pretext-content .exercises > .autopermalink,
 .pretext-content .introduction > .autopermalink,
 .pretext-content .glossary > .autopermalink {
     margin-top: 1em;
 }
+.pretext-content .appendix > .autopermalink,
 .pretext-content .chapter > .autopermalink,
 .pretext-content .index > .autopermalink,
-.pretext-content .section > .autopermalink,
-.pretext-content .subsection > .autopermalink {
-    margin-top: 2em;
+.pretext-content .section > .autopermalink {
+    margin-top: 2.7em;
+}
+.pretext-content .subsection > .autopermalink,
+.pretext-content .references > .autopermalink,
+.pretext-content .exercises > .autopermalink {
+    margin-top: 2.0em;
+}
+.pretext-content .subsubsection > .autopermalink {
+    margin-top: 1.4em;
 }
 
 .pretext-content .autopermalink:hover {
     opacity: 1;
     background: #eeddff;
+}
+.pretext-content .permalink-alert {
+    position: absolute;
+    top: -3em;
+    left: 5em;
+    padding: 1.5em 2em;
+    background: #fff;
+    border: 3px solid blue;
+    z-index: 2001;
 }
 
 .mininav {
@@ -1346,6 +1530,12 @@ iii.indexletter + :target::before {
 .pretext-content .cols2 + *, .pretext-content .cols3 + *, .pretext-content .cols4 + *, .pretext-content .cols5 + *, .pretext-content .cols6 + * {
     clear: both;
 }
+/* does the next line eliminate the need for the previous line? */
+.pretext-content .cols2::after, .pretext-content .cols3::after, .pretext-content .cols4::after, .pretext-content .cols5::after, .pretext-content .cols6::after {
+    content: "";
+    display: block;
+    clear: both;
+}
 
 .pretext-content section > ol:last-child,
 .pretext-content section > ul:last-child {
@@ -1361,11 +1551,14 @@ iii.indexletter + :target::before {
     padding-bottom: 0em;
 }
 
+/* does this do anything which is not accomplished by the colsN::after above? */
+/* seems not
 .pretext-content .cols2:last-child::after, .pretext-content .cols3:last-child::after, .pretext-content .cols4:last-child::after, .pretext-content .cols5:last-child::after, .pretext-content .cols6:last-child::after {
     content: "";
     display: block;
     clear: both;
 }
+*/
 
 .pretext-content .cols2 > li:nth-child(2n+1),
 .pretext-content .cols3 > li:nth-child(3n+1),
@@ -1387,22 +1580,10 @@ iii.indexletter + :target::before {
     float: left;
 }
 
-/* 1.25 = ol top + li top ?  looked too big with 0.75 below */
-.pretext-content .exercise-like p + ol {  
-    margin-top: 0.5em;
-}
-/*
-.pretext-content .exercise-like ol {  
-    margin-bottom: 0;
-}
-*/
-
 .pretext-content .incontext {
     display: block;
     font-size: 85%;
     text-align: right;
-/*    margin-bottom: -1.0em;
-*/
 }
 
 .pretext-content .terminology {
@@ -1422,7 +1603,6 @@ iii.indexletter + :target::before {
 :target {
     animation: target-fade 15s 1;
 }
-
 @-webkit-keyframes target-fade {
     0% { background-color: rgba(120,0,120,.3); }
     100% { background-color: inherit;
@@ -1468,6 +1648,12 @@ iii.indexletter + :target::before {
      content: attr(label) "\00A0\00A0 ";
 }
 
+.pretext-content ol.no-marker,
+.pretext-content ul.no-marker,
+.pretext-content li.no-marker {
+    list-style-type: none;
+}
+
 .pretext-content ol.decimal {
     list-style-type: decimal;
 }
@@ -1505,7 +1691,7 @@ iii.indexletter + :target::before {
     margin-left: 0;
 }
 
-.pretext-content dl dt {
+.pretext-content dl > dt {
         font-weight: bold;
 }
 
@@ -1519,11 +1705,14 @@ iii.indexletter + :target::before {
     margin-left: 22ex;
 }
 
-.pretext-content dl.description-list dd dt {
-    width: 14ex;
+.pretext-content dl.description-list dl dt {
+    width: 8ex;
 }
 .pretext-content dl.description-list dd dd {
     margin-left: 18ex;
+}
+.pretext-content dl.description-list dl dd {
+    margin-left: 12ex;
 }
 
 .pretext-content dl.description-list dd:after {
@@ -1531,23 +1720,14 @@ iii.indexletter + :target::before {
     display: block;
     clear: left;
 }
-
-.pretext-content dl.description-list-narrow {
-    margin-left: 0;
+.pretext-content dl.description-list dt:first-of-type {
+    clear: none;
 }
-.pretext-content dl.description-list-narrow dt {
-    float: left;
-    clear: left;
-    text-align: right;
+.pretext-content dl.description-list.narrow dt {
     width: 8ex;
 }
-.pretext-content dl.description-list-narrow dd {
+.pretext-content dl.description-list.narrow dd {
     margin-left: 12ex;
-}
-.pretext-content dl.description-list-narrow dd:after {
-    content: "";
-    display: block;
-    clear: left;
 }
 
 @media screen and (max-width: 480px) {
@@ -1562,6 +1742,29 @@ iii.indexletter + :target::before {
   }
 }
 
+/* delete all the -narrow in the next CSS version (post 0.31) */
+.pretext-content dl.description-list-narrow {
+    margin-left: 0;
+}
+.pretext-content dl.description-list-narrow dt {
+    float: left;
+    clear: left;
+    text-align: right;
+    width: 8ex;
+}
+.pretext-content dl.description-list-narrow dt:first-of-type {
+    clear: none;
+}
+.pretext-content dl.description-list-narrow dd {
+    margin-left: 12ex;
+}
+.pretext-content dl.description-list-narrow dd:after {
+    content: "";
+    display: block;
+    clear: left;
+}
+/* end of -narrow */
+
 /*
 #toc ul li.listprefix {
     list-style-type: none;
@@ -1574,6 +1777,16 @@ iii.indexletter + :target::before {
 }
 */
 
+.pretext-content [data-knowl] > mjx-mrow .TEX-I {
+    font-family: MJXZERO !important;
+    font-style: normal !important;
+}
+/* remove this when MathJax fixes the bug that was setting the width to 0 */
+/* as in  $x=0$.  becomes  $x=0\text{.}$ */
+.pretext-content .knowl mjx-mtext > mjx-utext {
+    width: revert !important;
+}
+
 /* to stop things being blue when rendering MathJax with SVG */
 a.mjx-svg-href  {
     fill: inherit;
@@ -1582,10 +1795,12 @@ a.mjx-svg-href  {
 
 /* for long math formulas and tables to scroll on small screens */
 @media screen and (max-width: 943px) {
-  /* adapted from line 192, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_sliding-sidebars.scss */
   .pretext-content .displaymath {
      position: relative;
+     overflow-x: auto;
   }
+/* maybe the remainder of this case is subsumed by the above,
+   and also does not apply to MJ3 */
   .pretext-content .mjx-chtml.MJXc-display {
     /*Allow users on smaller screens to scroll equations*/
     /*horizontally when they don't fit on the screen*/
@@ -1703,6 +1918,14 @@ a.mjx-svg-href  {
 .pretext-content .exercisegroup article.exercise-like .heading {
     margin: 0;
 }
+.pretext-content article.exercise-like .task > .heading + .heading {
+    font-weight: 600;  /* still looks same as bold to me */
+}
+.pretext-content article.exercise-like .task > .heading + .heading + p,
+.pretext-content article.exercise-like .task > .heading + .heading + div {
+    display: block;
+    margin-top: 0;
+}
 .pretext-content .exercisegroup .conclusion .heading {
     margin-top: 0.5em;
 }
@@ -1718,6 +1941,9 @@ a.mjx-svg-href  {
 .pretext-content .exercisegroup-exercises > article {
     margin-left: 2em;
 }
+.pretext-content .exercisegroup .cols2 > article {
+    margin-left: 1.25em;
+}
 .pretext-content .exercisegroup > .introduction,
 .pretext-content .exercisegroup > .conclusion {
     margin-left: 0;
@@ -1728,7 +1954,7 @@ a.mjx-svg-href  {
 }
 .pretext-content .exercisegroup > .introduction > p:first-child::before {
     content: '\25a0\2009';
-   // font-size: 70%;
+   /* font-size: 70%; */
     color: #06a;
     position: relative;
     top: -1px;
@@ -1838,9 +2064,17 @@ a.mjx-svg-href  {
 
 .pretext-content .code-inline,
 .pretext-content .code-block,
-.pretext-content .console {
+.pretext-content .console,
+.pretext-content .program,
+.pretext-content .program code {
     font-family: "Inconsolata", monospace;
 }
+.pretext-content .code-block,
+.pretext-content .console,
+.pretext-content .program {
+    overflow-x: auto;
+}
+
 .pretext-content .code-inline {
     font-size: 1em;
     white-space: nowrap;
@@ -1886,6 +2120,51 @@ a.mjx-svg-href  {
 .pretext-content .sage-interact.sagecell {
     margin: 0;
 }
+
+.pretext-content .sagecell_evalButton {
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  padding: 0 0.65em;
+}
+.pretext-content .sagecell_evalButton {
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  /* Disable accidental text-selection */
+  user-select: none;
+  /* Truncate overflowing text with ellipsis */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-width: 1px;
+  border-style: solid;
+  font-weight: bold;
+  border-radius: 3px;
+}
+.pretext-content .sagecell_evalButton {
+  color: #383838;
+  background-image: linear-gradient(#f7f7f7, #bbbbbb);
+  border-color: #c4c4c4;
+}
+.pretext-content .sagecell_evalButton:hover {
+  color: #181868;
+  background-image: linear-gradient(#bbbbbb, #f7f7f7);
+}
+.pretext-content .sagecell_evalButton:focus,
+.pretext-content .sagecell_evalButton:active {
+  color: #20160b;
+  background-image: linear-gradient(#ff6852, #ffd7d1);
+  border-color: #ff2822;
+}
+
+.pretext-content .sagecell .sagecell_editor {
+  margin-bottom: 8px;
+}
+
+
 /*
 .pretext-content .sagecell .CodeMirror-fullscreen {
     z-index: 400;
@@ -2016,6 +2295,11 @@ body, html body { background: #fff; }
     max-width: 650px;
 }
 
+.pretext-content .tabular-box table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 figure img {
     display: block;
     margin-left: auto;
@@ -2079,9 +2363,15 @@ figure figcaption.wrap {
 .pretext-content figure .image-box {
     margin-top: 0;
 }
+.pretext-content .sidebyside figure {
+    margin-top: 0;
+}
 .pretext-content .image-box img,  /* See sample article Graphics section */
+.pretext-content img.contained,  /* See sample article Graphics section */
 .pretext-content .sbspanel img {
+   /* previously these were hard-coded in the HTML */
     width: 100%;
+    height: auto;
 }
 
 /* In 0.2 all of the below are needed.  Possibly in a later version
@@ -2095,27 +2385,45 @@ figure figcaption.wrap {
 }
 .pretext-content img.mag_popup {
     border: 1px solid #666;
-    box-shadow: 5px 10px 5px #999;
+    box-shadow: 4px 6px 4px #999;
     cursor: zoom-out;
     max-width: 600px;
+/*
     margin-right: 50px;
+*/
 }
 .pretext-content .mag_popup_container {
     width:100%;
     position:absolute;
     z-index:1001;
-    overflow-x: auto;
+    overflow-x: visible;
 }
 
-/* .caption .counter:after { content: " ";} */
+.pretext-content .image-box,
+.pretext-content .audio-box,
+.pretext-content .video-box,
+.pretext-content .asymptote-box {
+    position: relative;
+}
+.pretext-content .image-box .asymptote-box iframe.asymptote,
+.pretext-content iframe.asymptote,
+.pretext-content .video-box .video,
+.pretext-content .video-box .video-poster {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+}
+.pretext-content section > .audio-box,
+.pretext-content section > .video-box,
+.pretext-content section > .image-box {
+    margin-top: 0.75em;
+}
 
-/* above repeated for captions outside figures */
+.pretext-content .audio {
+    width: 100%;
+}
 
 .caption .heading {
     font-weight: bold;
 }
-
-/* .caption .heading:after { content: " ";} */
 
 .caption .counter {
     font-weight: bold;
@@ -2136,6 +2444,35 @@ code.inline {
     border: none;
 }
 
+/* These next are frp Prism */
+.pretext-content pre.program,
+.pretext-content pre.program code {
+    line-height: 1.1;
+}
+.pretext-content section > .code-box,
+.pretext-content p + .code-box {
+    margin-top: 1em;
+}
+
+.pretext-content pre.program {
+    margin-top: 0;
+    padding-left: 15px;
+    border-left: 1px solid #aaa;
+    font-size: 93%;
+    overflow: auto;
+    background: inherit;  /* over-ride Prism's #f5f2f0 */
+}
+.pretext-content pre.program:before {
+    content:' ';
+    font-size: 50%;
+    border-top: 1px solid #aaa;
+    display: block;
+    margin-right: auto;
+    margin-left: -15px;
+    width: 3.0em;
+}
+
+/* next os for the old code formatting js */
 .pretext-content pre.prettyprint,
 .pretext-content pre.plainprint {
     margin-top: 0;
@@ -2149,6 +2486,7 @@ code.inline {
 .pretext-content pre.prettyprint:before,
 .pretext-content pre.plainprint:before {
     content:'';
+    font-size: 50%;
     border-top: 1px solid #aaa;
     display: block;
     margin-right: auto;
@@ -2157,11 +2495,6 @@ code.inline {
     padding-bottom: 0.25em;
 */
     width: 2.5em;
-}
-
-.pretext-content p + pre.prettyprint,
-.pretext-content p + pre.plainprint {
-    margin-top: 1.25em;
 }
 
 .pretext-content .objectives {
@@ -2197,6 +2530,10 @@ code.inline {
   background-color: #f5faff;
   box-shadow: 0 0 1.0em 0.2em #fff inset;
 }
+.pretext-content .aside-like p {
+    overflow-x: auto;
+}
+
 .pretext-content .aside-like:first-child {
     margin-top: -2.25em;
 }
@@ -2360,11 +2697,11 @@ code.inline {
 .pretext-content ol > li {
     padding-left: 0.25em;
 }
-.pretext-content ol.cols2 > li, .pretext-content ul.cols2 > li { width: calc(49% - 1.75em)}
-.pretext-content ol.cols3 > li, .pretext-content ul.cols3 > li { width: calc(33% - 1.25em)}
-.pretext-content ol.cols4 > li, .pretext-content ul.cols4 > li { width: calc(24.5% - 1.25em)}
-.pretext-content ol.cols5 > li, .pretext-content ul.cols5 > li { width: calc(19.5% - 0.75em)}
-.pretext-content ol.cols6 > li, .pretext-content ul.cols6 > li { width: calc(16.3% - 0.5em)}
+.pretext-content ol.cols2 > li, .pretext-content ul.cols2 > li { width: calc(49% - 1.75em); min-width: 190px}
+.pretext-content ol.cols3 > li, .pretext-content ul.cols3 > li { width: calc(33% - 1.25em); min-width: 160px}
+.pretext-content ol.cols4 > li, .pretext-content ul.cols4 > li { width: calc(24.5% - 1.25em); min-width: 100px}
+.pretext-content ol.cols5 > li, .pretext-content ul.cols5 > li { width: calc(19.5% - 0.75em); min-width: 90px}
+.pretext-content ol.cols6 > li, .pretext-content ul.cols6 > li { width: calc(16.3% - 0.5em); min-width: 80px}
 /* sample-article sec 5 */
 .pretext-content ul.cols2 > li, .pretext-content ol.cols2 > li {
    padding-right: 1.5em;
@@ -2425,6 +2762,8 @@ code.inline {
 
 /* because .colsN uses float, the margin-top of the folowing
 element is ignored */
+/* but now this is not needed because we add an "::after" on cols n,
+   which is an empty non-floating block 
 .pretext-content .cols2 > li:last-child,
 .pretext-content .cols3 > li:last-child,
 .pretext-content .cols4 > li:last-child,
@@ -2432,6 +2771,7 @@ element is ignored */
 .pretext-content .cols6 > li:last-child {
     padding-bottom: 1em;
 }
+*/
 
 /* A colsN in a knowl needs to be narrower because of the margin/padding of the knowl */
 .pretext-content .knowl .exercise-like > .cols2 > li { width: calc(49% - 2em)}
@@ -2554,23 +2894,6 @@ body.sidebar-left-closed .searchwrapper {
     padding-right: 0.5em;
     font-family: monospace;
 }
-/*
-.pretext-content .image-archive > a:not(:last-child) {
-    padding-right: 1em;
-}
-.pretext-content .image-archive > a:not(:last-child):after {
-    content: " ";
-}
-*/
-
-/*
-.pretext-content .sbspanel object {
-*/
-/*
-.pretext-content .sbspanel object:not(:last-child) {
-    margin-bottom: 0 !important;
-}
-*/
 
 .pretext-content iframe {
     margin: 0;
@@ -2590,11 +2913,14 @@ body.sidebar-left-closed .searchwrapper {
 
 /*
 nested tasks. see
-http://mathbook.pugetsound.edu/examples/sample-article/html/interesting-corollary.html
+https://pretextbook.org/examples/sample-article/html/interesting-corollary.html#aBc
 */
 
 .pretext-content .exercise-like > .exercise-like {
     margin-left: 40px;
+}
+.pretext-content .exercise-like > .exercise-like.task {
+    margin-left: 20px;
 }
 .pretext-content .exercise-like > .exercise-like > p {
     margin-top: 1.25em;
@@ -2766,6 +3092,29 @@ and condider having this replace line 3338 of the general code (which uses .head
   margin-right: 0.41667em;
 }
 
+.pretext-content .summary-links a:active {
+  position: relative;
+  color: white;
+  background: #932919;  
+  text-decoration: none;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px 5px inset;
+}
+.pretext-content .summary-links a:active:after {
+  width: 0;
+  height: 0;
+  border-top: 0.4em solid transparent;
+  border-bottom: 0.4em solid transparent;
+  border-left: 0.4em solid white;
+}
+.pretext-content .summary-links a:focus {
+  outline: thin dotted #333;
+  outline-offset: -2px;
+  /**
+   * Remove stupid inner dotted border applied by Firefox on focus
+   * See http://stackoverflow.com/a/199319/1599617
+   */
+}
+
 
 @media print {
     .navbar { display:none; }
@@ -2793,6 +3142,259 @@ and condider having this replace line 3338 of the general code (which uses .head
     .has-sidebar-left.mathbook-loaded.sidebar-left-open .page .main #content.pretext-content section .heading { margin-top:0 }
 }
 
+/* also see section > heading for worksheets, maybe around line 1200 */
+/* one-page documents in the browser */
+
+body.standalone.worksheet .pretext-content .onepage > .heading {
+    margin-top: 0;
+    font-size: 1.3em;
+}
+body.standalone.worksheet .pretext-content .onepage > .introduction {
+    margin-top: 0.4em;
+}
+body.standalone.worksheet .pretext-content .onepage > .introduction > .heading {
+    font-size: 1.1em;
+}
+body.standalone.worksheet .pretext-content .onepage .solutions {
+    display: none;
+}
+body.standalone .pretext-content .worksheet {
+    padding: 40px 45px 45px 55px;
+    border: 2px solid grey;
+    margin: 0;
+/* height: 1243px; */
+}
+
+body.standalone .pretext-content .onepage {
+    padding: 40px 45px 45px 55px;
+    border-bottom: 2px solid grey;
+    margin: 0;
+/* height: 1243px; */
+}
+body.standalone .pretext-content .onepage + .onepage {
+    border-top: 2px solid grey;
+}
+/* there may be worksheet content before the first page
+   or after the last page
+*/
+body.standalone .pretext-content .onepage.firstpage {
+    padding-top: 0
+}
+body.standalone .pretext-content .onepage.lastpage {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+body.standalone .pretext-content .worksheet:last-child {
+    padding-bottom: 0 !important
+}
+.pretext-content .onepage + .onepage {
+    margin-top: 2.5em;
+    padding-top: 1.5em;
+    border-top: 1px dashed #aaa;
+}
+.pretext-content .onepage + .onepage::before {
+    content: "pagebreak";
+    text-align: center;
+    margin-left: 40%;
+    padding-left: 1em;
+    padding-right: 1em;
+    position: absolute;
+    top: -0.8em;
+    font-size: 80%;
+    font-style: italic;
+    background: white;
+}
+
+body.standalone .pretext-content .onepage + .onepage {
+    margin-top: 10px;
+}
+body.standalone .pretext-content .onepage + .onepage::before {
+    content: none;
+}
+.pretext-content .onepage > p:first-child {
+    margin-top: 0;
+}
+/* not good, because of image next to image
+.pretext-content .onepage .sbspanel + .sbspanel {
+    padding-left: 1.25em;
+    border-left: 1px solid grey;
+    margin-left: -1.25em;
+}
+*/
+body.worksheet .pretext-content .onepage .sbspanel + .sbspanel > .exercise::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    padding-left: 1.25em;
+    border-left: 1px solid grey;
+    margin-left: -1.25em;
+    z-index: -100;  /* to not block editable content */
+}
+
+body.standalone.worksheet .pretext-content section article.task {
+    margin-left: 0;
+}
+body.standalone.worksheet .pretext-content section article.task > .heading {
+    font-weight: normal;
+}
+
+body.standalone .autopermalink {
+    display: none;
+}
+
+body.standalone.worksheet .pretext-content .onepage .workspace {
+    border: 2px dotted grey;
+    background: #f3fff3;
+/*  Sally suggests light and dark blue 
+    background: linear-gradient(
+        #eef 0px, #eef 200px,
+        #eef 200px, #99f 205px,
+        #99f 205px, #99f 100%)
+*/
+}
+body.standalone.worksheet .pretext-content .onepage .workspace.squashed {
+    border: 2px dotted grey;
+    background: #ffe;
+}
+
+body.standalone.worksheet .pretext-content .onepage .workspace.squashed.tight {
+    border: 15px solid;
+    border-image: repeating-linear-gradient(
+      -35deg,
+      #f33,
+      #f33 10px,
+      #000 10px,
+      #000 20px
+    ) 20; 
+/*
+    background: linear-gradient(
+        #ff0 0%, #ff0 8%,
+        #000 8%, #000 9%,
+        #ff6 9%, #ff6 17%,
+        #555 17%, #555 19%,
+        #ff8 19%, #ff8 26%,
+        #777 26%, #777 29%,
+        #ffa 29%, #ffa 37%,
+        #aaa 37%, #aaa 41%,
+        #ffd 41%, #ffd 48%,
+        #ccc 48%, #ccc 52%,
+        #ffd 52%, #ffd 59%,
+        #aaa 59%, #aaa 63%,
+        #ffa 63%, #ffa 71%,
+        #777 71%, #777 74%,
+        #ff8 74%, #ff8 81%,
+        #555 81%, #555 83%,
+        #ff6 83%, #ff6 91%,
+        #000 91%, #000 92%,
+        #ff0 92%, #ff0 100%
+        );
+*/
+    background: yellow;
+}
+
+body.standalone.worksheet #sidebar-left {
+    display: none;
+}
+body.has-sidebar-left.mathbook-loaded.standalone.worksheet .page .main {
+    margin-left: 0;
+}
+body.standalone.worksheet .page > .main #content {
+    max-width: 1030px;
+    width: 1030px;
+    margin-right: 0;
+}
+body.standalone.worksheet.a4 .page > .main #content {
+    max-width: 1001px;
+    width: 1001px;
+}
+
+body.standalone.worksheet .pretext-content .goal-like {
+    border: none;
+    padding: 0;
+}
+body.standalone.worksheet .pretext-content .goal-like > .heading {
+    margin-top: -0.5em;
+    padding: 0;
+    margin: 0;
+    font-size: 1.1em;
+}
+body.standalone.worksheet .pretext-content section > .heading {
+    display: inline;
+    font-size: 1.1em;
+}
+body.standalone.worksheet .pretext-content section > .heading + p {
+    display: inline;
+}
+
+/* [data-urlstub="calcvr.org"] temporary for worksheets in the browser */
+
+body[data-urlstub="calcvr.org"].standalone.worksheet .page > .main #content {
+    width: auto;
+}
+
+body[data-urlstub="calcvr.org"].standalone.worksheet .pretext-content .onepage .workspace,
+body[data-urlstub="calcvr.org"].standalone.worksheet .pretext-content .onepage .workspace.squashed.tight {
+        background: #eef !important;
+}
+
+
+/* printing for one-page worksheets */
+
+@media print {
+    body.standalone.worksheet #masthead {
+        display: none;
+    }
+
+    body.standalone.worksheet.has-sidebar-left.mathbook-loaded .page .main {
+        margin: 0;
+    }
+
+    body[data-urlstub="calcvr.org"].standalone.worksheet .page > .main #content {
+        width: 1030px;
+    }
+
+    body.standalone.worksheet .page > .main #content {
+        margin: 0;
+    }
+    body.standalone.worksheet .pretext-content .onepage {
+        max-height: 100%;
+        overflow: hidden;
+        page-break-after: always;
+        height: 1243px;
+        border: none;
+        page-break-inside: avoid;
+     }
+    body.standalone.worksheet.a4 .pretext-content .onepage {
+        height: 1320px;
+    }
+    body[data-urlstub="calcvr.org"].standalone.worksheet .pretext-content .onepage .workspace,
+    body[data-urlstub="calcvr.org"].standalone.worksheet .pretext-content .onepage .workspace.squashed.tight,
+    body.standalone.worksheet .pretext-content .onepage .workspace,
+    body.standalone.worksheet .pretext-content .onepage .workspace.squashed.tight {
+        border: none;
+        padding: 0;
+        background: none !important;
+    }
+    body.standalone.worksheet a {
+        color: black;
+    }
+
+    body.standalone.worksheet .page  .main {
+        padding: 0;
+    }
+
+    body.standalone.worksheet.mathbook-loaded .page .main #content.pretext-content section.onepage {
+        padding-bottom: 20px;  /* to help prevent flow onto the next page, particularly in Safari */
+                              /* the page is not full length, but what is missing was blank anyway */
+        margin: 0;
+    }
+
+    @page { margin: 0 }
+}
+
 .ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-draggable.ui-resizable {
     left: 0 !important;
     top: 0 !important;
@@ -2814,7 +3416,7 @@ and condider having this replace line 3338 of the general code (which uses .head
 }
 .pretext-content a.url:hover,
 .pretext-content a.external:hover {
-    background-color: #ffd;
+    background: #ffd;
 }
 
 .pretext-content a.internal:hover,
@@ -2986,11 +3588,6 @@ main a[data-knowl].newstuff {
     background: #fff;
 }
 
-/*
-table td { border-left: 1px solid #000; }
-table td:first-child { border-left: none; }
-*/
-
 .pretext-content .wwprob ol, .pretext-content .wwprob ul {
     margin-top: 0.75em !important;
 }
@@ -3057,6 +3654,127 @@ table td:first-child { border-left: none; }
     margin-left: 1em;
 }
 
+/* interactive WeBWorK */
+
+label.webwork {
+display:inline-flex;
+flex-direction:column;
+}
+
+label.correct .status {
+background-color: #a0f0a0;
+}
+
+label.partly-correct .status {
+ color: #ffcc66;
+}
+
+label.incorrect .status {
+  color: #b00;
+}
+label.incorrect .status::before {
+    content: " ";
+}
+
+.feedback {
+ word-wrap:break-word;
+}
+
+label.correct .feedback {
+ background-color: #00ffcc;
+}
+
+label.partly-correct .feedback {
+ color: #ffcc66;
+}
+
+label.incorrect .feedback {
+ color: #e07070;
+}
+
+
+.pretext-content .webwork-button {
+    border-radius: 3px;
+    padding: 0px 3px 0px 3px;
+    border: 1px solid #999;
+    background-color: #ffffff;
+}
+
+.pretext-content .webwork-button:hover {
+    cursor: pointer;
+    background-color: #e0e0ff;
+    border: 1px solid #000;
+}
+.pretext-content .webwork-button:active {
+    cursor: pointer;
+    background-color: #a0a0a0;
+    border: 1px solid #999;
+}
+
+.pretext-content .exercise-wrapper form button {
+    border-radius: 3px;
+    padding: 0px 3px 0px 3px;
+    border: 1px solid #999;
+    background-color: #ffffff;
+}
+.pretext-content .exercise-wrapper form button:hover {
+    cursor: pointer;
+    background-color: #e0e0ff;
+    border: 1px solid #000;
+}
+.pretext-content .exercise-wrapper form button:active {
+    background-color: #f0f0f0;
+}
+.pretext-content .exercise-wrapper form button + button {
+    margin-left: 0.8em;
+}
+
+.pretext-content .exercise-wrapper,
+.pretext-content .exercise-wrapper form, 
+.pretext-content .exercise-wrapper form > div:first-child {
+    display: inline-block;
+    vertical-align: top;
+}
+.pretext-content .knowl .exercise-wrapper,
+.pretext-content .knowl .exercise-wrapper form,
+.pretext-content .knowl .exercise-wrapper form > div:first-child {
+    width: 100%;
+}
+/*
+.pretext-content .exercise-wrapper form {
+     max-width: 95%;
+}
+*/
+.pretext-content .exercise-wrapper > p:first-child,
+.pretext-content .exercisegroup .exercise-wrapper > p:first-child {
+    margin-top: 0;
+    display: inline;
+}
+/* next is realted to having exercises start in-line with their exercise number,
+   including when a static WW problem is made interactive */
+/* not sure this was the right way to do it */
+/* see https://opentext.uleth.ca/apex-calculus/sec_antider.html#exercise-722 */
+.pretext-content .heading + .exercise-wrapper {
+    display: inline-block;
+    max-width: 95%;
+    width: 100%;
+}
+.pretext-content .cols2 .heading + .exercise-wrapper,
+.pretext-content .exercisegroup .heading + .exercise-wrapper {
+    width: auto;
+}
+
+/*  does not work as intended in Chrome dark mode 
+    (because Chrome dark mode does not seem to be a true dark mode)
+
+@media (prefers-color-scheme: dark) {
+  html .pretext-content * {
+    border-color: #ccc !important; 
+}
+}
+
+*/
+
 /*
 .problem a.internal::after {
     content: "";
@@ -3071,3 +3789,547 @@ table td:first-child { border-left: none; }
     z-index: 0;
 }
 */
+
+
+
+/* CAT  */
+
+#edit_menu_holder {
+    position: relative;
+    left: 15em;
+    bottom: 1.5em;
+    z-index: 1000;
+/*
+    display: inline;
+*/
+}
+#edit_menu_holder li {
+    font-style: normal;
+}
+p > #edit_menu_holder,
+.creator > #edit_menu_holder {
+    display: inline;
+}
+/*
+article > #edit_menu_holder {
+    bottom: 3.7em;
+}
+ol > #edit_menu_holder {
+    bottom: -2.2em;
+}
+li > p > #edit_menu_holder {
+    bottom: -1.2em;
+}
+em #edit_menu_holder,
+h6 #edit_menu_holder {
+    left: -0.5em;
+}
+*/
+p > #edit_menu_holder {
+    bottom: 4.2em;
+}
+#local_menu_holder {
+    position: relative;
+    left: 20em;
+    bottom: 1.5em;
+    z-index: 1000;
+}
+#edit_menu,
+#enter_choice {
+    background: #fee;
+    position: absolute;
+    left: 0;
+    white-space: nowrap;
+    z-index: 1000;
+    font-size: 95%;
+    font-weight: normal;
+}
+#edit_menu.past {
+    background: #ffe;
+    color: #999;
+}
+.past > li {
+    background: #fff9f9;
+    color: #aaa;
+}
+#enter_choice {
+    padding: 0.25em 0.5em 0 0.5em;
+    background: yellow;
+    bottom: -1.2em;
+    border-radius: 0.5em 0.5em 0 0; 
+    font-style: italic;
+}
+.may_enter #enter_choice {
+    background: #ccccee;
+}
+.may_enter {
+/*    box-shadow: -10px -10px 5px #ccccee;
+*/
+    margin-top: 1.25em;
+    background: #eeeeff !important;
+}
+.may_enter > [data-editable] {
+    background: #feeedf !important;
+}
+.may_enter > [data-editable="99"] {
+    background: #ffffdd !important;
+}
+
+p > #edit_menu_holder > #enter_choice {
+    bottom: -2.7em;
+}
+blockquote > #edit_menu_holder > #enter_choice {
+    bottom: -1.2em;
+}
+blockquote.may_leave + #edit_menu_holder > #enter_choice {
+    bottom: -2.3em;
+}
+article.project-like > #edit_menu_holder > #enter_choice {
+    bottom: -0.5em;
+}
+article.theorem-like > #edit_menu_holder > #enter_choice,
+article.definition-like > #edit_menu_holder > #enter_choice {
+    bottom: -0.2em;
+}
+/*
+article.project-like > ol > #edit_menu_holder > #enter_choice {
+    bottom: -1.3em;
+}
+*/
+.pretext-content section article.project-like.may-enter > .heading,
+.pretext-content section article.project-like.may-leave > .heading {
+    background-color: inherit;
+}
+
+ol > #edit_menu_holder > #enter_choice {
+    bottom: -1.3em;
+}
+ol.may_leave + #edit_menu_holder > #enter_choice {
+    bottom: -3.3em;
+}
+li > p > #edit_menu_holder > #enter_choice {
+    bottom: -4.1em;
+}
+#enter_choice[data-location="inline"] {
+    bottom: -0.2em;
+    left: -0.5em;
+}
+
+#edit_menu_holder + p {
+    margin-top: 0;
+}
+/*
+.heading + p > #edit_menu_holder {
+    bottom: -0.2em;
+    left: -0.5em;
+}
+*/
+li > #edit_menu_holder {
+    display: block;
+}
+.may_leave + #edit_menu_holder #enter_choice {
+    position: absolute;
+    padding: 0em 0.5em 0.25em 0.25em;
+    background: #FFD6D9;
+    bottom: -1.9em;
+    border-radius: 0 0 0.5em 0.5em;
+    list-style-type: none;
+ /*   margin: 0 0.25em 0.25em 0.25em;
+*/
+    font-style: italic;
+}
+section.may_leave + #edit_menu_holder #enter_choice {
+    bottom: -3.3em;
+}
+article.may_leave + #edit_menu_holder #enter_choice {
+    bottom: -2.3em;
+}
+.may_leave + #edit_menu_holder #enter_choice li {
+    padding: 0;
+    padding-left: 0.25em;
+    padding-right: 0.25em;
+}
+
+#edit_menu li.chosen,
+#edit_menu #choose_current {
+    background: #ddf;
+    color: #000;
+}
+#edit_menu.past > .choose {
+    background: #eef;
+    color: #000;
+}
+#edit_menu {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style-type: none;
+}
+#edit_menu li {
+    margin-top: 0;
+    padding-right: 1.4em;
+    padding-left: 0.4em;
+    padding-bottom: 0.1em;
+}
+#edit_menu li:last-of-type {
+    padding-bottom: 0.3em;
+}
+#edit_menu_holder ol.past {
+    box-shadow: -0.25em 0.25em 0 #ccc;
+}
+#edit_menu_holder ol:not(.past) {
+    border: 0.1em solid #999;
+/*
+    border-right: none;
+    border-bottom: none;
+*/
+    box-shadow: 0.15em 0.15em 0.05em #ccc;
+}
+#edit_menu li#choose_current {
+    background: #ddf;
+}
+#edit_menu li.choosen {
+    background: #ddf;
+}
+#edit_menu li ol {
+    position: absolute;
+    left: 8em;
+    bottom: -0.5em;
+    margin-top: 0;
+    padding-left: 0;
+    list-style-type: none;
+    background: #fdd;
+}
+#edit_menu li.choose {
+    background: #eef;
+}
+#edit_menu .wrap_to_submenu {
+    float: right;
+}
+.past > li > .wrap_to_submenu {
+    display: none;
+}
+#edit_menu .to_submenu {
+    position: absolute;
+    padding-left: 0.5em;
+}
+.text_source {
+    font-size: 95%;
+}
+/*
+.may_select {
+    box-shadow: -10px -5px 5px yellow;
+    margin-top: 1.25em;
+    background: #ffffee;
+}
+*/
+.may_select > p:first-of-type {
+    margin-top: 0;
+}
+/*
+.may_select.inline {
+    box-shadow: none;
+    border-top: 0.5em solid yellow;
+    border-bottom: 0.5em solid yellow;
+}
+*/
+.sbspanel.may_select {
+    margin-top: 0;
+}
+sbspanel:empty { /* can only happen when partially created */
+    height: 10em;
+    background-color: rgb(221, 221, 255);
+}
+.pretext-content .sbspanel:empty + .sbspanel:empty {
+    background-color: #dfd;
+}
+.pretext-content .sbspanel:empty + .sbspanel:empty + .sbspanel:empty {
+    background-color: #eee;
+}
+
+/*
+.may_leave {
+    box-shadow: -10px 5px 5px #FFD6D9;
+    background: #ffeeee !important;
+}
+*/
+#actively_editing {
+    margin-top: 1em;
+}
+#actively_editing_id {
+    float: right;
+    width: 8em;
+    margin-bottom: 0;
+}
+#actively_editing[data-component="title"] {
+    display: inline-block;
+    min-width: 10em;
+    margin-top: 0;
+    margin-left: 0.75em;
+    background: #fff;
+    border: 1px dotted black;
+}
+.title > #edit_menu_holder {
+    display: inline;
+}
+.space + .title {
+    margin-left: 0.5em;
+}
+
+/*
+.in_edit_tree {
+    border-right: 1px solid blue;
+    margin-right: 0.25em;
+}
+*/
+/* do we really need the top and bottom edge of the structure bracket?  It messes up some other things
+.in_edit_tree:before,
+.in_edit_tree:after {
+    content: ' ';
+    font-size: 50%;
+    border-top: 1px solid blue;
+    display: block;
+    margin-right: 0em;
+    margin-left: auto;
+    width: 0.75em;
+}
+*/
+
+#edit_menu .in_edit_tree {
+    border: none;
+}
+#edit_menu .in_edit_tree:before,
+#edit_menu .in_edit_tree:before {
+    display: none;
+}
+
+.in_edit_tree > .workspace {
+    min-height: 3em;
+    background: #efe;
+    border: 1px dotted #aaa;
+}
+.in_edit_tree > .workspace::before {
+    content: "optional workspace (in printed worksheet)";
+    font-size: 90%;
+    font-style: italic;
+    padding-left: 0.25em;
+}
+/* why not collapse the next groups of 4? */
+.in_edit_tree > .placeholder.proof,
+.in_edit_tree > .placeholder.hint,
+.in_edit_tree > .placeholder.answer, 
+.in_edit_tree > .placeholder.solution {
+    min-height: 1em;
+    background: #fee;
+} 
+.in_edit_tree > .placeholder.proof::before,
+.in_edit_tree > .placeholder.hint::before,
+.in_edit_tree > .placeholder.answer::before,
+.in_edit_tree > .placeholder.solution::before {
+    font-size: 90%;
+    font-style: italic;
+    padding-left: 0.25em;
+}
+.in_edit_tree > .placeholder.proof::before {
+    content: "optional proof";
+}
+.in_edit_tree > .placeholder.hint::before {
+    content: "optional hint";
+}
+.in_edit_tree > .placeholder.answer::before {
+    content: "optional answer";
+}
+.in_edit_tree > .placeholder.solution::before {
+    content: "optional solution";
+}
+
+.group_description {
+    font-size: 75%;
+    font-color: #caa;
+    font-style: italic;
+}
+[data-objecttype="theorem-like"] p {
+    font-style: italic;
+} 
+[data-objecttype="theorem-like"] p ol {
+    font-style: normal;
+} 
+
+.paragraph_input {
+    width: 98%;
+    min-height: 3em;
+    border: 3px dashed #999;
+}
+.paragraph_input:focus {
+    border: 1px solid #000;
+    padding: 2px;
+}
+.edit_inline_math {
+    font-family: "Inconsolata";
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    background-color: #ddf;
+}
+#actively_editing em {
+    background-color: #fdf;
+}
+#actively_editing q {
+    background-color: #eef;
+}
+#actively_editing span {
+    background-color: #dfd;
+}
+#actively_editing code {
+    background-color: #ddd;
+}
+#actively_editing dfn {
+    background-color: #fee;
+}
+.pretext-content section.may_enter > .heading {
+    margin-top: 0;
+}
+.pretext-content #deleting {
+    transition: all 0.5s;
+    background: #666;
+    height: 5em;
+    margin-right: 20em;
+    margin-left: 15em;
+    font-size: 5%;
+    box-shadow: -2px -1px 1px #770000;
+}
+
+.pretext-content #phantomobject.move {
+    margin-left: 5em;
+    margin-right: 2em;
+    padding: 1.5em;
+    box-shadow: 1em 0.7em rgba(180, 180, 180,0.96);
+    margin-top: -1.5em;
+    margin-bottom: -1.5em;
+    z-index: 100;
+    background: rgba(239, 223,256,0.9);
+    font-size: 110%;
+    font-style: italic;
+/*
+    background: #edf;
+    opacity: 0.8;
+*/
+    position: relative;
+}
+.pretext-content #phantomobject.move + p {
+    margin-top: 0;
+}
+.pretext-content #phantomobject.move .done {
+    margin-left: 1em;
+    margin-top: 0em;
+/*
+    float: right;
+*/
+}
+.pretext-content #phantomobject.move .movearrow  {
+    position: relative;
+    z-index: 101;
+    background: rgba(243, 225,256,1);
+/*
+    background: #edf;
+    opacity: 1;
+*/
+}
+.pretext-content #phantomobject.move .movearrow .arrow {
+    font-size: 200%;
+    margin-right: 0.6em;
+    margin-top: -0.5em;
+}
+.pretext-content #phantomobject.move .movearrow p {
+    margin-top: 0.4em;
+}
+.pretext-content #phantomobject.move .movearrow p.up {
+    margin-top: 0;
+    margin-bottom: -1em;
+}
+.pretext-content #phantomobject.move .movearrow p.down {
+    margin-top: 0.0em;
+}
+.pretext-content #phantomobject.move .movearrow > * {
+    display: inline-block;
+}
+
+.pretext-content .ref.tmp {
+    background: #dfd;
+}
+.pretext-content .may_enter q {
+    background: #ddf;
+}
+.pretext-content .may_enter abbr {
+    background: #adf;
+}
+
+/* new editing css */
+.pretext-content p.may_select {
+    display: block !important;
+}
+.pretext-content .may_select {
+    background: #fef;
+    border: 2px solid #999;
+}
+
+.pretext-content .onepage.in_edit_tree,
+.pretext-content .in_edit_tree .onepage {
+    border: 6px double #600 !important;
+    padding: 0.5em;
+}
+
+
+.pretext-content p.in_edit_tree,
+.pretext-content section.in_edit_tree,
+.pretext-content article.in_edit_tree {
+    border: 3px solid #666 !important;
+    padding: 0.5em;
+}
+.pretext-content .in_edit_tree p,
+.pretext-content .in_edit_tree .displaymath,
+.pretext-content .in_edit_tree section,
+.pretext-content .in_edit_tree article {
+    border: 3px solid blue !important;
+    padding: 0.5em;
+}
+.pretext-content .in_edit_tree p {
+    border: 3px solid #4a9 !important;
+    background: #ffd;
+    padding: 0.5em;
+}
+.pretext-content .in_edit_tree figcaption,
+.pretext-content .in_edit_tree img,
+.pretext-content .in_edit_tree blockquote {
+    border: 3px dotted #9a0 !important;
+    background: #efd;
+    padding: 0.5em;
+}
+.pretext-content .in_edit_tree .displaymath,
+.pretext-content .in_edit_tree figure {
+    border: 3px solid #92a !important;
+    background: #efe;
+    padding: 0.5em;
+}
+.pretext-content .in_edit_tree * section,
+.pretext-content .in_edit_tree * article {
+    border: 3px solid green !important;
+    padding: 0.5em;
+}
+.pretext-content .in_edit_tree * * p,
+.pretext-content .in_edit_tree * * .displaymath,
+.pretext-content .in_edit_tree * * section,
+.pretext-content .in_edit_tree * * article {
+    border: 3px dashed grey !important;
+    padding: 0.5em;
+}
+
+
+.pretext-content .in_edit_tree .heading + p {
+    display: block;
+}
+.pretext-content .in_edit_tree::before,
+.pretext-content .in_edit_tree::after,
+.pretext-content .in_edit_tree *::before,
+.pretext-content .in_edit_tree *::after {
+    all: reset;
+}
