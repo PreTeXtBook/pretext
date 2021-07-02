@@ -9834,6 +9834,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <xsl:when test="$webwork-reps-version = 2">
                 <script src="{$html.js.server}/js/{$html.js.version}/pretext-webwork.js"></script>
+                <script src="{$webwork-domain}/webwork2_files/node_modules/iframe-resizer/js/iframeResizer.min.js"></script>
             </xsl:when>
         </xsl:choose>
     </xsl:if>
@@ -9945,15 +9946,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="aria-live">
             <xsl:value-of select="'polite'"/>
         </xsl:attribute>
-        <xsl:apply-templates select="static" mode="exercise-components">
-            <xsl:with-param name="b-original"      select="$b-original"/>
-            <xsl:with-param name="b-has-statement" select="true()"/>
-            <xsl:with-param name="b-has-hint"      select="$b-has-hint"/>
-            <xsl:with-param name="b-has-answer"    select="$b-has-answer"/>
-            <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
-        </xsl:apply-templates>
-        <div>
-            <button class="webwork-button" onclick="initWW('{@ww-id}')">Make Interactive</button>
+        <div class="problem-contents">
+            <xsl:apply-templates select="static" mode="exercise-components">
+                <xsl:with-param name="b-original"      select="$b-original"/>
+                <xsl:with-param name="b-has-statement" select="true()"/>
+                <xsl:with-param name="b-has-hint"      select="$b-has-hint"/>
+                <xsl:with-param name="b-has-answer"    select="$b-has-answer"/>
+                <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
+            </xsl:apply-templates>
+        </div>
+        <div class="problem-buttons">
+            <button class="webwork-button" onclick="handleWW('{@ww-id}')">Make Interactive</button>
         </div>
     </xsl:element>
 </xsl:template>
