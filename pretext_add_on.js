@@ -81,7 +81,7 @@ function permalinkDescription(elem) {
         if ((nodeName == 'ARTICLE') && (elem.classList.contains('exercise')) ) {
             typeStr = "Exercise";
         } else if ((nodeName == 'ARTICLE') && (elem.classList.contains('task')) ) {
-            typeStr = elem.parentElement.firstChild.getAttribute('data-description');
+            typeStr = elem.parentElement.firstElementChild.getAttribute('data-description');
             numberSep = "";
         } else {
             resultNodes = headerNode.getElementsByClassName("type");
