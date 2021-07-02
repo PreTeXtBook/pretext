@@ -1,0 +1,37 @@
+
+/* sage cell code goes in a pre.  What else goes there? */
+.pretext-content pre {
+    font-size: 95%;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    padding-left: 0.5em;
+    background: #f0f0f0;
+}
+.pretext-content pre.code.input {
+    background: #f0f0ff;
+}
+.pretext-content pre.code.output {
+    background: #f0fff0;
+}
+
+
+/* these "break-(before/after) might not actually do anything */
+.pretext-content section article > .heading,
+.pretext-content section > .heading {
+    display: block;
+    margin-top: 0;
+    break-after: avoid !important;
+}
+.pretext-content section > .heading + p,
+.pretext-content section article > .heading + p,
+.pretext-content section article > .heading + .introduction {
+     display: block;
+     break-before: avoid !important;
+}
+.pretext-content figcaption {
+     break-before: avoid !important;
+}
+.pretext-content figure .image-box {
+    break-after: avoid !important;
+}
+
