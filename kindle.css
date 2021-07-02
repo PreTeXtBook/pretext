@@ -26,6 +26,7 @@
 .pretext-content article.project-like::after,
 .pretext-content article.remark-like::after,
 .pretext-content article.computation-like::after {
+    break-before: avoid;
     margin-top: -1em;
 }
 
@@ -74,5 +75,8 @@
 }
 .pretext-content figure .image-box {
     break-after: avoid !important;
+}
+.pretext-content figure {
+    break-inside: avoid;
 }
 
