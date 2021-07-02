@@ -3159,7 +3159,7 @@ body.standalone.worksheet .pretext-content .onepage .solutions {
     display: none;
 }
 body.standalone .pretext-content .worksheet {
-    padding: 40px 45px 0px 55px;
+    padding: 40px 45px 45px 55px;
     border: 2px solid grey;
     margin: 0;
 /* height: 1243px; */
@@ -3170,6 +3170,22 @@ body.standalone .pretext-content .onepage {
     border-bottom: 2px solid grey;
     margin: 0;
 /* height: 1243px; */
+}
+body.standalone .pretext-content .onepage + .onepage {
+    border-top: 2px solid grey;
+}
+/* there may be worksheet content before the first page
+   or after the last page
+*/
+body.standalone .pretext-content .onepage.firstpage {
+    padding-top: 0
+}
+body.standalone .pretext-content .onepage.lastpage {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+body.standalone .pretext-content .worksheet:last-child {
+    padding-bottom: 0 !important
 }
 .pretext-content .onepage + .onepage {
     margin-top: 2.5em;

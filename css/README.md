@@ -19,8 +19,7 @@ Instructions
 
 To update these files,
 
-    $ cd /path/to/css
-    $ xargs -n 1 curl -O < css-file-list.txt
+    $ ./update_css
 
 Then update the following record of when this was last done.
 Examine the `xsl/pretext-html.xsl` file if you need to check
@@ -31,7 +30,7 @@ number when that changes.  At a minimum, change the date and
 commit that as a record of a "no-change" update.
 
 CSS version: 0.31
-Date: 2021-07-01
+Date: 2021-07-02
 
 
 Experimental Jupyter Notebook CSS
