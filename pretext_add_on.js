@@ -762,7 +762,13 @@ function adjustWorkspace() {
     var pagelayout = "letter";
     if (document.body.classList.contains("a4")) { pagelayout = "a4" } 
 
+    var pageheight = [];
+
     for (var i = 0; i < all_pages.length; i++) {
+        /* for assigning page height later */
+        if (pagelayout == "a4") { pageheight.push(1320) }
+        else { pageheight.push(1243) }
+
         this_item = all_pages[i];
         if (i == 0) { this_item.classList.add("firstpage") }
         else if (i == all_pages.length - 1) { this_item.classList.add("lastpage") }
@@ -776,37 +782,32 @@ function adjustWorkspace() {
        /* a magicscale makes the output the height of the minimum specified input */
        /* not sure if this is the place to do it, but the first page might
           have items before it, and the last page mught have items after it */
-       var offsetHeightAbove = 0;
+       var worksheetData = this_item.parentElement.getBoundingClientRect();
+       var pageData = this_item.getBoundingClientRect();
+       console.log("worksheetData", worksheetData, "pageData", pageData);
+       var pageExtraHeight = 0;
        if (this_item.classList.contains("firstpage")) {
            console.log("this_item",this_item.getBoundingClientRect(),this_item.getBoundingClientRect()["y"]);
            console.log("this_item parent",this_item.parentElement.getBoundingClientRect(),this_item.parentElement.getBoundingClientRect()["y"]);
-           var prev_sib = this_item.previousElementSibling;
-           while (prev_sib) {
-               console.log("prev_sib", prev_sib, "with height", prev_sib.offsetHeight);
-               offsetHeightAbove += prev_sib.offsetHeight;
-               prev_sib = prev_sib.previousElementSibling;
-           }
+           pageExtraHeight = pageData["top"] - worksheetData["top"];
        }
-       var offsetHeightBelow = 0;
        if (this_item.classList.contains("lastpage")) {
-           console.log(this_item.getBoundingClientRect());
-           var next_sib = this_item.nextElementSibling;
-           while (next_sib) {
-               console.log("next_sib", next_sib, "with height", next_sib.offsetHeight);
-               offsetHeightBelow += next_sib.offsetHeight;
-               next_sib = next_sib.nextElementSibling;
-           } 
+           pageExtraHeight = worksheetData["bottom"] - pageData["bottom"];
        }
-       heightA += offsetHeightAbove + offsetHeightBelow;
-       heightB += offsetHeightAbove + offsetHeightBelow;
-       console.log(i, "i", offsetHeightAbove, "offsetHeightAbove", offsetHeightBelow, "offsetHeightBelow");
-//       alert(toString(i) + " offsetHeightAbove " + toString(offsetHeightAbove) + " offsetHeightBelow " + toString(offsetHeightBelow));
+  //     pageExtraHeight += 150;
+       heightA += pageExtraHeight;
+       heightB += pageExtraHeight;
+       pageheight[i] -= pageExtraHeight
+       console.log(i, "i", pageExtraHeight, "pageExtraHeight");
        var magicscale = 12;
+
        if (heightA != heightB) {
 /*
          magicscale = (1328 - 2*height10 + 1*height20)/(height20 - height10)
          magicscale = (1324 - 2*height10 + 1*height20)/(height20 - height10)
 */
+         magicscale = (pageheight[i]*(a - b) + b*heightA - a*heightB)/(heightA - heightB);
+/*
          if (pagelayout == "a4") {
              magicscale = (1413*(a - b) + b*heightA - a*heightB)/(heightA - heightB)
          } else if (pagelayout == "letter") {
@@ -814,10 +815,12 @@ function adjustWorkspace() {
          } else {
              console.log("Error: unknown pagelayout", pagelayout)
          }
+*/
          
        }
        console.log("magicscale", magicscale, "of", this_item);
-       scaleWorkspaceIn(this_item, this_item, magicscale, "final")
+       scaleWorkspaceIn(this_item, this_item, magicscale, "final");
+       all_pages[i].setAttribute("style", 'height: ' + pageheight[i].toString() + 'px');
 
        var this_height = this_item.clientHeight;
        console.log(this_height, "ccc", this_item);

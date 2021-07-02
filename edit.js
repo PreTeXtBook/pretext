@@ -1533,7 +1533,7 @@ function top_menu_options_for(this_obj) {
         if (previous_editing() && this_id == top_level_id) {
             this_list += '<li tabindex="-1" data-action="' + "resume" + '">Resume previous editing</li>';
         }
-        this_list += '<li tabindex="-1" data-action="' + "replace" + '">Stop editing</li>';
+        this_list += '<li tabindex="-1" data-action="' + "stop_editing" + '">Stop editing</li>';
     }
     return this_list
 }
@@ -2084,8 +2084,10 @@ function replace_by_id(theid, format) {
 //    MathJax.typesetPromise(document.getElementById(theid));
     MathJax.typesetPromise();
 
+alert("stop");
     console.log("adjusting workspace");
-    adjustWorkspace();
+window.setTimeout(adjustWorkspace, 1000);
+//    adjustWorkspace();
 //    make_current_editing_tree_from_id(theid);
 //    edit_menu_from_current_editing("entering");
 }
@@ -3786,8 +3788,11 @@ function main_menu_navigator(e) {  // we are not currently editing
             if (dataAction == "edit") {
                 editorLog("going to edit", object_of_interest);
                 edit_in_place(object_of_interest, "old");
-            } else if (dataAction == "replace") {
+            } else if (dataAction == "replace") {  // no longer used?
                 editorLog("replace", object_of_interest, "by id", object_of_interest.id);
+                replace_by_id(object_of_interest.id, "html")
+            } else if (dataAction == "stop_editing") {
+                editorLog("stop_editing", object_of_interest, "by id", object_of_interest.id);
                 replace_by_id(object_of_interest.id, "html")
             } else if (dataAction == "resume") {
                 editorLog("resuming previous editing session");
