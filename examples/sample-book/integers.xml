@@ -88,10 +88,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <mrow>&amp; = \frac{(n + 1)!}{k!(n + 1 - k)!}</mrow>
                 <mrow>&amp; =\binom{n + 1}{k}</mrow>
             </md>.<notation>
-                <usage>n!</usage>
+                <usage><m>n!</m></usage>
                 <description><m>n</m> factorial</description>
             </notation><notation>
-                <usage>\binom{n}{k}</usage>
+                <usage><m>\binom{n}{k}</m></usage>
                 <description>binomial coefficient <m>n!/(k!(n-k)!)</m></description>
             </notation></p>
 
@@ -189,7 +189,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </proof>
             </theorem>
 
-            <p>Let <m>a</m> and <m>b</m> be integers.  If <m>b = ak</m> for some integer <m>k</m>, we write <m>a \mid b</m>.  An integer <m>d</m> is called a <term>common divisor</term> of <m>a</m> and <m>b</m> if <m>d \mid a</m> and <m>d \mid b</m>.  The <term>greatest common divisor</term><idx><h>Greatest common divisor</h><h>of two integers</h></idx> of integers <m>a</m> and <m>b</m> is a positive integer <m>d</m> such that <m>d</m> is a common divisor  of <m>a</m> and <m>b</m> and if <m>d'</m> is any other common divisor of <m>a</m> and <m>b</m>, then <m>d' \mid d</m>. <notation><usage>a \mid b</usage><description><m>a</m> divides <m>b</m></description></notation><notation><usage>\gcd(a, b)</usage><description>greatest common divisor of <m>a</m> and <m>b</m></description></notation>  We write <m>d = \gcd(a, b)</m>; for example, <m>\gcd( 24, 36) = 12</m> and <m>\gcd(120, 102) = 6</m>.  We say that two integers <m>a</m> and <m>b</m> are <term>relatively prime</term> if <m>\gcd( a, b ) = 1</m>.</p>
+            <p>Let <m>a</m> and <m>b</m> be integers.  If <m>b = ak</m> for some integer <m>k</m>, we write <m>a \mid b</m>.  An integer <m>d</m> is called a <term>common divisor</term> of <m>a</m> and <m>b</m> if <m>d \mid a</m> and <m>d \mid b</m>.  The <term>greatest common divisor</term><idx><h>Greatest common divisor</h><h>of two integers</h></idx> of integers <m>a</m> and <m>b</m> is a positive integer <m>d</m> such that <m>d</m> is a common divisor  of <m>a</m> and <m>b</m> and if <m>d'</m> is any other common divisor of <m>a</m> and <m>b</m>, then <m>d' \mid d</m>. <notation><usage><m>a \mid b</m></usage><description><m>a</m> divides <m>b</m></description></notation><notation><usage><m>\gcd(a, b)</m></usage><description>greatest common divisor of <m>a</m> and <m>b</m></description></notation>  We write <m>d = \gcd(a, b)</m>; for example, <m>\gcd( 24, 36) = 12</m> and <m>\gcd(120, 102) = 6</m>.  We say that two integers <m>a</m> and <m>b</m> are <term>relatively prime</term> if <m>\gcd( a, b ) = 1</m>.</p>
 
             <theorem xml:id="theorem-integers-gcd">
                 <statement>

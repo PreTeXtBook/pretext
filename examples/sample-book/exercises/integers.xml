@@ -131,7 +131,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercise number="12">
         <title>Power Sets</title>
         <statement>
-            <p>Let <m>X</m> be a set. Define the <term>power set</term> of <m>X</m>, denoted <m>{\mathcal P}(X)</m>, to be the set of all subsets  of <m>X</m>.  <notation><usage>\mathcal P(X)</usage><description>power set of <m>X</m></description></notation> For example,  
+            <p>Let <m>X</m> be a set. Define the <term>power set</term> of <m>X</m>, denoted <m>{\mathcal P}(X)</m>, to be the set of all subsets  of <m>X</m>.  <notation><usage><m>\mathcal P(X)</m></usage><description>power set of <m>X</m></description></notation> For example,  
                 <me>{\mathcal P}( \{a, b\} ) = \{ \emptyset, \{a\}, \{b\}, \{a, b\} \}.</me>
             For every positive integer <m>n</m>, show that a set with exactly <m>n</m> elements has a power set with exactly <m>2^n</m> elements.</p>
         </statement>
@@ -233,7 +233,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <exercise number="23">
         <statement>
-            <p>Define the <term>least common multiple</term> of two nonzero integers <m>a</m> and <m>b</m>, denoted by <m>\lcm(a,b)</m>, to be the nonnegative integer <m>m</m> such that both <m>a</m> and <m>b</m> divide <m>m</m>, and if <m>a</m> and <m>b</m>  divide any other integer <m>n</m>, then <m>m</m> also divides <m>n</m>. <notation><usage>\lcm(m,n)</usage><description>the least common multiple of <m>m</m> and <m>n</m></description></notation> Prove that any two integers <m>a</m> and <m>b</m> have a unique least common multiple.</p>
+            <p>Define the <term>least common multiple</term> of two nonzero integers <m>a</m> and <m>b</m>, denoted by <m>\lcm(a,b)</m>, to be the nonnegative integer <m>m</m> such that both <m>a</m> and <m>b</m> divide <m>m</m>, and if <m>a</m> and <m>b</m>  divide any other integer <m>n</m>, then <m>m</m> also divides <m>n</m>. <notation><usage><m>\lcm(m,n)</m></usage><description>the least common multiple of <m>m</m> and <m>n</m></description></notation> Prove that any two integers <m>a</m> and <m>b</m> have a unique least common multiple.</p>
         </statement>
         <hint>
             <p>Let <m>S = \{s \in {\mathbb N} : a \mid s</m>, <m>b \mid s \}</m>. Then <m>S \neq \emptyset</m>, since <m>|ab| \in S</m>. By the Principle of Well-Ordering, <m>S</m> contains a least element <m>m</m>. To show uniqueness, suppose that <m>a \mid n</m> and <m>b \mid n</m> for some <m>n \in {\mathbb N}</m>. By the division algorithm, there exist unique integers <m>q</m> and <m>r</m> such that <m>n = mq + r</m>, where <m>0 \leq r \lt m</m>. Since <m>a</m> and <m>b</m> divide both <m>m</m>, and <m>n</m>, it must be the case that  <m>a</m> and <m>b</m> both divide <m>r</m>.  Thus, <m>r = 0</m> by the minimality of <m>m</m>. Therefore, <m>m \mid n</m>.</p>

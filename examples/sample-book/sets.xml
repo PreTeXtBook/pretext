@@ -97,7 +97,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>Set Theory</title>
 
             <p>A <term>set</term> is a well-defined collection of objects; that is, it is defined in such a manner that we can determine for any given object <m>x</m> whether or not <m>x</m> belongs to the set.  The objects that belong to a set are called its <term>elements</term> or <term>members</term>. We will denote sets by capital letters, such as <m>A</m> or <m>X</m>; if <m>a</m> is an element of the set <m>A</m>, we write <m>a \in A</m>.
-            <notation><usage>a \in A</usage><description><m>a</m> is in the set <m>A</m></description></notation></p>
+            <notation><usage><m>a \in A</m></usage><description><m>a</m> is in the set <m>A</m></description></notation></p>
 
             <!-- ToDo: Make notation table -->
 
@@ -116,35 +116,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <mrow>{\mathbb R} &amp;= \{ x : x \text{ is a real number} \}</mrow>
                 <mrow>{\mathbb C} &amp;= \{z : z \text{ is a complex number}\}</mrow>
             </md>.<notation>
-                <usage>{\mathbb N}</usage>
+                <usage><m>{\mathbb N}</m></usage>
                 <description>the natural numbers</description>
             </notation><notation>
-                <usage>{\mathbb Z}</usage>
+                <usage><m>{\mathbb Z}</m></usage>
                 <description>the integers</description>
             </notation><notation>
-                <usage>{\mathbb Q}</usage>
+                <usage><m>{\mathbb Q}</m></usage>
                 <description>the rational numbers</description>
             </notation><notation>
-                <usage>{\mathbb R}</usage>
+                <usage><m>{\mathbb R}</m></usage>
                 <description>the real numbers</description></notation>
             <notation>
-                <usage>{\mathbb C}</usage>
+                <usage><m>{\mathbb C}</m></usage>
                 <description>the complex numbers</description>
             </notation></p>
 
-            <p>We can find various relations between sets as well as perform operations on sets.  A set <m>A</m> is a <term>subset</term> of <m>B</m>, written <m>A \subset B</m> or <m>B \supset A</m>, if every element of <m>A</m> is also an element of <m>B</m>.  <notation><usage>A \subset B</usage><description><m>A</m> is a subset of <m>B</m></description></notation> For example,  
+            <p>We can find various relations between sets as well as perform operations on sets.  A set <m>A</m> is a <term>subset</term> of <m>B</m>, written <m>A \subset B</m> or <m>B \supset A</m>, if every element of <m>A</m> is also an element of <m>B</m>.  <notation><usage><m>A \subset B</m></usage><description><m>A</m> is a subset of <m>B</m></description></notation> For example,  
                 <me>\{4,5,8\} \subset \{2, 3, 4, 5, 6, 7, 8, 9 \}</me>
             and
                 <me>{\mathbb N} \subset {\mathbb Z} \subset {\mathbb Q} \subset {\mathbb R} \subset {\mathbb C}</me>.
             Trivially, every set is a subset of itself.  A set <m>B</m> is a <term>proper subset</term> of a set <m>A</m> if <m>B \subset A</m> but <m>B \neq A</m>. If <m>A</m> is not a subset of <m>B</m>, we write <m>A \notsubset B</m>; for example, <m>\{4, 7, 9\} \notsubset \{2, 4, 5,  8, 9 \}</m>.  Two sets are <term>equal</term>, written <m>A = B</m>, if we can show that <m>A \subset B</m> and <m>B \subset A</m>.</p>
 
-            <p>It is convenient to have a set with no elements in it.  This set is called the <term>empty set</term> and is denoted by <m>\emptyset</m>.  Note that the empty set is a subset of every set. <notation><usage>\emptyset</usage><description>the empty set</description></notation></p>  	
+            <p>It is convenient to have a set with no elements in it.  This set is called the <term>empty set</term> and is denoted by <m>\emptyset</m>.  Note that the empty set is a subset of every set. <notation><usage><m>\emptyset</m></usage><description>the empty set</description></notation></p>  	
 
             <p>To construct new sets out of old sets, we can perform certain operations: the <term>union</term> <m>A \cup B</m> of two sets <m>A</m> and <m>B</m> is defined as  
                 <me>A \cup B = \{x : x \in A \text{ or } x \in B \}</me>
             and the <term>intersection</term> of <m>A</m> and <m>B</m>  is defined by
                 <me>A \cap B = \{x :  x \in A \text{ and } x \in B \}</me>.
-            <notation><usage>A \cup B</usage><description>the union of sets <m>A</m> and <m>B</m></description></notation><notation><usage>A \cap B</usage><description>the intersection of sets <m>A</m> and <m>B</m></description></notation> If <m>A = \{1, 3, 5\}</m> and <m>B = \{ 1, 2, 3, 9 \}</m>, then
+            <notation><usage><m>A \cup B</m></usage><description>the union of sets <m>A</m> and <m>B</m></description></notation><notation><usage><m>A \cap B</m></usage><description>the intersection of sets <m>A</m> and <m>B</m></description></notation> If <m>A = \{1, 3, 5\}</m> and <m>B = \{ 1, 2, 3, 9 \}</m>, then
                 <me>A \cup B = \{1, 2, 3, 5, 9 \} \quad \text{and} \quad A \cap B = \{ 1, 3 \}</me>.
             We can consider the union and the intersection of more than two sets.  In this case we write 
                 <me>\bigcup_{i = 1}^{n} A_{i} = A_{1} \cup \ldots \cup A_n</me>
@@ -156,10 +156,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>When two sets have no elements in common, they are said to be <term>disjoint</term>; for example, if <m>E</m> is the set of even integers and <m>O</m> is the set of odd integers, then <m>E</m> and <m>O</m> are disjoint.  Two sets <m>A</m> and <m>B</m> are disjoint exactly when <m>A \cap B = \emptyset</m>.</p> 
 
-            <p>Sometimes we will work within one fixed set <m>U</m>, called the <term>universal set</term>.  For any set <m>A \subset U</m>, we define the <term>complement</term> of <m>A</m>, denoted by <m>A'</m>, to be the set <notation><usage>A'</usage><description>complement of the set <m>A</m></description></notation>
+            <p>Sometimes we will work within one fixed set <m>U</m>, called the <term>universal set</term>.  For any set <m>A \subset U</m>, we define the <term>complement</term> of <m>A</m>, denoted by <m>A'</m>, to be the set <notation><usage><m>A'</m></usage><description>complement of the set <m>A</m></description></notation>
                 <me>A' = \{ x : x \in U \text{ and } x \notin A \}</me>.</p>		
 
-            <p>We define the <term>difference</term> of two sets <m>A</m> and <m>B</m> to be <notation><usage>A \setminus B</usage><description>difference between sets <m>A</m> and <m>B</m></description></notation>
+            <p>We define the <term>difference</term> of two sets <m>A</m> and <m>B</m> to be <notation><usage><m>A \setminus B</m></usage><description>difference between sets <m>A</m> and <m>B</m></description></notation>
                 <me>A \setminus B = A \cap B'  = \{ x : x \in A \text{ and } x \notin B \}</me>.</p>
 
         <example xml:id="example-sets-operations">
@@ -246,7 +246,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <subsection>
         <title>Cartesian Products and Mappings</title>
 
-            <p>Given sets <m>A</m> and <m>B</m>, we can define a new set <m>A \times B</m>, called the <term>Cartesian product</term>  of <m>A</m> and <m>B</m>, as a set of ordered pairs.  That is, <notation><usage>A \times B</usage><description>Cartesian product of sets <m>A</m> and <m>B</m></description></notation>
+            <p>Given sets <m>A</m> and <m>B</m>, we can define a new set <m>A \times B</m>, called the <term>Cartesian product</term>  of <m>A</m> and <m>B</m>, as a set of ordered pairs.  That is, <notation><usage><m>A \times B</m></usage><description>Cartesian product of sets <m>A</m> and <m>B</m></description></notation>
                 <me>A \times B = \{ (a,b) : a \in A \text{ and } b \in B \}</me>.</p>
 
         <example xml:id="example-sets-cartesian-products">
@@ -259,7 +259,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>We define the <term>Cartesian product of <m>n</m> sets</term> to be
             <me>A_1 \times \cdots \times A_n = \{ (a_1, \ldots, a_n): a_i \in A_i \text{ for } i = 1, \ldots, n \}</me>.
-        If <m>A = A_1 = A_2 = \cdots = A_n</m>, we often write <m>A^n</m> for <m>A \times \cdots \times A</m> (where <m>A</m> would be written <m>n</m> times).  <notation><usage>A^n</usage><description><m>A \times \cdots \times A</m> (<m>n</m> times)</description></notation>For example, the set <m>{\mathbb R}^3</m> consists of all of 3-tuples of real numbers.</p>
+        If <m>A = A_1 = A_2 = \cdots = A_n</m>, we often write <m>A^n</m> for <m>A \times \cdots \times A</m> (where <m>A</m> would be written <m>n</m> times).  <notation><usage><m>A^n</m></usage><description><m>A \times \cdots \times A</m> (<m>n</m> times)</description></notation>For example, the set <m>{\mathbb R}^3</m> consists of all of 3-tuples of real numbers.</p>
 
 
 
@@ -479,7 +479,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </proof>
         </theorem>
 
-            <p>If <m>S</m> is any set, we will use <m>id_S</m> or <m>id</m> to denote the <term>identity mapping</term><idx><h>Function</h><h>identity</h></idx> from <m>S</m> to itself.  Define this map by <m>id(s) = s</m> for all <m>s \in S</m>.  A map <m>g: B \rightarrow A</m> is an <term>inverse mapping</term> of <m>f: A \rightarrow B</m> if <m>g \circ f = id_A</m> and <m>f \circ g = id_B</m>; in other words, the inverse function of a function simply <q>undoes</q> the function.   A map is said to be <term>invertible</term><idx><h>Function</h><h>invertible</h></idx> if it has an inverse.  We usually write <m>f^{-1}</m> for the inverse of <m>f</m>. <notation><usage>id</usage><description>identity mapping</description></notation><notation><usage>f^{-1}</usage><description>inverse of the function <m>f</m></description></notation></p> 
+            <p>If <m>S</m> is any set, we will use <m>id_S</m> or <m>id</m> to denote the <term>identity mapping</term><idx><h>Function</h><h>identity</h></idx> from <m>S</m> to itself.  Define this map by <m>id(s) = s</m> for all <m>s \in S</m>.  A map <m>g: B \rightarrow A</m> is an <term>inverse mapping</term> of <m>f: A \rightarrow B</m> if <m>g \circ f = id_A</m> and <m>f \circ g = id_B</m>; in other words, the inverse function of a function simply <q>undoes</q> the function.   A map is said to be <term>invertible</term><idx><h>Function</h><h>invertible</h></idx> if it has an inverse.  We usually write <m>f^{-1}</m> for the inverse of <m>f</m>. <notation><usage><m>id</m></usage><description>identity mapping</description></notation><notation><usage><m>f^{-1}</m></usage><description>inverse of the function <m>f</m></description></notation></p> 
 
         <example xml:id="example-sets-inverse-function">
             <title>An Inverse Function</title>
@@ -661,7 +661,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <example xml:id="example-sets-congruent-integers">
                 <title>A Partition of Integers</title>
-                <p>Let <m>r</m> and <m>s</m> be two integers and suppose that <m>n \in {\mathbb N}</m>.  We say that <m>r</m> is <term>congruent</term><idx><h>Congruence modulo <m>n</m></h></idx> to <m>s</m> <term>modulo</term> <m>n</m>, or <m>r</m> is congruent to <m>s</m> mod <m>n</m>, if <m>r - s</m> is evenly divisible by <m>n</m>; that is, <m>r - s = nk</m>  for some <m>k \in {\mathbb Z}</m>.  In this case we write <m>r \equiv s \pmod{n}</m>.  <notation><usage>a \equiv b \pmod{n}</usage><description><m>a</m> is congruent to <m>b</m> modulo <m>n</m></description></notation>  For example, <m>41 \equiv 17 \pmod{ 8}</m> since <m>41 - 17=24</m> is divisible by 8.  We claim that congruence modulo <m>n</m> forms an equivalence relation of <m>{\mathbb Z}</m>.  Certainly any integer <m>r</m> is equivalent to itself since <m>r - r = 0</m> is divisible by <m>n</m>.  We will now show that the relation is symmetric.  If <m>r \equiv s \pmod{ n}</m>, then <m>r - s = -(s -r)</m> is divisible by <m>n</m>. So <m>s - r</m> is divisible by <m>n</m> and <m>s \equiv r \pmod{ n}</m>.  Now suppose that <m>r \equiv s \pmod{ n}</m> and <m>s \equiv t \pmod{ n}</m>.  Then there exist integers <m>k</m> and <m>l</m> such that <m>r -s = kn</m> and <m>s - t = ln</m>.  To show transitivity, it is necessary to prove that <m>r - t</m> is divisible by <m>n</m>.  However,   
+                <p>Let <m>r</m> and <m>s</m> be two integers and suppose that <m>n \in {\mathbb N}</m>.  We say that <m>r</m> is <term>congruent</term><idx><h>Congruence modulo <m>n</m></h></idx> to <m>s</m> <term>modulo</term> <m>n</m>, or <m>r</m> is congruent to <m>s</m> mod <m>n</m>, if <m>r - s</m> is evenly divisible by <m>n</m>; that is, <m>r - s = nk</m>  for some <m>k \in {\mathbb Z}</m>.  In this case we write <m>r \equiv s \pmod{n}</m>.  <notation><usage><m>a \equiv b \pmod{n}</m></usage><description><m>a</m> is congruent to <m>b</m> modulo <m>n</m></description></notation>  For example, <m>41 \equiv 17 \pmod{ 8}</m> since <m>41 - 17=24</m> is divisible by 8.  We claim that congruence modulo <m>n</m> forms an equivalence relation of <m>{\mathbb Z}</m>.  Certainly any integer <m>r</m> is equivalent to itself since <m>r - r = 0</m> is divisible by <m>n</m>.  We will now show that the relation is symmetric.  If <m>r \equiv s \pmod{ n}</m>, then <m>r - s = -(s -r)</m> is divisible by <m>n</m>. So <m>s - r</m> is divisible by <m>n</m> and <m>s \equiv r \pmod{ n}</m>.  Now suppose that <m>r \equiv s \pmod{ n}</m> and <m>s \equiv t \pmod{ n}</m>.  Then there exist integers <m>k</m> and <m>l</m> such that <m>r -s = kn</m> and <m>s - t = ln</m>.  To show transitivity, it is necessary to prove that <m>r - t</m> is divisible by <m>n</m>.  However,   
                     <me>r - t = r - s + s - t = kn + ln = (k + l)n</me>,
                 and so <m>r - t</m> is divisible by <m>n</m>.</p>
 
