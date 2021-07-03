@@ -3006,7 +3006,7 @@
 
         <p>Other authors like to make definitions using the <tag>definition</tag> element, since it creates a heading and number, allows a <tag>title</tag>, and can easily serve as the target of a cross-reference.  So this is another good place for a <tag>notation</tag> element.  But now, associate it clearly with the <tag>defintion</tag> by placing it in the metadata, early on, after the <tag>title</tag>.  And not in some subsequent paragraph.  The reason will be clear in just a bit.</p>
 
-        <p>How is a <tag>notation</tag> element constructed?  It has two elements.  The <tag>usage</tag> should be a sample piece of mathematics using the necessary symbols.  Do not wrap it in an <tag>m</tag> element, that is assumed and will be provided.  The second element is <tag>description</tag> and should be a short phrase, or sentence-like material, decoding the sample usage, and may include <tag>m</tag> elements.  The reader sees nothing in the output at the location of the <tag>notation</tag> element.</p>
+        <p>How is a <tag>notation</tag> element constructed?  It has two elements.  The <tag>usage</tag> should be a sample piece of mathematics using the necessary symbols, and wrapped in a <em>single</em> <tag>m</tag> element.  The second element is <tag>description</tag> and should be a short phrase, or sentence-like material, decoding the sample usage, and may include <tag>m</tag> elements.  The reader sees nothing in the output at the location of the <tag>notation</tag> element.</p>
 
         <p>The automatically-generated notation list is then a three-column table, in the order of appearance, with the sample usage, the description, and a <term>locator</term>.  For output derived from <latex/>, such as print or <init>PDF</init>, the locator will be the page number of wherever you placed the <tag>notation</tag> element.  For <init>HTML</init> the locator is much better<mdash/>it is a knowl, for either a paragraph or for an entire definition.  The latter possibility explains why it is better to place the <tag>notation</tag> element inside a <tag>definition</tag>, if possible, rather than in a paragraph that is a constituent of a <tag>definition</tag>.</p>
     </section>
@@ -3372,7 +3372,7 @@
                     <mrow>\nabla \cdot \vec{\mathbf{E}} &amp; = 4 \pi \rho</mrow>
                     <mrow>\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} &amp; = \vec{\mathbf{0}}</mrow>
                     <mrow>\nabla \cdot \vec{\mathbf{B}} &amp; = 0</mrow>
-                </md><notation><usage>\nabla</usage><description>gradient operator</description></notation></p>
+                </md><notation><usage><m>\nabla</m></usage><description>gradient operator</description></notation></p>
 
             </li>
 
