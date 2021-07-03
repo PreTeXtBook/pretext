@@ -5057,9 +5057,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </span>
                     </h6>
                 </xsl:if>
-                <xsl:apply-templates>
-                    <xsl:with-param name="b-original" select="$b-original" />
-                </xsl:apply-templates>
+                <!-- Unstructured list items will be output as an HTML "p"     -->
+                <!-- within the "li", much like a structured list item could   -->
+                <!-- have a single "p" as its structured content.  This is     -->
+                <!-- meant to help with authoring tools based on HTML content  -->
+                <!-- and for CSS withing Kindle versions.  A "dl/li" is always -->
+                <!-- structured, so we can do this here.                       -->
+                <xsl:choose>
+                    <!-- Any of these children is an indicator of a structured  -->
+                    <!-- list item, according to the schema, as of 2021-07-03   -->
+                    <xsl:when test="p|blockquote|pre|image|video|program|console|tabular|&FIGURE-LIKE;|&ASIDE-LIKE;|sidebyside|sbsgroup|sage">
+                        <xsl:apply-templates>
+                            <xsl:with-param name="b-original" select="$b-original" />
+                        </xsl:apply-templates>
+                    </xsl:when>
+                    <!-- No good test for unstructured? -->
+                    <xsl:otherwise>
+                        <p>
+                            <!-- Create a derived id, if original.  Somewhat  -->
+                            <!-- contrived so it doesn't collide with another. -->
+                            <xsl:if test="$b-original">
+                                <xsl:attribute name="id">
+                                    <xsl:text>derived-p-</xsl:text>
+                                    <xsl:apply-templates select="." mode="html-id" />
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:apply-templates>
+                                <xsl:with-param name="b-original" select="$b-original" />
+                            </xsl:apply-templates>
+                        </p>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:element>
         </xsl:otherwise>
     </xsl:choose>
