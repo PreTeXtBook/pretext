@@ -960,17 +960,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </table>
 </xsl:template>
 
-<!-- We wrap the sample usage as mathematics       -->
+<!-- Process *exactly* one "m" element             -->
 <!-- Duplicate the provided description            -->
 <!-- Create a cross-reference to enclosing content -->
 <xsl:template match="notation" mode="backmatter">
     <tr>
         <td>
-            <xsl:call-template name="begin-inline-math" />
-            <!-- "usage" should be raw latex, so -->
-            <!-- should avoid text processing    -->
-            <xsl:value-of select="usage" />
-            <xsl:call-template name="end-inline-math" />
+            <xsl:apply-templates select="usage/m[1]"/>
         </td>
         <td>
             <xsl:apply-templates select="description" />

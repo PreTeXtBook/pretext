@@ -393,6 +393,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </pretext>
 </xsl:template>
 
+<!-- 2021-07-02 wrap notation/usage in "m" if not present -->
+<xsl:template match="notation/usage[not(m)]" mode="assembly">
+    <!-- duplicate "usage" w/ attributes, insert "m" as repair -->
+    <usage>
+        <xsl:apply-templates select="@*" mode="assembly"/>
+        <m>
+            <xsl:apply-templates select="node()|@*" mode="assembly"/>
+        </m>
+    </usage>
+</xsl:template>
+
 <!-- ######## -->
 <!-- Warnings -->
 <!-- ######## -->

@@ -11548,6 +11548,14 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'use of a &quot;@source&quot; attribute on a &quot;video&quot; or &quot;audio&quot; element to specify a network location (leading with &quot;http&quot;) has been deprecated, but will still be effective.  Replace with a &quot;@href&quot; attribute.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2021-07-02  deprecate notation/usage as bare LaTeX, needs exactly 1 "m"       -->
+    <!-- N.B. this is fixed by the pre-processor, so we analyze the (entire) $original -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$original//notation/usage[not(m)]" />
+        <xsl:with-param name="date-string" select="'2021-07-02'" />
+        <xsl:with-param name="message" select="'a &quot;notation/usage&quot; element should contain *exactly* one &quot;m&quot;.  There is none, but we will attempt to honor your intent'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->

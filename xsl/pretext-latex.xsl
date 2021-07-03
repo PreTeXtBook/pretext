@@ -4519,11 +4519,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="notation" mode="backmatter">
-    <xsl:text>\(</xsl:text>
-    <!-- "usage" should be raw latex, so -->
-    <!-- should avoid text processing    -->
-    <xsl:value-of select="usage" />
-    <xsl:text>\)</xsl:text>
+    <!-- Process *exactly* one "m" element -->
+    <xsl:apply-templates select="usage/m[1]"/>
     <xsl:text>&amp;</xsl:text>
     <xsl:apply-templates select="description" />
     <xsl:text>&amp;</xsl:text>
