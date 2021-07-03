@@ -5078,7 +5078,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <!-- contrived so it doesn't collide with another. -->
                             <xsl:if test="$b-original">
                                 <xsl:attribute name="id">
-                                    <xsl:text>derived-p-</xsl:text>
+                                    <xsl:text>p-derived-</xsl:text>
                                     <xsl:apply-templates select="." mode="html-id" />
                                 </xsl:attribute>
                             </xsl:if>
