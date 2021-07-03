@@ -2759,7 +2759,13 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="usage" type="xs:string"/>
+  <xs:element name="usage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="m"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="m">
     <xs:complexType mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">

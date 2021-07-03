@@ -3101,7 +3101,7 @@
   <define name="Notation">
     <element name="notation">
       <element name="usage">
-        <text/>
+        <ref name="MathInline"/>
       </element>
       <element name="description">
         <ref name="TextShort"/>

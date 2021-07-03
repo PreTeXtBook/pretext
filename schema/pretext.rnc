@@ -1261,7 +1261,7 @@
                 }
             Notation =
                 element notation {
-                    element usage {text},
+                    element usage {MathInline},
                     element description {
                         TextShort
                     }
