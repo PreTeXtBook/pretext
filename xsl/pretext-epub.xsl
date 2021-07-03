@@ -99,6 +99,27 @@
 <!-- responsible for integrating PNG images in place of SVG -->
 <xsl:param name="math.format"/>
 
+<!-- The  mathjax_latex()  routine in  pretext.py  is parameterized    -->
+<!-- by the format of the math being generated:                        -->
+<!--     'svg', 'mml', 'nemeth', 'speech', 'kindle'                    -->
+<!-- In turn, this dictates if clause-ending punctuation is absorbed   -->
+<!-- into the math or not:                                             -->
+<!--     'svg', 'mml', 'kindle' -> absorbed into display math only     -->
+<!--     'nemeth', 'speech'     -> never absorbed                      -->
+<!-- For this stylesheet, which consumes this math, we need to set     -->
+<!-- the matching behavior for the adjacent text nodes via an override -->
+<!-- of the global  math.punctuation.include  variable.                -->
+<xsl:variable name="math.punctuation.include">
+    <xsl:choose>
+        <xsl:when test="($math.format = 'svg') or ($math.format = 'mml') or ($math.format = 'kindle')">
+            <xsl:text>display</xsl:text>
+        </xsl:when>
+        <xsl:when test="($math.format = 'speech')">
+            <xsl:text>none</xsl:text>
+        </xsl:when>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- Cover image filename, once -->
 <xsl:variable name="cover-filename">
     <xsl:value-of select="$external-directory"/>
