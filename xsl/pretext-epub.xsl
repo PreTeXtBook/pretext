@@ -76,8 +76,9 @@
 </xsl:variable>
 <xsl:variable name="mock-UUID">mock-123456789-0-987654321</xsl:variable>
 
-<!-- We hard-code the chunking level.  Level 2 is       -->
-<!-- the default for books, which we presume throughout -->
+<!-- We hard-code the chunking level.  Level 2 is the  -->
+<!-- default for books, which we presume throughout.   -->
+<!-- Specialized divisions, to the spine, assume this. -->
 <xsl:variable name="chunk-level">
     <xsl:choose>
         <xsl:when test="$root/book/part">3</xsl:when>
@@ -439,7 +440,10 @@
 </xsl:template>
 
 <!-- Simplest scenario is spine matches manifest, all with @linear="yes" -->
-<xsl:template match="frontmatter|colophon|acknowledgement|preface|biography|chapter|appendix|index|section|exercises|references|solutions" mode="spine">
+<!-- Specialized divisions will only become files in the manifest at     -->
+<!-- chunk level 2, in other words, peers of chapters or sections        -->
+<!-- (book or chapter/appendix as parent, respectively)                  -->
+<xsl:template match="frontmatter|colophon|acknowledgement|preface|biography|chapter|appendix|index|section|exercises[parent::book|parent::chapter|parent::appendix]|reading-questions[parent::book|parent::chapter|parent::appendix]|references[parent::book|parent::chapter|parent::appendix]|solutions[parent::book|parent::chapter|parent::appendix]|glossary[parent::book|parent::chapter|parent::appendix]" mode="spine">
     <xsl:element name="itemref" xmlns="http://www.idpf.org/2007/opf">
         <xsl:attribute name="idref">
             <xsl:apply-templates select="." mode="html-id" />
