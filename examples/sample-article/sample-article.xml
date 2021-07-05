@@ -5610,6 +5610,36 @@ the xsltproc executable.
                 </tabular>
             </table>
 
+            <table>
+                <title>One Row Header, with Rules</title>
+                <tabular>
+                    <row header="yes" bottom="major">
+                        <cell>State</cell>
+                        <cell>Population</cell>
+                        <cell>Area (sq. mi.)</cell>
+                        <cell>Statehood (Year)</cell>
+                    </row>
+                    <row>
+                        <cell>Washington</cell>
+                        <cell>7,614,893</cell>
+                        <cell>71,362</cell>
+                        <cell>1889</cell>
+                    </row>
+                    <row>
+                        <cell>Oregon</cell>
+                        <cell>4,217,737</cell>
+                        <cell>98,381</cell>
+                        <cell>1859</cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell>California</cell>
+                        <cell>39,512,223</cell>
+                        <cell>163,696</cell>
+                        <cell>1850</cell>
+                    </row>
+                </tabular>
+            </table>
+
         </section>
 
         <section xml:id="section-interactive-authored">
