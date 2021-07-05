@@ -960,17 +960,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </table>
 </xsl:template>
 
-<!-- We wrap the sample usage as mathematics       -->
+<!-- Process *exactly* one "m" element             -->
 <!-- Duplicate the provided description            -->
 <!-- Create a cross-reference to enclosing content -->
 <xsl:template match="notation" mode="backmatter">
     <tr>
         <td>
-            <xsl:call-template name="begin-inline-math" />
-            <!-- "usage" should be raw latex, so -->
-            <!-- should avoid text processing    -->
-            <xsl:value-of select="usage" />
-            <xsl:call-template name="end-inline-math" />
+            <xsl:apply-templates select="usage/m[1]"/>
         </td>
         <td>
             <xsl:apply-templates select="description" />
@@ -2268,7 +2264,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- the name of the object, its "type" -->
     <span class="type">
         <xsl:apply-templates select="." mode="type-name" />
+        <xsl:text>.</xsl:text>
     </span>
+    <xsl:text> </xsl:text>
     <xsl:variable name="the-number">
         <xsl:apply-templates select="." mode="non-singleton-number" />
     </xsl:variable>
@@ -3831,6 +3829,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:apply-templates>
                     </xsl:if>
                 </xsl:when>
+                <xsl:when test="webwork-reps/static/task">
+                    <xsl:if test="$b-has-statement">
+                        <xsl:apply-templates select="webwork-reps/static/introduction">
+                            <xsl:with-param name="b-original" select="false()" />
+                        </xsl:apply-templates>
+                    </xsl:if>
+                    <xsl:apply-templates select="webwork-reps/static/task" mode="solutions">
+                        <xsl:with-param name="b-original" select="false()" />
+                        <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+                        <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+                        <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+                        <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+                    </xsl:apply-templates>
+                    <xsl:if test="$b-has-statement">
+                        <xsl:apply-templates select="webwork-reps/static/conclusion">
+                            <xsl:with-param name="b-original" select="false()" />
+                        </xsl:apply-templates>
+                    </xsl:if>
+                </xsl:when>
                 <!-- webwork with stages -->
                 <xsl:when test="webwork-reps/static/stage">
                     <xsl:apply-templates select="webwork-reps/static/stage" mode="exercise-components">
@@ -3841,7 +3858,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
                     </xsl:apply-templates>
                 </xsl:when>
-                <!-- webwork without stages -->
+                <!-- webwork without tasks or stages -->
                 <xsl:when test="webwork-reps/static">
                     <xsl:apply-templates select="webwork-reps/static" mode="exercise-components">
                         <xsl:with-param name="b-original" select="false()" />
@@ -4053,7 +4070,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
-<xsl:template match="exercise|&PROJECT-LIKE;|task|&EXAMPLE-LIKE;|webwork-reps/static|webwork-reps/static/stage" mode="exercise-components">
+<xsl:template match="exercise|&PROJECT-LIKE;|task|&EXAMPLE-LIKE;|webwork-reps/static|webwork-reps/static/task|webwork-reps/static/stage" mode="exercise-components">
     <xsl:param name="b-original"/>
     <xsl:param name="block-type"/>
     <xsl:param name="b-has-statement" />
@@ -5040,9 +5057,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </span>
                     </h6>
                 </xsl:if>
-                <xsl:apply-templates>
-                    <xsl:with-param name="b-original" select="$b-original" />
-                </xsl:apply-templates>
+                <!-- Unstructured list items will be output as an HTML "p"     -->
+                <!-- within the "li", much like a structured list item could   -->
+                <!-- have a single "p" as its structured content.  This is     -->
+                <!-- meant to help with authoring tools based on HTML content  -->
+                <!-- and for CSS withing Kindle versions.  A "dl/li" is always -->
+                <!-- structured, so we can do this here.                       -->
+                <xsl:choose>
+                    <!-- Any of these children is an indicator of a structured  -->
+                    <!-- list item, according to the schema, as of 2021-07-03   -->
+                    <xsl:when test="p|blockquote|pre|image|video|program|console|tabular|&FIGURE-LIKE;|&ASIDE-LIKE;|sidebyside|sbsgroup|sage">
+                        <xsl:apply-templates>
+                            <xsl:with-param name="b-original" select="$b-original" />
+                        </xsl:apply-templates>
+                    </xsl:when>
+                    <!-- No good test for unstructured? -->
+                    <xsl:otherwise>
+                        <p>
+                            <!-- Create a derived id, if original.  Somewhat  -->
+                            <!-- contrived so it doesn't collide with another. -->
+                            <xsl:if test="$b-original">
+                                <xsl:attribute name="id">
+                                    <xsl:text>p-derived-</xsl:text>
+                                    <xsl:apply-templates select="." mode="html-id" />
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:apply-templates>
+                                <xsl:with-param name="b-original" select="$b-original" />
+                            </xsl:apply-templates>
+                        </p>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:element>
         </xsl:otherwise>
     </xsl:choose>
@@ -5524,7 +5569,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
     </xsl:variable>
     <!-- location of image, based on configured directory in publisher file -->
-    <xsl:variable name="location" select="concat($external-image-directory, @source)"/>
+    <xsl:variable name="location" select="concat($external-directory, @source)"/>
     <xsl:choose>
         <!-- no extension, presume SVG provided as external image -->
         <xsl:when test="$extension=''">
@@ -5563,7 +5608,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- possibly annotate with archive links -->
             <xsl:apply-templates select="." mode="archive">
                 <xsl:with-param name="base-pathname">
-                    <xsl:value-of select="$external-image-directory"/>
+                    <xsl:value-of select="$external-directory"/>
                     <xsl:call-template name="substring-before-last">
                         <xsl:with-param name="input" select="$location" />
                         <xsl:with-param name="substr" select="'.'" />
@@ -5581,8 +5626,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   Match style is duplicated in mathbook-epub.xsl -->
 <xsl:template match="image[latex-image]|image[sageplot]" mode="image-inclusion">
     <xsl:variable name="base-pathname">
-        <xsl:value-of select="$generated-image-directory"/>
-        <xsl:if test="$b-managed-generated-images">
+        <xsl:value-of select="$generated-directory"/>
+        <xsl:if test="$b-managed-directories">
             <xsl:choose>
                 <xsl:when test="latex-image">
                     <xsl:text>latex-image/</xsl:text>
@@ -5620,8 +5665,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="image[asymptote]" mode="image-inclusion">
     <!-- base-pathname needed later for archive link production -->
     <xsl:variable name="base-pathname">
-        <xsl:value-of select="$generated-image-directory"/>
-        <xsl:if test="$b-managed-generated-images">
+        <xsl:value-of select="$generated-directory"/>
+        <xsl:if test="$b-managed-directories">
             <xsl:text>asymptote/</xsl:text>
         </xsl:if>
         <xsl:apply-templates select="." mode="visible-id" />
@@ -6296,7 +6341,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <!-- else a local filename in @source -->
             <xsl:otherwise>
-                <xsl:value-of select="$external-image-directory"/>
+                <xsl:value-of select="$external-directory"/>
                 <xsl:value-of select="@source"/>
             </xsl:otherwise>
         </xsl:choose>
@@ -6400,7 +6445,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <!-- else a local filename in @source -->
             <xsl:otherwise>
-                <xsl:value-of select="$external-image-directory"/>
+                <xsl:value-of select="$external-directory"/>
                 <xsl:value-of select="@source"/>
             </xsl:otherwise>
         </xsl:choose>
@@ -6522,7 +6567,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The HTML @default attribute functions simply by being -->
 <!-- present, so we do not provide a value.                -->
 <xsl:template match="track">
-    <xsl:variable name="location" select="concat($external-image-directory, @source)"/>
+    <xsl:variable name="location" select="concat($external-directory, @source)"/>
 
     <track>
         <xsl:if test="@default='yes'">
@@ -8705,8 +8750,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$hid" />
         </xsl:attribute>
         <xsl:attribute name="data-tracefile">
-            <xsl:if test="$b-managed-generated-images">
-                <xsl:value-of select="$external-image-directory"/>
+            <xsl:if test="$b-managed-directories">
+                <xsl:value-of select="$external-directory"/>
             </xsl:if>
             <xsl:text>pytutor/</xsl:text>
             <xsl:value-of select="$hid" />
@@ -8846,18 +8891,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- no .enable_chatcodes -->
             </xsl:when>
             <!-- Dev, testing: $runestone-dev = 'yes' -->
+            <!-- 2021-07-01: to become universal HTML -->
             <xsl:otherwise>
+                <xsl:comment>** eBookCongig is necessary to configure interactive       **</xsl:comment>
+                <xsl:comment>** Runestone components to run locally in reader's browser **</xsl:comment>
+                <xsl:comment>** No external communication:                              **</xsl:comment>
+                <xsl:comment>**     log level is 0, Runestone Services are disabled     **</xsl:comment>
                 <xsl:text>eBookConfig.useRunestoneServices = false;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.host = 'http://127.0.0.1:8000';&#xa;</xsl:text>
                 <!-- no .app -->
                 <xsl:text>eBookConfig.course = 'PTX Course: Title Here';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.basecourse = 'PTX Base Course';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.isLoggedIn = false;&#xa;</xsl:text>
-                <xsl:text>eBookConfig.email = 'somebody@nobody.com';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.email = '';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.isInstructor = false;&#xa;</xsl:text>
                 <!-- no .ajaxURL since no .app -->
-                <xsl:text>eBookConfig.logLevel = 10;&#xa;</xsl:text>
-                <xsl:text>eBookConfig.username = 'Somebody Nobody';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.logLevel = 0;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.username = '';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.readings = null;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.activities = null;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.downloadsEnabled = false;&#xa;</xsl:text>
@@ -9502,8 +9552,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <xsl:when test="@source">
                 <xsl:text>filename:"</xsl:text>
-                <xsl:if test="$b-managed-generated-images">
-                    <xsl:value-of select="$external-image-directory"/>
+                <xsl:if test="$b-managed-directories">
+                    <xsl:value-of select="$external-directory"/>
                 </xsl:if>
                 <xsl:value-of select="@source" />
                 <xsl:text>",&#xa;</xsl:text>
@@ -9631,8 +9681,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
               <xsl:text>  board.unsuspendUpdate();&#xa;</xsl:text>
               <xsl:text>}&#xa;</xsl:text>
               <xsl:text>fetch('</xsl:text>
-              <xsl:if test="$b-managed-generated-images">
-                <xsl:value-of select="$external-image-directory"/>
+              <xsl:if test="$b-managed-directories">
+                <xsl:value-of select="$external-directory"/>
               </xsl:if>
               <xsl:value-of select="@source" />
               <xsl:text>').then(function(response) { response.text().then( function(text) { parseJessie(text); }); });&#xa;</xsl:text>
@@ -9674,11 +9724,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:when test="substring($raw-location,1,4) = 'http'">
                             <xsl:value-of select="$raw-location"/>
                         </xsl:when>
-                        <xsl:when test="not($b-managed-generated-images)">
+                        <xsl:when test="not($b-managed-directories)">
                             <xsl:value-of select="$raw-location"/>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:value-of select="$external-image-directory"/>
+                            <xsl:value-of select="$external-directory"/>
                             <xsl:value-of select="$raw-location"/>
                         </xsl:otherwise>
                     </xsl:choose>
@@ -9829,6 +9879,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <xsl:when test="$webwork-reps-version = 2">
                 <script src="{$html.js.server}/js/{$html.js.version}/pretext-webwork.js"></script>
+                <script src="{$webwork-domain}/webwork2_files/node_modules/iframe-resizer/js/iframeResizer.min.js"></script>
             </xsl:when>
         </xsl:choose>
     </xsl:if>
@@ -9867,7 +9918,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- interactive? This includes problems with only essay fields.  -->
         <!-- NB: for Runestone, we may want to allow essay answer fields  -->
         <!-- to make live problems, and Runestone records submissions.    -->
-        <xsl:when test="($b-static = 'yes') or not(static/answer or static/stage/answer)">
+        <xsl:when test="($b-static = 'yes') or not(static/answer or static/task/answer or static/stage/answer)">
             <xsl:apply-templates select="static" mode="exercise-components">
                 <xsl:with-param name="b-original"      select="$b-original"/>
                 <xsl:with-param name="b-has-statement" select="true()"/>
@@ -9940,15 +9991,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="aria-live">
             <xsl:value-of select="'polite'"/>
         </xsl:attribute>
-        <xsl:apply-templates select="static" mode="exercise-components">
-            <xsl:with-param name="b-original"      select="$b-original"/>
-            <xsl:with-param name="b-has-statement" select="true()"/>
-            <xsl:with-param name="b-has-hint"      select="$b-has-hint"/>
-            <xsl:with-param name="b-has-answer"    select="$b-has-answer"/>
-            <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
-        </xsl:apply-templates>
-        <div>
-            <button class="webwork-button" onclick="initWW('{@ww-id}')">Make Interactive</button>
+        <div class="problem-contents">
+            <xsl:apply-templates select="static" mode="exercise-components">
+                <xsl:with-param name="b-original"      select="$b-original"/>
+                <xsl:with-param name="b-has-statement" select="true()"/>
+                <xsl:with-param name="b-has-hint"      select="$b-has-hint"/>
+                <xsl:with-param name="b-has-answer"    select="$b-has-answer"/>
+                <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
+            </xsl:apply-templates>
+        </div>
+        <div class="problem-buttons">
+            <button class="webwork-button" onclick="handleWW('{@ww-id}')">Make Interactive</button>
         </div>
     </xsl:element>
 </xsl:template>
@@ -11516,14 +11569,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="favicon">
     <xsl:if test="$docinfo/html/favicon">
         <xsl:variable name="res32">
-            <xsl:if test="$b-managed-generated-images">
-                <xsl:value-of select="$external-image-directory"/>
+            <xsl:if test="$b-managed-directories">
+                <xsl:value-of select="$external-directory"/>
             </xsl:if>
             <xsl:text>favicon/favicon-32x32.png</xsl:text>
         </xsl:variable>
         <xsl:variable name="res16">
-            <xsl:if test="$b-managed-generated-images">
-                <xsl:value-of select="$external-image-directory"/>
+            <xsl:if test="$b-managed-directories">
+                <xsl:value-of select="$external-directory"/>
             </xsl:if>
             <xsl:text>favicon/favicon-16x16.png</xsl:text>
         </xsl:variable>
@@ -11669,7 +11722,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="brand-logo">
     <xsl:choose>
         <xsl:when test="$docinfo/brandlogo">
-            <xsl:variable name="location" select="concat($external-image-directory, $docinfo/brandlogo/@source)"/>
+            <xsl:variable name="location" select="concat($external-directory, $docinfo/brandlogo/@source)"/>
             <a id="logo-link" href="{$docinfo/brandlogo/@url}" target="_blank" >
                 <img src="{$location}" alt="Logo image"/>
             </a>

@@ -21,9 +21,9 @@
 # vermin is a great linter/checker to check versions required
 #     https://github.com/netromdk/vermin.git
 # 2021-05-21: this module expects Python 3.6 or newer
-#     in reality:
-#     shutil.copytree(dirs_exist_ok) requires Python 3.8
-#         (only in experimental code right now)
+#     copying HTML into cwd twice, might be better with
+#     shutil.copytree(dirs_exist_ok), requires Python 3.8
+#
 #     subprocess.run() requires Python 3.5
 #     shutil.which() member requires 3.3
 #     otherwise Python 3.0 might be sufficient
@@ -570,9 +570,6 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
     NSMAP = {"xml" : "http://www.w3.org/XML/1998/namespace"}
     XML = "http://www.w3.org/XML/1998/namespace"
     webwork_representations = ET.Element('webwork-representations', nsmap = NSMAP)
-    # lines like this next one micromanage newlines and indentation when we print to file
-    webwork_representations.text = "\n  "
-
     # Choose one of the dictionaries to take its keys as what to loop through
     for problem in sorted(origin):
 
@@ -813,10 +810,7 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
         webwork_reps.set('version',ww_reps_version)
         webwork_reps.set("{%s}id" % (XML),'extracted-' + problem)
         webwork_reps.set('ww-id',problem)
-        webwork_reps.text = "\n    "
-        webwork_reps.tail = "\n  "
         static = ET.SubElement(webwork_reps,'static')
-        static.text = "\n      "
         static.set('seed',seed[problem])
         if (origin[problem] == 'server'):
             static.set('source',source[problem])
@@ -831,212 +825,82 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
             p.text = badness_msg.format(problem_identifier, seed[problem], badness_tip)
             continue
 
-        # Exericse schema is: (statement, hint*, answer*, solution*)
-        # Incoming WW may have multiple statement, so we merge them into one.
-        # Then write hints in original order.
-        # Then convert answerhashes to a sequence of answer.
-        # Lastly, write all solutions in original order.
-        # For problems with stages, more care is needed to get hints, answers, solutions within the right stage
+        # This recursive function is needed in the case of nested tasks.
+        # It is written in such a way to handle task with no nesting, and even an exercise without any task.
 
-        # First handle problems where there are no stages
-        if response_root.find('.//stage') is None:
-            statement = ET.SubElement(static, 'statement')
-            statement.text = "\n"
-            statements = response_root.findall('.//statement')
-            for st in list(statements):
-                for child in st:
-                    # response_root is an element tree from the response
-                    # webwork_represenations is an element tree
-                    # we use deepcopy to make sure that when we append we are making new nodes,
-                    # not intertangling the two trees
-                    chcopy = copy.deepcopy(child)
-                    statement.append(chcopy)
-            # blocks like this next one micromanage newlines and indentation when we print to file
-            for elem in statement.getiterator():
-                try:
-                    elem.text = elem.text.replace("\n","\n        ")
-                except AttributeError:
-                    pass
-                try:
-                    elem.tail = elem.tail.replace("\n","\n        ")
-                except AttributeError:
-                    pass
-            # blocks like this next one micromanage newlines and indentation when we print to file
-            last = statement.xpath('./*[last()]')
-            if last:
-                last[0].tail = "\n      "
+        def static_webwork_level(write,read):
+            # (tree we are building, tree we take from)
+            # since write is a tree and read is a tree, we use deepcopy to make sure
+            # that when we append nodes we are appending new ones, not intertwining the trees
+
+            tasks = read.findall('./task')
+            if tasks:
+                titles = read.xpath('./title')
+                if titles:
+                    for ttl in list(titles):
+                        title = copy.deepcopy(ttl)
+                        write.append(title)
+                introductions = read.xpath('./statement[following-sibling::task]|./statement[following-sibling::stage]')
+                if introductions:
+                    introduction = ET.SubElement(write, 'introduction')
+                    for intro in list(introductions):
+                        for child in intro:
+                            chcopy = copy.deepcopy(child)
+                            introduction.append(chcopy)
+                for tsk in list(tasks):
+                    task = ET.SubElement(write, 'task')
+                    static_webwork_level(task,tsk)
+                conclusions = read.xpath('./statement[preceding-sibling::task]')
+                if conclusions:
+                    conclusion = ET.SubElement(write, 'conclusion')
+                    for conc in list(conclusions):
+                        for child in conc:
+                            chcopy = copy.deepcopy(child)
+                            conclusion.append(chcopy)
             else:
-                print('PTX:WARNING: a statement in {} has no content'.format(problem_identifier))
-            statement.tail = "\n      "
-
-            hints = response_root.findall('.//hint')
-            for ht in list(hints):
-                htcopy = copy.deepcopy(ht)
-                for elem in htcopy.getiterator():
-                    try:
-                        elem.text = elem.text.replace("\n","\n        ")
-                    except AttributeError:
-                        pass
-                    try:
-                        elem.tail = elem.tail.replace("\n","\n        ")
-                    except AttributeError:
-                        pass
-
-                last = htcopy.xpath('./*[last()]')
-                if last:
-                    last[0].tail = "\n      "
-                else:
-                    print('PTX:WARNING: a hint in {} has no content'.format(problem_identifier))
-                htcopy.text = "\n        "
-                htcopy.tail = "\n      "
-
-                static.append(htcopy)
-
-            answer_hashes = response_root.find('.//answerhashes')
-            if answer_hashes is not None:
-                for ans in list(answer_hashes):
-                    correct_ans = ans.get('correct_ans','')
-                    correct_ans_latex_string = ans.get('correct_ans_latex_string','')
-                    if (correct_ans != '' or correct_ans_latex_string != ''):
-                        answer = ET.SubElement(static,'answer')
-                        answer.text = "\n        "
-                        p = ET.SubElement(answer,'p')
-                        if correct_ans_latex_string:
-                            m = ET.SubElement(p, 'm')
-                            m.text = correct_ans_latex_string
-                        elif correct_ans:
-                            p.text = correct_ans
-                        p.tail = "\n      "
-                        answer.tail = "\n      "
-
-            solutions = response_root.findall('.//solution')
-            for sol in list(solutions):
-                solcopy = copy.deepcopy(sol)
-                for elem in solcopy.getiterator():
-                    try:
-                        elem.text = elem.text.replace("\n","\n        ")
-                    except AttributeError:
-                        pass
-                    try:
-                        elem.tail = elem.tail.replace("\n","\n        ")
-                    except AttributeError:
-                        pass
-
-                last = solcopy.xpath('./*[last()]')
-                if last:
-                    last[0].tail = "\n      "
-                else:
-                    print('PTX:WARNING: a solution in {} has no content'.format(problem_identifier))
-                solcopy.text = "\n        "
-                solcopy.tail = "\n      "
-
-                static.append(solcopy)
-
-        else:
-            stages = response_root.findall('.//stage')
-            for stg in list(stages):
-                stage = ET.SubElement(static,'stage')
-                stage.text = "\n        "
-                statement = ET.SubElement(stage, 'statement')
-                statement.text = "\n"
-                statements = stg.findall('.//statement')
-                for st in list(statements):
-                    for child in st:
-                        chcopy = copy.deepcopy(child)
-                        statement.append(chcopy)
-                for elem in statement.getiterator():
-                    try:
-                        elem.text = elem.text.replace("\n","\n          ")
-                    except AttributeError:
-                        pass
-                    try:
-                        elem.tail = elem.tail.replace("\n","\n          ")
-                    except AttributeError:
-                        pass
-
-                last = statement.xpath('./*[last()]')
-                if last:
-                    last[0].tail = "\n        "
-                else:
-                    print('PTX:WARNING: a statement in {} has no content'.format(problem_identifier))
-                statement.tail = "\n        "
-
-                hints = stg.findall('.//hint')
-                for ht in list(hints):
-                    htcopy = copy.deepcopy(ht)
-                    for elem in htcopy.getiterator():
-                        try:
-                            elem.text = elem.text.replace("\n","\n          ")
-                        except AttributeError:
-                            pass
-                        try:
-                            elem.tail = elem.tail.replace("\n","\n          ")
-                        except AttributeError:
-                            pass
-
-                    last = htcopy.xpath('./*[last()]')
-                    if last:
-                        last[0].tail = "\n        "
-                    else:
-                        print('PTX:WARNING: a hint in {} has no content'.format(problem_identifier))
-                    htcopy.text = "\n          "
-                    htcopy.tail = "\n        "
-
-                    stage.append(htcopy)
-
-                answer_hashes = response_root.find('.//answerhashes')
+                titles = read.xpath('./title')
+                if titles:
+                    for ttl in list(titles):
+                        title = copy.deepcopy(ttl)
+                        write.append(title)
+                statements = read.xpath('./statement[not(preceding-sibling::task or following-sibling::task)]')
+                if statements:
+                    statement = ET.SubElement(write, 'statement')
+                    for stat in list(statements):
+                        for child in stat:
+                            chcopy = copy.deepcopy(child)
+                            statement.append(chcopy)
+                hints = read.xpath('./hint')
+                if hints:
+                    hint = ET.SubElement(write, 'hint')
+                    for hnt in list(hints):
+                        for child in hnt:
+                            chcopy = copy.deepcopy(child)
+                            hint.append(chcopy)
+                answer_names = read.xpath('.//fillin/@name|.//var/@name')
+                answer_hashes = response_root.find('./answerhashes')
                 if answer_hashes is not None:
-                    for ans in answer_hashes:
-                        name = ans.tag
-                        answer_inputs = stg.find(".//*[@name='%s']" % (name))
-                        if answer_inputs is not None:
+                    for ans in list(answer_hashes):
+                        if ans.get('ans_name') in list(answer_names):
                             correct_ans = ans.get('correct_ans','')
                             correct_ans_latex_string = ans.get('correct_ans_latex_string','')
                             if (correct_ans != '' or correct_ans_latex_string != ''):
-                                answer = ET.SubElement(stage,'answer')
-                                answer.text = "\n          "
+                                answer = ET.SubElement(write,'answer')
                                 p = ET.SubElement(answer,'p')
                                 if correct_ans_latex_string:
                                     m = ET.SubElement(p, 'm')
                                     m.text = correct_ans_latex_string
                                 elif correct_ans:
                                     p.text = correct_ans
-                                p.tail = "\n        "
-                                answer.tail = "\n        "
+                solutions = read.xpath('./solution')
+                if solutions:
+                    solution = ET.SubElement(write, 'solution')
+                    for sol in list(solutions):
+                        for child in sol:
+                            chcopy = copy.deepcopy(child)
+                            solution.append(chcopy)
 
-                solutions = stg.findall('.//solution')
-                for sol in list(solutions):
-                    solcopy = copy.deepcopy(sol)
-                    for elem in solcopy.getiterator():
-                        try:
-                            elem.text = elem.text.replace("\n","\n          ")
-                        except AttributeError:
-                            pass
-                        try:
-                            elem.tail = elem.tail.replace("\n","\n          ")
-                        except AttributeError:
-                            pass
-
-                    last = solcopy.xpath('./*[last()]')
-                    if last:
-                        last[0].tail = "\n        "
-                    else:
-                        print('PTX:WARNING: a solution in {} has no content'.format(problem_identifier))
-                    solcopy.text = "\n          "
-                    solcopy.tail = "\n        "
-
-                    stage.append(solcopy)
-
-                last = stage.xpath('./*[last()]')
-                last[0].tail = "\n      "
-                stage.tail = "\n      "
-
-        last = static.xpath('./*[last()]')
-        if last:
-            last[0].tail = "\n    "
-        else:
-            print('PTX:WARNING: {} has no content'.format(problem_identifier))
-        static.tail = "\n    "
+        static_webwork_level(static,response_root)
 
         # Add elements for interactivity
         if (ww_reps_version == '2'):
@@ -1057,7 +921,6 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
             server_data.set('user-id',userID)
             server_data.set('course-password',course_password)
             server_data.set('language',localization)
-            server_data.tail = "\n    "
 
         elif (ww_reps_version == '1'):
             # Add server-url elements for putting into the @src of an iframe
@@ -1080,7 +943,6 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
                     server_url.set('domain',ww_domain)
                     url_shell = "{}?courseID={}&userID={}&password={}&course_password={}&answersSubmitted=0&displayMode=MathJax&outputformat=simple&language={}&problemSeed={}&{}"
                     server_url.text = url_shell.format(ww_domain_path,courseID,userID,password,course_password,localization,seed[problem],source_query)
-                    server_url.tail = "\n    "
 
         # Add PG for PTX-authored problems
         # Empty tag with @source for server problems
@@ -1101,19 +963,12 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
             pg.text = ET.CDATA("\n" + formatted_pg)
         elif origin[problem] == 'server':
             pg.set('source',source[problem])
-        pg.tail = "\n    "
-
-        last = webwork_reps.xpath('./*[last()]')
-        last[0].tail = "\n  "
-
-    last = webwork_representations.xpath('./*[last()]')
-    last[0].tail = "\n "
 
     # write to file
     include_file_name = os.path.join(dest_dir, "webwork-representations.ptx")
     try:
         with open(include_file_name, 'wb') as include_file:
-            include_file.write( ET.tostring(webwork_representations, encoding="utf-8", xml_declaration=True) )
+            include_file.write( ET.tostring(webwork_representations, encoding="utf-8", xml_declaration=True, pretty_print=True) )
     except Exception as e:
         root_cause = str(e)
         msg = "PTX:ERROR: there was a problem writing a problem to the file: {}\n"
@@ -1499,7 +1354,8 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format):
     #   package.opf
     #   css
     #   xhtml
-    #     images (customizable)
+    #     generated images (customizable)
+    #     external images (customizable)
     # META-INF
 
     source_dir = get_source_path(xml_source)
@@ -1520,6 +1376,8 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format):
     # and produce some information needed for the packaging here.
     _verbose('converting source ({}) and clean representations ({}) into EPUB files'.format(xml_source, math_representations))
     params = {}
+
+    # the EPUB production is parmameterized by how math is produced
     params['mathfile'] = math_representations
     params['math.format'] = math_format
     if pub_file:
@@ -1528,10 +1386,12 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format):
 
     # XHTML files lack an overall namespace,
     # while EPUB validation expects it
+    # Kindle needs an encoding declaration to avoid assuming ASCII
     # regex inplace to end up with:
-    # <html xmlns="http://www.w3.org/1999/xhtml">
+    #   <?xml version="1.0" encoding="UTF-8"?>
+    #   <html xmlns="http://www.w3.org/1999/xhtml">
     orig = '<html'
-    repl = '<html xmlns="http://www.w3.org/1999/xhtml"'
+    repl = '<?xml version="1.0" encoding="UTF-8"?>\n<html xmlns="http://www.w3.org/1999/xhtml"'
     # the inoplace facility of the fileinput module gets
     # confused about temporary backup files if the working
     # directory is not where the file lives
@@ -1566,21 +1426,21 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format):
 
     # directory of images, relative to master source file, given by publisher
     # build the same directory relative to the XHTML files
-    #imdir = packaging_tree.xpath('/packaging/images/@image-directory')[0]
-    #source_image_dir = os.path.join(source_dir, str(imdir))
-    #os.mkdir(os.path.join(tmp_dir, 'EPUB', 'xhtml', str(imdir)))
-    source_image_dir = os.path.join(source_dir, 'images')
-    os.mkdir(os.path.join(tmp_dir, 'EPUB', 'xhtml', 'images'))
+
     # position cover file
     cov = packaging_tree.xpath('/packaging/cover/@filename')[0]
     cover_source = os.path.join(source_dir, str(cov))
-    cover_dest = os.path.join(tmp_dir, 'EPUB', 'xhtml', str(cov))
+    cover_dest = os.path.join(xhtml_dir, str(cov))
+    # https://stackoverflow.com/questions/2793789, Python 3.2
+    os.makedirs(os.path.dirname(cover_dest), exist_ok=True)
     shutil.copy2(cover_source, cover_dest)
+
     # position image files
     images = packaging_tree.xpath('/packaging/images/image/@filename')
     for im in images:
         source = os.path.join(source_dir, str(im))
-        dest = os.path.join(tmp_dir, 'EPUB', 'xhtml', str(im))
+        dest = os.path.join(xhtml_dir, str(im))
+        os.makedirs(os.path.dirname(dest), exist_ok=True)
         shutil.copy2(source, dest)
 
     # clean-up the trash
@@ -1642,12 +1502,6 @@ def html(xml, pub_file, stringparams, dest_dir):
     import os.path # join()
     import shutil # copytree()
 
-    warning = '\n'.join(['*************************************************',
-                         'Conversion to HTML is experimental and incomplete',
-                         '    (Temporarily requires Python version 3.8)    ',
-                         '*************************************************'])
-    print(warning)
-
     # Consult publisher file for locations of images
     # data directory likely only needed for latex compilation
     generated_abs, _, external_abs, generated, _, external = get_image_directories(xml, pub_file)
@@ -1659,13 +1513,13 @@ def html(xml, pub_file, stringparams, dest_dir):
 
     # copy externally manufactured media to  dest_dir
     if external:
-        external_dir = os.path.join(dest_dir, external)
-        shutil.copytree(external_abs, external_dir, dirs_exist_ok=True)
+        external_dir = os.path.join(dest_dir, 'external')
+        shutil.copytree(external_abs, external_dir)
 
     # copy generated to  dest_dir
     if generated:
-        generated_dir = os.path.join(dest_dir, generated)
-        shutil.copytree(generated_abs, generated_dir, dirs_exist_ok=True)
+        generated_dir = os.path.join(dest_dir, 'generated')
+        shutil.copytree(generated_abs, generated_dir)
 
     # Write output into working directory, no scratch space needed
     _verbose('converting {} to HTML in {}'.format(xml, dest_dir))
@@ -1703,12 +1557,6 @@ def pdf(xml, pub_file, stringparams, out_file, dest_dir):
     import shutil # copytree(), copy2()
     import subprocess # run()
 
-    warning = '\n'.join(['************************************************',
-                         'Conversion to PDF is experimental and incomplete',
-                         '   (Temporarily requires Python version 3.8)    ',
-                         '************************************************'])
-    print(warning)
-    #
     generated_abs, data_abs, external_abs, generated, data, external = get_image_directories(xml, pub_file)
     # perhaps necessary (so drop "if"), but maybe not; needs to be supported
     if pub_file:
@@ -1735,16 +1583,16 @@ def pdf(xml, pub_file, stringparams, out_file, dest_dir):
 
     # Managed, generated images
     if generated:
-        generated_dir = os.path.join(tmp_dir, generated)
-        shutil.copytree(generated_abs, generated_dir, dirs_exist_ok=True)
+        generated_dir = os.path.join(tmp_dir, 'generated')
+        shutil.copytree(generated_abs, generated_dir)
     # externally manufactured images
     if external:
-        external_dir = os.path.join(tmp_dir, external)
-        shutil.copytree(external_abs, external_dir, dirs_exist_ok=True)
+        external_dir = os.path.join(tmp_dir, 'external')
+        shutil.copytree(external_abs, external_dir)
     # data files
     if data:
-        data_dir = os.path.join(tmp_dir, data)
-        shutil.copytree(data_abs, data_dir, dirs_exist_ok=True)
+        data_dir = os.path.join(tmp_dir, 'data')
+        shutil.copytree(data_abs, data_dir)
 
     # now work in temporary directory since LaTeX is a bit incapable
     # of working outside of the current working directory
@@ -1868,18 +1716,20 @@ def set_verbosity(v):
     # 0 - nothing
     # 1 - _verbose() only
     # 2 - _verbose() and _debug()
-    global _verbosity
+    global __verbosity
 
     if ((v != 0) and (v !=1 ) and (v!= 2)):
         raise ValueError('PTX:ERROR: verbosity level is 0, 1, or 2, not {}'.format(v))
-    _verbosity = v
+    __verbosity = v
 
 def _verbose(msg):
     """Write a concise message to the console on program progress"""
     # N.B.: this should be an informative progress indicator for an impatient
     # author who wonders if anything is happening.  Use _debug() for messages
     # with content useful for location or solving problems.
-    if _verbosity >= 1:
+    global __verbosity
+
+    if __verbosity >= 1:
         print('PTX: {}'.format(msg))
 
 def _debug(msg):
@@ -1887,7 +1737,9 @@ def _debug(msg):
     # N.B. This can be as detailed and infotrmative as possible,
     # and should be helpful in locating where a problem occurs
     # or what scenario caused that problem.
-    if _verbosity >= 2:
+    global __verbosity
+
+    if __verbosity >= 2:
         print('PTX:DEBUG: {}'.format(msg))
 
 def python_version():
@@ -1908,26 +1760,32 @@ def check_python_version():
     if sys.version_info[0] <= 2:
         raise(OSError(msg.format(python_version())))
 
-def set_ptx_path():
-    """Discover and set path to root of PreTeXt distribution"""
+def set_ptx_path(path=None):
+    """Set (or discover) path to root of PreTeXt distribution"""
     # necessary to locate configuration files, XSL stylesheets
     # since authors can drop distribution *anywhere* in their system
-    global _ptx_path
+    # Default (path=None) will assume the location is relative to
+    # this module in the PreTeXt distribution.  Otherwise, a
+    # simple assignment is made
     import os.path # abspath(), split()
+    global __ptx_path
 
-    # full path to module itself
-    ptx_path = os.path.abspath(__file__)
-    # split "python.py" off module's filename
-    module_dir, _ = os.path.split(ptx_path)
-    # split "pretext" path off executable
-    _ptx_path, _ = os.path.split(module_dir)
+    if path:
+        __ptx_path = path
+    else:
+        # full path to module itself
+        ptx_path = os.path.abspath(__file__)
+        # split "python.py" off module's filename
+        module_dir, _ = os.path.split(ptx_path)
+        # split "pretext" path off executable
+        __ptx_path, _ = os.path.split(module_dir)
     return None
 
 def get_ptx_path():
     """Returns path to root of PreTeXt distribution"""
-    global _ptx_path
+    global __ptx_path
 
-    return _ptx_path
+    return __ptx_path
 
 def get_ptx_xsl_path():
     """Returns path of PreTeXt XSL directory"""
@@ -1944,20 +1802,19 @@ def get_source_path(source_file):
     _verbose("discovering source file's directory name: {}".format(source_dir))
     return os.path.normpath(source_dir)
 
+def set_executables(adict):
+    global __executables
+
+    __executables = adict
+
 def get_executable_cmd(exec_name):
     """Queries configuration file for executable name, verifies existence in Unix"""
-    import os
-    import platform
-    import subprocess
     import shutil # .which()
-
-    # parse user configuration(s), contains locations of executables
-    # in the "executables" section of the INI-style file
-    config = get_config_info()
+    global __executables
 
     # get the name, but then see if it really, really works
     _debug('locating "{}" in [executables] section of configuration file'.format(exec_name))
-    config_cmd_line = config.get('executables', exec_name).split()
+    config_cmd_line = __executables[exec_name].split()
 
     # Returns the full-path version of the command, as if the PATH was employed
     # "None" indicates the executable does not exist on the system
@@ -2001,40 +1858,6 @@ def sanitize_alpha_num_underscore(param):
         raise ValueError('PTX:ERROR: param {} contains characters other than a-zA-Z0-9_ '.format(param))
     return param
 
-def set_config_info():
-    """Create configuation in object for querying"""
-    global _config
-    import os.path # join()
-    import configparser # ConfigParser()
-
-    ptx_dir = get_ptx_path()
-    config_filename = 'pretext.cfg'
-    default_config_file = os.path.join(ptx_dir, 'pretext', config_filename)
-    user_config_file = os.path.join(ptx_dir, 'user', config_filename)
-    # 2020-05-21: obsolete'd mbx script and associated config filenames
-    # Try to read old version, but prefer new version
-    stale_user_config_file = os.path.join(ptx_dir, 'user', 'mbx.cfg')
-    config_file_list = [default_config_file, stale_user_config_file, user_config_file]
-    # ConfigParser module was renamed to configparser in Python 3
-    # and object was renamed from SafeConfigParser() to ConfigParser()
-    _config = configparser.ConfigParser()
-
-    _verbose("parsing possible configuration files: {}".format(config_file_list))
-    files_read = _config.read(config_file_list)
-    _debug("configuration files actually used/read: {}".format(files_read))
-    if not(user_config_file in files_read):
-        msg = "using default configuration only, custom configuration file not used at {}"
-        _verbose(msg.format(user_config_file))
-    return _config
-
-# def debug_config_info():
-
-def get_config_info():
-    """Return configuation in object for querying"""
-    global _config
-
-    return _config
-
 def copy_data_directory(source_file, data_dir, tmp_dir):
     """Stage directory from CLI argument into the working directory"""
     import os.path, shutil
@@ -2044,22 +1867,21 @@ def copy_data_directory(source_file, data_dir, tmp_dir):
     # in other words, data directory is a peer of source file
     _verbose("formulating data directory location")
     source_full_path, _ = os.path.split(source_file)
-    data_last_step = os.path.basename(data_dir)
-    destination_root = os.path.join(tmp_dir, data_last_step)
+    destination_root = os.path.join(tmp_dir, 'data')
     _debug("copying data directory {} to working location {}".format(data_dir, destination_root))
     shutil.copytree(data_dir, destination_root)
 
 def get_temporary_directory():
     """Create, record, and return a scratch directory"""
     import tempfile #  mkdtemp()
-    global _temps   #  cache of temporary directories
+    global __temps   #  cache of temporary directories
 
     temp_dir = tempfile.mkdtemp()
     # Register the directory for cleanup at the end of successful
     # execution iff the verbosity is set to level 2 ("debug")
     # So errors, or requesting gross debugging info, will leave the
     # directories behind for inspection, otherwise they get removed
-    _temps.append(temp_dir)
+    __temps.append(temp_dir)
     return temp_dir
 
 def get_output_filename(xml, out_file, dest_dir, suffix):
@@ -2077,11 +1899,12 @@ def get_output_filename(xml, out_file, dest_dir, suffix):
 def release_temporary_directories():
     """Release scratch directories unless requesting debugging info"""
     import shutil #  rmtree()
-    global _temps #  cache of temporary directories
+    global __verbosity
+    global __temps
 
-    _debug('Temporary directories left behind for inspection: {}'.format(_temps))
-    if _verbosity < 2:
-        for td in _temps:
+    _debug('Temporary directories left behind for inspection: {}'.format(__temps))
+    if __verbosity < 2:
+        for td in __temps:
             _verbose('Removing temporary directory {}'.format(td))
             # conservatively, raise exception on errors
             shutil.rmtree(td, ignore_errors=False)
@@ -2105,7 +1928,7 @@ def get_image_directories(xml_source, pub_file):
     # N.B. manage attributes carefully to distinguish
     # absent (None) versus empty string value ('')
 
-    # Examine /publication/source/media element carefully
+    # Examine /publication/source/directories element carefully
     # for attributes which we code here for convenience
     gen_attr = 'generated'
     data_attr = 'data'
@@ -2128,12 +1951,12 @@ def get_image_directories(xml_source, pub_file):
         pub_tree.xinclude()
         # "source" element => single-item list
         # no "source" element => empty list => triple of None returned
-        element_list = pub_tree.xpath("/publication/source/media")
+        element_list = pub_tree.xpath("/publication/source/directories")
         if element_list:
             attributes_dict = element_list[0].attrib
             # common error message
             abs_path_error = ' '.join(['the directory path to data for images, given in the',
-                             'publisher file as "source/media/@{}" must be relative to',
+                             'publisher file as "source/directories/@{}" must be relative to',
                              'the PreTeXt source file location, and not the absolute path "{}"'])
             # attribute absent => None
             if gen_attr in attributes_dict.keys():
@@ -2173,27 +1996,31 @@ def get_image_directories(xml_source, pub_file):
 ########
 
 # One-time set-up for global use in the module
-# Module provides, and depends on:
+# Module provides, and depends on these variables,
+# whose scope is the module, so must be declared
+# by employing routines as non-local ("global")
 #
-#  _verbosity - level of detail in console output
+#  __verbosity - level of detail in console output
 #
-#  _ptx_path - root directory of installed PreTeXt distribution
+#  __ptx_path - root directory of installed PreTeXt distribution
 #              necessary to locate stylesheets and other support
 #
-#  _config - parsed values from an INI-style configuration file
+#  __config - parsed values from an INI-style configuration file
+#
+#  __temps - created temporary directories, to report or release
 
 # verbosity parameter defaults to 0 at startup
 # employing application can use set_verbosity()
 # to override via application's methodology
-_verbosity = None
+__verbosity = None
 set_verbosity(0)
 
 # Discover and set distribution path once at start-up
-_ptx_path = None
+__ptx_path = None
 set_ptx_path()
 
-# Parse configuration file once
-_config = None
-set_config_info()
+# Configuration as a dictionary
+__executables = None
 
-_temps = []
+#  cache of temporary directories
+__temps = []

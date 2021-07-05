@@ -1725,7 +1725,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Package for precise image placement (for logos on pages)&#xa;</xsl:text>
         <xsl:text>\usepackage{eso-pic}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$document-root//notation|$document-root//list-of">
+    <!-- Lists are built as "longtable" so they span multiple pages    -->
+    <!-- and get "continuation" footers, for example.  It is the       -->
+    <!-- "list generator" element which provokes the package inclusion -->
+    <xsl:if test="$document-root//notation-list|$document-root//list-of">
         <xsl:text>%% Package for tables spanning several pages&#xa;</xsl:text>
         <xsl:text>\usepackage{longtable}&#xa;</xsl:text>
     </xsl:if>
@@ -4516,11 +4519,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="notation" mode="backmatter">
-    <xsl:text>\(</xsl:text>
-    <!-- "usage" should be raw latex, so -->
-    <!-- should avoid text processing    -->
-    <xsl:value-of select="usage" />
-    <xsl:text>\)</xsl:text>
+    <!-- Process *exactly* one "m" element -->
+    <xsl:apply-templates select="usage/m[1]"/>
     <xsl:text>&amp;</xsl:text>
     <xsl:apply-templates select="description" />
     <xsl:text>&amp;</xsl:text>
@@ -5824,8 +5824,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- causes the relative file name to resolve according    -->
     <!-- to the correct location.   Experiments with the       -->
     <xsl:variable name="filename">
-        <xsl:if test="$b-managed-generated-images">
-            <xsl:value-of select="$generated-image-directory"/>
+        <xsl:if test="$b-managed-directories">
+            <xsl:value-of select="$generated-directory"/>
         </xsl:if>
         <xsl:text>problems/mom-</xsl:text>
         <xsl:value-of select="myopenmath/@problem"/>
@@ -6028,7 +6028,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We make sure a nested list has content, before starting (and    -->
 <!-- later ending) a list to hold the tasks.  Only terminal tasks    -->
 <!-- have statement|hint|answer|solution.                            -->
-<xsl:template match="exercise[task]|project[task]|activity[task]|exploration[task]|investigation[task]|example[task]|question[task]|problem[task]|task[task]" mode="exercise-components">
+<xsl:template match="exercise[task]|webwork-reps/static[task]|project[task]|activity[task]|exploration[task]|investigation[task]|example[task]|question[task]|problem[task]|task[task]" mode="exercise-components">
     <xsl:param name="b-original" />
     <xsl:param name="purpose" />
     <xsl:param name="b-component-heading"/>
@@ -6155,7 +6155,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- hint|answer|solution that might appear somewhere else.  Since there     -->
 <!-- could be multiple targets, we use the heuristic of choosing main matter -->
 <!-- over back matter.  Unclear what happens if there are multiple targets.  -->
-<xsl:template match="exercise|webwork-reps/static|webwork-reps/static/stage|myopenmath|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task[not(task)]" mode="exercise-components">
+<xsl:template match="exercise|webwork-reps/static[not(task)]|webwork-reps/static/stage|myopenmath|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task[not(task)]" mode="exercise-components">
     <xsl:param name="b-original" />
     <xsl:param name="purpose" />
     <xsl:param name="b-component-heading"/>
@@ -7220,8 +7220,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- has @preview -->
         <xsl:when test="@preview">
             <xsl:text>\includegraphics[width=0.80\linewidth,height=\qrsize,keepaspectratio]{</xsl:text>
-            <xsl:if test="$b-managed-generated-images">
-                <xsl:value-of select="$external-image-directory"/>
+            <xsl:if test="$b-managed-directories">
+                <xsl:value-of select="$external-directory"/>
             </xsl:if>
             <xsl:value-of select="@preview" />
             <xsl:text>}</xsl:text>
@@ -7233,8 +7233,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- nothing specified, look for scraped via visible-id -->
         <xsl:when test="@youtube">
             <xsl:text>\includegraphics[width=0.80\linewidth,height=\qrsize,keepaspectratio]{</xsl:text>
-            <xsl:value-of select="$generated-image-directory"/>
-            <xsl:if test="$b-managed-generated-images">
+            <xsl:value-of select="$generated-directory"/>
+            <xsl:if test="$b-managed-directories">
                 <xsl:text>youtube/</xsl:text>
             </xsl:if>
             <xsl:apply-templates select="." mode="visible-id" />
@@ -7252,8 +7252,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- has @preview -->
         <xsl:when test="@preview">
             <xsl:text>\includegraphics[width=0.80\linewidth,height=\qrsize,keepaspectratio]{</xsl:text>
-            <xsl:if test="$b-managed-generated-images">
-                <xsl:value-of select="$external-image-directory"/>
+            <xsl:if test="$b-managed-directories">
+                <xsl:value-of select="$external-directory"/>
             </xsl:if>
             <xsl:value-of select="@preview" />
             <xsl:text>}</xsl:text>
@@ -7262,8 +7262,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Critical: coordinate with "extract-interactive.xsl" -->
         <xsl:otherwise>
             <xsl:variable name="default-preview-image">
-                <xsl:value-of select="$generated-image-directory"/>
-                <xsl:if test="$b-managed-generated-images">
+                <xsl:value-of select="$generated-directory"/>
+                <xsl:if test="$b-managed-directories">
                     <xsl:text>preview/</xsl:text>
                 </xsl:if>
                 <xsl:apply-templates select="." mode="visible-id" />
@@ -8883,7 +8883,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:text>\includegraphics[width=\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:value-of select="$external-image-directory"/>
+    <xsl:value-of select="$external-directory"/>
     <xsl:value-of select="@source"/>
     <xsl:if test="not($extension)">
         <xsl:text>.pdf&#xa;</xsl:text>
@@ -8896,8 +8896,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="image[asymptote]" mode="image-inclusion">
     <!-- need image filename in two different scenarios -->
     <xsl:variable name="image-file-name">
-        <xsl:value-of select="$generated-image-directory"/>
-        <xsl:if test="$b-managed-generated-images">
+        <xsl:value-of select="$generated-directory"/>
+        <xsl:if test="$b-managed-directories">
             <xsl:text>asymptote/</xsl:text>
         </xsl:if>
         <xsl:apply-templates select="." mode="visible-id" />
@@ -8907,8 +8907,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
       <xsl:when test="$b-asymptote-links">
         <xsl:variable name="image-html-url">
             <xsl:value-of select="$baseurl"/>
-            <xsl:value-of select="$generated-image-directory"/>
-            <xsl:if test="$b-managed-generated-images">
+            <xsl:value-of select="$generated-directory"/>
+            <xsl:if test="$b-managed-directories">
                 <xsl:text>asymptote/</xsl:text>
             </xsl:if>
             <xsl:apply-templates select="." mode="visible-id" />
@@ -8939,24 +8939,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- PNGs are fallback for 3D     -->
 <xsl:template match="image[sageplot]" mode="image-inclusion">
     <xsl:text>\IfFileExists{</xsl:text>
-    <xsl:value-of select="$generated-image-directory"/>
-    <xsl:if test="$b-managed-generated-images">
+    <xsl:value-of select="$generated-directory"/>
+    <xsl:if test="$b-managed-directories">
         <xsl:text>sageplot/</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.pdf}%&#xa;</xsl:text>
     <xsl:text>{\includegraphics[width=\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:value-of select="$generated-image-directory"/>
-    <xsl:if test="$b-managed-generated-images">
+    <xsl:value-of select="$generated-directory"/>
+    <xsl:if test="$b-managed-directories">
         <xsl:text>sageplot/</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.pdf}}%&#xa;</xsl:text>
     <xsl:text>{\includegraphics[width=\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:value-of select="$generated-image-directory"/>
-    <xsl:if test="$b-managed-generated-images">
+    <xsl:value-of select="$generated-directory"/>
+    <xsl:if test="$b-managed-directories">
         <xsl:text>sageplot/</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="." mode="visible-id" />

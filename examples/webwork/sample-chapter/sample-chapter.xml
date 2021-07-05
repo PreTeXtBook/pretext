@@ -330,6 +330,224 @@
 
             <exercise xml:id="quadratic-equation">
                 <title>Solving Quadratic Equations</title>
+                <webwork>
+                    <description>
+                        <line>Find a quadratic equation's solutions.</line>
+                        <line>One positive integer solution and one negative fraction solution.</line>
+                    </description>
+                    <pg-code>
+                        Context("Fraction");
+                        $a = Compute(random(2,6,1));
+                        do {$k = Compute(random(2,6,1))} until (gcd($a,$k)==1);
+                        $r = Compute(random(2,6,1));
+                        $c = $k*-$r;
+                        $b = $a*-$r+$k;
+                        $quadratic = Formula("$a x^2 + $b x + $c")->reduce;
+                        $x1 = Fraction($r,1);
+                        $x2 = Fraction(-$k,$a);
+                        Context()->flags->set(reduceConstants=>0,reduceConstantFunctions=>0);
+                        $sol1 = Formula("(-$b+sqrt(($b)**2-4($a)($c)))/(2($a))");
+                        $sol2 = Formula("(-$b-sqrt(($b)**2-4($a)($c)))/(2($a))");
+                        $evaluatorfora = $a->cmp()->withPostFilter(AnswerHints(
+                            [-$a] => "Do you have the sign correct?")
+                        );
+                        $evaluatorforb = $b->cmp()->withPostFilter(AnswerHints(
+                            [-$b] => "Do you have the sign correct?")
+                        );
+                        $evaluatorforc = $c->cmp()->withPostFilter(AnswerHints(
+                            [-$c] => "Do you have the sign correct?")
+                        );
+                        Context("FiniteSolutionSets");
+                        $solutionset = Formula("{$x1,$x2}");
+                    </pg-code>
+                    <introduction>
+                        <p>
+                            Consider the quadratic equation <m><var name="$quadratic" /> = 0</m>.
+                        </p>
+                    </introduction>
+                    <task>
+                        <title>Identify Coefficients</title>
+                        <statement>
+                            <p>
+                                Identify the coefficients for the quadratic equation
+                                using the standard form from <xref ref="theorem-quadratic-formula" />.
+                            </p>
+                            <p>
+                                <m>a=</m> <var name="$a" width="4" evaluator="$evaluatorfora"/>,
+                                <m>b=</m> <var name="$b" width="4" evaluator="$evaluatorforb"/>,
+                                <m>c=</m> <var name="$c" width="4" evaluator="$evaluatorforc"/>
+                            </p>
+                        </statement>
+                        <solution>
+                            <p>
+                                Take the coefficient of <m>x^2</m> for the value of <m>a</m>,
+                                the coefficient of <m>x</m> for <m>b</m>,
+                                and the constant for <m>c</m>.
+                                <em>In this case</em>, they are <m>a = <var name="$a" /></m>,
+                                <m>b = <var name="$b" /></m>, <m>c = <var name="$c" /></m>.
+                            </p>
+                        </solution>
+                    </task>
+                    <task>
+                        <title>Use the Quadratic Formula</title>
+                        <statement>
+                            <p>
+                                Using the quadratic formula, solve the equation.
+                            </p>
+                            <p>
+                                <var name="$solutionset" width="40"/>
+                            </p>
+                        </statement>
+                        <solution>
+                            <p>
+                                Recall that the quadratic formula is given in <xref ref="theorem-quadratic-formula"/>.
+                            </p>
+                            <p>
+                                You already identified <m>a = <var name="$a"/></m>,
+                                <m>b = <var name="$b"/></m>, and <m>c = <var name="$c"/></m>,
+                                so the results are:
+                                <me>x = <var name="$sol1"/> = <var name="$x1"/></me>
+                                or
+                                <me>x = <var name="$sol2"/> = <var name="$x2"/></me>
+                            </p>
+                        </solution>
+                    </task>
+                    <conclusion>
+                        <p>
+                            This conclusion is just here for testing.
+                        </p>
+                    </conclusion>
+                </webwork>
+            </exercise>
+
+            <exercise>
+                <title>Nested tasks</title>
+                <introduction>
+                    <p>
+                        This exercise tests that nested tasks work.
+                    </p>
+                </introduction>
+                <webwork>
+                    <description>
+                        <line>Find a quadratic equation's solutions.</line>
+                        <line>One positive integer solution and one negative fraction solution.</line>
+                    </description>
+                    <pg-code>
+                        Context("Fraction");
+                        $a = Compute(random(2,6,1));
+                        do {$k = Compute(random(2,6,1))} until (gcd($a,$k)==1);
+                        $r = Compute(random(2,6,1));
+                        $c = $k*-$r;
+                        $b = $a*-$r+$k;
+                        $quadratic = Formula("$a x^2 + $b x + $c")->reduce;
+                        $x1 = Fraction($r,1);
+                        $x2 = Fraction(-$k,$a);
+                        Context()->flags->set(reduceConstants=>0,reduceConstantFunctions=>0);
+                        $sol1 = Formula("(-$b+sqrt(($b)**2-4($a)($c)))/(2($a))");
+                        $sol2 = Formula("(-$b-sqrt(($b)**2-4($a)($c)))/(2($a))");
+                        $evaluatorfora = $a->cmp()->withPostFilter(AnswerHints(
+                            [-$a] => "Do you have the sign correct?")
+                        );
+                        $evaluatorforb = $b->cmp()->withPostFilter(AnswerHints(
+                            [-$b] => "Do you have the sign correct?")
+                        );
+                        $evaluatorforc = $c->cmp()->withPostFilter(AnswerHints(
+                            [-$c] => "Do you have the sign correct?")
+                        );
+                        Context("FiniteSolutionSets");
+                        $solutionset = Formula("{$x1,$x2}");
+                    </pg-code>
+                    <introduction>
+                        <p>
+                            Consider the quadratic equation <m><var name="$quadratic" /> = 0</m>.
+                        </p>
+                    </introduction>
+                    <task>
+                        <title>Identify Coefficients</title>
+                        <introduction>
+                            <p>
+                                Identify the coefficients for the quadratic equation using the standard form from <xref ref="theorem-quadratic-formula"/>.
+                            </p>
+                        </introduction>
+                        <task>
+                            <statement>
+                                <p>
+                                    <m>a=</m> <var name="$a" width="4" evaluator="$evaluatorfora"/>,
+                                </p>
+                            </statement>
+                            <solution>
+                                <p>
+                                    Take the coefficient of <m>x^2</m> for the value of <m>a</m>.
+                                    <em>In this case</em>, <m>a = <var name="$a" /></m>.
+                                </p>
+                            </solution>
+                        </task>
+                        <task>
+                            <statement>
+                                <p>
+                                    <m>b=</m> <var name="$b" width="4" evaluator="$evaluatorforb"/>,
+                                </p>
+                            </statement>
+                            <solution>
+                                <p>
+                                    Take the coefficient of <m>x</m> for the value of <m>b</m>.
+                                    <em>In this case</em>, <m>b = <var name="$b" /></m>.
+                                </p>
+                            </solution>
+                        </task>
+                        <task>
+                            <statement>
+                                <p>
+                                    <m>c=</m> <var name="$c" width="4" evaluator="$evaluatorforc"/>
+                                </p>
+                            </statement>
+                            <solution>
+                                <p>
+                                    Take the constant term for the value of <m>c</m>.
+                                    <em>In this case</em>, <m>c = <var name="$c" /></m>.
+                                </p>
+                            </solution>
+                        </task>
+                    </task>
+                    <task>
+                        <title>Use the Quadratic Formula</title>
+                        <statement>
+                            <p>
+                                Using the quadratic formula, solve the equation.
+                            </p>
+                            <p>
+                                <var name="$solutionset" width="40"/>
+                            </p>
+                        </statement>
+                        <solution>
+                            <p>
+                                Recall that the quadratic formula is given in <xref ref="theorem-quadratic-formula"/>.
+                            </p>
+                            <p>
+                                You already identified <m>a = <var name="$a"/></m>,
+                                <m>b = <var name="$b"/></m>, and <m>c = <var name="$c"/></m>,
+                                so the results are:
+                                <me>x = <var name="$sol1"/> = <var name="$x1"/></me>
+                                or
+                                <me>x = <var name="$sol2"/> = <var name="$x2"/></me>
+                            </p>
+                        </solution>
+                    </task>
+                    <conclusion>
+                        <p>
+                            This conclusion is just here for testing.
+                        </p>
+                    </conclusion>
+                </webwork>
+            </exercise>
+
+            <p>
+                We repeat a version of a previous exercise using the deprectated <tag>stage</tag> element.
+                This is for testing to monitor if <tag>stage</tag> decays.
+            </p>
+
+            <exercise xml:id="quadratic-equation-with-stage">
+                <title>Solving Quadratic Equations</title>
 
                 <webwork>
                     <description>

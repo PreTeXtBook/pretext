@@ -139,7 +139,7 @@ function action(state, code, setup = null) {
 //
 //  States for PreTeXt actions
 //
-newState('PRETEXT', STATE.COMPILED + 10);
+newState('PRETEXT', STATE.METRICS + 10);
 newState('PRETEXTACTION', STATE.PRETEXT + 10);
 
 //

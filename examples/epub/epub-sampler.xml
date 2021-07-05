@@ -68,6 +68,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>Maecenas ex enim, lobortis et blandit sit amet, pretium in ante. Sed mollis sollicitudin nibh non consectetur. Vestibulum eget tortor sit amet felis iaculis fermentum. Sed eu nisl a urna cursus congue at nec nulla. Mauris lacinia molestie tristique. Maecenas aliquet rutrum venenatis. Vivamus quis metus sit amet est feugiat facilisis quis et massa. Aenean dui sem, dapibus at imperdiet ac, auctor sit amet arcu. Vestibulum eget porttitor est. Aliquam id pellentesque quam, vitae rhoncus metus. In congue condimentum malesuada. Mauris in condimentum eros, eget mattis nibh. Praesent et ex porttitor, lobortis nibh sed, cursus ante. Suspendisse dapibus vel risus eu pellentesque. </p>
             </section>
+            <section>
+                <title>A Section with Subsections</title>
+                <subsection>
+                    <title>A simple subsection</title>
+                    <p>A <c>subsection</c> in a <c>section</c>.</p>
+                </subsection>
+                <exercises xml:id="exercises-like-a-subsection">
+                    <exercise>
+                        <statement>
+                            <p>A single exercise buried in an <c>exercises</c> division that is a peer of a <c>subsection</c>.</p>
+                        </statement>
+                    </exercise>
+                </exercises>
+            </section>
+            <exercises xml:id="exercises-like-a-section">
+                <exercise>
+                    <statement>
+                        <p>A lone exercise in an <c>exercises</c> division that is a peer of a <c>section</c>.</p>
+                    </statement>
+                </exercise>
+            </exercises>
             <conclusion>
                 <title>Wrapping up</title>
                 <p>This is the conclusion.</p>
@@ -100,14 +121,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <figure xml:id="figure-cubic-polynomial">
                 <caption>A cubic polynomial and its derivative</caption>
-                <image source="images/cubic-function.png" width="60%"/>
+                <image source="cubic-function.png" width="60%"/>
             </figure>
 
             <p>A Scalable Vector Graphics (SVG) image created externally in Sage and then included here as a vector image (no file extension given).</p>
 
             <figure xml:id="complete-graph" width="20%">
                 <caption>A complete graph on 16 vertices</caption>
-                <image source="images/complete-graph" width="70%"/>
+                <image source="complete-graph" width="70%"/>
             </figure>
 
             <p>A Scalable Vector Graphics (SVG) image described by Sage commands, which is produced by the <c>pretext</c> script.</p>
@@ -215,7 +236,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>We repeat an image created from an external file, because the EPUB format only wants the file noted once.</p>
 
-            <image source="images/complete-graph" width="70%"/>
+            <image source="complete-graph" width="70%"/>
 
             <p>We like to put <init>URL</init>s into footnotes, especially for formats like this where they may not be active.  This output is from <url href="https://pretextbook.org"><pretext/></url><fn><c>pretextbook.org</c></fn>.</p>
 

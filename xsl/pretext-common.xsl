@@ -841,8 +841,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- from other blocks.  A configuration element  -->
 <!-- in "docinfo" is indicative of this           -->
 <xsl:variable name="b-number-figure-distinct" select="boolean($docinfo/numbering/figures)" />
-<!-- project historical default, switch it -->
-<xsl:variable name="b-number-project-distinct" select="true()" />
+<!-- project historical default, switch it     -->
+<!-- 2021-07-02: debug variable is unsupported -->
+<xsl:variable name="b-number-project-distinct" select="$debug.project.number = ''" />
 <!-- historically false -->
 <xsl:variable name="b-number-exercise-distinct" select="boolean($docinfo/numbering/exercises)" />
 
@@ -1120,6 +1121,10 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 
 <!-- Definitely not debugging.  Transitional.  Top-secret. -->
 <xsl:param name="debug.editable" select="''"/>
+
+<!-- 2021-07-02: any non-empty string will cause project-like  -->
+<!-- to run on the same counter as other blocks. Un-supported. -->
+<xsl:param name="debug.project.number" select="''"/>
 
 <!-- Maybe not debugging, but transitional variables -->
 
@@ -7147,8 +7152,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:choose>
         <!-- return nothing if not admitted -->
         <xsl:when test="not($b-admitted)"/>
-        <xsl:when test="webwork-reps/static/stage">
-            <xsl:apply-templates select="webwork-reps/static/stage" mode="dry-run">
+        <xsl:when test="webwork-reps/static/task|webwork-reps/static/stage">
+            <xsl:apply-templates select="webwork-reps/static/task|webwork-reps/static/stage" mode="dry-run">
                 <xsl:with-param name="b-has-statement" select="$b-has-statement" />
                 <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
                 <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
@@ -11541,6 +11546,14 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="$document-root//video[substring(@source,1,4) = 'http']|$document-root//audio[substring(@source,1,4) = 'http']" />
         <xsl:with-param name="date-string" select="'2021-06-24'" />
         <xsl:with-param name="message" select="'use of a &quot;@source&quot; attribute on a &quot;video&quot; or &quot;audio&quot; element to specify a network location (leading with &quot;http&quot;) has been deprecated, but will still be effective.  Replace with a &quot;@href&quot; attribute.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2021-07-02  deprecate notation/usage as bare LaTeX, needs exactly 1 "m"       -->
+    <!-- N.B. this is fixed by the pre-processor, so we analyze the (entire) $original -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$original//notation/usage[not(m)]" />
+        <xsl:with-param name="date-string" select="'2021-07-02'" />
+        <xsl:with-param name="message" select="'a &quot;notation/usage&quot; element should contain *exactly* one &quot;m&quot;.  There is none, but we will attempt to honor your intent'"/>
     </xsl:call-template>
     <!--  -->
 </xsl:template>

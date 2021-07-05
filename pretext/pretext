@@ -98,6 +98,44 @@ def string_parameters_as_dict(pairs):
         params[pairs[2*i]] = pairs[2*i+1]
     return params
 
+####################
+# Configuration File
+####################
+
+def get_executables():
+    """Query the configuration file, return dictionary of executables/commands"""
+
+    import configparser # ConfigParser()
+    import os.path # join()
+
+    # parse user configuration(s), contains locations of executables
+    # in the "executables" section of the INI-style file
+
+    ptx_dir = ptx.get_ptx_path()
+    config_filename = 'pretext.cfg'
+    default_config_file = os.path.join(ptx_dir, 'pretext', config_filename)
+    user_config_file = os.path.join(ptx_dir, 'user', config_filename)
+    # 2020-05-21: obsolete'd mbx script and associated config filenames
+    # Try to read old version, but prefer new version
+    stale_user_config_file = os.path.join(ptx_dir, 'user', 'mbx.cfg')
+    config_file_list = [default_config_file, stale_user_config_file, user_config_file]
+
+    # report on which configuration files are being examined
+    ptx._verbose("parsing possible configuration files: {}".format(config_file_list))
+
+    config = configparser.ConfigParser()
+    files_read = config.read(config_file_list)
+    # report on which configuration files were used
+    ptx._debug("configuration files actually used/read: {}".format(files_read))
+    if not(user_config_file in files_read):
+        msg = "using default configuration only, custom configuration file not used at {}"
+        ptx._verbose(msg.format(user_config_file))
+    executable_dict = dict(config['executables'])
+    # report the dictionary of keys
+    ptx._debug("dictionary of executables/commands: {}".format(executable_dict))
+
+    return executable_dict
+
 #####################
 # Command-Line Parser
 #####################
@@ -209,9 +247,8 @@ def main():
     # Necessary for locating configuration files (next)
     ptx._debug("discovered distribution and xsl directories: {}, {}".format(ptx.get_ptx_path(), ptx.get_ptx_xsl_path()))
 
-    # Report 'executables' in configuration file
-    # Module functions depend on this extensively via get_executable()
-    ptx._debug('executables in configuration file: {}'.format(dict(ptx.get_config_info()['executables'])))
+    # The "get" will report 'executables' in configuration file
+    ptx.set_executables(get_executables())
 
     # directory/file locations provided on command-line by user
     # Expanded here to be complete paths, or set to defaults

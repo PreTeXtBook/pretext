@@ -282,7 +282,7 @@ the xsltproc executable.
             -->
 
             <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <me>\definiteintegral{0}{2}{\sin^2(x)}{x}</me>.  This is also a demonstration of the capabilities of <url href="https://pretextbook.org"><pretext /></url>.<notation>
-                <usage>\int_a^b\,f(x)\,dx</usage>
+                <usage><m>\int_a^b\,f(x)\,dx</m></usage>
                 <description>definite integral of <m>f(x)</m></description>
             </notation></p>
 
@@ -364,7 +364,7 @@ the xsltproc executable.
             <definition xml:id="definition-indefinite-integral">
                 <idx>indefinite integral</idx><idx><h>integral</h><h>indefinite integral</h></idx>
                 <notation>
-                    <usage>\int\,f(x)\,dx</usage>
+                    <usage><m>\int\,f(x)\,dx</m></usage>
                     <description>indefinite integral of <m>f(x)</m></description>
                 </notation>
                 <statement>
@@ -1653,11 +1653,11 @@ the xsltproc executable.
                 <mrow>{\mathcal L}(y'')(s) = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0)</mrow>
             </md>.
             <notation>
-                <usage>\rho</usage>
+                <usage><m>\rho</m></usage>
                 <description>this symbol could be used for lots of things, but we are just trying to make a super-long description to get it to wrap within the column where it belongs, which is sometimes set to a fixed width to accomodate really complicated explanations</description>
             </notation>
             <idx>rho, a test</idx>
-            Just prior to this sentence, in the middle of this paragraph, is an <tag>idx</tag> and a <tag>notation</tag>, adjacent, but separated by some whitespace in the authored source.  That insignificant whitespace will be removed akways, which will be a (slightly) noticeable improvement in the <latex/> output.  We test referencing notation here, placed <em>before</em> the sentence-ending period and right after some inline mathematics<mdash/>for <m>\mathbb{Z}_n</m><notation><usage>\mathbb{Z}_n</usage><description>(ring of) integers modulo <m>n</m></description></notation>.</p>
+            Just prior to this sentence, in the middle of this paragraph, is an <tag>idx</tag> and a <tag>notation</tag>, adjacent, but separated by some whitespace in the authored source.  That insignificant whitespace will be removed akways, which will be a (slightly) noticeable improvement in the <latex/> output.  We test referencing notation here, placed <em>before</em> the sentence-ending period and right after some inline mathematics<mdash/>for <m>\mathbb{Z}_n</m><notation><usage><m>\mathbb{Z}_n</m></usage><description>(ring of) integers modulo <m>n</m></description></notation>.</p>
 
             <p><latex /> has a device where you can interrupt a sequence of equations with a small amout of text and preserve the equation alignment on either side.  Here are two tests of that device, with aligned equations and non-aligned equations.  Study the source to see use and differences.  (The math does not make sense.)</p>
 
@@ -1744,7 +1744,7 @@ the xsltproc executable.
                     <mrow>\nabla \cdot \vec{\mathbf{E}} &amp; = 4 \pi \rho</mrow>
                     <mrow>\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} &amp; = \vec{\mathbf{0}}</mrow>
                     <mrow>\nabla \cdot \vec{\mathbf{B}} &amp; = 0</mrow>
-                </md><notation><usage>\nabla</usage><description>gradient operator</description></notation></p>
+                </md><notation><usage><m>\nabla</m></usage><description>gradient operator</description></notation></p>
 
                 <p>A small test that the extensible arrows library is included properly:<me>A\xmapsto[\text{bijection}]{\Phi+\Psi+\Theta}B</me></p>
 
@@ -5602,6 +5602,36 @@ the xsltproc executable.
                         <cell>1859</cell>
                     </row>
                     <row>
+                        <cell>California</cell>
+                        <cell>39,512,223</cell>
+                        <cell>163,696</cell>
+                        <cell>1850</cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <table>
+                <title>One Row Header, with Rules</title>
+                <tabular>
+                    <row header="yes" bottom="major">
+                        <cell>State</cell>
+                        <cell>Population</cell>
+                        <cell>Area (sq. mi.)</cell>
+                        <cell>Statehood (Year)</cell>
+                    </row>
+                    <row>
+                        <cell>Washington</cell>
+                        <cell>7,614,893</cell>
+                        <cell>71,362</cell>
+                        <cell>1889</cell>
+                    </row>
+                    <row>
+                        <cell>Oregon</cell>
+                        <cell>4,217,737</cell>
+                        <cell>98,381</cell>
+                        <cell>1859</cell>
+                    </row>
+                    <row bottom="minor">
                         <cell>California</cell>
                         <cell>39,512,223</cell>
                         <cell>163,696</cell>

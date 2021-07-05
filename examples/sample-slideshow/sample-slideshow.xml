@@ -172,7 +172,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <definition xml:id="definition-indefinite-integral">
                     <idx>indefinite integral</idx><idx><h>integral</h><h>indefinite integral</h></idx>
                     <notation>
-                        <usage>\int\,f(x)\,dx</usage>
+                        <usage><m>\int\,f(x)\,dx</m></usage>
                         <description>indefinite integral of <m>f(x)</m></description>
                     </notation>
                     <statement>
