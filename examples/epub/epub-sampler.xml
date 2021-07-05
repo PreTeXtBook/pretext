@@ -68,6 +68,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>Maecenas ex enim, lobortis et blandit sit amet, pretium in ante. Sed mollis sollicitudin nibh non consectetur. Vestibulum eget tortor sit amet felis iaculis fermentum. Sed eu nisl a urna cursus congue at nec nulla. Mauris lacinia molestie tristique. Maecenas aliquet rutrum venenatis. Vivamus quis metus sit amet est feugiat facilisis quis et massa. Aenean dui sem, dapibus at imperdiet ac, auctor sit amet arcu. Vestibulum eget porttitor est. Aliquam id pellentesque quam, vitae rhoncus metus. In congue condimentum malesuada. Mauris in condimentum eros, eget mattis nibh. Praesent et ex porttitor, lobortis nibh sed, cursus ante. Suspendisse dapibus vel risus eu pellentesque. </p>
             </section>
+            <section>
+                <title>A Section with Subsections</title>
+                <subsection>
+                    <title>A simple subsection</title>
+                    <p>A <c>subsection</c> in a <c>section</c>.</p>
+                </subsection>
+                <exercises xml:id="exercises-like-a-subsection">
+                    <exercise>
+                        <statement>
+                            <p>A single exercise buried in an <c>exercises</c> division that is a peer of a <c>subsection</c>.</p>
+                        </statement>
+                    </exercise>
+                </exercises>
+            </section>
+            <exercises xml:id="exercises-like-a-section">
+                <exercise>
+                    <statement>
+                        <p>A lone exercise in an <c>exercises</c> division that is a peer of a <c>section</c>.</p>
+                    </statement>
+                </exercise>
+            </exercises>
             <conclusion>
                 <title>Wrapping up</title>
                 <p>This is the conclusion.</p>
