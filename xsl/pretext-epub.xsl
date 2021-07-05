@@ -401,6 +401,7 @@
         <!-- properties are iff, so validator complains if extra -->
         <!-- condition on math presence for svg/mathml property  -->
         <!-- TODO: use a parameter switch for output style       -->
+        <!-- Study: https://github.com/w3c/epubcheck/issues/420  -->
         <!-- Processing with page2svg makes it appear SVG images exist -->
         <!-- <xsl:if test=".//m or .//me or .//men or .//md or .//mdn"> -->
              <xsl:attribute name="properties">
