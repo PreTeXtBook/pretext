@@ -397,13 +397,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Default template for content of a structural  -->
 <!-- division, which could be an entire page's     -->
-<!-- worth, or just a subdivision withing a page   -->
-<!-- Increment $heading-level within this template -->
+<!-- worth, or just a subdivision within a page    -->
+<!-- Increment $heading-level via this template    -->
+<!-- We use a modal template, so it can be called  -->
+<!-- two more times for a worksheet to make        -->
+<!-- printable standalone versions.                -->
 <!-- NB: Override in the Braille conversion for    -->
 <!-- just "frontmatter" and "backmatter" simply    -->
 <!-- to keep from stepping the heading level, so   -->
 <!-- the liblouis styling on h1-h6 is consistent   -->
 <xsl:template match="&STRUCTURAL;">
+    <xsl:param name="heading-level"/>
+
+    <xsl:apply-templates select="." mode="structural-division-content">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
+
+    <!-- For a "worksheet" (only), we do it again TWICE, -->
+    <!-- to generate standalone printable versions       -->
+    <xsl:if test="self::worksheet">
+        <xsl:apply-templates select="." mode="standalone-worksheets"/>
+    </xsl:if>
+</xsl:template>
+
+<!-- This is where a division becomes an HTML "section".  It may -->
+<!-- be the content wrapped as an entire HTML page, or it may be -->
+<!-- a subdivision that is just part of a page.                  -->
+<xsl:template match="&STRUCTURAL;" mode="structural-division-content">
     <xsl:param name="heading-level"/>
 
     <!-- location info for debugging efforts -->
@@ -466,11 +486,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </section>
-    <!-- For a "worksheet" (only), we do it again TWICE, -->
-    <!-- to generate standalone printable versions       -->
-    <xsl:if test="self::worksheet">
-        <xsl:apply-templates select="." mode="standalone-worksheets"/>
-    </xsl:if>
 </xsl:template>
 
 <!-- Worksheets generate two additional versions, each -->
