@@ -9912,13 +9912,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                           (ancestor::worksheet and ($webwork.worksheet.static = 'yes')) or
                                           (not(ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and ($webwork.inline.static = 'yes'))"/>
     <xsl:choose>
-        <!-- We print the static version when that is explicitly directed -->
-        <!-- but also when the static has no "answer" element. This means -->
-        <!-- the problem had no answer input fields, so why make it       -->
-        <!-- interactive? This includes problems with only essay fields.  -->
-        <!-- NB: for Runestone, we may want to allow essay answer fields  -->
-        <!-- to make live problems, and Runestone records submissions.    -->
-        <xsl:when test="($b-static = 'yes') or not(static/answer or static/task/answer or static/stage/answer)">
+        <!-- We print the static version when that is explicitly directed. -->
+        <xsl:when test="($b-static = 'yes')">
             <xsl:apply-templates select="static" mode="exercise-components">
                 <xsl:with-param name="b-original"      select="$b-original"/>
                 <xsl:with-param name="b-has-statement" select="true()"/>
