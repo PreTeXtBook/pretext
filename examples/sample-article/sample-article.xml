@@ -5640,6 +5640,48 @@ the xsltproc executable.
                 </tabular>
             </table>
 
+            <p>The next table has a progression of thicker rules in the heading, plus a progression of thicker rules across the columns.  For testing, not for aesthetics.</p>
+
+            <table>
+                <title>Two Row Header, Many Rules</title>
+                <tabular top="minor" left="minor">
+                    <col right="minor"/>
+                    <col right="medium"/>
+                    <col/>
+                    <col right="major"/>
+                    <row header="yes" bottom="medium">
+                        <cell>State</cell>
+                        <cell>Population</cell>
+                        <cell>Area</cell>
+                        <cell>Statehood</cell>
+                    </row>
+                    <row header="yes" bottom="major">
+                        <cell></cell>
+                        <cell></cell>
+                        <cell>(sq. mi.)</cell>
+                        <cell>(Year)</cell>
+                    </row>
+                    <row>
+                        <cell>Washington</cell>
+                        <cell>7,614,893</cell>
+                        <cell>71,362</cell>
+                        <cell>1889</cell>
+                    </row>
+                    <row>
+                        <cell>Oregon</cell>
+                        <cell>4,217,737</cell>
+                        <cell>98,381</cell>
+                        <cell>1859</cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell>California</cell>
+                        <cell>39,512,223</cell>
+                        <cell>163,696</cell>
+                        <cell>1850</cell>
+                    </row>
+                </tabular>
+            </table>
+
         </section>
 
         <section xml:id="section-interactive-authored">
