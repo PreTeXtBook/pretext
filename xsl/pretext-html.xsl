@@ -414,9 +414,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 
     <!-- For a "worksheet" (only), we do it again TWICE, -->
-    <!-- to generate standalone printable versions       -->
+    <!-- to generate standalone printable and editable   -->
+    <!-- versions. $paper becomes HTML class names, e.g. -->
+    <!-- LOWER CASE "a4" and "letter"                    -->
     <xsl:if test="self::worksheet">
-        <xsl:apply-templates select="." mode="standalone-worksheets"/>
+        <xsl:apply-templates select="." mode="standalone-worksheet">
+            <xsl:with-param name="paper" select="'letter'"/>
+            <xsl:with-param name="heading-level" select="$heading-level"/>
+        </xsl:apply-templates>
+        <xsl:apply-templates select="." mode="standalone-worksheet">
+            <xsl:with-param name="paper" select="'a4'"/>
+            <xsl:with-param name="heading-level" select="$heading-level"/>
+        </xsl:apply-templates>
     </xsl:if>
 </xsl:template>
 
@@ -490,42 +499,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Worksheets generate two additional versions, each -->
 <!-- designed for printing, on US Letter or A4 paper.  -->
-<!-- TODO: worth making one template to use twice?     -->
-<xsl:template match="worksheet" mode="standalone-worksheets">
+<xsl:template match="worksheet" mode="standalone-worksheet">
+    <xsl:param name="heading-level"/>
+    <xsl:param name="paper"/>
+
     <xsl:variable name="base-filename">
         <xsl:apply-templates select="." mode="visible-id"/>
     </xsl:variable>
-    <!-- US Letter version, indicated by class on the HTML body element -->
     <xsl:apply-templates select="." mode="file-wrap">
         <xsl:with-param name="filename">
-            <xsl:apply-templates select="." mode="standalone-filename-letter"/>
+            <xsl:apply-templates select="." mode="standalone-worksheet-filename">
+                <xsl:with-param name="paper" select="$paper"/>
+             </xsl:apply-templates>
         </xsl:with-param>
         <xsl:with-param name="extra-body-classes">
-            <!-- Hack, include leading space -->
-            <xsl:text> standalone worksheet letter</xsl:text>
+            <!-- Hack, include necessary spaces -->
+            <xsl:text> standalone worksheet </xsl:text>
+            <xsl:value-of select="$paper"/>
         </xsl:with-param>
         <xsl:with-param name="content">
-            <!-- No enclosing structure, just sequence of pages -->
-            <!-- parameterized as 'printable' (not 'viewable')  -->
-            <xsl:apply-templates select="page">
-                <xsl:with-param name="purpose" select="'printable'"/>
-            </xsl:apply-templates>
-        </xsl:with-param>
-    </xsl:apply-templates>
-    <!-- A4 version, indicated by (lower-case) class on the HTML body element -->
-    <xsl:apply-templates select="." mode="file-wrap">
-        <xsl:with-param name="filename">
-            <xsl:apply-templates select="." mode="standalone-filename-A4"/>
-        </xsl:with-param>
-        <xsl:with-param name="extra-body-classes">
-            <!-- Hack, include leading space -->
-            <xsl:text> standalone worksheet a4</xsl:text>
-        </xsl:with-param>
-        <xsl:with-param name="content">
-            <!-- No enclosing structure, just sequence of pages -->
-            <!-- parameterized as 'printable' (not 'viewable')  -->
-            <xsl:apply-templates select="page">
-                <xsl:with-param name="purpose" select="'printable'"/>
+            <xsl:apply-templates select="." mode="structural-division-content">
+                <xsl:with-param name="heading-level" select="$heading-level"/>
             </xsl:apply-templates>
         </xsl:with-param>
     </xsl:apply-templates>
@@ -707,16 +701,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </span>
     <!-- Links to the "printable" version(s), meant only for "viewable" -->
     <!-- worksheet, so CSS can kill on the "printable" versions         -->
+    <!-- $paper is LOWER CASE "a4" and "letter"                         -->
     <xsl:if test="self::worksheet">
-        <xsl:variable name="letter">
-            <xsl:apply-templates select="." mode="standalone-filename-letter"/>
+        <xsl:variable name="letter-filename">
+            <xsl:apply-templates select="." mode="standalone-worksheet-filename">
+                <xsl:with-param name="paper" select="'letter'"/>
+            </xsl:apply-templates>
         </xsl:variable>
-        <xsl:variable name="A4">
-            <xsl:apply-templates select="." mode="standalone-filename-A4"/>
+        <xsl:variable name="a4-filename">
+            <xsl:apply-templates select="." mode="standalone-worksheet-filename">
+                <xsl:with-param name="paper" select="'a4'"/>
+            </xsl:apply-templates>
         </xsl:variable>
         <div class="print-links">
-            <a href="{$A4}" class="a4">A4</a>
-            <a href="{$letter}" class="us">US</a>
+            <a href="{$a4-filename}" class="a4">A4</a>
+            <a href="{$letter-filename}" class="us">US</a>
         </div>
     </xsl:if>
 </xsl:template>
@@ -11860,52 +11859,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Worksheet Pages -->
 <!-- ############### -->
 
-<!-- A worksheet is (mostly) structured by "page", but we incorporate -->
-<!-- certain beginning/ending items into a strict stucture organized  -->
-<!-- by pages (HTML section.onepage), only, for printing purposes     -->
-<!-- NB: extras print in document order, we are not imposing one here -->
+<!-- A worksheet is (mostly) structured by "page", which translates    -->
+<!-- into an HTML section.onepage.  Note that an "introduction" and    -->
+<!-- "objectives" can precede the first "page" as HTML output, and the -->
+<!-- final "page" may be followed by a "conclusion" and "outcomes"     -->
 <xsl:template match="worksheet/page">
-    <xsl:param name="purpose" select="'viewable'"/>
-
     <section class="onepage">
-        <!-- There is no enclosing HTML structure in the standalone, -->
-        <!-- printable version, so we print a title/heading within   -->
-        <!-- the first "section.onepage".  The is the only purpose   -->
-        <!-- of the $purpose parameter. ("viewable" is usual HTML.)  -->
-        <xsl:variable name="b-is-printable" select="$purpose = 'printable'"/>
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="html-id"/>
         </xsl:attribute>
-        <!-- incorporate "extras" into Page 1 when printable -->
-        <xsl:if test="not(preceding-sibling::page) and $b-is-printable">
-            <!-- title of entire worksheet absorbed first into first page -->
-            <!-- masthead is "h1", so specify "h2"?                       -->
-            <xsl:apply-templates select=".." mode="section-header">
-                <xsl:with-param name="heading-level" select="'2'"/>
-            </xsl:apply-templates>
-            <!-- other overall-worksheet times to absorb into first page -->
-            <xsl:apply-templates select="../objectives|../introduction"/>
-        </xsl:if>
-        <!-- main content of *all* pages, especially intermediate pages,  -->
-        <!-- whether viewable or printable (could kill banned items here) -->
         <xsl:apply-templates/>
-        <!-- incorporate "extras" into Page N (even if N=1) when printable -->
-        <xsl:if test="not(following-sibling::page) and $b-is-printable">
-            <xsl:apply-templates select="../conclusion|../outcomes"/>
-        </xsl:if>
     </section>
 </xsl:template>
 
-<!-- Templates ensure standalone page creation, -->
-<!-- and links to same, are consistent          -->
-<xsl:template match="worksheet" mode="standalone-filename-letter">
-    <xsl:apply-templates select="." mode="visible-id"/>
-    <xsl:text>-letter.html</xsl:text>
-</xsl:template>
+<!-- A template ensures standalone page creation, -->
+<!-- and links to same, are consistent            -->
+<xsl:template match="worksheet" mode="standalone-worksheet-filename">
+    <xsl:param name="paper"/>
 
-<xsl:template match="worksheet" mode="standalone-filename-A4">
     <xsl:apply-templates select="." mode="visible-id"/>
-    <xsl:text>-A4.html</xsl:text>
+    <xsl:text>-</xsl:text>
+    <xsl:value-of select="$paper"/>
+    <xsl:text>.html</xsl:text>
 </xsl:template>
 
 <!-- 2020-03-17: Empty element, since originally a       -->
