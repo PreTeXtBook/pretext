@@ -3175,7 +3175,7 @@
 
             <figure>
                 <caption>Sea Hares, Flower Garden Banks National Marine Sanctuary</caption>
-                <video xml:id="video-sea-hares" source="https://flowergarden.noaa.gov/image_library/video/seaharew.mp4" width="80%" preview="images/sea-hare.jpg" />
+                <video xml:id="video-sea-hares" href="https://flowergarden.noaa.gov/image_library/video/seaharew.mp4" width="80%" preview="images/sea-hare.jpg" />
             </figure>
         </subsection>
 

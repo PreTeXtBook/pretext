@@ -1,7 +1,7 @@
 <definition>
 
   <notation>
-    <usage>\binom{n}{k}</usage>
+    <usage><m>\binom{n}{k}</m></usage>
     <description>binomial coefficient</description>
   </notation>
 
