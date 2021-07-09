@@ -2216,20 +2216,6 @@ a.mjx-svg-href  {
     margin-right: 1.5em;
 }
 
-.pretext-content.epub .solutions {
-    margin-top: 1em;
-}
-
-.pretext-content.epub .solutions .solution .type {
-    font-weight: bold;
-}
-.pretext-content.epub .solutions .solution .type + .period {
-    margin-right: 0.75em;
-}
-.pretext-content.epub .solutions .solution .type + p {
-   display: inline;
-}
-
 /* Can .solutions .solution actually happen any more?  Or is that
    replaced by .solutions a ? */
 .pretext-content .solutions .solution .type + .codenumber {
@@ -2293,9 +2279,6 @@ body, html body { background: #fff; }
     display: inline-block;
     margin-left: auto;
     margin-right: auto;
-}
-.pretext-content.epub img {
-    display: block;
 }
 
 /* is .cs for commutative diagrams? */
@@ -3393,7 +3376,9 @@ body[data-urlstub="calcvr.org"].standalone.worksheet .pretext-content .onepage .
 /*
         height: 1243px;
 */
+/*
         border: none;
+*/
         page-break-inside: avoid;
      }
      body.standalone.worksheet .pretext-content .onepage.lastpage {

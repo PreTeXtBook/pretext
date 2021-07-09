@@ -1,4 +1,22 @@
 
+.pretext-content.epub img {
+    display: block;
+}
+.pretext-content.epub .solutions {
+    margin-top: 1em;
+}
+
+.pretext-content.epub .solutions .solution .type {
+    font-family: "PT Serif", "Times New Roman", Times, serif;
+    font-weight: bold;
+}
+.pretext-content.epub .solutions .solution .type + .period {
+    margin-right: 0.75em;
+}
+.pretext-content.epub .solutions .solution .type + p {
+   display: inline;
+}
+
 /* sage cell code goes in a pre.  What else goes there? */
 .pretext-content pre {
     font-size: 95%;
@@ -28,7 +46,8 @@
 .pretext-content figcaption {
      break-before: avoid !important;
 }
-.pretext-content figure .image-box {
+.pretext-content figure .image-box, 
+.pretext-content figure .tabular-box {
     break-after: avoid !important;
 }
 .pretext-content figure {
