@@ -3120,7 +3120,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- in the side-by-side                           -->
 <xsl:template match="assemblage" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select="p|blockquote|pre|sidebyside|sbsgroup" >
+    <!-- Coordinate with schema, since we enforce it here -->
+    <xsl:apply-templates select="p|blockquote|pre|image|video|program|console|tabular|sidebyside|sbsgroup" >
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>

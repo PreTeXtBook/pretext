@@ -820,6 +820,7 @@
 
         <p><c>demonstration</c> is slated for removal or an overhaul, and so is in the <xref ref="badbank" text="title" />.  Avoid using them for now.</p>
 
+        <!-- BlockText is enforced via XSL for assemblage, keep synchronized -->
         <fragment xml:id="block">
             <title>Blocks</title>
             <code>
@@ -1322,6 +1323,7 @@
 
         <p>Since an <c>assemblage</c> is meant to accumulate significant content (as a review or summary, or for initial presentation) lists are allowed here, an exception to their restriction to paragraphs.  We are also mildly restrictive about what can be content here<mdash/>in particular blocks are excluded, despite not strictly being blocks themselves.</p>
 
+        <!-- BlockText + SBS is enforced via XSL, keep synchronized -->
         <fragment xml:id="assemblage">
             <title>Assemblages</title>
             <code>

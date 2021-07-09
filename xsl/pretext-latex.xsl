@@ -6463,7 +6463,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="block-options"/>
     <xsl:text>%&#xa;</xsl:text>
-    <xsl:apply-templates select="p|blockquote|pre|sidebyside|sbsgroup" />
+    <!-- Coordinate with schema, since we enforce it here -->
+    <xsl:apply-templates select="p|blockquote|pre|image|video|program|console|tabular|sidebyside|sbsgroup" />
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
