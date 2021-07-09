@@ -371,7 +371,7 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
         line-height: 1.15em;
     }
     .pretext-content section section section > .heading {
-        font-size: 1.15;
+        font-size: 1.15em;
         line-height: 1em;
     }
 }
@@ -2146,9 +2146,13 @@ a.mjx-svg-href  {
   cursor: pointer;
   display: inline-block;
   vertical-align: middle;
+/*
   *vertical-align: auto;
+*/
   zoom: 1;
+/*
   *display: inline;
+*/
   /* Disable accidental text-selection */
   user-select: none;
   /* Truncate overflowing text with ellipsis */
@@ -3496,7 +3500,7 @@ body[data-urlstub="calcvr.org"].standalone.worksheet .pretext-content .onepage .
 .pretext-content .poem .heading + .stanza {
     margin-top: 0.2em;
 }
-.pretext-content .poem .heading + .line, {
+.pretext-content .poem .heading + .line {
     margin-top: 0.2em;
 }
 
