@@ -94,11 +94,13 @@
 
 <!-- blocks, or statement + solution -->
 <!-- save off lab, laboratory, experiment for science -->
+<!-- NB: update comprehensive list in the Guide with any additions -->
 <!ENTITY PROJECT-LIKE "project|activity|exploration|investigation">
 <!ENTITY PROJECT-FILTER "self::project or self::activity or self::exploration or self::investigation">
 
 <!-- blocks with meta-information in lists -->
 <!-- TODO: add in "standards", "goals"     -->
+<!-- NB: update comprehensive list in the Guide with any additions -->
 <!ENTITY GOAL-LIKE "objectives|outcomes">
 <!ENTITY GOAL-FILTER "self::objectives or self::outcomes">
 

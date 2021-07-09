@@ -807,6 +807,135 @@
         </conclusion>
     </section>
 
+    <section xml:id="topic-blocks">
+        <title>Blocks</title>
+        <idx>blocks</idx>
+
+        <subsection>
+            <title>Introduction to Blocks</title>
+
+            <p>A division (<xref ref="overview-structure"/>), that is not further subdivided, is primarly, but not exclusively, composed of paragraphs and <term>blocks</term>.  We document the types of blocks here, even though we do not intend to ever provide a rigorous definition of the term.  Here is a list of characteristics, which is not prescriptive.</p>
+
+            <list>
+                <title>Characteristics of a Block</title>
+
+                <ul>
+                    <li>Visually set-off from a run of <q>plain</q> paragraphs.  Often earning a number, and ideally provided a title or caption (<xref ref="best-practice-titles"/>).</li>
+
+                    <li>Reflowable lines of text, such as an <tag>example</tag>, <em>or</em> a more rigid, more spatial, more two-dimensional object, such as a <tag>figure</tag> or <tag>table</tag>.</li>
+
+                    <li>Usually a child of a division (<xref ref="topic-divisions"/>).  But see just below.</li>
+
+                    <li>Typically a block does not contain another block, except that the more spatial ones can appear as part of a more textual one.</li>
+
+                    <li>When numbered, all blocks generally run consecutively.  (In <latex/>-speak, <q>on the same counter.</q>)  Numbering FIGURE-LIKE and PROJECT-LIKE independently is in transition at this writing (2021-07-07).</li>
+                </ul>
+            </list>
+
+            <p>The following is somewhat general, and we have not extensively cross-referenced to the particular types of blocks, so use the Table of Contents or the Index to learn more specifics.</p>
+        </subsection>
+
+        <subsection>
+            <title>Isomorphic Blocks</title>
+
+            <p>The structure of a block is described carefully in the schema (<xref ref="schema"/>).  There are approximately fourty blocks that are arranged into ten groups, within which they behave identically, except for their displayed names.  These groupings are defined in the <c>xsl/entities.ent</c> file, which we summarize in the next table.  The category name is taken from the entities file, and the notes are meant to describe the distinctive capabilities of the category.</p>
+
+            <list xml:id="block-summary">
+                <title>Summary of Blocks</title>
+
+                <dl>
+                    <li>
+                        <title>REMARK-LIKE</title>
+                        <p><tag>remark</tag>, <tag>convention</tag>, <tag>note</tag>, <tag>observation</tag>, <tag>warning</tag>, <tag>insight</tag></p>
+                        <p>The most basic, generic, block.</p>
+                    </li>
+
+                    <li>
+                        <title>EXAMPLE-LIKE</title>
+                        <p><tag>example</tag>, <tag>question</tag>, <tag>problem</tag></p>
+                        <p>A worked problem meant as exposition.  It can be structured with <tag>task</tag>, <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> just like an <tag>exercise</tag> or PROJECT-LIKE, but the <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> cannot be electively removed from output, and they do not migrate to collections of solutions elsewhere.</p>
+                    </li>
+
+                    <li>
+                        <title>PROJECT-LIKE</title>
+                        <p><tag>project</tag>, <tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag></p>
+                        <p>These are similar to an <tag>exercise</tag>, but the name suggests a slightly different undertaking, and they cannot be placed in an <tag>exercises</tag> division.  The current default is that they are numbered independently from other blocks, but this is planned to switch to elective behavior.  The <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> behave more like those for an <tag>exercise</tag> and can be removed from output, and can migrate to collections of solutions.</p>
+                    </li>
+
+                    <li>
+                        <title>FIGURE-LIKE</title>
+                        <p><tag>figure</tag>, <tag>table</tag>, <tag>listing</tag>, <tag>list</tag></p>
+                        <p>An object that is a container for other atomic objects, which are typically somewhat rigid (not reflowable) or two-dimensional.  Typically with a number, and provided with a title or caption.  A <tag>table</tag> can only hold a <tag>tabular</tag>, while a <tag>listing</tag> is meant for <tag>program</tag> and <tag>console</tag>.  A <tag>list</tag> is not the list itself, but a container for one of the three possible lists (see <xref ref="topic-lists"/> and especially <xref ref="topic-named-list"/>).  A <tag>figure</tag> is the most liberal, allowing a wide variety of contents, with <tag>image</tag> being the prototypical example.</p>
+                    </li>
+
+                    <li>
+                        <title>THEOREM-LIKE</title>
+                        <p><tag>theorem</tag>, <tag>corollary</tag>, <tag>lemma</tag>, <tag>algorithm</tag>, <tag>proposition</tag>, <tag>claim</tag>, <tag>fact</tag>, <tag>identity</tag></p>
+                        <p>Mathematical results, which can have an (optional) proof.</p>
+                    </li>
+
+                    <li>
+                        <title>AXIOM-LIKE</title>
+                        <p><tag>axiom</tag>, <tag>conjecture</tag>, <tag>principle</tag>, <tag>heuristic</tag>, <tag>hypothesis</tag>, <tag>assumption</tag></p>
+                        <p>A mathematical statement, which does not have a proof.</p>
+                    </li>
+
+                    <li>
+                        <title>DEFINITION-LIKE</title>
+                        <p><tag>definition</tag></p>
+                        <p>A definition of a (mathematical) object.</p>
+                    </li>
+
+                    <li>
+                        <title>ASIDE-LIKE</title>
+                        <p><tag>aside</tag>, <tag>biographical</tag>, <tag>historical</tag></p>
+                        <p>Parenthetical content that is structured beyond what a footnote can contain.</p>
+                    </li>
+
+                    <li>
+                        <title>COMPUTATION-LIKE</title>
+                        <p><tag>computation</tag>, <tag>technology</tag></p>
+                        <p>For descriptions of activities using computers, calculators, or other devices.</p>
+                    </li>
+
+                    <li>
+                        <title>GOAL-LIKE</title>
+                        <p><tag>objectives</tag>, <tag>outcomes</tag></p>
+                        <p>These are structured primarily as lists, and may only appear early (<tag>objectives</tag>) or late (<tag>outcomes</tag>) within a division.</p>
+                    </li>
+
+                </dl>
+            </list>
+        </subsection>
+
+        <subsection>
+            <title>Other Blocks</title>
+
+            <p>There are other blocks which can be achieved using just one element.  Examples are <tag>poem</tag> and <tag>assemblage</tag>.  An <tag>exercise</tag> can take on different behaviors, depending on its placement (see <xref ref="topic-exercises"/>).  One such placement is as a child of a division, which we call an <term>inline exercise</term>, and this would be regarded as a block, very similar to a PROJECT-LIKE.</p>
+
+            <p>A paragraph (<tag>p</tag>) can appear many places and is a primary component of blocks.  But when it is a child of a division, it shares some charateristics with other blocks.  There are a number of peers of a <tag>p</tag> which would then also qualify:  <tag>pre</tag>, <tag>blockquote</tag>, <tag>image</tag>, <tag>video</tag>, <tag>program</tag>, <tag>console</tag>, and <tag>tabular</tag>.  None of these can have a title or number, making them less useful, but widening the possibilities for placement.</p>
+        </subsection>
+
+        <subsection xml:id="renaming-blocks">
+            <title>Renaming Blocks</title>
+            <idx>renaming blocks</idx>
+
+            <p>A common desire of authors new to <pretext/> is a new block.  Extending <pretext/> to add a new one is not supported, nor an easy exercise.  One of the reasons for multiple versions of blocks, with common behaviors, is that you can appropriate one for use with your project and give it a new name.  So for example, a biology textbook might want to use <tag>activity</tag> for a laboratory, but rename it to <q>Laboratory</q>.   Of course, this means you will forego having any <q>Activity</q> in your book.  (But if you <em>are the first</em> to write a biology textbook in <pretext/> perhaps you should talk to us about a real <tag>laboratory</tag> element that behaves well for all the physical and biological sciences!)  Here is the procedure:<ol>
+                <li>Choose a block from <xref ref="block-summary"/> that has behavior similar to your intended use, and which you do not forsee using as-is in your project.</li>
+
+                <li>In the <tag>docinfo</tag> section use a <tag>rename</tag> element.  The content should be the new name (<q>Laboratory</q> above), while the <attr>element</attr> attribute should be the name of the element renamed (<c>activity</c> above).</li>
+
+                <li>The <attr>xml:lang</attr> attribute should be used to specify a value of the code for use with documents authored in languages other than US English.  If absent, the default vslue <c>en-US</c> is used.  Multiple <tag>rename</tag> elements for the same element, in different languages, is supported.</li>
+            </ol>So, continuing and extending our example, an author would use<cd>
+                <cline>&lt;rename @element="activity" xml:lang="fr-FR"&gt;Laboratoire&lt;/rename&gt;</cline>
+            </cd></p>
+
+            <p>The most popular block to rename is <tag>exercise</tag>.  We have exercises inside <tag>exercises</tag> divisions, which we call <term>divisional exercises</term>, and exercises inside divisions, which we call <term>inline exercises</term>.   It is possible to have one of each that have identical numbers.  So in cross-references the former is an <q>Exercise</q>, while the latter is a <q>Checkpoint</q>.  If you only have inline exercises, you might prefer that they be called Exercise rather than Checkpoint.  For the <attr>element</attr> attribute of the <tag>rename</tag> element, use a <term>pseudo-element</term>, in this case <c>inlineexercise</c>.  Other pseudo-elements which can be used to distinguish the various types of exercises are:  <c>divisionexercise</c>, <c>worksheetexercise</c>, and <c>readingquestion</c>.</p>
+
+            <p>Choose the element you rename carefully, trying to match it to the purpose of your content.  It can be useful for other purposes, such as automatic lists (<xref ref="topic-automatic-lists"/>), and you may decide later to use other properties of the element you have chosen.</p>
+        </subsection>
+    </section>
+
     <section xml:id="topic-exercises">
         <title>(*) Exercises, Inline and Divisional</title>
         <p></p>
