@@ -132,6 +132,11 @@
             <p>Changes on our end which produce new warnings are almost always announced on the <c>pretext-announce</c> Google Group.  This is a very low-traffic, announcement-only list, so you could skim the messages you missed.  Also, read warnings carefully, as they often have explicit suggestions about what to do next.</p>
         </li>
 
+        <li>
+          <title>There are lots of different  blocks, but my project needs one that does not exist.</title>
+          <p>We do not support creating new blocks.  But you can repurpose an existing one.  See <xref ref="renaming-blocks"/>.</p>
+        </li>
+
         <!-- mathbook-xml-support:  2015-06-21:  Subscripts in custom lists -->
         <!-- mathbook-xml-support:  2016-06-19:  Formulas in list labels    -->
         <li>
