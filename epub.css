@@ -51,5 +51,5 @@
     break-after: avoid !important;
 }
 .pretext-content figure {
-    break-inside: avoid;
+    break-inside: avoid !important;
 }
