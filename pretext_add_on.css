@@ -1026,55 +1026,71 @@ body > a.assistive:focus {
 }
 
 
+.pretext-content table tr th.b1,
 .pretext-content table tr td.b1 {
     border-bottom: 1px solid #000;
 }
+.pretext-content table tr th.b2,
 .pretext-content table tr td.b2 {
     border-bottom: 2px solid #000;
 }
+.pretext-content table tr th.b3,
 .pretext-content table tr td.b3 {
     border-bottom: 3px solid #000;
 }
+.pretext-content table tr th.b0,
 .pretext-content table tr td.b0 {
     border-bottom: none;
 }
+/* add more tr below */
 
+.pretext-content table tr th.t1,
 .pretext-content table tr td.t1 {
     border-top: 1px solid #000;
 }
+.pretext-content table tr th.t2,
 .pretext-content table tr td.t2 {
     border-top: 2px solid #000;
 }
+.pretext-content table tr th.t3,
 .pretext-content table tr td.t3 {
     border-top: 3px solid #000;
 }
+.pretext-content table tr th.t0,
 .pretext-content table tr td.t0 {
     border-top: none;
 }
 
+.pretext-content table tr th.r1,
 .pretext-content table tr td.r1 {
     border-right: 1px solid #000;
 }
+.pretext-content table tr th.r2,
 .pretext-content table tr td.r2 {
     border-right: 2px solid #000;
 }
+.pretext-content table tr th.r3,
 .pretext-content table tr td.r3 {
     border-right: 3px solid #000;
 }
+.pretext-content table tr th.r0,
 .pretext-content table tr td.r0 {
     border-right: none;
 }
 
-
+.pretext-content table tr th.l1,
 .pretext-content table tr td.l1 {
     border-left: 1px solid #000;
 }
+.pretext-content table tr th.l2,
 .pretext-content table tr td.l2 {
     border-left: 2px solid #000;
 }
+.pretext-content table tr th.l3,
 .pretext-content table tr td.l3 {
     border-left: 3px solid #000;
 }
+.pretext-content table tr th.l0,
 .pretext-content table tr td.l0 {
     border-left: none;
 }
@@ -3166,12 +3182,15 @@ body.standalone .pretext-content .worksheet {
 }
 
 body.standalone .pretext-content .onepage {
-    padding: 40px 45px 45px 55px;
+/*    padding: 40px 45px 45px 55px;
+*/
+    padding: 0 0 45px 0;
     border-bottom: 2px solid grey;
     margin: 0;
 /* height: 1243px; */
 }
 body.standalone .pretext-content .onepage + .onepage {
+    padding-top: 40px;
     border-top: 2px solid grey;
 }
 /* there may be worksheet content before the first page
@@ -3210,6 +3229,14 @@ body.standalone .pretext-content .onepage + .onepage {
 }
 body.standalone .pretext-content .onepage + .onepage::before {
     content: none;
+}
+
+body.standalone .pretext-content .onepage article {
+    padding-left: 0;
+    border: none;
+}
+body.standalone .pretext-content .onepage article::after {
+    all: unset;
 }
 .pretext-content .onepage > p:first-child {
     margin-top: 0;
@@ -3363,12 +3390,19 @@ body[data-urlstub="calcvr.org"].standalone.worksheet .pretext-content .onepage .
         max-height: 100%;
         overflow: hidden;
         page-break-after: always;
+/*
         height: 1243px;
+*/
         border: none;
         page-break-inside: avoid;
      }
+     body.standalone.worksheet .pretext-content .onepage.lastpage {
+        page-break-after: auto;
+     }
     body.standalone.worksheet.a4 .pretext-content .onepage {
+/*
         height: 1320px;
+*/
     }
     body[data-urlstub="calcvr.org"].standalone.worksheet .pretext-content .onepage .workspace,
     body[data-urlstub="calcvr.org"].standalone.worksheet .pretext-content .onepage .workspace.squashed.tight,
@@ -4298,10 +4332,14 @@ sbspanel:empty { /* can only happen when partially created */
     padding: 0.5em;
 }
 .pretext-content .in_edit_tree figcaption,
-.pretext-content .in_edit_tree img,
 .pretext-content .in_edit_tree blockquote {
     border: 3px dotted #9a0 !important;
     background: #efd;
+    padding: 0.5em;
+}
+.pretext-content .in_edit_tree img {
+    border: 3px dotted #09a !important;
+    background: #fbd;
     padding: 0.5em;
 }
 .pretext-content .in_edit_tree .displaymath,
