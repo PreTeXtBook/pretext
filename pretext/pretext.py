@@ -73,6 +73,12 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     if pub_file:
         params['publisher'] = pub_file
     xsltproc(extraction_xslt, xml_source, mjinput, None, params)
+    # Trying to correct baseline for inline math in Kindle, so we
+    # insert a \mathstrut into all the inline math before feeding to MathJax
+    if (math_format == 'kindle'):
+        with fileinput.FileInput(mjinput, inplace=True, backup='.bak') as file:
+            for line in file:
+                print(line.replace('\(', '\(\mathstrut '), end='')
 
     # shell out to process with MathJax/SRE node program
     _debug('calling MathJax to convert LaTeX from {} into raw representations in {}'.format(mjinput, mjoutput))
