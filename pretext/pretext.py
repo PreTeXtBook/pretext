@@ -1429,6 +1429,12 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format):
     for cssfilename in [str(stylefile), str(colorfile), 'pretext_add_on.css', 'setcolors.css']:
         css = os.path.join(get_ptx_xsl_path(), '..', 'css', cssfilename)
         shutil.copy2(css, css_dir)
+    if (math_format == 'kindle'):
+        css = os.path.join(get_ptx_xsl_path(), '..', 'css', 'kindle.css')
+        shutil.copy2(css, css_dir)
+    if (math_format == 'svg'):
+        css = os.path.join(get_ptx_xsl_path(), '..', 'css', 'epub.css')
+        shutil.copy2(css, css_dir)
 
     # directory of images, relative to master source file, given by publisher
     # build the same directory relative to the XHTML files
