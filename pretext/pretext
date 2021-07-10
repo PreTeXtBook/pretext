@@ -333,13 +333,13 @@ def main():
         elif args.format == 'braille-electronic':
             ptx.braille(xml_source, publisher_file, stringparams, out_file, dest_dir, 'electronic')
         elif args.format == 'epub-svg':
-            ptx.epub(xml_source, publisher_file, out_file, dest_dir, 'svg')
+            ptx.epub(xml_source, publisher_file, out_file, dest_dir, 'svg', stringparams)
         elif args.format == 'epub-mml':
-            ptx.epub(xml_source, publisher_file, out_file, dest_dir, 'mml')
+            ptx.epub(xml_source, publisher_file, out_file, dest_dir, 'mml', stringparams)
         elif args.format == 'epub-speech':
-            ptx.epub(xml_source, publisher_file, out_file, dest_dir, 'speech')
+            ptx.epub(xml_source, publisher_file, out_file, dest_dir, 'speech', stringparams)
         elif args.format == 'epub-kindle':
-            ptx.epub(xml_source, publisher_file, out_file, dest_dir, 'kindle')
+            ptx.epub(xml_source, publisher_file, out_file, dest_dir, 'kindle', stringparams)
         # 2020-05-19 MathBookXMLtoSWS class removed
         elif args.format == 'sagenb':
             raise NotImplementedError("conversion to Sage notebook format removed (2020-05-18)")

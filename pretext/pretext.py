@@ -73,6 +73,12 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     if pub_file:
         params['publisher'] = pub_file
     xsltproc(extraction_xslt, xml_source, mjinput, None, params)
+    # Trying to correct baseline for inline math in Kindle, so we
+    # insert a \mathstrut into all the inline math before feeding to MathJax
+    if (math_format == 'kindle'):
+        with fileinput.FileInput(mjinput, inplace=True, backup='.bak') as file:
+            for line in file:
+                print(line.replace('\(', '\(\mathstrut '), end='')
 
     # shell out to process with MathJax/SRE node program
     _debug('calling MathJax to convert LaTeX from {} into raw representations in {}'.format(mjinput, mjoutput))
@@ -1329,7 +1335,7 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
 # Conversion to EPUB
 ####################
 
-def epub(xml_source, pub_file, out_file, dest_dir, math_format):
+def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     """Produce complete document in an EPUB container"""
     # math_format is a string that parameterizes this process
     #   'svg': mathematics as SVG
@@ -1382,7 +1388,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format):
     params['math.format'] = math_format
     if pub_file:
         params['publisher'] = pub_file
-    xsltproc(epub_xslt, xml_source, packaging_file, tmp_dir, params)
+    xsltproc(epub_xslt, xml_source, packaging_file, tmp_dir, {**params, **stringparams})
 
     # XHTML files lack an overall namespace,
     # while EPUB validation expects it
@@ -1422,6 +1428,12 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format):
     colorfile = packaging_tree.xpath('/packaging/css/@colorfile')[0]
     for cssfilename in [str(stylefile), str(colorfile), 'pretext_add_on.css', 'setcolors.css']:
         css = os.path.join(get_ptx_xsl_path(), '..', 'css', cssfilename)
+        shutil.copy2(css, css_dir)
+    if (math_format == 'kindle'):
+        css = os.path.join(get_ptx_xsl_path(), '..', 'css', 'kindle.css')
+        shutil.copy2(css, css_dir)
+    if (math_format == 'svg'):
+        css = os.path.join(get_ptx_xsl_path(), '..', 'css', 'epub.css')
         shutil.copy2(css, css_dir)
 
     # directory of images, relative to master source file, given by publisher
