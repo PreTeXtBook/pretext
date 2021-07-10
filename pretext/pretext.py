@@ -1335,7 +1335,7 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
 # Conversion to EPUB
 ####################
 
-def epub(xml_source, pub_file, out_file, dest_dir, math_format):
+def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     """Produce complete document in an EPUB container"""
     # math_format is a string that parameterizes this process
     #   'svg': mathematics as SVG
@@ -1388,7 +1388,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format):
     params['math.format'] = math_format
     if pub_file:
         params['publisher'] = pub_file
-    xsltproc(epub_xslt, xml_source, packaging_file, tmp_dir, params)
+    xsltproc(epub_xslt, xml_source, packaging_file, tmp_dir, {**params, **stringparams})
 
     # XHTML files lack an overall namespace,
     # while EPUB validation expects it
