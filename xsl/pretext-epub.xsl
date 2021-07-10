@@ -146,7 +146,7 @@
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/">
     <xsl:call-template name="banner-warning">
-        <xsl:with-param name="warning">EPUB conversion is experimental and not supported.  In particular,&#xa;the XSL conversion alone is not sufficient to create an EPUB.</xsl:with-param>
+        <xsl:with-param name="warning">EPUB conversion is experimental and not supported.  In particular,&#xa;creating an EPUB requires the pretext/pretext script.</xsl:with-param>
     </xsl:call-template>
     <!-- analyze authored source, which will repair "mathbook" -->
     <xsl:apply-templates select="pretext|mathbook" mode="deprecation-warnings" />
@@ -683,12 +683,12 @@ width: 100%
     <xsl:param name="in" />
     <xsl:param name="out" />
     <xsl:if test="$in!=''">
-        <pre>
+        <pre class="code input">
             <xsl:value-of select="$in" />
         </pre>
     </xsl:if>
     <xsl:if test="$out!=''">
-        <pre>
+        <pre class="code output">
             <xsl:value-of select="$out" />
         </pre>
     </xsl:if>
