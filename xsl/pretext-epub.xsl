@@ -240,14 +240,7 @@
                 <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
                 <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
                 <xsl:call-template name="mathjax-css"/>
-                <xsl:choose>
-                    <xsl:when test="$b-kindle">
-                        <link href="../{$css-dir}/kindle.css" rel="stylesheet" type="text/css"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <link href="../{$css-dir}/epub.css" rel="stylesheet" type="text/css"/>
-                    </xsl:otherwise>
-                </xsl:choose>
+		<xsl:call-template name="epub-kindle-css"/>
                 <title>
                     <xsl:apply-templates select="." mode="title-short"/>
                 </title>
@@ -704,6 +697,17 @@ width: 100%
 </style>
 </xsl:template>
 
+<!-- Include the appropriate CSS file depending on output -->
+<xsl:template name="epub-kindle-css">
+    <xsl:choose>
+	<xsl:when test="$b-kindle">
+	    <link href="../{$css-dir}/kindle.css" rel="stylesheet" type="text/css"/>
+	</xsl:when>
+	<xsl:otherwise>
+	    <link href="../{$css-dir}/epub.css" rel="stylesheet" type="text/css"/>
+	</xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- ############# -->
 <!-- Content files -->
@@ -738,14 +742,7 @@ width: 100%
                 <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
                 <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
                 <xsl:call-template name="mathjax-css"/>
-		<xsl:choose>
-		    <xsl:when test="$b-kindle">
-			<link href="../{$css-dir}/kindle.css"            rel="stylesheet" type="text/css"/>
-		    </xsl:when>
-		    <xsl:otherwise>
-			<link href="../{$css-dir}/epub.css"            rel="stylesheet" type="text/css"/>
-		    </xsl:otherwise>
-		</xsl:choose>
+		<xsl:call-template name="epub-kindle-css"/>
 		<title>Table of Conents</title>
             </head>
             <body class="pretext-content epub" epub:type="frontmatter">
@@ -1104,14 +1101,7 @@ width: 100%
                     <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
                     <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
                     <xsl:call-template name="mathjax-css"/>
-		    <xsl:choose>
-			<xsl:when test="$b-kindle">
-			    <link href="../{$css-dir}/kindle.css"            rel="stylesheet" type="text/css"/>
-			</xsl:when>
-			<xsl:otherwise>
-			    <link href="../{$css-dir}/epub.css"            rel="stylesheet" type="text/css"/>
-			</xsl:otherwise>
-		    </xsl:choose>
+		    <xsl:call-template name="epub-kindle-css"/>
 		    <title>Endnotes</title>
                 </head>
                 <!-- use class to repurpose HTML CSS work -->
