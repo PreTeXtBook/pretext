@@ -135,6 +135,46 @@
 <!-- If there are footnotes, we'll build and package a "endnotes.xhtml" file -->
 <xsl:variable name="b-has-endnotes" select="boolean($document-root//fn|$document-root//aside|$document-root//biographical|$document-root//historical|$document-root//hint)"/>
 
+<xsl:variable name="endnotes-have-math">
+    <xsl:if test="$b-has-endnotes">
+        <xsl:choose>
+            <xsl:when test="$document-root//fn//m">
+                <xsl:text>true</xsl:text>
+            </xsl:when>
+            <xsl:when test="$document-root//aside//m or
+                            $document-root//aside//me or
+                            $document-root//aside//men or
+                            $document-root//aside//md or
+                            $document-root//aside//mdn">
+                <xsl:text>true</xsl:text>
+            </xsl:when>
+            <xsl:when test="$document-root//biographical//m or
+                            $document-root//biographical//me or
+                            $document-root//biographical//men or
+                            $document-root//biographical//md or
+                            $document-root//biographical//mdn">
+                <xsl:text>true</xsl:text>
+            </xsl:when>
+            <xsl:when test="$document-root//historical//m or
+                            $document-root//historical//me or
+                            $document-root//historical//men or
+                            $document-root//historical//md or
+                            $document-root//historical//mdn">
+                <xsl:text>true</xsl:text>
+            </xsl:when>
+            <xsl:when test="$document-root//hint//m or
+                            $document-root//hint//me or
+                            $document-root//hint//men or
+                            $document-root//hint//md or
+                            $document-root//hint//mdn">
+                <xsl:text>true</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:if>
+</xsl:variable>
+
+<xsl:variable name="b-endnotes-have-math" select="$endnotes-have-math
+              = 'true'" />
 
 <!-- ############## -->
 <!-- Entry Template -->
@@ -391,7 +431,24 @@
         <xsl:for-each select="($discovery-manifest/*|$discovery-manifest/comment())[not(@href = preceding::*/@href)]">
             <xsl:copy-of select="."/>
         </xsl:for-each>
-        <item id="endnotes" href="{$xhtml-dir}/{$endnote-file}" media-type="application/xhtml+xml"/>
+        <xsl:if test="$b-has-endnotes">
+            <item id="endnotes" href="{$xhtml-dir}/{$endnote-file}"
+                  media-type="application/xhtml+xml">
+                <xsl:if test="$b-endnotes-have-math">
+                    <xsl:attribute name="properties">
+                        <xsl:choose>
+                            <xsl:when test="$math.format = 'mml' or
+                                            $math.format = 'kindle'">
+                                <xsl:text>mathml</xsl:text>
+                            </xsl:when>
+                            <xsl:when test="$math.format = 'svg'">
+                                <xsl:text>svg</xsl:text>
+                            </xsl:when>
+                        </xsl:choose>
+                    </xsl:attribute>
+                </xsl:if>
+            </item>
+        </xsl:if>
     </manifest>
 </xsl:template>
 
@@ -422,13 +479,71 @@
         <!-- TODO: use a parameter switch for output style       -->
         <!-- Study: https://github.com/w3c/epubcheck/issues/420  -->
         <!-- Processing with page2svg makes it appear SVG images exist -->
-        <!-- <xsl:if test=".//m or .//me or .//men or .//md or .//mdn"> -->
-             <xsl:attribute name="properties">
-                <xsl:text>svg</xsl:text>
-                <!-- <xsl:text>mathml</xsl:text> -->
+	<!-- Set properties="svg" or properties="mathml" when a -->
+        <!-- file contains math in one of thse formats. -->
+	<xsl:variable name="is-structured">
+            <xsl:apply-templates select="." mode="is-structured-division"/>
+	</xsl:variable>
+	<xsl:variable name="b-is-structured" select="$is-structured = 'true'"/>
+
+        <xsl:variable name="has-math">
+            <xsl:choose>
+		<xsl:when test="local-name() = 'frontmatter'">
+		    <xsl:text>false</xsl:text>
+		</xsl:when>
+		<!-- TODO: Condition more on exercises in case -->
+		<!-- answer/solution is suppressed. -->
+                <xsl:when test="../section or ../preface or ../exercises">
+                    <xsl:if test=".//m or .//me or .//men or .//md or
+                                  .//mdn">
+                        <xsl:text>true</xsl:text>
+                    </xsl:if>
+                </xsl:when>
+                <xsl:when test=".//notation-list">
+                    <xsl:text>true</xsl:text>
+                </xsl:when>
+                <xsl:when test="index-list and $document-root//idx//m">
+                    <xsl:text>true</xsl:text>
+                </xsl:when>
+                <xsl:when test="../chapter or ../appendix">
+		    <xsl:choose>
+			<xsl:when test="$b-is-structured">
+			    <xsl:if test="chapter/title|objectives|introduction//m or
+					  chapter/title|objectives|introduction//me or
+					  chapter/title|objectives|introduction//men or
+					  chapter/title|objectives|introduction//md or
+					  chapter/title|objectives|introduction//mdn">
+				<xsl:text>true</xsl:text>
+			    </xsl:if>
+			</xsl:when>
+			<xsl:otherwise>
+			    <xsl:if test=".//m or .//me or .//men or
+					  .//md or .//mdn">
+				<xsl:text>true</xsl:text>
+			    </xsl:if>
+			</xsl:otherwise>
+		    </xsl:choose>
+		</xsl:when>
+		<xsl:otherwise>
+		    <xsl:text>false</xsl:text>
+		</xsl:otherwise>
+	    </xsl:choose>
+	</xsl:variable>
+	<xsl:variable name="b-has-math" select="$has-math = 'true'" />
+	<xsl:if test="$b-has-math">
+            <xsl:attribute name="properties">
+	        <xsl:choose>
+		    <xsl:when test="$math.format = 'mml' or
+                                    $math.format = 'kindle'">
+		        <xsl:text>mathml</xsl:text>
+		    </xsl:when>
+		    <xsl:when test="$math.format = 'svg'">
+		        <xsl:text>svg</xsl:text>
+		    </xsl:when>
+		</xsl:choose>
             </xsl:attribute>
-        <!-- </xsl:if> -->
-         <!-- TODO: coordinate with manifest/script on xhtml extension -->
+        </xsl:if>
+        <!-- TODO: coordinate with manifest/script on xhtml extension -->
         <xsl:attribute name="href">
             <xsl:value-of select="$xhtml-dir" />
             <xsl:text>/</xsl:text>
