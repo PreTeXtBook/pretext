@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!--********************************************************************
-Copyright 2016 Robert A. Beezer
+Copyright 2016-2021 Robert A. Beezer
 
-This file is part of MathBook XML.
+This file is part of PreTeXt.
 
-MathBook XML is free software: you can redistribute it and/or modify
+PreTeXt is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 2 or version 3 of the
 License (at your option).
 
-MathBook XML is distributed in the hope that it will be useful,
+PreTeXt is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
 <pretext>
@@ -87,6 +87,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <statement>
                         <p>A lone exercise in an <c>exercises</c> division that is a peer of a <c>section</c>.</p>
                     </statement>
+		    <hint><p>A little suggestion.</p></hint>
+		    <answer><p><m>y=x^2</m></p></answer>
+		    <solution><p>Maecenas ex enim, lobortis et blandit
+		    sit amet, pretium in ante. Sed mollis sollicitudin
+		    nibh non consectetur. Vestibulum eget tortor sit
+		    amet felis iaculis fermentum. Sed eu nisl a urna
+		    cursus congue at nec nulla. Mauris lacinia
+		    molestie tristique. Maecenas aliquet rutrum
+		    venenatis. Vivamus quis metus sit amet est feugiat
+		    facilisis quis et massa. Aenean dui sem, dapibus
+		    at imperdiet ac, <m>y=ax^2+bx+c</m> auctor sit
+		    amet arcu. Vestibulum eget porttitor est. Aliquam
+		    id pellentesque quam, vitae rhoncus metus. In
+		    congue condimentum malesuada. Mauris in
+		    condimentum eros, eget mattis nibh. Praesent et ex
+		    porttitor, lobortis nibh sed, cursus
+		    ante. Suspendisse dapibus vel risus eu
+		    pellentesque.</p></solution>
                 </exercise>
             </exercises>
             <conclusion>
@@ -112,6 +130,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </md></p>
 
             <p>Nice.</p>
+	    <theorem>
+	      <title>Fundamental Theorem of Calculus</title>
+	      <creator>Newton, Leibniz</creator>
+	      <statement>
+		<p>Let <m>f</m> be a continuous function on the
+		interval <m>[a,b]</m>. If <m>F</m> is an
+		antiderivative for <m>f</m> on <m>[a,b]</m>, then
+		<me>\int_a^b f(t)\, dt = F(b)-F(a)</me>.</p>
+	      </statement>
+	    </theorem>
         </chapter>
 
         <chapter>
