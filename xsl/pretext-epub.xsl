@@ -133,7 +133,7 @@
 <xsl:variable name="b-kindle" select="$math.format = 'kindle'"/>
 
 <!-- If there are footnotes, we'll build and package a "endnotes.xhtml" file -->
-<xsl:variable name="b-has-endnotes" select="boolean($document-root//fn|$document-root//aside)"/>
+<xsl:variable name="b-has-endnotes" select="boolean($document-root//fn|$document-root//aside|$document-root//biographical|$document-root//historical|$document-root//hint)"/>
 
 
 <!-- ############## -->
@@ -870,27 +870,47 @@ width: 100%
 <!-- recognizable by their "-kindle-return" suffix.  See 10.3.12:   -->
 <!-- https://kindlegen.s3.amazonaws.com/AmazonKindlePublishingGuidelines.pdf -->
 
-<!-- Asides -->
+<!-- Asides and hints -->
 <!-- EPUB has a semi-natural mechanism for this, though -->
 <!-- the text we drop could use some work. The marker,  -->
 <!-- a simple title/paragraph, tostyle minimally        -->
-<xsl:template match="aside">
+<xsl:template match="&ASIDE-LIKE;|hint">
     <xsl:variable name="hid">
         <xsl:apply-templates select="." mode="html-id" />
     </xsl:variable>
     <p>
         <a class="url" epub:type="noteref" href="{$endnote-file}#{$hid}">
-            <xsl:text>Aside: </xsl:text>
-            <xsl:apply-templates select="." mode="title-full"/>
+            <!-- Older Kindles don't always support pop-ups, so -->
+            <!-- create infrastructure for endnotes to jump back-->
+            <xsl:if test="$b-kindle">
+                <xsl:attribute name="id">
+                    <xsl:value-of select="$hid"/>
+                    <xsl:text>-kindle-return</xsl:text>
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:apply-templates select="." mode="heading-simple" />
         </a>
     </p>
 </xsl:template>
 
 <!-- The content, unwrapped from HTML infrastructure -->
-<xsl:template match="aside" mode="endnote-content">
+<xsl:template match="&ASIDE-LIKE;|hint" mode="endnote-content">
     <xsl:variable name="hid">
         <xsl:apply-templates select="." mode="html-id" />
     </xsl:variable>
+    <!-- Older Kindles don't always support pop-ups, so -->
+    <!-- create infrastructure for endnotes to jump back-->
+    <xsl:if test="$b-kindle">
+        <a epub:type="noteref">
+            <xsl:attribute name="href">
+                <xsl:apply-templates select="." mode="containing-filename"/>
+                <xsl:text>#</xsl:text>
+                <xsl:value-of select="$hid"/>
+                <xsl:text>-kindle-return</xsl:text>
+            </xsl:attribute>
+            <xsl:apply-templates select="." mode="heading-full"/>
+        </a>
+    </xsl:if>
     <aside epub:type="footnote" id="{$hid}">
         <!-- mode="body" gets too much CSS -->
         <xsl:apply-templates select="." mode="wrapped-content"/>
@@ -978,7 +998,7 @@ width: 100%
                 <body class="pretext-content epub">
                     <h4>Endnotes</h4>
                     <!-- structure according to footnote level -->
-                    <xsl:apply-templates select="$document-root//fn|$document-root//aside" mode="endnote-content"/>
+                    <xsl:apply-templates select="$document-root//fn|$document-root//aside|$document-root//biographical|$document-root//historical|$document-root//hint" mode="endnote-content"/>
                 </body>
             </html>
         </exsl:document>
