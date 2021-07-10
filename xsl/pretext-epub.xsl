@@ -200,14 +200,17 @@
                 <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
                 <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
                 <xsl:call-template name="mathjax-css"/>
-		<xsl:choose>
-		  <xsl:when test="$b-kindle">
-                    <link href="../{$css-dir}/kindle.css"            rel="stylesheet" type="text/css"/>
-		  </xsl:when>
-		  <xsl:otherwise>
-                    <link href="../{$css-dir}/epub.css"            rel="stylesheet" type="text/css"/>
-		  </xsl:otherwise>
-		</xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="$b-kindle">
+                        <link href="../{$css-dir}/kindle.css" rel="stylesheet" type="text/css"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <link href="../{$css-dir}/epub.css" rel="stylesheet" type="text/css"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <title>
+                    <xsl:apply-templates select="." mode="title-short"/>
+                </title>
             </head>
             <!-- use class to repurpose HTML CSS work -->
             <body class="pretext-content epub">
@@ -244,7 +247,7 @@
         <xsl:apply-templates select="author|objectives|introduction|titlepage|abstract" />
         <!-- deleted "nav" and summary links here -->
         <!-- "conclusion" is being missed here    -->
-     </section>
+    </section>
 </xsl:template>
 
 <!-- At level 2, the backmatter summary is useless, -->
@@ -271,9 +274,9 @@
     <!-- Points to OPF metadata file (in two variables)              -->
     <exsl:document href="META-INF/container.xml" method="xml" omit-xml-declaration="yes" indent="no">
         <container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
-          <rootfiles>
-            <rootfile full-path="{$content-dir}/{$package-file}" media-type="application/oebps-package+xml" />
-          </rootfiles>
+            <rootfiles>
+                <rootfile full-path="{$content-dir}/{$package-file}" media-type="application/oebps-package+xml" />
+            </rootfiles>
         </container>
     </exsl:document>
 </xsl:template>
@@ -365,14 +368,14 @@
         <item id="css-style"  href="{$css-dir}/{$html-css-stylefile}" media-type="text/css"/>
         <item id="css-color"  href="{$css-dir}/{$html-css-colorfile}" media-type="text/css"/>
         <item id="css-setclr" href="{$css-dir}/setcolors.css"         media-type="text/css"/>
-	<xsl:choose>
-	  <xsl:when test="$b-kindle">
-            <item id="css-kindle" href="{$css-dir}/kindle.css"            media-type="text/css"/>
-	  </xsl:when>
-	  <xsl:otherwise>
-            <item id="css-epub" href="{$css-dir}/epub.css"            media-type="text/css"/>
-	  </xsl:otherwise>
-	</xsl:choose>
+        <xsl:choose>
+            <xsl:when test="$b-kindle">
+                <item id="css-kindle" href="{$css-dir}/kindle.css"            media-type="text/css"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <item id="css-epub" href="{$css-dir}/epub.css"            media-type="text/css"/>
+            </xsl:otherwise>
+        </xsl:choose>
         <item id="cover-page" href="{$xhtml-dir}/cover-page.xhtml" media-type="application/xhtml+xml"/>
         <item id="table-contents" href="{$xhtml-dir}/table-contents.xhtml" properties="nav" media-type="application/xhtml+xml"/>
         <item id="cover-image" href="{$xhtml-dir}/{$cover-filename}" properties="cover-image" media-type="image/png"/>
@@ -621,13 +624,14 @@ width: 100%
                 <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
                 <xsl:call-template name="mathjax-css"/>
 		<xsl:choose>
-		  <xsl:when test="$b-kindle">
-		    <link href="../{$css-dir}/kindle.css"            rel="stylesheet" type="text/css"/>
-		  </xsl:when>
-		  <xsl:otherwise>
-		    <link href="../{$css-dir}/epub.css"            rel="stylesheet" type="text/css"/>
-		  </xsl:otherwise>
+		    <xsl:when test="$b-kindle">
+			<link href="../{$css-dir}/kindle.css"            rel="stylesheet" type="text/css"/>
+		    </xsl:when>
+		    <xsl:otherwise>
+			<link href="../{$css-dir}/epub.css"            rel="stylesheet" type="text/css"/>
+		    </xsl:otherwise>
 		</xsl:choose>
+		<title>Table of Conents</title>
             </head>
             <body class="pretext-content epub" epub:type="frontmatter">
                 <nav epub:type="toc" id="toc">
@@ -986,13 +990,14 @@ width: 100%
                     <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
                     <xsl:call-template name="mathjax-css"/>
 		    <xsl:choose>
-		      <xsl:when test="$b-kindle">
-			<link href="../{$css-dir}/kindle.css"            rel="stylesheet" type="text/css"/>
-		      </xsl:when>
-		      <xsl:otherwise>
-			<link href="../{$css-dir}/epub.css"            rel="stylesheet" type="text/css"/>
-		      </xsl:otherwise>
+			<xsl:when test="$b-kindle">
+			    <link href="../{$css-dir}/kindle.css"            rel="stylesheet" type="text/css"/>
+			</xsl:when>
+			<xsl:otherwise>
+			    <link href="../{$css-dir}/epub.css"            rel="stylesheet" type="text/css"/>
+			</xsl:otherwise>
 		    </xsl:choose>
+		    <title>Endnotes</title>
                 </head>
                 <!-- use class to repurpose HTML CSS work -->
                 <body class="pretext-content epub">
