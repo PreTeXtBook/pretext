@@ -173,8 +173,7 @@
     </xsl:if>
 </xsl:variable>
 
-<xsl:variable name="b-endnotes-have-math" select="$endnotes-have-math
-              = 'true'" />
+<xsl:variable name="b-endnotes-have-math" select="$endnotes-have-math = 'true'"/>
 
 <!-- ############## -->
 <!-- Entry Template -->
@@ -240,7 +239,7 @@
                 <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
                 <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
                 <xsl:call-template name="mathjax-css"/>
-		<xsl:call-template name="epub-kindle-css"/>
+                <xsl:call-template name="epub-kindle-css"/>
                 <title>
                     <xsl:apply-templates select="." mode="title-short"/>
                 </title>
@@ -472,23 +471,22 @@
         <!-- TODO: use a parameter switch for output style       -->
         <!-- Study: https://github.com/w3c/epubcheck/issues/420  -->
         <!-- Processing with page2svg makes it appear SVG images exist -->
-	<!-- Set properties="svg" or properties="mathml" when a -->
+        <!-- Set properties="svg" or properties="mathml" when a -->
         <!-- file contains math in one of thse formats. -->
-	<xsl:variable name="is-structured">
+        <xsl:variable name="is-structured">
             <xsl:apply-templates select="." mode="is-structured-division"/>
-	</xsl:variable>
-	<xsl:variable name="b-is-structured" select="$is-structured = 'true'"/>
+        </xsl:variable>
+        <xsl:variable name="b-is-structured" select="$is-structured = 'true'"/>
 
         <xsl:variable name="has-math">
             <xsl:choose>
-		<xsl:when test="local-name() = 'frontmatter'">
-		    <xsl:text>false</xsl:text>
-		</xsl:when>
-		<!-- TODO: Condition more on exercises in case -->
-		<!-- answer/solution is suppressed. -->
+                <xsl:when test="self::frontmatter">
+                    <xsl:text>false</xsl:text>
+                </xsl:when>
+                <!-- TODO: Condition more on exercises in case -->
+                <!-- answer/solution is suppressed. -->
                 <xsl:when test="../section or ../preface or ../exercises">
-                    <xsl:if test=".//m or .//me or .//men or .//md or
-                                  .//mdn">
+                    <xsl:if test=".//m or .//me or .//men or .//md or .//mdn">
                         <xsl:text>true</xsl:text>
                     </xsl:if>
                 </xsl:when>
@@ -499,41 +497,39 @@
                     <xsl:text>true</xsl:text>
                 </xsl:when>
                 <xsl:when test="../chapter or ../appendix">
-		    <xsl:choose>
-			<xsl:when test="$b-is-structured">
-			    <xsl:if test="chapter/title|objectives|introduction//m or
-					  chapter/title|objectives|introduction//me or
-					  chapter/title|objectives|introduction//men or
-					  chapter/title|objectives|introduction//md or
-					  chapter/title|objectives|introduction//mdn">
-				<xsl:text>true</xsl:text>
-			    </xsl:if>
-			</xsl:when>
-			<xsl:otherwise>
-			    <xsl:if test=".//m or .//me or .//men or
-					  .//md or .//mdn">
-				<xsl:text>true</xsl:text>
-			    </xsl:if>
-			</xsl:otherwise>
-		    </xsl:choose>
-		</xsl:when>
-		<xsl:otherwise>
-		    <xsl:text>false</xsl:text>
-		</xsl:otherwise>
-	    </xsl:choose>
-	</xsl:variable>
-	<xsl:variable name="b-has-math" select="$has-math = 'true'" />
-	<xsl:if test="$b-has-math">
+                    <xsl:choose>
+                        <xsl:when test="$b-is-structured">
+                            <xsl:if test="chapter/title|objectives|introduction//m or
+                                          chapter/title|objectives|introduction//me or
+                                          chapter/title|objectives|introduction//men or
+                                          chapter/title|objectives|introduction//md or
+                                          chapter/title|objectives|introduction//mdn">
+                                <xsl:text>true</xsl:text>
+                            </xsl:if>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:if test=".//m or .//me or .//men or .//md or .//mdn">
+                                <xsl:text>true</xsl:text>
+                            </xsl:if>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>false</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="b-has-math" select="$has-math = 'true'" />
+        <xsl:if test="$b-has-math">
             <xsl:attribute name="properties">
-	        <xsl:choose>
-		    <xsl:when test="$math.format = 'mml' or
-                                    $math.format = 'kindle'">
-		        <xsl:text>mathml</xsl:text>
-		    </xsl:when>
-		    <xsl:when test="$math.format = 'svg'">
-		        <xsl:text>svg</xsl:text>
-		    </xsl:when>
-		</xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="$math.format = 'mml' or $math.format = 'kindle'">
+                        <xsl:text>mathml</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="$math.format = 'svg'">
+                        <xsl:text>svg</xsl:text>
+                    </xsl:when>
+                </xsl:choose>
             </xsl:attribute>
         </xsl:if>
         <!-- TODO: coordinate with manifest/script on xhtml extension -->
@@ -700,12 +696,12 @@ width: 100%
 <!-- Include the appropriate CSS file depending on output -->
 <xsl:template name="epub-kindle-css">
     <xsl:choose>
-	<xsl:when test="$b-kindle">
-	    <link href="../{$css-dir}/kindle.css" rel="stylesheet" type="text/css"/>
-	</xsl:when>
-	<xsl:otherwise>
-	    <link href="../{$css-dir}/epub.css" rel="stylesheet" type="text/css"/>
-	</xsl:otherwise>
+        <xsl:when test="$b-kindle">
+            <link href="../{$css-dir}/kindle.css" rel="stylesheet" type="text/css"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <link href="../{$css-dir}/epub.css" rel="stylesheet" type="text/css"/>
+        </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
@@ -742,8 +738,8 @@ width: 100%
                 <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
                 <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
                 <xsl:call-template name="mathjax-css"/>
-		<xsl:call-template name="epub-kindle-css"/>
-		<title>Table of Conents</title>
+                <xsl:call-template name="epub-kindle-css"/>
+                <title>Table of Contents</title>
             </head>
             <body class="pretext-content epub" epub:type="frontmatter">
                 <nav epub:type="toc" id="toc">
@@ -1101,8 +1097,8 @@ width: 100%
                     <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
                     <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
                     <xsl:call-template name="mathjax-css"/>
-		    <xsl:call-template name="epub-kindle-css"/>
-		    <title>Endnotes</title>
+                    <xsl:call-template name="epub-kindle-css"/>
+                    <title>Endnotes</title>
                 </head>
                 <!-- use class to repurpose HTML CSS work -->
                 <body class="pretext-content epub">
