@@ -19,7 +19,7 @@
 # along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 # *********************************************************************
 
-import requests
+import requests, fileinput
 
 # Simple Python 3 script to retrieve the PreTeXt book CSS from Github
 # This CSS is used for EPUB and Kindle output. It is not required to
@@ -56,6 +56,11 @@ def main():
         r = requests.get(url, allow_redirects=True)
         # requests gets the file as bytes and not text, so need 'wb' here
         open(filename, 'wb').write(r.content)
+
+    # Validator does not allow @import in CSS, so let's just remove it
+    for line in fileinput.input('pretext_add_on.css', inplace=1):
+        print(line.replace('@import url("https://fonts.googleapis.com/css?family=PT+Serif:400,700,400italic,700italic|Open+Sans:400italic,700italic,400,700");', ''), end='')
+
     print("CSS files have been updated in your local copy of the repository")
 
 # Do it - lone top-level command

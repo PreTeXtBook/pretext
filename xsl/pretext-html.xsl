@@ -2276,6 +2276,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- SOLUTION-LIKE (xref-text), biblio/note (xref-text) -->
 <xsl:template match="*" mode="heading-simple">
     <!-- the name of the object, its "type" -->
+    <!-- The <xsl:text> </xsl:text> to produce a space is -->
+    <!-- essential for EPUB. Calling space-styled creates -->
+    <!-- a line break in EPUB/Kindle.                     -->
     <span class="type">
         <xsl:apply-templates select="." mode="type-name" />
         <xsl:text>.</xsl:text>
