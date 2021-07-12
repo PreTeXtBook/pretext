@@ -268,6 +268,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>We like to put <init>URL</init>s into footnotes, especially for formats like this where they may not be active.  This output is from <url href="https://pretextbook.org"><pretext/></url><fn><c>pretextbook.org</c></fn>.</p>
 
+	    <p>We make a reference to some math in another chapter
+	    <xref ref="equation-conclude" /> in order to test that
+	    validation works for this.</p>
+
             <exercise>
                 <statement>
                     <p>A sample exercise, where a <tag>hint</tag> and a <tag>solution</tag> should be visible (rather than in a knowl).</p>
