@@ -1164,6 +1164,9 @@ width: 100%
                 </xsl:when>
             </xsl:choose>
         </xsl:attribute>
+        <xsl:attribute name="id">
+            <xsl:text>mjx-eqn:</xsl:text><xsl:value-of select="$id" />
+        </xsl:attribute>
         <!-- Finally, drop a "svg" element, "math" element, or ASCII speech -->
         <xsl:choose>
             <xsl:when test="$math.format = 'svg'">
