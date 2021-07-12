@@ -1332,8 +1332,8 @@
 
       <console width="80%" margins="10% 10%">
         <!-- <idx><h><c>pretext</c> script</h><h>for latex-image</h></idx> -->
-        <input>[path to mathbook]/pretext/pretext -c latex-image -f
-	svg -d [path to output directory for HTML]/images [path to PTX source file]</input>
+        <input>/path/to/pretext/pretext -c latex-image -f
+	svg -d /path/to/html/output/directory/images /path/to/yoursource.ptx</input>
       </console>
     </section>
   </chapter>
@@ -1495,11 +1495,11 @@
       <!-- <idx><h><c>pretext</c> script</h><h>for sageplot to svg</h></idx> -->
       <!-- <idx><h><c>pretext</c> script</h><h>for sageplot to pdf</h></idx> -->
       <console width="80%" margins="10% 10%">
-        <input>[path to mathbook]/script/pretext -c sageplot -f svg -d ./images [path to PTX source file]</input>
+        <input>/path/to/mathbook]/script/pretext -c sageplot -f svg -d ./images /path/to/yoursource.ptx</input>
       </console>
 
       <console width="80%" margins="10% 10%">
-        <input>[path to mathbook]/script/pretext -c sageplot -f pdf -d ./images [path to PTX source file]</input>
+        <input>/path/to/mathbook]/script/pretext -c sageplot -f pdf -d ./images /path/to/yoursource.ptx</input>
       </console>
 
       <p>
@@ -1563,7 +1563,12 @@
         <idx sortby="href"><attr>href</attr></idx>
         If you want to provide a link to a resource outside of your project,
         you will want the <tag>url</tag> tag.
-        The code <tage>url href="https://pretextbook.org"</tage> produces <url href="https://pretextbook.org"/>.
+        The code
+	<cd>&lt;url href="https://pretextbook.org" visual="pretextbook.org"&gt;PreTeXt&lt;/url&gt;</cd>
+	produces <url
+	href="https://pretextbook.org"
+	visual="pretextbook.org">PreTeXt</url>. Note that the footnote
+	is automatically created by the use of <attr>visual</attr>.
       </p>
 
       <p>
@@ -1586,8 +1591,7 @@
         </fn> For instance,
         you can't put a <tag>p</tag> (and thus you can't put lists) inside a footnote.
         Also, no displayed math via <tag>me</tag>.
-        This might change,
-        but there's a lot of care being taken because of the prospect of footnotes inside footnotes inside footnotes.
+        There's a lot of care being taken because of the prospect of footnotes inside footnotes inside footnotes.
             <idx><h>footnote</h><h>restrictions</h></idx>
       </p>
 
@@ -1649,7 +1653,8 @@
         It is also possible to use <q>see</q>
         and <q>see also</q> entries for indices.
         For instance, in <xref ref="basics-ch-basic-formatting"/>,
-        we use <c>            &lt;idx&gt;&lt;h&gt;font&lt;/h&gt;&lt;see&gt;formatting&lt;/see&gt;&lt;/idx&gt;</c> to create an index entry for <q>font</q>
+        we use
+	<cd>&lt;idx&gt;&lt;h&gt;font&lt;/h&gt;&lt;see&gt;formatting&lt;/see&gt;&lt;/idx&gt;</cd> to create an index entry for <q>font</q>
         that instructs the reader to <q><em>see </em> formatting</q>.
         A <q><em>see also</em></q> can be created using the <tag>seealso</tag> tag instead of <tag>see</tag>.
       </p>
@@ -1663,8 +1668,8 @@
       </p>
       
       <p>
-        If you generate <latex/> output,
-        the index is generated without any additional passes beyond the usual two required to get references correct.
+        If you generate <init>PDF</init> output from <latex/>,
+        the index is automatically generated.
       </p>
     </section>
 
