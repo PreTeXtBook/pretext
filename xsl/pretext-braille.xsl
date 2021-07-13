@@ -46,7 +46,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Trade on HTML markup, numbering, chunking, etc.        -->
 <!-- Override as pecularities of liblouis conversion arise  -->
 <!-- NB: this will import -assembly and -common stylesheets -->
-<xsl:import href="./mathbook-html.xsl" />
+<xsl:import href="./pretext-html.xsl" />
 
 <!-- Output (xsl:output) is controlled by an explicit exsl:document() call -->
 <!-- later, for better control over the header of the resulting file       -->
