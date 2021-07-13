@@ -22,8 +22,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See  xsl/localizations/README.md  for an explanation of this file -->
 
 <!-- ca-ES, Catalan (Spain) -->
-<!-- Jordi Saludes, jordi.saludes@upc.edu, 2020-05-28 -->
-<!-- Julian Pfeifle, julian.pfeifle@upc.edu, 2020-05-28 -->
+<!-- Jordi Saludes, jordi.saludes@upc.edu, 2021-07-13 -->
 
 <locale language="ca-ES">
     <!-- THEOREM-LIKE blocks -->
@@ -105,7 +104,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='biographical'>Biographical Aside</localization> -->
     <!-- <localization string-id='historical'>Historical Aside</localization> -->
     <!-- EXAMPLE-LIKE blocks -->
-    <localization string-id='example'>Exemplo</localization>
+    <localization string-id='example'>Exemple</localization>
     <localization string-id='question'>Pregunta</localization>
     <localization string-id='problem'>Problema</localization>
     <!-- PROJECT-LIKE blocks -->
