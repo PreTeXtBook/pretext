@@ -1,11 +1,11 @@
 <table>
   <title>A simple table</title>
   <tabular halign="center">
-    <row bottom="minor" >
-      <cell><m>x</m></cell>
-      <cell><m>y</m></cell>
-      <cell><m>x\wedge y</m></cell>
-      <cell><m>x\vee y</m></cell>
+    <row header="yes" bottom="minor" >
+      <cell>Variable <m>x</m></cell>
+      <cell>Variable <m>y</m></cell>
+      <cell>Conjunction <m>x\wedge y</m></cell>
+      <cell>Disjunction <m>x\vee y</m></cell>
     </row>
     <row>
       <cell>T</cell>

@@ -1,0 +1,51 @@
+<reading-questions xml:id="basics-reading-questions">
+  <title>Check your understanding!</title>
+  <introduction>
+    <p>
+      Here is a spot to explain the purpose of these questions. It's
+      optional, like most introductions.
+    </p>
+  </introduction>
+
+  <exercise>
+    <statement>
+      <p>
+	Here is a question.
+      </p>
+    </statement>
+    <hint>
+      <p>
+        A little hint.
+      </p>
+    </hint>
+    <answer>
+      <p>
+        Just the answer.
+      </p>
+    </answer>
+    <solution>
+      <p>
+        All the glorious details about an answer.
+      </p>
+    </solution>
+  </exercise>
+
+  <exercise>
+    <statement>
+      <p>
+	A second comprehension question. We don't bother with answers
+	or solutions.
+      </p>
+    </statement>
+  </exercise>
+
+  <conclusion>
+    <p>
+      A little wrap up, perhaps giving guidance or encouragement if
+      the student struggled with the questions. Optional like most
+      conclusions. 
+    </p>
+  </conclusion>
+
+</reading-questions>
+

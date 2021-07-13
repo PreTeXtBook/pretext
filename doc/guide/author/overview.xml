@@ -159,7 +159,7 @@
             </li>
             <li>
                 <title>Project</title>
-                <p>A <tag>project</tag> is a bit different than the prior situations, since this element is structured with <tag>task</tag>.  But it has many common features, such as allowing optional <tag>title</tag>, <tag>hint</tag>, <tag>answer</tag>, <tag>solution</tag>.</p>
+                <p>A <tag>project</tag> is similar to an inline exercise, other than the type name and the fact that it can run on a separate counter from theorems, figures, etc. (When running on a separate counter, the same counter is used for <tag>activity</tag>, <tag>exploration</tag>, and <tag>investigation</tag>.)</p>
             </li>
         </dl></p>
 
