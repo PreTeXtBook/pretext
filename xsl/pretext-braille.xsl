@@ -681,6 +681,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- In the imported HTML conversion, an unstructured "li" gets    -->
+<!-- a "p" wrapper, to aid in styling certain output formats.      -->
+<!-- But we override the template for every possible "li" here.    -->
+<!-- This is good, since we have to work hard to ignore an initial -->
+<!-- "p" (and friends) in order to write a list label and have the -->
+<!-- contents of the list item continue on the same line.          -->
+
 <!-- TODO: subtract 1 from "item-number"   -->
 <!-- when "format-code" template gives '0' -->
 <xsl:template match="ol/li" mode="body">
@@ -742,6 +749,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </b>
         <xsl:apply-templates/>
     </li>
+</xsl:template>
+
+
+<!-- The conversion to braille sometimes needs an exceptional        -->
+<!-- element for the first block of a list item, so we can get       -->
+<!-- list labels onto the same line as the following content.        -->
+<!-- Here in the braille conversion, we usually mimic the HTML       -->
+<!-- conversion. The three simple "text" blocks of a list item just  -->
+<!-- coincidentally have PreTeXt names that match HTML names - this  -->
+<!-- could need to be adjusted later.  In the exceptional case of an -->
+<!-- initial list item we provide a throwaway element name, which    -->
+<!-- quite literally is cast aside via a rule in  pretext.sem.       -->
+<!-- This causes  liblouis  to output the list label (e.g. "a.") and -->
+<!-- the first content onto the same line. We documentthis near      -->
+<!-- lists, even if use is distributed around.                       -->
+<!-- NB: the "otherwise" could be an "apply-imports"?                -->
+<xsl:template match="p|blockquote|pre" mode="initial-list-item-element">
+    <xsl:choose>
+        <xsl:when test="parent::li and not(preceding-sibling::*)">
+            <xsl:text>first-li-block</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="local-name(.)"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 
