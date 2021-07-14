@@ -3138,10 +3138,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>false</xsl:text>
 </xsl:template>
 
-<!-- Overall enclosing element -->
-<!-- Natural HTML element      -->
+<!-- Overall enclosing element     -->
+<!-- Natural HTML element, usually -->
 <xsl:template match="blockquote" mode="body-element">
-    <xsl:text>blockquote</xsl:text>
+    <!-- Allow for creating exceptional first list item in braille -->
+    <!-- conversion. Here, result is almost always "blockquote".   -->
+    <xsl:apply-templates select="." mode="initial-list-item-element"/>
 </xsl:template>
 
 <!-- And its CSS class -->
@@ -4854,7 +4856,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$block-type = 'xref'">
         <xsl:apply-templates select="." mode="heading-xref-knowl" />
     </xsl:if>
-    <p>
+    <!-- Allow for creating exceptional first list item in braille -->
+    <!-- conversion. Here, $body-element is almost always "p".     -->
+    <xsl:variable name="body-element">
+        <xsl:apply-templates select="." mode="initial-list-item-element"/>
+    </xsl:variable>
+    <xsl:element name="{$body-element}">
         <!-- label original -->
         <xsl:if test="$b-original">
             <xsl:attribute name="id">
@@ -4864,7 +4871,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates>
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
-    </p>
+    </xsl:element>
     <!-- Single HTML paragraphs is done, place footnote content(s) here -->
     <xsl:apply-templates select="." mode="pop-footnote-text">
         <xsl:with-param name="b-original" select="$b-original"/>
@@ -4904,14 +4911,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- XSLT 1.0: RTF is just a string if not converted to node set -->
     <!-- This comparison might improve with a normalize-space()      -->
     <xsl:if test="not($initial-content='')">
-        <p>
+        <!-- Allow for creating exceptional first list item in braille -->
+        <!-- conversion. Here, $body-element is almost always "p".     -->
+        <xsl:variable name="body-element">
+            <xsl:apply-templates select="." mode="initial-list-item-element"/>
+        </xsl:variable>
+        <xsl:element name="{$body-element}">
             <xsl:if test="$b-original">
                 <xsl:attribute name="id">
                     <xsl:apply-templates select="." mode="html-id" />
                 </xsl:attribute>
             </xsl:if>
             <xsl:copy-of select="$initial-content" />
-        </p>
+        </xsl:element>
     </xsl:if>
     <!-- for each display, output the display, plus trailing content -->
     <xsl:for-each select="$displays">
@@ -5146,6 +5158,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- The conversion to braille sometimes needs an exceptional       -->
+<!-- element for the first block of a list item, so we can get      -->
+<!-- list labels onto the same line as the following content.       -->
+<!-- Here in the HTML conversion, the template is a fancy way       -->
+<!-- of not accomplishing much.  The three simple "text" blocks of  -->
+<!-- a list item jut coincidentally have PreTeXt names that match   -->
+<!-- HTML names - this could need to be adjusted later. We document -->
+<!-- this near lists, even if use is distributed around.            -->
+<xsl:template match="p|blockquote|pre" mode="initial-list-item-element">
+    <xsl:value-of select="local-name(.)"/>
+</xsl:template>
 
 <!-- ########### -->
 <!-- Mathematics -->
@@ -7990,7 +8013,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (See templates in xsl/pretext-common.xsl file)     -->
 <!-- Then wrap in a pre element that MathJax ignores     -->
 <xsl:template match="pre">
-    <xsl:element name="pre">
+    <!-- Allow for creating exceptional first list item in braille -->
+    <!-- conversion. Here, $body-element is almost always "pre".   -->
+    <xsl:variable name="body-element">
+        <xsl:apply-templates select="." mode="initial-list-item-element"/>
+    </xsl:variable>
+    <xsl:element name="{$body-element}">
         <xsl:attribute name="class">
             <xsl:text>code-block tex2jax_ignore</xsl:text>
         </xsl:attribute>
