@@ -301,7 +301,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </li>
             </dl></p>
 
-            <p>TODO: list items structured with paragraphs, nested lists.</p>
+            <p>A <pretext/> ordered list where most of the list items are authored with structure, meaning paragraphs and similar blocks that are peers.<ol>
+                <li>
+                    <p>First item, first paragraph.  And a nonsense sentence so we wrap to a second braille line.</p>
+                    <p>First item, second paragraph.  And a nonsense sentence so we wrap to a second braille line.</p>
+                </li>
+                <li>
+                    <p>Second item, first paragraph.  All by itself, no more structure. With some display math that the HTML conversion will isolate and provide a "continuation paragraph".
+                        <me>a^2+b^2=c^2</me>
+                    And a nonsense sentence so there is something after the math.</p>
+                </li>
+                <li>Third item, but now totally unstructured, just to provide a mix within the list.</li>
+            </ol></p>
+
+
+            <p>TODO: list items structured with more than paragraphs, nested lists.</p>
 
         </chapter>
 
