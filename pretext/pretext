@@ -102,7 +102,7 @@ def string_parameters_as_dict(pairs):
 # Configuration File
 ####################
 
-def get_executables():
+def get_executables(arg_supplied_config_file):
     """Query the configuration file, return dictionary of executables/commands"""
 
     import configparser # ConfigParser()
@@ -119,6 +119,8 @@ def get_executables():
     # Try to read old version, but prefer new version
     stale_user_config_file = os.path.join(ptx_dir, 'user', 'mbx.cfg')
     config_file_list = [default_config_file, stale_user_config_file, user_config_file]
+    if (arg_supplied_config_file):
+        config_file_list.append(arg_supplied_config_file)
 
     # report on which configuration files are being examined
     ptx._verbose("parsing possible configuration files: {}".format(config_file_list))
@@ -127,9 +129,15 @@ def get_executables():
     files_read = config.read(config_file_list)
     # report on which configuration files were used
     ptx._debug("configuration files actually used/read: {}".format(files_read))
+    if not(user_config_file in files_read) and not(arg_supplied_config_file in files_read):
+        ptx._verbose("using default configuration only")
     if not(user_config_file in files_read):
-        msg = "using default configuration only, custom configuration file not used at {}"
+        msg = "custom configuration file not used at {}"
         ptx._verbose(msg.format(user_config_file))
+    if arg_supplied_config_file and not(arg_supplied_config_file in files_read):
+        msg = "command-line specified config file not used at {}"
+        ptx._verbose(msg.format(arg_supplied_config_file))
+
     executable_dict = dict(config['executables'])
     # report the dictionary of keys
     ptx._debug("dictionary of executables/commands: {}".format(executable_dict))
@@ -150,6 +158,14 @@ def get_cli_arguments():
                               "  -v  is actions being performed",
                               "  -vv is some additional raw debugging information"])
     parser.add_argument('-v', '--verbose', help=verbose_help, action="count")
+
+    config_help = '\n'.join(["filename for pretext script config file",
+                             "  Settings in the specified file will override both defaults in",
+                             "  {}/pretext/pretext.cfg".format(ptx.get_ptx_path()),
+                             "  and user overrides in",
+                             "  {}/user/pretext.cfg".format(ptx.get_ptx_path()),
+                             "  (if it exists)"])
+    parser.add_argument('-C', '--config', help=config_help, action="store", dest='config_file')
 
     component_info = [
         ('asy', 'Asymptote diagrams'),
@@ -248,7 +264,7 @@ def main():
     ptx._debug("discovered distribution and xsl directories: {}, {}".format(ptx.get_ptx_path(), ptx.get_ptx_xsl_path()))
 
     # The "get" will report 'executables' in configuration file
-    ptx.set_executables(get_executables())
+    ptx.set_executables(get_executables(args.config_file))
 
     # directory/file locations provided on command-line by user
     # Expanded here to be complete paths, or set to defaults
