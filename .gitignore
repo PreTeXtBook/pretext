@@ -3,4 +3,6 @@ examples/webwork/Makefile.paths
 examples/webwork/minimal/webwork-representations.ptx
 examples/webwork/sample-chapter/webwork-representations.ptx
 doc/guide/webwork-representations.ptx
+script/mjsre/node_modules/
+script/mjsre/package-lock.json
 pretext/__pycache__/**

@@ -1,0 +1,75 @@
+<worksheet xml:id="basics-sample-worksheet">
+  <title>A Skeletal Worksheet</title>
+  <objectives>
+    <ul>
+      <li>Something really cool</li>
+      <li>A less important thing you'll learn</li>
+    </ul>
+  </objectives>
+  <introduction>
+    <p>It can be helpful to say what the point of the worksheet is.</p>
+  </introduction>
+
+  <page>
+    <exercise workspace="4in">
+      <statement>
+        <p>Here's a first exercise in this worksheet.
+	Notice how we set the workspace in inches.</p>
+      </statement>
+    </exercise>
+
+    <exercise workspace="1cm">
+      <introduction>
+	<p>A second exercise, this time structured with tasks. The
+	workspace specification is assigned to each task. </p>
+      </introduction>
+      <task>
+	<statement>
+	  <p>Here's the first task.</p>
+	</statement>
+	<hint>
+	  <p>Why not give a hint here, we're nice authors, right?</p>
+	</hint>
+      </task>
+      <task>
+	<statement>
+	  <p>The second task. No hint this time!</p>
+	</statement>
+      </task>
+    </exercise>
+  </page>
+
+  <page>
+    <p>OK, we're now onto a second page, one of the few times you can
+    force this.</p>
+    <figure>
+      <caption>Just a little figure</caption>
+      <image src="image-4.svg" width="50%" />
+    </figure>
+    <sidebyside margins="0%" widths="30% 60%" valign="top">
+      <exercise workspace="4.5in">
+        <statement>
+	  Only inside a worksheet can you put an exercise in a
+	  sidebyside! 
+        </statement>
+	<answer>
+	  <p>Sure, you can have an answer here.</p>
+	</answer>
+      </exercise>
+      <exercise workspace="2in">
+        <statement>
+          <p>Here's the second column. We also could have just put a
+	  figure here if we needed for layout.</p>
+        </statement>
+      </exercise>
+    </sidebyside>
+    <exercise workspace="2.54cm">
+      <p>One more exercise to do.</p>
+    </exercise>
+  </page>
+
+  <conclusion>
+    <title>Final thoughts</title>
+    <p>Put something here because you might run out of time.</p>
+  </conclusion>
+</worksheet>

@@ -39,6 +39,7 @@ To test, or use: place  `xml:lang="es-ES"`, or similar, as an attribute on your 
 Current (partially) implemented language codes and contributors
 * af-ZA, Afrikaans (South Africa), Dirk Basson
 * bg-BG, Bulgarian (Bulgaria), Boyko Bantchev
+* ca-ES, Catalan (Spain), Jordi Saludes
 * cs-CZ, Czech (Czechia), Jiří Lebl
 * de-DE, German (Germany), Karl-Dieter Crisman
 * es-ES, Spanish (Spain), Juan José Torrens

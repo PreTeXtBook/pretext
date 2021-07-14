@@ -5521,6 +5521,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="&PROJECT-FILTER;">
             <xsl:value-of select="local-name(.)" />
         </xsl:when>
+        <!-- must now be an "exercise" -->
         <xsl:when test="&INLINE-EXERCISE-FILTER;">
             <xsl:text>inlineexercise</xsl:text>
         </xsl:when>
@@ -5552,7 +5553,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Four types of exercises, we use local variables when we -->
     <!-- need to condition.  Exactly one of these is true, which -->
     <!-- is important in the more complicated booleans below.    -->
-    <xsl:variable name="inline" select="boolean(&INLINE-EXERCISE-FILTER;)"/>
+    <xsl:variable name="inline" select="self::exercise and boolean(&INLINE-EXERCISE-FILTER;)"/>
     <xsl:variable name="project" select="boolean(&PROJECT-FILTER;)"/>
     <xsl:variable name="divisional" select="boolean(ancestor::exercises)"/>
     <xsl:variable name="worksheet" select="boolean(ancestor::worksheet)"/>
@@ -5678,6 +5679,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="local-name(.)" />
             <xsl:text>solution</xsl:text>
         </xsl:when>
+        <!-- must now be an "exercise" -->
         <xsl:when test="&INLINE-EXERCISE-FILTER;">
             <xsl:text>inlinesolution</xsl:text>
         </xsl:when>
@@ -6463,7 +6465,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="block-options"/>
     <xsl:text>%&#xa;</xsl:text>
-    <xsl:apply-templates select="p|blockquote|pre|sidebyside|sbsgroup" />
+    <!-- Coordinate with schema, since we enforce it here -->
+    <xsl:apply-templates select="p|blockquote|pre|image|video|program|console|tabular|sidebyside|sbsgroup" />
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>

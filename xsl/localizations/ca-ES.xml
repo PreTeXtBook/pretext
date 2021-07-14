@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2014-2021 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- See  xsl/localizations/README.md  for an explanation of this file -->
+
+<!-- ca-ES, Catalan (Spain) -->
+<!-- Jordi Saludes, jordi.saludes@upc.edu, 2021-07-13 -->
+
+<locale language="ca-ES">
+    <!-- THEOREM-LIKE blocks -->
+    <!-- Environments which have proofs, plus proofs themselves -->
+    <localization string-id="theorem">Teorema</localization>
+    <localization string-id="corollary">Corol·lari</localization>
+    <localization string-id="lemma">Lema</localization>
+    <localization string-id='algorithm'>Algorisme</localization>
+    <localization string-id='proposition'>Proposició</localization>
+    <localization string-id='claim'>Postulat</localization>
+    <localization string-id='fact'>Fet</localization>
+    <localization string-id='identity'>Identitat</localization>
+    <localization string-id='proof'>Demostració</localization>
+    <localization string-id='case'>Cas</localization>
+    <!-- Mathematical statements without proofs -->
+    <!-- AXIOM-LIKE blocks -->
+    <localization string-id='axiom'>Axioma</localization>
+    <localization string-id='conjecture'>Conjectura</localization>
+    <localization string-id='principle'>Principi</localization>
+    <localization string-id='heuristic'>Heurística</localization>
+    <localization string-id='hypothesis'>Hipótesi</localization>
+    <localization string-id='assumption'>Hipótesi</localization>
+    <!-- Definitions -->
+    <localization string-id='definition'>Definició</localization>
+    <!-- Single Line Mathematics -->
+    <localization string-id='me'>Equació</localization>
+    <localization string-id='men'>Equació</localization>
+    <localization string-id='mrow'>Equació</localization>
+    <!-- Display Mathematics -->
+    <localization string-id='md'>Ecuació destacada</localization>
+    <localization string-id='mdn'>Equació destacada</localization>
+    <!-- Types of documents, mostly for informational messages -->
+    <localization string-id='volume'>Volum</localization>
+    <localization string-id='book'>Llibre</localization>
+    <localization string-id='article'>Article</localization>
+    <!-- <localization string-id='slideshow'>Slideshow</localization> -->
+    <localization string-id='letter'>Carta</localization>
+    <localization string-id='memo'>Memorándum</localization>
+    <localization string-id='presentation'>Presentació</localization>
+    <!-- Parts of a document -->
+    <localization string-id='frontmatter'>Págines preliminars</localization>
+    <localization string-id='part'>Part</localization>
+    <localization string-id='chapter'>Capítol</localization>
+    <localization string-id='appendix'>Apéndix</localization>
+    <!-- Next is the plural of Appendix, used to identify a group of appendix -->
+    <!-- <localization string-id='appendices'>Appendices</localization> -->
+    <localization string-id='section'>Secció</localization>
+    <localization string-id='subsection'>Subsecció</localization>
+    <localization string-id='subsubsection'>Subsubsecció</localization>
+    <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
+    <!-- <localization string-id='slide'>Slide</localization> -->
+    <localization string-id='introduction'>Introducció</localization>
+    <localization string-id='conclusion'>Conclusió</localization>
+    <localization string-id='exercises'>Exercicis</localization>
+    <localization string-id='worksheet'>Full de treball</localization>
+    <localization string-id='reading-questions'>Preguntes de comprensió lectora</localization>
+    <localization string-id='solutions'>Solucions</localization>
+    <localization string-id='glossary'>Glossari</localization>
+    <localization string-id='references'>Referències</localization>
+    <!-- Translation needed for Spain Spanish and Catalan -->
+    <!-- <localization string-id='backmatter'>Back Matter</localization> -->
+    <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
+    <localization string-id='paragraphs'>Paràgraf</localization>
+    <localization string-id='commentary'>Comentari</localization>
+    <localization string-id='subparagraph'>Subparàgraf</localization>
+    <!-- Components of the narrative -->
+    <!-- REMARK-LIKE blocks -->
+    <!-- "note" is used within "biblio", likely to change -->
+    <localization string-id='remark'>Nota</localization>
+    <localization string-id='convention'>Convenció</localization>
+    <localization string-id='note'>Nota</localization>
+    <localization string-id='observation'>Observació</localization>
+    <localization string-id='warning'>Advertiment</localization>
+    <!-- <localization string-id='insight'>Insight</localization> -->
+    <localization string-id='computation'>Computació</localization>
+    <localization string-id='technology'>Tecnologia</localization>
+    <!-- ASIDE-LIKE blocks -->
+    <!-- <localization string-id='aside'>Aside</localization> -->
+    <!-- <localization string-id='biographical'>Biographical Aside</localization> -->
+    <!-- <localization string-id='historical'>Historical Aside</localization> -->
+    <!-- EXAMPLE-LIKE blocks -->
+    <localization string-id='example'>Exemple</localization>
+    <localization string-id='question'>Pregunta</localization>
+    <localization string-id='problem'>Problema</localization>
+    <!-- PROJECT-LIKE blocks -->
+    <!-- <localization string-id='project'>Project</localization> -->
+    <!-- <localization string-id='activity'>Activity</localization> -->
+    <!-- <localization string-id='exploration'>Exploration</localization> -->
+    <!-- <localization string-id='task'>Task</localization> -->
+    <!-- <localization string-id='investigation'>Investigation</localization> -->
+    <!--  -->
+    <!-- assemblages are collections of minimally structured material -->
+    <!-- <localization string-id='assemblage'>Assemblage</localization> -->
+    <!-- <localization string-id='poem'>Poem</localization> -->
+    <!-- Objectives is the block, objective is a list item within -->
+    <!-- <localization string-id='objectives'>Objectives</localization> -->
+    <!-- <localization string-id='objective'>Objective</localization> -->
+    <!-- Outcomes is the block, outcome is a list item within (different) -->
+    <!-- <localization string-id='outcomes'>Outcomes</localization> -->
+    <!-- <localization string-id='outcome'>Outcome</localization> -->
+    <!--  -->
+    <localization string-id='figure'>Figura</localization>
+    <localization string-id='table'>Quadre</localization>
+    <localization string-id='listing'>Llistat</localization>
+    <!-- Translation needed for Spain Spanish -->
+    <!-- <localization string-id='contributor'>Contributor</localization> -->
+    <localization string-id='fn'>Nota al peu</localization>
+    <!-- Lists and their items -->
+    <!-- Translations needed for Spain Spanish -->
+    <!-- <localization string-id='list'>List</localization> -->
+    <!-- <localization string-id='li'>Item</localization> -->
+    <!-- A term (word) defined in a glossary -->
+    <!-- <localization string-id='defined-term'>Term</localization> -->
+    <!-- A regular paragraph, not the old sectioning structure -->
+    <localization string-id='p'>Paràgraf</localization>
+    <!-- <localization string-id='blockquote'>Quotation</localization> -->
+    <!-- Literate programming, a chunk of computer code -->
+    <!-- <localization string-id='fragment'>Fragment</localization> -->
+    <!-- Parts of an exercise and its solution -->
+    <localization string-id='divisionalexercise'>Exercici</localization>
+    <!-- Translation needed for Spain Spanish -->
+    <!-- See en-US file for distinctions here, do not repeat previous translation -->
+    <!-- <localization string-id='inlineexercise'>Checkpoint</localization> -->
+    <!-- <localization string-id='worksheetexercise'>Worksheet Exercise</localization> -->
+    <!-- <localization string-id='readingquestion'>Reading Question</localization> -->
+    <localization string-id='webwork'>WeBWorK</localization>
+    <localization string-id='hint'>Pista</localization>
+    <localization string-id='answer'>Resposta</localization>
+    <localization string-id='solution'>Solució</localization>
+    <!-- Translation needed for Spain Spanish -->
+    <!-- A group of divisional exercises (with introduction and conclusion) -->
+    <!-- <localization string-id='exercisegroup'>Exercise Group</localization> -->
+    <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
+    <!-- <localization string-id='biblio'>Bibliographic Entry</localization> -->
+    <!-- Front matter components -->
+    <localization string-id='toc'>Índex</localization>
+    <localization string-id='abstract'>Resum</localization>
+    <localization string-id='preface'>Prefaci</localization>
+    <localization string-id='acknowledgement'>Agraïments</localization>
+    <localization string-id='biography'>Biografia de l'autor</localization>
+    <!-- singular and plural titles for biography subdivision -->
+    <!-- <localization string-id='about-author'>About the Author</localization> -->
+    <!-- <localization string-id='about-authors'>About the Authors</localization> -->
+    <localization string-id='foreword'>Pròleg</localization>
+    <localization string-id='dedication'>Dedicatòria</localization>
+    <localization string-id='colophon'>Colofó</localization>
+    <!-- Back matter components -->
+    <!-- index-part is deprecated, but not abandoned          -->
+    <!-- NB: repurpose translations, maybe move appendix here -->
+    <localization string-id='index-part'>Índex alfabètico</localization>
+    <!-- <localization string-id='jump-to'>Jump to:</localization> -->
+    <!-- Parts of the Index -->
+    <localization string-id='index'>Índex alfabètico</localization>
+    <localization string-id='see'>Vegeu</localization>
+    <localization string-id='also'>Vegeu també</localization>
+    <!-- Notation List headings/foot -->
+    <localization string-id='symbol'>Símbol</localization>
+    <localization string-id='description'>Descripció</localization>
+    <localization string-id='location'>Ubicació</localization>
+    <localization string-id='page'>Página</localization>
+    <localization string-id='continued'>Continua a la página següent</localization>
+    <!-- Navigation Interface elements -->
+    <!-- Assistive "skip to content" link -->
+    <localization string-id='skip-to-content'>Salta al contingut principal</localization>
+    <localization string-id='previous'>Anterior</localization>
+    <localization string-id='up'>Amunt</localization>
+    <localization string-id='next'>Següent</localization>
+    <!-- Keep these short, so buttons are not overly wide, 4 characters maximum -->
+    <!-- TODO: SHORTEN THESE -->
+    <localization string-id='previous-short'>Anterior</localization>
+    <localization string-id='up-short'>Amunt</localization>
+    <localization string-id='next-short'>Següent</localization>
+    <!-- NB: Use toc from above for both headings and navigation sidebar-->
+    <localization string-id='annotations'>Anotacions</localization>
+    <localization string-id='feedback'>Comentari</localization>
+    <localization string-id='authored'>Fet amb PreTeXt</localization>
+    <!-- Parts of memos and letters -->
+    <localization string-id='to'>A</localization>
+    <localization string-id='from'>De</localization>
+    <localization string-id='subject'>Assumpte</localization>
+    <localization string-id='date'>Data</localization>
+    <localization string-id='copy'>Còpia a</localization>
+    <localization string-id='enclosure'>Adjunt</localization>
+    <!-- Various -->
+    <localization string-id='todo'>A fer</localization>
+    <localization string-id='editor'>Editor</localization>
+    <localization string-id='edition'>Edició</localization> 
+    <!-- <localization string-id='website'>Website</localization> -->
+    <localization string-id='copyright'>Drets d'autor</localization>
+    <!-- HTML clickables (lowercase strings to click on) -->
+    <localization string-id='permalink'>enllaç permanent</localization>
+    <localization string-id='incontext'>en context</localization>
+    <!-- Sage Cell evaluate button      -->
+    <!-- eg, "Evaluate (Maxima)"        -->
+    <!-- 2017-05-14: 'code' is obsolete -->
+    <!-- This needs to be defined to *something* (English)       -->
+    <!-- else whatever crud ends up on the button kills the cell -->
+    <!-- Translate at first opportunity, please                  -->
+    <localization string-id='evaluate'>Avaluar</localization>
+    <!-- <localization string-id='code'>Code</localization> -->
+</locale>

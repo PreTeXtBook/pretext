@@ -807,6 +807,135 @@
         </conclusion>
     </section>
 
+    <section xml:id="topic-blocks">
+        <title>Blocks</title>
+        <idx>blocks</idx>
+
+        <subsection>
+            <title>Introduction to Blocks</title>
+
+            <p>A division (<xref ref="overview-structure"/>), that is not further subdivided, is primarly, but not exclusively, composed of paragraphs and <term>blocks</term>.  We document the types of blocks here, even though we do not intend to ever provide a rigorous definition of the term.  Here is a list of characteristics, which is not prescriptive.</p>
+
+            <list>
+                <title>Characteristics of a Block</title>
+
+                <ul>
+                    <li>Visually set-off from a run of <q>plain</q> paragraphs.  Often earning a number, and ideally provided a title or caption (<xref ref="best-practice-titles"/>).</li>
+
+                    <li>Reflowable lines of text, such as an <tag>example</tag>, <em>or</em> a more rigid, more spatial, more two-dimensional object, such as a <tag>figure</tag> or <tag>table</tag>.</li>
+
+                    <li>Usually a child of a division (<xref ref="topic-divisions"/>).  But see just below.</li>
+
+                    <li>Typically a block does not contain another block, except that the more spatial ones can appear as part of a more textual one.</li>
+
+                    <li>When numbered, all blocks generally run consecutively.  (In <latex/>-speak, <q>on the same counter.</q>)  Numbering FIGURE-LIKE and PROJECT-LIKE independently is in transition at this writing (2021-07-07).</li>
+                </ul>
+            </list>
+
+            <p>The following is somewhat general, and we have not extensively cross-referenced to the particular types of blocks, so use the Table of Contents or the Index to learn more specifics.</p>
+        </subsection>
+
+        <subsection>
+            <title>Isomorphic Blocks</title>
+
+            <p>The structure of a block is described carefully in the schema (<xref ref="schema"/>).  There are approximately fourty blocks that are arranged into ten groups, within which they behave identically, except for their displayed names.  These groupings are defined in the <c>xsl/entities.ent</c> file, which we summarize in the next table.  The category name is taken from the entities file, and the notes are meant to describe the distinctive capabilities of the category.</p>
+
+            <list xml:id="block-summary">
+                <title>Summary of Blocks</title>
+
+                <dl>
+                    <li>
+                        <title>REMARK-LIKE</title>
+                        <p><tag>remark</tag>, <tag>convention</tag>, <tag>note</tag>, <tag>observation</tag>, <tag>warning</tag>, <tag>insight</tag></p>
+                        <p>The most basic, generic, block.</p>
+                    </li>
+
+                    <li>
+                        <title>EXAMPLE-LIKE</title>
+                        <p><tag>example</tag>, <tag>question</tag>, <tag>problem</tag></p>
+                        <p>A worked problem meant as exposition.  It can be structured with <tag>task</tag>, <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> just like an <tag>exercise</tag> or PROJECT-LIKE, but the <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> cannot be electively removed from output, and they do not migrate to collections of solutions elsewhere.</p>
+                    </li>
+
+                    <li>
+                        <title>PROJECT-LIKE</title>
+                        <p><tag>project</tag>, <tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag></p>
+                        <p>These are similar to an <tag>exercise</tag>, but the name suggests a slightly different undertaking, and they cannot be placed in an <tag>exercises</tag> division.  The current default is that they are numbered independently from other blocks, but this is planned to switch to elective behavior.  The <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> behave more like those for an <tag>exercise</tag> and can be removed from output, and can migrate to collections of solutions.</p>
+                    </li>
+
+                    <li>
+                        <title>FIGURE-LIKE</title>
+                        <p><tag>figure</tag>, <tag>table</tag>, <tag>listing</tag>, <tag>list</tag></p>
+                        <p>An object that is a container for other atomic objects, which are typically somewhat rigid (not reflowable) or two-dimensional.  Typically with a number, and provided with a title or caption.  A <tag>table</tag> can only hold a <tag>tabular</tag>, while a <tag>listing</tag> is meant for <tag>program</tag> and <tag>console</tag>.  A <tag>list</tag> is not the list itself, but a container for one of the three possible lists (see <xref ref="topic-lists"/> and especially <xref ref="topic-named-list"/>).  A <tag>figure</tag> is the most liberal, allowing a wide variety of contents, with <tag>image</tag> being the prototypical example.</p>
+                    </li>
+
+                    <li>
+                        <title>THEOREM-LIKE</title>
+                        <p><tag>theorem</tag>, <tag>corollary</tag>, <tag>lemma</tag>, <tag>algorithm</tag>, <tag>proposition</tag>, <tag>claim</tag>, <tag>fact</tag>, <tag>identity</tag></p>
+                        <p>Mathematical results, which can have an (optional) proof.</p>
+                    </li>
+
+                    <li>
+                        <title>AXIOM-LIKE</title>
+                        <p><tag>axiom</tag>, <tag>conjecture</tag>, <tag>principle</tag>, <tag>heuristic</tag>, <tag>hypothesis</tag>, <tag>assumption</tag></p>
+                        <p>A mathematical statement, which does not have a proof.</p>
+                    </li>
+
+                    <li>
+                        <title>DEFINITION-LIKE</title>
+                        <p><tag>definition</tag></p>
+                        <p>A definition of a (mathematical) object.</p>
+                    </li>
+
+                    <li>
+                        <title>ASIDE-LIKE</title>
+                        <p><tag>aside</tag>, <tag>biographical</tag>, <tag>historical</tag></p>
+                        <p>Parenthetical content that is structured beyond what a footnote can contain.</p>
+                    </li>
+
+                    <li>
+                        <title>COMPUTATION-LIKE</title>
+                        <p><tag>computation</tag>, <tag>technology</tag></p>
+                        <p>For descriptions of activities using computers, calculators, or other devices.</p>
+                    </li>
+
+                    <li>
+                        <title>GOAL-LIKE</title>
+                        <p><tag>objectives</tag>, <tag>outcomes</tag></p>
+                        <p>These are structured primarily as lists, and may only appear early (<tag>objectives</tag>) or late (<tag>outcomes</tag>) within a division.</p>
+                    </li>
+
+                </dl>
+            </list>
+        </subsection>
+
+        <subsection>
+            <title>Other Blocks</title>
+
+            <p>There are other blocks which can be achieved using just one element.  Examples are <tag>poem</tag> and <tag>assemblage</tag>.  An <tag>exercise</tag> can take on different behaviors, depending on its placement (see <xref ref="topic-exercises"/>).  One such placement is as a child of a division, which we call an <term>inline exercise</term>, and this would be regarded as a block, very similar to a PROJECT-LIKE.</p>
+
+            <p>A paragraph (<tag>p</tag>) can appear many places and is a primary component of blocks.  But when it is a child of a division, it shares some charateristics with other blocks.  There are a number of peers of a <tag>p</tag> which would then also qualify:  <tag>pre</tag>, <tag>blockquote</tag>, <tag>image</tag>, <tag>video</tag>, <tag>program</tag>, <tag>console</tag>, and <tag>tabular</tag>.  None of these can have a title or number, making them less useful, but widening the possibilities for placement.</p>
+        </subsection>
+
+        <subsection xml:id="renaming-blocks">
+            <title>Renaming Blocks</title>
+            <idx>renaming blocks</idx>
+
+            <p>A common desire of authors new to <pretext/> is a new block.  Extending <pretext/> to add a new one is not supported, nor an easy exercise.  One of the reasons for multiple versions of blocks, with common behaviors, is that you can appropriate one for use with your project and give it a new name.  So for example, a biology textbook might want to use <tag>activity</tag> for a laboratory, but rename it to <q>Laboratory</q>.   Of course, this means you will forego having any <q>Activity</q> in your book.  (But if you <em>are the first</em> to write a biology textbook in <pretext/> perhaps you should talk to us about a real <tag>laboratory</tag> element that behaves well for all the physical and biological sciences!)  Here is the procedure:<ol>
+                <li>Choose a block from <xref ref="block-summary"/> that has behavior similar to your intended use, and which you do not forsee using as-is in your project.</li>
+
+                <li>In the <tag>docinfo</tag> section use a <tag>rename</tag> element.  The content should be the new name (<q>Laboratory</q> above), while the <attr>element</attr> attribute should be the name of the element renamed (<c>activity</c> above).</li>
+
+                <li>The <attr>xml:lang</attr> attribute should be used to specify a value of the code for use with documents authored in languages other than US English.  If absent, the default vslue <c>en-US</c> is used.  Multiple <tag>rename</tag> elements for the same element, in different languages, is supported.</li>
+            </ol>So, continuing and extending our example, an author would use<cd>
+                <cline>&lt;rename @element="activity" xml:lang="fr-FR"&gt;Laboratoire&lt;/rename&gt;</cline>
+            </cd></p>
+
+            <p>The most popular block to rename is <tag>exercise</tag>.  We have exercises inside <tag>exercises</tag> divisions, which we call <term>divisional exercises</term>, and exercises inside divisions, which we call <term>inline exercises</term>.   It is possible to have one of each that have identical numbers.  So in cross-references the former is an <q>Exercise</q>, while the latter is a <q>Checkpoint</q>.  If you only have inline exercises, you might prefer that they be called Exercise rather than Checkpoint.  For the <attr>element</attr> attribute of the <tag>rename</tag> element, use a <term>pseudo-element</term>, in this case <c>inlineexercise</c>.  Other pseudo-elements which can be used to distinguish the various types of exercises are:  <c>divisionexercise</c>, <c>worksheetexercise</c>, and <c>readingquestion</c>.</p>
+
+            <p>Choose the element you rename carefully, trying to match it to the purpose of your content.  It can be useful for other purposes, such as automatic lists (<xref ref="topic-automatic-lists"/>), and you may decide later to use other properties of the element you have chosen.</p>
+        </subsection>
+    </section>
+
     <section xml:id="topic-exercises">
         <title>(*) Exercises, Inline and Divisional</title>
         <p></p>
@@ -1321,11 +1450,52 @@
         <subsection xml:id="mathematics-macros">
             <title>Your Macros</title>
 
-            <p>These go in the <tag>docinfo</tag> section, wrapped in a <tag>macros</tag><idx>macro</idx> element.  Keep them simple<mdash />one or two arguments, and one-line definitions.  This is not the place to be fancy, and not the place to try to end-run the structural aspects of <pretext />.  The idea is to define something like <c>\adjoint{A}</c> for the matrix <c>A</c> to be a superscript asterisk, and later you can change your mind and use a superscript dagger instead.  Keep in the spirit of <pretext /> and use readable, semantic macros.  For example, do not use <c>\a{A}</c> for the adjoint of <c>A</c>.</p>
+            <p>These go in the <tag>docinfo</tag> section, wrapped in a <tag>macros</tag><idx>macro</idx> element.  Keep them simple<mdash />one or two arguments, and one-line definitions.  This is not the place to be fancy, and not the place to try to end-run the structural aspects of <pretext/>.  The idea is to define something like <c>\adjoint{A}</c> for the matrix <c>A</c> to be a superscript asterisk, and later you can change your mind and use a superscript dagger instead.  Keep in the spirit of <pretext/> and use readable, semantic macros.  For example, do not use <c>\a{A}</c> for the adjoint of <c>A</c>.</p>
 
-            <p><pretext /> will use your macros correctly for print and for <init>HTML</init>, after erasing whitespace from the left margin, and stripping <latex /> comments.</p>
+            <p><pretext/> will use your macros correctly for print and for <init>HTML</init>, after erasing whitespace from the left margin, and stripping <latex/> comments.</p>
 
             <p>The name of your macros also cannot contain any numbers, otherwise MathJax will <q>silently</q> fail and may not read any subsequent macros you might have. This is important because <pretext/> will place custom macros for you at the end of your own, defined at <xref ref="mathematics-xml-characters"/>, to be used. Those would fail to be processed by MathJax if your own macros caused it to stop reading.</p>
+        </subsection>
+
+        <subsection xml:id="semantic-macros">
+            <title>Semantic Macros</title>
+
+            <introduction>
+                <p>We have resisted using overly-verbose MathML for mathematics, or worse, inventing our own <init>XML</init> vocabulary for mathematics.  <latex/> syntax generally works great, but to work even better within <pretext/> an author needs to take a few extra steps.  Your work will translate better to a variety of formats, and will be easier to maintain, with well-designed macros.  A well-designed macro will convey the mathematical <em>meaning</em> of the object to a reader of your source, without them looking at your <em>definition</em> of the macro.  In situations where a mathematical object might be written with different notation, it should be trivial to change the macro's definition and preserve the mathematical meaning.  For example, consider two versions of a binomial coefficient:
+                <md>
+                    <mrow>&amp;{n\choose r} &amp; &amp;\operatorname{C}(n,r)</mrow>
+                </md>which could both equally well be the realization of <c>\binomial{n}{r}</c>.</p>
+
+                <p>Here we describe some notation which often carries multiple mathematical meanings and/or may be created with <latex/> in multiple ways.</p>
+            </introduction>
+
+            <subsubsection>
+                <title>Vertical Bars</title>
+
+                <p>Vertical bars are used for a variety of mathematical objects.  Paired to create functions of expressions: absolute value, <m>\left\lvert x-1\right\rvert</m>; norm of a vector, <m>\left\lVert \mathbf{v}\right\rVert</m>; cardinality of a set, <m>\left\lvert X\right\rvert</m>; and the determinant of a matrix, <m>\left\lvert A^k\right\rvert</m>.  As relations:  division, <m>a\mid b</m>; parallel lines <m>L_1\parallel L_2</m>.  Sets are another use: <m>E=\left\{x\in{\mathbb Z}\,\middle\vert\, x\equiv 0\pmod 2\right\}</m>.</p>
+
+                <p><latex/> <c>\vert</c>, <c>\Vert</c>, <c>\lvert</c>, <c>\rvert</c>, <c>\lVert</c>, <c>\rVert</c> are the delimiters, where <c>l</c> and <c>r</c> refer to left and right, and the capitalized versions are a pair of vertical lines.  The qualifiers <c>\left</c> and <c>\right</c> can be used to have the length of the bar grow to match what it encloses.   Note that there is a <c>\middle</c> that we have used above with <c>\vert</c> for the set <m>E</m>, and we have added space on either side.  <c>\mid</c> and <c>\parallel</c> are relations, used above to indicate divisibility and parallel lines, and so automatically get an extra bit of spacing on either side.</p>
+
+                <p>When using <c>\left</c> or <c>\right</c> in isolation, <c>\left.</c> or <c>\right.</c> can be used to define a group that only has a bar on one end.  For example:<md>
+                    <mrow>\int_0^1\,\sin^{-1}(x)\,dx = \left.\frac{1}{\sqrt{1-x^2}}\right\rvert_{x=0}^{x=1}</mrow>
+                </md>.</p>
+            </subsubsection>
+
+            <subsubsection>
+                <title>Times</title>
+
+                <p>The <q>times</q> symbol sees many uses that are different: dimensions, multiplication, and more complicated products (such as a Cartesian product of two sets).  Macros <c>\product</c>, <c>\times</c>, and <c>by</c> could carry different meanings, even if each one is defined by the <c>\times</c> symbol, <m>\times</m>.  For example:</p>
+
+                <pre>
+                Chess is played on an &lt;m&gt;8 \by 8&lt;/m&gt; grid, which
+                contains &lt;m&gt;8 \times 8 = 64&lt;/m&gt; little squares.
+                </pre>
+
+                <pre>
+                If &lt;m&gt;G&lt;/m&gt; and &lt;m&gt;H&lt;/m&gt; are finite groups, then
+                &lt;m&gt;\card(G \product H) = \card(G) \times \card(H)&lt;/m&gt;.
+                </pre>
+            </subsubsection>
         </subsection>
 
         <subsection xml:id="punctuation-display-math">
@@ -3175,7 +3345,7 @@
 
             <figure>
                 <caption>Sea Hares, Flower Garden Banks National Marine Sanctuary</caption>
-                <video xml:id="video-sea-hares" source="https://flowergarden.noaa.gov/image_library/video/seaharew.mp4" width="80%" preview="images/sea-hare.jpg" />
+                <video xml:id="video-sea-hares" href="https://flowergarden.noaa.gov/image_library/video/seaharew.mp4" width="80%" preview="images/sea-hare.jpg" />
             </figure>
         </subsection>
 

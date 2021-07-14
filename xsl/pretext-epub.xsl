@@ -133,8 +133,47 @@
 <xsl:variable name="b-kindle" select="$math.format = 'kindle'"/>
 
 <!-- If there are footnotes, we'll build and package a "endnotes.xhtml" file -->
-<xsl:variable name="b-has-endnotes" select="boolean($document-root//fn|$document-root//aside)"/>
+<xsl:variable name="b-has-endnotes" select="boolean($document-root//fn|$document-root//aside|$document-root//biographical|$document-root//historical|$document-root//hint)"/>
 
+<xsl:variable name="endnotes-have-math">
+    <xsl:if test="$b-has-endnotes">
+        <xsl:choose>
+            <xsl:when test="$document-root//fn//m">
+                <xsl:text>true</xsl:text>
+            </xsl:when>
+            <xsl:when test="$document-root//aside//m or
+                            $document-root//aside//me or
+                            $document-root//aside//men or
+                            $document-root//aside//md or
+                            $document-root//aside//mdn">
+                <xsl:text>true</xsl:text>
+            </xsl:when>
+            <xsl:when test="$document-root//biographical//m or
+                            $document-root//biographical//me or
+                            $document-root//biographical//men or
+                            $document-root//biographical//md or
+                            $document-root//biographical//mdn">
+                <xsl:text>true</xsl:text>
+            </xsl:when>
+            <xsl:when test="$document-root//historical//m or
+                            $document-root//historical//me or
+                            $document-root//historical//men or
+                            $document-root//historical//md or
+                            $document-root//historical//mdn">
+                <xsl:text>true</xsl:text>
+            </xsl:when>
+            <xsl:when test="$document-root//hint//m or
+                            $document-root//hint//me or
+                            $document-root//hint//men or
+                            $document-root//hint//md or
+                            $document-root//hint//mdn">
+                <xsl:text>true</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:if>
+</xsl:variable>
+
+<xsl:variable name="b-endnotes-have-math" select="$endnotes-have-math = 'true'"/>
 
 <!-- ############## -->
 <!-- Entry Template -->
@@ -146,7 +185,7 @@
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/">
     <xsl:call-template name="banner-warning">
-        <xsl:with-param name="warning">EPUB conversion is experimental and not supported.  In particular,&#xa;the XSL conversion alone is not sufficient to create an EPUB.</xsl:with-param>
+        <xsl:with-param name="warning">EPUB conversion is experimental and not supported.  In particular,&#xa;creating an EPUB requires the pretext/pretext script.</xsl:with-param>
     </xsl:call-template>
     <!-- analyze authored source, which will repair "mathbook" -->
     <xsl:apply-templates select="pretext|mathbook" mode="deprecation-warnings" />
@@ -190,7 +229,7 @@
     <!-- Any XML declaration seems to get scrubbed by the MathJax processing   -->
     <!-- (converted to a comment), so we explicitly suppress it here, and in   -->
     <!-- other exsl:document uses.                                             -->
-    <exsl:document href="{$file}" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="yes">
+    <exsl:document href="{$file}" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="no">
         <html>
             <head>
                 <xsl:text>&#xa;</xsl:text> <!-- a little formatting help -->
@@ -200,6 +239,10 @@
                 <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
                 <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
                 <xsl:call-template name="mathjax-css"/>
+                <xsl:call-template name="epub-kindle-css"/>
+                <title>
+                    <xsl:apply-templates select="." mode="title-short"/>
+                </title>
             </head>
             <!-- use class to repurpose HTML CSS work -->
             <body class="pretext-content epub">
@@ -236,7 +279,7 @@
         <xsl:apply-templates select="author|objectives|introduction|titlepage|abstract" />
         <!-- deleted "nav" and summary links here -->
         <!-- "conclusion" is being missed here    -->
-     </section>
+    </section>
 </xsl:template>
 
 <!-- At level 2, the backmatter summary is useless, -->
@@ -261,11 +304,11 @@
     <!-- Do not use "doctype-system" here                            -->
     <!-- Automatically writes XML header at version 1.0, no encoding -->
     <!-- Points to OPF metadata file (in two variables)              -->
-    <exsl:document href="META-INF/container.xml" method="xml" omit-xml-declaration="yes" indent="yes">
+    <exsl:document href="META-INF/container.xml" method="xml" omit-xml-declaration="yes" indent="no">
         <container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
-          <rootfiles>
-            <rootfile full-path="{$content-dir}/{$package-file}" media-type="application/oebps-package+xml" />
-          </rootfiles>
+            <rootfiles>
+                <rootfile full-path="{$content-dir}/{$package-file}" media-type="application/oebps-package+xml" />
+            </rootfiles>
         </container>
     </exsl:document>
 </xsl:template>
@@ -279,7 +322,7 @@
     <!-- Must be XML, UTF-8/16            -->
     <!-- Required on package: version, id -->
     <!-- Trying with no encoding, Gitden rejects? -->
-    <exsl:document href="{$content-dir}/{$package-file}" method="xml" omit-xml-declaration="yes" indent="yes">
+    <exsl:document href="{$content-dir}/{$package-file}" method="xml" omit-xml-declaration="yes" indent="no">
         <package xmlns="http://www.idpf.org/2007/opf"
                  unique-identifier="{$uid-string}" version="3.0">
             <xsl:call-template name="package-metadata" />
@@ -357,6 +400,14 @@
         <item id="css-style"  href="{$css-dir}/{$html-css-stylefile}" media-type="text/css"/>
         <item id="css-color"  href="{$css-dir}/{$html-css-colorfile}" media-type="text/css"/>
         <item id="css-setclr" href="{$css-dir}/setcolors.css"         media-type="text/css"/>
+        <xsl:choose>
+            <xsl:when test="$b-kindle">
+                <item id="css-kindle" href="{$css-dir}/kindle.css"            media-type="text/css"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <item id="css-epub" href="{$css-dir}/epub.css"            media-type="text/css"/>
+            </xsl:otherwise>
+        </xsl:choose>
         <item id="cover-page" href="{$xhtml-dir}/cover-page.xhtml" media-type="application/xhtml+xml"/>
         <item id="table-contents" href="{$xhtml-dir}/table-contents.xhtml" properties="nav" media-type="application/xhtml+xml"/>
         <item id="cover-image" href="{$xhtml-dir}/{$cover-filename}" properties="cover-image" media-type="image/png"/>
@@ -372,7 +423,24 @@
         <xsl:for-each select="($discovery-manifest/*|$discovery-manifest/comment())[not(@href = preceding::*/@href)]">
             <xsl:copy-of select="."/>
         </xsl:for-each>
-        <item id="endnotes" href="{$xhtml-dir}/{$endnote-file}" media-type="application/xhtml+xml"/>
+        <xsl:if test="$b-has-endnotes">
+            <item id="endnotes" href="{$xhtml-dir}/{$endnote-file}"
+                  media-type="application/xhtml+xml">
+                <xsl:if test="$b-endnotes-have-math">
+                    <xsl:attribute name="properties">
+                        <xsl:choose>
+                            <xsl:when test="$math.format = 'mml' or
+                                            $math.format = 'kindle'">
+                                <xsl:text>mathml</xsl:text>
+                            </xsl:when>
+                            <xsl:when test="$math.format = 'svg'">
+                                <xsl:text>svg</xsl:text>
+                            </xsl:when>
+                        </xsl:choose>
+                    </xsl:attribute>
+                </xsl:if>
+            </item>
+        </xsl:if>
     </manifest>
 </xsl:template>
 
@@ -403,13 +471,68 @@
         <!-- TODO: use a parameter switch for output style       -->
         <!-- Study: https://github.com/w3c/epubcheck/issues/420  -->
         <!-- Processing with page2svg makes it appear SVG images exist -->
-        <!-- <xsl:if test=".//m or .//me or .//men or .//md or .//mdn"> -->
-             <xsl:attribute name="properties">
-                <xsl:text>svg</xsl:text>
-                <!-- <xsl:text>mathml</xsl:text> -->
+        <!-- Set properties="svg" or properties="mathml" when a -->
+        <!-- file contains math in one of thse formats. -->
+        <xsl:variable name="is-structured">
+            <xsl:apply-templates select="." mode="is-structured-division"/>
+        </xsl:variable>
+        <xsl:variable name="b-is-structured" select="$is-structured = 'true'"/>
+
+        <xsl:variable name="has-math">
+            <xsl:choose>
+                <xsl:when test="self::frontmatter">
+                    <xsl:text>false</xsl:text>
+                </xsl:when>
+                <!-- TODO: Condition more on exercises in case -->
+                <!-- answer/solution is suppressed. -->
+                <xsl:when test="../section or ../preface or ../exercises">
+                    <xsl:if test=".//m or .//me or .//men or .//md or .//mdn">
+                        <xsl:text>true</xsl:text>
+                    </xsl:if>
+                </xsl:when>
+                <xsl:when test=".//notation-list">
+                    <xsl:text>true</xsl:text>
+                </xsl:when>
+                <xsl:when test="index-list and $document-root//idx//m">
+                    <xsl:text>true</xsl:text>
+                </xsl:when>
+                <xsl:when test="../chapter or ../appendix">
+                    <xsl:choose>
+                        <xsl:when test="$b-is-structured">
+                            <xsl:if test="chapter/title|objectives|introduction//m or
+                                          chapter/title|objectives|introduction//me or
+                                          chapter/title|objectives|introduction//men or
+                                          chapter/title|objectives|introduction//md or
+                                          chapter/title|objectives|introduction//mdn">
+                                <xsl:text>true</xsl:text>
+                            </xsl:if>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:if test=".//m or .//me or .//men or .//md or .//mdn">
+                                <xsl:text>true</xsl:text>
+                            </xsl:if>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>false</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="b-has-math" select="$has-math = 'true'" />
+        <xsl:if test="$b-has-math">
+            <xsl:attribute name="properties">
+                <xsl:choose>
+                    <xsl:when test="$math.format = 'mml' or $math.format = 'kindle'">
+                        <xsl:text>mathml</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="$math.format = 'svg'">
+                        <xsl:text>svg</xsl:text>
+                    </xsl:when>
+                </xsl:choose>
             </xsl:attribute>
-        <!-- </xsl:if> -->
-         <!-- TODO: coordinate with manifest/script on xhtml extension -->
+        </xsl:if>
+        <!-- TODO: coordinate with manifest/script on xhtml extension -->
         <xsl:attribute name="href">
             <xsl:value-of select="$xhtml-dir" />
             <xsl:text>/</xsl:text>
@@ -570,13 +693,24 @@ width: 100%
 </style>
 </xsl:template>
 
+<!-- Include the appropriate CSS file depending on output -->
+<xsl:template name="epub-kindle-css">
+    <xsl:choose>
+        <xsl:when test="$b-kindle">
+            <link href="../{$css-dir}/kindle.css" rel="stylesheet" type="text/css"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <link href="../{$css-dir}/epub.css" rel="stylesheet" type="text/css"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- ############# -->
 <!-- Content files -->
 <!-- ############# -->
 
 <xsl:template match="frontmatter" mode="epub">
-    <exsl:document href="{$content-dir}/{$xhtml-dir}/cover-page.xhtml" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="yes">
+    <exsl:document href="{$content-dir}/{$xhtml-dir}/cover-page.xhtml" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="no">
         <html>
             <!-- head element should not be empty -->
             <head>
@@ -595,7 +729,7 @@ width: 100%
             </body>
         </html>
     </exsl:document>
-    <exsl:document href="{$content-dir}/{$xhtml-dir}/table-contents.xhtml" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="yes">
+    <exsl:document href="{$content-dir}/{$xhtml-dir}/table-contents.xhtml" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="no">
         <html xmlns:epub="http://www.idpf.org/2007/ops">
             <head>
                 <meta charset="utf-8"/>
@@ -604,6 +738,8 @@ width: 100%
                 <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
                 <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
                 <xsl:call-template name="mathjax-css"/>
+                <xsl:call-template name="epub-kindle-css"/>
+                <title>Table of Contents</title>
             </head>
             <body class="pretext-content epub" epub:type="frontmatter">
                 <nav epub:type="toc" id="toc">
@@ -659,12 +795,12 @@ width: 100%
     <xsl:param name="in" />
     <xsl:param name="out" />
     <xsl:if test="$in!=''">
-        <pre>
+        <pre class="code input">
             <xsl:value-of select="$in" />
         </pre>
     </xsl:if>
     <xsl:if test="$out!=''">
-        <pre>
+        <pre class="code output">
             <xsl:value-of select="$out" />
         </pre>
     </xsl:if>
@@ -846,27 +982,47 @@ width: 100%
 <!-- recognizable by their "-kindle-return" suffix.  See 10.3.12:   -->
 <!-- https://kindlegen.s3.amazonaws.com/AmazonKindlePublishingGuidelines.pdf -->
 
-<!-- Asides -->
+<!-- Asides and hints -->
 <!-- EPUB has a semi-natural mechanism for this, though -->
 <!-- the text we drop could use some work. The marker,  -->
 <!-- a simple title/paragraph, tostyle minimally        -->
-<xsl:template match="aside">
+<xsl:template match="&ASIDE-LIKE;|hint">
     <xsl:variable name="hid">
         <xsl:apply-templates select="." mode="html-id" />
     </xsl:variable>
     <p>
         <a class="url" epub:type="noteref" href="{$endnote-file}#{$hid}">
-            <xsl:text>Aside: </xsl:text>
-            <xsl:apply-templates select="." mode="title-full"/>
+            <!-- Older Kindles don't always support pop-ups, so -->
+            <!-- create infrastructure for endnotes to jump back-->
+            <xsl:if test="$b-kindle">
+                <xsl:attribute name="id">
+                    <xsl:value-of select="$hid"/>
+                    <xsl:text>-kindle-return</xsl:text>
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:apply-templates select="." mode="heading-simple" />
         </a>
     </p>
 </xsl:template>
 
 <!-- The content, unwrapped from HTML infrastructure -->
-<xsl:template match="aside" mode="endnote-content">
+<xsl:template match="&ASIDE-LIKE;|hint" mode="endnote-content">
     <xsl:variable name="hid">
         <xsl:apply-templates select="." mode="html-id" />
     </xsl:variable>
+    <!-- Older Kindles don't always support pop-ups, so -->
+    <!-- create infrastructure for endnotes to jump back-->
+    <xsl:if test="$b-kindle">
+        <a epub:type="noteref">
+            <xsl:attribute name="href">
+                <xsl:apply-templates select="." mode="containing-filename"/>
+                <xsl:text>#</xsl:text>
+                <xsl:value-of select="$hid"/>
+                <xsl:text>-kindle-return</xsl:text>
+            </xsl:attribute>
+            <xsl:apply-templates select="." mode="heading-full"/>
+        </a>
+    </xsl:if>
     <aside epub:type="footnote" id="{$hid}">
         <!-- mode="body" gets too much CSS -->
         <xsl:apply-templates select="." mode="wrapped-content"/>
@@ -931,7 +1087,7 @@ width: 100%
     <!-- No footnotes or asides, don't bother -->
     <xsl:if test="$b-has-endnotes">
         <!-- cribbed from "file-wrap" elsewhere -->
-        <exsl:document href="{$content-dir}/{$xhtml-dir}/{$endnote-file}" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="yes">
+        <exsl:document href="{$content-dir}/{$xhtml-dir}/{$endnote-file}" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="no">
             <html>
                 <head>
                     <xsl:text>&#xa;</xsl:text> <!-- a little formatting help -->
@@ -941,12 +1097,14 @@ width: 100%
                     <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
                     <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
                     <xsl:call-template name="mathjax-css"/>
+                    <xsl:call-template name="epub-kindle-css"/>
+                    <title>Endnotes</title>
                 </head>
                 <!-- use class to repurpose HTML CSS work -->
                 <body class="pretext-content epub">
                     <h4>Endnotes</h4>
                     <!-- structure according to footnote level -->
-                    <xsl:apply-templates select="$document-root//fn|$document-root//aside" mode="endnote-content"/>
+                    <xsl:apply-templates select="$document-root//fn|$document-root//aside|$document-root//biographical|$document-root//historical|$document-root//hint" mode="endnote-content"/>
                 </body>
             </html>
         </exsl:document>
@@ -1005,6 +1163,9 @@ width: 100%
                     <xsl:text>mjpage mjpage__block</xsl:text>
                 </xsl:when>
             </xsl:choose>
+        </xsl:attribute>
+        <xsl:attribute name="id">
+            <xsl:text>mjx-eqn:</xsl:text><xsl:value-of select="$id" />
         </xsl:attribute>
         <!-- Finally, drop a "svg" element, "math" element, or ASCII speech -->
         <xsl:choose>

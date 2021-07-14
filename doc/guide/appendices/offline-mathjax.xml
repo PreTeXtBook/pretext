@@ -22,7 +22,7 @@
 
         <p>So the first step is to install both <c>node</c> and <c>npm</c> on your system.  These programs are meant to be cross-platform, so once you do these two operating-system-specific installations, we can proceed with generic instructions. (2020-11-09: we could add instructions for specific operating systems to other appendices?)</p>
 
-        <p><c>node</c> should be on your path after installation, and you can try <cd>which node</cd> to see if your operating system can locate it automatically.  If not, then you will need to edit your peronal copy of the <c>pretext.cfg</c> configuration file to have the <c>node</c> key provide a path to the executable (2020-11-10: needs a cross-reference to the script's configuration file).</p>
+        <p>Now <c>node</c> should be on your path, and you can try <cd>which node</cd> to see if your operating system can locate it automatically.  If not, then you will need to edit your peronal copy of the <c>pretext.cfg</c> configuration file to have the <c>node</c> key provide a path to the executable (see <xref ref="pretext-helpers"/>).</p>
 
         <p>Some useful <c>npm</c> commands, in the form of examples.</p>
 
@@ -51,14 +51,19 @@
 
         <p>MathJax is packaged as a <c>node.js</c> program.  A component of MathJax is Speech Rule Engine (<init>SRE</init>), which converts <latex/> to text that represents a spoken version of the mathematics, and to Nemeth braille, a braille code for expressing mathematics.</p>
 
-        <p>Follow the directions here <em>exactly</em>.  Do not free-style and think some modification will have a better or identical result.  In a terminal, set your working directory to be your top-level home/user directory.  Install both packages <em>at the same time</em> with a <em>single</em> command:<cd>
-            <cline>npm install mathjax-full speech-rule-engine</cline>
-        </cd>It is possible you will get an error and a warning about the <c>package-lock.json</c> file.  They are harmless, ignore them.</p>
+        <p>Follow the directions here <em>exactly</em>.  Do not free-style and think some modification will have a better or identical result.  In a terminal, set your working directory with<cd>
+            <cline>cd /path/to/mathbook/script/mjsre</cline>
+        </cd>
+        Install both packages at the same time with a single command:<cd>
+            <cline>./update-sre</cline>
+        </cd>It is possible you will need to make this simple script executable.  On Unix-style systems (Linux, Mac OS) this can be done with the <c>chmod</c> command.</p>
 
+        <p>The <c>update-sre</c> script is supplied by <pretext/>.  It will create a file and a directory:<cd>
+            <cline>/path/to/mathbook/script/mjsre/package-lock.json</cline>
+            <cline>/path/to/mathbook/script/mjsre/node_modules</cline>
+        </cd>Neither will be tracked by <c>git</c>.  Since SRE changes faster than MathJax, this will replace MathJax's expectation for a version of SRE with a potentially newer version.  So do not be alarmed if it appears MathJax is missing a dependency, that is intentional.</p>
 
-        <p>These two packages, along with others that are dependencies, will appear in a directory/folder called <c>node_modules</c>.  Your version of Speech Rule Engine should be the newest stable version, and this is important since <init>SRE</init> is under active development.  If you do not follow these directions (or maybe even if you do?) there is a risk your MathJax installation will also include a copy of <init>SRE</init>, since it is a component of MathJax.  And this version is likely older, so you want to get rid of it.  If so, the older version will be in the directory<cd>
-            <cline>node_modules/mathjax-full/node_modules/speech-rule-engine</cline>
-        </cd>By removing this directory, only the newer version will remain and MathJax will locate it for use in the routines <pretext/> supplies.</p>
+        <p>Now you have copies of MathJax and SRE that can be used by the <c>pretext/pretext</c> script to process mathematics offline into useful formats for conversions to <init>EPUB</init>, Kindle, and braille.</p>
     </section>
 
 

@@ -43,6 +43,14 @@
         <p>So early in your writing project, familiarize yourself with the components of a paragraph detailed in <xref ref="topic-paragraphs" />.</p>
     </section>
 
+    <section xml:id="overview-blocks">
+        <title>Blocks</title>
+        <idx>blocks</idx>
+        <idx><h>environments</h><see>blocks</see></idx>
+
+        <p>Besides paragraphs (<xref ref="overview-paragraphs"/>) the most common object to include in a division is what we informally refer to as a <term>block</term>.  These are self-contained units of text, almost always set-off visually, and likely with a number and a title.  If you know <latex/>, you may be in the habit of calling these <term>environments</term>.  Mathematical results are one example, and you can start at <xref ref="overview-math-results"/> to learn more.  There are others that are more general-purpose, such as <tag>remark</tag> and <tag>example</tag>.  While fundamentally different from these blocks that are textual with reflowable lines, objects like <tag>figure</tag> and <tag>table</tag> (<xref ref="overview-figures-tables"/>) or <tag>program</tag> and <tag>console</tag> (<xref ref="overview-programs"/>) are blocks, even if their contents are more rigid or spatial.  For a more precise description, see <xref ref="topic-blocks"/>.</p>
+    </section>
+
     <section xml:id="overview-cross-references">
         <title>Cross-References</title>
         <idx>cross-reference</idx>
@@ -151,7 +159,7 @@
             </li>
             <li>
                 <title>Project</title>
-                <p>A <tag>project</tag> is a bit different than the prior situations, since this element is structured with <tag>task</tag>.  But it has many common features, such as allowing optional <tag>title</tag>, <tag>hint</tag>, <tag>answer</tag>, <tag>solution</tag>.</p>
+                <p>A <tag>project</tag> is similar to an inline exercise, other than the type name and the fact that it can run on a separate counter from theorems, figures, etc. (When running on a separate counter, the same counter is used for <tag>activity</tag>, <tag>exploration</tag>, and <tag>investigation</tag>.)</p>
             </li>
         </dl></p>
 
