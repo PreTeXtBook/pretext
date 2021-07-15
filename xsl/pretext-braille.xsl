@@ -793,15 +793,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- construct any tactile versions.              -->
 <xsl:template match="image">
     <div data-braille="image">
-        <p>
-            <xsl:text>Image: </xsl:text>
-            <xsl:apply-templates select="description"/>
-        </p>
-        <p>
-            <xsl:text>ID: </xsl:text>
-            <xsl:apply-templates select="." mode="visible-id" />
-        </p>
+        <xsl:text>Image ID: </xsl:text>
+        <xsl:apply-templates select="." mode="visible-id" />
+        <br/>
+        <xsl:text>Description: </xsl:text>
+        <xsl:apply-templates select="description"/>
+        <br/>
+        <xsl:if test="$page-format = 'electronic'">
+            <xsl:text>Transcriber note: this image should be provided separately for an electronic version.</xsl:text>
+        </xsl:if>
     </div>
+</xsl:template>
+
+<!-- If a "figure" has an "image", we let the image do its thing -->
+<!-- (as just above) and we also let the figure wrap it.  But we -->
+<!-- follow with a (nearly) blank page suggesting a tactile      -->
+<!-- version of the image should be subsituted in.               -->
+<xsl:template match="figure[image]">
+    <xsl:apply-imports/>
+    <xsl:if test="$page-format = 'emboss'">
+        <div data-braille="pageeject"/>
+        <xsl:text>Transcriber note: the image with ID </xsl:text>
+        <xsl:apply-templates select="image" mode="visible-id" />
+        <xsl:text> belongs here.  Replace this page with the independently generated tactile image.</xsl:text>
+        <div data-braille="pageeject"/>
+    </xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>

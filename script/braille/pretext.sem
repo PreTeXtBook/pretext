@@ -183,6 +183,17 @@ boxline article,data-braille,proof
 # We box "sage" since the visual formatting is absent
 boxline article,data-braille,sage
 
+
+########
+# Images
+########
+
+# Need a blank "place holder" page in the embossed version
+# This action does what it says: ejects the current page
+
+pageeject div,data-braille,pageeject
+
+
 #######
 # Lists
 #######
