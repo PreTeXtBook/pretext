@@ -354,6 +354,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </chapter>
 
         <chapter>
+            <title>Figures</title>
+
+            <p>Figures should create some usable information, but also create a blank page (for embossable output) that will allow placement of a separately generated tactile graphic.</p>
+
+            <figure>
+                <caption>A test figure with an image</caption>
+                <image source="foo.jpg">
+                    <description>A picture of a pretty flower in a field of grass all by itself</description>
+                </image>
+            </figure>
+
+            <p>And some text trailing the figure.</p>
+        </chapter>
+
+        <chapter>
             <title>MISCELLANEOUS - DO NOT REVIEW</title>
 
             <theorem xml:id="pythagorean-theorem">
