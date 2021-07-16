@@ -1606,6 +1606,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:copy-of select="cross-reference/node()"/>
                 </xsl:when>
                 <!--  -->
+                <!-- Various uses of  position()  here are not as dangerous -->
+                <!-- as they seem, since the nodeset comes from an RTF of   -->
+                <!-- our construction.  Still, remove them in an eventual   -->
+                <!-- refactor and abstraction of index construction.        -->
                 <xsl:when test="see">
                     <span class="see">
                         <xsl:if test="position() = 1">
@@ -7044,6 +7048,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
     <!-- For a "normal" 1-column cell this variable effectively makes a copy -->
+    <!-- position()  added in 026d6d6d9f69f4de17a012aa32c4e8dee77519fb,      -->
+    <!-- unclear if it can be removed/replaced                               -->
     <xsl:variable name="right-col" select="($left-col/self::*|$left-col/following-sibling::col)[position()=$column-span]" />
     <!-- Look ahead one column, anticipating recursion   -->
     <!-- but also probing for end of row (no more cells) -->
