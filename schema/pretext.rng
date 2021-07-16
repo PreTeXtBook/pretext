@@ -514,9 +514,7 @@
   <define name="BookFrontMatter">
     <element name="frontmatter">
       <ref name="MetaDataTitleOptional"/>
-      <optional>
-        <ref name="TitlePage"/>
-      </optional>
+      <ref name="TitlePage"/>
       <optional>
         <ref name="ColophonFront"/>
       </optional>

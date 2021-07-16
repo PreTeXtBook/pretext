@@ -2108,7 +2108,7 @@
                 }
             BookFrontMatter = element frontmatter {
                     MetaDataTitleOptional,
-                    TitlePage?,
+                    TitlePage,
                     ColophonFront?,
                     Biography*,
                     Dedication?,

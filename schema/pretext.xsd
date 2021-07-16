@@ -393,7 +393,7 @@
         <xs:complexType>
           <xs:sequence>
             <xs:group ref="MetaDataTitleOptional"/>
-            <xs:element minOccurs="0" ref="titlepage"/>
+            <xs:element ref="titlepage"/>
             <xs:group minOccurs="0" ref="ColophonFront"/>
             <xs:element minOccurs="0" maxOccurs="unbounded" ref="biography"/>
             <xs:element minOccurs="0" ref="dedication"/>
