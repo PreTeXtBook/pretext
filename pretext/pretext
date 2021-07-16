@@ -34,7 +34,7 @@ import pretext as ptx
 
 def verify_input_file(f, file_type):
     """Verify file exists, or raise error.  Return absolute path"""
-    # file_type is 'source' or 'publisher'
+    # file_type is 'source' or 'publisher' or 'config'
     #    the source gets fed into the lxml routines and so we
     #    let Python deal with separators, etc.  However the
     #    publisher file is passed around until an XSL stylesheet
@@ -49,13 +49,23 @@ def verify_input_file(f, file_type):
         file_descriptor = 'XML source'
     elif file_type == 'publisher':
         file_descriptor = 'publisher'
+    elif file_type == 'config':
+        file_descriptor = 'executables configuration'
     else:
-        msg = "input file verification should receive 'source' or 'publisher' parameter, not '{}'"
+        msg = "input file verification should receive 'source' or 'publisher' or 'config' parameter, not '{}'"
         raise ValueError(msg.format(file_type))
 
     ptx._verbose('verifying and expanding {} file: {}'.format(file_descriptor, f))
     if not(os.path.isfile(f)):
-        raise ValueError('file {} does not exist'.format(f))
+        msg = '{} file {}{} does not exist'.format(
+            file_descriptor, f,
+            ' from the command line' if file_type == 'config' else ''
+        )
+        if file_type == 'config':
+            print('PTX:WARNING: {}'.format(msg))
+            return None
+        else:
+            raise ValueError(msg)
     absf = os.path.abspath(f)
     if file_type == 'publisher':
         absf = absf.replace(os.sep, '/')
@@ -119,6 +129,8 @@ def get_executables(arg_supplied_config_file):
     # Try to read old version, but prefer new version
     stale_user_config_file = os.path.join(ptx_dir, 'user', 'mbx.cfg')
     config_file_list = [default_config_file, stale_user_config_file, user_config_file]
+    if (arg_supplied_config_file):
+        arg_supplied_config_file = verify_input_file(arg_supplied_config_file, 'config')
     if (arg_supplied_config_file):
         config_file_list.append(arg_supplied_config_file)
 
