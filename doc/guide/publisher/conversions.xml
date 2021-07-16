@@ -76,7 +76,7 @@
         <note xml:id="best-practice-chapter-zero">
             <title>Use Chapter Zero Carefully</title>
 
-            <p>Chapter numbering may start with a number other than one, and zero is a popular choice.  This should not be simply because the first chapter is introductory or preparatory, nor should it be a replacement for a preface, which has a well-defined purpose.</p>
+            <p>Chapter numbering may start with a number other than one, and zero is a popular choice.  This should not be simply because the first chapter is introductory or preparatory, nor should it be a replacement for a preface, which has a well-defined purpose (see <xref ref="best-practice-preface"/>).</p>
         </note>
     </section>
 

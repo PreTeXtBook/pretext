@@ -1316,7 +1316,7 @@
 
         <p>A <tag>book</tag> may be structured into parts.  After the <tag>frontmatter</tag> and before the <tag>backmatter</tag> there may be a sequence of <tag>part</tag>.  These elements may carry a <tag>title</tag>, and not much else, besides a substantial sequence of <tag>chapter</tag>.  The main effect is to get an extra level of division in the Table of Contents.  For print and <init>PDF</init> there is an entire page devoted to the title and number of the part.  The default numbering is <term>decorative</term>, which means that the chapters are numbered consecutively from the start of the book and do not reset to one at the start of each part.  It is as if the parts were not even there.  The alternative is that parts are <term>structural</term>.  Now each part begins with Chapter 1.  There are other more subtle differences, such as cross-references use a part number if, and only if,  the trip from the cross-reference to its target crosses a boundary of two parts.  The two approaches to part structure may be set via the publisher file, see <xref ref="publisher-file-numbering"/>.</p>
 
-        <p>There are exceptions to the above.  For one, <tag>paragraphs</tag> is an anomalous division, as a sort of lightweight sectioning command.  It may appear in any division, at any location within a division, it may not be divided further (it is a leaf of the document tree), it never gets a number, and its title is formatted in a subsidiary way.  I especially like to use this in a two- or three-page <tag>article</tag> that has no other divisions at all.  Typical presentation has the title in bold, without much change in font size (if at all), inline with the first paragraph, and perhaps a bit of vertical space as it begins and ends.  Despite the name, it may contain more than just paragraphs, so may contain any top-level-content that would go in any other division.</p>
+        <p>There are exceptions to the above.  For one, <tag>paragraphs</tag> is an anomalous division, as a sort of lightweight sectioning command.  It may appear in any division, at any location within a division, it may not be divided further (it is a leaf of the document tree), it never gets a number, and its title is formatted in a subsidiary way.  I especially like to use this in a two- or three-page <tag>article</tag> that has no other divisions at all.   It is also very useful as a way to subdivide portions of the front matter (<xref ref="topic-front-matter"/>), such as a <tag>preface</tag>. Typical presentation has the title in bold, without much change in font size (if at all), inline with the first paragraph, and perhaps a bit of vertical space as it begins and ends.  Despite the name, it may contain more than just paragraphs, so may contain any top-level-content that would go in any other division.</p>
 
         <p>Two other anomalous divisions are <tag>exercises</tag> and <tag>references</tag>.  These can be placed as a final component of any division from <tag>chapter</tag> on down.  So for example, an <tag>exercises</tag> could be a peer of several <tag>section</tag>s, contained within a structured <tag>chapter</tag>, and in this case would behave similar to the other <tag>section</tag>s.  Or an unstructured <tag>chapter</tag> may have a sequence of paragraphs, figures, examples, and the like, and conclude with a single <tag>exercises</tag>.  Detail on allowed content and behavior are in <xref ref="topic-exercises" /> and <xref ref="topic-references" />, respectively.</p>
     </section>
@@ -2856,52 +2856,72 @@
     </section>
 
     <section xml:id="topic-front-matter">
-        <title>(*) Front Matter</title>
+        <title>Front Matter</title>
 
          <introduction>
-            <p></p>
+            <p>A single <tag>frontmatter</tag> element can be placed early in your <tag>book</tag> or <tag>article</tag>, after some metadata, such as the overall <tag>title</tag>.  It is optional, but likely highly desirable.  The following subsections describe the items that may be employed within the <tag>frontmatter</tag>.  Most are optional, and some may be repeated.  An <tag>article</tag> differs in that it must contain a <tag>titlepage</tag> and then may <em>only</em> contain an <tag>abstract</tag>.  Generally, these will get default titles, localized in the language of your document, but these defaults may also be replaced by giving a <tag>title</tag> element.  None of these divisions themselves is numbered, precluding any content within that is numbered.  So, for example, no <tag>figure</tag> may be included.  But you could choose to include an <tag>image</tag>, perhaps within a <tag>biography</tag>.</p>
+
+            <p>If a component of the front matter cannot be numbered, how best to subdivide something like a <tag>preface</tag>?  This is a good use of the <tag>paragraphs</tag> element.  It allows for a (minimal) title, but cannot be subdivided further.  See the later part of <xref ref="topic-divisions"/> for more about this exceptional element.</p>
+
+            <p>These elements must appear in your source in the order given below, and will appear in your ouput in the same order, which is a generally accepted order used in the production of books.  So, for example, even if you author an <tag>acknowledgement</tag> between two <tag>preface</tag>, your output may (will?) place the Acknowledgement before the first Preface.</p>
+
+            <p>(We have not yet described the contents of these various elements in full detail.)</p>
         </introduction>
 
         <subsection>
             <title>(*) Title Page</title>
 
-            <p></p>
+            <p>Required.  Since the entire <tag>frontmatter</tag> is optional, we assume that the front matter at least includes the appearance of the document's overall <tag>title</tag>.</p>
         </subsection>
 
         <subsection>
             <title>(*) Abstract</title>
 
-            <p></p>
+            <p>Optional, and only available for an <tag>article</tag>.</p>
         </subsection>
 
-        <subsection>
+        <subsection xml:id="topic-front-colophon">
             <title>(*) Colophon</title>
 
-            <p></p>
+            <p>The <em>front</em> colophon. (There is also a <em>back</em> colophon, see <xref ref="topic-back-colophon"/>).  Sometimes this is also called the <term>copyright page</term>.</p>
         </subsection>
 
         <subsection>
-            <title>(*) Biography</title>
+            <title>(*) Biographies</title>
 
-            <p></p>
+            <p>Multiple <tag>biography</tag> elements, one per author.</p>
         </subsection>
 
         <subsection>
             <title>(*) Dedication</title>
 
-            <p></p>
+            <p>A single <tag>dedication</tag> element, that might include multiple dedications (perhaps by different authors).</p>
         </subsection>
 
         <subsection>
-            <title>(*) Acknowledgement</title>
+            <title>(*) Acknowledgements</title>
 
-            <p></p>
+            <p>A single <tag>acknowledgement</tag> element (note spelling), that becomes a division, and so can contain paragraphs, lists, etc.  The Chicago Manual of Style (15th Edition, 1.52) suggests that if these are short, they may be contained in a preface.</p>
+        </subsection>
+
+        <subsection>
+            <title>(*) Forewords</title>
+
+            <p>As of 2021-07-16 the <tag>foreword</tag> element is not fully implemented.  Please make a feature request if you need it.</p>
+
+            <p>A <tag>foreword</tag> is written by somebody other than the author.  The name of the writer of the foreword need to be included<mdash/>at the end is a good location.</p>
         </subsection>
 
         <subsection>
             <title>(*) Prefaces</title>
 
-            <p></p>
+            <p>Multiple prefaces are a distinct possibility, and in this case providing a different <tag>title</tag> for each would be essential.  Examples might include:  <articletitle>Preface to the Third Edition</articletitle>, <articletitle>How to Use this Book</articletitle>, or <articletitle>To the Student</articletitle>.  More ad-hoc material, such as a translator's note, can be handled as a preface.</p>
+
+            <note xml:id="best-practice-preface">
+                <title>Understand the Role of a Preface</title>
+
+                <p>Chicago Manual of Style (15th Edition, 1.49) begins with <q>Material normally contained in an author's preface includes reasons for undertaking the work, method of research, <ellipsis/></q>  Note that a preface is not introductory content and is not an introduction.  It is written from the author's point-of-view, and may include information about why they are qualified to write on the topic of the book.  If there are several editions, the prefaces to the newer editions are placed first.  See the related <xref ref="best-practice-chapter-zero"/>.</p>
+            </note>
         </subsection>
 
     </section>
@@ -2943,10 +2963,10 @@
             <p></p>
         </subsection>
 
-        <subsection>
+        <subsection xml:id="topic-back-colophon">
             <title>(*) Colophon</title>
 
-            <p></p>
+            <p>The <em>back</em> colophon, what most authors think of as <em>the</em> colophon. (There is also a <em>front</em> colophon, see <xref ref="topic-front-colophon"/>).</p>
         </subsection>
     </section>
 
