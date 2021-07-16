@@ -821,6 +821,7 @@
         <p><c>demonstration</c> is slated for removal or an overhaul, and so is in the <xref ref="badbank" text="title" />.  Avoid using them for now.</p>
 
         <!-- BlockText is enforced via XSL for assemblage, keep synchronized -->
+        <!-- BlockText is enforced via XSL for Aside, keep synchronized      -->
         <fragment xml:id="block">
             <title>Blocks</title>
             <code>
@@ -1304,12 +1305,13 @@
 
         <p>An aside is a deviation from the narrative, and might physically move in the presentation (say, to a margin, or to a knowl).  <c>biographical</c> and <c>historical</c> may be further developed.</p>
 
+        <!-- BlockText is enforced via XSL for Aside, keep synchronized -->
         <fragment xml:id="aside">
             <title>Asides, and similar</title>
             <code>
             AsideLike =
                 MetaDataTitleOptional,
-                BlockStatement+
+                BlockText+
             Aside =
                 element aside {AsideLike} |
                 element biographical {AsideLike} |

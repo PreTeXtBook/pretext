@@ -1642,7 +1642,7 @@
   <define name="AsideLike">
     <ref name="MetaDataTitleOptional"/>
     <oneOrMore>
-      <ref name="BlockStatement"/>
+      <ref name="BlockText"/>
     </oneOrMore>
   </define>
   <define name="Aside">

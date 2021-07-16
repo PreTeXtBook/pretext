@@ -629,7 +629,7 @@
             
             AsideLike =
                 MetaDataTitleOptional,
-                BlockStatement+
+                BlockText+
             Aside =
                 element aside {AsideLike} |
                 element biographical {AsideLike} |
