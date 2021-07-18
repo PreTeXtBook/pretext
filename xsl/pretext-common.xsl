@@ -5803,7 +5803,14 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Structure Numbers: Exercise Groups -->
 <!-- An exercisegroup gets it structure number from the parent exercises -->
 <xsl:template match="exercisegroup" mode="structure-number">
-    <xsl:apply-templates select="parent::*" mode="number" />
+    <xsl:choose>
+        <xsl:when test="parent::page">
+            <xsl:apply-templates select="parent::page/parent::*" mode="number" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="parent::*" mode="number" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Hints, answers, solutions get structure number from parent       -->
