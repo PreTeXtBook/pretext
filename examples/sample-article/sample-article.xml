@@ -11219,6 +11219,44 @@ the xsltproc executable.
                     </sidebyside>
                 </page>
             </worksheet>
+
+            <worksheet>
+                <title>Exercisegroups in a Worksheet</title>
+                <introduction>
+                    <p>
+                        This worksheet tests what happens when a worksheet contains exercisegroups.
+                    </p>
+                </introduction>
+                <page>
+                    <exercisegroup cols="2">
+                        <introduction>
+                            <p>
+                                Find the derivative of each function.
+                            </p>
+                        </introduction>
+                        <exercise>
+                            <p>
+                                <m>x^2</m>
+                            </p>
+                        </exercise>
+                        <exercise>
+                            <p>
+                                <m>2^x</m>
+                            </p>
+                        </exercise>
+                        <exercise>
+                            <p>
+                                <m>\log_2(x)</m>
+                            </p>
+                        </exercise>
+                        <exercise>
+                            <p>
+                                <m>2x</m>
+                            </p>
+                        </exercise>
+                    </exercisegroup>
+                </page>
+            </worksheet>
         </section>
 
         <section xml:id="exercises-single">
