@@ -838,7 +838,7 @@
         <subsection>
             <title>Isomorphic Blocks</title>
 
-            <p>The structure of a block is described carefully in the schema (<xref ref="schema"/>).  There are approximately fourty blocks that are arranged into ten groups, within which they behave identically, except for their displayed names.  These groupings are defined in the <c>xsl/entities.ent</c> file, which we summarize in the next table.  The category name is taken from the entities file, and the notes are meant to describe the distinctive capabilities of the category.</p>
+            <p>The structure of a block is described carefully in the schema (<xref ref="schema"/>).  There are approximately forty blocks that are arranged into ten groups, within which they behave identically, except for their displayed names.  An exception is the group of four <q>figure-like</q> items which are very similar, but have differences beyond just their displayed names.  These groupings are defined in the <c>xsl/entities.ent</c> file, which we summarize in the next table.  The category name is taken from the entities file, and the notes are meant to describe the distinctive capabilities of the category.</p>
 
             <list xml:id="block-summary">
                 <title>Summary of Blocks</title>
@@ -865,7 +865,7 @@
                     <li>
                         <title>FIGURE-LIKE</title>
                         <p><tag>figure</tag>, <tag>table</tag>, <tag>listing</tag>, <tag>list</tag></p>
-                        <p>An object that is a container for other atomic objects, which are typically somewhat rigid (not reflowable) or two-dimensional.  Typically with a number, and provided with a title or caption.  A <tag>table</tag> can only hold a <tag>tabular</tag>, while a <tag>listing</tag> is meant for <tag>program</tag> and <tag>console</tag>.  A <tag>list</tag> is not the list itself, but a container for one of the three possible lists (see <xref ref="topic-lists"/> and especially <xref ref="topic-named-list"/>).  A <tag>figure</tag> is the most liberal, allowing a wide variety of contents, with <tag>image</tag> being the prototypical example.</p>
+                        <p>An object that is a container for other atomic objects, which are typically somewhat rigid (not reflowable) or two-dimensional.  Typically with a number, and provided with a title or caption.  But each is slightly different in what it can contain and how it is rendered.  A <tag>table</tag> can only hold a <tag>tabular</tag>, while a <tag>listing</tag> is meant for <tag>program</tag> and <tag>console</tag>.  A <tag>list</tag> is not the list itself, but a container for one of the three possible lists (see <xref ref="topic-lists"/> and especially <xref ref="topic-named-list"/>).  A <tag>figure</tag> is the most liberal, allowing a wide variety of contents, with <tag>image</tag> being the prototypical example.  These are not designed with the expectation that they can be renamed.</p>
                     </li>
 
                     <li>
@@ -920,7 +920,7 @@
             <title>Renaming Blocks</title>
             <idx>renaming blocks</idx>
 
-            <p>A common desire of authors new to <pretext/> is a new block.  Extending <pretext/> to add a new one is not supported, nor an easy exercise.  One of the reasons for multiple versions of blocks, with common behaviors, is that you can appropriate one for use with your project and give it a new name.  So for example, a biology textbook might want to use <tag>activity</tag> for a laboratory, but rename it to <q>Laboratory</q>.   Of course, this means you will forego having any <q>Activity</q> in your book.  (But if you <em>are the first</em> to write a biology textbook in <pretext/> perhaps you should talk to us about a real <tag>laboratory</tag> element that behaves well for all the physical and biological sciences!)  Here is the procedure:<ol>
+            <p>A common desire of authors new to <pretext/> is a new block.  Authors extending <pretext/> to add a new one is not supported, and it is not even straightforward for a <pretext/> developer to provide comprehensive support for a new block.  One of the reasons for multiple versions of blocks, with common behaviors, is that you can appropriate one for use with your project and give it a new name.  So for example, a biology textbook might want to use <tag>activity</tag> for a laboratory, but rename it to <q>Laboratory</q>.   Of course, this means you will forego having any <q>Activity</q> in your book.  (But if you <em>are the first</em> to write a biology textbook in <pretext/> perhaps you should talk to us about a real <tag>laboratory</tag> element that behaves well for all the physical and biological sciences!)  Here is the procedure:<ol>
                 <li>Choose a block from <xref ref="block-summary"/> that has behavior similar to your intended use, and which you do not forsee using as-is in your project.</li>
 
                 <li>In the <tag>docinfo</tag> section use a <tag>rename</tag> element.  The content should be the new name (<q>Laboratory</q> above), while the <attr>element</attr> attribute should be the name of the element renamed (<c>activity</c> above).</li>
