@@ -3967,14 +3967,58 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="block-type" select="$block-type"/>
             </xsl:apply-templates>
         </xsl:when>
+        <!-- then terminal task, may have solutions to optionally display -->
         <xsl:otherwise>
+            <!-- We identify the container, in order to classify the    -->
+            <!-- group of switches that will control visibility of      -->
+            <!-- solutions.  Exactly one of these three is a singleton, -->
+            <!-- the other two are empty.                               -->
+            <xsl:variable name="exercise-container" select="ancestor::exercise"/>
+            <xsl:variable name="project-container" select="ancestor::*[&PROJECT-FILTER;]"/>
+            <xsl:variable name="example-container" select="ancestor::*[&EXAMPLE-FILTER;]"/>
+            <!-- Now booleans for exercises or projects, exercises below -->
+            <xsl:variable name="project" select="boolean($project-container)"/>
+            <xsl:variable name="example" select="boolean($example-container)"/>
+            <!-- We classify the four types of exercises further based -->
+            <!-- on location.  Inline is "everything else".            -->
+            <xsl:variable name="divisional" select="$exercise-container and $exercise-container/ancestor::exercises"/>
+            <xsl:variable name="worksheet" select="$exercise-container and $exercise-container/ancestor::worksheet"/>
+            <xsl:variable name="reading" select="$exercise-container and $exercise-container/ancestor::reading-questions"/>
+            <xsl:variable name="inline" select="$exercise-container and not($divisional or $worksheet or $reading)"/>
+            <!-- We have six booleans, exactly one is true, thus  -->
+            <!-- classifying a "task" by its employment/location. -->
+            <!-- We now form a set of three booleans, appropriate -->
+            <!-- for setting the task finds itself in.  There are -->
+            <!-- five author-supplied switches and an "example"   -->
+            <!-- *always* shows its solutions (not an "exercise). -->
+            <xsl:variable name="b-has-hint"
+                select="($inline and $b-has-inline-hint)  or
+                        ($project and $b-has-project-hint)  or
+                        ($divisional and $b-has-divisional-hint) or
+                        ($worksheet and $b-has-worksheet-hint)  or
+                        ($reading and $b-has-reading-hint)  or
+                         $example"/>
+            <xsl:variable name="b-has-answer"
+                select="($inline and $b-has-inline-answer)  or
+                        ($project and $b-has-project-answer)  or
+                        ($divisional and $b-has-divisional-answer) or
+                        ($worksheet and $b-has-worksheet-answer)  or
+                        ($reading and $b-has-reading-answer)  or
+                         $example"/>
+            <xsl:variable name="b-has-solution"
+                select="($inline and $b-has-inline-solution)  or
+                        ($project and $b-has-project-solution)  or
+                        ($divisional and $b-has-divisional-solution) or
+                        ($worksheet and $b-has-worksheet-solution)  or
+                        ($reading and $b-has-reading-solution)  or
+                         $example"/>
             <xsl:apply-templates select="."  mode="exercise-components">
                 <xsl:with-param name="b-original" select="$b-original"/>
                 <xsl:with-param name="block-type" select="$block-type"/>
                 <xsl:with-param name="b-has-statement" select="true()" />
-                <xsl:with-param name="b-has-hint"      select="$b-has-project-hint" />
-                <xsl:with-param name="b-has-answer"    select="$b-has-project-answer" />
-                <xsl:with-param name="b-has-solution"  select="$b-has-project-solution" />
+                <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+                <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+                <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
             </xsl:apply-templates>
         </xsl:otherwise>
    </xsl:choose>
