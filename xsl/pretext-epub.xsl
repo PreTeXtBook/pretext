@@ -212,8 +212,12 @@
 
 <!-- Read the code and documentation for "chunking" in xsl/mathbook-common.xsl -->
 
-
-<xsl:template match="&STRUCTURAL;" mode="file-wrap">
+<!-- Normally a "conclusion" would be on a "summary" page, or a -->
+<!-- component of the page for its containing division.  In the -->
+<!-- EPUB conversion with "chapter" having "section" it gets an -->
+<!-- HTML page of its own as part of the "summary" hack.  Ditto -->
+<!-- for "outcomes" which might appear in a different order.    -->
+<xsl:template match="&STRUCTURAL;|chapter/conclusion|chapter/outcomes" mode="file-wrap">
     <xsl:param name="content" />
     <xsl:variable name="file">
         <xsl:value-of select="$content-dir" />
@@ -254,19 +258,29 @@
     </exsl:document>
 </xsl:template>
 
-<!-- At level 1, we can just kill book's summary page -->
-
 <!-- The book element gets mined in various ways,            -->
 <!-- but the "usual" HTML treatment can/should be thrown out -->
-<!-- At fixed level 1, this is a summary page                -->
+<!-- At fixed level 2, this is a summary page                -->
 <!-- Later gives precedence?  So overrides above             -->
 <xsl:template match="book" mode="file-wrap" />
 
-<!-- At level 2 we need to capture chapter and appendix -->
-<!-- introductions from summary page that is at level 1 -->
-<!-- NB: we are missing conclusions here                -->
-<!-- NB: copied from mathbook-html.xsl, sans            -->
-<!-- the summary links and the conclusion               -->
+<!-- This seems a bit dangerous, but this content is fairly small -->
+<!-- and they are going into their own files.  So it seems the    -->
+<!-- right thing to do, while making minimal changes elsewhere.   -->
+<xsl:template match="chapter/conclusion|chapter/outcomes" mode="containing-filename">
+    <xsl:apply-templates select="." mode="visible-id"/>
+    <xsl:text>.xhtml</xsl:text>
+</xsl:template>
+
+<!-- If a "book" has some "chapter" subdivided by "section" then -->
+<!-- at a chunking level of 2, the "chapter" is an intermediate  -->
+<!-- node and will produce a "summary" page.  We implement that  -->
+<!-- to produce content that is a faux chapter that is just the  -->
+<!-- heading and the lead-in material.  Anything after the last  -->
+<!-- division (conclusion, outcomes) will create s of their own, -->
+<!-- which will appear as a continuation/ending of the chapter.  -->
+<!-- NB: copied from pretext-html.xsl, sans the summary links    -->
+<!-- and the conclusion                                          -->
 <xsl:template match="frontmatter|chapter|appendix" mode="summary">
     <!-- location info for debugging efforts -->
     <xsl:apply-templates select="." mode="debug-location" />
@@ -280,6 +294,20 @@
         <!-- deleted "nav" and summary links here -->
         <!-- "conclusion" is being missed here    -->
     </section>
+    <xsl:if test="conclusion">
+        <xsl:apply-templates select="conclusion" mode="file-wrap">
+            <xsl:with-param name="content">
+                <xsl:apply-templates select="conclusion"/>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <xsl:if test="outcomes">
+        <xsl:apply-templates select="conclusion" mode="file-wrap">
+            <xsl:with-param name="content">
+                <xsl:apply-templates select="outcomes"/>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
 </xsl:template>
 
 <!-- At level 2, the backmatter summary is useless, -->
@@ -456,7 +484,7 @@
 <!-- recurse into contents for image files, etc    -->
 <!-- See "Core Media Type Resources"               -->
 <!-- Add to spine identically                      -->
-<xsl:template match="frontmatter|colophon|acknowledgement|preface|biography|chapter|appendix|index|section|exercises|references|solutions" mode="manifest">
+<xsl:template match="frontmatter|colophon|acknowledgement|preface|biography|chapter|chapter/conclusion|chapter/outcomes|appendix|index|section|exercises|references|solutions" mode="manifest">
     <!-- Annotate manifest entries -->
     <xsl:comment>
         <xsl:apply-templates select="." mode="long-name" />
@@ -567,7 +595,7 @@
 <!-- Specialized divisions will only become files in the manifest at     -->
 <!-- chunk level 2, in other words, peers of chapters or sections        -->
 <!-- (book or chapter/appendix as parent, respectively)                  -->
-<xsl:template match="frontmatter|colophon|acknowledgement|preface|biography|chapter|appendix|index|section|exercises[parent::book|parent::chapter|parent::appendix]|reading-questions[parent::book|parent::chapter|parent::appendix]|references[parent::book|parent::chapter|parent::appendix]|solutions[parent::book|parent::chapter|parent::appendix]|glossary[parent::book|parent::chapter|parent::appendix]" mode="spine">
+<xsl:template match="frontmatter|colophon|acknowledgement|preface|biography|chapter|appendix|index|section|exercises[parent::book|parent::chapter|parent::appendix]|reading-questions[parent::book|parent::chapter|parent::appendix]|references[parent::book|parent::chapter|parent::appendix]|solutions[parent::book|parent::chapter|parent::appendix]|glossary[parent::book|parent::chapter|parent::appendix]|conclusion[parent::chapter]|outcomes[parent::chapter]" mode="spine">
     <xsl:element name="itemref" xmlns="http://www.idpf.org/2007/opf">
         <xsl:attribute name="idref">
             <xsl:apply-templates select="." mode="html-id" />

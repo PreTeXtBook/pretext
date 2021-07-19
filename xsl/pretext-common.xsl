@@ -5597,6 +5597,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <!-- numbering scheme NB: this is *not* the serial    -->
         <!-- number, so for example, the summary page for     -->
         <!-- a part *will* have a number, and the right one   -->
+        <!-- NB: can $nodes be stripped without the  position()  function? -->
         <xsl:when test="$nodes[1][self::part or self::backmatter]">
             <xsl:apply-templates select="." mode="multi-number">
                 <xsl:with-param name="nodes" select="$nodes[position() > 1]" />
@@ -11663,6 +11664,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Take as input a node set of attributes -->
 <!-- of percentages (with '%' at the end)   -->
 <!-- Check that sum is under 100%           -->
+<!-- NB: can $nodes be stripped without the  position()  function? -->
 <xsl:template name="cap-width-at-one-hundred-percent">
     <xsl:param name="nodeset" />
     <xsl:param name="cap" select="100" />

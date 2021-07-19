@@ -3956,7 +3956,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\\&#xa;</xsl:text>
         <xsl:apply-templates select="email" />
     </xsl:if>
-    <xsl:if test="position() != last()" >
+    <xsl:if test="following-sibling::author" >
         <xsl:text>&#xa;\and</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
@@ -3980,7 +3980,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\\&#xa;</xsl:text>
         <xsl:apply-templates select="email" />
     </xsl:if>
-    <xsl:if test="position() != last()" >
+    <xsl:if test="following-sibling::author" >
         <xsl:text>&#xa;\and</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
@@ -6448,7 +6448,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="block-options"/>
     <xsl:text>%&#xa;</xsl:text>
-    <xsl:apply-templates select="p|&FIGURE-LIKE;|sidebyside" />
+    <!-- Coordinate with schema, since we enforce it here -->
+    <xsl:apply-templates select="p|blockquote|pre|image|video|program|console|tabular"/>
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>

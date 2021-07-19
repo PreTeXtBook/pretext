@@ -385,7 +385,7 @@
         <xsl:with-param name="block-title">Scaffold</xsl:with-param>
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
-    <xsl:text>Scaffold::Begin(numbered=>1);</xsl:text>
+    <xsl:text>Scaffold::Begin(is_open => "correct_or_first_incorrect", numbered => 1);</xsl:text>
     <xsl:if test="$b-human-readable">
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
@@ -602,7 +602,7 @@
         <xsl:when test="line">
             <xsl:for-each select="line">
                 <xsl:apply-templates select="." mode="delimit"/>
-                <xsl:if test="not(position()=last())">
+                <xsl:if test="following-sibling::line">
                     <xsl:text>, </xsl:text>
                 </xsl:if>
             </xsl:for-each>
@@ -668,7 +668,7 @@
     <xsl:if test="/mathbook/book|/mathbook/article">
         <xsl:for-each select="/mathbook/book/frontmatter/titlepage/author|/mathbook/article/frontmatter/titlepage/author">
             <xsl:value-of select="personname"/>
-            <xsl:if test="not(position()=last())">
+            <xsl:if test="following-sibling::author">
                 <xsl:text>, </xsl:text>
             </xsl:if>
         </xsl:for-each>

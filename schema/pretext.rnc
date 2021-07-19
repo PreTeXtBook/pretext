@@ -183,7 +183,7 @@
                 }
             BookFrontMatter = element frontmatter {
                     MetaDataTitleOptional,
-                    TitlePage?,
+                    TitlePage,
                     ColophonFront?,
                     Biography*,
                     Dedication?,
@@ -629,7 +629,7 @@
             
             AsideLike =
                 MetaDataTitleOptional,
-                BlockStatement+
+                BlockText+
             Aside =
                 element aside {AsideLike} |
                 element biographical {AsideLike} |

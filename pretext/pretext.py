@@ -1305,6 +1305,8 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
     msg = 'converting source ({}) and clean representations ({}) into liblouis precursor XML file ({})'
     _debug(msg.format(xml_source, math_representations, liblouis_xml))
     stringparams['mathfile'] = math_representations
+    # pass in the page format (for messages about graphics, etc.)
+    stringparams['page-format'] = page_format
     if pub_file:
         stringparams['publisher'] = pub_file
     xsltproc(braille_xslt, xml_source, None, tmp_dir, stringparams)
