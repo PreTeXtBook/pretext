@@ -45,7 +45,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <p>The quick brown fox jumps over the lazy dog.</p>
             <p>Some test cross-references:<ul>
             <li>To the next chapter: <xref ref="nonsense-chapter"/></li>
-        <li>To a figure much later: <xref ref="figure-cubic-polynomial"/></li>
+            <li>To a figure much later: <xref ref="figure-cubic-polynomial"/></li>
+            <li>To some multi-line display math later <xref ref="small-DE-soln"/></li>
         </ul></p>
         </chapter>
         <chapter xml:id="nonsense-chapter">
@@ -64,6 +65,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <p>This is an aside. Please don't let it distract you.</p>
                 </aside>
                 <p>Maecenas ex enim, lobortis et blandit sit amet, pretium in ante. Sed mollis sollicitudin nibh non consectetur. Vestibulum eget tortor sit amet felis iaculis fermentum. Sed eu nisl a urna cursus congue at nec nulla. Mauris lacinia molestie tristique. Maecenas aliquet rutrum venenatis. Vivamus quis metus sit amet est feugiat facilisis quis et massa. Aenean dui sem, dapibus at imperdiet ac, auctor sit amet arcu. Vestibulum eget porttitor est. Aliquam id pellentesque quam, vitae rhoncus metus. In congue condimentum malesuada. Mauris in condimentum eros, eget mattis nibh. Praesent et ex porttitor, lobortis nibh sed, cursus ante. Suspendisse dapibus vel risus eu pellentesque. </p>
+                <p>We end here with multiline display math to test
+                linking from elsewhere into this multi-page section.
+                <mdn>
+                    <mrow xml:id="small-DE">
+                        -9y&amp;=y''-6y'
+                    </mrow>
+                    <mrow xml:id="small-DE-soln">
+                        y&amp;=c_1e^{3x} + c_2 x e^{3x}
+                    </mrow>
+                </mdn>
+                </p>
             </section>
             <section>
                 <title>A Section with Subsections</title>
@@ -120,7 +132,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <chapter>
             <title>A Bit of Math <m>y=mx+b</m></title>
             <shorttitle>A Bit of Math y=mx+b</shorttitle>
-            <p><idx>Diophantine equation</idx>This paragraph has some inline math, a Diophantine equation, <m>x^2 + \doubler{y^2} = z^2</m>.  And some display math about infinite series: <me>\sum_{n=1}^\infty\,\frac{1}{n^2} = \frac{\pi^2}{6}.</me>  Look at the XML source to see how <latex/> macros are employed.</p>
+            <p><idx>Diophantine equation</idx>This paragraph has some
+            inline math, a Diophantine equation, <m>x^2 +
+            \doubler{y^2} = z^2</m>.  And some display math about
+            infinite series: <men xml:id="zeta-2">\sum_{n=1}^\infty\,\frac{1}{n^2} = \frac{\pi^2}{6}.</men>  Look at the XML source to see how <latex/> macros are employed.</p>
             <p>And a bit of multi-line display math:<mdn><mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow><mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow><mrow xml:id="equation-conclude">&amp;=f(x)-0 = f(x)</mrow></mdn>.</p>
             <p>And multi-line math with an embedded cross-reference to a figure:<md><mrow>x^2 + y^2 &amp;= z^2&amp;&amp;<xref ref="complete-graph"/></mrow><mrow>a^2 + b^2 &amp;= c^2&amp;&amp;</mrow></md></p>
             <p>Nice.</p>
@@ -152,6 +167,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <caption>A cubic polynomial and its derivative</caption>
                     <image source="cubic-function.png" width="60%"/>
                 </figure>
+                <p>Here we drop a small reference to an equation
+                earlier, notably <xref ref="zeta-2" />.</p>
                 <p>A Scalable Vector Graphics (SVG) image created externally in Sage and then included here as a vector image (no file extension given).</p>
                 <figure xml:id="complete-graph">
                     <caption>A complete graph on 16 vertices</caption>
@@ -262,8 +279,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <image source="complete-graph" width="70%"/>
                 <p>We like to put <init>URL</init>s into footnotes, especially for formats like this where they may not be active.  This output is from <url href="https://pretextbook.org"><pretext/></url><fn><c>pretextbook.org</c></fn>.</p>
                 <p>We make a reference to some math in another chapter
-            <xref ref="equation-conclude"/> in order to test that
-            validation works for this.</p>
+                <xref ref="equation-conclude"/> in order to test that
+                validation works for this. We also refer to <xref
+                ref="small-DE"/></p>
                 <exercise>
                     <statement>
                         <p>A sample exercise, where a <tag>hint</tag> and a <tag>solution</tag> should be visible (rather than in a knowl).</p>
