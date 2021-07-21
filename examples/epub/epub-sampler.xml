@@ -80,7 +80,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
         <chapter xml:id="nonsense-chapter">
             <title>Two</title>
-            <introduction><p>This is the introduction to the chapter.</p></introduction>
+            <introduction>
+                <p>This is the introduction to the chapter. We put
+		some math <me>\int_a^b f(t)\, dt</me> in here for
+		validation purposes.</p>
+            </introduction>
             <section>
                 <title>A silly section.</title>
                 <p>This section just exists so that we can add <tag>introduction</tag> and <tag>conclusion</tag> tags to this chapter.
@@ -170,45 +174,47 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </chapter>
 
         <chapter>
-            <title>Some Images</title>
-
-            <p><idx>Portable Network Graphics (PNG)</idx><idx><h>PNG</h><see>Portable Network Graphics</see></idx>A Portable Network Graphics (PNG) image created externally in Sage and then included directly here.</p>
-
-            <figure xml:id="figure-cubic-polynomial">
-                <caption>A cubic polynomial and its derivative</caption>
-                <image source="cubic-function.png" width="60%"/>
-            </figure>
-
-            <p>A Scalable Vector Graphics (SVG) image created externally in Sage and then included here as a vector image (no file extension given).</p>
-
-            <figure xml:id="complete-graph" width="20%">
-                <caption>A complete graph on 16 vertices</caption>
-                <image source="complete-graph" width="70%"/>
-            </figure>
-
-            <p>A Scalable Vector Graphics (SVG) image described by Sage commands, which is produced by the <c>pretext</c> script.</p>
-
-            <figure xml:id="figure-sage-multigraph">
-                <caption>A Sage multigraph of a sentence</caption>
-                <image xml:id="sageplot-sentence-multigraph" width="50%">
-                    <sageplot>
-                    stnc = 'I am a cool multiedge graph with loops'
-                    g = DiGraph({}, loops=True, multiedges=True)
-                    for a,b in [(stnc[i], stnc[i+1]) for i in xrange(len(stnc)-1)]:
-                       g.add_edge(a, b, b)
-                    g.plot(color_by_label=True, edge_style='solid', figsize=(8,8))
-                    </sageplot>
-                </image>
-            </figure>
-
-            <!-- http://www.texample.net/media/tikz/examples/TEX/noise-shaper.tex -->
-            <figure xml:id="figure-tikz-electronics">
-                <caption>TikZ Electronics Diagram</caption>
-                <image xml:id="tikz-electronics">
-                    <description>A pile of electronic components wired together</description>
-                    <latex-image>
-                    <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
-                    <![CDATA[\tikzset{%
+            <title>Some Images <m>ax^2+bx+c=0</m></title>
+            <shorttitle>Some Imagex ax^2+bx+c=0</shorttitle>
+	    <objectives>
+		<ul>
+		    <li>To discuss formats for graphics</li>
+		    <li>To stress test the EPUB conversion with
+		    <m>y=f'(x)</m> math in here</li>
+		</ul>
+	    </objectives>
+            <section>
+                <title>Graphics formats <m>f'(x)</m></title>
+		<shorttitle>Graphics formats f'(x)</shorttitle>
+                <p><idx>Portable Network Graphics (PNG)</idx><idx><h>PNG</h><see>Portable Network Graphics</see></idx>A Portable Network Graphics (PNG) image created externally in Sage and then included directly here.</p>
+                <figure xml:id="figure-cubic-polynomial">
+                    <caption>A cubic polynomial and its derivative</caption>
+                    <image source="cubic-function.png" width="60%"/>
+                </figure>
+                <p>A Scalable Vector Graphics (SVG) image created externally in Sage and then included here as a vector image (no file extension given).</p>
+                <figure xml:id="complete-graph">
+                    <caption>A complete graph on 16 vertices</caption>
+                    <image source="complete-graph" width="70%"/>
+                </figure>
+                <p>A Scalable Vector Graphics (SVG) image described by Sage commands, which is produced by the <c>pretext</c> script.</p>
+                <figure xml:id="figure-sage-multigraph">
+                    <caption>A Sage multigraph of a sentence</caption>
+                    <image xml:id="sageplot-sentence-multigraph" width="50%">
+                        <sageplot>
+                            stnc = 'I am a cool multiedge graph with loops'
+                            g = DiGraph({}, loops=True, multiedges=True)
+                            for a,b in [(stnc[i], stnc[i+1]) for i in xrange(len(stnc)-1)]:
+                                g.add_edge(a, b, b)
+                            g.plot(color_by_label=True, edge_style='solid', figsize=(8,8))
+                        </sageplot>
+                    </image>
+                </figure>
+                <!-- http://www.texample.net/media/tikz/examples/TEX/noise-shaper.tex -->
+                <figure xml:id="figure-tikz-electronics">
+                    <caption>TikZ Electronics Diagram</caption>
+                    <image xml:id="tikz-electronics">
+                        <description>A pile of electronic components wired together</description>
+                        <latex-image><!-- CDATA prevents certain LaTeX code from being interpreted as xml --><![CDATA[\tikzset{%
                       block/.style    = {draw, thick, rectangle, minimum height = 3em,
                         minimum width = 3em},
                       sum/.style      = {draw, circle, node distance = 2cm}, % Adder
@@ -284,43 +290,62 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         \node at (-0.5,1) [above=5mm, right=0mm] {\textsc{first-order noise shaper}};
                         \draw [color=gray,thick](-0.5,-9) rectangle (12.5,-5);
                         \node at (-0.5,-9) [below=5mm, right=0mm] {\textsc{second-order noise shaper}};
-                    \end{tikzpicture}]]>
-                    </latex-image>
-                </image>
-            </figure>
-
-            <p>We repeat an image created from an external file, because the EPUB format only wants the file noted once.</p>
-
-            <image source="complete-graph" width="70%"/>
-
-            <p>We like to put <init>URL</init>s into footnotes, especially for formats like this where they may not be active.  This output is from <url href="https://pretextbook.org"><pretext/></url><fn><c>pretextbook.org</c></fn>.</p>
-
-            <p>We make a reference to some math in another chapter
-            <xref ref="equation-conclude" /> in order to test that
+                        \end{tikzpicture}
+                    ]]></latex-image>
+                    </image>
+                </figure>
+            </section>
+            <section>
+                <title>Additional stress testing</title>
+                <p>We repeat an image created from an external file, because the EPUB format only wants the file noted once.</p>
+                <image source="complete-graph" width="70%"/>
+                <p>We like to put <init>URL</init>s into footnotes, especially for formats like this where they may not be active.  This output is from <url href="https://pretextbook.org"><pretext/></url><fn><c>pretextbook.org</c></fn>.</p>
+                <p>We make a reference to some math in another chapter
+            <xref ref="equation-conclude"/> in order to test that
             validation works for this.</p>
-
-            <exercise>
-                <statement>
-                    <p>A sample exercise, where a <tag>hint</tag> and a <tag>solution</tag> should be visible (rather than in a knowl).</p>
-                </statement>
-                <hint>
-                    <p>Just a little help.</p>
-                </hint>
-                <solution>
-                    <p>The whole story with all the details.</p>
-                </solution>
-            </exercise>
-
+                <exercise>
+                    <statement>
+                        <p>A sample exercise, where a <tag>hint</tag> and a <tag>solution</tag> should be visible (rather than in a knowl).</p>
+                    </statement>
+                    <hint>
+                        <p>Just a little help.</p>
+                    </hint>
+                    <solution>
+                        <p>The whole story with all the details.</p>
+                    </solution>
+                </exercise>
+            </section>
+            <conclusion xml:id="concl-followed-by-outcomes">
+                <p>This is a <tag>conclusion</tag>. We will follow it with
+            an <tag>outcomes</tag>.</p>
+            </conclusion>
+            <outcomes>
+                <title>The really awesome things we've done!</title>
+                <ol>
+                    <li>We just tested if we get this list of outcomes.</li>
+                </ol>
+            </outcomes>
         </chapter>
         <backmatter>
             <appendix>
                 <title>Maybe the license</title>
                 <p>Lots of books written in <pretext/> include the terms of their license in an appendix, so let's use this as a test.</p>
             </appendix>
+            <appendix xml:id="figure-list">
+                <title>List of Figures</title>
+                <list-of elements="figure" divisions="chapter subsection" empty="no" />
+	    </appendix>
             <index>
                 <title>Index</title>
                 <index-list/>
             </index>
+	    <colophon>
+		<blockquote><p>This document was authored in <pretext
+		/> to stress test conversion to
+		<init>EPUB</init>. Please do not judge its contents,
+		which randomly has some <m>y=e^{ax+b}</m> math in the
+		rear colophon.</p></blockquote>
+	    </colophon>
         </backmatter>
 
     </book>
