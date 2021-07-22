@@ -245,7 +245,20 @@
                 <xsl:call-template name="mathjax-css"/>
                 <xsl:call-template name="epub-kindle-css"/>
                 <title>
-                    <xsl:apply-templates select="." mode="title-short"/>
+                    <xsl:choose>
+                        <!-- make sure hacked-in "conclusion" and "outcomes"  -->
+                        <!-- get *some sort* of title, this could be improved -->
+                        <!-- by testing them for a "title" element            -->
+                        <xsl:when test="self::conclusion">
+                            <xsl:text>Conclusion</xsl:text>
+                        </xsl:when>
+                        <xsl:when test="self::outcomes">
+                            <xsl:text>Outcomes</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:apply-templates select="." mode="title-short"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </title>
             </head>
             <!-- use class to repurpose HTML CSS work -->
