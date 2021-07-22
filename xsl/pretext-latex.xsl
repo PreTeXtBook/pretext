@@ -7354,17 +7354,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:text>https://youtu.be/</xsl:text>
     <xsl:choose>
         <xsl:when test="@youtubeplaylist">
             <xsl:text>playlist?list=</xsl:text>
             <xsl:value-of select="$youtube" />
         </xsl:when>
         <xsl:when test="contains($youtube, ' ')">
+            <xsl:text>https://youtube.com/</xsl:text>
             <xsl:text>watch_videos?video_ids=</xsl:text>
             <xsl:value-of select="str:replace($youtube, ' ', ',')" />
         </xsl:when>
         <xsl:otherwise>
+            <xsl:text>https://youtu.be/</xsl:text>
             <xsl:value-of select="$youtube" />
         </xsl:otherwise>
     </xsl:choose>
