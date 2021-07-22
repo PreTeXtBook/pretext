@@ -8889,8 +8889,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$external-directory"/>
     <xsl:value-of select="@source"/>
-    <xsl:if test="not($extension)">
-        <xsl:text>.pdf&#xa;</xsl:text>
+    <xsl:if test="$extension = ''">
+        <xsl:text>.pdf</xsl:text>
     </xsl:if>
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
