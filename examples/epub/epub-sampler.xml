@@ -271,19 +271,28 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <p>We make a reference to some math in another chapter
             <xref ref="equation-conclude" /> in order to test that
             validation works for this.</p>
-
-            <exercise>
-                <statement>
-                    <p>A sample exercise, where a <tag>hint</tag> and a <tag>solution</tag> should be visible (rather than in a knowl).</p>
-                </statement>
-                <hint>
-                    <p>Just a little help.</p>
-                </hint>
-                <solution>
-                    <p>The whole story with all the details.</p>
-                </solution>
-            </exercise>
-
+                <exercise>
+                    <statement>
+                        <p>A sample exercise, where a <tag>hint</tag> and a <tag>solution</tag> should be visible (rather than in a knowl).</p>
+                    </statement>
+                    <hint>
+                        <p>Just a little help.</p>
+                    </hint>
+                    <solution>
+                        <p>The whole story with all the details.</p>
+                    </solution>
+                </exercise>
+            </section>
+            <conclusion xml:id="concl-followed-by-outcomes">
+                <p>This is a <tag>conclusion</tag>. We will follow it with
+	    an <tag>outcomes</tag>.</p>
+            </conclusion>
+            <outcomes>
+                <title>The really awesome things we've done!</title>
+                <ol>
+                    <li>We just tested if we get this list of outcomes.</li>
+                </ol>
+            </outcomes>
         </chapter>
         <backmatter>
             <appendix>
