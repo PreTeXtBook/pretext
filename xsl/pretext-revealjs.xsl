@@ -342,6 +342,9 @@ dfn {
 
 <xsl:template match="ol">
   <ol>
+    <xsl:if test="@label='a'">
+      <xsl:attribute name="type">a</xsl:attribute>
+    </xsl:if>
     <xsl:apply-templates/>
   </ol>
 </xsl:template>
