@@ -3328,7 +3328,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&EXAMPLE-LIKE;" mode="is-hidden">
     <xsl:value-of select="$knowl-example = 'yes'" />
     <!-- Preserving a way to not knowl anything in a worksheet -->
-    <!-- 
+    <!--
     <xsl:choose>
         <xsl:when test="ancestor::worksheet">
             <xsl:value-of select="false()"/>
@@ -5824,6 +5824,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="archive">
         <xsl:with-param name="base-pathname" select="$base-pathname" />
     </xsl:apply-templates>
+    <!-- possibly provide link to full size image -->
+    <xsl:if test="$b-asymptote-links">
+      <xsl:variable name="image-html-url">
+          <xsl:value-of select="$baseurl"/>
+          <xsl:value-of select="$html-filename"/>
+      </xsl:variable>
+      <div style="text-align: center;">
+        <a href="{$image-html-url}">Click to view full-sized image</a>
+      </div>
+    </xsl:if>
 </xsl:template>
 
 <!-- A named template creates the infrastructure for an SVG image -->
@@ -6767,7 +6777,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <div class="hidden-content">
                 <!-- Hidden content in here                   -->
                 <!-- Turn autoplay on, else two clicks needed -->
-                <iframe id="{$hid}" class="video" 
+                <iframe id="{$hid}" class="video"
                     allowfullscreen="" src="{$source-url-autoplay-on}">
                     <xsl:apply-templates select="." mode="video-iframe-attributes">
                         <xsl:with-param name="autoplay" select="'true'"/>
