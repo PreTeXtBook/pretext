@@ -302,7 +302,7 @@
         </xsl:apply-templates>
     </xsl:if>
     <xsl:if test="outcomes">
-        <xsl:apply-templates select="conclusion" mode="file-wrap">
+        <xsl:apply-templates select="outcomes" mode="file-wrap">
             <xsl:with-param name="content">
                 <xsl:apply-templates select="outcomes"/>
             </xsl:with-param>
