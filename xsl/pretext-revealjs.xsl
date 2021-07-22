@@ -361,6 +361,13 @@ dfn {
       </xsl:attribute>
     </xsl:if>
     <!-- content may be structured, or not -->
+    <xsl:if test="title">
+        <h6 class="heading">
+            <span class="title">
+                <xsl:apply-templates select="." mode="title-xref"/>
+            </span>
+        </h6>
+    </xsl:if>
     <xsl:apply-templates/>
   </li>
 </xsl:template>

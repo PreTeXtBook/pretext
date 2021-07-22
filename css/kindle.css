@@ -1,0 +1,100 @@
+
+.pretext-content.epub img {
+    display: block;
+}
+.pretext-content.epub .solutions {
+    margin-top: 1em;
+}
+
+.pretext-content.epub .solutions .solution .type {
+    font-family: "PT Serif", "Times New Roman", Times, serif;
+    font-weight: bold;
+}
+.pretext-content.epub .solutions .solution .type + .period {
+    margin-right: 0.75em;
+}
+.pretext-content.epub .solutions .solution .type + p {
+   display: inline;
+}
+
+/* default behavior is excessive space below display math. */
+/* should the selector be .mjpage__block? */
+.pretext-content .mjpage + p {
+    margin-top: -0.5em !important;
+}
+.pretext-content .mjpage {
+    margin-bottom: 0 !important;
+}
+/* align inline math baseline */
+.pretext-content .mjpage {
+    vertical-align: -.68ex;
+}
+
+.pretext-content .solution-like > .type {
+    font-weight: bold;
+}
+.pretext-content .solution-like .type + p {
+    display: inline;
+}
+
+/* Greg's L was a line too long */
+.pretext-content article.theorem-like::after,
+.pretext-content article.definition-like::after,
+.pretext-content article.example-like::after,
+.pretext-content article.project-like::after,
+.pretext-content article.remark-like::after,
+.pretext-content article.computation-like::after {
+    margin-top: -1em;
+}
+
+.pretext-content .mjpage {
+    vertical-align: -.68ex;
+}
+
+.pretext-content section {
+    padding-top: 0 !important;
+}
+.pretext-content .subsection {
+    margin-top: 1.5em !important;
+}
+
+/* sage cell code goes in a pre.  What else goes there? */
+.pretext-content pre {
+    font-size: 95%;
+    padding-top: 0.3em;
+    padding-bottom: 0.5em;
+    padding-left: 0.5em;
+    background: #f0f0f0;
+}
+.pretext-content pre.code.input {
+    background: #f0f0ff;
+}
+.pretext-content pre.code.output {
+    background: #f0fff0;
+}
+
+
+/* these "break-(before/after) might not actually do anything */
+.pretext-content section article > .heading,
+.pretext-content section > .heading {
+    display: block;
+    margin-top: 0;
+    break-after: avoid !important;
+}
+.pretext-content section > .heading + p,
+.pretext-content section article > .heading + p,
+.pretext-content section article > .heading + .introduction {
+     display: block;
+     break-before: avoid !important;
+}
+.pretext-content figcaption {
+     break-before: avoid !important;
+}
+.pretext-content figure .image-box,
+.pretext-content figure .tabular-box {
+    break-after: avoid !important;
+}
+.pretext-content figure {
+    break-inside: avoid !important;
+}
+

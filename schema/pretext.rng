@@ -514,9 +514,7 @@
   <define name="BookFrontMatter">
     <element name="frontmatter">
       <ref name="MetaDataTitleOptional"/>
-      <optional>
-        <ref name="TitlePage"/>
-      </optional>
+      <ref name="TitlePage"/>
       <optional>
         <ref name="ColophonFront"/>
       </optional>
@@ -925,6 +923,15 @@
       </optional>
       <optional>
         <attribute name="project"/>
+      </optional>
+      <optional>
+        <attribute name="admit">
+          <choice>
+            <value>all</value>
+            <value>odd</value>
+            <value>even</value>
+          </choice>
+        </attribute>
       </optional>
       <optional>
         <ref name="IntroductionDivision"/>
@@ -1555,7 +1562,7 @@
   </define>
   <define name="Task">
     <element name="task">
-      <ref name="MetaDataTarget"/>
+      <ref name="MetaDataTitleOptional"/>
       <choice>
         <oneOrMore>
           <ref name="BlockStatement"/>
@@ -1633,7 +1640,7 @@
   <define name="AsideLike">
     <ref name="MetaDataTitleOptional"/>
     <oneOrMore>
-      <ref name="BlockStatement"/>
+      <ref name="BlockText"/>
     </oneOrMore>
   </define>
   <define name="Aside">
@@ -1766,7 +1773,6 @@
           <ref name="Poem"/>
           <ref name="Tabular"/>
           <ref name="Image"/>
-          <ref name="ImageWW"/>
           <ref name="Video"/>
           <ref name="Program"/>
           <ref name="Console"/>
@@ -1866,6 +1872,9 @@
         <attribute name="pg-name"/>
       </optional>
       <optional>
+        <attribute name="width"/>
+      </optional>
+      <optional>
         <element name="description">
           <zeroOrMore>
             <choice>
@@ -1873,6 +1882,14 @@
               <ref name="WWVariable"/>
             </choice>
           </zeroOrMore>
+        </element>
+      </optional>
+      <optional>
+        <element name="latex-image">
+          <attribute name="syntax">
+            <value>PGtikz</value>
+          </attribute>
+          <text/>
         </element>
       </optional>
     </element>
@@ -2103,19 +2120,27 @@
       </optional>
       <choice>
         <ref name="AttributesSourceFile"/>
+        <ref name="AttributesNetwork"/>
         <ref name="AttributesYouTube"/>
         <ref name="AttributesYouTubePlaylist"/>
+        <ref name="AttributesVimeo"/>
       </choice>
     </element>
   </define>
   <define name="AttributesSourceFile">
     <attribute name="source"/>
   </define>
+  <define name="AttributesNetwork">
+    <attribute name="href"/>
+  </define>
   <define name="AttributesYouTube">
     <attribute name="youtube"/>
   </define>
   <define name="AttributesYouTubePlaylist">
     <attribute name="youtubeplaylist"/>
+  </define>
+  <define name="AttributesVimeo">
+    <attribute name="vimeo"/>
   </define>
   <define name="ExerciseBody">
     <oneOrMore>
@@ -2393,9 +2418,15 @@
   <define name="WebWorkAuthored">
     <element name="webwork">
       <optional>
+        <ref name="UniqueID"/>
+      </optional>
+      <optional>
         <attribute name="seed">
           <data type="integer"/>
         </attribute>
+      </optional>
+      <optional>
+        <attribute name="copy"/>
       </optional>
       <optional>
         <element name="description">
@@ -2425,6 +2456,17 @@
             <ref name="SolutionWW"/>
           </optional>
         </group>
+        <group>
+          <optional>
+            <ref name="IntroductionText"/>
+          </optional>
+          <oneOrMore>
+            <ref name="TaskWW"/>
+          </oneOrMore>
+          <optional>
+            <ref name="ConclusionText"/>
+          </optional>
+        </group>
         <oneOrMore>
           <element name="stage">
             <optional>
@@ -2442,16 +2484,49 @@
       </choice>
     </element>
   </define>
+  <define name="BlockStatementWW">
+    <choice>
+      <ref name="Paragraph"/>
+      <ref name="Preformatted"/>
+      <ref name="Tabular"/>
+      <ref name="ImageWW"/>
+    </choice>
+  </define>
   <define name="StatementExerciseWW">
     <element name="statement">
       <oneOrMore>
         <choice>
-          <ref name="Paragraph"/>
+          <ref name="BlockStatementWW"/>
           <ref name="WWInstruction"/>
-          <ref name="Preformatted"/>
-          <ref name="SideBySideNoCaption"/>
         </choice>
       </oneOrMore>
+    </element>
+  </define>
+  <define name="TaskWW">
+    <element name="task">
+      <ref name="MetaDataTitleOptional"/>
+      <choice>
+        <group>
+          <ref name="StatementExerciseWW"/>
+          <optional>
+            <ref name="HintWW"/>
+          </optional>
+          <optional>
+            <ref name="SolutionWW"/>
+          </optional>
+        </group>
+        <group>
+          <optional>
+            <ref name="IntroductionText"/>
+          </optional>
+          <oneOrMore>
+            <ref name="TaskWW"/>
+          </oneOrMore>
+          <optional>
+            <ref name="ConclusionText"/>
+          </optional>
+        </group>
+      </choice>
     </element>
   </define>
   <define name="WWMacros">
@@ -2465,7 +2540,7 @@
   </define>
   <define name="WWVariable">
     <element name="var">
-      <a:documentation>The WeBWorK "var" element appears in the RELAX-NG schema as a child of many elements, but almost always as a descendant of a "p" element or a "cell" element.  As an element that is only relevant for a WeBWorK problem, occurences of "var" must be within a "webwork" element.  A Schematron rule will check on these two situations.</a:documentation>
+      <a:documentation>The WeBWorK "var" element appears in the RELAX-NG schema as a child of many elements, but almost always as a descendant of a "p" element or a "cell" element.  As an element that is only relevant for a WeBWorK problem, occurrences of "var" must be within a "webwork" element.  A Schematron rule will check on these two situations.</a:documentation>
       <choice>
         <group>
           <attribute name="name"/>
@@ -2525,22 +2600,14 @@
   <define name="HintWW">
     <element name="hint">
       <oneOrMore>
-        <choice>
-          <ref name="Paragraph"/>
-          <ref name="Preformatted"/>
-          <ref name="SideBySideNoCaption"/>
-        </choice>
+        <ref name="BlockStatementWW"/>
       </oneOrMore>
     </element>
   </define>
   <define name="SolutionWW">
     <element name="solution">
       <oneOrMore>
-        <choice>
-          <ref name="Paragraph"/>
-          <ref name="Preformatted"/>
-          <ref name="SideBySideNoCaption"/>
-        </choice>
+        <ref name="BlockStatementWW"/>
       </oneOrMore>
     </element>
   </define>
@@ -3002,6 +3069,9 @@
   <define name="Url">
     <element name="url">
       <attribute name="href"/>
+      <optional>
+        <attribute name="visual"/>
+      </optional>
       <ref name="TextShort"/>
     </element>
   </define>
@@ -3029,7 +3099,7 @@
   <define name="Notation">
     <element name="notation">
       <element name="usage">
-        <text/>
+        <ref name="MathInline"/>
       </element>
       <element name="description">
         <ref name="TextShort"/>
@@ -3716,6 +3786,11 @@
   </define>
   <define name="Configuration" combine="choice">
     <element name="latex-image-preamble">
+      <optional>
+        <attribute name="syntax">
+          <value>PGtikz</value>
+        </attribute>
+      </optional>
       <text/>
     </element>
   </define>

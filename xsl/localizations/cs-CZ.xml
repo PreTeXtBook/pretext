@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2014-2021 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- See  xsl/localizations/README.md  for an explanation of this file -->
+
+<!-- cs-CZ, Czech (Czechia) -->
+<!-- Jiri Lebl, lebl@okstate.edu, 2021-03-07   -->
+
+<locale language="cs-CZ">
+    <!-- THEOREM-LIKE blocks -->
+    <!-- Environments which have proofs, plus proofs themselves -->
+    <localization string-id='theorem'>Teorém</localization>
+    <localization string-id='corollary'>Důsledek</localization>
+    <localization string-id='lemma'>Lemma</localization>
+    <localization string-id='algorithm'>Algoritmus</localization>
+    <localization string-id='proposition'>Věta</localization>
+    <localization string-id='claim'>Tvrzení</localization>
+    <localization string-id='fact'>Fakt</localization>
+    <localization string-id='proof'>Důkaz</localization>
+    <localization string-id='identity'>Rovnost</localization>
+    <!-- Mathematical statements without proofs -->
+    <!-- AXIOM-LIKE blocks -->
+    <localization string-id='axiom'>Axiom</localization>
+    <localization string-id='conjecture'>Domněnka</localization>
+    <localization string-id='principle'>Princip</localization>
+    <localization string-id='heuristic'>Heurestika</localization>
+    <localization string-id='hypothesis'>Hypotéza</localization>
+    <localization string-id='assumption'>Předpoklad</localization>
+    <!-- Definitions -->
+    <localization string-id='definition'>Definice</localization>
+    <!-- Single Line Mathematics -->
+    <localization string-id='me'>Rovnice</localization>
+    <localization string-id='men'>Rovnice</localization>
+    <localization string-id='mrow'>Rovnice</localization>
+    <!-- Display Mathematics -->
+    <localization string-id='md'>Zobrazená matematika</localization>
+    <localization string-id='mdn'>Zobrazená matematika</localization>
+    <!-- Types of documents, mostly for informational messages -->
+    <localization string-id='volume'>Díl</localization>
+    <localization string-id='book'>Kniha</localization>
+    <localization string-id='article'>Článek</localization>
+    <localization string-id='slideshow'>Prezentace</localization>
+    <localization string-id='letter'>Dopis</localization>
+    <localization string-id='memo'>Sdělení</localization>
+    <localization string-id='presentation'>Prezentace</localization>
+    <!-- Parts of a document -->
+    <localization string-id='frontmatter'>Úvodní část</localization>
+    <localization string-id='part'>Část</localization>
+    <localization string-id='chapter'>Kapitola</localization>
+    <localization string-id='appendix'>Dodatek</localization>
+    <!-- Next is the plural of Appendix, used to identify a group of appendix -->
+    <localization string-id='appendices'>Dodatky</localization>
+    <localization string-id='section'>Sekce</localization>
+    <localization string-id='subsection'>Podsekce</localization>
+    <localization string-id='subsubsection'>Podpodsekce</localization>
+    <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
+    <localization string-id='slide'>Slajd</localization>
+    <localization string-id='introduction'>Úvod</localization>
+    <localization string-id='conclusion'>Závěr</localization>
+    <localization string-id='exercises'>Cvičení</localization>
+    <localization string-id='worksheet'>Pracovní list</localization>
+    <localization string-id='reading-questions'>Otázky ze čtení</localization>
+    <localization string-id='solutions'>Řešení</localization>
+    <localization string-id='glossary'>Vysvětlivky</localization>
+    <localization string-id='references'>Odkazy</localization>
+    <localization string-id='backmatter'>Závěrečná část</localization>
+    <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
+    <localization string-id='paragraphs'>Odstavce</localization>
+    <localization string-id='commentary'>Komentář</localization>
+    <localization string-id='subparagraph'>Pododstavec</localization>
+    <localization string-id='case'>Případ</localization>
+    <!-- Components of the narrative -->
+    <!-- REMARK-LIKE blocks -->
+    <!-- "note" is used within "biblio", likely to change -->
+    <localization string-id='remark'>Poznámka</localization>
+    <localization string-id='convention'>Konvence</localization>
+    <localization string-id='note'>Poznámka</localization>
+    <localization string-id='observation'>Postřeh</localization>
+    <localization string-id='warning'>Varování</localization>
+    <localization string-id='insight'>Nahléd</localization>
+    <localization string-id='computation'>Výpočet</localization>
+    <localization string-id='technology'>Technologie</localization>
+    <!-- ASIDE-LIKE blocks -->
+    <localization string-id='aside'>Poznámka stranou</localization>
+    <localization string-id='biographical'>Biografická poznámka</localization>
+    <localization string-id='historical'>Historická poznámka</localization>
+    <!-- EXAMPLE-LIKE blocks -->
+    <localization string-id='example'>Příklad</localization>
+    <localization string-id='question'>Otázka</localization>
+    <localization string-id='problem'>Problém</localization>
+    <!-- PROJECT-LIKE blocks -->
+    <localization string-id='project'>Projekt</localization>
+    <localization string-id='activity'>Aktivita</localization>
+    <localization string-id='exploration'>Průzkum</localization>
+    <localization string-id='task'>Úkol</localization>
+    <localization string-id='investigation'>Výzkum</localization>
+    <!--  -->
+    <!-- assemblages are collections of minimally structured material -->
+    <localization string-id='assemblage'>Soustava</localization>
+    <localization string-id='poem'>Báseň</localization>
+    <!-- Objectives is the block, objective is a list item within -->
+    <localization string-id='objectives'>Cíle</localization>
+    <localization string-id='objective'>Cíl</localization>
+    <!-- Outcomes is the block, outcome is a list item within (different) -->
+    <localization string-id='outcomes'>Výsledky</localization>
+    <localization string-id='outcome'>Výsledek</localization>
+    <!--  -->
+    <localization string-id='figure'>Obrázek</localization>
+    <localization string-id='table'>Tabulka</localization>
+    <localization string-id='listing'>Výpis</localization>
+    <localization string-id='fn'>Vysvětlivka</localization>
+    <localization string-id='contributor'>Přispěvatel</localization>
+    <!-- Lists and their items -->
+    <localization string-id='list'>Seznam</localization>
+    <localization string-id='li'>Bod</localization>
+    <!-- A term (word) defined in a glossary -->
+    <localization string-id='defined-term'>Termín</localization>
+    <!-- A regular paragraph, not the old sectioning structure -->
+    <localization string-id='p'>Odstavec</localization>
+    <localization string-id='blockquote'>Citát</localization>
+    <!-- Literate programming, a chunk of computer code -->
+    <localization string-id='fragment'>Fragment</localization>
+    <!-- Parts of an exercise and its solution -->
+    <localization string-id='divisionalexercise'>Cvičení</localization>
+    <!-- Translation needed for Czech Czech -->
+    <!-- See en-US file for distinctions here, do not repeat previous translation -->
+    <localization string-id='inlineexercise'>Zkouška</localization>
+    <localization string-id='worksheetexercise'>Cvičení pracovního listu</localization>
+    <localization string-id='readingquestion'>Otázka ze čtení</localization>
+    <localization string-id='webwork'>WeBWorK</localization>
+    <localization string-id='hint'>Nápověda</localization>
+    <localization string-id='answer'>Odpověď</localization>
+    <localization string-id='solution'>Řešení</localization>
+    <!-- A group of divisional exercises (with introduction and conclusion) -->
+    <localization string-id='exercisegroup'>Skupina cvičení</localization>
+    <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
+    <localization string-id='biblio'>Bibliografický údaj</localization>
+    <!-- Front matter components -->
+    <localization string-id='toc'>Obsah</localization>
+    <localization string-id='abstract'>Abstrakt</localization>
+    <localization string-id='preface'>Předmluva</localization>
+    <localization string-id='acknowledgement'>Poděkování</localization>
+    <localization string-id='biography'>Životopis autora</localization>
+    <!-- singular and plural titles for biography subdivision -->
+    <localization string-id='about-author'>O autoru</localization>
+    <localization string-id='about-authors'>O autorech</localization>
+    <localization string-id='foreword'>Předmluva</localization>
+    <localization string-id='dedication'>Věnování</localization>
+    <localization string-id='colophon'>Kolofon</localization>
+    <!-- Back matter components -->
+    <!-- index-part is deprecated, but not abandoned          -->
+    <!-- NB: repurpose translations, maybe move appendix here -->
+    <localization string-id='index-part'>Rejstřík</localization>
+    <localization string-id='jump-to'>Skoč na:</localization>
+    <!-- Parts of the Index -->
+    <localization string-id='index'>Rejstřík</localization>
+    <localization string-id='see'>Viz</localization>
+    <localization string-id='also'>Viz také</localization>
+    <!-- Notation List headings/foot -->
+    <localization string-id='symbol'>Symbol</localization>
+    <localization string-id='description'>Popis</localization>
+    <localization string-id='location'>Pozice</localization>
+    <localization string-id='page'>Stránka</localization>
+    <localization string-id='continued'>Pokračuje na další straně</localization>
+    <!-- Navigation Interface elements -->
+    <!-- Assistive "skip to content" link -->
+    <localization string-id='skip-to-content'>Přeskočit na hlavní obsah</localization>
+    <localization string-id='previous'>Předchozí</localization>
+    <localization string-id='up'>Nahoru</localization>
+    <localization string-id='next'>Další</localization>
+    <!-- Keep these short, so buttons are not overly wide, 4 characters maximum -->
+    <localization string-id='previous-short'>Zpět</localization>
+    <localization string-id='up-short'>Výš</localization>
+    <localization string-id='next-short'>Dál</localization>
+    <!-- NB: Use toc from above for both headings and navigation sidebar-->
+    <localization string-id='annotations'>Anotace</localization>
+    <localization string-id='feedback'>Odezva</localization>
+    <localization string-id='authored'>Napsáno v PreTeXt</localization>
+    <!-- Parts of memos and letters -->
+    <localization string-id='to'>Komu</localization>
+    <localization string-id='from'>Od</localization>
+    <localization string-id='subject'>Předmět</localization>
+    <localization string-id='date'>Datum</localization>
+    <localization string-id='copy'>Kopie</localization>
+    <localization string-id='enclosure'>Příloha</localization>
+    <!-- Various -->
+    <localization string-id='todo'>To Do</localization>
+    <localization string-id='editor'>Editor</localization>
+    <localization string-id='edition'>Edice</localization>
+    <localization string-id='website'>Webová stránka</localization>
+    <localization string-id='copyright'>Copyright</localization>
+    <!-- HTML clickables (lowercase strings to click on) -->
+    <localization string-id='permalink'>permalink</localization>
+    <localization string-id='incontext'>v-souvislosti</localization>
+    <!-- Sage Cell evaluate button      -->
+    <!-- eg, "Evaluate (Maxima)"        -->
+    <!-- 2017-05-14: 'code' is obsolete -->
+    <!-- This needs to be defined to *something* (English)       -->
+    <!-- else whatever crud ends up on the button kills the cell -->
+    <!-- Translate at first opportunity, please                  -->
+    <localization string-id='evaluate'>Ohodnotit</localization>
+    <localization string-id='code'>Kód</localization>
+</locale>

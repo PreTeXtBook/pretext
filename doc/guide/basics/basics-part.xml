@@ -3,7 +3,7 @@
   <chapter xml:id="basics-ch-about">
     <title>About This Reference</title>
     <p>
-      This <pubtitle>Basics Reference</pubtitle> is meant to supplement the more formal documentation in other parts of <pubtitle>The Guide</pubtitle>.
+      This <pubtitle>Basics Reference</pubtitle> supplements the more formal documentation in other parts of <pubtitle>The Guide</pubtitle>.
       Here you will find the <em>basics</em>
       of the most important and commonly used <pretext/> elements.
       In most instances,
@@ -23,15 +23,15 @@
           This is a <em>basic</em> reference,
           and so we want to keep things simple.
           When you need a more advanced feature not discussed here,
-          follow the link to the appropriate portion of the <pubtitle>Author's Guide</pubtitle>
-          (<xref ref="part-author"/>).
+          follow the link to the
+          <xref ref="part-author" text="title"/>.
           We welcome contributions of intermediate examples to this
           <pubtitle>Basics Reference</pubtitle>,
           but the initial goal is not to be comprehensive in adding such examples.
         </li>
 
         <li>
-          Instructions on using <c>xsltproc</c> to convert your <pretext/> <init>XML</init> to another format such as <init>HTML</init> or <latex/>.
+          Instructions on converting your <pretext/> <init>XML</init> to another format such as <init>HTML</init> or <latex/>.
         </li>
 
         <li>
@@ -41,7 +41,7 @@
           <webwork/> Open Problem Library.
           However, it assumes that you already have a project set up to compile correctly with
           <webwork/> problems,
-          which is a more involved task than just running <c>xsltproc</c>.)
+          which is an involved task.)
         </li>
       </ul>
     </p>
@@ -56,7 +56,8 @@
           <idx>term</idx>
           <idx>formatting</idx>
           <idx>emphasis</idx>
-      The <pretext/> Principles (<xref ref="list-principles"/>) begin with <q><pretext/> is a markup language that captures the structure of textbooks and research papers</q> (<xref ref="principle-markup"/>).
+      The <xref ref="list-principles"
+      text="title" /> begin with <q><pretext/> is a markup language that captures the structure of textbooks and research papers</q> (<xref ref="principle-markup"/>).
       By a <term>markup language</term>,
           <idx>markup language</idx>
       we mean that the syntax describes the <em>structure</em>
@@ -98,8 +99,8 @@
   <chapter xml:id="basics-ch-divisions">
     <title>Document Structure</title>
     <p>
-      Rob Beezer refers to elements such as <tag>chapter</tag>, <tag>section</tag>,
-      and <tag>subsection</tag> as <term>divisions</term>.
+     Elements such as <tag>chapter</tag>, <tag>section</tag>,
+      and <tag>subsection</tag> are called <term>divisions</term>.
           <idx>division</idx>
           <idx>document structure</idx> 
           <idx sortby="section"><tag>section</tag></idx>
@@ -175,7 +176,7 @@
         which places some limits on the sorts of things that can be contained in a title.
         If you find text disappearing or displaying strangely,
         the culprit is likely an unnecessary or or missing <tag>p</tag> tag.
-        See the part of the documentation on validating your source for information on how to use some additional tools to see if your <pretext/> file is valid in terms of following the structural rules in the schema.
+        See <xref ref="schema" text="type-global" /> for information on how to use some additional tools to see if your <pretext/> file is valid in terms of following the structural rules in the schema.
       </p>
     </paragraphs>
   </chapter>
@@ -199,7 +200,12 @@
           <idx><latex/></idx>
           <idx><h><latex/></h> <h>exceptions: &lt; and &amp;</h></idx>
           <idx><h>special symbols</h><see><latex/></see></idx>
-      When typing math in your <pretext/> code, use <c>\lt</c> for &lt;, use <c>\gt</c> for &gt; (not strictly necessary, but good for symmetry), and use <c>\amp</c> for &amp;. In <init>HTML</init>, MathJax is used to render math, so <pretext/> generally supports the things that MathJax does <q>out of the box</q> without the need for too many additional packages to be loaded.
+      When typing math in your <pretext/> code, use <c>\lt</c> for
+      &lt;, use <c>\gt</c> for &gt; (not strictly necessary, but good
+      for symmetry), and use <c>\amp</c> for &amp;. In
+      <init>HTML</init>, MathJax is used to render math, so <pretext/>
+      generally supports the things that MathJax does <q>out of the
+      box</q> (with the addition of <c>amsmath</c>) without the need for too many additional packages to be loaded.
           <idx>MathJax</idx>
     </p>
 
@@ -259,7 +265,7 @@
     <p>
       Because most of the early adopters of <pretext/> have been mathematicians,
       there are lots of additional features supported in terms of mathematics.
-      See the online documentation for further details.
+      See <xref ref="topic-mathematics" text="type-global" /> for further details.
     </p>
   </chapter>
 
@@ -274,12 +280,11 @@
       very complex discussions on the <pretext/> email lists.
       We'll keep it simple here.
       There are a variety of places that lists can live,
-      but a good mental model is that a list must be put inside an environment
-      (or tag)
+      but a good mental model is that a list must be put inside an element
       that's similar to <tag>p</tag>.
-      So for example,
+      <alert>So for example,
       you can't put your list directly inside a <tag>subsection</tag>,
-      but instead must wrap the list in a <tag>p</tag>.
+      but instead must wrap the list in a <tag>p</tag>.</alert>
     </p>
 
     <p>
@@ -289,7 +294,15 @@
           <idx><h>ordered list</h></idx> (There's also the description list.
       See the <pubtitle>Author's Guide</pubtitle> at <xref ref="topic-lists"/> for more information on it.) As in <init>HTML</init>,
       an ordered list is produced with <tag>ol</tag> and an unordered list with <tag>ul</tag>.
-      The items of your list are structured inside <tag>li</tag> tags. The example in <xref ref="basics-l-ol" text="type-global"/> shows that these <tag>li</tag> tags can contain a paragraph in a <tag>p</tag> tag but you do not need to. If you're just putting a sentence or two inside your <tag>li</tag>, no <tag>p</tag> is required. However, if you also want to put an image or more complicated items inside the <tag>li</tag>, then <q>loose</q> text must be contained inside one or more <tag>p</tag>.<idx><h sortby="p"><tag>p</tag></h><h sortby="use inside li">use inside <tag>li</tag></h></idx>
+      The items of your list are structured inside <tag>li</tag>
+      tags. The example in <xref ref="basics-l-ol"
+      text="type-global"/> shows that these <tag>li</tag> tags can
+      contain a paragraph in a <tag>p</tag> tag but you do not need
+      to. If you're just putting a sentence or two inside your
+      <tag>li</tag>, no <tag>p</tag> is required. However, if you also
+      want to put an image or more complicated items inside the
+      <tag>li</tag>, then the <tag>li</tag> must be structured with
+      <tag>p</tag> by placing <q>loose</q> text inside one or more <tag>p</tag>.<idx><h sortby="p"><tag>p</tag></h><h sortby="use inside li">use inside <tag>li</tag></h></idx>
     </p>
 
     <listing xml:id="basics-l-ol">
@@ -356,7 +369,9 @@
     </p>
   </chapter>
 
-  <chapter xml:id="basics-ch-thm">
+  <chapter xml:id="basics-ch-block">
+    <title>Blocks</title>
+    <section xml:id="basics-s-thm">
     <title>Theorem-Like Elements</title>
     <idx>theorem-like elements (<tag>algorithm</tag>, <tag>claim</tag>, <tag>corollary</tag>, <tag>fact</tag>, <tag>identity</tag>, <tag>lemma</tag>, <tag>proposition</tag>, <tag>theorem</tag>)</idx>
 
@@ -399,23 +414,23 @@
           <idx><h sortby="theorem"><tag>theorem</tag></h><h sortby="title"><tag>title</tag></h></idx>
           <idx><h sortby="title"><tag>title</tag></h><h>of theorem-like elements</h></idx>
           <idx><h sortby="creator"><tag>creator</tag></h><h>of theorem-like elements</h></idx>
-      Cross references (see <xref ref="basics-s-xref"/> can be made using the name or the number, depending on how the author codes them.
+      Cross references (see <xref ref="basics-s-xref"/>) can be made using the name or the number, depending on how the author codes them.
     </p>
 
     <p>
         <idx sortby="proof"><tag>proof</tag></idx>
         <idx><h>theorem-like elements (<tag>algorithm</tag>, <tag>claim</tag>, <tag>corollary</tag>, <tag>fact</tag>, <tag>identity</tag>, <tag>lemma</tag>, <tag>proposition</tag>, <tag>theorem</tag>)</h><h>proofs of</h></idx>
-        A theorem-like element can have multipe <tag>proof</tag> elements contained inside it. In such instances, it would be useful to use the <tag>title</tag> tag within your proof. By default, a <tag>proof</tag> is hidden in a knowl when using <init>HTML</init> output. Click the <q>Proof.</q> heading to expand the proof. Click it again to hide the proof. A <tag>proof</tag> can also be divided into <tag>case</tag>s, each of which can have a title.<idx><h sortby="case"><tag>case</tag></h><h>of proof</h></idx> Although it has not always been so, you can author a <tag>proof</tag> all on its own within a division. The structure of such a detached <tag>proof</tag> is the same as for a <tag>proof</tag> contained within a theorem-like element.<idx><h sortby="proof"><tag>proof</tag></h><h>detached</h></idx>
+        A theorem-like element can contain multipe <tag>proof</tag> elements. In such instances, it would be useful to use the <tag>title</tag> tag within your proof. By default, a <tag>proof</tag> is hidden in a knowl when using <init>HTML</init> output. Click the <q>Proof.</q> heading to expand the proof. Click it again to hide the proof. A <tag>proof</tag> can also be divided into <tag>case</tag>s, each of which can have a title.<idx><h sortby="case"><tag>case</tag></h><h>of proof</h></idx> Although it has not always been so, you can author a <tag>proof</tag> all on its own within a division. The structure of such a detached <tag>proof</tag> is the same as for a <tag>proof</tag> contained within a theorem-like element.<idx><h sortby="proof"><tag>proof</tag></h><h>detached</h></idx>
         <idx><h sortby="proof"><tag>proof</tag></h><h>outside of theorem-like elements</h><see>proof, detached</see></idx>
         <idx>detached proof</idx>
     </p>
     <p>
       You can use <tag>definition</tag> essentially like <tag>theorem</tag>,
-      but a <tag>definition</tag> cannot have a proof.
+      but a <tag>definition</tag> does not have a proof.
           <idx>definition</idx>
       You are encouraged to use the <tag>term</tag> tag to set off the word being defined.
           <idx><h sortby="term"><tag>term</tag></h><h>in a definition</h></idx>
-      If you wish to include a list of notation to an appendix as your document,
+      If you wish to include a list of notation as an appendix as your document,
       you might also add a <tag>notation</tag> tag such as shown in <xref ref="basics-l-definition"/>. A <tag>notation</tag> tag has no effect unless you have an <tag>appendix</tag> with a <tage>notation-list</tage> in it.
       <idx sortby="notation (to be included in a notation list)"><tag>notation</tag> (to be included in a notation list)</idx>
       <idx sortby="notation list"><tage>notation-list</tage></idx>
@@ -437,9 +452,9 @@
     </p>
 
     <xi:include href="definition.ptx"/>
-  </chapter>
+  </section>
 
-  <chapter xml:id="basics-ch-examples">
+  <section xml:id="basics-s-examples">
     <title>Example-Like Elements</title>
     <idx>example-like elements (<tag>example</tag>, <tag>problem</tag>, <tag>question</tag>)</idx>
     <idx><h sortby="example"><tag>example</tag></h></idx>
@@ -453,7 +468,8 @@
       They are <tag>example</tag>, <tag>problem</tag>,
       and <tag>question</tag>.
       They all have the same syntax.
-      The <tag>title</tag> element is optional.
+      The <tag>title</tag> element is optional, but encouraged as
+      discussed in <xref ref="best-practice-titles" text="type-global" />.
           <idx><h>example-like elements (<tag>example</tag>, <tag>problem</tag>, <tag>question</tag>)</h><h sortby="title"><tag>title</tag></h></idx>
           <idx><h sortby="title"><tag>title</tag></h><h>of example-like elements</h></idx>
       You may either use a freeform example, as shown in <xref ref="basics-l-example-simple"/>,
@@ -472,7 +488,7 @@
       if your <tag>example</tag> has a <tag>solution</tag>,
       the solution will be hidden in a knowl,
       and the publisher does not
-      (as of August 2019)
+      (as of summer 2021)
       have the option of not knowling the solution.
     </p>
     <aside>
@@ -502,6 +518,14 @@
 
     <xi:include href="example-simple.ptx"/>
 
+    <p>
+      If you are reading this in <init>HTML</init> with the default
+      processing options applied, the example above will be
+      knowled. This is the <pretext /> default <em>only</em> so that
+      authors know that knowls exist. See <xref ref="knowled-content"
+      text="type-global" /> for information on changing this behavior.
+    </p>
+    
     <listing xml:id="basics-l-example-structured">
       <caption>A structured example</caption>
       <idx><h sortby="example"><tag>example</tag></h><h>structured</h><h><pretext/> code for</h></idx>
@@ -518,15 +542,14 @@
     </p>
 
     <xi:include href="example-structured.ptx"/>
-  </chapter>
+  </section>
 
-  <chapter xml:id="basics-ch-axiom">
+  <section xml:id="basics-s-axiom">
     <title>Axiom-Like Elements</title>
     <idx>axiom-like elements (<tag>assumption</tag>, <tag>axiom</tag>, <tag>conjecture</tag>, <tag>heuristic</tag>, <tag>hypothesis</tag>, <tag>principle</tag>)</idx>
 
     <p>
-      <pretext/> provides several tags that fall into the category of an <q>axiom</q>
-      that one would like to be numbered.
+      <pretext/> provides several tags that fall into the category of an <q>axiom</q>.
       They are <tag>assumption</tag>, <tag>axiom</tag>, <tag>conjecture</tag>, <tag>heuristic</tag>, <tag>hypothesis</tag>, and <tag>principle</tag>.
       The content of these tags is very simple.
       They allow an optional <tag>title</tag>, an optional <tag>creator</tag>,
@@ -559,19 +582,19 @@
     </p>
 
     <xi:include href="axiom.ptx"/>
-  </chapter>
+  </section>
 
   
-  <chapter xml:id="basics-ch-remark">
+  <section xml:id="basics-s-remark">
     <title>Remark-Like Elements</title>
     <idx>remark-like elements (<tag>convention</tag>, <tag>insight</tag>, <tag>note</tag>, <tag>observation</tag>, <tag>remark</tag>, <tag>warning</tag>)</idx>
 
     <p>
-      <pretext/> provides several simple tags that fall into the general category of a <q>remark</q>
-      that one would like to be numbered.
+      <pretext/> provides several tags that fall into the general category of a <q>remark</q>.
       They are <tag>convention</tag>, <tag>insight</tag>, <tag>note</tag>, <tag>observation</tag>, <tag>remark</tag>,
       and <tag>warning</tag>.
-      The content of these tags is very simple.
+      The content of these elements is similar to what is allowed inside
+      the <tag>statement</tag> of a theorem-like element.
       They allow an optional title,
       optional <tag>idx</tag> tags,
       and then a mixture of <tag>p</tag>, <tag>blockquote</tag>,
@@ -600,9 +623,9 @@
     </p>
 
     <xi:include href="remark.ptx"/>
-  </chapter>
+  </section>
 
-  <chapter xml:id="basics-ch-project">
+  <section xml:id="basics-ch-project">
     <title>Project-Like Elements</title>
     <idx>project-like elements (<tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag>, <tag>project</tag>)</idx>
 
@@ -639,27 +662,32 @@
     </p>
 
     <xi:include href="project.ptx"/>
+  </section>
   </chapter>
-
   <chapter xml:id="basics-ch-exercise">
     <title>Exercises</title>
     <idx sortby="exercise"><tag>exercise</tag></idx>
-
-    <section>
-      <title>Inline exercises</title>
-      <idx><h sortby="exercise"><tag>exercise</tag></h><h>inline</h></idx>
-      <idx><h>inline exercise</h></idx>
-
+    <introduction>
+      <p><pretext /> provides a number of ways of collecting things
+      that might be thought of as exercises for students to do. Some
+      might be used for a student to check their ability to perform a
+      skill. Others might be to check the understanding of what a
+      student has just read, perhaps submitting responses to an
+      instructor before class so that plans for in-class time can be
+      adjusted. Another way of collecting exercises might be as a
+      worksheet intended to be worked on during classtime.</p>
+    </introduction>
+    <section xml:id="basics-ss-exercise-structure">
+      <title><tag>exercise</tag> structure</title>
       <p>
-        You can put an <tag>exercise</tag> in the middle of a division,
-        intermixed between theorems and paragraphs and figures.
-        In this case, it is labeled as a <q>Checkpoint</q>.<fn>
-        See <xref ref="basics-ch-rename"/> for information on how to use something different than
-        <q>Checkpoint</q> as the name for these.
-        </fn> You can also put a bunch of <tag>exercise</tag>s inside an <tag>exercises</tag> tag within a division,
-        which is the typical way for creating a bunch of exercises togther at the end of a section.
-            <idx><h>checkpoint</h><see>inline exercise</see></idx>
-            <idx>inline exercise</idx>
+	An <tag>exercise</tag> can be rather freeform, containing
+	elements such as <tag>p</tag>, <tag>figure</tag>,
+	<tag>image</tag>, etc. However, an author will typically think
+	about an exercise as having an associated correct answer,
+	perhaps with a hint or a detailed solution. <pretext /> has
+	tags to support that sort of content, but it does require that
+	your <tag>exercise</tag> be structured. This is nearly
+	identical to the structure of a project-like element.
       </p>
 
       <listing xml:id="basics-l-exercise">
@@ -667,9 +695,10 @@
         <idx><h sortby="exercise"><tag>exercise</tag></h><h><pretext/> code for</h></idx>
         <idx><h>inline exercise</h><h><pretext/> code for</h></idx>
         <idx><h><pretext/> code for</h><h sortby="exercise"><tag>exercise</tag></h><h>inline</h></idx>
-<program>
+        <idx><h><pretext/> code for</h><h sortby="exercise"><tag>exercise</tag></h></idx>
+	<program>
 <input><xi:include href="exercise.ptx" parse="text"/></input>
-</program>
+	</program>
       </listing>
 
       <p>
@@ -692,19 +721,106 @@
         There are a variety of options for determining where hints,
         answers, and solutions appear
         (at all).
-        Check the <pretext/> documentation for information about <c>stringparam</c>s.
+        Check <xref
+	ref="processing-publisher-stringparam"
+	text="type-global" /> for information about <c>stringparam</c>s.
       </p>
-    </section>
 
-    <section xml:id="basics-s-exgp">
+      <p>
+	An <tag>exercise</tag> can also have a more complicated
+	structure that assigns a sequence of steps for a student to
+	complete. <pretext /> provides the same <tag>task</tag> tag
+	that is used in project-like elements to give structure to
+	such an <tag>exercise</tag>.
+      </p>
+      <listing xml:id="basics-l-exercise-task">
+        <caption>An exercise with tasks</caption>
+        <idx><h sortby="exercise"><tag>exercise</tag></h><h
+	sortby="with task">with <tag>task</tag></h><h><pretext/> code for</h></idx>
+        <idx><h><pretext/> code for</h><h
+	sortby="exercise"><tag>exercise</tag></h><h sortby="with
+	task">with <tag>task</tag></h></idx>
+	<program>
+<input><xi:include href="exercise-task.ptx" parse="text"/></input>
+	</program>
+      </listing>
+
+      <p>
+        The code in <xref ref="basics-l-exercise-task"/> produces the following output:
+      </p>
+
+      <xi:include href="exercise-task.ptx"/>
+
+    </section>
+    <section xml:id="basics-s-exercise-inline">
+      <title>Inline exercises</title>
+      <idx><h sortby="exercise"><tag>exercise</tag></h><h>inline</h></idx>
+      <idx><h>inline exercise</h></idx>
+
+      <p>
+        You can put an <tag>exercise</tag> in the middle of a division,
+        intermixed between theorems and paragraphs and figures.
+        In this case, it is labeled as a <q>Checkpoint</q>.<fn>
+        See <xref ref="basics-ch-rename"/> for information on how to use something different than
+        <q>Checkpoint</q> as the name for these.
+        </fn> To distinguish these <tag>exercise</tag>s from
+	<tag>exercise</tag>s that are contained in the specialized
+	divisions designed to collect <tag>exercise</tag>s that will
+	be discussed in the next section, we refer to these as
+	<term>inline exercises</term>.
+            <idx><h>checkpoint</h><see>inline exercise</see></idx>
+            <idx>inline exercise</idx>
+      </p>
+
+    </section>
+    <section xml:id="basics-s-">
+      <title>Divisions of <tag>exercise</tag>s</title>
+      <introduction>
+	<p>
+	  <idx sortby="exercises division"><tag>exercises</tag>
+	  division</idx>
+
+	  You can also put several <tag>exercise</tag>s as part of an
+	  <tag>exercises</tag> element within a division, which is the
+	  typical way for creating a collection of exercises togther
+	  at the end of a division such as a chapter or section. The
+	  content of an <tag>exercises</tag> division is rather
+	  limited. It can begin with an <tag>introduction</tag>
+	  (perhaps a set of common instructions), followed by a
+	  mixture of <tag>exercise</tag> and <tag>exercisegroup</tag>
+	  (see <xref ref="basics-ss-exgp" text="type-global" />)
+	  elements, followed by an optional <tag>conclusion</tag>. The
+	  sample code in <xref ref="basics-l-exercisegroup"
+	  text="type-global" /> illustrates this structure, which is
+	  rendered later as <q><xref ref="basics-s-sample-exercises"
+	  text="global"/> Exercises</q>. 
+	</p>
+	<p>
+	  <idx sortby="subexercises"><tag>subexercises</tag></idx>
+	  <idx><h sortby="exercises"><tag>exercises</tag></h><h>grouping</h></idx>
+	  An alternative structure for an <tag>exercises</tag>
+	  division is to use a sequence of <tag>subsexercises</tag>
+	  elements, optionally preceded by an <tag>introduction</tag>
+	  and followed by a <tag>conclusion</tag>. The content of a
+	  <tag>subexercises</tag> element is identical to
+	  what was described above for an <tag>exercises</tag>
+	  element, but we emphasize that a strong rationale for using
+	  <tag>subexercises</tag> (as opposed to
+	  <tag>exercisegroup</tag>) is that a <tag>subexercises</tag>
+	  element can begin with a <tag>title</tag>, providing a clear
+	  way of organizing the <tag>exercise</tag>s for the reader.
+	</p>
+      </introduction>
+      <subsection xml:id="basics-ss-exgp">
       <title><tag>exercisegroup</tag></title>
       <idx sortby="exercisegroup"><tag>exercisegroup</tag></idx>
-
+      <idx><h sortby="exercises"><tag>exercises</tag></h><h>grouping</h></idx>
       <p>
         Sometimes you have several exercises that should all have a common set of instructions,
         which is when you will use the <tag>exercisegroup</tag> tag.
             <idx><h sortby="exercisegroup"><tag>exercisegroup</tag></h><h>instructions</h></idx>
-        An <tag>exercisegroup</tag> can only be placed inside an <tag>exercises</tag> element, however!
+        An <tag>exercisegroup</tag> can only be used as part of an
+	<tag>exercises</tag> element or a <tag>subexercises</tag> element, however!
         The portion of this section headed as
         <q><xref ref="basics-s-sample-exercises" text="global"/> Exercises</q>
         is produced using the code in <xref ref="basics-l-exercisegroup"/>.
@@ -730,66 +846,53 @@
       </p>
 
       <p>
-        An <tag>exercisegroup</tag> generates exercises in a separate section or subsection.
         The code in <xref ref="basics-l-exercisegroup">Listing</xref>
         produces the output seen in <xref ref="basics-s-sample-exercises">Exercises</xref>.
       </p>
+      </subsection>
+      <subsection>
+	<title>Reading questions</title>
+	<p>
+	  Another specialized division, <tag>reading-questions</tag>,
+	  can be used to house <tag>exercise</tag>s designed to test
+	  or guide a reader's comprehension of the material in that
+	  division. The structure of a <tag>reading-questions</tag>
+	  element is similar to an <tag>exercises</tag> element, but
+	  without the grouping options of <tag>subexercises</tag> and
+	  <tag>exercisegroup</tag>.         The portion of this section headed as
+        <q><xref ref="basics-reading-questions" text="global"/> <xref ref="basics-reading-questions" text="title"/></q>
+        is produced using the code in <xref ref="basics-l-reading-questions"/>.
+      </p>
+
+      <listing xml:id="basics-l-reading-questions">
+        <caption>Structure of <tag>reading-questions</tag>.</caption>
+        <idx><h sortby="reading-questions"><tag>reading-questions</tag></h><h><pretext/> code for</h></idx>
+        <idx><h><pretext/> code for</h><h sortby="reading-questions"><tag>reading-questions</tag></h></idx>
+<program>
+<input><xi:include href="reading-questions.ptx" parse="text"/></input>
+</program>
+      </listing>
+
+      </subsection>
+      <xi:include href="reading-questions.ptx" />
     </section>
 
     <xi:include href="exercisegroup.ptx"/>
-  </chapter>
 
-  <chapter xml:id="basics-ch-rename">
-      <title>Renaming Elements</title>
-      <idx sortby="rename"><tag>rename</tag></idx>
-      <idx><h>porism</h><h>renaming another tag to obtain</h></idx>
-      <p>
-          <idx><h sortby="rename"><tag>rename</tag></h><h><pretext/> code for</h></idx>
-          <idx><h><pretext/> code for</h><h sortby="rename"><tag>rename</tag></h></idx>
-
-          <idx sortby="docinfo"><tag>docinfo</tag></idx>
-      The preceding sections have provided a lengthy list of <pretext/> tags that behave interchangeably.
-      Perhaps you don't like one of their names.
-      For instance, suppose your project will not involve any <tag>algorithm</tag>s, but you need another theorem-like tag whose name you would like to have rendered as <q>Porism</q>.
-      To do this, you need to add a <tag>rename</tag> tag to the <tag>docinfo</tag> block of your code.
-      For our example,
-      the necessary code would be <c>&lt;rename element="algorithm"&gt;Porism&lt;/rename&gt;</c>.
-      The <tag>rename</tag> tag generates a <em>global</em> change;
-      it is not possible to rename a single instance of a tag or to define your own tags (without writings your own <init>XSLT</init> code.
-    </p>
-
-    <p>
-      We have included this <tag>rename</tag> code in this project's <tag>docinfo</tag>,
-      and as such,
-      we can do the following.
-    </p>
-
-    <listing xml:id="basics-l-porism">
-      <caption>A porism generated using <tag>algorithm</tag> and <tag>rename</tag></caption>
-
-<program>
-<input><xi:include href="porism.ptx" parse="text"/></input>
-</program>
-    </listing>
-
-    <p>
-      The code in <xref ref="basics-l-porism"/> produces the following output:
-    </p>
-
-    <xi:include href="porism.ptx"/>
-  </chapter>
-
-  <chapter xml:id="basics-ch-webwork">
+    <section xml:id="basics-s-webwork">
     <title><webwork/> Exercises</title>
     <idx><webwork/> exercise</idx>
     <idx><h sortby="exercise"><tag>exercise</tag></h><h><webwork/></h></idx>
     <p>
       It is possible to embed
       <webwork/> exercises into a <pretext/> document.
-      In the <init>HTML</init> version,
+      It is possible to build an <init>HTML</init> version in which
       readers can answer these exercises and find out if their answer is correct or incorrect.
       However, results of
-      <webwork/> exercises cannot be recorded to your gradebook.
+      <webwork/> exercises cannot yet be recorded to your gradebook.       Because <webwork /> content belongs inside an
+      <tag>exercise</tag>, you can include <webwork /> exercises in
+      any of the elements that can contain an <tag>exercise</tag> such
+      as a <tag>worksheet</tag> and <tag>reading-questions</tag>.
       There's some configuration required use
       <webwork/>.
       Please see <xref ref="webwork-author"/> and <xref ref="webwork-publisher"/> for more details.
@@ -797,10 +900,11 @@
       <webwork/> exercises,
       compiling to produce any output format becomes a multistep process.
     </p>
-
+    
     <p>
       When a
-      <webwork/> exercise lives on the server, the code takes one form.
+      <webwork/> exercise lives on the server, the code takes one
+      simple form.
     </p>
 
     <listing xml:id="basics-l-webwork-opl">
@@ -825,8 +929,7 @@
       It is also possible to code
       <webwork/> exercises directly in your <pretext/> source.
       This shows the most primitive sort of such exercise.
-      The section of the <pubtitle>Author's Guide</pubtitle> referenced above goes into greater detail
-      (<xref ref="webwork-author"/>).
+      <xref ref="webwork-author"/> goes into greater detail.
     </p>
 
     <listing xml:id="basics-l-webwork-code">
@@ -846,7 +949,112 @@
     </p>
 
     <xi:include href="webwork-code.ptx"/>
+  </section>
+
   </chapter>
+
+  <chapter xml:id="basics-ch-worksheets">
+    <title>Worksheets</title>
+    <idx><h sortby="worksheet"><tag>worksheet</tag></h></idx>
+    <p>
+      <idx><h>page layout</h><h sortby="in worksheet">in
+      <tag>worksheet</tag></h></idx>
+
+      A <tag>worksheet</tag> is a specialized division that can be a
+      child of most divisions and can contain most <pretext />
+      tags. The general idea, however, would be to assemble a sequence
+      of <tag>exercise</tag>s or project-like elements with some
+      interspersed <tag>p</tag>, <tag>figure</tag>, and
+      <tag>sidebyside</tag>. One of the few times that <pretext />
+      allows you to manipulate page layout in terms of giving blank
+      space and specifying page breaks is in the <tag>worksheet</tag>
+      tag. A <tag>worksheet</tag> is also the only place you can put
+      an <tag>exercise</tag> inside a <tag>sidebyside</tag>. The
+      sample code in <xref ref="basics-l-worksheet" text="type-global"
+      /> is not meant to demonstrate everything you can do, but rather
+      to give you a skeleton to start exploring. The rendered output
+      from the listing appears immediately after it.
+    </p>
+
+    <listing xml:id="basics-l-worksheet">
+        <caption>Structure of <tag>worksheet</tag>.</caption>
+        <idx><h sortby="worksheet"><tag>worksheet</tag></h><h><pretext/> code for</h></idx>
+        <idx><h><pretext/> code for</h><h sortby="worksheet"><tag>worksheet</tag></h></idx>
+	<program>
+	  <input><xi:include href="worksheet.ptx" parse="text"/></input>
+	</program>
+    </listing>
+    <xi:include href="worksheet.ptx" />
+  </chapter>
+  
+  <chapter xml:id="basics-ch-rename">
+      <title>Renaming Elements</title>
+      <idx sortby="rename"><tag>rename</tag></idx>
+      <idx><h>porism</h><h>renaming another tag to obtain</h></idx>
+      <p>
+          <idx><h sortby="rename"><tag>rename</tag></h><h><pretext/> code for</h></idx>
+          <idx><h><pretext/> code for</h><h sortby="rename"><tag>rename</tag></h></idx>
+
+          <idx sortby="docinfo"><tag>docinfo</tag></idx>
+      The preceding sections have provided a lengthy list of <pretext/> tags that behave interchangeably.
+      Perhaps you don't like one of their names.
+      For instance, suppose your project will not involve any <tag>algorithm</tag>s, but you need another theorem-like tag whose name you would like to have rendered as <q>Porism</q>.
+      To do this, you need to add a <tag>rename</tag> element to the <tag>docinfo</tag> element of your code.
+      For our example,
+      the necessary code would be <c>&lt;rename element="algorithm"&gt;Porism&lt;/rename&gt;</c>.
+      A <tag>rename</tag> element generates a <em>global</em> change;
+      it is not possible to rename a single instance of an element or to define your own tags (without writing your own <init>XSLT</init> code.
+    </p>
+
+    <p>
+      We have included this <tag>rename</tag> code in this guide's <tag>docinfo</tag>,
+      and as such,
+      we can do the following.
+    </p>
+
+    <listing xml:id="basics-l-porism">
+      <caption>A porism generated using <tag>algorithm</tag> and <tag>rename</tag></caption>
+
+<program>
+<input><xi:include href="porism.ptx" parse="text"/></input>
+</program>
+    </listing>
+
+    <p>
+      The code in <xref ref="basics-l-porism"/> produces the following output:
+    </p>
+
+    <xi:include href="porism.ptx"/>
+
+    <paragraphs>
+      <title>A special note about renaming
+      <tag>exercise</tag>s</title>
+      <idx><h>inline exercise</h><h>renaming</h></idx>
+      <idx><h
+	       sortby="exercise"><tag>exercise</tag></h><h>renaming</h></idx>
+      <idx><h sortby="rename"><tag>rename</tag></h><h sortby="for exercise">for <tag>exercise</tag></h></idx>
+      <p>Because of the range of divisions that can contain an
+      <tag>exercise</tag> element with different names displayed (such
+      as <q>Checkpoint</q> for an inline exercise), one cannot simply
+      use <attr>element="exercise"</attr> in a <tag>rename</tag>
+      element. The value of <attr>element</attr> to rename an
+      <tag>exercise</tag> is as follows:
+      <ul>
+	<li><c>divisionalexercise</c> for an <tag>exercise</tag>
+	inside <tag>exercises</tag>, <tag>subexercises</tag>, or
+	<tag>exercisegroup</tag> with default <q>Exercise</q></li>
+	<li><c>inlineexercise</c> for an inline exerise with default
+	<q>Checkpoint</q></li>
+	<li><c>worksheetexercise</c> for an <tag>exercise</tag>
+	contained in a <tag>worksheet</tag> with default <q>Worksheet
+	Exercise</q></li>
+	<li><c>readingquestion</c> for an <tag>exercise</tag>
+	contained in a <tag>reading-questions</tag> with default
+	<q>Reading Question</q></li>
+      </ul></p>
+    </paragraphs>
+  </chapter>
+
 
   <chapter xml:id="basics-ch-fig">
     <title>Figures and Friends</title>
@@ -855,7 +1063,7 @@
         <idx sortby="image"><tag>image</tag></idx>
         <p><idx><h sortby="figure"><tag>figure</tag></h><h>without caption</h><see><tag>image</tag></see></idx>
         <idx><h sortby="image"><tag>image</tag></h><h>without caption</h></idx>
-        It is possible to include an image without a number or caption, centered on its own line by using <tag>image</tag>. In earlier days, <pretext/> required that such an <tag>image</tag> be contained in a <tag>sidebyside</tag>, but that is no longer the case, as this section will demonstrate.</p>
+        It is possible to include an image without a number or caption, centered on its own line by using <tag>image</tag>.</p>
       <p>
           <idx>graphics formats</idx>
           <idx sortby="svg"><init>SVG</init> (Scalable Vector Graphics) format</idx>
@@ -863,17 +1071,26 @@
           <idx>PNG image format</idx>
         The gold standard for graphics to include in <pretext/> documents is, well,
         complicated.
-        If you're only working with <init>HTML</init> output,
+        If you're only working with <init>HTML</init> or <init>EPUB</init> output
         then <init>SVG</init> is what you want.
         If you're producing <init>PDF</init> by using <latex/>,
-        then you'll also want <init>PDF</init> graphics files.
+        then you'll also want <init>PDF</init> graphics files. If you
+	plan to produce an ebook that can be read on Kindle devices,
+	you will need <init>PNG</init> graphics files. 
         Fortunately,
         it's not too hard to convert between these formats on the command line.<fn>
-        Windows users have run into some problems in this area.
         Since conversion is a rare task,
         it may be easiest to do in a cloud environment like CoCalc.
-        </fn> In order to produce both <init>HTML</init> and <init>PDF</init>, you will need to always have both files available. We recommend that you consistently pick one format or the other to be the one that you edit and then convert to the other format. Otherwise, you might have <c>parabola.svg</c> and <c>parabola.pdf</c> contain different graphics, and then the <init>HTML</init> and <init>PDF</init> versions of your project will have different images in them!
-        <init>PNG</init> is also supported by modern web browsers and <latex/>,
+        </fn> In order to produce <init>HTML</init>, <init>PDF</init>,
+	and Kindle, you will need to always have three files
+	available. We recommend that you consistently pick
+	<init>PDF</init> or <init>SVG</init> to be the one that you
+	edit and then convert to the other format. Otherwise, you
+	might have <c>parabola.svg</c> and <c>parabola.pdf</c> and
+	<c>parabola.png</c> contain three different graphics, and then
+	the different output formats for your project will have different images in them!
+        <init>PNG</init> and <init>JPEG</init> are supported by modern
+	web browsers, <latex/>, and Kindle,
         so that's a good option when vector graphic formats like <init>SVG</init> and <init>PDF</init> are not available or appropriate.
       </p>
       <listing xml:id="basics-l-image">
@@ -887,30 +1104,42 @@
       </listing>
 
       <p>
+	<idx><h sortby="width"><attr>width</attr></h><h sortby="of image">of <tag>image</tag></h></idx>
         Use of <attr>width</attr> on an image must be a percentage, and for an <tag>image</tag> as in this example, the percentage is of the current line width. The code in <xref ref="basics-l-image"/> produces the following output:
       </p>
 
       <xi:include href="image.ptx"/>
 
-      <p><idx><h sortby="description"><tag>description</tag></h><h>for accessibility</h></idx>The example in <xref ref="basics-l-image"/> also illustrates the use of  <tag>description</tag>. We admit to not using a <tag>description</tag> for most of the other <tag>image</tag>s in this Guide, but doing so is strongly recommended for accessibility reasons. A reader who is unable to see the visual element of your book can use assistive technology to have the <tag>description</tag> read to them. As much as is practical, authors should endeavor to include <tag>description</tag>s for their <tag>image</tag>s.
+      <p><idx><h sortby="description"><tag>description</tag></h><h>for
+      accessibility</h></idx>
+      <idx>accessibility</idx>The example in <xref ref="basics-l-image"/> also illustrates the use of  <tag>description</tag>. We admit to not using a <tag>description</tag> for most of the other <tag>image</tag>s in this <pubtitle>Guide</pubtitle>, but doing so is strongly recommended for accessibility reasons. A reader who is unable to see the visual element of your book can use assistive technology to have the <tag>description</tag> read to them. As much as is practical, authors should endeavor to include <tag>description</tag>s for their <tag>image</tag>s.
       </p>
       <p>
           <idx><h>file extensions</h><h>for graphics</h></idx>
           <idx><h>extensions</h><see>file extensions</see></idx>
+	  <idx><h>graphics</h><h>file formats</h></idx>
+	  <idx><h sortby="image"><tag>image</tag></h><h>file formats</h></idx>
         Note that the path to the image file does not include the file extension.
-        When you run <c>xsltproc</c>,
-        the output format you're generating will determine what gets added on so that the right file is grabbed.
+        When you process your source,
+        the output format you're generating will determine what gets added on so that the right file is used.
         If your browser says it can't find the image file,
         make sure that the <init>SVG</init> file is in the correct location relative to the <init>HTML</init> file.
         Here, we need a directory called <c>images</c> that lives next to our <init>HTML</init> files with a file called <c>small_graph.svg</c> inside that directory.
-        If using a <init>PNG</init> file,
-        put the extension in the filename so that the file is used in both <init>HTML</init> and <latex/>. Many authors have an <c>images</c> directory that lives in the same directory as their <pretext/> source files and then produce the <c>.tex</c> file or <init>HTML</init> files in another directory. When doing so, you need to copy the <c>images</c> directory to be in the same directory as the <c>.tex</c> file before generating a <init>PDF</init> or in the same directory as your many <c>.html</c> files before viewing your <init>HTML</init> files in a web browser.
+        If using a <init>PNG</init> or <init>JPEG</init> file across
+	<init>HTML</init>, <latex />/<init>PDF</init>,
+	<init>EPUB</init>, and Kindle,
+        put the extension in the filename so that the file is used for
+	all. Many authors have an <c>images</c> directory that lives in the same directory as their <pretext/> source files and then produce the <c>.tex</c> file or <init>HTML</init> files in another directory. When doing so, you need to copy the <c>images</c> directory to be in the same directory as the <c>.tex</c> file before generating a <init>PDF</init> or in the same directory as your many <c>.html</c> files before viewing your <init>HTML</init> files in a web browser.
       </p>
     </section>
     <section xml:id="basics-s-fig">
         <title><tag>figure</tag></title>
         <idx sortby="figure"><tag>figure</tag></idx>
-        <p>To provide a number and caption for an <tag>image</tag>, the <tag>figure</tag> element is used. </p>
+        <p>To provide a number and caption for an <tag>image</tag>,
+	the <tag>figure</tag> element is used. Notice that the
+	<tag>caption</tag> is authored at the <em>beginning</em> of
+	the <tag>figure</tag> but is displayed <em>below</em> the
+	<tag>figure</tag>'s content.</p>
       <listing xml:id="basics-l-figure">
           <caption>Code to include a figure</caption>
           <idx><h sortby="figure"><tag>figure</tag></h><h><pretext/> code for</h></idx>
@@ -935,6 +1164,7 @@
     <section xml:id="basics-s-sidebyside">
         <title><tag>sidebyside</tag></title>
         <idx sortby="sidebyside"><tag>sidebyside</tag></idx>
+	<idx>page layout</idx>
       <p>
         One of the more complex pieces of code in <pretext/>,
         by most accounts, is that used for positioning objects
@@ -942,15 +1172,20 @@
         next to each other.
         If you've tried to do this in <latex/>, you know that it can be challenging on a good day.
         Fortunately,
-        <pretext/> does the heavy lifting for us here for both <latex/> and <init>HTML</init>.
+        <pretext/> does the heavy lifting for us.
       </p>
 
       <p>
-        We include two examples here.
-        The first places the <tag>sidebyside</tag> directly in the current division and places a <tag>figure</tag> with a caption inside the <tag>sidebyside</tag>.
-        The second puts the <tag>sidebyside</tag> inside <tag>figure</tag> and then uses an <tag>image</tag> not contained in a <tag>figure</tag> to include the graphic.
-        It's possible to do all sorts of nesting and get nice subnumbering automatically.
-        The sample article demonstrates all the capabilities of <tag>sidebyside</tag>.
+        We include two examples here.  The first places the
+        <tag>sidebyside</tag> directly in the current division and
+        places a <tag>figure</tag> with a caption inside the
+        <tag>sidebyside</tag>.  The second puts the
+        <tag>sidebyside</tag> inside <tag>figure</tag> and then uses
+        an <tag>image</tag> not contained in a <tag>figure</tag> to
+        include the graphic.  It's possible to do all sorts of nesting
+        and get nice subnumbering automatically.  More information on
+        the capabilities of <tag>sidebyside</tag> can be found in
+        <xref ref="topic-sidebyside" text="type-global" />.
       </p>
 
       <listing xml:id="basics-l-sbs">
@@ -1038,11 +1273,17 @@
         </p>
 
         <p>
-          <c>pdf2svg</c> is also a piece of the toolchain that may need to be installed separately,
+          <c>pdf2svg</c> and ImageMagick are also pieces of the toolchain that may need to be installed separately,
           including on macOS. To generate graphics using SageMath,
           you'll need a working installation of it with a proper configuration of its path in the <c>pretext.cfg</c> file.
           Linux and CoCalc can probably get away without extra configuration here,
-          but it will likely be required on macOS and Windows unless you've set up your SageMath install so you can run it from the command line by simply executing <c>sage</c>.
+          but it will likely be required on macOS and Windows unless
+	  you've set up your SageMath install so you can run it from
+	  the command line by simply executing <c>sage</c>. More
+	  details on running the <c>pretext/pretext</c> script can be
+	  found in <xref
+	  ref="pretext-script"
+	  text="type-global" />
         </p>
       </aside>
       <p><idx sortby="latex-image-preamble"><tag>latex-image-preamble</tag></idx>
@@ -1091,12 +1332,9 @@
 
       <console width="80%" margins="10% 10%">
         <!-- <idx><h><c>pretext</c> script</h><h>for latex-image</h></idx> -->
-        <input>[path to mathbook]/script/pretext -c latex-image -f svg -d ./images [path to PTX source file]</input>
+        <input>/path/to/pretext/pretext -c latex-image -f
+	svg -d /path/to/html/output/directory/images /path/to/yoursource.ptx</input>
       </console>
-
-      <p>
-        This command assumes that we're in the directory where we usually run <c>xsltproc</c> to produce our <init>HTML</init> and that we want to put the images in a directory called <c>images</c> inside that directory.
-      </p>
     </section>
   </chapter>
 
@@ -1107,7 +1345,7 @@
     <p>
       After <tag>sidebyside</tag>,
       getting tables to lay out consistently between <init>HTML</init> and <init>PDF</init> is probably the second biggest headache that <pretext/> takes care of for us behind the scenes.
-      Considerable effort has been taken in order to fix some of the challenges inherent to working with the <tag>tabular</tag> environment in <latex/>, and so if you author in <pretext/>,
+      Considerable effort has been taken in order to fix some of the challenges inherent to working with the <c>tabular</c> environment in <latex/>, and so if you author in <pretext/>,
       you should be able to forget the hacks you had to learn to make nice tables in <latex/>.
     </p>
 
@@ -1162,9 +1400,9 @@
             numbers in PreTeXt.  Some approximate quotes about tables from CMOS: 
             <ul>
                 <li>facts that are easy to scan and compare</li>
-                <li>a reader unfamiliar with the material should still be ale to make 
-                sense of the table </li>
-                <li>tables are numbered and have titles (and not captions) </li>
+                <li>a reader unfamiliar with the material should still be able to make 
+                sense of the table</li>
+                <li>tables are numbered and have titles (and not captions)</li>
             </ul>
             </p>
             <p>My take-away is that a CMOS table is a supplement to what is written 
@@ -1195,7 +1433,8 @@
         <idx sortby="output"><tag>output</tag></idx>
         Including computational SageMath cells is pretty easy with <tag>sage</tag>, <tag>input</tag>,
         and <tag>output</tag>.
-        The last tag is useful for producing a <init>PDF</init> that includes the result of the code's execution.
+        The last tag is useful for producing formats intended for
+	offline reading so that they can include the result of the code's execution.
       </p>
 
       <listing xml:id="basics-l-sage">
@@ -1224,10 +1463,11 @@
         Sometimes you don't want to provide an interactive SageMath environment in the middle of your book
         (or a chunk of code)
         but you would like to produce a figure to include in your project by using SageMath.
-        The cleanest way to do this his to put the SageMath code right in your <pretext/> project and use the <c>pretext</c> script to produce the image files required for your chosen output formats.
-        This is accomplished by using <tag>sageplot</tag> and the <c>pretext</c> script that we discussed in <xref ref="basics-s-latex-fig"/>.
-        (In particular,
-        see the aside in that section about the additional packages that must be installed and configured to use the <c>pretext</c> script.)
+        The cleanest way to do this his to put the SageMath code right in your <pretext/> project and use the <c>pretext</c> script
+	that we discussed in <xref ref="basics-s-latex-fig"/> to produce the image files required for your chosen output formats.
+        This is accomplished by using <tag>sageplot</tag> with the script.
+        (The <c>pretext</c> script is fully discussed in <xref ref="pretext-script"/>, but at least
+        see the aside in <xref ref="basics-s-latex-fig"/> about the additional packages that must be installed and configured to use it properly.)
       </p>
 
       <listing xml:id="basics-l-sageplot">
@@ -1255,11 +1495,11 @@
       <!-- <idx><h><c>pretext</c> script</h><h>for sageplot to svg</h></idx> -->
       <!-- <idx><h><c>pretext</c> script</h><h>for sageplot to pdf</h></idx> -->
       <console width="80%" margins="10% 10%">
-        <input>[path to mathbook]/script/pretext -c sageplot -f svg -d ./images [path to PTX source file]</input>
+        <input>/path/to/mathbook]/script/pretext -c sageplot -f svg -d ./images /path/to/yoursource.ptx</input>
       </console>
 
       <console width="80%" margins="10% 10%">
-        <input>[path to mathbook]/script/pretext -c sageplot -f pdf -d ./images [path to PTX source file]</input>
+        <input>/path/to/mathbook]/script/pretext -c sageplot -f pdf -d ./images /path/to/yoursource.ptx</input>
       </console>
 
       <p>
@@ -1323,7 +1563,12 @@
         <idx sortby="href"><attr>href</attr></idx>
         If you want to provide a link to a resource outside of your project,
         you will want the <tag>url</tag> tag.
-        The code <tage>url href="https://pretextbook.org"</tage> produces <url href="https://pretextbook.org"/>.
+        The code
+	<cd>&lt;url href="https://pretextbook.org" visual="pretextbook.org"&gt;PreTeXt&lt;/url&gt;</cd>
+	produces <url
+	href="https://pretextbook.org"
+	visual="pretextbook.org">PreTeXt</url>. Note that the footnote
+	is automatically created by the use of <attr>visual</attr>.
       </p>
 
       <p>
@@ -1346,8 +1591,7 @@
         </fn> For instance,
         you can't put a <tag>p</tag> (and thus you can't put lists) inside a footnote.
         Also, no displayed math via <tag>me</tag>.
-        This might change,
-        but there's a lot of care being taken because of the prospect of footnotes inside footnotes inside footnotes.
+        There's a lot of care being taken because of the prospect of footnotes inside footnotes inside footnotes.
             <idx><h>footnote</h><h>restrictions</h></idx>
       </p>
 
@@ -1409,7 +1653,8 @@
         It is also possible to use <q>see</q>
         and <q>see also</q> entries for indices.
         For instance, in <xref ref="basics-ch-basic-formatting"/>,
-        we use <c>            &lt;idx&gt;&lt;h&gt;font&lt;/h&gt;&lt;see&gt;formatting&lt;/see&gt;&lt;/idx&gt;</c> to create an index entry for <q>font</q>
+        we use
+	<cd>&lt;idx&gt;&lt;h&gt;font&lt;/h&gt;&lt;see&gt;formatting&lt;/see&gt;&lt;/idx&gt;</cd> to create an index entry for <q>font</q>
         that instructs the reader to <q><em>see </em> formatting</q>.
         A <q><em>see also</em></q> can be created using the <tag>seealso</tag> tag instead of <tag>see</tag>.
       </p>
@@ -1423,8 +1668,8 @@
       </p>
       
       <p>
-        If you generate <latex/> output,
-        the index is generated without any additional passes beyond the usual two required to get references correct.
+        If you generate <init>PDF</init> output from <latex/>,
+        the index is automatically generated.
       </p>
     </section>
 

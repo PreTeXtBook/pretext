@@ -43,6 +43,14 @@
         <p>So early in your writing project, familiarize yourself with the components of a paragraph detailed in <xref ref="topic-paragraphs" />.</p>
     </section>
 
+    <section xml:id="overview-blocks">
+        <title>Blocks</title>
+        <idx>blocks</idx>
+        <idx><h>environments</h><see>blocks</see></idx>
+
+        <p>Besides paragraphs (<xref ref="overview-paragraphs"/>) the most common object to include in a division is what we informally refer to as a <term>block</term>.  These are self-contained units of text, almost always set-off visually, and likely with a number and a title.  If you know <latex/>, you may be in the habit of calling these <term>environments</term>.  Mathematical results are one example, and you can start at <xref ref="overview-math-results"/> to learn more.  There are others that are more general-purpose, such as <tag>remark</tag> and <tag>example</tag>.  While fundamentally different from these blocks that are textual with reflowable lines, objects like <tag>figure</tag> and <tag>table</tag> (<xref ref="overview-figures-tables"/>) or <tag>program</tag> and <tag>console</tag> (<xref ref="overview-programs"/>) are blocks, even if their contents are more rigid or spatial.  For a more precise description, see <xref ref="topic-blocks"/>.</p>
+    </section>
+
     <section xml:id="overview-cross-references">
         <title>Cross-References</title>
         <idx>cross-reference</idx>
@@ -53,7 +61,7 @@
 
         <p>Since the value of an <attr>xml:id</attr> is also used in a variety of ways, such as to construct some file names, some care should be taken in how you author them.  We limit the possible characters to letters and numbers (<c>a-z</c>, <c>A-Z</c>, <c>0-9</c>), with hyphens and underscores (<c>-_</c>) available as word-separators.  Our advice is to stick to lowercase letters, though we are not yet aware of any problems with case-insensitivity.  So in short, use <term>kebab-case</term> or <term>snake-case</term> for your <attr>xml:id</attr> values.</p>
 
-        <p>For more, see <xref ref="topic-cross-referencing" /> because cross-references have many features. But first, here are two features you do not want to miss.  In the early stages of writing, you can author <c>&lt;xref provisional="subsection-flowers" /&gt;</c> to point to a subsection you are contemplating (but have not written yet) and you will get various polite reminders to get that straightened out eventually.  Also the default behavior is to automatically provide the generic name of the target, so you will get something like <q>Subsection 4.3.2</q> without ever typing the <q>Subsection</q> part.  If you move the target, the generic name will adjust if necessary, and if you switch to one of the supported languages, the generic name will switch language (see <xref provisional="topic-on-languages" />.</p>
+        <p>For more, see <xref ref="topic-cross-referencing" /> because cross-references have many features. But first, here are two features you do not want to miss.  In the early stages of writing, you can author <c>&lt;xref provisional="subsection-flowers" /&gt;</c> to point to a subsection you are contemplating (but have not written yet) and you will get various polite reminders to get that straightened out eventually (see <xref ref="processing-author-tools" /> for details).  Also the default behavior is to automatically provide the generic name of the target, so you will get something like <q>Subsection 4.3.2</q> without ever typing the <q>Subsection</q> part.  If you move the target, the generic name will adjust if necessary, and if you switch to one of the supported languages, the generic name will switch language (see <xref provisional="topic-on-languages" />.</p>
     </section>
 
     <section xml:id="overview-title">
@@ -65,6 +73,28 @@
         <p>A division will also support an optional <tag>shortitle</tag>.  The full <tag>title</tag> will be used where the division is born, but in other places where the title is used for navigation, such as a Table of Contents, print page header, or HTML summary page, the <tag>shortitle</tag> will be used preferentially.  To avoid confusing your readers, use this feature sparingly, and ideally only when you have a really, really, really long title and then use a short title that is easily recognizable as a variant of the long title.  Your first option should be to ask if your long title must absolutely be so long.</p>
 
         <p>Many, many other structures admit titles.  Experiment, or look at specific descriptions of the structure you are interested in.  Titles are very integral to <pretext />, much like cross-references.  Titles migrate to the Table of Contents, get used in page headers for print output, can be used in lists (such as a List of Figures), and can be used as the text of a cross-reference, instead of a number.  You might not be inclined to give a <tag>remark</tag> a title, but it would be good practice to do so.  If you use knowls in your <init>HTML</init> output for structures such as <tag>example</tag> (or if somebody else may someday choose to), then your readers will be spared a lot of confusion if you supply informative titles for each. Your electronic outputs will be much more useful to your readers if you routinely title every structure that allows it (perhaps excepting <tag>exercise</tag> which can be known by their number).</p>
+
+        <note xml:id="best-practice-titles">
+            <title>Provide Informative Titles Liberally</title>
+            <p>Provisions for titles in many situations is a key <pretext/> feature.  And then they are used for various purposes to benefit readers.  A good example is when the <init>HTML</init> conversion is used to place content in a <term>knowl</term>, a unit of content that begins hidden, but can be revealed (and hidden again) with one click of a mouse.  Since a reader cannot see the content originally, we will migrate a title into the clickable text.  But we cannot read your mind<mdash/>it is your job as the author to provide a title, and to provide a good one.</p>
+
+            <p>Even if you are not yet sure what a knowl is, and even if you think you do not want to use them, there are other good reasons to have a title (such as automatic lists, see <xref ref="topic-automatic-lists"/>).  Constructing them on-the-fly is much easier than making a big chore out of going back and doing it later.</p>
+
+            <p><dl width="narrow">
+                <li>
+                    <title>Bad</title>
+                    <p>Example 5.10</p>
+                </li>
+                <li>
+                    <title>Better</title>
+                    <p>Example 5.10 A cool lizard trick.</p>
+                </li>
+                <li>
+                    <title>Best</title>
+                    <p>Example 5.10 Various colors and markings of a chameleon.</p>
+                </li>
+            </dl></p>
+        </note>
     </section>
 
     <section xml:id="overview-math">
@@ -129,7 +159,7 @@
             </li>
             <li>
                 <title>Project</title>
-                <p>A <tag>project</tag> is a bit different than the prior situations, since this element is structured with <tag>task</tag>.  But it has many common features, such as allowing optional <tag>hint</tag>, <tag>answer</tag>, <tag>solution</tag>.</p>
+                <p>A <tag>project</tag> is similar to an inline exercise, other than the type name and the fact that it can run on a separate counter from theorems, figures, etc. (When running on a separate counter, the same counter is used for <tag>activity</tag>, <tag>exploration</tag>, and <tag>investigation</tag>.)</p>
             </li>
         </dl></p>
 
@@ -345,7 +375,7 @@
         <title>Front Matter</title>
         <idx>front matter</idx>
 
-        <p>In the beginning of your <tag>book</tag> or <tag>article</tag> you can have a <tag>frontmatter</tag><idx>front matter</idx> element that contains various items that would precede your first <tag>chapter</tag> or <tag>section</tag> (respectively).  Possibilities include <tag>titlepage</tag>, <tag>colophon</tag>, <tag>biography</tag>, <tag>abstract</tag>, <tag>dedication</tag>, <tag>acknowledgment</tag>, <tag>foreword</tag>, and <tag>preface</tag>.  Some of these may be duplicated (e.g., several prefaces for multiple editions), many of these items are restricted to books (e.g., a foreword), and some items are restricted to articles (e.g., an abstract).  The schema (<xref ref="schema"/>) will help you place them in the right order in your source.  See <xref ref="topic-front-matter"/> for details.</p>
+        <p>In the beginning of your <tag>book</tag> or <tag>article</tag> you can have a <tag>frontmatter</tag><idx>front matter</idx> element that contains various items that would precede your first <tag>chapter</tag> or <tag>section</tag> (respectively).  Possibilities include <tag>titlepage</tag>, <tag>colophon</tag>, <tag>biography</tag>, <tag>abstract</tag>, <tag>dedication</tag>, <tag>acknowledgement</tag>, <tag>foreword</tag>, and <tag>preface</tag>.  Some of these may be duplicated (e.g., several prefaces for multiple editions), many of these items are restricted to books (e.g., a foreword), and some items are restricted to articles (e.g., an abstract).  The schema (<xref ref="schema"/>) will help you place them in the right order in your source.  See <xref ref="topic-front-matter"/> for details.</p>
 
         <p>The <tag>frontmatter</tag> is also employed in other types of documents, such as a <tag>slideshow</tag>, in similar, but not identical, ways.</p>
     </section>
@@ -354,7 +384,7 @@
         <title>Back Matter</title>
         <idx>back matter</idx>
 
-        <p>Similar to front matter, there is material you might wish to include after your book's final <tag>chapter</tag> or your article's final <tag>section</tag>.  Possibilities to place in a <tag>backmatter</tag><idx>back matter</idx> include <tag>appendix</tag>, <tag>references</tag>, <tag>glossary</tag>, <tag>solutions</tag>, <tag>index</tag>, and <tag>colophon</tag>.  There are empty tags you can place into an appendix to generate lists of notation, or lists of particular elements of your choice, such as a list of figures.  A similar empty element actually generates the index, <tag>index-list</tag>, but you will almost always want to place it into the <tag>index</tag> division.  See <xref ref="topic-back-matter"/> for details on the back matter generally, and <xref ref="topic-automatic-lists"/> for more on automatic lists.</p>
+        <p>Similar to front matter, there is material you might wish to include after your book's final <tag>chapter</tag> or your article's final <tag>section</tag>.  Possibilities to place in a <tag>backmatter</tag><idx>back matter</idx> include <tag>appendix</tag>, <tag>references</tag>, <tag>glossary</tag>, <tag>solutions</tag>, <tag>index</tag>, and <tag>colophon</tag>.  There are empty tags you can place into an appendix to generate lists of notation, or lists of particular elements of your choice, such as a list of figures.  A similar empty element actually generates the index, <tag>index-list</tag>, but you will almost always want to place it into the <tag>index</tag> division.  See <xref ref="topic-back-matter"/> for details on the back matter generally.  Also, be sure to read about the powerful and flexible automatic list feature (<xref ref="topic-automatic-lists"/>), which is not restricted to just the back matter.</p>
     </section>
 
     <section xml:id="overview-index-notation">
@@ -371,16 +401,16 @@
         <p>See <xref ref="topic-index"/> for more details and the finer points of creating index entries.</p>
 
         <p>A similar device is used to create a list of notation for a technical (mathematical) work.
-        Place a <tag>notation</tag> element as close as possible to the place where notation is first introduced.  If you use the <tag>definition</tag> tag for your definitions, then this is a very natural place to also introduce notation.  Inside of <tag>notation</tag> use the <tag>usage</tag> tag to include a short example of the notation in use.  This will be treated as mathematics, so imagine that it will be wrapped in an <tag>m</tag> tag and use <latex/> syntax.  The <tag>description</tag> tag should contain a very short description in words of what the notation is for.  So <q>center of a group</q> would be a good description to accompany the usage <q><m>Z(G)</m>.</q></p>
+        Place a <tag>notation</tag> element as close as possible to the place where notation is first introduced.  If you use the <tag>definition</tag> tag for your definitions, then this is a very natural place to also introduce notation.  Inside of <tag>notation</tag> use the <tag>usage</tag> tag to include a short example of the notation in use, wrapped in an <tag>m</tag> tag and use <latex/> syntax (as usual).  The <tag>description</tag> tag should contain a very short description in words of what the notation is for.  So <q>center of a group</q> would be a good description to accompany the usage <q><m>Z(G)</m>.</q></p>
 
         <p>See <xref ref="topic-notation"/> for more details and the finer points of creating notation entries.</p>
     </section>
 
     <section xml:id="overview-webwork">
-        <title><webwork /> Exercises</title>
-        <idx><h><webwork /></h><h><webwork /> exercise</h></idx>
+        <title><webwork/> Exercises</title>
+        <idx><h><webwork/></h><h><webwork/> exercise</h></idx>
 
-        <p>It is possible to author <webwork /> automated homework problems<idx><h><webwork /></h><h><webwork /> exercise</h></idx> directly within your source.  A static version will be rendered in your <latex />/PDF/print output, and a <q>live</q> version will be rendered into HTML output (though a student is not able to authenticate against a course).  However, you can also extract <em>all</em> of the <webwork /> questions from a textbook into a single archive suitable for uploading into a traditional <webwork /> server.  This is a big topic, so see the dedicated <xref ref="webwork-author" /> for details.</p>
+        <p>It is possible to author <webwork/> automated homework problems<idx><h><webwork /></h><h><webwork /> exercise</h></idx> directly within your source.  A static version will be rendered in your <latex />/PDF/print output, and a <q>live</q> version will be rendered into HTML output (though a student is not able to authenticate against a course).  However, you can also extract <em>all</em> of the <webwork/> questions from a textbook into a single archive suitable for uploading into a traditional <webwork/> server.  This is a big topic, so see the dedicated <xref ref="webwork-author" /> for details.</p>
     </section>
 
     <section xml:id="overview-url">

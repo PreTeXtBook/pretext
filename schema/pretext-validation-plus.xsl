@@ -19,6 +19,12 @@ You should have received a copy of the GNU General Public License
 along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
+<!-- http://pimpmyxslt.com/articles/entity-tricks-part2/ -->
+<!-- NB: directories affect location -->
+<!DOCTYPE xsl:stylesheet [
+    <!ENTITY % entities SYSTEM "../xsl/entities.ent">
+    %entities;
+]>
 <!-- Identify as a stylesheet -->
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
@@ -86,6 +92,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
+<!-- 2017-12-21 remove sage/@copy               -->
+<!-- 2021-02-25 remove all code due to id() use -->
+<xsl:template match="sage[@copy]">
+    <xsl:apply-templates select="." mode="messaging">
+        <xsl:with-param name="severity" select="'error'"/>
+        <xsl:with-param name="message">
+            <xsl:text>@copy on a &quot;sage&quot; element was deprecated (2017-12-21)</xsl:text>
+            <xsl:text>Use the xinclude mechanism with common code in an external file</xsl:text>
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- 2017-12-21 remove image/@copy              -->
+<!-- 2021-02-25 remove all code due to id() use -->
+<xsl:template match="image[@copy]">
+    <xsl:apply-templates select="." mode="messaging">
+        <xsl:with-param name="severity" select="'error'"/>
+        <xsl:with-param name="message">
+            <xsl:text>@copy on an &quot;image&quot; element was deprecated (2017-12-21)</xsl:text>
+            <xsl:text>Perhaps use the xinclude mechanism with common code in an external file</xsl:text>
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
 
 <!-- ################ -->
 <!-- Real-Time Checks -->
@@ -112,6 +142,73 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates/>
 </xsl:template>
 
+<!-- Docinfo should have at most one latex-image-preamble -->
+<!-- of each value for @syntax (including no @syntax)     -->
+<xsl:template match="latex-image-preamble[not(@syntax)][1]">
+    <xsl:if test="count(parent::docinfo/latex-image-preamble[not(@syntax)]) > 1">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message">
+                <xsl:text>There should be at most one &lt;latex-image-preamble&gt; without a&#xa;</xsl:text>
+                <xsl:text>@syntax within the &lt;docinfo&gt; element. There are more than one,&#xa;</xsl:text>
+                <xsl:text>and they should be consolidated.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- recurse further -->
+    <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="latex-image-preamble[@syntax = 'PGtikz'][1]">
+    <xsl:if test="count(parent::docinfo/latex-image-preamble[@syntax = 'PGtikz']) > 1">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message">
+                <xsl:text>There should be at most one &lt;latex-image-preamble&gt; with @syntax&#xa;</xsl:text>
+                <xsl:text>having value 'PGtikz' within the &lt;docinfo&gt; element. There are&#xa;</xsl:text>
+                <xsl:text>more than one, and they should be consolidated.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- recurse further -->
+    <xsl:apply-templates/>
+</xsl:template>
+
+<!-- ########## -->
+<!-- Advisories -->
+<!-- ########## -->
+
+<xsl:template match="sidebyside[not(parent::interactive)]">
+    <xsl:if test="count(*[not(&METADATA-FILTER;)]) = 1">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message">
+                <xsl:text>A &lt;sidebyside&gt; normally does not have a single panel.&#xa;</xsl:text>
+                <xsl:text>If this construct is only for layout control, try moving&#xa;</xsl:text>
+                <xsl:text>layout onto the element used as panel ("</xsl:text>
+                <xsl:value-of select="local-name(*[not(&METADATA-FILTER;)])"/>
+                <xsl:text>") and remove the &lt;sidebyside&gt;&#xa;</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- recurse further -->
+    <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="title[m]">
+    <xsl:if test="parent::chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|slide|exercises|worksheet|reading-questions|solutions|references|glossary|backmatter and not(following-sibling::shorttitle)">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message">
+                <xsl:text>You have a title containing m but no shorttitle.&#xa;</xsl:text>
+                <xsl:text>Because this title will be used many places, errors may result.&#xa;</xsl:text>
+                <xsl:text>Please add a shorttitle.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- recurse further -->
+    <xsl:apply-templates/>
+</xsl:template>
 
 <!-- ####### -->
 <!-- WeBWorK -->

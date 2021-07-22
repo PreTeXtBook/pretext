@@ -21,15 +21,14 @@
     <section xml:id="help-and-support">
         <title>Help and Support</title>
 
-        <p>There is a documentation area at the project website.  Presumably, that is where you found this <pubtitle>Author's Guide</pubtitle>.  This is what another software project might call the <pubtitle>User's Manual</pubtitle>.  So start here.  Re-read <xref ref="philosophy"/> on the project philosophy and the principles in <xref ref="list-principles"/> at regular intervals.  <xref ref="overview"/> is meant to inform you on the features of <pretext/>, without getting into all the details.  It will frequently refer you to <xref ref="topics"/> for all those details.</p>
+        <p>There is a documentation area at the project website.  Presumably, that is where you found this <pubtitle>Author's Guide</pubtitle>.  This is what another software project might call the <pubtitle>User's Manual</pubtitle>.  So start here.  Re-read <xref ref="philosophy"/> on the project philosophy and the principles in <xref ref="list-principles"/> at regular intervals.  <xref ref="overview"/> is meant to inform you of the features of <pretext/>, without getting into all the details.  It will frequently refer you to <xref ref="topics"/> for all those details.</p>
 
         <p>PreTeXt is fundamentally a specification of a set of elements and attributes, a topic discussed in <xref ref="schema"/>.  This chapter also discusses validation.  Once comfortable, but before authoring lots of material, take the time to get validation working, and use it regularly.  Do not save it for last.</p>
 
         <p>There are many examples available in an area on the website.  Compare <pretext /> source to the resulting output (in both directions).  The <articletitle>sample article</articletitle> is not always pretty, since it is used for testing, but it does try to have one of everything.</p>
 
-        <p>When the above is not sufficient, the <c>pretext-support</c> Google Group is the right place to ask questions.  If you are trying to determine which elements to use to accomplish something, provide some context.  Do not ask, <q>How do I print a line of text upside-down?</q>  Instead say, <q>I am writing a monograph on mammalian vision, and I'd like the reader to use a mirror to view a line of text written upside down.  What is the best way to do that?</q>  (I think the answer would be: make an image and include that, rather than trying to get reflected text.)  Sometimes a quick search of the Goggle Group may yield insights.</p>
+        <p>When the above is not sufficient, the <c>pretext-support</c> Google Group is the right place to ask questions.  If you are trying to determine which elements to use to accomplish something, provide some context.  Do not ask, <q>How do I print a line of text upside-down?</q>  Instead say, <q>I am writing a monograph on mammalian vision, and I'd like the reader to use a mirror to view a line of text written upside down.  What is the best way to do that?</q>  (I think the answer would be: make an image and include that, rather than trying to get reflected text.)  Sometimes a quick search of the Goggle Group may yield insights.  Overall, do your best not to be a <url href="http://slash7.com/2006/12/22/vampires/" visual="slash7.com/2006/12/22/vampires/">Help Vampire</url>.</p>
 
-        <p>When you have a question about design, or are pretty sure you have encountered a bug, then the <c>pretext-dev</c> list is the place to start a discussion.  As you get more comfortable with <pretext/> this may be a more useful venue for more detailed discussions.</p>
     </section>
 
     <section xml:id="github-issues">
@@ -39,7 +38,7 @@
 
         <p>If you are asked to create an issue in response to a discussion you initiated, please consider doing so.  It will save the other volunteers just a bit of time to work on other parts of <pretext />.  And you will also get email-for-life as the issue is discussed and eventually closed.  It is a very helpful contribution.</p>
 
-        <p>As you gain more experience, you will identify bugs, obsolete instructions, typos, <etc/>  Search the issues to see if there is something relevant you can add to.  For example, your particular version of a bug might provide the key insight into identifying the cause.  When you are certain something is wrong, and there is no need to discuss it in the groups, feel free to go straight to making an issue.  For something like a list of typos, make a single issue and just keep editing your initial post.</p>
+        <p>As you gain more experience, you will identify bugs, obsolete instructions, typos, <etc/>  Search the issues to see if there is something relevant you can add.  For example, your particular version of a bug might provide the key insight into identifying the cause.  When you are certain something is wrong, and there is no need to discuss it in the groups, feel free to go straight to making an issue.  For something like a list of typos, make a single issue and just keep editing your initial post.</p>
 
         <p>If you have some structural problem, see if you can reproduce it by adding into the minimal example, and post that <em>entire</em> source file.  If the rendering in <init>HTML</init> is a bit off or you think it exhibits a bug, be sure to post a link to a <em>live</em> example, not just a verbal description and <em>definitely not</em> a screenshot.  If you need an easy, quick, free, temporary location to host one file or your whole project as <init>HTML</init>, try <url href="https://app.netlify.com/drop">Netlify Drop</url><fn><c>https://app.netlify.com/drop</c></fn>.</p>
     </section>
@@ -52,7 +51,9 @@
 
         <p>The documentation is authored in <pretext/>, so you know how to create additions, clean-up obsolete parts, and fix typos.  If you know <c>git</c> and GitHub, then a pull request (on a new branch!) is a very economical way for us to manage contributions.  Even if you do not know GitHub, we can easily accept files written in <pretext/> that contain changes to the documentation.  For example, files supporting localization to new languages (see <xref ref="topic-localization"/>) are ideal for simply submitting an entire file.  (Send files to us by email, or post as attachments on one of the Google groups.)</p>
 
-        <p>Conversions are written in <init>XSL</init>, a declarative language.  It has a steep learning curve, but is very powerful for an application like this.  Start small, and we do not mind helping you along with suggestions and critiques.  Do not begin an ambitious task unless your skills are up to it.</p>
+        <p>Conversions are written in <init>XSL</init>, a declarative language.  It has a steep learning curve, but is very powerful for an application like this.  Start small, and we do not mind helping you along with suggestions and critiques.  Do not, do not, begin an ambitious task unless your skills are up to it.</p>
+
+        <p>When you have gained significant experience as an author, and have a good feel for the questions asked by other authors due to your material participation in the <c>pretext-support</c> group, then it may be time to apply to be part of the <c>pretext-dev</c> group.  This where design discussions are held and nasty bugs are squashed collectively.</p>
     </section>
 
     <section xml:id="personal-email">
@@ -61,14 +62,14 @@
         <p>How do we put this politely?  Personal email to the core <pretext/> developers should be your last resort.  We are not unfriendly<mdash/>just the opposite.  We would love to hear from you, but in the groups.  Here is the rationale:<ul>
             <li>You may get a better answer from somebody who is not the most active developer, but understands your particular need better than anybody else.  You will never get that answer with a personal email.</li>
             <li>Developers teach university courses, travel to professional meetings, sleep at night, take naps, turn off their email for big coding pushes, and sometimes travel in the wilderness and are offline for days at a time.  You are likely to get quick responses from the core developers through the groups, but if they are not available a personal email may get a slower response.  (I am inclined to answer posts on the groups before I work through personal email.)</li>
-            <li>Many contributors prefer to provide help in a public forum because then their efforts are more widely recognized.</li>
-            <li>Your question, and its answer, are searchable by others.  (The groups and issues are public.)  A personal email is no help to anybody else.</li>
+            <li>Many contributors prefer to provide help in a public forum because their efforts are then more widely recognized.</li>
+            <li>Your question and its answer are searchable by others.  (The groups and issues are public.)  A personal email is no help to anybody else.</li>
             <li>We prefer to make as many decisions as possible <em>openly</em>.  So a discussion on a public group or site is there for all to see, now and later.</li>
             <li>We depend on granting agencies for much of our funding.  Membership in groups, forks on GitHub, activity in the groups, number of issues, and number of contributors to the repository, are all crude measures of the health of the project.  Personal emails add nothing to those measures.</li>
             <li>Everybody who has committed their big writing project to <pretext/> likes to see an active, responsive, friendly community supporting its use and growth.  Just by asking a necessary question, you can add to that community.</li>
         </ul></p>
 
-        <p>We understand that nobody likes to pop their head up and ask a <q>stupid question.</q>  But it is counter-productive to do personally what we can do better collectively.  The groups are friendly forums (we will enforce that if we ever have to) and everybody there made an initial post once.  And the group members largely enjoy sharing their advice, experience, and knowledge.  So, please make a contribution simply by saving the personal emails for that which really is personal.  Thanks, and we'll look forward to chatting with you on the groups!</p>
+        <p>We understand that nobody likes to pop their head up and ask a <q>stupid question.</q>  But it is counterproductive to do personally what we can do better collectively.  The groups are friendly forums (we will enforce that if we ever have to) and everybody there made an initial post once.  And the group members largely enjoy sharing their advice, experience, and knowledge.  So, please make a contribution simply by saving the personal emails for that which is really personal.  Thanks, and we'll look forward to chatting with you on the groups!</p>
     </section>
 
 </appendix>

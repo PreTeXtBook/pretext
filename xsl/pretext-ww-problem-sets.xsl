@@ -52,8 +52,8 @@
 <!-- We default to one massive def file -->
 <xsl:variable name="chunk-level">
     <xsl:choose>
-        <xsl:when test="$chunk.level != ''">
-            <xsl:value-of select="$chunk.level" />
+        <xsl:when test="$chunk-level-entered != ''">
+            <xsl:value-of select="$chunk-level-entered" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>0</xsl:text>
@@ -131,6 +131,13 @@
     <xsl:value-of select="pg/@source" />
 </xsl:template>
 
+<!-- For copied problems move to the problem that was copied -->
+<xsl:template match="webwork-reps[pg/@copied-from]" mode="filename">
+    <xsl:variable name="copied-from" select="pg/@copied-from"/>
+    <xsl:apply-templates select="$document-root//webwork-reps[@ww-id=$copied-from]" mode="filename"/>
+</xsl:template>
+
+
 <!-- ################## -->
 <!-- Problem Extraction -->
 <!-- ################## -->
@@ -150,6 +157,10 @@
 <!-- OPL problems don't produce PG source files, -->
 <!-- as they live on the server already          -->
 <xsl:template match="webwork-reps[pg/@source]" />
+
+<!-- Don't make PG file for copies -->
+<xsl:template match="webwork-reps[pg/@copied-from]" />
+
 
 <!-- ################## -->
 <!-- Chunking Def Files-->

@@ -18,7 +18,7 @@
     <section xml:id="pretext-executing">
         <title>Running <c>pretext/pretext</c></title>
 
-        <p><c>pretext</c> is a Python program (aka script), so you will need to have the Python 3 interpreter on your system (version 3.4 or better expected as of 2020-05-22) which you can run at a command-line (aka terminal, console, command prompt).  So your first step is to install Python (see <xref ref="python"/>) or check your installed version and the exact name of your executable (see <xref ref="python-executable"/>).</p>
+        <p><c>pretext</c> is a Python program (aka script), so you will need to have the Python 3 interpreter on your system (version 3.6 or better expected as of 2021-05-21) which you can run at a command-line (aka terminal, console, command prompt).  So your first step is to install Python (see <xref ref="python"/>) or check your installed version and the exact name of your executable (see <xref ref="python-executable"/>).</p>
 
         <p>The <c>pretext</c> script is located in a directory of the <pretext/> distribution also named <c>pretext</c>.  So we often refer to it as the <c>pretext/pretext</c> script to avoid confusion with all the other places we say <pretext/>.  As a simple check on your ability to run the script, with a suitable path you can run<cd>
             <cline>/path/to/pretext/pretext -h</cline>
@@ -55,7 +55,9 @@
         <p>Now you need to generate the <init>SVG</init> versions of your images that will accompany your <init>HTML</init> version of your book and provide nice scalable graphics. This is exactly the sort of chore the <c>pretext/pretext</c> script was designed for.  You might run (all on one line)<cd>
             <cline>pretext -vv -c latex-image -f svg</cline>
             <cline>  -d ~/books/aota/images ~/books/aota/animals.xml</cline>
-        </cd>Here <c>-c</c> is specifying the <q>component</q> of your book to process, and <c>-f</c> is specifying the <q>format</q> of what is being produced.  The <c>-d</c> argument specifies a directory where the output ends up, in this case a collection of <init>SVG</init> files, one per image.</p>
+        </cd>Here <c>-c</c> is specifying the <q>component</q> of your book to process, and <c>-f</c> is specifying the <q>format</q> of what is being produced.  The <c>-d</c> argument specifies a directory where the output ends up, in this case a collection of <init>SVG</init> files, one per image.
+Note that the <pretext/> file, <c>animals.xml</c> in the above example, is the main source file for the document.
+The script should be run on the entire document, even if all the images are in one file.</p>
     </section>
 
     <section xml:id="pretext-strategy">
@@ -79,15 +81,21 @@
 
         <p>A principal use of the <c>pretext/pretext</c> script is to isolate source code from <tag>latex-image</tag> sections, package them up as proper <c>*.tex</c> files, run <latex/> to make cropped <init>PDF</init> versions, and then convert these to other formats such as <init>SVG</init> or <init>PNG</init>.</p>
 
-        <p>Much of this activity happens in a temporary directory.  If you use the <c>-vv</c> switch described above, then one of the messages early in the output describing the initialization will be the name of this directory.  Looking to see what files end up there, and what those files contain, is often useful in determining the step where this toolchain fails, and maybe even why.</p>
+        <p>Much of this activity happens in a temporary directory, and it is similar for Asymptote images and other options of the script.  If you use the <c>-vv</c> switch described above, then these temporary directories will be noted in the debugging output requested, and a complete list will be the last line of output.   In this case, and if the script encounters an error prior to successful execution, then these directories will be left in place.  Looking to see what files end up there, and what those files contain, is often useful in determining the step where the script fails, and maybe even why.</p>
 
-        <p>Another option is to ask for the actual <c>*.tex</c> files as the result of a run.  This is accomplished with the <c>-f source</c> option when invoking <c>pretext</c>.  If the right packages or macros are not being employed in these files, this is an easy way to get at the source files for inspection and analysis.</p>
+        <p>With no chatter requested, or just progress indications (<c>-v</c>) these temporary directories will be cleaned out as the last part of successful execution.</p>
+
+        <p>Another option is to ask for the actual source files (<c>*.tex</c>, <c>*.asy</c>, etc.) as the output of a run.  This is accomplished with the <c>-f source</c> option when invoking <c>pretext/pretext</c>.  If the right packages or macros are not being employed in these files, this is an easy way to get at the source files for inspection and analysis, and is a good first check on problematic execution.</p>
+
+        <p>It is possible to design an image whose dimensions exceed the page size of typical <latex/> output.  An example is an image you might use only for some HTML output, such as a slideshow.  In this case, construction and conversion to an output format like <init>SVG</init> may fail.  There is a string parameter, <c>latex.geometry</c>, that allows you to provide options to the <latex/> <url href="https://ctan.org/pkg/geometry" visual="ctan.org/pkg/geometry"><c>geometry</c> package</url> which influence page size.  At a minimum, you need to override the page size, plus it might be best to override the <q>printable</q> area as well.  (See <xref ref="pretext-publisher-stringparam"/> for more on string parameters, which will be obsolete in the future.)  Here is a sample <em>addition</em> to a call to the <c>pretext</c> script.  Note that you cannot put the <c>-x</c> switch last, so it must precede some other option.<cd>
+            <cline>-x latex.geometry "paperwidth=21in,paperheight=21in,total={20in,20in}"</cline>
+        </cd>Since the image will ultimately be cropped, there is little harm in making the overall page grossly oversized.  However, if the <latex/> code you are using employs lengths like <c>\linewidth</c> or <c>\textwidth</c> (which we will claim is not a good practice), then your image might be very sensitive to how you set the page geometry.  Note that restricting the scope (<xref ref="restrict-pretext-scope"/>) might be useful if this accomodation is only needed for one image.</p>
     </section>
 
     <section xml:id="pretext-helpers">
         <title>Configuring External Helper Programs</title>
 
-        <p>Our main processor, <c>xsltproc</c><idx><c>xsltproc</c></idx>, is not a general-purpose compiler, and does not <q>call</q> external programs.  That is the <foreign xml:lang="fr-FR">raison d'etere</foreign> of the <c>pretext/pretext</c> script.  You will see a configuration file, <c>pretext/pretext.cfg</c>, as part of the distribution.  Read the comments at the top of this file, but foremost, realize that you are not meant to edit this file.  It is a template, and any changes you make will be overwritten with an original version when you update.  Instead, make a copy and place it as <c>user/pretext.cfg</c> within the distribution.  For instance, if your distribution is in the <c>mathbook</c> directory, then the commands<cd>
+        <p>Our main processor, <c>xsltproc</c><idx><c>xsltproc</c></idx>, is not a general-purpose compiler, and does not <q>call</q> external programs.  That is the <foreign xml:lang="fr-FR">raison d'être</foreign> of the <c>pretext/pretext</c> script.  You will see a configuration file, <c>pretext/pretext.cfg</c>, as part of the distribution.  Read the comments at the top of this file, but foremost, realize that you are not meant to edit this file.  It is a template, and any changes you make will be overwritten with an original version when you update.  Instead, make a copy and place it as <c>user/pretext.cfg</c> within the distribution.  For instance, if your distribution is in the <c>mathbook</c> directory, then the commands<cd>
             <cline>cd /path/to/mathbook</cline>
             <cline>mkdir user</cline>
             <cline>cp pretext/pretext.cfg user/</cline>
@@ -107,11 +115,11 @@
 
         <p>A publisher file (<xref ref="publisher-file"/>) can be used to control various options that are independent of the authoring process, or for some conversions may be necessary.  Use the <c>-p</c> switch to specify this file.</p>
 
-        <p>Sometimes you might have need to pass stringparams to the pretext script.  This is accomplished with the <c>-x</c> flag, followed by a space separated list of (stringparam, value) pairs.  Do not use parentheses, just separate with spaces.  But note that <c>-x</c> cannot be the last option passed to the script since it makes it hard for the script to <q>see</q> filename for your source.</p>
+        <p>Sometimes you might have need to pass stringparams to the <pretext/> script, though this will eventually be something an author will rarely do, and is more likely necessary for developers.  This is accomplished with the <c>-x</c> flag, followed by a space separated list of (stringparam, value) pairs.  Do not use parentheses, just separate with spaces.  But note that <c>-x</c> cannot be the last option passed to the script since it makes it hard for the script to <q>see</q> the filename for your source.</p>
 
         <p>For example:<cd>
-            <cline>pretext -vv -x latex.engine xelatex latex.font.size 12pt -f svg</cline>
-            <cline>   -c latex-image -d ~/books/aota/images ~/books/aota/animals.xml</cline>
+            <cline>pretext -vv -x debug.datedfiles no debug.chunk 0 -f html</cline>
+            <cline>   -c all -d /tmp/aota-html ~/books/aota/animals.xml</cline>
         </cd></p>
     </section>
 
@@ -134,7 +142,7 @@
     <section xml:id="pretext-capabilities">
         <title><c>pretext/pretext</c> Capabilities</title>
 
-        <p>Again, the command <c>pretext -h</c> will remind you of the various options for the script and is teh most likely list to be correct and up-to-date.  The following is a brief summary, in general terms, of what is possible.<dl width="narrow">
+        <p>Again, the command <c>pretext -h</c> will remind you of the various options for the script and is the most likely list to be correct and up-to-date.  The following is a brief summary, in general terms, of what is possible.<dl width="narrow">
             <li>
                 <title>Complete Conversions</title>
                 <p>With <c>-c all</c> and various choices of the format (<c>-f</c>) the script will execute a complete conversion.  In some cases, this is a convenience compated with just using the <c>xsltproc</c> processor.  In other cases the conversion is very complex and multiple (arcane) output files must be packaged up in very specific ways and no author would want to manage it all.  Conversion to <c>EPUB</c> is one example (<xref provisional="epub conversion"/>).</p>

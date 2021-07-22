@@ -183,6 +183,17 @@ boxline article,data-braille,proof
 # We box "sage" since the visual formatting is absent
 boxline article,data-braille,sage
 
+
+########
+# Images
+########
+
+# Need a blank "place holder" page in the embossed version
+# This action does what it says: ejects the current page
+
+pageeject div,data-braille,pageeject
+
+
 #######
 # Lists
 #######
@@ -193,6 +204,10 @@ boxline article,data-braille,sage
 # we give thos a style based on a class value, the others
 # just get dropped as pure containers.  There is only one
 # kind of list item.
+# To get labels of list items, and the first bit of content,
+# onto the same line, we place a throwaway element on the
+# first block (when structured).  Instruction below is how
+# we actually ignore it.
 outerlist ol,class,outerlist
 outerlist ul,class,outerlist
 outerlist dl,class,outerlist
@@ -200,6 +215,7 @@ no ol
 no ul
 no dl
 listitem li
+no first-li-block
 
 
 ########

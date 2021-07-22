@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2014-2021 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- See  xsl/localizations/README.md  for an explanation of this file -->
+<!-- Please respect alphabetical order here                            -->
+
+<localizations xmlns:xi="http://www.w3.org/2001/XInclude">
+    <locale>af-ZA.xml</locale>
+    <locale>bg-BG.xml</locale>
+    <locale>cs-CZ.xml</locale>
+    <locale>ca-ES.xml</locale>
+    <locale>de-DE.xml</locale>
+    <locale>en-US.xml</locale>
+    <locale>es-ES.xml</locale>
+    <locale>fr-CA.xml</locale>
+    <locale>fr-FR.xml</locale>
+    <locale>hu-HU.xml</locale>
+    <locale>it-IT.xml</locale>
+    <locale>pt-BR.xml</locale>
+    <locale>pt-PT.xml</locale>
+</localizations>

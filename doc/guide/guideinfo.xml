@@ -9,20 +9,20 @@
 <!-- See the file COPYING for copying conditions.                   -->
 
 <docinfo>
-    <!-- this is the default, but supresses a warning -->
-    <cross-references text="type-global"/>
     <rename element="note" xml:lang="en-US">Best Practice</rename>
     <!-- a demonstration in Basic Reference -->
     <rename element="algorithm" xml:lang="en-US">Porism</rename>
     <latex-image-preamble>
         \usepackage{tikz}
     </latex-image-preamble>
-    <!-- There does not need to be a trailing / on the URL -->
-    <!-- NB This is likely to change, it should be a publisher option -->
-    <html>
-        <baseurl href="https://pretextbook.org/doc/guide/html"/>
-    </html>
-
+    <!-- necessary for discussion and demonstration of using -->
+    <!-- macros for the names of mathematical functions      -->
+    <!-- \DeclareMathOperator preferable to \operatorname    -->
+    <!-- See link in comment at discussion in source         -->
+    <macros>
+    \DeclareMathOperator{\homop}{Hom}
+    \newcommand{\Hom}[2]{\homop\left(#1,\,#2\right)}
+    </macros>
 </docinfo>
 
 

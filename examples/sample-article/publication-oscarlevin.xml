@@ -21,8 +21,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <publication>
 
+    <!-- we use customizations-one for the plain sample article -->
+    <source customizations="customizations-two.xml">
+        <directories external="media" generated="generated" data="data"/>
+    </source>
+
     <!-- HTML-Specific Options -->
     <html>
+        <!-- Several embedded calculators are available            -->
+        <!-- Use "none" to turn this off (or remove the element)   -->
+        <calculator model="geogebra-classic"/>
         <!-- @xml:id of a page to be target of index.html redirect -->
         <!-- This is the @xml:id of the "article", which is not    -->
         <!-- default behavior, but we do this as a test and as an  -->

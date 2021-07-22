@@ -64,7 +64,7 @@ the xsltproc executable.
         16th Century Art Book Cover, 176x240 pixels, Public Domain, due to age
         http://commons.wikimedia.org/wiki/File:Book_Cover_-_Google_Art_Project.jpg
         -->
-        <brandlogo url="https://pretextbook.org" source="images/book-cover-google-art-project.jpg" />
+        <brandlogo url="https://pretextbook.org" source="misc/book-cover-google-art-project.jpg" />
         <!--
         LaTeX packages that are also implemented as MathJax extensions
         may be specified here and any macros they have in common may be
@@ -137,12 +137,9 @@ the xsltproc executable.
         <document-id>pretext-SA</document-id>
         <!-- Items peculiar to an HTML output -->
         <html>
-            <!-- Expects favicon/favicon-32x32.png, and favicon/favicon-16x16.png -->
+            <!-- Expects favicon/favicon-32x32.png, and favicon/favicon-16x16.png,       -->
+            <!-- possibly in external images directory, when specified in publisher file -->
             <favicon/>
-            <!-- There does not need to be a trailing / on the URL             -->
-            <!-- NB Eventually a publisher option will exist to overrule this, -->
-            <!-- so a given source can be installed more than one place        -->
-            <baseurl href="https://pretextbook.org/examples/sample-article/html" />
         </html>
         <!--
         With a <feedback> element, in the HTML version, you get a button
@@ -285,7 +282,7 @@ the xsltproc executable.
             -->
 
             <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <me>\definiteintegral{0}{2}{\sin^2(x)}{x}</me>.  This is also a demonstration of the capabilities of <url href="https://pretextbook.org"><pretext /></url>.<notation>
-                <usage>\int_a^b\,f(x)\,dx</usage>
+                <usage><m>\int_a^b\,f(x)\,dx</m></usage>
                 <description>definite integral of <m>f(x)</m></description>
             </notation></p>
 
@@ -367,7 +364,7 @@ the xsltproc executable.
             <definition xml:id="definition-indefinite-integral">
                 <idx>indefinite integral</idx><idx><h>integral</h><h>indefinite integral</h></idx>
                 <notation>
-                    <usage>\int\,f(x)\,dx</usage>
+                    <usage><m>\int\,f(x)\,dx</m></usage>
                     <description>indefinite integral of <m>f(x)</m></description>
                 </notation>
                 <statement>
@@ -489,6 +486,13 @@ the xsltproc executable.
             <sage doctest="absolute" tolerance="0.006">
                 <input>12 + 0.01*random()</input>
                 <output>12.005</output>
+            </sage>
+
+            <p>Sage has some functions which affect output, generally making mathematics look more like mathematics via <latex/> syntax.  This is a simple test, and you should see the variable and superscript in italics, properly formatted as output when viewed within HTML output.  We have provided expected output for doctesting, but it is sort of silly to have this as part of <latex/> output, even if it is instructive.</p>
+
+            <sage>
+                <input>pretty_print(html("$a^2$"))</input>
+                <output>&lt;script type="math/tex"&gt;a^2&lt;/script&gt;</output>
             </sage>
 
             <!-- keep R index entry, collides with sortby attribute elsewhere -->
@@ -629,7 +633,7 @@ the xsltproc executable.
             </objectives>
 
             <introduction>
-                <p>This is a cross-reference to one of the objectives above, forced to use the <c>type-global</c> form of the text.  It should describe the objective as belonging to the <em>section</em> (rather than the <em>objectives</em>), since objectives are one-per-subdivision and are numbered based upon the containing division: <xref ref="objective-structure" text="phrase-global" />.  For comparison this is the (forced) <c>type-global</c> cross-reference: <xref ref="objective-structure" text="type-global" />.</p>
+                <p>This is a cross-reference to one of the objectives above, forced to use the <c>phrase-global</c> form of the text.  It should describe the objective as belonging to the <em>section</em> (rather than the <em>objectives</em>), since objectives are one-per-subdivision and are numbered based upon the containing division: <xref ref="objective-structure" text="phrase-global" />.  For comparison this is the (forced) <c>type-global</c> cross-reference: <xref ref="objective-structure" text="type-global" />.</p>
 
                 <p>The Fundamental Theorem comes in two flavors, where usually one is a corollary of the other.</p>
             </introduction>
@@ -946,6 +950,7 @@ the xsltproc executable.
                         </introduction>
 
                         <task>
+                            <title>A super-simple task</title>
                             <p>This first task is very simple, just a paragraph.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                         </task>
 
@@ -956,11 +961,13 @@ the xsltproc executable.
                         </task>
 
                         <task>
+                            <title>A title of a task that has a subtask with an <tag>answer</tag> for the Solutions</title>
                             <introduction>
                                 <p>This second task is further divided by more tasks.  This is its introduction.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                                 <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                             </introduction>
                             <task>
+                                <title>A task with a title and an <tag>answer</tag> for the Solutions</title>
                                 <statement>
                                     <p>A really simple subtask.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                                     <p>A short paragraph, before an answer.</p>
@@ -983,12 +990,13 @@ the xsltproc executable.
                             </task>
                             <task>
                                 <introduction>
-                                    <p>Two simple sub-sub-tasks.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                                    <p>Three simple sub-sub-tasks.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                                 </introduction>
                                 <task>
                                     <p>First subsubtask.  Short paragraph.</p>
                                 </task>
                                 <task>
+                                    <title>A second three-deep subsubtask!</title>
                                     <p>Second subsubtask.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                                     <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                                 </task>
@@ -1439,7 +1447,7 @@ the xsltproc executable.
                 <subsubsection>
                     <title>Test Two</title>
 
-                    <p>An intervening subsection section which contains an <tag>exercises</tag> division which must at the level of a Subsubsubsection.</p>
+                    <p>An intervening subsection section which contains an <tag>exercises</tag> division which must be at the level of a Subsubsubsection.</p>
 
                     <exercises>
                         <exercise>
@@ -1645,11 +1653,11 @@ the xsltproc executable.
                 <mrow>{\mathcal L}(y'')(s) = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0)</mrow>
             </md>.
             <notation>
-                <usage>\rho</usage>
+                <usage><m>\rho</m></usage>
                 <description>this symbol could be used for lots of things, but we are just trying to make a super-long description to get it to wrap within the column where it belongs, which is sometimes set to a fixed width to accomodate really complicated explanations</description>
             </notation>
             <idx>rho, a test</idx>
-            Just prior to this sentence, in the middle of this paragraph, is an <tag>idx</tag> and a <tag>notation</tag>, adjacent, but separated by some whitespace in the authored source.  That insignificant whitespace will be removed akways, which will be a (slightly) noticeable improvement in the <latex/> output.  We test referencing notation here, placed <em>before</em> the sentence-ending period and right after some inline mathematics<mdash/>for <m>\mathbb{Z}_n</m><notation><usage>\mathbb{Z}_n</usage><description>(ring of) integers modulo <m>n</m></description></notation>.</p>
+            Just prior to this sentence, in the middle of this paragraph, is an <tag>idx</tag> and a <tag>notation</tag>, adjacent, but separated by some whitespace in the authored source.  That insignificant whitespace will be removed akways, which will be a (slightly) noticeable improvement in the <latex/> output.  We test referencing notation here, placed <em>before</em> the sentence-ending period and right after some inline mathematics<mdash/>for <m>\mathbb{Z}_n</m><notation><usage><m>\mathbb{Z}_n</m></usage><description>(ring of) integers modulo <m>n</m></description></notation>.</p>
 
             <p><latex /> has a device where you can interrupt a sequence of equations with a small amout of text and preserve the equation alignment on either side.  Here are two tests of that device, with aligned equations and non-aligned equations.  Study the source to see use and differences.  (The math does not make sense.)</p>
 
@@ -1736,7 +1744,7 @@ the xsltproc executable.
                     <mrow>\nabla \cdot \vec{\mathbf{E}} &amp; = 4 \pi \rho</mrow>
                     <mrow>\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} &amp; = \vec{\mathbf{0}}</mrow>
                     <mrow>\nabla \cdot \vec{\mathbf{B}} &amp; = 0</mrow>
-                </md><notation><usage>\nabla</usage><description>gradient operator</description></notation></p>
+                </md><notation><usage><m>\nabla</m></usage><description>gradient operator</description></notation></p>
 
                 <p>A small test that the extensible arrows library is included properly:<me>A\xmapsto[\text{bijection}]{\Phi+\Psi+\Theta}B</me></p>
 
@@ -1963,6 +1971,18 @@ the xsltproc executable.
                     <mrow>&amp;=D+E&amp;&amp;<xref ref="theorem-FTC" text="title" /></mrow>
                     <mrow>&amp;=F+G&amp;&amp;<xref ref="theorem-number-01" text="custom">A nice result</xref></mrow>
                 </md>.</p>
+
+                <p>Scott Beaver likes to write short chains of equalities all in one line, with the cross-references sitting on each equals sign.  Here we test the <latex/> <c>\overset</c> and <c>\underset</c> macros wrapping a <pretext/> <tag>xref</tag>, with and without content, inside an <tag>me</tag> element.  Note that  <c>\stackrel</c> is obsolete, and <c>\overunderset</c> is not yet supported by MathJax (but see <url href="https://github.com/mathjax/MathJax/issues/2704" visual="github.com/mathjax/MathJax/issues/2704">GitHub #2704</url>).  The mathematics is Scott's, the reasons are totally unrelated to the math.
+                    <me>AC-AD
+                        \overset{<xref ref="theorem-FTC" text="global"/>}{=}
+                        A(C-D)
+                        \underset{<xref ref="definition-indefinite-integral" text="global"/>}{=}
+                        A0_{n\times p}
+                        \overset{<xref ref="theorem-FTC" text="global">Thm.</xref>}{=}
+                        0_{m\times p}
+                    </me>
+                We suggest using cross-references that only display numbers (<tag>xref</tag> with <attr>text</attr> set to <c>global</c>) since if you stick to elements like <tag>theorem</tag>, <tag>lemma</tag>, <tag>definition</tag>, or <tag>axiom</tag>, then the numbers will be unambiguous and the target of the cross-reference will contain full information.  But note that if you mix in divisions, or perhaps figures, as reasons then there is a possibility that numbers will need to be qualified by their type.  We have provided an abbreviation for one cross-reference to <xref ref="theorem-FTC" text="type-global"/> (which will not benefit from automatic translation to other languages).
+                </p>
             </subsection>
 
             <subsection>
@@ -1993,6 +2013,14 @@ the xsltproc executable.
                     E     @>\phi>>  F
                     \end{CD}</me>
                 While this package is not as flexible as some generic drawing packages, it has the advantage of full support by MathJax, and thus the <init>HTML</init> version will be more accessible.</p>
+            </subsection>
+
+            <subsection xml:id="line-breaking-math">
+                <title>Line-Breaking after Mathematics</title>
+
+                <p>As of 2021-05-14, in <init>HTML</init> output the next sentence should just fill a full line across the page.  We take active measures to bind the concluding period to the final bit of mathematics, the variable <m>x</m>.  The prevents a bad line break which could see the period <em>begin</em> a new line, all by itself.  In the event that the line-breaking siutation improves, we could relax these measures.  This testing is only relevant to <init>HTML</init> output, not <latex/> output.</p>
+
+                <p>xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx <m>x</m>.</p>
             </subsection>
         </section>
 
@@ -2035,7 +2063,7 @@ the xsltproc executable.
 
                 <p>A large quote can be accomodated with the <tag>blockquote</tag> tag, which can carry within itself an <tag>attribution</tag> element.</p>
 
-                <blockquote xml:id="blockquote-seuss">
+                <blockquote>
                     <p>The problem with writing a book in verse is, to be successful, it has to sound like you knocked it off on a rainy Friday afternoon. It has to sound easy. When you can do it, it helps tremendously because it's a thing that forces kids to read on. You have this unconsummated feeling if you stop.</p>
                     <attribution>Dr. Seuss</attribution>
                 </blockquote>
@@ -2607,7 +2635,7 @@ the xsltproc executable.
 
                 <p>We also disrupt certain constructions from <latex/>.  Attempting to sneak-in any traditional macro for the purposes of <latex/>-only output, such as, say a \newpage, will fail since the leading backslash will be caught and converted to <c>\textbackslash</c>.  (See?  It just happened twice.)  For technical reasons we want to particularly test \textbackslash, \textbraceleft, and \textbraceright.</p>
 
-                <p>Four <q><tex/> ligatures</q>, <c>--</c>, <c>---</c>, <c>``</c>, and <c>''</c>, authored in running text, --, ---, ``, ''.  It may be hard to tell that the two consecutive apostrophes have not coalesced into a curly left smart quote, but see below, the spacing is subtely different.</p>
+                <p>Four <q><tex/> ligatures</q>, <c>--</c>, <c>---</c>, <c>``</c>, and <c>''</c>, authored in running text, --, ---, ``, ''.  It may be hard to tell that the two consecutive apostrophes have not coalesced into a curly left smart quote, but see below, the spacing is subtly different.</p>
 
                 <p>We want the double quote mark from your keyboard, <c>"</c>, to not morph into some other character: "<nbsp/>.</p>
 
@@ -2652,7 +2680,7 @@ the xsltproc executable.
                 <p>If you have raster images (photographs, etc.) then they are specified with complete filenames, as above in Figure<nbsp /><xref ref="figure-function-derivative"/> or just below.</p>
 
                 <figure>
-                    <caption>New Zealand Landscape, <url href="https://commons.wikimedia.org/wiki/File:NZ_Landscape_from_the_van.jpg"><c>commons.wikimedia.org</c></url><fn><c>https://commons.wikimedia.org/wiki/File:NZ_Landscape_from_the_van.jpg</c></fn>, CC-BY-SA-2.0</caption>
+                    <caption>New Zealand Landscape, <url href="https://commons.wikimedia.org/wiki/File:NZ_Landscape_from_the_van.jpg" visual="commons.wikimedia.org/wiki/File:NZ_Landscape_from_the_van.jpg"><c>commons.wikimedia.org</c></url>, CC-BY-SA-2.0</caption>
                     <image source="images/nz-landscape.jpg" width="80%"/>
                 </figure>
 
@@ -2918,8 +2946,7 @@ the xsltproc executable.
                         <description>A pgfplots example, with external data plotted.</description>
                         <latex-image>
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
-                        <![CDATA[\tikzset{%
-                        }
+                        <![CDATA[
                         \begin{tikzpicture}
                         \begin{axis}[
                             xmin=0,xmax=100,ymin=-20,ymax=100,
@@ -3059,7 +3086,7 @@ the xsltproc executable.
             <subsection xml:id="graphics-asymptote-webgl">
                 <title>Asymptote, 3D via WebGL</title>
 
-                <p>Asymptote can create an <init>HTML</init> file that is an interactive version of a 3D shape.  At this writing (2020-05-18) support via the <c>pretext</c> script is evolving.  Plus, you will need newer versions of Asymptote and the <c>dvisvgm</c> utility to duplicate all of the results being displayed here in this testing document.  The other distinction is that the author needs to provide the aspect ratio of the figure, and this should be placed on the <tag>asymptote</tag> element (not on the <tag>image</tag> element).  <xref ref="figure-asymptote-workcone" text="type-global"/> is from the <url href="http://asymptote.sourceforge.net/gallery/3Dwebgl/">Asymptote Gallery</url><fn><c>http://asymptote.sourceforge.net/gallery/3Dwebgl/</c></fn>.</p>
+                <p>Asymptote can create an <init>HTML</init> file that is an interactive version of a 3D shape.  At this writing (2020-05-18) support via the <c>pretext</c> script is evolving.  Plus, you will need newer versions of Asymptote and the <c>dvisvgm</c> utility to duplicate all of the results being displayed here in this testing document.  The other distinction is that the author needs to provide the aspect ratio of the figure, and this should be placed on the <tag>asymptote</tag> element (not on the <tag>image</tag> element).  <xref ref="figure-asymptote-workcone" text="type-global"/> is from the <url href="http://asymptote.sourceforge.net/gallery/3Dwebgl/" visual="asymptote.sourceforge.net/gallery/3Dwebgl/">Asymptote Gallery</url>.</p>
 
                 <figure xml:id="figure-asymptote-workcone">
                     <caption>Work Cone (Asymptote Interactive 3D Image)</caption>
@@ -3210,13 +3237,14 @@ the xsltproc executable.
 
                 <sidebyside width="40%" margins="auto">
                     <!-- Tour example modified: figsize moved from show() into plot() -->
+                    <!-- 2020-11-18: converted an xrange() to an srange() -->
                     <figure xml:id="figure-sage-multigraph">
                         <caption>A Sage multigraph of a sentence</caption>
                         <image xml:id="sageplot-sentence-multigraph">
                             <sageplot>
                             stnc = 'I am a cool multiedge graph with loops'
                             g = DiGraph({}, loops=True, multiedges=True)
-                            for a,b in [(stnc[i], stnc[i+1]) for i in xrange(len(stnc)-1)]:
+                            for a,b in [(stnc[i], stnc[i+1]) for i in srange(len(stnc)-1)]:
                                g.add_edge(a, b, b)
                             g.plot(color_by_label=True, edge_style='solid', figsize=(8,8))
                             </sageplot>
@@ -3268,7 +3296,7 @@ the xsltproc executable.
             <subsection>
                 <title>Inkscape Images</title>
 
-                <p><url href="https://inkscape.org/">Inkscape</url><fn><c>inkscape.org/</c></fn> is a great tool for creating images.  It ticks all the boxes: open source, mature, cross-platform, standards-compliant.  Read much more about it in The <pretext/> Guide.  In <init>HTML</init> output the two images below are both in <init>SVG</init> format.  The first is <q>pure</q> SVG, while the second has embedded information that makes it easier to edit in Inkscape.  You could view the source for this page in the <init>HTML</init> version, deduce the filename of the second image, download it, and manipulate it profitably with Inkscape.  Both files are quite small, but the first is half the size of the second.  In <init>PDF</init> the two images come from files that are identical, so nothing is being tested.  The <init>PDF</init> version is smaller still.</p>
+                <p><url href="https://inkscape.org/" visual="inkscape.org">Inkscape</url> is a great tool for creating images.  It ticks all the boxes: open source, mature, cross-platform, standards-compliant.  Read much more about it in The <pretext/> Guide.  In <init>HTML</init> output the two images below are both in <init>SVG</init> format.  The first is <q>pure</q> SVG, while the second has embedded information that makes it easier to edit in Inkscape.  You could view the source for this page in the <init>HTML</init> version, deduce the filename of the second image, download it, and manipulate it profitably with Inkscape.  Both files are quite small, but the first is half the size of the second.  In <init>PDF</init> the two images come from files that are identical, so nothing is being tested.  The <init>PDF</init> version is smaller still.</p>
 
                 <figure>
                     <caption>Inkscape Stars, Plain SVG (left), Inkscape SVG (right), from Bethany Llewellyn</caption>
@@ -3308,7 +3336,7 @@ the xsltproc executable.
             <subsection xml:id="captionless-images">
                 <title>Captionless Images</title>
 
-                <p>We strongly suggest placing images within a <tag>figure</tag>, as we have done above, so that you can reference them, and use the (required) <tag>caption</tag> to explain what they are.  However there are places, such as a <tag>preface</tag>, where numbered itmes are not permitted.  So you might want a solo image there.  Or maybe graphics are an illustration of sorts, and a numbered figure feels like overkill.  Or it is part of an <tag>exercise</tag> or <tag>proof</tag> of a <tag>theorem</tag>. But notice that you cannot then use this image as the target of a cross-reference, so you may need to refer to some enclosing container.</p>
+                <p>We strongly suggest placing images within a <tag>figure</tag>, as we have done above, so that you can reference them, and use the (required) <tag>caption</tag> to explain what they are.  However there are places, such as a <tag>preface</tag>, where numbered items are not permitted.  So you might want a solo image there.  Or maybe graphics are an illustration of sorts, and a numbered figure feels like overkill.  Or it is part of an <tag>exercise</tag> or <tag>proof</tag> of a <tag>theorem</tag>. But notice that you cannot then use this image as the target of a cross-reference, so you may need to refer to some enclosing container.</p>
 
                 <p>The image can be scaled by specifying the <attr>width</attr> as a percentage, including the percent-sign (%).  The height is scaled to preserve the aspect ratio.  There is no facility to change the height, it is your responsibility to manage the aspect ratio independently.  The <attr>margins</attr> can be given as a pair of percentages, separated by a space.  The <attr>width</attr> defaults to 100%, while <attr>margins</attr> defaults to the value <c>auto</c>, which will center the image.  Missing values are computed sensibly, and there is robust error-checking.  The layout control here is a subset of what is available for the more elaborate <tag>sidebyside</tag> element, see <xref ref="section-side-by-side" text="type-global"/>.</p>
 
@@ -3424,8 +3452,7 @@ the xsltproc executable.
                     <image xml:id="pgfplots-data-demo-solo" width="20%" margins="40% 40%">
                         <latex-image>
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
-                        <![CDATA[\tikzset{%
-                        }
+                        <![CDATA[
                         \begin{tikzpicture}
                         \begin{axis}[
                             xmin=0,xmax=100,ymin=-20,ymax=100,
@@ -3540,12 +3567,118 @@ the xsltproc executable.
                 <p>In the early stages of a writing project, it may be best not to track provisional image files built with <c>pretext</c> under version control, and just regenerate them periodically (see the <c>-r</c> option for <c>pretext</c>).  As a project matures, then it makes sense to put stable files under version control for collaborators and others.  In every case, managing graphics files (and other aspects of production), is much more pleasurable with a script (shell, Makefile, etc.)</p>
             </subsection>
 
-            <subsection>
+            <subsection xml:id="subsection-tactile-graphics">
                 <title>Experimental Tactile Graphics</title>
 
-                <p>This subsection is a work-in-progress which will eventually allow some limited markup within the code for a TikZ diagram and allow the production of an SVG that can be embossed as a braille page that may be explored by a blind reader.  Until that work is completed, this diagram should render nicely for other formats, such as HTML and <latex/>.  In other words, right now this image is being used for development <em>and</em> test that existing routines have been modified in ways that preserve the creation of this image in the usual ways.</p>
+                <p>This subsection is a work-in-progress which will eventually allow some limited markup within the code for a TikZ diagram and allow the production of an SVG that can be embossed as a braille page that may be explored by a blind reader.  Until that work is completed, this diagram should render nicely for other formats, such as HTML and <latex/>.  In other words, right now these images are being used for development <em>and</em> to test that existing routines have been modified in ways that preserve the creation of this image in the usual ways.</p>
 
-                <p>This is a diagram of the complex 8-th roots of unity, from Judson's <pubtitle>Abstract Algebra: Theory and Applications</pubtitle>.  It has been significantly reworked for this new approach, but retains the pedagogical intent of the original.</p>
+                <p>It is possible that images may be missing in HTML output or may not be consistent with current code (document or processing).  The <latex/> version should be accurate, but may be meaningless.</p>
+
+                <p>Some preliminary documentation follows the examples, none of which is guaranteed.</p>
+
+                <figure xml:id="tactile-labels-exterior-figure">
+                    <caption>Simple label positioning (exterior)</caption>
+                    <!-- lesser width to account for 1.5/1.65 discrepancy -->
+                    <image xml:id="tactile-labels-exterior" width="55%">
+                        <latex-image>
+                        \begin{tikzpicture}
+
+                        \pgfmathsetmacro{\pointsize}{0.09}
+
+                        <!-- 5 cm radius for the circle -->
+                        \draw (0,0) circle (5);
+
+                        <!-- locations in polar coordinates -->
+                        \coordinate (zero)  at (0:5);
+                        \coordinate (one)   at (45:5);
+                        \coordinate (two)   at (90:5);
+                        \coordinate (three) at (135:5);
+                        \coordinate (four)  at (180:5);
+                        \coordinate (five)  at (225:5);
+                        \coordinate (six)   at (270:5);
+                        \coordinate (seven) at (315:5);
+
+                        \filldraw[fill=black, draw=black] (zero)   circle (\pointsize);
+                        <label xml:id="label-exterior-zero" location="zero" direction="east">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (one)    circle (\pointsize);
+                        <label xml:id="label-exterior-one" location="one" direction="northeast">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (two)    circle (\pointsize);
+                        <label xml:id="label-exterior-two" location="two" direction="north">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (three)  circle (\pointsize);
+                        <label xml:id="label-exterior-three" location="three" direction="northwest">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (four)    circle (\pointsize);
+                        <label xml:id="label-exterior-four" location="four" direction="west">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (five)   circle (\pointsize);
+                        <label xml:id="label-exterior-five" location="five" direction="southwest">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (six)    circle (\pointsize);
+                        <label xml:id="label-exterior-six" location="six" direction="south">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (seven)  circle (\pointsize);
+                        <label xml:id="label-exterior-seven" location="seven" direction="southeast">yyyyy</label>
+
+                        \end{tikzpicture}
+                        </latex-image>
+                    </image>
+                </figure>
+
+                <figure xml:id="tactile-labels-interior-figure">
+                    <caption>Simple label positioning (interior)</caption>
+                    <!-- lesser width to account for 1.5/1.65 discrepancy -->
+                    <image xml:id="tactile-labels-interior" width="55%">
+                        <latex-image>
+                        \begin{tikzpicture}
+
+                        \pgfmathsetmacro{\pointsize}{0.09}
+
+                        <!-- 5 cm radius for the circle -->
+                        \draw (0,0) circle (5);
+
+                        <!-- locations in polar coordinates -->
+                        \coordinate (zero)  at (0:5);
+                        \coordinate (one)   at (45:5);
+                        \coordinate (two)   at (90:5);
+                        \coordinate (three) at (135:5);
+                        \coordinate (four)  at (180:5);
+                        \coordinate (five)  at (225:5);
+                        \coordinate (six)   at (270:5);
+                        \coordinate (seven) at (315:5);
+
+                        \filldraw[fill=black, draw=black] (zero)   circle (\pointsize);
+                        <label xml:id="label-interior-zero" location="zero" direction="west" offset="0.9mm">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (one)    circle (\pointsize);
+                        <label xml:id="label-interior-one" location="one" direction="southwest" offset="0.9mm">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (two)    circle (\pointsize);
+                        <label xml:id="label-interior-two" location="two" direction="south" offset="0.9mm">yyyyyyyyyyyyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (three)  circle (\pointsize);
+                        <label xml:id="label-interior-three" location="three" direction="southeast" offset="0.9mm">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (four)    circle (\pointsize);
+                        <label xml:id="label-interior-four" location="four" direction="east" offset="0.9mm">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (five)   circle (\pointsize);
+                        <label xml:id="label-interior-five" location="five" direction="northeast" offset="0.9mm">yyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (six)    circle (\pointsize);
+                        <label xml:id="label-interior-six" location="six" direction="north" offset="0.9mm">yyyyyyyyyyyyyyy</label>
+
+                        \filldraw[fill=black, draw=black] (seven)  circle (\pointsize);
+                        <label xml:id="label-interior-seven" location="seven" direction="northwest" offset="0.9mm">yyyyy</label>
+
+                        \end{tikzpicture}
+                        </latex-image>
+                    </image>
+                </figure>
+
+                <p>This is a diagram of the complex 8-th roots of unity, from Judson's <pubtitle>Abstract Algebra: Theory and Applications</pubtitle>.  It has been significantly reworked for this new approach, but retains the pedagogical intent of the original.  It is being scaled by a factor of <m>1.65</m> which may complicate scaling to a full embossed page for tactile graphics.</p>
 
                 <figure xml:id="tactile-experiment">
                     <caption>The complex <m>8^\text{th}</m> roots of unity</caption>
@@ -3574,39 +3707,124 @@ the xsltproc executable.
 
                                 \draw [->]  (negative-x-axis) -- (positive-x-axis);
                                 \draw [->]  (negative-y-axis) -- (positive-y-axis);
-                                <label xml:id="origin" location="origin" direction="below right"><m>0</m></label>
-                                <label xml:id="posx" location="positive-x-axis" direction="above"><m>x</m>-axis</label>
-                                <label xml:id="posy" location="positive-y-axis" direction="right"><m>y</m>-axis</label>
+                                <label xml:id="origin" location="origin" direction="southeast"><m>0</m></label>
+                                <label xml:id="posx" location="positive-x-axis" direction="north"><m>x</m>-axis</label>
+                                <label xml:id="posy" location="positive-y-axis" direction="east"><m>y</m>-axis</label>
 
                             \draw (origin) circle (1);
 
                                     \filldraw[fill=black, draw=black] (zero)   circle (\pointsize);
-                                    <label xml:id="power-zero" location="zero" direction="below right"><m>1</m></label>
+                                    <label xml:id="power-zero" location="zero" direction="southeast"><m>1</m></label>
 
                                     \filldraw[fill=black, draw=black] (one)    circle (\pointsize);
-                                    <label xml:id="power-one" location="one" direction="above right"><m>\omega</m></label>
+                                    <label xml:id="power-one" location="one" direction="northeast"><m>\omega</m></label>
 
                                     \filldraw[fill=black, draw=black] (two)    circle (\pointsize);
-                                    <label xml:id="power-two" location="two" direction="above right"><m>i</m></label>
+                                    <label xml:id="power-two" location="two" direction="northeast"><m>i</m></label>
 
                                     \filldraw[fill=black, draw=black] (three)  circle (\pointsize);
-                                    <label xml:id="power-three" location="three" direction="above left"><m>\omega^3</m></label>
+                                    <label xml:id="power-three" location="three" direction="northwest"><m>\omega^3</m></label>
 
                                     \filldraw[fill=black, draw=black] (four)    circle (\pointsize);
-                                    <label xml:id="power-four" location="four" direction="below left"><m>-1</m></label>
+                                    <label xml:id="power-four" location="four" direction="southwest"><m>-1</m></label>
 
                                     \filldraw[fill=black, draw=black] (five)   circle (\pointsize);
-                                    <label xml:id="power-five" location="five" direction="below left"><m>\omega^5</m></label>
+                                    <label xml:id="power-five" location="five" direction="southwest"><m>\omega^5</m></label>
 
                                     \filldraw[fill=black, draw=black] (six)    circle (\pointsize);
-                                    <label xml:id="power-six" location="six" direction="below right"><m>-i</m></label>
+                                    <label xml:id="power-six" location="six" direction="southeast"><m>-i</m></label>
 
                                     \filldraw[fill=black, draw=black] (seven)  circle (\pointsize);
-                                    <label xml:id="power-seven" location="seven" direction="below right"><m>\omega^7</m></label>
+                                    <label xml:id="power-seven" location="seven" direction="southeast"><m>\omega^7</m></label>
                         \end{tikzpicture}
                         </latex-image>
                     </image>
                 </figure>
+
+                <p>Same diagram, but we have scaled to <q>natural</q> TikZ units, i.e.<nbsp/>centimeters.  Really, for convenience we have multiplied by <m>1.5</m>, not <m>1.65</m>.  We have also labeled the axes with just <m>x</m> and <m>y</m> to test the use of Nemeth indicators since every label is a single inline <tag>m</tag> element.</p>
+
+                <figure xml:id="tactile-experiment-noscale">
+                    <caption>The complex <m>8^\text{th}</m> roots of unity</caption>
+                    <!-- lesser width to account for 1.5/1.65 discrepancy -->
+                    <image xml:id="roots-of-unity-noscale" width="55%">
+                        <latex-image>
+                        <!-- indentation expects forthcoming groupings, -->
+                        <!-- so the diffs might be more informative     -->
+                        \begin{tikzpicture}
+                        \coordinate (negative-y-axis) at (0,-2.25);
+                        \coordinate (positive-y-axis) at (0,2.25);
+                        \coordinate (negative-x-axis) at (-2.625,0);
+                        \coordinate (positive-x-axis) at (2.625,0);
+                        \coordinate (origin) at (0,0);
+
+                        \pgfmathsetmacro{\pointsize}{0.09}
+
+                        <!-- locations in polar coordinates -->
+                        \coordinate (zero)  at (0:1.5);
+                        \coordinate (one)   at (45:1.5);
+                        \coordinate (two)   at (90:1.5);
+                        \coordinate (three) at (135:1.5);
+                        \coordinate (four)  at (180:1.5);
+                        \coordinate (five)  at (225:1.5);
+                        \coordinate (six)   at (270:1.5);
+                        \coordinate (seven) at (315:1.5);
+
+                                \draw [->]  (negative-x-axis) -- (positive-x-axis);
+                                \draw [->]  (negative-y-axis) -- (positive-y-axis);
+                                <label xml:id="n-origin" location="origin" direction="southeast"><m>0</m></label>
+                                <label xml:id="n-posx" location="positive-x-axis" direction="north"><m>x</m></label>
+                                <label xml:id="n-posy" location="positive-y-axis" direction="north"><m>y</m></label>
+
+                            \draw (origin) circle (1.5);
+
+                                    \filldraw[fill=black, draw=black] (zero)   circle (\pointsize);
+                                    <label xml:id="n-power-zero" location="zero" direction="southeast"><m>1</m></label>
+
+                                    \filldraw[fill=black, draw=black] (one)    circle (\pointsize);
+                                    <label xml:id="n-power-one" location="one" direction="northeast"><m>\omega</m></label>
+
+                                    \filldraw[fill=black, draw=black] (two)    circle (\pointsize);
+                                    <label xml:id="n-power-two" location="two" direction="northeast"><m>i</m></label>
+
+                                    \filldraw[fill=black, draw=black] (three)  circle (\pointsize);
+                                    <label xml:id="n-power-three" location="three" direction="northwest"><m>\omega^3</m></label>
+
+                                    \filldraw[fill=black, draw=black] (four)    circle (\pointsize);
+                                    <label xml:id="n-power-four" location="four" direction="southwest"><m>-1</m></label>
+
+                                    \filldraw[fill=black, draw=black] (five)   circle (\pointsize);
+                                    <label xml:id="n-power-five" location="five" direction="southwest"><m>\omega^5</m></label>
+
+                                    \filldraw[fill=black, draw=black] (six)    circle (\pointsize);
+                                    <label xml:id="n-power-six" location="six" direction="southeast"><m>-i</m></label>
+
+                                    \filldraw[fill=black, draw=black] (seven)  circle (\pointsize);
+                                    <label xml:id="n-power-seven" location="seven" direction="southeast"><m>\omega^7</m></label>
+                        \end{tikzpicture}
+                        </latex-image>
+                    </image>
+                </figure>
+
+                <paragraphs>
+                    <title>General Advice</title>
+
+                    <p>It is best to design your diagram without using an overall scale factor later to compensate for not doing it carefully first.  The default units in TikZ are centimeters.</p>
+
+                    <p>Labels are discussed next.  Scaling (magnification) as a tactile image works best if the bounding box of your diagram is determined by the bounding box of just the graphics elements.  Rather than having labels extend outside the graphics bounding box to define a larger overall bounding box.  This is a consequence of how TikZ scales an image (graphics scale, text does not).</p>
+                </paragraphs>
+
+                <paragraphs>
+                    <title>Accessible Labels</title>
+
+                    <p>In a TikZ diagram, name locations of interest explicitly, with the <c>\coordinate</c> macro, such as<cd>\coordinate (positive-y-axis) at (4,6);</cd>Both Cartesian and polar coordinates are supported by TikZ using different syntax.  These names will not be seen by your reader, they are just used in the TikZ code.</p>
+
+                    <p>Then use the names of these locations for the placement of labels.  A large filled circle is a good shape to use.  A radius that will scale to a radius of about 3 millimeters is a good choice.  You will want to move your label away from the shape so there is no overlap, and thus the radius of your circle would be a good offset.  The label can move in one of eight directions:  <c>south</c>, <c>southwest</c>, <c>west</c>, etc.  Try to arrange the direction of your label so that it does not overwrite other graphics elements of your diagram<mdash/>this will be confusing to a blind reader.  So an example (spread over two lines) is<cd>
+                        <cline>&lt;label xml:id="pos-y-axis" location="positive-y-axis"</cline>
+                        <cline>direction="northeast" offset="3mm"&gt;&lt;m&gt;y&lt;/m&gt;-axis&lt;/label&gt;</cline>
+                    </cd>The <attr>xml:id</attr> is not strictly necessary, but can be useful for debugging.</p>
+
+                    <p>When producing a tactile version of this diagram, the graphics elements of the diagram will be scaled up as much as possible to fit a whole 11.5 inch by 11 inch embossable page.  The content will be replaced by braille cells (which are not scaled).  The braille cells will get a 4 millimeter margin all around them, which will be a no-emboss zone.  Finally, the offset will be scaled along with the graphics so the label should stay off of the shape being labeled.</p>
+                </paragraphs>
             </subsection>
         </section>
 
@@ -3645,6 +3863,7 @@ the xsltproc executable.
 
                 <exercisegroup xml:id="exercisegroup-two-problems">
                     <title>Two Derivative Problems</title>
+                    <idx><h>exercise group</h><h>two derivatives</h></idx>
 
                     <introduction>
                         <p>In the next two problems compute the indicated derivative.</p>
@@ -3654,11 +3873,12 @@ the xsltproc executable.
 
                     <!-- This exercise has no solutions, so we can dispense with the "statement" structure -->
                     <exercise>
-                        <p xml:id="paragraph-in-exercise"><m>f(x)=x^3</m>, <m>\frac{df}{dx}</m>.  This sentence is just a bunch of gibberish to check where the second line of the problem begins relative to the first line.</p>
+                        <p><m>f(x)=x^3</m>, <m>\frac{df}{dx}</m>.  This sentence is just a bunch of gibberish to check where the second line of the problem begins relative to the first line.</p>
                         <p>We cross-reference the next problem in this exercise group.  For the <c>phrase-global</c> form, the common element of the cross-reference and the target should be the <c>exercises</c> division, and not the enclosing <c>exercisegroup</c>:  <xref ref="exercises-cosine-derivative" text="phrase-global" />.</p>
                     </exercise>
 
                     <exercise xml:id="exercises-cosine-derivative">
+                        <idx><h>derivative</h><h>cosine</h></idx>
                         <statement>
                             <p><m>y = \cos(x)</m>, <m>y^\prime</m>.</p>
                         </statement>
@@ -4471,7 +4691,8 @@ the xsltproc executable.
                     <statement>
                         <table>
                             <title>Table Alignment Example</title>
-                            <tabular top="minor" left="minor" halign="center">
+                            <!-- permids go onto tabular, so we test picking it up -->
+                            <tabular top="minor" left="minor" halign="center" permid="fhP">
                                 <col right="medium"/>
                                 <col right="major"/>
                                 <col />
@@ -5389,13 +5610,82 @@ the xsltproc executable.
                 </tabular>
             </table>
 
+            <table>
+                <title>One Row Header, with Rules</title>
+                <tabular>
+                    <row header="yes" bottom="major">
+                        <cell>State</cell>
+                        <cell>Population</cell>
+                        <cell>Area (sq. mi.)</cell>
+                        <cell>Statehood (Year)</cell>
+                    </row>
+                    <row>
+                        <cell>Washington</cell>
+                        <cell>7,614,893</cell>
+                        <cell>71,362</cell>
+                        <cell>1889</cell>
+                    </row>
+                    <row>
+                        <cell>Oregon</cell>
+                        <cell>4,217,737</cell>
+                        <cell>98,381</cell>
+                        <cell>1859</cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell>California</cell>
+                        <cell>39,512,223</cell>
+                        <cell>163,696</cell>
+                        <cell>1850</cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <p>The next table has a progression of thicker rules in the heading, plus a progression of thicker rules across the columns.  For testing, not for aesthetics.</p>
+
+            <table>
+                <title>Two Row Header, Many Rules</title>
+                <tabular top="minor" left="minor">
+                    <col right="minor"/>
+                    <col right="medium"/>
+                    <col/>
+                    <col right="major"/>
+                    <row header="yes" bottom="medium">
+                        <cell>State</cell>
+                        <cell>Population</cell>
+                        <cell>Area</cell>
+                        <cell>Statehood</cell>
+                    </row>
+                    <row header="yes" bottom="major">
+                        <cell></cell>
+                        <cell></cell>
+                        <cell>(sq. mi.)</cell>
+                        <cell>(Year)</cell>
+                    </row>
+                    <row>
+                        <cell>Washington</cell>
+                        <cell>7,614,893</cell>
+                        <cell>71,362</cell>
+                        <cell>1889</cell>
+                    </row>
+                    <row>
+                        <cell>Oregon</cell>
+                        <cell>4,217,737</cell>
+                        <cell>98,381</cell>
+                        <cell>1859</cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell>California</cell>
+                        <cell>39,512,223</cell>
+                        <cell>163,696</cell>
+                        <cell>1850</cell>
+                    </row>
+                </tabular>
+            </table>
+
         </section>
 
         <section xml:id="section-interactive-authored">
-            <title>
-                <line>Interactive Elements</line>
-                <line>Authored in Javascript</line>
-            </title>
+            <title>Interactive Elements, Authored in Javascript</title>
             <shorttitle>Interactive Elements, Authored</shorttitle>
             <idx><h>interactive elements</h><h>authored</h></idx>
             <idx><h>embedded interactive elements</h><h>authored</h></idx>
@@ -5421,7 +5711,7 @@ the xsltproc executable.
                 <figure xml:id="figure-simple-eigenvector">
                     <caption>A simple eigenvector demonstration</caption>
 
-                    <interactive xml:id="interactive-simple-eigenvector" platform="javascript" width="60%" source="code/austin/figures.js code/austin/simple-ev.js" preview="images/simple-eigenvector-preview.jpg">
+                    <interactive xml:id="interactive-simple-eigenvector" platform="javascript" width="60%" source="code/austin/figures.js code/austin/simple-ev.js" preview="preview/simple-eigenvector-preview.jpg">
                         <slate xml:id="eigenvector" surface="canvas" />
                         <instructions>
                             <p>Let <m>\vec{x}</m> be represented by the red arrow, and <m>A\vec{x}</m> by the grey arrow, for some particular <m>2\times 2</m> matrix <m>A</m>.  Drag the <em>tip</em> of the red arrow to see the grey arrow change.</p>
@@ -5436,7 +5726,7 @@ the xsltproc executable.
                 <figure xml:id="figure-eigenvectors">
                     <caption>Eigenvector demonstration</caption>
 
-                    <interactive xml:id="interactive-eigenvectors" platform="javascript" width="90%" aspect="4:5" source="code/austin/figures.js code/austin/eigenvectors.js" preview="images/eigenvectors-preview.jpg">
+                    <interactive xml:id="interactive-eigenvectors" platform="javascript" width="90%" aspect="4:5" source="code/austin/figures.js code/austin/eigenvectors.js" preview="preview/eigenvectors-preview.jpg">
                         <slate xml:id="sliders"      aspect="4:1" surface="canvas" />
                         <slate xml:id="eigenvectors" aspect="4:4" surface="canvas" />
                         <instructions>
@@ -5452,7 +5742,7 @@ the xsltproc executable.
 
                     <!-- The "10" in the "12:10" should really be a "9".  I suspect -->
                     <!-- there is some inline element that induces scroll bars      -->
-                    <interactive xml:id="interactive-animation" platform="javascript" width="100%" aspect="12:10" source="code/austin/animation.js" preview="images/animation-preview.jpg">
+                    <interactive xml:id="interactive-animation" platform="javascript" width="100%" aspect="12:10" source="code/austin/animation.js" preview="preview/animation-preview.jpg">
                         <sbsgroup>
                             <sidebyside>
                                 <slate xml:id="a" surface="canvas" aspect="4:1" />
@@ -5529,7 +5819,7 @@ the xsltproc executable.
 
                 <figure>
                     <caption>Force layout and collision detection</caption>
-                    <interactive xml:id="interactive-d3-collision" platform="d3" version="3" width="80%" aspect="1:1" source="code/d3/collision.js" preview="images/collision-preview.png">
+                    <interactive xml:id="interactive-d3-collision" platform="d3" version="3" width="80%" aspect="1:1" source="code/d3/collision.js" preview="preview/collision-preview.png">
                         <slate xml:id="d3-collision" surface="div" aspect="1:1"/>
                         <instructions>
                             <p>Place your mouse/pointer at the center of the interactive to repel the 200 circles.</p>
@@ -5546,7 +5836,7 @@ the xsltproc executable.
 
                 <figure>
                     <caption>Graph Layout</caption>
-                    <interactive xml:id="interactive-d3-graph-layout" platform="d3" version="4" width="60%" aspect="1:1" source="code/d3/graph-layout.js" preview="images/graph-layout-preview.png">
+                    <interactive xml:id="interactive-d3-graph-layout" platform="d3" version="4" width="60%" aspect="1:1" source="code/d3/graph-layout.js" preview="preview/graph-layout-preview.png">
                         <slate xml:id="d3-graph-layout" surface="div" aspect="1:1"/>
                         <instructions>
                             <p>Drag a vertex to a new location to see the graph adjust its layout.</p>
@@ -5578,12 +5868,12 @@ the xsltproc executable.
                     <li>We have adjusted the margins in an attempt to keep names visible on the right side, but without giving up too much space.</li>
                     <li>We have adjust the repelling force, and the collision buffer, to better fit the available space.</li>
                     <li>This example required its own <init>CSS</init>, which we have included as part of the <tag>interactive</tag>.</li>
-                    <li>The data collected from the Twitter analysis is contained in a <init>JSON</init> file, <c>mention_network.json</c>, and where the script loads that file, it needs a path relative to the <init>HTML</init> file where the interactive is viewed.</li>
+                    <li>The data collected from the Twitter analysis is contained in a <init>JSON</init> file, <c>mention_network.json</c>, and where the script loads that file, it has a hardcoded path.  So this example is a bit brittle, should that file move.</li>
                 </ul></p>
 
                 <figure>
                     <caption>Tweet mentions within the Welsh Assembly</caption>
-                    <interactive xml:id="interactive-d3-welsh" platform="d3" version="4" width="100%" aspect="1:2" source="code/d3/welsh.js" css="code/d3/welsh.css" preview="images/welsh-assembly-preview.png">
+                    <interactive xml:id="interactive-d3-welsh" platform="d3" version="4" width="100%" aspect="1:2" source="code/d3/welsh.js" css="code/d3/welsh.css" preview="preview/welsh-assembly-preview.png">
                         <slate xml:id="d3-welsh" surface="div" aspect="1:2"/>
                         <instructions>
                             <p>Hover on the name of an Assembly Member to concentrate on their tweet mentions.</p>
@@ -5756,6 +6046,89 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
+                <title>JessieCode</title>
+                <idx>JessieCode</idx>
+
+                <p><url href="https://jsxgraph.uni-bayreuth.de/wp/docs_jessiecode/">JessieCode</url> is a scripting language for JSXGraph. It provides the core geometric and graphing features of JSXGraph without accessing the underlying JavaScript. In order to use JessieCode, you simply create the HTML <tag>div</tag> element as you would for any other JSXGraph interactive plot and then provide the JessieCode script, which focuses on the geometric elements.</p>
+
+                <p>Because JessieCode is provided by JSXGraph, the interactive platform is <c>jsxgraph</c>. The <tag>slate</tag>, however, uses <attr>surface="jessiecode"</attr>. The script can be embedded directly in your code. As usual, you would need to remember to escape the special characters. JessieCode uses <c>&lt;</c> and <c>&gt;</c> for inequalities as well as for declaring objects used to style geometric elements, and <c>&amp;&amp;</c> is the boolean AND operator. Alternatively, you can provide the file as a separate resource, providing the URL with a <attr>source</attr> attribute. Attributes defining the JSXBoard at the time it is created should be included as attributes of the <tag>slate</tag>, including <attr>boundingbox</attr>, <attr>axis</attr>, and <attr>grid</attr>.</p>
+
+                <p>For this first example, the JessieCode was included directly in the XML source as the contents of the associated slate.</p>
+
+                <figure xml:id="figure-quadratic-slope">
+                    <caption>Finding the Tangent Line of a Quadratic Function</caption>
+
+                    <!-- Aspect ratio should be 20:7, the ":8" is to avoid extra scroll bars -->
+                    <interactive xml:id="interactive-quadratic-tangent" platform="jsxgraph" width="80%">
+                        <slate xml:id="quadratic-tangent-plot"  surface="jessiecode" axis="true" grid="false">
+                            a = slider([-4.5,4], [-1.5,4], [-2,1,2])
+                                &lt;&lt;
+                                    name:"a",
+                                    snapWidth:0.25,
+                                    point1: &lt;&lt; frozen: true &gt;&gt;,
+                                    point2: &lt;&lt; frozen: true &gt;&gt;
+                                &gt;&gt;;
+                            b = slider([-4.5,3.5], [-1.5,3.5], [-4,-1,4])
+                                &lt;&lt;
+                                    name:"b",
+                                    snapWidth:0.5,
+                                    point1: &lt;&lt; frozen: true &gt;&gt;,
+                                    point2: &lt;&lt; frozen: true &gt;&gt;
+                                &gt;&gt;;
+                            c = slider([-4.5,3], [-1.5,3], [-4,0,4])
+                                &lt;&lt;
+                                    name:"c",
+                                    snapWidth:0.5,
+                                    point1: &lt;&lt; frozen: true &gt;&gt;,
+                                    point2: &lt;&lt; frozen: true &gt;&gt;
+                                &gt;&gt;;
+                            fGraph = functiongraph(function(x) {
+                              return a.Value()*x^2 + b.Value()*x + c.Value();
+                            });
+                            P = glider(1,0, fGraph);
+                            Q = point(2,2)
+                                &lt;&lt; name:"P" &gt;&gt;;
+                            secant = line(P,Q)
+                              &lt;&lt; color: (function() {
+                                      m = (Q.Y() - P.Y())/(Q.X() - P.X());
+                                      dydx = 2*a.Value()*P.X() + b.Value();
+                                      cVal = "red";
+                                      if (abs(m-dydx) &lt; 0.001) {
+                                          cVal = "blue";
+                                      }
+                                      return cVal;
+                                  })
+                              &gt;&gt;;
+                            dydxValue = text(-4, 1.5, function() {
+                                    m = 2*a.Value()*P.X() + b.Value();
+                                    return ("dy/dx = " + trunc(m,3));
+                                })
+                                &lt;&lt; frozen: true &gt;&gt;;
+                            mValue = text(-4, 1, function() {
+                                  m = (Q.Y() - P.Y())/(Q.X() - P.X());
+                                  return ("m = " + trunc(m,3));
+                              })
+                              &lt;&lt; frozen: true &gt;&gt;;
+                        </slate>
+                        <instructions>
+                            <p>Use the sliders to set the parameters of the quadratic <m>f(x)=ax^2+bx+c</m>. Drag the point <m>A</m> on the graph and the point <m>P</m> to define a line. Try to make the line tangent at the point at <m>A</m> and observe the resulting slope of the tangent line.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+
+                <p>For this second example, the JessieCode was included through an associated script file, loaded by the browser.</p>
+                <figure xml:id="figure-nondifferentiable-oscillation">
+                  <caption>Graph of a function that is continuous but not differentiable at <m>x=0</m> because the slope of the secant line has no limit.</caption>
+                  <interactive xml:id="interactive-oscillating-secant" platform="jsxgraph" width="90%">
+                      <slate xml:id="graph-cts-not-diff-function" surface="jessiecode" source="code/jsxgraph/cts-not-diff-oscillate.jc" axis="true" />
+                      <instructions>
+                          <p>Drag the point <m>B</m> to move the point on the graph and change the secant line. Notice that there is no well-defined limiting tangent line as <m>x \to 0</m>.</p>
+                      </instructions>
+                  </interactive>
+                </figure>
+            </subsection>
+
+            <subsection>
                 <title>Sage Interacts</title>
                 <idx><h>Sage</h><h>interacts</h></idx>
 
@@ -5833,7 +6206,16 @@ the xsltproc executable.
                     </interactive>
                 </figure>
 
-                <p>The same can be done with a <c>.ggb</c> file. Here we use two provided by David Rosoff, and one provided by Tevian Dray. The path to the file needs to be relative. We modify David's applet in a few ways. Remove the modifications to see the original.</p>
+                <p>The same can be done with a <c>.ggb</c> file. Here we use two provided by David Rosoff, and one provided by Tevian Dray. The path to the file needs to be relative. First, David's original.</p>
+
+                <figure>
+                    <caption>GeoGebra: <c>.ggb</c> file</caption>
+                    <interactive xml:id="geogebra-astroid-original" platform="geogebra" width="100%" aspect="4:3">
+                        <slate xml:id="astroid-original" surface="geogebra" source="code/rosoff/astroid.ggb" aspect="4:3"/>
+                    </interactive>
+                </figure>
+
+                <p>Now we modify David's applet in a few ways.</p>
 
                 <figure>
                     <caption>GeoGebra: modified from <c>.ggb</c> file</caption>
@@ -5907,11 +6289,11 @@ the xsltproc executable.
             <subsection>
                 <title>threejs</title>
 
-                <p>An example using the <c>threejs</c> 3D Javascript library.  This is <url href="https://threejs.org/examples/#webgl_geometry_extrude_splines">one of the project's examples</url><fn><c>https://threejs.org/examples/#webgl_geometry_extrude_splines</c></fn>, licensed with an MIT License, with minimal modifications.  We get several of the necessary libraries from the <c>threejs.org</c> site.</p>
+                <p>An example using the <c>threejs</c> 3D Javascript library.  This is <url href="https://threejs.org/examples/#webgl_geometry_extrude_splines" visual="threejs.org/examples/#webgl_geometry_extrude_splines">one of the project's examples</url>, licensed with an MIT License, with minimal modifications.  We get several of the necessary libraries from the <c>threejs.org</c> site.</p>
 
                 <figure xml:id="figure-threejs-splines">
                     <caption><c>threejs</c> webgl_geometry_extrude_splines example</caption>
-                    <interactive xml:id="interactive-threejs-splines" platform="javascript" width="75%" aspect="1:1" preview="images/threejs-splines.png" source="https://threejs.org/build/three.js https://threejs.org/examples/js/controls/OrbitControls.js https://threejs.org/examples/js/curves/CurveExtras.js https://threejs.org/examples/js/libs/dat.gui.min.js code/threejs/splines.js">
+                    <interactive xml:id="interactive-threejs-splines" platform="javascript" width="75%" aspect="1:1" preview="preview/threejs-splines.png" source="https://threejs.org/build/three.js https://threejs.org/examples/js/controls/OrbitControls.js https://threejs.org/examples/js/curves/CurveExtras.js https://threejs.org/examples/js/libs/dat.gui.min.js code/threejs/splines.js">
                         <slate xml:id="threejs-splines" surface="div" aspect="1:1" />
                     </interactive>
                 </figure>
@@ -6028,18 +6410,18 @@ the xsltproc executable.
 
             <figure>
                 <caption>MP3 Piano Trill (<c>www.kozco.com/tech/soundtests.html</c>)</caption>
-                <audio xml:id="audio-piano-trill" source="http://www.kozco.com/tech/piano2-CoolEdit.mp3" width="80%"/>
+                <audio xml:id="audio-piano-trill" href="http://www.kozco.com/tech/piano2-CoolEdit.mp3" width="80%"/>
             </figure>
 
             <p>Now, naked, between a couple of paragraphs, with specified asymmetric margins, and a computed width.</p>
 
-            <audio xml:id="audio-piano-trill-two" source="http://www.kozco.com/tech/piano2-CoolEdit.mp3" margins="30% 15%"/>
+            <audio xml:id="audio-piano-trill-two" href="http://www.kozco.com/tech/piano2-CoolEdit.mp3" margins="30% 15%"/>
 
             <p>Now in a <tag>sidebyside</tag> with an <q>Organ Finale</q> WAV file on the left, and on the right, Bach in OGG format at a very low bit rate (32 kps).  From <url href="http://www.music.helsinki.fi/tmt/opetus/uusmedia/esim/index-e.html"/>.</p>
 
             <sidebyside>
-                <audio xml:id="audio-organ-finale" source="https://www.kozco.com/tech/organfinale.wav" width="30%"/>
-                <audio xml:id="audio-bach" source="http://www.music.helsinki.fi/tmt/opetus/uusmedia/esim/a2002011001-e02-32k.ogg" width="60%"/>
+                <audio xml:id="audio-organ-finale" href="https://www.kozco.com/tech/organfinale.wav" width="30%"/>
+                <audio xml:id="audio-bach" href="http://www.music.helsinki.fi/tmt/opetus/uusmedia/esim/a2002011001-e02-32k.ogg" width="60%"/>
             </sidebyside>
         </section>
 
@@ -6059,7 +6441,7 @@ the xsltproc executable.
 
                 <figure>
                     <caption>University of Puget Sound Promotional Video</caption>
-                    <video source="images/ups-visitor-guide-360" width="80%" preview="images/ups-promo-frame-one.jpg" />
+                    <video source="video/ups-visitor-guide-360" width="80%" preview="preview/ups-promo-frame-one.jpg" />
                 </figure>
 
                 <p>You can replace the <q>preview</q> image of a video with one of your own making.  <init>HTML</init> refers to this as the <term>poster</term>, presumably because it advertises the video.  The image you make should be of the same quality as the video, and with the same aspect-ratio, and is presumably one of the frames of the video.  So a screenshot is the likely avenue.  (Maybe we will have advice on how to do this easily, or see <url href="https://github.com/rbeezer/mathbook/issues/853" />.)
@@ -6069,14 +6451,14 @@ the xsltproc executable.
 
                 <figure>
                     <caption>University of Puget Sound Promotional Video</caption>
-                    <video source="images/ups-visitor-guide-360" width="80%" preview="images/ups-promo-preview.jpg" />
+                    <video source="video/ups-visitor-guide-360" width="80%" preview="preview/ups-promo-preview.jpg" />
                 </figure>
 
                 <p>If you find the posters provided automatically for a video to be distracting or objectionable, you can cover them up by requesting a generic poster with the attribute-value pair: <c>preview = "generic"</c>.</p>
 
                 <figure>
                     <caption>University of Puget Sound Promotional Video</caption>
-                    <video source="images/ups-visitor-guide-360" width="80%" preview="generic" />
+                    <video source="video/ups-visitor-guide-360" width="80%" preview="generic" />
                 </figure>
 
                 <p>You can use a very similar construction to point to a video hosted somewhere on the Internet, just use a complete <init>URL</init> for the <tag>source</tag> attribute.  Note that if the URL has a query string (parameters following a question-mark), then any ampersands (&amp;) will need to be escaped, so as to not confuse the <init>XML</init> processor (<ie /> use <c>&amp;amp</c>).  Also, the question-mark character needs to <em>not</em> be <init>URL</init>-encoded (<c>%3F</c>), so presumably edit the <init>URL</init> to be the character.  Here are several examples, the second one uses the <attr>start</attr> and <attr>stop</attr> attributes to limit the video to just the time between the 16-second and 30-second locations, and has asymmetric margins.</p>
@@ -6085,32 +6467,32 @@ the xsltproc executable.
 
                 <figure>
                     <caption>Big Buck Bunny from <q>Video for Everybody</q> Test Page at <url href="http://camendesign.com/code/video_for_everybody/test.htm"><c>camendesign.com/code/video_for_everybody/test.htm</c></url></caption>
-                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="70%" preview="images/big-buck-bunny-frame-one.jpg" />
+                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="70%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <figure>
                     <caption>Big Buck Bunny, Controlled Start/End, Asymmetric Margins</caption>
-                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" start="16" end="30" margins="25% 5%" width="70%" preview="images/big-buck-bunny-frame-one.jpg" />
+                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" start="16" end="30" margins="25% 5%" width="70%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <figure>
                     <caption>Big Buck Bunny, Ogg container, <c>*.ogv</c> extension</caption>
-                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.ogv" width="60%" preview="images/big-buck-bunny-frame-one.jpg" />
+                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.ogv" width="60%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <figure>
                     <caption>Big Buck Bunny, MP4 format</caption>
-                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" width="50%" preview="images/big-buck-bunny-frame-one.jpg" />
+                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" width="50%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <figure>
                     <caption>Big Buck Bunny, WebM format</caption>
-                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="40%" preview="images/big-buck-bunny-frame-one.jpg" />
+                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="40%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <figure>
                     <caption>Big Buck Bunny, Automatic best format (temporarily broken)</caption>
-                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny" width="30%" preview="images/big-buck-bunny-frame-one.jpg" />
+                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny" width="30%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <!-- A Coursera URL that expires via digital signature scheme:
@@ -6149,7 +6531,7 @@ the xsltproc executable.
                     <caption>Kashmir (Live), Led Zeppelin. O2 Arena, London. December 10, 2007. (8:55)</caption>
                     <idx><h>Led Zeppelin video</h></idx>
 
-                    <video xml:id="led-zeppelin-kashmir" youtube="hAzdgU_kpGo" width="70%" preview="images/jimmy-page.jpg" />
+                    <video xml:id="led-zeppelin-kashmir" youtube="hAzdgU_kpGo" width="70%" preview="preview/jimmy-page.jpg" />
                 </figure>
 
                 <p>And if you don't want to be reminded of Plant, Page, Bonham, or Jones, you can cover them up entirely.</p>
@@ -6164,7 +6546,7 @@ the xsltproc executable.
 
                 <p>Videos were first designed mostly on the assumption that they are wrapped in a <c>figure</c> with a <c>title</c> (which is distinct from a <c>caption</c>).  But you can just place a video <q>naked</q> inbetween a couple of paragraphs.  This is nice if you don't want the clutter of numbers, and/or if you plan to exclude videos from some edition of your document.</p>
 
-                <video xml:id="led-zeppelin-kashmir-solo" youtube="hAzdgU_kpGo" width="50%" preview="images/jimmy-page.jpg" />
+                <video xml:id="led-zeppelin-kashmir-solo" youtube="hAzdgU_kpGo" width="50%" preview="preview/jimmy-page.jpg" />
 
                 <p>We can pack two videos side-by-side, with a lot of horizontal control, using two panels in the <c>sidebyside</c> element.  We have simply chosen here to not provide a caption (overall, or separately) as an illustration.  The sizes are purposely a bit odd.  See <xref ref="section-side-by-side" text="type-global"/> for much more on side-by-side panels.  These videos come from the <q>Topic</q> and <q>VEVO</q> areas of YouTube (respectively) and both have start/end times.</p>
 
@@ -6186,7 +6568,7 @@ the xsltproc executable.
                     <!-- UPS promo -->
                     <figure>
                         <caption>UPS Promo</caption>
-                        <video xml:id="ups-promo-sbs" source="images/ups-visitor-guide-360" preview="images/ups-promo-frame-one.jpg"/>
+                        <video xml:id="ups-promo-sbs" source="video/ups-visitor-guide-360" preview="preview/ups-promo-frame-one.jpg"/>
                     </figure>
                 </sidebyside>
 
@@ -6247,15 +6629,15 @@ the xsltproc executable.
                 <sidebyside margins="0%" width="30%">
                     <figure>
                         <caption>Medium Length</caption>
-                        <video xml:id="ups-promo-1" source="images/ups-visitor-guide-360"/>
+                        <video xml:id="ups-promo-1" source="video/ups-visitor-guide-360" preview="preview/ups-promo-preview.jpg"/>
                     </figure>
                     <figure>
                         <caption>Short</caption>
-                        <video xml:id="ups-promo-2" source="images/ups-visitor-guide-360" start="4" end="10"/>
+                        <video xml:id="ups-promo-2" source="video/ups-visitor-guide-360" start="4" end="10" preview="preview/ups-promo-preview.jpg"/>
                     </figure>
                     <figure>
                         <caption>A Really Long Caption That Will Wrap onto a New Line</caption>
-                        <video xml:id="ups-promo-3" source="images/ups-visitor-guide-360"/>
+                        <video xml:id="ups-promo-3" source="video/ups-visitor-guide-360" preview="preview/ups-promo-preview.jpg"/>
                     </figure>
                 </sidebyside>
 
@@ -6266,15 +6648,15 @@ the xsltproc executable.
                     <sidebyside margins="0%" width="30%">
                         <figure>
                             <caption>Medium Length</caption>
-                            <video xml:id="ups-promo-4" source="images/ups-visitor-guide-360"/>
+                            <video xml:id="ups-promo-4" source="video/ups-visitor-guide-360" preview="preview/ups-promo-preview.jpg"/>
                         </figure>
                         <figure>
                             <caption>Short</caption>
-                            <video xml:id="ups-promo-5" source="images/ups-visitor-guide-360" start="4" end="10"/>
+                            <video xml:id="ups-promo-5" source="video/ups-visitor-guide-360" start="4" end="10" preview="preview/ups-promo-preview.jpg"/>
                         </figure>
                         <figure>
                             <caption>A Really Long Caption That Will Wrap onto a New Line</caption>
-                            <video xml:id="ups-promo-6" source="images/ups-visitor-guide-360"/>
+                            <video xml:id="ups-promo-6" source="video/ups-visitor-guide-360" preview="preview/ups-promo-preview.jpg"/>
                         </figure>
                     </sidebyside>
                 </figure>
@@ -6283,36 +6665,36 @@ the xsltproc executable.
             <subsection>
                 <title>Vimeo</title>
 
-                <p>We support videos from <url href="https://vimeo.com/">Vimeo</url><fn><c>vimeo.com</c></fn> in much the same way as YouTube videos.  Now the identifier is a long integer.  For example, the video up next would normally be found at <c>https://vimeo.com/27246366</c>.  But instead, you can embed the video with as little as <c>&lt;video vimeo="27246366"/&gt;</c>.  As of 2019-05-18, we intend to support as many of the options described above as possible.  Widths and heights (via the aspect ratio) will perform as expected.  We have not investigated start and end times.</p>
+                <p>We support videos from <url href="https://vimeo.com/" visual="vimeo.com">Vimeo</url> in much the same way as YouTube videos.  Now the identifier is a long integer.  For example, the video up next would normally be found at <c>https://vimeo.com/27246366</c>.  But instead, you can embed the video with as little as <c>&lt;video vimeo="27246366"/&gt;</c>.  As of 2019-05-18, we intend to support as many of the options described above as possible.  Widths and heights (via the aspect ratio) will perform as expected.  We have not investigated start and end times.</p>
 
                 <figure>
                     <caption><articletitle>MOVE</articletitle>, by <url href="https://vimeo.com/rickmereki">Rick Mereki</url>, <c>vimeo.com/rickmereki</c></caption>
-                    <video xml:id="vimeo-move" vimeo="27246366" width="80%"/>
+                    <video xml:id="vimeo-move" vimeo="27246366" width="80%" preview="preview/vimeo-move.jpg"/>
                 </figure>
 
                 <p>Now with an author-supplied poster.</p>
                 <figure>
                     <caption><articletitle>MOVE</articletitle>, by <url href="https://vimeo.com/rickmereki">Rick Mereki</url>, <c>vimeo.com/rickmereki</c></caption>
-                    <video vimeo="27246366" width="80%" preview="images/move.png"/>
+                    <video vimeo="27246366" width="80%" preview="preview/move.png"/>
                 </figure>
             </subsection>
 
             <subsection>
                 <title>Captions and Subtitles</title>
 
-                <p>Experimental support for captions and subtitles first.  Look at the source, which mimics the actual HTML.  The words of the titles and/or subcaptions (there is a difference!) come from a file in <url href="https://en.wikipedia.org/wiki/WebVTT">Web Video Text Tracks</url><fn><c>wikipedia.org/wiki/WebVTT</c></fn> (<init>WEBVVT</init>) format.</p>
+                <p>Experimental support for captions and subtitles first.  Look at the source, which mimics the actual HTML.  The words of the titles and/or subcaptions (there is a difference!) come from a file in <url href="https://en.wikipedia.org/wiki/WebVTT" visual="wikipedia.org/wiki/WebVTT">Web Video Text Tracks</url> (<init>WEBVVT</init>) format.</p>
                 <figure>
                     <caption>Big Buck Bunny with subtitles adapted from <url href="https://sites.google.com/site/chrisfoo/subtitles"><c>https://sites.google.com/site/chrisfoo/subtitles</c></url></caption>
-                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="images/big-buck-bunny-frame-one.jpg">
-                        <track kind="subtitles" label="US English" xml:lang="en" source="images/BigBuckBunnyAcapella.vtt"/>
+                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="preview/big-buck-bunny-frame-one.jpg">
+                        <track kind="subtitles" label="US English" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt"/>
                     </video>
                 </figure>
 
                 <p>This video is identical to the previous one, except it tests the use of a default <tag>track</tag>.  The <attr>default</attr> attribute on <tag>track</tag> can be set to the value <c>yes</c> to make one set of captions the default (and only one!).  Test is a bit lame, the two <tag>track</tag> use the same file, but just have different labels for the player's menu.  Track named <c>US English Two</c> will show as in-use at start-up.</p>
 
-                <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="images/big-buck-bunny-frame-one.jpg">
-                    <track kind="subtitles" label="US English One" xml:lang="en" source="images/BigBuckBunnyAcapella.vtt"/>
-                    <track kind="subtitles" label="US English Two" xml:lang="en" source="images/BigBuckBunnyAcapella.vtt" default="yes"/>
+                <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="preview/big-buck-bunny-frame-one.jpg">
+                    <track kind="subtitles" label="US English One" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt"/>
+                    <track kind="subtitles" label="US English Two" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt" default="yes"/>
                 </video>
 
             </subsection>
@@ -6404,10 +6786,8 @@ the xsltproc executable.
                 <li><p><q>Cross-references inside quotations previously lost track of their target, so this tests correcting that, not so much the cross-reference itself: <xref ref="theorem-FTC" text="type-global" /></q></p></li>
                 <li><p>An activity with full details following: <xref ref="activity-with-hint-answer-solution" /></p></li>
                 <li><p>An interactive program inside a program listing, to test if the Javascript will execute properly within a knowl: <xref ref="program-interactive" /></p></li>
-                <li><p>A cross-reference to a block quotation (which is never numbered) and with custom text: <xref ref="blockquote-seuss" text="custom">Quote by Dr Seuss</xref></p></li>
                 <li><p>A <c>type-global</c> cross-reference to a second-level <c>task</c> within a project: <xref ref="project-task-level-two" text="type-global" />, the encompassing <c>project</c>: <xref ref="project-structured" />, and a <c>local</c> reference <xref ref="project-task-level-two" text="local" />.</p></li>
                 <li><p>A subcaptioned named list: <xref ref="color-list-as-panel" /></p></li>
-                <li><p>A cross-reference to a paragraph (<c>p</c>) in the <c>statement</c> of an <c>exercise</c>: <xref ref="paragraph-in-exercise" text="custom">paragraph</xref>.  Notice that such a paragraph has no number and no title, so you need to (a) use <c>text='custom'</c>, and (b) provide custom text as the content of the <tag>xref</tag>.  You may wish to provide very explicit location information for hardcopy print.  Notice that this is not a cross-reference to the <c>exercise</c>, just a small portion of it.</p></li>
                 <li><p>This opens a knowl for an <c>example</c>.  It has a solution, which is orginally presented as a hidden knowl.  But since this version is a duplicate, the knowl for the solution is a file version, not an embedded version, and hence free from duplicating any unique identifaction like an <init>HTML</init> id.  So we test its styling and function here: <xref ref="example-structured" text="type-global" /></p></li>
                 <li><p>A cross-reference to a poem, where we need to use a title for the link text, since a <c>poem</c> is not numbered: <xref ref="poem-light-brigade" text="title" /></p></li>
                 <li><p>A cross-reference to a <tag>references</tag> division in a subsection, which should not be numbered where born, but which has the number of its parent division in a cross-reference: <xref ref="references-section" text="type-global"/>.  And a cross-reference to a <tag>references</tag> division, which is the <q>main</q> bibliography in the back matter, and so is not numbered where born, nor in a cross-reference (which we must accomplish via it's title): <xref ref="references-backmatter" text="title"/>.</p></li>
@@ -6822,7 +7202,7 @@ the xsltproc executable.
                 </input>
             </program>
 
-            <p>Matlab is a commercial language for mathematics, while Octave in an open source version.  The <attr>language</attr> values of <c>matlab</c> and <c>octave</c> are somewhat interchangeable.  Following is a very slighlty edited version of an example from <articletitle>50 Basic Examples for Matlab</articletitle><fn><c>http://www.public.asu.edu/~hhuang38/hph_matlab_basic2013_1.pdf</c></fn>.</p>
+            <p>Matlab is a commercial language for mathematics, while Octave in an open source version.  The <attr>language</attr> values of <c>matlab</c> and <c>octave</c> are somewhat interchangeable.  Following is a very slighlty edited version of an example from <url href="http://www.public.asu.edu/~hhuang38/hph_matlab_basic2013_1.pdf" visual="www.public.asu.edu/~hhuang38/hph_matlab_basic2013_1.pdf"><articletitle>50 Basic Examples for Matlab</articletitle></url>.</p>
 
             <!-- Example 45: 50 Basic Examples for Matlab -->
             <program language="matlab">
@@ -8810,7 +9190,7 @@ the xsltproc executable.
 
             <sidebyside  margins="5%" widths="40% 45%">
                 <!-- Hosted -->
-                <video source="images/ups-visitor-guide-360" width="80%" preview="images/ups-promo-frame-one.jpg"/>
+                <video source="video/ups-visitor-guide-360" width="80%" preview="preview/ups-promo-frame-one.jpg"/>
                 <!-- Airborne Toxic Event -->
                 <video xml:id="airborne-midnight-1" youtube="UYPoMjR6-Ao" />
             </sidebyside>
@@ -8968,7 +9348,7 @@ the xsltproc executable.
 
                 <p>All by itsef, with no layout specified, so showing the default size and placement.  Vivamus in congue massa. Morbi condimentum ac magna at accumsan. Vestibulum ac augue eu lorem semper gravida.</p>
 
-                <video xml:id="ups-promo-7" source="images/ups-visitor-guide-360"/>
+                <video xml:id="ups-promo-7" source="video/ups-visitor-guide-360" preview="preview/ups-promo-preview.jpg"/>
 
                 <p>Vestibulum facilisis ligula lectus, ac tristique nisl aliquet non. Quisque ornare felis arcu. Vivamus suscipit diam eget mi cursus viverra.</p>
 
@@ -8976,7 +9356,7 @@ the xsltproc executable.
 
                 <p>Width set at 40%, so equal margins and thus centered.  Aenean faucibus augue tellus, et sollicitudin tortor finibus non. Maecenas semper dolor quis diam placerat, iaculis sollicitudin augue finibus. Vestibulum facilisis ligula lectus, ac tristique nisl aliquet non.</p>
 
-                <video xml:id="ups-promo-8" source="images/ups-visitor-guide-360" width="40%"/>
+                <video xml:id="ups-promo-8" source="video/ups-visitor-guide-360" width="40%" preview="preview/ups-promo-preview.jpg"/>
 
                 <p>Vestibulum facilisis ligula lectus, ac tristique nisl aliquet non. Quisque ornare felis arcu. Vivamus suscipit diam eget mi cursus viverra.</p>
 
@@ -8984,7 +9364,7 @@ the xsltproc executable.
 
                 <p>Asymmetric margins of 20% and 40% given, implying 40% width, equal to previous instance.  Vivamus suscipit diam eget mi cursus viverra.</p>
 
-                <video xml:id="ups-promo-9" source="images/ups-visitor-guide-360" margins="20% 40%"/>
+                <video xml:id="ups-promo-9" source="video/ups-visitor-guide-360" margins="20% 40%" preview="preview/ups-promo-preview.jpg"/>
 
                 <p>Vestibulum facilisis ligula lectus, ac tristique nisl aliquet non. Quisque ornare felis arcu. Vivamus suscipit diam eget mi cursus viverra.</p>
 
@@ -8993,7 +9373,7 @@ the xsltproc executable.
                 <p>As a plain component of a <tag>sidebyside</tag>.  Widths here are 20% and 30%, margins and gaps are automatic, default alignment on top edges.  Nulla pharetra imperdiet elit, in sodales nibh blandit ultricies. Maecenas efficitur ac felis ut pharetra.</p>
 
                 <sidebyside widths="20% 30%">
-                    <video xml:id="ups-promo-10" source="images/ups-visitor-guide-360"/>
+                    <video xml:id="ups-promo-10" source="video/ups-visitor-guide-360" preview="preview/ups-promo-preview.jpg"/>
                     <video xml:id="pre-roll-countdown-10" youtube="Srmdij0CU1U"/>
                 </sidebyside>
 
@@ -9001,7 +9381,7 @@ the xsltproc executable.
 
                 <figure>
                     <caption>University of Puget Sound Promotional Video</caption>
-                    <video xml:id="ups-promo-11" source="images/ups-visitor-guide-360"/>
+                    <video xml:id="ups-promo-11" source="video/ups-visitor-guide-360" preview="preview/ups-promo-preview.jpg"/>
                 </figure>
 
                 <p>Vestibulum facilisis ligula lectus, ac tristique nisl aliquet non. Quisque ornare felis arcu. Vivamus suscipit diam eget mi cursus viverra.</p>
@@ -9015,7 +9395,7 @@ the xsltproc executable.
 
                 <figure>
                     <caption>University of Puget Sound Promotional Video</caption>
-                    <video xml:id="ups-promo-12" source="images/ups-visitor-guide-360" margins="30% 60%"/>
+                    <video xml:id="ups-promo-12" source="video/ups-visitor-guide-360" margins="30% 60%" preview="preview/ups-promo-preview.jpg"/>
                 </figure>
 
                 <p>Vestibulum facilisis ligula lectus, ac tristique nisl aliquet non. Quisque ornare felis arcu. Vivamus suscipit diam eget mi cursus viverra.</p>
@@ -9034,7 +9414,7 @@ the xsltproc executable.
                     </figure>
                     <figure>
                         <caption>University of Puget Sound Promotional Video</caption>
-                        <video xml:id="ups-promo-13" source="images/ups-visitor-guide-360"/>
+                        <video xml:id="ups-promo-13" source="video/ups-visitor-guide-360" preview="preview/ups-promo-preview.jpg"/>
                     </figure>
                 </sidebyside>
 
@@ -9049,7 +9429,7 @@ the xsltproc executable.
                         </figure>
                         <figure xml:id="ups-video">
                             <caption>University of Puget Sound Promotional Video</caption>
-                            <video xml:id="ups-promo-14" source="images/ups-visitor-guide-360"/>
+                            <video xml:id="ups-promo-14" source="video/ups-visitor-guide-360" preview="preview/ups-promo-preview.jpg"/>
                         </figure>
                     </sidebyside>
                 </figure>
@@ -10201,6 +10581,43 @@ the xsltproc executable.
 
             </subsection>
 
+            <subsection>
+                <title>Customizing Phrases</title>
+
+                <p>There is a facility for providing alternate text for small or short phrases, or other components of a paragraph.  Here we just provide some tests.  Each is inside of a block quote to identify it clearly.</p>
+
+                <p>We have two auxiliary files of custom elements, so you need to adjust the publisher file to specify the second one during testing.  First, a very simple string as the variation.</p>
+
+                <blockquote>
+                    <p>This is an article about <custom ref="plural-animal"/>.</p>
+                </blockquote>
+
+                <p>Now a string which is partially text and partially simple markup.</p>
+
+                <blockquote>
+                    <p>We like to write with <custom ref="an-emotional-style"/>.</p>
+                </blockquote>
+
+                <p>And a mildly more complicated structure (a list) as the variable text.</p>
+
+                <!-- List in "custom" so no space after "are" -->
+                <blockquote>
+                    <p>Some of our favorite colors are<custom ref="color-list"/></p>
+                </blockquote>
+
+                <p>A cross-reference to test, since context is critical.</p>
+
+                <blockquote>
+                    <p>See also <custom ref="xref-to-result"/>.</p>
+                </blockquote>
+
+                <p>The URLs used as a replacement have the <attr>visual</attr> attribute which is also managed by the assembly pre-processor to provide a footnote.  So this is a good test of the organization of the multiple passes employed by the pre-processor.</p>
+
+                <blockquote>
+                    <p>A <init>URL</init> that should have a footnote: <custom ref="a-URL"/>.</p>
+                </blockquote>
+            </subsection>
+
         </section>
 
         <section xml:id="section-myopenmath">
@@ -10337,14 +10754,16 @@ the xsltproc executable.
                 </sidebyside>
                 <p>In this exercise, we'll use vectors to show that the medians of any triangle (<xref ref="figure-triangle-cyclic-vectors" text="type-global"/>) intersect at a point. Recall that medians are the lines connecting the vertices of the triangle to the midpoints of their opposite edges, as in the figure. We'll do this in a few steps.</p>
               </introduction>
-              <exercise xml:id="ex-cyclic" workspace="30%">
-                <statement>
-                  <p>What is the value of <m>\vec{A} + \vec{B} + \vec{C}</m>?</p>
-                </statement>
-              </exercise>
 
-              <pagebreak/>
+              <page>
+                <exercise xml:id="ex-cyclic" workspace="4in">
+                  <statement>
+                    <p>What is the value of <m>\vec{A} + \vec{B} + \vec{C}</m>?</p>
+                  </statement>
+                </exercise>
+              </page>
 
+              <page>
               <p><xref ref="figure-triangle-cyclic-medians" text="type-global"/> from the previous page is reproduced for your convenience.</p>
               <figure xml:id="figure-triangle-cyclic-medians-copy">
                 <caption>The medians of the triangle are <m>\vec{M}_1</m>, <m>\vec{M}_2</m>, and <m>\vec{M}_3</m>.</caption>
@@ -10368,7 +10787,7 @@ the xsltproc executable.
                 </image>
               </figure>
               <sidebyside margins="0%" widths="30% 60%" valign="top">
-                <exercise xml:id="exercise-vector-addition" workspace="40%">
+                <exercise xml:id="exercise-vector-addition" workspace="4.5in">
                   <statement>
                     <p>Show that <m>\vec{M}_{1} + \vec{M}_{2} + \vec{M}_{3} = 0</m>.</p>
                   </statement>
@@ -10376,7 +10795,7 @@ the xsltproc executable.
                     <p>Use <xref ref="ex-cyclic" text="type-global"/>.</p>
                   </hint>
                 </exercise>
-                <exercise workspace="40%">
+                <exercise workspace="2in">
                   <statement>
                     <p>To show that the point <m>P</m> exists (as the common intersection of the <m>\vec{M}_{i}</m>), show that <me>
                       \vec{A} + \frac{2}{3} \vec{M}_{3} = \frac{2}{3} \vec{M}_{2} = <fillin characters="10"/>
@@ -10384,9 +10803,11 @@ the xsltproc executable.
                   </statement>
                 </exercise>
               </sidebyside>
-              <exercise workspace="5%">
+              <exercise workspace="2.54cm">
                 <p>If you have time, try to devise a vector proof of Euclid's result presented at the beginning of the workshop. Recall that a <term>parallelogram</term> is a four-sided polygon whose opposite sides are parallel.</p>
               </exercise>
+              </page>
+
               <conclusion>
                 <title>Wrap-up</title>
                 <p>It's possible to do interesting things with vector arithmetic in a coordinate-free way: we didn't specify an origin, or any entries of any vectors in the examples.</p>
@@ -10446,173 +10867,177 @@ the xsltproc executable.
                     </p>
                 </introduction>
 
-                <pagebreak/>
 
-                <sidebyside width="45%" margins="0%">
-                    <exercise workspace="12%">
-                        <statement>
-                        <p>For the simple network pictured, calculuate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
-                        <image xml:id="worksheet-simple-network">
-                            <latex-image>
-                            \begin{circuitikz}
-                            \draw (0,0)
-                            to[V, v=$11\quad \mbox{volt}$](0, 3)
-                            to[short](2,3)
-                            to[R, R=$4\quad \mbox{ohm}$] (3, 3)
-                            to[short](4,3)
-                            to[R, R=$3\quad \mbox{ohm}$](4,0)
-                            to[short](3,0)
-                            to[R, R=$3\quad \mbox{ohm}$](2,0)
-                            to[short](0,0);
-                            \end{circuitikz}
-                            </latex-image>
-                        </image>
-                       </statement>
-                    </exercise>
+                <page>
+                </page>
 
-                    <exercise workspace="12%">
+                <page>
+                    <sidebyside width="45%" margins="0%">
+                        <exercise workspace="1.5in">
+                            <statement>
+                            <p>For the simple network pictured, calculuate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
+                            <image xml:id="worksheet-simple-network">
+                                <latex-image>
+                                \begin{circuitikz}
+                                \draw (0,0)
+                                to[V, v=$11\quad \mbox{volt}$](0, 3)
+                                to[short](2,3)
+                                to[R, R=$4\quad \mbox{ohm}$] (3, 3)
+                                to[short](4,3)
+                                to[R, R=$3\quad \mbox{ohm}$](4,0)
+                                to[short](3,0)
+                                to[R, R=$3\quad \mbox{ohm}$](2,0)
+                                to[short](0,0);
+                                \end{circuitikz}
+                                </latex-image>
+                            </image>
+                           </statement>
+                        </exercise>
+
+                        <exercise workspace="2in">
+                            <statement>
+                            <p> Compare it with a parallel circuit network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
+                            <image xml:id="worksheet-parallel-circuit">
+                                <latex-image>
+                                \begin{circuitikz}
+                                \draw(0,0)
+                                to[V, v=$11\quad \mbox{volt}$](0, 3)
+                                to[short](5,3)
+                                to[R, R=$4\quad \mbox{ohm}$](6,3)
+                                to[short](7,3)
+                                to[R, R=$3\quad \mbox{ohm}$](7,0)
+                                to[short](6,0)
+                                to[R, R=$3\quad \mbox{ohm}$](5,0)
+                                to[short](0,0);
+                                \draw(4,0)
+                                to[R, R=$3\quad \mbox{ohm}$](4,3);
+                                \end{circuitikz}
+                                </latex-image>
+                            </image>
+                            </statement>
+                        </exercise>
+                    </sidebyside>
+
+                    <exercise workspace="1in">
                         <statement>
-                        <p> Compare it with a parallel circuit network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
-                        <image xml:id="worksheet-parallel-circuit">
+                        <p> Now for a more complicated network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
+                        <image xml:id="worksheet-complicated-network">
                             <latex-image>
                             \begin{circuitikz}
                             \draw(0,0)
-                            to[V, v=$11\quad \mbox{volt}$](0, 3)
+                            to[V, v=$11 \quad \mbox{volt}$](0, 3)
                             to[short](5,3)
-                            to[R, R=$4\quad \mbox{ohm}$](6,3)
-                            to[short](7,3)
-                            to[R, R=$3\quad \mbox{ohm}$](7,0)
+                            to[R, R=$4 \quad \mbox{ohm}$](6,3)
+                            to[short](9,3)
+                            to[R, R=$4 \quad \mbox{ohm}$](10,3)
+                            to[short](11,3)
+                            to[R, R=$3 \quad \mbox{ohm}$](11, 0)
+                            to[short](10,0)
+                            to[R, R=$2\quad \mbox{ohm}$](9,0)
                             to[short](6,0)
-                            to[R, R=$3\quad \mbox{ohm}$](5,0)
+                            to[R, R=$2\quad \mbox{ohm}$](5,0)
                             to[short](0,0);
                             \draw(4,0)
                             to[R, R=$3\quad \mbox{ohm}$](4,3);
+                            \draw(8,0)
+                            to[R, R=$1\quad \mbox{ohm}$](8,3);
                             \end{circuitikz}
                             </latex-image>
                         </image>
                         </statement>
                     </exercise>
-                </sidebyside>
+                </page>
 
-                <exercise workspace="12%">
-                    <statement>
-                    <p> Now for a more complicated network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
-                    <image xml:id="worksheet-complicated-network">
-                        <latex-image>
-                        \begin{circuitikz}
-                        \draw(0,0)
-                        to[V, v=$11 \quad \mbox{volt}$](0, 3)
-                        to[short](5,3)
-                        to[R, R=$4 \quad \mbox{ohm}$](6,3)
-                        to[short](9,3)
-                        to[R, R=$4 \quad \mbox{ohm}$](10,3)
-                        to[short](11,3)
-                        to[R, R=$3 \quad \mbox{ohm}$](11, 0)
-                        to[short](10,0)
-                        to[R, R=$2\quad \mbox{ohm}$](9,0)
-                        to[short](6,0)
-                        to[R, R=$2\quad \mbox{ohm}$](5,0)
-                        to[short](0,0);
-                        \draw(4,0)
-                        to[R, R=$3\quad \mbox{ohm}$](4,3);
-                        \draw(8,0)
-                        to[R, R=$1\quad \mbox{ohm}$](8,3);
-                        \end{circuitikz}
-                        </latex-image>
-                    </image>
-                    </statement>
-                </exercise>
+                <page>
+                    <exercise workspace="3in">
+                        <statement>
+                            <p> Now generalize these ideas to a context outside of electrical circuits. Consider the network of streets given in the diagram (with one-way directions as indicated).</p>
 
-                <pagebreak/>
+                            <image xml:id="worksheet-street-network" width="65%">
+                                <latex-image>
+                                <![CDATA[
+                                \begin{tikzpicture}[>=stealth]
+                                \draw[->, very thick] (0,0) -- (10, 0) node[midway, below]{East Bound Winooski Ave};
+                                \draw[<-, very thick] (0, 1) -- (10, 1) node[midway, above]{West Bound Winooski Ave};
+                                    \draw[<-, very thick] (0, 4) -- (10, 4) node[midway, above]{Shelburne St};
+                                    \draw[<-, very thick] (1, -1) -- (1, 5) node[midway, above, sloped]{Willow};
+                                    \draw[->, very thick] (9, -1) -- (9, 5) node[midway, above, sloped]{Jay};
+                                    \end{tikzpicture}
+                                ]]>
+                                </latex-image>
+                            </image>
 
-                <exercise workspace="30%">
-                    <statement>
-                        <p> Now generalize these ideas to a context outside of electrical circuits. Consider the network of streets given in the diagram (with one-way directions as indicated).</p>
+                            <p>A traffic engineer counts the hourly flow of cars into and out of this network at the entrances.  They get (EB = East Bound; WB = West Bound): </p>
 
-                        <image xml:id="worksheet-street-network" width="65%">
-                            <latex-image>
-                            <![CDATA[
-                            \begin{tikzpicture}[>=stealth]
-                            \draw[->, very thick] (0,0) -- (10, 0) node[midway, below]{East Bound Winooski Ave};
-                            \draw[<-, very thick] (0, 1) -- (10, 1) node[midway, above]{West Bound Winooski Ave};
-                                \draw[<-, very thick] (0, 4) -- (10, 4) node[midway, above]{Shelburne St};
-                                \draw[<-, very thick] (1, -1) -- (1, 5) node[midway, above, sloped]{Willow};
-                                \draw[->, very thick] (9, -1) -- (9, 5) node[midway, above, sloped]{Jay};
-                                \end{tikzpicture}
-                            ]]>
-                            </latex-image>
-                        </image>
+                            <table>
+                                <title>Estimated hourly traffic flow for the road network</title>
+                                <tabular>
+                                    <row>
+                                        <cell>
+                                        </cell>
+                                        <cell>
+                                            EB Winooski
+                                        </cell>
+                                        <cell>
+                                            WB Winooski
+                                        </cell>
+                                        <cell>
+                                            Shelburne St
+                                        </cell>
+                                        <cell>
+                                            Willow
+                                        </cell>
+                                        <cell>
+                                            Jay
+                                        </cell>
+                                    </row>
+                                    <row>
+                                        <cell>
+                                            into
+                                        </cell>
+                                        <cell>
+                                            50
+                                        </cell>
+                                        <cell>
+                                            400
+                                        </cell>
+                                        <cell>
+                                            0
+                                        </cell>
+                                        <cell>
+                                            10
+                                        </cell>
+                                        <cell>
+                                            50
+                                        </cell>
+                                    </row>
+                                    <row>
+                                        <cell>
+                                            out of
+                                        </cell>
+                                        <cell>
+                                            55
+                                        </cell>
+                                        <cell>
+                                            390
+                                        </cell>
+                                        <cell>
+                                            20
+                                        </cell>
+                                        <cell>
+                                            15
+                                        </cell>
+                                        <cell>
+                                            30
+                                        </cell>
+                                    </row>
+                                </tabular>
+                            </table>
 
-                        <p>A traffic engineer counts the hourly flow of cars into and out of this network at the entrances.  They get (EB = East Bound; WB = West Bound): </p>
-
-                        <table>
-                            <title>Estimated hourly traffic flow for the road network</title>
-                            <tabular>
-                                <row>
-                                    <cell>
-                                    </cell>
-                                    <cell>
-                                        EB Winooski
-                                    </cell>
-                                    <cell>
-                                        WB Winooski
-                                    </cell>
-                                    <cell>
-                                        Shelburne St
-                                    </cell>
-                                    <cell>
-                                        Willow
-                                    </cell>
-                                    <cell>
-                                        Jay
-                                    </cell>
-                                </row>
-                                <row>
-                                    <cell>
-                                        into
-                                    </cell>
-                                    <cell>
-                                        50
-                                    </cell>
-                                    <cell>
-                                        400
-                                    </cell>
-                                    <cell>
-                                        0
-                                    </cell>
-                                    <cell>
-                                        10
-                                    </cell>
-                                    <cell>
-                                        50
-                                    </cell>
-                                </row>
-                                <row>
-                                    <cell>
-                                        out of
-                                    </cell>
-                                    <cell>
-                                        55
-                                    </cell>
-                                    <cell>
-                                        390
-                                    </cell>
-                                    <cell>
-                                        20
-                                    </cell>
-                                    <cell>
-                                        15
-                                    </cell>
-                                    <cell>
-                                        30
-                                    </cell>
-                                </row>
-                            </tabular>
-                        </table>
-
-                        <p> Use a variable for each segment inside of the network and set up a system of linear equations restricting the flow. Solve the system.  Note that you should not get a unique solution as traffic should be able to flow through the network in various ways. </p>
-                    </statement>
-                </exercise>
+                            <p> Use a variable for each segment inside of the network and set up a system of linear equations restricting the flow. Solve the system.  Note that you should not get a unique solution as traffic should be able to flow through the network in various ways. </p>
+                        </statement>
+                    </exercise>
+                </page>
             </worksheet>
 
             <worksheet margin="1cm">
@@ -10620,87 +11045,181 @@ the xsltproc executable.
                     <p>This is a mock one-page worksheet for testing purposes. We have specified an overall margin just slightly less than the default.</p>
                 </introduction>
 
-                <sidebyside width="45%" margins="0%">
-                    <exercise workspace="5%">
+                <page>
+                    <sidebyside width="45%" margins="0%">
+                        <exercise workspace="1in">
+                            <statement>
+                                <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+                            </statement>
+                        </exercise>
+
+                        <exercise workspace="1in">
+                            <statement>
+                                <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+                            </statement>
+                        </exercise>
+                    </sidebyside>
+
+                    <p>A two-line paragraph interspersed to check on spacing, breaks and all that.</p>
+
+                    <exercise workspace="1.5in">
+                        <title>A full-width exercise</title>
                         <statement>
                             <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
-                        </statement>
-                    </exercise>
-
-                    <exercise workspace="10%">
-                        <statement>
-                            <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
-                        </statement>
-                    </exercise>
-                </sidebyside>
-
-                <p>A two-line paragraph interspersed to check on spacing, breaks and all that.</p>
-
-                <exercise workspace="8%">
-                    <title>A full-width exercise</title>
-                    <statement>
-                        <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
-                        <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
-                    </statement>
-                </exercise>
-
-                <p>A two-line paragraph interspersed to check on spacing, breaks and all that.</p>
-
-                <sidebyside width="30%" margins="0%">
-                    <exercise>
-                        <statement>
-                            <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
-                        </statement>
-                    </exercise>
-
-                    <exercise workspace="12%">
-                        <!-- <title>The Tallest</title> -->
-                        <statement>
                             <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
                         </statement>
                     </exercise>
 
-                    <exercise workspace="12%">
+                    <p>Another two-line paragraph interspersed to check on spacing, breaks and all that.</p>
+
+                    <sidebyside width="30%" margins="0%">
+                        <exercise>
+                            <statement>
+                                <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+                            </statement>
+                        </exercise>
+
+                        <exercise workspace="0.5in">
+                            <!-- <title>The Tallest</title> -->
+                            <statement>
+                                <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+                            </statement>
+                        </exercise>
+
+                        <exercise workspace="1in">
+                            <statement>
+                                <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+                            </statement>
+                        </exercise>
+                    </sidebyside>
+
+                    <activity>
+                        <title>A Mock Activity</title>
+
                         <statement>
-                            <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+                            <p>The problem, as we see it.</p>
                         </statement>
-                    </exercise>
-                </sidebyside>
+                        <hint>
+                            <p>A worksheet could have hints, no?  But no spacing. Note row below has widths set to balance the heights.</p>
+                        </hint>
+                    </activity>
 
-                <activity>
-                    <title>A Mock Activity</title>
+                    <sidebyside widths="25% 40% 25%" margins="0%">
+                        <exercise workspace="0.5in">
+                            <statement>
+                                <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+                            </statement>
+                        </exercise>
 
-                    <statement>
-                        <p>The problem, as we see it.</p>
-                    </statement>
-                    <hint>
-                        <p>A worksheet could have hints, no?  But no spacing. Note row below has widths set to balance the heights.</p>
-                    </hint>
-                </activity>
+                        <exercise workspace="0.5in">
+                            <!-- <title>Balanced Heights</title> -->
+                            <statement>
+                                <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+                            </statement>
+                        </exercise>
 
-                <sidebyside widths="25% 40% 25%" margins="0%">
-                    <exercise workspace="4%">
-                        <statement>
-                            <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
-                        </statement>
-                    </exercise>
+                        <exercise workspace="0.5in">
+                            <statement>
+                                <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+                            </statement>
+                        </exercise>
+                    </sidebyside>
+                </page>
+            </worksheet>
 
-                    <exercise workspace="4%">
-                        <!-- <title>Balanced Heights</title> -->
-                        <statement>
-                            <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
-                        </statement>
-                    </exercise>
+            <worksheet courseid="MAT-150" series="Activity" seriescode="13">
+              <title>Dot products and projection</title>
+                <page>
+                    <sidebyside width="45%" margins="0%">
+                        <exercise>
+                            <introduction>
+                                <p>Let
+                                <m>{\vec v}_1 = (-4,1)</m>,
+                                <m>{\vec v}_2 = (2,2)</m>,
+                                <m>{\vec v}_3 = (1,2,3)</m>,
+                                <m>{\vec v}_4 = (-2,1,0)</m>.
+                                Find the values of the following expressions:</p>
+                            </introduction>
+                            <task workspace="1in">
+                              <m>{\vec v}_1 \cdot {\vec v}_2 = <fillin/></m>
+                            </task>
+                            <task workspace="1.0in">
+                              <m>{\vec v}_3 \cdot {\vec v}_4 = <fillin/></m>
+                            </task>
+                            <task workspace="1in">
+                              <m>\lVert{\vec v}_1\rVert = <fillin/></m>
+                            </task>
+                            <task workspace="1in">
+                              <m>\lVert{\vec v}_4\rVert = <fillin/></m>
+                            </task>
+                            <task workspace="1in">
+                              <p>Are any of these vectors perpendicular to each other? <fillin/></p>
+                          </task>
+                        </exercise>
 
-                    <exercise workspace="4%">
-                        <statement>
-                            <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
-                        </statement>
-                    </exercise>
-                </sidebyside>
+                        <exercise workspace="3in">
+                            <statement>
+                                <p>The vectors <m>\vec a = (3,9)</m> and <m>\vec u = (4,2)</m> are pictured below.  Derive the formula for projection on a line and use it to find the projection of <m>\vec a</m> on the line spanned by <m>\vec u</m>. Also compute the length of the residual vector.</p>
+                                <image width="100%" source="images/projection1.png">
+                                    <description>two vectors...</description>
+                                </image>
+                            </statement>
+                        </exercise>
+                    </sidebyside>
+                </page>
+
+                <page>
+                    <sidebyside width="48%" margins="0%">
+                        <exercise workspace="1.25in">
+                            <introduction>
+                                <p>Consider the vector equation
+                                <me>
+                                m \begin{bmatrix}2 \\ 5\end{bmatrix} = \begin{bmatrix}3 \\ 7\end{bmatrix}
+                                </me>.</p>
+                            </introduction>
+                            <task>
+                                <p>Check that there is no solution <m>m</m> that makes the equation true.</p>
+                            </task>
+
+                            <task>
+                                <p>Use projection to find the best approximation <m>\hat m</m>.</p>
+                            </task>
+
+                            <task>
+                                <p>Compute <m>\hat m \begin{bmatrix}2 \\ 5\end{bmatrix} </m>.</p>
+                            </task>
+
+                            <task>
+                                <p>Compute the residual vector.</p>
+                            </task>
+
+                            <task>
+                                <p>Compute the length of the residual vector and explain what it means.</p>
+                            </task>
+                        </exercise>
+
+                        <exercise>
+                            <introduction>
+                                <p>Consider the system of equations
+                                <md>
+                                    <mrow>3t \amp =5</mrow>
+                                    <mrow> 2t \amp = 9 </mrow>
+                                </md>.</p>
+                            </introduction>
+                            <task workspace="2in">
+                                <p>Write the system in vector form.</p>
+                            </task>
+                            <task workspace="3.9in">
+                                <p>Find the best estimate, <m>\hat t</m>, of <m>t</m> using projection.</p>
+                            </task>
+                            <task workspace="2in">
+                                <p>Compute the length of the residual vector.</p>
+                            </task>
+                        </exercise>
+                    </sidebyside>
+                </page>
             </worksheet>
         </section>
-
 
         <section xml:id="exercises-single">
             <title>Exercises, One Subsection</title>
@@ -11265,12 +11784,36 @@ the xsltproc executable.
                 <!-- content will happen here automatically -->
             </solutions>
 
+            <solutions inline="answer" divisional="answer" worksheet="answer" reading="answer" project="answer" admit="odd">
+                <title>All Solutions that are Answers to Odd Exercises</title>
+                <idx><h>solutions</h><h>all even answers</h></idx>
+
+                <introduction>
+                    <p>This should be identical to the previous collection of answers, <em>except</em> only exercises with an even number are reported (via the <attr>admit</attr> attribute).</p>
+                </introduction>
+
+                <!-- content will happen here automatically -->
+            </solutions>
+
             <appendix xml:id="appendix-results">
                 <title>List of Results</title>
 
                 <p>We had an automatic list of theorems for just one section, back in <xref ref="subsection-local-theorems" text="type-global" />.  Here we expand to include <c>corollary</c> in our space-delimited list of <c>elements</c> and we request <c>divisions</c> (headings) at each <c>subsection</c> and <c>section</c>.  The default <c>scope</c> is the entire document, which is appropriate here in the backmatter.  There are many subsections with no results, so we set the <c>empty</c> attribute to <c>no</c> to suppress them, though this is the default behavior (<c>yes</c> being the other option to see divisions with no list items).  These lists are most valuable if you are in the practice of giving items titles.</p>
 
                 <list-of elements="  theorem corollary" divisions="section    subsection " empty="no" />
+            </appendix>
+
+            <appendix xml:id="appendix-exercise-lists">
+                <title>Lists of Exercises</title>
+
+                <p>Since <tag>exercise</tag> come in several flavors, we use <term>pseudo-elements</term> to specify the distinct types.  There are not many reading questions<mdash/>but here is a list of all of them, by section, using a <c>readingquestion</c> pseudo-element.</p>
+
+                <list-of elements="readingquestion" divisions="section" empty="no"/>
+
+                <p>And now a list of all the inline exercises, and including the title of every <tag>section</tag>, even if there is no inline exercise contained inside it.  The pseudo-element is <c>inlineexercise</c>.</p>
+
+                <list-of elements="inlineexercise" divisions="section" empty="yes"/>
+
             </appendix>
 
             <appendix>
@@ -11312,20 +11855,6 @@ the xsltproc executable.
                 </paragraphs>
             </appendix>
 
-            <!-- Bibliography/References can appear anywhere,  -->
-            <!-- but these are in the backmatter, hence global -->
-
-            <references xml:id="references-backmatter">
-                <title>References</title>
-
-                <biblio type="raw" xml:id="biblio-judson-AATA">Tom Judson, <title>Abstract Algebra: Theory and Applications</title>.
-                <note xml:id="note-judson-AATA"><p>Another online, open-source offering.</p></note>
-                </biblio>
-
-                <biblio type="raw" xml:id="biblio-lay-article">David C. Lay, <title>Subspaces and Echelon Forms</title>. <journal>The College Mathematics Journal</journal>, January 1993, <volume>24</volume> <number>1</number>, 57<ndash />62.</biblio>
-
-            </references>
-
             <appendix xml:id="references">
                 <title>Multiple References</title>
 
@@ -11349,6 +11878,20 @@ the xsltproc executable.
                     <biblio type="raw" xml:id="biblio-strang-article-tres">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash />855.</biblio>
                 </references>
              </appendix>
+
+            <!-- Bibliography/References can appear anywhere,  -->
+            <!-- but these are in the backmatter, hence global -->
+
+            <references xml:id="references-backmatter">
+                <title>References</title>
+
+                <biblio type="raw" xml:id="biblio-judson-AATA">Tom Judson, <title>Abstract Algebra: Theory and Applications</title>.
+                <note xml:id="note-judson-AATA"><p>Another online, open-source offering.</p></note>
+                </biblio>
+
+                <biblio type="raw" xml:id="biblio-lay-article">David C. Lay, <title>Subspaces and Echelon Forms</title>. <journal>The College Mathematics Journal</journal>, January 1993, <volume>24</volume> <number>1</number>, 57<ndash />62.</biblio>
+
+            </references>
 
             <index>
                 <title>Index</title>

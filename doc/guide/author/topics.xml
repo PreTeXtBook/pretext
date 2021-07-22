@@ -753,7 +753,7 @@
             </paragraphs>
 
             <paragraphs>
-                <title><tage>tex</tage>, <tage>latex</tage>, <tage>pretext</tage>, <tage>webwork</tage>, <tex />, <latex />, <pretext />, <webwork /></title>
+                <title><tage>tex</tage>, <tage>latex</tage>, <tage>pretext</tage>, <tage>webwork</tage>, <tex />, <latex />, <pretext />, <webwork/></title>
                 <p>Conveniences for frequently-mentioned accessories to <pretext />.</p>
             </paragraphs>
 
@@ -805,6 +805,135 @@
                 <p>So come back here often for a re-read.  And keep in mind that <pretext /> is designed around principles (<xref ref="list-principles" />), and that it is markup (<xref ref="principle-markup" />) which enables multiple outputs (<xref ref="principle-multiple-outputs" />) and effective and beautiful online versions (<xref ref="principle-web-versions"/>).</p>
             </note>
         </conclusion>
+    </section>
+
+    <section xml:id="topic-blocks">
+        <title>Blocks</title>
+        <idx>blocks</idx>
+
+        <subsection>
+            <title>Introduction to Blocks</title>
+
+            <p>A division (<xref ref="overview-structure"/>), that is not further subdivided, is primarly, but not exclusively, composed of paragraphs and <term>blocks</term>.  We document the types of blocks here, even though we do not intend to ever provide a rigorous definition of the term.  Here is a list of characteristics, which is not prescriptive.</p>
+
+            <list>
+                <title>Characteristics of a Block</title>
+
+                <ul>
+                    <li>Visually set-off from a run of <q>plain</q> paragraphs.  Often earning a number, and ideally provided a title or caption (<xref ref="best-practice-titles"/>).</li>
+
+                    <li>Reflowable lines of text, such as an <tag>example</tag>, <em>or</em> a more rigid, more spatial, more two-dimensional object, such as a <tag>figure</tag> or <tag>table</tag>.</li>
+
+                    <li>Usually a child of a division (<xref ref="topic-divisions"/>).  But see just below.</li>
+
+                    <li>Typically a block does not contain another block, except that the more spatial ones can appear as part of a more textual one.</li>
+
+                    <li>When numbered, all blocks generally run consecutively.  (In <latex/>-speak, <q>on the same counter.</q>)  Numbering FIGURE-LIKE and PROJECT-LIKE independently is in transition at this writing (2021-07-07).</li>
+                </ul>
+            </list>
+
+            <p>The following is somewhat general, and we have not extensively cross-referenced to the particular types of blocks, so use the Table of Contents or the Index to learn more specifics.</p>
+        </subsection>
+
+        <subsection>
+            <title>Isomorphic Blocks</title>
+
+            <p>The structure of a block is described carefully in the schema (<xref ref="schema"/>).  There are approximately forty blocks that are arranged into ten groups, within which they behave identically, except for their displayed names.  An exception is the group of four <q>figure-like</q> items which are very similar, but have differences beyond just their displayed names.  These groupings are defined in the <c>xsl/entities.ent</c> file, which we summarize in the next table.  The category name is taken from the entities file, and the notes are meant to describe the distinctive capabilities of the category.</p>
+
+            <list xml:id="block-summary">
+                <title>Summary of Blocks</title>
+
+                <dl>
+                    <li>
+                        <title>REMARK-LIKE</title>
+                        <p><tag>remark</tag>, <tag>convention</tag>, <tag>note</tag>, <tag>observation</tag>, <tag>warning</tag>, <tag>insight</tag></p>
+                        <p>The most basic, generic, block.</p>
+                    </li>
+
+                    <li>
+                        <title>EXAMPLE-LIKE</title>
+                        <p><tag>example</tag>, <tag>question</tag>, <tag>problem</tag></p>
+                        <p>A worked problem meant as exposition.  It can be structured with <tag>task</tag>, <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> just like an <tag>exercise</tag> or PROJECT-LIKE, but the <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> cannot be electively removed from output, and they do not migrate to collections of solutions elsewhere.</p>
+                    </li>
+
+                    <li>
+                        <title>PROJECT-LIKE</title>
+                        <p><tag>project</tag>, <tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag></p>
+                        <p>These are similar to an <tag>exercise</tag>, but the name suggests a slightly different undertaking, and they cannot be placed in an <tag>exercises</tag> division.  The current default is that they are numbered independently from other blocks, but this is planned to switch to elective behavior.  The <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> behave more like those for an <tag>exercise</tag> and can be removed from output, and can migrate to collections of solutions.</p>
+                    </li>
+
+                    <li>
+                        <title>FIGURE-LIKE</title>
+                        <p><tag>figure</tag>, <tag>table</tag>, <tag>listing</tag>, <tag>list</tag></p>
+                        <p>An object that is a container for other atomic objects, which are typically somewhat rigid (not reflowable) or two-dimensional.  Typically with a number, and provided with a title or caption.  But each is slightly different in what it can contain and how it is rendered.  A <tag>table</tag> can only hold a <tag>tabular</tag>, while a <tag>listing</tag> is meant for <tag>program</tag> and <tag>console</tag>.  A <tag>list</tag> is not the list itself, but a container for one of the three possible lists (see <xref ref="topic-lists"/> and especially <xref ref="topic-named-list"/>).  A <tag>figure</tag> is the most liberal, allowing a wide variety of contents, with <tag>image</tag> being the prototypical example.  These are not designed with the expectation that they can be renamed.</p>
+                    </li>
+
+                    <li>
+                        <title>THEOREM-LIKE</title>
+                        <p><tag>theorem</tag>, <tag>corollary</tag>, <tag>lemma</tag>, <tag>algorithm</tag>, <tag>proposition</tag>, <tag>claim</tag>, <tag>fact</tag>, <tag>identity</tag></p>
+                        <p>Mathematical results, which can have an (optional) proof.</p>
+                    </li>
+
+                    <li>
+                        <title>AXIOM-LIKE</title>
+                        <p><tag>axiom</tag>, <tag>conjecture</tag>, <tag>principle</tag>, <tag>heuristic</tag>, <tag>hypothesis</tag>, <tag>assumption</tag></p>
+                        <p>A mathematical statement, which does not have a proof.</p>
+                    </li>
+
+                    <li>
+                        <title>DEFINITION-LIKE</title>
+                        <p><tag>definition</tag></p>
+                        <p>A definition of a (mathematical) object.</p>
+                    </li>
+
+                    <li>
+                        <title>ASIDE-LIKE</title>
+                        <p><tag>aside</tag>, <tag>biographical</tag>, <tag>historical</tag></p>
+                        <p>Parenthetical content that is structured beyond what a footnote can contain.</p>
+                    </li>
+
+                    <li>
+                        <title>COMPUTATION-LIKE</title>
+                        <p><tag>computation</tag>, <tag>technology</tag></p>
+                        <p>For descriptions of activities using computers, calculators, or other devices.</p>
+                    </li>
+
+                    <li>
+                        <title>GOAL-LIKE</title>
+                        <p><tag>objectives</tag>, <tag>outcomes</tag></p>
+                        <p>These are structured primarily as lists, and may only appear early (<tag>objectives</tag>) or late (<tag>outcomes</tag>) within a division.</p>
+                    </li>
+
+                </dl>
+            </list>
+        </subsection>
+
+        <subsection>
+            <title>Other Blocks</title>
+
+            <p>There are other blocks which can be achieved using just one element.  Examples are <tag>poem</tag> and <tag>assemblage</tag>.  An <tag>exercise</tag> can take on different behaviors, depending on its placement (see <xref ref="topic-exercises"/>).  One such placement is as a child of a division, which we call an <term>inline exercise</term>, and this would be regarded as a block, very similar to a PROJECT-LIKE.</p>
+
+            <p>A paragraph (<tag>p</tag>) can appear many places and is a primary component of blocks.  But when it is a child of a division, it shares some charateristics with other blocks.  There are a number of peers of a <tag>p</tag> which would then also qualify:  <tag>pre</tag>, <tag>blockquote</tag>, <tag>image</tag>, <tag>video</tag>, <tag>program</tag>, <tag>console</tag>, and <tag>tabular</tag>.  None of these can have a title or number, making them less useful, but widening the possibilities for placement.</p>
+        </subsection>
+
+        <subsection xml:id="renaming-blocks">
+            <title>Renaming Blocks</title>
+            <idx>renaming blocks</idx>
+
+            <p>A common desire of authors new to <pretext/> is a new block.  Authors extending <pretext/> to add a new one is not supported, and it is not even straightforward for a <pretext/> developer to provide comprehensive support for a new block.  One of the reasons for multiple versions of blocks, with common behaviors, is that you can appropriate one for use with your project and give it a new name.  So for example, a biology textbook might want to use <tag>activity</tag> for a laboratory, but rename it to <q>Laboratory</q>.   Of course, this means you will forego having any <q>Activity</q> in your book.  (But if you <em>are the first</em> to write a biology textbook in <pretext/> perhaps you should talk to us about a real <tag>laboratory</tag> element that behaves well for all the physical and biological sciences!)  Here is the procedure:<ol>
+                <li>Choose a block from <xref ref="block-summary"/> that has behavior similar to your intended use, and which you do not forsee using as-is in your project.</li>
+
+                <li>In the <tag>docinfo</tag> section use a <tag>rename</tag> element.  The content should be the new name (<q>Laboratory</q> above), while the <attr>element</attr> attribute should be the name of the element renamed (<c>activity</c> above).</li>
+
+                <li>The <attr>xml:lang</attr> attribute should be used to specify a value of the code for use with documents authored in languages other than US English.  If absent, the default vslue <c>en-US</c> is used.  Multiple <tag>rename</tag> elements for the same element, in different languages, is supported.</li>
+            </ol>So, continuing and extending our example, an author would use<cd>
+                <cline>&lt;rename @element="activity" xml:lang="fr-FR"&gt;Laboratoire&lt;/rename&gt;</cline>
+            </cd></p>
+
+            <p>The most popular block to rename is <tag>exercise</tag>.  We have exercises inside <tag>exercises</tag> divisions, which we call <term>divisional exercises</term>, and exercises inside divisions, which we call <term>inline exercises</term>.   It is possible to have one of each that have identical numbers.  So in cross-references the former is an <q>Exercise</q>, while the latter is a <q>Checkpoint</q>.  If you only have inline exercises, you might prefer that they be called Exercise rather than Checkpoint.  For the <attr>element</attr> attribute of the <tag>rename</tag> element, use a <term>pseudo-element</term>, in this case <c>inlineexercise</c>.  Other pseudo-elements which can be used to distinguish the various types of exercises are:  <c>divisionexercise</c>, <c>worksheetexercise</c>, and <c>readingquestion</c>.</p>
+
+            <p>Choose the element you rename carefully, trying to match it to the purpose of your content.  It can be useful for other purposes, such as automatic lists (<xref ref="topic-automatic-lists"/>), and you may decide later to use other properties of the element you have chosen.</p>
+        </subsection>
     </section>
 
     <section xml:id="topic-exercises">
@@ -1013,7 +1142,7 @@
             <title>Variations</title>
 
             <p>There are some variant uses for the <tag>xref</tag> tag.<ul>
-                <li>Replace <attr>ref</attr> by <attr>provisional</attr> and give it a value with some simple text like <c>subsection on eagle habitat</c> and you will get reminders that once you write this future subsection you need to link it in right here.  This is just a convenience for authors during the early stages of a writing project.</li>
+                <li>Replace <attr>ref</attr> by <attr>provisional</attr> and give it a value with some simple text like <c>subsection on eagle habitat</c> and you will get reminders that once you write this future subsection you need to link it in right here.  This is just a convenience for authors during the early stages of a writing project (see <xref ref="processing-author-tools" /> for details).</li>
 
                 <li>Replace <attr>ref</attr> by the pair <attr>first</attr> and <attr>last</attr>.  Provide attribute values just as you would for <attr>ref</attr>.  The code will check that the targets have the exact same tag, and that the order is correct.  You will get a link that looks like a range, separated by an en dash.  As a link, only <attr>first</attr> will be used for the linking mechanism (<ie />, one link is generated, not two).  Experiment with <attr>text</attr> and content overrides.</li>
 
@@ -1185,7 +1314,9 @@
 
         <p>A division <em>must</em> contain a <tag>title</tag>, and may contain one or more index entries (see <xref ref="topic-index" />), which should appear before anything else.  Any division may be unstructured, with just a sequence of <term>top-level content</term><idx>top-level content</idx> such as paragraphs, figures, lists, theorems, <etc />  Or a division may be structured, and in this case it must follow a prescribed pattern.  There may be a single, optional <tag>introduction</tag>, filled with top-level content, followed by a sequence of at least one of the appropriate divisions, ending with a single, optional <tag>conclusion</tag>, filled with top-level content.  It is an error to begin with a run of top-level content inside a division and then begin to use divisions.  (The solution is to make the initial content an <tag>introduction</tag> and/or one or several divisions.)</p>
 
-        <p>There are exceptions to the above.  For one, <tag>paragraphs</tag> is an anomalous division, as a sort of lightweight sectioning command.  It may appear in any division, at any location within a division, it may not be divided further (it is a leaf of the document tree), it never gets a number, and its title is formatted in a subsidiary way.  I especially like to use this in a two- or three-page <tag>article</tag> that has no other divisions at all.  Typical presentation has the title in bold, without much change in font size (if at all), inline with the first paragraph, and perhaps a bit of vertical space as it begins and ends.  Despite the name, it may contain more than just paragraphs, so may contain any top-level-content that would go in any other division.</p>
+        <p>A <tag>book</tag> may be structured into parts.  After the <tag>frontmatter</tag> and before the <tag>backmatter</tag> there may be a sequence of <tag>part</tag>.  These elements may carry a <tag>title</tag>, and not much else, besides a substantial sequence of <tag>chapter</tag>.  The main effect is to get an extra level of division in the Table of Contents.  For print and <init>PDF</init> there is an entire page devoted to the title and number of the part.  The default numbering is <term>decorative</term>, which means that the chapters are numbered consecutively from the start of the book and do not reset to one at the start of each part.  It is as if the parts were not even there.  The alternative is that parts are <term>structural</term>.  Now each part begins with Chapter 1.  There are other more subtle differences, such as cross-references use a part number if, and only if,  the trip from the cross-reference to its target crosses a boundary of two parts.  The two approaches to part structure may be set via the publisher file, see <xref ref="publisher-file-numbering"/>.</p>
+
+        <p>There are exceptions to the above.  For one, <tag>paragraphs</tag> is an anomalous division, as a sort of lightweight sectioning command.  It may appear in any division, at any location within a division, it may not be divided further (it is a leaf of the document tree), it never gets a number, and its title is formatted in a subsidiary way.  I especially like to use this in a two- or three-page <tag>article</tag> that has no other divisions at all.   It is also very useful as a way to subdivide portions of the front matter (<xref ref="topic-front-matter"/>), such as a <tag>preface</tag>. Typical presentation has the title in bold, without much change in font size (if at all), inline with the first paragraph, and perhaps a bit of vertical space as it begins and ends.  Despite the name, it may contain more than just paragraphs, so may contain any top-level-content that would go in any other division.</p>
 
         <p>Two other anomalous divisions are <tag>exercises</tag> and <tag>references</tag>.  These can be placed as a final component of any division from <tag>chapter</tag> on down.  So for example, an <tag>exercises</tag> could be a peer of several <tag>section</tag>s, contained within a structured <tag>chapter</tag>, and in this case would behave similar to the other <tag>section</tag>s.  Or an unstructured <tag>chapter</tag> may have a sequence of paragraphs, figures, examples, and the like, and conclude with a single <tag>exercises</tag>.  Detail on allowed content and behavior are in <xref ref="topic-exercises" /> and <xref ref="topic-references" />, respectively.</p>
     </section>
@@ -1195,7 +1326,7 @@
         <idx>mathematics</idx>
 
         <introduction>
-            <p>As mentioned in the overview, <xref ref="overview-math" />, we use <latex /> syntax for mathematics.  In order to allow for quality display in <init>HTML</init>, and other electronic formats, this limits us to the subset of <latex /> supported by the very capable <url href="https://www.mathjax.org/">MathJax</url> Javascript library.  Generally this looks like the <c>amsmath</c><idx><c>amsmath</c></idx> package maintained by the American Mathematical Society at their <url href="http://www.ams.org/publications/authors/tex/amslatex">AMS-LaTeX page</url>.  For a complete and precise list of what MathJax supports, see MathJax's <url href="http://docs.mathjax.org/en/latest/input/tex/macros/">Supported <tex/>/<latex/> commands</url><fn><c>http://docs.mathjax.org/en/latest/input/tex/macros/</c></fn> (2019-11-10: this link may be specific to MathJax 3.0, which we have not yet adopted.)</p>
+            <p>As mentioned in the overview, <xref ref="overview-math" />, we use <latex /> syntax for mathematics.  In order to allow for quality display in <init>HTML</init>, and other electronic formats, this limits us to the subset of <latex /> supported by the very capable <url href="https://www.mathjax.org/">MathJax</url> Javascript library.  Generally this looks like the <c>amsmath</c><idx><c>amsmath</c></idx> package maintained by the American Mathematical Society at their <url href="http://www.ams.org/publications/authors/tex/amslatex">AMS-LaTeX page</url>.  For a complete and precise list of what MathJax supports, see MathJax's <url href="http://docs.mathjax.org/en/latest/input/tex/macros/">Supported <tex/>/<latex/> commands</url><fn><c>http://docs.mathjax.org/en/latest/input/tex/macros/</c></fn> (2019-11-10: this link may be specific to MathJax 3.0, which we have not yet adopted.)  Once you have digested this more general section, be sure to also consult <xref ref="topic-mathematics-practices"/> for some very specific suggestions.</p>
         </introduction>
 
         <subsection>
@@ -1238,7 +1369,7 @@
             <p>The <latex /> macros, <c>\amp</c>, <c>\lt</c>, and <c>\gt</c> are always available within these mathematics elements, so that you can avoid the exceptional XML characters <c>&amp;</c>, <c>&lt;</c> and <c>&gt;</c>.  See <xref ref="overview-exceptional-characters" /> for this same information, but in the broader context of your entire document.</p>
         </subsection>
 
-        <subsection>
+        <subsection xml:id="text-in-mathematics">
             <title>Text in Mathematics</title>
 
             <p>Once in a while, you need a little bit of <q>regular</q> text within an expression and you do not want it to look like a product of a bunch of one-letter variables.  Use the <c>\text{}</c> macro for these.  Only.  Other ways of switching out of math-mode and into some sort of <q>regular</q> text will appear inferior, and can raise errors in certain conversions.<ul>
@@ -1316,14 +1447,55 @@
             <p>For print output, do nothing additional and <latex /> will do its best to break your display between lines.  You can turn this behavior off by setting the <attr>break</attr> attribute on the <tag>md</tag> or <tag>mdn</tag> to the value <c>no</c>.  Once you do this, you can then selectively allow a page break after a given <tag>mrow</tag> by setting the <attr>break</attr> attribute on the <tag>mrow</tag> to the value <c>yes</c>.</p>
         </subsection>
 
-        <subsection>
+        <subsection xml:id="mathematics-macros">
             <title>Your Macros</title>
 
-            <p>These go in the <tag>docinfo</tag> section, wrapped in a <tag>macros</tag><idx>macro</idx> element.  Keep them simple<mdash />one or two arguments, and one-line definitions.  This is not the place to be fancy, and not the place to try to end-run the structural aspects of <pretext />.  The idea is to define something like <c>\adjoint{A}</c> for the matrix <c>A</c> to be a superscript asterisk, and later you can change your mind and use a superscript dagger instead.  Keep in the spirit of <pretext /> and use readable, semantic macros.  For example, do not use <c>\a{A}</c> for the adjoint of <c>A</c>.</p>
+            <p>These go in the <tag>docinfo</tag> section, wrapped in a <tag>macros</tag><idx>macro</idx> element.  Keep them simple<mdash />one or two arguments, and one-line definitions.  This is not the place to be fancy, and not the place to try to end-run the structural aspects of <pretext/>.  The idea is to define something like <c>\adjoint{A}</c> for the matrix <c>A</c> to be a superscript asterisk, and later you can change your mind and use a superscript dagger instead.  Keep in the spirit of <pretext/> and use readable, semantic macros.  For example, do not use <c>\a{A}</c> for the adjoint of <c>A</c>.</p>
 
-            <p><pretext /> will use your macros correctly for print and for <init>HTML</init>, after erasing whitespace from the left margin, and stripping <latex /> comments.</p>
+            <p><pretext/> will use your macros correctly for print and for <init>HTML</init>, after erasing whitespace from the left margin, and stripping <latex/> comments.</p>
 
             <p>The name of your macros also cannot contain any numbers, otherwise MathJax will <q>silently</q> fail and may not read any subsequent macros you might have. This is important because <pretext/> will place custom macros for you at the end of your own, defined at <xref ref="mathematics-xml-characters"/>, to be used. Those would fail to be processed by MathJax if your own macros caused it to stop reading.</p>
+        </subsection>
+
+        <subsection xml:id="semantic-macros">
+            <title>Semantic Macros</title>
+
+            <introduction>
+                <p>We have resisted using overly-verbose MathML for mathematics, or worse, inventing our own <init>XML</init> vocabulary for mathematics.  <latex/> syntax generally works great, but to work even better within <pretext/> an author needs to take a few extra steps.  Your work will translate better to a variety of formats, and will be easier to maintain, with well-designed macros.  A well-designed macro will convey the mathematical <em>meaning</em> of the object to a reader of your source, without them looking at your <em>definition</em> of the macro.  In situations where a mathematical object might be written with different notation, it should be trivial to change the macro's definition and preserve the mathematical meaning.  For example, consider two versions of a binomial coefficient:
+                <md>
+                    <mrow>&amp;{n\choose r} &amp; &amp;\operatorname{C}(n,r)</mrow>
+                </md>which could both equally well be the realization of <c>\binomial{n}{r}</c>.</p>
+
+                <p>Here we describe some notation which often carries multiple mathematical meanings and/or may be created with <latex/> in multiple ways.</p>
+            </introduction>
+
+            <subsubsection>
+                <title>Vertical Bars</title>
+
+                <p>Vertical bars are used for a variety of mathematical objects.  Paired to create functions of expressions: absolute value, <m>\left\lvert x-1\right\rvert</m>; norm of a vector, <m>\left\lVert \mathbf{v}\right\rVert</m>; cardinality of a set, <m>\left\lvert X\right\rvert</m>; and the determinant of a matrix, <m>\left\lvert A^k\right\rvert</m>.  As relations:  division, <m>a\mid b</m>; parallel lines <m>L_1\parallel L_2</m>.  Sets are another use: <m>E=\left\{x\in{\mathbb Z}\,\middle\vert\, x\equiv 0\pmod 2\right\}</m>.</p>
+
+                <p><latex/> <c>\vert</c>, <c>\Vert</c>, <c>\lvert</c>, <c>\rvert</c>, <c>\lVert</c>, <c>\rVert</c> are the delimiters, where <c>l</c> and <c>r</c> refer to left and right, and the capitalized versions are a pair of vertical lines.  The qualifiers <c>\left</c> and <c>\right</c> can be used to have the length of the bar grow to match what it encloses.   Note that there is a <c>\middle</c> that we have used above with <c>\vert</c> for the set <m>E</m>, and we have added space on either side.  <c>\mid</c> and <c>\parallel</c> are relations, used above to indicate divisibility and parallel lines, and so automatically get an extra bit of spacing on either side.</p>
+
+                <p>When using <c>\left</c> or <c>\right</c> in isolation, <c>\left.</c> or <c>\right.</c> can be used to define a group that only has a bar on one end.  For example:<md>
+                    <mrow>\int_0^1\,\sin^{-1}(x)\,dx = \left.\frac{1}{\sqrt{1-x^2}}\right\rvert_{x=0}^{x=1}</mrow>
+                </md>.</p>
+            </subsubsection>
+
+            <subsubsection>
+                <title>Times</title>
+
+                <p>The <q>times</q> symbol sees many uses that are different: dimensions, multiplication, and more complicated products (such as a Cartesian product of two sets).  Macros <c>\product</c>, <c>\times</c>, and <c>by</c> could carry different meanings, even if each one is defined by the <c>\times</c> symbol, <m>\times</m>.  For example:</p>
+
+                <pre>
+                Chess is played on an &lt;m&gt;8 \by 8&lt;/m&gt; grid, which
+                contains &lt;m&gt;8 \times 8 = 64&lt;/m&gt; little squares.
+                </pre>
+
+                <pre>
+                If &lt;m&gt;G&lt;/m&gt; and &lt;m&gt;H&lt;/m&gt; are finite groups, then
+                &lt;m&gt;\card(G \product H) = \card(G) \times \card(H)&lt;/m&gt;.
+                </pre>
+            </subsubsection>
         </subsection>
 
         <subsection xml:id="punctuation-display-math">
@@ -1364,7 +1536,7 @@
             <p>Note that <em>any</em> text, other than whitespace, outside the <tag>m</tag> tag will disable this feature, <em>including punctuation</em>. However, according to the Chicago Manual of Style, 14e, 6.127, <q>Items carry no closing punctuation unless they consist of complete sentences.</q> So that comma at the end of your equation probably doesn't belong there anyway.</p>
         </subsection>
 
-        <subsection>
+        <subsection xml:id="mathematics-latex-packages">
             <title>Additional Packages</title>
 
             <p>Generally, you cannot add additional packages for use within mathematics.  The exception is a package with support available optionally within MathJax.  And it must have the same name as its normal <latex /> version.  Then set a <c>docinfo/latex-preamble/package</c> element to be the common name of the package.   (The <c>cancel</c> package is one such example.)</p>
@@ -1377,6 +1549,90 @@
 
             <p>There are two existing additional options, which we might want to remove some day for technical reasons.  Macros from the <c>extpfeil</c> extensible arrows package are available by default, and an <c>\sfrac{}{}</c> macro is available for appealing inline <q>slanted fractions.</q></p>
         </subsection>
+
+        <subsection xml:id="mathematics-notes">
+            <title>Notes</title>
+
+            <p>As mentioned at the start of this section, your use of <latex/> needs to also be supported by MathJax so that it may be rendered as part of an <init>HTML</init> page displayed in a web broswer.  In addition to the information at the start of <xref ref="topic-mathematics"/>, this subsection has some notes that may help you navigate this situation.<ol>
+                <li>Generally, MathJax supports commands available in the <c>amsmath</c> package.</li>
+                <li>You can construct, and use, your own macros, <em>but only for mathematics</em>, not for document structure or document management.  See <xref ref="mathematics-macros"/>.</li>
+                <li>Support for loading <q>extra</q> packages is extremely limited.  See <xref ref="mathematics-latex-packages"/>.</li>
+                <li>The <c>\matrix{}</c> command, and its friends (such as <c>\pmatrix{}</c>) are not supported by <latex/>, despite being recognized by MathJax.  So use environments like <c>\begin{matrix}</c> and <c>\begin{pmatrix}</c> (with their corresponding <c>\end{}</c>, of course) and you will get accurate results for both formats.</li>
+            </ol></p>
+        </subsection>
+    </section>
+
+    <section xml:id="topic-mathematics-practices">
+        <title>Mathematics Best Practices</title>
+        <idx><h>mathematics</h><h>best practices</h></idx>
+
+        <p>This section addresses some finer points of authoring mathematics with <latex/>, motivated in large part by helping MathJax create the most accessible output possible, which in many instances will also create a superior typographical result across all conversions.  We try to provide justification and explanation, though that might not be easy in all cases.   Some are definitely technical, and we are only aware of them from authors' experience and reports.  Many are meant to help in the conversion to braille.  This is an incomplete list so additional reports and additions are welcome.</p>
+
+        <paragraphs>
+            <title>Large Numbers</title>
+            <p>Using a separator to aid in reading a large number should avoid using a space as a separator.  So <m>234,766,544</m> or <m>234.766.544</m> is preferable to <m>234\,766\,544</m>.  (We have used a <latex/> <q>thin space</q>, <c> \, </c>, in the latter.)</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Ratios</title>
+            <p>If you really intend to communicate a ratio with a colon, keep it super-simple, like <c>3:2</c> or <c>a:b</c>.  Do not wrap it in parentheses or other decorations, since then the colon will be communicated literally in braille.  For example, the index of a subgroup, <c>[G:H]</c>, will not be confused with a ratio, due to the brackets.  But <c>(4:5)</c> will not be output in a conversion to braille in a way that communicates that it is a ratio.  If you keep your ratios simple, braille output will use special syntax designed for ratios.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Function and Operator Names</title>
+            <!-- https://tex.stackexchange.com/questions/84302/what-is-the-difference-of-mathop-operatorname-and-declaremathoperator -->
+
+            <p>Common mathematical functions, like <m>\sin</m> (<c>\sin</c>) and <m>\det</m> (<c>\det</c>), are built into <latex/>, well-known, and commonly used.  Compare with the versions authored as simple sequences of letters <m>sin</m> and <m>det</m>, which <latex/> interprets (and typesets) as a product of three individual variables.</p>
+
+            <p>Instead, use the <latex/> <c>\DeclareMathOperator</c> macro as we will illustrate.  Suppose you want to discuss the set of homomorphisms from the vector space <m>U</m> to the vector space <m>V</m>, <m>\Hom{U}{V}</m>.  Define the macros
+            <cd>
+                <cline>\DeclareMathOperator{\homop}{Hom}</cline>
+                <cline>\newcommand{\Hom}[2]{\homop\left(#1,\,#2\right)}</cline>
+            </cd> and employ as <c>\Hom{U}{V}</c>, which yields <m>\Hom{U}{V}</m>.  Compare with the no-macro, no-special-care, version, <m>Hom(U,V)</m>.  Grouping <c>Hom</c> as a unit will prevent <latex/> from rendering it as a product of three variables, use the correct font, and will preserve the meaning in Nemeth braille.  Notice that the <c>\homop</c> macro is never used in your source.</p>
+
+            <p>Directly contradicting this general advice, Sean Fitzpatrick reports on 2021-01-06 that the <latex/> macro construction
+                <cd>\newcommand{\foo}{\operatorname{foo}}</cd>
+            behaves better in Asymptote diagrams than
+                <cd>\DeclareMathOperator{\foo}{foo}</cd>
+            So perhaps you need to define a second macro for use in Asymptote diagrams.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Permutations in Cycle Notation</title>
+
+            <p>The permutation in cycle notation, <m>(1246)(35)</m>, is difficult to distinguish from a product of two integers and gets entirely different treatment than intended as Nemeth braille.  And when the points of the permutation group involve multiple digits, some other notation will become necessary anyway.  Commas work, as in <m>(1,2,4,6)(3,5)</m>.  Or if commas look too cluttered, then spaces are possible, as in <m>(1\;2\;4\;6)(3\;5)</m>, where we have used the <latex/> medium space, <c> \; </c>.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Text in Math</title>
+
+            <p>We have discussed this one already, but it is important for a conversion to braille.  If you use a word inside of math, such as describing a condition for membership in a set, put any spaces inside of a <c>\text{}</c> macro, not on either side of it.  So <c>\text{ and }</c> is preferable to <c>\ \text{and}\ </c>.  Similarly, do not put any math inside a <c>\text{}</c> macro.  For example,<cd>
+                <cline>\text{ for -3 \lt  x \lt  -2 }</cline>
+            </cd>will lead to poor results due to the inequalties mixed in with the text.  A better version would be<cd>
+                <cline>\text{ for }-3 \lt  x \lt  -2</cline>
+            </cd>and now the numbers will be treated as mathematics.  Review <xref ref="text-in-mathematics"/> for more details.</p>
+       </paragraphs>
+
+        <paragraphs>
+            <title>Math as Text</title>
+
+            <p>Do not use symbols from mathematics in non-mathematical situations such as the <latex/> construction <c>73^\circ</c> to indicate a temperature in degrees, outside of a mathematical or scientific setting, such as in a <tag>poem</tag> about springtime weather.  In this particular case, we provide a <tage>degree</tage> element that can be used in non-mathematical contexts, so we can get 73<degree/>, which will behave well in a variety of conversions (and can also be used for latitude and longitude in your poem).  Similarly, we advocate writing ordinal numbers with text on the baseline, rather than a <latex/> construction like <c>2^\mathrm{nd}</c>.  So use 1st, 2nd, 3rd, 4th, etc.</p>
+
+        </paragraphs>
+
+        <paragraphs>
+            <title>Avoid Nesting</title>
+            <p>It may seem  convenient to nest custom macro definitions. For example:
+                <cd>
+                    <cline>\newcommand{\makered}[1]{{\color{red}{#1}}}</cline>
+                    <cline>\newcommand{\MAKERED}[1]{\textbf{\makered{#1}}}</cline>
+                </cd>
+            The second macro definition uses the first macro. At least one <pretext/> conversion isolates macro defintions for use only on an as-needed basis. So here, if the author used <c>\MAKERED</c> without also using <c>\makered</c> close nearby, it would lead to an issue under that conversion, because <c>\makered</c> would be locally undefined. So we recommend defining each macro from the ground up. In this case:
+                <cd>
+                    <cline>\newcommand{\MAKERED}[1]{\textbf{\color{red}{#1}}}</cline>
+                </cd>
+            This also contradicts our advice above on operator names.</p>
+        </paragraphs>
     </section>
 
     <section xml:id="topic-lists">
@@ -1750,6 +2006,17 @@
                 <cline>  &lt;/solutions&gt;</cline>
                 <cline>&lt;/section&gt;</cline>
             </cd>would generate an entire subsection with hints and solutions to every worksheet and every project, located anywhere (including in subsections and subsubsections) in the section on Birds of Paradise.</p>
+
+            <p>
+                An <attr>admit</attr> attribute specifies some feature of an exercise's serial number
+                to determine whether its components are admitted into the solutions division.
+                (For example, the <q>serial number</q> of Exercise 1.2.3 is 3.)
+                Presently, the only options are <c>odd</c>, <c>even</c>, and the default <c>all</c>.
+                So, <pretext/> source like
+                <cd>&lt;solutions divisional="answer" admit="odd"&gt;</cd>
+                would generate a subsection with answers to only the odd-numbered divisional exercises.
+            </p>
+
         </subsection>
     </section>
 
@@ -2515,6 +2782,22 @@
             <p>Note that tables may be constructed using the <url href="http://www.latex-tables.com/"><latex /> Complex Table Editor</url> tool online at <c>latex-tables.com</c>and then exported in <pretext /> syntax.</p>
         </introduction>
 
+        <subsection>
+            <title>Placeholder</title>
+
+            <note>
+                <title>Tables are Difficult</title>
+
+                <p>Width is always at a premium, and then when a <tag>tabular</tag> has more than a few columns, the width becomes even more dear.  When a <tag>cell</tag> has text that looks like a phrase or a sentence, rather than numerical data or symbols, it can be even harder to pack it all in.  A common example is a schedule of talks at a small professional conference where each time slot (rows) might have two or three talks simultaneously in parallel sessions (columns).</p>
+
+                <p>We offer <term>paragraph cells</term> which automatically break lines, but you need to specify a <attr>width</attr> on the <tag>col</tag> as a percentage to indicate where line-breaking happens.  For manual line-breaking, a <tag>cell</tag> can be structured entirely by <tag>line</tag> elements.</p>
+
+                <p>The next complication is that the <latex/> used for <init>PDF</init> output tends to make columns as wide as necessary and will not break lines without the devices mentioned in the previous paragraph.  The <init>HTML</init> output can sometimes be a bit more forgiving and flexible.  So we suggest building the <latex/> output first and getting that right, and then the <init>HTML</init> is likely to follow along and not need much futher refinement.</p>
+
+                <p>In contrast to most of <pretext/>, you may need to experiment, refine your approach, iterate, and maybe do things contrary to usual best practices elsewhere.  For example, the clickables for <init>URL</init>s and knowls might need to be short and less-informative in order to save some width.  Abbreviations, initialisms, and acronyms can also save some width.</p>
+            </note>
+        </subsection>
+
         <subsection xml:id="table-headers">
             <title>Table Headers</title>
 
@@ -2573,52 +2856,72 @@
     </section>
 
     <section xml:id="topic-front-matter">
-        <title>(*) Front Matter</title>
+        <title>Front Matter</title>
 
          <introduction>
-            <p></p>
+            <p>A single <tag>frontmatter</tag> element can be placed early in your <tag>book</tag> or <tag>article</tag>, after some metadata, such as the overall <tag>title</tag>.  It is optional, but likely highly desirable.  The following subsections describe the items that may be employed within the <tag>frontmatter</tag>.  Most are optional, and some may be repeated.  An <tag>article</tag> differs in that it must contain a <tag>titlepage</tag> and then may <em>only</em> contain an <tag>abstract</tag>.  Generally, these will get default titles, localized in the language of your document, but these defaults may also be replaced by giving a <tag>title</tag> element.  None of these divisions themselves is numbered, precluding any content within that is numbered.  So, for example, no <tag>figure</tag> may be included.  But you could choose to include an <tag>image</tag>, perhaps within a <tag>biography</tag>.</p>
+
+            <p>If a component of the front matter cannot be numbered, how best to subdivide something like a <tag>preface</tag>?  This is a good use of the <tag>paragraphs</tag> element.  It allows for a (minimal) title, but cannot be subdivided further.  See the later part of <xref ref="topic-divisions"/> for more about this exceptional element.</p>
+
+            <p>These elements must appear in your source in the order given below, and will appear in your ouput in the same order, which is a generally accepted order used in the production of books.  So, for example, even if you author an <tag>acknowledgement</tag> between two <tag>preface</tag>, your output may (will?) place the Acknowledgement before the first Preface.</p>
+
+            <p>(We have not yet described the contents of these various elements in full detail.)</p>
         </introduction>
 
         <subsection>
             <title>(*) Title Page</title>
 
-            <p></p>
+            <p>Required.  Since the entire <tag>frontmatter</tag> is optional, we assume that the front matter at least includes the appearance of the document's overall <tag>title</tag>.</p>
         </subsection>
 
         <subsection>
             <title>(*) Abstract</title>
 
-            <p></p>
+            <p>Optional, and only available for an <tag>article</tag>.</p>
         </subsection>
 
-        <subsection>
+        <subsection xml:id="topic-front-colophon">
             <title>(*) Colophon</title>
 
-            <p></p>
+            <p>The <em>front</em> colophon. (There is also a <em>back</em> colophon, see <xref ref="topic-back-colophon"/>).  Sometimes this is also called the <term>copyright page</term>.</p>
         </subsection>
 
         <subsection>
-            <title>(*) Biography</title>
+            <title>(*) Biographies</title>
 
-            <p></p>
+            <p>Multiple <tag>biography</tag> elements, one per author.</p>
         </subsection>
 
         <subsection>
             <title>(*) Dedication</title>
 
-            <p></p>
+            <p>A single <tag>dedication</tag> element, that might include multiple dedications (perhaps by different authors).</p>
         </subsection>
 
         <subsection>
-            <title>(*) Acknowledgement</title>
+            <title>(*) Acknowledgements</title>
 
-            <p></p>
+            <p>A single <tag>acknowledgement</tag> element (note spelling), that becomes a division, and so can contain paragraphs, lists, etc.  The Chicago Manual of Style (15th Edition, 1.52) suggests that if these are short, they may be contained in a preface.</p>
+        </subsection>
+
+        <subsection>
+            <title>(*) Forewords</title>
+
+            <p>As of 2021-07-16 the <tag>foreword</tag> element is not fully implemented.  Please make a feature request if you need it.</p>
+
+            <p>A <tag>foreword</tag> is written by somebody other than the author.  The name of the writer of the foreword need to be included<mdash/>at the end is a good location.</p>
         </subsection>
 
         <subsection>
             <title>(*) Prefaces</title>
 
-            <p></p>
+            <p>Multiple prefaces are a distinct possibility, and in this case providing a different <tag>title</tag> for each would be essential.  Examples might include:  <articletitle>Preface to the Third Edition</articletitle>, <articletitle>How to Use this Book</articletitle>, or <articletitle>To the Student</articletitle>.  More ad-hoc material, such as a translator's note, can be handled as a preface.</p>
+
+            <note xml:id="best-practice-preface">
+                <title>Understand the Role of a Preface</title>
+
+                <p>Chicago Manual of Style (15th Edition, 1.49) begins with <q>Material normally contained in an author's preface includes reasons for undertaking the work, method of research, <ellipsis/></q>  Note that a preface is not introductory content and is not an introduction.  It is written from the author's point-of-view, and may include information about why they are qualified to write on the topic of the book.  If there are several editions, the prefaces to the newer editions are placed first.  See the related <xref ref="best-practice-chapter-zero"/>.</p>
+            </note>
         </subsection>
 
     </section>
@@ -2633,7 +2936,7 @@
         <subsection>
             <title>(*) Appendices</title>
 
-            <p></p>
+            <p>Automatic lists (<xref ref="topic-automatic-lists"/>) can appear anywhere, but an appendix is a very natural place to place one.</p>
         </subsection>
 
         <subsection>
@@ -2644,12 +2947,6 @@
 
         <subsection>
             <title>(*) References</title>
-
-            <p></p>
-        </subsection>
-
-        <subsection>
-            <title>(*) Automatic Lists</title>
 
             <p></p>
         </subsection>
@@ -2666,10 +2963,10 @@
             <p></p>
         </subsection>
 
-        <subsection>
+        <subsection xml:id="topic-back-colophon">
             <title>(*) Colophon</title>
 
-            <p></p>
+            <p>The <em>back</em> colophon, what most authors think of as <em>the</em> colophon. (There is also a <em>front</em> colophon, see <xref ref="topic-front-colophon"/>).</p>
         </subsection>
     </section>
 
@@ -2899,14 +3196,39 @@
 
         <p>Other authors like to make definitions using the <tag>definition</tag> element, since it creates a heading and number, allows a <tag>title</tag>, and can easily serve as the target of a cross-reference.  So this is another good place for a <tag>notation</tag> element.  But now, associate it clearly with the <tag>defintion</tag> by placing it in the metadata, early on, after the <tag>title</tag>.  And not in some subsequent paragraph.  The reason will be clear in just a bit.</p>
 
-        <p>How is a <tag>notation</tag> element constructed?  It has two elements.  The <tag>usage</tag> should be a sample piece of mathematics using the necessary symbols.  Do not wrap it in an <tag>m</tag> element, that is assumed and will be provided.  The second element is <tag>description</tag> and should be a short phrase, or sentence-like material, decoding the sample usage, and may include <tag>m</tag> elements.  The reader sees nothing in the output at the location of the <tag>notation</tag> element.</p>
+        <p>How is a <tag>notation</tag> element constructed?  It has two elements.  The <tag>usage</tag> should be a sample piece of mathematics using the necessary symbols, and wrapped in a <em>single</em> <tag>m</tag> element.  The second element is <tag>description</tag> and should be a short phrase, or sentence-like material, decoding the sample usage, and may include <tag>m</tag> elements.  The reader sees nothing in the output at the location of the <tag>notation</tag> element.</p>
 
         <p>The automatically-generated notation list is then a three-column table, in the order of appearance, with the sample usage, the description, and a <term>locator</term>.  For output derived from <latex/>, such as print or <init>PDF</init>, the locator will be the page number of wherever you placed the <tag>notation</tag> element.  For <init>HTML</init> the locator is much better<mdash/>it is a knowl, for either a paragraph or for an entire definition.  The latter possibility explains why it is better to place the <tag>notation</tag> element inside a <tag>definition</tag>, if possible, rather than in a paragraph that is a constituent of a <tag>definition</tag>.</p>
     </section>
 
     <section xml:id="topic-automatic-lists">
-        <title>(*) Automatic Lists</title>
-        <p></p>
+        <title>Automatic Lists</title>
+
+        <p>Sometimes it is useful to have an automatic list of various elements of one kind in a book, other than the ones already available in a <pretext/> document.  The predefined ones include an index (see <xref ref="topic-index"/>) and a list of notation (see <xref ref="topic-notation"/>).  Examples of lists one might wish to create could include lists figures, computational listings, or theorems.</p>
+
+        <p>There is a very flexible way to make a list of various blocks (or perhaps other items) in your text.  Use an empty <tage>list-of</tage> element as a child of a division.  A very natural use would be to create an <tag>appendix</tag> for the sole purpose of holding one such list.  This is why this feature is frequently used in the back matter.  But you could place an <term>automatic list</term> many other places.</p>
+
+        <p>We will illustrate with an example.  Suppose you know your book has theoretical results only in <tag>theorem</tag> and <tag>lemma</tag> elements.  So, for example, you never use <tag>corollary</tag> elements.  Then you could author</p>
+
+        <pre><![CDATA[
+        <appendix xml:id="appendix-list-results">
+          <title>List of Results</title>
+
+          <list-of elements="theorem lemma" divisions="chapter" empty="yes"/>
+        </appendix>
+        ]]>
+        </pre>
+
+        <p>The result will be a link to every <tag>theorem</tag> and <tag>lemma</tag> in the entire book, using a clickable with its type, number and title.  See <xref ref="best-practices"/> for an example. In <init>HTML</init> output the clickables will usually be knowls, which is especially handy.  The list will be organized with the titles of the chapters as headings.  The <attr>divisions</attr> attribute can have several types of divisions listed, such as both <tag>chapter</tag> <em>and</em> <tag>section</tag>.  The <attr>empty</attr> attribute set to <c>yes</c> indicates that a division heading should be used even if there is nothing on the list contained within.  The default for <attr>empty</attr> is <c>no</c>.</p>
+
+        <p>This feature is best used when the items in the list have been authored with titles, which greatly increases the utility of the list for your reader.  Review <xref ref="best-practice-titles"/> if this advice is new to you.</p>
+
+        <p>There is a <attr>scope</attr> attribute, which should be the name of an element which is a division containing the location of the <tag>list-of</tag> element.  Then the list is restricted to items within the specified division.  For example, if you have the <tag>list-of</tag> inside a <tag>subsection</tag> built for this purpose, and you use <c>@scope="section"</c> then the list will have all the items from throughout the section containing the list.</p>
+
+        <p>There are four types of exercises, based on their location: inline, divisional, worksheet, and reading questions.  These may be specified inside <attr>elements</attr> by the <term>pseudo-elements</term>: <c>'inlineexercise'</c>, <c>'divisionexercise'</c>, <c>'worksheetexercise'</c>, <c>'readingquestion'</c>.  (These are just strings meant for this purpose, and are not <em>real</em> <pretext/> elements.)</p>
+
+        <p>There may be an argument for a <attr>ref</attr> attribute that would behave similar to <attr>scope</attr>.  Make a feature request if you need it?</p>
+
     </section>
 
     <section xml:id="topic-url">
@@ -3043,7 +3365,7 @@
 
             <figure>
                 <caption>Sea Hares, Flower Garden Banks National Marine Sanctuary</caption>
-                <video xml:id="video-sea-hares" source="https://flowergarden.noaa.gov/image_library/video/seaharew.mp4" width="80%" preview="images/sea-hare.jpg" />
+                <video xml:id="video-sea-hares" href="https://flowergarden.noaa.gov/image_library/video/seaharew.mp4" width="80%" preview="images/sea-hare.jpg" />
             </figure>
         </subsection>
 
@@ -3235,11 +3557,12 @@
                     <li>You can navigate (explore) the expression tree with the up, down, left, and right arrow keys.  The subtitles will change as you do this.</li>
                 </ol></p>
                 <p>From the MathJax demonstration page, Maxwell's equations for practice:<idx>Maxwell's equations</idx><md>
-                    <mrow>\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &amp; = \frac{4\pi}{c}\vec{\mathbf{j}}</mrow>
+                    <mrow>\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t}
+                    &amp; = \frac{4\pi}{c}\vec{\boldsymbol{\jmath}}</mrow>
                     <mrow>\nabla \cdot \vec{\mathbf{E}} &amp; = 4 \pi \rho</mrow>
                     <mrow>\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} &amp; = \vec{\mathbf{0}}</mrow>
                     <mrow>\nabla \cdot \vec{\mathbf{B}} &amp; = 0</mrow>
-                </md><notation><usage>\nabla</usage><description>gradient operator</description></notation></p>
+                </md><notation><usage><m>\nabla</m></usage><description>gradient operator</description></notation></p>
 
             </li>
 
@@ -3344,7 +3667,6 @@
         <idx>slides</idx>
         <p>
 Slideshows may be authored in <pretext/> by using the following tags.
-        </p>
         <ul>
           <li>
 <c>slideshow</c> replaces the usual <c>article</c> or <c>book</c> tag to
@@ -3366,11 +3688,13 @@ value <c>yes</c> to allow stepping through
 parts of a slide (e.g. it inserts a Beamer <c>\pause</c>).
           </li>
         </ul>
+        </p>
         <p>
 A minimal working example may be found in the
 <url href="https://github.com/rbeezer/mathbook/blob/dev/examples/sample-slideshow/sample-slideshow.xml">
   Examples folder of the PreTeXt repo on GitHub
 </url><fn><c>examples/sample-slideshow/sample-slideshow.xml</c></fn>.
+See publishing details for various outputs in <xref ref="publisher-slides"/>.
         </p>
     </section>
 
@@ -3382,7 +3706,7 @@ A minimal working example may be found in the
 
         <p>A <tag>fragment</tag> is a chunk of code.  Almost always it has a <attr>xml:id</attr> attribute.  It begins with a mandatory <tag>title</tag>.  It may have index entries, but see below for advice using the <tag>list-of</tag> element.  Then there is a mix of <tag>code</tag> and <tag>fragref</tag> elements.  The <tag>code</tag> element holds the actual text in whatever computer language you are using.  Line breaks are respected.  Use the <init>XML</init> escape characters <c>&amp;lt;</c> and <c>&amp;amp;</c> if your code needs the <c>&lt;</c> or <c>&amp;</c> characters.  Do not try to use <init>XML</init> markup inside the <tag>code</tag> element.</p>
 
-        <p>A <tag>fragref</tag> is a reference to some other <tag>fragment</tag>.  This is accomplished via the <attr>ref</attr> attribute which points to the target via an <attr>xml:id</attr>.  So this is very similar to an <tag>xref</tag> (<xref ref="overview-cross-references"/>), but not enough alike to have the same element name.   The most important distinction is that the <c>xsl/pretext-litprog.xsl</c> stylesheet will <em>replace</em> the <tag>fragref</tag> with the <em>contents</em> of the target <tag>fragment</tag>.  In other conversions, the <tag>fragref</tag> will be a visual expression of the target <tag>fragment</tag>, possibly with some active means to visit or examine the target (hyperlink, knowl), more similar to an <element>xref</element>.</p>
+        <p>A <tag>fragref</tag> is a reference to some other <tag>fragment</tag>.  This is accomplished via the <attr>ref</attr> attribute which points to the target via an <attr>xml:id</attr>.  So this is very similar to an <tag>xref</tag> (<xref ref="overview-cross-references"/>), but not enough alike to have the same element name.   The most important distinction is that the <c>xsl/pretext-litprog.xsl</c> stylesheet will <em>replace</em> the <tag>fragref</tag> with the <em>contents</em> of the target <tag>fragment</tag>.  In other conversions, the <tag>fragref</tag> will be a visual expression of the target <tag>fragment</tag>, possibly with some active means to visit or examine the target (hyperlink, knowl), more similar to an <tag>xref</tag>.</p>
 
         <p>So the <c>xsl/pretext-litprog.xsl</c> stylesheet will course through your fragments converting the tree-like structure given by the references in the <tag>fragref</tag> elements into a depth-first traversal that will assemble the <tag>code</tag> elements, and only the <tag>code</tag> elements, linearly into a program.  Notice that it is your job as the author of the program to be certain that this rearrangement results in a syntactically correct program.  (<pretext/> is good, but not that good.)</p>
 

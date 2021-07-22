@@ -8,7 +8,7 @@
 <!-- See the file COPYING for copying conditions.             -->
 
 <chapter xml:id="webwork-publisher">
-  <title><webwork /> Exercises</title>
+  <title><webwork/> Exercises</title>
   <idx>
     <h><webwork/></h>
     <h><webwork/> exercises</h>
@@ -99,6 +99,32 @@
     </p>
   </section>
 
+  <section xml:id="webwork-pg-macros">
+    <title>PG Macros from the <pretext/> Source</title>
+    <p>
+      The project's <webwork/> exercises may rely on PG macros that are written into the project's source.
+      For example, the exercises might have TikZ images that rely on <tag>docinfo/latex-image-preamble</tag>
+      with <attr>syntax</attr> set to <c>PGtikz</c>.
+    </p>
+    <p>
+      For this, a PG macro library file must be built and placed in the host course's <c>templates/macros/</c>
+      folder <em>before</em> attempting to process the <webwork/> exercises. To build this macro library, run:
+      <cd>
+        pretext -c pg-macros aota.ptx
+      </cd>
+      <c>aota.ptx</c> in the example is the root file for your <pretext/> project.
+      You could also specify a location to place the resulting macro library file:
+      <cd>
+        pretext -c pg-macros -d some/file/path aota.ptx
+      </cd>
+    </p>
+    <p>
+      Once you have the macro library file, upload it to the host <webwork/> course's <c>templates/macros</c> folder.
+      If your project relies on the AIM <webwork/> server and you need to supply a macro library file
+      to a host course on that server, post to <email>pretex-support@googlegroups.com</email> and we can help with that.
+    </p>
+  </section>
+
   <section xml:id="webwork-processing">
     <title>Processing <webwork/> Exercises</title>
 
@@ -132,14 +158,17 @@
         <prompt>$ </prompt>
         <input>pretext -c webwork -s &lt;server&gt; -d webwork-representations aota.ptx</input>
       </console>
+      <p>
+        <c>aota.ptx</c> in the example is the root file for your <pretext/> project.
+      </p>
       <warning>
         <title>File Paths</title>
         <p>
           In the previous example and those that follow, you should specify paths as needed.
-          For example, the <c>pretext</c> script is typically at <c>~/mathbook/script/pretext</c>.
+          For example, the <c>pretext</c> script is typically at <c>~/mathbook/pretext/pretext</c>.
           And the <c>-d</c> option is specifying a directory to place the auxiliary file,
-          and if you literally use <c>-d webwork-extraction</c> instead of a full path,
-          the expectation is that <c>webwork-extraction</c> is a folder in your current working folder.
+          and if you literally use <c>-d webwork-representations</c> instead of a full path,
+          the expectation is that <c>webwork-representations</c> is a folder in your current working folder.
         </p>
       </warning>
       <p>
@@ -147,7 +176,7 @@
       </p>
       <p>
         <c>-s</c> specifies the <webwork/> server.
-        The <webwork /> server needs to be version 2.14 or later, specified with its protocol and domain,
+        The <webwork/> server needs to be version 2.14 or later, specified with its protocol and domain,
         like <c>https://webwork-ptx.aimath.org</c>.
         It is <em>important</em> to get the protocol correct for your server (<c>http</c> versus <c>https</c>).
         If you do not have a server, you may use <c>https://webwork-ptx.aimath.org</c>.
@@ -168,9 +197,6 @@
         (Note that you can name the folder whatever you like,
         but the auxiliary file that is created will <em>always</em> be named <c>webwork-representations.ptx</c>.)
       </p>
-      <p>
-        <c>aota.ptx</c> in the example is the root file for your <pretext/> project.
-      </p>
     </subsection>
 
     <subsection xml:id="representations-publisher">
@@ -178,7 +204,7 @@
 
       <p>You now have custody of the <c>webwork-representations.ptx</c>.  It contains multiple versions of each of your <webwork/> exercises, each appropriate for different output formats.  Early in a project, you may regenerate this file frequently as your project changes.  Later in a project you might consider it to be (generated/manufactured/derived) source material.  More on this in a bit.  For now, you need to set up how the file is communicated to a conversion.  This is accomplished with the publisher file (see <xref ref="publisher-file"/>).</p>
 
-      <p>The publisher file has a place where you can specify the name of the file with the representations, by default, <c>webwork-representations.ptx</c>.  You are welcome to change the name at this juncture, but perhaps there is no point.  We will procede with the default.  The absolute simplest publisher file you can create would look like<cd>
+      <p>The publisher file has a place where you can specify the name of the file with the representations, by default, <c>webwork-representations.ptx</c>.  You are welcome to change the name at this juncture, but perhaps there is no point.  We will proceed with the default.  The absolute simplest publisher file you can create would look like<cd>
         <cline>&lt;publication&gt;</cline>
         <cline>  &lt;source webwork-problems="webwork-representations.ptx"/&gt;</cline>
         <cline>&lt;/publication&gt;</cline>
@@ -322,14 +348,13 @@
       <console>
         <prompt>$ </prompt>
         <input>xsltproc -stringparam publisher publication.ptx</input>
-        <input>  -stringparam chunk.level 2 pretext-ww-problem-sets.xsl aota.ptx</input>
+        <input>  pretext-ww-problem-sets.xsl aota.ptx</input>
       </console>
       <p>
         You may need to specify paths to these files.
       </p>
       <p>
-        With a book, <c>-stringparam chunk.level 2</c> means that each problem set corresponds to a section from the book.
-        Level 1: chapter. Level 3: subsection. With an article there are no chapters, and Level 1 corresponds to sections.
+        With a book, you can break up your problem set into multiple files according to a chosen depth of the hierarchy.  See <xref ref="common-chunking-options"/> for details on how to specify this.
       </p>
       <p>
         This creates a folder named after your book title,
@@ -354,7 +379,7 @@
           <p>
             Anything that is the numbered target of a cross-reference, such as a figure,
             may not be inside a <webwork/> exercise.
-            The exericse may go on to have a life of its own independent of its parent <pretext/> project,
+            The exercise may go on to have a life of its own independent of its parent <pretext/> project,
             and then such a number makes no sense.
           </p>
         </li>

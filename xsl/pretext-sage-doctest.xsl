@@ -24,11 +24,11 @@
 <xsl:variable name="file-extension" select="'.py'" />
 
 <!-- Set the chunking level variable for the routines in pretext-common.xsl. -->
-<!-- Default to zero, else use whatever an author specifies                   -->
+<!-- Default to zero, else use whatever an author specifies                  -->
 <xsl:variable name="chunk-level">
     <xsl:choose>
-        <xsl:when test="$chunk.level != ''">
-            <xsl:value-of select="$chunk.level" />
+        <xsl:when test="$chunk-level-entered != ''">
+            <xsl:value-of select="$chunk-level-entered" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>0</xsl:text>
@@ -81,15 +81,6 @@
     <xsl:apply-templates select="input" />
     <xsl:apply-templates select="output" />
     <xsl:text>&#xA;</xsl:text>
-</xsl:template>
-
-<!-- @copy deprecated  2017-12-21 -->
-<!-- Just handle "copy" Sage blocks the same way as others  -->
-<!-- since results may be needed for subsequent tests       -->
-<!-- This needs to come second, since it will fail previous -->
-<!-- filter and has the same priority, so will be fulfilled -->
-<xsl:template match="sage[@copy]">
-    <xsl:apply-templates select="id(@copy)" />
 </xsl:template>
 
 <!-- Kill anything else that has not matched -->

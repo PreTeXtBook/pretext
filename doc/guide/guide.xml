@@ -73,6 +73,7 @@
             <title>Developer's Guide</title>
 
             <xi:include href="developer/coding.xml"/>
+            <xi:include href="developer/debugging.xml"/>
             <xi:include href="developer/git.xml"/>
         </part>
 

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2014-2021 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- See  xsl/localizations/README.md  for an explanation of this file -->
+
+<!-- it-IT, Italian (Italy) -->
+<!-- Valerio Monti, gedeonedepaperoni@gmail.com, 2020-07-27   -->
+
+<locale language="it-IT">
+    <!-- THEOREM-LIKE blocks -->
+    <!-- Environments which have proofs, plus proofs themselves -->
+    <localization string-id='theorem'>Teorema</localization>
+    <localization string-id='corollary'>Corollario</localization>
+    <localization string-id='lemma'>Lemma</localization>
+    <localization string-id='algorithm'>Algoritmo</localization>
+    <localization string-id='proposition'>Proposizione</localization>
+    <localization string-id='claim'>Affermazione</localization>
+    <localization string-id='fact'>Fatto</localization>
+    <localization string-id='identity'>Identità</localization>
+    <localization string-id='proof'>Dimostrazione</localization>
+    <localization string-id='case'>Caso</localization>
+    <!-- Components of the narrative -->
+    <!-- Mathematical statements without proofs -->
+    <!-- AXIOM-LIKE blocks -->
+    <localization string-id='axiom'>Assioma</localization>
+    <localization string-id='conjecture'>Congettura</localization>
+    <localization string-id='principle'>Principio</localization>
+    <localization string-id='heuristic'>Processo euristico</localization>
+    <localization string-id='hypothesis'>Ipotesi</localization>
+    <localization string-id='assumption'>Assunzione</localization>
+    <!-- Definitions -->
+    <localization string-id='definition'>Definizione</localization>
+    <!-- Single Line Mathematics -->
+    <localization string-id='me'>Equazione</localization>
+    <localization string-id='men'>Equazione</localization>
+    <localization string-id='mrow'>Equazione</localization>
+    <!-- Display Mathematics -->
+    <localization string-id='md'>Matematica in display</localization>
+    <localization string-id='mdn'>Matematica in display</localization>
+    <!-- Types of documents, mostly for informational messages -->
+    <localization string-id='volume'>Volume</localization>
+    <localization string-id='book'>libro</localization>
+    <localization string-id='article'>Articolo</localization>
+    <!-- <localization string-id='slideshow'>Slideshow</localization> -->
+    <localization string-id='letter'>Lettera</localization>
+    <localization string-id='memo'>Memo</localization>
+    <localization string-id='presentation'>Presentazione</localization>
+    <!-- Parts of a document -->
+    <!-- "part" will also be used for a "stage" of a WeBWorK problem -->
+    <localization string-id='frontmatter'>Materiale iniziale</localization>
+    <localization string-id='part'>Parte</localization>
+    <localization string-id='chapter'>Capitolo</localization>
+    <localization string-id='appendix'>Appendice</localization>
+    <!-- Next is the plural of Appendix, used to identify a group of appendix -->
+    <localization string-id='appendices'>Appendici</localization>
+    <localization string-id='section'>Paragrafo</localization>
+    <localization string-id='subsection'>Sottoparagrafo</localization>
+    <localization string-id='subsubsection'>Sotto-sottoparagrafo</localization>
+    <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
+    <localization string-id='slide'>Diapositiva</localization>
+    <localization string-id='introduction'>Introduzione</localization>
+    <localization string-id='conclusion'>Conclusione</localization>
+    <localization string-id='exercises'>Esercizi</localization>
+    <localization string-id='worksheet'>Scheda didattica</localization>
+    <localization string-id='reading-questions'>Domande di comprensione del testo</localization>
+    <localization string-id='solutions'>Soluzioni</localization>
+    <localization string-id='glossary'>Glossario</localization>
+    <localization string-id='references'>Bibliografia</localization>
+    <localization string-id='backmatter'>Materiale finale</localization>
+    <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
+    <localization string-id='paragraphs'>Capoversi</localization>
+    <localization string-id='commentary'>Commento</localization>
+    <localization string-id='subparagraph'>Sottocapoverso</localization>
+    <!-- Components of the narrative -->
+    <!-- REMARK-LIKE blocks -->
+    <!-- "note" is used within "biblio", likely to change -->
+    <localization string-id='remark'>Osservazione</localization>
+    <localization string-id='convention'>Convenzione</localization>
+    <localization string-id='note'>Nota</localization>
+    <!-- <localization string-id='observation'>Observation</localization>  -->
+    <localization string-id='warning'>Attenzione</localization>
+    <localization string-id='insight'>Intuizione</localization>
+    <localization string-id='computation'>Computazione</localization>
+    <localization string-id='technology'>Tecnologia</localization>
+    <!-- ASIDE-LIKE blocks -->
+    <localization string-id='aside'>Inciso</localization>
+    <localization string-id='biographical'>Inciso biografico</localization>
+    <localization string-id='historical'>Inciso storico</localization>
+    <!-- EXAMPLE-LIKE blocks -->
+    <localization string-id='example'>Esempio</localization>
+    <localization string-id='question'>Domanda</localization>
+    <localization string-id='problem'>Problema</localization>
+    <!-- PROJECT-LIKE blocks -->
+    <localization string-id='project'>Progetto</localization>
+    <localization string-id='activity'>Attività</localization>
+    <localization string-id='exploration'>Esplorazione</localization>
+    <localization string-id='task'>Compito</localization>
+    <localization string-id='investigation'>Investigazione</localization>
+    <!-- assemblages are collections of minimally structured material -->
+    <localization string-id='assemblage'>Raccolta</localization>
+    <localization string-id='poem'>Poema</localization>
+    <!-- Objectives is the block, objective is a list item within -->
+    <localization string-id='objectives'>Obiettivi</localization>
+    <localization string-id='objective'>Obiettivo</localization>
+    <!-- Outcomes is the block, outcome is a list item within (different) -->
+    <!-- These two words need to be different, to avoid ambiguous cross-references -->
+    <localization string-id='outcomes'>Risultati</localization>
+    <localization string-id='outcome'>Risultato</localization>
+    <!--  -->
+    <localization string-id='figure'>Figura</localization>
+    <localization string-id='table'>Tabella</localization>
+    <localization string-id='listing'>Listato</localization>
+    <localization string-id='fn'>Nota a piè di pagina</localization>
+    <localization string-id='contributor'>Contributore</localization>
+    <!-- Lists and their items -->
+    <localization string-id='list'>Elenco</localization>
+    <localization string-id='li'>Punto</localization>
+    <!-- A term (word) defined in a glossary -->
+    <localization string-id='defined-term'>Termine</localization>
+    <!-- A regular paragraph, not the old sectioning structure -->
+    <localization string-id='p'>Capoverso</localization>
+    <localization string-id='blockquote'>Citazione</localization>
+    <!-- Literate programming, a chunk of computer code -->
+    <!-- <localization string-id='fragment'>Fragment</localization> -->
+    <!-- Parts of an exercise and its solution -->
+    <!-- An "exercise", at any level, within an "exercises" division is a          -->
+    <!-- "divisional" exercise and the string employed is 'divisionalexercise'.    -->
+    <!-- An "exercise" whose parent is a division (chapter, section, etc) we       -->
+    <!-- call an "inline exercise" and the string employed is 'inlineexercise'.    -->
+    <!-- And an "exercise" in a "worksheet" is a 'worksheetexercise'.              -->
+    <!-- And an "exercise" in a "reading-questions" is a 'readingquestion'.         -->
+    <!-- It is important to use different translations so that a text with         -->
+    <!-- different types of exercises do not have ambiguous cross-references       -->
+    <!-- (there is an example of this at the start of one of the later             -->
+    <!-- sections of the sample article).                                          -->
+    <!--                                                                           -->
+    <!-- In English, an "Exercise" is something you do that has a beneficial       -->
+    <!-- outcome, such as "I am going to the gym to exercise."  A "Checkpoint"     -->
+    <!-- is something you must do before you do something else.  Another use of    -->
+    <!-- the term is a location on a roadway where you must stop for the      -->
+    <!-- police to do an inspection. A worksheet is a collection of activities or  -->
+    <!-- problems, typically printed on paper, which might be used in a classroom. -->
+    <localization string-id='divisionalexercise'>Esercizio</localization>
+    <localization string-id='inlineexercise'>Punto di controllo</localization>
+    <localization string-id='worksheetexercise'>Esercizio in scheda didattica</localization>
+    <localization string-id='readingquestion'>Domanda di comprensione del testo</localization>
+    <localization string-id='webwork'>WeBWorK</localization>
+    <localization string-id='hint'>Suggerimento</localization>
+    <localization string-id='answer'>Risposta</localization>
+    <localization string-id='solution'>Soluzione</localization>
+    <!-- A group of divisional exercises (with introduction and conclusion) -->
+    <localization string-id='exercisegroup'>Gruppo di esercizi</localization>
+    <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
+    <localization string-id='biblio'>Riferimento bibliografico</localization>
+    <!-- Front matter components -->
+    <localization string-id='toc'>Indice</localization>
+    <localization string-id='abstract'>Sommario</localization>
+    <localization string-id='preface'>Prefazione</localization>
+    <localization string-id='acknowledgement'>Ringraziamenti</localization>
+    <localization string-id='biography'>Biografia dell'autore</localization>
+    <!-- singular and plural titles for biography subdivision -->
+    <localization string-id='about-author'>Sull'autore</localization>
+    <localization string-id='about-authors'>Sugli autori</localization>
+    <localization string-id='foreword'>Presentazione</localization>
+    <localization string-id='dedication'>Dedica</localization>
+    <localization string-id='colophon'>Colophon</localization>
+    <!-- Back matter components -->
+    <!-- index-part is deprecated, but not abandoned          -->
+    <!-- NB: repurpose translations, maybe move appendix here -->
+    <localization string-id='index-part'>Indice analitico</localization>
+    <localization string-id='jump-to'>Vai a:</localization>
+    <!-- Parts of the Index -->
+    <localization string-id='index'>Indice analitico</localization>
+    <localization string-id='see'>Vedi</localization>
+    <localization string-id='also'>Vedi anche</localization>
+    <!-- Notation List headings/foot -->
+    <localization string-id='symbol'>Simbolo</localization>
+    <localization string-id='description'>Descrizione</localization>
+    <localization string-id='location'>Posizione</localization>
+    <localization string-id='page'>Pag.</localization>
+    <localization string-id='continued'>Continua alla pagina successiva</localization>
+    <!-- Navigation Interface elements -->
+    <!-- Assistive "skip to content" link -->
+    <localization string-id='skip-to-content'>Vai all'indice generale</localization>
+    <localization string-id='previous'>Precedente</localization>
+    <localization string-id='up'>Su</localization>
+    <localization string-id='next'>Successivo</localization>
+    <!-- Keep these short, so buttons are not overly wide, 4 characters maximum -->
+    <localization string-id='previous-short'>Prec</localization>
+    <localization string-id='up-short'>Su</localization>
+    <localization string-id='next-short'>Succ</localization>
+    <!-- NB: Use toc from above for both headings and navigation sidebar-->
+    <localization string-id='annotations'>Annotazioni</localization>
+    <localization string-id='feedback'>Feedback</localization>
+    <!-- This phrase should suggest that PreTeXt is the source -->
+    <!-- language that makes a particular output possible      -->
+    <localization string-id='authored'>Redatto in PreTeXt</localization>
+    <!-- Parts of memos and letters -->
+    <localization string-id='to'>Per</localization>
+    <localization string-id='from'>Da</localization>
+    <localization string-id='subject'>Oggetto</localization>
+    <localization string-id='date'>Data</localization>
+    <localization string-id='copy'>e p.c.</localization>
+    <localization string-id='enclosure'>allegati</localization>
+    <!-- Various -->
+    <localization string-id='todo'>Da fare</localization>
+    <localization string-id='editor'>Curatore</localization>
+    <localization string-id='edition'>Edizione</localization>
+    <localization string-id='website'>Sito web</localization>
+    <localization string-id='copyright'>Copyright</localization>
+    <!-- HTML clickables (lowercase strings to click on) -->
+    <localization string-id='permalink'>permalink</localization>
+    <localization string-id='incontext'>Contesto</localization>
+    <!-- Sage Cell evaluate button      -->
+    <!-- eg, "Evaluate (Maxima)"        -->
+    <!-- 2017-05-14: 'code' is obsfolete -->
+    <!-- This needs to be defined to *something* (always)       -->
+    <!-- else whatever crud ends up on the button kills the cell -->
+    <localization string-id='evaluate'>Calcola</localization>
+    <!-- <localization string-id='code'>Code</localization> -->
+</locale>

@@ -237,7 +237,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$document-root//console">
             <xsl:text>%% Console session with prompt, input, output&#xa;</xsl:text>
             <xsl:text>%% listings allows for escape sequences to enable LateX,&#xa;</xsl:text>
-            <xsl:text>%% so we bold the input commands via teh following macro&#xa;</xsl:text>
+            <xsl:text>%% so we bold the input commands via the following macro&#xa;</xsl:text>
             <xsl:text>\newcommand{\consoleinput}[1]{\textbf{#1}}&#xa;</xsl:text>
             <!-- https://tex.stackexchange.com/questions/299401/bold-just-one-line-inside-of-lstlisting/299406 -->
             <!-- Syntax highlighting is not so great for "language=bash" -->
@@ -510,11 +510,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
   </xsl:if>
 
   <xsl:apply-templates select="/pretext/docinfo/macros"/>
-  <xsl:if test="$docinfo/latex-image-preamble">
+  <xsl:if test="$latex-image-preamble">
     <xsl:text>%% Graphics Preamble Entries&#xa;</xsl:text>
-    <xsl:call-template name="sanitize-text">
-      <xsl:with-param name="text" select="$docinfo/latex-image-preamble" />
-    </xsl:call-template>
+    <xsl:value-of select="$latex-image-preamble"/>
   </xsl:if>
   <xsl:text>&#xa;&#xa;%%%% End of PreTeXt generated preamble %%%%% &#xa;&#xa;</xsl:text>
 </xsl:template>

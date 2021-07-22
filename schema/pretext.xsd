@@ -393,7 +393,7 @@
         <xs:complexType>
           <xs:sequence>
             <xs:group ref="MetaDataTitleOptional"/>
-            <xs:element minOccurs="0" ref="titlepage"/>
+            <xs:element ref="titlepage"/>
             <xs:group minOccurs="0" ref="ColophonFront"/>
             <xs:element minOccurs="0" maxOccurs="unbounded" ref="biography"/>
             <xs:element minOccurs="0" ref="dedication"/>
@@ -810,6 +810,15 @@
           <xs:attribute name="inline"/>
           <xs:attribute name="divisional"/>
           <xs:attribute name="project"/>
+          <xs:attribute name="admit">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="all"/>
+                <xs:enumeration value="odd"/>
+                <xs:enumeration value="even"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
@@ -1341,7 +1350,7 @@
         </xs:sequence>
         <xs:sequence>
           <xs:group minOccurs="0" ref="IntroductionStatement"/>
-          <xs:element maxOccurs="unbounded" ref="task"/>
+          <xs:group maxOccurs="unbounded" ref="Task"/>
           <xs:group minOccurs="0" ref="ConclusionStatement"/>
         </xs:sequence>
       </xs:choice>
@@ -1374,7 +1383,7 @@
             </xs:sequence>
             <xs:sequence>
               <xs:group minOccurs="0" ref="IntroductionStatement"/>
-              <xs:element maxOccurs="unbounded" ref="task"/>
+              <xs:group maxOccurs="unbounded" ref="Task"/>
               <xs:group minOccurs="0" ref="ConclusionStatement"/>
             </xs:sequence>
           </xs:choice>
@@ -1396,28 +1405,32 @@
   <xs:element name="investigation" type="ProjectLike"/>
   <xs:element name="exploration" type="ProjectLike"/>
   <xs:element name="project" type="ProjectLike"/>
-  <xs:element name="task">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:group ref="MetaDataTarget"/>
-        <xs:choice>
-          <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+  <xs:group name="Task">
+    <xs:sequence>
+      <xs:element name="task">
+        <xs:complexType>
           <xs:sequence>
-            <xs:group ref="Statement"/>
-            <xs:group minOccurs="0" maxOccurs="unbounded" ref="Hint"/>
-            <xs:element minOccurs="0" maxOccurs="unbounded" ref="answer"/>
-            <xs:group minOccurs="0" maxOccurs="unbounded" ref="Solution"/>
+            <xs:group ref="MetaDataTitleOptional"/>
+            <xs:choice>
+              <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+              <xs:sequence>
+                <xs:group ref="Statement"/>
+                <xs:group minOccurs="0" maxOccurs="unbounded" ref="Hint"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="answer"/>
+                <xs:group minOccurs="0" maxOccurs="unbounded" ref="Solution"/>
+              </xs:sequence>
+              <xs:sequence>
+                <xs:group minOccurs="0" ref="IntroductionStatement"/>
+                <xs:group maxOccurs="unbounded" ref="Task"/>
+                <xs:group minOccurs="0" ref="ConclusionStatement"/>
+              </xs:sequence>
+            </xs:choice>
           </xs:sequence>
-          <xs:sequence>
-            <xs:group minOccurs="0" ref="IntroductionStatement"/>
-            <xs:element maxOccurs="unbounded" ref="task"/>
-            <xs:group minOccurs="0" ref="ConclusionStatement"/>
-          </xs:sequence>
-        </xs:choice>
-      </xs:sequence>
-      <xs:attributeGroup ref="MetaDataTarget"/>
-    </xs:complexType>
-  </xs:element>
+          <xs:attributeGroup ref="MetaDataTitleOptional"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
   <xs:complexType name="RemarkLike">
     <xs:sequence>
       <xs:group ref="MetaDataTitleOptional"/>
@@ -1458,7 +1471,7 @@
   <xs:complexType name="AsideLike">
     <xs:sequence>
       <xs:group ref="MetaDataTitleOptional"/>
-      <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+      <xs:group maxOccurs="unbounded" ref="BlockText"/>
     </xs:sequence>
     <xs:attributeGroup ref="MetaDataTitleOptional"/>
   </xs:complexType>
@@ -1610,7 +1623,6 @@
             <xs:element ref="poem"/>
             <xs:element ref="tabular"/>
             <xs:group ref="Image"/>
-            <xs:group ref="ImageWW"/>
             <xs:element ref="video"/>
             <xs:element ref="program"/>
             <xs:element ref="console"/>
@@ -1682,7 +1694,7 @@
               </xs:complexType>
             </xs:element>
             <xs:choice>
-              <xs:element ref="latex-image"/>
+              <xs:element name="latex-image" type="xs:string"/>
               <xs:element ref="asymptote"/>
               <xs:element ref="sageplot"/>
             </xs:choice>
@@ -1696,7 +1708,6 @@
       </xs:element>
     </xs:sequence>
   </xs:group>
-  <xs:element name="latex-image" type="xs:string"/>
   <xs:element name="asymptote" type="xs:string"/>
   <xs:element name="sageplot" type="xs:string"/>
   <xs:group name="ImageWW">
@@ -1712,8 +1723,20 @@
                 </xs:choice>
               </xs:complexType>
             </xs:element>
+            <xs:element minOccurs="0" name="latex-image">
+              <xs:complexType mixed="true">
+                <xs:attribute name="syntax" use="required">
+                  <xs:simpleType>
+                    <xs:restriction base="xs:token">
+                      <xs:enumeration value="PGtikz"/>
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
           </xs:sequence>
           <xs:attribute name="pg-name"/>
+          <xs:attribute name="width"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -1901,18 +1924,26 @@
       </xs:attribute>
       <xs:attribute name="preview"/>
       <xs:attribute name="source"/>
+      <xs:attribute name="href"/>
       <xs:attribute name="youtube"/>
       <xs:attribute name="youtubeplaylist"/>
+      <xs:attribute name="vimeo"/>
     </xs:complexType>
   </xs:element>
   <xs:attributeGroup name="AttributesSourceFile">
     <xs:attribute name="source" use="required"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="AttributesNetwork">
+    <xs:attribute name="href" use="required"/>
   </xs:attributeGroup>
   <xs:attributeGroup name="AttributesYouTube">
     <xs:attribute name="youtube" use="required"/>
   </xs:attributeGroup>
   <xs:attributeGroup name="AttributesYouTubePlaylist">
     <xs:attribute name="youtubeplaylist" use="required"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="AttributesVimeo">
+    <xs:attribute name="vimeo" use="required"/>
   </xs:attributeGroup>
   <xs:group name="ExerciseBody">
     <xs:sequence>
@@ -1964,7 +1995,7 @@
           </xs:sequence>
           <xs:sequence>
             <xs:group minOccurs="0" ref="IntroductionStatement"/>
-            <xs:element maxOccurs="unbounded" ref="task"/>
+            <xs:group maxOccurs="unbounded" ref="Task"/>
             <xs:group minOccurs="0" ref="ConclusionStatement"/>
           </xs:sequence>
           <xs:sequence>
@@ -2198,10 +2229,17 @@
                 <xs:group minOccurs="0" ref="HintWW"/>
                 <xs:group minOccurs="0" ref="SolutionWW"/>
               </xs:sequence>
+              <xs:sequence>
+                <xs:group minOccurs="0" ref="IntroductionText"/>
+                <xs:group maxOccurs="unbounded" ref="TaskWW"/>
+                <xs:group minOccurs="0" ref="ConclusionText"/>
+              </xs:sequence>
               <xs:element maxOccurs="unbounded" ref="stage"/>
             </xs:choice>
           </xs:sequence>
+          <xs:attribute ref="xml:id"/>
           <xs:attribute name="seed" type="xs:integer"/>
+          <xs:attribute name="copy"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -2217,16 +2255,46 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:group name="BlockStatementWW">
+    <xs:choice>
+      <xs:group ref="Paragraph"/>
+      <xs:element ref="pre"/>
+      <xs:element ref="tabular"/>
+      <xs:group ref="ImageWW"/>
+    </xs:choice>
+  </xs:group>
   <xs:group name="StatementExerciseWW">
     <xs:sequence>
       <xs:element name="statement">
         <xs:complexType>
           <xs:choice maxOccurs="unbounded">
-            <xs:group ref="Paragraph"/>
+            <xs:group ref="BlockStatementWW"/>
             <xs:element ref="instruction"/>
-            <xs:element ref="pre"/>
-            <xs:group ref="SideBySideNoCaption"/>
           </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="TaskWW">
+    <xs:sequence>
+      <xs:element name="task">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group ref="MetaDataTitleOptional"/>
+            <xs:choice>
+              <xs:sequence>
+                <xs:group ref="StatementExerciseWW"/>
+                <xs:group minOccurs="0" ref="HintWW"/>
+                <xs:group minOccurs="0" ref="SolutionWW"/>
+              </xs:sequence>
+              <xs:sequence>
+                <xs:group minOccurs="0" ref="IntroductionText"/>
+                <xs:group maxOccurs="unbounded" ref="TaskWW"/>
+                <xs:group minOccurs="0" ref="ConclusionText"/>
+              </xs:sequence>
+            </xs:choice>
+          </xs:sequence>
+          <xs:attributeGroup ref="MetaDataTitleOptional"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -2241,7 +2309,7 @@
   <xs:element name="macro-file" type="xs:string"/>
   <xs:element name="var">
     <xs:annotation>
-      <xs:documentation>The WeBWorK "var" element appears in the RELAX-NG schema as a child of many elements, but almost always as a descendant of a "p" element or a "cell" element.  As an element that is only relevant for a WeBWorK problem, occurences of "var" must be within a "webwork" element.  A Schematron rule will check on these two situations.</xs:documentation>
+      <xs:documentation>The WeBWorK "var" element appears in the RELAX-NG schema as a child of many elements, but almost always as a descendant of a "p" element or a "cell" element.  As an element that is only relevant for a WeBWorK problem, occurrences of "var" must be within a "webwork" element.  A Schematron rule will check on these two situations.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:attribute name="form">
@@ -2289,11 +2357,7 @@
     <xs:sequence>
       <xs:element name="hint">
         <xs:complexType>
-          <xs:choice maxOccurs="unbounded">
-            <xs:group ref="Paragraph"/>
-            <xs:element ref="pre"/>
-            <xs:group ref="SideBySideNoCaption"/>
-          </xs:choice>
+          <xs:group maxOccurs="unbounded" ref="BlockStatementWW"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -2302,11 +2366,7 @@
     <xs:sequence>
       <xs:element name="solution">
         <xs:complexType>
-          <xs:choice maxOccurs="unbounded">
-            <xs:group ref="Paragraph"/>
-            <xs:element ref="pre"/>
-            <xs:group ref="SideBySideNoCaption"/>
-          </xs:choice>
+          <xs:group maxOccurs="unbounded" ref="BlockStatementWW"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -2673,6 +2733,7 @@
     <xs:complexType mixed="true">
       <xs:group ref="TextShort"/>
       <xs:attribute name="href" use="required"/>
+      <xs:attribute name="visual"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="xref">
@@ -2698,7 +2759,13 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="usage" type="xs:string"/>
+  <xs:element name="usage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="m"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="m">
     <xs:complexType mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -3446,7 +3513,17 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="package" type="xs:string"/>
-  <xs:element name="latex-image-preamble" type="xs:string"/>
+  <xs:element name="latex-image-preamble">
+    <xs:complexType mixed="true">
+      <xs:attribute name="syntax">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="PGtikz"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="asymptote-preamble" type="xs:string"/>
   <xs:element name="macros" type="xs:string"/>
   <xs:element name="cross-references">

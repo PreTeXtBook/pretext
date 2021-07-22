@@ -24,34 +24,47 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:exsl="http://exslt.org/common"
-    xmlns:str="http://exslt.org/strings"
-    extension-element-prefixes="exsl str"
+    xmlns:date="http://exslt.org/dates-and-times"
+    extension-element-prefixes="exsl date"
+    exclude-result-prefixes="pi"
 >
 
 <!-- This is the once-mythical pre-processor, though we prefer     -->
 <!-- to describe it as the "assembly" of "enhanced" source.  By    -->
 <!-- "assembly" we mean pre-processing of source, by "assembling"  -->
 <!-- various pieces of material or content, authored or computed,  -->
-<!-- into an enhanced source tree.                                 -->
+<!-- into an enhanced source tree. This template operates by       -->
+<!-- successive passes through the entire source tree making       -->
+<!-- adjustments into a new "enhanced" or modified source tree     -->
+<!-- with each pass.                                               -->
 <!--                                                               -->
-<!-- Import this stylesheet immediately after pretext-common.xsl. -->
+<!-- Import this stylesheet immediately after pretext-common.xsl.  -->
 <!--                                                               -->
 <!-- * $original will point to source file/tree/XML at the overall -->
 <!--   "pretext" element.                                          -->
-<!-- * The modal "assembly" template will be applied to the source -->
+<!-- * The modal "assembly" templates are applied to the source    -->
 <!--   root element, creating a new version of the source, which   -->
-<!--   has been "enhanced".                                        -->
-<!-- * $duplicate will point to the root of the enhanced source    -->
-<!--   file/tree/XML.                                              -->
+<!--   has been "enhanced".  Various things happen in this pass,   -->
+<!--   such as assembling auxiliary files of content (WeBWorK      -->
+<!--   representations, private solutions, bibliographic items),   -->
+<!--   or automatically repairing deprecated constructions so that -->
+<!--   actual conversions can remove orphaned code.  This creates  -->
+<!--   the $assembly source tree.                                  -->
+<!-- * The two modal "version" templates are applied to decide if  -->
+<!--   certain elements are included or excluded from the source   -->
+<!--   tree.  This creates the $version source tree.               -->
+<!-- * $version will point to the root of the final enhanced       -->
+<!--   source file/tree/XML.                                       -->
 <!-- * $root will override (via this import) the similar variable  -->
 <!--   defined in -common.                                         -->
 <!-- * Derived variables, $docinfo and $document-root, will        -->
-<!--   reference the enhanced source.                              -->
+<!--   reference the final enhanced source tree ($version).        -->
 <!--                                                               -->
 <!-- Notes:                                                        -->
 <!--                                                               -->
-<!-- 1.  $original is needed here for context switches into the    -->
-<!--     authored source.                                          -->
+<!-- 1.  $original is needed for context switches back into the    -->
+<!--     original authored source, such as for determining the     -->
+<!--     location of the source in the file system.                -->
 <!-- 2.  Any coordination of automatically assigned identifiers    -->
 <!--     requires identical source, so even a simple extraction    -->
 <!--     stylesheet might require preparing identical source       -->
@@ -59,39 +72,70 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 3.  Overrides, customization of the assembly will typically   -->
 <!--     happen here, but can be converter-specific in some ways.  -->
 
+<!-- Timing debugging -->
+<xsl:param name="debug.assembly.time" select="'no'"/>
+<xsl:variable name="time-assembly" select="$debug.assembly.time = 'yes'"/>
 
 <!-- ############################## -->
 <!-- Source Assembly Infrastructure -->
 <!-- ############################## -->
 
-<!-- When building the duplicate, we have occasion -->
-<!-- to inspect the orginal in various places      -->
+<!-- When building duplicates, we have occasion -->
+<!-- to inspect the original in various places  -->
 <xsl:variable name="original" select="/mathbook|/pretext"/>
 
-<!-- This modal "assembly" template duplicates the source        -->
-<!-- exactly: elements, attributes, text, whitespace, comments,  -->
-<!-- everything. Various other templates may override this       -->
-<!-- template in various ways to create an enhanced source tree. -->
+<!-- These modal templates duplicate the source exactly for each -->
+<!-- pass: elements, attributes, text, whitespace, comments,     -->
+<!-- everything. Various other templates will override these     -->
+<!-- templates to create a new enhanced source tree.             -->
 <xsl:template match="node()|@*" mode="assembly">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="assembly"/>
     </xsl:copy>
 </xsl:template>
 
-<!-- This constructs the new tree as a (text) result tree      -->
-<!-- fragment and then we convert it into real XML nodes. It   -->
-<!-- has a root element as part of the node-set() manufacture. -->
-<xsl:variable name="duplicate-rtf">
+<xsl:template match="node()|@*" mode="version">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="version"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- These templates initiate and create several iterations of -->
+<!-- the source tree via modal templates.  Think of each as a  -->
+<!-- "pass" through the source. Generally this constructs the  -->
+<!-- new tree as a (text) result tree fragment and then we     -->
+<!-- convert it into real XML nodes. These "real" trees have a -->
+<!-- root element, as a result of the node-set() manufacture.  -->
+<xsl:variable name="assembly-rtf">
     <xsl:call-template name="assembly-warnings"/>
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: start assembly</xsl:message>
+    </xsl:if>
+    <!--  -->
     <xsl:apply-templates select="/" mode="assembly"/>
+    <!--  -->
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: end assembly</xsl:message>
+    </xsl:if>
+    <!--  -->
 </xsl:variable>
-<xsl:variable name="duplicate" select="exsl:node-set($duplicate-rtf)"/>
+<xsl:variable name="assembly" select="exsl:node-set($assembly-rtf)"/>
+
+<xsl:variable name="version-rtf">
+    <xsl:apply-templates select="$assembly" mode="version"/>
+    <!--  -->
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: end version</xsl:message>
+    </xsl:if>
+    <!--  -->
+</xsl:variable>
+<xsl:variable name="version" select="exsl:node-set($version-rtf)"/>
 
 <!-- -common defines a "$root" which is the overall named element. -->
 <!-- We override it here and then -common will define some derived -->
 <!-- variables based upon the $root                                -->
 <!-- NB: source repair below converts a /mathbook to a /pretext    -->
-<xsl:variable name="root" select="$duplicate/pretext" />
+<xsl:variable name="root" select="$version/pretext" />
 
 
 <!-- ######################## -->
@@ -134,6 +178,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- $webwork-representations-file is from publisher file      -->
 <xsl:variable name="b-doing-webwork-assembly" select="not($webwork-representations-file = '')"/>
 
+<!-- Normally we are not extracting PG. When we do, extract-pg.xsl -->
+<!-- will override the following with true()                       -->
+<xsl:variable name="b-extracting-pg" select="false()"/>
+
 <!-- Don't match on simple WeBWorK logo       -->
 <!-- Seed and possibly source attributes      -->
 <!-- Then authored?, pg?, and static children -->
@@ -145,6 +193,46 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
     <xsl:choose>
+        <xsl:when test="$b-extracting-pg">
+            <xsl:choose>
+                <xsl:when test="@copy">
+                    <!-- this will need to switch to a document-wide search     -->
+                    <!-- for a match on the @name value, once that attribute    -->
+                    <!-- is in place, since we do not yet have the              -->
+                    <!-- @name -> @xml:id  mapping until we are done assembling -->
+                    <xsl:variable name="target" select="id(@copy)"/>
+                    <xsl:choose>
+                        <xsl:when test="$target/statement|$target/stage">
+                            <xsl:copy>
+                                <xsl:attribute name="copied-from">
+                                    <xsl:value-of select="@copy"/>
+                                </xsl:attribute>
+                                <xsl:apply-templates select="@*[not(local-name(.) = 'copy')]" mode="assembly"/>
+                                <xsl:apply-templates select="$target/@*[not(local-name(.) = 'id')][not(local-name(.) = 'seed')]" mode="assembly"/>
+                                <!-- TODO: The following should scrub unique IDs as it continues down the tree. -->
+                                <!-- Perhaps with a param to the assembly modal template.                       -->
+                                <xsl:apply-templates select="$target/node()" mode="assembly"/>
+                            </xsl:copy>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <webwork>
+                                <statement>
+                                    <p>
+                                        A WeBWorK problem would appear here, but something about its <c>@copy</c> attribute is not right.
+                                        Search the runtime output for <q><c>PTX:ERROR</c></q>.
+                                    </p>
+                                </statement>
+                            </webwork>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:copy>
+                        <xsl:apply-templates select="node()|@*" mode="assembly"/>
+                    </xsl:copy>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
         <xsl:when test="$b-doing-webwork-assembly">
             <xsl:copy-of select="document($webwork-representations-file, /pretext)/webwork-representations/webwork-reps[@ww-id=$ww-id]" />
         </xsl:when>
@@ -206,6 +294,90 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- ############## -->
+<!-- Customizations -->
+<!-- ############## -->
+
+<!-- The "custom" element, with a @name in an auxiliary file,     -->
+<!-- and a @ref in a source file, allows for custom substitutions -->
+
+<!-- If the publisher variable  $customizations-file  is bad, -->
+<!-- then  document()  will raise an error.  The empty string -->
+<!-- (default) will not raise an error, so if not specified,  -->
+<!-- no problem.  But an empty string, and an attempted       -->
+<!-- access in the template *will* raise the error below.     -->
+<xsl:variable name="customizations" select="document($customizations-file, $original)"/>
+
+<!-- Set the key, nodes to be located are named -->
+<!-- "custom" within the file just accessed     -->
+<!-- For each one, @name is the search term     -->
+<!-- that will locate it: the key, the index    -->
+<xsl:key name="name-key" match="custom" use="@name"/>
+
+<xsl:template match="custom[@ref]" mode="assembly">
+    <!-- We need to get the @ref attribute now, due to a context shift -->
+    <!-- And the "custom" context also, for use in a location report   -->
+    <xsl:variable name="the-ref" select="string(@ref)"/>
+    <xsl:variable name="the-custom" select="."/>
+    <!-- Now the context shift to query the customizations -->
+    <xsl:for-each select="$customizations">
+        <xsl:variable name="the-lookup" select="key('name-key', $the-ref)"/>
+        <!-- This is an AWOL node, not empty content (which is allowed) -->
+        <xsl:if test="not($the-lookup)">
+            <xsl:text>[MISSING CUSTOM CONTENT HERE]</xsl:text>
+            <xsl:message>PTX:WARNING:   lookup for a "custom" element with @name set to "<xsl:value-of select="$the-ref"/>" has failed, while consulting the customization file "<xsl:value-of select="$customizations-file"/>".  Output will contain "[MISSING CUSTOM CONTENT HERE]" instead</xsl:message>
+            <xsl:apply-templates select="$the-custom" mode="location-report"/>
+        </xsl:if>
+        <!-- Copying the contents of "custom" via the "assembly" templates -->
+        <!-- will keep the "pi" namespace from appearing in palces, as it  -->
+        <!-- will with an "xsl:copy-of" on the same node set.  But it      -->
+        <!-- allows nested "custom" elements.                              -->
+        <!--                                                               -->
+        <!-- Do we want authors to potentially create cyclic references?   -->
+        <!-- A simple 2-cycle test failed quickly and obviously, so it     -->
+        <!-- will be caught quite easily, it seems.                        -->
+        <xsl:apply-templates select="$the-lookup/node()" mode="assembly"/>
+    </xsl:for-each>
+</xsl:template>
+
+
+<!-- ############# -->
+<!-- Conveniences  -->
+<!-- ############# -->
+
+<!-- Certain markup can be translated into more primitive versions using      -->
+<!-- existing markup, so we do a translation of certain forms into more       -->
+<!-- potentially verbose forms that an author might tire of doing repeatedly. -->
+<!-- See below for examples.  This is better than making a result-tree        -->
+<!-- fragment and applying templates, since all context is lost that way.     -->
+
+<!-- Visual URLs -->
+<!-- A great way to present a URL is with some clickable text.  But that    -->
+<!-- is useless in print.  And maybe a reader really would like to see the  -->
+<!-- actual URL.  So "@visual" is a version of the URL that is pleasing to -->
+<!-- look at, maybe just a TLD, no protocol (e.g "https://"), no "www."     -->
+<!-- if unnecessary, etc.  Here it becomes a footnote, and in monospace     -->
+<!-- ("code") font.  This is great in print, and is a knowl in HTML.        -->
+<!--                                                                        -->
+<!-- Advantages: however a conversion does footnotes, this will be the      -->
+<!-- right markup for that conversion.  Note that LaTeX pulls footnotes     -->
+<!-- out of "tcolorbox" environments, which is based on the *context*,      -->
+<!-- so a result-tree fragment implementation is doomed to fail.            -->
+
+<!-- N.B.  We considered interpreting the "no content" form here by simply  -->
+<!-- duplicating @href as the content (in a "c" element).  This would mean  -->
+<!-- just a single template/case in conversions.  But it would prevent      -->
+<!-- LaTeX from being able to use a \url{} construction which does sensible -->
+<!-- line-breaking. -->
+
+<xsl:template match="url[@visual]" mode="assembly">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*[not(local-name(.) = 'visual')]" mode="assembly"/>
+    </xsl:copy>
+    <fn><c><xsl:value-of select="@visual"/></c></fn>
+</xsl:template>
+
+
 <!-- ############# -->
 <!-- Source Repair -->
 <!-- ############# -->
@@ -221,120 +393,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </pretext>
 </xsl:template>
 
-<!-- ############### -->
-<!-- Source Warnings -->
-<!-- ############### -->
-
-<!-- A mistyped xref/@ref, or a replacement @xml:id, makes -->
-<!-- for a broken cross-reference.  So we warn at run-time -->
-<!-- and leave behind placeholder text.                    -->
-
-<!-- TODO: move in @first/@last compatibility and order checks -->
-<!-- TODO: perhaps parts of the following should be placed     -->
-<!-- in -common so the "author tools" stylesheet could use it, -->
-<!-- in addition to a more general source-checker stylesheet   -->
-
-<xsl:template match="xref[not(@provisional)]" mode="assembly">
-    <!-- commas to blanks, normalize spaces, -->
-    <!-- add trailing space for final split  -->
-    <xsl:variable name="normalized-ref-list">
-        <xsl:choose>
-            <xsl:when test="@ref">
-                <xsl:value-of select="concat(normalize-space(str:replace(@ref,',', ' ')), ' ')"/>
-            </xsl:when>
-            <!-- put @first and @last into a normalized two-part list -->
-            <xsl:when test="@first">
-                <xsl:value-of select="concat(normalize-space(@first), ' ', normalize-space(@last), ' ')"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:message>PTX:ERROR:   an "xref" lacks a @ref, @first, and @provisional; check your source or report as a potential bug</xsl:message>
-                <xsl:apply-templates select="." mode="location-report"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- variable will contain comma-separated list  -->
-    <!-- of @ref values that have no target, so if   -->
-    <!-- empty that is success                       -->
-    <xsl:variable name="bad-xrefs-in-list">
-        <xsl:apply-templates select="." mode="check-ref-list">
-            <xsl:with-param name="ref-list" select="$normalized-ref-list"/>
-        </xsl:apply-templates>
-    </xsl:variable>
-    <xsl:choose>
-        <!-- let assembly procede, do "xref" literally  -->
-        <xsl:when test="$bad-xrefs-in-list = ''">
-            <xsl:copy>
-                <xsl:apply-templates select="node()|@*" mode="assembly"/>
-            </xsl:copy>
-        </xsl:when>
-        <!-- error condition, so warn and leave  -->
-        <!-- placeholder text in enhanced source -->
-        <xsl:otherwise>
-            <xsl:variable name="error-list" select="substring($bad-xrefs-in-list, 1, string-length($bad-xrefs-in-list) - 2)"/>
-            <xsl:message>PTX:ERROR:   a cross-reference ("xref") uses references [<xsl:value-of select="$error-list"/>] that do not point to any target, or perhaps point to multiple targets.  Maybe you typed an @xml:id value wrong, maybe the target of the @xml:id is nonexistent, or maybe you temporarily removed the target from your source, or maybe an auxiliary file contains a duplicate.  Your output will contain some placeholder text that you will not want to distribute to your readers.</xsl:message>
-            <xsl:apply-templates select="." mode="location-report"/>
-            <!-- placeholder text -->
-            <c>
-                <xsl:text>[cross-reference to target(s) "</xsl:text>
-                <xsl:value-of select="$error-list"/>
-                <xsl:text>" missing or not unique]</xsl:text>
-            </c>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<xsl:template match="xref" mode="check-ref-list">
-    <xsl:param name="ref-list"/>
-    <xsl:choose>
-        <!-- no more to test, stop recursing -->
-        <xsl:when test="$ref-list = ''"/>
-        <!-- test/check initial ref of the list -->
-        <xsl:otherwise>
-            <xsl:variable name="initial" select="substring-before($ref-list, ' ')" />
-            <!-- Look up the ref in all relevant "documents":          -->
-            <!-- the original source, and private solution file.       -->
-            <!-- Count the number of successes, hoping it will be 1.   -->
-            <!-- Long-term, this check should be performed in a second -->
-            <!-- pass on a completely assembled source, so the id()    -->
-            <!-- function does not need to survey multiple documents.  -->
-            <xsl:variable name="hits">
-                <!-- always do a context shift to $original -->
-                <xsl:for-each select="$original">
-                    <xsl:if test="exsl:node-set(id($initial))">
-                        <xsl:text>X</xsl:text>
-                    </xsl:if>
-                </xsl:for-each>
-                <!-- optionally do a context shift to private solutions file -->
-                <xsl:if test="$b-private-solutions">
-                    <xsl:for-each select="$privatesolns">
-                        <xsl:if test="exsl:node-set(id($initial))">
-                            <xsl:text>X</xsl:text>
-                        </xsl:if>
-                    </xsl:for-each>
-                </xsl:if>
-            </xsl:variable>
-            <xsl:if test="not($hits = 'X')">
-                <!-- drop the failed lookup, plus a separator.  A nonempty -->
-                <!-- result for this template is indicative of a failure   -->
-                <!-- and the list can be reported in the error message     -->
-                <xsl:value-of select="$initial"/>
-                <xsl:text>, </xsl:text>
-            </xsl:if>
-            <xsl:apply-templates select="." mode="check-ref-list">
-                <xsl:with-param name="ref-list" select="substring-after($ref-list, ' ')"/>
-            </xsl:apply-templates>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- An xref/@provisional is a tool for authors so we just -->
-<!-- drop a reminder of some planned (forward) reference   -->
-<xsl:template match="xref[@provisional]" mode="assembly">
-    <c>
-        <xsl:text>[provisional cross-reference: </xsl:text>
-        <xsl:value-of select="@provisional"/>
-        <xsl:text>]</xsl:text>
-    </c>
+<!-- 2021-07-02 wrap notation/usage in "m" if not present -->
+<xsl:template match="notation/usage[not(m)]" mode="assembly">
+    <!-- duplicate "usage" w/ attributes, insert "m" as repair -->
+    <usage>
+        <xsl:apply-templates select="@*" mode="assembly"/>
+        <m>
+            <xsl:apply-templates select="node()|@*" mode="assembly"/>
+        </m>
+    </usage>
 </xsl:template>
 
 <!-- ######## -->
@@ -344,14 +411,42 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A place for warnings about missing files, etc -->
 <!-- and/or temporary/experimental features        -->
 <xsl:template name="assembly-warnings">
-    <xsl:if test="$original/*[not(self::docinfo)]//webwork/node() and not($b-doing-webwork-assembly)">
-        <xsl:message>PTX:WARNING: Your document has WeBworK exercises,</xsl:message>
+    <xsl:if test="$original/*[not(self::docinfo)]//webwork/node() and not($b-doing-webwork-assembly or $b-extracting-pg)">
+        <xsl:message>PTX:WARNING: Your document has WeBWorK exercises,</xsl:message>
         <xsl:message>             but your publisher file does not indicate the file</xsl:message>
         <xsl:message>             of problem representations created by a WeBWorK server.</xsl:message>
         <xsl:message>             Exercises will have a small informative message instead</xsl:message>
         <xsl:message>             of the intended content.  Not making this file available</xsl:message>
         <xsl:message>             can cause difficulties when parts of your document get</xsl:message>
         <xsl:message>             processed by external programs (e.g. graphics, previews)</xsl:message>
+    </xsl:if>
+    <xsl:if test="$b-extracting-pg">
+        <xsl:variable name="webwork-with-copy" select="$original//webwork[@copy]"/>
+        <xsl:for-each select="$webwork-with-copy">
+            <!-- this will need to switch to a document-wide search     -->
+            <!-- for a match on the @name value, once that attribute    -->
+            <!-- is in place, since we do not yet have the              -->
+            <!-- @name -> @xml:id  mapping until we are done assembling -->
+            <xsl:variable name="target" select="id(@copy)"/>
+            <xsl:choose>
+                <xsl:when test="$target/statement|$target/stage"/>
+                <xsl:when test="$target/@source">
+                    <xsl:message>PTX:ERROR:   A WeBWorK problem with copy="<xsl:value-of select="@copy"/>"</xsl:message>
+                    <xsl:message>             points to a WeBWorK problem that uses a source attribute</xsl:message>
+                    <xsl:message>             to generate a problem using a file that exists on the WeBWorK server.</xsl:message>
+                    <xsl:message>             Instead of using the copy attribute, use the same source attribute.</xsl:message>
+                </xsl:when>
+                <xsl:when test="not($target)">
+                    <xsl:message>PTX:ERROR:   A WeBWorK problem uses copy="<xsl:value-of select="@copy"/>",</xsl:message>
+                    <xsl:message>             but there is no WeBWorK problem with xml:id="<xsl:value-of select="@copy"/>".</xsl:message>
+                    <xsl:message>             Is it a typo? Is the target WeBWorK problem currently commented out in source?</xsl:message>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR:   A WeBWorK problem with copy="<xsl:value-of select="@copy"/>"</xsl:message>
+                    <xsl:message>             points to a WeBWorK problem that does not have a statement or stage.</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:for-each>
     </xsl:if>
 </xsl:template>
 

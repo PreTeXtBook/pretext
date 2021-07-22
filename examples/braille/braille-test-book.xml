@@ -189,7 +189,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <p><pretext/> has many chunks of text with a heading and a number.  I call them blocks, others call them environments.  They qualify as the <q>boxed material</q> of the BANA transcription guide.  Experiments here are the <pretext/> <q>definition</q> and <q>example</q>.  Theorems are more complicated, since they have associated proofs.  We will start simple and iterate to more types and more complicated structures.</p>
 
-            <p><c>liblouis</c> allows giving the characters to use for the top and bottom line, but is a bit vague.  BANA transcription guide clearly says dot patterns 2356 and 1245 for top and bottom respectively.  In 6-dot braille these appear to be the characters seven and capital-g, which is what I have put into the <c>liblouis</c> configuration.  But the BRF file seems to end up with the characters six and open-square-bracket.  Al reports that when embossed these yield dot patterns 246 and 235 (possibly reversed), consistent with the six and open-square-bracket in teh BRF file.  I've tried many things, but cannot seem to configure <c>liblouis</c> to generate the seven and capital-G, nor can I see any rhyme nor reason to the results I get when experimenting.</p>
+            <p><c>liblouis</c> allows giving the characters to use for the top and bottom line, but is a bit vague.  BANA transcription guide clearly says dot patterns 2356 and 1245 for top and bottom respectively.  In 6-dot braille these appear to be the characters seven and capital-g, which is what I have put into the <c>liblouis</c> configuration.  But the BRF file seems to end up with the characters six and open-square-bracket.  Al reports that when embossed these yield dot patterns 246 and 235 (possibly reversed), consistent with the six and open-square-bracket in the BRF file.  I've tried many things, but cannot seem to configure <c>liblouis</c> to generate the seven and capital-G, nor can I see any rhyme nor reason to the results I get when experimenting.</p>
 
             <p>BANA is pretty clear about <q>boxed material</q>, and <c>liblouis</c> supports a style option called <q>boxline</q>.  It'll be contrary to BANA, and technically more unnatural to try to just use inline markers.  Yes, two blank lines, and two boxlines, will use more paper, but this sort of material is a key feature of PreTeXt material.  So for now, I'd lobby for following the BANA and liblouis recommendations.  (Yes, I know the paper is expensive!)  Al has agreed to this.</p>
 
@@ -301,7 +301,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </li>
             </dl></p>
 
-            <p>TODO: list items structured with paragraphs, nested lists.</p>
+            <p>A <pretext/> ordered list where most of the list items are authored with structure, meaning paragraphs and similar blocks that are peers.<ol>
+                <li>
+                    <p>First item, first paragraph.  And a nonsense sentence so we wrap to a second braille line.</p>
+                    <p>First item, second paragraph.  And a nonsense sentence so we wrap to a second braille line.</p>
+                </li>
+                <li>
+                    <p>Second item, first paragraph.  All by itself, no more structure. With some display math that the HTML conversion will isolate and provide a "continuation paragraph".
+                        <me>a^2+b^2=c^2</me>
+                    And a nonsense sentence so there is something after the math.</p>
+                </li>
+                <li>Third item, but now totally unstructured, just to provide a mix within the list.</li>
+            </ol></p>
+
+
+            <p>TODO: list items structured with more than paragraphs, nested lists.</p>
 
         </chapter>
 
@@ -337,6 +351,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </row>
                 </tabular>
             </table>
+        </chapter>
+
+        <chapter>
+            <title>Figures</title>
+
+            <p>Figures should create some usable information, but also create a blank page (for embossable output) that will allow placement of a separately generated tactile graphic.</p>
+
+            <figure>
+                <caption>A test figure with an image</caption>
+                <image source="foo.jpg">
+                    <description>A picture of a pretty flower in a field of grass all by itself</description>
+                </image>
+            </figure>
+
+            <p>And some text trailing the figure.</p>
         </chapter>
 
         <chapter>

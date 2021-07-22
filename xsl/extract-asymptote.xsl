@@ -42,7 +42,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Asymptote graphics to standalone file           -->
 <!-- Prepend document's macros, otherwise no changes -->
-<xsl:template match="image/asymptote" mode="extraction">
+<xsl:template match="asymptote" mode="extraction">
     <xsl:variable name="filebase">
         <xsl:apply-templates select=".." mode="visible-id" />
     </xsl:variable>
@@ -61,26 +61,5 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="."/>
     </exsl:document>
  </xsl:template>
-
-<!-- ################################## -->
-<!-- Deprecated Graphics Code Templates -->
-<!-- ################################## -->
-<!-- 2015/02/08: Deprecated, still functional but not maintained -->
-<!-- 2020/10/16: remove "image/sageplot" parent in real          -->
-<!-- template, once this one is *really* removed                 -->
-<xsl:template match="asymptote" mode="extraction">
-    <xsl:variable name="filebase">
-        <xsl:apply-templates select="." mode="visible-id" />
-    </xsl:variable>
-    <exsl:document href="{$filebase}.asy" method="text">
-        <xsl:text>texpreamble("&#xa;</xsl:text>
-        <xsl:value-of select="$latex-macros" />
-        <xsl:text>");&#xa;&#xa;</xsl:text>
-        <xsl:value-of select="."/>
-    </exsl:document>
- </xsl:template>
-<!-- ################################## -->
-<!-- Deprecated Graphics Code Templates -->
-<!-- ################################## -->
 
 </xsl:stylesheet>

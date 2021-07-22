@@ -121,6 +121,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="chapter[1]|article/section[1]">
     <xsl:apply-templates select="$document-root" mode="solutions-generator">
         <xsl:with-param name="purpose" select="'solutionmanual'" />
+        <xsl:with-param name="admit" select="'all'" />
         <xsl:with-param name="b-inline-statement"     select="$b-has-inline-statement" />
         <xsl:with-param name="b-inline-hint"          select="$b-has-inline-hint"  />
         <xsl:with-param name="b-inline-answer"        select="$b-has-inline-answer"  />

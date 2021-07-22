@@ -49,12 +49,17 @@
         </li>
 
         <li>
-            <title>Create Space</title>
-            <idx>CreateSpace</idx>
+            <title>Kindle Direct Publishing</title>
+            <idx>Kindle Direct Publishing</idx>
             <idx>Amazon.com</idx>
-            <p>This company is owned by Amazon.com.  They manufacture and distribute serious books, in addition to music and film.  Distribution through Amazon is nearly automatic.  There is also <q>Expanded Distribution</q>, which starts to look more like Ingram (next).  (2017-11-25)</p>
+
+            <p>Until early 2018, Kindle Direct Publishing (<init>KDP</init>) was a service known as CreateSpace.  Some of the information below refers to this predecessor.  (2021-04-21).</p>
+
+            <p>This company is owned by Amazon.com.  They manufacture and distribute serious books, in addition to music and film.  Distribution through Amazon is nearly automatic.  There is also <q>Expanded Distribution</q>, which starts to look more like Ingram (next).  If royalties are small, using direct deposit might be the most convenient (international sales all get converted to dollars for authors in the US).  (2017-11-25)</p>
 
             <p>CreateSpace attempts to make sure you have the rights to your content.  So if they find your book freely available on the Internet, their <q>Content Validation Request Team</q> becomes suspicious and investigates.  This has caused a few authors a few headaches and delays in making their book available for sale, though all have been successful eventually.  (2018-03-06)</p>
+
+            <p>If you want to offer your project electronically for no cost, you may need to do an end run.  We have a report that you can put your project on <init>KDP</init> for a low price (e.g.<nbsp/>$1), then offer it on Apple's similar service for free, and then exercise a price match guarantee back on <init>KDP</init>.  Reports on this technique encouraged.  (2021-04-21)</p>
         </li>
 
         <li>
@@ -63,6 +68,7 @@
             <idx>IngramSpark</idx>
             <idx>Ingram</idx>
             <p>IngramSpark (formerly Lightning Source) is a division of Ingram, which is a very large printer, also providing services to major publishers.  Creating an account is not trivial, and you need to provide your own <init>ISBN</init> number.  In return, your book is available at Amazon.com and many other online bookstores automatically, and is in many ways indistinguishable from offerings of large commercial publishers.  There are also options for international distribution.  You can also control settings for discounts and returns.  (2018-03-06)</p>
+            <p>Current startup pricing for publishers is forty-nine dollars for either a print book, or print and e-book together.  A recent change seems to be that, like <init>KDP</init>, they will now provide a free <init>ISBN</init> if you don't have one; however, the free <init>ISBN</init> is only usable for as long as you continue to use IngramSpark. (2021-07-21)</p>
         </li>
 
         <li>

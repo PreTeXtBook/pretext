@@ -183,7 +183,7 @@
                 }
             BookFrontMatter = element frontmatter {
                     MetaDataTitleOptional,
-                    TitlePage?,
+                    TitlePage,
                     ColophonFront?,
                     Biography*,
                     Dedication?,
@@ -353,6 +353,7 @@
                     attribute inline {text}?,
                     attribute divisional {text}?,
                     attribute project {text}?,
+                    attribute admit {"all"|"odd"|"even"}?,
                     IntroductionDivision?,
                     ConclusionDivision?
                 }
@@ -600,7 +601,7 @@
                 element project {ProjectLike}
             Task =
                 element task {
-                    MetaDataTarget,
+                    MetaDataTitleOptional,
                     (
                         BlockStatement+ |
                         (Statement, Hint*, Answer*, Solution*) |
@@ -628,7 +629,7 @@
             
             AsideLike =
                 MetaDataTitleOptional,
-                BlockStatement+
+                BlockText+
             Aside =
                 element aside {AsideLike} |
                 element biographical {AsideLike} |
@@ -714,7 +715,6 @@
                         Poem |
                         Tabular |
                         Image |
-                        ImageWW |
                         Video |
                         Program |
                         Console |
@@ -763,7 +763,12 @@
             ImageWW =
                 element image {
                     attribute pg-name {text}?,
-                    element description {(TextShort | WWVariable)*}?
+                    attribute width {text}?,
+                    element description {(TextShort | WWVariable)*}?,
+                    element latex-image {
+                        attribute syntax {"PGtikz"},
+                        text
+                    }?
                 }
             
             BorderThickness = "none" | "minor" | "medium" | "major"
@@ -848,15 +853,19 @@
                     attribute end {xsd:integer}?,
                     attribute play-at {"embed" | "popout" | "select"}?,
                     attribute preview {"default" | "generic" | text}?,
-                    (AttributesSourceFile | AttributesYouTube |
-                     AttributesYouTubePlaylist)
+                    (AttributesSourceFile | AttributesNetwork | AttributesYouTube |
+                     AttributesYouTubePlaylist | AttributesVimeo)
                 }
             AttributesSourceFile =
                 attribute source {text}
+            AttributesNetwork =
+                attribute href {text}
             AttributesYouTube =
                 attribute youtube {text}
             AttributesYouTubePlaylist =
                 attribute youtubeplaylist {text}
+            AttributesVimeo =
+                attribute vimeo {text}
             
             ExerciseBody =
                 (
@@ -959,7 +968,9 @@
                 }
             WebWorkAuthored =
                 element webwork {
+                    UniqueID?,
                     attribute seed {xsd:integer}?,
+                    attribute copy {text}?,
                     element description {
                         (
                             TextSimple |
@@ -971,6 +982,8 @@
                     (
                         (StatementExerciseWW, HintWW?, SolutionWW?)
                     |
+                        (IntroductionText?, TaskWW+, ConclusionText?)
+                    |
                         element stage {
                             Title?,
                             StatementExerciseWW,
@@ -979,21 +992,29 @@
                         }+
                     )
                 }
+            BlockStatementWW =
+                        Paragraph |
+                        Preformatted |
+                        Tabular |
+                        ImageWW
             StatementExerciseWW =
                 element statement {
+                    (BlockStatementWW|WWInstruction)+
+                }
+            TaskWW =
+                element task {
+                    MetaDataTitleOptional,
                     (
-                        Paragraph |
-                        WWInstruction |
-                        Preformatted |
-                        SideBySideNoCaption
-                    )+
+                        (StatementExerciseWW, HintWW?, SolutionWW?) |
+                        (IntroductionText?, TaskWW+, ConclusionText?)
+                    )
                 }
             WWMacros =
                 element pg-macros {
                     element macro-file {text}+
                 }
             WWVariable =
-                ## The WeBWorK "var" element appears in the RELAX-NG schema as a child of many elements, but almost always as a descendant of a "p" element or a "cell" element.  As an element that is only relevant for a WeBWorK problem, occurences of "var" must be within a "webwork" element.  A Schematron rule will check on these two situations.
+                ## The WeBWorK "var" element appears in the RELAX-NG schema as a child of many elements, but almost always as a descendant of a "p" element or a "cell" element.  As an element that is only relevant for a WeBWorK problem, occurrences of "var" must be within a "webwork" element.  A Schematron rule will check on these two situations.
                 element var {
                     (attribute name {text},
                     attribute evaluator {text}?,
@@ -1013,19 +1034,11 @@
                 element instruction {TextShort}
             HintWW =
                 element hint {
-                    (
-                        Paragraph |
-                        Preformatted |
-                        SideBySideNoCaption
-                    )+
+                    (BlockStatementWW)+
                 }
             SolutionWW =
                 element solution {
-                    (
-                        Paragraph |
-                        Preformatted |
-                        SideBySideNoCaption
-                    )+
+                    (BlockStatementWW)+
                 }
             
             Fragment =
@@ -1232,6 +1245,7 @@
             Url =
                 element url {
                     attribute href {text},
+                    attribute visual {text}?,
                     TextShort
                 }
             Xref =
@@ -1247,7 +1261,7 @@
                 }
             Notation =
                 element notation {
-                    element usage {text},
+                    element usage {MathInline},
                     element description {
                         TextShort
                     }
@@ -1493,7 +1507,10 @@
                     element package {text}*
                 }
             Configuration |=
-                element latex-image-preamble {text}
+                element latex-image-preamble {
+                    attribute syntax {"PGtikz"}?,
+                    text
+                }
             Configuration |=
                 element asymptote-preamble {text}
             
