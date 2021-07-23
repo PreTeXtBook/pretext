@@ -123,7 +123,6 @@
 
 <!-- Cover image filename, once -->
 <xsl:variable name="cover-filename">
-    <xsl:value-of select="$external-directory"/>
     <xsl:value-of select="$publication/epub/@cover"/>
 </xsl:variable>
 
