@@ -10467,8 +10467,27 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <xsl:template name="banner-warning">
     <xsl:param name="warning" />
     <xsl:message>********************************************************************************</xsl:message>
-        <xsl:message><xsl:value-of select="$warning" /></xsl:message>
+    <xsl:call-template name="warning-line-by-line">
+        <xsl:with-param name="warning" select="$warning" />
+    </xsl:call-template>
     <xsl:message>********************************************************************************</xsl:message>
+</xsl:template>
+
+<xsl:template name="warning-line-by-line">
+    <xsl:param name="warning" />
+    <xsl:variable name="after" select="substring-before($warning,'&#xa;')"/>
+    <xsl:choose>
+        <!-- no line breaks in warning, just print it -->
+        <xsl:when test="substring-before($warning,'&#xa;') = ''">
+            <xsl:message><xsl:value-of select="$warning" /></xsl:message>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message><xsl:value-of select="substring-before($warning,'&#xa;')" /></xsl:message>
+            <xsl:call-template name="warning-line-by-line">
+                <xsl:with-param name="warning" select="substring-after($warning,'&#xa;')" />
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- We search up the tree, looking for something -->
