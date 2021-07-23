@@ -497,7 +497,7 @@
 <!-- recurse into contents for image files, etc    -->
 <!-- See "Core Media Type Resources"               -->
 <!-- Add to spine identically                      -->
-<xsl:template match="frontmatter|colophon|acknowledgement|preface|biography|chapter|chapter/conclusion|chapter/outcomes[preceding-sibling::section]|appendix|index|section|exercises|references|solutions" mode="manifest">
+<xsl:template match="frontmatter|colophon|biography|dedication|acknowledgement|preface|chapter|chapter/conclusion|chapter/outcomes[preceding-sibling::section]|appendix|index|section|exercises|references|solutions" mode="manifest">
     <!-- Annotate manifest entries -->
     <xsl:comment>
         <xsl:apply-templates select="." mode="long-name" />
@@ -608,7 +608,7 @@
 <!-- Specialized divisions will only become files in the manifest at     -->
 <!-- chunk level 2, in other words, peers of chapters or sections        -->
 <!-- (book or chapter/appendix as parent, respectively)                  -->
-<xsl:template match="frontmatter|colophon|acknowledgement|preface|biography|chapter|appendix|index|section|exercises[parent::book|parent::chapter|parent::appendix]|reading-questions[parent::book|parent::chapter|parent::appendix]|references[parent::book|parent::chapter|parent::appendix]|solutions[parent::book|parent::chapter|parent::appendix]|glossary[parent::book|parent::chapter|parent::appendix]|conclusion[parent::chapter]|outcomes[preceding-sibling::section]" mode="spine">
+<xsl:template match="frontmatter|colophon|acknowledgement|biography|dedication|preface|chapter|appendix|index|section|exercises[parent::book|parent::chapter|parent::appendix]|reading-questions[parent::book|parent::chapter|parent::appendix]|references[parent::book|parent::chapter|parent::appendix]|solutions[parent::book|parent::chapter|parent::appendix]|glossary[parent::book|parent::chapter|parent::appendix]|conclusion[parent::chapter]|outcomes[preceding-sibling::section]" mode="spine">
     <xsl:element name="itemref" xmlns="http://www.idpf.org/2007/opf">
         <xsl:attribute name="idref">
             <xsl:apply-templates select="." mode="html-id" />
