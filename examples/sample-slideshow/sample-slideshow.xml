@@ -73,8 +73,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 
             <slide>
-                <title>Ordered Lists, With Pauses</title>
+                <title>Ordered Lists, With Features</title>
 
+                <p>These are enumerated with capital letters.</p>
+
+                <p><ol label="A">
+                    <li>Two conversions: print-on-demand, electronic <init>PDF</init></li>
+                    <li>Extensive use of the <c>tcolorbox</c> package (CSS-like)</li>
+                    <li>Evolving styling/themes (Andrew Rechnitzer, David Farmer)</li>
+                </ol></p>
+
+                <p>These are inline</p>
+
+                <p><ol label="i" cols="2">
+                    <li>print-on-demand</li>
+                    <li>electronic <init>PDF</init></li>
+                </ol></p>
+
+                <p>And these have pauses.</p>
                 <p><ol pause="yes">
                     <li>Two conversions: print-on-demand, electronic <init>PDF</init></li>
                     <li>Extensive use of the <c>tcolorbox</c> package (CSS-like)</li>
