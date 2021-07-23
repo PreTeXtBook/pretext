@@ -1784,6 +1784,40 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="b-asymptote-links" select="$asymptote-links = 'yes'"/>
 
+<!-- Add another boolean to turn on links in html -->
+<!-- so reader can click to open a larger version -->
+
+<xsl:variable name="asymptote-html-links">
+    <xsl:choose>
+        <!-- proceed when requested, so long as there is a base URL -->
+        <xsl:when test="$publication/html/asymptote/@links = 'yes'">
+            <xsl:choose>
+                <!-- fail when no base URL is given -->
+                <xsl:when test="$baseurl = ''">
+                    <xsl:message>PTX WARNING: baseurl must be set in publisher file to enable links from Asymptote images</xsl:message>
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>yes</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:when test="$publication/html/asymptote/@links = 'no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- set, but not correct, so inform and use default -->
+        <xsl:when test="$publication/html/asymptote/@links">
+            <xsl:message>PTX WARNING: HTML links to Asymptote publisher file should be "yes" (adds link below image) or "no" (no links), not "<xsl:value-of select="$publication/latex/asymptote/@links"/>". Proceeding with default value: "no" (no links)</xsl:message>
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- unset, use the default, which is "no" since -->
+        <!-- it also needs action to set base URL        -->
+        <xsl:otherwise>
+            <xsl:text>no</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-asymptote-html-links" select="$asymptote-html-links = 'yes'"/>
 
 <!-- ########################### -->
 <!-- Reveal.js Slideshow Options -->
