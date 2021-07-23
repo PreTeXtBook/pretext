@@ -3328,7 +3328,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&EXAMPLE-LIKE;" mode="is-hidden">
     <xsl:value-of select="$knowl-example = 'yes'" />
     <!-- Preserving a way to not knowl anything in a worksheet -->
-    <!-- 
+    <!--
     <xsl:choose>
         <xsl:when test="ancestor::worksheet">
             <xsl:value-of select="false()"/>
@@ -6789,7 +6789,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <div class="hidden-content">
                 <!-- Hidden content in here                   -->
                 <!-- Turn autoplay on, else two clicks needed -->
-                <iframe id="{$hid}" class="video" 
+                <iframe id="{$hid}" class="video"
                     allowfullscreen="" src="{$source-url-autoplay-on}">
                     <xsl:apply-templates select="." mode="video-iframe-attributes">
                         <xsl:with-param name="autoplay" select="'true'"/>
