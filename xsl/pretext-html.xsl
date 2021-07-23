@@ -5824,6 +5824,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="archive">
         <xsl:with-param name="base-pathname" select="$base-pathname" />
     </xsl:apply-templates>
+    <!-- possibly provide link to full size image -->
+    <!-- need to set html/asymptote@links="yes" in publisher file to enable -->
+    <xsl:if test="$b-asymptote-html-links">
+      <xsl:variable name="image-html-url">
+          <xsl:value-of select="$baseurl"/>
+          <xsl:value-of select="$html-filename"/>
+      </xsl:variable>
+      <div style="text-align: center;">
+        <a href="{$image-html-url}">Click to view full-sized image</a>
+      </div>
+    </xsl:if>
 </xsl:template>
 
 <!-- A named template creates the infrastructure for an SVG image -->
