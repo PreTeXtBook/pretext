@@ -266,6 +266,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <p>But this is still visible from the outset.</p>
             </slide>
 
+            <slide>
+                <title>Images</title>
+
+                <p>External <c>image</c>s may be added via URL using the <c>@href</c> attribute.</p>
+
+                <figure>
+                    <image href="https://via.placeholder.com/1200x800"/>
+                    <caption>A big image scaled to cap vertical size (click to expand).</caption>
+                </figure>
+            </slide>
+
         </section>
     </slideshow>
 </pretext>
