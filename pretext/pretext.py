@@ -1450,10 +1450,10 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     shutil.copy2(cover_source, cover_dest)
 
     # position image files
-    images = packaging_tree.xpath('/packaging/images/image/@filename')
+    images = packaging_tree.xpath('/packaging/images/image[@filename]')
     for im in images:
-        source = os.path.join(source_dir, str(im))
-        dest = os.path.join(xhtml_dir, str(im))
+        source = os.path.join(source_dir, str(im.get('sourcename')))
+        dest = os.path.join(xhtml_dir, str(im.get('filename')))
         os.makedirs(os.path.dirname(dest), exist_ok=True)
         shutil.copy2(source, dest)
 
