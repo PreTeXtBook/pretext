@@ -78,7 +78,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <chapter xml:id="nonsense-chapter">
             <title>Two</title>
             <introduction>
-                <p>This is the introduction to the chapter.</p>
+                <p>This is the introduction to the chapter. We put
+		some math <me>\int_a^b f(t)\, dt</me> in here for
+		validation purposes.</p>
             </introduction>
             <section>
                 <title>A silly section.</title>
@@ -171,9 +173,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </outcomes>
         </chapter>
         <chapter>
-            <title>Some Images</title>
+            <title>Some Images <m>ax^2+bx+c=0</m></title>
+            <shorttitle>Some Imagex ax^2+bx+c=0</shorttitle>
+	    <objectives>
+		<ul>
+		    <li>To discuss formats for graphics</li>
+		    <li>To stress test the EPUB conversion with
+		    <m>y=f'(x)</m> math in here</li>
+		</ul>
+	    </objectives>
             <section>
-                <title>Graphics formats</title>
+                <title>Graphics formats <m>f'(x)</m></title>
+		<shorttitle>Graphics formats f'(x)</shorttitle>
                 <p><idx>Portable Network Graphics (PNG)</idx><idx><h>PNG</h><see>Portable Network Graphics</see></idx>A Portable Network Graphics (PNG) image created externally in Sage and then included directly here.</p>
                 <figure xml:id="figure-cubic-polynomial">
                     <caption>A cubic polynomial and its derivative</caption>
@@ -189,12 +200,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <caption>A Sage multigraph of a sentence</caption>
                     <image xml:id="sageplot-sentence-multigraph" width="50%">
                         <sageplot>
-                stnc = 'I am a cool multiedge graph with loops'
-                g = DiGraph({}, loops=True, multiedges=True)
-                for a,b in [(stnc[i], stnc[i+1]) for i in xrange(len(stnc)-1)]:
-                    g.add_edge(a, b, b)
-                g.plot(color_by_label=True, edge_style='solid', figsize=(8,8))
-            </sageplot>
+                            stnc = 'I am a cool multiedge graph with loops'
+                            g = DiGraph({}, loops=True, multiedges=True)
+                            for a,b in [(stnc[i], stnc[i+1]) for i in xrange(len(stnc)-1)]:
+                                g.add_edge(a, b, b)
+                            g.plot(color_by_label=True, edge_style='solid', figsize=(8,8))
+                        </sageplot>
                     </image>
                 </figure>
                 <!-- http://www.texample.net/media/tikz/examples/TEX/noise-shaper.tex -->
@@ -278,8 +289,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         \node at (-0.5,1) [above=5mm, right=0mm] {\textsc{first-order noise shaper}};
                         \draw [color=gray,thick](-0.5,-9) rectangle (12.5,-5);
                         \node at (-0.5,-9) [below=5mm, right=0mm] {\textsc{second-order noise shaper}};
-            \end{tikzpicture}
-            ]]></latex-image>
+                        \end{tikzpicture}
+                    ]]></latex-image>
                     </image>
                 </figure>
             </section>
@@ -305,7 +316,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </section>
             <conclusion xml:id="concl-followed-by-outcomes">
                 <p>This is a <tag>conclusion</tag>. We will follow it with
-        an <tag>outcomes</tag>.</p>
+            an <tag>outcomes</tag>.</p>
             </conclusion>
             <outcomes>
                 <title>The really awesome things we've done!</title>
@@ -319,10 +330,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <title>Maybe the license</title>
                 <p>Lots of books written in <pretext/> include the terms of their license in an appendix, so let's use this as a test.</p>
             </appendix>
+            <appendix xml:id="figure-list">
+                <title>List of Figures</title>
+                <list-of elements="figure" divisions="chapter subsection" empty="no" />
+	    </appendix>
             <index>
                 <title>Index</title>
                 <index-list/>
             </index>
+	    <colophon>
+		<blockquote><p>This document was authored in <pretext
+		/> to stress test conversion to
+		<init>EPUB</init>. Please do not judge its contents,
+		which randomly has some <m>y=e^{ax+b}</m> math in the
+		rear colophon.</p></blockquote>
+	    </colophon>
         </backmatter>
     </book>
 </pretext>
