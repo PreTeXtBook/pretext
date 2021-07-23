@@ -92,6 +92,7 @@
 <!-- XHTML files as output -->
 <xsl:variable name="file-extension" select="'.xhtml'" />
 
+<xsl:param name="tmpdir"/>
 <xsl:param name="mathfile"/>
 <xsl:variable name="math-repr" select="document($mathfile)/pi:math-representations"/>
 
@@ -192,9 +193,9 @@
     <!-- Following should use $root or $document-root as defined -->
     <!-- by the "assembly" template.  Checked 2020-07-16.        -->
     <xsl:call-template name="setup" />
+    <xsl:apply-templates select="$root"/>
     <xsl:call-template name="package-document" />
     <xsl:call-template name="packaging-info"/>
-    <xsl:apply-templates select="$root"/>
 </xsl:template>
 
 <!-- First, we use the frontmatter element to trigger various necessary files     -->
@@ -305,7 +306,6 @@
         <xsl:apply-templates select="." mode="section-header" />
         <xsl:apply-templates select="author|objectives|introduction|titlepage|abstract" />
         <!-- deleted "nav" and summary links here -->
-        <!-- "conclusion" is being missed here    -->
     </section>
     <xsl:if test="conclusion">
         <xsl:apply-templates select="conclusion" mode="file-wrap">
@@ -450,9 +450,48 @@
             </xsl:otherwise>
         </xsl:choose>
         <item id="cover-page" href="{$xhtml-dir}/cover-page.xhtml" media-type="application/xhtml+xml"/>
-        <item id="table-contents" href="{$xhtml-dir}/table-contents.xhtml" properties="nav" media-type="application/xhtml+xml"/>
-        <item id="cover-image" href="{$xhtml-dir}/{$cover-filename}" properties="cover-image" media-type="image/png"/>
-
+        <item id="table-contents"
+              href="{$xhtml-dir}/table-contents.xhtml"
+              media-type="application/xhtml+xml">
+            <!-- TODO: If the TOC expands to include more than -->
+            <!-- chapter and appendix, this will need revision. -->
+            <xsl:attribute name="properties">
+                <xsl:choose>
+                    <xsl:when test="$document-root//chapter/title/m or
+                                    $document-root//appendix/title/m">
+                        <xsl:choose>
+                            <xsl:when test="$math.format = 'mml' or
+                                            $math.format = 'kindle'">
+                                <xsl:text>nav mathml</xsl:text>
+                            </xsl:when>
+                            <xsl:when test="$math.format = 'svg'">
+                                <xsl:text>nav svg</xsl:text>
+                            </xsl:when>
+                        </xsl:choose>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>nav</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
+        </item>
+        <item id="cover-image" href="{$xhtml-dir}/{$cover-filename}" properties="cover-image">
+            <xsl:attribute name="media-type">
+                <xsl:variable name="extension">
+                    <xsl:call-template name="file-extension">
+                        <xsl:with-param name="filename" select="$cover-filename" />
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:choose>
+                    <xsl:when test="$extension='png'">
+                        <xsl:text>image/png</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="$extension='jpeg' or $extension='jpg'">
+                        <xsl:text>image/jpeg</xsl:text>
+                    </xsl:when>
+                </xsl:choose>
+            </xsl:attribute>
+        </item>
         <!-- cruise found objects, including comments we generate to help debug       -->
         <!-- NB: * could be just "item", but we generally want all elements           -->
         <!-- Strategy: compare @href of each candidate item with the @href of each    -->
@@ -514,46 +553,26 @@
         <!-- Processing with page2svg makes it appear SVG images exist -->
         <!-- Set properties="svg" or properties="mathml" when a -->
         <!-- file contains math in one of thse formats. -->
-        <xsl:variable name="is-structured">
-            <xsl:apply-templates select="." mode="is-structured-division"/>
-        </xsl:variable>
-        <xsl:variable name="b-is-structured" select="$is-structured = 'true'"/>
-
+        <!-- There are simply too many edge cases to do this -->
+        <!-- based on document structure alone, so read the actual -->
+        <!-- XHTML files we've already written and look for svg -->
+        <!-- or math tags in them. -->
         <xsl:variable name="has-math">
+            <xsl:variable name="contents-filename">
+                <xsl:value-of select="$tmpdir" />
+                <xsl:text>/</xsl:text>
+                <xsl:value-of select="$content-dir" />
+                <xsl:text>/</xsl:text>
+                <xsl:value-of select="$xhtml-dir" />
+                <xsl:text>/</xsl:text>
+                <xsl:apply-templates select="."
+                                     mode="containing-filename"/>
+            </xsl:variable>
+            <xsl:variable name="filedata"
+                          select="document($contents-filename)"/>
             <xsl:choose>
-                <xsl:when test="self::frontmatter">
-                    <xsl:text>false</xsl:text>
-                </xsl:when>
-                <!-- TODO: Condition more on exercises in case -->
-                <!-- answer/solution is suppressed. -->
-                <xsl:when test="../section or ../preface or ../exercises">
-                    <xsl:if test=".//m or .//me or .//men or .//md or .//mdn">
-                        <xsl:text>true</xsl:text>
-                    </xsl:if>
-                </xsl:when>
-                <xsl:when test=".//notation-list">
+                <xsl:when test="$filedata//svg:svg|$filedata//math:math">
                     <xsl:text>true</xsl:text>
-                </xsl:when>
-                <xsl:when test="index-list and $document-root//idx//m">
-                    <xsl:text>true</xsl:text>
-                </xsl:when>
-                <xsl:when test="../chapter or ../appendix">
-                    <xsl:choose>
-                        <xsl:when test="$b-is-structured">
-                            <xsl:if test="chapter/title|objectives|introduction//m or
-                                          chapter/title|objectives|introduction//me or
-                                          chapter/title|objectives|introduction//men or
-                                          chapter/title|objectives|introduction//md or
-                                          chapter/title|objectives|introduction//mdn">
-                                <xsl:text>true</xsl:text>
-                            </xsl:if>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:if test=".//m or .//me or .//men or .//md or .//mdn">
-                                <xsl:text>true</xsl:text>
-                            </xsl:if>
-                        </xsl:otherwise>
-                    </xsl:choose>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:text>false</xsl:text>

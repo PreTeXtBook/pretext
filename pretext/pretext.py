@@ -1388,6 +1388,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     # the EPUB production is parmameterized by how math is produced
     params['mathfile'] = math_representations
     params['math.format'] = math_format
+    params['tmpdir'] = tmp_dir
     if pub_file:
         params['publisher'] = pub_file
     xsltproc(epub_xslt, xml_source, packaging_file, tmp_dir, {**params, **stringparams})
