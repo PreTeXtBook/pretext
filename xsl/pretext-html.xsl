@@ -8893,11 +8893,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>;&#xa;</xsl:text>
         </script>
     </xsl:if>
-    <xsl:if test="$debug.editable = 'yes'">
-        <script>
-            <xsl:text>var online_editable=true;</xsl:text>
-        </script>
-    </xsl:if>
 </xsl:template>
 
 <xsl:template name="aim-login-footer">
