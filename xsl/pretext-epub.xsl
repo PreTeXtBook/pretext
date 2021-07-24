@@ -1224,8 +1224,8 @@ width: 100%
                 </xsl:when>
             </xsl:choose>
         </xsl:attribute>
-        <xsl:if test="$context = 'me' or $context = 'men'
-                      or $context = 'md' or $context = 'mdn'">
+        <!-- Can only "xref" to an "men" or an "md/mrow" or an "mdn/mrow" -->
+        <xsl:if test="$context = 'men' or $context = 'md' or $context = 'mdn'">
             <xsl:attribute name="id">
               <xsl:text>mjx-eqn:</xsl:text><xsl:value-of select="$id"
               />
