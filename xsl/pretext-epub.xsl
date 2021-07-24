@@ -1255,25 +1255,18 @@ width: 100%
 <!-- match="*". We just need to contend with mrow in EPUB -->
 <!-- since we can't control the ID MathJax returns.       -->
 <xsl:template match="mrow" mode="url">
-    <xsl:variable name="intermediate">
-        <xsl:apply-templates select="." mode="is-intermediate" />
-    </xsl:variable>
-    <xsl:variable name="chunk">
-        <xsl:apply-templates select="." mode="is-chunk" />
-    </xsl:variable>
+    <!-- An enclosing "md" or "mdn" is never a division, so     -->
+    <!-- there will always be a containing file and a fragment  -->
+    <!-- identifier (unlike teh more general version in -html). -->
     <xsl:apply-templates select="." mode="containing-filename" />
-    <xsl:if test="$intermediate='false' and $chunk='false'">
-        <xsl:text>#</xsl:text>
-        <!-- the ids on equations are manufactured -->
-        <!-- by MathJax to look this way           -->
-        <xsl:if test="self::men|self::mrow">
-            <xsl:text>mjx-eqn:</xsl:text>
-        </xsl:if>
-        <!-- This is the difference from the * template in -html. -->
-        <!-- We can only control the HTML id on the enclosing     -->
-        <!-- md or mdn, so we get its ID for the hyperlink.       -->
-        <xsl:apply-templates select="parent::*" mode="html-id" />
-    </xsl:if>
+    <xsl:text>#</xsl:text>
+    <!-- the ids on equations are manufactured -->
+    <!-- by MathJax to look this way -->
+    <xsl:text>mjx-eqn:</xsl:text>
+    <!-- This is the main difference from the * template in      -->
+    <!-- -html. We can only control the HTML id on the enclosing -->
+    <!-- md or mdn, so we get its ID for the hyperlink.          -->
+    <xsl:apply-templates select="parent::*" mode="html-id" />
 </xsl:template>
 
 <!-- Identity template as a mode coursing through SVGs  -->
