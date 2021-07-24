@@ -7538,6 +7538,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   4. many navigation devices, e.g. ToC, prev/next buttons   -->
 <!-- This is strictly an HTML construction.                      -->
 <!-- A containing filename, plus possibly a fragment identifier. -->
+<!-- NOTE: There is a copy of this template in pretext-epub.xsl  -->
+<!-- that overrides only the behavior on mrow. Please keep       -->
+<!-- changes in sync.                                            -->
 <xsl:template match="*" mode="url">
     <xsl:variable name="intermediate">
         <xsl:apply-templates select="." mode="is-intermediate" />
