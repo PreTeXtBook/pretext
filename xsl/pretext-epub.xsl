@@ -536,7 +536,10 @@
 <!-- recurse into contents for image files, etc    -->
 <!-- See "Core Media Type Resources"               -->
 <!-- Add to spine identically                      -->
-<xsl:template match="frontmatter|colophon|biography|dedication|acknowledgement|preface|chapter|chapter/conclusion|chapter/outcomes[preceding-sibling::section]|appendix|index|section|exercises|backmatter/references|backmatter/solutions" mode="manifest">
+<!-- Specialized divisions are terminal in back    -->
+<!-- matter, and only a seperate file when within  -->
+<!-- a "chapter", at level 2                       -->
+<xsl:template match="frontmatter|colophon|biography|dedication|acknowledgement|preface|chapter|chapter/conclusion|chapter/outcomes[preceding-sibling::section]|appendix|index|section|exercises|chapter/solutions|appendix/solutions|backmatter/solutions|chapter/references|appendix/references|backmatter/references" mode="manifest">
     <!-- Annotate manifest entries -->
     <xsl:comment>
         <xsl:apply-templates select="." mode="long-name" />
@@ -627,7 +630,7 @@
 <!-- Specialized divisions will only become files in the manifest at     -->
 <!-- chunk level 2, in other words, peers of chapters or sections        -->
 <!-- (book or chapter/appendix as parent, respectively)                  -->
-<xsl:template match="frontmatter|colophon|acknowledgement|biography|dedication|preface|chapter|appendix|index|section|exercises[parent::book|parent::chapter|parent::appendix]|reading-questions[parent::book|parent::chapter|parent::appendix]|references[parent::book|parent::chapter|parent::appendix]|backmatter/references|backmatter/solutions|glossary[parent::book|parent::chapter|parent::appendix]|conclusion[parent::chapter]|outcomes[preceding-sibling::section]" mode="spine">
+<xsl:template match="frontmatter|colophon|acknowledgement|biography|dedication|preface|chapter|appendix|index|section|exercises[parent::book|parent::chapter|parent::appendix]|reading-questions[parent::book|parent::chapter|parent::appendix]|chapter/solutions|appendix/solutions|backmatter/solutions|chapter/references|appendix/references|backmatter/references|glossary[parent::book|parent::chapter|parent::appendix]|conclusion[parent::chapter]|outcomes[preceding-sibling::section]" mode="spine">
     <xsl:element name="itemref" xmlns="http://www.idpf.org/2007/opf">
         <xsl:attribute name="idref">
             <xsl:apply-templates select="." mode="html-id" />
