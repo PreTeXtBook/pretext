@@ -351,7 +351,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <appendix xml:id="figure-list">
                 <title>List of Figures</title>
                 <list-of elements="figure" divisions="chapter subsection" empty="no" />
-	    </appendix>
+            </appendix>
+            <solutions divisional="hint answer solution">
+                <title>Hints, Answers and Solutions to Exercises</title>
+            </solutions>
             <index>
                 <title>Index</title>
                 <index-list/>
