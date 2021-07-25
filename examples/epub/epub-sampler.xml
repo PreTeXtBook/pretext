@@ -73,7 +73,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <p>Some test cross-references:<ul>
             <li>To the next chapter: <xref ref="nonsense-chapter"/></li>
             <li>To a figure much later: <xref ref="figure-cubic-polynomial"/></li>
-            <li>To some multi-line display math later <xref ref="small-DE-soln"/></li>
+            <li>To some multi-line display math later: <xref ref="small-DE-soln"/></li>
+            <li>To an abstract algebra textbook: <xref ref="biblio-judson-AATA"/></li>
         </ul></p>
         </chapter>
         <chapter xml:id="nonsense-chapter">
@@ -355,6 +356,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <solutions divisional="hint answer solution">
                 <title>Hints, Answers and Solutions to Exercises</title>
             </solutions>
+            <references xml:id="references-backmatter">
+                <title>References</title>
+                <biblio type="raw" xml:id="biblio-judson-AATA">Tom Judson, <title>Abstract Algebra: Theory and Applications</title>.
+                <note xml:id="note-judson-AATA"><p>Another online, open-source offering.</p></note>
+                </biblio>
+                <biblio type="raw" xml:id="biblio-lay-article">David C. Lay, <title>Subspaces and Echelon Forms</title>. <journal>The College Mathematics Journal</journal>, January 1993, <volume>24</volume> <number>1</number>, 57<ndash />62.</biblio>
+            </references>
             <index>
                 <title>Index</title>
                 <index-list/>
