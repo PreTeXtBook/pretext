@@ -818,7 +818,7 @@ width: 100%
                                 </xsl:element>
                             </li>
                         </xsl:for-each>
-                        <xsl:if test="$document-root/backmatter/appendix">
+                        <xsl:if test="$document-root/backmatter/appendix|$document-root/backmatter/solutions">
                             <li class="no-marker">
                                 <span>Appendices</span>
                                 <ol type="A">
