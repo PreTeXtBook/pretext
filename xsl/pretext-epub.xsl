@@ -667,6 +667,11 @@
             <xsl:for-each select="$document-root//image">
                 <image>
                     <!-- filename begins with directories from publisher file -->
+                    <xsl:attribute name="sourcename">
+                        <xsl:apply-templates select="." mode="epub-base-filename">
+                            <xsl:with-param name="read" select="'yes'"/>
+                        </xsl:apply-templates>
+                    </xsl:attribute>
                     <xsl:attribute name="filename">
                         <xsl:apply-templates select="." mode="epub-base-filename"/>
                     </xsl:attribute>
@@ -893,7 +898,13 @@ width: 100%
 
 <!-- Base filename for an image,  -->
 <!-- mostly handling the @source case -->
+
+<!-- Parametrized by "read": -->
+<!-- yes produces path to source file in input folder tree -->
+<!-- no produces path to file in output folder tree        -->
 <xsl:template match="image" mode="epub-base-filename">
+    <xsl:param name="read" select="'no'"/>
+
     <xsl:choose>
         <xsl:when test="@source">
             <xsl:variable name="extension">
@@ -902,7 +913,14 @@ width: 100%
                 </xsl:call-template>
             </xsl:variable>
             <!-- PDF LaTeX, SVG HTML, PNG Kindle if not indicated -->
-            <xsl:value-of select="$external-directory"/>
+            <xsl:choose>
+                <xsl:when test="$read = 'yes'">
+                    <xsl:value-of select="$external-directory-source"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$external-directory"/>
+                </xsl:otherwise>
+            </xsl:choose>
             <xsl:apply-templates select="@source" />
             <xsl:if test="$extension=''">
                 <xsl:choose>
@@ -916,7 +934,14 @@ width: 100%
             </xsl:if>
         </xsl:when>
         <xsl:when test="latex-image|sageplot|asymptote">
-            <xsl:value-of select="$generated-directory"/>
+            <xsl:choose>
+                <xsl:when test="$read = 'yes'">
+                    <xsl:value-of select="$generated-directory-source"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$generated-directory"/>
+                </xsl:otherwise>
+            </xsl:choose>
             <xsl:choose>
                 <xsl:when test="latex-image">
                     <xsl:text>latex-image</xsl:text>
