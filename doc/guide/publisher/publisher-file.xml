@@ -362,6 +362,16 @@
                 <li><attr>privacy</attr>: allowed values are <c>yes</c> or <c>no</c>.</li>
             </ul>Setting this to yes (the default) prevents certain tracking cookies from being used. Currently only supported for videos from YouTube. See <xref ref="video-embedding"/> for more.</p>
         </subsection>
+
+        <subsection xml:id="html-asymptote-link-options">
+            <title><latex/> Asymptote <q>Click to Enlarge</q> Links</title>
+            <idx><h>Asymptote links</h><h>HTML</h></idx>
+            <idx><h>HTML</h><h>Asymptote links</h></idx>
+
+            <p>The conversion to <init>HTML</init> can provide a <q>Click to view full-sized image</q> link below each Asymptote graphic.  The<cd>
+                <cline>/publication/html/asymptote/@links</cline>
+            </cd>attribute can have the value <c>yes</c> to produce links, or the value <c>no</c> to not create links.  Note that a base URL must be set for this feature to be functional (<xref ref="online-base-url"/>).  The default is <c>no</c>.  See  <xref ref="html-asymptote-links"/> for more detail.</p>
+        </subsection>
     </section>
 
     <section xml:id="publisher-file-revealjs">

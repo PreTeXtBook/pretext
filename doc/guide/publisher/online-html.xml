@@ -67,9 +67,23 @@
             <p>Within the <tag>publication</tag> element of your publisher file include an <tag>html</tag> element, with a child element <tag>video</tag> having an attribute <attr>privacy</attr>.
             The value must be either <c>yes</c> (use enhanced privacy, if available), or <c>no</c> (allow all tracking cookies).
             If your publisher file does not have this element (or you do not have a publisher file) you will get a warning message, and the default will be used.  See <xref ref="embedded-video-privacy-options"/> for details on specifying this option.</p>
-          </subsection>
-    </section>
+        </subsection>
 
+        <subsection xml:id="html-asymptote-links">
+            <title>Links to full-size versions of Asymptote diagrams</title>
+            <idx><h>Asymptote links</h><h>HTML</h></idx>
+            <idx><h>HTML</h><h>Asymptote links</h></idx>
+
+            <p>Asymptote diagrams are embedded in <init>HTML</init> as a <c>canvas</c> element within an <c>iframe</c>.
+            Unlike <c>image</c> elements, web browsers will not provide the option to <q>view image</q>, and clicking on the image will not enlarge it.
+            Since 3D Asymptote diagrams are interactive, a reader may wish that they could interact with a larger version of the graphic.</p>
+
+            <p>You may elect to place a <q>Click to view full-size image</q> link below each Asymptote diagram.
+            Clicking on the link will open the Asymptote <init>HTML</init> file directly, and the digram will be displayed at a much larger size.</p>
+
+            <p>See <xref ref="html-asymptote-link-options"/> for the specifics of this entry.  This feature is off by default.</p>
+        </subsection>
+    </section>
     <section xml:id="knowled-content">
         <title>Knowled Content</title>
 
