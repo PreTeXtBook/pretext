@@ -111,20 +111,13 @@
 
         <subsection xml:id="latex-asymptote-link-options">
             <title><latex/> Asymptote Links</title>
-            <idx><h>Asymptote links</h><h>LaTeX, PDF, HTML</h></idx>
+            <idx><h>Asymptote links</h><h>LaTeX, PDF</h></idx>
             <idx><h>LaTeX</h><h>Asymptote links</h></idx>
             <idx><h>PDF</h><h>Asymptote links</h></idx>
-            <idx><h>HTML</h><h>Asymptote links</h></idx>
 
-            <p>When the <c>html</c> output format is selected for Asymptote graphics, each diagram will generate an <init>HTML</init> file as part of the online version of your book. In some cases you may wish to link to these files.</p>
-            <p>The conversion to <init>HTML</init> can provide a <q>Click to enlarge</q> link below each graphic that allows the reader to view a full-size version of your diagram. This is especially useful for 3D graphics, since they are interactive.</p>
-            <p>The conversion to <latex/> can also provide a link to an <init>HTML</init> version of each Asymptote graphic, allowing readers of the <init>PDF</init> version of your book to access the interactive version of the diagram.</p>
-            <p>The<cd>
-                <cline>/publication/html/asymptote/@links</cline>
-            </cd> attribute can be used to provide links in the <init>HTML</init> version of your book. The
-              <cd>
+            <p>The conversion to <latex/> can provide a link to an <init>HTML</init> version of each Asymptote graphic.  The<cd>
                 <cline>/publication/latex/asymptote/@links</cline>
-            </cd>attribute will do the same for <init>PDF</init>. Both attributes can have the value <c>yes</c> to produce links, or the value <c>no</c> to not create links.  Note that a base URL must be set for this feature to be functional (<xref ref="online-base-url"/>).  The default is <c>no</c>.  See  <xref ref="latex-asymptote-links"/> for more detail.</p>
+            </cd>attribute can have the value <c>yes</c> to produce links, or the value <c>no</c> to not create links.  Note that a base URL must be set for this feature to be functional (<xref ref="online-base-url"/>).  The default is <c>no</c>.  See  <xref ref="latex-asymptote-links"/> for more detail.</p>
         </subsection>
     </section>
 
