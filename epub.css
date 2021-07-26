@@ -6,14 +6,17 @@
     margin-top: 1em;
 }
 
-.pretext-content.epub .solutions .solution .type {
+.pretext-content.epub .solutions .solution .type,
+.pretext-content.epub .solutions .answer .type {
     font-family: "PT Serif", "Times New Roman", Times, serif;
     font-weight: bold;
 }
-.pretext-content.epub .solutions .solution .type + .period {
+.pretext-content.epub .solutions .solution .type + .period,
+.pretext-content.epub .solutions .answer .type + .period {
     margin-right: 0.75em;
 }
-.pretext-content.epub .solutions .solution .type + p {
+.pretext-content.epub .solutions .solution .type + p,
+.pretext-content.epub .solutions .answer .type + p {
    display: inline;
 }
 
