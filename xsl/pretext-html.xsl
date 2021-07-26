@@ -5659,7 +5659,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
     </xsl:variable>
     <!-- location of image, based on configured directory in publisher file -->
-    <xsl:variable name="location" select="concat($external-directory, @source)"/>
+    <xsl:variable name="location">
+        <!-- empty when not using managed directories -->
+        <xsl:value-of select="$external-directory"/>
+        <xsl:value-of select="@source"/>
+    </xsl:variable>
     <xsl:choose>
         <!-- no extension, presume SVG provided as external image -->
         <xsl:when test="$extension=''">
@@ -5698,6 +5702,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- possibly annotate with archive links -->
             <xsl:apply-templates select="." mode="archive">
                 <xsl:with-param name="base-pathname">
+                    <!-- empty when not using managed directories -->
                     <xsl:value-of select="$external-directory"/>
                     <xsl:call-template name="substring-before-last">
                         <xsl:with-param name="input" select="$location" />
@@ -6431,6 +6436,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <!-- else a local filename in @source -->
             <xsl:otherwise>
+                <!-- empty when not using managed directories -->
                 <xsl:value-of select="$external-directory"/>
                 <xsl:value-of select="@source"/>
             </xsl:otherwise>
@@ -6535,6 +6541,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <!-- else a local filename in @source -->
             <xsl:otherwise>
+                <!-- empty when not using managed directories -->
                 <xsl:value-of select="$external-directory"/>
                 <xsl:value-of select="@source"/>
             </xsl:otherwise>
@@ -6657,7 +6664,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The HTML @default attribute functions simply by being -->
 <!-- present, so we do not provide a value.                -->
 <xsl:template match="track">
-    <xsl:variable name="location" select="concat($external-directory, @source)"/>
+    <xsl:variable name="location">
+        <!-- empty when not using managed directories -->
+        <xsl:value-of select="$external-directory"/>
+        <xsl:value-of select="@source"/>
+    </xsl:variable>
 
     <track>
         <xsl:if test="@default='yes'">
@@ -8850,9 +8861,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$hid" />
         </xsl:attribute>
         <xsl:attribute name="data-tracefile">
-            <xsl:if test="$b-managed-directories">
-                <xsl:value-of select="$external-directory"/>
-            </xsl:if>
+            <!-- empty when not using managed directories -->
+            <xsl:value-of select="$external-directory"/>
             <xsl:text>pytutor/</xsl:text>
             <xsl:value-of select="$hid" />
             <xsl:text>.json</xsl:text>
@@ -9647,9 +9657,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <xsl:when test="@source">
                 <xsl:text>filename:"</xsl:text>
-                <xsl:if test="$b-managed-directories">
-                    <xsl:value-of select="$external-directory"/>
-                </xsl:if>
+                <!-- empty when not using managed directories -->
+                <xsl:value-of select="$external-directory"/>
                 <xsl:value-of select="@source" />
                 <xsl:text>",&#xa;</xsl:text>
             </xsl:when>
@@ -9776,9 +9785,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
               <xsl:text>  board.unsuspendUpdate();&#xa;</xsl:text>
               <xsl:text>}&#xa;</xsl:text>
               <xsl:text>fetch('</xsl:text>
-              <xsl:if test="$b-managed-directories">
-                <xsl:value-of select="$external-directory"/>
-              </xsl:if>
+              <!-- empty when not using managed directories -->
+              <xsl:value-of select="$external-directory"/>
               <xsl:value-of select="@source" />
               <xsl:text>').then(function(response) { response.text().then( function(text) { parseJessie(text); }); });&#xa;</xsl:text>
           </xsl:element>
@@ -9823,6 +9831,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:value-of select="$raw-location"/>
                         </xsl:when>
                         <xsl:otherwise>
+                            <!-- empty when not using managed directories -->
                             <xsl:value-of select="$external-directory"/>
                             <xsl:value-of select="$raw-location"/>
                         </xsl:otherwise>
@@ -11659,15 +11668,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="favicon">
     <xsl:if test="$docinfo/html/favicon">
         <xsl:variable name="res32">
-            <xsl:if test="$b-managed-directories">
-                <xsl:value-of select="$external-directory"/>
-            </xsl:if>
+            <!-- empty when not using managed directories -->
+            <xsl:value-of select="$external-directory"/>
             <xsl:text>favicon/favicon-32x32.png</xsl:text>
         </xsl:variable>
         <xsl:variable name="res16">
-            <xsl:if test="$b-managed-directories">
-                <xsl:value-of select="$external-directory"/>
-            </xsl:if>
+            <!-- empty when not using managed directories -->
+            <xsl:value-of select="$external-directory"/>
             <xsl:text>favicon/favicon-16x16.png</xsl:text>
         </xsl:variable>
         <link rel="icon" type="image/png" sizes="32x32" href="{$res32}"/>
@@ -11812,7 +11819,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="brand-logo">
     <xsl:choose>
         <xsl:when test="$docinfo/brandlogo">
-            <xsl:variable name="location" select="concat($external-directory, $docinfo/brandlogo/@source)"/>
+            <xsl:variable name="location">
+                <!-- empty when not using managed directories -->
+                <xsl:value-of select="$external-directory"/>
+                <xsl:value-of select="$docinfo/brandlogo/@source"/>
+            </xsl:variable>
             <a id="logo-link" href="{$docinfo/brandlogo/@url}" target="_blank" >
                 <img src="{$location}" alt="Logo image"/>
             </a>

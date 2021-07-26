@@ -199,14 +199,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- Destination directory is hard-coded here and used in      -->
+<!-- various conversions under the managed directories scheme. -->
 <xsl:variable name="external-directory">
     <xsl:choose>
         <xsl:when test="$b-managed-directories">
-            <xsl:value-of select="'external/'"/>
+            <xsl:text>external/</xsl:text>
         </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$external-directory-source"/>
-        </xsl:otherwise>
+        <!-- backwards-compatiblity, there never was any sort of   -->
+        <!-- naming/copying scheme for externally produced content -->
+        <xsl:otherwise/>
     </xsl:choose>
 </xsl:variable>
 

@@ -7224,9 +7224,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- has @preview -->
         <xsl:when test="@preview">
             <xsl:text>\includegraphics[width=0.80\linewidth,height=\qrsize,keepaspectratio]{</xsl:text>
-            <xsl:if test="$b-managed-directories">
-                <xsl:value-of select="$external-directory"/>
-            </xsl:if>
+            <!-- empty when not using managed directories -->
+            <xsl:value-of select="$external-directory"/>
             <xsl:value-of select="@preview" />
             <xsl:text>}</xsl:text>
         </xsl:when>
@@ -7256,9 +7255,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- has @preview -->
         <xsl:when test="@preview">
             <xsl:text>\includegraphics[width=0.80\linewidth,height=\qrsize,keepaspectratio]{</xsl:text>
-            <xsl:if test="$b-managed-directories">
-                <xsl:value-of select="$external-directory"/>
-            </xsl:if>
+            <!-- empty when not using managed directories -->
+            <xsl:value-of select="$external-directory"/>
             <xsl:value-of select="@preview" />
             <xsl:text>}</xsl:text>
         </xsl:when>
@@ -8887,6 +8885,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:text>\includegraphics[width=\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
+    <!-- empty when not using managed directories -->
     <xsl:value-of select="$external-directory"/>
     <xsl:value-of select="@source"/>
     <xsl:if test="$extension = ''">
