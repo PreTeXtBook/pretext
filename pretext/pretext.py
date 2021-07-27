@@ -1166,7 +1166,8 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
         msg = ' '.join(["creating all images requires a directory specification",
                         "in a publisher file, and no publisher file has been given"])
         raise ValueError(msg)
-    generated_dir, data_dir, _, _, _, _ = get_image_directories(xml, pub_file)
+    generated_dir, _ = get_managed_directories(xml, pub_file)
+
     # correct attribute and not a directory gets caught earlier
     # but could have publisher file and bad elements/attributes
     if not(generated_dir):
@@ -1518,21 +1519,20 @@ def html(xml, pub_file, stringparams, dest_dir):
     import shutil # copytree()
 
     # Consult publisher file for locations of images
-    # data directory likely only needed for latex compilation
-    generated_abs, _, external_abs, generated, _, external = get_image_directories(xml, pub_file)
+    generated_abs, external_abs = get_managed_directories(xml, pub_file)
 
     # support publisher file, not subtree argument
     if pub_file:
         stringparams['publisher'] = pub_file
     extraction_xslt = os.path.join(get_ptx_xsl_path(), 'pretext-html.xsl')
 
-    # copy externally manufactured media to  dest_dir
-    if external:
+    # copy externally manufactured files to  dest_dir
+    if external_abs:
         external_dir = os.path.join(dest_dir, 'external')
         shutil.copytree(external_abs, external_dir)
 
     # copy generated to  dest_dir
-    if generated:
+    if generated_abs:
         generated_dir = os.path.join(dest_dir, 'generated')
         shutil.copytree(generated_abs, generated_dir)
 
@@ -1572,7 +1572,7 @@ def pdf(xml, pub_file, stringparams, out_file, dest_dir):
     import shutil # copytree(), copy2()
     import subprocess # run()
 
-    generated_abs, data_abs, external_abs, generated, data, external = get_image_directories(xml, pub_file)
+    generated_abs, external_abs = get_managed_directories(xml, pub_file)
     # perhaps necessary (so drop "if"), but maybe not; needs to be supported
     if pub_file:
         stringparams['publisher'] = pub_file
@@ -1597,11 +1597,11 @@ def pdf(xml, pub_file, stringparams, out_file, dest_dir):
     # (an empty string is impossible due to a slash always being present?)
 
     # Managed, generated images
-    if generated:
+    if generated_abs:
         generated_dir = os.path.join(tmp_dir, 'generated')
         shutil.copytree(generated_abs, generated_dir)
     # externally manufactured images
-    if external:
+    if external_abs:
         external_dir = os.path.join(tmp_dir, 'external')
         shutil.copytree(external_abs, external_dir)
     # data files
