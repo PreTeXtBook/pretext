@@ -669,11 +669,13 @@
                     <!-- filename begins with directories from publisher file -->
                     <xsl:attribute name="sourcename">
                         <xsl:apply-templates select="." mode="epub-base-filename">
-                            <xsl:with-param name="read" select="'yes'"/>
+                            <xsl:with-param name="purpose" select="'read'"/>
                         </xsl:apply-templates>
                     </xsl:attribute>
                     <xsl:attribute name="filename">
-                        <xsl:apply-templates select="." mode="epub-base-filename"/>
+                        <xsl:apply-templates select="." mode="epub-base-filename">
+                            <xsl:with-param name="purpose" select="'write'"/>
+                        </xsl:apply-templates>
                     </xsl:attribute>
                 </image>
             </xsl:for-each>
@@ -900,10 +902,10 @@ width: 100%
 <!-- mostly handling the @source case -->
 
 <!-- Parametrized by "read": -->
-<!-- yes produces path to source file in input folder tree -->
-<!-- no produces path to file in output folder tree        -->
+<!-- 'read' produces path to source file in input folder tree -->
+<!-- 'write' produces path to file in output folder tree      -->
 <xsl:template match="image" mode="epub-base-filename">
-    <xsl:param name="read" select="'no'"/>
+    <xsl:param name="purpose"/>
 
     <xsl:choose>
         <xsl:when test="@source">
@@ -914,12 +916,12 @@ width: 100%
             </xsl:variable>
             <!-- PDF LaTeX, SVG HTML, PNG Kindle if not indicated -->
             <xsl:choose>
-                <xsl:when test="$read = 'yes'">
+                <xsl:when test="$purpose = 'read'">
                     <xsl:value-of select="$external-directory-source"/>
                 </xsl:when>
-                <xsl:otherwise>
+                <xsl:when test="$purpose = 'write'">
                     <xsl:value-of select="$external-directory"/>
-                </xsl:otherwise>
+                </xsl:when>
             </xsl:choose>
             <xsl:apply-templates select="@source" />
             <xsl:if test="$extension=''">
@@ -935,12 +937,12 @@ width: 100%
         </xsl:when>
         <xsl:when test="latex-image|sageplot|asymptote">
             <xsl:choose>
-                <xsl:when test="$read = 'yes'">
+                <xsl:when test="$purpose = 'read'">
                     <xsl:value-of select="$generated-directory-source"/>
                 </xsl:when>
-                <xsl:otherwise>
+                <xsl:when test="$purpose = 'write'">
                     <xsl:value-of select="$generated-directory"/>
-                </xsl:otherwise>
+                </xsl:when>
             </xsl:choose>
             <xsl:choose>
                 <xsl:when test="latex-image">
@@ -993,7 +995,9 @@ width: 100%
         <xsl:attribute name="href">
             <xsl:value-of select="$xhtml-dir" />
             <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="." mode="epub-base-filename" />
+            <xsl:apply-templates select="." mode="epub-base-filename">
+                <xsl:with-param name="purpose" select="'write'"/>
+            </xsl:apply-templates>
         </xsl:attribute>
         <!-- media attribute -->
         <xsl:attribute name="media-type">
@@ -1025,7 +1029,9 @@ width: 100%
 <xsl:template match="image">
     <xsl:element name="img">
         <xsl:attribute name="src">
-            <xsl:apply-templates select="." mode="epub-base-filename" />
+            <xsl:apply-templates select="." mode="epub-base-filename">
+                <xsl:with-param name="purpose" select="'write'"/>
+            </xsl:apply-templates>
         </xsl:attribute>
         <xsl:if test="@width">
             <xsl:attribute name="style">
