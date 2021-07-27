@@ -1935,8 +1935,8 @@ def verify_input_directory(inputdir):
     _verbose('input directory expanded to absolute path: {}'.format(absdir))
     return absdir
 
-def get_image_directories(xml_source, pub_file):
-    """Returns triple: (generated, data, external) absolute paths, derived from publisher file"""
+def get_managed_directories(xml_source, pub_file):
+    """Returns pair: (generated, external) absolute paths, derived from publisher file"""
     import os.path # isabs, split
     import lxml.etree as ET  # XML source
 
@@ -1946,18 +1946,13 @@ def get_image_directories(xml_source, pub_file):
     # Examine /publication/source/directories element carefully
     # for attributes which we code here for convenience
     gen_attr = 'generated'
-    data_attr = 'data'
     ext_attr = 'external'
 
     # prepare for relative paths later
     source_dir = get_source_path(xml_source)
 
     # Unknown until running the gauntlet
-    generated_abs = None
-    data_abs = None
-    external_abs = None
     generated = None
-    data = None
     external = None
     if pub_file:
         # parse publisher file, xinclude is conceivable
@@ -1980,17 +1975,7 @@ def get_image_directories(xml_source, pub_file):
                     raise ValueError(abs_path_error.format(gen_attr, raw_path))
                 else:
                     abs_path = os.path.join(source_dir, raw_path)
-                generated = raw_path
-                generated_abs = verify_input_directory(abs_path)
-            # attribute absent => None
-            if data_attr in attributes_dict.keys():
-                raw_path = attributes_dict[data_attr]
-                if os.path.isabs(raw_path):
-                    raise ValueError(abs_path_error.format(data_attr, raw_path))
-                else:
-                    abs_path = os.path.join(source_dir, raw_path)
-                data = raw_path
-                data_abs = verify_input_directory(abs_path)
+                generated = verify_input_directory(abs_path)
             # attribute absent => None
             if ext_attr in attributes_dict.keys():
                 raw_path = attributes_dict[ext_attr]
@@ -1998,10 +1983,9 @@ def get_image_directories(xml_source, pub_file):
                     raise ValueError(abs_path_error.format(ext_attr, raw_path))
                 else:
                     abs_path = os.path.join(source_dir, raw_path)
-                external = raw_path
-                external_abs = verify_input_directory(abs_path)
-    # triple of discovered paths
-    return (generated_abs, data_abs, external_abs, generated, data, external)
+                external = verify_input_directory(abs_path)
+    # pair of discovered absolute paths
+    return (generated, external)
 
 
 ########
