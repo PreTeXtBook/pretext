@@ -231,7 +231,8 @@ def get_cli_arguments():
 
     parser.add_argument('-s', '--server', help='base URL for server (webwork only)', action="store", dest='server')
 
-    parser.add_argument('-i', '--include', help='external data directory, relative to source, latex-image only', action="store", dest='data_dir')
+    # recognize this switch, but only warn later that it is being ignored
+    parser.add_argument('-i', '--include', help='external data directory, deprecated 2021-07-26, IGNORED', action="store", dest='data_dir')
     parser.add_argument('-o', '--output', help='file for output (supersedes -d)', action="store", dest='out')
     parser.add_argument('-d', '--directory', help='directory for output, defaults to current directory', action="store", dest='dir')
     parser.add_argument('-a', '--abort', help='abort script upon recoverable errors', action="store_true", dest='abort')
@@ -266,6 +267,12 @@ def main():
 
     # Report the command-line arguments just obtained
     ptx._debug("Parsed CLI args {}".format(vars(args)))
+
+    # Issue command-line argument deprecations
+    if args.data_dir:
+        msg = '\n'.join(["the '-i/--include' switch is deprecated and ignored, as of 2021-07-26.",
+                         "Transition to using a publisher file to set managed directories.  See the PreTeXt Guide."])
+        raise ValueError(msg)
 
     # Report Python version in debugging output
     ptx._debug("Python version: {} (expecting 3.6 or newer)".format(ptx.python_version()))
@@ -325,9 +332,9 @@ def main():
             raise NotImplementedError('cannot make Sage graphics in "{}" format'.format(args.format))
     elif args.component == 'latex-image':
         if args.format in ['pdf', 'svg', 'png', 'eps', 'source', 'all']:
-            ptx.latex_image_conversion(xml_source, publisher_file, stringparams, args.xmlid, data_dir, dest_dir, args.format)
+            ptx.latex_image_conversion(xml_source, publisher_file, stringparams, args.xmlid, dest_dir, args.format)
         elif args.format in ['tactile']:
-            ptx.latex_tactile_image_conversion(xml_source, publisher_file, stringparams, data_dir, dest_dir, args.format)
+            ptx.latex_tactile_image_conversion(xml_source, publisher_file, stringparams, dest_dir, args.format)
         else:
             raise NotImplementedError('cannot make LaTeX pictures in "{}" format'.format(args.format))
     elif args.component == 'webwork-tex':

@@ -241,7 +241,7 @@ def sage_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, ou
             for f in glob.glob(sagepng):
                 shutil.copy2(f, dest_dir)
 
-def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, data_dir, dest_dir, outformat):
+def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat):
     # stringparams is a dictionary, best for lxml parsing
     import platform # system, machine()
     import os.path # join()
@@ -253,9 +253,6 @@ def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, data_
     devnull = open(os.devnull, 'w')
     tmp_dir = get_temporary_directory()
     _debug("temporary directory for latex-image conversion: {}".format(tmp_dir))
-    # NB: next command uses relative paths, so no chdir(), etc beforehand
-    if data_dir:
-        copy_data_directory(xml_source, data_dir, tmp_dir)
     ptx_xsl_dir = get_ptx_xsl_path()
     _verbose("extracting latex-image pictures from {}".format(xml_source))
     # support publisher file, subtree argument
@@ -340,7 +337,7 @@ def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, data_
 #
 #######################
 
-def latex_tactile_image_conversion(xml_source, pub_file, stringparams, data_dir, dest_dir, outformat):
+def latex_tactile_image_conversion(xml_source, pub_file, stringparams, dest_dir, outformat):
     import os # .chdir()
     import os.path # join()
     import subprocess # run() is Python 3.5 (run() is preferable to call())
@@ -1186,8 +1183,8 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
         # make directory if not already present
         if not(os.path.isdir(dest_dir)):
             os.mkdir(dest_dir)
-        latex_image_conversion(xml, pub_file, stringparams, xmlid_root, data_dir, dest_dir, 'pdf')
-        latex_image_conversion(xml, pub_file, stringparams, xmlid_root, data_dir, dest_dir, 'svg')
+        latex_image_conversion(xml, pub_file, stringparams, xmlid_root, dest_dir, 'pdf')
+        latex_image_conversion(xml, pub_file, stringparams, xmlid_root, dest_dir, 'svg')
 
     # Asymptote
     #
@@ -1604,10 +1601,6 @@ def pdf(xml, pub_file, stringparams, out_file, dest_dir):
     if external_abs:
         external_dir = os.path.join(tmp_dir, 'external')
         shutil.copytree(external_abs, external_dir)
-    # data files
-    if data:
-        data_dir = os.path.join(tmp_dir, 'data')
-        shutil.copytree(data_abs, data_dir)
 
     # now work in temporary directory since LaTeX is a bit incapable
     # of working outside of the current working directory
@@ -1872,19 +1865,6 @@ def sanitize_alpha_num_underscore(param):
     if not(set(param) <= allowed):
         raise ValueError('PTX:ERROR: param {} contains characters other than a-zA-Z0-9_ '.format(param))
     return param
-
-def copy_data_directory(source_file, data_dir, tmp_dir):
-    """Stage directory from CLI argument into the working directory"""
-    import os.path, shutil
-
-    # Assumes all input paths are absolute, and that
-    # data_dir is one step longer than directory for source_file,
-    # in other words, data directory is a peer of source file
-    _verbose("formulating data directory location")
-    source_full_path, _ = os.path.split(source_file)
-    destination_root = os.path.join(tmp_dir, 'data')
-    _debug("copying data directory {} to working location {}".format(data_dir, destination_root))
-    shutil.copytree(data_dir, destination_root)
 
 def get_temporary_directory():
     """Create, record, and return a scratch directory"""
