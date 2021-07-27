@@ -5832,7 +5832,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
           <xsl:value-of select="$html-filename"/>
       </xsl:variable>
       <div style="text-align: center;">
-        <a href="{$image-html-url}">Click to view full-sized image</a>
+        <a href="{$image-html-url}">Link to full-sized image</a>
       </div>
     </xsl:if>
 </xsl:template>
