@@ -78,7 +78,7 @@
             Unlike <c>image</c> elements, web browsers will not provide the option to <q>view image</q>, and clicking on the image will not enlarge it.
             Since 3D Asymptote diagrams are interactive, a reader may wish that they could interact with a larger version of the graphic.</p>
 
-            <p>You may elect to place a <q>Click to view full-size image</q> link below each Asymptote diagram.
+            <p>You may elect to place a <q>Link to full-sized image</q> link below each Asymptote diagram.
             Clicking on the link will open the Asymptote <init>HTML</init> file directly, and the digram will be displayed at a much larger size.</p>
 
             <p>See <xref ref="html-asymptote-link-options"/> for the specifics of this entry.  This feature is off by default.</p>
