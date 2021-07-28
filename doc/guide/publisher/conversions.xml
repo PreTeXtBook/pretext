@@ -123,7 +123,7 @@
 
         <p>Note that this functionality is limited when it comes to irregular plurals and capitalization. Take care with the placement of custom elements: they will not, for example, capitalize automatically at the beginning of a sentence.</p>
 
-        <p>See <xref ref="publisher-file-source"/> for the mechanics of specifying a file of customizations via the publisher file.</p>
+        <p>See <xref ref="publisher-file-source-extras"/> for the mechanics of specifying a file of customizations via the publisher file.</p>
     </section>
 
     <section xml:id="processing-parameters">
