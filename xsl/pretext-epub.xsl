@@ -245,20 +245,7 @@
                 <xsl:call-template name="mathjax-css"/>
                 <xsl:call-template name="epub-kindle-css"/>
                 <title>
-                    <xsl:choose>
-                        <!-- make sure hacked-in "conclusion" and "outcomes"  -->
-                        <!-- get *some sort* of title, this could be improved -->
-                        <!-- by testing them for a "title" element            -->
-                        <xsl:when test="self::conclusion">
-                            <xsl:text>Conclusion</xsl:text>
-                        </xsl:when>
-                        <xsl:when test="self::outcomes">
-                            <xsl:text>Outcomes</xsl:text>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:apply-templates select="." mode="title-short"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
+                    <xsl:apply-templates select="." mode="type-name-number" />
                 </title>
             </head>
             <!-- use class to repurpose HTML CSS work -->
@@ -1300,6 +1287,14 @@ width: 100%
     <!-- -html. We can only control the HTML id on the enclosing -->
     <!-- md or mdn, so we get its ID for the hyperlink.          -->
     <xsl:apply-templates select="parent::*" mode="html-id" />
+</xsl:template>
+
+<!-- Simple text representations of structural elements for -->
+<!-- head/title, which is really restrictive.               -->
+<xsl:template match="*" mode="type-name-number">
+    <xsl:apply-templates select="." mode="type-name" />
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="." mode="number" />
 </xsl:template>
 
 <!-- Identity template as a mode coursing through SVGs  -->
