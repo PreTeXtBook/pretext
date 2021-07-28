@@ -3162,7 +3162,10 @@ body.standalone.worksheet .pretext-content .onepage .solutions {
     display: none;
 }
 body.standalone .pretext-content .worksheet {
+/*
     padding: 40px 45px 45px 55px;
+*/
+    padding: 40px 0 45px 0;
     border: 2px solid grey;
     margin: 0;
 /* height: 1243px; */
@@ -3170,14 +3173,17 @@ body.standalone .pretext-content .worksheet {
 
 body.standalone .pretext-content .onepage {
 /*    padding: 40px 45px 45px 55px;
-*/
     padding: 0 0 45px 0;
+*/
+    padding: 40px 45px 45px 55px;
     border-bottom: 2px solid grey;
     margin: 0;
 /* height: 1243px; */
 }
 body.standalone .pretext-content .onepage + .onepage {
+/*
     padding-top: 40px;
+*/
     border-top: 2px solid grey;
 }
 /* there may be worksheet content before the first page
@@ -3190,7 +3196,8 @@ body.standalone .pretext-content .onepage.lastpage {
     padding-bottom: 0;
     border-bottom: none;
 }
-body.standalone .pretext-content .worksheet:last-child {
+
+body.standalone .pretext-content .worksheet > *:last-child {
     padding-bottom: 0 !important
 }
 .pretext-content .onepage + .onepage {
@@ -3225,9 +3232,16 @@ body.standalone .pretext-content .onepage article {
 body.standalone .pretext-content .onepage article::after {
     all: unset;
 }
-.pretext-content .onepage > p:first-child {
+.pretext-content .onepage > p:first-child,
+.pretext-content .onepage > article:first-child {
     margin-top: 0;
 }
+.pretext-content section + .onepage.firstpage,
+.pretext-content article + .onepage.firstpage,
+.pretext-content p + .onepage.firstpage {
+    margin-top: 1.25em;
+}
+
 /* not good, because of image next to image
 .pretext-content .onepage .sbspanel + .sbspanel {
     padding-left: 1.25em;
@@ -3335,11 +3349,19 @@ body.standalone.worksheet .pretext-content .goal-like > .heading {
     margin: 0;
     font-size: 1.1em;
 }
-body.standalone.worksheet .pretext-content section > .heading {
+body.standalone.worksheet .pretext-content section.worksheet > .heading {
     display: inline;
     font-size: 1.1em;
 }
-body.standalone.worksheet .pretext-content section > .heading + p {
+/* becaues the worksheet has no side margins but the .onepage does */
+body.standalone.worksheet .pretext-content section.worksheet > .heading,
+body.standalone.worksheet .pretext-content section.worksheet > .objectives,
+body.standalone.worksheet .pretext-content section.worksheet > .introduction,
+body.standalone.worksheet .pretext-content section.worksheet > .conclusion {
+    margin-left: 55px;
+    margin-right: 40px;
+}
+body.standalone.worksheet .pretext-content section.worksheet > .heading + p {
     display: inline;
 }
 
@@ -3358,6 +3380,9 @@ body[data-urlstub="calcvr.org"].standalone.worksheet .pretext-content .onepage .
 /* printing for one-page worksheets */
 
 @media print {
+    body.standalone .pretext-content .worksheet {
+        border: none;
+    }
     body.standalone.worksheet #masthead {
         display: none;
     }
@@ -3375,14 +3400,13 @@ body[data-urlstub="calcvr.org"].standalone.worksheet .pretext-content .onepage .
     }
     body.standalone.worksheet .pretext-content .onepage {
         max-height: 100%;
+        max-width: 100%;
         overflow: hidden;
         page-break-after: always;
 /*
         height: 1243px;
 */
-/*
         border: none;
-*/
         page-break-inside: avoid;
      }
      body.standalone.worksheet .pretext-content .onepage.lastpage {
@@ -3412,7 +3436,9 @@ body[data-urlstub="calcvr.org"].standalone.worksheet .pretext-content .onepage .
     body.standalone.worksheet.mathbook-loaded .page .main #content.pretext-content section.onepage {
         padding-bottom: 20px;  /* to help prevent flow onto the next page, particularly in Safari */
                               /* the page is not full length, but what is missing was blank anyway */
+/*
         margin: 0;
+*/
     }
 
     @page { margin: 0 }
