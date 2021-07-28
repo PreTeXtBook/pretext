@@ -98,6 +98,160 @@
         <p>One caveat for using these is that experience has taught us that some of the parameters we created early on really do affect your content.  We will change some of these, but always provide a smooth upgrade path through deprecations, with little or no disruption to your workflow.</p>
     </section>
 
+    <section xml:id="processing-directory-management">
+        <title>Directory Management</title>
+
+        <subsection>
+            <title>External and Generated Files</title>
+
+            <p>Early in your writing project, you will decide you want to add images, embedded YouTube videos, interactive demonstrations, or other enhancements that are more than just words on the page.  Some of these objects will be created outside of your <pretext/> project, such as a photograph.  But some images are described within your <pretext/> project, such as a diagram authored using the <latex/> TikZ package, and <pretext/> will help generate different versions of the diagram in different file formats for use in output formats that are not <latex/>.  For an embedded YouTube video we provide tools that will automatically get you a thumbnail preview image from a YouTube server, which will then appear in your non-interactive PDF version.  We describe the photograph as <term>external</term>, since it comes from <q>somewhere else,</q> independent of anything you authored in your source. In contrast, an SVG image of your TikZ diagram for HTML output, and a preview image of a YouTube video for use in a print version, are described as <term>generated</term> since they are dependent on what you have put in your source, and <pretext/> automates almost all of their creation for you.</p>
+
+            <p>As these files are added to your project, you want to organize them in a specific (but flexible) way.  First, make a directory (folder) for your <em>external</em> files.  You can use any name you like, including <c>external</c>.  Within reason you can place it wherever you want.  Natural choices are as a peer of a <c>source</c> directory that holds your <pretext/> files, or as a subdirectory of your project's top-level directory that may hold all your <pretext/> files.  You can also organize this directory with subdirectories of your own choice, if that helps you stay organized.</p>
+
+            <p>Similarly, you need a separate directory for your <em>generated</em> files.  As above, it can be named anything, including <c>generated</c>, and you can place it almost anywhere (close by).  But now, it must have a precise directory structure, described below in <xref ref="subdirectories-of-generated"/>, according to what sort of generation produced the files.</p>
+        </subsection>
+
+        <subsection>
+            <title>Managing Directories</title>
+
+            <p>The name, and location of the external and generated directories (both of them, always) are then specified in a publisher file (see <xref ref="publisher-file-directory-management"/> for the precise specification).  The values of these attributes are <em>relative</em> pathnames to the directories, relative to the location of the <em>main</em> <pretext/> file for your project.  Let us take a look at an example.</p>
+
+            <example xml:id="sample-directory-management">
+                <title>Sample Directory Management</title>
+
+                <p>Suppose you are M.<nbsp/>Jones, the author of the <init>AOTA</init> project, and so you might have the following directory and file structure.  There is some sort of overall path from the root of your entire filesystem to your project, so on Linux this path could be<cd>
+                    <cline>/home/mjones/books/</cline>
+                </cd>and on other operating systems it will be slightly different, but those differences are not relevant here.  Inside of <c>books</c> there would be an <c>aota</c> directory for the <init>AOTA</init> project, structured as follows.  We are most interested in the <c>ext</c> and <c>gen</c> directories.<cd>
+                    <cline>aota</cline>
+                    <cline>    source</cline>
+                    <cline>        aota.ptx</cline>
+                    <cline>        alligators.ptx</cline>
+                    <cline>        dogs.ptx</cline>
+                    <cline>    publication</cline>
+                    <cline>        print.ptx</cline>
+                    <cline>        online.ptx</cline>
+                    <cline>        epub.ptx</cline>
+                    <cline>    ext</cline>
+                    <cline>        photos</cline>
+                    <cline>            slow-alligator.jpeg</cline>
+                    <cline>            fast-whippet.png</cline>
+                    <cline>        movies</cline>
+                    <cline>            alligator-chases-whippet.mp4</cline>
+                    <cline>        data</cline>
+                    <cline>            deer-weights.csv</cline>
+                    <cline>    gen</cline>
+                    <cline>        latex-image</cline>
+                    <cline>            marsupial-life-cycle.svg</cline>
+                    <cline>        youtube</cline>
+                    <cline>            sloth.jpg</cline>
+                </cd></p>
+
+                <p>In your publisher files you would then have the entry, as a subelement of the <c>source</c> element,<cd>
+                    <cline>&lt;directories external="../ext" generated="../gen"/&gt;</cline>
+                </cd>Notice that we have deliberately named our directories <c>ext</c> and <c>gen</c> as part of this illustration, so that they are not identical to the <em>attribute</em> names on the <tag>directories</tag> element.  The two attribute values are <em>relative</em> to the location of the main <pretext/> file, in this case <c>aota.ptx</c>.  The two periods, <c>..</c>, mean to go up a level, here to the <c>aota</c> directory, then the slash indicates a step down to either <c>gen</c> or <c>ext</c>.  Note that <c>latex-image</c> and <c>youtube</c> within <c>gen</c> <em>must</em> be specified exactly that way.  Now every <pretext/> production tool can deduce where your files are.</p>
+
+                <p>How do you specify in your <pretext/> source which file to use where?  Suppose you want your two (external) photographs to be used in a <tag>sidebyside</tag> element.  You would author<cd>
+                    <cline>&lt;sidebyside widths="50% 30%"&gt;</cline>
+                    <cline>     &lt;image source="photos/slow-alligator.jpeg"/&gt;</cline>
+                    <cline>     &lt;image source="photos/fast-whippet.jpeg"/&gt;</cline>
+                    <cline>&lt;sidebyside/&gt;</cline>
+                </cd>Notice that the values of your <attr>source</attr> attributes <em>do not</em> include <c>ext</c> or <c>../ext</c>.  This gives you the freedom to move your <c>ext</c> directory or rename it, and then you only change the publisher file and not your source.  The decision to have the subdirectories <c>photos</c> and <c>movies</c> are not easily changed, since they will be in your source, but they may have value for the organization of your project.</p>
+
+                <p>The chase video is of your own creation, you have included it as part of your project's files, and will be hosting it on your web server, where the rest of your HTML version is made available for viewing.  You might author<cd>
+                    <cline>&lt;figure xml:id="fig-chase"&gt;</cline>
+                    <cline>     &lt;caption&gt;Alligator chases whippet&lt;/caption&gt;</cline>
+                    <cline>     &lt;video source="movies/alligator-chases-whippet.mp4"/&gt;</cline>
+                    <cline>&lt;figure/&gt;</cline>
+                </cd></p>
+
+                <p>The situation with the generated files is presently a bit more complicated, but will eventually be transparent to an author.  The marsupial life cycle diagram has been authored in your source using the language from the <latex/> TikZ package, which is delimited as a <tag>latex-image</tag> element.  When building a PDF from <latex/> output this is a no-brainer<mdash/><pretext/> just puts your TikZ code into the <latex/> file.  But how about HTML output?  The <c>pretext/pretext</c> script will manufacture a standalone version of this image and then convert it to an SVG, and this version will work very well in the online version of your project.  What do you author?<cd>
+                    <cline>&lt;figure xml:id="fig-life-cycle"&gt;</cline>
+                    <cline>     &lt;caption&gt;Marsupial Life Cycle&lt;/caption&gt;</cline>
+                    <cline>     &lt;latex-image xml:id="marsupial-life-cycle"&gt;</cline>
+                    <cline>         -- some TiKZ code here --</cline>
+                    <cline>     &lt;/latex-image&gt;</cline>
+                    <cline>&lt;figure/&gt;</cline>
+                </cd>With the right options to the <c>pretext/pretext</c> script, the file <c>marsupial-life-cycle.svg</c> will be generated.  Presently, you must explicitly tell the script to place the output in the directory<cd>
+                    <cline>/home/mjones/books/gen/latex-image</cline>
+                </cd>but we plan to make this the default behavior.  Or you could generate the file anywhere, and move it to the <c>latex-image</c> subdirectory of <c>gen</c>.  Notice how much of the process of creating a companion SVG image (which excels in a web browser) is automated, and how the <attr>xml:id</attr> attribute and the directories in the publisher file are used to keep everything coordinated.  The <c>latex-image</c> directory is not negotiable, it is the home for <em>every</em> image authored using a <pretext/> <tag>latex-image</tag> element (see <xref ref="subdirectories-of-generated"/>).</p>
+
+                <p>The slow sloth video was created by somebody else and posted to YouTube as a super slo-mo 240fps video.  You authored it within a <tag>figure</tag> simply by using the ID of the video on YouTube.<cd>
+                    <cline>&lt;figure xml:id="fig-sloth"&gt;</cline>
+                    <cline>     &lt;caption&gt;Slow Sloth&lt;/caption&gt;</cline>
+                    <cline>     &lt;video xml:id="sloth" youtube="DJWEqYcxUl8"/&gt;</cline>
+                    <cline>&lt;figure/&gt;</cline>
+                </cd>With the right options to the <c>pretext/pretext</c> script, the file <c>sloth.jpg</c> will be generated by requesting a thumbnail preview from YouTube's servers.  Note how this content is generated from your source (precisely, the YouTube ID) through an automated process.  Presently, you must explicitly tell the script to place the output in the directory<cd>
+                    <cline>/home/mjones/books/gen/youtube</cline>
+                </cd>but we plan to make this the default behavior.  The <c>youtube</c> directory is not negotiable, it is the home for <em>every</em> server-generated preview image for an embedded YouTube video (see <xref ref="subdirectories-of-generated"/>).  (Note that any <tag>video</tag> may have an author-provided image as its preview, and then this would be considered an external file.)</p>
+            </example>
+
+            <p>As you can tell from the above, different output formats have different expectations for additional files and when producing an output, there may be different expectations for where exactly where to find files.  A good example is the <init>EPUB</init> format, which despite being basically an HTML format, is still very rigourous about names, formats, and locations for image files.  With the above procedures you provide just enough information for <pretext/> to handle the remainder of the complexity for you, without you becoming an expert with the EPUB standard.  So the <c>pretext/pretext</c> script can automatically produce PDF, HTML, EPUB, Kindle, and braille, each in a single step.</p>
+
+            <p>We have skirted one finer point of all this.  How does an author know if a file is external or generated and what are the supported subdirectories of the generated directory?  A <pretext/> <attr>source</attr> attribute will almost always point to a file that belongs in the external directory.  An exception is the <attr>preview</attr> attribute which is used to specify static images to use in outputs like PDF or print to represent more dynamic objects employed in more-capable electronic formats (videos, audio, interactives).  (Please alert us to other exceptions!)  The list below describes the subdirectories of the generated directory.  The files that belong in these directories are all generated by the <c>pretex/pretext</c> script using aspects of your authored source.</p>
+
+            <list xml:id="subdirectories-of-generated">
+                <title>Subdirectories of the Generated Directory</title>
+                <!-- preserve alphabetical ordering -->
+                <dl width="narrow">
+                    <li>
+                        <title><c>asymptote</c></title>
+                        <p>Images described by Asymptote code in an <tag>asymptote</tag> element.</p>
+                    </li>
+
+                    <li>
+                        <title><c>latex-image</c></title>
+                        <p>Images described by <latex/> code in a <tag>latex-image</tag> element.</p>
+                    </li>
+
+                    <li>
+                        <title><c>preview</c></title>
+                        <p>Static images of dynamic content, created with automatic screenshots via a headless web server.</p>
+                    </li>
+
+                    <li>
+                        <title><c>problems</c></title>
+                        <p>MyOpenMath problems in static <pretext/> forms.  Possibly broken.</p>
+                    </li>
+
+                    <li>
+                        <title><c>sageplot</c></title>
+                        <p>Images described by Sage code in a <tag>sageplot</tag> element.</p>
+                    </li>
+
+                    <li>
+                        <title><c>youtube</c></title>
+                        <p>Static images for YouTube videos, automatically downloaded from YouTube servers.</p>
+                    </li>
+                </dl>
+            </list>
+
+            <p>Just one more obscure situation to address, requiring a peek under the hood.  Occassionally there are external files used in ways that <pretext/> cannot <q>see</q> them and provide the management necessary.  One example is a file of data points used to generate a plot using the <tag>latex-image</tag> element.  Suppose we have a file<cd>
+                <cline>/home/mjones/books/ext/data/deer-weights.csv</cline>
+            </cd>as shown in <xref ref="sample-directory-management"/>.  We will use this inside of a <tag>latex-image</tag> element employing PGF code with a <c>table {};</c> construction.  As part of building the <latex/> output, this file will be copied to a temporary directory as<cd>
+                <cline>external/data/deer-weights.csv</cline>
+            </cd>Note that your <c>ext</c> has been converted to <c>external</c> as files are copied<mdash/>that is not a typo.  <pretext/> is not going to examine all your code and try to guess where you have requested a file.  So you need to author<cd>
+                <cline>\addplot table {external/data/deer-weights.csv};</cline>
+            </cd>
+            using the filename created after the copy.  Then the <latex/> compilation will locate the file successfully.  The <c>external</c> directory after the file copy is not negotiable, that is what is always used.</p>
+        </subsection>
+
+        <subsection>
+            <title>Backward-Compatibility and Migration</title>
+
+            <p>Directory management was added in the middle of 2021.  For projects existing at that time, it is an <q>opt-in</q> feature.  In other words, existing projects can still be built by moving additional files in the same ways as always, so long as you do not have a <tag>directories</tag> element in your publisher file.</p>
+
+            <p>However, it is absolutely necessary to opt-in to directory management (via the publisher file) if you want to build EPUB or Kindle formats.  You will also then be able to build PDF and HTML output with a single invocation of the <c>pretext/pretext</c> script, without any extra effort to place additional files in the right places.</p>
+
+            <p>New projects should definitely adopt directory management as their project develops.  New features and tools will assume this.  We now describe how existing projects can migrate.</p>
+
+            <p>Previously there was not a firm distinction between external and generated files, though they were specified differently in <pretext/> source.  Many authors placed both types of files into a single directory, and since the default for locating generated files was a directory called <c>images</c>, this was often the single directory employed.   Thus, external files would be specified with a <attr>source</attr> attribute such as<cd>
+                <cline>&lt;image source="images/bobcat.jpg"/&gt;</cline>
+            </cd>A solution, if a bit clunky, is to make a new directory named <c>ext</c> and copy <c>images</c> and its contents to become a subdirectory of <c>ext</c>.  Then place a relative path to <c>ext</c> in the <attr>external</attr> attribute in your publisher file.  This means you will not have to edit your <pretext/> source at all.  At some later time, you could remove all references to <c>images</c> in your source and move the files themselves directly into <c>ext</c>.</p>
+
+            <p>For generated files it will be a bit more involved.  You need a new directory, such as <c>gen</c>, and you need to add it to your publisher file with the right relative path.  Then you will need to create as many of the relevant directories from <xref ref="subdirectories-of-generated"/> as necessary, as subdirectories of <c>gen</c>.  Populate these subdirectories with the relevant files, which may have been located in <c>images</c> before you started migrating.  There was a string parameter, <c>directory.images</c>, that could be used to specify an alternative directory to the default, <c>images</c>.  That parameter is now announced as deprecated, but will still be effective until your project opts-in.</p>
+        </subsection>
+    </section>
+
     <section xml:id="processing-thin-xsl">
         <title>Customizations, Thin XSL Stylesheets</title>
 

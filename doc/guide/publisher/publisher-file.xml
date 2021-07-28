@@ -429,6 +429,17 @@
         <idx>source publisher options</idx>
         <idx><h>publisher options</h><h>source</h></idx>
 
+        <subsection xml:id="publisher-file-directory-management">
+            <title>Directory Management</title>
+
+            <p>Two directories of additional files need to be specified, as paths relative to the main <pretext/> source file, in order that they can be managed automatically for the construction of various output formats.  Study <xref ref="processing-directory-management"/> carefully for the exact details.  To set these directories, the<cd>
+                <cline>/publication/source/directories</cline>
+            </cd>element must have the following two attributes:<ul>
+                <li><attr>external</attr>: a directory of files produced independently of your project.</li>
+                <li><attr>generated</attr>: a directory of files produced automatically via <pretext/> tools, from aspects of your <pretext/> source.</li>
+            </ul>It is an error to only specify one of the two directories.  It is all or nothing.</p>
+        </subsection>
+
         <subsection xml:id="publisher-file-source-extras">
             <title>Extras</title>
 
