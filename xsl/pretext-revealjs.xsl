@@ -151,6 +151,49 @@ ul {
 dfn {
   font-weight: bold;
 }
+.pretext-content ol.no-marker,
+.pretext-content ul.no-marker,
+.pretext-content li.no-marker {
+    list-style-type: none;
+}
+
+.pretext-content ol.decimal {
+    list-style-type: decimal;
+}
+.pretext-content ol.lower-alpha {
+    list-style-type: lower-alpha;
+}
+.pretext-content ol.upper-alpha {
+    list-style-type: upper-alpha;
+}
+.pretext-content ol.lower-roman {
+    list-style-type: lower-roman;
+}
+.pretext-content ol.upper-roman {
+    list-style-type: upper-roman;
+}
+.pretext-content ul.disc {
+    list-style-type: disc;
+}
+.pretext-content ul.square {
+    list-style-type: square;
+}
+.pretext-content ul.circle {
+    list-style-type: circle;
+}
+.pretext-content ol.no-marker,
+.pretext-content ul.no-marker {
+    list-style-type: none;
+}
+.pretext-content .cols1 li,
+.pretext-content .cols2 li,
+.pretext-content .cols3 li,
+.pretext-content .cols4 li,
+.pretext-content .cols5 li,
+.pretext-content .cols6 li {
+    float: left;
+    padding-right:2em;
+}
           </style>
 
         </head>
@@ -159,7 +202,7 @@ dfn {
             <!-- For mathematics/MathJax -->
             <xsl:call-template name="latex-macros"/>
 
-            <div class="reveal">
+            <div class="reveal pretext-content">
                 <div class="slides">
                      <xsl:apply-templates select="frontmatter"/>
                     <xsl:apply-templates select="section|slide"/>
@@ -333,25 +376,6 @@ dfn {
     <xsl:apply-templates/>
   </div>
 </xsl:template>
-
-<xsl:template match="ul">
-  <ul>
-    <xsl:apply-templates/>
-  </ul>
-</xsl:template>
-
-<xsl:template match="ol">
-  <ol>
-    <xsl:apply-templates/>
-  </ol>
-</xsl:template>
-
-<xsl:template match="dl">
-  <dl>
-    <xsl:apply-templates select="li"/>
-  </dl>
-</xsl:template>
-
 
 <xsl:template match="ul/li|ol/li">
   <li>
