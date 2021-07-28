@@ -54,6 +54,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- HTML-Specific Options -->
     <html>
+        <!-- links below images to open full-size, must be elected -->
+        <asymptote links="yes"/>
         <!-- Several embedded calculators are available            -->
         <!-- Use "none" to turn this off (or remove the element)   -->
         <calculator model="geogebra-classic"/>
