@@ -320,9 +320,12 @@ def main():
     ptx._verbose('Done examining environment and initializing setup info')
 
     # The big switch
-    if args.component == 'asy':
+    if args.component in ['asy', 'asy-server']:
         if args.format in ['html', 'pdf', 'svg', 'png', 'eps', 'source']:
-            ptx.asymptote_conversion(xml_source, publisher_file, stringparams, args.xmlid, dest_dir, args.format)
+            if args.component == 'asy-server':
+                ptx.asymptote_conversion(xml_source, publisher_file, stringparams, args.xmlid, dest_dir, args.format, 'server')
+            elif args.component == 'asy':
+                ptx.asymptote_conversion(xml_source, publisher_file, stringparams, args.xmlid, dest_dir, args.format, 'local')
         else:
             raise NotImplementedError('cannot make Asymptote diagrams in "{}" format'.format(args.format))
     elif  args.component == 'sageplot':
