@@ -261,6 +261,14 @@ def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_
     if xmlid_root:
         stringparams['subtree'] = xmlid_root
     _verbose('string parameters passed to extraction stylesheet: {}'.format(stringparams))
+    # Need to copy entire external directory in the managed case.
+    # Making data files available for latex image compilation is
+    # not supported outside of the managed directory scheme (2021-07-28)
+    _, external_dir = get_managed_directories(xml_source, pub_file)
+    if external_dir:
+        external_dest = os.path.join(tmp_dir, 'external')
+        shutil.copytree(external_dir, external_dest)
+    # now create all the standalone LaTeX source files
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-latex-image.xsl')
     # no output (argument 3), stylesheet writes out per-image file
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
@@ -340,6 +348,7 @@ def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_
 def latex_tactile_image_conversion(xml_source, pub_file, stringparams, dest_dir, outformat):
     import os # .chdir()
     import os.path # join()
+    import shutil # copytree()
     import subprocess # run() is Python 3.5 (run() is preferable to call())
     import lxml.etree as ET
 
@@ -414,6 +423,14 @@ def latex_tactile_image_conversion(xml_source, pub_file, stringparams, dest_dir,
     extraction_params = stringparams
     extraction_params['format'] = 'tactile'
     extraction_params['labelfile'] = braille_label_file
+    # Need to copy entire external directory in the managed case.
+    # Making data files available for latex image compilation is
+    # not supported outside of the managed directory scheme (2021-07-28)
+    _, external_dir = get_managed_directories(xml_source, pub_file)
+    if external_dir:
+        external_dest = os.path.join(tmp_dir, 'external')
+        shutil.copytree(external_dir, external_dest)
+    # now create all the standalone LaTeX source files
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-latex-image.xsl')
     # Output is multiple *.tex files
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, extraction_params)
