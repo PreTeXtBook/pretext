@@ -137,18 +137,19 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
 #
 ##############################################
 
-def asymptote_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat):
+def asymptote_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, method):
     """Extract asymptote code for diagrams and convert to graphics formats"""
     # stringparams is a dictionary, best for lxml parsing
+    # method == 'local': use a system executable from pretext.cfg
+    # method == 'server': hit a server at U of Alberta, Asymptote HQ
     import os.path # join()
     import os, subprocess, shutil, glob
+    import requests # post()
 
-    _verbose('converting Asymptote diagrams from {} to {} graphics for placement in {}'.format(xml_source, outformat.upper(), dest_dir))
+    msg = 'converting Asymptote diagrams from {} to {} graphics for placement in {} with method "{}"'
+    _verbose(msg.format(xml_source, outformat.upper(), dest_dir, method))
     tmp_dir = get_temporary_directory()
     _debug("temporary directory: {}".format(tmp_dir))
-    asy_executable_cmd = get_executable_cmd('asy')
-    # TODO why this debug line? get_executable_cmd() outputs the same debug info
-    _debug("asy executable: {}".format(asy_executable_cmd[0]))
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-asymptote.xsl')
     # support publisher file, subtree argument
@@ -164,44 +165,62 @@ def asymptote_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
     # Resulting *.asy files are in tmp_dir, switch there to work
     os.chdir(tmp_dir)
     devnull = open(os.devnull, 'w')
-    # perhaps replace following stock advisory with a real version
-    # check using the (undocumented) distutils.version module, see:
-    # https://stackoverflow.com/questions/11887762/how-do-i-compare-version-numbers-in-python
-    proc = subprocess.Popen([asy_executable_cmd[0], '--version'], stderr=subprocess.PIPE)
-    # bytes -> ASCII, strip final newline
-    asyversion = proc.stderr.read().decode('ascii')[:-1]
     # simply copy for source file output
+    # no need to check executable or server, PreTeXt XSL does it all
     if outformat == 'source':
         for asydiagram in os.listdir(tmp_dir):
             _verbose("copying source file {}".format(asydiagram))
             shutil.copy2(asydiagram, dest_dir)
-    # consolidated process for four possible output formats
+    # consolidated process for five possible output formats
+    # parameterized for places where  method  differs
     if outformat in ['html', 'svg', 'png', 'pdf', 'eps']:
-        # build command line to suit
-        asy_cli = asy_executable_cmd + ['-f', outformat]
-        if outformat in ['pdf', 'eps']:
-            asy_cli += ['-noprc', '-iconify', '-tex', 'xelatex', '-batchMask']
-        elif outformat in ['svg', 'png']:
-            asy_cli += ['-render=4', '-tex', 'xelatex', '-iconify']
+        # setup, depending on the method
+        if method == 'local':
+            asy_executable_cmd = get_executable_cmd('asy')
+            # perhaps replace following stock advisory with a real version
+            # check using the (undocumented) distutils.version module, see:
+            # https://stackoverflow.com/questions/11887762/how-do-i-compare-version-numbers-in-python
+            proc = subprocess.Popen([asy_executable_cmd[0], '--version'], stderr=subprocess.PIPE)
+            # bytes -> ASCII, strip final newline
+            asyversion = proc.stderr.read().decode('ascii')[:-1]
+            # build command line to suit
+            asy_cli = asy_executable_cmd + ['-f', outformat]
+            if outformat in ['pdf', 'eps']:
+                asy_cli += ['-noprc', '-iconify', '-tex', 'xelatex', '-batchMask']
+            elif outformat in ['svg', 'png']:
+                asy_cli += ['-render=4', '-tex', 'xelatex', '-iconify']
+        if method == 'server':
+            alberta = 'http://asymptote.ualberta.ca:10007?f={}'.format(outformat)
         # loop over files, doing conversions
         for asydiagram in os.listdir(tmp_dir):
             filebase, _ = os.path.splitext(asydiagram)
             asyout = "{}.{}".format(filebase, outformat)
-            asy_cmd = asy_cli + [asydiagram]
             _verbose("converting {} to {}".format(asydiagram, asyout))
-            _debug("asymptote conversion {}".format(asy_cmd))
-            subprocess.call(asy_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+            # do the work, depending on method
+            if method == 'local':
+                asy_cmd = asy_cli + [asydiagram]
+                _debug("asymptote conversion {}".format(asy_cmd))
+                subprocess.call(asy_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+            if method == 'server':
+                _debug("asymptote server query {}".format(alberta))
+                with open(asydiagram) as f:
+                    data = f.read()
+                    response = requests.post(url=alberta,data=data)
+                    open(asyout, 'wb').write(response.content)
+            # copy resulting image file, or warn/advise about failure
             if os.path.exists(asyout):
                 shutil.copy2(asyout, dest_dir)
             else:
                 msg = [
                 'PTX:WARNING: the Asymptote output {} was not built'.format(asyout),
-                '             1. Perhaps your code has errors (try testing in the Asymptote web app).',
-                '             2. Or your copy of Asymtote may precede version 2.66 that we expect.',
-                '                Not every image can be built in every possible format.',
-                '',
-                '                Your Asymptote reports its version within the following:',
-                '                {}'.format(asyversion)]
+                '             Perhaps your code has errors (try testing in the Asymptote web app).']
+                if method == 'local':
+                    msg += [
+                    '             Or your local copy of Asymtote may precede version 2.66 that we expect.',
+                    '             In this case, not every image can be built in every possible format.',
+                    '',
+                    '             Your Asymptote reports its version within the following:',
+                    '             {}'.format(asyversion)]
                 print('\n'.join(msg))
 
 
