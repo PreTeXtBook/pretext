@@ -3760,7 +3760,7 @@ label.incorrect .feedback {
     border: 1px solid #999;
 }
 
-.webwork img {max-width:100%;}
+.webwork img, .webwork + .knowl-output img {max-width:100%;}
 
 .pretext-content .exercise-wrapper form button {
     border-radius: 3px;
