@@ -204,7 +204,8 @@ def asymptote_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
             if method == 'server':
                 _debug("asymptote server query {}".format(alberta))
                 with open(asydiagram) as f:
-                    data = f.read()
+                    # protect against Unicode (in comments?)
+                    data = f.read().encode('utf-8')
                     response = requests.post(url=alberta,data=data)
                     open(asyout, 'wb').write(response.content)
             # copy resulting image file, or warn/advise about failure
