@@ -108,6 +108,16 @@ def string_parameters_as_dict(pairs):
         params[pairs[2*i]] = pairs[2*i+1]
     return params
 
+def sanitize_method(method, component, format):
+    '''Returns a string appropriate for the component and format, else None'''
+    # inappropriate attempt to use this argument
+    if method:
+        msg = ''.join(['PTX:WARNING: the method "{}" is not applicable for ',
+              'component "{}" and format "{}".  It is being ignored.'])
+        print(msg.format(method, component, format))
+    return None
+
+
 ####################
 # Configuration File
 ####################
@@ -225,10 +235,12 @@ def get_cli_arguments():
     # stringparams is a list of strings on return, defaults to empty list
     parser.add_argument('-x', '--parameters', nargs='+', help='extra stringparam options to pass to XSLT extraction stylesheet (multiple option/value pairs, not as last argument)',
                          action="store", dest='stringparams', default=[])
+    # an option of sorts, called method, default will be per-component
+    parser.add_argument('-M', '--method', help='method to use for a component/format (values and defaults vary)',
+                         action="store", dest='method', default='')
     # default to an empty string, which signals root to XSL stylesheet
     parser.add_argument('-r', '--restrict', help='restrict to subtree rooted at element with specified xml:id',
                          action="store", dest='xmlid', default='')
-
     parser.add_argument('-s', '--server', help='base URL for server (webwork only)', action="store", dest='server')
 
     # recognize this switch, but only warn later that it is being ignored
@@ -306,7 +318,10 @@ def main():
         publisher_file = verify_input_file(args.publisher_file, 'publisher')
     else:
         publisher_file = None
-
+    # method may not be required, but when it may apply we use a
+    # routine to error-check and sanitize possible values and defaults
+    # varies by component and format
+    method = sanitize_method(args.method, args.component, args.format)
     # convert list of string parameters into a dictionary
     # routines in module expect a dictionary, so convert here and now
     stringparams = string_parameters_as_dict(args.stringparams)
