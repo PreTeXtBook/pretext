@@ -153,6 +153,11 @@ def asymptote_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
 
     msg = 'converting Asymptote diagrams from {} to {} graphics for placement in {} with method "{}"'
     _verbose(msg.format(xml_source, outformat.upper(), dest_dir, method))
+
+    # front-ends and calling routines should guarantee the following
+    if not(method in ['local', 'server']):
+        raise ValueError('{} is not a method for Asymptote diagram generation'.format(method))
+
     tmp_dir = get_temporary_directory()
     _debug("temporary directory: {}".format(tmp_dir))
     ptx_xsl_dir = get_ptx_xsl_path()
