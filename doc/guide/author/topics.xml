@@ -2157,12 +2157,12 @@
                     </li>
                 </ul></p>
 
-                <p>At this writing (2020-07-16) the <c>pretext</c> Python script requires a very new version of Asymptote in order to accurately produce all the versions described above.  There is no real way to do otherwise.  However, Asymptote provides a very useful <url href="http://asymptote.ualberta.ca/">web application</url><fn><c>asymptote.ualberta.ca</c></fn> written by Pedram Emami.  So you can create various output files <q>by hand</q> and download them for use.  More importantly, the web application is a great place to learn, experiment, and iterate as you become more skilled at building high-quality graphics to illustrate the concepts in your document.</p>
+                <p>Asymptote may be run as a program installed locally, but the project also has an on-demand online server written by Supakorn Jamie Rassameemasmuang.  By default, the <c>pretext/pretext</c> script (<xref ref="pretext-script"/>) will interface automatically with this server to create your diagrams.  Furthermore, Asymptote provides a very useful <url href="http://asymptote.ualberta.ca/">web application</url><fn><c>asymptote.ualberta.ca</c></fn> written by Pedram Emami.  This is a great place to learn, experiment, and iterate as you become more skilled at building high-quality graphics to illustrate the concepts in your document.</p>
 
                 <note>
                     <title>Build 3-D Asymptote Figures</title>
 
-                    <p>If your project uses geometric or mathematical objects that are three-dimensional, invest some time in learning the Asymptote vector graphics language.  The interactive diagrams for your <init>HTML</init> output produced by Asymptote, in <init>WebGL</init> format, are outstanding and will greatly enhance your project.  (And the other static formats are similarly excellent.)</p>
+                    <p>If your project uses geometric or mathematical objects that are three-dimensional, invest some time in learning the Asymptote vector graphics language.  The interactive diagrams for your <init>HTML</init> output produced by Asymptote, in <init>WebGL</init> format, are outstanding and will greatly enhance your project.  (And the other static formats are similarly excellent.)  The <c>pretext/pretext</c> script will create these diagrams, in the necessary formats, with no extra software by using an online server.</p>
                 </note>
 
             </subsubsection>

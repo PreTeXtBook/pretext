@@ -131,6 +131,27 @@ The script should be run on the entire document, even if all the images are in o
         <p>So if your images are complex or numerous (or both!) and take a long time to process, you can restrict attention to whatever part of the document you are actively editing, and you can even restrict to a single <tag>image</tag> and so produce just a single graphics file.</p>
     </section>
 
+    <section xml:id="pretext-method">
+        <title>Methods</title>
+
+        <p>The <c>-M</c><idx><c>-M</c></idx> (<c>--method</c><idx><c>--method</c></idx>) switch is used in some cases to specify the <em>method</em> by which some process is achieved.  Supported situations and values are listed below.  Defaults are listed first, in brackets.</p>
+
+        <table>
+            <title>PreTeXt Script Methods</title>
+
+            <tabular>
+                <row heade="yes" bottom="major">
+                    <cell>Situation</cell>
+                    <cell>Values</cell>
+                </row>
+                <row>
+                    <cell><c>-c asy</c></cell>
+                    <cell>[<c>server</c>], <c>local</c></cell>
+                </row>
+            </tabular>
+        </table>
+    </section>
+
     <section xml:id="pretext-output">
         <title>Output</title>
 
@@ -155,7 +176,7 @@ The script should be run on the entire document, even if all the images are in o
 
             <li>
                 <title>Asymptote</title>
-                <p>Images described by the Asymptote language can be processed in a manner entirely similar to that for images described with <latex/> graphics languages.  This requires having the <c>asy</c> executable on your system and locatable via the <c>pretext.cfg</c> configuration file.</p>
+                <p>Images described by the Asymptote language can be processed in a manner entirely similar to that for images described with <latex/> graphics languages.  By default an online server will be used for the image generation, or you may elect to use an <c>asy</c> executable on your system and locatable via the <c>pretext.cfg</c> configuration file.</p>
             </li>
 
             <li>
