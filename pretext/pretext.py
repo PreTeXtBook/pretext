@@ -1557,7 +1557,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
 # Conversion to HTML
 ####################
 
-def html(xml, pub_file, stringparams, dest_dir):
+def html(xml, pub_file, stringparams, extra_xsl, dest_dir):
     """Convert XML source to HTML files in destination directory"""
     import os.path # join()
     import shutil # copytree()
@@ -1568,7 +1568,11 @@ def html(xml, pub_file, stringparams, dest_dir):
     # support publisher file, not subtree argument
     if pub_file:
         stringparams['publisher'] = pub_file
-    extraction_xslt = os.path.join(get_ptx_xsl_path(), 'pretext-html.xsl')
+    # Optional extra XSL could be None, or sanitized full filename
+    if extra_xsl:
+        extraction_xslt = extra_xsl
+    else:
+        extraction_xslt = os.path.join(get_ptx_xsl_path(), 'pretext-html.xsl')
 
     # copy externally manufactured files to  dest_dir
     if external_abs:
@@ -1589,14 +1593,18 @@ def html(xml, pub_file, stringparams, dest_dir):
 # Conversion to LaTeX
 #####################
 
-def latex(xml, pub_file, stringparams, out_file, dest_dir):
+def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
     """Convert XML source to LaTeX in destination directory"""
     import os.path # join()
 
     # support publisher file, not subtree argument
     if pub_file:
         stringparams['publisher'] = pub_file
-    extraction_xslt = os.path.join(get_ptx_xsl_path(), 'pretext-latex.xsl')
+    # Optional extra XSL could be None, or sanitized full filename
+    if extra_xsl:
+        extraction_xslt = extra_xsl
+    else:
+        extraction_xslt = os.path.join(get_ptx_xsl_path(), 'pretext-latex.xsl')
     # form output filename based on source filename,
     # unless an  out_file  has been specified
     derivedname = get_output_filename(xml, out_file, dest_dir, '.tex')
@@ -1609,7 +1617,7 @@ def latex(xml, pub_file, stringparams, out_file, dest_dir):
 # Conversion to PDF
 ###################
 
-def pdf(xml, pub_file, stringparams, out_file, dest_dir):
+def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
     """Convert XML source to a PDF (incomplete)"""
     import os # chdir()
     import os.path # join(), split(), splitext()
@@ -1626,7 +1634,7 @@ def pdf(xml, pub_file, stringparams, out_file, dest_dir):
     # make the LaTeX source file in scratch directory
     # (1) pass None as out_file to derive from XML source filename
     # (2) pass tmp_dir (scratch) as destination directory
-    latex(xml, pub_file, stringparams, None, tmp_dir)
+    latex(xml, pub_file, stringparams, extra_xsl, None, tmp_dir)
 
     # "dirs_exist_ok" keyword is Python 3.8; necessary?
 
