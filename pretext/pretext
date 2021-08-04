@@ -49,10 +49,12 @@ def verify_input_file(f, file_type):
         file_descriptor = 'XML source'
     elif file_type == 'publisher':
         file_descriptor = 'publisher'
+    elif file_type == 'stylesheet':
+        file_descriptor = 'extra XSL stylesheet'
     elif file_type == 'config':
         file_descriptor = 'executables configuration'
     else:
-        msg = "input file verification should receive 'source' or 'publisher' or 'config' parameter, not '{}'"
+        msg = "input file verification should receive a 'source', 'publisher', 'stylesheet', or 'config' parameter, not '{}'"
         raise ValueError(msg.format(file_type))
 
     ptx._verbose('verifying and expanding {} file: {}'.format(file_descriptor, f))
@@ -250,6 +252,8 @@ def get_cli_arguments():
     # stringparams is a list of strings on return, defaults to empty list
     parser.add_argument('-x', '--parameters', nargs='+', help='extra stringparam options to pass to XSLT extraction stylesheet (multiple option/value pairs, not as last argument)',
                          action="store", dest='stringparams', default=[])
+    # filename for "eXtra" XSL, really alternate XSL
+    parser.add_argument('-X', '--XSL', help='filename for extra XSL stylesheet (only PDF, HTML, LaTeX formats)', action="store", dest='extra_stylesheet')
     # an option of sorts, called method, default will be per-component
     parser.add_argument('-M', '--method', help='method to use for a component/format (values and defaults vary)',
                          action="store", dest='method', default='')
@@ -333,6 +337,11 @@ def main():
         publisher_file = verify_input_file(args.publisher_file, 'publisher')
     else:
         publisher_file = None
+    # extra XSL is optional, so allow for None here
+    if args.extra_stylesheet:
+        extra_stylesheet = verify_input_file(args.extra_stylesheet, 'stylesheet')
+    else:
+        extra_stylesheet = None
     # method may not be required, but when it may apply we use a
     # routine to error-check and sanitize possible values and defaults
     # varies by component and format
@@ -388,11 +397,11 @@ def main():
             raise NotImplementedError('cannot convert math elements to "{}" format'.format(args.format))
     elif args.component == 'all':
         if args.format == 'html':
-            ptx.html(xml_source, publisher_file, stringparams, dest_dir)
+            ptx.html(xml_source, publisher_file, stringparams, extra_stylesheet, dest_dir)
         elif args.format == 'pdf':
-            ptx.pdf(xml_source, publisher_file, stringparams, out_file, dest_dir)
+            ptx.pdf(xml_source, publisher_file, stringparams, extra_stylesheet, out_file, dest_dir)
         elif args.format == 'latex':
-            ptx.latex(xml_source, publisher_file, stringparams, out_file, dest_dir)
+            ptx.latex(xml_source, publisher_file, stringparams, extra_stylesheet, out_file, dest_dir)
         elif args.format == 'braille-emboss':
             ptx.braille(xml_source, publisher_file, stringparams, out_file, dest_dir, 'emboss')
         elif args.format == 'braille-electronic':
