@@ -2078,7 +2078,7 @@
             <subsubsection>
                 <title>Asymptote</title>
 
-                <p><url href="https://asymptote.sourceforge.io/">Asymptote</url><fn><c>asymptote.sourceforge.io/</c></fn> is a vector graphics language that produces high-quality output in <init>WebGL</init>, <init>SVG</init>, and <init>PDF</init> formats.  You can describe 2-D or 3-D objects, and the 3-D objects are interactive in online output.  <latex/> may be used, and your macros are automatically available for use.</p>
+                <p><url href="https://asymptote.sourceforge.io/">Asymptote</url><fn><c>asymptote.sourceforge.io/</c></fn> is a vector graphics language that produces high-quality output in <init>WebGL</init>, <init>SVG</init>, <init>PNG</init>, and <init>PDF</init> formats.  You can describe 2-D or 3-D objects, and the 3-D objects are interactive in online output as <init>HTML</init> <init>WebGL</init> files.  <latex/> may be used, and your macros are automatically available for use.</p>
 
                 <p>Authoring is straight-forward.  Inside an <tag>image</tag> include a child <tag>asymptote</tag> to hold the code.  For example:</p>
 
