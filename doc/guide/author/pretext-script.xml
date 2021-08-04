@@ -123,6 +123,22 @@ The script should be run on the entire document, even if all the images are in o
         </cd></p>
     </section>
 
+    <section xml:id="extra-stylesheet">
+        <title>Extra Stylesheet</title>
+
+        <p>There are situations when an <q>extra</q> <init>XSL</init> stylesheet is necessary for processing your <init>XML</init> source.  A good example is the supported method for styling <init>PDF</init> output, described at <xref ref="latex-styles"/>.  Historically, various customizations have been supported by <q>thin</q> XSL stylesheets (<xref ref="processing-thin-xsl"/>), but as certain themes have become apparent we have moved these customizations to simpler techniques (e.g. publisher files, <xref ref="publisher-file"/>).  Other than styling <init>PDF</init>, you should think carefully about if an additional stylesheet is necessary.</p>
+
+        <p>The <c>-X</c><idx><c>-X</c></idx> (<c>--XSL</c><idx><c>--XSL</c></idx>) switch is used to specify an <q>extra</q> <init>XSL</init> stylesheet that will be applied to your source.  Note that it is now possible to do <em>anything</em> you want to your source and so can create run-time failures at any point in the process.  Here are the simple mistakes to avoid.<ul>
+            <li>If you are expecting <init>HTML</init> output because you used <c>-f html</c>, then your stylesheet supplied in the <c>-X</c> argument will certainly import the base <c>xsl/pretext-html.xsl</c> stylesheet.  When you understand this, then you will understand that perhaps we should call this an <q>alternate</q> stylesheet.  This advice applies equally well to extending the base <c>xsl/pretext-latex.xsl</c> stylesheet.</li>
+
+            <li>The import just described will behave better for others (meaning co-authors, or authors who fork your project) if the import uses a relative path, meaning relative to location of the extra stylesheet.  We therefore suggest using a <c>user</c> directory, placed as a peer of the <c>xsl</c> directory, as described in <xref ref="processing-thin-xsl"/>.</li>
+
+            <li>So a common mistake is to use <c>-X</c> to point to an extra stylesheet someplace close-by your project's source files, when you have sensibly setup a relative import of the base stylesheet, and instead should point to the <em>copy</em> you have placed in <c>user</c> so that the import is effective on everybody's system.</li>
+        </ul></p>
+
+        <p>As of 2021-08-04, this technique is only effective for <init>HTML</init>, <init>PDF</init>, and <latex/> outputs.  It may be natural for some other output formats (e.g., <init>EPUB</init>), and perhaps possible for others (e.g., braille).  Make a feature request for expanding applicability.</p>
+    </section>
+
     <section xml:id="restrict-pretext-scope">
         <title>Restricting the Scope</title>
 
