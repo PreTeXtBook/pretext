@@ -6,3 +6,4 @@ doc/guide/webwork-representations.ptx
 script/mjsre/node_modules/
 script/mjsre/package-lock.json
 pretext/__pycache__/**
+.vscode

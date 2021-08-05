@@ -37,7 +37,7 @@
     <introduction>
       <p>
         <alert>You must extract <webwork/> content as described in the <xref ref="webwork-publisher" text="custom">Publisher Guide</xref>
-        before you will be able to see any <webwork/> content in your output.</alert>
+        before you will be able to see any <webwork/> content in your output.  For simple cases, you might be able to run <c>pretext build html -w</c> to process <webwork /> exercises.</alert>
       </p>
       <p>
         A <tag>webwork</tag> tag must be inside an <tag>exercise</tag>,
