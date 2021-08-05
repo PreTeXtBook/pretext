@@ -280,7 +280,11 @@ console.log("this is e", e);
    //         this_permalink_container.innerHTML = '<span href="' + this_permalink_url + '">' + permalink_word + '</span>';
             this_permalink_container.innerHTML = '<a href="' + this_permalink_url + '">' + permalink_word + '</a>';
 
-            this_item.insertAdjacentElement("afterbegin", this_permalink_container);
+            if (document.querySelector('body.standalone')) {
+                console.log("no permalinks on standalone pages")
+            } else {
+                this_item.insertAdjacentElement("afterbegin", this_permalink_container)
+            }
         } else {
             console.log("      no permalink, because no id", this_item)
         }
@@ -771,15 +775,14 @@ function adjustWorkspace() {
 
         this_item = all_pages[i];
         if (i == 0) { this_item.classList.add("firstpage") }
-        else if (i == all_pages.length - 1) { this_item.classList.add("lastpage") }
-        console.log(this_item.clientHeight, "ccc", this_item);
+            /* not else if: could be one-page worksheet */
+        if (i == all_pages.length - 1) { this_item.classList.add("lastpage") }
+        console.log(this_item.getBoundingClientRect(), "ccc", this_item);
+        console.log(this_item.parentElement.getBoundingClientRect(), "ddd", this_item.parentElement);
     }
     for (var i = 0; i < all_pages.length; i++) {
        this_item = all_pages[i];
-       heightA = scaleWorkspaceIn(this_item, this_item, a, "tmp");
-       heightB = scaleWorkspaceIn(this_item, this_item, b, "tmp");
-       console.log("heights", heightA, " xx ", heightB, "oo", this_item);
-       /* a magicscale makes the output the height of the minimum specified input */
+
        /* not sure if this is the place to do it, but the first page might
           have items before it, and the last page mught have items after it */
        var worksheetData = this_item.parentElement.getBoundingClientRect();
@@ -789,17 +792,27 @@ function adjustWorkspace() {
        if (this_item.classList.contains("firstpage")) {
            console.log("this_item",this_item.getBoundingClientRect(),this_item.getBoundingClientRect()["y"]);
            console.log("this_item parent",this_item.parentElement.getBoundingClientRect(),this_item.parentElement.getBoundingClientRect()["y"]);
-           pageExtraHeight = pageData["top"] - worksheetData["top"];
+           pageExtraHeight += pageData["top"] - worksheetData["top"];  /* 45 for padding */
        }
        if (this_item.classList.contains("lastpage")) {
-           pageExtraHeight = worksheetData["bottom"] - pageData["bottom"];
+           pageExtraHeight += worksheetData["bottom"] - pageData["bottom"];
        }
   //     pageExtraHeight += 150;
+       pageheight[i] -= pageExtraHeight
+       console.log("worksheetData", worksheetData, "pageData", pageData);
+       console.log(i, "i", pageExtraHeight, "pageExtraHeight");
+
+       heightA = scaleWorkspaceIn(this_item, this_item, a, "tmp");
+       heightB = scaleWorkspaceIn(this_item, this_item, b, "tmp");
+       console.log("heights", heightA, " xx ", heightB, "oo", this_item);
+       console.log(i, "goal height", pageheight[i]);
+       /* a magicscale makes the output the height of the minimum specified input */
+       var magicscale = 12;
+
+/*
        heightA += pageExtraHeight;
        heightB += pageExtraHeight;
-       pageheight[i] -= pageExtraHeight
-       console.log(i, "i", pageExtraHeight, "pageExtraHeight");
-       var magicscale = 12;
+*/
 
        if (heightA != heightB) {
 /*
@@ -823,8 +836,12 @@ function adjustWorkspace() {
        all_pages[i].setAttribute("style", 'height: ' + pageheight[i].toString() + 'px');
 
        var this_height = this_item.clientHeight;
-       console.log(this_height, "ccc", this_item);
+       console.log(this_height, "ttt", this_item);
+       console.log(this_item.getBoundingClientRect(), "222ccc", this_item);
+       console.log(this_item.parentElement.getBoundingClientRect(), "222ddd", this_item.parentElement);
 
+
+//   alert("part of one page");
        /* now go back and see if any of the squashed non-tight items can be expanded */
        var these_squashed = this_item.querySelectorAll('.squashed:not(.tight)');
        console.log("these_squashed", these_squashed);
@@ -863,7 +880,7 @@ window.addEventListener("load",function(event) {
 
       window.setTimeout(urlattribute, 1500);
   }
-  console.log("done adjusting workspace");
+//  console.log("done adjusting workspace");
 
 });
 
