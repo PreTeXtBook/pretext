@@ -82,8 +82,9 @@ function handleWW(ww_id, action) {
         url.searchParams.append("userID", ww_user_id);
         url.searchParams.append("course_password", ww_course_password);
         url.searchParams.append("outputformat", "raw");
-        url.searchParams.append("showSolutions", ww_container.dataset.hasSolution ? '1' : '0');
-        url.searchParams.append("showHints", ww_container.dataset.hasHint ? '1' : '0');
+        // note ww_container.dataset.hasSolution is a string, possibly 'false' which is true
+        url.searchParams.append("showSolutions", ww_container.dataset.hasSolution == 'true' ? '1' : '0');
+        url.searchParams.append("showHints", ww_container.dataset.hasHint == 'true' ? '1' : '0');
     }
 
     // get the json and do stuff with what we get
@@ -117,7 +118,7 @@ function handleWW(ww_id, action) {
         adjustSrcHrefs(body_div, ww_domain);
 
         translateHintSol(ww_id, body_div, ww_domain,
-            ww_container.dataset.hasHint, ww_container.dataset.hasSolution,
+            ww_container.dataset.hasHint == 'true', ww_container.dataset.hasSolution == 'true',
             ww_container.dataset.hintLabelText, ww_container.dataset.solutionLabelText)
 
         // insert our cleaned up problem text
@@ -138,8 +139,9 @@ function handleWW(ww_id, action) {
             outputformat:     "raw",
             language:         data.formLanguage,
             showSummary:      data.showSummary,
-			showSolutions:    ww_container.dataset.hasSolution ? '1' : '0',
-			showHints:        ww_container.dataset.hasHint ? '1' : '0',
+            // note ww_container.dataset.hasSolution is a string, possibly 'false' which is true
+            showSolutions:    ww_container.dataset.hasSolution == 'true' ? '1' : '0',
+            showHints:        ww_container.dataset.hasHint == 'true' ? '1' : '0',
             forcePortNumber:  data.forcePortNumber
         };
 
@@ -156,7 +158,7 @@ function handleWW(ww_id, action) {
 
         // Prepare answers object
         const answers = {};
-        if (ww_container.dataset.hasAnswer) {
+        if (ww_container.dataset.hasAnswer == 'true') {
             // Update answer data
             Object.keys(data.rh_result.answers).forEach(function(id) {
                 answers[id] = {
@@ -195,7 +197,7 @@ function handleWW(ww_id, action) {
             buttonContainer.appendChild(check);
 
             // Show correct answers button if original PTX has answer knowl.
-            if (ww_container.dataset.hasAnswer) {
+            if (ww_container.dataset.hasAnswer == 'true') {
                 const correct = document.createElement("button");
                 correct.classList.add("show-correct", 'webwork-button');
                 correct.type = "button";
@@ -223,7 +225,7 @@ function handleWW(ww_id, action) {
             buttonContainer.appendChild(reset)
         } else {
             // Update the click handler for the show correct button.
-            if (ww_container.dataset.hasAnswer) {
+            if (ww_container.dataset.hasAnswer == 'true') {
                 const correct = buttonContainer.querySelector('.show-correct');
                 const correctNew = correct.cloneNode(true);
                 correctNew.addEventListener('click', () => WWshowCorrect(ww_id, answers));
