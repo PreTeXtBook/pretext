@@ -2084,7 +2084,6 @@ function replace_by_id(theid, format) {
 //    MathJax.typesetPromise(document.getElementById(theid));
     MathJax.typesetPromise();
 
-alert("stop");
     console.log("adjusting workspace");
 window.setTimeout(adjustWorkspace, 1000);
 //    adjustWorkspace();
