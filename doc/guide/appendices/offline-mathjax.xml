@@ -56,7 +56,7 @@
         </cd>
         Install both packages at the same time with a single command:<cd>
             <cline>./update-sre</cline>
-        </cd>It is possible you will need to make this simple script executable.  On Unix-style systems (Linux, Mac OS) this can be done with the <c>chmod</c> command.</p>
+        </cd>It is possible you will need to make this simple script executable.  On Unix-style systems (Linux, Mac OS) this can be done with the <c>chmod</c> command.  As this is a bash script, Windows users must use Window's Sybsystem for Linux or examine the contents of the script to run the commands manually.</p>
 
         <p>The <c>update-sre</c> script is supplied by <pretext/>.  It will create a file and a directory:<cd>
             <cline>/path/to/mathbook/script/mjsre/package-lock.json</cline>
