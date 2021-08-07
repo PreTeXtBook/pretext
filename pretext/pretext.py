@@ -149,7 +149,11 @@ def asymptote_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
     #   curl --data-binary @source.asy 'asymptote.ualberta.ca:10007?f=svg' > output.svg
     import os.path # join()
     import os, subprocess, shutil, glob
-    import requests # post()
+    try:
+        import requests # post()
+    except ImportError:
+        global __module_warning
+        raise ImportError(__module_warning.format('requests'))
 
     msg = 'converting Asymptote diagrams from {} to {} graphics for placement in {} with method "{}"'
     _verbose(msg.format(xml_source, outformat.upper(), dest_dir, method))
@@ -380,7 +384,12 @@ def latex_tactile_image_conversion(xml_source, pub_file, stringparams, dest_dir,
     import os.path # join()
     import shutil # copytree()
     import subprocess # run() is Python 3.5 (run() is preferable to call())
-    import lxml.etree as ET
+    # external module, often forgotten
+    try:
+        import lxml.etree as ET  # label file
+    except ImportError:
+        global __module_warning
+        raise ImportError(__module_warning.format('lxml'))
 
     # Outline:
     #   1.  Locate, isolate, convert math to Unicode braille
@@ -513,15 +522,19 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
     import urllib.parse # urlparse()
     import re     # regular expressions for parsing
     import base64  # b64encode()
-    import lxml.etree as ET
     import copy
     import tarfile
+    # external module, often forgotten
+    global __module_warning
+    try:
+        import lxml.etree as ET  # write representations
+    except ImportError:
+        raise ImportError(__module_warning.format('lxml'))
     # at least on Mac installations, requests module is not standard
     try:
-        import requests
+        import requests  # webwork server
     except ImportError:
-        msg = 'PTX:ERROR: failed to import requests module, is it installed?'
-        raise ValueError(msg)
+        raise ImportError(__module_warning.format('requests'))
 
     # N.B. accepting a publisher file and passing it the extraction step
     # runs the risk of specifying a representations file, so there is then
@@ -1052,7 +1065,11 @@ def pg_macros(xml_source, dest_dir):
 def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     import os.path  # join()
     import subprocess, shutil
-    import requests
+    try:
+        import requests  # YouTube server
+    except ImportError:
+        global __module_warning
+        raise ImportError(__module_warning.format('requests'))
 
     _verbose('downloading YouTube thumbnails from {} for placement in {}'.format(xml_source, dest_dir))
     ptx_xsl_dir = get_ptx_xsl_path()
@@ -1181,7 +1198,12 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
     """All images, in all necessary formats, in subdirectories, for production of any project"""
     import os  # mkdir()
     import os.path  # join(), isdir()
-    import lxml.etree as ET
+    # external module, often forgotten
+    try:
+        import lxml.etree as ET  # XML source
+    except ImportError:
+        global __module_warning
+        raise ImportError(__module_warning.format('lxml'))
 
     # parse source, no harm to assume
     # xinclude modularization is necessary
@@ -1281,7 +1303,11 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
 def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     import os.path # join()
     import subprocess, shutil
-    import requests
+    try:
+        import requests  # MyOpenMath server
+    except ImportError:
+        global __module_warning
+        raise ImportError(__module_warning.format('requests'))
 
     _verbose('downloading MyOpenMath static problems from {} for placement in {}'.format(xml_source, dest_dir))
     ptx_xsl_dir = get_ptx_xsl_path()
@@ -1390,7 +1416,12 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     import os, os.path, subprocess, shutil
     import re, fileinput
     import zipfile as ZIP
-    import lxml.etree as ET
+    # external module, often forgotten
+    try:
+        import lxml.etree as ET  # packaging file
+    except ImportError:
+        global __module_warning
+        raise ImportError(__module_warning.format('lxml'))
 
     # general message for this entire procedure
     _verbose('converting {} into EPUB in {} with math as {}'.format(xml_source, dest_dir, math_format))
@@ -1703,7 +1734,13 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
     different than that at the time of the command-line invocation.
     """
     import os
-    import lxml.etree as ET
+    # external module, often forgotten
+    try:
+        import lxml.etree as ET  # XML source
+    except ImportError:
+        global __module_warning
+        raise ImportError(__module_warning.format('lxml'))
+
 
     _verbose('XSL conversion of {} by {}'.format(xml, xsl))
     debug_string = 'XSL conversion via {} of {} to {} and/or into directory {} with parameters {}'
@@ -1903,7 +1940,11 @@ def get_executable_cmd(exec_name):
 def sanitize_url(url):
     """Verify a server address"""
     _verbose('validating, cleaning server URL: {}'.format(url))
-    import requests
+    try:
+        import requests  # test a URL
+    except ImportError:
+        global __module_warning
+        raise ImportError(__module_warning.format('requests'))
     try:
         requests.get(url)
     except requests.exceptions.RequestException as e:
@@ -1973,7 +2014,12 @@ def verify_input_directory(inputdir):
 def get_managed_directories(xml_source, pub_file):
     """Returns pair: (generated, external) absolute paths, derived from publisher file"""
     import os.path # isabs, split
-    import lxml.etree as ET  # XML source
+    # external module, often forgotten
+    try:
+        import lxml.etree as ET  # publisher file
+    except ImportError:
+        global __module_warning
+        raise ImportError(__module_warning.format('lxml'))
 
     # N.B. manage attributes carefully to distinguish
     # absent (None) versus empty string value ('')
@@ -2023,11 +2069,11 @@ def get_managed_directories(xml_source, pub_file):
     return (generated, external)
 
 
-########
+###########################
 #
-# Module
+#  Module-level definitions
 #
-########
+###########################
 
 # One-time set-up for global use in the module
 # Module provides, and depends on these variables,
@@ -2042,6 +2088,8 @@ def get_managed_directories(xml_source, pub_file):
 #  __config - parsed values from an INI-style configuration file
 #
 #  __temps - created temporary directories, to report or release
+#
+#  __module_warning - stock import-failure warning message
 
 # verbosity parameter defaults to 0 at startup
 # employing application can use set_verbosity()
@@ -2058,3 +2106,13 @@ __executables = None
 
 #  cache of temporary directories
 __temps = []
+
+# This is a convenience for a uniform (detailed) warning when
+# a "extraneous" module fails to load, which is indicative of
+# some problem with an author's working environment
+__module_warning = '\n'.join([
+                    'PTX ERROR: the "{}" module has failed to load, and',
+                    '  this is necessary for the task you have requested.  Perhaps',
+                    '  you have not installed it?  Or perhaps you have forgotten to',
+                    '  use a Python virtual environment you set up for this purpose?'
+                    ])
