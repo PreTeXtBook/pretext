@@ -6353,7 +6353,7 @@ the xsltproc executable.
 
             </subsection>
 
-            <subsection>
+            <subsection xml:id="interactive-iframes">
                 <title>IFrames</title>
 
                 <p>An <c>iframe</c> is an <init>HTML</init> element that allows embedding of a complete web page within another one.  Here we use this device to provide interactive 3D diagrams built with other tools.</p>
@@ -6375,7 +6375,7 @@ the xsltproc executable.
                 <p>Note that the downloaded file has links to specific versions of the <c>three.js</c> library, which are beyond our control, and beyond your control.  So there is a future where these images may need updating.  You could put your source code into a (large) comment with your project's source for safe-keeping in the future.</p>
             </subsection>
 
-            <subsection>
+            <subsection xml:id="interactive-threejs">
                 <title>threejs</title>
 
                 <p>An example using the <c>threejs</c> 3D Javascript library.  This is <url href="https://threejs.org/examples/#webgl_geometry_extrude_splines" visual="threejs.org/examples/#webgl_geometry_extrude_splines">one of the project's examples</url>, licensed with an MIT License, with minimal modifications.  We get several of the necessary libraries from the <c>threejs.org</c> site.</p>
@@ -6386,6 +6386,48 @@ the xsltproc executable.
                         <slate xml:id="threejs-splines" surface="div" aspect="1:1" />
                     </interactive>
                 </figure>
+
+                <p>The following two examples are meant to be instructive (only).  The end result is accomplished in a much more straightforward way be the method in <xref ref="interactive-iframes" text="type-global"/>.  We illustrate a way to get a <c>three.js</c> image out of an <init>HTML</init> page as a Javascript file and render it on a <pretext/> <tag>slate</tag>.  We follow the second method in a <url href="https://golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html" visual="golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html">blog post from the <m>n</m>-Category Cafe</url>.<ol>
+                    <li>Open a Jupyter Notebook that utilizes a Sage kernel.  This can be done easily at <url href="https://cocalc.com" visual="cocalc.com">CoCalc</url> (and for free initially).</li>
+
+                    <li>Sketch a surface using Sage code.  We recycle the suggestion from Juan Carlos Bustamante in <xref ref="interactive-iframes" text="type-global"/>:<cd>
+                        <cline>var('x,y')</cline>
+                        <cline>plot3d(x^2 - y^2, (x,-1,1), (y,-1,1), color="orange", mesh=true)</cline>
+                    </cd></li>
+
+                    <li>Look for a button (in the lower-right) which will provide a menu option <c>Save as HTML</c>.  Save the resulting <init>HTML</init> file, and open a <em>copy</em> in a text editor.</li>
+
+                    <li>
+                        <p>You are now looking for two <init>HTML</init> <c>script</c> elements.  One will tell you just which version of <c>three.js</c> is being used, vis a <c>@src</c> attribute.  For the second example below we located<cd>
+                            <cline>https://cdn.jsdelivr.net/gh/sagemath/threejs-sage@r122/build/three.min.js</cline>
+                        </cd>The <c>@r122</c> will likely be a version number, which is a good thing for the longevity of your work.  This will get used in the <attr>source</attr> attribute of your <tag>interactive</tag>, which will have <attr>platform</attr> set to <c>javascript</c>.</p>
+
+                        <p>The second <c>script</c> element is likely huge and has many generic functions defined it.  There may be a huge variable full of data points computed by Sage.  Copy the <em>contents</em> of this <c>script</c> element into a new Javascript file (so use a <c>.js</c> extension).  Do not edit in any way until you read further.  Once adjusted, this file too gets specified in the <attr>source</attr> attribute of your <tag>interactive</tag>.</p>
+                    </li>
+
+                    <li>Your <tag>interactive</tag> needs a <tag>slate</tag> element for the graphic to draw on, and you will need to give it a proper <attr>xml:id</attr> attribute, plus teh <attr>surface</attr> will be set to <c>div</c>.  Then you need to edit the Javascript file to connect the graphic with the slate, via IDs in your <pretext/> source and on teh <init>HTML</init> <c>div</c> created by the slate.  Look at the provided examples to see how.  Do not make any other edits to this file, even if tempted.</li>
+
+                    <li>Study the two examples below, and mimic how they were constructed.</li>
+                </ol></p>
+
+                <p>First, the example given in the blog post referenced above.</p>
+
+                <figure xml:id="figure-threejs-catenoid-surface">
+                    <caption><c>threejs</c> catenoid surface, from <m>n</m>-Category Cafe</caption>
+                    <interactive xml:id="interactive-threejs-catenoid-surface" platform="javascript" width="75%" aspect="2:1" source="https://cdn.rawgit.com/mrdoob/three.js/r80/build/three.min.js https://cdn.rawgit.com/mrdoob/three.js/r80/examples/js/controls/OrbitControls.js code/threejs/catenoid.js">
+                        <slate xml:id="threejs-catenoid-surface" surface="div" aspect="2:1" />
+                    </interactive>
+                </figure>
+
+                <p>Second, the example from JC Bustamante.</p>
+
+                <figure xml:id="figure-threejs-saddle">
+                    <caption><c>threejs</c> saddle by Sage</caption>
+                    <interactive xml:id="interactive-threejs-saddle" platform="javascript" width="85%" aspect="1:1" source="https://cdn.jsdelivr.net/gh/sagemath/threejs-sage@r122/build/three.min.js code/threejs/saddle.js">
+                        <slate xml:id="threejs-saddle" surface="div" aspect="1:1" />
+                    </interactive>
+                </figure>
+
             </subsection>
         </section>
 
