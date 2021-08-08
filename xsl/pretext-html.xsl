@@ -2252,7 +2252,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Title only -->
-<!-- ASIDE-LIKE, exercisegroup, dl/li -->
+<!-- ASIDE-LIKE, dl/li                -->
 <!-- proof, when optionally titled    -->
 <!-- Subsidiary to paragraphs,        -->
 <!-- and divisions of "exercises"     -->
@@ -3510,7 +3510,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- When born use this heading         -->
 <!-- Never hidden, never gets a heading -->
 <xsl:template match="exercisegroup" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-title" />
+    <xsl:apply-templates select="." mode="heading-divisional-exercise-serial" />
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->

@@ -5349,11 +5349,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <!-- build it -->
     <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
+    <xsl:text>\textbf{</xsl:text>
+    <xsl:apply-templates select="." mode="serial-number" />
+    <xsl:text>.</xsl:text>
     <xsl:if test="title">
-        <xsl:text>\textbf{</xsl:text>
+        <xsl:text> </xsl:text>
         <xsl:apply-templates select="." mode="title-full" />
-        <xsl:text>}\space\space</xsl:text>
     </xsl:if>
+    <xsl:text>}\space\space</xsl:text>
     <xsl:if test="@xml:id">
         <xsl:apply-templates select="." mode="label"/>
     </xsl:if>
