@@ -110,6 +110,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- content, since we are going to fill in with Unicode braille    -->
 <!-- from MJ/SRE for eventual use with liblouis.                    -->
 <xsl:template match="label/m">
+    <!-- NB: math-representation file writes with "visible-id"  -->
     <xsl:variable name="id">
         <xsl:apply-templates select="." mode="visible-id"/>
     </xsl:variable>

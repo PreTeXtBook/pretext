@@ -579,6 +579,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- indicators.                                                  -->
 <xsl:template match="m|me|men|md|mdn">
     <!-- We connect source location with representations via id -->
+    <!-- NB: math-representation file writes with "visible-id"  -->
     <xsl:variable name="id">
         <xsl:apply-templates select="." mode="visible-id"/>
     </xsl:variable>

@@ -122,6 +122,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- know where the results belong      -->
 <xsl:template match="m|me|men|md|mdn" mode="cruise">
     <div context="{local-name(.)}">
+        <!-- NB: stylesheets receiving these representations will  -->
+        <!-- want to *also* mark math bits via the "visible-id"    -->
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="visible-id"/>
         </xsl:attribute>

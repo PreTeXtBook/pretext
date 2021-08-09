@@ -1226,8 +1226,9 @@ width: 100%
 
 <!-- Pluck SVGs from the file full of them, with matching IDs -->
 <xsl:template match="m|me|men|md|mdn">
+    <!-- NB: math-representation file writes with "visible-id" -->
     <xsl:variable name="id">
-        <xsl:apply-templates select="." mode="html-id"/>
+        <xsl:apply-templates select="." mode="visible-id"/>
     </xsl:variable>
     <xsl:variable name="math" select="$math-repr/pi:math[@id = $id]"/>
     <xsl:variable name="context" select="string($math/@context)"/>
