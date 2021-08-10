@@ -2266,7 +2266,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and divisions of "exercises"     -->
 <!-- No title, then nothing happens   -->
 <xsl:template match="*" mode="heading-title">
-    <xsl:if test="title/*|title/text()">
+    <xsl:variable name="has-default-title">
+        <xsl:apply-templates select="." mode="has-default-title"/>
+    </xsl:variable>
+    <xsl:if test="title/*|title/text() or $has-default-title = 'true'">
         <h6 class="heading">
             <span class="title">
                 <xsl:apply-templates select="." mode="title-full" />
