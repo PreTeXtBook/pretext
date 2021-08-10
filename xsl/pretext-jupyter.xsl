@@ -183,22 +183,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*"/>
 </xsl:template>
 
-<!-- We manufacture a single (additional?) notebook for each worksheet, -->
-<!-- irrespective of the chunking in effect.  The standalone version is -->
-<!-- identical to a version produced by chunking, but the metadata will -->
-<!-- contain different filenames.                                       -->
-<xsl:template match="worksheet" mode="standalone-worksheet">
-    <xsl:variable name="worksheet-filename">
-        <xsl:apply-templates select="." mode="visible-id"/>
-        <xsl:text>-standalone.ipynb</xsl:text>
-    </xsl:variable>
-    <xsl:apply-templates select="." mode="file-wrap">
-        <xsl:with-param name="content">
-            <xsl:apply-templates select="." mode="pretext-heading"/>
-            <xsl:apply-templates select="*"/>
-        </xsl:with-param>
-        <xsl:with-param name="filename" select="$worksheet-filename"/>
-    </xsl:apply-templates>
+<!-- A template ensures standalone page creation, -->
+<!-- and links to same, are consistent (*.ipynb)  -->
+<xsl:template match="worksheet" mode="standalone-worksheet-filename">
+    <xsl:param name="paper"/>
+
+    <xsl:apply-templates select="." mode="visible-id"/>
+    <xsl:text>-</xsl:text>
+    <xsl:value-of select="$paper"/>
+    <xsl:text>.ipynb</xsl:text>
 </xsl:template>
 
 
