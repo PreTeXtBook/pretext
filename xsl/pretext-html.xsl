@@ -703,21 +703,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- worksheet, so CSS can kill on the "printable" versions         -->
     <!-- $paper is LOWER CASE "a4" and "letter"                         -->
     <xsl:if test="self::worksheet">
-        <xsl:variable name="letter-filename">
-            <xsl:apply-templates select="." mode="standalone-worksheet-filename">
-                <xsl:with-param name="paper" select="'letter'"/>
-            </xsl:apply-templates>
-        </xsl:variable>
-        <xsl:variable name="a4-filename">
-            <xsl:apply-templates select="." mode="standalone-worksheet-filename">
-                <xsl:with-param name="paper" select="'a4'"/>
-            </xsl:apply-templates>
-        </xsl:variable>
-        <div class="print-links">
-            <a href="{$a4-filename}" class="a4">A4</a>
-            <a href="{$letter-filename}" class="us">US</a>
-        </div>
+        <xsl:apply-templates select="." mode="standalone-worksheet-links"/>
     </xsl:if>
+</xsl:template>
+
+<!-- Links to the "printable" version(s), meant only for "viewable" -->
+<!-- worksheet, so CSS can kill on the "printable" versions         -->
+<!-- $paper is LOWER CASE "a4" and "letter".  We isolate link       -->
+<!-- creation, so we can kill it simply in derivative conversions   -->
+<xsl:template match="worksheet" mode="standalone-worksheet-links">
+    <xsl:variable name="letter-filename">
+        <xsl:apply-templates select="." mode="standalone-worksheet-filename">
+            <xsl:with-param name="paper" select="'letter'"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:variable name="a4-filename">
+        <xsl:apply-templates select="." mode="standalone-worksheet-filename">
+            <xsl:with-param name="paper" select="'a4'"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <div class="print-links">
+        <a href="{$a4-filename}" class="a4">A4</a>
+        <a href="{$letter-filename}" class="us">US</a>
+    </div>
 </xsl:template>
 
 <!-- Recursively finds enclosing structural node -->
