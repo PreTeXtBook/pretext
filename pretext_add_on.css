@@ -1388,7 +1388,8 @@ body > a.assistive:focus {
 .pretext-content .exercises > .autopermalink {
     margin-top: 2.0em;
 }
-.pretext-content .subsubsection > .autopermalink {
+.pretext-content .subsubsection > .autopermalink,
+.pretext-content .exercisegroup > .autopermalink {
     margin-top: 1.4em;
 }
 
@@ -2064,6 +2065,10 @@ a.mjx-svg-href  {
 .pretext-content .exercisegroup .cols5 > article.exercise-like {flex-basis: calc(20% - 2em);}
 .pretext-content .exercisegroup .cols6 > article.exercise-like {flex-basis: calc(16.66% - 2em);}
 
+/* math directly adajacent to words is wrapped to avoid bad line breaks */
+.pretext-content .mathword {
+    white-space: nowrap;
+}
 
 .pretext-content .unit,
 .pretext-content .quantity {
