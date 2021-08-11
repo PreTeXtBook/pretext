@@ -256,7 +256,7 @@ console.log("this is e", e);
 
     console.log("adding permalinks");
     /* add permalinks to all sections and articles */
-    items_needing_permalinks = document.querySelectorAll('main section:not(.introduction), main section > p, main section article, main section > figure, main section > figure > figcaption, main section  .exercisegroup > .introduction > p, main section  .exercisegroup article, main section article.exercise, main section article.paragraphs > p, main section article.paragraphs > figure');
+    items_needing_permalinks = document.querySelectorAll('main section:not(.introduction), main section > p, main section article, main section > figure, main section > figure > figcaption, main section  .exercisegroup article, main section  .exercisegroup, main section article.exercise, main section article.paragraphs > p, main section article.paragraphs > figure');
     //   items_needing_permalinks = document.querySelectorAll('body section article');
     this_url = window.location.href.split('#')[0];
     permalink_word = "permalink";
