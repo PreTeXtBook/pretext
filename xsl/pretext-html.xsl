@@ -5131,11 +5131,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:if>
                 <!-- "title" only possible for structured version of a list item -->
                 <xsl:if test="title">
-                    <h6 class="heading">
-                        <span class="title">
-                            <xsl:apply-templates select="." mode="title-full"/>
-                        </span>
-                    </h6>
+                    <span class="heading">
+                        <xsl:apply-templates select="." mode="title-full"/>
+                    </span>
                 </xsl:if>
                 <!-- Unstructured list items will be output as an HTML "p"     -->
                 <!-- within the "li", much like a structured list item could   -->
