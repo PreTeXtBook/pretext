@@ -9477,40 +9477,38 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Runestone -->
 <!-- ######### -->
 
-<!-- Hosting at Runestone Academy -->
-
-<!-- Runestone Javascript -->
+<!-- Runestone Services (Javascript)  -->
+<!-- OR, Hosting at Runestone Academy -->
 <xsl:template name="runestone-header">
-    <!-- without switch, do not add *anything* -->
-    <xsl:if test="$b-host-runestone">
         <!-- Runestone templating for customizing hosted books -->
-        <script type="text/javascript">
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:text>eBookConfig = {};&#xa;</xsl:text>
-            <!-- no Sphinx {% %} templating for build system at all,         -->
-            <!-- everything conditional on $runestone-dev                    -->
-            <!-- 'no'  - production, {{ }} templating replaced by $rso, $rsc -->
-            <!-- 'yes' - local viewing, dummy values                         -->
-        <xsl:choose>
-            <!-- Hosted, dynamic: $runestone-dev = 'no' -->
-            <xsl:when test="not($runestone-dev)">
+        <!-- no Sphinx {% %} templating for build system at all,         -->
+        <!-- conditional on $b-host-runestone                 -->
+        <!-- 'true'  - hosted on a Runestone server, {{ }} templating replaced by $rso, $rsc -->
+        <!-- 'false' - local viewing, no server, just Runestone Services, so dummy values    -->
+    <xsl:choose>
+        <!-- Hosted on Runestone server -->
+        <xsl:when test="$b-host-runestone">
+            <script type="text/javascript">
+                <xsl:text>&#xa;</xsl:text>
+                <xsl:text>eBookConfig = {};&#xa;</xsl:text>
                 <xsl:text>eBookConfig.useRunestoneServices = true;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.host = '';&#xa;</xsl:text>
-                <xsl:text>eBookConfig.app = eBookConfig.host + '/' + '</xsl:text><xsl:value-of select="$rso"/><xsl:text>= request.application </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
-                <xsl:text>eBookConfig.course = '</xsl:text><xsl:value-of select="$rso"/><xsl:text>= course_name </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
-                <xsl:text>eBookConfig.basecourse = '</xsl:text><xsl:value-of select="$rso"/><xsl:text>= base_course </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
-                <xsl:text>eBookConfig.isLoggedIn = </xsl:text><xsl:value-of select="$rso"/><xsl:text>= is_logged_in</xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
-                <xsl:text>eBookConfig.email = '</xsl:text><xsl:value-of select="$rso"/><xsl:text>= user_email </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
-                <xsl:text>eBookConfig.isInstructor = </xsl:text><xsl:value-of select="$rso"/><xsl:text>= is_instructor </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.app = eBookConfig.host + '/' + '</xsl:text><xsl:value-of select="$rso"/><xsl:text> request.application </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.course = '</xsl:text><xsl:value-of select="$rso"/><xsl:text> course_name </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.basecourse = '</xsl:text><xsl:value-of select="$rso"/><xsl:text> base_course </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.isLoggedIn = </xsl:text><xsl:value-of select="$rso"/><xsl:text> is_logged_in </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.email = '</xsl:text><xsl:value-of select="$rso"/><xsl:text> user_email </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.isInstructor = </xsl:text><xsl:value-of select="$rso"/><xsl:text> is_instructor </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.logLevel = 10;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.ajaxURL = eBookConfig.app + "/ajax/";&#xa;</xsl:text>
                 <!-- no .loglevel -->
-                <xsl:text>eBookConfig.username = '</xsl:text><xsl:value-of select="$rso"/><xsl:text>= user_id</xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
-                <xsl:text>eBookConfig.readings = </xsl:text><xsl:value-of select="$rso"/><xsl:text>= readings</xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
-                <xsl:text>eBookConfig.activities = </xsl:text><xsl:value-of select="$rso"/><xsl:text>= XML(activity_info) </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
-                <xsl:text>eBookConfig.downloadsEnabled = </xsl:text><xsl:value-of select="$rso"/><xsl:text>=downloads_enabled</xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
-                <xsl:text>eBookConfig.allow_pairs = </xsl:text><xsl:value-of select="$rso"/><xsl:text>=allow_pairs</xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.username = '</xsl:text><xsl:value-of select="$rso"/><xsl:text> user_id </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.readings = </xsl:text><xsl:value-of select="$rso"/><xsl:text> readings </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.activities = </xsl:text><xsl:value-of select="$rso"/><xsl:text> activity_info|safe </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.downloadsEnabled = </xsl:text><xsl:value-of select="$rso"/><xsl:text> downloads_enabled </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.allow_pairs = </xsl:text><xsl:value-of select="$rso"/><xsl:text> allow_pairs </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.enableScratchAC = false;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.new_server_prefix = "/ns";&#xa;</xsl:text>
                 <!-- no .build_info -->
                 <!-- no .python3 -->
                 <!-- no .acDefaultLanguage -->
@@ -9519,14 +9517,94 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- no .proxyuri_runs -->
                 <!-- no .proxyuri_files -->
                 <!-- no .enable_chatcodes -->
-            </xsl:when>
-            <!-- Dev, testing: $runestone-dev = 'yes' -->
-            <!-- 2021-07-01: to become universal HTML -->
-            <xsl:otherwise>
-                <xsl:comment>** eBookCongig is necessary to configure interactive       **</xsl:comment>
-                <xsl:comment>** Runestone components to run locally in reader's browser **</xsl:comment>
-                <xsl:comment>** No external communication:                              **</xsl:comment>
-                <xsl:comment>**     log level is 0, Runestone Services are disabled     **</xsl:comment>
+            </script>
+            <xsl:text>&#xa;</xsl:text>
+
+            <!-- Google Ads: only on Runestone server, only visible in -->
+            <!-- *non-login* versions of books hosted at Runestone     -->
+            <!--                                                       -->
+            <!-- @data-ad-client attribute of upcoming script tag is   -->
+            <!-- templated for Runestone serving.  We form it as a     -->
+            <!-- variable, so that we can place it using an XSL AVT    -->
+            <xsl:variable name="id-attr">
+                <xsl:value-of select="$rso"/>
+                <xsl:text> settings.adsenseid </xsl:text>
+                <xsl:value-of select="$rsc"/>
+            </xsl:variable>
+            <!--  -->
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:text>{% if serve_ad and settings.adsenseid %}&#xa;</xsl:text>
+            <script data-ad-client="{$id-attr}" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:text>{% endif %}&#xa;</xsl:text>
+
+            <!-- When hosted, we embed YouTube videos in a slightly different -->
+            <!-- manner, and with the next script it is possible to monitor   -->
+            <!-- reader events associated with the use of the videos          -->
+            <!-- NB: placed here just for initial testing w/ diffs, -->
+            <!--     could move up above Google Ad section          -->
+            <script type="text/javascript" src="https://www.youtube.com/player_api"></script>
+
+            <!-- We only show the Runestone "bust" menu icon if we are building        -->
+            <!-- for a Runestone server, so this CSS is only needed in that case.      -->
+            <!-- Perhaps it should exist in Runestone's CSS or maybe in PreTeXt's CSS? -->
+            <style>
+                <xsl:text>.dropdown {&#xa;</xsl:text>
+                <xsl:text>    position: relative;&#xa;</xsl:text>
+                <xsl:text>    display: inline-block;&#xa;</xsl:text>
+                <xsl:text>    height: 39px;&#xa;</xsl:text>
+                <xsl:text>    width: 50px;&#xa;</xsl:text>
+                <xsl:text>    margin-left: auto;&#xa;</xsl:text>
+                <xsl:text>    margin-right: auto;&#xa;</xsl:text>
+                <xsl:text>    padding: 7px;&#xa;</xsl:text>
+                <xsl:text>    text-align: center;&#xa;</xsl:text>
+                <xsl:text>    background-color: #eeeeee;&#xa;</xsl:text>
+                <xsl:text>    border: 1px solid;&#xa;</xsl:text>
+                <xsl:text>    border-color: #aaaaaa;&#xa;</xsl:text>
+                <xsl:text> }&#xa;</xsl:text>
+                <xsl:text> .dropdown-content {&#xa;</xsl:text>
+                <xsl:text>    position: absolute;&#xa;</xsl:text>
+                <xsl:text>    display: none;&#xa;</xsl:text>
+                <xsl:text>    left: 300px;&#xa;</xsl:text>
+                <xsl:text>    text-align: left;&#xa;</xsl:text>
+                <xsl:text>    font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica';&#xa;</xsl:text>
+                <xsl:text>}&#xa;</xsl:text>
+                <xsl:text>.dropdown:hover {&#xa;</xsl:text>
+                <xsl:text>    background-color: #ddd;&#xa;</xsl:text>
+                <xsl:text>}&#xa;</xsl:text>
+                <xsl:text>.dropdown:hover .dropdown-content {&#xa;</xsl:text>
+                <xsl:text>    display: block;&#xa;</xsl:text>
+                <xsl:text>    position: fixed;&#xa;</xsl:text>
+                <xsl:text>}&#xa;</xsl:text>
+                <xsl:text>.dropdown-content {&#xa;</xsl:text>
+                <xsl:text>    background-color: white;&#xa;</xsl:text>
+                <xsl:text>    z-index: 1800;&#xa;</xsl:text>
+                <xsl:text>    min-width: 100px;&#xa;</xsl:text>
+                <xsl:text>    padding: 5px;&#xa;</xsl:text>
+                <xsl:text>}&#xa;</xsl:text>
+                <xsl:text>.dropdown-content a {&#xa;</xsl:text>
+                <xsl:text>    display: block;&#xa;</xsl:text>
+                <xsl:text>    text-decoration: none;&#xa;</xsl:text>
+                <xsl:text>    color: #662211;&#xa;</xsl:text>
+                <xsl:text>}&#xa;</xsl:text>
+                <xsl:text>.dropdown-content a:hover {&#xa;</xsl:text>
+                <xsl:text>    background-color: #671d12;&#xa;</xsl:text>
+                <xsl:text>    color: #ffffff;&#xa;</xsl:text>
+                <xsl:text>}&#xa;</xsl:text>
+            </style>
+        </xsl:when>
+        <!-- Hosted without a Runestone Server, just using Javascript -->
+        <!-- NB: condition on problems that benefit/need this?        -->
+        <!-- 2022-01-12: not ready for prime-time, so must            -->
+        <!-- flip $runestone-dev to turn this on                      -->
+        <xsl:when test="not($b-host-runestone) and $runestone-dev">
+            <xsl:comment>** eBookCongig is necessary to configure interactive       **</xsl:comment><xsl:text>&#xa;</xsl:text>
+            <xsl:comment>** Runestone components to run locally in reader's browser **</xsl:comment><xsl:text>&#xa;</xsl:text>
+            <xsl:comment>** No external communication:                              **</xsl:comment><xsl:text>&#xa;</xsl:text>
+            <xsl:comment>**     log level is 0, Runestone Services are disabled     **</xsl:comment><xsl:text>&#xa;</xsl:text>
+            <script type="text/javascript">
+                <xsl:text>&#xa;</xsl:text>
+                <xsl:text>eBookConfig = {};&#xa;</xsl:text>
                 <xsl:text>eBookConfig.useRunestoneServices = false;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.host = 'http://127.0.0.1:8000';&#xa;</xsl:text>
                 <!-- no .app -->
@@ -9551,96 +9629,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>eBookConfig.proxyuri_runs = '';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.proxyuri_files = '';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.enable_chatcodes =  false;&#xa;</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
+            </script>
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:when>
+    </xsl:choose>
+    <!-- Runestone Services -->
+    <!-- Runestone provides universally-applicable Javascript, and since Brad Miller -->
+    <!-- is "such a nice guy" he provides an XML version of the necessary files,     -->
+    <!-- which we store as "support/runestone-services.xml".  The structure of that  -->
+    <!-- file is pretty simple, and should be apparent to the cognescenti.           -->
+    <!-- NB: dev.runestoneinteractive.org  is temporary while testing -->
+    <!-- NB: we may eventually condition on Runestone server/hosting  -->
+    <!-- to affect the prefix network location.                       -->
+
+    <!-- This will become universal when we remove the $runestone-dev switch -->
+    <!-- Indentation anticipates this change -->
+    <xsl:if test="$b-host-runestone">
+    <xsl:comment>** Runestone Services **</xsl:comment><xsl:text>&#xa;</xsl:text>
+    <xsl:variable name="runestone-services" select="document('support/runestone-services.xml')"/>
+    <xsl:for-each select="$runestone-services/all/js/item">
+        <script type="text/javascript">
+            <xsl:attribute name="src">
+                <xsl:text>_static/</xsl:text>
+                <!-- <xsl:text>https://runestone.academy/runestone/static/dist/</xsl:text> -->
+                <xsl:value-of select="."/>
+            </xsl:attribute>
         </script>
-        <xsl:text>&#xa;</xsl:text>
-
-        <!-- Google Ads on Runestone -->
-        <!-- Only in PreTeXt production version, only visible in -->
-        <!-- *non-login* versions of books hosted at Runestone   -->
-        <xsl:if test="not($runestone-dev)">
-            <!-- attribute is templated, so we form it as a -->
-            <!-- variable that we can place it using an AVT -->
-            <xsl:variable name="id-attr">
-                <xsl:value-of select="$rso"/>
-                <xsl:text>=settings.adsenseid</xsl:text>
-                <xsl:value-of select="$rsc"/>
-            </xsl:variable>
-            <!--  -->
-            <xsl:value-of select="$rso"/>
-            <xsl:text> if response.serve_ad and settings.adsenseid: </xsl:text>
-            <xsl:value-of select="$rsc"/>
-            <xsl:text>&#xa;</xsl:text>
-            <!--  -->
-            <script data-ad-client="{$id-attr}" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!--  -->
-            <xsl:text>&#xa;</xsl:text>
-            <xsl:value-of select="$rso"/>
-            <xsl:text> pass </xsl:text>
-            <xsl:value-of select="$rsc"/>
-            <xsl:text>&#xa;</xsl:text>
-            <!--  -->
-        </xsl:if>
-
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.emitter.bidi.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.emitter.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.fallbacks.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.messagestore.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.parser.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.language.js"></script>
-
-        <script type="text/javascript" src="_static/jquery.idle-timer.js"></script>
-        <script type="text/javascript" src="_static/runestone.js"></script>
-        <script type="text/javascript" src="https://www.youtube.com/player_api"></script>
-
-        <style>
-        <xsl:text>.dropdown {&#xa;</xsl:text>
-        <xsl:text>    position: relative;&#xa;</xsl:text>
-        <xsl:text>    display: inline-block;&#xa;</xsl:text>
-        <xsl:text>    height: 39px;&#xa;</xsl:text>
-        <xsl:text>    width: 50px;&#xa;</xsl:text>
-        <xsl:text>    margin-left: auto;&#xa;</xsl:text>
-        <xsl:text>    margin-right: auto;&#xa;</xsl:text>
-        <xsl:text>    padding: 7px;&#xa;</xsl:text>
-        <xsl:text>    text-align: center;&#xa;</xsl:text>
-        <xsl:text>    background-color: #eeeeee;&#xa;</xsl:text>
-        <xsl:text>    border: 1px solid;&#xa;</xsl:text>
-        <xsl:text>    border-color: #aaaaaa;&#xa;</xsl:text>
-        <xsl:text> }&#xa;</xsl:text>
-        <xsl:text> .dropdown-content {&#xa;</xsl:text>
-        <xsl:text>    position: absolute;&#xa;</xsl:text>
-        <xsl:text>    display: none;&#xa;</xsl:text>
-        <xsl:text>    left: 300px;&#xa;</xsl:text>
-        <xsl:text>    text-align: left;&#xa;</xsl:text>
-        <xsl:text>    font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica';&#xa;</xsl:text>
-        <xsl:text>}&#xa;</xsl:text>
-        <xsl:text>.dropdown:hover {&#xa;</xsl:text>
-        <xsl:text>    background-color: #ddd;&#xa;</xsl:text>
-        <xsl:text>}&#xa;</xsl:text>
-        <xsl:text>.dropdown:hover .dropdown-content {&#xa;</xsl:text>
-        <xsl:text>    display: block;&#xa;</xsl:text>
-        <xsl:text>    position: fixed;&#xa;</xsl:text>
-        <xsl:text>}&#xa;</xsl:text>
-        <xsl:text>.dropdown-content {&#xa;</xsl:text>
-        <xsl:text>    background-color: white;&#xa;</xsl:text>
-        <xsl:text>    z-index: 1800;&#xa;</xsl:text>
-        <xsl:text>    min-width: 100px;&#xa;</xsl:text>
-        <xsl:text>    padding: 5px;&#xa;</xsl:text>
-        <xsl:text>}&#xa;</xsl:text>
-        <xsl:text>.dropdown-content a {&#xa;</xsl:text>
-        <xsl:text>    display: block;&#xa;</xsl:text>
-        <xsl:text>    text-decoration: none;&#xa;</xsl:text>
-        <xsl:text>    color: #662211;&#xa;</xsl:text>
-        <xsl:text>}&#xa;</xsl:text>
-        <xsl:text>.dropdown-content a:hover {&#xa;</xsl:text>
-        <xsl:text>    background-color: #671d12;&#xa;</xsl:text>
-        <xsl:text>    color: #ffffff;&#xa;</xsl:text>
-        <xsl:text>}&#xa;</xsl:text>
-        </style>
+    </xsl:for-each>
+    <xsl:for-each select="$runestone-services/all/css/item">
+        <link rel="stylesheet" type="text/css">
+            <xsl:attribute name="href">
+                <xsl:text>_static/</xsl:text>
+                <!-- <xsl:text>https://runestone.academy/runestone/static/dist/</xsl:text> -->
+                <xsl:value-of select="."/>
+            </xsl:attribute>
+        </link>
+    </xsl:for-each>
+    <!--  -->
     </xsl:if>
 </xsl:template>
 
@@ -11473,39 +11498,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                     <xsl:text>&#x1F464;</xsl:text>
                                     <div class="dropdown-content">
                                         <xsl:text>&#xa;</xsl:text>
-                                        <xsl:value-of select="$rso"/><xsl:text> if auth.user: </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
-                                        <a href="{$rso}=URL('assignments','chooseAssignment'){$rsc}">Assignments</a>
-                                        <a href="{$rso}=URL('assignments','practice'){$rsc}">Practice</a>
-                                        <xsl:value-of select="$rso"/><xsl:text> if settings.academy_mode: </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
+                                        <xsl:text>{% if settings.academy_mode: %}&#xa;</xsl:text>
+                                        <a href="/runestone/assignments/chooseAssignment">Assignments</a>
+                                        <a href="/runestone/assignments/practice">Practice</a>
                                         <hr/>
-                                        <a href='/{$rso}=request.application{$rsc}/default/courses'>Change Course</a>
-                                        <xsl:text>&#xa;</xsl:text>
-                                        <xsl:value-of select="$rso"/><xsl:text> pass </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
-                                        <xsl:value-of select="$rso"/><xsl:text> pass </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
-                                        <xsl:value-of select="$rso"/><xsl:text> if auth.user: </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
+                                        <a href="/runestone/default/courses">Change Course</a>
                                         <hr/>
-                                        <a href='/{$rso}=request.application{$rsc}/admin/index'>Instructor's Page</a>
-                                        <xsl:text>&#xa;</xsl:text>
-                                        <xsl:value-of select="$rso"/><xsl:text> pass </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
+                                        <a id="ip_dropdown_link" href="/runestone/admin/index">Instructor's Page</a>
                                         <hr/>
-                                        <xsl:value-of select="$rso"/><xsl:text> pass </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
-                                        <xsl:value-of select="$rso"/><xsl:text> if not settings.lti_only_mode: </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
-                                        <xsl:value-of select="$rso"/><xsl:text> if auth.user: </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
-                                        <a href="{$rso}=URL('dashboard','studentreport'){$rsc}">Progress Page</a>
+                                        <xsl:text>&#xa;</xsl:text>
+                                        <xsl:text>{% endif %}&#xa;</xsl:text>
+                                        <a href="/runestone/dashboard/studentreport">Progress Page</a>
                                         <hr/>
-                                        <a href="/{$rso}=request.application{$rsc}/default/user/profile">Edit Profile</a>
-                                        <a href="/{$rso}=request.application{$rsc}/default/user/change_password">Change Password</a>
-                                        <a href="{$rso}=URL('default','user/logout'){$rsc}">Log Out</a>
-                                        <xsl:text>&#xa;</xsl:text>
-                                        <xsl:value-of select="$rso"/><xsl:text> else: </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
-                                        <a href="{$rso}=URL('default','user/register'){$rsc}">Register</a>
-                                        <a href="{$rso}=URL('default','user/login'){$rsc}">Login</a>
-                                        <xsl:text>&#xa;</xsl:text>
-                                        <xsl:value-of select="$rso"/><xsl:text> pass </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
-                                        <xsl:value-of select="$rso"/><xsl:text> else: </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
-                                        <a href="{$rso}=URL('assignments','index'){$rsc}">Progress Page</a>
-                                        <xsl:text>&#xa;</xsl:text>
-                                        <xsl:value-of select="$rso"/><xsl:text> pass </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
+                                        <a href="/runestone/default/user/profile">Edit Profile</a>
+                                        <a href="/runestone/default/user/change_password">Change Password</a>
+                                        <a href="/runestone/default/user/logout">Log Out</a>
+                                        <a href="/runestone/default/user/register">Register</a>
+                                        <a href="/runestone/default/user/login">Login</a>
+                                        <a href="/runestone/assignments/index">Progress Page</a>
                                     </div>
                                 </div>
                             </xsl:if>
