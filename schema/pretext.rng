@@ -2230,9 +2230,7 @@
           </choice>
         </attribute>
       </optional>
-      <optional>
-        <ref name="IntroductionStatementNoCaption"/>
-      </optional>
+      <ref name="IntroductionStatementNoCaption"/>
       <oneOrMore>
         <ref name="Exercise"/>
       </oneOrMore>

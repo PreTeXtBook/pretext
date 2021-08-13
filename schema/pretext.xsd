@@ -2013,7 +2013,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:group ref="MetaDataTitleOptional"/>
-        <xs:group minOccurs="0" ref="IntroductionStatementNoCaption"/>
+        <xs:group ref="IntroductionStatementNoCaption"/>
         <xs:element maxOccurs="unbounded" ref="exercise"/>
         <xs:group minOccurs="0" ref="ConclusionStatementNoCaption"/>
       </xs:sequence>
