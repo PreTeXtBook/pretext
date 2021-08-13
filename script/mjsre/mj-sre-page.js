@@ -34,10 +34,14 @@
 require('mathjax-full/js/util/asyncLoad/node.js');
 const {mathjax} = require('mathjax-full/js/mathjax.js');
 const {TeX} = require('mathjax-full/js/input/tex.js');
+//  RAB 2021-09-01, MathML only needed for  svgenhanced  mode
+const {MathML} = require('mathjax-full/js/input/mathml.js');
 const {SVG} = require('mathjax-full/js/output/svg.js');
 const {RegisterHTMLHandler} = require('mathjax-full/js/handlers/html.js');
 const {liteAdaptor} = require('mathjax-full/js/adaptors/liteAdaptor.js');
 const {STATE, newState} = require('mathjax-full/js/core/MathItem.js');
+//  RAB 2021-09-01, Enrichhandler only needed for  svgenhanced  mode
+const {EnrichHandler} = require('mathjax-full/js/a11y/semantic-enrich.js');
 
 const {AllPackages} = require('mathjax-full/js/input/tex/AllPackages.js');
 
@@ -62,6 +66,15 @@ var argv = require('yargs')
         boolean: true,
         default: false,
         describe: 'produce svg output'
+      },
+      svgenhanced: {
+        boolean: true,
+        default: false,
+        describe: 'produces speech enhanced svg output'
+      },
+      depth: {
+        default: 'shallow',
+        describe: 'The speech depth for SVG elements'
       },
       mathml: {
         boolean: true,
@@ -92,7 +105,7 @@ var argv = require('yargs')
     })
     .argv;
 
-const needsSRE = argv.speech || argv.braille;
+const needsSRE = argv.speech || argv.braille || argv.svgenhanced;
 
 //
 //  Load SRE if needed for speech or braille
@@ -136,6 +149,7 @@ function action(state, code, setup = null) {
   }];
 }
 
+
 //
 //  States for PreTeXt actions
 //
@@ -171,6 +185,24 @@ if (argv.svg) {
   renderActions.svg = action(STATE.PRETEXTACTION, (math, doc, adaptor) => {
     math.outputData.pretext.push(adaptor.firstChild(doc.outputJax.typeset(math, doc)));
     math.outputData.pretext.push(adaptor.text('\n'));
+  });
+}
+
+//
+//  If SVG is requested, add an action to add it to the output
+//  RAB 2021-09-01,  svgenhanced  mode not being used (yet)
+//
+const mmldoc = mathjax.document('', {
+  InputJax: new MathML(),
+  OutputJax: new SVG({fontCache: (argv.fontPaths ? 'none' : 'local')}),
+});
+if (argv.svgenhanced) {
+  renderActions.svg = action(STATE.PRETEXTACTION, (math, doc, adaptor) => {
+    let out = mmldoc.convert(SRE.toEnriched(math.outputData.mml).toString());
+    math.outputData.pretext.push(out);
+    math.outputData.pretext.push(adaptor.text('\n'));
+  }, () => {
+    SRE.setupEngine({speech: argv.depth, modality: 'speech', locale: argv.locale, domain: argv.rules});
   });
 }
 
@@ -237,7 +269,7 @@ const html = mathjax.document(htmlfile, {
 //
 //  Don't add the stylesheet unless SVG output is requested
 //
-if (!argv.svg) {
+if (!(argv.svg || argv.svgenhanced)) {
   html.addStyleSheet = () => {};
 }
 
