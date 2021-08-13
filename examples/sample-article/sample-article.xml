@@ -3904,6 +3904,10 @@ the xsltproc executable.
                 <exercisegroup xml:id="exercisegroup-two-more-problems">
                     <title>Two More Derivative Problems</title>
 
+                    <introduction>
+                        <p>Some common instructions would go here in the <tag>introduction</tag></p>
+                    </introduction>
+
                     <exercise>
                         <p><m>f(x)=x^3</m>, <m>\frac{df}{dx}</m>.  This sentence is just a bunch of gibberish to check where the second line of the problem begins relative to the first line.</p>
                         <p>We cross-reference the next problem in this exercise group.  For the <c>phrase-global</c> form, the common element of the cross-reference and the target should be the <c>exercises</c> division, and not the enclosing <c>exercisegroup</c>:  <xref ref="exercises-cosine-derivative" text="phrase-global" />.</p>
