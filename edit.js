@@ -16,6 +16,8 @@ in source, pieces are of the form ["piecename", "required_component"], while
 
 */
 
+editing_mode = 0;
+
 objectStructure = {
   "type": {
     "html": {
@@ -4108,8 +4110,15 @@ fetch(source_url).then(
   //        console.log("ppppppppppp  this_source_txt",this_source_txt)
           if (this_source_txt.includes("404 Not")) {
               console.log("Error: source unavailable")
-          } else {
+          } else if(editing_mode) {
               initialize_editing(this_source_txt)
+          } else {
+              console.log("editing_mode", editing_mode)
+              edit_choice = document.createElement('span');
+              edit_choice.setAttribute("class", "login-link");
+              edit_choice.innerHTML = "<span id='edit_choice'>Edit this page</span>";
+              document.getElementById("content").insertAdjacentElement("afterbegin", edit_choice);
+              console.log("editing choice enabled")
           }
         }
       );

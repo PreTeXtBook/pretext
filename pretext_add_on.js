@@ -623,8 +623,11 @@ window.addEventListener("load",function(event) {
             loadResource("css", "features");
             setTimeout( loadResource("js", "survey"), 1000);  /* I know: sloppy */
 
-        } else if ((typeof online_editable !== 'undefined') &&  online_editable) {
-            loadResource('js', 'edit')
+  //      } else if ((typeof online_editable !== 'undefined') &&  online_editable) {
+        } else if ($('body').attr('id') == "pretext-SA") {
+            loadResource('css', 'features');
+            loadResource('js', 'edit');
+            loadResource('js', 'login')
         }
 
 });
