@@ -170,12 +170,16 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .pretext-content li {
     margin-bottom: 0;
 }
-.pretext-content section li > .heading {
+/* next two: li titles were in a .heading, and then were cahnged to span.title */
+/* so the first if these two pairs can be deleted after 0.31 */
+.pretext-content section li > .heading,
+.pretext-content section li > .title {
     font-size: 100%;
     font-weight: normal;
     font-style: italic;
 }
-.pretext-content section article.theorem-like li > .heading {
+.pretext-content section article.theorem-like li > .heading,
+.pretext-content section article.theorem-like li > .title {
     font-weight: 600;
     font-style: normal;
     font-size: 96%;
@@ -307,7 +311,8 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .pretext-content article > .heading + p {
     margin-top: 0;
 }
-.pretext-content section .heading + p, /* , .pretext-content section header + p, */
+.pretext-content section .heading + p,
+.pretext-content section .title + p, /* list items have bare .title, not in a .heading */
 .pretext-content section .heading + .introduction > p:first-child,
 .pretext-content section .blob > p:first-child,
 .pretext-content section .permalink + p {
