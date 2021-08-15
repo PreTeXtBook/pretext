@@ -18,6 +18,14 @@ in source, pieces are of the form ["piecename", "required_component"], while
 
 editing_mode = 0;
 
+current_page = location.host+location.pathname;
+debugLog("current_page", current_page);
+chosen_edit_option_key = "edit_option".concat(current_page);
+chosen_edit_option = readCookie(chosen_edit_option_key) || "";
+editing_mode = chosen_edit_option;  /* delete one of those variables */
+debugLog("chosen_edit_option", chosen_edit_option, "chosen_edit_option", chosen_edit_option > 0);
+
+
 objectStructure = {
   "type": {
     "html": {
@@ -2067,7 +2075,10 @@ $('[contenteditable]').on('paste',function(e) {
 
 function resume_editing() {
     internalSource = previous_editing();
-    replace_by_id(internalSource["root_data"]["id"], "html")
+    replace_by_id(internalSource["root_data"]["id"], "html");
+    edit_menu_for(top_level_id, "entering");
+//    edit_menu_for(current_editing["tree"]["level"]["location"], "entering");
+    console.log("editing resumed");
 }
 
 function replace_by_id(theid, format) {
@@ -4064,6 +4075,7 @@ document.addEventListener('focus', function() {
 
 function initialize_editing(xml_st) {
 
+    createCookie(chosen_edit_option_key,1,0.01);
     xmlToObject(xml_st);
     record_children(sourceobj);
     internalSource = re_transform_source();
@@ -4110,15 +4122,26 @@ fetch(source_url).then(
   //        console.log("ppppppppppp  this_source_txt",this_source_txt)
           if (this_source_txt.includes("404 Not")) {
               console.log("Error: source unavailable")
-          } else if(editing_mode) {
+          } else if( false && editing_mode) {
               initialize_editing(this_source_txt)
           } else {
               console.log("editing_mode", editing_mode)
               edit_choice = document.createElement('span');
               edit_choice.setAttribute("class", "login-link");
-              edit_choice.innerHTML = "<span id='edit_choice'>Edit this page</span>";
+      //        edit_choice.innerHTML = "<span id='edit_choice'>Edit this page</span>";
+              document.getElementById("content").insertAdjacentElement("afterbegin", edit_choice);
+              if(editing_mode) {
+                  initialize_editing(this_source_txt)
+                  edit_choice.innerHTML = "<span id='edit_choice'>Stop editing this page</span>";
+              } else {
+                  edit_choice.innerHTML = "<span id='edit_choice'>Edit this page</span>";
+              }
               document.getElementById("content").insertAdjacentElement("afterbegin", edit_choice);
               console.log("editing choice enabled")
+              $("#edit_choice").on("click", function(event){
+                  console.log("apparently you want to edit");
+                  initialize_editing(this_source_txt)
+              });
           }
         }
       );

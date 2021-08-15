@@ -626,8 +626,8 @@ window.addEventListener("load",function(event) {
   //      } else if ((typeof online_editable !== 'undefined') &&  online_editable) {
         } else if ($('body').attr('id') == "pretext-SA") {
             loadResource('css', 'features');
-            loadResource('js', 'edit');
             loadResource('js', 'login')
+            loadResource('js', 'edit');
         }
 
 });
