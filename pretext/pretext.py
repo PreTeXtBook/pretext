@@ -78,7 +78,7 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     if (math_format == 'kindle'):
         with fileinput.FileInput(mjinput, inplace=True, backup='.bak') as file:
             for line in file:
-                print(line.replace('\(', '\(\mathstrut '), end='')
+                print(line.replace(r'\(', r'\(\mathstrut '), end='')
 
     # shell out to process with MathJax/SRE node program
     _debug('calling MathJax to convert LaTeX from {} into raw representations in {}'.format(mjinput, mjoutput))
