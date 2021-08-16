@@ -249,6 +249,8 @@
             </cd>A solution, if a bit clunky, is to make a new directory named <c>ext</c> and copy <c>images</c> and its contents to become a subdirectory of <c>ext</c>.  Then place a relative path to <c>ext</c> in the <attr>external</attr> attribute in your publisher file.  This means you will not have to edit your <pretext/> source at all.  At some later time, you could remove all references to <c>images</c> in your source and move the files themselves directly into <c>ext</c>.</p>
 
             <p>For generated files it will be a bit more involved.  You need a new directory, such as <c>gen</c>, and you need to add it to your publisher file with the right relative path.  Then you will need to create as many of the relevant directories from <xref ref="subdirectories-of-generated"/> as necessary, as subdirectories of <c>gen</c>.  Populate these subdirectories with the relevant files, which may have been located in <c>images</c> before you started migrating.  There was a string parameter, <c>directory.images</c>, that could be used to specify an alternative directory to the default, <c>images</c>.  That parameter is now announced as deprecated, but will still be effective until your project opts-in.</p>
+
+            <p>As another short-term option for Mac or Linux users, it is possible to take previously existing resource directories and make symbolic links from a previous image directory, such as <c>my_images</c>, to the names provided here.  In that case, assuming the directory structure provided here, a command like <c>ln -s my_images external</c> (issued in the directory containing <c>my_images</c>) would create the correct symbolic link.</p>
         </subsection>
     </section>
 
