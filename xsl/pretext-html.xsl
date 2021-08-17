@@ -608,7 +608,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:element name="{$html-heading}">
         <xsl:attribute name="class">
             <xsl:choose>
-                <xsl:when test="self::chapter and ($numbering-maxlevel > 0)">
+                <xsl:when test="(self::chapter or self::appendix) and ($numbering-maxlevel > 0)">
                     <xsl:text>heading</xsl:text>
                 </xsl:when>
                 <!-- hide "Chapter" when numbers are killed -->
@@ -618,6 +618,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:choose>
         </xsl:attribute>
         <xsl:apply-templates select="." mode="header-content" />
+    </xsl:element>
+</xsl:template>
+
+<!-- Headings for structural divisions when they are repeated: -->
+<!-- list-of, solutions                                        -->
+<!-- Use span instead of hN                                    -->
+<xsl:template match="*" mode="secondary-heading">
+    <xsl:element name="span">
+        <xsl:attribute name="class">
+            <xsl:text>heading</xsl:text>
+            <xsl:if test="not(self::chapter) or ($numbering-maxlevel = 0)">
+                <xsl:text> hide-type</xsl:text>
+            </xsl:if>
+        </xsl:attribute>
+        <xsl:attribute name="title">
+            <xsl:apply-templates select="." mode="tooltip-text" />
+        </xsl:attribute>
+        <span class="type">
+            <xsl:apply-templates select="." mode="type-name" />
+        </span>
+        <xsl:text> </xsl:text>
+        <span class="codenumber">
+            <xsl:apply-templates select="." mode="number" />
+        </span>
+        <xsl:text> </xsl:text>
+        <span class="title">
+            <xsl:apply-templates select="." mode="title-full" />
+        </span>
     </xsl:element>
 </xsl:template>
 
@@ -1055,7 +1083,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- $b-has-heading will always be "false" in these situations.     -->
 <xsl:template match="book|article|part|chapter|section|subsection|subsubsection|exercises|worksheet|reading-questions" mode="division-in-solutions">
     <xsl:param name="scope" /> <!-- ignored -->
-    <xsl:param name="heading-level"/>
     <xsl:param name="b-has-heading"/>
     <xsl:param name="content" />
 
@@ -1065,9 +1092,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$b-has-heading">
             <!-- as a duplicate of generated content, no HTML id -->
             <section class="{local-name(.)}">
-                <xsl:apply-templates select="." mode="section-header">
-                    <xsl:with-param name="heading-level" select="$heading-level"/>
-                </xsl:apply-templates>
+                <xsl:apply-templates select="." mode="secondary-heading"/>
                 <!-- we don't do an "author-byline" here in duplication -->
                 <xsl:copy-of select="$content" />
             </section>
@@ -1093,38 +1118,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="list-of-end" />
 
 <!-- Subdivision headings in list-of's -->
-<!-- Amalgamation of "section-header" and "header-content" -->
-<!--   (1) No author credit                                -->
-<!--   (2) No permalink                                    -->
-<!-- TODO: maybe a stock template could do a better job with this? -->
 <xsl:template match="*" mode="list-of-header">
-    <xsl:param name="heading-level"/>
-
-    <xsl:variable name="heading-level">
-        <xsl:apply-templates select="." mode="html-heading">
-            <xsl:with-param name="heading-level" select="$heading-level"/>
-        </xsl:apply-templates>
-    </xsl:variable>
-
-    <xsl:element name="{$heading-level}">
-        <xsl:attribute name="class">
-            <xsl:text>heading</xsl:text>
-        </xsl:attribute>
-        <xsl:attribute name="title">
-            <xsl:apply-templates select="." mode="tooltip-text" />
-        </xsl:attribute>
-        <span class="type">
-            <xsl:apply-templates select="." mode="type-name" />
-        </span>
-        <xsl:text> </xsl:text>
-        <span class="codenumber">
-            <xsl:apply-templates select="." mode="number" />
-        </span>
-        <xsl:text> </xsl:text>
-        <span class="title">
-            <xsl:apply-templates select="." mode="title-full" />
-        </span>
-    </xsl:element>
+    <xsl:apply-templates select="." mode="secondary-heading"/>
 </xsl:template>
 
 <!-- Entries in list-of's -->
