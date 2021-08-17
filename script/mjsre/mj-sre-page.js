@@ -209,7 +209,7 @@ if (argv.braille) {
     math.outputData.pretext.push(adaptor.node('mjx-braille', {}, [adaptor.text(speech)]));
     math.outputData.pretext.push(adaptor.text('\n'));
   }, () => {
-    SRE.setupEngine({modality: 'braille', locale: 'nemeth', domain: 'default'});
+    SRE.setupEngine({modality: 'braille', locale: 'nemeth', markup: 'layout', domain: 'default'});
   });
 }
 
