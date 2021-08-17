@@ -46,7 +46,7 @@ objectStructure = {
     "html": {
         "tag": "span",
         "attributes": ['class="type"', 'data-editable="70YY"', 'tabindex="-1"'],
-        "pieces": [["(literal,Prooooooof)", ""]]
+        "pieces": [["(literal,Proof)", ""]]
    //     "pieces": [["(capitalize,type-contained)", ""]]
     }
   },
@@ -3806,6 +3806,7 @@ function main_menu_navigator(e) {  // we are not currently editing
             } else if (dataAction == "stop_editing") {
                 editorLog("stop_editing", object_of_interest, "by id", object_of_interest.id);
                 replace_by_id(object_of_interest.id, "html")
+                eraseCookie(chosen_edit_option_key)
             } else if (dataAction == "resume") {
                 editorLog("resuming previous editing session");
                 resume_editing()
@@ -4132,7 +4133,8 @@ fetch(source_url).then(
               document.getElementById("content").insertAdjacentElement("afterbegin", edit_choice);
               if(editing_mode) {
                   initialize_editing(this_source_txt)
-                  edit_choice.innerHTML = "<span id='edit_choice'>Stop editing this page</span>";
+             //     edit_choice.innerHTML = "<span id='edit_choice'>Stop editing this page</span>";
+                  edit_choice.innerHTML = "";
               } else {
                   edit_choice.innerHTML = "<span id='edit_choice'>Edit this page</span>";
               }
