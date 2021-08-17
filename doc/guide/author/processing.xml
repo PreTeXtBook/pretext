@@ -39,7 +39,7 @@
         </p>
 
         <p>
-            The <pretext />-CLI, can be installed on the command-line using the command <c>pip install pretextbook</c>, see <xref ref="quickstart-getting-pretex"/>.  To use options 2 and 3 above, you will need to get a copy of <pretext /> from its <url href="https://github.com/rbeezer/mathbook">GitHub repository</url>.  This can be done using the command <c>git clone https://github.com/rbeezer/mathbook.git</c>, or by downloading a zip file directly from the repository.
+            The <pretext />-CLI, can be installed on the command-line using the command <c>pip install pretextbook</c>, see <xref ref="quickstart-getting-pretext"/>.  To use options 2 and 3 above, you will need to get a copy of <pretext /> from its <url href="https://github.com/rbeezer/mathbook">GitHub repository</url>.  This can be done using the command <c>git clone https://github.com/rbeezer/mathbook.git</c>, or by downloading a zip file directly from the repository.
         </p>
 
         <p>
@@ -51,7 +51,7 @@
         <title>The <pretext />-CLI</title>
         <introduction>
         <p>
-            Here we will outline the functionality of the <pretext />-CLI.  Instructions for installing this command line interface can be found in <xref ref="quickstart-getting-pretex"/>.
+            Here we will outline the functionality of the <pretext />-CLI.  Instructions for installing this command line interface can be found in <xref ref="quickstart-getting-pretext"/>.
         </p>
 
         <p>

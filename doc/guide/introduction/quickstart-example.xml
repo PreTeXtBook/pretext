@@ -16,7 +16,7 @@
       </p>
     </introduction>
 
-    <section xml:id="quickstart-getting-pretex">
+    <section xml:id="quickstart-getting-pretext">
       <title>Getting <pretext /></title>
       <p>
         For the sake of this tutorial, we will use the <pretext />-CLI, a python-based command line interface that simplifies the installation of <pretext />, and allows you to easily create, build (convert), and view <pretext /> documents.  Other setups that provide more flexibility at the cost of complexity can be found in <xref ref="processing"/>.
