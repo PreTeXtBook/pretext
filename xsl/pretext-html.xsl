@@ -79,7 +79,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See more generally applicable parameters in pretext-common.xsl file     -->
 
 <!-- CSS and Javascript Servers -->
-<!-- We allow processing paramteers to specify new servers   -->
+<!-- We allow processing paramters to specify new servers    -->
 <!-- or to specify the particular CSS file, which may have   -->
 <!-- different color schemes.  The defaults should work      -->
 <!-- fine and will not need changes on initial or casual use -->
@@ -5427,7 +5427,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                                             -->
 <!-- Note this holds for parts of interactives as well, so       -->
 <!-- authors need to use the MathJax script tags for any part of -->
-<!-- thier HTML they want displayed as mathematics.              -->
+<!-- their HTML they want displayed as mathematics.              -->
 
 <xsl:template name="text-processing">
     <xsl:param name="text"/>
