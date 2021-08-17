@@ -19,7 +19,9 @@
     <section xml:id="publisher-file">
         <title>Publisher File</title>
 
-        <p>As of 2021-01-23 we are well along on a transition to providing options a publisher would choose via an <init>XML</init> <term>publisher file</term>.  Here we describe how to create and employ this file.  Details on actual options can be found throughout this guide, with terse comprehensive reference material in <xref ref="publisher-file-reference"/>.  Note too, that <xref ref="processing-parameters"/> describes the old method (which is still in use, but will eventually be obsolete).</p>
+        <p>
+        <idx><h>publisher file</h></idx> <idx><h>publication file</h><see>publisher file</see></idx>
+            As of 2021-01-23 we are well along on a transition to providing options a publisher would choose via an <init>XML</init> <term>publisher file</term>. Here we describe how to create and employ this file.  Details on actual options can be found throughout this guide, with terse comprehensive reference material in <xref ref="publisher-file-reference"/>.  Note too, that <xref ref="processing-parameters"/> describes the old method (which is still in use, but will eventually be obsolete).</p>
 
         <p>Create a separate <init>XML</init> file the same way you always would.  Include the usual <init>XML</init> declaration as the first line.  Now, instead of the overall element being <tag>pretext</tag>, use <tag>publication</tag>.  That's it.  Various elements within <tag>publication</tag> will be used to specify options, typically attributes.  Name the file something that reminds you of its purpose, such as <c>pod.xml</c> for a print-on-demand version.</p>
 
@@ -35,9 +37,22 @@
             </publication>]]>
         </pre>
 
-        <p>To employ the file, you specify its filename on the <c>xsltproc</c> command line using a string parameter (<xref ref="processing-parameters"/>) named <c>publisher</c>.  This should have a path that is relative to the main file for the document.  For example, assuming <c>pod.xml</c> and <c>fauna.xml</c> are in the same directory<cd>
+        <p>
+            The path to a publisher file can be specified using the <c>-p</c> option for <c>pretext build</c>.  For example, if your publisher file is <c>publication.ptx</c> in the folder <c>publication</c> (parallel to <c>source</c>), you would enter the following.
+        </p>
+
+        <console>
+            <input>pretext build html -p publication/publication.ptx</input>
+        </console>
+
+        <p>
+            Alternatively, you can specify the path to the publisher file in the <c>project.ptx</c> manifest in the <tag>publication</tag> element for each <tag>target</tag>, allowing you to have a different publisher file for different targets.
+        </p>
+        <aside>
+        <p>To employ the file using <c>xsltproc</c> you use a string parameter (<xref ref="processing-parameters"/>) named <c>publisher</c>.  This should have a path that is relative to the main file for the document.  For example, assuming <c>pod.xml</c> and <c>fauna.xml</c> are in the same directory<cd>
             <cline>xsltproc -stringparam publisher pod.xml pretext-html.xsl aota.xml</cline>
         </cd>This file should reduce the many other string parameters in use, and reduce the need for extra <init>XSL</init> files (<xref ref="processing-thin-xsl"/>).</p>
+        </aside>
     </section>
 
     <section xml:id="publisher-levels">
@@ -57,21 +72,21 @@
         <title>Numbering Explained</title>
         <idx>numbering</idx>
 
-        <p><pretext/> targets the production of <q>structured scholary documents</q><mdash/>not novels, not magazine articles, not menus, and not travel brochures.  (Though a novel could work well?)  A research monograph might only be consulted for a portion of its content.  A good textbook should be useful to a reader after a course is over, and it should be easy to locate certain portions of the material.  A good textbook will foreshadow later material, and reinforce earlier material.  So we provide tools that lead to a quality index, reduce the overhead of making an accurate cross-reference, and make an automatic Table of Contents.  Page numbers can be a useful way to locate information for print output, but are less useful in an electronic <init>PDF</init> with hyperlinks, and are totally useless for online <init>HTML</init> and reflowable <init>EPUB</init>.  So we rely on copious hierarchical numbering to assist with locating discrete pieces of content.</p>
+        <p><pretext/> targets the production of <q>structured scholarly documents</q><mdash/>not novels, not magazine articles, not menus, and not travel brochures.  (Though a novel could work well?)  A research monograph might only be consulted for a portion of its content.  A good textbook should be useful to a reader after a course is over, and it should be easy to locate certain portions of the material.  A good textbook will foreshadow later material, and reinforce earlier material.  So we provide tools that lead to a quality index, reduce the overhead of making an accurate cross-reference, and make an automatic Table of Contents.  Page numbers can be a useful way to locate information for print output, but are less useful in an electronic <init>PDF</init> with hyperlinks, and are totally useless for online <init>HTML</init> and reflowable <init>EPUB</init>.  So we rely on copious hierarchical numbering to assist with locating discrete pieces of content.</p>
 
-        <p>A <pretext/> document, like most any scholarly document has a hierarchy of <term>divisions</term>.  These are always numbered to reflect that hierachy.  So Subsection 4.7.2 of a <tag>book</tag> is the second sub-section of the seventh section of the fourth chapter of the book.  It is possible to specify that the numbering stops at some level, but that will limit how you can number smaller units of content.</p>
+        <p>A <pretext/> document, like most any scholarly document has a hierarchy of <term>divisions</term>.  These are always numbered to reflect that hierarchy.  So Subsection 4.7.2 of a <tag>book</tag> is the second sub-section of the seventh section of the fourth chapter of the book.  It is possible to specify that the numbering stops at some level, but that will limit how you can number smaller units of content.</p>
 
         <p><term>Blocks</term> are units of content held in a division.  An <tag>example</tag> is a good example.  These are always numbered, so that cross-references are as useful as possible in all output formats.  The number begins with a <term>structure number</term> that is the number of a division.  The division will contain the block, but does not need to be the closest containing division.  For example, Example 5.2.65 of a book has structure number 5.2, indicating it is in Section 2 of Chapter 5.  But this section might be structured as a sequence of sub-sections and Example 5.2.65 would be contained in one of these sub-sections.  But if we started counting all the examples in this <em>section</em> we would find Example 5.2.65 as the sixty-fifth numbered block of the whole <em>section</em>, even if it might only be the twenty-second example of its sub-section.  This final number is known as the <term>serial number</term>.  The granularity of the structure number may be configured.  This is a good place to suggest the complementary <xref ref="publisher-levels"/> on the meaning of the term <term>level</term>.</p>
 
         <p>Numbering of equations and footnotes may be configured in a manner entirely similar to that of blocks.  See <xref ref="publisher-file-numbering"/> for details on how to control this.</p>
 
-        <p>As mentioned above, a number is a kind of <term>locator</term><mdash/>it should help a reader locate content, via a cross-reference, an index entry (a specialized cross-reference), or a Table of Contents.  It should also help a reader (teacher) tell another reader (student) where to find content, perhaps as part of a citation to a smaller item within a larger work.  How would you locate Example 5.2.65?  A Table of Contents, in any output format should get you to Section 5.2 quite easily.  We claim that the <tag>remark</tag> immediately preceeding Example 5.2.65 should be Remark 5.2.64.  In other words, it will easier to scan the section and quickly home in on the example if the serial numbers count <em>all</em> the numbered blocks, rather than having one sequence of serial numbers counting examples, and a second sequence counting remarks.  Not convinced?  Suppose there were two such sequences of serial numbers.  When you see Remark 5.2.23, should you move forward or backward in your search for Example 5.2.65?</p>
+        <p>As mentioned above, a number is a kind of <term>locator</term><mdash/>it should help a reader locate content, via a cross-reference, an index entry (a specialized cross-reference), or a Table of Contents.  It should also help a reader (teacher) tell another reader (student) where to find content, perhaps as part of a citation to a smaller item within a larger work.  How would you locate Example 5.2.65?  A Table of Contents, in any output format should get you to Section 5.2 quite easily.  We claim that the <tag>remark</tag> immediately preceding Example 5.2.65 should be Remark 5.2.64.  In other words, it will easier to scan the section and quickly home in on the example if the serial numbers count <em>all</em> the numbered blocks, rather than having one sequence of serial numbers counting examples, and a second sequence counting remarks.  Not convinced?  Suppose there were two such sequences of serial numbers.  When you see Remark 5.2.23, should you move forward or backward in your search for Example 5.2.65?</p>
 
         <p>If it is so important to not have separate sequences of serial numbers, then why do equations and footnotes get their own sequences?  These items are substantially different visually, and even their numbers are formatted quite differently, so scanning for blocks or equations or footnotes should be very distinct visually.  Notice that it is their <em>distinctive appearance</em> that is the criteria for an independent sequence of serial numbers.</p>
 
         <p>We have implemented some flexibility for figures and tables, and for projects.  This work is in flux, so we have not yet documented the possibilities.  Our view is that figures and tables can be considered visually different enough to merit a separate sequence of serial numbers.</p>
 
-        <p>Divisions that are <tag>chapter</tag>s, and only <tag>chapter</tag>s, may begin with a number other than one.  Primarly this is to accomodate books that need to be printed in multiple physical volumes, so numbering in a second (or subsequent) volume can be correct.  We also understand the instructive value of a computer science text that wants to start counting from zero.  We do not mean to encourage a Chapter 0 that is an introduction (go ahead and title Chapter 1 <articletitle>Introduction</articletitle>) or background preparatory material (make that an appendix).  Understand that a <tag>preface</tag>, or multiple <tag>preface</tag>s, is the place to talk about how, or why, you wrote your book, and/or a place to instruct a reader or instructor about the best ways to use your book.  See <xref ref="publisher-file-numbering"/> for details on how to accomplish this.</p>
+        <p>Divisions that are <tag>chapter</tag>s, and only <tag>chapter</tag>s, may begin with a number other than one.  Primarily this is to accommodate books that need to be printed in multiple physical volumes, so numbering in a second (or subsequent) volume can be correct.  We also understand the instructive value of a computer science text that wants to start counting from zero.  We do not mean to encourage a Chapter 0 that is an introduction (go ahead and title Chapter 1 <articletitle>Introduction</articletitle>) or background preparatory material (make that an appendix).  Understand that a <tag>preface</tag>, or multiple <tag>preface</tag>s, is the place to talk about how, or why, you wrote your book, and/or a place to instruct a reader or instructor about the best ways to use your book.  See <xref ref="publisher-file-numbering"/> for details on how to accomplish this.</p>
 
         <note xml:id="best-practice-chapter-zero">
             <title>Use Chapter Zero Carefully</title>
@@ -129,9 +144,15 @@
     <section xml:id="processing-parameters">
         <title>Processing Parameters</title>
 
-        <p>Many of the options for different conversions are accomplished by command-line options, which are fed to <c>xsltproc</c> by what that program calls <term>string parameters</term>.  Here is an example:<cd>
-            <cline>xsltproc -stringparam latex.font.size 14pt pretext-latex.xsl fauna.xml</cline>
+        <p>Many of the options for different conversions are accomplished by command-line options by <term>string parameters</term>.  Here is an example:<cd>
+            <cline>pretext build pdf --stringparam latex.font.size "14pt"</cline>
         </cd>This will use a larger overall font size, while trying to preserve the same number of characters per line (with consequent smaller margins).</p>
+
+        <aside>
+            <p>
+                To feed such a string the <c>xsltproc</c>, you would enter <c>xsltproc -stringparam latex.font.size "14pt" pretext-latex.xsl fauna.xml</c>.
+            </p>
+        </aside>
 
         <p>Notice that this example does nothing to change the <em>words</em> that a conversion produces, which is why you do not specify them in your source, and why they are documented here in the <pubtitle>Publisher's Guide</pubtitle>.  They are conversion options that do not affect your content in significant ways, and are related to the particular output format.  Note that we are phasing out these parameters in favor of the Publisher's File (see <xref ref="publisher-file"/>).</p>
     </section>
@@ -141,10 +162,9 @@
 
         <p>Output can contain a <term>watermark</term><idx>watermark</idx>, which is prominent text in the background of a document.  You might use it to make a draft version (with a date?), or a CONFIDENTIAL version, or a document intended for limited distribution, such as an instructor's solution manual.</p>
 
-        <p>To use, specify the text, and an optional scaling factor to adjust the size.  If your text has spaces, you may need to enclose the string in quote marks so that it passes correctly into <c>xsltproc</c>.  For example, all on one line,<cd>
-            <cline>xsltproc -stringparam watermark.text "DRAFT 2034-05-25"</cline>
-            <cline>  -stringparam watermark.scale 0.5 pretext-latex.xsl fauna.xml</cline>
-            <cline>         </cline>
+        <p>To use, specify the text, and an optional scaling factor to adjust the size.  If your text has spaces, you may need to enclose the string in quote marks so that it passes correctly as a string parameter. For example, all on one line,<cd>
+            <cline>pretext build pdf --stringparam watermark.text "DRAFT 2034-05-25"</cline>
+            <cline>  --stringparam watermark.scale 0.5</cline>
         </cd></p>
     </section>
 </chapter>

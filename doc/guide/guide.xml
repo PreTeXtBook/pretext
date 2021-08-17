@@ -32,7 +32,6 @@
             <xi:include href="author/topics.xml"/>
             <xi:include href="author/processing.xml"/>
             <xi:include href="author/schema.xml"/>
-            <xi:include href="author/pretext-script.xml"/>
             <xi:include href="author/webwork.xml"/>
             <xi:include href="author/advice.xml"/>
             <!-- keep the Author's FAQ last within part -->
@@ -72,6 +71,8 @@
         <part xml:id="part-developer">
             <title>Developer's Guide</title>
 
+            <xi:include href="developer/xsltproc.xml"/>
+            <xi:include href="developer/pretext-script.xml"/>
             <xi:include href="developer/coding.xml"/>
             <xi:include href="developer/debugging.xml"/>
             <xi:include href="developer/git.xml"/>

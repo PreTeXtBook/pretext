@@ -68,7 +68,7 @@
         <paragraphs>
             <title>File Format</title>
 
-            <p>Your source should be plain <term>ASCII files</term><idx>ASCII file</idx> which you will create with a text editor.  In other words, do not create your source with Word, LibreOffice, WordPerfect, AbiWord, Pages or similar programs.  Popular text editors include vi, emacs, Notepad, Notepad++, Atom, TextWrangler, and BBEdit.  I have had a very good experience with Sublime Text, which is cross-platform (Windows, OS X, Linux), and can be used for free, though it has a very liberal license and is well worth the cost.  Sometimes these editors are known as a <term>programmer's editor</term><idx>programmer's editor</idx> (though we will be doing no programming).  Support for writing HTML sometimes translates directly to good support for XML.</p>
+            <p>Your source should be plain <term>ASCII files</term><idx>ASCII file</idx> which you will create with a text editor.  In other words, do not create your source with Word, LibreOffice, WordPerfect, AbiWord, Pages or similar programs.  Popular text editors include vi, emacs, Notepad, Notepad++, Atom, Visual Studio Code, TextWrangler, and BBEdit.  I have had a very good experience with Sublime Text, which is cross-platform (Windows, OS X, Linux), and can be used for free, though it has a very liberal license and is well worth the cost.  Sometimes these editors are known as a <term>programmer's editor</term><idx>programmer's editor</idx> (though we will be doing no programming).  Support for writing HTML sometimes translates directly to good support for XML.</p>
 
             <p>There are <term>XML editors</term><idx>XML editor</idx>, which I have generally found too complex for authoring in <pretext />.  They do have some advantages and XML Copy Editor is one that I have found that is possibly useful.</p>
 
@@ -112,10 +112,42 @@
         </paragraphs>
     </section>
 
+    <section xml:id="start-source-to-output">
+        <title>Converting Your Source to Output</title>
+
+        <p>
+            Once you have content created in <pretext /> files (i.e., XML files), you will want to convert these files into a output format such as HTML, to be viewed in a web browser, or a PDF.  Detailed instructions for doing this, including a plethora of options, will be discussed in <xref ref="processing"/>; here we will give a very brief overview to illustrate the basic ideas.
+        </p>
+
+        <p>
+            Once you have your computer set up correctly, converting <pretext /> <init>XML</init> into a full <init>HTML</init> website can be as simple as typing <c>pretext build html</c> in a terminal, or even hitting <c>Ctrl+B</c> in Visual Studio Code.  Behind-the-scenes, these commands use <term>XSL</term> 1.0 (<term>eXtensiible Stylesheet Language</term>) to <em>transform</em> the XML source using a number of XSL stylesheets that come with <pretext />.
+        </p>
+
+        <p>
+            There are other methods of combining the supplied XSL stylesheets with your XML source, including <c>xsltproc</c>, a command line program that is usually installed by default on Linux systems and MacOS.  For many years, this was the preferred method of converting <pretext /> documents, by entering a command such as:
+        </p>
+
+        <console>
+            <input>xsltproc -xinclude ../mathbook/xsl/pretext-html.xsl source/main.ptx</input>
+        </console>
+
+        <p>
+            This workflow is still supported, and for authors who would like more control over their projects, this might still be the best option.  Documentation for how to use <c>xsltproc</c> with <pretext /> can be found in <xref ref="xsltproc"/>.
+        </p>
+
+        <p>
+            Some features of <pretext />, such as the inclusion of images described in source, or including <webwork /> exercises, requires the use of an additional Python script, also shipped with <pretext />.  Instructions for using this script can be found in <xref ref="pretext-script"/>.
+        </p>
+
+        <p>
+            For the majority of authors who are starting out with <pretext />, a simpler workflow is available: the PreTeXt-CLI (CLI is <em>Command Line Interface</em>).  This is a Python program that implements the most common conversion tasks that previously required <c>xsltproc</c> and the pretext script.
+        </p>
+    </section>
+
     <section xml:id="start-next">
         <title>Where Next?</title>
 
-        <p>If you are impatient (sometimes a good quality!), then <xref ref="quickstart-example"/> should be next, where we show you how to construct and process a short example and then expand it slightly with several additions.</p>
+        <p>If you are impatient (sometimes a good quality!), then <xref ref="quickstart-example"/> should be next, where we walk through the steps to construct and convert a couple short examples and then expand them slightly with several additions.</p>
 
         <p>If you would like a general, high-level overview of features skip ahead to <xref ref="overview"/>.</p>
 
