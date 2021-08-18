@@ -163,7 +163,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='worksheetexercise'>Worksheet Exercise</localization> -->
     <localization string-id='readingquestion'>Question de compréhension</localization>
     <localization string-id='webwork'>WeBWorK</localization>
-    <localization string-id='hint'>Indice</localization>  <!-- Knowingly differs from fr-FR, which uses "Indication" instead -->
+    <localization string-id='hint'>Indication</localization>
     <localization string-id='answer'>Réponse</localization>
     <localization string-id='solution'>Solution</localization>
     <!-- A group of divisional exercises (with introduction and conclusion) -->
