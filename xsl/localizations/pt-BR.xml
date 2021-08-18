@@ -146,6 +146,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Literate programming, a chunk of computer code -->
     <!-- <localization string-id='fragment'>Fragment</localization> -->
     <!-- Parts of an exercise and its solution -->
+    <!-- See the en-US file for a detailed explanation of the words for exercises -->
     <localization string-id='divisionalexercise'>Exercício</localization>
     <!-- Translation needed for Brazilian Portugese -->
     <!-- See en-US file for distinctions here, do not repeat previous translation -->

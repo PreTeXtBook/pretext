@@ -141,23 +141,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Literate programming, a chunk of computer code -->
     <!-- <localization string-id='fragment'>Fragment</localization> -->
     <!-- Parts of an exercise and its solution -->
-    <!-- An "exercise", at any level, within an "exercises" division is a          -->
-    <!-- "divisional" exercise and the string employed is 'divisionalexercise'.    -->
-    <!-- An "exercise" whose parent is a division (chapter, section, etc) we       -->
-    <!-- call an "inline exercise" and the string employed is 'inlineexercise'.    -->
-    <!-- And an "exercise" in a "worksheet" is a 'worksheetexercise'.              -->
-    <!-- And an "exercise" in a "reading-questions" is a 'readingquestion'.         -->
-    <!-- It is important to use different translations so that a text with         -->
-    <!-- different types of exercises do not have ambiguous cross-references       -->
-    <!-- (there is an example of this at the start of one of the later             -->
-    <!-- sections of the sample article).                                          -->
-    <!--                                                                           -->
-    <!-- In English, an "Exercise" is something you do that has a beneficial       -->
-    <!-- outcome, such as "I am going to the gym to exercise."  A "Checkpoint"     -->
-    <!-- is something you must do before you do something else.  Another use of    -->
-    <!-- the term is a location on a roadway where you must stop for the      -->
-    <!-- police to do an inspection. A worksheet is a collection of activities or  -->
-    <!-- problems, typically printed on paper, which might be used in a classroom. -->
+    <!-- See the en-US file for a detailed explanation of the words for exercises -->
     <localization string-id='divisionalexercise'>Esercizio</localization>
     <localization string-id='inlineexercise'>Punto di controllo</localization>
     <localization string-id='worksheetexercise'>Esercizio in scheda didattica</localization>
