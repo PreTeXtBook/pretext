@@ -149,6 +149,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='hint'>Indication</localization>
     <localization string-id='answer'>Réponse</localization>
     <localization string-id='solution'>Solution</localization>
+    <!-- A group of divisional exercises (with introduction and conclusion) -->
+    <localization string-id='exercisegroup'>Groupe d'exercices</localization>
      <!-- Front matter components -->
     <localization string-id='toc'>Table des matières</localization>
     <localization string-id='abstract'>Résumé</localization>
