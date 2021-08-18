@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "mathjax-full": "^3.2.0",
-    "speech-rule-engine": "^3.3.3",
+    "speech-rule-engine": "^4.0.0-beta.1",
     "yargs": "^15.4.1"
   }
 }
