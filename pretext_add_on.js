@@ -160,6 +160,7 @@ async function copyPermalink(elem) {
         }
         // temporary element to alert user that link was copied
         let copied_msg = document.createElement('p');
+        copied_msg.setAttribute('role', 'alert');
         copied_msg.className = "permalink-alert";
         copied_msg.innerHTML = "Link to " + msg_link  + " copied to clipboard";
         elem.parentElement.insertBefore(copied_msg, elem);
@@ -278,7 +279,7 @@ console.log("this is e", e);
             this_permalink_container.setAttribute('onclick', 'copyPermalink(this)');
             this_permalink_container.setAttribute('data-description', this_permalink_description);
    //         this_permalink_container.innerHTML = '<span href="' + this_permalink_url + '">' + permalink_word + '</span>';
-            this_permalink_container.innerHTML = '<a href="' + this_permalink_url + '">' + permalink_word + '</a>';
+            this_permalink_container.innerHTML = '<a href="' + this_permalink_url + '" title="Copy permalink for ' + this_permalink_description + '">' + permalink_word + '</a>';
 
             if (document.querySelector('body.standalone')) {
                 console.log("no permalinks on standalone pages")
