@@ -603,7 +603,9 @@
         <itemref idref="table-contents" linear="yes"/>
         <itemref idref="cover-page" linear="yes" />
         <xsl:apply-templates select="$document-root" mode="spine" />
-        <itemref idref="endnotes" linear="no" />
+        <xsl:if test="$b-has-endnotes">
+            <itemref idref="endnotes" linear="no" />
+        </xsl:if>
     </spine>
 </xsl:template>
 
