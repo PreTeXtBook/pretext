@@ -525,7 +525,7 @@
 <!-- Specialized divisions are terminal in back    -->
 <!-- matter, and only a seperate file when within  -->
 <!-- a "chapter", at level 2                       -->
-<xsl:template match="frontmatter|colophon|biography|dedication|acknowledgement|preface|chapter|chapter/conclusion|chapter/outcomes[preceding-sibling::section]|appendix|index|section|exercises|chapter/solutions|appendix/solutions|backmatter/solutions|chapter/references|appendix/references|backmatter/references" mode="manifest">
+<xsl:template match="frontmatter|colophon|biography|dedication|acknowledgement|preface|chapter|chapter/conclusion|chapter/outcomes[preceding-sibling::section]|appendix|index|section|exercises|chapter/reading-questions|chapter/solutions|appendix/solutions|backmatter/solutions|chapter/references|appendix/references|backmatter/references" mode="manifest">
     <!-- Annotate manifest entries -->
     <xsl:comment>
         <xsl:apply-templates select="." mode="long-name" />
