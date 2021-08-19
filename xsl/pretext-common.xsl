@@ -7892,7 +7892,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:call-template name="list-of-begin" />
     <!-- recursive procedure, starting from indicated scope -->
     <xsl:apply-templates select="$subroot" mode="list-of-content">
-        <xsl:with-param name="heading-level" select="$heading-level"/>
+        <!-- list-of was passed a heading level that was incremented by its parent division -->
+        <!-- Since the list-of has no heading itself, we back this up by 1                  -->
+        <xsl:with-param name="heading-level" select="$heading-level - 1"/>
         <xsl:with-param name="elements" select="$elements"/>
         <xsl:with-param name="divisions" select="$divisions"/>
         <xsl:with-param name="b-empty" select="$b-empty"/>

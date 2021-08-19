@@ -623,9 +623,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Headings for structural divisions when they are repeated: -->
 <!-- list-of, solutions                                        -->
-<!-- Use span instead of hN                                    -->
-<xsl:template match="*" mode="secondary-heading">
-    <xsl:element name="span">
+<xsl:template match="*" mode="duplicate-heading">
+    <xsl:param name="heading-level"/>
+    <xsl:variable name="hN">
+        <xsl:text>h</xsl:text>
+        <xsl:choose>
+            <xsl:when test="$heading-level > 6">
+                <xsl:text>6</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$heading-level"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:element name="{$hN}">
         <xsl:attribute name="class">
             <xsl:text>heading</xsl:text>
             <xsl:if test="not(self::chapter) or ($numbering-maxlevel = 0)">
@@ -1083,6 +1094,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- $b-has-heading will always be "false" in these situations.     -->
 <xsl:template match="book|article|part|chapter|section|subsection|subsubsection|exercises|worksheet|reading-questions" mode="division-in-solutions">
     <xsl:param name="scope" /> <!-- ignored -->
+    <xsl:param name="heading-level"/>
     <xsl:param name="b-has-heading"/>
     <xsl:param name="content" />
 
@@ -1092,7 +1104,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$b-has-heading">
             <!-- as a duplicate of generated content, no HTML id -->
             <section class="{local-name(.)}">
-                <xsl:apply-templates select="." mode="secondary-heading"/>
+                <xsl:apply-templates select="." mode="duplicate-heading">
+                    <xsl:with-param name="heading-level" select="$heading-level"/>
+                </xsl:apply-templates>
                 <!-- we don't do an "author-byline" here in duplication -->
                 <xsl:copy-of select="$content" />
             </section>
@@ -1119,7 +1133,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Subdivision headings in list-of's -->
 <xsl:template match="*" mode="list-of-header">
-    <xsl:apply-templates select="." mode="secondary-heading"/>
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="duplicate-heading">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Entries in list-of's -->
