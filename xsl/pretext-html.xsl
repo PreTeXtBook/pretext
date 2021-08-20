@@ -6306,8 +6306,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- the first class controls the default icon -->
                 <xsl:attribute name="class">
                     <xsl:choose>
-                        <xsl:when test="$root/book">mathbook-book</xsl:when>
-                        <xsl:when test="$root/article">mathbook-article</xsl:when>
+                        <xsl:when test="$root/book">pretext-book</xsl:when>
+                        <xsl:when test="$root/article">pretext-article</xsl:when>
                     </xsl:choose>
                     <!-- ################################################# -->
                     <!-- This is how the left sidebar goes away            -->
@@ -10265,8 +10265,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- the first class controls the default icon -->
             <xsl:attribute name="class">
                 <xsl:choose>
-                    <xsl:when test="$root/book">mathbook-book</xsl:when>
-                    <xsl:when test="$root/article">mathbook-article</xsl:when>
+                    <xsl:when test="$root/book">pretext-book</xsl:when>
+                    <xsl:when test="$root/article">pretext-article</xsl:when>
                 </xsl:choose>
                 <xsl:if test="$b-has-toc">
                     <xsl:text> has-toc has-sidebar-left</xsl:text> <!-- note space, later add right -->
