@@ -11070,7 +11070,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:if test="$docinfo/feedback">
                         <xsl:call-template name="feedback-link" />
                     </xsl:if>
-                    <xsl:call-template name="mathbook-link" />
+                    <xsl:call-template name="pretext-link" />
                     <xsl:call-template name="powered-by-mathjax" />
                 </nav>
             </div>
@@ -11282,8 +11282,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Branding in "extras", mostly hard-coded        -->
 <!-- HTTPS for authors delivering from secure sites -->
-<xsl:template name="mathbook-link">
-    <a class="mathbook-link" href="https://pretextbook.org">
+<xsl:template name="pretext-link">
+    <a class="pretext-link" href="https://pretextbook.org">
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id" select="'authored'" />
         </xsl:call-template>
