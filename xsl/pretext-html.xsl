@@ -6293,7 +6293,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- Only purpose of this page is YouTube video -->
                 <!-- A hook could go here for some extras       -->
                 <!-- ########################################## -->
-                <xsl:call-template name="mathbook-js" />
+                <xsl:call-template name="pretext-js" />
                 <xsl:call-template name="knowl" />
                 <xsl:call-template name="fonts" />
                 <xsl:call-template name="css" />
@@ -10247,7 +10247,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="sagecell" />
             <xsl:call-template name="syntax-highlight-header"/>
             <xsl:call-template name="google-search-box-js" />
-            <xsl:call-template name="mathbook-js" />
+            <xsl:call-template name="pretext-js" />
             <xsl:call-template name="knowl" />
             <xsl:call-template name="fonts" />
             <xsl:call-template name="hypothesis-annotation" />
@@ -11689,8 +11689,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- Mathbook Javascript header -->
-<xsl:template name="mathbook-js">
+<!-- PreTeXt Javascript header -->
+<xsl:template name="pretext-js">
     <!-- condition first on toc present? -->
     <script src="{$html.js.server}/js/lib/jquery.min.js"></script>
     <script src="{$html.js.server}/js/lib/jquery.sticky.js" ></script>
