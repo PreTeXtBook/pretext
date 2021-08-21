@@ -313,7 +313,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ############## -->
 
 <!-- Deprecation warnings are universal analysis of source and parameters   -->
-<!-- There is always a "document root" directly under the mathbook element, -->
+<!-- There is always a "document root" directly under the pretext element,  -->
 <!-- and we process it with the chunking template called below              -->
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/">
@@ -1689,7 +1689,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- interest.  Create cross-reference.                          -->
 <!-- One notable case: paragraph must be "top-level", just below -->
 <!-- a structural document node                                  -->
-<!-- Recursion always halts, since "mathbook" is structural      -->
+<!-- Recursion always halts, since "pretext" is structural       -->
 <!-- TODO: save knowl or section link                            -->
 <!-- We create content of "xref-knowl" if it is a block.         -->
 <!-- TODO: identify index targets consistently in "make-efficient-knowls" -->
@@ -5714,7 +5714,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   Asymptote graphics language                    -->
 <!--   LaTeX source code images                       -->
 <!--   Sage graphics plots, w/ PNG fallback for 3D    -->
-<!--   Match style is duplicated in mathbook-epub.xsl -->
+<!--   Match style is duplicated in pretext-epub.xsl  -->
 <xsl:template match="image[latex-image]|image[sageplot]" mode="image-inclusion">
     <xsl:variable name="base-pathname">
         <xsl:value-of select="$generated-directory"/>
@@ -6293,7 +6293,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- Only purpose of this page is YouTube video -->
                 <!-- A hook could go here for some extras       -->
                 <!-- ########################################## -->
-                <xsl:call-template name="mathbook-js" />
+                <xsl:call-template name="pretext-js" />
                 <xsl:call-template name="knowl" />
                 <xsl:call-template name="fonts" />
                 <xsl:call-template name="css" />
@@ -6306,8 +6306,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- the first class controls the default icon -->
                 <xsl:attribute name="class">
                     <xsl:choose>
-                        <xsl:when test="$root/book">mathbook-book</xsl:when>
-                        <xsl:when test="$root/article">mathbook-article</xsl:when>
+                        <xsl:when test="$root/book">pretext-book</xsl:when>
+                        <xsl:when test="$root/article">pretext-article</xsl:when>
                     </xsl:choose>
                     <!-- ################################################# -->
                     <!-- This is how the left sidebar goes away            -->
@@ -10247,7 +10247,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="sagecell" />
             <xsl:call-template name="syntax-highlight-header"/>
             <xsl:call-template name="google-search-box-js" />
-            <xsl:call-template name="mathbook-js" />
+            <xsl:call-template name="pretext-js" />
             <xsl:call-template name="knowl" />
             <xsl:call-template name="fonts" />
             <xsl:call-template name="hypothesis-annotation" />
@@ -10265,8 +10265,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- the first class controls the default icon -->
             <xsl:attribute name="class">
                 <xsl:choose>
-                    <xsl:when test="$root/book">mathbook-book</xsl:when>
-                    <xsl:when test="$root/article">mathbook-article</xsl:when>
+                    <xsl:when test="$root/book">pretext-book</xsl:when>
+                    <xsl:when test="$root/article">pretext-article</xsl:when>
                 </xsl:choose>
                 <xsl:if test="$b-has-toc">
                     <xsl:text> has-toc has-sidebar-left</xsl:text> <!-- note space, later add right -->
@@ -10470,7 +10470,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Create the URL of the parent document node    -->
 <!-- Parent always exists, since the               -->
-<!-- structural check fails at <mathbook>          -->
+<!-- structural check fails at <pretext>           -->
 <!-- Identical in tree/linear schemes, up is up    -->
 <xsl:template match="*" mode="up-url">
     <xsl:if test="parent::*">
@@ -10482,7 +10482,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="$parent" mode="url" />
         </xsl:if>
     </xsl:if>
-    <!-- will be empty precisely at children of <mathbook> -->
+    <!-- will be empty precisely at children of <pretext> -->
 </xsl:template>
 
 <!-- Next Linear URL -->
@@ -10515,8 +10515,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- Recursively look sideways to the right, else up     -->
-<!-- <mathbook> is not structural, so halt looking there -->
+<!-- Recursively look sideways to the right, else up    -->
+<!-- <pretext> is not structural, so halt looking there -->
 <xsl:template match="*" mode="next-sideways-url">
     <xsl:variable name="url">
         <xsl:if test="following-sibling::*">
@@ -10533,8 +10533,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:value-of select="$url" /> <!-- no harm if empty -->
     <xsl:if test="$url=''">
-        <!-- Try going up and then sideways                           -->
-        <!-- parent always exists, since <mathbook> is non-structural -->
+        <!-- Try going up and then sideways                          -->
+        <!-- parent always exists, since <pretext> is non-structural -->
         <xsl:variable name="parent" select="parent::*[1]" />
         <xsl:variable name="structural">
             <xsl:apply-templates select="$parent" mode="is-structural" />
@@ -10550,7 +10550,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Look sideways to the left                                  -->
 <!-- If present, move there and descend right branches          -->
 <!-- If nothing there, move up once                             -->
-<!-- <mathbook> is not structural, so halt if we go up to there -->
+<!-- <pretext> is not structural, so halt if we go up to there  -->
 <xsl:template match="*" mode="previous-linear-url">
     <xsl:variable name="url">
         <xsl:if test="preceding-sibling::*">
@@ -10567,8 +10567,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$url=''">
-            <!-- Go up to parent and get the URL there (not recursive)    -->
-            <!-- parent always exists, since <mathbook> is non-structural -->
+            <!-- Go up to parent and get the URL there (not recursive)   -->
+            <!-- parent always exists, since <pretext> is non-structural -->
             <xsl:variable name="parent" select="parent::*[1]" />
             <xsl:variable name="structural">
                 <xsl:apply-templates select="$parent" mode="is-structural" />
@@ -11070,7 +11070,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:if test="$docinfo/feedback">
                         <xsl:call-template name="feedback-link" />
                     </xsl:if>
-                    <xsl:call-template name="mathbook-link" />
+                    <xsl:call-template name="pretext-link" />
                     <xsl:call-template name="powered-by-mathjax" />
                 </nav>
             </div>
@@ -11282,8 +11282,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Branding in "extras", mostly hard-coded        -->
 <!-- HTTPS for authors delivering from secure sites -->
-<xsl:template name="mathbook-link">
-    <a class="mathbook-link" href="https://pretextbook.org">
+<xsl:template name="pretext-link">
+    <a class="pretext-link" href="https://pretextbook.org">
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id" select="'authored'" />
         </xsl:call-template>
@@ -11689,8 +11689,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- Mathbook Javascript header -->
-<xsl:template name="mathbook-js">
+<!-- PreTeXt Javascript header -->
+<xsl:template name="pretext-js">
     <!-- condition first on toc present? -->
     <script src="{$html.js.server}/js/lib/jquery.min.js"></script>
     <script src="{$html.js.server}/js/lib/jquery.sticky.js" ></script>
