@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<publication>
+    <!-- directories are relative to the main source PreTeXt file -->
+    <source webwork-problems="../generated-assets/webwork/webwork-representations.ptx">
+        <directories external="../assets" generated="../generated-assets"/>
+    </source>
+</publication>

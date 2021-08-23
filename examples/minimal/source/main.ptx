@@ -19,25 +19,37 @@ You should have received a copy of the GNU General Public License
 along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
-<!-- To process this file do                                                                      -->
+<!-- To process this file with PreTeXt-CLI do                                                     -->
+<!--                                                                                              -->
+<!-- (1) HTML:                                                                                    -->
+<!--     pretext build html                                                                       -->
+<!--                                                                                              -->
+<!-- (2) LaTeX:                                                                                   -->
+<!--     pretext build latex                                                                      -->
+<!--                                                                                              -->
+<!-- (3) PDF:                                                                                     -->
+<!--     pretext build pdf                                                                        -->
+
+
+<!-- To process this file with xsltproc do                                                        -->
 <!--                                                                                              -->
 <!-- (1) LaTeX/PDF:                                                                               -->
-<!--     xsltproc -o minimal.tex mathbook/xsl/pretext-latex.xsl minimal.xml                       -->
+<!--     xsltproc -o minimal.tex PATH_TO/mathbook/xsl/pretext-latex.xsl source/main.ptx           -->
 <!--     pdflatex minimal.tex                                                                     -->
 <!--     xelatex minimal.tex                                                                      -->
 <!--                                                                                              -->
 <!-- (2) HTML:                                                                                    -->
-<!--     xsltproc mathbook/xsl/pretext-html.xsl minimal.xml                                       -->
+<!--     xsltproc PATH_TO/mathbook/xsl/pretext-html.xsl source/main.ptx                           -->
 <!--     <browser>  minimal.html                                                                  -->
 <!--                                                                                              -->
 <!-- (3) CoCalc worksheet (parameter causes a single file for output)                             -->
 <!--     REMOVE the "X" in the double dash (which is not legal in an XML comment)                 -->
-<!--     xsltproc -X-stringparam chunk.level 0 mathbook/xsl/pretext-smc.xsl minimal.xml           -->
+<!--     xsltproc -X-stringparam chunk.level 0 PATH_TO/mathbook/xsl/pretext-smc.xsl source/main.ptx   -->
 <!--     <CoCalc> minimal.sagews                                                                  -->
 <!--                                                                                              -->
 <!-- (4) Sage doctesting                                                                          -->
 <!--     REMOVE the "X" in the double dash (which is not legal in an XML comment)                 -->
-<!--     xsltproc -X-stringparam chunk.level 0 mathbook/xsl/pretext-sage-doctest.xsl minimal.xml  -->
+<!--     xsltproc -X-stringparam chunk.level 0 PATH_TO/mathbook/xsl/pretext-sage-doctest.xsl source/main.ptx  -->
 <!--     <read further instructions in> minimal.py                                                -->
 
 <pretext>
