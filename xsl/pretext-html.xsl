@@ -294,6 +294,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="webwork.divisional.static" select="'yes'" />
 <xsl:param name="webwork.reading.static" select="'yes'" />
 <xsl:param name="webwork.worksheet.static" select="'yes'" />
+<!-- We make variables instead of using the params directly, so that in EPUB we can overrule -->
+<xsl:variable name="b-webwork-inline-static" select="$webwork.inline.static = 'yes'" />
+<xsl:variable name="b-webwork-divisional-static" select="$webwork.divisional.static = 'yes'" />
+<xsl:variable name="b-webwork-reading-static" select="$webwork.reading.static = 'yes'" />
+<xsl:variable name="b-webwork-worksheet-static" select="$webwork.worksheet.static = 'yes'" />
 
 <xsl:variable name="webwork-reps-version" select="$document-root//webwork-reps[1]/@version"/>
 
@@ -10018,10 +10023,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                                 (ancestor::reading-questions and $b-has-reading-solution) or
                                                 (ancestor::worksheet and $b-has-worksheet-solution) or
                                                 (not(ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-solution)"/>
-    <xsl:variable name="b-static" select="(ancestor::exercises and ($webwork.divisional.static = 'yes')) or
-                                          (ancestor::reading-questions and ($webwork.reading.static = 'yes')) or
-                                          (ancestor::worksheet and ($webwork.worksheet.static = 'yes')) or
-                                          (not(ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and ($webwork.inline.static = 'yes'))"/>
+    <xsl:variable name="b-static" select="(ancestor::exercises and $b-webwork-divisional-static) or
+                                          (ancestor::reading-questions and $b-webwork-reading-static) or
+                                          (ancestor::worksheet and $b-webwork-worksheet-static) or
+                                          (not(ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-webwork-inline-static)"/>
     <xsl:choose>
         <!-- We print the static version when that is explicitly directed. -->
         <xsl:when test="($b-static = 'yes')">
