@@ -5253,6 +5253,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\)</xsl:text>
 </xsl:template>
 
+<!-- These two templates wrap math adjacent text in a span -->
+<!-- to prevent unwanted line breaks.                      -->
+<xsl:template name="begin-math-adjacent-text">
+    <xsl:text disable-output-escaping="yes"><![CDATA[<span class="mathword">]]></xsl:text>
+</xsl:template>
+<xsl:template name="end-math-adjacent-text">
+    <xsl:text disable-output-escaping="yes"><![CDATA[</span>]]></xsl:text>
+</xsl:template>
+
+
 <!-- Displayed Single-Line Math ("me", "men") -->
 
 <!-- All displayed mathematics is wrapped by a div,    -->
