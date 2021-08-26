@@ -122,6 +122,12 @@
     </xsl:choose>
 </xsl:variable>
 
+<!-- For WeBWorK in EPUB, we force WeBWorK to be static -->
+<xsl:variable name="b-webwork-inline-static" select="true()" />
+<xsl:variable name="b-webwork-divisional-static" select="true()" />
+<xsl:variable name="b-webwork-reading-static" select="true()" />
+<xsl:variable name="b-webwork-worksheet-static" select="true()" />
+
 <!-- Cover image filename, once -->
 <xsl:variable name="cover-filename">
     <xsl:value-of select="$publication/epub/@cover"/>
