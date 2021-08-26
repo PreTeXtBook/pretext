@@ -6579,13 +6579,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- items (titles, index), so use the "fixltx2e" package, -->
 <!-- which declares \MakeRobust\( and \MakeRobust\)        -->
 
-<!-- These two templates provide the delimiters for -->
-<!-- inline math, implementing abstract templates.  -->
-<xsl:template name="begin-inline-math">
+<!-- This template wraps inline math in delimiters -->
+<xsl:template name="inline-math-wrapper">
+    <xsl:param name="math"/>
     <xsl:text>\(</xsl:text>
-</xsl:template>
-
-<xsl:template name="end-inline-math">
+    <xsl:value-of select="$math"/>
     <xsl:text>\)</xsl:text>
 </xsl:template>
 
@@ -10833,9 +10831,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:call-template name="rangle-character"/>
     <xsl:text> </xsl:text>
-    <xsl:call-template name="begin-inline-math"/>
-    <xsl:text>\equiv</xsl:text>
-    <xsl:call-template name="end-inline-math"/>
+    <xsl:call-template name="inline-math-wrapper">
+        <xsl:with-param name="math" select="'\equiv'"/>
+    </xsl:call-template>
     <!-- sortby first, @ separator, then tt version -->
     <xsl:text>\index{</xsl:text>
     <xsl:value-of select="@xml:id" />

@@ -5243,13 +5243,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- to be part of MathJax configuration, but   -->
 <!-- also free up the dollar sign               -->
 
-<!-- These two templates provide the delimiters for -->
-<!-- inline math, so we can adjust with overides.   -->
-<xsl:template name="begin-inline-math">
-    <xsl:text>\(</xsl:text>
-</xsl:template>
 
-<xsl:template name="end-inline-math">
+<!-- This template wraps inline math in delimiters -->
+<xsl:template name="inline-math-wrapper">
+    <xsl:param name="math"/>
+    <xsl:text>\(</xsl:text>
+    <xsl:value-of select="$math"/>
     <xsl:text>\)</xsl:text>
 </xsl:template>
 
@@ -7698,9 +7697,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="."/>
     </xsl:variable>
     <xsl:variable name="math-pi">
-        <xsl:call-template name="begin-inline-math" />
-        <xsl:text>\pi</xsl:text>
-        <xsl:call-template name="end-inline-math" />
+        <xsl:call-template name="inline-math-wrapper">
+            <xsl:with-param name="math" select="'\pi'"/>
+        </xsl:call-template>
     </xsl:variable>
     <xsl:value-of select="str:replace($mag,'\pi',string($math-pi))"/>
 </xsl:template>
@@ -11812,10 +11811,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>latex-macros</xsl:text>
             </xsl:attribute>
         </xsl:if>
-        <xsl:call-template name="begin-inline-math" />
-        <xsl:value-of select="$latex-packages-mathjax" />
-        <xsl:value-of select="$latex-macros" />
-        <xsl:call-template name="end-inline-math" />
+        <xsl:call-template name="inline-math-wrapper">
+            <xsl:with-param name="math">
+                <xsl:value-of select="$latex-packages-mathjax"/>
+                <xsl:value-of select="$latex-macros"/>
+            </xsl:with-param>
+        </xsl:call-template>
     </div>
 </xsl:template>
 

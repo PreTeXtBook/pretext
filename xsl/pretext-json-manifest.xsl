@@ -139,11 +139,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="containing-filename"/>
 </xsl:template>
 
-<!-- Necessary, override any definition in "pretext-tex.xsl" -->
-<xsl:template name="begin-inline-math">
+<!-- Necessary, override any definition in "pretext-text.xsl" -->
+<xsl:template name="inline-math-wrapper">
+    <xsl:param name="math"/>
     <xsl:text>\(</xsl:text>
-</xsl:template>
-<xsl:template name="end-inline-math">
+    <xsl:value-of select="$math"/>
     <xsl:text>\)</xsl:text>
 </xsl:template>
 
