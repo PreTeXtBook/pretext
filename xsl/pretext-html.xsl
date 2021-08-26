@@ -4217,7 +4217,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
             <!-- optionally, an indication of workspace -->
             <!-- for a print version of a worksheet     -->
-            <xsl:apply-templates select="." mode="worksheet-workspace"/>
+            <xsl:choose>
+                <xsl:when test="self::static">
+                    <xsl:apply-templates select="ancestor::exercise" mode="worksheet-workspace"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="." mode="worksheet-workspace"/>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:when>
         <!-- TODO: contained "if" should just be a new "when"? (look around for similar)" -->
         <xsl:otherwise>
