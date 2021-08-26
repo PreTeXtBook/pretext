@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2014-2021 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- See  xsl/localizations/README.md  for an explanation of this file -->
+
+<!-- fi-FI, Finnish (Finland) -->
+<!-- Lasse M. Manninen lasse.m.manninen@gmail.com   -->
+
+<locale language="fi-FI">
+    <!-- THEOREM-LIKE blocks -->
+    <!-- Environments which have proofs, plus proofs themselves -->
+    <localization string-id='theorem'>Lause</localization>
+    <localization string-id='corollary'>Seuraus</localization>
+    <localization string-id='lemma'>Lemma</localization>
+    <localization string-id='algorithm'>Algoritmi</localization>
+    <localization string-id='proposition'>Propositio</localization>
+    <localization string-id='claim'>Väite</localization>
+    <localization string-id='fact'>Fakta</localization>
+    <localization string-id='identity'>Identiteetti</localization>
+    <localization string-id='proof'>Todistus</localization>
+    <localization string-id='case'>Tapaus</localization>
+    <!-- Components of the narrative -->
+    <!-- Mathematical statements without proofs -->
+    <!-- AXIOM-LIKE blocks -->
+    <localization string-id='axiom'>Aksiooma</localization>
+    <localization string-id='conjecture'>Konjektuuri</localization>
+    <localization string-id='principle'>Periaate</localization>
+    <localization string-id='heuristic'>Heuristiikka</localization>
+    <localization string-id='hypothesis'>Hypoteesi</localization>
+    <localization string-id='assumption'>Oletus</localization>
+    <!-- Definitions -->
+    <localization string-id='definition'>Määritelmä</localization>
+    <!-- Single Line Mathematics -->
+    <localization string-id='me'>Yhtälö</localization>
+    <localization string-id='men'>Numeroitu yhtälö</localization>
+    <localization string-id='mrow'>Yhtälö</localization>
+    <!-- Display Mathematics -->
+    <localization string-id='md'>Rivitetty yhtälö</localization>
+    <localization string-id='mdn'>Numeroitu rivitetty yhtälö</localization>
+    <!-- Types of documents, mostly for informational messages -->
+    <localization string-id='volume'>Osa</localization>
+    <localization string-id='book'>Kirja</localization>
+    <localization string-id='article'>Artikkeli</localization>
+    <localization string-id='letter'>Kirje</localization>
+    <localization string-id='slideshow'>Diaesitys</localization>
+    <localization string-id='memo'>Muistio</localization>
+    <localization string-id='presentation'>Esitelmä</localization>
+    <!-- Parts of a document -->
+    <!-- "part" will also be used for a "stage" of a WeBWorK problem -->
+    <localization string-id='frontmatter'>Nimiösivut</localization>
+    <localization string-id='part'>Osa</localization>
+    <localization string-id='chapter'>Luku</localization>
+    <localization string-id='appendix'>Liite</localization>
+    <!-- Next is the plural of Appendix, used to identify a group of appendix -->
+    <localization string-id='appendices'>Liitteet</localization>
+    <localization string-id='section'>Alaluku</localization>
+    <localization string-id='subsection'>Alaluku</localization>
+    <localization string-id='subsubsection'>Alaluku</localization>
+    <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
+    <localization string-id='slide'>Dia</localization>
+    <localization string-id='introduction'>Johdanto</localization>
+    <localization string-id='conclusion'>Päätäntä</localization>
+    <localization string-id='exercises'>Harjoitustehtävät</localization>
+    <localization string-id='worksheet'>Tehtävämoniste</localization>
+    <localization string-id='reading-questions'>Luetun ymmärtäminen</localization>
+    <localization string-id='solutions'>Ratkaisut</localization>
+    <localization string-id='glossary'>Sanasto</localization>
+    <localization string-id='references'>Lähdeluettelo</localization>
+    <localization string-id='backmatter'>Lisäykset</localization>
+    <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
+    <localization string-id='paragraphs'>Kappaleet</localization>
+    <localization string-id='commentary'>Kommentti</localization>
+    <localization string-id='subparagraph'>Alakappale</localization>
+    <!-- Components of the narrative -->
+    <!-- REMARK-LIKE blocks -->
+    <!-- "note" is used within "biblio", likely to change -->
+    <localization string-id='remark'>Huomautus</localization>
+    <localization string-id='convention'>Konventio</localization>
+    <localization string-id='note'>Huomautus</localization>
+    <localization string-id='observation'>Havainto</localization>
+    <localization string-id='warning'>Varoitus</localization>
+    <localization string-id='insight'>Oivallus</localization>
+    <localization string-id='computation'>Lasku</localization>
+    <localization string-id='technology'>Teknologia</localization>
+    <!-- ASIDE-LIKE blocks -->
+    <localization string-id='aside'>Sivuhuomautus</localization>
+    <localization string-id='biographical'>Elämäkerrallinen sivuhuomautus</localization>
+    <localization string-id='historical'>Historiallinen sivuhuomautus</localization>
+    <!-- EXAMPLE-LIKE blocks -->
+    <localization string-id='example'>Esimerkki</localization>
+    <localization string-id='question'>Kysymys</localization>
+    <localization string-id='problem'>Ongelma</localization>
+    <!-- PROJECT-LIKE blocks -->
+    <localization string-id='project'>Projekti</localization>
+    <localization string-id='activity'>Aktiviteetti</localization>
+    <localization string-id='exploration'>Tutkimus</localization>
+    <localization string-id='task'>Tehtävä</localization>
+    <localization string-id='investigation'>Tutkimus</localization>
+    <!-- assemblages are collections of minimally structured material -->
+    <localization string-id='assemblage'>Kokoelma</localization>
+    <localization string-id='poem'>Runo</localization>
+    <!-- Objectives is the block, objective is a list item within -->
+    <localization string-id='objectives'>Tavoitteet</localization>
+    <localization string-id='objective'>Tavoite</localization>
+    <!-- Outcomes is the block, outcome is a list item within (different) -->
+    <!-- These two words need to be different, to avoid ambiguous cross-references -->
+    <localization string-id='outcomes'>Lopputulokset</localization>
+    <localization string-id='outcome'>Lopputulos</localization>
+    <!--  -->
+    <localization string-id='figure'>Kuva</localization>
+    <localization string-id='table'>Taulukko</localization>
+    <localization string-id='listing'>Lista</localization>
+    <localization string-id='fn'>Alaviite</localization>
+    <localization string-id='contributor'>Edistäjä</localization>
+    <!-- Lists and their items -->
+    <localization string-id='list'>Lista</localization>
+    <localization string-id='li'>Nimike</localization>
+    <!-- A term (word) defined in a glossary -->
+    <localization string-id='defined-term'>Termi</localization>
+    <!-- A regular paragraph, not the old sectioning structure -->
+    <localization string-id='p'>Kappale</localization>
+    <localization string-id='blockquote'>Lainaus</localization>
+    <!-- Literate programming, a chunk of computer code -->
+    <localization string-id='fragment'>Koodinpala</localization>
+    <!-- Parts of an exercise and its solution -->
+    <!-- An "exercise", at any level, within an "exercises" division is a          -->
+    <!-- "divisional" exercise and the string employed is 'divisionalexercise'.    -->
+    <!-- An "exercise" whose parent is a division (chapter, section, etc) we       -->
+    <!-- call an "inline exercise" and the string employed is 'inlineexercise'.    -->
+    <!-- And an "exercise" in a "worksheet" is a 'worksheetexercise'.              -->
+    <!-- And an "exercise" in a "reading-questions" is a 'readingquestion'.         -->
+    <!-- It is important to use different translations so that a text with         -->
+    <!-- different types of exercises do not have ambiguous cross-references       -->
+    <!-- (there is an example of this at the start of one of the later             -->
+    <!-- sections of the sample article).                                          -->
+    <!--                                                                           -->
+    <!-- In English, an "Exercise" is something you do that has a beneficial       -->
+    <!-- outcome, such as "I am going to the gym to exercise."  A "Checkpoint"     -->
+    <!-- is something you must do before you do something else.  Another use of    -->
+    <!-- the term is a location on a roadway where you must stop for the      -->
+    <!-- police to do an inspection. A worksheet is a collection of activities or  -->
+    <!-- problems, typically printed on paper, which might be used in a classroom. -->
+    <localization string-id='divisionalexercise'>Harjoitustehtävä</localization>
+    <localization string-id='inlineexercise'>Harjoitus</localization>
+    <localization string-id='worksheetexercise'>Tehtävämonisteen tehtävä</localization>
+    <localization string-id='readingquestion'>Luetunymmärtämistehtävä</localization>
+    <localization string-id='webwork'>WeBWorK</localization>
+    <localization string-id='hint'>Vihje</localization>
+    <localization string-id='answer'>Vastaus</localization>
+    <localization string-id='solution'>Ratkaisu</localization>
+    <!-- A group of divisional exercises (with introduction and conclusion) -->
+    <localization string-id='exercisegroup'>Tehtäväsetti</localization>
+    <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
+    <localization string-id='biblio'>Bibliografinen nimike</localization>
+    <!-- Front matter components -->
+    <localization string-id='toc'>Sisällys</localization>
+    <localization string-id='abstract'>Tiivistelmä</localization>
+    <localization string-id='preface'>Johdanto</localization>
+    <localization string-id='acknowledgement'>Kiitokset</localization>
+    <localization string-id='biography'>Kirjoittajan tausta</localization>
+    <!-- singular and plural titles for biography subdivision -->
+    <localization string-id='about-author'>Kirjoittajasta</localization>
+    <localization string-id='about-authors'>Kirjoittajista</localization>
+    <localization string-id='foreword'>Esipuhe</localization>
+    <localization string-id='dedication'>Omistus</localization>
+    <localization string-id='colophon'>Kolofoni</localization>
+    <!-- Back matter components -->
+    <!-- index-part is deprecated, but not abandoned          -->
+    <!-- NB: repurpose translations, maybe move appendix here -->
+    <localization string-id='index-part'>Hakemisto</localization>
+    <localization string-id='jump-to'>Mene kohtaan:</localization>
+    <!-- Parts of the Index -->
+    <localization string-id='index'>Hakemisto</localization>
+    <localization string-id='see'>Ks.</localization>
+    <localization string-id='also'>Ks. myös</localization>
+    <!-- Notation List headings/foot -->
+    <localization string-id='symbol'>Symboli</localization>
+    <localization string-id='description'>Kuvaus</localization>
+    <localization string-id='location'>Paikka</localization>
+    <localization string-id='page'>Sivu</localization>
+    <localization string-id='continued'>Jatkuu seuraavalla sivulla</localization>
+    <!-- Navigation Interface elements -->
+    <!-- Assistive "skip to content" link -->
+    <localization string-id='skip-to-content'>Siirry pääasiaan</localization>
+    <localization string-id='previous'>Edellinen</localization>
+    <localization string-id='up'>Ylös</localization>
+    <localization string-id='next'>Seuraava</localization>
+    <!-- Keep these short, so buttons are not overly wide, 4 characters maximum -->
+    <localization string-id='previous-short'>Ed</localization>
+    <localization string-id='up-short'>Yl</localization>
+    <localization string-id='next-short'>Seur</localization>
+    <!-- NB: Use toc from above for both headings and navigation sidebar-->
+    <localization string-id='annotations'>Huomautukset</localization>
+    <localization string-id='feedback'>Palaute</localization>
+    <!-- This phrase should suggest that PreTeXt is the source -->
+    <!-- language that makes a particular output possible      -->
+    <localization string-id='authored'>Tuotettu PreTeXtillä</localization>
+    <!-- Parts of memos and letters -->
+    <localization string-id='to'>Vastaanottaja</localization>
+    <localization string-id='from'>Lähettäjä</localization>
+    <localization string-id='subject'>Aihe</localization>
+    <localization string-id='date'>Pvm</localization>
+    <localization string-id='copy'>cc</localization>
+    <localization string-id='enclosure'>liite</localization>
+    <!-- Various -->
+    <localization string-id='todo'>To Do</localization>
+    <localization string-id='editor'>Toimittaja</localization>
+    <localization string-id='edition'>Painos</localization>
+    <localization string-id='website'>Nettisivu</localization>
+    <localization string-id='copyright'>Tekijänoikeus</localization>
+    <!-- HTML clickables (lowercase strings to click on) -->
+    <localization string-id='permalink'>linkki</localization>
+    <localization string-id='incontext'>in-context</localization>
+    <!-- Sage Cell evaluate button      -->
+    <!-- eg, "Evaluate (Maxima)"        -->
+    <!-- 2017-05-14: 'code' is obsolete -->
+    <!-- This needs to be defined to *something* (always)       -->
+    <!-- else whatever crud ends up on the button kills the cell -->
+    <localization string-id='evaluate'>Aja</localization>
+    <localization string-id='evaluate'>Aja</localization>
+    <!-- <localization string-id='code'>Code</localization> -->
+</locale>
