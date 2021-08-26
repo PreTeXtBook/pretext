@@ -625,7 +625,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="$nemeth-close"/>
             </span>
         </xsl:when>
-        <!-- Now, authored as display or converted as multiline.           -->
+        <!-- single line, authored as such, and converted by SRE as such -->
+        <xsl:when test="(self::me or self::men) and not($b-multiline)">
+            <!-- Similarly, but div puts onto a newline, and breaks after -->
+            <div data-braille="nemeth-display">
+                <span data-braille="nemeth-inline">
+                    <xsl:value-of select="$nemeth-open"/>
+                    <xsl:text>&#xa0;</xsl:text>
+                    <xsl:value-of select="$braille"/>
+                    <xsl:text>&#xa0;</xsl:text>
+                    <xsl:value-of select="$nemeth-close"/>
+                </span>
+            </div>
+        </xsl:when>
+        <!-- Now, authored as display, or converted by SRE, as multiline.  -->
         <!-- liblouis defaults to breaking lines before and after the div. -->
         <!-- We supply opening and closing Nemeth indicators on their own  -->
         <!-- lines, by virtue of the "oneline" span (described below) and  -->
