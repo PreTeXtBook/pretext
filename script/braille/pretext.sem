@@ -101,62 +101,6 @@ boldx dfn,class,terminology
 # PTX alert => HTML em.alert
 boldx em,class,alert
 
-# Single-letter, Latin mathematics, such
-# as a variable "x" is not marked up with
-# Nemeth indicators, but instead gets an
-# HTML italics element ("i") with class
-# .one-letter, and so is converted to
-# Braille italics
-italicx i,class,one-letter
-
-########################
-# Nemeth Math Indicators
-########################
-
-# Nemeth indicator use described in:
-# Braille Authority of North America (BANA),
-# "Guidance for Transcription Using the Nemeth
-# Code within UEB Contexts Revised", April 2018
-# Hereafter "BANA Nemeth Guidance"
-#
-# BANA Nemeth Guidance quotes "Rules of Unified English Braille 2013"
-#
-# 14.6 Nemeth Code within UEB text
-#
-# 14.6.1 When technical material is transcribed according to the
-# provisions of The Nemeth Braille Code for Mathematics and Science
-# Notation within UEB text, the following sections provide for
-# switching between UEB and Nemeth Code.
-#
-# 14.6.2 Place the opening Nemeth Code indicator followed by a
-# space before the sequence to which it applies. Its effect is
-# terminated by the Nemeth Code terminator preceded by a space.
-# Note: The spaces required with the indicator and the terminator
-# do not represent spaces in print.
-#
-# 14.6.3 When the Nemeth Code text is displayed on one or more lines
-# separate from the UEB text, the opening Nemeth Code indicator and
-# the Nemeth Code terminator may each be placed on a line by itself
-# or at the end of the previous line of text.
-#
-# Opening Nemeth Code indicator
-# _%,  4-5-6 1-4-6,  x5f x25
-# always followed by a space
-# technically a UEB symbol
-#
-# Nemeth Code terminator
-# _:,  4-5-6 1-5-6,  x5f x3a
-# always preceded by a space
-# technically a Nemeth symbol
-
-# We write a "nemeth" tag as we produce Braille
-# with the Speech Rule Engine.  We wrap it with
-# the right indicators.  The spaces here are
-# "non-breaking", which  liblouis  respects,
-# and then converts to plain (x20) spaces.
-
-generic nemeth \x2838\x2829\x00a0,\x00a0\x2838\x2831
-
 
 ########
 # Blocks
@@ -230,6 +174,47 @@ tablerow tr \*.
 generic td \*;\s
 generic td,data-braille,last-cell \*
 
+
+########################
+# Nemeth Math Indicators
+########################
+
+# Nemeth indicator use described in:
+# Braille Authority of North America (BANA),
+# "Guidance for Transcription Using the Nemeth
+# Code within UEB Contexts Revised", April 2018
+# Hereafter "BANA Nemeth Guidance"
+#
+# BANA Nemeth Guidance quotes "Rules of Unified English Braille 2013"
+#
+# 14.6 Nemeth Code within UEB text
+#
+# 14.6.1 When technical material is transcribed according to the
+# provisions of The Nemeth Braille Code for Mathematics and Science
+# Notation within UEB text, the following sections provide for
+# switching between UEB and Nemeth Code.
+#
+# 14.6.2 Place the opening Nemeth Code indicator followed by a
+# space before the sequence to which it applies. Its effect is
+# terminated by the Nemeth Code terminator preceded by a space.
+# Note: The spaces required with the indicator and the terminator
+# do not represent spaces in print.
+#
+# 14.6.3 When the Nemeth Code text is displayed on one or more lines
+# separate from the UEB text, the opening Nemeth Code indicator and
+# the Nemeth Code terminator may each be placed on a line by itself
+# or at the end of the previous line of text.
+#
+# Opening Nemeth Code indicator
+# _%,  4-5-6 1-4-6,  x5f x25
+# always followed by a space
+# technically a UEB symbol
+#
+# Nemeth Code terminator
+# _:,  4-5-6 1-5-6,  x5f x3a
+# always preceded by a space
+# technically a Nemeth symbol
+
 #############
 # Mathematics
 #############
@@ -237,15 +222,38 @@ generic td,data-braille,last-cell \*
 # This will kill an empty div that formerly held all
 # the LaTeX macros.  It gets emptied by MathJax, but
 # it leaves behind the LaTeX math delimiters, which
-# become an empty "nemeth" element.  This produces a
-# single opening Nemeth indicator (because it is an
-# empty element?).
-
-# "no" processes interior, "skip" ignores everything
-
+# are problematic.  ("no" processes interior,
+# "skip" ignores everything)
 skip div,data-braille,latex-macros
 
-displaymath div,class,displaymath
+# Single-letter, Latin mathematics, such
+# as a variable "x" is not marked up with
+# Nemeth indicators, but instead gets an
+# HTML italics element ("i") with class
+# .one-letter, and so is converted to
+# Braille italics
+italicx i,class,one-letter
+
+# Inline snippets just pass through unmolested.
+# We are likely getting bad line-breaks here.
+# Nemeth indicators, with non-breaking spaces,
+# are supplied by the PreTeXt conversion to the
+# liblouis precursor.
+generic span,data-braille,nemeth-inline
+
+# Multiline mathematics (which includes displayed
+# single-line mathematics, such as that originating
+# from an "me" element) will be in a div that
+# provides a newline before and after.
+displaymath div,data-braille,nemeth-display
+
+# Individual lines of a multiline display (including
+# the Nemeth indicators on lines of their own) pass
+# through unmolested, and we explicitly write a
+# line-break for each one, that can be controlled
+# with liblouis' softreturn action
+generic span,data-braille,nemeth-oneline
+softreturn br
 
 ##########
 # Verbatim
