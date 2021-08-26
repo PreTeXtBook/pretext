@@ -368,11 +368,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="markdown-cell">
         <xsl:with-param name="content">
             <xsl:call-template name="begin-string" />
-            <xsl:call-template name="begin-inline-math" />
-            <xsl:value-of select="$latex-packages-mathjax" />
-            <!-- Sequence replacements if \gt and/or \amp need to go -->
-            <xsl:value-of select="str:replace($latex-macros,'\newcommand{\lt}{&lt;}&#xa;', '')"/>
-            <xsl:call-template name="end-inline-math" />
+            <xsl:call-template name="inline-math-wrapper">
+                <xsl:with-param name="math">
+                    <xsl:value-of select="$latex-packages-mathjax" />
+                    <!-- Sequence replacements if \gt and/or \amp need to go -->
+                    <xsl:value-of select="str:replace($latex-macros,'\newcommand{\lt}{&lt;}&#xa;', '')"/>
+                </xsl:with-param>
+            </xsl:call-template>
             <xsl:call-template name="end-string" />
         </xsl:with-param>
     </xsl:call-template>
@@ -453,7 +455,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- breaks.  Replacements late in the conversion will make    -->
 <!-- these the "\n" acceptable in JSON.                        -->
 
-<!-- These two templates provide the delimiters for inline math.     -->
+<!-- This template wraps inline math in delimiters                   -->
 <!-- The Jupyter notebook appears to support the AMS-style for       -->
 <!-- inline math ( \(, \) ).  But in doing so, it fails to prevent   -->
 <!-- Markdown syntax from mucking up the math.  For example, two     -->
@@ -462,11 +464,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- be escaped, but easier to just deal with "plain text" dollar    -->
 <!-- signs as a possibility.  There is no issue for display          -->
 <!-- mathematics, presumably since we use environments, exclusively. -->
-<xsl:template name="begin-inline-math">
+<xsl:template name="inline-math-wrapper">
+    <xsl:param name="math"/>
     <xsl:text>$</xsl:text>
-</xsl:template>
-
-<xsl:template name="end-inline-math">
+    <xsl:value-of select="$math"/>
     <xsl:text>$</xsl:text>
 </xsl:template>
 

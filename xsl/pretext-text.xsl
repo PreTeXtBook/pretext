@@ -170,11 +170,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Until we think of something better, we just -->
 <!-- bracket raw LaTeX that appears inline       -->
 <!-- This can be overridden, if necessary        -->
-<xsl:template name="begin-inline-math">
+<xsl:template name="inline-math-wrapper">
+    <xsl:param name="math"/>
     <xsl:text>[</xsl:text>
-</xsl:template>
-
-<xsl:template name="end-inline-math">
+    <xsl:value-of select="$math"/>
     <xsl:text>]</xsl:text>
 </xsl:template>
 
