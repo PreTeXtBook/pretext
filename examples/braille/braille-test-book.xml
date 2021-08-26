@@ -127,6 +127,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </md>.  Adjust to a single displayed equation, but authored as a single <tag>mrow</tag> within a <tag>md</tag>, without alignment:<md>
                 <mrow>r^5 + s^5 = t^5</mrow>
             </md>.  Plus as an <tag>me</tag>, which cannot have alignment:<me>p^4 + q^4 = r^4</me>.</p>
+            <p>And a moderately complicated fraction:
+                <me>\frac{\alpha+1/2}{\beta+\gamma} = \frac{12}{37}</me>
+            .</p>
 
         </chapter>
 
