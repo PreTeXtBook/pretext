@@ -1164,7 +1164,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-pageref">
             <xsl:text>\label{#4}</xsl:text>
         </xsl:if>
-        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3}\newline}{}}}&#xa;</xsl:text>
+        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3}\newline\vfill}{}}}&#xa;</xsl:text>
     </xsl:if>
     <!-- Division Exercise, Exercise Group -->
     <!-- The exercise itself carries the indentation, hence we can use breakable -->
@@ -1177,7 +1177,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-pageref">
             <xsl:text>\label{#4}</xsl:text>
         </xsl:if>
-        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3}\newline}{}}}&#xa;</xsl:text>
+        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3}\newline\vfill}{}}}&#xa;</xsl:text>
     </xsl:if>
     <!-- Division Exercise, Exercise Group, Columnar -->
     <!-- Explicity unbreakable, to behave in multicolumn tcbraster -->
@@ -1189,7 +1189,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-pageref">
             <xsl:text>\label{#4}</xsl:text>
         </xsl:if>
-        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3}\newline}{}}}&#xa;</xsl:text>
+        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3}\newline\vfill}{}}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//exercise[@workspace]">
         <xsl:text>%% Worksheet exercises may have workspaces&#xa;</xsl:text>
@@ -5612,7 +5612,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>{</xsl:text>
             <xsl:apply-templates select="." mode="title-full"/>
             <xsl:text>}</xsl:text>
-            <!-- workspace fraction, only if given, else blank -->
+            <!-- workspace length, only if given, else blank   -->
             <!-- worksheets only now, eventually exams?        -->
             <xsl:text>{</xsl:text>
             <xsl:if test="$worksheet and @workspace">
