@@ -453,7 +453,7 @@
         <subsection xml:id="publisher-file-source-extras">
             <title>Extras</title>
 
-            <p>Some source material is optional, and may be included based on the publisher and the audience.  The values of the attributes below are filenames.  They could be absolute paths (which is not very portable, and so likely a bad idea), or relative paths.  In teh latter case, they are relative to the source file that contains the <tag>pretext</tag> element (the <q>main</q> file if you have modularized your source).  Temporarily using an absolute path can be useful when you are having problems with any of these files and want to eliminate one variable while debugging.</p>
+            <p>Some source material is optional, and may be included based on the publisher and the audience.  The values of the attributes below are filenames.  They could be absolute paths (which is not very portable, and so likely a bad idea), or relative paths.  In the latter case, they are relative to the source file that contains the <tag>pretext</tag> element (the <q>main</q> file if you have modularized your source).  Temporarily using an absolute path can be useful when you are having problems with any of these files and want to eliminate one variable while debugging.</p>
 
             <p>The<cd>
                 <cline>/publication/source</cline>

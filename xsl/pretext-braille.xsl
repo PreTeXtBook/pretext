@@ -690,7 +690,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise>
             <!-- else, bust-up, wrap initial, recurse on trailing -->
             <!-- we *must* have a newline if we reach this point  -->
-            <!-- split is on teh very first newline, as desired   -->
+            <!-- split is on the very first newline, as desired   -->
             <xsl:variable name="initial" select="substring-before($braille, '&#xa;')" />
             <xsl:variable name="trailing" select="substring-after($braille, '&#xa;')" />
             <span data-braille="nemeth-oneline">

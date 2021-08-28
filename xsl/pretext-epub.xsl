@@ -529,7 +529,7 @@
 <!-- See "Core Media Type Resources"               -->
 <!-- Add to spine identically                      -->
 <!-- Specialized divisions are terminal in back    -->
-<!-- matter, and only a seperate file when within  -->
+<!-- matter, and only a separate file when within  -->
 <!-- a "chapter", at level 2                       -->
 <xsl:template match="frontmatter|colophon|biography|dedication|acknowledgement|preface|chapter|chapter/conclusion|chapter/outcomes[preceding-sibling::section]|appendix|index|section|exercises|chapter/reading-questions|chapter/solutions|appendix/solutions|backmatter/solutions|chapter/references|appendix/references|backmatter/references" mode="manifest">
     <!-- Annotate manifest entries -->
@@ -1286,7 +1286,7 @@ width: 100%
 <xsl:template match="mrow" mode="url">
     <!-- An enclosing "md" or "mdn" is never a division, so     -->
     <!-- there will always be a containing file and a fragment  -->
-    <!-- identifier (unlike teh more general version in -html). -->
+    <!-- identifier (unlike the more general version in -html). -->
     <xsl:apply-templates select="." mode="containing-filename" />
     <xsl:text>#</xsl:text>
     <!-- the ids on equations are manufactured -->

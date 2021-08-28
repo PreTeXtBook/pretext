@@ -3474,7 +3474,7 @@ the xsltproc executable.
                         <asymptote>
                         // The next comment was seen in the wild, and the angle brackets
                         // are non-ASCII Unicode characters, which was disrupting communication
-                        // with the Asymptote server, so we include teh comment here for testing.
+                        // with the Asymptote server, so we include the comment here for testing.
                         // The actual comment is immaterial for the lever diagram.
                         //
                         // The path is an elliptical helix ⟨ cos t, 2sin t, t/pi ⟩.
