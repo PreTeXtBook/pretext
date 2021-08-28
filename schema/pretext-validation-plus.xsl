@@ -210,6 +210,48 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates/>
 </xsl:template>
 
+<!-- Image elements should have meaningful descriptions.   -->
+<!-- We catch any "image" that does not either declare     -->
+<!-- @decorative="yes" or have a non-empty description.    -->
+<!-- Warn if there is a description and @decorative="yes". -->
+<!-- Warn if a description length is over 125 characters.  -->
+<xsl:template match="image">
+    <xsl:if test="not(@decorative = 'yes') and description = ''">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message">
+                <xsl:text>You have an image without a description and do not declare the image to be decorative.&#xa;</xsl:text>
+                <xsl:text>Because of this, output may not be accessible.&#xa;</xsl:text>
+                <xsl:text>If the image does not add information that is not already present, use @decorative="yes".&#xa;</xsl:text>
+                <xsl:text>Otherwise, provide a &lt;description&gt;.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <xsl:if test="@decorative = 'yes' and not(description = '')">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message">
+                <xsl:text>You have an image with @decorative="yes" that has a nonempty description.&#xa;</xsl:text>
+                <xsl:text>The description may not appear in output.&#xa;</xsl:text>
+                <xsl:text>Either remove the description, remove @decorative, or change @decorative to "no".</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <xsl:if test="string-length(description) > 125">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'advice'"/>
+            <xsl:with-param name="message">
+                <xsl:text>You have an image description that is more than 125 characters long.&#xa;</xsl:text>
+                <xsl:text>Some screen readers will cut off reading alt text after the 125th character.&#xa;</xsl:text>
+                <xsl:text>Rewrite the description to be 125 characters or fewer.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- recurse further -->
+    <xsl:apply-templates/>
+</xsl:template>
+
+
 <!-- ####### -->
 <!-- WeBWorK -->
 <!-- ####### -->

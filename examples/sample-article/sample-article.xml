@@ -3833,6 +3833,50 @@ the xsltproc executable.
                     <p>When producing a tactile version of this diagram, the graphics elements of the diagram will be scaled up as much as possible to fit a whole 11.5 inch by 11 inch embossable page.  The content will be replaced by braille cells (which are not scaled).  The braille cells will get a 4 millimeter margin all around them, which will be a no-emboss zone.  Finally, the offset will be scaled along with the graphics so the label should stay off of the shape being labeled.</p>
                 </paragraphs>
             </subsection>
+
+            <subsection>
+                <title>Accessibility</title>
+                <p>An <tag>image</tag> should either have a non-empty description or have <attr>decorative="yes"</attr>. Some of the following images comply, and some do not.</p>
+
+                <sbsgroup>
+                    <sidebyside>
+                        <p>No description, no <attr>decorative="yes"</attr></p>
+                        <image source="images/cross-square.png"/>
+                        <p>No description, <attr>decorative="yes"</attr></p>
+                        <image source="images/cross-square.png" decorative="yes"/>
+                    </sidebyside>
+                    <sidebyside>
+                        <p>Empty description, no <attr>decorative="yes"</attr></p>
+                        <image source="images/cross-square.png">
+                            <description/>
+                        </image>
+                        <p>Empty description, <attr>decorative="yes"</attr></p>
+                        <image source="images/cross-square.png" decorative="yes">
+                            <description/>
+                        </image>
+                    </sidebyside>
+                    <sidebyside>
+                        <p>Too long description, no <attr>decorative="yes"</attr></p>
+                        <image source="images/cross-square.png">
+                            <description>This description is too long because when alt text is longer than 125 characters, some scren readers will cut off reading the alt text after the 125th character.</description>
+                        </image>
+                        <p>Too long description, <attr>decorative="yes"</attr></p>
+                        <image source="images/cross-square.png" decorative="yes">
+                            <description>This description is too long because when alt text is longer than 125 characters, some scren readers will cut off reading the alt text after the 125th character.</description>
+                        </image>
+                    </sidebyside>
+                    <sidebyside>
+                        <p>Good description, no <attr>decorative="yes"</attr></p>
+                        <image source="images/cross-square.png">
+                            <description>A white square outlined in blue covered by a black X</description>
+                        </image>
+                        <p>Good description, <attr>decorative="yes"</attr></p>
+                        <image source="images/cross-square.png" decorative="yes">
+                            <description>A white square outlined in blue covered by a black X</description>
+                        </image>
+                    </sidebyside>
+                </sbsgroup>
+            </subsection>
         </section>
 
         <section>
