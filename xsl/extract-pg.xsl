@@ -1856,7 +1856,7 @@
         <!-- pass the enclosing environment (md) as the context       -->
         <xsl:apply-templates select="parent::md" mode="get-clause-punctuation" />
     </xsl:if>
-    <!-- PG cannot actually mirror LaTeX intertext funcitonality. As  -->
+    <!-- PG cannot actually mirror LaTeX intertext functionality. As  -->
     <!-- a consequence, we should not line break an mrow that         -->
     <!-- immediately preceds an intertext.                            -->
     <xsl:if test="following-sibling::mrow and not(following-sibling::*[1][self::intertext])">

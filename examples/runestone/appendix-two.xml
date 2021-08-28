@@ -22,7 +22,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <appendix xml:id="appendix-two">
    <title>Second Appendix</title>
 
-    <p>This is a nonsense appendix, to check that numbering (<q>lettering</q>) procedes correctly.</p>
+    <p>This is a nonsense appendix, to check that numbering (<q>lettering</q>) proceeds correctly.</p>
 
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam finibus lacus at molestie tristique. Vivamus in feugiat nibh, ut condimentum nibh. Praesent pretium est ante, et sagittis nisi tempor sed. Aenean eu odio nunc. Suspendisse dolor sem, feugiat nec ullamcorper in, cursus eu lectus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla at diam ac ex efficitur sagittis vitae sit amet est. Suspendisse fermentum orci at justo feugiat, a molestie mi consectetur. Proin volutpat eleifend accumsan. Ut sit amet dolor leo. Morbi tempus tortor at gravida rutrum. Morbi ultricies pharetra lobortis. Cras mollis, massa nec convallis luctus, erat magna finibus lectus, non venenatis massa magna quis lectus. In eu mollis odio. In hac habitasse platea dictumst. Nulla elementum urna ut felis rhoncus fermentum.</p>
 
