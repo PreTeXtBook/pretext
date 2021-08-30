@@ -10,22 +10,18 @@
  * Containers restrict the max-width of content within elements
  * whose backgrounds must stretch to the width of the viewport.
  */
-/* line 12, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_layout.scss */
 .container {
   margin: 0;
   transition-property: width;
   transition-duration: 400ms;
 }
-/* line 20, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_layout.scss */
 .container, .container.layout-left, .layout-left .container {
   max-width: 664px;
 }
-/* line 24, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_layout.scss */
 .container.has-sidebar-left, .has-sidebar-left .container {
   max-width: 904px;
 }
 
-/* line 21, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
 #masthead {
   position: relative;
   background: #fafafa;
@@ -33,7 +29,6 @@
   border: none;
   box-shadow: none;
 }
-/* line 45, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
 #masthead #title-container, #masthead .title-container {
   font-size: 1em;
   padding-left: 9.68px;
@@ -42,32 +37,26 @@
   /* On mobile phones */
 }
 @media screen and (max-width: 480px) {
-  /* line 45, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
   #masthead #title-container, #masthead .title-container {
     padding: 0;
     text-align: center;
     margin-top: 0.625em;
   }
 }
-/* line 105, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
 #masthead #title-container > .heading, #masthead .title-container > .heading {
   font-family: "PT Serif", "Times New Roman", Times, serif;
   font-weight: 700;
   color: inherit;
 }
-/* line 70, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
 #masthead #title-container > .heading.hide-type .type, #masthead .title-container > .heading.hide-type .type {
   display: none;
 }
-/* line 77, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
 #masthead #title-container > .heading.hide-codenumber .codenumber, #masthead .title-container > .heading.hide-codenumber .codenumber {
   display: none;
 }
-/* line 84, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
 #masthead #title-container > .heading.hide-title .title, #masthead .title-container > .heading.hide-title .title {
   display: none;
 }
-/* line 65, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
 #masthead #title-container > .heading, #masthead .title-container > .heading {
   margin: 0;
   font-size: 2em;
@@ -76,7 +65,6 @@
   color: #932919;
 }
 @media screen and (max-width: 480px) {
-  /* line 19, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
   #masthead #title-container > .heading, #masthead .title-container > .heading {
     font-size: 1.5em;
     line-height: 1.25em;
@@ -84,17 +72,14 @@
     margin-bottom: 0.41667em;
   }
 }
-/* line 86, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
 #masthead #title-container > .heading a:link, #masthead #title-container > .heading a:visited, #masthead .title-container > .heading a:link, #masthead .title-container > .heading a:visited {
   color: #932919;
   color: #932919;
   background: none;
 }
-/* line 182, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
 #masthead #title-container > .heading a:link, .lt-ie10 #masthead #title-container > .heading a:link, #masthead #title-container > .heading a:visited, .lt-ie10 #masthead #title-container > .heading a:visited, #masthead .title-container > .heading a:link, .lt-ie10 #masthead .title-container > .heading a:link, #masthead .title-container > .heading a:visited, .lt-ie10 #masthead .title-container > .heading a:visited {
   text-decoration: none;
 }
-/* line 94, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
 #masthead #title-container > .heading a:hover, #masthead #title-container > .heading a:focus, #masthead .title-container > .heading a:hover, #masthead .title-container > .heading a:focus {
   color: #932919;
   /**
@@ -104,7 +89,6 @@
   /* the better underlines were removed by David Farmer on 2/9/16
      because of various headaches  */
 }
-/* line 102, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
 #masthead #title-container > .heading a:active, #masthead .title-container > .heading a:active {
   color: #3572a0;
   /**
@@ -114,13 +98,11 @@
   /* the better underlines were removed by David Farmer on 2/9/16
      because of various headaches  */
 }
-/* line 112, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
 #masthead #title-container > .heading .subtitle, #masthead .title-container > .heading .subtitle {
   font-weight: normal;
   /* Much classier */
 }
 @media screen and (max-width: 800px) {
-  /* line 112, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
   #masthead #title-container > .heading .subtitle, #masthead .title-container > .heading .subtitle {
     /* Force the subtitle onto a seperate line */
     display: block;
@@ -130,12 +112,10 @@
     color: #595959;
     /* Remove colon */
   }
-  /* line 131, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
   #masthead #title-container > .heading .subtitle:before, #masthead .title-container > .heading .subtitle:before {
     content: normal;
   }
 }
-/* line 140, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
 #masthead #logo-link, #masthead .logo-link {
   position: relative;
   float: left;
@@ -149,7 +129,6 @@
   /* Override addons */
   /* On mobile phones */
 }
-/* line 153, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
 #masthead #logo-link img, #masthead .logo-link img {
   width: auto;
   height: auto;
@@ -157,7 +136,6 @@
    * so that icon placeholder height matches */
   max-height: 1em;
 }
-/* line 167, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
 #masthead #logo-link:empty:before, #masthead .logo-link:empty:before {
   font-family: "Open Sans";
   font-size: 1em;
@@ -169,30 +147,28 @@
   text-align: center;
   color: #ccc;
 }
-/* line 169, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
-#masthead #logo-link:empty:before, .mathbook-book #masthead #logo-link:empty:before, #masthead .logo-link:empty:before, .mathbook-book #masthead .logo-link:empty:before {
+#masthead #logo-link:empty:before,
+.pretext-content #masthead #logo-link:empty:before,
+.mathbook-book #masthead #logo-link:empty:before,
+.pretext-book #masthead #logo-link:empty:before {
   content: "\2211";
 }
-/* line 173, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
-.mathbook-article #masthead #logo-link:empty:before, .mathbook-article #masthead .logo-link:empty:before {
+.mathbook-article #masthead #logo-link:empty:before,
+.pretext-article #masthead #logo-link:empty:before {
   content: "\2211";
 }
-/* line 189, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
 #masthead #logo-link:empty:hover:before, #masthead .logo-link:empty:hover:before {
   color: #932919;
 }
-/* line 193, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
 #masthead #logo-link:empty:active:before, #masthead .logo-link:empty:active:before {
   color: #3572a0;
 }
-/* line 199, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
 #masthead #logo-link:link, #masthead #logo-link:hover, #masthead #logo-link:active, #masthead .logo-link:link, #masthead .logo-link:hover, #masthead .logo-link:active {
   background: transparent;
   border: none;
   text-decoration: none;
 }
 @media screen and (max-width: 480px) {
-  /* line 140, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
   #masthead #logo-link, #masthead .logo-link {
     display: block;
     float: none;
@@ -200,7 +176,6 @@
     font-size: 50px;
   }
 }
-/* line 217, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
 #masthead #byline, #masthead .byline {
   color: #333333;
   font-weight: normal;
@@ -211,22 +186,18 @@
   font-family: "PT Serif", "Times New Roman", Times, serif;
 }
 @media screen and (max-width: 480px) {
-  /* line 217, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
   #masthead #byline, #masthead .byline {
     margin-top: 0;
     font-size: 1em;
     line-height: 1.25em;
   }
 }
-/* line 235, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
 #masthead #byline a:link, #masthead #byline a:visited, #masthead .byline a:link, #masthead .byline a:visited {
   color: #333333;
 }
-/* line 243, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
 #masthead #byline a:hover, #masthead #byline a:focus, #masthead .byline a:hover, #masthead .byline a:focus {
   color: #932919;
 }
-/* line 250, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_masthead.scss */
 #masthead #byline a:active, #masthead .byline a:active {
   color: #3572a0;
 }
@@ -235,7 +206,6 @@
  * Primary Navbar
  * Contains primary actions for navigation or layout control
  */
-/* line 44, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar, #primary-navbar-sticky-wrapper {
   background: #ededed;
   border-bottom: 1px solid #bababa;
@@ -251,7 +221,6 @@
    * when it's sticky-wrapper is stuck
    */
 }
-/* line 60, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 .stuck #primary-navbar, .stuck #primary-navbar-sticky-wrapper {
   position: fixed;
   top: 0;
@@ -260,7 +229,6 @@
   box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 5px;
 }
 @media screen and (max-width: 800px) {
-  /* line 73, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
   #primary-navbar, .stuck #primary-navbar, #primary-navbar-sticky-wrapper, .stuck #primary-navbar-sticky-wrapper {
     position: fixed;
     top: auto;
@@ -272,7 +240,6 @@
     height: 44.2px;
   }
 }
-/* line 90, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .button, #primary-navbar-sticky-wrapper .button {
   cursor: pointer;
   display: inline-block;
@@ -304,7 +271,6 @@
   /* active/pressed state */
   /* Icon only at small screen sizes */
 }
-/* line 51, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
 #primary-navbar .button:focus, #primary-navbar-sticky-wrapper .button:focus {
   outline: thin dotted #333;
   outline-offset: -2px;
@@ -313,28 +279,22 @@
    * See http://stackoverflow.com/a/199319/1599617
    */
 }
-/* line 215, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
 #primary-navbar .button:active, #primary-navbar .button.active, #primary-navbar-sticky-wrapper .button:active, #primary-navbar-sticky-wrapper .button.active {
   box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
 }
-/* line 111, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .button, #primary-navbar .button:hover, #primary-navbar .button:focus, #primary-navbar .button:visited, #primary-navbar .button:link, #primary-navbar .button:active, #primary-navbar-sticky-wrapper .button, #primary-navbar-sticky-wrapper .button:hover, #primary-navbar-sticky-wrapper .button:focus, #primary-navbar-sticky-wrapper .button:visited, #primary-navbar-sticky-wrapper .button:link, #primary-navbar-sticky-wrapper .button:active {
   text-decoration: none;
 }
-/* line 115, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .button, #primary-navbar .button:link, #primary-navbar .button:visited, #primary-navbar-sticky-wrapper .button, #primary-navbar-sticky-wrapper .button:link, #primary-navbar-sticky-wrapper .button:visited {
   color: #333333;
   background-color: #ededed;
 }
-/* line 120, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .button:hover, #primary-navbar-sticky-wrapper .button:hover {
   background-color: #fafafa;
 }
-/* line 125, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .button.active, #primary-navbar .button:active, #primary-navbar-sticky-wrapper .button.active, #primary-navbar-sticky-wrapper .button:active {
   background-color: #e0e0e0;
 }
-/* line 130, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .button.disabled, #primary-navbar .button.disabled:link, #primary-navbar .button.disabled:visited, #primary-navbar .button.disabled:hover, #primary-navbar .button.disabled:focus, #primary-navbar .button.disabled:active, #primary-navbar-sticky-wrapper .button.disabled, #primary-navbar-sticky-wrapper .button.disabled:link, #primary-navbar-sticky-wrapper .button.disabled:visited, #primary-navbar-sticky-wrapper .button.disabled:hover, #primary-navbar-sticky-wrapper .button.disabled:focus, #primary-navbar-sticky-wrapper .button.disabled:active {
   opacity: .4;
   color: #333333;
@@ -343,7 +303,6 @@
   box-shadow: none;
 }
 @media screen and (max-width: 800px) {
-  /* line 90, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
   #primary-navbar .button, #primary-navbar-sticky-wrapper .button {
     /*@include button-hide-text($navbar-icon-box-size);*/
     float: left;
@@ -351,20 +310,17 @@
     margin: 0;
     line-height: 44.2px;
   }
-  /* line 148, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
   #primary-navbar .button.active, #primary-navbar .button:active, #primary-navbar-sticky-wrapper .button.active, #primary-navbar-sticky-wrapper .button:active {
     /* Vertically flip shadow for lower navbar */
     box-shadow: rgba(0, 0, 0, 0.5) 0 -2px 5px inset;
   }
 }
-/* line 183, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .sidebar-left-toggle-button, #primary-navbar-sticky-wrapper .sidebar-left-toggle-button {
   /* Do not display if has-sidebar-left is missing */
   display: none;
   /*On desktop screens, */
   padding: 0;
 }
-/* line 187, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 .has-sidebar-left #primary-navbar .sidebar-left-toggle-button, .has-sidebar-left #primary-navbar-sticky-wrapper .sidebar-left-toggle-button {
   display: block;
   width: 240px;
@@ -433,11 +389,9 @@
     margin-top: -22.1px;
   }
 }
-/* line 229, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .up-button, #primary-navbar-sticky-wrapper .up-button {
   text-align: center;
 }
-/* line 284, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
 #primary-navbar .up-button:before, #primary-navbar-sticky-wrapper .up-button:before {
   content: "^";
   text-align: center;
@@ -453,7 +407,6 @@
   vertical-align: middle;
 }
 @media screen and (max-width: 800px) {
-  /* line 229, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
   #primary-navbar .up-button, #primary-navbar-sticky-wrapper .up-button {
     /* Disable ellipsis */
     white-space: normal;
@@ -483,7 +436,6 @@
     margin-top: -22.1px;
   }
 }
-/* line 284, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
 #primary-navbar .previous-button:before, #primary-navbar-sticky-wrapper .previous-button:before {
   content: "<";
   text-align: center;
@@ -502,7 +454,6 @@
   zoom: 1;
 }
 @media screen and (max-width: 800px) {
-  /* line 234, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
   #primary-navbar .previous-button, #primary-navbar-sticky-wrapper .previous-button {
     /* Disable ellipsis */
     white-space: normal;
@@ -516,7 +467,6 @@
     white-space: nowrap;
     overflow: hidden;
   }
-  /* line 284, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
   #primary-navbar .previous-button:before, #primary-navbar-sticky-wrapper .previous-button:before {
     font-size: 40px;
     line-height: 36px;
@@ -532,11 +482,9 @@
     margin-top: -22.1px;
   }
 }
-/* line 238, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .next-button, #primary-navbar-sticky-wrapper .next-button {
   text-align: right;
 }
-/* line 284, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
 #primary-navbar .next-button:after, #primary-navbar-sticky-wrapper .next-button:after {
   content: ">";
   text-align: center;
@@ -553,7 +501,6 @@
   vertical-align: middle;
 }
 @media screen and (max-width: 800px) {
-  /* line 238, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
   #primary-navbar .next-button, #primary-navbar-sticky-wrapper .next-button {
     /* Disable ellipsis */
     white-space: normal;
@@ -567,7 +514,6 @@
     white-space: nowrap;
     overflow: hidden;
   }
-  /* line 284, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
   #primary-navbar .next-button:after, #primary-navbar-sticky-wrapper .next-button:after {
     font-size: 40px;
     line-height: 36px;
@@ -585,7 +531,6 @@
   }
 }
 @media screen and (max-width: 800px) {
-  /* line 243, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
   #primary-navbar .settings-button, #primary-navbar-sticky-wrapper .settings-button {
     /* Disable ellipsis */
     white-space: normal;
@@ -599,7 +544,6 @@
     white-space: nowrap;
     overflow: hidden;
   }
-  /* line 320, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
   #primary-navbar .settings-button:before, #primary-navbar-sticky-wrapper .settings-button:before {
     position: absolute;
     left: 50%;
@@ -610,7 +554,6 @@
     margin-top: -22.1px;
   }
 }
-/* line 255, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar, #primary-navbar .toolbar > .toolbar-item, #primary-navbar .button, #primary-navbar-sticky-wrapper .toolbar, #primary-navbar-sticky-wrapper .toolbar > .toolbar-item, #primary-navbar-sticky-wrapper .button {
   /* Use a left border */
   border: 1px solid #bababa;
@@ -621,7 +564,6 @@
    * so we can set width precisely as percent */
   box-sizing: border-box;
 }
-/* line 270, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar, #primary-navbar-sticky-wrapper .toolbar {
   /**
    * Ensure adjacent borders do not double up
@@ -662,142 +604,111 @@
   width: 20%;
 }
 
-/* line 292, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-divisor-1 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-1 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-1 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-1 > .toolbar-item:first-child {
   border-left: none;
 }
-/* line 300, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-divisor-1 > .toolbar-item:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-1 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-1 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-1 > .toolbar-item:last-child {
   border-right: none;
 }
-/* line 304, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-divisor-1 > .toolbar-item:first-child:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-1 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-1 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-1 > .toolbar-item:first-child:last-child {
   border-left: none;
   border-right: 1px solid #bababa;
 }
-/* line 292, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-divisor-2 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-2 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-2 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-2 > .toolbar-item:first-child {
   border-left: none;
 }
-/* line 300, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-divisor-2 > .toolbar-item:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-2 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-2 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-2 > .toolbar-item:last-child {
   border-right: none;
 }
-/* line 304, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-divisor-2 > .toolbar-item:first-child:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-2 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-2 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-2 > .toolbar-item:first-child:last-child {
   border-left: none;
   border-right: 1px solid #bababa;
 }
-/* line 292, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-divisor-3 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-3 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-3 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-3 > .toolbar-item:first-child {
   border-left: none;
 }
-/* line 300, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-divisor-3 > .toolbar-item:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-3 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-3 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-3 > .toolbar-item:last-child {
   border-right: none;
 }
-/* line 304, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-divisor-3 > .toolbar-item:first-child:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-3 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-3 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-3 > .toolbar-item:first-child:last-child {
   border-left: none;
   border-right: 1px solid #bababa;
 }
-/* line 292, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-divisor-4 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-4 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-4 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-4 > .toolbar-item:first-child {
   border-left: none;
 }
-/* line 300, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-divisor-4 > .toolbar-item:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-4 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-4 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-4 > .toolbar-item:last-child {
   border-right: none;
 }
-/* line 304, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-divisor-4 > .toolbar-item:first-child:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-4 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-4 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-4 > .toolbar-item:first-child:last-child {
   border-left: none;
   border-right: 1px solid #bababa;
 }
-/* line 292, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-divisor-5 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-5 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-5 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-5 > .toolbar-item:first-child {
   border-left: none;
 }
-/* line 300, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-divisor-5 > .toolbar-item:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-5 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-5 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-5 > .toolbar-item:last-child {
   border-right: none;
 }
-/* line 304, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-divisor-5 > .toolbar-item:first-child:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-5 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-5 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-5 > .toolbar-item:first-child:last-child {
   border-left: none;
   border-right: 1px solid #bababa;
 }
-/* line 319, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-1 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-1 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-1 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-1 > .toolbar-item:first-child:last-child {
   border-right: none;
   border-left: 1px solid #bababa;
 }
-/* line 324, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-1 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-1 > .toolbar-item:last-child {
   border-left: none;
 }
-/* line 319, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-2 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-2 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-2 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-2 > .toolbar-item:first-child:last-child {
   border-right: none;
   border-left: 1px solid #bababa;
 }
-/* line 324, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-2 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-2 > .toolbar-item:last-child {
   border-left: none;
 }
-/* line 319, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-3 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-3 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-3 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-3 > .toolbar-item:first-child:last-child {
   border-right: none;
   border-left: 1px solid #bababa;
 }
-/* line 324, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-3 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-3 > .toolbar-item:last-child {
   border-left: none;
 }
-/* line 319, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-4 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-4 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-4 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-4 > .toolbar-item:first-child:last-child {
   border-right: none;
   border-left: 1px solid #bababa;
 }
-/* line 324, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-4 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-4 > .toolbar-item:last-child {
   border-left: none;
 }
-/* line 319, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-5 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-5 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-5 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-5 > .toolbar-item:first-child:last-child {
   border-right: none;
   border-left: 1px solid #bababa;
 }
-/* line 324, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-5 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-5 > .toolbar-item:last-child {
   border-left: none;
 }
-/* line 330, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar:first-child, #primary-navbar-sticky-wrapper .toolbar:first-child {
   border-left: none;
 }
-/* line 334, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar:last-child, #primary-navbar-sticky-wrapper .toolbar:last-child {
   border-right: none;
 }
-/* line 347, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .toolbar.toolbar-borderless, #primary-navbar .toolbar.toolbar-borderless > .toolbar-item, #primary-navbar .toolbar.toolbar-borderless.toolbar-align-right, #primary-navbar .toolbar.toolbar-borderless.toolbar-align-right > .toolbar-item, #primary-navbar .toolbar.toolbar-borderless.toolbar-align-left, #primary-navbar .toolbar.toolbar-borderless.toolbar-align-left > .toolbar-item, #primary-navbar-sticky-wrapper .toolbar.toolbar-borderless, #primary-navbar-sticky-wrapper .toolbar.toolbar-borderless > .toolbar-item, #primary-navbar-sticky-wrapper .toolbar.toolbar-borderless.toolbar-align-right, #primary-navbar-sticky-wrapper .toolbar.toolbar-borderless.toolbar-align-right > .toolbar-item, #primary-navbar-sticky-wrapper .toolbar.toolbar-borderless.toolbar-align-left, #primary-navbar-sticky-wrapper .toolbar.toolbar-borderless.toolbar-align-left > .toolbar-item {
   border-left: none;
   border-right: none;
   border-top: none;
   border-bottom: none;
 }
-/* line 360, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .navbar-bottom-buttons, #primary-navbar-sticky-wrapper .navbar-bottom-buttons {
   display: none;
 }
 @media screen and (max-width: 800px) {
-  /* line 360, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
   #primary-navbar .navbar-bottom-buttons, #primary-navbar-sticky-wrapper .navbar-bottom-buttons {
     display: block;
   }
 }
-/* line 368, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 #primary-navbar .navbar-top-buttons, #primary-navbar-sticky-wrapper .navbar-top-buttons {
   display: block;
 }
@@ -806,18 +717,15 @@
   margin-left: 240px;
   border-right: 1px solid #bababa;
 }
-/* line 376, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
 .has-sidebar-left #primary-navbar .navbar-top-buttons .toolbar .sidebar-left-toggle-button, .has-sidebar-left #primary-navbar-sticky-wrapper .navbar-top-buttons .toolbar .sidebar-left-toggle-button {
   width: 240px;
 }
 @media screen and (max-width: 800px) {
-  /* line 368, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
   #primary-navbar .navbar-top-buttons, #primary-navbar-sticky-wrapper .navbar-top-buttons {
     display: none;
   }
 }
 @media screen and (max-width: 1199px) {
-  /* line 48, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_layout.scss */
   #primary-navbar#primary-navbar-sticky-wrapper, #primary-navbar-sticky-wrapper#primary-navbar-sticky-wrapper {
     height: 0;
   }
@@ -826,12 +734,10 @@
 /**
  * Houses the page (everything that is not header or footer)
  */
-/* line 71, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_layout.scss */
 .page {
   position: relative;
 }
 @media screen and (max-width: 800px) {
-  /* line 71, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_layout.scss */
   .page {
     /* Clip hidden sidebars */
     overflow: hidden;
@@ -843,16 +749,13 @@
  * whether it be the wrapper or the sidebar-left itself.
  * Note: The #sidebar-left-sticky-wrapper is added by javascript on page load
  */
-/* line 92, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_layout.scss */
 .page > #sidebar-left, #sidebar-left-sticky-wrapper {
   /* Hide sidebar by default */
   display: none;
 }
-/* line 98, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_layout.scss */
 .has-sidebar-left .page > #sidebar-left, .has-sidebar-left #sidebar-left-sticky-wrapper {
   display: block;
 }
-/* line 41, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_sliding-sidebars.scss */
 .has-sidebar-left .page > #sidebar-left, .has-sidebar-left #sidebar-left-sticky-wrapper {
   position: absolute;
   /* Default styles on load, before javascript loads */
@@ -861,26 +764,21 @@
   transition-duration: 400ms;
 }
 @media screen and (max-width: 800px) {
-  /* line 41, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_sliding-sidebars.scss */
   .has-sidebar-left .page > #sidebar-left, .has-sidebar-left #sidebar-left-sticky-wrapper {
     /* Small */
     margin-left: -240px;
   }
 }
-/* line 55, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_sliding-sidebars.scss */
 .has-sidebar-left.mathbook-loading.sidebar-left-open .page > #sidebar-left, .has-sidebar-left.mathbook-loaded.sidebar-left-open .page > #sidebar-left, .has-sidebar-left.mathbook-loading.sidebar-left-open #sidebar-left-sticky-wrapper, .has-sidebar-left.mathbook-loaded.sidebar-left-open #sidebar-left-sticky-wrapper {
   margin-left: 0;
 }
-/* line 61, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_sliding-sidebars.scss */
 .has-sidebar-left.mathbook-loading.sidebar-left-closed .page > #sidebar-left, .has-sidebar-left.mathbook-loaded.sidebar-left-closed .page > #sidebar-left, .has-sidebar-left.mathbook-loading.sidebar-left-closed #sidebar-left-sticky-wrapper, .has-sidebar-left.mathbook-loaded.sidebar-left-closed #sidebar-left-sticky-wrapper {
   margin-left: -240px;
 }
-/* line 65, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_sliding-sidebars.scss */
 .page > #sidebar-left .sidebar-content, #sidebar-left-sticky-wrapper .sidebar-content {
   width: 240px;
 }
 
-/* line 109, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_layout.scss */
 #sidebar-left {
   /**
    * Trick webkit browers into generating a compositing layer for this
@@ -897,7 +795,6 @@
   perspective: 1000;
 }
 
-/* line 18, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_sidebar-extras.scss */
 .sidebar-content .extras {
   position: relative;
   border: 0.3125em solid #2b2b2b;
@@ -905,7 +802,6 @@
   border-right: none;
   border-bottom: none;
 }
-/* line 35, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_sidebar-extras.scss */
 .sidebar-content .extras:before {
   content: "";
   position: absolute;
@@ -923,7 +819,6 @@
    */
   pointer-events: none;
 }
-/* line 98, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_navtree.scss */
 .sidebar-content .extras a {
   position: relative;
   display: block;
@@ -938,12 +833,10 @@
 .sidebar-content .extras a, .sidebar-content .extras a:link, .sidebar-content .extras a:visited, .sidebar-content .extras a:hover, .sidebar-content .extras a:active, .sidebar-content .extras a.active {
   text-decoration: none;
 }
-/* line 117, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_navtree.scss */
 .sidebar-content .extras a, .sidebar-content .extras a:link, .sidebar-content .extras a:visited {
   color: #d9d9d9;
   background: #454545;
 }
-/* line 128, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_navtree.scss */
 .sidebar-content .extras a.active, .sidebar-content .extras a:active {
   color: white;
   background: #3d3d3d;
@@ -957,23 +850,18 @@
   border-top: 1px solid #260b06;
   text-shadow: 0 -2px 2px rgba(0, 0, 0, 0.5);
 }
-/* line 215, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
 .sidebar-content .extras a:active:active, .sidebar-content .extras a:active.active {
   box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
 }
-/* line 167, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_navtree.scss */
 .sidebar-content .extras a:first-child {
   border-top: 1px solid #2b2b2b;
 }
-/* line 171, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_navtree.scss */
 .sidebar-content .extras a:first-child:hover {
   margin-top: 0;
 }
-/* line 180, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_navtree.scss */
 .sidebar-content .extras a:last-child {
   border-bottom-color: transparent;
 }
-/* line 184, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_navtree.scss */
 .sidebar-content .extras a:last-child:hover {
   /* When we hover we want to show the last border */
   border-color: #333333;
@@ -982,7 +870,6 @@
 /**
  * Container for the main focus/purpose of the page.
  */
-/* line 5, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_main.scss */
 .page > .main {
   display: block;
   margin: 0;
@@ -1009,13 +896,11 @@
   /**************************************************************************/
 }
 @media screen and (max-width: 800px) {
-  /* line 5, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_main.scss */
   .page > .main {
     /* Make space for navbar fixed to bottom of screen */
     padding-bottom: 35.36px;
   }
 }
-/* line 47, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_main.scss */
 .page > .main #content {
   max-width: 600px;
   /* Default left */
@@ -1025,26 +910,21 @@
       }
   */
 }
-/* line 51, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_main.scss */
 .page > .main #content, .layout-left .page > .main #content {
   margin: 32px;
 }
-/* line 62, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_main.scss */
 @media screen and (max-width: 663px) {
-  /* line 62, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_main.scss */
   .page > .main #content, .layout-left .page > .main #content {
     /* Decrease the margins */
     margin: 30px 30px;
   }
 }
 @media screen and (max-width: 903px) {
-  /* line 184, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_sliding-sidebars.scss */
   .sidebar-left-open .page > .main #content, .sidebar-left-open .layout-left .page > .main #content {
     /* Decrease the margins */
     margin: 30px 30px;
   }
 }
-/* line 160, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_layout.scss */
 .page > .main {
   /* Must be relative to support sidebar offsets */
   position: relative;
@@ -1071,29 +951,24 @@
   backface-visibility: hidden;
   perspective: 1000;
 }
-/* line 82, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_sliding-sidebars.scss */
 .page > .main .has-sidebar-left {
   transition-property: margin-left, left;
 }
-/* line 109, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_sliding-sidebars.scss */
 .has-sidebar-left .page > .main {
   margin-left: 240px;
   left: auto;
 }
 @media screen and (max-width: 800px) {
-  /* line 109, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_sliding-sidebars.scss */
   .has-sidebar-left .page > .main {
     margin-left: 0;
     left: auto;
   }
 }
-/* line 119, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_sliding-sidebars.scss */
 .has-sidebar-left.mathbook-loading.sidebar-left-open .page > .main, .has-sidebar-left.mathbook-loaded.sidebar-left-open .page > .main {
   margin-left: 240px;
   left: auto;
 }
 @media screen and (max-width: 640px) {
-  /* line 119, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_sliding-sidebars.scss */
   .has-sidebar-left.mathbook-loading.sidebar-left-open .page > .main, .has-sidebar-left.mathbook-loaded.sidebar-left-open .page > .main {
     /* Must force other-side to auto so we can push from the right */
     right: -240px !important;
@@ -1101,13 +976,11 @@
     margin-left: 0;
   }
 }
-/* line 128, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_sliding-sidebars.scss */
 .has-sidebar-left.mathbook-loading.sidebar-left-closed .page > .main, .has-sidebar-left.mathbook-loaded.sidebar-left-closed .page > .main {
   margin-left: 0;
   left: auto;
 }
 @media screen and (max-width: 640px) {
-  /* line 128, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_sliding-sidebars.scss */
   .has-sidebar-left.mathbook-loading.sidebar-left-closed .page > .main, .has-sidebar-left.mathbook-loaded.sidebar-left-closed .page > .main {
     margin-left: 0;
     left: 0;
@@ -1118,24 +991,19 @@
  * Container for main content.
  * This is bound to a comfortable max-width for reading.
  */
-/* line 185, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_layout.scss */
 #content {
   max-width: 600px;
 }
-/* line 189, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_layout.scss */
 #content, .layout-left #content {
   margin: 32px;
 }
-/* line 193, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_layout.scss */
 @media screen and (max-width: 663px) {
-  /* line 193, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_layout.scss */
   #content, .layout-left #content {
     /* Decrease the margins */
     margin: 30px 30px;
   }
 }
 @media screen and (max-width: 903px) {
-  /* line 184, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_sliding-sidebars.scss */
   .sidebar-left-open #content, .sidebar-left-open .layout-left #content {
     /* Decrease the margins */
     margin: 30px 30px;
@@ -1163,7 +1031,6 @@ body #MathJax_Message {
   bottom: 8px;
 }
 @media screen and (max-width: 800px) {
-  /* line 15, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_mathjax.scss */
   body #MathJax_Message {
     /* Display above bottom navbar */
     left: 20px;
@@ -1172,7 +1039,6 @@ body #MathJax_Message {
   }
 }
 
-/* line 34, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_mathjax.scss */
 .MathJax_Display {
   padding-top: 2px;
   padding-bottom: 2px;
@@ -1188,7 +1054,6 @@ body #MathJax_Message {
    */
 }
 @media screen and (max-width: 800px) {
-  /* line 34, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_mathjax.scss */
   .MathJax_Display {
     /* Allow users on smaller screens to scroll equations
      * horizontally when they don't fit on the screen
@@ -1198,7 +1063,6 @@ body #MathJax_Message {
   }
 }
 @media screen and (max-width: 703px) {
-  /* line 34, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_mathjax.scss */
   .MathJax_Display {
     /*Allow users on smaller screens to scroll equations*/
     /*horizontally when they don't fit on the screen*/
@@ -1207,7 +1071,6 @@ body #MathJax_Message {
   }
 }
 @media screen and (max-width: 943px) {
-  /* line 184, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_sliding-sidebars.scss */
   .sidebar-left-open .MathJax_Display {
     /*Allow users on smaller screens to scroll equations*/
     /*horizontally when they don't fit on the screen*/
