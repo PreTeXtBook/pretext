@@ -407,13 +407,19 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     margin-top: 0;
 }
 
-.pretext-content .heading.hide-type > .type {
-    display: none;
+/*
+.pretext-content .appendix .heading + .heading {
+    display: block;
+    font-size: 1.2em;
+    margin-top: 0.3em;
 }
+*/
 .pretext-content .appendix .heading > .type {
     display: inline;
 }
-
+.pretext-content .heading.hide-type > .type {
+    display: none;
+}
 
 /*
  * Contents of articles
@@ -503,7 +509,9 @@ from Jiří Lebl */
 /* padding, not margin, to det colored background (and not be absorbed) */
     padding-top: 0.5em;
 }
-
+.pretext-content .knowl-footer {
+    display: none;
+}
 
 .pretext-content section p.credit + p.credit {
     margin-top: 0.25em;
@@ -577,7 +585,6 @@ body > a.assistive:focus {
 .collectedworks .work .title {
 }
 
-/* see http://mathbook.pugetsound.edu/examples/sample-book/html/references-1.html */
 .pretext-content .bibitem + .bibentry {
     display: inline-block;
     width: 90%;
@@ -1342,11 +1349,13 @@ body > a.assistive:focus {
 .pretext-content section article .heading + div.exercisegroup > div:first-child,
 .pretext-content section article .heading + div.exercisegroup > div:first-child > p:first-child,
 */
+/*
 .pretext-content section article .heading + div.runestone,
 .pretext-content section article .heading + div.runestone > div:first-child,
 .pretext-content section article .heading + div.runestone > div:first-child > p:first-child {
     display: inline;
 }
+*/
 
 /* after version 0.31, check the pretext code if a.permalink can still occur */
 .pretext-content .heading a.permalink:hover {
@@ -2801,9 +2810,6 @@ element is ignored */
     margin-top: 0;
 }
 
-/* http://mathbook.pugetsound.edu/beta/contibutor-list-20161130/preface-2.html
- * */
-
 .pretext-content .contributor .contributor-name {
     font-variant: small-caps;
 }
@@ -2980,7 +2986,7 @@ https://pretextbook.org/examples/sample-article/html/interesting-corollary.html#
 }
 
 /* used when knowl content is hidden in the page */
-.pretext-content .hidden-content, .mathbook-book .hidden-content, .hidden-content {
+.pretext-content .hidden-content, .pretext-book .hidden-content, .pretext-article .hidden-content, .hidden-content {
     display: none;
 }
 
@@ -3776,8 +3782,15 @@ label.incorrect .feedback {
     border-radius: 3px;
     padding: 0px 3px 0px 3px;
     border: 1px solid #999;
+    color: black;
     background-color: #ffffff;
 }
+/* hack for runestone */
+/*
+.pretext-content .exercise-wrapper form button.btn-success {
+    background-color: #5cb85c;
+}
+*/
 .pretext-content .exercise-wrapper form button:hover {
     cursor: pointer;
     background-color: #e0e0ff;
