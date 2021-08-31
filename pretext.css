@@ -22,6 +22,37 @@
   max-width: 904px;
 }
 
+/* over-write bootstrap (in Runestone, for example) */
+#primary-navbar > .container {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  max-width: 904px;
+  background-color: inherit;
+}
+#masthead .container {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: inherit;
+}
+#masthead .navbar {
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  min-height: unset;
+}
+#primary-navbar .container::before,
+#masthead .navbar::before,
+#masthead .container::before,
+#masthead #primary-navbar::before,
+#primary-navbar .container::after,
+#masthead .navbar::after,
+#masthead .container::after,
+#masthead #primary-navbar::after {
+    all: unset;
+}
+
 #masthead {
   position: relative;
   background: #fafafa;
@@ -104,7 +135,7 @@
 }
 @media screen and (max-width: 800px) {
   #masthead #title-container > .heading .subtitle, #masthead .title-container > .heading .subtitle {
-    /* Force the subtitle onto a seperate line */
+    /* Force the subtitle onto a separate line */
     display: block;
     font-size: 1.16667em;
     line-height: 1.42857em;
@@ -209,6 +240,7 @@
 #primary-navbar, #primary-navbar-sticky-wrapper {
   background: #ededed;
   border-bottom: 1px solid #bababa;
+  margin: 0;
   z-index: 200;
   height: 35.36px;
   font-family: "PT Serif", "Times New Roman", Times, serif;
@@ -338,9 +370,12 @@
   content: "\2630";
   aria-hidden="true";  /* not valid.  the hamburger shoudl appear in the source with this attr on its span */
   text-align: center;
-  font-size: 24px;
+  font-size: 2em;
+  line-height: 0.9em;
+/*
   line-height: 35.36px;
-  width: 35.36px;
+*/
+  width: 1.4em;
   text-indent: 0;
   /* So text isn't removed from this too */
   display: inline-block;
@@ -369,9 +404,11 @@
     content: "\2630";
     aria-hidden=”true”;
     text-align: center;
-    font-size: 30px;
-    line-height: 36px;
+    font-size: 2.4em;
+    line-height: 1.2em;
+/*
     width: 44.2px;
+*/
     text-indent: 0;
     /* So text isn't removed from this too */
     display: inline-block;
@@ -395,7 +432,7 @@
 #primary-navbar .up-button:before, #primary-navbar-sticky-wrapper .up-button:before {
   content: "^";
   text-align: center;
-  font-size: 24px;
+  font-size: 1.5em;
   font-family: "Open Sans";
 /*
   line-height: 35.36px;
@@ -422,9 +459,12 @@
   }
 
   #primary-navbar .up-button:before, #primary-navbar-sticky-wrapper .up-button:before {
-    font-size: 36px;
+    font-size: 2em;
+    line-height: 1.2em;
+/*
     line-height: 44.2px;
-    width: 44.2px;
+*/
+    width: 1.5em;
     padding-top: 5px;
     /* So text isn't removed from this too */
     position: absolute;
@@ -439,7 +479,7 @@
 #primary-navbar .previous-button:before, #primary-navbar-sticky-wrapper .previous-button:before {
   content: "<";
   text-align: center;
-  font-size: 24px;
+  font-size: 1.5em;
   font-family: "Open Sans";
 
 /*
@@ -468,9 +508,12 @@
     overflow: hidden;
   }
   #primary-navbar .previous-button:before, #primary-navbar-sticky-wrapper .previous-button:before {
-    font-size: 40px;
+    font-size: 2em;
+    line-height: 1.0em;
+/*
     line-height: 36px;
-    width: 44.2px;
+*/
+    width: 2em;
     /* So text isn't removed from this too */
     padding-top: 5px;
     position: absolute;
@@ -488,7 +531,7 @@
 #primary-navbar .next-button:after, #primary-navbar-sticky-wrapper .next-button:after {
   content: ">";
   text-align: center;
-  font-size: 24px;
+  font-size: 1.5em;
   font-family: "Open Sans";
 /*
   line-height: 35.36px;
@@ -515,9 +558,12 @@
     overflow: hidden;
   }
   #primary-navbar .next-button:after, #primary-navbar-sticky-wrapper .next-button:after {
-    font-size: 40px;
+    font-size: 2em;
+    line-height: 1.0em;
+/*
     line-height: 36px;
-    width: 44.2px;
+*/
+    width: 2em;
     padding-top: 5px;
     padding-left: 5px;
     /* So text isn't removed from this too */

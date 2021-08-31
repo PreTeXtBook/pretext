@@ -3,9 +3,19 @@
 
 body {
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+body,
+body.pretext-article,
+body.pretext-book,
+body.standalone {
     margin: 0;
     padding: 0;
+/*
+    font-size: unset;
+*/
 }
+
+body, html body { background: #fff; }
 
 a {
     color: inherit;
@@ -2283,8 +2293,6 @@ a.mjx-svg-href  {
 /* these were taken from the local add-on.css.
  * need to check if the are needed.
  */
-
-body, html body { background: #fff; }
 
 .pretext-content article > figure:first-child {
     margin-top: 0;
