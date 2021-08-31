@@ -1449,6 +1449,7 @@ body > a.assistive:focus {
 
 .indexnav a {
     padding-left: 2.5px;
+    padding-right: 0.5px;
     width: 2.5ex;
 /*
  *  *  omitted, because we put a space in the source
@@ -1457,7 +1458,9 @@ body > a.assistive:focus {
     margin-right: -1px;
     color: inherit;
     font-size: 80%;
+/*
     display: inline-block;
+*/
     text-align: center;
 }
 .indexnav a::after{
@@ -1466,6 +1469,9 @@ body > a.assistive:focus {
 }
 .indexnav a:nth-of-type(14){
     padding-left: 1.8ex;
+}
+.indexnav a:last-child {
+    padding-right: 10px;
 }
 
 .indexnav a:hover {
