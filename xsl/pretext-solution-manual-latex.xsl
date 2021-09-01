@@ -146,7 +146,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Hard-code numbers into titles -->
-<xsl:template match="part|chapter|section|subsection|subsubsection|exercises" mode="division-in-solutions">
+<xsl:template match="part|chapter|section|subsection|subsubsection|exercises|reading-questions|worksheet" mode="division-in-solutions">
     <xsl:param name="scope" />
     <xsl:param name="content" />
 
