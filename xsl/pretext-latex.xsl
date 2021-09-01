@@ -5612,12 +5612,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>{</xsl:text>
             <xsl:apply-templates select="." mode="title-full"/>
             <xsl:text>}</xsl:text>
-            <!-- workspace length, only if given, else blank   -->
-            <!-- worksheets only now, eventually exams?        -->
+            <!-- if not in a "worksheet" and if the exercise or project-like does  -->
+            <!-- not have a "workspace" attribute then this argument will be blank -->
             <xsl:text>{</xsl:text>
-            <xsl:if test="$worksheet and @workspace">
-                <xsl:apply-templates select="." mode="sanitize-workspace"/>
-            </xsl:if>
+            <xsl:apply-templates select="." mode="sanitize-workspace"/>
             <xsl:text>}</xsl:text>
             <xsl:text>{</xsl:text>
             <xsl:apply-templates select="." mode="latex-id"/>
@@ -6129,11 +6127,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
                 <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
             </xsl:apply-templates>
-            <!-- this is a bit rough -->
-            <xsl:if test="not(task) and @workspace and ancestor::worksheet">
-                <!-- par break below instead of line break, in case there is no line to end -->
-                <xsl:text>\par\rule{\workspacestrutwidth}{</xsl:text>
+            <!-- possibly add some workspace for items from a worksheet     -->
+            <!-- an empty result is a signal there is no workspace authored -->
+            <xsl:variable name="vertical-space">
                 <xsl:apply-templates select="." mode="sanitize-workspace"/>
+            </xsl:variable>
+            <xsl:if test="not($vertical-space = '')">
+                <xsl:text>\par\rule{\workspacestrutwidth}{</xsl:text>
+                <xsl:value-of select="$vertical-space"/>
                 <xsl:text>}%&#xa;</xsl:text>
             </xsl:if>
         </xsl:if>
