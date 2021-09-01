@@ -1825,6 +1825,14 @@
       </optional>
       <attribute name="source"/>
       <optional>
+        <attribute name="decorative">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
         <element name="description">
           <ref name="TextShort"/>
         </element>
@@ -1847,6 +1855,14 @@
       </optional>
       <optional>
         <attribute name="archive"/>
+      </optional>
+      <optional>
+        <attribute name="decorative">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
       </optional>
       <optional>
         <element name="description">
@@ -1873,6 +1889,14 @@
       </optional>
       <optional>
         <attribute name="width"/>
+      </optional>
+      <optional>
+        <attribute name="decorative">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
       </optional>
       <optional>
         <element name="description">

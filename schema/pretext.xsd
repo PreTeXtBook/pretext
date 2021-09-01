@@ -1679,6 +1679,14 @@
           <xs:attribute name="margins"/>
           <xs:attribute name="archive"/>
           <xs:attribute name="source" use="required"/>
+          <xs:attribute name="decorative">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -1704,6 +1712,14 @@
           <xs:attribute name="width"/>
           <xs:attribute name="margins"/>
           <xs:attribute name="archive"/>
+          <xs:attribute name="decorative">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -1737,6 +1753,14 @@
           </xs:sequence>
           <xs:attribute name="pg-name"/>
           <xs:attribute name="width"/>
+          <xs:attribute name="decorative">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
