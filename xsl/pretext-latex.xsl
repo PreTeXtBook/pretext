@@ -6131,7 +6131,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:apply-templates>
             <!-- this is a bit rough -->
             <xsl:if test="not(task) and @workspace and ancestor::worksheet">
-                <xsl:text>\\\rule{\workspacestrutwidth}{</xsl:text>
+                <!-- par break below instead of line break, in case there is no line to end -->
+                <xsl:text>\par\rule{\workspacestrutwidth}{</xsl:text>
                 <xsl:apply-templates select="." mode="sanitize-workspace"/>
                 <xsl:text>}%&#xa;</xsl:text>
             </xsl:if>
