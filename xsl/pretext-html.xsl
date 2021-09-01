@@ -5703,6 +5703,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="image-description">
                     <xsl:apply-templates select="description" />
                 </xsl:with-param>
+                <xsl:with-param name="decorative">
+                    <xsl:apply-templates select="@decorative" />
+                </xsl:with-param>
             </xsl:call-template>
             <!-- possibly annotate with archive links -->
             <xsl:apply-templates select="." mode="archive">
@@ -5719,9 +5722,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>contained</xsl:text>
                 </xsl:attribute>
                 <!-- alt attribute for accessibility -->
-                <xsl:attribute name="alt">
-                    <xsl:apply-templates select="description" />
-                </xsl:attribute>
+                <xsl:choose>
+                    <xsl:when test="@decorative = 'yes'">
+                        <xsl:attribute name="alt"/>
+                    </xsl:when>
+                    <xsl:when test="not(string(description) = '')">
+                        <xsl:attribute name="alt">
+                            <xsl:apply-templates select="description" />
+                        </xsl:attribute>
+                    </xsl:when>
+                </xsl:choose>
             </img>
             <!-- possibly annotate with archive links -->
             <xsl:apply-templates select="." mode="archive">
@@ -5772,6 +5782,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:with-param>
         <xsl:with-param name="image-description">
             <xsl:apply-templates select="description" />
+        </xsl:with-param>
+        <xsl:with-param name="decorative">
+            <xsl:apply-templates select="@decorative" />
         </xsl:with-param>
     </xsl:call-template>
     <!-- possibly annotate with archive links -->
@@ -5877,6 +5890,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="png-fallback-filename" select="''" />
     <xsl:param name="image-width" />
     <xsl:param name="image-description" select="''" />
+    <xsl:param name="decorative"/>
     <img>
         <!-- source file attribute for img element, the SVG image -->
         <xsl:attribute name="src">
@@ -5893,9 +5907,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>contained</xsl:text>
         </xsl:attribute>
         <!-- alt attribute for accessibility -->
-        <xsl:attribute name="alt">
-            <xsl:value-of select="$image-description" />
-        </xsl:attribute>
+        <xsl:choose>
+            <xsl:when test="$decorative = 'yes'">
+                <xsl:attribute name="alt"/>
+            </xsl:when>
+            <xsl:when test="not($image-description = '')">
+                <xsl:attribute name="alt">
+                    <xsl:value-of select="$image-description" />
+                </xsl:attribute>
+            </xsl:when>
+        </xsl:choose>
         <!-- PNG fallback, if available                                     -->
         <!-- https://www.envano.com/2014/04/using-svg-images-in-responsive- -->
         <!-- websites-with-a-fallback-for-browsers-not-supporting-svg/      -->
