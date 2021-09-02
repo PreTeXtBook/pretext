@@ -1452,6 +1452,8 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     import os, os.path, subprocess, shutil
     import re, fileinput
     import zipfile as ZIP
+    # for building a cover image
+    from PIL import Image, ImageDraw, ImageFont
     # external module, often forgotten
     try:
         import lxml.etree as ET  # packaging file
@@ -1569,12 +1571,124 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     # build the same directory relative to the XHTML files
 
     # position cover file
-    cov = packaging_tree.xpath('/packaging/cover/@filename')[0]
-    cover_source = os.path.join(source_dir, str(cov))
+    cov = packaging_tree.xpath('/packaging/cover/@pubfilename')[0]
     cover_dest = os.path.join(xhtml_dir, str(cov))
-    # https://stackoverflow.com/questions/2793789, Python 3.2
-    os.makedirs(os.path.dirname(cover_dest), exist_ok=True)
-    shutil.copy2(cover_source, cover_dest)
+    if cov != '':
+        cover_source = os.path.join(source_dir, str(cov))
+        # https://stackoverflow.com/questions/2793789, Python 3.2
+        os.makedirs(os.path.dirname(cover_dest), exist_ok=True)
+        shutil.copy2(cover_source, cover_dest)
+    else:
+        cover_source = os.path.join(tmp_dir, "cover.png")
+        # Get some useful things from the packaging file
+        title = packaging_tree.xpath('/packaging/title')[0].xpath("string()").__str__()
+        subtitle = packaging_tree.xpath('/packaging/subtitle')[0].xpath("string()").__str__()
+        author = packaging_tree.xpath('/packaging/author')[0].xpath("string()").__str__()
+        title_ASCII = "".join([x if ord(x) < 128 else '?' for x in title])
+        subtitle_ASCII = "".join([x if ord(x) < 128 else '?' for x in subtitle])
+        author_ASCII = "".join([x if ord(x) < 128 else '?' for x in author])
+        _verbose('attempting to construct cover image using LaTeX and ImageMagick')
+        try:
+            tex_executable_cmd = get_executable_cmd('tex')
+            cover_tex_template = '\\documentclass[20pt]{{scrartcl}}\\begin{{document}}\\title{{ {} }}\\subtitle{{ {} }}\\author{{ {} }}\\date{{}}\\maketitle\\end{{document}}'
+            if 'xelatex' in tex_executable_cmd:
+                cover_tex = cover_tex_template.format(title,subtitle,author)
+            else:
+                cover_tex = cover_tex_template.format(title_ASCII,subtitle_ASCII,author_ASCII)
+            cover_tex_file = os.path.join(tmp_dir, 'cover.tex')
+            with open(cover_tex_file, 'w') as tex:
+                tex.write(cover_tex)
+            latex_cmd = tex_executable_cmd + ["-interaction=batchmode", cover_tex_file]
+            cover_pdf_file = os.path.join(tmp_dir, 'cover.pdf')
+            pdfpng_executable_cmd = get_executable_cmd('pdfpng')
+            png_cmd = pdfpng_executable_cmd + ["-quiet", "-density", "300", cover_pdf_file + '[0]', "-gravity", "center", "-crop", "5:8", "-background", "white", "-alpha", "remove", "-quality", "100", cover_source]
+            os.chdir(tmp_dir)
+            subprocess.run(latex_cmd)
+            subprocess.run(png_cmd)
+            os.chdir(owd)
+        except:
+            _verbose('failed to construct cover image using LaTeX and ImageMagick')
+            _verbose('attempting to construct cover image using pageres')
+            try:
+                pageres_executable_cmd = get_executable_cmd('pageres')
+                pageres_cmd = pageres_executable_cmd + ["-v", "--filename=cover", "--css=section.frontmatter{width:480px;height:768px;}h1{padding-top:192px;padding-left:32px;padding-right:32px;}.author{padding-left:32px;padding-right:32px;}", "--selector=.frontmatter", 'EPUB/xhtml/cover-page.xhtml',  "1280x2048"]
+                os.chdir(tmp_dir)
+                subprocess.run(pageres_cmd)
+                os.chdir(owd)
+            except:
+                _verbose('failed to construct cover image using pageres')
+                _verbose('attempting to construct cover image using "Arial.ttf" and "Arial Bold.ttf"')
+                try:
+                    title_size = 100
+                    title_font = ImageFont.truetype("Arial Bold.ttf", title_size)
+                    subtitle_size = int(title_size*0.6)
+                    subtitle_font = ImageFont.truetype("Arial Bold.ttf", subtitle_size)
+                    author_size = subtitle_size
+                    author_font = ImageFont.truetype("Arial.ttf", author_size)
+                    title_words = title.split()
+                    subtitle_words = subtitle.split()
+                    author_names = [x.strip() for x in author.split(',')]
+                    png_width = 1280
+                    png_height = int(png_width * 1.6)
+                    # build an array of lines for the title (and subtitle), each line fitting within 80% of png_width
+                    title_lines = ['']
+                    for word in title_words:
+                        last_line = title_lines[-1]
+                        (line_width,line_height) = title_font.getsize(last_line + ' ' + word)
+                        if line_width <= 0.8*png_width:
+                            title_lines[-1] += ' ' + word
+                        else:
+                            title_lines.append(word)
+                    multiline_title = "\n".join(title_lines).strip()
+                    subtitle_lines = ['']
+                    for word in subtitle_words:
+                        last_line = subtitle_lines[-1]
+                        (line_width,line_height) = subtitle_font.getsize(last_line + ' ' + word)
+                        if line_width <= 0.8*png_width:
+                            subtitle_lines[-1] += ' ' + word
+                        else:
+                            subtitle_lines.append(word)
+                    multiline_subtitle = "\n".join(subtitle_lines).strip()
+                    # each author on own line
+                    multiline_author = "\n".join(author_names).strip()
+                    # create new image
+                    cover_png = Image.new(mode = "RGB", size = (png_width,png_height), color = "white")
+                    draw = ImageDraw.Draw(cover_png)
+                    title_depth = int(png_height//4)
+                    subtitle_depth = title_depth + len(title_lines)*title_size + 0.2*title_size
+                    author_depth = subtitle_depth + len(subtitle_lines)*subtitle_size + 0.8*title_size
+                    draw.multiline_text((int(png_width//2), title_depth), multiline_title, font=title_font, fill='black', anchor='ma', align="center")
+                    draw.multiline_text((int(png_width//2), subtitle_depth), multiline_subtitle, font=subtitle_font, fill='gray', anchor='ma', align="center")
+                    draw.multiline_text((int(png_width//2), author_depth), multiline_author, font=author_font, fill='black', anchor='ma', align="center")
+                    cover_png.save(cover_source)
+                except:
+                    _verbose('failed to construct cover image using "Arial.ttf" and "Arial Bold.ttf"')
+                    _verbose('attempting to construct crude bitmap font cover image')
+                    try:
+                        title_words = title_ASCII.split()
+                        title_font = ImageFont.load_default()
+                        cover_png = Image.new(mode = "RGB", size = (120,192), color = "white")
+                        draw = ImageDraw.Draw(cover_png)
+                        y = 20
+                        for word in title_words:
+                            draw.text((20, y), word, font=title_font, fill='black')
+                            y += 10
+                        cover_png.save(cover_source)
+                    except:
+                        # We failed to build a cover.png so we remove all references to cover.png
+                        _verbose('failed to construct a cover image')
+        try:
+            shutil.copy2(cover_source, cover_dest)
+        except:
+            _verbose('removing references to cover image from package.opf')
+            package_opf = os.path.join(tmp_dir, 'EPUB/package.opf')
+            package_opf_tree = ET.parse(package_opf)
+            for meta in package_opf_tree.xpath("//opf:meta[@name=\'cover\']",namespaces={'opf': 'http://www.idpf.org/2007/opf'}):
+                meta.getparent().remove(meta)
+            for item in package_opf_tree.xpath("//opf:item[@id=\'cover-image\']",namespaces={'opf': 'http://www.idpf.org/2007/opf'}):
+                item.getparent().remove(item)
+            package_opf_tree.write(package_opf)
+
 
     # position image files
     images = packaging_tree.xpath('/packaging/images/image[@filename]')
