@@ -95,6 +95,11 @@
 <xsl:param name="tmpdir"/>
 <xsl:param name="mathfile"/>
 <xsl:variable name="math-repr" select="document($mathfile)/pi:math-representations"/>
+<!-- For MathML math, the "speechfile" is not used and an       -->
+<!-- empty string is passed in.  This does not seem to cause    -->
+<!-- an error here, or in any subsequent uses in the empty case -->
+<xsl:param name="speechfile"/>
+<xsl:variable name="speech-repr" select="document($speechfile)/pi:math-representations"/>
 
 <!-- One of 'svg", 'mml', 'kindle', or 'speech', always     -->
 <!-- Also 'kindle' dictates MathML output, but is primarily -->
@@ -1239,6 +1244,7 @@ width: 100%
         <xsl:apply-templates select="." mode="visible-id"/>
     </xsl:variable>
     <xsl:variable name="math" select="$math-repr/pi:math[@id = $id]"/>
+    <xsl:variable name="speech" select="$speech-repr/pi:math[@id = $id]"/>
     <xsl:variable name="context" select="string($math/@context)"/>
     <!-- <xsl:message>C:<xsl:value-of select="$math/@context"/>:C</xsl:message> -->
     <!-- <xsl:copy-of select="$math-repr[../@id = $id]"/> -->
@@ -1263,7 +1269,9 @@ width: 100%
         <!-- Finally, drop a "svg" element, "math" element, or ASCII speech -->
         <xsl:choose>
             <xsl:when test="$math.format = 'svg'">
-                <xsl:apply-templates select="$math/div[@class = 'svg']/svg:svg" mode="svg-edit"/>
+                <xsl:apply-templates select="$math/div[@class = 'svg']/svg:svg" mode="svg-edit">
+                    <xsl:with-param name="speech" select="$speech"/>
+                </xsl:apply-templates>
             </xsl:when>
             <xsl:when test="$math.format = 'mml'">
                 <xsl:copy-of select="$math/div[@class = 'mathml']/math:math"/>
@@ -1312,6 +1320,31 @@ width: 100%
 <xsl:template match="node()|@*" mode="svg-edit">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="svg-edit"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- SVG elements to augment -->
+<!-- We enrich the main "svg" element with a speech string.      -->
+<!--   1.  Since this is the "entry template" for this mode,     -->
+<!--       this is the only place we accept the "speech" param.  -->
+<!--   2.  MathJax seems to use SVGs inside of SVGs for placing  -->
+<!--       numbers/tags of numbered equations, so we only enrich -->
+<!--       "top-level" SVG - that is the point of the filter.     -->
+<xsl:template match="svg:svg[not(ancestor::svg:svg)]" mode="svg-edit">
+    <xsl:param name="speech"/>
+
+    <xsl:copy>
+        <!-- attributes first -->
+        <xsl:apply-templates select="@*" mode="svg-edit"/>
+        <!-- now additional metadata, of sorts -->
+        <xsl:element name="title" namespace="http://www.w3.org/2000/svg">
+            <xsl:text>Math Expression</xsl:text>
+        </xsl:element>
+        <xsl:element name="desc" namespace="http://www.w3.org/2000/svg">
+            <xsl:value-of select="$speech"/>
+        </xsl:element>
+        <!-- and all the rest of the nodes -->
+        <xsl:apply-templates select="node()" mode="svg-edit"/>
     </xsl:copy>
 </xsl:template>
 

@@ -81,7 +81,8 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
                 print(line.replace(r'\(', r'\(\mathstrut '), end='')
 
     # shell out to process with MathJax/SRE node program
-    _debug('calling MathJax to convert LaTeX from {} into raw representations in {}'.format(mjinput, mjoutput))
+    msg = 'calling MathJax to convert LaTeX from {} into raw representations as {} in {}'
+    _debug(msg.format(mjinput, math_format, mjoutput))
 
     # process with  pretext.js  executable from  MathJax (Davide Cervone, Volker Sorge)
     node_exec_cmd = get_executable_cmd('node')
@@ -1445,6 +1446,8 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     source_dir = get_source_path(xml_source)
     epub_xslt = os.path.join(get_ptx_xsl_path(), 'pretext-epub.xsl')
     math_representations = os.path.join(tmp_dir, 'math-representations-{}.xml'.format(math_format))
+    # speech representations are just for SVG images, but we define the filename always anyway
+    speech_representations = os.path.join(tmp_dir, 'math-representations-{}.xml'.format('speech'))
     packaging_file = os.path.join(tmp_dir, 'packaging.xml')
     xhtml_dir = os.path.join(tmp_dir, 'EPUB', 'xhtml')
 
@@ -1452,6 +1455,10 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     msg = 'converting raw LaTeX from {} into clean {} format placed into {}'
     _debug(msg.format(xml_source, math_format, math_representations))
     mathjax_latex(xml_source, pub_file, math_representations, None, math_format)
+    # optionally, build a file of speech versions of the math
+    if math_format == 'svg':
+        _debug(msg.format(xml_source, 'speech', speech_representations))
+        mathjax_latex(xml_source, pub_file, speech_representations, None, 'speech')
 
     # Build necessary content and infrastructure EPUB files,
     # using SVG images of math.  Most output goes into the
@@ -1463,6 +1470,14 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
 
     # the EPUB production is parmameterized by how math is produced
     params['mathfile'] = math_representations
+    # It is convenient for the subsequent XSL to always get a 'speechfile'
+    # string parameter.  An empty string seems to not provoke an error,
+    # though perhaps the resulting variable is crazy.  We'll just be
+    # sure not to access the variable unless making SVG images.
+    if math_format == 'svg':
+        params['speechfile'] = speech_representations
+    else:
+        params['speechfile'] = ''
     params['math.format'] = math_format
     params['tmpdir'] = tmp_dir
     if pub_file:
