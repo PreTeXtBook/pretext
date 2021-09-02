@@ -1271,6 +1271,7 @@ width: 100%
             <xsl:when test="$math.format = 'svg'">
                 <xsl:apply-templates select="$math/div[@class = 'svg']/svg:svg" mode="svg-edit">
                     <xsl:with-param name="speech" select="$speech"/>
+                    <xsl:with-param name="base-id" select="$id"/>
                 </xsl:apply-templates>
             </xsl:when>
             <xsl:when test="$math.format = 'mml'">
@@ -1329,18 +1330,47 @@ width: 100%
 <!--       this is the only place we accept the "speech" param.  -->
 <!--   2.  MathJax seems to use SVGs inside of SVGs for placing  -->
 <!--       numbers/tags of numbered equations, so we only enrich -->
-<!--       "top-level" SVG - that is the point of the filter.     -->
+<!--       "top-level" SVG - that is the point of the filter.    -->
+<!--   3.  The id of the math element will be used as the base   -->
+<!--       of (unique) ids necessary to point to the speech.     -->
+<!--       Pattern 11 at:                                        -->
+<!--       https://www.deque.com/blog/creating-accessible-svgs/  -->
 <xsl:template match="svg:svg[not(ancestor::svg:svg)]" mode="svg-edit">
     <xsl:param name="speech"/>
+    <xsl:param name="base-id"/>
+
+    <!-- manufacture id values for consistency, uniqueness -->
+    <xsl:variable name="title-id">
+        <xsl:value-of select="$base-id"/>
+        <xsl:text>-title</xsl:text>
+    </xsl:variable>
+    <xsl:variable name="desc-id">
+        <xsl:value-of select="$base-id"/>
+        <xsl:text>-desc</xsl:text>
+    </xsl:variable>
 
     <xsl:copy>
         <!-- attributes first -->
         <xsl:apply-templates select="@*" mode="svg-edit"/>
+        <xsl:attribute name="role">
+            <xsl:text>img</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="aria-labelledby">
+            <xsl:value-of select="$title-id"/>
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="$desc-id"/>
+        </xsl:attribute>
         <!-- now additional metadata, of sorts -->
         <xsl:element name="title" namespace="http://www.w3.org/2000/svg">
+            <xsl:attribute name="id">
+                <xsl:value-of select="$title-id"/>
+            </xsl:attribute>
             <xsl:text>Math Expression</xsl:text>
         </xsl:element>
         <xsl:element name="desc" namespace="http://www.w3.org/2000/svg">
+            <xsl:attribute name="id">
+                <xsl:value-of select="$desc-id"/>
+            </xsl:attribute>
             <xsl:value-of select="$speech"/>
         </xsl:element>
         <!-- and all the rest of the nodes -->
@@ -1349,18 +1379,12 @@ width: 100%
 </xsl:template>
 
 <!-- SVG attributes to remove -->
-<!-- epubcheck 4.0.2 complains about these for EPUB 3.0.1 -->
-<!-- Each match appears to be once per math-SVG           -->
-<xsl:template match="svg:svg/@focusable|svg:svg/@role|svg:svg/@aria-labelledby" mode="svg-edit"/>
-<!-- Per-image, when fonts are included -->
-<xsl:template match="svg:svg/svg:defs/@aria-hidden" mode="svg-edit"/>
-<!-- Per-font-cache, when fonts are consolidated -->
-<xsl:template match="svg:svg/svg:g/@aria-hidden" mode="svg-edit"/>
+<!-- There can be attributes of SVG images produced by MathJax     -->
+<!-- which cause validation errors when used within an EPUB.       -->
+<!-- 2021-09-02: these seem to have gone away in a transition from -->
+<!-- EPUB 3.0.0 to EPUB 3.2, as reported by  epubcheck v4.2.2.  We -->
+<!-- will remove @focusable just as an example, in case there are  -->
+<!-- future changes.                                               -->
+<xsl:template match="svg:svg/@focusable" mode="svg-edit"/>
 
-<!-- Uncomment to test inline image behavior -->
-<!-- 
-<xsl:template match="img">
-    <img src="{@src}" style="width:8ex;"/>
-</xsl:template>
- -->
 </xsl:stylesheet>
