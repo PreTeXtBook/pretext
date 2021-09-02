@@ -3840,37 +3840,37 @@ the xsltproc executable.
 
                 <sbsgroup>
                     <sidebyside>
-                        <p>No description, no <attr>decorative="yes"</attr></p>
+                        <p>No description, no <attr>decorative</attr> set to <c>yes</c></p>
                         <image source="images/cross-square.png"/>
-                        <p>No description, <attr>decorative="yes"</attr></p>
+                        <p>No description, <attr>decorative</attr> set to <c>yes</c></p>
                         <image source="images/cross-square.png" decorative="yes"/>
                     </sidebyside>
                     <sidebyside>
-                        <p>Empty description, no <attr>decorative="yes"</attr></p>
+                        <p>Empty description, no <attr>decorative</attr> set to <c>yes</c></p>
                         <image source="images/cross-square.png">
                             <description/>
                         </image>
-                        <p>Empty description, <attr>decorative="yes"</attr></p>
+                        <p>Empty description, <attr>decorative</attr> set to <c>yes</c></p>
                         <image source="images/cross-square.png" decorative="yes">
                             <description/>
                         </image>
                     </sidebyside>
                     <sidebyside>
-                        <p>Too long description, no <attr>decorative="yes"</attr></p>
+                        <p>Too long description, no <attr>decorative</attr> set to <c>yes</c></p>
                         <image source="images/cross-square.png">
                             <description>This description is too long because when alt text is longer than 125 characters, some scren readers will cut off reading the alt text after the 125th character.</description>
                         </image>
-                        <p>Too long description, <attr>decorative="yes"</attr></p>
+                        <p>Too long description, <attr>decorative</attr> set to <c>yes</c></p>
                         <image source="images/cross-square.png" decorative="yes">
                             <description>This description is too long because when alt text is longer than 125 characters, some scren readers will cut off reading the alt text after the 125th character.</description>
                         </image>
                     </sidebyside>
                     <sidebyside>
-                        <p>Good description, no <attr>decorative="yes"</attr></p>
+                        <p>Good description, no <attr>decorative</attr> set to <c>yes</c></p>
                         <image source="images/cross-square.png">
                             <description>A white square outlined in blue covered by a black X</description>
                         </image>
-                        <p>Good description, <attr>decorative="yes"</attr></p>
+                        <p>Good description, <attr>decorative</attr> set to <c>yes</c></p>
                         <image source="images/cross-square.png" decorative="yes">
                             <description>A white square outlined in blue covered by a black X</description>
                         </image>
@@ -6106,7 +6106,7 @@ the xsltproc executable.
 
                 <p><url href="https://jsxgraph.uni-bayreuth.de/wp/docs_jessiecode/">JessieCode</url> is a scripting language for JSXGraph. It provides the core geometric and graphing features of JSXGraph without accessing the underlying JavaScript. In order to use JessieCode, you simply create the HTML <tag>div</tag> element as you would for any other JSXGraph interactive plot and then provide the JessieCode script, which focuses on the geometric elements.</p>
 
-                <p>Because JessieCode is provided by JSXGraph, the interactive platform is <c>jsxgraph</c>. The <tag>slate</tag>, however, uses <attr>surface="jessiecode"</attr>. The script can be embedded directly in your code. As usual, you would need to remember to escape the special characters. JessieCode uses <c>&lt;</c> and <c>&gt;</c> for inequalities as well as for declaring objects used to style geometric elements, and <c>&amp;&amp;</c> is the boolean AND operator. Alternatively, you can provide the file as a separate resource, providing the URL with a <attr>source</attr> attribute. Attributes defining the JSXBoard at the time it is created should be included as attributes of the <tag>slate</tag>, including <attr>boundingbox</attr>, <attr>axis</attr>, and <attr>grid</attr>.</p>
+                <p>Because JessieCode is provided by JSXGraph, the interactive platform is <c>jsxgraph</c>. The <tag>slate</tag>, however, uses <attr>surface</attr> with value <c>jessiecode</c>. The script can be embedded directly in your code. As usual, you would need to remember to escape the special characters. JessieCode uses <c>&lt;</c> and <c>&gt;</c> for inequalities as well as for declaring objects used to style geometric elements, and <c>&amp;&amp;</c> is the boolean AND operator. Alternatively, you can provide the file as a separate resource, providing the URL with a <attr>source</attr> attribute. Attributes defining the JSXBoard at the time it is created should be included as attributes of the <tag>slate</tag>, including <attr>boundingbox</attr>, <attr>axis</attr>, and <attr>grid</attr>.</p>
 
                 <p>For this first example, the JessieCode was included directly in the XML source as the contents of the associated slate.</p>
 
