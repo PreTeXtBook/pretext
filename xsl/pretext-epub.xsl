@@ -129,8 +129,20 @@
 <xsl:variable name="b-webwork-worksheet-static" select="true()" />
 
 <!-- Cover image filename, once -->
-<xsl:variable name="cover-filename">
+<!-- May be empty, in which case pretext/pretext will try to build a cover.png -->
+<xsl:variable name="publication-cover-filename">
     <xsl:value-of select="$publication/epub/@cover"/>
+</xsl:variable>
+<xsl:variable name="b-has-cover-image" select="not($publication-cover-filename = '')"/>
+<xsl:variable name="cover-filename">
+    <xsl:choose>
+        <xsl:when test="$b-has-cover-image">
+            <xsl:value-of select="$publication-cover-filename"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>cover.png</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:variable>
 
 <!-- Kindle needs various tweaks, way beyond just math as MathML -->
@@ -409,6 +421,7 @@
             <xsl:value-of select="substring(date:date-time(),1,19)" />
             <xsl:text>Z</xsl:text>
         </xsl:element>
+        <meta name="cover" content="{$xhtml-dir}/{$cover-filename}" />
     </metadata>
 </xsl:template>
 
@@ -606,8 +619,8 @@
 <!-- Each must reference an id in the manifest   -->
 <xsl:template name="package-spine">
     <spine xmlns="http://www.idpf.org/2007/opf">
-        <itemref idref="table-contents" linear="yes"/>
         <itemref idref="cover-page" linear="yes" />
+        <itemref idref="table-contents" linear="yes"/>
         <xsl:apply-templates select="$document-root" mode="spine" />
         <xsl:if test="$b-has-endnotes">
             <itemref idref="endnotes" linear="no" />
@@ -654,7 +667,25 @@
             <!-- for actual EPUB file eventually output -->
             <xsl:apply-templates select="$document-root" mode="title-filesafe"/>
         </filename>
-        <cover filename="{$cover-filename}"/>
+        <!-- pubfilename maybe empty -->
+        <cover pubfilename="{$publication-cover-filename}"/>
+            <!-- <svg:svg xmlns:svg="http://www.w3.org/2000/svg" height="2560" width="1600"> -->
+                <!-- If title is too long, this will spill out of the image -->
+                <!-- <svg:text x="50%" y="25%" fill="black" font-size="100px" text-anchor="middle">
+                    <xsl:apply-templates select="$document-root" mode="title-simple"/>
+                </svg:text>
+            </svg:svg>
+        </cover> -->
+        <!-- These may be used in automated creation of a cover image -->
+        <title>
+            <xsl:apply-templates select="$document-root" mode="title-simple"/>
+        </title>
+        <subtitle>
+            <xsl:apply-templates select="$document-root" mode="subtitle"/>
+        </subtitle>
+        <author>
+            <xsl:apply-templates select="$document-root/frontmatter/titlepage/author" mode="name-list"/>
+        </author>
         <css stylefile="{$html-css-stylefile}" colorfile="{$html-css-colorfile}"/>
         <!-- Decide what to do with preview images, etc. -->
         <images>
@@ -782,14 +813,47 @@ width: 100%
                 <title>
                     <xsl:apply-templates select="$document-root" mode="title-full"/>
                 </title>
-                <xsl:call-template name="mathjax-css"/>
+                <xsl:if test="not($b-has-cover-image)">
+                    <link href="../{$css-dir}/pretext_add_on.css"    rel="stylesheet" type="text/css"/>
+                    <link href="../{$css-dir}/{$html-css-stylefile}" rel="stylesheet" type="text/css"/>
+                    <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
+                    <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
+                    <xsl:call-template name="mathjax-css"/>
+                    <xsl:call-template name="epub-kindle-css"/>
+                </xsl:if>
             </head>
             <body class="pretext-content epub">
-                <!-- https://www.opticalauthoring.com/inside-the-epub-format-the-cover-image/   -->
-                <!-- says the "figure" is necessary, and does not seem to hurt (CSS could style)-->
-                <figure>
-                    <img src="{$cover-filename}"/>
-                </figure>
+                <xsl:choose>
+                    <xsl:when test="$b-has-cover-image">
+                        <section epub:type="cover">
+                            <!-- https://ebookflightdeck.com/handbook/coverimage   -->
+                            <img src="{$cover-filename}" alt="cover image"/>
+                        </section>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <section epub:type="cover" class="frontmatter">
+                            <h1 class="heading">
+                                <span class="title">
+                                    <xsl:apply-templates select="$document-root" mode="title-full" />
+                                    <xsl:if test="$document-root/subtitle">
+                                        <xsl:text>:</xsl:text>
+                                    </xsl:if>
+                                </span>
+                                <xsl:if test="$document-root/subtitle">
+                                    <xsl:text> </xsl:text>
+                                    <span class="subtitle">
+                                        <xsl:apply-templates select="$document-root" mode="subtitle" />
+                                    </span>
+                                </xsl:if>
+                            </h1>
+                            <div class="author">
+                                <div class="author-name">
+                                    <xsl:apply-templates select="$document-root/frontmatter/titlepage/author" mode="name-list"/>
+                                </div>
+                            </div>
+                        </section>
+                    </xsl:otherwise>
+                </xsl:choose>
             </body>
         </html>
     </exsl:document>
