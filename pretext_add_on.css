@@ -3822,6 +3822,7 @@ label.incorrect .feedback {
 .pretext-content .exercise-wrapper form > div:first-child {
     display: inline-block;
     vertical-align: top;
+    width: 100%; // for live ww to open at 100% wide
 }
 .pretext-content .knowl .exercise-wrapper,
 .pretext-content .knowl .exercise-wrapper form,
