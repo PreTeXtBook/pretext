@@ -838,7 +838,7 @@
       <p>
           <idx><h sortby="cols"><attr>cols</attr></h><h>of an exercise group</h></idx>
         If you want the contents of an <tag>exercisegroup</tag> to be put in multiple columns,
-        you can add a <attr>cols</attr> attribute to the <tag>exercisegroup</tag> of the form <attr>cols="3"</attr>.
+        you can add a <attr>cols</attr> attribute to the <tag>exercisegroup</tag> with value (for example) <c>3</c>.
         The integer value of <attr>cols</attr> must be between 2 and 6
         (inclusive).
             <idx><h sortby="exercisegroup"><tag>exercisegroup</tag></h><h>columns</h></idx>
@@ -1036,7 +1036,7 @@
       <p>Because of the range of divisions that can contain an
       <tag>exercise</tag> element with different names displayed (such
       as <q>Checkpoint</q> for an inline exercise), one cannot simply
-      use <attr>element="exercise"</attr> in a <tag>rename</tag>
+      use <attr>element</attr> with value <c>exercise</c> in a <tag>rename</tag>
       element. The value of <attr>element</attr> to rename an
       <tag>exercise</tag> is as follows:
       <ul>
@@ -1540,7 +1540,7 @@
         So we can type <tage>xref ref="basics-s-xref"</tage> to create a reference to this subsection:
         <xref ref="basics-s-xref"/>.
         There are lots of options to control what text and number appear when you use <tag>xref</tag>.
-        The default is <attr>text="type-gobal"</attr>,
+        The default is <attr>text</attr> with value <c>type-gobal</c>,
         which produces something like <q>Subsection 3.3</q> or <q>Theorem 3.1.4</q>.
         The type is <q>Subsection</q> or <q>Theorem</q>,
         and the <em>global</em> number is 3.3 or 3.1.4. (Global is in contrast to local,

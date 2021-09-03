@@ -227,26 +227,26 @@
         creates an input field answer blank that expects the variable with that <attr>name</attr> to be the answer.
       </p>
       <p>
-        A <tag>var</tag> can have <attr>form="essay"</attr>, in which case it need not have a <attr>name</attr> attribute.
+        A <tag>var</tag> can have <attr>form</attr> with value <c>essay</c>, in which case it need not have a <attr>name</attr> attribute.
         This is for open-ended questions that must be graded by a human.
         The form field will be an expandable input block if the question is served to an authenticated user within <webwork/>.
         But for the <webwork/> cells in <pretext/> HTML output,
         there will just be a message explaining that there is no place to enter an answer.
       </p>
       <p>
-        A <tag>var</tag> can have <attr>form="array"</attr>.
+        A <tag>var</tag> can have <attr>form</attr> with value <c>array</c>.
         You would use this when the answer is a Matrix or Vector MathObject (a <webwork/> classification)
         to cause the input form to be an array of smaller fields instead of one big field.
       </p>
       <p>
-        A <tag>var</tag> can have <attr>form="popup"</attr> or <attr>form="buttons"</attr> for multiple choice questions.
+        A <tag>var</tag> can have <attr>form</attr> with value <c>popup</c> or <c>buttons</c> for multiple choice questions.
       </p>
       <p>
         If you are familiar with PG, then in your <tag>pg-code</tag> you might write a custom evaluator
         (a combination of a custom answer checker, post filters, pre filters, <etc/>).
         If you store this similar to
         <cd>$my_evaluator = $answer -> cmp(...);</cd>
-        then the <tag>var</tag> can have <attr>evaluator="$my_evaluator"</attr>.
+        then the <tag>var</tag> can have <attr>evaluator</attr> with value <c>$my_evaluator</c>.
       </p>
       <p>
         An <tag>instruction</tag> is specific instructions for how the reader might type or otherwise electronically submit their answer.
