@@ -1776,6 +1776,19 @@ body > a.assistive:focus {
 .pretext-content dl.description-list.narrow dd {
     margin-left: 12ex;
 }
+.pretext-content dl.description-list.wide dt {
+    float: none;
+    text-align: left;
+    width: 18ex;
+}
+.pretext-content dl.description-list.wide dt {
+    width: unset;
+    max-width: 58ex;
+}
+.pretext-content dl.description-list.wide dd {
+    margin-left: 12ex;
+    margin-top: 0;
+}
 
 @media screen and (max-width: 480px) {
   .pretext-content dl.description-list dt {
@@ -2136,6 +2149,9 @@ a.mjx-svg-href  {
     margin-left: 0.2em;
     margin-right: 0.2em;
     border-radius: 0.2em;
+}
+.pretext-content .code-inline:first-child {
+    margin-left: 0;
 }
 .pretext-content .title .code-inline {
     padding-left: 0;
