@@ -88,16 +88,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- load reveal.js resources             -->
             <xsl:choose>
                 <xsl:when test="$b-reveal-minified">
-                    <link href="{$reveal-root}/css/reset.min.css" rel="stylesheet"></link>
-                    <link href="{$reveal-root}/css/reveal.min.css" rel="stylesheet"></link>
-                    <link href="{$reveal-root}/css/theme/{$reveal-theme}.min.css" rel="stylesheet"></link>
-                    <script src="{$reveal-root}/js/reveal.min.js"></script>
+                    <link href="{$reveal-root}/reset.min.css" rel="stylesheet"></link>
+                    <link href="{$reveal-root}/reveal.min.css" rel="stylesheet"></link>
+                    <link href="{$reveal-root}/theme/{$reveal-theme}.min.css" rel="stylesheet"></link>
+                    <script src="{$reveal-root}/reveal.min.js"></script>
                 </xsl:when>
                 <xsl:otherwise>
-                    <link href="{$reveal-root}/css/reset.css" rel="stylesheet"></link>
-                    <link href="{$reveal-root}/css/reveal.css" rel="stylesheet"></link>
-                    <link href="{$reveal-root}/css/theme/{$reveal-theme}.css" rel="stylesheet"></link>
-                    <script src="{$reveal-root}/js/reveal.js"></script>
+                    <link href="{$reveal-root}/reset.css" rel="stylesheet"></link>
+                    <link href="{$reveal-root}/reveal.css" rel="stylesheet"></link>
+                    <link href="{$reveal-root}/theme/{$reveal-theme}.css" rel="stylesheet"></link>
+                    <script src="{$reveal-root}/reveal.js"></script>
                 </xsl:otherwise>
             </xsl:choose>
 

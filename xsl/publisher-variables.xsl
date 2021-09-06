@@ -1960,7 +1960,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- CDN is used twice, so just edit here -->
     <!-- NB: deprecation is frozen -->
     <xsl:variable name="cdn-url">
-        <xsl:text>https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0</xsl:text>
+        <xsl:text>https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.2</xsl:text>
     </xsl:variable>
 
     <xsl:choose>
