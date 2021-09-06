@@ -562,6 +562,21 @@ body > a.assistive:focus {
 	outline:0;	
     transition: top .1s ease-in, background .5s linear;
 }
+.heading > p.assistive {
+    margin-top: 0;
+}
+.heading > p.assistive + p.assistive {
+    font-size: 94%;
+}
+.heading > p.assistive + p.assistive + p.assistive {
+    font-size: 90%;
+}
+.heading > p.assistive + p.assistive + p.assistive + p.assistive {
+    font-size: 87%;
+}
+.heading > p.assistive + p.assistive + p.assistive + p.assistive + p.assistive {
+    font-size: 85%;
+}
 
 .collectedworks .knowl-output {
     border: 12px 
