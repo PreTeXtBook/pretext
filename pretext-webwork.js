@@ -126,7 +126,6 @@ function handleWW(ww_id, action) {
 
         // Set up hidden input fields that the form uses
         const wwInputs = {
-            answersSubmitted: 0,
             problemSeed:      data.inputs_ref.problemSeed,
             problemUUID:      data.inputs_ref.problemUUID,
             psvn:             data.inputs_ref.psvn,
@@ -158,6 +157,10 @@ function handleWW(ww_id, action) {
 
         // Prepare answers object
         const answers = {};
+        // id the answers even if we won't populate them
+        Object.keys(data.rh_result.answers).forEach(function(id) {
+            answers[id] = {};
+        }, data.rh_result.answers);
         if (ww_container.dataset.hasAnswer == 'true') {
             // Update answer data
             Object.keys(data.rh_result.answers).forEach(function(id) {
