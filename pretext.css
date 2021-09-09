@@ -181,9 +181,7 @@
 #masthead #logo-link:empty:before,
 .pretext-content #masthead #logo-link:empty:before,
 .mathbook-book #masthead #logo-link:empty:before,
-.pretext-book #masthead #logo-link:empty:before {
-  content: "\2211";
-}
+.pretext-book #masthead #logo-link:empty:before,
 .mathbook-article #masthead #logo-link:empty:before,
 .pretext-article #masthead #logo-link:empty:before {
   content: "\2211";
@@ -771,7 +769,7 @@
     display: none;
   }
 }
-@media screen and (max-width: 1199px) {
+@media screen and (max-width: 1099px) {
   #primary-navbar#primary-navbar-sticky-wrapper, #primary-navbar-sticky-wrapper#primary-navbar-sticky-wrapper {
     height: 0;
   }
