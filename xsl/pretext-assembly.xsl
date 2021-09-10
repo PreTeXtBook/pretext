@@ -202,7 +202,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- @name -> @xml:id  mapping until we are done assembling -->
                     <xsl:variable name="target" select="id(@copy)"/>
                     <xsl:choose>
-                        <xsl:when test="$target/statement|$target/stage">
+                        <xsl:when test="$target/statement|$target/task|$target/stage">
                             <xsl:copy>
                                 <xsl:attribute name="copied-from">
                                     <xsl:value-of select="@copy"/>
