@@ -202,7 +202,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- @name -> @xml:id  mapping until we are done assembling -->
                     <xsl:variable name="target" select="id(@copy)"/>
                     <xsl:choose>
-                        <xsl:when test="$target/statement|$target/stage">
+                        <xsl:when test="$target/statement|$target/task|$target/stage">
                             <xsl:copy>
                                 <xsl:attribute name="copied-from">
                                     <xsl:value-of select="@copy"/>
@@ -466,7 +466,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- @name -> @xml:id  mapping until we are done assembling -->
             <xsl:variable name="target" select="id(@copy)"/>
             <xsl:choose>
-                <xsl:when test="$target/statement|$target/stage"/>
+                <xsl:when test="$target/statement|$target/task|$target/stage"/>
                 <xsl:when test="$target/@source">
                     <xsl:message>PTX:ERROR:   A WeBWorK problem with copy="<xsl:value-of select="@copy"/>"</xsl:message>
                     <xsl:message>             points to a WeBWorK problem that uses a source attribute</xsl:message>
@@ -480,7 +480,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:message>PTX:ERROR:   A WeBWorK problem with copy="<xsl:value-of select="@copy"/>"</xsl:message>
-                    <xsl:message>             points to a WeBWorK problem that does not have a statement or stage.</xsl:message>
+                    <xsl:message>             points to a WeBWorK problem that does not have a statement, task, or stage.</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:for-each>
