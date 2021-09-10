@@ -3888,12 +3888,22 @@ label.incorrect .feedback {
     width: auto;
 }
 
-@media screen and (((max-width: 850px) and (min-width: 786px)) or (max-width: 600px)) {
+/* next two need to be separate due to limitations in Chrome and Safari */
+@media screen and (max-width: 600px) {
     .pretext-content .exercisegroup .cols2 > article.exercise-like {flex-basis: calc(100% - 2em);}
     .pretext-content .exercisegroup .cols3 > article.exercise-like {flex-basis: calc(100% - 2em);}
     .pretext-content .exercisegroup .cols4 > article.exercise-like {flex-basis: calc(50% - 2em);}
     .pretext-content .exercisegroup .cols5 > article.exercise-like {flex-basis: calc(50% - 2em);}
     .pretext-content .exercisegroup .cols6 > article.exercise-like {flex-basis: calc(33.3% - 2em);}
+    .pretext-content .exercisegroup .cols2 .heading + .exercise-wrapper { max-width: 100%; }
+}
+@media screen and (max-width: 850px) and (min-width: 786px) {
+    .pretext-content .exercisegroup .cols2 > article.exercise-like {flex-basis: calc(100% - 2em);}
+    .pretext-content .exercisegroup .cols3 > article.exercise-like {flex-basis: calc(100% - 2em);}
+    .pretext-content .exercisegroup .cols4 > article.exercise-like {flex-basis: calc(50% - 2em);}
+    .pretext-content .exercisegroup .cols5 > article.exercise-like {flex-basis: calc(50% - 2em);}
+    .pretext-content .exercisegroup .cols6 > article.exercise-like {flex-basis: calc(33.3% - 2em);}
+    .pretext-content .exercisegroup .cols2 .heading + .exercise-wrapper { max-width: 100%; }
 }
 
 /* CAT  */
