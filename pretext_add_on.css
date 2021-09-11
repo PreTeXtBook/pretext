@@ -1791,6 +1791,38 @@ body > a.assistive:focus {
 .pretext-content dl.description-list.narrow dd {
     margin-left: 12ex;
 }
+.pretext-content dl.description-list dd::after {
+    content: "";
+    display: block;
+    height: 1em;
+}
+
+.pretext-content dl.description-list.narrow dd {
+    margin-left: 0;
+    margin-top: 0;
+    width: 31em;
+    max-width: calc(100% - 12ex);
+    float: right;
+    clear: right;
+}
+
+.pretext-content dl.description-list.narrow dt {
+margin-top: 0;
+width: unset;
+max-width: 58ex;
+    float: left;
+    text-align: left;
+    clear: both;
+    margin-right: 0.8em;
+}
+.pretext-content dl.description-list.narrow dt {
+    text-align: left;
+}
+.pretext-content dl.description-list + * {
+    clear: both;
+}
+
+/* 
 .pretext-content dl.description-list.wide dt {
     float: none;
     text-align: left;
@@ -1804,6 +1836,7 @@ body > a.assistive:focus {
     margin-left: 12ex;
     margin-top: 0;
 }
+*/
 
 @media screen and (max-width: 480px) {
   .pretext-content dl.description-list dt {
