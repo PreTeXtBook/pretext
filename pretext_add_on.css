@@ -1821,6 +1821,9 @@ max-width: 58ex;
 .pretext-content dl.description-list + * {
     clear: both;
 }
+.pretext-content section {
+    clear: both;
+}
 
 /* 
 .pretext-content dl.description-list.wide dt {
