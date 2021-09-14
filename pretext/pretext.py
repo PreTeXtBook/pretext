@@ -678,7 +678,8 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
                          ('course_password',course_password),
                          ('outputformat','ptx'),
                          server_params_source,
-                         ('problemSeed',seed[problem]))
+                         ('problemSeed',seed[problem]),
+                         ('problemUUID',problem))
 
         msg = "sending {} to server to save in {}: origin is '{}'"
         _verbose(msg.format(problem, dest_dir, origin[problem]))
