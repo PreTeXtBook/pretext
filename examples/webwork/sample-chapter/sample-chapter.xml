@@ -64,6 +64,10 @@
              <!-- <text>My Button Text</text>  -->
         </feedback>
 
+        <latex-image-preamble>
+            \usepackage{tikz}
+        </latex-image-preamble>
+
         <latex-image-preamble syntax="PGtikz">
             \usepackage{pgfplots}
             \pgfplotsset{

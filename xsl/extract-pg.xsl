@@ -529,6 +529,10 @@
         <xsl:with-param name="text" select=".//pg-code" />
     </xsl:call-template>
     <!-- if there are latex-image in the problem, put their code here -->
+    <!-- introduction images are not needed except for human readable code -->
+    <xsl:if test="$b-human-readable">
+        <xsl:apply-templates select="ancestor::exercisegroup/introduction//image[latex-image/@syntax = 'PGtikz']" mode="latex-image-code"/>
+    </xsl:if>
     <xsl:apply-templates select=".//image[latex-image/@syntax = 'PGtikz']" mode="latex-image-code"/>
 </xsl:template>
 
@@ -844,7 +848,7 @@
             </xsl:call-template>
         </xsl:if>
         <!-- when there is a PGtikz graph -->
-        <xsl:if test=".//latex-image[@syntax = 'PGtikz']">
+        <xsl:if test=".//latex-image[@syntax = 'PGtikz'] or ($b-human-readable and ancestor::exercisegroup/introduction//latex-image[@syntax = 'PGtikz'])">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'PGtikz.pl'"/>
                 <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
@@ -1227,7 +1231,7 @@
         <xsl:value-of select="$standard-macros" />
         <xsl:value-of select="$implied-macros" />
         <xsl:value-of select="$user-macros" />
-        <xsl:if test=".//latex-image">
+        <xsl:if test=".//latex-image or ancestor::exercisegroup/introduction//latex-image[@syntax='PGtikz']">
             <xsl:value-of select="$ptx-pg-macros" />
         </xsl:if>
         <xsl:value-of select="$course-macros" />
@@ -1536,15 +1540,11 @@
 </xsl:template>
 
 <xsl:template match="image[latex-image/@syntax = 'PGtikz']" mode="components">
-    <xsl:variable name="visible-id">
-        <xsl:apply-templates select="." mode="visible-id"/>
-    </xsl:variable>
-    <xsl:variable name="pg-name" select="concat('$', translate($visible-id,'-','_'))"/>
     <xsl:variable name="width">
         <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
     <xsl:text>[@image(insertGraph(</xsl:text>
-    <xsl:value-of select="$pg-name"/>
+    <xsl:apply-templates select="." mode="pg-name"/>
     <xsl:text>), width=&gt;</xsl:text>
     <xsl:value-of select="substring-before($width, '%') div 100 * $design-width-pg"/>
     <!-- alt attribute for accessibility -->
@@ -1575,25 +1575,31 @@
 </xsl:template>
 
 <xsl:template match="image[latex-image/@syntax = 'PGtikz']" mode="latex-image-code">
-    <xsl:variable name="visible-id">
-        <xsl:apply-templates select="." mode="visible-id"/>
-    </xsl:variable>
-    <xsl:variable name="pg-name" select="concat('$', translate($visible-id,'-','_'))"/>
-    <xsl:value-of select="$pg-name"/>
+    <xsl:apply-templates select="." mode="pg-name"/>
     <xsl:text> = createTikZImage();&#xa;</xsl:text>
     <xsl:if test="$docinfo/latex-image-preamble[@syntax = 'PGtikz']">
-        <xsl:value-of select="$pg-name"/>
+        <xsl:apply-templates select="." mode="pg-name"/>
         <xsl:text>->addToPreamble(latexImagePreamble());&#xa;</xsl:text>
     </xsl:if>
     <xsl:variable name="pg-tikz-code">
         <xsl:apply-templates select="latex-image/text()|latex-image/var" mode="latex-image"/>
     </xsl:variable>
-    <xsl:value-of select="$pg-name"/>
+    <xsl:apply-templates select="." mode="pg-name"/>
     <xsl:text>->BEGIN_TIKZ&#xa;</xsl:text>
     <xsl:call-template name="sanitize-text">
         <xsl:with-param name="text" select="$pg-tikz-code"/>
     </xsl:call-template>
     <xsl:text>&#xa;END_TIKZ&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="image[latex-image/@syntax = 'PGtikz']" mode="pg-name">
+    <xsl:text>$image_</xsl:text>
+    <xsl:number count="image" from="webwork" level="any" />
+</xsl:template>
+
+<xsl:template match="exercisegroup/introduction//image[latex-image/@syntax = 'PGtikz']" mode="pg-name">
+    <xsl:text>$introduction_image_</xsl:text>
+    <xsl:number count="image" from="exercisegroup" level="any" />
 </xsl:template>
 
 <xsl:template match="text()" mode="latex-image">

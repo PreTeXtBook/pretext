@@ -228,7 +228,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
         <xsl:text>\usepackage{amsmath,amssymb}&#xa;</xsl:text>
-        <xsl:value-of select="$latex-image-preamble"/>
+        <xsl:choose>
+            <xsl:when test="latex-image[@syntax='PGtikz']">
+                <xsl:value-of select="$latex-image-preamble-PGtikz"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$latex-image-preamble"/>
+            </xsl:otherwise>
+        </xsl:choose>
         <xsl:text>\ifdefined\tikzset&#xa;</xsl:text>
         <xsl:text>\tikzset{ampersand replacement = \amp}&#xa;</xsl:text>
         <xsl:text>\fi&#xa;</xsl:text>
@@ -239,7 +246,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- We save off the code for discovery and possible          -->
         <!-- manipulation for scaling and spacing as tactile graphics -->
         <xsl:variable name="the-latex-image">
-            <xsl:apply-templates select="latex-image"/>
+            <xsl:choose>
+                <xsl:when test="parent::introduction/parent::exercisegroup and latex-image[@syntax='PGtikz']">
+                    <xsl:text>\begin{tikzpicture}</xsl:text>
+                    <xsl:apply-templates select="latex-image"/>
+                    <xsl:text>\end{tikzpicture}</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="latex-image"/>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:variable>
         <!-- Analyze the type of image we have, and save markers as universal  -->
         <!-- variables.  An empty result will signal a "latex-image" we cannot -->

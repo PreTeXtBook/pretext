@@ -8980,6 +8980,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}%&#xa;</xsl:text>
 </xsl:template>
 
+<xsl:template match="image[latex-image/@syntax='PGtikz']" mode="image-inclusion">
+    <!-- Only applies to images in an exercisegroup/introduction -->
+    <!-- where there are webwork exercises. These need the       -->
+    <!-- tikzpicture environment wrapped around it.              -->
+    <xsl:text>\resizebox{\linewidth}{!}{%&#xa;</xsl:text>
+    <xsl:text>\begin{tikzpicture}&#xa;</xsl:text>
+    <xsl:apply-templates select="latex-image"/>
+    <xsl:text>\end{tikzpicture}&#xa;</xsl:text>
+    <xsl:text>}%&#xa;</xsl:text>
+</xsl:template>
+
 <!-- EXPERIMENTAL -->
 <!-- We allow some mark-up inside the "latex-image" element, -->
 <!-- which was formerly assumed to be purely text.  Then we  -->

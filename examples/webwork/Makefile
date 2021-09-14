@@ -70,6 +70,7 @@ DTD = $(MB)/schema/dtd
 
 # XML to apply templates to
 SMPCHP = $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
+SMPCHPPUB = $(WWEXAMPLE)/sample-chapter/publication.xml
 MINI = $(WWEXAMPLE)/minimal/mini.xml
 
 # These paths are subdirectories of
@@ -79,6 +80,7 @@ HTMLOUT    = $(SCRATCH)/html
 PDFOUT     = $(SCRATCH)/pdf
 EPUBOUT    = $(SCRATCH)/epub
 WWOUT      = $(SCRATCH)/webwork-representations
+IMGOUT     = $(SCRATCH)/images
 
 # Some aspects of producing these examples require a WeBWorK server.
 # Either specify only the protocol and domain (like https://webwork.yourschool.edu)
@@ -100,6 +102,15 @@ SERVER = https://webwork-ptx.aimath.org
 #  webwork-representations.xml which holds multiple versions of each problem.
 #  Also locally store images from the WeBWorK server.
 
+#  BUILD TREE FOR SAMPLE CHAPTER
+#  make sample-chapter-check
+#  make sample-chapter-representations
+#      make sample-chapter-images
+#          make sample-chapter-html
+#          make samepl-chapter-epub (planned)
+#      make sample-chapter-pdf
+#      make sample-chapter-problem-sets
+
 #  For HTML and problem set output, we turn off dates in file headers,
 #  so when we use these for testing we can get more accurate diffs.
 #  Dates are useful for single file output (or at least less of an
@@ -109,7 +120,7 @@ SERVER = https://webwork-ptx.aimath.org
 
 sample-chapter-representations:
 	install -d $(WWOUT)
-	-rm $(WWOUT)/webwork-representations.ptx
+	-rm $(WWOUT)/*.*
 	$(MB)/pretext/pretext -v -c webwork -d $(WWOUT) -s $(SERVER) $(SMPCHP)
 
 mini-representations:
@@ -117,8 +128,8 @@ mini-representations:
 	-rm $(WWOUT)/webwork-representations.ptx
 	$(MB)/pretext/pretext -v -c webwork -d $(WWOUT) -s $(SERVER) $(MINI)
 
+
 # LaTeX and PDF versions
-# See prerequisite above about merge files.
 # xsltproc may be passed --stringparam latex.fillin.style box for box answer blanks
 
 sample-chapter-pdf:
@@ -146,13 +157,22 @@ mini-pdf:
 	xelatex webwork-mini.tex; \
 	xelatex webwork-mini.tex; \
 
+
+# Generated images (excluding the ones that the WW server generates)
+sample-chapter-images:
+	install -d $(WWOUT)
+	-rm -r $(IMGOUT) || :
+	install -d $(IMGOUT)
+	$(MB)/pretext/pretext -c latex-image -p $(SMPCHPPUB) -f all -d $(IMGOUT) $(SMPCHP)
+
+
 # HTML output
-# See prerequisite above about merge files.
 sample-chapter-html:
 	install -d $(HTMLOUT)
 	-rm $(HTMLOUT)/*.html
 	-rm $(HTMLOUT)/knowl/*.html
 	cp -a $(WWEXAMPLE)/sample-chapter/images $(HTMLOUT)
+	cp -a $(IMGOUT)/*.svg $(HTMLOUT)/images
 	cp -a $(WWOUT)/*.svg $(HTMLOUT)/images
 	cp -a $(WWOUT)/*.png $(HTMLOUT)/images
 	cp $(WWOUT)/webwork-representations.ptx $(WWEXAMPLE)/sample-chapter
@@ -170,7 +190,7 @@ mini-html:
 #  Make an archive of webwork problem sets for each "section" (as specified
 #  by chunk level) with set definition files, set header files, and problem
 #  files in a file tree. Separate problem sets for inline and divisional
-#  problems. Requires the merged PTX file from above.
+#  problems.
 
 sample-chapter-problem-sets:
 	install -d $(PGOUT)

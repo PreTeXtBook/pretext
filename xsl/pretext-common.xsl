@@ -2067,6 +2067,17 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:variable>
 
+<xsl:variable name="latex-image-preamble-PGtikz">
+    <xsl:choose>
+        <xsl:when test="$docinfo/latex-image-preamble[@syntax='PGtikz']">
+            <xsl:call-template name="sanitize-text">
+                <xsl:with-param name="text" select="$docinfo/latex-image-preamble[@syntax='PGtikz'][1]" />
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- ############## -->
 <!-- LaTeX Preamble -->
 <!-- ############## -->
