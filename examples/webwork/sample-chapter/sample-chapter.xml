@@ -1389,10 +1389,28 @@
                                 \end{axis}
                             </latex-image>
                         </image>
+                        <!-- same thing, just to have a 2nd graph for testing -->
+                        <image width="50%">
+                            <latex-image syntax="PGtikz">
+                                \begin{axis}
+                                    \addplot[domain=$xmin:$xmax,smooth] {(x-$roots[0])*(x-$roots[1])*(x-$roots[2])};
+                                \end{axis}
+                            </latex-image>
+                        </image>
                         <p>
                             <var name="$answer" width="20"/>
                         </p>
                     </statement>
+                    <solution>
+                        <!-- same thing, just to have a 3rd graph for testing -->
+                        <image width="50%">
+                            <latex-image syntax="PGtikz">
+                                \begin{axis}
+                                    \addplot[domain=$xmin:$xmax,smooth] {(x-$roots[0])*(x-$roots[1])*(x-$roots[2])};
+                                \end{axis}
+                            </latex-image>
+                        </image>
+                    </solution>
                 </webwork>
             </exercise>
 
@@ -1404,9 +1422,6 @@
                     </p>
                 </introduction>
                 <webwork>
-                    <pg-code>
-                        $refreshCachedImages = 1;
-                    </pg-code>
                     <statement>
                         <p>
                             The code below has a printed dollar sign, a printed percent sign,
@@ -1481,6 +1496,59 @@
                     </solution>
                 </webwork>
             </exercise>
+
+            <exercises>
+                <exercisegroup cols="2">
+                    <introduction>
+                        <p>
+                            This exercisegroup has a PGtikz image in its introduction.
+                        </p>
+                        <image width="50%">
+                          <latex-image syntax="PGtikz">
+                            \draw (0,0) --++ (4,0) node[below,pos=0.5] {\(L\)} --++ (0,3) node[right,pos=0.5] {\(W\)} --++ (-4,-3) node[above,sloped,pos=0.5] {\(D\)} --++ (0,3) --++ (4,0);
+                          </latex-image>
+                        </image>
+                    </introduction>
+                    <exercise>
+                        <webwork>
+                            <statement>
+                                <p>
+                                    Find <m>D</m> when <m>L=4</m> and <m>W=3</m>.
+                                </p>
+                                <p>
+                                    <var name="'5'" width="10"/>
+                                </p>
+                            </statement>
+                            <solution>
+                                <image>
+                                  <latex-image syntax="PGtikz">
+                                    \draw (0,0) --++ (4,0) node[below,pos=0.5] {\(4\)} --++ (0,3) node[right,pos=0.5] {\(3\)} --++ (-4,-3) node[above,sloped,pos=0.5] {\(5\)} --++ (0,3) --++ (4,0);
+                                  </latex-image>
+                                </image>
+                            </solution>
+                        </webwork>
+                    </exercise>
+                    <exercise>
+                        <webwork>
+                            <statement>
+                                <p>
+                                    Find <m>D</m> when <m>L=12</m> and <m>W=5</m>.
+                                </p>
+                                <p>
+                                    <var name="'13'" width="10"/>
+                                </p>
+                            </statement>
+                            <solution>
+                                <image>
+                                  <latex-image syntax="PGtikz">
+                                    \draw (0,0) --++ (4,0) node[below,pos=0.5] {\(12\)} --++ (0,3) node[right,pos=0.5] {\(5\)} --++ (-4,-3) node[above,sloped,pos=0.5] {\(13\)} --++ (0,3) --++ (4,0);
+                                  </latex-image>
+                                </image>
+                            </solution>
+                        </webwork>
+                    </exercise>
+                </exercisegroup>
+            </exercises>
         </section>
 
         <section>
