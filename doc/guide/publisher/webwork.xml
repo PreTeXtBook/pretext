@@ -54,7 +54,7 @@
       This file needs to include the lines:
     </p>
     <pre>
-      <![CDATA[]
+      <![CDATA[
       <IfModule mod_headers.c>
           <Location /webwork2/html2xml>
               Header set Access-Control-Allow-Origin "*"
