@@ -54,7 +54,7 @@
       This file needs to include the lines:
     </p>
     <pre>
-      <![CDATA[]
+      <![CDATA[
       <IfModule mod_headers.c>
           <Location /webwork2/html2xml>
               Header set Access-Control-Allow-Origin "*"
@@ -70,9 +70,12 @@
       which has these lines (or similar lines) commented out.
     </p>
     <p>
-      If you are certain that your <pretext/> book will only be hosted at one particlar site,
-      for example <c>https://mybook.myschool.edu</c>, then you should replace the <c>*</c>s above with that site.
+      If you are certain that your <pretext/> book will only be hosted at one site,
+      (or if you are supporting multiple books, that they will only be hosted at one site)
+      then you should consider replacing the <c>*</c>s above with that site (for example <c>https://mybook.myschool.edu</c>).
       This will mildly defend against unauthorized use of your <webwork/> server.
+      It will make it so that if there are HTML pages at some other domain and they embed <webwork/> problems
+      that rely on your <webwork/> server, then web browsers will refuse to load the embedded content.
     </p>
     <p>
       You may also need to enable headers by executing something like <c>sudo a2enmod headers</c> from the command line.
