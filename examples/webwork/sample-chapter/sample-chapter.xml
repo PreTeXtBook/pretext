@@ -330,7 +330,7 @@
 
             <exercise xml:id="quadratic-equation">
                 <title>Solving Quadratic Equations</title>
-                <webwork>
+                <webwork xml:id="webwork-solve-quadratic">
                     <description>
                         <line>Find a quadratic equation's solutions.</line>
                         <line>One positive integer solution and one negative fraction solution.</line>
@@ -539,6 +539,17 @@
                         </p>
                     </conclusion>
                 </webwork>
+            </exercise>
+
+            <exercise xml:id="copy-with-tasks">
+                <title>Copy a Problem with Tasks</title>
+
+                <introduction>
+                    <p>We are testing copying the quadratic equation problem above (<xref ref="quadratic-equation"/>), since it is structured with <tag>task</tag>, and we also provide a new seed.</p>
+                </introduction>
+
+                <webwork copy="webwork-solve-quadratic" seed="832"/>
+
             </exercise>
 
             <p>
