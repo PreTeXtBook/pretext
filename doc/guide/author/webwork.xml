@@ -72,7 +72,6 @@
         For example if it is a problem in the Open Problem Library (OPL), then relative to the <c>templates/</c> folder,
         its path is <c>Library/...</c> and you may use:
         <cd>&lt;webwork source="Library/PCC/BasicAlgebra/Exponents/exponentsMultiplication0.pg" /></cd>
-        replacing the <c>&lt;webwork>&lt;/webwork></c> above.
       </p>
       <p>
         Or if you have a problem's PG file, you can upload it into the hosting course's <c>templates/local/</c> folder and use it with:
@@ -269,7 +268,7 @@
         then when the exercises are exported to <c>.pg</c> problem files for use as online homework from a <webwork/> server
         it makes sense that the instructions from the <tag>exercisegroup</tag>'s <tag>introduction</tag> should be included in the <c>.pg</c> file.
         And so they are included there. Note that they are <em>not</em> included when you are building <acro>HTML</acro> or <latex/> output
-        for your proeject. (Rather, the <tag>exercisegroup</tag>'s <tag>introduction</tag> appears in its normal place.)
+        for your project. (Rather, the <tag>exercisegroup</tag>'s <tag>introduction</tag> appears in its normal place.)
       </p>
       <p>
         You should be aware of this when you write the <tag>exercisegroup</tag>'s <tag>introduction</tag>.

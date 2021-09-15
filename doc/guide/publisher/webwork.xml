@@ -30,11 +30,60 @@
     </p>
   </introduction>
 
-  <section xml:id="webwork-configuration">
+  <section xml:id="webwork-server-configuration">
+    <title>Configuring a <webwork/> Server for <pretext/></title>
+    <p>
+      To make use of <webwork/> in your <pretext/> project, you need a <webwork/> server.
+      If someone is providing a <webwork/> server for you, like the AIM server
+      at <url href="https://webwork-ptx.aimath.org"><c>webwork-ptx.aimath.org</c></url>,
+      then we assume they have already configured that server for use with <pretext/>,
+      and you may skip this section and move on to <xref ref="webwork-processing">Section</xref>.
+    </p>
+    <p>
+      If you are configuring your own <webwork/> server to use with <pretext/>,
+      we assume a mild familiarity with administrating a <webwork/> server.
+      The version of <webwork/> needs to be 2.14 or later for use with <pretext/>.
+    </p>
+    <p>
+      The only thing you need to do at this level is set the web server to use certain headers on content that is fetched.
+      These headers tell a web browser that you are authorizing it to display content from this web server
+      as embedded content inside pages from another web server (in particular, where you are hosting you <pretext/> book).
+    </p>
+    <p>
+      In <c>webwork2/conf/</c> there should be the apache configuration file <c>webwork-apache2.4-config</c>.
+      This file needs to include the lines:
+    </p>
+    <pre>
+      <![CDATA[]
+      <IfModule mod_headers.c>
+          <Location /webwork2/html2xml>
+              Header set Access-Control-Allow-Origin "*"
+          </Location>
+          <Location /webwork2_files>
+              Header set Access-Control-Allow-Origin "*"
+          </Location>
+      </IfModule>
+      ]]>
+    </pre>
+    <p>
+      Note there is the distribution file <c>webwork-apache2.4-config.dist</c>,
+      which has these lines (or similar lines) commented out.
+    </p>
+    <p>
+      If you are certain that your <pretext/> book will only be hosted at one particlar site,
+      for example <c>https://mybook.myschool.edu</c>, then you should replace the <c>*</c>s above with that site.
+      This will mildly defend against unauthorized use of your <webwork/> server.
+    </p>
+    <p>
+      You may also need to enable headers by executing something like <c>sudo a2enmod headers</c> from the command line.
+    </p>
+  </section>
+
+  <section xml:id="webwork-course-configuration">
     <title>Configuring a <webwork/> Course for <pretext/></title>
     <p>
-      To make use of <webwork/> in your <pretext/> project, you need to use a <webwork/> server.
-      If someone else is providing a <webwork/> server for you, like the AIM <webwork/> server
+      To make use of <webwork/> in your <pretext/> project, you need a host <webwork/> course.
+      If someone is providing a <webwork/> server for you, like the AIM server
       at <url href="https://webwork-ptx.aimath.org"><c>webwork-ptx.aimath.org</c></url>,
       then we assume they have already configured a course for use with <pretext/>,
       and you may skip this section and move on to <xref ref="webwork-processing">Section</xref>.
@@ -43,6 +92,8 @@
       If you are configuring your own <webwork/> server to use with <pretext/>,
       we assume a mild familiarity with administrating a <webwork/> server.
       The version of <webwork/> needs to be 2.14 or later for use with <pretext/>.
+    </p>
+    <p>
       Using the <c>admin</c> course, create a course named <c>anonymous</c>.
       (You could name it something else, but we assume the name is <c>anonymous</c> in this guide.)
       In the course's Course Configuration menu, set all permissions to <c>admin</c>
