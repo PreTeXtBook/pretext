@@ -4619,8 +4619,37 @@ the xsltproc executable.
                         <p>Get feisty about that weird counterfeit rule: seize the day and don't have a heifer, man.</p>
                        </li>
                     <li>
+                        <title>Avocado</title>
+                        <p>Avocado is the the color with hex code <c>#568203</c>, and also the main ingredient in guacamole.</p>
+                     </li>
+                    <li>
                         <title>Magenta</title>
                         <p>Magenta is a color, and a character in Rocky Horror.</p>
+                     </li>
+                    <li>
+                        <title>Zymurgist</title>
+                        <p>A scientist who studies the chemical process of fermentation in brewing and distilling.  Also the alphabetically last 9-letter word in the English language.</p>
+                     </li>
+                    <li>
+                        <title>Byzantium</title>
+                        <p>Byzantium is the the color with hex code <c>#702963</c>, and also an ancient Greek city which later became known as Constantinople, and today is called Istanbul.</p>
+                     </li>
+                    <li>
+                        <title>Convection</title>
+                        <p>Circulating motion in a fluid.</p>
+                     </li>
+                    <li>
+                        <title>Elementary</title>
+                        <p>No literary detective ever said <q>Elementary my dear Watson.</q>  In particular, Sherlock Holmes never said that.</p>
+                     </li>
+                    <li>
+                        <title>Understand</title>
+                        <p>Perceive the intended meaning of.</p>
+                     </li>
+                    <li>
+                        <title>Washington</title>
+                        <p>A state, a district, the man on the US $1 bill and on the US quarter. Did you ever notice that on the US dime, the value is stated as <q>one dime</q>"?
+But how is one to know that a dime is worth 10 cents?</p>
                      </li>
                     <li>
                         <title>Aquamarine</title>
@@ -4631,12 +4660,12 @@ the xsltproc executable.
                         <p>George Santayana wrote those words in 1905.  A similar aphorism is misattributed to Winston Churchill.  The idea is embodied in the 4th principle: <pretext/> respects the good design practices which have been developed over the past centuries.</p>
                     </li>
                     <li>
-                        <title><m>\displaystyle \zeta(s) = \sum_{n=0}^\infty n^{-s} </m></title>
+                        <title><m>\displaystyle \zeta(s) = \sum_{n=1}^\infty n^{-s} </m></title>
                         <p>The Riemann <m>\zeta</m>-function is defined by a Dirichlet series, valid for <m> \Re(s) > 1</m>.</p>
                      </li>
                     <li>
                         <title><c>main()</c> is a void function</title>
-                        <p>A <c>dl</c> with <c>width="narrow></c> might be a useful way to give commentary on a program listing.</p>
+                        <p>A <c>dl</c> with <c>width="narrow"</c> might be a useful way to give commentary on a program listing.</p>
                     </li>
                 </dl></p>
             </subsection>
