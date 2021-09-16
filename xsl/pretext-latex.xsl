@@ -1642,11 +1642,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
     </xsl:if>
     <!-- TODO:  \showidx package as part of a draft mode, prints entries in margin -->
-     <xsl:if test="$document-root//ol[@cols]|$document-root//ul[@cols]|$document-root//dl[@cols]|$document-root//contributors">
+     <xsl:if test="$document-root//ol[@cols]|$document-root//ul[@cols]|$document-root//contributors">
         <xsl:text>%% Multiple column, column-major lists&#xa;</xsl:text>
         <xsl:text>\usepackage{multicol}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$document-root//ol or $document-root//ul or $document-root//dl or $document-root//task or $document-root//references or $b-has-webwork-reps">
+    <xsl:if test="$document-root//ol or $document-root//ul or $document-root//task or $document-root//references or $b-has-webwork-reps">
         <xsl:text>%% More flexible list management, esp. for references&#xa;</xsl:text>
         <xsl:text>%% But also for specifying labels (i.e. custom order) on nested lists&#xa;</xsl:text>
         <xsl:text>\usepackage</xsl:text>
@@ -1662,6 +1662,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- labelindent defaults to 0, ! means computed -->
             <xsl:text>\setlist[referencelist]{leftmargin=!,labelwidth=!,labelsep=0ex,itemsep=1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
         </xsl:if>
+    </xsl:if>
+    <xsl:if test="$document-root//dl">
+        <xsl:text>%% Description lists as tcolorbox sidebyside&#xa;</xsl:text>
+        <xsl:text>%% "dli" short for "description list item"&#xa;</xsl:text>
+        <!-- title widths, gaps, from David Farmer, ~2021-09-15, pretext-support, "inline titles" -->
+        <xsl:text>\newlength{\dlititlewidth}&#xa;</xsl:text>
+        <xsl:text>\newlength{\dlimaxnarrowtitle}\setlength{\dlimaxnarrowtitle}{11ex}&#xa;</xsl:text>
+        <xsl:text>\newlength{\dlimaxmediumtitle}\setlength{\dlimaxmediumtitle}{18ex}&#xa;</xsl:text>
+        <!-- "top seam" alignment works better for titles that are display math -->
+        <!-- halign applies only to "upper", which is "right" in sidebyside     -->
+        <xsl:text>\tcbset{ dlistyle/.style={sidebyside, sidebyside align=top seam, lower separated=false, bwminimalstyle, bottomtitle=0.75ex, after skip=1.5ex, boxsep=0pt, left=0pt, right=0pt, top=0pt, bottom=0pt} }&#xa;</xsl:text>
+        <xsl:text>\tcbset{ dlinarrowstyle/.style={dlistyle, lefthand width=\dlimaxnarrowtitle, sidebyside gap=1ex, halign=flush left, righttitle=10ex} }&#xa;</xsl:text>
+        <xsl:text>\tcbset{ dlimediumstyle/.style={dlistyle, lefthand width=\dlimaxmediumtitle, sidebyside gap=4ex, halign=flush right} }&#xa;</xsl:text>
+        <xsl:text>\NewDocumentEnvironment{descriptionlist}{}{\par\vspace*{1.5ex}}{\par\vspace*{1.5ex}}%&#xa;</xsl:text>
+        <xsl:text>%% begin enviroment has an if/then to open the tcolorbox&#xa;</xsl:text>
+        <xsl:text>\NewDocumentEnvironment{dlinarrow}{mm}{%&#xa;</xsl:text>
+        <xsl:text>\settowidth{\dlititlewidth}{{\textbf{#1}}}%&#xa;</xsl:text>
+        <xsl:text>\ifthenelse{\dlititlewidth > \dlimaxnarrowtitle}%&#xa;</xsl:text>
+        <xsl:text>{\begin{tcolorbox}[title={\textbf{#1}}, phantom={\hypertarget{#2}{}}, dlinarrowstyle]\tcblower}%&#xa;</xsl:text>
+        <xsl:text>{\begin{tcolorbox}[dlinarrowstyle, phantom={\hypertarget{#2}{}}]\textbf{#1}\tcblower}%&#xa;</xsl:text>
+        <xsl:text>}%&#xa;</xsl:text>
+        <xsl:text>{\end{tcolorbox}}%&#xa;</xsl:text>
+        <xsl:text>%% medium option is simpler&#xa;</xsl:text>
+        <xsl:text>\NewDocumentEnvironment{dlimedium}{mm}%&#xa;</xsl:text>
+        <xsl:text>{\begin{tcolorbox}[dlimediumstyle, phantom={\hypertarget{#2}{}}]\textbf{#1}\tcblower}%&#xa;</xsl:text>
+        <xsl:text>{\end{tcolorbox}}%&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//exercisegroup">
         <xsl:text>%% Indented groups of "exercise" within an "exercises" division&#xa;</xsl:text>
@@ -6987,17 +7013,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="dl">
     <xsl:text>%&#xa;</xsl:text>
-    <xsl:if test="@cols">
-        <xsl:text>\begin{multicols}{</xsl:text>
-        <xsl:value-of select="@cols" />
-        <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:text>\begin{description}&#xa;</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>\end{description}&#xa;</xsl:text>
-    <xsl:if test="@cols">
-        <xsl:text>\end{multicols}&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>\begin{descriptionlist}&#xa;</xsl:text>
+    <xsl:apply-templates select="li"/>
+    <xsl:text>\end{descriptionlist}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- List Items -->
@@ -7055,15 +7073,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- argument In a description list, an item can be a  -->
 <!-- target but only if it has an @xml:id to use       -->
 <xsl:template match="dl/li">
-    <xsl:text>\item[{</xsl:text>
+    <xsl:variable name="item-environment">
+        <xsl:choose>
+            <xsl:when test="parent::dl/@width = 'narrow'">
+                <xsl:text>dlinarrow</xsl:text>
+            </xsl:when>
+            <!-- the default (specified, or absent) -->
+            <xsl:otherwise>
+                <xsl:text>dlimedium</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:text>\begin{</xsl:text>
+    <xsl:value-of select="$item-environment"/>
+    <xsl:text>}{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
-    <xsl:text>}]</xsl:text>
-    <xsl:if test="@xml:id">
-        <xsl:apply-templates select="." mode="label" />
-    </xsl:if>
-    <!-- title or label will protect -->
-    <!-- content, so no {} ever      -->
+    <xsl:text>}{</xsl:text>
+    <xsl:apply-templates select="." mode="latex-id" />
+    <xsl:text>}%&#xa;</xsl:text>
     <xsl:apply-templates />
+    <xsl:text>\end{</xsl:text>
+    <xsl:value-of select="$item-environment"/>
+    <xsl:text>}%&#xa;</xsl:text>
 </xsl:template>
 
 <!-- ###################################### -->
