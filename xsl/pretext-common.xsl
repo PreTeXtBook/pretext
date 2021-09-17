@@ -3889,7 +3889,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:value-of select="true()"/>
 </xsl:template>
 <!-- Miscellaneous -->
-<xsl:template match="paragraphs|proof|case|defined-term|exercisegroup" mode="title-wants-punctuation">
+<xsl:template match="paragraphs|proof|case|exercisegroup" mode="title-wants-punctuation">
     <xsl:value-of select="true()"/>
 </xsl:template>
 <!-- Titled: list items, tasks of exercise, PROJECT-LIKE, EXAMPLE-LIKE -->
