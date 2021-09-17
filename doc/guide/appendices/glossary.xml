@@ -37,7 +37,7 @@
         <defined-term>
                 <idx>attribute</idx>
             <title>attribute</title>
-            <p>in XML, tags can have attributes, which provide more information about the element.  For example,
+            <p>In XML, tags can have attributes, which provide more information about the element.  For example,
                in <c>&lt;section permid="dWf"></c> the tag is <q>section</q>,
                the attribute is <q>permid</q>, and the value of that attribute is <q>dWf</q>.</p>
         </defined-term>
@@ -254,6 +254,11 @@
         </defined-term>
 
         <defined-term>
+                <idx>main branch</idx>
+            <title>main branch</title>
+            <p>In git, the name of the default branch.</p>
+        </defined-term>
+        <defined-term>
                 <idx>Markdown</idx>
             <title>Markdown</title>
             <p>A plain text markup language which is easy to use, is limited in its capabilities
@@ -269,7 +274,8 @@
         <defined-term>
                 <idx>master branch</idx>
             <title>master branch</title>
-            <p>In git, the default branch.</p>
+            <p>In git, the former name of the default branch.
+               Curently <q>main</q> is the preferred.</p>
         </defined-term>
 
         <defined-term>
@@ -281,7 +287,7 @@
         <defined-term>
                 <idx>MBX</idx>
             <title>MBX</title>
-            <p><pretext/> was once known as <q>MathBook XML</q>, commonly abbreviated as MBX.  This abbreviation appears in some historical reference.</p>
+            <p><pretext/> was once known as <q>MathBook XML</q>, commonly abbreviated as MBX.  This abbreviation appears in many historical references.</p>
         </defined-term>
 
         <defined-term>
@@ -462,8 +468,8 @@
         </defined-term>
 
         <defined-term>
-                <idx>TeX</idx>
-            <title>TeX</title>
+                <idx><tex/></idx>
+            <title><tex/></title>
             <p>A typesetting language with high-quality automatic line- and page-breaking, specifically designed for mathematics.
             </p>
         </defined-term>
@@ -514,6 +520,11 @@
             <p>A format for storing video content.
             </p>
         </defined-term>
+        <defined-term>
+                <idx><webwork/></idx>
+            <title><webwork/></title>
+            <p>An open-source online homework system for math and sciences courses.</p>
+        </defined-term>
 
         <defined-term>
                 <idx>Wolfram CDF</idx>
@@ -525,8 +536,8 @@
         </defined-term>
 
         <defined-term>
-                <idx>XeLaTex</idx>
-            <title>XeLaTex</title>
+                <idx>XeLaTeX</idx>
+            <title>XeLaTeX</title>
             <p>One of the available programs to convert <latex/> to DVI or PDF.
             </p>
         </defined-term>
