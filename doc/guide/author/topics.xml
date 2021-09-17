@@ -1325,7 +1325,7 @@
         <title>Mathematics</title>
         <idx>mathematics</idx>
 
-        <introduction>
+        <introduction xml:id="math-intro">
             <p>As mentioned in the overview, <xref ref="overview-math" />, we use <latex /> syntax for mathematics.  In order to allow for quality display in <init>HTML</init>, and other electronic formats, this limits us to the subset of <latex /> supported by the very capable <url href="https://www.mathjax.org/">MathJax</url> Javascript library.  Generally this looks like the <c>amsmath</c><idx><c>amsmath</c></idx> package maintained by the American Mathematical Society at their <url href="http://www.ams.org/publications/authors/tex/amslatex">AMS-LaTeX page</url>.  For a complete and precise list of what MathJax supports, see MathJax's <url href="http://docs.mathjax.org/en/latest/input/tex/macros/">Supported <tex/>/<latex/> commands</url><fn><c>http://docs.mathjax.org/en/latest/input/tex/macros/</c></fn> (2019-11-10: this link may be specific to MathJax 3.0, which we have not yet adopted.)  Once you have digested this more general section, be sure to also consult <xref ref="topic-mathematics-practices"/> for some very specific suggestions.</p>
         </introduction>
 
@@ -1553,7 +1553,7 @@
         <subsection xml:id="mathematics-notes">
             <title>Notes</title>
 
-            <p>As mentioned at the start of this section, your use of <latex/> needs to also be supported by MathJax so that it may be rendered as part of an <init>HTML</init> page displayed in a web broswer.  In addition to the information at the start of <xref ref="topic-mathematics"/>, this subsection has some notes that may help you navigate this situation.<ol>
+            <p>As mentioned at the <xref ref="math-intro" text="custom">start of this section</xref>, your use of <latex/> needs to also be supported by MathJax so that it may be rendered as part of an <init>HTML</init> page displayed in a web browser.  In addition to the information at the start of <xref ref="topic-mathematics"/>, this subsection has some notes that may help you navigate this situation.<ol>
                 <li>Generally, MathJax supports commands available in the <c>amsmath</c> package.</li>
                 <li>You can construct, and use, your own macros, <em>but only for mathematics</em>, not for document structure or document management.  See <xref ref="mathematics-macros"/>.</li>
                 <li>Support for loading <q>extra</q> packages is extremely limited.  See <xref ref="mathematics-latex-packages"/>.</li>
