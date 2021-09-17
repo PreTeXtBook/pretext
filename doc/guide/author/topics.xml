@@ -1326,7 +1326,7 @@
         <idx>mathematics</idx>
 
         <introduction xml:id="math-intro">
-            <p>As mentioned in the overview, <xref ref="overview-math" />, we use <latex /> syntax for mathematics.  In order to allow for quality display in <init>HTML</init>, and other electronic formats, this limits us to the subset of <latex /> supported by the very capable <url href="https://www.mathjax.org/">MathJax</url> Javascript library.  Generally this looks like the <c>amsmath</c><idx><c>amsmath</c></idx> package maintained by the American Mathematical Society at their <url href="http://www.ams.org/publications/authors/tex/amslatex">AMS-LaTeX page</url>.  For a complete and precise list of what MathJax supports, see MathJax's <url href="http://docs.mathjax.org/en/latest/input/tex/macros/">Supported <tex/>/<latex/> commands</url><fn><c>http://docs.mathjax.org/en/latest/input/tex/macros/</c></fn> (2019-11-10: this link may be specific to MathJax 3.0, which we have not yet adopted.)  Once you have digested this more general section, be sure to also consult <xref ref="topic-mathematics-practices"/> for some very specific suggestions.</p>
+            <p>As mentioned in the overview, <xref ref="overview-math" />, we use <latex /> syntax for mathematics.  In order to allow for quality display in <init>HTML</init>, and other electronic formats, this limits us to the subset of <latex /> supported by the very capable <url href="https://www.mathjax.org/">MathJax</url> Javascript library.  Generally this looks like the <c>amsmath</c><idx><c>amsmath</c></idx> package maintained by the American Mathematical Society at their <url href="http://www.ams.org/publications/authors/tex/amslatex">AMS-LaTeX page</url>.  For a complete and precise list of what MathJax supports, see MathJax's <url href="http://docs.mathjax.org/en/latest/input/tex/macros/">Supported <tex/>/<latex/> commands</url><fn><c>http://docs.mathjax.org/en/latest/input/tex/macros/</c></fn>. Once you have digested this more general section, be sure to also consult <xref ref="topic-mathematics-practices"/> for some very specific suggestions.</p>
         </introduction>
 
         <subsection>
@@ -1390,8 +1390,6 @@
             <title>Color in Mathematics</title>
 
             <p>There is a temptation to use color to indicate or highlight portions of mathematics, especially for electronic outputs where color is easy and cheap.  But before you leap, how will this work in black-and-white printed output?  How will it work for a blind reader using a screen-reader or a braille version?</p>
-
-            <p>If you must, be aware that for older versions of MathJax that we support for HTML output (v2.7, as of 2020-08-19), the relevant macros have slightly different behavior than for standard <latex/>.  But you can make both work if you are careful.  This should not be an issue with MathJax 3.</p>
 
             <p>With careful use of <tex/> grouping (<c>{...}</c>) you can make the two behaviors of <c>\color</c> effective.  For example, go:<cd>
                 <cline>{\color{blue}{x^2}}</cline>
