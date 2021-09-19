@@ -222,6 +222,18 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .pretext-content .heading + ol, .pretext-content .heading + ul {
     margin-top: 0.45em;
 }
+.pretext-content li > .heading + ol, .pretext-content li > .heading + ul {
+    margin-top: 0.25em;
+}
+.pretext-content li > .heading + ol > li:nth-child(1),
+.pretext-content li > .heading + ul > li:nth-child(1) {
+    margin-top: 0;
+}
+.pretext-content li > .heading + ol.cols2 > li:nth-child(2),
+.pretext-content li > .heading + ul.cols2 > li:nth-child(2) {
+    margin-top: 0;
+}
+
 .pretext-content dl {
     margin-top: 1em;
 }
@@ -1751,6 +1763,8 @@ body > a.assistive:focus {
 
 .pretext-content dl.description-list {
     margin-left: 0;
+    margin-bottom: 0;
+    overflow: hidden;
 }
 
 .pretext-content dl > dt {
@@ -1777,7 +1791,7 @@ body > a.assistive:focus {
     margin-left: 12ex;
 }
 
-.pretext-content dl.description-list dd:after {
+.pretext-content dl.description-list dd::after {
     content: "";
     display: block;
     clear: left;
@@ -1796,6 +1810,9 @@ body > a.assistive:focus {
     display: block;
     height: 1em;
 }
+.pretext-content dl.description-list dd:last-child::after {
+    height: 0;
+}
 
 .pretext-content dl.description-list.narrow dd {
     margin-left: 0;
@@ -1813,7 +1830,7 @@ max-width: 58ex;
     float: left;
     text-align: left;
     clear: both;
-    margin-right: 0.8em;
+    margin-right: 1ex;
 }
 .pretext-content dl.description-list.narrow dt {
     text-align: left;
@@ -1821,7 +1838,9 @@ max-width: 58ex;
 .pretext-content dl.description-list + * {
     clear: both;
 }
-.pretext-content section {
+.pretext-content section,
+.pretext-content article,
+.pretext-content figure {
     clear: both;
 }
 
@@ -2374,6 +2393,7 @@ a.mjx-svg-href  {
 .pretext-content figure + figure,
 .pretext-content figure + .sidebyside,
 .pretext-content .sidebyside + .sidebyside,
+.pretext-content article + figure,
 .pretext-content .sidebyside + figure {
     padding-top: 1.0em;
 }
