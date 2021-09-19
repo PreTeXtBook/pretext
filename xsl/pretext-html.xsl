@@ -2319,9 +2319,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- a line break in EPUB/Kindle.                     -->
     <span class="type">
         <xsl:apply-templates select="." mode="type-name" />
-        <xsl:text>.</xsl:text>
     </span>
-    <xsl:text> </xsl:text>
     <xsl:variable name="the-number">
         <xsl:apply-templates select="." mode="non-singleton-number" />
     </xsl:variable>
@@ -2333,6 +2331,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="serial-number" />
         </span>
     </xsl:if>
+    <!-- Always end, e.g. "Hint" or "Hint 4", with a period -->
+    <xsl:call-template name="period-styled"/>
     <xsl:if test="title">
         <xsl:call-template name="space-styled"/>
         <span class="title">
