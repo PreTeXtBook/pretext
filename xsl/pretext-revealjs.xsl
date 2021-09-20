@@ -93,24 +93,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <link href="{$reveal-root}/reveal.css" rel="stylesheet"></link>
             <link href="{$reveal-root}/theme/{$reveal-theme}.css" rel="stylesheet"></link>
             <script src="{$reveal-root}/reveal.js"></script>
-
-            <!-- Explicitly enable AMS-style inline \(...\),      -->
-            <!-- and explicitly disable TeX-style inline $...$    -->
-            <!-- The main HTML conversion does not do anything    -->
-            <!-- special for display math, so we disable any such -->
-            <!-- markup, since we use environments exclusively.   -->
-            <!-- N.B. default HTML adds a "zero-width" space into -->
-            <!-- a \( authored in a non-math context.             -->
-            <!-- N.B. This may need to be changed for MathJax 3   -->
-            <xsl:comment> Coordinate control of MathJax delimiters </xsl:comment>
-            <script type="text/x-mathjax-config">
-                <xsl:text>    MathJax.Hub.Config({&#xa;</xsl:text>
-                <xsl:text>        tex2jax: {&#xa;</xsl:text>
-                <xsl:text>            inlineMath:  [['\\(','\\)']],&#xa;</xsl:text>
-                <xsl:text>            displayMath: [],&#xa;</xsl:text>
-                <xsl:text>        }&#xa;</xsl:text>
-                <xsl:text>    });&#xa;</xsl:text>
-            </script>
+            <script src="{$reveal-root}/plugin/math/math.js"></script>
 
           <!--  Some style changes from regular pretext-html -->
           <style>
@@ -242,12 +225,27 @@ dfn {
             <xsl:text>  width: "100%",&#xa;</xsl:text>
             <xsl:text>  height: "100%",&#xa;</xsl:text>
             <xsl:text>  margin: "0.025",&#xa;</xsl:text>
-            <xsl:text>  dependencies: [&#xa;</xsl:text>
-            <xsl:text>    { src: '</xsl:text>
-                <xsl:value-of select="$reveal-root"/><xsl:text>/plugin/math/math.min.js</xsl:text>
-            <xsl:text>', async: true },&#xa;</xsl:text>
-            <xsl:text>    ]&#xa;</xsl:text>
-            <xsl:text>  });&#xa;</xsl:text>
+            <!-- Explicitly enable AMS-style inline \(...\),      -->
+            <!-- and explicitly disable TeX-style inline $...$    -->
+            <!-- The main HTML conversion does not do anything    -->
+            <!-- special for display math, so we disable any such -->
+            <!-- markup, since we use environments exclusively.   -->
+            <!-- N.B. default HTML adds a "zero-width" space into -->
+            <!-- a \( authored in a non-math context.             -->
+            <!-- N.B. This may need to be changed for MathJax 3   -->
+
+            <!-- Suggested by  https://revealjs.com/math/, 2021-09-19 -->
+            <xsl:text>  math: {&#xa;</xsl:text>
+            <xsl:text>    mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js',&#xa;</xsl:text>
+            <xsl:text>    config: 'TeX-AMS_HTML-full',&#xa;</xsl:text>
+            <xsl:text>    // other options are passed into MathJax.Hub.Config()&#xa;</xsl:text>
+            <xsl:text>    tex2jax: {&#xa;</xsl:text>
+            <xsl:text>      inlineMath:  [['\\(','\\)']],&#xa;</xsl:text>
+            <xsl:text>      displayMath: [],&#xa;</xsl:text>
+            <xsl:text>    }&#xa;</xsl:text>
+            <xsl:text>  },&#xa;</xsl:text>
+            <xsl:text>  plugins: [ RevealMath ]&#xa;</xsl:text>
+            <xsl:text>});&#xa;</xsl:text>
         </script>
     </html>
 </xsl:template>
