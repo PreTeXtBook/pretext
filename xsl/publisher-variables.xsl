@@ -1984,47 +1984,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-<!-- Reveal.js Minified CSS/JS -->
-<!-- Resources from a CDN come in a minified version typically.    -->
-<!-- But a local version does not have these files available.      -->
-<!-- So we provide sensible defaults and let a publisher override. -->
-
-<xsl:variable name="minified">
-    <xsl:choose>
-        <!-- explict is recognized first, only "yes" activates minified -->
-        <xsl:when test="$publication/revealjs/resources/@minified">
-            <xsl:choose>
-                <xsl:when test="$publication/revealjs/resources/@minified = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>no</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- for PTX-supplied CDN, assume minified is best -->
-        <xsl:when test="$publication/revealjs/resources/@host = 'cdn'">
-            <xsl:text>yes</xsl:text>
-        </xsl:when>
-        <!-- and for a local copy, assume no minified copy exists -->
-        <xsl:when test="$publication/revealjs/resources/@host = 'local'">
-            <xsl:text>no</xsl:text>
-        </xsl:when>
-        <!-- else some host, but we don't have any idea -->
-        <!-- so don't get fancy, and go without minified -->
-        <xsl:when test="$publication/revealjs/resources/@host">
-            <xsl:text>no</xsl:text>
-        </xsl:when>
-        <!-- no @minified, and no @host, so we have     -->
-        <!-- defaulted to CDN and minified is suggested -->
-        <xsl:otherwise>
-            <xsl:text>yes</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-<!-- Convert "yes"/"no" to a boolean variable -->
-<xsl:variable name="b-reveal-minified" select="$minified = 'yes'"/>
-
 
 <!-- ######################### -->
 <!-- String Parameter Bad Bank -->

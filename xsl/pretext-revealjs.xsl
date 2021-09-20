@@ -87,21 +87,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="sagecell-code" />
             <xsl:apply-templates select="." mode="sagecell" />
 
-            <!-- load reveal.js resources             -->
-            <xsl:choose>
-                <xsl:when test="$b-reveal-minified">
-                    <link href="{$reveal-root}/reset.min.css" rel="stylesheet"></link>
-                    <link href="{$reveal-root}/reveal.min.css" rel="stylesheet"></link>
-                    <link href="{$reveal-root}/theme/{$reveal-theme}.min.css" rel="stylesheet"></link>
-                    <script src="{$reveal-root}/reveal.min.js"></script>
-                </xsl:when>
-                <xsl:otherwise>
-                    <link href="{$reveal-root}/reset.css" rel="stylesheet"></link>
-                    <link href="{$reveal-root}/reveal.css" rel="stylesheet"></link>
-                    <link href="{$reveal-root}/theme/{$reveal-theme}.css" rel="stylesheet"></link>
-                    <script src="{$reveal-root}/reveal.js"></script>
-                </xsl:otherwise>
-            </xsl:choose>
+            <!-- load reveal.js resources; w/ v 4.1.2 -->
+            <!-- these seem to be *always* minified   -->
+            <link href="{$reveal-root}/reset.css" rel="stylesheet"></link>
+            <link href="{$reveal-root}/reveal.css" rel="stylesheet"></link>
+            <link href="{$reveal-root}/theme/{$reveal-theme}.css" rel="stylesheet"></link>
+            <script src="{$reveal-root}/reveal.js"></script>
 
             <!-- Explicitly enable AMS-style inline \(...\),      -->
             <!-- and explicitly disable TeX-style inline $...$    -->

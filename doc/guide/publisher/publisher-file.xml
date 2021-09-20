@@ -429,7 +429,6 @@
                 <cline>/publication/revealjs/resources</cline>
             </cd>element can have the following attributes:<ul>
                 <li><attr>host</attr>: The values <c>local</c> and <c>cdn</c> will retrieve various Javascript and CSS files (such as the theme) relative to the slideshow <init>HTML</init> file or from an online Content Delivery Network (respectively).  PreTeXt will maintain a link to a current, updated, <init>CDN</init> version and this will change without notice.  This attribute may be given a <init>URL</init> or a local path, though this has not been tested, so should be considered experimental.</li>
-                <li><attr>minified</attr>: These files may be compressed into a <q>min-ified</q> form for faster downloading.  Typically the <init>CDN</init> files will be available in this form, while the local version will not.  <pretext/> will make a sensible choice based on <attr>host</attr>, so you should only need to use this attribute to override that choice.  Values are <c>yes</c> and <c>no</c>.</li>
             </ul></p>
         </subsection>
     </section>

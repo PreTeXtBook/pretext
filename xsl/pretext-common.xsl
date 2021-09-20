@@ -11592,6 +11592,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'a &quot;notation/usage&quot; element should contain *exactly* one &quot;m&quot;.  There is none, but we will attempt to honor your intent'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2021-09-19  obsolete Reveal.js slideshow @minified option -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$publication/revealjs/resources/@minified" />
+        <xsl:with-param name="date-string" select="'2021-09-19'" />
+        <xsl:with-param name="message" select="'the Reveal.js publisher option for minified resources (revealjs/resources/@minified) is obsolete and is being ignored.  Removing it will stop this message'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
