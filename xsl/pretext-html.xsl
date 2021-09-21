@@ -626,45 +626,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<!-- Headings for structural divisions when they are repeated: -->
-<!-- list-of, solutions                                        -->
-<xsl:template match="*" mode="duplicate-heading">
-    <xsl:param name="heading-level"/>
-    <xsl:variable name="hN">
-        <xsl:text>h</xsl:text>
-        <xsl:choose>
-            <xsl:when test="$heading-level > 6">
-                <xsl:text>6</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="$heading-level"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:element name="{$hN}">
-        <xsl:attribute name="class">
-            <xsl:text>heading</xsl:text>
-            <xsl:if test="not(self::chapter) or ($numbering-maxlevel = 0)">
-                <xsl:text> hide-type</xsl:text>
-            </xsl:if>
-        </xsl:attribute>
-        <xsl:attribute name="title">
-            <xsl:apply-templates select="." mode="tooltip-text" />
-        </xsl:attribute>
-        <span class="type">
-            <xsl:apply-templates select="." mode="type-name" />
-        </span>
-        <xsl:text> </xsl:text>
-        <span class="codenumber">
-            <xsl:apply-templates select="." mode="number" />
-        </span>
-        <xsl:text> </xsl:text>
-        <span class="title">
-            <xsl:apply-templates select="." mode="title-full" />
-        </span>
-    </xsl:element>
-</xsl:template>
-
 <!-- Add an author's names, if present   -->
 <!-- TODO: make match more restrictive?  -->
 <xsl:template match="&STRUCTURAL;" mode="author-byline">
@@ -1094,33 +1055,55 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Solutions Divisions, Content Generation -->
 <!-- ####################################### -->
 
-<!-- "book" and "article" need to be in the match so this template  -->
-<!-- is defined for those top-level (whole document) cases, even if -->
-<!-- $b-has-heading will always be "false" in these situations.     -->
-<xsl:template match="book|article|part|chapter|section|subsection|subsubsection|exercises|worksheet|reading-questions" mode="division-in-solutions">
-    <xsl:param name="scope" /> <!-- ignored -->
-    <xsl:param name="heading-level"/>
-    <xsl:param name="b-has-heading"/>
-    <xsl:param name="content" />
+<!-- The "division-in-solutions" modal template from -common -->
+<!-- calls the "duplicate-heading" modal template.           -->
 
-    <!-- Usually we create an automatic heading, -->
-    <!-- but not at the root division            -->
-    <xsl:choose>
-        <xsl:when test="$b-has-heading">
-            <!-- as a duplicate of generated content, no HTML id -->
-            <section class="{local-name(.)}">
-                <xsl:apply-templates select="." mode="duplicate-heading">
-                    <xsl:with-param name="heading-level" select="$heading-level"/>
-                </xsl:apply-templates>
-                <!-- we don't do an "author-byline" here in duplication -->
-                <xsl:copy-of select="$content" />
-            </section>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:copy-of select="$content" />
-        </xsl:otherwise>
-    </xsl:choose>
+<xsl:template match="*" mode="duplicate-heading">
+    <xsl:param name="heading-level"/>
+    <xsl:param name="heading-stack" select="."/>
+    <xsl:variable name="hN">
+        <xsl:text>h</xsl:text>
+        <xsl:choose>
+            <xsl:when test="$heading-level > 6">
+                <xsl:text>6</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$heading-level"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:element name="{$hN}">
+        <xsl:attribute name="class">
+            <xsl:text>heading</xsl:text>
+            <xsl:if test="not(self::chapter) or ($numbering-maxlevel = 0)">
+                <xsl:text> hide-type</xsl:text>
+            </xsl:if>
+        </xsl:attribute>
+        <xsl:attribute name="title">
+            <xsl:apply-templates select="." mode="tooltip-text" />
+        </xsl:attribute>
+        <xsl:apply-templates select="$heading-stack" mode="duplicate-heading-content"/>
+    </xsl:element>
 </xsl:template>
+
+<xsl:template match="*" mode="duplicate-heading-content">
+    <xsl:variable name="is-specialized-division-in-unstructured">
+        <xsl:apply-templates select="." mode="is-specialized-division-in-unstructured"/>
+    </xsl:variable>
+    <!-- Since headings stack, we use a "p" to aid screen readers in pausing between headings -->
+    <p class="assistive">
+        <xsl:if test="not($is-specialized-division-in-unstructured = 'true')">
+            <span class="codenumber">
+                <xsl:apply-templates select="." mode="number" />
+            </span>
+            <xsl:text> </xsl:text>
+        </xsl:if>
+        <span class="title">
+            <xsl:apply-templates select="." mode="title-full" />
+        </span>
+    </p>
+</xsl:template>
+
 
 <!-- ############### -->
 <!-- Arbitrary Lists -->
