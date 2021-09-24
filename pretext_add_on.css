@@ -583,6 +583,24 @@ body > a.assistive:focus {
 .heading > p.assistive {
     margin-top: 0;
 }
+/* stacked headings in the solutions backmatter */
+.pretext-content section.solutions > h3.heading,
+.pretext-content section.solutions section > h3.heading {
+    font-size: 1.6em;
+}
+.pretext-content section.solutions > h4.heading,
+.pretext-content section.solutions section > h4.heading {
+    font-size: 1.45em;
+}
+.pretext-content section.solutions > h5.heading,
+.pretext-content section.solutions section > h5.heading {
+    font-size: 1.35em;
+}
+.pretext-content section.solutions > h6.heading,
+.pretext-content section.solutions section > h6.heading {
+    font-size: 1.25em;
+}
+/*
 .heading > p.assistive + p.assistive {
     font-size: 94%;
 }
@@ -595,6 +613,7 @@ body > a.assistive:focus {
 .heading > p.assistive + p.assistive + p.assistive + p.assistive + p.assistive {
     font-size: 85%;
 }
+*/
 
 .collectedworks .knowl-output {
     border: 12px 
@@ -2382,9 +2401,8 @@ a.mjx-svg-href  {
 }
 
 .pretext-content section.solutions {
-    margin-top: 3em;
-    padding-left: 1em;
     font-size: 90%;
+    padding-left: 1em;
     border-left: 1em solid #eeeeee;
 }
 
