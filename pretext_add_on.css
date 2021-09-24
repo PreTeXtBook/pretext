@@ -378,9 +378,15 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     font-size: 1.5em;
     line-height: 1.25em;
 }
+/*
 .pretext-content section section.paragraphs > .heading {
+*/
+.pretext-content .paragraphs > .heading {
     font-size: 1.125em;
     line-height: 1.125em;
+}
+.pretext-content article .paragraphs > .heading {
+    font-size: 1.05em;
 }
 .pretext-content section section section > .heading {
     font-size: 1.40em;
