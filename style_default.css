@@ -160,6 +160,9 @@
   background-color: #f5faff;
   box-shadow: 0 0 1.0em 0.2em #fff inset;
 }
+.pretext-content .aside-like p {
+    overflow-x: auto;
+}
 .pretext-content .aside-like:first-child {
     margin-top: -2.25em;
 }
@@ -224,7 +227,7 @@
 }
 
 .pretext-content .aside-like + *{
-    margin-top: 3em !important;
+    margin-top: 3em; /* !important; */
     margin-right: 3em;
 }
 
@@ -256,9 +259,15 @@
   }
 
   .pretext-content .aside-like + * {
-      margin-top: 1.25em !important;
+      margin-top: 1.25em;
   /*    background: none;  */
       margin-right: 0;
+  }
+  /* previous and next point to the need to rethink asides:  structurally they are
+     in the midts of the other elements, so they affect neighbor selectors.
+     but visually they often are off to the side */
+  .pretext-content .aside-like + .solutions {
+      margin-top: 0;
   }
 
   .pretext-content .aside-like.front:after, .pretext-content .example-like .aside-like.front:after {
