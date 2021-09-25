@@ -7334,6 +7334,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <!-- the HTML element for the cell -->
         <xsl:element name="{$header-row-elt}">
+            <!-- if this is a row of column headers, declare scope="col" -->
+            <xsl:if test="$header-row-elt = 'th'">
+                <xsl:attribute name="scope">
+                    <xsl:text>col</xsl:text>
+                </xsl:attribute>
+            </xsl:if>
             <!-- and the class attribute -->
             <xsl:attribute name="class">
                 <!-- always write alignment, so *precede* all subsequent with a space -->
