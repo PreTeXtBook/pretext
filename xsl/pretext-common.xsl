@@ -3369,6 +3369,23 @@ Book (with parts), "section" at level 3
     <xsl:value-of select="false()" />
 </xsl:template>
 
+<!-- Specialized divisions sometimes get special handling    -->
+<!-- when the parent division is unstructured.               -->
+<!-- NB: designed for specialized divisions that have        -->
+<!-- exercises with solutions (exercises, reading-questions, -->
+<!-- worksheet), but implemented for all five specialized    -->
+<!-- divisions, so as to be used in other contexts.          -->
+<xsl:template match="*" mode="is-specialized-division-in-unstructured">
+    <xsl:value-of select="false()"/>
+</xsl:template>
+
+<xsl:template match="exercises|worksheet|reading-questions|references|glossary" mode="is-specialized-division-in-unstructured">
+    <xsl:variable name="parent-is-structured">
+        <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
+    </xsl:variable>
+    <xsl:value-of select="not($parent-is-structured = 'true')"/>
+</xsl:template>
+
 <!-- Structural Leaves -->
 <!-- Some structural elements of the document tree     -->
 <!-- are the leaves of that tree, meaning they do      -->
@@ -7369,6 +7386,14 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:apply-templates>
 </xsl:template>
 
+<!-- If not explicitly addressed in another template, dry-run returns      -->
+<!-- empty. This is necessary when stacking headings in output from the    -->
+<!-- solutions generator.  The preceding siblings are examined, and it     -->
+<!-- may include elements that do not naturally does a dry-run inspection. -->
+<!-- This wildcard match could make debugging harder, perhaps reporting    -->
+<!-- the element from this template would be useful.                       -->
+<xsl:template match="*" mode="dry-run"/>
+
 <!-- This template is called for items in a worksheet that can have a  -->
 <!-- workspace specified.  It is important that this sometimes returns -->
 <!-- an empty string, since that is a signal to not construct some     -->
@@ -7492,6 +7517,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <xsl:with-param name="purpose" select="$purpose" />
                 <xsl:with-param name="admit"   select="$admit"/>
                 <xsl:with-param name="heading-level" select="$heading-level"/>
+                <xsl:with-param name="scope" select="$scope"/>
                 <xsl:with-param name="b-inline-statement"     select="contains(@inline,     'statement')" />
                 <xsl:with-param name="b-inline-hint"          select="contains(@inline,     'hint')"      />
                 <xsl:with-param name="b-inline-answer"        select="contains(@inline,     'answer')"    />
@@ -7520,6 +7546,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <xsl:with-param name="purpose" select="$purpose" />
                 <xsl:with-param name="admit"   select="$admit"/>
                 <xsl:with-param name="heading-level" select="$heading-level"/>
+                <xsl:with-param name="scope" select="ancestor::*[not(self::backmatter)][1]"/>
                 <xsl:with-param name="b-inline-statement"     select="contains(@inline,     'statement')" />
                 <xsl:with-param name="b-inline-hint"          select="contains(@inline,     'hint')"      />
                 <xsl:with-param name="b-inline-answer"        select="contains(@inline,     'answer')"    />
@@ -7574,7 +7601,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- Context is the originally the scope (root of subtree examined)      -->
 <!-- and is meant to be a "traditional" division, as expressed in        -->
-<!-- the schema.  However, on recusion context can be any division       -->
+<!-- the schema.  However, on recursion context can be any division      -->
 <!-- containing exercises, such as "worksheet".  We do not allow a       -->
 <!-- "solutions" division to live inside a "part", so in the default     -->
 <!-- use a part is not the context.  This is all to explain that         -->
@@ -7583,13 +7610,15 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- On first call, the placing division should have a descriptive       -->
 <!-- title from the author, such as "Solutions to Chapter Exercises",    -->
 <!-- when placed at the level of a section (and assuming default scope). -->
-<!-- So the "b-has-heading" should default to false, *and should not     -->
-<!-- be overridden*.  Recursive calls will set this variable to true,    -->
-<!-- and then there will be sectioning of the solutions.                 -->
 <!--                                                                     -->
-<!-- Similarly, "scope" is set to the context on first call, then        -->
-<!-- replicated/preserved/remembered in recursive calls, so do not       -->
-<!-- pass in a different value.                                          -->
+<!-- "scope" is replicated/preserved/remembered in recursive calls.      -->
+<!--                                                                     -->
+<!-- "heading-stack" is a node set consisting of all divisional nodes    -->
+<!-- between the current node and the scope that warrant having their    -->
+<!-- heading printed when the "leaf" division is finally dropping its    -->
+<!-- content. It includes the "scope" even though the scope's heading    -->
+<!-- may ultimately not be printed. The "division-in-solutions"          -->
+<!-- template can cut scope from the heading-stack when desired.         -->
 <!--                                                                     -->
 <!-- NB: this template is used/called directly by the                    -->
 <!-- "solution-manual-latex.xsl" stylesheet, so coordinate               -->
@@ -7599,8 +7628,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:param name="purpose"/>
     <xsl:param name="admit"/>
     <xsl:param name="heading-level"/>
-    <xsl:param name="b-has-heading" select="false()"/>
-    <xsl:param name="scope" select="."/>
+    <xsl:param name="heading-stack" select="."/>
+    <xsl:param name="scope"/>
     <xsl:param name="b-inline-statement"     />
     <xsl:param name="b-inline-hint"          />
     <xsl:param name="b-inline-answer"        />
@@ -7650,6 +7679,38 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:with-param name="b-project-solution"     select="$b-project-solution" />
         </xsl:apply-templates>
     </xsl:variable>
+
+    <!-- Now apply dry-run to preceding-siblings. If this comes back empty, -->
+    <!-- we know that this division should pass along the heading-stack     -->
+    <!-- node set of ancestors for grouping stacked headings.               -->
+    <!-- Otherwise, set the heading-stack to just this division.            -->
+    <xsl:variable name="preceding-sibling-dry-run">
+        <xsl:apply-templates select="preceding-sibling::*" mode="dry-run">
+            <xsl:with-param name="admit"                  select="$admit"/>
+            <xsl:with-param name="b-inline-statement"     select="$b-inline-statement" />
+            <xsl:with-param name="b-inline-answer"        select="$b-inline-answer" />
+            <xsl:with-param name="b-inline-hint"          select="$b-inline-hint" />
+            <xsl:with-param name="b-inline-solution"      select="$b-inline-solution" />
+            <xsl:with-param name="b-divisional-statement" select="$b-divisional-statement" />
+            <xsl:with-param name="b-divisional-answer"    select="$b-divisional-answer" />
+            <xsl:with-param name="b-divisional-hint"      select="$b-divisional-hint" />
+            <xsl:with-param name="b-divisional-solution"  select="$b-divisional-solution" />
+            <xsl:with-param name="b-worksheet-statement"  select="$b-worksheet-statement" />
+            <xsl:with-param name="b-worksheet-answer"     select="$b-worksheet-answer" />
+            <xsl:with-param name="b-worksheet-hint"       select="$b-worksheet-hint" />
+            <xsl:with-param name="b-worksheet-solution"   select="$b-worksheet-solution" />
+            <xsl:with-param name="b-reading-statement"    select="$b-reading-statement" />
+            <xsl:with-param name="b-reading-answer"       select="$b-reading-answer" />
+            <xsl:with-param name="b-reading-hint"         select="$b-reading-hint" />
+            <xsl:with-param name="b-reading-solution"     select="$b-worksheet-solution" />
+            <xsl:with-param name="b-project-statement"    select="$b-project-statement" />
+            <xsl:with-param name="b-project-answer"       select="$b-project-answer" />
+            <xsl:with-param name="b-project-hint"         select="$b-project-hint" />
+            <xsl:with-param name="b-project-solution"     select="$b-project-solution" />
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:variable name="b-preceding-empty" select="$preceding-sibling-dry-run = ''"/>
+    <xsl:variable name="next-heading-stack" select=".|ancestor::*[$b-preceding-empty and (count(.|$heading-stack) = count($heading-stack))]"/>
 
     <xsl:if test="not($dry-run = '')">
         <!-- We call the only real abstract template, it simply        -->
@@ -7702,7 +7763,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:apply-templates select="." mode="division-in-solutions">
             <xsl:with-param name="scope" select="$scope" />
             <xsl:with-param name="heading-level" select="$heading-level"/>
-            <xsl:with-param name="b-has-heading" select="$b-has-heading"/>
+            <xsl:with-param name="heading-stack" select="$next-heading-stack"/>
             <xsl:with-param name="content">
 
                 <xsl:for-each select="exercise|subexercises|exercisegroup|&PROJECT-LIKE;|paragraphs/exercise|self::worksheet//exercise">
@@ -7782,13 +7843,15 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <!-- On every recursion (not initial call) we request a heading  -->
     <!-- and we pass in the scope of original call for help deciding -->
     <!-- the level of headings given surroundings.                   -->
-    <!-- This is recurrence, so increment $heading-level.            -->
+    <!-- This is recurrence, so one might expect to increment $heading-level. -->
+    <!-- But to collapse stacked headings, we leave heading-level stable at   -->
+    <!-- the "solutions" level and the output stylesheet should increment 1.  -->
     <!-- NB: $b-component-heading is recomputed, so is not passed    -->
     <xsl:apply-templates select="book|article|part|chapter|section|subsection|subsubsection|exercises|worksheet|reading-questions" mode="solutions-generator">
         <xsl:with-param name="purpose" select="$purpose" />
         <xsl:with-param name="admit"   select="$admit"/>
-        <xsl:with-param name="heading-level" select="$heading-level + 1"/>
-        <xsl:with-param name="b-has-heading" select="true()" />
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+        <xsl:with-param name="heading-stack" select="$next-heading-stack"/>
         <xsl:with-param name="scope" select="$scope" />
         <xsl:with-param name="b-inline-statement"     select="$b-inline-statement" />
         <xsl:with-param name="b-inline-answer"        select="$b-inline-answer" />
@@ -7811,6 +7874,56 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:with-param name="b-project-hint"         select="$b-project-hint" />
         <xsl:with-param name="b-project-solution"     select="$b-project-solution" />
     </xsl:apply-templates>
+</xsl:template>
+
+<!-- An abstract outer template for each division when repeated in the solutions.                             -->
+<!-- This calls "duplicate-heading" modal template, which implements output-specific mechanisms for headings. -->
+
+<xsl:template match="book|article|part|chapter|section|subsection|subsubsection|exercises|worksheet|reading-questions" mode="division-in-solutions">
+    <xsl:param name="scope" />
+    <xsl:param name="heading-level"/>
+    <xsl:param name="heading-stack"/>
+    <xsl:param name="content" />
+    <xsl:variable name="is-structured">
+        <xsl:apply-templates select="." mode="is-structured-division"/>
+    </xsl:variable>
+    <xsl:variable name="is-specialized-division-in-unstructured">
+        <xsl:apply-templates select="." mode="is-specialized-division-in-unstructured"/>
+    </xsl:variable>
+
+    <!-- We cut "scope" from heading-stack.                                          -->
+    <xsl:variable name="final-heading-stack" select="ancestor-or-self::*[(count(.|$heading-stack) = count($heading-stack)) and (count(.|$scope) != count($scope))]"/>
+
+    <!-- A structured division cannot have children that have solution-like things   -->
+    <!-- So we withhold headings for such divisions, passing to the "leaf" division, -->
+    <!-- which must itself be unstructured.                                          -->
+    <xsl:choose>
+        <xsl:when test="count($final-heading-stack) = 0">
+            <xsl:copy-of select="$content" />
+        </xsl:when>
+        <!-- Specialize subdivisions in unstructured divisions               -->
+        <!-- have a heading level that is 2 deeper from invoking "solutions" -->
+        <!-- and their heading does not carry the heading stack.             -->
+        <xsl:when test="$is-specialized-division-in-unstructured = 'true'">
+            <xsl:apply-templates select="." mode="duplicate-heading">
+                <xsl:with-param name="heading-level" select="$heading-level + 2"/>
+            </xsl:apply-templates>
+            <xsl:copy-of select="$content" />
+        </xsl:when>
+        <!-- Other leaf divisions do carry a heading stack       -->
+        <!-- and are only 1 deeper than the invoking "solutions" -->
+        <xsl:when test="not($is-structured = 'true')">
+            <xsl:apply-templates select="." mode="duplicate-heading">
+                <xsl:with-param name="heading-level" select="$heading-level + 1"/>
+                <xsl:with-param name="heading-stack" select="$final-heading-stack"/>
+            </xsl:apply-templates>
+            <xsl:copy-of select="$content" />
+        </xsl:when>
+        <!-- Content in something structred should just be recursing down to unstructured leaves. -->
+        <xsl:otherwise>
+            <xsl:copy-of select="$content" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 

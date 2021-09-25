@@ -1448,12 +1448,40 @@ the xsltproc executable.
                     <title>Test Two</title>
 
                     <p>An intervening subsection section which contains an <tag>exercises</tag> division which must be at the level of a Subsubsubsection.</p>
+                    <exercise>
+                        <statement>
+                            <p>An inline exercise to examine any clash with divisional exercises below.</p>
+                        </statement>
+                        <answer>
+                            <p>An answer so there is something to appear in a <tag>solutions</tag>.</p>
+                        </answer>
+                    </exercise>
+
+                    <reading-questions>
+                        <title>What Did You Learn?</title>
+                        <exercise>
+                            <statement>
+                                <p>A mock exercise to appease validation.</p>
+                            </statement>
+                            <answer>
+                                <p>An answer so there is something to appear in a <tag>solutions</tag>.</p>
+                            </answer>
+                        </exercise>
+                        <exercise>
+                            <statement>
+                                <p>And a second to help with formatting the division heading.</p>
+                            </statement>
+                        </exercise>
+                    </reading-questions>
 
                     <exercises>
                         <exercise>
                             <statement>
                                 <p>A mock exercise to appease validation.</p>
                             </statement>
+                            <answer>
+                                <p>An answer so there is something to appear in a <tag>solutions</tag>.</p>
+                            </answer>
                         </exercise>
                         <exercise>
                             <statement>
