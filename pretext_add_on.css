@@ -584,6 +584,14 @@ body > a.assistive:focus {
     margin-top: 0;
 }
 /* stacked headings in the solutions backmatter */
+.pretext-content section.solutions > .heading,
+.pretext-content section.solutions section > .heading {
+    display: block;
+}
+.pretext-content section.solutions > .heading + .heading,
+.pretext-content section.solutions section > .heading + .heading {
+    margin-top: 0;
+} 
 .pretext-content section.solutions > h3.heading,
 .pretext-content section.solutions section > h3.heading {
     font-size: 1.6em;
