@@ -2683,7 +2683,7 @@ the xsltproc executable.
             <subsection>
                 <title><init>HTML</init> and accidental mathematics</title>
 
-                <p>We render mathematics in web pages with the fantastic MathJax Javascript library.  Simplifying just a bit, it recognizes <latex/> syntax within a page, takes control of that text, and replaces it wth nice fonts and formatting.  Now, if you write about <latex/> you might well have some mathematics in your examples.  Best practice would be to use verbatim text for that, and we mark off such text as being off-limits to MathJax.</p>
+                <p>We render mathematics in web pages with the fantastic MathJax Javascript library.  Simplifying just a bit, it recognizes <latex/> syntax within a page, takes control of that text, and replaces it with nice fonts and formatting.  Now, if you write about <latex/> you might well have some mathematics in your examples.  Best practice would be to use verbatim text for that, and we mark off such text as being off-limits to MathJax.</p>
 
                 <p>But if you are writing running text, then you can (accidentally) author some text which MathJax recognizes and converts to something (unintended).  And if you are doing this intentionally, then you have ignored <pretext/> markup for mathematics, and are missing out on some features.</p>
 
@@ -2693,6 +2693,17 @@ the xsltproc executable.
 
                 <p>Display mathematics: \begin{align}x^2+y^2=z^2\end{align}</p>
             </subsection>
+
+            <paragraphs><title>Accidental <latex/></title>
+                <p>The way <latex/> does <q>smart quotes,</q> ``like this,''
+                   causes a conflict with MathJax <ndash/> the backtick is
+                   the delimeter for AsciiMath.  This page may have an
+                   error in the math rendering, or the backticks may not appear,
+                   until this issue is resolved.
+                </p>
+
+                <p>Also check on the multiple backticks a few paragraphs above.</p>
+             </paragraphs>
         </section>
 
         <section xml:id="graphics">
