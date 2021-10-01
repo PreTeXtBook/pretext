@@ -89,7 +89,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- visit the "css" directory and make an update there      -->
 <!-- for the benefit of offline formats                      -->
 <xsl:param name="html.css.server" select="'https://pretextbook.org'" />
-<xsl:param name="html.css.version" select="'0.31'" />
+<xsl:param name="html.css.version" select="'0.4'" />
 <xsl:param name="html.js.server" select="'https://pretextbook.org'" />
 <xsl:param name="html.js.version" select="'0.13'" />
 
