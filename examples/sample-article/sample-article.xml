@@ -1317,25 +1317,19 @@ the xsltproc executable.
 
                 <glossary>
                     <idx>glossary</idx>
-                    <introduction>
-                        <p>A glossary may have an <tag>introduction</tag>, perhaps with some explanation.</p>
-                    </introduction>
+                    <headnote>
+                        <p>A glossary may have a <tag>headnote</tag>, perhaps with some explanation.</p>
+                    </headnote>
 
-                    <terms>
-                        <defined-term>
-                            <title>bar</title>
-                            <p>A part of <term>foobar</term>.  See <xref ref="foobar-defined" text="title"/>.</p>
-                        </defined-term>
+                    <gi>
+                        <title>bar</title>
+                        <p>A part of <term>foobar</term>.  See <xref ref="foobar-defined" text="title"/>.</p>
+                    </gi>
 
-                        <defined-term xml:id="foobar-defined">
-                            <title>foobar</title>
-                            <p>A synonym for the acronym <acro>FUBAR</acro>.</p>
-                        </defined-term>
-                    </terms>
-
-                    <conclusion>
-                        <p>And for symmetry, a <tag>conclusion</tag>.</p>
-                    </conclusion>
+                    <gi xml:id="foobar-defined">
+                        <title>foobar</title>
+                        <p>A synonym for the acronym <acro>FUBAR</acro>.</p>
+                    </gi>
                 </glossary>
 
                 <solutions xml:id="solutions-subsection" inline="hint solution answer" divisional="hint solution answer" project="hint solution answer">
