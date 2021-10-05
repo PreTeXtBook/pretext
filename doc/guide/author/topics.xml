@@ -941,16 +941,6 @@
         <p></p>
     </section>
 
-    <section xml:id="topic-worksheet">
-        <title>(*) Worksheets</title>
-        <p></p>
-    </section>
-
-    <section xml:id="topic-references">
-        <title>(*) Lists of Works Cited (References)</title>
-        <p></p>
-    </section>
-
     <section xml:id="topic-verbatim-literal">
         <title>Verbatim and Literal Text</title>
 
@@ -1317,8 +1307,28 @@
         <p>A <tag>book</tag> may be structured into parts.  After the <tag>frontmatter</tag> and before the <tag>backmatter</tag> there may be a sequence of <tag>part</tag>.  These elements may carry a <tag>title</tag>, and not much else, besides a substantial sequence of <tag>chapter</tag>.  The main effect is to get an extra level of division in the Table of Contents.  For print and <init>PDF</init> there is an entire page devoted to the title and number of the part.  The default numbering is <term>decorative</term>, which means that the chapters are numbered consecutively from the start of the book and do not reset to one at the start of each part.  It is as if the parts were not even there.  The alternative is that parts are <term>structural</term>.  Now each part begins with Chapter 1.  There are other more subtle differences, such as cross-references use a part number if, and only if,  the trip from the cross-reference to its target crosses a boundary of two parts.  The two approaches to part structure may be set via the publisher file, see <xref ref="publisher-file-numbering"/>.</p>
 
         <p>There are exceptions to the above.  For one, <tag>paragraphs</tag> is an anomalous division, as a sort of lightweight sectioning command.  It may appear in any division, at any location within a division, it may not be divided further (it is a leaf of the document tree), it never gets a number, and its title is formatted in a subsidiary way.  I especially like to use this in a two- or three-page <tag>article</tag> that has no other divisions at all.   It is also very useful as a way to subdivide portions of the front matter (<xref ref="topic-front-matter"/>), such as a <tag>preface</tag>. Typical presentation has the title in bold, without much change in font size (if at all), inline with the first paragraph, and perhaps a bit of vertical space as it begins and ends.  Despite the name, it may contain more than just paragraphs, so may contain any top-level-content that would go in any other division.</p>
+    </section>
 
-        <p>Two other anomalous divisions are <tag>exercises</tag> and <tag>references</tag>.  These can be placed as a final component of any division from <tag>chapter</tag> on down.  So for example, an <tag>exercises</tag> could be a peer of several <tag>section</tag>s, contained within a structured <tag>chapter</tag>, and in this case would behave similar to the other <tag>section</tag>s.  Or an unstructured <tag>chapter</tag> may have a sequence of paragraphs, figures, examples, and the like, and conclude with a single <tag>exercises</tag>.  Detail on allowed content and behavior are in <xref ref="topic-exercises" /> and <xref ref="topic-references" />, respectively.</p>
+    <section xml:id="topic-specialized-divisions">
+        <title>Specialized Divisions</title>
+        <idx><h>division</h><h>specialized</h></idx>
+        <idx>specialized division</idx>
+
+        <introduction>
+            <p>There are six divisions that have specialized functions, and therefore have less generic names than ones like <tag>chapter</tag> or <tag>section</tag>.  They are <tag>exercises</tag>, <tag>reading-questions</tag>, <tag>solutions</tag>, <tag>references</tag>, <tag>glossary</tag>, and <tag>worksheet</tag>.  They have some features in common, such as having a <tag>title</tag>, but each is different from the other in substantial ways.</p>
+
+            <p>Generally, a specialized division may be placed within any other division (<xref ref="topic-divisions"/>), and it will behave like a subdivision of that division.  Some may be placed in the back matter and may behave as a version relevant to the entire document.  This section describes the specifics for each type of specialized division.</p>
+        </introduction>
+
+        <subsection xml:id="topic-references">
+            <title>(*) References (Lists of Works Cited)</title>
+            <p></p>
+        </subsection>
+
+        <subsection xml:id="topic-worksheet">
+            <title>(*) Worksheets</title>
+            <p></p>
+        </subsection>
     </section>
 
     <section xml:id="topic-mathematics">
