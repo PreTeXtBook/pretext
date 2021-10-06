@@ -5927,7 +5927,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-has-answer"  />
     <xsl:param name="b-has-solution"  />
 
-
     <!-- The introduction (and conclusion) remain in the "exercise" as part -->
     <!-- of the enhanced source, and so lie outside of the "webwork-reps"   -->
     <xsl:if test="$b-has-statement">
@@ -5939,59 +5938,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- structured into individual stages which are each -->
             <!-- structured as  statement|hint|answer|solution      -->
             <xsl:for-each select="webwork-reps/static/stage">
-                 <xsl:variable name="dry-run">
-                    <xsl:apply-templates select="." mode="dry-run">
-                        <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                        <xsl:with-param name="b-has-hint" select="$b-has-hint" />
-                        <xsl:with-param name="b-has-answer" select="$b-has-answer" />
-                        <xsl:with-param name="b-has-solution" select="$b-has-solution" />
-                    </xsl:apply-templates>
-                </xsl:variable>
-
-                <xsl:if test="not($dry-run = '')">
-                    <xsl:apply-templates select="." mode="leave-vertical-mode"/>
-                    <!-- e.g., Part 2. -->
-                    <xsl:text>\textbf{</xsl:text>
-                    <xsl:call-template name="type-name">
-                        <xsl:with-param name="string-id" select="'part'" />
-                    </xsl:call-template>
-                    <xsl:text> </xsl:text>
-                    <xsl:apply-templates select="." mode="serial-number" />
-                    <xsl:text>.}</xsl:text>
-                    <!-- statement will be inline so needs inline separation, -->
-                    <!-- other components have be preceded with a linebreak   -->
-                    <xsl:if test="$b-has-statement">
-                        <xsl:text>\quad</xsl:text>
-                    </xsl:if>
-                    <xsl:text>%&#xa;</xsl:text>
-                    <xsl:apply-templates select="." mode="exercise-components">
-                        <xsl:with-param name="b-original" select="$b-original"/>
-                        <xsl:with-param name="purpose" select="$purpose"/>
-                        <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
-                        <xsl:with-param name="b-has-statement" select="$b-has-statement"/>
-                        <xsl:with-param name="b-has-hint" select="$b-has-hint"/>
-                        <xsl:with-param name="b-has-answer" select="$b-has-answer"/>
-                        <xsl:with-param name="b-has-solution" select="$b-has-solution"/>
-                    </xsl:apply-templates>
-                    <xsl:if test="following-sibling::stage">
-                        <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
-                    </xsl:if>
+                <xsl:apply-templates select="." mode="leave-vertical-mode"/>
+                <!-- e.g., Part 2. -->
+                <xsl:text>\textbf{</xsl:text>
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'part'" />
+                </xsl:call-template>
+                <xsl:text> </xsl:text>
+                <xsl:apply-templates select="." mode="serial-number" />
+                <xsl:text>.}</xsl:text>
+                <!-- statement will be inline so needs inline separation, -->
+                <!-- other components have be preceded with a linebreak   -->
+                <xsl:if test="$b-has-statement">
+                    <xsl:text>\quad</xsl:text>
                 </xsl:if>
-            </xsl:for-each>
-        </xsl:when>
-        <xsl:otherwise>
-            <!-- static is structured as  statement|hint|answer|solution -->
-            <xsl:variable name="dry-run">
-                <xsl:apply-templates select="webwork-reps/static" mode="dry-run">
-                    <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                    <xsl:with-param name="b-has-hint" select="$b-has-hint" />
-                    <xsl:with-param name="b-has-answer" select="$b-has-answer" />
-                    <xsl:with-param name="b-has-solution" select="$b-has-solution" />
-                </xsl:apply-templates>
-            </xsl:variable>
-
-            <xsl:if test="not($dry-run = '')">
-                <xsl:apply-templates select="webwork-reps/static" mode="exercise-components">
+                <xsl:text>%&#xa;</xsl:text>
+                <xsl:apply-templates select="." mode="exercise-components">
                     <xsl:with-param name="b-original" select="$b-original"/>
                     <xsl:with-param name="purpose" select="$purpose"/>
                     <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
@@ -6000,7 +5962,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="b-has-answer" select="$b-has-answer"/>
                     <xsl:with-param name="b-has-solution" select="$b-has-solution"/>
                 </xsl:apply-templates>
-            </xsl:if>
+                <xsl:if test="following-sibling::stage">
+                    <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
+                </xsl:if>
+            </xsl:for-each>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- static is structured as  statement|hint|answer|solution -->
+            <xsl:apply-templates select="webwork-reps/static" mode="exercise-components">
+                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="purpose" select="$purpose"/>
+                <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
+                <xsl:with-param name="b-has-statement" select="$b-has-statement"/>
+                <xsl:with-param name="b-has-hint" select="$b-has-hint"/>
+                <xsl:with-param name="b-has-answer" select="$b-has-answer"/>
+                <xsl:with-param name="b-has-solution" select="$b-has-solution"/>
+            </xsl:apply-templates>
         </xsl:otherwise>
     </xsl:choose>
 
@@ -6068,7 +6045,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- with up to three level of "task".  When this is done, each      -->
 <!-- level may have an "introduction" and a "conclusion".  This      -->
 <!-- template handles every structure that can have a "task" child,  -->
-<!-- which includes a "task"itself.  We run over each nested "task". -->
+<!-- which includes a "task" itself. We run over each nested "task". -->
 <!-- We make sure a nested list has content, before starting (and    -->
 <!-- later ending) a list to hold the tasks.  Only terminal tasks    -->
 <!-- have statement|hint|answer|solution.                            -->
