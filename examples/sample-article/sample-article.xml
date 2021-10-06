@@ -1241,6 +1241,21 @@ the xsltproc executable.
 
                         <p>But you might want to describe how to use some other calculator, or maybe some numerical method.</p>
                     </technology>
+
+                    <paragraphs>
+                        <title>A <tag>paragraphs</tag> with a <tag>project</tag> with an <tag>answer</tag></title>
+
+                        <p>The solutions to a project (and similar) once did not migrate to the automatically-generated solutions.</p>
+
+                        <project>
+                            <statement>
+                                <p>A simple project, no tasks, just an answer.</p>
+                            </statement>
+                            <answer>
+                                <p>Here's the answer we are looking for.</p>
+                            </answer>
+                        </project>
+                    </paragraphs>
                 </subsubsection>
 
                 <exercises xml:id="exercises-subsection-solo">
