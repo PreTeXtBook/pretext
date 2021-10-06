@@ -2244,7 +2244,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- "paragraphs" are partly like a division, -->
     <!-- but we include it here as a one-off      -->
     <xsl:variable name="miscellaneous-reps" select="
-        ($document-root//defined-term)[1]|
+        ($document-root//gi)[1]|
         ($document-root//proof[parent::hint|parent::answer|parent::solution])[1]|
         ($document-root//proof[not(parent::hint|parent::answer|parent::solution)])[1]|
         ($document-root//case)[1]|
@@ -2768,14 +2768,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>style}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- "defined-term" -->
-<!-- Body:  \begin{definedterm}{title}{label} -->
-<xsl:template match="defined-term" mode="environment">
-    <xsl:text>%% commentary: elective, additional comments in an enhanced edition&#xa;</xsl:text>
-    <xsl:text>\tcbset{ definedtermstyle/.style={</xsl:text>
+<!-- "gi" -->
+<!-- A "glossary item"                         -->
+<!-- Body:  \begin{glossaryitem}{title}{label} -->
+<xsl:template match="gi" mode="environment">
+    <xsl:text>%% glossary item, style and tcolorbox&#xa;</xsl:text>
+    <xsl:text>\tcbset{ glossaryitemstyle/.style={</xsl:text>
     <xsl:apply-templates select="." mode="tcb-style" />
     <xsl:text>} }&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox{definedterm}[2]{title={#1\space}, phantomlabel={#2}, breakable, parbox=false, definedtermstyle}&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{glossaryitem}[2]{title={#1\space}, phantomlabel={#2}, breakable, parbox=false, glossaryitemstyle}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "paragraphs" -->
@@ -3184,10 +3185,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>bwminimalstyle, blockspacingstyle, before skip=5ex, left skip=0.15\textwidth, right skip=0.15\textwidth, fonttitle=\blocktitlefont\large\bfseries, center title, halign=center, bottomtitle=2ex</xsl:text>
 </xsl:template>
 
-<!-- "defined-term" -->
+<!-- "gi" -->
 <!-- Differs only by spacing prior, this could go away  -->
 <!-- if headings, etc handle vertical space correctly   -->
-<xsl:template match="defined-term" mode="tcb-style">
+<xsl:template match="gi" mode="tcb-style">
     <xsl:text>bwminimalstyle, runintitlestyle, </xsl:text>
 </xsl:template>
 
@@ -5061,7 +5062,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- explicit subdivisions, to introduce or summarize -->
 <!-- Title optional (and discouraged), in argument    -->
 <!-- typically just a few paragraphs                  -->
-<xsl:template match="article/introduction|chapter/introduction|section/introduction|subsection/introduction|appendix/introduction|exercises/introduction|solutions/introduction|worksheet/introduction|reading-questions/introduction|glossary/introduction|references/introduction">
+<!-- NB: a glossary has a "headnote" (elsewhere) and does not have a "conclusion" -->
+<xsl:template match="article/introduction|chapter/introduction|section/introduction|subsection/introduction|appendix/introduction|exercises/introduction|solutions/introduction|worksheet/introduction|reading-questions/introduction|references/introduction">
     <xsl:text>\begin{introduction}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
@@ -5071,7 +5073,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{introduction}%&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="article/conclusion|chapter/conclusion|section/conclusion|subsection/conclusion|appendix/conclusion|exercises/conclusion|solutions/conclusion|worksheet/conclusion|reading-questions/conclusion|glossary/conclusion|references/conclusion">
+<xsl:template match="article/conclusion|chapter/conclusion|section/conclusion|subsection/conclusion|appendix/conclusion|exercises/conclusion|solutions/conclusion|worksheet/conclusion|reading-questions/conclusion|references/conclusion">
     <xsl:text>\begin{conclusion}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
@@ -10794,7 +10796,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- be necessary.                                           -->
 <xsl:template match="fn">
     <xsl:choose>
-        <xsl:when test="ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &GOAL-FILTER; or &FIGURE-FILTER; or self::tabular or self::commentary or self::list or self::sidebyside or self::defined-term or self::colophon/parent::backmatter or self::assemblage or self::exercise]">
+        <xsl:when test="ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &GOAL-FILTER; or &FIGURE-FILTER; or self::tabular or self::commentary or self::list or self::sidebyside or self::gi or self::colophon/parent::backmatter or self::assemblage or self::exercise]">
             <!-- a footnote in the text of a caption will migrate to -->
             <!-- the auxiliary file for use in the "list of figures" -->
             <!-- and there is some confusion of braces and the use   -->
@@ -10831,8 +10833,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- no ancestors are implmented by tcolorbox.  Otherwise, we      -->
 <!-- "wait" and pop all interior footnotes later.                  -->
 <!-- NB: these templates could be improved with an entity          -->
-<xsl:template match="&ASIDE-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|tabular|commentary|list|sidebyside|defined-term|&GOAL-LIKE;|backmatter/colophon|assemblage|exercise" mode="pop-footnote-text">
-    <xsl:if test="count(ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &GOAL-FILTER; or &FIGURE-FILTER; or self::tabular or self::commentary or self::list or self::sidebyside or self::defined-term or self::colophon/parent::backmatter or self::assemblage or self::exercise]) = 0">
+<xsl:template match="&ASIDE-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|tabular|commentary|list|sidebyside|gi|&GOAL-LIKE;|backmatter/colophon|assemblage|exercise" mode="pop-footnote-text">
+    <xsl:if test="count(ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &GOAL-FILTER; or &FIGURE-FILTER; or self::tabular or self::commentary or self::list or self::sidebyside or self::gi or self::colophon/parent::backmatter or self::assemblage or self::exercise]) = 0">
         <xsl:for-each select=".//fn">
             <xsl:text>\footnotetext[</xsl:text>
             <xsl:apply-templates select="." mode="serial-number"/>
@@ -10845,14 +10847,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- Very nearly a no-op, but necessary for HTML -->
-<xsl:template match="glossary/terms">
-    <xsl:apply-templates select="defined-term"/>
+<!-- TEMPORARILY: render a glossary "headnote" as an "introduction" -->
+<xsl:template match="glossary/headnote">
+    <xsl:text>%% this should be a new (isomorphic) "headnote" environment&#xa;</xsl:text>
+    <xsl:text>\begin{introduction}{}%&#xa;</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>\end{introduction}%&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Defined Terms, in a Glossary -->
-<xsl:template match="defined-term">
-    <xsl:text>\begin{definedterm}</xsl:text>
+<xsl:template match="gi">
+    <xsl:text>\begin{glossaryitem}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>}</xsl:text>
@@ -10861,7 +10866,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates/>
-    <xsl:text>\end{definedterm}&#xa;</xsl:text>
+    <xsl:text>\end{glossaryitem}&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
