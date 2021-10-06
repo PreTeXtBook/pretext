@@ -122,6 +122,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$document-root" mode="solutions-generator">
         <xsl:with-param name="purpose" select="'solutionmanual'" />
         <xsl:with-param name="admit" select="'all'" />
+        <xsl:with-param name="scope" select="$document-root"/>
         <xsl:with-param name="b-inline-statement"     select="$b-has-inline-statement" />
         <xsl:with-param name="b-inline-hint"          select="$b-has-inline-hint"  />
         <xsl:with-param name="b-inline-answer"        select="$b-has-inline-answer"  />
@@ -145,60 +146,61 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- Hard-code numbers into titles -->
-<xsl:template match="part|chapter|section|subsection|subsubsection|exercises|reading-questions|worksheet" mode="division-in-solutions">
-    <xsl:param name="scope" />
-    <xsl:param name="content" />
+<!-- Not really "duplicate" here in solutions manual, but confomrs to -common -->
+<xsl:template match="*" mode="duplicate-heading">
+    <xsl:param name="heading-stack" select="."/>
 
-    <xsl:variable name="the-number">
-        <xsl:apply-templates select="." mode="number" />
-    </xsl:variable>
-    <xsl:variable name="original-title">
-        <!-- no trailing space if no number -->
-        <xsl:if test="not($the-number = '')">
-            <xsl:value-of select="$the-number" />
-            <xsl:text> </xsl:text>
-        </xsl:if>
-        <xsl:apply-templates select="." mode="title-full" />
-    </xsl:variable>
-    <xsl:variable name="moving-title">
-        <!-- no trailing space if no number -->
-        <xsl:if test="not($the-number = '')">
-            <xsl:value-of select="$the-number" />
-            <xsl:text> </xsl:text>
-        </xsl:if>
-        <xsl:apply-templates select="." mode="title-simple" />
-    </xsl:variable>
+    <!-- Iterate through heading-stack, opening divisions -->
+    <!-- and creating toc entry.                          -->
+    <!-- Number is hard-coded into title                  -->
+    <xsl:for-each select="$heading-stack">
+        <xsl:variable name="the-number">
+            <xsl:apply-templates select="." mode="number" />
+        </xsl:variable>
+        <xsl:variable name="original-title">
+            <!-- no trailing space if no number -->
+            <xsl:if test="not($the-number = '')">
+                <xsl:value-of select="$the-number" />
+                <xsl:text> </xsl:text>
+            </xsl:if>
+            <xsl:apply-templates select="." mode="title-full" />
+        </xsl:variable>
+        <xsl:variable name="moving-title">
+            <!-- no trailing space if no number -->
+            <xsl:if test="not($the-number = '')">
+                <xsl:value-of select="$the-number" />
+                <xsl:text> </xsl:text>
+            </xsl:if>
+            <xsl:apply-templates select="." mode="title-simple" />
+        </xsl:variable>
 
-    <!-- LaTeX heading with hard-coded number -->
-    <xsl:text>\</xsl:text>
-    <xsl:apply-templates select="." mode="division-name" />
-    <xsl:text>*{</xsl:text>
-    <xsl:value-of select="$original-title"/>
-    <xsl:text>}&#xa;</xsl:text>
-    <!-- An entry for the ToC, since we hard-code numbers -->
-    <!-- These mainmatter divisions should always have a number -->
-    <xsl:text>\addcontentsline{toc}{</xsl:text>
-    <xsl:apply-templates select="." mode="division-name" />
-    <xsl:text>}{</xsl:text>
-    <xsl:value-of select="$moving-title"/>
-    <xsl:text>}&#xa;</xsl:text>
-    <!-- Explicit marks, since divisions are the starred form -->
-    <xsl:choose>
-        <xsl:when test="self::chapter">
-            <xsl:text>\chaptermark{</xsl:text>
-            <xsl:value-of select="$moving-title"/>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:when>
-        <!-- "section", "exercises", "worksheet", at section-level, etc. -->
-        <xsl:when test="parent::chapter">
-            <xsl:text>\sectionmark{</xsl:text>
-            <xsl:value-of select="$moving-title"/>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:when>
-    </xsl:choose>
-
-    <xsl:copy-of select="$content" />
+        <xsl:text>\</xsl:text>
+        <xsl:apply-templates select="." mode="division-name" />
+        <xsl:text>*{</xsl:text>
+        <xsl:value-of select="$original-title"/>
+        <xsl:text>}&#xa;</xsl:text>
+        <!-- An entry for the ToC, since we hard-code numbers -->
+        <!-- These mainmatter divisions should always have a number -->
+        <xsl:text>\addcontentsline{toc}{</xsl:text>
+        <xsl:apply-templates select="." mode="division-name" />
+        <xsl:text>}{</xsl:text>
+        <xsl:value-of select="$moving-title"/>
+        <xsl:text>}&#xa;</xsl:text>
+        <!-- Explicit marks, since divisions are the starred form -->
+        <xsl:choose>
+            <xsl:when test="self::chapter">
+                <xsl:text>\chaptermark{</xsl:text>
+                <xsl:value-of select="$moving-title"/>
+                <xsl:text>}&#xa;</xsl:text>
+            </xsl:when>
+            <!-- "section", "exercises", "worksheet", at section-level, etc. -->
+            <xsl:when test="parent::chapter">
+                <xsl:text>\sectionmark{</xsl:text>
+                <xsl:value-of select="$moving-title"/>
+                <xsl:text>}&#xa;</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:for-each>
 </xsl:template>
 
 <!-- Page headers + Chapter/Section XYZ Title      -->
