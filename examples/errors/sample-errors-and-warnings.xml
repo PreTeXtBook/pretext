@@ -663,6 +663,30 @@ systems.
 
         </section>
 
+        <glossary>
+             <idx>glossary</idx>
+            <introduction>
+                <p>A glossary may have an <tag>introduction</tag>, perhaps with some explanation. Here this is an <q>old-style</q> glossary to provoke errors.</p>
+            </introduction>
+
+            <terms>
+                <defined-term>
+                    <title>bar</title>
+                    <p>A part of <term>foobar</term>.  See <xref ref="foobar-defined" text="title"/>.</p>
+                </defined-term>
+
+                <defined-term xml:id="foobar-defined">
+                    <title>foobar</title>
+                    <p>A synonym for the acronym <acro>FUBAR</acro>.</p>
+                </defined-term>
+            </terms>
+
+            <conclusion>
+                <p>And for symmetry, a <tag>conclusion</tag>.</p>
+            </conclusion>
+        </glossary>
+
+
         <!-- These worksheets frequently have too much space alloted, -->
         <!-- so we can test the response to that author "error".      -->
         <!-- 2020-03-22: copied verbatim from the sample article      -->

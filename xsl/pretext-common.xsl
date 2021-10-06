@@ -11337,14 +11337,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
             <xsl:with-param name="incorrect-use" select="($html.css.file != '')" />
     </xsl:call-template>
     <!--  -->
-    <!-- 2019-02-12  "terms" necessary to structure a "glossary"     -->
-    <!-- Never in the schema, but a warning here as a public service -->
-    <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//glossary[not(terms)]" />
-        <xsl:with-param name="date-string" select="'2019-02-12'" />
-        <xsl:with-param name="message" select="'a &quot;glossary&quot; needs to have its &quot;defined-term&quot; structured within a &quot;terms&quot;'"/>
-    </xsl:call-template>
-    <!--  -->
     <!-- 2019-02-20  "todo" items now in comments -->
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurrences" select="$document-root//todo" />
@@ -11710,6 +11702,36 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="$publication/revealjs/resources/@minified" />
         <xsl:with-param name="date-string" select="'2021-09-19'" />
         <xsl:with-param name="message" select="'the Reveal.js publisher option for minified resources (revealjs/resources/@minified) is obsolete and is being ignored.  Removing it will stop this message'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2021-10-04  glossary "introduction" is now a "headnote" -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//glossary/introduction" />
+        <xsl:with-param name="date-string" select="'2021-10-04'" />
+        <xsl:with-param name="message" select="'a &quot;glossary&quot; &quot;introduction&quot; is now a &quot;headnote&quot;.  We will attempt to fix your source.  See the documentation for this, and other changes for &quot;glossary&quot;'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2021-10-04  "terms" was necessary to structure a "glossary", now obsolete -->
+    <!-- Never in the schema, but a warning here as a public service -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//glossary/terms" />
+        <xsl:with-param name="date-string" select="'2021-10-04'" />
+        <xsl:with-param name="message" select="'a &quot;glossary&quot; no longer needs &quot;terms&quot; to structure its items.  We will attempt to fix your source.  See the documentation for this, and other changes for &quot;glossary&quot;'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2021-10-04  "defined-term" has been replaced by "gi" -->
+    <!-- Never in the schema, but a warning here as a public service -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//glossary/terms/defined-term" />
+        <xsl:with-param name="date-string" select="'2021-10-04'" />
+        <xsl:with-param name="message" select="'a &quot;glossary&quot; no longer has &quot;defined-term&quot; but instead has glossary items (&quot;gi&quot;).  We will attempt to fix your source.  See the documentation for this, and other changes for &quot;glossary&quot;'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2021-10-04  glossary "conclusion" is obsolete -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//glossary/conclusion" />
+        <xsl:with-param name="date-string" select="'2021-10-04'" />
+        <xsl:with-param name="message" select="'a &quot;glossary&quot; no longer has a &quot;conclusion&quot;.  It is being ignored, so you will need to design an alternative.  See the documentation for this, and other changes for &quot;glossary&quot;'"/>
     </xsl:call-template>
     <!--  -->
 </xsl:template>
