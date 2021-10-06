@@ -1325,6 +1325,19 @@
             <p></p>
         </subsection>
 
+        <subsection xml:id="topic-glossary">
+            <title>Glossary</title>
+            <idx>glossary</idx>
+
+            <p>A <tag>glossary</tag> division may be placed in any main matter division, and once in the <tag>backmatter</tag>.</p>
+
+            <p>After a <tag>title</tag>, index entries, and other metadata, a <tag>glossary</tag> division may begin with an optional <tag>headnote</tag>, which can use paragraphs to explain anything unusual about a particular glossary.</p>
+
+            <p>The remainder of a glossary is a sequence of items to explain.  Typically these are words, phrases, initialisms, or acronyms.  Each item is a <q>glossary item</q>, enclosed in a shorthand <tag>gi</tag> element.  The element must lead with a <tag>title</tag>, which is the term being explained. The explanation itself follows, typically in a sequence of paragraphs, but unnumbered items, such as an <tag>image</tag> may also be used.  It is the author's responsibility to create the list in the desired order.  Automatic divisions (by initial letter) could be reasonable feature request, perhaps especially for a final, overall, back matter glossary, much like an index.</p>
+
+            <p>For an example, see the <xref ref="glossary" text="custom">glossary</xref> in the back matter of this Guide.</p>
+        </subsection>
+
         <subsection xml:id="topic-worksheet">
             <title>(*) Worksheets</title>
             <p></p>
