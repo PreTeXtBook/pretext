@@ -7766,7 +7766,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:with-param name="heading-stack" select="$next-heading-stack"/>
             <xsl:with-param name="content">
 
-                <xsl:for-each select="exercise|subexercises|exercisegroup|&PROJECT-LIKE;|paragraphs/exercise|self::worksheet//exercise">
+                <!-- N.B.: inline exercises and PROJECT-LIKE can be   -->
+                <!-- "hidden" inside the "paragraphs" pseudo-division -->
+                <xsl:for-each select="exercise|subexercises|exercisegroup|&PROJECT-LIKE;|paragraphs/exercise|paragraphs/*[&PROJECT-FILTER;]|self::worksheet//exercise">
                      <xsl:choose>
                         <xsl:when test="self::exercise and boolean(&INLINE-EXERCISE-FILTER;)">
                             <xsl:apply-templates select="." mode="solutions">
