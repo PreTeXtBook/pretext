@@ -34,6 +34,7 @@
                   <xs:element ref="exercises"/>
                   <xs:element ref="solutions"/>
                   <xs:element ref="references"/>
+                  <xs:element ref="glossary"/>
                 </xs:choice>
                 <xs:element minOccurs="0" ref="outcomes"/>
               </xs:sequence>
@@ -49,6 +50,7 @@
                   <xs:element ref="exercises"/>
                   <xs:element ref="solutions"/>
                   <xs:element ref="references"/>
+                  <xs:element ref="glossary"/>
                 </xs:choice>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                   <xs:element ref="outcomes"/>
@@ -117,6 +119,7 @@
                   <xs:element ref="exercises"/>
                   <xs:element ref="solutions"/>
                   <xs:element ref="references"/>
+                  <xs:element ref="glossary"/>
                 </xs:choice>
                 <xs:element minOccurs="0" ref="outcomes"/>
               </xs:sequence>
@@ -132,6 +135,7 @@
                   <xs:element ref="exercises"/>
                   <xs:element ref="solutions"/>
                   <xs:element ref="references"/>
+                  <xs:element ref="glossary"/>
                 </xs:choice>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                   <xs:element ref="outcomes"/>
@@ -163,6 +167,7 @@
                   <xs:element ref="exercises"/>
                   <xs:element ref="solutions"/>
                   <xs:element ref="references"/>
+                  <xs:element ref="glossary"/>
                 </xs:choice>
                 <xs:element minOccurs="0" ref="outcomes"/>
               </xs:sequence>
@@ -178,6 +183,7 @@
                   <xs:element ref="exercises"/>
                   <xs:element ref="solutions"/>
                   <xs:element ref="references"/>
+                  <xs:element ref="glossary"/>
                 </xs:choice>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                   <xs:element ref="outcomes"/>
@@ -209,6 +215,7 @@
                   <xs:element ref="exercises"/>
                   <xs:element ref="solutions"/>
                   <xs:element ref="references"/>
+                  <xs:element ref="glossary"/>
                 </xs:choice>
                 <xs:element minOccurs="0" ref="outcomes"/>
               </xs:sequence>
@@ -224,6 +231,7 @@
                   <xs:element ref="exercises"/>
                   <xs:element ref="solutions"/>
                   <xs:element ref="references"/>
+                  <xs:element ref="glossary"/>
                 </xs:choice>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                   <xs:element ref="outcomes"/>
@@ -253,6 +261,7 @@
               <xs:element ref="exercises"/>
               <xs:element ref="solutions"/>
               <xs:element ref="references"/>
+              <xs:element ref="glossary"/>
             </xs:choice>
             <xs:element minOccurs="0" ref="outcomes"/>
           </xs:sequence>
@@ -282,6 +291,7 @@
                       <xs:element ref="exercises"/>
                       <xs:element ref="solutions"/>
                       <xs:element ref="references"/>
+                      <xs:element ref="glossary"/>
                     </xs:choice>
                     <xs:element minOccurs="0" ref="outcomes"/>
                   </xs:sequence>
@@ -297,6 +307,7 @@
                       <xs:element ref="exercises"/>
                       <xs:element ref="solutions"/>
                       <xs:element ref="references"/>
+                      <xs:element ref="glossary"/>
                     </xs:choice>
                     <xs:choice minOccurs="0" maxOccurs="unbounded">
                       <xs:element ref="outcomes"/>
@@ -333,6 +344,7 @@
                       <xs:element ref="exercises"/>
                       <xs:element ref="solutions"/>
                       <xs:element ref="references"/>
+                      <xs:element ref="glossary"/>
                     </xs:choice>
                     <xs:element minOccurs="0" ref="outcomes"/>
                   </xs:sequence>
@@ -348,6 +360,7 @@
                       <xs:element ref="exercises"/>
                       <xs:element ref="solutions"/>
                       <xs:element ref="references"/>
+                      <xs:element ref="glossary"/>
                     </xs:choice>
                     <xs:choice minOccurs="0" maxOccurs="unbounded">
                       <xs:element ref="outcomes"/>
@@ -836,6 +849,18 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  <xs:element name="glossary">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="MetaDataShortTitleOptional">
+          <xs:sequence>
+            <xs:element minOccurs="0" ref="headnote"/>
+            <xs:element maxOccurs="unbounded" ref="gi"/>
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
   <xs:group name="BlockText">
     <xs:choice>
       <xs:group ref="Paragraph"/>
@@ -1030,6 +1055,11 @@
       </xs:element>
     </xs:sequence>
   </xs:group>
+  <xs:element name="headnote">
+    <xs:complexType>
+      <xs:group maxOccurs="unbounded" ref="BlockStatementNoCaption"/>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="objectives">
     <xs:complexType>
       <xs:sequence>
@@ -2171,6 +2201,15 @@
       </xs:element>
     </xs:sequence>
   </xs:group>
+  <xs:element name="gi">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="MetaDataTitle">
+          <xs:group maxOccurs="unbounded" ref="BlockStatementNoCaption"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="contributor">
     <xs:complexType>
       <xs:sequence>

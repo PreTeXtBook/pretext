@@ -17,7 +17,7 @@
                             Objectives?,
                             (BlockDivision | Paragraphs | Commentary)+,
                             (ReadingQuestions? & Exercises? &
-                             Solutions? & References?),
+                             Solutions? & References? & Glossary?),
                             Outcomes?
                         )
                     |
@@ -25,7 +25,7 @@
                             (Objectives? & IntroductionDivision?),
                             Section,
                             (Section | ReadingQuestions | Exercises |
-                             Solutions | References)*,
+                             Solutions | References | Glossary)*,
                             (Outcomes? & ConclusionDivision?),
                             ArticleBackMatter?
                         )
@@ -57,7 +57,7 @@
                             Objectives?,
                             (BlockDivision | Paragraphs | Commentary)+,
                             (ReadingQuestions? & Exercises? &
-                             Solutions? & References?),
+                             Solutions? & References? & Glossary?),
                             Outcomes?
                         )
                     |
@@ -65,7 +65,7 @@
                             (Objectives? & IntroductionDivision?),
                             Section,
                             (Section | ReadingQuestions | Exercises |
-                             Solutions | References)*,
+                             Solutions | References | Glossary)*,
                             (Outcomes? & ConclusionDivision?)
                         )
                     )
@@ -79,7 +79,7 @@
                             Objectives?,
                             (BlockDivision | Paragraphs | Commentary)+,
                             (ReadingQuestions? & Exercises? &
-                             Solutions? & References?),
+                             Solutions? & References? & Glossary?),
                             Outcomes?
                         )
                     |
@@ -87,7 +87,7 @@
                             (Objectives? & IntroductionDivision?),
                             Subsection,
                             (Subsection | ReadingQuestions | Exercises |
-                             Solutions | References)*,
+                             Solutions | References | Glossary)*,
                             (Outcomes? & ConclusionDivision?)
                         )
                     )
@@ -101,7 +101,7 @@
                             Objectives?,
                             (BlockDivision | Paragraphs | Commentary)+,
                             (ReadingQuestions? & Exercises? &
-                             Solutions? & References?),
+                             Solutions? & References? & Glossary?),
                             Outcomes?
                         )
                     |
@@ -109,7 +109,7 @@
                             (Objectives? & IntroductionDivision?),
                             Subsubsection,
                             (Subsubsection | ReadingQuestions | Exercises |
-                             Solutions | References)*,
+                             Solutions | References | Glossary)*,
                             (Outcomes? & ConclusionDivision?)
                         )
                     )
@@ -121,7 +121,7 @@
                     Objectives?,
                     (BlockDivision | Paragraphs | Commentary)+,
                     (ReadingQuestions? & Exercises? &
-                     Solutions? & References?),
+                     Solutions? & References? & Glossary?),
                     Outcomes?
                 }
             ArticleAppendix =
@@ -134,7 +134,7 @@
                             (BlockDivision | Paragraphs | Commentary |
                              NotationList)+,
                             (ReadingQuestions? & Exercises? &
-                             Solutions? & References?),
+                             Solutions? & References? & Glossary?),
                             Outcomes?
                         )
                     |
@@ -142,7 +142,7 @@
                             (Objectives? & IntroductionDivision?),
                             Subsection,
                             (Subsection | ReadingQuestions | Exercises |
-                             Solutions | References)*,
+                             Solutions | References | Glossary)*,
                             (Outcomes? & ConclusionDivision?)
                         )
                     )
@@ -157,14 +157,14 @@
                             (BlockDivision | Paragraphs | Commentary |
                              NotationList)+,
                             (ReadingQuestions? & Exercises? &
-                             Solutions? & References?),
+                             Solutions? & References? & Glossary?),
                             Outcomes?
                         )
                     |
                         (
                             (Objectives? & IntroductionDivision?),
                             Section,
-                            (Section | ReadingQuestions | Exercises | Solutions | References)*,
+                            (Section | ReadingQuestions | Exercises | Solutions | References | Glossary)*,
                             (Outcomes? & ConclusionDivision?)
                         )
                     )
@@ -364,6 +364,12 @@
                     BibliographyItem+,
                     ConclusionDivision?
                 }
+            Glossary =
+                element glossary {
+                    MetaDataShortTitleOptional,
+                    HeadNote?,
+                    GlossaryItem+
+                }
             
             BlockText =
                 Paragraph | BlockQuote | Preformatted |
@@ -432,6 +438,8 @@
                     MetaDataTitleOptional?,
                     BlockDivision+
                 }
+            HeadNote =
+                element headnote {BlockStatementNoCaption+}
             
             Objectives =
                 element objectives {
@@ -946,6 +954,12 @@
             BibVolume = element volume {text}
             BibTitle = element title {TextLong}
             BibNote = element note {UniqueID?, Paragraph+}
+            
+            GlossaryItem =
+                element gi {
+                    MetaDataTitle,
+                    BlockStatementNoCaption+
+                }
             
             Contributor =
                 element contributor {

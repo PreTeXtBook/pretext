@@ -47,6 +47,9 @@
             <optional>
               <ref name="References"/>
             </optional>
+            <optional>
+              <ref name="Glossary"/>
+            </optional>
           </interleave>
           <optional>
             <ref name="Outcomes"/>
@@ -69,6 +72,7 @@
               <ref name="Exercises"/>
               <ref name="Solutions"/>
               <ref name="References"/>
+              <ref name="Glossary"/>
             </choice>
           </zeroOrMore>
           <interleave>
@@ -155,6 +159,9 @@
             <optional>
               <ref name="References"/>
             </optional>
+            <optional>
+              <ref name="Glossary"/>
+            </optional>
           </interleave>
           <optional>
             <ref name="Outcomes"/>
@@ -177,6 +184,7 @@
               <ref name="Exercises"/>
               <ref name="Solutions"/>
               <ref name="References"/>
+              <ref name="Glossary"/>
             </choice>
           </zeroOrMore>
           <interleave>
@@ -222,6 +230,9 @@
             <optional>
               <ref name="References"/>
             </optional>
+            <optional>
+              <ref name="Glossary"/>
+            </optional>
           </interleave>
           <optional>
             <ref name="Outcomes"/>
@@ -244,6 +255,7 @@
               <ref name="Exercises"/>
               <ref name="Solutions"/>
               <ref name="References"/>
+              <ref name="Glossary"/>
             </choice>
           </zeroOrMore>
           <interleave>
@@ -289,6 +301,9 @@
             <optional>
               <ref name="References"/>
             </optional>
+            <optional>
+              <ref name="Glossary"/>
+            </optional>
           </interleave>
           <optional>
             <ref name="Outcomes"/>
@@ -311,6 +326,7 @@
               <ref name="Exercises"/>
               <ref name="Solutions"/>
               <ref name="References"/>
+              <ref name="Glossary"/>
             </choice>
           </zeroOrMore>
           <interleave>
@@ -354,6 +370,9 @@
         <optional>
           <ref name="References"/>
         </optional>
+        <optional>
+          <ref name="Glossary"/>
+        </optional>
       </interleave>
       <optional>
         <ref name="Outcomes"/>
@@ -392,6 +411,9 @@
             <optional>
               <ref name="References"/>
             </optional>
+            <optional>
+              <ref name="Glossary"/>
+            </optional>
           </interleave>
           <optional>
             <ref name="Outcomes"/>
@@ -414,6 +436,7 @@
               <ref name="Exercises"/>
               <ref name="Solutions"/>
               <ref name="References"/>
+              <ref name="Glossary"/>
             </choice>
           </zeroOrMore>
           <interleave>
@@ -460,6 +483,9 @@
             <optional>
               <ref name="References"/>
             </optional>
+            <optional>
+              <ref name="Glossary"/>
+            </optional>
           </interleave>
           <optional>
             <ref name="Outcomes"/>
@@ -482,6 +508,7 @@
               <ref name="Exercises"/>
               <ref name="Solutions"/>
               <ref name="References"/>
+              <ref name="Glossary"/>
             </choice>
           </zeroOrMore>
           <interleave>
@@ -955,6 +982,17 @@
       </optional>
     </element>
   </define>
+  <define name="Glossary">
+    <element name="glossary">
+      <ref name="MetaDataShortTitleOptional"/>
+      <optional>
+        <ref name="HeadNote"/>
+      </optional>
+      <oneOrMore>
+        <ref name="GlossaryItem"/>
+      </oneOrMore>
+    </element>
+  </define>
   <define name="BlockText">
     <choice>
       <ref name="Paragraph"/>
@@ -1119,6 +1157,13 @@
       </optional>
       <oneOrMore>
         <ref name="BlockDivision"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="HeadNote">
+    <element name="headnote">
+      <oneOrMore>
+        <ref name="BlockStatementNoCaption"/>
       </oneOrMore>
     </element>
   </define>
@@ -2373,6 +2418,14 @@
       </optional>
       <oneOrMore>
         <ref name="Paragraph"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="GlossaryItem">
+    <element name="gi">
+      <ref name="MetaDataTitle"/>
+      <oneOrMore>
+        <ref name="BlockStatementNoCaption"/>
       </oneOrMore>
     </element>
   </define>

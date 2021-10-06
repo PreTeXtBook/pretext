@@ -97,7 +97,7 @@
                             Objectives?,
                             (BlockDivision | Paragraphs | Commentary)+,
                             (ReadingQuestions? &amp; Exercises? &amp;
-                             Solutions? &amp; References?),
+                             Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
                         )
                     |
@@ -105,7 +105,7 @@
                             (Objectives? &amp; IntroductionDivision?),
                             Section,
                             (Section | ReadingQuestions | Exercises |
-                             Solutions | References)*,
+                             Solutions | References | Glossary)*,
                             (Outcomes? &amp; ConclusionDivision?),
                             ArticleBackMatter?
                         )
@@ -152,7 +152,7 @@
                             Objectives?,
                             (BlockDivision | Paragraphs | Commentary)+,
                             (ReadingQuestions? &amp; Exercises? &amp;
-                             Solutions? &amp; References?),
+                             Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
                         )
                     |
@@ -160,7 +160,7 @@
                             (Objectives? &amp; IntroductionDivision?),
                             Section,
                             (Section | ReadingQuestions | Exercises |
-                             Solutions | References)*,
+                             Solutions | References | Glossary)*,
                             (Outcomes? &amp; ConclusionDivision?)
                         )
                     )
@@ -174,7 +174,7 @@
                             Objectives?,
                             (BlockDivision | Paragraphs | Commentary)+,
                             (ReadingQuestions? &amp; Exercises? &amp;
-                             Solutions? &amp; References?),
+                             Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
                         )
                     |
@@ -182,7 +182,7 @@
                             (Objectives? &amp; IntroductionDivision?),
                             Subsection,
                             (Subsection | ReadingQuestions | Exercises |
-                             Solutions | References)*,
+                             Solutions | References | Glossary)*,
                             (Outcomes? &amp; ConclusionDivision?)
                         )
                     )
@@ -196,7 +196,7 @@
                             Objectives?,
                             (BlockDivision | Paragraphs | Commentary)+,
                             (ReadingQuestions? &amp; Exercises? &amp;
-                             Solutions? &amp; References?),
+                             Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
                         )
                     |
@@ -204,7 +204,7 @@
                             (Objectives? &amp; IntroductionDivision?),
                             Subsubsection,
                             (Subsubsection | ReadingQuestions | Exercises |
-                             Solutions | References)*,
+                             Solutions | References | Glossary)*,
                             (Outcomes? &amp; ConclusionDivision?)
                         )
                     )
@@ -216,7 +216,7 @@
                     Objectives?,
                     (BlockDivision | Paragraphs | Commentary)+,
                     (ReadingQuestions? &amp; Exercises? &amp;
-                     Solutions? &amp; References?),
+                     Solutions? &amp; References? &amp; Glossary?),
                     Outcomes?
                 }
             ArticleAppendix =
@@ -229,7 +229,7 @@
                             (BlockDivision | Paragraphs | Commentary |
                              NotationList)+,
                             (ReadingQuestions? &amp; Exercises? &amp;
-                             Solutions? &amp; References?),
+                             Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
                         )
                     |
@@ -237,7 +237,7 @@
                             (Objectives? &amp; IntroductionDivision?),
                             Subsection,
                             (Subsection | ReadingQuestions | Exercises |
-                             Solutions | References)*,
+                             Solutions | References | Glossary)*,
                             (Outcomes? &amp; ConclusionDivision?)
                         )
                     )
@@ -252,14 +252,14 @@
                             (BlockDivision | Paragraphs | Commentary |
                              NotationList)+,
                             (ReadingQuestions? &amp; Exercises? &amp;
-                             Solutions? &amp; References?),
+                             Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
                         )
                     |
                         (
                             (Objectives? &amp; IntroductionDivision?),
                             Section,
-                            (Section | ReadingQuestions | Exercises | Solutions | References)*,
+                            (Section | ReadingQuestions | Exercises | Solutions | References | Glossary)*,
                             (Outcomes? &amp; ConclusionDivision?)
                         )
                     )
@@ -311,7 +311,7 @@
     </section>
 
     <section>
-        <title>Universal Divisions</title>
+        <title>Specialized Divisions</title>
 
         <p>We add specialized divisions, which may appear within any of the above divisions.  Titles will be provided as defaults.</p>
 
@@ -358,6 +358,12 @@
                     IntroductionDivision?,
                     BibliographyItem+,
                     ConclusionDivision?
+                }
+            Glossary =
+                element glossary {
+                    MetaDataShortTitleOptional,
+                    HeadNote?,
+                    GlossaryItem+
                 }
             </code>
         </fragment>
@@ -883,12 +889,14 @@
     </section>
 
     <section>
-        <title>Introductions and Conclusions</title>
+        <title>Introductions, Conclusions, and Headnotes</title>
 
         <p>The <c>introduction</c> and <c>conclusion</c> containers can be used in a variety of other structured elements.  They come in three levels, according to what they can contain, and are meant to be consonant with their surroundings.  As children of a division, they may carry a <c>title</c>, which in turn allows them to be cross-referenced by that text.</p>
 
-        <fragment xml:id="introduction-conclusion">
-            <title>Introductions and conclusions</title>
+        <p>A <tag>headnote</tag> is like an <tag>introduction</tag>, but does not have a symmetric concluding element, and is typically meant for specialized divisions, such as a <tag>glossary</tag>.</p>
+
+        <fragment xml:id="introduction-conclusion-headnote">
+            <title>Introductions, conclusions, headnotes</title>
             <code>
             IntroductionText =
                 element introduction {BlockText+}
@@ -912,6 +920,8 @@
                     MetaDataTitleOptional?,
                     BlockDivision+
                 }
+            HeadNote =
+                element headnote {BlockStatementNoCaption+}
             </code>
         </fragment>
     </section>
@@ -1766,6 +1776,23 @@
     </section>
 
     <section>
+        <title>Glossary</title>
+
+        <p>A <tag>glossary</tag> is primarly built up as a sequence of <q>glossary items,</q>, using the <tag>gi</tag> element, by analogy with list items.</p>
+
+        <fragment xml:id="glossary">
+            <title>Glossary</title>
+            <code>
+            GlossaryItem =
+                element gi {
+                    MetaDataTitle,
+                    BlockStatementNoCaption+
+                }
+            </code>
+        </fragment>
+    </section>
+
+    <section>
         <title>Examples and Questions</title>
 
         <p>Expository, but with solutions, etc. (Borrows from exercises and projects.)</p>
@@ -2453,7 +2480,7 @@
             <fragref ref="universal" />
             <fragref ref="block" />
             <fragref ref="block-component" />
-            <fragref ref="introduction-conclusion" />
+            <fragref ref="introduction-conclusion-headnote" />
             <fragref ref="objective-outcome" />
             <fragref ref="blockquote" />
             <fragref ref="verbatimdisplay" />
@@ -2477,6 +2504,7 @@
             <fragref ref="exercise" />
             <fragref ref="poetry" />
             <fragref ref="bibliography" />
+            <fragref ref="glossary" />
             <fragref ref="contributor" />
             <fragref ref="webwork" />
             <fragref ref="literate-programming" />
