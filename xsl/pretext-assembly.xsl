@@ -404,6 +404,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </usage>
 </xsl:template>
 
+<!-- 2021-10-04 "glossary" was finalized, so old-style preserved -->
+
+<!-- glossary introductions become headnotes -->
+<xsl:template match="glossary/introduction" mode="assembly">
+    <headnote>
+        <xsl:apply-templates select="node()|@*" mode="assembly"/>
+    </headnote>
+</xsl:template>
+
+<!-- "terms" only ever had "defined-term" as children    -->
+<!-- and is now obsolete, so dropped as excess structure -->
+<xsl:template match="glossary/terms" mode="assembly">
+    <xsl:apply-templates select="defined-term" mode="assembly"/>
+</xsl:template>
+
+<!-- "defined-term" was structured, so we just select elements -->
+<xsl:template match="glossary/terms/defined-term" mode="assembly">
+    <gi>
+        <xsl:apply-templates select="*|@*" mode="assembly"/>
+    </gi>
+</xsl:template>
+
+<!-- no more "conclusion", so drop it here; deprecation will warn -->
+<xsl:template match="glossary/conclusion" mode="assembly"/>
+
 <!-- ######## -->
 <!-- Versions -->
 <!-- ######## -->
