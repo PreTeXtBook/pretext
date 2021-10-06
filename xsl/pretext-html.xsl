@@ -472,12 +472,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- One exception: the "solutions" division has no children, -->
         <!-- it just gets built (via a modal template so it does not  -->
         <!-- come back through here).                                 -->
+        <!-- NB: *another exception* is "glossary" which is presumed  -->
+        <!-- to have a certain structure that is being enforced by    -->
+        <!-- the specificity of the templates                         -->
+        <!-- TODO: call some (modal) template that treats some        -->
+        <!-- divisions specially, but defaults to a generic           -->
+        <!-- application of templates to nodes.                       -->
         <xsl:choose>
             <xsl:when test="self::solutions">
                 <!-- this is not recurrence, do not increment heading-level -->
                 <xsl:apply-templates select="." mode="solutions">
                     <xsl:with-param name="heading-level" select="$heading-level"/>
                 </xsl:apply-templates>
+            </xsl:when>
+            <!-- A glossary has a headnote, followed by a sequence  -->
+            <!-- of glossary items ('gi").  This could be the place -->
+            <!-- to get fancy and segment the entries with spacing  -->
+            <!-- by letter, or similar.                             -->
+            <xsl:when test="self::glossary">
+                <xsl:apply-templates select="headnote"/>
+                <dl class="glossary">
+                    <xsl:apply-templates select="gi"/>
+                </dl>
             </xsl:when>
             <xsl:otherwise>
                 <!-- this is usually recurrence, so increment heading-level, -->
@@ -1170,21 +1186,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="contributor" />
 </xsl:template>
 
-<!-- ######## -->
-<!-- Glossary -->
-<!-- ######## -->
-
-<!-- A glossary has an introduction and conclusion, then -->
-<!-- "defined-term" inside a "term" element. Here we     -->
-<!-- implement a basic definition for "term", but this   -->
-<!-- could be the place to get fancy and segment the     -->
-<!-- entries with spacing by letter, or similar.         -->
-<xsl:template match="glossary/terms">
-    <dl class="glossary">
-        <xsl:apply-templates select="defined-term"/>
-    </dl>
-</xsl:template>
-
 <!-- ############## -->
 <!-- Index Creation -->
 <!-- ############## -->
@@ -1763,7 +1764,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="commentary" mode="xref-as-knowl">
     <xsl:value-of select="$b-commentary" />
 </xsl:template>
-<xsl:template match="fn|p|blockquote|biblio|biblio/note|defined-term|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|&GOAL-LIKE;|exercise|hint|answer|solution|exercisegroup|men|mrow|li[not(parent::var)]|contributor|fragment" mode="xref-as-knowl">
+<xsl:template match="fn|p|blockquote|biblio|biblio/note|gi|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|&GOAL-LIKE;|exercise|hint|answer|solution|exercisegroup|men|mrow|li[not(parent::var)]|contributor|fragment" mode="xref-as-knowl">
     <xsl:value-of select="not($b-skip-knowls)" />
 </xsl:template>
 
@@ -2420,7 +2421,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- (7) TODO: "wrapped-content" called by "body" to separate code. -->
 
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|defined-term|p|li|me|men|md|mdn|fragment">
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|gi|p|li|me|men|md|mdn|fragment">
     <xsl:param name="b-original" select="true()" />
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
@@ -4560,33 +4561,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Defined Terms (of a Glossary) -->
 
 <!-- Never born-hidden, always in "glossary" -->
-<xsl:template match="defined-term" mode="is-hidden">
+<xsl:template match="gi" mode="is-hidden">
     <xsl:text>false</xsl:text>
 </xsl:template>
 
 <!-- Overall enclosing element -->
-<xsl:template match="defined-term" mode="body-element">
+<xsl:template match="gi" mode="body-element">
     <xsl:text>article</xsl:text>
 </xsl:template>
 
 <!-- And its CSS class -->
-<xsl:template match="defined-term" mode="body-css-class">
+<xsl:template match="gi" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
 </xsl:template>
 
 <!-- Never born hidden -->
-<xsl:template match="defined-term" mode="hidden-knowl-placement" />
+<xsl:template match="gi" mode="hidden-knowl-placement" />
 
 <!-- When born use this heading -->
-<xsl:template match="defined-term" mode="heading-birth" />
+<xsl:template match="gi" mode="heading-birth" />
 
 <!-- Heading for interior of xref-knowl content -->
 <!-- Not necessary, obvious by appearance       -->
-<xsl:template match="defined-term" mode="heading-xref-knowl" />
+<xsl:template match="gi" mode="heading-xref-knowl" />
 
 <!-- Glossary defined terms have more structure -->
 <!-- The id is placed on the title as a target  -->
-<xsl:template match="defined-term" mode="body">
+<xsl:template match="gi" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
     <xsl:choose>
@@ -5486,6 +5487,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
     </xsl:element>
+</xsl:template>
+
+<!-- A "headnote" prefaces the content of a "glossary".  Below -->
+<!-- is modeled on block introductions (just above), but with  -->
+<!-- no "title" and with a provisional recycled CSS class.     -->
+<xsl:template match="glossary/headnote">
+    <xsl:param name="b-original" select="true()" />
+    <section class="headnote">
+        <xsl:if test="$b-original">
+            <xsl:attribute name="id">
+                <xsl:apply-templates select="." mode="html-id" />
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:apply-templates>
+            <xsl:with-param name="b-original" select="$b-original" />
+        </xsl:apply-templates>
+    </section>
 </xsl:template>
 
 <!-- Prelude, Interlude, Postlude -->
