@@ -131,8 +131,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Lists and their items -->
     <localization string-id='list'>Seznam</localization>
     <localization string-id='li'>Bod</localization>
-    <!-- A term (word) defined in a glossary -->
-    <localization string-id='defined-term'>Termín</localization>
+    <!-- A term (word) defined in a glossary item -->
+    <localization string-id='gi'>Termín</localization>
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'>Odstavec</localization>
     <localization string-id='blockquote'>Citát</localization>

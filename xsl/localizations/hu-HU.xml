@@ -131,8 +131,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Lists and their items -->
     <localization string-id='list'>Lista</localization>
     <localization string-id='li'>Tétel</localization>
-    <!-- A term (word) defined in a glossary -->
-    <!-- <localization string-id='defined-term'>Term</localization> -->
+    <!-- A term (word) defined in a glossary item -->
+    <!-- <localization string-id='gi'>Term</localization> -->
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'>Paragrafus</localization>
     <localization string-id='blockquote'>Idézet</localization>

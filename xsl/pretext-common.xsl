@@ -197,10 +197,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The next three are containers -->
 <xsl:strip-space elements="prelude interlude postlude" />
 <xsl:strip-space elements="aside blockquote assemblage" />
-<xsl:strip-space elements="list terms" />
+<xsl:strip-space elements="list" />
 <xsl:strip-space elements="sage program console task" />
 <xsl:strip-space elements="exercisegroup page" />
-<xsl:strip-space elements="ul ol dl defined-term" />
+<xsl:strip-space elements="ul ol dl gi" />
 <xsl:strip-space elements="md mdn quantity" />
 <xsl:strip-space elements="sage figure table listing index" />
 <xsl:strip-space elements="sidebyside paragraphs" />
@@ -3906,7 +3906,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:value-of select="true()"/>
 </xsl:template>
 <!-- Miscellaneous -->
-<xsl:template match="paragraphs|proof|case|defined-term|exercisegroup" mode="title-wants-punctuation">
+<xsl:template match="paragraphs|proof|case|exercisegroup" mode="title-wants-punctuation">
     <xsl:value-of select="true()"/>
 </xsl:template>
 <!-- Titled: list items, tasks of exercise, PROJECT-LIKE, EXAMPLE-LIKE -->
@@ -5517,8 +5517,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- components of exercises, so we might need to explicitly   -->
 <!-- make webwork/solution, etc to be unnumbered.              -->
 
-<!-- Defined terms, in a "glossary", are known by their title  -->
-<xsl:template match="defined-term" mode="serial-number"/>
+<!-- Glossary items ("gi"), in a "glossary", are known by their title -->
+<xsl:template match="gi" mode="serial-number"/>
 
 <!-- GOAL-LIKE are one-per-subdivision,               -->
 <!-- and so get their serial number from their parent -->
@@ -9173,7 +9173,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- yes/no boolean for valid targets of an "xref"         -->
 <!-- Initial list from entities file as of 2021-02-10      -->
 <!-- Others from test docs, public testing via pretext-dev -->
-<xsl:template match="&STRUCTURAL;|&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|&SOLUTION-LIKE;|exercise|task|exercisegroup|poem|assemblage|paragraphs|li|fn|men|mrow|biblio|proof|case|contributor|defined-term" mode="is-xref-target">
+<xsl:template match="&STRUCTURAL;|&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|&SOLUTION-LIKE;|exercise|task|exercisegroup|poem|assemblage|paragraphs|li|fn|men|mrow|biblio|proof|case|contributor|gi" mode="is-xref-target">
     <xsl:value-of select="'yes'"/>
 </xsl:template>
 

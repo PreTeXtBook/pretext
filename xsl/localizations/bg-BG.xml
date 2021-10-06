@@ -147,8 +147,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Lists and their items -->
     <localization string-id='list'>Списък</localization>
     <localization string-id='li'>Точка</localization>
-    <!-- A term (word) defined in a glossary -->
-    <localization string-id='defined-term'>Термин</localization>
+    <!-- A term (word) defined in a glossary item -->
+    <localization string-id='gi'>Термин</localization>
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'>Абзац</localization>
     <localization string-id='blockquote'>Цитат</localization>
