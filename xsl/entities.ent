@@ -71,6 +71,8 @@
 <!-- statement + proof -->
 <!ENTITY THEOREM-LIKE "theorem|corollary|lemma|algorithm|proposition|claim|fact|identity">
 <!ENTITY THEOREM-FILTER "self::theorem or self::corollary or self::lemma or self::algorithm or self::proposition or self::claim or self::fact or self::identity">
+<!-- catch a proof that is inside THEOREM-LIKE -->
+<!ENTITY INNER-PROOF-FILTER "self::proof and (parent::theorem or parent::corollary or parent::lemma or parent::algorithm or parent::proposition or parent::claim or parent::fact or parent::identity)">
 
 <!-- a mathematical statement, but never with a proof -->
 <!ENTITY AXIOM-LIKE "axiom|conjecture|principle|heuristic|hypothesis|assumption">
