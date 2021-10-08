@@ -323,12 +323,14 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 
 .pretext-content section > .heading {
     font-size: 1.75em;
-    line-height: 1.42857em;
+    line-height: 1.25em;
     margin-top: 1em;
+    margin-bottom: 0.35em;
 }
 .pretext-content section section > .heading {
     font-size: 1.5em;
     line-height: 1.25em;
+    margin-bottom: 0;
 }
 .pretext-content .paragraphs > .heading {
     font-size: 1.125em;
@@ -1611,7 +1613,8 @@ body > a.assistive:focus {
 }
 
 .pretext-content dl > dt {
-        font-weight: bold;
+    font-weight: bold;
+    max-width: 55ex;
 }
 
 .pretext-content dl.description-list dt {
@@ -1669,7 +1672,7 @@ body > a.assistive:focus {
 .pretext-content dl.description-list.narrow dt {
 margin-top: 0;
 width: unset;
-max-width: 58ex;
+max-width: 55ex;
     float: left;
     text-align: left;
     clear: both;
