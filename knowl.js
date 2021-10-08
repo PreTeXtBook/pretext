@@ -191,7 +191,8 @@ function knowl_click_handler($el) {
          } else if (mjvers > 3) {
               MathJax.typesetPromise([$output.get(0)]);
          }
-// not sure of the use case for this:
+// not sure of the use case for this,
+// since the same code appears later:
  $(".knowl-output .hidden-content .hidden-sagecell-sage").attr("class", "doubly-hidden-sagecell-sage");
  $(".knowl-output .hidden-sagecell-sage").attr("class", "sagecell-sage");
  sagecell.makeSagecell({inputLocation: ".sagecell-sage",  linked: true, evalButtonText: sagecellEvalName });
@@ -234,10 +235,10 @@ function knowl_click_handler($el) {
         $("a[data-knowl]").attr("href", "");
         }]);
 // if this is before the MathJax, big problems
-        $(".knowl-output .hidden-content .hidden-sagecell-sage").attr("class", "doubly-hidden-sagecell-sage");
-        $(".knowl-output .hidden-sagecell-sage").attr("class", "sagecell-sage");
-        sagecell.makeSagecell({inputLocation: ".sagecell-sage",  linked: true, evalButtonText: sagecellEvalName});
-        $(".knowl-output .hidden-content .doubly-hidden-sagecell-sage").attr("class", "hidden-sagecell-sage");
+//        $(".knowl-output .hidden-content .hidden-sagecell-sage").attr("class", "doubly-hidden-sagecell-sage");
+//        $(".knowl-output .hidden-sagecell-sage").attr("class", "sagecell-sage");
+//        sagecell.makeSagecell({inputLocation: ".sagecell-sage",  linked: true, evalButtonText: sagecellEvalName});
+//        $(".knowl-output .hidden-content .doubly-hidden-sagecell-sage").attr("class", "hidden-sagecell-sage");
      } else if (mjvers > 3) {
        console.log("processing for MJ3");
        $knowl.addClass("processing");
@@ -265,6 +266,11 @@ function knowl_click_handler($el) {
      } else {
         $knowl.slideDown("slow");
      }
+// if this is before the MathJax, big problems
+        $(".knowl-output .hidden-content .hidden-sagecell-sage").attr("class", "doubly-hidden-sagecell-sage");
+        $(".knowl-output .hidden-sagecell-sage").attr("class", "sagecell-sage");
+        sagecell.makeSagecell({inputLocation: ".sagecell-sage",  linked: true, evalButtonText: sagecellEvalName});
+        $(".knowl-output .hidden-content .doubly-hidden-sagecell-sage").attr("class", "hidden-sagecell-sage");
     }
   }
 } //~~ end click handler for *[data-knowl] elements
