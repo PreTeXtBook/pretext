@@ -1391,66 +1391,65 @@ Book (with parts), "section" at level 3
 
 <!-- Inline Mathematics ("m") -->
 <!--                                                     -->
-<!-- This is fairly simple.  Differences are             -->
-<!--   (1) Some conversions require different delimiters -->
-<!--   (2) We adjust punctuation for HTML, but not Latex -->
+<!-- Inline math in source may have adjacent text        -->
+<!-- (no spaces in between), and we aim to prevent line  -->
+<!-- breaking between the math and that text.            -->
+
+<!-- So in source like `beforetext<m>math</m>aftertext`  -->
+<!-- the m template reaches out and grabs beforetext and -->
+<!-- aftertext. There is opportunity for output like:    -->
+<!-- [beforetext{math}aftertext]                         -->
+<!-- where [,],{,} are some sort of delimiters (possibly -->
+<!-- empty).                                             -->
+
+<!-- Elsewhere, the text template removes beforetext and -->
+<!-- aftertext so that it is not repeated inoutput.      -->
+
+<!-- Abstract Templates to possibly override             -->
 <!--                                                     -->
-<!-- Abstract Templates                                  -->
-<!--                                                     -->
-<!-- (1) named "inline-math-wrapper"                     -->
+<!-- (1) named "math-adjacent-text-wrapper"              -->
+<!--       Wraps around math, including adjacent text    -->
+<!-- (2) named "inline-math-wrapper"                     -->
 <!--       Provides the delimiters for inline math       -->
 <!--       Stub warnings follow below                    -->
-<!-- (2) get-clause-punctuation                          -->
-<!--       Look at next node, and if a text node,        -->
-<!--       then look for leading punctuation, and        -->
-<!--       bring into math with \text() wrapper          -->
-<!--       when  $math.punctuation.include  indicates    -->
-
-<!-- $debug.displaystyle defaults to yes for testing -->
 
 <xsl:template match="m">
-    <!-- wrap in math delimiters -->
-    <xsl:call-template name="inline-math-wrapper">
-        <xsl:with-param name="math">
-            <!-- Build a textual version of the latex,  -->
-            <!-- applying the rare templates allowed,   -->
-            <!-- save for minor manipulation later.     -->
-            <!-- Note: generic text() template here in  -->
-            <!-- -common should always pass through the -->
-            <!-- text nodes within "m" with no changes  -->
-            <xsl:variable name="raw-latex">
-                <xsl:choose>
-                    <xsl:when test="ancestor::static/parent::webwork-reps">
-                        <xsl:apply-templates select="text()|var" />
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:apply-templates select="text()|fillin" />
-                    </xsl:otherwise>
-                </xsl:choose>
-                <!-- look ahead to absorb immediate clause-ending punctuation   -->
-                <!-- this is useful for HTML/MathJax to prevent bad line breaks -->
-                <!-- The template here in -common is generally useful, but      -->
-                <!-- for LaTeX we override to be a no-op, since not necessary   -->
-                <xsl:apply-templates select="." mode="get-clause-punctuation" />
-            </xsl:variable>
-            <!-- Prefix will normally be empty and have no effect.  We also have  -->
-            <!-- an undocumented switch to totally kill the possibility entirely. -->
-            <!-- This was added to support testing of braille output.             -->
-            <xsl:if test="not($debug.displaystyle = 'no')">
-                <xsl:apply-templates select="."  mode="display-style-prefix"/>
-            </xsl:if>
-            <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
-            <!--   (1) avoid LaTeX compilation errors                       -->
-            <!--   (2) avoid spurious blank lines leading to new paragraphs -->
-            <!--   (3) provide human-readable source of high quality        -->
-            <!-- sanitize-latex template does not provide a final newline   -->
-            <!-- and we do not add one here either, since it is inline math -->
-            <!-- MathJax is more tolerant, but readability is still useful  -->
-            <xsl:call-template name="sanitize-latex">
-                <xsl:with-param name="text" select="$raw-latex" />
+    <xsl:variable name="text-before">
+        <xsl:apply-templates select="." mode="get-text-before"/>
+    </xsl:variable>
+    <xsl:variable name="text-after">
+        <xsl:apply-templates select="." mode="get-text-after"/>
+    </xsl:variable>
+    <xsl:variable name="content">
+        <xsl:apply-templates select="." mode="get-text-before"/>
+        <xsl:call-template name="inline-math-wrapper">
+            <xsl:with-param name="math">
+                <xsl:apply-templates select="." mode="math"/>
+            </xsl:with-param>
+        </xsl:call-template>
+        <xsl:apply-templates select="." mode="get-text-after"/>
+    </xsl:variable>
+    <!-- We look to see if there is in fact no adjacent  -->
+    <!-- text, in which case the wrapper is unnecessary. -->
+    <xsl:choose>
+        <xsl:when test="$text-before = '' and $text-after = ''">
+            <xsl:value-of select="$content"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="math-adjacent-text-wrapper">
+                <xsl:with-param name="content">
+                    <xsl:value-of select="$content"/>
+                </xsl:with-param>
             </xsl:call-template>
-        </xsl:with-param>
-    </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- This template needs an override in an output mode if -->
+<!-- math-adjacent text is to be wrapped in a delimiter.  -->
+<xsl:template name="math-adjacent-text-wrapper">
+    <xsl:param name="content"/>
+    <xsl:value-of select="$content"/>
 </xsl:template>
 
 <!-- This template needs an override in each output mode. -->
@@ -1462,6 +1461,42 @@ Book (with parts), "section" at level 3
     <xsl:text>]]]</xsl:text>
 </xsl:template>
 
+<!-- $debug.displaystyle defaults to yes for testing -->
+
+<xsl:template match="m" mode="math">
+    <!-- Build a textual version of the latex,  -->
+    <!-- applying the rare templates allowed,   -->
+    <!-- save for minor manipulation later.     -->
+    <!-- Note: generic text() template here in  -->
+    <!-- -common should always pass through the -->
+    <!-- text nodes within "m" with no changes  -->
+    <xsl:variable name="raw-latex">
+        <xsl:choose>
+            <xsl:when test="ancestor::static/parent::webwork-reps">
+                <xsl:apply-templates select="text()|var" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="text()|fillin" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- Prefix will normally be empty and have no effect.  We also have  -->
+    <!-- an undocumented switch to totally kill the possibility entirely. -->
+    <!-- This was added to support testing of braille output.             -->
+    <xsl:if test="not($debug.displaystyle = 'no')">
+        <xsl:apply-templates select="."  mode="display-style-prefix"/>
+    </xsl:if>
+    <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
+    <!--   (1) avoid LaTeX compilation errors                       -->
+    <!--   (2) avoid spurious blank lines leading to new paragraphs -->
+    <!--   (3) provide human-readable source of high quality        -->
+    <!-- sanitize-latex template does not provide a final newline   -->
+    <!-- and we do not add one here either, since it is inline math -->
+    <!-- MathJax is more tolerant, but readability is still useful  -->
+    <xsl:call-template name="sanitize-latex">
+        <xsl:with-param name="text" select="$raw-latex" />
+    </xsl:call-template>
+</xsl:template>
 
 <!-- Display Style LaTeX markup for inline math -->
 <!--                                                     -->
@@ -3126,7 +3161,7 @@ Book (with parts), "section" at level 3
 <!-- A corresponding event happens with the following    -->
 <!-- text() node: the punctuation will get scrubbed      -->
 <!-- from there iff the punctuation migrates in this     -->
-<xsl:template match="m|me|men|md|mdn" mode="get-clause-punctuation">
+<xsl:template match="me|men|md|mdn" mode="get-clause-punctuation">
     <xsl:if test="(self::m and $b-include-inline) or ((self::me|self::men|self::md|self::mdn) and $b-include-display)">
         <xsl:variable name="trailing-text" select="following-sibling::node()[1]/self::text()" />
         <xsl:variable name="punctuation">
@@ -3140,6 +3175,109 @@ Book (with parts), "section" at level 3
             <xsl:text>}</xsl:text>
         </xsl:if>
     </xsl:if>
+</xsl:template>
+
+<!-- In cases where we need to wrap math-adjacent text, -->
+<!-- get the before- and after-text                     -->
+<xsl:template match="m" mode="get-text-after">
+    <xsl:variable name="following-text" select="following-sibling::node()[1]/self::text()" />
+    <xsl:call-template name="leading-non-whitespace">
+        <xsl:with-param name="text" select="$following-text" />
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="m" mode="get-text-before">
+    <xsl:variable name="preceding-text" select="preceding-sibling::node()[1]/self::text()" />
+    <xsl:call-template name="trailing-non-whitespace">
+        <xsl:with-param name="text" select="$preceding-text" />
+    </xsl:call-template>
+</xsl:template>
+
+<!-- This collects non-whitespace text             -->
+<!-- from the *front* of a text node.  It does not -->
+<!-- change the text node, but simply outputs the  -->
+<!-- punctuation for use by another template       -->
+<xsl:template name="leading-non-whitespace">
+    <xsl:param name="text" />
+    <xsl:variable name="first-char" select="substring($text, 1, 1)" />
+    <xsl:choose>
+        <!-- empty, quit -->
+        <xsl:when test="not($first-char)" />
+        <!-- if not whitespace, output and recurse -->
+        <!-- else silently quit recursion          -->
+        <xsl:when test="not(contains($whitespaces, $first-char))">
+        <xsl:value-of select="$first-char" />
+            <xsl:call-template name="leading-non-whitespace">
+                <xsl:with-param name="text" select="substring($text, 2)" />
+            </xsl:call-template>
+        </xsl:when>
+        <!-- consecutive only, stop collecting -->
+        <xsl:otherwise />
+    </xsl:choose>
+</xsl:template>
+
+<!-- This collects non-whitespace text             -->
+<!-- from the *end* of a text node.  It does not   -->
+<!-- change the text node, but simply outputs the  -->
+<!-- punctuation for use by another template       -->
+<xsl:template name="trailing-non-whitespace">
+    <xsl:param name="text" />
+    <xsl:variable name="last-char" select="substring($text, string-length($text))" />
+    <xsl:choose>
+        <!-- empty, quit -->
+        <xsl:when test="not($last-char)" />
+        <!-- if not whitespace, output and recurse -->
+        <!-- else silently quit recursion          -->
+        <xsl:when test="not(contains($whitespaces, $last-char))">
+        <xsl:value-of select="$last-char" />
+            <xsl:call-template name="trailing-non-whitespace">
+                <xsl:with-param name="text" select="substring($text, 1, string-length($text) - 1)" />
+            </xsl:call-template>
+        </xsl:when>
+        <!-- consecutive only, stop collecting -->
+        <xsl:otherwise />
+    </xsl:choose>
+</xsl:template>
+
+<!-- If we collect nonwhitespace, we need to scrub it by   -->
+<!-- examining and manipulating the text node with         -->
+<!-- those characters.  We drop consecutive nonwhitespace. -->
+<xsl:template name="drop-leading-non-whitespace">
+    <xsl:param name="text" />
+    <xsl:variable name="first-char" select="substring($text, 1, 1)" />
+    <xsl:choose>
+        <!-- if empty, done -->
+        <xsl:when test="not($first-char)" />
+        <!-- first character is nonwhitespace, drop it, recurse -->
+        <xsl:when test="not(contains($whitespaces, $first-char))">
+            <xsl:call-template name="drop-leading-non-whitespace">
+                <xsl:with-param name="text" select="substring($text, 2)" />
+            </xsl:call-template>
+        </xsl:when>
+        <!-- no more nonwhitespace, output as-is -->
+        <xsl:otherwise>
+            <xsl:value-of select="$text" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template name="drop-trailing-non-whitespace">
+    <xsl:param name="text" />
+    <xsl:variable name="last-char" select="substring($text, string-length($text))" />
+    <xsl:choose>
+        <!-- if empty, done -->
+        <xsl:when test="not($last-char)" />
+        <!-- last character is nonwhitespace, drop it, recurse -->
+        <xsl:when test="not(contains($whitespaces, $last-char))">
+            <xsl:call-template name="drop-trailing-non-whitespace">
+                <xsl:with-param name="text" select="substring($text, 1, string-length($text) - 1)" />
+            </xsl:call-template>
+        </xsl:when>
+        <!-- no more nonwhitespace, output as-is -->
+        <xsl:otherwise>
+            <xsl:value-of select="$text" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 
@@ -3158,6 +3296,9 @@ Book (with parts), "section" at level 3
 <!-- it to adjust for clause-ending punctuation       -->
 <!-- being absorbed elsewhere into math, so we place  -->
 <!-- this near math handling.                         -->
+<!-- For inline math, rather than just clause-ending  -->
+<!-- punctuation, we are adjusting all adjacent       -->
+<!-- nonwhitespace.                                   -->
 <!--                                                  -->
 <!-- Later Strategy                                   -->
 <!--                                                  -->
@@ -3170,14 +3311,16 @@ Book (with parts), "section" at level 3
 <!-- with some whitespace consolidated                -->
 
 <xsl:template match="text()">
-    <!-- Scrub clause-ending punctuation immediately after math  -->
+    <!-- Scrub clause-ending punctuation immediately after display math  -->
+    <!-- and nonwhitespace characters immediately after inline math      -->
     <!-- It migrates and is absorbed in math templates elsewhere -->
     <!-- Side-effect: resulting leading whitespace is scrubbed   -->
     <!-- for displayed mathematics (only) as it is irrelevant    -->
     <xsl:variable name="first-char" select="substring(., 1, 1)" />
-    <xsl:variable name="math-punctuation">
+    <xsl:variable name="last-char" select="substring(., string-length(.))" />
+    <xsl:variable name="math-start-trimmed">
         <xsl:choose>
-            <!-- drop punctuation after display math, if moving to math -->
+            <!-- drop punctuation after display math -->
             <xsl:when test="$b-include-display and contains($clause-ending-marks, $first-char) and preceding-sibling::node()[1][self::me|self::men|self::md|self::mdn]">
                 <xsl:call-template name="strip-leading-whitespace">
                     <xsl:with-param name="text">
@@ -3187,14 +3330,27 @@ Book (with parts), "section" at level 3
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
-            <!-- drop punctuation after inline math, if moving to math -->
-            <xsl:when test="$b-include-inline and contains($clause-ending-marks, $first-char) and preceding-sibling::node()[1][self::m]">
-                <xsl:call-template name="drop-clause-punctuation">
+            <!-- drop nonwhitespace after inline math -->
+            <xsl:when test="not(contains($whitespaces, $first-char)) and preceding-sibling::node()[1][self::m]">
+                <xsl:call-template name="drop-leading-non-whitespace">
                     <xsl:with-param name="text" select="." />
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="." />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="math-trimmed">
+        <xsl:choose>
+            <!-- drop nonwhitespace before inline math -->
+            <xsl:when test="not(contains($whitespaces, $last-char)) and following-sibling::node()[1][self::m]">
+                <xsl:call-template name="drop-trailing-non-whitespace">
+                    <xsl:with-param name="text" select="$math-start-trimmed" />
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$math-start-trimmed" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -3212,11 +3368,11 @@ Book (with parts), "section" at level 3
         <xsl:choose>
             <xsl:when test="not(parent::m|parent::me|parent::men|parent::mrow)">
                 <xsl:call-template name="text-processing">
-                    <xsl:with-param name="text" select="$math-punctuation"/>
+                    <xsl:with-param name="text" select="$math-trimmed"/>
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="$math-punctuation"/>
+                <xsl:value-of select="$math-trimmed"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
