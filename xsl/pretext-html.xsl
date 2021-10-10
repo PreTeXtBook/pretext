@@ -5246,7 +5246,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- if we do this routinely for inline math also.  If MathJax ever     -->
 <!-- gets better at this, then we can set this switch to 'display',     -->
 <!-- as for LaTeX.                                                      -->
-<xsl:variable name="math.punctuation.include" select="'all'"/>
+<xsl:variable name="math.punctuation.include" select="'display'"/>
 
 <!-- Inline Mathematics ("m") -->
 
@@ -5256,6 +5256,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- to be part of MathJax configuration, but   -->
 <!-- also free up the dollar sign               -->
 
+<!-- Override the  template from -common so that we may wrap -->
+<!-- a nonbreaking span around adjacent text.                -->
+<xsl:template name="math-adjacent-text-wrapper">
+    <xsl:param name="content"/>
+    <span style="white-space: nowrap;">
+        <xsl:value-of select="$content"/>
+    </span>
+</xsl:template>
 
 <!-- This template wraps inline math in delimiters -->
 <xsl:template name="inline-math-wrapper">
