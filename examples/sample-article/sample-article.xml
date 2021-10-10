@@ -11845,6 +11845,7 @@ the xsltproc executable.
                 </statement>
                 <solution xml:id="solution-antiderivative">
                     <p>An antiderivative of <m>x^2</m> is <m>F(x)=x^3/3</m>, so by the FTC,<me>\definiteintegral{2}{4}{x^2}{x}=F(4)-F(2)=\frac{1}{3}\left(4^3-2^3\right)=\frac{56}{3}</me>!?!      This is indeed an exciting result, but we are mostly interested in seeing that the sentence-ending punctuation is absorbed properly into the displayed equation.</p>
+                    <p>On a related note, we are interested in seeing that math-adjacent non-whitespace characters (not counting things like quote characters introduced by a <tag>q</tag> element) do not line break awkwardly, so we present some math <m>x</m>, some irrational numbers (<m>\pi</m>, <m>e</m>), and remind you that <m>\lim_{x\to0}\frac{\sin x}{x}</m> has <q><m>0/0</m></q>-indeterminate form. Also, <q>Beware the <m>x</m>-axis!</q></p>
                 </solution>
             </exercise>
 
