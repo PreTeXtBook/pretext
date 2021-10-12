@@ -2576,6 +2576,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="placement"/>
 
     <xsl:element name="a">
+        <!-- empty, but presence needed for accessibility -->
+        <!-- An HTML "a" without an href attribute does   -->
+        <!-- not default to role "link" and does not read -->
+        <!-- as clickable by a screen reader.             -->
+        <xsl:attribute name="href"/>
         <!-- empty, indicates content *not* in a file -->
         <xsl:attribute name="data-knowl" />
         <!-- id-ref class: content is in div referenced by id       -->
@@ -2632,6 +2637,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The link for a duplicate hidden knowl -->
 <xsl:template match="*" mode="duplicate-hidden-knowl-link">
     <xsl:element name="a">
+        <!-- empty, but presence needed for accessibility -->
+        <!-- An HTML "a" without an href attribute does   -->
+        <!-- not default to role "link" and does not read -->
+        <!-- as clickable by a screen reader.             -->
+        <xsl:attribute name="href"/>
         <!-- (element-name)-knowl: specific element used in content -->
         <!-- original: born hidden knowl, not xref                  -->
         <!-- Similar to "hidden-knowl-link", no id-ref              -->
@@ -7547,6 +7557,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:choose>
                     <!-- build a modern knowl -->
                     <xsl:when test="$knowl='true'">
+                        <!-- empty, but presence needed for accessibility -->
+                        <!-- An HTML "a" without an href attribute does   -->
+                        <!-- not default to role "link" and does not read -->
+                        <!-- as clickable by a screen reader.             -->
+                        <xsl:attribute name="href"/>
                         <!-- mark as duplicated content via an xref -->
                         <xsl:attribute name="class">
                             <xsl:text>xref</xsl:text>
