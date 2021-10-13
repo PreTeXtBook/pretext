@@ -380,6 +380,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <head>
                 <meta http-equiv="refresh" content="0; URL='{$html-index-page}'" />
             </head>
+            <!-- body is non-existent, i.e. empty -->
             <body/>
         </html>
     </exsl:document>
@@ -1941,7 +1942,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- sufficient for the external knowl             -->
                 <xsl:apply-templates select="." mode="sagecell" />
             </head>
-            <body>
+            <!-- ignore MathJax signals everywhere, then enable selectively -->
+            <body class="ignore-math">
                 <!-- content, in xref style or hidden style     -->
                 <!-- initiate tunneling duplication flag here   -->
                 <!-- We send a flag to the "body" template      -->
@@ -5454,9 +5456,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This template wraps inline math in delimiters -->
 <xsl:template name="inline-math-wrapper">
     <xsl:param name="math"/>
-    <xsl:text>\(</xsl:text>
-    <xsl:value-of select="$math"/>
-    <xsl:text>\)</xsl:text>
+    <span class="process-math">
+        <xsl:text>\(</xsl:text>
+        <xsl:value-of select="$math"/>
+        <xsl:text>\)</xsl:text>
+    </span>
 </xsl:template>
 
 <!-- Displayed Single-Line Math ("me", "men") -->
@@ -5470,7 +5474,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="me|men|md|mdn" mode="display-math-wrapper">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="content" />
-    <div class="displaymath">
+    <div class="displaymath process-math">
         <xsl:apply-templates select="." mode="insert-paragraph-id" >
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
@@ -6559,6 +6563,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:when test="$root/book">pretext-book</xsl:when>
                         <xsl:when test="$root/article">pretext-article</xsl:when>
                     </xsl:choose>
+                    <!-- ignore MathJax signals everywhere, then enable selectively -->
+                    <xsl:text> ignore-math</xsl:text>
                     <!-- ################################################# -->
                     <!-- This is how the left sidebar goes away            -->
                     <!-- <xsl:if test="$b-has-toc">                        -->
@@ -9735,7 +9741,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- load header libraries (for all "slate") -->
                 <xsl:apply-templates select="." mode="header-libraries" />
             </head>
-            <body class="pretext-content">
+                <!-- ignore MathJax signals everywhere, then enable selectively -->
+                <body class="pretext-content ignore-math">
                 <!-- potential document-id per-page -->
                 <xsl:call-template name="document-id"/>
                 <div>
@@ -10556,6 +10563,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:when test="$root/book">pretext-book</xsl:when>
                     <xsl:when test="$root/article">pretext-article</xsl:when>
                 </xsl:choose>
+                <!-- ignore MathJax signals everywhere, then enable selectively -->
+                <xsl:text> ignore-math</xsl:text>
                 <xsl:if test="$b-has-toc">
                     <xsl:text> has-toc has-sidebar-left</xsl:text> <!-- note space, later add right -->
                 </xsl:if>
@@ -10668,7 +10677,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="font-awesome" />
         </head>
         <!-- TODO: needs some padding etc -->
-        <body>
+        <!-- ignore MathJax signals everywhere, then enable selectively -->
+        <body class="ignore-math">
             <!-- potential document-id per-page -->
             <xsl:call-template name="document-id"/>
             <xsl:copy-of select="$content" />
@@ -11634,8 +11644,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>]}&#xa;</xsl:text>
         <xsl:text>  },&#xa;</xsl:text>
         <xsl:text>  options: {&#xa;</xsl:text>
-        <xsl:text>    ignoreHtmlClass: "tex2jax_ignore",&#xa;</xsl:text>
-        <xsl:text>    processHtmlClass: "has_am",&#xa;</xsl:text>
+        <xsl:text>    ignoreHtmlClass: "tex2jax_ignore|ignore-math",&#xa;</xsl:text>
+        <xsl:text>    processHtmlClass: "process-math",&#xa;</xsl:text>
         <xsl:if test="$b-has-webwork-reps or $b-has-sage">
             <xsl:text>    renderActions: {&#xa;</xsl:text>
             <xsl:text>        findScript: [10, function (doc) {&#xa;</xsl:text>
@@ -12095,7 +12105,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- sneaking in packages, which load first, in       -->
 <!-- case authors want to build on these macros       -->
 <xsl:template name="latex-macros">
-    <div id="latex-macros" class="hidden-content" style="display:none">
+    <div id="latex-macros" class="hidden-content process-math" style="display:none">
         <xsl:if test="$b-braille">
             <xsl:attribute name="data-braille">
                 <xsl:text>latex-macros</xsl:text>
