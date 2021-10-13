@@ -140,12 +140,12 @@ if (reading_questions.length) {
          var this_ques_id_controls = reading_question_id + "_controls";
          var answer_div = '<div';
          answer_div += ' id="' + this_ques_id_text + '"';
-         answer_div += ' class="given_answer has_am"';
+         answer_div += ' class="given_answer has_am processme"';
          answer_div += '>';
          answer_div += dollars_to_slashparen(escapeHTML(existing_content)) + " ";
          answer_div += '</div>';
   
-  /* need to save the original so that MathJax does not change it */
+  /* need to save the original so that mathjax does not change it */
          var hidden_answer_div = '<div';
          hidden_answer_div += ' id="' + this_ques_id_text + '_hidden' + '"';
          hidden_answer_div += ' class="tex2jax_ignore asciimath2jax_ignore" style="display: none">';
@@ -168,7 +168,12 @@ if (reading_questions.length) {
        //  this.parentNode.insertAdjacentElement("afterend", this_rq_answer_and_controls);
   
           /* typeset the math in the reading questions answers */
-          MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+   //       MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+         if (mjvers && mjvers < 3) {
+              MathJax.Hub.Queue(['Typeset', MathJax.Hub]);
+         } else if (mjvers > 3) {
+              MathJax.typesetPromise();
+         }
   
       }  else if(role == "instructor" || role == "student") {
 
@@ -307,7 +312,7 @@ if (reading_questions.length) {
        }
        compiled_answers += '<div class="s_id">' + this_student_id + '</div>';
        compiled_answers += '<div class="rq_sub_time">' + this_submitted_time + '</div>';
-       compiled_answers += '<div class="s_ans has_am">' + this_specific_answer + '</div>';
+       compiled_answers += '<div class="s_ans has_am processme">' + this_specific_answer + '</div>';
        compiled_answers += '</div>\n';
        console.log(j, "j", these_specific_answers)
    }
@@ -324,7 +329,13 @@ if (reading_questions.length) {
 //   this.parentNode.remove();
    this.innerHTML = "Reload responses";
    $(this).addClass("reload");
-   MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+//   MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+         if (mjvers && mjvers < 3) {
+              MathJax.Hub.Queue(['Typeset', MathJax.Hub]);
+         } else if (mjvers > 3) {
+              MathJax.typesetPromise();
+         }
+
        //  this.parentNode.insertAdjacentElement("afterend", this_rq_answe
 
   });
@@ -376,7 +387,7 @@ if (reading_questions.length) {
   //and show it on the page
     var this_ans_static = document.createElement('div');
     this_ans_static.setAttribute('id', this_ques_id_text);
-    this_ans_static.setAttribute('class', 'given_answer has_am');
+    this_ans_static.setAttribute('class', 'given_answer has_am processme');
     console.log("setting this_ans_static.innerHTML to", dollars_to_slashparen(escapeHTML(this_ans_text_value)));
     this_ans_static.innerHTML = dollars_to_slashparen(escapeHTML(this_ans_text_value)) + " "
 
@@ -384,7 +395,13 @@ if (reading_questions.length) {
     console.log("about to replace  this_ans_text",  this_ans_text);
     this_ans_text.replaceWith(this_ans_static);
   
-    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+//    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+         if (mjvers && mjvers < 3) {
+              MathJax.Hub.Queue(['Typeset', MathJax.Hub]);
+         } else if (mjvers > 3) {
+              MathJax.typesetPromise();
+         }
+
   
     console.log(" this_ans_text",  this_ans_text);
 
