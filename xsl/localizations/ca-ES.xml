@@ -68,12 +68,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='chapter'>Capítol</localization>
     <localization string-id='appendix'>Apéndix</localization>
     <!-- Next is the plural of Appendix, used to identify a group of appendix -->
-    <!-- <localization string-id='appendices'>Appendices</localization> -->
+    <localization string-id='appendices'>Apèndixs</localization>
     <localization string-id='section'>Secció</localization>
     <localization string-id='subsection'>Subsecció</localization>
     <localization string-id='subsubsection'>Subsubsecció</localization>
     <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
-    <!-- <localization string-id='slide'>Slide</localization> -->
+    <localization string-id='slide'>Diapositiva</localization>
     <localization string-id='introduction'>Introducció</localization>
     <localization string-id='conclusion'>Conclusió</localization>
     <localization string-id='exercises'>Exercicis</localization>
@@ -83,7 +83,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='glossary'>Glossari</localization>
     <localization string-id='references'>Referències</localization>
     <!-- Translation needed for Spain Spanish and Catalan -->
-    <!-- <localization string-id='backmatter'>Back Matter</localization> -->
+    <localization string-id='backmatter'>Material posterior</localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'>Paràgraf</localization>
     <localization string-id='commentary'>Comentari</localization>
@@ -108,11 +108,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='question'>Pregunta</localization>
     <localization string-id='problem'>Problema</localization>
     <!-- PROJECT-LIKE blocks -->
-    <!-- <localization string-id='project'>Project</localization> -->
-    <!-- <localization string-id='activity'>Activity</localization> -->
-    <!-- <localization string-id='exploration'>Exploration</localization> -->
-    <!-- <localization string-id='task'>Task</localization> -->
-    <!-- <localization string-id='investigation'>Investigation</localization> -->
+    <localization string-id='project'>Projecte</localization>
+    <localization string-id='activity'>Activitat</localization>
+    <localization string-id='exploration'>Exploració</localization>
+    <localization string-id='task'>Tasca</localization>
+    <localization string-id='investigation'>Recerca</localization>
     <!--  -->
     <!-- assemblages are collections of minimally structured material -->
     <!-- <localization string-id='assemblage'>Assemblage</localization> -->
@@ -132,21 +132,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='fn'>Nota al peu</localization>
     <!-- Lists and their items -->
     <!-- Translations needed for Spain Spanish -->
-    <!-- <localization string-id='list'>List</localization> -->
-    <!-- <localization string-id='li'>Item</localization> -->
+    <localization string-id='list'>Llista</localization>
+    <localization string-id='li'>Ítem</localization>
     <!-- A term (word) defined in a glossary item -->
-    <!-- <localization string-id='gi'>Term</localization> -->
+    <localization string-id='gi'>Terme</localization>
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'>Paràgraf</localization>
-    <!-- <localization string-id='blockquote'>Quotation</localization> -->
+    <localization string-id='blockquote'>Cita</localization>
     <!-- Literate programming, a chunk of computer code -->
-    <!-- <localization string-id='fragment'>Fragment</localization> -->
+    <localization string-id='fragment'>Fragment</localization>
     <!-- Parts of an exercise and its solution -->
     <!-- See the en-US file for a detailed explanation of the words for exercises -->
     <localization string-id='divisionalexercise'>Exercici</localization>
     <!-- Translation needed for Spain Spanish -->
     <!-- See en-US file for distinctions here, do not repeat previous translation -->
-    <!-- <localization string-id='inlineexercise'>Checkpoint</localization> -->
+    <localization string-id='inlineexercise'>Punt de control</localization>
     <!-- <localization string-id='worksheetexercise'>Worksheet Exercise</localization> -->
     <!-- <localization string-id='readingquestion'>Reading Question</localization> -->
     <localization string-id='webwork'>WeBWorK</localization>
@@ -165,8 +165,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='acknowledgement'>Agraïments</localization>
     <localization string-id='biography'>Biografia de l'autor</localization>
     <!-- singular and plural titles for biography subdivision -->
-    <!-- <localization string-id='about-author'>About the Author</localization> -->
-    <!-- <localization string-id='about-authors'>About the Authors</localization> -->
+    <localization string-id='about-author'>Sobre l'autor</localization>
+    <localization string-id='about-authors'>Sobre els autors</localization>
     <localization string-id='foreword'>Pròleg</localization>
     <localization string-id='dedication'>Dedicatòria</localization>
     <localization string-id='colophon'>Colofó</localization>
@@ -174,7 +174,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- index-part is deprecated, but not abandoned          -->
     <!-- NB: repurpose translations, maybe move appendix here -->
     <localization string-id='index-part'>Índex alfabètico</localization>
-    <!-- <localization string-id='jump-to'>Jump to:</localization> -->
+    <localization string-id='jump-to'>Passeu a:</localization>
     <!-- Parts of the Index -->
     <localization string-id='index'>Índex alfabètico</localization>
     <localization string-id='see'>Vegeu</localization>
@@ -223,5 +223,5 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- else whatever crud ends up on the button kills the cell -->
     <!-- Translate at first opportunity, please                  -->
     <localization string-id='evaluate'>Avaluar</localization>
-    <!-- <localization string-id='code'>Code</localization> -->
+    <localization string-id='code'>Codi</localization>
 </locale>
