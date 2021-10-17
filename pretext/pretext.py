@@ -1606,8 +1606,14 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
 
 def html(xml, pub_file, stringparams, extra_xsl, dest_dir):
     """Convert XML source to HTML files in destination directory"""
+    from collections import defaultdict
+    from glob import glob
+    import json
     import os.path # join()
+    from pathlib import Path
     import shutil # copytree()
+    import sys
+    from urllib.parse import urlparse
 
     # Consult publisher file for locations of images
     generated_abs, external_abs = get_managed_directories(xml, pub_file)
@@ -1634,6 +1640,48 @@ def html(xml, pub_file, stringparams, extra_xsl, dest_dir):
     # Write output into working directory, no scratch space needed
     _verbose('converting {} to HTML in {}'.format(xml, dest_dir))
     xsltproc(extraction_xslt, xml, None, dest_dir, stringparams)
+
+    # Build a mapping between XML IDs and the resulting generated HTML files. The goal: map from source files to the resulting HTML files produced by the pretext build. The data structure is:
+    #
+    ## path_to_xml_id = Dict[path_to_source_file: str, List[xml_id: str]]
+    #
+    # This allows a single source file to produce multiple HTML files, as well as supporting a one-to-one relationship. The list captures the order of appearance of the XML IDs in the tree -- element 0 is the first XML ID, etc.
+    path_to_xml_id = defaultdict(list)
+
+    # This follows the `Python recommendations <https://docs.python.org/3/library/sys.html#sys.platform>`_.
+    is_win = sys.platform == "win32"
+
+    # Look at all HTML files in the output directory. Store only their stem, since this is what an XML ID specifies. Note that all output files will have the same path prefix (the ``dest_dir`` and the same suffix (``.html``); the stem is the only unique part.
+    html_files = set(Path(html_file).stem for html_file in glob(dest_dir + "/*.html"))
+
+    # Load in the XML. Wait to import this until the call to ``xsltproc`` above has already verified that lxml is installed.
+    import lxml.etree as ET
+    huge_parser = ET.XMLParser(huge_tree=True)
+    src_tree = ET.parse(xml, parser=huge_parser)
+    src_tree.xinclude()
+
+    # Walk though every element with an xml ID.
+    #
+    # lxml turns ``xml:id`` into the string below.
+    xml_id_attrib = "{http://www.w3.org/XML/1998/namespace}id"
+    for elem in src_tree.iterfind(f"//*[@{xml_id_attrib}]"):
+        # Consider only elemets whose ID produced an HTML file.
+        xml_id = elem.get(xml_id_attrib)
+        if xml_id in html_files:
+            # Store this discovered mapping between ID and output file.
+            #
+            # The `elem.base <https://lxml.de/api/lxml.etree._Element-class.html#base>`_ gives the URL of this file. Extract the path.
+            up = urlparse(elem.base)
+            # If this isn't a ``file`` scheme, we're lost.
+            assert up.scheme == "file"
+            path = up.path
+            # On Windows, this produces ``path == "/C:/path/to/file.ptx"``. Remove the slash.
+            if is_win:
+                path = path[1:]
+            path_to_xml_id[path].append(xml_id)
+
+    # Save the result as a JSON file in the ``dest_dir``.
+    (Path(dest_dir) / "mapping.json").write_text(json.dumps(path_to_xml_id))
 
 
 #####################
