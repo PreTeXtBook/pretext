@@ -1643,7 +1643,15 @@ def html(xml, pub_file, stringparams, extra_xsl, dest_dir):
 
     # Build a mapping between XML IDs and the resulting generated HTML files. The goal: map from source files to the resulting HTML files produced by the pretext build. The data structure is:
     #
-    ## path_to_xml_id = Dict[path_to_source_file: str, List[xml_id: str]]
+    # .. code::
+    #   :number-lines:
+    #
+    #   path_to_xml_id: Dict[
+    #       # A path to the source file
+    #       str,
+    #       # A list of XML IDs in this source file which produce HTML files.
+    #       List[str]
+    #   ]
     #
     # This allows a single source file to produce multiple HTML files, as well as supporting a one-to-one relationship. The list captures the order of appearance of the XML IDs in the tree -- element 0 is the first XML ID, etc.
     path_to_xml_id = defaultdict(list)
@@ -1654,23 +1662,34 @@ def html(xml, pub_file, stringparams, extra_xsl, dest_dir):
     # Look at all HTML files in the output directory. Store only their stem, since this is what an XML ID specifies. Note that all output files will have the same path prefix (the ``dest_dir`` and the same suffix (``.html``); the stem is the only unique part.
     html_files = set(Path(html_file).stem for html_file in glob(dest_dir + "/*.html"))
 
-    # Load in the XML. Wait to import this until the call to ``xsltproc`` above has already verified that lxml is installed.
-    import lxml.etree as ET
-    huge_parser = ET.XMLParser(huge_tree=True)
-    src_tree = ET.parse(xml, parser=huge_parser)
-    src_tree.xinclude()
+    # lxml turns ``xml:id`` into the string below.
+    xml_href = "{http://www.w3.org/XML/1998/namespace}"
+    xml_base_attrib = f"{xml_href}base"
+    xml_id_attrib = f"{xml_href}id"
+
+    # Wait to import this until the call to ``xsltproc`` above has already verified that lxml is installed.
+    from lxml import etree as ElementTree
+    from lxml import ElementInclude
+
+    # Define a loader which sets the ``xml:base`` of an xincluded element. While lxml `evidently used to do this in 2013 <https://stackoverflow.com/a/18158472/16038919>`_, a change eliminated this ability per some `dicussion <https://mail.gnome.org/archives/xml/2014-April/msg00015.html>`_, which included a rejected patch fixing this problem. `Current source <https://github.com/GNOME/libxml2/blob/master/xinclude.c#L1689>`_ lacks this patch.
+    def my_loader(href, parse, encoding=None, parser=None):
+        ret = ElementInclude._lxml_default_loader(href, parse, encoding, parser)
+        ret.attrib[xml_base_attrib] = href
+        return ret
+
+    # Load the XML, performing xincludes using this loader.
+    huge_parser = ElementTree.XMLParser(huge_tree=True)
+    src_tree = ElementTree.parse(xml, parser=huge_parser)
+    ElementInclude.include(src_tree, loader=my_loader)
 
     # Walk though every element with an xml ID.
-    #
-    # lxml turns ``xml:id`` into the string below.
-    xml_id_attrib = "{http://www.w3.org/XML/1998/namespace}id"
     for elem in src_tree.iterfind(f"//*[@{xml_id_attrib}]"):
-        # Consider only elemets whose ID produced an HTML file.
+        # Consider only elemets whose ID produced an HTML file. TODO: use a walrus operator after Python 3.7 is EOL.
         xml_id = elem.get(xml_id_attrib)
         if xml_id in html_files:
             # Store this discovered mapping between ID and output file.
             #
-            # The `elem.base <https://lxml.de/api/lxml.etree._Element-class.html#base>`_ gives the URL of this file. Extract the path.
+            # The `elem.base <https://lxml.de/api/lxml.etree._Element-class.html#base>`_ gives the URL of this file (which is correct due to the custom loader). Extract the path.
             up = urlparse(elem.base)
             # If this isn't a ``file`` scheme, we're lost.
             assert up.scheme == "file"
@@ -1678,6 +1697,9 @@ def html(xml, pub_file, stringparams, extra_xsl, dest_dir):
             # On Windows, this produces ``path == "/C:/path/to/file.ptx"``. Remove the slash.
             if is_win:
                 path = path[1:]
+            # Use ``resolve()`` to standardize capitalization on Windows.
+            path = str(Path(path).resolve())
+            # Add this XML ID to others for this path.
             path_to_xml_id[path].append(xml_id)
 
     # Save the result as a JSON file in the ``dest_dir``.
