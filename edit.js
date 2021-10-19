@@ -1171,6 +1171,7 @@ base_menu_for = {
             ["proof", "proof-standalone", "o"],
             ["layout-like"],
             ["section-like"],
+            ["Save", "save"],
             ["PreTeXt source", "source"]],
 "blockquote": [["paragraph", "p"]],
 // "ol": [["list item", "li"]],
@@ -1815,6 +1816,17 @@ function show_source(sibling, relative_placement) {
     document.getElementById("newsource").remove();
 }
 
+function save_source() {
+//    var current_source = document.getElementById("newpretextsource");
+//    if (current_source) { editorLog("curr sou", current_source); alert("curr sour"); current_source.remove() }
+    editorLog("saving");
+
+    var the_pretext_source =  output_from_id("", top_level_id, "pretext");
+
+    the_pretext_source = the_pretext_source.replace(/\n\n/g, '\n');
+
+    parent.save_file(top_level_id, the_pretext_source)
+}
 
 function create_object_to_edit(new_tag, new_objects_sibling, relative_placement) {
 
@@ -3972,6 +3984,9 @@ function main_menu_navigator(e) {  // we are not currently editing
                       show_source(object_of_interest, before_after);
                       edit_menu_from_current_editing("entering");
                       return
+                   } else if (dataEnv == "save") {
+                      save_source();
+                      edit_menu_from_current_editing("entering");
                    }
                   editorLog("create object to edit",dataEnv, object_of_interest, before_after);
                   var new_obj = create_object_to_edit(dataEnv, object_of_interest, before_after);
