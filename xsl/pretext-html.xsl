@@ -11767,7 +11767,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <script src="{$html.js.server}/js/lib/jquery.sticky.js" ></script>
     <script src="{$html.js.server}/js/lib/jquery.espy.min.js"></script>
     <script src="{$html.js.server}/js/{$html.js.version}/pretext.js"></script>
-    <script src="{$html.js.server}/js/{$html.js.version}/pretext_add_on.js"></script>
+    <script>miniversion=0.6</script>
+    <script src="{$html.js.server}/js/{$html.js.version}/pretext_add_on.js?x=1"></script>
 </xsl:template>
 
 <!-- Font header -->
