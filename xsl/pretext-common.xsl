@@ -7760,14 +7760,32 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:variable>
         <xsl:variable name="b-component-heading" select="string-length($variety) &gt; 1"/>
 
+        <!-- Specialized divisions in unstructured divisions have a heading   -->
+        <!-- level that is 2 deeper from invoking "solutions".                -->
+        <!-- Other leaf divisions are 1 deeper than the invoking "solutions". -->
+        <xsl:variable name="is-specialized-division-in-unstructured">
+            <xsl:apply-templates select="." mode="is-specialized-division-in-unstructured"/>
+        </xsl:variable>
+        <xsl:variable name="next-heading-level">
+            <xsl:choose>
+                <xsl:when test="$is-specialized-division-in-unstructured = 'true'">
+                    <xsl:value-of select="$heading-level + 2"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$heading-level + 1"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+
         <xsl:apply-templates select="." mode="division-in-solutions">
             <xsl:with-param name="scope" select="$scope" />
-            <xsl:with-param name="heading-level" select="$heading-level"/>
+            <xsl:with-param name="heading-level" select="$next-heading-level"/>
             <xsl:with-param name="heading-stack" select="$next-heading-stack"/>
             <xsl:with-param name="content">
 
                 <!-- N.B.: inline exercises and PROJECT-LIKE can be   -->
                 <!-- "hidden" inside the "paragraphs" pseudo-division -->
+                <!-- Everything below is 1 deeper than the division's heading -->
                 <xsl:for-each select="exercise|subexercises|exercisegroup|&PROJECT-LIKE;|paragraphs/exercise|paragraphs/*[&PROJECT-FILTER;]|self::worksheet//exercise">
                      <xsl:choose>
                         <xsl:when test="self::exercise and boolean(&INLINE-EXERCISE-FILTER;)">
@@ -7775,6 +7793,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                                 <xsl:with-param name="purpose" select="$purpose" />
                                 <xsl:with-param name="admit"   select="$admit"/>
                                 <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
+                                <xsl:with-param name="heading-level"       select="$next-heading-level + 1"/>
                                 <xsl:with-param name="b-has-statement" select="$b-inline-statement" />
                                 <xsl:with-param name="b-has-answer"    select="$b-inline-answer" />
                                 <xsl:with-param name="b-has-hint"      select="$b-inline-hint" />
@@ -7786,6 +7805,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                                 <xsl:with-param name="purpose" select="$purpose"/>
                                 <xsl:with-param name="admit"   select="$admit"/>
                                 <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
+                                <xsl:with-param name="heading-level"       select="$next-heading-level + 1"/>
                                 <xsl:with-param name="b-has-statement" select="$b-divisional-statement" />
                                 <xsl:with-param name="b-has-answer"    select="$b-divisional-answer" />
                                 <xsl:with-param name="b-has-hint"      select="$b-divisional-hint" />
@@ -7797,6 +7817,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                                 <xsl:with-param name="purpose" select="$purpose"/>
                                 <xsl:with-param name="admit"   select="$admit"/>
                                 <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
+                                <xsl:with-param name="heading-level"       select="$next-heading-level + 1"/>
                                 <xsl:with-param name="b-has-statement" select="$b-divisional-statement" />
                                 <xsl:with-param name="b-has-answer"    select="$b-divisional-answer" />
                                 <xsl:with-param name="b-has-hint"      select="$b-divisional-hint" />
@@ -7808,6 +7829,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                                 <xsl:with-param name="purpose" select="$purpose"/>
                                 <xsl:with-param name="admit"   select="$admit"/>
                                 <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
+                                <xsl:with-param name="heading-level"       select="$next-heading-level + 1"/>
                                 <xsl:with-param name="b-has-statement" select="$b-worksheet-statement" />
                                 <xsl:with-param name="b-has-answer"    select="$b-worksheet-answer" />
                                 <xsl:with-param name="b-has-hint"      select="$b-worksheet-hint" />
@@ -7819,6 +7841,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                                 <xsl:with-param name="purpose" select="$purpose"/>
                                 <xsl:with-param name="admit"   select="$admit"/>
                                 <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
+                                <xsl:with-param name="heading-level"       select="$next-heading-level + 1"/>
                                 <xsl:with-param name="b-has-statement" select="$b-reading-statement" />
                                 <xsl:with-param name="b-has-answer"    select="$b-reading-answer" />
                                 <xsl:with-param name="b-has-hint"      select="$b-reading-hint" />
@@ -7830,6 +7853,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                                 <xsl:with-param name="purpose" select="$purpose"/>
                                 <xsl:with-param name="admit"   select="$admit"/>
                                 <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
+                                <xsl:with-param name="heading-level"       select="$next-heading-level + 1"/>
                                 <xsl:with-param name="b-has-statement" select="$b-project-statement" />
                                 <xsl:with-param name="b-has-answer"    select="$b-project-answer" />
                                 <xsl:with-param name="b-has-hint"      select="$b-project-hint" />
@@ -7893,8 +7917,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:apply-templates select="." mode="is-specialized-division-in-unstructured"/>
     </xsl:variable>
 
-    <!-- We cut "scope" from heading-stack.                                          -->
-    <xsl:variable name="final-heading-stack" select="ancestor-or-self::*[(count(.|$heading-stack) = count($heading-stack)) and (count(.|$scope) != count($scope))]"/>
+    <!-- We cut "scope" from heading-stack if needed.                    -->
+    <!-- Or reset stack if specialized division in unstructured division -->
+    <xsl:variable name="final-heading-stack" select=".|ancestor-or-self::*[
+        $is-specialized-division-in-unstructured != 'true'
+        and (count(.|$heading-stack) = count($heading-stack))
+        and (count(.|$scope) != count($scope))]"
+    />
 
     <!-- A structured division cannot have children that have solution-like things   -->
     <!-- So we withhold headings for such divisions, passing to the "leaf" division, -->
@@ -7903,20 +7932,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="count($final-heading-stack) = 0">
             <xsl:copy-of select="$content" />
         </xsl:when>
-        <!-- Specialize subdivisions in unstructured divisions               -->
-        <!-- have a heading level that is 2 deeper from invoking "solutions" -->
-        <!-- and their heading does not carry the heading stack.             -->
-        <xsl:when test="$is-specialized-division-in-unstructured = 'true'">
-            <xsl:apply-templates select="." mode="duplicate-heading">
-                <xsl:with-param name="heading-level" select="$heading-level + 2"/>
-            </xsl:apply-templates>
-            <xsl:copy-of select="$content" />
-        </xsl:when>
-        <!-- Other leaf divisions do carry a heading stack       -->
-        <!-- and are only 1 deeper than the invoking "solutions" -->
         <xsl:when test="not($is-structured = 'true')">
             <xsl:apply-templates select="." mode="duplicate-heading">
-                <xsl:with-param name="heading-level" select="$heading-level + 1"/>
+                <xsl:with-param name="heading-level" select="$heading-level"/>
                 <xsl:with-param name="heading-stack" select="$final-heading-stack"/>
             </xsl:apply-templates>
             <xsl:copy-of select="$content" />
