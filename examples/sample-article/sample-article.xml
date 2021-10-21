@@ -2059,6 +2059,16 @@ the xsltproc executable.
 
                 <p>xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx <m>x</m>.</p>
             </subsection>
+
+            <subsection xml:id="miscellaneous-math">
+                <title>Miscellaneous</title>
+
+                <p>In <init>HTML</init> output, a MathJax workaround for a Safari rendering bug was inserting extra spaces after textual subscripts and superscripts (<url href="https://groups.google.com/g/mathjax-users/c/ANjLK9KtcWA/m/vlHaPja-AwAJ" visual="groups.google.com/g/mathjax-users/c/ANjLK9KtcWA/m/vlHaPja-AwAJ">MathJax thread</url>).  <pretext/> CSS now applies a correction.  The following tests if the CSS fix is sufficient, and could be used to test the necessity of our fix in the future.  Following is the original report, though <c>NOT</c> has been moved to a superscript:
+                <md>
+                    <mrow>T_\text{clk}-t_\text{su} \gt t_\text{clk-Q} + \max\left( t_\text{XOR}, t^\text{NOT} \right)</mrow>
+                </md>.  There should not be anything to see in <latex/>/<init>PDF</init> output. (2021-10-21)</p>
+
+            </subsection>
         </section>
 
         <section xml:id="text-in-paragraphs">
