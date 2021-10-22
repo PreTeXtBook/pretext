@@ -321,6 +321,9 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     margin-top: 0.4em;
 }
 
+.pretext-content .knowl-content > section:first-child > .heading:first-child {
+    margin-top: 0;
+}
 .pretext-content section > .heading {
     font-size: 1.75em;
     line-height: 1.25em;
@@ -1710,6 +1713,10 @@ max-width: 55ex;
 /* as in  $x=0$.  becomes  $x=0\text{.}$ */
 .pretext-content .knowl mjx-mtext > mjx-utext {
     width: revert !important;
+}
+.pretext-content mjx-msup mjx-utext,
+.pretext-content mjx-msub mjx-utext {
+    display: inline;
 }
 
 /* to stop things being blue when rendering MathJax with SVG */
