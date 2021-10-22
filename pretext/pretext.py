@@ -1693,8 +1693,8 @@ def html(xml, pub_file, stringparams, extra_xsl, dest_dir):
             #
             # The `elem.base <https://lxml.de/api/lxml.etree._Element-class.html#base>`_ gives the URL of this file (which is correct due to the custom loader). Extract the path.
             up = urlparse(elem.base)
-            # If this isn't a ``file`` scheme, we're lost.
-            assert up.scheme == "file"
+            # If this isn't a ``file`` scheme (or an unspecified schema, which seems to default to a file), we're lost.
+            assert up.scheme in ("file", "")
             path = up.path
             # On Windows, this produces ``path == "/C:/path/to/file.ptx"``. Remove the slash.
             if is_win:
