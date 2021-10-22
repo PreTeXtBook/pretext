@@ -1674,7 +1674,9 @@ def html(xml, pub_file, stringparams, extra_xsl, dest_dir):
     # Define a loader which sets the ``xml:base`` of an xincluded element. While lxml `evidently used to do this in 2013 <https://stackoverflow.com/a/18158472/16038919>`_, a change eliminated this ability per some `dicussion <https://mail.gnome.org/archives/xml/2014-April/msg00015.html>`_, which included a rejected patch fixing this problem. `Current source <https://github.com/GNOME/libxml2/blob/master/xinclude.c#L1689>`_ lacks this patch.
     def my_loader(href, parse, encoding=None, parser=None):
         ret = ElementInclude._lxml_default_loader(href, parse, encoding, parser)
-        ret.attrib[xml_base_attrib] = href
+        # The return value may not be an element.
+        if isinstance(ret, ElementTree._Element):
+            ret.attrib[xml_base_attrib] = href
         return ret
 
     # Load the XML, performing xincludes using this loader.
