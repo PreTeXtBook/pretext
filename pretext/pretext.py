@@ -1606,14 +1606,8 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
 
 def html(xml, pub_file, stringparams, extra_xsl, dest_dir):
     """Convert XML source to HTML files in destination directory"""
-    from collections import defaultdict
-    from glob import glob
-    import json
     import os.path # join()
-    from pathlib import Path
     import shutil # copytree()
-    import sys
-    from urllib.parse import urlparse
 
     # Consult publisher file for locations of images
     generated_abs, external_abs = get_managed_directories(xml, pub_file)
@@ -1640,20 +1634,39 @@ def html(xml, pub_file, stringparams, extra_xsl, dest_dir):
     # Write output into working directory, no scratch space needed
     _verbose('converting {} to HTML in {}'.format(xml, dest_dir))
     xsltproc(extraction_xslt, xml, None, dest_dir, stringparams)
+    map_path_to_xml_id(xml, dest_dir)
 
-    # Build a mapping between XML IDs and the resulting generated HTML files. The goal: map from source files to the resulting HTML files produced by the pretext build. The data structure is:
-    #
-    # .. code::
-    #   :number-lines:
-    #
-    #   path_to_xml_id: Dict[
-    #       # A path to the source file
-    #       str,
-    #       # A list of XML IDs in this source file which produce HTML files.
-    #       List[str]
-    #   ]
-    #
-    # This allows a single source file to produce multiple HTML files, as well as supporting a one-to-one relationship. The list captures the order of appearance of the XML IDs in the tree -- element 0 is the first XML ID, etc.
+
+# Build a mapping between XML IDs and the resulting generated HTML files. The goal: map from source files to the resulting HTML files produced by the pretext build. The data structure is:
+#
+# .. code::
+#   :number-lines:
+#
+#   path_to_xml_id: Dict[
+#       # A path to the source file
+#       str,
+#       # A list of XML IDs in this source file which produce HTML files.
+#       List[str]
+#   ]
+#
+# This allows a single source file to produce multiple HTML files, as well as supporting a one-to-one relationship. The list captures the order of appearance of the XML IDs in the tree -- element 0 is the first XML ID, etc.
+def map_path_to_xml_id(
+    # A path to the root XML file in the pretext book being processed.
+    xml: str,
+    # A path to the destination or output directory. The resulting JSON file will be stored there.
+    dest_dir: str
+):
+    from collections import defaultdict
+    from glob import glob
+    import json
+    from pathlib import Path
+    import sys
+    from urllib.parse import urlparse
+
+    # We assume a previous call to ``xsltproc`` has already verified that lxml is installed.
+    import lxml.etree
+    import lxml.ElementInclude
+
     path_to_xml_id = defaultdict(list)
 
     # This follows the `Python recommendations <https://docs.python.org/3/library/sys.html#sys.platform>`_.
@@ -1663,26 +1676,22 @@ def html(xml, pub_file, stringparams, extra_xsl, dest_dir):
     html_files = set(Path(html_file).stem for html_file in glob(dest_dir + "/*.html"))
 
     # lxml turns ``xml:id`` into the string below.
-    xml_href = "{http://www.w3.org/XML/1998/namespace}"
-    xml_base_attrib = f"{xml_href}base"
-    xml_id_attrib = f"{xml_href}id"
-
-    # Wait to import this until the call to ``xsltproc`` above has already verified that lxml is installed.
-    from lxml import etree as ElementTree
-    from lxml import ElementInclude
+    xml_ns = "{http://www.w3.org/XML/1998/namespace}"
+    xml_base_attrib = f"{xml_ns}base"
+    xml_id_attrib = f"{xml_ns}id"
 
     # Define a loader which sets the ``xml:base`` of an xincluded element. While lxml `evidently used to do this in 2013 <https://stackoverflow.com/a/18158472/16038919>`_, a change eliminated this ability per some `dicussion <https://mail.gnome.org/archives/xml/2014-April/msg00015.html>`_, which included a rejected patch fixing this problem. `Current source <https://github.com/GNOME/libxml2/blob/master/xinclude.c#L1689>`_ lacks this patch.
     def my_loader(href, parse, encoding=None, parser=None):
-        ret = ElementInclude._lxml_default_loader(href, parse, encoding, parser)
+        ret = lxml.ElementInclude._lxml_default_loader(href, parse, encoding, parser)
         # The return value may not be an element.
-        if isinstance(ret, ElementTree._Element):
+        if isinstance(ret, lxml.etree._Element):
             ret.attrib[xml_base_attrib] = href
         return ret
 
     # Load the XML, performing xincludes using this loader.
-    huge_parser = ElementTree.XMLParser(huge_tree=True)
-    src_tree = ElementTree.parse(xml, parser=huge_parser)
-    ElementInclude.include(src_tree, loader=my_loader)
+    huge_parser = lxml.etree.XMLParser(huge_tree=True)
+    src_tree = lxml.etree.parse(xml, parser=huge_parser)
+    lxml.ElementInclude.include(src_tree, loader=my_loader)
 
     # Walk though every element with an xml ID.
     for elem in src_tree.iterfind(f"//*[@{xml_id_attrib}]"):
