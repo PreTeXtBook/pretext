@@ -1654,26 +1654,28 @@ def map_path_to_xml_id(
     # A path to the root XML file in the pretext book being processed.
     xml: str,
     # A path to the destination or output directory. The resulting JSON file will be stored there.
-    dest_dir: str
-):
-    from collections import defaultdict
-    from glob import glob
+    dest_dir: str,
+) -> None:
+    import collections  # defaultdict
+    import glob  # glob
     import json
-    from pathlib import Path
-    import sys
-    from urllib.parse import urlparse
+    import pathlib  # Path
+    import sys  # platform
+    import urllib.parse  # urlparse
 
     # We assume a previous call to ``xsltproc`` has already verified that lxml is installed.
     import lxml.etree
     import lxml.ElementInclude
 
-    path_to_xml_id = defaultdict(list)
+    path_to_xml_id = collections.defaultdict(list)
 
     # This follows the `Python recommendations <https://docs.python.org/3/library/sys.html#sys.platform>`_.
     is_win = sys.platform == "win32"
 
     # Look at all HTML files in the output directory. Store only their stem, since this is what an XML ID specifies. Note that all output files will have the same path prefix (the ``dest_dir`` and the same suffix (``.html``); the stem is the only unique part.
-    html_files = set(Path(html_file).stem for html_file in glob(dest_dir + "/*.html"))
+    html_files = set(
+        pathlib.Path(html_file).stem for html_file in glob(dest_dir + "/*.html")
+    )
 
     # lxml turns ``xml:id`` into the string below.
     xml_ns = "{http://www.w3.org/XML/1998/namespace}"
@@ -1701,7 +1703,7 @@ def map_path_to_xml_id(
             # Store this discovered mapping between ID and output file.
             #
             # The `elem.base <https://lxml.de/api/lxml.etree._Element-class.html#base>`_ gives the URL of this file (which is correct due to the custom loader). Extract the path.
-            up = urlparse(elem.base)
+            up = urllib.parse.urlparse(elem.base)
             # If this isn't a ``file`` scheme (or an unspecified schema, which seems to default to a file), we're lost.
             assert up.scheme in ("file", "")
             path = up.path
@@ -1709,12 +1711,12 @@ def map_path_to_xml_id(
             if is_win:
                 path = path[1:]
             # Use ``resolve()`` to standardize capitalization on Windows.
-            path = str(Path(path).resolve())
+            path = str(pathlib.Path(path).resolve())
             # Add this XML ID to others for this path.
             path_to_xml_id[path].append(xml_id)
 
     # Save the result as a JSON file in the ``dest_dir``.
-    (Path(dest_dir) / "mapping.json").write_text(json.dumps(path_to_xml_id))
+    (pathlib.Path(dest_dir) / "mapping.json").write_text(json.dumps(path_to_xml_id))
 
 
 #####################
