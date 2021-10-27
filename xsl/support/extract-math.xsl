@@ -77,7 +77,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- so we set the level to control associated templates          -->
 <xsl:variable name="chunk-level" select="number(0)"/>
 
-<!-- No special wrapping needed, so just copy the content -->
+<!-- Base HTML conversion (which we have imported) wraps mathematics   -->
+<!-- with a class "process-math", which is specified in the MathJax 3  -->
+<!-- configuration so we can ignore non-math bits and not get confused -->
+<!-- by stray LaTeX/ASCIIMath/MathJax markup.  Here we just rip out    -->
+<!-- and package math for subsequent processing, so no such            -->
+<!-- contortions are necessary and a simpler wrapping is possible.     -->
+
+<!-- Inline math does not need a "span", just delimiters -->
+<xsl:template name="inline-math-wrapper">
+     <xsl:param name="math"/>
+     <xsl:text>\(</xsl:text>
+     <xsl:value-of select="$math"/>
+     <xsl:text>\)</xsl:text>
+ </xsl:template>
+
+<!-- No special wrapping needed for display  -->
+<!-- mathematics, so just copy the content   -->
 <xsl:template match="me|men|md|mdn" mode="display-math-wrapper">
     <xsl:param name="content" />
     <xsl:copy-of select="$content" />
