@@ -471,6 +471,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>$</xsl:text>
 </xsl:template>
 
+<!-- The "display-math-wrapper" in the base HTML conversion has an -->
+<!-- additional "process-math" class, to be used with a MathJax 3  -->
+<!-- configuration to limit the scope of MathJax's conversions.    -->
+<!-- Rather than a hook or override to get this just right, we     -->
+<!-- leave the additional class name in place, to no real effect.  -->
+<!-- For it to be effective will require the overall "ignore-math" -->
+<!-- class, and access to the MathJax configuration.               -->
 
 <!-- Images -->
 
