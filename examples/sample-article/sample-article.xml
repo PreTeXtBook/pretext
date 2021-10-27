@@ -2716,6 +2716,8 @@ the xsltproc executable.
                 <p>Inline mathematics: \(x^2\).</p>
 
                 <p>Display mathematics: \begin{align}x^2+y^2=z^2\end{align}</p>
+
+                <p>Double backticks is a common <latex/> construction, which in <latex/>/PDF output <em>should not</em> become an opening quote-mark.  Also, a single backtick in HTML is a signal for MathJax to interpret ASCIIMath, and then a double backtick causes <q>random</q> pieces of mathematics on a page to not render at all.  So we have a quotation authored <latex/>-style: ``We have nothing to fear, but fear itself.''</p>
             </subsection>
         </section>
 
