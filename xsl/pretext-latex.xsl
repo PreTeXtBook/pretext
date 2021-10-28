@@ -8141,6 +8141,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\textquotesingle\textquotesingle{}</xsl:text>
 </xsl:template>
 
+<!-- Characters for Tagging Equations -->
+
+<xsl:template name="tag-star">
+    <xsl:text>\textasteriskcentered</xsl:text>
+</xsl:template>
+
+<xsl:template name="tag-dagger">
+    <xsl:text>\textdagger</xsl:text>
+</xsl:template>
+
+<xsl:template name="tag-daggerdbl">
+    <xsl:text>\textdaggerdbl</xsl:text>
+</xsl:template>
+
+<xsl:template name="tag-hash">
+    <xsl:text>\#</xsl:text>
+</xsl:template>
+
+<!-- AMS symbol designed for both text and math modes -->
+<xsl:template name="tag-maltese">
+    <xsl:text>\maltese</xsl:text>
+</xsl:template>
+
 <!-- Fill-in blank -->
 <!-- \fillin{} defined in preamble as semantic macro       -->
 <!-- argument is number of "em", Bringhurst suggests 5/11  -->

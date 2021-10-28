@@ -8164,6 +8164,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x2033;</xsl:text>
 </xsl:template>
 
+<!-- Characters for Tagging Equations -->
+
+<!-- 'SIX POINTED BLACK STAR' (U+2736) -->
+<xsl:template name="tag-star">
+    <xsl:text>&#x2736;</xsl:text>
+</xsl:template>
+
+<!-- 'DAGGER' (U+2020) -->
+<xsl:template name="tag-dagger">
+    <xsl:text>&#x2020;</xsl:text>
+</xsl:template>
+
+<!-- 'DOUBLE DAGGER' (U+2021) -->
+<xsl:template name="tag-daggerdbl">
+    <xsl:text>&#x2021;</xsl:text>
+</xsl:template>
+
+<!-- 'NUMBER SIGN' (U+0023) -->
+<xsl:template name="tag-hash">
+    <xsl:text>&#x0023;</xsl:text>
+</xsl:template>
+
+<!-- 'MALTESE CROSS' (U+2720) -->
+<xsl:template name="tag-maltese">
+    <xsl:text>&#x2720;</xsl:text>
+</xsl:template>
+
 <!-- Fill-in blank -->
 <!-- Bringhurst suggests 5/11 em per character                            -->
 <!-- A 'span' normally, but a MathJax non-standard \Rule for math         -->

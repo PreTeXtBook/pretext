@@ -2030,12 +2030,17 @@ the xsltproc executable.
                 <p>Use the <c>@tag</c> attribute on an <c>mrow</c>, only.  (Remember, you can have just one <c>mrow</c>.)  The behavior is identical within an <c>md</c> or <c>mdn</c>.  The value of the <c>@tag</c> attribute is a symbol name.  The prefix <c>d</c> means <q>double</q>, and the prefix <c>t</c> means <q>triple</q>.  So allowed values are<cd>
                     <cline>star, dstar, tstar</cline>
                     <cline>dagger, ddagger, tdagger</cline>
+                    <cline>daggerdbl, ddaggerdbl, tdaggerdbl</cline>
                     <cline>hash, dhash, thash</cline>
                     <cline>maltese, dmaltese, tmaltese</cline>
-                </cd>Cross-references to these tagged equations happens in the usual way and should behave as expected.<mdn>
-                    <mrow xml:id="equation-local-tag" tag="dstar">c^2 \amp = a^2+b^2</mrow>
+                </cd>Cross-references to these tagged equations happens in the usual way and should behave as expected.  We test the double versions to make sure the symbols render properly in various output formats.<mdn>
+                    <mrow xml:id="equation-local-star"      tag="dstar">c^2 \amp = a^2+b^2</mrow>
+                    <mrow xml:id="equation-local-dagger"    tag="ddagger">c^2 \amp = a^2+b^2</mrow>
+                    <mrow xml:id="equation-local-daggerdbl" tag="ddaggerdbl">c^2 \amp = a^2+b^2</mrow>
+                    <mrow xml:id="equation-local-hash"      tag="dhash">c^2 \amp = a^2+b^2</mrow>
+                    <mrow xml:id="equation-local-maltese"   tag="dmaltese">c^2 \amp = a^2+b^2</mrow>
                     <mrow>z^2 \amp = x^2+y^2</mrow>
-                </mdn>Here is a local cross-reference: <xref ref="equation-local-tag" />.  We test another farther away in <xref ref="section-cross-referencing" text="type-global" />, contrary to our advice above.</p>
+                </mdn>Here are the local cross-references: <xref ref="equation-local-star"/>, <xref ref="equation-local-dagger"/>, <xref ref="equation-local-daggerdbl"/>, <xref ref="equation-local-hash"/>, <xref ref="equation-local-maltese"/>.  We test another farther away in <xref ref="section-cross-referencing" text="type-global" />, contrary to our advice above.</p>
             </subsection>
 
             <subsection xml:id="commutative-diagrams">
@@ -6915,7 +6920,7 @@ the xsltproc executable.
                 <li><p>Display Mathematics: single, first with no name: <xref ref="equation-alternate-FTC" />.  Then with an autoname: <xref ref="equation-alternate-FTC" text="type-global" />.</p></li>
                 <li><p>Display Mathematics: multi-row, first with no name: <xref ref="equation-use-FTC" />.  Then with an autoname: <xref ref="equation-use-FTC" text="type-global" />.  And two, with a plural form: <xref ref="equation-alternate-FTC">Equations</xref> and <xref ref="equation-use-FTC" text="global" />.</p></li>
                 <li><p>You can cross-reference <xref ref="equation-use-FTC" text="custom">The Fundamental Theorem of Calculus</xref> via custom text of your choice.</p></li>
-                <li><p>Display mathematics: an equation with  <q>local</q> tag, which should not be used so very far away: <xref ref="equation-local-tag" />.</p></li>
+                <li><p>Display mathematics: an equation with  <q>local</q> tag, which should not be used so very far away: <xref ref="equation-local-star" />.</p></li>
                 <li><p>You can author a cross-reference to a displayed equation with no number, but it will not be very satisfying.  You should get a warning if you try.</p></li>
                 <li><p>Exercises (divisional), a range, with plural form provided to override autonaming: <xref first="exercises-null-problem" last="exercises-cosine-derivative">Exercises</xref>.</p></li>
                 <li><p>Exercise (inline): with enclosed hint at <xref ref="exercise-essay" /></p></li>

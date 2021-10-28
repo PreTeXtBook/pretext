@@ -1994,52 +1994,73 @@ Book (with parts), "section" at level 3
 <!-- the textcomp package, then math delimiters will    -->
 <!-- move down into the "when" parts of the "choose"    -->
 <xsl:template match="@tag" mode="tag-symbol">
-    <xsl:call-template name="inline-math-wrapper">
-        <xsl:with-param name="math">
-            <xsl:choose>
-                <!-- Stars -->
-                <xsl:when test=". = 'star'">
-                    <xsl:text>\star</xsl:text>
-                </xsl:when>
-                <xsl:when test=". = 'dstar'">
-                    <xsl:text>\star\star</xsl:text>
-                </xsl:when>
-                <xsl:when test=". = 'tstar'">
-                    <xsl:text>\star\star\star</xsl:text>
-                </xsl:when>
-                <!-- Dagger -->
-                <xsl:when test=". = 'dagger'">
-                    <xsl:text>\dagger</xsl:text>
-                </xsl:when>
-                <xsl:when test=". = 'ddagger'">
-                    <xsl:text>\dagger\dagger</xsl:text>
-                </xsl:when>
-                <xsl:when test=". = 'tdagger'">
-                    <xsl:text>\dagger\dagger\dagger</xsl:text>
-                </xsl:when>
-                <!-- Hash -->
-                <xsl:when test=". = 'hash'">
-                    <xsl:text>\#</xsl:text>
-                </xsl:when>
-                <xsl:when test=". = 'dhash'">
-                    <xsl:text>\#\#</xsl:text>
-                </xsl:when>
-                <xsl:when test=". = 'thash'">
-                    <xsl:text>\#\#\#</xsl:text>
-                </xsl:when>
-                <!-- Maltese -->
-                <xsl:when test=". = 'maltese'">
-                    <xsl:text>\maltese</xsl:text>
-                </xsl:when>
-                <xsl:when test=". = 'dmaltese'">
-                    <xsl:text>\maltese\maltese</xsl:text>
-                </xsl:when>
-                <xsl:when test=". = 'tmaltese'">
-                    <xsl:text>\maltese\maltese\maltese</xsl:text>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:with-param>
-    </xsl:call-template>
+    <xsl:choose>
+        <!-- Stars -->
+        <xsl:when test=". = 'star'">
+            <xsl:call-template name="tag-star"/>
+        </xsl:when>
+        <xsl:when test=". = 'dstar'">
+            <xsl:call-template name="tag-star"/>
+            <xsl:call-template name="tag-star"/>
+        </xsl:when>
+        <xsl:when test=". = 'tstar'">
+            <xsl:call-template name="tag-star"/>
+            <xsl:call-template name="tag-star"/>
+            <xsl:call-template name="tag-star"/>
+        </xsl:when>
+        <!-- Dagger -->
+        <xsl:when test=". = 'dagger'">
+            <xsl:call-template name="tag-dagger"/>
+        </xsl:when>
+        <xsl:when test=". = 'ddagger'">
+            <xsl:call-template name="tag-dagger"/>
+            <xsl:call-template name="tag-dagger"/>
+        </xsl:when>
+        <xsl:when test=". = 'tdagger'">
+            <xsl:call-template name="tag-dagger"/>
+            <xsl:call-template name="tag-dagger"/>
+            <xsl:call-template name="tag-dagger"/>
+        </xsl:when>
+        <!-- Double Dagger -->
+        <xsl:when test=". = 'daggerdbl'">
+            <xsl:call-template name="tag-daggerdbl"/>
+        </xsl:when>
+        <xsl:when test=". = 'ddaggerdbl'">
+            <xsl:call-template name="tag-daggerdbl"/>
+            <xsl:call-template name="tag-daggerdbl"/>
+        </xsl:when>
+        <xsl:when test=". = 'tdaggerdbl'">
+            <xsl:call-template name="tag-daggerdbl"/>
+            <xsl:call-template name="tag-daggerdbl"/>
+            <xsl:call-template name="tag-daggerdbl"/>
+        </xsl:when>
+        <!-- Hash -->
+        <xsl:when test=". = 'hash'">
+            <xsl:call-template name="tag-hash"/>
+        </xsl:when>
+        <xsl:when test=". = 'dhash'">
+            <xsl:call-template name="tag-hash"/>
+            <xsl:call-template name="tag-hash"/>
+        </xsl:when>
+        <xsl:when test=". = 'thash'">
+            <xsl:call-template name="tag-hash"/>
+            <xsl:call-template name="tag-hash"/>
+            <xsl:call-template name="tag-hash"/>
+        </xsl:when>
+        <!-- Maltese -->
+        <xsl:when test=". = 'maltese'">
+            <xsl:call-template name="tag-maltese"/>
+        </xsl:when>
+        <xsl:when test=". = 'dmaltese'">
+            <xsl:call-template name="tag-maltese"/>
+            <xsl:call-template name="tag-maltese"/>
+        </xsl:when>
+        <xsl:when test=". = 'tmaltese'">
+            <xsl:call-template name="tag-maltese"/>
+            <xsl:call-template name="tag-maltese"/>
+            <xsl:call-template name="tag-maltese"/>
+        </xsl:when>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Intertext -->
@@ -10501,6 +10522,38 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:call-template name="dblprime-character"/>
 </xsl:template>
 
+<!-- Characters for Tagging Equations -->
+
+<xsl:template name="tag-star">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'tag-star'"/>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="tag-dagger">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'tag-dagger'"/>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="tag-daggerdbl">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'tag-daggerdbl'"/>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="tag-hash">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'tag-hash'"/>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- AMS symbol designed for both text and math modes -->
+<xsl:template name="tag-maltese">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'tag-maltese'"/>
+    </xsl:call-template>
+</xsl:template>
 
 <!-- Dots
 http://tex.stackexchange.com/questions/19180/which-dot-character-to-use-in-which-context
