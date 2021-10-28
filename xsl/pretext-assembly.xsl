@@ -42,6 +42,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                                               -->
 <!-- * $original will point to source file/tree/XML at the overall -->
 <!--   "pretext" element.                                          -->
+<!-- * The "version" templates are applied to decide if certain    -->
+<!--   elements are excluded from the source tree.  This creates   -->
+<!--   the new $version source tree by *removing* source.          -->
 <!-- * The modal "assembly" templates are applied to the source    -->
 <!--   root element, creating a new version of the source, which   -->
 <!--   has been "enhanced".  Various things happen in this pass,   -->
@@ -50,9 +53,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   or automatically repairing deprecated constructions so that -->
 <!--   actual conversions can remove orphaned code.  This creates  -->
 <!--   the $assembly source tree.                                  -->
-<!-- * The two modal "version" templates are applied to decide if  -->
-<!--   certain elements are included or excluded from the source   -->
-<!--   tree.  This creates the $version source tree.               -->
 <!-- * $version will point to the root of the final enhanced       -->
 <!--   source file/tree/XML.                                       -->
 <!-- * $root will override (via this import) the similar variable  -->
@@ -88,15 +88,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- pass: elements, attributes, text, whitespace, comments,     -->
 <!-- everything. Various other templates will override these     -->
 <!-- templates to create a new enhanced source tree.             -->
-<xsl:template match="node()|@*" mode="assembly">
-    <xsl:copy>
-        <xsl:apply-templates select="node()|@*" mode="assembly"/>
-    </xsl:copy>
-</xsl:template>
-
 <xsl:template match="node()|@*" mode="version">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="version"/>
+    </xsl:copy>
+</xsl:template>
+
+<xsl:template match="node()|@*" mode="assembly">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="assembly"/>
     </xsl:copy>
 </xsl:template>
 
@@ -106,23 +106,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- new tree as a (text) result tree fragment and then we     -->
 <!-- convert it into real XML nodes. These "real" trees have a -->
 <!-- root element, as a result of the node-set() manufacture.  -->
-<xsl:variable name="assembly-rtf">
+<xsl:variable name="version-rtf">
     <xsl:call-template name="assembly-warnings"/>
     <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: start assembly</xsl:message>
+        <xsl:message><xsl:value-of select="date:date-time()"/>: start version</xsl:message>
     </xsl:if>
-    <!--  -->
-    <xsl:apply-templates select="/" mode="assembly"/>
-    <!--  -->
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: end assembly</xsl:message>
-    </xsl:if>
-    <!--  -->
-</xsl:variable>
-<xsl:variable name="assembly" select="exsl:node-set($assembly-rtf)"/>
-
-<xsl:variable name="version-rtf">
-    <xsl:apply-templates select="$assembly" mode="version"/>
+    <xsl:apply-templates select="/" mode="version"/>
     <!--  -->
     <xsl:if test="$time-assembly">
         <xsl:message><xsl:value-of select="date:date-time()"/>: end version</xsl:message>
@@ -131,11 +120,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="version" select="exsl:node-set($version-rtf)"/>
 
+<xsl:variable name="assembly-rtf">
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: start assembly</xsl:message>
+    </xsl:if>
+    <!--  -->
+    <xsl:apply-templates select="$version" mode="assembly"/>
+    <!--  -->
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: end assembly</xsl:message>
+    </xsl:if>
+    <!--  -->
+</xsl:variable>
+<xsl:variable name="assembly" select="exsl:node-set($assembly-rtf)"/>
+
 <!-- -common defines a "$root" which is the overall named element. -->
 <!-- We override it here and then -common will define some derived -->
 <!-- variables based upon the $root                                -->
 <!-- NB: source repair below converts a /mathbook to a /pretext    -->
-<xsl:variable name="root" select="$version/pretext" />
+<xsl:variable name="root" select="$assembly/pretext"/>
 
 
 <!-- ######################## -->
@@ -234,7 +237,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:choose>
         </xsl:when>
         <xsl:when test="$b-doing-webwork-assembly">
-            <xsl:copy-of select="document($webwork-representations-file, /pretext)/webwork-representations/webwork-reps[@ww-id=$ww-id]" />
+            <xsl:copy-of select="document($webwork-representations-file, $original)/webwork-representations/webwork-reps[@ww-id=$ww-id]" />
         </xsl:when>
         <xsl:otherwise>
             <statement>
