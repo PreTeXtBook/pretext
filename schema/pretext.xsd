@@ -2865,6 +2865,9 @@
             <xs:enumeration value="dagger"/>
             <xs:enumeration value="ddagger"/>
             <xs:enumeration value="tdagger"/>
+            <xs:enumeration value="daggerdbl"/>
+            <xs:enumeration value="ddaggerdbl"/>
+            <xs:enumeration value="tdaggerdbl"/>
             <xs:enumeration value="hash"/>
             <xs:enumeration value="dhash"/>
             <xs:enumeration value="thash"/>

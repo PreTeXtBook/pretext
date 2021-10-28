@@ -3212,6 +3212,9 @@
               <value>dagger</value>
               <value>ddagger</value>
               <value>tdagger</value>
+              <value>daggerdbl</value>
+              <value>ddaggerdbl</value>
+              <value>tdaggerdbl</value>
               <value>hash</value>
               <value>dhash</value>
               <value>thash</value>

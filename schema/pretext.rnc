@@ -1295,6 +1295,7 @@
                         attribute number {"yes" | "no"} |
                         attribute tag {"star" | "dstar" | "tstar" |
                                        "dagger" | "ddagger" | "tdagger" |
+                                       "daggerdbl" | "ddaggerdbl" | "tdaggerdbl" |
                                        "hash" | "dhash" | "thash" |
                                        "maltese" | "dmaltese" | "tmaltese" }
                     )?,
