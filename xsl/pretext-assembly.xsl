@@ -49,11 +49,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   root element, creating a new version of the source, which   -->
 <!--   has been "enhanced".  Various things happen in this pass,   -->
 <!--   such as assembling auxiliary files of content (WeBWorK      -->
-<!--   representations, private solutions, bibliographic items),   -->
-<!--   or automatically repairing deprecated constructions so that -->
-<!--   actual conversions can remove orphaned code.  This creates  -->
-<!--   the $assembly source tree.                                  -->
-<!-- * $version will point to the root of the final enhanced       -->
+<!--   representations, private solutions, bibliographic items).   -->
+<!--   This creates the $assembly source tree by *adding* new      -->
+<!--   source elements.                                            -->
+<!-- * The "repair" templates will automatically repair deprecated -->
+<!--   constructions so that actual conversions can remove         -->
+<!--   orphaned code.  Despite the name, we also implement         -->
+<!--   conveniences that are universal accross all conversions, so -->
+<!--   that conversions can assume a more canonical version of the -->
+<!--   source, or remove the need for additional templates to      -->
+<!--   realize certain constructions (e.g. url/@visual).  This     -->
+<!--   creates the $repair source tree by *changing* source.       -->
+<!-- * $repair will point to the root of the final enhanced        -->
 <!--   source file/tree/XML.                                       -->
 <!-- * $root will override (via this import) the similar variable  -->
 <!--   defined in -common.                                         -->
@@ -100,6 +107,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<xsl:template match="node()|@*" mode="repair">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </xsl:copy>
+</xsl:template>
+
 <!-- These templates initiate and create several iterations of -->
 <!-- the source tree via modal templates.  Think of each as a  -->
 <!-- "pass" through the source. Generally this constructs the  -->
@@ -134,11 +147,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="assembly" select="exsl:node-set($assembly-rtf)"/>
 
+<xsl:variable name="repair-rtf">
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: start repair</xsl:message>
+    </xsl:if>
+    <!--  -->
+    <xsl:apply-templates select="$assembly" mode="repair"/>
+    <!--  -->
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: end repair</xsl:message>
+    </xsl:if>
+    <!--  -->
+</xsl:variable>
+<xsl:variable name="repair" select="exsl:node-set($repair-rtf)"/>
+
 <!-- -common defines a "$root" which is the overall named element. -->
 <!-- We override it here and then -common will define some derived -->
 <!-- variables based upon the $root                                -->
 <!-- NB: source repair below converts a /mathbook to a /pretext    -->
-<xsl:variable name="root" select="$assembly/pretext"/>
+<xsl:variable name="root" select="$repair/pretext"/>
 
 
 <!-- ######################## -->
@@ -373,9 +400,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- LaTeX from being able to use a \url{} construction which does sensible -->
 <!-- line-breaking. -->
 
-<xsl:template match="url[@visual]" mode="assembly">
+<xsl:template match="url[@visual]" mode="repair">
     <xsl:copy>
-        <xsl:apply-templates select="node()|@*[not(local-name(.) = 'visual')]" mode="assembly"/>
+        <xsl:apply-templates select="node()|@*[not(local-name(.) = 'visual')]" mode="repair"/>
     </xsl:copy>
     <fn><c><xsl:value-of select="@visual"/></c></fn>
 </xsl:template>
@@ -390,19 +417,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- accurately that the source has certain characteristics.    -->
 
 <!-- 2019-04-02  "mathbook" replaced by "pretext" -->
-<xsl:template match="/mathbook" mode="assembly">
+<xsl:template match="/mathbook" mode="repair">
     <pretext>
-        <xsl:apply-templates select="node()|@*" mode="assembly"/>
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
     </pretext>
 </xsl:template>
 
 <!-- 2021-07-02 wrap notation/usage in "m" if not present -->
-<xsl:template match="notation/usage[not(m)]" mode="assembly">
+<xsl:template match="notation/usage[not(m)]" mode="repair">
     <!-- duplicate "usage" w/ attributes, insert "m" as repair -->
     <usage>
-        <xsl:apply-templates select="@*" mode="assembly"/>
+        <xsl:apply-templates select="@*" mode="repair"/>
         <m>
-            <xsl:apply-templates select="node()|@*" mode="assembly"/>
+            <xsl:apply-templates select="node()|@*" mode="repair"/>
         </m>
     </usage>
 </xsl:template>
@@ -410,27 +437,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2021-10-04 "glossary" was finalized, so old-style preserved -->
 
 <!-- glossary introductions become headnotes -->
-<xsl:template match="glossary/introduction" mode="assembly">
+<xsl:template match="glossary/introduction" mode="repair">
     <headnote>
-        <xsl:apply-templates select="node()|@*" mode="assembly"/>
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
     </headnote>
 </xsl:template>
 
 <!-- "terms" only ever had "defined-term" as children    -->
 <!-- and is now obsolete, so dropped as excess structure -->
-<xsl:template match="glossary/terms" mode="assembly">
-    <xsl:apply-templates select="defined-term" mode="assembly"/>
+<xsl:template match="glossary/terms" mode="repair">
+    <xsl:apply-templates select="defined-term" mode="repair"/>
 </xsl:template>
 
 <!-- "defined-term" was structured, so we just select elements -->
-<xsl:template match="glossary/terms/defined-term" mode="assembly">
+<xsl:template match="glossary/terms/defined-term" mode="repair">
     <gi>
-        <xsl:apply-templates select="*|@*" mode="assembly"/>
+        <xsl:apply-templates select="*|@*" mode="repair"/>
     </gi>
 </xsl:template>
 
 <!-- no more "conclusion", so drop it here; deprecation will warn -->
-<xsl:template match="glossary/conclusion" mode="assembly"/>
+<xsl:template match="glossary/conclusion" mode="repair"/>
 
 <!-- ######## -->
 <!-- Versions -->
