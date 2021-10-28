@@ -1383,7 +1383,13 @@
 
             <p>On any given <tag>mrow</tag> you can place the <attr>number</attr> attribute, with allowable values of <c>yes</c> and <c>no</c>.  These will typically be used to override the behavior inherited by the container, but there is no harm if they are redundant.  A given line of the display may be the target of a cross-reference, though the numbering flexibility means you can try (and fail) to target an unnumbered equation.</p>
 
-            <p>An <tag>mrow</tag> may have a <attr>tag</attr> attribute in place of a <attr>number</attr> attribute.  This will create a <q>number</q> on the equation which is just a symbol.  This is meant for situations where you do not want to use numbers, and the resulting cross-reference is <q>local.</q>  In other words, the <tag>xref</tag> and its target are not far apart, such as maybe within the same <tag>example</tag> or the same <tag>proof</tag>.  Allowable values for the attribute are: <c>star, dstar, tstar, dagger, ddagger, tdagger, hash, dhash, thash, maltese, dmaltese, tmaltese</c>.  These are the names of symbols, with prefixes where the prefix <c>d</c> means <q>double</q>, and the prefix <c>t</c> means <q>triple</q>.  Cross-references to these tagged equations happens in the usual way and should behave as expected.  See <xref ref="overview-cross-references" /> and <xref ref="topic-cross-referencing" /> for more on cross-references.</p>
+            <p>An <tag>mrow</tag> may have a <attr>tag</attr> attribute in place of a <attr>number</attr> attribute.  This will create a <q>number</q> on the equation which is just a symbol.  This is meant for situations where you do not want to use numbers, and the resulting cross-reference is <q>local.</q>  In other words, the <tag>xref</tag> and its target are not far apart, such as maybe within the same <tag>example</tag> or the same <tag>proof</tag>.  Allowable values for the attribute are:<cd>
+                <cline>star, dstar, tstar,</cline>
+                <cline>dagger, ddagger, tdagger,</cline>
+                <cline>daggerdbl, ddaggerdbl, tdaggerdbl,</cline>
+                <cline>hash, dhash, thash,</cline>
+                <cline>maltese, dmaltese, tmaltese</cline>
+            </cd>These are the names of symbols, with prefixes where the prefix <c>d</c> means <q>double</q>, and the prefix <c>t</c> means <q>triple</q>.  Cross-references to these tagged equations happens in the usual way and should behave as expected.  See <xref ref="overview-cross-references" /> and <xref ref="topic-cross-referencing" /> for more on cross-references.</p>
         </subsection>
 
         <subsection xml:id="mathematics-xml-characters">
