@@ -209,9 +209,6 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     margin-top: 0;
 }
 
-.pretext-content dl {
-    margin-top: 1em;
-}
 .pretext-content li {
     margin-top: 0.5em;
 }
@@ -224,23 +221,6 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 
 .pretext-content ol ol, .pretext-content ol ul,  .pretext-content ul ol, .pretext-content ul ul {
     margin-top: 0.5em;
-}
-
-.pretext-content dl dt, .pretext-content dl dd {
-    margin-top: 1.5em;
-}
-.pretext-content dl dd p {
-    margin-top: 1em;
-}
-.pretext-content dl dt > p:first-child, .pretext-content dl dd > p:first-child {
-    margin-top: 0;
-}
-
-.pretext-content dl dt:first-of-type, .pretext-content dl dd:first-of-type {
-    margin-top: 0;
-}
-.pretext-content dl.glossary dd {
-    margin-top: 0;
 }
 
 .pretext-content .frontmatter > .heading {
@@ -1605,15 +1585,61 @@ body > a.assistive:focus {
     list-style-type: none;
 }
 
-/* The dl should behave more like the default on a narrow screen,
- * with the term and definition on separate lines.
+/* needed for dl, but probably won't cause harm elsewhere */
+.pretext-content section,
+.pretext-content article,
+.pretext-content figure {
+    clear: both;
+}
+
+/* dl is used for glossaries and descriptions lists.
+   Glossaries are simple:  bold word by itself on a line.
+        Definition indented on the next line.
+        Vertical space before the next term.
+
+   Description lists are more complicated.  The wider version
+   (refering to the horizontal indentation of the definition;
+    this is the default)
+   has the (wrapped) term inline with the definition.
+
+   The narrow version is complicated because the term is inline
+   with its definition if it fits, otherwise it is on the line above.
+   That means the vertical space between entries can't be handled by
+   a top margin on the dt.  Instead we have an ::after on the dd .
  */
 
-.pretext-content dl.description-list {
+.pretext-content dl {
+    margin-top: 1em;
     margin-left: 0;
     margin-bottom: 0;
     overflow: hidden;
 }
+.pretext-content dl dd {
+    margin-top: 0;
+}
+.pretext-content dl.glossary dt {
+    margin-top: 1.25em;
+}
+.pretext-content dl.description-list dt,
+.pretext-content dl.description-list dd {
+    margin-top: 1em;
+}
+.pretext-content dl.description-list.narrow dt {
+    margin-top: 0;
+}
+.pretext-content dl.glosary dt:first-of-type,
+.pretext-content dl.description-list dt:first-of-type,
+.pretext-content dl.glosary dd:first-of-type,
+.pretext-content dl.description-list dd:first-of-type {
+    margin-top: 0;
+}
+.pretext-content dl dd p {
+    margin-top: 1em;
+}
+.pretext-content dl dt > p:first-child, .pretext-content dl dd > p:first-child {
+    margin-top: 0;
+}
+
 
 .pretext-content dl > dt {
     font-weight: bold;
@@ -1626,43 +1652,42 @@ body > a.assistive:focus {
     text-align: right;
     width: 18ex;
 }
+.pretext-content dl.description-list.narrow dt,
+.pretext-content dl.glossary dt {
+    text-align: left;
+}
+.pretext-content dl.glossary dd {
+    margin-left: 5ex;
+}
 .pretext-content dl.description-list dd {
     margin-left: 22ex;
-}
-
-.pretext-content dl.description-list dl dt {
-    width: 8ex;
-}
-.pretext-content dl.description-list dd dd {
-    margin-left: 18ex;
-}
-.pretext-content dl.description-list dl dd {
-    margin-left: 12ex;
-}
-
-.pretext-content dl.description-list dd::after {
-    content: "";
-    display: block;
-    clear: left;
-}
-.pretext-content dl.description-list dt:first-of-type {
-    clear: none;
-}
-.pretext-content dl.description-list.narrow dt {
-    width: 8ex;
 }
 .pretext-content dl.description-list.narrow dd {
     margin-left: 12ex;
 }
-.pretext-content dl.description-list dd::after {
+.pretext-content dl.description-list dt:first-of-type {
+    clear: none;
+}
+.pretext-content dl.description-list.narrow dd::after {
     content: "";
     display: block;
     height: 1em;
+    clear: left;
 }
-.pretext-content dl.description-list dd:last-child::after {
+.pretext-content dl.description-list.narrow dd:last-child::after {
     height: 0;
 }
 
+.pretext-content dl.description-list dt {
+    float: left;
+    clear: both;
+    margin-right: 1ex;
+}
+.pretext-content dl.description-list.narrow dt {
+    width: unset;
+    max-width: 55ex;
+    text-align: left;
+}
 .pretext-content dl.description-list.narrow dd {
     margin-left: 0;
     margin-top: 0;
@@ -1672,24 +1697,7 @@ body > a.assistive:focus {
     clear: right;
 }
 
-.pretext-content dl.description-list.narrow dt {
-margin-top: 0;
-width: unset;
-max-width: 55ex;
-    float: left;
-    text-align: left;
-    clear: both;
-    margin-right: 1ex;
-}
-.pretext-content dl.description-list.narrow dt {
-    text-align: left;
-}
 .pretext-content dl.description-list + * {
-    clear: both;
-}
-.pretext-content section,
-.pretext-content article,
-.pretext-content figure {
     clear: both;
 }
 
@@ -1699,16 +1707,28 @@ max-width: 55ex;
     margin-left: 0;
     text-align: left;
   }
-  .pretext-content dl.description-list dd {
+  .pretext-content dl.description-list dd,
+  .pretext-content dl.description-list.narrow dd {
     margin-top: 0.5em;
     margin-left: 3em;
+    max-width: calc(100% - 3em);
   }
 }
-
+/* where do we have nested dl? */
+.pretext-content dl.description-list dl dt {
+    width: 8ex;
+}
+.pretext-content dl.description-list dd dd {
+    margin-left: 18ex;
+}
+.pretext-content dl.description-list dl dd {
+    margin-left: 12ex;
+}
 .pretext-content [data-knowl] > mjx-mrow .TEX-I {
     font-family: MJXZERO !important;
     font-style: normal !important;
 }
+
 /* remove this when MathJax fixes the bug that was setting the width to 0 */
 /* as in  $x=0$.  becomes  $x=0\text{.}$ */
 .pretext-content .knowl mjx-mtext > mjx-utext {
@@ -1851,7 +1871,7 @@ a.mjx-svg-href  {
     margin: 0;
 }
 .pretext-content article.exercise-like .task > .heading + .heading {
-    font-weight: 600;  /* still looks same as bold to me */
+    font-weight: 600;  /* should be slightly less bold, but some browsers make it bold */
 }
 .pretext-content article.exercise-like .task > .heading + .heading + p,
 .pretext-content article.exercise-like .task > .heading + .heading + div {
