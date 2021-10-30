@@ -23,7 +23,7 @@ Thanks for your interest in making PreTeXt better.  Contributions from users are
 *  Use the [pretext-dev](https://groups.google.com/forum/#!forum/pretext-dev) Google Group to float your idea before starting.  You will get some good feedback that will make your contribution better and you may get some cautions that will save you some effort.
 *  Pull requests on GitHub are the easiest way to contribute and are really the only practical way for us to review, test, and incorporate your work.  If you are new to Git, there is lots of information on the Internet, and some of it is even helpful and accurate.  You can also read a guide we put together, [Git for Authors](https://pretextbook.org/gfa/html/). Despite the title, it has general principles and techniques that work equally well for software.
 *  **Always** begin a new branch for a contribution.  And keep topically distinct contributions on different branches.  Small and compact is better than large and diverse.
-*  Pull frequently from the main line of development for official MathBook XML (`dev` at this writing) to update current progress.  Then **rebase** your topic branch onto the tip of this official branch as you work.
+*  Pull frequently from the main line of development for official PreTeXt (`dev` at this writing) to update current progress.  Then **rebase** your topic branch onto the tip of this official branch as you work.
 ```
 git checkout dev
 git pull origin dev

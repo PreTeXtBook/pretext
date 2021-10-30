@@ -1,6 +1,6 @@
 # WeBWorK examples
 
-These examples demonstrate how to author, and process, [WeBWorK](http://webwork.maa.org/) automated homework problems for inclusion in a [MathBook XML](https://pretextbook.org) document.
+These examples demonstrate how to author, and process, [WeBWorK](http://webwork.maa.org/) automated homework problems for inclusion in a [PreTeXt](https://pretextbook.org) document.
 
 Because the process can be a bit more involved when your document includes a WW problem, we provide a makefile to process the examples and as concrete documentation of how to process your own document.
 

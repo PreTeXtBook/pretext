@@ -1,8 +1,8 @@
-# MathBook XML Examples
+# PreTeXt Examples
 
 Some directories have their own `README`.  This is an overview of the contents of the `examples/` directory, with the date of the last update for each entry.
 
-For several of these, sample output (PDF, HTML) is produced routinely and is available at the MathBook XML website from the "Examples" page.
+For several of these, sample output (PDF, HTML) is produced routinely and is available at the PreTeXt website from the "Examples" page.
 
 
 ### Sample Article (`sample-article/`)
@@ -22,12 +22,12 @@ A short article.  This is a good place to test a problematic construction. This 
 
 ### Hello, World (`hello-world/`)
 
-The bare minimum, about as little as you can do and still be valid MathBook XML.  (2016-02-20)
+The bare minimum, about as little as you can do and still be valid PreTeXt.  (2016-02-20)
 
 
 ### WeBWorK (`webwork/`)
 
-Several examples of how to author WeBWorK online homework problems within a MathBook XML book.  See the `Makefile` for guidance on how to build the examples.  (2016-02-20)
+Several examples of how to author WeBWorK online homework problems within a PreTeXt book.  See the `Makefile` for guidance on how to build the examples.  (2016-02-20)
 
 
 ### Braille (`braille/`)
@@ -37,7 +37,7 @@ A fairly simple document to test the conversion of principal elements of a docum
 
 ### Humanities in Action (`humanities/`)
 
-Various exhibits of material authored in MathBook XML which might be of more interest to Humanities scholars.  Initiated by Jahrme Risner during his Summer 2016 undergraduate research project.  (2016-07-10)
+Various exhibits of material authored in PreTeXt which might be of more interest to Humanities scholars.  Initiated by Jahrme Risner during his Summer 2016 undergraduate research project.  (2016-07-10)
 
 
 ### Characters, Fonts, and Languages (`fonts/`)
@@ -47,7 +47,7 @@ A testing and demonstration document similar to the sample article, but focused 
 
 ### Pug (`pug`)
 
-Pug (nee Jade) is a Javascript template engine, which can be employed easily to output MathBook XML source.  So if you prefer to format with whitespace, this could be a good choice.  "Normal" output is best, but using a `-P` flag provides better formatting of the XML output for human eyes.  Contributed by Harald Schilly.  (2016-05-21)
+Pug (nee Jade) is a Javascript template engine, which can be employed easily to output PreTeXt source.  So if you prefer to format with whitespace, this could be a good choice.  "Normal" output is best, but using a `-P` flag provides better formatting of the XML output for human eyes.  Contributed by Harald Schilly.  (2016-05-21)
 
 A subdirectory contains the original file for the Windows Installation Notes of the Author's Guide, contributed by Dave Rosoff.  It needs a few fixes, and will not be maintained, but will give a good demonstration of how a substantial chunk of content could be authored with Pug.  (2016-05-31)
 
