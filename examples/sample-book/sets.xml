@@ -487,7 +487,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </example>
 
         <example xml:id="example-sets-exponential">
-            <title>Exponential and Logarthmic Functions are Inverses</title>
+            <title>Exponential and Logarithmic Functions are Inverses</title>
             <p>The natural logarithm and the exponential functions, <m>f(x) = \ln x</m> and <m>f^{-1}(x) = e^x</m>, are inverses of each other provided that we are careful about choosing domains.  Observe that  
                 <me>f(f^{-1}(x)) = f(e^x) = \ln e^x = x</me>
             and
