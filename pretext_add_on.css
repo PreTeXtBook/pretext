@@ -2741,6 +2741,9 @@ and condider having this replace line 3338 of the general code (which uses .head
 .pretext-content .summary-links li {
     margin-top: 0;
 }
+.pretext-content section .summary-links li .title {
+    font-style: normal;
+}
 .pretext-content .summary-links a {
   position: relative;
   display: block;
