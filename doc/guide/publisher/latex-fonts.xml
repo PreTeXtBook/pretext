@@ -13,7 +13,7 @@
     <introduction>
         <p>Part of a book's style is the choice of fonts.  As of 2019-11-09 we have a better understanding of the use of fonts in <latex/> to the point where we can design interfaces that will make it simpler for you to experiment with different choices and preserve various features that <pretext/> enables.</p>
 
-        <p>The first thing to understand is that the <c>xelatex</c> engine is much more capable of employing modern fonts.  <tex/> was built in the late 1970's when computer resources were at a premium, and the idea of mixing mathematics with non-Western languages and scripts may have been fanciful.  The <c>pdflatex</c> engine is rooted in this history.  We now have the Unicode standard, thoroughly integrated into web browsers, and companion scalable OpenType fonts.  In contrast to <tex/>, XeTeX was designed to work better with a multitude of fonts.  So we organize this section by this distinction.</p>
+        <p>The first thing to understand is that the <c>xelatex</c> engine is much more capable of employing modern fonts.  <tex/> was built in the late 1970's when computer resources were at a premium, and the idea of mixing mathematics with non-Western languages and scripts may have been fanciful.  The <c>pdflatex</c> engine is rooted in this history.  We now have the Unicode standard, thoroughly integrated into web browsers, and companion scalable OpenType fonts.  In contrast to <tex/>, <xetex/> was designed to work better with a multitude of fonts.  So we organize this section by this distinction.</p>
     </introduction>
 
     <section>

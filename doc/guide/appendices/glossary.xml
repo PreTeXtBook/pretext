@@ -532,9 +532,9 @@
     </gi>
 
     <gi>
-        <idx>XeLaTeX</idx>
-        <title>XeLaTeX</title>
-        <p>One of the available programs to convert <latex/> to DVI or PDF.
+        <idx><xelatex/></idx>
+        <title><xelatex/></title>
+        <p>One of the available programs to convert <latex/> to DVI or PDF, the executable is <c>xelatex</c>.
         </p>
     </gi>
 

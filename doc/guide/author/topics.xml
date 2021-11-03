@@ -753,7 +753,7 @@
             </paragraphs>
 
             <paragraphs>
-                <title><tage>tex</tage>, <tage>latex</tage>, <tage>pretext</tage>, <tage>webwork</tage>, <tex />, <latex />, <pretext />, <webwork/></title>
+                <title><tage>tex</tage>, <tage>latex</tage>, <tage>xetex</tage>, <tage>xelatex</tage>, <tage>pretext</tage>, <tage>webwork</tage>, <tex />, <latex />, <xetex/>, <xelatex/>, <pretext />, <webwork/></title>
                 <p>Conveniences for frequently-mentioned accessories to <pretext />.</p>
             </paragraphs>
 
