@@ -502,6 +502,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% this is a necessity for isolating styling and behavior&#xa;</xsl:text>
     <xsl:text>%% The tcolorbox library of the same name loads the base library&#xa;</xsl:text>
     <xsl:text>\tcbuselibrary{xparse}&#xa;</xsl:text>
+    <xsl:text>%% The tcolorbox library loads TikZ, its calc package is generally useful,&#xa;</xsl:text>
+    <xsl:text>%% and is necessary for some smaller documents that use partial tcolor boxes&#xa;</xsl:text>
+    <xsl:text>%% See:  https://github.com/rbeezer/mathbook/issues/1624&#xa;</xsl:text>
+    <xsl:text>\usetikzlibrary{calc}&#xa;</xsl:text>
     <xsl:text>%% Hyperref should be here, but likes to be loaded late&#xa;</xsl:text>
     <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Inline math delimiters, \(, \), need to be robust&#xa;</xsl:text>
