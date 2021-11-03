@@ -3132,6 +3132,8 @@
         <xs:element ref="timeofday"/>
         <xs:element ref="tex"/>
         <xs:element ref="latex"/>
+        <xs:element ref="xetex"/>
+        <xs:element ref="xelatex"/>
         <xs:element name="pretext">
           <xs:complexType/>
         </xs:element>
@@ -3165,6 +3167,12 @@
     <xs:complexType/>
   </xs:element>
   <xs:element name="latex">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="xetex">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="xelatex">
     <xs:complexType/>
   </xs:element>
   <xs:element name="ad">

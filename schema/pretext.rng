@@ -3464,6 +3464,12 @@
       <element name="latex">
         <empty/>
       </element>
+      <element name="xetex">
+        <empty/>
+      </element>
+      <element name="xelatex">
+        <empty/>
+      </element>
       <element name="pretext">
         <empty/>
       </element>

@@ -614,6 +614,8 @@
                 element timeofday {empty} |
                 element tex {empty} |
                 element latex {empty} |
+                element xetex {empty} |
+                element xelatex {empty} |
                 element pretext {empty} |
                 element webwork {empty} |
                 element ad {empty} |
