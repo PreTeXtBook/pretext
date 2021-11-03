@@ -9664,13 +9664,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="cp3d-endpoint">
         <xsl:choose>
             <xsl:when test="@variant='application'">
-                <xsl:text>https://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D</xsl:text>
+                <xsl:text>https://c3d.libretexts.org/CalcPlot3D/index.html</xsl:text>
             </xsl:when>
             <xsl:when test="@variant='controls'">
-                <xsl:text>https://www.monroecc.edu/faculty/paulseeburger/CalcPlot3D/dynamicFigureWCP</xsl:text>
+                <xsl:text>https://c3d.libretexts.org/CalcPlot3D/dynamicFigureWCP/index.html</xsl:text>
             </xsl:when>
             <xsl:when test="@variant='minimal'">
-                <xsl:text>https://www.monroecc.edu/faculty/paulseeburger/CalcPlot3D/dynamicFigure</xsl:text>
+                <xsl:text>https://c3d.libretexts.org/CalcPlot3D/dynamicFigure/index.html</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <!-- just a silly domain so something none-too-crazy happens -->
@@ -9682,7 +9682,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <!-- load 'em up and go -->
     <!-- TODO: box-sizing, etc does not seem to help with vertical scroll bars -->
-    <xsl:variable name="full-url" select="concat($cp3d-endpoint, '/?', @calcplot3d)" />
+    <xsl:variable name="full-url" select="concat($cp3d-endpoint, '?', @calcplot3d)" />
     <iframe src="{$full-url}">
         <xsl:apply-templates select="." mode="iframe-id"/>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />

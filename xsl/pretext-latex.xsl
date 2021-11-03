@@ -8696,11 +8696,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- CalcPlot3D -->
 <xsl:template match="interactive[@platform='calcplot3d']" mode="info-text">
-    <!-- code/url will need sanitization -->
-    <xsl:text>CalcPlot3D: \href{https://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D/}</xsl:text>
-<!--     <xsl:text>CalcPlot3D: \href{https://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D/?</xsl:text>
-    <xsl:value-of select="code" />
- -->    <xsl:text>{\mono{www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D}}&#xa;</xsl:text>
+    <!-- code/url too much to include! -->
+    <xsl:text>CalcPlot3D: \href{https://c3d.libretexts.org/CalcPlot3D/index.html}</xsl:text>
+    <xsl:text>{\mono{c3d.libretexts.org/CalcPlot3D/index.html}}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- JSXGraph -->
