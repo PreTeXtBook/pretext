@@ -8197,8 +8197,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>$\Leftarrow$</xsl:text>
 </xsl:template>
 
-<!-- TeX, LaTeX -->
-<!-- PreTeXt is in -common -->
+<!-- TeX, LaTeX via macros -->
+<!-- PreTeXt, XeLaTeX, XeTeX are in -common -->
 <xsl:template match="latex">
     <xsl:text>\LaTeX{}</xsl:text>
 </xsl:template>

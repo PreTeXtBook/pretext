@@ -9914,9 +9914,26 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- With no special formatting, "PreTeXt" can be in -common -->
 <!-- Use of "pretext" as a root container should get higher  -->
 <!-- priority when used with /, or as a variable             -->
+<!-- NB: there is a \XeTeX macro which renders the first "E" -->
+<!-- backwards, but it is only defined when actually using   -->
+<!-- xelatex (not pdflatex).  The LaTeX/PDF conversion could -->
+<!-- conditionally define an internal macro based on the     -->
+<!-- engine.  But we do not talk about XeTeX as much as      -->
+<!-- XeLaTeX.                                                -->
+<!-- NB: We have not attempted to make the "xe-" variants    -->
+<!-- with fancy typography for HTML output, but one could    -->
+<!-- mimic the HTML/CSS used for TeX and LaTeX in that       -->
+<!-- conversion.                                             -->
 <xsl:template match="pretext">
     <xsl:text>PreTeXt</xsl:text>
 </xsl:template>
+<xsl:template match="xetex">
+    <xsl:text>XeTeX</xsl:text>
+</xsl:template>
+<xsl:template match="xelatex">
+    <xsl:text>XeLaTeX</xsl:text>
+</xsl:template>
+
 
 <!-- We place the 13 Latin abbreviations here since they -->
 <!-- are fairly basic.  The final period is implemented  -->
