@@ -2802,7 +2802,7 @@
         <introduction>
             <p>A <tag>table</tag> is a container that houses a <tag>tabular</tag>, which is the actual rows and columns of table entries.</p>
 
-            <p>Note that <tag>tabular</tag> may be constructed using the <url href="http://www.latex-tables.com/" visual="www.latex-tables.com"><latex /> Complex Table Editor</url> tool online and then exported in <pretext/> syntax.</p>
+            <p>Note that <tag>tabular</tag> may be constructed using the <url href="http://www.latex-tables.com/" visual="www.latex-tables.com"><latex /> Complex Table Editor</url> tool online and then exported in <pretext/> syntax. This produces verbose <pretext/> syntax that is usually equivalent to much simpler <pretext/> syntax once you understand the borders and alignment considerations below.</p>
         </introduction>
 
         <subsection>
@@ -2934,9 +2934,9 @@
         <subsection>
             <title>Summary: Table Reference</title>
 
-            <p>Finally, we summarize the available options for a table with<ellipse/>a table.  Because it would take too much text to describe fully.</p>
+            <p>Finally, we summarize the available options for a table with<ellipsis/>a table.  Because it would take too much text to describe fully.</p>
 
-            <p>This table describes how to construct tables via the <c>tabular</c> element.  The <c>table</c> element may be used to enclose the raw table, so as to associate a caption and get vertical separation with horizontal centering.</p>
+            <p>This table describes how to construct tables via the <c>tabular</c> element.  The <c>table</c> element may be used to enclose the raw table, so as to associate a title and get vertical separation with horizontal centering.</p>
 
             <p>The <c>tabular</c> element contains a sequence of <c>row</c> elements, and must contain at least one.  Each <c>row</c> contains a sequence of <c>cell</c> elements and must have the same number in each row (acccounting for the use of the <c>colspan</c> attribute).  The contents of the <c>cell</c> elements are the text to appear in entries of the table.</p>
 
@@ -3029,7 +3029,7 @@
                         <cell></cell>
                         <cell><times/></cell>
                         <cell></cell>
-                        <cell>top, middle, bottom</cell>
+                        <cell>top, middle*, bottom</cell>
                     </row>
                     <row>
                         <cell><c>colspan</c></cell>
