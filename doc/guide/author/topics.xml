@@ -2799,9 +2799,6 @@
     <section xml:id="topic-tabular">
         <title>Tables and Tabulars</title>
 
-        <!-- copy in table of possible attributes/features from sample article, -->
-        <!-- and replace hacked \times with a proper typographic "x" element    -->
-
         <introduction>
             <p>A <tag>table</tag> is a container that houses a <tag>tabular</tag>, which is the actual rows and columns of table entries.</p>
 
@@ -2934,6 +2931,141 @@
             </note>
         </subsection>
 
+        <subsection>
+            <title>Summary: Table Reference</title>
+
+            <p>Finally, we summarize the available options for a table with<ellipse/>a table.  Because it would take too much text to describe fully.</p>
+
+            <p>This table describes how to construct tables via the <c>tabular</c> element.  The <c>table</c> element may be used to enclose the raw table, so as to associate a caption and get vertical separation with horizontal centering.</p>
+
+            <p>The <c>tabular</c> element contains a sequence of <c>row</c> elements, and must contain at least one.  Each <c>row</c> contains a sequence of <c>cell</c> elements and must have the same number in each row (acccounting for the use of the <c>colspan</c> attribute).  The contents of the <c>cell</c> elements are the text to appear in entries of the table.</p>
+
+            <p>A sequence of <c>col</c> elements may optionally be used.  But if one appears, then there must be the right number for the width of the table.  They are empty elements always, and just carry information about their respective column.</p>
+
+            <p>Where the body of the table below has an entry, it means the attribute may be used on the element, and affects the range of the tabular described by the element.  Employment of an attribute on elements to the right in the table will supersede use on elements to the left.  Generally, every cell has right and bottom borders, but only cells at the left side of the table have a left border and only cells across the top have a top border.  Only one cell has four borders.</p>
+
+            <table>
+                <title>Tabular Elements and Attributes (p = potential)</title>
+                <tabular top="major" halign="center">
+                    <col halign="left" />
+                    <col/>
+                    <col/>
+                    <col/>
+                    <col/>
+                    <col halign="left"/>
+                    <!--  -->
+                    <row>
+                        <cell>Attributes</cell>
+                        <cell colspan="4" halign="center">Elements</cell>
+                        <cell>Values</cell>
+                    </row>
+                    <row bottom="medium">
+                        <cell></cell>
+                        <cell><c>tabular</c></cell>
+                        <cell><c>col</c></cell>
+                        <cell><c>row</c></cell>
+                        <cell><c>cell</c></cell>
+                        <cell>* = default</cell>
+                    </row>
+                    <row>
+                        <cell><c>top</c></cell>
+                        <cell><times/></cell>
+                        <cell><times/></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell>none*, minor, medium, major</cell>
+                    </row>
+                    <row>
+                        <cell><c>left</c></cell>
+                        <cell><times/></cell>
+                        <cell></cell>
+                        <cell><times/></cell>
+                        <cell></cell>
+                        <cell>none*, minor, medium, major</cell>
+                    </row>
+                    <row>
+                        <cell><c>bottom</c></cell>
+                        <cell><times/></cell>
+                        <cell></cell>
+                        <cell><times/></cell>
+                        <cell><times/></cell>
+                        <cell>none*, minor, medium, major</cell>
+                    </row>
+                    <row>
+                        <cell><c>right</c></cell>
+                        <cell><times/></cell>
+                        <cell><times/></cell>
+                        <cell></cell>
+                        <cell><times/></cell>
+                        <cell>none*, minor, medium, major</cell>
+                    </row>
+                    <row>
+                        <cell><c>halign</c></cell>
+                        <cell><times/></cell>
+                        <cell><times/></cell>
+                        <cell><times/></cell>
+                        <cell><times/></cell>
+                        <cell>left*, center, right, justify</cell>
+                    </row>
+                    <row>
+                        <cell><c>halign</c></cell>
+                        <cell></cell>
+                        <cell>p</cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell>decimal, character</cell>
+                    </row>
+                    <row>
+                        <cell><c>header</c></cell>
+                        <cell></cell>
+                        <cell>p</cell>
+                        <cell><times/></cell>
+                        <cell></cell>
+                        <cell>yes/vertical/no*</cell>
+                    </row>
+                    <row>
+                        <cell><c>valign</c></cell>
+                        <cell><times/></cell>
+                        <cell></cell>
+                        <cell><times/></cell>
+                        <cell></cell>
+                        <cell>top, middle, bottom</cell>
+                    </row>
+                    <row>
+                        <cell><c>colspan</c></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell><times/></cell>
+                        <cell>1*, positive integer</cell>
+                    </row>
+                    <row>
+                        <cell><c>rowspan</c></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell>p</cell>
+                        <cell>1*, positive integer</cell>
+                    </row>
+                    <row>
+                        <cell><c>width</c></cell>
+                        <cell></cell>
+                        <cell><times/></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell>percentage</cell>
+                    </row>
+                    <row>
+                        <cell>colors</cell>
+                        <cell>p</cell>
+                        <cell>p</cell>
+                        <cell>p</cell>
+                        <cell>p</cell>
+                        <cell></cell>
+                    </row>
+                </tabular>
+            </table>
+        </subsection>
     </section>
 
     <section xml:id="topic-program-listings">
