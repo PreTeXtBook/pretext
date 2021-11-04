@@ -203,7 +203,7 @@
 
         <p>A <tag>table</tag> may only contain a <tag>tabular</tag>, which is the structure containing the rows and columns of a table.  Details can be found in <xref ref="topic-tabular" />.</p>
 
-        <p>A <tag>figure</tag> is more liberal than a <tag>table</tag> and may contain a variety of items.  Most probably, you will include an <tag>image</tag> (see <xref ref="overview-images" />).</p>
+        <p>A <tag>figure</tag> is more liberal than a <tag>table</tag> and may contain a variety of items.  Most probably, you will include an <tag>image</tag> (see <xref ref="overview-images" />), but there are other options, such as <tag>video</tag> (see <xref ref="overview-video"/>).</p>
     </section>
 
     <section xml:id="overview-programs">

@@ -5128,17 +5128,6 @@ the xsltproc executable.
                 </tabular>
             </table>
 
-            <paragraphs>
-                <title>Bully Pulpit: Vertical Rules in Tables</title>
-
-                <p>One of the goals of <pretext /> is to gently guide authors towards good choices in the design of their documents, even if we do not claim to know it all ourselves.  Take a close look at that table about tables.  What's missing?  No vertical rules.  Try living without them, you will not really miss them.  If you think you need to divide a table into two halves, maybe you really need two tables (and then see the <q>side-by-side</q> capabilities, Section <xref ref="section-side-by-side" />).</p>
-
-                <p>In the documentation for his excellent <latex /> package, <url href="https://www.ctan.org/pkg/booktabs">booktabs</url>, Simon Fear gives two rules for what he calls <q>formal tables</q>: (1) Never, ever use vertical rules, and (2) Never use double rules.  We have resisted the temptation to enforce the former and have provided an alternative to the second (three thicknesses).  He refers to using tables for layout as creating <q>tableau.</q>  If you are finicky about the look of your work, the first three pages of the documentation is recommended reading.</p>
-
-                <p>That all said, we now give several examples in order to stress and demonstrate our code.</p>
-            </paragraphs>
-
-
             <p>An example of aligning table cells' contents horizontally. See the source for comments.</p>
 
             <!-- Default matches HTML and LaTEX, left. -->

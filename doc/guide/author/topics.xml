@@ -326,7 +326,7 @@
                 <!-- ~ tilde, swungdash              -->
                 <!-- " do not use, lq, rq            -->
 
-                <table>
+                <table xml:id="table-ambiguous-characters">
                     <title>Ambiguous Keyboard Characters and Alternatives</title>
                     <tabular>
                         <row bottom="medium">
@@ -2797,20 +2797,129 @@
     </section>
 
     <section xml:id="topic-tabular">
-        <title>(*) Tables and Tabulars</title>
+        <title>Tables and Tabulars</title>
 
-        <!-- Reprise:  <title>Bully Pulpit: Vertical Rules in Tables</title> -->
         <!-- copy in table of possible attributes/features from sample article, -->
         <!-- and replace hacked \times with a proper typographic "x" element    -->
 
         <introduction>
-            <p>This section needs much more work, and we are slowly adding material as we work on features.</p>
+            <p>A <tag>table</tag> is a container that houses a <tag>tabular</tag>, which is the actual rows and columns of table entries.</p>
 
-            <p>Note that tables may be constructed using the <url href="http://www.latex-tables.com/"><latex /> Complex Table Editor</url> tool online at <c>latex-tables.com</c>and then exported in <pretext /> syntax.</p>
+            <p>Note that <tag>tabular</tag> may be constructed using the <url href="http://www.latex-tables.com/" visual="www.latex-tables.com"><latex /> Complex Table Editor</url> tool online and then exported in <pretext/> syntax.</p>
         </introduction>
 
         <subsection>
-            <title>Placeholder</title>
+            <title>Tables</title>
+            <idx>table</idx>
+
+            <p>A <tag>table</tag> is similar to other blocks in <pretext/> (<xref ref="topic-blocks"/>) and is most similar to a <tag>figure</tag>.  It will earn a number, which is likely to be a part of the text of a cross-reference pointing to the table.  Rather than a <tag>caption</tag>, it will have a <tag>title</tag>.  The main difference is that the principal content <em>must</em> be a <tag>tabular</tag>.  Only.</p>
+        </subsection>
+
+        <subsection>
+            <title>Tabular</title>
+            <idx>tabular</idx>
+
+            <p>A <tag>tabular</tag> is the actual headings, rows, and columns of a table.  As discussed above, a typical use is to place it inside a <tag>table</tag>, though it can be placed all by itself, typically in among a run of paragraphs.</p>
+
+            <p>Fundamentally a <tag>tabular</tag> is a sequence of <tag>row</tag> and each <tag>row</tag> is a sequence of <tag>cell</tag>, which could also be called <q>table entries.</q></p>
+        </subsection>
+
+        <subsection>
+            <title>Table Cells</title>
+            <idx><h>table</h><h>cell</h></idx>
+            <idx><h>table</h><h>entry</h></idx>
+            <idx><h>cell</h><h>table</h></idx>
+
+            <p>A given cell can span multiple columns, by providing the <attr>colspan</attr> attribute with a value that is a positive number, the cell will extend to occupy additional columns.</p>
+        </subsection>
+
+        <subsection>
+            <title>Table Rows</title>
+            <idx><h>table</h><h>row</h></idx>
+            <idx><h>row</h><h>table</h></idx>
+
+            <p>A <tag>row</tag> of a table is a sequence of <tag>cell</tag> elements.  Each row should occupy the same number of cells, when considering the <attr>colspan</attr>, as discussed above.</p>
+
+            <p>To achieve <em>column</em> headings, you indicate that a <em>row</em> contains headings.  Typically, the contents of every cell in this row will then be rendered in bold, or some other style.  The <tag>row</tag> element accepts a <attr>header</attr> attribute with possible values of <c>no</c> (the default), <c>yes</c>, or <c>vertical</c>.  The latter is useful if space is at a premium (which always seems to be the case with tables), and the cells of a column are narrow and the heading is long.  Note that only the first (top) rows can be treated as column headings and these rows must be contiguous.  If you think you need column headings mid-tabular, maybe you really have two tables?</p>
+        </subsection>
+
+        <subsection>
+            <title>Table Columns</title>
+            <idx><h>table</h><h>column</h></idx>
+            <idx><h>column</h><h>table</h></idx>
+
+            <p>Prior to all of the <tag>row</tag> within a <tag>tabular</tag>, there may be a sequence of empty <tage>col</tage> elements.  Having these is optional, but once there is one, then there needs to be as many as the number of columns of the table.  These elements do not have any content that appears in the table, but are used to hold attributes that influence the borders or alignment of the cells within a column.  These are described below.</p>
+
+            <p>So it should now be clear that, after much consideration, that we have chosen a <q>row first</q> approach to describing a table.</p>
+
+            <p>We plan to support row headings, in a manner similar to column headings, with an attribute possible on the initial <tage>col</tage> elements.</p>
+        </subsection>
+
+        <subsection>
+            <title>Table Borders and Rules</title>
+            <idx><h>table</h><h>row</h></idx>
+            <idx><h>row</h><h>table</h></idx>
+            <idx><h>table</h><h>rule</h></idx>
+            <idx><h>rule</h><h>table</h></idx>
+
+            <p>You can view each cell of your table as having four borders.  Or you can imagine rows and columns separated by horizontal or vertical rules.  These additions to your table do not change the arrangement of information into rows and columns (a doubly-indexed data set), though you may think it makes the presentation clearer.  But less is actually more.</p>
+
+            <note>
+                <title>Vertical Rules in Tables</title>
+
+                <p>One of the goals of <pretext/> is to gently guide authors towards good choices in the design of their documents, even if we do not claim to know it all ourselves.  Take a close look at <xref ref="table-ambiguous-characters"/>.  What's missing?  No vertical rules.  Try living without them, you will not really miss them.  If you think you need to divide a table into two halves, maybe you really need two tables (and then see the <q>side-by-side</q> capabilities, <xref ref="topic-sidebyside"/>).</p>
+
+                <p>In the documentation for his excellent <latex/> package, <url href="https://www.ctan.org/pkg/booktabs" visual="www.ctan.org/pkg/booktabs">booktabs</url>, Simon Fear gives two rules for what he calls <q>formal tables</q>: (1) Never, ever use vertical rules, and (2) Never use double rules.  We have resisted the temptation to enforce the former and have provided an alternative to the second (three thicknesses).  He refers to using tables for layout as creating <q>tableau.</q>  If you are finicky about the look of your work, the first three pages of the documentation is recommended reading.</p>
+            </note>
+
+            <p>A given <tag>cell</tag> can have a border on its bottom edge, and on its right edge.  This is accomplished with the <attr>bottom</attr> and <attr>right</attr> attributes.  The possible values are <c>minor</c>, <c>medium</c>, and <c>major</c>, which control thickness.  (Not every conversion can produce three distinct thicknesses, so this should be considered a hint to the conversion.)  A value of <c>none</c> is the default behavior when the attribute is not used, but can be given explicitly.</p>
+
+            <p>How to get a left border on the first cell of a row?  The <tag>row</tag> element allows a <attr>left</attr> attribute which will put a border on the left end of the row, which is also the left border of the first cell.</p>
+
+            <p>How to get a top border on a cell?  Put a bottom border on the cell above it.  But what if the cell is already in the top row and has no cell above it?  The relevant <tag>col</tag> element allows a <attr>top</attr> attribute which will place the necessary border on the top-row cell.</p>
+
+            <p>Borders and rules verge on presentation, so we are not concerned about which cell a border (or rule) belongs to.  So, generally <attr>bottom</attr> and <attr>right</attr> can be used in many places, and the exceptional <attr>top</attr> and <attr>bottom</attr> maybe used to get the missing border <m>n+1</m> for a vertical or horizontal sequence of <m>n</m> cells.</p>
+
+            <p>The attributes described for cells may also be used on <tag>row</tag>, <tag>col</tag>, and <tag>tabular</tag>.  For example a thick horizontal rule after two rows of headings could be accomplished with<cd>
+                <cline>&lt;row header="yes"&gt;...&lt;/row&gt;</cline>
+                <cline>&lt;row header="yes" bottom="major"&gt;...&lt;/row&gt;</cline>
+            </cd>We will not detail all the combinations that are possible, so experiment and you should be able to create any rational look (and some irrational ones).</p>
+        </subsection>
+
+        <subsection>
+            <title>Table Cell Alignment</title>
+            <idx><h>table</h><h>cell alignment</h></idx>
+            <idx><h>cell alignment</h><h>table</h></idx>
+
+            <p>The horizontal alignment of the contents of a <tag>cell</tag> can be influenced by the <attr>halign</attr> attribute with values <c>left</c>, <c>right</c>, <c>center</c>, and for <q>paragraph cells,</q> <c>justify</c>.  Similarly the <attr>valign</attr> attribute will influence the vertical alignment through values <c>top</c>, <c>middle</c>, and <c>bottom</c>.  Default alignments are <c>left</c> and <c>middle</c>.</p>
+
+            <p>To align the cells of an entire <tag>row</tag>, <tag>col</tag>, or <tag>tabular</tag> identically, place the relevant attribute on the relevant element.  Note that these choices can be overridden by different values on individual consituents.</p>
+
+        </subsection>
+
+        <subsection>
+            <title>Multi-line Cells</title>
+            <idx><h>table</h><h>multi-line cell</h></idx>
+            <idx><h>cell</h><h>table</h><h>multi-line</h></idx>
+
+            <p>A cell of a table may contain more text that fits onto one line.  If you know exactly where you want the line-breaks to be, then structure the entire cell as a sequence of <tag>line</tag> elements.</p>
+
+            <p>Or, if you want the contents of a cell to look and feel more like a paragraph (or several), structure the cell as a sequence of <tag>p</tag>, which can contain the usual content of a <tag>p</tag>, excepting <q>larger</q> content such as display mathematics or lists.  Now, in this case, you must constrain the width of the cell's column, to force the line-breaking necessary to render a paragraph as several lines.  Use the relevant <tage>col</tage> element, and specify a percentage of the tabular's overall width, like this:
+                <cd>&lt;col width="40%"/&gt;</cd>
+            A paragraph cell can be right-justified with the <attr>halign</attr> attribute set to <c>justify</c>.  But be aware that if the column is skinny, this can lead to awkward inter-word spaces.</p>
+        </subsection>
+
+
+        <subsection>
+            <title>Table Philosophy</title>
+
+            <p>The <pubtitle>Chicago Manual of Style</pubtitle> (15e, 13.1) says:</p>
+
+            <blockquote>
+                <p>A table offers an excellent means of presenting a large number of individual similar facts so that they are easy to scan and compare.  A simple table can give information that would require several paragraphs to present textually, and it can do so more clearly. <ellipsis/> A table should be as simple as the material allows and understandable on its own; even a reader unfamiliar with the material presented should be able to make general sense of a table.</p>
+            </blockquote>
+
+            <p>While our implementation allows for some presentational elements (borders, rules, alignment) our conversions will presume your table hews to the purposes described by CMOS.  In particular, it is not a device for spatial layout of complex elements.  You might find that the <tag>sidebyside</tag> and <tag>sbsgroup</tag> layout devices will suit that purpose better (see <xref ref="topic-sidebyside"/>).</p>
 
             <note>
                 <title>Tables are Difficult</title>
@@ -2825,11 +2934,6 @@
             </note>
         </subsection>
 
-        <subsection xml:id="table-headers">
-            <title>Table Headers</title>
-
-            <p>To achieve <em>column</em> headings, you indicate that a <em>row</em> contains headings.  Typically, the contents of every cell in this row will then be rendered in bold, or some other style.  The <tag>row</tag> element accepts a <attr>header</attr> attribute with possible values of <c>no</c> (the default), <c>yes</c>, or <c>vertical</c>.  The latter is useful if space is at a premium (which always seems to be the case with tables), and the cells of a column are narrow and the heading is long.  The one restriction is that rows identified as having headers must be the initial (top) rows of the table and must be contiguous.</p>
-        </subsection>
     </section>
 
     <section xml:id="topic-program-listings">
