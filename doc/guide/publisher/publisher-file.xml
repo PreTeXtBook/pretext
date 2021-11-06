@@ -109,6 +109,28 @@
             </cd>attribute can have the value <c>one</c> for a one-sided version, or the value <c>two</c> to produce a two-sided version.  The default depends on if the output is electronic (one-sided) or print (two-sided).  See <xref ref="print-sides"/> for more detail.</p>
         </subsection>
 
+        <subsection xml:id="latex-page-options">
+            <title><latex/> Page Options</title>
+
+            <p>The following options affect the <q>shape</q> of each page, so are in a way less <q>global</q> than some of the previous options.  These are all attributes of the <cd>
+                <cline>/publication/latex/page</cline>
+            </cd>element.<ul>
+                <li>
+                    <title>Text Alignment, Right Edge</title>
+                    <p>Set<cd>
+                        <cline>/publication/latex/page/@right-alignment</cline>
+                    </cd> to values <c>flush</c> (default) or <c>ragged</c> to influence the right edge of the block of text on a page.  See <xref ref="print-justification"/> for more.</p>
+                </li>
+
+                <li>
+                    <title>Text Alignment, Bottom Edge</title>
+                    <p>Set<cd>
+                        <cline>/publication/latex/page/@bottom-alignment</cline>
+                     </cd> to values <c>flush</c> or <c>ragged</c> (default) to influence the bottom edge of the block of text on a page.  See <xref ref="print-justification"/> for more.</p>
+                </li>
+            </ul></p>
+        </subsection>
+
         <subsection xml:id="latex-asymptote-link-options">
             <title><latex/> Asymptote Links</title>
             <idx><h>Asymptote links</h><h>LaTeX, PDF</h></idx>

@@ -33,13 +33,13 @@
     </section>
 
     <section xml:id="print-justification">
-        <title>Text Justification and Alignment</title>
+        <title>Text Block Alignment</title>
 
-        <p><latex/> is engineered around placing boxes on the page.  Characters in boxes are built up to be words, then words in boxes become lines, and then lines in boxes become pages.  Or something close to that.  As a consequence <latex/> excels at right-justified text.  For this reason, and also because we think it looks more like a commercial published book and therefore more professional, right-justified text is the default.  If your opinions on this come from experience with some other word processor, keep an open mind.</p>
+        <p><latex/> is engineered around placing boxes on the page.  Characters in boxes are built up to be words, then words in boxes become lines, and then lines in boxes become pages.  Or something close to that.  As a consequence <latex/> excels at right-justified text.  For this reason, and also because we think it looks more like a commercial published book and therefore more professional, right-justified text is the default.  If your opinions on this come from experience with some other word processor, keep an open mind.  Note too, that paradoxically, sometimes a ragged-right alignment can lead to greater amounts of hyphenation.</p>
 
-        <p>However, we provide the <c>text.alignment</c> switch to control how text is aligned (such as in paragraphs).  The value <c>justify</c> is the default, and <c>raggedright</c> will cause alignment on the left, with an uneven right edge.  Paradoxically, this can lead to greater amounts of hyphenation.</p>
+        <p>Similarly, <latex/> can make the bottom of the text block <em>always</em> land at exactly the same place.  This is especially pleasing if you are targeting two-sided printing, since you can have the two text blocks on either side of a single piece of paper match up <em>exactly</em>.  But this comes at a cost<mdash/>sometimes a page can have huge gaps between paragraphs just to place the bottom edge of the last paragraph at the bottom of the space meant for the text blocks.  Further, <latex/> defaults to a flush bottom or ragged bottom, depending on if the document is a book or an article, or if it is one-sided or two-sided.  Instead, we default to a ragged bottom for better out-of-the-box formatting, with an option to elect a flush bottom when you understand the risks and can watch out for them.</p>
 
-        <p>See <xref ref="styling-justification"/> for greater control over some aspects of right-justified text and also read about justified text in <xref ref="topic-accessibility"/>.</p>
+        <p>See details on specifying these options at <xref ref="latex-page-options"/>.  See <xref ref="styling-justification"/> for greater control over some aspects of right-justified text and also read about justified text in <xref ref="topic-accessibility"/>.</p>
     </section>
 
     <section xml:id="print-sides">
@@ -195,11 +195,6 @@
                     <cell><c>latex.geometry</c></cell>
                     <cell></cell>
                     <cell>Any options to <c>\geometry{}</c></cell>
-                </row>
-                <row>
-                    <cell><c>text.alignment</c></cell>
-                    <cell><c>justify</c></cell>
-                    <cell><c>raggedright</c>, <c>justify</c></cell>
                 </row>
                 <row>
                     <cell><c>latex.pageref</c></cell>
