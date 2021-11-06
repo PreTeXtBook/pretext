@@ -93,6 +93,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </html>
 
     <latex print="no" sides="two">
+        <!-- these are the default alignments, given just as an example -->
+        <page right-alignment="flush" bottom-alignment="ragged"/>
         <asymptote links="yes"/>
     </latex>
 
