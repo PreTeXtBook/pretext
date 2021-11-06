@@ -2112,6 +2112,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Deprecated 2021-02-14, now ignored, but warning exists -->
 <xsl:param name="debug.chapter.start" select="''" />
 
+<!-- Deprecated 2021-11-04, but respected by LaTeX publisher -->
+<!-- switch for right alignment of page's text               -->
+<xsl:param name="text.alignment" select="''" />
 
 <!-- ################# -->
 <!-- Variable Bad Bank -->

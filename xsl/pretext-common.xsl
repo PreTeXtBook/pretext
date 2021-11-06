@@ -152,9 +152,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Publisher option to include "commentary" -->
 <!-- Default will be "no"                     -->
 <xsl:param name="commentary" select="''" />
-<!-- Publisher option to influence horizontal alignment of text -->
-<!-- Default will be "justify"                                  -->
-<xsl:param name="text.alignment" select="''" />
 
 <!-- Whitespace discussion: http://www.xmlplease.com/whitespace               -->
 <!-- Describes source expectations, DO NOT override in subsequent conversions -->
@@ -11822,6 +11819,12 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="$document-root//glossary/conclusion" />
         <xsl:with-param name="date-string" select="'2021-10-04'" />
         <xsl:with-param name="message" select="'a &quot;glossary&quot; no longer has a &quot;conclusion&quot;.  It is being ignored, so you will need to design an alternative.  See the documentation for this, and other changes for &quot;glossary&quot;'"/>
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-11-04'" />
+        <xsl:with-param name="message" select="'the  text.alignment  parameter has been deprecated, but we will attempt to honor your intent.  Please switch to using the Publishers File for configuration of LaTeX page shape, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($text.alignment != '')" />
     </xsl:call-template>
     <!--  -->
 </xsl:template>
