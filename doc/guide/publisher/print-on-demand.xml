@@ -18,7 +18,7 @@
     <p>We list three such services below, but first describe some commonalities, pro and con.<dl width="narrow">
         <li>
             <title>Updates</title>
-            <p>Generally, you provide a <init>PDF</init> of your text, and we have tried, with the <c>latex.print</c> option, to make output that is amenable to this situation.  A real advantage of print-on-demand is that you can usually update this <init>PDF</init> at any time, without much trouble.  You will need to decide how to indicate versions (or printings?) of your work.  Perhaps we will have tools and advice about this soon.</p>
+            <p>Generally, you provide a <init>PDF</init> of your text, and we have tried, with the print option, to make output that is amenable to this situation (see <xref ref="electronic-or-print"/>).  A real advantage of print-on-demand is that you can usually update this <init>PDF</init> at any time, without much trouble.  You will need to decide how to indicate versions (or printings?) of your work.  Perhaps we will have tools and advice about this soon.</p>
         </li>
 
         <li>

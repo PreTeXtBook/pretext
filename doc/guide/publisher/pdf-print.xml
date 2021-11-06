@@ -177,16 +177,6 @@
                     <cell>Values</cell>
                 </row>
                 <row>
-                    <cell><c>latex.print</c></cell>
-                    <cell><c>no</c></cell>
-                    <cell><c>yes</c>, <c>no</c></cell>
-                </row>
-                <row>
-                    <cell><c>latex.sides</c></cell>
-                    <cell>Varies</cell>
-                    <cell><c>one</c>, <c>two</c></cell>
-                </row>
-                <row>
                     <cell><c>latex.font.size</c></cell>
                     <cell><c>10pt</c></cell>
                     <cell><c>8pt</c> to <c>20pt</c> (8 steps)</cell>
