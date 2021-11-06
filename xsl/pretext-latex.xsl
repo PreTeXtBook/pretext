@@ -561,7 +561,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex.geometry" />
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="not($text-alignment = 'justify')">
+    <xsl:if test="$latex-right-alignment = 'ragged'">
         <xsl:text>%% better handing of text alignment&#xa;</xsl:text>
         <xsl:text>\usepackage{ragged2e}&#xa;</xsl:text>
     </xsl:if>
@@ -2276,14 +2276,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- Text Alignment -->
-<!-- Overall alignment can be "justify" (the default) or      -->
-<!-- "raggedright" (as implemented by the "ragged2e" package) -->
+<!-- Text Alignment, Right and Bottom -->
+<!-- \RaggedRight is from the "ragged2e" package, and  -->
+<!-- will allow for some hypenation (vs. \raggedright) -->
+<!-- Bottom varies by oneside/twoside, and by          -->
+<!-- book/article, so we just make it explicit no      -->
+<!-- matter what (breaking that dichotomy)             -->
+<!-- See: https://www.sascha-frank.com/page-break.html -->
+<!-- N.B. Perhaps this template should be used in the  -->
+<!-- LaTeX preamble, perhaps with \AtBeginDocument{}   -->
+<!-- https://tex.stackexchange.com/questions/33913/    -->
+<!-- global-ragged-right-justification-of-report       -->
 <xsl:template name="text-alignment">
-    <xsl:if test="$text-alignment = 'raggedright'">
-        <xsl:text>\RaggedRight&#xa;</xsl:text>
-    </xsl:if>
-    <!-- $text-alignment = 'justify' => default LaTeX -->
+    <!-- horizontal/right first -->
+    <xsl:choose>
+        <xsl:when test="$latex-right-alignment = 'ragged'">
+            <xsl:text>\RaggedRight&#xa;</xsl:text>
+        </xsl:when>
+        <!-- Flush right is default LaTeX -->
+        <xsl:when test="$latex-right-alignment = 'flush'"/>
+    </xsl:choose>
+    <!-- vertical/bottom -->
+    <xsl:text>%% bottom alignment is explicit, since it normally depends on oneside, twoside&#xa;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$latex-bottom-alignment = 'ragged'">
+            <xsl:text>\raggedbottom&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:when test="$latex-bottom-alignment = 'flush'">
+            <xsl:text>\flushbottom&#xa;</xsl:text>
+        </xsl:when>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Sidedness -->

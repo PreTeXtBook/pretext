@@ -1760,6 +1760,55 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- parameter, so we want the default (false) to be more likely than not. -->
 <xsl:variable name="b-latex-print" select="not($latex-print = 'no')"/>
 
+<!-- LaTeX/Page -->
+
+<!-- Right Alignment -->
+<!-- guaranteed to be 'flush' or 'ragged'   -->
+<!-- N.B. let HTML be different/independent -->
+<xsl:variable name="latex-right-alignment">
+    <xsl:choose>
+        <xsl:when test="$publication/latex/page/@right-alignment = 'flush'">
+            <xsl:text>flush</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/latex/page/@right-alignment = 'ragged'">
+            <xsl:text>ragged</xsl:text>
+        </xsl:when>
+        <!-- or respect deprecated stringparam in use, text.alignment -->
+        <xsl:when test="$text.alignment = 'justify'">
+            <xsl:text>flush</xsl:text>
+        </xsl:when>
+        <xsl:when test="$text.alignment = 'raggedright'">
+            <xsl:text>ragged</xsl:text>
+        </xsl:when>
+        <!-- default -->
+        <xsl:otherwise>
+            <xsl:text>flush</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Bottom Alignment -->
+<!-- guaranteed to be 'flush' or 'ragged'            -->
+<!-- LaTeX varies this according to oneside, twoside -->
+<!-- https://www.sascha-frank.com/page-break.html    -->
+<!-- N.B. makes no sense for HTML                    -->
+<xsl:variable name="latex-bottom-alignment">
+    <xsl:choose>
+        <xsl:when test="$publication/latex/page/@bottom-alignmant = 'flush'">
+            <xsl:text>flush</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/latex/page/@bottom-alignment = 'ragged'">
+            <xsl:text>ragged</xsl:text>
+        </xsl:when>
+        <!-- default -->
+        <xsl:otherwise>
+            <xsl:text>ragged</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- LaTeX/Asymptote -->
+
 <!-- Add a boolean variable to toggle links for Asymptote images in PDF.    -->
 <!-- If a baseurl is set, and an HTML version is available with interactive -->
 <!-- WebGL images the publisher may want static images in the PDF to link   -->
