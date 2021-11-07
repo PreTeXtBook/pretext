@@ -146,7 +146,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- Not really "duplicate" here in solutions manual, but confomrs to -common -->
+<!-- Not really "duplicate" here in solutions manual, but conforms to -common -->
 <xsl:template match="*" mode="duplicate-heading">
     <xsl:param name="heading-stack" select="."/>
 

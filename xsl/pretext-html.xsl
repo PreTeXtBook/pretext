@@ -387,7 +387,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The HTML "section" elements created here could have an ARIA    -->
 <!-- role="region", but would have to then have a @aria-labelled-by -->
 <!-- whose value is the HTML id of the "hX" heading to get its      -->
-<!-- content as the label.  But the "section-header" template is    -->
+<!-- content as the label.  But the "section-heading" template is   -->
 <!-- sometimes null, and even if not, the "hX" elements do not now  -->
 <!-- have natural id on them (we could manufacture such a thing).   -->
 
@@ -438,7 +438,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="html-id" />
     </xsl:variable>
     <section class="{local-name(.)}" id="{$hid}">
-        <xsl:apply-templates select="." mode="section-header">
+        <xsl:apply-templates select="." mode="section-heading">
             <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
         <xsl:apply-templates select="." mode="author-byline"/>
@@ -542,7 +542,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- normal, then links to subsidiary divisions     -->
 <!-- occur between, as a group of button/hyperlinks -->
 <!-- heading-level of parent should come in as 1,   -->
-<!-- so then passed to "section-header" as 2.       -->
+<!-- so then passed to "section-heading" as 2.      -->
 <!-- Always.                                        -->
 <xsl:template match="&STRUCTURAL;" mode="summary">
     <xsl:param name="heading-level"/>
@@ -554,7 +554,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="html-id" />
     </xsl:variable>
     <section class="{local-name(.)}" id="{$hid}">
-        <xsl:apply-templates select="." mode="section-header">
+        <xsl:apply-templates select="." mode="section-heading">
             <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
         <xsl:apply-templates select="." mode="author-byline"/>
@@ -602,14 +602,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Bits and Pieces -->
 <!-- ############### -->
 
-<!-- Header for Document Nodes -->
+<!-- Heading for Document Nodes -->
 <!-- Every document node goes the same way, a    -->
 <!-- heading followed by its subsidiary elements -->
-<!-- hit with templates.  This is the header.    -->
+<!-- hit with templates.  This is the heading.   -->
 <!-- Only "chapter" ever gets shown generically  -->
 <!-- Subdivisions have titles, or default titles -->
 <!-- NB: this template is overridden for Braille -->
-<xsl:template match="*" mode="section-header">
+<xsl:template match="*" mode="section-heading">
     <xsl:param name="heading-level"/>
 
     <xsl:variable name="html-heading">
@@ -629,7 +629,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:attribute>
-        <xsl:apply-templates select="." mode="header-content" />
+        <xsl:apply-templates select="." mode="heading-content" />
     </xsl:element>
 </xsl:template>
 
@@ -644,15 +644,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- The front and back matter have their own style -->
-<xsl:template match="frontmatter|backmatter" mode="section-header" />
+<xsl:template match="frontmatter|backmatter" mode="section-heading" />
 
 <!-- A book or article is the top level, so the   -->
 <!-- masthead might suffice, else an author can   -->
 <!-- provide a frontmatter/titlepage to provide   -->
 <!-- more specific information.  In either event, -->
-<!-- a typical section header is out of place.    -->
+<!-- a typical section heading is out of place.   -->
 <!-- NB: this is copied verbatim for Braille      -->
-<xsl:template match="book|article" mode="section-header" />
+<xsl:template match="book|article" mode="section-heading" />
 
 <!-- ######## -->
 <!-- Headings -->
@@ -665,7 +665,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: this is overridden in the conversion to Braille,  -->
 <!-- to center chapter numbers above titles (and appendix, -->
 <!-- preface, etc), so coordinate with those templates.    -->
-<xsl:template match="*" mode="header-content">
+<xsl:template match="*" mode="heading-content">
     <span class="type">
         <xsl:apply-templates select="." mode="type-name" />
     </span>
@@ -683,7 +683,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We give them a localized "type" computed from     -->
 <!-- their level. Numbers are displayed for structured -->
 <!-- divisions, but not for unstructured divisions.    -->
-<xsl:template match="exercises|solutions|glossary|references|worksheet|reading-questions" mode="header-content">
+<xsl:template match="exercises|solutions|glossary|references|worksheet|reading-questions" mode="heading-content">
     <span class="type">
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id">
@@ -772,7 +772,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Title Page -->
 <!-- A frontmatter has no title, so we reproduce the       -->
 <!-- title of the work (book or article) here              -->
-<!-- NB: this could done with a "section-header" template? -->
+<!-- NB: this could done with a "section-heading" template?-->
 <!-- Other divisions (eg, colophon, preface) will follow   -->
 <!-- This is all within a .frontmatter class for CSS       -->
 <!-- NB: this is redefined with the same @match in the     -->
@@ -1140,7 +1140,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="list-of-end" />
 
 <!-- Subdivision headings in list-of's -->
-<xsl:template match="*" mode="list-of-header">
+<xsl:template match="*" mode="list-of-heading">
     <xsl:param name="heading-level"/>
     <xsl:apply-templates select="." mode="duplicate-heading">
         <xsl:with-param name="heading-level" select="$heading-level"/>
@@ -1763,7 +1763,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- into a knowl posted publicly                        -->
 <!-- TEMPORARY: var/li is a WeBWorK popup or radio button, -->
 <!-- which is not a cross-reference target (it originates  -->
-<!-- in PG-code), and an error results when the header in  -->
+<!-- in PG-code), and an error results when the heading in -->
 <!-- the knowl content tries to compute a number           -->
 <xsl:template match="commentary" mode="xref-as-knowl">
     <xsl:value-of select="$b-commentary" />
@@ -2541,7 +2541,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Original, born hidden.  The element knows if it should be hidden on the page in an embedded knowl via the modal "is-hidden" template.  So a link is written on the page, and the main content is written onto the page as a hidden, embedded knowl.  The "b-original" flag (set to true) is passed through to templates for the children. -->
 
-<!-- Duplicates.  Duplicated versions, sans identification, are created by an extra, specialized, traversal of the entire document tree with the "xref-knowl-old" modal templates.  When an element is first encountered the infrastructure for an external file is constructed and the modal "body" template of the element is called with the "b-original" flag set to false.  The content of the knowl should have an overall header, explaining what it is, since it is a target of the cross-reference.  Now the body template will pass along the "b-original" flag set to false, indicating the production mode should be duplication.  For a block that is born hidden, we build an additional external knowl that duplicates it, so without identification, without an overall header, and without an in-context link.  -->
+<!-- Duplicates.  Duplicated versions, sans identification, are created by an extra, specialized, traversal of the entire document tree with the "xref-knowl-old" modal templates.  When an element is first encountered the infrastructure for an external file is constructed and the modal "body" template of the element is called with the "b-original" flag set to false.  The content of the knowl should have an overall heading, explaining what it is, since it is a target of the cross-reference.  Now the body template will pass along the "b-original" flag set to false, indicating the production mode should be duplication.  For a block that is born hidden, we build an additional external knowl that duplicates it, so without identification, without an overall heading, and without an in-context link.  -->
 
 <!-- Child elements born visible will be written into knowl files without identification.  Child elements born hidden will write a knowl link into the page, pointing to the duplicated (hidden) version.  -->
 
@@ -6305,8 +6305,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="left-margin"  select="$layout/left-margin" />
     <xsl:variable name="right-margin" select="$layout/right-margin" />
 
-    <!-- A "sidebyside" div, to contain headings,  -->
-    <!-- panels, captions rows as "sbsrow" divs -->
+    <!-- A "sidebyside" div, to contain headers, -->
+    <!-- panels, captions rows as "sbsrow" divs  -->
     <xsl:element name="div">
         <xsl:attribute name="class">
             <xsl:text>sidebyside</xsl:text>
