@@ -2816,7 +2816,7 @@
             <title>Tabular</title>
             <idx>tabular</idx>
 
-            <p>A <tag>tabular</tag> is the actual headings, rows, and columns of a table.  As discussed above, a typical use is to place it inside a <tag>table</tag>, though it can be placed all by itself, typically in among a run of paragraphs.</p>
+            <p>A <tag>tabular</tag> is the actual headers, rows, and columns of a table.  As discussed above, a typical use is to place it inside a <tag>table</tag>, though it can be placed all by itself, typically in among a run of paragraphs.</p>
 
             <p>Fundamentally a <tag>tabular</tag> is a sequence of <tag>row</tag> and each <tag>row</tag> is a sequence of <tag>cell</tag>, which could also be called <q>table entries.</q></p>
         </subsection>
@@ -2837,7 +2837,7 @@
 
             <p>A <tag>row</tag> of a table is a sequence of <tag>cell</tag> elements.  Each row should occupy the same number of cells, when considering the <attr>colspan</attr>, as discussed above.</p>
 
-            <p>To achieve <em>column</em> headings, you indicate that a <em>row</em> contains headings.  Typically, the contents of every cell in this row will then be rendered in bold, or some other style.  The <tag>row</tag> element accepts a <attr>header</attr> attribute with possible values of <c>no</c> (the default), <c>yes</c>, or <c>vertical</c>.  The latter is useful if space is at a premium (which always seems to be the case with tables), and the cells of a column are narrow and the heading is long.  Note that only the first (top) rows can be treated as column headings and these rows must be contiguous.  If you think you need column headings mid-tabular, maybe you really have two tables?</p>
+            <p>To achieve <em>column</em> headers, you indicate that a <em>row</em> contains headers.  Typically, the contents of every cell in this row will then be rendered in bold, or some other style.  The <tag>row</tag> element accepts a <attr>header</attr> attribute with possible values of <c>no</c> (the default), <c>yes</c>, or <c>vertical</c>.  The latter is useful if space is at a premium (which always seems to be the case with tables), and the cells of a column are narrow and the header is long.  Note that only the first (top) rows can be treated as column headers and these rows must be contiguous.  If you think you need column headers mid-tabular, maybe you really have two tables?</p>
         </subsection>
 
         <subsection>
@@ -2849,7 +2849,7 @@
 
             <p>So it should now be clear that, after much consideration, that we have chosen a <q>row first</q> approach to describing a table.</p>
 
-            <p>We plan to support row headings, in a manner similar to column headings, with an attribute possible on the initial <tage>col</tage> elements.</p>
+            <p>We plan to support row headers, in a manner similar to column headers, with an attribute possible on the initial <tage>col</tage> elements.</p>
         </subsection>
 
         <subsection>
@@ -2877,7 +2877,7 @@
 
             <p>Borders and rules verge on presentation, so we are not concerned about which cell a border (or rule) belongs to.  So, generally <attr>bottom</attr> and <attr>right</attr> can be used in many places, and the exceptional <attr>top</attr> and <attr>bottom</attr> maybe used to get the missing border <m>n+1</m> for a vertical or horizontal sequence of <m>n</m> cells.</p>
 
-            <p>The attributes described for cells may also be used on <tag>row</tag>, <tag>col</tag>, and <tag>tabular</tag>.  For example a thick horizontal rule after two rows of headings could be accomplished with<cd>
+            <p>The attributes described for cells may also be used on <tag>row</tag>, <tag>col</tag>, and <tag>tabular</tag>.  For example a thick horizontal rule after two rows of headers could be accomplished with<cd>
                 <cline>&lt;row header="yes"&gt;...&lt;/row&gt;</cline>
                 <cline>&lt;row header="yes" bottom="major"&gt;...&lt;/row&gt;</cline>
             </cd>We will not detail all the combinations that are possible, so experiment and you should be able to create any rational look (and some irrational ones).</p>

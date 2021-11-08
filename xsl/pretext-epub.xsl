@@ -300,7 +300,7 @@
         <xsl:apply-templates select="." mode="html-id" />
     </xsl:variable>
     <section class="{local-name(.)}" id="{$hid}">
-        <xsl:apply-templates select="." mode="section-header" />
+        <xsl:apply-templates select="." mode="section-heading" />
         <xsl:apply-templates select="author|objectives|introduction|titlepage|abstract" />
         <!-- deleted "nav" and summary links here -->
     </section>

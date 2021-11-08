@@ -2200,7 +2200,7 @@
 <!--        escape them.                                             -->
 <!--                                                                 -->
 <!-- * #  If n of these are at the start of a line, that makes       -->
-<!--      the line a header level n. Whitespace before the # may or  -->
+<!--      the line a heading level n. Whitespace before the # may or -->
 <!--      may not break that, but I think it is a bug and whitespace -->
 <!--      shouldn't break that. Otherwise # doesn't need escaping.   -->
 <!--                                                                 -->

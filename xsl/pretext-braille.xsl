@@ -225,34 +225,34 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <!-- Unnumbered, chapter-level headings, just title text -->
-<xsl:template match="preface|acknowledgement|biography|foreword|dedication|solutions[parent::backmatter]|references[parent::backmatter]|index|colophon" mode="header-content">
+<xsl:template match="preface|acknowledgement|biography|foreword|dedication|solutions[parent::backmatter]|references[parent::backmatter]|index|colophon" mode="heading-content">
     <span class="title">
         <xsl:apply-templates select="." mode="title-full" />
     </span>
 </xsl:template>
 
-<!-- We override the "section-header" template to place classes   -->
+<!-- We override the "section-heading" template to place classes  -->
 <!--                                                              -->
 <!--     fullpage centerpage center cell5 cell7                   -->
 <!--                                                              -->
-<!-- onto the header so liblouis can style it properly            -->
+<!-- onto the heading so liblouis can style it properly           -->
 <!-- This is greatly simplified, "hX" elements just become "div", -->
 <!-- which is all we need for the  liblouis  sematic action file  -->
 
 
-<xsl:template match="*" mode="section-header">
+<xsl:template match="*" mode="section-heading">
     <div>
         <xsl:attribute name="class">
             <xsl:apply-templates select="." mode="division-class"/>
         </xsl:attribute>
-        <xsl:apply-templates select="." mode="header-content" />
+        <xsl:apply-templates select="." mode="heading-content" />
     </div>
 </xsl:template>
 
 <!-- Verbatim from -html conversion read about it there -->
-<xsl:template match="book|article" mode="section-header" />
+<xsl:template match="book|article" mode="section-heading" />
 <!-- Slideshow is similar, but not present in the -html stylesheet -->
-<xsl:template match="slideshow" mode="section-header" />
+<xsl:template match="slideshow" mode="section-heading" />
 
 <!-- Default is indeterminate (seacrch while debugging) -->
 <xsl:template match="*" mode="division-class">

@@ -5666,7 +5666,7 @@ the xsltproc executable.
                 </tabular>
             </table>
 
-            <p>The next table has a progression of thicker rules in the heading, plus a progression of thicker rules across the columns.  For testing, not for aesthetics.</p>
+            <p>The next table has a progression of thicker rules in the header, plus a progression of thicker rules across the columns.  For testing, not for aesthetics.</p>
 
             <table>
                 <title>Two Row Header, Many Rules</title>

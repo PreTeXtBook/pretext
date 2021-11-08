@@ -114,7 +114,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We have entire cells for division headings. -->
 <xsl:template match="&STRUCTURAL;" mode="pretext-heading">
     <xsl:variable name="html-rtf">
-        <xsl:apply-templates select="." mode="section-header" />
+        <xsl:apply-templates select="." mode="section-heading" />
     </xsl:variable>
     <xsl:variable name="html-node-set" select="exsl:node-set($html-rtf)" />
     <xsl:call-template name="pretext-cell">

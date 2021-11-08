@@ -78,7 +78,7 @@
 
 <!-- The abstract chunking routines expect a modal   -->
 <!-- "summary" template for a subdivision that sits  -->
-<!-- above the chunking level.  We write a header,   -->
+<!-- above the chunking level.  We write a heading,  -->
 <!-- process the remainder in document order, either -->
 <!-- as content (eg introduction) or as a pointer    -->
 <!-- to a finer subdivision                          -->
@@ -91,7 +91,7 @@
                 <xsl:apply-templates select="." mode="html-id" />
             </xsl:variable>
             <section class="{local-name(.)}" id="{$hid}">
-                <xsl:apply-templates select="." mode="section-header" />
+                <xsl:apply-templates select="." mode="section-heading" />
             </section>
         </xsl:with-param>
     </xsl:apply-templates>
@@ -138,7 +138,7 @@
                 <xsl:apply-templates select="." mode="html-id" />
             </xsl:variable>
             <section class="{local-name(.)}" id="{$hid}">
-                <xsl:apply-templates select="." mode="section-header" />
+                <xsl:apply-templates select="." mode="section-heading" />
             </section>
         </xsl:with-param>
     </xsl:apply-templates>

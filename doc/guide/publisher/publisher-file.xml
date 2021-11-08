@@ -220,7 +220,7 @@
             <table>
                 <title>Knowlization options</title>
                 <tabular>
-                    <row heading="yes" bottom="major">
+                    <row header="yes" bottom="major">
                         <cell>Attribute</cell>
                         <cell>Default</cell>
                         <cell>Element(s)</cell>

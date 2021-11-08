@@ -4692,7 +4692,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Some insulating space around headings    -->
 <!-- All in one, so not part of table columns -->
-<xsl:template match="*" mode="list-of-header">
+<xsl:template match="*" mode="list-of-heading">
     <xsl:text>\multicolumn{2}{l}{\null}\\[1.5ex] </xsl:text>
     <xsl:text>\multicolumn{2}{l}{\large </xsl:text>
     <xsl:apply-templates select="." mode="type-name" />
@@ -4921,9 +4921,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
 
-<!-- ############################ -->
-<!-- Division Headers and Footers -->
-<!-- ############################ -->
+<!-- ############################## -->
+<!-- Division Headings and Footings -->
+<!-- ############################## -->
 
 <!-- A typical division has 5 arguments (below).  For specialized       -->
 <!-- divisions we need to adjust the environment name for numbered      -->
@@ -5070,7 +5070,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Footers are straightforward -->
+<!-- Footings are straightforward -->
 <xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|solutions|reading-questions|glossary|references|worksheet" mode="latex-division-footing">
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="division-environment-name" />
@@ -8848,7 +8848,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- are in xsl/pretext-common.xsl, as befits containers -->
 
 <!-- Note: Various end-of-line "%" are necessary to keep  -->
-<!-- headings, panels, and captions together as one unit  -->
+<!-- headers, panels, and captions together as one unit   -->
 <!-- without a page -break, via the LaTeX                 -->
 <!-- \nopagebreak=\nopagebreak[4] command                 -->
 
@@ -8890,7 +8890,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="space-width" select="$layout/space-width" />
 
     <!-- TODO: Make "sidebyside" a 3-argument environment:          -->
-    <!-- headings, panels, captions.  Then put "\nopagebreak"       -->
+    <!-- headers, panels, captions.  Then put "\nopagebreak"        -->
     <!-- into the definition, so it is "hidden" and not in the body -->
 
     <xsl:apply-templates select="." mode="leave-vertical-mode"/>

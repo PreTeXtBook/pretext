@@ -6321,7 +6321,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- Horizontal layouts of "panels" with vertical alignments      -->
 <!-- A container for layout of other elements, eg figures, images -->
-<!-- No notion of columns, no rules or dividers, no row headings  -->
+<!-- No notion of columns, no rules or dividers, no row headers   -->
 <!-- This is purely a container to specify layout parameters,     -->
 <!-- and place/control the horizontal arrangement in converters   -->
 
@@ -6807,10 +6807,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
      <xsl:variable name="panels" select="p|pre|ol|ul|dl|program|console|poem|audio|video|interactive|slate|exercise|image|figure|table|listing|list|tabular|stack|jsxgraph|paragraphs" />
 
     <!-- We build up lists of various parts of a panel      -->
-    <!-- It has setup (LaTeX), headings (titles), panels,   -->
+    <!-- It has setup (LaTeX), headers (titles), panels,    -->
     <!-- and captions.  These then go to "compose-panels".  -->
     <!-- Implementations need to define modal templates     -->
-    <!--   panel-heading, panel-panel, panel-caption        -->
+    <!--   panel-header, panel-panel, panel-caption         -->
     <!-- The parameters passed to each is the union of what -->
     <!-- is needed for LaTeX and HTML implementations.      -->
     <!-- Final results are collectively sent to modal       -->
@@ -7971,14 +7971,14 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- Format-independent construction of a list of    -->
 <!-- intermediate elements, in order of appearance,  -->
-<!-- with headers from indicated divisions           -->
+<!-- with headings from indicated divisions          -->
 <!--                                                 -->
 <!-- Implementation requires four abstract templates -->
 <!--                                                 -->
 <!-- 1.  name="list-of-begin"                        -->
 <!-- hook for start of list                          -->
 <!--                                                 -->
-<!-- 2.  mode="list-of-header"                       -->
+<!-- 2.  mode="list-of-heading"                      -->
 <!-- Format/output per division                      -->
 <!--                                                 -->
 <!-- 3.  mode="list-of-element"                      -->
@@ -8015,7 +8015,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:variable name="b-division-exercises" select="'divisionexercise' = $elements"/>
     <xsl:variable name="b-worksheet-exercises" select="'worksheetexercise' = $elements"/>
     <xsl:variable name="b-reading-questions" select="'readingquestion' = $elements"/>
-    <!-- display subdivision headers with empty contents? -->
+    <!-- display subdivision headings with empty contents? -->
     <xsl:variable name="entered-empty">
         <xsl:choose>
             <xsl:when test="not(@empty)">
@@ -8094,14 +8094,14 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                     <xsl:variable name="inline-exercises" select="$b-inline-exercises and .//exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]"/>
                     <xsl:variable name="any-elements" select="$by-name-elements or $inline-exercises or $division-exercises or $worksheet-exercises or $reading-questions"/>
                     <xsl:if test="$any-elements">
-                        <xsl:apply-templates select="." mode="list-of-header">
+                        <xsl:apply-templates select="." mode="list-of-heading">
                             <xsl:with-param name="heading-level" select="$heading-level"/>
                         </xsl:apply-templates>
                     </xsl:if>
                 </xsl:when>
                 <xsl:when test="$b-empty">
                     <!-- always write a heading, even if there will be no items listed -->
-                    <xsl:apply-templates select="." mode="list-of-header">
+                    <xsl:apply-templates select="." mode="list-of-heading">
                         <xsl:with-param name="heading-level" select="$heading-level"/>
                     </xsl:apply-templates>
                 </xsl:when>
