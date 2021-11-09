@@ -1940,12 +1940,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\renewcommand\UrlFont{\small\ttfamily}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="not($b-latex-print)">
-        <xsl:text>%% Hyperlinking active in electronic PDFs, all links solid and blue&#xa;</xsl:text>
+        <xsl:text>%% Hyperlinking active in electronic PDFs, all links without surrounding boxes and blue&#xa;</xsl:text>
         <xsl:text>\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$b-latex-print">
-        <xsl:text>%% "print" version, all hyperlinks black and inactive&#xa;</xsl:text>
-        <xsl:text>\hypersetup{draft}&#xa;</xsl:text>
+        <xsl:text>%% For a print PDF, no surrounding boxes, so simply textcolor (but still active to preserve spacing)&#xa;</xsl:text>
+        <xsl:text>\hypersetup{hidelinks=true}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\hypersetup{pdftitle={</xsl:text>
     <xsl:apply-templates select="." mode="title-short" />
@@ -10133,8 +10133,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   \hyperref[foo]{Theorem~\ref{foo}}                                    -->
 <!--                                                                        -->
 <!-- Note: for print, we could use "Theorem~\ref{foo}" just as easily and   -->
-<!-- not utilize  hyperref  (presently, we just color links black and make  -->
-<!-- them inactive via \hypersetup{draft}).                                 -->
+<!-- not utilize  hyperref (presently, we use a hyperref "hidelinks" key)   -->
 <!--                                                                        -->
 <!-- 2.  Hyperref                                                           -->
 <!-- Some items are not numbered naturally by LaTeX, like a "proof".  Other -->
@@ -10152,8 +10151,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   \hyperlink{foo}{Proof~2.4.17}                                        -->
 <!--                                                                        -->
 <!-- Note: for print, we could use "Proof~2.4.17" just as easily and not    -->
-<!-- utilize  hyperref  (presently, we just color links black and make them -->
-<!-- inactive via \hypersetup{draft}).                                      -->
+<!-- not utilize  hyperref (presently, we use a hyperref "hidelinks" key)   -->
 <!--                                                                        -->
 <!-- Note: footnotes, "fn" are exceptional, see notes below                 -->
 
