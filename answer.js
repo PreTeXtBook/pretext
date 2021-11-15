@@ -140,7 +140,7 @@ if (reading_questions.length) {
          var this_ques_id_controls = reading_question_id + "_controls";
          var answer_div = '<div';
          answer_div += ' id="' + this_ques_id_text + '"';
-         answer_div += ' class="given_answer has_am processme"';
+         answer_div += ' class="given_answer has_am process-math processme"';
          answer_div += '>';
          answer_div += dollars_to_slashparen(escapeHTML(existing_content)) + " ";
          answer_div += '</div>';
@@ -312,7 +312,7 @@ if (reading_questions.length) {
        }
        compiled_answers += '<div class="s_id">' + this_student_id + '</div>';
        compiled_answers += '<div class="rq_sub_time">' + this_submitted_time + '</div>';
-       compiled_answers += '<div class="s_ans has_am processme">' + this_specific_answer + '</div>';
+       compiled_answers += '<div class="s_ans has_am process-math processme">' + this_specific_answer + '</div>';
        compiled_answers += '</div>\n';
        console.log(j, "j", these_specific_answers)
    }
@@ -387,7 +387,7 @@ if (reading_questions.length) {
   //and show it on the page
     var this_ans_static = document.createElement('div');
     this_ans_static.setAttribute('id', this_ques_id_text);
-    this_ans_static.setAttribute('class', 'given_answer has_am processme');
+    this_ans_static.setAttribute('class', 'given_answer has_am process-math processme');
     console.log("setting this_ans_static.innerHTML to", dollars_to_slashparen(escapeHTML(this_ans_text_value)));
     this_ans_static.innerHTML = dollars_to_slashparen(escapeHTML(this_ans_text_value)) + " "
 
