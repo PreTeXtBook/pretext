@@ -15,6 +15,13 @@
 console.log("thisbrowser.userAgent", window.navigator.userAgent);
 */
 
+var minivers = "0";
+if (typeof miniversion !== 'undefined') {
+  console.log("typeof miniversion", typeof miniversion, "dddd", typeof miniversion == 'undefined');
+  minivers = miniversion.toString();
+}
+console.log("               minivers", minivers);
+
 /* scrollbar width from https://stackoverflow.com/questions/13382516/getting-scroll-bar-width-using-javascript */
 function getScrollbarWidth() {
     var outer = document.createElement("div");
@@ -579,10 +586,12 @@ function loadResource(type, file) {
       newresource.type = 'text/css';
       newresource.rel = 'stylesheet';
       newresource.href = 'https://pretextbook.org/css/' + css_version + '/' + file + '.css';
+      newresource.href += '?minivers=' + minivers;
   } else if (type == "js") {
       newresource.type = 'text/javascript';
 //  newscript.async = true;
       newresource.src = 'https://pretextbook.org/js/' + js_version + '/' + file + '.js';
+      newresource.src += '?minivers=' + minivers;
   } else {
       console.log("unknown resource type", type, "for", file);
       return
