@@ -1,7 +1,9 @@
 
-editorLog = console.log;
+// editorLog = console.log;
+editorLog = function(){};
 errorLog = console.log;
-debugLog = console.log;
+// debugLog = console.log;
+debugLog = function(){};
 // parseLog = console.log;
 parseLog = function(){};
 // editorLog = function(){};
@@ -1745,7 +1747,7 @@ function create_new_internal_object(new_tag, new_id, parent_description) {
       editorLog("new_tag", new_tag);
       var thisstructure = objectStructure[new_tag];
       var thisownersourcestructure = {};
-      if (!thisstructure) { alert(new_tag + " not implemented yet"); return "" }
+      if (!thisstructure) { errorLog(new_tag + " not implemented yet"); return "" }
       if ("owner" in thisstructure) {
           var thisownerstructure = objectStructure[thisstructure.owner];
           thisownersourcestructure = thisownerstructure.source;
@@ -1819,12 +1821,13 @@ function show_source(sibling, relative_placement) {
 function save_source() {
 //    var current_source = document.getElementById("newpretextsource");
 //    if (current_source) { editorLog("curr sou", current_source); alert("curr sour"); current_source.remove() }
-    editorLog("saving");
+    editorLog("         QQ  saving");
 
     var the_pretext_source =  output_from_id("", top_level_id, "pretext");
 
     the_pretext_source = the_pretext_source.replace(/\n\n/g, '\n');
 
+    editorLog("         RR  saving", top_level_id, "which begins", the_pretext_source.substring(0,50));
     parent.save_file(top_level_id, the_pretext_source)
 }
 
@@ -4115,7 +4118,9 @@ function initialize_editing(xml_st) {
     editorLog("e_location", e_location);
     console.log("               making the initial menu for", e_tree[e_level][e_location]);
 
-    document.getElementById("content").firstElementChild.setAttribute("id", internalSource.root_data.id);
+//    document.getElementById("content").firstElementChild.setAttribute("id", internalSource.root_data.id);
+
+    console.log("replacing by id", internalSource.root_data.id);
     replace_by_id(internalSource.root_data.id, "html");
 
     edit_menu_for(e_tree[e_level][e_location], "entering")
