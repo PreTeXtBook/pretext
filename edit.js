@@ -1,6 +1,6 @@
 
-// editorLog = console.log;
-editorLog = function(){};
+editorLog = console.log;
+// editorLog = function(){};
 errorLog = console.log;
 // debugLog = console.log;
 debugLog = function(){};
@@ -167,6 +167,14 @@ objectStructure = {
         "pieces": [["{sectiontype}", ""], ["{codenumber}", ""], ["{space}", ""], ["{title}", ""]]
     }
   },
+  "title_heading": {
+    "html": {
+        "tag": "h2",
+        "cssclass": "heading",
+        "attributes": ['class="<&>{cssclass}<;>"', 'data-parent_id="<&>xml:id<;>"'],
+        "pieces": [["{title}", ""], ["{period}", ""]]
+    }
+  },
   "task_like_heading": {
     "html": {
         "tag": "h6",
@@ -268,6 +276,21 @@ objectStructure = {
     },
     "pretext": {
         "tag": "subsection",
+        "attributes": ['xml:id="<&>xml:id<;>"'],
+        "pieces": [["title", "title"], ["content", ""]]
+    },
+    "source": {
+        "pieces": [["title", "*"], ["content", "p"]]
+    }
+  },
+  "paragraphs": {
+    "html": {
+        "tag": "section",
+        "attributes": ['class="paragraphs"', 'id="<&>xml:id<;>"', 'data-editable="XYX"', 'tabindex="-1"'],
+        "pieces": [["{title_heading}", ""], ["content", ""]],
+    },
+    "pretext": {
+        "tag": "paragraphs",
         "attributes": ['xml:id="<&>xml:id<;>"'],
         "pieces": [["title", "title"], ["content", ""]]
     },
@@ -988,24 +1011,30 @@ function process_value_from_source(fcn, piece, src) {
 
     editorLog(fcn, "process_value_from_source", piece, "in", src);
     var content_raw = "";
-    if (piece in src) {
-        content_raw = src[piece]
+    if (["literal", "codenumber", "period", "titleperiod", "space"].includes(fcn)) {
+        content_raw = piece;
     } else {
-        if ("parent" in src) {
-            var parent_src = internalSource[src["parent"][0]];
-            if (piece in parent_src) {
-                content_raw = parent_src[piece]
-            } else {
-                errorLog("Error: piece", piece, "from", parent_src, "not in src or parent_src")
-            }
+        if (piece in src) {
+          content_raw = src[piece]
         } else {
+          if ("parent" in src) {
+              var parent_src = internalSource[src["parent"][0]];
+              if (piece in parent_src) {
+                  content_raw = parent_src[piece]
+              } else {
+                  errorLog("Error: piece", piece, "fcn", fcn, "from", parent_src, "not in src or parent_src")
+              }
+          } else {
             errorLog("at the top, or else there is an error")
+          }
         }
-    }
+    } /* fcn != literal */
 
+/*
     if (typeof myVar == 'string') {
         content_raw = content_raw.replace(/-standalone$/, "")  // hack because we need alternate to sourcetag
     }
+*/
     if (fcn == "capitalize") {
         content = content_raw.charAt(0).toUpperCase() + content_raw.slice(1);
     } else if (fcn == "literal") {
@@ -1140,6 +1169,7 @@ var submenu_options = {  // revise as these are handled previously
 "aside-like": [["aside"], ["historical"], ["biographical"]],
 "list-like": [["itemized list", "list"], ["dictionary list", "dl"], ["table"]],
 "layout-like": [["side-by-side panels", "sbs"], ["assemblage"], ["biographical aside"], ["titled paragraph", "paragraphs"]],
+"section-like": ["section", "subsection", "paragraphs", "rq", "exercises"],
 "sbs": [["2 panels", "sbs2"], ["3 panels", "sbs3"], ["4 panels", "sbs4"]],
 "list-like": [["itemized list", "list"], ["dictionary list", "dl"], ["table"]],
 "example-like": ["example", "question", "problem"]
@@ -1210,7 +1240,6 @@ editing_container_for = { "p": 1,
 "remark-like": ["remark", "warning", "note", "observation", "convention", "insight"],
 "example-like": ["example", "question", "problem"],
 "exercise-like": ["exercise"],
-"section-like": ["section", "subsection", "paragraphs", "rq", "exercises"],
 "ol": ["item"],
 "li": [""],
 "list": [""],
@@ -3033,6 +3062,10 @@ function wrap_tag(tag, content, attribute_values) {
     if (!closing_tag) { closing_tag = "" }
 
     if (content.includes("N.m")) { editorLog("3 ----- content",content); editorLog("opening_tag", opening_tag) }
+
+    if (opening_tag.startsWith("<p") && !content) {
+        alert("empty p")
+    }
 
     return opening_tag + content + closing_tag
 }
