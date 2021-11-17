@@ -4553,122 +4553,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- ########### -->
 
 <!--                    -->
-<!-- Identifier Mapping -->
-<!--                    -->
-
-<!-- Overview -->
-<!-- Source will use @name to allow for an author-supplied label    -->
-<!-- for elements.  Principally this is for an easy-to-remember     -->
-<!-- moniker of a chunk of content.  So placing the same string     -->
-<!-- in xref/@ref is a way to specify the target of the             -->
-<!-- cross-reference. The @xml:id is a superior way to name a       -->
-<!-- target, since the XSL id() function will return the target *as -->
-<!--  a node*.  xsltproc  also reports if  @xml:id  are not unique. -->
-<!--                                                                -->
-<!-- So we map  @name  for any element to the  @xml:id  of the      -->
-<!-- element, which we assume has been assigned for every element,  -->
-<!-- at a minimum, as part of a pre-processing step.                -->
-
-
-<!-- Construct mapping -->
-<!-- For any element, we generate an internal "idmap"  -->
-<!-- element with two attributes - the @name attribute -->
-<!-- value and the @xml:id attribute value.  Next      -->
-<!-- template does this for one element, then recurses -->
-<!-- into child elements.  Elements only.              -->
-
-<!-- NB: As made public initially, no source should  -->
-<!-- have a @name value anywhere.  So implementation -->
-<!-- creates an identity mapping of author-supplied  -->
-<!-- string on @xml:id, the status quo.  So we can   -->
-<!-- gradually insert this mapping, checking for     -->
-<!-- absolutely no effect, and then later test with  -->
-<!-- @name present in limited ways.                  -->
-
-<!-- TODO: eventually condition on @name actually  -->
-<!-- being present, both overall (?) (as indicator -->
-<!-- of new source) and definitely per element so  -->
-<!-- we don't create superflous element???         -->
-
-<!-- TODO: once pre-processor automatically promotes  -->
-<!-- @xml:id to @name and provides single-use @xml:id -->
-<!-- then we can condition on @name.                  -->
-
-<xsl:template match="*" mode="id-mapping">
-    <!-- presumes source has been manipulated     -->
-    <!-- so every element has @xml:id attribute   -->
-    <!-- not necessary to make a mapping if there -->
-    <!-- is no @name attribute on the element     -->
-    <!--  -->
-    <!-- NB: this should be @name to avoid empty pairs -->
-    <!-- we are testing on "nameless" source, not even -->
-    <!-- default pre-processor testing                 -->
-    <!--  -->
-    <xsl:if test="@xml:id">
-        <!-- create a bona fide mapping/pair -->
-        <!-- we sanitize all authored attribute values -->
-        <idmap>
-            <xsl:attribute name="namevalue">
-                <xsl:choose>
-                    <xsl:when test="@name">
-                        <xsl:value-of select="normalize-space(@name)"/>
-                    </xsl:when>
-                    <xsl:when test="@xml:id">
-                        <xsl:value-of select="normalize-space(@xml:id)"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <!-- Default (old) operation once made empty/empty pairs -->
-                        <!-- <xsl:message>PTX:BUG:  identifier mapping construction has a problem</xsl:message> -->
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:attribute>
-            <xsl:attribute name="idvalue">
-                <xsl:value-of select="normalize-space(@xml:id)"/>
-            </xsl:attribute>
-        </idmap>
-    </xsl:if>
-    <!-- tail-recursion, order unimportant since       -->
-    <!-- we later sort to help report duplicates       -->
-    <!-- Process all child elements, absent a "select" -->
-    <xsl:apply-templates mode="id-mapping"/>
-</xsl:template>
-
-<!-- Initiate lookup table construction at the root. $docinfo -->
-<!-- shouldn't be dangerous, but also shouldn't be necessary. -->
-<xsl:variable name="identifier-mapping-rtf">
-    <xsl:apply-templates select="$root" mode="id-mapping"/>
-</xsl:variable>
-<xsl:variable name="identifier-mapping" select="exsl:node-set($identifier-mapping-rtf)"/>
-
-<!-- Key retrieves internal "idmap" elements, with access -->
-<!-- via the string obtained by a @name value.            -->
-<xsl:key name="nameid-key" match="idmap" use="@namevalue"/>
-
-<!-- We check this list for duplicates.  @xml:id does this -->
-<!-- automatically, but only within a file (modularized    -->
-<!-- source?), so we have forsaken that feature, and we do -->
-<!-- the check on duplicate @namevalue (the lookup key)    -->
-<!-- ourselves.                                            -->
-<!-- Sort by @namevalue, which will make error messages    -->
-<!-- for duplicates adjacent and so a bit less haphazard,  -->
-<!-- since we simply repeat the message for each duplicate -->
-<!-- NB: match/context are irrelevant, just matching style -->
-<xsl:template match="*" mode="check-duplicate-identifiers">
-    <!-- context shift for use with key -->
-    <xsl:for-each select="$identifier-mapping">
-        <!-- true loop over mapping pairs, sorted -->
-        <xsl:for-each select="idmap">
-            <xsl:sort select="@namevalue"/>
-            <xsl:variable name="the-count" select="count(key('nameid-key', string(@namevalue)))"/>
-            <xsl:if test="not($the-count = 1)">
-                <xsl:message>PTX:ERROR:   the identifier "<xsl:value-of select="@namevalue"/>" is repeated <xsl:value-of select="$the-count"/> times (and this message also repeats)</xsl:message>
-            </xsl:if>
-        </xsl:for-each>
-    </xsl:for-each>
-</xsl:template>
-
-
-<!--                    -->
 <!-- Visible Identifier -->
 <!--                    -->
 
@@ -10728,7 +10612,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:apply-templates select="." mode="literate-programming-warning" />
     <xsl:apply-templates select="." mode="xinclude-warnings" />
     <xsl:apply-templates select="." mode="xmlid-warning" />
-    <xsl:apply-templates select="." mode="check-duplicate-identifiers"/>
     <xsl:apply-templates select="." mode="text-element-warning" />
     <xsl:apply-templates select="." mode="subdivision-structure-warning" />
 </xsl:template>
