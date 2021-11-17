@@ -166,6 +166,25 @@
     </paragraphs>
 
     <paragraphs>
+      <title>Paragraphs: like an un-numbered (sub)section</title>
+      <idx>paragraphs</idx>
+      <idx><h sortby="paragraphs">paragraphs</h></idx>
+      <p>
+        It can be useful to gather a few items and give them a title,
+        but perhaps those items do not merit their own (sub)section.
+        The <tag>paragraphs</tag> serves that purpose.  A <tag>title</tag>
+        is required.</p>
+
+      <p>
+        This <tag>paragraphs</tag> contains two <tag>p</tag>s.  Immediately before,
+        and immediately after this <tag>paragraphs</tag> there are <tag>paragraphs</tag>
+        which each contain one <tag>p</tag>.  A <tag>paragraphs</tag> can contain pretty
+        much anything except for a division.
+      </p>
+    </paragraphs>
+
+
+    <paragraphs>
       <title>The role of <tag>p</tag> tags</title>
       <idx>paragraph</idx>
       <idx sortby="p"><tag>p</tag></idx>

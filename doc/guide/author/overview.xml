@@ -74,6 +74,12 @@
 
         <p>Many, many other structures admit titles.  Experiment, or look at specific descriptions of the structure you are interested in.  Titles are very integral to <pretext />, much like cross-references.  Titles migrate to the Table of Contents, get used in page headers for print output, can be used in lists (such as a List of Figures), and can be used as the text of a cross-reference, instead of a number.  You might not be inclined to give a <tag>remark</tag> a title, but it would be good practice to do so.  If you use knowls in your <init>HTML</init> output for structures such as <tag>example</tag> (or if somebody else may someday choose to), then your readers will be spared a lot of confusion if you supply informative titles for each. Your electronic outputs will be much more useful to your readers if you routinely title every structure that allows it (perhaps excepting <tag>exercise</tag> which can be known by their number).</p>
 
+<p>If a title is very long, the <tag>line</tag> element can be used to indicate how the title should appear on multiple lines.
+Note: does not apply to all output formats.
+<idx><h>title</h><h>very long</h></idx>
+<idx>line</idx>
+</p>
+
         <note xml:id="best-practice-titles">
             <title>Provide Informative Titles Liberally</title>
             <p>Provisions for titles in many situations is a key <pretext/> feature.  And then they are used for various purposes to benefit readers.  A good example is when the <init>HTML</init> conversion is used to place content in a <term>knowl</term>, a unit of content that begins hidden, but can be revealed (and hidden again) with one click of a mouse.  Since a reader cannot see the content originally, we will migrate a title into the clickable text.  But we cannot read your mind<mdash/>it is your job as the author to provide a title, and to provide a good one.</p>

@@ -1379,7 +1379,10 @@
         <subsection xml:id="topic-display-math">
             <title>Multi-line Display Mathematics</title>
 
-            <p>We begin with a pure container, either <tag>md</tag> or <tag>mdn</tag>.  The former numbers no lines, the latter numbers every line.  Within the container, content, on a per-line basis, goes into a <tag>mrow</tag> element.  You can think of <tag>mrow</tag> as being very similar to <tag>me</tag>.  If you are tempted to put a <latex /> <c>\\</c> into an <tag>mrow</tag>, think twice.</p>
+            <p>We begin with a pure container, either <tag>md</tag> or <tag>mdn</tag>.  The former numbers no lines, the latter numbers every line.  Within the container, content, on a per-line basis, goes into a <tag>mrow</tag> element.  You can think of <tag>mrow</tag> as being very similar to <tag>me</tag>.
+In a <latex/> <c>align</c> the <c>\\</c> mark the end of a displayed line.  In <pretext/> each <tag>mrow</tag> delimits a
+displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignment point.
+<idx>aligned math</idx><idx>\amp, math alignment</idx></p>
 
             <p>On any given <tag>mrow</tag> you can place the <attr>number</attr> attribute, with allowable values of <c>yes</c> and <c>no</c>.  These will typically be used to override the behavior inherited by the container, but there is no harm if they are redundant.  A given line of the display may be the target of a cross-reference, though the numbering flexibility means you can try (and fail) to target an unnumbered equation.</p>
 
