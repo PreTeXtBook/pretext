@@ -4667,28 +4667,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:for-each>
 </xsl:template>
 
-<!-- Interface to identifier mapping (for developers) -->
-<!-- To access this table/mapping we use a named template.  Consumers        -->
-<!-- need to locate/prepare the string that identifies some location/target. -->
-<!-- Typically this is a @ref value, but there are other applications.       -->
-<!-- Pass in the $name as a string, not a node set (e.g. string(@ref)).      -->
-<!-- Result is string/text-node of the attribute value of @xml:id for the    -->
-<!-- element whose @name is $name.  Typically this will be passed to the     -->
-<!-- XSL  id()  function, but may have other uses.                           -->
-
-<!-- The interface, described above.    -->
-<!-- NB: no context, text in, text out. -->
-<xsl:template name="id-lookup-by-name">
-    <!-- we santitize the $name value here, when employed -->
-    <xsl:param name="name" select="''"/>
-    <!-- set context for "document" to use for lookup table -->
-    <xsl:for-each select="$identifier-mapping">
-        <xsl:variable name="a-mapping" select="key('nameid-key', normalize-space($name))"/>
-        <!-- result is string used to identify element via its @xml:id -->
-        <xsl:value-of select="$a-mapping/@idvalue"/>
-    </xsl:for-each>
-</xsl:template>
-
 
 <!--                    -->
 <!-- Visible Identifier -->
@@ -7517,12 +7495,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <!-- First check that the scope is reasonable, i.e. it -->
             <!-- exists and is one of the elements defined for the -->
             <!-- "solutions-generator" template                    -->
-            <xsl:variable name="scope-id">
-                <xsl:call-template name="id-lookup-by-name">
-                    <xsl:with-param name="name" select="@scope"/>
-                </xsl:call-template>
-            </xsl:variable>
-            <xsl:variable name="scope" select="id($scope-id)"/>
+            <xsl:variable name="scope" select="id(@scope)"/>
             <xsl:if test="not($scope)">
                 <xsl:message>PTX:WARNING: unresolved @scope ("<xsl:value-of select="@scope"/>") for a &lt;solutions&gt; division</xsl:message>
                 <xsl:apply-templates select="." mode="location-report" />
@@ -8819,12 +8792,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:when>
         <!-- clear of errors, so on to main event -->
         <xsl:otherwise>
-            <xsl:variable name="target-id">
-                <xsl:call-template name="id-lookup-by-name">
-                    <xsl:with-param name="name" select="@ref"/>
-                </xsl:call-template>
-            </xsl:variable>
-            <xsl:variable name="target" select="id($target-id)"/>
+            <xsl:variable name="target" select="id(@ref)"/>
             <!-- Determine style of visible text in link -->
             <xsl:variable name="text-style">
                 <xsl:apply-templates select="." mode="get-text-style" />
@@ -8911,18 +8879,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:when>
         <!-- clear of errors, so on to main event -->
         <xsl:otherwise>
-            <xsl:variable name="ref-one-id">
-                <xsl:call-template name="id-lookup-by-name">
-                    <xsl:with-param name="name" select="@first"/>
-                </xsl:call-template>
-            </xsl:variable>
-            <xsl:variable name="target-one" select="id($ref-one-id)"/>
-            <xsl:variable name="ref-two-id">
-                <xsl:call-template name="id-lookup-by-name">
-                    <xsl:with-param name="name" select="@last"/>
-                </xsl:call-template>
-            </xsl:variable>
-            <xsl:variable name="target-two" select="id($ref-two-id)" />
+            <xsl:variable name="target-one" select="id(@first)"/>
+            <xsl:variable name="target-two" select="id(@last)" />
             <!-- Determine style of visible text in link -->
             <xsl:variable name="text-style-one">
                 <xsl:apply-templates select="." mode="get-text-style" />
@@ -9059,12 +9017,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:variable name="trailing" select="substring-after($ref-list, ' ')" />
     <!-- now work with one $ref and the configured $text-style -->
     <!-- get the target as a node -->
-    <xsl:variable name="target-id">
-        <xsl:call-template name="id-lookup-by-name">
-            <xsl:with-param name="name" select="$ref"/>
-        </xsl:call-template>
-    </xsl:variable>
-    <xsl:variable name="target" select="id($target-id)" />
+    <xsl:variable name="target" select="id($ref)" />
     <!-- bibiographic targets are special -->
     <xsl:variable name="b-is-biblio-target" select="$target/self::biblio" />
     <!-- if starting, begin bibliography list wrapping -->
@@ -9237,14 +9190,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:variable name="hits">
                 <!-- always do a context shift to $original -->
                 <xsl:for-each select="$original">
-                    <xsl:variable name="initial-id">
-                        <xsl:call-template name="id-lookup-by-name">
-                            <xsl:with-param name="name" select="$initial"/>
-                        </xsl:call-template>
-                    </xsl:variable>
-                    <xsl:if test="id($initial-id)">
+                    <xsl:if test="id($initial)">
                         <xsl:text>X</xsl:text>
-                        <xsl:variable name="target" select="id($initial-id)"/>
+                        <xsl:variable name="target" select="id($initial)"/>
                         <xsl:variable name="is-a-target">
                             <xsl:apply-templates select="$target" mode="is-xref-target"/>
                         </xsl:variable>
