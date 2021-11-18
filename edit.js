@@ -931,6 +931,22 @@ objectStructure = {
           "pieces": [["content", ""]]
       }
   },
+  "men": {
+      "html": {
+          "tag": "div",
+          "attributes": ['id="<&>xml:id<;>"', 'class="displaymath"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+          "data_editable": "42",
+          "pieces": [["{me_raw}", ""]]
+      },
+      "pretext": {
+          "tag": "men",
+          "attributes": ['xml:id="<&>xml:id<;>"'],
+          "pieces": [["content", ""]]
+      },
+      "source": {
+          "pieces": [["content", ""]]
+      }
+  },
   "me_raw": {
       "html": {
           "tag_opening": "\\begin{equation*}",
