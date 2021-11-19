@@ -8,3 +8,4 @@ script/mjsre/package-lock.json
 pretext/__pycache__/**
 .vscode
 **/_build
+**/output

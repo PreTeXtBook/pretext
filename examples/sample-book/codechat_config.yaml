@@ -34,7 +34,7 @@ output_path: _build
 # - ``{output_path}``: the ``output_path`` above, but as an absolute path.
 #
 # The line below could also be written ``args: sphinx-build . _build``.
-args: python3 ../../pretext/pretext --component all --format html --directory {output_path} sample-book.xml
+args: c:/Users/bjones/documents/git/CodeChat_System/.venv/Scripts/python ../../pretext/pretext --component all --format html --directory {output_path} sample-book.xml
 
 # ``html_ext``: optional; defaults to ``.html``. The extension used by this renderer when generating HTML files.
 #html_ext: .html
