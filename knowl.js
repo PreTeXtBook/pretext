@@ -269,10 +269,15 @@ function knowl_click_handler($el) {
 // if this is before the MathJax, big problems
         $(".knowl-output .hidden-content .hidden-sagecell-sage").attr("class", "doubly-hidden-sagecell-sage");
         $(".knowl-output .hidden-sagecell-sage").attr("class", "sagecell-sage");
-        sagecell.makeSagecell({inputLocation: ".sagecell-sage",  linked: true, evalButtonText: sagecellEvalName});
+        try {
+          sagecell.makeSagecell({inputLocation: ".sagecell-sage",  linked: true, evalButtonText: sagecellEvalName});
+        } catch {
+          console.log("sagecell is missing")
+        }
         $(".knowl-output .hidden-content .doubly-hidden-sagecell-sage").attr("class", "hidden-sagecell-sage");
     }
   }
+  return($knowl)
 } //~~ end click handler for *[data-knowl] elements
 
 /** register a click handler for each element with the knowl attribute 
@@ -287,7 +292,25 @@ $(function() {
         $knowl.attr("data-knowl-uid", knowl_id_counter);
         knowl_id_counter++;
       }
-      knowl_click_handler($knowl, evt);
+      var knowlc = knowl_click_handler($knowl, evt);
+      console.log("after click handler", knowlc);
+      setTimeout(function () {
+          if (knowlc[0]["innerHTML"].includes("knowl-output error")) {
+            console.log("seem to have a bad knowl")
+            var missing_knowl_message = "<div style='padding: 0.5rem 1rem'>";
+            missing_knowl_message += "<h2>This is not the knowl you are looking for!</h2>";
+            missing_knowl_message += "<h3>Why is that?</h3>";
+            missing_knowl_message += "<p>The knowl you wanted was empty, so this message was put in its place.</p>";
+            missing_knowl_message += "<p>If you are viewing this file on your laptop, ";
+            missing_knowl_message += "a security setting on your browser prevents ";
+            missing_knowl_message += "the knowl file from opening, resulting in an empty knowl.  See the <a href='https://pretextbook.org/doc/guide/html/author-faq.html' style='text-decoration: underline; color:#00f'>PreTeXt FAQ</a>.</p>";
+            missing_knowl_message += "<p>If you are viewing this page from a server, ";
+            missing_knowl_message += "then something else went wrong.</p>";
+            missing_knowl_message += "</div>";
+            knowlc[0]["innerHTML"] = missing_knowl_message
+          }
+        }, 1000
+      )
   });
 });
 
