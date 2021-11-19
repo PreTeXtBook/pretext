@@ -1807,6 +1807,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- LaTeX worksheet formatting -->
+<!-- By default, worksheets in LaTeX will be formatted -->
+<!-- with specified margins, pages, and workspace.     -->
+<!-- Publisher switch to format continuously with      -->
+<!-- other divisions here                              -->
+<xsl:variable name="latex-worksheet-formatted">
+    <xsl:choose>
+        <xsl:when test="$publication/latex/worksheet/@formatted = 'no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- default -->
+        <xsl:otherwise>
+            <xsl:text>yes</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- LaTeX/Asymptote -->
 
 <!-- Add a boolean variable to toggle links for Asymptote images in PDF.    -->

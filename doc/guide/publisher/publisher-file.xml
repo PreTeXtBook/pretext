@@ -131,6 +131,15 @@
             </ul></p>
         </subsection>
 
+        <subsection xml:id="latex-worksheet-options">
+            <title><latex /> Worksheet Options</title>
+            <p>
+                By default, worksheets are formatted differently than other pages, including customizable margins, workspace between exercises, and on their own pages.  This separate formatting can be ignored, causing worksheets to be treated like any other division, using the<cd>
+                <cline>/publication/latex/worksheet/@formatted</cline>
+             </cd>attribute, setting the value to <c>no</c>.  The default value is <c>yes</c>.
+            </p>
+        </subsection>
+
         <subsection xml:id="latex-asymptote-link-options">
             <title><latex/> Asymptote Links</title>
             <idx><h>Asymptote links</h><h>LaTeX, PDF</h></idx>
