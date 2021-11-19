@@ -4485,6 +4485,15 @@ function re_transform_source() {
             var this_math_id = this_math_tag.slice(3,-3);
             console.log("this_math_id", this_math_id);
             console.log("with source", sourceobj[this_math_id]);
+            // move punctuation inside the display math
+            // (for easier editing.  move it back out later)
+            var find_char_after = new RegExp('^(.*' + this_math_tag + ")(.)\s*(.*)$", "s");
+            var char_after = this_content.replace(find_char_after, "$2");
+            if ([".", ",", ";", ":"].includes(char_after)) {
+                console.log("found punctuation", char_after);
+                this_content = this_content.replace(find_char_after, "$1$3");  // go back an omit white space
+                sourceobj[this_math_id]["content"] += char_after
+            }
             // the original p ends at the first displaymath
             var displaymath_id_and_before = new RegExp('^.*' + this_math_tag, "s");  // s = dotAll
             var displaymath_id_and_after = new RegExp(this_math_tag + '.*$', "s");
@@ -4498,6 +4507,7 @@ function re_transform_source() {
             context_of_outer_parent = context_of_outer_parent.replace("<&>" + id + "<;>", "<&>" + id + "<;>" + "\n" + this_math_tag);
             console.log("updated context_of_outer_parent", context_of_outer_parent);
             sourceobj[outer_parent[0]][outer_parent[1]] = context_of_outer_parent;
+         //  here need to check if this_content is nonempty (after removing trailing white space
             var new_id = "XXXX" + randomstring();
             sourceobj[new_id] = {"xml:id":new_id, "sourcetag": "p"};
             sourceobj[new_id]["content"] = this_content;
@@ -4507,6 +4517,17 @@ function re_transform_source() {
             for (var j=1; j < these_includedmath_index.length; ++j) {
                 this_math_tag = these_includedmath_index[j][1];
                 this_math_id = this_math_tag.slice(3,-3);
+
+                // move punctuation inside the display math
+                // (for easier editing.  move it back out later)
+                var find_char_after = new RegExp('^(.*' + this_math_tag + ")(.)\s*(.*)$", "s");
+                var char_after = this_content.replace(find_char_after, "$2");
+                if ([".", ",", ";", ":"].includes(char_after)) {
+                    console.log("found punctuation", char_after);
+                    this_content = this_content.replace(find_char_after, "$1$3");  // go back an omit white space
+                    sourceobj[this_math_id]["content"] += char_after
+                } 
+
                 displaymath_id_and_before = new RegExp('^.*' + this_math_tag, "s");  // s = dotAll
                 displaymath_id_and_after = new RegExp(this_math_tag + '.*$', "s");
                 sourceobj[new_id]["content"] = this_content.replace(displaymath_id_and_after, "");
@@ -4516,6 +4537,7 @@ function re_transform_source() {
                 // that parent needs to know where to put the first displaymath
                 context_of_outer_parent = context_of_outer_parent.replace("<&>" + new_id + "<;>", "<&>" + new_id + "<;>" + "\n" + this_math_tag);
                 sourceobj[outer_parent[0]][outer_parent[1]] = context_of_outer_parent;
+          // omit next if this_content is only white space
                 new_id = "XXXX" + randomstring();
                 sourceobj[new_id] = {"xml:id":new_id, "sourcetag": "p"};
                 sourceobj[new_id]["content"] = this_content;
