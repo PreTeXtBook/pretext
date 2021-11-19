@@ -85,6 +85,7 @@ function handleWW(ww_id, action) {
         // note ww_container.dataset.hasSolution is a string, possibly 'false' which is true
         url.searchParams.append("showSolutions", ww_container.dataset.hasSolution == 'true' ? '1' : '0');
         url.searchParams.append("showHints", ww_container.dataset.hasHint == 'true' ? '1' : '0');
+        url.searchParams.append("problemUUID",ww_id);
     }
 
     // get the json and do stuff with what we get
