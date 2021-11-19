@@ -7419,7 +7419,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template match="&PROJECT-LIKE;|exercise|task" mode="sanitize-workspace">
     <!-- bail out quickly and empty if not on a worksheet    -->
     <!-- bail out if at a "task" that is not a terminal task -->
-    <xsl:if test="ancestor::worksheet and not(child::task)">
+    <!-- bail out if publisher file says to not format worksheets -->
+    <xsl:if test="ancestor::worksheet and not(child::task) and ($latex-worksheet-formatted = 'yes')">
         <!-- First element with @workspace, confined to the worksheet  -->
         <!-- Could be empty node-set, which will be empty string later -->
         <xsl:variable name="workspaced" select="ancestor-or-self::*[@workspace and ancestor::worksheet][1]"/>

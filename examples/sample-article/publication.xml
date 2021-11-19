@@ -95,6 +95,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <latex print="no" sides="two">
         <!-- these are the default alignments, given just as an example -->
         <page right-alignment="flush" bottom-alignment="ragged"/>
+        <!-- worksheets are formatted separately by default.   -->
+        <!-- change to "no" to format as regular sections.     -->
+        <worksheet formatted="yes"/>
         <asymptote links="yes"/>
     </latex>
 
