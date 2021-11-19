@@ -2019,7 +2019,7 @@ function edit_in_place(obj, oldornew) {
       var new_tag = internalSource[thisID]["sourcetag"];
       var new_id = thisID;  // track down why new_id is in the code
       editorLog("new_tag is", new_tag, "from thisID", thisID, "from", internalSource[thisID]);
-      if (new_tag == "p" || new_tag == "me") {  // make into a category?
+      if (new_tag == "p" || new_tag == "me" || new_tag == "men") {  // make into a category?
         var this_content_container = document.createElement('div');
         this_content_container.setAttribute('id', "actively_editing");
         this_content_container.setAttribute('data-age', oldornew);
@@ -3341,7 +3341,7 @@ function insert_html_version(these_changes) {
         editorLog("j=", j, "this thing", possibly_changed_ids_and_entry[j]);
         this_object = internalSource[this_object_id];
         editorLog(j, "this_object", this_object);
-        if (this_object["sourcetag"] == "p" || this_object["sourcetag"] == "li" || this_object["sourcetag"] == "me") {
+        if (this_object["sourcetag"] == "p" || this_object["sourcetag"] == "li" || this_object["sourcetag"] == "me" || this_object["sourcetag"] == "men") {
 
             var this_new_object = html_from_internal_id(this_object_id);
             editorLog("inserting",this_new_object,"before",location_of_change);
@@ -4279,7 +4279,7 @@ function xmlToObject(xml_st) {
 
   parseLog("this_node_content", this_node_content);
 
-  if (xml.nodeType == 1) {                
+  if (xml.nodeType == 1) { // element                
     this_id = xml_id_of(xml);
     if (!new_top_id) {
         new_top_id = this_id;
@@ -4291,6 +4291,10 @@ function xmlToObject(xml_st) {
     this_entry["xml:id"] = this_id;
     if (["ol", "ul", "dl"].includes(xml.nodeName)) {
         this_entry["sourcetag"] = "list"
+/*
+    } else if (["me", "men"].includes(xml.nodeName)){
+        this_entry["sourcetag"] = "displaymath"
+*/
     } else {
         this_entry["sourcetag"] = xml.nodeName;
     }
@@ -4301,17 +4305,9 @@ function xmlToObject(xml_st) {
         var item = xml.childNodes.item(i);
         if (item.nodeType == 8) {
             //comment, so skip
-        } else if (item.nodeType == 3) {
+        } else if (item.nodeType == 3) { // text
             this_node_content += item.nodeValue
-        } else if (item.nodeType == 1) {
-/*
-            if (item.nodeName == "title") {
-                  // next may reguire processing markup inside the title
-                  // also meed to handle statement similarly
-                this_entry["title"] = item.firstChild.nodeValue;
-                continue
-            }
-*/
+        } else if (item.nodeType == 1) { // element
             var sub_node_id = xmlToObject(item);  // the contents, in certain cases
             if (["title", "statement", "caption", "proof"].includes(item.nodeName)) {
                 this_entry[item.nodeName] = sub_node_id
@@ -4371,7 +4367,7 @@ function xmlToObject(xml_st) {
   } else if (xml.nodeType == 8) {
       // comment node, so do nothign
       this_node_content = ""
-  } else if (xml.nodeType == 3) { 
+  } else if (xml.nodeType == 3) {  // text
       // can this, or the previous case, actually happen?
   } else {
       console.log("failed to deal with", xml)
@@ -4446,6 +4442,87 @@ function re_transform_source() {
             var margins = (100 - width)*0.5;
             this_item["marginleft"] = margins;
             this_item["marginright"] = margins;
+        }
+    } else if (["me", "men"].includes(this_item["sourcetag"])) {
+  // to handle the case of more than one displaymath in a p,
+  // we do it in two passes.  First we just record the ids of the me/men's.
+  // Then we simplify the problem by handling the displaymath in the
+  // order they occur.
+        console.log("found displaymath", this_item);
+        console.log("with parent", sourceobj[this_item["parent"][0]]);
+        var displaymath_id= this_item["xml:id"];
+        if ("includedmath" in sourceobj[this_item["parent"][0]]) {
+            sourceobj[this_item["parent"][0]]["includedmath"].push("<&>" + displaymath_id + "<;>")
+        } else {
+            sourceobj[this_item["parent"][0]]["includedmath"] = ["<&>" + displaymath_id + "<;>"]
+        }
+    }
+  }
+  // now go through and fix the "p" containing displaymath
+  for (var id in sourceobj) {
+    var this_item = sourceobj[id];
+    if (this_item["sourcetag"] == "p") {
+        if ("includedmath" in this_item) {
+            console.log("found includedmath", this_item);
+            var outer_parent = this_item["parent"];
+            var context_of_outer_parent = sourceobj[outer_parent[0]][outer_parent[1]];
+            console.log("this item id", id, "with parent", outer_parent, "in context", context_of_outer_parent);
+            var these_includedmath = this_item["includedmath"];
+            var this_content = this_item["content"];
+            var these_includedmath_index = [];
+            for (var j=0; j < these_includedmath.length; ++j) {
+                var this_math_tag = these_includedmath[j];
+                these_includedmath_index.push([this_content.indexOf(this_math_tag),this_math_tag]);
+                console.log("this_math_tag", this_math_tag, "has index", this_content.indexOf(this_math_tag))
+            }
+            these_includedmath_index.sort();
+            console.log("sorted list", these_includedmath_index)
+
+      //      var displaymath_parent_original_content = sourceobj[outer_parent[0]]["content"];
+            console.log("ocntent before splitting up", context_of_outer_parent);
+            this_math_tag = these_includedmath_index[0][1];
+            console.log("this_math_tag", this_math_tag);
+            var this_math_id = this_math_tag.slice(3,-3);
+            console.log("this_math_id", this_math_id);
+            console.log("with source", sourceobj[this_math_id]);
+            // the original p ends at the first displaymath
+            var displaymath_id_and_before = new RegExp('^.*' + this_math_tag, "s");  // s = dotAll
+            var displaymath_id_and_after = new RegExp(this_math_tag + '.*$', "s");
+            sourceobj[id]["content"] =
+                   this_content.replace(displaymath_id_and_after, "");
+            this_content = this_content.replace(displaymath_id_and_before, "");
+            console.log("updated this_content", this_content);
+            // the first displaymath now has a different parent
+            sourceobj[this_math_id]["parent"] = outer_parent;
+            // that parent needs to know where to put the first displaymath
+            context_of_outer_parent = context_of_outer_parent.replace("<&>" + id + "<;>", "<&>" + id + "<;>" + "\n" + this_math_tag);
+            console.log("updated context_of_outer_parent", context_of_outer_parent);
+            sourceobj[outer_parent[0]][outer_parent[1]] = context_of_outer_parent;
+            var new_id = "XXXX" + randomstring();
+            sourceobj[new_id] = {"xml:id":new_id, "sourcetag": "p"};
+            sourceobj[new_id]["content"] = this_content;
+            sourceobj[new_id]["parent"] = outer_parent;
+            context_of_outer_parent = context_of_outer_parent.replace(this_math_tag, this_math_tag + "\n" + "<&>" + new_id + "<;>");
+            sourceobj[outer_parent[0]][outer_parent[1]] = context_of_outer_parent;
+            for (var j=1; j < these_includedmath_index.length; ++j) {
+                this_math_tag = these_includedmath_index[j][1];
+                this_math_id = this_math_tag.slice(3,-3);
+                displaymath_id_and_before = new RegExp('^.*' + this_math_tag, "s");  // s = dotAll
+                displaymath_id_and_after = new RegExp(this_math_tag + '.*$', "s");
+                sourceobj[new_id]["content"] = this_content.replace(displaymath_id_and_after, "");
+                this_content = this_content.replace(displaymath_id_and_before, "");
+                // this displaymath now has a different parent
+                sourceobj[this_math_id]["parent"] = outer_parent;
+                // that parent needs to know where to put the first displaymath
+                context_of_outer_parent = context_of_outer_parent.replace("<&>" + new_id + "<;>", "<&>" + new_id + "<;>" + "\n" + this_math_tag);
+                sourceobj[outer_parent[0]][outer_parent[1]] = context_of_outer_parent;
+                new_id = "XXXX" + randomstring();
+                sourceobj[new_id] = {"xml:id":new_id, "sourcetag": "p"};
+                sourceobj[new_id]["content"] = this_content;
+                sourceobj[new_id]["parent"] = outer_parent;
+                context_of_outer_parent = context_of_outer_parent.replace(this_math_tag, this_math_tag + "\n" + "<&>" + new_id + "<;>");
+                sourceobj[outer_parent[0]][outer_parent[1]] = context_of_outer_parent;
+            }
         }
     }
   }
