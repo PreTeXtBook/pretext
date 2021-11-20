@@ -4946,7 +4946,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="b-is-specialized" select="boolean(self::exercises|self::solutions[not(parent::backmatter)]|self::reading-questions|self::glossary|self::references|self::worksheet)"/>
 
     <!-- change geometry if worksheet should be formatted -->
-    <xsl:if test="self::worksheet and ($latex-worksheet-formatted = 'yes')">
+    <xsl:if test="self::worksheet and $b-latex-worksheet-formatted">
         <!-- \newgeometry includes a \clearpage -->
         <xsl:apply-templates select="." mode="new-geometry"/>
     </xsl:if>
@@ -5078,7 +5078,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- possibly numberless -->
     <xsl:apply-templates select="." mode="division-environment-name-suffix" />
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:if test="self::worksheet and ($latex-worksheet-formatted = 'yes')">
+    <xsl:if test="self::worksheet and $b-latex-worksheet-formatted">
         <!-- \restoregeometry includes a \clearpage -->
         <xsl:text>\restoregeometry&#xa;</xsl:text>
     </xsl:if>
@@ -5141,7 +5141,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="worksheet/page">
     <xsl:apply-templates/>
-    <xsl:if test="following-sibling::page and ($latex-worksheet-formatted = 'yes')">
+    <xsl:if test="following-sibling::page and $b-latex-worksheet-formatted">
         <xsl:text>\clearpage&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
@@ -5150,7 +5150,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "page" element interrupted numbering of contents.   -->
 <!-- Now deprecated in favor of a proper "page" element. -->
 <xsl:template match="worksheet/pagebreak">
-    <xsl:if test="$latex-worksheet-formatted = 'yes'">
+    <xsl:if test="$b-latex-worksheet-formatted">
         <xsl:text>\clearpage&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>

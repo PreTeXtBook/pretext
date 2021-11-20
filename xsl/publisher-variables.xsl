@@ -1817,12 +1817,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$publication/latex/worksheet/@formatted = 'no'">
             <xsl:text>no</xsl:text>
         </xsl:when>
+        <xsl:when test="$publication/latex/worksheet/@formatted = 'yes'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/latex/worksheet/@formatted">
+            <xsl:message>PTX WARNING: LaTeX worksheet formatting in the publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/latex/worksheet/@formatted"/>". Proceeding with default value: "yes"</xsl:message>
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
         <!-- default -->
         <xsl:otherwise>
             <xsl:text>yes</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+<xsl:variable name="b-latex-worksheet-formatted" select="$latex-worksheet-formatted = 'yes'"/>
 
 <!-- LaTeX/Asymptote -->
 
