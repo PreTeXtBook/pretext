@@ -381,6 +381,67 @@ objectStructure = {
         "pieces": [["content", ""]]
     }
   },
+/* probably there is a better way to do it, but we have separate elements for p
+   that occur in
+   text  // ip
+   math
+   text  // mp
+   math
+   text  // mp
+   math
+   text  // fp 
+*/
+   "ip": {
+    "html": {
+        "tag": "p",
+        "pieces": [["content", ""]],
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+        "data_editable": "99"
+    },
+    "pretext": {
+        "tag_opening": "\n<p ",   // note the slimy way of including attributes
+        "tag_closing": "",
+        "attributes": ['id="<&>xml:id<;>">\n'],
+        "pieces": [["content", ""]]
+    },
+    "source": {
+        "pieces": [["content", ""]]
+    }
+  },
+   "mp": {
+    "html": {
+        "tag": "p",
+        "pieces": [["content", ""]],
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+        "data_editable": "99"
+    },
+    "pretext": {
+        "tag_opening": "",
+        "tag_closing": "",
+        "attributes": [],
+        "pieces": [["content", ""]]
+    },
+    "source": {
+        "pieces": [["content", ""]]
+    }
+  },
+   "fp": {
+    "html": {
+        "tag": "p",
+        "pieces": [["content", ""]],
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+        "data_editable": "99"
+    },
+    "pretext": {
+        "tag_opening": "",
+        "tag_closing": "\n</p>\n",
+        "attributes": [],
+        "pieces": [["content", ""]]
+    },
+    "source": {
+        "pieces": [["content", ""]]
+    }
+  },
 
   "li": {
     "html": {
@@ -1016,12 +1077,23 @@ var always_empty_tags = ["img", "image", "ellipsis", "ie", "eg", "etc", "nbsp"];
 var allowed_empty_tags = ["div", "span", "p", "stack", "xref"];
 var tag_display = {  /* the default is "block" */
     "inline": ["m", "em", "ellipsis", "span", "term", "dfn", "q", "c", "code", "alert", "ie", "eg", "etc", "nbsp", "xref", "idx", "h", "init"], 
-    "title": ["title", "idx", "h1", "h2", "h3", "h4", "h5", "h6", "div", "usage"]
+    "title": ["title", "idx", "h1", "h2", "h3", "h4", "h5", "h6", "div", "usage"],
+    "block-tight": [] // ["mp", "mrow"]
 } 
 
 inline_tags = tag_display["inline"];
 inline_math = ["m"];
 inline_abbrev = ["ellipsis", "ie", "eg", "etc"];
+
+function tag_type(tag) {
+    var this_type;
+
+    if (["p", "ip", "mp", "fp"].includes(tag)) { this_type = "p" }
+    else if (["me", "men", "md", "mdn"].includes(tag)) { this_type = "md" }
+    else { this_type = tag }
+
+    return this_type
+}
 
 function process_value_from_source(fcn, piece, src) {
 
@@ -1250,7 +1322,7 @@ function past_edits() {
 }
 
 // this should be created from inner_menu_for
-editing_container_for = { "p": 1,
+editing_container_for = { "p": 1, "ip": 1, "mp": 1, "fp": 1,
  "theorem-like": ["theorem", "proposition", "lemma", "corollary", "claim", "fact", "identity", "algorithm"],
  "definition-like": ["definition", "conjecture", "axiom", "hypothesis", "principle", "heuristic", "assumption"],
 "remark-like": ["remark", "warning", "note", "observation", "convention", "insight"],
@@ -1372,7 +1444,7 @@ function menu_options_for(object_id, component_type, level) {
                  ["move-global", "Move this another page (not implemented yet)"],
                  ["delete", "Delete"]  // does it matter whether there are other p in this li?
              ];
-         } else if(component_type == "p") {
+         } else if(tag_type(component_type) == "p") {
              m_d_options = [
                  ["move-local-p", "Move this text within this page"],
                  ["move-global", "Move to another page (not implemented yet)"],
@@ -1834,7 +1906,7 @@ function create_new_internal_object(new_tag, new_id, parent_description) {
     if (new_tag == "list") {
         // do nothing, because it is the child "li" which we are really creating
         // chack that:  maybe do add, if the stack is in the proper order
-    } else if (new_tag == "p"){
+    } else if (tag_type(new_tag) == "p"){
         // p is the default, so no need to keep track of it
     } else if (new_tag == "source"){
        // not really a tag 
@@ -2019,7 +2091,7 @@ function edit_in_place(obj, oldornew) {
       var new_tag = internalSource[thisID]["sourcetag"];
       var new_id = thisID;  // track down why new_id is in the code
       editorLog("new_tag is", new_tag, "from thisID", thisID, "from", internalSource[thisID]);
-      if (new_tag == "p" || new_tag == "me" || new_tag == "men") {  // make into a category?
+      if (tag_type(new_tag) == "p" || tag_type(new_tag) == "md") {  // make into a category?
         var this_content_container = document.createElement('div');
         this_content_container.setAttribute('id', "actively_editing");
         this_content_container.setAttribute('data-age', oldornew);
@@ -2416,7 +2488,7 @@ function move_by_id_local(theid, thehandleid) {
     editorLog("current_editing[tree][0]", current_editing["tree"][0]);
     if (moved_content_tag == "li") {
         movement_location_neighbors = next_editable_of(current_editing["tree"][0][0], "li-only");
-    } else if (moved_content_tag == "p") {
+    } else if (tag_type(moved_content_tag) == "p") {
         movement_location_neighbors = next_editable_of(current_editing["tree"][0][0], "inner-block");
     } else {
         movement_location_neighbors = next_editable_of(current_editing["tree"][0][0], "outer-block");
@@ -2474,7 +2546,7 @@ function move_by_id_local(theid, thehandleid) {
     //  if we are moving a p which has parent li, and it is the only p there, then delete the parent li
     //  note:  this will be wrong if there is other non-p siblings inside the li
     var moving_object_replace = moving_object;
-    if (moved_content_tag == "p" && internalSource[moved_parent_and_location[0]]["sourcetag"] == "li") {
+    if (tag_type(moved_content_tag) == "p" && internalSource[moved_parent_and_location[0]]["sourcetag"] == "li") {
         // check if that p is the only thing inside the li (so the li is empty when we move the p), and if so,
         // remove that li from internalSource and also the HTML, and the reverence to it in internalSource
         if (moving_object.parentElement.getElementsByTagName("p").length == 1) {
@@ -3062,6 +3134,8 @@ function wrap_tag(tag, content, attribute_values) {
       } else if (tag_display["title"].includes(tag)) {
         opening_tag = "\n" + opening_tag;
         closing_tag = closing_tag + "\n"
+      } else if (tag_display["block-tight"].includes(tag)) {
+        // do nothing
       } else {  //the default
         opening_tag = "\n" + opening_tag + "\n";
         if (closing_tag) {
@@ -3070,6 +3144,9 @@ function wrap_tag(tag, content, attribute_values) {
       }
     } else if (tag) {
         [opening_tag, closing_tag] = tag
+        for (var j=0; j < attribute_values.length; ++j) {
+            opening_tag += ' ' + attribute_values[j]
+        }
     } else {
         opening_tag = "";
         closing_tag = "";
@@ -3083,7 +3160,7 @@ function wrap_tag(tag, content, attribute_values) {
         alert("empty p")
     }
 
-    return opening_tag + content + closing_tag
+    return opening_tag + content.trim() + closing_tag
 }
 
 function output_from_source(the_object, output_structure, format) {
@@ -3285,7 +3362,7 @@ function html_from_internal_id(the_id, is_inner) {
         editorLog("html_of_this_object", html_of_this_object);
         the_html_objects.push(html_of_this_object);
 
-    } else if (sourcetag == "p") {
+    } else if (tag_type(sourcetag) == "p") {
         html_of_this_object = output_from_id("", the_id, "html");
         editorLog("html_of_this_object", html_of_this_object);
         the_html_objects.push(html_of_this_object);
@@ -3341,7 +3418,7 @@ function insert_html_version(these_changes) {
         editorLog("j=", j, "this thing", possibly_changed_ids_and_entry[j]);
         this_object = internalSource[this_object_id];
         editorLog(j, "this_object", this_object);
-        if (this_object["sourcetag"] == "p" || this_object["sourcetag"] == "li" || this_object["sourcetag"] == "me" || this_object["sourcetag"] == "men") {
+        if (tag_type(this_object["sourcetag"]) == "p" || this_object["sourcetag"] == "li" || tag_type(this_object["sourcetag"]) == "md") {
 
             var this_new_object = html_from_internal_id(this_object_id);
             editorLog("inserting",this_new_object,"before",location_of_change);
@@ -4499,6 +4576,7 @@ function re_transform_source() {
             var displaymath_id_and_after = new RegExp(this_math_tag + '.*$', "s");
             sourceobj[id]["content"] =
                    this_content.replace(displaymath_id_and_after, "");
+            sourceobj[id]["sourcetag"] = "ip"
             this_content = this_content.replace(displaymath_id_and_before, "");
             console.log("updated this_content", this_content);
             // the first displaymath now has a different parent
@@ -4509,7 +4587,7 @@ function re_transform_source() {
             sourceobj[outer_parent[0]][outer_parent[1]] = context_of_outer_parent;
          //  here need to check if this_content is nonempty (after removing trailing white space
             var new_id = "XXXX" + randomstring();
-            sourceobj[new_id] = {"xml:id":new_id, "sourcetag": "p"};
+            sourceobj[new_id] = {"xml:id":new_id, "sourcetag": "mp"};
             sourceobj[new_id]["content"] = this_content;
             sourceobj[new_id]["parent"] = outer_parent;
             context_of_outer_parent = context_of_outer_parent.replace(this_math_tag, this_math_tag + "\n" + "<&>" + new_id + "<;>");
@@ -4539,12 +4617,13 @@ function re_transform_source() {
                 sourceobj[outer_parent[0]][outer_parent[1]] = context_of_outer_parent;
           // omit next if this_content is only white space
                 new_id = "XXXX" + randomstring();
-                sourceobj[new_id] = {"xml:id":new_id, "sourcetag": "p"};
+                sourceobj[new_id] = {"xml:id":new_id, "sourcetag": "mp"};
                 sourceobj[new_id]["content"] = this_content;
                 sourceobj[new_id]["parent"] = outer_parent;
                 context_of_outer_parent = context_of_outer_parent.replace(this_math_tag, this_math_tag + "\n" + "<&>" + new_id + "<;>");
                 sourceobj[outer_parent[0]][outer_parent[1]] = context_of_outer_parent;
             }
+            sourceobj[new_id]["sourcetag"] = "fp"
         }
     }
   }
