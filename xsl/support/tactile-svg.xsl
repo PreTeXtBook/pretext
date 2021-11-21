@@ -35,6 +35,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     exclude-result-prefixes="pi"
 >
 
+<xsl:output method="xml" encoding="UTF-8"/>
+
 <!-- Required: necessary to get braille'd labels, Grade 1 + Nemeth -->
 <xsl:param name="labelfile" select="''"/>
 <xsl:variable name="braille-labels"  select="document($labelfile)/pi:braille-labels"/>

@@ -39,7 +39,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:import href="./extract-identity.xsl" />
 
 <!-- Output Python as text -->
-<xsl:output method="text" />
+<xsl:output method="text" encoding="UTF-8"/>
 
 <!-- Enclosing structure is a Python list -->
 <!-- So wrap at outermost level and       -->

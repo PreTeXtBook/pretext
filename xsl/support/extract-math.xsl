@@ -56,7 +56,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- the MathJax tools, producing a non-XML file. -->
 
 <!-- Output an HTML for MathJax to consume page -->
-<xsl:output method="xml" omit-xml-declaration="yes" doctype-system="about:legacy-compat"/>
+<xsl:output method="xml" encoding="UTF-8" omit-xml-declaration="yes" doctype-system="about:legacy-compat"/>
 
 <!-- This stylesheet is parameterized by how trailing punctuation       -->
 <!-- is handled by math elements.  An  xsl:param  immediately overrides -->

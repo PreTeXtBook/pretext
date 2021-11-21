@@ -46,7 +46,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Intend output for rendering as source code for some language -->
 <!-- An output in XML syntax, like XSL, might be tricky           -->
-<xsl:output method="text"/>
+<xsl:output method="text" encoding="UTF-8"/>
 
 <!-- ############## -->
 <!-- Entry Template -->

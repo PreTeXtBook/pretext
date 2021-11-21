@@ -51,6 +51,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     exclude-result-prefixes="svg"
 >
 
+<xsl:output method="xml" encoding="UTF-8"/>
+
 <!-- Our simple webpage is processed by MathJax via the mathjax-node-page -->
 <!-- program.  This invocation is parameterized by a choice of SVG output -->
 <!-- or MathML output.  Either way, the structure of the page is          -->

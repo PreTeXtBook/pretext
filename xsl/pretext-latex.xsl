@@ -38,7 +38,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:import href="./pretext-assembly.xsl"/>
 
 <!-- Intend output for rendering by pdflatex -->
-<xsl:output method="text" />
+<xsl:output method="text" encoding="UTF-8"/>
 
 <!-- Parameters to pass via xsltproc "stringparam" on command-line            -->
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->

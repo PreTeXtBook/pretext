@@ -41,7 +41,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:import href="./extract-identity.xsl" />
 
 <!-- Output Sage code as text -->
-<xsl:output method="text" />
+<xsl:output method="text" encoding="UTF-8"/>
 
 <!-- Sage graphics to standalone Sage/Python file      -->
 <xsl:template match="sageplot" mode="extraction">

@@ -39,7 +39,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Does not support "subtree" xml:id value   -->
 
 <!-- Output structured XML -->
-<xsl:output method="xml" />
+<xsl:output method="xml" encoding="UTF-8"/>
 
 <!-- Necessary to get pre-constructed Nemeth braille for math elements. -->
 <xsl:param name="mathfile" select="''"/>

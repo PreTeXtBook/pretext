@@ -45,7 +45,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:import href="./extract-identity.xsl" />
 
 <!-- Output LaTeX as text -->
-<xsl:output method="text" />
+<xsl:output method="text" encoding="UTF-8"/>
 
 <!-- Stylesheet is parametrized by format for output           -->
 <!--   latex:   for PDF to be cropped, manipulated, etc        -->
