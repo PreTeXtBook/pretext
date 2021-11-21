@@ -374,7 +374,7 @@ objectStructure = {
     },
     "pretext": {
         "tag": "p",
-        "attributes": ['id="<&>xml:id<;>"'],
+        "attributes": ['xml:id="<&>xml:id<;>"'],
         "pieces": [["content", ""]]
     },
     "source": {
@@ -399,9 +399,9 @@ objectStructure = {
         "data_editable": "99"
     },
     "pretext": {
-        "tag_opening": "\n<p ",   // note the slimy way of including attributes
+        "tag_opening": "\n<p",   // note the slimy way of including attributes
         "tag_closing": "",
-        "attributes": ['id="<&>xml:id<;>">\n'],
+        "attributes": ['xml:id="<&>xml:id<;>">\n'],
         "pieces": [["content", ""]]
     },
     "source": {
@@ -3122,7 +3122,7 @@ function wrap_tag(tag, content, attribute_values) {
         }
         closing_tag = "</" + tag + ">";
       }
-      if (!content && always_empty_tags.includes(tag)) {
+      if (!content && (always_empty_tags.includes(tag) || allowed_empty_tags.includes(tag))) {
         opening_tag += "/>";
         closing_tag = "";
       } else {
