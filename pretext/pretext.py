@@ -1892,16 +1892,23 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
                 print('    * ', m.message)
     os.chdir(owd)
 
-    # write a serialized version to a file if
-    # there is a non-empty result tree on stdout
-    # NB: this seems to presume an ASCII (not UTF-8)
-    # encoding for output, no matter what stylesheet says
-    # There seems to be a way to set this, but that would
-    # possibly be a significant change in behavior, so
-    # should be extensively tested
-    if result:
-        with open(result, 'w') as result_file:
-            result_file.write(str(result_tree))
+    # write a serialized version of `result_tree` to a file
+    # write_output() is an lxml method which respects/interprets
+    # the stylesheet's xsl:output/@encoding attribute value
+    # An error traced back here could be a stylesheet with no explicit
+    # encoding given, so determine which `xsl` is in use and check
+    try:
+        if result:
+            result_tree.write_output(result)
+    except LookupError as e:
+        root_cause = str(e)
+        msg = ''.join(["PTX:ERROR: the stylesheet: {}\n",
+                       "has a problem with xsl:output/@encoding.\n",
+                       "The lxml error message is:\n",
+                       '"{}"'
+                       ]).format(xsl, root_cause)
+        raise ValueError(msg)
+
 
 
 ###################
