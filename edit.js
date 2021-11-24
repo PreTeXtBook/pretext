@@ -185,7 +185,7 @@ objectStructure = {
   },
   "caption_like_heading": {
     "html": {
-        "tag": "",
+        "tag": "h5",
         "cssclass": "figcaption",
         "attributes": ['class="<&>{cssclass}<;>"', 'data-parent_id="<&>xml:id<;>"'],
         "pieces": [["{type}", ""], ["{space}", ""], ["{codenumber}", ""], ["{period}", ""], ["{space}", ""]]
@@ -1930,6 +1930,9 @@ function show_source(sibling, relative_placement) {
     var the_pretext_source =  output_from_id("", top_level_id, "pretext");
 
     the_pretext_source = the_pretext_source.replace(/\n\n/g, '\n');
+
+    // remove temporary ids
+    the_pretext_source = the_pretext_source.replace(/ xml:id="tMP[0-9a-z]+"/g, '');
 
     edit_placeholder.insertAdjacentHTML('afterend', '<textarea id="newpretextsource" style="width: 100%; height:30em">' + the_pretext_source + '</textarea>');
     document.getElementById("newsource").remove();
@@ -4525,8 +4528,8 @@ function re_transform_source() {
   // we do it in two passes.  First we just record the ids of the me/men's.
   // Then we simplify the problem by handling the displaymath in the
   // order they occur.
-        console.log("found displaymath", this_item);
-        console.log("with parent", sourceobj[this_item["parent"][0]]);
+        parseLog("found displaymath", this_item);
+        parseLog("with parent", sourceobj[this_item["parent"][0]]);
         var displaymath_id= this_item["xml:id"];
         if ("includedmath" in sourceobj[this_item["parent"][0]]) {
             sourceobj[this_item["parent"][0]]["includedmath"].push("<&>" + displaymath_id + "<;>")
@@ -4553,15 +4556,15 @@ function re_transform_source() {
                 console.log("this_math_tag", this_math_tag, "has index", this_content.indexOf(this_math_tag))
             }
             these_includedmath_index.sort();
-            console.log("sorted list", these_includedmath_index)
+            parseLog("sorted list", these_includedmath_index)
 
       //      var displaymath_parent_original_content = sourceobj[outer_parent[0]]["content"];
-            console.log("ocntent before splitting up", context_of_outer_parent);
+            parseLog("ocntent before splitting up", context_of_outer_parent);
             this_math_tag = these_includedmath_index[0][1];
-            console.log("this_math_tag", this_math_tag);
+            parseLog("this_math_tag", this_math_tag);
             var this_math_id = this_math_tag.slice(3,-3);
-            console.log("this_math_id", this_math_id);
-            console.log("with source", sourceobj[this_math_id]);
+            parseLog("this_math_id", this_math_id);
+            parseLog("with source", sourceobj[this_math_id]);
             // move punctuation inside the display math
             // (for easier editing.  move it back out later)
             var find_char_after = new RegExp('^(.*' + this_math_tag + ")(.)\s*(.*)$", "s");
@@ -4578,12 +4581,12 @@ function re_transform_source() {
                    this_content.replace(displaymath_id_and_after, "");
             sourceobj[id]["sourcetag"] = "ip"
             this_content = this_content.replace(displaymath_id_and_before, "");
-            console.log("updated this_content", this_content);
+            parseLog("updated this_content", this_content);
             // the first displaymath now has a different parent
             sourceobj[this_math_id]["parent"] = outer_parent;
             // that parent needs to know where to put the first displaymath
             context_of_outer_parent = context_of_outer_parent.replace("<&>" + id + "<;>", "<&>" + id + "<;>" + "\n" + this_math_tag);
-            console.log("updated context_of_outer_parent", context_of_outer_parent);
+            parseLog("updated context_of_outer_parent", context_of_outer_parent);
             sourceobj[outer_parent[0]][outer_parent[1]] = context_of_outer_parent;
          //  here need to check if this_content is nonempty (after removing trailing white space
             var new_id = "XXXX" + randomstring();
