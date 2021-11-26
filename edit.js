@@ -412,7 +412,7 @@ objectStructure = {
     "html": {
         "tag": "p",
         "pieces": [["content", ""]],
-        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="mp"'],
         "data_editable": "99"
     },
     "pretext": {
@@ -429,7 +429,7 @@ objectStructure = {
     "html": {
         "tag": "p",
         "pieces": [["content", ""]],
-        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="fp"'],
         "data_editable": "99"
     },
     "pretext": {
@@ -504,11 +504,11 @@ objectStructure = {
     },
     "pretext": {
         "tag": "figure",
-        "pieces": [["caption","content"]],
+        "pieces": [["content"], ["{caption}"]],
         "attributes": ['xml:id="<&>xml:id<;>"']
     },
     "source": {
-        "pieces": [["caption","content"]],
+        "pieces": [["content", ""], ["caption", ""]],
         "attributes": []
     }
   },
@@ -637,8 +637,9 @@ objectStructure = {
    //     "pieces": [["(literal, caption goes here)",""]]
     },
     "pretext": {
+        "tag": "caption",
         "attributes": [],
-        "pieces": [["content", ""]]
+        "pieces": [["caption", ""]]
     },
     "source": {
         "pieces": [["content", ""]]
@@ -961,10 +962,10 @@ objectStructure = {
 
   "m": {    // need to mark it as inline
       "html": {
-          "tag_opening": "\\(",
-          "tag_closing": "\\)",
+          "tag_opening": "<span class='process-math'>\\(",
+          "tag_closing": "\\)</span>",
  //         "tag": "script",
-          "attributes": ['type="math/tex"'],
+    //      "attributes": ['type="math/tex"'],
           "pieces": [["content", ""]]
       },
       "pretext": {
@@ -995,7 +996,7 @@ objectStructure = {
   "men": {
       "html": {
           "tag": "div",
-          "attributes": ['id="<&>xml:id<;>"', 'class="displaymath"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+          "attributes": ['id="<&>xml:id<;>"', 'class="displaymath process-math"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
           "data_editable": "42",
           "pieces": [["{me_raw}", ""]]
       },
@@ -1992,7 +1993,7 @@ function create_object_to_edit(new_tag, new_objects_sibling, relative_placement)
     }
 
     if (relative_placement == "afterbegin" && new_tag != "image") {  // when adding to a sbs panel
-                           // redo the condition so that it explicitly usus sbs
+                           // redo the condition so that it explicitly uses sbs
        // redundant with the "special case" above?
   //      parent_description = [new_id, "content"];
     }
@@ -4255,6 +4256,12 @@ function initialize_editing(xml_st) {
     edit_menu_for(e_tree[e_level][e_location], "entering")
 
     console.log("internalSource internalSource internalSource internalSource internalSource internalSource", internalSource);
+
+   // done rebulding HTML, so now process math
+   // NOT CURRENTLY DOING ANYTHING????
+    console.log("ready to edit, so typeset the math");
+    MathJax.typesetPromise();
+
     editorLog = console.log;
 }
 
@@ -4434,10 +4441,25 @@ function xmlToObject(xml_st) {
             }
         }
     }
+    // The CAT expects a width and margins on an image, but those myght not be
+    // specified in the source.  So add those if not present.
+    if (xml.nodeName == "image") {
+        console.log("image attributes", xml.attributes, "ddd", xml.attributes["source"]);
+        if (!xml.attributes["width"]) {
+            console.log("no width");
+            this_entry["width"] = 100;
+        }
+        if (!xml.attributes["margins"]) {
+            console.log("no margins");
+            this_entry["marginleft"] = 0;
+            this_entry["marginright"] = 0;
+        }
+    }
 
     if (xml.attributes) {
         parseLog(xml, "has attributes", xml.attributes)
     }
+  // what is the point of the next condition?
     if (["title", "statement", "caption", "proof"].includes(xml.nodeName)) {
         return this_node_content
     } else {
@@ -4445,7 +4467,7 @@ function xmlToObject(xml_st) {
         return this_id
     }
   } else if (xml.nodeType == 8) {
-      // comment node, so do nothign
+      // comment node, so do nothing
       this_node_content = ""
   } else if (xml.nodeType == 3) {  // text
       // can this, or the previous case, actually happen?
