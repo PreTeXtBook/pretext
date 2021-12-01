@@ -4552,6 +4552,47 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Identifiers -->
 <!-- ########### -->
 
+<xsl:template match="*" mode="check-duplicate-xmlid">
+    <xsl:variable name="tagged-elements" select=".//*[@xml:id]"/>
+    <!-- course over all such tagged elements, we will stop at the first -->
+    <!-- one with duplicates and report all of the duplicates            -->
+    <xsl:for-each select="$tagged-elements">
+        <!-- It is possible to sort here on the @xml:id, and -->
+        <!-- does not seem to be a big hit in performance or -->
+        <!-- coding, but also seems of little value since    -->
+        <!-- duplicates should be removed soon/quickly       -->
+
+        <xsl:variable name="the-id" select="string(@xml:id)"/>
+
+        <!-- Normally just a single element, count will reveal the  -->
+        <!-- existence of multiple elements with the same @xml:id.  -->
+        <!-- We report to the author by coursing over this node-set -->
+        <xsl:variable name="duplicate-elements" select="$tagged-elements[@xml:id = $the-id]"/>
+
+        <!-- (A) If $duplicate-elements has multiple elements, then $the-id   -->
+        <!--     is an identifier that is duplicated (so these are elements   -->
+        <!--     with duplicates, not duplicated elements).  So the first     -->
+        <!--     condition recognizes a problematic @xml:id value.            -->
+        <!--                                                                  -->
+        <!-- (B) We only report at the first "tagged element" with a problem, -->
+        <!--     but we want to report on each of the "duplicate-elements",   -->
+        <!--     specifically a location, to help an author                   -->
+        <!--     We test equality of context (current "tagged-element")       -->
+        <!--     and the first "duplicate-element"                            -->
+        <!--     Plain equality seems to work, but is not suggested at:       -->
+        <!--     Determining if Two Nodes Are the Same                        -->
+        <!--     XSLT Cookbook, 2nd Edition                                   -->
+        <!--     https://www.oreilly.com/library/view/xslt-cookbook/0596003722/ch04s02.html -->
+        <xsl:if test="(count($duplicate-elements) &gt; 1) and (count(.|$duplicate-elements[position() = 1]) = 1)">
+            <xsl:message>PTX:ERROR: the @xml:id value "<xsl:value-of select="$the-id"/>" should be unique, but appears <xsl:value-of select="count($duplicate-elements)"/> times.&#xa;           Results will be unpredictable, and likely incorrect.  Information on the locations follows:</xsl:message>
+            <xsl:for-each select="$duplicate-elements">
+                <xsl:apply-templates select="." mode="location-report" />
+            </xsl:for-each>
+        </xsl:if>
+    </xsl:for-each>
+</xsl:template>
+
+
 <!--                    -->
 <!-- Visible Identifier -->
 <!--                    -->
@@ -10612,6 +10653,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:apply-templates select="." mode="literate-programming-warning" />
     <xsl:apply-templates select="." mode="xinclude-warnings" />
     <xsl:apply-templates select="." mode="xmlid-warning" />
+    <xsl:apply-templates select="." mode="check-duplicate-xmlid"/>
     <xsl:apply-templates select="." mode="text-element-warning" />
     <xsl:apply-templates select="." mode="subdivision-structure-warning" />
 </xsl:template>
