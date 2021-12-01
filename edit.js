@@ -1,12 +1,11 @@
 
 editorLog = console.log;
 // editorLog = function(){};
-errorLog = console.log;
-// debugLog = console.log;
 debugLog = function(){};
-// parseLog = console.log;
-parseLog = function(){};
-// editorLog = function(){};
+// debugLog = console.log;
+//parseLog = function(){};
+parseLog = console.log;
+errorLog = console.log;
 
 /* the structure of each object, and its realization as PreTeXt source or in HTML,
    is recorded in the objectStructure dictionary.
@@ -71,6 +70,13 @@ objectStructure = {
         "tag": "span",
         "attributes": ['class="period"'],
         "pieces": [["(period,)", ""]]
+    }
+  },
+  "comma": {   // used in bibliography
+    "html": {
+        "tag": "span",
+        "attributes": ['class="comma"'],
+        "pieces": [["(comma,)", ""]]
     }
   },
   "titleperiod": {
@@ -646,6 +652,80 @@ objectStructure = {
     }
   },
 
+  "references": {
+    "html": {
+        "tag": "article",
+        "cssclass": "bib",
+        "data_editable": "33",
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
+        "pieces": [["{section_like_heading}", ""], ["content",""]]
+    },
+    "pretext": {
+        "tag": "references",
+        "attributes": ['xml:id="<&>xml:id<;>"'],
+        "pieces": [["title", ""], ["content",""]]
+    },
+    "source": {
+        "pieces": [["title", ""], ["content",""]]
+    }
+  },
+
+  "biblio": {
+    "html": {
+        "tag": "div",
+        "cssclass": "bibentry",
+        "data_editable": "333",
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"', 'class="<&>{cssclass}<;>"'],
+        "pieces": [["{bib-title}", ""], ["{journal}",""], ["{volume}",""], ["{number}",""], ["{author}",""], ["{pages}",""]]
+    },
+    "pretext": {
+        "tag": "biblio",
+        "attributes": ['xml:id="<&>xml:id<;>"', 'type="raw"'],
+        "pieces": [["title", ""], ["journal",""], ["volume",""], ["number",""], ["author",""], ["pages",""]]
+    },
+    "source": {
+        "pieces": [["title", ""], ["journal",""], ["volume",""], ["number",""], ["author",""], ["pages",""]]
+    }
+  },
+
+  "bib-title": {
+    "html": {
+        "tag": "i",
+        "pieces": [["title", "zz"]]
+    }
+  },
+  "author": {
+    "html": {
+        "tag": "",
+        "pieces": [["author", ""], ["{comma}", ""]]
+    }
+  },
+  "journal": {
+    "html": {
+        "tag": "",
+        "pieces": [["journal", ""]]
+    }
+  },
+  "volume": {
+    "html": {
+        "tag": "b",
+        "pieces": [["volume", ""]]
+    }
+  },
+  "pages": {
+    "html": {
+        "tag": "jjj",
+        "pieces": [["pages", ""]]
+    }
+  },
+  "number": {
+    "html": {
+        "tag_opening": "(",
+        "tag_closing": ")",
+        "pieces": [["number", ""]]
+    }
+  },
+
   "remark-like": {
     "html": {
         "tag": "article",
@@ -1086,6 +1166,10 @@ inline_tags = tag_display["inline"];
 inline_math = ["m"];
 inline_abbrev = ["ellipsis", "ie", "eg", "etc"];
 
+// contained_objects are a componnet of another object, not just buried in content
+var contained_objects =["title", "statement", "caption", "proof",
+                        "author", "journal", "volume", "number", "pages"];
+
 function tag_type(tag) {
     var this_type;
 
@@ -1134,6 +1218,8 @@ function process_value_from_source(fcn, piece, src) {
         content = content_raw + " "
     } else if (fcn == "period") {
         content = content_raw + "."
+    } else if (fcn == "comma") {
+        content = content_raw + ","
     } else if (fcn == "titleperiod") {
         if (src.title && !(/[!?]$/.test(src.title))) {
             content = content_raw + "."
@@ -4396,7 +4482,8 @@ function xmlToObject(xml_st) {
             this_node_content += item.nodeValue
         } else if (item.nodeType == 1) { // element
             var sub_node_id = xmlToObject(item);  // the contents, in certain cases
-            if (["title", "statement", "caption", "proof"].includes(item.nodeName)) {
+            if (contained_objects.includes(item.nodeName)) {
+  //          if (["title", "statement", "caption", "proof", "journal", "volume"].includes(item.nodeName)) {
                 this_entry[item.nodeName] = sub_node_id
             } else {
                 this_node_content += "<&>" + sub_node_id + "<;>"
@@ -4459,8 +4546,9 @@ function xmlToObject(xml_st) {
     if (xml.attributes) {
         parseLog(xml, "has attributes", xml.attributes)
     }
-  // what is the point of the next condition?
-    if (["title", "statement", "caption", "proof"].includes(xml.nodeName)) {
+//    parseLog("item", item);
+    if (contained_objects.includes(xml.nodeName)) {
+//    if (["title", "statement", "caption", "proof", "journal", "volume"].includes(xml.nodeName)) {
         return this_node_content
     } else {
         sourceobj[this_id] = this_entry
@@ -4481,11 +4569,11 @@ function record_children(internal_src) {
         var this_item = internal_src[key];
         if ("content" in this_item) { // skip empty tags
             var this_content = this_item["content"];
-     //       parseLog("this_content", this_content);
+            parseLog("this_content", this_content);
             var child_items = this_content.match(/<&>.*?<;>/g) || "";
             for (var j=0; j < child_items.length; ++j) {
                 var this_child = child_items[j].slice(3,-3);
-      //          parseLog("this_child", this_child, "has a parent", key);
+                parseLog("this_child", this_child, "has a parent", key);
                 internal_src[this_child]["parent"] = [key, "content"]
             }
         }
