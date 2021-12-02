@@ -8818,6 +8818,77 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="biblio[@type='raw']/ibid">
     <xsl:text>Ibid.</xsl:text>
 </xsl:template>
+
+<!-- Fully marked-up bibtex-style bibliographic entry formatting -->
+<!-- Current treatment assumes elements are in the correct order -->
+
+<!-- Comma after author or editor -->
+<xsl:template match="biblio[@type='bibtex']/author">
+    <xsl:apply-templates />
+    <xsl:text>, </xsl:text>
+</xsl:template>
+<xsl:template match="biblio[@type='bibtex']/editor">
+    <xsl:apply-templates />
+    <xsl:text>, </xsl:text>
+</xsl:template>
+
+<!-- Title in italics -->
+<xsl:template match="biblio[@type='bibtex']/title">
+    <i><xsl:apply-templates /></i>
+    <xsl:text>, </xsl:text>
+</xsl:template>
+
+<!-- Space after journal -->
+<xsl:template match="biblio[@type='bibtex']/journal">
+    <xsl:apply-templates />
+    <xsl:text> </xsl:text>
+</xsl:template>
+
+<!-- Volume in bold -->
+<xsl:template match="biblio[@type='bibtex']/volume">
+    <b><xsl:apply-templates /></b>
+    <xsl:text> </xsl:text>
+</xsl:template>
+
+<!-- Series is plain (but space after) -->
+<xsl:template match="biblio[@type='bibtex']/series">
+    <xsl:apply-templates />
+    <xsl:text> </xsl:text>
+</xsl:template>
+
+<!-- Publisher is plain (but semicolon after) -->
+<xsl:template match="biblio[@type='bibtex']/publisher">
+    <xsl:apply-templates />
+    <xsl:text>; </xsl:text>
+</xsl:template>
+
+<!-- Year in parentheses -->
+<xsl:template match="biblio[@type='bibtex']/year">
+    <xsl:text>(</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>) </xsl:text>
+</xsl:template>
+
+<!-- Number: no. and comma after -->
+<xsl:template match="biblio[@type='bibtex']/number">
+    <xsl:text>no. </xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>, </xsl:text>
+</xsl:template>
+
+<!-- Pages should come last, so put a period.    -->
+<!-- Two forms: @start and @end,                 -->
+<!-- or total number as content (as for a book). -->
+<xsl:template match="biblio[@type='bibtex']/pages[not(@start)]">
+    <xsl:apply-templates />
+    <xsl:text>.</xsl:text>
+</xsl:template>
+<xsl:template match="biblio[@type='bibtex']/pages[@start]">
+    <xsl:text>pp. </xsl:text>
+    <xsl:value-of select="@start"/><xsl:text>-</xsl:text><xsl:value-of select="@end"/>
+    <xsl:text>.</xsl:text>
+</xsl:template>
+
 <!-- Index Entries -->
 <!-- Kill on sight, collect later to build index  -->
 <xsl:template match="index[not(index-list)]" />
@@ -11967,7 +12038,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <script src="{$html.js.server}/js/lib/jquery.sticky.js" ></script>
     <script src="{$html.js.server}/js/lib/jquery.espy.min.js"></script>
     <script src="{$html.js.server}/js/{$html.js.version}/pretext.js"></script>
-    <script>miniversion=0.6</script>
+    <script>miniversion=0.674</script>
     <script src="{$html.js.server}/js/{$html.js.version}/pretext_add_on.js?x=1"></script>
 </xsl:template>
 
@@ -11983,7 +12054,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Hypothes.is Annotations -->
 <!-- Configurations are the defaults as of 2016-11-04   -->
-<!-- async="" is a guessed-hack, docs ahve no attribute -->
+<!-- async="" is a guessed-hack, docs have no attribute -->
 <xsl:template name="hypothesis-annotation">
     <xsl:if test="$b-activate-hypothesis">
         <script type="application/json" class="js-hypothesis-config">
