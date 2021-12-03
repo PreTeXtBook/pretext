@@ -67,6 +67,9 @@ so that we can set our own later */
 .pretext-content p.continuation {
     margin-top: 0;
 }
+.pretext-content pre + p.continuation {
+    margin-top: 1em;
+}
 .pretext-content .aside-like > p:first-child,
 .pretext-content td > p:first-child,
 .pretext-content .solution-like > p:first-child {
@@ -4025,9 +4028,4 @@ sbspanel:empty { /* can only happen when partially created */
 .pretext-content .in_edit_tree *::before,
 .pretext-content .in_edit_tree *::after {
     all: reset;
-}
-
-.pretext-content pp {
-    display: block;
-    margin-top: 1rem;
 }
