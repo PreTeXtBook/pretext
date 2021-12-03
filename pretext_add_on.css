@@ -64,6 +64,9 @@ so that we can set our own later */
     margin-bottom: 0;
     line-height: 1.35;
 }
+.pretext-content p.continuation {
+    margin-top: 0;
+}
 .pretext-content .aside-like > p:first-child,
 .pretext-content td > p:first-child,
 .pretext-content .solution-like > p:first-child {
@@ -4009,6 +4012,10 @@ sbspanel:empty { /* can only happen when partially created */
     padding: 0.5em;
 }
 
+.pretext-content .in_edit_tree p.mp,
+.pretext-content .in_edit_tree p.fp {
+    margin-top: 0;
+}
 
 .pretext-content .in_edit_tree .heading + p {
     display: block;
@@ -4018,4 +4025,9 @@ sbspanel:empty { /* can only happen when partially created */
 .pretext-content .in_edit_tree *::before,
 .pretext-content .in_edit_tree *::after {
     all: reset;
+}
+
+.pretext-content pp {
+    display: block;
+    margin-top: 1rem;
 }
