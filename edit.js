@@ -670,6 +670,10 @@ objectStructure = {
     }
   },
 
+/* biblio, the items directly following it, and the refrences above,
+   are not usable at this time.  references have to be handled in
+   a text editor.  3 Dec 2021
+*/
   "biblio": {
     "html": {
         "tag": "div",
@@ -720,8 +724,8 @@ objectStructure = {
   },
   "number": {
     "html": {
-        "tag_opening": "(",
-        "tag_closing": ")",
+        "tag_opening": "no. ",
+        "tag_closing": " ",
         "pieces": [["number", ""]]
     }
   },
@@ -2033,6 +2037,8 @@ function save_source() {
     var the_pretext_source =  output_from_id("", top_level_id, "pretext");
 
     the_pretext_source = the_pretext_source.replace(/\n\n/g, '\n');
+    // remove temporary ids
+    the_pretext_source = the_pretext_source.replace(/ xml:id="tMP[0-9a-z]+"/g, '');
 
     editorLog("         RR  saving", top_level_id, "which begins", the_pretext_source.substring(0,50));
     parent.save_file(top_level_id, the_pretext_source)
