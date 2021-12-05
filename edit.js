@@ -200,8 +200,8 @@ objectStructure = {
   "xref": {
     "html": {
         "tag": "span",
-        "attributes": ['class="ref tmp"', 'id="<&>xml:id<;>"'],
-        "pieces": [["(literal,REF)", ""], ["(literal,&nbsp;)", ""], ["{codenumber}", ""]],
+        "attributes": ['class="ref tmp"', 'id="<&>xml:id<;>"', 'ref="<&>ref<;>"'],
+        "pieces": [["(literal,REFERENCE)", ""]],
     },
     "pretext": {
         "tag": "xref",
@@ -210,7 +210,7 @@ objectStructure = {
     },
     "source": {
         "pieces": [["content", ""]],
-        "attributes": [["ref", "*"], ["text", ""]]
+        "attributes": [["ref", "*"], ["text", ""],["detail",""],["first",""],["last",""]]
     }
   },
   "introduction": {
@@ -1157,11 +1157,11 @@ var sidebyside_instances = {
 Object.assign(objectStructure, sidebyside_instances);
 
 // shoudl we distinguish empty tags by format?
-// these tags are html an dpretext
-var always_empty_tags = ["img", "image", "ellipsis", "ie", "eg", "etc", "nbsp"];
-var allowed_empty_tags = ["div", "span", "p", "stack", "xref"];
+var always_empty_tags = ["img", "image", "xref"];
+// eventially xref will move to allowed_empty_tags
+var allowed_empty_tags = ["div", "span", "p", "stack"];
 var tag_display = {  /* the default is "block" */
-    "inline": ["m", "em", "ellipsis", "span", "term", "dfn", "q", "c", "code", "alert", "ie", "eg", "etc", "nbsp", "xref", "idx", "h", "init"], 
+    "inline": ["m", "em", "ellipsis", "span", "term", "dfn", "q", "c", "code", "alert", "nbsp", "xref", "idx", "h", "init"], 
     "title": ["title", "idx", "h1", "h2", "h3", "h4", "h5", "h6", "div", "usage"],
     "block-tight": [] // ["mp", "mrow"]
 } 
@@ -3025,7 +3025,10 @@ function save_internal_cont(match, contains_id, the_contents) {
     editorLog("id", this_id, "now has contents", the_contents);
     if ("content" in internalSource[this_id]) {   // not all objects have content
         internalSource[this_id]["content"] = the_contents;
+    } else if (internalSource[this_id]["sourcetag"] == "xref") {
+        internalSource[this_id]["ref"] = the_contents;
     }
+    editorLog("all of it is now", internalSource[this_id]);
     return "<&>" + this_id + "<;>"
 }
 function assemble_internal_version_changes(object_being_edited) {
@@ -3476,6 +3479,12 @@ function html_from_internal_id(the_id, is_inner) {
         var closing_tag = '</span>';
             opening_tag += ' id="' + the_id + '"data-editable="44" tabindex="-1">';
         return opening_tag + spacemath_to_tex(the_object["content"]) + closing_tag
+    } else if (sourcetag == "xref" && is_inner == "edit") {
+        // here we are assuming the tag is 'm'
+        var opening_tag = '<span class="edit_reference"';
+        var closing_tag = '</span>';
+            opening_tag += ' id="' + the_id + '"data-editable="44" tabindex="-1">';
+        return opening_tag + the_object["ref"] + closing_tag
     } else {
         html_of_this_object = output_from_id("", the_id, "html");
         editorLog("html_of_this_object", html_of_this_object);
