@@ -2949,15 +2949,23 @@ function extract_internal_contents(some_text) {
     editorLog("            xxxxxxxxxx  the_text is", the_text);
     editorLog("extract_internal_contents");
 
+    // delete class information
+    the_text = the_text.replace(/ class="[^"]"/g, "");
+
     // inline from previous editing
-    the_text = the_text.replace(/<([^<]+) data-editable="[^"]+" tabindex="-1">(.*?)<[^<]+>/g, save_internal_cont)
-    the_text = the_text.replace(/<([^<]+) contenteditable="false">(.*?)<[^<]+>/g, save_internal_cont)
+    editorLog("extracting where 'data-editable...'");
+    the_text = the_text.replace(/<([^<]+) data-editable="[^"]+" tabindex="-1">(.*?)<[^<]+>/g, save_internal_cont);
+    editorLog("extracting where 'contenteditable...'");
+    the_text = the_text.replace(/<([^<]+) contenteditable="false">(.*?)<[^<]+>/g, save_internal_cont);
     // new $math$
-    the_text = the_text.replace(/(^|\s)\$([^\$]+)\$(\s|$|[.,!?;:])/g, extract_new_math)
+    editorLog("extracting new $math$");
+    the_text = the_text.replace(/(^|\s)\$([^\$]+)\$(\s|$|[.,!?;:])/g, extract_new_math);
     // new \\(math\\)
-    the_text = the_text.replace(/(^|.)\\\(([^\$]+)\\\)(.|$)/g, extract_new_math)
+    editorLog("extracting new \\(math\\)");
+    the_text = the_text.replace(/(^|.)\\\(([^\$]+)\\\)(.|$)/g, extract_new_math);
     // new <m>math</m>
-    the_text = the_text.replace(/(^|.)&lt;m&gt;(.*?)&lt;\/m&gt;(.|$)/g, extract_new_math)
+    editorLog("extracting new <m>math</m>");
+    the_text = the_text.replace(/(^|.)&lt;m&gt;(.*?)&lt;\/m&gt;(.|$)/g, extract_new_math);
 
     // "..." to <ellipsis/>, which will then be processed
     the_text = the_text.replace(/\.\.\./g, '&lt;ellipsis\/&gt;');
@@ -2981,7 +2989,7 @@ function extract_internal_contents(some_text) {
     for (var j=0; j < inline_tags.length; ++j) {
         var this_tag = inline_tags[j];
         editorLog("this_tag", this_tag);
-        var this_tag_search = "&lt;(" + this_tag + ")&gt;" + "(.*?)" + "&lt;\\/" + this_tag + "&gt;";
+        var this_tag_search = "&lt;(" + this_tag + ") *&gt;" + "(.*?)" + "&lt;\\/" + this_tag + "&gt;";
         editorLog("searching for", this_tag_search);
         var this_tag_search_re = new RegExp(this_tag_search,"g");
         the_text = the_text.replace(this_tag_search_re, extract_new_inline)
@@ -3597,7 +3605,7 @@ function local_editing_action(e) {
 // editing_input_image
         } else if (e.code == "Escape" || (prev_char.code == "Enter" && prev_prev_char.code == "Enter") || document.getElementById("editing_input_image")) {
             editorLog("need to save");
-editorLog("    HHH current_editing", current_editing);
+editorLog("    HHH current_editing", current_editing, "with active element", document.activeElement);
 
             e.preventDefault();
             this_char = "";
@@ -4746,6 +4754,16 @@ function re_transform_source() {
         }
     }
   }
+  // trim leading white space in paragraph content
+  for (var id in sourceobj) {
+    var this_item = sourceobj[id];
+    if (["p", "mp", "fp"].includes(this_item["sourcetag"])) {
+        var this_content = sourceobj[id]["content"];
+        this_content = this_content.replace(/\n +/g, "\n");
+        sourceobj[id]["content"] = this_content;
+    }
+  }
+
   return sourceobj;
 }
 
