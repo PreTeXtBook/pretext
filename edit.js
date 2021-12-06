@@ -1064,7 +1064,7 @@ objectStructure = {
   "me": {
       "html": {
           "tag": "div",
-          "attributes": ['id="<&>xml:id<;>"', 'class="displaymath"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+          "attributes": ['id="<&>xml:id<;>"', 'class="displaymath process-math"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
           "data_editable": "42",
           "pieces": [["{me_raw}", ""]]
       },
@@ -1093,10 +1093,65 @@ objectStructure = {
           "pieces": [["content", ""]]
       }
   },
+  "md": {
+      "html": {
+          "tag": "div",
+          "attributes": ['id="<&>xml:id<;>"', 'class="displaymath process-math"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+          "data_editable": "42",
+          "pieces": [["{md_raw}", ""]]
+      },
+      "pretext": {
+          "tag": "md",
+          "attributes": ['xml:id="<&>xml:id<;>"'],
+          "pieces": [["content", ""]]
+      },
+      "source": {
+          "pieces": [["content", ""]]
+      }
+  },
+  "mdn": {
+      "html": {
+          "tag": "div",
+          "attributes": ['id="<&>xml:id<;>"', 'class="displaymath process-math"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+          "data_editable": "42",
+          "pieces": [["{me_raw}", ""]]
+      },
+      "pretext": {
+          "tag": "mdn",
+          "attributes": ['xml:id="<&>xml:id<;>"'],
+          "pieces": [["content", ""]]
+      },
+      "source": {
+          "pieces": [["content", ""]]
+      }
+  },
   "me_raw": {
       "html": {
           "tag_opening": "\\begin{equation*}",
           "tag_closing": "\\end{equation*}",
+          "pieces": [["content", ""]]
+      }
+  },
+  "md_raw": {
+      "html": {
+          "tag_opening": "\\begin{align*}",
+          "tag_closing": "\\end{align*}",
+          "pieces": [["content", ""]]
+      }
+  },
+  "mrow": {
+      "html": {
+          "tag_opening": "",
+          "tag_closing": "\\cr",
+          "data_editable": "422",
+          "pieces": [["content", ""]]
+      },
+      "pretext": {
+          "tag": "mrow",
+          "attributes": ['xml:id="<&>xml:id<;>"'],
+          "pieces": [["content", ""]]
+      },
+      "source": {
           "pieces": [["content", ""]]
       }
   }
@@ -1162,7 +1217,7 @@ var always_empty_tags = ["img", "image", "xref"];
 var allowed_empty_tags = ["div", "span", "p", "stack"];
 var tag_display = {  /* the default is "block" */
     "inline": ["m", "em", "ellipsis", "span", "term", "dfn", "q", "c", "code", "alert", "nbsp", "xref", "idx", "h", "init"], 
-    "title": ["title", "idx", "h1", "h2", "h3", "h4", "h5", "h6", "div", "usage"],
+    "title": ["title", "idx", "h1", "h2", "h3", "h4", "h5", "h6", "div", "usage", "image"],
     "block-tight": [] // ["mp", "mrow"]
 } 
 
@@ -3026,6 +3081,7 @@ function save_internal_cont(match, contains_id, the_contents) {
     if ("content" in internalSource[this_id]) {   // not all objects have content
         internalSource[this_id]["content"] = the_contents;
     } else if (internalSource[this_id]["sourcetag"] == "xref") {
+        // this needs work once we have  text="custom"  references
         internalSource[this_id]["ref"] = the_contents;
     }
     editorLog("all of it is now", internalSource[this_id]);
@@ -3464,11 +3520,9 @@ function html_from_internal_id(the_id, is_inner) {
     var the_html_objects = [];
 
     if (sourcetag == "image") {
-
         html_of_this_object = output_from_id("", the_id, "html");
         editorLog("html_of_this_object", html_of_this_object);
         the_html_objects.push(html_of_this_object);
-
     } else if (tag_type(sourcetag) == "p") {
         html_of_this_object = output_from_id("", the_id, "html");
         editorLog("html_of_this_object", html_of_this_object);
@@ -3531,7 +3585,7 @@ function insert_html_version(these_changes) {
         editorLog("j=", j, "this thing", possibly_changed_ids_and_entry[j]);
         this_object = internalSource[this_object_id];
         editorLog(j, "this_object", this_object);
-        if (tag_type(this_object["sourcetag"]) == "p" || this_object["sourcetag"] == "li" || tag_type(this_object["sourcetag"]) == "md") {
+        if (tag_type(this_object["sourcetag"]) == "p" || this_object["sourcetag"] == "li" || tag_type(this_object["sourcetag"]) == "me" || tag_type(this_object["sourcetag"]) == "md") {
 
             var this_new_object = html_from_internal_id(this_object_id);
             editorLog("inserting",this_new_object,"before",location_of_change);
@@ -4656,7 +4710,7 @@ function re_transform_source() {
             this_item["marginleft"] = margins;
             this_item["marginright"] = margins;
         }
-    } else if (["me", "men"].includes(this_item["sourcetag"])) {
+    } else if (["md", "mdn", "me", "men"].includes(this_item["sourcetag"])) {
   // to handle the case of more than one displaymath in a p,
   // we do it in two passes.  First we just record the ids of the me/men's.
   // Then we simplify the problem by handling the displaymath in the
@@ -4770,6 +4824,12 @@ function re_transform_source() {
         var this_content = sourceobj[id]["content"];
         this_content = this_content.replace(/\n +/g, "\n");
         sourceobj[id]["content"] = this_content;
+    }
+    // next also needs table (or whatever it is that has a caption)
+    if (["figure"].includes(this_item["sourcetag"])) {
+        var this_caption = sourceobj[id]["caption"];
+        this_caption = this_caption.replace(/\n +/g, "\n");
+        sourceobj[id]["caption"] = this_caption;
     }
   }
 
