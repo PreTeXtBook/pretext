@@ -1389,13 +1389,46 @@ function rescale(width, max, margin_left, margin_right) {
     return width * 100 / available_width
 }
 
-
 function spacemath_to_tex(text) {
     thetext = text;
 
     thetext = thetext.replace(/ d([a-zA-Z])(\s|$)/, " \\,d$1$2");
 
     return thetext
+}
+
+function split_paragraphs(paragraph_content) {
+
+    // does the textbox contain more than one paragraph?
+    var paragraph_content_list = paragraph_content.split("<div><br></div>");
+    editorLog("there were", paragraph_content_list.length, "paragraphs, but some may be empty");
+    for (var j=0; j < paragraph_content_list.length; ++j) {
+        editorLog("paragraph", j, "begins", paragraph_content_list[j].substring(0,20))
+    }   
+
+    var  paragraph_content_list_trimmed = []; 
+
+    for (var j=0; j < paragraph_content_list.length; ++j) {
+        // probably each paragraph is wrapped in meaningless div tags
+        var this_paragraph_contents_raw = paragraph_content_list[j];
+        this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/<\/div><div>/g, "\n");
+        this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/<div>/g, "");
+        this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/<\/div>/g, "");
+        this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/&nbsp;/g, " "); 
+        this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/ +<br>/g, "\n");
+        this_paragraph_contents_raw = this_paragraph_contents_raw.replace(/<br>/g, "\n");
+        this_paragraph_contents_raw = this_paragraph_contents_raw.trim();
+        if (!this_paragraph_contents_raw) { editorLog("empty paragraph") }
+        else { paragraph_content_list_trimmed.push(this_paragraph_contents_raw) }
+        editorLog("this_paragraph_contents_raw", this_paragraph_contents_raw);
+    }   
+
+    if (!paragraph_content_list_trimmed.length ) { 
+            // empty, so insert it and delete it later
+        paragraph_content_list_trimmed = [""];
+    }   
+
+    return paragraph_content_list_trimmed
 }
 
 var submenu_options = {  // revise as these are handled previously
@@ -2238,7 +2271,7 @@ function edit_in_place(obj, oldornew) {
     }
 
      // this only works for paragraphs,
-     // whing may be right, becaise ixisting content is mostly titles and paragraphs
+     // which may be right, because existing content is mostly titles and paragraphs
     if ( internalSource[thisID] ) {
       var new_tag = internalSource[thisID]["sourcetag"];
       var new_id = thisID;  // track down why new_id is in the code
@@ -2253,7 +2286,11 @@ function edit_in_place(obj, oldornew) {
         var idOfEditText = 'editing' + '_input_text';
         var paragraph_editable = document.createElement('div');
         paragraph_editable.setAttribute('contenteditable', 'true');
-        paragraph_editable.setAttribute('class', 'text_source paragraph_input');
+        if (tag_type(new_tag) == "md") {
+            paragraph_editable.setAttribute('class', 'text_source displaymath_input');
+        } else {
+            paragraph_editable.setAttribute('class', 'text_source paragraph_input');
+        }
         paragraph_editable.setAttribute('id', idOfEditText);
         paragraph_editable.setAttribute('data-source_id', thisID);
         paragraph_editable.setAttribute('data-parent_id', internalSource[thisID]["parent"][0]);
@@ -2273,7 +2310,7 @@ function edit_in_place(obj, oldornew) {
         });
         the_contents = internalSource[thisID]["content"]; 
         the_contents = expand_condensed_source_html(the_contents, "edit");
-        the_contents = the_contents.replace("\\cr", "<br/><br/>");
+        the_contents = the_contents.replace("\\cr", "<div><br></div>");
         $('#' + idOfEditText).html(the_contents);
         document.getElementById(idOfEditText).focus();
         editorLog("made edit box for", thisID);
@@ -3104,6 +3141,7 @@ function assemble_internal_version_changes(object_being_edited) {
 
 //    var object_being_edited = document.activeElement;
     var location_of_change = object_being_edited.parentElement;
+    var this_arrangement_of_objects = "";
 
     if (object_being_edited.classList.contains("paragraph_input")) {
         editorLog("found paragraph_input");
@@ -3116,21 +3154,22 @@ function assemble_internal_version_changes(object_being_edited) {
 
         editorLog("cursor_location", cursor_location, "out of", paragraph_content.length, "paragraph_content", paragraph_content);
 
+        var parent_and_location = [object_being_edited.getAttribute("data-parent_id"), object_being_edited.getAttribute("data-parent_component")];
+        editorLog("parent_and_location", parent_and_location);
+        editorLog("of ", object_being_edited);
+
+        var prev_id = object_being_edited.getAttribute("data-source_id");
+        editorLog("prev_id", prev_id);
+        editorLog("which contains", internalSource[prev_id]);
+
+        // need to replace the below by split_paragraphs
+
         // does the textbox contain more than one paragraph?
         var paragraph_content_list = paragraph_content.split("<div><br></div>");
         editorLog("there were", paragraph_content_list.length, "paragraphs, but some may be empty");
         for (var j=0; j < paragraph_content_list.length; ++j) {
             editorLog("paragraph", j, "begins", paragraph_content_list[j].substring(0,20))
         }
-
-        var parent_and_location = [object_being_edited.getAttribute("data-parent_id"), object_being_edited.getAttribute("data-parent_component")];
-        var this_arrangement_of_objects = "";
-        editorLog("parent_and_location", parent_and_location);
-        editorLog("of ", object_being_edited);
-
-        var prev_id = object_being_edited.getAttribute("data-source_id");
-        editorLog("prev_id", prev_id);
-        editorLog("which is", prev_id);
 
         var  paragraph_content_list_trimmed = [];
 
@@ -3153,7 +3192,6 @@ function assemble_internal_version_changes(object_being_edited) {
 
         if (!paragraph_content_list_trimmed.length ) { 
                 // empty, so insert it and delete it later
-            nature_of_the_change = "empty";  // not sure this is used
             paragraph_content_list_trimmed = [""];
         }
 
@@ -3210,6 +3248,40 @@ function assemble_internal_version_changes(object_being_edited) {
           editorLog("this_arrangement_of_objects was",  internalSource[parent_and_location[0]][parent_and_location[1]]);
           internalSource[parent_and_location[0]][parent_and_location[1]] = this_arrangement_of_objects;
           editorLog("this_arrangement_of_objects is", this_arrangement_of_objects);
+    } else if (object_being_edited.classList.contains("displaymath_input")) {
+       editorLog("found displaymath_input");
+        nature_of_the_change = "replace";
+        var paragraph_content = object_being_edited.innerHTML;
+    //    editorLog("paragraph_content from innerHTML", paragraph_content);
+        paragraph_content = paragraph_content.trim();
+
+        var cursor_location = object_being_edited.selectionStart;
+
+        editorLog("cursor_location", cursor_location, "out of", paragraph_content.length, "paragraph_content", paragraph_content);
+
+        var parent_and_location = [object_being_edited.getAttribute("data-parent_id"), object_being_edited.getAttribute("data-parent_component")];
+
+        editorLog("parent_and_location", parent_and_location);
+        editorLog("of ", object_being_edited);
+
+        var prev_id = object_being_edited.getAttribute("data-source_id");
+        editorLog("prev_id", prev_id);
+        editorLog("which contains", internalSource[prev_id]);
+
+        // textbox may contain more than one paragraph
+        var paragraph_content_list = split_paragraphs(paragraph_content);
+        var this_paragraph_contents = paragraph_content_list.join("\n\\cr\n");
+        this_paragraph_contents = extract_internal_contents(this_paragraph_contents);
+         
+        if (!internalSource[prev_id]["content"]) {
+            ongoing_editing_actions.push(["new", "md", prev_id]);
+        } else {
+            ongoing_editing_actions.push(["changed", "md", prev_id]);
+        }
+
+        internalSource[prev_id]["content"] = this_paragraph_contents
+        possibly_changed_ids_and_entry.push([prev_id, "content", oldornew]);
+
     } else if (object_being_edited.getAttribute('data-component') == "title") {
 
         nature_of_the_change = "replace";
@@ -3624,7 +3696,7 @@ function insert_html_version(these_changes) {
         editorLog("j=", j, "this thing", possibly_changed_ids_and_entry[j]);
         this_object = internalSource[this_object_id];
         editorLog(j, "this_object", this_object);
-        if (tag_type(this_object["sourcetag"]) == "p" || this_object["sourcetag"] == "li" || tag_type(this_object["sourcetag"]) == "me" || tag_type(this_object["sourcetag"]) == "md") {
+        if (tag_type(this_object["sourcetag"]) == "p" || this_object["sourcetag"] == "li" || tag_type(this_object["sourcetag"]) == "md") {
 
             var this_new_object = html_from_internal_id(this_object_id);
             editorLog("inserting",this_new_object,"before",location_of_change);
