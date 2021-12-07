@@ -1139,6 +1139,7 @@ objectStructure = {
           "pieces": [["content", ""]]
       }
   },
+// check if mrow is actually used
   "mrow": {
       "html": {
           "tag_opening": "",
@@ -2265,13 +2266,14 @@ function edit_in_place(obj, oldornew) {
 // from https://stackoverflow.com/questions/21257688/paste-rich-text-into-content-editable-div-and-only-keep-bold-and-italics-formatt
 
 // figure out better how to do this as needed.
-$('[contenteditable]').on('paste',function(e) {
-    e.preventDefault();
-    var text = (e.originalEvent || e).clipboardData.getData('text/plain') || prompt('Paste something..');
-    document.execCommand('insertText', false, text);
-});
+        $('[contenteditable]').on('paste',function(e) {
+            e.preventDefault();
+            var text = (e.originalEvent || e).clipboardData.getData('text/plain') || prompt('Paste something..');
+            document.execCommand('insertText', false, text);
+        });
         the_contents = internalSource[thisID]["content"]; 
         the_contents = expand_condensed_source_html(the_contents, "edit");
+        the_contents = the_contents.replace("\\cr", "<br/><br/>");
         $('#' + idOfEditText).html(the_contents);
         document.getElementById(idOfEditText).focus();
         editorLog("made edit box for", thisID);
@@ -3118,7 +3120,6 @@ function assemble_internal_version_changes(object_being_edited) {
         var paragraph_content_list = paragraph_content.split("<div><br></div>");
         editorLog("there were", paragraph_content_list.length, "paragraphs, but some may be empty");
         for (var j=0; j < paragraph_content_list.length; ++j) {
-
             editorLog("paragraph", j, "begins", paragraph_content_list[j].substring(0,20))
         }
 
@@ -3147,7 +3148,7 @@ function assemble_internal_version_changes(object_being_edited) {
             else { paragraph_content_list_trimmed.push(this_paragraph_contents_raw) }
        //     editorLog("this_paragraph_contents_raw", this_paragraph_contents_raw);
             editorLog("done transforming paragraph", j, "with object_being_edited",object_being_edited);
-            editorLog("which has contents", this_paragraph_contents_raw.substring(0,50))
+            editorLog("which has contents", this_paragraph_contents_raw)
         }
 
         if (!paragraph_content_list_trimmed.length ) { 
@@ -3157,7 +3158,6 @@ function assemble_internal_version_changes(object_being_edited) {
         }
 
         for (var j=0; j < paragraph_content_list_trimmed.length; ++j) {
-
             editorLog("_trimmed paragraph", j, "begins", paragraph_content_list_trimmed[j].substring(0,20))
         }
         for (var j=0; j < paragraph_content_list_trimmed.length; ++j) {
@@ -3200,12 +3200,13 @@ function assemble_internal_version_changes(object_being_edited) {
                 this_paragraph_contents = extract_internal_contents(this_paragraph_contents);
                 this_object_internal["content"] = this_paragraph_contents;
                 internalSource[this_object_label] = this_object_internal
-                editorLog("just inserted at label", this_object_label, "content starting", this_paragraph_contents.substring(0,11));
+                editorLog("just inserted at label", this_object_label, "content starting", this_paragraph_contents.substring(0,11), "which is now", internalSource[this_object_label]);
                 ongoing_editing_actions.push(["added", "p", this_object_label]);
 // here is where we can record that somethign is empty, hence should be deleted
                 possibly_changed_ids_and_entry.push([this_object_label, "content", "new"]);
             }
           }
+          editorLog("parent_and_location", parent_and_location);
           editorLog("this_arrangement_of_objects was",  internalSource[parent_and_location[0]][parent_and_location[1]]);
           internalSource[parent_and_location[0]][parent_and_location[1]] = this_arrangement_of_objects;
           editorLog("this_arrangement_of_objects is", this_arrangement_of_objects);
@@ -3256,6 +3257,25 @@ function assemble_internal_version_changes(object_being_edited) {
     } else if (inline_tags.includes(object_being_edited.tagName.toLowerCase())) {
         editorLog(object_being_edited, "is inline, so processing parent");
         return assemble_internal_version_changes(object_being_edited.parentElement)
+    } else if (object_being_edited.classList.contains("edit_math_row")) {
+        nature_of_the_change = "replace";
+        var line_being_edited = object_being_edited;
+        var line_content = line_being_edited.innerHTML;
+        line_content = line_content.trim();
+        editorLog("the content (is it a title?) is", line_content);
+        var owner_of_change = object_being_edited.getAttribute("id");
+    //    var component_being_changed = object_being_edited.getAttribute("data-component");
+        var component_being_changed = "content";
+        editorLog("component_being_changed", component_being_changed, "within", owner_of_change);
+        // update the title of the object
+        if (internalSource[owner_of_change][component_being_changed]) {
+            ongoing_editing_actions.push(["changed", "mrow", owner_of_change]);
+        } else {
+            ongoing_editing_actions.push(["added", "mrow", owner_of_change]);
+        }
+        internalSource[owner_of_change][component_being_changed] = line_content;
+        possibly_changed_ids_and_entry.push([owner_of_change, "mrow"]);
+
     } else {
         errorLog("trouble editing", object_being_edited, "AAA", object_being_edited.tagName.toLowerCase(), "not in", inline_tags);
         alert("don;t know how to assemble internal_version_changes of " + object_being_edited.tagName)
@@ -3533,6 +3553,23 @@ function html_from_internal_id(the_id, is_inner) {
         var closing_tag = '</span>';
             opening_tag += ' id="' + the_id + '"data-editable="44" tabindex="-1">';
         return opening_tag + spacemath_to_tex(the_object["content"]) + closing_tag
+    } else if (["me","men"].includes(sourcetag) && is_inner == "edit") {
+        var opening_tag = '<div class="edit_display_math"';
+        var closing_tag = '</div>';
+            opening_tag += ' id="' + the_id + '"data-editable="44" tabindex="-1">';
+        return opening_tag + spacemath_to_tex(the_object["content"]) + closing_tag
+    } else if (["md","mdn"].includes(sourcetag) && is_inner == "edit") {
+        var opening_tag = '<div class="edit_multiline_math"';
+        var closing_tag = '</div>';
+            opening_tag += ' id="' + the_id + '"data-editable="44" tabindex="-1">';
+        this_content = the_object["content"].replace(/<&>(.*?)<;>/g,expand_condensed_src_edit);
+        this_content = this_content.replace("MROWsepARATOR", "\n yyyy \n");
+        return opening_tag + this_content + closing_tag
+    } else if (["mrow"].includes(sourcetag) && is_inner == "edit") {
+        var opening_tag = '<div class="edit_math_row"';
+        var closing_tag = '</div>';
+            opening_tag += ' id="' + the_id + '"data-editable="44" tabindex="-1">';
+        return opening_tag + "MROW" + spacemath_to_tex(the_object["content"]) + closing_tag
     } else if (sourcetag == "xref" && is_inner == "edit") {
         // here we are assuming the tag is 'm'
         var opening_tag = '<span class="edit_reference"';
@@ -3547,6 +3584,8 @@ function html_from_internal_id(the_id, is_inner) {
     } 
 
     editorLog("    RRRR returning the_html_objects", the_html_objects);
+
+//    the_html_objects = the_html_objects.replace("MROWsepARATOR", "\n\\cr\n");
     return the_html_objects
 }
 
@@ -4388,6 +4427,12 @@ document.addEventListener('focus', function() {
 function initialize_editing(xml_st) {
 
     createCookie(chosen_edit_option_key,1,0.01);
+ //   console.log("QQQQQQQQ", xml_st, "PPPPPPPPPP");
+    // Space Math uses a blank line to indicate mrows
+    xml_st = xml_st.replace(/<\/mrow>\s*<mrow>/g, " \n\\cr\n ");
+    xml_st = xml_st.replace(/<mrow>/g, " ");
+    xml_st = xml_st.replace(/<\/mrow>/g, " ");
+
     xmlToObject(xml_st);
     record_children(sourceobj);
     internalSource = re_transform_source();
