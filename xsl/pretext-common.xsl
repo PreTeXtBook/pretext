@@ -3895,6 +3895,45 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
+<!-- Plain title: motivation is browser tabs without extensive -->
+<!-- MathJax markup around (little bits) of mathematics        -->
+<xsl:template match="*" mode="title-plain">
+    <xsl:variable name="default-exists">
+        <xsl:apply-templates select="." mode="has-default-title" />
+    </xsl:variable>
+    <xsl:choose>
+        <!-- Historically a browser tab would get a short title, if available. -->
+        <!-- Instead this might be support for a new "plaintitle" element.     -->
+        <!-- This is just for backward-compatibility and may be short-lived.   -->
+        <xsl:when test="shorttitle">
+            <xsl:apply-templates select="shorttitle/node()[not(self::fn)]" mode="plain-title-edit"/>
+        </xsl:when>
+        <xsl:when test="title">
+            <xsl:apply-templates select="title/node()[not(self::fn)]" mode="plain-title-edit"/>
+        </xsl:when>
+        <!-- We assume the automatic titles are plain -->
+        <xsl:when test="$default-exists='true'">
+            <xsl:apply-templates select="." mode="type-name" />
+        </xsl:when>
+        <!-- just empty if there is no titles, no default -->
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:template>
+
+<!-- We do not wrap an "m" element as part of a plain title -->
+<!-- This will misbehave for m/xref and m/fillin, etc, but  -->
+<!-- these devices should not be in a title anyway          -->
+<!-- N.B. this would be a place to do some crude            -->
+<!-- substitutions, such as "\delta" -> "δ" (U+03B4)        -->
+<xsl:template match="m" mode="plain-title-edit">
+    <xsl:value-of select="."/>
+</xsl:template>
+
+<!-- Return processing to defaults for most elements of titles -->
+<xsl:template match="*" mode="plain-title-edit">
+    <xsl:apply-templates select="."/>
+</xsl:template>
+
 <!-- We let styling provide punctuation for titles, principally       -->
 <!-- a period at the end.  But this is awkward if there is already    -->
 <!-- punctuation there.  This template returns the string 'true' if,  -->
