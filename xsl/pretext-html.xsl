@@ -6515,7 +6515,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:apply-templates select="$docinfo/initialism" />
                         <xsl:text> </xsl:text>
                     </xsl:if>
-                <xsl:apply-templates select="." mode="title-short" />
+                    <xsl:apply-templates select="." mode="title-plain" />
                 </title>
                 <meta name="Keywords" content="Authored in PreTeXt" />
                 <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
@@ -10500,7 +10500,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="$docinfo/initialism" />
                     <xsl:text> </xsl:text>
                 </xsl:if>
-            <xsl:apply-templates select="." mode="title-short" />
+                <xsl:apply-templates select="." mode="title-plain" />
             </title>
             <meta name="Keywords" content="Authored in PreTeXt" />
             <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
@@ -11583,7 +11583,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:if test="title">
         <xsl:text>: </xsl:text>
-        <xsl:apply-templates select="." mode="title-short" />
+        <xsl:apply-templates select="." mode="title-plain" />
     </xsl:if>
 </xsl:template>
 
