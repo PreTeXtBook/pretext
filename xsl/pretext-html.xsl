@@ -8824,55 +8824,55 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Comma after author or editor -->
 <xsl:template match="biblio[@type='bibtex']/author">
-    <xsl:apply-templates />
+    <xsl:apply-templates select="text()"/>
     <xsl:text>, </xsl:text>
 </xsl:template>
 <xsl:template match="biblio[@type='bibtex']/editor">
-    <xsl:apply-templates />
+    <xsl:apply-templates select="text()"/>
     <xsl:text>, </xsl:text>
 </xsl:template>
 
 <!-- Title in italics -->
 <xsl:template match="biblio[@type='bibtex']/title">
-    <i><xsl:apply-templates /></i>
+    <i><xsl:apply-templates select="text()|m"/></i>
     <xsl:text>, </xsl:text>
 </xsl:template>
 
 <!-- Space after journal -->
 <xsl:template match="biblio[@type='bibtex']/journal">
-    <xsl:apply-templates />
+    <xsl:apply-templates select="text()|m"/>
     <xsl:text> </xsl:text>
 </xsl:template>
 
 <!-- Volume in bold -->
 <xsl:template match="biblio[@type='bibtex']/volume">
-    <b><xsl:apply-templates /></b>
+    <b><xsl:apply-templates select="text()"/></b>
     <xsl:text> </xsl:text>
 </xsl:template>
 
 <!-- Series is plain (but space after) -->
 <xsl:template match="biblio[@type='bibtex']/series">
-    <xsl:apply-templates />
+    <xsl:apply-templates select="text()"/>
     <xsl:text> </xsl:text>
 </xsl:template>
 
 <!-- Publisher is plain (but semicolon after) -->
 <xsl:template match="biblio[@type='bibtex']/publisher">
-    <xsl:apply-templates />
+    <xsl:apply-templates select="text()"/>
     <xsl:text>; </xsl:text>
 </xsl:template>
 
 <!-- Year in parentheses -->
 <xsl:template match="biblio[@type='bibtex']/year">
     <xsl:text>(</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates select="text()"/>
     <xsl:text>) </xsl:text>
 </xsl:template>
 
 <!-- Number: no. and comma after -->
 <xsl:template match="biblio[@type='bibtex']/number">
     <xsl:text>no. </xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates select="text()"/>
     <xsl:text>, </xsl:text>
 </xsl:template>
 
@@ -8880,7 +8880,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Two forms: @start and @end,                 -->
 <!-- or total number as content (as for a book). -->
 <xsl:template match="biblio[@type='bibtex']/pages[not(@start)]">
-    <xsl:apply-templates />
+    <xsl:apply-templates select="text()"/>
     <xsl:text>.</xsl:text>
 </xsl:template>
 <xsl:template match="biblio[@type='bibtex']/pages[@start]">
