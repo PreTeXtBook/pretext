@@ -1344,6 +1344,51 @@
         </subsection>
     </section>
 
+    <section xml:id="topic-title">
+        <title>Titles</title>
+        <idx>title</idx>
+
+        <p>Divisions always need titles, you accomplish this with a <tag>title</tag><idx>title</idx> tag first thing.  Almost everything that you can use in a paragraph can be used in a title, but a few constructions are banned, such as a displayed mathematical equation (for good reason).  Try to avoid using footnotes in titles, even if we have tried to make them possible.</p>
+
+        <p>A division will also support a single optional <tag>shorttitle</tag> and/or a single optional <tag>plaintitle</tag>.  The full <tag>title</tag> will be used where the division is born, but in other places where the title is used for navigation, such as a Table of Contents, print page header, or HTML summary page, when horizontal space may be at a premium, the <tag>shortitle</tag> will be used preferentially.</p>
+
+        <p>A <tag>plaintitle</tag> is similar, but slightly different, so you might want both.  In limited situations, <pretext/> markup does not travel well in certain conversions.  The best example is mathematics, which might be in a title of a division, and then in a conversion to HTML, will fail to render in the tab of a browser, or the list of open tabs for a browser window.  Two examples<cd>
+            <cline>&lt;title&gt;&lt;m&gt;q&lt;/m&gt;-crystalline cohomology&lt;/title&gt;</cline>
+            <cline>&lt;title&gt;&lt;m&gt;\delta&lt;/m&gt;-rings&lt;/title&gt;</cline>
+        </cd>  <pretext/> will automatically do a nice job for you with the first, but the second will retain <c>\delta</c> in a browser tab.  However, you can add a <tag>plaintitle</tag> element where the <latex/> <c>\delta</c> can be replaced by a Unicode delta (<c>U+03B4</c>), which will used preferentially and be fine in <init>HTML</init> output.</p>
+
+        <p>To avoid confusing your readers, use these alternate titles sparingly, and ideally only when you have a really, really, really long title and then use a short title that is easily recognizable as a variant of the long title, or when markup is behaving poorly in situations such as a browser tab.  Your first option should be to ask if your long title must absolutely be so long, or if the markup is strictly necessary.</p>
+
+        <p>Many, many other structures admit titles.  Experiment, or look at specific descriptions of the structure you are interested in.  Titles are very integral to <pretext/>, much like cross-references.  Titles migrate to the Table of Contents, get used in page headers for print output, can be used in lists (such as a List of Figures), and can be used as the text of a cross-reference, instead of a number.  You might not be inclined to give a <tag>remark</tag> a title, but it would be good practice to do so.  If you use knowls in your <init>HTML</init> output for structures such as <tag>example</tag> (or if somebody else may someday choose to), then your readers will be spared a lot of confusion if you supply informative titles for each. Your electronic outputs will be much more useful to your readers if you routinely title every structure that allows it (perhaps excepting <tag>exercise</tag> which can be known by their number).</p>
+
+        <p>If a title is very long, the <tag>line</tag> element can be used to indicate how the title should appear on multiple lines.  Note: does not apply to all output formats.
+        <idx><h>title</h><h>very long</h></idx>
+        <idx>line</idx>
+        </p>
+
+        <note xml:id="best-practice-titles">
+            <title>Provide Informative Titles Liberally</title>
+            <p>Provisions for titles in many situations is a key <pretext/> feature.  And then they are used for various purposes to benefit readers.  A good example is when the <init>HTML</init> conversion is used to place content in a <term>knowl</term>, a unit of content that begins hidden, but can be revealed (and hidden again) with one click of a mouse.  Since a reader cannot see the content originally, we will migrate a title into the clickable text.  But we cannot read your mind<mdash/>it is your job as the author to provide a title, and to provide a good one.</p>
+
+            <p>Even if you are not yet sure what a knowl is, and even if you think you do not want to use them, there are other good reasons to have a title (such as automatic lists, see <xref ref="topic-automatic-lists"/>).  Constructing them on-the-fly is much easier than making a big chore out of going back and doing it later.</p>
+
+            <p><dl width="narrow">
+                <li>
+                    <title>Bad</title>
+                    <p>Example 5.10</p>
+                </li>
+                <li>
+                    <title>Better</title>
+                    <p>Example 5.10 A cool lizard trick.</p>
+                </li>
+                <li>
+                    <title>Best</title>
+                    <p>Example 5.10 Various colors and markings of a chameleon.</p>
+                </li>
+            </dl></p>
+        </note>
+    </section>
+
     <section xml:id="topic-mathematics">
         <title>Mathematics</title>
         <idx>mathematics</idx>
@@ -1572,6 +1617,12 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <p>Generally, you cannot add additional packages for use within mathematics.  The exception is a package with support available optionally within MathJax.  And it must have the same name as its normal <latex /> version.  Then set a <c>docinfo/latex-preamble/package</c> element to be the common name of the package.   (The <c>cancel</c> package is one such example.)</p>
 
             <p>Then the supported macros of the package will be available with your mathematics elements, and you can use them within other macro definitions.  We do not guarantee the absence of conflicts with other packages in use, even if employed by <pretext />.  Nor do we support debugging such conflicts.</p>
+        </subsection>
+
+        <subsection>
+            <title>Mathematics in Titles</title>
+
+            <p>Titles are a key feature of <pretext/>, and migrate to various places in different conversions, where they might be mixed with bold text, or where they do not render properly.  Please report any substandard situations.  A good example of this phenomenon is mathematics in division titles, where we provide a <tag>plaintitle</tag> alternate.  See <xref ref="topic-title"/> for a complete discussion.</p>
         </subsection>
 
         <subsection>
