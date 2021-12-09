@@ -2508,6 +2508,7 @@
       <xs:group ref="TextShort"/>
     </xs:complexType>
   </xs:element>
+  <xs:element name="plaintitle" type="xs:string"/>
   <xs:element name="creator">
     <xs:complexType mixed="true">
       <xs:group ref="TextShort"/>
@@ -2542,6 +2543,7 @@
     <xs:sequence>
       <xs:group ref="Title"/>
       <xs:element minOccurs="0" ref="shorttitle"/>
+      <xs:element minOccurs="0" ref="plaintitle"/>
       <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
     </xs:sequence>
     <xs:attribute ref="xml:id"/>
@@ -2556,6 +2558,7 @@
         <xs:group ref="LinedTitle"/>
       </xs:choice>
       <xs:element minOccurs="0" ref="shorttitle"/>
+      <xs:element minOccurs="0" ref="plaintitle"/>
       <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
     </xs:sequence>
     <xs:attribute ref="xml:id"/>
@@ -2568,6 +2571,7 @@
       <xs:group ref="Title"/>
       <xs:group minOccurs="0" ref="Subtitle"/>
       <xs:element minOccurs="0" ref="shorttitle"/>
+      <xs:element minOccurs="0" ref="plaintitle"/>
       <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
     </xs:sequence>
   </xs:group>
@@ -2588,6 +2592,7 @@
         <xs:group ref="LinedSubtitle"/>
       </xs:choice>
       <xs:element minOccurs="0" ref="shorttitle"/>
+      <xs:element minOccurs="0" ref="plaintitle"/>
       <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
     </xs:sequence>
     <xs:attribute ref="xml:id"/>
@@ -2612,6 +2617,7 @@
       <xs:sequence minOccurs="0">
         <xs:group ref="Title"/>
         <xs:element minOccurs="0" ref="shorttitle"/>
+        <xs:element minOccurs="0" ref="plaintitle"/>
       </xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
     </xs:sequence>

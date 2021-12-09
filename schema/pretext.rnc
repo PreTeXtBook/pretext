@@ -1097,6 +1097,8 @@
                 element subtitle {LongLine+}
             ShortTitle =
                 element shorttitle {TextShort}
+            PlainTitle =
+                element plaintitle {text}
             Creator =
                 element creator {TextShort}
             XMLBase = attribute xml:base {text}
@@ -1119,6 +1121,7 @@
                 XMLLang?,
                 Title,
                 ShortTitle?,
+                PlainTitle?,
                 Index*
             MetaDataLinedTitle =
                 UniqueID?,
@@ -1127,6 +1130,7 @@
                 XMLLang?,
                 (Title | LinedTitle),
                 ShortTitle?,
+                PlainTitle?,
                 Index*
             MetaDataSubtitle =
                 UniqueID?,
@@ -1136,6 +1140,7 @@
                 Title,
                 Subtitle?,
                 ShortTitle?,
+                PlainTitle?,
                 Index*
             MetaDataLinedSubtitle =
                 UniqueID?,
@@ -1145,6 +1150,7 @@
                 (Title | LinedTitle),
                 (Subtitle | LinedSubtitle)?,
                 ShortTitle?,
+                PlainTitle?,
                 Index*
             MetaDataTitleOptional =
                 UniqueID?,
@@ -1158,7 +1164,7 @@
                 PermanentID?,
                 XMLBase?,
                 XMLLang?,
-                (Title, ShortTitle?)?,
+                (Title, ShortTitle?, PlainTitle?)?,
                 Index*
             MetaDataTitleCreatorOptional =
                 UniqueID?,

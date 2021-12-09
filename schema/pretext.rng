@@ -2755,6 +2755,11 @@
       <ref name="TextShort"/>
     </element>
   </define>
+  <define name="PlainTitle">
+    <element name="plaintitle">
+      <text/>
+    </element>
+  </define>
   <define name="Creator">
     <element name="creator">
       <ref name="TextShort"/>
@@ -2812,6 +2817,9 @@
     <optional>
       <ref name="ShortTitle"/>
     </optional>
+    <optional>
+      <ref name="PlainTitle"/>
+    </optional>
     <zeroOrMore>
       <ref name="Index"/>
     </zeroOrMore>
@@ -2836,6 +2844,9 @@
     <optional>
       <ref name="ShortTitle"/>
     </optional>
+    <optional>
+      <ref name="PlainTitle"/>
+    </optional>
     <zeroOrMore>
       <ref name="Index"/>
     </zeroOrMore>
@@ -2859,6 +2870,9 @@
     </optional>
     <optional>
       <ref name="ShortTitle"/>
+    </optional>
+    <optional>
+      <ref name="PlainTitle"/>
     </optional>
     <zeroOrMore>
       <ref name="Index"/>
@@ -2889,6 +2903,9 @@
     </optional>
     <optional>
       <ref name="ShortTitle"/>
+    </optional>
+    <optional>
+      <ref name="PlainTitle"/>
     </optional>
     <zeroOrMore>
       <ref name="Index"/>
@@ -2931,6 +2948,9 @@
       <ref name="Title"/>
       <optional>
         <ref name="ShortTitle"/>
+      </optional>
+      <optional>
+        <ref name="PlainTitle"/>
       </optional>
     </optional>
     <zeroOrMore>

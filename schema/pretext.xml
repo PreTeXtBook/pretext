@@ -1979,12 +1979,13 @@
             <li><attr>permid</attr> is part of managing editions, and is supplied by a script.  You should not be adding these manually as an author.  (You do want to manually author <attr>xml:id</attr>.)</li>
             <li>The <c>xinlude</c> mechanism may pass language tags down through the root element of included files to make them universally available.</li>
             <li>The <c>xinclude</c> mechanism inserts a <c>@xml:base</c> attribute on the root element of an included file.  So we allow this attribute on any element that allows a title.</li>
-            <li>These are not unordered specifications since they contain several attributes, and we enforce a <c>title</c>, <c>subtitle</c>, <tag>shorttitle</tag>, <c>creator</c>, <c>caption</c>, <c>idx</c> order.</li>
+            <li>These are not unordered specifications since they contain several attributes, and we enforce a <c>title</c>, <c>subtitle</c>, <tag>shorttitle</tag>, <tag>plaintitle</tag>, <c>creator</c>, <c>caption</c>, <c>idx</c> order.</li>
             <li><c>MetaDataTarget</c> is for items that are targets of cross-references, but without even optional titles.  Since they will be knowled, they can appear in an index.  But without the potential to be titled, we do not set them up as possible root elements of a file to <c>xinclude</c>.</li>
             <li><c>MetaDataTitle</c> has a required <tag>title</tag>.</li>
-            <li><c>MetaDataShortTitle</c> has a required <tag>title</tag>, and allows an optional <tag>shorttitle</tag>.</li>
-            <li><c>MetaDataSubtitle</c> implicitly has a required <tag>title</tag>, and allows optional <tag>subtitle</tag> and <tag>shorttitle</tag>.</li>
-            <li><c>MetaDataLinedTitle</c> and <c>MetaDataLinedSubtitle</c> are variants of the <c>Short</c> or <c>Subtitle</c> versions for use on larger divisions with <tag>line</tag> elements used to suggest line breaks in titles.</li>
+            <li><c>MetaDataShortTitle</c> has a required <tag>title</tag>, and allows optional <tag>shorttitle</tag> and <tag>plaintitle</tag>.</li>
+            <li><c>MetaDataSubtitle</c> implicitly has a required <tag>title</tag>, and allows optional <tag>subtitle</tag>, <tag>shorttitle</tag> and <tag>plaintitle</tag>.</li>
+            <li>A <tag>plaintitle</tag> means no markup whatsoever in the content, this is what <q>plain</q> means.</li>
+            <li><c>MetaDataLinedTitle</c> and <c>MetaDataLinedSubtitle</c> are variants of the <c>ShortTitle</c> or <c>Subtitle</c> versions for use on larger divisions with <tag>line</tag> elements used to suggest line breaks in titles.</li>
             <li><c>MetaDataCaption</c> implicitly has an optional title.</li>
             <li>Titles may contain external references (<c>url</c>) or internal cross-references (<c>xref</c>), but implementers need not make them active (<ie/>, they maybe text only), since titles are prone to migrating to other locations.</li>
         </ul></p>
@@ -2006,6 +2007,8 @@
                 element subtitle {LongLine+}
             ShortTitle =
                 element shorttitle {TextShort}
+            PlainTitle =
+                element plaintitle {text}
             Creator =
                 element creator {TextShort}
             XMLBase = attribute xml:base {text}
@@ -2028,6 +2031,7 @@
                 XMLLang?,
                 Title,
                 ShortTitle?,
+                PlainTitle?,
                 Index*
             MetaDataLinedTitle =
                 UniqueID?,
@@ -2036,6 +2040,7 @@
                 XMLLang?,
                 (Title | LinedTitle),
                 ShortTitle?,
+                PlainTitle?,
                 Index*
             MetaDataSubtitle =
                 UniqueID?,
@@ -2045,6 +2050,7 @@
                 Title,
                 Subtitle?,
                 ShortTitle?,
+                PlainTitle?,
                 Index*
             MetaDataLinedSubtitle =
                 UniqueID?,
@@ -2054,6 +2060,7 @@
                 (Title | LinedTitle),
                 (Subtitle | LinedSubtitle)?,
                 ShortTitle?,
+                PlainTitle?,
                 Index*
             MetaDataTitleOptional =
                 UniqueID?,
@@ -2067,7 +2074,7 @@
                 PermanentID?,
                 XMLBase?,
                 XMLLang?,
-                (Title, ShortTitle?)?,
+                (Title, ShortTitle?, PlainTitle?)?,
                 Index*
             MetaDataTitleCreatorOptional =
                 UniqueID?,
