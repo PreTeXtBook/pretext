@@ -388,6 +388,9 @@ the xsltproc executable.
 
         <section permid="Abc" xml:id="section-sage-cells">
             <title>Computing Integrals with Sage (<m>\int</m>)</title>
+            <!-- A version of the title with no markup at all,     -->
+            <!-- math is now a Unicode symbol for an integral sign -->
+            <plaintitle>Computing Integrals with Sage (&#x222B;)</plaintitle>
             <!-- Index testing, semi-realistic -->
             <idx><h>Sage</h><h>integration</h></idx>
             <idx><h>Sage</h><h>integration</h><h>cell</h></idx>
@@ -2079,6 +2082,9 @@ the xsltproc executable.
         <section xml:id="text-in-paragraphs">
             <title>Entering Text in Paragraphs, Titles, Captions</title>
             <shorttitle>Text in Paragraphs</shorttitle>
+            <!-- a "plaintitle" has no markup, meant for browser tabs, etc -->
+            <!-- here we just use a variant, for testing purposes          -->
+            <plaintitle>Entering Text in Paragraphs</plaintitle>
 
             <introduction>
                 <p><init>XML</init>, and therefore <pretext/>, is a markup language.  But by and large, what you type into your source will be what you see in your output.  So there is not much to say.  Except that <xref ref="subsection-xml-escape" text="type-global"/> eventually will be essential.  However we do test various tricky situations here (which have technical explanations we avoid).  See the Author's Guide for a superior treatment of the topics addressed here.</p>
@@ -4666,6 +4672,8 @@ the xsltproc executable.
                     </li>
                     <li xml:id="description-list-math-title">
                         <title>Math <m>x^2</m></title>
+                        <!-- this is a candidate for a "plaintitle" but the schema limits -->
+                        <!-- the element to divisions, figures and named lists            -->
                         <p>Sorry, not a color but testing titles with math in them.</p>
                     </li>
                     <li>
@@ -5712,7 +5720,10 @@ the xsltproc executable.
 
         <section xml:id="section-interactive-authored">
             <title>Interactive Elements, Authored in Javascript</title>
+            <!-- short for table of contents, etc -->
             <shorttitle>Interactive Elements, Authored</shorttitle>
+            <!-- no markup version, for places like browser tabs -->
+            <plaintitle>Interactive Elements, Authored</plaintitle>
             <idx><h>interactive elements</h><h>authored</h></idx>
             <idx><h>embedded interactive elements</h><h>authored</h></idx>
 
