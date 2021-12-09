@@ -1749,31 +1749,62 @@
     <section>
         <title>Bibliography</title>
 
-        <p>This is all stop-gap and will change radically.  But it seems to work for now.</p>
+        <p>This is all stop-gap and will change radically.  But it seems to work for now.  So these rules should not be taken as definitive, at all.</p>
 
         <fragment xml:id="bibliography">
             <title>Bibliography</title>
             <code>
+            TextBib = mixed { (Character | MathInline)* }
             BibliographyItem =
                 element biblio {
                     MetaDataTarget,
-                    attribute type {"raw"}?,
-                    (TextLong |
-                    Ibid |
-                    BibTitle |
-                    BibYear |
-                    BibJournal |
-                    BibNumber |
-                    BibVolume |
-                    BibNote)*
+                    ((
+                        attribute type {"raw"},
+                        (TextLong |
+                        Ibid |
+                        BibTitle |
+                        BibYear |
+                        BibJournal |
+                        BibNumber |
+                        BibVolume |
+                        BibNote)*
+                    ) |
+                    (
+                        attribute type {"bibtex"},
+                        (BibTitle |
+                        BibAuthor |
+                        BibEditor |
+                        BibYear |
+                        BibJournal |
+                        BibNumber |
+                        BibVolume |
+                        BibSeries |
+                        BibPublisher |
+                        BibPages |
+                        BibNote)*
+                    ))
                 }
             Ibid = element ibid {empty}
             BibYear = element year {text}
-            BibJournal = element journal {text}
+            BibJournal = element journal { TextBib }
             BibNumber = element number {text}
             BibVolume = element volume {text}
             BibTitle = element title {TextLong}
             BibNote = element note {UniqueID?, Paragraph+}
+            BibAuthor = element author {text}
+            BibEditor = element editor {text}
+            BibSeries = element series {text}
+            BibPublisher = element publisher {text}
+            BibPages = element pages {
+                (
+                    attribute start {text},
+                    attribute end {text},
+                    empty
+                ) |
+                (
+                    text
+                )
+                }
             </code>
         </fragment>
     </section>

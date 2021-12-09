@@ -425,11 +425,11 @@
           <xs:sequence>
             <xs:group ref="Author"/>
             <xs:group minOccurs="0" maxOccurs="unbounded" ref="Author"/>
-            <xs:element minOccurs="0" maxOccurs="unbounded" ref="editor"/>
+            <xs:group minOccurs="0" maxOccurs="unbounded" ref="Editor"/>
           </xs:sequence>
           <xs:sequence>
-            <xs:element ref="editor"/>
-            <xs:element minOccurs="0" maxOccurs="unbounded" ref="editor"/>
+            <xs:group ref="Editor"/>
+            <xs:group minOccurs="0" maxOccurs="unbounded" ref="Editor"/>
           </xs:sequence>
         </xs:choice>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="credit"/>
@@ -471,30 +471,34 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="email" type="xs:string"/>
-  <xs:element name="editor">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="personname"/>
-        <xs:element minOccurs="0" name="department">
-          <xs:complexType mixed="true">
-            <xs:choice>
-              <xs:group ref="TextSimple"/>
-              <xs:group maxOccurs="unbounded" ref="ShortLine"/>
-            </xs:choice>
-          </xs:complexType>
-        </xs:element>
-        <xs:element minOccurs="0" name="institution">
-          <xs:complexType mixed="true">
-            <xs:choice>
-              <xs:group ref="TextSimple"/>
-              <xs:group maxOccurs="unbounded" ref="ShortLine"/>
-            </xs:choice>
-          </xs:complexType>
-        </xs:element>
-        <xs:element minOccurs="0" ref="email"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+  <xs:group name="Editor">
+    <xs:sequence>
+      <xs:element name="editor">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="personname"/>
+            <xs:element minOccurs="0" name="department">
+              <xs:complexType mixed="true">
+                <xs:choice>
+                  <xs:group ref="TextSimple"/>
+                  <xs:group maxOccurs="unbounded" ref="ShortLine"/>
+                </xs:choice>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="institution">
+              <xs:complexType mixed="true">
+                <xs:choice>
+                  <xs:group ref="TextSimple"/>
+                  <xs:group maxOccurs="unbounded" ref="ShortLine"/>
+                </xs:choice>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" ref="email"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
   <xs:element name="credit">
     <xs:complexType>
       <xs:sequence>
@@ -2150,26 +2154,48 @@
       </xs:element>
     </xs:sequence>
   </xs:group>
+  <xs:complexType name="TextBib" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="Character"/>
+      <xs:element ref="m"/>
+    </xs:choice>
+  </xs:complexType>
   <xs:element name="biblio">
     <xs:complexType mixed="true">
       <xs:sequence>
         <xs:group ref="MetaDataTarget"/>
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:group ref="TextLong"/>
-          <xs:element ref="ibid"/>
-          <xs:group ref="BibTitle"/>
-          <xs:element ref="year"/>
-          <xs:element ref="journal"/>
-          <xs:element ref="number"/>
-          <xs:element ref="volume"/>
-          <xs:group ref="BibNote"/>
+        <xs:choice>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:group ref="TextLong"/>
+            <xs:element ref="ibid"/>
+            <xs:group ref="BibTitle"/>
+            <xs:element ref="year"/>
+            <xs:element ref="journal"/>
+            <xs:element ref="number"/>
+            <xs:element ref="volume"/>
+            <xs:group ref="BibNote"/>
+          </xs:choice>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:group ref="BibTitle"/>
+            <xs:group ref="BibAuthor"/>
+            <xs:group ref="BibEditor"/>
+            <xs:element ref="year"/>
+            <xs:element ref="journal"/>
+            <xs:element ref="number"/>
+            <xs:element ref="volume"/>
+            <xs:element ref="series"/>
+            <xs:element ref="publisher"/>
+            <xs:element ref="pages"/>
+            <xs:group ref="BibNote"/>
+          </xs:choice>
         </xs:choice>
       </xs:sequence>
       <xs:attributeGroup ref="MetaDataTarget"/>
-      <xs:attribute name="type">
+      <xs:attribute name="type" use="required">
         <xs:simpleType>
           <xs:restriction base="xs:token">
             <xs:enumeration value="raw"/>
+            <xs:enumeration value="bibtex"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
@@ -2179,7 +2205,7 @@
     <xs:complexType/>
   </xs:element>
   <xs:element name="year" type="xs:string"/>
-  <xs:element name="journal" type="xs:string"/>
+  <xs:element name="journal" type="TextBib"/>
   <xs:element name="number" type="xs:string"/>
   <xs:element name="volume" type="xs:string"/>
   <xs:group name="BibTitle">
@@ -2201,6 +2227,24 @@
       </xs:element>
     </xs:sequence>
   </xs:group>
+  <xs:group name="BibAuthor">
+    <xs:sequence>
+      <xs:element name="author" type="xs:string"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="BibEditor">
+    <xs:sequence>
+      <xs:element name="editor" type="xs:string"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="series" type="xs:string"/>
+  <xs:element name="publisher" type="xs:string"/>
+  <xs:element name="pages">
+    <xs:complexType mixed="true">
+      <xs:attribute name="start"/>
+      <xs:attribute name="end"/>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="gi">
     <xs:complexType>
       <xs:complexContent>

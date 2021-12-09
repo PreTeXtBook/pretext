@@ -2359,26 +2359,58 @@
       <ref name="TextShort"/>
     </element>
   </define>
+  <define name="TextBib">
+    <mixed>
+      <zeroOrMore>
+        <choice>
+          <ref name="Character"/>
+          <ref name="MathInline"/>
+        </choice>
+      </zeroOrMore>
+    </mixed>
+  </define>
   <define name="BibliographyItem">
     <element name="biblio">
       <ref name="MetaDataTarget"/>
-      <optional>
-        <attribute name="type">
-          <value>raw</value>
-        </attribute>
-      </optional>
-      <zeroOrMore>
-        <choice>
-          <ref name="TextLong"/>
-          <ref name="Ibid"/>
-          <ref name="BibTitle"/>
-          <ref name="BibYear"/>
-          <ref name="BibJournal"/>
-          <ref name="BibNumber"/>
-          <ref name="BibVolume"/>
-          <ref name="BibNote"/>
-        </choice>
-      </zeroOrMore>
+      <choice>
+        <group>
+          <attribute name="type">
+            <value>raw</value>
+          </attribute>
+          <zeroOrMore>
+            <choice>
+              <ref name="TextLong"/>
+              <ref name="Ibid"/>
+              <ref name="BibTitle"/>
+              <ref name="BibYear"/>
+              <ref name="BibJournal"/>
+              <ref name="BibNumber"/>
+              <ref name="BibVolume"/>
+              <ref name="BibNote"/>
+            </choice>
+          </zeroOrMore>
+        </group>
+        <group>
+          <attribute name="type">
+            <value>bibtex</value>
+          </attribute>
+          <zeroOrMore>
+            <choice>
+              <ref name="BibTitle"/>
+              <ref name="BibAuthor"/>
+              <ref name="BibEditor"/>
+              <ref name="BibYear"/>
+              <ref name="BibJournal"/>
+              <ref name="BibNumber"/>
+              <ref name="BibVolume"/>
+              <ref name="BibSeries"/>
+              <ref name="BibPublisher"/>
+              <ref name="BibPages"/>
+              <ref name="BibNote"/>
+            </choice>
+          </zeroOrMore>
+        </group>
+      </choice>
     </element>
   </define>
   <define name="Ibid">
@@ -2393,7 +2425,7 @@
   </define>
   <define name="BibJournal">
     <element name="journal">
-      <text/>
+      <ref name="TextBib"/>
     </element>
   </define>
   <define name="BibNumber">
@@ -2419,6 +2451,38 @@
       <oneOrMore>
         <ref name="Paragraph"/>
       </oneOrMore>
+    </element>
+  </define>
+  <define name="BibAuthor">
+    <element name="author">
+      <text/>
+    </element>
+  </define>
+  <define name="BibEditor">
+    <element name="editor">
+      <text/>
+    </element>
+  </define>
+  <define name="BibSeries">
+    <element name="series">
+      <text/>
+    </element>
+  </define>
+  <define name="BibPublisher">
+    <element name="publisher">
+      <text/>
+    </element>
+  </define>
+  <define name="BibPages">
+    <element name="pages">
+      <choice>
+        <group>
+          <attribute name="start"/>
+          <attribute name="end"/>
+          <empty/>
+        </group>
+        <text/>
+      </choice>
     </element>
   </define>
   <define name="GlossaryItem">
