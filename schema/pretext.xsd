@@ -199,7 +199,7 @@
   <xs:element name="subsection">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="MetaDataShortTitle">
+        <xs:extension base="MetaDataAltTitle">
           <xs:sequence>
             <xs:group minOccurs="0" maxOccurs="unbounded" ref="AuthorByline"/>
             <xs:choice>
@@ -247,7 +247,7 @@
   <xs:element name="subsubsection">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="MetaDataShortTitle">
+        <xs:extension base="MetaDataAltTitle">
           <xs:sequence>
             <xs:group minOccurs="0" maxOccurs="unbounded" ref="AuthorByline"/>
             <xs:element minOccurs="0" ref="objectives"/>
@@ -274,7 +274,7 @@
       <xs:element name="appendix">
         <xs:complexType>
           <xs:complexContent>
-            <xs:extension base="MetaDataShortTitle">
+            <xs:extension base="MetaDataAltTitle">
               <xs:sequence>
                 <xs:group minOccurs="0" maxOccurs="unbounded" ref="AuthorByline"/>
                 <xs:choice>
@@ -327,7 +327,7 @@
       <xs:element name="appendix">
         <xs:complexType>
           <xs:complexContent>
-            <xs:extension base="MetaDataShortTitle">
+            <xs:extension base="MetaDataAltTitle">
               <xs:sequence>
                 <xs:group minOccurs="0" maxOccurs="unbounded" ref="AuthorByline"/>
                 <xs:choice>
@@ -378,7 +378,7 @@
   <xs:element name="index">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="MetaDataShortTitleOptional">
+        <xs:extension base="MetaDataAltTitleOptional">
           <xs:sequence>
             <xs:element ref="index-list"/>
           </xs:sequence>
@@ -767,7 +767,7 @@
   <xs:element name="reading-questions">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="MetaDataShortTitleOptional">
+        <xs:extension base="MetaDataAltTitleOptional">
           <xs:sequence>
             <xs:group minOccurs="0" ref="IntroductionDivision"/>
             <xs:element maxOccurs="unbounded" ref="exercise"/>
@@ -780,7 +780,7 @@
   <xs:element name="exercises">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="MetaDataShortTitleOptional">
+        <xs:extension base="MetaDataAltTitleOptional">
           <xs:sequence>
             <xs:group minOccurs="0" ref="IntroductionDivision"/>
             <xs:choice>
@@ -799,7 +799,7 @@
   <xs:element name="subexercises">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="MetaDataShortTitleOptional">
+        <xs:extension base="MetaDataAltTitleOptional">
           <xs:sequence>
             <xs:group minOccurs="0" ref="IntroductionDivision"/>
             <xs:choice maxOccurs="unbounded">
@@ -815,7 +815,7 @@
   <xs:element name="solutions">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="MetaDataShortTitleOptional">
+        <xs:extension base="MetaDataAltTitleOptional">
           <xs:sequence>
             <xs:group minOccurs="0" ref="IntroductionDivision"/>
             <xs:group minOccurs="0" ref="ConclusionDivision"/>
@@ -839,7 +839,7 @@
   <xs:element name="references">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="MetaDataShortTitleOptional">
+        <xs:extension base="MetaDataAltTitleOptional">
           <xs:sequence>
             <xs:group minOccurs="0" ref="IntroductionDivision"/>
             <xs:element maxOccurs="unbounded" ref="biblio"/>
@@ -852,7 +852,7 @@
   <xs:element name="glossary">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="MetaDataShortTitleOptional">
+        <xs:extension base="MetaDataAltTitleOptional">
           <xs:sequence>
             <xs:element minOccurs="0" ref="headnote"/>
             <xs:element maxOccurs="unbounded" ref="gi"/>
@@ -1560,7 +1560,7 @@
   <xs:element name="table">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="MetaDataShortTitle">
+        <xs:extension base="MetaDataAltTitle">
           <xs:sequence>
             <xs:element ref="tabular"/>
           </xs:sequence>
@@ -1583,7 +1583,7 @@
   <xs:element name="list">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="MetaDataShortTitle">
+        <xs:extension base="MetaDataAltTitle">
           <xs:sequence>
             <xs:group minOccurs="0" ref="IntroductionText"/>
             <xs:group ref="List"/>
@@ -2539,7 +2539,7 @@
     <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:complexType>
-  <xs:complexType name="MetaDataShortTitle">
+  <xs:complexType name="MetaDataAltTitle">
     <xs:sequence>
       <xs:group ref="Title"/>
       <xs:element minOccurs="0" ref="shorttitle"/>
@@ -2612,7 +2612,7 @@
     <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:attributeGroup>
-  <xs:complexType name="MetaDataShortTitleOptional">
+  <xs:complexType name="MetaDataAltTitleOptional">
     <xs:sequence>
       <xs:sequence minOccurs="0">
         <xs:group ref="Title"/>

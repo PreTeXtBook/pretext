@@ -94,7 +94,7 @@
                 }
             Subsection =
                 element subsection {
-                    MetaDataShortTitle,
+                    MetaDataAltTitle,
                     AuthorByline*,
                     (
                         (
@@ -116,7 +116,7 @@
                 }
             Subsubsection =
                 element subsubsection {
-                    MetaDataShortTitle,
+                    MetaDataAltTitle,
                     AuthorByline*,
                     Objectives?,
                     (BlockDivision | Paragraphs | Commentary)+,
@@ -126,7 +126,7 @@
                 }
             ArticleAppendix =
                 element appendix {
-                    MetaDataShortTitle,
+                    MetaDataAltTitle,
                     AuthorByline*,
                     (
                         (
@@ -149,7 +149,7 @@
                 }
             BookAppendix =
                 element appendix {
-                    MetaDataShortTitle,
+                    MetaDataAltTitle,
                     AuthorByline*,
                     (
                         (
@@ -171,7 +171,7 @@
                 }
             IndexDivision =
                 element index {
-                    MetaDataShortTitleOptional,
+                    MetaDataAltTitleOptional,
                     IndexList
                 }
             
@@ -325,14 +325,14 @@
             
             ReadingQuestions =
                 element reading-questions {
-                    MetaDataShortTitleOptional,
+                    MetaDataAltTitleOptional,
                     IntroductionDivision?,
                     Exercise+,
                     ConclusionDivision?
                 }
             Exercises =
                 element exercises {
-                    MetaDataShortTitleOptional,
+                    MetaDataAltTitleOptional,
                     IntroductionDivision?,
                     (
                         (Exercise | ExerciseGroup)+ |
@@ -342,14 +342,14 @@
                 }
             Subexercises =
                 element subexercises {
-                    MetaDataShortTitleOptional,
+                    MetaDataAltTitleOptional,
                     IntroductionDivision?,
                     (Exercise | ExerciseGroup)+,
                     ConclusionDivision?
                 }
             Solutions =
                 element solutions {
-                    MetaDataShortTitleOptional,
+                    MetaDataAltTitleOptional,
                     attribute inline {text}?,
                     attribute divisional {text}?,
                     attribute project {text}?,
@@ -359,14 +359,14 @@
                 }
             References =
                 element references {
-                    MetaDataShortTitleOptional,
+                    MetaDataAltTitleOptional,
                     IntroductionDivision?,
                     BibliographyItem+,
                     ConclusionDivision?
                 }
             Glossary =
                 element glossary {
-                    MetaDataShortTitleOptional,
+                    MetaDataAltTitleOptional,
                     HeadNote?,
                     GlossaryItem+
                 }
@@ -664,7 +664,7 @@
                     )
                 } |
                 element table {
-                    MetaDataShortTitle,
+                    MetaDataAltTitle,
                     Tabular
                 } |
                 element listing {
@@ -675,7 +675,7 @@
                     )
                 } |
                 element list {
-                    MetaDataShortTitle,
+                    MetaDataAltTitle,
                     IntroductionText?,
                     List,
                     ConclusionText?
@@ -1114,7 +1114,7 @@
                 XMLLang?,
                 Title,
                 Index*
-            MetaDataShortTitle =
+            MetaDataAltTitle =
                 UniqueID?,
                 PermanentID?,
                 XMLBase?,
@@ -1159,7 +1159,7 @@
                 XMLLang?,
                 Title?,
                 Index*
-            MetaDataShortTitleOptional =
+            MetaDataAltTitleOptional =
                 UniqueID?,
                 PermanentID?,
                 XMLBase?,

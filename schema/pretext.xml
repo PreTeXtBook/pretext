@@ -189,7 +189,7 @@
                 }
             Subsection =
                 element subsection {
-                    MetaDataShortTitle,
+                    MetaDataAltTitle,
                     AuthorByline*,
                     (
                         (
@@ -211,7 +211,7 @@
                 }
             Subsubsection =
                 element subsubsection {
-                    MetaDataShortTitle,
+                    MetaDataAltTitle,
                     AuthorByline*,
                     Objectives?,
                     (BlockDivision | Paragraphs | Commentary)+,
@@ -221,7 +221,7 @@
                 }
             ArticleAppendix =
                 element appendix {
-                    MetaDataShortTitle,
+                    MetaDataAltTitle,
                     AuthorByline*,
                     (
                         (
@@ -244,7 +244,7 @@
                 }
             BookAppendix =
                 element appendix {
-                    MetaDataShortTitle,
+                    MetaDataAltTitle,
                     AuthorByline*,
                     (
                         (
@@ -266,7 +266,7 @@
                 }
             IndexDivision =
                 element index {
-                    MetaDataShortTitleOptional,
+                    MetaDataAltTitleOptional,
                     IndexList
                 }
             </code>
@@ -320,14 +320,14 @@
             <code>
             ReadingQuestions =
                 element reading-questions {
-                    MetaDataShortTitleOptional,
+                    MetaDataAltTitleOptional,
                     IntroductionDivision?,
                     Exercise+,
                     ConclusionDivision?
                 }
             Exercises =
                 element exercises {
-                    MetaDataShortTitleOptional,
+                    MetaDataAltTitleOptional,
                     IntroductionDivision?,
                     (
                         (Exercise | ExerciseGroup)+ |
@@ -337,14 +337,14 @@
                 }
             Subexercises =
                 element subexercises {
-                    MetaDataShortTitleOptional,
+                    MetaDataAltTitleOptional,
                     IntroductionDivision?,
                     (Exercise | ExerciseGroup)+,
                     ConclusionDivision?
                 }
             Solutions =
                 element solutions {
-                    MetaDataShortTitleOptional,
+                    MetaDataAltTitleOptional,
                     attribute inline {text}?,
                     attribute divisional {text}?,
                     attribute project {text}?,
@@ -354,14 +354,14 @@
                 }
             References =
                 element references {
-                    MetaDataShortTitleOptional,
+                    MetaDataAltTitleOptional,
                     IntroductionDivision?,
                     BibliographyItem+,
                     ConclusionDivision?
                 }
             Glossary =
                 element glossary {
-                    MetaDataShortTitleOptional,
+                    MetaDataAltTitleOptional,
                     HeadNote?,
                     GlossaryItem+
                 }
@@ -1374,7 +1374,7 @@
                     )
                 } |
                 element table {
-                    MetaDataShortTitle,
+                    MetaDataAltTitle,
                     Tabular
                 } |
                 element listing {
@@ -1385,7 +1385,7 @@
                     )
                 } |
                 element list {
-                    MetaDataShortTitle,
+                    MetaDataAltTitle,
                     IntroductionText?,
                     List,
                     ConclusionText?
@@ -1982,10 +1982,10 @@
             <li>These are not unordered specifications since they contain several attributes, and we enforce a <c>title</c>, <c>subtitle</c>, <tag>shorttitle</tag>, <tag>plaintitle</tag>, <c>creator</c>, <c>caption</c>, <c>idx</c> order.</li>
             <li><c>MetaDataTarget</c> is for items that are targets of cross-references, but without even optional titles.  Since they will be knowled, they can appear in an index.  But without the potential to be titled, we do not set them up as possible root elements of a file to <c>xinclude</c>.</li>
             <li><c>MetaDataTitle</c> has a required <tag>title</tag>.</li>
-            <li><c>MetaDataShortTitle</c> has a required <tag>title</tag>, and allows optional <tag>shorttitle</tag> and <tag>plaintitle</tag>.</li>
+            <li><c>MetaDataAltTitle</c> has a required <tag>title</tag>, and allows optional <tag>shorttitle</tag> and <tag>plaintitle</tag>.</li>
             <li><c>MetaDataSubtitle</c> implicitly has a required <tag>title</tag>, and allows optional <tag>subtitle</tag>, <tag>shorttitle</tag> and <tag>plaintitle</tag>.</li>
             <li>A <tag>plaintitle</tag> means no markup whatsoever in the content, this is what <q>plain</q> means.</li>
-            <li><c>MetaDataLinedTitle</c> and <c>MetaDataLinedSubtitle</c> are variants of the <c>ShortTitle</c> or <c>Subtitle</c> versions for use on larger divisions with <tag>line</tag> elements used to suggest line breaks in titles.</li>
+            <li><c>MetaDataLinedTitle</c> and <c>MetaDataLinedSubtitle</c> are variants of the <c>AltTitle</c> or <c>Subtitle</c> versions for use on larger divisions with <tag>line</tag> elements used to suggest line breaks in titles.</li>
             <li><c>MetaDataCaption</c> implicitly has an optional title.</li>
             <li>Titles may contain external references (<c>url</c>) or internal cross-references (<c>xref</c>), but implementers need not make them active (<ie/>, they maybe text only), since titles are prone to migrating to other locations.</li>
         </ul></p>
@@ -2024,7 +2024,7 @@
                 XMLLang?,
                 Title,
                 Index*
-            MetaDataShortTitle =
+            MetaDataAltTitle =
                 UniqueID?,
                 PermanentID?,
                 XMLBase?,
@@ -2069,7 +2069,7 @@
                 XMLLang?,
                 Title?,
                 Index*
-            MetaDataShortTitleOptional =
+            MetaDataAltTitleOptional =
                 UniqueID?,
                 PermanentID?,
                 XMLBase?,

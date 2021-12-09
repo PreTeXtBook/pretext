@@ -272,7 +272,7 @@
   </define>
   <define name="Subsection">
     <element name="subsection">
-      <ref name="MetaDataShortTitle"/>
+      <ref name="MetaDataAltTitle"/>
       <zeroOrMore>
         <ref name="AuthorByline"/>
       </zeroOrMore>
@@ -343,7 +343,7 @@
   </define>
   <define name="Subsubsection">
     <element name="subsubsection">
-      <ref name="MetaDataShortTitle"/>
+      <ref name="MetaDataAltTitle"/>
       <zeroOrMore>
         <ref name="AuthorByline"/>
       </zeroOrMore>
@@ -381,7 +381,7 @@
   </define>
   <define name="ArticleAppendix">
     <element name="appendix">
-      <ref name="MetaDataShortTitle"/>
+      <ref name="MetaDataAltTitle"/>
       <zeroOrMore>
         <ref name="AuthorByline"/>
       </zeroOrMore>
@@ -453,7 +453,7 @@
   </define>
   <define name="BookAppendix">
     <element name="appendix">
-      <ref name="MetaDataShortTitle"/>
+      <ref name="MetaDataAltTitle"/>
       <zeroOrMore>
         <ref name="AuthorByline"/>
       </zeroOrMore>
@@ -525,7 +525,7 @@
   </define>
   <define name="IndexDivision">
     <element name="index">
-      <ref name="MetaDataShortTitleOptional"/>
+      <ref name="MetaDataAltTitleOptional"/>
       <ref name="IndexList"/>
     </element>
   </define>
@@ -888,7 +888,7 @@
   </define>
   <define name="ReadingQuestions">
     <element name="reading-questions">
-      <ref name="MetaDataShortTitleOptional"/>
+      <ref name="MetaDataAltTitleOptional"/>
       <optional>
         <ref name="IntroductionDivision"/>
       </optional>
@@ -902,7 +902,7 @@
   </define>
   <define name="Exercises">
     <element name="exercises">
-      <ref name="MetaDataShortTitleOptional"/>
+      <ref name="MetaDataAltTitleOptional"/>
       <optional>
         <ref name="IntroductionDivision"/>
       </optional>
@@ -924,7 +924,7 @@
   </define>
   <define name="Subexercises">
     <element name="subexercises">
-      <ref name="MetaDataShortTitleOptional"/>
+      <ref name="MetaDataAltTitleOptional"/>
       <optional>
         <ref name="IntroductionDivision"/>
       </optional>
@@ -941,7 +941,7 @@
   </define>
   <define name="Solutions">
     <element name="solutions">
-      <ref name="MetaDataShortTitleOptional"/>
+      <ref name="MetaDataAltTitleOptional"/>
       <optional>
         <attribute name="inline"/>
       </optional>
@@ -970,7 +970,7 @@
   </define>
   <define name="References">
     <element name="references">
-      <ref name="MetaDataShortTitleOptional"/>
+      <ref name="MetaDataAltTitleOptional"/>
       <optional>
         <ref name="IntroductionDivision"/>
       </optional>
@@ -984,7 +984,7 @@
   </define>
   <define name="Glossary">
     <element name="glossary">
-      <ref name="MetaDataShortTitleOptional"/>
+      <ref name="MetaDataAltTitleOptional"/>
       <optional>
         <ref name="HeadNote"/>
       </optional>
@@ -1732,7 +1732,7 @@
         </choice>
       </element>
       <element name="table">
-        <ref name="MetaDataShortTitle"/>
+        <ref name="MetaDataAltTitle"/>
         <ref name="Tabular"/>
       </element>
       <element name="listing">
@@ -1743,7 +1743,7 @@
         </choice>
       </element>
       <element name="list">
-        <ref name="MetaDataShortTitle"/>
+        <ref name="MetaDataAltTitle"/>
         <optional>
           <ref name="IntroductionText"/>
         </optional>
@@ -2800,7 +2800,7 @@
       <ref name="Index"/>
     </zeroOrMore>
   </define>
-  <define name="MetaDataShortTitle">
+  <define name="MetaDataAltTitle">
     <optional>
       <ref name="UniqueID"/>
     </optional>
@@ -2931,7 +2931,7 @@
       <ref name="Index"/>
     </zeroOrMore>
   </define>
-  <define name="MetaDataShortTitleOptional">
+  <define name="MetaDataAltTitleOptional">
     <optional>
       <ref name="UniqueID"/>
     </optional>
