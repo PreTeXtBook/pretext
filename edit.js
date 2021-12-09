@@ -1923,6 +1923,7 @@ function edit_menu_for(this_obj_or_id, motion) {
 
     if (motion == "entering") {
         editorLog("inline_tags", inline_tags, "tag", this_obj.tagName.toLowerCase());
+        editorLog("next_editable_of(this_obj, children)", next_editable_of(this_obj, "children"));
         if (false && inline_tags.includes(this_obj.tagName.toLowerCase())) {
             edit_option.innerHTML = "change this?";
             edit_option.setAttribute('data-location', 'inline');
@@ -2128,6 +2129,7 @@ function save_source() {
     the_pretext_source = the_pretext_source.replace(/\n\n/g, '\n');
     // remove temporary ids
     the_pretext_source = the_pretext_source.replace(/ xml:id="tMP[0-9a-z]+"/g, '');
+    the_pretext_source = the_pretext_source.replace(/\n +$/g, '\n');
 
     editorLog("         RR  saving", top_level_id, "which begins", the_pretext_source.substring(0,50));
     parent.save_file(top_level_id, the_pretext_source)
@@ -3516,6 +3518,11 @@ function output_from_source(the_object, output_structure, format) {
             the_answer += wrap_tag(this_tag, this_content, [])
         } else if (this_piece in the_object) {
             this_piece_output = output_from_text(the_object[this_piece], format);
+            if (format == "pretext" && output_tag == "md" && this_piece == "content") {
+                // convert \cr to mrow
+                this_piece_output = this_piece_output.replace(/\s*\\cr\s+/g, "</mrow>\n<mrow>\n");
+                this_piece_output = "<mrow>\n" + this_piece_output + "\n</mrow>";
+            }
             the_answer += wrap_tag(this_tag, this_piece_output, [])
         } else {
             editorLog("missing piece:", this_tag, "with no", this_piece)
@@ -4937,9 +4944,13 @@ function re_transform_source() {
   // trim leading white space in paragraph content
   for (var id in sourceobj) {
     var this_item = sourceobj[id];
-    if (["p", "mp", "fp"].includes(this_item["sourcetag"])) {
+    if (["p", "ip", "mp", "fp"].includes(this_item["sourcetag"])) {
         var this_content = sourceobj[id]["content"];
         this_content = this_content.replace(/\n +/g, "\n");
+        sourceobj[id]["content"] = this_content;
+    } else if (["me", "men", "md", "mdn"].includes(this_item["sourcetag"])) {
+        var this_content = sourceobj[id]["content"];
+        this_content = this_content.replace(/\n +/g, "\n  ");
         sourceobj[id]["content"] = this_content;
     }
     // next also needs table (or whatever it is that has a caption)
