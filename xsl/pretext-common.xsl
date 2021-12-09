@@ -3720,10 +3720,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- We include the "creator" element of a theorem/axiom as metadata -->
 <!-- NB: since these elements get killed on-sight, when we actually  -->
 <!-- want to process them we need to use a "select" attribute        -->
-<!-- similar to  title/*|title/text().                               -->
+<!-- similar to  title/*|title/text() or title/node().               -->
 <xsl:template match="title" />
 <xsl:template match="subtitle" />
 <xsl:template match="shorttitle"/>
+<xsl:template match="plaintitle"/>
 <xsl:template match="creator" />
 
 <!-- Some items have default titles that make sense         -->
@@ -3902,11 +3903,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:apply-templates select="." mode="has-default-title" />
     </xsl:variable>
     <xsl:choose>
-        <!-- Historically a browser tab would get a short title, if available. -->
-        <!-- Instead this might be support for a new "plaintitle" element.     -->
-        <!-- This is just for backward-compatibility and may be short-lived.   -->
-        <xsl:when test="shorttitle">
-            <xsl:apply-templates select="shorttitle/node()[not(self::fn)]" mode="plain-title-edit"/>
+        <!-- "plaintitle" has *no* markup, but we do strip extra   -->
+        <!-- whitespace by sending to generic text node processing -->
+        <xsl:when test="plaintitle">
+            <xsl:apply-templates select="plaintitle/text()"/>
         </xsl:when>
         <xsl:when test="title">
             <xsl:apply-templates select="title/node()[not(self::fn)]" mode="plain-title-edit"/>
@@ -3930,7 +3930,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- Return processing to defaults for most elements of titles -->
-<xsl:template match="*" mode="plain-title-edit">
+<xsl:template match="node()" mode="plain-title-edit">
     <xsl:apply-templates select="."/>
 </xsl:template>
 
