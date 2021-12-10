@@ -3863,6 +3863,15 @@ sbspanel:empty { /* can only happen when partially created */
     border: 1px solid #000;
     padding: 2px;
 }
+.displaymath_input {
+    width: 98%; 
+    min-height: 3em;
+    border: 3px dotted #399;
+}
+.displaymath_input:focus {
+    border: 1px dashed #900;
+    padding: 2px;
+}
 .edit_inline_math {
     font-family: "Inconsolata";
     margin-left: 0.5em;
