@@ -192,7 +192,7 @@ objectStructure = {
   "caption_like_heading": {
     "html": {
         "tag": "h5",
-        "cssclass": "figcaption",
+        "cssclass": "captionheading",
         "attributes": ['class="<&>{cssclass}<;>"', 'data-parent_id="<&>xml:id<;>"'],
         "pieces": [["{type}", ""], ["{space}", ""], ["{codenumber}", ""], ["{period}", ""], ["{space}", ""]]
     }
@@ -649,6 +649,14 @@ objectStructure = {
     },
     "source": {
         "pieces": [["content", ""]]
+    }
+  },
+  "captiontext": {  /* not used */
+    "html": {
+        "tag": "p",
+        "data_editable": "321",
+        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+        "pieces": ["caption",""]
     }
   },
 
@@ -2114,11 +2122,14 @@ function show_source(sibling, relative_placement) {
 
     // remove temporary ids
     the_pretext_source = the_pretext_source.replace(/ xml:id="tMP[0-9a-z]+"/g, '');
+    the_pretext_source = the_pretext_source.replace(/^ +$/mg, '');  // m = multiline
 
+//    var the_old_source = document.getElementById("newsource");
+//    if (the_old_source) { the_old_source.remove() }
     edit_placeholder.insertAdjacentHTML('afterend', '<textarea id="newpretextsource" style="width: 100%; height:30em">' + the_pretext_source + '</textarea>');
-    document.getElementById("newsource").remove();
 }
 
+// unify with show_source, and maybe make the clean up part of output_from_id
 function save_source() {
 //    var current_source = document.getElementById("newpretextsource");
 //    if (current_source) { editorLog("curr sou", current_source); alert("curr sour"); current_source.remove() }
@@ -4547,9 +4558,8 @@ function initialize_editing(xml_st) {
    // done rebulding HTML, so now process math
    // NOT CURRENTLY DOING ANYTHING????
     console.log("ready to edit, so typeset the math");
+    document.getElementById("content").classList.add("canedit");
     MathJax.typesetPromise();
-
-    editorLog = console.log;
 }
 
 var this_source_txt;    
