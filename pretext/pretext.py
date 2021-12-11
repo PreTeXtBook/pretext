@@ -199,6 +199,9 @@ def asymptote_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
             # bytes -> ASCII, strip final newline
             asyversion = proc.stderr.read().decode('ascii')[:-1]
             # build command line to suit
+            # 2021-12-10, Michael Doob: "-noprc" is default for the server,
+            # and newer CLI versions.  Retain for explicit use locally when
+            # perhaps an older version is being employed
             asy_cli = asy_executable_cmd + ['-f', outformat]
             if outformat in ['pdf', 'eps']:
                 asy_cli += ['-noprc', '-iconify', '-tex', 'xelatex', '-batchMask']
