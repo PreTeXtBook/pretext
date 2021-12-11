@@ -3896,9 +3896,9 @@ the xsltproc executable.
 
             <subsection>
                 <title>Accessibility</title>
-                <p>An <tag>image</tag> should either have a non-empty description or set <attr>decorative</attr> to the value <c>yes</c>. Some of the following images comply, and some do not.</p>
+                <p>An <tag>image</tag> should either have a non-empty description or set <attr>decorative</attr> to the value <c>yes</c>. Some of the following images comply, and some do not.  There's not really anything to see here visually, this is testing notifications made elsewhere.</p>
 
-                <sbsgroup>
+                <sbsgroup width="20%">
                     <sidebyside>
                         <p>No description, no <attr>decorative</attr> set to <c>yes</c></p>
                         <image source="images/cross-square.png"/>
