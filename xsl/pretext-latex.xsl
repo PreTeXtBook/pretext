@@ -1168,7 +1168,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-pageref">
             <xsl:text>\label{#4}</xsl:text>
         </xsl:if>
-        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3}\newline\vfill}{}}}&#xa;</xsl:text>
+        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3}\newline\vfill}{\par}}}&#xa;</xsl:text>
     </xsl:if>
     <!-- Division Exercise, Exercise Group -->
     <!-- The exercise itself carries the indentation, hence we can use breakable -->
@@ -1181,7 +1181,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-pageref">
             <xsl:text>\label{#4}</xsl:text>
         </xsl:if>
-        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3}\newline\vfill}{}}}&#xa;</xsl:text>
+        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3}\newline\vfill}{\par}}}&#xa;</xsl:text>
     </xsl:if>
     <!-- Division Exercise, Exercise Group, Columnar -->
     <!-- Explicity unbreakable, to behave in multicolumn tcbraster -->
@@ -1193,7 +1193,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-pageref">
             <xsl:text>\label{#4}</xsl:text>
         </xsl:if>
-        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3}\newline\vfill}{}}}&#xa;</xsl:text>
+        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3}\newline\vfill}{\par}}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//exercise[@workspace]">
         <xsl:text>%% Worksheet exercises may have workspaces&#xa;</xsl:text>
