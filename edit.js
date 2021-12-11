@@ -514,7 +514,7 @@ objectStructure = {
         "attributes": ['xml:id="<&>xml:id<;>"']
     },
     "source": {
-        "pieces": [["content", ""], ["caption", ""]],
+        "pieces": [["content", ""], ["captiontext", ""]],
         "attributes": []
     }
   },
@@ -638,14 +638,15 @@ objectStructure = {
     "html": {
         "tag": "figcaption",
         "data_editable": "321",
-        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
-        "pieces": [["{caption_like_heading}", ""], ["caption",""]]
+    //    "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+        "attributes": ['id="<&>xml:id<;>"'],
+        "pieces": [["{caption_like_heading}", ""], ["{captiontext}",""]]
    //     "pieces": [["(literal, caption goes here)",""]]
     },
     "pretext": {
         "tag": "caption",
         "attributes": [],
-        "pieces": [["caption", ""]]
+        "pieces": [["captiontext", ""]]
     },
     "source": {
         "pieces": [["content", ""]]
@@ -655,8 +656,18 @@ objectStructure = {
     "html": {
         "tag": "p",
         "data_editable": "321",
-        "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
-        "pieces": ["caption",""]
+   //     "attributes": ['id="<&>xml:id<;>"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+// do it like editabe title?
+        "attributes": ['data-source_id="<&>xml:id<;>"', 'data-component="caption"', 'class="caption"', 'data-editable="<&>{data_editable}<;>"', 'tabindex="-1"'],
+        "pieces": [["captiontext",""]]
+    },
+    "pretext": {
+        "tag": "",
+        "attributes": [],
+        "pieces": [["captiontext", ""]]
+    },
+    "source": {
+        "pieces": [["captiontext", ""]]
     }
   },
 
@@ -1235,7 +1246,7 @@ inline_math = ["m"];
 inline_abbrev = ["ellipsis", "ie", "eg", "etc"];
 
 // contained_objects are a componnet of another object, not just buried in content
-var contained_objects =["title", "statement", "caption", "proof",
+var contained_objects =["title", "statement", "caption", "captiontext", "proof",
                         "author", "journal", "volume", "number", "pages"];
 
 function tag_type(tag) {
@@ -1321,7 +1332,7 @@ function process_value_from_source(fcn, piece, src) {
 $(".autopermalink > a").attr("tabindex", -1);
 
 var editable_objects = [["p", 99], ["ol", 97], ["ul", 96], ["article", 95], ["blockquote", 80], ["section", 66],
-                        ["title", 20]];
+                        ["title", 20], ["caption", 890]];
 for(var j=0; j < editable_objects.length; ++j) {
     $(editable_objects[j][0]).attr("data-editable", editable_objects[j][1]);
     $(editable_objects[j][0]).attr("tabindex", -1);
@@ -1610,6 +1621,16 @@ function standard_title_form(object_id) {
 
     return title_form
 }
+function standard_caption_form(object_id) {
+    var the_object = internalSource[object_id];
+    editorLog("editing caption of object_id", object_id, "which contains", the_object);
+    var the_caption = the_object.caption;
+
+    var caption_form = '<span id="actively_editing" class="starting_point_for_editing" data-source_id="' + object_id + '" data-component="' + 'caption' + '" contenteditable="true">' + the_caption + '</span>';
+
+    return caption_form
+}
+
 
 function menu_options_for(object_id, component_type, level) {
         // this should be a function of the object, not just its tag
@@ -1948,7 +1969,9 @@ function edit_menu_for(this_obj_or_id, motion) {
             edit_option.innerHTML = "<b>modify</b> this image layout, or add near here?";
         } else if (this_obj.classList.contains("sbspanel")) {
             edit_option.innerHTML = "<b>modify</b> this panel layout, or change panel contents?";
-        } else if (this_obj.classList.contains("title")) {
+        } else if (this_obj.classList.contains("title") || this_obj.classList.contains("caption")) {
+            var this_contained_type = "title";
+            if (this_obj.classList.contains("caption")) { this_contained_type = "caption" }
             edit_option = document.createElement('ol');
             edit_option.setAttribute('id', 'edit_menu');
             editorLog("this_obj", this_obj);
@@ -1957,9 +1980,9 @@ function edit_menu_for(this_obj_or_id, motion) {
             this_obj_parent_id = this_obj.parentElement.parentElement.id;
             this_obj_environment = internalSource[this_obj_parent_id]["sourcetag"];
             if (this_obj.innerHTML == '<div id="edit_menu_holder" tabindex="-1"></div>') {
-                edit_option.innerHTML = '<li id="choose_current" tabindex="-1" data-action="change-title">Add a title</li>';
+                edit_option.innerHTML = '<li id="choose_current" tabindex="-1" data-action="change-' + this_contained_type + '">Add a ' + this_contained_type + '</li>';
             } else {
-                edit_option.innerHTML = '<li id="choose_current" tabindex="-1" data-action="change-title">Change title</li>';
+                edit_option.innerHTML = '<li id="choose_current" tabindex="-1" data-action="change-' + this_contained_type + '">Change ' + this_contained_type + '</li>';
             }
             edit_option.setAttribute('data-location', 'inline');
         } else if ((this_obj.classList.contains("placeholder") && (this_obj.classList.contains("hint") ||
@@ -3295,24 +3318,26 @@ function assemble_internal_version_changes(object_being_edited) {
         internalSource[prev_id]["content"] = this_paragraph_contents
         possibly_changed_ids_and_entry.push([prev_id, "content", oldornew]);
 
-    } else if (object_being_edited.getAttribute('data-component') == "title") {
+    } else if (object_being_edited.getAttribute('data-component') == "title" ||
+               object_being_edited.getAttribute('data-component') == "caption") {
 
+        var this_content_type = object_being_edited.getAttribute('data-component');
         nature_of_the_change = "replace";
         var line_being_edited = object_being_edited;
         var line_content = line_being_edited.innerHTML;
         line_content = line_content.trim();
-        editorLog("the content (is it a title?) is", line_content);
+        editorLog("the content (is it a title or caption?) is", line_content);
         var owner_of_change = object_being_edited.getAttribute("data-source_id");
         var component_being_changed = object_being_edited.getAttribute("data-component");
         editorLog("component_being_changed", component_being_changed, "within", owner_of_change);
         // update the title of the object
         if (internalSource[owner_of_change][component_being_changed]) {
-            ongoing_editing_actions.push(["changed", "title", owner_of_change]);
+            ongoing_editing_actions.push(["changed", this_content_type, owner_of_change]);
         } else {
-            ongoing_editing_actions.push(["added", "title", owner_of_change]);
+            ongoing_editing_actions.push(["added", this_content_type, owner_of_change]);
         }
         internalSource[owner_of_change][component_being_changed] = line_content;
-        possibly_changed_ids_and_entry.push([owner_of_change, "title"]);
+        possibly_changed_ids_and_entry.push([owner_of_change, this_content_type]);
 
     } else if (object_being_edited.classList.contains("image_source")) {
         // currently this only handles images by URL.
@@ -3489,6 +3514,7 @@ function output_from_source(the_object, output_structure, format) {
     for (var j=0; j < output_structure.pieces.length; ++j) {
         var this_piece_output = "";
         var [this_piece, this_tag] = output_structure.pieces[j];
+        editorLog("output_structure", output_structure);
             // when this_piece is provisional, then this_tag is actually the key for the required content
         editorLog(j, "this_piece", this_piece, "this_tag", this_tag, "output_tag", output_tag);
         if (this_piece.startsWith("{")) {
@@ -3733,7 +3759,8 @@ function insert_html_version(these_changes) {
             location_of_change = location_of_change.querySelector("#actively_editing");
             editorLog("now location_of_change",location_of_change);
             location_of_change.insertAdjacentElement('beforebegin', object_as_html);
-
+        } else if (this_object_entry == "caption") {
+            console.log("Error: don't know what to do with 'caption'")
         } else if (this_object_entry == "image") {
             editorLog("image, this_object", this_object);
             var this_new_object = html_from_internal_id(this_object_id);
@@ -3777,8 +3804,9 @@ function local_editing_action(e) {
     var most_recent_edit;
     if (e.code == "Escape" || e.code == "Enter") {
         editorLog("I saw a Rettttt");
-        if (document.activeElement.getAttribute('data-component') == "title") {
-            editorLog("probably saving a title");
+        if (document.activeElement.getAttribute('data-component') == "title",
+            document.activeElement.getAttribute('data-component') == "caption") {
+            editorLog("probably saving a ", document.activeElement.getAttribute('data-component'));
             e.preventDefault();
             these_changes = assemble_internal_version_changes(document.activeElement);
             final_added_object = insert_html_version(these_changes);
@@ -4373,6 +4401,16 @@ function main_menu_navigator(e) {  // we are not currently editing
                 document.getElementById('edit_menu_holder').parentElement.remove();
                 editorLog("change-title in progress")
                 document.getElementById('actively_editing').focus();
+            } else if (dataAction == "change-caption") {
+                alert("editing captions not implemented yet");
+                return ;
+                var this_caption = document.getElementById('edit_menu_holder').parentElement;
+                var this_env_id = this_caption.getAttribute("data-source_id");
+                var new_title_form = standard_caption_form(this_env_id);
+                document.getElementById('edit_menu_holder').parentElement.insertAdjacentHTML("afterend",new_title_form);
+                document.getElementById('edit_menu_holder').parentElement.remove();
+                editorLog("change-caption in progress")
+                document.getElementById('actively_editing').focus();
             } else {
                 editorLog("unknown dataAction", dataAction);
                 alert("I don;t know what to do llllllll dataAction " + dataAction)
@@ -4820,6 +4858,8 @@ function re_transform_source() {
   for (var id in sourceobj) {
     var this_item = sourceobj[id];
     if (this_item["sourcetag"] == "list") {
+        // I think this takes the list out of its parent p,
+        // but I forgot to write this comment when I first wrote the code.
         parseLog("found a list", this_item);
         var [parent_id, parent_content] = this_item["parent"];
         parseLog("with parent", sourceobj[parent_id]);
@@ -4857,6 +4897,20 @@ function re_transform_source() {
         } else {
             sourceobj[this_item["parent"][0]]["includedmath"] = ["<&>" + displaymath_id + "<;>"]
         }
+    } else if (["caption"].includes(this_item["sourcetag"])) {
+        parseLog("found a caption", this_item);
+        var [parent_id, parent_content] = this_item["parent"];
+        parseLog("with parent", sourceobj[parent_id]);
+        if (sourceobj[parent_id]["sourcetag"] == "figure") {
+            var old_p_content = sourceobj[parent_id][parent_content];
+            var new_p_content = old_p_content.replace("<&>" + id + "<;>", "");
+            sourceobj[parent_id][parent_content] = new_p_content;
+            sourceobj[parent_id]["captiontext"] = sourceobj[id]["content"];
+         // then eliminate the caption object, because now it is an attribute of a figure
+            delete sourceobj[id];
+            parseLog("now sourceobj[parent_id]", sourceobj[parent_id])
+alert("testing")
+        } else { alert("error: caption not in figure") }
     }
   }
   // now go through and fix the "p" containing displaymath
@@ -4965,9 +5019,11 @@ function re_transform_source() {
     }
     // next also needs table (or whatever it is that has a caption)
     if (["figure"].includes(this_item["sourcetag"])) {
+        editorLog("adjusting a figure", this_item);
+   //  ??? next line should involve captiontext instead of caption ?
         var this_caption = sourceobj[id]["caption"];
         this_caption = this_caption.replace(/\n +/g, "\n");
-        sourceobj[id]["caption"] = this_caption;
+        sourceobj[id]["captiontext"] = this_caption;
     }
   }
 
