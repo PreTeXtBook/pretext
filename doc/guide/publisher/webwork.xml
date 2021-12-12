@@ -204,13 +204,16 @@
         to install it.)
       </p>
       <p>
-        Once you know that you have the <c>requests</c> package installed,
-        use the <c>pretext</c> script to extract <pretext/> content from the <webwork/> server into a <em>folder</em>,
-        which you might call <c>webwork-representations/</c> as in this example:
+        Processing <webwork/> problems is best accomplished if you are using directory management.
+        With a publisher file, declare the external and generated directories as describe in
+        <xref ref="processing-directory-management"/>.
+        Then use the <c>pretext</c> script to extract <pretext/> content from the <webwork/> server.
+        It will be placed in a <c>webwork</c> subfolder of your generated folder.
+        For example:
       </p>
       <console>
         <prompt>$ </prompt>
-        <input>pretext -c webwork -s &lt;server&gt; -d webwork-representations aota.ptx</input>
+        <input>pretext -c webwork -p &lt;publisher&gt; -s &lt;server&gt; aota.ptx</input>
       </console>
       <p>
         <c>aota.ptx</c> in the example is the root file for your <pretext/> project.
@@ -220,13 +223,14 @@
         <p>
           In the previous example and those that follow, you should specify paths as needed.
           For example, the <c>pretext</c> script is typically at <c>~/mathbook/pretext/pretext</c>.
-          And the <c>-d</c> option is specifying a directory to place the auxiliary file,
-          and if you literally use <c>-d webwork-representations</c> instead of a full path,
-          the expectation is that <c>webwork-representations</c> is a folder in your current working folder.
+          And the <c>-p</c> option is specifying a publisher file.
         </p>
       </warning>
       <p>
         <c>-c webwork</c> means you are processing the <webwork/> components.
+      </p>
+      <p>
+        <c>-p</c> specifies the publisher file, as described in <xref ref="publisher-file-reference"/>.
       </p>
       <p>
         <c>-s</c> specifies the <webwork/> server.
@@ -243,51 +247,30 @@
         but could be something different. Only server administrators can set this.
         Again, it is <em>important</em> to get the protocol correct for your server (<c>http</c> versus <c>https</c>).
       </p>
-      <p>
-        <c>-d</c> specifies a path to the folder where the auxiliary files will be stored.
-        That folder is named <c>webwork-representations</c> in the example.
-        Any image files that the <webwork/> server generates will be stored inside this folder.
-        An auxiliary XML <em>file</em> called <c>webwork-representations.ptx</c> will be created in this folder.
-        (Note that you can name the folder whatever you like,
-        but the auxiliary file that is created will <em>always</em> be named <c>webwork-representations.ptx</c>.)
-      </p>
-    </subsection>
-
-    <subsection xml:id="representations-publisher">
-      <title>Representations and the Publisher File</title>
-
-      <p>You now have custody of the <c>webwork-representations.ptx</c>.  It contains multiple versions of each of your <webwork/> exercises, each appropriate for different output formats.  Early in a project, you may regenerate this file frequently as your project changes.  Later in a project you might consider it to be (generated/manufactured/derived) source material.  More on this in a bit.  For now, you need to set up how the file is communicated to a conversion.  This is accomplished with the publisher file (see <xref ref="publisher-file"/>).</p>
-
-      <p>The publisher file has a place where you can specify the name of the file with the representations, by default, <c>webwork-representations.ptx</c>.  You are welcome to change the name at this juncture, but perhaps there is no point.  We will proceed with the default.  The absolute simplest publisher file you can create would look like<cd>
-        <cline>&lt;publication&gt;</cline>
-        <cline>  &lt;source webwork-problems="webwork-representations.ptx"/&gt;</cline>
-        <cline>&lt;/publication&gt;</cline>
-      </cd>But there is an important caveat.  The use of a relative path in this filename indicates the path to the file is relative to the location of the primary <pretext/> source file.  So as written above, the <c>webwork-representations.ptx</c> file would be expected to be <em>in the same directory</em> as the <pretext/> source.  If you are having with trouble with subsequent steps locating this file, try specifying the complete filename with a path starting from the very top of your filesystem.  This publisher option is described at <xref ref="publisher-file-source-extras"/>.</p>
-
-      <p>Realize that any changes to any of your WeBWorK problems, adding new ones, removing any, or rearranging the order will mean you need to regenerate <c>webwork-representations.ptx</c>.  Together with the previous paragraph this suggests three approaches, and you might use all three during the life of your project.<ol>
-        <li>Use a script to copy your source files into some scratch area, generate <c>webwork-representations.ptx</c> as part of every build since your project is changing rapidly, and copy these representations into the scratch area.  (See <xref ref="processing-file-management"/>.)</li>
-        <li>Regenerate <c>webwork-representations.ptx</c> only when necessary since your project is not changing much, and you have many problems, which takes significant time for your <webwork/> server to process.  Copy it into a location relative to your source files (even if your build script then copies everything over to a scratch area).</li>
-        <li>Same as the previous step, but track <c>webwork-representations.ptx</c> (and the image files generated) as part of a git repository.  You will want to be aware of when the result has changed (beyond just the timestamps).</li>
-      </ol></p>
-
     </subsection>
 
     <subsection xml:id="webwork-html-output">
       <title>HTML output</title>
 
       <p>
-        When you execute <c>xsltproc</c><idx><c>xsltproc</c></idx> using <c>pretext-html.xsl</c>,
-        now supply the publisher file to incorporate the representations. For example:
+        We assume you are using managed directories, and have <webwork/> representations file as above.
+        Now you may use <c>pretext/pretext</c> to build HTML. For example:
       </p>
       <console>
         <prompt>$ </prompt>
-        <input>xsltproc -stringparam publisher publication.ptx pretext-html.xsl aota.ptx</input>
+        <input>pretext -c all -f html -p &lt;publisher&gt; -d &lt;destination&gt; aota.ptx</input>
       </console>
       <p>
-        You may need to specify paths to these files.
+        <c>-p</c> specifies the publisher file, as described in <xref ref="publisher-file-reference"/>.
       </p>
       <p>
-        There are several string parameters you may pass to <c>xsltproc</c>.
+        <c>-d</c> specifies a folder to place all of the HTML output.
+        If unspecified, this will be the current working directory.
+      </p>
+      <p>
+        There are several string parameters you may pass to <c>pretext</c> using
+        <c>-x stringparam option stringparam option ...</c>. If you use <c>-x</c> with <c>pretext</c>,
+        make sure at least one other switch (<c>-p</c> for example) follows the use of <c>-x</c>.
       </p>
       <tabular valign="top">
         <col />
@@ -347,37 +330,52 @@
           </cell>
         </row>
       </tabular>
-      <p>
-        If your <webwork/> processing produced image files from the <webwork/> server
-        and you are rendering the corresponding problems as static,
-        then you need to copy the images files (from where your file of representations was output) over to where your HTML output assumes images files are located.
-      </p>
     </subsection>
 
     <subsection xml:id="webwork-latex-output">
       <title><latex/> output</title>
 
       <p>
-        When you execute <c>xsltproc</c><idx><c>xsltproc</c></idx> using <c>pretext-latex.xsl</c>,
-        now supply the publisher file to incorporate the representations. For example, a single line:
+        We assume you are using managed directories, and have <webwork/> representations file as above.
+        Now you may use <c>pretext/pretext</c> to build a <latex/> PDF. For example:
       </p>
       <console>
         <prompt>$ </prompt>
-        <input>xsltproc -stringparam publisher publication.ptx</input>
-        <input>       -o mybook.tex pretext-latex.xsl aota.ptx</input>
+        <input>pretext -c all -f pdf -p &lt;publisher&gt; -d &lt;destination&gt; aota.ptx</input>
       </console>
       <p>
-        You may need to specify paths to these files.
+        <c>-p</c> specifies the publisher file, as described in <xref ref="publisher-file-reference"/>.
       </p>
       <p>
-        One string parameter you can pass to <c>xsltproc</c> is <c>latex.fillin.style</c>,
-        which can take values <c>'underline'</c> (the default) or <c>'box'</c>.
+        <c>-d</c> specifies a folder to place the PDF output.
+        If unspecified, this will be the current working directory.
       </p>
       <p>
-        If your <webwork/> processing produced image image files from the <webwork/> server,
-        then you need to copy the images files (from where your extracted auxiliary XML file was placed)
-        over to where your TeX output assumes images files are located.
+        There is one string parameter you may pass to <c>pretext</c> using <c>-x</c>.
+        If you use <c>-x</c> with <c>pretext</c>,
+        make sure at least one other switch (<c>-p</c> for example) follows the use of <c>-x</c>.
       </p>
+      <tabular valign="top">
+        <col />
+        <col width="60%" />
+        <row bottom="major">
+          <cell>stringparam</cell>
+          <cell>options</cell>
+        </row>
+        <row bottom="minor">
+          <cell><c>latex.fillin.style</c></cell>
+          <cell>
+            <p>
+              <c>'underline'</c> (default) means that where there would be an answer blank,
+              it is rendered as an underline.
+            </p>
+            <p>
+              <c>'box'</c> means that where there would be an answer blank,
+              it is rendered as a box outline.
+            </p>
+          </cell>
+        </row>
+      </tabular>
     </subsection>
 
     <subsection>
@@ -394,15 +392,11 @@
         This archiving process creates set header <c>.pg</c> files for each set definition.
       </p>
       <p>
-        As with other <webwork/> processing, you must create the representations and specify a publisher file
-        as described in <xref ref="webwork-representations"/> and <xref ref="representations-publisher"/>.
-        Then use <c>xsltproc</c> with the <c>pretext-ww-problem-sets.xsl</c> stylesheet.
-        For example, a single line:
+        For example:
       </p>
       <console>
         <prompt>$ </prompt>
-        <input>xsltproc -stringparam publisher publication.ptx</input>
-        <input>  pretext-ww-problem-sets.xsl aota.ptx</input>
+        <input>xsltproc -stringparam publisher &lt;publisher&gt; pretext-ww-problem-sets.xsl aota.ptx</input>
       </console>
       <p>
         You may need to specify paths to these files.

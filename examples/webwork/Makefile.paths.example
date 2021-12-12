@@ -33,6 +33,7 @@
 
 
 # Change History
+#     2021/11/27: Change MB to PTX
 #     2017/09/25: Local path for jing-trang
 #     2015/07/22: First release
 
@@ -43,8 +44,8 @@
 # Provide full paths for principal variables,
 # each without a trailing slash
 
-# MathBook XML distribution root
-MB = /Users/alex.jordan/mathbook
+# PreTeXt distribution root
+PTX = /Users/alex.jordan/mathbook
 
 # Products are built in subdirectories
 # of a "scratch" directory

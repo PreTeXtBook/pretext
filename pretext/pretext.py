@@ -522,6 +522,7 @@ def latex_tactile_image_conversion(xml_source, pub_file, stringparams, dest_dir,
 
 def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_params, dest_dir):
     import subprocess, os.path
+    import os  # mkdir()
     import sys # version_info
     import urllib.parse # urlparse()
     import re     # regular expressions for parsing
@@ -540,15 +541,31 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
     except ImportError:
         raise ImportError(__module_warning.format('requests'))
 
-    # N.B. accepting a publisher file and passing it the extraction step
-    # runs the risk of specifying a representations file, so there is then
-    # nothing left to extract after substitutions.  Only relevant if an
-    # assembly step is needed, such as adding in private solutions
-
     # support publisher file, but not subtree argument
     if pub_file:
         stringparams['publisher'] = pub_file
     _verbose('string parameters passed to extraction stylesheet: {}'.format(stringparams))
+    effective_pub_file = stringparams['publisher'] if 'publisher' in stringparams else pub_file
+
+    # Either we have a "generated" directory, or we must assume placing everything in dest_dir
+    generated_dir, _ = get_managed_directories(xml_source, effective_pub_file)
+    if generated_dir:
+        ww_reps_dir = os.path.join(generated_dir, 'webwork')
+        ww_images_dir = os.path.join(ww_reps_dir, 'images')
+    else:
+        msg = ' '.join(["A publisher file specifying /publication/source/@generated is not in use.",
+                        "Output will be placed in", dest_dir])
+        print(msg)
+        ww_reps_dir = dest_dir
+        # Below is not a good choice, but here for backwards compatibility
+        ww_images_dir = dest_dir
+
+    if not(os.path.isdir(ww_reps_dir)):
+            os.mkdir(ww_reps_dir)
+    if not(os.path.isdir(ww_images_dir)):
+            os.mkdir(ww_images_dir)
+    ww_reps_file = os.path.join(ww_reps_dir, 'webwork-representations.xml')
+
     # execute XSL extraction to get back six dictionaries
     # where the keys are the internal-ids for the problems
     # origin, copy, seed, source, pghuman, pgdense
@@ -685,14 +702,14 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
                          ('problemUUID',problem))
 
         msg = "sending {} to server to save in {}: origin is '{}'"
-        _verbose(msg.format(problem, dest_dir, origin[problem]))
+        _verbose(msg.format(problem, ww_reps_file, origin[problem]))
         if origin[problem] == 'server':
-            _debug("server-to-ptx: {}\n{}\n{}\n{}".format(problem, ww_domain_path, source[problem], dest_dir))
+            _debug("server-to-ptx: {}\n{}\n{}\n{}".format(problem, ww_domain_path, source[problem], ww_reps_file))
         elif origin[problem] == 'ptx':
             if (ww_reps_version == '2'):
-                _debug("server-to-ptx: {}\n{}\n{}\n{}".format(problem, ww_domain_path, pgdense[problem], dest_dir))
+                _debug("server-to-ptx: {}\n{}\n{}\n{}".format(problem, ww_domain_path, pgdense[problem], ww_reps_file))
             elif (ww_reps_version == '1'):
-                _debug("server-to-ptx: {}\n{}\n{}\n{}".format(problem, ww_domain_path, pgdense['hint_yes_solution_yes'][problem], dest_dir))
+                _debug("server-to-ptx: {}\n{}\n{}\n{}".format(problem, ww_domain_path, pgdense['hint_yes_solution_yes'][problem], ww_reps_file))
 
         # Ready, go out on the wire
         try:
@@ -843,7 +860,13 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
             else:
                 image_url = ww_domain + '/' + ww_image_full_path
             # modify PTX problem source to include local versions
-            response_text = response_text.replace(ww_image_full_path, 'images/' + ptx_image)
+            if generated_dir:
+                if 'xmlns:pi=' not in response_text:
+                    response_text = response_text.replace('<webwork>', '<webwork xmlns:pi="http://pretextbook.org/2020/pretext/internal">')
+                response_text = re.sub(r'(<image[^>]*? )source=', r'\1pi:generated=', response_text, count=0, flags=0)
+                response_text = response_text.replace(ww_image_full_path, os.path.join('webwork', 'images', ptx_image))
+            else:
+                response_text = response_text.replace(ww_image_full_path, 'images/' + ptx_image)
             # download actual image files
             # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests
             try:
@@ -854,22 +877,27 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
                 raise ValueError(msg.format(image_url) + root_cause)
             # and save the image itself
             try:
-                with open(os.path.join(dest_dir, ptx_image_filename), 'wb') as image_file:
+                with open(os.path.join(ww_images_dir, ptx_image_filename), 'wb') as image_file:
+                    msg = "saving image file {} {} in {}"
+                    qualifier = '';
+                    if image_extension == '.tgz':
+                        qualifier = '(contents)'
+                    _verbose(msg.format(ptx_image_filename, qualifier, ww_images_dir))
                     image_file.write(image_response.content)
             except Exception as e:
                 root_cause = str(e)
                 msg = "PTX:ERROR: there was a problem saving an image file,\n Filename: {}\n"
-                raise ValueError(os.path.join(dest_dir, ptx_filename) + root_cause)
+                raise ValueError(msg.format(os.path.join(ww_images_dir, ptx_image_filename)) + root_cause)
             # unpack if it's a tgz
             if image_extension == '.tgz':
-                tgzfile = tarfile.open(os.path.join(dest_dir, ptx_image_filename))
-                tgzfile.extractall(os.path.join(dest_dir))
+                tgzfile = tarfile.open(os.path.join(ww_images_dir, ptx_image_filename))
+                tgzfile.extractall(os.path.join(ww_images_dir))
                 tgzfile.close()
-                os.rename(os.path.join(dest_dir, 'image.tex'),os.path.join(dest_dir, ptx_image_name + '.tex'))
-                os.rename(os.path.join(dest_dir, 'image.pdf'),os.path.join(dest_dir, ptx_image_name + '.pdf'))
-                os.rename(os.path.join(dest_dir, 'image.svg'),os.path.join(dest_dir, ptx_image_name + '.svg'))
-                os.rename(os.path.join(dest_dir, 'image.png'),os.path.join(dest_dir, ptx_image_name + '.png'))
-                os.remove(os.path.join(dest_dir, ptx_image_filename))
+                os.rename(os.path.join(ww_images_dir, 'image.tex'),os.path.join(ww_images_dir, ptx_image_name + '.tex'))
+                os.rename(os.path.join(ww_images_dir, 'image.pdf'),os.path.join(ww_images_dir, ptx_image_name + '.pdf'))
+                os.rename(os.path.join(ww_images_dir, 'image.svg'),os.path.join(ww_images_dir, ptx_image_name + '.svg'))
+                os.rename(os.path.join(ww_images_dir, 'image.png'),os.path.join(ww_images_dir, ptx_image_name + '.png'))
+                os.remove(os.path.join(ww_images_dir, ptx_image_filename))
 
         # Start appending XML children
         # Use "webwork-reps" as parent tag for the various representations of a problem
@@ -1033,7 +1061,7 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
             pg.set('source',source[problem])
 
     # write to file
-    include_file_name = os.path.join(dest_dir, "webwork-representations.ptx")
+    include_file_name = os.path.join(ww_reps_file)
     try:
         with open(include_file_name, 'wb') as include_file:
             include_file.write( ET.tostring(webwork_representations, encoding="utf-8", xml_declaration=True, pretty_print=True) )
@@ -1243,7 +1271,7 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
     # but could have publisher file and bad elements/attributes
     if not(generated_dir):
         msg = ' '.join(["creating all images requires a directory specified in the",
-                        "publisher file in the attribute /publication/source/@generated-images" ])
+                        "publisher file in the attribute /publication/source/@generated" ])
         raise ValueError(msg)
 
     # first stanza has code comments, and subsequent follow this

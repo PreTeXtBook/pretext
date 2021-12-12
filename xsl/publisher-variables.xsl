@@ -298,6 +298,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- pretext/pretext script communicating with a WeBWorK server. -->
 <xsl:variable name="webwork-representations-file">
     <xsl:choose>
+        <!-- XSLT should skip the second condition below if the first is false (boosts efficiency). -->
+        <xsl:when test="$generated-directory-source != '' and $original//webwork[*|@*]">
+            <xsl:value-of select="concat($generated-directory-source, 'webwork/webwork-representations.xml')"/>
+        </xsl:when>
         <xsl:when test="$publication/source/@webwork-problems">
             <xsl:value-of select="$publication/source/@webwork-problems"/>
         </xsl:when>

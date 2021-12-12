@@ -39,6 +39,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:str="http://exslt.org/strings"
+    xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     exclude-result-prefixes="b64"
     extension-element-prefixes="exsl date str"
 >
@@ -5857,19 +5858,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   we presume an SVG has been manufactured       -->
 <!-- With a @source attribute, with an extension,    -->
 <!--   we write an HTML "img" tag with attributes    -->
-<xsl:template match="image[@source]" mode="image-inclusion">
+<xsl:template match="image[@source|@pi:generated]" mode="image-inclusion">
     <!-- condition on file extension -->
     <!-- no period, lowercase'ed     -->
     <xsl:variable name="extension">
         <xsl:call-template name="file-extension">
-            <xsl:with-param name="filename" select="@source" />
+            <xsl:with-param name="filename">
+                <xsl:choose>
+                    <xsl:when test="@pi:generated">
+                        <xsl:value-of select="@pi:generated"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="@source"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:with-param>
         </xsl:call-template>
     </xsl:variable>
     <!-- location of image, based on configured directory in publisher file -->
     <xsl:variable name="location">
-        <!-- empty when not using managed directories -->
-        <xsl:value-of select="$external-directory"/>
-        <xsl:value-of select="@source"/>
+        <xsl:choose>
+            <xsl:when test="@pi:generated">
+                <xsl:value-of select="$generated-directory"/>
+                <xsl:value-of select="@pi:generated"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- empty when not using managed directories -->
+                <xsl:value-of select="$external-directory"/>
+                <xsl:value-of select="@source"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:variable>
     <xsl:choose>
         <!-- no extension, presume SVG provided as external image -->
