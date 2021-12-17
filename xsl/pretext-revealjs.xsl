@@ -104,6 +104,10 @@ ul {
   border: 0.5px !important;
   border-radius: 2px 10px 2px;
   padding: 4px;
+  max-height:50vh;
+}
+.figure-like {
+  text-align: center;
 }
 .definition,.theorem,.activity {
   border-width: 0.5px;
@@ -422,17 +426,32 @@ dfn {
 
 
 <xsl:template match="image">
-  <img>
-    <xsl:attribute name="src">
-        <xsl:value-of select="@source" />
-    </xsl:attribute>
-    <xsl:if test="@pause = 'yes'">
-      <xsl:attribute name="class">
-        <xsl:text>fragment</xsl:text>
+    <xsl:variable name="url">
+        <xsl:choose>
+            <xsl:when test="@source">
+                <xsl:value-of select="@source" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="@href" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <a>
+      <xsl:attribute name="href">
+        <xsl:value-of select="$url" />
       </xsl:attribute>
-    </xsl:if>
-    <xsl:apply-templates/>
-  </img>
+      <img>
+        <xsl:attribute name="src">
+            <xsl:value-of select="$url" />
+        </xsl:attribute>
+        <xsl:if test="@pause = 'yes'">
+          <xsl:attribute name="class">
+            <xsl:text>fragment</xsl:text>
+          </xsl:attribute>
+        </xsl:if>
+        <xsl:apply-templates/>
+      </img>
+    </a>
 </xsl:template>
 
 <!-- Side-By-Side -->
