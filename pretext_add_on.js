@@ -628,10 +628,29 @@ window.addEventListener("load",function(event) {
             setTimeout( loadResource("js", "survey"), 1000);  /* I know: sloppy */
 
   //      } else if ((typeof online_editable !== 'undefined') &&  online_editable) {
-        } else if ($('body').attr('id') == "pretext-SA") {
+        } else if (false && $('body').attr('id') == "pretext-SA") {
             loadResource('css', 'features');
             loadResource('js', 'login')
             loadResource('js', 'edit');
+        } else {
+  var this_source_txt;
+  var source_url = window.location.href;
+  source_url = source_url.replace(/(#|\?).*/, "");
+  source_url = source_url.replace(/html$/, "ptx");
+  fetch(source_url).then(
+        function(u){ return u.text();}
+    ).then(
+        function(text){
+            this_source_txt = text;
+            if (this_source_txt.includes("404 Not")) {
+                console.log("Editing not enabled: source unavailable")
+            } else {
+              loadResource('css', 'features');
+              loadResource('js', 'login')
+              loadResource('js', 'edit');
+            }
+        }
+    );
         }
 
 });

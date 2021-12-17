@@ -1872,6 +1872,7 @@ function top_menu_options_for(this_obj) {
         if (previous_editing() && this_id == top_level_id) {
             this_list += '<li tabindex="-1" data-action="' + "resume" + '">Resume previous editing</li>';
         }
+        this_list += '<li tabindex="-1" data-action="' + "save" + '">Save</li>';
         this_list += '<li tabindex="-1" data-action="' + "stop_editing" + '">Stop editing</li>';
     }
     return this_list
@@ -3330,12 +3331,12 @@ function assemble_internal_version_changes(object_being_edited) {
         var owner_of_change = object_being_edited.getAttribute("data-source_id");
         var component_being_changed = object_being_edited.getAttribute("data-component");
         editorLog("component_being_changed", component_being_changed, "within", owner_of_change);
-        // update the title of the object
         if (internalSource[owner_of_change][component_being_changed]) {
             ongoing_editing_actions.push(["changed", this_content_type, owner_of_change]);
         } else {
             ongoing_editing_actions.push(["added", this_content_type, owner_of_change]);
         }
+        // update the title of the object
         internalSource[owner_of_change][component_being_changed] = line_content;
         possibly_changed_ids_and_entry.push([owner_of_change, this_content_type]);
 
@@ -3776,9 +3777,6 @@ function insert_html_version(these_changes) {
     }
     location_of_change.remove();
 
-// this should be called after this funciotn returns
-//    make_current_editing_tree_from_id(this_object_id);
-
     editorLog("returning from insert html version", object_as_html);
     // call mathjax, in case the new content contains math
     return object_as_html // the most recently added object, which we may want to
@@ -3804,7 +3802,7 @@ function local_editing_action(e) {
     var most_recent_edit;
     if (e.code == "Escape" || e.code == "Enter") {
         editorLog("I saw a Rettttt");
-        if (document.activeElement.getAttribute('data-component') == "title",
+        if (document.activeElement.getAttribute('data-component') == "title" ||
             document.activeElement.getAttribute('data-component') == "caption") {
             editorLog("probably saving a ", document.activeElement.getAttribute('data-component'));
             e.preventDefault();
@@ -4603,9 +4601,7 @@ function initialize_editing(xml_st) {
 var this_source_txt;    
 var source_url = window.location.href;
 source_url = source_url.replace(/(#|\?).*/, "");
-// source_url = source_url.replace(/html$/, "src");
 source_url = source_url.replace(/html$/, "ptx");
-//var source_url = "https://aimath.org/~farmer/demo/worksheet-1-letter.src";
 fetch(source_url).then(
         function(u){ return u.text();}
       ).then(
@@ -4634,6 +4630,7 @@ fetch(source_url).then(
               $("#edit_choice").on("click", function(event){
                   console.log("apparently you want to edit");
                   initialize_editing(this_source_txt)
+                  document.getElementById("edit_choice").remove();
               });
           }
         }
@@ -4732,7 +4729,6 @@ function xmlToObject(xml_st) {
         } else if (item.nodeType == 1) { // element
             var sub_node_id = xmlToObject(item);  // the contents, in certain cases
             if (contained_objects.includes(item.nodeName)) {
-  //          if (["title", "statement", "caption", "proof", "journal", "volume"].includes(item.nodeName)) {
                 this_entry[item.nodeName] = sub_node_id
             } else {
                 this_node_content += "<&>" + sub_node_id + "<;>"
@@ -4797,7 +4793,6 @@ function xmlToObject(xml_st) {
     }
 //    parseLog("item", item);
     if (contained_objects.includes(xml.nodeName)) {
-//    if (["title", "statement", "caption", "proof", "journal", "volume"].includes(xml.nodeName)) {
         return this_node_content
     } else {
         sourceobj[this_id] = this_entry
