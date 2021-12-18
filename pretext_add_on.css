@@ -4011,6 +4011,12 @@ sbspanel:empty { /* can only happen when partially created */
     background: #efe;
     padding: 0.5em;
 }
+/* over-rive overflow-x on small screens */
+.pretext-content.canedit .displaymath,
+.pretext-content.canedit .figure,
+.pretext-content.canedit figure.figure-like figcaption {
+     overflow: initial;
+}
 .pretext-content .in_edit_tree * section,
 .pretext-content .in_edit_tree * article {
     border: 3px solid green !important;
