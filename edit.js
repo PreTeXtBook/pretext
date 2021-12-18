@@ -1872,7 +1872,7 @@ function top_menu_options_for(this_obj) {
         if (previous_editing() && this_id == top_level_id) {
             this_list += '<li tabindex="-1" data-action="' + "resume" + '">Resume previous editing</li>';
         }
-        this_list += '<li tabindex="-1" data-action="' + "save" + '">Save</li>';
+ //       this_list += '<li tabindex="-1" data-action="' + "save" + '">Save</li>';
         this_list += '<li tabindex="-1" data-action="' + "stop_editing" + '">Stop editing</li>';
     }
     return this_list
@@ -4610,6 +4610,8 @@ fetch(source_url).then(
   //        console.log("ppppppppppp  this_source_txt",this_source_txt)
           if (this_source_txt.includes("404 Not")) {
               console.log("Error: source unavailable")
+          } else if (this_source_txt.includes("<biblio ")) {
+              alert("Editing bibliographies not implemented")
           } else if( false && editing_mode) {
               initialize_editing(this_source_txt)
           } else {
@@ -4850,6 +4852,7 @@ function record_children(internal_src) {
 
 /* rewrite with sourceobj not global */
 function re_transform_source() {
+  var ids_to_delete = [];
   for (var id in sourceobj) {
     var this_item = sourceobj[id];
     if (this_item["sourcetag"] == "list") {
@@ -4868,7 +4871,8 @@ function re_transform_source() {
             sourceobj[id]["parent"] = [parent_parent_id, parent_parent_content];
             // then eliminate the intermediate parent
             parseLog("deleting", parent_id);
-            delete sourceobj[parent_id];
+       //     delete sourceobj[parent_id];
+            ids_to_delete.push(parent_id);
             parseLog("now sourceobj[parent_parent_id]", sourceobj[parent_parent_id])
         }
     } else if (this_item["sourcetag"] == "image") {
@@ -4902,7 +4906,8 @@ function re_transform_source() {
             sourceobj[parent_id][parent_content] = new_p_content;
             sourceobj[parent_id]["captiontext"] = sourceobj[id]["content"];
          // then eliminate the caption object, because now it is an attribute of a figure
-            delete sourceobj[id];
+         //   delete sourceobj[id];
+            ids_to_delete.push(id);
             parseLog("now sourceobj[parent_id]", sourceobj[parent_id])
 alert("testing")
         } else { alert("error: caption not in figure") }
@@ -5020,6 +5025,10 @@ alert("testing")
         this_caption = this_caption.replace(/\n +/g, "\n");
         sourceobj[id]["captiontext"] = this_caption;
     }
+  }
+
+  for (var j=1; j < ids_to_delete.length; ++j) {
+ //     delete sourceobj[ids_to_delete[j]]
   }
 
   return sourceobj;
