@@ -3681,6 +3681,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- suffix in different conversions.          -->
 <!-- Parameter: $file-extension, set globally  -->
 <xsl:template match="*" mode="containing-filename">
+    <!-- this is a frequent programming error -->
+    <xsl:if test="$chunk-level = ''">
+        <xsl:message>PTX:BUG:   the $chunk-level variable is empty, so must have been set improperly, perhaps when overridden in a conversion.  The "containing-filename" template is likely to act incorrectly.  Please report me</xsl:message>
+    </xsl:if>
     <xsl:variable name="intermediate">
         <xsl:apply-templates select="." mode="is-intermediate" />
     </xsl:variable>
