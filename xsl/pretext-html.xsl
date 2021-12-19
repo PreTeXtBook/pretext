@@ -362,7 +362,73 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- publisher html/index-page/@ref option.  We write it first, so if   -->
 <!-- the deprecated scheme is in place then it will overwrite this one. -->
 <!-- See https://css-tricks.com/redirect-web-page/ for alternatives     -->
+<!-- NB: the use of the "containing-filename" template will require a   -->
+<!-- chunking level or else the template may go into infinite           -->
+<!-- recursion.  So we also protect against the chunking-level not      -->
+<!-- being set properly.                                                -->
 <xsl:template name="index-redirect-page">
+    <!-- $html-index-page-entered-ref comes from the publisher variables -->
+    <!-- stylesheet.  It may be empty, signifying no election beyond     -->
+    <!-- the defaults, or it is a reference to some actual node with a   -->
+    <!-- matching @xml:id value.  We now need to see if it is a node     -->
+    <!-- that is a complete webpage at the current chunking level.       -->
+    <!--                                                                 -->
+    <!-- But first, we see if there is a coding error, due to            -->
+    <!-- the critical chunk level variable being overridden              -->
+    <xsl:if test="$chunk-level = ''">
+        <xsl:message>PTX:BUG     the $chunk-level variable has been left undefined&#xa;due to a change in a stylesheet that imports the HTML conversion&#xa;and the computation of an index page may fail spectacularly (infinite recursion?)"</xsl:message>
+    </xsl:if>
+    <xsl:variable name="sanitized-ref">
+        <xsl:choose>
+            <!-- no publisher file entry implies empty entered ref -->
+            <xsl:when test="$html-index-page-entered-ref = ''"/>
+            <!-- now we have a node, is it the top of a page? -->
+            <xsl:otherwise>
+                <!-- true/false values if node creates a web page -->
+                <xsl:variable name="is-intermediate">
+                    <xsl:apply-templates select="id($html-index-page-entered-ref)" mode="is-intermediate"/>
+                </xsl:variable>
+                <xsl:variable name="is-chunk">
+                    <xsl:apply-templates select="id($html-index-page-entered-ref)" mode="is-chunk"/>
+                </xsl:variable>
+                <xsl:choose>
+                    <!-- really is a web-page -->
+                    <xsl:when test="($is-intermediate = 'true') or ($is-chunk = 'true')">
+                        <xsl:value-of select="$html-index-page-entered-ref"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:message>PTX:WARNING:   the requested HTML index page cannot be constructed since "<xsl:value-of select="$html-index-page-entered-ref"/>" is not a complete web page at the current chunking level (level <xsl:value-of select="$chunk-level"/>).  Defaults will be used instead</xsl:message>
+                        <xsl:text/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- Now have a good @xml:id for an extant webpage, or an empty -->
+    <!-- string signals we need to choose a sensible default. The   -->
+    <!-- default is the "frontmatter" page, if possible, otherwise  -->
+    <!-- the root page. The variable $html-index-page will be the   -->
+    <!-- full name (*.html) of a page guaranteed to be built by     -->
+    <!-- the chunking routines.                                     -->
+    <xsl:variable name="html-index-page">
+        <xsl:choose>
+            <!-- publisher's choice survives -->
+            <xsl:when test="not($sanitized-ref = '')">
+                <xsl:apply-templates select="id($sanitized-ref)" mode="containing-filename"/>
+            </xsl:when>
+            <!-- now need to create defaults                        -->
+            <!-- the level of the frontmatter is a bit conflicted   -->
+            <!-- but it is a chunk iff there is any chunking at all -->
+            <xsl:when test="$document-root/frontmatter and ($chunk-level &gt; 0)">
+                <xsl:apply-templates select="$document-root/frontmatter" mode="containing-filename"/>
+            </xsl:when>
+            <!-- absolute last option is $document-root, *always* a webpage -->
+            <xsl:otherwise>
+                <xsl:apply-templates select="$document-root" mode="containing-filename"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- build a very simple  index.html  page pointing at  $html-index-page -->
     <exsl:document href="index.html" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
         <html>
             <xsl:text>&#xa;</xsl:text>

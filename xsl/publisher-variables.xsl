@@ -758,64 +758,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- HTML Index Page Redirect -->
 <!--                          -->
 
-<!-- A generic "index.html" page will be built to redirect to an     -->
-<!-- existing page from the HTML build/chunking.  The default is the -->
-<!-- "frontmatter" page, if possible, otherwise the root page.       -->
-<!-- The variable $html-index-page will be the full name (*.html)    -->
-<!-- of a page guaranteed to be built by the chunking routines.      -->
+<!-- A generic "index.html" page will be built to redirect to an        -->
+<!-- existing page from the HTML build/chunking.  Here we simply        -->
+<!-- record the @xml:id present in the publication file and error-check -->
+<!-- the ref.  The processing and decisions about defaults, etc. are    -->
+<!-- delegated to the HTML conversion since it relies on chunk level    -->
+<!-- and associated routines (which may not be available in some other  -->
+<!-- conversion which imports this stylesheet).                         -->
 
-<xsl:variable name="html-index-page">
+<xsl:variable name="html-index-page-entered-ref">
     <!-- needs to be realized as a *string*, not a node -->
     <xsl:variable name="entered-ref" select="string($publication/html/index-page/@ref)"/>
-    <xsl:variable name="sanitized-ref">
-        <xsl:choose>
-            <!-- signal no choice with empty string-->
-            <xsl:when test="$entered-ref = ''">
-                <xsl:text/>
-            </xsl:when>
-            <!-- bad choice, set to empty string -->
-            <xsl:when test="not(id($entered-ref))">
-                <xsl:message>PTX:WARNING:   the requested HTML index page cannot be constructed since "<xsl:value-of select="$entered-ref"/>" is not an @xml:id anywhere in the document.  Defaults will be used instead</xsl:message>
-                <xsl:text/>
-            </xsl:when>
-            <!-- now we have a node, is it the top of a page? -->
-            <xsl:otherwise>
-                <!-- true/false values if node creates a web page -->
-                <xsl:variable name="is-intermediate">
-                    <xsl:apply-templates select="id($entered-ref)" mode="is-intermediate"/>
-                </xsl:variable>
-                <xsl:variable name="is-chunk">
-                    <xsl:apply-templates select="id($entered-ref)" mode="is-chunk"/>
-                </xsl:variable>
-                <xsl:choose>
-                    <!-- really is a web-page -->
-                    <xsl:when test="($is-intermediate = 'true') or ($is-chunk = 'true')">
-                        <xsl:value-of select="$entered-ref"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:message>PTX:WARNING:   the requested HTML index page cannot be constructed since "<xsl:value-of select="$entered-ref"/>" is not a complete web page at the current chunking level (level <xsl:value-of select="$chunk-level"/>).  Defaults will be used instead</xsl:message>
-                        <xsl:text/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- now have a good @xml:id for an extant webpage, or        -->
-    <!-- empty string signals we need to choose sensible defaults -->
     <xsl:choose>
-        <!-- publisher's choice survives -->
-        <xsl:when test="not($sanitized-ref = '')">
-            <xsl:apply-templates select="id($sanitized-ref)" mode="containing-filename"/>
+        <!-- signal no choice with empty string-->
+        <xsl:when test="$entered-ref = ''">
+            <xsl:text/>
         </xsl:when>
-        <!-- now need to create defaults                        -->
-        <!-- the level of the frontmatter is a bit conflicted   -->
-        <!-- but it is a chunk iff there is any chunking at all -->
-        <xsl:when test="$document-root/frontmatter and ($chunk-level &gt; 0)">
-            <xsl:apply-templates select="$document-root/frontmatter" mode="containing-filename"/>
+        <!-- bad choice, set to empty string -->
+        <xsl:when test="not(id($entered-ref))">
+            <xsl:message>PTX:WARNING:   the requested HTML index page cannot be constructed since "<xsl:value-of select="$entered-ref"/>" is not an @xml:id anywhere in the document.  Defaults will be used instead</xsl:message>
+            <xsl:text/>
         </xsl:when>
-        <!-- absolute last option is $document-root, *always* a webpage -->
         <xsl:otherwise>
-            <xsl:apply-templates select="$document-root" mode="containing-filename"/>
+            <xsl:value-of select="$entered-ref"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
