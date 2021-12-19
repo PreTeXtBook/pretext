@@ -79,6 +79,9 @@
 <!-- We hard-code the chunking level.  Level 2 is the  -->
 <!-- default for books, which we presume throughout.   -->
 <!-- Specialized divisions, to the spine, assume this. -->
+<!-- NB: this override is only defined for a "book",   -->
+<!-- so when there is support for "article" it will    -->
+<!-- need new definitions.                             -->
 <xsl:variable name="chunk-level">
     <xsl:choose>
         <xsl:when test="$root/book/part">3</xsl:when>
@@ -196,8 +199,15 @@
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/">
     <xsl:call-template name="banner-warning">
-        <xsl:with-param name="warning">EPUB conversion is experimental and not supported.  In particular,&#xa;creating an EPUB requires the pretext/pretext script.</xsl:with-param>
+        <xsl:with-param name="warning">EPUB conversion is relatively new, as of 2021-08-01.  Note that creating&#xa;an EPUB requires the pretext/pretext script, and not this stylesheet alone.</xsl:with-param>
     </xsl:call-template>
+    <!-- no hope for an "article" so fail immediately, with warning -->
+    <xsl:if test="not($b-is-book)">
+        <xsl:call-template name="banner-warning">
+            <xsl:with-param name="warning">EPUB creation is only implemented for a "book",&#xa;not a "<xsl:value-of select="local-name($document-root)"/>", and we cannot recover</xsl:with-param>
+        </xsl:call-template>
+        <xsl:message terminate="yes">Quitting...</xsl:message>
+    </xsl:if>
     <!-- analyze authored source, which will repair "mathbook" -->
     <xsl:apply-templates select="pretext|mathbook" mode="deprecation-warnings" />
     <!-- Following should use $root or $document-root as defined -->
