@@ -4753,7 +4753,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- An unstructured division has solo specialized divisions -->
 <!-- which inherit numbers from their parents.  This too is  -->
 <!-- handled in the "division-serial-number" template.       -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|reading-questions|references[not(parent::backmatter)]|glossary[not(parent::backmatter)]|worksheet" mode="serial-number">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet" mode="serial-number">
     <xsl:variable name="relative-level">
         <xsl:apply-templates select="." mode="level" />
     </xsl:variable>
@@ -4764,9 +4764,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
-<!-- Backmatter references and glossary are unique and un-numbered -->
-<xsl:template match="backmatter/references" mode="serial-number" />
-<xsl:template match="backmatter/glossary" mode="serial-number" />
 
 <!-- Divisions -->
 <xsl:template match="part" mode="division-serial-number">
@@ -4789,10 +4786,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:when>
     </xsl:choose>
 </xsl:template>
+<!-- A "solutions" is a specialized division, but is numbered -->
+<!-- as an appendix when present in the backmatter            -->
 <xsl:template match="appendix" mode="division-serial-number">
-    <xsl:number from="backmatter" level="any" count="appendix|solutions" format="A"/>
-</xsl:template>
-<xsl:template match="backmatter/solutions" mode="division-serial-number">
     <xsl:number from="backmatter" level="any" count="appendix|solutions" format="A"/>
 </xsl:template>
 <!-- NB: following do not assume an ordering on the subdivisions,     -->
@@ -4808,13 +4804,14 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template match="subsubsection" mode="division-serial-number">
     <xsl:number count="subsubsection|exercises|reading-questions|solutions|references|glossary|worksheet" format="1" />
 </xsl:template>
+
 <!-- Specialized Divisions -->
 <!-- "exercises", "solutions", references, "worksheet" -->
 <!-- Count preceding peers in structured case,         -->
 <!-- or copy parent in unstructured case               -->
-<!-- NB: backmatter/references and backmatter/glossary -->
-<!-- should never come through here                    -->
-<xsl:template match="exercises|reading-questions|solutions[not(parent::backmatter)]|references|glossary|worksheet" mode="division-serial-number">
+<!-- NB: backmatter/references, backmatter/glossary,   -->
+<!-- backmatter/solutions are below (more soecific)    -->
+<xsl:template match="exercises|reading-questions|solutions|references|glossary|worksheet" mode="division-serial-number">
     <!-- Inspect parent (part through subsubsection)  -->
     <!-- to determine one of two models of a division -->
     <!-- NB: return values are 'true" and empty       -->
@@ -4829,10 +4826,19 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:number count="chapter|section|subsection|subsubsection|exercises|reading-questions|solutions|references|glossary|worksheet" format="1" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="parent::*" mode="serial-number"/>
+            <xsl:apply-templates select="parent::*" mode="division-serial-number"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+<!-- A "solutions" is a specialized division, but is numbered -->
+<!-- as an appendix when present in the backmatter, see above -->
+<xsl:template match="backmatter/solutions" mode="division-serial-number">
+    <xsl:number from="backmatter" level="any" count="appendix|solutions" format="A"/>
+</xsl:template>
+<!-- Backmatter references and glossary are unique and un-numbered -->
+<xsl:template match="backmatter/references" mode="division-serial-number" />
+<xsl:template match="backmatter/glossary" mode="division-serial-number" />
+
 
 <!-- Serial Numbers: Theorems, Examples, Inline Exercise, Figures, Etc. -->
 <!-- We determine the appropriate subtree to count within     -->
