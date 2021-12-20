@@ -1492,6 +1492,23 @@ base_menu_for = {
             ["section-like"],
             ["Save", "save"],
             ["PreTeXt source", "source"]],
+  // need to unify section with paragraphs (when sections are managed by the CAT)
+"paragraphs": [["paragraph", "p"],
+            ["display math/chemistry/code", "math-like", "c"],
+            ["list or table", "list-like"],
+            ["example-like", "example-like"],
+            ["definition-like", "definition-like"],
+            ["theorem-like", "theorem-like"],
+            ["remark-like"],
+            ["project/exercise-like", "project-like", "j"],
+            ["image/video/sound", "image-like", "v"],
+            ["blockquote/poem/music/etc", "quoted"],
+            ["aside-like", "aside-like", "d"],
+            ["interactives"],
+            ["proof", "proof-standalone", "o"],
+            ["layout-like"],
+            ["Save", "save"],
+            ["PreTeXt source", "source"]],
 "blockquote": [["paragraph", "p"]],
 // "ol": [["list item", "li"]],
 "article": [["paragraph", "p"],  //  this is for theorem-like and similar
@@ -1749,7 +1766,7 @@ function menu_options_for(object_id, component_type, level) {
      if (component_type in menu_for) {
          component_items = menu_for[component_type]
      } else {
-         // is this a reasbable default for what can go anywhere?
+         // is this a reasonable default for what can go anywhere?
          editorLog("default menu for" + component_type);
          component_items = [["paragraph", "p"],
             ["math/chemistry/code", "math-like", "c"],
@@ -2164,7 +2181,7 @@ function save_source() {
     the_pretext_source = the_pretext_source.replace(/\n\n/g, '\n');
     // remove temporary ids
     the_pretext_source = the_pretext_source.replace(/ xml:id="tMP[0-9a-z]+"/g, '');
-    the_pretext_source = the_pretext_source.replace(/\n +$/g, '\n');
+    the_pretext_source = the_pretext_source.replace(/^ +$/mg, '');  // m = multiline
 
     editorLog("         RR  saving", top_level_id, "which begins", the_pretext_source.substring(0,50));
     parent.save_file(top_level_id, the_pretext_source)
@@ -2458,9 +2475,6 @@ function replace_by_id(theid, format) {
 
     console.log("adjusting workspace");
 window.setTimeout(adjustWorkspace, 1000);
-//    adjustWorkspace();
-//    make_current_editing_tree_from_id(theid);
-//    edit_menu_from_current_editing("entering");
 }
 
 // temporary:  need to unify img and sbs layout
@@ -4332,7 +4346,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                             current_env_id = current_env.getAttribute("data-parent_id");
                             editorLog("current_env_id", current_env_id);
                         }
-                        editorLog("J2a lookinh for menu options for", current_env_id);
+                        editorLog("J2a looking for menu options for", current_env_id);
                         edit_submenu.innerHTML = menu_options_for(current_env_id, "", "modify");
                         editorLog("just inserted inner menu_options_for(parent_type)", menu_options_for(current_env_id, "", "modify"));
                         if (theChooseCurrent.tagName == "SPAN") {  // when adjusting workspace
