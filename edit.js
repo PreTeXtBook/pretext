@@ -1490,7 +1490,7 @@ base_menu_for = {
             ["proof", "proof-standalone", "o"],
             ["layout-like"],
             ["section-like"],
-            ["Save", "save"],
+    //        ["Save", "save"],
             ["PreTeXt source", "source"]],
   // need to unify section with paragraphs (when sections are managed by the CAT)
 "paragraphs": [["paragraph", "p"],
@@ -1507,7 +1507,7 @@ base_menu_for = {
             ["interactives"],
             ["proof", "proof-standalone", "o"],
             ["layout-like"],
-            ["Save", "save"],
+   //         ["Save", "save"],
             ["PreTeXt source", "source"]],
 "blockquote": [["paragraph", "p"]],
 // "ol": [["list item", "li"]],
@@ -1889,7 +1889,7 @@ function top_menu_options_for(this_obj) {
         if (previous_editing() && this_id == top_level_id) {
             this_list += '<li tabindex="-1" data-action="' + "resume" + '">Resume previous editing</li>';
         }
- //       this_list += '<li tabindex="-1" data-action="' + "save" + '">Save</li>';
+        this_list += '<li tabindex="-1" data-action="' + "save" + '">Save</li>';
         this_list += '<li tabindex="-1" data-action="' + "stop_editing" + '">Stop editing</li>';
     }
     return this_list
@@ -4087,6 +4087,8 @@ function main_menu_navigator(e) {  // we are not currently editing
         var dataAction = theChooseCurrent.getAttribute("data-action");  // may be null
         var dataModifier = theChooseCurrent.getAttribute("data-modifier");  // may be null
         var dataEnv = theChooseCurrent.getAttribute("data-env");  // may be null
+        // a hack because of how the menus were originally set up
+        if (dataEnv == "save") { dataAction = "save" }
         var dataEnvParent = theChooseCurrent.getAttribute("data-env-parent");  // may be null
         var object_of_interest;
         if (document.getElementById("edit_menu_holder")) {
@@ -4284,6 +4286,9 @@ function main_menu_navigator(e) {  // we are not currently editing
                 editorLog("stop_editing", object_of_interest, "by id", object_of_interest.id);
                 replace_by_id(object_of_interest.id, "html")
                 eraseCookie(chosen_edit_option_key)
+            } else if (dataAction == "save") {
+                save_source();
+                edit_menu_from_current_editing("entering");
             } else if (dataAction == "resume") {
                 editorLog("resuming previous editing session");
                 resume_editing()
@@ -4459,9 +4464,9 @@ function main_menu_navigator(e) {  // we are not currently editing
                       show_source(object_of_interest, before_after);
                       edit_menu_from_current_editing("entering");
                       return
-                   } else if (dataEnv == "save") {
-                      save_source();
-                      edit_menu_from_current_editing("entering");
+         //          } else if (dataEnv == "save") {
+         //             save_source();
+         //             edit_menu_from_current_editing("entering");
                    }
                   editorLog("create object to edit",dataEnv, object_of_interest, before_after);
                   var new_obj = create_object_to_edit(dataEnv, object_of_interest, before_after);
