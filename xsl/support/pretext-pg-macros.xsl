@@ -50,8 +50,6 @@
 <!--#######################################################################-->
 
 <xsl:template match="/">
-    <xsl:apply-templates select="pretext" mode="generic-warnings" />
-    <xsl:apply-templates select="pretext" mode="deprecation-warnings" />
     <xsl:variable name="macro-file-name">
         <xsl:choose>
             <xsl:when test="$docinfo/initialism">

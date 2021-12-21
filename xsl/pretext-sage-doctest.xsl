@@ -43,11 +43,7 @@
 <!-- Entry Template -->
 <!-- ############## -->
 
-<!-- Deprecation warnings are universal analysis of source and parameters   -->
-<!-- There is always a "document root" directly under the mathbook element, -->
-<!-- and we process it with the chunking template called below              -->
 <xsl:template match="/">
-    <xsl:apply-templates select="mathbook" mode="deprecation-warnings" />
     <xsl:apply-templates />
 </xsl:template>
 
