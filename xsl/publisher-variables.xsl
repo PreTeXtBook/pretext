@@ -57,6 +57,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Common Options -->
 <!-- ############## -->
 
+<!-- Override chunking publisher variable, for testing -->
+<xsl:param name="debug.chunk" select="''"/>
+
 <xsl:variable name="chunks">
     <xsl:choose>
         <!-- debugging tool overrides anything else -->

@@ -1071,8 +1071,9 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- (3) No error-checking, no deprecation plan            -->
 <!-- (4) Perhaps warnings on removal, migrate to Bad Bank  -->
 
-<!-- Override chunking publisher variable, for testing -->
-<xsl:param name="debug.chunk" select="''"/>
+<!-- Look in "publisher variables" stylesheet for some -->
+<!-- (convenience) debugging switches that override    -->
+<!-- publisher/default settings                        -->
 
 <!-- Sometimes  xsltproc fails, and fails spectacularly,        -->
 <!-- setting this switch will dump lots of location info to the -->
