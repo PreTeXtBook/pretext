@@ -38,8 +38,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- adjustments into a new "enhanced" or modified source tree     -->
 <!-- with each pass.                                               -->
 <!--                                                               -->
-<!-- Import this stylesheet immediately after pretext-common.xsl.  -->
-<!--                                                               -->
 <!-- * $original will point to source file/tree/XML at the overall -->
 <!--   "pretext" element.                                          -->
 <!-- * The "version" templates are applied to decide if certain    -->
@@ -60,12 +58,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   source, or remove the need for additional templates to      -->
 <!--   realize certain constructions (e.g. url/@visual).  This     -->
 <!--   creates the $repair source tree by *changing* source.       -->
-<!-- * $repair will point to the root of the final enhanced        -->
+<!-- * $root will point to the root of the final enhanced          -->
 <!--   source file/tree/XML.                                       -->
-<!-- * $root will override (via this import) the similar variable  -->
-<!--   defined in -common.                                         -->
 <!-- * Derived variables, $docinfo and $document-root, will        -->
-<!--   reference the final enhanced source tree ($version).        -->
+<!--   be created here for use in subsequent stylesheets.          -->
 <!--                                                               -->
 <!-- Notes:                                                        -->
 <!--                                                               -->
@@ -78,6 +74,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--     via this method.                                          -->
 <!-- 3.  Overrides, customization of the assembly will typically   -->
 <!--     happen here, but can be converter-specific in some ways.  -->
+<!--                                                               -->
+<!-- The "publisher-variables.xsl" and "pretext-assembly.xsl"      -->
+<!-- stylesheets are symbiotic, and should be imported             -->
+<!-- simultaneously.  Assembly will change the source in various   -->
+<!-- ways, while some defaults for publisher variables will depend -->
+<!-- on source.  The default variables should depend on gross      -->
+<!-- structure and adjustments should be to smaller portions of    -->
+<!-- the source, but we don't take any chances.  So, note in       -->
+<!-- "assembly" that an intermediate tree is defined as a          -->
+<!-- variable, which is then used in defining some variables,      -->
+<!-- based on assembled source.  Conversely, certain variables,    -->
+<!-- such as locations of customizations or private solutions,     -->
+<!-- are needed early in assembly, while other variables, such     -->
+<!-- as options for numbering, are needed for later enhancements   -->
+<!-- to the source.  If new code results in undefine, or           -->
+<!-- recursively defined, variables, this discussion may be        -->
+<!-- relevant.  (This is repeated verbatim in the other            -->
+<!-- stylesheet).                                                  -->
 
 <!-- Timing debugging -->
 <xsl:param name="debug.assembly.time" select="'no'"/>
@@ -89,6 +103,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- When building duplicates, we have occasion -->
 <!-- to inspect the original in various places  -->
+<!-- We do not know if we have "fixed" the      -->
+<!-- deprecated overall element, so need to     -->
+<!-- try both.                                  -->
 <xsl:variable name="original" select="/mathbook|/pretext"/>
 
 <!-- These modal templates duplicate the source exactly for each -->
@@ -161,11 +178,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="repair" select="exsl:node-set($repair-rtf)"/>
 
-<!-- -common defines a "$root" which is the overall named element. -->
-<!-- We override it here and then -common will define some derived -->
-<!-- variables based upon the $root                                -->
-<!-- NB: source repair below converts a /mathbook to a /pretext    -->
+<!-- The main "pretext" element only has two possible children      -->
+<!-- One is "docinfo", the other is "book", "article", etc.         -->
+<!-- This is of interest by itself, or the root of content searches -->
+<!-- And docinfo is the other child, these help prevent searching   -->
+<!-- the wrong half.                                                -->
+<!-- NB: source repair below converts a /mathbook to a /pretext     -->
 <xsl:variable name="root" select="$repair/pretext"/>
+<xsl:variable name="docinfo" select="$root/docinfo"/>
+<xsl:variable name="document-root" select="$root/*[not(self::docinfo)]"/>
 
 
 <!-- ######################## -->
