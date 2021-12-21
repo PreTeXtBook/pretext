@@ -10694,7 +10694,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <!-- Literate Programming support is half-baked, 2017-07-21 -->
 <xsl:template match="mathbook|pretext" mode="literate-programming-warning">
-    <xsl:if test="$document-root//fragment">
+    <xsl:if test=".//fragment">
         <xsl:call-template name="banner-warning">
             <xsl:with-param name="warning">
                 <xsl:text>  Literate Programming support is incomplete&#xa;</xsl:text>
@@ -10734,7 +10734,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- but this may not be necessary to achieve uniqueness  -->
 <xsl:template match="mathbook|pretext" mode="xmlid-warning">
     <xsl:variable name="xmlid-characters" select="concat('-_', &SIMPLECHAR;)" />
-    <xsl:for-each select="$document-root//@xml:id">
+    <xsl:for-each select=".//@xml:id">
         <xsl:if test="not(translate(., $xmlid-characters, '') = '')">
             <xsl:message>
                 <xsl:text>MBX:WARNING:    </xsl:text>
@@ -10780,7 +10780,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- c, cline; unstructured cd, pre                    -->
 <!-- prompt, input, output for sage, console, program  -->
 <xsl:template match="mathbook|pretext" mode="text-element-warning">
-    <xsl:variable name="bad-elements" select="$document-root//c/*|$document-root//cline/*|$document-root//cd[not(cline)]/*|$document-root//pre[not(cline)]/*|$document-root//prompt/*|$document-root//input/*|$document-root//output/*" />
+    <xsl:variable name="bad-elements" select=".//c/*|.//cline/*|.//cd[not(cline)]/*|.//pre[not(cline)]/*|.//prompt/*|.//input/*|.//output/*" />
     <xsl:if test="$bad-elements">
         <xsl:message>
             <xsl:text>MBX:WARNING: </xsl:text>
@@ -10903,7 +10903,12 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="*" mode="deprecation-warnings">
+<xsl:template match="mathbook|pretext" mode="deprecation-warnings">
+    <!-- These apparent re-definitions are local to this template -->
+    <!-- Reasons are historical, so to be a convenience           -->
+    <xsl:variable name="docinfo" select="./docinfo"/>
+    <xsl:variable name="document-root" select="./*[not(self::docinfo)]"/>
+
     <!-- Older deprecations at the top of this list, -->
     <!-- so author will see new at the tail end.     -->
     <!-- Comments without implementations have moved -->
@@ -11685,9 +11690,8 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     </xsl:call-template>
     <!--  -->
     <!-- 2021-07-02  deprecate notation/usage as bare LaTeX, needs exactly 1 "m"       -->
-    <!-- N.B. this is fixed by the pre-processor, so we analyze the (entire) $original -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$original//notation/usage[not(m)]" />
+        <xsl:with-param name="occurrences" select="$document-root//notation/usage[not(m)]" />
         <xsl:with-param name="date-string" select="'2021-07-02'" />
         <xsl:with-param name="message" select="'a &quot;notation/usage&quot; element should contain *exactly* one &quot;m&quot;.  There is none, but we will attempt to honor your intent'"/>
     </xsl:call-template>
