@@ -321,8 +321,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
     </xsl:if>
     <!--  -->
-    <xsl:apply-templates select="mathbook|pretext" mode="generic-warnings" />
-    <xsl:apply-templates select="mathbook|pretext" mode="deprecation-warnings" />
+    <xsl:apply-templates select="$original" mode="generic-warnings"/>
+    <xsl:apply-templates select="$original" mode="deprecation-warnings"/>
     <!-- Usually no manifest is created -->
     <xsl:call-template name="runestone-manifest"/>
     <!-- The main event                          -->

@@ -284,9 +284,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and we process it with the chunking template called below              -->
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/">
-    <xsl:apply-templates select="mathbook|pretext" mode="generic-warnings" />
-    <xsl:apply-templates select="mathbook|pretext" mode="deprecation-warnings" />
-    <xsl:apply-templates select="mathbook|pretext" mode="deprecation-warnings-latex" />
+    <xsl:apply-templates select="$original" mode="generic-warnings"/>
+    <xsl:apply-templates select="$original" mode="deprecation-warnings"/>
+    <xsl:apply-templates select="$original" mode="deprecation-warnings-latex" />
     <!-- We process the enhanced source pointed  -->
     <!-- to by $root at  /mathbook  or  /pretext -->
     <xsl:apply-templates select="$root"/>

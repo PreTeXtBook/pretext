@@ -208,8 +208,9 @@
         </xsl:call-template>
         <xsl:message terminate="yes">Quitting...</xsl:message>
     </xsl:if>
-    <!-- analyze authored source, which will repair "mathbook" -->
-    <xsl:apply-templates select="pretext|mathbook" mode="deprecation-warnings" />
+    <!-- analyze authored source -->
+    <xsl:apply-templates select="$original" mode="generic-warnings"/>
+    <xsl:apply-templates select="$original" mode="deprecation-warnings"/>
     <!-- Following should use $root or $document-root as defined -->
     <!-- by the "assembly" template.  Checked 2020-07-16.        -->
     <xsl:call-template name="setup" />

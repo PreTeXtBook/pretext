@@ -110,8 +110,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
         <xsl:message terminate="yes"/>
     </xsl:if>
-    <xsl:apply-templates select="$root" mode="generic-warnings" />
-    <xsl:apply-templates select="$root" mode="deprecation-warnings" />
+    <xsl:apply-templates select="$original" mode="generic-warnings"/>
+    <xsl:apply-templates select="$original" mode="deprecation-warnings"/>
     <xsl:apply-templates mode="chunking" />
 </xsl:template>
 

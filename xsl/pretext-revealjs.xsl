@@ -55,8 +55,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- HTML file as the output/slideshow                                -->
 <xsl:template match="/">
     <xsl:call-template name="reveal-warnings"/>
-    <xsl:apply-templates select="pretext" mode="generic-warnings" />
-    <xsl:apply-templates select="pretext" mode="deprecation-warnings" />
+    <xsl:apply-templates select="$original" mode="generic-warnings"/>
+    <xsl:apply-templates select="$original" mode="deprecation-warnings"/>
     <xsl:apply-templates select="pretext"/>
 </xsl:template>
 
