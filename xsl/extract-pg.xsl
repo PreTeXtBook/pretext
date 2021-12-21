@@ -57,8 +57,10 @@
 <!-- Then other translation sheets' assembly phase will factor in          -->
 <!-- webwork-representations.xml                                           -->
 
-<xsl:import href="./pretext-common.xsl" />
+<!-- Standard conversion groundwork -->
+<xsl:import href="./publisher-variables.xsl"/>
 <xsl:import href="./pretext-assembly.xsl"/>
+<xsl:import href="./pretext-common.xsl"/>
 
 <!-- Override the corresponding param in pretext-assembly so that webwork  -->
 <!-- copies can be made.                                                   -->

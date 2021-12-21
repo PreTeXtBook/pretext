@@ -41,13 +41,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 >
 
 <!-- Get internal ID's for filenames, etc -->
-<!-- Plus variables post-assembly         -->
-<xsl:import href="../pretext-common.xsl" />
-<!-- Process to enhanced source before relying on IDs -->
-<!-- So we expect the publisher file, which might for -->
-<!-- example point to (static) representations of     -->
-<!-- WeBWorK problems with math elements              -->
+<!-- Standard conversion groundwork       -->
+<xsl:import href="../publisher-variables.xsl"/>
 <xsl:import href="../pretext-assembly.xsl"/>
+<xsl:import href="../pretext-common.xsl"/>
+
 <!-- Use the HTML variants, as we are making input for MathJax -->
 <xsl:import href="../pretext-html.xsl" />
 

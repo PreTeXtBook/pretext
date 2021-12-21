@@ -40,9 +40,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "code" (to emit) and other "fragment".  If your source code has & or < -->
 <!-- as characters, author them as &amp; or &lt; (respectively).            -->
 
-<!-- The assembly templates will define $root and $document-root -->
-<xsl:import href="./pretext-common.xsl"/>
+<!-- Standard conversion groundwork -->
+<xsl:import href="./publisher-variables.xsl"/>
 <xsl:import href="./pretext-assembly.xsl"/>
+<xsl:import href="./pretext-common.xsl"/>
 
 <!-- Intend output for rendering as source code for some language -->
 <!-- An output in XML syntax, like XSL, might be tricky           -->

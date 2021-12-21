@@ -31,7 +31,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     extension-element-prefixes="exsl str"
     >
 
-<xsl:import href="./pretext-common.xsl" />
 <xsl:import href="./pretext-html.xsl" />
 
 <!-- Output is JSON, enriched with serialized HTML -->

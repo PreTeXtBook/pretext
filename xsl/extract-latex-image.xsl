@@ -32,7 +32,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 >
 
 <!-- Get internal ID's for filenames, etc -->
-<xsl:import href="./pretext-common.xsl" />
+<!-- Standard conversion groundwork -->
+<xsl:import href="./publisher-variables.xsl"/>
+<xsl:import href="./pretext-assembly.xsl"/>
+<xsl:import href="./pretext-common.xsl"/>
 
 <!-- We use some common code to make the actual LaTeX code used      -->
 <!-- for the image.  The extract-identity stylesheet will override   -->

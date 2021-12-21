@@ -15,7 +15,10 @@
 >
 
 <!-- For numbers, titles, text utilities, etc -->
-<xsl:import href="./pretext-common.xsl" />
+<!-- Standard conversion groundwork           -->
+<xsl:import href="./publisher-variables.xsl"/>
+<xsl:import href="./pretext-assembly.xsl"/>
+<xsl:import href="./pretext-common.xsl"/>
 
 <!-- Intend output for Python docstring -->
 <xsl:output method="text" />

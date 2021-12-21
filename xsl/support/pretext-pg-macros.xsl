@@ -32,8 +32,10 @@
 <!-- Eventually when used by the pretext script, the name of the perl      -->
 <!-- library file will be generated from the project title.                -->
 
-<xsl:import href="./../pretext-common.xsl" />
-<xsl:import href="./../pretext-assembly.xsl"/>
+<!-- Standard conversion groundwork -->
+<xsl:import href="../publisher-variables.xsl"/>
+<xsl:import href="../pretext-assembly.xsl"/>
+<xsl:import href="../pretext-common.xsl"/>
 
 <!-- Override the corresponding param in pretext-assembly so that webwork  -->
 <!-- copies can be made.                                                   -->

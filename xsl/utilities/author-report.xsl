@@ -35,6 +35,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- enhanced source, they *are* different.                          -->
 
 <!-- Uses "strip-leading-whitespace" and more -->
+<!-- Standard conversion groundwork           -->
+<xsl:import href="../publisher-variables.xsl"/>
+<xsl:import href="../pretext-assembly.xsl"/>
 <xsl:import href="../pretext-common.xsl"/>
 
 <!-- ASCII output intended, consistent with -common -->

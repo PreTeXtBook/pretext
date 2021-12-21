@@ -42,7 +42,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     extension-element-prefixes="exsl date str"
 >
 
-<xsl:import href="./pretext-common.xsl" />
+<!-- Standard conversion groundwork -->
+<xsl:import href="./publisher-variables.xsl"/>
+<xsl:import href="./pretext-assembly.xsl"/>
+<xsl:import href="./pretext-common.xsl"/>
 
 <!-- This is a conversion to "plain" text.  Upon initiation it is mainly -->
 <!-- meant as a foundation for various simple conversions to things like -->

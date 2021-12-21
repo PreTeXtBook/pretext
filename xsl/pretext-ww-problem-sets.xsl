@@ -39,8 +39,10 @@
 <!-- upload into a WeBWorK course (perhaps in the templates/local folder); -->
 <!-- or into a server's libraries folder and set up site-wide access.      -->
 
-<xsl:import href="./pretext-common.xsl" />
-<xsl:import href="./pretext-assembly.xsl" />
+<!-- Standard conversion groundwork -->
+<xsl:import href="./publisher-variables.xsl"/>
+<xsl:import href="./pretext-assembly.xsl"/>
+<xsl:import href="./pretext-common.xsl"/>
 
 <!-- Intend output to be a PG/PGML problem or a "def" file -->
 <xsl:output method="text" />

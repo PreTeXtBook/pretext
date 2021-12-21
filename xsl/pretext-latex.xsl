@@ -34,8 +34,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     extension-element-prefixes="exsl date str"
 >
 
-<xsl:import href="./pretext-common.xsl" />
+<!-- Standard conversion groundwork -->
+<xsl:import href="./publisher-variables.xsl"/>
 <xsl:import href="./pretext-assembly.xsl"/>
+<xsl:import href="./pretext-common.xsl"/>
 
 <!-- Intend output for rendering by pdflatex -->
 <xsl:output method="text" encoding="UTF-8"/>

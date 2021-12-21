@@ -33,8 +33,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Get internal ID's for filenames, etc      -->
 <!-- This file lives in "support", so look up  -->
-<xsl:import href="../pretext-common.xsl" />
+<!-- Standard conversion groundwork            -->
+<xsl:import href="../publisher-variables.xsl"/>
 <xsl:import href="../pretext-assembly.xsl"/>
+<xsl:import href="../pretext-common.xsl"/>
 
 <!-- Does not support "subtree" xml:id value   -->
 
