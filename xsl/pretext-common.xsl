@@ -46,14 +46,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     exclude-result-prefixes="mb"
 >
 
-<!-- Any serious conversion will import this file (-common) -->
-<!-- and the "publisher-variables" stylesheet will read a   -->
-<!-- publisher file and create many global variables,       -->
-<!-- which can be used to influence conversions             -->
-<!-- See  publisher-variables.xsl  for more detail          -->
-<xsl:import href="./publisher-variables.xsl"/>
-
-<!-- MathBook XML common templates                        -->
+<!-- PreTeXt common templates                             -->
 <!-- Text creation/manipulation common to HTML, TeX, Sage -->
 
 <!-- This collection of XSL routines is like a base library,          -->
@@ -813,19 +806,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Remember that many basic templates are shared out of this      -->
 <!-- file for often very simple conversions (e.g. extractions)      -->
 <!-- so excessive setup is an unnecessary drain on processing time. -->
-
-<!-- The main "mathbook" element only has two possible children     -->
-<!-- Or the main element could be "pretext" after name change       -->
-<!-- One is "docinfo", the other is "book", "article", etc.         -->
-<!-- This is of interest by itself, or the root of content searches -->
-<!-- And docinfo is the other child                                 -->
-<!-- These help prevent searching the wrong half                    -->
-<!-- 2019-04-02: "mathbook" deprecated.  It still appears in        -->
-<!-- multiple locations, even if the definitions below help         -->
-<!-- isolate its use here.                                          -->
-<xsl:variable name="root" select="/mathbook|/pretext" />
-<xsl:variable name="docinfo" select="$root/docinfo" />
-<xsl:variable name="document-root" select="$root/*[not(self::docinfo)]" />
+<!-- $root, $docinfo, $document-root are a product of the           -->
+<!-- "pretext-assembly.xsl" stylesheet                              -->
 
 <!-- "book" and "article" are sometimes different, esp. for LaTeX -->
 <xsl:variable name="b-is-book"    select="$document-root/self::book" />
