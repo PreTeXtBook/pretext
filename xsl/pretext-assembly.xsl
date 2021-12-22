@@ -93,6 +93,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- relevant.  (This is repeated verbatim in the other            -->
 <!-- stylesheet).                                                  -->
 
+<!-- Isolate computation of serial numbers -->
+<xsl:import href="./serial-numbers.xsl"/>
+
 <!-- Timing debugging -->
 <xsl:param name="debug.assembly.time" select="'no'"/>
 <xsl:variable name="time-assembly" select="$debug.assembly.time = 'yes'"/>
