@@ -1223,6 +1223,30 @@ Book (with parts), "section" at level 3
 ||      || backmatter  || appendix || section  || subsection || subsubsection ||
 -->
 
+<!-- 2021-12-22: we are transitioning to selected (and eventually universal) -->
+<!-- use of levels computed during the "assembly" phase.  So we use careful  -->
+<!-- matches and we use careful choices for application.  At every           -->
+<!-- application we compute the "old" level to test for consistency.         -->
+
+<!-- ####################################################################### -->
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet" mode="new-level">
+    <xsl:variable name="old-level">
+        <xsl:apply-templates select="." mode="level"/>
+    </xsl:variable>
+    <xsl:if test="not($old-level = @level)">
+        <xsl:message>PTX:BUG:  development bug, new level does not match old level for "<xsl:value-of select="local-name(.)"/>"</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+    <!-- actual value here, above is debugging -->
+    <xsl:value-of select="@level"/>
+</xsl:template>
+
+<xsl:template match="*" mode="new-level">
+    <xsl:message>PTX:BUG:   an element ("<xsl:value-of select="local-name(.)"/>") does not know its *new* level</xsl:message>
+    <xsl:apply-templates select="." mode="location-report" />
+</xsl:template>
+<!-- ####################################################################### -->
+
  <!-- Specific top-level divisions -->
 <!-- article/frontmatter, article/backmatter are faux divisions, but   -->
 <!-- will function as a terminating condition in recursive count below -->
@@ -4738,7 +4762,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- handled in the "division-serial-number" template.       -->
 <xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet" mode="serial-number">
     <xsl:variable name="relative-level">
-        <xsl:apply-templates select="." mode="level" />
+        <xsl:apply-templates select="." mode="new-level" />
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$relative-level > $numbering-maxlevel" />
