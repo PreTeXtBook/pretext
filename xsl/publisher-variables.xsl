@@ -660,15 +660,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- substantially.  The "decorative" option is the default for  -->
 <!-- books with parts, and it looks just like the LaTeX default. -->
 <xsl:variable name="parts">
+    <!-- these definitions are temporary and can   -->
+    <!-- go away once we define intermediate trees -->
+    <!-- which will also be closer to correct      -->
+    <xsl:variable name="temp-root" select="/mathbook|/pretext"/>
+    <xsl:variable name="temp-docinfo" select="$temp-root/docinfo"/>
     <xsl:choose>
         <!-- no parts, just record as absent,  -->
         <!-- but warn of ill-advised attempts  -->
-        <xsl:when test="not($document-root/part)">
+        <xsl:when test="not($temp-root/book/part)">
             <xsl:choose>
                 <xsl:when test="$publication/numbering/divisions/@part-structure">
                     <xsl:message>PTX:WARNING: your document is not a book with parts, so the publisher file  numbering/divisions/@part-structure  entry is being ignored</xsl:message>
                 </xsl:when>
-                <xsl:when test="$docinfo/numbering/division/@part">
+                <xsl:when test="$temp-docinfo/numbering/division/@part">
                     <xsl:message>PTX:WARNING: your document is not a book with parts, and docinfo/numbering/division/@part is deprecated anyway and is being ignored</xsl:message>
                 </xsl:when>
             </xsl:choose>
@@ -692,16 +697,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:choose>
         </xsl:when>
         <!-- Preserve much of old behavior, warning is elsewhere -->
-        <xsl:when test="$docinfo/numbering/division/@part">
+        <xsl:when test="$temp-docinfo/numbering/division/@part">
             <xsl:choose>
-                <xsl:when test="$docinfo/numbering/division/@part = 'structural'">
+                <xsl:when test="$temp-docinfo/numbering/division/@part = 'structural'">
                     <xsl:text>structural</xsl:text>
                 </xsl:when>
-                <xsl:when test="$docinfo/numbering/division/@part = 'decorative'">
+                <xsl:when test="$temp-docinfo/numbering/division/@part = 'decorative'">
                     <xsl:text>decorative</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: the  docinfo/numbering/division/@part  entry should be "decorative" or "structural", not "<xsl:value-of select="$docinfo/numbering/division/@part"/>".  The default will be used instead.</xsl:message>
+                    <xsl:message>PTX:WARNING: the  docinfo/numbering/division/@part  entry should be "decorative" or "structural", not "<xsl:value-of select="$temp-docinfo/numbering/division/@part"/>".  The default will be used instead.</xsl:message>
                     <xsl:text>decorative</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
