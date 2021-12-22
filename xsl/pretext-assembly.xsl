@@ -130,6 +130,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<xsl:template match="node()|@*" mode="augment">
+    <xsl:param name="parent-struct" select="''"/>
+    <xsl:param name="level" select="0"/>
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="augment">
+            <xsl:with-param name="parent-struct" select="$parent-struct"/>
+            <xsl:with-param name="level" select="$level"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
 <!-- These templates initiate and create several iterations of -->
 <!-- the source tree via modal templates.  Think of each as a  -->
 <!-- "pass" through the source. Generally this constructs the  -->
@@ -178,13 +189,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="repair" select="exsl:node-set($repair-rtf)"/>
 
+<xsl:variable name="augment-rtf">
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: start augment</xsl:message>
+    </xsl:if>
+    <!--  -->
+    <xsl:apply-templates select="$repair" mode="augment"/>
+    <!--  -->
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: end augment</xsl:message>
+    </xsl:if>
+    <!--  -->
+</xsl:variable>
+<xsl:variable name="augment" select="exsl:node-set($augment-rtf)"/>
+
 <!-- The main "pretext" element only has two possible children      -->
 <!-- One is "docinfo", the other is "book", "article", etc.         -->
 <!-- This is of interest by itself, or the root of content searches -->
 <!-- And docinfo is the other child, these help prevent searching   -->
 <!-- the wrong half.                                                -->
 <!-- NB: source repair below converts a /mathbook to a /pretext     -->
-<xsl:variable name="root" select="$repair/pretext"/>
+<xsl:variable name="root" select="$augment/pretext"/>
 <xsl:variable name="docinfo" select="$root/docinfo"/>
 <xsl:variable name="document-root" select="$root/*[not(self::docinfo)]"/>
 
