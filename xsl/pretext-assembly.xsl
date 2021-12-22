@@ -545,6 +545,112 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- ######### -->
+<!-- Numbering -->
+<!-- ######### -->
+
+<!-- We use the "augment" pass to compute, and add, partially naïve        -->
+<!-- information about numbers of objects, to be interpreted later by      -->
+<!-- templates in the "-common" stylesheet.  By "naïve" we mean that       -->
+<!-- these routines may depend on publisher variables (e.g. specification  -->
+<!-- of roots of subtrees for serial numbers of blocks) but do not depend  -->
+<!-- on subtlties of numbering (such as the structured/unstructured        -->
+<!-- division dichotomy), which are addressed in the "-common" stylesheet. -->
+<!-- In this way, this information could be interpreted in new ways by     -->
+<!-- additional conversions.                                               -->
+<!--                                                                       -->
+<!-- The manufactured @struct attribute is the (naïve) hierarchical number -->
+<!-- of the *container* of an element, known as the "structure number"     -->
+<!-- of an element.  The @serial attribute is the computed serial number   -->
+<!-- of the element, known as the "serial number".  Typically combining    -->
+<!-- these two attributes forms teh number of an element.  As many         -->
+<!-- practical subtleties about these numbers is delayed until their       -->
+<!-- interpretation by templates in the "-common" stylesheet.              -->
+
+<!-- For every type of division, everywhere, the "division-serial-number"   -->
+<!-- modal template will return a count of preceding peers at that level.   -->
+<!-- The @struct attribute is the structure number of the *parent*          -->
+<!-- (container), which seems odd here, but fits the general scheme better. -->
+<!-- The @level attribute is helpful, and trvislly to compute here.         -->
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet" mode="augment">
+    <xsl:param name="parent-struct"/>
+    <xsl:param name="level"/>
+
+    <xsl:variable name="the-serial">
+        <xsl:apply-templates select="." mode="division-serial-number"/>
+    </xsl:variable>
+    <xsl:variable name="new-struct">
+        <xsl:choose>
+            <!-- Parts as Roman numerals make for a lot of clutter.      -->
+            <!-- We tend to only use them when necessary to diambiguate  -->
+            <!-- a cross-reference in the case where these numbers are   -->
+            <!-- structural.  So rightly or wrongly, and owing to        -->
+            <!-- historical work, we squelch them as the lead item of a  -->
+            <!-- structural number.  So here the Roman numeral will be   -->
+            <!-- preserved as a serial number, but the construction of   -->
+            <!-- the structural numbers will be delayed one level.       -->
+            <!-- (It seems harder to strip these in -common.)            -->
+            <xsl:when test="self::part"/>
+            <xsl:otherwise>
+                <xsl:value-of select="$parent-struct"/>
+                <xsl:if test="not($parent-struct='')">
+                    <xsl:text>.</xsl:text>
+                </xsl:if>
+                <xsl:value-of select="$the-serial"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="next-level" select="$level + 1"/>
+    <xsl:copy>
+        <xsl:attribute name="struct">
+            <xsl:value-of select="$parent-struct"/>
+        </xsl:attribute>
+        <xsl:attribute name="serial">
+            <xsl:value-of select="$the-serial"/>
+        </xsl:attribute>
+        <xsl:attribute name="level">
+            <xsl:value-of select="$next-level"/>
+        </xsl:attribute>
+        <xsl:apply-templates select="node()|@*" mode="augment">
+            <xsl:with-param name="parent-struct" select="$new-struct"/>
+            <xsl:with-param name="level" select="$next-level"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- See the definitions of levels in -common.  For a book with parts   -->
+<!-- ($parts != 'absent') we consider parts as peers of frontmatter and -->
+<!-- backmatter.  So we need to increment the level in this case, only. -->
+<!-- NB: this might consolidate with above, but seems better solo.      -->
+<!-- NB: with some study and work, this situation might be improved?    -->
+<xsl:template match="frontmatter|backmatter" mode="augment">
+    <xsl:param name="parent-struct"/>
+    <xsl:param name="level"/>
+
+    <xsl:variable name="next-level">
+        <xsl:choose>
+            <xsl:when test="($parts = 'decorative') or ($parts = 'structural')">
+                <xsl:value-of select="$level + 1"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$level"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- we only add a level (not necessary?) -->
+    <!-- and just pass along structure number -->
+    <xsl:copy>
+        <xsl:attribute name="level">
+            <xsl:value-of select="$next-level"/>
+        </xsl:attribute>
+        <xsl:apply-templates select="node()|@*" mode="augment">
+            <xsl:with-param name="parent-struct" select="$parent-struct"/>
+            <xsl:with-param name="level" select="$next-level"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+
 <!-- ######## -->
 <!-- Warnings -->
 <!-- ######## -->
