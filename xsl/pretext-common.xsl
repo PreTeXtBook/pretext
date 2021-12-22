@@ -4750,27 +4750,50 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Serial Numbers -->
 <!-- ############## -->
 
-<!-- These count the occurrence of the item, within it's  -->
-<!-- scheme and within a natural, or configured, subtree -->
-
 <!-- Serial Numbers: Divisions -->
 <!-- To respect the maximum level for numbering, we          -->
 <!-- return an empty serial number at an excessive level,    -->
 <!-- otherwise we call for a serial number relative to peers -->
-<!-- An unstructured division has solo specialized divisions -->
-<!-- which inherit numbers from their parents.  This too is  -->
-<!-- handled in the "division-serial-number" template.       -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet" mode="serial-number">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|backmatter/solutions" mode="serial-number">
     <xsl:variable name="relative-level">
         <xsl:apply-templates select="." mode="new-level" />
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$relative-level > $numbering-maxlevel" />
         <xsl:otherwise>
-            <xsl:apply-templates select="." mode="division-serial-number" />
+            <xsl:value-of select="@serial"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
+<!-- Serial Numbers: Specialized Divisions -->
+<xsl:template match="exercises|solutions|worksheet|reading-questions|references|glossary" mode="serial-number">
+    <xsl:variable name="is-structured">
+        <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
+    </xsl:variable>
+    <xsl:variable name="b-is-structured" select="$is-structured = 'true'"/>
+    <xsl:choose>
+        <xsl:when test="$b-is-structured">
+            <xsl:variable name="relative-level">
+                <xsl:apply-templates select="." mode="new-level" />
+            </xsl:variable>
+            <xsl:choose>
+                <xsl:when test="$relative-level > $numbering-maxlevel" />
+                <xsl:otherwise>
+                    <xsl:value-of select="@serial"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="parent::*" mode="serial-number" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Backmatter references and glossary are unique and un-numbered, -->
+<!-- so an empty serial number.  These matches supersede the above. -->
+<xsl:template match="backmatter/references" mode="serial-number" />
+<xsl:template match="backmatter/glossary" mode="serial-number" />
 
 <!-- Serial Numbers: Theorems, Examples, Inline Exercise, Figures, Etc. -->
 <!-- We determine the appropriate subtree to count within     -->
@@ -5593,10 +5616,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- NB: this is number of the *container* of the division,   -->
 <!-- a serial number for the division itself will be appended -->
 <xsl:template match="part|chapter|appendix|section|subsection|subsubsection|backmatter/solutions" mode="structure-number">
-    <xsl:apply-templates select="." mode="multi-number">
-        <xsl:with-param name="levels" select="$numbering-maxlevel - 1" />
-        <xsl:with-param name="pad" select="'no'" />
-    </xsl:apply-templates>
+    <xsl:value-of select="@struct"/>
 </xsl:template>
 
 <!-- Structure Numbers: Specialized Divisions -->
@@ -5612,10 +5632,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:variable name="b-is-structured" select="$is-structured = 'true'"/>
     <xsl:choose>
         <xsl:when test="$b-is-structured">
-            <xsl:apply-templates select="." mode="multi-number">
-                <xsl:with-param name="levels" select="$numbering-maxlevel - 1" />
-                <xsl:with-param name="pad" select="'no'" />
-            </xsl:apply-templates>
+            <xsl:value-of select="@struct"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="parent::*" mode="structure-number" />
@@ -5714,20 +5731,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Within a "exercises" or "worksheet", look up to enclosing division -->
 <!-- in order to decide where the structure number comes from           -->
 <xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise" mode="structure-number">
-    <!-- one or the other, just a single node in variable -->
+    <!-- Need to look up through "exercisegroup", "subexercises", "sidebyside", etc -->
+    <!-- Only one of these specialized divisions, just a single node in variable    -->
     <xsl:variable name="container" select="ancestor::*[self::exercises or self::worksheet or self::reading-questions]"/>
-    <xsl:variable name="is-structured">
-        <xsl:apply-templates select="$container/parent::*" mode="is-structured-division"/>
-    </xsl:variable>
-    <xsl:variable name="b-is-structured" select="$is-structured = 'true'"/>
-    <xsl:choose>
-        <xsl:when test="$b-is-structured">
-            <xsl:apply-templates select="$container" mode="number" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="$container/parent::*" mode="number" />
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$container" mode="number" />
 </xsl:template>
 
 <!-- Structure Numbers: Exercise Groups -->
