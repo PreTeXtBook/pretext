@@ -88,7 +88,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- such as locations of customizations or private solutions,     -->
 <!-- are needed early in assembly, while other variables, such     -->
 <!-- as options for numbering, are needed for later enhancements   -->
-<!-- to the source.  If new code results in undefine, or           -->
+<!-- to the source.  If new code results in undefined, or          -->
 <!-- recursively defined, variables, this discussion may be        -->
 <!-- relevant.  (This is repeated verbatim in the other            -->
 <!-- stylesheet).                                                  -->
@@ -191,6 +191,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!--  -->
 </xsl:variable>
 <xsl:variable name="repair" select="exsl:node-set($repair-rtf)"/>
+
+<!-- Once the "repair" tree is formed, any source modifications      -->
+<!-- have been made, and it is on to *augmenting* the source.        -->
+<!-- Various publisher variables are consulted for the augmentation, -->
+<!-- notably the style/depth of numbering.  So this tree needs to    -->
+<!-- be available for creating those variables, notably sensible     -->
+<!-- defaults based on the source.  We refer to this tree as the     -->
+<!-- "assembly" tree.                                                -->
+<xsl:variable name="assembly-root" select="$repair/pretext"/>
+<xsl:variable name="assembly-docinfo" select="$assembly-root/docinfo"/>
+<xsl:variable name="assembly-document-root" select="$assembly-root/*[not(self::docinfo)]"/>
 
 <xsl:variable name="augment-rtf">
     <xsl:if test="$time-assembly">

@@ -1329,14 +1329,14 @@ Book (with parts), "section" at level 3
 <!-- NB: 2017-09-05, three places, keep as variable  -->
 <xsl:variable name="root-level">
     <xsl:choose>
-        <xsl:when test="$root/book/part">-1</xsl:when>
-        <xsl:when test="$root/book/chapter">0</xsl:when>
+        <xsl:when test="$assembly-root/book/part">-1</xsl:when>
+        <xsl:when test="$assembly-root/book/chapter">0</xsl:when>
         <!-- An article is rooted just above sections, -->
         <!-- on par with chapters of a book            -->
-        <xsl:when test="$root/article">1</xsl:when>
-        <xsl:when test="$root/slideshow">1</xsl:when>
-        <xsl:when test="$root/letter">1</xsl:when>
-        <xsl:when test="$root/memo">1</xsl:when>
+        <xsl:when test="$assembly-root/article">1</xsl:when>
+        <xsl:when test="$assembly-root/slideshow">1</xsl:when>
+        <xsl:when test="$assembly-root/letter">1</xsl:when>
+        <xsl:when test="$assembly-root/memo">1</xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:BUG: Level offset undefined for this document type</xsl:message>
         </xsl:otherwise>

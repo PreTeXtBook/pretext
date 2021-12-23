@@ -53,6 +53,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- node does not seem so critical.                                -->
 <xsl:variable name="publication" select="document($publisher, .)/publication"/>
 
+<!-- The "publisher-variables.xsl" and "pretext-assembly.xsl"      -->
+<!-- stylesheets are symbiotic, and should be imported             -->
+<!-- simultaneously.  Assembly will change the source in various   -->
+<!-- ways, while some defaults for publisher variables will depend -->
+<!-- on source.  The default variables should depend on gross      -->
+<!-- structure and adjustments should be to smaller portions of    -->
+<!-- the source, but we don't take any chances.  So, note in       -->
+<!-- "assembly" that an intermediate tree is defined as a          -->
+<!-- variable, which is then used in defining some variables,      -->
+<!-- based on assembled source.  Conversely, certain variables,    -->
+<!-- such as locations of customizations or private solutions,     -->
+<!-- are needed early in assembly, while other variables, such     -->
+<!-- as options for numbering, are needed for later enhancements   -->
+<!-- to the source.  If new code results in undefined, or          -->
+<!-- recursively defined, variables, this discussion may be        -->
+<!-- relevant.  (This is repeated verbatim in the other            -->
+<!-- stylesheet).                                                  -->
+
 <!-- ############## -->
 <!-- Common Options -->
 <!-- ############## -->
@@ -95,16 +113,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$toc.level" />
         </xsl:when>
         <!-- defaults purely by structure, not by output format -->
-        <xsl:when test="$root/book/part/chapter/section">3</xsl:when>
-        <xsl:when test="$root/book/part/chapter">2</xsl:when>
-        <xsl:when test="$root/book/chapter/section">2</xsl:when>
-        <xsl:when test="$root/book/chapter">1</xsl:when>
-        <xsl:when test="$root/article/section/subsection">2</xsl:when>
-        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
-        <xsl:when test="$root/article">0</xsl:when>
-        <xsl:when test="$root/slideshow">0</xsl:when>
-        <xsl:when test="$root/letter">0</xsl:when>
-        <xsl:when test="$root/memo">0</xsl:when>
+        <xsl:when test="$assembly-root/book/part/chapter/section">3</xsl:when>
+        <xsl:when test="$assembly-root/book/part/chapter">2</xsl:when>
+        <xsl:when test="$assembly-root/book/chapter/section">2</xsl:when>
+        <xsl:when test="$assembly-root/book/chapter">1</xsl:when>
+        <xsl:when test="$assembly-root/article/section/subsection">2</xsl:when>
+        <xsl:when test="$assembly-root/article/section|$assembly-root/article/worksheet">1</xsl:when>
+        <xsl:when test="$assembly-root/article">0</xsl:when>
+        <xsl:when test="$assembly-root/slideshow">0</xsl:when>
+        <xsl:when test="$assembly-root/letter">0</xsl:when>
+        <xsl:when test="$assembly-root/memo">0</xsl:when>
         <xsl:otherwise>
             <xsl:message>PTX:ERROR: Table of Contents level not determined</xsl:message>
         </xsl:otherwise>
@@ -347,13 +365,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- the default, and also an error-check upper-limit         -->
     <xsl:variable name="max-feasible">
         <xsl:choose>
-            <xsl:when test="$root/book/part">5</xsl:when>
-            <xsl:when test="$root/book">4</xsl:when>
-            <xsl:when test="$root/article/section|$root/article/worksheet">3</xsl:when>
-            <xsl:when test="$root/article">0</xsl:when>
-            <xsl:when test="$root/letter">0</xsl:when>
-            <xsl:when test="$root/slideshow">0</xsl:when>
-            <xsl:when test="$root/memo">0</xsl:when>
+            <xsl:when test="$assembly-root/book/part">5</xsl:when>
+            <xsl:when test="$assembly-root/book">4</xsl:when>
+            <xsl:when test="$assembly-root/article/section|$assembly-root/article/worksheet">3</xsl:when>
+            <xsl:when test="$assembly-root/article">0</xsl:when>
+            <xsl:when test="$assembly-root/letter">0</xsl:when>
+            <xsl:when test="$assembly-root/slideshow">0</xsl:when>
+            <xsl:when test="$assembly-root/memo">0</xsl:when>
             <xsl:otherwise>
                 <xsl:message>PTX:BUG: a document type needs a maximum division level defined</xsl:message>
             </xsl:otherwise>
@@ -410,13 +428,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="numbering-blocks-entered">
     <xsl:variable name="default-blocks">
         <xsl:choose>
-            <xsl:when test="$root/book/part">3</xsl:when>
-            <xsl:when test="$root/book">2</xsl:when>
-            <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
-            <xsl:when test="$root/article">0</xsl:when>
-            <xsl:when test="$root/slideshow">0</xsl:when>
-            <xsl:when test="$root/letter">0</xsl:when>
-            <xsl:when test="$root/memo">0</xsl:when>
+            <xsl:when test="$assembly-root/book/part">3</xsl:when>
+            <xsl:when test="$assembly-root/book">2</xsl:when>
+            <xsl:when test="$assembly-root/article/section|$assembly-root/article/worksheet">1</xsl:when>
+            <xsl:when test="$assembly-root/article">0</xsl:when>
+            <xsl:when test="$assembly-root/slideshow">0</xsl:when>
+            <xsl:when test="$assembly-root/letter">0</xsl:when>
+            <xsl:when test="$assembly-root/memo">0</xsl:when>
             <xsl:otherwise>
                 <xsl:message>PTX:BUG: a document type needs a default block numbering level defined</xsl:message>
             </xsl:otherwise>
@@ -469,13 +487,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="numbering-projects-entered">
     <xsl:variable name="default-projects">
         <xsl:choose>
-        <xsl:when test="$root/book/part">3</xsl:when>
-        <xsl:when test="$root/book">2</xsl:when>
-        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
-        <xsl:when test="$root/article">0</xsl:when>
-        <xsl:when test="$root/slideshow">0</xsl:when>
-        <xsl:when test="$root/letter">0</xsl:when>
-        <xsl:when test="$root/memo">0</xsl:when>
+            <xsl:when test="$assembly-root/book/part">3</xsl:when>
+            <xsl:when test="$assembly-root/book">2</xsl:when>
+            <xsl:when test="$assembly-root/article/section|$assembly-root/article/worksheet">1</xsl:when>
+            <xsl:when test="$assembly-root/article">0</xsl:when>
+            <xsl:when test="$assembly-root/slideshow">0</xsl:when>
+            <xsl:when test="$assembly-root/letter">0</xsl:when>
+            <xsl:when test="$assembly-root/memo">0</xsl:when>
             <xsl:otherwise>
                 <xsl:message>PTX:BUG: a document type needs a default project level defined</xsl:message>
             </xsl:otherwise>
@@ -525,13 +543,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="numbering-equations-entered">
     <xsl:variable name="default-equations">
         <xsl:choose>
-        <xsl:when test="$root/book/part">3</xsl:when>
-        <xsl:when test="$root/book">2</xsl:when>
-        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
-        <xsl:when test="$root/article">0</xsl:when>
-        <xsl:when test="$root/slideshow">0</xsl:when>
-        <xsl:when test="$root/letter">0</xsl:when>
-        <xsl:when test="$root/memo">0</xsl:when>
+            <xsl:when test="$assembly-root/book/part">3</xsl:when>
+            <xsl:when test="$assembly-root/book">2</xsl:when>
+            <xsl:when test="$assembly-root/article/section|$assembly-root/article/worksheet">1</xsl:when>
+            <xsl:when test="$assembly-root/article">0</xsl:when>
+            <xsl:when test="$assembly-root/slideshow">0</xsl:when>
+            <xsl:when test="$assembly-root/letter">0</xsl:when>
+            <xsl:when test="$assembly-root/memo">0</xsl:when>
             <xsl:otherwise>
                 <xsl:message>PTX:BUG: a document type needs a default equation project level defined</xsl:message>
             </xsl:otherwise>
@@ -581,13 +599,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="numbering-footnotes-entered">
     <xsl:variable name="default-footnotes">
         <xsl:choose>
-        <xsl:when test="$root/book/part">3</xsl:when>
-        <xsl:when test="$root/book">2</xsl:when>
-        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
-        <xsl:when test="$root/article">0</xsl:when>
-        <xsl:when test="$root/slideshow">0</xsl:when>
-        <xsl:when test="$root/letter">0</xsl:when>
-        <xsl:when test="$root/memo">0</xsl:when>
+            <xsl:when test="$assembly-root/book/part">3</xsl:when>
+            <xsl:when test="$assembly-root/book">2</xsl:when>
+            <xsl:when test="$assembly-root/article/section|$assembly-root/article/worksheet">1</xsl:when>
+            <xsl:when test="$assembly-root/article">0</xsl:when>
+            <xsl:when test="$assembly-root/slideshow">0</xsl:when>
+            <xsl:when test="$assembly-root/letter">0</xsl:when>
+            <xsl:when test="$assembly-root/memo">0</xsl:when>
             <xsl:otherwise>
                 <xsl:message>PTX:BUG: a document type needs a default footnote project level defined</xsl:message>
             </xsl:otherwise>
@@ -660,20 +678,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- substantially.  The "decorative" option is the default for  -->
 <!-- books with parts, and it looks just like the LaTeX default. -->
 <xsl:variable name="parts">
-    <!-- these definitions are temporary and can   -->
-    <!-- go away once we define intermediate trees -->
-    <!-- which will also be closer to correct      -->
-    <xsl:variable name="temp-root" select="/mathbook|/pretext"/>
-    <xsl:variable name="temp-docinfo" select="$temp-root/docinfo"/>
     <xsl:choose>
         <!-- no parts, just record as absent,  -->
         <!-- but warn of ill-advised attempts  -->
-        <xsl:when test="not($temp-root/book/part)">
+        <xsl:when test="not($assembly-root/book/part)">
             <xsl:choose>
                 <xsl:when test="$publication/numbering/divisions/@part-structure">
                     <xsl:message>PTX:WARNING: your document is not a book with parts, so the publisher file  numbering/divisions/@part-structure  entry is being ignored</xsl:message>
                 </xsl:when>
-                <xsl:when test="$temp-docinfo/numbering/division/@part">
+                <xsl:when test="$assembly-docinfo/numbering/division/@part">
                     <xsl:message>PTX:WARNING: your document is not a book with parts, and docinfo/numbering/division/@part is deprecated anyway and is being ignored</xsl:message>
                 </xsl:when>
             </xsl:choose>
@@ -697,16 +710,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:choose>
         </xsl:when>
         <!-- Preserve much of old behavior, warning is elsewhere -->
-        <xsl:when test="$temp-docinfo/numbering/division/@part">
+        <xsl:when test="$assembly-docinfo/numbering/division/@part">
             <xsl:choose>
-                <xsl:when test="$temp-docinfo/numbering/division/@part = 'structural'">
+                <xsl:when test="$assembly-docinfo/numbering/division/@part = 'structural'">
                     <xsl:text>structural</xsl:text>
                 </xsl:when>
-                <xsl:when test="$temp-docinfo/numbering/division/@part = 'decorative'">
+                <xsl:when test="$assembly-docinfo/numbering/division/@part = 'decorative'">
                     <xsl:text>decorative</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: the  docinfo/numbering/division/@part  entry should be "decorative" or "structural", not "<xsl:value-of select="$temp-docinfo/numbering/division/@part"/>".  The default will be used instead.</xsl:message>
+                    <xsl:message>PTX:WARNING: the  docinfo/numbering/division/@part  entry should be "decorative" or "structural", not "<xsl:value-of select="$assembly-docinfo/numbering/division/@part"/>".  The default will be used instead.</xsl:message>
                     <xsl:text>decorative</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -1336,8 +1349,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="$publication/html/baseurl/@href"/>
             </xsl:when>
             <!-- reluctantly query the old docinfo version -->
-            <xsl:when test="$docinfo/html/baseurl/@href">
-                <xsl:value-of select="$docinfo/html/baseurl/@href"/>
+            <xsl:when test="$assembly-docinfo/html/baseurl/@href">
+                <xsl:value-of select="$assembly-docinfo/html/baseurl/@href"/>
             </xsl:when>
             <!-- otherwise use the default, is empty as sentinel -->
             <xsl:otherwise/>
@@ -1483,8 +1496,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$html.statcounter.project"/>
         </xsl:when>
         <!-- deprecated -->
-        <xsl:when test="$docinfo/analytics/statcounter/project">
-            <xsl:value-of select="$docinfo/analytics/statcounter/project"/>
+        <xsl:when test="$assembly-docinfo/analytics/statcounter/project">
+            <xsl:value-of select="$assembly-docinfo/analytics/statcounter/project"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text/>
@@ -1502,8 +1515,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$html.statcounter.security"/>
         </xsl:when>
         <!-- deprecated -->
-        <xsl:when test="$docinfo/analytics/statcounter/security">
-            <xsl:value-of select="$docinfo/analytics/statcounter/security"/>
+        <xsl:when test="$assembly-docinfo/analytics/statcounter/security">
+            <xsl:value-of select="$assembly-docinfo/analytics/statcounter/security"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text/>
@@ -1517,8 +1530,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="not($html.google-classic = '')">
             <xsl:value-of select="$html.google-classic"/>
         </xsl:when>
-        <xsl:when test="$docinfo/analytics/google">
-            <xsl:value-of select="$docinfo/analytics/google/tracking"/>
+        <xsl:when test="$assembly-docinfo/analytics/google">
+            <xsl:value-of select="$assembly-docinfo/analytics/google/tracking"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text/>
@@ -1532,8 +1545,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="not($html.google-universal = '')">
             <xsl:value-of select="$html.google-universal"/>
         </xsl:when>
-        <xsl:when test="$docinfo/analytics/google-universal">
-            <xsl:value-of select="$docinfo/analytics/google-universal/@tracking"/>
+        <xsl:when test="$assembly-docinfo/analytics/google-universal">
+            <xsl:value-of select="$assembly-docinfo/analytics/google-universal/@tracking"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text/>
@@ -1575,8 +1588,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="not($html.google-search = '')">
             <xsl:value-of select="$html.google-search"/>
         </xsl:when>
-        <xsl:when test="$docinfo/search/google/cx">
-            <xsl:value-of select="$docinfo/search/google/cx"/>
+        <xsl:when test="$assembly-docinfo/search/google/cx">
+            <xsl:value-of select="$assembly-docinfo/search/google/cx"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text/>
