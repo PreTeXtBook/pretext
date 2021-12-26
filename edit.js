@@ -1412,6 +1412,7 @@ function spacemath_to_tex(text) {
     thetext = text;
 
     thetext = thetext.replace(/ d([a-zA-Z])(\s|$)/, " \\,d$1$2");
+    thetext = thetext.replace(/ *< */, " &lt; ");
 
     return thetext
 }
@@ -1859,6 +1860,9 @@ function top_menu_options_for(this_obj) {
             if (editable_children.length  && !(this_object_type == "P")) {
                 this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_obj_environment + '</li>';
             }
+            if (editable_children.length > 2 && (this_object_type == "SECTION")) {
+                this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="end">Go to end of ' + this_obj_environment + '</li>';
+            }
         } else if (this_obj.classList.contains("image-box")) {
             editorLog("found an image-box");
             this_list = '<li tabindex="-1" id="choose_current" data-env="imagebox" data-action="modify">Modify layout<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
@@ -1866,6 +1870,9 @@ function top_menu_options_for(this_obj) {
             this_list = '<li tabindex="-1" id="choose_current" data-env="sbspanel" data-action="modify">Modify layout<div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
         } else {
             this_list += '<li tabindex="-1" id="choose_current" data-env="' + this_object_type + '" data-location="enter">Enter ' + this_obj_environment + '</li>';
+            if (this_object_type == "SECTION") {
+                this_list += '<li tabindex="-1" data-env="' + this_object_type + '" data-location="end">Go to end of ' + this_obj_environment + '</li>';
+            }
        }
 
         if (this_obj.classList.contains("sbspanel")) {
@@ -2364,7 +2371,7 @@ function edit_in_place(obj, oldornew) {
         });
         the_contents = internalSource[thisID]["content"]; 
         the_contents = expand_condensed_source_html(the_contents, "edit");
-        the_contents = the_contents.replace("\\cr", "<div><br></div>");
+        the_contents = the_contents.replace(/\\cr/g, "<div><br></div>");
         $('#' + idOfEditText).html(the_contents);
         document.getElementById(idOfEditText).focus();
         editorLog("made edit box for", thisID);
@@ -2453,7 +2460,6 @@ function resume_editing() {
     internalSource = previous_editing();
     replace_by_id(internalSource["root_data"]["id"], "html");
     edit_menu_for(top_level_id, "entering");
-//    edit_menu_for(current_editing["tree"]["level"]["location"], "entering");
     console.log("editing resumed");
 }
 
@@ -2954,110 +2960,13 @@ function delete_by_id(theid, thereason) {
     save_edits()
 }
 
-var originalsource = '<section xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="sec_intro-intro" permid="hPw">\n  <title>What is Discrete Mathematics?</title>\n  <blockquote permid="akX">\n    <p permid="PLS">\n      dis<midpoint/>crete / dis\'krët.\n    </p>\n\n    <p permid="vTb">\n      <em>Adjective</em>: Individually separate and distinct.\n    </p>\n\n    <p permid="cak">\n      <em>Synonyms</em>: separate - detached - distinct - abstract.\n    </p>\n  </blockquote>\n\n  <p permid="UvL">\n    Defining <em>discrete mathematics</em>\n    is hard because defining <em>mathematics</em> is hard.\n    What is mathematics?\n    The study of numbers?\n    In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n    <ellipsis/>.\n    Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n    What sort of problems?\n    Okay, those that involve numbers,\n    functions, lines, triangles,\n    <ellipsis/>.\n    Whatever your conception of what mathematics is,\n    try applying the concept of <q>discrete</q> to it, as defined above.\n    Some math fundamentally deals with <em>stuff</em>\n    that is individually separate and distinct.\n  </p>\n\n  <theorem><statement><p>Statement of the <m>e^x = 8</m> theorem.</p></statement></theorem><p permid="ACU">\n    In an algebra or calculus class,\n    you might have found a particular set of numbers\n    (maybe the set of numbers in the range of a function).\n    You would represent this set as an interval:\n    <m>[0,\\infty)</m> is the range of <m>f(x) = x^2</m> since the set\n    of outputs of the function are all real numbers 0 and greater.\n    This set of numbers is NOT discrete.\n    The numbers in the set are not separated by much at all.\n    In fact, take any two numbers in the set and there are infinitely many more between\n    them which are also in the set.\n  </p>\n  <p permid="gKd">\n    Discrete math could still ask about the range of a function,\n    but the set would not be an interval.\n    Consider the function which gives the number of children of each person reading this.\n    What is the range?\n    I\'m guessing\n    it is something like <m>\\{0, 1, 2, 3\\}</m>.\n    Maybe 4 is in there too.\n    But certainly there is nobody reading this that has 1.32419 children.\n    This output set <em>is</em> discrete because the elements are separate.\n    The inputs to the function also form a discrete set because each input is an individual person.\n  </p>\n\n  <p permid="MRm">\n    One way to get a feel for the subject is to consider the types of problems you solve in discrete math.\n    Here are a few simple examples:\n  </p>\n  <investigation permid="udO">\n    <p permid="Iht">\n      <em>Note: Throughout the text you will see <alert>Investigate!</alert>\n      activities like this one.\n      Answer the questions in these as best you can to give yourself a feel for what is coming next.</em>\n    </p>\n\n    <p permid="ooC">\n      <ol permid="Gsg">\n        <li permid="mzp">\n          <p permid="LbZ">\n            The most popular mathematician in the world is throwing a party for all of his friends.\n            As a way to kick things off, they decide that everyone should shake hands.\n            Assuming all 10 people at the party each shake hands with every other person\n            (but not themselves,\n            obviously)\n            exactly once, how many handshakes take place?\n          </p>\n        </li>\n\n        <li permid="SGy">\n          <p permid="rji">\n            At the warm-up event for Oscar\'s All Star Hot Dog Eating Contest, Al ate one hot dog.\n            Bob then showed him up by eating three hot dogs.\n            Not to be outdone, Carl ate five.\n            This continued with each contestant eating two more hot dogs than the previous contestant.\n            How many hot dogs did Zeno (the 26th and final contestant) eat?\n            How many hot dogs were eaten all together?\n          </p>\n        </li>\n\n        <li permid="yNH">\n          <p permid="Xqr">\n            After excavating for weeks, you finally arrive at the burial chamber.\n            The room is empty except for two large chests.\n            On each is carved a message (strangely in English):\n          </p>\n\n      <image xml:id="two-chests" permid="FmNprocessed" source="http://discrete.openmathbooks.org/dmoi3/images/two-chests.svg" width="80%"></image>      \n          <p permid="DxA">\n            You know exactly one of these messages is true.\n            What should you do?\n          </p>\n        </li>\n\n        <li permid="eUQ">\n          <p permid="jEJ">\n            Back in the days of yore,\n            five small towns decided they wanted to build roads directly connecting each pair of towns.\n            While the towns had plenty of money to build roads as long and as winding as they wished,\n            it was very important that the roads not intersect\n            with each other\n            (as stop signs had not yet been invented).\n            Also, tunnels and bridges were not allowed.\n            Is it possible for each of these towns to build a road to each of the four other towns without creating any intersections?\n          </p>\n        </li>\n      </ol>\n    </p>\n  </investigation>\n  <p permid="sYv">\n    One reason it is difficult to define discrete math is that it is a very broad description which encapsulates a large number of subjects.\n    In this course we will study four main topics:\n    <term>combinatorics</term>\n    (the theory of ways things <em>combine</em>;\n    in particular, how to count these ways),\n    <term>sequences</term>, <term>symbolic logic</term>,\n    and <term>graph theory</term>.\n    However, there are other topics that belong under the discrete umbrella,\n    including computer science, abstract algebra,\n    number theory, game theory,\n    probability, and geometry\n    (some of these, particularly the last two,\n    have both discrete and non-discrete variants).\n  </p>\n\n  <p permid="ZfE">\n    Ultimately the best way to learn what discrete math is about is to <em>do</em> it.\n    Let\'s get started!\n    Before we can begin answering more complicated\n    (and fun)\n    problems, we must lay down some foundation.\n    We start by reviewing mathematical statements, sets, and functions in\n    the framework of discrete mathematics.\n  </p>\n</section>';
 
 var internalSource = {  // currently the key is the HTML id
-//   "root_data": {"id": "hPw", "number_base": "0.1" },
-   "root_data": {"id": "page-1", "number_base": "0.1" },
-   "hPw": {"xml:id": "hPw", "sourcetag": "section", "title": "What is Discrete Mathematics?",
-           "content": "<&>akX<;>\n<&>UvL<;>\n<&>ACU<;>\n<&>gKd<;>\n<&>MRm<;>\n<&>udO<;>\n<&>sYv<;>\n<&>ZfE<;>"},
-   "gKd": {"xml:id": "gKd", "sourcetag": "p", "title": "", "parent": ["hPw","content"],
-           "content": "Discrete math could still ask about the range of a function, but the set would not be an interval. Consider the function which gives the number of children of each person reading this. What is the range? I'm guessing it is something like <&>mset<;>. Maybe 4 is in there too.\nBut certainly there is nobody reading this that has 1.32419 children. This output set <&>emis<;> discrete because the elements are separate. The inputs to the function also form a discrete set because each input is an individual person."},
-   "mset": {"xml:id": "mset", "sourcetag": "m", "parent": ["gKd","content"],
-           "content": "\\{0, 1, 2, 3\\}"},
-   "emis": {"xml:id": "emis", "sourcetag": "em", "parent": ["gKd","content"],
-           "content": "is"},
-   "emdo": {"xml:id": "emdo", "sourcetag": "em", "parent": ["ZfE","content"],
-           "content": "do"},
-   "emadj": {"xml:id": "emadj", "sourcetag": "em", "parent": ["vTb","content"],
-           "content": "Adjective"},
-   "MRm": {"xml:id": "MRm", "sourcetag": "p", "title": "", "parent": ["hPw","content"],
-           "content": "One way to get a feel for the subject is to consider the types of problems you solve in discrete math.\nHere are a few simple examples:"},
-   "ZfE": {"xml:id": "cak", "sourcetag": "p", "title": "", "parent": ["hPw","content"],
-           "content": "Ultimately the best way to learn what discrete math is about is to <&>emdo<;> it. Let's get started! Before we can begin answering more complicated (and fun) problems, we must lay down some foundation. We start by reviewing mathematical statements, sets, and functions in the framework of discrete mathematics."},
-   "PLS": {"xml:id": "PLS", "sourcetag": "p", "title": "", "parent": ["akX","content"],
-           "content": "dis·crete / dis'krët."},
-   "vTb": {"xml:id": "vTb", "sourcetag": "p", "title": "", "parent": ["akX","content"],
-           "content": "<&>emadj<;>: Individually separate and distinct."},
-   "cak": {"xml:id": "cak", "sourcetag": "p", "title": "", "parent": ["akX","content"],
-           "content": "<&>357911<;>: separate - detached - distinct - abstract."},
-   "akX": {"xml:id": "akX", "sourcetag": "blockquote", "title": "", "parent": ["hPw","content"],
-           "content": "<&>PLS<;>\n<&>vTb<;>\n<&>cak<;>"},
-   "ell1": {"xml:id": "ell1", "sourcetag": "ellipsis", "parent": ["UvL","content"]},
-   "ell2": {"xml:id": "ell1", "sourcetag": "ellipsis", "parent": ["UvL","content"]},
-   "qqq1": {"xml:id": "qqq1", "sourcetag": "q", "parent": ["UvL","content"], "content": "discrete"},
-   "UvL": {"xml:id": "UvL", "sourcetag": "p", "title": "","parent": ["hPw","content"],
-           "content": "    Defining <&>eee1c<;>\n    is hard because defining <&>eee1d<;> is hard.\n    What is mathematics?\n    The study of numbers?\n     In part, but you also study functions and lines and triangles and parallelepipeds and vectors and\n <&>ell2<;>.\n Or perhaps you want to say that mathematics is a collection of tools that allow you to solve problems.\n What sort of problems?\n Okay, those that involve numbers,\n functions, lines, triangles,\n <&>ell1<;>.\n Whatever your conception of what mathematics is,\n try applying the concept of <&>qqq1<;> to it, as defined above.\n Some math fundamentally deals with <&>eee1a<;>\n that is individually separate and distinct."},
-   "eee1c": {"xml:id": "eee1c", "sourcetag": "em", "parent": ["UvL", "content"],
-           "content": 'discrete mathematics'},
-   "eee1d": {"xml:id": "eee1d", "sourcetag": "em", "parent": ["UvL", "content"],
-           "content": 'mathematics'},
-   "eee1a": {"xml:id": "eee1a", "sourcetag": "em", "parent": ["UvL", "content"],
-           "content": 'stuff'},
-   "eee1b": {"xml:id": "eee1b", "sourcetag": "em", "parent": ["UvL", "content"],
-           "content": 'combine'},
-   "357911": {"xml:id": "357911", "sourcetag": "em", "parent": ["cak", "content"],
-           "content": 'Synonyms'},
-   "term1a": {"xml:id": "term1a", "sourcetag": "term", "parent": ["sYv","content"],
-             "content": "symbolic logic"},
-   "term1b": {"xml:id": "term1b", "sourcetag": "term", "parent": ["sYv","content"],
-             "content": "combinatorics"},
-   "term1c": {"xml:id": "term1c", "sourcetag": "term", "parent": ["sYv","content"],
-             "content": "sequences"},
-   "term1d": {"xml:id": "term1d", "sourcetag": "term", "parent": ["sYv","content"],
-             "content": "graph theory"},
-   "m0": {"xml:id": "m0", "sourcetag": "m", "parent": ["ACU","content"],
-             "content": "0"},
-   "sYv": {"xml:id": "sYv", "sourcetag": "p", "parent": ["hPw","content"],
-           "content": 'One reason it is difficult to define discrete math is that it is a very broad description which encapsulates a large number of subjects.\nIn this course we will study four main topics: <&>term1b<;> (the theory of ways things <&>eee1b<;>; in particular, how to count these ways), <&>term1c<;>, <&>term1a<;>, and <&>term1d<;>. However, there are other topics that belong under the discrete umbrella, including computer science, abstract algebra, number theory, game theory, probability, and geometry (some of these, particularly the last two, have both discrete and non-discrete variants).'},
-   "ACU": {"xml:id": "ACU", "sourcetag": "p", "parent": ["hPw","content"],
-           "content": "In an algebra or calculus class, you might have found a particular set of numbers (maybe the set of numbers in the range of a function). You would represent this set as an interval: <&>223344<;> is the range of <&>112233<;> since the set of outputs of the function are all real numbers <&>m0<;> and greater. This set of numbers is NOT discrete. The numbers in the set are not separated by much at all. In fact, take any two numbers in the set and there are infinitely many more between them which are also in the set."},
-   "112233": {"xml:id": "112233", "sourcetag": "m", "parent": ["ACU","content"],
-           "content": "f(x)=x^2"},
-   "udO": {"xml:id": "udO", "sourcetag": "investigation", "parent": ["hPw","content"],
-           "content": "<&>Iht<;><&>ooC<;>"},
-   "Iht": {"xml:id": "Iht", "sourcetag": "p", "parent": ["udO","content"],
-           "content": "<&>Ihtem<;>"},
-   "Ihtem": {"xml:id": "Ihtem", "sourcetag": "em", "parent": ["Iht","content"],
-           "content": "Note: Throughout the text you will see <&>em1a<;>\nactivities like this one.\nAnswer the questions in these as best you can to give yourself a feel for what is coming next."},
-   "em1a": {"xml:id": "em1", "sourcetag": "alert", "parent": ["Iht","content"],
-           "content": "Investigate!"},
-   "ooC": {"xml:id": "ooC", "sourcetag": "list", "parent": ["udO","content"],
-           "content": "<&>mzp<;><&>SGy<;><&>yNH<;><&>eUQ<;>"},
-   "eUQ": {"xml:id": "eUQ", "sourcetag": "li", "parent": ["ooC","content"],
-           "content": "<&>jEJ<;>"},
-   "jEJ": {"xml:id": "jEJ", "sourcetag": "p", "parent": ["eUQ","content"],
-           "content": "Back in the days of yore, five small towns decided they wanted to build roads directly connecting each pair of towns. While the towns had plenty of money to build roads as long and as winding as they wished, it was very important that the roads not intersect with each other (as stop signs had not yet been invented). Also, tunnels and bridges were not allowed. Is it possible for each of these towns to build a road to each of the four other towns without creating any intersections?"},
-   "mzp": {"xml:id": "mzp", "sourcetag": "li", "parent": ["ooC","content"],
-           "content": "<&>LbZ<;>"},
-   "LbZ": {"xml:id": "LbZ", "sourcetag": "p", "parent": ["mzp","content"],
-           "content": "The most popular mathematician in the world is throwing a party for all of his friends.\n As a way to kick things off, they decide that everyone should shake hands.\n Assuming all 10 people at the party each shake hands with every other person\n (but not themselves,\n obviously)\n exactly once, how many handshakes take place?"},
-   "SGy": {"xml:id": "SGy", "sourcetag": "li", "parent": ["ooC","content"],
-           "content": "<&>rji<;>"},
-   "rji": {"xml:id": "rji", "sourcetag": "p", "parent": ["SGy","content"],
-           "content": "At the warm-up event for Oscar's All Star Hot Dog Eating Contest, Al ate one hot dog.\n Bob then showed him up by eating three hot dogs.\n Not to be outdone, Carl ate five.\n This continued with each contestant eating two more hot dogs than the previous contestant.\n How many hot dogs did Zeno (the 26th and final contestant) eat?\n How many hot dogs were eaten all together?"},
-   "223344": {"xml:id": "223344", "sourcetag": "m", "parent": ["ACU","content"],
-           "content": "[0, \\infty)"},
-   "yNH": {"xml:id": "yNH", "sourcetag": "li", "parent": ["ooC","content"],
-           "content": "<&>Xqr<;><&>ssiiddee<;><&>DxA<;>"},
-   "Xqr": {"xml:id": "Xqr", "sourcetag": "p", "parent": ["yNH","content"],
-           "content": "After excavating for weeks, you finally arrive at the burial chamber.\nThe room is empty except for two large chests.\n On each is carved a message (strangely in English):"},
-   "ssiiddee": {"xml:id": "ssiiddee", "sourcetag": "image", "parent": ["yNH","content"],
-           "source": "http://discrete.openmathbooks.org/dmoi3/images/two-chests.svg",
-           "width": "66", "marginright": "17", "marginleft": "17"},
-/*
-   "ssiiddee": {"xml:id": "ssiiddee", "sourcetag": "image", "parent": ["yNH","content"],
-           "src": "images/two-chests.svg",
-           "width": "66", "marginright": "17", "marginleft": "17"},
-   "ppccii": {"xml:id": "ppccii", "sourcetag": "image", "parent": ["ssiiddee","content"],
-           "src": "images/two-chests.svg", "alt": "alt text goes here"},
-*/
-   "DxA": {"xml:id": "DxA", "sourcetag": "p", "parent": ["yNH","content"],
-           "content": "You know exactly one of these messages is true.\nWhat should you do?"}
+   "root_data": {"id": "page-1", "number_base": "0.1" }
 }
 
 /* top_level_id is a mistake:  just use internalSource.root_data.id */
-var top_level_id = internalSource.root_data.id;
+var top_level_id = internalSource["root_data"]["id"];
 
 var current_editing = {
     "level": 0,
@@ -3104,7 +3013,7 @@ function extract_internal_contents(some_text) {
     the_text = the_text.replace(/<([^<]+) contenteditable="false">(.*?)<[^<]+>/g, save_internal_cont);
     // new $math$
     editorLog("extracting new $math$");
-    the_text = the_text.replace(/(^|\s)\$([^\$]+)\$(\s|$|[.,!?;:])/g, extract_new_math);
+    the_text = the_text.replace(/(^|\s)\$([^\$]+)\$(\s|$|[.,!?;:])/mg, extract_new_math);
     // new \\(math\\)
     editorLog("extracting new \\(math\\)");
     the_text = the_text.replace(/(^|.)\\\(([^\$]+)\\\)(.|$)/g, extract_new_math);
@@ -3572,7 +3481,7 @@ function output_from_source(the_object, output_structure, format) {
             this_piece_output = output_from_text(the_object[this_piece], format);
             if (format == "pretext" && output_tag == "md" && this_piece == "content") {
                 // convert \cr to mrow
-                this_piece_output = this_piece_output.replace(/\s*\\cr\s+/g, "</mrow>\n<mrow>\n");
+                this_piece_output = this_piece_output.replace(/\s*\\cr\b\s*/g, "</mrow>\n<mrow>\n");
                 this_piece_output = "<mrow>\n" + this_piece_output + "\n</mrow>";
             }
             the_answer += wrap_tag(this_tag, this_piece_output, [])
@@ -4251,6 +4160,36 @@ function main_menu_navigator(e) {  // we are not currently editing
                  edit_menu_for(editableChildren[0], "entering");
 
                 return ""
+             // combine the next with previous, because the ony difference is which object receives focus
+            } else if (dataLocation == "end") {  // move to the end of an object
+
+                editorLog("theChooseCurrent", theChooseCurrent);
+                var object_to_be_entered = object_of_interest;
+                editorLog("object_to_be_entered", object_to_be_entered);
+                object_to_be_entered.classList.remove("may_select");
+                object_to_be_entered.classList.remove("may_enter");
+                object_to_be_entered.classList.remove("may_leave");
+                editorLog('next_editable_of(object_to_be_entered, "children")');
+                editableChildren = next_editable_of(object_to_be_entered, "children");
+                var num_editableChildren = editableChildren.length;
+                current_level += 1;
+                current_editing["level"] = current_level;
+    //            current_editing["location"][current_level] = 0;
+                current_editing["location"][current_level] = num_editableChildren - 1;
+                current_editing["tree"][current_level] = editableChildren;
+                editorLog("current_editing", current_editing);
+
+                editorLog("object_to_be_entered", object_to_be_entered);
+                editorLog("with some children", editableChildren);
+               // put  menu on the item at the top of the block_we_are_reentering
+                   // this is a repeat of a Tab case, so consolidate
+                editorLog("menu place 10end");
+                editorLog("document.activeElement", document.activeElement);
+
+                 editorLog("menu on", editableChildren[num_editableChildren - 1]);
+                 edit_menu_for(editableChildren[num_editableChildren - 1], "entering");
+
+                return ""
             } else if ((dataLocation == "beforebegin") || (dataLocation == "afterend") || (dataLocation == "afterbegin")) {  // should be the only other options
                 theChooseCurrent.parentElement.classList.add("past");
                 theChooseCurrent.removeAttribute("id");
@@ -4630,7 +4569,7 @@ fetch(source_url).then(
           if (this_source_txt.includes("404 Not")) {
               console.log("Error: source unavailable")
           } else if (this_source_txt.includes("<biblio ")) {
-              alert("Editing bibliographies not implemented")
+              console.log("Editing bibliographies not implemented")
           } else if( false && editing_mode) {
               initialize_editing(this_source_txt)
           } else {
@@ -5053,4 +4992,3 @@ alert("testing")
   return sourceobj;
 }
 
-// internalSource = re_transform_source();
