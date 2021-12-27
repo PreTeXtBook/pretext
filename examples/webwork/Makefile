@@ -101,15 +101,22 @@ SERVER = https://webwork-ptx.aimath.org
 # Build PG (does not need representations)
 
 #########################################################################
+# Verbose Output
+# Applications of the pretext/pretext  script use extra-verbose output
+# via the  -vv  switch so that temporary directories are preserved for
+# testing purposes.This should not be taken as necessary or best
+# practice for a real PreTeXt project using WeBWorK problems.
+
+#########################################################################
 #  Extract webwork problems into a single XML file.
 #  Location is within generated folder (named in the publisher file),
 #  within "webwork" subfolder
 
 sample-chapter-representations:
-	$(PTX)/pretext/pretext -v -c webwork -p $(SMPCPUB) -s $(SERVER) $(SMPC)
+	$(PTX)/pretext/pretext -vv -c webwork -p $(SMPCPUB) -s $(SERVER) $(SMPC)
 
 mini-representations:
-	$(PTX)/pretext/pretext -v -c webwork -p $(MINIPUB) -s $(SERVER) $(MINI)
+	$(PTX)/pretext/pretext -vv -c webwork -p $(MINIPUB) -s $(SERVER) $(MINI)
 
 
 #########################################################################
@@ -119,12 +126,12 @@ mini-representations:
 sample-chapter-pdf:
 	-rm -r $(PDFOUT)
 	install -d $(PDFOUT)
-	$(PTX)/pretext/pretext -v -c all -f pdf -p $(SMPCPUB) -d $(PDFOUT) $(SMPC)
+	$(PTX)/pretext/pretext -vv -c all -f pdf -p $(SMPCPUB) -d $(PDFOUT) $(SMPC)
 
 mini-pdf:
 	-rm -r $(PDFOUT)
 	install -d $(PDFOUT)
-	$(PTX)/pretext/pretext -v -c all -f pdf -p $(MINIPUB) -d $(PDFOUT) $(MINI)
+	$(PTX)/pretext/pretext -vv -c all -f pdf -p $(MINIPUB) -d $(PDFOUT) $(MINI)
 
 
 #########################################################################
@@ -138,18 +145,18 @@ mini-pdf:
 sample-chapter-html:
 	-rm -r $(IMGOUT)
 	install -d $(IMGOUT)
-	$(PTX)/pretext/pretext -v -c latex-image -f svg -p $(SMPCPUB) -d $(IMGOUT) $(SMPC)
+	$(PTX)/pretext/pretext -vv -c latex-image -f svg -p $(SMPCPUB) -d $(IMGOUT) $(SMPC)
 	-rm -r $(WWEXAMPLE)/sample-chapter/generated/latex-image
 	install -d $(WWEXAMPLE)/sample-chapter/generated/latex-image
 	cp $(IMGOUT)/*.svg $(WWEXAMPLE)/sample-chapter/generated/latex-image
 	-rm -r $(HTMLOUT)
 	install -d $(HTMLOUT)
-	$(PTX)/pretext/pretext -v -c all -f html -p $(SMPCPUB) -x webwork.divisional.static no debug.datedfiles no -d $(HTMLOUT) $(SMPC); \
+	$(PTX)/pretext/pretext -vv -c all -f html -p $(SMPCPUB) -x webwork.divisional.static no debug.datedfiles no -d $(HTMLOUT) $(SMPC); \
 
 mini-html:
 	-rm -r $(HTMLOUT)
 	install -d $(HTMLOUT)
-	$(PTX)/pretext/pretext -v -c all -f html -p $(MINIPUB) -x debug.datedfiles no -d $(HTMLOUT) $(MINI); \
+	$(PTX)/pretext/pretext -vv -c all -f html -p $(MINIPUB) -x debug.datedfiles no -d $(HTMLOUT) $(MINI); \
 
 
 #########################################################################
@@ -212,13 +219,13 @@ WWOUT        = $(SCRATCH)/webwork-representations
 sample-chapter-representations-not-managed:
 	-rm -r $(WWOUT)
 	install -d $(WWOUT)
-	$(PTX)/pretext/pretext -v -c webwork -d $(WWOUT) -s $(SERVER) $(SMPC)
+	$(PTX)/pretext/pretext -vv -c webwork -d $(WWOUT) -s $(SERVER) $(SMPC)
 
 # DO NOT MODEL YOUR PROJECT AFTER THIS
 mini-representations-not-managed:
 	-rm -r $(WWOUT)
 	install -d $(WWOUT)
-	$(PTX)/pretext/pretext -v -c webwork -d $(WWOUT) -s $(SERVER) $(MINI)
+	$(PTX)/pretext/pretext -vv -c webwork -d $(WWOUT) -s $(SERVER) $(MINI)
 
 
 #########################################################################
@@ -238,7 +245,7 @@ sample-chapter-pdf-not-managed:
 	cp -a $(WWOUT)/*.pdf $(PDFOUT)/images
 	cp $(WWOUT)/webwork-representations.xml $(WWEXAMPLE)/sample-chapter
 	cd $(PDFOUT); \
-	$(PTX)/pretext/pretext -v -c all -f latex -p $(SMPCPUBNOMAN) -d $(PDFOUT) $(SMPC); \
+	$(PTX)/pretext/pretext -vv -c all -f latex -p $(SMPCPUBNOMAN) -d $(PDFOUT) $(SMPC); \
 	xelatex sample-chapter.tex; \
 	xelatex sample-chapter.tex; \
 	rm $(WWEXAMPLE)/sample-chapter/webwork-representations.xml; \
@@ -249,7 +256,7 @@ mini-pdf-not-managed:
 	install -d $(PDFOUT)
 	cp $(WWOUT)/webwork-representations.xml $(WWEXAMPLE)/minimal
 	cd $(PDFOUT); \
-	$(PTX)/pretext/pretext -v -c all -f pdf -p $(MINIPUBNOMAN) -d $(PDFOUT) $(MINI); \
+	$(PTX)/pretext/pretext -vv -c all -f pdf -p $(MINIPUBNOMAN) -d $(PDFOUT) $(MINI); \
 	rm $(WWEXAMPLE)/minimal/webwork-representations.xml; \
 
 
@@ -271,7 +278,7 @@ sample-chapter-html-not-managed:
 	-rm -r $(IMGOUT)
 	install -d $(IMGOUT)
 	cp $(WWOUT)/webwork-representations.xml $(WWEXAMPLE)/sample-chapter
-	$(PTX)/pretext/pretext -v -c latex-image -f svg -p $(SMPCPUBNOMAN) -d $(IMGOUT) $(SMPC)
+	$(PTX)/pretext/pretext -vv -c latex-image -f svg -p $(SMPCPUBNOMAN) -d $(IMGOUT) $(SMPC)
 	-rm -r $(HTMLOUT)
 	install -d $(HTMLOUT)
 	install -d $(HTMLOUT)/images
@@ -280,7 +287,7 @@ sample-chapter-html-not-managed:
 	cp -a $(WWOUT)/*.svg $(HTMLOUT)/images
 	cp -a $(IMGOUT)/*.svg $(HTMLOUT)/images
 	cd $(HTMLOUT); \
-	$(PTX)/pretext/pretext -v -c all -f html -p $(SMPCPUBNOMAN) -x webwork.divisional.static no -d $(HTMLOUT) $(SMPC); \
+	$(PTX)/pretext/pretext -vv -c all -f html -p $(SMPCPUBNOMAN) -x webwork.divisional.static no -d $(HTMLOUT) $(SMPC); \
 	rm $(WWEXAMPLE)/sample-chapter/webwork-representations.xml; \
 
 # DO NOT MODEL YOUR PROJECT AFTER THIS
@@ -289,5 +296,5 @@ mini-html-not-managed:
 	install -d $(HTMLOUT)
 	cp $(WWOUT)/webwork-representations.xml $(WWEXAMPLE)/minimal
 	cd $(HTMLOUT); \
-	$(PTX)/pretext/pretext -v -c all -f html -p $(MINIPUBNOMAN) -d $(HTMLOUT) $(MINI); \
+	$(PTX)/pretext/pretext -vv -c all -f html -p $(MINIPUBNOMAN) -d $(HTMLOUT) $(MINI); \
 	rm $(WWEXAMPLE)/minimal/webwork-representations.xml; \
