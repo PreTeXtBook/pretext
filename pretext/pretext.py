@@ -1641,10 +1641,14 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
 def html(xml, pub_file, stringparams, extra_xsl, dest_dir):
     """Convert XML source to HTML files in destination directory"""
     import os.path # join()
+    import shutil # copytree()
     import distutils.dir_util # copy_tree()
 
     # Consult publisher file for locations of images
     generated_abs, external_abs = get_managed_directories(xml, pub_file)
+
+    # names for scratch directories
+    tmp_dir = get_temporary_directory()
 
     # support publisher file, not subtree argument
     if pub_file:
@@ -1655,26 +1659,29 @@ def html(xml, pub_file, stringparams, extra_xsl, dest_dir):
     else:
         extraction_xslt = os.path.join(get_ptx_xsl_path(), 'pretext-html.xsl')
 
-    # copy externally manufactured files to  dest_dir
+    # Managed, generated images
+    # copytree() does not overwrite since
+    # tmp_dir is created anew on each use
+    if external_abs:
+        external_dir = os.path.join(tmp_dir, 'external')
+        shutil.copytree(external_abs, external_dir)
+
+    if generated_abs:
+        generated_dir = os.path.join(tmp_dir, 'generated')
+        shutil.copytree(generated_abs, generated_dir)
+
+    # Write output into temporary directory
+    _verbose('converting {} to HTML in {}'.format(xml, tmp_dir))
+    xsltproc(extraction_xslt, xml, None, tmp_dir, stringparams)
+    map_path_to_xml_id(xml, tmp_dir)
+
     # with multiple files, we need to copy a tree, and
     # shutil.copytree() will balk at overwriting directories
     # before Python 3.8.  The  distutils  module is old
     # (being replaced by setup).  So once on Python 3.8 these
     # copies can be replaced with shutil.copytree() using
     # the  dirs_exist_ok  keyword
-    if external_abs:
-        external_dir = os.path.join(dest_dir, 'external')
-        distutils.dir_util.copy_tree(external_abs, external_dir)
-
-    # copy generated to  dest_dir
-    if generated_abs:
-        generated_dir = os.path.join(dest_dir, 'generated')
-        distutils.dir_util.copy_tree(generated_abs, generated_dir)
-
-    # Write output into working directory, no scratch space needed
-    _verbose('converting {} to HTML in {}'.format(xml, dest_dir))
-    xsltproc(extraction_xslt, xml, None, dest_dir, stringparams)
-    map_path_to_xml_id(xml, dest_dir)
+    distutils.dir_util.copy_tree(tmp_dir, dest_dir)
 
 
 # Build a mapping between XML IDs and the resulting generated HTML files. The goal: map from source files to the resulting HTML files produced by the pretext build. The data structure is:
