@@ -21,7 +21,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <publication>
 
-    <!-- Relative path, relative to "main" source file -->
-    <source webwork-problems="webwork-representations.ptx"/>
+    <source>
+      <directories generated="generated" external="external"/>
+    </source>
 
 </publication>

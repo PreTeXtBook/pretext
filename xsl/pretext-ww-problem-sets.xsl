@@ -33,11 +33,10 @@
     extension-element-prefixes="exsl date"
 >
 
-<!-- Apply this style sheet to merged XML (see pretext-merge.xsl and       -->
-<!-- webwork-extraction.xsl) to produce a folder tree of .pg problem files -->
-<!-- with set defintion and set header files. Compress into a .tgz and     -->
-<!-- upload into a WeBWorK course (perhaps in the templates/local folder); -->
-<!-- or into a server's libraries folder and set up site-wide access.      -->
+<!-- Apply this style sheet to to produce a folder tree of PG problem files -->
+<!-- with set defintion and set header files. Compress into a .tgz and      -->
+<!-- upload into a WeBWorK course (perhaps in the templates/local folder);  -->
+<!-- or into a server's libraries folder and set up site-wide access.       -->
 
 <!-- Standard conversion groundwork -->
 <xsl:import href="./publisher-variables.xsl"/>

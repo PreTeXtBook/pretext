@@ -64,6 +64,10 @@
              <!-- <text>My Button Text</text>  -->
         </feedback>
 
+        <latex-image-preamble>
+            \usepackage{tikz}
+        </latex-image-preamble>
+
         <latex-image-preamble syntax="PGtikz">
             \usepackage{pgfplots}
             \pgfplotsset{
@@ -111,7 +115,6 @@
                 <date><today /></date>
 
             </titlepage>
-
 
             <abstract>
                 <p>This is a sample article to demonstrate integrating <webwork /> homework problems into content authored with <pretext />.  While technically an example of <pretext />'s <c>article</c> format, it is intended to closely resemble a chapter of a <pretext /> <c>book</c> that is divided into sections.</p>

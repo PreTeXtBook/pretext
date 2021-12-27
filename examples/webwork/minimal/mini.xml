@@ -47,7 +47,7 @@
               Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:
             </p>
             <p>
-              <m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="2" />
+              <m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="5" />
             </p>
           </statement>
           <hint>
