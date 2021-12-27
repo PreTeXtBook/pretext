@@ -553,9 +553,9 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
         ww_reps_dir = os.path.join(generated_dir, 'webwork')
         ww_images_dir = os.path.join(ww_reps_dir, 'images')
     else:
-        msg = ' '.join(["A publisher file specifying /publication/source/@generated is not in use.",
-                        "Output will be placed in", dest_dir])
-        print(msg)
+        msg = '\n'.join(["A publisher file specifying /publication/source/@generated",
+                         "is not in use. Output will be placed in {}"])
+        _verbose(msg.format(dest_dir))
         ww_reps_dir = dest_dir
         # Below is not a good choice, but here for backwards compatibility
         ww_images_dir = dest_dir
