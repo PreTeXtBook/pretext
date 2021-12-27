@@ -1638,8 +1638,8 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
 # Conversion to HTML
 ####################
 
-def html(xml, pub_file, stringparams, extra_xsl, dest_dir):
-    """Convert XML source to HTML files in destination directory"""
+def html(xml, pub_file, stringparams, file_format, extra_xsl, out_file, dest_dir):
+    """Convert XML source to HTML files, in destination directory or as zip file"""
     import os.path # join()
     import shutil # copytree()
     import distutils.dir_util # copy_tree()
@@ -1675,13 +1675,14 @@ def html(xml, pub_file, stringparams, extra_xsl, dest_dir):
     xsltproc(extraction_xslt, xml, None, tmp_dir, stringparams)
     map_path_to_xml_id(xml, tmp_dir)
 
-    # with multiple files, we need to copy a tree, and
-    # shutil.copytree() will balk at overwriting directories
-    # before Python 3.8.  The  distutils  module is old
-    # (being replaced by setup).  So once on Python 3.8 these
-    # copies can be replaced with shutil.copytree() using
-    # the  dirs_exist_ok  keyword
-    distutils.dir_util.copy_tree(tmp_dir, dest_dir)
+    if file_format == 'html':
+        # with multiple files, we need to copy a tree, and
+        # shutil.copytree() will balk at overwriting directories
+        # before Python 3.8.  The  distutils  module is old
+        # (being replaced by setup).  So once on Python 3.8 these
+        # copies can be replaced with shutil.copytree() using
+        # the  dirs_exist_ok  keyword
+        distutils.dir_util.copy_tree(tmp_dir, dest_dir)
 
 
 # Build a mapping between XML IDs and the resulting generated HTML files. The goal: map from source files to the resulting HTML files produced by the pretext build. The data structure is:
