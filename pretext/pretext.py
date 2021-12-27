@@ -23,6 +23,7 @@
 # 2021-05-21: this module expects Python 3.6 or newer
 #     copying HTML into cwd twice, might be better with
 #     shutil.copytree(dirs_exist_ok), requires Python 3.8
+#     see comments near copytree() and copy_tree()
 #
 #     subprocess.run() requires Python 3.5
 #     shutil.which() member requires 3.3
@@ -302,6 +303,7 @@ def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_
     # Need to copy entire external directory in the managed case.
     # Making data files available for latex image compilation is
     # not supported outside of the managed directory scheme (2021-07-28)
+    # copytree() does not overwrite since tmp_dir is created anew on each use
     _, external_dir = get_managed_directories(xml_source, pub_file)
     if external_dir:
         external_dest = os.path.join(tmp_dir, 'external')
@@ -469,6 +471,7 @@ def latex_tactile_image_conversion(xml_source, pub_file, stringparams, dest_dir,
     # Need to copy entire external directory in the managed case.
     # Making data files available for latex image compilation is
     # not supported outside of the managed directory scheme (2021-07-28)
+    # copytree() does not overwrite since tmp_dir is created anew on each use
     _, external_dir = get_managed_directories(xml_source, pub_file)
     if external_dir:
         external_dest = os.path.join(tmp_dir, 'external')
@@ -1638,7 +1641,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
 def html(xml, pub_file, stringparams, extra_xsl, dest_dir):
     """Convert XML source to HTML files in destination directory"""
     import os.path # join()
-    import shutil # copytree()
+    import distutils.dir_util # copy_tree()
 
     # Consult publisher file for locations of images
     generated_abs, external_abs = get_managed_directories(xml, pub_file)
@@ -1653,14 +1656,20 @@ def html(xml, pub_file, stringparams, extra_xsl, dest_dir):
         extraction_xslt = os.path.join(get_ptx_xsl_path(), 'pretext-html.xsl')
 
     # copy externally manufactured files to  dest_dir
+    # with multiple files, we need to copy a tree, and
+    # shutil.copytree() will balk at overwriting directories
+    # before Python 3.8.  The  distutils  module is old
+    # (being replaced by setup).  So once on Python 3.8 these
+    # copies can be replaced with shutil.copytree() using
+    # the  dirs_exist_ok  keyword
     if external_abs:
         external_dir = os.path.join(dest_dir, 'external')
-        shutil.copytree(external_abs, external_dir)
+        distutils.dir_util.copy_tree(external_abs, external_dir)
 
     # copy generated to  dest_dir
     if generated_abs:
         generated_dir = os.path.join(dest_dir, 'generated')
-        shutil.copytree(generated_abs, generated_dir)
+        distutils.dir_util.copy_tree(generated_abs, generated_dir)
 
     # Write output into working directory, no scratch space needed
     _verbose('converting {} to HTML in {}'.format(xml, dest_dir))
@@ -1810,6 +1819,8 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
     # (an empty string is impossible due to a slash always being present?)
 
     # Managed, generated images
+    # copytree() does not overwrite since
+    # tmp_dir is created anew on each use
     if generated_abs:
         generated_dir = os.path.join(tmp_dir, 'generated')
         shutil.copytree(generated_abs, generated_dir)
