@@ -1641,8 +1641,9 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
 def html(xml, pub_file, stringparams, file_format, extra_xsl, out_file, dest_dir):
     """Convert XML source to HTML files, in destination directory or as zip file"""
     import os.path # join()
-    import shutil # copytree()
+    import shutil # copytree(), copy2()
     import distutils.dir_util # copy_tree()
+    import zipfile as ZIP
 
     # Consult publisher file for locations of images
     generated_abs, external_abs = get_managed_directories(xml, pub_file)
@@ -1683,6 +1684,22 @@ def html(xml, pub_file, stringparams, file_format, extra_xsl, out_file, dest_dir
         # copies can be replaced with shutil.copytree() using
         # the  dirs_exist_ok  keyword
         distutils.dir_util.copy_tree(tmp_dir, dest_dir)
+    elif file_format == 'zip':
+        # working in temporary directory gets simple paths in zip file
+        owd = os.getcwd()
+        os.chdir(tmp_dir)
+        zip_file = 'html-output.zip'
+        _verbose('packaging a zip file temporarily as {}'.format(os.path.join(tmp_dir, zip_file)))
+        with ZIP.ZipFile(zip_file, mode='w', compression=ZIP.ZIP_DEFLATED) as epub:
+            for root, dirs, files in os.walk('.'):
+                for name in files:
+                    epub.write(os.path.join(root, name))
+        derivedname = get_output_filename(xml, out_file, dest_dir, '.zip')
+        shutil.copy2(zip_file, derivedname)
+        _verbose('zip file of HTML output deposited as {}'.format(derivedname))
+        os.chdir(owd)
+    else:
+        raise ValueError('PTX:BUG: HTML file format not recognized')
 
 
 # Build a mapping between XML IDs and the resulting generated HTML files. The goal: map from source files to the resulting HTML files produced by the pretext build. The data structure is:
