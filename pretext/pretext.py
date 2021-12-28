@@ -1453,7 +1453,10 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     import re, fileinput
     import zipfile as ZIP
     # for building a cover image
-    from PIL import Image, ImageDraw, ImageFont
+    # modules from the PIL package
+    import PIL.Image # new()
+    import PIL.ImageDraw # Draw()
+    import PIL.ImageFont # truetype(), load_default()
     # external module, often forgotten
     try:
         import lxml.etree as ET  # packaging file
@@ -1620,11 +1623,11 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
                 _verbose('attempting to construct cover image using "Arial.ttf" and "Arial Bold.ttf"')
                 try:
                     title_size = 100
-                    title_font = ImageFont.truetype("Arial Bold.ttf", title_size)
+                    title_font = PIL.ImageFont.truetype("Arial Bold.ttf", title_size)
                     subtitle_size = int(title_size*0.6)
-                    subtitle_font = ImageFont.truetype("Arial Bold.ttf", subtitle_size)
+                    subtitle_font = PIL.ImageFont.truetype("Arial Bold.ttf", subtitle_size)
                     author_size = subtitle_size
-                    author_font = ImageFont.truetype("Arial.ttf", author_size)
+                    author_font = PIL.ImageFont.truetype("Arial.ttf", author_size)
                     title_words = title.split()
                     subtitle_words = subtitle.split()
                     author_names = [x.strip() for x in author.split(',')]
@@ -1652,8 +1655,8 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
                     # each author on own line
                     multiline_author = "\n".join(author_names).strip()
                     # create new image
-                    cover_png = Image.new(mode = "RGB", size = (png_width,png_height), color = "white")
-                    draw = ImageDraw.Draw(cover_png)
+                    cover_png = PIL.Image.new(mode = "RGB", size = (png_width,png_height), color = "white")
+                    draw = PIL.ImageDraw.Draw(cover_png)
                     title_depth = int(png_height//4)
                     subtitle_depth = title_depth + len(title_lines)*title_size + 0.2*title_size
                     author_depth = subtitle_depth + len(subtitle_lines)*subtitle_size + 0.8*title_size
@@ -1666,9 +1669,9 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
                     _verbose('attempting to construct crude bitmap font cover image')
                     try:
                         title_words = title_ASCII.split()
-                        title_font = ImageFont.load_default()
-                        cover_png = Image.new(mode = "RGB", size = (120,192), color = "white")
-                        draw = ImageDraw.Draw(cover_png)
+                        title_font = PIL.ImageFont.load_default()
+                        cover_png = PIL.Image.new(mode = "RGB", size = (120,192), color = "white")
+                        draw = PIL.ImageDraw.Draw(cover_png)
                         y = 20
                         for word in title_words:
                             draw.text((20, y), word, font=title_font, fill='black')
