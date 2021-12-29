@@ -822,11 +822,11 @@
                 <ul>
                     <li>Visually set-off from a run of <q>plain</q> paragraphs.  Often earning a number, and ideally provided a title or caption (<xref ref="best-practice-titles"/>).</li>
 
-                    <li>Reflowable lines of text, such as an <tag>example</tag>, <em>or</em> a more rigid, more spatial, more two-dimensional object, such as a <tag>figure</tag> or <tag>table</tag>.</li>
+                    <li>Reflowable lines of text, such as an <tag>example</tag>, <em>or</em> a more rigid, more spatial, more <term>planar</term> object, such as a <tag>figure</tag> or <tag>table</tag>.</li>
 
                     <li>Usually a child of a division (<xref ref="topic-divisions"/>).  But see just below.</li>
 
-                    <li>Typically a block does not contain another block, except that the more spatial ones can appear as part of a more textual one.</li>
+                    <li>Typically a block does not contain another block, except that the more planar ones can appear as part of a more textual one.</li>
 
                     <li>When numbered, all blocks generally run consecutively.  (In <latex/>-speak, <q>on the same counter.</q>)  Numbering FIGURE-LIKE and PROJECT-LIKE independently is in transition at this writing (2021-07-07).</li>
                 </ul>
@@ -946,7 +946,7 @@
 
         <introduction>
 
-            <p>This section expands on parts of <xref ref="overview-verbatim-literal" />.  For descriptions of more involved uses, such as program listings and console sessions, see <xref ref="topic-program-listings" />.</p>
+            <p>This section expands on parts of <xref ref="overview-verbatim-literal" />.  For descriptions of more involved uses, such as program listings and console sessions, see <xref ref="topic-program-console"/>.</p>
 
             <p>The tags described here contain <em>only raw characters</em>.  By that we typically mean the first 128 characters of the <acro>ASCII</acro> code.  Unicode characters are likely to migrate to HTML output just fine, but results for <latex /> output will be variable.  The restriction to character data has two consequences.  First, any markup mistakenly included will have its content silently ignored and dropped.  Second, you need to observe the rules on exceptional characters and escaped characters for <init>XML</init> for literal text, which are mercifully simple.</p>
 
@@ -982,7 +982,7 @@
 
             <p>You can structure the contents with <tag>cline</tag> in exactly the same manner as for <tag>cd</tag>.  But you may find this tedious.  Instead, you can make the content of <tag>pre</tag> a sequence of lines separated by newlines.  So that you can preserve the indentation of your source, the line closest to the left margin is taken to actually be the left margin, and a corresponding amount of leading whitespace will be removed from every line.  This will work well if you recognize two caveats.  First, results will be unpredictable if you mix spaces and tabs for indentation.  Sticking with spaces is best.  Second, if your first characters of content immediately follow the <tag>pre</tag> tag then there is no leading whitespace and it is as if that line is already at the left margin.  Then subsequent indentation may seem too severe to you.</p>
 
-            <p>As previously mentioned, <xref ref="topic-program-listings" /> discusses the <tag>console</tag> and <tag>program</tag> tags which are more specific, and hence more capable.  Review the possibilities before you decide between <tag>pre</tag>, <tag>console</tag>, and <tag>program</tag>.</p>
+            <p>As previously mentioned, <xref ref="topic-program-console"/> discusses the <tag>console</tag> and <tag>program</tag> tags which are more specific, and hence more capable.  Review the possibilities before you decide between <tag>pre</tag>, <tag>console</tag>, and <tag>program</tag>.</p>
         </subsection>
     </section>
 
@@ -1824,20 +1824,6 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
                 <p>Anything more than three columns tends to get very crowded horizontally.  Think twice about using more than that, and realize that six columns should be a ridiculously generous upper limit, and not a promise of good behavior in final output.</p>
             </note>
-        </subsection>
-
-        <subsection xml:id="topic-named-list">
-            <title>Named Lists</title>
-            <idx><h>list</h><h>named</h></idx>
-            <idx><h>named list</h></idx>
-            <idx><h>list</h><h>anonymous</h></idx>
-            <idx><h>anonymous list</h></idx>
-
-            <p>As mentioned above, it is not possible to have a list be the target of a cross-reference.  Should an entire list be <em>so important</em> that you need to point to it from elsewhere, then make it a <term>named list</term> by wrapping it in the <tag>list</tag> tag.</p>
-
-            <p>This element can begin with an optional <tag>introduction</tag>, then has a single, required list, which may be any of the three types.  It concludes with an optional <tag>conclusion</tag>.  It can have an <attr>xml:id</attr> attribute, which in a way is the whole <foreign xml:lang="fr-FR">raison d'être</foreign> for this construction.  It will be numbered when rendered, and so also requires a <tag>title</tag>.  You might think of this as similar to a <tag>table</tag><mdash/>bits of information organized spatially.</p>
-
-            <p>Since this element associates a number, title, to an entire list, we call it a <q>named list</q>.  What should we call a list that is authored within a paragraph and cannot be the target of a cross-reference?  We call it an <term>anonymous list</term> when we want to make the distinction.</p>
         </subsection>
 
         <subsection>
@@ -2850,6 +2836,48 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         </subsection>
     </section>
 
+    <section xml:id="topic-program-console">
+        <title>Programs and Consoles</title>
+        <idx>program</idx>
+        <idx>console</idx>
+
+        <p>A <tag>program</tag> will be treated as verbatim text (see <xref ref="overview-verbatim-literal"/>), subject to all the exceptions for exceptional characters (see <xref ref="overview-exceptional-characters"/>).  Indentation will be preserved, though an equal amount of leading whitespace will be stripped from every line, so as to keep the code shifted left as far as possible.  So you can indent your code consistently along with your <init>XML</init> indentation.  For this reason it is best to indent with spaces, and not tabs.  A mix will almost surely end badly, and in some programming languages tabs are discouraged (e.g. Python).</p>
+
+        <p>The <attr>language</attr> attribute may be used to get some degree of language-specific syntax highlighting.  We will eventually provide a table of attribute values here.  They are always lowercase, and a first guess might succeed.</p>
+
+        <p>A <tag>console</tag> is a transcript of an interactive session in a terminal or console at a command-line.  It is a sequence of the following elements, in this order, possibly repeated many times as a group: <tag>prompt</tag>, <tag>input</tag>, and <tag>output</tag>.  The <tag>output</tag> is optional, and a <tag>prompt</tag> is only displayed when there is an immediately subsequent <tag>input</tag> (which could be empty).  The content is treated as verbatim text (see <xref ref="overview-verbatim-literal"/>), subject to all the exceptions for exceptional characters (see <xref ref="overview-exceptional-characters"/>).</p>
+
+        <p>A <tag>program</tag> or <tag>console</tag> may be wrapped in a <tag>listing</tag>, see <xref ref="topic-listing"/>.</p>
+    </section>
+
+    <section xml:id="topic-figure">
+        <title>Figures</title>
+
+        <p>A <tag>figure</tag> is the most generic and flexible container for planar content.  But be sure to read <xref ref="overview-figures-tables-etc"/> so you are aware of the other possibilities.  A figure has a <tag>caption</tag>, which will typically render below the content (even if authored early as metadata) and serves to provide an extra description of the content.  So it may be several sentences long.  There is also a <tag>title</tag>, which is typically not rendered as part of the figure.  Instead it is used for cross-references, or in a list of figures, to identify the figure.  So it should be very short and might just be a phrase, such as <q>Life Cycle of a Salamander.</q></p>
+
+        <p>An <tag>image</tag> is likely the most frequent content in a <tag>figure</tag>.  But you may also place a <tag>video</tag>, <tag>audio</tag>, <tag>sidebyside</tag>, or <tag>sbsgroup</tag>.  Once completely implemented, an <tag>interactive</tag> is another possibility.  (See  <xref ref="topic-sidebyside"/> for more about the side-by-side construction.)</p>
+
+        <p>A special situation is when a <tag>figure</tag> is a panel of a <tag>sidebyside</tag>, which is itself inside a <tag>figure</tag>.  Then the interior figure is <term>subnumbered</term>.  For example, the exterior figure might be Figure 4.12, and if a panel of the <tag>sidebyside</tag> is the second interior figure it will be Figure 4.12(b).  For example,<cd>
+            <cline>&lt;figure&gt;</cline>
+            <cline>    &lt;caption&gt;Salamanders at different life stages&lt;/caption&gt;</cline>
+            <cline>    &lt;sidebyside&gt;</cline>
+            <cline>        &lt;figure&gt;</cline>
+            <cline>            &lt;caption&gt;Hatchling&lt;/caption&gt;</cline>
+            <cline>            &lt;image source="salamader-hatchling.jpg"/&gt;</cline>
+            <cline>        &lt;/figure&gt;</cline>
+            <cline>        &lt;figure&gt;</cline>
+            <cline>            &lt;caption&gt;Juvenile&lt;/caption&gt;</cline>
+            <cline>            &lt;image source="salamader-juvenile.jpg"/&gt;</cline>
+            <cline>        &lt;/figure&gt;</cline>
+            <cline>        &lt;figure&gt;</cline>
+            <cline>            &lt;caption&gt;Adult&lt;/caption&gt;</cline>
+            <cline>            &lt;image source="salamader-adult.jpg"/&gt;</cline>
+            <cline>        &lt;/figure&gt;</cline>
+            <cline>    &lt;/sidebyside&gt;</cline>
+            <cline>&lt;/figure&gt;</cline>
+        </cd>could result in the entire figure being Figure 4.12 and then the juvenile salamander photograph would be inside of Figure 4.12(b).</p>
+    </section>
+
     <section xml:id="topic-tabular">
         <title>Tables and Tabulars</title>
 
@@ -3122,9 +3150,23 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         </subsection>
     </section>
 
-    <section xml:id="topic-program-listings">
-        <title>(*) Program Listings</title>
-        <p></p>
+    <section xml:id="topic-listing">
+        <title>Program Listings</title>
+        <p>A <tag>listing</tag> is really a specialized type of <tag>figure</tag>, whose purpose is to hold computer code.  Just like a figure, it has a <tag>caption</tag> and <tag>title</tag> which behave identically.  However, the enclosed planar content is limited to a <tag>program</tag> or <tag>console</tag> (see <xref ref="topic-program-console"/>).</p>
+    </section>
+
+    <section xml:id="topic-named-list">
+        <title>Named Lists</title>
+        <idx><h>list</h><h>named</h></idx>
+        <idx><h>named list</h></idx>
+        <idx><h>list</h><h>anonymous</h></idx>
+        <idx><h>anonymous list</h></idx>
+
+        <p>As mentioned above, it is not possible to have a list be the target of a cross-reference.  Should an entire list be <em>so important</em> that you need to point to it from elsewhere, then make it a <term>named list</term> by wrapping it in the <tag>list</tag> tag.</p>
+
+        <p>This element can begin with an optional <tag>introduction</tag>, then has a single, required list, which may be any of the three types.  It concludes with an optional <tag>conclusion</tag>.  It can have an <attr>xml:id</attr> attribute, which in a way is the whole <foreign xml:lang="fr-FR">raison d'être</foreign> for this construction.  It will be numbered when rendered, and so also requires a <tag>title</tag>.  You might think of this as similar to a <tag>table</tag><mdash/>bits of information organized spatially, via indentation and line breaks.</p>
+
+        <p>Since this element associates a number, title, to an entire list, we call it a <q>named list</q>.  What should we call a list that is authored within a paragraph and cannot be the target of a cross-reference?  We call it an <term>anonymous list</term> when we want to make the distinction.</p>
     </section>
 
     <section xml:id="topic-sage">

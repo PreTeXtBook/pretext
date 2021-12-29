@@ -48,7 +48,7 @@
         <idx>blocks</idx>
         <idx><h>environments</h><see>blocks</see></idx>
 
-        <p>Besides paragraphs (<xref ref="overview-paragraphs"/>) the most common object to include in a division is what we informally refer to as a <term>block</term>.  These are self-contained units of text, almost always set-off visually, and likely with a number and a title.  If you know <latex/>, you may be in the habit of calling these <term>environments</term>.  Mathematical results are one example, and you can start at <xref ref="overview-math-results"/> to learn more.  There are others that are more general-purpose, such as <tag>remark</tag> and <tag>example</tag>.  While fundamentally different from these blocks that are textual with reflowable lines, objects like <tag>figure</tag> and <tag>table</tag> (<xref ref="overview-figures-tables"/>) or <tag>program</tag> and <tag>console</tag> (<xref ref="overview-programs"/>) are blocks, even if their contents are more rigid or spatial.  For a more precise description, see <xref ref="topic-blocks"/>.</p>
+        <p>Besides paragraphs (<xref ref="overview-paragraphs"/>) the most common object to include in a division is what we informally refer to as a <term>block</term>.  These are self-contained units of text, almost always set-off visually, and likely with a number and a title.  If you know <latex/>, you may be in the habit of calling these <term>environments</term>.  Mathematical results are one example, and you can start at <xref ref="overview-math-results"/> to learn more.  There are others that are more general-purpose, such as <tag>remark</tag> and <tag>example</tag>.  While fundamentally different from these blocks that are textual with reflowable lines, objects like <tag>figure</tag> and <tag>table</tag> (<xref ref="overview-figures-tables-etc"/>) or <tag>program</tag> and <tag>console</tag> (<xref ref="overview-programs"/>) are blocks, even if their contents are more rigid or spatial.  For a more precise description, see <xref ref="topic-blocks"/>.</p>
     </section>
 
     <section xml:id="overview-cross-references">
@@ -152,6 +152,14 @@
         <p>Within a run of divisional exercises a subgroup can be delimited as an <tag>exercisegroup</tag>, which requires an <tag>introduction</tag> and allows a <tag>conclusion</tag> to explain some commonality.  A <tag>title</tag> is optional, and a default will be provided otherwise.  An <tag>exercisegroup</tag> should be rendered in some way that makes it clear to the reader that they are a group.</p>
     </section>
 
+    <section xml:id="overview-programs">
+        <title>Programs and Consoles</title>
+        <idx>program</idx>
+        <idx>console</idx>
+
+        <p>If you are writing about scientific or engineering topics, you may wish to include sample computer programs, or command-line sessions.  A <tag>program</tag> will contain a complete computer program, or a portion of the code from a program.  A <tag>console</tag> holds a command-line session.  These elements feature monospace fonts, preservation of whitespace, and syntax highlighting.  See <xref ref="topic-program-console"/> for details.</p>
+    </section>
+
     <section xml:id="overview-worksheet">
         <title>Worksheets</title>
         <idx>worksheet</idx>
@@ -172,32 +180,101 @@
         <p>Like <tag>exercises</tag>, a <tag>references</tag> division may go anywhere a more typical division could go.  This allows for things like a <q>Further Reading</q> list at the end of every chapter of a book.  These are populated with <tag>biblio</tag> items that are individual bibliographic entries.  Support is presently very minimal, but is planned to improve.</p>
     </section>
 
-    <section xml:id="overview-figures-tables">
-        <title>Figures and Tables</title>
+    <section xml:id="overview-figures-tables-etc">
+        <title>Figures, Tables, Listings, Lists</title>
         <idx>figure</idx>
         <idx>table</idx>
+        <idx>listing</idx>
+        <idx><h>list</h><h>named</h></idx>
 
-        <p>Figures and tables are outer structures, <tag>figure</tag><idx>figure</idx> and <tag>table</tag><idx>table</idx>. A <tag>table</tag> has a <tag>title</tag> and a <tag>figure</tag> has a <tag>caption</tag>.</p>
+        <p>Some elements in <pretext/> are <term>containers</term>, meaning they do not stand by themselves, but are meant to be filled with other elements.  Other elements are <term>atomic</term>, meaning they cannot be decomposed into smaller elements.  A canonical example is the case of a <tag>figure</tag>, which is a container meant to be filled with other elements.  One such element is an <tag>image</tag>, which is atomic.  Note that the figure can be filled with other items, and that an image may appear inside other elements, including as a child of a division, perhaps as a peer within a run of paragraphs.  A purpose of the container is typically to provide a number and some text (a title, caption, or similar) as identification or description, in addition to indicating to conversions the necessity for some visual formatting (such as small amounts of separating vertical space above and below).  Note that an author provides the caption, while <pretext/> provides the vertical spacing.</p>
 
-        <p>A <tag>table</tag> may only contain a <tag>tabular</tag>, which is the structure containing the rows and columns of a table.  Details can be found in <xref ref="topic-tabular" />.</p>
+        <p>Here we provide very brief descriptions of these four containers.  Be sure to consult the in-depth topics for more details on specifics.  Generally, the common thread here is that these containers contain text or graphic elements that has a two-dimensional quality to it.  To different degrees the content is rigid.  Unlike a paragraph, which could be unwound into a single (linear) long sequence of characters, <em>something</em> about the contents of these containers would be lost if stretched out in one dimension.  To reflect this rigid two-dimensional flavor, we refer to these objects (and their containers) as <term>planar</term>.</p>
 
-        <p>A <tag>figure</tag> is more liberal than a <tag>table</tag> and may contain a variety of items.  Most probably, you will include an <tag>image</tag> (see <xref ref="overview-images" />), but there are other options, such as <tag>video</tag> (see <xref ref="overview-video"/>).</p>
-    </section>
+        <p>A <tag>figure</tag> is the most general planar container.  It can hold an <tag>image</tag>, a <tag>audio</tag>, a <tag>video</tag>, and more.  A <tag>caption</tag> is authored early as metadata, but will likely render below.  A <tag>title</tag> can be used for cross-references or in lists of figures, but may not render where authored.
+        See <xref ref="topic-figure"/> for full details.
+        </p>
 
-    <section xml:id="overview-programs">
-        <title>Programs and Consoles</title>
-        <idx>program</idx>
-        <idx>console</idx>
+        <p>A <tag>table</tag> is the container for a <tag>tabular</tag>, an atomic element which is the only allowed content of a table.  A <tag>title</tag> is the identifying information, and renders above the rows and columns of the table.  A variety of notes (to appear below the table) are possible (not implemented as of 2021-12-10).  The elements we provide to describe a table are heavily influenced by the discussion in <pubtitle>Chicago Manual of Style</pubtitle> (15e, Chapter 13), which is worth reading if your project has many important tables.  See <xref ref="topic-tabular"/> for full details.</p>
 
-        <p>If you are writing about scientific or engineering topics, you may wish to include sample computer programs, or command-line sessions.</p>
+        <p>A <tag>listing</tag> is a container for computer code or programs, to support projects in computer science and other technical disciplines.  These languages often rely on indentation (Python) or even exact column numbers of text (<acro>FORTRAN</acro>), hence a planar quality.  Other languages can be written syntactically-correct as one long reflowable line (C, Pascal), but are impractical to do so as part of an exposition.  So the allowed content is a <tag>program</tag> or <tag>console</tag>, which will respect indentation, use monospace fonts, and include syntax highlighting.  Otherwise, a listing is very similar to a figure in how a caption and title are handled. See <xref ref="topic-listing"/> for full details.</p>
 
-        <p>A <tag>program</tag> will be treated as verbatim text (see <xref ref="overview-verbatim-literal" />), subject to all the exceptions for exceptional characters.  Indentation will be preserved, though an equal amount of leading whitespace will be stripped from every line, so as to keep the code shifted left as far as possible.  So you can indent your code consistently along with your XML indentation.  For this reason it is best to indent with spaces, and not tabs.  A mix will almost surely end badly, and in some programming languages tabs are discouraged (<eg /> Python).</p>
+        <p>A <tag>list</tag> may not be what you think it is.  An actual list (be it ordered, unordered, or description) is a common and popular device for organizing information.  Start at <xref ref="overview-lists"/> for details on lists.  Since these lists are considered part of a sentence (within a paragraph), or a part of a paragraph, it is hard to create a cross-reference to them.  So when you have a list that is important to mention elsewhere, you can create a <term>named list</term> with the <tag>list</tag> element, a container that has an optional <tag>introduction</tag>, followed by a actual list, and then an optional <tag>conclusion</tag>.  An example might be a laboratory procedure, such as the steps necessary to dissect a frog.  Like a <tag>table</tag> this element should have a <tag>title</tag>, and will be given a number.  Using a new line for each new list item, and conveying nesting with indentation gives a list a planar quality. See <xref ref="topic-named-list"/> for full details.</p>
 
-        <p>The <attr>language</attr> attribute may be used to get some degree of language-specific syntax highlighting.  See <xref ref="topic-program-listings" /> for details.</p>
+        <p>We use a <tag>table</tag> to summarize these similar containers.</p>
 
-        <p>A <tag>console</tag> is a transcript of an interactive session in a terminal at a command-line.  It is a sequence of the following elements, in this order, possibly repeated many times as a group: <tag>prompt</tag>, <tag>input</tag>, and <tag>output</tag>.  The <tag>output</tag> is optional, and a <tag>prompt</tag> is only displayed when there is an immediately subsequent <tag>input</tag> (which could be empty).  The content is treated as verbatim text (see <xref ref="overview-verbatim-literal" />), subject to all the exceptions for exceptional characters.</p>
+        <table>
+            <title>Containers for Planar Content</title>
+            <tabular>
+                <col header="yes"/>
+                <col/>
+                <col/>
+                <col/>
+                <col/>
 
-        <p>A <tag>program</tag> or <tag>console</tag> may be wrapped in a <tag>listing</tag>, which is analogous to a <tag>figure</tag> or <tag>table</tag>.  A <tag>listing</tag> may contain a <tag>title</tag> for use in cross-references or lists.  A <tag>caption</tag> will be displayed and will generate a number.</p>
+                <row header="yes" bottom="major">
+                    <cell></cell>
+                    <cell>Figure</cell>
+                    <cell>Table</cell>
+                    <cell>Listing</cell>
+                    <cell>List</cell>
+                </row>
+
+                <row>
+                    <cell>Element</cell>
+                    <cell><c>figure</c></cell>
+                    <cell><c>table</c></cell>
+                    <cell><c>listing</c></cell>
+                    <cell><c>list</c></cell>
+                </row>
+
+                <row valign="top">
+                    <cell>Contents</cell>
+                    <cell>various</cell>
+                    <cell><c>tabular</c></cell>
+                    <cell>
+                        <line><c>program</c>, or</line>
+                        <line><c>console</c></line>
+                    </cell>
+                    <cell><line><c>introduction</c></line>
+                          <line><c>ol</c>, <c>ul</c>, or <c>dl</c></line>
+                          <line><c>conclusion</c></line>
+                    </cell>
+                </row>
+
+                <row halign="center">
+                    <cell halign="left">Title</cell>
+                    <cell><times/></cell>
+                    <cell><times/></cell>
+                    <cell><times/></cell>
+                    <cell><times/></cell>
+                </row>
+
+                <row halign="center">
+                    <cell halign="left">Caption</cell>
+                    <cell><times/></cell>
+                    <cell></cell>
+                    <cell><times/></cell>
+                    <cell></cell>
+                </row>
+
+                <row halign="center">
+                    <cell halign="left">Notes</cell>
+                    <cell></cell>
+                    <cell><times/></cell>
+                    <cell></cell>
+                    <cell></cell>
+                </row>
+
+                <row>
+                    <cell>Details</cell>
+                    <cell><xref ref="topic-figure"     type="global"/></cell>
+                    <cell><xref ref="topic-tabular"    type="global"/></cell>
+                    <cell><xref ref="topic-listing"    type="global"/></cell>
+                    <cell><xref ref="topic-named-list" type="global"/></cell>
+                </row>
+            </tabular>
+        </table>
     </section>
 
     <section xml:id="overview-exceptional-characters">
