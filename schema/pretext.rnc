@@ -656,10 +656,9 @@
                     MetaDataCaption,
                     (
                         Image |
-                        Tabular |
+                        Video |
                         SideBySide |
                         SideBySideGroup |
-                        Video |
                         MuseScore
                     )
                 } |

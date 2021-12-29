@@ -1551,10 +1551,9 @@
         <xs:extension base="MetaDataCaption">
           <xs:choice>
             <xs:group ref="Image"/>
-            <xs:element ref="tabular"/>
+            <xs:element ref="video"/>
             <xs:group ref="SideBySide"/>
             <xs:group ref="SideBySideGroup"/>
-            <xs:element ref="video"/>
             <xs:element ref="score"/>
           </xs:choice>
         </xs:extension>

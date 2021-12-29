@@ -1724,10 +1724,9 @@
         <ref name="MetaDataCaption"/>
         <choice>
           <ref name="Image"/>
-          <ref name="Tabular"/>
+          <ref name="Video"/>
           <ref name="SideBySide"/>
           <ref name="SideBySideGroup"/>
-          <ref name="Video"/>
           <ref name="MuseScore"/>
         </choice>
       </element>

@@ -1354,7 +1354,8 @@
     <section>
         <title>Figures, Tables, Listings and Named Lists</title>
 
-        <p>These are containers that carry titles, captions, and numbers and need to be filled with other (indivisible) items.  They have a mandatory <c>caption</c> (which can have no text, but will still produce a numbered caption), and may have a <c>title</c>, which could more appropriately be called a <term>heading</term>.  These are also called <term>captioned items</term>.</p>
+        <p>These are containers that all carry titles (mandatory and optional), captions for two, and numbers.  They need to be filled with other (atomic) items, which we generally call <term>planar</term> due to their two-dimensional and rigid characteristics.  These have also called <term>captioned items</term> in the code, even if not all allow a caption.</p>
+        <!-- 2021-12-29: should add audio and interacive to figure, once ready -->
 
         <fragment xml:id="table-figure">
             <title>Captioned and titled displays</title>
@@ -1366,10 +1367,9 @@
                     MetaDataCaption,
                     (
                         Image |
-                        Tabular |
+                        Video |
                         SideBySide |
                         SideBySideGroup |
-                        Video |
                         MuseScore
                     )
                 } |
