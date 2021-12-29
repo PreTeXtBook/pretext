@@ -3765,13 +3765,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:when>
         <!-- select="title" would just get it killed -->
         <xsl:when test="title">
-            <xsl:apply-templates select="title/*|title/text()" />
-        </xsl:when>
-        <!-- A "table" and a "list" once had "caption", so provide this -->
-        <!-- content for backward-compatibility, and just safely call   -->
-        <!-- "title-full" on these objects                              -->
-        <xsl:when test="(self::table or self::list) and caption">
-            <xsl:apply-templates select="caption/*|caption/text()"/>
+            <xsl:apply-templates select="title/node()" />
         </xsl:when>
         <xsl:when test="$default-exists='true'">
             <xsl:apply-templates select="." mode="type-name" />
@@ -4032,7 +4026,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:param name="b-original" select="true()"/>
 
     <xsl:if test="caption">
-        <xsl:apply-templates select="caption/*|caption/text()">
+        <xsl:apply-templates select="caption/node()">
             <xsl:with-param name="b-original" select="$b-original"/>
         </xsl:apply-templates>
     </xsl:if>
@@ -11355,23 +11349,17 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!-- 2017-08-25  once deprecated named lists to be captioned lists -->
     <!-- 2019-06-28  deprecated captioned lists to be titled lists     -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//list[caption and not(title)]" />
+        <xsl:with-param name="occurrences" select="$document-root//list[caption]" />
         <xsl:with-param name="date-string" select="'2017-06-28'" />
-        <xsl:with-param name="message" select="'the &quot;list&quot; element is back to requiring a &quot;title&quot;, an existing &quot;caption&quot; will be used in its place'" />
+        <xsl:with-param name="message" select="'the &quot;list&quot; element requires a &quot;title&quot;, an existing &quot;caption&quot; is being ignored'" />
     </xsl:call-template>
     <!--  -->
-    <!-- 2019-06-28  deprecated captioned lists to be titled lists     -->
-    <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//list[title and caption]" />
-        <xsl:with-param name="date-string" select="'2019-06-28'" />
-        <xsl:with-param name="message" select="'the &quot;list&quot; element is back to requiring a &quot;title&quot;, only.  So an existing &quot;caption&quot; will be ignored when a &quot;title&quot; is supplied'" />
-    </xsl:call-template>
     <!--  -->
     <!-- 2019-06-28  deprecated captioned tables to be titled tables  -->
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurrences" select="$document-root//table[caption]" />
         <xsl:with-param name="date-string" select="'2019-06-28'" />
-        <xsl:with-param name="message" select="'the &quot;table&quot; element needs a &quot;title&quot;, not a &quot;caption&quot;.  An existing &quot;caption&quot; will be used instead.  Both will display below the &quot;tabular&quot;'" />
+        <xsl:with-param name="message" select="'the &quot;table&quot; element requires a &quot;title&quot;, an existing &quot;caption&quot; is being ignored'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2019-07-10  @xml:id = 'index' deprecated in favor of publisher's @ref  -->
