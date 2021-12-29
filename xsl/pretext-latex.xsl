@@ -9253,7 +9253,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>{</xsl:text>
             <xsl:value-of select="$layout/right-margin div 100"/>
             <xsl:text>}%&#xa;</xsl:text>
-            <xsl:text>\resizebox{\linewidth}{!}{%&#xa;</xsl:text>
+            <!-- with layout control, scale down, but not up                      -->
+            <!-- https://tex.stackexchange.com/questions/327887/                  -->
+            <!-- resizing-or-scaling-table-only-if-it-is-larger-than-column-width -->
+            <xsl:text>\resizebox{\ifdim\width > \linewidth\linewidth\else\width\fi}{!}{%&#xa;</xsl:text>
             <xsl:apply-templates select="." mode="tabular-inclusion"/>
             <xsl:text>}%&#xa;</xsl:text>
             <xsl:text>\end{tabularbox}%&#xa;</xsl:text>
@@ -9262,7 +9265,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="tabular[ancestor::sidebyside]">
-    <xsl:text>\resizebox{\linewidth}{!}{%&#xa;</xsl:text>
+    <!-- with layout control (inside sidebyside), scale down, but not up  -->
+    <!-- https://tex.stackexchange.com/questions/327887/                  -->
+    <!-- resizing-or-scaling-table-only-if-it-is-larger-than-column-width -->
+    <xsl:text>\resizebox{\ifdim\width > \linewidth\linewidth\else\width\fi}{!}{%&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="tabular-inclusion"/>
     <xsl:text>}%&#xa;</xsl:text>
 </xsl:template>
