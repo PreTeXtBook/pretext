@@ -9221,7 +9221,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="tabular[not(ancestor::sidebyside)]">
     <xsl:choose>
         <!-- the "natural width" case, centered -->
-        <xsl:when test="not(@margins) and (not(@width) or (@width = 'auto'))">
+        <xsl:when test="not(@margins) and not(@width)">
             <xsl:choose>
                 <xsl:when test="parent::table">
                     <!-- center with no space more than "tableptx" provides -->
