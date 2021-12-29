@@ -9832,7 +9832,7 @@ the xsltproc executable.
                     <li>inside a <tag>table</tag> inside a <tag>sidebyside</tag> inside a <tag>figure</tag>, with size and layout configured, with a number and title, but now sub-numbered ((a), (b), (c),<ellipsis/>).</li>
                 </ol>Examples of each, and more.</p>
 
-                <p>A <tag>tabular</tag> realized by <latex/> will normally be as wide as necessary to hold the content, without word-wrapping the content of any cell that is not explicitly authored that way.  So for <pretext/> output as <latex/>, when you explicitly constrain the width (including use as a panel of a <tag>sidebyside</tag>, or even setting margins) the table will be scaled, which can result in an apparent font size very different than the surrounding document.  [NOT SURE HOW HTML WILL BEHAVE]</p>
+                <p>A <tag>tabular</tag> realized by <latex/> for PDF/print will normally be as wide as necessary to hold the content, without word-wrapping the content of any cell that is not explicitly authored that way.  This is the most rigid of the content types we call <q>planar.</q>  So for <pretext/> output as <latex/>, when you explicitly constrain the width to be less than the <q>natural width</q> (including use as a panel of a <tag>sidebyside</tag>, or even setting margins) the table will be scaled <em>down</em> in width, which can result in an apparent font size very much smaller than that of the surrounding text.  Note that we do not ever scale a tabular up to be wider with a larger font size.  Note also that if there is no attempt to control the space for the table (no layout control, not in a <tag>sidebyside</tag>) then no scaling is attempted at all and the table may be wider than the text and protrude into the right margin.  For more, see the three examples at: <xref ref="natural-too-wide" text="type-global"/> , <xref ref="scale-down-auto" text="type-global"/>, <xref ref="scale-down-100" text="type-global"/>.  Generally, much of the commentary and testing here is about <latex/>/PDF/print.  While for <init>HTML</init> output the cells will usually automatically word-wrap to fit in the available space, without adjusting the font size.  Some might like this behavior and some might not.</p>
 
                 <p>Data in a table form can be placed in amongst a series of paragraphs.  With no layout control, it will occupy its <q>natural width</q> and be centered.</p>
 
@@ -10108,7 +10108,126 @@ the xsltproc executable.
                     </tabular>
                 </table>
 
-                <p>Now into <tag>sidebyside</tag> in various ways and with various sizes. First, two <tag>tabular</tag> as panels with widths at 60% and 30%.</p>
+                <p>The next table is purposely much too wide.  In <xref ref="natural-too-wide" text="type-global"/> we make no attempt to control the width, and so it will extend into the margins.  In <xref ref="scale-down-auto" text="type-global"/> we have simple added the attribute <c>width="auto"</c>.  This attempt to use layout control will cause an automatic reduction in width and a smaller apparent font size.  Adjusting margins providing an explicit percentage width, or placing the tabular as a panel of <tag>sidebyside</tag> will have the same effect.  In <xref ref="scale-down-100" text="type-global"/> we have set the width explicity to 100% and so it should be identical to the automatic width case just prior.</p>
+
+                <table xml:id="natural-too-wide">
+                    <title>Tabular too wide, no layout control</title>
+                    <tabular>
+                        <row header="yes">
+                            <cell>State</cell>
+                            <cell>Population</cell>
+                            <cell>Area (sq. mi.)</cell>
+                            <cell>Statehood (Year)</cell>
+                            <cell>Capitol City</cell>
+                            <cell>Largest City</cell>
+                        </row>
+                        <row>
+                            <cell>Washington</cell>
+                            <cell>7,614,893</cell>
+                            <cell>71,362</cell>
+                            <cell>1889</cell>
+                            <cell>Olympia</cell>
+                            <cell>Seattle</cell>
+                        </row>
+                        <row>
+                            <cell>Oregon</cell>
+                            <cell>4,217,737</cell>
+                            <cell>98,381</cell>
+                            <cell>1859</cell>
+                            <cell>Salem</cell>
+                            <cell>Portland</cell>
+                        </row>
+                        <row>
+                            <cell>California</cell>
+                            <cell>39,512,223</cell>
+                            <cell>163,696</cell>
+                            <cell>1850</cell>
+                            <cell>Sacremento</cell>
+                            <cell>Los Angeles</cell>
+                        </row>
+                    </tabular>
+                </table>
+
+                <table xml:id="scale-down-auto">
+                    <title>Tabular too wide, scale to automatic width</title>
+                    <tabular width="auto">
+                        <row header="yes">
+                            <cell>State</cell>
+                            <cell>Population</cell>
+                            <cell>Area (sq. mi.)</cell>
+                            <cell>Statehood (Year)</cell>
+                            <cell>Capitol City</cell>
+                            <cell>Largest City</cell>
+                        </row>
+                        <row>
+                            <cell>Washington</cell>
+                            <cell>7,614,893</cell>
+                            <cell>71,362</cell>
+                            <cell>1889</cell>
+                            <cell>Olympia</cell>
+                            <cell>Seattle</cell>
+                        </row>
+                        <row>
+                            <cell>Oregon</cell>
+                            <cell>4,217,737</cell>
+                            <cell>98,381</cell>
+                            <cell>1859</cell>
+                            <cell>Salem</cell>
+                            <cell>Portland</cell>
+                        </row>
+                        <row>
+                            <cell>California</cell>
+                            <cell>39,512,223</cell>
+                            <cell>163,696</cell>
+                            <cell>1850</cell>
+                            <cell>Sacremento</cell>
+                            <cell>Los Angeles</cell>
+                        </row>
+                    </tabular>
+                </table>
+
+                <table xml:id="scale-down-100">
+                    <title>Tabular too wide, scale to 100% width</title>
+                    <tabular width="100%">
+                        <row header="yes">
+                            <cell>State</cell>
+                            <cell>Population</cell>
+                            <cell>Area (sq. mi.)</cell>
+                            <cell>Statehood (Year)</cell>
+                            <cell>Capitol City</cell>
+                            <cell>Largest City</cell>
+                        </row>
+                        <row>
+                            <cell>Washington</cell>
+                            <cell>7,614,893</cell>
+                            <cell>71,362</cell>
+                            <cell>1889</cell>
+                            <cell>Olympia</cell>
+                            <cell>Seattle</cell>
+                        </row>
+                        <row>
+                            <cell>Oregon</cell>
+                            <cell>4,217,737</cell>
+                            <cell>98,381</cell>
+                            <cell>1859</cell>
+                            <cell>Salem</cell>
+                            <cell>Portland</cell>
+                        </row>
+                        <row>
+                            <cell>California</cell>
+                            <cell>39,512,223</cell>
+                            <cell>163,696</cell>
+                            <cell>1850</cell>
+                            <cell>Sacremento</cell>
+                            <cell>Los Angeles</cell>
+                        </row>
+                    </tabular>
+                </table>
+
+
+
+
+                <p>Now into <tag>sidebyside</tag> in various ways and with various sizes. First, two <tag>tabular</tag> as panels with widths at 60% and 30%.  Note that in <latex/>/PDF/print the tabular of functional values does not need the full 30% width, so it is at its natural size and centered within its panel.</p>
 
                 <sidebyside widths="60% 30%">
                     <tabular>
@@ -10153,7 +10272,7 @@ the xsltproc executable.
                     </tabular>
                 </sidebyside>
 
-                <p>Let's do that again, but with widths experimentally set to make font sizes match.</p>
+                <p>Let's do that again, but with widths experimentally set to make font sizes match (approximately).</p>
 
                 <sidebyside widths="81.61% 12.75%">
                     <tabular>
@@ -10314,7 +10433,7 @@ the xsltproc executable.
                     </table>
                 </sidebyside>
 
-                <p>Finally, as two individual <tag>table</tag>, grouped and laid out via a <tag>sidebyside</tag>, and collected as a <tag>figure</tag>.  Which causes sub-numbering of the enclosed <tag>table</tag>.</p>
+                <p>Finally, as two individual <tag>table</tag>, grouped and laid out via a <tag>sidebyside</tag>, and collected as a <tag>figure</tag>.  Which causes sub-numbering of the two enclosed <tag>table</tag>.</p>
 
                 <figure>
                     <caption>Geography and Mathematics</caption>
