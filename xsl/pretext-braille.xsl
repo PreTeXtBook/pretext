@@ -57,9 +57,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- to be made in the -html stylesheet conditionally.            -->
 <xsl:variable name="b-braille" select="true()"/>
 
-<!-- Only need one monolithic file, how to chunk -->
-<!-- is not obvious, so we set this here         -->
-<xsl:param name="chunk.level" select="0"/>
+<!-- On 2021-12-30 we removed the use of the HTML chunking routines to     -->
+<!-- create the one monolithic HTML file that liblouis needs as input.     -->
+<!-- So we are now basically operating as if this is chunking at level 0.  -->
+<!-- The HTML templates are designed to produce "hN" elements for          -->
+<!-- accessibility, and these are critically sensitive to the chunk level. -->
+<!-- So we need to explicitly override the default value.  The (one) place -->
+<!-- where this is necessary is teh modal "hN" template in the             -->
+<!-- pretext-html.xsl stylesheet.  Remove this variable override and       -->
+<!-- certain blocks (definition, theorem, example,...) will have their     -->
+<!-- hN change to one less due to a change in the variable                 -->
+<!-- $chunk-level-zero-adjustment.                                         -->
+<!--                                                                       -->
+<!-- The braille conversion does not rely on hN levels at this depth,      -->
+<!-- so this all may be moot, and possibly not even correct or best.       -->
+<!-- The only motivation right now is minimal (zero) impact due to         -->
+<!-- abandoning the chunking templates.                                    -->
+<xsl:variable name="chunk-level" select="0"/>
 
 <!-- NB: This will need to be expanded with terms like //subsection/exercises -->
 <xsl:variable name="b-has-subsubsection" select="boolean($document-root//subsubsection)"/>
@@ -86,17 +100,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Primarily the production of cross-reference ("xref") knowls    -->
 <!-- has been removed.  The pretext-html.xsl template will have     -->
 <!-- done the assembly phase, adjusting $root to point to the       -->
-<!-- in-memory enhanced source.                                     -->
+<!-- in-memory enhanced source, along with $document-root.          -->
 <xsl:template match="/">
     <xsl:apply-templates select="$root"/>
 </xsl:template>
 
-<!-- Deprecation warnings are universal analysis of source and parameters   -->
-<!-- There is always a "document root" directly under the mathbook element, -->
-<!-- and we process it with the chunking template called below              -->
-<!-- Note that "docinfo" is at the same level and not structural, so killed -->
-<!-- We process structural nodes via chunking routine in xsl/pretext-common.xsl    -->
-<!-- This in turn calls specific modal templates defined elsewhere in this file     -->
 <xsl:template match="/pretext">
     <!-- No point in proceeding without the file of braille   -->
     <!-- representations, and right at the start, so a banner -->
@@ -110,33 +118,39 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
         <xsl:message terminate="yes"/>
     </xsl:if>
+    <!-- the usual warnings, as part of a primary conversion -->
     <xsl:apply-templates select="$original" mode="generic-warnings"/>
     <xsl:apply-templates select="$original" mode="deprecation-warnings"/>
-    <xsl:apply-templates mode="chunking" />
-</xsl:template>
-
-<!-- ################# -->
-<!-- Page Construction -->
-<!-- ################# -->
-
-<!-- A greatly simplified file-wrap template -->
-<!-- We hard-code the name of the output file as   -->
-<!-- "liblouis-precursor.html" and ensure here     -->
-<!-- that we get an XML declaration, indentation,  -->
-<!-- and encoding.  file2brl seems to be sensitive -->
-<!-- to the form of the header of the output here. -->
-<xsl:template match="*" mode="file-wrap">
-    <xsl:param name="content" />
-
+    <!-- One monolithic HTML page, as input to liblouis' file2brl   -->
+    <!-- executable.  The HTML templates are engineered to be       -->
+    <!-- chunked into multiple pages, however a "chunk level" of    -->
+    <!-- zero corresponds to one big page, starting at the document -->
+    <!-- root.  So we apply templates to the document root, wrapped -->
+    <!-- as an HTML file/page. We hard-code the name of the output  -->
+    <!-- file as "liblouis-precursor.html" and ensure here that we  -->
+    <!-- get an XML declaration, indentation, and encoding.         -->
+    <!-- file2brl seems to be sensitive to the form of the header   -->
+    <!-- of the output here.                                        -->
+    <!-- N.B. when we abandoned the chunking routines (they were    -->
+    <!-- not necessary) some headings elements changed (e.g.        -->
+    <!-- h3 -> h2).  Always smaller by one, and maybe not           -->
+    <!-- universal. Passing in level 2 at the start seems to not    -->
+    <!-- have an effect (nor 1, nor 3) We don't seem to rely on     -->
+    <!-- them (using class names instead) and BRF output seemed     -->
+    <!-- unchanged.                                                 -->
+    <!--  -->
     <exsl:document href="liblouis-precursor.xml" method="xml" version="1.0" indent="yes" encoding="UTF-8">
         <html>
             <head>
             </head>
             <body>
-                <xsl:copy-of select="$content" />
+                <xsl:apply-templates select="$document-root">
+                    <xsl:with-param name="heading-level" select="2"/>
+                </xsl:apply-templates>
             </body>
         </html>
     </exsl:document>
+    <!--  -->
 </xsl:template>
 
 <!-- The "frontmatter" and "backmatter" of the HTML version are possibly -->
@@ -237,7 +251,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                                              -->
 <!-- onto the heading so liblouis can style it properly           -->
 <!-- This is greatly simplified, "hX" elements just become "div", -->
-<!-- which is all we need for the  liblouis  sematic action file  -->
+<!-- which is all we need for the  liblouis  semantic action file -->
 
 
 <xsl:template match="*" mode="section-heading">
