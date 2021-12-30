@@ -113,10 +113,10 @@ SERVER = https://webwork-ptx.aimath.org
 #  within "webwork" subfolder
 
 sample-chapter-representations:
-	$(PTX)/pretext/pretext -vv -c webwork -p $(SMPCPUB) -s $(SERVER) $(SMPC)
+	$(PTX)/pretext/pretext -v -c webwork -p $(SMPCPUB) -s $(SERVER) $(SMPC)
 
 mini-representations:
-	$(PTX)/pretext/pretext -vv -c webwork -p $(MINIPUB) -s $(SERVER) $(MINI)
+	$(PTX)/pretext/pretext -v -c webwork -p $(MINIPUB) -s $(SERVER) $(MINI)
 
 
 #########################################################################
