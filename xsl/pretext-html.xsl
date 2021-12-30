@@ -449,16 +449,57 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Structural Nodes -->
 <!-- ################ -->
 
-<!-- Read the code and documentation for "chunking" in xsl/pretext-common.xsl  -->
-<!-- This will explain document structure (not XML structure) and has the       -->
-<!-- routines which employ the realizations below of two abstract templates.    -->
+<!-- Read the code and documentation for "chunking" in      -->
+<!-- xsl/pretext-common.xsl  This will help explain         -->
+<!-- document structure (not XML structure).                -->
+<!--                                                        -->
+<!-- With an implementation of a file-wrapping routine,     -->
+<!-- a typical use is to                                    -->
+<!--                                                        -->
+<!--   (a) apply a default template to the structural       -->
+<!--       node for a complete (chunk'ed) node              -->
+<!--                                                        -->
+<!--   (b) apply a modal template to the structural         -->
+<!--       node for a summary (intermediate) node           -->
+<!--                                                        -->
+<!-- The "file-wrap" routine should accept a $content       -->
+<!-- parameter holding the contents of the body of the page -->
 
-<!-- The HTML "section" elements created here could have an ARIA    -->
-<!-- role="region", but would have to then have a @aria-labelled-by -->
-<!-- whose value is the HTML id of the "hX" heading to get its      -->
-<!-- content as the label.  But the "section-heading" template is   -->
-<!-- sometimes null, and even if not, the "hX" elements do not now  -->
-<!-- have natural id on them (we could manufacture such a thing).   -->
+<!-- A complete page for a structural division -->
+<!-- Unlike the base implemenation in -common we pass a        -->
+<!-- "heading-level", which begins at 2 to account for an "h1" -->
+<!-- being used in the masthead of the page infrastructure.    -->
+<xsl:template match="&STRUCTURAL;" mode="chunk">
+    <xsl:apply-templates select="." mode="file-wrap">
+        <xsl:with-param name="content">
+            <xsl:apply-templates select=".">
+                 <xsl:with-param name="heading-level" select="2"/>
+            </xsl:apply-templates>
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- A summary page for a structural division -->
+<!-- Unlike the base implemenation in -common we break out a  -->
+<!-- "summary" templates (below) for processing a structural  -->
+<!-- node realized as an intermediate/summary node.  *This*   -->
+<!-- "summary" template is overridden in the Jupyter and EPUB -->
+<!-- conversions.                                             -->
+<!-- We also pass a "heading-level", which begins at 2 to     -->
+<!-- account for an "h1" being used in the masthead of the    -->
+<!-- page infrastructure.                                     -->
+<!-- NB: (2021-12-30) Could absorb "summary" template here,   -->
+<!-- and just do similarly for overrides in EPUB and Jupyter  -->
+<!-- conversions.                                             -->
+<xsl:template match="&STRUCTURAL;" mode="intermediate">
+    <xsl:apply-templates select="." mode="file-wrap">
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="." mode="summary">
+                <xsl:with-param name="heading-level" select="2"/>
+            </xsl:apply-templates>
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
 
 <!-- Default template for content of a structural  -->
 <!-- division, which could be an entire page's     -->
