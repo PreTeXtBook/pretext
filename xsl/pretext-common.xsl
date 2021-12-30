@@ -3512,31 +3512,34 @@ Book (with parts), "section" at level 3
 <!-- Chunking Document Nodes -->
 <!-- ####################### -->
 
-<!--
-When we break a document into pieces, known as "chunks,"
-there is a configurable level (the "chunk-level") where
-the document nodes at that level are always a chunk.
-At a lesser level, document nodes are "intermediate" nodes
-and so are output as summaries of their children.
-However, an intermediate node may have no children
-(is a "leaf") and hence is output as a chunk.
 
-Said differently, chunks are natural leaves of the document
-tree, or leaves (dead-ends) manufactured by an arbitrary
-cutoff given by the chunk-level variable
--->
+<!-- When we break a document into pieces, known as "chunks,"       -->
+<!-- there is a configurable level (the "chunk-level") where        -->
+<!-- the document nodes at that level are always a chunk.           -->
+<!-- At a lesser level, document nodes are "intermediate" nodes     -->
+<!-- and so are output as summaries of their children.              -->
+<!-- However, an intermediate node may have no children             -->
+<!-- (is a "leaf") and hence is output as a chunk.                  -->
+<!--                                                                -->
+<!-- Said differently, chunks are natural leaves of the document    -->
+<!-- tree, or leaves (dead-ends) manufactured by an arbitrary       -->
+<!-- cutoff given by the chunk-level variable                       -->
+<!--                                                                -->
+<!-- So we have three types of document nodes:                      -->
+<!-- Intermediate: structural node, not a document leaf, smaller    -->
+<!--               level than chunk-level                           -->
+<!--   Realization: some content (title, introduction, conclusion), -->
+<!--                links/includes to children                      -->
+<!-- Leaf: structural node, at chunk-level or a leaf at smaller     -->
+<!--       level than chunk-level                                   -->
+<!--   Realization: a chunk will all content                        -->
+<!-- Neither: A structural node that is simply a (visual)           -->
+<!--          division of a chunk                                   -->
+<!--   Realization: usual presentation, within the enclosing chunk  -->
 
-<!--
-So we have three types of document nodes:
-Intermediate: structural node, not a document leaf, smaller level than chunk-level
-  Realization: some content (title, introduction, conclusion), links/includes to children
-Leaf: structural node, at chunk-level or a leaf at smaller level than chunk-level
-  Realization: a chunk will all content
-Neither: A structural node that is simply a (visual) subdivision of a chunk
-  Realization: usual presentation, but wtithin the enclosing chunk
--->
 
-<!-- An intermediate node is at lesser level than chunk-level and is not a leaf -->
+<!-- An intermediate node is at lesser level -->
+<!-- than chunk-level and is not a leaf      -->
  <xsl:template match="*" mode="is-intermediate">
     <xsl:variable name="structural">
         <xsl:apply-templates select="." mode="is-structural" />
@@ -3560,7 +3563,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
-<!-- A chunk node is at the chunk-level, or a leaf at a lesser level -->
+<!-- A chunk node is at the chunk-level, -->
+<!-- or a leaf at a lesser level         -->
 <xsl:template match="*" mode="is-chunk">
     <xsl:variable name="structural">
         <xsl:apply-templates select="." mode="is-structural" />
@@ -3605,7 +3609,20 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!--   2) match="&STRUCTURAL;" mode="intermediate"              -->
 <!--                                                            -->
 <!-- Similarities can be consolidated within the implementation -->
-<!-- See  xsl/pretext-html.xsl  a typical example              -->
+<!-- See  xsl/pretext-html.xsl  for a canonical example         -->
+<!--                                                            -->
+<!-- See the discussion just above to understand leaves of the  -->
+<!-- document tree (always chunks), manufactured leaves (due to -->
+<!-- an arbitrary, but configured, chunk level depth), and      -->
+<!-- intermediate nodes (structured divisions above the chunk   -->
+<!-- level line).                                               -->
+<!--                                                            -->
+<!-- NB: as of 2020-12-30 these implementations are used        -->
+<!-- directly as-is or are overridden (in part) by the          -->
+<!-- conversions to WeBWorK problem sets and logical files for  -->
+<!-- Sage doctesting.  They are also extended in the HTML       -->
+<!-- conversion, which is again extended by the EPUB and        -->
+<!-- Jupyter conversions.  This is an exhaustive list of uses.  -->
 
 <xsl:template match="&STRUCTURAL;" mode="chunking">
     <xsl:variable name="chunk">
@@ -3613,13 +3630,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:variable>
      <xsl:choose>
         <xsl:when test="$chunk='true'">
-            <!-- Very informative output for debugging purposes, comment/uncomment, but do not remove  -->
-            <!-- <xsl:message>CHUNK: <xsl:apply-templates select="." mode="long-name" /></xsl:message> -->
             <xsl:apply-templates select="." mode="chunk" />
         </xsl:when>
         <xsl:otherwise>
-            <!-- Very informative output for debugging purposes, comment/uncomment, but do not remove  -->
-            <!-- <xsl:message>INTER: <xsl:apply-templates select="." mode="long-name" /></xsl:message> -->
             <xsl:apply-templates select="." mode="intermediate" />
             <xsl:apply-templates select="&STRUCTURAL;" mode="chunking" />
         </xsl:otherwise>
@@ -3638,48 +3651,36 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!--   (b) apply a modal template to the structural         -->
 <!--       node for a summary (intermediate) node           -->
 <!--                                                        -->
-<!-- The file-wrap routine should accept two parameters     -->
-<!--                                                        -->
-<!--   1) a "page-type" string to identify the type of page -->
-<!--   2) the "content" to be wrapped                       -->
+<!-- The "file-wrap" routine should accept a $content       -->
+<!-- parameter holding the contents of the body of the page -->
 
-<!-- A complete page for a structural subdivision -->
+<!-- A complete file/page for a structural division         -->
 <xsl:template match="&STRUCTURAL;" mode="chunk">
     <xsl:apply-templates select="." mode="file-wrap">
-        <xsl:with-param name="page-type" select="'complete'" />
         <xsl:with-param name="content">
-            <xsl:apply-templates select=".">
-                <!-- the level of the object in the context on the page, -->
-                <!-- here "2" since there is an "h1" in the masthead     -->
-                <xsl:with-param name="heading-level" select="2"/>
-            </xsl:apply-templates>
+            <xsl:apply-templates select="." />
         </xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- A summary page for a structural subdivision -->
+<!-- An intermediate file/page for a structural division    -->
+<!-- It is very possible this implementation is not correct -->
+<!-- or desirable, since the notion of an "intermediate"    -->
+<!-- (or "summary") page/file is a bit unusual.             -->
+<!--                                                        -->
+<!-- See  xsl/pretext-ww-problem-sets.xsl  for an example   -->
+<!-- use, in addition to a non-trivial application for the  -->
+<!-- (primary) HTML conversion. -->
+<!--                                                        -->
+<!-- See  xsl/pretext-sage-doctest.xsl  for a conversion    -->
+<!-- which only implements the "file-wrap" template.        -->
 <xsl:template match="&STRUCTURAL;" mode="intermediate">
     <xsl:apply-templates select="." mode="file-wrap">
-        <xsl:with-param name="page-type" select="'summary'" />
         <xsl:with-param name="content">
-            <xsl:apply-templates select="." mode="summary">
-                <!-- the level of the object in the context on the page, -->
-                <!-- here "2" since there is an "h1" in the masthead     -->
-                <xsl:with-param name="heading-level" select="2"/>
-            </xsl:apply-templates>
+            <xsl:apply-templates select="*[not(&STRUCTURAL-FILTER;)]" />
         </xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>
-
-<!-- A default summary page can just ignore the structural      -->
-<!-- divisions within though usually you might want to do       -->
-<!-- something with them, so you would override this template   -->
-<!-- with an implementation.  See xsl/pretext-sage-doctest.xsl -->
-<!-- which uses all of these general routines here              -->
-<xsl:template match="&STRUCTURAL;" mode="summary">
-    <xsl:apply-templates select="*[not(&STRUCTURAL-FILTER;)]" />
-</xsl:template>
-
 
 <!-- Containing Filenames, URLs -->
 <!-- Relative to the chunking in effect, every -->
