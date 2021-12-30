@@ -44,14 +44,14 @@
 <!-- ############## -->
 
 <xsl:template match="/">
-    <xsl:apply-templates />
+    <xsl:apply-templates select="$root"/>
 </xsl:template>
 
 <!-- We process structural nodes via chunking        -->
 <!-- routine in   xsl/pretext-common.xsl             -->
 <!-- The default templates there do everything       -->
 <!-- we need once we have "file-wrap" modal template -->
-<xsl:template match="mathbook|pretext">
+<xsl:template match="/pretext">
     <xsl:apply-templates mode="chunking" />
 </xsl:template>
 
