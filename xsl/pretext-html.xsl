@@ -508,8 +508,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- account for an "h1" being used in the masthead of the    -->
 <!-- page infrastructure.                                     -->
 <!-- NB: (2021-12-30) Could absorb "summary" template here,   -->
-<!-- and just do similarly for overrides in EPUB and Jupyter  -->
-<!-- conversions.                                             -->
+<!-- and just do similarly for an override in the EPUB        -->
+<!-- conversion.                                             -->
 <xsl:template match="&STRUCTURAL;" mode="intermediate">
     <xsl:apply-templates select="." mode="file-wrap">
         <xsl:with-param name="content">

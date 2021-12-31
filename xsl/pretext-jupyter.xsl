@@ -148,28 +148,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Three modal templates accomodate all document structure nodes -->
 <!-- and all possibilities for chunking.  Read the description     -->
-<!-- in  xsl/pretext-common.xsl to understand these.              -->
-<!-- The  "file-wrap"  template is defined elsewhre in this file.  -->
+<!-- in  xsl/pretext-common.xsl  and  -html  to understand these.  -->
+<!-- The  "file-wrap"  template is defined elsewhere in this file. -->
 
 <!-- Content of a summary page is usual content,  -->
 <!-- or link to subsidiary content, all from HTML -->
 <!-- template with same mode, as one big cell     -->
-<xsl:template match="&STRUCTURAL;" mode="summary">
-    <xsl:apply-templates select="objectives|introduction" />
-    <xsl:variable name="html-rtf">
-        <nav class="summary-links">
-            <xsl:apply-templates select="*" mode="summary-nav" />
-        </nav>
-    </xsl:variable>
-    <xsl:variable name="html-node-set" select="exsl:node-set($html-rtf)" />
-    <xsl:call-template name="pretext-cell">
+<xsl:template match="&STRUCTURAL;" mode="intermediate">
+    <xsl:apply-templates select="." mode="file-wrap">
         <xsl:with-param name="content">
-            <xsl:call-template name="begin-string" />
-                <xsl:apply-templates select="$html-node-set" mode="serialize" />
-            <xsl:call-template name="end-string" />
+            <!-- should perhaps initialize/pass $heading-level = 2 here -->
+            <!-- perhaps irrelevant since headings are done in markown? -->
+            <xsl:apply-templates select="objectives|introduction" />
+            <xsl:variable name="html-rtf">
+                <nav class="summary-links">
+                    <xsl:apply-templates select="*" mode="summary-nav" />
+                </nav>
+            </xsl:variable>
+            <xsl:variable name="html-node-set" select="exsl:node-set($html-rtf)" />
+            <xsl:call-template name="pretext-cell">
+                <xsl:with-param name="content">
+                    <xsl:call-template name="begin-string" />
+                        <xsl:apply-templates select="$html-node-set" mode="serialize" />
+                    <xsl:call-template name="end-string" />
+                </xsl:with-param>
+            </xsl:call-template>
+            <xsl:apply-templates select="conclusion" />
         </xsl:with-param>
-    </xsl:call-template>
-    <xsl:apply-templates select="conclusion" />
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- ########## -->
