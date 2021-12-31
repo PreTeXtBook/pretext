@@ -1755,7 +1755,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
 # Conversion to HTML
 ####################
 
-def html(xml, pub_file, stringparams, file_format, extra_xsl, out_file, dest_dir):
+def html(xml, pub_file, stringparams, file_format, extra_xsl, out_file, dest_dir, xmlid_root):
     """Convert XML source to HTML files, in destination directory or as zip file"""
     import os.path # join()
     import shutil # copytree(), copy2()
@@ -1771,6 +1771,8 @@ def html(xml, pub_file, stringparams, file_format, extra_xsl, out_file, dest_dir
     # support publisher file, not subtree argument
     if pub_file:
         stringparams['publisher'] = pub_file
+    if xmlid_root:
+        stringparams['subtree'] = xmlid_root
     # Optional extra XSL could be None, or sanitized full filename
     if extra_xsl:
         extraction_xslt = extra_xsl

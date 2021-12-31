@@ -332,17 +332,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$root"/>
 </xsl:template>
 
+<!-- #### EXPERIMENTAL #### -->
+<xsl:param name="subtree" select="''"/>
+<!-- #### EXPERIMENTAL #### -->
+
 <!-- We process structural nodes via chunking routine in xsl/pretext-common.xsl    -->
 <!-- This in turn calls specific modal templates defined elsewhere in this file     -->
 <!-- The xref-knowl templates run independently on content node of document tree    -->
 <xsl:template match="/mathbook|/pretext">
     <xsl:call-template name="index-redirect-page"/>
-    <xsl:apply-templates mode="chunking" />
-    <xsl:if test="$b-knowls-new">
-        <xsl:apply-templates select="." mode="make-efficient-knowls"/>
+
+    <!-- #### EXPERIMENTAL #### -->
+    <!-- <xsl:message>P: <xsl:value-of select="$subtree"/>:P</xsl:message>     -->
+    <xsl:variable name="b-subsetting" select="not($subtree = '')"/>
+    <xsl:variable name="subtree-node" select="id($subtree)"/>
+    <!-- #### EXPERIMENTAL #### -->
+
+    <xsl:if test="$b-subsetting">
+        <xsl:apply-templates select="$subtree-node" mode="chunking" />
     </xsl:if>
-    <xsl:if test="not($b-knowls-new)">
-        <xsl:apply-templates select="$document-root" mode="xref-knowl-old"/>
+    <xsl:if test="not($b-subsetting)">
+        <xsl:apply-templates mode="chunking" />
+    </xsl:if>
+
+    <xsl:if test="not($b-subsetting)">
+        <xsl:if test="$b-knowls-new">
+            <xsl:apply-templates select="." mode="make-efficient-knowls"/>
+        </xsl:if>
+        <xsl:if test="not($b-knowls-new)">
+            <xsl:apply-templates select="$document-root" mode="xref-knowl-old"/>
+        </xsl:if>
     </xsl:if>
 </xsl:template>
 
