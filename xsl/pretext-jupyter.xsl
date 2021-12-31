@@ -31,6 +31,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     extension-element-prefixes="exsl str"
     >
 
+<!-- Trade on HTML markup, numbering, chunking, etc.        -->
+<!-- Override as pecularities of Jupytr/JSON arise          -->
+<!-- NB: this will import -assembly and -common stylesheets -->
 <xsl:import href="./pretext-html.xsl" />
 
 <!-- Output is JSON, enriched with serialized HTML -->
@@ -49,17 +52,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Entry Template -->
 <!-- ############## -->
 
-<!-- Deprecation warnings are universal analysis of source and parameters   -->
-<!-- There is always a "document root" directly under the mathbook element, -->
-<!-- and we process it with the chunking template called below              -->
-<!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/">
-    <xsl:apply-templates />
+    <xsl:apply-templates select="$root"/>
 </xsl:template>
 
+<!-- Deprecation warnings are universal analysis of source and parameters        -->
 <!-- We process structural nodes via chunking routine in  xsl/pretext-common.xsl -->
-<!-- This in turn calls specific modal templates defined elsewhere in this file    -->
-<xsl:template match="/mathbook|/pretext">
+<!-- This in turn calls specific modal templates defined elsewhere in this file  -->
+<!-- There is always a "document root" directly under the mathbook element,      -->
+<!-- and we process it with the chunking template called below                   -->
+<!-- Note that "docinfo" is at the same level and not structural, so killed      -->
+<xsl:template match="/pretext">
     <xsl:call-template name="banner-warning">
         <xsl:with-param name="warning">Jupyter notebook conversion is experimental and incomplete&#xa;Requests to fix/implement specific constructions welcome</xsl:with-param>
     </xsl:call-template>
