@@ -294,9 +294,9 @@
 
 <!-- The book element gets mined in various ways,            -->
 <!-- but the "usual" HTML treatment can/should be thrown out -->
-<!-- At fixed level 2, this is a summary page                -->
-<!-- Later gives precedence?  So overrides above             -->
-<xsl:template match="book" mode="file-wrap" />
+<!-- At fixed level 2, this is a summary page from an        -->
+<!-- intermediate node, so we kill it                        -->
+<xsl:template match="book" mode="intermediate" />
 
 <!-- This seems a bit dangerous, but this content is fairly small -->
 <!-- and they are going into their own files.  So it seems the    -->
@@ -313,40 +313,43 @@
 <!-- heading and the lead-in material.  Anything after the last  -->
 <!-- division (conclusion, outcomes) will create s of their own, -->
 <!-- which will appear as a continuation/ending of the chapter.  -->
-<!-- NB: copied from pretext-html.xsl, sans the summary links    -->
-<!-- and the conclusion                                          -->
-<xsl:template match="frontmatter|chapter|appendix" mode="summary">
-    <!-- location info for debugging efforts -->
-    <xsl:apply-templates select="." mode="debug-location" />
-    <!-- Heading, div for this structural subdivision -->
-    <xsl:variable name="hid">
-        <xsl:apply-templates select="." mode="html-id" />
-    </xsl:variable>
-    <section class="{local-name(.)}" id="{$hid}">
-        <xsl:apply-templates select="." mode="section-heading" />
-        <xsl:apply-templates select="author|objectives|introduction|titlepage|abstract" />
-        <!-- deleted "nav" and summary links here -->
-    </section>
-    <xsl:if test="conclusion">
-        <xsl:apply-templates select="conclusion" mode="file-wrap">
-            <xsl:with-param name="content">
-                <xsl:apply-templates select="conclusion"/>
-            </xsl:with-param>
-        </xsl:apply-templates>
-    </xsl:if>
-    <xsl:if test="outcomes">
-        <xsl:apply-templates select="outcomes" mode="file-wrap">
-            <xsl:with-param name="content">
-                <xsl:apply-templates select="outcomes"/>
-            </xsl:with-param>
-        </xsl:apply-templates>
-    </xsl:if>
+<!-- NB: based on version in  pretext-html.xsl                   -->
+<xsl:template match="frontmatter|chapter|appendix" mode="intermediate">
+    <xsl:apply-templates select="." mode="file-wrap">
+        <xsl:with-param name="content">
+            <!-- location info for debugging efforts -->
+            <xsl:apply-templates select="." mode="debug-location" />
+            <!-- Heading, div for this structural subdivision -->
+            <xsl:variable name="hid">
+                <xsl:apply-templates select="." mode="html-id" />
+            </xsl:variable>
+            <section class="{local-name(.)}" id="{$hid}">
+                <xsl:apply-templates select="." mode="section-heading" />
+                <xsl:apply-templates select="author|objectives|introduction|titlepage|abstract" />
+                <!-- deleted "nav" and summary links here -->
+            </section>
+            <xsl:if test="conclusion">
+                <xsl:apply-templates select="conclusion" mode="file-wrap">
+                    <xsl:with-param name="content">
+                        <xsl:apply-templates select="conclusion"/>
+                    </xsl:with-param>
+                </xsl:apply-templates>
+            </xsl:if>
+            <xsl:if test="outcomes">
+                <xsl:apply-templates select="outcomes" mode="file-wrap">
+                    <xsl:with-param name="content">
+                        <xsl:apply-templates select="outcomes"/>
+                    </xsl:with-param>
+                </xsl:apply-templates>
+            </xsl:if>
+        </xsl:with-param>
+    </xsl:apply-templates>
 </xsl:template>
 
-<!-- At level 2, the backmatter summary is useless, -->
-<!-- since it is all links, so just kill the file,  -->
-<!-- and do not include in the manifest or spine    -->
-<xsl:template match="backmatter" mode="file-wrap" />
+<!-- At level 2, the backmatter summary is useless, since it is  -->
+<!-- all links, so just kill the intermediate chunking template.  -->
+<!-- Also do not include entries in the manifest or spine. -->
+<xsl:template match="backmatter" mode="intermediate" />
 
 
 
