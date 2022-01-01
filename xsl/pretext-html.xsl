@@ -499,23 +499,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- A summary page for a structural division -->
-<!-- Unlike the base implemenation in -common we break out a  -->
-<!-- "summary" templates (below) for processing a structural  -->
-<!-- node realized as an intermediate/summary node.  *This*   -->
-<!-- "summary" template is overridden in the Jupyter and EPUB -->
-<!-- conversions.                                             -->
-<!-- We also pass a "heading-level", which begins at 2 to     -->
+<!-- Processing of a structural node realized as an           -->
+<!-- intermediate/summary node.                               -->
+<!-- We pass in a "heading-level", which begins at 2 to       -->
 <!-- account for an "h1" being used in the masthead of the    -->
 <!-- page infrastructure.                                     -->
-<!-- NB: (2021-12-30) Could absorb "summary" template here,   -->
-<!-- and just do similarly for an override in the EPUB        -->
-<!-- conversion.                                             -->
 <xsl:template match="&STRUCTURAL;" mode="intermediate">
     <xsl:apply-templates select="." mode="file-wrap">
         <xsl:with-param name="content">
-            <xsl:apply-templates select="." mode="summary">
-                <xsl:with-param name="heading-level" select="2"/>
-            </xsl:apply-templates>
+            <!-- location info for debugging efforts -->
+            <xsl:apply-templates select="." mode="debug-location" />
+            <!-- Heading, div for this structural subdivision -->
+            <xsl:variable name="hid">
+                <xsl:apply-templates select="." mode="html-id" />
+            </xsl:variable>
+            <section class="{local-name(.)}" id="{$hid}">
+                <xsl:apply-templates select="." mode="section-heading">
+                    <xsl:with-param name="heading-level" select="2"/>
+                </xsl:apply-templates>
+                <xsl:apply-templates select="." mode="author-byline"/>
+                <xsl:apply-templates select="objectives|introduction|titlepage|abstract" />
+                <!-- Links to subsidiary divisions, as a group of button/hyperlinks -->
+                <nav class="summary-links">
+                    <ul>
+                        <xsl:apply-templates select="*" mode="summary-nav" />
+                    </ul>
+                </nav>
+                <xsl:apply-templates select="conclusion|outcomes"/>
+            </section>
         </xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>
@@ -664,37 +675,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:apply-templates>
         </xsl:with-param>
     </xsl:apply-templates>
-</xsl:template>
-
-<!-- Modal template for content of a summary page   -->
-<!-- Introduction (etc.) and conclusion realized as -->
-<!-- normal, then links to subsidiary divisions     -->
-<!-- occur between, as a group of button/hyperlinks -->
-<!-- heading-level of parent should come in as 1,   -->
-<!-- so then passed to "section-heading" as 2.      -->
-<!-- Always.                                        -->
-<xsl:template match="&STRUCTURAL;" mode="summary">
-    <xsl:param name="heading-level"/>
-
-    <!-- location info for debugging efforts -->
-    <xsl:apply-templates select="." mode="debug-location" />
-    <!-- Heading, div for this structural subdivision -->
-    <xsl:variable name="hid">
-        <xsl:apply-templates select="." mode="html-id" />
-    </xsl:variable>
-    <section class="{local-name(.)}" id="{$hid}">
-        <xsl:apply-templates select="." mode="section-heading">
-            <xsl:with-param name="heading-level" select="$heading-level"/>
-        </xsl:apply-templates>
-        <xsl:apply-templates select="." mode="author-byline"/>
-        <xsl:apply-templates select="objectives|introduction|titlepage|abstract" />
-        <nav class="summary-links">
-            <ul>
-                <xsl:apply-templates select="*" mode="summary-nav" />
-            </ul>
-        </nav>
-        <xsl:apply-templates select="conclusion|outcomes"/>
-    </section>
 </xsl:template>
 
 <!-- Navigation -->
