@@ -531,6 +531,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
+<!-- Navigation -->
+<!-- Structural nodes on a summary page  -->
+<!-- become attractive button/hyperlinks -->
+<xsl:template match="&STRUCTURAL;" mode="summary-nav">
+    <xsl:variable name="num">
+        <xsl:apply-templates select="." mode="number" />
+    </xsl:variable>
+    <xsl:variable name="url">
+        <xsl:apply-templates select="." mode="url" />
+    </xsl:variable>
+    <li>
+        <a href="{$url}">
+            <!-- do not include an empty codenumber span -->
+            <xsl:if test="not($num = '')">
+                <span class="codenumber">
+                    <xsl:value-of select="$num" />
+                </span>
+                <xsl:text> </xsl:text>
+            </xsl:if>
+            <!-- title is required on structural elements -->
+            <span class="title">
+                <xsl:apply-templates select="." mode="title-short" />
+            </span>
+        </a>
+    </li>
+</xsl:template>
+
+<!-- introduction (etc.) and conclusion get dropped -->
+<xsl:template match="*" mode="summary-nav" />
+
 <!-- Default template for content of a structural  -->
 <!-- division, which could be an entire page's     -->
 <!-- worth, or just a subdivision within a page    -->
@@ -676,36 +706,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>
-
-<!-- Navigation -->
-<!-- Structural nodes on a summary page  -->
-<!-- become attractive button/hyperlinks -->
-<xsl:template match="&STRUCTURAL;" mode="summary-nav">
-    <xsl:variable name="num">
-        <xsl:apply-templates select="." mode="number" />
-    </xsl:variable>
-    <xsl:variable name="url">
-        <xsl:apply-templates select="." mode="url" />
-    </xsl:variable>
-    <li>
-        <a href="{$url}">
-            <!-- do not include an empty codenumber span -->
-            <xsl:if test="not($num = '')">
-                <span class="codenumber">
-                    <xsl:value-of select="$num" />
-                </span>
-                <xsl:text> </xsl:text>
-            </xsl:if>
-            <!-- title is required on structural elements -->
-            <span class="title">
-                <xsl:apply-templates select="." mode="title-short" />
-            </span>
-        </a>
-    </li>
-</xsl:template>
-
-<!-- introduction (etc.) and conclusion get dropped -->
-<xsl:template match="*" mode="summary-nav" />
 
 <!-- ############### -->
 <!-- Bits and Pieces -->
