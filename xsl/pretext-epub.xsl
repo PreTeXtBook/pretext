@@ -21,6 +21,7 @@
                 xmlns:epub="http://www.idpf.org/2007/ops"
                 xmlns:exsl="http://exslt.org/common"
                 xmlns:date="http://exslt.org/dates-and-times"
+                exclude-result-prefixes="pi"
                 extension-element-prefixes="exsl date">
 
 <!-- Trade on HTML markup, numbering, chunking, etc. -->
