@@ -1755,7 +1755,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
 # Conversion to HTML
 ####################
 
-def html(xml, pub_file, stringparams, file_format, extra_xsl, out_file, dest_dir, xmlid_root):
+def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_file, dest_dir):
     """Convert XML source to HTML files, in destination directory or as zip file"""
     import os.path # join()
     import shutil # copytree(), copy2()
@@ -1768,7 +1768,7 @@ def html(xml, pub_file, stringparams, file_format, extra_xsl, out_file, dest_dir
     # names for scratch directories
     tmp_dir = get_temporary_directory()
 
-    # support publisher file, not subtree argument
+    # support publisher file, and subtree argument
     if pub_file:
         stringparams['publisher'] = pub_file
     if xmlid_root:

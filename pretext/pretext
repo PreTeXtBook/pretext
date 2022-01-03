@@ -398,7 +398,7 @@ def main():
             raise NotImplementedError('cannot convert math elements to "{}" format'.format(args.format))
     elif args.component == 'all':
         if args.format == 'html':
-            ptx.html(xml_source, publisher_file, stringparams, 'html', extra_stylesheet, out_file, dest_dir, args.xmlid)
+            ptx.html(xml_source, publisher_file, stringparams, args.xmlid, 'html', extra_stylesheet, out_file, dest_dir)
         elif args.format == 'html-zip':
             ptx.html(xml_source, publisher_file, stringparams, 'zip', extra_stylesheet, out_file, dest_dir)
         elif args.format == 'pdf':
