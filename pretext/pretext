@@ -400,7 +400,8 @@ def main():
         if args.format == 'html':
             ptx.html(xml_source, publisher_file, stringparams, args.xmlid, 'html', extra_stylesheet, out_file, dest_dir)
         elif args.format == 'html-zip':
-            ptx.html(xml_source, publisher_file, stringparams, 'zip', extra_stylesheet, out_file, dest_dir)
+            # no "subtree root" build is possible
+            ptx.html(xml_source, publisher_file, stringparams, None, 'zip', extra_stylesheet, out_file, dest_dir)
         elif args.format == 'pdf':
             ptx.pdf(xml_source, publisher_file, stringparams, extra_stylesheet, out_file, dest_dir)
         elif args.format == 'latex':
