@@ -306,6 +306,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- #### EXPERIMENTAL #### -->
+<!-- We allow for the HTML conversion to chunk output, starting  -->
+<!-- from an arbitrary node.  $subtree-node needs context.       -->
+<xsl:param name="subtree" select="''"/>
+<xsl:variable name="b-subsetting" select="not($subtree = '')"/>
+<!-- #### EXPERIMENTAL #### -->
+
+
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->
@@ -332,37 +340,62 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$root"/>
 </xsl:template>
 
-<!-- #### EXPERIMENTAL #### -->
-<xsl:param name="subtree" select="''"/>
-<!-- #### EXPERIMENTAL #### -->
 
 <!-- We process structural nodes via chunking routine in xsl/pretext-common.xsl    -->
 <!-- This in turn calls specific modal templates defined elsewhere in this file     -->
 <!-- The xref-knowl templates run independently on content node of document tree    -->
 <xsl:template match="/mathbook|/pretext">
-    <xsl:call-template name="index-redirect-page"/>
 
-    <!-- #### EXPERIMENTAL #### -->
-    <!-- <xsl:message>P: <xsl:value-of select="$subtree"/>:P</xsl:message>     -->
-    <xsl:variable name="b-subsetting" select="not($subtree = '')"/>
-    <xsl:variable name="subtree-node" select="id($subtree)"/>
-    <!-- #### EXPERIMENTAL #### -->
-
-    <xsl:if test="$b-subsetting">
-        <xsl:apply-templates select="$subtree-node" mode="chunking" />
-    </xsl:if>
-    <xsl:if test="not($b-subsetting)">
-        <xsl:apply-templates mode="chunking" />
-    </xsl:if>
-
-    <xsl:if test="not($b-subsetting)">
-        <xsl:if test="$b-knowls-new">
+    <xsl:choose>
+        <!-- usually not working on a subset -->
+        <xsl:when test="not($b-subsetting)">
+            <xsl:call-template name="index-redirect-page"/>
+            <xsl:apply-templates mode="chunking" />
+        </xsl:when>
+        <!-- if subsetting, begin chunking at specified node -->
+        <!-- and do not build an "index.html" page           -->
+        <xsl:otherwise>
+            <!-- we compute the subset node while the context is the -->
+            <!-- tree produced by the -assembly stylesheet, and only -->
+            <!-- if actually requested                               -->
+            <xsl:variable name="subtree-node" select="id($subtree)"/>
+            <!-- this error-checking should be parked somewhere else -->
+            <!-- and maybe there is a fallback to full processing?   -->
+            <xsl:choose>
+                <xsl:when test="not($subtree-node)">
+                    <xsl:message terminate="yes">PTX:ERROR:  the @xml:id given as a subtree root ("<xsl:value-of select="$subtree"/>") does not specify any element.  (Check spelling?)  Quitting...</xsl:message>
+                </xsl:when>
+                <xsl:when test="not($subtree-node[&STRUCTURAL-FILTER;])">
+                    <xsl:message terminate="yes">PTX:ERROR:  the element with the @xml:id given as a subtree root ("<xsl:value-of select="$subtree"/>") is not division that can be chunked into HTML page(s).  Quitting...</xsl:message>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:variable name="current-level">
+                        <!-- this should be successful having passed previous filter -->
+                        <xsl:apply-templates select="$subtree-node" mode="level"/>
+                    </xsl:variable>
+                    <!-- too deep to chunk into a page (or pages) -->
+                    <xsl:if test="$current-level > $chunk-level">
+                        <xsl:message terminate="yes">PTX:ERROR:  the element with @xml:id given as a subtree root ("<xsl:value-of select="$subtree"/>") is only a partial HTML page at the current chunking level.  Quitting...</xsl:message>
+                    </xsl:if>
+                </xsl:otherwise>
+            </xsl:choose>
+            <!-- seems to now be a good place to start chunking -->
+            <xsl:apply-templates select="$subtree-node" mode="chunking" />
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- knowl-production, partially in flux while improving -->
+    <xsl:choose>
+        <!-- subsetting? don't bother (for now) -->
+        <xsl:when test="$b-subsetting"/>
+        <!-- alternate, new production for testing -->
+        <xsl:when test="$b-knowls-new">
             <xsl:apply-templates select="." mode="make-efficient-knowls"/>
-        </xsl:if>
-        <xsl:if test="not($b-knowls-new)">
+        </xsl:when>
+        <!-- status quo -->
+        <xsl:otherwise>
             <xsl:apply-templates select="$document-root" mode="xref-knowl-old"/>
-        </xsl:if>
-    </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- However, some MBX document types do not have    -->
