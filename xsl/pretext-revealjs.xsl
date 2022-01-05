@@ -178,10 +178,10 @@ dfn {
         </head>
 
         <body>
-            <!-- For mathematics/MathJax -->
-            <xsl:call-template name="latex-macros"/>
-
             <div class="reveal pretext-content">
+                <!-- For mathematics/MathJax, must be located -->
+                <!-- within div.reveal to be effective        -->
+                <xsl:call-template name="latex-macros"/>
                 <div class="slides">
                      <xsl:apply-templates select="frontmatter"/>
                     <xsl:apply-templates select="section|slide"/>
