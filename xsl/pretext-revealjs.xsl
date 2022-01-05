@@ -33,9 +33,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     extension-element-prefixes="exsl date"
 >
 
-<!-- Necessary to get some HTML constructions, -->
-<!-- but want to be sure to override the entry -->
-<!-- template to avoid chunking, etc.          -->
+<!-- Necessary to get some HTML constructions,    -->
+<!-- but want to be sure to override the entry    -->
+<!-- template to avoid chunking, etc.             -->
+<!-- The pretext-assembly stylesheet is employed, -->
+<!-- so be sure to use the right trees in the     -->
+<!-- entry template                               -->
 <xsl:import href="pretext-html.xsl" />
 
 <!-- HTML5 format -->
@@ -57,7 +60,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="reveal-warnings"/>
     <xsl:apply-templates select="$original" mode="generic-warnings"/>
     <xsl:apply-templates select="$original" mode="deprecation-warnings"/>
-    <xsl:apply-templates select="pretext"/>
+    <xsl:apply-templates select="$root"/>
 </xsl:template>
 
 <xsl:template match="/pretext">
