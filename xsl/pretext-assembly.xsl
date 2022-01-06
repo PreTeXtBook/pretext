@@ -444,27 +444,41 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Visual URLs -->
 <!-- A great way to present a URL is with some clickable text.  But that    -->
 <!-- is useless in print.  And maybe a reader really would like to see the  -->
-<!-- actual URL.  So "@visual" is a version of the URL that is pleasing to -->
+<!-- actual URL.  So "@visual" is a version of the URL that is pleasing to  -->
 <!-- look at, maybe just a TLD, no protocol (e.g "https://"), no "www."     -->
-<!-- if unnecessary, etc.  Here it becomes a footnote, and in monospace     -->
-<!-- ("code") font.  This is great in print, and is a knowl in HTML.        -->
+<!-- if unnecessary, etc.  Here it becomes a special variant of a footnote, -->
+<!-- which allows for numbering and special-handling in LaTeX, based        -->
+<!-- strictly on the element itself.  But placing the URL in an attribute   -->
+<!-- signals this is an exceptional footnote, so the URL can be handled     -->
+<!-- specially, say in a monospace font, or in the LaTeX case, treatment    -->
+<!-- like \nolinkurl{}. This is great in print, and is a knowl in HTML.     -->
 <!--                                                                        -->
 <!-- Advantages: however a conversion does footnotes, this will be the      -->
 <!-- right markup for that conversion.  Note that LaTeX pulls footnotes     -->
 <!-- out of "tcolorbox" environments, which is based on the *context*,      -->
 <!-- so a result-tree fragment implementation is doomed to fail.            -->
+<!--                                                                        -->
+<!-- N.B.  We are only interpreting the "content" form here by simply       -->
+<!-- adding the footnote element.  This leaves various decisions about      -->
+<!-- formatting to the subsequent conversion.                               -->
 
-<!-- N.B.  We considered interpreting the "no content" form here by simply  -->
-<!-- duplicating @href as the content (in a "c" element).  This would mean  -->
-<!-- just a single template/case in conversions.  But it would prevent      -->
-<!-- LaTeX from being able to use a \url{} construction which does sensible -->
-<!-- line-breaking. -->
-
-<xsl:template match="url[@visual]" mode="repair">
+<xsl:template match="url[node()]" mode="repair">
     <xsl:copy>
+        <!-- we drop the @visual attribute, a decision we might revisit -->
         <xsl:apply-templates select="node()|@*[not(local-name(.) = 'visual')]" mode="repair"/>
     </xsl:copy>
-    <fn><c><xsl:value-of select="@visual"/></c></fn>
+    <xsl:choose>
+        <!-- deprecated, force the issue using @href -->
+        <xsl:when test="not(@visual)">
+            <fn pi:url="{@href}"/>
+        </xsl:when>
+        <!-- explicitly opt-out, so no footnote -->
+        <xsl:when test="@visual = ''"/>
+        <!-- go for it, as requested by author -->
+        <xsl:otherwise>
+            <fn pi:url="{@visual}"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 

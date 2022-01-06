@@ -10855,12 +10855,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>\footnote{</xsl:text>
-            <xsl:apply-templates />
+            <xsl:apply-templates select="." mode="footnote-text"/>
             <xsl:apply-templates select="." mode="label" />
             <xsl:text>}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
 
 <!-- Part 2: for items implemented as "tcolorbox", and other       -->
 <!-- environments that could harbor a footnote, such as            -->
@@ -10886,11 +10887,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="serial-number"/>
             <xsl:text>]</xsl:text>
             <xsl:text>{</xsl:text>
-            <xsl:apply-templates />
+            <xsl:apply-templates select="." mode="footnote-text"/>
             <xsl:apply-templates select="." mode="label" />
             <xsl:text>}%&#xa;</xsl:text>
         </xsl:for-each>
     </xsl:if>
+</xsl:template>
+
+<xsl:template match="fn" mode="footnote-text">
+    <xsl:choose>
+        <xsl:when test="@pi:url">
+            <xsl:text>\nolinkurl{</xsl:text>
+            <xsl:call-template name="escape-url-to-latex">
+                <xsl:with-param name="text">
+                    <xsl:value-of select="@pi:url"/>
+                </xsl:with-param>
+            </xsl:call-template>
+            <xsl:text>}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- TEMPORARILY: render a glossary "headnote" as an "introduction" -->
