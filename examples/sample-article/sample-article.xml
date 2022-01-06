@@ -281,7 +281,7 @@ the xsltproc executable.
             example near the discussion of Asymptote.
             -->
 
-            <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <me>\definiteintegral{0}{2}{\sin^2(x)}{x}</me>.  This is also a demonstration of the capabilities of <url href="https://pretextbook.org"><pretext /></url>.<notation>
+            <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <me>\definiteintegral{0}{2}{\sin^2(x)}{x}</me>.  This is also a demonstration of the capabilities of <url href="https://pretextbook.org" visual="pretextbook.org"><pretext /></url>.<notation>
                 <usage><m>\int_a^b\,f(x)\,dx</m></usage>
                 <description>definite integral of <m>f(x)</m></description>
             </notation></p>
@@ -1712,7 +1712,7 @@ the xsltproc executable.
             <p>Now with no numbers and no alignment.  We include two cross-references in the <c>intertext</c> portion for testing.<md>
                 <mrow>{\mathcal L}(y')(s)  = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
                 <mrow>{\mathcal L}(y'')(s) = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
-                <intertext>First an external reference to <url href="http://example.com" /> and internal cross-reference to <xref ref="corollary-FTC-derivative" text="type-global" />. And so it follows that,</intertext>
+                <intertext>First an external reference to <url href="http://example.com" visual="example.com"/> and internal cross-reference to <xref ref="corollary-FTC-derivative" text="type-global" />. And so it follows that,</intertext>
                 <mrow>{\mathcal L}(y')(s)^{++} = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
                 <mrow>{\mathcal L}(y'')(s)^{5} = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0)</mrow>
             </md>.</p>
@@ -1777,7 +1777,7 @@ the xsltproc executable.
             <subsection>
                 <title>Basic Mathematics</title>
 
-                <p>The following is from the MathJax <url href="http://www.mathjax.org/demos/tex-samples/">demonstration page</url>, an identity due to Ramanujan:<me>\frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} = 1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}} {1+\frac{e^{-8\pi}} {1+\ldots} } } }</me></p>
+                <p>The following is from the MathJax <url href="http://www.mathjax.org/demos/tex-samples/" visual="www.mathjax.org/demos/tex-samples/">demonstration page</url>, an identity due to Ramanujan:<me>\frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} = 1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}} {1+\frac{e^{-8\pi}} {1+\ldots} } } }</me></p>
 
                 <p>And again, from the MathJax demonstration page, Maxwell's equations:<idx>Maxwell's equations</idx><md>
                     <mrow>\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &amp; = \frac{4\pi}{c}\vec{\mathbf{j}}</mrow>
@@ -2195,7 +2195,7 @@ the xsltproc executable.
                 <obelus/><nbsp/><nbsp/>
                 <plusminus/></p>
 
-                <p>There are a few  common abbreviations of Latin phrases that can be achieved in HTML one way, and in <latex /> with a slightly different mechanism.  These are due to <latex />'s treatment of a period (full stop), depending on its surroundings.  So not reserved characters, but just divergent treatment.  Using these will lead to the best quality in all your outputs.  See Will Robertson's informative and arcane <url href="http://latex-alive.tumblr.com/post/827168808/correct-punctuation-spaces">blog post</url> on the topic if you want the full story for the treatment of a full stop in <latex />.</p>
+                <p>There are a few  common abbreviations of Latin phrases that can be achieved in HTML one way, and in <latex /> with a slightly different mechanism.  These are due to <latex />'s treatment of a period (full stop), depending on its surroundings.  So not reserved characters, but just divergent treatment.  Using these will lead to the best quality in all your outputs.  See Will Robertson's informative and arcane <url href="http://latex-alive.tumblr.com/post/827168808/correct-punctuation-spaces" visual="latex-alive.tumblr.com/post/827168808">blog post</url> on the topic if you want the full story for the treatment of a full stop in <latex />.</p>
 
                 <tabular>
                     <row><cell>Tag</cell><cell>Realization</cell><cell>Meaning</cell></row>
@@ -2593,9 +2593,20 @@ the xsltproc executable.
 
             <subsection xml:id="section-urls">
                 <title>URLs, such as <url href="http://example.com" /></title>
-                        <idx><h>link</h><h>external, url</h></idx>
-                        <idx><h>reference</h><h>external, url</h></idx>
-                <p>An internet <init>URL</init><idx><h>URLs</h></idx> can contain a limited subset of keyboard characters.  So we include a long <init>URL</init> for testing:  <url href="http://www.pcc.edu/enroll/registration/dropping.html#withdraw">www.pcc.edu/enroll/registration/dropping.html#withdraw</url>.  Notice in the source that you <em>do not</em> put any tags inside the <c>href</c> attribute, but you may need to provide XML escape sequences, see <xref ref="subsection-xml-escape"/>).  Here is a totally bogus <init>URL</init>, which contains every possible legal character, so if this fails to convert there is some problematic character.  In order to test the use of a percent sign (<c>%</c>) in a URL, we follow it by two hex digits, specifically, <c>58</c>, which is a way to represent the character <c>X</c> in a <init>URL</init>.  Three versions: one with the content as normal text, one with the characters as verbatim text, and then as a <init>URL</init> with the same string of characters as the address and the clickable, viewable part.</p>
+                <idx><h>link</h><h>external, url</h></idx>
+                <idx><h>reference</h><h>external, url</h></idx>
+
+                <p>The <tag>url</tag> element can be used to create an external reference.  The mandatory <attr>href</attr> attribute is the actual <init>URL</init> complete with the protocol (e.g. <c>https://</c>).  Content for the element is optional, and if provided will be the <q>clickable</q> text.  In this case, a <attr>visual</attr> attribute must be provided, and this will become a footnote with a more friendly version of the <init>URL</init>.  When no content is provided, the <q>clickable</q> will be the <init>URL</init> with a preference for an optional <attr>visual</attr>.  This subsection has some (extreme) tests and we leave complete documentation and full details for the <pretext/> Guide.</p>
+
+                <p>A long <init>URL</init> for testing:  <url href="http://www.pcc.edu/enroll/registration/dropping.html#withdraw" visual="www.pcc.edu/enroll/registration/dropping.html#withdraw"/>.  Notice in the source that you <em>do not</em> put any tags inside the <attr>href</attr> or <attr>visual</attr> attributes, but you may need to provide XML escape sequences (see <xref ref="subsection-xml-escape" text="type-global"/>). </p>
+
+                <p>A <tag>url</tag> element with content will get a footnote, containing the (simplified) URL in the mandatory <attr>visual</attr> attribute.  If you do not provide the <attr>visual</attr> attribute in this case, then you are using a construction that was deprecated on 2020-01-05.  If you insist, you can make the <attr>visual</attr> attribute identical to the <attr>href</attr> attribute.  Some tests:<ul>
+                    <li><url href="http://example.com/" visual="example.com">With a useful <attr>visual</attr> attribute</url></li>
+                    <li><url href="http://example.com/" visual="http://example.com/">With a duplicate <attr>visual</attr> attribute</url></li>
+                    <li><url href="http://example.com/">Without a <attr>visual</attr> attribute (deprecated)</url></li>
+                </ul></p>
+
+                <p>Here is a totally bogus <init>URL</init>, which contains every possible legal character, so if this fails to convert there is some problematic character.  In order to test the use of a percent sign (<c>%</c>) in a URL, we follow it by two hex digits, specifically, <c>58</c>, which is a way to represent the character <c>X</c> in a <init>URL</init>.  Normal text, monospace text, <tag>url</tag> with just <attr>href</attr>, <tag>url</tag> with <attr>href</attr> and <attr>visual</attr>, <tag>url</tag> with <attr>href</attr>, <attr>visual</attr> and content.  Notice how the various versions do, or do not, line-break in <latex/>/PDF output, including the (potentially confusing) use of a use of a hyphen in the normal text version</p>
 
                 <blockquote>
 
@@ -2603,23 +2614,23 @@ the xsltproc executable.
 
                     <p><c>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</c></p>
 
-                    <p><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;=">http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;=</url></p>
+                    <p><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;="/></p>
+
+                    <p><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;=" visual="example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;="/></p>
+
+                    <p><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;=" visual="example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;=">Characters to a footnote</url></p>
 
                 </blockquote>
 
-                <p>The source of the four above examples can be instructive.<ul>
-                    <li><p>Four ampersands need to be authored as <c>&amp;amp;</c>: two <c>href</c> attributes and two strings of verbatim text.</p></li>
+                <p>Line-breaking in <latex/>/PDF output is specialized, using path separators (slashes) as candidates for splitting across lines: <url href="http://example.com/long/long/long/long/long/long/long/long/long/long/long/long/long/long/long/long/long/long/long/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer"/></p>
 
-                    <li><p>Two ampersands are authored as <tag>ampersand /</tag>: two strings of normal text.</p></li>
-                </ul></p>
-
-                <p>When a <c>url</c> has no content, then its <c>href</c> attribute is displayed as the text, automatically in a typewriter font.</p>
-
-                <blockquote>
-                    <p><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;="></url></p>
-                </blockquote>
-
-                <p>We are not fans of footnotes, they are totally unstructured.<fn><url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url></fn>  A URL in a footnote migrates around, and so care must be taken.<fn><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;="><c>http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;=</c></url></fn>  This paragraph has two footnotes, one with a real URL from Jesse Oldroyd, another with a fake URL from the above suite (the fourth one).  For good measure, we repeat the URL found in the first footnote: <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url>.  And we include a no-content version of the same link:  <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" />.</p>
+                <p>We are not fans of footnotes, they are totally unstructured.<fn><url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" visual="">Carleson's Theorem</url></fn>
+                A URL in a footnote migrates around, and so care must be taken.<fn><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;="/></fn>
+                This paragraph has two footnotes, one with a real URL from Jesse Oldroyd, another with a fake URL from the above suite.
+                For good measure, we repeat the URL found in the first footnote (which lacks its own footnote by design):
+                <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" visual="">Carleson's Theorem</url>.
+                And we include a no-content version of the same link, with a visual version provided and employed:
+                <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" visual="en.wikipedia.org/wiki/Carleson%27s_theorem"/>.</p>
             </subsection>
 
 
@@ -2631,7 +2642,7 @@ the xsltproc executable.
 
                 <p>The <c>taxon</c><idx>taxon</idx><idx><h>biological names</h><h>taxon</h></idx> element can be used all by itself to get an italicized scientific name, as in <taxon>Escherichia coli</taxon>.  It can also be structured with the elements <c>genus</c><idx>genus</idx><idx><h>biological names</h><h>genus</h></idx> and <c>species</c>,<idx>species</idx><idx><h>biological names</h><h>species</h></idx> as in using both together in <taxon><genus>Cyclops</genus><species>kolensis</species></taxon>.  Or the subelements can be used individually.  Rules for capitalization are presently your responsibility as an author.  Possible improvements include new subelements, attributes for database identifiers, and checks on capitalization.  Also, we might automatically abbreviate the genus after first use.</p>
 
-                <p>There is an attribute, <c>@ncbi</c><idx>ncbi attribute</idx><idx><h>attributes</h><h>ncbi attribute</h></idx><idx><h>biological names</h><h>ncbi attribute</h></idx> that you can use on the <c>taxon</c> element to precisely identify the organism you are discussing using an identification number from the <url href="https://www.ncbi.nlm.nih.gov/">National Center for Biotechnology Information</url>.  Their <url href="https://www.ncbi.nlm.nih.gov/taxonomy">taxonomy</url> is at <c>www.ncbi.nlm.nih.gov/taxonomy</c>.  Right now, we do not do anything with this attribute, but things like links are certainly possible.  See the source of this document to see it in use with <taxon ncbi="7229"><genus>Drosophila</genus><species>miranda</species></taxon> which could be used to construct a link to <url href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=7229">further information via id number</url> or even <url href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Drosophila+miranda">further information via just the name</url>.</p>
+                <p>There is an attribute, <c>@ncbi</c><idx>ncbi attribute</idx><idx><h>attributes</h><h>ncbi attribute</h></idx><idx><h>biological names</h><h>ncbi attribute</h></idx> that you can use on the <c>taxon</c> element to precisely identify the organism you are discussing using an identification number from the <url href="https://www.ncbi.nlm.nih.gov/" visual="www.ncbi.nlm.nih.gov">National Center for Biotechnology Information</url>.  Their <url href="https://www.ncbi.nlm.nih.gov/taxonomy" visual="www.ncbi.nlm.nih.gov/taxonomy">taxonomy</url> is at <c>www.ncbi.nlm.nih.gov/taxonomy</c>.  Right now, we do not do anything with this attribute, but things like links are certainly possible.  See the source of this document to see it in use with <taxon ncbi="7229"><genus>Drosophila</genus><species>miranda</species></taxon> which could be used to construct a link to <url href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=7229" visual="www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=7229">further information via id number</url> or even <url href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Drosophila+miranda" visual="www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Drosophila+miranda">further information via just the name</url>.</p>
             </subsection>
 
             <subsection>
@@ -2772,7 +2783,7 @@ the xsltproc executable.
                 <idx><latex/> image</idx>
                 <idx><h>image</h><h><latex/> image</h></idx>
 
-                <p>There are several graphics engine packages that a <latex/> document can employ. Code from these packages renders diagrams automatically as part of normal processing of <latex/> files.  For HTML output the <c>pretext</c> script produces SVG versions of the pictures.  The script can also produce standalone <tex/> source files, PDFs, PNGs, and EPSs. The packages should be loaded in <c>docinfo/latex-image-preamble</c>, which is also where global package settings should be made. If any ampersands occur in your <latex/> code you should use the <c>\amp</c> macro pre-defined by <pretext/>. These first examples are from the <url href="http://www.texample.net/tikz/examples/">TeXample.net</url> site.  Note that any <latex /> macros used in the rest of your document may be employed in the <latex/>-standalone or Asymptote diagrams (with this feature coming to Sage graphics next?).</p>
+                <p>There are several graphics engine packages that a <latex/> document can employ. Code from these packages renders diagrams automatically as part of normal processing of <latex/> files.  For HTML output the <c>pretext</c> script produces SVG versions of the pictures.  The script can also produce standalone <tex/> source files, PDFs, PNGs, and EPSs. The packages should be loaded in <c>docinfo/latex-image-preamble</c>, which is also where global package settings should be made. If any ampersands occur in your <latex/> code you should use the <c>\amp</c> macro pre-defined by <pretext/>. These first examples are from the <url href="http://www.texample.net/tikz/examples/" visual="www.texample.net/tikz/examples/">TeXample.net</url> site.  Note that any <latex /> macros used in the rest of your document may be employed in the <latex/>-standalone or Asymptote diagrams (with this feature coming to Sage graphics next?).</p>
 
                 <!-- http://www.texample.net/media/tikz/examples/TEX/noise-shaper.tex -->
                 <figure xml:id="figure-tikz-electronics">
@@ -2862,7 +2873,7 @@ the xsltproc executable.
                     </image>
                 </figure>
 
-                <p>The next example began life in <url href="http://www.frontiernet.net/~eugene.ressler/">Sketch</url>, which will output TikZ code (though the code has been edited by hand for readability).</p>
+                <p>The next example began life in <url href="http://www.frontiernet.net/~eugene.ressler/" visual="www.frontiernet.net/~eugene.ressler/">Sketch</url>, which will output TikZ code (though the code has been edited by hand for readability).</p>
 
                 <!-- http://www.texample.net/media/tikz/examples/TEX/3d-cone.tex -->
                 <figure xml:id="figure-tikz-cone3D">
@@ -3029,7 +3040,7 @@ the xsltproc executable.
             <subsection>
                 <title>Asymptote, 2D</title>
 
-                <p>The Asymptote<idx><h>asymptote graphics language</h></idx> graphics language may be placed in your source to draw graphs, diagrams or pictures.  Rules for formatting code are identical to those for Sage code.  For more on Asymptote see <url href="http://asymptote.sourceforge.net/" />.</p>
+                <p>The Asymptote<idx><h>asymptote graphics language</h></idx> graphics language may be placed in your source to draw graphs, diagrams or pictures.  Rules for formatting code are identical to those for Sage code.  For more on Asymptote see <url href="http://asymptote.sourceforge.net/" visual="asymptote.sourceforge.net"/>.</p>
 
                 <!--
                 See a different (more traditional) variant of URL usage
@@ -3293,7 +3304,7 @@ the xsltproc executable.
                     </image>
                 </figure>
 
-                <p>The following examples are from the <url href="http://www.sagemath.org/tour-graphics.html">Sage Tour</url>.  We package them into a <c>sidebyside</c> layout element, see <xref ref="section-side-by-side" text="type-global" />.</p>
+                <p>The following examples are from the <url href="http://www.sagemath.org/tour-graphics.html" visual="www.sagemath.org/tour-graphics.html">Sage Tour</url>.  We package them into a <c>sidebyside</c> layout element, see <xref ref="section-side-by-side" text="type-global" />.</p>
 
                 <sidebyside width="40%" margins="auto">
                     <!-- Tour example modified: figsize moved from show() into plot() -->
@@ -3387,7 +3398,7 @@ the xsltproc executable.
                 <p>A caption could be as substantial as a paragraph, here we test out one such example.</p>
 
                 <figure xml:id="figure-long-caption">
-                    <caption>A caption can be a whole paragraph with lots of technical details, and maybe a hyperlink to something external, such as <url href="https://pretextbook.org"><c>pretextbook.org</c></url>.  There could be some inline mathematics, such as <m>x^2 + y^2 = c^2</m>.  Would a knowl open here?  Recursively?  Let's see: <xref ref="figure-long-caption" />.  Display mathematics, side-by-sides, theorems, and lots of other things should be banned.  Footnotes sound like a bad idea.  Strange characters should be fine: <section-mark />.</caption>
+                    <caption>A caption can be a whole paragraph with lots of technical details, and maybe a hyperlink to something external, such as <url href="https://pretextbook.org" visual="pretextbook.org"/> or <url href="https://pretextbook.org" visual="pretextbook.org"><pretext/></url>.  There could be some inline mathematics, such as <m>x^2 + y^2 = c^2</m>.  Would a knowl open here?  Recursively?  Let's see: <xref ref="figure-long-caption" />.  Display mathematics, side-by-sides, theorems, and lots of other things should be banned.  Footnotes sound like a bad idea.  Strange characters should be fine: <section-mark />.</caption>
 
                     <image source="images/cross-square.png" width="20%" />
                 </figure>
@@ -4955,7 +4966,7 @@ the xsltproc executable.
                 </tabular>
             </table>
 
-            <p>Note that tables may be constructed using the <url href="http://www.latex-tables.com/"><latex /> Complex Table Editor</url> tool online at <c>latex-tables.com</c>and then exported in <pretext /> syntax.</p>
+            <p>Note that tables may be constructed using the <url href="http://www.latex-tables.com/" visual="www.latex-tables.com"><latex /> Complex Table Editor</url> tool online at <c>latex-tables.com</c>and then exported in <pretext /> syntax.</p>
 
             <p>Tables can be used and abused many ways.  We describe long division of polynomials by using vertical and horizontal borders on individual entries of a <tag>tabular</tag>.  The division lines are slightly thicker than the subtraction lines.  This is a good example of the typical abuse of tables for horizontal and vertical layout.  At least we have called it a <q>Figure,</q> not a <q>Table</q>.</p>
 
@@ -5474,7 +5485,7 @@ the xsltproc executable.
                 </sidebyside>
             </figure>
 
-            <p>Tables are formed in <latex /> output with copious use of the <c>\multicolumn</c> macro to override more global alignment settings, and to spread the content of one cell across several columns.  However, sometimes <latex />'s special characters have behaved badly in this situation.  So the table below, two items per row, is just designed for <latex /> testing.  But of course, it should still render fine in other formats.  The three test cases are from <xref ref="section-urls" />, but without 50 alphabetic characters and 8 digits, which should not be problems in this context.  In order to test the use of a percent sign (<c>%</c>) in a URL, we follow it by two hex digits, specifically, <c>58</c>, which is a way to represent the character <c>X</c> in a <init>URL</init>.  The first column's entries are <em>forced</em> to be wrapped in a <c>\multicolumn</c> by specifying their horizontal alignment.  The second column's entries <em>will not</em> be wrapped in a <c>\multicolumn</c>.So the two columns will look identical, other than the first having a left alignment, and the second has the default center alignment.  (This table is known to render poorly in a Jupyter notebook.  The cause is four dollar signs present in rows 1 and 3, and is explained in <xref ref="subsection-jupyter-dollars" text="type-global"/>.)</p>
+            <p>Tables are formed in <latex /> output with copious use of the <c>\multicolumn</c> macro to override more global alignment settings, and to spread the content of one cell across several columns.  However, sometimes <latex />'s special characters have behaved badly in this situation.  So the table below, two items per row, is just designed for <latex /> testing.  But of course, it should still render fine in other formats.  The three test cases are from <xref ref="section-urls" type="text-global"/>, but without 50 alphabetic characters and 8 digits, which should not be problems in this context.  In order to test the use of a percent sign (<c>%</c>) in a URL, we follow it by two hex digits, specifically, <c>58</c>, which is a way to represent the character <c>X</c> in a <init>URL</init>.  The first column's entries are <em>forced</em> to be wrapped in a <c>\multicolumn</c> by specifying their horizontal alignment.  The second column's entries <em>will not</em> be wrapped in a <c>\multicolumn</c>.  So the two columns will look identical, other than the first having a left alignment, and the second has the default center alignment.  (This table is known to render poorly in a Jupyter notebook.  The cause is four dollar signs present in rows 1 and 3, and is explained in <xref ref="subsection-jupyter-dollars" text="type-global"/>.)</p>
 
             <table xml:id="table-latex-problems">
                 <title>Problematic Table Cells for <latex /></title>
@@ -5487,14 +5498,14 @@ the xsltproc executable.
 
                     <row>
                         <cell>2</cell>
-                        <cell halign="left"><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=">http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=</url></cell>
-                        <cell><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=">http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=</url></cell>
+                        <cell halign="left"><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=" visual="example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=">e.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=</url></cell>
+                        <cell><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=" visual="example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=">e.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=</url></cell>
                     </row>
 
                     <row>
                         <cell>3</cell>
-                        <cell halign="left"><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;="></url></cell>
-                        <cell><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;="></url></cell>
+                        <cell halign="left"><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=" visual="example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;="/></cell>
+                        <cell><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=" visual="example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;="/></cell>
                     </row>
                 </tabular>
             </table>
@@ -5760,7 +5771,7 @@ the xsltproc executable.
 
                 <p><init>HTML5</init> introduced the <tag>canvas</tag> element, which can be thought of a blank slate, a place to draw or write on.  So <pretext /> has the <tag>slate</tag> element for a similar purpose.  Generally, but not exclusively, <init>HTML5</init> writes on a <tag>canvas</tag> using the Javascript language.  We demonstrate this approach to interactive diagrams in this subsection.</p>
 
-                <p>The following examples are from David Austin's excellent <url href="http://merganser.math.gvsu.edu/david/linear.algebra/ula/index.html"><pubtitle>Understanding Linear Algebra</pubtitle></url> textbook, which can be found at <cd>
+                <p>The following examples are from David Austin's excellent <url href="http://merganser.math.gvsu.edu/david/linear.algebra/ula/index.html" visual="merganser.math.gvsu.edu/david/linear.algebra/ula/index.html"><pubtitle>Understanding Linear Algebra</pubtitle></url> textbook, which can be found at <cd>
                     <cline>merganser.math.gvsu.edu/david/linear.algebra/ula/index.html</cline>
                 </cd>David's contribution of examples, and assistance designing the <pretext /> elements is greatly appreciated.  Alright, let's learn some linear algebra.  Yes, there are some learning opportunities in this subsection.</p>
 
@@ -5871,7 +5882,7 @@ the xsltproc executable.
 
                 <p>The first example uses the force layout and collision detection from Version 3.  (The necessary commands are very different in Version 4.)  Pretend you are a working shepherding dog.  Can you separate, and catch, one of the herd?</p>
 
-                <p>This is adapted from a <url href="https://bl.ocks.org/mbostock/3231298">block</url> by <url href="https://bl.ocks.org/mbostock">Mike Bostock</url> at <c>3231298</c> with a <init>GPL</init> license.  A similar demonstration, only using an <init>HTML5</init> canvas is at <url href="https://bl.ocks.org/mbostock/3231307"><c>bl.ocks.org/mbostock/3231307</c></url>.</p>
+                <p>This is adapted from a <url href="https://bl.ocks.org/mbostock/3231298" visual="bl.ocks.org/mbostock/3231298">block</url> by <url href="https://bl.ocks.org/mbostock" visual="bl.ocks.org/mbostock">Mike Bostock</url> with a <init>GPL</init> license.  A similar demonstration, only using an <init>HTML5</init> canvas is at <url href="https://bl.ocks.org/mbostock/3231307" visual="bl.ocks.org/mbostock/3231307"/>.</p>
 
                 <figure>
                     <caption>Force layout and collision detection</caption>
@@ -5888,7 +5899,7 @@ the xsltproc executable.
                     <li>The Javascript script uses introspection to size itself, which would be a good general practice.</li>
                 </ul></p>
 
-                <p>This is adapted from a <url href="https://bl.ocks.org/shimizu/e6209de87cdddde38dadbb746feaf3a3">block</url> by <url href="https://bl.ocks.org/shimizu">shimizu</url> at <c>e6209de87cdddde38dadbb746feaf3a3</c> with a <init>GPL</init> license.</p>
+                <p>This is adapted from a <url href="https://bl.ocks.org/shimizu/e6209de87cdddde38dadbb746feaf3a3" visual="bl.ocks.org/shimizu/e6209de87cdddde38dadbb746feaf3a3">block</url> by <url href="https://bl.ocks.org/shimizu" visual="bl.ocks.org/shimizu">shimizu</url> with a <init>GPL</init> license.</p>
 
                 <figure>
                     <caption>Graph Layout</caption>
@@ -5907,7 +5918,7 @@ the xsltproc executable.
                     </statement>
                 </exercise>
 
-                <p>Finally an example that actually uses some data.  Here is the description from the <url href="https://bl.ocks.org/martinjc/7aa53c7bf3e411238ac8aef280bd6581">original block</url> by <url href="https://bl.ocks.org/martinjc">Martin Chorley</url> at <c>7aa53c7bf3e411238ac8aef280bd6581</c>, provided with an MIT License.</p>
+                <p>Finally an example that actually uses some data.  Here is the description from the <url href="https://bl.ocks.org/martinjc/7aa53c7bf3e411238ac8aef280bd6581" visual="bl.ocks.org/martinjc/7aa53c7bf3e411238ac8aef280bd6581">original block</url> by <url href="https://bl.ocks.org/martinjc" visual="bl.ocks.org/martinjc">Martin Chorley</url> with an MIT License.</p>
 
                 <blockquote>
                     <p>This visualisation uses a D3 force simulation to show the Twitter relationships between the Assembly Members in the Welsh Assembly in terms of the number of times each assembly member has mentioned another assembly member in a tweet.</p>
@@ -6018,11 +6029,11 @@ the xsltproc executable.
                 <title>JSXGraph</title>
                 <idx>JSXGraph</idx>
 
-                <p><url href="http://jsxgraph.uni-bayreuth.de/wp/index.html">JSXGraph</url> is a <q>cross-browser JavaScript library for interactive geometry, function plotting, charting, and data visualization in the web browser.</q>  Now a <tag>slate</tag> will be what JSXGraph calls a <term>board</term>.  Again, you use Javascript to write onto a <tag>slate</tag>, but have some powerful shortcuts available from the JSXGraph library.  For this reason, <pretext /> calls JSXGraph a <q>language</q>, similar in may respects to how Sage is a language, but is really a Python library.  So realize that the syntax for using JSXGraph is that of Javascript.</p>
+                <p><url href="http://jsxgraph.uni-bayreuth.de/wp/index.html" visual="jsxgraph.uni-bayreuth.de">JSXGraph</url> is a <q>cross-browser JavaScript library for interactive geometry, function plotting, charting, and data visualization in the web browser.</q>  Now a <tag>slate</tag> will be what JSXGraph calls a <term>board</term>.  Again, you use Javascript to write onto a <tag>slate</tag>, but have some powerful shortcuts available from the JSXGraph library.  For this reason, <pretext /> calls JSXGraph a <q>language</q>, similar in may respects to how Sage is a language, but is really a Python library.  So realize that the syntax for using JSXGraph is that of Javascript.</p>
 
                 <p>Place Javascript inside a file that is specified with the <attr>source</attr> attribute of the <tag>interactive</tag> element.  Then just be certain that <attr>xml:id</attr> of the <tag>interactive</tag> element is passed as the <init>HTML</init> <c>id</c> in an (early) call to JSXGraph's <c>initBoard()</c> method.</p>
 
-                <p>The plot below is the curve <m>r=a+b\theta</m> in polar coordinates, for <m>0\leq\theta\leq 8\pi</m>.  It may be manipulated with the sliders to control the shape of the curve.  Point <m>A</m> is contrained to the curve, but may be dragged to a new location. At <m>A</m> the tangent line and normal line are plotted as dashed red lines.  Use the controls in the lower left to adjust the viewing window.  This <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral">example</url> is taken from the JSXGraph <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">example wiki</url>.  The code could be written in 7 lines.  Width is 80% and aspect ratio is 4:3.</p>
+                <p>The plot below is the curve <m>r=a+b\theta</m> in polar coordinates, for <m>0\leq\theta\leq 8\pi</m>.  It may be manipulated with the sliders to control the shape of the curve.  Point <m>A</m> is contrained to the curve, but may be dragged to a new location. At <m>A</m> the tangent line and normal line are plotted as dashed red lines.  Use the controls in the lower left to adjust the viewing window.  This <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral" visual="jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral">Archimedean Spiral</url> is taken from the <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples" visual="jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">JSXGraph example wiki</url>.  The code could be written in 7 lines.  Width is 80% and aspect ratio is 4:3.</p>
 
                 <figure>
                     <caption>The Archimedian Spiral <m>r = a + b\theta</m>, <m>0\leq\theta\leq 8\pi</m></caption>
@@ -6036,7 +6047,7 @@ the xsltproc executable.
                     </interactive>
                 </figure>
 
-                <p>Here is a more elaborate example, from the <url href="http://jsxgraph.uni-bayreuth.de/showcase/">JSXGraph Showcase</url>, titled <url href="http://jsxgraph.uni-bayreuth.de/showcase/infinity.html">Infinity</url>.</p>
+                <p>Here is a more elaborate example, from the <url href="http://jsxgraph.uni-bayreuth.de/showcase/" visual="jsxgraph.uni-bayreuth.de/showcase/">JSXGraph Showcase</url>, titled <url href="http://jsxgraph.uni-bayreuth.de/showcase/infinity.html" visual="jsxgraph.uni-bayreuth.de/showcase/infinity.html">Infinity</url>.</p>
 
                 <p>There are two active sliders to control the shape and shading of the graphic, and hovering the mouse near one of the edges will highlight the entirety of one of the 30 quadrangles.  Finally, each of the four red corners may be dragged to a new location.  Code is 47 lines.  Width is 60% and aspect ratio is the default, 1:1, <ie /> a square.</p>
 
@@ -6051,7 +6062,7 @@ the xsltproc executable.
                     </interactive>
                 </figure>
 
-                <p>Here are the two new examples.  They have been included in a <c>sidebyside</c> layout element with equal widths (see <xref ref="section-side-by-side" text="type-global" />) so they can be placed horizontally across the page.  They are not wrapped as figures, so cannot be cross-referenced.  These are again from the <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">example wiki</url>, the left being Fermat's Spiral and the right being a demonstration of B-splines.</p>
+                <p>Here are the two new examples.  They have been included in a <c>sidebyside</c> layout element with equal widths (see <xref ref="section-side-by-side" text="type-global" />) so they can be placed horizontally across the page.  They are not wrapped as figures, so cannot be cross-referenced.  These are again from the <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples" visual="jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">JSXGraph example wiki</url>, the left being Fermat's Spiral and the right being a demonstration of B-splines.</p>
 
                 <sidebyside widths="40% 40%">
                     <interactive xml:id="interactive-fermats-spiral" platform="jsxgraph" source="code/jsxgraph/fermats-spiral.js">
@@ -6098,14 +6109,14 @@ the xsltproc executable.
                     </interactive>
                 </figure>
 
-                <p>Generally, we load an interactive into an HTML <c>iframe</c> to sandbox (isolate) it from other interactives.  We does this for your own protection.  So, for example, one interactive cannot talk to another.  If two <tag>slate</tag> need to communicate, then they are related, and should be placed into a single <tag>interactive</tag>, allowed to layout themselves, or grouped within a <tag>sidebyside</tag> allowing finer control.  Even if we have this under control, you might still enjoy reading <url href="http://mikecavaliere.com/your-js-is-a-mess-javascript-namespacing/">Your JS is a Mess</url> at <c>mikecavaliere.com/your-js-is-a-mess-javascript-namespacing/</c>.</p>
+                <p>Generally, we load an interactive into an HTML <c>iframe</c> to sandbox (isolate) it from other interactives.  We does this for your own protection.  So, for example, one interactive cannot talk to another.  If two <tag>slate</tag> need to communicate, then they are related, and should be placed into a single <tag>interactive</tag>, allowed to layout themselves, or grouped within a <tag>sidebyside</tag> allowing finer control.  Even if we have this under control, you might still enjoy reading <url href="http://mikecavaliere.com/your-js-is-a-mess-javascript-namespacing/" visual="mikecavaliere.com/your-js-is-a-mess-javascript-namespacing/">Your JS is a Mess</url> at <c>mikecavaliere.com/your-js-is-a-mess-javascript-namespacing/</c>.</p>
             </subsection>
 
             <subsection>
                 <title>JessieCode</title>
                 <idx>JessieCode</idx>
 
-                <p><url href="https://jsxgraph.uni-bayreuth.de/wp/docs_jessiecode/">JessieCode</url> is a scripting language for JSXGraph. It provides the core geometric and graphing features of JSXGraph without accessing the underlying JavaScript. In order to use JessieCode, you simply create the HTML <tag>div</tag> element as you would for any other JSXGraph interactive plot and then provide the JessieCode script, which focuses on the geometric elements.</p>
+                <p><url href="https://jsxgraph.uni-bayreuth.de/wp/docs_jessiecode/" visual="jsxgraph.uni-bayreuth.de/wp/docs_jessiecode/">JessieCode</url> is a scripting language for JSXGraph. It provides the core geometric and graphing features of JSXGraph without accessing the underlying JavaScript. In order to use JessieCode, you simply create the HTML <tag>div</tag> element as you would for any other JSXGraph interactive plot and then provide the JessieCode script, which focuses on the geometric elements.</p>
 
                 <p>Because JessieCode is provided by JSXGraph, the interactive platform is <c>jsxgraph</c>. The <tag>slate</tag>, however, uses <attr>surface</attr> with value <c>jessiecode</c>. The script can be embedded directly in your code. As usual, you would need to remember to escape the special characters. JessieCode uses <c>&lt;</c> and <c>&gt;</c> for inequalities as well as for declaring objects used to style geometric elements, and <c>&amp;&amp;</c> is the boolean AND operator. Alternatively, you can provide the file as a separate resource, providing the URL with a <attr>source</attr> attribute. Attributes defining the JSXBoard at the time it is created should be included as attributes of the <tag>slate</tag>, including <attr>boundingbox</attr>, <attr>axis</attr>, and <attr>grid</attr>.</p>
 
@@ -6196,7 +6207,7 @@ the xsltproc executable.
                     <li>Graphics refresh with a round-trip to the server, so are not nearly as fluid as with other tools.</li>
                 </ul>  Note that each interact is insulated from the others, unlike our other employment of the Sage Cell Server.</p>
 
-                <p>This example is by Marshall Hampton, taken from the Sage interact wiki, <url href="https://wiki.sagemath.org/interact/calculus"><c>wiki.sagemath.org/interact/calculus</c></url>, specifically <url href="https://wiki.sagemath.org/interact/calculus#Numerical_integrals_with_the_midpoint_rule">here</url>.</p>
+                <p>This example is by Marshall Hampton, taken from the <url href="https://wiki.sagemath.org/interact/calculus" visual="wiki.sagemath.org/interact/calculus">Sage interact wiki</url>, specifically <url href="https://wiki.sagemath.org/interact/calculus#Numerical_integrals_with_the_midpoint_rule" visual="wiki.sagemath.org/interact/calculus#Numerical_integrals_with_the_midpoint_rule">Numerical integrals with the midpoint rule</url>.</p>
 
                 <!-- It would be better to xi:include this Sage code, but we don't want    -->
                 <!-- newcomers to need to use the "-xinclude" switch while getting started -->
@@ -6242,14 +6253,14 @@ the xsltproc executable.
 
                 <p>Do one of the following:<ol>
                     <li>Identify a material ID from GeoGebra's Classroom Resources site. You might even make the material yourself on that site.</li>
-                    <li>Obtain a <c>.ggb</c> file from GeoGebra. You might construct something on a desktop installation of GeoGebra and save it. If you have a base64-encoded string for a GeoGebra applet, but you don't have a <c>.ggb</c> file, you can decode the string and save the result. For example, at <url href="https://www.opinionatedgeek.com/codecs/base64decoder">www.opinionatedgeek.com/codecs/base64decoder</url>.</li>
+                    <li>Obtain a <c>.ggb</c> file from GeoGebra. You might construct something on a desktop installation of GeoGebra and save it. If you have a base64-encoded string for a GeoGebra applet, but you don't have a <c>.ggb</c> file, you can decode the string and save the result. For example, at <url href="https://www.opinionatedgeek.com/codecs/base64decoder" visual="www.opinionatedgeek.com/codecs/base64decoder"/>.</li>
                     <li>Obtain a base64 encoded string for a GeoGebra applet. You might first open a <c>.ggb</c> file in a desktop installation of GeoGebra, and push ctrl-shift-B (command-shift-B on a Mac) and then the string will be in your clipboard.</li>
                     <li>None of the above, with the intention to make an applet from scratch.</li>
                 </ol></p>
 
-                <p>Then mimic the examples that follow, using GeoGebra API commands documented at <url href="https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API">wiki.geogebra.org/en/Reference:GeoGebra_Apps_API</url>, but do not include the <c>ggbApplet.</c> or <c>applet.</c> used in examples to prefix the functions<mdash/>that part of the code will be provided automatically by <pretext/>.</p>
+                <p>Then mimic the examples that follow, using GeoGebra API commands documented at <url href="https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API" visual="wiki.geogebra.org/en/Reference:GeoGebra_Apps_API">Geogebra API Manual</url>, but do not include the <c>ggbApplet.</c> or <c>applet.</c> used in examples to prefix the functions<mdash/>that part of the code will be provided automatically by <pretext/>.</p>
 
-                <p>Jack Green created an applet on the Classroom Resources site with ID <c>D4s2v4ft</c>, which you may view at <url href="https://www.geogebra.org/m/D4s2v4ft">geogebra.org/m/D4s2v4ft</url>. Suppose you would like to use this in your project, but change something about it. We will change something trivial, making the <m>y</m>-axis ticks be separated <m>5</m> apart instead of <m>10</m> apart. We also decide we want a different aspect ratio and overall width. One gotcha: the original applet is loaded and then <pretext/> uses <attr>width</attr> and <attr>aspect</attr> attributes to resize the viewing window using the top left corner as an anchor. This does not rescale axes and that may leave you with important elements missing from the viewing window. So here we reset the viewing window to return to values that are in the original. Lastly, we disable zooming, which is not helpful for this applet. To do each of these things, we rely on the GeoGebra API manual at <url href="https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API">wiki.geogebra.org/en/Reference:GeoGebra_Apps_API</url>. It is important to use one command per line.</p>
+                <p>Jack Green created an applet on the Classroom Resources site with ID <c>D4s2v4ft</c>, which you may view at <url href="https://www.geogebra.org/m/D4s2v4ft" visual="www.geogebra.org/m/D4s2v4ft"/>. Suppose you would like to use this in your project, but change something about it. We will change something trivial, making the <m>y</m>-axis ticks be separated <m>5</m> apart instead of <m>10</m> apart. We also decide we want a different aspect ratio and overall width. One gotcha: the original applet is loaded and then <pretext/> uses <attr>width</attr> and <attr>aspect</attr> attributes to resize the viewing window using the top left corner as an anchor. This does not rescale axes and that may leave you with important elements missing from the viewing window. So here we reset the viewing window to return to values that are in the original. Lastly, we disable zooming, which is not helpful for this applet. To do each of these things, we rely on the GeoGebra API manual at <url href="https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API" visual="wiki.geogebra.org/en/Reference:GeoGebra_Apps_API">Geogebra API Manual</url>. It is important to use one command per line.</p>
 
                 <figure>
                     <caption>GeoGebra: modified material ID</caption>
@@ -6375,7 +6386,7 @@ the xsltproc executable.
                 <idx><h>Geogebra</h><h>server</h></idx>
                 <idx><h>Geogebra</h><h>material</h></idx>
 
-                <p>A Geogebra <term>material</term> is something you might use in a class.  It could also be called an interactive demonstration.  Go browsing at <url href="https://www.geogebra.org/materials/">www.geogebra.org/materials</url> and find something appropriate for your project.  Or make an account and create your own.</p>
+                <p>A Geogebra <term>material</term> is something you might use in a class.  It could also be called an interactive demonstration.  Go browsing at <url href="https://www.geogebra.org/materials/" visual="www.geogebra.org/materials/"/> and find something appropriate for your project.  Or make an account and create your own.</p>
 
                 <p>Once you find a material that looks instructive, it will be at a <init>URL</init> such as<cd>https://www.geogebra.org/m/KGn2d4Qd</cd> and you want to pick off the identifier on the end, in this case <c>KGn2d4Qd</c>.  Then author<cd>&lt;interactive geogebra="KGn2d4Qd" /&gt;</cd>  At this writing (2018-02-04) you will want to place this inside a <c>figure</c>, with a caption, as we do right now with material <c>KGn2d4Qd</c>.</p>
 
@@ -6437,7 +6448,7 @@ the xsltproc executable.
                 <title>Wolfram CDF</title>
                 <idx>Wolfram CDF</idx>
 
-                <p>You can embed interactive demonstrations created in Wolfram's <term>Computable Document Format</term> so that they will be played with the Wolfram CDF Player<trademark />.  Once you create and save a demonstration, you want to determine the UUID that is the identifier of your demonstration.  For example, <xref ref="wolfram-cdf-cellular-automata" text="type-global" /> is identified by <c>9fa2acff-c809-4b7f-a73b-c59ace36affc</c>.  This identifier is enough to create the <pretext /> to embed the demonstration.  See <url href="https://reference.wolfram.com/language/howto/DeployInteractiveContentInTheWolframCloud.html" /> for information about creating your demonstration.</p>
+                <p>You can embed interactive demonstrations created in Wolfram's <term>Computable Document Format</term> so that they will be played with the Wolfram CDF Player<trademark />.  Once you create and save a demonstration, you want to determine the UUID that is the identifier of your demonstration.  For example, <xref ref="wolfram-cdf-cellular-automata" text="type-global" /> is identified by <c>9fa2acff-c809-4b7f-a73b-c59ace36affc</c>.  This identifier is enough to create the <pretext /> to embed the demonstration.  See <url href="https://reference.wolfram.com/language/howto/DeployInteractiveContentInTheWolframCloud.html" visual="reference.wolfram.com/language/howto/DeployInteractiveContentInTheWolframCloud.html"/> for information about creating your demonstration.</p>
 
                 <p><url href="http://www.wolfram.com/cdf/adopting-cdf/deploying-cdf/web-delivery-cloud.html" /> explains hosting CDF files at the Wolfram Cloud, and is the source of <xref ref="wolfram-cdf-cellular-automata" text="type-global" />.  You can learn about powering your CDF with Wolfram Cloud Credits at <url href="https://www.wolfram.com/cloud-credits/" />.  CDF is a public format, and the FreeCDF<trademark /> license is a variant of a Creative Commons BY-SA license, see <url href="http://www.wolfram.com/cdf/adopting-cdf/licensing-options.html" />.</p>
 
@@ -6475,7 +6486,7 @@ the xsltproc executable.
 
             <audio xml:id="audio-piano-trill-two" href="http://www.kozco.com/tech/piano2-CoolEdit.mp3" margins="30% 15%"/>
 
-            <p>Now in a <tag>sidebyside</tag> with an <q>Organ Finale</q> WAV file on the left, and on the right, Bach in OGG format at a very low bit rate (32 kps).  From <url href="http://www.music.helsinki.fi/tmt/opetus/uusmedia/esim/index-e.html"/>.</p>
+            <p>Now in a <tag>sidebyside</tag> with an <q>Organ Finale</q> WAV file on the left, and on the right, Bach in OGG format at a very low bit rate (32 kps).  From <url href="http://www.music.helsinki.fi/tmt/opetus/uusmedia/esim/index-e.html" visual="www.music.helsinki.fi/tmt/opetus/uusmedia/esim/index-e.html"/>.</p>
 
             <sidebyside>
                 <audio xml:id="audio-organ-finale" href="https://www.kozco.com/tech/organfinale.wav" width="30%"/>
@@ -6502,7 +6513,7 @@ the xsltproc executable.
                     <video source="video/ups-visitor-guide-360" width="80%" preview="preview/ups-promo-frame-one.jpg" />
                 </figure>
 
-                <p>You can replace the <q>preview</q> image of a video with one of your own making.  <init>HTML</init> refers to this as the <term>poster</term>, presumably because it advertises the video.  The image you make should be of the same quality as the video, and with the same aspect-ratio, and is presumably one of the frames of the video.  So a screenshot is the likely avenue.  (Maybe we will have advice on how to do this easily, or see <url href="https://github.com/rbeezer/mathbook/issues/853" />.)
+                <p>You can replace the <q>preview</q> image of a video with one of your own making.  <init>HTML</init> refers to this as the <term>poster</term>, presumably because it advertises the video.  The image you make should be of the same quality as the video, and with the same aspect-ratio, and is presumably one of the frames of the video.  So a screenshot is the likely avenue.  (Maybe we will have advice on how to do this easily, or see <url href="https://github.com/rbeezer/mathbook/issues/853" visual="github.com/rbeezer/mathbook/issues/853">Issue #853</url>.)
                 <idx><h>link</h><h>external, url</h></idx>
                 <idx><h>reference</h><h>external, url</h></idx>
                 On the <tag>video</tag> tag, include a <attr>preview</attr> attribute which is the name of an image file, including a relative path.  (JPEG or PNG formats are best.  JPEG may be smaller for video screenshots, while PNG is lossless and so may work better for diagrams.)  The next video has a preview/poster that is a fram part way into the introduction.</p>
@@ -6524,7 +6535,7 @@ the xsltproc executable.
                 <!-- http://camendesign.com/code/video_for_everybody/test.html -->
 
                 <figure>
-                    <caption>Big Buck Bunny from <q>Video for Everybody</q> Test Page at <url href="http://camendesign.com/code/video_for_everybody/test.htm"><c>camendesign.com/code/video_for_everybody/test.htm</c></url></caption>
+                    <caption>Big Buck Bunny from  <url href="http://camendesign.com/code/video_for_everybody/test.htm" visual="camendesign.com/code/video_for_everybody/test.htm"><q>Video for Everybody</q> Test Page</url></caption>
                     <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="70%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
@@ -6562,7 +6573,7 @@ the xsltproc executable.
             <subsection>
                 <title>YouTube</title>
 
-                <p>YouTube<idx><h>YouTube videos</h></idx><idx><h>videos</h><h>YouTube</h></idx> videos may be embedded with only knowledge of a video's <q>ID</q> or a <q>playlist ID</q>.  A single video's YouTube ID is a string of eleven seemingly random characters that show up in the URL when you watch a video.  For the Led Zeppelin performance below, the ID is <c>hAzdgU_kpGo</c>, which you might normally watch directly from the URL <url href="https://www.youtube.com/watch?v=hAzdgU_kpGo" />.  As described just above, you need to specify a different aspect ratio if the video does not have a 16:9 aspect ratio.</p>
+                <p>YouTube<idx><h>YouTube videos</h></idx><idx><h>videos</h><h>YouTube</h></idx> videos may be embedded with only knowledge of a video's <q>ID</q> or a <q>playlist ID</q>.  A single video's YouTube ID is a string of eleven seemingly random characters that show up in the URL when you watch a video.  For the Led Zeppelin performance below, the ID is <c>hAzdgU_kpGo</c>, which you might normally watch directly from the URL <url href="https://www.youtube.com/watch?v=hAzdgU_kpGo"  visual="www.youtube.com/watch?v=hAzdgU_kpGo" />.  As described just above, you need to specify a different aspect ratio if the video does not have a 16:9 aspect ratio.</p>
 
                 <p>Note: some of these videos may not play if viewed locally, and maybe not even if you start up a local web server (such as can be easily done with Python).  So if you are testing new features, be careful about assuming videos from cloud services are not working properly.</p>
 
@@ -6726,13 +6737,13 @@ the xsltproc executable.
                 <p>We support videos from <url href="https://vimeo.com/" visual="vimeo.com">Vimeo</url> in much the same way as YouTube videos.  Now the identifier is a long integer.  For example, the video up next would normally be found at <c>https://vimeo.com/27246366</c>.  But instead, you can embed the video with as little as <c>&lt;video vimeo="27246366"/&gt;</c>.  As of 2019-05-18, we intend to support as many of the options described above as possible.  Widths and heights (via the aspect ratio) will perform as expected.  We have not investigated start and end times.</p>
 
                 <figure>
-                    <caption><articletitle>MOVE</articletitle>, by <url href="https://vimeo.com/rickmereki">Rick Mereki</url>, <c>vimeo.com/rickmereki</c></caption>
+                    <caption><articletitle>MOVE</articletitle>, by <url href="https://vimeo.com/rickmereki" visual="vimeo.com/rickmereki">Rick Mereki</url>, <c>vimeo.com/rickmereki</c></caption>
                     <video xml:id="vimeo-move" vimeo="27246366" width="80%" preview="preview/vimeo-move.jpg"/>
                 </figure>
 
                 <p>Now with an author-supplied poster.</p>
                 <figure>
-                    <caption><articletitle>MOVE</articletitle>, by <url href="https://vimeo.com/rickmereki">Rick Mereki</url>, <c>vimeo.com/rickmereki</c></caption>
+                    <caption><articletitle>MOVE</articletitle>, by <url href="https://vimeo.com/rickmereki" visual="vimeo.com/rickmereki">Rick Mereki</url>, <c>vimeo.com/rickmereki</c></caption>
                     <video vimeo="27246366" width="80%" preview="preview/move.png"/>
                 </figure>
             </subsection>
@@ -6742,7 +6753,7 @@ the xsltproc executable.
 
                 <p>Experimental support for captions and subtitles first.  Look at the source, which mimics the actual HTML.  The words of the titles and/or subcaptions (there is a difference!) come from a file in <url href="https://en.wikipedia.org/wiki/WebVTT" visual="wikipedia.org/wiki/WebVTT">Web Video Text Tracks</url> (<init>WEBVVT</init>) format.</p>
                 <figure>
-                    <caption>Big Buck Bunny with subtitles adapted from <url href="https://sites.google.com/site/chrisfoo/subtitles"><c>https://sites.google.com/site/chrisfoo/subtitles</c></url></caption>
+                    <caption>Big Buck Bunny with subtitles adapted from <url href="https://sites.google.com/site/chrisfoo/subtitles" visual="https://sites.google.com/site/chrisfoo/subtitles"/></caption>
                     <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="preview/big-buck-bunny-frame-one.jpg">
                         <track kind="subtitles" label="US English" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt"/>
                     </video>
@@ -6885,14 +6896,14 @@ the xsltproc executable.
 
 
 
-            <p>The <c>url</c><idx>url</idx> element may be used to link to a data file, either externally, or internally, if you want to make such an object available to a reader.<idx><h>reference</h><h>external</h></idx>  A good example use case is a spreadsheet that might be part of an exercise, or contain data relevant to some discussion.  First let us suppose the data resides somewhere on the Internet, then just use the complete address.  Here is one from Microsoft: <url href="http://go.microsoft.com/fwlink/?LinkID=521962">Sample Excel Spreadsheet</url>.</p>
+            <p>The <c>url</c><idx>url</idx> element may be used to link to a data file, either externally, or internally, if you want to make such an object available to a reader.<idx><h>reference</h><h>external</h></idx>  A good example use case is a spreadsheet that might be part of an exercise, or contain data relevant to some discussion.  First let us suppose the data resides somewhere on the Internet, then just use the complete address.  Here is one from Microsoft: <url href="http://go.microsoft.com/fwlink/?LinkID=521962" visual="hgo.microsoft.com/fwlink/?LinkID=521962">Sample Excel Spreadsheet</url>.</p>
 
             <p>For a link like the previous one, you might want to provide advice appropriate for your audience about using a context menu to download a file, or how to configure helper/viewer applications.</p>
 
             <!-- http://templates.openoffice.org/en/template/running-statistics-template -->
             <!-- http://templates.openoffice.org/template/download/1203 -->
 
-            <p>You can also provide a file yourself, but now it is your obligation to distribute the file with your document (<init>HTML</init>, <init>PDF</init>, <etc />) and provide a relative link.  This creates some complications, such as making sure an electronic PDF has the associated file in the same place relative to the PDF file.  Of course, if you make a print PDF, this becomes impossible.  Here is a test example anyway, which is highly likely to be broken in a PDF (including at the <pretext /> project site) unless you build this example on your own computer, locally.  Here is a template from the Apache OpenOffice project, provided via the Public Documentation License (PDL):  <url href="external/data/runningstatisticstemplate.ots">Running Statistics Template</url>.</p>
+            <p>You can also provide a file yourself, but now it is your obligation to distribute the file with your document (<init>HTML</init>, <init>PDF</init>, <etc />) and provide a relative link.  This creates some complications, such as making sure an electronic PDF has the associated file in the same place relative to the PDF file.  Of course, if you make a print PDF, this becomes impossible.  Here is a test example anyway, which is highly likely to be broken in a PDF (including at the <pretext /> project site) unless you build this example on your own computer, locally.  Here is a template from the Apache OpenOffice project, provided via the Public Documentation License (PDL):  <url href="external/data/runningstatisticstemplate.ots" visual="external/data/runningstatisticstemplate.ots">Running Statistics Template</url>.</p>
         </section>
 
         <section xml:id="section-internationalization">
@@ -6911,7 +6922,7 @@ the xsltproc executable.
 
                     <li><p>Always, always identify your source as having Unicode characters by including the incantation <tag>?xml version="1.0" encoding="UTF-8" ?</tag> as the first line of your source file. (You <em>may</em> be able to accurately cut-and-paste this version here.  But if the copy has non-standard characters in it, go back to the top of this source file for a copy.)</p></li>
 
-                    <li><p>Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url> has a plethora of samples of various groups of Unicode characters.  If you, or your readers, are <q>missing</q> characters in a web browser, this is a good place to start testing the local setup.</p></li>
+                    <li><p>Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html" visual="www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url> has a plethora of samples of various groups of Unicode characters.  If you, or your readers, are <q>missing</q> characters in a web browser, this is a good place to start testing the local setup.</p></li>
                 </ul></p>
             </paragraphs>
 
@@ -7324,7 +7335,7 @@ the xsltproc executable.
             <algorithm xml:id="algorithm-sieve-eratosthenes">
                 <title>Sieve of Eratosthenes</title>
                 <statement>
-                    <p>On input of a positive integer <c>n</c> this algorithm will compute all the prime numbers up to, and including, <c>n</c>.  It was named for Eratosthenes of Cyrene (<ca/> 276 BC<ndash /><ca /> 195/194 BC) by Nicomachus (<ca /> 60<ndash /><ca /> 120 CE) in <pubtitle>Introduction to Arithmetic</pubtitle>. (<url href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Wikipedia</url>, 2015)<ol>
+                    <p>On input of a positive integer <c>n</c> this algorithm will compute all the prime numbers up to, and including, <c>n</c>.  It was named for Eratosthenes of Cyrene (<ca/> 276 BC<ndash /><ca /> 195/194 BC) by Nicomachus (<ca /> 60<ndash /><ca /> 120 CE) in <pubtitle>Introduction to Arithmetic</pubtitle>. (<url href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes" visual="en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Wikipedia</url>, 2015)<ol>
                         <li>Input: <c>n</c></li>
                         <li>Form the list of all integers from <c>2</c> to <c>n</c></li>
                         <li>Set <c>p = 2</c></li>
@@ -7564,7 +7575,7 @@ the xsltproc executable.
                 </program>
             </listing>
 
-            <p>In <init>HTML</init> output, a program can be interactive.  This is an example program provided by <url href="http://www.pythontutor.com/">Python Tutor</url>.</p>
+            <p>In <init>HTML</init> output, a program can be interactive.  This is an example program provided by <url href="http://www.pythontutor.com/" visual="www.pythontutor.com">Python Tutor</url>.</p>
 
             <listing xml:id="program-interactive">
                 <caption>An interactive Python program, using <pubtitle>Python Tutor</pubtitle></caption>
@@ -7885,7 +7896,7 @@ the xsltproc executable.
                     <image source="images/led-zeppelin-kashmir.jpg" archive="jpg" />
                 </sidebyside>
 
-                <p>Here are two TikZ images, authored side-by-side.  The first has had its geometric portions of the original scaled down to 75%, with the effect of increasing the text, relatively, so the application in a side-by-side panel with 25% width has legible text.  We caption only the second panel, which has no text adjustments.  From <url href="http://www.texample.net/tikz/examples/">TeXample.net</url>.</p>
+                <p>Here are two TikZ images, authored side-by-side.  The first has had its geometric portions of the original scaled down to 75%, with the effect of increasing the text, relatively, so the application in a side-by-side panel with 25% width has legible text.  We caption only the second panel, which has no text adjustments.  From <url href="http://www.texample.net/tikz/examples/" visual="www.texample.net/tikz/examples/">TeXample.net</url>.</p>
 
                 <sidebyside widths="25% 25% 35%" margins="auto">
                     <!-- http://www.texample.net/tikz/examples/venn/ -->
@@ -7928,8 +7939,8 @@ the xsltproc executable.
                     </figure>
                     <!--  -->
                     <p>Images by Stefan Kottwitz<ul>
-                        <li><url href="http://www.texample.net/tikz/examples/venn/">Venn Diagram</url></li>
-                        <li><url href="http://www.texample.net/tikz/examples/smart-circle/">Work Flow</url></li>
+                        <li><url href="http://www.texample.net/tikz/examples/venn/" visual="www.texample.net/tikz/examples/venn/">Venn Diagram</url></li>
+                        <li><url href="http://www.texample.net/tikz/examples/smart-circle/" visual="www.texample.net/tikz/examples/smart-circle/">Work Flow</url></li>
                     </ul></p>
                  </sidebyside>
             </subsection>
@@ -10632,7 +10643,7 @@ the xsltproc executable.
                 </subsubsection>
 
                 <conclusion>
-                    <p>Conclusion now.  We include two theorems as numbered items in the conclusion to test their numbers, which are sometimes totally illogical and are inconsistent across output formats.  To see the effect, use <c>--stringparam numbering.theorems.level 3</c> in the <c>xsltproc</c> invocation. See this GitHub <url href="https://github.com/rbeezer/mathbook/issues/139">issue</url> for details.</p>
+                    <p>Conclusion now.  We include two theorems as numbered items in the conclusion to test their numbers, which are sometimes totally illogical and are inconsistent across output formats.  To see the effect, use <c>--stringparam numbering.theorems.level 3</c> in the <c>xsltproc</c> invocation. See this GitHub <url href="https://github.com/rbeezer/mathbook/issues/139" visual="github.com/rbeezer/mathbook/issues/139">Issue #139</url> for details.</p>
 
                     <theorem xml:id="theorem-bad-one">
                         <title>Bad Numbered Theorem One</title>
