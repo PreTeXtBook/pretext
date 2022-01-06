@@ -1939,7 +1939,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\usepackage[hyperfootnotes=false]{hyperref}&#xa;</xsl:text>
     <!-- http://tex.stackexchange.com/questions/79051/how-to-style-text-in-hyperref-url -->
     <xsl:if test="$document-root//url">
-    <xsl:text>%% configure hyperref's  \url  to match listings' inline verbatim&#xa;</xsl:text>
+    <xsl:text>%% configure hyperref's  \href{}{}  and  \nolinkurl  to match listings' inline verbatim&#xa;</xsl:text>
         <xsl:text>\renewcommand\UrlFont{\small\ttfamily}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="not($b-latex-print)">
@@ -7721,42 +7721,64 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ############# -->
 
 <!-- We escape all the problem LaTeX characters      -->
-<!-- when given in the @href attribute, the \url{}   -->
+<!-- when given in the @href attribute, \nolinkurl{} -->
 <!-- and \href{}{} seem to do the right thing        -->
 <!-- and they do better in footnotes and table cells -->
 <!-- Within titles, we just produce (formatted)      -->
 <!-- text, but nothing active                        -->
+<!-- N.B. compare with LaTeX version, could move much to -common -->
 
-<!-- Empty form, so duplicate URL as clickable -->
-<!-- \url{} seems to provide line-breaking     -->
-<xsl:template match="url[not(node())]">
-    <!-- choose a macro, font change, or active link -->
+<!-- \nolinkurl{} seems to provide line-breaking     -->
+<xsl:template match="url">
+    <!-- form the "clickable" (visible) text -->
+    <xsl:variable name="visible-text">
+        <xsl:choose>
+            <!-- process content, as-is, when authored -->
+            <xsl:when test="node()">
+                <xsl:apply-templates/>
+            </xsl:when>
+            <!-- absent content, use a URL, with   -->
+            <!-- preference for @visual over @href -->
+            <xsl:otherwise>
+                <xsl:text>\nolinkurl{</xsl:text>
+                <!-- sanitize the URL for LaTeX output -->
+                <xsl:call-template name="escape-url-to-latex">
+                    <xsl:with-param name="text">
+                        <xsl:choose>
+                            <xsl:when test="@visual">
+                                <xsl:value-of select="@visual"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="@href"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:with-param>
+                </xsl:call-template>
+                <xsl:text>}</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:choose>
         <xsl:when test="ancestor::title|ancestor::shorttitle|ancestor::subtitle">
-            <!-- switch to node-set with "c" if characters need escaping -->
-            <xsl:text>\mono{</xsl:text>
+            <xsl:choose>
+                <xsl:when test="node()">
+                    <xsl:copy-of select="$visible-text"/>
+                </xsl:when>
+                <!-- migration to a title requires a version without a -->
+                <!-- "\nolinkurl{}" else the *.out file gets messed up -->
+                <!-- (PDF bookmarks?)                                  -->
+                <xsl:when test="@visual">
+                    <xsl:text>\mono{</xsl:text>
+                    <xsl:value-of select="@visual"/>
+                    <xsl:text>}</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>\mono{</xsl:text>
+                    <xsl:value-of select="@href"/>
+                    <xsl:text>}</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\url{</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <!-- sanitize the URL for LaTeX output -->
-    <xsl:call-template name="escape-url-to-latex">
-        <xsl:with-param name="text">
-            <xsl:value-of select="@href" />
-        </xsl:with-param>
-    </xsl:call-template>
-    <xsl:text>}</xsl:text>
-</xsl:template>
-
-<!-- With content of any form, so with no assumptions -->
-<xsl:template match="url[node()]">
-    <xsl:choose>
-        <!-- just the content, ignore the actual URL @href -->
-        <xsl:when test="ancestor::title|ancestor::shorttitle|ancestor::subtitle">
-            <xsl:apply-templates />
-        </xsl:when>
-        <!-- the functional version, usually -->
         <xsl:otherwise>
             <!-- the actual URL -->
             <xsl:text>\href{</xsl:text>
@@ -7768,10 +7790,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}</xsl:text>
             <!-- the visible clickable -->
             <xsl:text>{</xsl:text>
-            <xsl:apply-templates />
+            <xsl:copy-of select="$visible-text"/>
             <xsl:text>}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
+
 </xsl:template>
 
 <!-- ############# -->
