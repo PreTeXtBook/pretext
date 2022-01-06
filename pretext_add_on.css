@@ -1644,6 +1644,11 @@ body > a.assistive:focus {
 .pretext-content dl dd {
     margin-top: 0;
 }
+.pretext-content dl dd::after {
+  content: "";
+  display: block;
+  clear: both;
+}
 .pretext-content dl.glossary dt {
     margin-top: 1.25em;
 }
