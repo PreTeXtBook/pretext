@@ -3227,10 +3227,15 @@
   <define name="Url">
     <element name="url">
       <attribute name="href"/>
-      <optional>
-        <attribute name="visual"/>
-      </optional>
-      <ref name="TextShort"/>
+      <choice>
+        <group>
+          <attribute name="visual"/>
+          <ref name="TextShort"/>
+        </group>
+        <optional>
+          <attribute name="visual"/>
+        </optional>
+      </choice>
     </element>
   </define>
   <define name="Xref">

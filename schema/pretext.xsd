@@ -2843,7 +2843,7 @@
   </xs:group>
   <xs:element name="url">
     <xs:complexType mixed="true">
-      <xs:group ref="TextShort"/>
+      <xs:group minOccurs="0" ref="TextShort"/>
       <xs:attribute name="href" use="required"/>
       <xs:attribute name="visual"/>
     </xs:complexType>

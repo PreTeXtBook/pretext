@@ -945,8 +945,13 @@
             Url =
                 element url {
                     attribute href {text},
-                    attribute visual {text}?,
-                    TextShort
+                    (
+                        (attribute visual {text},
+                        TextShort
+                        )|(
+                        attribute visual {text}?
+                        )
+                    )
                 }
             Xref =
                 element xref {
