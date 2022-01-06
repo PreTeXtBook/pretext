@@ -475,10 +475,11 @@
         <idx>URL</idx>
         <idx>external reference</idx><idx><h>external reference</h><seealso>URL</seealso></idx>
 
-        <p>The <tag>url</tag><idx>URL</idx> tag always requires an <attr>href</attr> attribute.  Usually this will be some external web page, or other resource.  If the <tag>url</tag> is empty, then the value of the <attr>href</attr> attribute will be the link text, typically in a monospace font.  You can also provide your own content, using elements much like any other piece of text that would occur in a paragraph.  Of course, there is no need to anticipate any problems with <latex /> output and special characters like a tilde.  Use the character itself in the <attr>href</attr>, and use the <tag>tilde</tag> element in the content (or wrap the content in the <tag>c</tag> element and use the literal character).</p>
+        <p>The <tag>url</tag> tag always requires an <attr>href</attr> attribute.  Usually this will be a complete address for some external web page, or other external resource.  The <attr>@visual</attr> attribute is sometimes mandatory, but sometimes optional.  It should provide a simplified version of the <init>URL</init> for use in print, or similar situations.  Finally, you can provide content for the <tag>url</tag> element, which will become the clickable text in most realizations.</p>
 
-        <p>This element may also be used to link to external data files.  See <xref ref="topic-url" /> for details.</p>
+        <p>If the <tag>url</tag> element is empty (no content), then the value of the <attr>href</attr> attribute or the optional <attr>visual</attr> attribute will be the link text, with a preference for the latter.  When you instead provide content, you can use <pretext/> elements much like any other piece of text that would occur in a paragraph.  In this case, a <attr>visual</attr> attribute is now mandatory, as an alternative to the content, providing information about the actual <init>URL</init> for non-electronic formats like print.  It will appear in a footnote.</p>
 
+        <p>See <xref ref="topic-url"/> for an example and full details.</p>
     </section>
 
     <section xml:id="overview-video">

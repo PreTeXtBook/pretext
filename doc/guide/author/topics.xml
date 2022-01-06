@@ -3598,19 +3598,41 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <subsection>
             <title><init>URL</init>s to External Web Pages</title>
 
-            <p>The <tag>url</tag><idx>URL</idx> tag can be used to point to external items (as distinct from other internal portions of your current document, which is accomplished with the <tage>xref</tage> element, <xref ref="overview-cross-references" />).  It always needs a value for the <attr>href</attr> attribute, most likely a <init>URL</init>.  Most of this time, this will point to some resource available on the Internet but it could be a file on the system hosting your document, perhaps using a relative address (but see the rest of this section for some cautions).  Here are three scenarios:<ul>
-                <li><p>The <tag>url</tag> element is empty.  Then the value of the <attr>href</attr> is also used for the visible text of the link, verbatim, and usually in a monospace font.  Use <term>percent-encoding</term><idx>percent encoding</idx><idx><h>percent encoding</h><seealso>URL encoding</seealso></idx> (aka <term>URL encoding</term><idx><h>URL</h><h>URL encoding</h></idx>) for the <attr>href</attr> attribute to include special characters, such as spaces.</p></li>
+            <p>The <tag>url</tag> element is used to point to <em>external</em> web pages, or other online resources  (as distinct from other internal portions of your current document, which is accomplished with the <tage>xref</tage> element, <xref ref="overview-cross-references"/>).  The <attr>href</attr> attribute is always necessary, as it contains the full and complete address of the external page or resource.  The element always allows, and then employs, a <attr>visual</attr> attribute for a provided more-friendly version of the address.  Finally, the content of the element, which becomes the clickable text in electronic formats, can be authored with the full range of <pretext/> markup generally available in a title or sentence.  A typical use might look like<cd>
+                <cline>&lt;url href="https://example.com/" visual="example.com"&gt;Demo Site&lt;/url&gt;</cline>
+            </cd>This will render as <url href="https://example.com/" visual="example.com">Demo Site</url>.  Note the automatic footnote providing the visual version in a monospace font.</p>
 
-                <li><p>The <tag>url</tag> element has content.  Now the content should be authored as you would any other text in a sentence.  Potentially problematic characters, such as a tilde should be authored with provided empty elements (as distinct from being authored literally in the <attr>href</attr> attribute).</p></li>
+            <p>If you do not provide any content for a <tage>url</tage> element, then the clickable text will be the actual <init>URL</init> with a preference for the (optional) <attr>visual</attr> attribute, rather than the mandatory <attr>href</attr> attribute.  This should be considered a disruptive to the flow of your text, and so a poor alternative to the content version just discussed (see <xref ref="best-practice-urls"/>).  But it might be a good choice in something like a list of interesting web sites.  Whether or not a simplified version of the address, via the <attr>visual</attr> attribute, is desirable will depend on the application.  As an example, using the optional <attr>visual</attr> attribute we have<cd>
+                <cline>&lt;url href="https://example.com/" visual="example.com"/&gt;</cline>
+            </cd>This will render as <url href="https://example.com/" visual="example.com"/>.  Note that there is no footnote since the visual version is already apparent.</p>
 
-                <li><p>The <tag>url</tag> element has content, but you want this content to look like a <init>URL</init>.  Use the <tag>c</tag> element around the content, and follow the rules for verbatim text.  I do this often for simple <init>URL</init>s that point to the top level of a website.  The <attr>href</attr> is a complete <init>URL</init> like <c>https://pretextbook.org/</c> but for content I use a less-imposing reader-friendly version like <c>pretextbook.org</c>.</p></li>
-            </ul></p>
+            <p>If you want to squelch the automatic footnote on a <tag>url</tag> element with content, you can explicitly set the <attr>visual</attr> attribute to an empty string as <c>visual=""</c>.  This signal will inhibit the automatic footnote.  This should be a <em>very rare</em> occurence, since you are denying readers of some formats from seeing even a hint of the actual <init>URL</init>.  One example of this is a regular footnote, which contains a <init>URL</init>.  The automatic footnote, insiee another footnote, becomes problematic in some conversions.  Better to squelch the footnote-within-a-footnote, and just list nearby a <init>URL</init>, likely using the <tag>c</tag> element to get a monospace font.</p>
 
-            <p>You can place an external reference into a <tag>title</tag> element, but conversions may choose to simply render it as text, and not as an active link.</p>
+            <p>A <tag>url</tag> inside a <tag>title</tag> has been accounted for, but should be used with caution.</p>
 
-            <p>For <latex /> output it gets quite tricky to handle all the various meanings of certain escape characters in <init>URL</init>s in more complicated contexts (such as tables, footnotes, and titles), so there may be some special cases where the formatting is off or you get an error when compiling your <latex />.  We handle most of these situations, but we always appreciate reports of missed cases.</p>
+            <p>As with the rest of <pretext/> we have taken care to handle all of the exceptional characters that might arise in a <tag>url</tag>.  So author normally, using the necessary keyboard characters, only taking care with the two <init>XML</init> characters, <c>&lt;</c> and <c>&amp;</c>, which need escaping (see <xref ref="overview-exceptional-characters"/>).  Use <term>percent-encoding</term><idx>percent encoding</idx><idx><h>percent encoding</h><seealso>URL encoding</seealso></idx> (aka <term>URL encoding</term><idx><h>URL</h><h>URL encoding</h></idx>) for the <attr>href</attr> attribute, if necesary, to include special characters, such as spaces.  See <xref ref="topic-url-characters"/> below for a common need for the ampersand character, and a further caution  about percent-encoding of <init>URL</init>s.</p>
+
+            <p>Finally, for conversion to <latex/>/PDF output it gets extremely tricky to handle all the various meanings of certain escape characters in <init>URL</init>s in more complicated contexts (such as tables, footnotes, and titles), so there may be some special cases where the formatting is off or you get an error when compiling your <latex/>.  We have anticipated most of these situations, but we always appreciate reports of missed cases.</p>
         </subsection>
 
+        <subsection xml:id="topic-visual-urls">
+            <title>Visual <init>URL</init>s</title>
+            <idx><h>URL</h><h>visual</h></idx>
+
+            <p>By a <term>visual URL</term> we mean a version of a <init>URL</init> that is simpler than the <q>real</q> <init>URL</init>, but that provides enough information that a reader can type the <init>URL</init> into some other device with a minimum of effort, and with success.  Consider that your project may someday be a print (hardcopy) book, or that your project will be converted to braille for a blind reader.  These are some ideas about making a <init>URL</init> simpler.  We welcome more ideas.<ul>
+                <li>Remove standard/default protocols like <c>http://</c> and <c>https://</c> which most browsers will furnish in their absence.</li>
+                <li>Sites like <url href="https://stackexchange.com/" visual="stackexchange.com">StackExchange</url> list posts with a long identifying number, followed by something that looks like the title.  In practice, the number is enough.</li>
+                <li>Experiment with dropping a trailing slash<mdash/>they are frequently unnecessary.</li>
+                <li>Try providing just a domain name in place of a top-level landing page, it will often redirect to a longer <init>URL</init>.</li>
+                <li>You could use a <url href="https://en.wikipedia.org/wiki/Wikipedia:URLShortener" visual="https://w.wiki/4QA">URL shortener</url>, though some thought should be given to <url href="https://en.wikipedia.org/wiki/Google_URL_Shortener" visual="https://w.wiki/4eEM">its longevity</url>.</li>
+            </ul></p>
+
+            <note>
+                <title>Craft URLs Carefully</title>
+
+                <p>Your writing will be smoother, and easier on your readers, if you do not interrupt a sentence with a long <init>URL</init>, unless somehow it is really of interest and relevant right there.  So provide content (the <q>clickable</q> text) when you use the <tag>url</tag> element (rather than an empty <tage>url</tage>).  This obligates you to provide a <attr>visual</attr> attribute, which feels a little like a tedious exercise.  But this will be very welcome to some of your readers, those who are unable or prefer not to use electronic formats.  Just above (<xref ref="topic-visual-urls"/>, we provide suggestions for crafting these more pleasing, but still useful, versions of <init>URL</init>s.</p>
+            </note>
+        </subsection>
 
         <subsection xml:id="topic-url-characters">
             <title>Characters in <init>URL</init>s</title>
