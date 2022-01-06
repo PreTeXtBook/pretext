@@ -8430,20 +8430,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- External URLs, Email        -->
 <!-- Open in new window/tab as external reference                        -->
-<!-- If content-less, then automatically formatted like code             -->
+<!-- If "no-content", prefer @visual to @href, and then automatically    -->
+<!-- format like code (verbatim)                                         -->
 <!-- Within titles, we just produce (formatted) text, but nothing active -->
+<!-- N.B.  In "content" case, we get a special footnote from the         -->
+<!-- assembly phase, so look elsewhere for that handling.                -->
+<!-- N.B. compare with LaTeX version, could move much to -common         -->
 <xsl:template match="url">
     <!-- visible portion of HTML is the URL itself,   -->
     <!-- formatted as code, or content of PTX element -->
     <xsl:variable name="visible-text">
         <xsl:choose>
-            <xsl:when test="not(node())">
-                <code class="code-inline tex2jax_ignore">
-                    <xsl:value-of select="@href" />
-                </code>
+            <xsl:when test="node()">
+                <xsl:apply-templates />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:apply-templates />
+                <code class="code-inline tex2jax_ignore">
+                    <xsl:choose>
+                        <xsl:when test="@visual">
+                            <xsl:value-of select="@visual"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="@href"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </code>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
