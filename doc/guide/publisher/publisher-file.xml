@@ -69,6 +69,7 @@
         <p>A <tag>book</tag> with <tag>part</tag> may have the parts numbered to reflect two different structures, <term>decorative</term> or <term>structural</term>.  Set the publisher file entry<cd>
             <cline>/publication/numbering/divisions/@part-structure</cline>
         </cd> to <c>decorative</c> (the default) or <c>structural</c>.</p>
+        <p>When a <tag>book</tag> is designed to have structural parts, then there is an expectation that the part divisions are important or relevant (at least moreso than in the case of decorative parts).  Then, to choose to number objects (blocks, equations, etc.) at level 0, crossing part boundaries, strikes us as an odd choice.  So odd that there is a <url href="https://github.com/rbeezer/mathbook/issues/1650" visual="https://github.com/rbeezer/mathbook/issues/1650">small bug at issue #1650</url>, which might be solved by simply banning this combination.</p>
         <p>For more on divisions, and their numbering see <xref ref="topic-divisions"/>.</p>
     </section>
 
