@@ -5536,6 +5536,9 @@ Book (with parts), "section" at level 3
     </xsl:variable>
 
     <xsl:choose>
+        <!-- always halt when levels met, do this check *before* -->
+        <!-- adjusting for parts or for decorative divisions     -->
+        <xsl:when test="$levels = 0" />
         <!-- When the lead node is a part, we just drop it,   -->
         <!-- and we decrement the level.  A lead node of      -->
         <!-- backmatter will appear for a book with parts,    -->
@@ -5561,8 +5564,6 @@ Book (with parts), "section" at level 3
                 <xsl:with-param name="pad" select="$pad" />
             </xsl:apply-templates>
         </xsl:when>
-        <!-- always halt when levels met -->
-        <xsl:when test="$levels = 0" />
         <!-- not padding, halt if $nodes exhausted -->
         <xsl:when test="($pad = 'no') and not($nodes)" />
         <xsl:otherwise>
