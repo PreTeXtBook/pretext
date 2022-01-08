@@ -23,7 +23,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:exsl="http://exslt.org/common"
-    extension-element-prefixes="exsl"
+    xmlns:str="http://exslt.org/strings"
+    extension-element-prefixes="exsl str"
 >
 
 <!-- ######################### -->
@@ -51,7 +52,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- to be interpreted relative to the location of the *current XML -->
 <!-- file* rather than the location of the *stylesheet*. The actual -->
 <!-- node does not seem so critical.                                -->
-<xsl:variable name="publication" select="document($publisher, .)/publication"/>
+<!-- NB A publisher might provide a filename, which when resolved   -->
+<!-- as an absolute path (think "My Documents") by some helper      -->
+<!-- program or front-end, will arrive here containing a space,     -->
+<!-- which will cause the  document()  function to fail silently.   -->
+<!-- The location provided in the first argument of document() is   -->
+<!-- a URI, so the proper escape mechanism is percent-encoding.     -->
+<xsl:variable name="publication" select="document(str:replace($publisher, '&#x20;', '%20'), .)/publication"/>
 
 <!-- The "publisher-variables.xsl" and "pretext-assembly.xsl"      -->
 <!-- stylesheets are symbiotic, and should be imported             -->
@@ -288,9 +295,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Filenames for Assembly -->
 <!-- ###################### -->
 
-<!-- These are auxilary files provided by authors and publishers, -->
-<!-- generally for derived versions of a project.  Their use can  -->
-<!-- be found in the  pretext-assembly.xsl  file.                 -->
+<!-- These are auxiliary files provided by authors and publishers, -->
+<!-- generally for derived versions of a project.  Their use can   -->
+<!-- be found in the  pretext-assembly.xsl  file.                  -->
+<!--                                                               -->
+<!-- NB  Generally these files are given as relative paths to a    -->
+<!-- project's source file and the  document()  function will      -->
+<!-- locate them as such.  So absolute paths gaining "extra"       -->
+<!-- directories with spaces is not as much of a concern as with   -->
+<!-- the publisher file (see above).  But an author or publisher   -->
+<!-- can still place these files' names into an attribute of the   -->
+<!-- publisher file using a space.  This will cause the            -->
+<!-- document()  function to fail silently. The location provided  -->
+<!-- in the first argument of document() is a URI, so the proper   -->
+<!-- escape mechanism is percent-encoding.                         -->
 
 
 <!-- A file of hint|answer|solution, with @ref back to "exercise" -->
@@ -300,7 +318,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="private-solutions-file">
     <xsl:choose>
         <xsl:when test="$publication/source/@private-solutions">
-            <xsl:value-of select="$publication/source/@private-solutions"/>
+            <xsl:value-of select="str:replace($publication/source/@private-solutions, '&#x20;', '%20')"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text/>
@@ -314,10 +332,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- XSLT should skip the second condition below if the first is false (boosts efficiency). -->
         <xsl:when test="$generated-directory-source != '' and $original//webwork[*|@*]">
-            <xsl:value-of select="concat($generated-directory-source, 'webwork/webwork-representations.xml')"/>
+            <xsl:value-of select="str:replace(concat($generated-directory-source, 'webwork/webwork-representations.xml'), '&#x20;', '%20')"/>
         </xsl:when>
         <xsl:when test="$publication/source/@webwork-problems">
-            <xsl:value-of select="$publication/source/@webwork-problems"/>
+            <xsl:value-of select="str:replace($publication/source/@webwork-problems, '&#x20;', '%20')"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text/>
@@ -331,7 +349,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="customizations-file">
     <xsl:choose>
         <xsl:when test="$publication/source/@customizations">
-            <xsl:value-of select="$publication/source/@customizations"/>
+            <xsl:value-of select="str:replace($publication/source/@customizations, '&#x20;', '%20')"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text/>
