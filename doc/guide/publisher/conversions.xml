@@ -18,12 +18,11 @@
 
     <section xml:id="publisher-file">
         <title>Publisher File</title>
-
-        <p>
         <idx><h>publisher file</h></idx> <idx><h>publication file</h><see>publisher file</see></idx>
-            As of 2021-01-23 we are well along on a transition to providing options a publisher would choose via an <init>XML</init> <term>publisher file</term>. Here we describe how to create and employ this file.  Details on actual options can be found throughout this guide, with terse comprehensive reference material in <xref ref="publisher-file-reference"/>.  Note too, that <xref ref="processing-parameters"/> describes the old method (which is still in use, but will eventually be obsolete).</p>
 
-        <p>Create a separate <init>XML</init> file the same way you always would.  Include the usual <init>XML</init> declaration as the first line.  Now, instead of the overall element being <tag>pretext</tag>, use <tag>publication</tag>.  That's it.  Various elements within <tag>publication</tag> will be used to specify options, typically attributes.  Name the file something that reminds you of its purpose, such as <c>pod.xml</c> for a print-on-demand version.</p>
+        <p>As of 2021-01-23 we are well along on a transition to providing options a publisher would choose via an <init>XML</init> <term>publisher file</term>. Here we describe how to create and employ this file.  Details on actual options can be found throughout this guide, with terse comprehensive reference material in <xref ref="publisher-file-reference"/>.  Note too, that <xref ref="processing-parameters"/> describes the old method (which is still in use, but will eventually be obsolete).</p>
+
+        <p>Create a separate <init>XML</init> file the same way you always would.  Include the usual <init>XML</init> declaration as the first line.  Now, instead of the overall element being <tag>pretext</tag>, use <tag>publication</tag>.  That's it.  Various elements within <tag>publication</tag> will be used to specify options, typically attributes.  Name the file something that reminds you of its purpose, such as <c>pod.xml</c> for a print-on-demand version.  Avoid using spaces in the filename, even if your operating system encourages it.</p>
 
         <p>Entries that control aspects of the output are often attributes of various elements, but may also be the content of elements.  When you read the reference material in <xref ref="publisher-file-reference"/> be aware that we use a sort of shorthand to describe these entries, modeled on a specification called XPath.  For example, if we say to set<cd>
             <cline>/publication/foo/bar/@bazz</cline>
