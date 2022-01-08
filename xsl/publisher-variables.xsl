@@ -284,6 +284,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- ###################### -->
+<!-- Filenames for Assembly -->
+<!-- ###################### -->
+
+<!-- These are auxilary files provided by authors and publishers, -->
+<!-- generally for derived versions of a project.  Their use can  -->
+<!-- be found in the  pretext-assembly.xsl  file.                 -->
+
+
 <!-- A file of hint|answer|solution, with @ref back to "exercise" -->
 <!-- so that the solutions can see limited distribution.  No real -->
 <!-- error-checking.  If not set/present, then an empty string    -->
@@ -292,22 +301,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="$publication/source/@private-solutions">
             <xsl:value-of select="$publication/source/@private-solutions"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text/>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<!-- A version may be specified as a list of components.  We "fence" -->
-<!-- the list so as to make matching a single component in the list  -->
-<!-- more reliable (don't match substrings).  A totally empty string -->
-<!-- means it has not been set.                                      -->
-<!-- N.B. tokenize() and string+node-set matching might be better    -->
-<xsl:variable name="components-fenced">
-    <xsl:choose>
-        <xsl:when test="$publication/source/version/@include">
-            <xsl:value-of select="concat('|', translate(normalize-space($publication/source/version/@include), ' ', '|'), '|')"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text/>
@@ -339,6 +332,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="$publication/source/@customizations">
             <xsl:value-of select="$publication/source/@customizations"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- ################## -->
+<!-- Version Components -->
+<!-- ################## -->
+
+
+<!-- A version may be specified as a list of components.  We "fence" -->
+<!-- the list so as to make matching a single component in the list  -->
+<!-- more reliable (don't match substrings).  A totally empty string -->
+<!-- means it has not been set.                                      -->
+<!-- N.B. tokenize() and string+node-set matching might be better    -->
+<xsl:variable name="components-fenced">
+    <xsl:choose>
+        <xsl:when test="$publication/source/version/@include">
+            <xsl:value-of select="concat('|', translate(normalize-space($publication/source/version/@include), ' ', '|'), '|')"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text/>
