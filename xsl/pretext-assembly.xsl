@@ -235,6 +235,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Initial experiment, overall "references" flagged with -->
 <!-- a @source filename as the place to go get a list of   -->
 <!-- candidate "biblio" (in desired order)                 -->
+<!-- NB: this needs a rethink when revisited.  A file of   -->
+<!-- bibliography items can be specified, perhaps in       -->
+<!-- in docinfo (runs with the source?), formed as         -->
+<!-- $biblios in -common, and then mined for matches not   -->
+<!-- explicitly present?                                   -->
 <xsl:template match="backmatter/references[@source]" mode="assembly">
     <!-- Grab the list, filename is relative to the -->
     <!-- "document" holding "references" (original) -->
