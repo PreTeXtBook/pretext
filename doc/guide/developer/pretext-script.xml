@@ -217,6 +217,17 @@ The script should be run on the entire document, even if all the images are in o
                     <p>For each YouTube video (or itemized playlist) you specify, the script will go the YouTube site and grab a thumbnail image for that video (or first video from the itemized playlist). These get used in static formats, such as <init>PDF</init>.</p>
                 </li>
 
+                <li>
+                    <title>Preview Images</title>
+                    <p>Like a thumbnail for a YouTube video, other interactive content can benefit from a still image for use with static formats.  Our strategy is to render the content with a <q>headless</q> web browser and capture an image automatically.  For example, you might write some custom Javascript to allow a reader to interact with a graph, and you would like an image of the graph, along with its interactive sliders and checkboxes, to appear in the <init>PDF</init> version of your text.  Recognize that this image will necessarily be the content at its initial start-up.  Get a screenshot manually if you want something better.</p>
+
+                    <p>Note that for all this to work, you need to properly serve your project's <init>HTML</init> output with the interactive content.  (A local server may be a possibility, but we have not tried.  See <xref ref="processing-testing-html"/>.  Or you can try a temporary public server, see <xref ref="processing-testing-html-globally"/>).  Then you need to announce the location of this hosted <init>HTML</init>, which is accomplished via a <q>base URL</q> in a publication file.  (You could make a simple one-off publication file for just this purpose.)  Start at <xref ref="online-base-url"/> for details on this publisher variable.</p>
+
+                    <p><c>pageres</c> is the <c>node</c> program enabling this process.  So follow <xref ref="node-and-npm"/> and install the <c>pageres-cli</c> package (not simply <c>pageres</c>).  In <em>your copy</em> of <c>pretext/pretext.cfg</c> you will see an entry for <c>pageres</c>.  Provide a complete path to within your installation of the <c>pageres-cli</c> package (see <xref ref="pretext-helpers"/>).  For example, my setup uses<cd>
+                        <cline>pageres = /home/rob/node_modules/.bin/pageres</cline>
+                    </cd>Now call <c>pretext/pretext</c> with <c>-c preview</c>.  There is no need to set a format<mdash/>you get what you get (<init>PNG</init> images).</p>
+                </li>
+
                 <li xml:id="mathematics-representations">
                     <title>Mathematics Representations</title>
                     <p>Conversions to <init>EPUB</init>, braille, and other formats require creating conversions of mathematics elements locally as part of the conversion.  This requires having MathJax installed locally,  see <xref ref="offline-mathjax"/>.  Structured files of these representations can be obtained by setting the component with <c>-c math</c>.  Possible formats (<c>-f</c>) are <c>svg</c>, <c>mml</c> (MathML), <c>braille</c> and <c>speech</c>.</p>
