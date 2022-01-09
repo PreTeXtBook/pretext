@@ -1186,6 +1186,12 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     _debug("pageres executable: {}".format(pageres_executable_cmd[0]))
     _debug("interactives identifiers: {}".format(interactives))
 
+    # We look to see if a delay is provided in the
+    # command from the configuration file.  The command is
+    # a list of command-line pieces.  We inefficently
+    # look in all of them, even if it might be found early.
+    delay_specified = any([( p.startswith('-d') or p.startswith('--delay') ) for p in pageres_executable_cmd])
+
     # pageres-cli writes into current working directory
     # so change to temporary directory, and copy out
     owd = os.getcwd()
@@ -1204,13 +1210,15 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         _verbose('converting {} to {}'.format(page_with_fragment, filename))
 
         # pageres invocation
+        # 5-second delay allows Javascript, etc to settle down but can be
+        # overridden with a -dN or --delay=N provided in the  pretext.cfg  file
+        if not(delay_specified):
+            pageres_executable_cmd.append('-d5')
         # Overwriting files prevents numbered versions (with spaces!)
-        # 3-second delay allows Javascript, etc to settle down
         # --transparent, --crop do not seem very effective
         cmd = pageres_executable_cmd + [
         "-v",
         "--overwrite",
-        '-d5',
         '--transparent',
         selector_option,
         filename_option,
