@@ -162,7 +162,7 @@ function check_role() {
 function validateLogin() {
     var logged_in = false;
     var un = document.loginform.uname.value;
-    un = un.toLowerCase();
+//    un = un.toLowerCase();
     uname = un;
     var pw = document.loginform.psw.value;
     emanu = pw;
