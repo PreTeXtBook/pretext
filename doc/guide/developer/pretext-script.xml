@@ -179,46 +179,54 @@ The script should be run on the entire document, even if all the images are in o
     <section xml:id="pretext-capabilities">
         <title><c>pretext/pretext</c> Capabilities</title>
 
-        <p>Again, the command <c>pretext -h</c> will remind you of the various options for the script and is the most likely list to be correct and up-to-date.  The following is a brief summary, in general terms, of what is possible.<dl width="narrow">
-            <li>
-                <title>Complete Conversions</title>
-                <p>With <c>-c all</c> and various choices of the format (<c>-f</c>) the script will execute a complete conversion.  In some cases, this is a convenience compated with just using the <c>xsltproc</c> processor.  In other cases the conversion is very complex and multiple (arcane) output files must be packaged up in very specific ways and no author would want to manage it all.  Conversion to <c>EPUB</c> is one example (<xref provisional="epub conversion"/>).</p>
-            </li>
+        <list xml:id="list-pretext-capabilities">
+            <title><c>pretext/pretext</c> Capabilities</title>
 
-            <li>
-                <title><latex/> Graphics</title>
-                <p><latex/> has a variety of languages for specifying images, such as xypic, pgfplots, and TikZ.  By including the necessary packages or setup commands in <c>docinfo/latex-preamble</c>, these can all be generated at once, in the manner of the example earlier.</p>
-            </li>
+            <introduction>
+                <p>Again, the command <c>pretext -h</c> will remind you of the various options for the script and is the most likely list to be correct and up-to-date.  The following is a brief summary, in general terms, of what is possible.</p>
+            </introduction>
 
-            <li>
-                <title>Asymptote</title>
-                <p>Images described by the Asymptote language can be processed in a manner entirely similar to that for images described with <latex/> graphics languages.  By default an online server will be used for the image generation, or you may elect to use an <c>asy</c> executable on your system and locatable via the <c>pretext.cfg</c> configuration file.</p>
-            </li>
+            <dl width="narrow">
+                <li>
+                    <title>Complete Conversions</title>
+                    <p>With <c>-c all</c> and various choices of the format (<c>-f</c>) the script will execute a complete conversion.  In some cases, this is a convenience compared with just using the <c>xsltproc</c> processor.  In other cases the conversion is very complex and multiple (arcane) output files must be packaged up in very specific ways and no author would want to manage it all.  Conversion to <c>EPUB</c> is one example (<xref provisional="epub conversion"/>).</p>
+                </li>
 
-            <li>
-                <title>Sage Plot</title>
-                <p>If you have a version of Sage installed on your system, you can specify the path to the executable and obtain images described by Sage code.  See the sample article for more information.</p>
-            </li>
+                <li>
+                    <title><latex/> Graphics</title>
+                    <p><latex/> has a variety of languages for specifying images, such as xypic, pgfplots, and TikZ.  By including the necessary packages or setup commands in <c>docinfo/latex-preamble</c>, these can all be generated at once, in the manner of the example earlier.</p>
+                </li>
 
-            <li>
-                <title>All Formats</title>
-                <p>If you desire images in a wide variety of formats, the option <c>-f all</c> will oblige.</p>
-            </li>
+                <li>
+                    <title>Asymptote</title>
+                    <p>Images described by the Asymptote language can be processed in a manner entirely similar to that for images described with <latex/> graphics languages.  By default an online server will be used for the image generation, or you may elect to use an <c>asy</c> executable on your system and locatable via the <c>pretext.cfg</c> configuration file.</p>
+                </li>
 
-            <li>
-                <title>YouTube Thumbnails</title>
-                <p>For each YouTube video (or itemized playlist) you specify, the script will go the YouTube site and grab a thumbnail image for that video (or first video from the itemized playlist). These get used in static formats, such as <init>PDF</init>.</p>
-            </li>
+                <li>
+                    <title>Sage Plot</title>
+                    <p>If you have a version of Sage installed on your system, you can specify the path to the executable and obtain images described by Sage code.  See the sample article for more information.</p>
+                </li>
 
-            <li xml:id="mathematics-representations">
-                <title>Mathematics Representations</title>
-                <p>Conversions to <init>EPUB</init>, braille, and other formats require creating conversions of mathematics elements locally as part of the conversion.  This requires having MathJax installed locally,  see <xref ref="offline-mathjax"/>.  Structured files of these representations can be obtained by setting the component with <c>-c math</c>.  Possible formats (<c>-f</c>) are <c>svg</c>, <c>mml</c> (MathML), <c>braille</c> and <c>speech</c>.</p>
-            </li>
+                <li>
+                    <title>All Formats</title>
+                    <p>If you desire images in a wide variety of formats, the option <c>-f all</c> will oblige.</p>
+                </li>
 
-            <li>
-                <title><webwork/></title>
-                <p>Various conversions of <webwork/> problems are facilitated through communication with a <webwork/> server.  This server is specified as an argument to the <c>-s</c> option.  See <xref ref="webwork-author"/> for the details of this procedure.</p>
-            </li>
-        </dl></p>
+                <li>
+                    <title>YouTube Thumbnails</title>
+                    <p>For each YouTube video (or itemized playlist) you specify, the script will go the YouTube site and grab a thumbnail image for that video (or first video from the itemized playlist). These get used in static formats, such as <init>PDF</init>.</p>
+                </li>
+
+                <li xml:id="mathematics-representations">
+                    <title>Mathematics Representations</title>
+                    <p>Conversions to <init>EPUB</init>, braille, and other formats require creating conversions of mathematics elements locally as part of the conversion.  This requires having MathJax installed locally,  see <xref ref="offline-mathjax"/>.  Structured files of these representations can be obtained by setting the component with <c>-c math</c>.  Possible formats (<c>-f</c>) are <c>svg</c>, <c>mml</c> (MathML), <c>braille</c> and <c>speech</c>.</p>
+                </li>
+
+                <li>
+                    <title><webwork/></title>
+                    <p>Various conversions of <webwork/> problems are facilitated through communication with a <webwork/> server.  This server is specified as an argument to the <c>-s</c> option.  See <xref ref="webwork-author"/> for the details of this procedure.</p>
+                </li>
+            </dl>
+        </list>
     </section>
 </chapter>
