@@ -6354,6 +6354,28 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
+                <title>IFrames</title>
+
+                <p>An <c>iframe</c> is an <init>HTML</init> element that allows embedding of a complete web page within another one.  Here we use this device to provide interactive 3D diagrams built with other tools.</p>
+
+                <p>We begin with a Jupyter notebook hosted on <url href="https://cocalc.com" visual="CoCalc.com"/>.  News of success on other hosts for Jupyter notebook servers will allow us to expand this description.  We use a Sage kernel and create a 3D surface suggested by Juan Carlos Bustamante:<cd>
+                    <cline>var('x,y')</cline>
+                    <cline>plot3d(x^2 - y^2, (x,-1,1), (y,-1,1), color="orange", mesh=true)</cline>
+                </cd>
+                News of other computational engines that produce similar graphics will also allow us to further expand this description.</p>
+
+                <p>A button in the lower right allows for several options, one is <c>Save as HTML</c>, which will produce a complete self-contained web page we can recycle.  We save this file with our other externally-created images, in a directory that we choose to name <c>iframe</c><mdash/>you can use another name.  Then we make an <tag>interactive</tag> with an <attr>iframe</attr> attribute that has the filename, starting from <c>iframe/</c> (in other words, do not include the name of your managed directory of external images).</p>
+
+                <figure xml:id="figure-sage-jupyter-iframe">
+                    <caption>Sage+Jupyter <c>iframe</c></caption>
+                    <interactive xml:id="interactive-sage-jupyter-iframe" iframe="iframe/sage-jupyter.html" width="95%" aspect="1:1"/>
+                </figure>
+                    <!-- preview="preview/threejs-splines.png"  -->
+
+                <p>Note that the downloaded file has links to specific versions of the <c>three.js</c> library, which are beyond our control, and beyond your control.  So there is a future where these images may need updating.  You could put your source code into a (large) comment with your project's source for safe-keeping in the future.</p>
+            </subsection>
+
+            <subsection>
                 <title>threejs</title>
 
                 <p>An example using the <c>threejs</c> 3D Javascript library.  This is <url href="https://threejs.org/examples/#webgl_geometry_extrude_splines" visual="threejs.org/examples/#webgl_geometry_extrude_splines">one of the project's examples</url>, licensed with an MIT License, with minimal modifications.  We get several of the necessary libraries from the <c>threejs.org</c> site.</p>
