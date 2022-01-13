@@ -7330,9 +7330,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>{\includegraphics[width=0.80\linewidth,height=\qrsize,keepaspectratio]{</xsl:text>
             <xsl:value-of select="$default-preview-image"/>
             <xsl:text>}}%&#xa;</xsl:text>
-            <xsl:text>{\small{}Specify static image with \mono{@preview} attribute,\\Or create and provide automatic screenshot as \mono{</xsl:text>
+            <xsl:text>{\small{}</xsl:text>
+            <xsl:text>Specify a static image with the \mono{@preview} attribute;\\%&#xa;</xsl:text>
+            <xsl:text>Or create and provide an automatic screenshot as\\%&#xa;</xsl:text>
+            <xsl:text>\mono{</xsl:text>
             <xsl:value-of select="$default-preview-image"/>
-            <xsl:text>} via the \mono{mbx} script}</xsl:text>
+            <xsl:text>}\\%&#xa;</xsl:text>
+            <xsl:text>via the \mono{PreTeXt-CLI} application or \mono{pretext/pretext} script.</xsl:text>
+            <xsl:text>}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
