@@ -9950,6 +9950,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </iframe>
 </xsl:template>
 
+<!-- Arbitrary IFrame -->
+<!-- Almost too easy and trivial, so last, not first -->
+<!-- Assumes a local, "external", HTML file to house -->
+<xsl:template match="interactive[@iframe]" mode="iframe-interactive">
+    <xsl:variable name="location">
+        <!-- empty when not using managed directories -->
+        <xsl:value-of select="$external-directory"/>
+        <xsl:value-of select="@iframe"/>
+    </xsl:variable>
+    <iframe src="{$location}">
+        <xsl:apply-templates select="." mode="iframe-id"/>
+        <xsl:apply-templates select="." mode="size-pixels-attributes"/>
+    </iframe>
+</xsl:template>
+
 <!-- For more complicated interactives, we just point to the page we generate -->
 <xsl:template match="interactive[@platform]" mode="iframe-interactive">
     <iframe>
@@ -10008,7 +10023,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- These forms *are* iframes, so we don't need to build their content -->
-<xsl:template match="interactive[@desmos|@geogebra|@calcplot3d|@wolfram-cdf]" mode="create-iframe-page" />
+<xsl:template match="interactive[@desmos|@geogebra|@calcplot3d|@wolfram-cdf|@iframe]" mode="create-iframe-page" />
 
 
 <!-- ################ -->
