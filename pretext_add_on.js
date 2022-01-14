@@ -156,35 +156,45 @@ async function copyPermalink(elem) {
     var link     = "<a href=\""                    + this_permalink_url + "\">" + this_permalink_description + "</a>";
     var msg_link = "<a class=\"internal\" href=\"" + this_permalink_url + "\">" + this_permalink_description + "</a>";
     var text_fallback = this_permalink_description + " \r\n" + this_permalink_url;
+    var copy_success = true;
     try {
-        // Kludge because Firefox doesn't yet support ClipboardItem
-        // Also, firefox users *may* need
-        //    dom.events.asyncClipboard.dataTransfer
-        // set to True in about:config  ?
-        if (navigator.userAgent.indexOf("Firefox") != -1 ) {
-            console.log("permalink-to-clipboard: Firefox kludge");
-            await navigator.clipboard.writeText(text_fallback);
-        } else {
-            await navigator.clipboard.write([
-                new ClipboardItem({
-                    'text/html': new Blob([link], { type: 'text/html' }),
-                    'text/plain': new Blob([text_fallback], { type: 'text/plain' }),
-                })
-            ]);
-            console.log(`copied '${this_permalink_url}' to clipboard`);
-        }
-        // temporary element to alert user that link was copied
-        let copied_msg = document.createElement('p');
-        copied_msg.setAttribute('role', 'alert');
-        copied_msg.className = "permalink-alert";
-        copied_msg.innerHTML = "Link to " + msg_link  + " copied to clipboard";
-        elem.parentElement.insertBefore(copied_msg, elem);
-        // show confirmation for a couple seconds
-        await new Promise((resolve, reject) => setTimeout(resolve, 1500));
-        copied_msg.remove();
+        // NOTE: this method will only work in Firefox if the user has
+        //    dom.events.asyncClipboard.clipboardItem
+        // set to true in their about:config.
+        // Annoyingly, this setting is turned off by default.
+        // If that setting is off, this try block will fail and we'll use the
+        // fallback method lower down instead.
+        await navigator.clipboard.write([
+            new ClipboardItem({
+                'text/html': new Blob([link], { type: 'text/html' }),
+                'text/plain': new Blob([text_fallback], { type: 'text/plain' }),
+            })
+        ]);
     } catch (err) {
-        console.error('Failed to copy link to clipboard!', err);
+        console.log('Permalink-to-clipboard using ClipboardItem failed, falling back to clipboard.writeText', err);
+        copy_success = false;
     }
+    if (! copy_success) {
+        try {
+            await navigator.clipboard.writeText(text_fallback);
+        } catch (err) {
+            console.log('Permalink-to-clipboard using clipboard.writeText failed', err);
+            console.error('Failed to copy link to clipboard!');
+            return
+        }
+    }
+
+    console.log(`copied '${this_permalink_url}' to clipboard`);
+    // temporary element to alert user that link was copied
+    let copied_msg = document.createElement('p');
+    copied_msg.setAttribute('role', 'alert');
+    copied_msg.className = "permalink-alert";
+    copied_msg.innerHTML = "Link to " + msg_link  + " copied to clipboard";
+    elem.parentElement.insertBefore(copied_msg, elem);
+    // show confirmation for a couple seconds
+    await new Promise((resolve, reject) => setTimeout(resolve, 1500));
+    copied_msg.remove();
+
 }
 
 window.addEventListener("load",function(event) {
