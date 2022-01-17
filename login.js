@@ -201,7 +201,8 @@ function validateLogin() {
         logged_in = true;
     }
     else {
-        alert ("Login was unsuccessful, please check id and password");
+   //     alert ('Login was unsuccessful, please check id: "' + uname + '" and password"' + emanu +'".  Also checking "' + pw + '" and "' + the_un_enc + '".');
+        alert ('Login was unsuccessful, please check id: "' + uname + '".');
         console.log("failed to set the ut_cookie");
         logged_in = false;
     }
