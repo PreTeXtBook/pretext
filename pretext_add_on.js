@@ -61,11 +61,14 @@ function permalinkDescription(elem) {
     }
     // the data we need will be either in an element with class .heading or in a figcaption element
     // but for:
-    //   exercisegroup -- the heading element will be further up the tree
-    //   hidden knowl  -- the heading element will be further down the tree (this is the 'a > .heading' selector)
+    //   exercisegroup            -- the heading element will be further up the tree
+    //   hidden knowl             -- the heading element will be further down the tree (this is the 'a > .heading' selector)
+    //   figcaption (figure-like) -- we are already in the figcaption node
     var headerNode;
     if (isExerciseGroup)  {
         headerNode = elem.parentElement.parentElement.querySelector(':scope > .heading');
+    } else if (nodeName == 'FIGCAPTION') {
+        headerNode = elem;
     } else {
         headerNode = elem.querySelector(':scope > .heading, :scope > figcaption, :scope > a > .heading');
     }
@@ -143,40 +146,55 @@ async function copyPermalink(elem) {
         return
     }
     console.log("copying permalink for", elem);
-    const this_permalink_url = this_url + "#" + elem.parentElement.id;
+    var linkNode = elem.querySelector(':scope > a');
+    if (!linkNode) {
+        console.log("Error: Something went wrong finding permalink URL")
+        return
+    }
+    const this_permalink_url = linkNode.getAttribute('href');
     const this_permalink_description = elem.getAttribute('data-description');
     var link     = "<a href=\""                    + this_permalink_url + "\">" + this_permalink_description + "</a>";
     var msg_link = "<a class=\"internal\" href=\"" + this_permalink_url + "\">" + this_permalink_description + "</a>";
     var text_fallback = this_permalink_description + " \r\n" + this_permalink_url;
+    var copy_success = true;
     try {
-        // Kludge because Firefox doesn't yet support ClipboardItem
-        // Also, firefox users *may* need
-        //    dom.events.asyncClipboard.dataTransfer
-        // set to True in about:config  ?
-        if (navigator.userAgent.indexOf("Firefox") != -1 ) {
-            console.log("permalink-to-clipboard: Firefox kludge");
-            await navigator.clipboard.writeText(text_fallback);
-        } else {
-            await navigator.clipboard.write([
-                new ClipboardItem({
-                    'text/html': new Blob([link], { type: 'text/html' }),
-                    'text/plain': new Blob([text_fallback], { type: 'text/plain' }),
-                })
-            ]);
-            console.log(`copied '${this_permalink_url}' to clipboard`);
-        }
-        // temporary element to alert user that link was copied
-        let copied_msg = document.createElement('p');
-        copied_msg.setAttribute('role', 'alert');
-        copied_msg.className = "permalink-alert";
-        copied_msg.innerHTML = "Link to " + msg_link  + " copied to clipboard";
-        elem.parentElement.insertBefore(copied_msg, elem);
-        // show confirmation for a couple seconds
-        await new Promise((resolve, reject) => setTimeout(resolve, 1500));
-        copied_msg.remove();
+        // NOTE: this method will only work in Firefox if the user has
+        //    dom.events.asyncClipboard.clipboardItem
+        // set to true in their about:config.
+        // Annoyingly, this setting is turned off by default.
+        // If that setting is off, this try block will fail and we'll use the
+        // fallback method lower down instead.
+        await navigator.clipboard.write([
+            new ClipboardItem({
+                'text/html': new Blob([link], { type: 'text/html' }),
+                'text/plain': new Blob([text_fallback], { type: 'text/plain' }),
+            })
+        ]);
     } catch (err) {
-        console.error('Failed to copy link to clipboard!', err);
+        console.log('Permalink-to-clipboard using ClipboardItem failed, falling back to clipboard.writeText', err);
+        copy_success = false;
     }
+    if (! copy_success) {
+        try {
+            await navigator.clipboard.writeText(text_fallback);
+        } catch (err) {
+            console.log('Permalink-to-clipboard using clipboard.writeText failed', err);
+            console.error('Failed to copy link to clipboard!');
+            return
+        }
+    }
+
+    console.log(`copied '${this_permalink_url}' to clipboard`);
+    // temporary element to alert user that link was copied
+    let copied_msg = document.createElement('p');
+    copied_msg.setAttribute('role', 'alert');
+    copied_msg.className = "permalink-alert";
+    copied_msg.innerHTML = "Link to " + msg_link  + " copied to clipboard";
+    elem.parentElement.insertBefore(copied_msg, elem);
+    // show confirmation for a couple seconds
+    await new Promise((resolve, reject) => setTimeout(resolve, 1500));
+    copied_msg.remove();
+
 }
 
 window.addEventListener("load",function(event) {
@@ -262,33 +280,32 @@ console.log("this is e", e);
         }
     }
 
-    console.log("                       adding permalinks");
-    /* add permalinks to all sections and articles */
-    items_needing_permalinks = document.querySelectorAll('main section:not(.introduction), main section > p, main section article, main section > figure, main section > figure > figcaption, main section  .exercisegroup article, main section  .exercisegroup, main section article.exercise, main section article.paragraphs > p, main section article.paragraphs > figure');
-    //   items_needing_permalinks = document.querySelectorAll('body section article');
-    this_url = window.location.href.split('#')[0];
-    permalink_word = "&#x1F517;";
-    for (var i = 0; i < items_needing_permalinks.length; i++) {
-        this_item = items_needing_permalinks[i];
-        var this_anchor = this_item.id;
-        if (this_item.tagName == "FIGCAPTION") { this_anchor  = this_item.parentElement.id }
-        if(this_anchor) {
-            this_permalink_url = this_url + "#" + this_anchor;
-            const this_permalink_description = permalinkDescription(this_item);
-            this_permalink_container = document.createElement('div');
-            this_permalink_container.setAttribute('class', 'autopermalink');
-            this_permalink_container.setAttribute('onclick', 'copyPermalink(this)');
-            this_permalink_container.setAttribute('data-description', this_permalink_description);
-   //         this_permalink_container.innerHTML = '<span href="' + this_permalink_url + '">' + permalink_word + '</span>';
-            this_permalink_container.innerHTML = '<a href="' + this_permalink_url + '" title="Copy permalink for ' + this_permalink_description + '">' + permalink_word + '</a>';
-
-            if (document.querySelector('body.standalone')) {
-                console.log("no permalinks on standalone pages")
-            } else {
+    if (document.querySelector('body.standalone')) {
+        console.log("no permalinks on standalone pages")
+    } else {
+        console.log("                       adding permalinks");
+        /* add permalinks to all sections and articles */
+        items_needing_permalinks = document.querySelectorAll('main section:not(.introduction), main section > p, main section article, main section > figure.table-like, main section > figure.figure-like > figcaption, main section  .exercisegroup article, main section  .exercisegroup, main section article.exercise, main section article.paragraphs > p, main section article.paragraphs > figure.table-like, main section article.paragraphs > figure.figure-like');
+        //   items_needing_permalinks = document.querySelectorAll('body section article');
+        this_url = window.location.href.split('#')[0];
+        permalink_word = "&#x1F517;";
+        for (var i = 0; i < items_needing_permalinks.length; i++) {
+            this_item = items_needing_permalinks[i];
+            var this_anchor = this_item.id;
+            if (this_item.tagName == "FIGCAPTION") { this_anchor  = this_item.parentElement.id }
+            if(this_anchor) {
+                this_permalink_url = this_url + "#" + this_anchor;
+                const this_permalink_description = permalinkDescription(this_item);
+                this_permalink_container = document.createElement('div');
+                this_permalink_container.setAttribute('class', 'autopermalink');
+                this_permalink_container.setAttribute('onclick', 'copyPermalink(this)');
+                this_permalink_container.setAttribute('data-description', this_permalink_description);
+    //         this_permalink_container.innerHTML = '<span href="' + this_permalink_url + '">' + permalink_word + '</span>';
+                this_permalink_container.innerHTML = '<a href="' + this_permalink_url + '" title="Copy permalink for ' + this_permalink_description + '">' + permalink_word + '</a>';
                 this_item.insertAdjacentElement("afterbegin", this_permalink_container)
+            } else {
+                console.log("      no permalink, because no id", this_item)
             }
-        } else {
-            console.log("      no permalink, because no id", this_item)
         }
     }
 
