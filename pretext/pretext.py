@@ -264,21 +264,18 @@ def sage_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, ou
     os.chdir(tmp_dir)
     devnull = open(os.devnull, 'w')
     for sageplot in os.listdir(tmp_dir):
-        if outformat == 'source':
-            shutil.copy2(sageplot, dest_dir)
-        else:
-            filebase, _ = os.path.splitext(sageplot)
-            sageout = "{0}.{1}".format(filebase, outformat)
-            sagepng = "{0}.png".format(filebase, outformat)
-            sage_cmd = sage_executable_cmd + [sageplot, outformat]
-            _verbose("converting {} to {} (or {} for 3D)".format(sageplot, sageout, sagepng))
-            _debug("sage conversion {}".format(sage_cmd))
-            subprocess.call(sage_cmd, stdout=devnull, stderr=subprocess.STDOUT)
-            # Sage makes PNGs for 3D
-            for f in glob.glob(sageout):
-                shutil.copy2(f, dest_dir)
-            for f in glob.glob(sagepng):
-                shutil.copy2(f, dest_dir)
+        filebase, _ = os.path.splitext(sageplot)
+        sageout = "{0}.{1}".format(filebase, outformat)
+        sagepng = "{0}.png".format(filebase, outformat)
+        sage_cmd = sage_executable_cmd + [sageplot, outformat]
+        _verbose("converting {} to {} (or {} for 3D)".format(sageplot, sageout, sagepng))
+        _debug("sage conversion {}".format(sage_cmd))
+        subprocess.call(sage_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+        # Sage makes PNGs for 3D
+        for f in glob.glob(sageout):
+            shutil.copy2(f, dest_dir)
+        for f in glob.glob(sagepng):
+            shutil.copy2(f, dest_dir)
 
 def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat):
     # stringparams is a dictionary, best for lxml parsing
