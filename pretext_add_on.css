@@ -83,8 +83,15 @@ so that we can set our own later */
 }
 /* for assemblages without a title */
 .pretext-content .assemblage-like > p:first-of-type {
+    margin-top: 0;
+}
+.pretext-content .assemblage-like > .heading + p {
     margin-top: 0.25em;
 }
+.pretext-content .assemblage-like + p {
+    margin-top: 1.75em;
+}
+
 .pretext-content p.intertext {
     margin-top: -0.25em;
     text-indent: 0;

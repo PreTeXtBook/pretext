@@ -141,6 +141,10 @@
     visibility: visible;
     background-color: #fcc;
 }
+.login-link .logout {
+    visibility: visible;
+    background-color: #fcc;
+}
 
 #dontlogout {
     float: right;
