@@ -6015,14 +6015,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- no extension, presume SVG provided as external image -->
         <xsl:when test="$extension=''">
-            <xsl:call-template name="svg-wrapper">
-                <xsl:with-param name="svg-filename">
+            <xsl:call-template name="svg-png-wrapper">
+                <xsl:with-param name="image-filename">
                     <xsl:value-of select="$location"/>
                     <xsl:text>.svg</xsl:text>
-                </xsl:with-param>
-                <xsl:with-param name="png-fallback-filename" />
-                <xsl:with-param name="image-width">
-                    <xsl:apply-templates select="." mode="get-width-percentage" />
                 </xsl:with-param>
                 <xsl:with-param name="image-description">
                     <xsl:apply-templates select="description" />
@@ -6092,18 +6088,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
-    <xsl:call-template name="svg-wrapper">
-        <xsl:with-param name="svg-filename" select="concat($base-pathname, '.svg')" />
-        <!-- maybe empty, which is fine -->
-        <xsl:with-param name="png-fallback-filename">
-            <xsl:if test="sageplot">
-                <xsl:value-of select="$base-pathname" />
-                <xsl:text>.png</xsl:text>
-            </xsl:if>
-        </xsl:with-param>
-        <xsl:with-param name="image-width">
-            <xsl:apply-templates select="." mode="get-width-percentage" />
-        </xsl:with-param>
+    <xsl:call-template name="svg-png-wrapper">
+        <xsl:with-param name="image-filename" select="concat($base-pathname, '.svg')" />
         <xsl:with-param name="image-description">
             <xsl:apply-templates select="description" />
         </xsl:with-param>
@@ -6203,22 +6189,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- A named template creates the infrastructure for an SVG image -->
-<!-- Parameters                                 -->
-<!-- svg-filename: required, full relative path -->
-<!-- png-fallback-filename: optional            -->
-<!-- image-width: required                      -->
-<!-- image-description: optional                -->
-<xsl:template name="svg-wrapper">
-    <xsl:param name="svg-filename" />
-    <xsl:param name="png-fallback-filename" select="''" />
-    <xsl:param name="image-width" />
+<!-- A named template creates the infrastructure for an SVG or PNG image -->
+<!-- Parameters                                      -->
+<!--   image-filename: required, full relative path  -->
+<!--   image-description: optional                   -->
+<!--   decorative: optional, 'yes' => no alt text    -->
+<!-- NB: (2020-01-18) Prior, this was SVG specific,  -->
+<!-- and then PNG functionality was folded in (when  -->
+<!-- fallback for "sageplot" was no longer necessary -->
+<xsl:template name="svg-png-wrapper">
+    <xsl:param name="image-filename" />
     <xsl:param name="image-description" select="''" />
     <xsl:param name="decorative"/>
     <img>
         <!-- source file attribute for img element, the SVG image -->
         <xsl:attribute name="src">
-            <xsl:value-of select="$svg-filename" />
+            <xsl:value-of select="$image-filename" />
         </xsl:attribute>
         <!-- For accessibility use an ARIA role, e.g so screen  -->
         <!-- readers do not try to read the elements of the SVG -->
@@ -6241,16 +6227,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:attribute>
             </xsl:when>
         </xsl:choose>
-        <!-- PNG fallback, if available                                     -->
-        <!-- https://www.envano.com/2014/04/using-svg-images-in-responsive- -->
-        <!-- websites-with-a-fallback-for-browsers-not-supporting-svg/      -->
-        <xsl:if test="not($png-fallback-filename = '')">
-            <xsl:attribute name="onerror">
-                <xsl:text>this.src='</xsl:text>
-                <xsl:value-of select="$png-fallback-filename" />
-                <xsl:text>';this.onerror=null;</xsl:text>
-            </xsl:attribute>
-        </xsl:if>
     </img>
 </xsl:template>
 
