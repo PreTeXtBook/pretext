@@ -255,6 +255,9 @@ def sage_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, ou
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-sageplot.xsl')
     _verbose("extracting Sage diagrams from {}".format(xml_source))
+    # extraction stylesheet is parameterized by fileformat
+    # this is an internal parameter only, do not use otherwise
+    stringparams['sageplot.fileformat'] = outformat
     # support publisher file, subtree argument
     if pub_file:
         stringparams['publisher'] = pub_file
@@ -266,16 +269,11 @@ def sage_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, ou
     for sageplot in os.listdir(tmp_dir):
         filebase, _ = os.path.splitext(sageplot)
         sageout = "{0}.{1}".format(filebase, outformat)
-        sagepng = "{0}.png".format(filebase, outformat)
-        sage_cmd = sage_executable_cmd + [sageplot, outformat]
-        _verbose("converting {} to {} (or {} for 3D)".format(sageplot, sageout, sagepng))
+        sage_cmd = sage_executable_cmd + [sageplot]
+        _verbose("converting {} to {}".format(sageplot, sageout))
         _debug("sage conversion {}".format(sage_cmd))
         subprocess.call(sage_cmd, stdout=devnull, stderr=subprocess.STDOUT)
-        # Sage makes PNGs for 3D
-        for f in glob.glob(sageout):
-            shutil.copy2(f, dest_dir)
-        for f in glob.glob(sagepng):
-            shutil.copy2(f, dest_dir)
+        shutil.copy2(sageout, dest_dir)
 
 def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat):
     # stringparams is a dictionary, best for lxml parsing
