@@ -1921,6 +1921,17 @@
           <text/>
         </element>
         <element name="sageplot">
+          <optional>
+            <attribute name="variant">
+              <choice>
+                <value>2d</value>
+                <value>3d</value>
+              </choice>
+            </attribute>
+          </optional>
+          <optional>
+            <attribute name="aspect"/>
+          </optional>
           <text/>
         </element>
       </choice>

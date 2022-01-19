@@ -766,7 +766,11 @@
                     (
                         element latex-image {text} |
                         element asymptote {text} |
-                        element sageplot {text}
+                        element sageplot {
+                            attribute variant {'2d'|'3d'}?,
+                            attribute aspect {text}?,
+                            text
+                        }
                     )
                 }
             ImageWW =

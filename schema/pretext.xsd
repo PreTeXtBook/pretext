@@ -1758,7 +1758,19 @@
     </xs:sequence>
   </xs:group>
   <xs:element name="asymptote" type="xs:string"/>
-  <xs:element name="sageplot" type="xs:string"/>
+  <xs:element name="sageplot">
+    <xs:complexType mixed="true">
+      <xs:attribute name="variant">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="2d"/>
+            <xs:enumeration value="3d"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="aspect"/>
+    </xs:complexType>
+  </xs:element>
   <xs:group name="ImageWW">
     <xs:sequence>
       <xs:element name="image">
