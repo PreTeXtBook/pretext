@@ -6073,18 +6073,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   LaTeX source code images                       -->
 <!--   Sage graphics plots, w/ PNG fallback for 3D    -->
 <!--   Match style is duplicated in pretext-epub.xsl  -->
-<xsl:template match="image[latex-image]|image[sageplot]" mode="image-inclusion">
+<xsl:template match="image[latex-image]" mode="image-inclusion">
+    <!-- $base-pathname needed later for archive links -->
     <xsl:variable name="base-pathname">
         <xsl:value-of select="$generated-directory"/>
         <xsl:if test="$b-managed-directories">
-            <xsl:choose>
-                <xsl:when test="latex-image">
-                    <xsl:text>latex-image/</xsl:text>
-                </xsl:when>
-                <xsl:when test="sageplot">
-                    <xsl:text>sageplot/</xsl:text>
-                </xsl:when>
-            </xsl:choose>
+            <xsl:text>latex-image/</xsl:text>
         </xsl:if>
         <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
@@ -6097,6 +6091,47 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="@decorative" />
         </xsl:with-param>
     </xsl:call-template>
+    <!-- possibly annotate with archive links -->
+    <xsl:apply-templates select="." mode="archive">
+        <xsl:with-param name="base-pathname" select="$base-pathname" />
+    </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="image[sageplot]" mode="image-inclusion">
+    <!-- $base-pathname needed later for archive links -->
+    <xsl:variable name="base-pathname">
+        <xsl:value-of select="$generated-directory"/>
+        <xsl:if test="$b-managed-directories">
+            <xsl:text>sageplot/</xsl:text>
+        </xsl:if>
+        <xsl:apply-templates select="." mode="visible-id" />
+    </xsl:variable>
+    <!-- 2d are SVG, 3d are HTML -->
+    <xsl:choose>
+        <xsl:when test="not(sageplot/@variant) or (sageplot/@variant = '2d')">
+            <!-- construct the "img" element -->
+            <xsl:call-template name="svg-png-wrapper">
+                <xsl:with-param name="image-filename" select="concat($base-pathname, '.svg')" />
+                <xsl:with-param name="image-description">
+                    <xsl:apply-templates select="description" />
+                </xsl:with-param>
+                <xsl:with-param name="decorative">
+                    <xsl:apply-templates select="@decorative" />
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:when test="sageplot/@variant = '3d'">
+            <iframe>
+                <xsl:apply-templates select="." mode="size-pixels-attributes" />
+                <xsl:attribute name="src">
+                    <xsl:value-of select="$base-pathname"/>
+                    <xsl:text>.html</xsl:text>
+                </xsl:attribute>
+            </iframe>
+        </xsl:when>
+        <!-- attribute errors found out in generation? -->
+        <xsl:otherwise/>
+    </xsl:choose>
     <!-- possibly annotate with archive links -->
     <xsl:apply-templates select="." mode="archive">
         <xsl:with-param name="base-pathname" select="$base-pathname" />
