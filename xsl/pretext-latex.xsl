@@ -9056,33 +9056,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Sage graphics plots          -->
-<!-- PDF's produced by mbx script -->
-<!-- PNGs are fallback for 3D     -->
+<!-- Sage graphics plots              -->
+<!-- PDF's produced by pretext script -->
+<!-- PDF for 2d, PNG for 3d           -->
 <xsl:template match="image[sageplot]" mode="image-inclusion">
-    <xsl:text>\IfFileExists{</xsl:text>
-    <xsl:value-of select="$generated-directory"/>
-    <xsl:if test="$b-managed-directories">
-        <xsl:text>sageplot/</xsl:text>
-    </xsl:if>
-    <xsl:apply-templates select="." mode="visible-id" />
-    <xsl:text>.pdf}%&#xa;</xsl:text>
-    <xsl:text>{\includegraphics[width=\linewidth]</xsl:text>
+    <xsl:text>\includegraphics[width=\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$generated-directory"/>
     <xsl:if test="$b-managed-directories">
         <xsl:text>sageplot/</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="." mode="visible-id" />
-    <xsl:text>.pdf}}%&#xa;</xsl:text>
-    <xsl:text>{\includegraphics[width=\linewidth]</xsl:text>
-    <xsl:text>{</xsl:text>
-    <xsl:value-of select="$generated-directory"/>
-    <xsl:if test="$b-managed-directories">
-        <xsl:text>sageplot/</xsl:text>
-    </xsl:if>
-    <xsl:apply-templates select="." mode="visible-id" />
-    <xsl:text>.png}}&#xa;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="not(sageplot/@variant) or (sageplot/@variant = '2d')">
+            <xsl:text>.pdf</xsl:text>
+        </xsl:when>
+        <xsl:when test="sageplot/@variant = '3d'">
+            <xsl:text>.png</xsl:text>
+        </xsl:when>
+        <!-- attribute errors found out in generation? -->
+        <xsl:otherwise/>
+    </xsl:choose>
+    <xsl:text>}%&#xa;</xsl:text>
 </xsl:template>
 
 <!-- LaTeX Image Code (tikz, pgfplots, pstricks, etc) -->
