@@ -30,7 +30,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <author><xref ref="dfarmer"/></author>
 
     <introduction>
-        <p>We begin our study of algebraic structures by investigating sets associated with single operations that satisfy certain reasonable axioms; that is, we want to define an operation on a set in a way that will generalize such familiar structures as the integers <m>{\mathbb Z}</m> together with the single operation of  addition, or invertible <m>2 \times 2</m> matrices together with the single operation of matrix multiplication.  The integers and the <m>2 \times 2</m> matrices, together with their respective single operations, are examples of algebraic structures known as groups.</p>
+        <p>We begin our study of algebraic structures by investigating sets associated with single operations that satisfy certain reasonable axioms; that is, we want to define an operation on a set in a way that will generalize such familiar structures as the integers <m>{\mathbb Z}</m> together with the single operation of  addition, or invertible <m>2 \times 2</m> matrices together with the single operation of matrix multiplication.  The integers and the <m>2 \times 2</m> matrices, together with their respective single operations, are examples of algebraic structures known as groups.<fn>A test footnote, with no real content.</fn></p>
 
         <p>The theory of groups occupies a central position in mathematics.  Modern group theory arose from an attempt to find the roots of a polynomial in terms of its coefficients.  Groups now play a central role in such areas as coding theory, counting, and the study of  symmetries; many areas of biology, chemistry, and physics have benefited from group theory.</p>
 
