@@ -4112,7 +4112,7 @@ Book (with parts), "section" at level 3
 <!-- Widths from sidebyside layouts have been error-checked as input    -->
 
 <!-- occurs in a figure, not contained in a sidebyside -->
-<xsl:template match="audio[ancestor::sidebyside]|video[ancestor::sidebyside]|jsxgraph[ancestor::sidebyside]|interactive[ancestor::sidebyside]|slate[ancestor::sidebyside]|image[asymptote and ancestor::sidebyside]" mode="get-width-percentage">
+<xsl:template match="audio[ancestor::sidebyside]|video[ancestor::sidebyside]|jsxgraph[ancestor::sidebyside]|interactive[ancestor::sidebyside]|slate[ancestor::sidebyside]|image[asymptote and ancestor::sidebyside]|image[sageplot and ancestor::sidebyside]" mode="get-width-percentage">
     <!-- in a side-by-side, get layout, locate in layout -->
     <!-- and get width.  The layout-parameters template  -->
     <!-- will analyze an enclosing sbsgroup              -->
@@ -4138,7 +4138,7 @@ Book (with parts), "section" at level 3
 <!-- Input:  "width:height", or decimal width/height -->
 <!-- Return: real number as fraction width/height    -->
 <!-- Totally blank means nothing could be determined -->
-<xsl:template match="slate|interactive|jsxgraph|audio|video|image[asymptote]" mode="get-aspect-ratio">
+<xsl:template match="slate|interactive|jsxgraph|audio|video|image[asymptote]|image[sageplot]" mode="get-aspect-ratio">
     <xsl:param name="default-aspect" select="''" />
 
     <!-- look to element first, then to supplied default          -->
@@ -4149,6 +4149,9 @@ Book (with parts), "section" at level 3
             <!-- interactive Asymptote WebGL version, only. -->
             <xsl:when test="self::image and asymptote/@aspect">
                 <xsl:value-of select="asymptote/@aspect" />
+            </xsl:when>
+            <xsl:when test="self::image and sageplot/@aspect">
+                <xsl:value-of select="sageplot/@aspect" />
             </xsl:when>
             <xsl:when test="not(self::image) and @aspect">
                 <xsl:value-of select="@aspect" />
@@ -4191,7 +4194,8 @@ Book (with parts), "section" at level 3
 
 <!-- Pixels are an HTML thing, but we may need these numbers -->
 <!-- elsewhere, and these are are pure text templates        -->
-<xsl:template match="slate|audio|video|interactive|image[asymptote]" mode="get-width-pixels">
+<!-- NB 3D "sageplot" needs an "iframe" with pixels for size -->
+<xsl:template match="slate|audio|video|interactive|image[asymptote]|image[sageplot]" mode="get-width-pixels">
     <xsl:variable name="width-percent">
         <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
@@ -4202,7 +4206,7 @@ Book (with parts), "section" at level 3
 </xsl:template>
 
 <!-- Square by default, when asked.  Can override -->
-<xsl:template match="slate|audio|video|interactive|image[asymptote]" mode="get-height-pixels">
+<xsl:template match="slate|audio|video|interactive|image[asymptote]|image[sageplot]" mode="get-height-pixels">
     <xsl:param name="default-aspect" select="'1:1'" />
 
     <xsl:variable name="width-percent">
