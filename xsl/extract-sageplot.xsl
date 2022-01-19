@@ -46,8 +46,53 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Output Sage code as text -->
 <xsl:output method="text" encoding="UTF-8"/>
 
+<!-- This stylesheet is parameterized by a requested file format to be  -->
+<!-- produced by Sage, which Sage picks up from file extensions in the  -->
+<!-- filename argument in a .save() method.  We supply this from the    -->
+<!-- pretext/pretext  script, so there is no error checking.  Values    -->
+<!-- vary by the @variant of the "sageplot".  *.png  are low-quality    -->
+<!-- (not cropped tight), so even if possible for 2D graphics, we do    -->
+<!-- not build such a thing.  Otherwise the formats are exclusive to    -->
+<!-- their variant (Sage capability).                                   -->
+<!--                                                                    -->
+<!--   2D variant: pdf (LaTeX), svg (HTML) formats                      -->
+<!--   3D variant: png (LaTeX), html (HTML) formats                     -->
+
+<xsl:param name="sageplot.fileformat" select="'pdf'"/>
+
 <!-- Sage graphics to standalone Sage/Python file      -->
 <xsl:template match="sageplot" mode="extraction">
+    <!-- Construct the file for Sage to execute                    -->
+    <!-- Convert final line to an assignment, so we can do save(s) -->
+    <!-- First, basename for the file (Sage input, image output)   -->
+    <!-- Second, the (unique) name of the graphics object in Sage  -->
+    <!-- (We do this first, so we can use "$filebase" below)       -->
+    <xsl:variable name="filebase">
+        <xsl:apply-templates select=".." mode="visible-id" />
+    </xsl:variable>
+    <xsl:variable name="plot-name">
+        <xsl:text>plot_</xsl:text>
+        <xsl:value-of select="generate-id(.)" />
+    </xsl:variable>
+    <!-- Look to see if "sageplot" is building 2d or 3d -->
+    <xsl:variable name="variant">
+        <xsl:choose>
+            <!-- default is a 2d graphic -->
+            <xsl:when test="not(@variant)">
+                <xsl:text>2d</xsl:text>
+            </xsl:when>
+            <xsl:when test="@variant = '2d'">
+                <xsl:text>2d</xsl:text>
+            </xsl:when>
+            <xsl:when test="@variant = '3d'">
+                <xsl:text>3d</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message>PTX:ERROR:   a "sageplot" has a @variant attribute ("<xsl:value-of select="@variant"/>") for "<xsl:value-of select="$filebase"/>" whose value is not "2d" nor "3d".  The default ("2d") is being used, which could be incorrect</xsl:message>
+                <xsl:text>2d</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <!-- has one trailing newline, which we ignore later (?) -->
     <xsl:variable name="plot-code-sanitary">
         <xsl:call-template name="sanitize-text">
@@ -76,47 +121,44 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="substr" select="'&#xa;'" />
         </xsl:call-template>
     </xsl:variable>
-    <!-- Construct the file for Sage to execute                    -->
-    <!-- Convert final line to an assignment, so we can do save(s) -->
-    <!-- First, basename for the file (Sage input, image output)   -->
-    <!-- Second, the (unique) name of the graphics object in Sage  -->
-    <xsl:variable name="filebase">
-        <xsl:apply-templates select=".." mode="visible-id" />
-    </xsl:variable>
-    <xsl:variable name="plot-name">
-        <xsl:text>plot_</xsl:text>
-        <xsl:value-of select="generate-id(.)" />
-    </xsl:variable>
+    <xsl:variable name="b-legal-combination" select="($variant = '2d' and $sageplot.fileformat = 'pdf')
+                                                 or  ($variant = '2d' and $sageplot.fileformat = 'svg')
+                                                 or  ($variant = '3d' and $sageplot.fileformat = 'png')
+                                                 or  ($variant = '3d' and $sageplot.fileformat = 'html')"/>
+    <!-- Only certain combinations are supported and only certain       -->
+    <!-- combinations are needed in subsequent conversions.  Yes,  this -->
+    <!-- setup is all inefficient to just bail out now.                 -->
     <!-- Do not use directories here, as Windows paths will get mangled -->
     <!-- Instead, set working directory before applying stylesheet      -->
-    <exsl:document href="{$filebase}.sage" method="text">
-        <!-- Module so we can pass file extension parameter on command line -->
-        <xsl:text>import sys&#xa;</xsl:text>
-        <xsl:text>suffix = sys.argv[1]&#xa;</xsl:text>
-        <!-- Duplicate most code, massge code at last line -->
-        <xsl:value-of select="$preamble" />
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:value-of select="$plot-name" />
-        <xsl:text> = </xsl:text>
-        <xsl:value-of select="$plotcmd" />
-        <xsl:text>&#xa;</xsl:text>
-        <!-- Sage 2D plots can be made into SVGs  -->
-        <!-- or many other formats routinely, -->
-        <!-- but for 3D plots only PNG is possible -->
-        <!-- So we try the former and default to the latter -->
-        <xsl:text>try:&#xa;</xsl:text>
-        <xsl:text>    </xsl:text>
-        <xsl:value-of select="$plot-name" />
-        <xsl:text>.save("</xsl:text>
-        <xsl:value-of select="$filebase" />
-        <xsl:text>.{}".format(suffix))&#xa;</xsl:text>
-        <xsl:text>except ValueError:&#xa;</xsl:text>
-        <xsl:text>    </xsl:text>
-        <xsl:value-of select="$plot-name" />
-        <xsl:text>.save("</xsl:text>
-        <xsl:value-of select="$filebase" />
-        <xsl:text>.png")&#xa;</xsl:text>
-    </exsl:document>
+    <xsl:if test="$b-legal-combination">
+        <exsl:document href="{$filebase}.sage" method="text">
+            <!-- Duplicate most code, massage code at last line -->
+            <xsl:value-of select="$preamble" />
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:value-of select="$plot-name" />
+            <xsl:text> = </xsl:text>
+            <xsl:value-of select="$plotcmd" />
+            <xsl:text>&#xa;</xsl:text>
+            <!-- We could build a try/except block here, where a ValueError -->
+            <!-- indicates a fileformat not supported, but we may have that -->
+            <!-- covered.  Would need to get the exception out of the sage  -->
+            <!-- executable invocation in the Python script to relay.       -->
+            <xsl:value-of select="$plot-name" />
+            <xsl:text>.save('</xsl:text>
+            <xsl:value-of select="$filebase" />
+            <xsl:text>.</xsl:text>
+            <xsl:value-of select="$sageplot.fileformat"/>
+            <xsl:text>'</xsl:text>
+            <!-- Need to inform Sage display manager for 3d HTML that we -->
+            <!-- are not inside a notebook or the command-line and we    -->
+            <!-- want self-contained  threejs  apllications with         -->
+            <!-- Javascript coming from a CDN.                           -->
+            <xsl:if test="$sageplot.fileformat = 'html'">
+                <xsl:text>, online=True</xsl:text>
+            </xsl:if>
+            <xsl:text>)&#xa;</xsl:text>
+        </exsl:document>
+    </xsl:if>
  </xsl:template>
 
 </xsl:stylesheet>
