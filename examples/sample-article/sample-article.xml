@@ -3327,7 +3327,8 @@ the xsltproc executable.
                     <figure xml:id="figure-sage-polynomial-approximation">
                         <caption>Sage polynomial approximations of <m>f(x)=1/(1+25x^2)</m></caption>
                         <image xml:id="sageplot-polynomial-approximation">
-                            <sageplot>
+                            <!-- default variant is 2d, just testing here -->
+                            <sageplot variant="2d">
                             def f(x):
                                return RDF(1 / (1 + 25 * x^2))
 
@@ -3348,17 +3349,17 @@ the xsltproc executable.
                     </figure>
                 </sidebyside>
 
-                <p>From the Sage documentation, with slight modifications, credited to Douglas Summers-Stay.  A plot of the implicity defined surface <me>2 = \cos(x + ty) + \cos(x - ty) + \cos(y + tz) + \cos(y - tz) + \cos(z - tx) + \cos(z + tx)</me> in rectangular <m>xyz</m> coordinates, with <m>t</m> equal to the golden ratio.</p>
+                <p>From the Sage documentation, with slight modifications, credited to Douglas Summers-Stay.  A plot of the implicity defined surface <me>2 = \cos(x + ty) + \cos(x - ty) + \cos(y + tz) + \cos(y - tz) + \cos(z - tx) + \cos(z + tx)</me> in rectangular <m>xyz</m> coordinates, with <m>t</m> equal to the golden ratio.  If you set <c>plot_points=100</c> in the Sage code, you will get a very smooth rendering, but also a quite large <init>HTML</init> file.  We have used <c>plot_points=50</c> to reduce the file size by a factor of four.  Note the need for a value of <c>3d</c> for the <attr>variant</attr> attribute, and an explicit aspect ratio with <attr>aspect</attr>.  Arrow keys, a mouse scroll wheel, plus grabbing with a left or a right mouse button, can be used to manipulate the image.</p>
 
                 <figure xml:id="figure-sage-implicit-surface">
                     <caption>A Sage implicitly defined 3D surface</caption>
-                    <image xml:id="sageplot-implicit-surface" width="50%">
-                        <sageplot>
+                    <image xml:id="sageplot-implicit-surface" width="80%" margins="15% 5%">
+                        <sageplot variant="3d" aspect="1.0">
                         var('x y z')
                         T = RDF(golden_ratio)
                         p = 2 - (cos(x + T*y) + cos(x - T*y) + cos(y + T*z) + cos(y - T*z) + cos(z - T*x) + cos(z + T*x))
                         r = 4.77
-                        implicit_plot3d(p, (x, -r, r), (y, -r, r), (z, -r, r), plot_points=100, frame=False)
+                        implicit_plot3d(p, (x, -r, r), (y, -r, r), (z, -r, r), plot_points=50, frame=False)
                         </sageplot>
                     </image>
                 </figure>
@@ -6362,7 +6363,7 @@ the xsltproc executable.
                     <cline>var('x,y')</cline>
                     <cline>plot3d(x^2 - y^2, (x,-1,1), (y,-1,1), color="orange", mesh=true)</cline>
                 </cd>
-                News of other computational engines that produce similar graphics will also allow us to further expand this description.</p>
+                News of other computational engines that produce similar graphics will also allow us to further expand this description.  Note that for the case of Sage 3D plots, support for the <tag>sageplot</tag> element makes this even easier.  For example, see <xref ref="figure-sage-implicit-surface"/>.</p>
 
                 <p>A button in the lower right allows for several options, one is <c>Save as HTML</c>, which will produce a complete self-contained web page we can recycle.  We save this file with our other externally-created images, in a directory that we choose to name <c>iframe</c><mdash/>you can use another name.  Then we make an <tag>interactive</tag> with an <attr>iframe</attr> attribute that has the filename, starting from <c>iframe/</c> (in other words, do not include the name of your managed directory of external images).</p>
 
@@ -6387,7 +6388,7 @@ the xsltproc executable.
                     </interactive>
                 </figure>
 
-                <p>The following two examples are meant to be instructive (only).  The end result is accomplished in a much more straightforward way be the method in <xref ref="interactive-iframes" text="type-global"/>.  We illustrate a way to get a <c>three.js</c> image out of an <init>HTML</init> page as a Javascript file and render it on a <pretext/> <tag>slate</tag>.  We follow the second method in a <url href="https://golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html" visual="golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html">blog post from the <m>n</m>-Category Cafe</url>.<ol>
+                <p>The following two examples are meant to be instructive (<em>only</em>).  The end result is accomplished in a much more straightforward way be the method in <xref ref="interactive-iframes" text="type-global"/>.  We illustrate a way to get a <c>three.js</c> image out of an <init>HTML</init> page as a Javascript file and render it on a <pretext/> <tag>slate</tag>.  We follow the second method in a <url href="https://golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html" visual="golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html">blog post from the <m>n</m>-Category Cafe</url>.<ol>
                     <li>Open a Jupyter Notebook that utilizes a Sage kernel.  This can be done easily at <url href="https://cocalc.com" visual="cocalc.com">CoCalc</url> (and for free initially).</li>
 
                     <li>Sketch a surface using Sage code.  We recycle the suggestion from Juan Carlos Bustamante in <xref ref="interactive-iframes" text="type-global"/>:<cd>
