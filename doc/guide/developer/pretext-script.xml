@@ -204,7 +204,7 @@ The script should be run on the entire document, even if all the images are in o
 
                 <li>
                     <title>Sage Plot</title>
-                    <p>If you have a version of Sage installed on your system, you can specify the path to the executable and obtain images described by Sage code.  See the sample article for more information.</p>
+                    <p>If you have a version of Sage installed on your system, you can specify the path to the executable and obtain images described by Sage code.  See <xref ref="topic-sageplot"/> for more information.</p>
                 </li>
 
                 <li>

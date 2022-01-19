@@ -2732,12 +2732,43 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 <p>Notice that when you produce these images for use with non-<latex/> formats such as <init>HTML</init>, it is your responsibility to move the images into the correct location where your output expects them, typically in a subdirectory named <c>images</c>.  Also note that as of 2020-07-24, limited testing indicates that PSTricks needs to be processed with the <c>xelatex</c> engine, and the <c>pstricks-add</c> package might also be necessary.  Any updates, especially using <c>pdflatex</c> would be appreciated.  Finally, processing with <c>xelatex</c> might be necessary if your labels use Unicode characters.</p>
             </subsubsection>
 
-            <subsubsection>
+            <subsubsection xml:id="topic-sageplot">
                 <title>Images in Sage Syntax</title>
 
-                <p>Sometimes the necessary computations for an image are not part of the capabilities of whatever system is actually realizing the image.  We have good support for Sage in other parts of your document, and Sage has an extremely wide variety of computational capabilities, in addition to letting you program your own computations in Python syntax with the full support of the Sage library.  Rather than translating Sage output as input to some other graphics program, we simply capture the graphics output from Sage.</p>
+                <p>Sometimes the necessary computations for an image are not part of the capabilities of whatever system is actually realizing the image.  We have good support for Sage in other parts of your document, and Sage has an extremely wide variety of computational capabilities, in addition to letting you program your own computations in Python syntax with the full support of the Sage library.  Rather than translating Sage output as input to some other graphics program, we simply capture the graphics output from Sage.  So if your graphics are derived from non-standard, or intensive, computation this might be your best avenue.</p>
 
-                <p>Use the <tag>sageplot</tag> tag, in a manner entirely similar to the <tag>asymptote</tag> tag and the <tag>latex-image</tag> tag, as a child of <tag>image</tag>, and containing the necessary Sage code to construct the image.  There is one twist.  The last line of your Sage code <alert>must</alert> return a Sage <c>Graphics</c> object (or 3D plot).  The <c>pretext</c> script (<xref ref="pretext-script"/>) will isolate this last line, use it as the right-hand side of an assignment statement, and the Sage <c>.save()</c> method will automatically be called to generate the image in a file, which is either a Portable Document Format (PDF) file amenable to <latex /> output, or a Scalable Vector Graphics (SVG) file amenable to HTML output.  For visualizations of 3D plots, Sage will only produce Portable Network Graphics (PNG) files, which can be included in HTML pages or <latex /> output.  Pay careful attention to the requirement that the last line of your code evaluates to be a graphics object.  In particular, while <c>show()</c> might appear to do the right thing during testing, it evaluates to Python's <c>None</c> object and that is just what you will get for your image.  The example below illustrates creating two graphics objects and combining them into an expression on the last line that evaluates to the graphics object that will be created in the desired graphics file.</p>
+                <p>Use the <tag>sageplot</tag> element, in a manner entirely similar to the <tag>asymptote</tag> element and the <tag>latex-image</tag> element, as a child of <tag>image</tag>, and containing the necessary Sage code to construct the image.  There is one very important twist.  The last line of your Sage code <alert>must</alert> return a Sage <c>Graphics</c> object.  The <c>pretext/pretext</c> script (<xref ref="pretext-script"/>) and <pretext/>-CLI (<xref ref="processing-CLI"/>) will isolate this last line, use it as the right-hand side of an assignment statement, and the Sage <c>.save()</c> method will automatically be called to generate the image in a file.  Note that there are four different file types, depending on if the graphic is 2D or 3D, and the output format of the conversion.</p>
+
+                <p>The <attr>variant</attr> attribute of the <tag>sageplot</tag> element may be <c>2d</c> or <c>3d</c>, since <pretext/> is not capable of analyzing your Sage code.  The default value is <c>3d</c> so can be skipped for 2D plots.  For technical reasons, it is also necessary to specify the aspect ratio of a graphic for the 3D case using the <attr>aspect</attr> attribute.  The value can be a positive real number (decimal) or a ratio of two positive integers separated by a colon.  The default is a square (<c>1.0</c> or <c>1:1</c>).</p>
+
+                <table>
+                    <title>File formats for <c>sageplot</c> images</title>
+                    <tabular>
+                        <col right="major" header="yes"/>
+                        <col/>
+                        <col/>
+                        <row bottom="major">
+                            <cell/>
+                            <cell>2D</cell>
+                            <cell>3D</cell>
+                        </row>
+                        <row>
+                            <cell><latex/></cell>
+                            <cell>PDF</cell>
+                            <cell>PNG</cell>
+                        </row>
+                        <row valign="top">
+                            <cell>HTML</cell>
+                            <cell>SVG</cell>
+                            <cell>HTML (for <c>iframe</c>)</cell>
+                        </row>
+                    </tabular>
+                </table>
+
+                <p>Note that the <init>PNG</init> images in the 3D case are not very good.  This needs help on the Sage side.  And since 3D images in <init>HTML</init> output are inserted via an <init>HTML</init> <c>iframe</c> they can misbehave if you do not get the aspect ratio close to right.  On the plus side, the 3D <init>HTML</init> images may be manipulated interactively with keyboard arrow keys, a mouse scroll wheel, and by dragging with a mouse using both a left and a right mouse press.</p>
+
+
+                <p>Pay very careful attention to the requirement that the last line of your code evaluates to be a graphics object.  In particular, while <c>show()</c> might appear to do the right thing during testing, it evaluates to Python's <c>None</c> object and that is just what you will get for your image.  The example below illustrates creating two graphics objects and combining them into an expression on the last line that evaluates to the graphics object that will be created in the desired graphics files.</p>
 
                 <pre><![CDATA[
                 <figure>
