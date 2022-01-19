@@ -366,7 +366,7 @@ def main():
         else:
             raise NotImplementedError('cannot make Asymptote diagrams in "{}" format'.format(args.format))
     elif  args.component == 'sageplot':
-        if args.format in ['pdf', 'svg']:
+        if args.format in ['pdf', 'svg', 'png', 'html']:
             ptx.sage_conversion(xml_source, publisher_file, stringparams, args.xmlid, dest_dir, args.format)
         else:
             raise NotImplementedError('cannot make Sage graphics in "{}" format'.format(args.format))
