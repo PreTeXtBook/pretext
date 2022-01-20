@@ -245,7 +245,11 @@ def asymptote_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
 
 
 def sage_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat):
-    import tempfile, os, os.path, subprocess, shutil, glob
+    import os # chdir(), devnull, listdir()
+    import os.path # join(), splitext()
+    import subprocess # call()
+    import shutil # copy2()
+
     _verbose('converting Sage diagrams from {} to {} graphics for placement in {}'.format(xml_source, outformat.upper(), dest_dir))
     tmp_dir = get_temporary_directory()
     _debug("temporary directory: {}".format(tmp_dir))
