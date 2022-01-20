@@ -250,6 +250,22 @@ def sage_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, ou
     import subprocess # call()
     import shutil # copy2()
 
+    # To make all four formats, just call this routine
+    # four times and halt gracefully with an explicit "return"
+    if outformat == 'all':
+        _verbose('Pass 1 for "all" formats, now generating PDF')
+        sage_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, 'pdf')
+        _verbose('Pass 2 for "all" formats, now generating SVG')
+        sage_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, 'svg')
+        _verbose('Pass 3 for "all" formats, now generating PNG')
+        sage_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, 'png')
+        _verbose('Pass 4 for "all" formats, now generating HTML')
+        sage_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, 'html')
+        return None
+    # The real routine, which is thinly parameterized by "outformat",
+    # thus necessitating the four separate calls above due to the
+    # extraction stylesheet producing slightly different Sage code
+    # for each possible output format
     _verbose('converting Sage diagrams from {} to {} graphics for placement in {}'.format(xml_source, outformat.upper(), dest_dir))
     tmp_dir = get_temporary_directory()
     _debug("temporary directory: {}".format(tmp_dir))
