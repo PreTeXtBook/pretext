@@ -344,11 +344,24 @@ def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_
             tex_executable_cmd = get_executable_cmd('tex')
             # TODO why this debug line? get_executable_cmd() outputs the same debug info
             _debug("tex executable: {}".format(tex_executable_cmd[0]))
-            latex_cmd = tex_executable_cmd + ["-interaction=batchmode", latex_image]
+            latex_cmd = tex_executable_cmd + ["-halt-on-error", latex_image]
             _verbose("converting {} to {}".format(latex_image, latex_image_pdf))
-            subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
-            if not os.path.exists(latex_image_pdf):
-                print('PTX:ERROR: There was a problem compiling {} and {} was not created'.format(latex_image,latex_image_pdf))
+            # Run LaTeX on the image file, usual console transcript is stdout.
+            # "result" is a "CompletedProcess" object.  Specifying an encoding
+            # causes captured output to be a string, which is convenient.
+            result = subprocess.run(latex_cmd, stdout=subprocess.PIPE, encoding="utf-8")
+            if result.returncode != 0:
+                # failed, so we help as much as we can
+                msg = '\n'.join([
+                    'PTX:ERROR:  LaTeX compilation of {} failed.',
+                    'Re-run, requesting "source" as the format, to analyze the image.',
+                    'Likely creating the entire document as PDF will fail similarly.',
+                    'The transcript of the LaTeX run follows.']
+                    ).format(latex_image)
+                print(msg)
+                print('##################################################################')
+                print(result.stdout)
+                print('##################################################################')
             pcm_executable_cmd = get_executable_cmd('pdfcrop')
             pcm_cmd = pcm_executable_cmd + [latex_image_pdf, "-o", "cropped-"+latex_image_pdf, "-p", "0", "-a", "-1"]
             _verbose("cropping {} to {}".format(latex_image_pdf, "cropped-"+latex_image_pdf))
