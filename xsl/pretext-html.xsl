@@ -40,7 +40,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:str="http://exslt.org/strings"
     xmlns:pi="http://pretextbook.org/2020/pretext/internal"
-    exclude-result-prefixes="pi b64"
+    exclude-result-prefixes="pi b64 svg"
     extension-element-prefixes="exsl date str"
 >
 
