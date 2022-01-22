@@ -21,7 +21,7 @@
                 xmlns:epub="http://www.idpf.org/2007/ops"
                 xmlns:exsl="http://exslt.org/common"
                 xmlns:date="http://exslt.org/dates-and-times"
-                exclude-result-prefixes="pi"
+                exclude-result-prefixes="pi svg math epub"
                 extension-element-prefixes="exsl date">
 
 <!-- Trade on HTML markup, numbering, chunking, etc. -->
@@ -689,13 +689,6 @@
         </filename>
         <!-- pubfilename maybe empty -->
         <cover pubfilename="{$publication-cover-filename}"/>
-            <!-- <svg:svg xmlns:svg="http://www.w3.org/2000/svg" height="2560" width="1600"> -->
-                <!-- If title is too long, this will spill out of the image -->
-                <!-- <svg:text x="50%" y="25%" fill="black" font-size="100px" text-anchor="middle">
-                    <xsl:apply-templates select="$document-root" mode="title-simple"/>
-                </svg:text>
-            </svg:svg>
-        </cover> -->
         <!-- These may be used in automated creation of a cover image -->
         <title>
             <xsl:apply-templates select="$document-root" mode="title-simple"/>
