@@ -362,49 +362,50 @@ def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_
                 print('##################################################################')
                 print(result.stdout)
                 print('##################################################################')
-            pcm_executable_cmd = get_executable_cmd('pdfcrop')
-            pcm_cmd = pcm_executable_cmd + [latex_image_pdf, "-o", "cropped-"+latex_image_pdf, "-p", "0", "-a", "-1"]
-            _verbose("cropping {} to {}".format(latex_image_pdf, "cropped-"+latex_image_pdf))
-            subprocess.call(pcm_cmd, stdout=devnull, stderr=subprocess.STDOUT)
-            if not os.path.exists("cropped-"+latex_image_pdf):
-                print('PTX:ERROR: There was a problem cropping {} and {} was not created'.format(latex_image_pdf,"cropped-"+latex_image_pdf))
-            shutil.move("cropped-"+latex_image_pdf, latex_image_pdf)
-            _verbose("renaming {} to {}".format("cropped-"+latex_image_pdf,latex_image_pdf))
-            if outformat == 'all':
-                shutil.copy2(latex_image, dest_dir)
-            if (outformat == 'pdf' or outformat == 'all'):
-                shutil.copy2(latex_image_pdf, dest_dir)
-            if (outformat == 'svg' or outformat == 'all'):
-                pdfsvg_executable_cmd = get_executable_cmd('pdfsvg')
-                # TODO why this debug line? get_executable_cmd() outputs the same debug info
-                _debug("pdfsvg executable: {}".format(pdfsvg_executable_cmd[0]))
-                svg_cmd = pdfsvg_executable_cmd + [latex_image_pdf, latex_image_svg]
-                _verbose("converting {} to {}".format(latex_image_pdf, latex_image_svg))
-                subprocess.call(svg_cmd)
-                if not os.path.exists(latex_image_svg):
-                    print('PTX:ERROR: There was a problem converting {} to svg and {} was not created'.format(latex_image_pdf,latex_image_svg))
-                shutil.copy2(latex_image_svg, dest_dir)
-            if (outformat == 'png' or outformat == 'all'):
-                # create high-quality png, presumes "convert" executable
-                pdfpng_executable_cmd = get_executable_cmd('pdfpng')
-                # TODO why this debug line? get_executable_cmd() outputs the same debug info
-                _debug("pdfpng executable: {}".format(pdfpng_executable_cmd[0]))
-                png_cmd = pdfpng_executable_cmd + ["-density", "300",  latex_image_pdf, "-quality", "100", latex_image_png]
-                _verbose("converting {} to {}".format(latex_image_pdf, latex_image_png))
-                subprocess.call(png_cmd)
-                if not os.path.exists(latex_image_png):
-                    print('PTX:ERROR: There was a problem converting {} to png and {} was not created'.format(latex_image_pdf,latex_image_png))
-                shutil.copy2(latex_image_png, dest_dir)
-            if (outformat == 'eps' or outformat == 'all'):
-                pdfeps_executable_cmd = get_executable_cmd('pdfeps')
-                # TODO why this debug line? get_executable_cmd() outputs the same debug info
-                _debug("pdfeps executable: {}".format(pdfeps_executable_cmd[0]))
-                eps_cmd = pdfeps_executable_cmd + ['-eps', latex_image_pdf, latex_image_eps]
-                _verbose("converting {} to {}".format(latex_image_pdf, latex_image_eps))
-                subprocess.call(eps_cmd)
-                if not os.path.exists(latex_image_eps):
-                    print('PTX:ERROR: There was a problem converting {} to eps and {} was not created'.format(latex_image_pdf,latex_image_eps))
-                shutil.copy2(latex_image_eps, dest_dir)
+            else:
+                pcm_executable_cmd = get_executable_cmd('pdfcrop')
+                pcm_cmd = pcm_executable_cmd + [latex_image_pdf, "-o", "cropped-"+latex_image_pdf, "-p", "0", "-a", "-1"]
+                _verbose("cropping {} to {}".format(latex_image_pdf, "cropped-"+latex_image_pdf))
+                subprocess.call(pcm_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+                if not os.path.exists("cropped-"+latex_image_pdf):
+                    print('PTX:ERROR: There was a problem cropping {} and {} was not created'.format(latex_image_pdf,"cropped-"+latex_image_pdf))
+                shutil.move("cropped-"+latex_image_pdf, latex_image_pdf)
+                _verbose("renaming {} to {}".format("cropped-"+latex_image_pdf,latex_image_pdf))
+                if outformat == 'all':
+                    shutil.copy2(latex_image, dest_dir)
+                if (outformat == 'pdf' or outformat == 'all'):
+                    shutil.copy2(latex_image_pdf, dest_dir)
+                if (outformat == 'svg' or outformat == 'all'):
+                    pdfsvg_executable_cmd = get_executable_cmd('pdfsvg')
+                    # TODO why this debug line? get_executable_cmd() outputs the same debug info
+                    _debug("pdfsvg executable: {}".format(pdfsvg_executable_cmd[0]))
+                    svg_cmd = pdfsvg_executable_cmd + [latex_image_pdf, latex_image_svg]
+                    _verbose("converting {} to {}".format(latex_image_pdf, latex_image_svg))
+                    subprocess.call(svg_cmd)
+                    if not os.path.exists(latex_image_svg):
+                        print('PTX:ERROR: There was a problem converting {} to svg and {} was not created'.format(latex_image_pdf,latex_image_svg))
+                    shutil.copy2(latex_image_svg, dest_dir)
+                if (outformat == 'png' or outformat == 'all'):
+                    # create high-quality png, presumes "convert" executable
+                    pdfpng_executable_cmd = get_executable_cmd('pdfpng')
+                    # TODO why this debug line? get_executable_cmd() outputs the same debug info
+                    _debug("pdfpng executable: {}".format(pdfpng_executable_cmd[0]))
+                    png_cmd = pdfpng_executable_cmd + ["-density", "300",  latex_image_pdf, "-quality", "100", latex_image_png]
+                    _verbose("converting {} to {}".format(latex_image_pdf, latex_image_png))
+                    subprocess.call(png_cmd)
+                    if not os.path.exists(latex_image_png):
+                        print('PTX:ERROR: There was a problem converting {} to png and {} was not created'.format(latex_image_pdf,latex_image_png))
+                    shutil.copy2(latex_image_png, dest_dir)
+                if (outformat == 'eps' or outformat == 'all'):
+                    pdfeps_executable_cmd = get_executable_cmd('pdfeps')
+                    # TODO why this debug line? get_executable_cmd() outputs the same debug info
+                    _debug("pdfeps executable: {}".format(pdfeps_executable_cmd[0]))
+                    eps_cmd = pdfeps_executable_cmd + ['-eps', latex_image_pdf, latex_image_eps]
+                    _verbose("converting {} to {}".format(latex_image_pdf, latex_image_eps))
+                    subprocess.call(eps_cmd)
+                    if not os.path.exists(latex_image_eps):
+                        print('PTX:ERROR: There was a problem converting {} to eps and {} was not created'.format(latex_image_pdf,latex_image_eps))
+                    shutil.copy2(latex_image_eps, dest_dir)
 
 
 #######################
