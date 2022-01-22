@@ -31,16 +31,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- even if this complicates adding namespaces onto    -->
 <!-- derivatives, such as HTML destined for EPUB output -->
 <!-- xmlns="http://www.w3.org/1999/xhtml"               -->
+<!--                                                    -->
+<!-- NB:                                                -->
+<!--   "xsl" is necessary to identify XSL functionality -->
+<!--   "xml" is automatic, hence redundant              -->
+<!--   "svg" is necessary to for Asymptote 3D images    -->
+<!--   "pi" is meant to mark private PreTeXt markup     -->
+<!--   "exsl" namespaces enable extension functions     -->
+<!--                                                    -->
+<!-- Excluding result prefixes keeps them from bleeding -->
+<!-- into output unnecessarily -->
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:svg="http://www.w3.org/2000/svg"
-    xmlns:b64="https://github.com/ilyakharlamov/xslt_base64"
+    xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:str="http://exslt.org/strings"
-    xmlns:pi="http://pretextbook.org/2020/pretext/internal"
-    exclude-result-prefixes="pi b64 svg"
+    exclude-result-prefixes="svg pi"
     extension-element-prefixes="exsl date str"
 >
 
