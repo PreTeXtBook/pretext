@@ -10,14 +10,11 @@
 <chapter xml:id="runestone">
     <title>Conversion to Runestone</title>
 
-    <introduction>
-        <p><url href="https://runestone.academy">Runestone Interactive</url><fn><c>runestone.academy</c></fn> is a textbook authoring and hosting system orginally designed for textbooks about computer science.  It is similar in design and goals to <pretext/>, but is also complementary in important ways.  In particular, Runestone provides textbook hosting and excels at providing very interactive versions where student work in the textbook can be graded (automatically or manually), scores recorded, and that information can be viewed by an instructor.</p>
-    </introduction>
+        <!-- indentation is off, for a clean commit as re-arranged -->
 
-    <section xml:id="runestone-build">
-        <title>A Runestone Build</title>
+        <p><url href="https://runestone.academy" visual="runestone.academy">Runestone Interactive</url> is a textbook authoring and hosting system orginally designed for textbooks about computer science.  It is similar in design and goals to <pretext/>, but is also complementary in important ways.  In particular, Runestone provides textbook hosting and excels at providing very interactive versions where student work in the textbook can be graded (automatically or manually), scores recorded, and that information can be viewed by an instructor.</p>
 
-        <p>Usual <pretext/> <init>HTML</init> output (<xref ref="online-html"/>) only needs minor modifications to run profitably on a Runestone server.  You accomplish this via a publisher option (<xref ref="publisher-file"/>).  The absolute simplest publisher file to accomplish this is<cd>
+        <p>The usual <pretext/> <init>HTML</init> output (<xref ref="online-html"/>) only needs minor modifications to run profitably on a Runestone server.  You accomplish this via a publisher option (<xref ref="publisher-file"/>).  The absolute simplest publisher file to accomplish this is<cd>
             <cline>&lt;publication&gt;</cline>
             <cline>  &lt;html&gt;</cline>
             <cline>    &lt;platform host="runestone"/&gt;</cline>
@@ -25,48 +22,15 @@
             <cline>&lt;/publication&gt;</cline>
         </cd>(See <xref ref="online-platform-options"/>.)  Then perform the usual conversion to online <init>HTML</init>, as described in <xref ref="online-html"/> but also include the publisher file via a string parameter.  The output should appear like a usual <pretext/> document, but will now include a new menu on each page.  This has options which allow a reader or instructor to interact with the server when hosted.</p>
 
-        <p>As of 2020-06-21 you need to add some files from Runestone to your local output, which will allow you to see some interactive features in action.  Here's the recipe.  (We will eventually automate this process.)<ol>
-            <li>Within your <init>HTML</init> output make a top-level directory named <c>_static</c>.  We will be populating this directory in the last step.</li>
-            <li>You will need to setup a virtual Pythion environment if you do not already have one (a one-time process) and then activate it.  We'll assume this environment is called <c>ptx</c>.  Instructions are at <xref ref="python-virtual"/>.</li>
-            <li>
-                <p>Obtain and install the Runestone Components library:<cd>
-                    <cline>(ptx) $ pip install runestone</cline>
-                </cd>This is the point of this exercise because this package contains the files we want.  But where are they?</p>
-            </li>
-            <li>Run Python interactively: <c>(ptx) $ python</c></li>
-            <li>
-                <p>Make a Python tool available:<cd>
-                    <cline>>>> from pkg_resources import resource_filename</cline>
-                </cd></p>
-            </li>
-            <li>
-                <p>You can now decipher where <c>pip</c> installed two files in your virtual environment as part of the <c>runestone</c> package:<cd>
-                    <cline>>>> resource_filename("runestone", "dist/runestone.js")</cline>
-                    <cline>>>> resource_filename("runestone", "common/js/jquery.idle-timer.js")</cline>
-                </cd>You should get some enormously long filenames back from each of these commands.  They should begin with your home/user directory, eventually include <c>virtual-python</c> (or whatever directory you used for virtual environments), followed immediately by <c>ptx</c>, a little while later <c>runestone</c>, and then finish with <c>runestone.js</c> or <c>jquery.idle-timer.js</c>.  This is the information we need.</p>
-            </li>
-            <li>Using the locations of these files from the previous step, copy each file into the <c>_static</c> directory you made at the start.</li>
-        </ol>Note: the two particular files necessary may change.  This is current as of 2020-07-15.</p>
-
-        <p>The above will build <init>HTML</init> output that can be hosted on a Runestone server.  But you may want to see a local version that provides some preview of what the output looks like and how it behaves.  Of course, many of the interactive features of the Runestone platform are also going to be missing.  To make a local version, use a string parameter (<xref ref="processing-publisher-stringparam"/>) on your <c>xsltproc</c> command line (in addition to the necessary publisher file):<cd>
-            <cline>xsltproc -stringparam runestone.dev yes -stringparam publisher rune.xml</cline>
-            <cline>    pretext-html.xsl aota.xml</cline>
-        </cd>Be sure to set this parameter to <c>no</c>, the default, when you are ready to build a version that will be hosted.  Or just remove it altogether.</p>
-    </section>
-
-    <section xml:id="runestone-features">
-        <title>Runestone Features</title>
-
-        <p>Runestone textbooks are designed around interactive activities and active reading.  We are just starting to expose these capabilities via <pretext/> markup, as of 2020-06-21.  So expect this list to expand, and feel free to influence priorities for new features.  Some of this is subject to change as we gain experience.<ul>
+        <p>Runestone textbooks are designed around interactive activities and active reading.  We are in the process of exposing these capabilities via <pretext/> markup, as of 2022-01-21.  So expect this list to expand, and feel free to influence priorities for new features.  Some of this is subject to change as we gain experience.<ul>
             <li>Every feature of <pretext/> <init>HTML</init> output should function identically on a Runestone server.</li>
             <li>Any <tag>exercise</tag> authored in a <pretext/> <tag>reading-questions</tag> division will automatically be rendered as a Runestone short answer question.  A student can use <latex/> notation in formulating their answer, and Runestone will provide the instructor an efficient interface for reviewing student responses, provide feedback, and assign scores.</li>
             <li>A <pretext/> <tag>program</tag> element with the attribute <attr>interactive</attr> set to <c>yes</c> will be realized as a Runestone ActiveCode element.  The <attr>language</attr> must also be set.  Supported values for the language are: <c>python</c>, <c>python2</c>, <c>python3</c>, <c>c</c>, <c>cpp (C++)</c>, <c>javascript</c>, <c>java</c>, <c>sql</c>, and <c>html</c>.</li>
             <li>More <pretext/> markup for exercises realized in a Runestone book is coming and will go here.</li>
-            <li>All Runestone exercises can be worked by a student at the location in the book where they were authored, or they may use the interface provided by the server to locate assigned problems disjoint from the text.</li>
+            <li>All of the exercises adapted automatically for Runestone (i.e. reading questions, programming exercises) can be worked by a student at the location in the book where they were authored, or a student may use the interface provided by the server to locate assigned problems, at a page disjoint from the text itself.</li>
             <li>Students and instructors are provided extensive reports on progress.</li>
             <li>Instructors may download a spreadsheet of scores at any time.</li>
         </ul></p>
 
-        <p>We will not attempt to duplicate Runestone's documentation here.  Visit the Runestone Academy site at <c>runestone.academy</c> to learn more.</p>
-    </section>
+        <p>We will not attempt to duplicate Runestone's documentation here.  Visit the <url href="https://runestone.academy" visual="runestone.academy">Runestone Academy</url> site to learn more.</p>
 </chapter>
