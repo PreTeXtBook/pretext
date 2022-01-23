@@ -329,6 +329,8 @@ def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
     # now work in temporary directory
     os.chdir(tmp_dir)
+    # and maintain a list of failures for later
+    failed_images = []
     # files *only*, from top-level
     files = list(filter(os.path.isfile, os.listdir(tmp_dir)))
     for latex_image in files:
@@ -351,7 +353,9 @@ def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_
             # causes captured output to be a string, which is convenient.
             result = subprocess.run(latex_cmd, stdout=subprocess.PIPE, encoding="utf-8")
             if result.returncode != 0:
-                # failed, so we help as much as we can
+                # failed
+                failed_images.append(latex_image)
+                # and we help as much as we can
                 msg = '\n'.join([
                     'PTX:ERROR:  LaTeX compilation of {} failed.',
                     'Re-run, requesting "source" as the format, to analyze the image.',
@@ -406,6 +410,16 @@ def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_
                     if not os.path.exists(latex_image_eps):
                         print('PTX:ERROR: There was a problem converting {} to eps and {} was not created'.format(latex_image_pdf,latex_image_eps))
                     shutil.copy2(latex_image_eps, dest_dir)
+    # raise an error if there were *any* failed images
+    if failed_images:
+        msg = '\n'.join([
+              'LaTeX compilation failed for {} "latex-image"(s).',
+              'Review the log for error messages, and LaTeX transcripts.',
+              'Images are:'
+              ]).format(len(failed_images))
+        # 2-space indentation
+        image_list = '\n  ' + '\n  '.join(failed_images)
+        raise ValueError(msg + image_list)
 
 
 #######################
