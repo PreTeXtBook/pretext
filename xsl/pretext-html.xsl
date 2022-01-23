@@ -2643,6 +2643,50 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- The next template, "heading-non-singleton-number", is basically    -->
+<!-- "heading-no-number" with an (optional) non-singleton number,       -->
+<!-- much like in "heading-simple".  If/Once "proof" gets a             -->
+<!-- non-singleton number then maybe "heading-no-number" can come here. -->
+
+<!-- A title or the type, with a period, and an optional number -->
+<!-- &SOLUTION-LIKE;, when unknowled, is the only known case    -->
+<xsl:template match="*" mode="heading-non-singleton-number">
+    <xsl:variable name="hN">
+        <xsl:apply-templates select="." mode="hN"/>
+    </xsl:variable>
+    <xsl:element name="{$hN}">
+        <xsl:attribute name="class">
+            <xsl:text>heading</xsl:text>
+        </xsl:attribute>
+        <xsl:choose>
+            <xsl:when test="title">
+                <!-- comes with punctuation -->
+                <span class="title">
+                    <xsl:apply-templates select="." mode="title-full"/>
+                </span>
+            </xsl:when>
+            <xsl:otherwise>
+                <span class="type">
+                    <xsl:apply-templates select="." mode="type-name" />
+                </span>
+                <xsl:variable name="the-number">
+                    <xsl:apply-templates select="." mode="non-singleton-number" />
+                </xsl:variable>
+                <!-- An empty value means element is a singleton -->
+                <!-- else the serial number comes through        -->
+                <xsl:if test="not($the-number = '')">
+                    <xsl:call-template name="space-styled"/>
+                    <span class="codenumber">
+                        <xsl:apply-templates select="." mode="serial-number" />
+                    </span>
+                </xsl:if>
+                <!-- supply a period -->
+                <xsl:call-template name="period-styled"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:element>
+</xsl:template>
+
 <!-- A case in a proof, eg "(=>) Necessity." -->
 <!-- case -->
 <xsl:template match="*" mode="heading-case">
