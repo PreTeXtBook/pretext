@@ -976,6 +976,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<xsl:variable name="knowl-example-solution">
+    <xsl:variable name="knowl-default" select="'yes'"/>
+    <xsl:choose>
+        <!-- observe publisher switch first -->
+        <xsl:when test="$publication/html/knowl/@example-solution">
+            <xsl:choose>
+                <xsl:when test="$publication/html/knowl/@example-solution = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/html/knowl/@example-solution = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "example-solution" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@example-solution"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
+                    <xsl:value-of select="$knowl-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- no attempt to set/manipulate, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$knowl-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <xsl:variable name="knowl-project">
     <xsl:variable name="knowl-default" select="'no'"/>
     <xsl:choose>
