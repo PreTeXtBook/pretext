@@ -678,56 +678,76 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- a separate stylesheet is used to define the template,  -->
         <!-- and the method is defined there.                       -->
         <xsl:apply-templates select="." mode="view-source-knowl"/>
+
+        <!-- This is usually recurrence, so increment heading-level,  -->
+        <!-- but "book" and "article" have an h1  masthead, so if     -->
+        <!-- this is the context, we just pass along the level of     -->
+        <!-- "2" which is supplied by the chunking templates          -->
+        <!-- N.B. the modal "solutions" templates increment           -->
+        <!--      $heading-level as "exercise" are produced, so       -->
+        <!--      we by-pass the increment here.                      -->
+        <xsl:variable name="next-level">
+            <xsl:choose>
+                <xsl:when test="self::book or self::article or self::solutions">
+                    <xsl:value-of select="$heading-level"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$heading-level + 1"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+
         <!-- Most divisions are a simple list of elements to be       -->
         <!-- processed in document order, once we handle metadata     -->
         <!-- properly, and also kill it so it is not caught up here.  -->
-        <!-- One exception: the "solutions" division has no children, -->
-        <!-- it just gets built (via a modal template so it does not  -->
-        <!-- come back through here).                                 -->
-        <!-- NB: *another exception* is "glossary" which is presumed  -->
-        <!-- to have a certain structure that is being enforced by    -->
-        <!-- the specificity of the templates                         -->
-        <!-- TODO: call some (modal) template that treats some        -->
-        <!-- divisions specially, but defaults to a generic           -->
-        <!-- application of templates to nodes.                       -->
-        <xsl:choose>
-            <xsl:when test="self::solutions">
-                <!-- this is not recurrence, do not increment heading-level -->
-                <xsl:apply-templates select="." mode="solutions">
-                    <xsl:with-param name="heading-level" select="$heading-level"/>
-                </xsl:apply-templates>
-            </xsl:when>
-            <!-- A glossary has a headnote, followed by a sequence  -->
-            <!-- of glossary items ('gi").  This could be the place -->
-            <!-- to get fancy and segment the entries with spacing  -->
-            <!-- by letter, or similar.                             -->
-            <xsl:when test="self::glossary">
-                <xsl:apply-templates select="headnote"/>
-                <dl class="glossary">
-                    <xsl:apply-templates select="gi"/>
-                </dl>
-            </xsl:when>
-            <xsl:otherwise>
-                <!-- this is usually recurrence, so increment heading-level, -->
-                <!-- but "book" and "article" have an h1  masthead, so if    -->
-                <!-- this is the context, we just pass along the level of    -->
-                <!-- "2" which is supplied by the chunking templates         -->
-                <xsl:variable name="next-level">
-                    <xsl:choose>
-                        <xsl:when test="self::book or self::article">
-                            <xsl:value-of select="$heading-level"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="$heading-level + 1"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:variable>
-                <xsl:apply-templates>
-                    <xsl:with-param name="heading-level" select="$next-level"/>
-                </xsl:apply-templates>
-            </xsl:otherwise>
-        </xsl:choose>
+        <!-- So the "inner-content" template just processes children  -->
+        <!-- in document order.  Exceptions are:                      -->
+        <!--   "solutions": no children, so built via a constructive  -->
+        <!--                modal template                            -->
+        <!--   "glossary": is presumed to have a very specific        -->
+        <!--               structure which requires elements          -->
+        <!--               at the division level                      -->
+
+        <xsl:apply-templates select="." mode="structural-division-inner-content">
+            <xsl:with-param name="heading-level" select="$next-level"/>
+        </xsl:apply-templates>
     </section>
+</xsl:template>
+
+<!-- A glossary has a headnote, followed by a sequence  -->
+<!-- of glossary items ('gi").  This could be the place -->
+<!-- to get fancy and segment the entries with spacing  -->
+<!-- by letter, or similar. Terminal (as a specialized  -->
+<!-- division) and the  $heading-level  affects nothing -->
+<xsl:template match="glossary" mode="structural-division-inner-content">
+    <xsl:param name="heading-level"/>
+
+    <xsl:apply-templates select="headnote"/>
+    <dl class="glossary">
+        <xsl:apply-templates select="gi"/>
+    </dl>
+</xsl:template>
+
+<!-- A "solutions" specialized division does not have any children -->
+<!-- at all, it gets built by mining content from other places     -->
+<xsl:template match="solutions" mode="structural-division-inner-content">
+    <xsl:param name="heading-level"/>
+
+    <xsl:apply-templates select="." mode="solutions">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- Only &STRUCTURAL; elements will pass through here, but we -->
+<!-- can't limit the match (without explicit exclusions), this -->
+<!-- is the default.  Which is to just apply templates to      -->
+<!-- elements within the division.                             -->
+<xsl:template match="*" mode="structural-division-inner-content">
+    <xsl:param name="heading-level"/>
+
+    <xsl:apply-templates select="*">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Worksheets generate two additional versions, each -->
