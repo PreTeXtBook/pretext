@@ -4543,7 +4543,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
             <!-- no  div.solutions  if there is nothing to go into it -->
             <xsl:if test="(hint and $b-has-hint) or (answer and $b-has-answer) or (solution and $b-has-solution)">
-                <div class="solutions">
+                <!-- collect all the hint, answer, solution in a variable -->
+                <xsl:variable name="all-solutions">
                     <xsl:if test="$b-has-hint">
                         <xsl:apply-templates select="hint">
                             <xsl:with-param name="b-original" select="$b-original" />
@@ -4562,6 +4563,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:with-param name="block-type" select="$block-type"/>
                         </xsl:apply-templates>
                     </xsl:if>
+                </xsl:variable>
+                <div class="solutions">
+                    <xsl:copy-of select="$all-solutions"/>
                 </div>
             </xsl:if>
             <!-- optionally, an indication of workspace -->
