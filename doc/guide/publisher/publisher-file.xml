@@ -225,7 +225,7 @@
                 <cline>&lt;knowl remark="yes"/&gt;</cline>
             </cd>would make every <q>remark-like</q> element occur as a knowl where the content is first introduced.  Note that these are distinctly different than cross-reference knowls.  For more detail see <xref ref="knowled-content"/>.</p>
 
-            <p>This table gives the various attribute names, the default value, and an indication of the elements affected.  Note that some items are automatically born knowled (e.g. footnotes) and so there is no option to control that behavior.  Also, items such as <tag>figure</tag>, when included in a <tag>sidebyside</tag> are not influenced by the relevant option and are not born knowled.</p>
+            <p>This table gives the various attribute names, the default value, and an indication of the elements affected.  Note that some items are automatically born knowled (e.g. footnotes) and so there is no option to control that behavior.  Also, items such as <tag>figure</tag>, when included in a <tag>sidebyside</tag> are not influenced by the relevant option and are not born knowled.  There are four flavors of <tag>exercise</tag> and so four options.  A <tag>hint</tag>, <tag>answer</tag>, or <tag>solution</tag> is automatically knowled as a plot-spoiler where the author is expecting the reader to do something.  In contrast, an <q>example-like</q> is expository, so the knowlization is configurable.</p>
 
             <table>
                 <title>Knowlization options</title>
@@ -258,6 +258,12 @@
                         <cell><c>example</c></cell>
                         <cell><c>yes</c></cell>
                         <cell><tag>example</tag>, <tag>problem</tag>, <ellipsis/></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>example-solution</c></cell>
+                        <cell><c>yes</c></cell>
+                        <cell><tag>hint</tag>, <tag>answer</tag>, <tag>solution</tag></cell>
                     </row>
                     <!--  -->
                     <row>
