@@ -4484,7 +4484,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Always born-hidden, by design -->
 <xsl:template match="&SOLUTION-LIKE;" mode="is-hidden">
-    <xsl:text>true</xsl:text>
+    <xsl:choose>
+        <xsl:when test="($knowl-example-solution = 'no') and ancestor::*[&EXAMPLE-FILTER;]">
+            <xsl:text>false</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>true</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Overall enclosing element -->
@@ -4505,7 +4512,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- When born use this heading -->
 <xsl:template match="&SOLUTION-LIKE;" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-simple" />
+    <xsl:choose>
+        <xsl:when test="($knowl-example-solution = 'no') and ancestor::*[&EXAMPLE-FILTER;]">
+            <xsl:apply-templates select="." mode="heading-non-singleton-number"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="heading-simple"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
@@ -4608,9 +4622,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:apply-templates>
                     </xsl:if>
                 </xsl:variable>
-                <div class="solutions">
-                    <xsl:copy-of select="$all-solutions"/>
-                </div>
+                <!-- If this is an EXAMPLE-LIKE and we are unknowling its solutions,   -->
+                <!-- then just show them.  Otherwise, we use a div to layout knowls    -->
+                <!-- like a sentence: horiziontal flow, with wrapping.                 -->
+                <!-- NB: context here could be an EXAMPLE-LIKE or it might be a "task" -->
+                <!-- with an EXAMPLE-LIKE ancestor, thus the ancestor-or-self:: axis   -->
+                <xsl:choose>
+                    <xsl:when test="($knowl-example-solution = 'no') and ancestor-or-self::*[&EXAMPLE-FILTER;]">
+                        <xsl:copy-of select="$all-solutions"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <div class="solutions">
+                            <xsl:copy-of select="$all-solutions"/>
+                        </div>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:if>
             <!-- optionally, an indication of workspace -->
             <!-- for a print version of a worksheet     -->
