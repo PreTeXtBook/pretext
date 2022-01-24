@@ -101,18 +101,18 @@
 }
 
 /* next two groups concern accessibility, so check when making changes */
-.pretext-content a.internal {
+.pretext-content p > a.internal {
     color: var(--bodytitle);
 }
-.pretext-content a.external {
+.pretext-content p > a.external {
     color: var(--bodysubtitle);
 }
-.pretext-content a.internal:hover, .pretext-content a.internal:hover *,
-.pretext-content a.internal:focus, .pretext-content a.internal:focus * {
+.pretext-content p > a.internal:hover, .pretext-content p > a.internal:hover *,
+.pretext-content p > a.internal:focus, .pretext-content p > a.internal:focus * {
     background-color: var(--bodytitlehighlight);
 }
-.pretext-content a.external:hover, .pretext-content a.external:hover *,
-.pretext-content a.external:focus, .pretext-content a.external:focus * {
+.pretext-content p > a.external:hover, .pretext-content p > a.external:hover *,
+.pretext-content p > a.external:focus, .pretext-content p > a.external:focus * {
     background-color: var(--bodysubtitlehighlight);
 }
 

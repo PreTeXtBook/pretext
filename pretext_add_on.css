@@ -3180,13 +3180,15 @@ body.standalone.worksheet .pretext-content section.worksheet > .heading + p {
 }
 
 /* move to the color file(s) and figure out next comment */
+/*
 .pretext-content a.internal {
     color: #900;
 }
 .pretext-content a.internal:hover {
     background-color: #ddf;
 }
-/* check whether class="ulr" under Endnotes in pretext-epub.xsl can be
+*/
+/* check whether class="url" under Endnotes in pretext-epub.xsl can be
    changed to class = "external"*/
 .pretext-content a.url,
 .pretext-content a.external {
@@ -3197,12 +3199,14 @@ body.standalone.worksheet .pretext-content section.worksheet > .heading + p {
     background: #ffd;
 }
 
+/*
 .pretext-content a.internal:hover,
 .pretext-content a.external:hover,
 .pretext-content a.internal:focus,
 .pretext-content a.external:focus {
     text-decoration: underline;
 }
+*/
 
 /* style for poems */
 
