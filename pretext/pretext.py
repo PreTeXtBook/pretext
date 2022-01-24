@@ -2254,7 +2254,8 @@ def get_executable_cmd(exec_name):
     if normalized_exec == None:
         error_messages += [
             'PTX:ERROR: cannot locate executable with configuration name `{}` as command `{}`'.format(exec_name, config_cmd_line[0]),
-            '*** Edit the configuration file and/or install the necessary program ***'
+            '***  Edit the configuration file  ("pretext.cfg" or "project.ptx") and/or install  ***',
+            '***  the necessary program and/or make sure the executable is on your PATH         ***'
         ]
     if config_cmd_line[0] == "pdfcrop":
         error_messages += [
