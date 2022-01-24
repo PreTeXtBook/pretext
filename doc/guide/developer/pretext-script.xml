@@ -12,7 +12,9 @@
     <idx><c>pretext</c> script</idx>
 
     <introduction>
-        <p><init>XSL</init> is a very powerful language for text processing.  However, it cannot do everything.  The <c>pretext/pretext</c> script is a Swiss Army Knife of sorts to operate on parts of your document and manage processing that requires the application of external programs, such as <latex/> and Sage.  It can also produce entire documents in different output formats.</p>
+        <p>Note that this <em>entire chapter</em> documents a lower-level tool for producing output from <pretext/> source.  Most authors and publishers should be using the <pretext/>-CLI, see <xref ref="processing"/>.</p>
+
+        <p><init>XSL</init> is a very powerful language for text processing.  However, it cannot do everything.  The <c>pretext/pretext</c> script is a Swiss Army Knife of sorts to operate on parts of your document and manage processing that requires the application of external programs, such as <latex/> and Sage.  It can also produce entire documents in different output formats.  Its principal routines are shared with the <pretext/>-CLI.</p>
     </introduction>
 
     <section xml:id="pretext-executing">

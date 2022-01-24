@@ -22,17 +22,17 @@
             <ol>
                 <li>
                     <p>
-                        The <pretext />-CLI: very easy and friendly, but somewhat limited in customization.  Requires Python 3.8 or later.
+                        The <pretext/>-CLI: very easy and friendly, but somewhat limited in customization.  Requires Python 3.8 or later.  Documentation appears here shortly, and throughout the Guide as needed.
                     </p>
                 </li>
                 <li>
                     <p>
-                        The <pretext /> script: a python script that has a variety of utilities to process your source.  Requires Python 3.7 or later.
+                        The <pretext/> script: a Python script that has a variety of utilities to process your source.  Requires Python 3.6 or later.  In rare cases this may be needed to test new features that have not yet been exposed in the <pretext/>-CLI.  See <xref ref="pretext-script"/>.
                     </p>
                 </li>
                 <li>
                     <p>
-                        <c>xsltproc</c>: an executable program that directly converts <init>XML</init> using a specified XSL file.  Requires <c>xsltproc</c>, which is easily available on Linux and MacOS, but harder to install on Windows.
+                        <c>xsltproc</c>: an executable program that directly converts <init>XML</init> using a specified XSL file.  Requires <c>xsltproc</c>, which is easily available on Linux and MacOS, but harder to install on Windows.  Demonstrations of use in this Guide are being phased-out.
                     </p>
                 </li>
             </ol>
