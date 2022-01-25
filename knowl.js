@@ -213,8 +213,6 @@ function knowl_click_handler($el) {
    } else {
      if (mjvers < 3) {
        $knowl.addClass("processing");
-//     $(".knowl-output .hidden-sagecell-sage").attr("class", "sagecell-sage");
-//     sagecell.makeSagecell({inputLocation: ".sagecell-sage"});
        MathJax.Hub.Queue(['Typeset', MathJax.Hub, $output.get(0)]);
        MathJax.Hub.Queue([ function() {
        $knowl.removeClass("processing");
@@ -234,11 +232,6 @@ function knowl_click_handler($el) {
         knowl_focus_stack.push($el);
         $("a[data-knowl]").attr("href", "");
         }]);
-// if this is before the MathJax, big problems
-//        $(".knowl-output .hidden-content .hidden-sagecell-sage").attr("class", "doubly-hidden-sagecell-sage");
-//        $(".knowl-output .hidden-sagecell-sage").attr("class", "sagecell-sage");
-//        sagecell.makeSagecell({inputLocation: ".sagecell-sage",  linked: true, evalButtonText: sagecellEvalName});
-//        $(".knowl-output .hidden-content .doubly-hidden-sagecell-sage").attr("class", "hidden-sagecell-sage");
      } else if (mjvers > 3) {
        console.log("processing for MJ3");
        $knowl.addClass("processing");
