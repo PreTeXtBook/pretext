@@ -320,7 +320,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- do not want to manipulate.  So leave unadulterated, -->
                 <!-- anything goes, and process normally (i.e. not a     -->
                 <!-- tactile version).                                   -->
+                <!-- NB: this spurious box is designed to make           -->
+                <!-- processing here match more closely what happens in  -->
+                <!-- a PDF build, where an image is scrunched into a     -->
+                <!-- functional resizing box of given width and          -->
+                <!-- preserved aspect-ratio.                             -->
+                <xsl:text>\resizebox{\width}{\height}{&#xa;</xsl:text>
                 <xsl:value-of select="$the-latex-image"/>
+                <xsl:text>}&#xa;</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
         <xsl:text>\end{document}&#xa;</xsl:text>
