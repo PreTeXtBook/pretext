@@ -593,7 +593,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="url" />
     </xsl:variable>
     <li>
-        <a href="{$url}">
+        <a href="{$url}" class="internal">
             <!-- do not include an empty codenumber span -->
             <xsl:if test="not($num = '')">
                 <span class="codenumber">
@@ -11837,6 +11837,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:attribute name="data-scroll">
                             <xsl:value-of select="$outer-pid" />
                         </xsl:attribute>
+                        <xsl:attribute name="class">
+                            <xsl:text>internal</xsl:text>
+                        </xsl:attribute>
                         <xsl:variable name="num"><xsl:apply-templates select="." mode="number" /></xsl:variable>
                         <xsl:if test="$num!=''">
                             <span class="codenumber">
@@ -11877,6 +11880,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                         </xsl:attribute>
                                         <xsl:attribute name="data-scroll">
                                             <xsl:value-of select="$inner-pid" />
+                                        </xsl:attribute>
+                                        <xsl:attribute name="class">
+                                            <xsl:text>internal</xsl:text>
                                         </xsl:attribute>
                                         <!-- Add if an "active" class if this is where we are -->
                                         <xsl:if test="count($this-page-node|$inner-node) = 1">
