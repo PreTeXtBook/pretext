@@ -85,7 +85,7 @@ def get_output_file(file_path):
     # else leave unspecified
     return None
 
-def get_destination_directory(directory):
+def get_destination_directory(directory, xml_source, pub_file, component):
     """Check and expand provided directory, or return current working directory"""
     import os # getcwd
 
@@ -317,15 +317,6 @@ def main():
     # The "get" will report 'executables' in configuration file
     ptx.set_executables(get_executables(args.config_file))
 
-    # directory/file locations provided on command-line by user
-    # Expanded here to be complete paths, or set to defaults
-    # output file expanded; if not specified, then no
-    # natural default, so could be left undefined (None)
-    # We don't assume it exists, it is being created
-    out_file = get_output_file(args.out)
-    # output directory: CLI switch or default to cwd
-    # must exist first if given, return value always exists
-    dest_dir = get_destination_directory(args.dir)
     # check and sanitize XML source, presumed to exiast
     xml_source = verify_input_file(args.xml_file, 'source')
     # data directory is optional, so allow for None here
@@ -343,6 +334,15 @@ def main():
         extra_stylesheet = verify_input_file(args.extra_stylesheet, 'stylesheet')
     else:
         extra_stylesheet = None
+    # directory/file locations provided on command-line by user
+    # Expanded here to be complete paths, or set to defaults
+    # output file expanded; if not specified, then no
+    # natural default, so could be left undefined (None)
+    # We don't assume it exists, it is being created
+    out_file = get_output_file(args.out)
+    # output directory: CLI switch or default to cwd
+    # must exist first if given, return value always exists
+    dest_dir = get_destination_directory(args.dir, xml_source, publisher_file, args.component)
     # method may not be required, but when it may apply we use a
     # routine to error-check and sanitize possible values and defaults
     # varies by component and format
