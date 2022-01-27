@@ -87,12 +87,43 @@ def get_output_file(file_path):
 
 def get_destination_directory(directory, xml_source, pub_file, component):
     """Check and expand provided directory, or return current working directory"""
-    import os # getcwd
+    import os # getcwd(), mkdir()
+    import os.path # join()
 
+    # directory names presumed within "generated" directory of
+    # the managed directories scheme, indexed by the "component",
+    # simply listed here in alphabetical order
+    component_dirs = {
+                        'asy':'asymptote',
+                        'latex-image':'latex-image',
+                        'mom':'problems',
+                        'preview':'preview',
+                        'sageplot':'sageplot',
+                        'youtube':'youtube',
+                      }
     # if specified, check, sanitize, return absolute path
     if directory:
         return ptx.verify_input_directory(directory)
-    # else default to current directory
+    # explore a default provided by the  managed directories
+    # scheme, as specified in the publication file.  "generated"
+    # will be sanitized as an absolute path, so we run with it
+    generated, _ = ptx.get_managed_directories(xml_source, pub_file)
+    # generated is "None" means publisher has not
+    #   opted-in for managed directories
+    # "missing" key means we are not creating a component
+    #   with pieces distributed to directories
+    if generated and (component in component_dirs):
+        # generally the component directory already exists (so the
+        # error does not concern us), but we create the directory the
+        # first time it is filled as part of a *managed* scheme
+        subdirectory = os.path.join(generated, component_dirs[component])
+        try:
+            os.mkdir(subdirectory)
+        except FileExistsError:
+            pass
+        # good - we've formed it and ensured it exists - ship it and finish
+        return subdirectory
+    # else, absent managed directories, default to current working directory
     return os.getcwd()
 
 def string_parameters_as_dict(pairs):
@@ -266,7 +297,7 @@ def get_cli_arguments():
     # recognize this switch, but only warn later that it is being ignored
     parser.add_argument('-i', '--include', help='external data directory, deprecated 2021-07-26, IGNORED', action="store", dest='data_dir')
     parser.add_argument('-o', '--output', help='file for output (supersedes -d)', action="store", dest='out')
-    parser.add_argument('-d', '--directory', help='directory for output, defaults to current directory', action="store", dest='dir')
+    parser.add_argument('-d', '--directory', help='directory for output, defaults to managed directories from publication file\nfor components with multiple outputs, else current directory', action="store", dest='dir')
     parser.add_argument('-a', '--abort', help='abort script upon recoverable errors', action="store_true", dest='abort')
 
     parser.add_argument('xml_file', help='PreTeXt source file with content', action="store")
