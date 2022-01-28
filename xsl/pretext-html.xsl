@@ -497,8 +497,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <html>
             <xsl:text>&#xa;</xsl:text>
             <xsl:call-template name="converter-blurb-html" />
-            <head>
+            <!-- Open Graph Protocol only in "meta" elements, within "head" -->
+            <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
                 <meta http-equiv="refresh" content="0; URL='{$html-index-page}'" />
+                <!-- more "meta" elements for discovery -->
+                <xsl:call-template name="open-graph-info"/>
             </head>
             <!-- body is non-existent, i.e. empty -->
             <body/>
@@ -6763,7 +6766,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exsl:document href="{$filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
         <xsl:call-template name="converter-blurb-html" />
         <html lang="{$document-language}"> <!-- dir="rtl" here -->
-            <head>
+            <!-- Open Graph Protocol only in "meta" elements, within "head" -->
+            <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
                 <title>
                     <!-- Leading with initials is useful for small tabs -->
                     <xsl:if test="$docinfo/initialism">
@@ -6773,6 +6777,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="." mode="title-plain" />
                 </title>
                 <meta name="Keywords" content="Authored in PreTeXt" />
+                <!-- more "meta" elements for discovery -->
+                <xsl:call-template name="open-graph-info"/>
                 <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
                 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
                 <!-- ########################################## -->
@@ -10878,7 +10884,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exsl:document href="{$the-filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
     <xsl:call-template name="converter-blurb-html" />
     <html lang="{$document-language}"> <!-- dir="rtl" here -->
-        <head>
+        <!-- Open Graph Protocol only in "meta" elements, within "head" -->
+        <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
             <title>
                 <!-- Leading with initials is useful for small tabs -->
                 <xsl:if test="$docinfo/initialism">
@@ -10890,6 +10897,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <meta name="Keywords" content="Authored in PreTeXt" />
             <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <!-- more "meta" elements for discovery -->
+            <xsl:call-template name="open-graph-info"/>
             <!-- favicon -->
             <xsl:call-template name="favicon"/>
             <!-- jquery used by sage, webwork, knowls -->
@@ -11015,10 +11024,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exsl:document href="{$filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
     <xsl:call-template name="converter-blurb-html" />
     <html lang="{$document-language}"> <!-- dir="rtl" here -->
-        <head>
+        <!-- Open Graph Protocol only in "meta" elements, within "head" -->
+        <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
             <meta name="Keywords" content="Authored in PreTeXt" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
+            <!-- more "meta" elements for discovery -->
+            <xsl:call-template name="open-graph-info"/>
             <!-- jquery used by sage, webwork, knowls -->
             <xsl:call-template name="sagecell-code" />
             <xsl:call-template name="mathjax" />
@@ -11063,6 +11074,92 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
     </xsl:if>
 </xsl:template>
+
+<!-- ################### -->
+<!-- Page Identification -->
+<!-- ################### -->
+
+<!-- Open Graph Protocol, advertise to Facebook, others       -->
+<!-- https://ogp.me/                                          -->
+<!-- https://developers.facebook.com/docs/sharing/webmasters/ -->
+<!-- https://webcode.tools/generators/open-graph/book         -->
+<!-- NB not used for EPUB nor Jupyter (could be in RevealJS?) -->
+
+<xsl:template name="open-graph-info">
+    <!-- og:type - book, article, or missing -->
+    <xsl:if test="$b-is-article or $b-is-book">
+        <xsl:call-template name="open-graph-meta-element">
+            <xsl:with-param name="namespace" select="'og'"/>
+            <xsl:with-param name="property" select="'type'"/>
+            <xsl:with-param name="content">
+                <xsl:choose>
+                    <xsl:when test="$b-is-book">
+                        <xsl:text>book</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="$b-is-article">
+                        <xsl:text>article</xsl:text>
+                    </xsl:when>
+                </xsl:choose>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
+    <!-- og:image - if it's URL can be constructed -->
+    <xsl:if test="not($baseurl = '') and $docinfo/brandlogo">
+        <xsl:call-template name="open-graph-meta-element">
+            <xsl:with-param name="namespace" select="'og'"/>
+            <xsl:with-param name="property" select="'image'"/>
+            <!-- URL = baseurl + external + @source -->
+            <xsl:with-param name="content">
+                <!-- empty when not using managed directories -->
+                <xsl:value-of select="$baseurl"/>
+                <xsl:value-of select="$external-directory"/>
+                <xsl:value-of select="$docinfo/brandlogo/@source"/>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
+    <!-- book:title (always exactly one)-->
+    <xsl:if test="$b-is-book">
+        <xsl:call-template name="open-graph-meta-element">
+            <xsl:with-param name="namespace" select="'book'"/>
+            <xsl:with-param name="property" select="'title'"/>
+            <xsl:with-param name="content">
+                <xsl:apply-templates select="$document-root" mode="title-plain"/>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
+    <!-- book:author (allow for multiple) -->
+    <xsl:if test="$b-is-book">
+        <xsl:for-each select="$document-root/frontmatter/titlepage/author">
+            <xsl:call-template name="open-graph-meta-element">
+                <xsl:with-param name="namespace" select="'book'"/>
+                <xsl:with-param name="property" select="'author'"/>
+                <xsl:with-param name="content">
+                    <xsl:value-of select="personname"/>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:for-each>
+    </xsl:if>
+    <!--  -->
+</xsl:template>
+
+<xsl:template name="open-graph-meta-element">
+    <xsl:param name="namespace"/>
+    <xsl:param name="property"/>
+    <xsl:param name="content"/>
+    <meta>
+        <xsl:attribute name="property">
+            <xsl:value-of select="$namespace"/>
+            <xsl:text>:</xsl:text>
+            <xsl:value-of select="$property"/>
+        </xsl:attribute>
+        <xsl:attribute name="content">
+            <xsl:value-of select="$content"/>
+        </xsl:attribute>
+    </meta>
+</xsl:template>
+
 
 <!-- ################# -->
 <!-- Navigational Aids -->
