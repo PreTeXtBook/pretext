@@ -3904,6 +3904,7 @@ Book (with parts), "section" at level 3
 
 <!-- Plain title: motivation is browser tabs without extensive -->
 <!-- MathJax markup around (little bits) of mathematics        -->
+<!-- Also used for <meta> in HTML carrying identification      -->
 <xsl:template match="*" mode="title-plain">
     <xsl:variable name="default-exists">
         <xsl:apply-templates select="." mode="has-default-title" />
@@ -3933,6 +3934,23 @@ Book (with parts), "section" at level 3
 <!-- substitutions, such as "\delta" -> "δ" (U+03B4)        -->
 <xsl:template match="m" mode="plain-title-edit">
     <xsl:value-of select="."/>
+</xsl:template>
+
+<!-- We dumb-down quotation marks to "straight" ASCII. -->
+<!-- These behave well in output as attribute values,  -->
+<!-- the HTML serialization seems "smart" enough to    -->
+<!-- escape properly, even when both typesare present. -->
+
+<xsl:template match="q" mode="plain-title-edit">
+    <xsl:text>"</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>"</xsl:text>
+</xsl:template>
+
+<xsl:template match="sq" mode="plain-title-edit">
+    <xsl:text>'</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>'</xsl:text>
 </xsl:template>
 
 <!-- Return processing to defaults for most elements of titles -->
