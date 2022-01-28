@@ -2217,6 +2217,26 @@ a.mjx-svg-href  {
     border-left: 1em solid #eeeeee;
 }
 
+.pretext-content article.example-like > .solution-like,
+.pretext-content article.exercise-like > .solution-like {
+    margin-top: 1.0em;
+    padding-left: 0.7em;
+}
+.pretext-content article.example-like > .solution-like > .heading,
+.pretext-content article.exercise-like > .solution-like > .heading {
+    font-size: 100%;
+    font-weight: 700;
+    margin-right: 0.25em;
+    display: inline;
+}
+.pretext-content article.example-like > .solution-like > .heading + p,
+.pretext-content article.exercise-like > .solution-like > .heading + p {
+    display: inline;
+}
+
+
+
+
 /* these were taken from the local add-on.css.
  * need to check if the are needed.
  */
