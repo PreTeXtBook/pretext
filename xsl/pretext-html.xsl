@@ -11083,6 +11083,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- https://ogp.me/                                          -->
 <!-- https://developers.facebook.com/docs/sharing/webmasters/ -->
 <!-- https://webcode.tools/generators/open-graph/book         -->
+<!-- Sanity-check live instance: https://opengraphcheck.com/  -->
 <!-- NB not used for EPUB nor Jupyter (could be in RevealJS?) -->
 
 <xsl:template name="open-graph-info">
