@@ -156,6 +156,19 @@ def sanitize_method(method, component, format):
         # set correctly
         else:
             return method
+    elif ((component == 'all') and (format == 'pdf')) or (component == 'latex-image'):
+        # we will arbitrarily set xelatex as the default
+        if not(method):
+            return 'xelatex'
+        # set, but illegal
+        elif not(method in ['pdflatex', 'xelatex']):
+            msg = '\n'.join(['PTX:WARNING: the method given for the "{}" component and format "{}" ("{}") is not "pdflatex" or "xelatex",',
+                             '             so using the default method instead ("xelatex")'])
+            print(msg.format(component, format, method))
+            return 'xelatex'
+        # set correctly
+        else:
+            return method
     # inappropriate attempt to use this argument
     elif method:
         msg = ''.join(['PTX:WARNING: the method "{}" is not applicable for ',
@@ -240,14 +253,14 @@ def get_cli_arguments():
     component_info = [
         ('asy', 'Asymptote diagrams (method: [server], local)'),
         ('sageplot', 'Sage graphics'),
-        ('latex-image', 'LaTeX pictures'),
+        ('latex-image', 'LaTeX pictures (method: [xelatex], pdflatex)'),
         ('webwork', 'WeBWorK problems in authored, PG, url, and static representations'),
         ('pg-macros', 'Server-side macros for WeBWorK problem generation'),
         ('youtube', 'Thumbnails for YouTube videos (JPEG only)'),
         ('preview', 'Static preview images for interactives'),
         ('mom', 'MyOpenMath problem files, static versions'),
         ('math', 'Math elements for MathJax conversion (only)'),
-        ('all', 'Complete document (in various formats)'),
+        ('all', 'Complete document (in various formats) (for pdf, method: [xelatex], pdflatex)'),
         ('tikz', 'tikz pictures (removed, use latex-image)'),
     ]
     component_help = 'Possible components are:\n' + '\n'.join(['  {} - {}'.format(info[0], info[1]) for info in component_info])
@@ -403,7 +416,7 @@ def main():
             raise NotImplementedError('cannot make Sage graphics in "{}" format'.format(args.format))
     elif args.component == 'latex-image':
         if args.format in ['pdf', 'svg', 'png', 'eps', 'source', 'all']:
-            ptx.latex_image_conversion(xml_source, publisher_file, stringparams, args.xmlid, dest_dir, args.format)
+            ptx.latex_image_conversion(xml_source, publisher_file, stringparams, args.xmlid, dest_dir, args.format, method)
         elif args.format in ['tactile']:
             ptx.latex_tactile_image_conversion(xml_source, publisher_file, stringparams, dest_dir, args.format)
         else:
@@ -434,7 +447,7 @@ def main():
             # no "subtree root" build is possible
             ptx.html(xml_source, publisher_file, stringparams, None, 'zip', extra_stylesheet, out_file, dest_dir)
         elif args.format == 'pdf':
-            ptx.pdf(xml_source, publisher_file, stringparams, extra_stylesheet, out_file, dest_dir)
+            ptx.pdf(xml_source, publisher_file, stringparams, extra_stylesheet, out_file, dest_dir, method)
         elif args.format == 'latex':
             ptx.latex(xml_source, publisher_file, stringparams, extra_stylesheet, out_file, dest_dir)
         elif args.format == 'braille-emboss':
