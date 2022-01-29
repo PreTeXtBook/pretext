@@ -2068,6 +2068,32 @@ the xsltproc executable.
                 <p>xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx <m>x</m>.</p>
             </subsection>
 
+            <subsection xml:id="font-math">
+                <title>Fonts and Mathematics</title>
+
+                <p>This section is about testing types and sizes of fonts, not so much about using different typefaces.  First, one long displayed equation, which is designed to be full-width for <latex/> output when using defaults as of 2020-01-29 (commit <c>defd4bffd462e7ea</c>).</p>
+
+                <p>Start paragraph.<me>a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2</me>End paragraph.</p>
+
+                <p>The next paragraph has five ways to write the sine of <m>x</m>, bracketed by plain text versions.  This tests font size and the fonts employed.  The raw source of this paragraph is (spread over two lines)<cd>
+                    <cline>sin x | &lt;m&gt;\sin x&lt;/m&gt; | &lt;m&gt;\text{sin}\ x&lt;/m&gt; | &lt;m&gt;\mathrm{sin}\ x&lt;/m&gt; |</cline>
+                    <cline>&lt;m&gt;\text{sin}x&lt;/m&gt; | &lt;m&gt;sin x&lt;/m&gt; | sin x</cline>
+                </cd>  The five ways, from good to bad,<ol>
+                    <li>The best way, using  <c>\sin</c>.  Note the distance to the <m>x</m>.</li>
+                    <li>With a <c>\text{}</c> macro.</li>
+                    <li>With a <c>\mathrm{}</c> macro.  Not recommended for <pretext/>.</li>
+                    <li>Without a space.  Note that the previous two require explicit spacing.</li>
+                    <li>No extra effort, so <latex/> renders as a product of four variables.</li>
+                </ol></p>
+
+                <p>sin x | <m>\sin x</m> | <m>\text{sin}\ x</m> | <m>\mathrm{sin}\ x</m>  | <m>\text{sin}x</m> | <m>sin x</m> | sin x</p>
+
+                <p>Finally a simple paragraph that places a text <q>x</q> next to a variable <q>x</q>.</p>
+
+                <p>wordxx<m>x+x</m>xxword</p>
+
+            </subsection>
+
             <subsection xml:id="miscellaneous-math">
                 <title>Miscellaneous</title>
 
