@@ -12445,23 +12445,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Knowl header -->
 <xsl:template name="knowl">
-    <script src="{$html.js.server}/js/lib/knowl.js"></script>
-    <!-- Variables are defined to defaults in knowl.js and  -->
-    <!-- we can override them with new values here          -->
-    <xsl:comment>knowl.js code controls Sage Cells within knowls</xsl:comment>
-    <script>
-        <!-- button text, internationalized -->
-        <xsl:text>sagecellEvalName='</xsl:text>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'evaluate'" />
-        </xsl:call-template>
-        <xsl:text> (</xsl:text>
-        <!-- $language-text hard-coded since language  -->
-        <!-- support within knowls is not yet settled -->
-        <xsl:text>Sage</xsl:text>
-        <xsl:text>)</xsl:text>
-        <xsl:text>';&#xa;</xsl:text>
-    </script>
+    <xsl:if test="not($b-debug-react)">
+        <script src="{$html.js.server}/js/lib/knowl.js"></script>
+        <!-- Variables are defined to defaults in knowl.js and  -->
+        <!-- we can override them with new values here          -->
+        <xsl:comment>knowl.js code controls Sage Cells within knowls</xsl:comment>
+        <script>
+            <!-- button text, internationalized -->
+            <xsl:text>sagecellEvalName='</xsl:text>
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'evaluate'" />
+            </xsl:call-template>
+            <xsl:text> (</xsl:text>
+            <!-- $language-text hard-coded since language  -->
+            <!-- support within knowls is not yet settled -->
+            <xsl:text>Sage</xsl:text>
+            <xsl:text>)</xsl:text>
+            <xsl:text>';&#xa;</xsl:text>
+        </script>
+    </xsl:if>
 </xsl:template>
 
 <!-- Header information for favicon -->
