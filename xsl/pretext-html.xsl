@@ -343,6 +343,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$original" mode="deprecation-warnings"/>
     <!-- Usually no manifest is created -->
     <xsl:call-template name="runestone-manifest"/>
+    <!-- A structured Table of Contents for a React app approach -->
+    <xsl:call-template name="doc-manifest"/>
     <!-- The main event                          -->
     <!-- We process the enhanced source pointed  -->
     <!-- to by $root at  /mathbook  or  /pretext -->
@@ -12005,6 +12007,53 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:for-each>
     </xsl:if>
 </xsl:template>
+
+<!-- A standalone XML file with ToC necessities  -->
+<!-- Infrastructure for file, initiate recursion -->
+<xsl:template name="doc-manifest">
+    <xsl:if test="$b-debug-react">
+        <exsl:document href="doc-manifest.xml" method="xml" indent="yes" encoding="UTF-8">
+            <toc>
+                <xsl:apply-templates select="$document-root" mode="toc-item-list"/>
+            </toc>
+        </exsl:document>
+    </xsl:if>
+</xsl:template>
+
+<!-- Every item that could be a TOC entry, mined from the schema. -->
+<xsl:template match="frontmatter|abstract|frontmatter/colophon|biography|dedication|acknowledgement|preface|contributors|part|chapter|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|backmatter|appendix|index|backmatter/colophon" mode="toc-item-list">
+    <division>
+        <xsl:attribute name="type">
+            <xsl:value-of select="local-name(.)"/>
+        </xsl:attribute>
+        <xsl:attribute name="number">
+            <xsl:apply-templates select="." mode="number"/>
+        </xsl:attribute>
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="visible-id"/>
+        </xsl:attribute>
+        <xsl:attribute name="url">
+            <xsl:apply-templates select="." mode="url"/>
+        </xsl:attribute>
+        <title>
+            <xsl:apply-templates select="." mode="title-short"/>
+        </title>
+        <!-- Recurse into children divisions (if any)                 -->
+        <!-- NB: the select here could match the one above and this   -->
+        <!-- would be much more efficient.  But we may include blocks -->
+        <!-- in the future, which could complicate how this is done   -->
+        <!-- (perhaps a "block-item" call right here which recurses   -->
+        <!-- through an entire division? -->
+        <xsl:apply-templates select="*" mode="toc-item-list"/>
+    </division>
+</xsl:template>
+
+<!-- Recurse through un-interesting elements                -->
+<!-- NB: this could be unnecessary in context of note above -->
+<xsl:template match="*" mode="toc-item-list">
+    <xsl:apply-templates select="*" mode="toc-item-list"/>
+</xsl:template>
+
 
 <!-- Feedback Button goes at the bottom (in "extras") -->
 <!-- Text from docinfo, or localized string           -->
