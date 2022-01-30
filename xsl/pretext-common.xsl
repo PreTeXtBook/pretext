@@ -1113,6 +1113,17 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- to run on the same counter as other blocks. Un-supported. -->
 <xsl:param name="debug.project.number" select="''"/>
 
+<!-- 2022-01-30: transition to React components, get ReactJS -->
+<!-- bundles, etc, locally or globally.  'yes' to activate.  -->
+<!-- Never use both, chaos might result, not error-checked   -->
+<xsl:param name="debug.react.local" select="'no'"/>
+<xsl:param name="debug.react.global" select="'no'"/>
+<!-- three derived internal variables, primarily use latter -->
+<xsl:variable name= "b-debug-react-local" select="not($debug.react.local = 'no')"/>
+<xsl:variable name= "b-debug-react-global" select="not($debug.react.global = 'no')"/>
+<xsl:variable name="b-debug-react" select="$b-debug-react-local or $b-debug-react-global"/>
+
+
 <!-- Maybe not debugging, but transitional variables -->
 
 <!-- Prior to January 2017 we treated all whitespace as -->
