@@ -19,9 +19,9 @@ You should have received a copy of the GNU General Public License
 along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
-<!-- This is the "structural" version for use when testing or -->
+<!-- This is the "decorative" version for use when testing or -->
 <!-- building samples for the website, keep in sync with the  -->
-<!-- "decorative" and "noparts" versions                      -->
+<!-- "structural" and "noparts" versions                      -->
 
 <publication>
 
@@ -30,8 +30,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <epub cover="images/cover_aata_2014.png" image-directory="images"/>
 
     <numbering>
-        <!-- defaults for a book with structural parts -->
-        <divisions part-structure="structural"/>
+        <!-- defaults for a book with decorative parts -->
+        <divisions part-structure="decorative"/>
     </numbering>
 
     <!-- HTML-Specific Options -->
@@ -41,6 +41,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- default behavior, but we do this as a test and as an  -->
         <!-- illustration                                          -->
         <index-page ref="sample-book"/>
+        <!-- A location for a hosted HTML version, as certain      -->
+        <!-- aspects of the LaTeX/PDF version will link to         -->
+        <!-- corresponding aspects of the HTML version             -->
+        <!-- NB: the "noparts" version, for no particular reason   -->
+        <!--     could migrate to different versions               -->
+        <baseurl href="https://pretextbook.org/examples/noparts/decorative/html/"/>
         <!-- specify the style of the html by giving names to      -->
         <!-- override defaults.  Ex: to use "style_oscarlevin.css" -->
         <!-- put <css style="oscarlevin"/>                         -->

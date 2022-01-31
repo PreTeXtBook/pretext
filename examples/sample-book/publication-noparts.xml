@@ -19,9 +19,9 @@ You should have received a copy of the GNU General Public License
 along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
-<!-- This is the "decorative" version for use when testing or     -->
-<!-- building samples for the website, keep in sync with the      -->
-<!-- "structural" version, which is  "publication-structural.xml" -->
+<!-- This is the "noparts" version for use when testing or   -->
+<!-- building samples for the website, keep in sync with the -->
+<!-- "structural" and "decorative" versions                  -->
 
 <publication>
 
@@ -30,10 +30,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <epub cover="images/cover_aata_2014.png" image-directory="images"/>
 
     <numbering>
-        <!-- defaults for a book with parts -->
-        <!-- we do not set a division level, since we remove parts    -->
-        <!-- with sed in the script building examples for the website -->
-        <divisions part-structure="decorative"/>
+        <!-- we just run with defaults for a book -->
     </numbering>
 
     <!-- HTML-Specific Options -->

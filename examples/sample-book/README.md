@@ -1,6 +1,4 @@
-PreTeXt Sample Book
-===================
-
+# PreTeXt Sample Book
 
 This sample book began as a subset of Tom Judson's
 _Abstract Algebra: Theory and Applications_ textbook.
@@ -10,9 +8,23 @@ this should not be taken as representative of the
 real version of Judson's book.
 
 It is meant to illustrate
-- how to structure the "extra" parts of a book,
+- how to structure the "extra" components of a book,
 such as the preface, appendices, index, and so on.
 - how to modularize a large project across multiple files
+
+### With Parts
+
+`sample-book.xml` can be used with two different publication files to get
+either "decorative" or "structural" parts.
+
+### No Parts
+
+`sample-book-noparts.xml` has, as the name implies, no parts employed.
+There is a third publication file for this case.  Also, some
+cross-references whose targets are parts, have been removed from the
+front matter, necessitating a different `frontmatter-noparts.xml`.
+
+### Usage Notes
 
 To build and test, use a scratch directory like `/tmp/sb`:
 
