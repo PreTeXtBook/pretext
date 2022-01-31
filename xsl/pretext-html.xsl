@@ -12193,8 +12193,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>      Configuration.create('sfrac', {&#xa;</xsl:text>
             <xsl:text>        handler: {macro: ['sfrac']}&#xa;</xsl:text>
             <xsl:text>      });&#xa;</xsl:text>
-            <xsl:text>      &#xa;</xsl:text>
-            <xsl:text>    MathJax.startup.defaultReady();&#xa;</xsl:text>
+            <xsl:if test="not($b-debug-react)">
+                <xsl:text>      &#xa;</xsl:text>
+                <xsl:text>    MathJax.startup.defaultReady();&#xa;</xsl:text>
+            </xsl:if>
             <xsl:text>    }&#xa;</xsl:text>
             <xsl:text>  },&#xa;</xsl:text>
         </xsl:if>
