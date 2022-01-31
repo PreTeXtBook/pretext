@@ -295,7 +295,7 @@ def sage_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, ou
         subprocess.call(sage_cmd, stdout=devnull, stderr=subprocess.STDOUT)
         shutil.copy2(sageout, dest_dir)
 
-def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat):
+def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, method):
     # stringparams is a dictionary, best for lxml parsing
     import platform # system, machine()
     import os.path # join()
@@ -343,7 +343,9 @@ def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_
             latex_image_svg = "{}.svg".format(filebase)
             latex_image_png = "{}.png".format(filebase)
             latex_image_eps = "{}.eps".format(filebase)
-            tex_executable_cmd = get_executable_cmd('tex')
+            # process with a  latex  engine
+            latex_key = get_deprecated_tex_fallback(method)
+            tex_executable_cmd = get_executable_cmd(latex_key)
             # TODO why this debug line? get_executable_cmd() outputs the same debug info
             _debug("tex executable: {}".format(tex_executable_cmd[0]))
             latex_cmd = tex_executable_cmd + ["-halt-on-error", latex_image]
@@ -1643,7 +1645,9 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
         author_ASCII = "".join([x if ord(x) < 128 else '?' for x in author])
         _verbose('attempting to construct cover image using LaTeX and ImageMagick')
         try:
-            tex_executable_cmd = get_executable_cmd('tex')
+            # process with the  xelatex  engine (better Unicode support)
+            latex_key = get_deprecated_tex_fallback('xelatex')
+            tex_executable_cmd = get_executable_cmd(latex_key)
             cover_tex_template = '\\documentclass[20pt]{{scrartcl}}\\begin{{document}}\\title{{ {} }}\\subtitle{{ {} }}\\author{{ {} }}\\date{{}}\\maketitle\\end{{document}}'
             if 'xelatex' in tex_executable_cmd:
                 cover_tex = cover_tex_template.format(title,subtitle,author)
@@ -1982,7 +1986,7 @@ def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
 # Conversion to PDF
 ###################
 
-def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
+def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
     """Convert XML source to a PDF (incomplete)"""
     import os # chdir()
     import os.path # join(), split(), splitext()
@@ -2027,8 +2031,9 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
     # now work in temporary directory since LaTeX is a bit incapable
     # of working outside of the current working directory
     os.chdir(tmp_dir)
-    # process with a  pdflatex  engine
-    latex_exec_cmd = get_executable_cmd('tex')
+    # process with a  latex  engine
+    latex_key = get_deprecated_tex_fallback(method)
+    latex_exec_cmd = get_executable_cmd(latex_key)
     # In flux during development, now nonstop
     # -halt-on-error will give an exit code to examine
     # perhaps behavior depends on -v, -vv
@@ -2257,6 +2262,15 @@ def get_executable_cmd(exec_name):
 
     # get the name, but then see if it really, really works
     _debug('locating "{}" in [executables] section of configuration file'.format(exec_name))
+    # 'tex' deprecated, and replaced by 'latex', 'pdflatex', and 'xelatex'
+    if exec_name == 'tex':
+        msg = '\n'.join(["PTX:WARNING: 'tex'  is deprecated as a key for a LaTeX executable (2022-01-31)'",
+                         "             and has been replaced by 'latex', 'pdflatex', or 'xelatex'.",
+                         "***  We will attempt to honor your existing LaTeX engine choice.                ***",
+                         '***  Edit the configuration file  ("pretext.cfg" or "project.ptx") accordingly  ***'
+                        ])
+        # upgrade to an ERROR/exception after some interval
+        print(msg)
     config_cmd_line = __executables[exec_name].split()
 
     # Returns the full-path version of the command, as if the PATH was employed
@@ -2280,6 +2294,22 @@ def get_executable_cmd(exec_name):
         raise OSError('\n'.join(error_messages))
     _debug("{} executable: {}, options: {}".format(exec_name, config_cmd_line[0], ' '.join(config_cmd_line[1:])))
     return config_cmd_line
+
+def get_deprecated_tex_fallback(key):
+    '''Return the best executable key in light of deprecation'''
+    global __executables
+
+    # Input: 'latex', 'pdflatex', or 'xelatex', as
+    #         enforced in the user interface
+    #
+    # Output: simply echo input, unless such an executable key
+    # does not exist AND there is a stale (deprecated) 'tex' key.
+    # In this case, generate the 'tex' key.  Warning will come
+    # from the  get_executable_cmd()  function.
+    if not(key in __executables) and ('tex' in __executables):
+        return 'tex'
+    else:
+        return key
 
 def sanitize_url(url):
     """Verify a server address"""
