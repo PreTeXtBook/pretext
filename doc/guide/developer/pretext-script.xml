@@ -167,6 +167,14 @@ The script should be run on the entire document, even if all the images are in o
                     <cell><c>-c asy</c></cell>
                     <cell>[<c>server</c>], <c>local</c></cell>
                 </row>
+                <row>
+                    <cell><c>-c latex-image</c></cell>
+                    <cell>[<c>xelatex</c>], <c>pdflatex</c></cell>
+                </row>
+                <row>
+                    <cell><c>-c all -f pdf</c></cell>
+                    <cell>[<c>xelatex</c>], <c>pdflatex</c></cell>
+                </row>
             </tabular>
         </table>
     </section>
