@@ -6248,7 +6248,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Asymptote graphics language -->
 <xsl:template match="image[asymptote]" mode="image-inclusion">
-    <!-- base-pathname needed later for archive link production -->
+    <!-- base-pathname needed later for archive link production. This   -->
+    <!-- is the location for eventual output, in contrast to juat below -->
+    <!-- for source analysis.                                           -->
     <xsl:variable name="base-pathname">
         <xsl:value-of select="$generated-directory"/>
         <xsl:if test="$b-managed-directories">
@@ -6257,11 +6259,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
     <xsl:variable name="html-filename" select="concat($base-pathname, '.html')" />
-
+    <!-- We also need a path to the *source* file, for examination -->
+    <!-- to determine the aspect ratio of the diagram, in order to -->
+    <!-- insert correctly as a scaled instance                     -->
+    <xsl:variable name="html-source-filename">
+        <xsl:value-of select="$generated-directory-source"/>
+        <xsl:if test="$b-managed-directories">
+            <xsl:text>asymptote/</xsl:text>
+        </xsl:if>
+        <xsl:apply-templates select="." mode="visible-id" />
+        <xsl:text>.html</xsl:text>
+    </xsl:variable>
     <!-- Assumes filename is relative to primary source file, -->
     <!-- which must be specified with the original version,   -->
     <!-- not the pre-processed, "assembled" version           -->
-    <xsl:variable name="image-xml" select="document($html-filename, $original)"/>
+    <xsl:variable name="image-xml" select="document($html-source-filename, $original)"/>
+
     <!-- width first -->
     <xsl:variable name="width">
         <xsl:choose>
@@ -6278,7 +6291,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <!-- failure -->
             <xsl:otherwise>
-                <xsl:message>PTX:ERROR:   the Asymptote diagram produced in "<xsl:value-of select="$html-filename"/>" needs to be available relative to the primary source file, or if available it is perhaps ill-formed and its width cannot be determined (which you might report as a bug).  We might be able to proceed as if the diagram is square, but results can be unpredictable.</xsl:message>
+                <xsl:message>PTX:ERROR:   the Asymptote diagram produced in "<xsl:value-of select="$image-xml"/>" needs to be available relative to the primary source file, or if available it is perhaps ill-formed and its width cannot be determined (which you might report as a bug).  We might be able to proceed as if the diagram is square, but results can be unpredictable.</xsl:message>
                 <!-- reasonable guess at points/pixels -->
                 <xsl:text>400</xsl:text>
             </xsl:otherwise>
@@ -6300,7 +6313,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <!-- failure -->
             <xsl:otherwise>
-                <xsl:message>PTX:ERROR:   the Asymptote diagram produced in "<xsl:value-of select="$html-filename"/>" needs to be available relative to the primary source file, or if available it is perhaps ill-formed and its height cannot be determined (which you might report as a bug).  We might be able to proceed as if the diagram is square, but results can be unpredictable.</xsl:message>
+                <xsl:message>PTX:ERROR:   the Asymptote diagram produced in "<xsl:value-of select="$image-xml"/>" needs to be available relative to the primary source file, or if available it is perhaps ill-formed and its height cannot be determined (which you might report as a bug).  We might be able to proceed as if the diagram is square, but results can be unpredictable.</xsl:message>
                 <!-- reasonable guess at points/pixels -->
                 <xsl:text>400</xsl:text>
             </xsl:otherwise>
