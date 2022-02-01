@@ -12036,6 +12036,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Every item that could be a TOC entry, mined from the schema. -->
 <xsl:template match="frontmatter|abstract|frontmatter/colophon|biography|dedication|acknowledgement|preface|contributors|part|chapter|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|backmatter|appendix|index|backmatter/colophon" mode="toc-item-list">
     <division>
+        <xsl:apply-templates select="." mode="doc-manifest-division-attributes"/>
+        <!-- Recurse into children divisions (if any)                 -->
+        <!-- NB: the select here could match the one above and this   -->
+        <!-- would be much more efficient.  But we may include blocks -->
+        <!-- in the future, which could complicate how this is done   -->
+        <!-- (perhaps a "block-item" call right here which recurses   -->
+        <!-- through an entire division? -->
+        <xsl:apply-templates select="*" mode="toc-item-list"/>
+    </division>
+</xsl:template>
+
+<!-- Recurse through un-interesting elements                -->
+<!-- NB: this could be unnecessary in context of note above -->
+<xsl:template match="*" mode="toc-item-list">
+    <xsl:apply-templates select="*" mode="toc-item-list"/>
+</xsl:template>
+
+<xsl:template match="*" mode="doc-manifest-division-attributes">
         <xsl:attribute name="type">
             <xsl:value-of select="local-name(.)"/>
         </xsl:attribute>
@@ -12051,20 +12069,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <title>
             <xsl:apply-templates select="." mode="title-short"/>
         </title>
-        <!-- Recurse into children divisions (if any)                 -->
-        <!-- NB: the select here could match the one above and this   -->
-        <!-- would be much more efficient.  But we may include blocks -->
-        <!-- in the future, which could complicate how this is done   -->
-        <!-- (perhaps a "block-item" call right here which recurses   -->
-        <!-- through an entire division? -->
-        <xsl:apply-templates select="*" mode="toc-item-list"/>
-    </division>
-</xsl:template>
-
-<!-- Recurse through un-interesting elements                -->
-<!-- NB: this could be unnecessary in context of note above -->
-<xsl:template match="*" mode="toc-item-list">
-    <xsl:apply-templates select="*" mode="toc-item-list"/>
 </xsl:template>
 
 
