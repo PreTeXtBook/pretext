@@ -12063,8 +12063,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="html-id"/>
         </xsl:attribute>
-        <xsl:attribute name="url">
+        <xsl:variable name="the-url">
             <xsl:apply-templates select="." mode="url"/>
+        </xsl:variable>
+        <xsl:attribute name="url">
+            <xsl:value-of select="$the-url"/>
+            <!-- add the HTML id as a fragment identifier when absent, -->
+            <!-- which is the case where the division is a chunk/page  -->
+            <xsl:if test="not(contains($the-url, '#'))">
+                <xsl:text>#</xsl:text>
+                <xsl:apply-templates select="." mode="html-id"/>
+            </xsl:if>
         </xsl:attribute>
         <title>
             <xsl:apply-templates select="." mode="title-short"/>
