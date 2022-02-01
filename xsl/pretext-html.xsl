@@ -12061,7 +12061,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="number"/>
         </xsl:attribute>
         <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="visible-id"/>
+            <xsl:apply-templates select="." mode="html-id"/>
         </xsl:attribute>
         <xsl:attribute name="url">
             <xsl:apply-templates select="." mode="url"/>
