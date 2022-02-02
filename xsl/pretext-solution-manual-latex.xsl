@@ -237,9 +237,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- complications of numbering, placement, duplication     -->
 
 <!-- Since divisions have hard-coded numbers, a \label{}   -->
-<!-- on an equation will be inaccurate.  These are reduced -->
-<!-- versions of the templates for hard-coded equation     -->
-<!-- numbers in the HTML conversion.                       -->
+<!-- on an equation will be inaccurate.  These versions of -->
+<!-- the templates for hard-coded equation numbers are     -->
+<!-- from the HTML conversion.                             -->
 
 <xsl:template match="men|mrow" mode="tag">
     <xsl:text>\tag{</xsl:text>

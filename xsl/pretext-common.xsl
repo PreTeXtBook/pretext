@@ -1118,6 +1118,7 @@ Book (with parts), "section" at level 3
         <!-- and for HTML we hard-code the equation number, -->
         <!-- plus a label if it has an xml:id               -->
         <!-- This is a no-op for "me"                       -->
+        <!-- TODO: investigate if/how the original flag is being used -->
         <xsl:apply-templates select="." mode="tag">
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>

@@ -147,29 +147,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
-<!-- We want the hard-coded "tags" (numbered equations) that PreTeXt -->
-<!-- supplies, but we do not want the "\label{}" that comes along as -->
-<!-- part of MathJax's semi-automatic linking mechanism.  Since we   -->
-<!-- disassociate the math from its surroundings, any sort of        -->
-<!-- cross-referencing of equations should be handled another way.   -->
-<!-- But we do need to "name" equations.                             -->
-<!--                                                                 -->
-<!-- These are stripped-down versions from the (imported) -html      -->
-<!-- conversion.  It is possible they will become identical some     -->
-<!-- day and then these versions can go away.                        -->
-
-<xsl:template match="men|mrow" mode="tag">
-    <xsl:text>\tag{</xsl:text>
-    <xsl:apply-templates select="." mode="number" />
-    <xsl:text>}</xsl:text>
-</xsl:template>
-
-<xsl:template match="mrow[@tag]" mode="tag">
-    <xsl:text>\tag{</xsl:text>
-    <xsl:apply-templates select="@tag" mode="tag-symbol" />
-    <xsl:text>}</xsl:text>
-</xsl:template>
-
 
 <!-- An "xref" inside of math is a delicate matter.                                   -->
 <!--                                                                                  -->
