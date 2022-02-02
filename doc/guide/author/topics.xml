@@ -1971,58 +1971,11 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <subsection>
             <title>Exercises, Original Versions</title>
 
-            <p>A <tag>hint</tag> to an <tag>exercise</tag> renders nicely in a knowl, right below the exercise statement, as part of a conversion to <init>HTML</init>.  For a conversion to <latex/>/<init>PDF</init>/print, you might wish to display a hint, visibly, as part of the exercise, or you may wish to park the hint in a <pubtitle>Hints to Exercises</pubtitle> division in the back matter.  To control visibility of the components of exercises (and projects) there are fifteen switches you can use as string parameters on the command line, or in an extra <init>XSL</init> file.  Each takes values of <c>yes</c> or <c>no</c>.</p>
-
-            <table>
-                <title>Exercise Component Switches, Original Versions</title>
-
-                <tabular>
-                    <row>
-                        <cell><c>exercise.inline.hint</c></cell>
-                        <cell><c>exercise.inline.answer</c></cell>
-                    </row>
-                    <row>
-                        <cell><c>exercise.inline.solution</c></cell>
-                        <cell/>
-                    </row>
-                    <row>
-                        <cell><c>exercise.divisional.hint</c></cell>
-                        <cell><c>exercise.divisional.answer</c></cell>
-                    </row>
-                    <row>
-                        <cell><c>exercise.divisional.solution</c></cell>
-                        <cell/>
-                    </row>
-                    <row>
-                        <cell><c>exercise.worksheet.hint</c></cell>
-                        <cell><c>exercise.worksheet.answer</c></cell>
-                    </row>
-                    <row>
-                        <cell><c>exercise.worksheet.solution</c></cell>
-                        <cell/>
-                    </row>
-                    <row>
-                        <cell><c>exercise.reading.hint</c></cell>
-                        <cell><c>exercise.reading.answer</c></cell>
-                    </row>
-                    <row>
-                        <cell><c>exercise.reading.solution</c></cell>
-                        <cell/>
-                    </row>
-                    <row>
-                        <cell><c>project.hint</c></cell>
-                        <cell><c>project.answer</c></cell>
-                    </row>
-                    <row>
-                        <cell><c>project.solution</c></cell>
-                        <cell/>
-                    </row>
-                </tabular>
-            </table>
+            <p>In a conversion to <init>HTML</init>, a <tag>hint</tag> to an <tag>exercise</tag> renders nicely in a knowl, right below the exercise statement.  For a conversion to <latex/>/<init>PDF</init>/print, you might wish to display a hint, visibly, as part of the exercise, or you may wish to park the hint in a <pubtitle>Hints to Exercises</pubtitle> division in the back matter.  To control visibility of the components of exercises (and projects) there are twenty switches you can use.  See <xref ref="exercise-component-visibility"/> for more.</p>
 
         </subsection>
 
-        <subsection>
+        <subsection xml:id="topic-solutions-division">
             <title>Exercises, Solutions Versions</title>
 
             <p>Exercises, and their components may be duplicated easily, to provide a back matter appendix with solutions, or within each division.  For example, you can easily create an end-of-chapter division with solutions to every inline exercise throughout the chapter and solutions to all the divisional exercises from each section of the chapter.</p>

@@ -46,6 +46,47 @@
                 <cline>/publication/common/tableofcontents/@level</cline>
             </cd>with a whole number as the value.  A value of 0 is used to indicate that no Table of Contents is desired.  Absent this setting, reasonable defaults are supplied, which can vary by conversion and document type.</p>
         </subsection>
+
+        <subsection xml:id="common-exercise-visibility">
+            <title>Exercise Component Visibility</title>
+            <idx><h>exercise</h><h>component visibility</h></idx>
+            <idx><h>exercise components</h><h>visibility</h></idx>
+
+            <p>An <tag>exercise</tag> can appear in four different locations: mixed in with paragraphs and blocks (<q>inline</q>), inside an <tag>exercises</tag> specialized division (<q>divisional</q>), inside a <tag>worksheet</tag> specialized division (<q>worksheet</q>), or inside a <tag>reading-questions</tag> specialized division (<q>reading</q>).  Also, a <tag>project</tag>, and similar (<q>project</q>), behaves in many ways like an <tag>exercise</tag>.  All of these elements (or their <tag>task</tag>) may have <tag>statement</tag>, <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> (<q>components</q>).</p>
+
+            <p>Where such exercises first appear (not, for example, in back-of-the-book solutions) publication switches can control the visibility of the components.  There are five elements, each with four attributes, which can take on the values of <c>yes</c> or <c>no</c>.  The default is <c>yes</c>, which should be most useful in the early stages of a project.  The element <tag>exercise-project</tag> is a misnomer, but is used to avoid confusion with some other use of <c>project</c>.  See <xref ref="exercise-component-visibility"/> for more explanation.</p>
+
+            <table>
+                <title>Exercise Component Visibility Settings</title>
+
+                <tabular>
+                    <row header="yes" bottom="major">
+                        <cell>Publication File Entry</cell>
+                        <cell>Attributes: <c>yes</c> or <c>no</c> values</cell>
+                    </row>
+                    <row>
+                        <cell><c>common/exercise-inline</c></cell>
+                        <cell><attr>statement</attr>, <attr>hint</attr>, <attr>answer</attr>, <attr>solution</attr></cell>
+                    </row>
+                    <row>
+                        <cell><c>common/exercise-divisional</c></cell>
+                        <cell><attr>statement</attr>, <attr>hint</attr>, <attr>answer</attr>, <attr>solution</attr></cell>
+                    </row>
+                    <row>
+                        <cell><c>common/exercise-worksheet</c></cell>
+                        <cell><attr>statement</attr>, <attr>hint</attr>, <attr>answer</attr>, <attr>solution</attr></cell>
+                    </row>
+                    <row>
+                        <cell><c>common/exercise-reading</c></cell>
+                        <cell><attr>statement</attr>, <attr>hint</attr>, <attr>answer</attr>, <attr>solution</attr></cell>
+                    </row>
+                    <row>
+                        <cell><c>common/project</c></cell>
+                        <cell><attr>statement</attr>, <attr>hint</attr>, <attr>answer</attr>, <attr>solution</attr></cell>
+                    </row>
+                </tabular>
+            </table>
+        </subsection>
     </section>
 
     <section xml:id="publisher-file-numbering">

@@ -140,6 +140,16 @@
         <p>See <xref ref="publisher-file-source-extras"/> for the mechanics of specifying a file of customizations via the publisher file.</p>
     </section>
 
+    <section xml:id="exercise-component-visibility">
+        <title>Exercise Component Visibility</title>
+
+        <p>The <tag>statement</tag>, <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> elements are collectively the <term>components</term> of exercises, projects (and similar), and tasks they may contain.  When you author an exercise, you may only want to have a solution appear at the end of a book, or in a solution manual, and not right where the exercise is born.  There are twenty yes/no settings (four components for each of five types of exercises), which control visibility <em>at the location where the content is born</em>.  The default value for each is <c>yes</c>, which means the component is visible.  See <xref ref="common-exercise-visibility"/> for complete details.</p>
+
+        <p>This is a good example of settings you may wish to employ differently for different output.  Since <init>HTML</init> output automatically puts these components into knowls (<xref ref="knowled-content"/>), you may be less concerned about having them visible as part of the exercise itself.  Conversely, for PDF/print output, you may wish exercise components to only be visible at the end of a book.  Note that migrating solutions to another location is accomplished with a <tag>solutions</tag> specialized division (<xref ref="topic-solutions-division"/>).</p>
+
+        <p>Finally, these settings are observed by the stylesheet which creates a solution manual (see <xref ref="solution-manual"/>).  This might explain why controlling the visibility of a <tag>statement</tag> is of interest.</p>
+    </section>
+
     <section xml:id="processing-parameters">
         <title>Processing Parameters</title>
 
