@@ -6964,7 +6964,7 @@ the xsltproc executable.
             <p><md>
                 <mrow>x^2 + y^2 &amp;= z^2&amp;&amp;<xref ref="theorem-FTC" text="type-global" /></mrow>
                 <mrow>a^2 + b^2 &amp;= c^2&amp;&amp;\text{Section}~<xref ref="section-fundamental-theorem" /></mrow>
-            </md></p>
+            </md><idx><h>bug</h><h>in-context broken</h></idx></p>
 
             <p>Variations on the above include multiple <c>xml:id</c> as the value of a single <c>ref</c> attribute on an <c>xref</c>, in the form of a comma-separated list.  In this case, only the numbers are links/knowls and the autonaming attribute is based on the type of the first <c>ref</c>.  Wrapping with brackets (citations) or parentheses (equations) is also controlled by the type of the first <c>ref</c>.  And the <c>detail</c> attribute for a bibliographic reference is silently ignored.  So you can do silly things like have a reference to a theorem within a list of equation numbers and there will be no error message.  Handle with care.  Spaces after commas in the list will migrate to the output as spaces, so if you don't have any, you won't get any.<ul>
                 <!-- NB: a knowl for "theorem-number-02" will *only* be created if this list is decomposed -->
