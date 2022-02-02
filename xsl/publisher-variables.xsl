@@ -148,15 +148,32 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- text/narrative appearances *only*, solution lists in the -->
 <!-- backmatter are given in alternate ways.  However, an     -->
 <!-- alternate conversion (such as an Instructor's Guide) may -->
-<!-- use these as well. We only do quality control here       -->
-<!-- first. The "*.text.*" forms are deprecated with warnings -->
+<!-- use these as well. We only do quality control here.      -->
+<!-- The first "*.text.*" forms are deprecated with warnings  -->
 <!-- elsewhere, but we try to preserve their intent here.     -->
-<!-- NB 2020-10-23: consider dropping "-statement" versions   -->
-<!-- as silly, since a Solutions Manual, or similar, can be   -->
-<!-- built with a solutions generator, and an Instructors     -->
-<!-- Edition would need statements also (always)              -->
+<!-- The second "exercise.{type}.{component}" also have       -->
+<!-- deprecation warnings elsewhere, and are honored here.    -->
+<!-- NB: "-statement" versions are necessary for the solution -->
+<!-- manual stylesheet, which feeds these into the solutions  -->
+<!-- generator template.                                      -->
+
 <xsl:variable name="entered-exercise-inline-statement">
     <xsl:choose>
+        <xsl:when test="$publication/common/exercise-inline/@statement">
+            <xsl:choose>
+                <xsl:when test="$publication/common/exercise-inline/@statement = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/common/exercise-inline/@statement = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR:   the exercise component visibility setting (common/exercise-inline/@statement in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-inline/@statement"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:text>yes</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- deprecated, but still honored -->
         <xsl:when test="($exercise.inline.statement = 'yes') or
                         ($exercise.inline.statement = 'no')">
             <xsl:value-of select="$exercise.inline.statement" />
@@ -178,6 +195,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="entered-exercise-inline-hint">
     <xsl:choose>
+        <xsl:when test="$publication/common/exercise-inline/@hint">
+            <xsl:choose>
+                <xsl:when test="$publication/common/exercise-inline/@hint = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/common/exercise-inline/@hint = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR:   the exercise component visibility setting (common/exercise-inline/@hint in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-inline/@hint"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:text>yes</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- deprecated, but still honored -->
         <xsl:when test="($exercise.inline.hint = 'yes') or
                         ($exercise.inline.hint = 'no')">
             <xsl:value-of select="$exercise.inline.hint" />
@@ -199,6 +231,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="entered-exercise-inline-answer">
     <xsl:choose>
+        <xsl:when test="$publication/common/exercise-inline/@answer">
+            <xsl:choose>
+                <xsl:when test="$publication/common/exercise-inline/@answer = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/common/exercise-inline/@answer = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR:   the exercise component visibility setting (common/exercise-inline/@answer in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-inline/@answer"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:text>yes</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- deprecated, but still honored -->
         <xsl:when test="($exercise.inline.answer = 'yes') or
                         ($exercise.inline.answer = 'no')">
             <xsl:value-of select="$exercise.inline.answer" />
@@ -220,6 +267,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="entered-exercise-inline-solution">
     <xsl:choose>
+        <xsl:when test="$publication/common/exercise-inline/@solution">
+            <xsl:choose>
+                <xsl:when test="$publication/common/exercise-inline/@solution = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/common/exercise-inline/@solution = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR:   the exercise component visibility setting (common/exercise-inline/@solution in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-inline/@solution"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:text>yes</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- deprecated, but still honored -->
         <xsl:when test="($exercise.inline.solution = 'yes') or
                         ($exercise.inline.solution = 'no')">
             <xsl:value-of select="$exercise.inline.solution" />
@@ -241,6 +303,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="entered-exercise-divisional-statement">
     <xsl:choose>
+        <xsl:when test="$publication/common/exercise-divisional/@statement">
+            <xsl:choose>
+                <xsl:when test="$publication/common/exercise-divisional/@statement = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/common/exercise-divisional/@statement = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR:   the exercise component visibility setting (common/exercise-divisional/@statement in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-divisional/@statement"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:text>yes</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- deprecated, but still honored -->
         <xsl:when test="($exercise.divisional.statement = 'yes') or
                         ($exercise.divisional.statement = 'no')">
             <xsl:value-of select="$exercise.divisional.statement" />
@@ -262,6 +339,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="entered-exercise-divisional-hint">
     <xsl:choose>
+        <xsl:when test="$publication/common/exercise-divisional/@hint">
+            <xsl:choose>
+                <xsl:when test="$publication/common/exercise-divisional/@hint = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/common/exercise-divisional/@hint = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR:   the exercise component visibility setting (common/exercise-divisional/@hint in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-divisional/@hint"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:text>yes</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- deprecated, but still honored -->
         <xsl:when test="($exercise.divisional.hint = 'yes') or
                         ($exercise.divisional.hint = 'no')">
             <xsl:value-of select="$exercise.divisional.hint" />
@@ -283,6 +375,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="entered-exercise-divisional-answer">
     <xsl:choose>
+        <xsl:when test="$publication/common/exercise-divisional/@answer">
+            <xsl:choose>
+                <xsl:when test="$publication/common/exercise-divisional/@answer = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/common/exercise-divisional/@answer = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR:   the exercise component visibility setting (common/exercise-divisional/@answer in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-divisional/@answer"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:text>yes</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- deprecated, but still honored -->
         <xsl:when test="($exercise.divisional.answer = 'yes') or
                         ($exercise.divisional.answer = 'no')">
             <xsl:value-of select="$exercise.divisional.answer" />
@@ -304,6 +411,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="entered-exercise-divisional-solution">
     <xsl:choose>
+        <xsl:when test="$publication/common/exercise-divisional/@solution">
+            <xsl:choose>
+                <xsl:when test="$publication/common/exercise-divisional/@solution = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/common/exercise-divisional/@solution = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR:   the exercise component visibility setting (common/exercise-divisional/@solution in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-divisional/@solution"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:text>yes</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- deprecated, but still honored -->
         <xsl:when test="($exercise.divisional.solution = 'yes') or
                         ($exercise.divisional.solution = 'no')">
             <xsl:value-of select="$exercise.divisional.solution" />
@@ -325,6 +447,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="entered-exercise-worksheet-statement">
     <xsl:choose>
+        <xsl:when test="$publication/common/exercise-worksheet/@statement">
+            <xsl:choose>
+                <xsl:when test="$publication/common/exercise-worksheet/@statement = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/common/exercise-worksheet/@statement = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR:   the exercise component visibility setting (common/exercise-worksheet/@statement in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-worksheet/@statement"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:text>yes</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- deprecated, but still honored -->
         <xsl:when test="($exercise.worksheet.statement = 'yes') or
                         ($exercise.worksheet.statement = 'no')">
             <xsl:value-of select="$exercise.worksheet.statement" />
@@ -346,6 +483,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="entered-exercise-worksheet-hint">
     <xsl:choose>
+        <xsl:when test="$publication/common/exercise-worksheet/@hint">
+            <xsl:choose>
+                <xsl:when test="$publication/common/exercise-worksheet/@hint = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/common/exercise-worksheet/@hint = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR:   the exercise component visibility setting (common/exercise-worksheet/@hint in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-worksheet/@hint"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:text>yes</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- deprecated, but still honored -->
         <xsl:when test="($exercise.worksheet.hint = 'yes') or
                         ($exercise.worksheet.hint = 'no')">
             <xsl:value-of select="$exercise.worksheet.hint" />
@@ -367,6 +519,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="entered-exercise-worksheet-answer">
     <xsl:choose>
+        <xsl:when test="$publication/common/exercise-worksheet/@answer">
+            <xsl:choose>
+                <xsl:when test="$publication/common/exercise-worksheet/@answer = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/common/exercise-worksheet/@answer = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR:   the exercise component visibility setting (common/exercise-worksheet/@answer in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-worksheet/@answer"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:text>yes</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- deprecated, but still honored -->
         <xsl:when test="($exercise.worksheet.answer = 'yes') or
                         ($exercise.worksheet.answer = 'no')">
             <xsl:value-of select="$exercise.worksheet.answer" />
@@ -388,6 +555,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="entered-exercise-worksheet-solution">
     <xsl:choose>
+        <xsl:when test="$publication/common/exercise-worksheet/@solution">
+            <xsl:choose>
+                <xsl:when test="$publication/common/exercise-worksheet/@solution = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/common/exercise-worksheet/@solution = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR:   the exercise component visibility setting (common/exercise-worksheet/@solution in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-worksheet/@solution"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:text>yes</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- deprecated, but still honored -->
         <xsl:when test="($exercise.worksheet.solution = 'yes') or
                         ($exercise.worksheet.solution = 'no')">
             <xsl:value-of select="$exercise.worksheet.solution" />
@@ -409,6 +591,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="entered-exercise-reading-statement">
     <xsl:choose>
+        <xsl:when test="$publication/common/exercise-reading/@statement">
+            <xsl:choose>
+                <xsl:when test="$publication/common/exercise-reading/@statement = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/common/exercise-reading/@statement = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR:   the exercise component visibility setting (common/exercise-reading/@statement in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-reading/@statement"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:text>yes</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- deprecated, but still honored -->
         <xsl:when test="($exercise.reading.statement = 'yes') or
                         ($exercise.reading.statement = 'no')">
             <xsl:value-of select="$exercise.reading.statement" />
@@ -430,6 +627,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="entered-exercise-reading-hint">
     <xsl:choose>
+        <xsl:when test="$publication/common/exercise-reading/@hint">
+            <xsl:choose>
+                <xsl:when test="$publication/common/exercise-reading/@hint = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/common/exercise-reading/@hint = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR:   the exercise component visibility setting (common/exercise-reading/@hint in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-reading/@hint"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:text>yes</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- deprecated, but still honored -->
         <xsl:when test="($exercise.reading.hint = 'yes') or
                         ($exercise.reading.hint = 'no')">
             <xsl:value-of select="$exercise.reading.hint" />
@@ -451,6 +663,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="entered-exercise-reading-answer">
     <xsl:choose>
+        <xsl:when test="$publication/common/exercise-reading/@answer">
+            <xsl:choose>
+                <xsl:when test="$publication/common/exercise-reading/@answer = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/common/exercise-reading/@answer = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR:   the exercise component visibility setting (common/exercise-reading/@answer in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-reading/@answer"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:text>yes</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- deprecated, but still honored -->
         <xsl:when test="($exercise.reading.answer = 'yes') or
                         ($exercise.reading.answer = 'no')">
             <xsl:value-of select="$exercise.reading.answer" />
@@ -472,6 +699,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="entered-exercise-reading-solution">
     <xsl:choose>
+        <xsl:when test="$publication/common/exercise-reading/@solution">
+            <xsl:choose>
+                <xsl:when test="$publication/common/exercise-reading/@solution = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/common/exercise-reading/@solution = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR:   the exercise component visibility setting (common/exercise-reading/@solution in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-reading/@solution"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:text>yes</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- deprecated, but still honored -->
         <xsl:when test="($exercise.reading.solution = 'yes') or
                         ($exercise.reading.solution = 'no')">
             <xsl:value-of select="$exercise.reading.solution" />
@@ -493,6 +735,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="entered-project-statement">
     <xsl:choose>
+        <xsl:when test="$publication/common/exercise-project/@statement">
+            <xsl:choose>
+                <xsl:when test="$publication/common/exercise-project/@statement = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/common/exercise-project/@statement = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR:   the exercise component visibility setting (common/exercise-project/@statement in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-project/@statement"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:text>yes</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- deprecated, but still honored -->
         <xsl:when test="($project.statement = 'yes') or
                         ($project.statement = 'no')">
             <xsl:value-of select="$project.statement" />
@@ -509,6 +766,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="entered-project-hint">
     <xsl:choose>
+        <xsl:when test="$publication/common/exercise-project/@hint">
+            <xsl:choose>
+                <xsl:when test="$publication/common/exercise-project/@hint = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/common/exercise-project/@hint = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR:   the exercise component visibility setting (common/exercise-project/@hint in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-project/@hint"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:text>yes</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- deprecated, but still honored -->
         <xsl:when test="($project.hint = 'yes') or
                         ($project.hint = 'no')">
             <xsl:value-of select="$project.hint" />
@@ -530,6 +802,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="entered-project-answer">
     <xsl:choose>
+        <xsl:when test="$publication/common/exercise-project/@answer">
+            <xsl:choose>
+                <xsl:when test="$publication/common/exercise-project/@answer = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/common/exercise-project/@answer = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR:   the exercise component visibility setting (common/exercise-project/@answer in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-project/@answer"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:text>yes</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- deprecated, but still honored -->
         <xsl:when test="($project.answer = 'yes') or
                         ($project.answer = 'no')">
             <xsl:value-of select="$project.answer" />
@@ -551,6 +838,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="entered-project-solution">
     <xsl:choose>
+        <xsl:when test="$publication/common/exercise-project/@solution">
+            <xsl:choose>
+                <xsl:when test="$publication/common/exercise-project/@solution = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/common/exercise-project/@solution = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR:   the exercise component visibility setting (common/exercise-project/@solution in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-project/@solution"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:text>yes</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- deprecated, but still honored -->
         <xsl:when test="($project.solution = 'yes') or
                         ($project.solution = 'no')">
             <xsl:value-of select="$project.solution" />
