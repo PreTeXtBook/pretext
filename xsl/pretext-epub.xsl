@@ -1332,10 +1332,11 @@ width: 100%
             </xsl:choose>
         </xsl:attribute>
         <!-- Can only "xref" to an "men" or an "md/mrow" or an "mdn/mrow" -->
+        <!-- As a target of a cross-reference URL/hyperlink, the base     -->
+        <!-- HTML modal "url" template uses the HTML id                   -->
         <xsl:if test="$context = 'men' or $context = 'md' or $context = 'mdn'">
             <xsl:attribute name="id">
-              <xsl:text>mjx-eqn:</xsl:text><xsl:value-of select="$id"
-              />
+                <xsl:apply-templates select="." mode="html-id"/>
             </xsl:attribute>
         </xsl:if>
         <!-- Finally, drop a "svg" element, "math" element, or ASCII speech -->
@@ -1359,24 +1360,6 @@ width: 100%
             </xsl:when>
         </xsl:choose>
     </span>
-</xsl:template>
-
-<!-- This is copied from pretext-html.xsl where it has    -->
-<!-- match="*". We just need to contend with mrow in EPUB -->
-<!-- since we can't control the ID MathJax returns.       -->
-<xsl:template match="mrow" mode="url">
-    <!-- An enclosing "md" or "mdn" is never a division, so     -->
-    <!-- there will always be a containing file and a fragment  -->
-    <!-- identifier (unlike the more general version in -html). -->
-    <xsl:apply-templates select="." mode="containing-filename" />
-    <xsl:text>#</xsl:text>
-    <!-- the ids on equations are manufactured -->
-    <!-- by MathJax to look this way -->
-    <xsl:text>mjx-eqn:</xsl:text>
-    <!-- This is the main difference from the * template in      -->
-    <!-- -html. We can only control the HTML id on the enclosing -->
-    <!-- md or mdn, so we get its ID for the hyperlink.          -->
-    <xsl:apply-templates select="parent::*" mode="html-id" />
 </xsl:template>
 
 <!-- Simple text representations of structural elements for -->

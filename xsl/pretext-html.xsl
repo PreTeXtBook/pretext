@@ -8059,9 +8059,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   4. many navigation devices, e.g. ToC, prev/next buttons   -->
 <!-- This is strictly an HTML construction.                      -->
 <!-- A containing filename, plus possibly a fragment identifier. -->
-<!-- NOTE: There is a copy of this template in pretext-epub.xsl  -->
-<!-- that overrides only the behavior on mrow. Please keep       -->
-<!-- changes in sync.                                            -->
 <!-- NB: a "p" whose initial content is display math results in  -->
 <!-- a contest for the HTML id that goes on the                  -->
 <!-- div.displaymath.  The "p" is only a target of a hyperlink   -->
