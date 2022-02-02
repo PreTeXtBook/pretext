@@ -2962,32 +2962,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- switch for right alignment of page's text               -->
 <xsl:param name="text.alignment" select="''" />
 
-<!-- An exercise has a statement, and may have hints,      -->
-<!-- answers and solutions.  An answer is just the         -->
-<!-- final number, expression, whatever; while a solution  -->
-<!-- includes intermediate steps. Parameters here control  -->
-<!-- the *visibility* of these four parts                  -->
-<!--                                                       -->
-<!-- Parameters are:                                       -->
-<!--   'yes' - visible                                     -->
-<!--   'no' - not visible                                  -->
-<!--                                                       -->
-<!-- Five categories:                                      -->
-<!--   inline (checpoint) exercises                        -->
-<!--   divisional (inside an "exercises" division)         -->
-<!--   worksheet (inside a "worksheet" division)           -->
-<!--   reading (inside a "reading-questions" division)     -->
-<!--   project (on a project-like,                         -->
-<!--   or possibly on a terminal "task" of a project-like) -->
-<!--                                                       -->
-<!-- Default is "yes" for every part, so experiment        -->
-<!-- with parameters to make some parts hidden.            -->
-<!--                                                       -->
-<!-- These are global switches, so only need to be fed     -->
-<!-- into the construction of exercises via the            -->
-<!-- "exercise-components" template.                       -->
-<!-- N.B. "statement" switches are necessary or desirable  -->
-<!-- for alternate collections of solutions (only)         -->
+<!-- String parameters were the *second* wave of these        -->
+<!-- switches, see variables below.  Deprecated on 2022-01-31 -->
+<!-- when they migrated to the publication file.              -->
+
 <xsl:param name="exercise.inline.statement" select="''" />
 <xsl:param name="exercise.inline.hint" select="''" />
 <xsl:param name="exercise.inline.answer" select="''" />
