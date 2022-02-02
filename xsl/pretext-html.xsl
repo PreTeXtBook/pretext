@@ -12435,14 +12435,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Program Listings highlighted by Prism -->
 <xsl:template name="syntax-highlight-header">
     <xsl:if test="$b-has-program">
-        <link href="https://unpkg.com/prismjs@v1.22.0/themes/prism.css" rel="stylesheet"/>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism.css" rel="stylesheet"/>
     </xsl:if>
 </xsl:template>
 
 <xsl:template name="syntax-highlight-footer">
     <xsl:if test="$b-has-program">
-        <script src="https://unpkg.com/prismjs@v1.22.0/components/prism-core.min.js"></script>
-        <script src="https://unpkg.com/prismjs@v1.22.0/plugins/autoloader/prism-autoloader.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
     </xsl:if>
 </xsl:template>
 
