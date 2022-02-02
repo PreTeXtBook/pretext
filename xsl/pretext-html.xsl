@@ -5703,9 +5703,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="content" />
     <div class="displaymath process-math">
-        <xsl:apply-templates select="." mode="insert-paragraph-id" >
-            <xsl:with-param name="b-original" select="$b-original" />
-        </xsl:apply-templates>
+        <xsl:choose>
+            <xsl:when test="$b-original and not(self::me)">
+                <xsl:attribute name="id">
+                    <xsl:apply-templates select="." mode="html-id"/>
+                </xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="insert-paragraph-id" >
+                    <xsl:with-param name="b-original" select="$b-original" />
+                </xsl:apply-templates>
+            </xsl:otherwise>
+        </xsl:choose>
         <xsl:copy-of select="$content" />
     </div>
 </xsl:template>
@@ -8053,6 +8062,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NOTE: There is a copy of this template in pretext-epub.xsl  -->
 <!-- that overrides only the behavior on mrow. Please keep       -->
 <!-- changes in sync.                                            -->
+<!-- NB: a "p" whose initial content is display math results in  -->
+<!-- a contest for the HTML id that goes on the                  -->
+<!-- div.displaymath.  The "p" is only a target of a hyperlink   -->
+<!-- when it is the "in-context" link of a knowl for the "p",    -->
+<!-- which only happens in the index, so the "p" must also have  -->
+<!-- an "idx" element.  So we are labeling the div for what it   -->
+<!-- is, display math, so links to numbered equations will work. -->
+<!-- So we have:                                                 -->
+<!-- BUG: a "p" that leads with display math and has an "idx"    -->
+<!-- creates a knowl in the index whose "in-context" link is     -->
+<!-- incorrect.                                                  -->
 <xsl:template match="*" mode="url">
     <xsl:variable name="intermediate">
         <xsl:apply-templates select="." mode="is-intermediate" />
@@ -8062,13 +8082,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:apply-templates select="." mode="containing-filename" />
     <xsl:if test="$intermediate='false' and $chunk='false'">
+        <!-- interior to a page, needs fragment identifier -->
         <xsl:text>#</xsl:text>
-        <!-- the ids on equations are manufactured -->
-        <!-- by MathJax to look this way           -->
-        <xsl:if test="self::men|self::mrow">
-            <xsl:text>mjx-eqn:</xsl:text>
-        </xsl:if>
-        <xsl:apply-templates select="." mode="html-id" />
+        <!-- All display math is in a  div.displaymath  with  -->
+        <!-- an HTML id.  An "mrow" can have an @xml:id, and  -->
+        <!-- we direct a URL (typically the "in-context" link -->
+        <!-- of a knowl) to the enclosing "md" or "mdn" (we   -->
+        <!-- can't know which in advance)                     -->
+        <xsl:choose>
+            <xsl:when test="self::mrow">
+                <xsl:apply-templates select="parent::*" mode="html-id"/>
+            </xsl:when>
+            <!-- an "men" is fine here, we do not need a parent -->
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="html-id" />
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:if>
 </xsl:template>
 
