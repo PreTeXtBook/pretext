@@ -805,7 +805,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:element name="{$html-heading}">
         <xsl:attribute name="class">
             <xsl:choose>
-                <xsl:when test="(self::chapter or self::appendix) and ($numbering-maxlevel > 0)">
+                <xsl:when test="(self::chapter or self::appendix or self::solutions/parent::backmatter) and ($numbering-maxlevel > 0)">
                     <xsl:text>heading</xsl:text>
                 </xsl:when>
                 <!-- hide "Chapter" when numbers are killed -->
@@ -865,16 +865,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Exercises, Solutions, References, Worksheets -->
-<!-- We give them a localized "type" computed from     -->
-<!-- their level. Numbers are displayed for structured -->
-<!-- divisions, but not for unstructured divisions.    -->
+<!-- Numbers are displayed for structured divisions, -->
+<!-- but not for unstructured divisions.             -->
 <xsl:template match="exercises|solutions|glossary|references|worksheet|reading-questions" mode="heading-content">
     <span class="type">
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id">
-                <xsl:value-of select="local-name(.)" />
-            </xsl:with-param>
-        </xsl:call-template>
+        <xsl:apply-templates select="." mode="type-name"/>
     </span>
     <xsl:text> </xsl:text>
     <!-- be selective about showing numbers -->
