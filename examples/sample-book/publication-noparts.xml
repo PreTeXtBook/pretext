@@ -19,9 +19,9 @@ You should have received a copy of the GNU General Public License
 along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
-<!-- This is the "noparts" version for use when testing or   -->
-<!-- building samples for the website, keep in sync with the -->
-<!-- "structural" and "decorative" versions                  -->
+<!-- This is the "noparts" version for use when testing or     -->
+<!-- building samples for the website, keep in sync with the   -->
+<!-- "structural", "decorative" and "solution-manual" versions -->
 
 <publication>
 

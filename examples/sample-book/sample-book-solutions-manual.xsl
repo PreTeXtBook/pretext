@@ -28,6 +28,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- solutions of a book that live anywhere inside a chapter. -->
 <xsl:import href="../xsl/pretext-solution-manual-latex.xsl" />
 
+<!-- Move the following out to publisher settings once implemented  -->
+<!-- Using extra XSL like this is discouraged (and only historical) -->
+
 <!-- PDF Watermarking of Personal Copies    -->
 <!-- Non-empty string makes it happen       -->
 <!-- 36in parbox just fits "DO NOT" string  -->
@@ -39,34 +42,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:param name="latex.font.size" select="'11pt'" />
 
-<!-- These switches default to "yes" if not set, so -->
-<!-- we explicitly set most to "no" and only set    -->
-<!-- "divisional hint and solution" to "yes".       -->
-<xsl:param name="exercise.inline.statement" select="'no'" />
-<xsl:param name="exercise.inline.hint" select="'no'" />
-<xsl:param name="exercise.inline.answer" select="'no'" />
-<xsl:param name="exercise.inline.solution" select="'no'" />
-
-<xsl:param name="exercise.divisional.statement" select="'yes'" />
-<xsl:param name="exercise.divisional.hint" select="'yes'" />
-<xsl:param name="exercise.divisional.answer" select="'yes'" />
-<xsl:param name="exercise.divisional.solution" select="'no'" />
-
-<xsl:param name="exercise.worksheet.statement" select="'yes'" />
-<xsl:param name="exercise.worksheet.hint" select="'no'" />
-<xsl:param name="exercise.worksheet.answer" select="'no'" />
-<xsl:param name="exercise.worksheet.solution" select="'no'" />
-
-<xsl:param name="exercise.reading.statement" select="'yes'" />
-<xsl:param name="exercise.reading.hint" select="'no'" />
-<xsl:param name="exercise.reading.answer" select="'no'" />
-<xsl:param name="exercise.reading.solution" select="'no'" />
-
-<xsl:param name="project.statement" select="'no'" />
-<xsl:param name="project.hint" select="'no'" />
-<xsl:param name="project.answer" select="'no'" />
-<xsl:param name="project.solution" select="'no'" />
-
 <!-- Print edition is 4 3/8 inches wide for body -->
 <!-- PDF only is wider, eg better for Sage material -->
 <!-- Default is "letterpaper", we could fine-tune margins if desired   -->
@@ -74,6 +49,5 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="latex.geometry">
 	<xsl:text>left=1.25in,right=1.25in,top=0.75in,bottom=0.75in,headsep=0.25in</xsl:text>
 </xsl:param>
-
 
 </xsl:stylesheet>

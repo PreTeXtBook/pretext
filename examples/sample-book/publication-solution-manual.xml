@@ -19,15 +19,26 @@ You should have received a copy of the GNU General Public License
 along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
-<!-- This is the "noparts" version for use when testing or   -->
-<!-- building samples for the website, keep in sync with the -->
-<!-- "structural" and "decorative" versions                  -->
+<!-- This is the "solution manual" version for use when testing -->
+<!-- or building samples for the website, keep in sync with the -->
+<!-- "nopart" versions                                          -->
 
 <publication>
 
     <!-- EPUB-Specific Options -->
     <!-- Specification of image locations, relative to main source file -->
     <epub cover="images/cover_aata_2014.png" image-directory="images"/>
+
+    <!-- These switches default to "yes" if not set, so -->
+    <!-- we explicitly set most to "no" and only set    -->
+    <!-- "divisional hint and solution" to "yes".       -->
+    <common>
+        <exercise-inline     statement="no"  hint="no"  answer="no"  solution="no"/>
+        <exercise-divisional statement="yes" hint="yes" answer="yes" solution="no"/>
+        <exercise-worksheet  statement="yes" hint="no"  answer="no"  solution="no"/>
+        <exercise-reading    statement="yes" hint="no"  answer="no"  solution="no"/>
+        <exercise-project    statement="no"  hint="no"  answer="no"  solution="no"/>
+    </common>
 
     <numbering>
         <!-- we just run with defaults for a book -->
