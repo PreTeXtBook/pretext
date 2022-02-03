@@ -964,20 +964,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="generated-directory-source">
     <xsl:variable name="raw-input" select="$publication/source/directories/@generated"/>
     <xsl:choose>
-        <xsl:when test="substring($raw-input, 1, 1) = '/'">
-            <xsl:message>PTX:ERROR:   a generated-image directory (source/directories/@generated in the publisher file) must be a relative path and not begin with "/" as in "<xsl:value-of select="$raw-input"/>".  Proceeding with the default, which is an empty string, and may lead to unexpected results.</xsl:message>
-            <xsl:text/>
+        <xsl:when test="$b-managed-directories">
+            <xsl:choose>
+                <xsl:when test="substring($raw-input, 1, 1) = '/'">
+                    <xsl:message>PTX:ERROR:   a generated-image directory (source/directories/@generated in the publisher file) must be a relative path and not begin with "/" as in "<xsl:value-of select="$raw-input"/>".  Proceeding with the default, which is an empty string, and may lead to unexpected results.</xsl:message>
+                    <xsl:text/>
+                </xsl:when>
+                <!-- trailing path separator is good -->
+                <xsl:when test="substring($raw-input, string-length($raw-input), 1) = '/'">
+                    <xsl:value-of select="$raw-input"/>
+                </xsl:when>
+                <!-- if there is substance, we need to add a trailing slash -->
+                <xsl:when test="string-length($raw-input) > 0">
+                    <xsl:value-of select="concat($raw-input, '/')"/>
+                </xsl:when>
+                <!-- specification must be empty, so we leave it that way -->
+                <xsl:otherwise/>
+            </xsl:choose>
         </xsl:when>
-        <!-- trailing path separator is good -->
-        <xsl:when test="substring($raw-input, string-length($raw-input), 1) = '/'">
-            <xsl:value-of select="$raw-input"/>
-        </xsl:when>
-        <!-- if there is substance, we need to add a trailing slash -->
-        <xsl:when test="string-length($raw-input) > 0">
-            <xsl:value-of select="concat($raw-input, '/')"/>
-        </xsl:when>
-        <!-- specification must be empty, so we leave it that way -->
-        <xsl:otherwise/>
+        <!-- Should issue a deprecation warning (elsewhere) for this.    -->
+        <!-- directory.images *is* defined elsewhere in this stylesheet, -->
+        <!-- and defaults to "images", but does not have a slash, which  -->
+        <!-- is presumed for the $generated-directory variable           -->
+        <xsl:otherwise>
+            <xsl:value-of select="concat($directory.images, '/')"/>
+        </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
 
