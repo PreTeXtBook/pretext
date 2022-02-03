@@ -2162,7 +2162,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:apply-templates select="." mode="url" />
                     </xsl:variable>
                     <span class="incontext">
-                        <a href="{$href}">
+                        <a href="{$href}" class="internal">
                             <xsl:call-template name="type-name">
                                 <xsl:with-param name="string-id" select="'incontext'" />
                             </xsl:call-template>
