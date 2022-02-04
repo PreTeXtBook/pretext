@@ -83,7 +83,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:for-each select="$root">
                 <xsl:variable name="subtree-root" select="id($subtree)"/>
                 <xsl:if test="not($subtree-root)">
-                    <xsl:message terminate="yes">MBX:FATAL:   xml:id provided ("<xsl:value-of select="$subtree"/>") for restriction to a subtree does not exist.  Quitting...</xsl:message>
+                    <xsl:message terminate="yes">PTX:FATAL:   xml:id provided ("<xsl:value-of select="$subtree"/>") for restriction to a subtree does not exist.  Quitting...</xsl:message>
                 </xsl:if>
                 <xsl:apply-templates select="$subtree-root" mode="extraction"/>
             </xsl:for-each>

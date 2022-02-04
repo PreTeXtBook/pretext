@@ -3621,7 +3621,7 @@ the xsltproc executable.
 
                 <tabular top="medium" bottom="minor">
                     <row bottom="medium">
-                        <cell>MBX Element</cell>
+                        <cell>Element</cell>
                         <cell>Specification</cell>
                         <cell><latex />/Print</cell>
                         <cell>HTML</cell>
@@ -4323,7 +4323,7 @@ the xsltproc executable.
 
                 <p>Items in ordered lists (only) may be be give an <c>xml:id</c> and then may be the target of an <c>xref</c>.  We test three here, referencing down into the hierarchy above.  Level 1, second: <xref ref="list-two" />.  Level 3, second: <xref ref="list-two-two-two" />.  Level 4, third: <xref ref="list-two-two-two-three" />.  Note that if a list item of an ordered list is contained within a list item of an unordered list, then its number will not be defined.</p>
 
-                <p>And now a four-level deep unordered list with the default labels supplied by MBX (disc, circle, square, disc).  Again, the defalt order for Markdown/Jupyter (disc, square, circle, circle) is different than for <latex /> and HTML (disc, circle, square, disc)<ul>
+                <p>And now a four-level deep unordered list with the default labels supplied by <pretext/> (disc, circle, square, disc).  Again, the defalt order for Markdown/Jupyter (disc, square, circle, circle) is different than for <latex /> and HTML (disc, circle, square, disc)<ul>
                     <li>
                         <title>A title on a top-level item</title>
                         <p>Level 1, first.</p>
@@ -7722,7 +7722,7 @@ the xsltproc executable.
         <section>
             <title>Units of Measure</title>
 
-            <p>Units of measure can be given xml treatment too with the <c>quantity</c> element. In <latex />, the <c>siunitx</c><idx><h>siunitx package</h></idx><idx><h>package</h><h>siunitx</h></idx><idx><h>units</h></idx> package is loaded to achive unit handling. Since that package only offers SI units, some other common units will be added by MBX in the preamble. In HTML, the capabilities of <c>siunitx</c> are simulated, weakly. Note that at present, you should not attempt to use the <c>quantity</c> element within a math environment.</p>
+            <p>Units of measure can be given xml treatment too with the <c>quantity</c> element. In <latex />, the <c>siunitx</c><idx><h>siunitx package</h></idx><idx><h>package</h><h>siunitx</h></idx><idx><h>units</h></idx> package is loaded to achive unit handling. Since that package only offers SI units, some other common units will be added by <pretext/> in the preamble. In HTML, the capabilities of <c>siunitx</c> are simulated, weakly. Note that at present, you should not attempt to use the <c>quantity</c> element within a math environment.</p>
             <p>The value of gravitational constant <m>g</m> is <quantity><mag>9.8</mag><unit base="meter"/><per base="second" exp="2"/></quantity>. Force is measured in <quantity><unit prefix="kilo" base="gram"/><unit base="meter"/><per base="second" exp="2"/></quantity>, also known as one <quantity><unit base="newton"/></quantity>. A quantity with rather ridiculous units is <quantity><mag>23</mag><unit prefix='micro' base='hectare' exp='23'/><per base='degreeCelsius'/><per base='second' exp='2'/></quantity>. One <quantity><unit base="hertz"/></quantity> is the same as <quantity><per base='second'/></quantity>. You can have a unitless quantity, like <quantity><mag>42</mag></quantity>, which may help with consistency between such numbers and units in the <latex /> output. Some non-SI units are available, such as the absurd <quantity><unit base="degreeFahrenheit"/><unit base="foot"/><unit base="pound"/><per base="gallon"/></quantity>.  The <latex /> command <c>\pi</c> is recognized within <c>mag</c> in conversions to HTML, which is consistent with the behavior with a conversion to <latex />, for example there are
             <quantity>
                 <mag>2\pi</mag>

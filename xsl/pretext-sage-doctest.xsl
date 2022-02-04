@@ -124,7 +124,7 @@
                         <xsl:value-of select="@tolerance" />
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:message>MBX:WARNING: '<xsl:value-of select="@doctest" /> tolerance' Sage doctest needs 'tolerance=' attribute</xsl:message>
+                        <xsl:message>PTX:WARNING: '<xsl:value-of select="@doctest" /> tolerance' Sage doctest needs 'tolerance=' attribute</xsl:message>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
@@ -137,7 +137,7 @@
                         <xsl:value-of select="@package" />
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:message>MBX:WARNING: 'optional' Sage doctest missing package, supply a 'package=' attribute</xsl:message>
+                        <xsl:message>PTX:WARNING: 'optional' Sage doctest missing package, supply a 'package=' attribute</xsl:message>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>

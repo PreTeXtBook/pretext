@@ -219,7 +219,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$latex.font.size='20pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
         <xsl:otherwise>
             <xsl:text>10pt</xsl:text>
-            <xsl:message>MBX:ERROR   the latex.font.size parameter must be 8pt, 9pt, 10pt, 11pt, 12pt, 14pt, 17pt, or 20pt, not "<xsl:value-of select="$latex.font.size" />".  Using the default ('10pt')</xsl:message>
+            <xsl:message>PTX:ERROR   the latex.font.size parameter must be 8pt, 9pt, 10pt, 11pt, 12pt, 14pt, 17pt, or 20pt, not "<xsl:value-of select="$latex.font.size" />".  Using the default ('10pt')</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -1036,7 +1036,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>}&#xa;</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:message>MBX:ERROR:   the latex.fillin.style parameter should be 'underline' or 'box', not '<xsl:value-of select="$latex.fillin.style"/>'.  Using the default ('underline').</xsl:message>
+                <xsl:message>PTX:ERROR:   the latex.fillin.style parameter should be 'underline' or 'box', not '<xsl:value-of select="$latex.fillin.style"/>'.  Using the default ('underline').</xsl:message>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:if>
@@ -1911,7 +1911,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% End: Author-provided packages&#xa;</xsl:text>
     <xsl:text>%% Begin: Author-provided macros&#xa;</xsl:text>
     <xsl:text>%% (From  docinfo/macros  element)&#xa;</xsl:text>
-    <xsl:text>%% Plus three from MBX for XML characters&#xa;</xsl:text>
+    <xsl:text>%% Plus three from PTX for XML characters&#xa;</xsl:text>
     <xsl:value-of select="$latex-macros" />
     <xsl:text>%% End: Author-provided macros&#xa;</xsl:text>
 
@@ -2422,7 +2422,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="*" mode="division-name">
-    <xsl:message>MBX:BUG: Asking for the name of an element (<xsl:value-of select="local-name(.)" />) that is not a division</xsl:message>
+    <xsl:message>PTX:BUG: Asking for the name of an element (<xsl:value-of select="local-name(.)" />) that is not a division</xsl:message>
 </xsl:template>
 
 <!-- ####################### -->
@@ -6876,7 +6876,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Good match between basic HTML types and basic LaTeX types -->
 
-<!-- Utility templates to translate MBX @label specification -->
+<!-- Utility templates to translate PTX @label specification -->
 <!-- for use with LaTeX enumitem package's label keyword     -->
 <xsl:template match="ol" mode="latex-list-label">
     <xsl:variable name="mbx-format-code">
@@ -6884,7 +6884,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <!-- deconstruct the left and right adornments of the label   -->
     <!-- or provide the default adornments, consistent with LaTeX -->
-    <!-- in the middle, translate MBX codes for enumitem package  -->
+    <!-- in the middle, translate PTX codes for enumitem package  -->
     <xsl:choose>
         <xsl:when test="@label">
             <xsl:value-of select="substring-before(@label, $mbx-format-code)" />
@@ -6902,7 +6902,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$mbx-format-code = 'i'">\roman*</xsl:when>
         <xsl:when test="$mbx-format-code = 'I'">\Roman*</xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:BUG: bad ordered list label format code in LaTeX conversion</xsl:message>
+            <xsl:message>PTX:BUG: bad ordered list label format code in LaTeX conversion</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:choose>
@@ -6929,7 +6929,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$mbx-format-code = 'square'">$\blacksquare$</xsl:when>
         <xsl:when test="$mbx-format-code = 'none'"></xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:BUG: bad unordered list label format code in LaTeX conversion</xsl:message>
+            <xsl:message>PTX:BUG: bad unordered list label format code in LaTeX conversion</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -6952,7 +6952,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$level='2'">$\blacksquare$</xsl:when>
         <xsl:when test="$level='3'">\textbullet</xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:ERROR: unordered list is more than 4 levels deep</xsl:message>
+            <xsl:message>PTX:ERROR: unordered list is more than 4 levels deep</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -9948,9 +9948,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Table construction utilities -->
 <!-- ############################ -->
 
-<!-- Mostly translating MBX terms to LaTeX terms         -->
+<!-- Mostly translating PTX terms to LaTeX terms         -->
 <!-- Typically use these at the last moment,             -->
-<!-- while outputting, and thus use MBX terms internally -->
+<!-- while outputting, and thus use PTX terms internally -->
 
 <!-- Some utilities are defined in xsl/pretext-common.xsl -->
 
@@ -9979,7 +9979,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>b</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:WARNING: vertical alignment attribute not recognized: use top, middle, bottom</xsl:message>
+            <xsl:message>PTX:WARNING: vertical alignment attribute not recognized: use top, middle, bottom</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -10000,7 +10000,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\raggedleft</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:WARNING: horizontal alignment attribute not recognized: use left, center, right, justify</xsl:message>
+            <xsl:message>PTX:WARNING: horizontal alignment attribute not recognized: use left, center, right, justify</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -10022,7 +10022,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>C</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:WARNING: tabular left or right attribute not recognized: use none, minor, medium, major</xsl:message>
+            <xsl:message>PTX:WARNING: tabular left or right attribute not recognized: use none, minor, medium, major</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -10044,7 +10044,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\hrulethick</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:WARNING: tabular top or bottom attribute not recognized: use none, minor, medium, major</xsl:message>
+            <xsl:message>PTX:WARNING: tabular top or bottom attribute not recognized: use none, minor, medium, major</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -10069,7 +10069,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\crulethick</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:WARNING: tabular top or bottom attribute not recognized: use none, minor, medium, major</xsl:message>
+            <xsl:message>PTX:WARNING: tabular top or bottom attribute not recognized: use none, minor, medium, major</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
     <!-- span -->

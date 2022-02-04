@@ -155,7 +155,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$root/letter">0</xsl:when>
         <xsl:when test="$root/memo">0</xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:ERROR: HTML chunk level not determined</xsl:message>
+            <xsl:message>PTX:ERROR: HTML chunk level not determined</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -172,7 +172,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>linear</xsl:text>
-            <xsl:message>MBX:ERROR: 'html.navigation.logic' must be 'linear' or 'tree', not '<xsl:value-of select="$html.navigation.logic" />.'  Using the default instead ('linear').</xsl:message>
+            <xsl:message>PTX:ERROR: 'html.navigation.logic' must be 'linear' or 'tree', not '<xsl:value-of select="$html.navigation.logic" />.'  Using the default instead ('linear').</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -187,7 +187,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>yes</xsl:text>
-            <xsl:message>MBX:ERROR: 'html.navigation.upbutton' must be 'yes' or 'no', not '<xsl:value-of select="$html.navigation.upbutton" />.'  Using the default instead ('yes').</xsl:message>
+            <xsl:message>PTX:ERROR: 'html.navigation.upbutton' must be 'yes' or 'no', not '<xsl:value-of select="$html.navigation.upbutton" />.'  Using the default instead ('yes').</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -202,7 +202,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>full</xsl:text>
-            <xsl:message>MBX:ERROR: 'html.navigation.style' must be 'full' or 'compact', not '<xsl:value-of select="$html.navigation.style" />.'  Using the default instead ('full').</xsl:message>
+            <xsl:message>PTX:ERROR: 'html.navigation.style' must be 'full' or 'compact', not '<xsl:value-of select="$html.navigation.style" />.'  Using the default instead ('full').</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -409,18 +409,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- However, some MBX document types do not have    -->
+<!-- However, some PTX document types do not have    -->
 <!-- universal conversion, so these default warnings -->
 <!-- should be overridden by supported conversions   -->
 <xsl:template match="letter" mode="chunking">
     <xsl:message terminate="yes">
-        <xsl:text>MBX:FATAL:  HTML conversion does not support the "letter" document type.  Quitting...</xsl:text>
+        <xsl:text>PTX:FATAL:  HTML conversion does not support the "letter" document type.  Quitting...</xsl:text>
     </xsl:message>
 </xsl:template>
 
 <xsl:template match="memo" mode="chunking">
     <xsl:message terminate="yes">
-        <xsl:text>MBX:FATAL:  HTML conversion does not support the "memo" document type.  Quitting...</xsl:text>
+        <xsl:text>PTX:FATAL:  HTML conversion does not support the "memo" document type.  Quitting...</xsl:text>
     </xsl:message>
 </xsl:template>
 
@@ -5926,7 +5926,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Lists -->
 <!-- ##### -->
 
-<!-- Utility templates to translate MBX              -->
+<!-- Utility templates to translate PTX              -->
 <!-- enumeration style to HTML list-style-type       -->
 <!-- NB: this is currently inferior to latex version -->
 <!-- NB: all pre-, post-formatting is lost           -->
@@ -5942,7 +5942,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$mbx-format-code = 'i'">lower-roman</xsl:when>
         <xsl:when test="$mbx-format-code = 'I'">upper-roman</xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:BUG: bad ordered list label format code in HTML conversion</xsl:message>
+            <xsl:message>PTX:BUG: bad ordered list label format code in HTML conversion</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -5957,7 +5957,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$mbx-format-code = 'square'">square</xsl:when>
         <xsl:when test="$mbx-format-code = 'none'">no-marker</xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:BUG: bad unordered list label format code in HTML conversion</xsl:message>
+            <xsl:message>PTX:BUG: bad unordered list label format code in HTML conversion</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -7646,7 +7646,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="$the-cell/ancestor::tabular/@valign">
                     <xsl:value-of select="$the-cell/ancestor::tabular/@valign" />
                 </xsl:when>
-                <!-- HTML default is "baseline", not supported by MBX           -->
+                <!-- HTML default is "baseline", not supported by PTX           -->
                 <!-- Instead we default to "middle" to be consistent with LaTeX -->
                 <xsl:otherwise>
                     <xsl:text>middle</xsl:text>
@@ -7848,7 +7848,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:when>
                         <!-- If there is no $left-col/@width, terminate -->
                         <xsl:otherwise>
-                            <xsl:message>MBX:FATAL:   cell with a "p" element has no corresponding col element with width attribute.</xsl:message>
+                            <xsl:message>PTX:FATAL:   cell with a "p" element has no corresponding col element with width attribute.</xsl:message>
                             <xsl:apply-templates select="." mode="location-report" />
                             <xsl:message terminate="yes">Quitting...</xsl:message>
                         </xsl:otherwise>
@@ -10050,7 +10050,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:otherwise>
                 <!-- just a silly domain so something none-too-crazy happens -->
                 <xsl:text>http://www.example.com/</xsl:text>
-                <xsl:message>MBX:ERROR:  @variant="<xsl:value-of select="@variant" />" is not recognized for a CalcPlot3D &lt;interactive&gt;</xsl:message>
+                <xsl:message>PTX:ERROR:  @variant="<xsl:value-of select="@variant" />" is not recognized for a CalcPlot3D &lt;interactive&gt;</xsl:message>
                 <xsl:apply-templates select="." mode="location-report" />
             </xsl:otherwise>
         </xsl:choose>
@@ -11272,7 +11272,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="$first-structural-child" mode="is-structural" />
             </xsl:variable>
             <xsl:if test="$structural='false'">
-                <xsl:message>MBX:ERROR: descending into first node of an intermediate page (<xsl:value-of select="local-name($first-structural-child)" />) that is non-structural; maybe your source has incorrect structure</xsl:message>
+                <xsl:message>PTX:ERROR: descending into first node of an intermediate page (<xsl:value-of select="local-name($first-structural-child)" />) that is non-structural; maybe your source has incorrect structure</xsl:message>
                 <xsl:apply-templates select="." mode="location-report" />
             </xsl:if>
         </xsl:when>
@@ -11371,7 +11371,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="$last-structural-child" mode="is-structural" />
             </xsl:variable>
             <xsl:if test="$structural='false'">
-                <xsl:message>MBX:ERROR: descending into last node of an intermediate page (<xsl:value-of select="local-name($last-structural-child)" />) that is non-structural</xsl:message>
+                <xsl:message>PTX:ERROR: descending into last node of an intermediate page (<xsl:value-of select="local-name($last-structural-child)" />) that is non-structural</xsl:message>
             </xsl:if>
         </xsl:otherwise>
     </xsl:choose>

@@ -458,7 +458,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}&#xa;</xsl:text>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:message terminate="yes">MBX:ERROR: invalid value <xsl:value-of select="$latex.fillin.style" />
+        <xsl:message terminate="yes">PTX:ERROR: invalid value <xsl:value-of select="$latex.fillin.style" />
  for latex.fillin.style stringparam. Should be 'underline' or 'box'.</xsl:message>
       </xsl:otherwise>
     </xsl:choose>

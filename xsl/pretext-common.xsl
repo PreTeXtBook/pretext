@@ -60,7 +60,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   (c) imports xsl/pretext-latex.xsl                             -->
 <!--                                                                  -->
 <!-- xsl/pretext-latex.xsl                                           -->
-<!--   (a) general conversion from MBX to LaTeX                       -->
+<!--   (a) general conversion from PTX to LaTeX                       -->
 <!--   (b) could be used at the command line for default conversion   -->
 <!--   (c) imports xsl/pretext-common.xsl                            -->
 <!--                                                                  -->
@@ -388,7 +388,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>none</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:ERROR:   Option for "emdash.space" should be "none" or "thin", not "<xsl:value-of select="$emdash.space" />".  Assuming the default, "none".</xsl:message>
+            <xsl:message>PTX:ERROR:   Option for "emdash.space" should be "none" or "thin", not "<xsl:value-of select="$emdash.space" />".  Assuming the default, "none".</xsl:message>
             <xsl:text>none</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
@@ -422,7 +422,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>no</xsl:text>
-            <xsl:message>MBX:WARNING: the "commentary" stringparam should be "yes" or "no", not "<xsl:value-of select="$commentary"/>", so assuming "no"</xsl:message>
+            <xsl:message>PTX:WARNING: the "commentary" stringparam should be "yes" or "no", not "<xsl:value-of select="$commentary"/>", so assuming "no"</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -440,7 +440,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>justify</xsl:text>
-            <xsl:message>MBX:WARNING: the "text.alignment" stringparam should be "justify" or "raggedright", not "<xsl:value-of select="$text.alignment"/>", so assuming "justify"</xsl:message>
+            <xsl:message>PTX:WARNING: the "text.alignment" stringparam should be "justify" or "raggedright", not "<xsl:value-of select="$text.alignment"/>", so assuming "justify"</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -617,7 +617,7 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>
-                <xsl:text>MBX:ERROR: the whitespace parameter can be 'strict' or 'flexible', not '</xsl:text>
+                <xsl:text>PTX:ERROR: the whitespace parameter can be 'strict' or 'flexible', not '</xsl:text>
                 <xsl:value-of select="$whitespace" />
                 <xsl:text>'.  Using the default ('flexible').</xsl:text>
             </xsl:message>
@@ -825,13 +825,13 @@ Book (with parts), "section" at level 3
         <xsl:when test="$assembly-root/letter">1</xsl:when>
         <xsl:when test="$assembly-root/memo">1</xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:BUG: Level offset undefined for this document type</xsl:message>
+            <xsl:message>PTX:BUG: Level offset undefined for this document type</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
 
 <!-- Names for Levels -->
-<!-- Levels (ie depths in the tree) translate to MBX element -->
+<!-- Levels (ie depths in the tree) translate to PTX element -->
 <!-- names and LaTeX divisions, which are generally the same -->
 <!-- This is useful for "new" sections (eg exercises) when   -->
 <!-- used with standard LaTeX sectioning and numbering       -->
@@ -850,7 +850,7 @@ Book (with parts), "section" at level 3
         <xsl:when test="$normalized-level=3">subsection</xsl:when>
         <xsl:when test="$normalized-level=4">subsubsection</xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Level computation is out-of-bounds (input as <xsl:value-of select="$level" />, normalized to <xsl:value-of select="$normalized-level" />)</xsl:message>
+            <xsl:message>PTX:ERROR: Level computation is out-of-bounds (input as <xsl:value-of select="$level" />, normalized to <xsl:value-of select="$normalized-level" />)</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -1257,7 +1257,7 @@ Book (with parts), "section" at level 3
             <xsl:text>align</xsl:text>
         </xsl:when>
         <xsl:when test="@alignment">
-            <xsl:message>MBX:ERROR: display math @alignment attribute "<xsl:value-of select="@alignment" />" is not recognized (should be "align", "gather", "alignat")</xsl:message>
+            <xsl:message>PTX:ERROR: display math @alignment attribute "<xsl:value-of select="@alignment" />" is not recognized (should be "align", "gather", "alignat")</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:when>
         <!-- sniff for alignment specifications    -->
@@ -2923,7 +2923,7 @@ Book (with parts), "section" at level 3
                     <xsl:value-of select="not(*[not(self::titlepage)])" />
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>MBX:BUG:     asking if a "frontmatter" is a leaf, for a document that is not a "book" nor an "article"</xsl:message>
+                    <xsl:message>PTX:BUG:     asking if a "frontmatter" is a leaf, for a document that is not a "book" nor an "article"</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
@@ -2943,7 +2943,7 @@ Book (with parts), "section" at level 3
 <!-- but should maybe not even be called -->
 <xsl:template match="*" mode="is-leaf">
     <xsl:value-of select="false()" />
-    <!-- <xsl:message>MBX:BUG:     asking if a non-structural division is a leaf</xsl:message> -->
+    <!-- <xsl:message>PTX:BUG:     asking if a non-structural division is a leaf</xsl:message> -->
 </xsl:template>
 
 <!-- There are two models for most of the divisions (part -->
@@ -3046,7 +3046,7 @@ Book (with parts), "section" at level 3
             <xsl:value-of select="$structural" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:BUG: Structural determination (<xsl:value-of select="$structural" />) failed for is-intermediate at <xsl:apply-templates select="." mode="long-name"/></xsl:message>
+            <xsl:message>PTX:BUG: Structural determination (<xsl:value-of select="$structural" />) failed for is-intermediate at <xsl:apply-templates select="." mode="long-name"/></xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -3071,7 +3071,7 @@ Book (with parts), "section" at level 3
             <xsl:value-of select="$structural" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:BUG: Structural determination (<xsl:value-of select="$structural" />) failed for is-chunk at <xsl:apply-templates select="." mode="long-name"/></xsl:message>
+            <xsl:message>PTX:BUG: Structural determination (<xsl:value-of select="$structural" />) failed for is-chunk at <xsl:apply-templates select="." mode="long-name"/></xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -3585,7 +3585,7 @@ Book (with parts), "section" at level 3
     <xsl:variable name="normalized-width" select="normalize-space($raw-width)" />
     <xsl:choose>
         <xsl:when test="not(substring($normalized-width, string-length($normalized-width)) = '%')">
-            <xsl:message>MBX:ERROR:   a "width" attribute should be given as a percentage (such as "40%", not as "<xsl:value-of select="$normalized-width" />, using 100% instead"</xsl:message>
+            <xsl:message>PTX:ERROR:   a "width" attribute should be given as a percentage (such as "40%", not as "<xsl:value-of select="$normalized-width" />, using 100% instead"</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
             <!-- replace by 100% -->
             <xsl:text>100%</xsl:text>
@@ -3680,7 +3680,7 @@ Book (with parts), "section" at level 3
         <!-- NaN does not equal *anything*, so tests if a number  -->
         <!-- http://stackoverflow.com/questions/6895870           -->
         <xsl:when test="not(number($the-aspect) = number($the-aspect)) or ($the-aspect &lt; 0)">
-            <xsl:message>MBX:WARNING: the @aspect attribute should be a ratio, like 4:3, or a positive number, not "<xsl:value-of select="$the-aspect" />"</xsl:message>
+            <xsl:message>PTX:WARNING: the @aspect attribute should be a ratio, like 4:3, or a positive number, not "<xsl:value-of select="$the-aspect" />"</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:when>
         <!-- survives as a number -->
@@ -3893,7 +3893,7 @@ Book (with parts), "section" at level 3
             <xsl:text>[</xsl:text>
             <xsl:value-of select="$string-id" />
             <xsl:text>]</xsl:text>
-            <xsl:message>MBX:WARNING: could not translate string with id "<xsl:value-of select="$string-id" />" into language for code "<xsl:value-of select="$document-language" />"</xsl:message>
+            <xsl:message>PTX:WARNING: could not translate string with id "<xsl:value-of select="$string-id" />" into language for code "<xsl:value-of select="$document-language" />"</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -4489,7 +4489,7 @@ Book (with parts), "section" at level 3
             <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/reading-questions" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Subtree level for atomic block number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
+            <xsl:message>PTX:ERROR: Subtree level for atomic block number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -4530,7 +4530,7 @@ Book (with parts), "section" at level 3
             <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/reading-questions" level="any" count="&PROJECT-LIKE;" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Subtree level for project number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
+            <xsl:message>PTX:ERROR: Subtree level for project number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -4600,7 +4600,7 @@ Book (with parts), "section" at level 3
                 list[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Subtree level for atomic figure number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
+            <xsl:message>PTX:ERROR: Subtree level for atomic figure number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -4647,7 +4647,7 @@ Book (with parts), "section" at level 3
                 count="exercise[boolean(&INLINE-EXERCISE-FILTER;)]" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Subtree level for atomic exercise number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
+            <xsl:message>PTX:ERROR: Subtree level for atomic exercise number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -4689,7 +4689,7 @@ Book (with parts), "section" at level 3
             <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/reading-questions" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Subtree level for equation number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
+            <xsl:message>PTX:ERROR: Subtree level for equation number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -4799,7 +4799,7 @@ Book (with parts), "section" at level 3
             <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/reading-questions" level="any" count="fn" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Subtree level for footnote number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
+            <xsl:message>PTX:ERROR: Subtree level for footnote number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -4834,7 +4834,7 @@ Book (with parts), "section" at level 3
 <!-- Serial Numbers: List Items -->
 
 <!-- First, the number of a list item within its own ordered list.  This -->
-<!-- trades on the MBX format codes being identical to the XSLT codes.   -->
+<!-- trades on the PTX format codes being identical to the XSLT codes.   -->
 <xsl:template match="ol/li" mode="item-number">
     <xsl:variable name="code">
         <xsl:apply-templates select=".." mode="format-code" />
@@ -5823,12 +5823,12 @@ Book (with parts), "section" at level 3
     <xsl:variable name="nspaces-valigns" select="string-length($valigns) - string-length(translate($valigns, ' ', ''))" />
     <xsl:choose>
         <xsl:when test="$nspaces-valigns &lt; $number-panels">
-            <xsl:message>MBX:FATAL:   a &lt;sidebyside&gt; or &lt;sbsgroup&gt; does not have enough "@valigns" (maybe you did not specify enough?)</xsl:message>
+            <xsl:message>PTX:FATAL:   a &lt;sidebyside&gt; or &lt;sbsgroup&gt; does not have enough "@valigns" (maybe you did not specify enough?)</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
             <xsl:message terminate="yes">             That's fatal.  Sorry.  Quitting...</xsl:message>
         </xsl:when>
         <xsl:when test="$nspaces-valigns &gt; $number-panels">
-            <xsl:message>MBX:WARNING: a &lt;sidebyside&gt; or &lt;sbsgroup&gt; has extra "@valigns" (did you confuse singular and plural attribute names?)</xsl:message>
+            <xsl:message>PTX:WARNING: a &lt;sidebyside&gt; or &lt;sbsgroup&gt; has extra "@valigns" (did you confuse singular and plural attribute names?)</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:when>
     </xsl:choose>
@@ -5981,11 +5981,11 @@ Book (with parts), "section" at level 3
     </xsl:if>
     <!-- error check for reasonable values -->
     <xsl:if test="(substring-before($left-margin, '%') &lt; 0) or (substring-before($left-margin, '%') &gt; 100)">
-        <xsl:message>MBX:ERROR:   left margin of a &lt;sidebyside&gt; ("<xsl:value-of select="$left-margin" />") is outside the interval [0%, 100%], (this may be computed, check consistency of "@margins" and "@widths")</xsl:message>
+        <xsl:message>PTX:ERROR:   left margin of a &lt;sidebyside&gt; ("<xsl:value-of select="$left-margin" />") is outside the interval [0%, 100%], (this may be computed, check consistency of "@margins" and "@widths")</xsl:message>
         <xsl:apply-templates select="." mode="location-report" />
     </xsl:if>
     <xsl:if test="(substring-before($right-margin, '%') &lt; 0) or (substring-before($right-margin, '%') &gt; 100)">
-        <xsl:message>MBX:ERROR:   right margin of a &lt;sidebyside&gt; ("<xsl:value-of select="$right-margin" />") is outside the interval [0%, 100%], (this may be computed, check consistency of "@margins" and "@widths")</xsl:message>
+        <xsl:message>PTX:ERROR:   right margin of a &lt;sidebyside&gt; ("<xsl:value-of select="$right-margin" />") is outside the interval [0%, 100%], (this may be computed, check consistency of "@margins" and "@widths")</xsl:message>
         <xsl:apply-templates select="." mode="location-report" />
     </xsl:if>
     <!-- Add to RTF -->
@@ -6021,12 +6021,12 @@ Book (with parts), "section" at level 3
     <xsl:variable name="nspaces-widths" select="string-length($widths) - string-length(translate($widths, ' ', ''))" />
     <xsl:choose>
         <xsl:when test="$nspaces-widths &lt; $number-panels">
-            <xsl:message>MBX:FATAL:   a &lt;sidebyside&gt; or &lt;sbsgroup&gt; does not have enough "@widths" (maybe you did not specify enough?)</xsl:message>
+            <xsl:message>PTX:FATAL:   a &lt;sidebyside&gt; or &lt;sbsgroup&gt; does not have enough "@widths" (maybe you did not specify enough?)</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
             <xsl:message terminate="yes">             That's fatal.  Sorry.  Quitting...</xsl:message>
         </xsl:when>
         <xsl:when test="$nspaces-widths &gt; $number-panels">
-            <xsl:message>MBX:WARNING: a &lt;sidebyside&gt; or &lt;sbsgroup&gt; has extra "@widths" (did you confuse singular and plural attribute names?)</xsl:message>
+            <xsl:message>PTX:WARNING: a &lt;sidebyside&gt; or &lt;sbsgroup&gt; has extra "@widths" (did you confuse singular and plural attribute names?)</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:when>
     </xsl:choose>
@@ -6059,11 +6059,11 @@ Book (with parts), "section" at level 3
     <!-- overall error check on space width -->
     <xsl:choose>
         <xsl:when test="substring-before($space-width, '%') &lt; 0">
-            <xsl:message>MBX:ERROR:   computed space between panels of a &lt;sidebyside&gt; ("<xsl:value-of select="$space-width" />") is negative (this value is computed, check consistency of "@margins" and "@widths")</xsl:message>
+            <xsl:message>PTX:ERROR:   computed space between panels of a &lt;sidebyside&gt; ("<xsl:value-of select="$space-width" />") is negative (this value is computed, check consistency of "@margins" and "@widths")</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:when>
         <xsl:when test="substring-before($space-width, '%') = 'NaN'">
-            <xsl:message>MBX:ERROR:   computed space between panels of a &lt;sidebyside&gt; is not a number (this value is computed, check that margins ("<xsl:value-of select="$left-margin" />, <xsl:value-of select="$right-margin" />") and widths ("<xsl:value-of select="$widths" />") are percentages of the form "nn%")</xsl:message>
+            <xsl:message>PTX:ERROR:   computed space between panels of a &lt;sidebyside&gt; is not a number (this value is computed, check that margins ("<xsl:value-of select="$left-margin" />, <xsl:value-of select="$right-margin" />") and widths ("<xsl:value-of select="$widths" />") are percentages of the form "nn%")</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:when>
     </xsl:choose>
@@ -6090,7 +6090,7 @@ Book (with parts), "section" at level 3
             <xsl:when test="$the-valign = 'bottom'" />
             <xsl:when test="$the-valign = 'middle'" />
             <xsl:otherwise>
-                <xsl:message>MBX:ERROR:   @valign(s) ("<xsl:value-of select="$the-valign" />") in &lt;sidebyside&gt; or &lt;sbsgroup&gt; is not "top," "middle" or "bottom"</xsl:message>
+                <xsl:message>PTX:ERROR:   @valign(s) ("<xsl:value-of select="$the-valign" />") in &lt;sidebyside&gt; or &lt;sbsgroup&gt; is not "top," "middle" or "bottom"</xsl:message>
                 <xsl:apply-templates select="." mode="location-report" />
             </xsl:otherwise>
         </xsl:choose>
@@ -6114,11 +6114,11 @@ Book (with parts), "section" at level 3
         <!-- error-check, since author-supplied could be wild -->
         <xsl:choose>
             <xsl:when test="substring-before($the-width, '%') &lt; 0">
-                <xsl:message>MBX:ERROR:   panel width ("<xsl:value-of select="$the-width" />") in a &lt;sidebyside&gt; or &lt;sbsgroup&gt; is negative (this may be computed, check "@margin(s)" and "@width(s)")</xsl:message>
+                <xsl:message>PTX:ERROR:   panel width ("<xsl:value-of select="$the-width" />") in a &lt;sidebyside&gt; or &lt;sbsgroup&gt; is negative (this may be computed, check "@margin(s)" and "@width(s)")</xsl:message>
                 <xsl:apply-templates select="." mode="location-report" />
             </xsl:when>
             <xsl:when test="substring-before($the-width, '%') &gt; 100">
-                <xsl:message>MBX:ERROR:   panel width ("<xsl:value-of select="$the-width" />") in a &lt;sidebyside&gt; or &lt;sbsgroup&gt; is bigger than 100% (this may be computed, check "@margin(s)" and "@width(s)")</xsl:message>
+                <xsl:message>PTX:ERROR:   panel width ("<xsl:value-of select="$the-width" />") in a &lt;sidebyside&gt; or &lt;sbsgroup&gt; is bigger than 100% (this may be computed, check "@margin(s)" and "@width(s)")</xsl:message>
                 <xsl:apply-templates select="." mode="location-report" />
             </xsl:when>
         </xsl:choose>
@@ -6286,7 +6286,7 @@ Book (with parts), "section" at level 3
 <xsl:template match="li[p|ol|ul|dl]/text()">
     <xsl:variable name="text" select="normalize-space(.)" />
     <xsl:if test="$text">
-        <xsl:message>MBX:WARNING: Unstructured content within a list item is being ignored ("<xsl:value-of select="$text" />")</xsl:message>
+        <xsl:message>PTX:WARNING: Unstructured content within a list item is being ignored ("<xsl:value-of select="$text" />")</xsl:message>
          <xsl:apply-templates select=".." mode="location-report" />
     </xsl:if>
 </xsl:template>
@@ -6401,7 +6401,7 @@ Book (with parts), "section" at level 3
                 <!-- DEPRECATED 2015-12-12 -->
                 <xsl:when test="@label=''" />
                 <xsl:otherwise>
-                    <xsl:message>MBX:ERROR: ordered list label (<xsl:value-of select="@label" />) not recognized</xsl:message>
+                    <xsl:message>PTX:ERROR: ordered list label (<xsl:value-of select="@label" />) not recognized</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
@@ -6415,7 +6415,7 @@ Book (with parts), "section" at level 3
                 <xsl:when test="$level='2'">i</xsl:when>
                 <xsl:when test="$level='3'">A</xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>MBX:ERROR: ordered list is more than 4 levels deep (at level <xsl:value-of select="$level" />) or is inside an "exercise" and is more than 3 levels deep  (at level <xsl:value-of select="$level - 1" />)</xsl:message>
+                    <xsl:message>PTX:ERROR: ordered list is more than 4 levels deep (at level <xsl:value-of select="$level" />) or is inside an "exercise" and is more than 3 levels deep  (at level <xsl:value-of select="$level - 1" />)</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:otherwise>
@@ -6436,7 +6436,7 @@ Book (with parts), "section" at level 3
                 <xsl:when test="@label='square'">square</xsl:when>
                 <xsl:when test="@label=''">none</xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>MBX:ERROR: unordered list label (<xsl:value-of select="@label" />) not recognized</xsl:message>
+                    <xsl:message>PTX:ERROR: unordered list label (<xsl:value-of select="@label" />) not recognized</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
@@ -6450,7 +6450,7 @@ Book (with parts), "section" at level 3
                 <xsl:when test="$level='2'">square</xsl:when>
                 <xsl:when test="$level='3'">disc</xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>MBX:ERROR: unordered list is more than 4 levels deep (at level <xsl:value-of select="$level" />)</xsl:message>
+                    <xsl:message>PTX:ERROR: unordered list is more than 4 levels deep (at level <xsl:value-of select="$level" />)</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:otherwise>
@@ -6473,7 +6473,7 @@ Book (with parts), "section" at level 3
             <xsl:value-of select="@cols" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:ERROR:   @cols attribute of lists or exercise groups, must be between 1 and 6 (inclusive), not "cols=<xsl:value-of select="@cols" />"</xsl:message>
+            <xsl:message>PTX:ERROR:   @cols attribute of lists or exercise groups, must be between 1 and 6 (inclusive), not "cols=<xsl:value-of select="@cols" />"</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:otherwise>
     </xsl:choose>
@@ -7677,7 +7677,7 @@ Book (with parts), "section" at level 3
             <xsl:text>3</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:WARNING: tabular rule thickness not recognized: use none, minor, medium, major</xsl:message>
+            <xsl:message>PTX:WARNING: tabular rule thickness not recognized: use none, minor, medium, major</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -7700,7 +7700,7 @@ Book (with parts), "section" at level 3
             <xsl:text>r</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:WARNING: tabular horizontal alignment attribute not recognized: use left, center, right, justify</xsl:message>
+            <xsl:message>PTX:WARNING: tabular horizontal alignment attribute not recognized: use left, center, right, justify</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -7723,7 +7723,7 @@ Book (with parts), "section" at level 3
             <xsl:text>b</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:WARNING: tabular vertical alignment attribute not recognized: use top, middle, bottom</xsl:message>
+            <xsl:message>PTX:WARNING: tabular vertical alignment attribute not recognized: use top, middle, bottom</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -8250,7 +8250,7 @@ Book (with parts), "section" at level 3
                             <xsl:apply-templates select="@detail" />
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:message>MBX:WARNING: &lt;xref @detail="<xsl:value-of select="@detail" />" /&gt; only implemented for single references to &lt;biblio&gt; elements</xsl:message>
+                            <xsl:message>PTX:WARNING: &lt;xref @detail="<xsl:value-of select="@detail" />" /&gt; only implemented for single references to &lt;biblio&gt; elements</xsl:message>
                             <xsl:apply-templates select="." mode="location-report" />
                         </xsl:otherwise>
                     </xsl:choose>
@@ -8333,7 +8333,7 @@ Book (with parts), "section" at level 3
             <!-- courtesy check that range is not out-of-order               -->
             <!-- NB: different schemes for "exercise" can make this look odd -->
             <xsl:if test="count($target-one/preceding::*) > count($target-two/preceding::*)">
-                <xsl:message>MBX:WARNING: &lt;xref @first="<xsl:value-of select="@first" />" @last="<xsl:value-of select="@last" />" /&gt; references two elements that appear to be in the wrong order</xsl:message>
+                <xsl:message>PTX:WARNING: &lt;xref @first="<xsl:value-of select="@first" />" @last="<xsl:value-of select="@last" />" /&gt; references two elements that appear to be in the wrong order</xsl:message>
             </xsl:if>
             <!-- Biblio check assumes targets are equal       -->
             <!-- If target is a bibliography item, generic    -->
@@ -8515,7 +8515,7 @@ Book (with parts), "section" at level 3
 
 <!-- Warnings for a high-frequency mistake -->
 <xsl:template match="xref[not(@ref) and not(@first and @last) and not(@provisional)]">
-    <xsl:message>MBX:WARNING: A cross-reference (&lt;xref&gt;) must have a @ref attribute, a @first/@last attribute pair, or a @provisional attribute</xsl:message>
+    <xsl:message>PTX:WARNING: A cross-reference (&lt;xref&gt;) must have a @ref attribute, a @first/@last attribute pair, or a @provisional attribute</xsl:message>
     <xsl:apply-templates select="." mode="location-report" />
     <xsl:call-template name="inline-warning">
         <xsl:with-param name="warning">
@@ -8743,7 +8743,7 @@ Book (with parts), "section" at level 3
             <xsl:text>title</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:BUG:    NO TEXT STYLE DETERMINED</xsl:message>
+            <xsl:message>PTX:BUG:    NO TEXT STYLE DETERMINED</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -8908,13 +8908,13 @@ Book (with parts), "section" at level 3
         <!-- catch this first and provide no text at all (could provide busted text?) -->
         <!-- anonymous lists live in "p", but this is an unreliable indication        -->
         <xsl:when test="($text-style = 'phrase-global' or $text-style = 'phrase-hybrid') and ($target/self::li and not($target/ancestor::list or $target/ancestor::objectives or $target/ancestor::outcomes or $target/ancestor::exercise))">
-            <xsl:message>MBX:WARNING: a cross-reference to a list item of an anonymous list ("<xsl:apply-templates select="$target" mode="serial-number" />") with 'phrase-global' and 'phrase-hybrid' styles for the xref text will yield no text at all, and possibly create unpredictable results in output</xsl:message>
+            <xsl:message>PTX:WARNING: a cross-reference to a list item of an anonymous list ("<xsl:apply-templates select="$target" mode="serial-number" />") with 'phrase-global' and 'phrase-hybrid' styles for the xref text will yield no text at all, and possibly create unpredictable results in output</xsl:message>
         </xsl:when>
         <xsl:when test="$text-style = 'phrase-global' or $text-style = 'phrase-hybrid'">
             <!-- no content override in this case -->
             <!-- maybe we can relax this somehow? -->
             <xsl:if test="$b-has-content">
-                <xsl:message>MBX:WARNING: providing content ("<xsl:value-of select="." />") for an "xref" element is ignored for 'phrase-global' and 'phrase-hybrid' styles for xref text</xsl:message>
+                <xsl:message>PTX:WARNING: providing content ("<xsl:value-of select="." />") for an "xref" element is ignored for 'phrase-global' and 'phrase-hybrid' styles for xref text</xsl:message>
                 <xsl:apply-templates select="." mode="location-report" />
             </xsl:if>
             <!-- type-local first, no matter what    -->
@@ -8993,7 +8993,7 @@ Book (with parts), "section" at level 3
             <xsl:copy-of select="$custom-text" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:BUG:  NO XREF TEXT GENERATED</xsl:message>
+            <xsl:message>PTX:BUG:  NO XREF TEXT GENERATED</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:apply-templates select="." mode="latex-page-number">
@@ -9136,7 +9136,7 @@ Book (with parts), "section" at level 3
         </xsl:when>
         <!-- possible missing implementation bug in numbering -->
         <xsl:when test="$parent-number = '[NUM]'">
-            <xsl:message>MBX:BUG:     Looks like a [<xsl:value-of select="local-name($parent)" />] element has an ambiguous number, found while making cross-reference text</xsl:message>
+            <xsl:message>PTX:BUG:     Looks like a [<xsl:value-of select="local-name($parent)" />] element has an ambiguous number, found while making cross-reference text</xsl:message>
         </xsl:when>
         <!-- no match, just recurse, and preserve $highest-match -->
         <xsl:when test="not($parent-number = $target-structure-number)">
@@ -10118,7 +10118,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <xsl:template match="*" mode="debug-location">
     <xsl:if test="$b-debug">
         <xsl:message>
-            <xsl:text>MBX:DEBUG:   </xsl:text>
+            <xsl:text>PTX:DEBUG:   </xsl:text>
             <xsl:text>f: </xsl:text>
             <xsl:choose>
                 <xsl:when test="@xml:base">
@@ -10175,13 +10175,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <xsl:template match="mathbook|pretext" mode="xinclude-warnings">
     <xsl:if test="book and not(book/chapter or book/part/chapter)">
         <xsl:message>
-            <xsl:text>MBX:WARNING:    </xsl:text>
+            <xsl:text>PTX:WARNING:    </xsl:text>
             <xsl:text>Your &lt;book&gt; does not have any chapters.  Maybe you forgot the '--xinclude' switch on your 'xsltproc' command line?</xsl:text>
         </xsl:message>
     </xsl:if>
     <xsl:if test="article and not(article/p) and not(article/section) and not(article/worksheet)">
         <xsl:message>
-            <xsl:text>MBX:WARNING:    </xsl:text>
+            <xsl:text>PTX:WARNING:    </xsl:text>
             <xsl:text>Your &lt;article&gt; does not have any sections or worksheets, nor any top-level paragraphs.  Maybe you forgot the '--xinclude' switch on your 'xsltproc' command line?</xsl:text>
         </xsl:message>
     </xsl:if>
@@ -10199,7 +10199,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:for-each select=".//@xml:id">
         <xsl:if test="not(translate(., $xmlid-characters, '') = '')">
             <xsl:message>
-                <xsl:text>MBX:WARNING:    </xsl:text>
+                <xsl:text>PTX:WARNING:    </xsl:text>
                 <xsl:text>The @xml:id "</xsl:text>
                 <xsl:value-of select="." />
                 <xsl:text>" is invalid.  Use only letters, numbers, hyphens and underscores.</xsl:text>
@@ -10214,7 +10214,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
                       (. = 'toc') or
                       (. = 'logo-link')">
             <xsl:message terminate="yes">
-                <xsl:text>MBX:FATAL:   </xsl:text>
+                <xsl:text>PTX:FATAL:   </xsl:text>
                 <xsl:text>The @xml:id "</xsl:text>
                 <xsl:value-of select="." />
                 <xsl:text>" is invalid since it will conflict with a unique HTML id in use by the user interface.  Please use a different string.  Quitting...</xsl:text>
@@ -10224,7 +10224,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <!-- Not terminating until 2019-07-10 deprecation expires   -->
         <xsl:if test=". = 'index'">
             <xsl:message terminate="no">
-                <xsl:text>MBX:ERROR:   </xsl:text>
+                <xsl:text>PTX:ERROR:   </xsl:text>
                 <xsl:text>The @xml:id "</xsl:text>
                 <xsl:value-of select="."/>
                 <xsl:text>" is invalid since it will conflict with the construction of an automatic HTML "index.html" page.  Use some alternative for the real index - sorry.</xsl:text>
@@ -10245,7 +10245,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:variable name="bad-elements" select=".//c/*|.//cline/*|.//cd[not(cline)]/*|.//pre[not(cline)]/*|.//prompt/*|.//input/*|.//output/*" />
     <xsl:if test="$bad-elements">
         <xsl:message>
-            <xsl:text>MBX:WARNING: </xsl:text>
+            <xsl:text>PTX:WARNING: </xsl:text>
             <xsl:text>There are apparent XML elements in locations that should be text only (</xsl:text>
             <xsl:value-of select="count($bad-elements)" />
             <xsl:text> times).</xsl:text>
@@ -10253,7 +10253,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     </xsl:if>
     <xsl:for-each select="$bad-elements">
         <xsl:message>
-            <xsl:text>MBX:WARNING: </xsl:text>
+            <xsl:text>PTX:WARNING: </xsl:text>
             <xsl:text>There is an apparent XML element (&lt;</xsl:text>
             <xsl:value-of select="local-name(.)" />
             <xsl:text>&gt;) inside an &lt;</xsl:text>
@@ -10272,7 +10272,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:for-each select="./book/chapter">
         <xsl:if test="p and section">
             <xsl:message>
-                <xsl:text>MBX:WARNING: </xsl:text>
+                <xsl:text>PTX:WARNING: </xsl:text>
                 <xsl:text>A chapter containing sections needs to have other content inside an &lt;introduction&gt; and/or  &lt;conclusion&gt;.</xsl:text>
             </xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
@@ -10281,7 +10281,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:for-each select="./article/section|./book/chapter/section">
         <xsl:if test="p and subsection">
             <xsl:message>
-                <xsl:text>MBX:WARNING: </xsl:text>
+                <xsl:text>PTX:WARNING: </xsl:text>
                 <xsl:text>A section containing subsections needs to have other content inside an &lt;introduction&gt; and/or  &lt;conclusion&gt;.</xsl:text>
             </xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
@@ -10290,7 +10290,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:for-each select="./article/section/subsection|./book/chapter/section/subsection">
         <xsl:if test="p and subsubsection">
             <xsl:message>
-                <xsl:text>MBX:WARNING: </xsl:text>
+                <xsl:text>PTX:WARNING: </xsl:text>
                 <xsl:text>A subsection containing subsubsections needs to have other content inside an &lt;introduction&gt; and/or  &lt;conclusion&gt;.</xsl:text>
             </xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
@@ -10315,7 +10315,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:param name="message" />
     <xsl:if test="$occurrences">
         <xsl:message>
-            <xsl:text>MBX:DEPRECATE: (</xsl:text>
+            <xsl:text>PTX:DEPRECATE: (</xsl:text>
             <xsl:value-of select="$date-string" />
             <xsl:text>) </xsl:text>
             <xsl:value-of select="$message" />
@@ -10352,7 +10352,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:param name="message" />
     <xsl:if test="$incorrect-use">
         <xsl:message>
-            <xsl:text>MBX:DEPRECATE: (</xsl:text>
+            <xsl:text>PTX:DEPRECATE: (</xsl:text>
             <xsl:value-of select="$date-string" />
             <xsl:text>) </xsl:text>
             <xsl:value-of select="$message" />
@@ -11455,7 +11455,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:param name="cap" select="100" />
     <xsl:if test="$nodeset">
         <xsl:if test="substring-before($nodeset[1], '%')&gt;$cap">
-            <xsl:message terminate="yes">MBX:FATAL:   percentage attributes sum to over 100%</xsl:message>
+            <xsl:message terminate="yes">PTX:FATAL:   percentage attributes sum to over 100%</xsl:message>
         </xsl:if>
         <xsl:call-template name="cap-width-at-one-hundred-percent">
             <xsl:with-param name="nodeset" select="$nodeset[position()&gt;1]" />
@@ -11475,13 +11475,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:value-of select="normalize-space($percentage)" />
     </xsl:variable>
     <xsl:if test="substring($stripped-percentage,string-length($stripped-percentage)) != '%'">
-        <xsl:message terminate="yes">MBX:FATAL:   expecting a percentage ending in '%'; got <xsl:value-of select="$stripped-percentage"/></xsl:message>
+        <xsl:message terminate="yes">PTX:FATAL:   expecting a percentage ending in '%'; got <xsl:value-of select="$stripped-percentage"/></xsl:message>
     </xsl:if>
     <xsl:variable name="percent">
         <xsl:value-of select="normalize-space(substring($stripped-percentage,1,string-length($stripped-percentage) - 1))" />
     </xsl:variable>
     <xsl:if test="number($percent) != $percent">
-        <xsl:message terminate="yes">MBX:FATAL:   expecting a numerical value preceding '%'; got <xsl:value-of select="$percent"/></xsl:message>
+        <xsl:message terminate="yes">PTX:FATAL:   expecting a numerical value preceding '%'; got <xsl:value-of select="$percent"/></xsl:message>
     </xsl:if>
     <xsl:value-of select="concat($percent,'%')" />
 </xsl:template>

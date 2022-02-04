@@ -1038,7 +1038,7 @@ width: 100%
             </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:BUG:     image filename not determined in EPUB conversion</xsl:message>
+            <xsl:message>PTX:BUG:     image filename not determined in EPUB conversion</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:otherwise>
     </xsl:choose>
@@ -1086,7 +1086,7 @@ width: 100%
                     <xsl:text>image/svg+xml</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>MBX:BUG:     EPUB image media-type not determined</xsl:message>
+                    <xsl:message>PTX:BUG:     EPUB image media-type not determined</xsl:message>
                     <xsl:apply-templates select="." mode="location-report" />
                 </xsl:otherwise>
             </xsl:choose>

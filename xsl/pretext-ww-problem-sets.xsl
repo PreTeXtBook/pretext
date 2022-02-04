@@ -300,7 +300,7 @@
 </xsl:template>
 
 <!-- Header file content -->
-<!-- Gives some information about where in the MBX project the set came from -->
+<!-- Gives some information about where in the PTX project the set came from -->
 <!-- Some info changes with WW variables, such as due date -->
 <xsl:template match="*" mode="header-content">
     <!-- Inneficient: indented text in variable, then strip indentation -->

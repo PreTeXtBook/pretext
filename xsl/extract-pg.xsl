@@ -2169,7 +2169,7 @@
 <!--   <, >, &, %, $, ^, _, #, ~, {, }                     -->
 
 <!-- NB: angle brackets as characters are not                 -->
-<!-- implemented throughout MBX.  But for math *only*         -->
+<!-- implemented throughout PTX.  But for math *only*         -->
 <!-- (ie LaTeX) the macros \lt, \gt are supported universally -->
 
 <!--       Alex Jordan, 2018-12-07, pretext-dev list                 -->
