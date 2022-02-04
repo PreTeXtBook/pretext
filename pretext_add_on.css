@@ -2217,6 +2217,11 @@ a.mjx-svg-href  {
     border-left: 1em solid #eeeeee;
 }
 
+.pretext-content#content > section.solutions:first-child {
+    padding-left: 0;
+    border-left: none;
+}
+
 .pretext-content article.example-like > .solution-like,
 .pretext-content article.exercise-like > .solution-like {
     margin-top: 1.0em;
