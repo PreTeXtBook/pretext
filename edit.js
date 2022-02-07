@@ -4577,7 +4577,7 @@ fetch(source_url).then(
               edit_choice = document.createElement('span');
               edit_choice.setAttribute("class", "login-link");
       //        edit_choice.innerHTML = "<span id='edit_choice'>Edit this page</span>";
-              document.getElementById("content").insertAdjacentElement("afterbegin", edit_choice);
+    //          document.getElementById("content").insertAdjacentElement("afterbegin", edit_choice);
               if(editing_mode) {
                   initialize_editing(this_source_txt)
              //     edit_choice.innerHTML = "<span id='edit_choice'>Stop editing this page</span>";
@@ -4585,7 +4585,7 @@ fetch(source_url).then(
               } else {
                   edit_choice.innerHTML = "<span id='edit_choice'>Edit this page</span>";
               }
-              document.getElementById("content").insertAdjacentElement("afterbegin", edit_choice);
+              document.getElementById("content").insertAdjacentElement("beforeend", edit_choice);
               console.log("editing choice enabled")
               $("#edit_choice").on("click", function(event){
                   console.log("apparently you want to edit");
