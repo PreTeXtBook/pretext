@@ -477,6 +477,25 @@ from Jiří Lebl */
 .pretext-content .knowl-output .knowl-content > *:last-child:not(.incontext) {
     margin-bottom: 0.5em;
 }
+.pretext-content .knowl-output .knowl .knowl-content > .solution-like,
+.pretext-content .knowl-output .knowl .knowl-content > .solution-like:not(.incontext) {
+    margin-bottom: 0.15em;
+}
+.pretext-content .knowl-output .knowl .knowl-content > .solution-like.hint {
+    border-left: 1px solid #0f0;
+    padding-left: 0.35em;
+    background: #efe;
+}
+.pretext-content .knowl-output .knowl .knowl-content > .solution-like.answer {
+    border-left: 2px solid #00f;
+    padding-left: 0.35em;
+    background: #eef;
+}
+.pretext-content .knowl-output .knowl .knowl-content > .solution-like.solution {
+    border-left: 3px solid #c0c;
+    padding-left: 0.5em;
+    background: #fef;
+}
 
 .pretext-content .knowl-content > article:first-child,
 .pretext-content .knowl-content > .solution:first-child {
@@ -2078,7 +2097,7 @@ a.mjx-svg-href  {
 
 .pretext-content .code-inline {
     font-size: 1em;
-    white-space: nowrap;
+    white-space: pre;
     color: inherit;
     background: #eeeeee;
     border: 1px solid #dddddd;
