@@ -10953,7 +10953,7 @@ the xsltproc executable.
         <section xml:id="worksheets">
             <title>Worksheets</title>
 
-            <subsection>
+            <introduction>
                 <title>About Worksheets</title>
 
                 <p>This is a section full of worksheets.  Each is a division of its own, via the <tag>worksheet</tag> element.  This is a necessary initial <tag>subsection</tag> to the current <tag>section</tag>, since we will have multiple worksheets.  In practice you might want to rip out all the worksheets of an entire book and bundle them up as an <q>activity book.</q></p>
@@ -10961,7 +10961,7 @@ the xsltproc executable.
                 <p>If you make PDF output you will notice an increased amount of control over layout.  Also, with the command-line argument<cd>
                     <cline>-stringparam latex.draft yes</cline>
                 </cd>there will be visual indicators of prescribed whitespace.</p>
-            </subsection>
+            </introduction>
 
             <worksheet>
               <title>A Geometric Prelude</title>
