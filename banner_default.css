@@ -8,7 +8,7 @@
 }
 
 /* newer, small top nav buttons */
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-align-right .toolbar-item-middle {
+#primary-navbar .navbar-top-buttons .toolbar-align-right .toolbar-item-middle {
     float: left;
     padding: 3px 6px 3px 6px;
     margin: 4px 10px 0px 10px;
@@ -18,7 +18,7 @@
     font-size: 90%;
 }
 
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-align-right .toolbar-item-middle a {
+#primary-navbar .navbar-top-buttons .toolbar-align-right .toolbar-item-middle a {
     color: #024;
 }
 
@@ -27,64 +27,57 @@
     border-right: 1px solid #bababa;
 }
 
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons {
+#primary-navbar .navbar-top-buttons {
     border-bottom: 1px solid #bababa;
 }
 #masthead.smallbuttons .banner {
     border-bottom: none;
 }
 
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .button {
+#primary-navbar .navbar-top-buttons .toolbar-divisor-3 .button {
     border-top: 1px solid #bababa;
 }
 
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 {
+#primary-navbar .navbar-top-buttons .toolbar-divisor-3 {
     background-color: #fafafa;
 }
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .index-button {
+#primary-navbar .navbar-top-buttons .toolbar-divisor-3 .index-button {
     width: 70px;
     text-align: center;
     border-right: 1px solid #bababa;
 }
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .up-button {
+#primary-navbar .navbar-top-buttons .toolbar-divisor-3 .up-button {
     width: 60px;
     float: right;
     border-right: 1px solid #bababa;
 }
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .up-button:before {
+#primary-navbar .navbar-top-buttons .toolbar-divisor-3 .up-button:before {
     text-align: left;
     width: 20px;
 }
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .previous-button.toolbar-item {
+#primary-navbar .navbar-top-buttons .toolbar-divisor-3 .previous-button.toolbar-item {
     width: 70px;
     border-right: none;
     float: right;
 }
 /* extra .toolbar-item to overrive mathbook-add-on */
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .previous-button.toolbar-item {
+#primary-navbar .navbar-top-buttons .toolbar-divisor-3 .previous-button.toolbar-item {
     border-left: 1px solid #bababa;
     padding-right: 3px;
 }
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .next-button {
+#primary-navbar .navbar-top-buttons .toolbar-divisor-3 .next-button {
     width: 70px;
     float: right;
     border-right: 1px solid #bababa;
 }
-#masthead.smallbuttons #primary-navbar .previous-button::before {
+#primary-navbar .previous-button::before {
     width: 27px;
 }
-#masthead.smallbuttons #primary-navbar .next-button::after {
+#primary-navbar .next-button::after {
     width: 25px;
 }
-/*
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 #calculator-toggle {
-    width: 70px;
-    text-align: center;
-    border-right: 1px solid #bababa;
-}
-*/
 
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .button.toggle {
+#primary-navbar .navbar-top-buttons .toolbar-divisor-3 .button.toggle {
     width: 60px;
     text-align: center;
     border-radius: 20px;
@@ -94,7 +87,7 @@
     margin-top: 3px;
     background-color: #eef;
 }
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .button.toggle.open {
+#primary-navbar .navbar-top-buttons .toolbar-divisor-3 .button.toggle.open {
     background: #fee;
 /*
     background-image: linear-gradient(163deg, transparent 0%, transparent 47%, #f66 47%, #f66 , #f66 53%, transparent 53%, transparent 100%);
@@ -102,11 +95,11 @@
     border: 2px solid #f66;
 }
 
-#masthead.smallbuttons #primary-navbar .threebuttons {
+#primary-navbar .threebuttons {
     float: right;
 }
 
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .threebuttons .next-button, #masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .threebuttons .up-button, #masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .threebuttons .previous-button {
+#primary-navbar .navbar-top-buttons .toolbar-divisor-3 .threebuttons .next-button, #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .threebuttons .up-button, #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .threebuttons .previous-button {
     float: left;
 }
 
