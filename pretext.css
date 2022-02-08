@@ -2,7 +2,7 @@
  * PreTeXt Stylesheet
  *******************************************************************************
  *
- * Authors: Michael DuBois, David Farmer, Rob Beezer
+ * Authors: David Farmer, Rob Beezer
  *
  *******************************************************************************
  */
@@ -10,15 +10,153 @@
  * Containers restrict the max-width of content within elements
  * whose backgrounds must stretch to the width of the viewport.
  */
+
+#primary-navbar {
+  position: sticky;
+  top: 0;
+  max-width: 904px;
+}
+#sidebar {
+  position: sticky;
+  top: 41px;
+}
+#toc {
+    position: sticky;
+    top: 50px;
+    box-sizing: border-box;
+    overflow-y: scroll;
+    height: calc(100vh - 100px);
+}
+/**
+ * Container for the main focus/purpose of the page.
+ */
+.page > .main {
+  display: block;
+  margin: 0;
+  padding: 0;
+  background: white;
+  /* side borders */
+  border-left: 1px solid #ccc;
+/*
+  border-top: none;
+  border-bottom: none;
+  box-shadow: rgba(0, 0, 0, 0.5) 0 5px 5px;
+*/
+  /***************************************************************************
+   * There are a few ways to fix the #content's top/botom margin collapsing
+   * inside this element.
+   **************************************************************************/
+  /* Method 1 */
+  padding-top: 1px;
+  padding-bottom: 6em;
+  /* This feels more conclusive: the page is over. */
+  /* Method 2 - will clip anything positioned absolutely outside borders */
+  /*overflow:hidden;*/
+  /* Method 3 - looks bad because of 1px break in left/right borders */
+  /*border-top:1px solid transparent;*/
+  /*border-bottom: 1px solid transparent;*/
+  /**************************************************************************/
+}
+@media screen and (max-width: 800px) {
+  .page > .main {
+    /* Make space for navbar fixed to bottom of screen */
+    padding-bottom: 35.36px;
+  }
+}
+.page > .main #content {
+  max-width: 600px;
+  /* Default left */
+  /*
+      .layout-centered & {
+          margin: $ui-content-margin auto;
+      }
+  */
+}
+.page > .main #content, .page > .main #content {
+  margin: 32px;
+}
+@media screen and (max-width: 663px) {
+  .page > .main #content, .page > .main #content {
+    /* Decrease the margins */
+    margin: 30px 30px;
+  }
+}
+@media screen and (max-width: 903px) {
+  .sidebar-left-open .page > .main #content, .sidebar-left-open  .page > .main #content {
+    /* Decrease the margins */
+    margin: 30px 30px;
+  }
+}
+.mathbook-loading.sidebar-left-open .page > .main, .mathbook-loaded.sidebar-left-open .page > .main {
+  margin-left: 240px;
+  left: auto;
+}
+@media screen and (max-width: 640px) {
+  .mathbook-loading.sidebar-left-open .page > .main, .mathbook-loaded.sidebar-left-open .page > .main {
+    /* Must force other-side to auto so we can push from the right */
+    right: -240px !important;
+    left: 240px;
+    margin-left: 0;
+  }
+}
+.mathbook-loading.sidebar-left-closed .page > .main, .mathbook-loaded.sidebar-left-closed .page > .main {
+  margin-left: 0;
+  left: auto;
+}
+@media screen and (max-width: 640px) {
+  .mathbook-loading.sidebar-left-closed .page > .main, .mathbook-loaded.sidebar-left-closed .page > .main {
+    margin-left: 0;
+    left: 0;
+  }
+}
+
+body .page {
+}
+#sidebar {
+  width: 240px;
+  float: left;
+}
+#toc {
+  overflow-y: scroll;
+}
+.page > .main {
+  width: auto;
+  transition-duration: 400ms;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+.page > .main  {
+  transition-property: margin-left, left;
+}
+ .page > .main {
+  position: relative;
+  margin-left: 240px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+@media screen and (max-width: 800px) {
+   .page > .main {
+    margin-left: 0;
+    left: auto;
+  }
+}
+
+.footer {
+    clear: both;
+    position: relative;
+    width: 100%;
+    margin-left: 240px;
+}
+
 .container {
   margin: 0;
   transition-property: width;
   transition-duration: 400ms;
 }
-.container, .container.layout-left, .layout-left .container {
+.container, .container, .container {
   max-width: 664px;
 }
-.container.has-sidebar-left, .has-sidebar-left .container {
+.container, .container {
   max-width: 904px;
 }
 
@@ -235,7 +373,7 @@
  * Primary Navbar
  * Contains primary actions for navigation or layout control
  */
-#primary-navbar, #primary-navbar-sticky-wrapper {
+#primary-navbar {
   background: #ededed;
   border-bottom: 1px solid #bababa;
   margin: 0;
@@ -251,7 +389,7 @@
    * when it's sticky-wrapper is stuck
    */
 }
-.stuck #primary-navbar, .stuck #primary-navbar-sticky-wrapper {
+.stuck #primary-navbar {
   position: fixed;
   top: 0;
   right: 0;
@@ -259,7 +397,7 @@
   box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 5px;
 }
 @media screen and (max-width: 800px) {
-  #primary-navbar, .stuck #primary-navbar, #primary-navbar-sticky-wrapper, .stuck #primary-navbar-sticky-wrapper {
+  #primary-navbar {
     position: fixed;
     top: auto;
     bottom: 0;
@@ -270,7 +408,7 @@
     height: 44.2px;
   }
 }
-#primary-navbar .button, #primary-navbar-sticky-wrapper .button {
+#primary-navbar .button {
   cursor: pointer;
   display: inline-block;
   vertical-align: middle;
@@ -301,7 +439,7 @@
   /* active/pressed state */
   /* Icon only at small screen sizes */
 }
-#primary-navbar .button:focus, #primary-navbar-sticky-wrapper .button:focus {
+#primary-navbar .button:focus {
   outline: thin dotted #333;
   outline-offset: -2px;
   /**
@@ -309,23 +447,23 @@
    * See http://stackoverflow.com/a/199319/1599617
    */
 }
-#primary-navbar .button:active, #primary-navbar .button.active, #primary-navbar-sticky-wrapper .button:active, #primary-navbar-sticky-wrapper .button.active {
+#primary-navbar .button:active, #primary-navbar .button.active {
   box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
 }
-#primary-navbar .button, #primary-navbar .button:hover, #primary-navbar .button:focus, #primary-navbar .button:visited, #primary-navbar .button:link, #primary-navbar .button:active, #primary-navbar-sticky-wrapper .button, #primary-navbar-sticky-wrapper .button:hover, #primary-navbar-sticky-wrapper .button:focus, #primary-navbar-sticky-wrapper .button:visited, #primary-navbar-sticky-wrapper .button:link, #primary-navbar-sticky-wrapper .button:active {
+#primary-navbar .button, #primary-navbar .button:hover, #primary-navbar .button:focus, #primary-navbar .button:visited, #primary-navbar .button:link, #primary-navbar .button:active {
   text-decoration: none;
 }
-#primary-navbar .button, #primary-navbar .button:link, #primary-navbar .button:visited, #primary-navbar-sticky-wrapper .button, #primary-navbar-sticky-wrapper .button:link, #primary-navbar-sticky-wrapper .button:visited {
+#primary-navbar .button, #primary-navbar .button:link, #primary-navbar .button:visited {
   color: #333333;
   background-color: #ededed;
 }
-#primary-navbar .button:hover, #primary-navbar-sticky-wrapper .button:hover {
+#primary-navbar .button:hover {
   background-color: #fafafa;
 }
-#primary-navbar .button.active, #primary-navbar .button:active, #primary-navbar-sticky-wrapper .button.active, #primary-navbar-sticky-wrapper .button:active {
+#primary-navbar .button.active, #primary-navbar .button:active {
   background-color: #e0e0e0;
 }
-#primary-navbar .button.disabled, #primary-navbar .button.disabled:link, #primary-navbar .button.disabled:visited, #primary-navbar .button.disabled:hover, #primary-navbar .button.disabled:focus, #primary-navbar .button.disabled:active, #primary-navbar-sticky-wrapper .button.disabled, #primary-navbar-sticky-wrapper .button.disabled:link, #primary-navbar-sticky-wrapper .button.disabled:visited, #primary-navbar-sticky-wrapper .button.disabled:hover, #primary-navbar-sticky-wrapper .button.disabled:focus, #primary-navbar-sticky-wrapper .button.disabled:active {
+#primary-navbar .button.disabled, #primary-navbar .button.disabled:link, #primary-navbar .button.disabled:visited, #primary-navbar .button.disabled:hover, #primary-navbar .button.disabled:focus, #primary-navbar .button.disabled:active {
   opacity: .4;
   color: #333333;
   background: #ededed;
@@ -333,38 +471,36 @@
   box-shadow: none;
 }
 @media screen and (max-width: 800px) {
-  #primary-navbar .button, #primary-navbar-sticky-wrapper .button {
+  #primary-navbar .button {
     /*@include button-hide-text($navbar-icon-box-size);*/
     float: left;
     text-align: center;
     margin: 0;
     line-height: 44.2px;
   }
-  #primary-navbar .button.active, #primary-navbar .button:active, #primary-navbar-sticky-wrapper .button.active, #primary-navbar-sticky-wrapper .button:active {
+  #primary-navbar .button.active, #primary-navbar .button:active {
     /* Vertically flip shadow for lower navbar */
     box-shadow: rgba(0, 0, 0, 0.5) 0 -2px 5px inset;
   }
 }
-#primary-navbar .sidebar-left-toggle-button, #primary-navbar-sticky-wrapper .sidebar-left-toggle-button {
-  /* Do not display if has-sidebar-left is missing */
+#primary-navbar .sidebar-left-toggle-button {
+  /* Do not display if is missing */
   display: none;
   /*On desktop screens, */
   padding: 0;
 }
-.has-sidebar-left #primary-navbar .sidebar-left-toggle-button, .has-sidebar-left #primary-navbar-sticky-wrapper .sidebar-left-toggle-button {
+ #primary-navbar .sidebar-left-toggle-button {
   display: block;
   width: 240px;
 }
 @media screen and (min-width: 801px) {
-  #primary-navbar .sidebar-left-toggle-button.active,
-  #primary-navbar-sticky-wrapper .sidebar-left-toggle-button.active {
+  #primary-navbar .sidebar-left-toggle-button.active {
     /* Show text if hidden and match sidebar width */
     text-indent: 0;
     width: 240px;
   }
 }
-#primary-navbar .sidebar-left-toggle-button:before,
-#primary-navbar-sticky-wrapper .sidebar-left-toggle-button:before {
+#primary-navbar .sidebar-left-toggle-button:before {
   content: "\2630";
   aria-hidden="true";  /* not valid.  the hamburger shoudl appear in the source with this attr on its span */
   text-align: center;
@@ -383,8 +519,7 @@
   *display: inline;
 }
 @media screen and (max-width: 800px) {
-  #primary-navbar .sidebar-left-toggle-button,
-  #primary-navbar-sticky-wrapper .sidebar-left-toggle-button {
+  #primary-navbar .sidebar-left-toggle-button {
     /* Disable ellipsis */
     white-space: normal;
     overflow: visible;
@@ -397,8 +532,7 @@
     white-space: nowrap;
     overflow: hidden;
   }
-  #primary-navbar .sidebar-left-toggle-button:before,
-  #primary-navbar-sticky-wrapper .sidebar-left-toggle-button:before {
+  #primary-navbar .sidebar-left-toggle-button:before {
     content: "\2630";
     aria-hidden=”true”;
     text-align: center;
@@ -413,8 +547,7 @@
     vertical-align: auto;
     zoom: 1;
   }
-  #primary-navbar .sidebar-left-toggle-button:before,
-  #primary-navbar-sticky-wrapper .sidebar-left-toggle-button:before {
+  #primary-navbar .sidebar-left-toggle-button:before {
     position: absolute;
     left: 50%;
     right: auto;
@@ -424,10 +557,10 @@
     margin-top: -22.1px;
   }
 }
-#primary-navbar .up-button, #primary-navbar-sticky-wrapper .up-button {
+#primary-navbar .up-button {
   text-align: center;
 }
-#primary-navbar .up-button:before, #primary-navbar-sticky-wrapper .up-button:before {
+#primary-navbar .up-button:before {
   content: "^";
   text-align: center;
   font-size: 1.5em;
@@ -442,7 +575,7 @@
   vertical-align: middle;
 }
 @media screen and (max-width: 800px) {
-  #primary-navbar .up-button, #primary-navbar-sticky-wrapper .up-button {
+  #primary-navbar .up-button {
     /* Disable ellipsis */
     white-space: normal;
     overflow: visible;
@@ -456,7 +589,7 @@
     overflow: hidden;
   }
 
-  #primary-navbar .up-button:before, #primary-navbar-sticky-wrapper .up-button:before {
+  #primary-navbar .up-button:before {
     font-size: 2em;
     line-height: 1.2em;
 /*
@@ -474,7 +607,7 @@
     margin-top: -22.1px;
   }
 }
-#primary-navbar .previous-button:before, #primary-navbar-sticky-wrapper .previous-button:before {
+#primary-navbar .previous-button:before {
   content: "<";
   text-align: center;
   font-size: 1.5em;
@@ -492,7 +625,7 @@
   zoom: 1;
 }
 @media screen and (max-width: 800px) {
-  #primary-navbar .previous-button, #primary-navbar-sticky-wrapper .previous-button {
+  #primary-navbar .previous-button {
     /* Disable ellipsis */
     white-space: normal;
     overflow: visible;
@@ -505,7 +638,7 @@
     white-space: nowrap;
     overflow: hidden;
   }
-  #primary-navbar .previous-button:before, #primary-navbar-sticky-wrapper .previous-button:before {
+  #primary-navbar .previous-button:before {
     font-size: 2em;
     line-height: 1.0em;
 /*
@@ -523,10 +656,10 @@
     margin-top: -22.1px;
   }
 }
-#primary-navbar .next-button, #primary-navbar-sticky-wrapper .next-button {
+#primary-navbar .next-button {
   text-align: right;
 }
-#primary-navbar .next-button:after, #primary-navbar-sticky-wrapper .next-button:after {
+#primary-navbar .next-button:after {
   content: ">";
   text-align: center;
   font-size: 1.5em;
@@ -542,7 +675,7 @@
   vertical-align: middle;
 }
 @media screen and (max-width: 800px) {
-  #primary-navbar .next-button, #primary-navbar-sticky-wrapper .next-button {
+  #primary-navbar .next-button {
     /* Disable ellipsis */
     white-space: normal;
     overflow: visible;
@@ -555,7 +688,7 @@
     white-space: nowrap;
     overflow: hidden;
   }
-  #primary-navbar .next-button:after, #primary-navbar-sticky-wrapper .next-button:after {
+  #primary-navbar .next-button:after {
     font-size: 2em;
     line-height: 1.0em;
 /*
@@ -575,7 +708,7 @@
   }
 }
 @media screen and (max-width: 800px) {
-  #primary-navbar .settings-button, #primary-navbar-sticky-wrapper .settings-button {
+  #primary-navbar .settings-button {
     /* Disable ellipsis */
     white-space: normal;
     overflow: visible;
@@ -588,7 +721,7 @@
     white-space: nowrap;
     overflow: hidden;
   }
-  #primary-navbar .settings-button:before, #primary-navbar-sticky-wrapper .settings-button:before {
+  #primary-navbar .settings-button:before {
     position: absolute;
     left: 50%;
     right: auto;
@@ -598,7 +731,7 @@
     margin-top: -22.1px;
   }
 }
-#primary-navbar .toolbar, #primary-navbar .toolbar > .toolbar-item, #primary-navbar .button, #primary-navbar-sticky-wrapper .toolbar, #primary-navbar-sticky-wrapper .toolbar > .toolbar-item, #primary-navbar-sticky-wrapper .button {
+#primary-navbar .toolbar, #primary-navbar .toolbar > .toolbar-item, #primary-navbar .button {
   /* Use a left border */
   border: 1px solid #bababa;
   border-top: none;
@@ -608,7 +741,7 @@
    * so we can set width precisely as percent */
   box-sizing: border-box;
 }
-#primary-navbar .toolbar, #primary-navbar-sticky-wrapper .toolbar {
+#primary-navbar .toolbar {
   /**
    * Ensure adjacent borders do not double up
    * BEWARE: THERE BE DRAGONS HERE.
@@ -626,152 +759,147 @@
   *zoom: 1;
 }
 
-#primary-navbar .toolbar .toolbar-item, #primary-navbar .toolbar.toolbar-align-left .toolbar-item, #primary-navbar-sticky-wrapper .toolbar .toolbar-item, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left .toolbar-item {
+#primary-navbar .toolbar .toolbar-item, #primary-navbar .toolbar.toolbar-align-left .toolbar-item {
   float: left;
 }
-#primary-navbar .toolbar.toolbar-align-right .toolbar-item, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right .toolbar-item {
+#primary-navbar .toolbar.toolbar-align-right .toolbar-item {
   float: right;
 }
-#primary-navbar .toolbar.toolbar-divisor-1 > .toolbar-item, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-1 > .toolbar-item {
+#primary-navbar .toolbar.toolbar-divisor-1 > .toolbar-item {
   width: 100%;
 }
-#primary-navbar .toolbar.toolbar-divisor-2 > .toolbar-item, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-2 > .toolbar-item {
+#primary-navbar .toolbar.toolbar-divisor-2 > .toolbar-item {
   width: 50%;
 }
-#primary-navbar .toolbar.toolbar-divisor-3 > .toolbar-item, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-3 > .toolbar-item {
+#primary-navbar .toolbar.toolbar-divisor-3 > .toolbar-item {
   width: 33.33333%;
 }
-#primary-navbar .toolbar.toolbar-divisor-4 > .toolbar-item, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-4 > .toolbar-item {
+#primary-navbar .toolbar.toolbar-divisor-4 > .toolbar-item {
   width: 25%;
 }
-#primary-navbar .toolbar.toolbar-divisor-5 > .toolbar-item, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-5 > .toolbar-item {
+#primary-navbar .toolbar.toolbar-divisor-5 > .toolbar-item {
   width: 20%;
 }
 
-#primary-navbar .toolbar.toolbar-divisor-1 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-1 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-1 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-1 > .toolbar-item:first-child {
+#primary-navbar .toolbar.toolbar-divisor-1 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-1 > .toolbar-item:first-child {
   border-left: none;
 }
-#primary-navbar .toolbar.toolbar-divisor-1 > .toolbar-item:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-1 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-1 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-1 > .toolbar-item:last-child {
+#primary-navbar .toolbar.toolbar-divisor-1 > .toolbar-item:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-1 > .toolbar-item:last-child {
   border-right: none;
 }
-#primary-navbar .toolbar.toolbar-divisor-1 > .toolbar-item:first-child:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-1 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-1 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-1 > .toolbar-item:first-child:last-child {
+#primary-navbar .toolbar.toolbar-divisor-1 > .toolbar-item:first-child:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-1 > .toolbar-item:first-child:last-child {
   border-left: none;
   border-right: 1px solid #bababa;
 }
-#primary-navbar .toolbar.toolbar-divisor-2 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-2 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-2 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-2 > .toolbar-item:first-child {
+#primary-navbar .toolbar.toolbar-divisor-2 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-2 > .toolbar-item:first-child {
   border-left: none;
 }
-#primary-navbar .toolbar.toolbar-divisor-2 > .toolbar-item:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-2 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-2 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-2 > .toolbar-item:last-child {
+#primary-navbar .toolbar.toolbar-divisor-2 > .toolbar-item:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-2 > .toolbar-item:last-child {
   border-right: none;
 }
-#primary-navbar .toolbar.toolbar-divisor-2 > .toolbar-item:first-child:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-2 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-2 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-2 > .toolbar-item:first-child:last-child {
+#primary-navbar .toolbar.toolbar-divisor-2 > .toolbar-item:first-child:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-2 > .toolbar-item:first-child:last-child {
   border-left: none;
   border-right: 1px solid #bababa;
 }
-#primary-navbar .toolbar.toolbar-divisor-3 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-3 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-3 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-3 > .toolbar-item:first-child {
+#primary-navbar .toolbar.toolbar-divisor-3 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-3 > .toolbar-item:first-child {
   border-left: none;
 }
-#primary-navbar .toolbar.toolbar-divisor-3 > .toolbar-item:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-3 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-3 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-3 > .toolbar-item:last-child {
+#primary-navbar .toolbar.toolbar-divisor-3 > .toolbar-item:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-3 > .toolbar-item:last-child {
   border-right: none;
 }
-#primary-navbar .toolbar.toolbar-divisor-3 > .toolbar-item:first-child:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-3 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-3 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-3 > .toolbar-item:first-child:last-child {
+#primary-navbar .toolbar.toolbar-divisor-3 > .toolbar-item:first-child:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-3 > .toolbar-item:first-child:last-child {
   border-left: none;
   border-right: 1px solid #bababa;
 }
-#primary-navbar .toolbar.toolbar-divisor-4 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-4 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-4 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-4 > .toolbar-item:first-child {
+#primary-navbar .toolbar.toolbar-divisor-4 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-4 > .toolbar-item:first-child {
   border-left: none;
 }
-#primary-navbar .toolbar.toolbar-divisor-4 > .toolbar-item:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-4 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-4 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-4 > .toolbar-item:last-child {
+#primary-navbar .toolbar.toolbar-divisor-4 > .toolbar-item:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-4 > .toolbar-item:last-child {
   border-right: none;
 }
-#primary-navbar .toolbar.toolbar-divisor-4 > .toolbar-item:first-child:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-4 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-4 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-4 > .toolbar-item:first-child:last-child {
+#primary-navbar .toolbar.toolbar-divisor-4 > .toolbar-item:first-child:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-4 > .toolbar-item:first-child:last-child {
   border-left: none;
   border-right: 1px solid #bababa;
 }
-#primary-navbar .toolbar.toolbar-divisor-5 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-5 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-5 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-5 > .toolbar-item:first-child {
+#primary-navbar .toolbar.toolbar-divisor-5 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-5 > .toolbar-item:first-child {
   border-left: none;
 }
-#primary-navbar .toolbar.toolbar-divisor-5 > .toolbar-item:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-5 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-5 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-5 > .toolbar-item:last-child {
+#primary-navbar .toolbar.toolbar-divisor-5 > .toolbar-item:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-5 > .toolbar-item:last-child {
   border-right: none;
 }
-#primary-navbar .toolbar.toolbar-divisor-5 > .toolbar-item:first-child:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-5 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-5 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-left.toolbar-divisor-5 > .toolbar-item:first-child:last-child {
+#primary-navbar .toolbar.toolbar-divisor-5 > .toolbar-item:first-child:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-5 > .toolbar-item:first-child:last-child {
   border-left: none;
   border-right: 1px solid #bababa;
 }
-#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-1 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-1 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-1 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-1 > .toolbar-item:first-child:last-child {
+#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-1 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-1 > .toolbar-item:first-child:last-child {
   border-right: none;
   border-left: 1px solid #bababa;
 }
-#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-1 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-1 > .toolbar-item:last-child {
+#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-1 > .toolbar-item:last-child {
   border-left: none;
 }
-#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-2 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-2 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-2 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-2 > .toolbar-item:first-child:last-child {
+#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-2 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-2 > .toolbar-item:first-child:last-child {
   border-right: none;
   border-left: 1px solid #bababa;
 }
-#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-2 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-2 > .toolbar-item:last-child {
+#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-2 > .toolbar-item:last-child {
   border-left: none;
 }
-#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-3 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-3 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-3 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-3 > .toolbar-item:first-child:last-child {
+#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-3 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-3 > .toolbar-item:first-child:last-child {
   border-right: none;
   border-left: 1px solid #bababa;
 }
-#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-3 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-3 > .toolbar-item:last-child {
+#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-3 > .toolbar-item:last-child {
   border-left: none;
 }
-#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-4 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-4 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-4 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-4 > .toolbar-item:first-child:last-child {
+#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-4 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-4 > .toolbar-item:first-child:last-child {
   border-right: none;
   border-left: 1px solid #bababa;
 }
-#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-4 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-4 > .toolbar-item:last-child {
+#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-4 > .toolbar-item:last-child {
   border-left: none;
 }
-#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-5 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-5 > .toolbar-item:first-child:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-5 > .toolbar-item:first-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-5 > .toolbar-item:first-child:last-child {
+#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-5 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-5 > .toolbar-item:first-child:last-child {
   border-right: none;
   border-left: 1px solid #bababa;
 }
-#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-5 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-align-right.toolbar-divisor-5 > .toolbar-item:last-child {
+#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-5 > .toolbar-item:last-child {
   border-left: none;
 }
-#primary-navbar .toolbar:first-child, #primary-navbar-sticky-wrapper .toolbar:first-child {
+#primary-navbar .toolbar:first-child {
   border-left: none;
 }
-#primary-navbar .toolbar:last-child, #primary-navbar-sticky-wrapper .toolbar:last-child {
+#primary-navbar .toolbar:last-child {
   border-right: none;
 }
-#primary-navbar .toolbar.toolbar-borderless, #primary-navbar .toolbar.toolbar-borderless > .toolbar-item, #primary-navbar .toolbar.toolbar-borderless.toolbar-align-right, #primary-navbar .toolbar.toolbar-borderless.toolbar-align-right > .toolbar-item, #primary-navbar .toolbar.toolbar-borderless.toolbar-align-left, #primary-navbar .toolbar.toolbar-borderless.toolbar-align-left > .toolbar-item, #primary-navbar-sticky-wrapper .toolbar.toolbar-borderless, #primary-navbar-sticky-wrapper .toolbar.toolbar-borderless > .toolbar-item, #primary-navbar-sticky-wrapper .toolbar.toolbar-borderless.toolbar-align-right, #primary-navbar-sticky-wrapper .toolbar.toolbar-borderless.toolbar-align-right > .toolbar-item, #primary-navbar-sticky-wrapper .toolbar.toolbar-borderless.toolbar-align-left, #primary-navbar-sticky-wrapper .toolbar.toolbar-borderless.toolbar-align-left > .toolbar-item {
+#primary-navbar .toolbar.toolbar-borderless, #primary-navbar .toolbar.toolbar-borderless > .toolbar-item, #primary-navbar .toolbar.toolbar-borderless.toolbar-align-right, #primary-navbar .toolbar.toolbar-borderless.toolbar-align-right > .toolbar-item, #primary-navbar .toolbar.toolbar-borderless.toolbar-align-left, #primary-navbar .toolbar.toolbar-borderless.toolbar-align-left > .toolbar-item {
   border-left: none;
   border-right: none;
   border-top: none;
   border-bottom: none;
 }
-#primary-navbar .navbar-bottom-buttons, #primary-navbar-sticky-wrapper .navbar-bottom-buttons {
+#primary-navbar .navbar-bottom-buttons {
   display: none;
 }
 @media screen and (max-width: 800px) {
-  #primary-navbar .navbar-bottom-buttons, #primary-navbar-sticky-wrapper .navbar-bottom-buttons {
+  #primary-navbar .navbar-bottom-buttons {
     display: block;
   }
 }
-#primary-navbar .navbar-top-buttons, #primary-navbar-sticky-wrapper .navbar-top-buttons {
+#primary-navbar .navbar-top-buttons {
   display: block;
 }
 /* The ">" because the GeoGebra calculator has a .toolbar */
-.has-sidebar-left #primary-navbar .navbar-top-buttons > .toolbar, .has-sidebar-left #primary-navbar-sticky-wrapper .navbar-top-buttons > .toolbar {
+ #primary-navbar .navbar-top-buttons > .toolbar {
   margin-left: 240px;
   border-right: 1px solid #bababa;
 }
-.has-sidebar-left #primary-navbar .navbar-top-buttons .toolbar .sidebar-left-toggle-button, .has-sidebar-left #primary-navbar-sticky-wrapper .navbar-top-buttons .toolbar .sidebar-left-toggle-button {
+ #primary-navbar .navbar-top-buttons .toolbar .sidebar-left-toggle-button {
   width: 240px;
 }
 @media screen and (max-width: 800px) {
-  #primary-navbar .navbar-top-buttons, #primary-navbar-sticky-wrapper .navbar-top-buttons {
+  #primary-navbar .navbar-top-buttons {
     display: none;
-  }
-}
-@media screen and (max-width: 1099px) {
-  #primary-navbar#primary-navbar-sticky-wrapper, #primary-navbar-sticky-wrapper#primary-navbar-sticky-wrapper {
-    height: 0;
   }
 }
 
@@ -791,16 +919,15 @@
 /**
  * These styles apply to the sidebar-left root,
  * whether it be the wrapper or the sidebar-left itself.
- * Note: The #sidebar-left-sticky-wrapper is added by javascript on page load
  */
-.page > #sidebar-left, #sidebar-left-sticky-wrapper {
+.page > #sidebar-left {
   /* Hide sidebar by default */
   display: none;
 }
-.has-sidebar-left .page > #sidebar-left, .has-sidebar-left #sidebar-left-sticky-wrapper {
+ .page > #sidebar-left {
   display: block;
 }
-.has-sidebar-left .page > #sidebar-left, .has-sidebar-left #sidebar-left-sticky-wrapper {
+ .page > #sidebar-left {
   position: absolute;
   /* Default styles on load, before javascript loads */
   margin-left: 0;
@@ -808,18 +935,18 @@
   transition-duration: 400ms;
 }
 @media screen and (max-width: 800px) {
-  .has-sidebar-left .page > #sidebar-left, .has-sidebar-left #sidebar-left-sticky-wrapper {
+   .page > #sidebar-left {
     /* Small */
     margin-left: -240px;
   }
 }
-.has-sidebar-left.mathbook-loading.sidebar-left-open .page > #sidebar-left, .has-sidebar-left.mathbook-loaded.sidebar-left-open .page > #sidebar-left, .has-sidebar-left.mathbook-loading.sidebar-left-open #sidebar-left-sticky-wrapper, .has-sidebar-left.mathbook-loaded.sidebar-left-open #sidebar-left-sticky-wrapper {
+.mathbook-loading.sidebar-left-open .page > #sidebar-left, .mathbook-loaded.sidebar-left-open .page > #sidebar-left {
   margin-left: 0;
 }
-.has-sidebar-left.mathbook-loading.sidebar-left-closed .page > #sidebar-left, .has-sidebar-left.mathbook-loaded.sidebar-left-closed .page > #sidebar-left, .has-sidebar-left.mathbook-loading.sidebar-left-closed #sidebar-left-sticky-wrapper, .has-sidebar-left.mathbook-loaded.sidebar-left-closed #sidebar-left-sticky-wrapper {
+.mathbook-loading.sidebar-left-closed .page > #sidebar-left, .mathbook-loaded.sidebar-left-closed .page > #sidebar-left {
   margin-left: -240px;
 }
-.page > #sidebar-left .sidebar-content, #sidebar-left-sticky-wrapper .sidebar-content {
+.page > #sidebar-left .sidebar-content {
   width: 240px;
 }
 
@@ -910,127 +1037,6 @@
   /* When we hover we want to show the last border */
   border-color: #333333;
 }
-
-/**
- * Container for the main focus/purpose of the page.
- */
-.page > .main {
-  display: block;
-  margin: 0;
-  padding: 0;
-  background: white;
-  /* side borders */
-  border: 1px solid #ccc;
-  border-top: none;
-  border-bottom: none;
-  box-shadow: rgba(0, 0, 0, 0.5) 0 5px 5px;
-  /***************************************************************************
-   * There are a few ways to fix the #content's top/botom margin collapsing
-   * inside this element.
-   **************************************************************************/
-  /* Method 1 */
-  padding-top: 1px;
-  padding-bottom: 6em;
-  /* This feels more conclusive: the page is over. */
-  /* Method 2 - will clip anything positioned absolutely outside borders */
-  /*overflow:hidden;*/
-  /* Method 3 - looks bad because of 1px break in left/right borders */
-  /*border-top:1px solid transparent;*/
-  /*border-bottom: 1px solid transparent;*/
-  /**************************************************************************/
-}
-@media screen and (max-width: 800px) {
-  .page > .main {
-    /* Make space for navbar fixed to bottom of screen */
-    padding-bottom: 35.36px;
-  }
-}
-.page > .main #content {
-  max-width: 600px;
-  /* Default left */
-  /*
-      .layout-centered & {
-          margin: $ui-content-margin auto;
-      }
-  */
-}
-.page > .main #content, .layout-left .page > .main #content {
-  margin: 32px;
-}
-@media screen and (max-width: 663px) {
-  .page > .main #content, .layout-left .page > .main #content {
-    /* Decrease the margins */
-    margin: 30px 30px;
-  }
-}
-@media screen and (max-width: 903px) {
-  .sidebar-left-open .page > .main #content, .sidebar-left-open .layout-left .page > .main #content {
-    /* Decrease the margins */
-    margin: 30px 30px;
-  }
-}
-.page > .main {
-  /* Must be relative to support sidebar offsets */
-  position: relative;
-  width: auto;
-  /*z-index:10;*/
-  transition-duration: 400ms;
-  /* Main with sidebar left without javascript*/
-  /* Main with sidebar left open */
-  /* Main with sidebar left closed */
-  /* Main with sidebar left without javascript*/
-  /* Main with sidebar left open */
-  /* Main with sidebar left closed */
-  /**
-   * Trick webkit browers into generating a compositing layer for this
-   * element so that we benefit from GPU acceleration.
-   *
-   * We config backface-visibility and perspective to improve performance
-   * See: http://stackoverflow.com/a/10133679/1599617
-   *
-   * IMPORTANT: this will reset the coordinate context for child elements
-   *            with fixed positioning.
-   */
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  perspective: 1000;
-}
-.page > .main .has-sidebar-left {
-  transition-property: margin-left, left;
-}
-.has-sidebar-left .page > .main {
-  margin-left: 240px;
-  left: auto;
-}
-@media screen and (max-width: 800px) {
-  .has-sidebar-left .page > .main {
-    margin-left: 0;
-    left: auto;
-  }
-}
-.has-sidebar-left.mathbook-loading.sidebar-left-open .page > .main, .has-sidebar-left.mathbook-loaded.sidebar-left-open .page > .main {
-  margin-left: 240px;
-  left: auto;
-}
-@media screen and (max-width: 640px) {
-  .has-sidebar-left.mathbook-loading.sidebar-left-open .page > .main, .has-sidebar-left.mathbook-loaded.sidebar-left-open .page > .main {
-    /* Must force other-side to auto so we can push from the right */
-    right: -240px !important;
-    left: 240px;
-    margin-left: 0;
-  }
-}
-.has-sidebar-left.mathbook-loading.sidebar-left-closed .page > .main, .has-sidebar-left.mathbook-loaded.sidebar-left-closed .page > .main {
-  margin-left: 0;
-  left: auto;
-}
-@media screen and (max-width: 640px) {
-  .has-sidebar-left.mathbook-loading.sidebar-left-closed .page > .main, .has-sidebar-left.mathbook-loaded.sidebar-left-closed .page > .main {
-    margin-left: 0;
-    left: 0;
-  }
-}
-
 /**
  * Container for main content.
  * This is bound to a comfortable max-width for reading.
@@ -1038,94 +1044,25 @@
 #content {
   max-width: 600px;
 }
-#content, .layout-left #content {
+#content, #content {
   margin: 32px;
 }
 @media screen and (max-width: 663px) {
-  #content, .layout-left #content {
+  #content, #content {
     /* Decrease the margins */
     margin: 30px 30px;
   }
 }
 @media screen and (max-width: 903px) {
-  .sidebar-left-open #content, .sidebar-left-open .layout-left #content {
+  .sidebar-left-open #content, .sidebar-left-open  #content {
     /* Decrease the margins */
     margin: 30px 30px;
   }
 }
 
-/*
- * Reposition MathJax loading message so it overlays content instead of navbar
- * when there is a toc.
- * To override, we must add body specificity.
- */
-body.has-sidebar-left.sidebar-left-open #MathJax_Message {
-  left: 248px;
-}
-
-/* Restyle MathJax loading message.
- * To override, must add body specificity.
- */
-body #MathJax_Message {
-  background: #fffbfa;
-  color: #932919;
-  border-color: #ffc1b8;
-  border-radius: 0.3em;
-  z-index: 1000;
-  bottom: 8px;
-}
-@media screen and (max-width: 800px) {
-  body #MathJax_Message {
-    /* Display above bottom navbar */
-    left: 20px;
-    right: 20px;
-    bottom: 42.432px;
-  }
-}
-
-.MathJax_Display {
-  padding-top: 2px;
-  padding-bottom: 2px;
-  /*
-   * Force margins MathJax_Display's to obey our vertical rhythm.
-   * It won't be perfect, because their interior sizing will not match our
-   * vertical rhythm, but we can at least make the margins match.
-   */
-  margin-top: 1.25em;
-  margin-bottom: 1.25em;
-  /**
-   * Limit equations in medium layout if sidebar is open
-   */
-}
-@media screen and (max-width: 800px) {
-  .MathJax_Display {
-    /* Allow users on smaller screens to scroll equations
-     * horizontally when they don't fit on the screen
-     */
-    overflow-x: auto;
-    overflow-y: hidden;
-  }
-}
-@media screen and (max-width: 703px) {
-  .MathJax_Display {
-    /*Allow users on smaller screens to scroll equations*/
-    /*horizontally when they don't fit on the screen*/
-    overflow-x: auto;
-    overflow-y: hidden;
-  }
-}
-@media screen and (max-width: 943px) {
-  .sidebar-left-open .MathJax_Display {
-    /*Allow users on smaller screens to scroll equations*/
-    /*horizontally when they don't fit on the screen*/
-    overflow-x: auto;
-    overflow-y: hidden;
-  }
-}
-
 /*******************************************************************************
  *
- * Authors: Michael DuBois, David Farmer, Rob Beezer
+ * Authors: David Farmer, Rob Beezer
  *
  *******************************************************************************
  */
