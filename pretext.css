@@ -181,10 +181,10 @@
 #masthead .title-container > .heading.hide-codenumber .codenumber {
   display: none;
 }
-#masthead #title-container > .heading.hide-title .title, #masthead .title-container > .heading.hide-title .title {
+#masthead .title-container > .heading.hide-title .title {
   display: none;
 }
-#masthead #title-container > .heading, #masthead .title-container > .heading {
+#masthead .title-container > .heading {
   margin: 0;
   font-size: 2em;
   line-height: 1.25em;
@@ -192,22 +192,21 @@
   color: #932919;
 }
 @media screen and (max-width: 480px) {
-  #masthead #title-container > .heading, #masthead .title-container > .heading {
+  #masthead .title-container > .heading {
     font-size: 1.5em;
     line-height: 1.25em;
     margin: 0;
     margin-bottom: 0.41667em;
   }
 }
-#masthead #title-container > .heading a:link, #masthead #title-container > .heading a:visited, #masthead .title-container > .heading a:link, #masthead .title-container > .heading a:visited {
-  color: #932919;
+#masthead .title-container > .heading a:link, #masthead .title-container > .heading a:visited {
   color: #932919;
   background: none;
 }
-#masthead #title-container > .heading a:link, .lt-ie10 #masthead #title-container > .heading a:link, #masthead #title-container > .heading a:visited, .lt-ie10 #masthead #title-container > .heading a:visited, #masthead .title-container > .heading a:link, .lt-ie10 #masthead .title-container > .heading a:link, #masthead .title-container > .heading a:visited, .lt-ie10 #masthead .title-container > .heading a:visited {
+#masthead .title-container > .heading a:link, .lt-ie10 #masthead .title-container > .heading a:link, #masthead .title-container > .heading a:visited, .lt-ie10 #masthead .title-container > .heading a:visited {
   text-decoration: none;
 }
-#masthead #title-container > .heading a:hover, #masthead #title-container > .heading a:focus, #masthead .title-container > .heading a:hover, #masthead .title-container > .heading a:focus {
+#masthead .title-container > .heading a:hover, #masthead .title-container > .heading a:focus {
   color: #932919;
   /**
    * Better underlines using background gradients
@@ -216,7 +215,7 @@
   /* the better underlines were removed by David Farmer on 2/9/16
      because of various headaches  */
 }
-#masthead #title-container > .heading a:active, #masthead .title-container > .heading a:active {
+#masthead .title-container > .heading a:active {
   color: #3572a0;
   /**
    * Better underlines using background gradients
@@ -225,12 +224,12 @@
   /* the better underlines were removed by David Farmer on 2/9/16
      because of various headaches  */
 }
-#masthead #title-container > .heading .subtitle, #masthead .title-container > .heading .subtitle {
+#masthead .title-container > .heading .subtitle {
   font-weight: normal;
   /* Much classier */
 }
 @media screen and (max-width: 800px) {
-  #masthead #title-container > .heading .subtitle, #masthead .title-container > .heading .subtitle {
+  #masthead .title-container > .heading .subtitle {
     /* Force the subtitle onto a separate line */
     display: block;
     font-size: 1.16667em;
@@ -239,7 +238,7 @@
     color: #595959;
     /* Remove colon */
   }
-  #masthead #title-container > .heading .subtitle:before, #masthead .title-container > .heading .subtitle:before {
+  #masthead .title-container > .heading .subtitle:before {
     content: normal;
   }
 }
