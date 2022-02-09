@@ -63,26 +63,12 @@
 }
 .page > .main #content {
   max-width: 600px;
-  /* Default left */
-  /*
-      .layout-centered & {
-          margin: $ui-content-margin auto;
-      }
-  */
-}
-.page > .main #content, .page > .main #content {
   margin: 32px;
 }
 @media screen and (max-width: 663px) {
-  .page > .main #content, .page > .main #content {
+  .page > .main #content {
     /* Decrease the margins */
-    margin: 30px 30px;
-  }
-}
-@media screen and (max-width: 903px) {
-  .sidebar-left-open .page > .main #content, .sidebar-left-open  .page > .main #content {
-    /* Decrease the margins */
-    margin: 30px 30px;
+    margin: 28px;
   }
 }
 #sidebar {
@@ -101,7 +87,7 @@
 .page > .main  {
   transition-property: margin-left, left;
 }
- .page > .main {
+.page > .main {
   position: relative;
   margin-left: 240px;
   overflow-y: scroll;
@@ -170,7 +156,7 @@
   border: none;
   box-shadow: none;
 }
-#masthead #title-container, #masthead .title-container {
+#masthead .title-container {
   font-size: 1em;
   padding-left: 9.68px;
   overflow: hidden;
@@ -178,21 +164,21 @@
   /* On mobile phones */
 }
 @media screen and (max-width: 480px) {
-  #masthead #title-container, #masthead .title-container {
+  #masthead .title-container {
     padding: 0;
     text-align: center;
     margin-top: 0.625em;
   }
 }
-#masthead #title-container > .heading, #masthead .title-container > .heading {
+#masthead .title-container > .heading {
   font-family: "PT Serif", "Times New Roman", Times, serif;
   font-weight: 700;
   color: inherit;
 }
-#masthead #title-container > .heading.hide-type .type, #masthead .title-container > .heading.hide-type .type {
+#masthead .title-container > .heading.hide-type .type {
   display: none;
 }
-#masthead #title-container > .heading.hide-codenumber .codenumber, #masthead .title-container > .heading.hide-codenumber .codenumber {
+#masthead .title-container > .heading.hide-codenumber .codenumber {
   display: none;
 }
 #masthead #title-container > .heading.hide-title .title, #masthead .title-container > .heading.hide-title .title {
@@ -898,74 +884,6 @@
   }
   .page > .footer {
     margin-left: 5em;
-  }
-}
-
-
-/**
- * These styles apply to the sidebar-left root,
- * whether it be the wrapper or the sidebar-left itself.
- */
-.page > #sidebar-left {
-  /* Hide sidebar by default */
-  display: none;
-}
- .page > #sidebar-left {
-  display: block;
-}
- .page > #sidebar-left {
-  position: absolute;
-  /* Default styles on load, before javascript loads */
-  margin-left: 0;
-  transition-property: margin-left;
-  transition-duration: 400ms;
-}
-@media screen and (max-width: 800px) {
-   .page > #sidebar-left {
-    /* Small */
-    margin-left: -240px;
-  }
-}
-.page > #sidebar-left .sidebar-content {
-  width: 240px;
-}
-
-#sidebar-left {
-  /**
-   * Trick webkit browers into generating a compositing layer for this
-   * element so that we benefit from GPU acceleration.
-   *
-   * We config backface-visibility and perspective to improve performance
-   * See: http://stackoverflow.com/a/10133679/1599617
-   *
-   * IMPORTANT: this will reset the coordinate context for child elements
-   *            with fixed positioning.
-   */
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  perspective: 1000;
-}
-
-/**
- * Container for main content.
- * This is bound to a comfortable max-width for reading.
- */
-#content {
-  max-width: 600px;
-}
-#content, #content {
-  margin: 32px;
-}
-@media screen and (max-width: 663px) {
-  #content, #content {
-    /* Decrease the margins */
-    margin: 30px 30px;
-  }
-}
-@media screen and (max-width: 903px) {
-  .sidebar-left-open #content, .sidebar-left-open  #content {
-    /* Decrease the margins */
-    margin: 30px 30px;
   }
 }
 
