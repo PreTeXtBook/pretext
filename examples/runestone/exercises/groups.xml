@@ -459,7 +459,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercise number="48">
         <statement>
             <p>Let <m>G</m> be a group and <m>g \in G</m>. Show that
-            <me>Z(G) = \{ x \in G : gx = xg \text{ for all } g \in G \}</me> is a subgroup of <m>G</m>. This subgroup is called the <term>center</term> of <m>G</m>. <notation><usage>Z(G)</usage><description>the center of a group</description></notation></p>
+            <me>Z(G) = \{ x \in G : gx = xg \text{ for all } g \in G \}</me> is a subgroup of <m>G</m>. This subgroup is called the <term>center</term> of <m>G</m>. <notation><usage><m>Z(G)</m></usage><description>the center of a group</description></notation></p>
         </statement>
     </exercise>
 

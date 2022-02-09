@@ -55,7 +55,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>The integers mod <m>n</m> have become indispensable in the theory and applications of algebra.  In mathematics they are used in cryptography, coding theory, and the detection of errors in identification codes.</p>
 
-            <p>We have already seen that two integers <m>a</m> and <m>b</m> are equivalent mod <m>n</m> if <m>n</m> divides <m>a - b</m>.  The integers mod <m>n</m> also partition <m>{\mathbb Z}</m> into <m>n</m> different equivalence classes; we will denote the set of these equivalence classes by <m>{\mathbb Z}_n</m>. <notation><usage>\mathbb Z_n</usage><description>the integers modulo <m>n</m></description></notation> Consider the integers modulo 12 and the corresponding partition of the integers:<md>
+            <p>We have already seen that two integers <m>a</m> and <m>b</m> are equivalent mod <m>n</m> if <m>n</m> divides <m>a - b</m>.  The integers mod <m>n</m> also partition <m>{\mathbb Z}</m> into <m>n</m> different equivalence classes; we will denote the set of these equivalence classes by <m>{\mathbb Z}_n</m>. <notation><usage><m>\mathbb Z_n</m></usage><description>the integers modulo <m>n</m></description></notation> Consider the integers modulo 12 and the corresponding partition of the integers:<md>
                 <mrow>{[0]} &amp; = \{ \ldots, -12, 0, 12, 24, \ldots \},</mrow>
                 <mrow> {[1]} &amp; = \{ \ldots, -11, 1, 13, 25, \ldots \},</mrow>
                 <mrow> &amp; \vdots</mrow>
@@ -416,7 +416,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <mrow> 4 \cdot 2 &amp; = 2 \qquad 5 \cdot 2 = 4.</mrow>
                 </md></p>
 
-                <p>By <xref ref="proposition-zn-equiv-classes" />, every nonzero <m>k</m> does have an inverse in <m>{\mathbb Z}_n</m> if <m>k</m> is relatively prime to <m>n</m>.  Denote the set of all such nonzero elements in <m>{\mathbb Z}_n</m> by <m>U(n)</m>. <notation><usage>U(n)</usage><description>group of units in <m>\mathbb Z_n</m></description></notation>  Then <m>U(n)</m> is a group called the <term>group of units</term><idx><h>Group</h><h>of units</h></idx> of <m>{\mathbb Z}_n</m>.  <xref ref="figure-cayley-u8" /> is a Cayley table for the group <m>U(8)</m>.</p>
+                <p>By <xref ref="proposition-zn-equiv-classes" />, every nonzero <m>k</m> does have an inverse in <m>{\mathbb Z}_n</m> if <m>k</m> is relatively prime to <m>n</m>.  Denote the set of all such nonzero elements in <m>{\mathbb Z}_n</m> by <m>U(n)</m>. <notation><usage><m>U(n)</m></usage><description>group of units in <m>\mathbb Z_n</m></description></notation>  Then <m>U(n)</m> is a group called the <term>group of units</term><idx><h>Group</h><h>of units</h></idx> of <m>{\mathbb Z}_n</m>.  <xref ref="figure-cayley-u8" /> is a Cayley table for the group <m>U(8)</m>.</p>
 
                 <figure xml:id="figure-cayley-u8">
                     <caption>Multiplication table for <m>U(8)</m></caption>
@@ -440,14 +440,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <example xml:id="example-groups-gl2">
                 <title>Matrix Multiplication of <m>2\times 2</m> Matrices is a Group</title>
-                <p>We use  <m>{\mathbb M}_2 ( {\mathbb R})</m> to denote the set of all <m>2 \times 2</m> matrices.  Let <m>GL_2({\mathbb R})</m> be the subset of <m>{\mathbb M}_2 ( {\mathbb R})</m> consisting of invertible matrices; that is, a matrix <notation><usage>\mathbb M_n(\mathbb R)</usage><description>the <m>n \times n</m> matrices with entries in <m>\mathbb R</m></description></notation>
+                <p>We use  <m>{\mathbb M}_2 ( {\mathbb R})</m> to denote the set of all <m>2 \times 2</m> matrices.  Let <m>GL_2({\mathbb R})</m> be the subset of <m>{\mathbb M}_2 ( {\mathbb R})</m> consisting of invertible matrices; that is, a matrix <notation><usage><m>\mathbb M_n(\mathbb R)</m></usage><description>the <m>n \times n</m> matrices with entries in <m>\mathbb R</m></description></notation>
                     <me>A =
                     \begin{pmatrix}<![CDATA[
                     a & b \\
                     c & d
                     ]]>\end{pmatrix}</me> 
                 is in  <m>GL_2( {\mathbb R})</m> if there exists a matrix <m>A^{-1}</m> such that
-                <m>A A^{-1} = A^{-1} A = I</m>, where <m>I</m> is the <m>2 \times 2</m> identity matrix. For <m>A</m> to have an inverse is equivalent to requiring that the determinant of <m>A</m> be nonzero; that is, <m>\det A = ad - bc \neq 0</m>. <notation><usage>\det A</usage><description>the determinant of <m>A</m></description></notation> The set of invertible matrices forms a group called the <term>general linear group</term><idx><h>Group</h><h>general linear</h></idx>.  <notation><usage>GL_n(\mathbb R)</usage><description>the general linear group</description></notation> The identity of the group is the identity matrix
+                <m>A A^{-1} = A^{-1} A = I</m>, where <m>I</m> is the <m>2 \times 2</m> identity matrix. For <m>A</m> to have an inverse is equivalent to requiring that the determinant of <m>A</m> be nonzero; that is, <m>\det A = ad - bc \neq 0</m>. <notation><usage><m>\det A</m></usage><description>the determinant of <m>A</m></description></notation> The set of invertible matrices forms a group called the <term>general linear group</term><idx><h>Group</h><h>general linear</h></idx>.  <notation><usage><m>GL_n(\mathbb R)</m></usage><description>the general linear group</description></notation> The identity of the group is the identity matrix
                     <me>I =
                     \begin{pmatrix}<![CDATA[
                     1 & 0 \\
@@ -492,7 +492,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     0 & -i
                     ]]>\end{pmatrix},</mrow>
                 </md>where <m>i^2 = -1</m>. Then the relations <m>I^2 = J^2 = K^2 = -1</m>, <m>IJ=K</m>, <m>JK = I</m>, <m>KI = J</m>, <m>JI = -K</m>, <m>KJ = -I</m>, and <m>IK = -J</m> hold. The set <m>Q_8 = \{\pm 1, \pm I, \pm J, \pm K  \}</m> is a group called the <term>quaternion group</term>. Notice that <m>Q_8</m> is noncommutative.<notation>
-                    <usage>Q_8</usage>
+                    <usage><m>Q_8</m></usage>
                     <description>the group of quaternions</description>
                 </notation><idx>
                     <h>Group</h>
@@ -504,10 +504,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <example xml:id="example-groups-c-star">
                 <title>Group of Nonzero Complex Numbers</title>
-                <p>Let <m>{\mathbb C}^\ast</m>be the set of nonzero complex numbers. <notation><usage>\mathbb C^*</usage><description>the multiplicative group of complex numbers</description></notation> Under the operation of multiplication <m>{\mathbb C}^\ast</m> forms a group.  The identity is 1. If <m>z = a+bi</m> is a nonzero complex number, then <me>z^{-1} = \frac{a -bi}{a^2 +b^2}</me> is the inverse of <m>z</m>.  It is easy to see that the remaining group axioms hold.</p>
+                <p>Let <m>{\mathbb C}^\ast</m>be the set of nonzero complex numbers. <notation><usage><m>\mathbb C^*</m></usage><description>the multiplicative group of complex numbers</description></notation> Under the operation of multiplication <m>{\mathbb C}^\ast</m> forms a group.  The identity is 1. If <m>z = a+bi</m> is a nonzero complex number, then <me>z^{-1} = \frac{a -bi}{a^2 +b^2}</me> is the inverse of <m>z</m>.  It is easy to see that the remaining group axioms hold.</p>
             </example>
 
-            <p>A group is <term>finite</term><idx><h>Group</h><h>finite</h></idx>, or has <term>finite order</term>, if it contains a finite number of elements; otherwise, the group is said to be <term>infinite</term> or to have <term>infinite order</term><idx><h>Group</h><h>infinite</h></idx>. The <term>order</term><idx><h>Group</h><h>order of</h></idx> of a finite group is the number of elements that it contains. If <m>G</m> is a group containing <m>n</m> elements, we write <m>|G| = n</m>. <notation><usage>|G|</usage><description>the order of a group</description></notation> The group <m>{\mathbb Z}_5</m> is a finite group of order 5; the integers <m>{\mathbb Z}</m> form an infinite group under addition, and we sometimes write <m>|{\mathbb Z}| = \infty</m>.</p>
+            <p>A group is <term>finite</term><idx><h>Group</h><h>finite</h></idx>, or has <term>finite order</term>, if it contains a finite number of elements; otherwise, the group is said to be <term>infinite</term> or to have <term>infinite order</term><idx><h>Group</h><h>infinite</h></idx>. The <term>order</term><idx><h>Group</h><h>order of</h></idx> of a finite group is the number of elements that it contains. If <m>G</m> is a group containing <m>n</m> elements, we write <m>|G| = n</m>. <notation><usage><m>|G|</m></usage><description>the order of a group</description></notation> The group <m>{\mathbb Z}_5</m> is a finite group of order 5; the integers <m>{\mathbb Z}</m> form an infinite group under addition, and we sometimes write <m>|{\mathbb Z}| = \infty</m>.</p>
         </subsection>
 
         <subsection>
@@ -620,9 +620,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <example xml:id="example-groups-multiplicative-subgroup">
                 <title>A Subgroup of the Reals</title>
-                <p>Consider the set of nonzero real numbers, <m>{\mathbb R}^*</m>, with the group operation of multiplication. <notation><usage>\mathbb R^*</usage><description>the multiplicative group of real numbers</description></notation> The identity of this group is 1 and the inverse of any element <m>a \in {\mathbb R}^*</m> is just <m>1/a</m>. We will show that
+                <p>Consider the set of nonzero real numbers, <m>{\mathbb R}^*</m>, with the group operation of multiplication. <notation><usage><m>\mathbb R^*</m></usage><description>the multiplicative group of real numbers</description></notation> The identity of this group is 1 and the inverse of any element <m>a \in {\mathbb R}^*</m> is just <m>1/a</m>. We will show that
                     <me>{\mathbb Q}^* = \{ p/q : p\text{ and }q\text{ are nonzero integers}\}</me>
-                is a subgroup of <m>{\mathbb R}^*</m>. <notation><usage>\mathbb Q^*</usage><description>the multiplicative group of rational numbers</description></notation> The identity of <m>{\mathbb R}^*</m> is 1; however,  <m>1 = 1/1</m> is the quotient of two nonzero integers. Hence, the identity of <m>{\mathbb R}^*</m> is in <m>{\mathbb Q}^*</m>. Given two elements in <m>{\mathbb Q}^*</m>, say <m>p/q</m> and <m>r/s</m>, their product <m>pr/qs</m> is also in <m>{\mathbb Q}^*</m>. The inverse of any element <m>p/q \in {\mathbb Q}^*</m> is again in <m>{\mathbb Q}^*</m> since <m>(p/q)^{-1} = q/p</m>. Since multiplication in <m>{\mathbb R}^*</m> is associative, multiplication in <m>{\mathbb Q}^*</m> is associative. </p> 
+                is a subgroup of <m>{\mathbb R}^*</m>. <notation><usage><m>\mathbb Q^*</m></usage><description>the multiplicative group of rational numbers</description></notation> The identity of <m>{\mathbb R}^*</m> is 1; however,  <m>1 = 1/1</m> is the quotient of two nonzero integers. Hence, the identity of <m>{\mathbb R}^*</m> is in <m>{\mathbb Q}^*</m>. Given two elements in <m>{\mathbb Q}^*</m>, say <m>p/q</m> and <m>r/s</m>, their product <m>pr/qs</m> is also in <m>{\mathbb Q}^*</m>. The inverse of any element <m>p/q \in {\mathbb Q}^*</m> is again in <m>{\mathbb Q}^*</m> since <m>(p/q)^{-1} = q/p</m>. Since multiplication in <m>{\mathbb R}^*</m> is associative, multiplication in <m>{\mathbb Q}^*</m> is associative. </p> 
             </example>
 
             <example xml:id="example-groups-subgroup-h">
@@ -632,7 +632,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <example xml:id="example-groups-sl2">
                 <title>A Subgroup of Matrices With Determinant One</title>
-                <p>Let <m>SL_2( {\mathbb R})</m> be the subset of <m>GL_2( {\mathbb R })</m>consisting of matrices of determinant one; that is, a matrix <notation><usage>SL_n(\mathbb R)</usage><description>the special linear group</description></notation>
+                <p>Let <m>SL_2( {\mathbb R})</m> be the subset of <m>GL_2( {\mathbb R })</m>consisting of matrices of determinant one; that is, a matrix <notation><usage><m>SL_n(\mathbb R)</m></usage><description>the special linear group</description></notation>
                     <me>A =
                     \begin{pmatrix}<![CDATA[
                     a & b \\

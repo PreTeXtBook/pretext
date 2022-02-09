@@ -82,7 +82,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </index>
 
     <colophon xml:id="back-colophon">
-        <p>This book was authored in MathBook XML.</p>
+        <p>This book was authored in PreTeXt.</p>
     </colophon>
 
 </backmatter>
