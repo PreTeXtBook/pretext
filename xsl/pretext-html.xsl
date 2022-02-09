@@ -6678,7 +6678,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
         <xsl:choose>
             <xsl:when test="$b-host-runestone and @youtube">
-                <!-- we compute pixels in the parameter value -->
+                <!-- we compute pixels in the parameter value, which become   -->
+                <!-- YT-specific attributes, so we can't use general template -->
+                <!-- providing standard attributes                            -->
                 <xsl:apply-templates select="." mode="runestone-youtube-embed">
                     <xsl:with-param name="width" select="($layout/width * $design-width) div 100"/>
                     <xsl:with-param name="height" select="($layout/height * $design-width) div 100"/>
@@ -7325,24 +7327,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </iframe>
         </xsl:otherwise>
     </xsl:choose>
-</xsl:template>
-
-<!-- Special for YouTube API setup on Runestone  -->
-<!-- Uses pixels (to match containing video-box) -->
-<!-- so is exceptional and featureless           -->
-<!-- TODO: are start/end attributes useful?      -->
-<xsl:template match="video[@youtube]" mode="runestone-youtube-embed">
-    <xsl:param name="width"/>
-    <xsl:param name="height"/>
-
-    <xsl:variable name="hid">
-        <xsl:apply-templates select="." mode="html-id"/>
-    </xsl:variable>
-
-    <div id="{$hid}" data-component="youtube" class="align-left youtube-video"
-         data-video-height="{$height}" data-video-width="{$width}"
-         data-video-videoid="{@youtube}" data-video-divid="{$hid}"
-         data-video-start="0" data-video-end="-1"/>
 </xsl:template>
 
 <!-- Creates a YouTube URL for embedding for use in an iframe -->
