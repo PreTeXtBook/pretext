@@ -2960,10 +2960,24 @@ Book (with parts), "section" at level 3
 <!-- A "part" must have chapters, so will always return   -->
 <!-- 'true' and for a 'subsubsection' there are no more   -->
 <!-- subdivisions to employ and so will return empty.     -->
+<!--                                                      -->
+<!-- An exception is a division of *only* worksheets.     -->
+<!-- Although there could be titles and the like.         -->
+<!-- So we compare all-children to  metadata + worksheet. -->
 <xsl:template match="book|article|part|chapter|appendix|section|subsection|subsubsection" mode="is-structured-division">
-    <xsl:if test="part|chapter|section|subsection|subsubsection">
-        <xsl:text>true</xsl:text>
-    </xsl:if>
+    <xsl:variable name="has-traditional" select="boolean(part|chapter|section|subsection|subsubsection)"/>
+    <xsl:variable name="all-children" select="*"/>
+    <xsl:variable name="all-worksheet" select="title|shorttitle|plaintitle|idx|introduction|worksheet|conclusion"/>
+    <xsl:variable name="only-worksheets" select="count($all-children) = count($all-worksheet)"/>
+
+    <xsl:value-of select="$has-traditional or $only-worksheets"/>
+</xsl:template>
+
+<!-- This should provoke a BUG message, but is being -->
+<!-- employed presently (2020-02-10) as if not(true) -->
+<xsl:template match="*" mode="is-structured-division">
+    <xsl:text>false</xsl:text>
+    <!-- <xsl:message>PTX:BUG: asking if a non-traditional division (<xsl:value-of select="local-name(.)"/>) is structured or not</xsl:message> -->
 </xsl:template>
 
 <!-- We also want to identify smaller pieces of a document,          -->
