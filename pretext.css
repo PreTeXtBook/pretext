@@ -81,7 +81,6 @@
 .page > .main {
   width: auto;
   transition-duration: 400ms;
-  transform: translateZ(0);
   backface-visibility: hidden;
 }
 .page > .main  {
@@ -160,8 +159,6 @@
   font-size: 1em;
   padding-left: 9.68px;
   overflow: hidden;
-  *zoom: 1;
-  /* On mobile phones */
 }
 @media screen and (max-width: 480px) {
   #masthead .title-container {
@@ -338,7 +335,6 @@
   /* Smoothly transition box-shadow when navbar sticks/unsticks */
   transition: box-shadow 400ms;
   overflow: hidden;
-  *zoom: 1;
   /*
    * Styles applied to make the navbar persistently visible
    * when it's sticky-wrapper is stuck
@@ -367,9 +363,7 @@
   cursor: pointer;
   display: inline-block;
   vertical-align: middle;
-  *vertical-align: auto;
   zoom: 1;
-  *display: inline;
   /* Disable accidental text-selection */
   user-select: none;
   /* Truncate overflowing text with ellipsis */
@@ -469,9 +463,7 @@
   /* So text isn't removed from this too */
   display: inline-block;
   vertical-align: baseline;
-  *vertical-align: auto;
   zoom: 1;
-  *display: inline;
 }
 @media screen and (max-width: 800px) {
   #primary-navbar .sidebar-left-toggle-button {
