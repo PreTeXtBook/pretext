@@ -25,7 +25,10 @@
     top: 50px;
     box-sizing: border-box;
     overflow-y: scroll;
-    height: calc(100vh - 100px);
+/*
+    height: calc(100vh - 60px);
+*/
+    height: 100vh;
 }
 /**
  * Container for the main focus/purpose of the page.
@@ -42,13 +45,8 @@
   border-bottom: none;
   box-shadow: rgba(0, 0, 0, 0.5) 0 5px 5px;
 */
-  /***************************************************************************
-   * There are a few ways to fix the #content's top/botom margin collapsing
-   * inside this element.
-   **************************************************************************/
-  /* Method 1 */
   padding-top: 1px;
-  padding-bottom: 6em;
+  padding-bottom: 0;
   /* This feels more conclusive: the page is over. */
   /* Method 2 - will clip anything positioned absolutely outside borders */
   /*overflow:hidden;*/
@@ -87,31 +85,6 @@
     margin: 30px 30px;
   }
 }
-.mathbook-loading.sidebar-left-open .page > .main, .mathbook-loaded.sidebar-left-open .page > .main {
-  margin-left: 240px;
-  left: auto;
-}
-@media screen and (max-width: 640px) {
-  .mathbook-loading.sidebar-left-open .page > .main, .mathbook-loaded.sidebar-left-open .page > .main {
-    /* Must force other-side to auto so we can push from the right */
-    right: -240px !important;
-    left: 240px;
-    margin-left: 0;
-  }
-}
-.mathbook-loading.sidebar-left-closed .page > .main, .mathbook-loaded.sidebar-left-closed .page > .main {
-  margin-left: 0;
-  left: auto;
-}
-@media screen and (max-width: 640px) {
-  .mathbook-loading.sidebar-left-closed .page > .main, .mathbook-loaded.sidebar-left-closed .page > .main {
-    margin-left: 0;
-    left: 0;
-  }
-}
-
-body .page {
-}
 #sidebar {
   width: 240px;
   float: left;
@@ -132,7 +105,6 @@ body .page {
   position: relative;
   margin-left: 240px;
   overflow-y: scroll;
-  overflow-x: hidden;
 }
 @media screen and (max-width: 800px) {
    .page > .main {
@@ -141,11 +113,11 @@ body .page {
   }
 }
 
-.footer {
+.page > .footer {
     clear: both;
     position: relative;
-    width: 100%;
     margin-left: 240px;
+    padding-left: 8em;
 }
 
 .container {
@@ -318,9 +290,7 @@ body .page {
 }
 #masthead #logo-link:empty:before,
 .pretext-content #masthead #logo-link:empty:before,
-.mathbook-book #masthead #logo-link:empty:before,
 .pretext-book #masthead #logo-link:empty:before,
-.mathbook-article #masthead #logo-link:empty:before,
 .pretext-article #masthead #logo-link:empty:before {
   content: "\2211";
 }
@@ -552,7 +522,7 @@ body .page {
     left: 50%;
     right: auto;
     margin-left: -22.1px;
-    top: 50%;
+    top: 35%;
     bottom: auto;
     margin-top: -22.1px;
   }
@@ -910,11 +880,27 @@ body .page {
   position: relative;
 }
 @media screen and (max-width: 800px) {
-  .page {
-    /* Clip hidden sidebars */
-    overflow: hidden;
+  #sidebar {
+    top: 1px;
+  }
+  #toc {
+    height: calc(100vh - 50px);
+  }
+  .page > .footer {
+    margin-bottom: 60px;
+    padding-left: 10px;
   }
 }
+
+@media screen and (max-width: 600px) {
+  #sidebar {
+    display: none;
+  }
+  .page > .footer {
+    margin-left: 5em;
+  }
+}
+
 
 /**
  * These styles apply to the sidebar-left root,
@@ -939,12 +925,6 @@ body .page {
     /* Small */
     margin-left: -240px;
   }
-}
-.mathbook-loading.sidebar-left-open .page > #sidebar-left, .mathbook-loaded.sidebar-left-open .page > #sidebar-left {
-  margin-left: 0;
-}
-.mathbook-loading.sidebar-left-closed .page > #sidebar-left, .mathbook-loaded.sidebar-left-closed .page > #sidebar-left {
-  margin-left: -240px;
 }
 .page > #sidebar-left .sidebar-content {
   width: 240px;
