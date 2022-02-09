@@ -25,12 +25,18 @@ a {
 .pretext-content figure,
 .pretext-content figcaption,
 .pretext-content .exercisegroup,
-.pretext-content p {
+.pretext-content .para {
     position: relative;
 }
 
+/* we use .para as a wrapper around some "compound" p, so the
+   first p in .para is block-like because of the .pare */
+.pretext-content .para > p:first-child {
+    display: inline;
+}
+
 /* Oscar Levin figured out the cause of chrome showing a funny border focus */
-.pretext-content .knowl p {
+.pretext-content .knowl .para {
     position: unset;
 }
 
@@ -49,7 +55,7 @@ so that we can set our own later */
     padding: 0;
 }
 
-/* p and other block-level elements should have space at the top, and not the bottom */
+/* .para and other block-level elements should have space at the top, and not the bottom */
 .pretext-content h1, .pretext-content h2, .pretext-content h3, .pretext-content h4, .pretext-content h5, .pretext-content h6 {
     margin: 0;
 }
@@ -58,71 +64,71 @@ so that we can set our own later */
     line-height: 1.1;
 }
 
-/* spacing around and after p, and around and after article */
-.pretext-content p {
+/* spacing around and after .para, and around and after article */
+.pretext-content .para {
     margin-top: 1.25em;
     margin-bottom: 0;
     line-height: 1.35;
 }
-.pretext-content p.continuation {
+.pretext-content .para.continuation {
     margin-top: 0;
 }
-.pretext-content pre + p.continuation {
+.pretext-content pre + .para.continuation {
     margin-top: 1em;
 }
-.pretext-content ul + p.continuation,
-.pretext-content ol + p.continuation,
-.pretext-content dl + p.continuation {
+.pretext-content ul + .para.continuation,
+.pretext-content ol + .para.continuation,
+.pretext-content dl + .para.continuation {
     margin-top: 0.75em;
 }
 
-.pretext-content .aside-like > p:first-child,
-.pretext-content td > p:first-child,
-.pretext-content .solution-like > p:first-child {
+.pretext-content .aside-like > .para:first-child,
+.pretext-content td > .para:first-child,
+.pretext-content .solution-like > .para:first-child {
     margin-top: 0;
 }
 /* for assemblages without a title */
-.pretext-content .assemblage-like > p:first-of-type {
+.pretext-content .assemblage-like > .para:first-of-type {
     margin-top: 0;
 }
-.pretext-content .assemblage-like > .heading + p {
+.pretext-content .assemblage-like > .heading + .para {
     margin-top: 0.25em;
 }
-.pretext-content .assemblage-like + p {
+.pretext-content .assemblage-like + .para {
     margin-top: 1.75em;
 }
 
-.pretext-content p.intertext {
+.pretext-content .para.intertext {
     margin-top: -0.25em;
     text-indent: 0;
 }
 
-.pretext-content p + table {
+.pretext-content .para + table {
     margin-top: 1em;
 }
 
-.pretext-content table tr td p + p {
+.pretext-content table tr td .para + .para {
     margin-top: 1em;
 }
 
-.pretext-content table + p {
+.pretext-content table + .para {
     margin-top: 1.5em;
 }
 
-.pretext-content p + figure.figure-like > table {
+.pretext-content .para + figure.figure-like > table {
     margin-top: 1em;
 }
 
 /* 1.25 = ol top + li top ?  looked too big with 0.75 below */
-.pretext-content .exercise-like p + ol {  
+.pretext-content .exercise-like .para + ol {  
     margin-top: 0.5em;
 }
 
-.pretext-content p + pre.prettyprint,
-.pretext-content p + pre.plainprint {
+.pretext-content .para + pre.prettyprint,
+.pretext-content .para + pre.plainprint {
     margin-top: 1.25em;
 }
-.pretext-content p + .code-box {
+.pretext-content .para + .code-box {
     margin-top: 1.25em;
 }
 .pretext-content .code-box > .console{
@@ -135,7 +141,7 @@ so that we can set our own later */
     margin-top: 1.25em;
 }
 .pretext-content section article + article,
-.pretext-content section p + article,
+.pretext-content section .para + article,
 .pretext-content section .posterior + article {
     margin-top: 1.75em;
 }
@@ -148,18 +154,18 @@ so that we can set our own later */
 .pretext-content article + .posterior {
     margin-top: 0.5em;
 }
-.pretext-content section p + .tabular-box {
+.pretext-content section .para + .tabular-box {
     margin-top: 0.75em;
 }
 .pretext-content section .proof {
     margin-top: 0.75em;
 }
 
-.pretext-content section > pre, .pretext-content p + pre {
+.pretext-content section > pre, .pretext-content .para + pre {
     margin-top: 1.25em;
 }
 
-.pretext-content ol p + p, .pretext-content ul p + p {
+.pretext-content ol .para + .para, .pretext-content ul .para + .para {
     margin-top: 1em;
 }
 
@@ -167,7 +173,7 @@ so that we can set our own later */
 and ex 2.91 in 
 https://yoshiwarabooks.org/mfg/MathModels.html */
 .pretext-content .introduction + .sidebyside,
-.pretext-content p + .sidebyside,
+.pretext-content .para + .sidebyside,
 .pretext-content ol + .sidebyside,
 .pretext-content ul + .sidebyside {
     margin-top: 1em;
@@ -202,7 +208,7 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .pretext-content .conclusion {
     margin-top: 1em;
 }
-.pretext-content .conclusion > p:first-child {
+.pretext-content .conclusion > .para:first-child {
     margin-top: 0.5em;
 }
 
@@ -231,10 +237,10 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .pretext-content li {
     margin-top: 0.5em;
 }
-.pretext-content li > p:first-child {
+.pretext-content li > .para:first-child {
     margin-top: 0;
 }
-.pretext-content article p:first-child {
+.pretext-content article .para:first-child {
     margin-top: 0;
 }
 
@@ -261,7 +267,7 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .pretext-content .frontmatter .author:first-of-type {
     margin-top: 4em;
 }
-.pretext-content .frontmatter > p:first-of-type {
+.pretext-content .frontmatter > .para:first-of-type {
     margin-top: 4em;
 }
 .pretext-content .frontmatter > .author,
@@ -288,13 +294,13 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     white-space: pre;
 }
 
-.pretext-content article > .heading + p {
+.pretext-content article > .heading + .para {
     margin-top: 0;
 }
-.pretext-content section .heading + p,
-.pretext-content section .title + p, /* list items have bare .title, not in a .heading */
-.pretext-content section .heading + .introduction > p:first-child,
-.pretext-content section .blob > p:first-child {
+.pretext-content section .heading + .para,
+.pretext-content section .title + .para, /* list items have bare .title, not in a .heading */
+.pretext-content section .heading + .introduction > .para:first-child,
+.pretext-content section .blob > .para:first-child {
     margin-top: 0.25em;
 }
 .pretext-content section .heading + article { /* , .pretext-content section header + article { */
@@ -398,9 +404,9 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 /*
  * Contents of articles
  */
-.pretext-content section article > .heading + p,
+.pretext-content section article > .heading + .para,
 .pretext-content section article > .heading + .introduction,
-.pretext-content section article > .heading + .introduction > p:first-child {
+.pretext-content section article > .heading + .introduction > .para:first-child {
     display: inline;
 }
 /* when a list is the only thing in an environment with a border,
@@ -409,7 +415,7 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .pretext-content section article > .heading + ul {
     padding-left: 1.5em;
 }
-.pretext-content section article.theorem-like p,
+.pretext-content section article.theorem-like .para,
 .pretext-content section article.theorem-like li {
     font-style: italic;
 }
@@ -506,21 +512,21 @@ from Jiří Lebl */
     display: none;
 }
 
-.pretext-content section p.credit + p.credit {
+.pretext-content section .para.credit + .para.credit {
     margin-top: 0.25em;
 }
-.pretext-content section p.credit > .title {
+.pretext-content section .para.credit > .title {
     font-weight: 700;
     margin-right: 0.5em;
 }
-/* .pretext-content section p.credit > .title::after {
+/* .pretext-content section .para.credit > .title::after {
     content: ": ";
 } */
 
-.pretext-content section p.copyright {
+.pretext-content section .para.copyright {
     margin-top: 2.5em;
 }
-.pretext-content section p.license {
+.pretext-content section .para.license {
     margin-top: 2.5em;
 }
 
@@ -545,7 +551,7 @@ body > a.assistive:focus {
 	outline:0;	
     transition: top .1s ease-in, background .5s linear;
 }
-.heading > p.assistive {
+.heading > .para.assistive {
     margin-top: 0;
 }
 /* stacked headings in the solutions backmatter */
@@ -695,7 +701,7 @@ body > a.assistive:focus {
 .pretext-content figcaption + .named-list-content {
     margin-top: 0.6em;
 }
-.pretext-content figcaption + .named-list-content > .introduction > p:first-child {
+.pretext-content figcaption + .named-list-content > .introduction > .para:first-child {
     margin-top: 0;
 }
 .pretext-content figcaption + table,
@@ -703,7 +709,7 @@ body > a.assistive:focus {
     margin-top: 0.5em;
 }
 
-.pretext-content .definition-like p > .emphasis {
+.pretext-content .definition-like .para > .emphasis {
     font-weight: 700;
 }
 .pretext-content em.alert {
@@ -737,15 +743,15 @@ body > a.assistive:focus {
     display: inline;
 }
 
-.pretext-content .paragraphs .heading + p {
+.pretext-content .paragraphs .heading + .para {
     display: inline;
 }
 
-/* the next are to avoid styping a p as inline, because
+/* the next are to avoid styping a .para as inline, because
  * inline styling messes up the meaning of line-height.
  * */
 
-.pretext-content .paragraphs p .title {
+.pretext-content .paragraphs .para .title {
     font-family: "PT Serif", "Times New Roman", Times, serif;
     font-size: 1.125em;
     font-weight: 700;
@@ -764,7 +770,7 @@ body > a.assistive:focus {
 }
 
 
-.pretext-content .sidebyside > p, .pretext-content .sidebyside > figure, .pretext-content .sidebyside > img, .pretext-content .sidebyside > table, .pretext-content .sidebyside > tabular, .pretext-content .sidebyside > section, .pretext-content .sidebyside > .paragraphs {
+.pretext-content .sidebyside > .para, .pretext-content .sidebyside > figure, .pretext-content .sidebyside > img, .pretext-content .sidebyside > table, .pretext-content .sidebyside > tabular, .pretext-content .sidebyside > section, .pretext-content .sidebyside > .paragraphs {
     display: inline-block;
     margin: 0;
 }
@@ -787,16 +793,16 @@ body > a.assistive:focus {
     font-family: "PT Serif", "Times New Roman", Times, serif;
 }
 
-.pretext-content .sidebyside > p {   /* what about sbspanel? */
+.pretext-content .sidebyside > .para {   /* what about sbspanel? */
     width: 32%;
     vertical-align: top;
 }
 
-.pretext-content .sidebyside > p.left, .pretext-content .sidebyside > p.middle, .pretext-content .sidebyside > p.right {
+.pretext-content .sidebyside > .para.left, .pretext-content .sidebyside > .para.middle, .pretext-content .sidebyside > .para.right {
     vertical-align: middle;
 }
 
-.pretext-content .sidebyside > p + img {
+.pretext-content .sidebyside > .para + img {
     vertical-align: middle;
 }
 
@@ -846,7 +852,7 @@ body > a.assistive:focus {
     justify-content: flex-end;
 }
 
-.pretext-content .sbspanel > p:first-child {
+.pretext-content .sbspanel > .para:first-child {
     margin-top: 0;
 }
 
@@ -1293,7 +1299,7 @@ body > a.assistive:focus {
     scroll-margin-top: 45px;
 }
 
-.pretext-content p > .autopermalink {
+.pretext-content .para > .autopermalink {
     margin-top: 0.2em;
 }
 
@@ -1697,10 +1703,10 @@ body > a.assistive:focus {
 .pretext-content dl.description-list dd:first-of-type {
     margin-top: 0;
 }
-.pretext-content dl dd p {
+.pretext-content dl dd .para {
     margin-top: 1em;
 }
-.pretext-content dl dt > p:first-child, .pretext-content dl dd > p:first-child {
+.pretext-content dl dt > .para:first-child, .pretext-content dl dd > .para:first-child {
     margin-top: 0;
 }
 
@@ -1917,17 +1923,17 @@ a.mjx-svg-href  {
 .pretext-content section .exercisegroup > .heading + .introduction {
     display: inline;
 }
-.pretext-content section .exercisegroup > .heading + .introduction > p:first-child {
+.pretext-content section .exercisegroup > .heading + .introduction > .para:first-child {
     display: inline;
 }
 
-.pretext-content .exercisegroup article.exercise-like p {
+.pretext-content .exercisegroup article.exercise-like .para {
     margin-top: 0.5em;
 }
-.pretext-content .exercisegroup article.exercise-like .solution p:first-child {
+.pretext-content .exercisegroup article.exercise-like .solution .para:first-child {
     margin-top: -3px;  /* because of the 10px (instread of 7) on the .knowl-content */
 }
-.pretext-content .exercisegroup article.exercise-like li > p:first-child {
+.pretext-content .exercisegroup article.exercise-like li > .para:first-child {
     margin-top: 0;
 }
 
@@ -1937,7 +1943,7 @@ a.mjx-svg-href  {
 .pretext-content article.exercise-like .task > .heading + .heading {
     font-weight: 600;  /* should be slightly less bold, but some browsers make it bold */
 }
-.pretext-content article.exercise-like .task > .heading + .heading + p,
+.pretext-content article.exercise-like .task > .heading + .heading + .para,
 .pretext-content article.exercise-like .task > .heading + .heading + div {
     display: block;
     margin-top: 0;
@@ -1968,7 +1974,7 @@ a.mjx-svg-href  {
     margin-top: 1.25em;
     margin-top: 0;
 }
-.pretext-content .exercisegroup > .introduction > p:first-child::before {
+.pretext-content .exercisegroup > .introduction > .para:first-child::before {
     content: '\25a0\2009';
    /* font-size: 70%; */
     color: #06a;
@@ -1976,11 +1982,11 @@ a.mjx-svg-href  {
     top: -1px;
     right: 1px;
 }
-.pretext-content .exercisegroup > .heading + .introduction > p:first-child::before {
+.pretext-content .exercisegroup > .heading + .introduction > .para:first-child::before {
     content: '\2003';
 }
 
-.pretext-content .exercisegroup > .introduction > p:first-child {
+.pretext-content .exercisegroup > .introduction > .para:first-child {
     margin-top: 0;
 }
 
@@ -2011,7 +2017,7 @@ a.mjx-svg-href  {
 .pretext-content .exercise-like .introduction .heading {
     display: inline;
 }
-.pretext-content .exercise-like .introduction p:first-child {
+.pretext-content .exercise-like .introduction .para:first-child {
     display: inline;
 }
 .pretext-content .exercise-like .introduction::after {
@@ -2253,8 +2259,8 @@ a.mjx-svg-href  {
     margin-right: 0.25em;
     display: inline;
 }
-.pretext-content article.example-like > .solution-like > .heading + p,
-.pretext-content article.exercise-like > .solution-like > .heading + p {
+.pretext-content article.example-like > .solution-like > .heading + .para,
+.pretext-content article.exercise-like > .solution-like > .heading + .para {
     display: inline;
 }
 
@@ -2449,7 +2455,7 @@ code.inline {
     line-height: 1.1;
 }
 .pretext-content section > .code-box,
-.pretext-content p + .code-box {
+.pretext-content .para + .code-box {
     margin-top: 1em;
 }
 
@@ -2543,7 +2549,7 @@ code.inline {
 
 /* solution to Example 4.2.12 in http://spot.pcc.edu/math/orcca-draft/orcca/section-radical-expressions-and-rational-exponents.html
 */
-.pretext-content .solution ol li > p:first-child, .pretext-content .solution ol li > .displaymath:first-child {
+.pretext-content .solution ol li > .para:first-child, .pretext-content .solution ol li > .displaymath:first-child {
     vertical-align: top;
     display: inline-block;
     margin-top: 0;
@@ -2573,7 +2579,7 @@ code.inline {
 .pretext-content .knowl .exercise-like > .cols6 > li { width: calc(16.3% - 2em)}
 
 
-.pretext-content .exercise-like ol li > p:first-child {
+.pretext-content .exercise-like ol li > .para:first-child {
     vertical-align: top;
     display: inline-block;
     margin-top: 0;
@@ -2594,7 +2600,7 @@ code.inline {
     margin-top: 1.5ex;
 }
 
-.pretext-content .contributor + p {
+.pretext-content .contributor + .para {
     margin-top: 3ex;
 }
 
@@ -2708,17 +2714,17 @@ https://pretextbook.org/examples/sample-article/html/interesting-corollary.html#
 .pretext-content .exercise-like > .exercise-like.task {
     margin-left: 20px;
 }
-.pretext-content .exercise-like > .exercise-like > p {
+.pretext-content .exercise-like > .exercise-like > .para {
     margin-top: 1.25em;
 /*    margin-bottom: 0.25em; */
 }
 .pretext-content .example-like > .heading + .introduction {
     display: inline;
 }
-.pretext-content .example-like > .heading + .introduction > p:first-child {
+.pretext-content .example-like > .heading + .introduction > .para:first-child {
     display: inline;
 }
-.pretext-content .example-like > .exercise-like > p {
+.pretext-content .example-like > .exercise-like > .para {
     margin-top: 1.25em;
 }
 
@@ -2783,7 +2789,7 @@ https://pretextbook.org/examples/sample-article/html/interesting-corollary.html#
    See 10.1.8c in http://faculty.valpo.edu/calculus3ibl/ch10_01_gradient.html
 and condider having this replace line 3338 of the general code (which uses .heading + p)
 */
-.pretext-content .example-like > .exercise-like > p:first-of-type {
+.pretext-content .example-like > .exercise-like > .para:first-of-type {
     display: inline;
 }
 .pretext-content .example-like > .exercise-like > .aside-like {
@@ -3018,13 +3024,13 @@ body.standalone .pretext-content .onepage article {
 body.standalone .pretext-content .onepage article::after {
     all: unset;
 }
-.pretext-content .onepage > p:first-child,
+.pretext-content .onepage > .para:first-child,
 .pretext-content .onepage > article:first-child {
     margin-top: 0;
 }
 .pretext-content section + .onepage.firstpage,
 .pretext-content article + .onepage.firstpage,
-.pretext-content p + .onepage.firstpage {
+.pretext-content .para + .onepage.firstpage {
     margin-top: 1.25em;
 }
 
@@ -3147,7 +3153,7 @@ body.standalone.worksheet .pretext-content section.worksheet > .conclusion {
     margin-left: 55px;
     margin-right: 40px;
 }
-body.standalone.worksheet .pretext-content section.worksheet > .heading + p {
+body.standalone.worksheet .pretext-content section.worksheet > .heading + .para {
     display: inline;
 }
 
@@ -3356,7 +3362,7 @@ body.standalone.worksheet .pretext-content section.worksheet > .heading + p {
 
 /* Preview of annual edition */
 
-main p.newstuff {
+main .para.newstuff {
     border-right: 6px solid #6f6;
     background:  #dfd;
 }
@@ -3364,7 +3370,7 @@ main li.newstuff {
     border-right: 6px solid #66f;
     background:  #eef;
 }
-main li.newstuff p.newstuff {
+main li.newstuff .para.newstuff {
     border-right: none;
     background: inherit;
 }
@@ -3576,8 +3582,8 @@ label.incorrect .feedback {
      max-width: 95%;
 }
 */
-.pretext-content .exercise-wrapper > p:first-child,
-.pretext-content .exercisegroup .exercise-wrapper > p:first-child {
+.pretext-content .exercise-wrapper > .para:first-child,
+.pretext-content .exercisegroup .exercise-wrapper > .para:first-child {
     margin-top: 0;
     display: inline;
 }
@@ -3712,7 +3718,7 @@ ol > #edit_menu_holder > #enter_choice {
 ol.may_leave + #edit_menu_holder > #enter_choice {
     bottom: -3.3em;
 }
-li > p > #edit_menu_holder > #enter_choice {
+li > .para > #edit_menu_holder > #enter_choice {
     bottom: -4.1em;
 }
 #enter_choice[data-location="inline"] {
@@ -3720,7 +3726,7 @@ li > p > #edit_menu_holder > #enter_choice {
     left: -0.5em;
 }
 
-#edit_menu_holder + p {
+#edit_menu_holder + .para {
     margin-top: 0;
 }
 li > #edit_menu_holder {
@@ -3820,7 +3826,7 @@ article.may_leave + #edit_menu_holder #enter_choice {
 .text_source {
     font-size: 95%;
 }
-.may_select > p:first-of-type {
+.may_select > .para:first-of-type {
     margin-top: 0;
 }
 .sbspanel.may_select {
@@ -3913,10 +3919,10 @@ sbspanel:empty { /* can only happen when partially created */
     font-color: #caa;
     font-style: italic;
 }
-[data-objecttype="theorem-like"] p {
+[data-objecttype="theorem-like"] .para {
     font-style: italic;
 } 
-[data-objecttype="theorem-like"] p ol {
+[data-objecttype="theorem-like"] .para ol {
     font-style: normal;
 } 
 
@@ -3985,7 +3991,7 @@ sbspanel:empty { /* can only happen when partially created */
     font-style: italic;
     position: relative;
 }
-.pretext-content #phantomobject.move + p {
+.pretext-content #phantomobject.move + .para {
     margin-top: 0;
 }
 .pretext-content #phantomobject.move .done {
@@ -4002,14 +4008,14 @@ sbspanel:empty { /* can only happen when partially created */
     margin-right: 0.6em;
     margin-top: -0.5em;
 }
-.pretext-content #phantomobject.move .movearrow p {
+.pretext-content #phantomobject.move .movearrow .para {
     margin-top: 0.4em;
 }
-.pretext-content #phantomobject.move .movearrow p.up {
+.pretext-content #phantomobject.move .movearrow .para.up {
     margin-top: 0;
     margin-bottom: -1em;
 }
-.pretext-content #phantomobject.move .movearrow p.down {
+.pretext-content #phantomobject.move .movearrow .para.down {
     margin-top: 0.0em;
 }
 .pretext-content #phantomobject.move .movearrow > * {
@@ -4027,7 +4033,7 @@ sbspanel:empty { /* can only happen when partially created */
 }
 
 /* new editing css */
-.pretext-content p.may_select {
+.pretext-content .para.may_select {
     display: block !important;
 }
 .pretext-content .may_select {
@@ -4042,20 +4048,20 @@ sbspanel:empty { /* can only happen when partially created */
 }
 
 
-.pretext-content p.in_edit_tree,
+.pretext-content .para.in_edit_tree,
 .pretext-content section.in_edit_tree,
 .pretext-content article.in_edit_tree {
     border: 3px solid #666 !important;
     padding: 0.5em;
 }
-.pretext-content .in_edit_tree p,
+.pretext-content .in_edit_tree .para,
 .pretext-content .in_edit_tree .displaymath,
 .pretext-content .in_edit_tree section,
 .pretext-content .in_edit_tree article {
     border: 3px solid blue !important;
     padding: 0.5em;
 }
-.pretext-content .in_edit_tree p {
+.pretext-content .in_edit_tree .para {
     border: 3px solid #4a9 !important;
     background: #ffd;
     padding: 0.5em;
@@ -4088,7 +4094,7 @@ sbspanel:empty { /* can only happen when partially created */
     border: 3px solid green !important;
     padding: 0.5em;
 }
-.pretext-content .in_edit_tree * * p,
+.pretext-content .in_edit_tree * * .para,
 .pretext-content .in_edit_tree * * .displaymath,
 .pretext-content .in_edit_tree * * section,
 .pretext-content .in_edit_tree * * article {
@@ -4096,12 +4102,12 @@ sbspanel:empty { /* can only happen when partially created */
     padding: 0.5em;
 }
 
-.pretext-content .in_edit_tree p.mp,
-.pretext-content .in_edit_tree p.fp {
+.pretext-content .in_edit_tree .para.mp,
+.pretext-content .in_edit_tree .para.fp {
     margin-top: 0;
 }
 
-.pretext-content .in_edit_tree .heading + p {
+.pretext-content .in_edit_tree .heading + .para {
     display: block;
 }
 .pretext-content .in_edit_tree::before,
