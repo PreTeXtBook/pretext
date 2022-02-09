@@ -44,6 +44,7 @@
   border-color: var(--highlighttocborder);
 }
 
+#toc ul li a:focus,
 #toc ul li a:hover {
   color: #321a0c;
   color: var(--highlighttoctext);
@@ -52,6 +53,7 @@
   border-color: #ec704b;
   border-color: var(--highlighttocborder);
 }
+#toc ul li ul a:focus,
 #toc ul li ul a:hover {
   color: #321a0c;
   color: var(--highlighttoctext);
@@ -74,6 +76,9 @@
     padding-top: 7px;
     padding-bottom: 7px;
 }
+#toc ul li.part a:focus,
+#toc ul li.frontmatter a:focus,
+#toc ul li.backmatter a:focus,
 #toc ul li.part a:hover,
 #toc ul li.frontmatter a:hover,
 #toc ul li.backmatter a:hover {

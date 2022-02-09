@@ -65,7 +65,7 @@
     margin-top: 0;
 }
 /* Removes underlines from links in toc */
-#toc ul li a, #toc ul li a:link, #toc ul li a:visited, #toc ul li a:hover, #toc ul li a:active {
+#toc ul li a, #toc ul li a:link, #toc ul li a:visited, #toc ul li a:hover, #toc ul li a:focus, #toc ul li a:active {
     text-decoration: none;
 }
 
