@@ -58,6 +58,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:import href="./pretext-assembly.xsl"/>
 <xsl:import href="./pretext-common.xsl"/>
 
+<!-- Modularize lots of Runestone-specific code    -->
+<!-- Likely need not be an "import" (v. "include") -->
+<xsl:import href="./pretext-runestone.xsl"/>
 
 <!-- We create HTML5 output.  The @doctype-system attribute will    -->
 <!-- create a header in the old style that browsers will recognize  -->
