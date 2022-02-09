@@ -131,20 +131,10 @@
   border: 0;
   background-color: inherit;
 }
-#masthead .navbar {
-  border-top: none;
-  border-right: none;
-  border-left: none;
-  min-height: unset;
-}
 #primary-navbar .container::before,
-#masthead .navbar::before,
 #masthead .container::before,
-#masthead #primary-navbar::before,
 #primary-navbar .container::after,
-#masthead .navbar::after,
-#masthead .container::after,
-#masthead #primary-navbar::after {
+#masthead .container::after {
     all: unset;
 }
 
@@ -170,7 +160,10 @@
 #masthead .title-container > .heading {
   font-family: "PT Serif", "Times New Roman", Times, serif;
   font-weight: 700;
-  color: inherit;
+  margin: 0;
+  font-size: 2em;
+  line-height: 1.25em;
+  color: #932919;
 }
 #masthead .title-container > .heading.hide-type .type {
   display: none;
@@ -180,13 +173,6 @@
 }
 #masthead .title-container > .heading.hide-title .title {
   display: none;
-}
-#masthead .title-container > .heading {
-  margin: 0;
-  font-size: 2em;
-  line-height: 1.25em;
-  font-family: "PT Serif", "Times New Roman", Times, serif;
-  color: #932919;
 }
 @media screen and (max-width: 480px) {
   #masthead .title-container > .heading {
@@ -295,7 +281,7 @@
     font-size: 50px;
   }
 }
-#masthead #byline, #masthead .byline {
+#masthead .byline {
   color: #333333;
   font-weight: normal;
   margin: 0;
@@ -305,19 +291,19 @@
   font-family: "PT Serif", "Times New Roman", Times, serif;
 }
 @media screen and (max-width: 480px) {
-  #masthead #byline, #masthead .byline {
+  #masthead .byline {
     margin-top: 0;
     font-size: 1em;
     line-height: 1.25em;
   }
 }
-#masthead #byline a:link, #masthead #byline a:visited, #masthead .byline a:link, #masthead .byline a:visited {
+#masthead .byline a:link, #masthead .byline a:visited {
   color: #333333;
 }
-#masthead #byline a:hover, #masthead #byline a:focus, #masthead .byline a:hover, #masthead .byline a:focus {
+#masthead .byline a:hover, #masthead .byline a:focus {
   color: #932919;
 }
-#masthead #byline a:active, #masthead .byline a:active {
+#masthead .byline a:active {
   color: #3572a0;
 }
 
@@ -335,17 +321,6 @@
   /* Smoothly transition box-shadow when navbar sticks/unsticks */
   transition: box-shadow 400ms;
   overflow: hidden;
-  /*
-   * Styles applied to make the navbar persistently visible
-   * when it's sticky-wrapper is stuck
-   */
-}
-.stuck #primary-navbar {
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 5px;
 }
 @media screen and (max-width: 800px) {
   #primary-navbar {
