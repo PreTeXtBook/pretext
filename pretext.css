@@ -71,6 +71,40 @@
     margin: 28px;
   }
 }
+
+
+
+
+#content.serif .para {
+  font-family: "PT Serif", "Times New Roman", serif;
+  font-size: 105%;
+}
+#content.serif #text-in-paragraphs .para,
+#content.serif #Bcd .para,
+#content.serif #interesting-corollary .para {
+  font-family: "Noto", serif;
+  font-size: 115%;
+  line-height: 1.20;
+}
+#content.serif #table-calisthenics .para,
+#content.serif #section-7 .para,
+#content.serif #section-11 .para {
+  font-family: "Tinos", serif;
+  font-size: 115%;
+  line-height: 1.30;
+}
+
+#content.serif .code-inline {
+  background: #f6f6f6;
+  border: 1px solid #eee;
+  padding: 0.01em 0.15em 0.03em 0.15em;
+  margin-left: 0.15em;
+  margin-right: 0.15em;
+  border-radius: 0;
+}
+
+
+
 #sidebar {
   width: 240px;
   float: left;
@@ -125,16 +159,8 @@
   max-width: 904px;
   background-color: inherit;
 }
-#masthead .container {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background-color: inherit;
-}
 #primary-navbar .container::before,
-#masthead .container::before,
-#primary-navbar .container::after,
-#masthead .container::after {
+#primary-navbar .container::after {
     all: unset;
 }
 
@@ -191,21 +217,9 @@
 }
 #masthead .title-container > .heading a:hover, #masthead .title-container > .heading a:focus {
   color: #932919;
-  /**
-   * Better underlines using background gradients
-   * See http://bit.ly/1vTg7hr
-   */
-  /* the better underlines were removed by David Farmer on 2/9/16
-     because of various headaches  */
 }
 #masthead .title-container > .heading a:active {
   color: #3572a0;
-  /**
-   * Better underlines using background gradients
-   * See http://bit.ly/1vTg7hr
-   */
-  /* the better underlines were removed by David Farmer on 2/9/16
-     because of various headaches  */
 }
 #masthead .title-container > .heading .subtitle {
   font-weight: normal;
@@ -233,10 +247,6 @@
   margin-left: 9.68px;
   text-align: center;
   line-height: 1;
-  /* Must be 1 so that icon placeholder is centered */
-  /* Display placeholder icon for css3 browsers (progressive enhancement) */
-  /* Override addons */
-  /* On mobile phones */
 }
 #masthead #logo-link img, #masthead .logo-link img {
   width: auto;
@@ -256,10 +266,7 @@
   text-align: center;
   color: #ccc;
 }
-#masthead #logo-link:empty:before,
-.pretext-content #masthead #logo-link:empty:before,
-.pretext-book #masthead #logo-link:empty:before,
-.pretext-article #masthead #logo-link:empty:before {
+#masthead #logo-link:empty:before {
   content: "\2211";
 }
 #masthead #logo-link:empty:hover:before, #masthead .logo-link:empty:hover:before {
