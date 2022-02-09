@@ -771,7 +771,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure xml:id="figure-upc-codes">
                     <caption>A UPC code</caption>
-                    <image width="30%" source="images/UPCcode.png" />
+                    <image width="30%" source="UPCcode.png" />
                 </figure>
             </statement>
         </exercise>

@@ -32,8 +32,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <brandlogo url="http://abstract.pugetsound.edu" source="images/cover_aata_2014.png" />
 
-    <covers front="images/original-front-cover-aata.pdf"
-            back="images/plain-back-cover-aata.pdf"/>
+    <covers front="external/original-front-cover-aata.pdf"
+            back="external/plain-back-cover-aata.pdf"/>
 
     <!-- Prefix to enhance Sage notebook contents -->
     <initialism>AATA</initialism>

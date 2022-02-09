@@ -211,7 +211,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>Runestone uses a YouTube API that broadcasts events when a reader interacts with a video.  In this way, Runestone can record video-watching as an activity.  As <pretext/> output we concede better behavior on small screens (<q>responsiveness</q>) to enable this feature in a Runestone version.  Various <pretext/> features, such as playlists, are not yet supported<mdash/>make a request.</p>
 
-        <video youtube="X1-UNHUajfk" width="60%" margins="5% 35%"/>
+        <video xml:id="yt-list-vars" youtube="X1-UNHUajfk" width="60%" margins="5% 35%" preview="yt-list-variables.png"/>
 
         <p>The margins here are asymmetric just as a test.  And this text is here to see where the video ends.</p>
     </section>
