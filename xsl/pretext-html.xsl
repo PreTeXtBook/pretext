@@ -9742,17 +9742,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- NB: dev.runestoneinteractive.org  is temporary while testing -->
     <!-- NB: we may eventually condition on Runestone server/hosting  -->
     <!-- to affect the prefix network location.                       -->
+    <xsl:variable name="runestone-services" select="document('support/runestone-services.xml')"/>
 
-    <!-- Transitional: if hosted on Runestone then we point to "_static"    -->
-    <!-- for the book in question (a relative URL).  If doing development   -->
-    <!-- work we assume the files are found locally in "external/runestone" -->
-    <!-- and we need to copy them there.  Otherwise, nothing happens.  When -->
-    <!-- we have a universal build, we can point to a Runestone pseudo-CDN. -->
-    <!-- NB: indentation below anticipates universal inclusion.             -->
-    <xsl:variable name="runestone-cdn-prefix">
+    <!-- If hosted on Runestone then we point to "_static" directory right -->
+    <!-- on the Runestone Server.  But in the "Runestone for All" case,    -->
+    <!-- any build/hosting can hit the Runestone site for the necessary    -->
+    <!-- Javascript/CSS to power interactive questions in much the same    -->
+    <!-- manner as at Runestone Academy.                                   -->
+    <xsl:variable name="runestone-cdn">
         <xsl:choose>
             <xsl:when test="$runestone-dev">
-                <xsl:text>external/runestone/</xsl:text>
+                <xsl:text>https://runestone.academy/cdn/runestone/</xsl:text>
+                <xsl:value-of select="$runestone-services/all/version"/>
+                <xsl:text>/</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>_static/</xsl:text>
@@ -9760,13 +9762,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
 
-    <xsl:if test="$b-host-runestone">
-    <xsl:comment>** Runestone Services **</xsl:comment><xsl:text>&#xa;</xsl:text>
-    <xsl:variable name="runestone-services" select="document('support/runestone-services.xml')"/>
+    <xsl:comment>*** Runestone Services ***</xsl:comment>
+    <xsl:text>&#xa;</xsl:text>
     <xsl:for-each select="$runestone-services/all/js/item">
         <script type="text/javascript">
             <xsl:attribute name="src">
-                <xsl:value-of select="$runestone-cdn-prefix"/>
+                <xsl:value-of select="$runestone-cdn"/>
                 <xsl:value-of select="."/>
             </xsl:attribute>
         </script>
@@ -9774,13 +9775,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:for-each select="$runestone-services/all/css/item">
         <link rel="stylesheet" type="text/css">
             <xsl:attribute name="href">
-                <xsl:value-of select="$runestone-cdn-prefix"/>
+                <xsl:value-of select="$runestone-cdn"/>
                 <xsl:value-of select="."/>
             </xsl:attribute>
         </link>
     </xsl:for-each>
-    <!--  -->
-    </xsl:if>
 </xsl:template>
 
 <!-- Runestone Manifest -->
