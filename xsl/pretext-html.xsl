@@ -9280,8 +9280,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="out" />
     <xsl:param name="b-original"/>
 
-    <xsl:element name="div">
+    <xsl:element name="pre">
         <xsl:attribute name="class">
+            <!-- ".ptx-sagecell" for CSS (and not simply .sagecell). -->
+            <!-- See https://github.com/sagemath/sagecell/issues/542 -->
+            <xsl:text>ptx-sagecell </xsl:text>
+            <!-- class names for configuration -->
             <xsl:if test="$block-type = 'embed'">
                 <xsl:text>hidden-</xsl:text>
             </xsl:if>
@@ -9309,8 +9313,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="block-type"/>
     <xsl:param name="in" />
 
-    <div>
+    <pre>
         <xsl:attribute name="class">
+            <!-- ".ptx-sagecell" for CSS (and not simply .sagecell). -->
+            <!-- See https://github.com/sagemath/sagecell/issues/542 -->
+            <xsl:text>ptx-sagecell </xsl:text>
+            <!-- class names for configuration -->
             <xsl:if test="$block-type = 'embed'">
                 <xsl:text>hidden-</xsl:text>
             </xsl:if>
@@ -9319,7 +9327,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <script type="text/x-sage">
             <xsl:value-of select="$in" />
         </script>
-    </div>
+    </pre>
 </xsl:template>
 
 <!-- Program Listings -->
@@ -9926,13 +9934,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- properly bundled up with the right HTML markup      -->
 <!-- ".sage-interact" must match use in "header-library" -->
 <xsl:template match="slate[@surface = 'sage']">
-    <div class="sage-interact">
+    <!-- ".ptx-sagecell" for CSS (and not simply .sagecell). -->
+    <!-- See https://github.com/sagemath/sagecell/issues/542 -->
+    <pre class="ptx-sagecell sage-interact">
       <script type="text/x-sage">
         <xsl:call-template name="sanitize-text">
             <xsl:with-param name="text" select="." />
         </xsl:call-template>
       </script>
-    </div>
+    </pre>
 </xsl:template>
 
 <xsl:template match="slate[@surface='geogebra']">
@@ -11917,11 +11927,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="language-text" />
     <xsl:element name="script">
         <xsl:text>$(function () {&#xa;</xsl:text>
-        <xsl:text>    // Make *any* div with class 'sagecell-</xsl:text>
+        <xsl:text>    // Make *any* pre with class 'sagecell-</xsl:text>
             <xsl:value-of select="$language-attribute" />
         <xsl:text>' an executable Sage cell&#xa;</xsl:text>
         <xsl:text>    // Their results will be linked, only within language type&#xa;</xsl:text>
-        <xsl:text>    sagecell.makeSagecell({inputLocation: 'div.sagecell-</xsl:text>
+        <xsl:text>    sagecell.makeSagecell({inputLocation: 'pre.sagecell-</xsl:text>
             <xsl:value-of select="$language-attribute" />
         <xsl:text>',&#xa;</xsl:text>
         <xsl:text>                           linked: true,&#xa;</xsl:text>
@@ -11944,8 +11954,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="sagecell-display">
     <xsl:element name="script">
         <xsl:text>$(function () {&#xa;</xsl:text>
-        <xsl:text>    // Make *any* div with class 'sage-display' a visible, uneditable Sage cell&#xa;</xsl:text>
-        <xsl:text>    sagecell.makeSagecell({inputLocation: 'div.sage-display',&#xa;</xsl:text>
+        <xsl:text>    // Make *any* pre with class 'sage-display' a visible, uneditable Sage cell&#xa;</xsl:text>
+        <xsl:text>    sagecell.makeSagecell({inputLocation: 'pre.sage-display',&#xa;</xsl:text>
         <xsl:text>                           editor: 'codemirror-readonly',&#xa;</xsl:text>
         <xsl:text>                           hide: ['evalButton', 'editorToggle', 'language']});&#xa;</xsl:text>
         <xsl:text>});&#xa;</xsl:text>
@@ -11957,9 +11967,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="sagecell-practice">
     <xsl:element name="script">
         <xsl:text>$(function () {&#xa;</xsl:text>
-        <xsl:text>    // Make *any* div with class 'sagecell-practice' an executable Sage cell&#xa;</xsl:text>
+        <xsl:text>    // Make *any* pre with class 'sagecell-practice' an executable Sage cell&#xa;</xsl:text>
         <xsl:text>    // Their results will be linked, only within language type&#xa;</xsl:text>
-        <xsl:text>    sagecell.makeSagecell({inputLocation: 'div.sagecell-practice',&#xa;</xsl:text>
+        <xsl:text>    sagecell.makeSagecell({inputLocation: 'pre.sagecell-practice',&#xa;</xsl:text>
         <xsl:text>                           linked: true,&#xa;</xsl:text>
         <xsl:text>                           languages: sagecell.allLanguages,&#xa;</xsl:text>
         <xsl:text>                           evalButtonText: '</xsl:text>
