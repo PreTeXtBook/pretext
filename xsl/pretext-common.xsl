@@ -2980,6 +2980,46 @@ Book (with parts), "section" at level 3
     <!-- <xsl:message>PTX:BUG: asking if a non-traditional division (<xsl:value-of select="local-name(.)"/>) is structured or not</xsl:message> -->
 </xsl:template>
 
+<!-- Specialized divisions sometimes inherit a number from their  -->
+<!-- parent (as part of an unstructured division) and sometimes   -->
+<!-- they do not even have a number (singleton "references" as    -->
+<!-- child of "backmatter").  This template returns "true" if a   -->
+<!-- specialized division "owns" its "own" number.                -->
+<xsl:template match="exercises|worksheet|references|glossary|reading-questions|solutions" mode="is-specialized-own-number">
+    <xsl:choose>
+        <!-- *Some* specialized divisions can appear as a child of the    -->
+        <!-- "backmatter" too.  But only those below.  The rest are       -->
+        <!-- banned as top-level items in the backmatter, but might       -->
+        <!-- occur in an "appendix" or below, with or without structure.  -->
+        <!--   "solutions" will look like an appendix, thus numbered.     -->
+        <!--   "references" or "glossary" are singletons, never numbered. -->
+        <xsl:when test="parent::*[self::backmatter]">
+            <xsl:choose>
+                <xsl:when test="self::solutions">
+                    <xsl:text>true</xsl:text>
+                </xsl:when>
+                <xsl:when test="self::references or self::glossary">
+                    <xsl:text>false</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR:   encountered a specialized division ("<xsl:value-of select="local-name(.)"/>") as a child of "backmatter" that was unexpected.  Results will be unpredictable</xsl:message>
+                    <!-- no idea if we should say true or false here -->
+                    <xsl:text>true</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- parent must now be a "traditional" division -->
+        <xsl:otherwise>
+            <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="*" mode="is-specialized-own-number">
+    <xsl:message>PTX:BUG: asking if a non-specialized division (<xsl:value-of select="local-name(.)"/>) is numbered or not</xsl:message>
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
 <!-- We also want to identify smaller pieces of a document,          -->
 <!-- such as when they contain an index element or defined term,     -->
 <!-- so we can reference back to them.  We call these "blocks" here, -->
@@ -4287,12 +4327,11 @@ Book (with parts), "section" at level 3
 
 <!-- Serial Numbers: Specialized Divisions -->
 <xsl:template match="exercises|solutions|worksheet|reading-questions|references|glossary" mode="serial-number">
-    <xsl:variable name="is-structured">
-        <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
+    <xsl:variable name="is-numbered">
+        <xsl:apply-templates select="." mode="is-specialized-own-number"/>
     </xsl:variable>
-    <xsl:variable name="b-is-structured" select="$is-structured = 'true'"/>
     <xsl:choose>
-        <xsl:when test="$b-is-structured">
+        <xsl:when test="$is-numbered = 'true'">
             <xsl:variable name="relative-level">
                 <xsl:apply-templates select="." mode="new-level" />
             </xsl:variable>
@@ -4338,10 +4377,10 @@ Book (with parts), "section" at level 3
     <!-- a decorative "exercises" or "worksheet" -->
     <xsl:variable name="inside-decorative">
         <xsl:if test="ancestor::*[self::exercises or self::reading-questions or self::worksheet]">
-            <xsl:variable name="is-structured">
-                <xsl:apply-templates select="ancestor::*[self::exercises or self::worksheet or self::reading-questions]/parent::*" mode="is-structured-division"/>
+            <xsl:variable name="is-numbered">
+                <xsl:apply-templates select="ancestor::*[self::exercises or self::worksheet or self::reading-questions]" mode="is-specialized-own-number"/>
             </xsl:variable>
-            <xsl:if test="not($is-structured ='true')">
+            <xsl:if test="not($is-numbered ='true')">
                 <xsl:text>true</xsl:text>
             </xsl:if>
         </xsl:if>
@@ -5050,10 +5089,10 @@ Book (with parts), "section" at level 3
     <!-- we do not want to duplicate the serial number, which is from the containing division -->
     <xsl:variable name="decorative-division">
         <xsl:if test="$nodes[last()][self::exercises or self::worksheet or self::reading-questions]">
-            <xsl:variable name="is-structured">
-                <xsl:apply-templates select="$nodes[last()]/parent::*" mode="is-structured-division"/>
+            <xsl:variable name="is-numbered">
+                <xsl:apply-templates select="$nodes[last()]" mode="is-specialized-own-number"/>
             </xsl:variable>
-            <xsl:if test="not($is-structured = 'true')">
+            <xsl:if test="not($is-numbered = 'true')">
                 <xsl:text>true</xsl:text>
             </xsl:if>
         </xsl:if>
@@ -5146,12 +5185,11 @@ Book (with parts), "section" at level 3
 <!-- devices (like local numbers) will behave correctly.      -->
 <!-- Serial numbers are computed elsewhere, but in tandem.    -->
 <xsl:template match="exercises|solutions[not(parent::backmatter)]|worksheet|reading-questions|references[not(parent::backmatter)]|glossary[not(parent::backmatter)]" mode="structure-number">
-    <xsl:variable name="is-structured">
-        <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
+    <xsl:variable name="is-numbered">
+        <xsl:apply-templates select="." mode="is-specialized-own-number"/>
     </xsl:variable>
-    <xsl:variable name="b-is-structured" select="$is-structured = 'true'"/>
     <xsl:choose>
-        <xsl:when test="$b-is-structured">
+        <xsl:when test="$is-numbered = 'true'">
             <xsl:value-of select="@struct"/>
         </xsl:when>
         <xsl:otherwise>
