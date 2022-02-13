@@ -2582,26 +2582,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Possibly numberless?  When employed, we can tell if a specialized -->
-<!-- division should be numberless.  This needs to be broken out since -->
-<!-- when we *create* the environments in the preamble we just make    -->
-<!-- "regular" and "numberless" variants, always.                      -->
-<xsl:template match="*" mode="division-environment-name-suffix">
-    <!-- Inspect parent (part through subsubsection)  -->
-    <!-- to determine one of two models of a division -->
-    <!-- NB: return values are 'true' and empty       -->
-    <xsl:variable name="is-structured">
-        <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
+<!-- division should be numberless at birth.  This needs to be broken  -->
+<!-- out since when we *create* the environments in the preamble we    -->
+<!-- just make "regular" and "numberless" variants, always.            -->
+<xsl:template match="exercises|worksheet|references|glossary|reading-questions|solutions" mode="division-environment-name-suffix">
+    <xsl:variable name="is-numbered">
+        <xsl:apply-templates select="." mode="is-specialized-own-number"/>
     </xsl:variable>
-    <xsl:variable name="b-is-structured" select="$is-structured = 'true'"/>
-
-    <!-- Determine if context is a specialized division that might be numberless -->
-    <!-- NB: unclear why "solutions" is the only one different in backmatter     -->
-    <xsl:variable name="b-is-specialized" select="boolean(self::exercises|self::solutions[not(parent::backmatter)]|self::reading-questions|self::glossary|self::references|self::worksheet)"/>
-
-    <xsl:if test="not($b-is-structured) and $b-is-specialized">
+    <xsl:if test="$is-numbered = 'false'">
         <xsl:text>-numberless</xsl:text>
     </xsl:if>
 </xsl:template>
+
+<!-- Only specialized divisions get a "numberless" variant, -->
+<!-- so we return nothing and do not call a template about  -->
+<!-- specialized divisions improperly                       -->
+<xsl:template match="*" mode="division-environment-name-suffix"/>
 
 <xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|index|exercises|solutions|worksheet|reading-questions|glossary|references" mode="environment">
     <!-- for specialized divisions we always make a numbered -->
@@ -10275,18 +10271,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A specialized division in an unstructured division may  -->
 <!-- not be numbered correctly via LaTeX's label/ref system, -->
 <!-- so we will use the hypertarget/hyperlink system         -->
-<xsl:template  match="exercises|reading-questions|glossary|references|worksheet|solutions[not(parent::backmatter)]" mode="xref-as-ref">
-    <xsl:variable name="is-structured">
-        <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
-    </xsl:variable>
-    <xsl:choose>
-        <xsl:when test="$is-structured = 'true'">
-            <xsl:value-of select="true()"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="false()"/>
-        </xsl:otherwise>
-    </xsl:choose>
+<!-- NB: template returns strings "true" or "false"          -->
+<xsl:template  match="exercises|reading-questions|glossary|references|worksheet|solutions" mode="xref-as-ref">
+    <xsl:apply-templates select="." mode="is-specialized-own-number"/>
 </xsl:template>
 
 <xsl:template match="*" mode="label">
@@ -10424,14 +10411,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This template just copies the gut of two above, perhaps -->
 <!-- there should be two utility templates that each get     -->
 <!-- called twice overall.                                   -->
-<xsl:template  match="exercises|reading-questions|glossary|references|worksheet|solutions[not(parent::backmatter)]" mode="xref-number">
+<xsl:template  match="exercises|reading-questions|glossary|references|worksheet|solutions" mode="xref-number">
     <xsl:param name="xref" select="/.." />
 
-    <xsl:variable name="is-structured">
-        <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
+    <xsl:variable name="is-numbered">
+        <xsl:apply-templates select="." mode="is-specialized-own-number"/>
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$is-structured = 'true'">
+        <xsl:when test="$is-numbered = 'true'">
             <xsl:apply-templates select="." mode="xref-number-latex">
                 <xsl:with-param name="xref" select="$xref"/>
             </xsl:apply-templates>
