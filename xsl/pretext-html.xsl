@@ -845,28 +845,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </span>
 </xsl:template>
 
-<!-- Exercises, Solutions, References, Worksheets -->
-<!-- Numbers are displayed for structured divisions, -->
-<!-- but not for unstructured divisions.             -->
+<!-- Specialized Divisions -->
+<!-- A specialized division may inherit a number from its parent  -->
+<!-- ("exercises"), or it may not ever even get a number          -->
+<!-- (backmatter/references is a singleton).  Whether or not to   -->
+<!-- *display* a number at birth is therefore more complicated    -->
+<!-- than *having* a number or not.                               -->
+<!-- NB: We sneak in links for standalone versions of worksheets. -->
 <xsl:template match="exercises|solutions|glossary|references|worksheet|reading-questions" mode="heading-content">
     <span class="type">
         <xsl:apply-templates select="." mode="type-name"/>
     </span>
     <xsl:text> </xsl:text>
-    <!-- be selective about showing numbers -->
-    <xsl:variable name="is-structured">
-        <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
+    <!-- be selective about displaying numbers at birth-->
+    <xsl:variable name="is-numbered">
+        <xsl:apply-templates select="." mode="is-specialized-own-number"/>
     </xsl:variable>
-    <xsl:variable name="b-is-structured" select="$is-structured = 'true'"/>
     <span class="codenumber">
-        <xsl:choose>
-            <xsl:when test="self::references[parent::backmatter]"/>
-            <xsl:when test="self::glossary[parent::backmatter]"/>
-            <xsl:when test="$b-is-structured or self::solutions[parent::backmatter]">
-                <xsl:apply-templates select="." mode="number" />
-            </xsl:when>
-            <xsl:otherwise/>
-        </xsl:choose>
+        <xsl:if test="($is-numbered = 'true')">
+            <xsl:apply-templates select="." mode="number"/>
+        </xsl:if>
     </span>
     <xsl:text> </xsl:text>
     <span class="title">
