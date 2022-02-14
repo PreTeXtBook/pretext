@@ -2136,7 +2136,9 @@ a.mjx-svg-href  {
     font-family: 'Inconsolata', monospace;
 }
 
-.pretext-content .sagecell {
+.pretext-content .sagecell, /* omit after 0.4 */
+.pretext-content .ptx-sagecell {
+    white-space: normal;
     margin-top: 1.25em;
     margin-bottom: 1.25em;
 }
