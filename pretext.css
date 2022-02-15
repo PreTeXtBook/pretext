@@ -25,10 +25,10 @@
     top: 50px;
     box-sizing: border-box;
     overflow-y: scroll;
-/*
     height: calc(100vh - 60px);
-*/
+/*
     height: 100vh;
+*/
 }
 /**
  * Container for the main focus/purpose of the page.
@@ -94,6 +94,17 @@
   line-height: 1.30;
 }
 
+/* text in lists was big */
+#content.serif .para .para,
+#content.serif #text-in-paragraphs .para .para,
+#content.serif #Bcd .para .para,
+#content.serif #interesting-corollary .para .para,
+#content.serif #table-calisthenics .para .para,
+#content.serif #section-7 .para .para,
+#content.serif #section-11 .para .para {
+  font-size: 100%;
+}
+
 #content.serif .code-inline {
   background: #f6f6f6;
   border: 1px solid #eee;
@@ -112,6 +123,8 @@
 #toc {
   overflow-y: scroll;
 }
+
+/*
 .page > .main {
   width: auto;
   transition-duration: 400ms;
@@ -120,10 +133,11 @@
 .page > .main  {
   transition-property: margin-left, left;
 }
+*/
 .page > .main {
   position: relative;
   margin-left: 240px;
-  overflow-y: scroll;
+  overflow-y: hidden;
 }
 @media screen and (max-width: 800px) {
    .page > .main {
@@ -132,22 +146,24 @@
   }
 }
 
+.footer {
+    background: #fdf;
+}
 .page > .footer {
-    clear: both;
-    position: relative;
     margin-left: 240px;
     padding-left: 8em;
+    background: #def;
 }
 
 .container {
   margin: 0;
-  transition-property: width;
-  transition-duration: 400ms;
+//  transition-property: width;
+//  transition-duration: 400ms;
 }
-.container, .container, .container {
+.container {
   max-width: 664px;
 }
-.container, .container {
+.container {
   max-width: 904px;
 }
 
@@ -325,8 +341,6 @@
   z-index: 200;
   height: 35.36px;
   font-family: "PT Serif", "Times New Roman", Times, serif;
-  /* Smoothly transition box-shadow when navbar sticks/unsticks */
-  transition: box-shadow 400ms;
   overflow: hidden;
 }
 @media screen and (max-width: 800px) {
@@ -352,8 +366,10 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+/*
   transition-property: text-indent, background-color;
   transition-duration: 200ms;
+*/
   float: left;
   text-align: left;
   position: relative;
@@ -846,8 +862,11 @@
     height: calc(100vh - 50px);
   }
   .page > .footer {
-    margin-bottom: 60px;
+    margin-bottom: 0;
     padding-left: 10px;
+  }
+  .footer {
+    margin-bottom: 60px;
   }
 }
 

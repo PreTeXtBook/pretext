@@ -22,7 +22,7 @@
     color: #024;
 }
 
-#masthead.smallbuttons {
+#masthead {
     max-width: 904px;
     border-right: 1px solid #bababa;
 }
@@ -30,7 +30,7 @@
 #primary-navbar .navbar-top-buttons {
     border-bottom: 1px solid #bababa;
 }
-#masthead.smallbuttons .banner {
+#masthead .banner {
     border-bottom: none;
 }
 

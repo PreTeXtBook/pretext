@@ -32,6 +32,32 @@
     left: 0.3em;
     display: inline-block;
 }
+/* no codenumbers on subsections */
+#toc ul ul a > .codenumber {
+    display: none;
+}
+#toc ul ul a > .title {
+    margin-left: 0;
+}
+#toc ul ul a > .title:empty::after {
+    content: "empty heading!";
+    font-weight: bold;
+}
+#toc ul ul ul a > .title {
+    margin-left: 1em;
+    font-size: 90%;
+}
+#toc ul ul ul ul a > .title {
+    margin-left: 2em;
+    font-size: 90%;
+    font-style: italic;
+}
+
+/* more specific than something in toc_default */
+#toc ul li ul li ul li:last-child {
+    margin-bottom: 0;
+    border-bottom: 1px solid #ddd;
+}
 
 #toc .part > a .codenumber {
     position: relative;
