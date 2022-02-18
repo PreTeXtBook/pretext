@@ -2882,23 +2882,6 @@ Book (with parts), "section" at level 3
     <xsl:value-of select="false()" />
 </xsl:template>
 
-<!-- Specialized divisions sometimes get special handling    -->
-<!-- when the parent division is unstructured.               -->
-<!-- NB: designed for specialized divisions that have        -->
-<!-- exercises with solutions (exercises, reading-questions, -->
-<!-- worksheet), but implemented for all five specialized    -->
-<!-- divisions, so as to be used in other contexts.          -->
-<xsl:template match="*" mode="is-specialized-division-in-unstructured">
-    <xsl:value-of select="false()"/>
-</xsl:template>
-
-<xsl:template match="exercises|worksheet|reading-questions|references|glossary" mode="is-specialized-division-in-unstructured">
-    <xsl:variable name="parent-is-structured">
-        <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
-    </xsl:variable>
-    <xsl:value-of select="not($parent-is-structured = 'true')"/>
-</xsl:template>
-
 <!-- Structural Leaves -->
 <!-- Some structural elements of the document tree     -->
 <!-- are the leaves of that tree, meaning they do      -->
@@ -3018,6 +3001,23 @@ Book (with parts), "section" at level 3
 <xsl:template match="*" mode="is-specialized-own-number">
     <xsl:message>PTX:BUG: asking if a non-specialized division (<xsl:value-of select="local-name(.)"/>) is numbered or not</xsl:message>
     <xsl:text>false</xsl:text>
+</xsl:template>
+
+<!-- Specialized divisions sometimes get special handling    -->
+<!-- when the parent division is unstructured.               -->
+<!-- NB: designed for specialized divisions that have        -->
+<!-- exercises with solutions (exercises, reading-questions, -->
+<!-- worksheet), but implemented for all five specialized    -->
+<!-- divisions, so as to be used in other contexts.          -->
+<xsl:template match="*" mode="is-specialized-division-in-unstructured">
+    <xsl:value-of select="false()"/>
+</xsl:template>
+
+<xsl:template match="exercises|worksheet|reading-questions|references|glossary" mode="is-specialized-division-in-unstructured">
+    <xsl:variable name="parent-is-structured">
+        <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
+    </xsl:variable>
+    <xsl:value-of select="not($parent-is-structured = 'true')"/>
 </xsl:template>
 
 <!-- We also want to identify smaller pieces of a document,          -->
