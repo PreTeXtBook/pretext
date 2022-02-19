@@ -4611,11 +4611,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="*" mode="duplicate-heading-content">
     <xsl:param name="heading-stack"/>
-    <xsl:variable name="is-specialized-division-in-unstructured">
-        <xsl:apply-templates select="." mode="is-specialized-division-in-unstructured"/>
+    <xsl:variable name="is-specialized-division">
+        <xsl:choose>
+            <xsl:when test="self::task">
+                <xsl:value-of select="false()"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="is-specialized-division"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="is-child-of-structured">
+        <xsl:choose>
+            <xsl:when test="parent::*[&TRADITIONAL-DIVISION-FILTER;]">
+                <xsl:apply-templates select="parent::*[&TRADITIONAL-DIVISION-FILTER;]" mode="is-structured-division"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="false()"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$is-specialized-division-in-unstructured = 'true'">
+        <xsl:when test="$is-specialized-division = 'true' and $is-child-of-structured = 'false'">
             <xsl:text>\textperiodcentered\space{}</xsl:text>
         </xsl:when>
         <xsl:otherwise>
