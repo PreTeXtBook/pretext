@@ -2948,7 +2948,7 @@ Book (with parts), "section" at level 3
 <!-- Although there could be titles and the like.         -->
 <!-- So we compare all-children to  metadata + worksheet. -->
 <xsl:template match="book|article|part|chapter|appendix|section|subsection|subsubsection" mode="is-structured-division">
-    <xsl:variable name="has-traditional" select="boolean(part|chapter|section|subsection|subsubsection)"/>
+    <xsl:variable name="has-traditional" select="boolean(&TRADITIONAL-DIVISION;)"/>
     <xsl:variable name="all-children" select="*"/>
     <xsl:variable name="all-worksheet" select="title|shorttitle|plaintitle|idx|introduction|worksheet|conclusion"/>
     <xsl:variable name="only-worksheets" select="count($all-children) = count($all-worksheet)"/>
@@ -2956,11 +2956,8 @@ Book (with parts), "section" at level 3
     <xsl:value-of select="$has-traditional or $only-worksheets"/>
 </xsl:template>
 
-<!-- This should provoke a BUG message, but is being -->
-<!-- employed presently (2020-02-10) as if not(true) -->
 <xsl:template match="*" mode="is-structured-division">
-    <xsl:text>false</xsl:text>
-    <!-- <xsl:message>PTX:BUG: asking if a non-traditional division (<xsl:value-of select="local-name(.)"/>) is structured or not</xsl:message> -->
+    <xsl:message>PTX:BUG: asking if a non-traditional division (<xsl:value-of select="local-name(.)"/>) is structured or not</xsl:message>
 </xsl:template>
 
 <!-- Specialized divisions sometimes inherit a number from their  -->
@@ -3003,21 +3000,20 @@ Book (with parts), "section" at level 3
     <xsl:text>false</xsl:text>
 </xsl:template>
 
-<!-- Specialized divisions sometimes get special handling    -->
-<!-- when the parent division is unstructured.               -->
-<!-- NB: designed for specialized divisions that have        -->
-<!-- exercises with solutions (exercises, reading-questions, -->
-<!-- worksheet), but implemented for all five specialized    -->
-<!-- divisions, so as to be used in other contexts.          -->
-<xsl:template match="*" mode="is-specialized-division-in-unstructured">
-    <xsl:value-of select="false()"/>
-</xsl:template>
-
-<xsl:template match="exercises|worksheet|reading-questions|references|glossary" mode="is-specialized-division-in-unstructured">
-    <xsl:variable name="parent-is-structured">
-        <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
-    </xsl:variable>
-    <xsl:value-of select="not($parent-is-structured = 'true')"/>
+<!-- Test if element is a specialized division or not. -->
+<!-- If element is not even a division, give error.    -->
+<xsl:template match="*" mode="is-specialized-division">
+    <xsl:choose>
+        <xsl:when test="&TRADITIONAL-DIVISION-FILTER;">
+            <xsl:value-of select="false()"/>
+        </xsl:when>
+        <xsl:when test="&SPECIALIZED-DIVISION-FILTER;">
+            <xsl:value-of select="true()"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:BUG: asking if a non-division (<xsl:value-of select="local-name(.)"/>) is a specialized division</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- We also want to identify smaller pieces of a document,          -->
