@@ -1283,21 +1283,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="title-full" />
     </xsl:variable>
     <!-- Since headings stack, we use a "p" to aid screen readers in pausing between headings -->
-    <p class="assistive">
-        <xsl:if test="$is-specialized-division = 'false' or $is-child-of-structured = 'true'">
-            <span class="codenumber">
-                <xsl:apply-templates select="." mode="number" />
-            </span>
-            <xsl:if test="$title != ''">
-                <xsl:call-template name="space-styled"/>
-            </xsl:if>
-        </xsl:if>
+    <xsl:if test="$is-specialized-division = 'false' or $is-child-of-structured = 'true'">
+        <span class="codenumber">
+            <xsl:apply-templates select="." mode="number" />
+        </span>
         <xsl:if test="$title != ''">
-            <span class="title">
-                <xsl:apply-templates select="." mode="title-full" />
-            </span>
+            <xsl:call-template name="space-styled"/>
         </xsl:if>
-    </p>
+    </xsl:if>
+    <xsl:if test="$title != ''">
+        <span class="title">
+            <xsl:apply-templates select="." mode="title-full" />
+        </span>
+    </xsl:if>
+    <xsl:if test="position() != last()">
+        <br/>
+    </xsl:if>
 </xsl:template>
 
 
