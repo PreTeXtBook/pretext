@@ -7224,12 +7224,15 @@ Book (with parts), "section" at level 3
         <!-- Specialized divisions in unstructured divisions have a heading   -->
         <!-- level that is 2 deeper from invoking "solutions".                -->
         <!-- Other leaf divisions are 1 deeper than the invoking "solutions". -->
-        <xsl:variable name="is-specialized-division-in-unstructured">
-            <xsl:apply-templates select="." mode="is-specialized-division-in-unstructured"/>
+        <xsl:variable name="is-specialized-division">
+            <xsl:apply-templates select="." mode="is-specialized-division"/>
+        </xsl:variable>
+        <xsl:variable name="is-child-of-structured">
+            <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
         </xsl:variable>
         <xsl:variable name="next-heading-level">
             <xsl:choose>
-                <xsl:when test="$is-specialized-division-in-unstructured = 'true'">
+                <xsl:when test="$is-specialized-division = 'true' and $is-child-of-structured = 'false'">
                     <xsl:value-of select="$heading-level + 2"/>
                 </xsl:when>
                 <xsl:otherwise>
@@ -7371,17 +7374,27 @@ Book (with parts), "section" at level 3
     <xsl:param name="heading-level"/>
     <xsl:param name="heading-stack"/>
     <xsl:param name="content" />
-    <xsl:variable name="is-structured">
-        <xsl:apply-templates select="." mode="is-structured-division"/>
+    <xsl:variable name="is-specialized-division">
+        <xsl:apply-templates select="." mode="is-specialized-division"/>
     </xsl:variable>
-    <xsl:variable name="is-specialized-division-in-unstructured">
-        <xsl:apply-templates select="." mode="is-specialized-division-in-unstructured"/>
+    <xsl:variable name="is-structured">
+        <xsl:choose>
+            <xsl:when test="$is-specialized-division = 'false'">
+                <xsl:apply-templates select="." mode="is-structured-division"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="false()"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="is-child-of-structured">
+        <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
     </xsl:variable>
 
     <!-- We cut "scope" from heading-stack if needed.                    -->
     <!-- Or reset stack if specialized division in unstructured division -->
     <xsl:variable name="final-heading-stack" select=".|ancestor-or-self::*[
-        $is-specialized-division-in-unstructured != 'true'
+        ($is-specialized-division = 'false' or $is-child-of-structured = 'true')
         and (count(.|$heading-stack) = count($heading-stack))
         and (count(.|$scope) != count($scope))]"
     />
