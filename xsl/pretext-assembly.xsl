@@ -93,8 +93,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- relevant.  (This is repeated verbatim in the other            -->
 <!-- stylesheet).                                                  -->
 
-<!-- Isolate computation of serial numbers -->
-<xsl:import href="./serial-numbers.xsl"/>
+<!-- Isolate computation of numbers -->
+<xsl:import href="./pretext-numbers.xsl"/>
 
 <!-- Timing debugging -->
 <xsl:param name="debug.assembly.time" select="'no'"/>
