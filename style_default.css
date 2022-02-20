@@ -131,12 +131,7 @@
 }
 
 
-/* next selector first part of the following is due to the mistake of
-   putting paragraph spacing in the margin-bottom 
-   Redo when we fix that error */
 .pretext-content .aside-like {
- /*   margin-top: -1.25em;
-*/
     position: absolute;
     margin-left: 45%;
     z-index: -10;
@@ -313,7 +308,7 @@
 }
 
 @media screen and (max-width: 1099px) {
-  .pretext-content aside.aside-like {
+  .pretext-content .aside-like {
     position: relative;
     float: right;
     z-index: 0;
@@ -324,7 +319,7 @@
     max-height: 4em;
     margin-right: -8em;
 }
-  .pretext-content li > aside.aside-like:last-child {
+  .pretext-content li > .aside-like:last-child {
     position: absolute;
 }
 }

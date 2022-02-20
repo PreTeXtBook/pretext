@@ -441,7 +441,7 @@ END OF STYLE_OSCARLEVIN
 }
 
 @media screen and (max-width: 1099px) {
-  .pretext-content aside.aside-like {
+  .pretext-content .aside-like {
     position: relative;
     float: right;
     z-index: 0;
@@ -452,7 +452,7 @@ END OF STYLE_OSCARLEVIN
     max-height: 4em;
     margin-right: -8em;
 }
-  .pretext-content li > aside.aside-like:last-child {
+  .pretext-content li > .aside-like:last-child {
     position: absolute;
 }
 }
