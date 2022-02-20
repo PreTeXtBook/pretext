@@ -1,3 +1,6 @@
+/*******************************************************************************
+ * PreTeXt Masthead Stylesheet
+ *******************************************************************************/
 
 #masthead .banner {
     border-bottom: 1px solid #d4d4d4;
@@ -5,21 +8,7 @@
     overflow: hidden;
     padding-top: 0.625em;
     padding-bottom: 1.125em;
-}
-
-/* newer, small top nav buttons */
-#primary-navbar .navbar-top-buttons .toolbar-align-right .toolbar-item-middle {
-    float: left;
-    padding: 3px 6px 3px 6px;
-    margin: 4px 10px 0px 10px;
-    margin: 4px 10px 0px 195px;
-    border: 1px solid #800;
-    background-color: #ffe5e5;
-    font-size: 90%;
-}
-
-#primary-navbar .navbar-top-buttons .toolbar-align-right .toolbar-item-middle a {
-    color: #024;
+    border-bottom: none;
 }
 
 #masthead {
@@ -27,79 +16,126 @@
     border-right: 1px solid #bababa;
 }
 
-#primary-navbar .navbar-top-buttons {
-    border-bottom: 1px solid #bababa;
+#masthead .title-container {
+  font-size: 1em;
+  padding-left: 9.68px;
+  overflow: hidden;
 }
-#masthead .banner {
-    border-bottom: none;
-}
-
-#primary-navbar .navbar-top-buttons .toolbar-divisor-3 .button {
-    border-top: 1px solid #bababa;
-}
-
-#primary-navbar .navbar-top-buttons .toolbar-divisor-3 {
-    background-color: #fafafa;
-}
-#primary-navbar .navbar-top-buttons .toolbar-divisor-3 .index-button {
-    width: 70px;
+@media screen and (max-width: 480px) {
+  #masthead .title-container {
+    padding: 0;
     text-align: center;
-    border-right: 1px solid #bababa;
+    margin-top: 0.625em;
+  }
 }
-#primary-navbar .navbar-top-buttons .toolbar-divisor-3 .up-button {
-    width: 60px;
-    float: right;
-    border-right: 1px solid #bababa;
+#masthead .title-container > .heading {
+  font-family: "PT Serif", "Times New Roman", Times, serif;
+  font-weight: 700;
+  margin: 0;
+  font-size: 2em;
+  line-height: 1.25em;
+  color: #932919;
 }
-#primary-navbar .navbar-top-buttons .toolbar-divisor-3 .up-button:before {
-    text-align: left;
-    width: 20px;
+@media screen and (max-width: 480px) {
+  #masthead .title-container > .heading {
+    font-size: 1.5em;
+    line-height: 1.25em;
+    margin: 0;
+    margin-bottom: 0.41667em;
+  }
 }
-#primary-navbar .navbar-top-buttons .toolbar-divisor-3 .previous-button.toolbar-item {
-    width: 70px;
-    border-right: none;
-    float: right;
+#masthead .title-container > .heading a {
+  color: #932919;
+  background: none;
+  text-decoration: none;
 }
-/* extra .toolbar-item to overrive mathbook-add-on */
-#primary-navbar .navbar-top-buttons .toolbar-divisor-3 .previous-button.toolbar-item {
-    border-left: 1px solid #bababa;
-    padding-right: 3px;
+#masthead .title-container > .heading .subtitle {
+  font-weight: normal;
 }
-#primary-navbar .navbar-top-buttons .toolbar-divisor-3 .next-button {
-    width: 70px;
-    float: right;
-    border-right: 1px solid #bababa;
+@media screen and (max-width: 800px) {
+  #masthead .title-container > .heading .subtitle {
+    /* Force the subtitle onto a separate line */
+    display: block;
+    font-size: 1.16667em;
+    line-height: 1.42857em;
+    /* De-emphasize relative to main title */
+    color: #595959;
+    /* Remove colon */
+  }
+  #masthead .title-container > .heading .subtitle:before {
+    content: normal;
+  }
 }
-#primary-navbar .previous-button::before {
-    width: 27px;
+#masthead #logo-link {
+  position: relative;
+  float: left;
+  font-size: 50px;
+  margin-top: 0.1em;
+  margin-left: 9.68px;
+  text-align: center;
+  line-height: 1;
 }
-#primary-navbar .next-button::after {
-    width: 25px;
+#masthead #logo-link img {
+  width: auto;
+  height: auto;
+  /* Allow font-size to control height
+   * so that icon placeholder height matches */
+  max-height: 1em;
 }
-
-#primary-navbar .navbar-top-buttons .toolbar-divisor-3 .button.toggle {
-    width: 60px;
-    text-align: center;
-    border-radius: 20px;
-    margin-left: 5px;
-    border: 2px solid #66f;
-    line-height: 25px;
-    margin-top: 3px;
-    background-color: #eef;
+#masthead #logo-link:empty:before {
+  font-family: "Open Sans";
+  font-size: 1em;
+  content: "\2211";
+  /* Center the icon in a square the size of the parent's font-size */
+  line-height: 1;
+  width: 1em;
+  display: inline-block;
+  vertical-align: top;
+  text-align: center;
+  color: #ccc;
 }
-#primary-navbar .navbar-top-buttons .toolbar-divisor-3 .button.toggle.open {
-    background: #fee;
-/*
-    background-image: linear-gradient(163deg, transparent 0%, transparent 47%, #f66 47%, #f66 , #f66 53%, transparent 53%, transparent 100%);
-*/
-    border: 2px solid #f66;
+#masthead #logo-link:empty:hover:before {
+  color: #932919;
 }
-
-#primary-navbar .threebuttons {
-    float: right;
+#masthead #logo-link:empty:active:before {
+  color: #3572a0;
 }
-
-#primary-navbar .navbar-top-buttons .toolbar-divisor-3 .threebuttons .next-button, #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .threebuttons .up-button, #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .threebuttons .previous-button {
-    float: left;
+#masthead #logo-link {
+  background: transparent;
+  border: none;
+  text-decoration: none;
+}
+@media screen and (max-width: 480px) {
+  #masthead #logo-link {
+    display: block;
+    float: none;
+    margin: 0;
+    font-size: 50px;
+  }
+}
+#masthead .byline {
+  color: #333333;
+  font-weight: normal;
+  margin: 0;
+  font-size: 1.3125em;
+  line-height: 1.42857em;
+  min-height: inherit;
+  font-family: "PT Serif", "Times New Roman", Times, serif;
+}
+@media screen and (max-width: 480px) {
+  #masthead .byline {
+    margin-top: 0;
+    font-size: 1em;
+    line-height: 1.25em;
+  }
+}
+#masthead .byline a {
+  color: #333333;
+}
+#masthead .byline a:hover, #masthead .byline a:focus {
+  color: #932919;
+}
+#masthead .byline a:active {
+  color: #3572a0;
 }
 

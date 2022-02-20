@@ -551,9 +551,6 @@ body > a.assistive:focus {
 	outline:0;	
     transition: top .1s ease-in, background .5s linear;
 }
-.heading > .para.assistive {
-    margin-top: 0;
-}
 /* stacked headings in the solutions backmatter */
 .pretext-content section > .heading + .heading,
 .pretext-content section section > .heading + .heading {

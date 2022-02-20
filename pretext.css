@@ -40,20 +40,8 @@
   background: white;
   /* side borders */
   border-left: 1px solid #ccc;
-/*
-  border-top: none;
-  border-bottom: none;
-  box-shadow: rgba(0, 0, 0, 0.5) 0 5px 5px;
-*/
   padding-top: 1px;
   padding-bottom: 0;
-  /* This feels more conclusive: the page is over. */
-  /* Method 2 - will clip anything positioned absolutely outside borders */
-  /*overflow:hidden;*/
-  /* Method 3 - looks bad because of 1px break in left/right borders */
-  /*border-top:1px solid transparent;*/
-  /*border-bottom: 1px solid transparent;*/
-  /**************************************************************************/
 }
 @media screen and (max-width: 800px) {
   .page > .main {
@@ -94,6 +82,14 @@
   line-height: 1.30;
 }
 
+#content.serif #section-6 .para,
+#content.serif #section-6 .para {
+  font-family: "Noto", serif;
+  font-size: 115%;
+  line-height: 1.30;
+}
+
+
 /* text in lists was big */
 #content.serif .para .para,
 #content.serif #text-in-paragraphs .para .para,
@@ -124,16 +120,6 @@
   overflow-y: scroll;
 }
 
-/*
-.page > .main {
-  width: auto;
-  transition-duration: 400ms;
-  backface-visibility: hidden;
-}
-.page > .main  {
-  transition-property: margin-left, left;
-}
-*/
 .page > .main {
   position: relative;
   margin-left: 240px;
@@ -146,38 +132,13 @@
   }
 }
 
-.footer {
+.content-footer {
     background: #fdf;
 }
-.page > .footer {
+.page > .page-footer {
     margin-left: 240px;
     padding-left: 8em;
     background: #def;
-}
-
-.container {
-  margin: 0;
-//  transition-property: width;
-//  transition-duration: 400ms;
-}
-.container {
-  max-width: 664px;
-}
-.container {
-  max-width: 904px;
-}
-
-/* over-write bootstrap (in Runestone, for example) */
-#primary-navbar > .container {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  max-width: 904px;
-  background-color: inherit;
-}
-#primary-navbar .container::before,
-#primary-navbar .container::after {
-    all: unset;
 }
 
 #masthead {
@@ -187,666 +148,7 @@
   border: none;
   box-shadow: none;
 }
-#masthead .title-container {
-  font-size: 1em;
-  padding-left: 9.68px;
-  overflow: hidden;
-}
-@media screen and (max-width: 480px) {
-  #masthead .title-container {
-    padding: 0;
-    text-align: center;
-    margin-top: 0.625em;
-  }
-}
-#masthead .title-container > .heading {
-  font-family: "PT Serif", "Times New Roman", Times, serif;
-  font-weight: 700;
-  margin: 0;
-  font-size: 2em;
-  line-height: 1.25em;
-  color: #932919;
-}
-#masthead .title-container > .heading.hide-type .type {
-  display: none;
-}
-#masthead .title-container > .heading.hide-codenumber .codenumber {
-  display: none;
-}
-#masthead .title-container > .heading.hide-title .title {
-  display: none;
-}
-@media screen and (max-width: 480px) {
-  #masthead .title-container > .heading {
-    font-size: 1.5em;
-    line-height: 1.25em;
-    margin: 0;
-    margin-bottom: 0.41667em;
-  }
-}
-#masthead .title-container > .heading a:link, #masthead .title-container > .heading a:visited {
-  color: #932919;
-  background: none;
-}
-#masthead .title-container > .heading a:link, .lt-ie10 #masthead .title-container > .heading a:link, #masthead .title-container > .heading a:visited, .lt-ie10 #masthead .title-container > .heading a:visited {
-  text-decoration: none;
-}
-#masthead .title-container > .heading a:hover, #masthead .title-container > .heading a:focus {
-  color: #932919;
-}
-#masthead .title-container > .heading a:active {
-  color: #3572a0;
-}
-#masthead .title-container > .heading .subtitle {
-  font-weight: normal;
-  /* Much classier */
-}
-@media screen and (max-width: 800px) {
-  #masthead .title-container > .heading .subtitle {
-    /* Force the subtitle onto a separate line */
-    display: block;
-    font-size: 1.16667em;
-    line-height: 1.42857em;
-    /* De-emphasize relative to main title */
-    color: #595959;
-    /* Remove colon */
-  }
-  #masthead .title-container > .heading .subtitle:before {
-    content: normal;
-  }
-}
-#masthead #logo-link, #masthead .logo-link {
-  position: relative;
-  float: left;
-  font-size: 50px;
-  margin-top: 0.1em;
-  margin-left: 9.68px;
-  text-align: center;
-  line-height: 1;
-}
-#masthead #logo-link img, #masthead .logo-link img {
-  width: auto;
-  height: auto;
-  /* Allow font-size to control height
-   * so that icon placeholder height matches */
-  max-height: 1em;
-}
-#masthead #logo-link:empty:before, #masthead .logo-link:empty:before {
-  font-family: "Open Sans";
-  font-size: 1em;
-  /* Center the icon in a square the size of the parent's font-size */
-  line-height: 1;
-  width: 1em;
-  display: inline-block;
-  vertical-align: top;
-  text-align: center;
-  color: #ccc;
-}
-#masthead #logo-link:empty:before {
-  content: "\2211";
-}
-#masthead #logo-link:empty:hover:before, #masthead .logo-link:empty:hover:before {
-  color: #932919;
-}
-#masthead #logo-link:empty:active:before, #masthead .logo-link:empty:active:before {
-  color: #3572a0;
-}
-#masthead #logo-link:link, #masthead #logo-link:hover, #masthead #logo-link:active, #masthead .logo-link:link, #masthead .logo-link:hover, #masthead .logo-link:active {
-  background: transparent;
-  border: none;
-  text-decoration: none;
-}
-@media screen and (max-width: 480px) {
-  #masthead #logo-link, #masthead .logo-link {
-    display: block;
-    float: none;
-    margin: 0;
-    font-size: 50px;
-  }
-}
-#masthead .byline {
-  color: #333333;
-  font-weight: normal;
-  margin: 0;
-  font-size: 1.3125em;
-  line-height: 1.42857em;
-  min-height: inherit;
-  font-family: "PT Serif", "Times New Roman", Times, serif;
-}
-@media screen and (max-width: 480px) {
-  #masthead .byline {
-    margin-top: 0;
-    font-size: 1em;
-    line-height: 1.25em;
-  }
-}
-#masthead .byline a:link, #masthead .byline a:visited {
-  color: #333333;
-}
-#masthead .byline a:hover, #masthead .byline a:focus {
-  color: #932919;
-}
-#masthead .byline a:active {
-  color: #3572a0;
-}
 
-/**
- * Primary Navbar
- * Contains primary actions for navigation or layout control
- */
-#primary-navbar {
-  background: #ededed;
-  border-bottom: 1px solid #bababa;
-  margin: 0;
-  z-index: 200;
-  height: 35.36px;
-  font-family: "PT Serif", "Times New Roman", Times, serif;
-  overflow: hidden;
-}
-@media screen and (max-width: 800px) {
-  #primary-navbar {
-    position: fixed;
-    top: auto;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: #ededed;
-    box-shadow: rgba(0, 0, 0, 0.3) 0px -2px 5px;
-    height: 44.2px;
-  }
-}
-#primary-navbar .button {
-  cursor: pointer;
-  display: inline-block;
-  vertical-align: middle;
-  zoom: 1;
-  /* Disable accidental text-selection */
-  user-select: none;
-  /* Truncate overflowing text with ellipsis */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-/*
-  transition-property: text-indent, background-color;
-  transition-duration: 200ms;
-*/
-  float: left;
-  text-align: left;
-  position: relative;
-  display: block;
-  /* subtract border and padding from width
-   * so we can set width precisely as percent */
-  box-sizing: border-box;
-  font-size: 1em;
-  padding: 0;
-  margin: 0;
-  line-height: 35.36px;
-  /* Override link properties */
-  /* hover state */
-  /* active/pressed state */
-  /* Icon only at small screen sizes */
-}
-#primary-navbar .button:focus {
-  outline: thin dotted #333;
-  outline-offset: -2px;
-  /**
-   * Remove stupid inner dotted border applied by Firefox on focus
-   * See http://stackoverflow.com/a/199319/1599617
-   */
-}
-#primary-navbar .button:active, #primary-navbar .button.active {
-  box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
-}
-#primary-navbar .button, #primary-navbar .button:hover, #primary-navbar .button:focus, #primary-navbar .button:visited, #primary-navbar .button:link, #primary-navbar .button:active {
-  text-decoration: none;
-}
-#primary-navbar .button, #primary-navbar .button:link, #primary-navbar .button:visited {
-  color: #333333;
-  background-color: #ededed;
-}
-#primary-navbar .button:hover {
-  background-color: #fafafa;
-}
-#primary-navbar .button.active, #primary-navbar .button:active {
-  background-color: #e0e0e0;
-}
-#primary-navbar .button.disabled, #primary-navbar .button.disabled:link, #primary-navbar .button.disabled:visited, #primary-navbar .button.disabled:hover, #primary-navbar .button.disabled:focus, #primary-navbar .button.disabled:active {
-  opacity: .4;
-  color: #333333;
-  background: #ededed;
-  cursor: default;
-  box-shadow: none;
-}
-@media screen and (max-width: 800px) {
-  #primary-navbar .button {
-    /*@include button-hide-text($navbar-icon-box-size);*/
-    float: left;
-    text-align: center;
-    margin: 0;
-    line-height: 44.2px;
-  }
-  #primary-navbar .button.active, #primary-navbar .button:active {
-    /* Vertically flip shadow for lower navbar */
-    box-shadow: rgba(0, 0, 0, 0.5) 0 -2px 5px inset;
-  }
-}
-#primary-navbar .sidebar-left-toggle-button {
-  /* Do not display if is missing */
-  display: none;
-  /*On desktop screens, */
-  padding: 0;
-}
- #primary-navbar .sidebar-left-toggle-button {
-  display: block;
-  width: 240px;
-}
-@media screen and (min-width: 801px) {
-  #primary-navbar .sidebar-left-toggle-button.active {
-    /* Show text if hidden and match sidebar width */
-    text-indent: 0;
-    width: 240px;
-  }
-}
-#primary-navbar .sidebar-left-toggle-button:before {
-  content: "\2630";
-  aria-hidden="true";  /* not valid.  the hamburger shoudl appear in the source with this attr on its span */
-  text-align: center;
-  font-size: 2em;
-  line-height: 0.9em;
-/*
-  line-height: 35.36px;
-*/
-  width: 1.4em;
-  text-indent: 0;
-  /* So text isn't removed from this too */
-  display: inline-block;
-  vertical-align: baseline;
-  zoom: 1;
-}
-@media screen and (max-width: 800px) {
-  #primary-navbar .sidebar-left-toggle-button {
-    /* Disable ellipsis */
-    white-space: normal;
-    overflow: visible;
-    text-overflow: clip;
-    /* center the icon */
-    text-align: center;
-    position: relative;
-    /* hide the text */
-    text-indent: 110%;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-  #primary-navbar .sidebar-left-toggle-button:before {
-    content: "\2630";
-    aria-hidden=”true”;
-    text-align: center;
-    font-size: 2.4em;
-    line-height: 1.2em;
-/*
-    width: 44.2px;
-*/
-    text-indent: 0;
-    /* So text isn't removed from this too */
-    display: inline-block;
-    vertical-align: auto;
-    zoom: 1;
-  }
-  #primary-navbar .sidebar-left-toggle-button:before {
-    position: absolute;
-    left: 50%;
-    right: auto;
-    margin-left: -22.1px;
-    top: 35%;
-    bottom: auto;
-    margin-top: -22.1px;
-  }
-}
-#primary-navbar .up-button {
-  text-align: center;
-}
-#primary-navbar .up-button:before {
-  content: "^";
-  text-align: center;
-  font-size: 1.5em;
-  font-family: "Open Sans";
-/*
-  line-height: 35.36px;
-  width: 35.36px;
-*/
-  text-indent: 0;
-  /* So text isn't removed from this too */
-  display: inline-block;
-  vertical-align: middle;
-}
-@media screen and (max-width: 800px) {
-  #primary-navbar .up-button {
-    /* Disable ellipsis */
-    white-space: normal;
-    overflow: visible;
-    text-overflow: clip;
-    /* center the icon */
-    text-align: center;
-    position: relative;
-    /* hide the text */
-    text-indent: 110%;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-
-  #primary-navbar .up-button:before {
-    font-size: 2em;
-    line-height: 1.2em;
-/*
-    line-height: 44.2px;
-*/
-    width: 1.5em;
-    padding-top: 5px;
-    /* So text isn't removed from this too */
-    position: absolute;
-    left: 50%;
-    right: auto;
-    margin-left: -22.1px;
-    top: 50%;
-    bottom: auto;
-    margin-top: -22.1px;
-  }
-}
-#primary-navbar .previous-button:before {
-  content: "<";
-  text-align: center;
-  font-size: 1.5em;
-  font-family: "Open Sans";
-
-/*
-  line-height: 35.36px;
-  width: 55.36px;
-*/
-  text-indent: 0;
-  /* So text isn't removed from this too */
-  display: inline-block;
-  vertical-align: middle;
-  padding-bottom: 5px;
-  zoom: 1;
-}
-@media screen and (max-width: 800px) {
-  #primary-navbar .previous-button {
-    /* Disable ellipsis */
-    white-space: normal;
-    overflow: visible;
-    text-overflow: clip;
-    /* center the icon */
-    text-align: center;
-    position: relative;
-    /* hide the text */
-    text-indent: 110%;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-  #primary-navbar .previous-button:before {
-    font-size: 2em;
-    line-height: 1.0em;
-/*
-    line-height: 36px;
-*/
-    width: 2em;
-    /* So text isn't removed from this too */
-    padding-top: 5px;
-    position: absolute;
-    left: 55%;
-    right: auto;
-    margin-left: -22.1px;
-    top: 50%;
-    bottom: auto;
-    margin-top: -22.1px;
-  }
-}
-#primary-navbar .next-button {
-  text-align: right;
-}
-#primary-navbar .next-button:after {
-  content: ">";
-  text-align: center;
-  font-size: 1.5em;
-  font-family: "Open Sans";
-/*
-  line-height: 35.36px;
-  width: 35.36px;
-*/
-  text-indent: 0;
-  padding-bottom: 5px;
-  /* So text isn't removed from this too */
-  display: inline-block;
-  vertical-align: middle;
-}
-@media screen and (max-width: 800px) {
-  #primary-navbar .next-button {
-    /* Disable ellipsis */
-    white-space: normal;
-    overflow: visible;
-    text-overflow: clip;
-    /* center the icon */
-    text-align: center;
-    position: relative;
-    /* hide the text */
-    text-indent: 110%;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-  #primary-navbar .next-button:after {
-    font-size: 2em;
-    line-height: 1.0em;
-/*
-    line-height: 36px;
-*/
-    width: 2em;
-    padding-top: 5px;
-    padding-left: 5px;
-    /* So text isn't removed from this too */
-    position: absolute;
-    left: 55%;
-    right: auto;
-    margin-left: -22.1px;
-    top: 50%;
-    bottom: auto;
-    margin-top: -22.1px;
-  }
-}
-@media screen and (max-width: 800px) {
-  #primary-navbar .settings-button {
-    /* Disable ellipsis */
-    white-space: normal;
-    overflow: visible;
-    text-overflow: clip;
-    /* center the icon */
-    text-align: center;
-    position: relative;
-    /* hide the text */
-    text-indent: 110%;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-  #primary-navbar .settings-button:before {
-    position: absolute;
-    left: 50%;
-    right: auto;
-    margin-left: -22.1px;
-    top: 50%;
-    bottom: auto;
-    margin-top: -22.1px;
-  }
-}
-#primary-navbar .toolbar, #primary-navbar .toolbar > .toolbar-item, #primary-navbar .button {
-  /* Use a left border */
-  border: 1px solid #bababa;
-  border-top: none;
-  border-bottom: none;
-  border-right: none;
-  /* subtract border and padding from width
-   * so we can set width precisely as percent */
-  box-sizing: border-box;
-}
-#primary-navbar .toolbar {
-  /**
-   * Ensure adjacent borders do not double up
-   * BEWARE: THERE BE DRAGONS HERE.
-   */
-  /*
-   * Order is reversed when we float right
-   * So we need to swap first and last on toolbar-item-children
-   * BEWARE: THERE BE DRAGONS HERE.
-   */
-  /**
-   * Make this item's bottom edge clear floated toolbar-items
-   * so that our borders display correctly
-   */
-  overflow: hidden;
-  *zoom: 1;
-}
-
-#primary-navbar .toolbar .toolbar-item, #primary-navbar .toolbar.toolbar-align-left .toolbar-item {
-  float: left;
-}
-#primary-navbar .toolbar.toolbar-align-right .toolbar-item {
-  float: right;
-}
-#primary-navbar .toolbar.toolbar-divisor-1 > .toolbar-item {
-  width: 100%;
-}
-#primary-navbar .toolbar.toolbar-divisor-2 > .toolbar-item {
-  width: 50%;
-}
-#primary-navbar .toolbar.toolbar-divisor-3 > .toolbar-item {
-  width: 33.33333%;
-}
-#primary-navbar .toolbar.toolbar-divisor-4 > .toolbar-item {
-  width: 25%;
-}
-#primary-navbar .toolbar.toolbar-divisor-5 > .toolbar-item {
-  width: 20%;
-}
-
-#primary-navbar .toolbar.toolbar-divisor-1 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-1 > .toolbar-item:first-child {
-  border-left: none;
-}
-#primary-navbar .toolbar.toolbar-divisor-1 > .toolbar-item:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-1 > .toolbar-item:last-child {
-  border-right: none;
-}
-#primary-navbar .toolbar.toolbar-divisor-1 > .toolbar-item:first-child:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-1 > .toolbar-item:first-child:last-child {
-  border-left: none;
-  border-right: 1px solid #bababa;
-}
-#primary-navbar .toolbar.toolbar-divisor-2 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-2 > .toolbar-item:first-child {
-  border-left: none;
-}
-#primary-navbar .toolbar.toolbar-divisor-2 > .toolbar-item:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-2 > .toolbar-item:last-child {
-  border-right: none;
-}
-#primary-navbar .toolbar.toolbar-divisor-2 > .toolbar-item:first-child:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-2 > .toolbar-item:first-child:last-child {
-  border-left: none;
-  border-right: 1px solid #bababa;
-}
-#primary-navbar .toolbar.toolbar-divisor-3 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-3 > .toolbar-item:first-child {
-  border-left: none;
-}
-#primary-navbar .toolbar.toolbar-divisor-3 > .toolbar-item:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-3 > .toolbar-item:last-child {
-  border-right: none;
-}
-#primary-navbar .toolbar.toolbar-divisor-3 > .toolbar-item:first-child:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-3 > .toolbar-item:first-child:last-child {
-  border-left: none;
-  border-right: 1px solid #bababa;
-}
-#primary-navbar .toolbar.toolbar-divisor-4 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-4 > .toolbar-item:first-child {
-  border-left: none;
-}
-#primary-navbar .toolbar.toolbar-divisor-4 > .toolbar-item:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-4 > .toolbar-item:last-child {
-  border-right: none;
-}
-#primary-navbar .toolbar.toolbar-divisor-4 > .toolbar-item:first-child:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-4 > .toolbar-item:first-child:last-child {
-  border-left: none;
-  border-right: 1px solid #bababa;
-}
-#primary-navbar .toolbar.toolbar-divisor-5 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-5 > .toolbar-item:first-child {
-  border-left: none;
-}
-#primary-navbar .toolbar.toolbar-divisor-5 > .toolbar-item:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-5 > .toolbar-item:last-child {
-  border-right: none;
-}
-#primary-navbar .toolbar.toolbar-divisor-5 > .toolbar-item:first-child:last-child, #primary-navbar .toolbar.toolbar-align-left.toolbar-divisor-5 > .toolbar-item:first-child:last-child {
-  border-left: none;
-  border-right: 1px solid #bababa;
-}
-#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-1 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-1 > .toolbar-item:first-child:last-child {
-  border-right: none;
-  border-left: 1px solid #bababa;
-}
-#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-1 > .toolbar-item:last-child {
-  border-left: none;
-}
-#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-2 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-2 > .toolbar-item:first-child:last-child {
-  border-right: none;
-  border-left: 1px solid #bababa;
-}
-#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-2 > .toolbar-item:last-child {
-  border-left: none;
-}
-#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-3 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-3 > .toolbar-item:first-child:last-child {
-  border-right: none;
-  border-left: 1px solid #bababa;
-}
-#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-3 > .toolbar-item:last-child {
-  border-left: none;
-}
-#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-4 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-4 > .toolbar-item:first-child:last-child {
-  border-right: none;
-  border-left: 1px solid #bababa;
-}
-#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-4 > .toolbar-item:last-child {
-  border-left: none;
-}
-#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-5 > .toolbar-item:first-child, #primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-5 > .toolbar-item:first-child:last-child {
-  border-right: none;
-  border-left: 1px solid #bababa;
-}
-#primary-navbar .toolbar.toolbar-align-right.toolbar-divisor-5 > .toolbar-item:last-child {
-  border-left: none;
-}
-#primary-navbar .toolbar:first-child {
-  border-left: none;
-}
-#primary-navbar .toolbar:last-child {
-  border-right: none;
-}
-#primary-navbar .toolbar.toolbar-borderless, #primary-navbar .toolbar.toolbar-borderless > .toolbar-item, #primary-navbar .toolbar.toolbar-borderless.toolbar-align-right, #primary-navbar .toolbar.toolbar-borderless.toolbar-align-right > .toolbar-item, #primary-navbar .toolbar.toolbar-borderless.toolbar-align-left, #primary-navbar .toolbar.toolbar-borderless.toolbar-align-left > .toolbar-item {
-  border-left: none;
-  border-right: none;
-  border-top: none;
-  border-bottom: none;
-}
-#primary-navbar .navbar-bottom-buttons {
-  display: none;
-}
-@media screen and (max-width: 800px) {
-  #primary-navbar .navbar-bottom-buttons {
-    display: block;
-  }
-}
-#primary-navbar .navbar-top-buttons {
-  display: block;
-}
-/* The ">" because the GeoGebra calculator has a .toolbar */
- #primary-navbar .navbar-top-buttons > .toolbar {
-  margin-left: 240px;
-  border-right: 1px solid #bababa;
-}
- #primary-navbar .navbar-top-buttons .toolbar .sidebar-left-toggle-button {
-  width: 240px;
-}
-@media screen and (max-width: 800px) {
-  #primary-navbar .navbar-top-buttons {
-    display: none;
-  }
-}
 
 /**
  * Houses the page (everything that is not header or footer)
@@ -861,12 +163,27 @@
   #toc {
     height: calc(100vh - 50px);
   }
-  .page > .footer {
+  .page > .page-footer {
     margin-bottom: 0;
     padding-left: 10px;
   }
-  .footer {
+  .content-footer {
     margin-bottom: 60px;
+  }
+  #primary-navbar #calculator-toggle,
+  #primary-navbar .index-button {
+    display: none;
+  }
+  #primary-navbar .sidebar-left-toggle-button {
+    width: 25%;
+  }
+  #primary-navbar .threebuttons {
+    width: 75%;
+  }
+  #primary-navbar #previousbutton,
+  #primary-navbar #upbutton,
+  #primary-navbar #nextbutton {
+    width: 33.3%;
   }
 }
 
@@ -874,7 +191,7 @@
   #sidebar {
     display: none;
   }
-  .page > .footer {
+  .page > .page-footer {
     margin-left: 5em;
   }
 }
