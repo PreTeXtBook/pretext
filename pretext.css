@@ -1,67 +1,87 @@
 /*******************************************************************************
- * PreTeXt Stylesheet
+ * pretext.css controls the overall arrangement of the blocks on the page.
  *******************************************************************************
  *
  * Authors: David Farmer, Rob Beezer
  *
  *******************************************************************************
  */
-/**
- * Containers restrict the max-width of content within elements
- * whose backgrounds must stretch to the width of the viewport.
- */
 
-#primary-navbar {
+/* The overall structure is
+  html
+    head
+    body.pretext
+      header#masthead
+      nav#primary-navbar
+      div.page
+        div.sidebar
+          nav#toc
+        main.main
+          div#content
+          div.content-footer
+      div.page-footer
+*/
+
+.pretext #masthead {
+  position: relative;
+  background: #fafafa;
+  min-height: inherit;
+  border: none;
+}
+
+.pretext #primary-navbar {
   position: sticky;
   top: 0;
   max-width: 904px;
 }
-#sidebar {
+
+.pretext .page {
+  position: relative;
+}
+
+.pretext #sidebar {
   position: sticky;
   top: 41px;
+  float: left;
+  width: 240px;
 }
-#toc {
+
+.pretext #toc {
     position: sticky;
     top: 50px;
     box-sizing: border-box;
     overflow-y: scroll;
     height: calc(100vh - 60px);
-/*
-    height: 100vh;
-*/
 }
-/**
- * Container for the main focus/purpose of the page.
- */
-.page > .main {
+
+.pretext .page > .main {
   display: block;
-  margin: 0;
-  padding: 0;
+  position: relative;
+  overflow-y: hidden;
+  margin: 0 0 0 240px;
+  padding: 1px 0 0 0;
   background: white;
-  /* side borders */
   border-left: 1px solid #ccc;
-  padding-top: 1px;
-  padding-bottom: 0;
 }
 @media screen and (max-width: 800px) {
-  .page > .main {
+  .pretext .page > .main {
     /* Make space for navbar fixed to bottom of screen */
     padding-bottom: 35.36px;
+    margin-left: 0;
+    left: auto;
   }
 }
-.page > .main #content {
+
+.pretext .page > .main #content {
   max-width: 600px;
   margin: 32px;
 }
 @media screen and (max-width: 663px) {
-  .page > .main #content {
+  .pretext .page > .main #content {
     /* Decrease the margins */
     margin: 28px;
   }
 }
-
-
-
 
 #content.serif .para {
   font-family: "PT Serif", "Times New Roman", serif;
@@ -110,88 +130,51 @@
   border-radius: 0;
 }
 
-
-
-#sidebar {
-  width: 240px;
-  float: left;
-}
-#toc {
-  overflow-y: scroll;
-}
-
-.page > .main {
-  position: relative;
-  margin-left: 240px;
-  overflow-y: hidden;
-}
-@media screen and (max-width: 800px) {
-   .page > .main {
-    margin-left: 0;
-    left: auto;
-  }
-}
-
-.content-footer {
+.pretext .content-footer {
     background: #fdf;
 }
-.page > .page-footer {
+.pretext .page > .page-footer {
     margin-left: 240px;
     padding-left: 8em;
     background: #def;
 }
 
-#masthead {
-  position: relative;
-  background: #fafafa;
-  min-height: inherit;
-  border: none;
-  box-shadow: none;
-}
-
-
-/**
- * Houses the page (everything that is not header or footer)
- */
-.page {
-  position: relative;
-}
 @media screen and (max-width: 800px) {
-  #sidebar {
+  .pretext #sidebar {
     top: 1px;
   }
-  #toc {
+  .pretext #toc {
     height: calc(100vh - 50px);
   }
-  .page > .page-footer {
+  .pretext .page > .page-footer {
     margin-bottom: 0;
     padding-left: 10px;
   }
-  .content-footer {
+  .pretext .content-footer {
     margin-bottom: 60px;
   }
-  #primary-navbar #calculator-toggle,
-  #primary-navbar .index-button {
+  .pretext #primary-navbar #calculator-toggle,
+  .pretext #primary-navbar .index-button {
     display: none;
   }
-  #primary-navbar .sidebar-left-toggle-button {
+  .pretext #primary-navbar .sidebar-left-toggle-button {
     width: 25%;
   }
-  #primary-navbar .threebuttons {
+  .pretext #primary-navbar .threebuttons {
     width: 75%;
   }
-  #primary-navbar #previousbutton,
-  #primary-navbar #upbutton,
-  #primary-navbar #nextbutton {
+  .pretext #primary-navbar #previousbutton,
+  .pretext #primary-navbar #upbutton,
+  .pretext #primary-navbar #nextbutton {
     width: 33.3%;
   }
 }
 
 @media screen and (max-width: 600px) {
-  #sidebar {
+  .pretext #sidebar {
     display: none;
   }
-  .page > .page-footer {
+  .pretext .page > .page-footer {
     margin-left: 5em;
   }
 }

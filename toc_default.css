@@ -14,12 +14,6 @@
     padding: 0px;
 }
 
-/* Places section titles */
-#toc .title {
-    margin-left: 1.4em;
-    display: inline-block;
-}
-
 
 /* Places codenumbers */
 #toc .codenumber {
@@ -36,24 +30,28 @@
 #toc ul ul a > .codenumber {
     display: none;
 }
-#toc ul ul a > .title {
-    margin-left: 0;
+#toc ul .title {
+    margin-left: 1.4em;
+    display: inline-block;
 }
-#toc ul ul a > .title:empty::after {
+#toc ul ul .title {
+    margin-left: 1.5em;
+}
+#toc ul ul .title:empty::after {
     content: "empty heading!";
     font-weight: bold;
 }
-#toc ul ul ul a > .title {
-    margin-left: 1em;
+#toc ul ul ul .title {
+    margin-left: 2.5em;
     font-size: 90%;
 }
-#toc ul ul ul ul a > .title {
-    margin-left: 2em;
+#toc ul ul ul ul .title {
+    margin-left: 3.2em;
     font-size: 90%;
     font-style: italic;
 }
 
-/* more specific than something in toc_default */
+/* more specific than something in toc_default (obsolete comment?) */
 #toc ul li ul li ul li:last-child {
     margin-bottom: 0;
     border-bottom: 1px solid #ddd;
@@ -74,9 +72,17 @@
     position: relative;
     display: block;
     padding: 2.86957px;
-    padding-left: 1.6em;
+    padding: 0.2em;
+//    padding-left: 0.5em;
     border-top: 1px solid #d1d1d1;
     border-bottom: 1px solid #d1d1d1;
+    font-family: "PT Serif", "Times New Roman", Times, serif;
+    font-weight: bold;
+}
+#toc ul ul li a {
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: normal;
+//    padding-left: 2.0em;
 }
 
 /* Sets spacing between section headings*/
@@ -95,11 +101,13 @@
     text-decoration: none;
 }
 
-#toc > ul > li > a, #toc > ul > li > a:link, #toc > ul > li > a:visited {
+/*
+#toc > ul > li a, #toc > ul > li a:link, #toc > ul > li a:visited {
     font-weight: bold;
     font-family: "PT Serif", "Times New Roman", Times, serif;
     padding-left: 0.2em;
 }
+*/
 
 /* Ensures that there is no double border between subsections */
 #toc ul li ul a {

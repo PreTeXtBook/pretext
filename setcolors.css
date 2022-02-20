@@ -11,7 +11,7 @@
   color: #932c1c;
   color: var(--bodytitle);
 }
-#toc > ul > li > a, #toc > ul > li > a:link, #toc > ul > li > a:visited {
+#toc > ul > li a, #toc > ul > li a:link, #toc > ul > li a:visited {
   color: #505050;
   color: var(--chaptertoctext);
   background-color: #dbf5ff;
