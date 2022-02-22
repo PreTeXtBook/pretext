@@ -1,11 +1,9 @@
 PreTeXt
 =======
 
-An uncomplicated XML vocabulary for authors of research articles, textbooks, and monographs.
+An authoring and publishing system for authors of textbooks, research articles, and monographs, especially in STEM disciplines.
 
 GPL License.
-
-*Be sure* to checkout the dev branch, master is currently a fiction.
 
 Quickstart instructions at project website:  [pretextbook.org](https://pretextbook.org)
 
