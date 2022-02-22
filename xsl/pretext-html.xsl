@@ -252,6 +252,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- leaving this entry template for derived stylesheets to (a) test        -->
 <!-- source, and (b) set the root                                           -->
 <xsl:template match="/">
+    <xsl:call-template name="stub-dev"/>
     <!-- temporary - while Hypothesis annotation is beta -->
     <xsl:if test="$b-activate-hypothesis">
         <xsl:call-template name="banner-warning">
