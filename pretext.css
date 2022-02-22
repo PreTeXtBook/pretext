@@ -140,8 +140,13 @@
 }
 
 @media screen and (max-width: 800px) {
+  .pretext #primary-navbar {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+   }
   .pretext #sidebar {
-    top: 1px;
+    display: none;
   }
   .pretext #toc {
     height: calc(100vh - 50px);
@@ -168,16 +173,405 @@
   .pretext #primary-navbar #nextbutton {
     width: 33.3%;
   }
-}
-
-@media screen and (max-width: 600px) {
-  .pretext #sidebar {
-    display: none;
-  }
   .pretext .page > .page-footer {
     margin-left: 5em;
   }
 }
+
+/* above shoudl be in shell_default.css */
+
+@import url("https://fonts.googleapis.com/css?family=PT+Serif:400,700,400italic,700italic|Open+Sans:400italic,700italic,400,700");
+
+body.pretext {
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+body.pretext,
+body.standalone {
+    margin: 0;
+    padding: 0;
+}
+
+body.pretext { background: #fff; }
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+body.pretext > a.assistive {
+        padding:6px;
+        position: absolute;
+        top:-40px;
+        left:0px;
+        color:white;
+        border-right:1px solid white;
+        border-bottom:1px solid white;
+        border-bottom-right-radius:8px;
+        background:transparent;
+    z-index: 100;
+}
+
+body.pretext > a.assistive:focus {
+        top:0px;
+        background:#BF1722;
+        outline:0;
+    transition: top .1s ease-in, background .5s linear;
+}
+
+/* so that we can position things (like .autopermalink) absolutely wrt these items */
+.pretext-content section,
+.pretext-content article,
+.pretext-content figure,
+.pretext-content figcaption,
+.pretext-content .exercisegroup,
+.pretext-content .para {
+    position: relative;
+}
+
+/* we use .para as a wrapper around some "compound" p, so the
+   first p in .para is block-like because of the .pare */
+.pretext-content .para > p:first-child {
+    display: inline;
+}
+
+/* Oscar Levin figured out the cause of chrome showing a funny border focus */
+.pretext-content .knowl .para {
+    position: unset;
+}
+
+/* CSS defult values:
+https://www.w3schools.com/cssref/css_default_values.asp
+*/
+
+/* the default margin for pre is "1em 0", so we over-ride
+so that we can set our own later */
+.pretext-content pre {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+.pretext-content textarea {
+    padding: 0;
+}
+
+/* .para and other block-level elements should have space at the top, and not the bottom */
+.pretext-content h1, .pretext-content h2, .pretext-content h3, .pretext-content h4, .pretext-content h5, .pretext-content h6 {
+    margin: 0;
+}
+
+.pretext-content .heading {
+    line-height: 1.1;
+}
+
+/* spacing around and after .para, and around and after article */
+.pretext-content .para {
+    margin-top: 1.25em;
+    margin-bottom: 0;
+    line-height: 1.35;
+}
+.pretext-content .para.continuation {
+    margin-top: 0;
+}
+.pretext-content pre + .para.continuation {
+    margin-top: 1em;
+}
+.pretext-content ul + .para.continuation,
+.pretext-content ol + .para.continuation,
+.pretext-content dl + .para.continuation {
+    margin-top: 0.75em;
+}
+
+.pretext-content .aside-like > .para:first-child,
+.pretext-content td > .para:first-child,
+.pretext-content .solution-like > .para:first-child {
+    margin-top: 0;
+}
+/* for assemblages without a title */
+.pretext-content .assemblage-like > .para:first-of-type {
+    margin-top: 0;
+}
+.pretext-content .assemblage-like > .heading + .para {
+    margin-top: 0.25em;
+}
+.pretext-content .assemblage-like + .para {
+    margin-top: 1.75em;
+}
+
+.pretext-content .para.intertext {
+    margin-top: -0.25em;
+    text-indent: 0;
+}
+
+.pretext-content .para + table {
+    margin-top: 1em;
+}
+
+.pretext-content table tr td .para + .para {
+    margin-top: 1em;
+}
+
+.pretext-content table + .para {
+    margin-top: 1.5em;
+}
+
+.pretext-content .para + figure.figure-like > table {
+    margin-top: 1em;
+}
+
+/* 1.25 = ol top + li top ?  looked too big with 0.75 below */
+.pretext-content .exercise-like .para + ol {  
+    margin-top: 0.5em;
+}
+
+.pretext-content .para + pre.prettyprint,
+.pretext-content .para + pre.plainprint {
+    margin-top: 1.25em;
+}
+.pretext-content .para + .code-box {
+    margin-top: 1.25em;
+}
+.pretext-content .code-box > .console {
+    margin-left: 1.5em;
+}
+
+/* this > may be too restrictive.  The purpose is to not put a
+   top margin on an article at the top of a knowl */
+.pretext-content section > article, .pretext-content section > section.paragraphs, .pretext-content .paragraphs > article {
+    margin-top: 1.25em;
+}
+.pretext-content section article + article,
+.pretext-content section .para + article,
+.pretext-content section .posterior + article {
+    margin-top: 1.75em;
+}
+.pretext-content section article > .introduction + article {
+    margin-top: 1em;
+}
+
+.pretext-content article + .posterior {
+    margin-top: 0.5em;
+}
+.pretext-content section .para + .tabular-box {
+    margin-top: 0.75em;
+}
+.pretext-content section .proof {
+    margin-top: 0.75em;
+}
+
+.pretext-content section > pre, .pretext-content .para + pre {
+    margin-top: 1.25em;
+}
+
+.pretext-content ol .para + .para, .pretext-content ul .para + .para {
+    margin-top: 1em;
+}
+
+/* see Ex 29 https://yoshiwarabooks.org/linear-functions.html 
+and ex 2.91 in 
+https://yoshiwarabooks.org/mfg/MathModels.html */
+.pretext-content .introduction + .sidebyside,
+.pretext-content .para + .sidebyside,
+.pretext-content ol + .sidebyside,
+.pretext-content ul + .sidebyside {
+    margin-top: 1em;
+}
+
+.pretext-content ol, .pretext-content ul {
+    margin-bottom: 0;
+}
+.pretext-content li {
+    margin-bottom: 0;
+}
+.pretext-content section li .title {
+    font-size: 100%;
+    font-weight: normal;
+    font-style: italic;
+}
+.pretext-content section article.theorem-like li > .title {
+    font-weight: 600;
+    font-style: normal;
+    font-size: 96%;
+}
+
+.pretext-content figure {
+    margin-bottom: 0;
+}
+
+.pretext-content .heading {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.pretext-content .conclusion {
+    margin-top: 1em;
+}
+.pretext-content .conclusion > .para:first-child {
+    margin-top: 0.5em;
+}
+
+.pretext-content ol, .pretext-content ul {
+    margin-top: 0.75em;
+}
+.pretext-content .exercise-like > ol:first-child,
+.pretext-content .exercise-like > ul:first-child {
+    margin-top: 0;
+}
+.pretext-content .heading + ol, .pretext-content .heading + ul {
+    margin-top: 0.45em;
+}
+.pretext-content li > .heading + ol, .pretext-content li > .heading + ul {
+    margin-top: 0.25em;
+}
+.pretext-content li > .heading + ol > li:nth-child(1),
+.pretext-content li > .heading + ul > li:nth-child(1) {
+    margin-top: 0;
+}
+.pretext-content li > .heading + ol.cols2 > li:nth-child(2),
+.pretext-content li > .heading + ul.cols2 > li:nth-child(2) {
+    margin-top: 0;
+}
+
+.pretext-content li {
+    margin-top: 0.5em;
+}
+.pretext-content li > .para:first-child {
+    margin-top: 0;
+}
+.pretext-content article .para:first-child {
+    margin-top: 0;
+}
+
+.pretext-content ol ol, .pretext-content ol ul,  .pretext-content ul ol, .pretext-content ul ul {
+    margin-top: 0.5em;
+}
+
+.pretext-content .frontmatter > .heading {
+    display: block;
+    text-align: center;
+}
+.pretext-content .frontmatter > .heading .title, .pretext-content .book > .heading .title {
+    font-size: 1.3em;
+}
+.pretext-content .frontmatter > .heading .subtitle, .pretext-content .book > .heading .subtitle {
+    display: block;
+    font-weight: normal;
+    color: #666666;
+    font-size: 0.875em;
+    line-height: 1.42857em;
+    margin-top: 0.35714em;
+}
+
+.pretext-content .frontmatter .author:first-of-type {
+    margin-top: 4em;
+}
+.pretext-content .frontmatter > .para:first-of-type {
+    margin-top: 4em;
+}
+.pretext-content .frontmatter > .author,
+.pretext-content .frontmatter > .credit {
+    margin-top: 2em;
+    text-align: center;
+}
+.pretext-content .frontmatter .date {
+    display: block;
+    margin-top: 2em;
+    text-align: center;
+}
+.pretext-content .frontmatter .credit .title {
+    font-size: 1em;
+}
+.pretext-content .frontmatter .credit .author {
+    font-size: 0.9em;
+    margin-top: 0.75em;
+}
+.pretext-content .frontmatter .author-info {
+    font-size: 90%;
+}
+.pretext-content a[href^="mailto:"] {
+    white-space: pre;
+}
+
+@media print {
+    .pretext #masthead,
+    .pretext #primary-navbar,
+    .pretext .page > #sidebar,
+    .pretext .page > .page-footer {
+       display:none;
+        border:none;
+    }
+    .pretext .page .main {
+        margin-left:0;
+        left:auto;
+        border:none;
+        box-shadow:none;
+        padding: 0;
+    }
+    .pretext .page .main #content { margin-top:0 }
+    .pretext .page .main #content.pretext-content section { margin-top:1em }
+    .pretext .page .main #content.pretext-content section .heading { margin-top:0 }
+}
+
+/* printing for one-page worksheets */
+
+@media print {
+    body.standalone .pretext-content .worksheet {
+        border: none;
+    }
+    body.standalone.worksheet #masthead {
+        display: none;
+    }
+
+    body.standalone.worksheet.has-sidebar-left.mathbook-loaded .page .main {
+        margin: 0;
+    }
+
+    body.standalone.worksheet .page > .main #content {
+        margin: 0;
+    }
+    body.standalone.worksheet .pretext-content .onepage {
+        max-height: 100%;
+        max-width: 100%;
+        overflow: hidden;
+        page-break-after: always;
+/*
+        height: 1243px;
+*/
+        border: none;
+        page-break-inside: avoid;
+     }
+     body.standalone.worksheet .pretext-content .onepage.lastpage {
+        page-break-after: auto;
+     }
+    body.standalone.worksheet.a4 .pretext-content .onepage {
+/*
+        height: 1320px;
+*/
+    }
+    body.standalone.worksheet .pretext-content .onepage .workspace,
+    body.standalone.worksheet .pretext-content .onepage .workspace.squashed.tight {
+        border: none;
+        padding: 0;
+        background: none !important;
+    }
+    body.standalone.worksheet a {
+        color: black;
+    }
+
+    body.standalone.worksheet .page  .main {
+        padding: 0;
+    }
+
+    body.standalone.worksheet.mathbook-loaded .page .main #content.pretext-content section.onepage {
+        padding-bottom: 20px;  /* to help prevent flow onto the next page, particularly in Safari */
+                              /* the page is not full length, but what is missing was blank anyway */
+/*
+        margin: 0;
+*/
+    }
+
+    @page { margin: 0 }
+}
+
 
 /*******************************************************************************
  *

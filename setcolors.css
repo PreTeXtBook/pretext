@@ -2,12 +2,12 @@
 /* This file assigns the main colors, using variables that
    have been set previously. */
 
-#masthead #title-container > .heading, #masthead .title-container > .heading,#masthead #title-container > .heading a:link, #masthead #title-container > .heading a:visited, #masthead .title-container > .heading a:link, #masthead .title-container > .heading a:visited, #masthead #title-container > .heading a:hover, #masthead #title-container > .heading a:focus, #masthead .title-container > .heading a:hover, #masthead .title-container > .heading a:focus, #masthead #logo-link:empty:hover:before, #masthead .logo-link:empty:hover:before, #masthead #byline a:hover, #masthead #byline a:focus, #masthead .byline a:hover, #masthead .byline a:focus {
+#masthead .title-container > .heading, #masthead .title-container > .heading a, #masthead #logo-link:empty:hover:before, #masthead #byline a {
   color: #2a5ea4;
   color: var(--documenttitle);
 }
 
-#masthead #title-container > .heading a:active, #masthead .title-container > .heading a:active, #masthead #logo-link:empty:active:before, #masthead .logo-link:empty:active:before, #masthead #byline a:active, #masthead .byline a:active {
+#masthead .title-container > .heading a:active, #masthead #logo-link:empty:active:before, #masthead .byline a:active {
   color: #932c1c;
   color: var(--bodytitle);
 }
@@ -68,8 +68,8 @@
     border-bottom: none;
 }
 #toc ul li.part a,
-#toc ul li.frontmatter > a:first-child,
-#toc ul li.backmatter > a:first-child {
+#toc ul li.frontmatter a:first-child,
+#toc ul li.backmatter a:first-child {
     color: #222222;
     background-color: var(--bodytitlehighlight);
     font-size: 110%;
@@ -84,10 +84,6 @@
 #toc ul li.backmatter a:hover {
     color: #ffffff;
     background-color: var(--highlighttoc);
-}
-
-.sidebar-content .extras a:hover {
-  border-top: 1px solid var(--highlighttocborder);
 }
 
 .pretext-content .summary-links a {
@@ -134,11 +130,11 @@
     background-color: var(--assemblagebackground);
 }
 
-.knowl-output {
+.pretext-content .knowl-output {
     border-color: var(--knowlborder);
     background-color: var(--knowlbackground);
 }
-.knowl-footer {
+.pretext-content .knowl-footer {
     background-color: var(--knowlborder);
 }
 

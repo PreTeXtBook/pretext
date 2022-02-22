@@ -1,517 +1,4 @@
 
-@import url("https://fonts.googleapis.com/css?family=PT+Serif:400,700,400italic,700italic|Open+Sans:400italic,700italic,400,700");
-
-body {
-    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-body,
-body.pretext-article,
-body.pretext-book,
-body.standalone {
-    margin: 0;
-    padding: 0;
-}
-
-body, html body { background: #fff; }
-
-a {
-    color: inherit;
-    text-decoration: none;
-}
-
-/* so that we can position things (like .autopermalink) absolutely wrt these items */
-.pretext-content section,
-.pretext-content article,
-.pretext-content figure,
-.pretext-content figcaption,
-.pretext-content .exercisegroup,
-.pretext-content .para {
-    position: relative;
-}
-
-/* we use .para as a wrapper around some "compound" p, so the
-   first p in .para is block-like because of the .pare */
-.pretext-content .para > p:first-child {
-    display: inline;
-}
-
-/* Oscar Levin figured out the cause of chrome showing a funny border focus */
-.pretext-content .knowl .para {
-    position: unset;
-}
-
-/* CSS defult values:
-https://www.w3schools.com/cssref/css_default_values.asp
-*/
-
-/* the default margin for pre is "1em 0", so we over-ride
-so that we can set our own later */
-.pretext-content pre {
-    margin: 0;
-    padding: 0;
-    border: none;
-}
-.pretext-content textarea {
-    padding: 0;
-}
-
-/* .para and other block-level elements should have space at the top, and not the bottom */
-.pretext-content h1, .pretext-content h2, .pretext-content h3, .pretext-content h4, .pretext-content h5, .pretext-content h6 {
-    margin: 0;
-}
-
-.pretext-content .heading {
-    line-height: 1.1;
-}
-
-/* spacing around and after .para, and around and after article */
-.pretext-content .para {
-    margin-top: 1.25em;
-    margin-bottom: 0;
-    line-height: 1.35;
-}
-.pretext-content .para.continuation {
-    margin-top: 0;
-}
-.pretext-content pre + .para.continuation {
-    margin-top: 1em;
-}
-.pretext-content ul + .para.continuation,
-.pretext-content ol + .para.continuation,
-.pretext-content dl + .para.continuation {
-    margin-top: 0.75em;
-}
-
-.pretext-content .aside-like > .para:first-child,
-.pretext-content td > .para:first-child,
-.pretext-content .solution-like > .para:first-child {
-    margin-top: 0;
-}
-/* for assemblages without a title */
-.pretext-content .assemblage-like > .para:first-of-type {
-    margin-top: 0;
-}
-.pretext-content .assemblage-like > .heading + .para {
-    margin-top: 0.25em;
-}
-.pretext-content .assemblage-like + .para {
-    margin-top: 1.75em;
-}
-
-.pretext-content .para.intertext {
-    margin-top: -0.25em;
-    text-indent: 0;
-}
-
-.pretext-content .para + table {
-    margin-top: 1em;
-}
-
-.pretext-content table tr td .para + .para {
-    margin-top: 1em;
-}
-
-.pretext-content table + .para {
-    margin-top: 1.5em;
-}
-
-.pretext-content .para + figure.figure-like > table {
-    margin-top: 1em;
-}
-
-/* 1.25 = ol top + li top ?  looked too big with 0.75 below */
-.pretext-content .exercise-like .para + ol {  
-    margin-top: 0.5em;
-}
-
-.pretext-content .para + pre.prettyprint,
-.pretext-content .para + pre.plainprint {
-    margin-top: 1.25em;
-}
-.pretext-content .para + .code-box {
-    margin-top: 1.25em;
-}
-.pretext-content .code-box > .console{
-    margin-left: 1.5em;
-}
-
-/* this > may be too restrictive.  The purpose is to not put a
-   top margin on an article at the top of a knowl */
-.pretext-content section > article, .pretext-content section > section.paragraphs, .pretext-content .paragraphs > article {
-    margin-top: 1.25em;
-}
-.pretext-content section article + article,
-.pretext-content section .para + article,
-.pretext-content section .posterior + article {
-    margin-top: 1.75em;
-}
-.pretext-content section article > .introduction + article {
-    margin-top: 1em;
-}
-.pretext-content article + .hidden-knowl-wrapper {
-    margin-top: 1em;
-}
-.pretext-content article + .posterior {
-    margin-top: 0.5em;
-}
-.pretext-content section .para + .tabular-box {
-    margin-top: 0.75em;
-}
-.pretext-content section .proof {
-    margin-top: 0.75em;
-}
-
-.pretext-content section > pre, .pretext-content .para + pre {
-    margin-top: 1.25em;
-}
-
-.pretext-content ol .para + .para, .pretext-content ul .para + .para {
-    margin-top: 1em;
-}
-
-/* see Ex 29 https://yoshiwarabooks.org/linear-functions.html 
-and ex 2.91 in 
-https://yoshiwarabooks.org/mfg/MathModels.html */
-.pretext-content .introduction + .sidebyside,
-.pretext-content .para + .sidebyside,
-.pretext-content ol + .sidebyside,
-.pretext-content ul + .sidebyside {
-    margin-top: 1em;
-}
-
-.pretext-content ol, .pretext-content ul {
-    margin-bottom: 0;
-}
-.pretext-content li {
-    margin-bottom: 0;
-}
-.pretext-content section li .title {
-    font-size: 100%;
-    font-weight: normal;
-    font-style: italic;
-}
-.pretext-content section article.theorem-like li > .title {
-    font-weight: 600;
-    font-style: normal;
-    font-size: 96%;
-}
-
-.pretext-content figure {
-    margin-bottom: 0;
-}
-
-.pretext-content .heading {
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-.pretext-content .conclusion {
-    margin-top: 1em;
-}
-.pretext-content .conclusion > .para:first-child {
-    margin-top: 0.5em;
-}
-
-.pretext-content ol, .pretext-content ul {
-    margin-top: 0.75em;
-}
-.pretext-content .exercise-like > ol:first-child,
-.pretext-content .exercise-like > ul:first-child {
-    margin-top: 0;
-}
-.pretext-content .heading + ol, .pretext-content .heading + ul {
-    margin-top: 0.45em;
-}
-.pretext-content li > .heading + ol, .pretext-content li > .heading + ul {
-    margin-top: 0.25em;
-}
-.pretext-content li > .heading + ol > li:nth-child(1),
-.pretext-content li > .heading + ul > li:nth-child(1) {
-    margin-top: 0;
-}
-.pretext-content li > .heading + ol.cols2 > li:nth-child(2),
-.pretext-content li > .heading + ul.cols2 > li:nth-child(2) {
-    margin-top: 0;
-}
-
-.pretext-content li {
-    margin-top: 0.5em;
-}
-.pretext-content li > .para:first-child {
-    margin-top: 0;
-}
-.pretext-content article .para:first-child {
-    margin-top: 0;
-}
-
-.pretext-content ol ol, .pretext-content ol ul,  .pretext-content ul ol, .pretext-content ul ul {
-    margin-top: 0.5em;
-}
-
-.pretext-content .frontmatter > .heading {
-    display: block;
-    text-align: center;
-}
-.pretext-content .frontmatter > .heading .title, .pretext-content .book > .heading .title {
-    font-size: 1.3em;
-}
-.pretext-content .frontmatter > .heading .subtitle, .pretext-content .book > .heading .subtitle {
-    display: block;
-    font-weight: normal;
-    color: #666666;
-    font-size: 0.875em;
-    line-height: 1.42857em;
-    margin-top: 0.35714em;
-}
-
-.pretext-content .frontmatter .author:first-of-type {
-    margin-top: 4em;
-}
-.pretext-content .frontmatter > .para:first-of-type {
-    margin-top: 4em;
-}
-.pretext-content .frontmatter > .author,
-.pretext-content .frontmatter > .credit {
-    margin-top: 2em;
-    text-align: center;
-}
-.pretext-content .frontmatter .date {
-    display: block;
-    margin-top: 2em;
-    text-align: center;
-}
-.pretext-content .frontmatter .credit .title {
-    font-size: 1em;
-}
-.pretext-content .frontmatter .credit .author {
-    font-size: 0.9em;
-    margin-top: 0.75em;
-}
-.pretext-content .frontmatter .author-info {
-    font-size: 90%;
-}
-.pretext-content a[href^="mailto:"] {
-    white-space: pre;
-}
-
-.pretext-content article > .heading + .para {
-    margin-top: 0;
-}
-.pretext-content section .heading + .para,
-.pretext-content section .title + .para, /* list items have bare .title, not in a .heading */
-.pretext-content section .heading + .introduction > .para:first-child,
-.pretext-content section .blob > .para:first-child {
-    margin-top: 0.25em;
-}
-.pretext-content section .heading + article { /* , .pretext-content section header + article { */
-    margin-top: 1em;
-}
-.pretext-content section .heading + .sidebyside {
-    margin-top: 1em;
-}
-
-.pretext-content a > .heading { display: inline;}
-
-.pretext-content section .heading,
-.pretext-content article .heading {
-    font-family: "PT Serif", "Times New Roman", Times, serif;
-    font-weight: 700;
-    color: inherit;
-}
-.pretext-content article .exercise-stage {
-    font-family: "PT Serif", "Times New Roman", Times, serif;
-    font-weight: 700;
-    color: inherit;
-    font-size: 100%;
-    margin-top: 0.4em;
-}
-
-.pretext-content .knowl-content > section:first-child > .heading:first-child {
-    margin-top: 0;
-}
-.pretext-content section > .heading {
-    font-size: 1.75em;
-    line-height: 1.25em;
-    margin-top: 1em;
-    margin-bottom: 0.35em;
-}
-.pretext-content section section > .heading {
-    font-size: 1.5em;
-    line-height: 1.25em;
-    margin-bottom: 0;
-}
-.pretext-content .paragraphs > .heading {
-    font-size: 1.125em;
-    line-height: 1.125em;
-}
-.pretext-content article .paragraphs > .heading {
-    font-size: 1.05em;
-}
-.pretext-content section section section > .heading {
-    font-size: 1.40em;
-    line-height: 1.15em;
-    margin-top: 0.75em;
-}
-@media screen and (max-width: 480px) {
-    .pretext-content section > .heading {
-        font-size: 1.5em;
-        line-height: 1.33em;
-        margin-top: 1em;
-    }
-    .pretext-content section section > .heading {
-        font-size: 1.3em;
-        line-height: 1.15em;
-    }
-    .pretext-content section section section > .heading {
-        font-size: 1.15em;
-        line-height: 1em;
-    }
-}
-
-.pretext-content section article > .heading,
-.pretext-content section section article > .heading,
-.pretext-content section article > a .heading,
-.pretext-content section section article > a .heading,
-.pretext-content .abstract > .heading {
-    font-size: 1.125em;
-    line-height: 1.125em;
-    margin-top: 0;
-    display: inline;
-}
-.pretext-content section article > .heading::after,
-.pretext-content section section.paragraphs > .heading::after,
-.pretext-content section section article > .heading::after,
-.pretext-content section article > a > .heading::after,
-.pretext-content section section article > a > .heading::after,
-.pretext-content .abstract > .heading::after {
-    content: "\2009";
-}
-/* Currently only for Solution to example */
-.pretext-content .posterior .heading {
-    font-weight: normal;
-    font-size: 1.125em;
-    line-height: 1.125em;
-    margin-top: 0;
-}
-
-.pretext-content .appendix .heading > .type {
-    display: inline;
-}
-.pretext-content .heading.hide-type > .type {
-    display: none;
-}
-
-/*
- * Contents of articles
- */
-.pretext-content section article > .heading + .para,
-.pretext-content section article > .heading + .introduction,
-.pretext-content section article > .heading + .introduction > .para:first-child {
-    display: inline;
-}
-/* when a list is the only thing in an environment with a border,
-   there is too much space to the left */
-.pretext-content section article > .heading + ol,
-.pretext-content section article > .heading + ul {
-    padding-left: 1.5em;
-}
-.pretext-content section article.theorem-like .para,
-.pretext-content section article.theorem-like li {
-    font-style: italic;
-}
-.pretext-content section article.theorem-like .emphasis {
-    font-weight: 700;
-}
-
-/*
- *  .hiddenproof
- */
-
-/* knowlified proofs are in an article.hiddenproof */
-/* .pretext-content .hiddenproof .heading,   ???? can't happen, because the a does the hiding? */
-.pretext-content .hiddenproof > a > .heading {
-    font-style: italic;
-    font-weight: normal;
-}
-
-/* show wide equation overflow even when no scroll bars,
-from Jiří Lebl */
-.pretext-content .MJXc-display, .pretext-content .knowl-output .knowl-output .knowl-output .knowl-output .MJXc-display ,
-.pretext-content pre.prettyprint,
-.pretext-content pre.plainprint, 
-.pretext-content pre.console,
-.pretext-content .code-box {
-    background-image: linear-gradient(to right, white, white), linear-gradient(to right, white, white), linear-gradient(to right, rgba(0,0,0,.25), rgba(255,255,255,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(255,255,255,0));
-    background-position: left center, right center, left center, right center;
-    background-repeat: no-repeat;
-    background-color: inherit;
-    background-size: 20px 100%, 20px 100%, 10px 100%, 10px 100%;
-    background-attachment: local, local, scroll, scroll;
-}
-.pretext-content .knowl-output .MJXc-display {
-    background-image: linear-gradient(to right, var(--knowlbackground), var(--knowlbackground)), linear-gradient(to right, var(--knowlbackground), var(--knowlbackground)), linear-gradient(to right, rgba(0,0,0,.25), var(--knowlbackground)), linear-gradient(to left, rgba(0,0,0,.25), var(--knowlbackground));
-}
-/* this should have a variable name, maybe? */
-.pretext-content .knowl-output.original .MJXc-display {
-    background: inherit;
-}
-
-.pretext-content .assemblage-like .MJXc-display {
-/*
-    background-image: none;
-    background-image: linear-gradient(to right, #f4f4fe, #f4f4fe), linear-gradient(to right, #f4f4fe, #f4f4fe), linear-gradient(to right, rgba(0,0,0,.25), rgba(242,242,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(242,242,254,0));
-*/
-    background-image: linear-gradient(to right, var(--assemblagebackground), var(--assemblagebackground)), linear-gradient(to right, var(--assemblagebackground), var(--assemblagebackground)), linear-gradient(to right, rgba(0,0,0,.25), var(--assemblagebackground)), linear-gradient(to left, rgba(0,0,0,.25), var(--assemblagebackground));
-}
-
-
-.pretext-content .knowl-output .knowl-output .MJXc-display {
-    background-image: none;
-    background-image: linear-gradient(to right, #fffff5, #fffff5), linear-gradient(to right, #fffff5, #fffff5), linear-gradient(to right, rgba(0,0,0,.25), rgba(255,255,243,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(255,255,243,0));
-}
-.pretext-content .knowl-output .knowl-output .knowl-output .MJXc-display {
-    background-image: none;
-    background-image: linear-gradient(to right, #fff5fe, #fff5fe), linear-gradient(to right, #fff5fe, #fff5fe), linear-gradient(to right, rgba(0,0,0,.25), rgba(255,243,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(255,243,254,0));
-}
-
-
-
-/* not sure where this was being used, but it made short knowls
- * look bad, like the hint here:
- * SAFurtherReading.html
-*/
-.pretext-content .knowl-output .knowl-content > *:last-child:not(.incontext) {
-    margin-bottom: 0.5em;
-}
-.pretext-content .knowl-output .knowl .knowl-content > .solution-like,
-.pretext-content .knowl-output .knowl .knowl-content > .solution-like:not(.incontext) {
-    margin-bottom: 0.15em;
-}
-.pretext-content .knowl-output .knowl .knowl-content > .solution-like.hint {
-    border-left: 1px solid #0f0;
-    padding-left: 0.35em;
-    background: #efe;
-}
-.pretext-content .knowl-output .knowl .knowl-content > .solution-like.answer {
-    border-left: 2px solid #00f;
-    padding-left: 0.35em;
-    background: #eef;
-}
-.pretext-content .knowl-output .knowl .knowl-content > .solution-like.solution {
-    border-left: 3px solid #c0c;
-    padding-left: 0.5em;
-    background: #fef;
-}
-
-.pretext-content .knowl-content > article:first-child,
-.pretext-content .knowl-content > .solution:first-child {
-/* padding, not margin, to det colored background (and not be absorbed) */
-    padding-top: 0.5em;
-}
-.pretext-content .knowl-footer {
-    display: none;
-}
-
 .pretext-content section .para.credit + .para.credit {
     margin-top: 0.25em;
 }
@@ -530,27 +17,6 @@ from Jiří Lebl */
     margin-top: 2.5em;
 }
 
-body > a.assistive {
-	padding:6px;
-	position: absolute;
-	top:-40px;
-	left:0px;
-	color:white;
-	border-right:1px solid white;
-	border-bottom:1px solid white;
-	border-bottom-right-radius:8px;
-	background:transparent;
-    z-index: 100;
-}
-
-body > a.assistive:focus {
-	position:absolute;
-	left:0px;
-	top:0px;
-	background:#BF1722;
-	outline:0;	
-    transition: top .1s ease-in, background .5s linear;
-}
 /* stacked headings in the solutions backmatter */
 .pretext-content section > .heading + .heading,
 .pretext-content section section > .heading + .heading {
@@ -573,38 +39,6 @@ body > a.assistive:focus {
     font-size: 1.25em;
 }
 
-.collectedworks .knowl-output {
-    border: 12px 
-    solid #D6E3FF;
-    background: none repeat scroll 0% 0% #FAFCFF;
-    border-radius: 4px;
-    margin-bottom: 1.25em;
-}
-
-.collectedworks .subjectwork {
-    max-width: 750px;
-}
-
-.collectedworks .bib {
-    margin-bottom: 1em;
-}
-
-.collectedworks .bibitem + .bibentry {
-    display: inline;
-}
-
-.collectedworks .bibitem {
-    display: inline;
-    font-weight: bold;
-    margin-right: 1em;
-}
-.collectedworks .work .title a {
-    text-decoration: none;
-    color: #009;
-}
-.collectedworks .work .title {
-}
-
 .pretext-content .bibitem + .bibentry {
     display: inline-block;
     width: 90%;
@@ -615,40 +49,6 @@ body > a.assistive:focus {
     width: 7%;
     margin-right: 0;
 }
-
-#primary-navbar .navbar-top-buttons .toolbar-align-right .toolbar-item {
-   /* for the prev/next svg from SL2X */
-    margin-top: -8px;
-    border-left: 0;
-}
-
-#primary-navbar .navbar-top-buttons .toolbar-align-right {
-   /* also for the prev/next svg from SL2X */
-    border-right: 0;
-}
-
-#primary-navbar .navbar-top-buttons .toolbar-align-right .toolbar-item-left {
-    float: left;
-    padding: 3px 6px 3px 6px;
-    margin: 4px 10px 0px 5px;
-    border: 1px solid #aaf;
-    background-color: #def;
-    font-size: 90%;
-}
-
-#primary-navbar .navbar-top-buttons .toolbar-align-right .toolbar-item-left a {
-    color: #00a;
-}
-
-
-#feedback {position: relative;
-        margin-top: 30px; /* negative value of footer height */
-        height: 30px;
-        margin-left: 30px;
-        font-size: 70%;
-        text-align: bottom;
-        clear:both;
-} 
 
 .pretext-content figcaption {
     font-weight: normal;
@@ -1239,10 +639,6 @@ body > a.assistive:focus {
 .standalone.worksheet #primary-navbar .sidebar-left-toggle-button {
     display: none;
 }
-.standalone.worksheet.has-sidebar-left #primary-navbar .navbar-top-buttons > .toolbar,
-.standalone.worksheet.has-sidebar-left #primary-navbar-sticky-wrapper .navbar-top-buttons > .toolbar {
-    margin-left: 0;
-}
 .standalone.worksheet .pretext-content [data-knowl]:hover,
 .standalone.worksheet .pretext-content [data-knowl]:active,
 .standalone.worksheet .pretext-content [data-knowl].active {
@@ -1257,6 +653,13 @@ body > a.assistive:focus {
 }
 .standalone.worksheet .pretext-content article > .knowl-output.original {
     margin: 0;
+}
+
+.pretext-content .appendix .heading > .type {
+    display: inline;
+}
+.pretext-content .heading.hide-type > .type {
+    display: none;
 }
 
 .pretext-content .heading .print-links > a {
@@ -1594,14 +997,6 @@ body > a.assistive:focus {
     border-bottom: 1px dotted red;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-}
-
-.has-sidebar-left #primary-navbar-sticky-wrapper .navbar-top-buttons .toolbar, .has-sidebar-left #primary-navbar .navbar-top-buttons > .toolbar {
-     border-right: 0;
-}
-
-#primary-navbar .toolbar.toolbar-divisor-3 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-3 > .toolbar-item:last-child {
-    border-right: 1px solid #bababa;
 }
 
 .pretext-content ol li.custom-list-style-type {
@@ -2003,6 +1398,101 @@ a.mjx-svg-href  {
 .pretext-content section > .hidden-knowl-wrapper {
     margin-top: 1em;
 }
+.pretext-content article + .hidden-knowl-wrapper {
+    margin-top: 1em;
+}
+.pretext-content .knowl-content > section:first-child > .heading:first-child {
+    margin-top: 0;
+}
+
+/*
+ *  .hiddenproof
+ */
+
+/* knowlified proofs are in an article.hiddenproof */
+/* .pretext-content .hiddenproof .heading,   ???? can't happen, because the a does the hiding? */
+.pretext-content .hiddenproof > a > .heading {
+    font-style: italic;
+    font-weight: normal;
+}
+
+/* show wide equation overflow even when no scroll bars,
+from Jiří Lebl */
+.pretext-content .MJXc-display, .pretext-content .knowl-output .knowl-output .knowl-output .knowl-output .MJXc-display ,
+.pretext-content pre.prettyprint,
+.pretext-content pre.plainprint, 
+.pretext-content pre.console,
+.pretext-content .code-box {
+    background-image: linear-gradient(to right, white, white), linear-gradient(to right, white, white), linear-gradient(to right, rgba(0,0,0,.25), rgba(255,255,255,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(255,255,255,0));
+    background-position: left center, right center, left center, right center;
+    background-repeat: no-repeat;
+    background-color: inherit;
+    background-size: 20px 100%, 20px 100%, 10px 100%, 10px 100%;
+    background-attachment: local, local, scroll, scroll;
+}
+.pretext-content .knowl-output .MJXc-display {
+    background-image: linear-gradient(to right, var(--knowlbackground), var(--knowlbackground)), linear-gradient(to right, var(--knowlbackground), var(--knowlbackground)), linear-gradient(to right, rgba(0,0,0,.25), var(--knowlbackground)), linear-gradient(to left, rgba(0,0,0,.25), var(--knowlbackground));
+}
+/* this should have a variable name, maybe? */
+.pretext-content .knowl-output.original .MJXc-display {
+    background: inherit;
+}
+
+.pretext-content .assemblage-like .MJXc-display {
+/*
+    background-image: none;
+    background-image: linear-gradient(to right, #f4f4fe, #f4f4fe), linear-gradient(to right, #f4f4fe, #f4f4fe), linear-gradient(to right, rgba(0,0,0,.25), rgba(242,242,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(242,242,254,0));
+*/
+    background-image: linear-gradient(to right, var(--assemblagebackground), var(--assemblagebackground)), linear-gradient(to right, var(--assemblagebackground), var(--assemblagebackground)), linear-gradient(to right, rgba(0,0,0,.25), var(--assemblagebackground)), linear-gradient(to left, rgba(0,0,0,.25), var(--assemblagebackground));
+}
+
+
+.pretext-content .knowl-output .knowl-output .MJXc-display {
+    background-image: none;
+    background-image: linear-gradient(to right, #fffff5, #fffff5), linear-gradient(to right, #fffff5, #fffff5), linear-gradient(to right, rgba(0,0,0,.25), rgba(255,255,243,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(255,255,243,0));
+}
+.pretext-content .knowl-output .knowl-output .knowl-output .MJXc-display {
+    background-image: none;
+    background-image: linear-gradient(to right, #fff5fe, #fff5fe), linear-gradient(to right, #fff5fe, #fff5fe), linear-gradient(to right, rgba(0,0,0,.25), rgba(255,243,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(255,243,254,0));
+}
+
+
+
+/* not sure where this was being used, but it made short knowls
+ * look bad, like the hint here:
+ * SAFurtherReading.html
+*/
+.pretext-content .knowl-output .knowl-content > *:last-child:not(.incontext) {
+    margin-bottom: 0.5em;
+}
+.pretext-content .knowl-output .knowl .knowl-content > .solution-like,
+.pretext-content .knowl-output .knowl .knowl-content > .solution-like:not(.incontext) {
+    margin-bottom: 0.15em;
+}
+.pretext-content .knowl-output .knowl .knowl-content > .solution-like.hint {
+    border-left: 1px solid #0f0;
+    padding-left: 0.35em;
+    background: #efe;
+}
+.pretext-content .knowl-output .knowl .knowl-content > .solution-like.answer {
+    border-left: 2px solid #00f;
+    padding-left: 0.35em;
+    background: #eef;
+}
+.pretext-content .knowl-output .knowl .knowl-content > .solution-like.solution {
+    border-left: 3px solid #c0c;
+    padding-left: 0.5em;
+    background: #fef;
+}
+
+.pretext-content .knowl-content > article:first-child,
+.pretext-content .knowl-content > .solution:first-child {
+/* padding, not margin, to det colored background (and not be absorbed) */
+    padding-top: 0.5em;
+}
+.pretext-content .knowl-footer {
+    display: none;
+}
 
 .pretext-content .exercisegroup > .conclusion {
     margin-left: 1.5em;
@@ -2305,36 +1795,36 @@ a.mjx-svg-href  {
     margin-right: auto;
 }
 
-figure img {
+.pretext-content figure img {
     display: block;
     margin-left: auto;
     margin-right: auto;
 }
 
-figure img + img {
+.pretext-content figure img + img {
     margin-top: 30px;
 }
 
-div.center img {
+.pretext-content div.center img {
     display: block;
     margin-left: auto;
     margin-right: auto;
 }
 
-div.center + div.center > img {
+.pretext-content div.center + div.center > img {
     margin-top: 60px;
 }
 
-div.center > img + img {
+.pretext-content div.center > img + img {
     margin-top: 60px;
 }
 
-figure table {
+.pretext-content figure table {
     margin-left: auto;
     margin-right: auto;
 }
 
-.caption {
+.pretext-content .caption {
     margin-top: 10px;
     margin-left: auto;
     margin-right: auto;
@@ -2343,20 +1833,20 @@ figure table {
 }
 
 
-figure.wrap img {
+.pretext-content figure.wrap img {
     width: 250px;
 }
-figure.wrap {
+.pretext-content figure.wrap {
     float: right;
     margin-right: 0;
     margin-left: 30px;
 }
-figure img.wrap {
+.pretext-content figure img.wrap {
     float: right;
     margin: 0;
 }
 
-figure figcaption.wrap {
+.pretext-content figure figcaption.wrap {
     margin: 10px;
     font-size: 100%;
     text-align: center;
@@ -2431,7 +1921,7 @@ figure figcaption.wrap {
     font-weight: bold;
 }
 
-div.quote {
+.pretext-content div.quote {
     padding-left: 40px;
     padding-right: 10px;
     margin-bottom: 1em;
@@ -2441,7 +1931,7 @@ div.quote {
     display: inline-block;
 }
 
-code.inline {
+.pretext-content code.inline {
     background: none;
     border: none;
 }
@@ -2606,63 +2096,38 @@ code.inline {
     font-style: normal;
 }
 
-.searchwrapper {
+.pretext .searchwrapper {
     max-width: 900px;
     position: absolute;
     right: 0;
     bottom: 0; 
     margin-bottom: 39px; 
 }
-body.sidebar-left-closed .searchwrapper {
-    margin-bottom: -2px; 
-}
 
-body.sidebar-left-open .searchwrapper {
-    top: 74px;
-}
-
-body.sidebar-left-closed .searchwrapper {
-    top: 74px;
-    margin-bottom: -2px;
-}
-
-@media screen and (max-width: 800px) {
-body.sidebar-left-closed .searchwrapper {
-    top: 129px;
-}
-}
-
-@media screen and (max-width: 480px) {
-body.sidebar-left-closed .searchwrapper {
-    top: 174px;
-}
-}
-
-
-.searchwrapper .cse .gsc-control-cse, .searchwrapper .gsc-control-cse  {
+.pretext .searchwrapper .cse .gsc-control-cse, .searchwrapper .gsc-control-cse  {
     padding: 0;
     border: none;
     width: 25ex;
 }
-.searchwrapper .cse .gsc-search-button input.gsc-search-button-v2, .searchwrapper input.gsc-search-button-v2 {
+.pretext .searchwrapper .cse .gsc-search-button input.gsc-search-button-v2, .searchwrapper input.gsc-search-button-v2 {
     padding: 2px 2px;
 }
-.searchwrapper form.gsc-search-box {
+.pretext .searchwrapper form.gsc-search-box {
     margin: 0;
 }
-.searchwrapper table.gsc-search-box {
+.pretext .searchwrapper table.gsc-search-box {
     margin: 0;
 }
-.searchwrapper .gsc-search-box-tools .gsc-search-box .gsc-input {
+.pretext .searchwrapper .gsc-search-box-tools .gsc-search-box .gsc-input {
     padding: 0;
 }
-.searchwrapper .gsib_a {
+.pretext .searchwrapper .gsib_a {
     padding: 0 0 0 5px;
 }
-.searchwrapper .gsc-input-box {
+.pretext .searchwrapper .gsc-input-box {
     height: 3.0ex;
 }
-.searchwrapper form.gsc-search-box {
+.pretext .searchwrapper form.gsc-search-box {
     font-size: 12px;
 }
 
@@ -2908,32 +2373,6 @@ and condider having this replace line 3338 of the general code (which uses .head
 }
 
 
-@media print {
-    .navbar { display:none; }
-    .has-sidebar-left #masthead #primary-navbar-sticky-wrapper { display:none; }
-    .has-sidebar-left #masthead.smallbuttons {
-        border:none;
-    }
-    .has-sidebar-left .page > #sidebar-left-sticky-wrapper { display:none; }
-    .searchwrapper { display:none; }
-    .has-sidebar-left.mathbook-loaded .page .main {
-        margin-left:0;
-        left:auto;
-        border:none;
-        box-shadow:none;
-        padding: 0;
-    }
-/*    .has-sidebar-left.mathbook-loading.sidebar-left-open .page > .main,
-*/
-    .has-sidebar-left.mathbook-loaded.sidebar-left-open .page > .main {
-        margin-left:0;
-        padding: 0;
-    }
-    .has-sidebar-left.mathbook-loaded.sidebar-left-open .page .main #content { margin-top:0 }
-    .has-sidebar-left.mathbook-loaded.sidebar-left-open .page .main #content.pretext-content section { margin-top:1em }
-    .has-sidebar-left.mathbook-loaded.sidebar-left-open .page .main #content.pretext-content section .heading { margin-top:0 }
-}
-
 /* also see section > heading for worksheets, maybe around line 1200 */
 /* one-page documents in the browser */
 
@@ -3156,71 +2595,6 @@ body.standalone.worksheet .pretext-content section.worksheet > .heading + .para 
 
 /* printing for one-page worksheets */
 
-@media print {
-    body.standalone .pretext-content .worksheet {
-        border: none;
-    }
-    body.standalone.worksheet #masthead {
-        display: none;
-    }
-
-    body.standalone.worksheet.has-sidebar-left.mathbook-loaded .page .main {
-        margin: 0;
-    }
-
-    body[data-urlstub="calcvr.org"].standalone.worksheet .page > .main #content {
-        width: 1030px;
-    }
-
-    body.standalone.worksheet .page > .main #content {
-        margin: 0;
-    }
-    body.standalone.worksheet .pretext-content .onepage {
-        max-height: 100%;
-        max-width: 100%;
-        overflow: hidden;
-        page-break-after: always;
-/*
-        height: 1243px;
-*/
-        border: none;
-        page-break-inside: avoid;
-     }
-     body.standalone.worksheet .pretext-content .onepage.lastpage {
-        page-break-after: auto;
-     }
-    body.standalone.worksheet.a4 .pretext-content .onepage {
-/*
-        height: 1320px;
-*/
-    }
-    body[data-urlstub="calcvr.org"].standalone.worksheet .pretext-content .onepage .workspace,
-    body[data-urlstub="calcvr.org"].standalone.worksheet .pretext-content .onepage .workspace.squashed.tight,
-    body.standalone.worksheet .pretext-content .onepage .workspace,
-    body.standalone.worksheet .pretext-content .onepage .workspace.squashed.tight {
-        border: none;
-        padding: 0;
-        background: none !important;
-    }
-    body.standalone.worksheet a {
-        color: black;
-    }
-
-    body.standalone.worksheet .page  .main {
-        padding: 0;
-    }
-
-    body.standalone.worksheet.mathbook-loaded .page .main #content.pretext-content section.onepage {
-        padding-bottom: 20px;  /* to help prevent flow onto the next page, particularly in Safari */
-                              /* the page is not full length, but what is missing was blank anyway */
-/*
-        margin: 0;
-*/
-    }
-
-    @page { margin: 0 }
-}
-
 .ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-draggable.ui-resizable {
     left: 0 !important;
     top: 0 !important;
@@ -3359,26 +2733,26 @@ body.standalone.worksheet .pretext-content section.worksheet > .heading + .para 
 
 /* Preview of annual edition */
 
-main .para.newstuff {
+.pretext main .para.newstuff {
     border-right: 6px solid #6f6;
     background:  #dfd;
 }
-main li.newstuff {
+.pretext main li.newstuff {
     border-right: 6px solid #66f;
     background:  #eef;
 }
-main li.newstuff .para.newstuff {
+.pretext main li.newstuff .para.newstuff {
     border-right: none;
     background: inherit;
 }
-main article.newstuff {
+.pretext main article.newstuff {
     border-right: 6px solid #ff6;
     background:  #ffd;
 }
-main section.newstuff {
+.pretext main section.newstuff {
     border-right: 10px solid #f6f;
 }
-main a[data-knowl].newstuff {
+.pretext main a[data-knowl].newstuff {
     border: 1px solid #f33;
     background: #fdd;
 }
@@ -3461,6 +2835,39 @@ main a[data-knowl].newstuff {
     display: block;
     margin-left: 2em;
 }
+
+.collectedworks .knowl-output {
+    border: 12px
+    solid #D6E3FF;
+    background: none repeat scroll 0% 0% #FAFCFF;
+    border-radius: 4px;
+    margin-bottom: 1.25em;
+}
+
+.collectedworks .subjectwork {
+    max-width: 750px;
+}
+
+.collectedworks .bib {
+    margin-bottom: 1em;
+}
+
+.collectedworks .bibitem + .bibentry {
+    display: inline;
+}
+
+.collectedworks .bibitem {
+    display: inline;
+    font-weight: bold;
+    margin-right: 1em;
+}
+.collectedworks .work .title a {
+    text-decoration: none;
+    color: #009;
+}
+.collectedworks .work .title {
+}
+
 
 .iconlegend {
     position: absolute;

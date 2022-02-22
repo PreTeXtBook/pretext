@@ -1,4 +1,122 @@
 
+.pretext-content section .heading,
+.pretext-content article .heading {
+    font-family: "PT Serif", "Times New Roman", Times, serif;
+    font-weight: 700;
+    color: inherit;
+}
+.pretext-content article .exercise-stage {
+    font-family: "PT Serif", "Times New Roman", Times, serif;
+    font-weight: 700;
+    color: inherit;
+    font-size: 100%;
+    margin-top: 0.4em;
+}
+
+.pretext-content article > .heading + .para {
+    margin-top: 0;
+}
+.pretext-content section .heading + .para,
+.pretext-content section .title + .para, /* list items have bare .title, not in a .heading */
+.pretext-content section .heading + .introduction > .para:first-child,
+.pretext-content section .blob > .para:first-child {
+    margin-top: 0.25em;
+}
+.pretext-content section .heading + article { /* , .pretext-content section header + article { */
+    margin-top: 1em;
+}
+.pretext-content section .heading + .sidebyside {
+    margin-top: 1em;
+}
+
+.pretext-content a > .heading { display: inline;}
+
+.pretext-content section > .heading {
+    font-size: 1.75em;
+    line-height: 1.25em;
+    margin-top: 1em;
+    margin-bottom: 0.35em;
+}
+.pretext-content section section > .heading {
+    font-size: 1.5em;
+    line-height: 1.25em;
+    margin-bottom: 0;
+}
+.pretext-content .paragraphs > .heading {
+    font-size: 1.125em;
+    line-height: 1.125em;
+}
+.pretext-content article .paragraphs > .heading {
+    font-size: 1.05em;
+}
+.pretext-content section section section > .heading {
+    font-size: 1.40em;
+    line-height: 1.15em;
+    margin-top: 0.75em;
+}
+@media screen and (max-width: 480px) {
+    .pretext-content section > .heading {
+        font-size: 1.5em;
+        line-height: 1.33em;
+        margin-top: 1em;
+    }
+    .pretext-content section section > .heading {
+        font-size: 1.3em;
+        line-height: 1.15em;
+    }
+    .pretext-content section section section > .heading {
+        font-size: 1.15em;
+        line-height: 1em;
+    }
+}
+
+.pretext-content section article > .heading,
+.pretext-content section section article > .heading,
+.pretext-content section article > a .heading,
+.pretext-content section section article > a .heading,
+.pretext-content .abstract > .heading {
+    font-size: 1.125em;
+    line-height: 1.125em;
+    margin-top: 0;
+    display: inline;
+}
+.pretext-content section article > .heading::after,
+.pretext-content section section.paragraphs > .heading::after,
+.pretext-content section section article > .heading::after,
+.pretext-content section article > a > .heading::after,
+.pretext-content section section article > a > .heading::after,
+.pretext-content .abstract > .heading::after {
+    content: "\2009";
+}
+/* Currently only for Solution to example */
+.pretext-content .posterior .heading {
+    font-weight: normal;
+    font-size: 1.125em;
+    line-height: 1.125em;
+    margin-top: 0;
+}
+
+/*
+ * Contents of articles
+ */
+.pretext-content section article > .heading + .para,
+.pretext-content section article > .heading + .introduction,
+.pretext-content section article > .heading + .introduction > .para:first-child {
+    display: inline;
+}
+/* when a list is the only thing in an environment with a border,
+   there is too much space to the left */
+.pretext-content section article > .heading + ol,
+.pretext-content section article > .heading + ul {
+    padding-left: 1.5em;
+}
+.pretext-content section article.theorem-like .para,
+.pretext-content section article.theorem-like li {
+    font-style: italic;
+}
+.pretext-content section article.theorem-like .emphasis {
+    font-weight: 700;
+}
 /* The Greg's L for theorems, proofs, etc */
 
 .pretext-content .proof {
