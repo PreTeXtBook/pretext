@@ -6604,7 +6604,7 @@ the xsltproc executable.
                     <video source="video/ups-visitor-guide-360" width="80%" preview="preview/ups-promo-frame-one.jpg" />
                 </figure>
 
-                <p>You can replace the <q>preview</q> image of a video with one of your own making.  <init>HTML</init> refers to this as the <term>poster</term>, presumably because it advertises the video.  The image you make should be of the same quality as the video, and with the same aspect-ratio, and is presumably one of the frames of the video.  So a screenshot is the likely avenue.  (Maybe we will have advice on how to do this easily, or see <url href="https://github.com/rbeezer/mathbook/issues/853" visual="github.com/rbeezer/mathbook/issues/853">Issue #853</url>.)
+                <p>You can replace the <q>preview</q> image of a video with one of your own making.  <init>HTML</init> refers to this as the <term>poster</term>, presumably because it advertises the video.  The image you make should be of the same quality as the video, and with the same aspect-ratio, and is presumably one of the frames of the video.  So a screenshot is the likely avenue.  (Maybe we will have advice on how to do this easily, or see <url href="https://github.com/PreTeXtBook/pretext/issues/853" visual="github.com/PreTeXtBook/pretext/issues/853">Issue #853</url>.)
                 <idx><h>link</h><h>external, url</h></idx>
                 <idx><h>reference</h><h>external, url</h></idx>
                 On the <tag>video</tag> tag, include a <attr>preview</attr> attribute which is the name of an image file, including a relative path.  (JPEG or PNG formats are best.  JPEG may be smaller for video screenshots, while PNG is lossless and so may work better for diagrams.)  The next video has a preview/poster that is a fram part way into the introduction.</p>
@@ -10734,7 +10734,7 @@ the xsltproc executable.
                 </subsubsection>
 
                 <conclusion>
-                    <p>Conclusion now.  We include two theorems as numbered items in the conclusion to test their numbers, which are sometimes totally illogical and are inconsistent across output formats.  To see the effect, use <c>--stringparam numbering.theorems.level 3</c> in the <c>xsltproc</c> invocation. See this GitHub <url href="https://github.com/rbeezer/mathbook/issues/139" visual="github.com/rbeezer/mathbook/issues/139">Issue #139</url> for details.</p>
+                    <p>Conclusion now.  We include two theorems as numbered items in the conclusion to test their numbers, which are sometimes totally illogical and are inconsistent across output formats.  To see the effect, use <c>--stringparam numbering.theorems.level 3</c> in the <c>xsltproc</c> invocation. See this GitHub <url href="https://github.com/PreTeXtBook/pretext/issues/139" visual="github.com/PreTeXtBook/pretext/issues/139">Issue #139</url> for details.</p>
 
                     <theorem xml:id="theorem-bad-one">
                         <title>Bad Numbered Theorem One</title>
