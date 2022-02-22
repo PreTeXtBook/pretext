@@ -39,7 +39,7 @@
         </p>
 
         <p>
-            The <pretext />-CLI, can be installed on the command-line using the command <c>pip install pretextbook</c>, see <xref ref="quickstart-getting-pretext"/>.  To use options 2 and 3 above, you will need to get a copy of <pretext /> from its <url href="https://github.com/rbeezer/mathbook">GitHub repository</url>.  This can be done using the command <c>git clone https://github.com/rbeezer/mathbook.git</c>, or by downloading a zip file directly from the repository.
+            The <pretext />-CLI, can be installed on the command-line using the command <c>pip install pretextbook</c>, see <xref ref="quickstart-getting-pretext"/>.  To use options 2 and 3 above, you will need to get a copy of <pretext /> from its <url href="https://github.com/PreTeXtBook/pretext">GitHub repository</url>.  This can be done using the command <c>git clone https://github.com/PreTeXtBook/pretext.git</c>, or by downloading a zip file directly from the repository.
         </p>
 
         <p>
@@ -179,7 +179,7 @@
 
         <p>A <term>schema</term><idx>schema</idx>, in our case a <init>RELAX-NG</init> schema,  is a formal specification of an <init>XML</init> vocabulary<idx><h>schema</h><seealso>XML vocabulary</seealso></idx><idx>XML vocabulary</idx> (the allowed tags and attributes), and how they relate to each other.  So, for example, the restrictions that say you cannot nest a <tag>book</tag> inside of a <tag>chapter</tag>, nor can you nest a <tag>subsection</tag> in a <tag>chapter</tag> without an intervening <tag>section</tag>, are expressed and enforced by the schema.  One of the beauties of the schema is that it is written using a very specific syntax and then there are tools that use a schema as input.  In particular, a <pretext /> source file that conforms to the <pretext /> schema is said to be <term>valid</term><idx>valid schema</idx>.  You should strive to always, always, always have valid source files, and therefore you want to regularly verify that this is the case.</p>
 
-        <p>You can find the <pretext /> schema in the <url href="https://github.com/rbeezer/mathbook/schema"><c>schema</c> folder of the GitHub repository</url>.  The version we author and maintain is <c>pretext.xml</c>, which is used to create <c>pretext.rnc</c>, which uses the compact syntax of the RELAX-NG specification.  By providing the schema and your source to a program called a <term>validator</term><idx>validator</idx> you can check if your source is valid, and if not, why.  See <xref ref="schema" /> for the details on doing this.</p>
+        <p>You can find the <pretext /> schema in the <url href="https://github.com/PreTeXtBook/pretext/schema"><c>schema</c> folder of the GitHub repository</url>.  The version we author and maintain is <c>pretext.xml</c>, which is used to create <c>pretext.rnc</c>, which uses the compact syntax of the RELAX-NG specification.  By providing the schema and your source to a program called a <term>validator</term><idx>validator</idx> you can check if your source is valid, and if not, why.  See <xref ref="schema" /> for the details on doing this.</p>
 
         <p>
             The <pretext />-CLI also has some basic validating capability: after running <c>pretext build</c>, open the <c>.error_schema.log</c> file in the main folder of your project to see validation errors.
@@ -201,7 +201,7 @@
 
         <p>At this writing (2019-07-10) we have begun to transition between two different ways to accomplish this.  The new method is to create a <term>publisher file</term> that is an <init>XML</init> file that specifies options that are independent of your source material.  See <xref ref="publisher-file"/> in <xref ref="part-publisher"/> for details.  We continue to provide many of the values for these parameters on the command-line <em>at processing time</em>.  They have become known as <term>stringparam</term><idx>stringparam</idx> since that is the name used to call them using <c>xsltproc</c>. The <pretext />-CLI can set these stringparams easily as well.</p>
 
-        <p>Suppose you want to make a large-font version of your textbook for a student who has limited vision.  Look inside the top of <url href="https://github.com/rbeezer/mathbook/blob/dev/xsl/mathbook-latex.xsl"><c>xsl/pretext-latex.xsl</c></url> and find the <c>latex.font.size</c> parameter.  The preceding comments in this file suggest <c>20pt</c> is the maximum supported. To pass this parameter to the CLI, you would enter the following.</p>
+        <p>Suppose you want to make a large-font version of your textbook for a student who has limited vision.  Look inside the top of <url href="https://github.com/PreTeXtBook/pretext/blob/dev/xsl/mathbook-latex.xsl"><c>xsl/pretext-latex.xsl</c></url> and find the <c>latex.font.size</c> parameter.  The preceding comments in this file suggest <c>20pt</c> is the maximum supported. To pass this parameter to the CLI, you would enter the following.</p>
 
         <console>
             <input>pretext build pdf --stringparam latex.font.size "20pt"</input>
@@ -213,7 +213,7 @@
             Instead of passing these stringparams on the command line, you can specify them inside your project manifest.  Inside a particular <tag>target</tag>, include <tage>stringparam key="latex.font.size" value="20pt"</tage>, for example.  Each stringparam you want to set gets its own <tage>stringparam key="" value=""</tage> element.
         </p>
 
-        <p>These parameters are documented in the <init>XSL</init> files themselves, available in <url href="https://github.com/rbeezer/mathbook/tree/dev/xsl"><c>xsl</c> fold in the <pretext /> GitHub repository</url>, principally <c>pretext-common.xsl</c>, <c>pretext-latex.xsl</c> and <c>pretext-html.xsl</c>, and occur near the top.  They assume sensible defaults for beginners, and error-checking is careful and robust.  They will be easier to locate and use when we have the time to document them more carefully here in the Author's Guide.</p>
+        <p>These parameters are documented in the <init>XSL</init> files themselves, available in <url href="https://github.com/PreTeXtBook/pretext/tree/dev/xsl"><c>xsl</c> fold in the <pretext /> GitHub repository</url>, principally <c>pretext-common.xsl</c>, <c>pretext-latex.xsl</c> and <c>pretext-html.xsl</c>, and occur near the top.  They assume sensible defaults for beginners, and error-checking is careful and robust.  They will be easier to locate and use when we have the time to document them more carefully here in the Author's Guide.</p>
 
         <p>One caveat for using these is that experience has taught us that some of the parameters we created early on really do affect your content.  We will change some of these, but always provide a smooth upgrade path through deprecations, with little or no disruption to your workflow.</p>
     </section>

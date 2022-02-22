@@ -65,8 +65,8 @@
                     </cd>and the response should be something like<cd>
                         <cline>origin      https://github.com/mjsmith/mathbook.git (fetch)</cline>
                         <cline>origin      https://github.com/mjsmith/mathbook.git (push)</cline>
-                        <cline>upstream    https://github.com/rbeezer/mathbook.git (fetch)</cline>
-                        <cline>upstream    https://github.com/rbeezer/mathbook.git (push)</cline>
+                        <cline>upstream    https://github.com/PreTeXtBook/pretext.git (fetch)</cline>
+                        <cline>upstream    https://github.com/PreTeXtBook/pretext.git (push)</cline>
                     </cd><c>origin</c> is an alias for the location of the repository you cloned.  And <c>upstream</c> is an alias the fork uses to know the location of the official repository.</p>
                 </li>
             </ol></p>

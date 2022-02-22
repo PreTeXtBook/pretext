@@ -3877,9 +3877,9 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <subsection>
           <title>Localization Files</title>
 
-          <p>The prerequisite is that a localization file for your language exists.  A number are already supported, such as <c>es-ES</c> (Peninsular Spanish), <c>pt-BR</c> (Brazilian Portuguese), and <c>hu-HU</c> (Hungarian/Magyar); the default language code is <c>en-US</c> (American English).  For a up-to-date list of which languages are available, see <url href="https://github.com/rbeezer/mathbook/tree/dev/xsl/localizations">the localization stylesheet folder on GitHub</url><fn><c>xsl/localizations</c></fn>.</p>
+          <p>The prerequisite is that a localization file for your language exists.  A number are already supported, such as <c>es-ES</c> (Peninsular Spanish), <c>pt-BR</c> (Brazilian Portuguese), and <c>hu-HU</c> (Hungarian/Magyar); the default language code is <c>en-US</c> (American English).  For a up-to-date list of which languages are available, see <url href="https://github.com/PreTeXtBook/pretext/tree/dev/xsl/localizations">the localization stylesheet folder on GitHub</url><fn><c>xsl/localizations</c></fn>.</p>
 
-          <p>If such a file does not exist, you will need to create one or find someone to help you do so. Brief instructions for this <url href="https://github.com/rbeezer/mathbook/blob/dev/xsl/localizations/README.md">are in the README file</url><fn><c>xsl/localizations/README.md</c></fn> for this directory.  These instructions suggest using the <c>en-US</c> file as a template and as a source of more detailed instructions.  We highly encourage anyone who creates such a file to contribute it to our growing list of localization stylesheets; see <xref ref="contributing"/> in the Appendices for details.</p>
+          <p>If such a file does not exist, you will need to create one or find someone to help you do so. Brief instructions for this <url href="https://github.com/PreTeXtBook/pretext/blob/dev/xsl/localizations/README.md">are in the README file</url><fn><c>xsl/localizations/README.md</c></fn> for this directory.  These instructions suggest using the <c>en-US</c> file as a template and as a source of more detailed instructions.  We highly encourage anyone who creates such a file to contribute it to our growing list of localization stylesheets; see <xref ref="contributing"/> in the Appendices for details.</p>
         </subsection>
 
         <subsection>
@@ -4019,7 +4019,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <p>We have concentrated on making <init>HTML</init> output accessible, since that seems the most natural and best supported.  But we are aware of efforts for other formats.<dl>
             <li>
                 <title>PDF/<latex/></title>
-                <p>A <init>PDF</init> may not lend itself naturally to providing an accessible format.  But there have been efforts.  The <url href="https://tug.org/twg/accessibility/"><tex/> Users Group on PDF Accessibility and PDF Standards</url><fn><c>tug.org/twg/accessibility/</c></fn> is an excellent resource to start with.  There is also a <url href="https://github.com/rbeezer/mathbook/issues/1046"><pretext/> issue #1046</url><fn><c>github.com/rbeezer/mathbook/issues/1046</c></fn>.</p>
+                <p>A <init>PDF</init> may not lend itself naturally to providing an accessible format.  But there have been efforts.  The <url href="https://tug.org/twg/accessibility/"><tex/> Users Group on PDF Accessibility and PDF Standards</url><fn><c>tug.org/twg/accessibility/</c></fn> is an excellent resource to start with.  There is also a <url href="https://github.com/PreTeXtBook/pretext/issues/1046"><pretext/> issue #1046</url><fn><c>github.com/PreTeXtBook/pretext/issues/1046</c></fn>.</p>
             </li>
             <li>
                 <title>EPUB</title>
@@ -4056,7 +4056,7 @@ parts of a slide (e.g. it inserts a Beamer <c>\pause</c>).
         </p>
         <p>
 A minimal working example may be found in the
-<url href="https://github.com/rbeezer/mathbook/blob/dev/examples/sample-slideshow/sample-slideshow.xml">
+<url href="https://github.com/PreTeXtBook/pretext/blob/dev/examples/sample-slideshow/sample-slideshow.xml">
   Examples folder of the PreTeXt repo on GitHub
 </url><fn><c>examples/sample-slideshow/sample-slideshow.xml</c></fn>.
 See publishing details for various outputs in <xref ref="publisher-slides"/>.

@@ -224,7 +224,7 @@
 
   <section xml:id="installing-anaconda">
     <title>Installing Anaconda</title>
-    <p>Anaconda is a well-regulated development environment for Python under Windows, and I recommend it for users who do not already have Python installed. The essential <c>pretext</c> script has <url href="https://github.com/rbeezer/mathbook/pull/252">recently been updated</url> to support both Python 2 and Python 3. Therefore we make no recommendation about which Python version to choose.</p>
+    <p>Anaconda is a well-regulated development environment for Python under Windows, and I recommend it for users who do not already have Python installed. The essential <c>pretext</c> script has <url href="https://github.com/PreTeXtBook/pretext/pull/252">recently been updated</url> to support both Python 2 and Python 3. Therefore we make no recommendation about which Python version to choose.</p>
     <p>If you already have a working Python installation, skip to <xref ref="installing-imagemagick" />.</p>
     <p>You have some choice with your Anaconda installation. It actually supports the installation of several independent Pythons side-by-side (since both 2.7 and 3.x are in active use, this is more reasonable than it seems). If you do not need Python for anything else or are simply a minimalist, Miniconda is also an option. Miniconda installs no packages, but these can be installed via the <c>conda</c> utility at the command line later.<ol>
       <li><p>Download either Miniconda, Python 2.7, or Python 3.5 from the <url href="https://www.continuum.io/downloads">Anaconda download page</url>.</p></li>

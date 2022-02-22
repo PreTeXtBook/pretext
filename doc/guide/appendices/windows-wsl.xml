@@ -113,7 +113,7 @@
         <ul>
         <li><p>Make a new directory <c>mkdir mathbook</c></p></li>
         <li><p>Make your own clone of the <pretext/> repository
-            <c>git clone https://github.com/rbeezer/mathbook.git</c></p></li>
+            <c>git clone https://github.com/PreTeXtBook/pretext.git</c></p></li>
         <li><p>Move to the new directory <c>cd mathbook</c></p></li>
         <li><p>Initialize the new directory with <c>git pull</c></p></li>
         </ul>
