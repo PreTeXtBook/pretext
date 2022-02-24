@@ -1,0 +1,13 @@
+
+#primary-navbar button {
+    padding: 2px 4px;
+    border: unset;
+    background-color: unset;
+    cursor: pointer;
+}
+
+#primary-navbar button:hover {
+    background-color: var(--documenttitle);
+    color: white;
+}
+

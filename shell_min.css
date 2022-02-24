@@ -1,0 +1,90 @@
+:root {
+    --primary-navbar-height: 35px;
+    --sidebar-width: 240px;
+}
+
+#primary-navbar {
+    height: var(--primary-navbar-height);
+    background-color: var(--header-background-color);
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    position: sticky;
+    top: 0px;
+    z-index: 100;
+}
+
+.page {
+    display: flex;
+}
+
+#sidebar {
+    align-self: flex-start;
+    height: calc(99vh - var(--primary-navbar-height));
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: sticky;
+    top: var(--primary-navbar-height);
+    width: var(--sidebar-width);
+    min-width: calc(0.8 * var(--sidebar-width));
+    border-right: 1px solid var(--tocborder);
+}
+
+.sidebar-hidden {
+    display: none;
+}
+
+main.main {
+    max-width: 600px;
+    margin: 0px 32px;
+    overflow-x: hidden;
+}
+
+/* RESPONSIVE styles */
+@media (max-width: 800px) {
+    #primary-navbar {
+        position: fixed;
+        bottom: 0;
+        top: unset;
+        width: 100%;
+    }
+    #sidebar {
+        top: 0;
+    }
+    main.main {
+        margin: 0px 10px;
+    }
+}
+@media (max-width: 600px) {
+    .page {
+        flex-direction: column-reverse;
+    }
+    .window-footer {
+        margin-bottom: var(--primary-navbar-height);
+    }
+    #sidebar {
+        position: relative;
+        align-self: stretch;
+        border: unset;
+        height: unset;
+        width: 100%;
+    }
+    /* On a small screen, the sidebar appears at the bottom,
+    and when it is "visible" it appears over the other content. */
+    #sidebar.sidebar-hidden {
+        display: block;
+    }
+    #sidebar:not(.sidebar-hidden) {
+        position: fixed;
+        top: 0;
+        height: calc(99vh - var(--primary-navbar-height));
+        z-index: 100;
+        background-color: white;
+    }
+    #sidebar:not(.sidebar-hidden) ~ main.main {
+        display: none;
+    }
+    main.main {
+        margin: 0px 10px;
+    }
+}
