@@ -1648,9 +1648,9 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
             # process with the  xelatex  engine (better Unicode support)
             latex_key = get_deprecated_tex_fallback('xelatex')
             tex_executable_cmd = get_executable_cmd(latex_key)
-            cover_tex_template = '\\documentclass[20pt]{{scrartcl}}\\begin{{document}}\\title{{ {} }}\\subtitle{{ {} }}\\author{{ {} }}\\date{{}}\\maketitle\\end{{document}}'
+            cover_tex_template = '\\documentclass[20pt]{{scrartcl}}\\begin{{document}}\\title{{ {} }}\\subtitle{{ {} }}\\author{{ {} }}\\date{{}}\\maketitle\\thispagestyle{{empty}}\\end{{document}}'
             if 'xelatex' in tex_executable_cmd:
-                cover_tex = cover_tex_template.format(title,subtitle,author)
+                cover_tex = cover_tex_template.format(title,subtitle,author.replace(', ','\\\\'))
             else:
                 cover_tex = cover_tex_template.format(title_ASCII,subtitle_ASCII,author_ASCII)
             cover_tex_file = os.path.join(tmp_dir, 'cover.tex')
