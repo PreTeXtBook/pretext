@@ -56,7 +56,7 @@
 #primary-navbar .button:active {
   box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
 }
-#primary-navbar .button, #primary-navbar .button:link, #primary-navbar .button:visited {
+#primary-navbar .button {
   color: #333333;
   background-color: #ededed;
 }
@@ -367,13 +367,9 @@
     text-align: left;
     width: 20px;
 }
-#primary-navbar .previous-button.toolbar-item {
+#primary-navbar .previous-button {
     width: 70px;
-    border-right: none;
     float: right;
-}
-/* extra .toolbar-item to overrive mathbook-add-on */
-#primary-navbar .previous-button.toolbar-item {
     border-left: 1px solid #bababa;
     padding-right: 3px;
 }
