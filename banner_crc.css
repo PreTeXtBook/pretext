@@ -1,0 +1,401 @@
+
+#masthead .banner {
+    border-top: 1px solid transparent;
+    border-bottom: none;
+    overflow: hidden;
+    padding-top: 0.625em;
+    padding-bottom: 1.125em;
+}
+
+.pretext-content .summary-links a {
+    color: var(--bluegreen);
+    background: #eee; 
+    display: block;
+    padding: .6em;
+//    text-transform: uppercase;
+    text-decoration: none;
+    font-family: "Open Sans", sans-serif;
+    font-size: 1em;
+    font-weight: 600;
+    border-radius: 5px;
+//    margin: 5px 20px 0px 20px;
+}
+
+.pretext-content .summary-links a .codenumber {
+color: var(--bluegreen)
+}
+
+.pretext-content .summary-links a .title {
+    font-weight: 600;
+}
+
+.pretext-content .summary-links a:hover {
+    color: #fff;
+    background: var(--bluegreen);
+}
+
+.pretext-content .summary-links ul,
+.pretext-content .summary-links ul li {
+    display: grid;
+    list-style-type: none; 
+    min-width: 300px;
+    padding-inline-start: 0px;
+    font-family: "Open Sans", sans-serif;
+    justify-items: stretch;
+    margin: 2px auto 3px auto;
+}
+
+
+.pretext-content .summary-links > ul {
+ //   text-align: left;
+}
+
+@media screen and (min-width: 600px) {
+.pretext-content .summary-links ul,    
+.pretext-content .summary-links ul li {
+    width: 60vw;
+    max-width: 500px;
+    }
+}    
+
+
+/*** End PreTeXt overrides ***/
+
+#masthead .title-container {
+  font-size: 1em;
+  padding-left: 9.68px;
+  overflow: hidden;
+}
+@media screen and (max-width: 480px) {
+  #masthead .title-container {
+    padding: 0;
+    text-align: center;
+    margin-top: 0.625em;
+  }
+}
+#masthead .title-container > .heading {
+  font-family: "PT Serif", "Times New Roman", Times, serif;
+  font-weight: 700;
+  margin: 0;
+  font-size: 2em;
+  line-height: 1.25em;
+  color: #932919;
+}
+#masthead .title-container > .heading.hide-type .type {
+  display: none;
+}
+#masthead .title-container > .heading.hide-codenumber .codenumber {
+  display: none;
+}
+#masthead .title-container > .heading.hide-title .title {
+  display: none;
+}
+@media screen and (max-width: 480px) {
+  #masthead .title-container > .heading {
+    font-size: 1.5em;
+    line-height: 1.25em;
+    margin: 0;
+    margin-bottom: 0.41667em;
+  }
+}
+#masthead .title-container > .heading a {
+  color: #932919;
+  background: none;
+  text-decoration: none;
+}
+#masthead .title-container > .heading a:active {
+  color: #3572a0;
+}
+#masthead .title-container > .heading .subtitle {
+  font-weight: normal;
+}
+@media screen and (max-width: 800px) {
+  #masthead .title-container > .heading .subtitle {
+    /* Force the subtitle onto a separate line */
+    display: block;
+    font-size: 1.16667em;
+    line-height: 1.42857em;
+    /* De-emphasize relative to main title */
+    color: #595959;
+    /* Remove colon */
+  }
+  #masthead .title-container > .heading .subtitle:before {
+    content: normal;
+  }
+}
+
+#masthead .byline {
+  color: #333333;
+  font-weight: normal;
+  margin: 0;
+  font-size: 1.3125em;
+  line-height: 1.42857em;
+  min-height: inherit;
+  font-family: "PT Serif", "Times New Roman", Times, serif;
+}
+@media screen and (max-width: 480px) {
+  #masthead .byline {
+    margin-top: 0;
+    font-size: 1em;
+    line-height: 1.25em;
+  }
+}
+#masthead .byline a {
+  color: #333333;
+}
+#masthead .byline a:active {
+  color: #3572a0;
+}
+
+
+#masthead .banner .title-container .heading {
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* .ptx-masthead-banner  */
+#masthead .banner {  /* maybe #masthead > .banner? */
+    max-width: 904px;
+    display: grid;
+    grid-gap: 1em;
+    grid-template-columns: 50px 1fr;
+    grid-template-areas:
+        "ptx-logobox ptx-title-byline-box";
+    background-color: #fff; /* #fafafa;  */
+    padding: 0px 20px 0px 20px;
+    justify-self: stretch;
+   
+}
+
+
+/* Adjust font sizes in masthead dynamically */
+/* Phones */
+.title-container  .title {
+    font-size: min(6vw,1.4em);
+    font-weight: 600;
+    color: var(--bodytitle);
+}
+
+.title-container  .subtitle {
+    font-weight: normal;
+    color: var(--bodysubtitle);
+    font-size: 1.0em; 
+    font-size: min(5vw,1.0em);
+}
+
+.title-container  .byline {
+    font-weight: 400;
+    color: #333;
+    font-size: .8em;
+    font-size: min(3.5vw,.8em);
+}
+
+
+/* Larger than mobile */
+@media (min-width: 400px) {
+
+    .title-container  .title {
+	font-size: 1.4em;
+	font-size: min(6vw,1.4em);
+	font-weight: 600;
+	color: var(--bodytitle);
+    }
+
+    .title-container  .subtitle {
+	font-weight: normal;
+	color: var(--bodysubtitle);
+	font-size: 1.4em; 
+	font-size: min(6vw,1.4em);
+    }
+
+    .title-container  .byline {
+	font-weight: 400;
+	color: #333;
+	font-size: 1.0em;
+	font-size: min(3.5vw,1.0em);
+    }
+
+}
+
+/* Larger than phablet (also point when grid becomes active) */
+@media (min-width: 550px) {
+
+.title-container  .title {
+    font-size: 2.0em;
+    font-size: min(6vw,2.0em);
+    font-weight: 600;
+    color: var(--bodytitle);
+}
+
+.title-container  .subtitle {
+    font-weight: normal;
+    color: var(--bodysubtitle);
+    font-size: 1.6em; 
+    font-size: min(5vw,1.6em);
+
+}
+
+.title-container  .byline {
+    font-weight: 400;
+    color: #333;
+    font-size: 1.3em;
+    font-size: min(3.0vw,1.3em);
+//    font-size: 3.5vw;
+}
+
+}
+
+/* Larger than tablet */
+@media (min-width: 750px) {
+
+    .title-container  .title {
+	font-size: 1.9em;
+	font-size: min(3.75vw,1.9em);
+	font-weight: 600;
+	color: var(--bodytitle);
+    }
+
+    .title-container  .subtitle {
+	font-weight: normal;
+	color: var(--bodysubtitle);
+	font-size: 1.95em; 
+	font-size: min(3.75vw,1.95em);
+    }
+
+    .title-container  .byline {
+	font-weight: 400;
+	color: #333;
+	font-size: 1.2em;
+	font-size: min(2.5vw,1.2em);
+    }
+
+}
+
+/* Larger than desktop */
+@media (min-width: 1000px) {
+    .title-container  .title {
+	font-size: 2.0em;
+	font-size: min(3vw,2.0em);
+	font-weight: 600;
+	color: var(--bodytitle);
+    }
+
+    .title-container  .subtitle {
+	font-weight: normal;
+	color: var(--bodysubtitle);
+	font-size: 2.0em; 
+	font-size: min(3vw,2.0em);
+    }
+
+    .title-container  .byline {
+	font-weight: 400;
+	color: #333;
+	font-size: 1.3em;
+	font-size: min(2vw,1.3em);
+    }
+}
+
+/* Larger than Desktop HD */
+@media (min-width: 1200px) {
+    .title-container  .title {
+	font-size: 2.1em;
+	font-size: min(3vw,2.1em);
+	font-weight: 600;
+	color: var(--bodytitle);
+    }
+
+    .title-container  .subtitle {
+	font-weight: normal;
+	color: var(--bodysubtitle);
+	font-size: 2.0em; 
+	font-size: min(2.5vw,2.0em);
+    }
+
+    .title-container  .byline {
+	font-weight: 400;
+	color: #333;
+	font-size: 1.4em;
+	font-size: min(1.7vw,1.4em);
+    }
+}
+
+/* .ptx-logobox  */
+#logo-link {
+    grid-area: ptx-logobox;
+    color: #000;
+    padding: 15px 0px 0px 0px;
+    justify-self: stretch;
+}
+
+/* Fix the width of logo to always be 50px */
+/* .ptx-logobox img  */
+#logo-link img {
+    width: 50px;
+}
+
+/* .ptx-title-byline-box  */
+.title-container {
+    grid-area: ptx-title-byline-box;
+    color: #000;
+    padding: 0px 0px 0px 0px;
+    justify-self: stretch;
+//    justify-items: start;
+}
+
+/* Hoverable menus https://codepen.io/shshaw/pen/gsFch */
+
+/* there is no sub-menu, but leaving in case it is useful later -- David F */
+.sub-menu-parent {
+    position: relative;
+}
+
+.extras-sub-menu { 
+  visibility: hidden; /* hides sub-menu */
+  opacity: 0;
+  position: absolute;
+  top: 100%;
+  margin: 0;
+  width: 100%;
+  z-index: -1;
+//  transition: all 0.3s ease-in-out 0s, visibility 0s linear 0.3s, z-index 0s linear 0.01s;
+}
+
+.sub-menu-parent:focus .extras-sub-menu,
+.sub-menu-parent:focus-within .extras-sub-menu,
+.sub-menu-parent:hover .extras-sub-menu {
+  visibility: visible; /* shows sub-menu */
+  opacity: 1;
+  z-index: 1;
+  border: 2px solid var(--bluegreen);
+  border-radius: 5px;
+  min-width: 90px;
+}
+
+.extras-sub-menu a {
+    color: var(--bluegreen);
+    background: #fafafa;
+    display: block;
+    padding: .25em .5em .25em .5em;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .9em;
+    margin: 0px;
+    text-align: left;
+}
+
+.extras-sub-menu a:hover {
+    color: white;
+    background: var(--bluegreen);
+}
+
+.extras-sub-menu ul {
+ list-style-type: none;
+}
+
+.extras-sub-menu ul,
+.extras-sub-menu ul li {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid var(--bluegreen);
+}
+

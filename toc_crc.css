@@ -1,0 +1,188 @@
+
+/* the top half of this file may be from a previous style */
+
+#toc {
+  /* IMPORTANT height must be calculated by javascript. */
+    width: 240px;
+    margin: 0;
+    font-size: 14.72px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Aligns toc to the top and side of the allotted space, respectively */
+#toc ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+/* do we need a class, or is the location in the tree good enough? */
+.page #sidebar #toc ul a,
+.page #sidebar #toc ul .part a,
+.page #sidebar #toc ul .frontmatter a:first-child {
+    background: #ddd;
+    font-weight: 700;
+    font-size: .9em;
+}
+.page #sidebar #toc ul ul a {
+    background: #fff;
+    font-weight: 400;
+}
+
+/* no codenumbers on subsections */
+#toc ul ul a > .codenumber {
+    display: none;
+}
+#toc ul ul a > .title {
+    margin-left: 0;
+}
+#toc ul ul a > .title:empty::after {
+    content: "empty heading!";
+    font-weight: bold;
+}
+#toc ul ul ul a > .title {
+    margin-left: 1em;
+    font-size: 90%;
+}
+#toc ul ul ul ul a > .title {
+    margin-left: 2em;
+    font-size: 90%;
+    font-style: italic;
+}
+
+/* more specific than something in toc_default */
+#toc ul ul ul li:last-child {
+    margin-bottom: 0;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Sets spacing between section headings*/
+#toc > ul > li:not(:first-child) {
+    margin-top: 0.3em;
+}
+/* But not at the start of a part */
+/* I cannot see that this actually does anything --DF */
+#toc > ul > li.part + li,
+#toc > ul > li.frontmatter + li,
+#toc > ul > li.backmatter + li {
+    margin-top: 0;
+}
+#toc ul li a {
+    text-decoration: none;
+}
+
+#toc > ul > li a {
+    font-weight: bold;
+    font-family: "PT Serif", "Times New Roman", Times, serif;
+    padding-left: 0.2em;
+}
+
+/* Ensures that there is no double border between subsections */
+#toc ul li ul a {
+    border-top: none;
+}
+
+/* Allows both "top" and bottom border of a subsection to be highlighted on hover */
+#toc ul li ul a:hover {
+    border-top: 1px solid #3c110a;
+   // why that dark redish color?
+    padding-top: -1px;
+   // was margin-top: -1px; but that caused a little jiggling
+}
+
+/* Removes the excess space between the last subsection and the next section (caused by
+the margin on top of sections being used to space out adjacent sections) */
+#toc ul li ul li:last-child {
+    margin-bottom: -0.3em;
+}
+
+/* Removes double border between last subsection and next section */
+#toc ul li ul li:last-child a {
+    border-bottom: none;
+}
+
+#toc ul li a:active {
+  box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
+}
+
+/* above code may be old.  new code below */
+
+/* Links inside the dropdown */
+#sidebar #toc a {
+    color: var(--bluegreen);
+    background: #fafafa;
+    padding: .25em .5em .25em .5em;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: .9em;
+    margin: 0px;
+    border-bottom: 1px solid var(--bluegreen);
+}
+
+/* Change color of dropdown links on hover */
+#sidebar #toc ul a:hover, #sidebar #toc ul a:focus,
+#sidebar #toc ul ul a:hover, #sidebar #toc ul ul a:focus {
+    background: var(--bluegreen);
+    color: #fff;
+}
+
+#sidebar #toc ul,
+#sidebar #toc ul li {
+    list-style-type: none;
+    margin: 0px;
+    width: 255px;  /* This one is key to making items menu uniform width */
+    padding-inline-start: 0px;
+}
+
+/* The anchor carries the grid content  */
+/* undo what is in toc_default.css */
+.page #sidebar ul li a {
+    display: grid;
+    width: 240px;
+    grid-gap: 3px;
+    grid-template-columns: 1fr 10fr;
+    grid-template-areas:
+        "toc-codenumber toc-content";
+}
+#toc {
+  position: sticky;
+  top: 0;
+  width: unset;
+  height: 100vh;
+}
+
+
+/**** Use serif font for Roman numerals ****/
+/* .ptx-TOC-codenumber  */
+#toc a > .codenumber {
+    font-family:  "PT Serif", "Times New Roman", Times, serif;
+    grid-area: toc-codenumber;
+}
+
+/* .ptx-TOC-contents */
+#toc a > .title {
+    grid-area: toc-content;
+}
+
+
+/* Adapted David Farmer hacks */
+
+#sidebar  .link.backmatter ~ .link a {
+    background-color: #fafafa;
+    border-top: none;
+    text-transform: none;
+    font-weight: 600;
+}
+
+#sidebar .link.backmatter ~ .link a:hover {
+    background-color: var(--bluegreen);
+    color: #fff;
+}
+
+#sidebar ul li  ul li a.active{
+    color: #ffffff;
+    background-color: var(--highlighttoc);
+}
+
+
+
