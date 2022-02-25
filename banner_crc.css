@@ -1,4 +1,12 @@
 
+/* 
+:root{
+  --bluegreen: hsl(192, 98%, 23%);
+  --bodytitle: var(--bluegreen);
+  --bodysubtitle: var(--bluegreen);
+}
+*/
+
 #ptx-masthead .ptx-banner {
     border-top: 1px solid transparent;
     border-bottom: none;
@@ -73,14 +81,16 @@ color: var(--bluegreen)
     margin-top: 0.625em;
   }
 }
+
 #ptx-masthead .title-container > .heading {
-  font-family: "PT Serif", "Times New Roman", Times, serif;
-  font-weight: 700;
+//  font-family: "PT Serif", "Times New Roman", Times, serif;
+//  font-weight: 700;
   margin: 0;
   font-size: 2em;
   line-height: 1.25em;
-  color: #932919;
+//  color: #932919;
 }
+
 #ptx-masthead .title-container > .heading.hide-type .type {
   display: none;
 }
@@ -98,14 +108,20 @@ color: var(--bluegreen)
     margin-bottom: 0.41667em;
   }
 }
+
+/*
 #ptx-masthead .title-container > .heading a {
-  color: #932919;
-  background: none;
-  text-decoration: none;
+    color: #932919;
+    background: none;
+    text-decoration: none;
 }
+*/
+
+/*
 #ptx-masthead .title-container > .heading a:active {
-  color: #3572a0;
+    color: #3572a0;
 }
+*/
 #ptx-masthead .title-container > .heading .subtitle {
   font-weight: normal;
 }
@@ -277,11 +293,13 @@ color: var(--bluegreen)
 	font-size: min(3vw,2.0em);
 	font-weight: 600;
 	color: var(--bodytitle);
+//	color: green;
     }
 
     .title-container  .subtitle {
 	font-weight: normal;
 	color: var(--bodysubtitle);
+//	color: green;
 	font-size: 2.0em; 
 	font-size: min(3vw,2.0em);
     }

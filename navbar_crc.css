@@ -177,7 +177,7 @@
   text-align: center;
 }
 #ptx-navbar .up-button:before {
-  content: "^";
+  content: "^\00a0";
   text-align: center;
   font-size: 1.5em;
   font-family: "Open Sans";

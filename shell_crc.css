@@ -49,14 +49,14 @@ body.pretext {
     border-bottom: none;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    overflow: hidden;  // otherwise the rounded corners are not visible
+/*     overflow: hidden;*/  /* otherwise the rounded corners are not visible */
     z-index: 100;
 }
 #ptx-masthead {
   position: relative;
   background: #fafafa;
   min-height: inherit;
-  border: none;
+//  border: none;
   box-shadow: none;
 }
 #ptx-masthead {
