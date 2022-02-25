@@ -1,0 +1,56 @@
+/* Some basic of the sidebar for my sanity. This should be replaced
+as part of a larger project... */
+:root {
+    --header-background-color: #fafafa;
+}
+
+#ptx-masthead {
+    display: flex;
+    align-items: center;
+    background-color: var(--header-background-color);
+}
+
+.ptx-banner {
+    display: flex;
+    font-family: "PT Serif", "Times New Roman", Times, serif;
+}
+
+#logo-link {
+    margin: 5px 5px;
+}
+
+#logo-link img {
+    max-height: 50px;
+}
+
+.ptx-banner h1 {
+    font-weight: 700;
+    margin: 0;
+    font-size: 2em;
+    line-height: 1.25em;
+}
+.ptx-banner .subtitle {
+    font-weight: normal;
+}
+.ptx-banner .byline {
+    margin: 0;
+    font-size: 1.3125em;
+}
+
+/* RESPONSIVE styles */
+@media (max-width: 800px) {
+    .ptx-banner .subtitle {
+        display: block;
+        line-height: 1em;
+        margin-bottom: 5px;
+    }
+}
+@media (max-width: 480px) {
+    #ptx-masthead {
+        justify-content: center;
+    }
+    .ptx-banner  {
+        flex-direction: column;
+        text-align: center;
+    }
+}

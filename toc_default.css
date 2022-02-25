@@ -1,5 +1,5 @@
 
-#toc {
+#ptx-toc {
   /* IMPORTANT height must be calculated by javascript. */
     width: 240px;
     margin: 0;
@@ -9,20 +9,14 @@
 }
 
 /* Aligns toc to the top and side of the allotted space, respectively */
-#toc ul {
+#ptx-toc ul {
     margin: 0px;
     padding: 0px;
 }
 
-/* Places section titles */
-#toc .title {
-    margin-left: 1.4em;
-    display: inline-block;
-}
-
 
 /* Places codenumbers */
-#toc .codenumber {
+#ptx-toc .codenumber {
     position: absolute;
     margin-right: 0;
     margin-left: 0em;
@@ -32,72 +26,112 @@
     left: 0.3em;
     display: inline-block;
 }
+/* no codenumbers on subsections */
+#ptx-toc ul ul a > .codenumber {
+    display: none;
+}
+#ptx-toc ul .title {
+    margin-left: 1.4em;
+    display: inline-block;
+}
+#ptx-toc ul ul .title {
+    margin-left: 1.5em;
+}
+#ptx-toc ul ul .title:empty::after {
+    content: "empty heading!";
+    font-weight: bold;
+}
+#ptx-toc ul ul ul .title {
+    margin-left: 2.5em;
+    font-size: 90%;
+}
+#ptx-toc ul ul ul ul .title {
+    margin-left: 3.2em;
+    font-size: 90%;
+    font-style: italic;
+}
 
-#toc .part > a .codenumber {
+/* more specific than something in toc_default (obsolete comment?) */
+#ptx-toc ul li ul li ul li:last-child {
+    margin-bottom: 0;
+    border-bottom: 1px solid #ddd;
+}
+
+#ptx-toc .part > a .codenumber {
     position: relative;
     display: block;
     float: left;
     margin-right: 0.7em;
 }
-#toc .part > a .title {
+#ptx-toc .part > a .title {
     display: block;
     margin-left: 1em;
 }
 
-#toc ul li a {
+#ptx-toc ul li a {
     position: relative;
     display: block;
     padding: 2.86957px;
-    padding-left: 1.6em;
+    padding: 0.2em;
+//    padding-left: 0.5em;
     border-top: 1px solid #d1d1d1;
     border-bottom: 1px solid #d1d1d1;
+    font-family: "PT Serif", "Times New Roman", Times, serif;
+    font-weight: bold;
+}
+#ptx-toc ul ul li a {
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: normal;
+//    padding-left: 2.0em;
 }
 
 /* Sets spacing between section headings*/
-#toc > ul > li:not(:first-child) {
+#ptx-toc > ul > li:not(:first-child) {
     margin-top: 0.3em;
 }
 /* But not at the start of a part */
 /* I cannot see that this actually does anything --DF */
-#toc > ul > li.part + li,
-#toc > ul > li.frontmatter + li,
-#toc > ul > li.backmatter + li {
+#ptx-toc > ul > li.part + li,
+#ptx-toc > ul > li.frontmatter + li,
+#ptx-toc > ul > li.backmatter + li {
     margin-top: 0;
 }
 /* Removes underlines from links in toc */
-#toc ul li a, #toc ul li a:link, #toc ul li a:visited, #toc ul li a:hover, #toc ul li a:focus, #toc ul li a:active {
+#ptx-toc ul li a, #ptx-toc ul li a:link, #ptx-toc ul li a:visited, #ptx-toc ul li a:hover, #ptx-toc ul li a:focus, #ptx-toc ul li a:active {
     text-decoration: none;
 }
 
-#toc > ul > li > a, #toc > ul > li > a:link, #toc > ul > li > a:visited {
+/*
+#ptx-toc > ul > li a, #ptx-toc > ul > li a:link, #ptx-toc > ul > li a:visited {
     font-weight: bold;
     font-family: "PT Serif", "Times New Roman", Times, serif;
     padding-left: 0.2em;
 }
+*/
 
 /* Ensures that there is no double border between subsections */
-#toc ul li ul a {
+#ptx-toc ul li ul a {
     border-top: none;
 }
 
 /* Allows both "top" and bottom border of a subsection to be highlighted on hover */
-#toc ul li ul a:hover {
+#ptx-toc ul li ul a:hover {
     border-top: 1px solid #3c110a;
     margin-top: -1px;
 }
 
 /* Removes the excess space between the last subsection and the next section (caused by
 the margin on top of sections being used to space out adjacent sections) */
-#toc ul li ul li:last-child {
+#ptx-toc ul li ul li:last-child {
     margin-bottom: -0.3em;
 }
 
 /* Removes double border between last subsection and next section */
-#toc ul li ul li:last-child a {
+#ptx-toc ul li ul li:last-child a {
     border-bottom: none;
 }
 
-#toc ul li a:active {
+#ptx-toc ul li a:active {
   box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
 }
 

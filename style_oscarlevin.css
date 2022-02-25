@@ -52,126 +52,126 @@
 */
 
 /* definitions, theorems, assemblages, with theorem-like.theorem distinguished */
-.pretext-content .assemblage-like,
-.pretext-content .definition-like,
-.pretext-content .theorem-like.theorem {
+.ptx-content .assemblage-like,
+.ptx-content .definition-like,
+.ptx-content .theorem-like.theorem {
     margin-top: 1.75em;
     padding: 1em;
     border-radius: 2px;
     margin-bottom: 1em;
 }
 
-.pretext-content .theorem-like {
+.ptx-content .theorem-like {
   margin-top: 1.25em;
   padding: 1em;
   border-radius: 2px;
   margin-bottom: 1em;
 }
 
-.pretext-content .assemblage-like{
+.ptx-content .assemblage-like{
     background-color: var(--assembbody);
     border: 2px solid var(--assembborder);
 }
 
-.pretext-content .definition-like {
+.ptx-content .definition-like {
   background-color: var(--definitionbody);
   border: 2px solid var(--definitionborder);
 }
 
-.pretext-content .theorem-like.theorem,
-.pretext-content .theorem-like {
+.ptx-content .theorem-like.theorem,
+.ptx-content .theorem-like {
   background-color: var(--theorembody);
   border: 2px solid var(--theoremborder);
 }
 
-.pretext-content .assemblage-like .heading,
-.pretext-content .definition-like .heading,
-.pretext-content .theorem-like.theorem .heading {
+.ptx-content .assemblage-like .heading,
+.ptx-content .definition-like .heading,
+.ptx-content .theorem-like.theorem .heading {
   margin-top: -1.75em;
   margin-left: -0.25em;
   display: table;
   padding: 0.25em 0.4em;
 }
 
-.pretext-content .assemblage-like .heading {
+.ptx-content .assemblage-like .heading {
   background-color: var(--assembhead);
   color: #000;
 }
 
-.pretext-content .definition-like .heading {
+.ptx-content .definition-like .heading {
   background-color: var(--definitionborder);
   color: #000;
 }
 
-.pretext-content .theorem-like.theorem .heading {
+.ptx-content .theorem-like.theorem .heading {
   background-color: var(--theoremborder);
   color: #000;
 }
 
 
-.pretext-content .assemblage-like .heading + p,
-.pretext-content .theorem-like.theorem .heading + p,
-.pretext-content .definition-like .heading + p {
+.ptx-content .assemblage-like .heading + p,
+.ptx-content .theorem-like.theorem .heading + p,
+.ptx-content .definition-like .heading + p {
   display: block;
   margin-top: .5em;
 }
 
 /* Examples and example-like; computation-like styled same as example-like with different colors */
-.pretext-content .example-like,
-.pretext-content .computation-like {
+.ptx-content .example-like,
+.ptx-content .computation-like {
   padding-left: 0.8em;
   padding-bottom: 0.5em;
 }
 
-.pretext-content .example-like.example {
+.ptx-content .example-like.example {
   border-left: 0.1em solid var(--examplehead);
   border-bottom: 0.1em solid var(--examplehead);
 }
 
-.pretext-content .example-like {
+.ptx-content .example-like {
   border-left: 0.1em solid var(--examplelikeborder);
   border-bottom: 0.1em solid var(--examplelikeborder);
 }
 
-.pretext-content .computation-like {
+.ptx-content .computation-like {
   border-left: 0.1em solid var(--computationborder);
   border-bottom: 0.1em solid var(--computationborder);
 }
 
-.pretext-content .example-like > .heading,
-.pretext-content .computation-like > .heading {
+.ptx-content .example-like > .heading,
+.ptx-content .computation-like > .heading {
   display: inline-block;
   padding: 0.3em 0.5em;
   margin-left: -0.8em;
 }
 
 
-.pretext-content .example-like.example > .heading {
+.ptx-content .example-like.example > .heading {
   border: 0.1em solid var(--examplehead);   /* maybe no border-left? */
   background: var(--examplehead);
   color: white;
 }
 
-.pretext-content .example-like > .heading {
+.ptx-content .example-like > .heading {
   background: var(--examplelikeborder);
   color: black;
 }
 
-.pretext-content .computation-like > .heading {
+.ptx-content .computation-like > .heading {
   background: var(--computationborder);
   color: black;
 }
 
-.pretext-content .example-like > .heading + p,
-.pretext-content .computation-like > .heading + p,
-.pretext-content .example-like > .heading + .introduction, 
-.pretext-content .computation-like > .heading + .introduction {
+.ptx-content .example-like > .heading + p,
+.ptx-content .computation-like > .heading + p,
+.ptx-content .example-like > .heading + .introduction, 
+.ptx-content .computation-like > .heading + .introduction {
   display: block;
   padding-top: 0.3em;
 }
 
 /* Project-like */
-.pretext-content .project-like {
+.ptx-content .project-like {
   background-color: white;
   border: solid 3px var(--projectborder);
   border-radius: 10px;
@@ -179,11 +179,11 @@
   margin-bottom: 1em;
 }
 
-.pretext-content .project-like.investigation {
+.ptx-content .project-like.investigation {
   border-color: var(--investigateborder);
 }
 
-.pretext-content .project-like > .heading {
+.ptx-content .project-like > .heading {
   margin-top: -1.5em;
   background-color: white;
   display: table !important;
@@ -196,22 +196,22 @@
 
 /* Goal-like */
 
-.pretext-content .goal-like {
+.ptx-content .goal-like {
   background-color: white;
   border-radius: 0em;
   padding: 0.7em;
   margin-bottom: 1em;
 }
-.pretext-content .goal-like.objectives {
+.ptx-content .goal-like.objectives {
   border-top: solid 3px var(--goalborder);
   border-bottom: solid 3px var(--goalborder);
 }
-.pretext-content .goal-like.outcomes {
+.ptx-content .goal-like.outcomes {
   border-top: solid 3px var(--goalborder);
   border-bottom: solid 3px var(--goalborder);
 }
 
-.pretext-content .goal-like .heading {
+.ptx-content .goal-like .heading {
   margin-top: -1.5em;
   background-color: white;
   display: table;
@@ -223,7 +223,7 @@
 
 /* remark-like */
 
-.pretext-content .remark-like {
+.ptx-content .remark-like {
   margin-top: 1.25em;
   padding: 1em;
   margin-bottom: 1em;
@@ -235,28 +235,28 @@
 
 /* proofs */
 
-.pretext-content section > .proof {
+.ptx-content section > .proof {
   margin-bottom: 1em;
 }
 
 
 /* Common fixes? */
-.pretext-content .assemblage-like .heading::after,
-.pretext-content .theorem-like.theorem .heading::after,
-.pretext-content .theorem-like .heading::after,
-.pretext-content .example-like > .heading::after,
-.pretext-content .project-like > .heading::after {
+.ptx-content .assemblage-like .heading::after,
+.ptx-content .theorem-like.theorem .heading::after,
+.ptx-content .theorem-like .heading::after,
+.ptx-content .example-like > .heading::after,
+.ptx-content .project-like > .heading::after {
   content: "";
 }
 
 /* Fixes for mathjax: */
 /* These gradients need to be adjusted to match background colors */
-.pretext-content .assemblage-like .MJXc-display,
-.pretext-content .definition-like .MJXc-display,
-.pretext-content .theorem-like.theorem .MJXc-display {
+.ptx-content .assemblage-like .MJXc-display,
+.ptx-content .definition-like .MJXc-display,
+.ptx-content .theorem-like.theorem .MJXc-display {
     background-image: linear-gradient(to right, #e9eff5, #e9eff5), linear-gradient(to right, #e9eff5, #e9eff5), linear-gradient(to right, rgba(0,0,0,.25), rgba(242,242,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(242,242,254,0));
 }
-.pretext-content .theorem-like.corollary .MJXc-display {
+.ptx-content .theorem-like.corollary .MJXc-display {
     background-image: linear-gradient(to right, var(--bodytitlehighlight), var(--bodytitlehighlight)), linear-gradient(to right, var(--bodytitlehighlight), var(--bodytitlehighlight)), linear-gradient(to right, rgba(0,0,0,.25), rgba(242,242,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(242,242,254,0));
 }
 
@@ -271,7 +271,7 @@ END OF STYLE_OSCARLEVIN
 /* next selector first part of the following is due to the mistake of
    putting paragraph spacing in the margin-bottom 
    Redo when we fix that error */
-.pretext-content .aside-like {
+.ptx-content .aside-like {
  /*   margin-top: -1.25em;
 */
     position: absolute;
@@ -285,22 +285,22 @@ END OF STYLE_OSCARLEVIN
     padding: 4px 10px 0 10px;
     color: #888;
 }
-.pretext-content .example-like .aside-like {
+.ptx-content .example-like .aside-like {
     margin-top: 0;
     position: absolute;
 }
-.pretext-content .aside-like {
+.ptx-content .aside-like {
     font-size: 90%;
 }
-.pretext-content .aside-like {
+.ptx-content .aside-like {
   margin-bottom: 5px;
   background-color: #f5faff;
   box-shadow: 0 0 1.0em 0.2em #fff inset;
 }
-.pretext-content .aside-like:first-child {
+.ptx-content .aside-like:first-child {
     margin-top: -2.25em;
 }
-.pretext-content .aside-like:after {
+.ptx-content .aside-like:after {
   content  : "";
   position : absolute;
   z-index  : 1;
@@ -316,11 +316,11 @@ END OF STYLE_OSCARLEVIN
 }
 /* example of where the following is needed? */
 /*
-.pretext-content .aside-like * {
+.ptx-content .aside-like * {
     background-color: #f5faff !important;
 }
 */
-.pretext-content .aside-like.front, .pretext-content .example-like .aside-like.front {
+.ptx-content .aside-like.front, .ptx-content .example-like .aside-like.front {
   position: relative;
   z-index: 0;
   padding: 8px 15px 10px 15px;
@@ -333,34 +333,34 @@ END OF STYLE_OSCARLEVIN
   font-size: 100%;
   box-shadow: none;
 }
-.pretext-content .aside-like.front:after, .pretext-content .example-like .aside-like.front:after {
+.ptx-content .aside-like.front:after, .ptx-content .example-like .aside-like.front:after {
     background-image: none;
 }
-.pretext-content .example-like .aside-like.front {
+.ptx-content .example-like .aside-like.front {
     margin-top: 1.25em;
 }
 
-.pretext-content .aside-like.front + p{
+.ptx-content .aside-like.front + p{
     margin-top: 1.25em !important;
     padding-top: 0;
 }
 
 
 
-.pretext-content .aside-like .aside-like {
+.ptx-content .aside-like .aside-like {
   background-color: #fafff5;
   border: 1px dotted #aaa;
 }
 
-.pretext-content article.aside-like > p:first-child {
+.ptx-content article.aside-like > p:first-child {
     margin-top: 0;
 }
 
-.pretext-content .aside-like > .heading {
+.ptx-content .aside-like > .heading {
     font-size: 95%;
 }
 
-.pretext-content .aside-like + *{
+.ptx-content .aside-like + *{
     margin-top: 3em !important;
     margin-right: 3em;
 }
@@ -368,14 +368,14 @@ END OF STYLE_OSCARLEVIN
 /* on sufficiently large screens, there is enough of a margin to see part of the aside */
 
 @media screen and (min-width: 943px) {
-  .pretext-content .aside-like + * {
+  .ptx-content .aside-like + * {
       margin-right: 0;
   }
 }
 
 /* on a wide screen, asides should appear in the right margin */
 @media screen and (min-width: 1100px) {
-  .pretext-content .aside-like, .pretext-content .aside-like.front, .pretext-content .example-like .aside-like, .pretext-content .example-like .aside-like.front {
+  .ptx-content .aside-like, .ptx-content .aside-like.front, .ptx-content .example-like .aside-like, .ptx-content .example-like .aside-like.front {
       position: absolute;
       margin-top: -2em;
       margin-left: 660px;
@@ -383,65 +383,65 @@ END OF STYLE_OSCARLEVIN
       width: 200px;
       color: inherit;
   }
-  .pretext-content .aside-like.front, .pretext-content .example-like .aside-like.front {
+  .ptx-content .aside-like.front, .ptx-content .example-like .aside-like.front {
       max-height: none;
       max-width: 223px;
       border: 2px solid #dcebfa;
 }
-  .pretext-content .example-like .aside-like, .pretext-content .example-like .aside-like.front {
+  .ptx-content .example-like .aside-like, .ptx-content .example-like .aside-like.front {
       margin-left: 654px;  /* because .example-like has 6px of padding */
   }
 
-  .pretext-content .aside-like + * {
+  .ptx-content .aside-like + * {
       margin-top: 1.25em !important;
   /*    background: none;  */
       margin-right: 0;
   }
 
-  .pretext-content .aside-like.front:after, .pretext-content .example-like .aside-like.front:after {
+  .ptx-content .aside-like.front:after, .ptx-content .example-like .aside-like.front:after {
     background-image: none;
   }
 
-  .pretext-content .aside-like:nth-of-type(3n+1) {
+  .ptx-content .aside-like:nth-of-type(3n+1) {
     margin-left: 660px;
 }
-  .pretext-content .aside-like:nth-of-type(3n) {
+  .ptx-content .aside-like:nth-of-type(3n) {
     margin-left: 680px;
 }
-  .pretext-content .aside-like:nth-of-type(3n+2) {
+  .ptx-content .aside-like:nth-of-type(3n+2) {
     margin-left: 640px;
 }
 }
 
-.pretext-content .aside-like:hover:after, .pretext-content .aside-like:focus:after {
+.ptx-content .aside-like:hover:after, .ptx-content .aside-like:focus:after {
     top: 3em;
     height: auto;
     background-image : none;
 }
 
-.pretext-content .aside-like:hover, .pretext-content .aside-like:focus {
+.ptx-content .aside-like:hover, .ptx-content .aside-like:focus {
     color: inherit;
     padding: 2px 8px 0 8px;
     border: 2px solid #dcebfa;
     height: auto;
     max-height: none;
 }
-.pretext-content .aside-like.front:hover, .pretext-content .aside-like.front:focus {
+.ptx-content .aside-like.front:hover, .ptx-content .aside-like.front:focus {
     padding: 4px 10px;
 }
 
 /* find a better way to handle asides in content that has a wide left margin */
 /* see http://pretext.jahrme.com/aside-in-knowl/section-1.html */
-.pretext-content section dl dd .aside-like {
+.ptx-content section dl dd .aside-like {
     margin-top: 0 !important;
     margin-left: 100px !important;
 }
-.pretext-content section dl dd .aside-like.front {
+.ptx-content section dl dd .aside-like.front {
     margin-left: -300px !important;
 }
 
 @media screen and (max-width: 1099px) {
-  .pretext-content aside.aside-like {
+  .ptx-content .aside-like {
     position: relative;
     float: right;
     z-index: 0;
@@ -452,7 +452,7 @@ END OF STYLE_OSCARLEVIN
     max-height: 4em;
     margin-right: -8em;
 }
-  .pretext-content li > aside.aside-like:last-child {
+  .ptx-content li > .aside-like:last-child {
     position: absolute;
 }
 }

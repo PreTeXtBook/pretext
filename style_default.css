@@ -1,12 +1,130 @@
 
+.ptx-content section .heading,
+.ptx-content article .heading {
+    font-family: "PT Serif", "Times New Roman", Times, serif;
+    font-weight: 700;
+    color: inherit;
+}
+.ptx-content article .exercise-stage {
+    font-family: "PT Serif", "Times New Roman", Times, serif;
+    font-weight: 700;
+    color: inherit;
+    font-size: 100%;
+    margin-top: 0.4em;
+}
+
+.ptx-content article > .heading + .para {
+    margin-top: 0;
+}
+.ptx-content section .heading + .para,
+.ptx-content section .title + .para, /* list items have bare .title, not in a .heading */
+.ptx-content section .heading + .introduction > .para:first-child,
+.ptx-content section .blob > .para:first-child {
+    margin-top: 0.25em;
+}
+.ptx-content section .heading + article { /* , .ptx-content section header + article { */
+    margin-top: 1em;
+}
+.ptx-content section .heading + .sidebyside {
+    margin-top: 1em;
+}
+
+.ptx-content a > .heading { display: inline;}
+
+.ptx-content section > .heading {
+    font-size: 1.75em;
+    line-height: 1.25em;
+    margin-top: 1em;
+    margin-bottom: 0.35em;
+}
+.ptx-content section section > .heading {
+    font-size: 1.5em;
+    line-height: 1.25em;
+    margin-bottom: 0;
+}
+.ptx-content .paragraphs > .heading {
+    font-size: 1.125em;
+    line-height: 1.125em;
+}
+.ptx-content article .paragraphs > .heading {
+    font-size: 1.05em;
+}
+.ptx-content section section section > .heading {
+    font-size: 1.40em;
+    line-height: 1.15em;
+    margin-top: 0.75em;
+}
+@media screen and (max-width: 480px) {
+    .ptx-content section > .heading {
+        font-size: 1.5em;
+        line-height: 1.33em;
+        margin-top: 1em;
+    }
+    .ptx-content section section > .heading {
+        font-size: 1.3em;
+        line-height: 1.15em;
+    }
+    .ptx-content section section section > .heading {
+        font-size: 1.15em;
+        line-height: 1em;
+    }
+}
+
+.ptx-content section article > .heading,
+.ptx-content section section article > .heading,
+.ptx-content section article > a .heading,
+.ptx-content section section article > a .heading,
+.ptx-content .abstract > .heading {
+    font-size: 1.125em;
+    line-height: 1.125em;
+    margin-top: 0;
+    display: inline;
+}
+.ptx-content section article > .heading::after,
+.ptx-content section section.paragraphs > .heading::after,
+.ptx-content section section article > .heading::after,
+.ptx-content section article > a > .heading::after,
+.ptx-content section section article > a > .heading::after,
+.ptx-content .abstract > .heading::after {
+    content: "\2009";
+}
+/* Currently only for Solution to example */
+.ptx-content .posterior .heading {
+    font-weight: normal;
+    font-size: 1.125em;
+    line-height: 1.125em;
+    margin-top: 0;
+}
+
+/*
+ * Contents of articles
+ */
+.ptx-content section article > .heading + .para,
+.ptx-content section article > .heading + .introduction,
+.ptx-content section article > .heading + .introduction > .para:first-child {
+    display: inline;
+}
+/* when a list is the only thing in an environment with a border,
+   there is too much space to the left */
+.ptx-content section article > .heading + ol,
+.ptx-content section article > .heading + ul {
+    padding-left: 1.5em;
+}
+.ptx-content section article.theorem-like .para,
+.ptx-content section article.theorem-like li {
+    font-style: italic;
+}
+.ptx-content section article.theorem-like .emphasis {
+    font-weight: 700;
+}
 /* The Greg's L for theorems, proofs, etc */
 
-.pretext-content .proof {
+.ptx-content .proof {
   border-right: 1px solid #666;
   padding-right: 0.625em;
   margin-right: -0.725em;
 }
-.pretext-content .proof:after {
+.ptx-content .proof:after {
   content: '';
   border-bottom: 1px solid #666;
   display: block;
@@ -17,45 +135,45 @@
   padding-bottom: 0.25em;
 }
 
-.pretext-content.epub .proof {
+.ptx-content.epub .proof {
   margin-right: 1px;
 }
 
-.pretext-content .proof .proof {
+.ptx-content .proof .proof {
   margin-right: -0.2em;
   border-right: 1.5px solid #ddd;
 }
-.pretext-content .proof .proof:after {
+.ptx-content .proof .proof:after {
   border-bottom: 1.5px solid #ddd;
   width: 1em;
 }
 
-.pretext-content article.theorem-like,
-.pretext-content article.definition-like,
-.pretext-content article.example-like,
-.pretext-content article.project-like,
-.pretext-content article.remark-like,
-.pretext-content article.computation-like {
+.ptx-content article.theorem-like,
+.ptx-content article.definition-like,
+.ptx-content article.example-like,
+.ptx-content article.project-like,
+.ptx-content article.remark-like,
+.ptx-content article.computation-like {
     padding-left: 0.4em;
     border-left: 1px solid #569;
 }
 
-.pretext-content.epub article.theorem-like,
-.pretext-content.epub article.definition-like,
-.pretext-content.epub article.example-like,
-.pretext-content.epub article.project-like,
-.pretext-content.epub article.remark-like,
-.pretext-content.epub article.computation-like {
+.ptx-content.epub article.theorem-like,
+.ptx-content.epub article.definition-like,
+.ptx-content.epub article.example-like,
+.ptx-content.epub article.project-like,
+.ptx-content.epub article.remark-like,
+.ptx-content.epub article.computation-like {
     margin-left: 1px;
 }
 
 
-.pretext-content article.theorem-like::after,
-.pretext-content article.definition-like::after,
-.pretext-content article.example-like::after,
-.pretext-content article.project-like::after,
-.pretext-content article.remark-like::after,
-.pretext-content article.computation-like::after {
+.ptx-content article.theorem-like::after,
+.ptx-content article.definition-like::after,
+.ptx-content article.example-like::after,
+.ptx-content article.project-like::after,
+.ptx-content article.remark-like::after,
+.ptx-content article.computation-like::after {
     content:'';
     border-bottom: 1px solid #569;
     display: block;
@@ -65,20 +183,20 @@
     width: 1.5em;
 }
 /* projects get a dotted L */
-.pretext-content article.project-like {
+.ptx-content article.project-like {
     border-left: 1px dotted #569;
 }
-.pretext-content article.project-like::after {
+.ptx-content article.project-like::after {
     border-bottom: 1px dotted #569;
 }
 
 /* commentary gets a thicker red L */
 
-.pretext-content article.commentary {
+.ptx-content article.commentary {
     padding-left: 0.6em;
     border-left: 3px solid #c33;
 }
-.pretext-content article.commentary::after {
+.ptx-content article.commentary::after {
     content:'';
     border-bottom: 3px solid #c33;
     display: block;
@@ -88,31 +206,31 @@
     width: 1.5em;
 }
 
-.pretext-content .assemblage-like {
+.ptx-content .assemblage-like {
     border: solid 2px #1100AA;
     border-radius: 12px;
     padding: 10px;
     background-color: #f4f4fe;
 }
 
-.pretext-content .assemblage-like .heading {
+.ptx-content .assemblage-like .heading {
     margin-top: 0;
 }
 
-.pretext-content .assemblage-like + .sidebyside {
+.ptx-content .assemblage-like + .sidebyside {
     margin-top: 1.25em;
 }
-.pretext-content section article.assemblage-like .heading + p {
+.ptx-content section article.assemblage-like .heading + p {
     display: block;
 }
 
-.pretext-content .goal-like {
+.ptx-content .goal-like {
   border: solid 3px #999999;
   padding: 0.7em;
   margin-bottom: 1em;
 }
 
-.pretext-content .goal-like > .heading {
+.ptx-content .goal-like > .heading {
   margin-top: -1.5em;
   background-color: white;
   display: table;
@@ -122,21 +240,16 @@
   font-size: 120%;
 }
 
-.pretext-content .goal-like > .heading .codenumber {
+.ptx-content .goal-like > .heading .codenumber {
   display:none;
 }
 
-.pretext-content .goal-like > .heading::after {
+.ptx-content .goal-like > .heading::after {
   display:none;
 }
 
 
-/* next selector first part of the following is due to the mistake of
-   putting paragraph spacing in the margin-bottom 
-   Redo when we fix that error */
-.pretext-content .aside-like {
- /*   margin-top: -1.25em;
-*/
+.ptx-content .aside-like {
     position: absolute;
     margin-left: 45%;
     z-index: -10;
@@ -148,25 +261,25 @@
     padding: 4px 10px 0 10px;
     color: #888;
 }
-.pretext-content .example-like .aside-like {
+.ptx-content .example-like .aside-like {
     margin-top: 0;
     position: absolute;
 }
-.pretext-content .aside-like {
+.ptx-content .aside-like {
     font-size: 90%;
 }
-.pretext-content .aside-like {
+.ptx-content .aside-like {
   margin-bottom: 5px;
   background-color: #f5faff;
   box-shadow: 0 0 1.0em 0.2em #fff inset;
 }
-.pretext-content .aside-like p {
+.ptx-content .aside-like p {
     overflow-x: auto;
 }
-.pretext-content .aside-like:first-child {
+.ptx-content .aside-like:first-child {
     margin-top: -2.25em;
 }
-.pretext-content .aside-like:after {
+.ptx-content .aside-like:after {
   content  : "";
   position : absolute;
   z-index  : 1;
@@ -182,11 +295,11 @@
 }
 /* example of where the following is needed? */
 /*
-.pretext-content .aside-like * {
+.ptx-content .aside-like * {
     background-color: #f5faff !important;
 }
 */
-.pretext-content .aside-like.front, .pretext-content .example-like .aside-like.front {
+.ptx-content .aside-like.front, .ptx-content .example-like .aside-like.front {
   position: relative;
   z-index: 0;
   padding: 8px 15px 10px 15px;
@@ -199,34 +312,34 @@
   font-size: 100%;
   box-shadow: none;
 }
-.pretext-content .aside-like.front:after, .pretext-content .example-like .aside-like.front:after {
+.ptx-content .aside-like.front:after, .ptx-content .example-like .aside-like.front:after {
     background-image: none;
 }
-.pretext-content .example-like .aside-like.front {
+.ptx-content .example-like .aside-like.front {
     margin-top: 1.25em;
 }
 
-.pretext-content .aside-like.front + p{
+.ptx-content .aside-like.front + p{
     margin-top: 1.25em !important;
     padding-top: 0;
 }
 
 
 
-.pretext-content .aside-like .aside-like {
+.ptx-content .aside-like .aside-like {
   background-color: #fafff5;
   border: 1px dotted #aaa;
 }
 
-.pretext-content article.aside-like > p:first-child {
+.ptx-content article.aside-like > p:first-child {
     margin-top: 0;
 }
 
-.pretext-content .aside-like > .heading {
+.ptx-content .aside-like > .heading {
     font-size: 95%;
 }
 
-.pretext-content .aside-like + *{
+.ptx-content .aside-like + *{
     margin-top: 3em; /* !important; */
     margin-right: 3em;
 }
@@ -234,14 +347,14 @@
 /* on sufficiently large screens, there is enough of a margin to see part of the aside */
 
 @media screen and (min-width: 943px) {
-  .pretext-content .aside-like + * {
+  .ptx-content .aside-like + * {
       margin-right: 0;
   }
 }
 
 /* on a wide screen, asides should appear in the right margin */
 @media screen and (min-width: 1100px) {
-  .pretext-content .aside-like, .pretext-content .aside-like.front, .pretext-content .example-like .aside-like, .pretext-content .example-like .aside-like.front {
+  .ptx-content .aside-like, .ptx-content .aside-like.front, .ptx-content .example-like .aside-like, .ptx-content .example-like .aside-like.front {
       position: absolute;
       margin-top: -2em;
       margin-left: 660px;
@@ -249,16 +362,16 @@
       width: 200px;
       color: inherit;
   }
-  .pretext-content .aside-like.front, .pretext-content .example-like .aside-like.front {
+  .ptx-content .aside-like.front, .ptx-content .example-like .aside-like.front {
       max-height: none;
       max-width: 223px;
       border: 2px solid #dcebfa;
 }
-  .pretext-content .example-like .aside-like, .pretext-content .example-like .aside-like.front {
+  .ptx-content .example-like .aside-like, .ptx-content .example-like .aside-like.front {
       margin-left: 654px;  /* because .example-like has 6px of padding */
   }
 
-  .pretext-content .aside-like + * {
+  .ptx-content .aside-like + * {
       margin-top: 1.25em;
   /*    background: none;  */
       margin-right: 0;
@@ -266,54 +379,54 @@
   /* previous and next point to the need to rethink asides:  structurally they are
      in the midts of the other elements, so they affect neighbor selectors.
      but visually they often are off to the side */
-  .pretext-content .aside-like + .solutions {
+  .ptx-content .aside-like + .solutions {
       margin-top: 0;
   }
 
-  .pretext-content .aside-like.front:after, .pretext-content .example-like .aside-like.front:after {
+  .ptx-content .aside-like.front:after, .ptx-content .example-like .aside-like.front:after {
     background-image: none;
   }
 
-  .pretext-content .aside-like:nth-of-type(3n+1) {
+  .ptx-content .aside-like:nth-of-type(3n+1) {
     margin-left: 660px;
 }
-  .pretext-content .aside-like:nth-of-type(3n) {
+  .ptx-content .aside-like:nth-of-type(3n) {
     margin-left: 680px;
 }
-  .pretext-content .aside-like:nth-of-type(3n+2) {
+  .ptx-content .aside-like:nth-of-type(3n+2) {
     margin-left: 640px;
 }
 }
 
-.pretext-content .aside-like:hover:after, .pretext-content .aside-like:focus:after {
+.ptx-content .aside-like:hover:after, .ptx-content .aside-like:focus:after {
     top: 3em;
     height: auto;
     background-image : none;
 }
 
-.pretext-content .aside-like:hover, .pretext-content .aside-like:focus {
+.ptx-content .aside-like:hover, .ptx-content .aside-like:focus {
     color: inherit;
     padding: 2px 8px 0 8px;
     border: 2px solid #dcebfa;
     height: auto;
     max-height: none;
 }
-.pretext-content .aside-like.front:hover, .pretext-content .aside-like.front:focus {
+.ptx-content .aside-like.front:hover, .ptx-content .aside-like.front:focus {
     padding: 4px 10px;
 }
 
 /* find a better way to handle asides in content that has a wide left margin */
 /* see http://pretext.jahrme.com/aside-in-knowl/section-1.html */
-.pretext-content section dl dd .aside-like {
+.ptx-content section dl dd .aside-like {
     margin-top: 0 !important;
     margin-left: 100px !important;
 }
-.pretext-content section dl dd .aside-like.front {
+.ptx-content section dl dd .aside-like.front {
     margin-left: -300px !important;
 }
 
 @media screen and (max-width: 1099px) {
-  .pretext-content aside.aside-like {
+  .ptx-content .aside-like {
     position: relative;
     float: right;
     z-index: 0;
@@ -324,7 +437,7 @@
     max-height: 4em;
     margin-right: -8em;
 }
-  .pretext-content li > aside.aside-like:last-child {
+  .ptx-content li > .aside-like:last-child {
     position: absolute;
 }
 }

@@ -1,0 +1,90 @@
+:root {
+    --ptx-navbar-height: 35px;
+    --sidebar-width: 240px;
+}
+
+#ptx-navbar {
+    height: var(--ptx-navbar-height);
+    background-color: var(--header-background-color);
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    position: sticky;
+    top: 0px;
+    z-index: 100;
+}
+
+.ptx-page {
+    display: flex;
+}
+
+#ptx-sidebar {
+    align-self: flex-start;
+    height: calc(99vh - var(--ptx-navbar-height));
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: sticky;
+    top: var(--ptx-navbar-height);
+    width: var(--sidebar-width);
+    min-width: calc(0.8 * var(--sidebar-width));
+    border-right: 1px solid var(--tocborder);
+}
+
+.sidebar-hidden {
+    display: none;
+}
+
+main.ptx-main {
+    max-width: 600px;
+    margin: 0px 32px;
+    overflow-x: hidden;
+}
+
+/* RESPONSIVE styles */
+@media (max-width: 800px) {
+    #ptx-navbar {
+        position: fixed;
+        bottom: 0;
+        top: unset;
+        width: 100%;
+    }
+    #ptx-sidebar {
+        top: 0;
+    }
+    main.ptx-main {
+        margin: 0px 10px;
+    }
+}
+@media (max-width: 600px) {
+    .ptx-page {
+        flex-direction: column-reverse;
+    }
+    .window-footer {
+        margin-bottom: var(--ptx-navbar-height);
+    }
+    #ptx-sidebar {
+        position: relative;
+        align-self: stretch;
+        border: unset;
+        height: unset;
+        width: 100%;
+    }
+    /* On a small screen, the sidebar appears at the bottom,
+    and when it is "visible" it appears over the other content. */
+    #ptx-sidebar.sidebar-hidden {
+        display: block;
+    }
+    #ptx-sidebar:not(.sidebar-hidden) {
+        position: fixed;
+        top: 0;
+        height: calc(99vh - var(--ptx-navbar-height));
+        z-index: 100;
+        background-color: white;
+    }
+    #ptx-sidebar:not(.sidebar-hidden) ~ main.ptx-main {
+        display: none;
+    }
+    main.ptx-main {
+        margin: 0px 10px;
+    }
+}
