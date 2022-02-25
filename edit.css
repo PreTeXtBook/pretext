@@ -82,8 +82,8 @@ article.project-like > ol > #edit_menu_holder > #enter_choice {
     bottom: -1.3em;
 }
 */
-.pretext-content section article.project-like.may-enter > .heading,
-.pretext-content section article.project-like.may-leave > .heading {
+.ptx-content section article.project-like.may-enter > .heading,
+.ptx-content section article.project-like.may-leave > .heading {
     background-color: inherit;
 }
 
@@ -211,10 +211,10 @@ sbspanel:empty { /* can only happen when partially created */
     height: 10em;
     background-color: rgb(221, 221, 255);
 }
-.pretext-content .sbspanel:empty + .sbspanel:empty {
+.ptx-content .sbspanel:empty + .sbspanel:empty {
     background-color: #dfd;
 }
-.pretext-content .sbspanel:empty + .sbspanel:empty + .sbspanel:empty {
+.ptx-content .sbspanel:empty + .sbspanel:empty + .sbspanel:empty {
     background-color: #eee;
 }
 
@@ -340,10 +340,10 @@ sbspanel:empty { /* can only happen when partially created */
 #actively_editing dfn {
     background-color: #fee;
 }
-.pretext-content section.may_enter > .heading {
+.ptx-content section.may_enter > .heading {
     margin-top: 0;
 }
-.pretext-content #deleting {
+.ptx-content #deleting {
     transition: all 0.5s;
     background: #666;
     height: 5em;
@@ -353,7 +353,7 @@ sbspanel:empty { /* can only happen when partially created */
     box-shadow: -2px -1px 1px #770000;
 }
 
-.pretext-content #phantomobject.move {
+.ptx-content #phantomobject.move {
     margin-left: 5em;
     margin-right: 2em;
     padding: 1.5em;
@@ -366,128 +366,128 @@ sbspanel:empty { /* can only happen when partially created */
     font-style: italic;
     position: relative;
 }
-.pretext-content #phantomobject.move + .para {
+.ptx-content #phantomobject.move + .para {
     margin-top: 0;
 }
-.pretext-content #phantomobject.move .done {
+.ptx-content #phantomobject.move .done {
     margin-left: 1em;
     margin-top: 0em;
 }
-.pretext-content #phantomobject.move .movearrow  {
+.ptx-content #phantomobject.move .movearrow  {
     position: relative;
     z-index: 101;
     background: rgba(243, 225,256,1);
 }
-.pretext-content #phantomobject.move .movearrow .arrow {
+.ptx-content #phantomobject.move .movearrow .arrow {
     font-size: 200%;
     margin-right: 0.6em;
     margin-top: -0.5em;
 }
-.pretext-content #phantomobject.move .movearrow .para {
+.ptx-content #phantomobject.move .movearrow .para {
     margin-top: 0.4em;
 }
-.pretext-content #phantomobject.move .movearrow .para.up {
+.ptx-content #phantomobject.move .movearrow .para.up {
     margin-top: 0;
     margin-bottom: -1em;
 }
-.pretext-content #phantomobject.move .movearrow .para.down {
+.ptx-content #phantomobject.move .movearrow .para.down {
     margin-top: 0.0em;
 }
-.pretext-content #phantomobject.move .movearrow > * {
+.ptx-content #phantomobject.move .movearrow > * {
     display: inline-block;
 }
 
-.pretext-content .ref.tmp {
+.ptx-content .ref.tmp {
     background: #dfd;
 }
-.pretext-content .may_enter q {
+.ptx-content .may_enter q {
     background: #ddf;
 }
-.pretext-content .may_enter abbr {
+.ptx-content .may_enter abbr {
     background: #adf;
 }
 
 /* new editing css */
-.pretext-content .para.may_select {
+.ptx-content .para.may_select {
     display: block !important;
 }
-.pretext-content .may_select {
+.ptx-content .may_select {
     background: #fef;
     border: 2px solid #999;
 }
 
-.pretext-content .onepage.in_edit_tree,
-.pretext-content .in_edit_tree .onepage {
+.ptx-content .onepage.in_edit_tree,
+.ptx-content .in_edit_tree .onepage {
     border: 6px double #600 !important;
     padding: 0.5em;
 }
 
 
-.pretext-content .para.in_edit_tree,
-.pretext-content section.in_edit_tree,
-.pretext-content article.in_edit_tree {
+.ptx-content .para.in_edit_tree,
+.ptx-content section.in_edit_tree,
+.ptx-content article.in_edit_tree {
     border: 3px solid #666 !important;
     padding: 0.5em;
 }
-.pretext-content .in_edit_tree .para,
-.pretext-content .in_edit_tree .displaymath,
-.pretext-content .in_edit_tree section,
-.pretext-content .in_edit_tree article {
+.ptx-content .in_edit_tree .para,
+.ptx-content .in_edit_tree .displaymath,
+.ptx-content .in_edit_tree section,
+.ptx-content .in_edit_tree article {
     border: 3px solid blue !important;
     padding: 0.5em;
 }
-.pretext-content .in_edit_tree .para {
+.ptx-content .in_edit_tree .para {
     border: 3px solid #4a9 !important;
     background: #ffd;
     padding: 0.5em;
 }
-.pretext-content .in_edit_tree figcaption,
-.pretext-content .in_edit_tree blockquote {
+.ptx-content .in_edit_tree figcaption,
+.ptx-content .in_edit_tree blockquote {
     border: 3px dotted #9a0 !important;
     background: #efd;
     padding: 0.5em;
 }
-.pretext-content .in_edit_tree img {
+.ptx-content .in_edit_tree img {
     border: 3px dotted #09a !important;
     background: #fbd;
     padding: 0.5em;
 }
-.pretext-content .in_edit_tree .displaymath,
-.pretext-content .in_edit_tree figure {
+.ptx-content .in_edit_tree .displaymath,
+.ptx-content .in_edit_tree figure {
     border: 3px solid #92a !important;
     background: #efe;
     padding: 0.5em;
 }
 /* over-rive overflow-x on small screens */
-.pretext-content.canedit .displaymath,
-.pretext-content.canedit .figure,
-.pretext-content.canedit figure.figure-like figcaption {
+.ptx-content.canedit .displaymath,
+.ptx-content.canedit .figure,
+.ptx-content.canedit figure.figure-like figcaption {
      overflow: initial;
 }
-.pretext-content .in_edit_tree * section,
-.pretext-content .in_edit_tree * article {
+.ptx-content .in_edit_tree * section,
+.ptx-content .in_edit_tree * article {
     border: 3px solid green !important;
     padding: 0.5em;
 }
-.pretext-content .in_edit_tree * * .para,
-.pretext-content .in_edit_tree * * .displaymath,
-.pretext-content .in_edit_tree * * section,
-.pretext-content .in_edit_tree * * article {
+.ptx-content .in_edit_tree * * .para,
+.ptx-content .in_edit_tree * * .displaymath,
+.ptx-content .in_edit_tree * * section,
+.ptx-content .in_edit_tree * * article {
     border: 3px dashed grey !important;
     padding: 0.5em;
 }
 
-.pretext-content .in_edit_tree .para.mp,
-.pretext-content .in_edit_tree .para.fp {
+.ptx-content .in_edit_tree .para.mp,
+.ptx-content .in_edit_tree .para.fp {
     margin-top: 0;
 }
 
-.pretext-content .in_edit_tree .heading + .para {
+.ptx-content .in_edit_tree .heading + .para {
     display: block;
 }
-.pretext-content .in_edit_tree::before,
-.pretext-content .in_edit_tree::after,
-.pretext-content .in_edit_tree *::before,
-.pretext-content .in_edit_tree *::after {
+.ptx-content .in_edit_tree::before,
+.ptx-content .in_edit_tree::after,
+.ptx-content .in_edit_tree *::before,
+.ptx-content .in_edit_tree *::after {
     all: reset;
 }

@@ -1,10 +1,10 @@
 :root {
-    --primary-navbar-height: 35px;
+    --ptx-navbar-height: 35px;
     --sidebar-width: 240px;
 }
 
-#primary-navbar {
-    height: var(--primary-navbar-height);
+#ptx-navbar {
+    height: var(--ptx-navbar-height);
     background-color: var(--header-background-color);
     overflow: hidden;
     display: flex;
@@ -14,17 +14,17 @@
     z-index: 100;
 }
 
-.page {
+.ptx-page {
     display: flex;
 }
 
-#sidebar {
+#ptx-sidebar {
     align-self: flex-start;
-    height: calc(99vh - var(--primary-navbar-height));
+    height: calc(99vh - var(--ptx-navbar-height));
     overflow-x: hidden;
     overflow-y: auto;
     position: sticky;
-    top: var(--primary-navbar-height);
+    top: var(--ptx-navbar-height);
     width: var(--sidebar-width);
     min-width: calc(0.8 * var(--sidebar-width));
     border-right: 1px solid var(--tocborder);
@@ -34,7 +34,7 @@
     display: none;
 }
 
-main.main {
+main.ptx-main {
     max-width: 600px;
     margin: 0px 32px;
     overflow-x: hidden;
@@ -42,27 +42,27 @@ main.main {
 
 /* RESPONSIVE styles */
 @media (max-width: 800px) {
-    #primary-navbar {
+    #ptx-navbar {
         position: fixed;
         bottom: 0;
         top: unset;
         width: 100%;
     }
-    #sidebar {
+    #ptx-sidebar {
         top: 0;
     }
-    main.main {
+    main.ptx-main {
         margin: 0px 10px;
     }
 }
 @media (max-width: 600px) {
-    .page {
+    .ptx-page {
         flex-direction: column-reverse;
     }
     .window-footer {
-        margin-bottom: var(--primary-navbar-height);
+        margin-bottom: var(--ptx-navbar-height);
     }
-    #sidebar {
+    #ptx-sidebar {
         position: relative;
         align-self: stretch;
         border: unset;
@@ -71,20 +71,20 @@ main.main {
     }
     /* On a small screen, the sidebar appears at the bottom,
     and when it is "visible" it appears over the other content. */
-    #sidebar.sidebar-hidden {
+    #ptx-sidebar.sidebar-hidden {
         display: block;
     }
-    #sidebar:not(.sidebar-hidden) {
+    #ptx-sidebar:not(.sidebar-hidden) {
         position: fixed;
         top: 0;
-        height: calc(99vh - var(--primary-navbar-height));
+        height: calc(99vh - var(--ptx-navbar-height));
         z-index: 100;
         background-color: white;
     }
-    #sidebar:not(.sidebar-hidden) ~ main.main {
+    #ptx-sidebar:not(.sidebar-hidden) ~ main.ptx-main {
         display: none;
     }
-    main.main {
+    main.ptx-main {
         margin: 0px 10px;
     }
 }

@@ -173,7 +173,7 @@ article > [data-knowl]::after, article > [data-knowl]:hover::after, article > [d
 }
 
 /* sort of a hack for proof knows in theorem knowls */
-.pretext-content div.knowl .posterior a[data-knowl]:first-child {
+.ptx-content div.knowl .posterior a[data-knowl]:first-child {
     padding: 0;
 }
 
@@ -181,29 +181,29 @@ article > [data-knowl]::after, article > [data-knowl]:hover::after, article > [d
  * look bad, like the hint here:
  * SAFurtherReading.html
 */
-.pretext-content .knowl-output .knowl-content > *:last-child:not(.incontext) {
+.ptx-content .knowl-output .knowl-content > *:last-child:not(.incontext) {
     margin-bottom: 0.5em;
 }
 
 /* No Greg's L in knowls, to save space */
 
-.pretext-content .knowl-content > article.theorem-like,
-.pretext-content .knowl-content > article.definition-like,
-.pretext-content .knowl-content > article.example-like,
-.pretext-content .knowl-content > article.project-like,
-.pretext-content .knowl-content > article.objectives,
-.pretext-content .knowl-content > article.outcomes,
-.pretext-content .knowl-content > article.remark-like {
+.ptx-content .knowl-content > article.theorem-like,
+.ptx-content .knowl-content > article.definition-like,
+.ptx-content .knowl-content > article.example-like,
+.ptx-content .knowl-content > article.project-like,
+.ptx-content .knowl-content > article.objectives,
+.ptx-content .knowl-content > article.outcomes,
+.ptx-content .knowl-content > article.remark-like {
     padding-left: 0;
     border-left: none;
 }
-.pretext-content .knowl-content > article.theorem-like::after,
-.pretext-content .knowl-content > article.definition-like::after,
-.pretext-content .knowl-content > article.example-like::after,
-.pretext-content .knowl-content > article.project-like::after,
-.pretext-content .knowl-content > article.objectives::after,
-.pretext-content .knowl-content > article.outcomes::after,
-.pretext-content .knowl-content > article.remark-like::after {
+.ptx-content .knowl-content > article.theorem-like::after,
+.ptx-content .knowl-content > article.definition-like::after,
+.ptx-content .knowl-content > article.example-like::after,
+.ptx-content .knowl-content > article.project-like::after,
+.ptx-content .knowl-content > article.objectives::after,
+.ptx-content .knowl-content > article.outcomes::after,
+.ptx-content .knowl-content > article.remark-like::after {
     content: '';
     border-bottom: none;
     margin: 0;

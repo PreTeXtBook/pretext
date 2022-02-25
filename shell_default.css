@@ -11,42 +11,42 @@
   html
     head
     body.pretext
-      header#masthead
-      nav#primary-navbar
-      div.page
+      header#ptx-masthead
+      nav#ptx-navbar
+      div.ptx-page
         div.sidebar
-          nav#toc
-        main.main
-          div#content
-          div.content-footer
-      div.page-footer
+          nav#ptx-toc
+        main.ptx-main
+          div.ptx-content
+          div.ptx-content-footer
+      div.ptx-page-footer
 */
 
-.pretext #masthead {
+.pretext #ptx-masthead {
   position: relative;
   background: #fafafa;
   min-height: inherit;
   border: none;
 }
 
-.pretext #primary-navbar {
+.pretext #ptx-navbar {
   position: sticky;
   top: 0;
   max-width: 904px;
 }
 
-.pretext .page {
+.pretext .ptx-page {
   position: relative;
 }
 
-.pretext #sidebar {
+.pretext #ptx-sidebar {
   position: sticky;
   top: 41px;
   float: left;
   width: 240px;
 }
 
-.pretext #toc {
+.pretext #ptx-toc {
     position: sticky;
     top: 50px;
     box-sizing: border-box;
@@ -54,7 +54,7 @@
     height: calc(100vh - 60px);
 }
 
-.pretext .page > .main {
+.pretext .ptx-page > .ptx-main {
   display: block;
   position: relative;
   overflow-y: hidden;
@@ -64,7 +64,7 @@
   border-left: 1px solid #ccc;
 }
 @media screen and (max-width: 800px) {
-  .pretext .page > .main {
+  .pretext .ptx-page > .ptx-main {
     /* Make space for navbar fixed to bottom of screen */
     padding-bottom: 35.36px;
     margin-left: 0;
@@ -72,38 +72,38 @@
   }
 }
 
-.pretext .page > .main #content {
+.pretext .ptx-page > .ptx-main .ptx-content {
   max-width: 600px;
   margin: 32px;
 }
 @media screen and (max-width: 663px) {
-  .pretext .page > .main #content {
+  .pretext .ptx-page > .ptx-main .ptx-content {
     /* Decrease the margins */
     margin: 28px;
   }
 }
 
-#content.serif .para {
+.ptx-content.serif .para {
   font-family: "PT Serif", "Times New Roman", serif;
   font-size: 105%;
 }
-#content.serif #text-in-paragraphs .para,
-#content.serif #Bcd .para,
-#content.serif #interesting-corollary .para {
+.ptx-content.serif #text-in-paragraphs .para,
+.ptx-content.serif #Bcd .para,
+.ptx-content.serif #interesting-corollary .para {
   font-family: "Noto", serif;
   font-size: 115%;
   line-height: 1.20;
 }
-#content.serif #table-calisthenics .para,
-#content.serif #section-7 .para,
-#content.serif #section-11 .para {
+.ptx-content.serif #table-calisthenics .para,
+.ptx-content.serif #section-7 .para,
+.ptx-content.serif #section-11 .para {
   font-family: "Tinos", serif;
   font-size: 115%;
   line-height: 1.30;
 }
 
-#content.serif #section-6 .para,
-#content.serif #section-6 .para {
+.ptx-content.serif #section-6 .para,
+.ptx-content.serif #section-6 .para {
   font-family: "Noto", serif;
   font-size: 115%;
   line-height: 1.30;
@@ -111,17 +111,17 @@
 
 
 /* text in lists was big */
-#content.serif .para .para,
-#content.serif #text-in-paragraphs .para .para,
-#content.serif #Bcd .para .para,
-#content.serif #interesting-corollary .para .para,
-#content.serif #table-calisthenics .para .para,
-#content.serif #section-7 .para .para,
-#content.serif #section-11 .para .para {
+.ptx-content.serif .para .para,
+.ptx-content.serif #text-in-paragraphs .para .para,
+.ptx-content.serif #Bcd .para .para,
+.ptx-content.serif #interesting-corollary .para .para,
+.ptx-content.serif #table-calisthenics .para .para,
+.ptx-content.serif #section-7 .para .para,
+.ptx-content.serif #section-11 .para .para {
   font-size: 100%;
 }
 
-#content.serif .code-inline {
+.ptx-content.serif .code-inline {
   background: #f6f6f6;
   border: 1px solid #eee;
   padding: 0.01em 0.15em 0.03em 0.15em;
@@ -130,50 +130,50 @@
   border-radius: 0;
 }
 
-.pretext .content-footer {
+.pretext .ptx-content-footer {
     background: #fdf;
 }
-.pretext .page > .page-footer {
+.pretext .ptx-page > .ptx-page-footer {
     margin-left: 240px;
     padding-left: 8em;
     background: #def;
 }
 
 @media screen and (max-width: 800px) {
-  .pretext #primary-navbar {
+  .pretext #ptx-navbar {
     position: fixed;
     top: auto;
     bottom: 0;
    }
-  .pretext #sidebar {
+  .pretext #ptx-sidebar {
     display: none;
   }
-  .pretext #toc {
+  .pretext #ptx-toc {
     height: calc(100vh - 50px);
   }
-  .pretext .page > .page-footer {
+  .pretext .ptx-page > .ptx-page-footer {
     margin-bottom: 0;
     padding-left: 10px;
   }
-  .pretext .content-footer {
+  .pretext .ptx-content-footer {
     margin-bottom: 60px;
   }
-  .pretext #primary-navbar #calculator-toggle,
-  .pretext #primary-navbar .index-button {
+  .pretext #ptx-navbar #calculator-toggle,
+  .pretext #ptx-navbar .index-button {
     display: none;
   }
-  .pretext #primary-navbar .sidebar-left-toggle-button {
+  .pretext #ptx-navbar .toc-toggle {
     width: 25%;
   }
-  .pretext #primary-navbar .threebuttons {
+  .pretext #ptx-navbar .treebuttons {
     width: 75%;
   }
-  .pretext #primary-navbar #previousbutton,
-  .pretext #primary-navbar #upbutton,
-  .pretext #primary-navbar #nextbutton {
+  .pretext #ptx-navbar .previous-button,
+  .pretext #ptx-navbar .up-button,
+  .pretext #ptx-navbar .next-button {
     width: 33.3%;
   }
-  .pretext .page > .page-footer {
+  .pretext .ptx-page > .ptx-page-footer {
     margin-left: 5em;
   }
 }

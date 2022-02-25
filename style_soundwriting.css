@@ -52,24 +52,24 @@
 
 /* Headings: */
 
-.pretext-content section.chapter h2.heading {
+.ptx-content section.chapter h2.heading {
   color: var(--chaptertitle);
 }
 
-.pretext-content section.chapter h2.heading .title {
+.ptx-content section.chapter h2.heading .title {
   display:block;
   font-size:larger;
   margin-top: 5pt;
 }
 
-.pretext-content section.section h2.heading {
+.ptx-content section.section h2.heading {
   color: var(--sectiontitle);
   border-top: 1pt solid;
   border-bottom: 1pt solid;
   margin-bottom: 20pt;
   width: 100%;
 }
-.pretext-content section.subsection h2.heading {
+.ptx-content section.subsection h2.heading {
   color: var(--subsectiontitle);
   border-bottom: 1pt solid;
   margin-bottom: 20pt;
@@ -77,20 +77,20 @@
 }
 
 /* frontmatter headings: */
-.pretext-content section.frontmatter h2.heading {
+.ptx-content section.frontmatter h2.heading {
   color: var(--chaptertitle);
   font-size:2em;
 }
 
-.pretext-content section.preface h2.heading, 
-.pretext-content section.acknowledgement h2.heading, 
-.pretext-content section.colophon h2.heading {
+.ptx-content section.preface h2.heading, 
+.ptx-content section.acknowledgement h2.heading, 
+.ptx-content section.colophon h2.heading {
   color: var(--chaptertitle);
   margin-bottom: 15pt;
   font-size: 1.75em;
 }
 
-.pretext-content section.preface h2.heading .title {
+.ptx-content section.preface h2.heading .title {
   display:block;
   font-size:larger;
 }
@@ -98,39 +98,39 @@
 /* Blocks: */
 
 /* set background colors */
-.pretext-content .list {
+.ptx-content .list {
   background-color: var(--listbackground);
 }
-.pretext-content .insight {
+.ptx-content .insight {
   background-color: var(--insightbackground);
 }
-.pretext-content .convention {
+.ptx-content .convention {
   background-color: var(--conventionbackground);
 }
-.pretext-content .note {
+.ptx-content .note {
   background-color: var(--notebackground);
 }
-.pretext-content .example {
+.ptx-content .example {
   background-color: var(--examplebackground);
 }
-.pretext-content .warning {
+.ptx-content .warning {
   background-color: var(--warningbackground);
 }
-.pretext-content .observation {
+.ptx-content .observation {
   background-color: var(--observationbackground);
 }
 
 /* set titles and borders */
-.pretext-content .remark-like,
-.pretext-content .example-like,
-.pretext-content .list {
+.ptx-content .remark-like,
+.ptx-content .example-like,
+.ptx-content .list {
     padding: 1em;
     border-radius: 10px;
     margin-bottom: 1em;
     border: 2px solid var(--bordercolor);
 }
 
-.pretext-content .example-like .example-like {
+.ptx-content .example-like .example-like {
     padding: 0;
     margin: 0;
     border: none;
@@ -139,14 +139,14 @@
 
 
 /* override list margins */
-.pretext-content .list {
+.ptx-content .list {
   margin-left: 0 !important;
   margin-right: 0 !important;
 }
 
-.pretext-content .remark-like .heading,
-/* .pretext-content .example-like .heading, */
-.pretext-content .list figcaption {
+.ptx-content .remark-like .heading,
+/* .ptx-content .example-like .heading, */
+.ptx-content .list figcaption {
   display: block;
   margin-top: -0.5em !important;
   padding-bottom: 1em;

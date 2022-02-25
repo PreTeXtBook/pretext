@@ -2,16 +2,16 @@
 /* This file assigns the main colors, using variables that
    have been set previously. */
 
-#masthead .title-container > .heading, #masthead .title-container > .heading a, #masthead #logo-link:empty:hover:before, #masthead #byline a {
+#ptx-masthead .title-container > .heading, #ptx-masthead .title-container > .heading a, #ptx-masthead #logo-link:empty:hover:before, #ptx-masthead #byline a {
   color: #2a5ea4;
   color: var(--documenttitle);
 }
 
-#masthead .title-container > .heading a:active, #masthead #logo-link:empty:active:before, #masthead .byline a:active {
+#ptx-masthead .title-container > .heading a:active, #ptx-masthead #logo-link:empty:active:before, #ptx-masthead .byline a:active {
   color: #932c1c;
   color: var(--bodytitle);
 }
-#toc > ul > li a, #toc > ul > li a:link, #toc > ul > li a:visited {
+#ptx-toc > ul > li a, #ptx-toc > ul > li a:link, #ptx-toc > ul > li a:visited {
   color: #505050;
   color: var(--chaptertoctext);
   background-color: #dbf5ff;
@@ -20,14 +20,14 @@
   border-color: var(--tocborder);
 }
 
-#toc ul li ul a, #toc ul li ul a:link, #toc ul li ul a:visited {
+#ptx-toc ul li ul a, #ptx-toc ul li ul a:link, #ptx-toc ul li ul a:visited {
   color: #404040;
   color: var(--sectiontoctext);
   background-color: #ffffff;
   background-color: var(--sectiontoc);
 }
 
-#toc ul li a.active {
+#ptx-toc ul li a.active {
   color: #404040;
   color: var(--chaptertoctextactive);
   background-color: #fae5b6;
@@ -35,7 +35,7 @@
   border-color: #d7b772;
   border-color: var(--highlighttocborder);
 }
-#toc ul li ul a.active {
+#ptx-toc ul li ul a.active {
   color: #404040;
   color: var(--sectiontoctextactive);
   background-color: #fae5b6;
@@ -44,8 +44,8 @@
   border-color: var(--highlighttocborder);
 }
 
-#toc ul li a:focus,
-#toc ul li a:hover {
+#ptx-toc ul li a:focus,
+#ptx-toc ul li a:hover {
   color: #321a0c;
   color: var(--highlighttoctext);
   background-color: #fac793;
@@ -53,8 +53,8 @@
   border-color: #ec704b;
   border-color: var(--highlighttocborder);
 }
-#toc ul li ul a:focus,
-#toc ul li ul a:hover {
+#ptx-toc ul li ul a:focus,
+#ptx-toc ul li ul a:hover {
   color: #321a0c;
   color: var(--highlighttoctext);
   background-color: #fac793;
@@ -63,78 +63,78 @@
   border-color: var(--highlighttocborder);
 }
 
-#toc ul li.part a {
+#ptx-toc ul li.part a {
     margin-top: 15px;
     border-bottom: none;
 }
-#toc ul li.part a,
-#toc ul li.frontmatter a:first-child,
-#toc ul li.backmatter a:first-child {
+#ptx-toc ul li.part a,
+#ptx-toc ul li.frontmatter a:first-child,
+#ptx-toc ul li.backmatter a:first-child {
     color: #222222;
     background-color: var(--bodytitlehighlight);
     font-size: 110%;
     padding-top: 7px;
     padding-bottom: 7px;
 }
-#toc ul li.part a:focus,
-#toc ul li.frontmatter a:focus,
-#toc ul li.backmatter a:focus,
-#toc ul li.part a:hover,
-#toc ul li.frontmatter a:hover,
-#toc ul li.backmatter a:hover {
+#ptx-toc ul li.part a:focus,
+#ptx-toc ul li.frontmatter a:focus,
+#ptx-toc ul li.backmatter a:focus,
+#ptx-toc ul li.part a:hover,
+#ptx-toc ul li.frontmatter a:hover,
+#ptx-toc ul li.backmatter a:hover {
     color: #ffffff;
     background-color: var(--highlighttoc);
 }
 
-.pretext-content .summary-links a {
+.ptx-content .summary-links a {
   color: var(--sectiontoctext);
 }
-.pretext-content .summary-links a:hover, .pretext-content .summary-links a:focus {
+.ptx-content .summary-links a:hover, .ptx-content .summary-links a:focus {
   color: var(--highlighttoctext);
   background: var(--highlighttoc);
 }
 
-.pretext-content [data-knowl], .pretext-content [data-knowl]:hover, .pretext-content [data-knowl]:active, .pretext-content [data-knowl].active {
+.ptx-content [data-knowl], .ptx-content [data-knowl]:hover, .ptx-content [data-knowl]:active, .ptx-content [data-knowl].active {
     color: var(--bodytitle);
 }
-.pretext-content [data-knowl]:hover, .pretext-content [data-knowl]:active, .pretext-content [data-knowl].active {
+.ptx-content [data-knowl]:hover, .ptx-content [data-knowl]:active, .ptx-content [data-knowl].active {
     background-color: var(--bodytitlehighlight);
 }
 
 /* next two groups concern accessibility, so check when making changes */
-.pretext-content p > a.internal {
+.ptx-content p > a.internal {
     color: var(--bodytitle);
 }
-.pretext-content p > a.external {
+.ptx-content p > a.external {
     color: var(--bodysubtitle);
 }
-.pretext-content p > a.internal:hover, .pretext-content p > a.internal:hover *,
-.pretext-content p > a.internal:focus, .pretext-content p > a.internal:focus * {
+.ptx-content p > a.internal:hover, .ptx-content p > a.internal:hover *,
+.ptx-content p > a.internal:focus, .ptx-content p > a.internal:focus * {
     background-color: var(--bodytitlehighlight);
 }
-.pretext-content p > a.external:hover, .pretext-content p > a.external:hover *,
-.pretext-content p > a.external:focus, .pretext-content p > a.external:focus * {
+.ptx-content p > a.external:hover, .ptx-content p > a.external:hover *,
+.ptx-content p > a.external:focus, .ptx-content p > a.external:focus * {
     background-color: var(--bodysubtitlehighlight);
 }
 
-.pretext-content .playvideo {
+.ptx-content .playvideo {
     background-color: var(--videoplay);
 }
 
-.pretext-content .goal-like {
+.ptx-content .goal-like {
   border-color: var(--chaptertoc);
 }
 
-.pretext-content .assemblage-like {
+.ptx-content .assemblage-like {
     border-color: var(--assemblageborder);
     background-color: var(--assemblagebackground);
 }
 
-.pretext-content .knowl-output {
+.ptx-content .knowl-output {
     border-color: var(--knowlborder);
     background-color: var(--knowlbackground);
 }
-.pretext-content .knowl-footer {
+.ptx-content .knowl-footer {
     background-color: var(--knowlborder);
 }
 

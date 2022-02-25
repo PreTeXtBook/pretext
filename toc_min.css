@@ -3,29 +3,29 @@
     --toc-chevron-width: 20px;
 }
 
-#toc ul {
+#ptx-toc ul {
     list-style: none;
     margin: unset;
     padding: unset;
     font-size: 14.72px;
 }
 
-#toc a {
+#ptx-toc a {
     font-weight: bold;
     font-family: "PT Serif", "Times New Roman", Times, serif;
 }
 
-#toc li {
+#ptx-toc li {
     margin-top: 3px;
     overflow: hidden;
     color: var(--chaptertoctext);
     position: relative;
 }
-#toc li:first-child {
+#ptx-toc li:first-child {
     margin-top: unset;
 }
 
-#toc a {
+#ptx-toc a {
     flex-grow: 1;
     display: flex;
     align-items: center;
@@ -40,33 +40,33 @@
     border-right: unset;
 }
 
-#toc .codenumber {
+#ptx-toc .codenumber {
     display: block;
     padding-right: 4px;
     text-align: end;
     width: var(--toc-codenumber-width);
     flex-shrink: 0;
 }
-#toc .title {
+#ptx-toc .title {
     flex-grow: 1;
 }
 
 /* Adjust the display of nested items */
-#toc li li {
+#ptx-toc li li {
     margin-top: 0px;
 }
-#toc li li .toc-item {
+#ptx-toc li li .toc-item {
     border-bottom: unset;
     border-color: rgb(209, 209, 209);
     background-color: var(--sectiontoc);
     color: var(--sectiontoctext);
 }
-#toc li li a {
+#ptx-toc li li a {
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: normal;
     padding-left: 30px;
 }
-#toc li li li a {
+#ptx-toc li li li a {
     padding-left: 45px;
 }
 .toc-chevron-surround {

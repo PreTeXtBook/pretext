@@ -1,5 +1,5 @@
 
-#masthead .banner {
+#ptx-masthead .ptx-banner {
     border-top: 1px solid transparent;
     border-bottom: none;
     overflow: hidden;
@@ -7,7 +7,7 @@
     padding-bottom: 1.125em;
 }
 
-.pretext-content .summary-links a {
+.ptx-content .summary-links a {
     color: var(--bluegreen);
     background: #eee; 
     display: block;
@@ -21,21 +21,21 @@
 //    margin: 5px 20px 0px 20px;
 }
 
-.pretext-content .summary-links a .codenumber {
+.ptx-content .summary-links a .codenumber {
 color: var(--bluegreen)
 }
 
-.pretext-content .summary-links a .title {
+.ptx-content .summary-links a .title {
     font-weight: 600;
 }
 
-.pretext-content .summary-links a:hover {
+.ptx-content .summary-links a:hover {
     color: #fff;
     background: var(--bluegreen);
 }
 
-.pretext-content .summary-links ul,
-.pretext-content .summary-links ul li {
+.ptx-content .summary-links ul,
+.ptx-content .summary-links ul li {
     display: grid;
     list-style-type: none; 
     min-width: 300px;
@@ -46,13 +46,13 @@ color: var(--bluegreen)
 }
 
 
-.pretext-content .summary-links > ul {
+.ptx-content .summary-links > ul {
  //   text-align: left;
 }
 
 @media screen and (min-width: 600px) {
-.pretext-content .summary-links ul,    
-.pretext-content .summary-links ul li {
+.ptx-content .summary-links ul,    
+.ptx-content .summary-links ul li {
     width: 60vw;
     max-width: 500px;
     }
@@ -61,19 +61,19 @@ color: var(--bluegreen)
 
 /*** End PreTeXt overrides ***/
 
-#masthead .title-container {
+#ptx-masthead .title-container {
   font-size: 1em;
   padding-left: 9.68px;
   overflow: hidden;
 }
 @media screen and (max-width: 480px) {
-  #masthead .title-container {
+  #ptx-masthead .title-container {
     padding: 0;
     text-align: center;
     margin-top: 0.625em;
   }
 }
-#masthead .title-container > .heading {
+#ptx-masthead .title-container > .heading {
   font-family: "PT Serif", "Times New Roman", Times, serif;
   font-weight: 700;
   margin: 0;
@@ -81,36 +81,36 @@ color: var(--bluegreen)
   line-height: 1.25em;
   color: #932919;
 }
-#masthead .title-container > .heading.hide-type .type {
+#ptx-masthead .title-container > .heading.hide-type .type {
   display: none;
 }
-#masthead .title-container > .heading.hide-codenumber .codenumber {
+#ptx-masthead .title-container > .heading.hide-codenumber .codenumber {
   display: none;
 }
-#masthead .title-container > .heading.hide-title .title {
+#ptx-masthead .title-container > .heading.hide-title .title {
   display: none;
 }
 @media screen and (max-width: 480px) {
-  #masthead .title-container > .heading {
+  #ptx-masthead .title-container > .heading {
     font-size: 1.5em;
     line-height: 1.25em;
     margin: 0;
     margin-bottom: 0.41667em;
   }
 }
-#masthead .title-container > .heading a {
+#ptx-masthead .title-container > .heading a {
   color: #932919;
   background: none;
   text-decoration: none;
 }
-#masthead .title-container > .heading a:active {
+#ptx-masthead .title-container > .heading a:active {
   color: #3572a0;
 }
-#masthead .title-container > .heading .subtitle {
+#ptx-masthead .title-container > .heading .subtitle {
   font-weight: normal;
 }
 @media screen and (max-width: 800px) {
-  #masthead .title-container > .heading .subtitle {
+  #ptx-masthead .title-container > .heading .subtitle {
     /* Force the subtitle onto a separate line */
     display: block;
     font-size: 1.16667em;
@@ -119,12 +119,12 @@ color: var(--bluegreen)
     color: #595959;
     /* Remove colon */
   }
-  #masthead .title-container > .heading .subtitle:before {
+  #ptx-masthead .title-container > .heading .subtitle:before {
     content: normal;
   }
 }
 
-#masthead .byline {
+#ptx-masthead .byline {
   color: #333333;
   font-weight: normal;
   margin: 0;
@@ -134,26 +134,26 @@ color: var(--bluegreen)
   font-family: "PT Serif", "Times New Roman", Times, serif;
 }
 @media screen and (max-width: 480px) {
-  #masthead .byline {
+  #ptx-masthead .byline {
     margin-top: 0;
     font-size: 1em;
     line-height: 1.25em;
   }
 }
-#masthead .byline a {
+#ptx-masthead .byline a {
   color: #333333;
 }
-#masthead .byline a:active {
+#ptx-masthead .byline a:active {
   color: #3572a0;
 }
 
 
-#masthead .banner .title-container .heading {
+#ptx-masthead .ptx-banner .title-container .heading {
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 /* .ptx-masthead-banner  */
-#masthead .banner {  /* maybe #masthead > .banner? */
+#ptx-masthead .ptx-banner {  /* maybe #ptx-masthead > .ptx-banner? */
     max-width: 904px;
     display: grid;
     grid-gap: 1em;

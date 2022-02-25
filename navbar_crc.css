@@ -1,21 +1,21 @@
 
-#primary-navbar .previous-button::before {
+#ptx-navbar .previous-button::before {
     width: 27px;
 }
-#primary-navbar .next-button::after {
+#ptx-navbar .next-button::after {
     width: 25px;
 }
 
-#primary-navbar .threebuttons {
+#ptx-navbar .treebuttons {
     float: right;
 }
 
-#primary-navbar .next-button, #primary-navbar .up-button, #primary-navbar .previous-button {
+#ptx-navbar .next-button, #ptx-navbar .up-button, #ptx-navbar .previous-button {
     float: left;
 }
 
 
-#primary-navbar {
+#ptx-navbar {
     display: grid;
 
     grid-column-gap: 0em;
@@ -42,19 +42,19 @@
 }
 
 @media only screen and (min-width: 700px) {
-    #primary-navbar {
+    #ptx-navbar {
         grid-template-columns:  0.53fr 6em 6em 1fr;
     }
-    #primary-navbar .button {
+    #ptx-navbar .button {
 	padding: 0 12px 0 12px;
     }
-    .sidebar-left-toggle-button {
+    .toc-toggle {
 	padding: 0 12px 0 12px;
     }
 }
 
 @media screen and (max-width: 700px) {
-  .pretext  #primary-navbar {
+  .pretext  #ptx-navbar {
     display: block;
     position: fixed;
     top: auto;
@@ -71,22 +71,22 @@
 
 
 @media only screen and (min-width: 846px) {
-    #primary-navbar .button {
+    #ptx-navbar .button {
 	padding: 0 24px 0 24px;
     }
-    #primary-navbar .threebuttons .button {
+    #ptx-navbar .treebuttons .button {
         padding: 0 20px 0 20px;
     }
-    #primary-navbar .threebuttons .previous-button { padding-left: 12px; }
-    #primary-navbar .threebuttons .next-button { padding-right: 12px; }
+    #ptx-navbar .treebuttons .previous-button { padding-left: 12px; }
+    #ptx-navbar .treebuttons .next-button { padding-right: 12px; }
 
-    #primary-navbar .sidebar-left-toggle-button {
+    #ptx-navbar .toc-toggle {
 	padding: 0 24px 0 24px;
     }
 }
 
 /* .ptx-MH-toc-area  */
-.sidebar-left-toggle-button {
+.toc-toggle {
     grid-area: MH-toc-area;
     justify-self: start;
     align-self: start;
@@ -103,15 +103,15 @@
 }
 
 /* .ptx-page-navigation-area  */
-.threebuttons {
+.treebuttons {
     grid-area: MH-page-navigation-area;
     justify-self: end;
     align-self: start;
 }
 
 /* .ptx-MH-button  */
-/* #primary-navbar button, */
-#primary-navbar .button {
+/* #ptx-navbar button, */
+#ptx-navbar .button {
     display: inline-block;
     height: 32px;
     color: #333;
@@ -131,7 +131,7 @@
     box-sizing: border-box;
     /*	padding: default? See @media changes */
 }
-#primary-navbar .button {
+#ptx-navbar .button {
   cursor: pointer;
   display: inline-block;
   vertical-align: middle;
@@ -148,17 +148,17 @@
   display: block;
 }
 
-#primary-navbar .button:hover {
+#ptx-navbar .button:hover {
     background-color: #fafafa;
     color: black;
 }
-#primary-navbar .button:focus {
+#ptx-navbar .button:focus {
   outline: thin dotted #333;
   outline-offset: -2px;
 }
 
 @media screen and (max-width: 700px) {
-  .pretext #primary-navbar .button {
+  .pretext #ptx-navbar .button {
     /*@include button-hide-text($navbar-icon-box-size);*/
     float: left;
     text-align: center;
@@ -167,16 +167,16 @@
     border: 0;
     height: unset;
   }
-  #primary-navbar .button.active, #primary-navbar .button:active {
+  #ptx-navbar .button.active, #ptx-navbar .button:active {
     /* Vertically flip shadow for lower navbar */
     box-shadow: rgba(0, 0, 0, 0.5) 0 -2px 5px inset;
   }
 }
 
-#primary-navbar .up-button {
+#ptx-navbar .up-button {
   text-align: center;
 }
-#primary-navbar .up-button:before {
+#ptx-navbar .up-button:before {
   content: "^";
   text-align: center;
   font-size: 1.5em;
@@ -191,7 +191,7 @@
   vertical-align: middle;
 }
 @media screen and (max-width: 700px) {
-    .pretext #primary-navbar .up-button {
+    .pretext #ptx-navbar .up-button {
     /* Disable ellipsis */
     white-space: normal;
     overflow: visible;
@@ -207,7 +207,7 @@
     border-right: 1px solid #aaa;
   }
 
-    .pretext #primary-navbar .up-button:before {
+    .pretext #ptx-navbar .up-button:before {
     font-size: 2em;
     line-height: 1.2em;
 /*
@@ -225,7 +225,7 @@
     margin-top: -22.1px;
   }
 }
-#primary-navbar .previous-button:before {
+#ptx-navbar .previous-button:before {
   content: "<";
   text-align: center;
   font-size: 1.5em;
@@ -243,7 +243,7 @@
   zoom: 1;
 }
 @media screen and (max-width: 700px) {
-    .pretext #primary-navbar .previous-button {
+    .pretext #ptx-navbar .previous-button {
     /* Disable ellipsis */
     white-space: normal;
     overflow: visible;
@@ -256,7 +256,7 @@
     white-space: nowrap;
     overflow: hidden;
   }
-    .pretext #primary-navbar .previous-button:before {
+    .pretext #ptx-navbar .previous-button:before {
     font-size: 2em;
     line-height: 1.0em;
 /*
@@ -274,10 +274,10 @@
     margin-top: -22.1px;
   }
 }
-#primary-navbar .next-button {
+#ptx-navbar .next-button {
   text-align: right;
 }
-#primary-navbar .next-button:after {
+#ptx-navbar .next-button:after {
   content: ">";
   text-align: center;
   font-size: 1.5em;
@@ -293,7 +293,7 @@
   vertical-align: middle;
 }
 @media screen and (max-width: 700px) {
-    .pretext #primary-navbar .threebuttons .next-button {
+    .pretext #ptx-navbar .treebuttons .next-button {
     /* Disable ellipsis */
     white-space: normal;
     overflow: visible;
@@ -306,7 +306,7 @@
     white-space: nowrap;
     overflow: hidden;
   }
-    .pretext #primary-navbar .next-button:after {
+    .pretext #ptx-navbar .next-button:after {
     font-size: 2em;
     line-height: 1.0em;
 /*
@@ -327,7 +327,7 @@
 }
 /* leaving this in, even though there is no settings-button */
 @media screen and (max-width: 700px) {
-    .pretext #primary-navbar .settings-button {
+    .pretext #ptx-navbar .settings-button {
     /* Disable ellipsis */
     white-space: normal;
     overflow: visible;
@@ -340,7 +340,7 @@
     white-space: nowrap;
     overflow: hidden;
   }
-    .pretext #primary-navbar .settings-button:before {
+    .pretext #ptx-navbar .settings-button:before {
     position: absolute;
     left: 50%;
     right: auto;
@@ -352,7 +352,7 @@
 }
 
 /* TOC button may be sized differently */
-.sidebar-left-toggle-button {
+.toc-toggle {
     display: inline-block;
     height: 32px;
     color: #333;
@@ -373,7 +373,7 @@
     /*	padding: ?? */
 }
 
-.sidebar-left-toggle-button:hover {
+.toc-toggle:hover {
     background-color: #fafafa;
     color: black;
 }

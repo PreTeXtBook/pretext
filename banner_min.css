@@ -4,13 +4,13 @@ as part of a larger project... */
     --header-background-color: #fafafa;
 }
 
-#masthead {
+#ptx-masthead {
     display: flex;
     align-items: center;
     background-color: var(--header-background-color);
 }
 
-.banner {
+.ptx-banner {
     display: flex;
     font-family: "PT Serif", "Times New Roman", Times, serif;
 }
@@ -23,33 +23,33 @@ as part of a larger project... */
     max-height: 50px;
 }
 
-.banner h1 {
+.ptx-banner h1 {
     font-weight: 700;
     margin: 0;
     font-size: 2em;
     line-height: 1.25em;
 }
-.banner .subtitle {
+.ptx-banner .subtitle {
     font-weight: normal;
 }
-.banner .byline {
+.ptx-banner .byline {
     margin: 0;
     font-size: 1.3125em;
 }
 
 /* RESPONSIVE styles */
 @media (max-width: 800px) {
-    .banner .subtitle {
+    .ptx-banner .subtitle {
         display: block;
         line-height: 1em;
         margin-bottom: 5px;
     }
 }
 @media (max-width: 480px) {
-    #masthead {
+    #ptx-masthead {
         justify-content: center;
     }
-    .banner  {
+    .ptx-banner  {
         flex-direction: column;
         text-align: center;
     }

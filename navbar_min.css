@@ -1,12 +1,12 @@
 
-#primary-navbar button {
+#ptx-navbar button {
     padding: 2px 4px;
     border: unset;
     background-color: unset;
     cursor: pointer;
 }
 
-#primary-navbar button:hover {
+#ptx-navbar button:hover {
     background-color: var(--documenttitle);
     color: white;
 }

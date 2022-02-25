@@ -46,23 +46,23 @@ body.pretext > a.assistive:focus {
 }
 
 /* so that we can position things (like .autopermalink) absolutely wrt these items */
-.pretext-content section,
-.pretext-content article,
-.pretext-content figure,
-.pretext-content figcaption,
-.pretext-content .exercisegroup,
-.pretext-content .para {
+.ptx-content section,
+.ptx-content article,
+.ptx-content figure,
+.ptx-content figcaption,
+.ptx-content .exercisegroup,
+.ptx-content .para {
     position: relative;
 }
 
 /* we use .para as a wrapper around some "compound" p, so the
    first p in .para is block-like because of the .pare */
-.pretext-content .para > p:first-child {
+.ptx-content .para > p:first-child {
     display: inline;
 }
 
 /* Oscar Levin figured out the cause of chrome showing a funny border focus */
-.pretext-content .knowl .para {
+.ptx-content .knowl .para {
     position: unset;
 }
 
@@ -72,214 +72,214 @@ https://www.w3schools.com/cssref/css_default_values.asp
 
 /* the default margin for pre is "1em 0", so we over-ride
 so that we can set our own later */
-.pretext-content pre {
+.ptx-content pre {
     margin: 0;
     padding: 0;
     border: none;
 }
-.pretext-content textarea {
+.ptx-content textarea {
     padding: 0;
 }
 
 /* .para and other block-level elements should have space at the top, and not the bottom */
-.pretext-content h1, .pretext-content h2, .pretext-content h3, .pretext-content h4, .pretext-content h5, .pretext-content h6 {
+.ptx-content h1, .ptx-content h2, .ptx-content h3, .ptx-content h4, .ptx-content h5, .ptx-content h6 {
     margin: 0;
 }
 
-.pretext-content .heading {
+.ptx-content .heading {
     line-height: 1.1;
 }
 
 /* spacing around and after .para, and around and after article */
-.pretext-content .para {
+.ptx-content .para {
     margin-top: 1.25em;
     margin-bottom: 0;
     line-height: 1.35;
 }
-.pretext-content .para.continuation {
+.ptx-content .para.continuation {
     margin-top: 0;
 }
-.pretext-content pre + .para.continuation {
+.ptx-content pre + .para.continuation {
     margin-top: 1em;
 }
-.pretext-content ul + .para.continuation,
-.pretext-content ol + .para.continuation,
-.pretext-content dl + .para.continuation {
+.ptx-content ul + .para.continuation,
+.ptx-content ol + .para.continuation,
+.ptx-content dl + .para.continuation {
     margin-top: 0.75em;
 }
 
-.pretext-content .aside-like > .para:first-child,
-.pretext-content td > .para:first-child,
-.pretext-content .solution-like > .para:first-child {
+.ptx-content .aside-like > .para:first-child,
+.ptx-content td > .para:first-child,
+.ptx-content .solution-like > .para:first-child {
     margin-top: 0;
 }
 /* for assemblages without a title */
-.pretext-content .assemblage-like > .para:first-of-type {
+.ptx-content .assemblage-like > .para:first-of-type {
     margin-top: 0;
 }
-.pretext-content .assemblage-like > .heading + .para {
+.ptx-content .assemblage-like > .heading + .para {
     margin-top: 0.25em;
 }
-.pretext-content .assemblage-like + .para {
+.ptx-content .assemblage-like + .para {
     margin-top: 1.75em;
 }
 
-.pretext-content .para.intertext {
+.ptx-content .para.intertext {
     margin-top: -0.25em;
     text-indent: 0;
 }
 
-.pretext-content .para + table {
+.ptx-content .para + table {
     margin-top: 1em;
 }
 
-.pretext-content table tr td .para + .para {
+.ptx-content table tr td .para + .para {
     margin-top: 1em;
 }
 
-.pretext-content table + .para {
+.ptx-content table + .para {
     margin-top: 1.5em;
 }
 
-.pretext-content .para + figure.figure-like > table {
+.ptx-content .para + figure.figure-like > table {
     margin-top: 1em;
 }
 
 /* 1.25 = ol top + li top ?  looked too big with 0.75 below */
-.pretext-content .exercise-like .para + ol {  
+.ptx-content .exercise-like .para + ol {  
     margin-top: 0.5em;
 }
 
-.pretext-content .para + pre.prettyprint,
-.pretext-content .para + pre.plainprint {
+.ptx-content .para + pre.prettyprint,
+.ptx-content .para + pre.plainprint {
     margin-top: 1.25em;
 }
-.pretext-content .para + .code-box {
+.ptx-content .para + .code-box {
     margin-top: 1.25em;
 }
-.pretext-content .code-box > .console {
+.ptx-content .code-box > .console {
     margin-left: 1.5em;
 }
 
 /* this > may be too restrictive.  The purpose is to not put a
    top margin on an article at the top of a knowl */
-.pretext-content section > article, .pretext-content section > section.paragraphs, .pretext-content .paragraphs > article {
+.ptx-content section > article, .ptx-content section > section.paragraphs, .ptx-content .paragraphs > article {
     margin-top: 1.25em;
 }
-.pretext-content section article + article,
-.pretext-content section .para + article,
-.pretext-content section .posterior + article {
+.ptx-content section article + article,
+.ptx-content section .para + article,
+.ptx-content section .posterior + article {
     margin-top: 1.75em;
 }
-.pretext-content section article > .introduction + article {
+.ptx-content section article > .introduction + article {
     margin-top: 1em;
 }
 
-.pretext-content article + .posterior {
+.ptx-content article + .posterior {
     margin-top: 0.5em;
 }
-.pretext-content section .para + .tabular-box {
+.ptx-content section .para + .tabular-box {
     margin-top: 0.75em;
 }
-.pretext-content section .proof {
+.ptx-content section .proof {
     margin-top: 0.75em;
 }
 
-.pretext-content section > pre, .pretext-content .para + pre {
+.ptx-content section > pre, .ptx-content .para + pre {
     margin-top: 1.25em;
 }
 
-.pretext-content ol .para + .para, .pretext-content ul .para + .para {
+.ptx-content ol .para + .para, .ptx-content ul .para + .para {
     margin-top: 1em;
 }
 
 /* see Ex 29 https://yoshiwarabooks.org/linear-functions.html 
 and ex 2.91 in 
 https://yoshiwarabooks.org/mfg/MathModels.html */
-.pretext-content .introduction + .sidebyside,
-.pretext-content .para + .sidebyside,
-.pretext-content ol + .sidebyside,
-.pretext-content ul + .sidebyside {
+.ptx-content .introduction + .sidebyside,
+.ptx-content .para + .sidebyside,
+.ptx-content ol + .sidebyside,
+.ptx-content ul + .sidebyside {
     margin-top: 1em;
 }
 
-.pretext-content ol, .pretext-content ul {
+.ptx-content ol, .ptx-content ul {
     margin-bottom: 0;
 }
-.pretext-content li {
+.ptx-content li {
     margin-bottom: 0;
 }
-.pretext-content section li .title {
+.ptx-content section li .title {
     font-size: 100%;
     font-weight: normal;
     font-style: italic;
 }
-.pretext-content section article.theorem-like li > .title {
+.ptx-content section article.theorem-like li > .title {
     font-weight: 600;
     font-style: normal;
     font-size: 96%;
 }
 
-.pretext-content figure {
+.ptx-content figure {
     margin-bottom: 0;
 }
 
-.pretext-content .heading {
+.ptx-content .heading {
     margin-top: 0;
     margin-bottom: 0;
 }
 
-.pretext-content .conclusion {
+.ptx-content .conclusion {
     margin-top: 1em;
 }
-.pretext-content .conclusion > .para:first-child {
+.ptx-content .conclusion > .para:first-child {
     margin-top: 0.5em;
 }
 
-.pretext-content ol, .pretext-content ul {
+.ptx-content ol, .ptx-content ul {
     margin-top: 0.75em;
 }
-.pretext-content .exercise-like > ol:first-child,
-.pretext-content .exercise-like > ul:first-child {
+.ptx-content .exercise-like > ol:first-child,
+.ptx-content .exercise-like > ul:first-child {
     margin-top: 0;
 }
-.pretext-content .heading + ol, .pretext-content .heading + ul {
+.ptx-content .heading + ol, .ptx-content .heading + ul {
     margin-top: 0.45em;
 }
-.pretext-content li > .heading + ol, .pretext-content li > .heading + ul {
+.ptx-content li > .heading + ol, .ptx-content li > .heading + ul {
     margin-top: 0.25em;
 }
-.pretext-content li > .heading + ol > li:nth-child(1),
-.pretext-content li > .heading + ul > li:nth-child(1) {
+.ptx-content li > .heading + ol > li:nth-child(1),
+.ptx-content li > .heading + ul > li:nth-child(1) {
     margin-top: 0;
 }
-.pretext-content li > .heading + ol.cols2 > li:nth-child(2),
-.pretext-content li > .heading + ul.cols2 > li:nth-child(2) {
+.ptx-content li > .heading + ol.cols2 > li:nth-child(2),
+.ptx-content li > .heading + ul.cols2 > li:nth-child(2) {
     margin-top: 0;
 }
 
-.pretext-content li {
+.ptx-content li {
     margin-top: 0.5em;
 }
-.pretext-content li > .para:first-child {
+.ptx-content li > .para:first-child {
     margin-top: 0;
 }
-.pretext-content article .para:first-child {
+.ptx-content article .para:first-child {
     margin-top: 0;
 }
 
-.pretext-content ol ol, .pretext-content ol ul,  .pretext-content ul ol, .pretext-content ul ul {
+.ptx-content ol ol, .ptx-content ol ul,  .ptx-content ul ol, .ptx-content ul ul {
     margin-top: 0.5em;
 }
 
-.pretext-content .frontmatter > .heading {
+.ptx-content .frontmatter > .heading {
     display: block;
     text-align: center;
 }
-.pretext-content .frontmatter > .heading .title, .pretext-content .book > .heading .title {
+.ptx-content .frontmatter > .heading .title, .ptx-content .book > .heading .title {
     font-size: 1.3em;
 }
-.pretext-content .frontmatter > .heading .subtitle, .pretext-content .book > .heading .subtitle {
+.ptx-content .frontmatter > .heading .subtitle, .ptx-content .book > .heading .subtitle {
     display: block;
     font-weight: normal;
     color: #666666;
@@ -288,74 +288,74 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     margin-top: 0.35714em;
 }
 
-.pretext-content .frontmatter .author:first-of-type {
+.ptx-content .frontmatter .author:first-of-type {
     margin-top: 4em;
 }
-.pretext-content .frontmatter > .para:first-of-type {
+.ptx-content .frontmatter > .para:first-of-type {
     margin-top: 4em;
 }
-.pretext-content .frontmatter > .author,
-.pretext-content .frontmatter > .credit {
+.ptx-content .frontmatter > .author,
+.ptx-content .frontmatter > .credit {
     margin-top: 2em;
     text-align: center;
 }
-.pretext-content .frontmatter .date {
+.ptx-content .frontmatter .date {
     display: block;
     margin-top: 2em;
     text-align: center;
 }
-.pretext-content .frontmatter .credit .title {
+.ptx-content .frontmatter .credit .title {
     font-size: 1em;
 }
-.pretext-content .frontmatter .credit .author {
+.ptx-content .frontmatter .credit .author {
     font-size: 0.9em;
     margin-top: 0.75em;
 }
-.pretext-content .frontmatter .author-info {
+.ptx-content .frontmatter .author-info {
     font-size: 90%;
 }
-.pretext-content a[href^="mailto:"] {
+.ptx-content a[href^="mailto:"] {
     white-space: pre;
 }
 
 @media print {
-    .pretext #masthead,
-    .pretext #primary-navbar,
-    .pretext .page > #sidebar,
-    .pretext .page > .page-footer {
+    .pretext #ptx-masthead,
+    .pretext #ptx-navbar,
+    .pretext .ptx-page > #ptx-sidebar,
+    .pretext .ptx-page > .ptx-page-footer {
        display:none;
         border:none;
     }
-    .pretext .page .main {
+    .pretext .ptx-page .ptx-main {
         margin-left:0;
         left:auto;
         border:none;
         box-shadow:none;
         padding: 0;
     }
-    .pretext .page .main #content { margin-top:0 }
-    .pretext .page .main #content.pretext-content section { margin-top:1em }
-    .pretext .page .main #content.pretext-content section .heading { margin-top:0 }
+    .pretext .ptx-page .ptx-main .ptx-content { margin-top:0 }
+    .pretext .ptx-page .ptx-main .ptx-content.ptx-content section { margin-top:1em }
+    .pretext .ptx-page .ptx-main .ptx-content.ptx-content section .heading { margin-top:0 }
 }
 
 /* printing for one-page worksheets */
 
 @media print {
-    body.standalone .pretext-content .worksheet {
+    body.standalone .ptx-content .worksheet {
         border: none;
     }
-    body.standalone.worksheet #masthead {
+    body.standalone.worksheet #ptx-masthead {
         display: none;
     }
 
-    body.standalone.worksheet.has-sidebar-left.mathbook-loaded .page .main {
+    body.standalone.worksheet.has-sidebar-left.mathbook-loaded .ptx-page .ptx-main {
         margin: 0;
     }
 
-    body.standalone.worksheet .page > .main #content {
+    body.standalone.worksheet .ptx-page > .ptx-main .ptx-content {
         margin: 0;
     }
-    body.standalone.worksheet .pretext-content .onepage {
+    body.standalone.worksheet .ptx-content .onepage {
         max-height: 100%;
         max-width: 100%;
         overflow: hidden;
@@ -366,16 +366,16 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
         border: none;
         page-break-inside: avoid;
      }
-     body.standalone.worksheet .pretext-content .onepage.lastpage {
+     body.standalone.worksheet .ptx-content .onepage.lastpage {
         page-break-after: auto;
      }
-    body.standalone.worksheet.a4 .pretext-content .onepage {
+    body.standalone.worksheet.a4 .ptx-content .onepage {
 /*
         height: 1320px;
 */
     }
-    body.standalone.worksheet .pretext-content .onepage .workspace,
-    body.standalone.worksheet .pretext-content .onepage .workspace.squashed.tight {
+    body.standalone.worksheet .ptx-content .onepage .workspace,
+    body.standalone.worksheet .ptx-content .onepage .workspace.squashed.tight {
         border: none;
         padding: 0;
         background: none !important;
@@ -384,11 +384,11 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
         color: black;
     }
 
-    body.standalone.worksheet .page  .main {
+    body.standalone.worksheet .ptx-page  .ptx-main {
         padding: 0;
     }
 
-    body.standalone.worksheet.mathbook-loaded .page .main #content.pretext-content section.onepage {
+    body.standalone.worksheet.mathbook-loaded .ptx-page .ptx-main .ptx-content.ptx-content section.onepage {
         padding-bottom: 20px;  /* to help prevent flow onto the next page, particularly in Safari */
                               /* the page is not full length, but what is missing was blank anyway */
 /*
