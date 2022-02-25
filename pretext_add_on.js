@@ -634,7 +634,7 @@ window.addEventListener("load",function(event) {
                 console.log("not enabling editing")
            }
  /*       } else if ($('body').attr('id') == "pugetsound-SW") { */
-        } else if (window.location.href.includes("soundwriting.pugetsound")) {
+        } else if (false && window.location.href.includes("soundwriting.pugetsound")) {
 /* a bunch of temporary exploration for a Sound Writing survey */
             console.log("please take our survey");
             console.log(window.location.href);
@@ -663,6 +663,7 @@ window.addEventListener("load",function(event) {
                 console.log("Editing not enabled: source unavailable")
             } else {
               loadResource('css', 'features');
+              loadResource('css', 'edit');
               loadResource('js', 'login')
               loadResource('js', 'edit');
             }
