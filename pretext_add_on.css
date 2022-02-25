@@ -1630,6 +1630,7 @@ from Jiří Lebl */
 }
 
 .ptx-content .sagecell {
+    white-space: normal;
     margin-top: 1.25em;
     margin-bottom: 1.25em;
 }
