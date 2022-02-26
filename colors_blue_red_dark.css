@@ -1,0 +1,114 @@
+
+/*
+ There are five main choices that define a color scheme in the
+ HTML output of PreTeXt:
+ 1) A dark color for the title on each page
+ 2) A dark color for highlighted words in the body
+ 3) A dark color for other highlighted words in the body
+
+ In the CSS those are called 'documenttitle', 'bodytitle',
+ and 'bodysubtitle'.
+
+ The other two choices appear in the ToC.
+
+ Either:
+ 3) A dark color for each chapter background
+ 4) A dark color for the current section background
+ (Often the ToC section background equals documenttitle.
+
+ Or:
+ 3') A light color for each chapter background
+ 4') A light color for the current section background
+
+ In the CSS those are called 'chaptertoc' and 'sectiontoc',
+ respectively.
+
+ With 3) and 4) you need white letters to go on the dark
+ background, and with 3') and 4') you need dark letters
+ on the light background.  Set the color of those letters
+ with 'chaptertoctext'.
+
+ In addition to the above four choices, you need to 
+ choose a contrasting shade of each color, to be used
+ for highlighting, borders, etc.
+
+ In the future you will be able to choose colors for assemblages
+ and for knowl output
+*/
+
+:root {
+  --documenttitle: #2a5ea4;
+  --documenttitledark: #20477b;
+  --documenttitlelight: #abf;
+  --bodytitle: #2B5F82; 
+  --bodysubtitle: #A62E1C;
+  --bodytitlehighlight: #316;  /* DARKER, and contrasting to bodytitle  */
+  --bodysubtitlehighlight: #fce5e4;  /* light, and contrasting to bodysubtitle  */
+     /*
+       The bodytitle and bodysubtitle colors must have at least a 3:1 contrast
+       ratio with black, and at least 5:1 ratio with with the corresponding highlight.
+       (The second condition will guarantee an adequate contrast with white.)
+     */
+
+  --chaptertoc: #932c1c;
+  --chaptertoctext: white;
+  --chaptertocactive: var(--documenttitle);   /* often the same as documenttitle */
+  --chaptertoctextactive: white;
+  --sectiontoc: #666;
+  --sectiontoctext: #fff;
+  --sectiontocactive: var(--documenttitle);   /* often the same as documenttitle */
+  --sectiontoctextactive: white;
+  --tocborder: #152f53;
+
+  --highlighttoc: var(--documenttitledark);
+  --highlighttoctext: white;
+  --highlighttocborder: var(--chaptertoc);
+
+  --videoplay: var(--bodytitle);
+  --assemblageborder: #1100aa;
+  --assemblagebackground: #f5f8ff;
+  --assemblagebackground: #003;
+
+  --knowlborder: var(--bodytitlehighlight);
+  --knowlbackground: var(--assemblagebackground);
+}
+
+.pretext .ptx-page > .ptx-main {
+    background: #444;
+    color: #fff;
+}
+.ptx-content .summary-links a {
+    background: var(--documenttitledark);
+    background: var(--chaptertoc);
+}
+#ptx-navbar {
+    background: #555;
+}
+.pretext #ptx-masthead {
+    background: #555;
+}
+.pretext #ptx-masthead .title-container > .pretext .heading,
+.pretext #ptx-masthead .title-container > .heading a,
+.pretext #ptx-masthead #logo-link:empty:hover::before,
+.pretext #ptx-masthead .byline,
+.pretext #ptx-masthead .byline a {
+  color: var(--documenttitlelight);
+}
+#ptx-toc {
+  scrollbar-color: var(--documenttitlelight) #666;
+}
+.pretext .ptx-content .code-inline {
+  color: var(--documenttitledark);
+}
+.ptx-content .goal-like > .heading {
+  background:  var(--chaptertoc);
+}
+.pretext .ptx-content [data-knowl],
+.pretext .ptx-content [data-knowl]:hover,
+.pretext .ptx-content [data-knowl]:active,
+.pretext .ptx-content [data-knowl].active {
+  color: var(--documenttitlelight);
+}
+.pretext .ptx-page .ptx-main .ptx-content .knowl-content > .solution-like {
+  background: #606;
+}
