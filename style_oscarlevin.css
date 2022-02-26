@@ -4,7 +4,7 @@
   
   --assembbody: var(--bluelight, hsl(210, 90%, 80%));
   --assembborder: var(--blue, hsl(210, 40%, 60%));
-  --assembhead: var(--blue, hsl(210, 40%, 60%));
+  --assembhead: var(--blue, hsl(210, 40%, 75%));
   --definitionbody: var(--greenlight, hsl(180, 40%, 80%));
   --definitionborder: var(--green, hsl(180, 40%, 50%));
   --definitionhead: var(--green, hsl(180, 40%, 50%));
