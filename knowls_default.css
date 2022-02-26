@@ -80,7 +80,7 @@ article > [data-knowl]::after, article > [data-knowl]:hover::after, article > [d
     background: #f5f5ff;
     border: 10px solid #ddf;
     border-radius: 10px;
-    display: none;
+ //   display: none;
     padding: 0;
     margin-top: 10px;
 }
@@ -91,7 +91,7 @@ article > [data-knowl]::after, article > [data-knowl]:hover::after, article > [d
 /*    border-left: 1px solid #666;
 */
     border-radius: 0;
-    display: none;
+//    display: none;
     padding: 0;
     margin-top: 10px;
 }

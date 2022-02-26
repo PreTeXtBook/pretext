@@ -2222,7 +2222,8 @@ https://pretextbook.org/examples/sample-article/html/interesting-corollary.html#
 }
 
 /* used when knowl content is hidden in the page */
-.ptx-content .hidden-content, .pretext-book .hidden-content, .pretext-article .hidden-content, .hidden-content {
+.ptx-content .hidden-content, .pretext .hidden-content {
+/* things will be different after 2022 overhaul */
     display: none;
 }
 
