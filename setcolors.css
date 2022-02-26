@@ -11,7 +11,7 @@
   color: #932c1c;
   color: var(--bodytitle);
 }
-#ptx-toc > ul > li a, #ptx-toc > ul > li a:link, #ptx-toc > ul > li a:visited {
+#ptx-toc > ul > li a {
   color: #505050;
   color: var(--chaptertoctext);
   background-color: #dbf5ff;
@@ -20,7 +20,7 @@
   border-color: var(--tocborder);
 }
 
-#ptx-toc ul li ul a, #ptx-toc ul li ul a:link, #ptx-toc ul li ul a:visited {
+#ptx-toc ul li ul a {
   color: #404040;
   color: var(--sectiontoctext);
   background-color: #ffffff;
