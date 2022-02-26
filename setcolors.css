@@ -2,7 +2,7 @@
 /* This file assigns the main colors, using variables that
    have been set previously. */
 
-#ptx-masthead .title-container > .heading, #ptx-masthead .title-container > .heading a, #ptx-masthead #logo-link:empty:hover:before, #ptx-masthead #byline a {
+#ptx-masthead .title-container > .heading, #ptx-masthead .title-container > .heading a, #ptx-masthead #logo-link:empty:hover:before, #ptx-masthead .byline a {
   color: #2a5ea4;
   color: var(--documenttitle);
 }
