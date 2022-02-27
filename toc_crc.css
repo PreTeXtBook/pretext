@@ -84,8 +84,8 @@
 
 /* Allows both "top" and bottom border of a subsection to be highlighted on hover */
 #ptx-toc ul li ul a:hover {
-    border-top: 1px solid #3c110a;
-   // why that dark redish color?
+//    border-top: 1px solid #3c110a;
+// why that dark redish color?
     padding-top: -1px;
    // was margin-top: -1px; but that caused a little jiggling
 }
@@ -105,25 +105,28 @@ the margin on top of sections being used to space out adjacent sections) */
   box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
 }
 
-/* above code may be old.  new code below */
+
+/* ************************************************** */
+/* Above code may be old.  New code below             */
+/* ************************************************** */
 
 /* Links inside the dropdown */
 #ptx-sidebar #ptx-toc a {
-    color: var(--bluegreen);
+//    color: var(--bluegreen); /* Not needed */  /* provided by colors_bluegreen_grey.css */
     background: #fafafa;
     padding: .25em .5em .25em .5em;
     text-decoration: none;
     font-weight: 500;
     font-size: .9em;
     margin: 0px;
-    border-bottom: 1px solid var(--bluegreen);
+    border-bottom: 1px solid var(--bluegreen); /* Needed --- not provided colors_bluegreen_grey.css */
 }
 
 /* Change color of dropdown links on hover */
 #ptx-sidebar #ptx-toc ul a:hover, #ptx-sidebar #ptx-toc ul a:focus,
 #ptx-sidebar #ptx-toc ul ul a:hover, #ptx-sidebar #ptx-toc ul ul a:focus {
-    background: var(--bluegreen);
-    color: #fff;
+   background: var(--bluegreen);  /* Needed --- not provided by colors_bluegreen_grey.css */
+   color: #fff;                   /* Needed --- not provided by colors_bluegreen_grey.css */
 }
 
 #ptx-sidebar #ptx-toc ul,
@@ -166,6 +169,7 @@ the margin on top of sections being used to space out adjacent sections) */
 
 
 /* Adapted David Farmer hacks */
+/*
 
 #ptx-sidebar  .link.backmatter ~ .link a {
     background-color: #fafafa;
@@ -184,5 +188,5 @@ the margin on top of sections being used to space out adjacent sections) */
     background-color: var(--highlighttoc);
 }
 
-
+*/
 
