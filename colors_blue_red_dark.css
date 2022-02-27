@@ -73,6 +73,9 @@
   --knowlbackground: var(--assemblagebackground);
 }
 
+body.pretext {
+  background: #222;
+}
 .pretext .ptx-page > .ptx-main {
     background: #444;
     color: #fff;
@@ -82,8 +85,23 @@
     background: var(--chaptertoc);
 }
 #ptx-navbar {
-    background: #555;
+    background: #333;
 }
+#ptx-navbar .button{
+  background-color: #635;
+  color: #fff;
+}
+#ptx-navbar .button:hover {
+  background-color: #fafafa;
+  color: #000;
+}
+#ptx-navbar #calculator-toggle {
+  background-color: #336;
+}
+#ptx-navbar #calculator-toggle:hover {
+  background-color: #fce;
+}
+
 .pretext #ptx-masthead {
     background: #555;
 }
