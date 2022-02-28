@@ -78,7 +78,7 @@ body.pretext {
 //    grid-template-columns: auto 1fr 1fr;
     grid-template-columns: auto 1fr;
     grid-template-columns: auto 1fr auto;
-  grid-template-rows: auto;
+    grid-template-rows: auto;
     grid-template-areas:
         "toc main-content"
         "toc content-footer";
@@ -119,14 +119,15 @@ z-index: 1;
   grid-row-start: 1;
   grid-row-end: 2;
 
-//    justify-self: start;
+  justify-self: start;
     max-width: 664px;
     width: 97vw;
     transition: 0s;
     padding: 0;
     margin: 0;
     z-index: 0;  /* Added so horizontal scrollbars in content don't bleed into TOC dropdown */
-//    overflow-y: auto;
+    //    overflow-y: auto;
+//    border: 2px solid green;
 }
 
 @media only screen and (min-width: 500px) {
@@ -134,7 +135,7 @@ z-index: 1;
     margin: 0;
     max-width: 664px;
     width: min(100vw,664px);
-//      justify-self: center;
+      justify-self: center;
 /*      width: 570px; @ 810px */
     }
 
