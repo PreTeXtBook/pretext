@@ -44,6 +44,7 @@
 @media only screen and (min-width: 800px) {
     #ptx-navbar {
         grid-template-columns:  0.53fr 6em 6em 1fr;
+	grid-template-columns:  .68fr 6em 6em 1fr;  /* Even gaps */
     }
     #ptx-navbar .button {
 	padding: 0 12px 0 12px;
