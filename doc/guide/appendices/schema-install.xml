@@ -37,7 +37,7 @@
             <p>Presumably something similar to the above will work for any Linux distribution that has packages for <c>jing</c>.</p>
 
             <!-- warning about using single source also in "from source" section -->
-            <p>Note that if you have modularized your source files (see <xref ref="processing-modular"/>), you only need to provide the master file as an argument to <c>jing</c>, just like when you use <c>xsltproc</c>.  In particular, the subsidiary files are certain to fail validation since they do not have a <tag>pretext</tag> root element.</p>
+            <p>Note that if you have modularized your source files (see <xref ref="processing-modular"/>), you only need to provide the top-level file as an argument to <c>jing</c>, just like when you use <c>xsltproc</c>.  In particular, the subsidiary files are certain to fail validation since they do not have a <tag>pretext</tag> root element.</p>
         </subsection>
 
         <subsection xml:id="jing-from-source">
