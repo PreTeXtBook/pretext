@@ -11,4 +11,13 @@
  *******************************************************************************
  */
 
+function toggletoc() {
+   thesidebar = document.getElementById("ptx-sidebar");
+   thesidebar.classList.toggle("hideme");
+}
+
+window.addEventListener("load",function(event) {
+       thetocbutton = document.getElementsByClassName("toc-toggle")[0];
+       thetocbutton.addEventListener('click', () => toggletoc() );
+});
 
