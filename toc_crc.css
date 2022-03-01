@@ -8,6 +8,7 @@
     font-size: 14.72px;
     overflow-y: auto;
     overflow-x: hidden;
+
 }
 
 /* Aligns toc to the top and side of the allotted space, respectively */
@@ -15,6 +16,7 @@
     margin: 0px;
     padding: 0px;
 }
+
 
 /* do we need a class, or is the location in the tree good enough? */
 .ptx-page #ptx-sidebar #ptx-toc ul a,
@@ -84,8 +86,6 @@
 
 /* Allows both "top" and bottom border of a subsection to be highlighted on hover */
 #ptx-toc ul li ul a:hover {
-//    border-top: 1px solid #3c110a;
-// why that dark redish color?
     padding-top: -1px;
    // was margin-top: -1px; but that caused a little jiggling
 }
@@ -109,6 +109,15 @@ the margin on top of sections being used to space out adjacent sections) */
 /* ************************************************** */
 /* Above code may be old.  New code below             */
 /* ************************************************** */
+
+
+/* TOC is initially closed in the CRC style */
+/* The onload js will close it, but you get an odd fluttering effect */
+.ptx-page #ptx-sidebar {
+    display: none;
+}
+
+
 
 /* Links inside the dropdown */
 #ptx-sidebar #ptx-toc a {

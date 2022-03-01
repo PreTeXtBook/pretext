@@ -86,6 +86,15 @@
     }
 }
 
+#ptx-navbar .button.disabled {
+  opacity: .4;
+  color: #333333;
+  background: #ededed;
+  cursor: default;
+  box-shadow: none;
+}
+
+
 /* .ptx-MH-toc-area  */
 .toc-toggle {
     grid-area: MH-toc-area;
@@ -379,3 +388,9 @@
     color: black;
 }
 
+/* Hamburger */
+.toc-toggle:before{
+    font-family: FontAwesome;
+    font-size: 150%;
+    content: "\f0c9\00a0";
+}
