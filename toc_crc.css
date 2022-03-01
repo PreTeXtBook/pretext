@@ -113,9 +113,13 @@ the margin on top of sections being used to space out adjacent sections) */
 
 /* TOC is initially closed in the CRC style */
 /* The onload js will close it, but you get an odd fluttering effect */
+
+/* comment out because we need to fix the fluttering effect.
+   if this is hidden by default, the page is not usable without JavaScript
 .ptx-page #ptx-sidebar {
     display: none;
 }
+*/
 
 
 
