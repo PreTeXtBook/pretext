@@ -1900,6 +1900,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\kbd}[1]{\keys{{#1}}}&#xa;</xsl:text>
     </xsl:if>
 
+    <!-- N.B. Author-supplied LaTeX macros come *after* the -->
+    <!-- late-preamble stringparam in order that an author  -->
+    <!-- cannot attempt a conversion-specific redefinition  -->
+    <!-- of a macro that has been used used in a less       -->
+    <!-- capable conversion, i.e. HTML/MathJax              -->
     <xsl:text>%% Custom Preamble Entries, late (use latex.preamble.late)&#xa;</xsl:text>
     <xsl:if test="$latex.preamble.late != ''">
         <xsl:value-of select="$latex.preamble.late" />
