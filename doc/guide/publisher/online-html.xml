@@ -120,7 +120,7 @@
     <section xml:id="online-index-style">
         <title>Index Style</title>
 
-        <p>The <pubtitle>Author's Guide</pubtitle> explains how to create an index.  The realization of the index for online output is implemented within <pretext/>.  We have made certain stylistic choices, in addition to taking advantage of certain features of the online format.<ul>
+        <p>Start at <xref ref="overview-index-notation"/> to learn how to create an index.  The realization of the index for online output is implemented within <pretext/>.  We have made certain stylistic choices, in addition to taking advantage of certain features of the online format.<ul>
             <li>A one-column format.</li>
             <li>Indented subheadings (not run-in).</li>
             <li>Maximum two levels of subheadings.</li>

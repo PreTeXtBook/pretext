@@ -31,7 +31,7 @@
             <li>Do not repeat information available by examining the commit itself.  Bad: <q>Changes in foo.xsl</q></li>
             <li>No longer than roughly 60 to 70 characters, and never onto multiple lines.</li>
             <li>You can find lots of advice about phrasing commit messages with action words, or in ways that describe how the code will be different.  These make for good reading, but we do not adhere slavishly to any one formulation.</li>
-            <li>For whatever reason, we isolate and prefix messages with <q>Author's Guide:<nbsp/></q>, <q>Publisher's Guide:<nbsp/></q>, <q>Developer's Guide:<nbsp/></q>, and <q>Schema:<nbsp/></q>.</li>
+            <li>For whatever reason, we isolate and prefix messages with the name of a relevant conversion such as <q>HTML:<nbsp/></q>, or other areas, such as <q>Guide:<nbsp/></q> or <q>Schema:<nbsp/></q>.  Scroll the list of commit messages to see the range.</li>
             <li>For pull requests we will append <q><nbsp/>(PR #nnnn)</q>. You can try to predict this in advance of creating your PR.  (This provides a permanent record somewhat independent of GitHub, and GitHub will utilize this number.)  </li>
         </ul></p>
     </section>

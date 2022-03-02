@@ -11,7 +11,7 @@
     <title>Starting</title>
 
     <introduction>
-        <p>Welcome to the Author's Guide for <pretext />.  You are likely eager to get started, but familiarizing yourself with this chapter should save you a lot of time in the long run.  We will try to keep it short and at the end of early chapters we will guide you on where to go next.  Not everything we say here will make sense on your first reading, so come back after your first few trial runs.  When you are ready to seek further help, or ask questions, please read the <xref ref="welcome" text="title"/> in <xref ref="welcome"/>.</p>
+        <p>Welcome to <q>the Guide</q> for <pretext />.  You are likely eager to get started, but familiarizing yourself with this chapter should save you a lot of time in the long run.  We will try to keep it short and at the end of early chapters we will guide you on where to go next.  Not everything we say here will make sense on your first reading, so come back after your first few trial runs.  When you are ready to seek further help, or ask questions, please read the <xref ref="welcome" text="title"/> in <xref ref="welcome"/>.</p>
     </introduction>
 
     <section xml:id="philosophy">

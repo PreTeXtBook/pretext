@@ -30,7 +30,7 @@
 
         <p>Begin by creating a file that is a new <init>XSL</init> stylesheet.  You can likely safely copy a mature one from the <c>xsl/latex</c> directory.  Be certain to keep the first few declarations.  The <tag>xsl:import</tag> is critical, since it will <q>pull in</q> all the basic code for the <pretext/> conversion to <latex/>.  You will be overriding and appending to that code (which <pretext/> has made straightforward).  You can start with an absolute path from your filesystem root, but once public a relative path will be necessary.  Remove all of the <tag>xsl:template</tag> elements, leaving a hollow shell to begin working with.</p>
 
-        <p>What we are doing here is similar to the discussion of <q>thin <init>XSL</init> stylesheets</q> in the <url href="https://pretextbook.org/doc/author-guide/html/processing-thin-xsl.html">Author's Guide</url>, only thicker.  String parameters are also described in this guide, at <xref ref="processing-parameters"/>.</p>
+        <p>What we are doing here is similar to the discussion of <q>thin <init>XSL</init> stylesheets</q> in <xref ref="processing-thin-xsl"/>, only thicker.  String parameters are also described in this Guide, at <xref ref="processing-parameters"/>.</p>
     </section>
 
     <section>

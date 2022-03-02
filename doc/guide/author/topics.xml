@@ -1965,7 +1965,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <title>Exercises and their Solutions</title>
 
         <introduction>
-            <p>As described in <xref ref="overview-exercises"/> an <tag>exercise</tag> can be placed in many different locations, and a <tag>project</tag> has similar features.  It is critical to understand that you want to author any hints, answers, or solutions immediately following the statement of an exercise.  If your <pretext/> source is public, and you would like to keep some aspects of the solutions private, then read the <pubtitle>Publisher's Guide</pubtitle> for some practical advice.  See the <pubtitle>Publisher's Guide</pubtitle> as well for information on creating a standalone <pubtitle>Solutions Guide</pubtitle>.  We concentrate here on techniques for controlling visibility and location of the components of exercises within your primary output.</p>
+            <p>As described in <xref ref="overview-exercises"/> an <tag>exercise</tag> can be placed in many different locations, and a <tag>project</tag> has similar features.  It is critical to understand that you want to author any hints, answers, or solutions immediately following the statement of an exercise.  If your <pretext/> source is public, and you would like to keep some aspects of the solutions private, then read <xref ref="instructor-solutions"/> for some practical advice.  See <xref ref="private-solutions-file"/> as well for information on creating a standalone <pubtitle>Solutions Guide</pubtitle>.  We concentrate here on techniques for controlling visibility and location of the components of exercises within your primary output.</p>
         </introduction>
 
         <subsection>

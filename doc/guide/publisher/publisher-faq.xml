@@ -36,7 +36,7 @@
 
         <li>
             <title>Why are my knowls empty?</title>
-            <p>When viewing the HTML version on your laptop or local computer as files, do not expect knowls to render properly.  This is a known bug/feature, and there is nothing to be done about it, unless you run a web server on your own machine, which fortunately is a very easy thing to do (see the section of the Author's Guide about testing <init>HTML</init> output locally). Think of it this way: the knowl content comes from a server, but on your laptop there is no web server.  You are just looking at files.</p>
+            <p>When viewing the HTML version on your laptop or local computer as files, do not expect knowls to render properly.  This is a known bug/feature, and there is nothing to be done about it, unless you run a web server on your own machine, which fortunately is a very easy thing to do (see <xref ref="processing-testing-html"/> about testing <init>HTML</init> output locally). Think of it this way: the knowl content comes from a server, but on your laptop there is no web server.  You are just looking at files.</p>
             <p>A possible added confusion is that some knowls, such as proofs, will appear.
                That is because their content is embedded in the page, not taken from a file.</p>
         </li>

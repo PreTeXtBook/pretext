@@ -21,7 +21,7 @@
     <section xml:id="help-and-support">
         <title>Help and Support</title>
 
-        <p>There is a documentation area at the project website.  Presumably, that is where you found this <pubtitle>Author's Guide</pubtitle>.  This is what another software project might call the <pubtitle>User's Manual</pubtitle>.  So start here.  Re-read <xref ref="philosophy"/> on the project philosophy and the principles in <xref ref="list-principles"/> at regular intervals.  <xref ref="overview"/> is meant to inform you of the features of <pretext/>, without getting into all the details.  It will frequently refer you to <xref ref="topics"/> for all those details.</p>
+        <p>There is a documentation area at the project website.  Presumably, that is where you found this <pubtitle><pretext/> Guide</pubtitle>.  This is what another software project might call the <pubtitle>User's Manual</pubtitle>.  So start here.  Re-read <xref ref="philosophy"/> on the project philosophy and the principles in <xref ref="list-principles"/> at regular intervals.  <xref ref="overview"/> is meant to inform you of the features of <pretext/>, without getting into all the details.  It will frequently refer you to <xref ref="topics"/> for all those details.</p>
 
         <p>PreTeXt is fundamentally a specification of a set of elements and attributes, a topic discussed in <xref ref="schema"/>.  This chapter also discusses validation.  Once comfortable, but before authoring lots of material, take the time to get validation working, and use it regularly.  Do not save it for last.</p>
 

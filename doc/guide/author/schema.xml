@@ -11,7 +11,7 @@
     <title><pretext /> Vocabulary Specification</title>
 
     <introduction>
-        <p>This Author's Guide, along with the sample article and sample book distributed with the <pretext /> source, provide a wealth of examples of how to author in <pretext />. However, at some point, you will undoubtedly encounter a situation where some of your text fails to appear in your output or <c>xsltproc</c> produces an error. Those are good moments to start investigating the formal specifications of the <pretext /> vocabulary, as most likely you tried to use something in a way incompatible with those specifications.  This chapter will help you understand, and work with, the formal specification of <pretext />.</p>
+        <p>This Guide, along with the sample article and sample book distributed with the <pretext /> source, provide a wealth of examples of how to author in <pretext />. However, at some point, you will undoubtedly encounter a situation where some of your text fails to appear in your output or <c>xsltproc</c> produces an error. Those are good moments to start investigating the formal specifications of the <pretext /> vocabulary, as most likely you tried to use something in a way incompatible with those specifications.  This chapter will help you understand, and work with, the formal specification of <pretext />.</p>
     </introduction>
 
     <section xml:id="schema-relaxng">

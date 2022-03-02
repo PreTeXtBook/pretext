@@ -3,7 +3,7 @@
   <chapter xml:id="basics-ch-about">
     <title>About This Reference</title>
     <p>
-      This <pubtitle>Basics Reference</pubtitle> supplements the more formal documentation in other parts of <pubtitle>The Guide</pubtitle>.
+      This <pubtitle>Basics Reference</pubtitle> supplements the more formal documentation in other parts of the Guide.
       Here you will find the <em>basics</em>
       of the most important and commonly used <pretext/> elements.
       In most instances,
@@ -311,7 +311,7 @@
       ordered and unordered.
           <idx><h>list</h><h>ordered</h></idx>
           <idx><h>ordered list</h></idx> (There's also the description list.
-      See the <pubtitle>Author's Guide</pubtitle> at <xref ref="topic-lists"/> for more information on it.) As in <init>HTML</init>,
+      See <xref ref="topic-lists"/> for more information.) As in <init>HTML</init>,
       an ordered list is produced with <tag>ol</tag> and an unordered list with <tag>ul</tag>.
       The items of your list are structured inside <tag>li</tag>
       tags. The example in <xref ref="basics-l-ol"
@@ -1131,7 +1131,7 @@
 
       <p><idx><h sortby="description"><tag>description</tag></h><h>for
       accessibility</h></idx>
-      <idx>accessibility</idx>The example in <xref ref="basics-l-image"/> also illustrates the use of  <tag>description</tag>. We admit to not using a <tag>description</tag> for most of the other <tag>image</tag>s in this <pubtitle>Guide</pubtitle>, but doing so is strongly recommended for accessibility reasons. A reader who is unable to see the visual element of your book can use assistive technology to have the <tag>description</tag> read to them. As much as is practical, authors should endeavor to include <tag>description</tag>s for their <tag>image</tag>s.
+      <idx>accessibility</idx>The example in <xref ref="basics-l-image"/> also illustrates the use of  <tag>description</tag>. We admit to not using a <tag>description</tag> for most of the other <tag>image</tag>s in this Guide, but doing so is strongly recommended for accessibility reasons. A reader who is unable to see the visual element of your book can use assistive technology to have the <tag>description</tag> read to them. As much as is practical, authors should endeavor to include <tag>description</tag>s for their <tag>image</tag>s.
       </p>
       <p>
           <idx><h>file extensions</h><h>for graphics</h></idx>
@@ -1564,8 +1564,7 @@
         The type is <q>Subsection</q> or <q>Theorem</q>,
         and the <em>global</em> number is 3.3 or 3.1.4. (Global is in contrast to local,
         which would be just 3 or 4, respectively,
-        for these examples.) The <pubtitle>Author's Guide</pubtitle>
-        (<xref ref="topic-cross-referencing"/>)
+        for these examples.) <xref ref="topic-cross-referencing"/>
         goes into greater detail about how to change settings for how cross references appear,
         which you can do for your entire document as well as for individual cross references that require different treatment.
       </p>
@@ -1741,8 +1740,8 @@
     <p>
       Once a project gets big,
       you may find yourself wishing to break your source into multiple files.
-      This is well documented in the <pubtitle>Author's Guide</pubtitle>
-      (<xref ref="processing-modular"/>), so we refer you there for more details.
+      This is well documented in 
+      <xref ref="processing-modular"/>, so we refer you there for more details.
     </p>
   </chapter>
 </part>

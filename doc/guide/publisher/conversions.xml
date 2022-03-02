@@ -163,7 +163,7 @@
             </p>
         </aside>
 
-        <p>Notice that this example does nothing to change the <em>words</em> that a conversion produces, which is why you do not specify them in your source, and why they are documented here in the <pubtitle>Publisher's Guide</pubtitle>.  They are conversion options that do not affect your content in significant ways, and are related to the particular output format.  Note that we are phasing out these parameters in favor of the Publisher's File (see <xref ref="publisher-file"/>).</p>
+        <p>Notice that this example does nothing to change the <em>words</em> that a conversion produces, which is why you do not specify them in your source, and why they are documented here in the Publisher's Guide (<xref ref="part-publisher"/>)  They are conversion options that do not affect your content in significant ways, and are related to the particular output format.  Note that we are phasing out these parameters in favor of the Publisher's File (see <xref ref="publisher-file"/>).</p>
     </section>
 
     <section>
