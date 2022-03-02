@@ -68,6 +68,31 @@
             <xsl:variable name="target" select="id($target-id)" />]]>
         </pre>
     </section>
+
+    <section>
+        <title>Documentation</title>
+
+        <p>Careful documentation must accompany new features.  You <em>cannot</em> leave this task for somebody else to clean-up after you, and writing the documentation is likely to cause you to revisit your code to introduce small improvements or squash bugs.</p>
+
+        <p>New <pretext/> language elements are described briefly in the overview at <xref ref="overview"/>.  This should make new authors <em>aware</em> of what elements are available, and maybe have enough instruction to get them started.  Then the topics at <xref ref="topics"/> should have full details.  These two sections should link back-and-forth to each other.  Examples are welcome, but should be short and succinct.  Elaborate examples should be contributed to the <pubtitle>Showcase Article</pubtitle>.</p>
+
+        <p>New options for publishers should be detailed <em>very tersely</em> in the reference section, <xref ref="publisher-file-reference"/>.  This section is organized lexicographically with respect to the XPath expressions describing the entries of the publisher file.  Then a more careful description, with examples if necessary, should appear in one of the chapters of the publisher part (<xref ref="part-publisher"/>) according to which aspects of a conversion are affected.  These two sections should link back-and-forth to each other.</p>
+
+        <p>Here are some conventions to follow, which will help authors and publishers have a better experience wandering through the Guide.  Please observe them in your own contributions.<ul>
+            <li>
+                <title>The Guide</title>
+                <p>We usually just say <q>the Guide</q> or <q>in this Guide</q>, with no additional formatting, and just the capital <q>G</q> indicative of a formal title.</p>
+            </li>
+            <li>
+                <title>Modularization</title>
+                <p>When an author's source is modularized (<xref ref="processing-modular"/>) we refer to the outermost, or main, file as the <q>top-level</q> file.  This is the one file that has the overall <tag>pretext</tag> element in it.</p>
+            </li>
+            <li>
+                <title>Git Branches</title>
+                <p>Reference the primary branch of a git repository as <c>main</c>.</p>
+            </li>
+        </ul></p>
+    </section>
 </chapter>
 
 
