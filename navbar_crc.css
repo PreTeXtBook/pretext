@@ -19,8 +19,8 @@
     display: grid;
 
     grid-column-gap: 0em;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-columns: 0.53fr 6em 6em 1fr;
+    grid-template-columns:  .72fr 6em 6em 1fr;  /* Even gaps */
     grid-template-areas:
         "MH-toc-area MH-extras-area1 MH-extras-area2 MH-page-navigation-area";  
     background-color: #fff; 
@@ -44,7 +44,7 @@
 @media only screen and (min-width: 800px) {
     #ptx-navbar {
         grid-template-columns:  0.53fr 6em 6em 1fr;
-	grid-template-columns:  .68fr 6em 6em 1fr;  /* Even gaps */
+	grid-template-columns:  .72fr 6em 6em 1fr;  /* Even gaps */
     }
     #ptx-navbar .button {
 	padding: 0 12px 0 12px;
@@ -394,3 +394,4 @@
     font-size: 150%;
     content: "\f0c9\00a0";
 }
+
