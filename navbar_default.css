@@ -13,6 +13,7 @@
   z-index: 200;
   height: 35.36px;
   font-family: "PT Serif", "Times New Roman", Times, serif;
+  font-family: "Open Sans";
   overflow: hidden;
 }
 @media screen and (max-width: 800px) {
@@ -24,7 +25,9 @@
     right: 0;
     background: #ededed;
     box-shadow: rgba(0, 0, 0, 0.3) 0px -2px 5px;
+/*
     height: 44.2px;
+*/
   }
 }
 #ptx-navbar .button {
@@ -32,6 +35,7 @@
   cursor: pointer;
   display: inline-block;
   vertical-align: middle;
+  height: 35px;
   /* Disable accidental text-selection */
   user-select: none;
   white-space: nowrap;
@@ -67,177 +71,133 @@
   cursor: default;
   box-shadow: none;
 }
-@media screen and (max-width: 800px) {
-  #ptx-navbar .button {
-    /*@include button-hide-text($navbar-icon-box-size);*/
-    float: left;
-    text-align: center;
-    margin: 0;
-    line-height: 44.2px;
-  }
-  #ptx-navbar .button:active {
-    /* Vertically flip shadow for lower navbar */
-    box-shadow: rgba(0, 0, 0, 0.5) 0 -2px 5px inset;
-  }
-}
 #ptx-navbar .toc-toggle {
   display: block;
   width: 240px;
-  padding-bottom: 0.8em;
+  border-bottom: 1px solid #bababa;
+  border-right: 1px solid #bababa;
 }
 #ptx-navbar .toc-toggle .icon {
-  font-size: 150%;
-  padding-left: 1em;
+  font-size: 1.75em;
+  position: relative;
+  bottom: 0.15em;
+  padding-left: 0.5em;
   padding-right: 0.4em;
 }
+#ptx-navbar .toc-toggle .name {
+  font-size: 1.15em;
+  position: relative;
+  bottom: 0.25em;
+}
+
 #ptx-navbar .up-button {
   text-align: center;
 }
+/*
 #ptx-navbar .up-button:before {
   content: "^";
   text-align: center;
   font-size: 1.5em;
   font-family: "Open Sans";
-/*
-  line-height: 35.36px;
-  width: 35.36px;
-*/
   text-indent: 0;
-  /* So text isn't removed from this too */
   display: inline-block;
   vertical-align: middle;
 }
-@media screen and (max-width: 800px) {
-  #ptx-navbar .up-button {
-    /* Disable ellipsis */
-    white-space: normal;
-    overflow: visible;
-    text-overflow: clip;
-    /* center the icon */
-    text-align: center;
-    position: relative;
-    /* hide the text */
-    text-indent: 110%;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-
-  #ptx-navbar .up-button:before {
-    font-size: 2em;
-    line-height: 1.2em;
-/*
-    line-height: 44.2px;
 */
-    width: 1.5em;
-    padding-top: 5px;
-    /* So text isn't removed from this too */
-    position: absolute;
-    left: 50%;
-    right: auto;
-    margin-left: -22.1px;
-    top: 50%;
-    bottom: auto;
-    margin-top: -22.1px;
-  }
+
+#ptx-navbar .name {
+  display: inline-block;
+  position: relative;
+  bottom: 0;
 }
+#ptx-navbar .treebuttons .name {
+  bottom: 0.2em;
+}
+#ptx-navbar .icon {
+  display: inline-block;
+  font-size: 1.5em;
+}
+#ptx-navbar .previous-button .icon {
+  margin-left: 0.3em;
+  margin-right: 0.2em;
+}
+#ptx-navbar .up-button .icon {
+  margin-left: 0.2em;
+  margin-right: 0.2em;
+  padding-top: 2px;
+}
+#ptx-navbar .up-button .name {
+  bottom: 0.3em;
+}
+#ptx-navbar .next-button .icon {
+  margin-left: 0.2em;
+  margin-right: 0.3em;
+}
+#ptx-navbar .index-button .name {
+  padding-top: 0.3em;
+}
+/*
 #ptx-navbar .previous-button:before {
   content: "<";
   text-align: center;
   font-size: 1.5em;
   font-family: "Open Sans";
 
-/*
-  line-height: 35.36px;
-  width: 55.36px;
-*/
   text-indent: 0;
-  /* So text isn't removed from this too */
   display: inline-block;
   vertical-align: middle;
   padding-bottom: 5px;
   zoom: 1;
 }
-@media screen and (max-width: 800px) {
-  #ptx-navbar .previous-button {
-    /* Disable ellipsis */
-    white-space: normal;
-    overflow: visible;
-    text-overflow: clip;
-    /* center the icon */
-    text-align: center;
-    position: relative;
-    /* hide the text */
-    text-indent: 110%;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-  #ptx-navbar .previous-button:before {
-    font-size: 2em;
-    line-height: 1.0em;
-/*
-    line-height: 36px;
 */
-    width: 2em;
-    /* So text isn't removed from this too */
-    padding-top: 5px;
-    position: absolute;
-    left: 55%;
-    right: auto;
-    margin-left: -22.1px;
-    top: 50%;
-    bottom: auto;
-    margin-top: -22.1px;
-  }
-}
+
 #ptx-navbar .next-button {
   text-align: right;
 }
-#ptx-navbar .next-button:after {
-  content: ">";
-  text-align: center;
-  font-size: 1.5em;
-  font-family: "Open Sans";
+@media screen and (max-width: 800px) {
+  #ptx-navbar .button {
+    /*@include button-hide-text($navbar-icon-box-size);*/
+    float: left;
+    text-align: center;
+    margin: 0;
 /*
-  line-height: 35.36px;
-  width: 35.36px;
+    line-height: 44.2px;
 */
-  text-indent: 0;
-  padding-bottom: 5px;
-  /* So text isn't removed from this too */
-  display: inline-block;
-  vertical-align: middle;
+    border: 1px solid #bababa;
+    display: inline;
+  }
 }
 @media screen and (max-width: 800px) {
-  #ptx-navbar .next-button {
-    /* Disable ellipsis */
-    white-space: normal;
-    overflow: visible;
-    text-overflow: clip;
-    /* center the icon */
-    text-align: center;
-    position: relative;
-    /* hide the text */
-    text-indent: 110%;
-    white-space: nowrap;
-    overflow: hidden;
+  #ptx-navbar {
+    margin-left: auto;
+    margin-right: auto;
   }
-  #ptx-navbar .next-button:after {
-    font-size: 2em;
-    line-height: 1.0em;
-/*
-    line-height: 36px;
-*/
-    width: 2em;
-    padding-top: 5px;
-    padding-left: 5px;
-    /* So text isn't removed from this too */
-    position: absolute;
-    left: 55%;
-    right: auto;
-    margin-left: -22.1px;
-    top: 50%;
-    bottom: auto;
-    margin-top: -22.1px;
+  #ptx-navbar .index-button,
+  #ptx-navbar .calculator-button {
+    display: none;
+  }
+  #ptx-navbar .button {
+    border-bottom: none;
+    text-align: center;
+  }
+  #ptx-navbar .button {
+    margin-left: 0;
+    margin-right: 0;
+  } 
+  #ptx-navbar .toc-toggle .name,
+  #ptx-navbar .previous-button .name,
+  #ptx-navbar .up-button .name,
+  #ptx-navbar .next-button .name {
+    display: none;
+  }
+  #ptx-navbar .toc-toggle {
+      width: 25%;
+  }
+  #ptx-navbar .treebuttons {
+      width: 75%;
+  }
+  #ptx-navbar .treebuttons .button {
+    width: calc(33% - 1px);
   }
 }
 @media screen and (max-width: 800px) {
@@ -253,28 +213,6 @@
     text-indent: 110%;
     white-space: nowrap;
     overflow: hidden;
-  }
-  #ptx-navbar .settings-button:before {
-    position: absolute;
-    left: 50%;
-    right: auto;
-    margin-left: -22.1px;
-    top: 50%;
-    bottom: auto;
-    margin-top: -22.1px;
-  }
-}
-@media screen and (max-width: 800px) {
-  #ptx-navbar .navbar-bottom-buttons {
-    display: block;
-  }
-}
-#ptx-navbar .navbar-top-buttons {
-  display: block;
-}
-@media screen and (max-width: 800px) {
-  #ptx-navbar .navbar-top-buttons {
-    display: none;
   }
 }
 
@@ -296,39 +234,44 @@
     float: right;
     border-right: 1px solid #bababa;
 }
+/*
 #ptx-navbar .up-button:before {
     text-align: left;
     width: 20px;
 }
+*/
 #ptx-navbar .previous-button {
     width: 70px;
     float: right;
     border-left: 1px solid #bababa;
-    padding-right: 3px;
+    border-right: 1px solid #bababa;
 }
 #ptx-navbar .next-button {
     width: 70px;
     float: right;
     border-right: 1px solid #bababa;
 }
+/*
 #ptx-navbar .previous-button::before {
     width: 27px;
 }
 #ptx-navbar .next-button::after {
     width: 25px;
 }
+*/
 
-#ptx-navbar .button.toggle {
+#ptx-navbar .calculator-toggle {
     width: 60px;
+    height: 33px;
     text-align: center;
     border-radius: 20px;
     margin-left: 5px;
     border: 2px solid #66f;
     line-height: 25px;
-    margin-top: 3px;
+    margin-top: 2px;
     background-color: #eef;
 }
-#ptx-navbar .button.toggle.open {
+#ptx-navbar .calculator-toggle.open {
     background: #fee;
     border: 2px solid #f66;
 }
@@ -336,7 +279,6 @@
 #ptx-navbar .treebuttons {
     float: right;
 }
-
 #ptx-navbar .treebuttons .next-button, #ptx-navbar .treebuttons .up-button, #ptx-navbar .treebuttons .previous-button {
     float: left;
 }
