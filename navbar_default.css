@@ -28,10 +28,10 @@
   }
 }
 #ptx-navbar .button {
+  font-size: 1.0em;
   cursor: pointer;
   display: inline-block;
   vertical-align: middle;
-  zoom: 1;
   /* Disable accidental text-selection */
   user-select: none;
   white-space: nowrap;
@@ -40,14 +40,8 @@
   float: left;
   text-align: left;
   position: relative;
-  display: block;
   /* subtract border and padding from width
    * so we can set width precisely as percent */
-  box-sizing: border-box;
-  font-size: 1em;
-  padding: 0;
-  margin: 0;
-  line-height: 35.36px;
 }
 #ptx-navbar .button:focus {
   outline: thin dotted #333;
@@ -87,75 +81,14 @@
   }
 }
 #ptx-navbar .toc-toggle {
-  /* Do not display if is missing */
-  display: none;
-  /*On desktop screens, */
-  padding: 0;
-}
- #ptx-navbar .toc-toggle {
   display: block;
   width: 240px;
+  padding-bottom: 0.8em;
 }
-@media screen and (min-width: 801px) {
-  #ptx-navbar .toc-toggle.active {
-    /* Show text if hidden and match sidebar width */
-    text-indent: 0;
-    width: 240px;
-  }
-}
-#ptx-navbar .toc-toggle:before {
-  content: "\2630";
-  aria-hidden="true";  /* not valid.  the hamburger shoudl appear in the source with this attr on its span */
-  text-align: center;
-  font-size: 2em;
-  line-height: 0.9em;
-/*
-  line-height: 35.36px;
-*/
-  width: 1.4em;
-  text-indent: 0;
-  /* So text isn't removed from this too */
-  display: inline-block;
-  vertical-align: baseline;
-  zoom: 1;
-}
-@media screen and (max-width: 800px) {
-  #ptx-navbar .toc-toggle {
-    /* Disable ellipsis */
-    white-space: normal;
-    overflow: visible;
-    text-overflow: clip;
-    /* center the icon */
-    text-align: center;
-    position: relative;
-    /* hide the text */
-    text-indent: 110%;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-  #ptx-navbar .toc-toggle:before {
-    content: "\2630";
-    text-align: center;
-    font-size: 2.4em;
-    line-height: 1.2em;
-/*
-    width: 44.2px;
-*/
-    text-indent: 0;
-    /* So text isn't removed from this too */
-    display: inline-block;
-    vertical-align: auto;
-    zoom: 1;
-  }
-  #ptx-navbar .toc-toggle:before {
-    position: absolute;
-    left: 50%;
-    right: auto;
-    margin-left: -22.1px;
-    top: 35%;
-    bottom: auto;
-    margin-top: -22.1px;
-  }
+#ptx-navbar .toc-toggle .icon {
+  font-size: 150%;
+  padding-left: 1em;
+  padding-right: 0.4em;
 }
 #ptx-navbar .up-button {
   text-align: center;
