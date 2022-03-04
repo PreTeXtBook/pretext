@@ -601,7 +601,7 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
         ww_reps_dir = os.path.join(generated_dir, 'webwork')
         ww_images_dir = os.path.join(ww_reps_dir, 'images')
     else:
-        msg = ''.join(["a publisher file specifying /publication/source/@generated ",
+        msg = ''.join(["a publisher file specifying /publication/source/directories/@generated ",
                        "is not in use. WeBWorK representations will be in {}"])
         _verbose(msg.format(dest_dir))
         ww_reps_dir = dest_dir
@@ -1327,7 +1327,7 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
     # but could have publisher file and bad elements/attributes
     if not(generated_dir):
         msg = ' '.join(["creating all images requires a directory specified in the",
-                        "publisher file in the attribute /publication/source/@generated" ])
+                        "publisher file in the attribute /publication/source/directories/@generated" ])
         raise ValueError(msg)
 
     # first stanza has code comments, and subsequent follow this
