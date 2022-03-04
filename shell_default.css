@@ -133,12 +133,14 @@
 .pretext .ptx-content-footer {
     background: #fdf;
 }
-.pretext .ptx-page > .ptx-page-footer {
+.pretext .ptx-page-footer {
     margin-left: 240px;
     padding-left: 8em;
     background: #def;
 }
-
+.pretext .ptx-page-footer > a > div {
+  display: inline;
+}
 @media screen and (max-width: 800px) {
   .pretext #ptx-navbar {
     position: fixed;
