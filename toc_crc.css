@@ -1,8 +1,5 @@
 
-/* the top half of this file may be from a previous style */
-
 #ptx-toc {
-  /* IMPORTANT height must be calculated by javascript. */
     width: 240px;
     margin: 0;
     font-size: 14.72px;
@@ -17,17 +14,13 @@
     padding: 0px;
 }
 
-
-/* do we need a class, or is the location in the tree good enough? */
-.ptx-page #ptx-sidebar #ptx-toc ul a,
-.ptx-page #ptx-sidebar #ptx-toc ul .part a,
-.ptx-page #ptx-sidebar #ptx-toc ul .frontmatter a:first-child {
-    background: #ddd;
+#ptx-toc ul a,
+#ptx-toc ul .part a,
+#ptx-toc ul .frontmatter a {
     font-weight: 700;
     font-size: .9em;
 }
-.ptx-page #ptx-sidebar #ptx-toc ul ul a {
-    background: #fff;
+#ptx-toc ul ul li a {
     font-weight: 400;
 }
 
@@ -52,23 +45,6 @@
     font-style: italic;
 }
 
-/* more specific than something in toc_default */
-#ptx-toc ul ul ul li:last-child {
-    margin-bottom: 0;
-    border-bottom: 1px solid #ddd;
-}
-
-/* Sets spacing between section headings*/
-#ptx-toc > ul > li:not(:first-child) {
-    margin-top: 0.3em;
-}
-/* But not at the start of a part */
-/* I cannot see that this actually does anything --DF */
-#ptx-toc > ul > li.part + li,
-#ptx-toc > ul > li.frontmatter + li,
-#ptx-toc > ul > li.backmatter + li {
-    margin-top: 0;
-}
 #ptx-toc ul li a {
     text-decoration: none;
 }
@@ -79,26 +55,14 @@
     padding-left: 0.2em;
 }
 
-/* Ensures that there is no double border between subsections */
-#ptx-toc ul li ul a {
-    border-top: none;
+#ptx-toc ul li a {
+    border-top: 1px solid;
+    border-bottom: none;
 }
 
-/* Allows both "top" and bottom border of a subsection to be highlighted on hover */
 #ptx-toc ul li ul a:hover {
     padding-top: -1px;
    // was margin-top: -1px; but that caused a little jiggling
-}
-
-/* Removes the excess space between the last subsection and the next section (caused by
-the margin on top of sections being used to space out adjacent sections) */
-#ptx-toc ul li ul li:last-child {
-    margin-bottom: -0.3em;
-}
-
-/* Removes double border between last subsection and next section */
-#ptx-toc ul li ul li:last-child a {
-    border-bottom: none;
 }
 
 #ptx-toc ul li a:active {
@@ -116,7 +80,7 @@ the margin on top of sections being used to space out adjacent sections) */
 
 /* comment out because we need to fix the fluttering effect.
    if this is hidden by default, the page is not usable without JavaScript
-.ptx-page #ptx-sidebar {
+#ptx-sidebar {
     display: none;
 }
 */
@@ -124,26 +88,16 @@ the margin on top of sections being used to space out adjacent sections) */
 
 
 /* Links inside the dropdown */
-#ptx-sidebar #ptx-toc a {
-//    color: var(--bluegreen); /* Not needed */  /* provided by colors_bluegreen_grey.css */
-    background: #fafafa;
+#ptx-toc a {
     padding: .25em .5em .25em .5em;
     text-decoration: none;
     font-weight: 500;
     font-size: .9em;
     margin: 0px;
-    border-bottom: 1px solid var(--bluegreen); /* Needed --- not provided colors_bluegreen_grey.css */
 }
 
-/* Change color of dropdown links on hover */
-#ptx-sidebar #ptx-toc ul a:hover, #ptx-sidebar #ptx-toc ul a:focus,
-#ptx-sidebar #ptx-toc ul ul a:hover, #ptx-sidebar #ptx-toc ul ul a:focus {
-   background: var(--bluegreen);  /* Needed --- not provided by colors_bluegreen_grey.css */
-   color: #fff;                   /* Needed --- not provided by colors_bluegreen_grey.css */
-}
-
-#ptx-sidebar #ptx-toc ul,
-#ptx-sidebar #ptx-toc ul li {
+#ptx-toc ul,
+#ptx-toc ul li {
     list-style-type: none;
     margin: 0px;
     width: 255px;  /* This one is key to making items menu uniform width */
@@ -152,7 +106,7 @@ the margin on top of sections being used to space out adjacent sections) */
 
 /* The anchor carries the grid content  */
 /* undo what is in toc_default.css */
-.ptx-page #ptx-sidebar ul li a {
+#ptx-toc ul li a {
     display: grid;
     width: 240px;
     grid-gap: 3px;
@@ -179,27 +133,4 @@ the margin on top of sections being used to space out adjacent sections) */
 #ptx-toc a > .title {
     grid-area: toc-content;
 }
-
-
-/* Adapted David Farmer hacks */
-/*
-
-#ptx-sidebar  .link.backmatter ~ .link a {
-    background-color: #fafafa;
-    border-top: none;
-    text-transform: none;
-    font-weight: 600;
-}
-
-#ptx-sidebar .link.backmatter ~ .link a:hover {
-    background-color: var(--bluegreen);
-    color: #fff;
-}
-
-#ptx-sidebar ul li  ul li a.active{
-    color: #ffffff;
-    background-color: var(--highlighttoc);
-}
-
-*/
 

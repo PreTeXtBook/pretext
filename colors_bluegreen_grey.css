@@ -57,7 +57,7 @@
   --sectiontoctext: var(--bluegreen); /* #20477b; */
   --sectiontocactive: var(--documenttitle);   /* often the same as documenttitle */
   --sectiontoctextactive: white;
-  --tocborder: #152f53;
+  --tocborder: var(--bluegreen);  /* #152f53; */
 
   --highlighttoc: var(--bluegreen); /* #20477b; */
   --highlighttoctext: white;
