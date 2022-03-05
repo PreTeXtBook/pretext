@@ -62,8 +62,8 @@
             <xi:include href="publisher/latex-fonts.xml"/>
             <xi:include href="publisher/latex-styling.xml"/>
             <xi:include href="publisher/cover-design.xml"/>
-            <xi:include href="publisher/publisher-file.xml"/>
             <xi:include href="publisher/print-on-demand.xml"/>
+            <xi:include href="publisher/publication-file.xml"/>
             <!-- keep the Publisher's FAQ last within part -->
             <xi:include href="publisher/publisher-faq.xml"/>
         </part>
