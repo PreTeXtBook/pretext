@@ -136,8 +136,98 @@ body.pretext {
     margin-left: 2em;
 }
 
+.pretext .ptx-page .ptx-content-footer {
+    display: grid;
+    max-width: 100%;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas:
+        "content-footer-prev content-footer-top content-footer-next";
+    border: 2px solid #f00;
+    margin-left: 32px;
+    margin-top: 10px;
+}
+
+.ptx-content-footer .previous-button {
+    grid-area: content-footer-prev;
+    background-color: green;
+    justify-self: start;
+    align-self: center;
+    margin: 20px;
+}
+
+.ptx-content-footer .top-button{
+    grid-area: content-footer-top;
+    background-color: yellow;
+    justify-self: center;
+    align-self: center;
+    margin: 20px;
+    padding: 5px;
+}
+
+.ptx-content-footer .top-button .name{
+ 
+    margin: 10px;
+    border: 2px solid #000;
+    padding: 5px;
+    border-radius: 5px;
+} 
+
+.ptx-content-footer .next-button {
+    grid-area: content-footer-next;
+    background-color: orange;
+    justify-self: end;
+    align-self: center;
+    margin: 20px;
+}
+
+
 /*.ptx-footer-wrapper */
 .pretext .ptx-page .ptx-page-footer {
+    display: grid;
+    max-width: 100%;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas:
+        "page-footer-feedback page-footer-pretext page-footer-mathjax";
+    border: 2px solid #00f;
+    margin-left: 32px;
+    margin-top: 10px;
+}
+
+.ptx-page-footer .feedback-link{
+    grid-area: page-footer-feedback;
+    background-color: green;
+    justify-self: start;
+    align-self: center;
+    margin: 20px;
+    padding: 5px;
+    max-width: 33.3%;        
+}
+.ptx-page-footer  .pretext-link{
+    grid-area: page-footer-pretext;
+    background-color: yellow;
+    justify-self: center;
+    align-self: center;
+    margin: 20px;
+    padding: 5px;
+    max-width: 33.3%;
+    border: 2px solid blue;
+}
+
+.ptx-page-footer  .pretext-link .logo {
+    max-width: 50px;
+    max-height: 50px;
+}
+
+.ptx-page-footer .logo {
+    grid-area: page-footer-mathjax;
+    background-color: orange;
+    justify-self: end;
+    align-self: center;
+    margin: 20px;
+    max-width: 33.3%;
+}
+
+.pretext .ptx-page .ptx-page-footerxx {
     grid-area: content-footer;
     grid-column-start: 2;
     grid-column-end: 3;
@@ -162,6 +252,7 @@ body.pretext {
     margin-right: 20px;
     //    position: sticky;
 }
+/*
 
 .pretext .ptx-page .ptx-page-footer > p {
     background: #ffd;
@@ -206,7 +297,7 @@ body.pretext {
     border: 1px solid #aaa;
     color: #000;
     cursor: pointer;
-    float: left; /* Float the buttons side by side */
+    float: left;
 }
 
 .ptx-foot-button-group button {
@@ -217,10 +308,10 @@ body.pretext {
     border: 1px solid #aaa;
 }
 .ptx-foot-button-group button:not(:last-child) {
-    border-right: none; /* Prevent double borders */
+    border-right: none;
 }
 
-/* Add a background color on hover */
+
 .ptx-foot-button-group button:hover {
     background-color: #fff;
 }
@@ -264,3 +355,4 @@ body.pretext {
     }
 }
 
+*/
