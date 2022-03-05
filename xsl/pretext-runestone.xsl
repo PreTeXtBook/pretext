@@ -467,13 +467,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*" mode="runestone-manifest"/>
 </xsl:template>
 
-<!-- HTML ID -->
-<!-- This is visible in exercises managed by Runestone Services  -->
-<!-- and so we provide a more appealing version with an override -->
-<xsl:template match="*" mode="html-id">
-    <xsl:apply-templates select="." mode="visible-id"/>
-</xsl:template>
-
 <!-- ########## -->
 <!-- Components -->
 <!-- ########## -->
