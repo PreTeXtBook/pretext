@@ -8,17 +8,17 @@
 <!-- See the file COPYING for copying conditions.             -->
 
 <!-- NB: This chapter is organized by the hierarchy -->
-<!-- of the publisher file and then alphabetically  -->
+<!-- of the publication file and then alphabetically  -->
 <!-- at each level of the tree                      -->
 
-<chapter xml:id="publisher-file-reference">
-    <title>Publisher File Reference</title>
+<chapter xml:id="publication-file-reference">
+    <title>Publication File Reference</title>
 
     <introduction>
-        <p>This chapter is reference material for the <term>publisher file</term>, whose employment is described in <xref ref="publisher-file"/>, where you can also find an explanation of the shorthand syntax used here to describe elements of this file.</p>
+        <p>This chapter is reference material for the <term>publication file</term>, whose employment is described in <xref ref="publication-file"/>, where you can also find an explanation of the shorthand syntax used here to describe elements of this file.</p>
     </introduction>
 
-    <section xml:id="publisher-file-common">
+    <section xml:id="publication-file-common">
         <title>Common Options</title>
         <idx>common options</idx>
         <idx><h>publisher options</h><h>common</h></idx>
@@ -89,13 +89,13 @@
         </subsection>
     </section>
 
-    <section xml:id="publisher-file-numbering">
+    <section xml:id="publication-file-numbering">
         <title>Numbering Options</title>
         <idx>numbering options</idx>
         <idx><h>publisher options</h><h>numbering</h></idx>
 
         <p>How various items get numbered can be controlled by specifying levels.  For pieces of content (e.g. <tag>example</tag>, <tag>fn</tag>, <ellipsis/>) the level will be the number of separators in the number, usually periods.  To fully understand these options, carefully read <xref ref="publisher-levels"/> and <xref ref="publisher-numbering"/>.</p>
-        <p>You can stop numbering divisions at some depth.  For example, you may want your <tag>book</tag> (without parts) to have numbered <tag>subsection</tag>, but numbers on the few <tag>subsubsection</tag> is just too messy and not necessary.  Then you would set the publisher file entry<cd>
+        <p>You can stop numbering divisions at some depth.  For example, you may want your <tag>book</tag> (without parts) to have numbered <tag>subsection</tag>, but numbers on the few <tag>subsubsection</tag> is just too messy and not necessary.  Then you would set the publication file entry<cd>
             <cline>/publication/numbering/divisions/@level</cline>
         </cd> to the value <c>3</c> to number <tag>chapter</tag>, <tag>section</tag>, and <tag>subsection</tag>, only.  (Note this is the exception, you will get at most <em>two</em> separators in a division number in this case.)  So you can think of this as the <em>maximum</em> level for numbers on divisions.  Just be careful not to try to number other objects (described next) to a greater level, as that is impossible, and so will generate a warning and the default will be substituted.</p>
         <p>For items within a division, various groups of objects are numbered consecutively, with a hierarchy given by a level.  These numbers are controlled by<cd>
@@ -104,17 +104,17 @@
             <cline>/publication/numbering/equations/@level</cline>
             <cline>/publication/numbering/footnotes/@level</cline>
         </cd> whose values should be integers (zero is a possibility) that do not exceed the maximum level specified for divisions.</p>
-        <p>Chapters of a <tag>book</tag> may start numbering from something other than one.  This feature is not available in a book with structural parts (rather than decorative parts).  Read about this at the end of <xref ref="publisher-numbering"/> and <xref ref="best-practice-chapter-zero"/>.  If you still want to proceed, then set the publisher file entry<cd>
+        <p>Chapters of a <tag>book</tag> may start numbering from something other than one.  This feature is not available in a book with structural parts (rather than decorative parts).  Read about this at the end of <xref ref="publisher-numbering"/> and <xref ref="best-practice-chapter-zero"/>.  If you still want to proceed, then set the publication file entry<cd>
             <cline>/publication/numbering/divisions/@chapter-start</cline>
         </cd> to the desired value of the first chapter.</p>
-        <p>A <tag>book</tag> with <tag>part</tag> may have the parts numbered to reflect two different structures, <term>decorative</term> or <term>structural</term>.  Set the publisher file entry<cd>
+        <p>A <tag>book</tag> with <tag>part</tag> may have the parts numbered to reflect two different structures, <term>decorative</term> or <term>structural</term>.  Set the publication file entry<cd>
             <cline>/publication/numbering/divisions/@part-structure</cline>
         </cd> to <c>decorative</c> (the default) or <c>structural</c>.</p>
         <p>When a <tag>book</tag> is designed to have structural parts, then there is an expectation that the part divisions are important or relevant (at least moreso than in the case of decorative parts).  Then, to choose to number objects (blocks, equations, etc.) at level 0, crossing part boundaries, strikes us as an odd choice.  So odd that there is a <url href="https://github.com/PreTeXtBook/pretext/issues/1650" visual="https://github.com/PreTeXtBook/pretext/issues/1650">small bug at issue #1650</url>, which might be solved by simply banning this combination.</p>
         <p>For more on divisions, and their numbering see <xref ref="topic-divisions"/>.</p>
     </section>
 
-    <section xml:id="publisher-file-latex">
+    <section xml:id="publication-file-latex">
         <title>PDF (<latex/>) Options</title>
         <idx>PDF publisher options</idx>
         <idx>LaTeX publisher options</idx>
@@ -123,7 +123,7 @@
 
         <introduction>
             <p>These options affect the conversion to <latex/>, which can in turn be converted into <init>PDF</init>.
-            See <xref ref="pdf-print"/> for a more general overview of this conversion with more details.  This includes some existing options that will eventually migrate to the publisher file.</p>
+            See <xref ref="pdf-print"/> for a more general overview of this conversion with more details.  This includes some existing options that will eventually migrate to the publication file.</p>
         </introduction>
 
         <subsection xml:id="latex-print-options">
@@ -194,7 +194,7 @@
         </subsection>
     </section>
 
-    <section xml:id="publisher-file-online">
+    <section xml:id="publication-file-online">
         <title>Online (HTML) Options</title>
         <idx>HTML publisher options</idx>
         <idx><h>publisher options</h><h>HTML</h></idx>
@@ -453,7 +453,7 @@
         </subsection>
     </section>
 
-    <section xml:id="publisher-file-revealjs">
+    <section xml:id="publication-file-revealjs">
         <title>Reveal.js Slideshow Options</title>
         <idx>reveal.js slideshow publisher options</idx>
         <idx><h>publisher options</h><h>reveal.js slideshow</h></idx>
@@ -512,12 +512,12 @@
         </subsection>
     </section>
 
-    <section xml:id="publisher-file-source">
+    <section xml:id="publication-file-source">
         <title>Source Options</title>
         <idx>source publisher options</idx>
         <idx><h>publisher options</h><h>source</h></idx>
 
-        <subsection xml:id="publisher-file-directory-management">
+        <subsection xml:id="publication-file-directory-management">
             <title>Directory Management</title>
 
             <p>Two directories of additional files need to be specified, as paths relative to the main <pretext/> source file, in order that they can be managed automatically for the construction of various output formats.  Study <xref ref="processing-directory-management"/> carefully for the exact details.  To set these directories, the<cd>
@@ -528,7 +528,7 @@
             </ul>It is an error to only specify one of the two directories.  It is all or nothing.</p>
         </subsection>
 
-        <subsection xml:id="publisher-file-source-extras">
+        <subsection xml:id="publication-file-source-extras">
             <title>Extras</title>
 
             <p>Some source material is optional, and may be included based on the publisher and the audience.  The values of the attributes below are filenames.  They could be absolute paths (which is not very portable, and so likely a bad idea), or relative paths.  In the latter case, they are relative to the source file that contains the <tag>pretext</tag> element (the <q>main</q> file if you have modularized your source).  Temporarily using an absolute path can be useful when you are having problems with any of these files and want to eliminate one variable while debugging.</p>

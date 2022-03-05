@@ -14,13 +14,13 @@
 
         <p><url href="https://runestone.academy" visual="runestone.academy">Runestone Interactive</url> is a textbook authoring and hosting system orginally designed for textbooks about computer science.  It is similar in design and goals to <pretext/>, but is also complementary in important ways.  In particular, Runestone provides textbook hosting and excels at providing very interactive versions where student work in the textbook can be graded (automatically or manually), scores recorded, and that information can be viewed by an instructor.</p>
 
-        <p>The usual <pretext/> <init>HTML</init> output (<xref ref="online-html"/>) only needs minor modifications to run profitably on a Runestone server.  You accomplish this via a publisher option (<xref ref="publisher-file"/>).  The absolute simplest publisher file to accomplish this is<cd>
+        <p>The usual <pretext/> <init>HTML</init> output (<xref ref="online-html"/>) only needs minor modifications to run profitably on a Runestone server.  You accomplish this via a publisher option (<xref ref="publication-file"/>).  The absolute simplest publication file to accomplish this is<cd>
             <cline>&lt;publication&gt;</cline>
             <cline>  &lt;html&gt;</cline>
             <cline>    &lt;platform host="runestone"/&gt;</cline>
             <cline>  &lt;/html&gt;</cline>
             <cline>&lt;/publication&gt;</cline>
-        </cd>(See <xref ref="online-platform-options"/>.)  Then perform the usual conversion to online <init>HTML</init>, as described in <xref ref="online-html"/> but also include the publisher file via a string parameter.  The output should appear like a usual <pretext/> document, but will now include a new menu on each page.  This has options which allow a reader or instructor to interact with the server when hosted.</p>
+        </cd>(See <xref ref="online-platform-options"/>.)  Then perform the usual conversion to online <init>HTML</init>, as described in <xref ref="online-html"/> but also include the publication file via a string parameter.  The output should appear like a usual <pretext/> document, but will now include a new menu on each page.  This has options which allow a reader or instructor to interact with the server when hosted.</p>
 
         <p>Runestone textbooks are designed around interactive activities and active reading.  We are in the process of exposing these capabilities via <pretext/> markup, as of 2022-01-21.  So expect this list to expand, and feel free to influence priorities for new features.  Some of this is subject to change as we gain experience.<ul>
             <li>Every feature of <pretext/> <init>HTML</init> output should function identically on a Runestone server.</li>

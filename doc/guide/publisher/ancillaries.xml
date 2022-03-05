@@ -88,7 +88,7 @@
                 </li>
 
                 <li>
-                    <p>Now you can have all of these private solutions incorporated into your source by specifying the filename in your publisher file (<xref ref="publisher-file"/>).  The <attr>private-solutions</attr> attribute of the <c>/publication/source</c> element should be set to this filename (<xref ref="publisher-file-source-extras"/>).  So you would have<cd>
+                    <p>Now you can have all of these private solutions incorporated into your source by specifying the filename in your publication file (<xref ref="publication-file"/>).  The <attr>private-solutions</attr> attribute of the <c>/publication/source</c> element should be set to this filename (<xref ref="publication-file-source-extras"/>).  So you would have<cd>
                         <cline>&lt;publication&gt;</cline>
                         <cline>  &lt;source private-solutions="path/to/privatesolutions.ptx"/&gt;</cline>
                         <cline>  ...</cline>

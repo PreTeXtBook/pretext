@@ -118,7 +118,7 @@
             <input>pretext new book</input>
           </console>
         <p>
-          This will create a new folder at your current location called <c>new-pretext-project</c>. The folder contains the <term>source</term> files for your project (the files you will edit to add content to your book), as well as a folder for <term>assets</term> (such as external images you might put in your book), a folder for <term>publisher files</term> (which describe some customizations for your book) and a <c>project.ptx</c> file that tracks options for different output <term>targets</term>.
+          This will create a new folder at your current location called <c>new-pretext-project</c>. The folder contains the <term>source</term> files for your project (the files you will edit to add content to your book), as well as a folder for <term>assets</term> (such as external images you might put in your book), a folder for <term>publication files</term> (which describe some customizations for your book) and a <c>project.ptx</c> file that tracks options for different output <term>targets</term>.
         </p>
 
         <p>

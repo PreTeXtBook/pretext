@@ -205,7 +205,7 @@
       </p>
       <p>
         Processing <webwork/> problems is best accomplished if you are using directory management.
-        With a publisher file, declare the external and generated directories as describe in
+        With a publication file, declare the external and generated directories as describe in
         <xref ref="processing-directory-management"/>.
         Then use the <c>pretext</c> script to extract <pretext/> content from the <webwork/> server.
         It will be placed in a <c>webwork</c> subfolder of your generated folder.
@@ -223,14 +223,14 @@
         <p>
           In the previous example and those that follow, you should specify paths as needed.
           For example, the <c>pretext</c> script is typically at <c>~/mathbook/pretext/pretext</c>.
-          And the <c>-p</c> option is specifying a publisher file.
+          And the <c>-p</c> option is specifying a publication file.
         </p>
       </warning>
       <p>
         <c>-c webwork</c> means you are processing the <webwork/> components.
       </p>
       <p>
-        <c>-p</c> specifies the publisher file, as described in <xref ref="publisher-file-reference"/>.
+        <c>-p</c> specifies the publication file, as described in <xref ref="publication-file-reference"/>.
       </p>
       <p>
         <c>-s</c> specifies the <webwork/> server.
@@ -261,7 +261,7 @@
         <input>pretext -c all -f html -p &lt;publisher&gt; -d &lt;destination&gt; aota.ptx</input>
       </console>
       <p>
-        <c>-p</c> specifies the publisher file, as described in <xref ref="publisher-file-reference"/>.
+        <c>-p</c> specifies the publication file, as described in <xref ref="publication-file-reference"/>.
       </p>
       <p>
         <c>-d</c> specifies a folder to place all of the HTML output.
@@ -344,7 +344,7 @@
         <input>pretext -c all -f pdf -p &lt;publisher&gt; -d &lt;destination&gt; aota.ptx</input>
       </console>
       <p>
-        <c>-p</c> specifies the publisher file, as described in <xref ref="publisher-file-reference"/>.
+        <c>-p</c> specifies the publication file, as described in <xref ref="publication-file-reference"/>.
       </p>
       <p>
         <c>-d</c> specifies a folder to place the PDF output.

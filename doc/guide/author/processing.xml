@@ -196,11 +196,11 @@
     </section>
 
     <section xml:id="processing-publisher-stringparam">
-        <title>Customizations, Publisher File, String Parameters</title>
+        <title>Customizations, Publication File, String Parameters</title>
 
         <p>There are some aspects of your output that are entirely divorced from the actual content, and are presumably all about how that content is presented.  Two good examples are the size of the font used in <latex />/PDF/print output, and the granularity of web pages in HTML output (by this we mean, is each web page a whole chapter, a whole section, a whole subsection?).  Producing output with varying values of these parameters does absolutely nothing to change your content in any way, and so should not be a part of your source.</p>
 
-        <p>At this writing (2019-07-10) we have begun to transition between two different ways to accomplish this.  The new method is to create a <term>publisher file</term> that is an <init>XML</init> file that specifies options that are independent of your source material.  See <xref ref="publisher-file"/> in <xref ref="part-publisher"/> for details.  We continue to provide many of the values for these parameters on the command-line <em>at processing time</em>.  They have become known as <term>stringparam</term><idx>stringparam</idx> since that is the name used to call them using <c>xsltproc</c>. The <pretext />-CLI can set these stringparams easily as well.</p>
+        <p>At this writing (2019-07-10) we have begun to transition between two different ways to accomplish this.  The new method is to create a <term>publication file</term> that is an <init>XML</init> file that specifies options that are independent of your source material.  See <xref ref="publication-file"/> in <xref ref="part-publisher"/> for details.  We continue to provide many of the values for these parameters on the command-line <em>at processing time</em>.  They have become known as <term>stringparam</term><idx>stringparam</idx> since that is the name used to call them using <c>xsltproc</c>. The <pretext />-CLI can set these stringparams easily as well.</p>
 
         <p>Suppose you want to make a large-font version of your textbook for a student who has limited vision.  Look inside the top of <url href="https://github.com/PreTeXtBook/pretext/blob/dev/xsl/mathbook-latex.xsl"><c>xsl/pretext-latex.xsl</c></url> and find the <c>latex.font.size</c> parameter.  The preceding comments in this file suggest <c>20pt</c> is the maximum supported. To pass this parameter to the CLI, you would enter the following.</p>
 
@@ -244,7 +244,7 @@
         <subsection>
             <title>Managing Directories</title>
 
-            <p>The name, and location of the external and generated directories (both of them, always) are then specified in a publisher file (see <xref ref="publisher-file-directory-management"/> for the precise specification).  The values of these attributes are <em>relative</em> pathnames to the directories, relative to the location of the <em>main</em> <pretext/> file for your project.  Let us take a look at an example.</p>
+            <p>The name, and location of the external and generated directories (both of them, always) are then specified in a publication file (see <xref ref="publication-file-directory-management"/> for the precise specification).  The values of these attributes are <em>relative</em> pathnames to the directories, relative to the location of the <em>main</em> <pretext/> file for your project.  Let us take a look at an example.</p>
 
             <example xml:id="sample-directory-management">
                 <title>Sample Directory Management</title>
@@ -276,7 +276,7 @@
                     <cline>            sloth.jpg</cline>
                 </cd></p>
 
-                <p>In your publisher files you would then have the entry, as a sub-element of the <c>source</c> element,<cd>
+                <p>In your publication files you would then have the entry, as a sub-element of the <c>source</c> element,<cd>
                     <cline>&lt;directories external="../ext" generated="../gen"/&gt;</cline>
                 </cd>Notice that we have deliberately named our directories <c>ext</c> and <c>gen</c> as part of this illustration, so that they are not identical to the <em>attribute</em> names on the <tag>directories</tag> element.  The two attribute values are <em>relative</em> to the location of the main <pretext/> file, in this case <c>aota.ptx</c>.  The two periods, <c>..</c>, mean to go up a level, here to the <c>aota</c> directory, then the slash indicates a step down to either <c>gen</c> or <c>ext</c>.  Note that <c>latex-image</c> and <c>youtube</c> within <c>gen</c> <em>must</em> be specified exactly that way.  Now every <pretext/> production tool can deduce where your files are.</p>
 
@@ -285,7 +285,7 @@
                     <cline>     &lt;image source="photos/slow-alligator.jpeg"/&gt;</cline>
                     <cline>     &lt;image source="photos/fast-whippet.jpeg"/&gt;</cline>
                     <cline>&lt;sidebyside/&gt;</cline>
-                </cd>Notice that the values of your <attr>source</attr> attributes <em>do not</em> include <c>ext</c> or <c>../ext</c>.  This gives you the freedom to move your <c>ext</c> directory or rename it, and then you only change the publisher file and not your source.  The decision to have the subdirectories <c>photos</c> and <c>movies</c> are not easily changed, since they will be in your source, but they may have value for the organization of your project.</p>
+                </cd>Notice that the values of your <attr>source</attr> attributes <em>do not</em> include <c>ext</c> or <c>../ext</c>.  This gives you the freedom to move your <c>ext</c> directory or rename it, and then you only change the publication file and not your source.  The decision to have the subdirectories <c>photos</c> and <c>movies</c> are not easily changed, since they will be in your source, but they may have value for the organization of your project.</p>
 
                 <p>The chase video is of your own creation, you have included it as part of your project's files, and will be hosting it on your web server, where the rest of your HTML version is made available for viewing.  You might author<cd>
                     <cline>&lt;figure xml:id="fig-chase"&gt;</cline>
@@ -303,7 +303,7 @@
                     <cline>&lt;figure/&gt;</cline>
                 </cd>With the right options to the <c>pretext/pretext</c> script, the file <c>marsupial-life-cycle.svg</c> will be generated.  Presently, you must explicitly tell the script to place the output in the directory<cd>
                     <cline>/home/mjones/books/gen/latex-image</cline>
-                </cd>but we plan to make this the default behavior.  Or you could generate the file anywhere, and move it to the <c>latex-image</c> subdirectory of <c>gen</c>.  Notice how much of the process of creating a companion SVG image (which excels in a web browser) is automated, and how the <attr>xml:id</attr> attribute and the directories in the publisher file are used to keep everything coordinated.  The <c>latex-image</c> directory is not negotiable, it is the home for <em>every</em> image authored using a <pretext/> <tag>latex-image</tag> element (see <xref ref="subdirectories-of-generated"/>).</p>
+                </cd>but we plan to make this the default behavior.  Or you could generate the file anywhere, and move it to the <c>latex-image</c> subdirectory of <c>gen</c>.  Notice how much of the process of creating a companion SVG image (which excels in a web browser) is automated, and how the <attr>xml:id</attr> attribute and the directories in the publication file are used to keep everything coordinated.  The <c>latex-image</c> directory is not negotiable, it is the home for <em>every</em> image authored using a <pretext/> <tag>latex-image</tag> element (see <xref ref="subdirectories-of-generated"/>).</p>
 
                 <p>The slow sloth video was created by somebody else and posted to YouTube as a super slo-mo 240fps video.  You authored it within a <tag>figure</tag> simply by using the ID of the video on YouTube.<cd>
                     <cline>&lt;figure xml:id="fig-sloth"&gt;</cline>
@@ -368,17 +368,17 @@
         <subsection>
             <title>Backward-Compatibility and Migration</title>
 
-            <p>Directory management was added in the middle of 2021.  For projects existing at that time, it is an <q>opt-in</q> feature.  In other words, existing projects can still be built by moving additional files in the same ways as always, so long as you do not have a <tag>directories</tag> element in your publisher file.</p>
+            <p>Directory management was added in the middle of 2021.  For projects existing at that time, it is an <q>opt-in</q> feature.  In other words, existing projects can still be built by moving additional files in the same ways as always, so long as you do not have a <tag>directories</tag> element in your publication file.</p>
 
-            <p>However, it is absolutely necessary to opt-in to directory management (via the publisher file) if you want to build EPUB or Kindle formats.  You will also then be able to build PDF and HTML output with a single invocation of the <c>pretext/pretext</c> script, without any extra effort to place additional files in the right places.</p>
+            <p>However, it is absolutely necessary to opt-in to directory management (via the publication file) if you want to build EPUB or Kindle formats.  You will also then be able to build PDF and HTML output with a single invocation of the <c>pretext/pretext</c> script, without any extra effort to place additional files in the right places.</p>
 
             <p>New projects should definitely adopt directory management as their project develops.  New features and tools will assume this.  We now describe how existing projects can migrate.</p>
 
             <p>Previously there was not a firm distinction between external and generated files, though they were specified differently in <pretext/> source.  Many authors placed both types of files into a single directory, and since the default for locating generated files was a directory called <c>images</c>, this was often the single directory employed.   Thus, external files would be specified with a <attr>source</attr> attribute such as<cd>
                 <cline>&lt;image source="images/bobcat.jpg"/&gt;</cline>
-            </cd>A solution, if a bit clunky, is to make a new directory named <c>ext</c> and copy <c>images</c> and its contents to become a subdirectory of <c>ext</c>.  Then place a relative path to <c>ext</c> in the <attr>external</attr> attribute in your publisher file.  This means you will not have to edit your <pretext/> source at all.  At some later time, you could remove all references to <c>images</c> in your source and move the files themselves directly into <c>ext</c>.</p>
+            </cd>A solution, if a bit clunky, is to make a new directory named <c>ext</c> and copy <c>images</c> and its contents to become a subdirectory of <c>ext</c>.  Then place a relative path to <c>ext</c> in the <attr>external</attr> attribute in your publication file.  This means you will not have to edit your <pretext/> source at all.  At some later time, you could remove all references to <c>images</c> in your source and move the files themselves directly into <c>ext</c>.</p>
 
-            <p>For generated files it will be a bit more involved.  You need a new directory, such as <c>gen</c>, and you need to add it to your publisher file with the right relative path.  Then you will need to create as many of the relevant directories from <xref ref="subdirectories-of-generated"/> as necessary, as subdirectories of <c>gen</c>.  Populate these subdirectories with the relevant files, which may have been located in <c>images</c> before you started migrating.  There was a string parameter, <c>directory.images</c>, that could be used to specify an alternative directory to the default, <c>images</c>.  That parameter is now announced as deprecated, but will still be effective until your project opts-in.</p>
+            <p>For generated files it will be a bit more involved.  You need a new directory, such as <c>gen</c>, and you need to add it to your publication file with the right relative path.  Then you will need to create as many of the relevant directories from <xref ref="subdirectories-of-generated"/> as necessary, as subdirectories of <c>gen</c>.  Populate these subdirectories with the relevant files, which may have been located in <c>images</c> before you started migrating.  There was a string parameter, <c>directory.images</c>, that could be used to specify an alternative directory to the default, <c>images</c>.  That parameter is now announced as deprecated, but will still be effective until your project opts-in.</p>
 
             <p>As another short-term option for Mac or Linux users, it is possible to take previously existing resource directories and make symbolic links from a previous image directory, such as <c>my_images</c>, to the names provided here.  In that case, assuming the directory structure provided here, a command like <c>ln -s my_images external</c> (issued in the directory containing <c>my_images</c>) would create the correct symbolic link.</p>
         </subsection>

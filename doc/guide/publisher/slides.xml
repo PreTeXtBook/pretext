@@ -22,7 +22,7 @@
         </p>
         <p>
             Reveal.js supports themes that affect the overall appearance of a slideshow.
-            So in <pretext/> you can specify the name of theme in a publisher file.
+            So in <pretext/> you can specify the name of theme in a publication file.
             See <xref ref="revealjs-appearance-options"/> for details.
         </p>
         <p>
@@ -56,7 +56,7 @@
             <title>Navigation Mode</title>
             <p>
                 Reveal.js has various options of the visibility of arrows a presenter can click on in order to move through a presentation.
-                The visibility of these can be controlled via options in the publisher file.  See <xref ref="revealjs-control-options"/>.
+                The visibility of these can be controlled via options in the publication file.  See <xref ref="revealjs-control-options"/>.
             </p>
             <p>
                 Reveal.js imagines slides laid out on a 2-D grid.  Each <pretext/> section gives rise to a title slide and these are organized left-to-right.  <em>Below</em> each of these slides, arranged vertically, are the slides comprising the section.  We use the attribute value <c>grid</c> to refer to this arrangement.
