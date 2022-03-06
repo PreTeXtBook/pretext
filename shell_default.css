@@ -139,7 +139,10 @@
     background: #def;
 }
 .pretext .ptx-page-footer > a > div {
-  display: inline;
+  display: inline-block;
+}
+.pretext .ptx-page-footer .pretext-link .logo {
+  width: 6em;
 }
 @media screen and (max-width: 800px) {
   .pretext #ptx-navbar {
@@ -156,6 +159,9 @@
   .pretext .ptx-page > .ptx-page-footer {
     margin-bottom: 0;
     padding-left: 10px;
+  }
+  .pretext .ptx-page-footer .pretext-link .logo {
+    width: 4em;
   }
   .pretext .ptx-content-footer {
     margin-bottom: 60px;
