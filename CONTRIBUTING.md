@@ -5,7 +5,7 @@ If you have output that you think might be incorrect or misbehaved, please follo
 
 * Check that your input conforms to the schema [Author's Guide](https://pretextbook.org/doc/author-guide/html/schema.html)
 * Add a small example of your problem to the "minimal" example in the `examples/minimal` directory and test there
-* Search the [pretext-support](https://groups.google.com/forum/#!forum/pretext-support) and [pretext-dev](https://groups.google.com/forum/#!forum/pretext-dev) Google Groups, and the [GitHub issues](https://github.com/rbeezer/mathbook/issues), to see if the problem is known (if so, please add any new information there)
+* Search the [pretext-support](https://groups.google.com/forum/#!forum/pretext-support) and [pretext-dev](https://groups.google.com/forum/#!forum/pretext-dev) Google Groups, and the [GitHub issues](https://github.com/PreTeXtBook/pretext/issues), to see if the problem is known (if so, please add any new information there)
 * Post on one of the Google Groups, and include the source of your adjusted minimal example, along with a copy of the problematic output
 * If your problem involves HTML output, it is usually easier for us to understand if you host a live example and provide a URL in your post
 * If you have discovered a new problem, you can help when asked by filing an issue on GitHub (and it is OK to cut/paste from th Google Group discussion and/or link to a discussion there)

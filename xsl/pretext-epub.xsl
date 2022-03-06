@@ -233,7 +233,7 @@
 </xsl:template>
 
 <!-- First, we use the frontmatter element to trigger various necessary files     -->
-<!-- We process structural nodes via chunking routine in  xsl/mathbook-common.xsl -->
+<!-- We process structural nodes via chunking routine in  xsl/pretext-common.xsl  -->
 <!-- This in turn calls specific modal templates defined elsewhere in this file   -->
 <xsl:template match="/pretext">
     <xsl:apply-templates select="$document-root//frontmatter" mode="epub" />
@@ -245,7 +245,7 @@
 <!-- Structural Nodes -->
 <!-- ################ -->
 
-<!-- Read the code and documentation for "chunking" in xsl/mathbook-common.xsl -->
+<!-- Read the code and documentation for "chunking" in xsl/pretext-common.xsl -->
 
 <!-- Normally a "conclusion" would be on a "summary" page, or a -->
 <!-- component of the page for its containing division.  In the -->

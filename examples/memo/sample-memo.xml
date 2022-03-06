@@ -32,7 +32,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Copy sample graphics (masthead, intitals) to the directory where you compile LaTeX -->
 <!--                                                                                    -->
 <!-- $ xsltproc -o memo.tex                                                             -->
-<!--      /path/to/mathbook/xsl/mathbook-latex.xsl  /path/to/this-source-file.xml       -->
+<!--      /path/to/pretext/xsl/pretext-latex.xsl  /path/to/this-source-file.xml         -->
 <!--                                                                                    -->
 <!-- Look in current working directory for "memo.tex"                                   -->
 

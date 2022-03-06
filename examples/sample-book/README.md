@@ -28,9 +28,9 @@ front matter, necessitating a different `frontmatter-noparts.xml`.
 
 To build and test, use a scratch directory like `/tmp/sb`:
 
-1. PREP:  `/tmp/sb$ cp -av /path/to/mathbook/examples/sample-book/* .`
-2. HTML:  `/tmp/sb$ xsltproc -xinclude /path/to/mathbook/xsl/pretext-html.xsl sample-book.xml`
-3. LaTeX: `/tmp/sb$ xsltproc -o sample-book.tex -xinclude /path/to/mathbook/xsl/pretext-latex.xsl sample-book.xml`
+1. PREP:  `/tmp/sb$ cp -av /path/to/pretext/examples/sample-book/* .`
+2. HTML:  `/tmp/sb$ xsltproc -xinclude /path/to/pretext/xsl/pretext-html.xsl sample-book.xml`
+3. LaTeX: `/tmp/sb$ xsltproc -o sample-book.tex -xinclude /path/to/pretext/xsl/pretext-latex.xsl sample-book.xml`
 
 Look for `sample-book.tex` and `sample-book.html` for futher
 processing or viewing.  Note that the HTML filename came

@@ -45,7 +45,7 @@
 # each without a trailing slash
 
 # PreTeXt distribution root
-PTX = /Users/alex.jordan/mathbook
+PTX = /Users/alex.jordan/pretext
 
 # Products are built in subdirectories
 # of a "scratch" directory

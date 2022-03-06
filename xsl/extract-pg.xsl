@@ -234,9 +234,9 @@
     <xsl:param name="xref" />
     <xsl:param name="b-human-readable" />
     <xsl:copy-of select="$content" />
-    <xsl:if test="/mathbook/book|/mathbook/article">
+    <xsl:if test="/pretext/book|/pretext/article">
         <xsl:text> in </xsl:text>
-        <xsl:apply-templates select="/mathbook/book|/mathbook/article" mode="title-full" />
+        <xsl:apply-templates select="/pretext/book|/pretext/article" mode="title-full" />
     </xsl:if>
 </xsl:template>
 
@@ -651,18 +651,18 @@
     <xsl:text>## KEYWORDS(</xsl:text>
     <xsl:text>)&#xa;</xsl:text>
     <xsl:text>## TitleText1(</xsl:text>
-    <xsl:if test="/mathbook/book|/mathbook/article">
-        <xsl:apply-templates select="/mathbook/book|/mathbook/article" mode="title-full" />
+    <xsl:if test="/pretext/book|/pretext/article">
+        <xsl:apply-templates select="/pretext/book|/pretext/article" mode="title-full" />
     </xsl:if>
     <xsl:text>)&#xa;</xsl:text>
     <xsl:text>## EditionText1(</xsl:text>
-    <xsl:if test="/mathbook/book/frontmatter/colophon/edition">
-        <xsl:apply-templates select="/mathbook/book/frontmatter/colophon/edition" />
+    <xsl:if test="/pretext/book/frontmatter/colophon/edition">
+        <xsl:apply-templates select="/pretext/book/frontmatter/colophon/edition" />
     </xsl:if>
     <xsl:text>)&#xa;</xsl:text>
     <xsl:text>## AuthorText1(</xsl:text>
-    <xsl:if test="/mathbook/book|/mathbook/article">
-        <xsl:for-each select="/mathbook/book/frontmatter/titlepage/author|/mathbook/article/frontmatter/titlepage/author">
+    <xsl:if test="/pretext/book|/pretext/article">
+        <xsl:for-each select="/pretext/book/frontmatter/titlepage/author|/pretext/article/frontmatter/titlepage/author">
             <xsl:value-of select="personname"/>
             <xsl:if test="following-sibling::author">
                 <xsl:text>, </xsl:text>

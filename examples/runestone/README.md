@@ -6,7 +6,7 @@ As of 2019-12-17, this is a fork of the PreTeXt "Sample Book" adjusted to test h
 
 ```
 pip install pretextbook
-cd /path/to/mathbook/examples/runestone
+cd /path/to/pretext/examples/runestone
 pretext build --input sample-runestone.xml --publisher ./publication.xml
 ```
 
@@ -16,10 +16,10 @@ pretext build --input sample-runestone.xml --publisher ./publication.xml
 ```
 mkdir /tmp/rune /tmp/rune/html
 cd /tmp/rune/html
-cp -av /path/to/mathbook/examples/sample-book/images/ /path/to/mathbook/examples/sample-book/tikz/ /path/to/mathbook/examples/sample-book/code/ .
+cp -av /path/to/pretext/examples/sample-book/images/ /path/to/pretext/examples/sample-book/tikz/ /path/to/pretext/examples/sample-book/code/ .
 
 rm ./knowl/*.html *.html
-xsltproc -xinclude -stringparam publisher publication.xml /path/to/mathbook/xsl/pretext-html.xsl /path/to/mathbook/examples/runestone/sample-runestone.xml
+xsltproc -xinclude -stringparam publisher publication.xml /path/to/pretext/xsl/pretext-html.xsl /path/to/pretext/examples/runestone/sample-runestone.xml
 ```
 
 ## Installing the book into a Runestone Server

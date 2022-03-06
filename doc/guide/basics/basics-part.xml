@@ -1514,11 +1514,11 @@
       <!-- <idx><h><c>pretext</c> script</h><h>for sageplot to svg</h></idx> -->
       <!-- <idx><h><c>pretext</c> script</h><h>for sageplot to pdf</h></idx> -->
       <console width="80%" margins="10% 10%">
-        <input>/path/to/mathbook]/script/pretext -c sageplot -f svg -d ./images /path/to/yoursource.ptx</input>
+        <input>/path/to/pretext/pretext/pretext -c sageplot -f svg -d ./images /path/to/yoursource.ptx</input>
       </console>
 
       <console width="80%" margins="10% 10%">
-        <input>/path/to/mathbook]/script/pretext -c sageplot -f pdf -d ./images /path/to/yoursource.ptx</input>
+        <input>/path/to/pretext/pretext/pretext -c sageplot -f pdf -d ./images /path/to/yoursource.ptx</input>
       </console>
 
       <p>

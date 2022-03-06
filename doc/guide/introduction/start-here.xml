@@ -128,7 +128,7 @@
         </p>
 
         <console>
-            <input>xsltproc -xinclude ../mathbook/xsl/pretext-html.xsl source/main.ptx</input>
+            <input>xsltproc -xinclude ../pretext/xsl/pretext-html.xsl source/main.ptx</input>
         </console>
 
         <p>

@@ -111,7 +111,7 @@
                 <cline>    -Dorg.apache.xerces.xni.parser.XMLParserConfiguration=</cline>
                 <cline>        org.apache.xerces.parsers.XIncludeParserConfiguration\</cline>
                 <cline>    -jar ~/GitHub/jing-trang/build/jing.jar\</cline>
-                <cline>    ~/GitHub/mathbook/Schema/pretext.rng "$1"</cline>
+                <cline>    ~/GitHub/pretext/schema/pretext.rng "$1"</cline>
                 <cline>}</cline>
             </cd>Then he can simply go<cd>
                 <cline>~ $ ptx-check my-book.xml</cline>
@@ -123,7 +123,7 @@
         <title><pretext/> Validation Plus</title>
 
         <p>The second step of validation is our <q>validation-plus</q> stylesheet.  Fortunately, there is nothing to install.  Use it just like the conversions you have already been doing.  In the <pretext/> distribution, in the <c>schema</c> directory you will find <c>pretext-validation-plus.xsl</c>.  This is a stylesheet, unique to <pretext/>, which will carefully analyze your source to find any exceptions that the <acro>RELAX-NG</acro> schema was not designed to catch.  You use the stylesheet like any other,<cd>
-            <cline>xsltproc ~/mathbook/schema/pretext-validation-plus.xsl ~/books/aota/animals.xml</cline>
+            <cline>xsltproc ~/pretext/schema/pretext-validation-plus.xsl ~/books/aota/animals.xml</cline>
         </cd>with suitably adjusted paths, and be sure to provide the <c>-xinclude</c> switch if your source is modularized across multiple files (<xref ref="processing-modular" />).  No news is good news, but each exception found should provide enough explanation for you to locate, and correct, the problem.  These messages are under <pretext/>'s control, so please report any that are not helpful enough.  That's it<mdash/>easy.</p>
     </section>
 

@@ -11419,7 +11419,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:when>
                 </xsl:choose>
                 <!-- Annotations button was once here, see GitHub issue -->
-                <!-- https://github.com/rbeezer/mathbook/issues/1010    -->
+                <!-- https://github.com/PreTeXtBook/pretext/issues/1010 -->
             </div>
             <!-- Bottom buttons, for mobile UI -->
             <xsl:element name="div">
@@ -11449,7 +11449,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:if>
                 <xsl:apply-templates select="." mode="next-button" />
                 <!-- Annotations button was once here, see GitHub issue -->
-                <!-- https://github.com/rbeezer/mathbook/issues/1010    -->
+                <!-- https://github.com/PreTeXtBook/pretext/issues/1010 -->
                 <!-- increment the toolbar-divisor-4/5 if it returns    -->
              </xsl:element>
         </div>

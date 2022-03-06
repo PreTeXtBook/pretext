@@ -222,7 +222,7 @@
         <title>File Paths</title>
         <p>
           In the previous example and those that follow, you should specify paths as needed.
-          For example, the <c>pretext</c> script is typically at <c>~/mathbook/pretext/pretext</c>.
+          For example, the <c>pretext</c> script is typically at <c>~/pretext/pretext/pretext</c>.
           And the <c>-p</c> option is specifying a publication file.
         </p>
       </warning>

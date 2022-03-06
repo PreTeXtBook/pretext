@@ -139,7 +139,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- "proof" -->
 <!-- Changes: Bold upright font, abnormally large spacing after title, no tombstone. -->
-<!-- bwminimalstyle is part of the mathbook-latex.xsl file, uncertain                -->
+<!-- bwminimalstyle is part of the pretext-latex.xsl file, uncertain                 -->
 <!-- if we are committed to making it universally available to be used               -->
 <!-- like this by style writers.                                                     -->
 <xsl:template match="proof" mode="tcb-style">

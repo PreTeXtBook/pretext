@@ -39,7 +39,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--     the actual pages output.                            -->
 <!-- 3.  -stringparam base-url <url>                         -->
 <!--     Prefix of filenames, including a trailing slash     -->
-<!-- 4.  path/to/mathbook/xsl/pretext-json-manifest.xsl      -->
+<!-- 4.  path/to/pretext/xsl/pretext-json-manifest.xsl       -->
 <!-- 5.  path/to/master-file.xml                             -->
 <!--                                                         -->
 <!-- Output will be on stdout.                               -->
@@ -49,7 +49,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- $ xsltproc -xinclude                                    -->
 <!--   -stringparam chunk.level 2                            -->
 <!--   -stringparam base-url "http://abstract.ups.edu/aata/" -->
-<!--   /path/to/mathbook/xsl/pretext-json-manifest.xsl       -->
+<!--   /path/to/pretext/xsl/pretext-json-manifest.xsl        -->
 <!--   /path/to/aata/src/aata.xml                            -->
 
 

@@ -281,7 +281,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ############## -->
 
 <!-- Deprecation warnings are universal analysis of source and parameters   -->
-<!-- There is always a "document root" directly under the mathbook element, -->
+<!-- There is always a "document root" directly under the pretext element,  -->
 <!-- and we process it with the chunking template called below              -->
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/">
@@ -9946,12 +9946,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>\tabularnewline</xsl:text>
                 <xsl:value-of select="$updated-cline"/>
             </xsl:when>
-            <!-- Test determines if there are more rows.         -->
-            <!-- Next row could begin with bare [ and LaTeX sees -->
-            <!-- the start of \tabularnewline[] which would      -->
-            <!-- indicate the need for some unit of length for a -->
-            <!-- space, so we just appease the macro with a 0pt. -->
-            <!-- https://github.com/rbeezer/mathbook/issues/300  -->
+            <!-- Test determines if there are more rows.           -->
+            <!-- Next row could begin with bare [ and LaTeX sees   -->
+            <!-- the start of \tabularnewline[] which would        -->
+            <!-- indicate the need for some unit of length for a   -->
+            <!-- space, so we just appease the macro with a 0pt.   -->
+            <!-- https://github.com/PreTeXtBook/pretext/issues/300 -->
             <xsl:when test="parent::row/following-sibling::row">
                 <xsl:text>\tabularnewline[0pt]</xsl:text>
             </xsl:when>

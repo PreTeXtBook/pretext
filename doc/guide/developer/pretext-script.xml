@@ -97,8 +97,8 @@ The script should be run on the entire document, even if all the images are in o
     <section xml:id="pretext-helpers">
         <title>Configuring External Helper Programs</title>
 
-        <p>Our main processor, <c>xsltproc</c><idx><c>xsltproc</c></idx>, is not a general-purpose compiler, and does not <q>call</q> external programs.  That is the <foreign xml:lang="fr-FR">raison d'être</foreign> of the <c>pretext/pretext</c> script.  You will see a configuration file, <c>pretext/pretext.cfg</c>, as part of the distribution.  Read the comments at the top of this file, but foremost, realize that you are not meant to edit this file.  It is a template, and any changes you make will be overwritten with an original version when you update.  Instead, make a copy and place it as <c>user/pretext.cfg</c> within the distribution.  For instance, if your distribution is in the <c>mathbook</c> directory, then the commands<cd>
-            <cline>cd /path/to/mathbook</cline>
+        <p>Our main processor, <c>xsltproc</c><idx><c>xsltproc</c></idx>, is not a general-purpose compiler, and does not <q>call</q> external programs.  That is the <foreign xml:lang="fr-FR">raison d'être</foreign> of the <c>pretext/pretext</c> script.  You will see a configuration file, <c>pretext/pretext.cfg</c>, as part of the distribution.  Read the comments at the top of this file, but foremost, realize that you are not meant to edit this file.  It is a template, and any changes you make will be overwritten with an original version when you update.  Instead, make a copy and place it as <c>user/pretext.cfg</c> within the distribution.  For instance, if your distribution is in the <c>pretext</c> directory, then the commands<cd>
+            <cline>cd /path/to/pretext</cline>
             <cline>mkdir user</cline>
             <cline>cp pretext/pretext.cfg user/</cline>
         </cd>would be appropriate.  The script will look for the <c>user</c> copy first, and if not found, then fallback to the generic version.</p>

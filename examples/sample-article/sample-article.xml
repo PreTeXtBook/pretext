@@ -22,12 +22,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--
 To process this file, at the command-line issue:
 
-xsltproc /path/to/mathbook/xsl/pretext-html.xsl /path/to/mathbook/examples/sample-article.xml
+xsltproc /path/to/pretext/xsl/pretext-html.xsl /path/to/pretext/examples/sample-article.xml
 
 then find  "derivatives.html"  in the current working directory
 and use a web browser to view.  For PDF/print, issue:
 
-xsltproc -o derivatives.tex /path/to/mathbook/xsl/mathbook-latex.xsl /path/to/mathbook/examples/sample-article.xml
+xsltproc -o derivatives.tex /path/to/pretext/xsl/pretext-latex.xsl /path/to/pretext/examples/sample-article.xml
 
 and apply  pdflatex  or  xelatex  to  "derivatives.tex"  in
 the current working directory.
@@ -5083,7 +5083,7 @@ the xsltproc executable.
                         <cell>1234567890</cell>
                     </row>
                     <!-- The bracket caused a bug with LaTeX code, DO NOT remove -->
-                    <!-- See https://github.com/rbeezer/mathbook/issues/300      -->
+                    <!-- See https://github.com/PreTeXtBook/pretext/issues/300   -->
                     <!-- Totally generic, so by columns, all to right            -->
                     <row>
                         <cell>[First</cell>

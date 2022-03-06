@@ -317,8 +317,8 @@
         <title>emacs</title>
 
         <p>Jason Underdown reports on 2016-05-12 that emacs' <url href="https://www.gnu.org/software/emacs/manual/html_mono/nxml-mode.html" visual="www.gnu.org/software/emacs/manual/html_mono/nxml-mode.html">nXML mode</url> works well with a schema, and Mitch Keller reports on 2021-04-18 that specifically a <acro>RELAX-NG</acro> schema may be used.  The two versions of the <acro>RELAX-NG</acro> schema for <pretext/> can be found at<cd>
-            <cline>mathbook/schema/pretext.rng</cline>
-            <cline>mathbook/schema/pretext.rnc</cline>
+            <cline>pretext/schema/pretext.rng</cline>
+            <cline>pretext/schema/pretext.rnc</cline>
         </cd>The first is the <q>real</q> version, while the second is an entirely equivalent (compact) syntax that is meant to be a bit more human-readable, so perhaps either may be employed.</p>
 
         <p>On 2021-04-18, Mitch Keller reports success with placing the following <c>schemas.xml</c> file in his <pretext/> source file directories.  Note that you may need to adjust the path in the <attr>uri</attr> attribute, and the <attr>pattern</attr> attribute implies that Mitch has used a <c>.ptx</c> suffix for all his source filenames.  If you are already using emacs, you should have no trouble making the necessary adjustments.</p>
@@ -326,7 +326,7 @@
         <pre><![CDATA[
         <?xml version="1.0"?>
         <locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0">
-          <uri pattern="*.ptx" uri="../../mathbook/schema/pretext.rnc"/>
+          <uri pattern="*.ptx" uri="../../pretext/schema/pretext.rnc"/>
         </locatingRules>
         ]]>
         </pre>

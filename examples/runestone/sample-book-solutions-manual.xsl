@@ -21,7 +21,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
-<!-- Copy current file (sample-book-solution-manual.xsl) into mathbook/user -->
+<!-- Copy current file (sample-book-solution-manual.xsl) into pretext/user -->
 <!-- Then other imports are all relative to that directory                  -->
 
 <!-- This relative import will get XSL for building all the  -->

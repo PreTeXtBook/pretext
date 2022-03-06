@@ -55,7 +55,7 @@
 
                 <li>
                     <p>You are now going to make a local copy of your fork.  Think of it as a mirror<mdash/>you will do your best to keep the copy and the fork in-sync.  Git calls this a <term>clone</term><idx>clone</idx>.  In your fork (i.e. in your account, find a green button partway down the right side.  Clicking on it will bring up a textbox with a <init>URL</init> you can copy.  Now at the command-line, execute something similar to<cd>
-                        <cline>git clone https://github.com/mjsmith/mathbook.git</cline>
+                        <cline>git clone https://github.com/mjsmith/pretext</cline>
                     </cd>Your clone will also <q>know</q> where it came from.</p>
                 </li>
 
@@ -63,8 +63,8 @@
                     <p>That finishes setup.  You can check that all is well by running<cd>
                         <cline>git remote -vv</cline>
                     </cd>and the response should be something like<cd>
-                        <cline>origin      https://github.com/mjsmith/mathbook.git (fetch)</cline>
-                        <cline>origin      https://github.com/mjsmith/mathbook.git (push)</cline>
+                        <cline>origin      https://github.com/mjsmith/pretext.git (fetch)</cline>
+                        <cline>origin      https://github.com/mjsmith/pretext.git (push)</cline>
                         <cline>upstream    https://github.com/PreTeXtBook/pretext.git (fetch)</cline>
                         <cline>upstream    https://github.com/PreTeXtBook/pretext.git (push)</cline>
                     </cd><c>origin</c> is an alias for the location of the repository you cloned.  And <c>upstream</c> is an alias the fork uses to know the location of the official repository.</p>

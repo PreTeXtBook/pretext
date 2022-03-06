@@ -30,7 +30,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Copy sample letterhead graphic to the directory where you will compile LaTeX -->
 <!--                                                                              -->
 <!-- $ xsltproc -o letter.tex                                                     -->
-<!--      /path/to/mathbook/xsl/pretext-latex.xsl  /path/to/this-source-file.xml  -->
+<!--      /path/to/pretext/xsl/pretext-latex.xsl  /path/to/this-source-file.xml   -->
 <!--                                                                              -->
 <!-- Look in current working directory for "letter.tex"                           -->
 
