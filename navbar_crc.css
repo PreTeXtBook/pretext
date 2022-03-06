@@ -1,18 +1,19 @@
 
+/* Generic and large screen layout */
 
-#ptx-navbar .previous-button::before {
-    width: 27px;
-}
-#ptx-navbar .next-button::after {
-    width: 25px;
+#ptx-navbar .button {
+    padding: 0 24px 0 24px;
 }
 
-#ptx-navbar .treebuttons {
-    float: right;
+#ptx-navbar .treebuttons .button {
+    padding: 0 20px 0 20px;
 }
 
-#ptx-navbar .next-button, #ptx-navbar .up-button, #ptx-navbar .previous-button {
-    float: left;
+#ptx-navbar .treebuttons .previous-button { padding-left: 12px; }
+#ptx-navbar .treebuttons .next-button { padding-right: 12px; }
+
+#ptx-navbar .toc-toggle {
+    padding: 0 24px 0 24px;
 }
 
 
@@ -20,7 +21,7 @@
     display: grid;
     grid-column-gap: 0em;
 
-    grid-template-columns:  .72fr 6em 6em 1fr;  /* Even gaps */
+    grid-template-columns:  .76fr 6em 6em 1fr;  /* Even gaps */
     grid-template-areas:
         "MH-toc-area MH-extras-area1 MH-extras-area2 MH-page-navigation-area";
     
@@ -38,36 +39,9 @@
 
     position: sticky;
     top: -20px;
-    align-items: start;
+    align-items: end;
 }
 
-@media only screen and (max-width: 800px) {
-  .pretext  #ptx-navbar {
-    display: block;
-    position: fixed;
-    top: auto;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 0;
-    background: #ededed;
-    box-shadow: rgba(0, 0, 0, 0.3) 0px -2px 5px;
-/*    height: 44.2px; */
-  }
-  #ptx-navbar {
-	grid-template-columns:  1fr;
-        grid-template-areas: "MH-toc-area MH-page-navigation-area";
-	
-    }
-    #ptx-navbar .button {
-	padding: 5px 12px 5px 12px;
-    }
-    .toc-toggle {
-	padding: 0 12px 0 12px;
-    }
-
-
-}
 
 /* TOC button may be sized differently */
 .toc-toggle {
@@ -88,15 +62,12 @@
     border: 1px solid #888;
     cursor: pointer;
     box-sizing: border-box;
-    /*	padding: ?? */
 }
 
 .toc-toggle:hover {
     background-color: #fafafa;
     color: black;
 }
-
-
 
 
 /* .ptx-MH-toc-area  */
@@ -145,11 +116,43 @@
     box-sizing: border-box;
 }
 
+
+/* Small screen layout  */
 @media only screen and (max-width: 800px) {
-    #ptx-navbar .button {
-	    height: 40px;
+    .pretext  #ptx-navbar {
+	display: block;
+	position: fixed;
+	top: auto;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 0;
+	background: #ededed;
+	box-shadow: rgba(0, 0, 0, 0.3) 0px -2px 5px;
+	/*    height: 44.2px; */
+	
+	grid-template-columns:  1fr 1fr;
+	grid-column-gap: 0;
+        grid-template-areas: "MH-toc-area MH-page-navigation-area";
+	align-items: end;
     }
-    
+
+    .pretext #ptx-navbar .button {
+	width: 24.95%;
+	height: 40px;
+	line-height: 40px;
+	margin: 0;
+    }
+    #ptx-navbar    .toc-toggle {
+	width: 25%;
+	margin: 0;
+    }
+
+    /* Kill some white space between toc-toggle and treebuttons */
+    #ptx-navbar    .treebuttons {
+	margin: 0 0 0 -4px;
+    }
+
 }
 
 #ptx-navbar .button:hover {
@@ -157,104 +160,94 @@
     color: black;
 }
 #ptx-navbar .button:focus {
-  outline: thin dotted #333;
-  outline-offset: -2px;
+    outline: thin dotted #333;
+    outline-offset: -2px;
 }
 
 #ptx-navbar .button:active {
-  background-color: #e0e0e0;
+    background-color: #e0e0e0;
 }
-
-
-
-
-@media only screen and (min-width: 801px) {
-    #ptx-navbar .button {
-	padding: 0 24px 0 24px;
-    }
-    #ptx-navbar .treebuttons .button {
-        padding: 0 20px 0 20px;
-    }
-    #ptx-navbar .treebuttons .previous-button { padding-left: 12px; }
-    #ptx-navbar .treebuttons .next-button { padding-right: 12px; }
-
-    #ptx-navbar .toc-toggle {
-	padding: 0 24px 0 24px;
-    }
-}
-
 
 
 #ptx-navbar .button.disabled {
-  opacity: .4;
-  color: #333333;
-  background: #ededed;
-  cursor: default;
-  box-shadow: none;
+    opacity: .4;
+    color: #333333;
+    background: #ededed;
+    cursor: default;
+    box-shadow: none;
 }
 #ptx-navbar .toc-toggle .icon {
-  font-size: 1.5em;
-  position: relative;
-  bottom: 0.15em;
-  padding-left: 0.5em;
-  padding-right: 0.4em;
+    font-size: 1.5em;
+    position: relative;
+    bottom: 0.15em;
+    padding-left: 0.5em;
+    padding-right: 0.4em;
 }
 #ptx-navbar .toc-toggle .name {
-  font-size: 1.0em;
-  position: relative;
-  bottom: 0.25em;
+    font-size: 1.0em;
+    position: relative;
+    bottom: 0.25em;
 }
 
 #ptx-navbar .index-button .name {
-/*  Nada */
+    /*  Nada */
 }
 
+#ptx-navbar .calculator-toggle .name {
+    /*  Nada */
+}
+
+
 #ptx-navbar .up-button {
-  text-align: center;
+    text-align: center;
 }
 
 #ptx-navbar .name {
-  display: inline-block;
-  position: relative;
-  bottom: 0;
+    display: inline-block;
+    position: relative;
+    bottom: 0;
 }
 #ptx-navbar .treebuttons .name {
-  bottom: 0.2em;
+    bottom: 0.2em;
 }
 #ptx-navbar .icon {
-  display: inline-block;
-  font-size: 1.5em;
+    display: inline-block;
+    font-size: 1.5em;
 }
 #ptx-navbar .previous-button .icon {
-  margin-left: 0.3em;
-  margin-right: 0.2em;
+    margin-left: 0.3em;
+    margin-right: 0.2em;
 }
 #ptx-navbar .up-button .icon {
-  margin-left: 00;
-  margin-right: 0.2em;
-  padding-top: 2px;
+    margin-left: 0;
+    margin-right: 0.2em;
 }
 #ptx-navbar .up-button .name {
-  bottom: 0.3em;
+    bottom: 0.3em;
 }
 #ptx-navbar .next-button .icon {
-  margin-left: 0.2em;
-  margin-right: 0.3em;
+    margin-left: 0.2em;
+    margin-right: 0.3em;
 }
 
 
 @media screen and (max-width: 800px) {
-#ptx-navbar .index-button,
-  #ptx-navbar .calculator-button {
-    display: none;
-  }
+    #ptx-navbar .index-button,
+    #ptx-navbar .calculator-toggle {
+	display: none;
+    }
     
- #ptx-navbar .toc-toggle .name,
-  #ptx-navbar .previous-button .name,
-  #ptx-navbar .up-button .name,
+    #ptx-navbar .toc-toggle .name,
+    #ptx-navbar .previous-button .name,
+    #ptx-navbar .up-button .name,
     #ptx-navbar .up-button .disabled .name,
-  #ptx-navbar .next-button .name {
-    display: none;
-  }
+    #ptx-navbar .next-button .name {
+	display: none;
+    }
+
+    #ptx-navbar .up-button .icon,
+    #ptx-navbar .up-button .disabled .icon{
+    }
+    
 }
 
