@@ -754,6 +754,11 @@
     z-index: 2001;
 }
 
+.navbar .indexnav {
+    position: absolute;
+    top: 4em;
+    right: 0;
+}
 .mininav {
     float: left;
     padding-top: 0.7ex;
@@ -762,7 +767,7 @@
 
 /* the index at the back of the book */
 
-.indexnav {
+.indexjump {
     margin-left: 1.5ex;
     margin-top: 0.2ex;
     padding-top: 0;
@@ -770,7 +775,7 @@
     line-height: 0.95;
 }
 
-.indexnav a {
+.indexjump a {
     padding-left: 2.5px;
     padding-right: 0.5px;
     width: 2.5ex;
@@ -783,18 +788,18 @@
     font-size: 80%;
     text-align: center;
 }
-.indexnav a::after{
+.indexjump a::after{
     content: "";
     display: inline-block;
 }
-.indexnav a:nth-of-type(14){
+.indexjump a:nth-of-type(14){
     padding-left: 1.8ex;
 }
-.indexnav a:last-child {
+.indexjump a:last-child {
     padding-right: 10px;
 }
 
-.indexnav a:hover {
+.indexjump a:hover {
     background: #eeaaff;
 }
 

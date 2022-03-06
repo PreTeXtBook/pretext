@@ -14,7 +14,7 @@
   height: 35.36px;
   font-family: "PT Serif", "Times New Roman", Times, serif;
   font-family: "Open Sans";
-  overflow: hidden;
+  overflow: visible;
 }
 @media screen and (max-width: 800px) {
   #ptx-navbar {
