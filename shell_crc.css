@@ -136,131 +136,126 @@ body.pretext {
     margin-left: 2em;
 }
 
-/*.ptx-footer-wrapper */
-.pretext .ptx-page .ptx-page-footer {
-    grid-area: content-footer;
-    grid-column-start: 2;
-    grid-column-end: 3;
-    grid-row-start: 2;
-    grid-row-end: 3;
-    //    height: 50px;
+/* Content footer wrapper playground */
+
+.pretext .ptx-page .ptx-content-footer {
     display: grid;
-    grid-gap: 1em;
-    //    grid-template-columns: 1fr 30px 1fr;
-    grid-template-columns: 0.5fr 1fr 0.5fr;
-    /*
+    max-width: 100%;
+    grid-template-columns: 1fr 1fr 1fr;
     grid-template-areas:
-        "footer-pretext-logo footer-return-to-top footer-mathjax-logo";  
-   */
-    border-radius: 5px;
-    padding: 20px 0px;
-    margin: 0px auto 0px auto;
-    min-width: 300px;
-    margin-bottom: 40px;
-    //    width: 95vw;
+        "content-footer-prev content-footer-top content-footer-next";
+    border: 2px solid #f00;
     margin-left: 32px;
-    margin-right: 20px;
-    //    position: sticky;
+    margin-top: 10px;
 }
 
-.pretext .ptx-page .ptx-page-footer > p {
-    background: #ffd;
-    grid-column-start: 2;
-    grid-column-end: 3;
-}
-@media only screen and (min-width: 801px) {
-    .ptx-page-footer {
-        width:590px;
-        margin-bottom: 0;
-
-    }
-}
-
-.ptx-footer-pretext-logo {
-    grid-area: footer-pretext-logo;
+.ptx-content-footer .previous-button {
+    grid-area: content-footer-prev;
+    background-color: yellow;
     justify-self: start;
+    align-self: center;
+    margin: 20px;
+    padding: 5px;        
 }
 
-.ptx-footer-return-to-top {
-    grid-area: footer-return-to-top;
-    margin: 10px 0;
+.ptx-content-footer .previous-button .name{
+    margin: 10px;
+    border: 2px solid #0f0;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.ptx-content-footer .previous-button .icon{
+    border: 2px solid #0f0;
+} 
+
+.ptx-content-footer .top-button{
+    grid-area: content-footer-top;
+    background-color: yellow;
     justify-self: center;
-    align-self: end;
+    align-self: center;
+    margin: 20px;
+    padding: 5px;
 }
-.ptx-footer-mathjax-logo {
-    grid-area: footer-mathjax-logo;
+
+.ptx-content-footer .top-button .name{
+    margin: 10px;
+    border: 2px solid #0f0;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.ptx-content-footer .top-button .icon{
+    border: 2px solid #0f0;
+} 
+
+.ptx-content-footer .next-button {
+    grid-area: content-footer-next;
+    background-color: yellow;
     justify-self: end;
+    align-self: center;
+    margin: 20px;
+    padding: 5px;
 }
 
-.ptx-bottom-nav {
-    width: 100%;
-    position: fixed;
-    bottom: 0px;
-    align-items: start;
-    z-index:300;
+.ptx-content-footer .next-button .name{
+    margin: 10px;
+    border: 2px solid #0f0;
+    padding: 5px;
+    border-radius: 5px;
 }
 
-.ptx-foot-button-group {
-    width: 100%;
-    background-color: #ccc;
-    border: 1px solid #aaa;
-    color: #000;
-    cursor: pointer;
-    float: left; /* Float the buttons side by side */
+.ptx-content-footer .next-button .icon{
+    border: 2px solid #0f0;
+} 
+
+/* Page footer wrapper playground */
+.ptx-page-footer {
+    display: grid;
+    max-width: 100%;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas:
+        "page-footer-feedback page-footer-pretext  page-footer-mathjax";
+    border: 2px solid #00f;
+    margin-top: 10px;
+    justify-items: stretch;
 }
 
-.ptx-foot-button-group button {
-    width:25%;
-    font-size: 1.5rem;
-    color: #333;
-    background-color: #eee;
-    border: 1px solid #aaa;
+.ptx-page-footer .feedback-link{
+    grid-area: page-footer-feedback;
+    border: 2px solid red;
+    justify-self: start;
+    align-self: center;
+    margin: 20px;
+    padding: 5px;
+    background-color: yellow;
 }
-.ptx-foot-button-group button:not(:last-child) {
-    border-right: none; /* Prevent double borders */
-}
-
-/* Add a background color on hover */
-.ptx-foot-button-group button:hover {
-    background-color: #fff;
-}
-
-@media screen and (max-width: 800px) {
-    .pretext #ptx-navbar {
-	position: fixed;
-	top: auto;
-	bottom: 0;
-    }
-    .pretext #ptx-sidebar {
-	display: none;
-    }
-    .pretext #ptx-toc {
-	height: calc(100vh - 50px);
-    }
-    .pretext .ptx-page > .ptx-page-footer {
-	margin-bottom: 0;
-	padding-left: 10px;
-    }
-    .pretext .ptx-content-footer {
-	margin-bottom: 60px;
-    }
-    .pretext #ptx-navbar #calculator-toggle,
-    .pretext #ptx-navbar .index-button {
-	display: none;
-    }
-    .pretext #ptx-navbar .toc-toggle {
-	width: 25%;
-    }
-    .pretext #ptx-navbar .treebuttons {
-	width: 75%;
-    }
-    .pretext #ptx-navbar .previous-button,
-    .pretext #ptx-navbar .up-button,
-    .pretext #ptx-navbar .next-button {
-	width: 33.3%;
-    }
-    .pretext .ptx-page > .ptx-page-footer {
-	margin-left: 5em;
-    }
+.ptx-page-footer  .pretext-link{
+    grid-area: page-footer-pretext;
+    background-color: yellow;
+    margin: 20px;
+    padding: 5px;
+    width: 70%;
+    border: 2px solid red;
 }
 
+
+.ptx-page-footer  .pretext-link .name {
+    display: block;
+}
+
+.ptx-page-footer  .pretext-link .logo {
+    display: block;
+}
+
+
+.ptx-page-footer .mathjax-logo {
+    grid-area: page-footer-mathjax;
+    justify-self: end;
+    align-self: center;
+    margin-right: 20px;
+    padding: 0px;
+    border: 2px solid red;
+    background-color: yellow;
+    
+}
