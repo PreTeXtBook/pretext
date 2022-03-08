@@ -144,118 +144,233 @@ body.pretext {
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-areas:
         "content-footer-prev content-footer-top content-footer-next";
-    border: 2px solid #f00;
     margin-left: 32px;
-    margin-top: 10px;
+    margin-top: 30px;
 }
 
 .ptx-content-footer .previous-button {
     grid-area: content-footer-prev;
-    background-color: yellow;
+
     justify-self: start;
     align-self: center;
     margin: 20px;
-    padding: 5px;        
+    padding: 5px;
+
+    display: inline-block;
+    height: 32px;
+    color: var(--sectiontoctext);
+    font-family: inherit; 
+    text-align: center;
+    font-size: .8em; 
+    font-weight: 700;
+    letter-spacing: .1rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: #eee;
+    border-radius: 4px;
+    border: 1px solid #888;
+    cursor: pointer;
+    box-sizing: border-box;
+
 }
 
 .ptx-content-footer .previous-button .name{
-    margin: 10px;
-    border: 2px solid #0f0;
-    padding: 5px;
-    border-radius: 5px;
+    margin-left: 2px;
+    padding-right: 5px;
 }
 
 .ptx-content-footer .previous-button .icon{
-    border: 2px solid #0f0;
+    padding-left: 5px;
 } 
 
 .ptx-content-footer .top-button{
     grid-area: content-footer-top;
-    background-color: yellow;
     justify-self: center;
     align-self: center;
     margin: 20px;
     padding: 5px;
+
+    display: inline-block;
+    height: 32px;
+    color: var(--sectiontoctext);
+    font-family: inherit; 
+    text-align: center;
+    font-size: .8em; 
+    font-weight: 700;
+    letter-spacing: .1rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: #eee;
+    border-radius: 4px;
+    border: 1px solid #888;
+    cursor: pointer;
+    box-sizing: border-box;
+
+
+
+    
 }
 
 .ptx-content-footer .top-button .name{
-    margin: 10px;
-    border: 2px solid #0f0;
-    padding: 5px;
-    border-radius: 5px;
+    margin-left: 2px;
+    padding-right: 5px;
+
 }
 
 .ptx-content-footer .top-button .icon{
-    border: 2px solid #0f0;
+    padding-left: 5px;
 } 
 
 .ptx-content-footer .next-button {
     grid-area: content-footer-next;
-    background-color: yellow;
     justify-self: end;
     align-self: center;
     margin: 20px;
     padding: 5px;
+
+    display: inline-block;
+    height: 32px;
+    color:  var(--sectiontoctext);
+    font-family: inherit; 
+    text-align: center;
+    font-size: .8em; 
+    font-weight: 700;
+    letter-spacing: .1rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: #eee;
+    border-radius: 4px;
+    border: 1px solid #888;
+    cursor: pointer;
+    box-sizing: border-box;
+
+
 }
 
 .ptx-content-footer .next-button .name{
-    margin: 10px;
-    border: 2px solid #0f0;
-    padding: 5px;
-    border-radius: 5px;
+    margin-right: 2px;
+    padding-left: 5px
+
 }
 
 .ptx-content-footer .next-button .icon{
-    border: 2px solid #0f0;
+    padding-right:5px;
 } 
 
 /* Page footer wrapper playground */
 .ptx-page-footer {
     display: grid;
     max-width: 100%;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1.1fr .68fr 1fr;
     grid-template-areas:
         "page-footer-feedback page-footer-pretext  page-footer-mathjax";
-    border: 2px solid #00f;
-    margin-top: 10px;
-    justify-items: stretch;
+    margin-top: 30px;
+    margin-bottom: 40px;
+    border-top: 2px solid var(--sectiontoctext);
 }
 
 .ptx-page-footer .feedback-link{
     grid-area: page-footer-feedback;
-    border: 2px solid red;
     justify-self: start;
     align-self: center;
-    margin: 20px;
-    padding: 5px;
-    background-color: yellow;
+    margin-top: 30px;
+
+
+    margin-left: 10px;
+    padding: 10px 20px 15px 20px;
+    height: 40px;
+    color: var(--sectiontoctext);
+    font-family: inherit; 
+    text-align: center;
+    font-size: .8em; 
+    font-weight: 700;
+    letter-spacing: .1rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: #eee;
+    border-radius: 4px;
+    border: 1px solid #888;
+    cursor: pointer;
+    box-sizing: border-box;
 }
+
 .ptx-page-footer  .pretext-link{
     grid-area: page-footer-pretext;
-    background-color: yellow;
-    margin: 20px;
-    padding: 5px;
-    width: 70%;
-    border: 2px solid red;
+    align-self: center;
+    margin-top: 30px;
+    color: var(--sectiontoctext);
 }
 
 
 .ptx-page-footer  .pretext-link .name {
-    display: block;
+    display: grid;
+    justify-self: center;
+    font-size: .9em; 
+    font-weight: 700;
+    letter-spacing: .1rem;
+    text-transform: uppercase;
+    padding-left: 8px;
 }
 
 .ptx-page-footer  .pretext-link .logo {
-    display: block;
+    display: grid;
+    justify-item: center;
+    height: 40px;
 }
 
 
 .ptx-page-footer .mathjax-logo {
     grid-area: page-footer-mathjax;
+    display: block;
     justify-self: end;
-    align-self: center;
-    margin-right: 20px;
+    margin-top: 35px;
+    margin-right: 10px;
     padding: 0px;
-    border: 2px solid red;
-    background-color: yellow;
-    
+
 }
+
+.ptx-page-footer .mathjax-logo .img {
+    /* No luck resizing */
+}
+
+
+
+@media only screen and (max-width: 800px) {
+    .ptx-page-footer {
+	grid-template-columns: 1.25fr .9fr 1fr;
+	margin-botton: 80px;
+    }
+
+
+    .ptx-page-footer  .pretext-link .name {
+	display: grid;
+	justify-self: center;
+	font-size: .9em; 
+	font-weight: 600;
+	text-transform: uppercase;
+    }
+
+    .ptx-page-footer  .pretext-link .logo {
+	display: none;
+    }
+
+
+}
+
+   
+
+
+
+
+    
+   
+
+
+
+
+    
+   
