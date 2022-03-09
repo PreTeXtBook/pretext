@@ -11912,15 +11912,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<!-- jQuery, SageCell -->
-<!-- jQuery used by sage, webwork, knowls, so load always  -->
-<!--  * essential to use the version from sagemath.org *   -->
+<!-- SageCell Javascript-->
 <!-- We never know if a Sage cell might be inside a knowl, -->
 <!-- so we load the relevant JavaScript onto every page if -->
 <!-- a cell occurs *anywhere* in the entire document       -->
 <xsl:template name="sagecell-code">
     <xsl:if test="$b-has-sage">
-        <script src="https://sagecell.sagemath.org/embedded_sagecell.js"></script>
+        <script src="https://sagecell.sagemath.org/static/embedded_sagecell.js"></script>
     </xsl:if>
 </xsl:template>
 
@@ -11934,7 +11932,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="language-attribute" />
     <xsl:param name="language-text" />
     <xsl:element name="script">
-        <xsl:text>$(function () {&#xa;</xsl:text>
         <xsl:text>    // Make *any* pre with class 'sagecell-</xsl:text>
             <xsl:value-of select="$language-attribute" />
         <xsl:text>' an executable Sage cell&#xa;</xsl:text>
@@ -11954,19 +11951,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$language-text" />
             <xsl:text>)</xsl:text>
         <xsl:text>'});&#xa;</xsl:text>
-        <xsl:text>});&#xa;</xsl:text>
     </xsl:element>
 </xsl:template>
 
 <!-- template for a "display only" version -->
 <xsl:template name="sagecell-display">
     <xsl:element name="script">
-        <xsl:text>$(function () {&#xa;</xsl:text>
         <xsl:text>    // Make *any* pre with class 'sage-display' a visible, uneditable Sage cell&#xa;</xsl:text>
         <xsl:text>    sagecell.makeSagecell({inputLocation: 'pre.sage-display',&#xa;</xsl:text>
         <xsl:text>                           editor: 'codemirror-readonly',&#xa;</xsl:text>
         <xsl:text>                           hide: ['evalButton', 'editorToggle', 'language']});&#xa;</xsl:text>
-        <xsl:text>});&#xa;</xsl:text>
     </xsl:element>
 </xsl:template>
 
@@ -11974,7 +11968,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Generic button, drop-down for languages -->
 <xsl:template name="sagecell-practice">
     <xsl:element name="script">
-        <xsl:text>$(function () {&#xa;</xsl:text>
         <xsl:text>    // Make *any* pre with class 'sagecell-practice' an executable Sage cell&#xa;</xsl:text>
         <xsl:text>    // Their results will be linked, only within language type&#xa;</xsl:text>
         <xsl:text>    sagecell.makeSagecell({inputLocation: 'pre.sagecell-practice',&#xa;</xsl:text>
@@ -11985,7 +11978,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="string-id" select="'evaluate'" />
             </xsl:call-template>
         <xsl:text>'});&#xa;</xsl:text>
-        <xsl:text>});&#xa;</xsl:text>
     </xsl:element>
 </xsl:template>
 
