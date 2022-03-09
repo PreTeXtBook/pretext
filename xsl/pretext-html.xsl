@@ -11932,18 +11932,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="language-attribute" />
     <xsl:param name="language-text" />
     <xsl:element name="script">
-        <xsl:text>    // Make *any* pre with class 'sagecell-</xsl:text>
+        <xsl:text>// Make *any* pre with class 'sagecell-</xsl:text>
             <xsl:value-of select="$language-attribute" />
         <xsl:text>' an executable Sage cell&#xa;</xsl:text>
-        <xsl:text>    // Their results will be linked, only within language type&#xa;</xsl:text>
-        <xsl:text>    sagecell.makeSagecell({inputLocation: 'pre.sagecell-</xsl:text>
+        <xsl:text>// Their results will be linked, only within language type&#xa;</xsl:text>
+        <xsl:text>sagecell.makeSagecell({inputLocation: 'pre.sagecell-</xsl:text>
             <xsl:value-of select="$language-attribute" />
         <xsl:text>',&#xa;</xsl:text>
-        <xsl:text>                           linked: true,&#xa;</xsl:text>
-        <xsl:text>                           languages: ['</xsl:text>
+        <xsl:text>                       linked: true,&#xa;</xsl:text>
+        <xsl:text>                       languages: ['</xsl:text>
             <xsl:value-of select="$language-attribute" />
         <xsl:text>'],&#xa;</xsl:text>
-        <xsl:text>                           evalButtonText: '</xsl:text>
+        <xsl:text>                       evalButtonText: '</xsl:text>
             <xsl:call-template name="type-name">
                 <xsl:with-param name="string-id" select="'evaluate'" />
             </xsl:call-template>
@@ -11957,10 +11957,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- template for a "display only" version -->
 <xsl:template name="sagecell-display">
     <xsl:element name="script">
-        <xsl:text>    // Make *any* pre with class 'sage-display' a visible, uneditable Sage cell&#xa;</xsl:text>
-        <xsl:text>    sagecell.makeSagecell({inputLocation: 'pre.sage-display',&#xa;</xsl:text>
-        <xsl:text>                           editor: 'codemirror-readonly',&#xa;</xsl:text>
-        <xsl:text>                           hide: ['evalButton', 'editorToggle', 'language']});&#xa;</xsl:text>
+        <xsl:text>// Make *any* pre with class 'sage-display' a visible, uneditable Sage cell&#xa;</xsl:text>
+        <xsl:text>sagecell.makeSagecell({inputLocation: 'pre.sage-display',&#xa;</xsl:text>
+        <xsl:text>                       editor: 'codemirror-readonly',&#xa;</xsl:text>
+        <xsl:text>                       hide: ['evalButton', 'editorToggle', 'language']});&#xa;</xsl:text>
     </xsl:element>
 </xsl:template>
 
@@ -11968,12 +11968,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Generic button, drop-down for languages -->
 <xsl:template name="sagecell-practice">
     <xsl:element name="script">
-        <xsl:text>    // Make *any* pre with class 'sagecell-practice' an executable Sage cell&#xa;</xsl:text>
-        <xsl:text>    // Their results will be linked, only within language type&#xa;</xsl:text>
-        <xsl:text>    sagecell.makeSagecell({inputLocation: 'pre.sagecell-practice',&#xa;</xsl:text>
-        <xsl:text>                           linked: true,&#xa;</xsl:text>
-        <xsl:text>                           languages: sagecell.allLanguages,&#xa;</xsl:text>
-        <xsl:text>                           evalButtonText: '</xsl:text>
+        <xsl:text>// Make *any* pre with class 'sagecell-practice' an executable Sage cell&#xa;</xsl:text>
+        <xsl:text>// Their results will be linked, only within language type&#xa;</xsl:text>
+        <xsl:text>sagecell.makeSagecell({inputLocation: 'pre.sagecell-practice',&#xa;</xsl:text>
+        <xsl:text>                       linked: true,&#xa;</xsl:text>
+        <xsl:text>                       languages: sagecell.allLanguages,&#xa;</xsl:text>
+        <xsl:text>                       evalButtonText: '</xsl:text>
             <xsl:call-template name="type-name">
                 <xsl:with-param name="string-id" select="'evaluate'" />
             </xsl:call-template>
