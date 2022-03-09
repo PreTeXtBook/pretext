@@ -67,6 +67,7 @@
 .toc-toggle:hover {
     background-color: #fafafa;
     color: black;
+
 }
 
 
@@ -99,7 +100,7 @@
 #ptx-navbar .button {
     display: inline-block;
     height: 32px;
-    color: #333;
+    color: var(--bodytitle);
     font-family: inherit; 
     text-align: center;
     font-size: .8em; 
@@ -157,8 +158,9 @@
 
 #ptx-navbar .button:hover {
     background-color: #fafafa;
-    color: black;
+    color: #888;
 }
+
 #ptx-navbar .button:focus {
     outline: thin dotted #333;
     outline-offset: -2px;
