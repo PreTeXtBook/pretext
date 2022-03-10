@@ -134,6 +134,12 @@
             </ol></p>
         </paragraphs>
 
+        <paragraphs xml:id="pull-request-verification">
+            <title>Pull Request Verification</title>
+
+            <p>It is often advisable to add an example of any new markup, new situation, or bug-provoking content into the sample article as part of a pull request.  Please do so, as appropriate.  However, because we do rolling releases, all code gets thoroughly tested.  For this reason <em>please</em> put all changes to the sample article, and only changes to the sample article, onto a first commit.  Code should then follow on subsequent commits.  This makes a big difference in our ability to test quickly and accurately.  Thanks.  (Ask if you need help rearranging your commits to achieve this.)</p>
+        </paragraphs>
+
         <paragraphs>
             <title>Modifications to a Pull Request</title>
 
