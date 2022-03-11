@@ -23,7 +23,7 @@
       </p>
 
       <p>
-        You have two options for running the <pretext />-CLI: you could do everything in the cloud using <url href="https://cocalc.com/">CoCalc</url>, or you could install PreTeXt on your own computer.  The CoCalc route is faster and doesn't require installing Python and <latex /> on your computer, but unless you pay for a subscription to CoCalc, your experience there might be limited.  A local install also allows you to use a more powerful text editor that might have <pretext />-specific support that speeds up editing.
+        You have two options for running the <pretext />-CLI: you could do everything in the cloud using <url href="https://cocalc.com/" visual="cocalc.com">CoCalc</url>, or you could install PreTeXt on your own computer.  The CoCalc route is faster and doesn't require installing Python and <latex /> on your computer, but unless you pay for a subscription to CoCalc, your experience there might be limited.  A local install also allows you to use a more powerful text editor that might have <pretext />-specific support that speeds up editing.
       </p>
 
       <p>
@@ -32,7 +32,7 @@
 
       <p>
         Note: We will work at the <term>command-line</term>
-        <idx>command-line</idx> inside of a <term>terminal</term> or <term>console</term>.<idx>terminal</idx><idx>console</idx>  
+        <idx>command-line</idx> inside of a <term>terminal</term> or <term>console</term>.<idx>terminal</idx><idx>console</idx>
         If you do not know what this is, it will seem very primitive at first.  Sometimes the old ways are the best ways.  This will be called a <q>Command Prompt</q> or <q>PowerShell</q> in Windows or a <q>Terminal</q> on a Mac.  In Linux it may be known as a <q>console</q> or a <q>shell</q>.
         Whenever the guide says to enter something on the <em>command line</em> or in a <em>terminal</em>, or just to <em>enter the command</em>, this is what we are talking about.
       </p>
@@ -43,7 +43,7 @@
           CoCalc has graciously already installed the <pretext />-CLI, as well as <latex />, so there is almost no setup required.
         </p>
         <p>
-          Simply visit <url href="https://cocalc.com/" />.  There you can click on the <q>Run CoCalc Now</q> button, or sign up for a free account so you can save your work.  Once you are in a CoCalc <em>project</em>, click on the <q>New</q> tab and select the <q>Linux terminal</q> button.  This will give you a command prompt where you can start typing commands.
+          Simply visit <url href="https://cocalc.com/" visual="cocalc.com"/>.  There you can click on the <q>Run CoCalc Now</q> button, or sign up for a free account so you can save your work.  Once you are in a CoCalc <em>project</em>, click on the <q>New</q> tab and select the <q>Linux terminal</q> button.  This will give you a command prompt where you can start typing commands.
         </p>
 
         <p>
@@ -67,7 +67,7 @@
             </li>
             <li>
               <p>
-                Any text editor.  <url href="https://code.visualstudio.com/">Visual Studio Code</url> is a reasonable choice (and has a pretext-tools extension available), but so are SublimeText, atom, emacs, vi, etc.  See <xref ref="editors"/>.
+                Any text editor.  <url href="https://code.visualstudio.com/" visual="code.visualstudio.com/">Visual Studio Code</url> is a reasonable choice (and has a pretext-tools extension available), but so are SublimeText, atom, emacs, vi, etc.  See <xref ref="editors"/>.
               </p>
             </li>
           </ul>
@@ -290,7 +290,7 @@
 
         <p>The <latex />/PDF output will be a bit odd looking since every paragraph is so short, but all the content should be there.  Notice that the HTML output now has a table of contents to the left and active navigation buttons.  Also the two sections are in their own files and the URLs have been constructed from the supplied values of the <attr>xml:id</attr> attribute.</p>
 
-        <p>One last experiment<mdash />let's add some mathematics.  We use XML tags, <tag>m</tag> for <q>inline</q> mathematics and <tag>me</tag> for a <q>math equation</q> which will be rendered with a bit of vertical separation and centered from left to right.  We use <latex /> syntax for mathematics, which has been the standard for working mathematicians for decades.  For electronic presentation, we rely on the excellent <url href="https://www.mathjax.org/">MathJax</url><fn><c>www.mathjax.org</c></fn> project which basically supports all the syntax of the <url href="https://www.ctan.org/pkg/amsmath?lang=en">amsmath</url><fn><c>www.ctan.org/pkg/amsmath</c></fn> package from the American Mathematical Society.  Add the following sentence to any of the paragraphs of your article (inside on of the <tag>p</tag> tags).</p>
+        <p>One last experiment<mdash />let's add some mathematics.  We use XML tags, <tag>m</tag> for <q>inline</q> mathematics and <tag>me</tag> for a <q>math equation</q> which will be rendered with a bit of vertical separation and centered from left to right.  We use <latex /> syntax for mathematics, which has been the standard for working mathematicians for decades.  For electronic presentation, we rely on the excellent <url href="https://www.mathjax.org/" visual="www.mathjax.org/">MathJax</url> project which basically supports all the syntax of the <url href="https://www.ctan.org/pkg/amsmath?lang=en" visual="www.ctan.org/pkg/amsmath?lang=en">amsmath</url> package from the American Mathematical Society.  Add the following sentence to any of the paragraphs of your article (inside on of the <tag>p</tag> tags).</p>
 
         <pre>
         <![CDATA[

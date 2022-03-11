@@ -18,7 +18,7 @@
   <introduction>
     <p>
       With a <webwork/> server
-      (version 2.14 or higher, or <url href="https://webwork-ptx.aimath.org"><c>webwork-ptx.aimath.org</c></url>)
+      (version 2.14 or higher, or <url href="https://webwork-ptx.aimath.org" visual="webwork-ptx.aimath.org"/>)
       and a little setup work, you can embed <webwork/> exercises in your <pretext/> project.
       HTML output can have interactive problem cells or print problems in <q>static</q> form.
       PDF output will print static versions.
@@ -36,7 +36,7 @@
 
     <introduction>
       <p>
-        <alert>You must extract <webwork/> content as described in the <xref ref="webwork-publisher"/> 
+        <alert>You must extract <webwork/> content as described in the <xref ref="webwork-publisher"/>
         before you will be able to see any <webwork/> content in your output.  For simple cases, you might be able to run <c>pretext build html -w</c> to process <webwork /> exercises.</alert>
       </p>
       <p>
@@ -254,7 +254,7 @@
       </p>
       <p>
         Some general information on authoring <webwork/> problems can be found in
-        a <url href="http://webwork.maa.org/wiki/Problem_Authoring_Videos">set of videos at <c>webwork.maa.org/wiki/Problem_Authoring_Videos</c></url>.
+        a <url href="http://webwork.maa.org/wiki/Problem_Authoring_Videos" visual="webwork.maa.org/wiki/Problem_Authoring_Videos">set of videos at <c>webwork.maa.org/wiki/Problem_Authoring_Videos</c></url>.
         Not all of this is relevant to authoring within <pretext/>,
         but there are parts that will be helpful for constructing the Perl code necessary for randomized problems.
       </p>

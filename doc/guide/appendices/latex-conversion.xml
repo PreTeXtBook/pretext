@@ -10,7 +10,7 @@
 <appendix xml:id="latex-conversion">
     <title>Conversion from <latex /></title>
 
-    <p>As part of the <url href="https://utmost.aimath.org/"><init>UTMOST</init></url> project, we offer a service to help convert existing textbooks from <latex/> to <pretext/>. The service is free if you are planning to release your book with an open license.  The conversion will only be 95 percent correct, but that means it will take you 20 times less effort than converting it yourself.</p>
+    <p>As part of the <url href="https://utmost.aimath.org/" visual="utmost.aimath.org/"><init>UTMOST</init></url> project, we offer a service to help convert existing textbooks from <latex/> to <pretext/>. The service is free if you are planning to release your book with an open license.  The conversion will only be 95 percent correct, but that means it will take you 20 times less effort than converting it yourself.</p>
 
     <p>Before converting your book, familiarize yourself with <pretext/> to the point of being able to compile the sample article and sample book into <init>HTML</init> and <init>PDF</init>.  Check that you can edit the source files and the resulting output files behave as expected.  That way, you will be on familiar ground when you finish the last 5 percent of the conversion.</p>
 

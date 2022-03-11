@@ -60,17 +60,11 @@
     stylesheets and the <c>xsltproc</c> program.  We work at the <term>command-line</term>
     <idx>command-line</idx> inside of a <term>terminal</term>
     <idx>terminal</idx> or <term>console</term>
-    <idx>console</idx>.  If you do not know what this is, it will seem very primitive at first.  Sometimes the old ways are the best ways.  This will be called a <q>Command Prompt</q> in Windows or a <q>Terminal</q> on a Mac.  In Linux it may be known as a <q>console</q> or a <q>shell</q>.  A tutorial, which is Linux-specific, can be found at <url href="http://ryanstutorials.net/linuxtutorial/">Ryan's Tutorials</url>
-    <fn>
-      <c>ryanstutorials.net/linuxtutorial/</c>
-    </fn> and certainly others exist.</p>
-
+    <idx>console</idx>.  If you do not know what this is, it will seem very primitive at first.  Sometimes the old ways are the best ways.  This will be called a <q>Command Prompt</q> in Windows or a <q>Terminal</q> on a Mac.  In Linux it may be known as a <q>console</q> or a <q>shell</q>.  A tutorial, which is Linux-specific, can be found at <url href="http://ryanstutorials.net/linuxtutorial/" visual="ryanstutorials.net/linuxtutorial/">Ryan's Tutorials</url> and certainly others exist.</p>
     <p>The operating system on a Mac is built on Unix, which is very similar to Linux, so most of the directions here will be little changed between the two.  Procedures can be very different in Windows (<xref ref="windows-install-notes" />
     ,<xref ref="windows-subsystem-linux" />
-    ).  One alternative is <url href="https://cocalc.com/">CoCalc</url>
-    <fn>
-    <c>cocalc.com</c>
-    </fn> which provides a full Linux computer for free in your web browser, so that may be an excellent place for initial experiments (<xref ref="topic-build-in-cocalc" />
+    ).  One alternative is <url href="https://cocalc.com/" visual="cocalc.com">CoCalc</url>
+     which provides a full Linux computer for free in your web browser, so that may be an excellent place for initial experiments (<xref ref="topic-build-in-cocalc" />
     ).</p>
 
     <paragraphs>
@@ -86,9 +80,9 @@
     <mdash />
     meaning on the order of <em>daily</em>.  See the <xref ref="faq-pull-regularly" text="custom">FAQ entry</xref> for more about why we <em>expect</em> you to do this.</p>
 
-    <p>See the <url href="https://pretextbook.org/">
+    <p>See the <url href="https://pretextbook.org/" visual="pretextbook.org">
     <pretext/>
-    site</url> at <c>pretextbook.org</c> for details and commands for this step, right on the main page.</p>
+    site</url> for details and commands for this step, right on the main page.</p>
     </paragraphs>
 
     <paragraphs>
@@ -230,7 +224,7 @@
     <p>Here are some notes:<ol>
     <li>
     <p>Be sure to experiment on copies of your source in a scratch directory.  Send your output to another directory.  When finished, use a <c>diff</c> tool to inspect the actual changes made.  You can record your eventual changes using revision-control. (See <pubtitle>
-    <url href="https://pretextbook.org/gfa/html/">Git for Authors</url>
+    <url href="https://pretextbook.org/gfa/html/" visual="pretextbook.org/gfa/html/">Git for Authors</url>
     </pubtitle>.)
     </p>
     </li>
@@ -304,7 +298,7 @@
     </console>
 
     <p>And as above, you can now compare the <c>normal</c> and <c>clean</c> directories to see actual changes.  If you are satisfied with the changes, you can copy the files in the <c>clean</c> directory back onto your source files.  If you are using revision-control (you are, aren't you?) then you can make a commit that holds these changes. (See <pubtitle>
-    <url href="https://pretextbook.org/gfa/html/">Git for Authors</url>
+    <url href="https://pretextbook.org/gfa/html/" visual="pretextbook.org/gfa/html/">Git for Authors</url>
     </pubtitle>.) Or maybe even make two commits, one from the normalization step, and a second with the substantive changes.</p>
     </section>
 

@@ -10,7 +10,7 @@
 <appendix xml:id="git-author">
     <title>Revision Control: git</title>
 
-     <p>Authoring a textbook without revision control is like driving without a seat belt.  Sooner or later, you will wish you had used it.  git is a popular program for revision control for software projects, and works quite well with <pretext />, though not perfectly.  Notes here are designed to help.  For more on git itself, in the context of authoring a book, see <url href="https://pretextbook.org/gfa/html/">Git for Authors</url>, by Robert Beezer and David Farmer at <c>pretextbook.org/gfa/html</c>.</p>
+     <p>Authoring a textbook without revision control is like driving without a seat belt.  Sooner or later, you will wish you had used it.  git is a popular program for revision control for software projects, and works quite well with <pretext />, though not perfectly.  Notes here are designed to help.  For more on git itself, in the context of authoring a book, see <url href="https://pretextbook.org/gfa/html/" visual="pretextbook.org/gfa/html/">Git for Authors</url>, by Robert Beezer and David Farmer at <c>pretextbook.org/gfa/html</c>.</p>
 
      <paragraphs>
         <title>Word Wrap</title>
@@ -23,7 +23,7 @@
 
         <p>When you make a commit or merge, you can supply a message at the command line with the <c>-m</c> argument.  Otherwise you get thrown into an editor, with the default being <c>vi</c>, which can be hard to get out of if you have not used it before.  Better, as Joe Fields suggests, is to tell git which editor you want to use.  To set <c>pico</c> as the default editor, the one-time command-line incantation would be:<cd>
             <cline>git config  --global core.editor "pico"</cline>
-        </cd>  You can also directly edit the configuration file at <c>~/.gitconfig</c>.  More suggestions can be found on <url href="https://stackoverflow.com/questions/2596805/how-do-i-make-git-use-the-editor-of-my-choice-for-commits">this thread</url> on StackOverflow at <c>stackoverflow.com/questions/2596805</c>.</p>
+        </cd>  You can also directly edit the configuration file at <c>~/.gitconfig</c>.  More suggestions can be found on <url href="https://stackoverflow.com/questions/2596805/how-do-i-make-git-use-the-editor-of-my-choice-for-commits" visual="stackoverflow.com/questions/2596805/">this thread</url> on StackOverflow at <c>stackoverflow.com/questions/2596805</c>.</p>
     </paragraphs>
 
 </appendix>

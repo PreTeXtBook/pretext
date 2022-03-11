@@ -28,7 +28,7 @@
         <title>Python Virtual Environment</title>
 
         <p>There is a very good chance your system has a version of Python
-        installed already since various other programs rely on it.  You will be much happier if various Python programs you need for <pretext/> do not get entangled with your Python programs installed as system software.  And if we need to help you debug some related problems we will ask you to work in a virtual environment anyway.  We will follow a <url href="https://realpython.com/python-virtual-environments-a-primer/">primer</url><fn><c>realpython.com/python-virtual-environments-a-primer/</c></fn> that has been recommended by Brad Miller, founder of Runestone Interactive.  See that page for more details.</p>
+        installed already since various other programs rely on it.  You will be much happier if various Python programs you need for <pretext/> do not get entangled with your Python programs installed as system software.  And if we need to help you debug some related problems we will ask you to work in a virtual environment anyway.  We will follow a <url href="https://realpython.com/python-virtual-environments-a-primer/" visual="realpython.com/python-virtual-environments-a-primer/">primer</url> that has been recommended by Brad Miller, founder of Runestone Interactive.  See that page for more details.</p>
 
         <p>These are condensed instructions without much explanation.<ol>
             <li>Do not install the old-school <c>virtualenv</c> module.</li>
