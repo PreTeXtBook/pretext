@@ -79,12 +79,18 @@
 <!-- statement + proof -->
 <!ENTITY THEOREM-LIKE "theorem|corollary|lemma|algorithm|proposition|claim|fact|identity">
 <!ENTITY THEOREM-FILTER "self::theorem or self::corollary or self::lemma or self::algorithm or self::proposition or self::claim or self::fact or self::identity">
-<!-- catch a proof that is inside THEOREM-LIKE -->
-<!ENTITY INNER-PROOF-FILTER "self::proof and (parent::theorem or parent::corollary or parent::lemma or parent::algorithm or parent::proposition or parent::claim or parent::fact or parent::identity)">
 
 <!-- varieties of proofs -->
 <!ENTITY PROOF-LIKE "proof|argument|justification|reasoning|explanation">
 <!ENTITY PROOF-FILTER "self::proof or self::argument or self::justification or self::reasoning or self::explanation">
+
+<!-- three types of PROOF-LIKE -->
+<!-- in THEOREM-LIKE, detached/standalone, in solutions                                  -->
+<!-- INNER-PROOF-FILTER only used where heading levels are controlled                    -->
+<!-- SOLUTION-PROOF-FILTER used extensively to control LaTeX environments/macros/styling -->
+<!-- standalone/detached is just everything else (in division, or paragraphs, or...)     -->
+<!ENTITY INNER-PROOF-FILTER "(&PROOF-FILTER;) and (parent::theorem or parent::corollary or parent::lemma or parent::algorithm or parent::proposition or parent::claim or parent::fact or parent::identity)">
+<!ENTITY SOLUTION-PROOF-FILTER "(&PROOF-FILTER;) and (ancestor::hint or ancestor::answer or ancestor::solution)">
 
 <!-- a mathematical statement, but never with a proof -->
 <!ENTITY AXIOM-LIKE "axiom|conjecture|principle|heuristic|hypothesis|assumption">
