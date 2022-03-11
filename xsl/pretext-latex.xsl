@@ -1070,7 +1070,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$document-root//case[@direction]">
         <!-- Perhaps customize these via something like tex-macro-style      -->
         <!-- And/or move these closer to the environment where they are used -->
-        <xsl:text>%% Arrows for iff proofs, with trailing space&#xa;</xsl:text>
+        <xsl:text>%% Arrows for iff PROOF-LIKEs, with trailing space&#xa;</xsl:text>
         <xsl:text>\newcommand{\forwardimplication}{($\Rightarrow$)}&#xa;</xsl:text>
         <xsl:text>\newcommand{\backwardimplication}{($\Leftarrow$)}&#xa;</xsl:text>
     </xsl:if>
@@ -2087,6 +2087,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:for-each select="$theorem-reps">
         <xsl:apply-templates select="." mode="environment"/>
     </xsl:for-each>
+    <!-- PROOF-LIKE -->
+    <!-- detached/standalone and inner are same style     -->
+    <!-- solution have a more minimal (hard-coded) style -->
+    <xsl:variable name="proof-reps" select="
+        ($document-root//proof[ancestor::hint|ancestor::answer|ancestor::solution])[1]|
+        ($document-root//proof[not(ancestor::hint|ancestor::answer|ancestor::solution)])[1]|
+        ($document-root//argument[ancestor::hint|ancestor::answer|ancestor::solution])[1]|
+        ($document-root//argument[not(ancestor::hint|ancestor::answer|ancestor::solution)])[1]|
+        ($document-root//justification[ancestor::hint|ancestor::answer|ancestor::solution])[1]|
+        ($document-root//justification[not(ancestor::hint|ancestor::answer|ancestor::solution)])[1]|
+        ($document-root//reasoning[ancestor::hint|ancestor::answer|ancestor::solution])[1]|
+        ($document-root//reasoning[not(ancestor::hint|ancestor::answer|ancestor::solution)])[1]|
+        ($document-root//explanation[ancestor::hint|ancestor::answer|ancestor::solution])[1]|
+        ($document-root//explanation[not(ancestor::hint|ancestor::answer|ancestor::solution)])[1]"/>
+    <xsl:if test="$proof-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for PROOF-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$proof-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
     <!-- AXIOM-LIKE -->
     <xsl:variable name="axiom-reps" select="
         ($document-root//axiom)[1]|
@@ -2257,8 +2279,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- but we include it here as a one-off      -->
     <xsl:variable name="miscellaneous-reps" select="
         ($document-root//gi)[1]|
-        ($document-root//proof[parent::hint|parent::answer|parent::solution])[1]|
-        ($document-root//proof[not(parent::hint|parent::answer|parent::solution)])[1]|
         ($document-root//case)[1]|
         ($document-root//assemblage)[1]|
         ($document-root//backmatter/colophon)[1]|
@@ -2687,26 +2707,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newtcolorbox{commentary}[2]{title={#1}, phantomlabel={#2}, breakable, parbox=false, commentarystyle}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- "proof" (regular, major) -->
+<!-- PROOF-LIKE (regular, major) -->
 <!-- Breakable tcolorbox since a child of a       -->
 <!-- division, i.e. top level, and hence stylable -->
 <!-- Body:  \begin{proof}{title}{label}           -->
 <!-- Title comes with punctuation, always.        -->
-<xsl:template match="proof[not(parent::hint|parent::answer|parent::solution)]" mode="environment">
+<xsl:template match="*[&PROOF-FILTER;][not(&SOLUTION-PROOF-FILTER;)]" mode="environment">
+    <xsl:variable name="proof-name" select="local-name(.)"/>
     <xsl:text>%% proof: title is a replacement&#xa;</xsl:text>
-    <xsl:text>\tcbset{ proofstyle/.style={</xsl:text>
+    <xsl:text>\tcbset{ </xsl:text>
+    <xsl:value-of select="$proof-name"/>
+    <xsl:text>style/.style={</xsl:text>
     <xsl:apply-templates select="." mode="tcb-style" />
     <xsl:text>} }&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox{proof}[2]{title={\notblank{#1}{#1}{</xsl:text>
+    <xsl:text>\newtcolorbox{</xsl:text>
+    <xsl:value-of select="$proof-name"/>
+    <xsl:text>}[2]{title={\notblank{#1}{#1}{</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text>.}}, phantom={</xsl:text>
     <xsl:if test="$b-pageref">
         <xsl:text>\label{#2}</xsl:text>
     </xsl:if>
-    <xsl:text>\hypertarget{#2}{}}, breakable, parbox=false, after={\par}, proofstyle }&#xa;</xsl:text>
+    <xsl:text>\hypertarget{#2}{}}, breakable, parbox=false, after={\par}, </xsl:text>
+    <xsl:value-of select="$proof-name"/>
+    <xsl:text>style }&#xa;</xsl:text>
 </xsl:template>
 
-<!-- "proof" (solutions, minor) -->
+<!-- PROOF-LIKE (solutions, minor) -->
 <!-- NOT a tcolorbox since embedded in others,      -->
 <!-- hence an inner box and thus always unbreakable -->
 <!-- Body:  \begin{solutionproof}                   -->
@@ -2714,14 +2741,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- cross-reference.  Not stylable, though we      -->
 <!-- could use a macro for the tombstone/Halmos/QED -->
 <!-- so that could be set.                          -->
-<xsl:template match="proof[parent::hint|parent::answer|parent::solution]" mode="environment">
-    <xsl:text>\NewDocumentEnvironment{solutionproof}{}&#xa;</xsl:text>
+<xsl:template match="*[&PROOF-FILTER;][&SOLUTION-PROOF-FILTER;]" mode="environment">
+    <xsl:text>\NewDocumentEnvironment{solution</xsl:text>
+    <xsl:value-of select="local-name(.)"/>
+    <xsl:text>}{}&#xa;</xsl:text>
     <xsl:text>{\par\smallskip\noindent\textit{</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text>}.\space\space}{\space\space\hspace*{\stretch{1}}\(\blacksquare\)\par\smallskip}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- "case" (of a proof) -->
+<!-- "case" (of a PROOF-LIKE) -->
 <!-- Body:  \begin{proof}{directionarrow}{title}{label} -->
 <!-- Title comes with punctuation, always.              -->
 <!-- TODO: move implication definitions here, and       -->
@@ -3125,8 +3154,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- * tcolorbox, boxrule=-0.3pt seems necessary to avoid          -->
 <!--   very faint lines/rules appearing in some PDF viewers,       -->
 <!--   not clear if "frame empty" is also necessary                -->
-<!-- * See discussion of end-of-block markers (eg, a proof         -->
-<!--   tombstone/Halmos) at the default style for proof            -->
+<!-- * See discussion of end-of-block markers (eg, a PROOF-LIKE    -->
+<!--   tombstone/Halmos) at the default style for PROOF-LIKE       -->
 
 <!-- "abbr", "acro", "init" -->
 <!-- We default to small caps for abbreviations, acronyms, and  -->
@@ -3176,7 +3205,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\path[draw=red!75!black,line width=0.5mm] (frame.north west) -- (frame.south west) -- ($ (frame.south west)!0.05!(frame.south east) $);}</xsl:text>
 </xsl:template>
 
-<!-- "proof" -->
+<!-- PROOF-LIKE -->
 <!-- Title in italics, as in amsthm style.           -->
 <!-- Filled, black square as QED, tombstone, Halmos. -->
 <!-- Pushing the tombstone flush-right is a bit      -->
@@ -3185,15 +3214,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- least two spaces gap to remain on the same      -->
 <!-- line. Presumably the line will stretch when the -->
 <!-- tombstone moves onto its own line.              -->
-<!-- NB: this style is NOT used for a "proof" inside -->
-<!-- a "hint", "answer", or "solution", since that   -->
-<!-- would lead to an inner tcolorbox which is       -->
+<!-- NB: this style is NOT used for a PROOF-LIKE     -->
+<!-- inside a "hint", "answer", or "solution", since -->
+<!-- that would lead to an inner tcolorbox which is  -->
 <!-- *always* unbreakable and leads to real          -->
 <!-- formatting problems.  We could restrict the     -->
 <!-- match, but that would complicate style writing. -->
 <!-- Instead, this template is simply not employed   -->
 <!-- for the "solution proof" case.                  -->
-<xsl:template match="proof" mode="tcb-style">
+<xsl:template match="&PROOF-LIKE;" mode="tcb-style">
     <xsl:text>bwminimalstyle, fonttitle=\blocktitlefont\itshape, attach title to upper, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\blacksquare\)},&#xa;</xsl:text>
 </xsl:template>
 
@@ -5261,10 +5290,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Theorems and Axioms-->
-<!-- Very similar to case of definitions   -->
-<!-- Adds (potential) proofs, and creators -->
-<!-- Statement structure should be relaxed -->
-<!-- Style is controlled in the preamble   -->
+<!-- Very similar to case of definitions       -->
+<!-- Adds (potential) PROOF-LIKE, and creators -->
+<!-- Statement structure should be relaxed     -->
+<!-- Style is controlled in the preamble       -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;">
     <!-- environment, title, label string, newline -->
     <xsl:text>\begin{</xsl:text>
@@ -5272,28 +5301,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="block-options"/>
     <xsl:text>%&#xa;</xsl:text>
-    <!-- statement is required now, to be relaxed in DTD      -->
-    <!-- explicitly ignore proof and pickup just for theorems -->
-    <!-- Locate first "proof", select only preceding:: ?      -->
-    <xsl:apply-templates select="*[not(self::proof)]" />
+    <!-- statement is required now, to be relaxed in schema             -->
+    <!-- explicitly ignore PROOF-LIKE and pickup just for theorems      -->
+    <!-- Alternative: ocate first PROOF-LIKE, select only preceding:: ? -->
+    <xsl:apply-templates select="*[not(&PROOF-FILTER;)]" />
     <xsl:text>\end{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
-    <!-- proof(s) are optional, so may not match at all          -->
-    <!-- And the point of the AXIOM-LIKE is that they lack proof -->
+    <!-- PROOF-LIKE(s) are optional, so may not match at all          -->
+    <!-- And the point of the AXIOM-LIKE is that they lack PROOF-LIKE -->
     <xsl:if test="&THEOREM-FILTER;">
-        <xsl:apply-templates select="proof" />
+        <xsl:apply-templates select="&PROOF-LIKE;" />
     </xsl:if>
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
-<!-- Proofs (regular, major) -->
+<!-- PROOF-LIKE (regular, major) -->
 <!-- Subsidary to THEOREM-LIKE, or standalone        -->
 <!-- Defaults to "Proof", can be replaced by "title" -->
-<xsl:template match="proof[not(parent::hint|parent::answer|parent::solution)]">
-    <xsl:text>\begin{proof}</xsl:text>
-    <!-- The AMS environment handles punctuation carefully, so  -->
-    <!-- we just use the "title-full" template, with protection -->
+<xsl:template match="*[&PROOF-FILTER;][not(&SOLUTION-PROOF-FILTER;)]">
+    <xsl:variable name="environment-name">
+        <xsl:value-of select="local-name(.)"/>
+    </xsl:variable>
+    <xsl:text>\begin{</xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:if test="title">
         <xsl:apply-templates select="." mode="title-full"/>
@@ -5304,19 +5336,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates/>
-    <xsl:text>\end{proof}&#xa;</xsl:text>
+    <xsl:text>\end{</xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Proofs (solutions, minor) -->
+<!-- PROOF-LIKE (solutions, minor) -->
 <!-- Inside "hint", "answer", solution" -->
-<xsl:template match="proof[parent::hint|parent::answer|parent::solution]">
-    <xsl:text>\begin{solutionproof}</xsl:text>
-    <xsl:text>&#xa;</xsl:text>
+<xsl:template match="*[&PROOF-FILTER;][&SOLUTION-PROOF-FILTER;]">
+    <xsl:variable name="environment-name">
+        <xsl:text>solution</xsl:text>
+        <xsl:value-of select="local-name(.)"/>
+    </xsl:variable>
+    <xsl:text>\begin{</xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>}&#xa;</xsl:text>
     <xsl:apply-templates/>
-    <xsl:text>\end{solutionproof}&#xa;</xsl:text>
+    <xsl:text>\end{</xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- cases in proofs -->
+<!-- cases in PROOF-LIKEs -->
 <!-- Three arguments: direction arrow, title, label -->
 <!-- The environment combines and styles            -->
 <xsl:template match="case">
@@ -6720,7 +6761,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="mrow|me" mode="qed-here">
     <!-- <xsl:message>here</xsl:message> -->
-    <xsl:variable name="enclosing-proof" select="ancestor::proof" />
+    <xsl:variable name="enclosing-proof" select="ancestor::*[&PROOF-FILTER;]" />
     <xsl:if test="$enclosing-proof and not(self::mrow and parent::md and @number='yes') and not(self::mrow and parent::mdn and not(@number='no'))">
         <xsl:variable name="proof-nodes" select="$enclosing-proof/descendant-or-self::*|$enclosing-proof/descendant-or-self::text()" />
         <xsl:variable name="trailing-nodes" select="following::*|following::text()" />
@@ -10286,7 +10327,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Any target of a PreTeXt cross-reference, which is not naturally -->
 <!-- numbered by a LaTeX \label{} command, needs to go here.         -->
-<xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup|p|paragraphs|blockquote|contributor|colophon|book|article" mode="xref-as-ref">
+<xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise|biblio|biblio/note|&PROOF-LIKE;|case|ol/li|dl/li|hint|answer|solution|exercisegroup|p|paragraphs|blockquote|contributor|colophon|book|article" mode="xref-as-ref">
     <xsl:value-of select="false()" />
 </xsl:template>
 
@@ -10419,7 +10460,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Note: objectives are one-per-subdivision, and precede the              -->
 <!-- introduction, so the LaTeX \ref{} mechanism assigns the correct        -->
 <!-- number - that of the enclosing subdivision                             -->
-<xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup|fn" mode="xref-number">
+<xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise|biblio|biblio/note|&PROOF-LIKE;|case|ol/li|dl/li|hint|answer|solution|exercisegroup|fn" mode="xref-number">
     <xsl:param name="xref" select="/.." />
 
     <xsl:apply-templates select="." mode="xref-number-hardcoded">
