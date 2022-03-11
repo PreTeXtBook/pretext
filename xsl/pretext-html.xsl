@@ -1945,7 +1945,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="commentary" mode="xref-as-knowl">
     <xsl:value-of select="$b-commentary" />
 </xsl:template>
-<xsl:template match="fn|p|blockquote|biblio|biblio/note|gi|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|&GOAL-LIKE;|exercise|hint|answer|solution|exercisegroup|men|mrow|li[not(parent::var)]|contributor|fragment" mode="xref-as-knowl">
+<xsl:template match="fn|p|blockquote|biblio|biblio/note|gi|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|&GOAL-LIKE;|exercise|hint|answer|solution|exercisegroup|men|mrow|li[not(parent::var)]|contributor|fragment" mode="xref-as-knowl">
     <xsl:value-of select="not($b-skip-knowls)" />
 </xsl:template>
 
@@ -2243,7 +2243,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- add block ancestors that definitely have an hN                     -->
 <!-- but subtract 1 for a solution|hint|answer because the statement is -->
 <!--   not an HTML heading ancestor                                     -->
-<!-- also subtract 1 for a proof inside a theorem-like                  -->
+<!-- also subtract 1 for a PROOF-LIKE inside a THEOREM-LIKE             -->
 <!-- add block ancestors that have an hN if they had a @title           -->
 <!-- add 1 for the overall h1                                           -->
 <!-- add 1 for the section itself                                       -->
@@ -2526,7 +2526,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- A title or the type, with a period -->
-<!-- proof is the only known case       -->
+<!-- PROOF-LIKE is the only known case       -->
 <xsl:template match="*" mode="heading-no-number">
     <xsl:variable name="hN">
         <xsl:apply-templates select="." mode="hN"/>
@@ -2555,7 +2555,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Title only -->
 <!-- ASIDE-LIKE, exercisegroup, dl/li -->
-<!-- proof, when optionally titled    -->
+<!-- PROOF-LIKE, when titled          -->
 <!-- Subsidiary to paragraphs,        -->
 <!-- and divisions of "exercises"     -->
 <!-- No title, then nothing happens   -->
@@ -2642,7 +2642,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- The next template, "heading-non-singleton-number", is basically    -->
 <!-- "heading-no-number" with an (optional) non-singleton number,       -->
-<!-- much like in "heading-simple".  If/Once "proof" gets a             -->
+<!-- much like in "heading-simple".  If/Once PROOF-LIKE gets a          -->
 <!-- non-singleton number then maybe "heading-no-number" can come here. -->
 
 <!-- A title or the type, with a period, and an optional number -->
@@ -2684,7 +2684,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<!-- A case in a proof, eg "(=>) Necessity." -->
+<!-- A case in a PROOF-LIKE, eg "(=>) Necessity." -->
 <!-- case -->
 <xsl:template match="*" mode="heading-case">
     <xsl:variable name="hN">
@@ -2786,7 +2786,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- (7) TODO: "wrapped-content" called by "body" to separate code. -->
 
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|gi|p|li|me|men|md|mdn|fragment">
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|fn|contributor|biblio|biblio/note|gi|p|li|me|men|md|mdn|fragment">
     <xsl:param name="b-original" select="true()" />
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
@@ -4734,13 +4734,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- The next few implementions support theorems,       -->
-<!-- which may have knowls containing proofs hanging    -->
-<!-- off them.  A proof can be a block in its own right -->
-<!-- (a "detached" proof).                              -->
+<!-- which may have knowls containing PROOF-LIKE        -->
+<!-- hanging  off them.  A PROOF-LIKE can be a block in -->
+<!-- its own right (a "detached" PROOF-LIKE).           -->
 
 
 <!-- THEOREM-LIKE, AXIOM-LIKE -->
-<!-- Similar blocks, former may have a proof appendage -->
+<!-- Similar blocks, former may have a PROOF-LIKE appendage -->
 
 <!-- Born-hidden behavior is configurable -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="is-hidden">
@@ -4782,31 +4782,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
 
-    <!-- Locate first "proof", select only preceding:: ? -->
-    <xsl:apply-templates select="*[not(self::proof)]" >
+    <!-- Alternative: Locate first "PROOF-LIKE", select only preceding:: ? -->
+    <xsl:apply-templates select="*[not(&PROOF-FILTER;)]" >
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
     </xsl:apply-templates>
 </xsl:template>
 
 
-<!-- Proof -->
+<!-- PROOF-LIKE -->
 <!-- A fairly simple block, though configurable -->
 
 <!-- Born-hidden behavior is configurable -->
-<xsl:template match="proof" mode="is-hidden">
+<xsl:template match="&PROOF-LIKE;" mode="is-hidden">
     <xsl:value-of select="$knowl-proof = 'yes'" />
 </xsl:template>
 
 <!-- Overall enclosing element -->
-<xsl:template match="proof" mode="body-element">
+<xsl:template match="&PROOF-LIKE;" mode="body-element">
     <xsl:text>article</xsl:text>
 </xsl:template>
 
 <!-- And its CSS class -->
 <!-- Only subsidiary item that is configurable -->
 <!-- as visible or hidden in a knowl           -->
-<xsl:template match="proof" mode="body-css-class">
+<xsl:template match="&PROOF-LIKE;" mode="body-css-class">
     <xsl:choose>
         <xsl:when test="$knowl-proof = 'yes'">
             <xsl:text>hiddenproof</xsl:text>
@@ -4817,21 +4817,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- Trailing as a hidden knowl, or plainly  -->
-<!-- visible, a proof is a block level item  -->
-<xsl:template match="proof" mode="hidden-knowl-placement">
+<!-- Trailing as a hidden knowl, or plainly visible, -->
+<!-- a PROOF-LIKE is a block level item              -->
+<xsl:template match="&PROOF-LIKE;" mode="hidden-knowl-placement">
     <xsl:text>block</xsl:text>
 </xsl:template>
 
 <!-- When born use this heading -->
 <!-- Optionally titled          -->
-<xsl:template match="proof" mode="heading-birth">
+<xsl:template match="&PROOF-LIKE;" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-no-number"/>
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
 <!-- Optionally titled                          -->
-<xsl:template match="proof" mode="heading-xref-knowl">
+<xsl:template match="&PROOF-LIKE;" mode="heading-xref-knowl">
     <xsl:choose>
         <xsl:when test="title">
             <xsl:apply-templates select="." mode="heading-title" />
@@ -4848,7 +4848,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Potentially knowled, may have statement    -->
 <!-- with Sage, so pass block type              -->
 <!-- Simply process contents, could restict here -->
-<xsl:template match="proof" mode="wrapped-content">
+<xsl:template match="&PROOF-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
 
@@ -4859,7 +4859,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Case (of a proof) -->
+<!-- Case (of a PROOF-LIKE) -->
 <!-- A simple block with an inline heading -->
 
 <!-- Never born-hidden, does not make sense -->
@@ -5274,7 +5274,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and top-down when components are also knowled.  -->
 
 
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|fragment" mode="body">
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|fn|contributor|biblio|biblio/note|fragment" mode="body">
     <xsl:param name="b-original" select="true()"/>
     <xsl:param name="block-type"/>
 
@@ -5288,7 +5288,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- unlike a subsidiary element like a "hint",      -->
     <!-- which must be elected to be visible, so this is -->
     <!-- a bit of an ad-hock hack to handle this case    -->
-    <!-- No prelude, postlude, proof for "commentary"    -->
+    <!-- No prelude, postlude, PROOF-LIKE for commentary -->
     <xsl:if test="not(self::commentary) or $b-commentary">
         <xsl:variable name="body-elt">
             <xsl:apply-templates select="." mode="body-element" />
@@ -5330,12 +5330,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:apply-templates>
         </xsl:element>
     </xsl:if>
-    <!-- Extraordinary: proofs are not displayed within their    -->
+    <!-- Extraordinary: PROOF-LIKE are not displayed within their-->
     <!-- parent theorem, but as a sibling, following.  It might  -->
-    <!-- be a hidden knowl, it might just be the proof visible.  -->
-    <!-- The conditional simply prevents abuse.                  -->
+    <!-- be a hidden knowl, it might just be the PROOF-LIKE      -->
+    <!-- visible. The conditional simply prevents abuse.         -->
     <xsl:if test="(&THEOREM-FILTER;)">
-        <xsl:apply-templates select="proof">
+        <xsl:apply-templates select="&PROOF-LIKE;">
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
     </xsl:if>
