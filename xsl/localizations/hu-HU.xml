@@ -35,7 +35,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='claim'>Állítás</localization>
     <localization string-id='fact'>Tény</localization>
     <localization string-id='identity'>Azonosság</localization>
+    <!-- PROOF-LIKE -->
     <localization string-id='proof'>Bizonyítás</localization>
+    <!-- <localization string-id='argument'>Argument</localization> -->
+    <!-- <localization string-id='justification'>Justification</localization> -->
+    <!-- <localization string-id='reasoning'>Reasoning</localization> -->
+    <!-- <localization string-id='explanation'>Explanation</localization> -->
+    <!-- used for a (logical) portion of a proof -->
     <localization string-id='case'>Eset</localization>
     <!-- Components of the narrative -->
     <!-- Mathematical statements without proofs -->

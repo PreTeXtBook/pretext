@@ -36,7 +36,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='claim'>Claim</localization>
     <localization string-id='fact'>Fact</localization>
     <localization string-id='identity'>Identity</localization>
+    <!-- PROOF-LIKE -->
+    <!-- We know these five names for PROOF-LIKE have subtle shades of meaning. -->
+    <!-- Provide a good translation for "proof" itself, and do your best with   -->
+    <!-- the others.  It is highly likely authors will rename one or more of    -->
+    <!-- the others.                                                            -->
     <localization string-id='proof'>Proof</localization>
+    <localization string-id='argument'>Argument</localization>
+    <localization string-id='justification'>Justification</localization>
+    <localization string-id='reasoning'>Reasoning</localization>
+    <localization string-id='explanation'>Explanation</localization>
+    <!-- used for a (logical) portion of a proof -->
     <localization string-id='case'>Case</localization>
     <!-- Components of the narrative -->
     <!-- Mathematical statements without proofs -->

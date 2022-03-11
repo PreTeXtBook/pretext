@@ -35,7 +35,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='claim'>Aanvoering</localization> <!-- This was a difficult one for me. The most obvious candidate is "bewering", but this is already used as a technical term for a mathematical statement. Words like "veronderstelling", "eis", "postuleer" all convey slightly the wrong meaning. "Aanvoering" is slightly awkward, but the best I could think of. -D.Basson -->
     <localization string-id='fact'>Feit</localization>
     <localization string-id='identity'>Identiteit</localization>
+    <!-- PROOF-LIKE -->
     <localization string-id='proof'>Bewys</localization>
+    <!-- <localization string-id='argument'>Argument</localization> -->
+    <!-- <localization string-id='justification'>Justification</localization> -->
+    <!-- <localization string-id='reasoning'>Reasoning</localization> -->
+    <!-- <localization string-id='explanation'>Explanation</localization> -->
+    <!-- used for a (logical) portion of a proof -->
     <localization string-id='case'>Geval</localization>
     <!-- Components of the narrative -->
     <!-- Mathematical statements without proofs -->

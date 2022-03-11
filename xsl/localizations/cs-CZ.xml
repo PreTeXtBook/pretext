@@ -34,8 +34,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='proposition'>Věta</localization>
     <localization string-id='claim'>Tvrzení</localization>
     <localization string-id='fact'>Fakt</localization>
-    <localization string-id='proof'>Důkaz</localization>
     <localization string-id='identity'>Rovnost</localization>
+    <!-- PROOF-LIKE -->
+    <localization string-id='proof'>Důkaz</localization>
+    <!-- <localization string-id='argument'>Argument</localization> -->
+    <!-- <localization string-id='justification'>Justification</localization> -->
+    <!-- <localization string-id='reasoning'>Reasoning</localization> -->
+    <!-- <localization string-id='explanation'>Explanation</localization> -->
     <!-- Mathematical statements without proofs -->
     <!-- AXIOM-LIKE blocks -->
     <localization string-id='axiom'>Axiom</localization>
@@ -86,6 +91,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='paragraphs'>Odstavce</localization>
     <localization string-id='commentary'>Komentář</localization>
     <localization string-id='subparagraph'>Pododstavec</localization>
+    <!-- used for a (logical) portion of a proof -->
     <localization string-id='case'>Případ</localization>
     <!-- Components of the narrative -->
     <!-- REMARK-LIKE blocks -->

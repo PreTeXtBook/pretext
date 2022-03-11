@@ -36,7 +36,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='claim'>Afirmação</localization>
     <localization string-id='fact'>Fato</localization>
     <localization string-id='identity'>Identidade</localization>
+    <!-- PROOF-LIKE -->
     <localization string-id='proof'>Demonstração</localization>
+    <!-- <localization string-id='argument'>Argument</localization> -->
+    <!-- <localization string-id='justification'>Justification</localization> -->
+    <!-- <localization string-id='reasoning'>Reasoning</localization> -->
+    <!-- <localization string-id='explanation'>Explanation</localization> -->
+    <!-- used for a (logical) portion of a proof -->
     <localization string-id='case'>Caso</localization>
     <!-- Mathematical statements without proofs -->
     <!-- AXIOM-LIKE blocks -->
