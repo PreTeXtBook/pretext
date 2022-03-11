@@ -1,0 +1,29 @@
+\documentclass[12pt]{article}
+\usepackage{geometry}
+\geometry{letterpaper,total={408pt,9.0in}}
+%% Custom Page Layout Adjustments (use latex.geometry)
+\usepackage{amsmath,amssymb}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usetikzlibrary{positioning}
+\usepgfplotslibrary{fillbetween}
+\usepackage{pstricks}
+\usepackage{phaistos}
+\usepackage{xcolor}
+\ifdefined\tikzset
+\tikzset{ampersand replacement = \amp}
+\fi
+\newcommand{\order}[1]{\left\lvert#1\right\rvert}
+\newcommand{\lt}{<}
+\newcommand{\gt}{>}
+\newcommand{\amp}{&}
+\begin{document}
+\pagestyle{empty}
+\resizebox{\width}{\height}{
+\begin{tikzpicture}[xscale=1.5, yscale=1.5]
+\draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
+\draw[->,>=latex, style={black, thick}] (3,0) -- (1.47, 1.53) node [above right =1mm] {$\vec{B}$} -- (1,2);
+\draw[->,>=latex, style={black, thick}] (1,2) -- (0.23 , 0.46) node [above left=1mm] {$\vec{C}$} -- (0,0);
+\end{tikzpicture}
+}
+\end{document}

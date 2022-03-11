@@ -1,0 +1,736 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-representations>
+  <webwork-reps version="2" xml:id="extracted-webwork-12" ww-id="webwork-12">
+    <static seed="12">
+      <statement><p>This Venn Diagram groups animals by certain characteristics.</p>
+<!-- PTX:WARNING: PGML wanted to center align here. -->
+<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" width="50%" pi:generated="webwork/images/webwork-12-image-1"/>
+<p>Name an animal that belongs in the center region. Spelling counts!</p>
+<p><fillin name="AnSwEr0001" characters="30"/></p>
+</statement>
+      <answer>
+        <p>
+          <m>{\text{platypus}}</m>
+        </p>
+      </answer>
+    </static>
+    <server-data problemSource="RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIk1hdGhPYmplY3RzLnBsIiwiUEdNTC5wbCIsIkFuc3dlckZvcm1hdEhlbHAucGwiLCJQR3Rpa3oucGwiLCJjb250ZXh0QXJiaXRyYXJ5U3RyaW5nLnBsIiwiUFRYU0MucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTsKQ29udGV4dCgiQXJiaXRyYXJ5U3RyaW5nIik7CiRwbGF0eXB1cyA9IENvbXB1dGUoInBsYXR5cHVzIiktPmNtcChjaGVja2VyID0+IHN1YiB7CiAgbXkgKCRjb3JyZWN0LCRzdHVkZW50LCRhbnMpID0gQF87CiAgJGNvcnJlY3QgPSAkY29ycmVjdC0+dmFsdWU7CiAgJHN0dWRlbnQgPSAkc3R1ZGVudC0+dmFsdWU7CiAgJHN0dWRlbnQgPSBsYygkc3R1ZGVudCk7CiAgJHN0dWRlbnQgPX4gcy8gKy8gLzsKICAkc3R1ZGVudCA9fiBzL14gLy87CiAgJHN0dWRlbnQgPX4gcy8gJC8vOwogIHJldHVybiAoJHN0dWRlbnQgZXEgJGNvcnJlY3QpOwp9KTsKJGltYWdlXzE1ID0gY3JlYXRlVGlrWkltYWdlKCk7CiRpbWFnZV8xNS0+QkVHSU5fVElLWgpcZHJhd1tmaWxsPXJlZCwgb3BhY2l0eT0wLjVdICgwLDApIGNpcmNsZSAoMmNtKSBub2RlW2JlbG93IGxlZnQ9MS41Y20sIG9wYWNpdHk9MV0ge0hhcyBhIEJpbGx9IG5vZGVbYmVsb3cgbGVmdCwgb3BhY2l0eT0xXSB7RHVja307ClxkcmF3W2ZpbGw9Z3JlZW4sIG9wYWNpdHk9MC41XSAoNjA6MmNtKSBjaXJjbGUgKDJjbSkgbm9kZSBbYWJvdmU9Mi4xY20sIG9wYWNpdHk9MV0ge0lzIFZlbmVtb3VzfSBub2RlW2Fib3ZlPTAuNWNtLCBvcGFjaXR5PTFdIHtKZWxseWZpc2h9OwpcZHJhd1tmaWxsPWJsdWUsIG9wYWNpdHk9MC41XSAoMDoyY20pIGNpcmNsZSAoMmNtKSBub2RlIFtiZWxvdyByaWdodD0xLjVjbSwgb3BhY2l0eT0xXSB7SGFzIEZ1cn0gbm9kZVtiZWxvdyByaWdodCwgb3BhY2l0eT0xXSB7QmVhdmVyfTsKCkVORF9USUtaCgpCRUdJTl9QR01MClRoaXMgVmVubiBEaWFncmFtIGdyb3VwcyBhbmltYWxzIGJ5IGNlcnRhaW4gY2hhcmFjdGVyaXN0aWNzLgoKPj4gW0BpbWFnZShpbnNlcnRHcmFwaCgkaW1hZ2VfMTUpLCB3aWR0aD0+MzAwKUBdKiAgPDwKCk5hbWUgYW4gYW5pbWFsIHRoYXQgYmVsb25ncyBpbiB0aGUgY2VudGVyIHJlZ2lvbi4gU3BlbGxpbmcgY291bnRzIQoKW19deyRwbGF0eXB1c317MzB9CgoKRU5EX1BHTUwKCkVORERPQ1VNRU5UKCk7" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" course-password="anonymous" language="en-US"/>
+    <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###       on 2022-03-23T23:07:56-07:00       
+###   A recent stable commit (2020-08-09):   
+### 98f21740783f166a773df4dc83cab5293ab63a4a 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(6.3)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "MathObjects.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "PGtikz.pl",
+  "contextArbitraryString.pl",
+  "PTXSC.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context("ArbitraryString");
+$platypus = Compute("platypus")->cmp(checker => sub {
+  my ($correct,$student,$ans) = @_;
+  $correct = $correct->value;
+  $student = $student->value;
+  $student = lc($student);
+  $student =~ s/ +/ /;
+  $student =~ s/^ //;
+  $student =~ s/ $//;
+  return ($student eq $correct);
+});
+$image_15 = createTikZImage();
+$image_15->BEGIN_TIKZ
+\draw[fill=red, opacity=0.5] (0,0) circle (2cm) node[below left=1.5cm, opacity=1] {Has a Bill} node[below left, opacity=1] {Duck};
+\draw[fill=green, opacity=0.5] (60:2cm) circle (2cm) node [above=2.1cm, opacity=1] {Is Venemous} node[above=0.5cm, opacity=1] {Jellyfish};
+\draw[fill=blue, opacity=0.5] (0:2cm) circle (2cm) node [below right=1.5cm, opacity=1] {Has Fur} node[below right, opacity=1] {Beaver};
+
+END_TIKZ
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+This Venn Diagram groups animals by certain characteristics.
+
+>> [@image(insertGraph($image_15), width=>300)@]*  <<
+
+Name an animal that belongs in the center region. Spelling counts!
+
+[_]{$platypus}{30}
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+  </webwork-reps>
+  <webwork-reps version="2" xml:id="extracted-webwork-15" ww-id="webwork-15">
+    <static seed="15" source="Library/PCC/BasicAlgebra/NumberBasics/FactorInteger10.pg">
+      <statement><p>Find the prime factorization of <m>35</m>.</p>
+<p><m>35={}</m><fillin name="AnSwEr0001" characters="11"/></p>
+</statement>
+      <answer>
+        <p>
+          <m>5\cdot 7</m>
+        </p>
+      </answer>
+      <solution><p>After checking to see if small prime numbers divide <m>35</m>, we find that <m>5</m> is one divisor. So <m>35=5\cdot7</m>.</p>
+<p>Since both <m>5</m> and <m>7</m> are prime, the prime factorization of <m>35</m> is <m>5\cdot7</m>.</p>
+</solution>
+    </static>
+    <server-data sourceFilePath="Library/PCC/BasicAlgebra/NumberBasics/FactorInteger10.pg" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" course-password="anonymous" language="en-US"/>
+    <pg source="Library/PCC/BasicAlgebra/NumberBasics/FactorInteger10.pg"/>
+  </webwork-reps>
+  <webwork-reps version="2" xml:id="extracted-webwork-18" ww-id="webwork-18">
+    <static seed="18">
+      <task><title>Identify Coefficients</title>
+<statement><p>Consider the equation</p>
+<p><me>{2x^{2}-7x-15} = 0</me></p>
+<p>Identify the coefficients for the quadratic equation using the standard form from Subsection<nbsp/>1.1.</p>
+<p><m>a=</m> <fillin name="AnSwEr0001" characters="4"/>, <m>b=</m> <fillin name="AnSwEr0002" characters="4"/>, <m>c=</m> <fillin name="AnSwEr0003" characters="4"/></p>
+</statement><answer><p><m>2</m></p></answer><answer><p><m>-7</m></p></answer><answer><p><m>-15</m></p></answer><solution><p>Take the coefficient of <m>x^2</m> for the value of <m>a\text{,}</m> the coefficient of <m>x</m> for <m>b\text{,}</m> and the constant for <m>c\text{.}</m> <em>In this case</em>, they are <m>a = 2\text{,}</m> <m>b = -7\text{,}</m> <m>c = -15\text{.}</m></p>
+</solution></task>
+      <task><title>Use the Quadratic Formula</title>
+<statement><p>Use the quadratic formula to find the solution set to</p>
+<p><me>{2x^{2}-7x-15}=0</me></p>
+<p><fillin name="AnSwEr0004" characters="30"/></p>
+</statement><answer><p><m>\frac{-3}{2}, 5</m></p></answer><solution><p>Recall that the quadratic formula is given in Subsection<nbsp/>1.1.</p>
+<p>You already identified <m>a = 2\text{,}</m> <m>b = -7\text{,}</m> and <m>c = -15\text{,}</m> and the results from using these in the quadratic formula are <m>-\frac{3}{2}</m> and <m>5\text{.}</m></p>
+</solution></task>
+    </static>
+    <server-data problemSource="RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIk1hdGhPYmplY3RzLnBsIiwiUEdNTC5wbCIsInNjYWZmb2xkLnBsIiwiQW5zd2VyRm9ybWF0SGVscC5wbCIsImNvbnRleHRGcmFjdGlvbi5wbCIsImNvbnRleHRGaW5pdGVTb2x1dGlvblNldHMucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTsKQ29udGV4dCgiRnJhY3Rpb24iKTsKJHF1YWRyYXRpYyA9IEZvcm11bGEoIjIgeF4yIC0gNyB4IC0gMTUiKS0+cmVkdWNlOwokeDEgPSBGcmFjdGlvbig1LDEpOwokeDIgPSBGcmFjdGlvbigtMywyKTsKQ29udGV4dCgpLT5mbGFncy0+c2V0KHJlZHVjZUNvbnN0YW50cz0+MCxyZWR1Y2VDb25zdGFudEZ1bmN0aW9ucz0+MCk7CkNvbnRleHQoIkZpbml0ZVNvbHV0aW9uU2V0cyIpOwokc29sdXRpb25zID0gRm9ybXVsYSgiLTMvMiw1Iik7ClNjYWZmb2xkOjpCZWdpbihpc19vcGVuID0+ICJjb3JyZWN0X29yX2ZpcnN0X2luY29ycmVjdCIsIG51bWJlcmVkID0+IDEpO1NlY3Rpb246OkJlZ2luKCJJZGVudGlmeSBDb2VmZmljaWVudHMiKTsKQkVHSU5fUEdNTApDb25zaWRlciB0aGUgZXF1YXRpb24KCltgYGBbJHF1YWRyYXRpY10gPSAwYGBgXQoKSWRlbnRpZnkgdGhlIGNvZWZmaWNpZW50cyBmb3IgdGhlIHF1YWRyYXRpYyBlcXVhdGlvbiB1c2luZyB0aGUgc3RhbmRhcmQgZm9ybSBmcm9tIFN1YnNlY3Rpb25bJE5CU1BdKjEuMS4KCltgYT1gXSBbX117Mn17NH0sIFtgYj1gXSBbX117LTd9ezR9LCBbYGM9YF0gW19dey0xNX17NH0KCgpFTkRfUEdNTAoKQkVHSU5fUEdNTF9TT0xVVElPTgpUYWtlIHRoZSBjb2VmZmljaWVudCBvZiBbYHheMmBdIGZvciB0aGUgdmFsdWUgb2YgW2BhXHRleHR7LH1gXSB0aGUgY29lZmZpY2llbnQgb2YgW2B4YF0gZm9yIFtgYlx0ZXh0eyx9YF0gYW5kIHRoZSBjb25zdGFudCBmb3IgW2BjXHRleHR7Ln1gXSBfSW4gdGhpcyBjYXNlXywgdGhleSBhcmUgW2BhID0gMlx0ZXh0eyx9YF0gW2BiID0gLTdcdGV4dHssfWBdIFtgYyA9IC0xNVx0ZXh0ey59YF0KCgpFTkRfUEdNTF9TT0xVVElPTgpTZWN0aW9uOjpFbmQoKTtTZWN0aW9uOjpCZWdpbigiVXNlIHRoZSBRdWFkcmF0aWMgRm9ybXVsYSIpOwpCRUdJTl9QR01MClVzZSB0aGUgcXVhZHJhdGljIGZvcm11bGEgdG8gZmluZCB0aGUgc29sdXRpb24gc2V0IHRvCgpbYGBgWyRxdWFkcmF0aWNdPTBgYGBdCgoKCltfXXskc29sdXRpb25zfXszMH0KCgpFTkRfUEdNTAoKQkVHSU5fUEdNTF9TT0xVVElPTgpSZWNhbGwgdGhhdCB0aGUgcXVhZHJhdGljIGZvcm11bGEgaXMgZ2l2ZW4gaW4gU3Vic2VjdGlvblskTkJTUF0qMS4xLgoKWW91IGFscmVhZHkgaWRlbnRpZmllZCBbYGEgPSAyXHRleHR7LH1gXSBbYGIgPSAtN1x0ZXh0eyx9YF0gYW5kIFtgYyA9IC0xNVx0ZXh0eyx9YF0gYW5kIHRoZSByZXN1bHRzIGZyb20gdXNpbmcgdGhlc2UgaW4gdGhlIHF1YWRyYXRpYyBmb3JtdWxhIGFyZSBbYC1cZnJhY3szfXsyfWBdIGFuZCBbYDVcdGV4dHsufWBdCgoKRU5EX1BHTUxfU09MVVRJT04KU2VjdGlvbjo6RW5kKCk7U2NhZmZvbGQ6OkVuZCgpOwpFTkRET0NVTUVOVCgpOw==" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" course-password="anonymous" language="en-US"/>
+    <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###       on 2022-03-23T23:07:56-07:00       
+###   A recent stable commit (2020-08-09):   
+### 98f21740783f166a773df4dc83cab5293ab63a4a 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(6.5)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "MathObjects.pl",
+  "PGML.pl",
+  "scaffold.pl",
+  "AnswerFormatHelp.pl",
+  "contextFraction.pl",
+  "contextFiniteSolutionSets.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+COMMENT('This problem is scaffolded with multiple parts');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context("Fraction");
+$quadratic = Formula("2 x^2 - 7 x - 15")->reduce;
+$x1 = Fraction(5,1);
+$x2 = Fraction(-3,2);
+Context()->flags->set(reduceConstants=>0,reduceConstantFunctions=>0);
+Context("FiniteSolutionSets");
+$solutions = Formula("-3/2,5");
+
+############################################################
+# Body
+############################################################
+
+############################################################
+# Scaffold
+############################################################
+Scaffold::Begin(is_open => "correct_or_first_incorrect", numbered => 1);
+
+############################################################
+# Section
+############################################################
+Section::Begin("Identify Coefficients");
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+Consider the equation
+
+[```[$quadratic] = 0```]
+
+Identify the coefficients for the quadratic equation using the standard form from Subsection[$NBSP]*1.1.
+
+[`a=`] [_]{2}{4}, [`b=`] [_]{-7}{4}, [`c=`] [_]{-15}{4}
+
+END_PGML
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+Take the coefficient of [`x^2`] for the value of [`a\text{,}`] the coefficient of [`x`] for [`b\text{,}`] and the constant for [`c\text{.}`] _In this case_, they are [`a = 2\text{,}`] [`b = -7\text{,}`] [`c = -15\text{.}`]
+
+END_PGML_SOLUTION
+
+Section::End();
+
+############################################################
+# Section
+############################################################
+Section::Begin("Use the Quadratic Formula");
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+Use the quadratic formula to find the solution set to
+
+[```[$quadratic]=0```]
+
+[_]{$solutions}{30}
+
+END_PGML
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+Recall that the quadratic formula is given in Subsection[$NBSP]*1.1.
+
+You already identified [`a = 2\text{,}`] [`b = -7\text{,}`] and [`c = -15\text{,}`] and the results from using these in the quadratic formula are [`-\frac{3}{2}`] and [`5\text{.}`]
+
+END_PGML_SOLUTION
+
+Section::End();
+
+Scaffold::End();
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+  </webwork-reps>
+  <webwork-reps version="2" xml:id="extracted-webwork-20" ww-id="webwork-20">
+    <static seed="20">
+      <statement><p><ol label="a.">
+<li>
+<p>The average cost of gasoline in the United States in 2010 was $2.78 per gallon. How much gasoline would $20 get you in 2010, on average?</p>
+<p><fillin name="AnSwEr0001" characters="10"/></p>
+</li>
+<li>
+<p>In 2011, the average cost was $3.52 per gallon. What percent increase was that from 2010?</p>
+<p><fillin name="AnSwEr0002" characters="10"/></p>
+</li>
+<li>
+<p>In 2012, the cost had risen 2.8% from the 2011 cost. What was the cost of a gallon of gasoline in 2012?</p>
+<p><fillin name="AnSwEr0003" characters="10"/></p>
+</li>
+</ol></p>
+</statement>
+      <answer>
+        <p>
+          <m>7.19424\ {\rm gal}</m>
+        </p>
+      </answer>
+      <answer>
+        <p>
+          <m>26.6\%</m>
+        </p>
+      </answer>
+      <answer>
+        <p>
+          <m>\$3.62</m>
+        </p>
+      </answer>
+    </static>
+    <server-data problemSource="RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIk1hdGhPYmplY3RzLnBsIiwiUEdNTC5wbCIsIkFuc3dlckZvcm1hdEhlbHAucGwiLCJwYXJzZXJOdW1iZXJXaXRoVW5pdHMucGwiLCJjb250ZXh0Q3VycmVuY3kucGwiLCJjb250ZXh0UGVyY2VudC5wbCIsIlBHY291cnNlLnBsIiwpO1RFWFQoYmVnaW5wcm9ibGVtKCkpOwokbmV3VW5pdHMgPSBbCiAge25hbWU9PidnYWxsb25zJyxjb252ZXJzaW9uPT57ZmFjdG9yPT4wLjAwMzc4NTQxLG09PjN9fSwKICB7bmFtZT0+J2dhbGxvbicsY29udmVyc2lvbj0+e2ZhY3Rvcj0+MC4wMDM3ODU0MSxtPT4zfX0sCiAge25hbWU9PidnYWwnLGNvbnZlcnNpb249PntmYWN0b3I9PjAuMDAzNzg1NDEsbT0+M319LApdOwpDb250ZXh0KCktPmZsYWdzLT5zZXQodG9sVHlwZT0+J2Fic29sdXRlJyx0b2xlcmFuY2U9PjAuMSk7CiR2b2x1bWUgPSBOdW1iZXJXaXRoVW5pdHMoIjIwLzIuNzggZ2FsIiwge25ld1VuaXQ9PiRuZXdVbml0c30pOwpDb250ZXh0KCJQZXJjZW50Iik7CkNvbnRleHQoKS0+ZmxhZ3MtPnNldCh0b2xlcmFuY2U9PjAuMDEpOwokaW5jcmVhc2UgPSBQZXJjZW50KDM1Mi8yNzgtMSk7CkNvbnRleHQoIkN1cnJlbmN5Iik7CiRjb3N0ID0gQ3VycmVuY3koMy41MioxLjAyOCk7CgpCRUdJTl9QR01MCmEuICBUaGUgYXZlcmFnZSBjb3N0IG9mIGdhc29saW5lIGluIHRoZSBVbml0ZWQgU3RhdGVzIGluIDIwMTAgd2FzICQyLjc4IHBlciBnYWxsb24uIEhvdyBtdWNoIGdhc29saW5lIHdvdWxkICQyMCBnZXQgeW91IGluIDIwMTAsIG9uIGF2ZXJhZ2U/CgogICAgW19deyR2b2x1bWV9ezEwfQoKCmEuICBJbiAyMDExLCB0aGUgYXZlcmFnZSBjb3N0IHdhcyAkMy41MiBwZXIgZ2FsbG9uLiBXaGF0IHBlcmNlbnQgaW5jcmVhc2Ugd2FzIHRoYXQgZnJvbSAyMDEwPwoKICAgIFtfXXskaW5jcmVhc2V9ezEwfQoKCmEuICBJbiAyMDEyLCB0aGUgY29zdCBoYWQgcmlzZW4gMi44JSBmcm9tIHRoZSAyMDExIGNvc3QuIFdoYXQgd2FzIHRoZSBjb3N0IG9mIGEgZ2FsbG9uIG9mIGdhc29saW5lIGluIDIwMTI/CgogICAgW19deyRjb3N0fXsxMH0gICAKCgoKRU5EX1BHTUwKCkVORERPQ1VNRU5UKCk7" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" course-password="anonymous" language="en-US"/>
+    <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###       on 2022-03-23T23:07:57-07:00       
+###   A recent stable commit (2020-08-09):   
+### 98f21740783f166a773df4dc83cab5293ab63a4a 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(6.6)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "MathObjects.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "parserNumberWithUnits.pl",
+  "contextCurrency.pl",
+  "contextPercent.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+$newUnits = [
+  {name=>'gallons',conversion=>{factor=>0.00378541,m=>3}},
+  {name=>'gallon',conversion=>{factor=>0.00378541,m=>3}},
+  {name=>'gal',conversion=>{factor=>0.00378541,m=>3}},
+];
+Context()->flags->set(tolType=>'absolute',tolerance=>0.1);
+$volume = NumberWithUnits("20/2.78 gal", {newUnit=>$newUnits});
+Context("Percent");
+Context()->flags->set(tolerance=>0.01);
+$increase = Percent(352/278-1);
+Context("Currency");
+$cost = Currency(3.52*1.028);
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+a.  The average cost of gasoline in the United States in 2010 was $2.78 per gallon. How much gasoline would $20 get you in 2010, on average?
+
+    [_]{$volume}{10}
+
+a.  In 2011, the average cost was $3.52 per gallon. What percent increase was that from 2010?
+
+    [_]{$increase}{10}
+
+a.  In 2012, the cost had risen 2.8% from the 2011 cost. What was the cost of a gallon of gasoline in 2012?
+
+    [_]{$cost}{10}   
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+  </webwork-reps>
+  <webwork-reps version="2" xml:id="extracted-webwork-5" ww-id="webwork-5">
+    <static seed="5">
+      <statement><p>Consider the function <m>f</m> defined by <m>f(x)={\sqrt{x}}\text{.}</m>
+<ol label="a.">
+<li>
+<p>The exact value of <m>f(12)</m> is <fillin name="AnSwEr0001" characters="10"/> and a decimal approximation for this is <fillin name="AnSwEr0002" characters="10"/>.</p>
+</li>
+<li>
+<p>The domain of this function, in interval notation, is <fillin name="AnSwEr0003" characters="10"/>.</p>
+</li>
+<li>
+<p>The graph of <m>y={\sqrt{x}}</m> intersects the graph of <m>y=6-x</m> at <fillin name="AnSwEr0004" characters="10"/>.</p>
+</li>
+<li>
+<p><m>\frac{d}{dx}{\sqrt{x}}={}</m> <fillin name="AnSwEr0005" characters="10"/>.</p>
+</li>
+<li>
+<p>The formula for <m>f(x)^2\text{,}</m> including its restricted domain, is <fillin name="AnSwEr0006" characters="20"/>.</p>
+</li>
+<li>
+<p><m>f</m> is a <var form="popup" name="AnSwEr0007">
+<li>
+<p>?</p>
+</li>
+<li>
+<p>power</p>
+</li>
+<li>
+<p>exponential</p>
+</li>
+<li>
+<p>linear</p>
+</li>
+<li>
+<p>quadratic</p>
+</li>
+</var> function.</p>
+</li>
+<li>
+<p>Which is true of the word <lq/>radical<rq/>?</p>
+<p><var form="buttons" name="AnSwEr0008">
+<li>
+<p>It shares ancestry with "radius", as in the radius of a circle.</p>
+</li>
+<li>
+<p>It shares ancestry with "radish", a vegetable.</p>
+</li>
+<li>
+<p>It shares ancestry with "radler", a mixture of beer and grapefruit soda.</p>
+</li>
+</var></p>
+</li>
+</ol></p>
+</statement>
+      <answer>
+        <p>
+          <m>2\sqrt{3}</m>
+        </p>
+      </answer>
+      <answer>
+        <p>
+          <m>3.4641</m>
+        </p>
+      </answer>
+      <answer>
+        <p>
+          <m>\left[0,\infty \right)</m>
+        </p>
+      </answer>
+      <answer>
+        <p>
+          <m>\left(4,2\right)</m>
+        </p>
+      </answer>
+      <answer>
+        <p>
+          <m>\frac{1}{2\sqrt{x}}</m>
+        </p>
+      </answer>
+      <answer>
+        <p>
+          <m>x, x\ge 0</m>
+        </p>
+      </answer>
+      <answer>
+        <p>
+          <m>\text{power}</m>
+        </p>
+      </answer>
+      <answer>
+        <p>
+          <m>\text{Choice 2}</m>
+        </p>
+      </answer>
+    </static>
+    <server-data problemSource="RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIk1hdGhPYmplY3RzLnBsIiwiUEdNTC5wbCIsIkFuc3dlckZvcm1hdEhlbHAucGwiLCJwYXJzZXJQb3BVcC5wbCIsInBhcnNlclJhZGlvQnV0dG9ucy5wbCIsImNvbnRleHRMaW1pdGVkUmFkaWNhbC5wbCIsImNvbnRleHRSZXN0cmljdGVkRG9tYWlucy5wbCIsIlBHY291cnNlLnBsIiwpO1RFWFQoYmVnaW5wcm9ibGVtKCkpOwpDb250ZXh0KCJOdW1lcmljIik7CiRmID0gRm9ybXVsYSgic3FydCh4KSIpOwokZGVyaXZhdGl2ZSA9IEZvcm11bGEoIjEvKDJzcXJ0KHgpKSIpOwokcG9wdXAgPSBQb3BVcChbJz8nLCdwb3dlcicsJ2V4cG9uZW50aWFsJywnbGluZWFyJywncXVhZHJhdGljJ10sMSk7CiRyYWRpbyA9IFJhZGlvQnV0dG9ucyhbCiAgJ0l0IHNoYXJlcyBhbmNlc3RyeSB3aXRoICJyYWRpdXMiLCBhcyBpbiB0aGUgcmFkaXVzIG9mIGEgY2lyY2xlLicsCiAgJ0l0IHNoYXJlcyBhbmNlc3RyeSB3aXRoICJyYWRpc2giLCBhIHZlZ2V0YWJsZS4nLAogICdJdCBzaGFyZXMgYW5jZXN0cnkgd2l0aCAicmFkbGVyIiwgYSBtaXh0dXJlIG9mIGJlZXIgYW5kIGdyYXBlZnJ1aXQgc29kYS4nLApdLDEpOwpDb250ZXh0KCJMaW1pdGVkUmFkaWNhbCIpOwokYSA9IEZvcm11bGEoIjJzcXJ0KDMpIik7CkNvbnRleHQoIkxpbWl0ZWROdW1lcmljIik7CiRiID0gUmVhbChzcXJ0KDEyKSk7CkNvbnRleHQoIkludGVydmFsIik7CiRkb21haW4gPSBJbnRlcnZhbCgiWzAsaW5mKSIpOwpDb250ZXh0KCJQb2ludCIpOwokcG9pbnQgPSBQb2ludCgiKDQsMikiKTsKQ29udGV4dCgiUmVzdHJpY3RlZERvbWFpbnMiKTsKJHJlc3RyaWN0ZWQgPSBGb3JtdWxhKCJ4LCB4ID49IDAiKTsKCkJFR0lOX1BHTUwKQ29uc2lkZXIgdGhlIGZ1bmN0aW9uIFtgZmBdIGRlZmluZWQgYnkgW2BmKHgpPVskZl1cdGV4dHsufWBdCmEuICBUaGUgZXhhY3QgdmFsdWUgb2YgW2BmKDEyKWBdIGlzIFtfXXskYX17MTB9IGFuZCBhIGRlY2ltYWwgYXBwcm94aW1hdGlvbiBmb3IgdGhpcyBpcyBbX117JGJ9ezEwfS4KCgphLiAgVGhlIGRvbWFpbiBvZiB0aGlzIGZ1bmN0aW9uLCBpbiBpbnRlcnZhbCBub3RhdGlvbiwgaXMgW19deyRkb21haW59ezEwfS4KCgphLiAgVGhlIGdyYXBoIG9mIFtgeT1bJGZdYF0gaW50ZXJzZWN0cyB0aGUgZ3JhcGggb2YgW2B5PTYteGBdIGF0IFtfXXskcG9pbnR9ezEwfS4KCgphLiAgW2BcZnJhY3tkfXtkeH1bJGZdPXt9YF0gW19deyRkZXJpdmF0aXZlfXsxMH0uCgoKYS4gIFRoZSBmb3JtdWxhIGZvciBbYGYoeCleMlx0ZXh0eyx9YF0gaW5jbHVkaW5nIGl0cyByZXN0cmljdGVkIGRvbWFpbiwgaXMgW19deyRyZXN0cmljdGVkfXsyMH0uCgoKYS4gIFtgZmBdIGlzIGEgW19deyRwb3B1cH17NX0gZnVuY3Rpb24uCgoKYS4gIFdoaWNoIGlzIHRydWUgb2YgdGhlIHdvcmQgInJhZGljYWwiPwoKICAgIFtfXXskcmFkaW99ezV9CgoKCkVORF9QR01MCgpFTkRET0NVTUVOVCgpOw==" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" course-password="anonymous" language="en-US"/>
+    <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###       on 2022-03-23T23:07:56-07:00       
+###   A recent stable commit (2020-08-09):   
+### 98f21740783f166a773df4dc83cab5293ab63a4a 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(6.1)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "MathObjects.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "parserPopUp.pl",
+  "parserRadioButtons.pl",
+  "contextLimitedRadical.pl",
+  "contextRestrictedDomains.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context("Numeric");
+$f = Formula("sqrt(x)");
+$derivative = Formula("1/(2sqrt(x))");
+$popup = PopUp(['?','power','exponential','linear','quadratic'],1);
+$radio = RadioButtons([
+  'It shares ancestry with "radius", as in the radius of a circle.',
+  'It shares ancestry with "radish", a vegetable.',
+  'It shares ancestry with "radler", a mixture of beer and grapefruit soda.',
+],1);
+Context("LimitedRadical");
+$a = Formula("2sqrt(3)");
+Context("LimitedNumeric");
+$b = Real(sqrt(12));
+Context("Interval");
+$domain = Interval("[0,inf)");
+Context("Point");
+$point = Point("(4,2)");
+Context("RestrictedDomains");
+$restricted = Formula("x, x >= 0");
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+Consider the function [`f`] defined by [`f(x)=[$f]\text{.}`]
+a.  The exact value of [`f(12)`] is [_]{$a}{10} and a decimal approximation for this is [_]{$b}{10}.
+
+a.  The domain of this function, in interval notation, is [_]{$domain}{10}.
+
+a.  The graph of [`y=[$f]`] intersects the graph of [`y=6-x`] at [_]{$point}{10}.
+
+a.  [`\frac{d}{dx}[$f]={}`] [_]{$derivative}{10}.
+
+a.  The formula for [`f(x)^2\text{,}`] including its restricted domain, is [_]{$restricted}{20}.
+
+a.  [`f`] is a [_]{$popup}{5} function.
+
+a.  Which is true of the word "radical"?
+
+    [_]{$radio}{5}
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+  </webwork-reps>
+  <webwork-reps version="2" xml:id="extracted-webwork-9" ww-id="webwork-9">
+    <static seed="9">
+      <statement><p>Simplify the expression <m>{x^{2}x^{5}}\text{.}</m></p>
+<p><fillin name="AnSwEr0001" characters="10"/></p>
+</statement>
+      <hint><p>Add the exponents.</p>
+</hint>
+      <answer>
+        <p>
+          <m>x^{7}</m>
+        </p>
+      </answer>
+      <solution><p>To simplify the product of two powers of the same base, add the exponents.</p>
+<p><me>\begin{aligned}
+{x^{2}x^{5}}\amp=x^{2+5}\\
+\amp={x^{7}}
+\end{aligned}</me></p>
+</solution>
+    </static>
+    <server-data problemSource="RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIk1hdGhPYmplY3RzLnBsIiwiUEdNTC5wbCIsImJpemFycm9Bcml0aG1ldGljLnBsIiwiQW5zd2VyRm9ybWF0SGVscC5wbCIsIlBHY291cnNlLnBsIiwpO1RFWFQoYmVnaW5wcm9ibGVtKCkpOwpURVhUKE1PREVTKFBUWD0+JycsSFRNTD0+JzxkaXYgc3R5bGU9ImRpc3BsYXk6bm9uZTsiPlwoXG5ld2NvbW1hbmR7XGFtcH17Jn1cKTwvZGl2PicpKTsKQ29udGV4dCgpLT5vcGVyYXRvcnMtPnNldCgKJyonID0+IHtjbGFzcyA9PiAnYml6YXJybzo6Qk9QOjptdWx0aXBseScsIGlzQ29tbWFuZCA9PiAxfSwKJyAqJyA9PiB7Y2xhc3MgPT4gJ2JpemFycm86OkJPUDo6bXVsdGlwbHknLCBpc0NvbW1hbmQgPT4gMX0sCicqICcgPT4ge2NsYXNzID0+ICdiaXphcnJvOjpCT1A6Om11bHRpcGx5JywgaXNDb21tYW5kID0+IDF9LAopOwokZ2l2ZW4gPSBGb3JtdWxhKCJ4XjIgeF41Iik7CiRhbnN3ZXIgPSBGb3JtdWxhKCJ4XjciKTsKJHNwZWNpYWwgPSBGb3JtdWxhKCJ4XjEwIik7CiRldmFsdWF0b3IgPSAkYW5zd2VyIC0+IGNtcCgKICBjaGVja2VyPT5zdWJ7CiAgICBteSAoICRjb3JyZWN0LCAkc3R1ZGVudCwgJGFuc0hhc2ggKSA9IEBfOwogICAgVmFsdWU6OkVycm9yKCJXaGVuIG11bHRpcGx5aW5nIHBvd2VycyB3aXRoIHRoZSBzYW1lIGJhc2UsIHlvdSBkbyBub3QgbXVsdGlwbHkgdGhlIGV4cG9uZW50cy4iKSBpZiAoJHNwZWNpYWwgPT0gJHN0dWRlbnQpOwogICAgcmV0dXJuIDAgaWYgJGFuc0hhc2gtPntpc1ByZXZpZXd9IHx8ICRjb3JyZWN0ICE9ICRzdHVkZW50OwogICAgQ29udGV4dCgpLT5mbGFncy0+c2V0KGJpemFycm9NdWw9PjEpOwogICAgZGVsZXRlICRjb3JyZWN0LT57dGVzdF92YWx1ZXN9OyBkZWxldGUgJHN0dWRlbnQtPnt0ZXN0X3ZhbHVlc307CiAgICBteSAkT0sgPSAoJGNvcnJlY3QgPT0gJHN0dWRlbnQpOwogICAgQ29udGV4dCgpLT5mbGFncy0+c2V0KGJpemFycm9NdWw9PjApOwogICAgVmFsdWU6OkVycm9yKAogICAgICAiWW91ciBhbnN3ZXIgaXMgZXF1aXZhbGVudCB0byB0aGUgY29ycmVjdCBhbnN3ZXIsIGJ1dCBub3QgaW4gdGhlIGV4cGVjdGVkIGZvcm0uCiAgICAgIE1heWJlIGl0IG5lZWRzIHRvIGJlIHNpbXBsaWZpZWQsIGZhY3RvcmVkLCBleHBhbmRlZCwgaGF2ZSBpdHMgZGVub21pbmF0b3IgcmF0aW9uYWxpemVkLCBldGMuIgogICAgKSB1bmxlc3MgJE9LOwogICAgcmV0dXJuICRPSzsKICB9Cik7CgpCRUdJTl9QR01MClNpbXBsaWZ5IHRoZSBleHByZXNzaW9uIFtgWyRnaXZlbl1cdGV4dHsufWBdCgpbX117JGV2YWx1YXRvcn17MTB9CgoKRU5EX1BHTUwKCkJFR0lOX1BHTUxfSElOVApBZGQgdGhlIGV4cG9uZW50cy4KCgpFTkRfUEdNTF9ISU5UCgpCRUdJTl9QR01MX1NPTFVUSU9OClRvIHNpbXBsaWZ5IHRoZSBwcm9kdWN0IG9mIHR3byBwb3dlcnMgb2YgdGhlIHNhbWUgYmFzZSwgYWRkIHRoZSBleHBvbmVudHMuCgpbYGBgXGJlZ2lue2FsaWduZWR9ClskZ2l2ZW5dXGFtcD14XnsyKzV9XFwKXGFtcD1bJGFuc3dlcl0KXGVuZHthbGlnbmVkfQpgYGBdCgoKCgpFTkRfUEdNTF9TT0xVVElPTgoKRU5ERE9DVU1FTlQoKTs=" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" course-password="anonymous" language="en-US"/>
+    <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###       on 2022-03-23T23:07:56-07:00       
+###   A recent stable commit (2020-08-09):   
+### 98f21740783f166a773df4dc83cab5293ab63a4a 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(6.2)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "MathObjects.pl",
+  "PGML.pl",
+  "bizarroArithmetic.pl",
+  "AnswerFormatHelp.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context()->operators->set(
+'*' => {class => 'bizarro::BOP::multiply', isCommand => 1},
+' *' => {class => 'bizarro::BOP::multiply', isCommand => 1},
+'* ' => {class => 'bizarro::BOP::multiply', isCommand => 1},
+);
+$given = Formula("x^2 x^5");
+$answer = Formula("x^7");
+$special = Formula("x^10");
+$evaluator = $answer -> cmp(
+  checker=>sub{
+    my ( $correct, $student, $ansHash ) = @_;
+    Value::Error("When multiplying powers with the same base, you do not multiply the exponents.") if ($special == $student);
+    return 0 if $ansHash->{isPreview} || $correct != $student;
+    Context()->flags->set(bizarroMul=>1);
+    delete $correct->{test_values}; delete $student->{test_values};
+    my $OK = ($correct == $student);
+    Context()->flags->set(bizarroMul=>0);
+    Value::Error(
+      "Your answer is equivalent to the correct answer, but not in the expected form.
+      Maybe it needs to be simplified, factored, expanded, have its denominator rationalized, etc."
+    ) unless $OK;
+    return $OK;
+  }
+);
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+Simplify the expression [`[$given]\text{.}`]
+
+[_]{$evaluator}{10}
+
+END_PGML
+
+############################################################
+# Hint
+############################################################
+#Set value of $showHint in PGcourse.pl for course-wide attempt threshhold for revealing hints
+
+BEGIN_PGML_HINT
+Add the exponents.
+
+END_PGML_HINT
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+To simplify the product of two powers of the same base, add the exponents.
+
+[```\newcommand{\amp}{&}
+\begin{aligned}
+[$given]\amp=x^{2+5}\\
+\amp=[$answer]
+\end{aligned}
+```]
+
+END_PGML_SOLUTION
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+  </webwork-reps>
+</webwork-representations>
