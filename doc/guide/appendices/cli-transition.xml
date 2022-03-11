@@ -37,7 +37,7 @@
       The first thing we will do is to create a new folder.
       Call this folder <c>PROJECT-CLI</c>, and put it at the same level as the <c>PROJECT</c> folder.
       In a terminal (or in Python), enter the <c>PROJECT-CLI</c> directory,
-      and run the <c>pretext init</c> command.
+      and run the <c>pretext new book</c> command.
       This will create the directory structure that the PreTeXt-CLI expects.
     </p>
 
