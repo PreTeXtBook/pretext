@@ -37,10 +37,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='identity'>Identità</localization>
     <!-- PROOF-LIKE -->
     <localization string-id='proof'>Dimostrazione</localization>
-    <!-- <localization string-id='argument'>Argument</localization> -->
-    <!-- <localization string-id='justification'>Justification</localization> -->
-    <!-- <localization string-id='reasoning'>Reasoning</localization> -->
-    <!-- <localization string-id='explanation'>Explanation</localization> -->
+    <localization string-id='argument'>Argomento</localization> -->
+    <localization string-id='justification'>Giustificazione</localization> -->
+    <localization string-id='reasoning'>Ragionamento</localization> -->
+    <localization string-id='explanation'>Spiegazione</localization> -->
     <!-- used for a (logical) portion of a proof -->
     <localization string-id='case'>Caso</localization>
     <!-- Components of the narrative -->
@@ -145,7 +145,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='p'>Capoverso</localization>
     <localization string-id='blockquote'>Citazione</localization>
     <!-- Literate programming, a chunk of computer code -->
-    <!-- <localization string-id='fragment'>Fragment</localization> -->
+    <localization string-id='fragment'>Porzione</localization> -->
     <!-- Parts of an exercise and its solution -->
     <!-- See the en-US file for a detailed explanation of the words for exercises -->
     <localization string-id='divisionalexercise'>Esercizio</localization>
