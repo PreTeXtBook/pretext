@@ -8,7 +8,7 @@
 <!-- See the file COPYING for copying conditions.             -->
 
 <appendix xml:id="cli-transition">
-  <title>Transitioning an existing prject to PreTeXt-CLI</title>
+  <title>Transitioning an existing project to PreTeXt-CLI</title>
   <author>Sean Fitzpatrick</author>
 
   <introduction>
