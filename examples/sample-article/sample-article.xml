@@ -659,6 +659,9 @@ the xsltproc executable.
                             <mrow xml:id="equation-conclude">&amp;=f(x)-0 = f(x)</mrow>
                         </mdn>.</p>
                     </proof>
+                    <justification>
+                        <p>A justification, which is one of the variants of a proof.</p>
+                    </justification>
                     <proof>
                         <title>Alternate Proof</title>
                         <p>You can have multiple proofs, and they can have titles which replace the word <q>Proof</q> as a heading.  Here we just exercise displayed math with no automatic numbering, and an elective number on the middle equation.<md>
