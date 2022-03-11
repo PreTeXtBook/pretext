@@ -18,7 +18,7 @@
   <introduction>
     <p>
       With a <webwork/> server
-      (version 2.14 or higher, or <url href="https://webwork-ptx.aimath.org"><c>webwork-ptx.aimath.org</c></url>)
+      (version 2.14 or higher, or <url href="https://webwork-ptx.aimath.org" visual="webwork-ptx.aimath.org"/>)
       and a little setup work, you can embed <webwork/> exercises in your <pretext/> project.
       HTML output can have interactive problem cells or print problems in <q>static</q> form.
       PDF output will print static versions.
@@ -35,7 +35,7 @@
     <p>
       To make use of <webwork/> in your <pretext/> project, you need a <webwork/> server.
       If someone is providing a <webwork/> server for you, like the AIM server
-      at <url href="https://webwork-ptx.aimath.org"><c>webwork-ptx.aimath.org</c></url>,
+      at <url href="https://webwork-ptx.aimath.org" visual="webwork-ptx.aimath.org"/>,
       then we assume they have already configured that server for use with <pretext/>,
       and you may skip this section and move on to <xref ref="webwork-processing">Section</xref>.
     </p>
@@ -87,7 +87,7 @@
     <p>
       To make use of <webwork/> in your <pretext/> project, you need a host <webwork/> course.
       If someone is providing a <webwork/> server for you, like the AIM server
-      at <url href="https://webwork-ptx.aimath.org"><c>webwork-ptx.aimath.org</c></url>,
+      at <url href="https://webwork-ptx.aimath.org" visual="webwork-ptx.aimath.org"/>,
       then we assume they have already configured a course for use with <pretext/>,
       and you may skip this section and move on to <xref ref="webwork-processing">Section</xref>.
     </p>

@@ -30,8 +30,8 @@
 
         <li>
             <p>Sign up for, and perhaps pay for, a hosting service that lets you point your domain name at the site.<ul>
-                <li>Oscar Levin explains that <url href="https://pages.github.com/">GitHub Pages</url> (<c>pages.github.com</c>) is free, super-easy to use if you already use <c>git</c>, and makes using your domain name (<q>custom <init>URL</init></q>) nearly trivial.  (2017-09-08)</li>
-                <li>Mitch Keller likes the <q>Swift</q> plan at <url href="https://www.a2hosting.com/web-hosting">A2 Hosting</url> (<c>a2hosting.com</c>) at about $60 annually.  (2017-07-05)</li>
+                <li>Oscar Levin explains that <url href="https://pages.github.com/" visual="pages.github.com/">GitHub Pages</url> is free, super-easy to use if you already use <c>git</c>, and makes using your domain name (<q>custom <init>URL</init></q>) nearly trivial.  (2017-09-08)</li>
+                <li>Mitch Keller likes the <q>Swift</q> plan at <url href="https://www.a2hosting.com/web-hosting" visual="www.a2hosting.com/web-hosting">A2 Hosting</url> at about $60 annually.  (2017-07-05)</li>
             </ul></p>
         </li>
     </ol>Now you are set, and control distribution of your scholarly publication.  If you are bothered by the thought of having expenses while you make your work freely available to the world, then consider generating some modest income.  For example, sell Google ads against your pages.  (Why should <em>this</em> disturb anybody?  I don't get it.)  Or roll a small royalty into the print-on-demand version, see <xref ref="print-on-demand" />.</p>
