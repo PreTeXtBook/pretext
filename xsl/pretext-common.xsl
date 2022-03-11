@@ -116,7 +116,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- theorem|corollary|lemma|algorithm|proposition|claim|fact|identity -->
 <xsl:strip-space elements="theorem corollary lemma algorithm proposition claim fact identity" />
 <xsl:strip-space elements="statement" />
-<xsl:strip-space elements="proof case" />
+<xsl:strip-space elements="proof argument justification reasoning explanation case" />
 <!-- List is elements in AXIOM-LIKE entity                  -->
 <!-- axiom|conjecture|principle|heuristic|hypothesis|assumption -->
 <xsl:strip-space elements="axiom conjecture principle heuristic hypothesis assumption" />
@@ -3521,11 +3521,11 @@ Book (with parts), "section" at level 3
 <!-- pieces simply so it is more readable.                     -->
 <!--                                                           -->
 <!-- Blocks -->
-<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise|commentary|assemblage" mode="title-wants-punctuation">
+<xsl:template match="&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise|commentary|assemblage" mode="title-wants-punctuation">
     <xsl:value-of select="true()"/>
 </xsl:template>
 <!-- Miscellaneous -->
-<xsl:template match="paragraphs|proof|case|exercisegroup" mode="title-wants-punctuation">
+<xsl:template match="paragraphs|case|exercisegroup" mode="title-wants-punctuation">
     <xsl:value-of select="true()"/>
 </xsl:template>
 <!-- Titled: list items, tasks of exercise, PROJECT-LIKE, EXAMPLE-LIKE -->
@@ -4703,8 +4703,8 @@ Book (with parts), "section" at level 3
 
 
 <!-- Proofs may be numbered (for cross-reference knowls) -->
-<xsl:template match="proof" mode="serial-number">
-    <xsl:number />
+<xsl:template match="&PROOF-LIKE;" mode="serial-number">
+    <xsl:number count="&PROOF-LIKE;"/>
 </xsl:template>
 
 
@@ -5243,7 +5243,9 @@ Book (with parts), "section" at level 3
     </xsl:apply-templates>
 </xsl:template>
 <!-- Proofs get structure number from parent theorem -->
-<xsl:template match="proof" mode="structure-number">
+<!-- NB: assumes proofs are not detached? Maybe not.      -->
+<!-- Definitely a detached proof in a "paragraphs" is bad -->
+<xsl:template match="&PROOF-LIKE;" mode="structure-number">
     <xsl:apply-templates select="parent::*" mode="number" />
 </xsl:template>
 <!-- Captioned items, arranged in a side-by-side,  -->
@@ -8647,7 +8649,7 @@ Book (with parts), "section" at level 3
 <!-- yes/no boolean for valid targets of an "xref"         -->
 <!-- Initial list from entities file as of 2021-02-10      -->
 <!-- Others from test docs, public testing via pretext-dev -->
-<xsl:template match="&STRUCTURAL;|&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|&SOLUTION-LIKE;|exercise|task|exercisegroup|poem|assemblage|paragraphs|li|fn|men|mrow|biblio|proof|case|contributor|gi" mode="is-xref-target">
+<xsl:template match="&STRUCTURAL;|&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|&SOLUTION-LIKE;|exercise|task|exercisegroup|poem|assemblage|paragraphs|li|fn|men|mrow|biblio|case|contributor|gi" mode="is-xref-target">
     <xsl:value-of select="'yes'"/>
 </xsl:template>
 
