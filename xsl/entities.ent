@@ -82,6 +82,10 @@
 <!-- catch a proof that is inside THEOREM-LIKE -->
 <!ENTITY INNER-PROOF-FILTER "self::proof and (parent::theorem or parent::corollary or parent::lemma or parent::algorithm or parent::proposition or parent::claim or parent::fact or parent::identity)">
 
+<!-- varieties of proofs -->
+<!ENTITY PROOF-LIKE "proof|argument|justification|reasoning|explanation">
+<!ENTITY PROOF-FILTER "self::proof or self::argument or self::justification or self::reasoning or self::explanation">
+
 <!-- a mathematical statement, but never with a proof -->
 <!ENTITY AXIOM-LIKE "axiom|conjecture|principle|heuristic|hypothesis|assumption">
 <!ENTITY AXIOM-FILTER "self::axiom or self::conjecture or self::principle or self::heuristic or self::hypothesis or self::assumption">
