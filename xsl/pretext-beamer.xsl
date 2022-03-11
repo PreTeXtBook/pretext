@@ -652,7 +652,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
   <xsl:text>\end{tcbraster} &#xa;</xsl:text>
 </xsl:template> -->
 
-<xsl:template match="proof">
+<xsl:template match="&PROOF-LIKE;">
   <xsl:text>\begin{proof}</xsl:text>
   <xsl:apply-templates/>
   <xsl:text>\end{proof}</xsl:text>
@@ -720,7 +720,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:text>}</xsl:text>
     <xsl:apply-templates select="statement"/>
 <xsl:text>\end{theorem}&#xa;</xsl:text>
-<xsl:apply-templates select="proof"/>
+<xsl:apply-templates select="&PROOF-LIKE;"/>
 </xsl:template>
 
 </xsl:stylesheet>

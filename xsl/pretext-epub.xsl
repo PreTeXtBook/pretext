@@ -1129,7 +1129,7 @@ width: 100%
 <!-- Everything configurable by author, 2020-01-02         -->
 <!-- Roughly in the order of old  html.knowl.*  switches   -->
 <!-- Similar HTML templates return string for boolean test -->
-<xsl:template match="&THEOREM-LIKE;|proof|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&REMARK-LIKE;|&GOAL-LIKE;|exercise" mode="is-hidden">
+<xsl:template match="&THEOREM-LIKE;|&PROOF-LIKE;|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&REMARK-LIKE;|&GOAL-LIKE;|exercise" mode="is-hidden">
     <xsl:text>false</xsl:text>
 </xsl:template>
 

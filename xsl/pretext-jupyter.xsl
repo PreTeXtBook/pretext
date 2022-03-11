@@ -399,7 +399,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Jupyter is hostile to knowls code, so we don't knowl  -->
 <!-- anything and ignore any choice in a publisher file    -->
 <!-- https://github.com/jupyter/notebook/pull/2947         -->
-<xsl:template match="&THEOREM-LIKE;|proof|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&REMARK-LIKE;|&GOAL-LIKE;|exercise" mode="is-hidden">
+<xsl:template match="&THEOREM-LIKE;|&PROOF-LIKE;|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&REMARK-LIKE;|&GOAL-LIKE;|exercise" mode="is-hidden">
     <xsl:text>false</xsl:text>
 </xsl:template>
 
