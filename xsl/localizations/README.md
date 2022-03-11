@@ -32,7 +32,7 @@ Contibutions of new languages are always welcome and especially encouraged! Sear
 
 NEW LANGUAGES: for a new file to be effective, a single line needs to be added to the `xsl/localizations/localizations.xml` file.  It should be obvious what to do by looking at the other lines of that file.
 
-Additions to incomplete files, or new files for additional languages, are very welcome and are a huge help in making PreTeXt useable for more authors.  A GitHub pull request is preferable.  If you do not know GitHub well, then emailing the entire language file (as an attachment) is very welcome and just as easy to deal with on our end.
+Additions to incomplete files, or new files for additional languages, are very welcome and are a huge help in making PreTeXt useable for more authors.  A GitHub pull request is preferable.  If you do not know GitHub well, then emailing the entire language file (as an attachment) is very welcome and just as easy to deal with on our end.  Please respect the order in the en-US file, it saves us time when we add new terms to each and every file.  Thanks.
 
 To test, or use: place  `xml:lang="es-ES"`, or similar, as an attribute on your `<pretext>` element.  `en-US` is the default if no `@xml:lang` attribute is given on the `pretext` element.
 
