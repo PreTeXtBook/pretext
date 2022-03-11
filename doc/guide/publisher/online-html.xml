@@ -41,7 +41,8 @@
             <title>Embedded Calculator</title>
             <idx><h>calculator</h><h>embedded in <init>HTML</init></h></idx>
 
-            <p>You may elect to have an embedded online calculator in each page of your online version.  It will appear in the right margin, and will stay there as a reader scrolls the page up and down.  A button near the masthead can be used to contol visibility.  By default no calculator is available, so you need to explicitly request this feature.  As of 2020-05-30 there are four calculators available from the GeoGebra Project<fn><url href="https://www.geogebra.org/">www.geogebra.org</url></fn>.  See <xref ref="online-calculator"/> for details on specifying this option.</p>
+            <p>You may elect to have an embedded online calculator in each page of your online version.  It will appear in the right margin, and will stay there as a reader scrolls the page up and down.  A button near the masthead can be used to contol visibility.  By default no calculator is available, so you need to explicitly request this feature.  As of 2020-05-30 there are four calculators available from the
+              <url href="https://www.geogebra.org/" visual="www.geogebra.org">GeoGebra Project</url>.  See <xref ref="online-calculator"/> for details on specifying this option.</p>
         </subsection>
 
         <subsection xml:id="online-base-url">
@@ -56,7 +57,7 @@
             <idx><h>video</h><h>HTML</h></idx>
             <idx><h>privacy</h><h>video</h></idx>
 
-            <p>When videos are embedded in <init>HTML</init> from sites like <url href="https://www.youtube.com">YouTube</url> or <url href="https://vimeo.com/">Vimeo</url>,
+            <p>When videos are embedded in <init>HTML</init> from sites like <url href="https://www.youtube.com" visual="youtube.com">YouTube</url> or <url href="https://vimeo.com/" visual="vimeo.com">Vimeo</url>,
             they come with whatever tracking cookies these sites want to include. Some of these can be helpful; for example, to let the viewer keep track of what they have watched.
             Others are designed to target advertising, and load when the page loads, rather than when the video plays, which can increase the time it takes for your book to load.</p>
 
@@ -161,7 +162,7 @@
         <title>Analytics</title>
         <idx>analytics</idx>
 
-        <p><pretext/> makes it as easy as possible to have services provide data about visitors to the <init>HTML</init> version of your book.  We support <url href="https://analytics.google.com/analytics/web/">Google Analytics</url><fn><c>analytics.google.com/analytics/web/</c></fn> and <url href="https://statcounter.com/">StatCounter</url><fn><c>statcounter.com/</c></fn>.</p>
+        <p><pretext/> makes it as easy as possible to have services provide data about visitors to the <init>HTML</init> version of your book.  We support <url href="https://analytics.google.com/analytics/web/" visual="analytics.google.com/analytics/web/">Google Analytics</url> and <url href="https://statcounter.com/" visual="statcounter.com/">StatCounter</url>.</p>
 
         <p>In each case, use is similar.  Begin at the service's site and follow their instructions for enabling data collection for your book's site.  We will not document those instructions here.  <em>Do not copy the identification numbers from another project<mdash/>be sure to obtain your own for your project.</em>  When completed, you can request (or will be shown) sample Javascript code to add to pages on your site.  Except, <pretext/> is going to do that part for you.  You only need to provide the unique identifiers used by the service that identify your project.  Because these sign-ups are dependent on your site, this is a publisher activity, and hence configured with the publication file (<xref ref="publication-file"/>), see <xref ref="online-analytics-options"/> for details.</p>
 
@@ -187,7 +188,7 @@
         <title>Search</title>
         <idx>search</idx>
 
-        <p>Search facilities are enabled through <url href="https://cse.google.com/cse">Google Custom Search Engine</url><fn><c>cse.google.com/cse</c></fn><idx>Google Custom Search Engine</idx>.  Please, please report any discrepancies in the following instructions as the setup interface at Google changes out from underneath us.  These instructions have been updated as of 2020-10-01.</p>
+        <p>Search facilities are enabled through <url href="https://cse.google.com/cse" visual="cse.google.com/cse">Google Custom Search Engine</url><idx>Google Custom Search Engine</idx>.  Please, please report any discrepancies in the following instructions as the setup interface at Google changes out from underneath us.  These instructions have been updated as of 2020-10-01.</p>
 
         <p>Besides being useful for search facilities, setting up a search engine might be a good way to alert Google of something newly available, and initiate your book's rise up the search results rankings.</p>
 
@@ -197,7 +198,7 @@
             <ol>
                 <li><p>Create an account with Google (GMail, YouTube, <etc />) and make sure you are signed in.</p></li>
 
-                <li><p>Visit <url href="https://cse.google.com/cse">GCSE</url> and add a new search engine via  <c>New Search Engine</c>.</p></li>
+                <li><p>Visit <url href="https://cse.google.com/cse" visual="cse.google.com/cse">GCSE</url> and add a new search engine via  <c>New Search Engine</c>.</p></li>
 
                 <li><p>Provide a <init>URL</init> for the top-level domain name/directory for your book/document.  Everything below this will be indexed.  We have taken some care to mark knowl content in a way compatible with the search facility, but there is more work to do here.</p></li>
 

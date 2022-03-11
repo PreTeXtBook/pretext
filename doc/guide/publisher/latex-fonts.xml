@@ -21,7 +21,8 @@
 
         <p>Fonts used by <latex/> come in <term>encodings</term>.  The original encoding is known as <c>OT1</c> and organizes glyphs (shapes of individual characters) 128 at a time.  Since this puts regular Latin letters in one group, and accented letters into another group, this makes automatic hyphenation impossible if accented letters are used (as in many European countries and much of the Americas).  The 1990 <tex/> Users Group (<acro>TUG</acro>) meeting in Cork, Ireland, formulated new and improved encodings.  The <c>T1</c> encoding is one result, and so it is known as the <term>Cork</term> encoding (and also as <c>EC</c>).  It groups 256 glyphs together at a time.  So you need only know that a <c>T1</c> encoding is better than an <c>OT1</c> encoding.  If you want to know more (much more), locate <articletitle><latex/> font encodings</articletitle> by Mittlebach, Fairbairns, &amp; Lemberg.</p>
 
-        <p>The <latex/> Font Catalogue<fn><url href="http://www.tug.dk/FontCatalogue/"/></fn> is a great resource for locating different fonts.  The fonts and their packages are likely already installed (this information is provided), or there is enough information about how to install the package in a standard way.  Each gives exact directions on how to enable the font for a document.  For example, Iwona<fn><url href="http://www.tug.dk/FontCatalogue/iwona/"/></fn>, a sans-serif font with support for mathematics, can be employed as the document font simply by including the following in the preamble:<cd>
+        <p>The <url href="http://www.tug.dk/FontCatalogue/" visual="www.tug.dk/FontCatalogue/"><latex/> Font Catalogue</url> is a great resource for locating different fonts.  The fonts and their packages are likely already installed (this information is provided), or there is enough information about how to install the package in a standard way.  Each gives exact directions on how to enable the font for a document.
+        For example, <url href="http://www.tug.dk/FontCatalogue/iwona/" visual="www.tug.dk/FontCatalogue/iwona/">Iwona</url>, a sans-serif font with support for mathematics, can be employed as the document font simply by including the following in the preamble:<cd>
             <cline>\usepackage[math]{iwona}</cline>
             <cline>\usepackage[T1]{fontenc}</cline>
         </cd>This suggested use of <c>fontenc</c> package (not to be confused with the <c>fontspec</c> package) indicates the availability of a <c>T1</c> encoding.</p>
@@ -71,7 +72,8 @@
                         <p>Mitch Keller reports on 2019-01-02 that <q>I opened the directory on my hard drive containing the <init>OTF</init> file, double clicked on the font (opens the macOS application Font Book, which comes with the OS), and then clicked the <c>Install Font</c> button.</q></p>
                     </li>
                     <li>
-                        <p>Karl-Dieter Crisman reports on 2019-07-01 that <q>I was able to use some fonts already existing in TeXLive with a symbolic link to the Font Book, as suggested at <url href="https://apple.stackexchange.com/a/225824/189102">Ask Different</url><fn><c>apple.stackexchange.com/a/225824/189102</c></fn>:
+                        <p>Karl-Dieter Crisman reports on 2019-07-01 that <q>I was able to use some fonts already existing in TeXLive with a symbolic link to the Font Book,
+                          as suggested at <url href="https://apple.stackexchange.com/a/225824/189102" visual="apple.stackexchange.com/a/225824/189102">Ask Different</url>:
                         <cd>
                             <cline>ln -s</cline>
                             <cline>  /usr/local/texlive/2018/texmf-dist/fonts/opentype/public/lm/</cline>
@@ -132,7 +134,7 @@
         </paragraphs>
 
         <exercise>
-            <p>Create a <latex/> file (from scratch) containing some Myanmar (Burmese) characters.  The <pubtitle>Kermit Project UTF-* Sampler</pubtitle><fn><url href="http://kermitproject.org/utf8.html"/></fn> is a great source for these sorts of experiments.  The Noto font is a project to make a huge collection of harmonious fonts for much of the world's languages.  Use what you have learned here to render your sample using a Noto font via both <c>pdflatex</c> and <c>xelatex</c>.  Extra credit if you can explain the name Noto.</p>
+            <p>Create a <latex/> file (from scratch) containing some Myanmar (Burmese) characters.  The <url href="http://kermitproject.org/utf8.html" visual="kermitproject.org/utf8.html"><pubtitle>Kermit Project UTF-* Sampler</pubtitle></url> is a great source for these sorts of experiments.  The Noto font is a project to make a huge collection of harmonious fonts for much of the world's languages.  Use what you have learned here to render your sample using a Noto font via both <c>pdflatex</c> and <c>xelatex</c>.  Extra credit if you can explain the name Noto.</p>
         </exercise>
 
         <paragraphs>
@@ -151,7 +153,7 @@
             <title>Dyslexic Font</title>
 
             <p>There is an <init>OTF</init> font, with an open license, that purports to help readers with dyslexia.<ul>
-                <li>Website is <url href="https://opendyslexic.org/"><c>opendyslexic.org/</c></url>.</li>
+                <li>Website is <url href="https://opendyslexic.org/" visual="opendyslexic.org/"/>.</li>
                 <li>In Debian/Ubuntu it is available in a package called <c>fonts-opendyslexic</c>.</li>
                 <li>When used with <c>xelatex</c> the relevant names of the font are <c>OpenDyslexic</c> and <c>OpenDyslexicMono</c>.</li>
             </ul></p>
@@ -171,7 +173,7 @@
         </cd>The first points to the extensive Latin Modern fonts, which are an improved version of the original Computer Modern fonts, and are <pretext/>'s default font for out-of-the-box <latex/>.  We have never had a report of these not being available in an author's <tex/> distribution.  The file indicates that the fonts can be found at<cd>
             <cline>/usr/share/texmf/fonts/opentype/public/lm</cline>
             <cline>/usr/share/texmf/fonts/opentype/public/lm-math</cline>
-        </cd>The second configuration file points to multiple fonts from the <url href="http://www.gust.org.pl/projects/e-foundry/tex-gyre/index_html">TeX Gyre Collection</url><fn><c>www.gust.org.pl/projects/e-foundry/tex-gyre/</c></fn> of GUST: Polska Grupa Użytkowników Systemu <tex/>.  Examining the file indicates these fonts can be found at:<cd>
+        </cd>The second configuration file points to multiple fonts from the <url href="http://www.gust.org.pl/projects/e-foundry/tex-gyre/index_html" visual="www.gust.org.pl/projects/e-foundry/tex-gyre/">TeX Gyre Collection</url> of GUST: Polska Grupa Użytkowników Systemu <tex/>.  Examining the file indicates these fonts can be found at:<cd>
             <cline>/usr/share/texmf/fonts/opentype/public/tex-gyre</cline>
             <cline>/usr/share/texmf/fonts/opentype/public/tex-gyre-math</cline>
         </cd></p>
@@ -192,9 +194,9 @@
             <cline>xdvipdfmx:fatal: pdf_ref_obj(): passed invalid object</cline>
         </cd>near the very end of the command-line output.</p>
 
-        <p>Apparently, the <c>texlive-fontconfig.conf</c> file is not distributed with Debian Linux as this <url href="https://packages.debian.org/search?arch=any&amp;mode=filename&amp;searchon=contents&amp;keywords=fontconfig.conf">search</url><fn><c>packages.debian.org/search?arch=any&amp;mode=filename&amp;searchon=contents&amp;keywords=fontconfig.conf</c></fn> will demonstrate.  Please report any change in this situation.</p>
+        <p>Apparently, the <c>texlive-fontconfig.conf</c> file is not distributed with Debian Linux as this <url href="https://packages.debian.org/search?arch=any&amp;mode=filename&amp;searchon=contents&amp;keywords=fontconfig.conf" visual="packages.debian.org/search?arch=any&amp;mode=filename&amp;searchon=contents&amp;keywords=fontconfig.conf">search</url> will demonstrate.  Please report any change in this situation.</p>
 
-        <p>When installing the Open Dyslexic font via an Ubuntu package (2020-04-28), <c>xelatex</c> became confused by the presence of Web Open Font Format (<init>WOFF</init>) versions which were installed along with the OTF versions.  
+        <p>When installing the Open Dyslexic font via an Ubuntu package (2020-04-28), <c>xelatex</c> became confused by the presence of Web Open Font Format (<init>WOFF</init>) versions which were installed along with the OTF versions.
         The solution is to create a new file (as root) named<cd>
             <cline>/etc/fonts/conf.d/70-no-woff.conf</cline>
         </cd>with contents<cd>
@@ -205,6 +207,6 @@
             <cline>    &lt;/rejectfont&gt;</cline>
             <cline>  &lt;/selectfont&gt;</cline>
             <cline>&lt;/fontconfig&gt;</cline>
-        </cd>and then running <c>fc-cache -f -v</c> to update what fonts are known to the system.  See the <url href="https://tex.stackexchange.com/questions/392144/xelatex-and-fontspec-crash-trying-to-find-woff-file-for-some-fonts-but-not-other"><c>tex.stackexchange.com</c></url><fn><c>tex.stackexchange.com/questions/392144</c></fn> post.</p>
+        </cd>and then running <c>fc-cache -f -v</c> to update what fonts are known to the system.  See the <url href="https://tex.stackexchange.com/questions/392144/xelatex-and-fontspec-crash-trying-to-find-woff-file-for-some-fonts-but-not-other" visual="tex.stackexchange.com/questions/392144"><c>tex.stackexchange.com</c></url> post.</p>
     </section>
 </chapter>

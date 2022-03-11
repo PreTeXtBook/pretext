@@ -28,7 +28,7 @@
         <subsection xml:id="jing-ubuntu">
             <title><c>jing</c> on Ubuntu and CoCalc</title>
 
-            <p><url href="https://cocalc.com/">CoCalc</url><fn><c>cocalc.com</c></fn> runs Ubuntu when you create a terminal window.  The necessary Ubuntu Linux (Debian) package is also named <c>jing</c> and is installed as part of the CoCalc setup.  So on Ubuntu, you need to install this package, and on CoCalc you will need to copy over the <c>schema/pretext.rng</c> version of the schema.  If you have a CoCalc subscription, it would be even better if you made a clone of the PreTeXt repository, so it would be trivial to update and always have the latest version of the schema in your CoCalc account.</p>
+            <p><url href="https://cocalc.com/" visual="cocalc.com/">CoCalc</url> runs Ubuntu when you create a terminal window.  The necessary Ubuntu Linux (Debian) package is also named <c>jing</c> and is installed as part of the CoCalc setup.  So on Ubuntu, you need to install this package, and on CoCalc you will need to copy over the <c>schema/pretext.rng</c> version of the schema.  If you have a CoCalc subscription, it would be even better if you made a clone of the PreTeXt repository, so it would be trivial to update and always have the latest version of the schema in your CoCalc account.</p>
 
             <p>Now it is straightforward to execute <c>jing</c>:<cd>
                 <cline>jing /path/to/pretext.rng aota.xml</cline>
@@ -47,7 +47,7 @@
                 <dl width="narrow">
                     <li>
                         <title>Clone</title>
-                        <p>Clone the <c>git</c> repository at <url href="https://github.com/relaxng/jing-trang"><c>github.com/relaxng/jing-trang</c></url> with the command<cd>
+                        <p>Clone the <c>git</c> repository at <url href="https://github.com/relaxng/jing-trang" visual="github.com/relaxng/jing-trang"/> with the command<cd>
                             <cline>git clone https://github.com/relaxng/jing-trang</cline>
                         </cd>which assumes you have a command-line version of <c>git</c> installed.  You will end up with a new <c>jing-trang</c> directory, which you will certainly want <em>outside</em> of your <pretext /> files and <em>outside</em> of your project files.</p>
                     </li>

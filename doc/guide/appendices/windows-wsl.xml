@@ -16,7 +16,7 @@
     Several distributions of Linux are available.
     We will use  Ubuntu as an example; working with other distributions is quite similar.
     The latest news and announcements about <init>WSL</init> may be found at
-    <url href="https://msdn.microsoft.com/commandline/wsl/about" />.
+    <url href="https://msdn.microsoft.com/commandline/wsl/about" visual="msdn.microsoft.com/commandline/wsl/about"/>.
     </p>
 
     <aside>
@@ -35,7 +35,7 @@
 	    If you have Windows 10 with OS Build greater than 16215 (August 2016),
         then installing <init>WSL</init> is not difficult. Just follow the
         (reasonably straightforward) instructions given by Microsoft at the address
-        <url href="https://msdn.microsoft.com/en-us/commandline/wsl/install_guide" />.
+        <url href="https://msdn.microsoft.com/en-us/commandline/wsl/install_guide" visual="msdn.microsoft.com/en-us/commandline/wsl/install_guide"/>.
         </p>
         <p>
         Upon completion of the installation, you should
@@ -125,10 +125,10 @@
     <paragraphs>
         <title>The simplest example</title>
         <p>
-        Here is a brief description of the use of <init>WSL</init> to create 
+        Here is a brief description of the use of <init>WSL</init> to create
         readable files.
         You, as the author, create the <init>xml</init> file.
-        The system will contain an appropriate <init>xsl</init> file that translates 
+        The system will contain an appropriate <init>xsl</init> file that translates
         your <init>xml</init> file to something readable.
         </p>
         <p>

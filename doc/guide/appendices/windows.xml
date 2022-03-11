@@ -99,7 +99,7 @@
     <subsection xml:id="download-and-install-executables-and-linked-libraries">
       <title>xsltproc binaries</title>
 
-      <p>This is the most annoying part of the installation. Obtain four zip archives from <url href="ftp://ftp.zlatkovic.com/libxml/"> Igor Zlatkovic's FTP site</url> that hosts the most recent Libxml binaries for Windows. At the time of this writing, the 64-bit binaries were considered experimental. I have had no trouble using the 32-bit binaries on my 64-bit Windows 7 system, so I suggest that all <pretext/> users download the most recent 32-bit version of the following libraries:</p>
+      <p>This is the most annoying part of the installation. Obtain four zip archives from <url href="ftp://ftp.zlatkovic.com/libxml/" visual="ftp://ftp.zlatkovic.com/libxml"> Igor Zlatkovic's FTP site</url> that hosts the most recent Libxml binaries for Windows. At the time of this writing, the 64-bit binaries were considered experimental. I have had no trouble using the 32-bit binaries on my 64-bit Windows 7 system, so I suggest that all <pretext/> users download the most recent 32-bit version of the following libraries:</p>
       <list xml:id="list-zip-files-xsltproc">
         <title><c>xsltproc</c> Zip Files</title>
         <ol>
@@ -195,7 +195,7 @@
         <title>git Installation</title>
         <ol>
           <li>
-            <p>Visit the official <c>git</c> <url href="https://git-scm.com/download/win">download page</url> (download starts automatically) and obtain the latest binary for your system.</p>
+            <p>Visit the official <c>git</c> <url href="https://git-scm.com/download/win" visual="git-scm.com/download/win"/> (download starts automatically) and obtain the latest binary for your system.</p>
           </li>
           <li>
             <p>Find the installer in your Download location and run it.</p>
@@ -224,10 +224,10 @@
 
   <section xml:id="installing-anaconda">
     <title>Installing Anaconda</title>
-    <p>Anaconda is a well-regulated development environment for Python under Windows, and I recommend it for users who do not already have Python installed. The essential <c>pretext</c> script has <url href="https://github.com/PreTeXtBook/pretext/pull/252">recently been updated</url> to support both Python 2 and Python 3. Therefore we make no recommendation about which Python version to choose.</p>
+    <p>Anaconda is a well-regulated development environment for Python under Windows, and I recommend it for users who do not already have Python installed. The essential <c>pretext</c> script has <url href="https://github.com/PreTeXtBook/pretext/pull/252" visual="github.com/PreTeXtBook/pretext/pull/252"/> to support both Python 2 and Python 3. Therefore we make no recommendation about which Python version to choose.</p>
     <p>If you already have a working Python installation, skip to <xref ref="installing-imagemagick" />.</p>
     <p>You have some choice with your Anaconda installation. It actually supports the installation of several independent Pythons side-by-side (since both 2.7 and 3.x are in active use, this is more reasonable than it seems). If you do not need Python for anything else or are simply a minimalist, Miniconda is also an option. Miniconda installs no packages, but these can be installed via the <c>conda</c> utility at the command line later.<ol>
-      <li><p>Download either Miniconda, Python 2.7, or Python 3.5 from the <url href="https://www.continuum.io/downloads">Anaconda download page</url>.</p></li>
+      <li><p>Download either Miniconda, Python 2.7, or Python 3.5 from the <url href="https://www.continuum.io/downloads" visual="www.continuum.io/downloads"/>.</p></li>
       <li><p>Run the installer and accept all the default suggestions.</p></li>
     </ol></p>
 
@@ -237,7 +237,7 @@
 
   <section xml:id="installing-imagemagick">
     <title>Installing ImageMagick</title>
-    <p>Visit the <url href="https://imagemagick.org/script/download.php#windows">ImageMagick downloads page</url> and grab a binary. If you have a 64-bit Windows installation (<xref ref="do-i-have-64-bit-windows" />), use the recommended version. If you have a 32-bit installation, find the version whose filename is obtained from that of the recommended version by substituting <c>x86</c> for <c>x64</c>. For example, if the recommended version's filename is:</p>
+    <p>Visit the <url href="https://imagemagick.org/script/download.php#windows" visual="imagemagick.org/script/download.php#windows"/> and grab a binary. If you have a 64-bit Windows installation (<xref ref="do-i-have-64-bit-windows" />), use the recommended version. If you have a 32-bit installation, find the version whose filename is obtained from that of the recommended version by substituting <c>x86</c> for <c>x64</c>. For example, if the recommended version's filename is:</p>
     <pre>ImageMagick-7.0.1-6-Q16-x64-dll.exe</pre>
     <p>then a good choice for a 32-bit Windows would be</p>
     <pre>ImageMagick-7.0.1-6-Q16-x86-dll.exe</pre>
@@ -310,8 +310,8 @@
       The <c>jing</c> utility for schema validation can be installed in Windows.
       To install, first make sure Java is installed on your machine.
       You can either install the official Oracle JDK from
-      <url href="https://www.oracle.com/technetwork/java/javase/downloads/index.html" />
-      or, if you prefer an open license, <url href="https://jdk.java.net/12/" />.
+      <url href="https://www.oracle.com/technetwork/java/javase/downloads/index.html" visual="www.oracle.com/technetwork/java/javase/downloads/index.html"/>
+      or, if you prefer an open license, <url href="https://jdk.java.net/12/" visual="jdk.java.net/12/"/>.
       Download the <c>.zip</c> file, and extract to a folder such as <c>C:\Java</c>.
       (Avoid installing to the Program Files folder due to the space in the folder name.)
     </p>
@@ -373,7 +373,7 @@
     <title>What's Missing</title>
     <p>Development of a Windows-compatible <c>pretext</c> script (<xref ref="pretext-script" />) is mostly complete. If you need help with <c>pretext</c>, contact Dave Rosoff. There are still a few use cases that haven't been tested, mostly those to do with Asymptote.</p>
     <p>A Windows installer for Sage is available from several mirrors at
-      <url href="http://www.sagemath.org/download-windows.html" />.
+      <url href="http://www.sagemath.org/download-windows.html" visual="www.sagemath.org/download-windows.html"/>.
       The installer provides Sage Math, the Sage Math Shell,
       and the Sage Math Notebook (Jupyter).</p>
   </section>

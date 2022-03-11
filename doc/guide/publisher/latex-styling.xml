@@ -38,7 +38,7 @@
 
         <p>Some changes in style are effected by setting string parameters that exist for use at the command line.  However, the more flexible features come from the selection by <pretext/> of certain <latex/> packages.  These have been chosen for their flexibility, maturity, and stability.  They should be part of a full <latex/> installation, especially one based on TeXLive.  We presume each author has a similar installation.  Please let us know of any exceptions.  Please try to avoid requiring new packages as part of your style, and if necessary, be sure they are mainstream ones.  Start a discussion on the development forum if you think it is warranted or necessary.  It may be difficult and error-prone for you to employ and integrate an obscure package, and it will cause problems for authors who want to use your style.</p>
 
-        <p>This is an incomplete list of the primary packages we employ, and their general purpose.  They, and their documentation, can be easily found at the <url href="https://ctan.org/">Comprehensive <tex/> Archive Network</url>, aka <init>CTAN</init>.</p>
+        <p>This is an incomplete list of the primary packages we employ, and their general purpose.  They, and their documentation, can be easily found at the <url href="https://ctan.org/" visual="ctan.org">Comprehensive <tex/> Archive Network</url>, aka <init>CTAN</init>.</p>
 
         <table>
             <title>Principal <latex/> packages used for styles</title>
@@ -176,7 +176,7 @@
     <section xml:id="styling-justification">
         <title>Justified Text</title>
 
-        <p>We employ the <latex/> package, <url href="https://ctan.org/pkg/microtype"><c>microtype</c></url><fn><c>ctan.org/pkg/microtype</c></fn> to enhance <latex/>'s algorithms for spacing text.  See <xref ref="print-justification"/> for some explanation.  The package admits a great deal of fine-tuning, and we make it easy to pass in options via a template included as part of the styling.</p>
+        <p>We employ the <latex/> package, <url href="https://ctan.org/pkg/microtype" visual="ctan.org/pkg/microtype"><c>microtype</c></url> to enhance <latex/>'s algorithms for spacing text.  See <xref ref="print-justification"/> for some explanation.  The package admits a great deal of fine-tuning, and we make it easy to pass in options via a template included as part of the styling.</p>
 
         <p>If you were using <c>pdflatex</c> you might include in your styling:<cd>
             <cline>&lt;xsl:template name="microtype-options"&gt;</cline>

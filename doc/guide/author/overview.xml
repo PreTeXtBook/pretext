@@ -81,7 +81,7 @@
 
         <p>With experience, you may realize that <pretext /> utilizes three principal languages.  One is the narrative of everyday sentences and paragraphs.  Most of what you write in a paragraph, or a table cell, or a title, or a caption, or an index heading, is in this language.  Then there is the structural language, which is the majority of the elements in <pretext />, such as <tag>chapter</tag>, <tag>theorem</tag>, or <tag>figure</tag>.  Then finally, there is the language of mathematical symbols and notation.</p>
 
-        <p>A key design decision is that mathematical symbols, expressions and equations are authored using <latex /> syntax.  More precisely, we support the symbols and constructions provided by <url href="https://www.mathjax.org/">MathJax</url>, which quite closely follows the <c>amsmath</c> package maintained by the American Mathematical Society.  Neither you nor I want to write <url href="https://en.wikipedia.org/wiki/MathML">MathML</url> by hand!</p>
+        <p>A key design decision is that mathematical symbols, expressions and equations are authored using <latex /> syntax.  More precisely, we support the symbols and constructions provided by <url href="https://www.mathjax.org/" visual="www.mathjax.org/">MathJax</url>, which quite closely follows the <c>amsmath</c> package maintained by the American Mathematical Society.  Neither you nor I want to write <url href="https://en.wikipedia.org/wiki/MathML" visual="en.wikipedia.org/wiki/MathML">MathML</url> by hand!</p>
 
         <p>The symbols and macros supported by MathJax can be found at their <url href="http://docs.mathjax.org/en/latest/tex.html#supported-latex-commands">Supported <latex/> commands</url><fn><c>docs.mathjax.org/en/latest/tex.html#supported-latex-commands</c></fn> documentation.  Look here to see which parts of <latex/> may be used in your mathematical expressions.</p>
 
@@ -420,7 +420,7 @@
         <title>Mathematical Results</title>
         <idx><h>mathematics</h><h>mathematical results</h></idx>
         <idx><h>mathematics</h><h>mathematical results</h><seealso>theorem-like elements</seealso></idx>
-        
+
         <p>Definitions, theorems, corollaries, <etc /> are supported by the tags:  <tag>theorem</tag>, <tag>corollary</tag>, <tag>lemma</tag>, <tag>algorithm</tag>, <tag>proposition</tag>, <tag>claim</tag>, <tag>fact</tag>, <tag>definition</tag>, <tag>conjecture</tag>, <tag>axiom</tag>, and <tag>principle</tag>.  Each may have a <tag>title</tag> (strongly encouraged), and then contains a <tag>statement</tag> which is a sequence of paragraphs and other elements.  As appropriate, some of these elements (such as a <tag>lemma</tag>) may contain an optional <tag>proof</tag> (or several), while other elements may not have a <tag>proof</tag> (such as a <tag>conjecture</tag>).</p>
 
         <p>A <tag>definition</tag> is a natural place to define notation as well (see <xref ref="overview-index-notation" />), and to use the <tag>term</tag> tag to identify the terminology being defined.</p>
@@ -514,7 +514,7 @@
         <idx>localization</idx>
         <idx>internationalization</idx>
 
-        <p>We are interested in helping authors produce documents with open licenses around the entirety of the world.  <pretext/> provides infrastructure for doing so (or <term>internationalization</term>) in accordance with guidelines of the <url href="https://www.w3.org/International/">W3C Internationalization (I18n) Activity</url><fn><c>www.w3.org/International/</c></fn> at <init>W3C</init> (<c>www.w3.org</c>).</p>
+        <p>We are interested in helping authors produce documents with open licenses around the entirety of the world.  <pretext/> provides infrastructure for doing so (or <term>internationalization</term>) in accordance with guidelines of the <url href="https://www.w3.org/International/" visual="www.w3.org/International/">W3C Internationalization (I18n) Activity</url> at <init>W3C</init> (<c>www.w3.org</c>).</p>
 
         <p>In order to actually adapt <pretext /> to another language (<term>localization</term>), there are two requirements:
           <ul>
@@ -530,7 +530,7 @@
         <idx>web accessibility</idx>
 
 
-        <p>The <url href="https://www.w3.org/standards/webdesign/accessibility">Web Accessibility Initiative</url> at <init>W3C</init> (<c>www.w3.org</c>) says:</p>
+        <p>The <url href="https://www.w3.org/standards/webdesign/accessibility" visual="www.w3.org/standards/webdesign/accessibility">Web Accessibility Initiative</url> at <init>W3C</init> (<c>www.w3.org</c>) says:</p>
 
         <blockquote>
             <p>The Web is fundamentally designed to work for all people, whatever their hardware, software, language, culture, location, or physical or mental ability. When the Web meets this goal, it is accessible to people with a diverse range of hearing, movement, sight, and cognitive ability.</p>
@@ -548,8 +548,8 @@
         but is experimental (so tags and attributes are subject to change).
       </p>
       <p>
-        Currently, support for producing <url href="https://revealjs.com">Reveal.js</url><fn><c>revealjs.com</c></fn>
-        and <url href="https://en.wikipedia.org/wiki/Beamer_(LaTeX)">Beamer <latex/></url><fn><c>en.wikipedia.org/wiki/Beamer_(LaTeX)</c></fn>
+        Currently, support for producing <url href="https://revealjs.com" visual="revealjs.com">Reveal.js</url>
+        and <url href="https://en.wikipedia.org/wiki/Beamer_(LaTeX)" visual="en.wikipedia.org/wiki/Beamer_(LaTeX)">Beamer <latex/></url>
         slideshows is available. Details on authoring may be found in <xref ref="topic-slides"/>,
         and publishing details are in <xref ref="publisher-slides"/>.
       </p>

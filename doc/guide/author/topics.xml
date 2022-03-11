@@ -135,7 +135,7 @@
                 <title><tag>taxon</tag>, scientific names, <taxon>Escherichia coli</taxon></title>
                 <p>This element may surround a full scientific name, resulting in presentation in italics.  There are subelements <tag>genus</tag> and <tag>species</tag> which may be used to delineate those components.</p>
 
-                <p>A <attr>ncbi</attr> attribute on <tag>taxon</tag> accepts an identifier from the <url href="https://www.ncbi.nlm.nih.gov/">National Center for Biotechnology Information</url>.  Feature requests for ways to make this more useful are welcome.</p>
+                <p>A <attr>ncbi</attr> attribute on <tag>taxon</tag> accepts an identifier from the <url href="https://www.ncbi.nlm.nih.gov/" visual="www.ncbi.nlm.nih.gov">National Center for Biotechnology Information</url>.  Feature requests for ways to make this more useful are welcome.</p>
             </paragraphs>
 
             <!-- Footnotes -->
@@ -189,8 +189,9 @@
 
                 <p>You may also wish to provide some text other than the actual <init>URL</init>, which you can specify as the content of the <tag>url</tag> element.  For example, <url href="http://www.example.com">IANA Test Site</url> can be achieved with
                     <cd>&lt;url href="http://www.example.com"&gt;IANA Test Site&lt;/url&gt;</cd>
-                In order to have a URL occur in print output in a useful way, and in electronic output in an active way, I often shorten the full <init>URL</init> in the visual portion and mark it up as verbatim text.  So illustrating again, we get <url href="http://www.example.com"><c>example.com</c></url> from
-                    <cd>&lt;url href="http://www.example.com"&gt;&lt;c&gt;www.example.com&lt;/c&gt;&lt;/url&gt;</cd>
+                In order to have a URL occur in print output in a useful way, and in electronic output in an active way, the <attr>visual</attr> attribute can be used to display the visual portion as verbatim text in a footnote.
+                So illustrating again, we get <url href="http://www.example.com" visual="example.com"/> from
+                    <cd>&lt;url href="http://www.example.com" visual="example.com"/&gt;</cd>
                 Notice the necessity and/or desirability of marking the text in a way that distinguishes it as literal text.</p>
 
                 <p>Note also that this tag is meant for <em>external</em> resources, so see the <tag>xref</tag> element (below) or <xref ref="topic-cross-referencing" /> for ways to link internally (<ie /> within your document).</p>
@@ -1394,7 +1395,7 @@
         <idx>mathematics</idx>
 
         <introduction>
-            <p>As mentioned in the overview, <xref ref="overview-math" />, we use <latex /> syntax for mathematics.  In order to allow for quality display in <init>HTML</init>, and other electronic formats, this limits us to the subset of <latex /> supported by the very capable <url href="https://www.mathjax.org/">MathJax</url> Javascript library.  Generally this looks like the <c>amsmath</c><idx><c>amsmath</c></idx> package maintained by the American Mathematical Society at their <url href="http://www.ams.org/publications/authors/tex/amslatex">AMS-LaTeX page</url>.  For a complete and precise list of what MathJax supports, see MathJax's <url href="http://docs.mathjax.org/en/latest/input/tex/macros/">Supported <tex/>/<latex/> commands</url><fn><c>http://docs.mathjax.org/en/latest/input/tex/macros/</c></fn>. Once you have digested this more general section, be sure to also consult <xref ref="topic-mathematics-practices"/> for some very specific suggestions.</p>
+            <p>As mentioned in the overview, <xref ref="overview-math" />, we use <latex /> syntax for mathematics.  In order to allow for quality display in <init>HTML</init>, and other electronic formats, this limits us to the subset of <latex /> supported by the very capable <url href="https://www.mathjax.org/" visual="www.mathjax.org">MathJax</url> Javascript library.  Generally this looks like the <c>amsmath</c><idx><c>amsmath</c></idx> package maintained by the American Mathematical Society at their <url href="http://www.ams.org/publications/authors/tex/amslatex" visual="www.ams.org/publications/authors/tex/amslatex">AMS-LaTeX page</url>. For a complete and precise list of what MathJax supports, see MathJax's <url href="http://docs.mathjax.org/en/latest/input/tex/macros/" visual="docs.mathjax.org/en/latest/input/tex/macros/">Supported <tex/>/<latex/> commands</url>. Once you have digested this more general section, be sure to also consult <xref ref="topic-mathematics-practices"/> for some very specific suggestions.</p>
         </introduction>
 
         <subsection>
@@ -1505,7 +1506,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <subsection xml:id="commutative-diagrams">
             <title>Commutative Diagrams</title>
 
-            <p>Commutative diagrams may be authored using the <init>AMS</init> <latex/> <c>amscd</c> package<fn><url href="https://ctan.org/pkg/amscd"><c>ctan.org/pkg/amscd</c></url></fn>.  While restricted in some ways, such as the lack of sloped or curved arrows, it has one important advantage over more general drawing tools.  Support for <init>HTML</init> output comes from MathJax, and hence has accessible versions included in the output.</p>
+            <p>Commutative diagrams may be authored using the <init>AMS</init> <latex/> <url href="https://ctan.org/pkg/amscd" visual="ctan.org/pkg/amscd"><c>amscd</c></url> package.  While restricted in some ways, such as the lack of sloped or curved arrows, it has one important advantage over more general drawing tools.  Support for <init>HTML</init> output comes from MathJax, and hence has accessible versions included in the output.</p>
 
             <p>Typical use would be within an <tag>me</tag> element, so starting with <c>\begin{CD}</c>.  Despite this being multi-line output, we have not chosen to integrate it within the more general <c>md/mrow</c> structure, but that decision can be revisited.</p>
         </subsection>
@@ -2098,7 +2099,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <subsubsection>
                 <title>Asymptote</title>
 
-                <p><url href="https://asymptote.sourceforge.io/">Asymptote</url><fn><c>asymptote.sourceforge.io/</c></fn> is a vector graphics language that produces high-quality output in <init>WebGL</init>, <init>SVG</init>, <init>PNG</init>, and <init>PDF</init> formats.  You can describe 2-D or 3-D objects, and the 3-D objects are interactive in online output as <init>HTML</init> <init>WebGL</init> files.  <latex/> may be used, and your macros are automatically available for use.</p>
+                <p><url href="https://asymptote.sourceforge.io/" visual="asymptote.sourceforge.io/">Asymptote</url> is a vector graphics language that produces high-quality output in <init>WebGL</init>, <init>SVG</init>, <init>PNG</init>, and <init>PDF</init> formats.  You can describe 2-D or 3-D objects, and the 3-D objects are interactive in online output as <init>HTML</init> <init>WebGL</init> files.  <latex/> may be used, and your macros are automatically available for use.</p>
 
                 <p>Authoring is straight-forward.  Inside an <tag>image</tag> include a child <tag>asymptote</tag> to hold the code.  For example:</p>
 
@@ -2169,7 +2170,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                     </li>
                     <li>You may want to produce <init>SVG</init> versions of your diagrams for conversion to <init>EPUB</init>, and <init>PNG</init> versions for conversion to the <init>EPUB</init> precursor for Kindle format.</li>
                     <li><init>PDF</init> versions produced by the <c>pretext</c> script will not include the RPC extensions.  So <q>rotatable</q> 3D images rendered by the proprietary viewer, Adobe Acrobat, are not created, consistent with our open source philosophy.</li>
-                    
+
                     <li>
                         <p>Colors in Asymptote can be hard-coded using <c>rgb</c> syntax. Colors can also be defined at the top of an Asymptote file, to be referred to later. You may wish to produce <init>PDF</init> in both color (electronic) and black and white (print on demand) formats, and you probably do not want to maintain parallel source for both versions. Rather than writing (for example) <c>pen p=rgb(0,0,.7);</c> in your Asymptote code, you can write <c>pen p=curvepen1;</c>. Then, in the <tag>docinfo</tag> section of your document, you can add an <tag>asymptote-preamble</tag> and include the line <c>pen curvepen1=rgb(0,0,.7);</c>. Once you are ready to produce your black and white version, you need only change the definition of <c>curvepen1</c> in your <tag>asymptote-preamble</tag>.</p>
 
@@ -2177,7 +2178,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                     </li>
                 </ul></p>
 
-                <p>Asymptote may be run as a program installed locally, but the project also has an on-demand online server written by Supakorn Jamie Rassameemasmuang.  By default, the <c>pretext/pretext</c> script (<xref ref="pretext-script"/>) will interface automatically with this server to create your diagrams.  Furthermore, Asymptote provides a very useful <url href="http://asymptote.ualberta.ca/">web application</url><fn><c>asymptote.ualberta.ca</c></fn> written by Pedram Emami.  This is a great place to learn, experiment, and iterate as you become more skilled at building high-quality graphics to illustrate the concepts in your document.</p>
+                <p>Asymptote may be run as a program installed locally, but the project also has an on-demand online server written by Supakorn Jamie Rassameemasmuang.  By default, the <c>pretext/pretext</c> script (<xref ref="pretext-script"/>) will interface automatically with this server to create your diagrams.  Furthermore, Asymptote provides a very useful <url href="http://asymptote.ualberta.ca/" visual="asymptote.ualberta.ca/">web application</url> written by Pedram Emami.  This is a great place to learn, experiment, and iterate as you become more skilled at building high-quality graphics to illustrate the concepts in your document.</p>
 
                 <note>
                     <title>Build 3-D Asymptote Figures</title>
@@ -2249,7 +2250,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 <p>This will result in:</p>
 
                 <figure>
-                    <caption>RNA Codons Table, by Florian Hollandt, from <url href="https://texample.net/tikz/examples/rna-codons-table/"><tex/>ample.net</url><fn><c>texample.net/tikz/examples/rna-codons-table/</c></fn></caption>
+                    <caption>RNA Codons Table, by Florian Hollandt, from <url href="https://texample.net/tikz/examples/rna-codons-table/" visual="texample.net/tikz/examples/rna-codons-table/"><tex/>ample.net</url></caption>
                     <image xml:id="rna-codons-table" width="100%">
                         <description>A table of the RNA codons, together with the amino acids they encode.</description>
                         <latex-image>
@@ -3365,7 +3366,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
               (specifically Chapter 18, 15th Edition),
               <pubtitle>Indexing for Editors and Authors: A Practical Guide to Understanding Indexes</pubtitle>
               <xref ref="indexing-guide"/>,
-              and Pilar Wyman of <url href="http://www.wymanindexing.com/">Wyman Indexing</url><fn><c>www.wymanindexing.com</c></fn>.
+              and Pilar Wyman of <url href="http://www.wymanindexing.com/" visual="www.wymanindexing.com/">Wyman Indexing</url>.
             </p>
 
             <paragraphs><title>Terminology</title>
@@ -3663,17 +3664,17 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                     <row>
                         <cell>Ogg, Theora</cell>
                         <cell><c>.ogg</c></cell>
-                        <cell>Free and open, <url href="https://en.wikipedia.org/wiki/Ogg">Wikipedia</url></cell>
+                        <cell>Free and open, <url href="https://en.wikipedia.org/wiki/Ogg" visual="en.wikipedia.org/wiki/Ogg">Wikipedia</url></cell>
                     </row>
                     <row>
                         <cell>WebM</cell>
                         <cell><c>.webm</c></cell>
-                        <cell>Royalty-free, <url href="https://en.wikipedia.org/wiki/WebM">Wikipedia</url></cell>
+                        <cell>Royalty-free, <url href="https://en.wikipedia.org/wiki/WebM" visual="en.wikipedia.org/wiki/WebM">Wikipedia</url></cell>
                     </row>
                     <row>
                         <cell>MPEG-4</cell>
                         <cell><c>.mp4</c></cell>
-                        <cell>Patent encumbered, <url href="https://en.wikipedia.org/wiki/MPEG-4_Part_14">Wikipedia</url></cell>
+                        <cell>Patent encumbered, <url href="https://en.wikipedia.org/wiki/MPEG-4_Part_14" visual="en.wikipedia.org/wiki/MPEG-4_Part_14">Wikipedia</url></cell>
                     </row>
                 </tabular>
             </table>
@@ -3793,9 +3794,9 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
                 <li><p>You can always place a Unicode character in your source using <init>XML</init> syntax.  The first thing an <init>XML</init> parser will do is convert this syntax into a character.  The number of the <c>SECTION SIGN</c> in hexadecimal is <c>A7</c>, so the syntax <c>&amp;#xA7;</c> is identical to the  character &#xA7;.  Of course, this will get tedious fast.</p></li>
 
-                <li><p>The <url href="https://www.cs.tut.fi/~jkorpela/fui.html8">Full Unicode Input</url> utility at <c>www.cs.tut.fi/~jkorpela/fui.html8</c> will allow you to specify a chunk of 256 consecutive Unicode numbers and then you can click on characters to make a string of several or many.  You can cut/paste these into your source, or convert the whole lot to <init>XML</init> syntax all at once.</p></li>
+                <li><p>The <url href="https://www.cs.tut.fi/~jkorpela/fui.html8" visual="www.cs.tut.fi/~jkorpela/fui.html8">Full Unicode Input</url> utility at <c>www.cs.tut.fi/~jkorpela/fui.html8</c> will allow you to specify a chunk of 256 consecutive Unicode numbers and then you can click on characters to make a string of several or many.  You can cut/paste these into your source, or convert the whole lot to <init>XML</init> syntax all at once.</p></li>
 
-                <li><p>Unicode characters have standardized names.  You can find these, and more information, including font support, at the Unicode section of <url href="http://www.fileformat.info/info/unicode/">FileFormat.info</url>, <c>www.fileformat.info/info/unicode/</c>.  If you are struggling to find a specific character, then using this site's name in a search will often quickly locate what you need.  Be sure to experiment with the test pages there for browser and font support (including checking your local configuration).</p></li>
+                <li><p>Unicode characters have standardized names.  You can find these, and more information, including font support, at the Unicode section of <url href="http://www.fileformat.info/info/unicode/" visual="www.fileformat.info/info/unicode/">FileFormat.info</url>.  If you are struggling to find a specific character, then using this site's name in a search will often quickly locate what you need.  Be sure to experiment with the test pages there for browser and font support (including checking your local configuration).</p></li>
 
                 <li>
                     <p><alert>Warning</alert>: do not use Unicode characters as a way to get mathematical symbols (that is delegated to our use of <latex /> syntax).  And do not use Unicode when we have provided an empty element for a character.  These empty elements are conveniences, which spare you from looking up Unicode numbers and make your source more readable.  We also sometimes fine-tune these characters in ways that are not possible if you embed them as Unicode.  An example is <c>&lt;times /&gt;</c>, for use outside of a strictly mathematical setting:  <q>I bought a 2<times />4 at the lumberyard.</q></p>
@@ -3858,7 +3859,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         &lt;/program>
         </pre>
 
-        <p>There are some fancy <init>XSLT</init> tricks you can employ to use more complicated content repeatedly.  Your source will be less portable, and we do not support or recommend these techniques.  But if you want a go anyway, see hints at <url href="http://www.sagehill.net/docbookxsl/DuplicateIDs.html"><c>www.sagehill.net/docbookxsl/DuplicateIDs.html</c></url>.  Note the reliance on <c>xpointer()</c>, and that the final technique is restricted to DocBook, a different <init>XML</init> vocabulary.</p>
+        <p>There are some fancy <init>XSLT</init> tricks you can employ to use more complicated content repeatedly.  Your source will be less portable, and we do not support or recommend these techniques.  But if you want a go anyway, see hints at <url href="http://www.sagehill.net/docbookxsl/DuplicateIDs.html" visual="www.sagehill.net/docbookxsl/DuplicateIDs.html"/>.  Note the reliance on <c>xpointer()</c>, and that the final technique is restricted to DocBook, a different <init>XML</init> vocabulary.</p>
     </section>
 
     <section xml:id="topic-localization">
@@ -3877,9 +3878,9 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <subsection>
           <title>Localization Files</title>
 
-          <p>The prerequisite is that a localization file for your language exists.  A number are already supported, such as <c>es-ES</c> (Peninsular Spanish), <c>pt-BR</c> (Brazilian Portuguese), and <c>hu-HU</c> (Hungarian/Magyar); the default language code is <c>en-US</c> (American English).  For a up-to-date list of which languages are available, see <url href="https://github.com/PreTeXtBook/pretext/tree/dev/xsl/localizations">the localization stylesheet folder on GitHub</url><fn><c>xsl/localizations</c></fn>.</p>
+          <p>The prerequisite is that a localization file for your language exists.  A number are already supported, such as <c>es-ES</c> (Peninsular Spanish), <c>pt-BR</c> (Brazilian Portuguese), and <c>hu-HU</c> (Hungarian/Magyar); the default language code is <c>en-US</c> (American English).  For a up-to-date list of which languages are available, see <url href="https://github.com/PreTeXtBook/pretext/tree/dev/xsl/localizations" visual="xsl/localizations">the localization stylesheet folder on GitHub</url>.</p>
 
-          <p>If such a file does not exist, you will need to create one or find someone to help you do so. Brief instructions for this <url href="https://github.com/PreTeXtBook/pretext/blob/dev/xsl/localizations/README.md">are in the README file</url><fn><c>xsl/localizations/README.md</c></fn> for this directory.  These instructions suggest using the <c>en-US</c> file as a template and as a source of more detailed instructions.  We highly encourage anyone who creates such a file to contribute it to our growing list of localization stylesheets; see <xref ref="contributing"/> in the Appendices for details.</p>
+          <p>If such a file does not exist, you will need to create one or find someone to help you do so. Brief instructions for this <url href="https://github.com/PreTeXtBook/pretext/blob/dev/xsl/localizations/README.md" visual="xsl/localizations/README.md">are in the README file</url> for this directory.  These instructions suggest using the <c>en-US</c> file as a template and as a source of more detailed instructions.  We highly encourage anyone who creates such a file to contribute it to our growing list of localization stylesheets; see <xref ref="contributing"/> in the Appendices for details.</p>
         </subsection>
 
         <subsection>
@@ -3902,16 +3903,16 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <idx>accessibilty</idx>
         <idx>web accessibilty</idx>
 
-        <p>Continuing our discussion from <xref ref="overview-accessibility" /> we begin by listing features of our conversion to <init>HTML</init> which happen automatically.  These come in part from the recommendations at the <url href="https://www.w3.org/WAI/standards-guidelines/wcag/">Web Content Accessibility Guidelines</url><fn><c>www.w3.org/WAI/standards-guidelines/wcag/</c></fn> of the Web Accessibility Initiative.<dl width="narrow">
+        <p>Continuing our discussion from <xref ref="overview-accessibility" /> we begin by listing features of our conversion to <init>HTML</init> which happen automatically.  These come in part from the recommendations at the <url href="https://www.w3.org/WAI/standards-guidelines/wcag/" visual="www.w3.org/WAI/standards-guidelines/wcag/">Web Content Accessibility Guidelines</url> of the Web Accessibility Initiative.<dl width="narrow">
             <li>
                 <title>HTML</title>
-                <p>Wherever possible we supply <init>HTML</init> elements and attributes that will be interpreted sensibly by a screen reader in the absence of the visual styling provided by <init>CSS</init>.  This means we are very careful about the role of headings (<c>h1</c> through <c>h6</c>) for screenreaders, both for divisions and the block elements they contain.  We provide HTML that passes validation checks.  And so on.  Employing attributes from the <url href="https://www.w3.org/WAI/standards-guidelines/aria/">Accessible Rich Internet Applications</url><fn><c>www.w3.org/WAI/standards-guidelines/aria/</c></fn> suite of web standards (<init>ARIA</init>) will go a long way to improving accessibility.  This work is on-going, as of 2021-11-03.</p>
+                <p>Wherever possible we supply <init>HTML</init> elements and attributes that will be interpreted sensibly by a screen reader in the absence of the visual styling provided by <init>CSS</init>.  This means we are very careful about the role of headings (<c>h1</c> through <c>h6</c>) for screenreaders, both for divisions and the block elements they contain.  We provide HTML that passes validation checks.  And so on.  Employing attributes from the <url href="https://www.w3.org/WAI/standards-guidelines/aria/" visual="www.w3.org/WAI/standards-guidelines/aria/">Accessible Rich Internet Applications</url> suite of web standards (<init>ARIA</init>) will go a long way to improving accessibility.  This work is on-going, as of 2021-11-03.</p>
             </li>
             <li>
                 <title>Mathematics</title>
                 <idx><h>accessibility</h><h>mathematics</h></idx>
                 <idx><h>web accessibility</h><h>mathematics</h></idx>
-                <p>MathJax (<url href="https://www.mathjax.org/"><c>mathjax.org</c></url>) is the JavaScript library we use to render mathematics within the <init>HTML</init> output.  It provides extensive capabilities for screen readers to render the mathematics audibly, and by default your project's output is configured to take advantage of these features.  We refer the reader to the MathJax documentation of <url href="http://docs.mathjax.org/en/latest/misc/accessibility-features.html">Accessibility Features</url><fn><c>docs.mathjax.org/en/latest/misc/accessibility-features.html</c></fn> for details.  But here is a simple experiment you can do yourself right now to simulate how a blind reader could experience mathematics with the combination of <pretext />, MathJax, and a screen reader.<ol>
+                <p>MathJax (<url href="https://www.mathjax.org/" visual="mathjax.org"/>) is the JavaScript library we use to render mathematics within the <init>HTML</init> output.  It provides extensive capabilities for screen readers to render the mathematics audibly, and by default your project's output is configured to take advantage of these features.  We refer the reader to the MathJax documentation of <url href="http://docs.mathjax.org/en/latest/misc/accessibility-features.html" visual="docs.mathjax.org/en/latest/misc/accessibility-features.html">Accessibility Features</url> for details.  But here is a simple experiment you can do yourself right now to simulate how a blind reader could experience mathematics with the combination of <pretext />, MathJax, and a screen reader.<ol>
                     <li>Find some moderately complicated mathematics, such as in the <q>Mathematics</q> section of the sample article, or your own project, or the sample from MathJax copied below.</li>
                     <li>Bring up the context menu on that display (a mouse right-click for most).</li>
                     <li>Turn on the <c>Accessibility > Explorer > Activate</c> menu item.  The page will reload, and the <c>Explorer</c> menu item will earn many more menu items.  This setting is reasonably sticky, so you should not have to do this repeatedly.  Having this on will incur some processing time as part of each page load, so you may want to turn it off later.</li>
@@ -3966,7 +3967,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 <title>Image Description</title>
                 <p>Images you author or supply will be invisible to some readers.  Within every <tag>image</tag> element you can use a <tag>description</tag> element.  The content here will migrate to places like the <init>HTML</init> <attr>alt</attr> attribute to be picked up by screen readers.</p>
 
-                <p>Make the content very expressive and detailed, but not overly verbose.  Also, do not use any markup whatsoever, just simple characters, and avoid quotation marks.  You can learn more at sites such as the one provided by the Web Accessibility Initiative (<init>WAI</init>) at <url href="https://www.w3.org/WAI/fundamentals/accessibility-principles/#alternatives">Text alternatives for non-text content</url>.</p>
+                <p>Make the content very expressive and detailed, but not overly verbose.  Also, do not use any markup whatsoever, just simple characters, and avoid quotation marks.  You can learn more at sites such as the one provided by the Web Accessibility Initiative (<init>WAI</init>) at <url href="https://www.w3.org/WAI/fundamentals/accessibility-principles/#alternatives" visual="www.w3.org/WAI/fundamentals/accessibility-principles/#alternatives">Text alternatives for non-text content</url>.</p>
 
                 <p>We cannot do this one for you, this is for the author only.  But we can give you the tools do it as easily and as correctly as possible.</p>
             </li>
@@ -4007,23 +4008,23 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         </dl></p>
 
         <p>Watching a blind reader navigate a web page can be a very enlightening experience.  Or you might even undertake learning one yourself.  Here are some suggestions for getting started (current on 2018-05-31).<ul>
-            <li><init>NVDA</init>, <url href="https://www.nvaccess.org/"><c>www.nvaccess.org</c></url>, Windows, open source via GPL</li>
-            <li>Orca, <url href="https://help.gnome.org/users/orca/stable/"><c>help.gnome.org/users</c></url>, Linux, open source via LGPL</li>
+            <li><init>NVDA</init>, <url href="https://www.nvaccess.org/" visual="www.nvaccess.org"/>, Windows, open source via GPL</li>
+            <li>Orca, <url href="https://help.gnome.org/users/orca/stable/" visual="help.gnome.org/users"/>, Linux, open source via LGPL</li>
             <li>VoiceOver, included with Apple's macOS and iOS</li>
-            <li>ChromeVox, <url href="http://www.chromevox.com/"><c>www.chromevox.com</c></url>, ChromeOS, free from Google</li>
-            <li><acro>JAWS</acro>, <url href="https://www.freedomscientific.com/Products/Blindness/JAWS"><c>www.freedomscientific.com</c></url>, Windows, commercial</li>
+            <li>ChromeVox, <url href="http://www.chromevox.com/" visual="www.chromevox.com"/>, ChromeOS, free from Google</li>
+            <li><acro>JAWS</acro>, <url href="https://www.freedomscientific.com/Products/Blindness/JAWS" visual="www.freedomscientific.com"/>, Windows, commercial</li>
         </ul></p>
 
-        <p>Much of the technical work for accessibility is accomplished by <pretext/> developers.  But authors have responsibilities, too.  So testing can be part of your workflow.  One free tool is <url href="https://www.deque.com/axe/">axe</url><fn><c>www.deque.com/axe/</c></fn> from <url href="https://www.deque.com">Deque Systems</url><fn><c>www.deque.com</c></fn>.</p>
+        <p>Much of the technical work for accessibility is accomplished by <pretext/> developers.  But authors have responsibilities, too.  So testing can be part of your workflow.  One free tool is <url href="https://www.deque.com/axe/" visual="www.deque.com/axe">axe</url> from <url href="https://www.deque.com" visual="www.deque.com">Deque Systems</url>.</p>
 
         <p>We have concentrated on making <init>HTML</init> output accessible, since that seems the most natural and best supported.  But we are aware of efforts for other formats.<dl>
             <li>
                 <title>PDF/<latex/></title>
-                <p>A <init>PDF</init> may not lend itself naturally to providing an accessible format.  But there have been efforts.  The <url href="https://tug.org/twg/accessibility/"><tex/> Users Group on PDF Accessibility and PDF Standards</url><fn><c>tug.org/twg/accessibility/</c></fn> is an excellent resource to start with.  There is also a <url href="https://github.com/PreTeXtBook/pretext/issues/1046"><pretext/> issue #1046</url><fn><c>github.com/PreTeXtBook/pretext/issues/1046</c></fn>.</p>
+                <p>A <init>PDF</init> may not lend itself naturally to providing an accessible format.  But there have been efforts.  The <url href="https://tug.org/twg/accessibility/" visual="tug.org/twg/accessibility/"><tex/> Users Group on PDF Accessibility and PDF Standards</url> is an excellent resource to start with.  There is also a <url href="https://github.com/PreTeXtBook/pretext/issues/1046" visual="github.com/PreTeXtBook/pretext/issues/1046"><pretext/> issue #1046</url>.</p>
             </li>
             <li>
                 <title>EPUB</title>
-                <p>The International Digital Publishing Forum has information on <url href="http://idpf.org/a11y">EPUB Accessibility</url><fn><c>idpf.org/a11y</c></fn>.</p>
+                <p>The International Digital Publishing Forum has information on <url href="http://idpf.org/a11y" visual="idpf.org/a11y">EPUB Accessibility</url>.</p>
             </li>
         </dl></p>
     </section>

@@ -11,7 +11,7 @@
     <title>Copyright and Licensing</title>
 
     <introduction>
-        <p>The legal issues described here are based on the authors' experiences and study, which necessarily reflect the laws of the United States.  But the <url href="">Berne Convention</url>, which dates to 1886, has 172 parties, so law and practice are very similar the world over.  The United States acceded to the convention in 1988.</p>
+        <p>The legal issues described here are based on the authors' experiences and study, which necessarily reflect the laws of the United States.  But the <url href="https://www.wipo.int/treaties/en/ip/berne/" visual="www.wipo.int/treaties/en/ip/berne/">Berne Convention</url>, which dates to 1886, has 172 parties, so law and practice are very similar the world over.  The United States acceded to the convention in 1988.</p>
     </introduction>
 
     <section>
@@ -163,7 +163,7 @@
 
         <p>For mathematics books, we do not concern ourselves too much with the potential for remixing.  Notation and dependencies make it hard to collect parts of various textbooks and assemble them into something new (and coherent).</p>
 
-        <p>Creative Commons maintains a matrix showing compatibility between their own licenses at their <init>FAQ</init> question, <url href="https://creativecommons.org/faq/#can-i-combine-material-under-different-creative-commons-licenses-in-my-work">Can I combine material under different Creative Commons licenses in my work?</url>, illustrating just how complicated this can become.</p>
+        <p>Creative Commons maintains a matrix showing compatibility between their own licenses at their <init>FAQ</init> question, <url href="https://creativecommons.org/faq/#can-i-combine-material-under-different-creative-commons-licenses-in-my-work" visual="creativecommons.org/faq/#can-i-combine-material-under-different-creative-commons-licenses-in-my-work">Can I combine material under different Creative Commons licenses in my work?</url>, illustrating just how complicated this can become.</p>
 
         <p>Finally, recognize that you can begin with a restrictive license and as you become more comfortable with the idea, change it to a more liberal license that applies to the work at the time of the change.  Further, you can always change your license to a more restrictive version, but invariably, you cannot revoke an open license once granted.  You could even stop offering an open license all together, and return to traditional copyright as you continue to improve your document.  But the version that existed when you made that decision is still available for anyone to use, and possibly improve, independent of your own closed version.</p>
 
@@ -173,7 +173,7 @@
     <section>
         <title>A Final Comment</title>
 
-        <p>These discussions remind us of a <url href="http://www.let.rug.nl/usa/presidents/thomas-jefferson/letters-of-thomas-jefferson/jefl220.php">letter by Thomas Jefferson</url>, the principal author of the United States' <pubtitle>Declaration of Independence</pubtitle>, writing about another monoply granted by governments<mdash />patents.</p>
+        <p>These discussions remind us of a <url href="http://www.let.rug.nl/usa/presidents/thomas-jefferson/letters-of-thomas-jefferson/jefl220.php" visual="www.let.rug.nl/usa/presidents/thomas-jefferson/letters-of-thomas-jefferson/jefl220.php">letter by Thomas Jefferson</url>, the principal author of the United States' <pubtitle>Declaration of Independence</pubtitle>, writing about another monoply granted by governments<mdash />patents.</p>
 
         <blockquote>
             <p>If nature has made any one thing less susceptible than all others of exclusive property, it is the action of the thinking power called an idea, which an individual may exclusively possess as long as he keeps it to himself; but the moment it is divulged, it forces itself into the possession of every one, and the receiver cannot dispossess himself of it. Its peculiar character, too, is that no one possesses the less, because every other possesses the whole of it. He who receives an idea from me, receives instruction himself without lessening mine; as he who lights his taper at mine, receives light without darkening me. That ideas should freely spread from one to another over the globe, for the moral and mutual instruction of man, and improvement of his condition, seems to have been peculiarly and benevolently designed by nature, when she made them, like fire, expansible over all space, without lessening their density in any point, and like the air in which we breathe, move, and have our physical being, incapable of confinement or exclusive appropriation.</p>
@@ -186,8 +186,3 @@
     </section>
 
 </chapter>
-
-
-
-
-

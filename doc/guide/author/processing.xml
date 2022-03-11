@@ -39,7 +39,7 @@
         </p>
 
         <p>
-            The <pretext />-CLI, can be installed on the command-line using the command <c>pip install pretextbook</c>, see <xref ref="quickstart-getting-pretext"/>.  To use options 2 and 3 above, you will need to get a copy of <pretext /> from its <url href="https://github.com/PreTeXtBook/pretext">GitHub repository</url>.  This can be done using the command <c>git clone https://github.com/PreTeXtBook/pretext.git</c>, or by downloading a zip file directly from the repository.
+            The <pretext />-CLI, can be installed on the command-line using the command <c>pip install pretextbook</c>, see <xref ref="quickstart-getting-pretext"/>.  To use options 2 and 3 above, you will need to get a copy of <pretext /> from its <url href="https://github.com/PreTeXtBook/pretext" visual="github.com/PreTeXtBook/pretext">GitHub repository</url>.  This can be done using the command <c>git clone https://github.com/PreTeXtBook/pretext.git</c>, or by downloading a zip file directly from the repository.
         </p>
 
         <p>
@@ -123,7 +123,7 @@
             </console>
 
             <p>
-                This will direct you to open a local server at a provided address (perhaps <url href="http://localhost:8000"/>).  Replace <q>html</q> in the above with other build targets as appropriate.
+                This will direct you to open a local server at a provided address (perhaps <url href="http://localhost:8000" visual="http://localhost:8000"/>).  Replace <q>html</q> in the above with other build targets as appropriate.
             </p>
 
             <p>
@@ -180,7 +180,7 @@
 
         <p>A <term>schema</term><idx>schema</idx>, in our case a <init>RELAX-NG</init> schema,  is a formal specification of an <init>XML</init> vocabulary<idx><h>schema</h><seealso>XML vocabulary</seealso></idx><idx>XML vocabulary</idx> (the allowed tags and attributes), and how they relate to each other.  So, for example, the restrictions that say you cannot nest a <tag>book</tag> inside of a <tag>chapter</tag>, nor can you nest a <tag>subsection</tag> in a <tag>chapter</tag> without an intervening <tag>section</tag>, are expressed and enforced by the schema.  One of the beauties of the schema is that it is written using a very specific syntax and then there are tools that use a schema as input.  In particular, a <pretext /> source file that conforms to the <pretext /> schema is said to be <term>valid</term><idx>valid schema</idx>.  You should strive to always, always, always have valid source files, and therefore you want to regularly verify that this is the case.</p>
 
-        <p>You can find the <pretext /> schema in the <url href="https://github.com/PreTeXtBook/pretext/schema"><c>schema</c> folder of the GitHub repository</url>.  The version we author and maintain is <c>pretext.xml</c>, which is used to create <c>pretext.rnc</c>, which uses the compact syntax of the RELAX-NG specification.  By providing the schema and your source to a program called a <term>validator</term><idx>validator</idx> you can check if your source is valid, and if not, why.  See <xref ref="schema" /> for the details on doing this.</p>
+        <p>You can find the <pretext /> schema in the <url href="https://github.com/PreTeXtBook/pretext/schema" visual="github.com/PreTeXtBook/pretext/schema"><c>schema</c> folder of the GitHub repository</url>.  The version we author and maintain is <c>pretext.xml</c>, which is used to create <c>pretext.rnc</c>, which uses the compact syntax of the RELAX-NG specification.  By providing the schema and your source to a program called a <term>validator</term><idx>validator</idx> you can check if your source is valid, and if not, why.  See <xref ref="schema" /> for the details on doing this.</p>
 
         <p>
             The <pretext />-CLI also has some basic validating capability: after running <c>pretext build</c>, open the <c>.error_schema.log</c> file in the main folder of your project to see validation errors.
@@ -190,7 +190,7 @@
 
         <p>We cannot stress enough the importance of setting up and performing regular validation and preventing many consistent errors of the same type.  You will learn what elements are allowed where, and which are not, from the messages produced by validation errors.  And when a conversion fails, or produces spectacularly incorrect output, validating your source should be your first reaction.  Always.</p>
 
-        <p>The other beauty of a schema is that you can supply it to a text editor (<xref ref="introduction-to-source-formatting" />) and then you will get context-sensitive help that greatly assists you in using only the tags and attributes that are allowed in a given location of your source.  <url href="http://xml-copy-editor.sourceforge.net/">XML Copy Editor</url> is the one editor like this we have tried, but we do not have extensive experience.</p>
+        <p>The other beauty of a schema is that you can supply it to a text editor (<xref ref="introduction-to-source-formatting" />) and then you will get context-sensitive help that greatly assists you in using only the tags and attributes that are allowed in a given location of your source.  <url href="http://xml-copy-editor.sourceforge.net/" visual="xml-copy-editor.sourceforge.net/">XML Copy Editor</url> is the one editor like this we have tried, but we do not have extensive experience.</p>
 
         <p>We have devoted an entire chapter (<xref ref="schema" />) to amplifying this introduction and providing more details, such as where to find details on installing a validator.</p>
     </section>
@@ -202,7 +202,7 @@
 
         <p>At this writing (2019-07-10) we have begun to transition between two different ways to accomplish this.  The new method is to create a <term>publication file</term> that is an <init>XML</init> file that specifies options that are independent of your source material.  See <xref ref="publication-file"/> in <xref ref="part-publisher"/> for details.  We continue to provide many of the values for these parameters on the command-line <em>at processing time</em>.  They have become known as <term>stringparam</term><idx>stringparam</idx> since that is the name used to call them using <c>xsltproc</c>. The <pretext />-CLI can set these stringparams easily as well.</p>
 
-        <p>Suppose you want to make a large-font version of your textbook for a student who has limited vision.  Look inside the top of <url href="https://github.com/PreTeXtBook/pretext/blob/dev/xsl/mathbook-latex.xsl"><c>xsl/pretext-latex.xsl</c></url> and find the <c>latex.font.size</c> parameter.  The preceding comments in this file suggest <c>20pt</c> is the maximum supported. To pass this parameter to the CLI, you would enter the following.</p>
+        <p>Suppose you want to make a large-font version of your textbook for a student who has limited vision.  Look inside the top of <url href="https://github.com/PreTeXtBook/pretext/blob/dev/xsl/mathbook-latex.xsl" visual="github.com/PreTeXtBook/pretext/blob/dev/xsl/mathbook-latex.xsl"><c>xsl/pretext-latex.xsl</c></url> and find the <c>latex.font.size</c> parameter.  The preceding comments in this file suggest <c>20pt</c> is the maximum supported. To pass this parameter to the CLI, you would enter the following.</p>
 
         <console>
             <input>pretext build pdf --stringparam latex.font.size "20pt"</input>
@@ -214,7 +214,7 @@
             Instead of passing these stringparams on the command line, you can specify them inside your project manifest.  Inside a particular <tag>target</tag>, include <tage>stringparam key="latex.font.size" value="20pt"</tage>, for example.  Each stringparam you want to set gets its own <tage>stringparam key="" value=""</tage> element.
         </p>
 
-        <p>These parameters are documented in the <init>XSL</init> files themselves, available in <url href="https://github.com/PreTeXtBook/pretext/tree/dev/xsl"><c>xsl</c> fold in the <pretext /> GitHub repository</url>, principally <c>pretext-common.xsl</c>, <c>pretext-latex.xsl</c> and <c>pretext-html.xsl</c>, and occur near the top.  They assume sensible defaults for beginners, and error-checking is careful and robust.  They will be easier to locate and use when we have the time to document them more carefully here in the Guide.</p>
+        <p>These parameters are documented in the <init>XSL</init> files themselves, available in <url href="https://github.com/PreTeXtBook/pretext/tree/dev/xsl" visual="github.com/PreTeXtBook/pretext/tree/dev/xsl"><c>xsl</c> folder in the <pretext /> GitHub repository</url>, principally <c>pretext-common.xsl</c>, <c>pretext-latex.xsl</c> and <c>pretext-html.xsl</c>, and occur near the top.  They assume sensible defaults for beginners, and error-checking is careful and robust.  They will be easier to locate and use when we have the time to document them more carefully here in the Guide.</p>
 
         <p>One caveat for using these is that experience has taught us that some of the parameters we created early on really do affect your content.  We will change some of these, but always provide a smooth upgrade path through deprecations, with little or no disruption to your workflow.</p>
     </section>
@@ -431,7 +431,7 @@
         <idx>Inkscape</idx>
         <idx><h>vector graphics</h><h>Inkscape</h></idx>
 
-        <p>A strength of <pretext/> is the ability to create diagrams and images with editable source code, embedded alongside your other <pretext/> source material (<xref ref="topic-images-source"/>, <xref ref="processing-images-pretext"/>).  But sometimes you want, or need, to be more artistic.  <url href="https://inkscape.org/">Inkscape</url><fn><c>inkscape.org/</c></fn> is a great tool for creating images.  It ticks all the boxes: open source, mature, cross-platform, standards-compliant.  Bethany Llewellyn helped research Inkscape capabilities for this section.</p>
+        <p>A strength of <pretext/> is the ability to create diagrams and images with editable source code, embedded alongside your other <pretext/> source material (<xref ref="topic-images-source"/>, <xref ref="processing-images-pretext"/>).  But sometimes you want, or need, to be more artistic.  <url href="https://inkscape.org/" visual="inkscape.org/">Inkscape</url> is a great tool for creating images.  It ticks all the boxes: open source, mature, cross-platform, standards-compliant.  Bethany Llewellyn helped research Inkscape capabilities for this section.</p>
 
         <p>Inkscape's native file format is Scalable Vector Graphics (<init>SVG</init>).  As the name suggests, this translates into excellent support for vector graphics.  (See <xref ref="topic-images-raster"/> and <xref ref="topic-images-vector"/> for the distinction.)  Why use Inkscape?<ul>
             <li><init>SVG</init> files are small and scale smoothly when you zoom in on a web page.  So this format is our top choice for how images are realized in the <init>HTML</init> output.  They will also work well in formats based on <init>HTML</init>, such as <init>EPUB</init>.</li>
@@ -535,7 +535,7 @@
         </console>
 
         <p>
-            You can replace <q>html</q> with any build target, although it is really <init>HTML</init> builds that benefit from this feature.  The CLI uses Python to spin up a local web server so you can see a copy of your output by going to the <init>URL</init> the CLI gives as output (usually <url href="http://localhost:8000"/>, although if you are working in CoCalc, this will be different).
+            You can replace <q>html</q> with any build target, although it is really <init>HTML</init> builds that benefit from this feature.  The CLI uses Python to spin up a local web server so you can see a copy of your output by going to the <init>URL</init> the CLI gives as output (usually <url href="http://localhost:8000" visual="http://localhost:8000"/>, although if you are working in CoCalc, this will be different).
         </p>
 
         <p>
@@ -554,7 +554,7 @@
     <section xml:id="processing-testing-html-globally">
         <title>Testing <init>HTML</init> Output Globally</title>
 
-        <p>Just like testing files locally can sometimes be misleading, testing on your own server can sometimes be misleading.  For example, on some university campuses, frequently accessed content (your textbook!) can be cached.  So when you update your files, it might not look like anything has changed.  An easy, free, quick solution is to place your <init>HTML</init> temporarily at <url href="https://app.netlify.com/drop">Netlify Drop</url><fn><c>https://app.netlify.com/drop</c></fn> as a double-check on the source of any problems.</p>
+        <p>Just like testing files locally can sometimes be misleading, testing on your own server can sometimes be misleading.  For example, on some university campuses, frequently accessed content (your textbook!) can be cached.  So when you update your files, it might not look like anything has changed.  An easy, free, quick solution is to place your <init>HTML</init> temporarily at <url href="https://app.netlify.com/drop" visual="app.netlify.com/drop">Netlify Drop</url> as a double-check on the source of any problems.</p>
 
         <p>This can also be a great solution if you do not have a server setup and want help from the <pretext/> community with your <init>HTML</init> output.  (See <xref ref="github-issues"/>.)</p>
     </section>
@@ -580,7 +580,7 @@
     <section xml:id="topic-build-in-cocalc">
         <title>Building Output in CoCalc</title>
 
-        <p>CoCalc <url href="https://cocalc.com/"><c>cocalc.com</c></url><idx>CoCalc</idx> has <em>all</em> the tools you need to author with MathBook <init>XML</init>.  You will need an upgrade from a subscription to allow Internet connectivity, but at a minimum a colleague with a paid plan can spare you one, they are plentiful and meant to be shared.<ul>
+        <p>CoCalc <url href="https://cocalc.com/" visual="cocalc.com/"><c>cocalc.com</c></url><idx>CoCalc</idx> has <em>all</em> the tools you need to author with MathBook <init>XML</init>.  You will need an upgrade from a subscription to allow Internet connectivity, but at a minimum a colleague with a paid plan can spare you one, they are plentiful and meant to be shared.<ul>
             <li><p>Text editor: reasonably good, partially <init>XML</init> syntax-aware.</p></li>
             <li><p><c>git</c>: installed (so you can clone/pull <pretext/>).</p></li>
             <li><p><c>jing</c>: installed, so you can do <init>RELAX-NG</init> validation.</p></li>

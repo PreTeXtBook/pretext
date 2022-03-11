@@ -23,7 +23,7 @@
             <title>Install Java on MacOS</title>
 
             <ol>
-                <li><p>From <url href="https://jdk.java.net/12/"/> get an open source <init>JDK</init>.  In other words, not the proprietary version from Oracle.</p></li>
+                <li><p>From <url href="https://jdk.java.net/12/" visual="jdk.java.net/12/"/> get an open source <init>JDK</init>.  In other words, not the proprietary version from Oracle.</p></li>
 
                 <li><p>Unzip the file you download until you have a directory called <c>jdk-12.0.1.jdk</c>. Put that directory somewhere useful. We will pretend that you put it in your home directory and that your user is called <c>jane</c>, which means that the directory is now at <c>/Users/jane/jdk-12.0.1.jdk</c>.</p></li>
 
