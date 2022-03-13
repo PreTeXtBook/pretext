@@ -2125,14 +2125,19 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
             print('PTX: Successful application of {}, but with messages:'.format(xsl))
             for m in messages:
                 print('    * ', m.message)
-    except:
+    except Exception as e:
+        msg = 'PTX: Processing with {} has failed\n'.format(xsl)
         # report any errors on failure (indented)
         messages = xslt.error_log
         if messages:
-            print('PTX: Failed application of {}, with messages:'.format(xsl))
+            msg += 'PTX: comprehensive messages, warnings, and errors:\n'
             for m in messages:
-                print('    * ', m.message)
-    os.chdir(owd)
+                msg = msg + '    * ' + m.message + '\n'
+        print(msg)
+        raise(e)
+    finally:
+        # restore directory in success or failure
+        os.chdir(owd)
 
     # write a serialized version of `result_tree` to a file
     # write_output() is an lxml method which respects/interprets
