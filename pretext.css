@@ -203,18 +203,133 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     margin-top: 1em;
 }
 
+.ptx-content section .heading,
+.ptx-content article .heading {
+    font-family: "PT Serif", "Times New Roman", Times, serif;
+    font-weight: 700;
+    color: inherit;
+}
+.ptx-content article .exercise-stage {
+    font-family: "PT Serif", "Times New Roman", Times, serif;
+    font-weight: 700;
+    color: inherit;
+    font-size: 100%;
+    margin-top: 0.4em;
+}
+
+.ptx-content article > .heading + .para {
+    margin-top: 0;
+}
+.ptx-content section .heading + .para,
+.ptx-content section .title + .para, /* list items have bare .title, not in a .heading */
+.ptx-content section .heading + .introduction > .para:first-child,
+.ptx-content section .blob > .para:first-child {
+    margin-top: 0.25em;
+}
+.ptx-content section .heading + article { /* , .ptx-content section header + article { */
+    margin-top: 1em;
+}
+.ptx-content section .heading + .sidebyside {
+    margin-top: 1em;
+}
+
+.ptx-content a > .heading { display: inline;}
+
+.ptx-content section > .heading {
+    font-size: 1.75em;
+    line-height: 1.25em;
+    margin-top: 1em;
+    margin-bottom: 0.35em;
+}
+.ptx-content section section > .heading {
+    font-size: 1.5em;
+    line-height: 1.25em;
+    margin-bottom: 0;
+}
+.ptx-content .paragraphs > .heading {
+    font-size: 1.125em;
+    line-height: 1.125em;
+}
+.ptx-content article .paragraphs > .heading {
+    font-size: 1.05em;
+}
+.ptx-content section section section > .heading {
+    font-size: 1.40em;
+    line-height: 1.15em;
+    margin-top: 0.75em;
+}
+@media screen and (max-width: 480px) {
+    .ptx-content section > .heading {
+        font-size: 1.5em;
+        line-height: 1.33em;
+        margin-top: 1em;
+    }
+    .ptx-content section section > .heading {
+        font-size: 1.3em;
+        line-height: 1.15em;
+    }
+    .ptx-content section section section > .heading {
+        font-size: 1.15em;
+        line-height: 1em;
+    }
+}
+
+.ptx-content article > .heading,
+.ptx-content article > a .heading,
+.ptx-content .abstract > .heading {
+    font-size: 1.125em;
+    line-height: 1.125em;
+    margin-top: 0;
+    display: inline;
+}
+.ptx-content article > .heading::after,
+.ptx-content .paragraphs > .heading::after,
+.ptx-content article > a > .heading::after,
+.ptx-content .abstract > .heading::after {
+    content: "\2009";
+}
+/* Currently only for Solution to example */
+.ptx-content .posterior .heading {
+    font-weight: normal;
+    font-size: 1.125em;
+    line-height: 1.125em;
+    margin-top: 0;
+}
+
+/*
+ * Contents of articles
+ */
+.ptx-content article > .heading + .para,
+.ptx-content article > .heading + .introduction,
+.ptx-content article > .heading + .introduction > .para:first-child {
+    display: inline;
+}
+/* when a list is the only thing in an environment with a border,
+   there is too much space to the left */
+.ptx-content article > .heading + ol,
+.ptx-content article > .heading + ul {
+    padding-left: 1.5em;
+}
+.ptx-content article.theorem-like .para,
+.ptx-content article.theorem-like li {
+    font-style: italic;
+}
+.ptx-content article.theorem-like .emphasis {
+    font-weight: 700;
+}
+
 .ptx-content ol, .ptx-content ul {
     margin-bottom: 0;
 }
 .ptx-content li {
     margin-bottom: 0;
 }
-.ptx-content section li .title {
+.ptx-content li .title {
     font-size: 100%;
     font-weight: normal;
     font-style: italic;
 }
-.ptx-content section article.theorem-like li > .title {
+.ptx-content article.theorem-like li > .title {
     font-weight: 600;
     font-style: normal;
     font-size: 96%;
