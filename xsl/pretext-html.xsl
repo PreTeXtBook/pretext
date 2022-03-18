@@ -5745,6 +5745,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="content" />
     <div class="displaymath process-math">
+        <xsl:apply-templates select="." mode="knowl-urls"/>
         <xsl:choose>
             <xsl:when test="$b-original and not(self::me)">
                 <xsl:attribute name="id">
@@ -5759,6 +5760,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
         <xsl:copy-of select="$content" />
     </div>
+</xsl:template>
+
+<xsl:template match="me|men|md|mdn" mode="knowl-urls">
+    <xsl:variable name="display-math-cross-references" select="..//xref"/>
+    <xsl:attribute name="data-contains-math-knowls">
+        <xsl:for-each select="$display-math-cross-references">
+            <!-- space before all, except first -->
+            <xsl:if test="position() != 1">
+                <xsl:text> </xsl:text>
+            </xsl:if>
+            <xsl:apply-templates select="id(@ref)" mode="xref-knowl-filename"/>
+        </xsl:for-each>
+    </xsl:attribute>
 </xsl:template>
 
 <!-- "men" needs to be handled in the knowl production          -->
