@@ -300,6 +300,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </choice>
             </choices>
         </exercise>
+
+        <exercise xml:id="number-theory-proof" adaptive="yes">
+            <statement>
+                <p>Create a proof of the theorem: If <m>n</m> is an even number, then <m>n\equiv 0\mod 2</m>.</p>
+            </statement>
+            <blocks>
+                <block order="2">
+                    <p>Suppose <m>n</m> is even.</p>
+                </block>
+                <block order="3">
+                    <choice><p>Then there exists an <m>m</m> so that <m>n = 2m</m>.</p></choice>
+                    <choice><p>Then there exists an <m>m</m> so that <m>n = 2m + 1</m>.</p></choice>
+                </block>
+                <block order="1" correct="no">
+                    <p>Spin around three times.</p>
+                </block>
+                <block order="5">
+                    <p>So <m>n = 2m + 0</m>.</p>
+                    <p>This is a superfluous paragraph.</p>
+                </block>
+                <block order="4">
+                    <p>Thus <m>n\equiv 0\mod 2</m>.</p>
+                </block>
+            </blocks>
+        </exercise>
     </exercises>
 
     <reading-questions>
