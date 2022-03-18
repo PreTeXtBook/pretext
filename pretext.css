@@ -161,6 +161,111 @@ so that we can set our own later */
     margin-left: 1.5em;
 }
 
+.ptx-content .exercisegroup {
+    padding-top: 1.25em;
+    margin-bottom: 1.0em;
+}
+.ptx-content section .exercisegroup > .heading {
+    font-size: 1.10em;
+    line-height: 1.05em;
+    margin-top: 0.75em;
+    display: inline;
+}
+.ptx-content section .exercisegroup > .heading + .introduction {
+    display: inline;
+}
+.ptx-content section .exercisegroup > .heading + .introduction > .para:first-child {
+    display: inline;
+}
+
+.ptx-content .exercisegroup article.exercise-like .solution .para:first-child {
+    margin-top: -3px;  /* because of the 10px (instread of 7) on the .knowl-content */
+}
+.ptx-content .exercisegroup article.exercise-like li > .para:first-child {
+    margin-top: 0;
+}
+
+.ptx-content .exercisegroup article.exercise-like .heading {
+    margin: 0;
+}
+.ptx-content article.exercise-like .task > .heading + .heading {
+    font-weight: 600;  /* should be slightly less bold, but some browsers make it bold */
+}
+.ptx-content article.exercise-like .task > .heading + .heading + .para,
+.ptx-content article.exercise-like .task > .heading + .heading + div {
+    display: block;
+    margin-top: 0;
+}
+.ptx-content .exercisegroup .conclusion .heading {
+    margin-top: 0.5em;
+}
+.ptx-content .exercisegroup .hidden-knowl-wrapper {
+    margin: 0;
+}
+.ptx-content .exercisegroup article + article {
+    margin-top: 1em;
+}
+
+/* http://spot.pcc.edu/math/APEXCalculus/sec_interp_deriv.html */
+.ptx-content .exercisegroup > article,
+.ptx-content .exercisegroup-exercises > article {
+    margin-left: 2em;
+}
+.ptx-content .exercisegroup .cols2 > article {
+    margin-left: 1.25em;
+}
+.ptx-content .exercisegroup > .introduction,
+.ptx-content .exercisegroup > .conclusion {
+    margin-left: 0;
+}
+.ptx-content .exercisegroup > .introduction {
+    margin-top: 1.25em;
+    margin-top: 0;
+}
+.ptx-content .exercisegroup > .introduction > .para:first-child::before {
+    content: '\25a0\2009';
+   /* font-size: 70%; */
+    color: #06a;
+    position: relative;
+    top: -1px;
+    right: 1px;
+}
+.ptx-content .exercisegroup > .heading + .introduction > .para:first-child::before {
+    content: '\2003';
+}
+
+.ptx-content .exercisegroup > .introduction > .para:first-child {
+    margin-top: 0;
+}
+
+.ptx-content .exercisegroup article + .hidden-knowl-wrapper {
+    margin-left: 4em;
+}
+
+/* make it look like a list, and have entra indenting when already more indented */
+.ptx-content .exercise-like .introduction + .hidden-knowl-wrapper,
+.ptx-content .exercise-like .conclusion {
+    margin-left: 1.0em;
+}
+.ptx-content .exercisegroup .exercise-like .introduction + .hidden-knowl-wrapper,
+.ptx-content .exercisegroup .exercise-like .conclusion {
+    margin-left: 1.5em;
+}
+.ptx-content section > .hidden-knowl-wrapper {
+    margin-top: 1em;
+}
+.ptx-content article + .hidden-knowl-wrapper {
+    margin-top: 1em;
+}
+.ptx-content .knowl-content > section:first-child > .heading:first-child {
+    margin-top: 0;
+}
+
+
+
+
+
+
 /* this > may be too restrictive.  The purpose is to not put a
    top margin on an article at the top of a knowl */
 .ptx-content section > article, .ptx-content section > section.paragraphs, .ptx-content .paragraphs > article {
