@@ -267,6 +267,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
 
+    <!-- When building for a Runestone server or when testing -->
+    <!-- Runestone for All, the $runestone-cdn will point to  -->
+    <!-- the right place for the necessary JS.  When the      -->
+    <!-- $runestone-dev switch becomes always true, then the  -->
+    <!-- enveloping conditional can be removed.               -->
+    <!-- NBL: Indentation expects this change -->
+    <xsl:if test="$b-host-runestone or $runestone-dev">
     <xsl:comment>*** Runestone Services ***</xsl:comment>
     <xsl:text>&#xa;</xsl:text>
     <xsl:for-each select="$runestone-services/all/js/item">
@@ -285,6 +292,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
         </link>
     </xsl:for-each>
+    </xsl:if>
 </xsl:template>
 
 <!-- User Menu (aka Bust Menu)                    -->
