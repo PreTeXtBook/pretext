@@ -132,17 +132,60 @@
 
 .pretext .ptx-content-footer {
     background: #fdf;
+    margin-top: 2em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
+.pretext .ptx-content-footer .button {
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+  height: 35px;
+  width: 65px;
+  color: #333333;
+  background-color: #ededed;
+  border: 1px solid #bababa;
+}
+.pretext .ptx-content-footer .button:hover,
+.pretext .ptx-content-footer .button:active,
+.pretext .ptx-content-footer .button:focus {
+  background-color: #fafafa;
+}
+.pretext .ptx-content-footer .button .icon,
+.pretext .ptx-content-footer .button .name {
+  vertical-align: middle;
+}
+
+
+
+.pretext .ptx-content-footer .top-button {
+  display: block;
+  width: 40px;
+  height: 60px;
+}
+
+.pretext .ptx-content-footer .top-button .icon,
+.pretext .ptx-content-footer .top-button .name {
+  display: block;
+}
+
 .pretext .ptx-page-footer {
-    margin-left: 240px;
-    padding-left: 8em;
     background: #def;
+    margin-top: 2em;
+    padding-top: 2em;
+    border-top: 2px solid var(--sectiontoctext);
 }
 .pretext .ptx-page-footer > a > div {
   display: inline-block;
 }
 .pretext .ptx-page-footer .pretext-link .logo {
   width: 6em;
+}
+.pretext .ptx-page-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 @media screen and (max-width: 800px) {
   .pretext #ptx-navbar {
