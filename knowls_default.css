@@ -98,19 +98,13 @@ article > [data-knowl]::after, article > [data-knowl]:hover::after, article > [d
     padding-bottom: 0;
     margin-bottom: 0;
 }
+/*
 .knowl-output.original:after {
   content: '';
-/*  border-bottom: 1px solid #666;
-*/
   display: block;
-/*
-  margin-right: auto;
-  margin-left: -0.10em;
-  width: 1.5em;
-*/
-  /* so the corner of the L meets */
   padding-top: 0.35em;
 }
+*/
 .example-like .knowl-output.original {
     background: inherit;
 }
