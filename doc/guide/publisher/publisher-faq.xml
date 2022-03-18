@@ -114,5 +114,10 @@
             <title>My publication file (or other auxiliary file) does not seem to be effective</title>
             <p>Does the filename, or any other directory <em>in the complete path to the file</em>, have a space in it?  A common culprit might be <c>My Documents</c> on Windows.  If so, the failure is likely our fault.  Doing a test where you move your project someplace clear of filenames or directory names with spaces would be a big help to us.  And then a careful report of the offending situation will let us make a fix for the next author or publisher.  Thank-you.</p>
         </li>
+
+        <li>
+            <title>Should I edit the <latex/> file created to make a <init>PDF</init>?</title>
+            <p>See <xref ref="latex-file"/> and especially the contained <xref ref="edit-latex"/>.</p>
+        </li>
     </ol></p>
 </chapter>
