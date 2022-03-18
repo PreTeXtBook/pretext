@@ -3157,13 +3157,31 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
     <section xml:id="topic-sage">
         <title>Sage</title>
 
-        <p>Until we can expand this section, get some ideas from <xref ref="overview-sage"/>.  We will also collect a few items here, to be cleaned-up later.</p>
+        <introduction>
+            <p>Until we can expand this section, get some ideas from <xref ref="overview-sage"/>.  We will also collect a few items here, to be cleaned-up later.</p>
 
-        <p>For online output formats, sometimes the output of a Sage command can be overwhelming, and a bit complicated to parse.  Many objects in Sage also have a <latex/> representation, which can be used to create a superior output format (for some purposes).  Begin a cell with the <q>magic</q>:<cd>
-            <cline>%display latex</cline>
-        </cd>Experiment with the following Sage code on the next line<cd>
-            <cline>integral(x^9*cos(x), x)</cline>
-        </cd>Boom!  Very nice.  Try replacing <c>latex</c> with <c>None</c>, <c>plain</c>, <c>ascii_art</c>, or <c>unicode_art</c>.</p>
+            <p>For online output formats, sometimes the output of a Sage command can be overwhelming, and a bit complicated to parse.  Many objects in Sage also have a <latex/> representation, which can be used to create a superior output format (for some purposes).  Begin a cell with the <q>magic</q>:<cd>
+                <cline>%display latex</cline>
+            </cd>Experiment with the following Sage code on the next line<cd>
+                <cline>integral(x^9*cos(x), x)</cline>
+            </cd>Boom!  Very nice.  Try replacing <c>latex</c> with <c>None</c>, <c>plain</c>, <c>ascii_art</c>, or <c>unicode_art</c>.</p>
+        </introduction>
+
+        <subsection xml:id="sage-cell-design">
+            <title>Sage Cell Server Design</title>
+
+            <p>The ability to execute, and edit, chunks of Sage code is provided by a distinct project, the <url href="https://sagecell.sagemath.org/" visual="sagecell.sagemath.org/">Sage Cell Server</url>.  Simplifying somewhat, the Sage code a reader sees (or has edited!) is shipped out to a running instance of Sage (on a server <em>somewhere</em>) and the code is executed there.  The results of that computation are shipped back to the reader for display below the code.</p>
+
+            <p>Two implications of this design are<ul>
+                <li>It is not within your power to add additional packages for the supported languages.</li>
+                <li>You cannot read a (data) file hosted on your project's site.</li>
+            </ul>  Fortunately, there are workarounds.</p>
+
+            <p>If your code needs a Python package, or an R package, or similar, and it is a standard open source package, then make a request on the <url href="https://groups.google.com/g/sage-cell" visual="groups.google.com/g/sage-cell">Sage Cell</url> Google Group.  Likely, it can be added/installed.</p>
+
+            <!-- Details at: https://groups.google.com/g/sage-cell/c/ETeONQMYbQM/m/Tzl-rFmkAQAJ -->
+            <p>Unfortunately, the ability to read files <em>anywhere</em> on the internet was abused, so this capability had to be restricted to a finite list of servers.  These include <url href="https://www.dropbox.com" visual="www.dropbox.com">DropBox</url> and <url href="https://github.com" visual="github.com">GitHub</url> where you might find it convenient to place files supporting your code.  Note that for GitHub, you likely want to use a <init>URL</init> which is a <q>raw</q> file such as for the <pretext/> repository <url href="https://github.com/PreTeXtBook/pretext/raw/master/README.md" visual="github.com/PreTeXtBook/pretext/raw/master/README.md">README</url> file, written with Markdown.</p>
+        </subsection>
     </section>
 
     <section xml:id="topic-sidebyside">

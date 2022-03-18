@@ -256,5 +256,17 @@
 
           <p>There are subtle and minor variations and restrictions around the interpretation of <latex/> syntax by <latex/> itself and the MathJax Javascript routines for rendering in a web page.  Work backwards from <xref ref="mathematics-notes"/> for details.</p>
         </li>
+
+        <li>
+          <title>I would like to use a standard package in my Sage code.</title>
+
+          <p>See <xref ref="sage-cell-design"/> for an explanation.</p>
+        </li>
+
+        <li>
+          <title>I would like to use a (large) data file in my Sage code.</title>
+
+          <p>See <xref ref="sage-cell-design"/> for an explanation.</p>
+        </li>
     </ol></p>
 </chapter>
