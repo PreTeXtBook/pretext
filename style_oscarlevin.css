@@ -108,12 +108,15 @@
   color: #000;
 }
 
-
-.ptx-content .assemblage-like .heading + p,
-.ptx-content .theorem-like.theorem .heading + p,
-.ptx-content .definition-like .heading + p {
+.ptx-content .example-like > .heading + .introduction, 
+.ptx-content .computation-like > .heading + .introduction,
+.ptx-content .assemblage-like .heading + .para,
+.ptx-content .computation-like > .heading + .para,
+.ptx-content .example-like .heading + .para,
+.ptx-content .theorem-like.theorem .heading + .para,
+.ptx-content .definition-like .heading + .para {
   display: block;
-  margin-top: .5em;
+  margin-top: 0.25em;
 }
 
 /* Examples and example-like; computation-like styled same as example-like with different colors */
@@ -160,14 +163,6 @@
 .ptx-content .computation-like > .heading {
   background: var(--computationborder);
   color: black;
-}
-
-.ptx-content .example-like > .heading + p,
-.ptx-content .computation-like > .heading + p,
-.ptx-content .example-like > .heading + .introduction, 
-.ptx-content .computation-like > .heading + .introduction {
-  display: block;
-  padding-top: 0.3em;
 }
 
 /* Project-like */
@@ -226,6 +221,7 @@
 .ptx-content .remark-like {
   margin-top: 1.25em;
   padding: 1em;
+  padding-top: 0.7em;
   margin-bottom: 1em;
   border-radius: 0px;
   border-left: 5px solid var(--remarklikeborder);
@@ -340,7 +336,7 @@ END OF STYLE_OSCARLEVIN
     margin-top: 1.25em;
 }
 
-.ptx-content .aside-like.front + p{
+.ptx-content .aside-like.front + .para{
     margin-top: 1.25em !important;
     padding-top: 0;
 }
@@ -352,7 +348,7 @@ END OF STYLE_OSCARLEVIN
   border: 1px dotted #aaa;
 }
 
-.ptx-content article.aside-like > p:first-child {
+.ptx-content article.aside-like > .para:first-child {
     margin-top: 0;
 }
 
