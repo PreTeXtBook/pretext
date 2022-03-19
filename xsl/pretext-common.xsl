@@ -9297,6 +9297,8 @@ Book (with parts), "section" at level 3
 <xsl:template match="*" mode="xref-link">
     <xsl:param name="target" />
     <xsl:param name="content" />
+
+    <xsl:message>PTX:BUG:     a new conversion needs an implementation of the modal "xref-link" template.  Search your output for "[LINK:"</xsl:message>
     <xsl:text>[LINK: </xsl:text>
     <xsl:copy-of select="$content" />
     <xsl:text>]</xsl:text>
