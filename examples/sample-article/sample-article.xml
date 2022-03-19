@@ -7452,13 +7452,15 @@ the xsltproc executable.
 
             <p>If you are writing about system-level software, you may need to write numbers in hexadecimal or binary.  Here we use a numbered, displayed equation (mathematics) and <latex /> macros such as <c>\texttt</c> for a monospace text font, and <c>\;</c> for spacing/grouping the bits of the binary number. <men>\texttt{6C2A}_{16} = \texttt{0110}\;\texttt{1100}\;\texttt{0010}\;\texttt{1010}_{2}</men>  If you use these constructions repeatedly, then some <latex /> macros might be useful.  It might also be beneficial for us to add some <pretext /> markup for such numbers used in a paragraph<mdash />send us a feature request.</p>
 
-            <theorem>
+            <theorem xml:id="theorem-detached">
                 <statement>
                     <p>This is a spurious theorem to break up the run of consecutive <c>listing</c> so we might test the effect.</p>
                 </statement>
             </theorem>
 
-            <proof>
+            <p>And this is a spurious paragraph to prove that the theorem beforehand, and the proof following, are distinct from one another.</p>
+
+            <proof ref="theorem-detached" text="type-global">
                 <p>This is a proof that is authored <q>detached.</q>  It is not associated with the theorem above in a way other than simply following it.</p>
             </proof>
 
