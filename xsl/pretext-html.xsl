@@ -2527,7 +2527,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- A title or the type, with a period -->
 <!-- PROOF-LIKE is the only known case       -->
-<xsl:template match="*" mode="heading-no-number">
+<xsl:template match="&PROOF-LIKE;" mode="heading-no-number">
     <xsl:variable name="hN">
         <xsl:apply-templates select="." mode="hN"/>
     </xsl:variable>
@@ -2550,6 +2550,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </span>
             </xsl:otherwise>
         </xsl:choose>
+        <xsl:if test="@ref">
+            <xsl:text>(</xsl:text>
+            <xsl:apply-templates select="." mode="proof-xref-theorem"/>
+            <xsl:text>)</xsl:text>
+        </xsl:if>
     </xsl:element>
 </xsl:template>
 
@@ -4901,6 +4906,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
 
+    <xsl:if test="@ref">
+        <xsl:apply-templates select="." mode="proof-xref-theorem"/>
+    </xsl:if>
     <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
