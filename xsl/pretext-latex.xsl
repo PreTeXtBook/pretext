@@ -5334,6 +5334,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="latex-id" />
     <xsl:text>}</xsl:text>
+    <!-- TODO: move this into an environment argument -->
+    <!-- to enable styling options (possibly blank)   -->
+    <xsl:if test="@ref">
+        <xsl:text>\space(</xsl:text>
+        <xsl:apply-templates select="." mode="proof-xref-theorem"/>
+        <xsl:text>)\space</xsl:text>
+    </xsl:if>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates/>
     <xsl:text>\end{</xsl:text>
@@ -10614,7 +10621,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="xref" mode="latex-page-number">
+<xsl:template match="xref|&PROOF-LIKE;" mode="latex-page-number">
     <xsl:param name="target"/>
 
     <xsl:choose>
