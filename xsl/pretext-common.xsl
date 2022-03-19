@@ -8705,7 +8705,7 @@ Book (with parts), "section" at level 3
 <!--   global:      5.2                  -->
 <!--   type-global: Theorem 5.2          -->
 <!--   title:       Smith's Theorem      -->
-<xsl:template match="xref" mode="get-text-style">
+<xsl:template match="xref|&PROOF-LIKE;" mode="get-text-style">
     <xsl:choose>
         <!-- local specification is override of global  -->
         <!-- new @text attribute first, and if so, bail -->
@@ -8815,7 +8815,7 @@ Book (with parts), "section" at level 3
 <!-- Bibliography items return a naked number,      -->
 <!-- caller is responsible for adjusting text with  -->
 <!-- brackets prior to shipping to link manufacture -->
-<xsl:template match="xref" mode="xref-text">
+<xsl:template match="xref|&PROOF-LIKE;" mode="xref-text">
     <xsl:param name="target" />
     <xsl:param name="text-style" />
     <xsl:param name="custom-text" select="''" />
@@ -9070,7 +9070,7 @@ Book (with parts), "section" at level 3
 <!-- inside of display mathematics *and* it does not play nicely   -->
 <!-- with WeBWorK's PGML, so this template handles the necessary   -->
 <!-- exception for "xref" immediately inside of an "mrow".         -->
-<xsl:template match="xref" mode="xref-text-separator">
+<xsl:template match="xref|&PROOF-LIKE;" mode="xref-text-separator">
     <xsl:choose>
         <xsl:when test="parent::mrow">
             <xsl:text> </xsl:text>
@@ -9084,7 +9084,51 @@ Book (with parts), "section" at level 3
 <!-- This is a hook to add page numbers to the end of the    -->
 <!-- xref text in LaTeX output via a \pageref{}, optionally. -->
 <!-- Default for this hook is to do nothing.                 -->
-<xsl:template match="xref" mode="latex-page-number"/>
+<xsl:template match="xref|&PROOF-LIKE;" mode="latex-page-number"/>
+
+<!-- A THEOREM-LIKE can have a *detached* PROOF-LIKE (which is not "inner" nor  -->
+<!-- "solution") that has @ref attribute which points to the THEOREM-LIKE being -->
+<!-- proved.  This abstract template will provide the link/knowl/whatever.      -->
+<!-- It is up to the employing conversion to place and format the result.       -->
+<xsl:template match="&PROOF-LIKE;" mode="proof-xref-theorem">
+    <xsl:choose>
+        <!-- produce nothing when there is not even a @ref -->
+        <xsl:when test="not(@ref)"/>
+        <!-- only for "detached" proofs -->
+        <xsl:when test="&INNER-PROOF-FILTER;"/>
+        <xsl:when test="&SOLUTION-PROOF-FILTER;"/>
+        <!-- now really get into it analyzing target -->
+        <xsl:otherwise>
+            <xsl:variable name="target" select="id(@ref)"/>
+            <xsl:choose>
+                <xsl:when test="not($target)">
+                    <xsl:message>PTX:ERROR:   a cross-reference ("ref") from a "<xsl:value-of select="local-name()"/>" uses a reference [<xsl:value-of select="@ref"/>] that does not point to any target.  Maybe the @ref and @xml:id values do not match?</xsl:message>
+                    <xsl:apply-templates select="." mode="location-report"/>
+                </xsl:when>
+                <xsl:when test="not($target[&THEOREM-FILTER;])">
+                    <xsl:message>PTX:ERROR:   a cross-reference ("ref") from a "<xsl:value-of select="local-name()"/>" uses a reference [<xsl:value-of select="@ref"/>] that does not point to an element that is THEOREM-LIKE (target is a "<xsl:value-of select="local-name($target)"/>" element).</xsl:message>
+                    <xsl:apply-templates select="." mode="location-report"/>
+                </xsl:when>
+                <!-- have a good target finally, do it -->
+                <xsl:otherwise>
+                    <xsl:variable name="text-style">
+                        <xsl:apply-templates select="." mode="get-text-style" />
+                    </xsl:variable>
+                    <xsl:apply-templates select="." mode="xref-link">
+                        <xsl:with-param name="target" select="$target" />
+                        <xsl:with-param name="content">
+                            <xsl:apply-templates select="." mode="xref-text" >
+                                <xsl:with-param name="target" select="$target" />
+                                <xsl:with-param name="text-style" select="$text-style" />
+                                <!-- $custom-text is not an option -->
+                            </xsl:apply-templates>
+                        </xsl:with-param>
+                    </xsl:apply-templates>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 
 <!-- ###################### -->
