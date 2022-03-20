@@ -96,6 +96,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Isolate computation of numbers -->
 <xsl:import href="./pretext-numbers.xsl"/>
 
+<!-- The "representations" pass is used to make derived versions of      -->
+<!-- authored exercises which can be rendered dynamically.  For example, -->
+<!-- a multiple choice question.  These representations can be "static"  -->
+<!-- and so meant for use in PDF or braille output, or "dynamic", which  -->
+<!-- means anyplace Javascript (or similar) is available.  Right now     -->
+<!-- that is just HTML (and not output built on HTML, such as EPUB).     -->
+<!--                                                                     -->
+<!-- Notes:                                                              -->
+<!--   * We default here to "static".  HTML production will override     -->
+<!--     to "dynamic" and then any importing stylesheet will need to     -->
+<!--     override back to "static".                                      -->
+<!--   * If testing, the pretext-enhanced-source.xsl  stylesheet will    -->
+<!--     need a stringparam override to view and test dynamic versions.  -->
+<xsl:variable name="exercise-style" select="'static'"/>
+
 <!-- Timing debugging -->
 <xsl:param name="debug.assembly.time" select="'no'"/>
 <xsl:variable name="time-assembly" select="$debug.assembly.time = 'yes'"/>
@@ -141,6 +156,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="parent-struct" select="$parent-struct"/>
             <xsl:with-param name="level" select="$level"/>
         </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<xsl:template match="node()|@*" mode="representations">
+    <xsl:param name="fn-subtree-number"/>
+    <xsl:param name="fn-subtree"/>
+
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="representations"/>
     </xsl:copy>
 </xsl:template>
 
@@ -217,13 +241,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="augment" select="exsl:node-set($augment-rtf)"/>
 
+<xsl:variable name="representations-rtf">
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: start representations</xsl:message>
+    </xsl:if>
+    <!--  -->
+    <xsl:apply-templates select="$augment" mode="representations"/>
+    <!--  -->
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: end representations</xsl:message>
+    </xsl:if>
+    <!--  -->
+</xsl:variable>
+<xsl:variable name="representations" select="exsl:node-set($representations-rtf)"/>
+
 <!-- The main "pretext" element only has two possible children      -->
 <!-- One is "docinfo", the other is "book", "article", etc.         -->
 <!-- This is of interest by itself, or the root of content searches -->
 <!-- And docinfo is the other child, these help prevent searching   -->
 <!-- the wrong half.                                                -->
 <!-- NB: source repair below converts a /mathbook to a /pretext     -->
-<xsl:variable name="root" select="$augment/pretext"/>
+<xsl:variable name="root" select="$representations/pretext"/>
 <xsl:variable name="docinfo" select="$root/docinfo"/>
 <xsl:variable name="document-root" select="$root/*[not(self::docinfo)]"/>
 
