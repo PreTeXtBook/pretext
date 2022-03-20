@@ -93,8 +93,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- relevant.  (This is repeated verbatim in the other            -->
 <!-- stylesheet).                                                  -->
 
+
 <!-- Isolate computation of numbers -->
 <xsl:import href="./pretext-numbers.xsl"/>
+<!-- Isolate conversion of Runestone/interactive to PreTeXt/static -->
+<xsl:import href="./pretext-runestone-static.xsl"/>
 
 <!-- The "representations" pass is used to make derived versions of      -->
 <!-- authored exercises which can be rendered dynamically.  For example, -->
@@ -718,6 +721,53 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- ############### -->
+<!-- Representations -->
+<!-- ############### -->
+
+<!-- Build multiple representations of exercises that are produced        -->
+<!-- in static and dynamic (HTML) versions.  Generally these templates    -->
+<!-- are parameterized by the $exercise-style variable/parameter.         -->
+<!--                                                                      -->
+<!-- A "static" version should be entirely in the style of a "regular"    -->
+<!-- PreTeXt exercise, having a statement|hint|answer|solution structure. -->
+<!-- Then it can be leveraged through all the infrastructure for things   -->
+<!-- like solutions manuals and non-capable output formats.               -->
+<!--                                                                      -->
+<!-- A "dynamic" version should still have statement|hint|answer|solution -->
+<!-- structure, but the "statement" should have copies of enough of the   -->
+<!-- authored source for an interactive version to be produced later.     -->
+
+<xsl:template match="exercise[choices]" mode="representations">
+    <!-- always preserve "exercise" container, with metadata -->
+    <!-- given as attributes and elements (title, idx)       -->
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="representations"/>
+        <xsl:apply-templates select="title" mode="representations"/>
+        <xsl:apply-templates select="idx" mode="representations"/>
+        <xsl:choose>
+            <!-- make a static version, in a PreTeXt   -->
+            <!-- statement|hint|answer|solution style  -->
+            <!-- for use naturally by most conversions -->
+            <xsl:when test="$exercise-style = 'static'">
+                <xsl:apply-templates select="." mode="runestone-to-static"/>
+            </xsl:when>
+            <!-- duplicate necessary bits, again in a PreTeXt          -->
+            <!-- statement|hint|answer|solution style, but let the     -->
+            <!-- conversion make the actual code for a dynamic version -->
+            <xsl:when test="$exercise-style = 'dynamic'">
+                <statement>
+                    <xsl:apply-templates select="statement" mode="representations"/>
+                    <xsl:apply-templates select="choices" mode="representations"/>
+                </statement>
+                <!-- Only hints are allowed/relevant since an interactive -->
+                <!-- version will reveal an answer eventually and provide -->
+                <!-- "feedbacK' that amounts to a solution                -->
+                <xsl:apply-templates select="hint" mode="representations"/>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:copy>
+</xsl:template>
 
 <!-- ######## -->
 <!-- Warnings -->
