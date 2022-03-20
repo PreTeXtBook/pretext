@@ -43,6 +43,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Variables -->
 <!-- ######### -->
 
+<!-- This variable controls representations of interactive exercises   -->
+<!-- built in  pretext-assembly.xsl.  The imported  pretext-html.xsl   -->
+<!-- stylesheet sets it to "dynamic".  But for this stylesheet we want -->
+<!-- to utilize the "standard" PreTeXt exercise versions built with    -->
+<!-- "static".  See both  pretext-assembly.xsl  and  pretext-html.xsl  -->
+<!-- for more discussion. -->
+<xsl:variable name="exercise-style" select="'static'"/>
+
 <!-- iPython files as output -->
 <xsl:variable name="file-extension" select="'.ipynb'" />
 

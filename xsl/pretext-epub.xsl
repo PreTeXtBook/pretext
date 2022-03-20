@@ -38,6 +38,14 @@
 <!-- This may have no practical effect -->
 <xsl:output method="xml" encoding="UTF-8" doctype-system="about:legacy-compat" indent="no" />
 
+<!-- This variable controls representations of interactive exercises   -->
+<!-- built in  pretext-assembly.xsl.  The imported  pretext-html.xsl   -->
+<!-- stylesheet sets it to "dynamic".  But for this stylesheet we want -->
+<!-- to utilize the "standard" PreTeXt exercise versions built with    -->
+<!-- "static".  See both  pretext-assembly.xsl  and  pretext-html.xsl  -->
+<!-- for more discussion. -->
+<xsl:variable name="exercise-style" select="'static'"/>
+
 <!-- Content will go into EPUB directory           -->
 <!-- package.opf is main metadata file             -->
 <!-- (META-INF/container.xml will point to it)     -->

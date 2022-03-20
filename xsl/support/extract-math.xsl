@@ -56,6 +56,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Output an HTML for MathJax to consume page -->
 <xsl:output method="xml" encoding="UTF-8" omit-xml-declaration="yes" doctype-system="about:legacy-compat"/>
 
+<!-- This variable controls representations of interactive exercises   -->
+<!-- built in  pretext-assembly.xsl.  The imported  pretext-html.xsl   -->
+<!-- stylesheet sets it to "dynamic".  But for this stylesheet we want -->
+<!-- to utilize the "standard" PreTeXt exercise versions built with    -->
+<!-- "static".  See both  pretext-assembly.xsl  and  pretext-html.xsl  -->
+<!-- for more discussion. -->
+<xsl:variable name="exercise-style" select="'static'"/>
+
 <!-- This stylesheet is parameterized by how trailing punctuation       -->
 <!-- is handled by math elements.  An  xsl:param  immediately overrides -->
 <!-- the global cross-stylesheet variable, to counteract how the HTML   -->

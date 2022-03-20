@@ -48,6 +48,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: this will import -assembly and -common stylesheets -->
 <xsl:import href="./pretext-html.xsl" />
 
+<!-- This variable controls representations of interactive exercises   -->
+<!-- built in  pretext-assembly.xsl.  The imported  pretext-html.xsl   -->
+<!-- stylesheet sets it to "dynamic".  But for this stylesheet we want -->
+<!-- to utilize the "standard" PreTeXt exercise versions built with    -->
+<!-- "static".  See both  pretext-assembly.xsl  and  pretext-html.xsl  -->
+<!-- for more discussion. -->
+<xsl:variable name="exercise-style" select="'static'"/>
+
 <!-- Output (xsl:output) is controlled by an explicit exsl:document() call -->
 <!-- later, for better control over the header of the resulting file       -->
 

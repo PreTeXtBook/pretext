@@ -429,7 +429,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   - every multiple choice "exercise"                   -->
 <!--   - every "exercise" with an interactive "program"     -->
 <!-- Note, 2020-05-29: multiple choice not yet merged, markup is speculative -->
-<xsl:template match="exercise[parent::reading-questions]|exercise[choices]" mode="runestone-manifest">
+<xsl:template match="exercise[parent::reading-questions]|exercise[statement/choices]" mode="runestone-manifest">
     <question>
         <xsl:apply-templates select="." mode="runestone-manifest-label"/>
         <xsl:apply-templates select="." mode="exercise-components"/>
@@ -478,6 +478,61 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ########## -->
 <!-- Components -->
 <!-- ########## -->
+
+<!-- Multiple Choice -->
+
+<xsl:template match="exercise/statement[choices]" mode="runestone-to-interactive">
+    <xsl:variable name="the-id">
+        <xsl:text>mc-</xsl:text>
+        <xsl:apply-templates select="parent::exercise" mode="html-id"/>
+    </xsl:variable>
+    <div class="runestone alert alert-warning">
+        <!-- ul can have multiple answer attribute -->
+        <ul data-component="multiplechoice" data-multipleanswers="false">
+            <xsl:attribute name="id">
+                <xsl:value-of select="$the-id"/>
+            </xsl:attribute>
+            <!-- Q: the statement is not a list item, but appears *inside* the list? -->
+            <!-- overall statement, not per-choice -->
+            <xsl:apply-templates select="statement"/>
+            <xsl:apply-templates select="choices/choice">
+                <xsl:with-param name="the-id" select="$the-id"/>
+            </xsl:apply-templates>
+        </ul>
+    </div>
+</xsl:template>
+
+<xsl:template match="exercise/statement/choices/choice">
+    <xsl:param name="the-id"/>
+
+    <!-- id for each "choice"                  -->
+    <!-- with common base, then a, b, c suffix -->
+    <!-- Used *twice* on adjacent "li"?        -->
+    <xsl:variable name="choice-id">
+        <xsl:value-of select="$the-id"/>
+        <xsl:text>_opt_</xsl:text>
+        <!-- will count preceding "choice" only -->
+        <xsl:number format="a"/>
+    </xsl:variable>
+    <li data-component="answer">
+        <xsl:attribute name="id">
+            <xsl:value-of select="$choice-id"/>
+        </xsl:attribute>
+        <!-- mark correct answers (empty attribute value) -->
+        <xsl:if test="@correct = 'yes'">
+            <xsl:attribute name="data-correct"/>
+        </xsl:if>
+        <!-- per-choice statement -->
+        <xsl:apply-templates select="statement"/>
+    </li>
+    <li data-component="feedback">
+        <xsl:attribute name="id">
+            <xsl:value-of select="$choice-id"/>
+        </xsl:attribute>
+        <!-- per-choice explanation -->
+        <xsl:apply-templates select="feedback"/>
+    </li>
+</xsl:template>
 
 <!-- YouTube Video -->
 <!-- When hosted on a Runestone server, we use a different embedding  -->
