@@ -534,6 +534,53 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </li>
 </xsl:template>
 
+<!-- Parsons Problem -->
+
+<xsl:template match="exercise/statement[blocks]" mode="runestone-to-interactive">
+    <div class="runestone" style="max-width: none;">
+        <div data-component="parsons" class="alert alert-warning parsons">
+            <xsl:attribute name="id">
+                <xsl:apply-templates select="parent::exercise" mode="html-id"/>
+            </xsl:attribute>
+            <div class="parsons_question parsons-text" >
+                <!-- the prompt -->
+                <xsl:apply-templates select="statement"/>
+            </div>
+            <pre class="parsonsblocks" data-language="natural" data-question_label="X.Y.Z" style="visibility: hidden;">
+                <!-- author opts-in to adaptive problems -->
+                <xsl:if test="@adaptive = 'yes'">
+                    <xsl:attribute name="data-adaptive">
+                        <xsl:text>true</xsl:text>
+                    </xsl:attribute>
+                </xsl:if>
+                <!-- the blocks -->
+                <xsl:apply-templates select="blocks/block"/>
+            </pre>
+        </div>
+    </div>
+</xsl:template>
+
+<xsl:template match="exercise/statement/blocks/block">
+    <xsl:choose>
+        <xsl:when test="choice">
+            <!-- put correct choice first -->
+            <xsl:apply-templates select="choice[@correct = 'yes']"/>
+            <xsl:text>&#xa;---&#xa;</xsl:text>
+            <xsl:apply-templates select="choice[not(@correct = 'yes')]"/>
+            <xsl:text> #paired</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates />
+            <xsl:if test="@correct = 'no'">
+                <xsl:text> #distractor</xsl:text>
+            </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="following-sibling::block">
+        <xsl:text>&#xa;---&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 <!-- YouTube Video -->
 <!-- When hosted on a Runestone server, we use a different embedding  -->
 <!-- for a YouTube video (only), which allows using a YouTube API for -->

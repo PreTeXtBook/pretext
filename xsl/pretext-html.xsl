@@ -4605,31 +4605,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </div>
         </xsl:when>
         <!-- Parsons Problem, powered by Runestone Services -->
-        <xsl:when test="blocks">
-            <div class="runestone" style="max-width: none;">
-                <div data-component="parsons" class="alert alert-warning parsons">
-                    <xsl:attribute name="id">
-                        <xsl:apply-templates select="." mode="html-id"/>
-                    </xsl:attribute>
-
-                    <div class="parsons_question parsons-text" >
-                        <!-- the prompt -->
-                        <xsl:apply-templates select="statement"/>
-                        <!-- <xsl:text>FOO</xsl:text> -->
-                    </div>
-
-                    <pre class="parsonsblocks" data-language="natural" data-question_label="X.Y.Z" style="visibility: hidden;">
-                        <!-- author opts-in to adaptive problems -->
-                        <xsl:if test="@adaptive = 'yes'">
-                            <xsl:attribute name="data-adaptive">
-                                <xsl:text>true</xsl:text>
-                            </xsl:attribute>
-                        </xsl:if>
-
-                        <!-- the blocks -->
-                        <xsl:apply-templates select="blocks/block" mode="parson-block"/>
-                    </pre>
-                </div>
+        <xsl:when test="statement/blocks">
+            <xsl:if test="$b-has-statement">
+                <xsl:apply-templates select="statement" mode="runestone-to-interactive"/>
+            </xsl:if>
+            <div class="solutions">
+                <xsl:if test="$b-has-hint">
+                    <xsl:apply-templates select="hint">
+                        <xsl:with-param name="b-original" select="$b-original" />
+                        <xsl:with-param name="block-type" select="$block-type"/>
+                    </xsl:apply-templates>
+                </xsl:if>
             </div>
         </xsl:when>
         <!-- now, structured versus unstructured -->
@@ -4725,27 +4711,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </xsl:otherwise>
     </xsl:choose>
-</xsl:template>
-
-<!-- !!!!!!!!!!!!!!  MOVE ME !!!!!!!!!!!!!!!!!!!!! -->
-<xsl:template match="exercise/blocks/block" mode="parson-block">
-    <xsl:choose>
-        <xsl:when test="choice">
-            <xsl:apply-templates select="choice[1]"/>
-            <xsl:text>&#xa;---&#xa;</xsl:text>
-            <xsl:apply-templates select="choice[2]"/>
-            <xsl:text> #paired</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates />
-            <xsl:if test="@correct = 'no'">
-                <xsl:text> #distractor</xsl:text>
-            </xsl:if>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:if test="following-sibling::block">
-        <xsl:text>&#xa;---&#xa;</xsl:text>
-    </xsl:if>
 </xsl:template>
 
 <!-- All of the items matching the previous template (except perhaps   -->
