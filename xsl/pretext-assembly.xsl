@@ -769,6 +769,37 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<xsl:template match="exercise[blocks]" mode="representations">
+    <!-- always preserve "exercise" container, with metadata -->
+    <!-- given as attributes and elements (title, idx)       -->
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="representations"/>
+        <xsl:apply-templates select="title" mode="representations"/>
+        <xsl:apply-templates select="idx" mode="representations"/>
+        <xsl:choose>
+            <!-- make a static version, in a PreTeXt   -->
+            <!-- statement|hint|answer|solution style  -->
+            <!-- for use naturally by most conversions -->
+            <xsl:when test="$exercise-style = 'static'">
+                <xsl:apply-templates select="." mode="runestone-to-static"/>
+            </xsl:when>
+            <!-- duplicate necessary bits, again in a PreTeXt          -->
+            <!-- statement|hint|answer|solution style, but let the     -->
+            <!-- conversion make the actual code for a dynamic version -->
+            <xsl:when test="$exercise-style = 'dynamic'">
+                <statement>
+                    <xsl:apply-templates select="statement" mode="representations"/>
+                    <xsl:apply-templates select="blocks" mode="representations"/>
+                </statement>
+                <!-- Only hints are allowed/relevant since an interactive -->
+                <!-- version will reveal an answer eventually and provide -->
+                <!-- "feedbacK' that amounts to a solution                -->
+                <xsl:apply-templates select="hint" mode="representations"/>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:copy>
+</xsl:template>
+
 <!-- ######## -->
 <!-- Warnings -->
 <!-- ######## -->

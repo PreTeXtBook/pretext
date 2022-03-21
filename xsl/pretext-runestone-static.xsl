@@ -89,4 +89,55 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </solution>
 </xsl:template>
 
+<xsl:template match="exercise[blocks]" mode="runestone-to-static">
+    <statement>
+        <xsl:copy-of select="statement/node()"/>
+        <!-- blocks, in author-defined order, via @order attribute -->
+        <p><ul>
+            <xsl:for-each select="blocks/block">
+                <xsl:sort select="@order"/>
+                <li>
+                    <xsl:choose>
+                        <xsl:when test="choice">
+                            <!-- seperate alternatives with "Or" -->
+                            <xsl:for-each select="choice">
+                                <xsl:copy-of select="node()"/>
+                                <xsl:if test="following-sibling::choice">
+                                    <p>Or,</p>
+                                </xsl:if>
+                            </xsl:for-each>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:copy-of select="node()"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </li>
+            </xsl:for-each>
+        </ul></p>
+    </statement>
+    <solution>
+        <p><ul>
+            <xsl:for-each select="blocks/block">
+                <xsl:if test="not(@correct = 'no')">
+                    <li>
+                        <xsl:choose>
+                            <xsl:when test="choice">
+                                <!-- seperate alternatives with "Or" -->
+                                <xsl:for-each select="choice">
+                                    <xsl:if test="@correct = 'yes'">
+                                        <xsl:copy-of select="node()"/>
+                                    </xsl:if>
+                                </xsl:for-each>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:copy-of select="node()"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </li>
+                </xsl:if>
+            </xsl:for-each>
+        </ul></p>
+    </solution>
+</xsl:template>
+
 </xsl:stylesheet>
