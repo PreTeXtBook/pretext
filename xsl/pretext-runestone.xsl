@@ -581,6 +581,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- Active Code -->
+
+<xsl:template match="exercise/statement[statement and program]|project/statement[statement and program]|activity/statement[statement and program]|exploration/statement[statement and program]|investigation/statement[statement and program]" mode="runestone-to-interactive">
+    <xsl:apply-templates select="program" mode="runestone-activecode">
+        <xsl:with-param name="statement-content">
+            <xsl:apply-templates select="statement">
+                <!-- <xsl:with-param name="b-original" select="$b-original" /> -->
+                <!-- <xsl:with-param name="block-type" select="$block-type"/> -->
+            </xsl:apply-templates>
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
 <!-- YouTube Video -->
 <!-- When hosted on a Runestone server, we use a different embedding  -->
 <!-- for a YouTube video (only), which allows using a YouTube API for -->
@@ -600,6 +613,122 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
          data-video-height="{$height}" data-video-width="{$width}"
          data-video-videoid="{@youtube}" data-video-divid="{$hid}"
          data-video-start="0" data-video-end="-1"/>
+</xsl:template>
+
+<!-- ########### -->
+<!-- Active Code -->
+<!-- ########### -->
+
+<!-- Runestone has support for various languages.  Some  -->
+<!-- are "in-browser" while others are backed by "real"  -->
+<!-- compilers as part of a Runestone server.  For an    -->
+<!-- exercise, we pass in some lead-in text, which is    -->
+<!-- the directions for using the ActiveCode component.  -->
+<!-- This template does the best job possible:           -->
+<!--   1.  Unsupported language, static rendering.       -->
+<!--   2.  Supported in-browser, always interactive.     -->
+<!--   3.  On a Runestone server, always interactive.    -->
+<xsl:template match="program" mode="runestone-activecode">
+    <xsl:param name="statement-content" select="''"/>
+
+    <xsl:variable name="active-language">
+        <xsl:apply-templates select="." mode="active-language"/>
+    </xsl:variable>
+    <xsl:variable name="hosting">
+        <xsl:apply-templates select="." mode="activecode-host"/>
+    </xsl:variable>
+    <xsl:variable name="hid">
+        <xsl:apply-templates select="." mode="html-id"/>
+    </xsl:variable>
+    <!-- assumes we get here from inside an "exercise" -->
+    <xsl:variable name="num">
+        <xsl:apply-templates select="ancestor::exercise" mode="number"/>
+    </xsl:variable>
+    <xsl:choose>
+        <!-- unsupported on Runestone, period -->
+        <xsl:when test="$active-language = ''">
+            <xsl:copy-of select="$statement-content"/>
+            <xsl:apply-templates select="." mode="code-inclusion"/>
+        </xsl:when>
+        <!-- needs server, and we aren't there -->
+        <xsl:when test="($hosting = 'jobeserver') and not($b-host-runestone)">
+            <xsl:copy-of select="$statement-content"/>
+            <xsl:apply-templates select="." mode="code-inclusion"/>
+        </xsl:when>
+        <!-- this is the logical negation of the previous, so could be "otherwise" -->
+        <xsl:when test="($hosting = 'browser') or $b-host-runestone">
+            <div class="runestone explainer ac_section alert alert-warning">
+                <div data-component="activecode">
+                    <xsl:attribute name="id">
+                        <xsl:value-of select="$hid"/>
+                    </xsl:attribute>
+                    <!-- add some lead-in text to the window -->
+                    <xsl:if test="not($statement-content = '')">
+                        <div class="ac_question col-md-12">
+                            <xsl:attribute name="id">
+                                <xsl:value-of select="concat($hid, '_question')"/>
+                            </xsl:attribute>
+                            <xsl:copy-of select="$statement-content"/>
+                        </div>
+                    </xsl:if>
+                    <textarea data-lang="{$active-language}" data-timelimit="25000" data-audio="" data-coach="true" style="visibility: hidden;">
+                        <xsl:attribute name="id">
+                            <xsl:value-of select="concat($hid, '_editor')"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="data-question_label">
+                            <xsl:value-of select="$num"/>
+                        </xsl:attribute>
+                        <!-- Code Lens only for certain languages -->
+                        <xsl:attribute name="data-codelens">
+                            <xsl:choose>
+                                <xsl:when test="($active-language = 'python') or ($active-language = 'python2') or ($active-language = 'python3')">
+                                    <xsl:text>true</xsl:text>
+                                </xsl:when>
+                                <xsl:when test="($active-language = 'c') or ($active-language = 'cpp') or ($active-language = 'java')">
+                                    <xsl:text>true</xsl:text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:text>false</xsl:text>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:attribute>
+                        <!-- SQL (only) needs an attribute so it can find some code -->
+                        <xsl:if test="$active-language = 'sql'">
+                            <xsl:attribute name="data-wasm">
+                                <xsl:text>/_static</xsl:text>
+                            </xsl:attribute>
+                        </xsl:if>
+                        <xsl:call-template name="sanitize-text">
+                            <xsl:with-param name="text" select="input" />
+                        </xsl:call-template>
+                    </textarea>
+                </div>
+            </div>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Some Runestone languages are supported within a browser,      -->
+<!-- so can be used as part of Runestone for All, while others     -->
+<!-- require a JOBE server on the Runestone server.  This template -->
+<!-- simply returns the necessary hosting capability.              -->
+<xsl:template match="program" mode="activecode-host">
+    <xsl:variable name="language">
+        <xsl:apply-templates select="." mode="active-language"/>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$language = 'python'">      <xsl:text>browser</xsl:text></xsl:when>
+        <xsl:when test="$language = 'javascript'">  <xsl:text>browser</xsl:text></xsl:when>
+        <xsl:when test="$language = 'html'">        <xsl:text>browser</xsl:text></xsl:when>
+        <xsl:when test="$language = 'sql'">         <xsl:text>browser</xsl:text></xsl:when>
+        <xsl:when test="$language = 'c'">           <xsl:text>jobeserver</xsl:text></xsl:when>
+        <xsl:when test="$language = 'cpp'">         <xsl:text>jobeserver</xsl:text></xsl:when>
+        <xsl:when test="$language = 'java'">        <xsl:text>jobeserver</xsl:text></xsl:when>
+        <xsl:when test="$language = 'python2'">     <xsl:text>jobeserver</xsl:text></xsl:when>
+        <xsl:when test="$language = 'python3'">     <xsl:text>jobeserver</xsl:text></xsl:when>
+        <xsl:when test="$language = 'octave'">      <xsl:text>jobeserver</xsl:text></xsl:when>
+        <xsl:otherwise/>
+    </xsl:choose>
 </xsl:template>
 
 </xsl:stylesheet>
