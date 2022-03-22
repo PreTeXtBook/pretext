@@ -9359,15 +9359,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: maybe ship sanitized "input" to each modal template? -->
 <xsl:template match="program[not(ancestor::sidebyside)]|console[not(ancestor::sidebyside)]">
     <xsl:choose>
-        <!-- 100% historical, replace with a "web" platform option       -->
-        <!-- TODO: once "exercise" conditions earlier on the platform,   -->
-        <!-- then maybe the parts of this "choose" will migrate to other -->
-        <!-- places and this will be more straightforward.               -->
-        <xsl:when test="self::program and not($b-host-runestone) and (@interactive='pythontutor')">
+        <!-- OBSOLETE: remove when deprecating PythonTutor -->
+        <xsl:when test="self::program and (@interactive='pythontutor')">
             <xsl:apply-templates select="." mode="python-tutor"/>
         </xsl:when>
-        <!-- if elected as interactive and on Runestone -->
-        <xsl:when test="self::program and (@interactive='yes') and $b-host-runestone">
+        <!-- if  a program is elected as interactive, then     -->
+        <!-- let Runestone do the best it can via the template -->
+        <xsl:when test="self::program and (@interactive='activecode')">
             <xsl:apply-templates select="." mode="runestone-activecode"/>
         </xsl:when>
         <!-- fallback is a less-capable static version, which -->
@@ -9377,7 +9375,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="layout-parameters" />
             </xsl:variable>
             <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
-            <!-- div is constraint/positioning for contained image -->
+            <!-- div is constraint/positioning for contained program/console -->
             <div class="code-box">
                 <xsl:attribute name="style">
                     <xsl:text>width: </xsl:text>
@@ -9398,16 +9396,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="program[ancestor::sidebyside]|console[ancestor::sidebyside]">
     <xsl:choose>
-        <!-- 100% historical, replace with a "web" platform option, see note above -->
-        <xsl:when test="self::program and not($b-host-runestone) and (@interactive='pythontutor')">
+        <!-- OBSOLETE: remove when deprecating PythonTutor -->
+        <xsl:when test="self::program and (@interactive='pythontutor')">
             <xsl:apply-templates select="." mode="python-tutor"/>
         </xsl:when>
-        <!-- if elected as interactive and on Runestone -->
-        <xsl:when test="self::program and (@interactive='yes') and $b-host-runestone">
+        <!-- if  a program is elected as interactive, then     -->
+        <!-- let Runestone do the best it can via the template -->
+        <xsl:when test="self::program and (@interactive='activecode')">
             <xsl:apply-templates select="." mode="runestone-activecode"/>
         </xsl:when>
         <!-- fallback is a less-capable static version, which -->
         <!-- might actually be desired for many formats       -->
+        <!-- constrained by side-by-side boxes                -->
         <xsl:otherwise>
             <xsl:apply-templates select="." mode="code-inclusion"/>
         </xsl:otherwise>
