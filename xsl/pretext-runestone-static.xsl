@@ -140,4 +140,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </solution>
 </xsl:template>
 
+<!-- Active Code -->
+
+<xsl:template match="exercise[statement and program]|project[statement and program]|activity[statement and program]|exploration[statement and program]|investigation[statement and program]" mode="runestone-to-static">
+    <statement>
+        <!-- duplicate the authored prompt/statement -->
+        <xsl:copy-of select="statement/node()"/>
+        <!-- bring up the program as part of the problem statement -->
+        <xsl:copy-of select="program"/>
+    </statement>
+    <xsl:copy-of select="hint|answer|solution"/>
+</xsl:template>
+
 </xsl:stylesheet>

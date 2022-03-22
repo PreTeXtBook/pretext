@@ -800,6 +800,39 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- Active Code -->
+
+<!-- "exercise" and PROJECT-LIKE -->
+<xsl:template match="exercise[statement and program]|project[statement and program]|activity[statement and program]|exploration[statement and program]|investigation[statement and program]" mode="representations">
+    <!-- always preserve "exercise" container, with metadata -->
+    <!-- given as attributes and elements (title, idx)       -->
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="representations"/>
+        <xsl:apply-templates select="title" mode="representations"/>
+        <xsl:apply-templates select="idx" mode="representations"/>
+        <xsl:choose>
+            <!-- make a static version, in a PreTeXt   -->
+            <!-- statement|hint|answer|solution style  -->
+            <!-- for use naturally by most conversions -->
+            <xsl:when test="$exercise-style = 'static'">
+                <xsl:apply-templates select="." mode="runestone-to-static"/>
+            </xsl:when>
+            <!-- duplicate necessary bits, again in a PreTeXt          -->
+            <!-- statement|hint|answer|solution style, but let the     -->
+            <!-- conversion make the actual code for a dynamic version -->
+            <xsl:when test="$exercise-style = 'dynamic'">
+                <statement>
+                    <xsl:apply-templates select="statement" mode="representations"/>
+                    <xsl:apply-templates select="program" mode="representations"/>
+                </statement>
+                <!-- Problem design does not imply any part of a solution -->
+                <xsl:apply-templates select="hint|answer|solution" mode="representations"/>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:copy>
+</xsl:template>
+
+
 <!-- ######## -->
 <!-- Warnings -->
 <!-- ######## -->
