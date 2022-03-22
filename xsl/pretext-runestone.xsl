@@ -35,10 +35,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 >
 
 <!-- Not documented, for development use only -->
-<xsl:param name="runestone.dev" select="''"/>
-<xsl:variable name="runestone-dev" select="$runestone.dev = 'yes'"/>
-
-<!-- Not documented, for development use only -->
 <xsl:param name="debug.rs.services.file" select="''"/>
 
 
@@ -75,7 +71,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- 'false' - local viewing, no server,                 -->
     <!--           just Runestone Services, so dummy values  -->
     <xsl:choose>
-        <!-- Hosted on Runestone server -->
+        <!-- Runestone Server build -->
         <xsl:when test="$b-host-runestone">
             <script type="text/javascript">
                 <xsl:text>&#xa;</xsl:text>
@@ -182,11 +178,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>}&#xa;</xsl:text>
             </style>
         </xsl:when>
+        <!-- Runestone for All build -->
         <!-- Hosted without a Runestone Server, just using Javascript -->
         <!-- NB: condition on problems that benefit/need this?        -->
-        <!-- 2022-01-12: not ready for prime-time, so must            -->
-        <!-- flip $runestone-dev to turn this on                      -->
-        <xsl:when test="not($b-host-runestone) and $runestone-dev">
+        <xsl:when test="not($b-host-runestone)">
             <xsl:comment>** eBookCongig is necessary to configure interactive       **</xsl:comment><xsl:text>&#xa;</xsl:text>
             <xsl:comment>** Runestone components to run locally in reader's browser **</xsl:comment><xsl:text>&#xa;</xsl:text>
             <xsl:comment>** No external communication:                              **</xsl:comment><xsl:text>&#xa;</xsl:text>
@@ -256,24 +251,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- manner as at Runestone Academy.                                   -->
     <xsl:variable name="runestone-cdn">
         <xsl:choose>
-            <xsl:when test="$runestone-dev">
+            <xsl:when test="$b-host-runestone">
+                <xsl:text>_static/</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
                 <xsl:text>https://runestone.academy/cdn/runestone/</xsl:text>
                 <xsl:value-of select="$runestone-services/all/version"/>
                 <xsl:text>/</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>_static/</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
 
     <!-- When building for a Runestone server or when testing -->
     <!-- Runestone for All, the $runestone-cdn will point to  -->
-    <!-- the right place for the necessary JS.  When the      -->
-    <!-- $runestone-dev switch becomes always true, then the  -->
-    <!-- enveloping conditional can be removed.               -->
-    <!-- NBL: Indentation expects this change -->
-    <xsl:if test="$b-host-runestone or $runestone-dev">
+    <!-- the right place for the necessary JS.                -->
     <xsl:comment>*** Runestone Services ***</xsl:comment>
     <xsl:text>&#xa;</xsl:text>
     <xsl:for-each select="$runestone-services/all/js/item">
@@ -292,7 +283,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
         </link>
     </xsl:for-each>
-    </xsl:if>
 </xsl:template>
 
 <!-- User Menu (aka Bust Menu)                    -->
