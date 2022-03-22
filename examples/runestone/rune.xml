@@ -36,20 +36,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <section>
         <title>ActiveCode</title>
 
-        <p>Python program listings are automatically made interactive when HTML is produced for Runestone.</p>
+        <p>Python programs are made interactive in HTML, on request.</p>
 
         <listing xml:id="program-activecode-python">
             <caption>An interactive Python program, using <pubtitle>Runestone</pubtitle></caption>
-            <program xml:id="python-hello-world" interactive='yes' language="python">
+            <program xml:id="python-hello-world" interactive='activecode' language="python">
                 <input>
                 print("Hello, World!")
                 </input>
             </program>
         </listing>
 
+        <p>A C program will only be interactive if hosted on a Runestone server.</p>
+
         <listing xml:id="program-activecode-c">
-            <caption>An interactive C program, using <pubtitle>Runestone</pubtitle></caption>
-            <program xml:id="c-hello-world" interactive='yes' language="c">
+            <caption>An C program, interactive on a <pubtitle>Runestone</pubtitle> server</caption>
+            <program xml:id="c-hello-world" interactive='activecode' language="c">
                 <input>
                 #include
 
@@ -61,9 +63,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </listing>
 
+        <p>A Java program will only be interactive if hosted on a Runestone server.</p>
+
         <listing xml:id="program-activecode-java">
-            <caption>An interactive Java program, using <pubtitle>Runestone</pubtitle></caption>
-            <program xml:id="java-hello-world" interactive='yes' language="java">
+            <caption>A Java program, interactive on a <pubtitle>Runestone</pubtitle> server</caption>
+            <program xml:id="java-hello-world" interactive='activecode' language="java">
                 <input>
                 import javax.swing.JFrame;  //Importing class JFrame
                 import javax.swing.JLabel;  //Importing class JLabel
@@ -81,16 +85,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </listing>
 
+        <p>Javascript programs are made interactive in HTML, on request.</p>
+
         <listing xml:id="program-activecode-javascript">
             <caption>An interactive JavaScript program, using <pubtitle>Runestone</pubtitle></caption>
-            <program xml:id="javascript-hello-world" interactive='yes' language="javascript">
+            <program xml:id="javascript-hello-world" interactive='activecode' language="javascript">
                 <input>
                 document.write('Hello, world!');
                 </input>
             </program>
         </listing>
 
-        <p>You do not need to make a <tag>program</tag> interactive, even on Runestone.</p>
+        <p>A <tag>program</tag> is not interactive, by default, no matter where it is hosted.</p>
 
         <listing xml:id="program-static-java">
             <caption>A static Java program</caption>
@@ -112,11 +118,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </listing>
 
-        <p>Octave is supported on Runestone.  Octave is meant to be a drop-in replacement for Matlab.  So in some places we use the language codes <c>matlab</c> and <c>octave</c> as synonyms, in particular for Runestone ActiveCode windows.</p>
+        <p>An Octave program will only be interactive if hosted on a Runestone server.  Octave is meant to be a drop-in replacement for Matlab.</p>
 
         <listing xml:id="program-activecode-octave">
             <caption>A simple Octave program</caption>
-            <program xml:id="octave-simple" interactive='yes' language="octave">
+            <program xml:id="octave-simple" interactive='activecode' language="octave">
                 <input>
                 x = 2 + 2
                 printf("%d\n", x)
@@ -124,12 +130,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </listing>
 
-        <p>An unsupported language might give a warning, but will be rendered static.</p>
-
+        <p>A language not supported by Runestone Services will be rendered static.</p>
 
         <listing xml:id="program-mistake-pascal">
             <caption>A Pascal program that cannot be interactive on Runestone</caption>
-            <program xml:id="pascal-mistake" interactive='yes' language="pascal">
+            <program xml:id="pascal-mistake" interactive='activecode' language="pascal">
                 <input>
                 program HelloWorld;
                 begin
@@ -152,6 +157,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <statement>
                 <p>An exercise might ask a reader to write a computer program, that would go here in the <tag>statement</tag>.  But you can also add a <tag>program</tag> element after a <tag>statement</tag>.  Here we place no code at all, but we do say we want it to be interactive.  The purpose is to make it a live coding environment for a version of your output that allows the reader to perhaps submit a solution.  The <tag>program</tag> element is necessary so you can specify a programming language.</p>
+
+                <p>In interactive formats, try creating and running a Python program below.  Use CodeLens to step through the program.</p>
             </statement>
             <program xml:id="coding-exercise-blank" language="python"/>
             <hint>We didn't really ask you to do anything.</hint>
@@ -170,20 +177,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 int main(void)
                 </input>
             </program>
-            <answer>We're not really sure.</answer>
+            <answer>
+                <p>We're not really sure.  But it would begin as follows:</p>
+                <program language="c">
+                    <input>
+                    #include
+
+                    int main(void)
+                    </input>
+                </program>
+            </answer>
         </exercise>
 
         <activity>
             <title>Activity Coding Exercise</title>
 
             <statement>
-                <p>Similar to above, but now as an <tag>activity</tag>.  This demonstrates the possibility to use any <q>project-like</q> block (<tag>project</tag>, <tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag>), but not in the case when structured with <tag>task</tag>.</p>
+                <p>Similar to above, but now as a complete Python program inside an <tag>activity</tag>.  This demonstrates the possibility to use any <q>project-like</q> block (<tag>project</tag>, <tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag>), but not in the case when structured with <tag>task</tag>.</p>
             </statement>
-            <program xml:id="coding-exercise-partial-two" language="c">
+            <program xml:id="coding-exercise-partial-two" language="python">
                 <input>
-                #include
-
-                int main(void)
+                for i in range(10):
+                    print(i)
                 </input>
             </program>
             <answer>We're still not really sure.</answer>
@@ -202,7 +217,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </input>
                 </program>
             </statement>
-            <answer>We're not really sure.</answer>
+            <solution>We're not really sure. Still.</solution>
         </exercise>
     </section>
 
@@ -221,6 +236,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <introduction>
             <p>This is a stub of a <tag>section</tag>, but it contains two <tag>subsection</tag> which each contain a PROJECT-LIKE item that includes a <tag>program</tag> element, and thus is a coding exercise.  This tests migration to the Runestone assignment area, though Runestone only has divisions two-deep (<q>chapter</q> and <q>subchapter</q>, so both will show up associated with the same <tag>section</tag><mdash/>this one.</p>
+
+            <p>The first is a start of a C program, so will only be interactive on a Runestone server.  The second is a Python program, so will be interactive in all HTML outputs.</p>
         </introduction>
 
         <subsection>
@@ -255,11 +272,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <statement>
                     <p>We would suggest now that you explore something here.</p>
                 </statement>
-                <program xml:id="coding-exercise-partial-four" language="c">
+                <program xml:id="coding-exercise-partial-four" language="python">
                     <input>
-                    #include
-
-                    int main(void)
+                    for i in range(10):
+                        print(i)
                     </input>
                 </program>
             </exploration>
