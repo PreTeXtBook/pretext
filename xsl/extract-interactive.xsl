@@ -41,29 +41,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- applying specializations below -->
 <xsl:import href="./extract-identity.xsl" />
 
-<!-- Output Python as text -->
 <xsl:output method="text" encoding="UTF-8"/>
 
-<!-- Enclosing structure is a Python list -->
-<!-- So wrap at outermost level and       -->
-<!-- return control to extract-identity   -->
-<!-- Sneak in baseurl as first item, rather  -->
-<!-- than some involved nested stucture      -->
+<!-- Sneak in baseurl as first item, with -->
+<!-- interactive info on subsequent lines -->
 <xsl:template match="/">
-    <xsl:text>['</xsl:text>
     <xsl:value-of select="$baseurl"/>
-    <xsl:text>', </xsl:text>
+    <xsl:text>&#xa;</xsl:text>
     <xsl:apply-imports />
-    <xsl:text>]</xsl:text>
 </xsl:template>
 
-<!-- "visible-id" of each interactive -->
-<!-- Simple, just list of strings      -->
-<!-- @preview indicates custom image   -->
+<!-- "visible-id" of each interactive per line -->
+<!-- @preview indicates custom image  -->
 <xsl:template match="interactive[not(@preview)]" mode="extraction">
-    <xsl:text>'</xsl:text>
     <xsl:apply-templates select="." mode="visible-id" />
-    <xsl:text>', </xsl:text>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>

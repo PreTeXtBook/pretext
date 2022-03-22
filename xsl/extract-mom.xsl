@@ -40,24 +40,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- applying specializations below -->
 <xsl:import href="./extract-identity.xsl" />
 
-<!-- Output Python as text -->
 <xsl:output method="text" encoding="UTF-8"/>
 
-<!-- Enclosing structure is a Python list -->
-<!-- So wrap at outermost level and       -->
-<!-- return control to extract-identity   -->
 <xsl:template match="/">
-    <xsl:text>[</xsl:text>
     <xsl:apply-imports />
-    <xsl:text>]</xsl:text>
 </xsl:template>
 
-<!-- Problem ids. As sterings. Period. -->
-<!-- Trailing comma is good in Python. -->
+<!-- One problem id per line -->
 <xsl:template match="myopenmath[@problem]" mode="extraction">
-    <xsl:text>'</xsl:text>
     <xsl:value-of select="@problem" />
-    <xsl:text>', </xsl:text>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>

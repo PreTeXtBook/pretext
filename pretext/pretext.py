@@ -1167,12 +1167,13 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
     # "run" an assignment for the list of triples of strings
     id_file = open(id_filename, 'r')
-    thumb_list = id_file.readline()
-    thumbs = eval(thumb_list)
+    # read lines, but only lines that are comma delimited
+    thumbs = [t.strip() for t in id_file.readlines() if "," in t]
 
     for thumb in thumbs:
-        url = 'http://i.ytimg.com/vi/{}/default.jpg'.format(thumb[0])
-        path = os.path.join(dest_dir, thumb[1] + '.jpg')
+        thumb_pair = thumb.split(",")
+        url = 'http://i.ytimg.com/vi/{}/default.jpg'.format(thumb_pair[0])
+        path = os.path.join(dest_dir, thumb_pair[1] + '.jpg')
         _verbose('downloading {} as {}...'.format(url, path))
         # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests/13137873
         # removed some settings wrapper from around the URL, otherwise verbatim
@@ -1217,8 +1218,8 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
     # "run" an assignment for the list of problem numbers
     id_file = open(id_filename, 'r')
-    interactive_list = id_file.readline()
-    interactives = eval(interactive_list)
+    # read lines, skipping blank lines
+    interactives = [f.strip() for f in id_file.readlines() if not f.isspace()]
 
     # Cheating a bit, base URL is *always* first item
     # Presumed to not have a trailing slash
@@ -1413,8 +1414,8 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
     xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
     # "run" an assignment for the list of problem numbers
     id_file = open(id_filename, 'r')
-    problem_list = id_file.readline()
-    problems = eval(problem_list)
+    # read lines, skipping blank lines
+    problems = [p.strip() for p in id_file.readlines() if not p.isspace()]
     xml_header = '<?xml version="1.0" encoding="UTF-8" ?>\n'
     for problem in problems:
         url = 'https://www.myopenmath.com/util/mbx.php?id={}'.format(problem)
