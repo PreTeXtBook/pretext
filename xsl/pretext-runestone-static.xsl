@@ -35,7 +35,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- *every* conversion, except the HTML conversion, where a more     -->
 <!-- capable version is designed to be powered by Runestone Services. -->
 
-<xsl:template match="exercise[choices]" mode="runestone-to-static">
+<xsl:template match="exercise[statement and choices]" mode="runestone-to-static">
     <!-- prompt, followed by ordered list of choices -->
     <xsl:text>&#xa;</xsl:text>
     <statement>
@@ -89,7 +89,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </solution>
 </xsl:template>
 
-<xsl:template match="exercise[blocks]" mode="runestone-to-static">
+<xsl:template match="exercise[statement and blocks]" mode="runestone-to-static">
     <statement>
         <xsl:copy-of select="statement/node()"/>
         <!-- blocks, in author-defined order, via @order attribute -->

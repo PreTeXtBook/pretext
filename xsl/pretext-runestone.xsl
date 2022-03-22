@@ -481,7 +481,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Multiple Choice -->
 
-<xsl:template match="exercise/statement[choices]" mode="runestone-to-interactive">
+<xsl:template match="exercise/statement[statement and choices]" mode="runestone-to-interactive">
     <xsl:variable name="the-id">
         <xsl:text>mc-</xsl:text>
         <xsl:apply-templates select="parent::exercise" mode="html-id"/>
@@ -536,7 +536,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Parsons Problem -->
 
-<xsl:template match="exercise/statement[blocks]" mode="runestone-to-interactive">
+<xsl:template match="exercise/statement[statement and blocks]" mode="runestone-to-interactive">
     <div class="runestone" style="max-width: none;">
         <div data-component="parsons" class="alert alert-warning parsons">
             <xsl:attribute name="id">

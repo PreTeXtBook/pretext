@@ -738,7 +738,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- structure, but the "statement" should have copies of enough of the   -->
 <!-- authored source for an interactive version to be produced later.     -->
 
-<xsl:template match="exercise[choices]" mode="representations">
+<!-- Multiple Choice -->
+
+<xsl:template match="exercise[statement and choices]" mode="representations">
     <!-- always preserve "exercise" container, with metadata -->
     <!-- given as attributes and elements (title, idx)       -->
     <xsl:copy>
@@ -769,7 +771,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
-<xsl:template match="exercise[blocks]" mode="representations">
+<!-- Parsons problems -->
+
+<xsl:template match="exercise[statement and blocks]" mode="representations">
     <!-- always preserve "exercise" container, with metadata -->
     <!-- given as attributes and elements (title, idx)       -->
     <xsl:copy>

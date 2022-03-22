@@ -4587,7 +4587,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- intercept a multiple choice question     -->
         <!-- signal on "source/choices" from assembly -->
-        <xsl:when test="statement/choices">
+        <xsl:when test="statement/statement and statement/choices">
             <xsl:if test="$b-has-statement">
                 <xsl:apply-templates select="statement" mode="runestone-to-interactive"/>
             </xsl:if>
@@ -4605,7 +4605,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </div>
         </xsl:when>
         <!-- Parsons Problem, powered by Runestone Services -->
-        <xsl:when test="statement/blocks">
+        <xsl:when test="statement/statement and statement/blocks">
             <xsl:if test="$b-has-statement">
                 <xsl:apply-templates select="statement" mode="runestone-to-interactive"/>
             </xsl:if>
