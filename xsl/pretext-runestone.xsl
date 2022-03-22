@@ -425,14 +425,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Exercises to the Runestone manifest -->
-<!--   - every "exercise" in a "reading-questions" division -->
-<!--   - every multiple choice "exercise"                   -->
-<!--   - every "exercise" with an interactive "program"     -->
-<!-- Note, 2020-05-29: multiple choice not yet merged, markup is speculative -->
-<xsl:template match="exercise[parent::reading-questions]|exercise[statement/choices]" mode="runestone-manifest">
+<!--   - every multiple choice "exercise"             -->
+<!--   - every Parsons problem "exercise"             -->
+<!--   - every "exercise" with additional "program"   -->
+<xsl:template match="exercise[statement/statement and statement/choices]|exercise[statement/statement and statement/blocks]|exercise[statement/statement and statement/program]" mode="runestone-manifest">
     <question>
+        <!-- label is from the "exercise" -->
         <xsl:apply-templates select="." mode="runestone-manifest-label"/>
-        <xsl:apply-templates select="." mode="exercise-components"/>
+        <!-- Duplicate, but still should look like original (ID, etc.),  -->
+        <!-- not knowled. Solutions are available in the originals, via  -->
+        <!-- an "in context" link off the Assignment page                -->
+        <xsl:apply-templates select="."  mode="exercise-components">
+            <xsl:with-param name="b-original" select="true()"/>
+            <xsl:with-param name="block-type" select="'visible'"/>
+            <xsl:with-param name="b-has-statement" select="true()" />
+            <xsl:with-param name="b-has-hint"      select="false()" />
+            <xsl:with-param name="b-has-answer"    select="false()" />
+            <xsl:with-param name="b-has-solution"  select="false()" />
+        </xsl:apply-templates>
     </question>
 </xsl:template>
 
@@ -444,25 +454,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </question>
 </xsl:template>
 
-<!-- Coding Exercise to the Runestone manifest -->
-<!--   "exercise" with "program" *outside* of "statement" -->
-<!--   &PROJECT-LIKE; only at top-level                   -->
-<xsl:template match="exercise[program]|project[program]|activity[program]|exploration[program]|investigation[program]" mode="runestone-manifest">
-    <xsl:variable name="active-language">
-        <xsl:apply-templates select="program" mode="active-language"/>
-    </xsl:variable>
-    <!-- if elected as interactive AND @language is supported -->
-    <xsl:if test="not($active-language = '')">
-        <question>
-            <!-- label is from the "exercise" -->
-            <xsl:apply-templates select="." mode="runestone-manifest-label"/>
-            <!-- need to set controls on what gets produced by "exercise-components"     -->
-            <!-- TODO: this is a band-aid, why isn't it necessary for reading questions? -->
-            <xsl:apply-templates select="." mode="exercise-components">
-                <xsl:with-param name="b-has-statement" select="true()"/>
-            </xsl:apply-templates>
-        </question>
-    </xsl:if>
+<!-- PROJECT-LIKE to the Runestone manifest -->
+<!--   PROJECT-LIKE with "program" *outside* of "statement" -->
+<!-- TODO: where should un-supported languages get caught?  Here is pretty late. -->
+<xsl:template match="project[statement/statement and statement/program]|activity[statement/statement and statement/program]|exploration[statement/statement and statement/program]|investigation[statement/statement and statement/program]" mode="runestone-manifest">
+    <question>
+        <!-- label is from the PROJECT-LIKE -->
+        <xsl:apply-templates select="." mode="runestone-manifest-label"/>
+        <!-- Duplicate, but still should look like original (ID, etc.),  -->
+        <!-- not knowled. Solutions are available in the originals, via  -->
+        <!-- an "in context" link off the Assignment page                -->
+        <xsl:apply-templates select="."  mode="exercise-components">
+            <xsl:with-param name="b-original" select="true()"/>
+            <xsl:with-param name="block-type" select="'visible'"/>
+            <xsl:with-param name="b-has-statement" select="true()" />
+            <xsl:with-param name="b-has-hint"      select="false()" />
+            <xsl:with-param name="b-has-answer"    select="false()" />
+            <xsl:with-param name="b-has-solution"  select="false()" />
+        </xsl:apply-templates>
+    </question>
 </xsl:template>
 
 <!-- Appendix is explicitly no-op, so we do not recurse into "section"  -->
