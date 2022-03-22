@@ -4591,32 +4591,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:if test="$b-has-statement">
                 <xsl:apply-templates select="statement" mode="runestone-to-interactive"/>
             </xsl:if>
-            <!-- see below for procedure to not create div when empty,      -->
-            <!-- which should perhaps become a template?  Pass $has-* so    -->
-            <!-- certain components can be killed for interactive problems? -->
-            <!-- Or maybe only a hint should be possible?                   -->
-            <div class="solutions">
-                <xsl:if test="$b-has-hint">
-                    <xsl:apply-templates select="hint">
-                        <xsl:with-param name="b-original" select="$b-original" />
-                        <xsl:with-param name="block-type" select="$block-type"/>
-                    </xsl:apply-templates>
-                </xsl:if>
-            </div>
+            <xsl:apply-templates select="." mode="solutions-div">
+                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="block-type" select="$block-type"/>
+                <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
+                <xsl:with-param name="b-has-answer"  select="$b-has-answer"/>
+                <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
+            </xsl:apply-templates>
         </xsl:when>
         <!-- Parsons Problem, powered by Runestone Services -->
         <xsl:when test="statement/statement and statement/blocks">
             <xsl:if test="$b-has-statement">
                 <xsl:apply-templates select="statement" mode="runestone-to-interactive"/>
             </xsl:if>
-            <div class="solutions">
-                <xsl:if test="$b-has-hint">
-                    <xsl:apply-templates select="hint">
-                        <xsl:with-param name="b-original" select="$b-original" />
-                        <xsl:with-param name="block-type" select="$block-type"/>
-                    </xsl:apply-templates>
-                </xsl:if>
-            </div>
+            <xsl:apply-templates select="." mode="solutions-div">
+                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="block-type" select="$block-type"/>
+                <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
+                <xsl:with-param name="b-has-answer"  select="$b-has-answer"/>
+                <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
+            </xsl:apply-templates>
         </xsl:when>
         <!-- ActiveCode exercises, powered by Runestone Services -->
         <!-- condition looks for packaging of a "statement" and a "program"      -->
@@ -4626,15 +4620,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:if test="$b-has-statement">
                 <xsl:apply-templates select="statement" mode="runestone-to-interactive"/>
             </xsl:if>
-            <!-- TODO - generalize this! -->
-            <div class="solutions">
-                <xsl:if test="$b-has-answer">
-                    <xsl:apply-templates select="answer">
-                        <xsl:with-param name="b-original" select="$b-original" />
-                        <xsl:with-param name="block-type" select="$block-type"/>
-                    </xsl:apply-templates>
-                </xsl:if>
-            </div>
+            <xsl:apply-templates select="." mode="solutions-div">
+                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="block-type" select="$block-type"/>
+                <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
+                <xsl:with-param name="b-has-answer"  select="$b-has-answer"/>
+                <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
+            </xsl:apply-templates>
         </xsl:when>
         <!-- now, structured versus unstructured -->
         <xsl:when test="statement">
@@ -4644,45 +4636,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="block-type" select="$block-type"/>
                 </xsl:apply-templates>
             </xsl:if>
-            <!-- no  div.solutions  if there is nothing to go into it -->
-            <xsl:if test="(hint and $b-has-hint) or (answer and $b-has-answer) or (solution and $b-has-solution)">
-                <!-- collect all the hint, answer, solution in a variable -->
-                <xsl:variable name="all-solutions">
-                    <xsl:if test="$b-has-hint">
-                        <xsl:apply-templates select="hint">
-                            <xsl:with-param name="b-original" select="$b-original" />
-                            <xsl:with-param name="block-type" select="$block-type"/>
-                        </xsl:apply-templates>
-                    </xsl:if>
-                    <xsl:if test="$b-has-answer">
-                        <xsl:apply-templates select="answer">
-                            <xsl:with-param name="b-original" select="$b-original" />
-                            <xsl:with-param name="block-type" select="$block-type"/>
-                        </xsl:apply-templates>
-                    </xsl:if>
-                    <xsl:if test="$b-has-solution">
-                        <xsl:apply-templates select="solution">
-                            <xsl:with-param name="b-original" select="$b-original" />
-                            <xsl:with-param name="block-type" select="$block-type"/>
-                        </xsl:apply-templates>
-                    </xsl:if>
-                </xsl:variable>
-                <!-- If this is an EXAMPLE-LIKE and we are unknowling its solutions,   -->
-                <!-- then just show them.  Otherwise, we use a div to layout knowls    -->
-                <!-- like a sentence: horiziontal flow, with wrapping.                 -->
-                <!-- NB: context here could be an EXAMPLE-LIKE or it might be a "task" -->
-                <!-- with an EXAMPLE-LIKE ancestor, thus the ancestor-or-self:: axis   -->
-                <xsl:choose>
-                    <xsl:when test="($knowl-example-solution = 'no') and ancestor-or-self::*[&EXAMPLE-FILTER;]">
-                        <xsl:copy-of select="$all-solutions"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <div class="solutions">
-                            <xsl:copy-of select="$all-solutions"/>
-                        </div>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:if>
+            <xsl:apply-templates select="." mode="solutions-div">
+                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="block-type" select="$block-type"/>
+                <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
+                <xsl:with-param name="b-has-answer"  select="$b-has-answer"/>
+                <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
+            </xsl:apply-templates>
             <!-- optionally, an indication of workspace -->
             <!-- for a print version of a worksheet     -->
             <xsl:choose>
@@ -4712,7 +4672,62 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- All of the items matching the previous template (except perhaps   -->
+<!-- "exercise", EXAMPLE-LIKE, PROJECT-LIKE, "task", and more have a  -->
+<!-- div.solutions full of SOLUTION-LIKE hanging off them.  But we    -->
+<!-- don't want the div if there is nothing to go into it, and        -->
+<!-- EXAMPLE-LIKE is presentational, so we don't have knowls to       -->
+<!-- package, we just lay them out right after the example.           -->
+<!-- N.B. match could be improved, just being more lazy than careful  -->
+<xsl:template match="*" mode="solutions-div">
+    <xsl:param name="b-original"/>
+    <xsl:param name="block-type"/>
+    <!-- no "statement" here -->
+    <xsl:param name="b-has-hint"/>
+    <xsl:param name="b-has-answer"/>
+    <xsl:param name="b-has-solution"/>
+
+    <!-- nothing to do if there is nothing so show -->
+    <xsl:if test="(hint and $b-has-hint) or (answer and $b-has-answer) or (solution and $b-has-solution)">
+        <!-- collect all the hint, answer, solution in a variable -->
+        <xsl:variable name="all-solutions">
+            <xsl:if test="$b-has-hint">
+                <xsl:apply-templates select="hint">
+                    <xsl:with-param name="b-original" select="$b-original" />
+                    <xsl:with-param name="block-type" select="$block-type"/>
+                </xsl:apply-templates>
+            </xsl:if>
+            <xsl:if test="$b-has-answer">
+                <xsl:apply-templates select="answer">
+                    <xsl:with-param name="b-original" select="$b-original" />
+                    <xsl:with-param name="block-type" select="$block-type"/>
+                </xsl:apply-templates>
+            </xsl:if>
+            <xsl:if test="$b-has-solution">
+                <xsl:apply-templates select="solution">
+                    <xsl:with-param name="b-original" select="$b-original" />
+                    <xsl:with-param name="block-type" select="$block-type"/>
+                </xsl:apply-templates>
+            </xsl:if>
+        </xsl:variable>
+        <!-- If this is an EXAMPLE-LIKE and we are unknowling its solutions,   -->
+        <!-- then just show them.  Otherwise, we use a div to layout knowls    -->
+        <!-- like a sentence: horiziontal flow, with wrapping.                 -->
+        <!-- NB: context here could be an EXAMPLE-LIKE or it might be a "task" -->
+        <!-- with an EXAMPLE-LIKE ancestor, thus the ancestor-or-self:: axis   -->
+        <xsl:choose>
+            <xsl:when test="($knowl-example-solution = 'no') and ancestor-or-self::*[&EXAMPLE-FILTER;]">
+                <xsl:copy-of select="$all-solutions"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <div class="solutions">
+                    <xsl:copy-of select="$all-solutions"/>
+                </div>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:if>
+</xsl:template>
+
+<!-- All of the items matching the template two above (except perhaps  -->
 <!-- the WW exercises) can appear in a worksheet with some room to     -->
 <!-- work a problem given by a @workspace attribute.  (But we are not  -->
 <!-- careful with the match, given the limited reach here.)  The "div" -->
