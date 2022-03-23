@@ -1168,7 +1168,7 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # "run" an assignment for the list of triples of strings
     id_file = open(id_filename, 'r')
     # read lines, but only lines that are comma delimited
-    thumbs = [t for t in id_file.readlines() if "," in t]
+    thumbs = [t.strip() for t in id_file.readlines() if "," in t]
 
     for thumb in thumbs:
         thumb_pair = thumb.split(",")
@@ -1219,7 +1219,7 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # "run" an assignment for the list of problem numbers
     id_file = open(id_filename, 'r')
     # read lines, skipping blank lines
-    interactives = [f for f in id_file.readlines() if not f.isspace()]
+    interactives = [f.strip() for f in id_file.readlines() if not f.isspace()]
 
     # Cheating a bit, base URL is *always* first item
     # Presumed to not have a trailing slash
@@ -1415,7 +1415,7 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
     # "run" an assignment for the list of problem numbers
     id_file = open(id_filename, 'r')
     # read lines, skipping blank lines
-    problems = [p for p in id_file.readlines() if not p.isspace()]
+    problems = [p.strip() for p in id_file.readlines() if not p.isspace()]
     xml_header = '<?xml version="1.0" encoding="UTF-8" ?>\n'
     for problem in problems:
         url = 'https://www.myopenmath.com/util/mbx.php?id={}'.format(problem)
