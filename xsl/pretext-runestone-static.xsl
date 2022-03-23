@@ -35,6 +35,47 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- *every* conversion, except the HTML conversion, where a more     -->
 <!-- capable version is designed to be powered by Runestone Services. -->
 
+<!-- True/False -->
+
+<xsl:template match="exercise[statement/@correct]" mode="runestone-to-static">
+    <!-- prompt, followed by ordered list of choices -->
+    <xsl:text>&#xa;</xsl:text>
+    <statement>
+        <xsl:copy-of select="statement/node()"/>
+        <p>True or False?</p>
+    </statement>
+    <!-- Hints are authored, not derived from problem formulation -->
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="hint"/>
+    <!-- the answer, simply "True" or "False" -->
+    <xsl:text>&#xa;</xsl:text>
+    <answer>
+        <xsl:choose>
+            <xsl:when test="statement/@correct = 'yes'">
+                <p>True.</p>
+            </xsl:when>
+            <xsl:when test="statement/@correct = 'no'">
+                <p>False.</p>
+            </xsl:when>
+            <xsl:otherwise/>
+        </xsl:choose>
+    </answer>
+    <!-- Answer, as above, plus explication with feedback -->
+    <xsl:text>&#xa;</xsl:text>
+    <solution>
+        <xsl:choose>
+            <xsl:when test="statement/@correct = 'yes'">
+                <p>True.</p>
+            </xsl:when>
+            <xsl:when test="statement/@correct = 'no'">
+                <p>False.</p>
+            </xsl:when>
+            <xsl:otherwise/>
+        </xsl:choose>
+        <xsl:copy-of select="feedback/node()"/>
+    </solution>
+</xsl:template>
+
 <xsl:template match="exercise[statement and choices]" mode="runestone-to-static">
     <!-- prompt, followed by ordered list of choices -->
     <xsl:text>&#xa;</xsl:text>
