@@ -44,7 +44,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Temporary, until we have confidence about impact   -->
 <!-- Not guaranteed to be exhaustive during development -->
-<xsl:variable name="b-needs-runestone" select="boolean($document-root//exercise/choices|$document-root//exercise/blocks|$document-root//exercise/program)"/>
+<!-- NB: ananlyzing *original* source, not *assembled*  -->
+<xsl:variable name="b-needs-runestone" select="boolean($original//exercise/choices|$original//exercise/blocks|$original//exercise/program)"/>
 
 <!-- The Runestone platform option requires output that can be used  -->
 <!-- on the server with a templating language/tool.  For books       -->
