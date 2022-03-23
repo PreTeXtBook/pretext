@@ -4585,6 +4585,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </div>
             </div>
         </xsl:when>
+        <!-- intercept a True/False question              -->
+        <!-- signal on "statement/@correct" from assembly -->
+        <xsl:when test="statement/statement and statement/statement/@correct">
+            <xsl:if test="$b-has-statement">
+                <xsl:apply-templates select="statement" mode="runestone-to-interactive"/>
+            </xsl:if>
+            <xsl:apply-templates select="." mode="solutions-div">
+                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="block-type" select="$block-type"/>
+                <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
+                <xsl:with-param name="b-has-answer"  select="$b-has-answer"/>
+                <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
+            </xsl:apply-templates>
+        </xsl:when>
         <!-- intercept a multiple choice question     -->
         <!-- signal on "source/choices" from assembly -->
         <xsl:when test="statement/statement and statement/choices">

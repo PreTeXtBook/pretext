@@ -427,7 +427,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   - every multiple choice "exercise"             -->
 <!--   - every Parsons problem "exercise"             -->
 <!--   - every "exercise" with additional "program"   -->
-<xsl:template match="exercise[statement/statement and statement/choices]|exercise[statement/statement and statement/blocks]|exercise[statement/statement and statement/program]" mode="runestone-manifest">
+<xsl:template match="exercise[statement/statement and statement/statement/@correct]|exercise[statement/statement and statement/choices]|exercise[statement/statement and statement/blocks]|exercise[statement/statement and statement/program]" mode="runestone-manifest">
     <question>
         <!-- label is from the "exercise" -->
         <xsl:apply-templates select="." mode="runestone-manifest-label"/>
@@ -487,6 +487,72 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ########## -->
 <!-- Components -->
 <!-- ########## -->
+
+<!-- True/False -->
+
+<xsl:template match="exercise/statement[statement/@correct]" mode="runestone-to-interactive">
+    <xsl:variable name="the-id">
+        <xsl:text>tf-</xsl:text>
+        <xsl:apply-templates select="parent::exercise" mode="html-id"/>
+    </xsl:variable>
+    <div class="runestone alert alert-warning">
+        <!-- ul can have multiple answer attribute -->
+        <ul data-component="multiplechoice" data-multipleanswers="false">
+            <xsl:attribute name="id">
+                <xsl:value-of select="$the-id"/>
+            </xsl:attribute>
+            <!-- Q: the statement is not a list item, but appears *inside* the list? -->
+            <!-- overall statement, not per-choice -->
+            <xsl:apply-templates select="statement"/>
+            <!-- radio button for True -->
+            <xsl:variable name="true-choice-id">
+                <xsl:value-of select="$the-id"/>
+                <xsl:text>_opt_t</xsl:text>
+            </xsl:variable>
+            <li data-component="answer">
+                <xsl:attribute name="id">
+                    <xsl:value-of select="$true-choice-id"/>
+                </xsl:attribute>
+                <!-- Correct answer if problem statement is correct/True -->
+                <xsl:if test="statement/@correct = 'yes'">
+                    <xsl:attribute name="data-correct"/>
+                </xsl:if>
+                <p>True.</p>
+            </li>
+            <li data-component="feedback">
+                <xsl:attribute name="id">
+                    <xsl:value-of select="$true-choice-id"/>
+                </xsl:attribute>
+                <xsl:if test="statement/@correct = 'yes'">
+                    <xsl:apply-templates select="feedback"/>
+                </xsl:if>
+            </li>
+            <!-- radio button for False -->
+            <xsl:variable name="false-choice-id">
+                <xsl:value-of select="$the-id"/>
+                <xsl:text>_opt_f</xsl:text>
+            </xsl:variable>
+            <li data-component="answer">
+                <xsl:attribute name="id">
+                    <xsl:value-of select="$false-choice-id"/>
+                </xsl:attribute>
+                <!-- Correct answer if problem statement is incorrect/False -->
+                <xsl:if test="statement/@correct = 'no'">
+                    <xsl:attribute name="data-correct"/>
+                </xsl:if>
+                <p>False.</p>
+            </li>
+            <li data-component="feedback">
+                <xsl:attribute name="id">
+                    <xsl:value-of select="$false-choice-id"/>
+                </xsl:attribute>
+                <xsl:if test="statement/@correct = 'no'">
+                    <xsl:apply-templates select="feedback"/>
+                </xsl:if>
+            </li>
+        </ul>
+    </div>
+</xsl:template>
 
 <!-- Multiple Choice -->
 
