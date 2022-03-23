@@ -285,6 +285,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercises>
         <title>Interactive Exercises</title>
 
+        <p>A sample of interactive problem types.</p>
+
+        <exercise>
+            <title>True/False</title>
+            <idx>vector space</idx>
+            <statement correct="no">
+                <p>Every vector space has finite dimension.</p>
+            </statement>
+            <feedback>
+                <p>The vector space of all polynomials with finite degree has a basis, <m>B = \{1,x,x^2,x^3,\dots\}</m>, which is infinte.</p>
+            </feedback>
+            <hint>
+                <p><m>P_n</m>, the vector space of polynomials with degree at most <m>n</m>, has dimension <m>n+1</m> by <xref ref="theorem-exponent-laws"/>.  [Cross-reference is just a demo, content is not relevant.]  What happens if we relax the defintion and remove the parameter <m>n</m>?</p>
+            </hint>
+        </exercise>
+
         <exercise>
             <title>Multiple-Choice, Not Randomized, One Answer</title>
             <idx>stop signs</idx>
