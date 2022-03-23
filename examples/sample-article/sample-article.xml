@@ -7671,28 +7671,6 @@ the xsltproc executable.
                 </program>
             </listing>
 
-            <p>In <init>HTML</init> output, a program can be interactive.  This is an example program provided by <url href="http://www.pythontutor.com/" visual="www.pythontutor.com">Python Tutor</url>.</p>
-
-            <listing xml:id="program-interactive">
-                <caption>An interactive Python program, using <pubtitle>Python Tutor</pubtitle></caption>
-                <program xml:id="happy" language="python" interactive="pythontutor">
-                    <input>
-                    # From "Teaching with Python" by John Zelle
-                    def happy():
-                        print("Happy Birthday to you!")
-
-                    def sing(P):
-                        happy()
-                        happy()
-                        print("Happy Birthday dear " + P + "!")
-                        happy()
-
-                    # main
-                    sing("Fred")
-                    </input>
-                </program>
-            </listing>
-
             <exercise>
                 <title>Inline Coding Exercise, No Help</title>
 
