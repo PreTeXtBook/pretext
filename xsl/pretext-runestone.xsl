@@ -42,6 +42,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Runestone Infrastructure -->
 <!-- ######################## -->
 
+<!-- Temporary, until we have confidence about impact   -->
+<!-- Not guaranteed to be exhaustive during development -->
+<xsl:variable name="b-needs-runestone" select="boolean($document-root//exercise/choices|$document-root//exercise/blocks|$document-root//exercise/program)"/>
+
 <!-- The Runestone platform option requires output that can be used  -->
 <!-- on the server with a templating language/tool.  For books       -->
 <!-- originating from PreTeXt we use a non-default pair of strings.  -->
@@ -181,7 +185,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Runestone for All build -->
         <!-- Hosted without a Runestone Server, just using Javascript -->
         <!-- NB: condition on problems that benefit/need this?        -->
-        <xsl:when test="not($b-host-runestone)">
+        <xsl:when test="not($b-host-runestone) and $b-needs-runestone">
             <xsl:comment>** eBookCongig is necessary to configure interactive       **</xsl:comment><xsl:text>&#xa;</xsl:text>
             <xsl:comment>** Runestone components to run locally in reader's browser **</xsl:comment><xsl:text>&#xa;</xsl:text>
             <xsl:comment>** No external communication:                              **</xsl:comment><xsl:text>&#xa;</xsl:text>
@@ -265,6 +269,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- When building for a Runestone server or when testing -->
     <!-- Runestone for All, the $runestone-cdn will point to  -->
     <!-- the right place for the necessary JS.                -->
+    <!-- N.B. Enclosing "if" goes away if/when $b-needs-runestone    -->
+    <!-- just becomes true all the time.  Indentation predicts this. -->
+    <xsl:if test="$b-host-runestone or $b-needs-runestone">
     <xsl:comment>*** Runestone Services ***</xsl:comment>
     <xsl:text>&#xa;</xsl:text>
     <xsl:for-each select="$runestone-services/all/js/item">
@@ -283,6 +290,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
         </link>
     </xsl:for-each>
+    </xsl:if>
 </xsl:template>
 
 <!-- User Menu (aka Bust Menu)                    -->
