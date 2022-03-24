@@ -183,13 +183,19 @@ def asymptote_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
     devnull = open(os.devnull, 'w')
     # simply copy for source file output
     # no need to check executable or server, PreTeXt XSL does it all
-    if outformat == 'source':
+    if outformat == 'source' or outformat == 'all':
         for asydiagram in os.listdir(tmp_dir):
             _verbose("copying source file {}".format(asydiagram))
             shutil.copy2(asydiagram, dest_dir)
     # consolidated process for five possible output formats
     # parameterized for places where  method  differs
-    if outformat in ['html', 'svg', 'png', 'pdf', 'eps']:
+    if outformat == 'all':
+        outformats = ['html', 'svg', 'png', 'pdf', 'eps']
+    elif outformat in ['html', 'svg', 'png', 'pdf', 'eps']:
+        outformats = [outformat]
+    else:
+        outformats = []
+    for outform in outformats:
         # setup, depending on the method
         if method == 'local':
             asy_executable_cmd = get_executable_cmd('asy')
@@ -203,17 +209,17 @@ def asymptote_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
             # 2021-12-10, Michael Doob: "-noprc" is default for the server,
             # and newer CLI versions.  Retain for explicit use locally when
             # perhaps an older version is being employed
-            asy_cli = asy_executable_cmd + ['-f', outformat]
-            if outformat in ['pdf', 'eps']:
+            asy_cli = asy_executable_cmd + ['-f', outform]
+            if outform in ['pdf', 'eps']:
                 asy_cli += ['-noprc', '-iconify', '-tex', 'xelatex', '-batchMask']
-            elif outformat in ['svg', 'png']:
+            elif outform in ['svg', 'png']:
                 asy_cli += ['-render=4', '-tex', 'xelatex', '-iconify']
         if method == 'server':
-            alberta = 'http://asymptote.ualberta.ca:10007?f={}'.format(outformat)
-        # loop over files, doing conversions
-        for asydiagram in os.listdir(tmp_dir):
+            alberta = 'http://asymptote.ualberta.ca:10007?f={}'.format(outform)
+        # loop over .asy files, doing conversions
+        for asydiagram in glob.glob(os.path.join(tmp_dir,'*.asy')):
             filebase, _ = os.path.splitext(asydiagram)
-            asyout = "{}.{}".format(filebase, outformat)
+            asyout = "{}.{}".format(filebase, outform)
             _verbose("converting {} to {}".format(asydiagram, asyout))
             # do the work, depending on method
             if method == 'local':
