@@ -405,7 +405,7 @@ def main():
 
     # The big switch
     if args.component == 'asy':
-        if args.format in ['html', 'pdf', 'svg', 'png', 'eps', 'source']:
+        if args.format in ['html', 'pdf', 'svg', 'png', 'eps', 'source', 'all']:
             ptx.asymptote_conversion(xml_source, publication_file, stringparams, args.xmlid, dest_dir, args.format, method)
         else:
             raise NotImplementedError('cannot make Asymptote diagrams in "{}" format'.format(args.format))
