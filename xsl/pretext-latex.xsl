@@ -1639,13 +1639,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:if test="$document-root//cd">
             <xsl:text>%% code display (cd), by analogy with math display (md)&#xa;</xsl:text>
-            <xsl:text>%% savebox, lrbox, etc to achieve centering&#xa;</xsl:text>
-            <!-- https://tex.stackexchange.com/questions/182476/how-do-i-center-a-boxed-verbatim -->
-            <!-- trying "\centering" here was a disaster -->
-            <xsl:text>\newsavebox{\codedisplaybox}&#xa;</xsl:text>
-            <xsl:text>\newenvironment{codedisplay}&#xa;</xsl:text>
-            <xsl:text>{\VerbatimEnvironment\begin{center}\begin{lrbox}{\codedisplaybox}\begin{BVerbatim}}&#xa;</xsl:text>
-            <xsl:text>{\end{BVerbatim}\end{lrbox}\usebox{\codedisplaybox}\end{center}}&#xa;</xsl:text>
+            <xsl:text>%% (a) indented slightly, so a paragraph appears to hang together&#xa;</xsl:text>
+            <xsl:text>\DefineVerbatimEnvironment{codedisplay}{Verbatim}{xleftmargin=4ex}&#xa;</xsl:text>
+            <xsl:text>%% (b) flush left works well in exceptions like list items, etc&#xa;</xsl:text>
+            <xsl:text>\DefineVerbatimEnvironment{codedisplayleft}{Verbatim}{}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
     <!-- TODO:  \showidx package as part of a draft mode, prints entries in margin -->
@@ -7895,21 +7892,51 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "cd" could be first in a paragraph, so do not  -->
 <!-- drop an empty line                             -->
 <xsl:template match="cd">
+    <xsl:variable name="cd-env">
+        <xsl:apply-templates select="." mode="environment-name"/>
+    </xsl:variable>
     <xsl:text>%&#xa;</xsl:text>
-    <xsl:text>\begin{codedisplay}&#xa;</xsl:text>
+    <xsl:text>\begin{</xsl:text>
+    <xsl:value-of select="$cd-env"/>
+    <xsl:text>}&#xa;</xsl:text>
     <xsl:value-of select="." />
     <xsl:text>&#xa;</xsl:text>
-    <xsl:text>\end{codedisplay}&#xa;</xsl:text>
+    <xsl:text>\end{</xsl:text>
+    <xsl:value-of select="$cd-env"/>
+    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- With a "cline" element present, we assume   -->
 <!-- that is the entire structure (see the cline -->
 <!-- template in the pretext-common.xsl file)   -->
 <xsl:template match="cd[cline]">
+    <xsl:variable name="cd-env">
+        <xsl:apply-templates select="." mode="environment-name"/>
+    </xsl:variable>
     <xsl:text>%&#xa;</xsl:text>
-    <xsl:text>\begin{codedisplay}&#xa;</xsl:text>
+    <xsl:text>\begin{</xsl:text>
+    <xsl:value-of select="$cd-env"/>
+    <xsl:text>}&#xa;</xsl:text>
     <xsl:apply-templates select="cline" />
-    <xsl:text>\end{codedisplay}&#xa;</xsl:text>
+    <xsl:text>\end{</xsl:text>
+    <xsl:value-of select="$cd-env"/>
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- An indented structure. like an item in a list likely does not -->
+<!-- need *more* indentation.  A "cd" inside a "p" inside a list   -->
+<!-- *will* be indented, but a bare "cd" as a *child* of an "li"   -->
+<!-- will not be.  Unclear if we want this condition for when the  -->
+<!-- "cd" is the only non-metadate element of an "li".             -->
+<xsl:template match="cd" mode="environment-name">
+    <xsl:choose>
+        <xsl:when test="parent::li">
+            <xsl:text>codedisplayleft</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>codedisplay</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- "pre" is analogous to the HTML tag of the same name -->
