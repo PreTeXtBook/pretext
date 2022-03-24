@@ -1637,6 +1637,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% Pre-formatted text, a peer of paragraphs&#xa;</xsl:text>
             <xsl:text>\DefineVerbatimEnvironment{preformatted}{Verbatim}{}&#xa;</xsl:text>
         </xsl:if>
+        <!-- see commit d2560edd0cc3974c for removal of code for a centered box of verbatim text -->
         <xsl:if test="$document-root//cd">
             <xsl:text>%% code display (cd), by analogy with math display (md)&#xa;</xsl:text>
             <xsl:text>%% (a) indented slightly, so a paragraph appears to hang together&#xa;</xsl:text>
