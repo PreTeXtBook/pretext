@@ -4683,6 +4683,77 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
+                <title>Difficult List Items</title>
+
+                <p>In <xref ref="test-second" text="type-global"/> we were careful about lone bits of math inside list items.  The <tag>cd</tag> element is used with indentation, which is likely superfluous inside a list item that is already being indented.  Here we test lone <tag>cd</tag> elements inside of list items in various configurations.</p>
+
+                <p>Unordered list, one-deep.
+                    <ul>
+                        <li>
+                            <cd>
+                                <cline>Foo Bar Foo</cline>
+                                <cline>Bar Foo Bar</cline>
+                            </cd>
+                        </li>
+                        <li>
+                            <p>This list item is a long paragraph with a <tag>cd</tag> in the middle which should be indented some to indicate its participation in the paragraph.
+                            <cd>
+                                <cline>Foo Bar Foo</cline>
+                                <cline>Bar</cline>
+                                <cline>Bar Foo Bar</cline>
+                                <cline>Foo</cline>
+                            </cd>This list item is a long paragraph with a <tag>cd</tag> in the middle which should be indented some to indicate its participation in the paragraph.</p>
+                        </li>
+                        <li>
+                            <cd>
+                                <cline>Foo Bar Foo</cline>
+                                <cline>Bar</cline>
+                                <cline>Bar Foo Bar</cline>
+                                <cline>Foo</cline>
+                            </cd>
+                        </li>
+                    </ul>
+                </p>
+
+                <p>Intervening paragraph, to illuminate spacing at both the top and bottom of a list.  Intervening paragraph, to illuminate spacing at both the top and bottom of a list.  Intervening paragraph, to illuminate spacing at both the top and bottom of a list.  Intervening paragraph, to illuminate spacing at top and bottom of a list.</p>
+
+                <p>Ordered lists, two-deep, mixed.
+                    <ol>
+                        <li>
+                            <p>First item, outer level.<ol>
+                                <li>
+                                    <cd>
+                                        <cline>First inner item, cd only</cline>
+                                        <cline>Foo Bar Foo</cline>
+                                        <cline>Bar</cline>
+                                        <cline>Bar Foo Bar</cline>
+                                        <cline>Foo</cline>
+                                    </cd>
+                                </li>
+                                <li><p>Second inner item, a paragraph in a list item.</p></li>
+                                <li>
+                                    <cd>
+                                        <cline>Third inner item, cd only</cline>
+                                        <cline>Foo Bar Foo</cline>
+                                        <cline>Foo Bar Foo</cline>
+                                        <cline>Bar Foo Bar</cline>
+                                    </cd>
+                                </li>
+                            </ol></p>
+                        </li>
+                        <li>
+                            <cd>
+                                <cline>cd inside second item, outer level</cline>
+                                <cline>Bar</cline>
+                                <cline>Bar Foo Bar</cline>
+                                <cline>Foo</cline>
+                            </cd>
+                        </li>
+                    </ol>
+                </p>
+            </subsection>
+
+            <subsection>
                 <title>Description Lists</title>
 
                 <p>Use <c>dl</c> to make a description list<idx><h>description list</h></idx><idx><h>list</h><h>description</h></idx>. Inside of those tags, use <c>li</c> for each entry. Then, use <c>title</c> to specify the term being described and <c>p</c> to specify the description.</p>
