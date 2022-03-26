@@ -65,10 +65,12 @@
 }
 @media screen and (max-width: 800px) {
   .pretext .ptx-page > .ptx-main {
-    /* Make space for navbar fixed to bottom of screen */
-    padding-bottom: 35.36px;
     margin-left: 0;
     left: auto;
+  }
+  .pretext .ptx-page-footer {
+    /* Make space for navbar fixed to bottom of screen */
+    margin-bottom: 38px;
   }
 }
 
@@ -233,9 +235,10 @@
 
 .pretext .ptx-page-footer {
     background: #def;
-    margin-top: 2em;
+    margin-top: 1em;
     padding-top: 2em;
     border-top: 2px solid var(--sectiontoctext);
+    border-bottom: 2px solid var(--sectiontoctext);
 }
 .pretext .ptx-page-footer > a > div {
   display: inline-block;
@@ -260,6 +263,11 @@
   .pretext .ptx-content-footer {
     display: none;
   }
+/*
+  .pretext .ptx-content-footer {
+    margin-bottom: 60px;
+  }
+*/
   .pretext #ptx-toc {
     height: calc(100vh - 50px);
   }
@@ -269,9 +277,6 @@
   }
   .pretext .ptx-page-footer .pretext-link .logo {
     width: 4em;
-  }
-  .pretext .ptx-content-footer {
-    margin-bottom: 60px;
   }
   .pretext #ptx-navbar #calculator-toggle,
   .pretext #ptx-navbar .index-button {
