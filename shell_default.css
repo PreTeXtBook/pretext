@@ -131,43 +131,104 @@
 }
 
 .pretext .ptx-content-footer {
-    background: #fdf;
-    margin-top: 2em;
+  margin-top: 2em;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
 }
 .pretext .ptx-content-footer .button {
   cursor: pointer;
-  display: inline-block;
-  vertical-align: middle;
-  height: 35px;
-  width: 65px;
+  text-align: center;
   color: #333333;
   background-color: #ededed;
   border: 1px solid #bababa;
+  padding: 0;
+  display: flex;
+  align-items: center;
 }
 .pretext .ptx-content-footer .button:hover,
 .pretext .ptx-content-footer .button:active,
 .pretext .ptx-content-footer .button:focus {
   background-color: #fafafa;
 }
-.pretext .ptx-content-footer .button .icon,
-.pretext .ptx-content-footer .button .name {
+
+.pretext .ptx-content-footer .button.top-button {
+  text-align: center;
+  width: 40px;
+  height: 50px;
+}
+.pretext .ptx-content-footer .button.previous-button,
+.pretext .ptx-content-footer .button.next-button {
+  font-size: 1.0em;
+  cursor: pointer;
+  display: inline-block;
   vertical-align: middle;
+  height: 35px;
+  width: 65px;
+  /* Disable accidental text-selection */
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  float: left;
+  position: relative;
+  margin-top: 0.5em;
+}
+.pretext .ptx-content-footer .previous-button {
+  text-align: left;
+}
+.pretext .ptx-content-footer .next-button {
+  text-align: right;
+}
+
+.pretext .ptx-content-footer .name {
+  position: relative;
+  bottom: 0;
+}
+.pretext .ptx-content-footer .icon {
+  font-size: 1.3em;
+  Position: relative;
+  bottom: -0.1em;
+}
+.pretext .ptx-content-footer .previous-button .icon {
+  margin-left: 0.3em;
+  margin-right: 0.2em;
+}
+.pretext .ptx-content-footer .next-button .icon {
+  margin-left: 0.2em;
+  margin-right: 0.3em;
+}
+.pretext .ptx-content-footer .next-button {
+  text-align: right;
+}
+.pretext .ptx-content-footer .previous-button {
+    width: 70px;
+    float: right;
+    border-left: 1px solid #bababa;
+    border-right: 1px solid #bababa;
+}
+.pretext .ptx-content-footer .next-button {
+    width: 70px;
+    float: right;
+    border-right: 1px solid #bababa;
 }
 
 
 
 .pretext .ptx-content-footer .top-button {
   display: block;
-  width: 40px;
-  height: 60px;
 }
 
 .pretext .ptx-content-footer .top-button .icon,
 .pretext .ptx-content-footer .top-button .name {
   display: block;
+}
+.pretext .ptx-content-footer .top-button .icon {
+  bottom: 0;
+}
+.pretext .ptx-content-footer .top-button .name {
+  position: relative;
+  bottom: 0.4em;
 }
 
 .pretext .ptx-page-footer {
@@ -194,6 +255,9 @@
     bottom: 0;
    }
   .pretext #ptx-sidebar {
+    display: none;
+  }
+  .pretext .ptx-content-footer {
     display: none;
   }
   .pretext #ptx-toc {
