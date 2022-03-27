@@ -137,6 +137,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  max-width: 650px;
 }
 .pretext .ptx-content-footer .button {
   cursor: pointer;
@@ -234,23 +235,49 @@
 }
 
 .pretext .ptx-page-footer {
-    background: #def;
+    background: #e8f4ff;
     margin-top: 1em;
-    padding-top: 2em;
+    padding-top: 0;
     border-top: 2px solid var(--sectiontoctext);
     border-bottom: 2px solid var(--sectiontoctext);
-}
-.pretext .ptx-page-footer > a > div {
-  display: inline-block;
-}
-.pretext .ptx-page-footer .pretext-link .logo {
-  width: 6em;
-}
-.pretext .ptx-page-footer {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
 }
+.pretext .ptx-page-footer > a > div {
+  display: inline-block;
+}
+.pretext .ptx-page-footer .pretext-link {
+  margin: 1em 0 1em 0;
+  display: flex;
+  align-items: middle;
+}
+.pretext .ptx-page-footer .pretext-link .logo {
+  width: 6em;
+}
+.pretext .ptx-page-footer .pretext-link .name {
+  margin-top: 1.5em;
+  margin-right: 1em;
+}
+.pretext .ptx-page-footer .feedback-link {
+  cursor: pointer;
+  text-align: center;
+  color: #333333;
+  background-color: #ededed;
+  border: 1px solid #bababa;
+  margin: 2.2em 0 0 0;
+  padding: 0 1em 0 1em;
+  height: 2em;
+  display: flex;
+  align-items: center;
+}
+.pretext .ptx-page-footer .mathjax-logo {
+  margin-top: 2.0em;
+}
+.pretext .ptx-page-footer .mathjax-logo img{
+  height: 2.5em;
+}
+
 @media screen and (max-width: 800px) {
   .pretext #ptx-navbar {
     position: fixed;
@@ -275,8 +302,27 @@
     margin-bottom: 0;
     padding-left: 10px;
   }
+  .pretext .ptx-page-footer .pretext-link {
+    margin-top: 0.7em;
+    margin-bottom: 0.7em;
+  }
   .pretext .ptx-page-footer .pretext-link .logo {
     width: 4em;
+  }
+  .pretext .ptx-page-footer .pretext-link .name {
+    margin-top: 1.2em;
+    margin-right: 0.5em;
+    font-size: 90%;
+  }
+  .pretext .ptx-page-footer .feedback-link {
+    margin-top: 1.5em;
+    font-size: 90%;
+  }
+  .pretext .ptx-page-footer .mathjax-logo {
+    margin-top: 1.4em;
+  }
+  .pretext .ptx-page-footer .mathjax-logo img{
+    height: 1.8em;
   }
   .pretext #ptx-navbar #calculator-toggle,
   .pretext #ptx-navbar .index-button {
