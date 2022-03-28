@@ -208,6 +208,11 @@
     text-align: center;
     border-right: 1px solid #bababa;
 }
+#ptx-navbar .user-preferences-button {
+    padding: 0 0.8em 0 0.8em;
+    margin-left: 8em;
+    border: 1px solid #bababa;
+}
 #ptx-navbar .up-button {
     width: 60px;
     float: right;

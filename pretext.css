@@ -620,6 +620,32 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     @page { margin: 0 }
 }
 
+#preferences_menu_holder {
+  z-index: 30;
+  background: #fee;
+  position: absolute;
+  right: 9em;
+  top: 3em;
+}
+#preferences_menu_holder ol {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+#preferences_menu_holder ol li {
+  padding: 0 1em 0 1em;
+}
+#preferences_menu_holder ol li ol {
+  z-index: 40;
+  position: absolute;
+  left: 11em;
+  top: -1em;
+  background: #fee;
+}
+
+#choose_topic {
+  background: #eef;
+}
 
 /*******************************************************************************
  *
