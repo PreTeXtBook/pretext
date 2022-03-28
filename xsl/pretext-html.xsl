@@ -4585,6 +4585,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </div>
             </div>
         </xsl:when>
+        <!-- signal on intentional, temporary, hack      -->
+        <!-- simply duplicated in assembly, no solutions -->
+        <xsl:when test="@runestone">
+            <xsl:apply-templates select="." mode="runestone-to-interactive"/>
+        </xsl:when>
         <!-- intercept a True/False question              -->
         <!-- signal on "statement/@correct" from assembly -->
         <xsl:when test="statement/statement and statement/statement/@correct">

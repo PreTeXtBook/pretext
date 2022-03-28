@@ -488,6 +488,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Components -->
 <!-- ########## -->
 
+<!-- Hacked -->
+
+<xsl:template match="exercise[@runestone]" mode="runestone-to-interactive">
+    <xsl:variable name="runestone" select="string(@runestone)"/>
+    <xsl:copy-of select="document('rs-substitutes.xml', $original)/substitutes/substitute[@xml:id = $runestone]"/>
+</xsl:template>
+
 <!-- True/False -->
 
 <xsl:template match="exercise/statement[statement/@correct]" mode="runestone-to-interactive">

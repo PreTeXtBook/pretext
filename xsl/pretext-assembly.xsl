@@ -738,6 +738,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- structure, but the "statement" should have copies of enough of the   -->
 <!-- authored source for an interactive version to be produced later.     -->
 
+<!-- Hacked -->
+
+<xsl:template match="exercise[@runestone]" mode="representations">
+    <xsl:choose>
+        <xsl:when test="$exercise-style = 'static'">
+            <!-- punt for static versions, we have nothing -->
+            <exercise>
+                <statement>
+                    <p>An interactive Runestone problem goes here, but there is not yet a static representation.</p>
+                </statement>
+            </exercise>
+        </xsl:when>
+        <xsl:when test="$exercise-style = 'dynamic'">
+            <!-- pass on to the HTML conversion -->
+            <xsl:copy-of select="."/>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
 <!-- True/False -->
 
 <xsl:template match="exercise[statement/@correct]" mode="representations">
