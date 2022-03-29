@@ -65,7 +65,7 @@
     </introduction>
 
     <subsection>
-      <title>Using an Existing <webwork/> Problem</title>
+      <title>Using a <webwork/> Problem from the Host Course</title>
       <p>
         If a problem already exists and is accessible from the hosting course's <c>templates/</c> folder,
         then you can simply include it as a <attr>source</attr> attribute.
@@ -162,7 +162,7 @@
         requires using a <tag>pg-code</tag> tag.
         Having at least a little familiarity with coding problems in <webwork/> is necessary,
         although for simpler problems you could get away with mimicking the sample article in <c>mathbook/examples/webwork/</c>.
-        A <tag>statement</tag>, <em>optional</em> <tag>hint</tag>, and <em>optional</em> <tag>solution</tag> follow.
+        An <em>optional</em> <tag>statement</tag>, <em>optional</em> <tag>hint</tag>, and <em>optional</em> <tag>solution</tag> follow.
       </p>
       <pre>
         <![CDATA[
@@ -184,9 +184,17 @@
         ]]>
       </pre>
       <p>
-        If you are familiar with code for <webwork/> PG problems, the <tag>pg-code</tag> contains lines of PG code
-        that would appear in the <q>setup</q> portion of the problem.
-        Typically, this is the code that follows <c>TEXT(beginproblem());</c> and precedes the first <c>BEGIN_TEXT</c> or <c>BEGIN_PGML</c>.
+        Of course exercises should have statements, so if you do not include a <tag>statement</tag> element,
+        then the <tag>pg-code</tag> element should include code that prints the statement.
+        If neither kind of statement is present, there will be an error message when <pretext/>
+        proceesses the problem.
+      </p>
+      <p>
+        The <tag>pg-code</tag> contains lines of PG code
+        that would appear in the <q>setup</q> portion of a problem.
+        Possibly, it also contains code that prints a statement, hint, and/or solution.
+      </p>
+      <p>
         If your code needs any special <webwork/> macro libraries,
         you may load them in a <tag>pg-macros</tag> tag prior to <tag>pg-code</tag>,
         with each such <c>.pl</c> file's name inside a <tag>macro-file</tag> tag.
@@ -194,7 +202,8 @@
         based on the content and attributes you use in the rest of your problem.
       </p>
       <p>
-        Here is a small example. Following the example, we'll continue discussing <tag>statement</tag> and <tag>solution</tag>.
+        Here are two small examples. Following these examples,
+        we'll continue discussing <tag>statement</tag> and <tag>solution</tag>.
       </p>
       <pre>
         <![CDATA[
@@ -218,6 +227,36 @@
         </webwork>
         ]]>
       </pre>
+      <p>
+        Here is the same exercise, with the statement and solution coded directly using PG.
+      </p>
+      <pre>
+        <![CDATA[
+        <webwork>
+          <pg-macros>
+            <macro-file>PCC
+          <pg-code>
+            Context("LimitedNumeric");
+            $a = Compute(random(1, 9, 1));
+            $b = Compute(random(1, 9, 1));
+            $c = $a + $b;
+
+            BEGIN_PGML
+            Compute [`[$a] + [$b]`].
+
+            [@KeyboardInstructions('Type your answer without using the [|+|]* sign.')@]**
+
+            The sum is [_]{$c}{2}.
+            END_PGML
+
+            BEGIN_PGML_SOLUTION
+            [`[$a] + [$b] = [$c]`]
+            END_PGML_SOLUTION
+          </pg-code>
+        </webwork>
+        ]]>
+      </pre>
+
       <p>
         Within a <tag>statement</tag>, <tag>hint</tag>, or <tag>solution</tag>, reference <tag>var</tag> tags by <attr>name</attr>.
       </p>

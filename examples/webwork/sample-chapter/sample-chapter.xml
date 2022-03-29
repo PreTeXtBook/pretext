@@ -176,6 +176,50 @@
 
             </exercise>
 
+            <p>
+                You may author the statement using <pretext/> code,
+                as the examples above do using a <tag>statement</tag> element.
+                Or you may author the statement directly by continuing the
+                <tag>pg-code</tag> element.
+            </p>
+
+            <exercise xml:id="all-pg">
+                <title>All PG code, No Statement</title>
+                <webwork>
+                    <pg-code>
+                        Context("Numeric");
+                        $f = Formula("cos^2(x)+sin^2(x)");
+                        BEGIN_PGML
+                        [`[$f]`] is equal to [_______]{Real(1)}.
+                        END_PGML
+                    </pg-code>
+                </webwork>
+            </exercise>
+
+            <p>
+                Any <tag>statement</tag>, <tag>solution</tag>, or <tag>hint</tag>
+                that follows the <tag>pg-code</tag> will be converted to PG before a <webwork/> renderer processes it.
+            </p>
+
+            <exercise xml:id="pg-statement-ptx-solution">
+                <title>PG Statement, PTX Solution</title>
+                <webwork>
+                    <pg-code>
+                        Context("Numeric");
+                        $f = Formula("cos^2(x)+sin^2(x)");
+                        BEGIN_PGML
+                        [`[$f]`] is equal to [_______]{Real(1)}.
+                        END_PGML
+                    </pg-code>
+                    <solution>
+                        <p>
+                            By the Pythagorean Theorem,
+                            this is <m>1</m>.
+                        </p>
+                    </solution>
+                </webwork>
+            </exercise>
+
             <exercise xml:id="integer-addition-with-control-seed">
                 <title>Controlling Randomness</title>
 

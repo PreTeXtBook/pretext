@@ -107,7 +107,7 @@
     <xsl:text>pgdense['hint_no_solution_yes'] = {}&#xa;</xsl:text>
     <xsl:text>pgdense['hint_yes_solution_no'] = {}&#xa;</xsl:text>
     <xsl:text>pgdense['hint_yes_solution_yes'] = {}&#xa;</xsl:text>
-    <xsl:apply-templates select="$document-root//webwork[statement|task|stage|@source]" mode="dictionaries"/>
+    <xsl:apply-templates select="$document-root//webwork[pg-code|statement|task|stage|@source]" mode="dictionaries"/>
 </xsl:template>
 
 <xsl:template match="webwork[@source]" mode="dictionaries">
@@ -133,7 +133,7 @@
     <xsl:text>"&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="webwork[statement|task|stage]" mode="dictionaries">
+<xsl:template match="webwork[pg-code|statement|task|stage]" mode="dictionaries">
     <!-- Define values for the visible-id as key -->
     <xsl:variable name="problem">
         <xsl:apply-templates select="." mode="visible-id" />
@@ -290,7 +290,7 @@
 <!-- level templates follow.                                               -->
 
 
-<xsl:template match="webwork[statement]">
+<xsl:template match="webwork[pg-code|statement]">
     <xsl:param name="b-hint" />
     <xsl:param name="b-solution" />
     <xsl:param name="b-human-readable" />
@@ -848,7 +848,7 @@
         </xsl:if>
         <!-- instructions for entering answers into HTML forms -->
         <!-- utility for randomly generating variable letters -->
-        <xsl:if test=".//instruction or contains(.//pg-code,'RandomVariableName') or contains(.//pg-code,'RandomName') or contains(.//pg-code,'numberWord')">
+        <xsl:if test=".//instruction or contains(.//pg-code,'KeyboardInstructions') or contains(.//pg-code,'RandomVariableName') or contains(.//pg-code,'RandomName') or contains(.//pg-code,'numberWord')">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'PCCmacros.pl'"/>
                 <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
