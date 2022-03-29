@@ -7887,9 +7887,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Formatted for visual appeal in LaTeX source    -->
 <!-- "cd" could be first in a paragraph, so do not  -->
 <!-- drop an empty line                             -->
-<!-- With a "cline" element present, we assume   -->
-<!-- that is the entire structure (see the cline -->
-<!-- template in the pretext-common.xsl file)   -->
+<!-- With a "cline" element present, we assume      -->
+<!-- that is the entire structure (see the cline    -->
+<!-- template in the pretext-common.xsl file)       -->
 <xsl:template match="cd">
     <xsl:variable name="cd-env">
         <xsl:apply-templates select="." mode="environment-name"/>
@@ -7897,7 +7897,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%&#xa;</xsl:text>
     <xsl:text>\begin{</xsl:text>
     <xsl:value-of select="$cd-env"/>
-    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>}</xsl:text>
+    <!-- optional visible spaces -->
+    <xsl:choose>
+        <xsl:when test="not(@showspaces) or (@showspaces = 'none')">
+            <!-- line break now for verbatim text -->
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:when test="@showspaces = 'all'">
+            <!-- option, *then* line break now for verbatim text -->
+            <xsl:text>[showspaces=true]&#xa;</xsl:text>
+        </xsl:when>
+    </xsl:choose>
+    <!-- content: structured, then single line -->
     <xsl:choose>
         <xsl:when test="cline">
             <xsl:apply-templates select="cline"/>
