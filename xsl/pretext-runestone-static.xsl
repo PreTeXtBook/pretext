@@ -35,6 +35,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- *every* conversion, except the HTML conversion, where a more     -->
 <!-- capable version is designed to be powered by Runestone Services. -->
 
+<!-- We include text utilities so we can manipulate indentation -->
+<!-- in blocks of code as part of Parsons problems              -->
+<xsl:include href = "./pretext-text-utilities.xsl"/>
+
 <!-- True/False -->
 
 <xsl:template match="exercise[statement/@correct]" mode="runestone-to-static">
@@ -131,6 +135,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="exercise[statement and blocks]" mode="runestone-to-static">
+    <!-- determine these two options before context switches -->
+    <xsl:variable name="b-natural" select="not(@language) or (@language = 'natural')"/>
+    <xsl:variable name="b-indent" select="@indent = 'yes'"/>
     <statement>
         <xsl:copy-of select="statement/node()"/>
         <!-- blocks, in author-defined order, via @order attribute -->
@@ -140,16 +147,70 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <li>
                     <xsl:choose>
                         <xsl:when test="choice">
-                            <!-- seperate alternatives with "Or" -->
+                            <!-- a paired distractor in the block        -->
+                            <!-- separate alternatives with "Either/Or"  -->
+                            <!-- Order is as authored                    -->
                             <xsl:for-each select="choice">
-                                <xsl:copy-of select="node()"/>
-                                <xsl:if test="following-sibling::choice">
-                                    <p>Or,</p>
-                                </xsl:if>
+                                <xsl:choose>
+                                    <xsl:when test="following-sibling::choice">
+                                        <p>Either:</p>
+                                    </xsl:when>
+                                    <xsl:when test="preceding-sibling::choice">
+                                        <p>Or:</p>
+                                    </xsl:when>
+                                </xsl:choose>
+                                <xsl:choose>
+                                    <xsl:when test="$b-natural">
+                                        <!-- replicate source of choice -->
+                                        <xsl:copy-of select="node()"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <!-- computer code, make a code display           -->
+                                        <!-- A "p" gets indentation relative to Either/Or -->
+                                        <!-- Otherwsie, we could make a sublist?          -->
+                                        <p>
+                                            <cd>
+                                                <xsl:choose>
+                                                    <xsl:when test="$b-indent">
+                                                        <xsl:apply-templates select="." mode="strip-cline-indentation"/>
+                                                    </xsl:when>
+                                                    <xsl:otherwise>
+                                                        <xsl:copy-of select="node()"/>
+                                                    </xsl:otherwise>
+                                                </xsl:choose>
+                                            </cd>
+                                        </p>
+                                    </xsl:otherwise>
+                                </xsl:choose>
                             </xsl:for-each>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:copy-of select="node()"/>
+                            <!-- not a paired distractor -->
+                            <xsl:choose>
+                                <xsl:when test="$b-natural">
+                                    <!-- replicate source of block -->
+                                    <xsl:copy-of select="node()"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <!-- computer code, make a code display -->
+                                    <cd>
+                                        <xsl:choose>
+                                            <xsl:when test="$b-indent">
+                                                <!-- a hard problem, reader supplies indentation -->
+                                                <xsl:apply-templates select="." mode="strip-cline-indentation"/>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <!-- a little help, indentation preserved and visible -->
+                                                <xsl:attribute name="showspaces">
+                                                    <xsl:text>all</xsl:text>
+                                                </xsl:attribute>
+                                                <xsl:text>&#xa;</xsl:text>
+                                                <xsl:copy-of select="node()"/>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </cd>
+                                </xsl:otherwise>
+                            </xsl:choose>
                         </xsl:otherwise>
                     </xsl:choose>
                 </li>
@@ -157,28 +218,110 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </ul></p>
     </statement>
     <solution>
-        <p><ul>
-            <xsl:for-each select="blocks/block">
-                <xsl:if test="not(@correct = 'no')">
-                    <li>
-                        <xsl:choose>
-                            <xsl:when test="choice">
-                                <!-- seperate alternatives with "Or" -->
-                                <xsl:for-each select="choice">
-                                    <xsl:if test="@correct = 'yes'">
+        <xsl:choose>
+            <xsl:when test="$b-natural">
+                <!-- not a programming exercise, use unordered -->
+                <!-- list and copy "natural" markup            -->
+                <p><ul>
+                    <xsl:for-each select="blocks/block">
+                        <!-- default on "block" is  correct="yes" -->
+                        <xsl:if test="not(@correct = 'no')">
+                            <li>
+                                <xsl:choose>
+                                    <xsl:when test="choice">
+                                        <!-- just the correct one -->
+                                        <xsl:for-each select="choice">
+                                            <xsl:if test="@correct = 'yes'">
+                                                <xsl:copy-of select="node()"/>
+                                            </xsl:if>
+                                        </xsl:for-each>
+                                    </xsl:when>
+                                    <xsl:otherwise>
                                         <xsl:copy-of select="node()"/>
-                                    </xsl:if>
-                                </xsl:for-each>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:copy-of select="node()"/>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </li>
-                </xsl:if>
-            </xsl:for-each>
-        </ul></p>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </li>
+                        </xsl:if>
+                    </xsl:for-each>
+                </ul></p>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- programming language specified, assume "cline" -->
+                <!-- structure, reconstruct as a program/input      -->
+                <program>
+                    <xsl:attribute name="language">
+                        <xsl:value-of select="@language"/>
+                    </xsl:attribute>
+                    <input>
+                        <xsl:for-each select="blocks/block">
+                            <xsl:if test="not(@correct = 'no')">
+                                <xsl:choose>
+                                    <xsl:when test="choice">
+                                        <!-- just the correct choice              -->
+                                        <!-- default on "choice" is  correct="no" -->
+                                        <xsl:for-each select="choice">
+                                            <xsl:if test="@correct = 'yes'">
+                                                <xsl:for-each select="cline">
+                                                    <xsl:value-of select="."/>
+                                                    <xsl:text>&#xa;</xsl:text>
+                                                </xsl:for-each>
+                                            </xsl:if>
+                                        </xsl:for-each>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:for-each select="cline">
+                                            <xsl:value-of select="."/>
+                                            <xsl:text>&#xa;</xsl:text>
+                                        </xsl:for-each>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:if>
+                        </xsl:for-each>
+                    </input>
+                </program>
+            </xsl:otherwise>
+        </xsl:choose>
     </solution>
+</xsl:template>
+
+<!-- If a sequence of "cline" are in a problem where a student does      -->
+<!-- not get indentation help, then we need to strip it out for          -->
+<!-- presentation in a static form.  This template forms the text block, -->
+<!-- strips leading/gross indentation with a utility template, then uses -->
+<!-- a recursive template to wrap back into "cline".                     -->
+
+<xsl:template match="block|choice" mode="strip-cline-indentation">
+    <xsl:variable name="text-block">
+        <xsl:for-each select="cline">
+            <xsl:value-of select="."/>
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:for-each>
+    </xsl:variable>
+    <xsl:call-template name="restore-cline">
+        <xsl:with-param name="text">
+            <xsl:call-template name="sanitize-text">
+                <xsl:with-param name="text">
+                    <xsl:value-of select="$text-block"/>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="restore-cline">
+    <xsl:param name="text"/>
+
+    <xsl:choose>
+        <xsl:when test="$text = ''"/>
+        <xsl:otherwise>
+            <cline>
+                <xsl:value-of select="substring-before($text, '&#xa;')"/>
+            </cline>
+            <xsl:call-template name="restore-cline">
+                <xsl:with-param name="text" select="substring-after($text, '&#xa;')"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Active Code -->

@@ -39,6 +39,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                                                       -->
 <!-- Used in:                                                              -->
 <!--     xsl/pretext-common.xsl (2022-03-27)                               -->
+<!--     xsl/pretext/pretext-runestone-static.xsl (2022-03-28)             -->
 
 <!-- There are &LOWERCASE; and &UPPERCASE; entities  -->
 <!-- in the "file-extension" template (only?) -->
