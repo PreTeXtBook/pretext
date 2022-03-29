@@ -7882,16 +7882,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- 100% analogue of LaTeX's verbatim            -->
-<!-- environment or HTML's <pre> element          -->
-<!-- TODO: center on page with fancyvrb/BVerbatim -->
-<!-- and \centering in a custom semantic macro?   -->
-
 <!-- cd is for use in paragraphs, inline            -->
 <!-- One line is mixed content, and should be tight -->
 <!-- Formatted for visual appeal in LaTeX source    -->
 <!-- "cd" could be first in a paragraph, so do not  -->
 <!-- drop an empty line                             -->
+<!-- With a "cline" element present, we assume   -->
+<!-- that is the entire structure (see the cline -->
+<!-- template in the pretext-common.xsl file)   -->
 <xsl:template match="cd">
     <xsl:variable name="cd-env">
         <xsl:apply-templates select="." mode="environment-name"/>
@@ -7900,25 +7898,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{</xsl:text>
     <xsl:value-of select="$cd-env"/>
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:value-of select="." />
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:text>\end{</xsl:text>
-    <xsl:value-of select="$cd-env"/>
-    <xsl:text>}&#xa;</xsl:text>
-</xsl:template>
-
-<!-- With a "cline" element present, we assume   -->
-<!-- that is the entire structure (see the cline -->
-<!-- template in the pretext-common.xsl file)   -->
-<xsl:template match="cd[cline]">
-    <xsl:variable name="cd-env">
-        <xsl:apply-templates select="." mode="environment-name"/>
-    </xsl:variable>
-    <xsl:text>%&#xa;</xsl:text>
-    <xsl:text>\begin{</xsl:text>
-    <xsl:value-of select="$cd-env"/>
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:apply-templates select="cline" />
+    <xsl:choose>
+        <xsl:when test="cline">
+            <xsl:apply-templates select="cline"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="."/>
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="$cd-env"/>
     <xsl:text>}&#xa;</xsl:text>
