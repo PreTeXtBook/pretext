@@ -368,6 +368,98 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </blocks>
             <hint>Dorothy will not be much help with this proof.</hint>
         </exercise>
+
+        <exercise xml:id="prime-number-program-indent-yes" language="python" adaptive="yes" indent="yes">
+            <title>Parsons Problem, Programming</title>
+            <idx>prime numbers</idx>
+            <idx>Sieve of Eratosthenes</idx>
+            <statement>
+                <p>The Sieve of Eratosthenes computes prime numbers by starting with a finite list of the integers bigger than 1.  The first member of the list is a prime and is saved/recorded.  Then all multiples of that prime (which not a prime, excepting the prime itself!) are removed from the list.  Now the first number remaining in the list is the next prime number.  And the process repeats.</p>
+                <p>The code blocks below can be rearranged to form one of the many possible programs to implement this algorithm to compute a list of all the primes less than <m>250</m>. [Ed. this version of this problem requires the reader to provide the necessary indentation.]</p>
+                <p>This reprises <xref ref="sieve-primes"/>.</p>
+            </statement>
+            <blocks>
+                <block order="6">
+                    <cline>n = 250</cline>
+                </block>
+                <block order="2">
+                    <choice correct="yes">
+                        <cline>primes = []</cline>
+                        <cline>candidates = list(range(2,n))</cline>
+                    </choice>
+                    <choice>
+                        <cline>candidates = []</cline>
+                        <cline>primes = list(range(2,n))</cline>
+                    </choice>
+                </block>
+                <block order="7" correct="no">
+                    <cline>primes = candidates + [p]</cline>
+                </block>
+                <block order="8">
+                    <cline>while candidates:</cline>
+                </block>
+                <block order="3">
+                    <cline>    p = candidates[0]</cline>
+                    <cline>    primes.append(p)</cline>
+                </block>
+                <block order="1">
+                    <cline>    for nonprime in range(p, n, p):</cline>
+                </block>
+                <block order="5">
+                    <cline>        if nonprime in candidates:</cline>
+                    <cline>            candidates.remove(nonprime)</cline>
+                </block>
+                <block order="4">
+                    <cline>print(primes)</cline>
+                </block>
+            </blocks>
+        </exercise>
+
+        <exercise xml:id="prime-number-program-indent-no" language="python" adaptive="yes" indent="no">
+            <title>Parsons Problem, Programming</title>
+            <idx>prime numbers</idx>
+            <idx>Sieve of Eratosthenes</idx>
+            <statement>
+                <p>The Sieve of Eratosthenes computes prime numbers by starting with a finite list of the integers bigger than 1.  The first member of the list is a prime and is saved/recorded.  Then all multiples of that prime (which not a prime, excepting the prime itself!) are removed from the list.  Now the first number remaining in the list is the next prime number.  And the process repeats.</p>
+                <p>The code blocks below can be rearranged to form one of the many possible programs to implement this algorithm to compute a list of all the primes less than <m>250</m>. [Ed. this version of this problem does not require the reader to provide the necessary indentation.]</p>
+                <p>This reprises <xref ref="sieve-primes"/>.</p>
+            </statement>
+            <blocks>
+                <block order="6">
+                    <cline>n = 250</cline>
+                </block>
+                <block order="2">
+                    <choice correct="yes">
+                        <cline>primes = []</cline>
+                        <cline>candidates = list(range(2,n))</cline>
+                    </choice>
+                    <choice>
+                        <cline>candidates = []</cline>
+                        <cline>primes = list(range(2,n))</cline>
+                    </choice>
+                </block>
+                <block order="7" correct="no">
+                    <cline>primes = candidates + [p]</cline>
+                </block>
+                <block order="8">
+                    <cline>while candidates:</cline>
+                </block>
+                <block order="3">
+                    <cline>    p = candidates[0]</cline>
+                    <cline>    primes.append(p)</cline>
+                </block>
+                <block order="1">
+                    <cline>    for nonprime in range(p, n, p):</cline>
+                </block>
+                <block order="5">
+                    <cline>        if nonprime in candidates:</cline>
+                    <cline>            candidates.remove(nonprime)</cline>
+                </block>
+                <block order="4">
+                    <cline>print(primes)</cline>
+                </block>
+            </blocks>
+        </exercise>
     </exercises>
 
     <section>
