@@ -619,6 +619,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Parsons Problem -->
 
 <xsl:template match="exercise/statement[statement and blocks]" mode="runestone-to-interactive">
+    <!-- determine this option before context switches -->
+    <xsl:variable name="b-natural" select="not(parent::exercise/@language) or (parent::exercise/@language = 'natural')"/>
     <div class="runestone" style="max-width: none;">
         <div data-component="parsons" class="alert alert-warning parsons">
             <xsl:attribute name="id">
@@ -628,31 +630,77 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- the prompt -->
                 <xsl:apply-templates select="statement"/>
             </div>
-            <pre class="parsonsblocks" data-language="natural" data-question_label="X.Y.Z" style="visibility: hidden;">
+            <pre class="parsonsblocks" data-question_label="X.Y.Z" style="visibility: hidden;">
                 <!-- author opts-in to adaptive problems -->
-                <xsl:if test="@adaptive = 'yes'">
+                <xsl:attribute name="data-language">
+                    <xsl:choose>
+                        <xsl:when test="$b-natural">
+                            <xsl:text>natural</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <!-- must now have @language -->
+                            <xsl:value-of select="parent::exercise/@language"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:attribute>
+                <xsl:if test="parent::exercise/@adaptive = 'yes'">
                     <xsl:attribute name="data-adaptive">
                         <xsl:text>true</xsl:text>
                     </xsl:attribute>
                 </xsl:if>
+                <!-- author asks student to provide indentation via  -->
+                <!-- the indentation-enabled "drop" text window      -->
+                <!-- (not relevant for natural language)             -->
+                <xsl:attribute name="data-noindent">
+                    <xsl:choose>
+                        <xsl:when test="parent::exercise/@indent = 'yes'">
+                            <xsl:text>false</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>true</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:attribute>
                 <!-- the blocks -->
-                <xsl:apply-templates select="blocks/block"/>
+                <xsl:apply-templates select="blocks/block">
+                    <xsl:with-param name="b-natural" select="$b-natural"/>
+                </xsl:apply-templates>
             </pre>
         </div>
     </div>
 </xsl:template>
 
 <xsl:template match="exercise/statement/blocks/block">
+    <xsl:param name="b-natural"/>
+
     <xsl:choose>
         <xsl:when test="choice">
-            <!-- put correct choice first -->
-            <xsl:apply-templates select="choice[@correct = 'yes']"/>
+            <!-- put correct choice first             -->
+            <!-- default on "choice" is  correct="no" -->
+            <xsl:apply-templates select="choice[@correct = 'yes']">
+                <xsl:with-param name="b-natural" select="$b-natural"/>
+            </xsl:apply-templates>
             <xsl:text>&#xa;---&#xa;</xsl:text>
-            <xsl:apply-templates select="choice[not(@correct = 'yes')]"/>
+            <xsl:apply-templates select="choice[not(@correct = 'yes')]">
+                <xsl:with-param name="b-natural" select="$b-natural"/>
+            </xsl:apply-templates>
             <xsl:text> #paired</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates />
+            <xsl:choose>
+                <xsl:when test="$b-natural">
+                    <xsl:apply-templates />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:for-each select="cline">
+                        <xsl:value-of select="."/>
+                        <xsl:if test="following-sibling::cline">
+                            <xsl:text>&#xa;</xsl:text>
+                        </xsl:if>
+                    </xsl:for-each>
+                </xsl:otherwise>
+            </xsl:choose>
+            <!-- default on "block" is  correct="yes" -->
             <xsl:if test="@correct = 'no'">
                 <xsl:text> #distractor</xsl:text>
             </xsl:if>
@@ -661,6 +709,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="following-sibling::block">
         <xsl:text>&#xa;---&#xa;</xsl:text>
     </xsl:if>
+</xsl:template>
+
+<xsl:template match="exercise/statement/blocks/block/choice">
+    <xsl:param name="b-natural"/>
+
+    <xsl:choose>
+        <xsl:when test="$b-natural">
+            <xsl:apply-templates select="*"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:for-each select="cline">
+                <xsl:value-of select="."/>
+                <xsl:if test="following-sibling::cline">
+                    <xsl:text>&#xa;</xsl:text>
+                </xsl:if>
+            </xsl:for-each>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Active Code -->
