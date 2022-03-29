@@ -7382,6 +7382,12 @@ the xsltproc executable.
                 <cline>use a single cline</cline>
             </cd>if you like to have your source closely model the visual look of the output.</p>
 
+            <p>With the <attr>showspaces</attr> attribute of <tag>cd</tag> set to <c>all</c> there will be a visual indication of every space character, which is nice if indentation is critical.  For example,<cd showspaces="all">
+                <cline>there is the &lt;cline&gt; tag</cline>
+                <cline>    meant to model the line tag</cline>
+                <cline>        and short for "code line"</cline>
+            </cd> and as single line <cd showspaces="all">authored as a single line</cd> that is not structured with <tag>cline</tag> elements.</p>
+
             <p>The <tag>pre</tag> tag is meant for use outside of paragraphs, but is otherwise very similar.  The source may also be structured as a sequence of <tag>cline</tag> as in the next example, recycling content from above.</p>
 
             <pre>
