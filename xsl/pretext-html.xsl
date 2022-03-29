@@ -8682,6 +8682,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- environment or HTML's <pre> element          -->
 <!-- TODO: center on page?                        -->
 
+<!-- When visual spaces are requested, we mimic the               -->
+<!-- long-established pattern in LaTeX and use a (short) open     -->
+<!-- box character, which is also suggested as a "graphic for     -->
+<!-- space" as part of the Unicode standard.                      -->
+<!-- Unicode Character 'OPEN BOX' (U+2423)                        -->
+<!-- https://www.fileformat.info/info/unicode/char/2423/index.htm -->
+
 <!-- cd is for use in paragraphs, inline -->
 <!-- Unstructured is pure text           -->
 <xsl:template match="cd">
@@ -8693,7 +8700,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="insert-paragraph-id" >
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
-        <xsl:value-of select="." />
+        <xsl:choose>
+            <xsl:when test="not(@showspaces) or (@showspaces = 'none')">
+                <xsl:value-of select="." />
+            </xsl:when>
+            <xsl:when test="@showspaces = 'all'">
+                <xsl:value-of select="str:replace(., '&#x20;', '&#x2423;')" />
+            </xsl:when>
+        </xsl:choose>
     </xsl:element>
 </xsl:template>
 
@@ -8709,6 +8723,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:apply-templates>
         <xsl:apply-templates select="cline" />
     </xsl:element>
+</xsl:template>
+
+<!-- Override from -common to insert visual spaces -->
+<xsl:template match="cline[parent::cd/@showspaces = 'all']">
+    <xsl:value-of select="str:replace(., '&#x20;', '&#x2423;')" />
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "pre" is analogous to the HTML tag of the same name -->
