@@ -945,8 +945,9 @@ function main_menu_navigator(e) {  // we are not currently editing
 // 3rd option means we already have a menu
 
     console.log("entered main_menu_navigator");
+    console.log("document.activeElement", document.activeElement);
 
-    if(!document.getElementById("preferences_menu_holder")) {
+  if (e.code == "Return" || e.code == "ArrowRight") {
         var prefs_button = document.getElementById("user-preferences-button");
 
         var preferences_menu_holder = document.createElement('div');
@@ -961,6 +962,8 @@ function main_menu_navigator(e) {  // we are not currently editing
         main_menu += '<li data-env="mode">Select dark/light mode</li>';
         main_menu += '</ol>';
         preferences_menu_holder.innerHTML = main_menu;
+    } else if (e.code == "Return" && document.getElementById("active_choice")) {
+        document.getElementById("preferences_menu_holder").remove()
     } else if (document.getElementById("choose_topic")) {
         theChooseTopic = document.getElementById("choose_topic");
         console.log("theEnterChoice", theChooseTopic);
@@ -1525,11 +1528,13 @@ function logKeyDown(e) {
     prev_prev_char = prev_char;
     prev_char = this_char;
     this_char = e;
-    editorLog("logKey",e,"XXX",e.code);
-    editorLog("are we editing", document.getElementById('actively_editing'));
-    editorLog("is there already an edit menu?", document.getElementById('edit_menu_holder'));
+    console.log("logKey",e,"XXX",e.code);
 
     var input_region = document.activeElement;
+    console.log("active id", input_region.id);
+    if(input_region.id == "user-preferences-button" && (e.code == "Enter")) {
+        document.getElementById("preferences_menu_holder").classList.toggle("hidden")
+    }
     editorLog("input_region", input_region);
     // if we are writing something, keystrokes usually are just text input
     if (document.getElementById('actively_editing')) {
