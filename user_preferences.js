@@ -29,16 +29,43 @@ editing_mode = chosen_edit_option;
 chosen_edit_option = "PLACEHOLDER";
 debugLog("chosen_edit_option", chosen_edit_option, "chosen_edit_option", chosen_edit_option > 0);
 
-var prefs_menu_vals = {
-    'avatar': {'cat': 'AA',
-               'man': 'bb',
-               'woman': 'CC'},
-    'font': {'serif': 'SS',
-             'sanserif': 'SSSS'},
-    'mode': {'light': 'AA',
-             'pastel': 'bb',
-             'grey': 'bb',
-             'dark': 'Dd'}
+var font_vals = {
+    'size': 12,
+    'height': 1.2,
+    'wdth': 100,
+    'wght': 500
+}
+
+function fontcss(fvals) {
+console.log("in fontcss",fvals);
+  var csskeys = Object.keys(fvals);
+  var this_style = "";
+  for (var j=0; j < csskeys.length; ++j) {
+    this_key = csskeys[j];
+
+console.log("in fontcss", this_key, "with value", fvals[this_key]);
+    if (this_key == 'size') {
+      this_style += "font-size: " + fvals[this_key].toString() + "pt; "
+    } else if (this_key == 'height') {
+      this_style += "line-height: " + fvals[this_key].toString() + "; "
+    }
+  }
+
+  this_style += "font-variation-settings: ";
+  for (var j=0; j < csskeys.length; ++j) {
+    this_key = csskeys[j];
+
+    if (this_key == 'wdth') {
+      this_style += "'wdth' " + fvals[this_key].toString() + ","
+    } else if (this_key == 'wght') {
+      this_style += "'wght' " + fvals[this_key].toString() + ","
+    }
+  }
+  this_style = this_style.slice(0, -1);
+  this_style += ";";
+
+console.log("returning this_style", this_style);
+  return this_style
 }
 
 function choice_options(this_choice) {
@@ -93,75 +120,6 @@ function tag_type(tag) {
     return this_type
 }
 
-function process_value_from_source(fcn, piece, src) {
-
-    editorLog(fcn, "process_value_from_source", piece, "in", src);
-    var content_raw = "";
-    if (["literal", "codenumber", "period", "titleperiod", "space"].includes(fcn)) {
-        content_raw = piece;
-    } else {
-        if (piece in src) {
-          content_raw = src[piece]
-        } else {
-          if ("parent" in src) {
-              var parent_src = internalSource[src["parent"][0]];
-              if (piece in parent_src) {
-                  content_raw = parent_src[piece]
-              } else {
-                  errorLog("Error: piece", piece, "fcn", fcn, "from", parent_src, "not in src or parent_src")
-              }
-          } else {
-            errorLog("at the top, or else there is an error")
-          }
-        }
-    } /* fcn != literal */
-
-/*
-    if (typeof myVar == 'string') {
-        content_raw = content_raw.replace(/-standalone$/, "")  // hack because we need alternate to sourcetag
-    }
-*/
-    if (fcn == "capitalize") {
-        content = content_raw.charAt(0).toUpperCase() + content_raw.slice(1);
-    } else if (fcn == "literal") {
-        editorLog("literally", piece);
-    //    alert(piece);
-        content = piece
-    } else if (fcn == "space") {
-        content = content_raw + " "
-    } else if (fcn == "period") {
-        content = content_raw + "."
-    } else if (fcn == "comma") {
-        content = content_raw + ","
-    } else if (fcn == "titleperiod") {
-        if (src.title && !(/[!?]$/.test(src.title))) {
-            content = content_raw + "."
-        }
-    } else if (fcn == "percentlist") {
-        if (content_raw) {
-            content = content_raw.join("% ") + "%"
-        } else {
-            content = "MISSING" + "%"
-        }
-    } else if (fcn == "nthitem") {
-
-        editorLog("calculating nthitem", piece, "from ", content_raw, "within", src);
-        var item_index = 0;  // need to be its location among siblings
-        content = content_raw[item_index];
-    } else if (fcn == "codenumber") {
-        editorLog("   CODENUMBER", src);
-        content = internalSource.root_data.number_base;
-        if (src["xml:id"] == top_level_id) {
-            // no need to add locan number
-        } else {
-            content += ".N"
-        }
-    } else {
-         content = content_raw
-    }
-
-    return content
-}
 
 $(".autopermalink > a").attr("tabindex", -1);
 
@@ -1523,6 +1481,19 @@ editorLog("adding tab listener");
 
 document.addEventListener('keydown', logKeyDown);
 
+function nextsibligntabbable(startingplace, where) {
+    var candidate = startingplace.nextElementSibling;
+    if (where == "previous" ) { candidate = startingplace.previousElementSibling }
+
+    while (candidate) {
+console.log("candidate A", candidate);
+      if (candidate.hasAttribute("tabindex")) { return candidate }
+console.log("candidate B", candidate);
+      if (where == "next" ) { candidate = candidate.nextElementSibling }
+      else { candidate = candidate.previousElementSibling }
+    }
+}
+
 function logKeyDown(e) {
     if (e.code == "ShiftLeft" || e.code == "ShiftRight" || e.code == "Shift") { return }
     prev_prev_char = prev_char;
@@ -1531,10 +1502,102 @@ function logKeyDown(e) {
     console.log("logKey",e,"XXX",e.code);
 
     var input_region = document.activeElement;
-    console.log("active id", input_region.id);
-    if(input_region.id == "user-preferences-button" && (e.code == "Enter")) {
-        document.getElementById("preferences_menu_holder").classList.toggle("hidden")
+    console.log("input_region", input_region);
+    if (input_region.id == "user-preferences-button") {
+        if (e.code == "Enter") {
+          document.getElementById("preferences_menu_holder").classList.toggle("hidden")
+        } else if (e.code == "Tab") {
+console.log("tabbing to main pref menu", document.getElementById("preferences_menu_holder").firstElementChild);
+console.log("tabbing to main pref menu", document.getElementById("preferences_menu_holder").firstElementChild.firstElementChild);
+          e.preventDefault();
+          document.getElementById("preferences_menu_holder").firstElementChild.firstElementChild.focus()
+        }
+    } else if (input_region.hasAttribute("data-env")) {
+      var this_submenu = input_region.getElementsByTagName("ol")[0];
+console.log("this_submenu C", this_submenu);
+      if ((e.code == "Enter") || (e.code == "ArrowRight")) {
+console.log("selecting",input_region, "which has", input_region.getElementsByTagName("ol"), "first",input_region.getElementsByTagName("ol")[0]);
+        this_submenu.classList.toggle("hidden")
+        input_region.classList.toggle("selected")
+        input_region.parentElement.classList.toggle("active")
+      } else if (e.code == "Tab" && e.shiftKey) {
+        e.preventDefault();
+        if (input_region.classList.contains("selected")) {
+          this_submenu.classList.loggle("hidden");
+          input_region.classList.loggle("selected");
+        } else { // cycle up through the elements
+     //     previous_sibling = input_region.previousElementSibling;
+          previous_sibling = nextsibligntabbable(input_region, "previous");
+          if (previous_sibling) { previous_sibling.focus() }
+          else {
+            document.getElementById("preferences_menu_holder").classList.toggle("hidden");
+            document.getElementById("user-preferences-button").focus();
+          }
+        }
+      } else if (e.code == "Tab") {
+        e.preventDefault();
+        if (input_region.classList.contains("selected")) {
+          var firstchild = this_submenu.firstElementChild;
+          if (firstchild.hasAttribute("tabindex")) {
+            firstchild.focus()
+          } else {
+            nextsibligntabbable(firstchild, "next").focus()
+          }
+        } else { // cycle through the elements
+//          next_sibling = input_region.nextElementSibling;
+          next_sibling = nextsibligntabbable(input_region, "next");
+          if (next_sibling) { next_sibling.focus() }
+          else {
+            document.getElementById("preferences_menu_holder").classList.toggle("hidden");
+            document.getElementById("user-preferences-button").focus();
+          }
+        }
+      }
+    } else if (input_region.hasAttribute("data-val")) {
+console.log("input_region", input_region);
+      if ((e.code == "Enter") || (e.code == "ArrowRight")) {
+console.log("font_vals is", font_vals);
+        var dataval = input_region.getAttribute("data-val");
+        var datachange = input_region.getAttribute("data-change");
+console.log("dataval", dataval, "datachange",datachange);
+        font_vals[dataval] += parseFloat(datachange);
+console.log("font_vals are", font_vals);
+console.log("css font_vals", fontcss(font_vals));
+        var new_style = fontcss(font_vals);
+        var divs = document.getElementsByClassName('para');
+        for (i = 0; i < divs.length; i++) {
+          divs[i].setAttribute('style', new_style);
+        }
+      } else if (e.code == "Tab" && e.shiftKey) {
+        e.preventDefault();
+//        previous_sibling = input_region.previousElementSibling;
+        previous_sibling = nextsibligntabbable(input_region, "previous");
+
+console.log("previous_sibling",previous_sibling);
+        if (previous_sibling) { previous_sibling.focus() }
+        else {
+          input_region.parentElement.parentElement.parentElement.classList.toggle("active");
+          input_region.parentElement.parentElement.classList.toggle("selected");
+          input_region.parentElement.parentElement.focus();
+          input_region.parentElement.classList.toggle("hidden");
+        }
+      } else if (e.code == "Tab") {
+        e.preventDefault();
+  //      next_sibling = input_region.nextElementSibling;
+        next_sibling = nextsibligntabbable(input_region, "next");
+        if (next_sibling) { next_sibling.focus() }
+        else {
+          input_region.parentElement.parentElement.parentElement.classList.toggle("active");
+          input_region.parentElement.parentElement.classList.toggle("selected");
+          input_region.parentElement.parentElement.focus();
+          input_region.parentElement.classList.toggle("hidden");
+        }
+      }
     }
+
+
+    return;
+
     editorLog("input_region", input_region);
     // if we are writing something, keystrokes usually are just text input
     if (document.getElementById('actively_editing')) {
