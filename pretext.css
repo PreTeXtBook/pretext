@@ -620,29 +620,66 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     @page { margin: 0 }
 }
 
+.hidden {
+  display: none;
+}
+
+#ptx-navbar #preferences_menu_holder .active  > li {
+  color: #ddd;
+}
+#ptx-navbar #preferences_menu_holder li:focus {
+  background: #eef;
+}
+#ptx-navbar #preferences_menu_holder .active .selected {
+  background: #eef;
+  color: #111;
+}
+#ptx-navbar .button.user-preferences-button {
+  overflow: visible;
+}
 #preferences_menu_holder {
   z-index: 30;
   background: #fee;
   position: absolute;
-  right: 9em;
-  top: 3em;
+  left: 1em;
+  top: 2em;
 }
 #preferences_menu_holder ol {
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
-#preferences_menu_holder ol li {
-  padding: 0 1em 0 1em;
+#preferences_menu_holder > ol {
+  width: 12.5em;
+}
+#preferences_menu_holder > ol > li {
+  padding: 0 1em 0 0.5em;
 }
 #preferences_menu_holder ol li ol {
   z-index: 40;
   position: absolute;
-  left: 11em;
-  top: -1em;
+  left: 14em;
+  top: 0;
   background: #fee;
 }
+#preferences_menu_holder ol.fonts:not(.hidden) {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+#preferences_menu_holder ol.fonts li {
+}
 
+#preferences_menu_holder .wrap_to_submenu {
+  float: right;
+  line-height: 0.95em;
+}
+#preferences_menu_holder .to_submenu {
+  position: absolute;
+}
+#preferences_menu_holder .avatars li {
+  font-size: 200%;
+  text-align: center;
+}
 #choose_topic {
   background: #eef;
 }
