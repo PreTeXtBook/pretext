@@ -627,9 +627,17 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 #ptx-navbar #preferences_menu_holder .active  > li {
   color: #ddd;
 }
-#ptx-navbar #preferences_menu_holder li:focus {
+#ptx-navbar #preferences_menu_holder > ol > li:focus {
   background: #eef;
+  border: 2px solid #909;
+  padding: 0 24px 0 8px;
 }
+#ptx-navbar #preferences_menu_holder > ol > li > ol > li:focus {
+  background: #eef;
+  border: 2px solid #909;
+  padding: 0 4px;
+}
+
 #ptx-navbar #preferences_menu_holder .active .selected {
   background: #eef;
   color: #111;
@@ -641,8 +649,8 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
   z-index: 30;
   background: #fee;
   position: absolute;
-  left: 1em;
-  top: 2em;
+  left: -1em;
+  top: 4em;
 }
 #preferences_menu_holder ol {
   list-style-type: none;
@@ -653,25 +661,51 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
   width: 12.5em;
 }
 #preferences_menu_holder > ol > li {
-  padding: 0 1em 0 0.5em;
+  padding: 2px 26px 2px 10px;
 }
 #preferences_menu_holder ol li ol {
   z-index: 40;
   position: absolute;
-  left: 14em;
-  top: 0;
+  left: 13em;
+  top: -2em;
   background: #fee;
+}
+#preferences_menu_holder ol li ol li {
+  padding: 2px 6px;
+  display: flex; 
+  align-items: center;
 }
 #preferences_menu_holder ol.fonts:not(.hidden) {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
 }
-#preferences_menu_holder ol.fonts li {
+#preferences_menu_holder ol.fonts li:nth-child(8n+1),
+#preferences_menu_holder ol.fonts li:nth-child(8n+2),
+#preferences_menu_holder ol.fonts li:nth-child(8n+3),
+#preferences_menu_holder ol.fonts li:nth-child(8n+4) {
+    background-color: #efe;
+}
+#preferences_menu_holder ol.fonts li:nth-child(4n+2) {
+ width: 5em;
+ justify-content: center;
+ text-align: center;
+ align-items: center;
+}
+#preferences_menu_holder ol.fonts li:nth-child(4n+1) {
+  padding-left: 14px;
+}
+#preferences_menu_holder ol.fonts li:nth-child(4n+3) {
+  padding-right: 20px;
+}
+#preferences_menu_holder ol.fonts li:nth-child(4n+3):focus {
+  padding-right: 18px;
 }
 
 #preferences_menu_holder .wrap_to_submenu {
   float: right;
   line-height: 0.95em;
+  margin-right: -7px;
 }
 #preferences_menu_holder .to_submenu {
   position: absolute;
@@ -682,6 +716,9 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 }
 #choose_topic {
   background: #eef;
+}
+.check {
+  width: 1em;
 }
 
 /*******************************************************************************
