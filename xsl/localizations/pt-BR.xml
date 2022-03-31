@@ -24,6 +24,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- pt-BR, Portugese (Brazil)-->
 <!-- Igor Morgado, morgado.igor@gmail.com, 2014-08-11, 2014-08-14 -->
 <!-- Vinicius Monego, monego@posteo.net, 2020-11-07 -->
+<!-- Leon Silva, leon.silva@ufrpe.br, 2022-03-30 -->
 
 <locale language="pt-BR">
     <!-- THEOREM-LIKE blocks -->
@@ -38,10 +39,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='identity'>Identidade</localization>
     <!-- PROOF-LIKE -->
     <localization string-id='proof'>Demonstração</localization>
-    <!-- <localization string-id='argument'>Argument</localization> -->
-    <!-- <localization string-id='justification'>Justification</localization> -->
-    <!-- <localization string-id='reasoning'>Reasoning</localization> -->
-    <!-- <localization string-id='explanation'>Explanation</localization> -->
+    <localization string-id='argument'>Argumento</localization>
+    <localization string-id='justification'>Justificativa</localization>
+    <localization string-id='reasoning'>Raciocínio</localization>
+    <localization string-id='explanation'>Explicação</localization>
     <!-- used for a (logical) portion of a proof -->
     <localization string-id='case'>Caso</localization>
     <!-- Mathematical statements without proofs -->
@@ -77,7 +78,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='chapter'>Capítulo</localization>
     <localization string-id='appendix'>Apêndice</localization>
     <!-- Next is the plural of Appendix, used to identify a group of appendix -->
-    <!-- <localization string-id='appendices'>Appendices</localization> -->
+    <localization string-id='appendices'>Apêndices</localization>
     <localization string-id='section'>Seção</localization>
     <localization string-id='subsection'>Subseção</localization>
     <localization string-id='subsubsection'>Subsubseção</localization>
@@ -93,10 +94,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='glossary'>Glossário</localization>
     <localization string-id='references'>Referêcias</localization>
     <!-- Translation needed for Brazilian Portugese -->
-    <!-- <localization string-id='backmatter'>Back Matter</localization> -->
+    <localization string-id='backmatter'>Pós-textual</localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
-    <localization string-id='paragraphs'>Parágrafo</localization>
-    <!-- <localization string-id='commentary'>Commentary</localization> -->
+    <localization string-id='paragraphs'>Parágrafos</localization>
+    <localization string-id='commentary'>Comentário</localization>
     <localization string-id='subparagraph'>Subparágrafo</localization>
     <!-- Components of the narrative -->
     <!-- REMARK-LIKE blocks -->
@@ -108,8 +109,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='warning'>Atenção</localization>
     <!-- Translation needed for Brazilian Portugese -->
     <!-- <localization string-id='insight'>Insight</localization> -->
-    <!-- <localization string-id='computation'>Computation</localization> -->
-    <!-- <localization string-id='technology'>Technology</localization> -->
+    <localization string-id='computation'>Cálculo</localization>
+    <localization string-id='technology'>Tecnologia</localization>
     <!-- ASIDE-LIKE blocks -->
     <!-- <localization string-id='aside'>Aside</localization> -->
     <!-- <localization string-id='biographical'>Biographical Aside</localization> -->
@@ -127,7 +128,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!--  -->
     <!-- Translation needed for Brazilian Portugese -->
     <!-- assemblages are collections of minimally structured material -->
-    <!-- <localization string-id='assemblage'>Assemblage</localization> -->
+    <localization string-id='assemblage'>Coleção</localization>
     <!-- <localization string-id='poem'>Poem</localization> -->
     <!-- Objectives is the block, objective is a list item within -->
     <localization string-id='objectives'>Objetivos</localization>
@@ -156,7 +157,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='divisionalexercise'>Exercício</localization>
     <!-- Translation needed for Brazilian Portugese -->
     <!-- See en-US file for distinctions here, do not repeat previous translation -->
-    <!-- <localization string-id='inlineexercise'>Checkpoint</localization> -->
+    <localization string-id='inlineexercise'>Autoavaliação</localization>
     <!-- <localization string-id='worksheetexercise'>Worksheet Exercise</localization> -->
     <!-- <localization string-id='readingquestion'>Reading Question</localization> -->
     <localization string-id='webwork'>WeBWorK</localization>
@@ -207,7 +208,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='next-short'>Próximo</localization>
     <!-- NB: Use toc from above for both headings and navigation sidebar-->
     <localization string-id='annotations'>Anotações</localization>
-    <localization string-id='feedback'>Comentário</localization>
+    <localization string-id='feedback'>Comentários</localization>
     <localization string-id='authored'>Feito com PreTeXt</localization>
     <!-- Parts of memos and letters -->
     <localization string-id='to'>Para</localization>
