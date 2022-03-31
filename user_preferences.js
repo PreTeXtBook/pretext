@@ -30,10 +30,13 @@ chosen_edit_option = "PLACEHOLDER";
 debugLog("chosen_edit_option", chosen_edit_option, "chosen_edit_option", chosen_edit_option > 0);
 
 var font_vals = {
+ //   'face': 'serif',
     'size': 12,
-    'height': 1.2,
+    'height': 12,
+    'wspace': 0,
+    'lspace': 0,
     'wdth': 100,
-    'wght': 500
+    'wght': 400
 }
 
 function fontcss(fvals) {
@@ -42,12 +45,17 @@ console.log("in fontcss",fvals);
   var this_style = "";
   for (var j=0; j < csskeys.length; ++j) {
     this_key = csskeys[j];
+    document.getElementById("the" + this_key).innerHTML = fvals[this_key];
 
-console.log("in fontcss", this_key, "with value", fvals[this_key]);
+console.log("in fontcss", this_key, "with value", fvals[this_key], "/10", fvals[this_key]/10.0);
     if (this_key == 'size') {
       this_style += "font-size: " + fvals[this_key].toString() + "pt; "
     } else if (this_key == 'height') {
-      this_style += "line-height: " + fvals[this_key].toString() + "; "
+      this_style += "line-height: " + (fvals[this_key]/10.0).toString() + "; "
+    } else if (this_key == 'lspace') {
+      this_style += "letter-spacing: " + (fvals[this_key]/200.0).toString() + "rem; "
+    } else if (this_key == 'wspace') {
+      this_style += "word-spacing: " + (fvals[this_key]/50.0).toString() + "rem; "
     }
   }
 
