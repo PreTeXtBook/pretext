@@ -635,7 +635,7 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 #ptx-navbar #preferences_menu_holder > ol > li > ol > li:focus {
   background: #eef;
   border: 2px solid #909;
-  padding: 0 4px;
+  padding: 4px 4px 2px 4px;
 }
 
 #ptx-navbar #preferences_menu_holder .active .selected {
@@ -671,7 +671,7 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
   background: #fee;
 }
 #preferences_menu_holder ol li ol li {
-  padding: 2px 6px;
+  padding: 6px 6px 4px 6px;
   display: flex; 
   align-items: center;
 }
@@ -694,12 +694,6 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 }
 #preferences_menu_holder ol.fonts li:nth-child(4n+1) {
   padding-left: 14px;
-}
-#preferences_menu_holder ol.fonts li:nth-child(4n+3) {
-  padding-right: 20px;
-}
-#preferences_menu_holder ol.fonts li:nth-child(4n+3):focus {
-  padding-right: 18px;
 }
 
 #preferences_menu_holder .wrap_to_submenu {
