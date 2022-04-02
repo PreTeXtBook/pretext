@@ -630,7 +630,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- the prompt -->
                 <xsl:apply-templates select="statement"/>
             </div>
-            <pre class="parsonsblocks" data-question_label="X.Y.Z" style="visibility: hidden;">
+            <pre class="parsonsblocks" data-question_label="" style="visibility: hidden;">
                 <!-- author opts-in to adaptive problems -->
                 <xsl:attribute name="data-language">
                     <xsl:choose>
@@ -823,9 +823,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:attribute name="id">
                             <xsl:value-of select="concat($hid, '_editor')"/>
                         </xsl:attribute>
-                        <xsl:attribute name="data-question_label">
-                            <xsl:value-of select="$num"/>
-                        </xsl:attribute>
+                        <xsl:attribute name="data-question_label"/>
                         <!-- Code Lens only for certain languages -->
                         <xsl:attribute name="data-codelens">
                             <xsl:choose>
