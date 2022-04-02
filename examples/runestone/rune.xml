@@ -369,7 +369,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <hint>Dorothy will not be much help with this proof.</hint>
         </exercise>
 
-        <exercise xml:id="prime-number-program-indent-yes" language="python" adaptive="yes" indent="yes">
+        <exercise xml:id="prime-number-program-indent-yes" language="python" adaptive="yes" indent="hide">
             <title>Parsons Problem, Programming</title>
             <idx>prime numbers</idx>
             <idx>Sieve of Eratosthenes</idx>
@@ -415,13 +415,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </blocks>
         </exercise>
 
-        <exercise xml:id="prime-number-program-indent-no" language="python" adaptive="yes" indent="no">
+        <exercise xml:id="prime-number-program-indent-no" language="python" adaptive="yes" indent="show">
             <title>Parsons Problem, Programming</title>
             <idx>prime numbers</idx>
             <idx>Sieve of Eratosthenes</idx>
             <statement>
                 <p>The Sieve of Eratosthenes computes prime numbers by starting with a finite list of the integers bigger than 1.  The first member of the list is a prime and is saved/recorded.  Then all multiples of that prime (which not a prime, excepting the prime itself!) are removed from the list.  Now the first number remaining in the list is the next prime number.  And the process repeats.</p>
-                <p>The code blocks below can be rearranged to form one of the many possible programs to implement this algorithm to compute a list of all the primes less than <m>250</m>. [Ed. this version of this problem does not require the reader to provide the necessary indentation.]</p>
+                <p>The code blocks below can be rearranged to form one of the many possible programs to implement this algorithm to compute a list of all the primes less than <m>250</m>. [Ed. this version of this problem does not require the reader to provide the necessary indentation, which is the default.]</p>
                 <p>This reprises <xref ref="sieve-primes"/>.</p>
             </statement>
             <blocks>

@@ -651,9 +651,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- (not relevant for natural language)             -->
                 <xsl:attribute name="data-noindent">
                     <xsl:choose>
-                        <xsl:when test="parent::exercise/@indent = 'yes'">
+                        <xsl:when test="parent::exercise/@indentation = 'hide'">
                             <xsl:text>false</xsl:text>
                         </xsl:when>
+                        <!-- default is 'show' -->
                         <xsl:otherwise>
                             <xsl:text>true</xsl:text>
                         </xsl:otherwise>
