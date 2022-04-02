@@ -589,6 +589,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
+            <!-- bare attribute, iff requested -->
+            <xsl:if test="choices/@randomize = 'yes'">
+                <xsl:attribute name="data-random"/>
+            </xsl:if>
             <!-- Q: the statement is not a list item, but appears *inside* the list? -->
             <!-- overall statement, not per-choice -->
             <xsl:apply-templates select="statement"/>
