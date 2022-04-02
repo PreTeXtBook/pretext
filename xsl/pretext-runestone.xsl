@@ -568,9 +568,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <div class="runestone alert alert-warning">
         <!-- ul can have multiple answer attribute -->
-        <ul data-component="multiplechoice" data-multipleanswers="false">
+        <ul data-component="multiplechoice">
             <xsl:attribute name="id">
                 <xsl:value-of select="$the-id"/>
+            </xsl:attribute>
+            <xsl:variable name="ncorrect" select="count(choices/choice[@correct = 'yes'])"/>
+            <xsl:attribute name="data-multipleanswers">
+                <xsl:choose>
+                    <xsl:when test="choices/@multiple-correct = 'yes'">
+                        <xsl:text>true</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="choices/@multiple-correct = 'no'">
+                        <xsl:text>false</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="$ncorrect > 1">
+                        <xsl:text>true</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>false</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:attribute>
             <!-- Q: the statement is not a list item, but appears *inside* the list? -->
             <!-- overall statement, not per-choice -->
