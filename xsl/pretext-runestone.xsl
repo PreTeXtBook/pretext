@@ -499,7 +499,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="exercise/statement[statement/@correct]" mode="runestone-to-interactive">
     <xsl:variable name="the-id">
-        <xsl:text>tf-</xsl:text>
         <xsl:apply-templates select="parent::exercise" mode="html-id"/>
     </xsl:variable>
     <div class="runestone alert alert-warning">
@@ -565,7 +564,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="exercise/statement[statement and choices]" mode="runestone-to-interactive">
     <xsl:variable name="the-id">
-        <xsl:text>mc-</xsl:text>
         <xsl:apply-templates select="parent::exercise" mode="html-id"/>
     </xsl:variable>
     <div class="runestone alert alert-warning">
