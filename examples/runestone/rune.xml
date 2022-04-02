@@ -476,6 +476,51 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
         </exercise>
 
+        <exercise>
+            <title>Mathematical Multiple-Choice, Not Randomized, Multiple Answers</title>
+            <idx>stop signs</idx>
+            <statement>
+                <p>Which of the following is an antiderivative of <m>2\sin(x)\cos(x)</m>?</p>
+            </statement>
+            <choices>
+                <choice correct="yes">
+                    <statement>
+                        <p><m>\sin^2(x)+832</m></p>
+                    </statement>
+                    <feedback>
+                        <p>Remember that when we write <m>+C</m> on an antiderivative that this is the way we communicate that there are <em>many</em> possible derivatives, but they all <q>differ by a constant</q>.</p>
+                    </feedback>
+                </choice>
+                <choice correct="yes">
+                    <statement>
+                        <p><m>\sin^2(x)</m></p>
+                    </statement>
+                    <feedback>
+                        <p>The derivative given in the statement of the problem looks exactly like an application of the chain rule to <m>\sin^2(x)</m>.</p>
+                    </feedback>
+                </choice>
+                <choice correct="yes">
+                    <statement>
+                        <p><m>-\cos^2(x)</m></p>
+                    </statement>
+                    <feedback>
+                        <p>Take a derivative on <m>-\cos^2(x)</m> to see that this answer is correct.  Extra credit: does this answer <q>differ by a constant</q> when subtracted from either of the other two correct answers?</p>
+                    </feedback>
+                </choice>
+                <choice>
+                    <statement>
+                        <p><m>-2\cos(x)\sin(x)</m></p>
+                    </statement>
+                    <feedback>
+                        <p>The antiderivative of a product is not the product of the antiderivatives.  Use the product rule to take a derivative and see that this answer is not correct.</p>
+                    </feedback>
+                </choice>
+            </choices>
+            <hint>
+                <p>You can take a derivative on any one of the choices to see if it is correct or not, rather than using techniques of integration to find <em>a single</em> correct answer.</p>
+            </hint>
+        </exercise>
+
         <exercise xml:id="number-theory-proof" adaptive="yes">
             <title>Parsons Problem, Mathematical Proof</title>
             <idx>even numbers</idx>
