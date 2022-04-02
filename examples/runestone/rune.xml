@@ -307,6 +307,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <statement>
                 <p>What color is a stop sign?</p>
             </statement>
+            <!-- to appear as problem with potentially multiple correct -->
+            <!-- answers (even though there is only one), use           -->
+            <!--                                                        -->
+            <!--     <choices multiple-correct="yes">                   -->
+            <!--                                                        -->
             <choices>
                 <choice>
                     <statement>
@@ -338,6 +343,51 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
             <hint>
                 <p>Maybe go out for a drive?</p>
+            </hint>
+        </exercise>
+
+        <exercise>
+            <title>Multiple-Choice, Not Randomized, Multiple Answers</title>
+            <idx>stop signs</idx>
+            <statement>
+                <p>Which colors might be found in a rainbow?  (Note that the radio buttons now allow multiple buttons to be selected.)</p>
+            </statement>
+            <choices>
+                <choice correct="yes">
+                    <statement>
+                        <p>Red</p>
+                    </statement>
+                    <feedback>
+                        <p>Red is a definitely one of the colors.</p>
+                    </feedback>
+                </choice>
+                <choice correct="yes">
+                    <statement>
+                        <p>Yellow</p>
+                    </statement>
+                    <feedback>
+                        <p>Yes, yellow is correct.</p>
+                    </feedback>
+                </choice>
+                <choice>
+                    <statement>
+                        <p>Black</p>
+                    </statement>
+                    <feedback>
+                        <p>Remember the acronym<ellipsis/><acro>ROY G BIV</acro>.  <q>B</q> stands for blue.</p>
+                    </feedback>
+                </choice>
+                <choice correct="yes">
+                    <statement>
+                        <p>Green</p>
+                    </statement>
+                    <feedback>
+                        <p>Yes, green is one of the colors.</p>
+                    </feedback>
+                </choice>
+            </choices>
+            <hint>
+                <p>Do you know the acronym<ellipsis/><acro>ROY G BIV</acro> for the colors of a rainbow, and their order?</p>
             </hint>
         </exercise>
 
