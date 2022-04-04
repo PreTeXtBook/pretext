@@ -12,6 +12,12 @@
 body.pretext {
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+body.pretext[data-font="OS"] {
+    font-family: "Open Sans", sans-serif;
+}
+body.pretext[data-font="RS"] {
+    font-family: "Roboto Serif", serif;
+}
 body.pretext,
 body.standalone {
     margin: 0;
@@ -630,7 +636,7 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 #ptx-navbar #preferences_menu_holder > ol > li:focus {
   background: #eef;
   border: 2px solid #909;
-  padding: 0 24px 0 8px;
+  padding: 2px 24px 2px 8px;
 }
 #ptx-navbar #preferences_menu_holder > ol > li > ol > li:focus {
   background: #eef;
@@ -661,7 +667,7 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
   width: 12.5em;
 }
 #preferences_menu_holder > ol > li {
-  padding: 2px 26px 2px 10px;
+  padding: 4px 26px 4px 10px;
 }
 #preferences_menu_holder ol li ol {
   z-index: 40;
@@ -677,17 +683,16 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 }
 #preferences_menu_holder ol.fonts:not(.hidden) {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 #preferences_menu_holder ol.fonts li:nth-child(8n+1),
 #preferences_menu_holder ol.fonts li:nth-child(8n+2),
 #preferences_menu_holder ol.fonts li:nth-child(8n+3),
 #preferences_menu_holder ol.fonts li:nth-child(8n+4) {
-    background-color: #efe;
+    background-color: #eff;
 }
 #preferences_menu_holder ol.fonts li:nth-child(4n+2) {
- width: 5em;
+ width: 4em;
  justify-content: center;
  text-align: center;
  align-items: center;
@@ -708,11 +713,28 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
   font-size: 200%;
   text-align: center;
 }
+#preferences_menu_holder .fontfamily .name {
+  margin-right: 2em;
+}
+#preferences_menu_holder .fontfamily .sample {
+  margin-left: auto;
+}
+#preferences_menu_holder .fonts .byunits {
+  font-size: 80%;
+  margin-bottom: -0.3em;
+}
+#ptx-navbar #theavatarbutton {
+  font-size: 1.3em;
+}
 #choose_topic {
   background: #eef;
 }
-.check {
+.ffcheck,
+.avatarcheck {
   width: 1em;
+  margin-left: 0.2em;
+  margin-right: 0.7em;
+  font-size: 11pt;
 }
 
 /*******************************************************************************

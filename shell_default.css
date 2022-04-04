@@ -85,6 +85,7 @@
   }
 }
 
+/*
 .ptx-content.serif .para {
   font-family: "PT Serif", "Times New Roman", serif;
   font-size: 105%;
@@ -112,20 +113,15 @@
   font-size: 115%;
   line-height: 1.30;
 }
-
+*/
 
 /* text in lists was big */
 .ptx-content.serif .para .para,
-.ptx-content.serif #text-in-paragraphs .para .para,
-.ptx-content.serif #Bcd .para .para,
-.ptx-content.serif #interesting-corollary .para .para,
-.ptx-content.serif #table-calisthenics .para .para,
-.ptx-content.serif #section-7 .para .para,
-.ptx-content.serif #section-11 .para .para {
+.ptx-content[data-font="RS"] .para .para {
   font-size: 100%;
 }
 
-.ptx-content.serif .code-inline {
+.ptx-content[data-font="RS"] .code-inline {
   background: #f6f6f6;
   border: 1px solid #eee;
   padding: 0.01em 0.15em 0.03em 0.15em;
