@@ -37,7 +37,7 @@ var font_families = {
 var font_vals = {
  //   'face': 'serif',
     'size': [12, 8, 20],
-    'height': [12, 8, 20],
+    'height': [135, 80, 200],
     'wspace': [0, -10,20],
     'lspace': [0, -20,20],
     'wdth': [100, 50, 150],
@@ -56,7 +56,7 @@ console.log("in fontcss", this_key, "with value", fvals[this_key][0], "/10", fva
     if (this_key == 'size') {
       this_style += "font-size: " + fvals[this_key][0].toString() + "pt; "
     } else if (this_key == 'height') {
-      this_style += "line-height: " + (fvals[this_key][0]/10.0).toString() + "; "
+      this_style += "line-height: " + (fvals[this_key][0]/100.0).toString() + "; "
     } else if (this_key == 'lspace') {
       this_style += "letter-spacing: " + (fvals[this_key][0]/200.0).toString() + "rem; "
     } else if (this_key == 'wspace') {
@@ -229,20 +229,37 @@ console.log("selecting",input_region, "which has", input_region.getElementsByTag
       }
     } else if (input_region.hasAttribute("data-val")) {
 console.log("input_region", input_region);
+console.log("input_regionparentElement", input_region.parentElement);
       if ((e.code == "Enter") || (e.code == "ArrowRight")) {
 console.log("font_vals is", font_vals);
         var dataval = input_region.getAttribute("data-val");
         var datachange = input_region.getAttribute("data-change");
 console.log("dataval", dataval, "datachange",datachange);
-        font_vals[dataval][0] += parseFloat(datachange);
-        if (font_vals[dataval][0] < font_vals[dataval][1]) { font_vals[dataval][0] = font_vals[dataval][1] }
-        else if (font_vals[dataval][0] > font_vals[dataval][2]) { font_vals[dataval][0] = font_vals[dataval][2] }
+        if (input_region.parentElement.classList.contains("fonts")) {
+          font_vals[dataval][0] += parseFloat(datachange);
+          if (font_vals[dataval][0] < font_vals[dataval][1]) { font_vals[dataval][0] = font_vals[dataval][1] }
+          else if (font_vals[dataval][0] > font_vals[dataval][2]) { font_vals[dataval][0] = font_vals[dataval][2] }
 console.log("font_vals are", font_vals);
 console.log("css font_vals", fontcss(font_vals));
-        var new_style = fontcss(font_vals);
-        var divs = document.getElementsByClassName('para');
-        for (i = 0; i < divs.length; i++) {
-          divs[i].setAttribute('style', new_style);
+          var new_style = fontcss(font_vals);
+          var paras = document.getElementsByClassName('para');
+          for (i = 0; i < paras.length; i++) {
+            paras[i].setAttribute('style', new_style);
+          }
+        } else if (input_region.parentElement.classList.contains("fontfamily")) {
+          document.body.setAttribute("data-font", datachange);
+          var checks = document.getElementsByClassName('ffcheck');
+          for (i = 0; i < checks.length; i++) {
+            checks[i].innerHTML = '';
+          }
+          document.getElementById("the" + datachange).innerHTML = "✔️";
+        } else if (input_region.parentElement.classList.contains("avatar")) {
+          var checks = document.getElementsByClassName('avatarcheck');
+          for (i = 0; i < checks.length; i++) {
+            checks[i].innerHTML = '';
+          }
+          document.getElementById("theavatarbutton").innerHTML = dataval;
+          document.getElementById("the" + dataval).innerHTML = "✔️";
         }
       } else if (e.code == "Tab" && e.shiftKey) {
         e.preventDefault();
