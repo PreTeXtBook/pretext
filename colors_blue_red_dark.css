@@ -37,6 +37,7 @@
 */
 
 :root {
+  --bodyfontcolor: #eee;
   --documenttitle: #2a5ea4;
   --documenttitledark: #20477b;
   --documenttitlelight: #abf;
@@ -51,11 +52,11 @@
      */
 
   --chaptertoc: #932c1c;
-  --chaptertoctext: white;
+  --chaptertoctext: #dee;
   --chaptertocactive: var(--documenttitle);   /* often the same as documenttitle */
   --chaptertoctextactive: white;
   --sectiontoc: #666;
-  --sectiontoctext: #fff;
+  --sectiontoctext: #eed;
   --sectiontocactive: var(--documenttitle);   /* often the same as documenttitle */
   --sectiontoctextactive: white;
   --tocborder: #152f53;
@@ -78,7 +79,7 @@ body.pretext {
 }
 .pretext .ptx-page > .ptx-main {
     background: #444;
-    color: #fff;
+    color: var(--bodyfontcolor);
 }
 .ptx-content .summary-links a {
     background: var(--documenttitledark);
