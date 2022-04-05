@@ -640,6 +640,80 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </block>
             </blocks>
         </exercise>
+
+        <exercise xml:id="number-theory-proof-numbered" adaptive="yes">
+            <title>Parsons Problem, Mathematical Proof, Numbered Blocks</title>
+            <idx>even numbers</idx>
+            <statement>
+                <p>Create a proof of the theorem: If <m>n</m> is an even number, then <m>n\equiv 0\mod 2</m>. [Ed.  This version has numbered blocks, online they are on the right end of the block.]</p>
+            </statement>
+            <blocks numbered="right">
+                <block order="2">
+                    <p>Suppose <m>n</m> is even.</p>
+                </block>
+                <block order="3">
+                    <choice correct="yes"><p>Then there exists an <m>m</m> so that <m>n = 2m</m>.</p></choice>
+                    <choice><p>Then there exists an <m>m</m> so that <m>n = 2m + 1</m>.</p></choice>
+                </block>
+                <block order="1" correct="no">
+                    <p>Click the heels of your ruby slippers together three times.</p>
+                </block>
+                <block order="5">
+                    <p>So <m>n = 2m + 0</m>.</p>
+                    <p>This is a superfluous second paragraph in this block.</p>
+                </block>
+                <block order="4">
+                    <p>Thus <m>n\equiv 0\mod 2</m>.</p>
+                </block>
+            </blocks>
+            <hint>Dorothy will not be much help with this proof.</hint>
+        </exercise>
+
+        <exercise xml:id="prime-number-program-numbered" language="python" adaptive="yes" indentation="hide">
+            <title>Parsons Problem, Programming</title>
+            <idx>prime numbers</idx>
+            <idx>Sieve of Eratosthenes</idx>
+            <statement>
+                <p>The Sieve of Eratosthenes computes prime numbers by starting with a finite list of the integers bigger than 1.  The first member of the list is a prime and is saved/recorded.  Then all multiples of that prime (which not a prime, excepting the prime itself!) are removed from the list.  Now the first number remaining in the list is the next prime number.  And the process repeats.</p>
+                <p>The code blocks below can be rearranged to form one of the many possible programs to implement this algorithm to compute a list of all the primes less than <m>250</m>. [Ed.  This version has numbered blocks, online they are on the left end of the block.]</p>
+                <p>This reprises <xref ref="sieve-primes"/>.</p>
+            </statement>
+            <blocks numbered="left">
+                <block order="6">
+                    <cline>n = 250</cline>
+                </block>
+                <block order="2">
+                    <choice correct="yes">
+                        <cline>primes = []</cline>
+                        <cline>candidates = list(range(2,n))</cline>
+                    </choice>
+                    <choice>
+                        <cline>candidates = []</cline>
+                        <cline>primes = list(range(2,n))</cline>
+                    </choice>
+                </block>
+                <block order="7" correct="no">
+                    <cline>primes = candidates + [p]</cline>
+                </block>
+                <block order="8">
+                    <cline>while candidates:</cline>
+                </block>
+                <block order="3">
+                    <cline>    p = candidates[0]</cline>
+                    <cline>    primes.append(p)</cline>
+                </block>
+                <block order="1">
+                    <cline>    for nonprime in range(p, n, p):</cline>
+                </block>
+                <block order="5">
+                    <cline>        if nonprime in candidates:</cline>
+                    <cline>            candidates.remove(nonprime)</cline>
+                </block>
+                <block order="4">
+                    <cline>print(primes)</cline>
+                </block>
+            </blocks>
+        </exercise>
     </exercises>
 
     <section>
