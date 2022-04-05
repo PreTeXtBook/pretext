@@ -364,6 +364,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:attribute>
 </xsl:template>
 
+<!-- ############### -->
+<!-- Runestone Hooks -->
+<!-- ############### -->
+
+<!-- Various additions/modifications to the HTML output, but which  -->
+<!-- we isolate here in this stylesheet for organizational reasons. -->
+
+<!-- A textual and visual progress indicator of completed activities  -->
+<!-- for a book hosted on a RS server, only.  At the RS "subchapter"  -->
+<!-- level, which we shortcut by checking for a chapter-level parent. -->
+<xsl:template match="&STRUCTURAL;" mode="runestone-progress-indicator">
+    <xsl:if test="$b-host-runestone and (parent::chapter or parent::appendix)">
+        <div id="scprogresscontainer">You have attempted <span id="scprogresstotal"/> of <span id="scprogressposs"/> activities on this page.<div id="subchapterprogress" aria-label="Page progress"/></div>
+    </xsl:if>
+</xsl:template>
+
 <!-- ################## -->
 <!-- Runestone Manifest -->
 <!-- ################## -->

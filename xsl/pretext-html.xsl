@@ -737,13 +737,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Only &STRUCTURAL; elements will pass through here, but we -->
 <!-- can't limit the match (without explicit exclusions), this -->
 <!-- is the default.  Which is to just apply templates to      -->
-<!-- elements within the division.                             -->
+<!-- elements within the division. Optional: add RS progress.  -->
 <xsl:template match="*" mode="structural-division-inner-content">
     <xsl:param name="heading-level"/>
 
     <xsl:apply-templates select="*">
         <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
+    <!-- only at "section" level. only when building for a Runestone server -->
+    <xsl:apply-templates select="." mode="runestone-progress-indicator"/>
 </xsl:template>
 
 <!-- Worksheets generate two additional versions, each -->
