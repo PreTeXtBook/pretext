@@ -920,9 +920,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:text>/_static</xsl:text>
                             </xsl:attribute>
                         </xsl:if>
+                        <!-- the code itself as text -->
                         <xsl:call-template name="sanitize-text">
                             <xsl:with-param name="text" select="input" />
                         </xsl:call-template>
+                        <!-- optional unit testing, with RS markup to keep it hidden -->
+                        <xsl:if test="tests">
+                            <xsl:text>====&#xa;</xsl:text>
+                            <xsl:call-template name="sanitize-text">
+                                <xsl:with-param name="text" select="tests" />
+                            </xsl:call-template>
+                        </xsl:if>
                     </textarea>
                 </div>
             </div>
