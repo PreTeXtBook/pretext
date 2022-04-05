@@ -260,6 +260,14 @@ console.log("css font_vals", fontcss(font_vals));
           }
           document.getElementById("theavatarbutton").innerHTML = dataval;
           document.getElementById("the" + dataval).innerHTML = "✔️";
+        } else if (input_region.parentElement.classList.contains("atmosphere")) {
+          document.body.setAttribute("data-atmosphere", dataval);
+          var checks = document.getElementsByClassName('atmospherecheck');
+          for (i = 0; i < checks.length; i++) {
+            checks[i].innerHTML = '';
+          }
+          document.getElementById("the" + dataval).innerHTML = "✔️";
+
         }
       } else if (e.code == "Tab" && e.shiftKey) {
         e.preventDefault();
