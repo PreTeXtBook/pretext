@@ -426,8 +426,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Exercises to the Runestone manifest -->
 <!--   - every multiple choice "exercise"             -->
 <!--   - every Parsons problem "exercise"             -->
+<!--   - every matching problem "exercise"            -->
 <!--   - every "exercise" with additional "program"   -->
-<xsl:template match="exercise[statement/statement and statement/statement/@correct]|exercise[statement/statement and statement/choices]|exercise[statement/statement and statement/blocks]|exercise[statement/statement and statement/program]" mode="runestone-manifest">
+<xsl:template match="exercise[statement/statement and statement/statement/@correct]|exercise[statement/statement and statement/choices]|exercise[statement/statement and statement/blocks]|exercise[statement/statement and statement/matches]|exercise[statement/statement and statement/program]" mode="runestone-manifest">
     <question>
         <!-- label is from the "exercise" -->
         <xsl:apply-templates select="." mode="runestone-manifest-label"/>
@@ -758,6 +759,50 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:for-each>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- Matching Problem -->
+
+<xsl:template match="exercise/statement[statement and matches]" mode="runestone-to-interactive">
+    <xsl:variable name="html-id">
+        <xsl:apply-templates select="parent::exercise" mode="html-id"/>
+    </xsl:variable>
+    <div class="runestone">
+        <ul data-component="dragndrop" data-question_label="" style="visibility: hidden;">
+            <xsl:attribute name="id">
+                <xsl:value-of select="$html-id"/>
+            </xsl:attribute>
+            <span data-subcomponent="question">
+                <xsl:apply-templates select="statement"/>
+            </span>
+            <xsl:if test="feedback">
+                <span data-subcomponent="feedback">
+                    <xsl:apply-templates select="feedback"/>
+                </span>
+            </xsl:if>
+            <xsl:for-each select="matches/match">
+                <xsl:variable name="sub-id">
+                    <xsl:value-of select="$html-id"/>
+                    <xsl:text>_drag</xsl:text>
+                    <xsl:number />
+                </xsl:variable>
+                <!-- PTX premise = RS draggable -->
+                <li data-subcomponent="draggable">
+                    <xsl:attribute name="id">
+                        <xsl:value-of select="$sub-id"/>
+                    </xsl:attribute>
+                    <xsl:apply-templates select="premise"/>
+                </li>
+                <!-- PTX response = RS dropzone -->
+                <li data-subcomponent="dropzone">
+                    <xsl:attribute name="for">
+                        <xsl:value-of select="$sub-id"/>
+                    </xsl:attribute>
+                    <xsl:apply-templates select="response"/>
+                </li>
+            </xsl:for-each>
+        </ul>
+    </div>
 </xsl:template>
 
 <!-- Active Code -->

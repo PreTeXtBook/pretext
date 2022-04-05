@@ -4631,6 +4631,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
             </xsl:apply-templates>
         </xsl:when>
+        <!-- intercept a matching question            -->
+        <!-- signal on "source/choices" from assembly -->
+        <xsl:when test="statement/statement and statement/matches">
+            <xsl:if test="$b-has-statement">
+                <xsl:apply-templates select="statement" mode="runestone-to-interactive"/>
+            </xsl:if>
+            <xsl:apply-templates select="." mode="solutions-div">
+                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="block-type" select="$block-type"/>
+                <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
+                <xsl:with-param name="b-has-answer"  select="$b-has-answer"/>
+                <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
+            </xsl:apply-templates>
+        </xsl:when>
         <!-- ActiveCode exercises, powered by Runestone Services -->
         <!-- condition looks for packaging of a "statement" and a "program"      -->
         <!-- into a statement via assembly, which is distinct from an "exercise" -->
