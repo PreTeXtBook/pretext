@@ -662,6 +662,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:attribute>
+                <xsl:variable name="numbered" select="blocks/@numbered"/>
+                <xsl:choose>
+                    <xsl:when test="($numbered = 'left') or ($numbered = 'right')">
+                        <xsl:attribute name="data-numbered">
+                            <xsl:value-of select="$numbered"/>
+                        </xsl:attribute>
+                    </xsl:when>
+                    <!-- default is un-numbered, so no attribute at all -->
+                    <xsl:when test="$numbered = 'no'"/>
+                    <xsl:otherwise/>
+                </xsl:choose>
                 <xsl:if test="parent::exercise/@adaptive = 'yes'">
                     <xsl:attribute name="data-adaptive">
                         <xsl:text>true</xsl:text>
