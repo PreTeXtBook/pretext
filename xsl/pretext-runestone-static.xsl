@@ -137,7 +137,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercise[statement and blocks]" mode="runestone-to-static">
     <!-- determine these two options before context switches -->
     <xsl:variable name="b-natural" select="not(@language) or (@language = 'natural')"/>
-    <xsl:variable name="b-indent" select="@indent = 'yes'"/>
+    <xsl:variable name="b-indent" select="@indentation = 'hide'"/>
     <statement>
         <xsl:copy-of select="statement/node()"/>
         <!-- blocks, in author-defined order, via @order attribute -->

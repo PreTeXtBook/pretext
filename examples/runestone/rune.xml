@@ -549,7 +549,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <hint>Dorothy will not be much help with this proof.</hint>
         </exercise>
 
-        <exercise xml:id="prime-number-program-indent-yes" language="python" adaptive="yes" indent="hide">
+        <exercise xml:id="prime-number-program-indent-yes" language="python" adaptive="yes" indentation="hide">
             <title>Parsons Problem, Programming</title>
             <idx>prime numbers</idx>
             <idx>Sieve of Eratosthenes</idx>
@@ -595,7 +595,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </blocks>
         </exercise>
 
-        <exercise xml:id="prime-number-program-indent-no" language="python" adaptive="yes" indent="show">
+        <exercise xml:id="prime-number-program-indent-no" language="python" adaptive="yes" indentation="show">
             <title>Parsons Problem, Programming</title>
             <idx>prime numbers</idx>
             <idx>Sieve of Eratosthenes</idx>
