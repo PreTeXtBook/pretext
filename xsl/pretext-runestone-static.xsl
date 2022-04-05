@@ -135,13 +135,32 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="exercise[statement and blocks]" mode="runestone-to-static">
-    <!-- determine these two options before context switches -->
+    <!-- determine these options before context switches -->
     <xsl:variable name="b-natural" select="not(@language) or (@language = 'natural')"/>
     <xsl:variable name="b-indent" select="@indentation = 'hide'"/>
+    <!-- we use numbers in static versions, if requested, but ignore left/right distinction -->
+    <xsl:variable name="b-numbered" select="(blocks/@numbered = 'left') or (blocks/@numbered = 'right')"/>
+    <!-- Statement -->
     <statement>
         <xsl:copy-of select="statement/node()"/>
+        <xsl:variable name="list-type">
+            <xsl:choose>
+                <xsl:when test="$b-numbered">
+                    <xsl:text>ol</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>ul</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <!-- blocks, in author-defined order, via @order attribute -->
-        <p><ul>
+        <p>
+            <xsl:element name="{$list-type}">
+                <xsl:if test="$list-type = 'ol'">
+                    <xsl:attribute name="label">
+                        <xsl:text>1.</xsl:text>
+                    </xsl:attribute>
+                </xsl:if>
             <xsl:for-each select="blocks/block">
                 <xsl:sort select="@order"/>
                 <li>
@@ -150,7 +169,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <!-- a paired distractor in the block        -->
                             <!-- separate alternatives with "Either/Or"  -->
                             <!-- Order is as authored                    -->
+                            <xsl:element name="{$list-type}">
+                                <xsl:if test="$list-type = 'ol'">
+                                    <xsl:attribute name="label">
+                                        <xsl:text>(a)</xsl:text>
+                                    </xsl:attribute>
+                                </xsl:if>
                             <xsl:for-each select="choice">
+                                <li>
+                                <xsl:if test="$list-type = 'ul'">
                                 <xsl:choose>
                                     <xsl:when test="following-sibling::choice">
                                         <p>Either:</p>
@@ -159,6 +186,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                         <p>Or:</p>
                                     </xsl:when>
                                 </xsl:choose>
+                                </xsl:if>
                                 <xsl:choose>
                                     <xsl:when test="$b-natural">
                                         <!-- replicate source of choice -->
@@ -182,7 +210,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                         </p>
                                     </xsl:otherwise>
                                 </xsl:choose>
+                                </li>
                             </xsl:for-each>
+                        </xsl:element>
                         </xsl:when>
                         <xsl:otherwise>
                             <!-- not a paired distractor -->
@@ -215,18 +245,79 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:choose>
                 </li>
             </xsl:for-each>
-        </ul></p>
+            </xsl:element>
+        </p>
     </statement>
+    <!-- Answer (potentially) -->
+    <xsl:if test="$b-numbered">
+        <!-- can make an economical answer with numbers of the -->
+        <!-- (correct) blocks in the order of the solution     -->
+        <answer>
+            <p>
+                <xsl:for-each select="blocks/block">
+                    <!-- default on "block" is  correct="yes" -->
+                    <xsl:if test="not(@correct = 'no')">
+                        <xsl:value-of select="@order"/>
+                        <xsl:if test="choice">
+                            <xsl:choose>
+                                <xsl:when test="choice[1][@correct = 'yes']">
+                                    <xsl:text>a</xsl:text>
+                                </xsl:when>
+                                <xsl:when test="choice[2][@correct = 'yes']">
+                                    <xsl:text>b</xsl:text>
+                                </xsl:when>
+                            </xsl:choose>
+                        </xsl:if>
+                        <xsl:if test="following-sibling::block">
+                            <xsl:text>, </xsl:text>
+                        </xsl:if>
+                    </xsl:if>
+                </xsl:for-each>
+            </p>
+        </answer>
+    </xsl:if>
+    <!-- Solution -->
     <solution>
         <xsl:choose>
             <xsl:when test="$b-natural">
-                <!-- not a programming exercise, use unordered -->
-                <!-- list and copy "natural" markup            -->
-                <p><ul>
+                <!-- not a programming exercise, use unordered     -->
+                <!-- or description list and copy "natural" markup -->
+                <xsl:variable name="list-type">
+                    <xsl:choose>
+                        <xsl:when test="$b-numbered">
+                            <xsl:text>dl</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>ul</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <p>
+                    <xsl:element name="{$list-type}">
+                        <xsl:if test="$list-type = 'dl'">
+                            <xsl:attribute name="width">
+                                <xsl:text>narrow</xsl:text>
+                            </xsl:attribute>
+                        </xsl:if>
                     <xsl:for-each select="blocks/block">
                         <!-- default on "block" is  correct="yes" -->
                         <xsl:if test="not(@correct = 'no')">
                             <li>
+                                <xsl:if test="$list-type = 'dl'">
+                                    <title>
+                                        <xsl:value-of select="@order"/>
+                                        <xsl:if test="choice">
+                                            <xsl:choose>
+                                                <xsl:when test="choice[1][@correct = 'yes']">
+                                                    <xsl:text>a</xsl:text>
+                                                </xsl:when>
+                                                <xsl:when test="choice[2][@correct = 'yes']">
+                                                    <xsl:text>b</xsl:text>
+                                                </xsl:when>
+                                            </xsl:choose>
+                                        </xsl:if>
+                                    </title>
+                                </xsl:if>
                                 <xsl:choose>
                                     <xsl:when test="choice">
                                         <!-- just the correct one -->
@@ -243,7 +334,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             </li>
                         </xsl:if>
                     </xsl:for-each>
-                </ul></p>
+                </xsl:element>
+                </p>
             </xsl:when>
             <xsl:otherwise>
                 <!-- programming language specified, assume "cline" -->
