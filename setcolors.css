@@ -308,3 +308,136 @@ body.pretext {
 .pretext[data-atmosphere="pastel"] #ptx-masthead {
     background: #efe;
 }
+
+/* midnight */
+
+.pretext[data-atmosphere="midnight"] {
+  --bodyfontcolor: #ddd;
+  --documenttitle: #2a5ea4;
+  --documenttitledark: #20477b;
+  --documenttitlelight: #8ab;
+  --bodytitle: #abd; 
+  --bodysubtitle: #dcb;
+  --bodytitlehighlight: #396;
+  --bodysubtitlehighlight: #363;
+     /*
+       The bodytitle and bodysubtitle colors must have at least a 3:1 contrast
+       ratio with black, and at least 5:1 ratio with with the corresponding highlight.
+       (The second condition will guarantee an adequate contrast with white.)
+     */
+
+  --chaptertoc: #400;
+  --chaptertoctext: #dee;
+  --chaptertocactive: var(--documenttitle);   /* often the same as documenttitle */
+  --chaptertoctextactive: white;
+  --sectiontoc: #222;
+  --sectiontoctext: #eed;
+  --sectiontocactive: var(--documenttitle);   /* often the same as documenttitle */
+  --sectiontoctextactive: white;
+  --tocborder: #152f53;
+
+  --highlighttoc: var(--documenttitledark);
+  --highlighttoctext: white;
+  --highlighttocborder: var(--chaptertoc);
+
+  --videoplay: var(--bodytitle);
+  --assemblageborder: #1100aa;
+  --assemblagebackground: #f5f8ff;
+  --assemblagebackground: #003;
+
+  --knowlborder: var(--bodytitlehighlight);
+  --knowlbackground: var(--assemblagebackground);
+
+  --bannerbackground: #333;
+  --navbarbackground: #333;
+  --footerbackground: #333;
+  --tocbackground: #222;
+  --mainbackground: #111;
+  --buttonbackground: #004;
+  --codebackground: #040;
+  --keybackground: #400;
+}
+
+.pretext[data-atmosphere="midnight"] {
+  background: var(--mainbackground);
+}
+.pretext[data-atmosphere="midnight"] .ptx-page > .ptx-main {
+    background: var(--mainbackground);
+    color: var(--bodyfontcolor);
+}
+.pretext[data-atmosphere="midnight"] .ptx-content .summary-links a {
+    background: var(--documenttitledark);
+    background: var(--chaptertoc);
+}
+.pretext[data-atmosphere="midnight"] #ptx-navbar {
+    background: var(--navbarbackground);
+}
+.pretext[data-atmosphere="midnight"] .ptx-page-footer .feedback-link,
+.pretext[data-atmosphere="midnight"] .ptx-content-footer .button,
+.pretext[data-atmosphere="midnight"] #ptx-navbar .button {
+  background-color: var(--buttonbackground);
+  color: var(--bodyfontcolor);
+}
+.pretext[data-atmosphere="midnight"] .ptx-page-footer .feedback-link:hover,
+.pretext[data-atmosphere="midnight"] .ptx-content-footer .button:hover,
+.pretext[data-atmosphere="midnight"] #ptx-navbar .button:hover,
+.pretext[data-atmosphere="midnight"] .ptx-content-footer .button:hover {
+  background-color: #dadada;
+  color: #404;
+}
+.pretext[data-atmosphere="midnight"] #ptx-navbar #calculator-toggle {
+  background-color: #336;
+}
+.pretext[data-atmosphere="midnight"] #ptx-navbar #calculator-toggle:hover {
+  background-color: #fce;
+  color: #222;
+}
+
+.pretext[data-atmosphere="midnight"] #ptx-masthead {
+    background: var(--bannerbackground);
+}
+
+.pretext[data-atmosphere="midnight"] .ptx-page-footer {
+    background: var(--footerbackground);
+    border-top-color: #447;
+    border-bottom-color: #447;
+}
+.pretext[data-atmosphere="midnight"] .ptx-page-footer .logo {
+    background: #779;
+    border-radius: 0.4em;
+}
+.pretext[data-atmosphere="midnight"] #ptx-masthead .title-container > .pretext .heading,
+.pretext[data-atmosphere="midnight"] #ptx-masthead .title-container > .heading a,
+.pretext[data-atmosphere="midnight"] #ptx-masthead #logo-link:empty:hover::before,
+.pretext[data-atmosphere="midnight"] #ptx-masthead .byline,
+.pretext[data-atmosphere="midnight"] #ptx-masthead .byline a {
+  color: var(--documenttitlelight);
+}
+.pretext[data-atmosphere="midnight"] #ptx-toc {
+  scrollbar-color: var(--documenttitlelight) #333;
+}
+.pretext[data-atmosphere="midnight"] .ptx-content .code-inline {
+/*
+  color: var(--documenttitledark);
+*/
+  background: var(--codebackground);
+}
+.pretext[data-atmosphere="midnight"] .ptx-content .kbdkey {
+/*
+  color: var(--documenttitledark);
+*/
+  background: var(--keybackground);
+}
+.pretext[data-atmosphere="midnight"] .ptx-content .goal-like > .heading {
+  background:  var(--chaptertoc);
+}
+.pretext[data-atmosphere="midnight"] .ptx-content [data-knowl],
+.pretext[data-atmosphere="midnight"] .ptx-content [data-knowl]:hover,
+.pretext[data-atmosphere="midnight"] .ptx-content [data-knowl]:active,
+.pretext[data-atmosphere="midnight"] .ptx-content [data-knowl].active {
+  color: var(--documenttitlelight);
+}
+.pretext[data-atmosphere="midnight"] .ptx-page .ptx-main .ptx-content .knowl-content > .solution-like {
+  background: #606;
+}
+
