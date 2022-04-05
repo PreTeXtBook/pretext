@@ -416,6 +416,61 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Matching Problems -->
+
+<xsl:template match="exercise[statement and matches]" mode="runestone-to-static">
+    <!-- Statement -->
+    <statement>
+        <xsl:copy-of select="statement/node()"/>
+        <tabular>
+            <!-- provide two "col" if necessary -->
+            <xsl:apply-templates select="matches/match" mode="matching-statement"/>
+        </tabular>
+    </statement>
+    <!-- Solution -->
+    <solution>
+        <tabular>
+            <!-- provide two "col" if necessary -->
+            <xsl:apply-templates select="matches/match" mode="matching-solution"/>
+        </tabular>
+    </solution>
+</xsl:template>
+
+<!-- responses re-orered according to match/@order -->
+<xsl:template match="exercise/matches/match" mode="matching-statement">
+    <xsl:variable name="premise-number" select="count(preceding-sibling::match) + 1"/>
+    <xsl:variable name="all-matches" select="parent::matches/match"/>
+    <row>
+        <xsl:if test="following-sibling::match">
+            <xsl:attribute name="bottom">
+                <xsl:text>minor</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
+        <cell>
+            <xsl:copy-of select="premise/node()"/>
+        </cell>
+        <cell>
+            <xsl:copy-of select="$all-matches[@order = $premise-number]/response/node()"/>
+        </cell>
+    </row>
+</xsl:template>
+
+<xsl:template match="exercise/matches/match" mode="matching-solution">
+    <row>
+        <xsl:if test="following-sibling::match">
+            <xsl:attribute name="bottom">
+                <xsl:text>minor</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
+        <cell>
+            <xsl:copy-of select="premise/node()"/>
+        </cell>
+        <cell>
+            <xsl:copy-of select="response/node()"/>
+        </cell>
+    </row>
+</xsl:template>
+
 <!-- Active Code -->
 
 <xsl:template match="exercise[statement and program]|project[statement and program]|activity[statement and program]|exploration[statement and program]|investigation[statement and program]" mode="runestone-to-static">
