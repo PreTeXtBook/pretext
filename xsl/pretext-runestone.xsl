@@ -805,17 +805,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
-<!-- Active Code -->
+<!-- Active Code exercise -->
 
 <xsl:template match="exercise/statement[statement and program]|project/statement[statement and program]|activity/statement[statement and program]|exploration/statement[statement and program]|investigation/statement[statement and program]" mode="runestone-to-interactive">
-    <xsl:apply-templates select="program" mode="runestone-activecode">
-        <xsl:with-param name="statement-content">
-            <xsl:apply-templates select="statement">
-                <!-- <xsl:with-param name="b-original" select="$b-original" /> -->
-                <!-- <xsl:with-param name="block-type" select="$block-type"/> -->
-            </xsl:apply-templates>
-        </xsl:with-param>
-    </xsl:apply-templates>
+    <xsl:apply-templates select="program" mode="runestone-activecode"/>
 </xsl:template>
 
 <!-- YouTube Video -->
@@ -843,17 +836,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Active Code -->
 <!-- ########### -->
 
-<!-- Runestone has support for various languages.  Some  -->
-<!-- are "in-browser" while others are backed by "real"  -->
-<!-- compilers as part of a Runestone server.  For an    -->
-<!-- exercise, we pass in some lead-in text, which is    -->
-<!-- the directions for using the ActiveCode component.  -->
-<!-- This template does the best job possible:           -->
-<!--   1.  Unsupported language, static rendering.       -->
-<!--   2.  Supported in-browser, always interactive.     -->
-<!--   3.  On a Runestone server, always interactive.    -->
+<!-- Runestone has support for various languages.  Some    -->
+<!-- are "in-browser" while others are backed by "real"    -->
+<!-- compilers as part of a Runestone server.  For an      -->
+<!-- exercise, we pass in some lead-in text, which is      -->
+<!-- the directions for using the ActiveCode component.    -->
+<!-- This template does the best job possible:             -->
+<!--   1.  Unsupported language, static rendering.         -->
+<!--   2.  Supported in-browser, always interactive.       -->
+<!--   3.  On a Runestone server, always interactive.      -->
+<!--                                                       -->
+<!-- When a "program" is part of an exercise/project-like, -->
+<!-- then we need to get the problem "statement" absorbed  -->
+<!-- into the ActiveCode.  This is an authored "statement" -->
+<!-- that has been packed into a manufactured "statement"  -->
+<!-- created as part of the dynamic representation from    -->
+<!-- -assembly.  Other times a "program" is an atomic item -->
+<!-- and surrounding text explains its purpose, hence      -->
+<!-- "exercise-statment" appropriately defaults to an      -->
+<!-- empty node-set.                                       -->
 <xsl:template match="program" mode="runestone-activecode">
-    <xsl:param name="statement-content" select="''"/>
+    <!-- need to be sure there is a "double" statement -->
+    <!-- from the -assembly representation             -->
+    <xsl:variable name="exercise-statement" select="parent::statement/child::statement"/>
 
     <xsl:variable name="active-language">
         <xsl:apply-templates select="." mode="active-language"/>
@@ -861,8 +866,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="hosting">
         <xsl:apply-templates select="." mode="activecode-host"/>
     </xsl:variable>
+    <!-- use an id from the "program" element, unless used inside -->
+    <!-- an exercise/project-like, which is up two levels (and    -->
+    <!-- could be many different types of project-like).  The     -->
+    <!-- "program" needs to have its id adjusted to not conflict  -->
+    <!-- with the id of the containing exercise.                  -->
     <xsl:variable name="hid">
-        <xsl:apply-templates select="." mode="html-id"/>
+        <xsl:choose>
+            <xsl:when test="$exercise-statement">
+                <xsl:apply-templates select="parent::statement/parent::*" mode="html-id"/>
+                <xsl:text>-ac</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="html-id"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:variable>
     <!-- assumes we get here from inside an "exercise" -->
     <xsl:variable name="num">
@@ -871,12 +889,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- unsupported on Runestone, period -->
         <xsl:when test="$active-language = ''">
-            <xsl:copy-of select="$statement-content"/>
+            <xsl:apply-templates select="$exercise-statement"/>
             <xsl:apply-templates select="." mode="code-inclusion"/>
         </xsl:when>
         <!-- needs server, and we aren't there -->
         <xsl:when test="($hosting = 'jobeserver') and not($b-host-runestone)">
-            <xsl:copy-of select="$statement-content"/>
+            <xsl:apply-templates select="$exercise-statement"/>
             <xsl:apply-templates select="." mode="code-inclusion"/>
         </xsl:when>
         <!-- this is the logical negation of the previous, so could be "otherwise" -->
@@ -887,12 +905,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:value-of select="$hid"/>
                     </xsl:attribute>
                     <!-- add some lead-in text to the window -->
-                    <xsl:if test="not($statement-content = '')">
+                    <xsl:if test="$exercise-statement">
                         <div class="ac_question col-md-12">
                             <xsl:attribute name="id">
                                 <xsl:value-of select="concat($hid, '_question')"/>
                             </xsl:attribute>
-                            <xsl:copy-of select="$statement-content"/>
+                            <xsl:apply-templates select="$exercise-statement"/>
                         </div>
                     </xsl:if>
                     <textarea data-lang="{$active-language}" data-timelimit="25000" data-audio="" data-coach="true" style="visibility: hidden;">
