@@ -150,6 +150,16 @@ function removeItemFromList(lis, value) {
 }
 
 
+function textNodesUnder(node){
+  var all = [];
+  for (node=node.firstChild;node;node=node.nextSibling){
+    if (node.nodeType==3) all.push(node);
+// probably we only want direct children
+//    else all = all.concat(textNodesUnder(node));
+  }
+  return all;
+}
+
 
 editorLog("adding tab listener");
 
@@ -177,6 +187,33 @@ function logKeyDown(e) {
 
     var input_region = document.activeElement;
     console.log("input_region", input_region);
+
+    if (e.code == "KeyP") {
+      var testID = "p-446";
+      var testNode = document.getElementById(testID);
+      these_text_nodes = textNodesUnder(testNode);
+      console.log("testNode", testNode);
+      console.log("these_text_nodes", these_text_nodes);
+      for (var j=0; j < these_text_nodes.length; ++j) {
+        //  () so the whitespace is included (and will be the 13t, 3rd, etc
+        var these_node_words_and_spaces = these_text_nodes[j].nodeValue.split(/(\s+)/);
+        console.log("these_node_words_and_spaces", these_node_words_and_spaces);
+        var spanned_words = "";
+        for (var k=0; k < these_node_words_and_spaces.length; ++k) {
+          if (k % 2 == 0) {
+            spanned_words += '<span class="oneword">' + these_node_words_and_spaces[k] + "</span>"
+          } else {spanned_words +=these_node_words_and_spaces[k]}
+        }
+        document.createElement
+        var wass_text = document.createElement('span');
+        wass_text.setAttribute('class', 'wastext');
+        wass_text.innerHTML = spanned_words;
+   //     these_text_nodes[j].nodeValue = spanned_words
+        these_text_nodes[j].replaceWith(wass_text);
+        wass_text.outerHTML = wass_text.innerHTML
+      }
+    }
+
     if (input_region.id == "user-preferences-button") {
         if (e.code == "Enter") {
           document.getElementById("preferences_menu_holder").classList.toggle("hidden")
