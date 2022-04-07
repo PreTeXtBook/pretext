@@ -424,6 +424,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Exercises to the Runestone manifest -->
+<!--   - every True/False "exercise"                  -->
 <!--   - every multiple choice "exercise"             -->
 <!--   - every Parsons problem "exercise"             -->
 <!--   - every matching problem "exercise"            -->

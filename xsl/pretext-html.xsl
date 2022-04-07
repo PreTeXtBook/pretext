@@ -4590,8 +4590,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="@runestone">
             <xsl:apply-templates select="." mode="runestone-to-interactive"/>
         </xsl:when>
-        <!-- intercept a True/False question              -->
-        <!-- signal on "statement/@correct" from assembly -->
+        <!-- intercept a True/False question                        -->
+        <!-- signal on "statement/statement/@correct" from assembly -->
         <xsl:when test="statement/statement and statement/statement/@correct">
             <xsl:if test="$b-has-statement">
                 <xsl:apply-templates select="statement" mode="runestone-to-interactive"/>
@@ -4604,8 +4604,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
             </xsl:apply-templates>
         </xsl:when>
-        <!-- intercept a multiple choice question     -->
-        <!-- signal on "source/choices" from assembly -->
+        <!-- intercept a multiple choice question        -->
+        <!-- signal on "statement/choices" from assembly -->
         <xsl:when test="statement/statement and statement/choices">
             <xsl:if test="$b-has-statement">
                 <xsl:apply-templates select="statement" mode="runestone-to-interactive"/>
@@ -4618,7 +4618,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
             </xsl:apply-templates>
         </xsl:when>
-        <!-- Parsons Problem, powered by Runestone Services -->
+        <!-- intercept a Parsons problem                -->
+        <!-- signal on "statement/blocks" from assembly -->
         <xsl:when test="statement/statement and statement/blocks">
             <xsl:if test="$b-has-statement">
                 <xsl:apply-templates select="statement" mode="runestone-to-interactive"/>
@@ -4631,8 +4632,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
             </xsl:apply-templates>
         </xsl:when>
-        <!-- intercept a matching question            -->
-        <!-- signal on "source/choices" from assembly -->
+        <!-- intercept a matching question               -->
+        <!-- signal on "statement/choices" from assembly -->
         <xsl:when test="statement/statement and statement/matches">
             <xsl:if test="$b-has-statement">
                 <xsl:apply-templates select="statement" mode="runestone-to-interactive"/>

@@ -678,7 +678,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </blocks>
         </exercise>
 
-        <exercise xml:id="number-theory-proof-numbered" adaptive="yes">
+        <exercise xml:id="number-theory-proof-numbered-left" adaptive="yes">
             <title>Parsons Problem, Mathematical Proof, Numbered Blocks</title>
             <idx>even numbers</idx>
             <statement>
@@ -706,7 +706,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <hint>Dorothy will not be much help with this proof.</hint>
         </exercise>
 
-        <exercise xml:id="prime-number-program-numbered" language="python" adaptive="yes" indentation="hide">
+        <exercise xml:id="prime-number-program-numbered-right" language="python" adaptive="yes" indentation="hide">
             <title>Parsons Problem, Programming</title>
             <idx>prime numbers</idx>
             <idx>Sieve of Eratosthenes</idx>
