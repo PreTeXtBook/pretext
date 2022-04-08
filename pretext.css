@@ -732,12 +732,86 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 }
 .ffcheck,
 .atmospherecheck,
-.avatarcheck {
+.avatarcheck,
+.rulercheck,
+.motioncheck {
   width: 1em;
   margin-left: 0.2em;
   margin-right: 0.7em;
   font-size: 11pt;
 }
+
+#preferences_menu_holder .moveQ {
+  padding-top: 0.5em;
+  border-top: 0.3em solid #eef;
+}
+#preferences_menu_holder .moveQ,
+#preferences_menu_holder .moveQ ~ li {
+  background: #efe;
+}
+
+[data-ruler="greybar"] .onelineX:hover{
+    padding-top: 2px;
+    margin-top: -2px;
+    padding-bottom: 2px;
+    margin-bottom: -2px;
+    background-color: #f3f3f3;
+}
+[data-ruler="lightbox"] .onelineX {
+    background-color: #e3e3e3;
+}
+[data-ruler="lightbox"] .onelineX:hover{
+    padding-top: 2px;
+    margin-top: -2px;
+    padding-bottom: 2px;
+    margin-bottom: -2px;
+    background-color: inherit;
+}
+[data-ruler="sunrise"] .onelineX:hover ~ .onelineX {
+    background-color: #e3e3e3;
+}
+[data-ruler="sunrise"] .para:hover ~ * .onelineX {
+    background-color: #e3e3e3;
+}
+[data-ruler="sunrise"] section:hover ~ * .onelineX {
+    background-color: #e3e3e3;
+}
+
+[data-ruler="sunriseunderline"] .onelineX:hover{
+    background-color: inherit;
+    border-bottom: 2px solid black;
+    margin-bottom: -2px;
+    position: relative;
+    z-index: 10;
+}
+x[data-ruler="sunriseunderline"] .onelineX:hover + .onelineX {
+    margin-top: -2px;
+}
+[data-ruler="sunriseunderline"] .onelineX:hover ~ .onelineX {
+    background-color: #e3e3e3;
+}
+[data-ruler="sunriseunderline"] .para:hover ~ * .onelineX {
+    background-color: #e3e3e3;
+}
+[data-ruler="sunriseunderline"] section:hover ~ * .onelineX {
+    background-color: #e3e3e3;
+}
+
+
+[data-ruler="underline"] .onelineX:hover{
+    background-color: inherit;
+    border-bottom: 1px solid black;
+    margin-bottom: -1px;
+}
+[data-ruler="lunderline"] .onelineX:hover{
+    background-color: inherit;
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+    padding-left: 4px;
+    margin-left: -5px;
+    margin-bottom: -1px;
+}
+
 
 /*******************************************************************************
  *
