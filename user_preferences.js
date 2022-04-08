@@ -154,13 +154,65 @@ function textNodesUnder(node){
   var all = [];
   for (node=node.firstChild;node;node=node.nextSibling){
     if (node.nodeType==3) { all.push([3, node]) }
-    else if (node.nodeType==1) { all.push([1, node]) }
+    else if (node.nodeType==1) {
+      all.push([1, node])
+      var thistag = node.cloneNode().outerHTML;
+      console.log("thistag", thistag);
+      [thisopen, thisclose] = thistag.split("><");
+      thisopen += ">"; thisclose += "<";
+      thisinsides = textNodesUnder(node.cloneNode().innerHTML);
+//      all.push([0, thisopen]);
+      for (var j=0; j < thisinsides.length; ++j) {
+//        all.push(thisinsides[j])
+      }
+//      all.push([0, thisclose]);
+    }
 // probably we only want direct children
 //    else all = all.concat(textNodesUnder(node));
   }
   return all;
 }
 
+function wordsAllWrapped(node) {
+  var these_text_nodes = textNodesUnder(node);
+  console.log("node", node);
+  console.log("these_text_nodes", these_text_nodes);
+  for (var j=0; j < these_text_nodes.length; ++j) {
+    var this_text_node = these_text_nodes[j];
+    var thistype = this_text_node[0];
+    var thisnode = this_text_node[1];
+    if (thistype == 3) {
+ //     var these_node_words_and_spaces = these_text_nodes[j].nodeValue.split(/(\s+)/);
+      var these_node_words_and_spaces = thisnode.nodeValue.split(/(\s+)/);
+      console.log("these_node_words_and_spaces", these_node_words_and_spaces);
+      var spanned_words = "";
+      for (var k=0; k < these_node_words_and_spaces.length; ++k) {
+          spanned_words += '<span class="oneword">' + these_node_words_and_spaces[k] + "</span>"
+      }
+      var wass_text = document.createElement('div');
+      wass_text.setAttribute('class', 'wastext');
+      wass_text.innerHTML = spanned_words;
+ //     these_text_nodes[j].nodeValue = spanned_words
+      thisnode.replaceWith(wass_text);
+      wass_text.outerHTML = wass_text.innerHTML
+    } else if (thistype == 1) {
+  //      // leave it there, but make sure we know about it
+   //    thisnode.classList.add("oneelement")
+      if (thisnode.classList.contains("process-math") ||
+          thisnode.classList.contains("autopermalink") ||
+   // should we instead check for tags that *can* contain line breaks?
+          ["A", "CODE"].includes(thisnode.tagName)) {
+        //wrap it in a span.oneword
+          var word_wrapper = document.createElement('span');
+          word_wrapper.setAttribute('class', 'oneword');
+          thisnode.parentNode.insertBefore(word_wrapper, thisnode);
+          word_wrapper.appendChild(thisnode);
+      } else {
+          wordsAllWrapped(thisnode)
+      }
+    }
+  }
+}
 
 editorLog("adding tab listener");
 
@@ -192,6 +244,10 @@ function logKeyDown(e) {
     if (e.code == "KeyP") {
       var testID = "p-446";
       var testNode = document.getElementById(testID);
+ wordsAllWrapped(testNode);
+
+/*
+return;
       these_text_nodes = textNodesUnder(testNode);
       console.log("testNode", testNode);
       console.log("these_text_nodes", these_text_nodes);
@@ -216,6 +272,10 @@ function logKeyDown(e) {
            thisnode.classList.add("oneelement")
         }
       }
+
+*/
+
+
  //     var these_words = document.getElementsByClassName("oneword");
       var these_words = document.querySelectorAll(".oneword, .oneelement");
       console.log("these_words", these_words);
