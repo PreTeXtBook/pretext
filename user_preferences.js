@@ -153,7 +153,8 @@ function removeItemFromList(lis, value) {
 function textNodesUnder(node){
   var all = [];
   for (node=node.firstChild;node;node=node.nextSibling){
-    if (node.nodeType==3) all.push(node);
+    if (node.nodeType==3) { all.push([3, node]) }
+    else if (node.nodeType==1) { all.push([1, node]) }
 // probably we only want direct children
 //    else all = all.concat(textNodesUnder(node));
   }
@@ -195,23 +196,28 @@ function logKeyDown(e) {
       console.log("testNode", testNode);
       console.log("these_text_nodes", these_text_nodes);
       for (var j=0; j < these_text_nodes.length; ++j) {
-        //  () so the whitespace is included (and will be the 13t, 3rd, etc
-        var these_node_words_and_spaces = these_text_nodes[j].nodeValue.split(/(\s+)/);
-        console.log("these_node_words_and_spaces", these_node_words_and_spaces);
-        var spanned_words = "";
-        for (var k=0; k < these_node_words_and_spaces.length; ++k) {
-          if (k % 1 == 0) {
-            spanned_words += '<span class="oneword">' + these_node_words_and_spaces[k] + "</span>"
-          } else {spanned_words +=these_node_words_and_spaces[k]}
+        [thistype, thisnode] = these_text_nodes[j];
+        if (thistype == 3) {
+     //     var these_node_words_and_spaces = these_text_nodes[j].nodeValue.split(/(\s+)/);
+          var these_node_words_and_spaces = thisnode.nodeValue.split(/(\s+)/);
+          console.log("these_node_words_and_spaces", these_node_words_and_spaces);
+          var spanned_words = "";
+          for (var k=0; k < these_node_words_and_spaces.length; ++k) {
+              spanned_words += '<span class="oneword">' + these_node_words_and_spaces[k] + "</span>"
+          }
+          var wass_text = document.createElement('div');
+          wass_text.setAttribute('class', 'wastext');
+          wass_text.innerHTML = spanned_words;
+     //     these_text_nodes[j].nodeValue = spanned_words
+          thisnode.replaceWith(wass_text);
+          wass_text.outerHTML = wass_text.innerHTML
+        } else if (thistype == 1) {
+            // leave it there, but make sure we know about it
+           thisnode.classList.add("oneelement")
         }
-        var wass_text = document.createElement('span');
-        wass_text.setAttribute('class', 'wastext');
-        wass_text.innerHTML = spanned_words;
-   //     these_text_nodes[j].nodeValue = spanned_words
-        these_text_nodes[j].replaceWith(wass_text);
-        wass_text.outerHTML = wass_text.innerHTML
       }
-      var these_words = document.getElementsByClassName("oneword");
+ //     var these_words = document.getElementsByClassName("oneword");
+      var these_words = document.querySelectorAll(".oneword, .oneelement");
       console.log("these_words", these_words);
       console.log("these_words[2]", these_words[2], "g",these_words[2].innerHTML);
       console.log("these_words[3]", these_words[3], "g",these_words[3].innerHTML);
@@ -220,30 +226,38 @@ function logKeyDown(e) {
       var all_lines = "";
       var current_height = these_words[0].getBoundingClientRect().bottom;
       for (var j=0; j < these_words.length; ++j) {
-        var this_word = these_words[j];
- //       console.log("j", j, "this_word", this_word, "len", these_words.length);
-        this_height = this_word.getBoundingClientRect().bottom;
-//        console.log("this_word", this_word, "this_height", this_height);
-//        if (this_height == current_height) {
-        if ( (Math.abs(this_height - current_height) < 10) && j > 0) {
-          this_line.push(this_word)
-        } else {
-          html_line = document.createElement('div');
-          html_line.setAttribute('class', 'oneline');
+        var this_word_or_element = these_words[j];
+        if (this_word_or_element.classList.contains("oneword")) {
+          this_height = this_word_or_element.getBoundingClientRect().bottom;
+          if ( (Math.abs(this_height - current_height) < 10) && j > 0) {
+            this_line.push(this_word_or_element)
+          } else {
+            html_line_contents = "";
+            for (var k=0; k < this_line.length; ++k) {
+              if (this_line[k].classList.contains("oneword")) {
+                html_line_contents += this_line[k].innerHTML
+              } else {
+                html_line_contents += this_line[k].outerHTML
+              }
+            }
+            console.log("made", html_line_contents);
+            all_lines += '<div class="onelineX">' + html_line_contents + '</div>';
+            current_height = this_height;
+            this_line = [this_word_or_element];
+          }
+        } else { // we have an html node
+          this_line.push(this_word_or_element)
+        }
+      }
+      // partial last line may be dangling
+      if (this_line.length > 0) {
           html_line_contents = "";
           for (var k=0; k < this_line.length; ++k) {
             html_line_contents += this_line[k].innerHTML
           }
-          html_line.innerHTML = html_line_contents;
-  //        testNode.insertAdjacentElement('afterend', html_line);
-          console.log("inserted", html_line, "with contents", html_line_contents);
-          console.log("inserting", html_line_contents);
-          all_lines += '<div class="onelineX">' + html_line_contents + '</div>';
-          current_height = this_height;
-          this_line = [this_word];
-        }
+          all_lines += '<div class="onelineX">' + html_line_contents + '</div>'
       }
-      testNode.innerHTML = "aaa" + all_lines + "bbb"
+      testNode.innerHTML = all_lines
     }
 
     if (input_region.id == "user-preferences-button") {
