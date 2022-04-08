@@ -200,8 +200,10 @@ function wordsAllWrapped(node) {
    //    thisnode.classList.add("oneelement")
       if (thisnode.classList.contains("process-math") ||
           thisnode.classList.contains("autopermalink") ||
+          thisnode.classList.contains("latex-logo") ||
+          thisnode.classList.contains("heading") ||
    // should we instead check for tags that *can* contain line breaks?
-          ["A", "CODE"].includes(thisnode.tagName)) {
+          ["A", "CODE", "PRE"].includes(thisnode.tagName)) {
         //wrap it in a span.oneword
           var word_wrapper = document.createElement('span');
           word_wrapper.setAttribute('class', 'oneword');
@@ -242,82 +244,91 @@ function logKeyDown(e) {
     console.log("input_region", input_region);
 
     if (e.code == "KeyP") {
-      var testID = "p-446";
-      var testNode = document.getElementById(testID);
- wordsAllWrapped(testNode);
+ //     var testID = "p-446";
+ //     var testNode = document.getElementById(testID);
+ //     var all_para = document.querySelectorAll(".para");
+      var all_para = document.querySelectorAll("SECTION P");
+      for (var pj = 0; pj < all_para.length; ++pj) {
+        testNode = all_para[pj];
+        wordsAllWrapped(testNode);
 
-/*
-return;
-      these_text_nodes = textNodesUnder(testNode);
-      console.log("testNode", testNode);
-      console.log("these_text_nodes", these_text_nodes);
-      for (var j=0; j < these_text_nodes.length; ++j) {
-        [thistype, thisnode] = these_text_nodes[j];
-        if (thistype == 3) {
-     //     var these_node_words_and_spaces = these_text_nodes[j].nodeValue.split(/(\s+)/);
-          var these_node_words_and_spaces = thisnode.nodeValue.split(/(\s+)/);
-          console.log("these_node_words_and_spaces", these_node_words_and_spaces);
-          var spanned_words = "";
-          for (var k=0; k < these_node_words_and_spaces.length; ++k) {
-              spanned_words += '<span class="oneword">' + these_node_words_and_spaces[k] + "</span>"
-          }
-          var wass_text = document.createElement('div');
-          wass_text.setAttribute('class', 'wastext');
-          wass_text.innerHTML = spanned_words;
-     //     these_text_nodes[j].nodeValue = spanned_words
-          thisnode.replaceWith(wass_text);
-          wass_text.outerHTML = wass_text.innerHTML
-        } else if (thistype == 1) {
-            // leave it there, but make sure we know about it
-           thisnode.classList.add("oneelement")
-        }
-      }
-
-*/
-
-
- //     var these_words = document.getElementsByClassName("oneword");
-      var these_words = document.querySelectorAll(".oneword, .oneelement");
-      console.log("these_words", these_words);
-      console.log("these_words[2]", these_words[2], "g",these_words[2].innerHTML);
-      console.log("these_words[3]", these_words[3], "g",these_words[3].innerHTML);
-      console.log("these_words[4]", these_words[4], "g",these_words[4].innerHTML);
-      var this_line = [];
-      var all_lines = "";
-      var current_height = these_words[0].getBoundingClientRect().bottom;
-      for (var j=0; j < these_words.length; ++j) {
-        var this_word_or_element = these_words[j];
-        if (this_word_or_element.classList.contains("oneword")) {
-          this_height = this_word_or_element.getBoundingClientRect().bottom;
-          if ( (Math.abs(this_height - current_height) < 10) && j > 0) {
-            this_line.push(this_word_or_element)
-          } else {
-            html_line_contents = "";
-            for (var k=0; k < this_line.length; ++k) {
-              if (this_line[k].classList.contains("oneword")) {
-                html_line_contents += this_line[k].innerHTML
+        var these_words = document.querySelectorAll(".oneword, .oneelement");
+        var this_line = [];
+        var all_lines = "";
+        var current_height = these_words[0].getBoundingClientRect().bottom;
+          var word_depth = 0;
+        for (var j=0; j < these_words.length; ++j) {
+  // next line is an error if the paragraphs starts with an element
+          var this_word = these_words[j];
+            var this_parent = this_word.parentElement;
+          if (this_word.classList.contains("oneword")) {
+            this_height = this_word.getBoundingClientRect().bottom;
+            if ( (Math.abs(this_height - current_height) < 10) && j > 0) {
+              if (this_parent == testNode && word_depth == 0) {
+                this_line.push(this_word.innerHTML)
               } else {
-                html_line_contents += this_line[k].outerHTML
+console.log(word_depth, ":",this_parent == testNode, "this_parent", this_parent.tagName, "ccc", this_parent.ClassList, "xxx", this_word.innerHTML);
+                if (word_depth == 0) {
+console.log("opening the tag", this_parent.tagName,"parent", this_parent,"of",this_word.innerHTML);
+                  var parent_classlist = this_parent.classList;
+console.log("parent_classlist", parent_classlist, "first", parent_classlist[0], "length", parent_classlist.length);
+            //  did not work.  why?      var parent_classes = parent_classlist.join(" ");
+                  this_line.push('<' + this_parent.tagName + ' class="' + parent_classlist[0] + '">');
+                  this_line.push(this_word.innerHTML);
+                  word_depth += 1
+
+                } else {
+                    this_line.push(this_word.innerHTML);  
+                }
+                if (this_word.nextElementSibling == null) {
+console.log("closing the tag", this_parent.tagName);
+                   // need to close the wrapping element
+                   this_line.push("</" + this_parent.tagName + ">");
+                   word_depth -= 1;
+                   if (word_depth > 0 && this_word.parentElement.nextElementSibling == null) {
+                     this_line.push("</" + this_parent.parentElement.tagName + ">");
+                     word_depth -= 1;
+                   }
+                }
+              }
+            } else {
+              html_line_contents = "";
+              for (var k=0; k < this_line.length; ++k) {
+                  html_line_contents += this_line[k]
+              }
+              // hack which only handles up to depth 2
+              if (word_depth > 0) {
+                html_line_contents += "</" + this_parent.tagName + ">"
+              }
+              if (word_depth > 1) {
+                html_line_contents += "</" + this_parent.parentElement.tagName + ">"
+              }
+              console.log("made", html_line_contents);
+              all_lines += '<div class="onelineX">' + html_line_contents + '</div>';
+              current_height = this_height;
+              this_line = [this_word.innerHTML];
+              if (word_depth > 0) {
+                this_line.unshift('<' + this_parent.tagName + ' class="' + this_parent.classList[0] + '">')
+              } 
+              if (word_depth > 1) {
+                this_line.unshift('<' + this_parent.tagName + ' class="' + this_parent.parentElement.classList[0] + '">')
               }
             }
-            console.log("made", html_line_contents);
-            all_lines += '<div class="onelineX">' + html_line_contents + '</div>';
-            current_height = this_height;
-            this_line = [this_word_or_element];
+          } else { // we have an html node
+              this_line.push(this_word.outerHTML)
+            }
           }
-        } else { // we have an html node
-          this_line.push(this_word_or_element)
+        // partial last line may be dangling
+        // bug: need to fix closing tags at the end?  maybe rely on automatic closure
+          if (this_line.length > 0) {
+            html_line_contents = "";
+            for (var k=0; k < this_line.length; ++k) {
+                  html_line_contents += this_line[k]
+            }
+            all_lines += '<div class="onelineX">' + html_line_contents + '</div>'
         }
+        testNode.innerHTML = all_lines
       }
-      // partial last line may be dangling
-      if (this_line.length > 0) {
-          html_line_contents = "";
-          for (var k=0; k < this_line.length; ++k) {
-            html_line_contents += this_line[k].innerHTML
-          }
-          all_lines += '<div class="onelineX">' + html_line_contents + '</div>'
-      }
-      testNode.innerHTML = all_lines
     }
 
     if (input_region.id == "user-preferences-button") {
