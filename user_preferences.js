@@ -216,34 +216,8 @@ function wordsAllWrapped(node) {
   }
 }
 
-editorLog("adding tab listener");
+function linesAllWrapped() {
 
-document.addEventListener('keydown', logKeyDown);
-
-function nextsibligntabbable(startingplace, where) {
-    var candidate = startingplace.nextElementSibling;
-    if (where == "previous" ) { candidate = startingplace.previousElementSibling }
-
-    while (candidate) {
-console.log("candidate A", candidate);
-      if (candidate.hasAttribute("tabindex")) { return candidate }
-console.log("candidate B", candidate);
-      if (where == "next" ) { candidate = candidate.nextElementSibling }
-      else { candidate = candidate.previousElementSibling }
-    }
-}
-
-function logKeyDown(e) {
-    if (e.code == "ShiftLeft" || e.code == "ShiftRight" || e.code == "Shift") { return }
-    prev_prev_char = prev_char;
-    prev_char = this_char;
-    this_char = e;
-    console.log("logKey",e,"XXX",e.code);
-
-    var input_region = document.activeElement;
-    console.log("input_region", input_region);
-
-    if (e.code == "KeyP") {
  //     var testID = "p-446";
  //     var testNode = document.getElementById(testID);
  //     var all_para = document.querySelectorAll(".para");
@@ -329,7 +303,34 @@ console.log("closing the tag", this_parent.tagName);
         }
         testNode.innerHTML = all_lines
       }
+}
+
+editorLog("adding tab listener");
+
+document.addEventListener('keydown', logKeyDown);
+
+function nextsibligntabbable(startingplace, where) {
+    var candidate = startingplace.nextElementSibling;
+    if (where == "previous" ) { candidate = startingplace.previousElementSibling }
+
+    while (candidate) {
+console.log("candidate A", candidate);
+      if (candidate.hasAttribute("tabindex")) { return candidate }
+console.log("candidate B", candidate);
+      if (where == "next" ) { candidate = candidate.nextElementSibling }
+      else { candidate = candidate.previousElementSibling }
     }
+}
+
+function logKeyDown(e) {
+    if (e.code == "ShiftLeft" || e.code == "ShiftRight" || e.code == "Shift") { return }
+    prev_prev_char = prev_char;
+    prev_char = this_char;
+    this_char = e;
+    console.log("logKey",e,"XXX",e.code);
+
+    var input_region = document.activeElement;
+    console.log("input_region", input_region);
 
     if (input_region.id == "user-preferences-button") {
         if (e.code == "Enter") {
@@ -414,6 +415,7 @@ console.log("css font_vals", fontcss(font_vals));
           }
           document.getElementById("theavatarbutton").innerHTML = dataval;
           document.getElementById("the" + dataval).innerHTML = "✔️";
+
         } else if (input_region.parentElement.classList.contains("atmosphere")) {
           document.body.setAttribute("data-atmosphere", dataval);
           var checks = document.getElementsByClassName('atmospherecheck');
@@ -421,6 +423,27 @@ console.log("css font_vals", fontcss(font_vals));
             checks[i].innerHTML = '';
           }
           document.getElementById("the" + dataval).innerHTML = "✔️";
+
+        } else if (input_region.parentElement.classList.contains("ruler")) {
+          // could be motion or actual ruler
+          if (["mouse", "arrow", "eye"].includes(dataval)) {
+            document.body.setAttribute("data-motion", dataval);
+            var checks = document.getElementsByClassName('motioncheck');
+            for (i = 0; i < checks.length; i++) {
+              checks[i].innerHTML = '';
+            }
+            document.getElementById("the" + dataval).innerHTML = "✔️";
+          } else {
+            if (!document.body.hasAttribute("data-ruler")) {
+              linesAllWrapped()
+            }
+            document.body.setAttribute("data-ruler", dataval);
+            var checks = document.getElementsByClassName('rulercheck');
+            for (i = 0; i < checks.length; i++) {
+              checks[i].innerHTML = '';
+            }
+            document.getElementById("the" + dataval).innerHTML = "✔️";
+          }
 
         }
       } else if (e.code == "Tab" && e.shiftKey) {
