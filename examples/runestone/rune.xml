@@ -53,7 +53,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <caption>An C program, interactive on a <pubtitle>Runestone</pubtitle> server</caption>
             <program xml:id="c-hello-world" interactive='activecode' language="c">
                 <input>
-                #include
+                #include &lt;stdio.h&gt;
 
                 int main(void)
                 {
@@ -172,7 +172,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </statement>
             <program language="c">
                 <input>
-                #include
+                #include &lt;stdio.h&gt;
 
                 int main(void)
                 </input>
@@ -181,7 +181,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>We're not really sure.  But it would begin as follows:</p>
                 <program language="c">
                     <input>
-                    #include
+                    #include &lt;stdio.h&gt;
 
                     int main(void)
                     </input>
@@ -211,7 +211,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Similar to above, again, but we place the <tag>program</tag> element <em>inside</em> the <tag>statement</tag>, not after it as a peer.  This signals that this is not a coding exercise and the program will render static, since it is explicitly labeled as not being interactive.</p>
                 <program xml:id="coding-exercise-static" language="c" interactive="no">
                     <input>
-                    #include
+                    #include &lt;stdio.h&gt;
 
                     int main(void)
                     </input>
@@ -248,7 +248,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>We're not really sure.  But it would begin as follows:</p>
                 <program language="c">
                     <input>
-                    #include
+                    #include &lt;stdio.h&gt;
 
                     int main(void)
                     </input>
@@ -290,7 +290,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </statement>
                 <program xml:id="coding-exercise-partial-three" language="c">
                     <input>
-                    #include
+                    #include &lt;stdio.h&gt;
 
                     int main(void)
                     </input>
