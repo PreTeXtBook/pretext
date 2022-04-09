@@ -157,7 +157,6 @@ body.pretext {
        (The second condition will guarantee an adequate contrast with white.)
      */
 
-  --chaptertoc: #932c1c;
   --chaptertoc: #832615;
   --chaptertoctext: #dee;
   --chaptertocactive: var(--documenttitle);   /* often the same as documenttitle */
@@ -179,13 +178,22 @@ body.pretext {
 
   --knowlborder: var(--bodytitlehighlight);
   --knowlbackground: var(--assemblagebackground);
+
+  --bannerbackground: #555;
+  --navbarbackground: #555;
+  --footerbackground: #333;
+  --mainbackground: #444;
+  --buttonbackground: #635;
+  --codebackground: #050;
+  --keybackground: #600;
+
 }
 
 .pretext[data-atmosphere="twilight"] {
   background: #222;
 }
 .pretext[data-atmosphere="twilight"] .ptx-page > .ptx-main {
-    background: #444;
+    background: var(--mainbackground);
     color: var(--bodyfontcolor);
 }
 .pretext[data-atmosphere="twilight"] .ptx-content .summary-links a {
@@ -193,12 +201,12 @@ body.pretext {
     background: var(--chaptertoc);
 }
 .pretext[data-atmosphere="twilight"] #ptx-navbar {
-    background: #333;
+    background: var(--navbarbackground);
 }
 .pretext[data-atmosphere="twilight"] .ptx-page-footer .feedback-link,
 .pretext[data-atmosphere="twilight"] .ptx-content-footer .button,
 .pretext[data-atmosphere="twilight"] #ptx-navbar .button {
-  background-color: #635;
+  background-color: var(--buttonbackground);
   color: var(--bodyfontcolor);
 }
 .pretext[data-atmosphere="twilight"] .ptx-page-footer .feedback-link:hover,
@@ -206,7 +214,7 @@ body.pretext {
 .pretext[data-atmosphere="twilight"] #ptx-navbar .button:hover,
 .pretext[data-atmosphere="twilight"] .ptx-content-footer .button:hover {
   background-color: #dadada;
-  color: #404;
+  color: var(--footerbackground);
 }
 .pretext[data-atmosphere="twilight"] #ptx-navbar #calculator-toggle {
   background-color: #336;
@@ -217,11 +225,11 @@ body.pretext {
 }
 
 .pretext[data-atmosphere="twilight"] #ptx-masthead {
-    background: #555;
+    background: var(--bannerbackground);
 }
 
 .pretext[data-atmosphere="twilight"] .ptx-page-footer {
-    background: #333;
+    background: var(--footerbackground);
     border-top-color: #447;
     border-bottom-color: #447;
 }
@@ -240,20 +248,19 @@ body.pretext {
   scrollbar-color: var(--documenttitlelight) #666;
 }
 .pretext[data-atmosphere="twilight"] .ptx-content .code-inline {
-/*
-  color: var(--documenttitledark);
-*/
-  background: #050;
+  background: var(--codebackground);
 }
 .pretext[data-atmosphere="twilight"] .ptx-content .kbdkey {
-/*
-  color: var(--documenttitledark);
-*/
-  background: #500;
+  background: var(--keybackground);
 }
 .pretext[data-atmosphere="twilight"] .ptx-content .goal-like > .heading {
   background:  var(--chaptertoc);
 }
+.pretext[data-atmosphere="twilight"] .ptx-content a.url,
+.pretext[data-atmosphere="twilight"] .ptx-content a.external {
+  color: #ddc;
+}
+
 .pretext[data-atmosphere="twilight"] .ptx-content [data-knowl],
 .pretext[data-atmosphere="twilight"] .ptx-content [data-knowl]:hover,
 .pretext[data-atmosphere="twilight"] .ptx-content [data-knowl]:active,
@@ -326,7 +333,7 @@ body.pretext {
        (The second condition will guarantee an adequate contrast with white.)
      */
 
-  --chaptertoc: #400;
+  --chaptertoc: #500;
   --chaptertoctext: #dee;
   --chaptertocactive: var(--documenttitle);   /* often the same as documenttitle */
   --chaptertoctextactive: white;
@@ -350,12 +357,11 @@ body.pretext {
 
   --bannerbackground: #333;
   --navbarbackground: #333;
-  --footerbackground: #333;
-  --tocbackground: #222;
+  --footerbackground: #222;
   --mainbackground: #111;
   --buttonbackground: #004;
-  --codebackground: #030;
-  --keybackground: #400;
+  --codebackground: #040;
+  --keybackground: #500;
 }
 
 .pretext[data-atmosphere="midnight"] {
@@ -431,6 +437,11 @@ body.pretext {
 .pretext[data-atmosphere="midnight"] .ptx-content .goal-like > .heading {
   background:  var(--chaptertoc);
 }
+.pretext[data-atmosphere="midnight"] .ptx-content a.url,
+.pretext[data-atmosphere="midnight"] .ptx-content a.external {
+  color: #ddc;
+}
+
 .pretext[data-atmosphere="midnight"] .ptx-content [data-knowl],
 .pretext[data-atmosphere="midnight"] .ptx-content [data-knowl]:hover,
 .pretext[data-atmosphere="midnight"] .ptx-content [data-knowl]:active,
