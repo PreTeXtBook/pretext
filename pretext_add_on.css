@@ -136,6 +136,24 @@
     margin: 0;
 }
 
+
+.pretext-content .runestone.ac_section {
+    width: 60em;
+    max-width: unset;
+}
+.pretext-content .runestone.ac_section .ac_section {
+    max-width: unset;
+}
+.pretext-content .runestone.ac_section > div {
+    max-width: unset;
+}
+
+.pretext-content .runestone > .parsons {
+    width: 60em;
+    max-width: unset;
+}
+
+
 .ptx-content .paragraphs .heading {
     display: inline;
 }
