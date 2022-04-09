@@ -142,8 +142,9 @@ body.pretext {
     background-color: var(--knowlborder);
 }
 
-.pretext[data-atmosphere="twilight"] {
+.pretext[data-atmosphere="darktwilight"] {
   --bodyfontcolor: #ddd;
+  --bodyfontcolorhighlight: #222;
   --documenttitle: #2a5ea4;
   --documenttitledark: #20477b;
   --documenttitlelight: #abd;
@@ -157,13 +158,13 @@ body.pretext {
        (The second condition will guarantee an adequate contrast with white.)
      */
 
-  --chaptertoc: #832615;
+  --chaptertoc: hsl(9, 72%, 30%);  /* #832615; */
   --chaptertoctext: #dee;
-  --chaptertocactive: var(--documenttitle);   /* often the same as documenttitle */
+  --chaptertocactive: var(--documenttitle);
   --chaptertoctextactive: white;
-  --sectiontoc: #666;
+  --sectiontoc: hsl(0, 0%, 40%);
   --sectiontoctext: #eed;
-  --sectiontocactive: var(--documenttitle);   /* often the same as documenttitle */
+  --sectiontocactive: var(--documenttitle);
   --sectiontoctextactive: white;
   --tocborder: #152f53;
 
@@ -179,18 +180,18 @@ body.pretext {
   --knowlborder: var(--bodytitlehighlight);
   --knowlbackground: var(--assemblagebackground);
 
-  --bannerbackground: #555;
-  --navbarbackground: #555;
-  --footerbackground: #333;
-  --mainbackground: #444;
-  --buttonbackground: #635;
-  --codebackground: #050;
-  --keybackground: #600;
+  --bannerbackground: hsl(0, 0%, 33%);
+  --navbarbackground: hsl(0, 0%, 33%);
+  --footerbackground: hsl(0, 0%, 30%);
+  --mainbackground: hsl(0, 0%, 27%);
+  --buttonbackground: hsl(225, 80%, 25%);
+  --codebackground: hsl(120, 100%, 17%);
+  --keybackground: hsl(0, 100%, 20%);
 
 }
 
 .pretext[data-atmosphere="twilight"] {
-  background: #222;
+  background: var(--mainbackground);
 }
 .pretext[data-atmosphere="twilight"] .ptx-page > .ptx-main {
     background: var(--mainbackground);
@@ -214,14 +215,14 @@ body.pretext {
 .pretext[data-atmosphere="twilight"] #ptx-navbar .button:hover,
 .pretext[data-atmosphere="twilight"] .ptx-content-footer .button:hover {
   background-color: #dadada;
-  color: var(--footerbackground);
+  color: var(--bodyfontcolorhighlight);
 }
 .pretext[data-atmosphere="twilight"] #ptx-navbar #calculator-toggle {
-  background-color: #336;
+  background-color: var(--buttonbackground);
 }
 .pretext[data-atmosphere="twilight"] #ptx-navbar #calculator-toggle:hover {
   background-color: #fce;
-  color: #222;
+  color: var(--bodyfontcolorhighlight);
 }
 
 .pretext[data-atmosphere="twilight"] #ptx-masthead {
@@ -318,7 +319,7 @@ body.pretext {
 
 /* midnight */
 
-.pretext[data-atmosphere="midnight"] {
+.pretext[data-atmosphere="darkmidnight"] {
   --bodyfontcolor: #ddd;
   --documenttitle: #2a5ea4;
   --documenttitledark: #20477b;
@@ -355,100 +356,100 @@ body.pretext {
   --knowlborder: var(--bodytitlehighlight);
   --knowlbackground: var(--assemblagebackground);
 
-  --bannerbackground: #333;
-  --navbarbackground: #333;
-  --footerbackground: #222;
-  --mainbackground: #111;
-  --buttonbackground: #004;
-  --codebackground: #040;
-  --keybackground: #500;
+  --bannerbackground: hsl(0, 0%, 16%);
+  --navbarbackground: hsl(0, 0%, 16%);
+  --footerbackground: hsl(0, 0%, 13%);
+  --mainbackground: hsl(0, 0%, 7%);
+  --buttonbackground: hsl(240, 100%, 13%);
+  --codebackground: hsl(120, 100%, 13%);
+  --keybackground: hsl(0, 100%, 17%);
 }
 
-.pretext[data-atmosphere="midnight"] {
+.pretext[data-atmosphere*="dark"] {
   background: var(--mainbackground);
 }
-.pretext[data-atmosphere="midnight"] .ptx-page > .ptx-main {
+.pretext[data-atmosphere*="dark"] .ptx-page > .ptx-main {
     background: var(--mainbackground);
     color: var(--bodyfontcolor);
 }
-.pretext[data-atmosphere="midnight"] .ptx-content .summary-links a {
+.pretext[data-atmosphere*="dark"] .ptx-content .summary-links a {
     background: var(--documenttitledark);
     background: var(--chaptertoc);
 }
-.pretext[data-atmosphere="midnight"] #ptx-navbar {
+.pretext[data-atmosphere*="dark"] #ptx-navbar {
     background: var(--navbarbackground);
 }
-.pretext[data-atmosphere="midnight"] .ptx-page-footer .feedback-link,
-.pretext[data-atmosphere="midnight"] .ptx-content-footer .button,
-.pretext[data-atmosphere="midnight"] #ptx-navbar .button {
+.pretext[data-atmosphere*="dark"] .ptx-page-footer .feedback-link,
+.pretext[data-atmosphere*="dark"] .ptx-content-footer .button,
+.pretext[data-atmosphere*="dark"] #ptx-navbar .button {
   background-color: var(--buttonbackground);
   color: var(--bodyfontcolor);
 }
-.pretext[data-atmosphere="midnight"] .ptx-page-footer .feedback-link:hover,
-.pretext[data-atmosphere="midnight"] .ptx-content-footer .button:hover,
-.pretext[data-atmosphere="midnight"] #ptx-navbar .button:hover,
-.pretext[data-atmosphere="midnight"] .ptx-content-footer .button:hover {
+.pretext[data-atmosphere*="dark"] .ptx-page-footer .feedback-link:hover,
+.pretext[data-atmosphere*="dark"] .ptx-content-footer .button:hover,
+.pretext[data-atmosphere*="dark"] #ptx-navbar .button:hover,
+.pretext[data-atmosphere*="dark"] .ptx-content-footer .button:hover {
   background-color: #dadada;
   color: #404;
 }
-.pretext[data-atmosphere="midnight"] #ptx-navbar #calculator-toggle {
+.pretext[data-atmosphere*="dark"] #ptx-navbar #calculator-toggle {
   background-color: #336;
 }
-.pretext[data-atmosphere="midnight"] #ptx-navbar #calculator-toggle:hover {
+.pretext[data-atmosphere*="dark"] #ptx-navbar #calculator-toggle:hover {
   background-color: #fce;
   color: #222;
 }
 
-.pretext[data-atmosphere="midnight"] #ptx-masthead {
+.pretext[data-atmosphere*="dark"] #ptx-masthead {
     background: var(--bannerbackground);
 }
 
-.pretext[data-atmosphere="midnight"] .ptx-page-footer {
+.pretext[data-atmosphere*="dark"] .ptx-page-footer {
     background: var(--footerbackground);
     border-top-color: #447;
     border-bottom-color: #447;
 }
-.pretext[data-atmosphere="midnight"] .ptx-page-footer .logo {
+.pretext[data-atmosphere*="dark"] .ptx-page-footer .logo {
     background: #779;
     border-radius: 0.4em;
 }
-.pretext[data-atmosphere="midnight"] #ptx-masthead .title-container > .pretext .heading,
-.pretext[data-atmosphere="midnight"] #ptx-masthead .title-container > .heading a,
-.pretext[data-atmosphere="midnight"] #ptx-masthead #logo-link:empty:hover::before,
-.pretext[data-atmosphere="midnight"] #ptx-masthead .byline,
-.pretext[data-atmosphere="midnight"] #ptx-masthead .byline a {
+.pretext[data-atmosphere*="dark"] #ptx-masthead .title-container > .pretext .heading,
+.pretext[data-atmosphere*="dark"] #ptx-masthead .title-container > .heading a,
+.pretext[data-atmosphere*="dark"] #ptx-masthead #logo-link:empty:hover::before,
+.pretext[data-atmosphere*="dark"] #ptx-masthead .byline,
+.pretext[data-atmosphere*="dark"] #ptx-masthead .byline a {
   color: var(--documenttitlelight);
 }
-.pretext[data-atmosphere="midnight"] #ptx-toc {
-  scrollbar-color: var(--documenttitlelight) #333;
+.pretext[data-atmosphere*="dark"] #ptx-toc {
+  scrollbar-color: var(--documenttitlelight) var(--footerbackground);
 }
-.pretext[data-atmosphere="midnight"] .ptx-content .code-inline {
+.pretext[data-atmosphere*="dark"] .ptx-content .code-inline {
 /*
   color: var(--documenttitledark);
 */
   background: var(--codebackground);
 }
-.pretext[data-atmosphere="midnight"] .ptx-content .kbdkey {
+.pretext[data-atmosphere*="dark"] .ptx-content .kbdkey {
 /*
   color: var(--documenttitledark);
 */
   background: var(--keybackground);
 }
-.pretext[data-atmosphere="midnight"] .ptx-content .goal-like > .heading {
+.pretext[data-atmosphere*="dark"] .ptx-content .goal-like > .heading {
   background:  var(--chaptertoc);
 }
-.pretext[data-atmosphere="midnight"] .ptx-content a.url,
-.pretext[data-atmosphere="midnight"] .ptx-content a.external {
+.pretext[data-atmosphere*="dark"] .ptx-content a.url,
+.pretext[data-atmosphere*="dark"] .ptx-content a.external {
   color: #ddc;
 }
 
-.pretext[data-atmosphere="midnight"] .ptx-content [data-knowl],
-.pretext[data-atmosphere="midnight"] .ptx-content [data-knowl]:hover,
-.pretext[data-atmosphere="midnight"] .ptx-content [data-knowl]:active,
-.pretext[data-atmosphere="midnight"] .ptx-content [data-knowl].active {
+.pretext[data-atmosphere*="dark"] .ptx-content [data-knowl],
+.pretext[data-atmosphere*="dark"] .ptx-content [data-knowl]:hover,
+.pretext[data-atmosphere*="dark"] .ptx-content [data-knowl]:active,
+.pretext[data-atmosphere*="dark"] .ptx-content [data-knowl].active {
   color: var(--documenttitlelight);
 }
-.pretext[data-atmosphere="midnight"] .ptx-page .ptx-main .ptx-content .knowl-content > .solution-like {
+.pretext[data-atmosphere*="dark"] .ptx-page .ptx-main .ptx-content .knowl-content > .solution-like {
   background: #606;
 }
 
