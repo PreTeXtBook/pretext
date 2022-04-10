@@ -3095,28 +3095,28 @@ Book (with parts), "section" at level 3
 <!-- template where translation with keys happens               -->
 <!-- This template allows a node to report its name             -->
 <xsl:template match="*" mode="type-name">
+    <xsl:variable name="string-id">
+        <xsl:apply-templates select="." mode="string-id"/>
+    </xsl:variable>
     <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="local-name(.)" />
+        <xsl:with-param name="string-id" select="$string-id" />
         <xsl:with-param name="lang" select="$document-language"/>
     </xsl:call-template>
 </xsl:template>
 
-<!-- We override a few elements using their XSLT locations      -->
-<!-- There are corresponing strings in the localizations files, -->
-<!-- and the "en-US" file will be the best documented           -->
+<!-- Most PreTeXt elements have names, and their localizations, indexed   -->
+<!-- by a "string-id" that is simply their local name.  However, others   -->
+<!-- ("exercise" is archetypical) have names that vary according to their -->
+<!-- context.  The following templates just report these "string-id",     -->
+<!-- defaulting to the "local name".  See the "en-US" localization file   -->
+<!-- for the best documentation of these non-standard string-id.          -->
 
 <!-- A single objective or outcome is authored as a list item -->
-<xsl:template match="objectives/ol/li|objectives/ul/li|objectives/dl/li" mode="type-name">
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="'objective'" />
-        <xsl:with-param name="lang" select="$document-language"/>
-    </xsl:call-template>
+<xsl:template match="objectives/ol/li|objectives/ul/li|objectives/dl/li" mode="string-id">
+    <xsl:text>objective</xsl:text>
 </xsl:template>
-<xsl:template match="outcomes/ol/li|outcomes/ul/li|outcomes/dl/li" mode="type-name">
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="'outcome'" />
-        <xsl:with-param name="lang" select="$document-language"/>
-    </xsl:call-template>
+<xsl:template match="outcomes/ol/li|outcomes/ul/li|outcomes/dl/li" mode="string-id">
+    <xsl:text>outcome</xsl:text>
 </xsl:template>
 
 <!-- There are lots of exercises, but differentiated by their parents,  -->
@@ -3124,27 +3124,18 @@ Book (with parts), "section" at level 3
 
 <!-- First, a "divisional" "exercise" in an "exercises",      -->
 <!-- with perhaps intervening groups, like an "exercisegroup" -->
-<xsl:template match="exercises//exercise" mode="type-name">
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="'divisionalexercise'" />
-        <xsl:with-param name="lang" select="$document-language"/>
-    </xsl:call-template>
+<xsl:template match="exercises//exercise" mode="string-id">
+    <xsl:text>divisionalexercise</xsl:text>
 </xsl:template>
 
 <!-- Second, an "exercise" placed within a "worksheet"-->
-<xsl:template match="worksheet//exercise" mode="type-name">
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="'worksheetexercise'" />
-        <xsl:with-param name="lang" select="$document-language"/>
-    </xsl:call-template>
+<xsl:template match="worksheet//exercise" mode="string-id">
+    <xsl:text>worksheetexercise</xsl:text>
 </xsl:template>
 
 <!-- Third, an "exercise" placed within a "reading-questions"-->
-<xsl:template match="reading-questions//exercise" mode="type-name">
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="'readingquestion'" />
-        <xsl:with-param name="lang" select="$document-language"/>
-    </xsl:call-template>
+<xsl:template match="reading-questions//exercise" mode="string-id">
+    <xsl:text>readingquestion</xsl:text>
 </xsl:template>
 
 <!-- Finally, an inline exercise has a division (several possible)        -->
@@ -3152,30 +3143,27 @@ Book (with parts), "section" at level 3
 <!-- succeed, but could improve with a filter or list of specific matches -->
 <!-- This matches the LaTeX environment of the same name, so              -->
 <!-- template to create an "inlineexercise" environment runs smoothly     -->
-<xsl:template match="exercise" mode="type-name">
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="'inlineexercise'" />
-        <xsl:with-param name="lang" select="$document-language"/>
-    </xsl:call-template>
+<xsl:template match="exercise" mode="string-id">
+    <xsl:text>inlineexercise</xsl:text>
 </xsl:template>
 
 <!-- "solutions" divisions are "Solutions 5.6" in the  -->
 <!-- main matter, but "Appendix D" in the back matter -->
-<xsl:template match="solutions" mode="type-name">
+<xsl:template match="solutions" mode="string-id">
     <xsl:choose>
         <xsl:when test="parent::backmatter">
-            <xsl:call-template name="type-name">
-                <xsl:with-param name="string-id" select="'appendix'" />
-                <xsl:with-param name="lang" select="$document-language"/>
-            </xsl:call-template>
+            <xsl:text>appendix</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:call-template name="type-name">
-                <xsl:with-param name="string-id" select="'solutions'" />
-                <xsl:with-param name="lang" select="$document-language"/>
-            </xsl:call-template>
+            <xsl:text>solutions</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- And with no better match, the default is  -->
+<!-- the PreTeXt name for the element itself. -->
+<xsl:template match="*" mode="string-id">
+    <xsl:value-of select="local-name(.)"/>
 </xsl:template>
 
 <!-- The  xsl/localizations/localizations.xml  file contains the base -->
