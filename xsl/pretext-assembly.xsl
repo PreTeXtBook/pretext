@@ -151,6 +151,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<xsl:template match="node()|@*" mode="language">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="language"/>
+    </xsl:copy>
+</xsl:template>
+
 <xsl:template match="node()|@*" mode="augment">
     <xsl:param name="parent-struct" select="''"/>
     <xsl:param name="level" select="0"/>
@@ -230,12 +236,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="assembly-docinfo" select="$assembly-root/docinfo"/>
 <xsl:variable name="assembly-document-root" select="$assembly-root/*[not(self::docinfo)]"/>
 
+<xsl:variable name="language-rtf">
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: start language</xsl:message>
+    </xsl:if>
+    <!--  -->
+    <xsl:apply-templates select="$repair" mode="language"/>
+    <!--  -->
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: end language</xsl:message>
+    </xsl:if>
+    <!--  -->
+</xsl:variable>
+<xsl:variable name="language" select="exsl:node-set($language-rtf)"/>
+
 <xsl:variable name="augment-rtf">
     <xsl:if test="$time-assembly">
         <xsl:message><xsl:value-of select="date:date-time()"/>: start augment</xsl:message>
     </xsl:if>
     <!--  -->
-    <xsl:apply-templates select="$repair" mode="augment"/>
+    <xsl:apply-templates select="$language" mode="augment"/>
     <!--  -->
     <xsl:if test="$time-assembly">
         <xsl:message><xsl:value-of select="date:date-time()"/>: end augment</xsl:message>
@@ -578,6 +598,67 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- no more "conclusion", so drop it here; deprecation will warn -->
 <xsl:template match="glossary/conclusion" mode="repair"/>
+
+<!-- ######### -->
+<!-- Languages -->
+<!-- ######### -->
+
+<!-- The variable $locales is a node-set of all the locales which have    -->
+<!-- supported localization files.  A comparison of an @xml:lang (string) -->
+<!-- with $locales (node-set) will be true if the attribute value is a    -->
+<!-- string value of one of the nodes in the node-set.  So it is easy to  -->
+<!-- create a boolean value for localization support .                    -->
+<xsl:variable name="locales" select="document('localizations/localizations.xml')/localizations/locale" />
+
+<!-- We want the root node to always have full and accurate language         -->
+<!-- information since it will be the fail-safe node on a query up the tree. -->
+<!-- Earlier "repair" pass eliminates "mathbook".                            -->
+<xsl:template match="/pretext" mode="language">
+    <!-- see above description of $locales, false if missing -->
+    <xsl:variable name="b-is-supported" select="@xml:lang = $locales"/>
+    <!-- duplicate with better language information -->
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="language"/>
+        <xsl:choose>
+            <xsl:when test="$b-is-supported">
+                <!-- if supported, it was just duplicated, save off a -->
+                <!-- new attribute indicating use for localizations   -->
+                <xsl:attribute name="locale-lang">
+                    <xsl:value-of select="@xml:lang"/>
+                </xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- if missing we add the default          -->
+                <!-- if unsupported, overwrite with default -->
+                <xsl:attribute name="xml:lang">
+                    <xsl:text>en-US</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="locale-lang">
+                    <xsl:text>en-US</xsl:text>
+                </xsl:attribute>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:apply-templates select="node()" mode="language"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- An  @xml:id  is checked to see if it is supported for localizations.  -->
+<!-- If so, we augment the elment with an internal attribute.  If not,     -->
+<!-- we just leave a copy alone, it might be relevant for future features. -->
+<xsl:template match="*[@xml:lang]" mode="language">
+    <!-- see above description of $locales -->
+    <xsl:variable name="b-is-supported" select="@xml:lang = $locales"/>
+    <!-- duplicate with additional language information -->
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="language"/>
+        <xsl:if test="$b-is-supported">
+            <xsl:attribute name="locale-lang">
+                <xsl:value-of select="@xml:lang"/>
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:apply-templates select="node()" mode="language"/>
+    </xsl:copy>
+</xsl:template>
 
 <!-- ######## -->
 <!-- Versions -->
