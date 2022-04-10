@@ -56,6 +56,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
+<!-- The "pretext-assembly.xsl" stylesheet is parameterized by a   -->
+<!-- *variable* for what types of exercises to create - mostly     -->
+<!-- static, but for HTML, interactive (dynamic).  In this way     -->
+<!-- importing stylesheets can set and override the variable as    -->
+<!-- necessary, but it is a bit harder to set via string parameters-->
+<!-- in the usual ways.  But for this utility, we want to run both -->
+<!-- modes.  So we *do* have a parameter here, and it just becomes -->
+<!-- the value of the variable, as just described.  Default if not -->
+<!-- set is "static", the alternative is "dynamic".                -->
+
+<xsl:param name="debug.assembly.exercise" select="'static'"/>
+<xsl:variable name="exercise-style">
+    <xsl:value-of select="$debug.assembly.exercise"/>
+</xsl:variable>
+
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->
