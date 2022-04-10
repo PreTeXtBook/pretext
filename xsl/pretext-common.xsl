@@ -3187,9 +3187,6 @@ Book (with parts), "section" at level 3
 <!-- just one root.                                                   -->
 <xsl:variable name="locale-files" select="document('localizations/localizations.xml')/localizations/filename" />
 <xsl:variable name="localizations" select="document($locale-files)" />
-
-<!-- Key to lookup which languages have support -->
-<xsl:key name="language-key" match="locale" use="@language"/>
 <!-- Key to lookup a particular localization -->
 <xsl:key name="localization-key" match="localization" use="concat(../@language, @string-id)"/>
 
@@ -3235,19 +3232,6 @@ Book (with parts), "section" at level 3
             <xsl:message>PTX:WARNING: could not translate string with id "<xsl:value-of select="$string-id" />" into language for code "<xsl:value-of select="$document-language" />"</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
-</xsl:template>
-
-<!-- This template echoes an element's @xml:lang attribute iff there  -->
-<!-- is a localization suite for that language, else it returns empty -->
-<xsl:template match="*" mode="localization-language">
-    <xsl:if test="@xml:lang">
-        <!-- save off the element's language code before context-shift -->
-        <xsl:variable name="the-lang" select="@xml:lang"/>
-        <!-- context switch -->
-        <xsl:for-each select="$localizations">
-            <xsl:value-of select="key('language-key', $the-lang)/@language"/>
-        </xsl:for-each>
-    </xsl:if>
 </xsl:template>
 
 <!-- ##### -->
