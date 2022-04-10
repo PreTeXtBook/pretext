@@ -22,19 +22,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See  xsl/localizations/README.md  for an explanation of this file -->
 <!-- Please respect alphabetical order here                            -->
 
+<!-- NB: there are two very similar elements for each language since   -->
+<!-- they each get used for slightly different purposes (reading       -->
+<!-- files, verifying support) and need to be converted as node-sets   -->
+<!-- without any intermediate manipulation.                            -->
+
 <localizations xmlns:xi="http://www.w3.org/2001/XInclude">
-    <filename>af-ZA.xml</filename>
-    <filename>bg-BG.xml</filename>
-    <filename>cs-CZ.xml</filename>
-    <filename>ca-ES.xml</filename>
-    <filename>de-DE.xml</filename>
-    <filename>en-US.xml</filename>
-    <filename>es-ES.xml</filename>
-    <filename>fi-FI.xml</filename>
-    <filename>fr-CA.xml</filename>
-    <filename>fr-FR.xml</filename>
-    <filename>hu-HU.xml</filename>
-    <filename>it-IT.xml</filename>
-    <filename>pt-BR.xml</filename>
-    <filename>pt-PT.xml</filename>
+    <locale>af-ZA</locale><filename>af-ZA.xml</filename>
+    <locale>bg-BG</locale><filename>bg-BG.xml</filename>
+    <locale>cs-CZ</locale><filename>cs-CZ.xml</filename>
+    <locale>ca-ES</locale><filename>ca-ES.xml</filename>
+    <locale>de-DE</locale><filename>de-DE.xml</filename>
+    <locale>en-US</locale><filename>en-US.xml</filename>
+    <locale>es-ES</locale><filename>es-ES.xml</filename>
+    <locale>fi-FI</locale><filename>fi-FI.xml</filename>
+    <locale>fr-CA</locale><filename>fr-CA.xml</filename>
+    <locale>fr-FR</locale><filename>fr-FR.xml</filename>
+    <locale>hu-HU</locale><filename>hu-HU.xml</filename>
+    <locale>it-IT</locale><filename>it-IT.xml</filename>
+    <locale>pt-BR</locale><filename>pt-BR.xml</filename>
+    <locale>pt-PT</locale><filename>pt-PT.xml</filename>
 </localizations>
