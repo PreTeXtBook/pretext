@@ -1964,6 +1964,32 @@ def map_path_to_xml_id(
     # Save the result as a JSON file in the ``dest_dir``.
     (pathlib.Path(dest_dir) / "mapping.json").write_text(json.dumps(path_to_xml_id))
 
+##################
+# Assembled Source
+##################
+
+# AKA the aftermath of the pre-processor
+# Parameterized by static v. dynamic exercises
+
+def assembly(xml, pub_file, stringparams, out_file, dest_dir, method):
+    """Convert XML source to pre-processed PreTeXt in destination directory"""
+    import os.path # join()
+
+    # support publisher file, not subtree argument
+    if pub_file:
+        stringparams['publisher'] = pub_file
+    # method dictates which type of exercises are produced
+    # parameter is exclusive to utility styleheet below
+    stringparams['debug.assembly.exercise'] = method
+    # "extra_xsl" would be silly in this context (?)
+    extraction_xslt = os.path.join(get_ptx_xsl_path(), 'utilities/pretext-enhanced-source.xsl')
+    # form output filename based on source filename,
+    # unless an  out_file  has been specified
+    derivedname = get_output_filename(xml, out_file, dest_dir, '.xml')
+    # Write output into working directory, no scratch space needed
+    _verbose('converting {} to enhanced (pre-processed) PreTeXt source as {}'.format(xml, derivedname))
+    xsltproc(extraction_xslt, xml, derivedname, None, stringparams)
+
 
 #####################
 # Conversion to LaTeX
@@ -1983,7 +2009,7 @@ def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
         extraction_xslt = os.path.join(get_ptx_xsl_path(), 'pretext-latex.xsl')
     # form output filename based on source filename,
     # unless an  out_file  has been specified
-    derivedname = get_output_filename(xml, out_file, dest_dir, '.tex')
+    derivedname = get_output_filename(xml, out_file, dest_dir, '.ptx')
     # Write output into working directory, no scratch space needed
     _verbose('converting {} to LaTeX as {}'.format(xml, derivedname))
     xsltproc(extraction_xslt, xml, derivedname, None, stringparams)
