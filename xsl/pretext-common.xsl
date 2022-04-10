@@ -3204,7 +3204,7 @@ Book (with parts), "section" at level 3
 <!-- "for-each" here should do a "copy-of" without the root node, all -->
 <!-- captured in a variable, then converted back to a node-set with   -->
 <!-- just one root.                                                   -->
-<xsl:variable name="locale-files" select="document('localizations/localizations.xml')/localizations/locale" />
+<xsl:variable name="locale-files" select="document('localizations/localizations.xml')/localizations/filename" />
 <xsl:variable name="localizations" select="document($locale-files)" />
 
 <!-- Key to lookup which languages have support -->

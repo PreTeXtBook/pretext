@@ -23,18 +23,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Please respect alphabetical order here                            -->
 
 <localizations xmlns:xi="http://www.w3.org/2001/XInclude">
-    <locale>af-ZA.xml</locale>
-    <locale>bg-BG.xml</locale>
-    <locale>cs-CZ.xml</locale>
-    <locale>ca-ES.xml</locale>
-    <locale>de-DE.xml</locale>
-    <locale>en-US.xml</locale>
-    <locale>es-ES.xml</locale>
-    <locale>fi-FI.xml</locale>
-    <locale>fr-CA.xml</locale>
-    <locale>fr-FR.xml</locale>
-    <locale>hu-HU.xml</locale>
-    <locale>it-IT.xml</locale>
-    <locale>pt-BR.xml</locale>
-    <locale>pt-PT.xml</locale>
+    <filename>af-ZA.xml</filename>
+    <filename>bg-BG.xml</filename>
+    <filename>cs-CZ.xml</filename>
+    <filename>ca-ES.xml</filename>
+    <filename>de-DE.xml</filename>
+    <filename>en-US.xml</filename>
+    <filename>es-ES.xml</filename>
+    <filename>fi-FI.xml</filename>
+    <filename>fr-CA.xml</filename>
+    <filename>fr-FR.xml</filename>
+    <filename>hu-HU.xml</filename>
+    <filename>it-IT.xml</filename>
+    <filename>pt-BR.xml</filename>
+    <filename>pt-PT.xml</filename>
 </localizations>
