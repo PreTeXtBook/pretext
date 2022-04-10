@@ -1097,6 +1097,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- Hardcode "name" of an inline exercise in the environment -->
             <xsl:call-template name="type-name">
                 <xsl:with-param name="string-id" select="'inlineexercise'" />
+                <xsl:with-param name="lang" select="$document-language"/>
             </xsl:call-template>
             <xsl:text>~#1}\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
         </xsl:if>
@@ -1220,18 +1221,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Localize LaTeX supplied names (possibly none)&#xa;</xsl:text>
     <xsl:if test="$document-root//appendix">
         <xsl:text>\renewcommand*{\appendixname}{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'appendix'" /></xsl:call-template>
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'appendix'"/>
+            <xsl:with-param name="lang" select="$document-language"/>
+        </xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$root/book">
         <xsl:if test="$document-root//part">
             <xsl:text>\renewcommand*{\partname}{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'part'" /></xsl:call-template>
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'part'"/>
+                <xsl:with-param name="lang" select="$document-language"/>
+            </xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="$document-root//chapter">
             <xsl:text>\renewcommand*{\chaptername}{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'chapter'" /></xsl:call-template>
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'chapter'"/>
+                <xsl:with-param name="lang" select="$document-language"/>
+            </xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
             <!-- We only adjust when necessary -->
             <xsl:if test="not($chapter-start = 1)">
@@ -1244,7 +1254,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$root/article">
         <xsl:if test="$document-root//abstract">
             <xsl:text>\renewcommand*{\abstractname}{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'abstract'" /></xsl:call-template>
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'abstract'"/>
+                <xsl:with-param name="lang" select="$document-language"/>
+            </xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
@@ -1733,16 +1746,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\makeindex[title=</xsl:text>
             <xsl:call-template name="type-name">
                 <xsl:with-param name="string-id" select="'index'" />
+                <xsl:with-param name="lang" select="$document-language"/>
             </xsl:call-template>
             <xsl:text>, intoc=true]&#xa;</xsl:text>
             <xsl:text>\renewcommand{\seename}{</xsl:text>
             <xsl:call-template name="type-name">
                 <xsl:with-param name="string-id" select="'see'" />
+                <xsl:with-param name="lang" select="$document-language"/>
             </xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
             <xsl:text>\renewcommand{\alsoname}{</xsl:text>
             <xsl:call-template name="type-name">
                 <xsl:with-param name="string-id" select="'also'" />
+                <xsl:with-param name="lang" select="$document-language"/>
             </xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
@@ -3558,6 +3574,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- LaTeX book style lacks  \sectionname, which could be internationalized globally -->
             <xsl:call-template name="type-name">
                 <xsl:with-param name="string-id" select="'section'"/>
+                <xsl:with-param name="lang" select="$document-language"/>
             </xsl:call-template>
             <xsl:text>\space\thesection.\space\sectiontitle}{}}}%&#xa;</xsl:text>
             <xsl:text>{}%&#xa;</xsl:text>
@@ -3882,6 +3899,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>, </xsl:text>
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id" select="'editor'" />
+            <xsl:with-param name="lang" select="$document-language"/>
         </xsl:call-template>
     </xsl:if>
     <xsl:text>}\\</xsl:text>
@@ -4051,6 +4069,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>, </xsl:text>
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'editor'" />
+        <xsl:with-param name="lang" select="$document-language"/>
     </xsl:call-template>
     <xsl:if test="department">
         <xsl:text>\\&#xa;</xsl:text>
@@ -4098,6 +4117,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\renewcommand*\contentsname{</xsl:text>
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id" select="'toc'" />
+            <xsl:with-param name="lang" select="$document-language"/>
         </xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>\tableofcontents&#xa;</xsl:text>
@@ -4148,6 +4168,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\renewcommand*\contentsname{</xsl:text>
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id" select="'toc'" />
+            <xsl:with-param name="lang" select="$document-language"/>
         </xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>\tableofcontents&#xa;</xsl:text>
@@ -4184,11 +4205,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="$number-authors > 1">
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'about-authors'" />
+                    <xsl:with-param name="lang" select="$document-language"/>
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'about-author'" />
+                    <xsl:with-param name="lang" select="$document-language"/>
                 </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
@@ -4421,6 +4444,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="appendices-name">
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id" select="'appendices'" />
+            <xsl:with-param name="lang" select="$document-language"/>
         </xsl:call-template>
     </xsl:variable>
     <xsl:if test="appendix|solutions">
@@ -4456,6 +4480,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>\addcontentsline{toc}{part}{</xsl:text>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'appendices'" />
+                    <xsl:with-param name="lang" select="$document-language"/>
                 </xsl:call-template>
                 <xsl:text>}%&#xa;</xsl:text>
             </xsl:when>
@@ -4463,6 +4488,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>\part*{</xsl:text>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'appendices'" />
+                    <xsl:with-param name="lang" select="$document-language"/>
                 </xsl:call-template>
                 <xsl:text>}%&#xa;</xsl:text>
             </xsl:otherwise>
@@ -4480,6 +4506,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\addcontentsline{toc}{part}{</xsl:text>
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id" select="'backmatter'" />
+            <xsl:with-param name="lang" select="$document-language"/>
         </xsl:call-template>
         <xsl:text>}%&#xa;</xsl:text>
         <xsl:apply-templates select="*[not(self::appendix|self::solutions)]"/>
@@ -4566,34 +4593,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\textbf{</xsl:text>
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'symbol'" />
+        <xsl:with-param name="lang" select="$document-language"/>
     </xsl:call-template>
     <xsl:text>}&amp;\textbf{</xsl:text>
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'description'" />
+        <xsl:with-param name="lang" select="$document-language"/>
     </xsl:call-template>
     <xsl:text>}&amp;\textbf{</xsl:text>
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'page'" />
+        <xsl:with-param name="lang" select="$document-language"/>
     </xsl:call-template>
     <xsl:text>}\\[1em]&#xa;</xsl:text>
     <xsl:text>\endfirsthead&#xa;</xsl:text>
     <xsl:text>\textbf{</xsl:text>
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'symbol'" />
+        <xsl:with-param name="lang" select="$document-language"/>
     </xsl:call-template>
     <xsl:text>}&amp;\textbf{</xsl:text>
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'description'" />
+        <xsl:with-param name="lang" select="$document-language"/>
     </xsl:call-template>
     <xsl:text>}&amp;\textbf{</xsl:text>
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'page'" />
+        <xsl:with-param name="lang" select="$document-language"/>
     </xsl:call-template>
     <xsl:text>}\\[1em]&#xa;</xsl:text>
     <xsl:text>\endhead&#xa;</xsl:text>
     <xsl:text>\multicolumn{3}{r}{(</xsl:text>
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'continued'" />
+        <xsl:with-param name="lang" select="$document-language"/>
     </xsl:call-template>
     <xsl:text>)}\\&#xa;</xsl:text>
     <xsl:text>\endfoot&#xa;</xsl:text>
@@ -4727,6 +4761,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\multicolumn{2}{r}{(</xsl:text>
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'continued'" />
+        <xsl:with-param name="lang" select="$document-language"/>
     </xsl:call-template>
     <xsl:text>)}\\&#xa;</xsl:text>
     <xsl:text>\endfoot&#xa;</xsl:text>
@@ -6039,6 +6074,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>\textbf{</xsl:text>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'part'" />
+                    <xsl:with-param name="lang" select="$document-language"/>
                 </xsl:call-template>
                 <xsl:text> </xsl:text>
                 <xsl:apply-templates select="." mode="serial-number" />

@@ -1153,16 +1153,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <th>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'symbol'" />
+                    <xsl:with-param name="lang" select="$document-language"/>
                 </xsl:call-template>
             </th>
             <th>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'description'" />
+                    <xsl:with-param name="lang" select="$document-language"/>
                 </xsl:call-template>
             </th>
             <th>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'location'" />
+                    <xsl:with-param name="lang" select="$document-language"/>
                 </xsl:call-template>
             </th>
         </tr>
@@ -1728,6 +1731,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="upper-see">
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'see'" />
+        <xsl:with-param name="lang" select="$document-language"/>
     </xsl:call-template>
 </xsl:variable>
 
@@ -1735,6 +1739,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="upper">
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id" select="'see'" />
+            <xsl:with-param name="lang" select="$document-language"/>
         </xsl:call-template>
     </xsl:variable>
     <xsl:value-of select="translate(substring($upper, 1, 1), &UPPERCASE;, &LOWERCASE;)"/>
@@ -1744,6 +1749,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="upper-seealso">
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'also'" />
+        <xsl:with-param name="lang" select="$document-language"/>
     </xsl:call-template>
 </xsl:variable>
 
@@ -1751,6 +1757,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="upper">
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id" select="'also'" />
+            <xsl:with-param name="lang" select="$document-language"/>
         </xsl:call-template>
     </xsl:variable>
     <xsl:value-of select="translate(substring($upper, 1, 1), &UPPERCASE;, &LOWERCASE;)"/>
@@ -2168,6 +2175,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <a href="{$href}" class="internal">
                             <xsl:call-template name="type-name">
                                 <xsl:with-param name="string-id" select="'incontext'" />
+                                <xsl:with-param name="lang" select="$document-language"/>
                             </xsl:call-template>
                         </a>
                     </span>
@@ -10892,6 +10900,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id" select="'skip-to-content'" />
+            <xsl:with-param name="lang" select="$document-language"/>
         </xsl:call-template>
     </xsl:element>
 </xsl:template>
@@ -11109,10 +11118,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="title">
                     <xsl:call-template name="type-name">
                         <xsl:with-param name="string-id" select="'previous'" />
+                        <xsl:with-param name="lang" select="$document-language"/>
                     </xsl:call-template>
                 </xsl:attribute>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'previous-short'" />
+                    <xsl:with-param name="lang" select="$document-language"/>
                 </xsl:call-template>
             </xsl:element>
         </xsl:when>
@@ -11126,6 +11137,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="class">previous-button button toolbar-item disabled</xsl:attribute>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'previous-short'" />
+                    <xsl:with-param name="lang" select="$document-language"/>
                 </xsl:call-template>
             </xsl:element>
         </xsl:otherwise>
@@ -11147,10 +11159,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:attribute name="title">
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'index-part'" />
+                    <xsl:with-param name="lang" select="$document-language"/>
                 </xsl:call-template>
             </xsl:attribute>
             <xsl:call-template name="type-name">
                 <xsl:with-param name="string-id" select="'index-part'" />
+                <xsl:with-param name="lang" select="$document-language"/>
             </xsl:call-template>
         </xsl:element>
     </xsl:if>
@@ -11161,6 +11175,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="mininav">
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id" select="'jump-to'" />
+            <xsl:with-param name="lang" select="$document-language"/>
         </xsl:call-template>
     </span>
     <span class="indexnav">
@@ -11221,10 +11236,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="title">
                     <xsl:call-template name="type-name">
                         <xsl:with-param name="string-id" select="'next'" />
+                        <xsl:with-param name="lang" select="$document-language"/>
                     </xsl:call-template>
                 </xsl:attribute>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'next-short'" />
+                    <xsl:with-param name="lang" select="$document-language"/>
                 </xsl:call-template>
             </xsl:element>
         </xsl:when>
@@ -11238,6 +11255,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="class">next-button button toolbar-item disabled</xsl:attribute>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'next-short'" />
+                    <xsl:with-param name="lang" select="$document-language"/>
                 </xsl:call-template>
             </xsl:element>
         </xsl:otherwise>
@@ -11265,10 +11283,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="title">
                     <xsl:call-template name="type-name">
                         <xsl:with-param name="string-id" select="'up'" />
+                        <xsl:with-param name="lang" select="$document-language"/>
                     </xsl:call-template>
                 </xsl:attribute>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'up-short'" />
+                    <xsl:with-param name="lang" select="$document-language"/>
                 </xsl:call-template>
             </xsl:element>
         </xsl:when>
@@ -11282,6 +11302,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="class">up-button button disabled toolbar-item</xsl:attribute>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'up-short'" />
+                    <xsl:with-param name="lang" select="$document-language"/>
                 </xsl:call-template>
             </xsl:element>
         </xsl:otherwise>
@@ -11372,6 +11393,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:attribute>
                     <xsl:call-template name="type-name">
                         <xsl:with-param name="string-id" select="'toc'" />
+                        <xsl:with-param name="lang" select="$document-language"/>
                     </xsl:call-template>
                 </xsl:element>
                 <!-- Prev/Up/Next buttons on top, according to options -->
@@ -11454,6 +11476,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <button class="sidebar-left-toggle-button button toolbar-item active">
                     <xsl:call-template name="type-name">
                         <xsl:with-param name="string-id" select="'toc'" />
+                        <xsl:with-param name="lang" select="$document-language"/>
                     </xsl:call-template>
                 </button>
                 <!-- Prev/Up/Next buttons on top, according to options -->
@@ -11761,6 +11784,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:otherwise>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'feedback'" />
+                    <xsl:with-param name="lang" select="$document-language"/>
                 </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
@@ -11773,6 +11797,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <a class="pretext-link" href="https://pretextbook.org">
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id" select="'authored'" />
+            <xsl:with-param name="lang" select="$document-language"/>
         </xsl:call-template>
     </a>
 </xsl:template>
@@ -11955,6 +11980,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>                       evalButtonText: '</xsl:text>
             <xsl:call-template name="type-name">
                 <xsl:with-param name="string-id" select="'evaluate'" />
+                <xsl:with-param name="lang" select="$document-language"/>
             </xsl:call-template>
             <xsl:text> (</xsl:text>
             <xsl:value-of select="$language-text" />
@@ -11985,6 +12011,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>                       evalButtonText: '</xsl:text>
             <xsl:call-template name="type-name">
                 <xsl:with-param name="string-id" select="'evaluate'" />
+                <xsl:with-param name="lang" select="$document-language"/>
             </xsl:call-template>
         <xsl:text>'});&#xa;</xsl:text>
     </xsl:element>
@@ -12140,6 +12167,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>sagecellEvalName='</xsl:text>
             <xsl:call-template name="type-name">
                 <xsl:with-param name="string-id" select="'evaluate'" />
+                <xsl:with-param name="lang" select="$document-language"/>
             </xsl:call-template>
             <xsl:text> (</xsl:text>
             <!-- $language-text hard-coded since language  -->

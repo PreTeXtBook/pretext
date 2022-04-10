@@ -3097,6 +3097,7 @@ Book (with parts), "section" at level 3
 <xsl:template match="*" mode="type-name">
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="local-name(.)" />
+        <xsl:with-param name="lang" select="$document-language"/>
     </xsl:call-template>
 </xsl:template>
 
@@ -3108,11 +3109,13 @@ Book (with parts), "section" at level 3
 <xsl:template match="objectives/ol/li|objectives/ul/li|objectives/dl/li" mode="type-name">
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'objective'" />
+        <xsl:with-param name="lang" select="$document-language"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="outcomes/ol/li|outcomes/ul/li|outcomes/dl/li" mode="type-name">
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'outcome'" />
+        <xsl:with-param name="lang" select="$document-language"/>
     </xsl:call-template>
 </xsl:template>
 
@@ -3124,6 +3127,7 @@ Book (with parts), "section" at level 3
 <xsl:template match="exercises//exercise" mode="type-name">
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'divisionalexercise'" />
+        <xsl:with-param name="lang" select="$document-language"/>
     </xsl:call-template>
 </xsl:template>
 
@@ -3131,6 +3135,7 @@ Book (with parts), "section" at level 3
 <xsl:template match="worksheet//exercise" mode="type-name">
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'worksheetexercise'" />
+        <xsl:with-param name="lang" select="$document-language"/>
     </xsl:call-template>
 </xsl:template>
 
@@ -3138,6 +3143,7 @@ Book (with parts), "section" at level 3
 <xsl:template match="reading-questions//exercise" mode="type-name">
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'readingquestion'" />
+        <xsl:with-param name="lang" select="$document-language"/>
     </xsl:call-template>
 </xsl:template>
 
@@ -3149,6 +3155,7 @@ Book (with parts), "section" at level 3
 <xsl:template match="exercise" mode="type-name">
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'inlineexercise'" />
+        <xsl:with-param name="lang" select="$document-language"/>
     </xsl:call-template>
 </xsl:template>
 
@@ -3159,11 +3166,13 @@ Book (with parts), "section" at level 3
         <xsl:when test="parent::backmatter">
             <xsl:call-template name="type-name">
                 <xsl:with-param name="string-id" select="'appendix'" />
+                <xsl:with-param name="lang" select="$document-language"/>
             </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
             <xsl:call-template name="type-name">
                 <xsl:with-param name="string-id" select="'solutions'" />
+                <xsl:with-param name="lang" select="$document-language"/>
             </xsl:call-template>
         </xsl:otherwise>
     </xsl:choose>
@@ -3190,23 +3199,41 @@ Book (with parts), "section" at level 3
 <!-- Key to lookup a particular localization -->
 <xsl:key name="localization-key" match="localization" use="concat(../@language, @string-id)"/>
 
-<!-- This template translates an string to an upper-case language-equivalent -->
-<!-- Sometimes we must call this directly, but usually better to apply the   -->
-<!-- template mode="type-name" to the node, which then calls this routine    -->
-<!-- TODO: perhaps allow mixed languages, so don't set document language globally,  -->
-<!-- but search up through parents until you find a lang tag                        -->
+<!-- This utility *named* template *requires* a "string-id" and a "lang" -->
+<!-- in order to look up a localization provided by contributors in the  -->
+<!-- localization files.  Both parameters are presumed to have been      -->
+<!-- error-checked, etc before this template is employed.                -->
+<!--                                                                     -->
+<!-- As of 2022-04-10 we are transitioning away from its use in about 70 -->
+<!-- locations, mostly for strings that label HTML buttons, label long   -->
+<!-- lists in LaTeX, or similar.  These are not context-sensitive.  But  -->
+<!-- now we want to pass along the context, so as to react to different  -->
+<!-- languages.  So some will be rplaced for this feature, others will   -->
+<!-- be more document-wide infrastructure and will use a document-wide   -->
+<!-- language.  This is part of an effort to allow several languages at  -->
+<!-- once in a single document.  So, do not add new uses, and instead    -->
+<!-- look to improvements in the *modal* "type-name"template.            -->
 <xsl:template name="type-name">
-    <xsl:param name="string-id" />
+    <xsl:param name="string-id" select="''"/>
+    <xsl:param name="lang" select="''"/>
+
+    <xsl:if test="$string-id = ''">
+        <xsl:message>PTX:BUG:    no "$string-id" supplied for localization translation</xsl:message>
+    </xsl:if>
+    <xsl:if test="$lang = ''">
+        <xsl:message>PTX:BUG:    no "$lang" supplied for localization translation</xsl:message>
+    </xsl:if>
+
     <xsl:variable name="translation">
         <xsl:choose>
             <!-- First, look in docinfo for document-specific rename with correct language -->
-            <xsl:when test="$docinfo/rename[@element=$string-id and @xml:lang=$document-language]">
-                <xsl:apply-templates select="$docinfo/rename[@element=$string-id and @xml:lang=$document-language]"/>
+            <xsl:when test="$docinfo/rename[@element=$string-id and @xml:lang=$lang]">
+                <xsl:apply-templates select="$docinfo/rename[@element=$string-id and @xml:lang=$lang]"/>
             </xsl:when>
             <!-- Second, look in docinfo for document-specific rename with correct language, -->
             <!-- but with @lang attribute which was deprecated on 2019-02-23                 -->
-            <xsl:when test="$docinfo/rename[@element=$string-id and @lang=$document-language]">
-                <xsl:apply-templates select="$docinfo/rename[@element=$string-id and @lang=$document-language]"/>
+            <xsl:when test="$docinfo/rename[@element=$string-id and @lang=$lang]">
+                <xsl:apply-templates select="$docinfo/rename[@element=$string-id and @lang=$lang]"/>
             </xsl:when>
             <!-- Third, look in docinfo for document-specific rename, but now explicitly language-agnostic -->
             <xsl:when test="$docinfo/rename[@element=$string-id and not(@lang) and not(@xml:lang)]">
@@ -3216,7 +3243,7 @@ Book (with parts), "section" at level 3
             <!-- Use a "for-each" to effect a context switch for the look-up     -->
             <xsl:otherwise>
                 <xsl:for-each select="$localizations">
-                    <xsl:value-of select="key('localization-key', concat($document-language,$string-id) )"/>
+                    <xsl:value-of select="key('localization-key', concat($lang,$string-id) )"/>
                 </xsl:for-each>
             </xsl:otherwise>
         </xsl:choose>
@@ -3229,7 +3256,7 @@ Book (with parts), "section" at level 3
             <xsl:text>[</xsl:text>
             <xsl:value-of select="$string-id" />
             <xsl:text>]</xsl:text>
-            <xsl:message>PTX:WARNING: could not translate string with id "<xsl:value-of select="$string-id" />" into language for code "<xsl:value-of select="$document-language" />"</xsl:message>
+            <xsl:message>PTX:WARNING: could not translate string with id "<xsl:value-of select="$string-id" />" into language for code "<xsl:value-of select="$lang" />"</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>

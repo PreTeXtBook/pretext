@@ -306,6 +306,7 @@
         <xsl:text>COMMENT('</xsl:text>
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id" select="'authored'" />
+            <xsl:with-param name="lang" select="$document-language"/>
         </xsl:call-template>
         <xsl:text>');&#xa;</xsl:text>
         <xsl:apply-templates select="description"/>
@@ -350,6 +351,7 @@
         <xsl:text>COMMENT('</xsl:text>
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id" select="'authored'" />
+            <xsl:with-param name="lang" select="$document-language"/>
         </xsl:call-template>
         <xsl:text>');&#xa;</xsl:text>
         <xsl:text>COMMENT('This problem is scaffolded with multiple parts');&#xa;</xsl:text>
