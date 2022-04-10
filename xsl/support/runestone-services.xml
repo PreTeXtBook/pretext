@@ -9,5 +9,6 @@
         <item type="str">637.fafafbd97df8a0d1.css</item>
         <item type="str">runestone.d062db89aaf1dddd.css</item>
     </css>
+    <cdn-url type="str">https://runestone.academy/cdn/runestone/</cdn-url>
     <version type="str">6.0.8</version>
 </all>

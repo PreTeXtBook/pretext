@@ -260,7 +260,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>_static/</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:text>https://runestone.academy/cdn/runestone/</xsl:text>
+                <!-- CDN URL should end in a slash, -->
+                <!-- as version has no slashes      -->
+                <xsl:value-of select="$runestone-services/all/cdn-url"/>
                 <xsl:value-of select="$runestone-services/all/version"/>
                 <xsl:text>/</xsl:text>
             </xsl:otherwise>
