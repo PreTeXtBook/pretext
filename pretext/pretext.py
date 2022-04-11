@@ -2009,7 +2009,7 @@ def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
         extraction_xslt = os.path.join(get_ptx_xsl_path(), 'pretext-latex.xsl')
     # form output filename based on source filename,
     # unless an  out_file  has been specified
-    derivedname = get_output_filename(xml, out_file, dest_dir, '.ptx')
+    derivedname = get_output_filename(xml, out_file, dest_dir, '.tex')
     # Write output into working directory, no scratch space needed
     _verbose('converting {} to LaTeX as {}'.format(xml, derivedname))
     xsltproc(extraction_xslt, xml, derivedname, None, stringparams)
