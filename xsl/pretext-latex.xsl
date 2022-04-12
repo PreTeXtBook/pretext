@@ -5352,7 +5352,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- PROOF-LIKE (regular, major) -->
 <!-- Subsidary to THEOREM-LIKE, or standalone        -->
 <!-- Defaults to "Proof", can be replaced by "title" -->
-<xsl:template match="*[&PROOF-FILTER;][not(&SOLUTION-PROOF-FILTER;)]">
+<xsl:template match="proof[not(&SOLUTION-PROOF-FILTER;)]|argument[not(&SOLUTION-PROOF-FILTER;)]|justification[not(&SOLUTION-PROOF-FILTER;)]|reasoning[not(&SOLUTION-PROOF-FILTER;)]|explanation[not(&SOLUTION-PROOF-FILTER;)]">
     <xsl:variable name="environment-name">
         <xsl:value-of select="local-name(.)"/>
     </xsl:variable>
@@ -5383,7 +5383,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- PROOF-LIKE (solutions, minor) -->
 <!-- Inside "hint", "answer", solution" -->
-<xsl:template match="*[&PROOF-FILTER;][&SOLUTION-PROOF-FILTER;]">
+<xsl:template match="proof[&SOLUTION-PROOF-FILTER;]|argument[&SOLUTION-PROOF-FILTER;]|justification[&SOLUTION-PROOF-FILTER;]|reasoning[&SOLUTION-PROOF-FILTER;]|explanation[&SOLUTION-PROOF-FILTER;]">
     <xsl:variable name="environment-name">
         <xsl:text>solution</xsl:text>
         <xsl:value-of select="local-name(.)"/>
