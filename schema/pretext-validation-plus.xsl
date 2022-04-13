@@ -33,6 +33,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Report on console, or redirect/option to a file -->
 <xsl:output method="text"/>
 
+<!-- Single line output allows for sorting on "fields" with the     -->
+<!-- sort utility. So design messages to *lead* with something      -->
+<!-- precise and unique that will sort cleanly with other messages. -->
+<xsl:param name="single.line.output" select="'no'"/>
+<xsl:variable name="b-single-line" select="$single.line.output = 'yes'"/>
+
 <!-- Walk the tree, so messages appear in document order, not topically.  -->
 <!-- Be sure to recurse into larger elements after interrupting to        -->
 <!-- process certain situations.  This is not necessary for templates     -->
@@ -442,7 +448,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="severity"/>
     <xsl:param name="message"/>
 
-    <xsl:text>################################################################&#xa;</xsl:text>
+    <!-- Separator is noise for (sortable) single-line output -->
+    <xsl:if test="not($b-single-line)">
+        <xsl:text>################################################################&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>PTX:</xsl:text>
     <xsl:choose>
         <xsl:when test="$severity = 'error'">
@@ -463,9 +472,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
     <xsl:text>: </xsl:text>
     <xsl:apply-templates select="." mode="numbered-path"/>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:value-of select="$message"/>
-    <!-- supply final newline -->
+    <!-- Consolidating output on a single line? space or newline here -->
+    <!-- Then consolidate $message into one line, or leave alone      -->
+    <xsl:choose>
+        <xsl:when test="$b-single-line">
+            <xsl:text>&#x20;</xsl:text>
+            <xsl:value-of select="translate($message, '&#xa;', '&#x20;')"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:value-of select="$message"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- supply final newline always -->
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
