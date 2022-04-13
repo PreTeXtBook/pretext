@@ -2330,6 +2330,36 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<xsl:variable name="html-css-navbarfile">
+    <xsl:choose>
+        <!-- if publisher.xml file has style value, use it -->
+        <xsl:when test="$publication/html/css/@navbar">
+            <xsl:text>navbar_</xsl:text>
+            <xsl:value-of select="$publication/html/css/@navbar"/>
+            <xsl:text>.css</xsl:text>
+        </xsl:when>
+        <!-- otherwise use the dafault -->
+        <xsl:otherwise>
+            <xsl:text>navbar_default.css</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="html-css-shellfile">
+    <xsl:choose>
+        <!-- if publisher.xml file has style value, use it -->
+        <xsl:when test="$publication/html/css/@shell">
+            <xsl:text>shell_</xsl:text>
+            <xsl:value-of select="$publication/html/css/@shell"/>
+            <xsl:text>.css</xsl:text>
+        </xsl:when>
+        <!-- otherwise use the dafault -->
+        <xsl:otherwise>
+            <xsl:text>shell_default.css</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!--                              -->
 <!-- HTML Analytics Configuration -->
 <!--                              -->

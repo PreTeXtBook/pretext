@@ -79,7 +79,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- are variable.  We exercise two such switches here,    -->
         <!-- the values are defaults so should make no discernable -->
         <!-- difference.                                           -->
-        <knowl example="yes" remark="no"/>
+        <knowl example="no" remark="no" proof="no" example-solution="no"/>
         <!-- specify the style of the html by giving names to      -->
         <!-- override defaults.  Ex: to use "style_oscarlevin.css" -->
         <!-- put <css style="oscarlevin"/>                         -->
@@ -97,6 +97,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Request fewer tracking cookies for YouTube videos     -->
         <!-- This is the default, here for documentation/testing   -->
         <video privacy="yes"/>
+        <css toc="default"/>
+        <css banner="default"/>
+        <css navbar="default"/>
+        <css shell="default"/>
     </html>
 
     <latex print="no" sides="two">
