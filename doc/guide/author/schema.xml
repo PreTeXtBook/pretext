@@ -37,10 +37,16 @@
 
         <p>The <acro>RELAX-NG</acro> schema is very good at specifying <q>parent-child</q> relationships, in other words, which elements can nest directly under/within other elements.  But we have situations where the possible elements depend on grandparents, great-grandparents, or older ancestors.  An example is the <tag>var</tag> element, which is only useful if it is contained <em>somewhere</em> within a <tag>webwork</tag> element.  You can describe these situations with <acro>RELAX-NG</acro>, but it becomes cumbersome and redundant.  So our stategy is to allow some prohibited situations in the <acro>RELAX-NG</acro> schema, and use an additional stylesheet to identify the prohibited situations.  Continuing our <webwork/> example, the <acro>RELAX-NG</acro> schema makes it appear that <tag>var</tag> can be used many places, but the <q>validation-plus</q> stylesheet provides a helpful message indicating you have used it outside the context of a <webwork/> problem.</p>
 
+        <p>You have put a lot of time and effort into your source, and we want to help you make the best possible output.  A little more effort from you will allow us to make the fine distinctions that produce really high-quality output.  So this stylesheet is our best attempt to help you make the very best possible source.  It is full of (automated) advice and warnings.</p>
+
         <p>To use this stylesheet, simply apply it at the command-line with <c>xsltproc</c> like any other stylesheet.<cd>
             <cline>xsltproc -xinclude -o report.txt</cline>
             <cline>    schema/pretext-validation-plus.xsl aota/animals.xml</cline>
         </cd>The output will be a text file that indicates the suspect element by its location in the document tree.</p>
+
+        <p>You may get lots of output on first use, especially if your source was born <q>somewhere else,</q> not meant for use by <pretext/>.  We could make improvements in managing all this output, but for now we have one suggestion.  Sorting on the actual messages realyed, rather than a hodgepodge of messages in document order, can help you identify consistent situations that you might be able to fix in bulk.  First, apply the stylesheet again, but now use the stringparam <c>single.line.output</c> set to the value <c>yes</c> (<xref ref="processing-publisher-stringparam"/>).  As you suspect, this will put all the output on one line, and the message text will be in the third <q>field</q>, which can be used by the command-line utility <c>sort</c>,<cd>
+            <cline>cat report.txt | sort -k 3 > report-sorted.txt</cline>
+        </cd></p>
 
         <p>We once used Schematron for this purpose.  Its author, Rick Jelliffe, says <q>Schematron is a feather duster to reach the corners that other schema languages cannot reach.</q>  Our additional stylesheet is similar.</p>
 
