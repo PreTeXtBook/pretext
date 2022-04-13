@@ -308,6 +308,117 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates/>
 </xsl:template>
 
+<!-- ############################### -->
+<!-- Text and Troublesome Characters -->
+<!-- ############################### -->
+
+<!-- When converting from other sources (Word, Google Drive, etc.) we -->
+<!-- often see smart quotes, fancy apostrophes, em-dashes, etc that   -->
+<!-- come through as Unicode characters.  They may not be obvious     -->
+<!-- (rendered similarly) or they may even be actual entities         -->
+<!-- (&#dddd in decimal or &#xhhhh in hex).                           -->
+<!--     ** They are all the smae character to the   **               -->
+<!--     ** XML processor once we get to this point. **               -->
+<!-- We employ the hex versions to match the U+hhhh notation common   -->
+<!-- for Unicode.  Note: some characters, like a dumb apostrophe      -->
+<!-- (U+0027), might be entities in source, but invisible to us here. -->
+
+<!-- Note: a single text node can have many problems, -->
+<!-- we catch such a node and then test for problems  -->
+<xsl:template match="text()[contains(., '&#x00B0;') or contains(., '&#x00D7;') or contains(., '&#x200B;') or contains(., '&#x2013;') or contains(., '&#x2014;') or contains(., '&#x2018;') or contains(., '&#x2019;') or contains(., '&#x201C;') or contains(., '&#x201D;')]">
+    <!-- Unicode Character 'DEGREE SIGN' (U+00B0) decimal: 176 -->
+    <xsl:if test="contains(., '&#x00B0;')">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message">
+                <xsl:text>A run of text contains a Unicode character for a degree symbol (U+00B0, decimal 176).&#xa;</xsl:text>
+                <xsl:text>Likely this was introduced in a conversion of source material authored in a word-processor.&#xa;</xsl:text>
+                <xsl:text>The symbol will behave better as the empty element "&lt;degree/&gt;"</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- Unicode Character 'MULTIPLICATION SIGN' (U+00D7) decimal: 215 -->
+    <xsl:if test="contains(., '&#x00D7;')">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message">
+                <xsl:text>A run of text contains a Unicode character for a multiplication sign (U+00D7, decimal 215).&#xa;</xsl:text>
+                <xsl:text>Likely this was introduced in a conversion of source material authored in a word-processor.&#xa;</xsl:text>
+                <xsl:text>The symbol will behave better as the empty element "&lt;times/&gt;"</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- Unicode Character 'ZERO WIDTH SPACE' (U+200B) decimal: 8203 -->
+    <xsl:if test="contains(., '&#x200B;')">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message">
+                <xsl:text>A run of text contains a Unicode character for zero-width character (U+200B, decimal 8203).&#xa;</xsl:text>
+                <xsl:text>Likely this was introduced in a conversion of source material authored in a word-processor.&#xa;</xsl:text>
+                <xsl:text>It is unnecessary and likely to cause errors.  It should be removed.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- Unicode Character 'EN DASH' (U+2013) decimal: 8211 -->
+    <xsl:if test="contains(., '&#x2013;')">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message">
+                <xsl:text>A run of text contains a Unicode character for an en-dash (U+2013, decimal 8211).&#xa;</xsl:text>
+                <xsl:text>Likely this was introduced in a conversion of source material authored in a word-processor.&#xa;</xsl:text>
+                <xsl:text>The en-dash will behave better as the empty element "&lt;ndash/&gt;".&#xa;</xsl:text>
+                <xsl:text>Understand the difference between an en-dash and an em-dash before editing.&#xa;</xsl:text>
+                <xsl:text>An en-dash is used for a range, such as the years 2013-22.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- Unicode Character 'EM DASH' (U+2014) decimal: 8212 -->
+    <xsl:if test="contains(., '&#x2014;')">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message">
+                <xsl:text>A run of text contains a Unicode character for an em-dash (U+2014, decimal 8212).&#xa;</xsl:text>
+                <xsl:text>Likely this was introduced in a conversion of source material authored in a word-processor.&#xa;</xsl:text>
+                <xsl:text>The em-dash will behave better as the empty element "&lt;mdash/&gt;".&#xa;</xsl:text>
+                <xsl:text>Understand the difference between an en-dash and an em-dash before editing.&#xa;</xsl:text>
+                <xsl:text>An em-dash is used for a pause in a sentence, and should not be authored with a space on either side.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- Unicode Character 'LEFT SINGLE QUOTATION MARK' (U+2018) decimal: 8216 -->
+    <!-- Unicode Character 'RIGHT SINGLE QUOTATION MARK' (U+2019) decimal: 8217 -->
+    <xsl:if test="contains(., '&#x2018;') or contains(., '&#x2019;')">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message">
+                <xsl:text>A run of text contains Unicode characters for single quotation marks (U+2018, decimal 8216; U+2019, decimal 8217).&#xa;</xsl:text>
+                <xsl:text>Likely this was introduced in a conversion of source material authored in a word-processor.&#xa;</xsl:text>
+                <xsl:text>A U+2019 in isolation could be an apostrophe.  Replace it with the keyboard version: U+0027.&#xa;</xsl:text>
+                <xsl:text>A matching pair U+2018, U+2019 should be replaced by the "&lt;sq&gt;" element enclosing content.&#xa;</xsl:text>
+                <xsl:text>In rare cases, U+2018 might be replaced by the empty element "&lt;lsq/&gt;".&#xa;</xsl:text>
+                <xsl:text>In rare cases, U+2019 might be replaced by the empty element "&lt;rsq/&gt;".</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- Unicode Character 'LEFT DOUBLE QUOTATION MARK' (U+201C) decimal: 8220 -->
+    <!-- Unicode Character 'RIGHT DOUBLE QUOTATION MARK' (U+201D) decimal: 8221-->
+    <xsl:if test="contains(., '&#x201C;') or contains(., '&#x201D;')">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message">
+                <xsl:text>A run of text contains Unicode characters for double quotation marks (U+201C, decimal 8220; U+201D, decimal 8221).&#xa;</xsl:text>
+                <xsl:text>Likely this was introduced in a conversion of source material authored in a word-processor.&#xa;</xsl:text>
+                <xsl:text>A matching pair U+201C, U+201D should be replaced by the "&lt;q&gt;" element enclosing content.&#xa;</xsl:text>
+                <xsl:text>In rare cases, U+201C might be replaced by the empty element "&lt;lq/&gt;".&#xa;</xsl:text>
+                <xsl:text>In rare cases, U+201D might be replaced by the empty element "&lt;rq/&gt;".</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!--                                                              -->
+    <!-- there is no recursing further, a text() node has no children -->
+    <!--                                                              -->
+</xsl:template>
+
 
 <!-- ############## -->
 <!-- Infrastructure -->
