@@ -327,7 +327,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Messaging -->
 <!-- ######### -->
 
-<xsl:template match="*" mode="messaging">
+<xsl:template match="*|text()" mode="messaging">
     <xsl:param name="severity"/>
     <xsl:param name="message"/>
 
@@ -358,7 +358,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="*" mode="numbered-path">
+<xsl:template match="*|text()" mode="numbered-path">
+    <!-- If "self" is a text node, then this variable will not include it -->
+    <!-- since it is not an element, but it will begin with the element   -->
+    <!-- *containing* the text node of interest, and hence be locatable.  -->
     <xsl:variable name="ancestors" select="ancestor-or-self::*"/>
     <xsl:for-each select="$ancestors">
         <xsl:text>/</xsl:text>
