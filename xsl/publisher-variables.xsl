@@ -2181,6 +2181,128 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!--                             -->
+<!-- HTML Short Answer Questions -->
+<!--                             -->
+
+<!-- Whether or not a "short answer" or "eassy" or "open-ended" question  -->
+<!-- is in an interactive form in a text may be configured based on the   -->
+<!-- five types of questions/locations.  We offer two choices:  static    -->
+<!-- (traditional PreTeXt) or dynamic (Runestone now, WeBWorK someday).   -->
+<!-- "dynamic" is only available on supported platforms, so we make it    -->
+<!-- the default, but use will be conditional also on targeting a capable -->
+<!-- platform.  In other words, these variables/setting are only relevant -->
+<!-- for *some* types of HTML output.                                     -->
+
+<!-- "inline" questions -->
+<xsl:variable name="sa-inline-style">
+    <xsl:choose>
+        <xsl:when test="$publication/html/short-answer/@inline = 'static'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/short-answer/@inline = 'dynamic'">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <!-- attempted, but not valid, default to dynamic -->
+        <xsl:when test="$publication/html/short-answer/@inline">
+            <xsl:message>PTX:WARNING: HTML short-answer interactive style for "inline" questions in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/short-answer/@inline"/>". Proceeding with default value: "dynamic"</xsl:message>
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <!-- default -->
+        <xsl:otherwise>
+            <xsl:text>dynamic</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-sa-inline-dynamic" select="$sa-inline-style = 'dynamic'"/>
+
+<!-- "divisional" questions -->
+<xsl:variable name="sa-divisional-style">
+    <xsl:choose>
+        <xsl:when test="$publication/html/short-answer/@divisional = 'static'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/short-answer/@divisional = 'dynamic'">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <!-- attempted, but not valid, default to dynamic -->
+        <xsl:when test="$publication/html/short-answer/@divisional">
+            <xsl:message>PTX:WARNING: HTML short-answer interactive style for "divisional" questions in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/short-answer/@divisional"/>". Proceeding with default value: "dynamic"</xsl:message>
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <!-- default -->
+        <xsl:otherwise>
+            <xsl:text>dynamic</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-sa-divisional-dynamic" select="$sa-divisional-style = 'dynamic'"/>
+
+<!-- "worksheet" questions -->
+<xsl:variable name="sa-worksheet-style">
+    <xsl:choose>
+        <xsl:when test="$publication/html/short-answer/@worksheet = 'static'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/short-answer/@worksheet = 'dynamic'">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <!-- attempted, but not valid, default to dynamic -->
+        <xsl:when test="$publication/html/short-answer/@worksheet">
+            <xsl:message>PTX:WARNING: HTML short-answer interactive style for "worksheet" questions in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/short-answer/@worksheet"/>". Proceeding with default value: "dynamic"</xsl:message>
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <!-- default -->
+        <xsl:otherwise>
+            <xsl:text>dynamic</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-sa-worksheet-dynamic" select="$sa-worksheet-style = 'dynamic'"/>
+
+<!-- "reading" questions -->
+<xsl:variable name="sa-reading-style">
+    <xsl:choose>
+        <xsl:when test="$publication/html/short-answer/@reading = 'static'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/short-answer/@reading = 'dynamic'">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <!-- attempted, but not valid, default to dynamic -->
+        <xsl:when test="$publication/html/short-answer/@reading">
+            <xsl:message>PTX:WARNING: HTML short-answer interactive style for "reading" questions in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/short-answer/@reading"/>". Proceeding with default value: "dynamic"</xsl:message>
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <!-- default -->
+        <xsl:otherwise>
+            <xsl:text>dynamic</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-sa-reading-dynamic" select="$sa-reading-style = 'dynamic'"/>
+
+<!-- "project" questions -->
+<xsl:variable name="sa-project-style">
+    <xsl:choose>
+        <xsl:when test="$publication/html/short-answer/@project = 'static'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/short-answer/@project = 'dynamic'">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <!-- attempted, but not valid, default to dynamic -->
+        <xsl:when test="$publication/html/short-answer/@project">
+            <xsl:message>PTX:WARNING: HTML short-answer interactive style for "project" questions in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/short-answer/@project"/>". Proceeding with default value: "dynamic"</xsl:message>
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <!-- default -->
+        <xsl:otherwise>
+            <xsl:text>dynamic</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-sa-project-dynamic" select="$sa-project-style = 'dynamic'"/>
 
 <!--               -->
 <!-- HTML Base URL -->
