@@ -30,6 +30,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <platform host="runestone"/>
         <!-- knowled checkpoints interfere with ActiveCode problems -->
         <knowl exercise-inline="no"/>
+        <short-answer inline="static" divisional="dynamic" reading="dynamic" worksheet="static" project="static"/>
     </html>
 
 </publication>
