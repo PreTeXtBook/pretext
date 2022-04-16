@@ -542,7 +542,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="the-id">
         <xsl:apply-templates select="parent::exercise" mode="html-id"/>
     </xsl:variable>
-    <div class="runestone alert alert-warning">
+    <div class="runestone ">
         <!-- ul can have multiple answer attribute -->
         <ul data-component="multiplechoice" data-multipleanswers="false">
             <xsl:attribute name="id">
@@ -607,7 +607,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="the-id">
         <xsl:apply-templates select="parent::exercise" mode="html-id"/>
     </xsl:variable>
-    <div class="runestone alert alert-warning">
+    <div class="runestone ">
         <!-- ul can have multiple answer attribute -->
         <ul data-component="multiplechoice">
             <xsl:attribute name="id">
@@ -682,7 +682,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- determine this option before context switches -->
     <xsl:variable name="b-natural" select="not(parent::exercise/@language) or (parent::exercise/@language = 'natural')"/>
     <div class="runestone" style="max-width: none;">
-        <div data-component="parsons" class="alert alert-warning parsons">
+        <div data-component="parsons" class=" parsons">
             <xsl:attribute name="id">
                 <xsl:apply-templates select="parent::exercise" mode="html-id"/>
             </xsl:attribute>
@@ -957,7 +957,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- this is the logical negation of the previous, so could be "otherwise" -->
         <xsl:when test="($hosting = 'browser') or $b-host-runestone">
-            <div class="runestone explainer ac_section alert alert-warning">
+            <div class="runestone explainer ac_section ">
                 <div data-component="activecode">
                     <xsl:attribute name="id">
                         <xsl:value-of select="$hid"/>
