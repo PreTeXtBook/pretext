@@ -11861,10 +11861,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>    tagSide: "right",&#xa;</xsl:text>
         <xsl:text>    tagIndent: ".8em",&#xa;</xsl:text>
         <xsl:text>    packages: {'[+]': ['base', 'extpfeil', 'ams', 'amscd', 'newcommand', 'knowl'</xsl:text>
-        <!-- only add in faux sfrac package (below) if indicated -->
-        <xsl:if test="$b-has-sfrac">
-            <xsl:text>, 'sfrac'</xsl:text>
-        </xsl:if>
         <xsl:text>]}&#xa;</xsl:text>
         <xsl:text>  },&#xa;</xsl:text>
         <xsl:text>  options: {&#xa;</xsl:text>
@@ -11894,40 +11890,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>    load: ['input/asciimath', '[tex]/extpfeil', '[tex]/amscd', '[tex]/newcommand', '[pretext]/mathjaxknowl3.js'],&#xa;</xsl:text>
         <xsl:text>    paths: {pretext: "https://pretextbook.org/js/lib"},&#xa;</xsl:text>
         <xsl:text>  },&#xa;</xsl:text>
-        <!-- trailing comma is legal as we lead into optional beveled fraction support -->
-        <xsl:if test="$b-has-sfrac">
-            <xsl:text>/* support for the sfrac command in MathJax (Beveled fraction) */&#xa;</xsl:text>
-            <xsl:text>  startup: {&#xa;</xsl:text>
-            <xsl:text>    ready() {&#xa;</xsl:text>
-            <xsl:text>      //&#xa;</xsl:text>
-            <xsl:text>      // Creating a simple "sfrac" package on-the-fly&#xa;</xsl:text>
-            <xsl:text>      //&#xa;</xsl:text>
-            <xsl:text>      const Configuration = MathJax._.input.tex.Configuration.Configuration;&#xa;</xsl:text>
-            <xsl:text>      const CommandMap = MathJax._.input.tex.SymbolMap.CommandMap;&#xa;</xsl:text>
-            <xsl:text>      &#xa;</xsl:text>
-            <xsl:text>      new CommandMap('sfrac', {&#xa;</xsl:text>
-            <xsl:text>        sfrac: 'SFrac'&#xa;</xsl:text>
-            <xsl:text>        }, {&#xa;</xsl:text>
-            <xsl:text>        SFrac(parser, name) {&#xa;</xsl:text>
-            <xsl:text>        const num = parser.ParseArg(name);&#xa;</xsl:text>
-            <xsl:text>        const den = parser.ParseArg(name);&#xa;</xsl:text>
-            <xsl:text>        const frac = parser.create('node', 'mfrac', [num, den], {bevelled: true});&#xa;</xsl:text>
-            <xsl:text>        parser.Push(frac);&#xa;</xsl:text>
-            <xsl:text>        }&#xa;</xsl:text>
-            <xsl:text>      });&#xa;</xsl:text>
-            <xsl:text>      //&#xa;</xsl:text>
-            <xsl:text>      // Create the package for the overridden macros&#xa;</xsl:text>
-            <xsl:text>      //&#xa;</xsl:text>
-            <xsl:text>      Configuration.create('sfrac', {&#xa;</xsl:text>
-            <xsl:text>        handler: {macro: ['sfrac']}&#xa;</xsl:text>
-            <xsl:text>      });&#xa;</xsl:text>
-            <xsl:if test="not($b-debug-react)">
-                <xsl:text>      &#xa;</xsl:text>
-                <xsl:text>    MathJax.startup.defaultReady();&#xa;</xsl:text>
-            </xsl:if>
-            <xsl:text>    }&#xa;</xsl:text>
-            <xsl:text>  },&#xa;</xsl:text>
-        </xsl:if>
         <!-- optional presentation mode gets clickable, large math -->
         <xsl:if test="$b-html-presentation">
             <xsl:text>  options: {&#xa;</xsl:text>
@@ -12354,6 +12316,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="math">
                 <xsl:value-of select="$latex-packages-mathjax"/>
                 <xsl:value-of select="$latex-macros"/>
+                <!-- legacy built-in support for "slanted|beveled|nice" fractions -->
+                <xsl:if test="$b-has-sfrac">
+                    <xsl:text>\newcommand{\sfrac}[2]{{#1}/{#2}}&#xa;</xsl:text>
+                </xsl:if>
             </xsl:with-param>
         </xsl:call-template>
     </div>
