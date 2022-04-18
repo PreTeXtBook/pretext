@@ -41,7 +41,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- True/False -->
 
-<xsl:template match="exercise[statement/@correct]" mode="runestone-to-static">
+<xsl:template match="exercise[@exercise-interactive = 'truefalse']" mode="runestone-to-static">
+    <!-- metadata (idx, title) -->
+    <xsl:copy-of select="statement/preceding-sibling::*"/>
     <!-- prompt, followed by ordered list of choices -->
     <xsl:text>&#xa;</xsl:text>
     <statement>
@@ -80,7 +82,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </solution>
 </xsl:template>
 
-<xsl:template match="exercise[statement and choices]" mode="runestone-to-static">
+<xsl:template match="exercise[@exercise-interactive = 'multiplechoice']" mode="runestone-to-static">
+    <!-- metadata (idx, title) -->
+    <xsl:copy-of select="statement/preceding-sibling::*"/>
     <!-- prompt, followed by ordered list of choices -->
     <xsl:text>&#xa;</xsl:text>
     <statement>
@@ -134,12 +138,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </solution>
 </xsl:template>
 
-<xsl:template match="exercise[statement and blocks]" mode="runestone-to-static">
+<xsl:template match="exercise[@exercise-interactive = 'parson']" mode="runestone-to-static">
     <!-- determine these options before context switches -->
     <xsl:variable name="b-natural" select="not(@language) or (@language = 'natural')"/>
     <xsl:variable name="b-indent" select="@indentation = 'hide'"/>
     <!-- we use numbers in static versions, if requested, but ignore left/right distinction -->
     <xsl:variable name="b-numbered" select="(blocks/@numbered = 'left') or (blocks/@numbered = 'right')"/>
+    <!-- metadata (idx, title) -->
+    <xsl:copy-of select="statement/preceding-sibling::*"/>
     <!-- Statement -->
     <statement>
         <xsl:copy-of select="statement/node()"/>
@@ -418,7 +424,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Matching Problems -->
 
-<xsl:template match="exercise[statement and matches]" mode="runestone-to-static">
+<xsl:template match="exercise[@exercise-interactive = 'matching']" mode="runestone-to-static">
+    <!-- metadata (idx, title) -->
+    <xsl:copy-of select="statement/preceding-sibling::*"/>
     <!-- Statement -->
     <statement>
         <xsl:copy-of select="statement/node()"/>
@@ -473,7 +481,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Active Code -->
 
-<xsl:template match="exercise[statement and program]|project[statement and program]|activity[statement and program]|exploration[statement and program]|investigation[statement and program]" mode="runestone-to-static">
+<xsl:template match="exercise[@exercise-interactive = 'coding']|project[@exercise-interactive = 'coding']|activity[@exercise-interactive = 'coding']|exploration[@exercise-interactive = 'coding']|investigation[@exercise-interactive = 'coding']" mode="runestone-to-static">
+    <!-- metadata (idx, title) -->
+    <xsl:copy-of select="statement/preceding-sibling::*"/>
     <statement>
         <!-- duplicate the authored prompt/statement -->
         <xsl:copy-of select="statement/node()"/>
