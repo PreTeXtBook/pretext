@@ -431,7 +431,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   - every Parsons problem "exercise"             -->
 <!--   - every matching problem "exercise"            -->
 <!--   - every "exercise" with additional "program"   -->
-<xsl:template match="exercise[statement/statement and statement/statement/@correct]|exercise[statement/statement and statement/choices]|exercise[statement/statement and statement/blocks]|exercise[statement/statement and statement/matches]|exercise[statement/statement and statement/program]" mode="runestone-manifest">
+<!--   - every "exercise" elected as "shortanswer"    -->
+<!--   - every PROJECT-LIKE with additional "program" -->
+<xsl:template match="exercise[ (@exercise-interactive = 'truefalse') or
+                               (@exercise-interactive = 'multiplechoice') or
+                               (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'coding') or
+                               (@exercise-interactive = 'shortanswer')]
+                              |project[@exercise-interactive = 'coding']
+                              |activity[@exercise-interactive = 'coding']
+                              |exploration[@exercise-interactive = 'coding']
+                              |investigation[@exercise-interactive = 'coding']" mode="runestone-manifest">
     <question>
         <!-- label is from the "exercise" -->
         <xsl:apply-templates select="." mode="runestone-manifest-label"/>
@@ -447,43 +458,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="b-has-solution"  select="false()" />
         </xsl:apply-templates>
     </question>
-</xsl:template>
-
-<!-- short answer questions                      -->
-<!-- conditional on (1) simplicity, (2) location -->
-<!-- NB: match is replicated from the defining template below -->
-<xsl:template match="exercise[statement and not(statement/statement)]|*[&PROJECT-FILTER;][statement and not(statement/statement)]" mode="runestone-manifest">
-    <!-- Only add conditionally based on location and publication file options -->
-    <!-- N.B. these conditions are relicated from -html conversion             -->
-
-    <xsl:variable name="b-is-divisional" select="boolean(ancestor::exercises)"/>
-    <xsl:variable name="b-is-worksheet" select="boolean(ancestor::worksheet)"/>
-    <xsl:variable name="b-is-reading" select="boolean(ancestor::reading-questions)"/>
-    <xsl:variable name="b-is-project" select="boolean(ancestor::*[&PROJECT-FILTER;])"/>
-    <xsl:variable name="b-is-inline" select="not($b-is-divisional or $b-is-worksheet or $b-is-reading or $b-is-project)"/>
-
-
-    <xsl:if test="($b-is-divisional and $b-sa-divisional-dynamic) or
-                  ($b-is-worksheet and $b-sa-worksheet-dynamic) or
-                  ($b-is-reading and $b-sa-reading-dynamic) or
-                  ($b-is-project and $b-sa-project-dynamic) or
-                  ($b-is-inline and $b-sa-inline-dynamic)">
-        <question>
-            <!-- label is from the "exercise" -->
-            <xsl:apply-templates select="." mode="runestone-manifest-label"/>
-            <!-- Duplicate, but still should look like original (ID, etc.),  -->
-            <!-- not knowled. Solutions are available in the originals, via  -->
-            <!-- an "in context" link off the Assignment page                -->
-            <xsl:apply-templates select="."  mode="exercise-components">
-                <xsl:with-param name="b-original" select="true()"/>
-                <xsl:with-param name="block-type" select="'visible'"/>
-                <xsl:with-param name="b-has-statement" select="true()" />
-                <xsl:with-param name="b-has-hint"      select="false()" />
-                <xsl:with-param name="b-has-answer"    select="false()" />
-                <xsl:with-param name="b-has-solution"  select="false()" />
-            </xsl:apply-templates>
-        </question>
-    </xsl:if>
 </xsl:template>
 
 <xsl:template match="exercise[webwork-reps]" mode="runestone-manifest">
