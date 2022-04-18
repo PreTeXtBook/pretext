@@ -4571,28 +4571,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-has-answer" />
     <xsl:param name="b-has-solution" />
 
+    <!-- Later we need to know what type of "exercise" this is based on location. -->
+    <!-- "inline" is the default after specialized instances are exhausted.       -->
+    <!-- NB: variable and subsequent conditional are recycled for the Runestone manifest -->
+    <xsl:variable name="b-is-divisional" select="boolean(ancestor::exercises)"/>
+    <xsl:variable name="b-is-worksheet" select="boolean(ancestor::worksheet)"/>
+    <xsl:variable name="b-is-reading" select="boolean(ancestor::reading-questions)"/>
+    <xsl:variable name="b-is-project" select="boolean(ancestor::*[&PROJECT-FILTER;])"/>
+    <xsl:variable name="b-is-inline" select="not($b-is-divisional or $b-is-worksheet or $b-is-reading or $b-is-project)"/>
+
     <xsl:choose>
-        <!-- intercept a reading question, when hosted on Runestone -->
-        <xsl:when test="ancestor::reading-questions and $b-host-runestone">
-            <div class="runestone outer-exercise-wrapper">
-                <div data-component="shortanswer" class="journal alert alert-success exercise-wrapper" data-optional="" data-mathjax="">
-                    <xsl:attribute name="id">
-                        <xsl:apply-templates select="." mode="html-id"/>
-                    </xsl:attribute>
-                    <!-- structured versus unstructured -->
-                    <xsl:choose>
-                        <!-- subelements of the structured "statement" -->
-                        <xsl:when test="statement">
-                            <xsl:apply-templates select="statement/*"/>
-                        </xsl:when>
-                        <!-- all content, but in elements, e.g "p" -->
-                        <xsl:otherwise>
-                            <xsl:apply-templates select="*"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </div>
-            </div>
-        </xsl:when>
         <!-- signal on intentional, temporary, hack      -->
         <!-- simply duplicated in assembly, no solutions -->
         <xsl:when test="@runestone">
@@ -4670,7 +4658,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
             </xsl:apply-templates>
         </xsl:when>
-        <!-- now, structured versus unstructured -->
+        <!-- We have run out of exceptional interactive forms, so turn our attention to -->
+        <!--     1.  statement|hint|answer|solution                                     -->
+        <!--     2.  structured by task                                                 -->
+        <!--     3.  some content, meant to be a statement only (adjust pre-processor?) -->
+        <!-- First is an "exercise" or PROJECT-LIKE that has a statement and            -->
+        <!-- has been elected as an interactive short answer problem and we             -->
+        <!-- have a capable platform                                                    -->
+        <xsl:when test="$b-host-runestone and statement and
+                         ( ($b-is-divisional and $b-sa-divisional-dynamic) or
+                           ($b-is-worksheet and $b-sa-worksheet-dynamic) or
+                           ($b-is-reading and $b-sa-reading-dynamic) or
+                           ($b-is-project and $b-sa-project-dynamic) or
+                           ($b-is-inline and $b-sa-inline-dynamic)
+                         )">
+            <xsl:apply-templates select="." mode="runestone-to-interactive"/>
+            <xsl:apply-templates select="." mode="solutions-div">
+                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="block-type" select="$block-type"/>
+                <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
+                <xsl:with-param name="b-has-answer"  select="$b-has-answer"/>
+                <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- Finally nothing too exceptional, do the usual drill. Consider -->
+        <!-- structured versus unstructured, non-interactive.              -->
         <xsl:when test="statement">
             <xsl:if test="$b-has-statement">
                 <xsl:apply-templates select="statement">
@@ -11767,10 +11779,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>    tagSide: "right",&#xa;</xsl:text>
         <xsl:text>    tagIndent: ".8em",&#xa;</xsl:text>
         <xsl:text>    packages: {'[+]': ['base', 'extpfeil', 'ams', 'amscd', 'newcommand', 'knowl'</xsl:text>
-        <!-- only add in faux sfrac package (below) if indicated -->
-        <xsl:if test="$b-has-sfrac">
-            <xsl:text>, 'sfrac'</xsl:text>
-        </xsl:if>
         <xsl:text>]}&#xa;</xsl:text>
         <xsl:text>  },&#xa;</xsl:text>
         <xsl:text>  options: {&#xa;</xsl:text>
@@ -11800,40 +11808,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>    load: ['input/asciimath', '[tex]/extpfeil', '[tex]/amscd', '[tex]/newcommand', '[pretext]/mathjaxknowl3.js'],&#xa;</xsl:text>
         <xsl:text>    paths: {pretext: "https://pretextbook.org/js/lib"},&#xa;</xsl:text>
         <xsl:text>  },&#xa;</xsl:text>
-        <!-- trailing comma is legal as we lead into optional beveled fraction support -->
-        <xsl:if test="$b-has-sfrac">
-            <xsl:text>/* support for the sfrac command in MathJax (Beveled fraction) */&#xa;</xsl:text>
-            <xsl:text>  startup: {&#xa;</xsl:text>
-            <xsl:text>    ready() {&#xa;</xsl:text>
-            <xsl:text>      //&#xa;</xsl:text>
-            <xsl:text>      // Creating a simple "sfrac" package on-the-fly&#xa;</xsl:text>
-            <xsl:text>      //&#xa;</xsl:text>
-            <xsl:text>      const Configuration = MathJax._.input.tex.Configuration.Configuration;&#xa;</xsl:text>
-            <xsl:text>      const CommandMap = MathJax._.input.tex.SymbolMap.CommandMap;&#xa;</xsl:text>
-            <xsl:text>      &#xa;</xsl:text>
-            <xsl:text>      new CommandMap('sfrac', {&#xa;</xsl:text>
-            <xsl:text>        sfrac: 'SFrac'&#xa;</xsl:text>
-            <xsl:text>        }, {&#xa;</xsl:text>
-            <xsl:text>        SFrac(parser, name) {&#xa;</xsl:text>
-            <xsl:text>        const num = parser.ParseArg(name);&#xa;</xsl:text>
-            <xsl:text>        const den = parser.ParseArg(name);&#xa;</xsl:text>
-            <xsl:text>        const frac = parser.create('node', 'mfrac', [num, den], {bevelled: true});&#xa;</xsl:text>
-            <xsl:text>        parser.Push(frac);&#xa;</xsl:text>
-            <xsl:text>        }&#xa;</xsl:text>
-            <xsl:text>      });&#xa;</xsl:text>
-            <xsl:text>      //&#xa;</xsl:text>
-            <xsl:text>      // Create the package for the overridden macros&#xa;</xsl:text>
-            <xsl:text>      //&#xa;</xsl:text>
-            <xsl:text>      Configuration.create('sfrac', {&#xa;</xsl:text>
-            <xsl:text>        handler: {macro: ['sfrac']}&#xa;</xsl:text>
-            <xsl:text>      });&#xa;</xsl:text>
-            <xsl:if test="not($b-debug-react)">
-                <xsl:text>      &#xa;</xsl:text>
-                <xsl:text>    MathJax.startup.defaultReady();&#xa;</xsl:text>
-            </xsl:if>
-            <xsl:text>    }&#xa;</xsl:text>
-            <xsl:text>  },&#xa;</xsl:text>
-        </xsl:if>
         <!-- optional presentation mode gets clickable, large math -->
         <xsl:if test="$b-html-presentation">
             <xsl:text>  options: {&#xa;</xsl:text>
@@ -12271,6 +12245,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="math">
                 <xsl:value-of select="$latex-packages-mathjax"/>
                 <xsl:value-of select="$latex-macros"/>
+                <!-- legacy built-in support for "slanted|beveled|nice" fractions -->
+                <xsl:if test="$b-has-sfrac">
+                    <xsl:text>\newcommand{\sfrac}[2]{{#1}/{#2}}&#xa;</xsl:text>
+                </xsl:if>
             </xsl:with-param>
         </xsl:call-template>
     </div>

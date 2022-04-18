@@ -280,7 +280,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <subsection>
             <title>Subsection One</title>
 
-            <p>An <tag>activity</tag> next.</p>
+            <p>An <tag>activity</tag> next.  This one has a <tag>program</tag> so will be made interactive whenever possible.</p>
 
             <activity>
                 <title>Activity in a Subsection</title>
@@ -296,6 +296,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </input>
                 </program>
             </activity>
+
+            <p>Nothing suggests this next <tag>project</tag> is interactive.  And we have configured the publication file to make any <q>project-like</q> to never be a <q>short answer</q> interactive question, even when built to host on a capable platform.</p>
+
+            <project>
+                <title>Project in a Subsection</title>
+
+                <statement>
+                    <p>You would work this project on paper, most likely.</p>
+                </statement>
+            </project>
         </subsection>
 
         <subsection>
@@ -316,6 +326,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </input>
                 </program>
             </exploration>
+
+            <p>The simple <tag>exercise</tag> could be a <q>short answer</q> question on a capable interactive platform, except that we have used the publication file to configure <q>inline</q> exercises to never be interactive.</p>
+
+            <exercise>
+                <title>Inline Exercise in a Subsection</title>
+
+                <statement>
+                    <p>I am never ever an interactive short answer question.</p>
+                </statement>
+            </exercise>
         </subsection>
     </section>
 
@@ -807,6 +827,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </matches>
         </exercise>
 
+        <exercise>
+            <title>Short Answer</title>
+
+            <statement>
+                <p>This sample book is configured to make some simple questions interactive on a capable platform, and to make others never interactive, even if it is possible.  In this case a <q>divisional</q> exercise will be made interactive whenever possible (which is the default, even though we have set this option explicitly).</p>
+            </statement>
+        </exercise>
+
     </exercises>
 
     <section>
@@ -827,11 +855,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <reading-questions>
 
         <exercise>
-            <p>This is a simple question.  Does this look like a short answer question?</p>
+            <statement>
+                <p>This is a simple question.  Does this look like a short answer question?</p>
+                <p>Both questions in this <q>reading-questions</q> division should render in an interactive <q>short answer</q> form on a capable platform.  This is the default, and we have also explicitly set this behavior in the publication file.</p>
+            </statement>
+            <hint>
+                <p>Shouldn't be hard!</p>
+            </hint>
         </exercise>
 
         <exercise>
-            <p>And a second reading question, so we can test having more than one.  Specifically to be certain each goes into the manifest properly.  How about some math now, <m>a^2+b^2=c^2</m>.  Is that all right?</p>
+            <statement>
+                <p>And a second reading question, so we can test having more than one.  Specifically to be certain each goes into the manifest properly.  How about some math now, <m>a^2+b^2=c^2</m>.  Is that all right?</p>
+            </statement>
         </exercise>
     </reading-questions>
 

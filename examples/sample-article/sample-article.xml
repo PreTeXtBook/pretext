@@ -1793,7 +1793,7 @@ the xsltproc executable.
 
                 <p>Look back at the top of the source file of this document to see how to include your <tex /> macros just once.  For best results keep your macros simple and semantic.</p>
 
-                <p>Chris Hughes has made available <q>slanted</q>, or <q>beveled</q>, or <q>nice</q> fractions.  To wit, we mean fractions such as: <m>\sfrac{3}{8}</m>.  Use the built-in <c>\sfrac{}{}</c> macro in your mathematics to achieve this presentation.</p>
+                <p><pretext/> provides modest built-in support for <q>slanted</q>, or <q>beveled</q>, or <q>nice</q> fractions.  To wit, we mean fractions such as: <m>\sfrac{3}{8}</m>.  Use the pre-defined <c>\sfrac{}{}</c> macro in your mathematics to achieve this presentation.  (The presentation in HTML output could be improved.  Please make suggestions if your skills with <latex/> macros and knowledge of MathJax's supported commands warrant.)</p>
 
                 <p>We consider a system of equations.  We number the first and last equation (there are just two) and include an <c>xml:id</c> on each.  We reference the whole system later as the range of equations from the first to the last.<mdn>
                     <mrow xml:id="equation-system-begin">\frac{dx}{dt} \amp = x^2 - 4x - y + 4</mrow>

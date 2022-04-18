@@ -3087,6 +3087,8 @@ Book (with parts), "section" at level 3
 <!-- Names of Objects -->
 <!-- ################ -->
 
+<!-- 2022-04-15: transitional, code comments may not match reality -->
+
 <!-- Ultimately translations are all contained in the files of  -->
 <!-- the xsl/localizations directory, which provides            -->
 <!-- upper-case, singular versions.  In this way, we only ever  -->
@@ -3095,12 +3097,29 @@ Book (with parts), "section" at level 3
 <!-- template where translation with keys happens               -->
 <!-- This template allows a node to report its name             -->
 <xsl:template match="*" mode="type-name">
-    <xsl:variable name="string-id">
-        <xsl:apply-templates select="." mode="string-id"/>
+    <xsl:param name="string-id" select="''"/>
+
+    <!-- Transitional: this matches old behavior of modal template in all  -->
+    <!-- cases, but now accomodates an override for "fixed/global" lookups -->
+    <xsl:variable name="the-string-id">
+        <xsl:choose>
+            <xsl:when test="not($string-id = '')">
+                <xsl:value-of select="$string-id"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="string-id"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:variable>
+
+    <!-- Transitional: this is old global behavior,  -->
+    <!-- to be replaced by multi-lingual support     -->
+    <xsl:variable name="the-lang" select="$document-language"/>
+
+    <!-- Historical employment, could move in here -->
     <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="$string-id" />
-        <xsl:with-param name="lang" select="$document-language"/>
+        <xsl:with-param name="string-id" select="$the-string-id" />
+        <xsl:with-param name="lang" select="$the-lang"/>
     </xsl:call-template>
 </xsl:template>
 
