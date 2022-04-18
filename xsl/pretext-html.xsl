@@ -4571,108 +4571,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-has-answer" />
     <xsl:param name="b-has-solution" />
 
-    <!-- Later we need to know what type of "exercise" this is based on location. -->
-    <!-- "inline" is the default after specialized instances are exhausted.       -->
-    <!-- NB: variable and subsequent conditional are recycled for the Runestone manifest -->
-    <xsl:variable name="b-is-divisional" select="boolean(ancestor::exercises)"/>
-    <xsl:variable name="b-is-worksheet" select="boolean(ancestor::worksheet)"/>
-    <xsl:variable name="b-is-reading" select="boolean(ancestor::reading-questions)"/>
-    <xsl:variable name="b-is-project" select="boolean(ancestor::*[&PROJECT-FILTER;])"/>
-    <xsl:variable name="b-is-inline" select="not($b-is-divisional or $b-is-worksheet or $b-is-reading or $b-is-project)"/>
-
     <xsl:choose>
         <!-- signal on intentional, temporary, hack      -->
         <!-- simply duplicated in assembly, no solutions -->
-        <xsl:when test="@runestone">
+        <xsl:when test="@exercise-interactive = 'htmlhack'">
             <xsl:apply-templates select="." mode="runestone-to-interactive"/>
         </xsl:when>
-        <!-- intercept a True/False question                        -->
-        <!-- signal on "statement/statement/@correct" from assembly -->
-        <xsl:when test="statement/statement and statement/statement/@correct">
+        <!-- True/False        -->
+        <!-- Multiple Choice   -->
+        <!-- Parson problems   -->
+        <!-- Matching problems -->
+        <!-- Short Answer      -->
+        <xsl:when test="(@exercise-interactive = 'truefalse') or
+                               (@exercise-interactive = 'multiplechoice') or
+                               (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'coding') or
+                               (@exercise-interactive = 'shortanswer')"
+                               >
             <xsl:if test="$b-has-statement">
-                <xsl:apply-templates select="statement" mode="runestone-to-interactive"/>
+                <xsl:apply-templates select="." mode="runestone-to-interactive"/>
             </xsl:if>
-            <xsl:apply-templates select="." mode="solutions-div">
-                <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="block-type" select="$block-type"/>
-                <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
-                <xsl:with-param name="b-has-answer"  select="$b-has-answer"/>
-                <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
-            </xsl:apply-templates>
-        </xsl:when>
-        <!-- intercept a multiple choice question        -->
-        <!-- signal on "statement/choices" from assembly -->
-        <xsl:when test="statement/statement and statement/choices">
-            <xsl:if test="$b-has-statement">
-                <xsl:apply-templates select="statement" mode="runestone-to-interactive"/>
-            </xsl:if>
-            <xsl:apply-templates select="." mode="solutions-div">
-                <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="block-type" select="$block-type"/>
-                <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
-                <xsl:with-param name="b-has-answer"  select="$b-has-answer"/>
-                <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
-            </xsl:apply-templates>
-        </xsl:when>
-        <!-- intercept a Parsons problem                -->
-        <!-- signal on "statement/blocks" from assembly -->
-        <xsl:when test="statement/statement and statement/blocks">
-            <xsl:if test="$b-has-statement">
-                <xsl:apply-templates select="statement" mode="runestone-to-interactive"/>
-            </xsl:if>
-            <xsl:apply-templates select="." mode="solutions-div">
-                <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="block-type" select="$block-type"/>
-                <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
-                <xsl:with-param name="b-has-answer"  select="$b-has-answer"/>
-                <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
-            </xsl:apply-templates>
-        </xsl:when>
-        <!-- intercept a matching question               -->
-        <!-- signal on "statement/choices" from assembly -->
-        <xsl:when test="statement/statement and statement/matches">
-            <xsl:if test="$b-has-statement">
-                <xsl:apply-templates select="statement" mode="runestone-to-interactive"/>
-            </xsl:if>
-            <xsl:apply-templates select="." mode="solutions-div">
-                <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="block-type" select="$block-type"/>
-                <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
-                <xsl:with-param name="b-has-answer"  select="$b-has-answer"/>
-                <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
-            </xsl:apply-templates>
-        </xsl:when>
-        <!-- ActiveCode exercises, powered by Runestone Services -->
-        <!-- condition looks for packaging of a "statement" and a "program"      -->
-        <!-- into a statement via assembly, which is distinct from an "exercise" -->
-        <!-- which has an authored statement with a "program" inside it          -->
-        <xsl:when test="statement/statement and statement/program">
-            <xsl:if test="$b-has-statement">
-                <xsl:apply-templates select="statement" mode="runestone-to-interactive"/>
-            </xsl:if>
-            <xsl:apply-templates select="." mode="solutions-div">
-                <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="block-type" select="$block-type"/>
-                <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
-                <xsl:with-param name="b-has-answer"  select="$b-has-answer"/>
-                <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
-            </xsl:apply-templates>
-        </xsl:when>
-        <!-- We have run out of exceptional interactive forms, so turn our attention to -->
-        <!--     1.  statement|hint|answer|solution                                     -->
-        <!--     2.  structured by task                                                 -->
-        <!--     3.  some content, meant to be a statement only (adjust pre-processor?) -->
-        <!-- First is an "exercise" or PROJECT-LIKE that has a statement and            -->
-        <!-- has been elected as an interactive short answer problem and we             -->
-        <!-- have a capable platform                                                    -->
-        <xsl:when test="$b-host-runestone and statement and
-                         ( ($b-is-divisional and $b-sa-divisional-dynamic) or
-                           ($b-is-worksheet and $b-sa-worksheet-dynamic) or
-                           ($b-is-reading and $b-sa-reading-dynamic) or
-                           ($b-is-project and $b-sa-project-dynamic) or
-                           ($b-is-inline and $b-sa-inline-dynamic)
-                         )">
-            <xsl:apply-templates select="." mode="runestone-to-interactive"/>
             <xsl:apply-templates select="." mode="solutions-div">
                 <xsl:with-param name="b-original" select="$b-original"/>
                 <xsl:with-param name="block-type" select="$block-type"/>
