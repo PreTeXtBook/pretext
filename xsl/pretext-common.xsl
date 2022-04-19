@@ -9658,7 +9658,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- c, cline; unstructured cd, pre                    -->
 <!-- prompt, input, output for sage, console, program  -->
 <xsl:template match="mathbook|pretext" mode="text-element-warning">
-    <xsl:variable name="bad-elements" select=".//c/*|.//cline/*|.//cd[not(cline)]/*|.//pre[not(cline)]/*|.//prompt/*|.//input/*|.//output/*" />
+    <xsl:variable name="bad-elements" select=".//c/*|.//cline/*[not(self::area)]|.//cd[not(cline)]/*|.//pre[not(cline)]/*|.//prompt/*|.//input/*|.//output/*" />
     <xsl:if test="$bad-elements">
         <xsl:message>
             <xsl:text>PTX:WARNING: </xsl:text>
