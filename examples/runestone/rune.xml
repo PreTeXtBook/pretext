@@ -827,6 +827,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </matches>
         </exercise>
 
+        <exercise xml:id="clickable-text">
+            <title>Clickable Areas, <q>Regular</q> Text</title>
+
+            <statement>
+                <p>Identify (by clicking, or by circling) all of the nouns in this quotation by Eleanor Roosevelt.</p>
+            </statement>
+
+            <areas>
+                <p><q>The <area>future</area> belongs to <area correct="no">those</area> who believe in the <area correct="yes">beauty</area> of <area correct="no">their</area> <area>dreams</area>.</q></p>
+            </areas>
+
+            <feedback>
+                <p>The incorrect words are pronouns.</p>
+            </feedback>
+        </exercise>
+
+        <exercise xml:id="clickable-code">
+            <title>Clickable Areas, Code</title>
+
+            <statement>
+                <p>Identify (by clicking, or by circling) all of the assignment statements in this Python function.</p>
+            </statement>
+
+            <areas language="python">
+                <cline><area correct="no">def main():</area></cline>
+                <cline>    <area correct="yes">x = 4</area></cline>
+                <cline>    for i in range(5):</cline>
+                <cline>        <area>y = i</area></cline>
+                <cline>        <area correct="no">if y > 2:</area></cline>
+                <cline>            print(y)</cline>
+            </areas>
+
+            <feedback>
+                <p>Remember, the operator <c>=</c> is used for assignment.</p>
+            </feedback>
+        </exercise>
+
         <exercise>
             <title>Short Answer</title>
 
