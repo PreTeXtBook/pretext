@@ -430,6 +430,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   - every multiple choice "exercise"             -->
 <!--   - every Parsons problem "exercise"             -->
 <!--   - every matching problem "exercise"            -->
+<!--   - every clickable area problem "exercise"      -->
 <!--   - every "exercise" with additional "program"   -->
 <!--   - every "exercise" elected as "shortanswer"    -->
 <!--   - every PROJECT-LIKE with additional "program" -->
@@ -437,6 +438,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
                                (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]
                               |project[@exercise-interactive = 'coding']
@@ -817,6 +819,83 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:for-each>
         </ul>
     </div>
+</xsl:template>
+
+<!-- Clickable Area Problem -->
+
+<xsl:template match="exercise[@exercise-interactive = 'clickablearea']" mode="runestone-to-interactive">
+    <xsl:variable name="html-id">
+        <xsl:apply-templates select="." mode="html-id"/>
+    </xsl:variable>
+    <div class="runestone">
+        <div data-component="clickablearea" class="runestone" data-question_label="" style="visibility: hidden;">
+            <xsl:attribute name="id">
+                <xsl:value-of select="$html-id"/>
+            </xsl:attribute>
+            <span data-question="">
+                <xsl:apply-templates select="statement"/>
+            </span>
+            <span data-feedback="">
+                <xsl:apply-templates select="feedback"/>
+            </span>
+            <xsl:apply-templates select="areas" mode="clickable-html"/>
+        </div>
+    </div>
+</xsl:template>
+
+<!-- We use modal templates, primarily for the case of code, -->
+<!-- so we do not mangle text() using routines in -common    -->
+<!-- and to preserve the structure of the program.           -->
+
+<xsl:template match="areas" mode="clickable-html">
+    <xsl:choose>
+        <xsl:when test="cline">
+            <!-- code, so make the "pre" structure -->
+            <pre>
+                <xsl:apply-templates select="cline" mode="clickable-html"/>
+            </pre>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- regular text, this will match a default template later -->
+            <xsl:apply-templates select="*" mode="clickable-html"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- A mix of text and "area", and needs a newline -->
+<xsl:template match="areas/cline" mode="clickable-html">
+    <xsl:apply-templates select="text()|area" mode="clickable-html"/>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Avoid falling into low-level manipulations to remain verbatim -->
+<xsl:template match="areas/cline/text()" mode="clickable-html">
+    <xsl:value-of select="."/>
+</xsl:template>
+
+<!-- Constructions for regular text ("p", "ul", etc) should   -->
+<!-- drop out to default templates, as will an "area" element -->
+<!-- (both code and regular text).                            -->
+<xsl:template match="*" mode="clickable-html">
+    <xsl:apply-templates select="."/>
+</xsl:template>
+
+<!-- NB: we want a generic template (not modal) for use within      -->
+<!-- sentences, etc.  As such it will then be available in every    -->
+<!-- derived conversion, *but* the "area" element should not        -->
+<!-- survive a conversion to a static form, so will not be present. -->
+<xsl:template match="area">
+    <span>
+        <xsl:choose>
+            <xsl:when test="@correct = 'no'">
+                <xsl:attribute name="data-incorrect"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:attribute name="data-correct"/>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:apply-templates/>
+    </span>
 </xsl:template>
 
 <!-- Short Answer problem -->
