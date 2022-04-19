@@ -964,9 +964,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="statement and matches">
                 <xsl:text>matching</xsl:text>
             </xsl:when>
-            <!--                          -->
-            <!-- need clickable area here -->
-            <!--                          -->
+            <xsl:when test="statement and areas">
+                <xsl:text>clickablearea</xsl:text>
+            </xsl:when>
             <xsl:when test="statement and program">
                 <xsl:text>coding</xsl:text>
             </xsl:when>
@@ -1054,14 +1054,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Multiple Choice   -->
 <!-- Parson problems   -->
 <!-- Matching problems -->
+<!-- Clickable Area    -->
 <!-- ActiveCode        -->
-
-<!-- Clickable Area should slot in near here -->
 
 <xsl:template match="exercise[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
                                (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'coding')]
                               |project[@exercise-interactive = 'coding']
                               |activity[@exercise-interactive = 'coding']
