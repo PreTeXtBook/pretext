@@ -221,10 +221,12 @@ function linesAllWrapped() {
  //     var testID = "p-446";
  //     var testNode = document.getElementById(testID);
  //     var all_para = document.querySelectorAll(".para");
-      var all_para = document.querySelectorAll("SECTION P");
+  //    var all_para = document.querySelectorAll("SECTION P");
+      var all_para = document.querySelectorAll("SECTION .para:not(.logical)");
       for (var pj = 0; pj < all_para.length; ++pj) {
         testNode = all_para[pj];
         wordsAllWrapped(testNode);
+        console.log("               wordsAllWrapped", pj, "of", testNode);
 
         var these_words = document.querySelectorAll(".oneword, .oneelement");
         var this_line = [];
