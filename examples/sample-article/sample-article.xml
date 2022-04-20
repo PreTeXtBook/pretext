@@ -9435,6 +9435,20 @@ the xsltproc executable.
                 </stanza>
             </poem>
 
+            <p>And when yours truly tried to joke about poetry on <url href="https://github.com/PreTeXtBook/pretext-cli/issues/182" visual="https://github.com/PreTeXtBook/pretext-cli/issues/182">GitHub CLI #182</url>, back came:</p>
+
+            <poem xml:id="limerick-clontz">
+                <author>Steven Clontz</author>
+
+                <stanza>
+                    <line>There once was a maintainer named Rob</line>
+                    <line>Who told bad jokes while on the job</line>
+                    <line>While they were lame</line>
+                    <line>You could say the same</line>
+                    <line>Of Steven's limericks that cause you to sob</line>
+                </stanza>
+            </poem>
+
         </section>
 
         <section xml:id="atomic-items">
