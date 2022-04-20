@@ -150,7 +150,8 @@ body.pretext {
 */
 .pretext[data-atmosphere="pastel"],
 .pretext[data-atmosphere="pastel"] .ptx-main {
-  background: #f9f9dc;
+  background: #dbf5ff;
+    background: #efe;
 }
 .pretext[data-atmosphere="pastel"] {
   --documenttitle: #2a5ea4;
@@ -161,6 +162,7 @@ body.pretext {
   --bodysubtitlehighlight: #FCE5E4;
 
   --chaptertoc: #dbf5ff;
+  --chaptertoc: #dcdcf9;
   --chaptertoctext: #444444;
   --chaptertocactive: #fae5b6;
   --chaptertoctextactive: #303030;
@@ -171,6 +173,7 @@ body.pretext {
   --tocborder: #afc2e5;
 
   --highlighttoc: #fac793;
+  --highlighttoc: #fadfa3;
   --highlighttoctext: #321a0c;
   --highlighttocborder: #ec704b;
 
@@ -186,9 +189,14 @@ body.pretext {
 }
 .pretext[data-atmosphere="pastel"] #ptx-navbar {
     background: #efe;
+  background: #dbf5ff;
 }
 .pretext[data-atmosphere="pastel"] #ptx-masthead {
     background: #efe;
+  background: #dbf5ff;
+}
+.pretext[data-atmosphere="pastel"] #ptx-sidebar {
+    background: #ffd;
 }
 
 /* twilight */
