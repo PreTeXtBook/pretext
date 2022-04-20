@@ -19,6 +19,11 @@ You should have received a copy of the GNU General Public License
 along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
+<!DOCTYPE xsl:stylesheet [
+    <!ENTITY % entities SYSTEM "entities.ent">
+    %entities;
+]>
+
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
@@ -168,6 +173,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<xsl:template match="node()|@*" mode="exercise">
+    <xsl:param name="division" select="''"/>
+
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="exercise">
+            <xsl:with-param name="division" select="$division"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
 <xsl:template match="node()|@*" mode="representations">
     <xsl:param name="fn-subtree-number"/>
     <xsl:param name="fn-subtree"/>
@@ -264,12 +279,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="augment" select="exsl:node-set($augment-rtf)"/>
 
+<xsl:variable name="exercise-rtf">
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: start exercise</xsl:message>
+    </xsl:if>
+    <!--  -->
+    <!-- initialize with default, 'inline' -->
+    <xsl:apply-templates select="$augment" mode="exercise">
+        <xsl:with-param name="division" select="'inline'"/>
+    </xsl:apply-templates>
+    <!--  -->
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: end exercise</xsl:message>
+    </xsl:if>
+    <!--  -->
+</xsl:variable>
+<xsl:variable name="exercise" select="exsl:node-set($exercise-rtf)"/>
+
 <xsl:variable name="representations-rtf">
     <xsl:if test="$time-assembly">
         <xsl:message><xsl:value-of select="date:date-time()"/>: start representations</xsl:message>
     </xsl:if>
     <!--  -->
-    <xsl:apply-templates select="$augment" mode="representations"/>
+    <xsl:apply-templates select="$exercise" mode="representations"/>
     <!--  -->
     <xsl:if test="$time-assembly">
         <xsl:message><xsl:value-of select="date:date-time()"/>: end representations</xsl:message>
@@ -802,26 +834,206 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- ######### -->
+<!-- Exercises -->
+<!-- ######### -->
+
+<!-- Exercises, and their kin, are complicated.  They come in five types   -->
+<!-- (inline, divisional, reading, worksheet, project-like) based largely  -->
+<!-- on location.  They can be static, interactive in HTML, interactive    -->
+<!-- on a server.  Interactive versions come in many flavors, such as      -->
+<!-- short answer, multiple choice, true/false, Parson, matching, fill-in, -->
+<!-- and so on.  Their solutions (hint, answer, solution) apear, or do not -->
+<!-- appear, where born or in specialized "solutions" divisions.  We       -->
+<!-- scribble on each to record as much as we can right now.  It'll be     -->
+<!-- useful below and forever.                                             -->
+
+<!-- Record exercise ancestors/location-->
+<!-- An "exercise" can be in one of four places.  We reset the parameter   -->
+<!-- as we pass through.  Default is "inline" and we initialize with that  -->
+<!-- value.  These three specialized divisions are always terminal, so we  -->
+<!-- will never find an inline exercise contained within.  We allow        -->
+<!-- publisher customization of exercises based on these locations, *and*  -->
+<!-- for project-like.  These templates are just about divisions.          -->
+
+<xsl:template match="reading-questions" mode="exercise">
+    <xsl:param name="division"/>
+
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="exercise">
+            <xsl:with-param name="division" select="'reading'"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<xsl:template match="worksheet" mode="exercise">
+    <xsl:param name="division"/>
+
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="exercise">
+            <xsl:with-param name="division" select="'worksheet'"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<xsl:template match="exercises" mode="exercise">
+    <xsl:param name="division"/>
+
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="exercise">
+            <xsl:with-param name="division" select="'divisional'"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Annotate "exercise" and PROJECT-LIKE -->
+<!-- Pre-processing here is entirely about supporting interactive       -->
+<!-- exercises powered by Runestone Services.  We allow publisher       -->
+<!-- options to control interactivity of "short answer" questions       -->
+<!-- when hosted on a server, so that is why locations are being noted. -->
+<!--   1.  "exercise-customization" refers to the situation where       -->
+<!--       certain publication options can vary behavior or visibility  -->
+<!--   2.  "exercise-interactive" refers to the type of                 -->
+<!--        interactivity, "static" is the default                      -->
+<!--                                                                    -->
+<!-- TODO:                                                              -->
+<!-- 1.  Expand to WW, example-like, and task                           -->
+<!-- 2.  Insert "statement" when not authored                           -->
+<!-- 3.  Use locations computed here, remove elsewhere                  -->
+
+<xsl:template match="exercise|&PROJECT-LIKE;" mode="exercise">
+    <xsl:param name="division"/>
+
+    <xsl:copy>
+        <!-- Record one of five categories for customization, which    -->
+        <!-- are not relevant for "example" (always inline), or "task" -->
+        <!-- (always just a component of something larger).  WeBWork   -->
+        <!-- problems are interactive or static, inline or not, based  -->
+        <!-- on publisher options.                                     -->
+        <xsl:attribute name="exercise-customization">
+            <xsl:choose>
+                <xsl:when test="&PROJECT-FILTER;">
+                    <xsl:text>project</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$division"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+        <!-- Determine and record types of interactivity, partially based   -->
+        <!-- on location due to publisher options for "short answer" (only) -->
+        <xsl:apply-templates select="." mode="exercise-interactive-attribute">
+            <xsl:with-param name="division" select="$division"/>
+        </xsl:apply-templates>
+        <!-- catch remaining attributes -->
+        <xsl:apply-templates select="@*" mode="exercise">
+            <xsl:with-param name="division" select="$division"/>
+        </xsl:apply-templates>
+        <!-- Now the child elements -->
+        <!-- NB: this would be a place to insert a "statement" for  -->
+        <!-- "exercise", "example", "project" and "task", for which -->
+        <!-- an author has not needed/elected to use one.           -->
+        <xsl:apply-templates select="node()" mode="exercise">
+            <xsl:with-param name="division" select="$division"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- These "interactivity types" are meant for Runestone-enabled  -->
+<!-- interactive exercises and projects                           -->
+<xsl:template match="*" mode="exercise-interactive-attribute">
+    <xsl:param name="division"/>
+
+    <xsl:attribute name="exercise-interactive">
+        <xsl:choose>
+            <!-- hack for temporary demo HTML versions -->
+            <xsl:when test="@runestone">
+                <xsl:text>htmlhack</xsl:text>
+            </xsl:when>
+            <!-- true/false -->
+            <xsl:when test="statement/@correct">
+                <xsl:text>truefalse</xsl:text>
+            </xsl:when>
+            <!-- multiple choice -->
+            <xsl:when test="statement and choices">
+                <xsl:text>multiplechoice</xsl:text>
+            </xsl:when>
+            <xsl:when test="statement and blocks">
+                <xsl:text>parson</xsl:text>
+            </xsl:when>
+            <xsl:when test="statement and matches">
+                <xsl:text>matching</xsl:text>
+            </xsl:when>
+            <xsl:when test="statement and areas">
+                <xsl:text>clickablearea</xsl:text>
+            </xsl:when>
+            <xsl:when test="statement and program">
+                <xsl:text>coding</xsl:text>
+            </xsl:when>
+            <!-- Now we have what once would have been called a "traditional"     -->
+            <!-- PreTeXt question, which is just "statement|hint|answer|solution" -->
+            <!-- (perhaps after a bit of preprocessing.  More accurately, these   -->
+            <!-- are "short answer", "essay", or "free response".  We have allow  -->
+            <!-- these to be interactive (or not) for a capable platform.         -->
+            <!-- Conveniently, we have the cusomization types in the $division    -->
+            <!-- parameter. This only matters when we are on a Runestone server.  -->
+            <xsl:when test="$b-host-runestone">
+                <xsl:choose>
+                    <xsl:when test="($division = 'inline') and $b-sa-inline-dynamic">
+                        <xsl:text>shortanswer</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="($division = 'divisional') and $b-sa-divisional-dynamic">
+                        <xsl:text>shortanswer</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="($division = 'reading') and $b-sa-reading-dynamic">
+                        <xsl:text>shortanswer</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="($division = 'worksheet') and $b-sa-worksheet-dynamic">
+                        <xsl:text>shortanswer</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="($division = 'project') and $b-sa-project-dynamic">
+                        <xsl:text>shortanswer</xsl:text>
+                    </xsl:when>
+                    <!-- examples are never assesments                -->
+                    <!-- maybe WeBWork will someday be on a RS server -->
+                    <xsl:otherwise>
+                        <xsl:text>static</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <!-- That's it, we are out of opportunities to be interactive -->
+            <xsl:otherwise>
+                <xsl:text>static</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:attribute>
+</xsl:template>
+
+
 <!-- ############### -->
 <!-- Representations -->
 <!-- ############### -->
 
-<!-- Build multiple representations of exercises that are produced        -->
-<!-- in static and dynamic (HTML) versions.  Generally these templates    -->
-<!-- are parameterized by the $exercise-style variable/parameter.         -->
+<!-- Build multiple (two) representations of exercises that are produced  -->
+<!-- in static (almost everything) and dynamic (HTML) versions.            -->
+<!-- Generally these templates are parameterized by the $exercise-style   -->
+<!-- variable/parameter.  We need the parameterization, since we do not   -->
+<!-- want to make *multiple* copies of each exercise in the source, since -->
+<!-- then duplicate items might confuse later templates e.g numbering).   -->
 <!--                                                                      -->
 <!-- A "static" version should be entirely in the style of a "regular"    -->
 <!-- PreTeXt exercise, having a statement|hint|answer|solution structure. -->
 <!-- Then it can be leveraged through all the infrastructure for things   -->
 <!-- like solutions manuals and non-capable output formats.               -->
 <!--                                                                      -->
-<!-- A "dynamic" version should still have statement|hint|answer|solution -->
-<!-- structure, but the "statement" should have copies of enough of the   -->
-<!-- authored source for an interactive version to be produced later.     -->
+<!-- A "dynamic" version is simply a duplicate of the author's source,    -->
+<!-- which is handled by templates elsewhere, applied in the HTML         -->
+<!-- conversion itself.                                                   -->
 
 <!-- Hacked -->
+<!-- Will eventually be obsolete -->
 
-<xsl:template match="exercise[@runestone]" mode="representations">
+<xsl:template match="exercise[@exercise-interactive = 'htmlhack']" mode="representations">
     <xsl:choose>
         <xsl:when test="$exercise-style = 'static'">
             <!-- punt for static versions, we have nothing -->
@@ -838,114 +1050,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- True/False -->
-
-<xsl:template match="exercise[statement/@correct]" mode="representations">
-    <!-- always preserve "exercise" container, with metadata -->
-    <!-- given as attributes and elements (title, idx)       -->
-    <xsl:copy>
-        <xsl:apply-templates select="@*" mode="representations"/>
-        <xsl:apply-templates select="title" mode="representations"/>
-        <xsl:apply-templates select="idx" mode="representations"/>
-        <xsl:choose>
-            <!-- make a static version, in a PreTeXt   -->
-            <!-- statement|hint|answer|solution style  -->
-            <!-- for use naturally by most conversions -->
-            <xsl:when test="$exercise-style = 'static'">
-                <xsl:apply-templates select="." mode="runestone-to-static"/>
-            </xsl:when>
-            <!-- duplicate necessary bits, again in a PreTeXt          -->
-            <!-- statement|hint|answer|solution style, but let the     -->
-            <!-- conversion make the actual code for a dynamic version -->
-            <xsl:when test="$exercise-style = 'dynamic'">
-                <statement>
-                    <xsl:apply-templates select="statement" mode="representations"/>
-                    <xsl:apply-templates select="feedback" mode="representations"/>
-                </statement>
-                <!-- Only hints are allowed/relevant since an interactive -->
-                <!-- version will reveal an answer eventually and provide -->
-                <!-- "feedbacK' that amounts to a solution                -->
-                <xsl:apply-templates select="hint" mode="representations"/>
-            </xsl:when>
-        </xsl:choose>
-    </xsl:copy>
-</xsl:template>
-
-<!-- Multiple Choice -->
-
-<xsl:template match="exercise[statement and choices]" mode="representations">
-    <!-- always preserve "exercise" container, with metadata -->
-    <!-- given as attributes and elements (title, idx)       -->
-    <xsl:copy>
-        <xsl:apply-templates select="@*" mode="representations"/>
-        <xsl:apply-templates select="title" mode="representations"/>
-        <xsl:apply-templates select="idx" mode="representations"/>
-        <xsl:choose>
-            <!-- make a static version, in a PreTeXt   -->
-            <!-- statement|hint|answer|solution style  -->
-            <!-- for use naturally by most conversions -->
-            <xsl:when test="$exercise-style = 'static'">
-                <xsl:apply-templates select="." mode="runestone-to-static"/>
-            </xsl:when>
-            <!-- duplicate necessary bits, again in a PreTeXt          -->
-            <!-- statement|hint|answer|solution style, but let the     -->
-            <!-- conversion make the actual code for a dynamic version -->
-            <xsl:when test="$exercise-style = 'dynamic'">
-                <statement>
-                    <xsl:apply-templates select="statement" mode="representations"/>
-                    <xsl:apply-templates select="choices" mode="representations"/>
-                </statement>
-                <!-- Only hints are allowed/relevant since an interactive -->
-                <!-- version will reveal an answer eventually and provide -->
-                <!-- "feedbacK' that amounts to a solution                -->
-                <xsl:apply-templates select="hint" mode="representations"/>
-            </xsl:when>
-        </xsl:choose>
-    </xsl:copy>
-</xsl:template>
-
-<!-- Parsons problems -->
-
-<xsl:template match="exercise[statement and blocks]" mode="representations">
-    <!-- always preserve "exercise" container, with metadata -->
-    <!-- given as attributes and elements (title, idx)       -->
-    <xsl:copy>
-        <xsl:apply-templates select="@*" mode="representations"/>
-        <xsl:apply-templates select="title" mode="representations"/>
-        <xsl:apply-templates select="idx" mode="representations"/>
-        <xsl:choose>
-            <!-- make a static version, in a PreTeXt   -->
-            <!-- statement|hint|answer|solution style  -->
-            <!-- for use naturally by most conversions -->
-            <xsl:when test="$exercise-style = 'static'">
-                <xsl:apply-templates select="." mode="runestone-to-static"/>
-            </xsl:when>
-            <!-- duplicate necessary bits, again in a PreTeXt          -->
-            <!-- statement|hint|answer|solution style, but let the     -->
-            <!-- conversion make the actual code for a dynamic version -->
-            <xsl:when test="$exercise-style = 'dynamic'">
-                <statement>
-                    <xsl:apply-templates select="statement" mode="representations"/>
-                    <xsl:apply-templates select="blocks" mode="representations"/>
-                </statement>
-                <!-- Only hints are allowed/relevant since an interactive -->
-                <!-- version will reveal an answer eventually and provide -->
-                <!-- "feedbacK' that amounts to a solution                -->
-                <xsl:apply-templates select="hint" mode="representations"/>
-            </xsl:when>
-        </xsl:choose>
-    </xsl:copy>
-</xsl:template>
-
+<!-- True/False        -->
+<!-- Multiple Choice   -->
+<!-- Parson problems   -->
 <!-- Matching problems -->
+<!-- Clickable Area    -->
+<!-- ActiveCode        -->
 
-<xsl:template match="exercise[statement and matches]" mode="representations">
-    <!-- always preserve "exercise" container, with metadata -->
-    <!-- given as attributes and elements (title, idx)       -->
+<xsl:template match="exercise[ (@exercise-interactive = 'truefalse') or
+                               (@exercise-interactive = 'multiplechoice') or
+                               (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'coding')]
+                              |project[@exercise-interactive = 'coding']
+                              |activity[@exercise-interactive = 'coding']
+                              |exploration[@exercise-interactive = 'coding']
+                              |investigation[@exercise-interactive = 'coding']" mode="representations">
+    <!-- always preserve "exercise" container, with attributes -->
     <xsl:copy>
         <xsl:apply-templates select="@*" mode="representations"/>
-        <xsl:apply-templates select="title" mode="representations"/>
-        <xsl:apply-templates select="idx" mode="representations"/>
         <xsl:choose>
             <!-- make a static version, in a PreTeXt   -->
             <!-- statement|hint|answer|solution style  -->
@@ -953,55 +1077,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="$exercise-style = 'static'">
                 <xsl:apply-templates select="." mode="runestone-to-static"/>
             </xsl:when>
-            <!-- duplicate necessary bits, again in a PreTeXt          -->
-            <!-- statement|hint|answer|solution style, but let the     -->
-            <!-- conversion make the actual code for a dynamic version -->
+            <!-- duplicate for a dynamic version -->
             <xsl:when test="$exercise-style = 'dynamic'">
-                <statement>
-                    <xsl:apply-templates select="statement" mode="representations"/>
-                    <xsl:apply-templates select="matches" mode="representations"/>
-                    <xsl:apply-templates select="feedback" mode="representations"/>
-                </statement>
-                <!-- Only hints are allowed/relevant since an interactive -->
-                <!-- version will reveal an answer eventually and provide -->
-                <!-- "feedbacK' that amounts to a solution                -->
-                <xsl:apply-templates select="hint" mode="representations"/>
+                <xsl:apply-templates select="node()" mode="representations"/>
             </xsl:when>
         </xsl:choose>
     </xsl:copy>
 </xsl:template>
 
-<!-- Active Code -->
+<!-- Short Answer -->
+<!-- @exercise-interactive = 'shortanswer' needs no adjustments -->
 
-<!-- "exercise" and PROJECT-LIKE -->
-<xsl:template match="exercise[statement and program]|project[statement and program]|activity[statement and program]|exploration[statement and program]|investigation[statement and program]" mode="representations">
-    <!-- always preserve "exercise" container, with metadata -->
-    <!-- given as attributes and elements (title, idx)       -->
-    <xsl:copy>
-        <xsl:apply-templates select="@*" mode="representations"/>
-        <xsl:apply-templates select="title" mode="representations"/>
-        <xsl:apply-templates select="idx" mode="representations"/>
-        <xsl:choose>
-            <!-- make a static version, in a PreTeXt   -->
-            <!-- statement|hint|answer|solution style  -->
-            <!-- for use naturally by most conversions -->
-            <xsl:when test="$exercise-style = 'static'">
-                <xsl:apply-templates select="." mode="runestone-to-static"/>
-            </xsl:when>
-            <!-- duplicate necessary bits, again in a PreTeXt          -->
-            <!-- statement|hint|answer|solution style, but let the     -->
-            <!-- conversion make the actual code for a dynamic version -->
-            <xsl:when test="$exercise-style = 'dynamic'">
-                <statement>
-                    <xsl:apply-templates select="statement" mode="representations"/>
-                    <xsl:apply-templates select="program" mode="representations"/>
-                </statement>
-                <!-- Problem design does not imply any part of a solution -->
-                <xsl:apply-templates select="hint|answer|solution" mode="representations"/>
-            </xsl:when>
-        </xsl:choose>
-    </xsl:copy>
-</xsl:template>
+<!-- Static (non-interactive) -->
+<!-- @exercise-interactive = 'static' needs no adjustments -->
 
 
 <!-- ######## -->
