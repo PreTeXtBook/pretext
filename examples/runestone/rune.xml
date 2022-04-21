@@ -864,6 +864,53 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </feedback>
         </exercise>
 
+        <exercise xml:id="clickable-table">
+            <title>Clickable Areas, Text in a Table</title>
+
+            <statement>
+                <p>A two-dimensional array was created in Python with the list comprehension:<cd>
+                        <cline>[[0 for x in range(3)] for y in range(2)]</cline>
+                </cd>Then the values were (mostly) changed from zeros and the final array is shown below.</p>
+                <p>Identify (by clicking, or by circling) all of the boolean values in the array.</p>
+            </statement>
+
+            <areas>
+                <tabular top="minor" bottom="minor" left="minor" right="minor">
+                    <row>
+                        <cell><c>42</c></cell>
+                        <cell><area><c>True</c></area></cell>
+                        <cell><area correct="no"><c>'towel'</c></area></cell>
+                    </row>
+                    <row>
+                        <cell><area correct="no">'true'</area></cell>
+                        <cell>0</cell>
+                        <cell><area>False</area></cell>
+                    </row>
+                </tabular>
+
+                <p>This second table has no <tag>area</tag>, in order to test CSS for tables.</p>
+
+                <tabular top="minor" bottom="minor" left="minor" right="minor">
+                    <row>
+                        <cell><c>42</c></cell>
+                        <cell><c>True</c></cell>
+                        <cell><c>'towel'</c></cell>
+                    </row>
+                    <row>
+                        <cell>'true'</cell>
+                        <cell>0</cell>
+                        <cell>False</cell>
+                    </row>
+                </tabular>
+            </areas>
+            <hint>
+                <p>Python boolean variables begin with capital latters.</p>
+            </hint>
+            <feedback>
+                <p>Python boolean variables are <c>True</c> and <c>False</c>.  A value in quotation marks is a string, not a boolean.</p>
+            </feedback>
+        </exercise>
+
         <exercise>
             <title>Short Answer</title>
 
