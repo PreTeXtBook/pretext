@@ -631,6 +631,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- no more "conclusion", so drop it here; deprecation will warn -->
 <xsl:template match="glossary/conclusion" mode="repair"/>
 
+<!-- 2022-04-22 replace Python Tutor with Runestone CodeLens -->
+<xsl:template match="program/@interactive" mode="repair">
+    <xsl:choose>
+        <xsl:when test=". = 'pythontutor'">
+            <xsl:attribute name="interactive">
+                <xsl:text>codelens</xsl:text>
+            </xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:copy/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- ######### -->
 <!-- Languages -->
 <!-- ######### -->

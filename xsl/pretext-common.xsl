@@ -10759,6 +10759,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="incorrect-use" select="($project.solution != '')" />
     </xsl:call-template>
     <!--  -->
+    <!-- 2022-04-22  Python Tutor via @interactive="pythontutor" replaced by Runestone CodeLens-->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//program[@interactive = 'pythontutor']" />
+        <xsl:with-param name="date-string" select="'2022-04-22'" />
+        <xsl:with-param name="message" select="'a Python &quot;program&quot; with the attribute &quot;@interactive&quot; set to &quot;pythontutor&quot; is deprecated, but we will attempt to honor your intent.  Change the attribute value to &quot;codelens&quot; instead, and be certain to manufacture trace data using allied PreTeXt tools'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
