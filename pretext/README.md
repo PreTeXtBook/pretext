@@ -38,3 +38,11 @@ perform various tasks.  Look inside the file for instructions on
 making, placing, and employing a customized version.
 
 **NEVER EDIT THE ORIGINAL VERSION OF** `pretext.cfg`
+
+`pg_encoder.py`, `pg_logger.py`
+-------------------------------
+
+Modules from Runestone to support the formulation of trace data for
+Python programs to poer CodeLens interactive programs written in Python.
+
+Edits for use with the `pretext` script are noted.

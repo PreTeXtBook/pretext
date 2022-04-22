@@ -9378,6 +9378,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="self::program and (@interactive='activecode')">
             <xsl:apply-templates select="." mode="runestone-activecode"/>
         </xsl:when>
+        <!-- if  a program is elected as interactive, then     -->
+        <!-- let Runestone do the best it can via the template -->
+        <xsl:when test="self::program and (@interactive='codelens')">
+            <xsl:apply-templates select="." mode="runestone-codelens"/>
+        </xsl:when>
         <!-- fallback is a less-capable static version, which -->
         <!-- might actually be desired for many formats       -->
         <xsl:otherwise>
@@ -9414,6 +9419,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- let Runestone do the best it can via the template -->
         <xsl:when test="self::program and (@interactive='activecode')">
             <xsl:apply-templates select="." mode="runestone-activecode"/>
+        </xsl:when>
+        <!-- if  a program is elected as interactive, then     -->
+        <!-- let Runestone do the best it can via the template -->
+        <xsl:when test="self::program and (@interactive='codelens')">
+            <xsl:apply-templates select="." mode="runestone-codelens"/>
         </xsl:when>
         <!-- fallback is a less-capable static version, which -->
         <!-- might actually be desired for many formats       -->

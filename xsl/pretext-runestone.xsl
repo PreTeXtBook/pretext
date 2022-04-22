@@ -1063,6 +1063,53 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- ######## -->
+<!-- CodeLens -->
+<!-- ######## -->
+
+<xsl:template match="program[@interactive = 'codelens']" mode="runestone-codelens">
+    <!-- as a variable so it does not look like an AVT -->
+    <xsl:variable name="parameter-dictionary">
+        <xsl:text>{</xsl:text>
+        <xsl:text>"embeddedMode": true, </xsl:text>
+        <xsl:text>"lang": "</xsl:text>
+        <xsl:value-of select="@language"/>
+        <xsl:text>", </xsl:text>
+        <xsl:text>"jumpToEnd": false</xsl:text>
+        <xsl:text>}</xsl:text>
+    </xsl:variable>
+    <!-- locate trace data via a *.js file, managed or not -->
+    <xsl:variable name="trace-file">
+        <xsl:value-of select="$generated-directory"/>
+        <xsl:if test="$b-managed-directories">
+            <xsl:text>trace/</xsl:text>
+        </xsl:if>
+        <xsl:apply-templates select="." mode="visible-id"/>
+        <xsl:text>.js</xsl:text>
+    </xsl:variable>
+    <!-- the Runestone HTML -->
+    <div class="runestone codelens">
+        <div class="alert alert-warning cd_section" data-component="codelens" data-question_label="">
+            <div class="pytutorVisualizer">
+                <xsl:attribute name="id">
+                    <xsl:apply-templates select="." mode="html-id"/>
+                </xsl:attribute>
+                <xsl:attribute name="data-params">
+                    <xsl:value-of select="$parameter-dictionary"/>
+                </xsl:attribute>
+            </div>
+            <!-- no caption, should go inside a listing? -->
+        </div>
+        <!-- access simple script with variable set to -->
+        <!-- the trace data via the @src attribute     -->
+        <script>
+            <xsl:attribute name="src">
+                <xsl:value-of select="$trace-file"/>
+            </xsl:attribute>
+        </script>
+    </div>
+</xsl:template>
+
 <!-- Some Runestone languages are supported within a browser,      -->
 <!-- so can be used as part of Runestone for All, while others     -->
 <!-- require a JOBE server on the Runestone server.  This template -->

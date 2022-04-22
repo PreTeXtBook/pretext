@@ -147,6 +147,137 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.</p>
     </section>
 
+    <section xml:id="code-lens">
+        <title>Code Lens</title>
+
+        <p>CodeLens is an interactive tool for following program execution, much like a debugger, without the ability to influence flow control or variable values.  For use without a server, traces must be computed beforehand.  First, we have some trivial programs, to provide minimal testing.</p>
+
+        <listing xml:id="program-codelens-python">
+            <caption>A Python program, stepable with CodeLens</caption>
+            <program xml:id="python-hello-world-code-lens" interactive="codelens" language="python">
+                <input>
+                print('Hello, World!')
+                </input>
+            </program>
+        </listing>
+
+        <listing xml:id="program-codelens-c">
+            <caption>An C program, stepable with CodeLens</caption>
+            <program xml:id="c-hello-world-code-lens" interactive="codelens" language="c">
+                <input>
+                #include &lt;stdio.h&gt;
+
+                int main(void)
+                {
+                    puts("Hello, World!");
+                }
+                </input>
+            </program>
+        </listing>
+
+        <listing xml:id="program-codelens-java">
+            <caption>A Java program, stepable with CodeLens</caption>
+            <program xml:id="java-hello-world-code-lens" interactive="codelens" language="java">
+                <input>
+                public class HelloWorld {
+                    public static void main(String[] args) {
+                        System.out.println("Hello, World!");
+                    }
+                }
+                </input>
+            </program>
+        </listing>
+
+        <p>Now some moderately more complicated programs to find teh prime numbers less than <m>20</m>.  We do not vouch for the quality of these, or even their correctness!</p>
+
+        <listing xml:id="sieve-python">
+            <caption><url href="https://www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes" visual="www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes">Sieve of Eratosthenes</url>, Java</caption>
+            <program xml:id="sieve-codelens-python" interactive="codelens" language="python">
+                <input><![CDATA[
+                def SieveOfEratosthenes(n):
+                   # array of type boolean with True values in it
+                   prime = [True for i in range(n + 1)]
+                   p = 2
+                   while (p * p <= n):
+                      # If it remain unchanged it is prime
+                      if (prime[p] == True):
+                         # updating all the multiples
+                         for i in range(p * 2, n + 1, p):
+                            prime[i] = False
+                      p += 1
+                   prime[0]= False
+                   prime[1]= False
+                   # Print
+                   for p in range(n + 1):
+                      if prime[p]:
+                         print (p,end=" ")
+                # main
+                if __name__=='__main__':
+                   n = 20
+                   print ("The prime numbers smaller than or equal to", n,"is")
+                   SieveOfEratosthenes(n)
+                ]]>
+                </input>
+            </program>
+        </listing>
+
+        <listing xml:id="sieve-cpp">
+            <caption><url href="https://www.tutorialspoint.com/cplusplus-program-to-implement-sieve-of-eratosthenes-to-generate-prime-numbers-between-given-range" visual="www.tutorialspoint.com/cplusplus-program-to-implement-sieve-of-eratosthenes-to-generate-prime-numbers-between-given-range">Sieve of Eratosthenes</url>, C++</caption>
+            <program xml:id="sieve-codelens-cpp" interactive="codelens" language="cpp">
+                <input> <![CDATA[
+                #include <stdio.h>
+                const int len = 20;
+                int main() {
+                   int arr[20] = {0};
+                   for (int i = 2; i < len; i++) {
+                      for (int j = i * i; j < len; j+=i) {
+                         arr[j - 1] = 1;
+                      }
+                   }
+                   for (int i = 1; i < len; i++) {
+                      if (arr[i - 1] == 0)
+                        printf(" %d", i);
+                   }
+                }
+                ]]>
+                </input>
+            </program>
+        </listing>
+
+        <listing xml:id="sieve-java">
+            <caption><url href="https://www.tutorialspoint.com/Sieve-of-Eratosthenes-in-java" visual="www.tutorialspoint.com/Sieve-of-Eratosthenes-in-java">Sieve of Eratosthenes</url>, Java</caption>
+            <program xml:id="sieve-codelens-java" interactive="codelens" language="java">
+                <input><![CDATA[
+                public class SievePrimeFactors  {
+                   public static void main(String args[]) {
+                      int num = 20;
+                      boolean[] bool = new boolean[num];
+
+                      for (int i = 0; i< bool.length; i++) {
+                         bool[i] = true;
+                      }
+                      for (int i = 2; i < Math.sqrt(num); i++) {
+                         if(bool[i] == true) {
+                            for(int j = (i*i); j < num; j = j+i) {
+                               bool[j] = false;
+                            }
+                         }
+                      }
+                      System.out.println("List of prime numbers: ");
+                      for (int i = 2; i< bool.length; i++) {
+                         if(bool[i]==true) {
+                            System.out.println(i);
+                         }
+                      }
+                   }
+                }
+                ]]>
+                </input>
+            </program>
+        </listing>
+
+    </section>
+
     <section xml:id="coding-exercises">
         <title>Coding Exercises</title>
 
@@ -861,6 +992,53 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <feedback>
                 <p>Remember, the operator <c>=</c> is used for assignment.</p>
+            </feedback>
+        </exercise>
+
+        <exercise xml:id="clickable-table">
+            <title>Clickable Areas, Text in a Table</title>
+
+            <statement>
+                <p>A two-dimensional array was created in Python with the list comprehension:<cd>
+                        <cline>[[0 for x in range(3)] for y in range(2)]</cline>
+                </cd>Then the values were (mostly) changed from zeros and the final array is shown below.</p>
+                <p>Identify (by clicking, or by circling) all of the boolean values in the array.</p>
+            </statement>
+
+            <areas>
+                <tabular top="minor" bottom="minor" left="minor" right="minor">
+                    <row>
+                        <cell><c>42</c></cell>
+                        <cell><area><c>True</c></area></cell>
+                        <cell><area correct="no"><c>'towel'</c></area></cell>
+                    </row>
+                    <row>
+                        <cell><area correct="no">'true'</area></cell>
+                        <cell>0</cell>
+                        <cell><area>False</area></cell>
+                    </row>
+                </tabular>
+
+                <p>This second table has no <tag>area</tag>, in order to test CSS for tables.</p>
+
+                <tabular top="minor" bottom="minor" left="minor" right="minor">
+                    <row>
+                        <cell><c>42</c></cell>
+                        <cell><c>True</c></cell>
+                        <cell><c>'towel'</c></cell>
+                    </row>
+                    <row>
+                        <cell>'true'</cell>
+                        <cell>0</cell>
+                        <cell>False</cell>
+                    </row>
+                </tabular>
+            </areas>
+            <hint>
+                <p>Python boolean variables begin with capital latters.</p>
+            </hint>
+            <feedback>
+                <p>Python boolean variables are <c>True</c> and <c>False</c>.  A value in quotation marks is a string, not a boolean.</p>
             </feedback>
         </exercise>
 
