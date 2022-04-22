@@ -497,7 +497,7 @@
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute language {text}?,
-                    attribute interactive {"pythontutor"}?,
+                    attribute interactive {"codelens"}?,
                     element input {text}
                 }
             

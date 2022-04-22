@@ -1166,7 +1166,7 @@
       <xs:attribute name="interactive">
         <xs:simpleType>
           <xs:restriction base="xs:token">
-            <xs:enumeration value="pythontutor"/>
+            <xs:enumeration value="codelens"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>

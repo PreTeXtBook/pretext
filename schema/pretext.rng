@@ -1291,7 +1291,7 @@
       </optional>
       <optional>
         <attribute name="interactive">
-          <value>pythontutor</value>
+          <value>codelens</value>
         </attribute>
       </optional>
       <element name="input">
