@@ -567,6 +567,96 @@ def latex_tactile_image_conversion(xml_source, pub_file, stringparams, dest_dir,
             manipulation_xslt = os.path.join(ptx_xsl_dir, 'support', 'tactile-svg.xsl')
             xsltproc(manipulation_xslt, svg_source, svg_result, None, manipulation_params)
 
+#####################
+# Traces for CodeLens
+#####################
+
+# Convert program source code into traces for the interactive
+# CodeLens tool in Runestone
+# Dependencies:  pg_logger.pty, pg_encoder.py, _js_var_finalizer()
+# See RunestoneComponents/runestone/codelens/visualizer.py (get_trace())
+
+def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
+    import os.path  # join()
+    import pg_logger # exec_script_str_local()
+
+    try:
+        import requests # post()
+    except ImportError:
+        global __module_warning
+        raise ImportError(__module_warning.format('requests'))
+
+    # Trace Server: language abbreviation goes in argument
+    url_string = 'http://tracer.runestone.academy:5000/trace{}'
+    server_time_out_string = "PTX:ERROR: the server at {} timed out while processing source {}.  No trace file produced"
+
+    _verbose('creating trace data from {} for placement in {}'.format(xml_source, dest_dir))
+    ptx_xsl_dir = get_ptx_xsl_path()
+    extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-codelens.xsl')
+    # support publisher file, subtree argument
+    if pub_file:
+        stringparams['publisher'] = pub_file
+    if xmlid_root:
+        stringparams['subtree'] = xmlid_root
+    # Build list of id's, languages, sources into a scratch directory/file
+    tmp_dir = get_temporary_directory()
+    code_filename = os.path.join(tmp_dir, 'codelens.txt')
+    _debug('Program sources for traces temporarily in {}'.format(code_filename))
+    xsltproc(extraction_xslt, xml_source, code_filename, None, stringparams)
+    # read lines, one-per-program
+    code_file = open(code_filename, 'r')
+    for program in code_file.readlines():
+        # three parts, always
+        program_triple = program.split(",", 2)
+        visible_id = program_triple[0]
+        language = program_triple[1]
+        url = url_string.format(language)
+        # instead use  .decode('string_escape')  somehow
+        # as part of reading the file?
+        source = program_triple[2].replace('\\n','\n')
+        _verbose('converting {} source {} to a trace...'.format(language, visible_id))
+
+        # success will replace this empty string
+        trace = ""
+        if (language == 'c') or (language == 'cpp'):
+            try:
+                r = requests.post(url, data=dict(src=source), timeout=30)
+                if r.status_code == 200:
+                    trace = r.text[r.text.find('{"code":') :]
+            except requests.ReadTimeout:
+                print(server_time_out_string.format(url, visible_id))
+        elif language == 'java':
+            try:
+                r = requests.post(url, data=dict(src=source), timeout=30)
+                if r.status_code == 200:
+                    trace = r.text
+            except requests.ReadTimeout:
+                print(server_time_out_string.format(url, visible_id))
+        elif language == 'python':
+            # local routines handle this case, no server involved
+            trace = pg_logger.exec_script_str_local(source, None, False, None, _js_var_finalizer)
+
+        # should now have a trace, except for timing out
+        # no trace, then do not even try to produce a file
+        if trace:
+            script_leadin_string = 'if (allTraceData === undefined) {{\n var allTraceData = {{}};\n }}\n allTraceData["{}"] = '
+            script_leadin = script_leadin_string.format(visible_id)
+            trace = script_leadin + trace
+            # print(program_triple[0], trace)
+            trace_file = os.path.join(dest_dir, '{}.js'.format(visible_id))
+            with open(trace_file, 'w') as f:
+                f.write(trace)
+
+# 2022-04-21:  "finalizer" routine from Runestone project
+#   Used with permission from Bradley Miller
+#   RunestoneComponents/blob/runestone/codelens/visualizer.py
+def _js_var_finalizer(input_code, output_trace):
+    import json
+
+    ret = dict(code=input_code, trace=output_trace)
+    json_output = json.dumps(ret, indent=None)
+    return json_output
+
 
 ################################
 #

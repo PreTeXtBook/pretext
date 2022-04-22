@@ -99,6 +99,7 @@ def get_destination_directory(directory, xml_source, pub_file, component):
                         'mom':'problems',
                         'preview':'preview',
                         'sageplot':'sageplot',
+                        'trace':'trace',
                         'youtube':'youtube',
                       }
     # if specified, check, sanitize, return absolute path
@@ -260,6 +261,7 @@ def get_cli_arguments():
         ('preview', 'Static preview images for interactives'),
         ('mom', 'MyOpenMath problem files, static versions'),
         ('math', 'Math elements for MathJax conversion (only)'),
+        ('trace', 'Program trace data for CodeLens'),
         ('all', 'Complete document (in various formats) (for pdf, method: [xelatex], pdflatex)'),
         ('tikz', 'tikz pictures (removed, use latex-image)'),
     ]
@@ -442,6 +444,8 @@ def main():
             ptx.mathjax_latex(xml_source, publication_file, out_file, dest_dir, args.format)
         else:
             raise NotImplementedError('cannot convert math elements to "{}" format'.format(args.format))
+    elif args.component == 'trace':
+            ptx.tracer(xml_source, publication_file, stringparams, args.xmlid, dest_dir)
     elif args.component == 'all':
         if args.format == 'html':
             ptx.html(xml_source, publication_file, stringparams, args.xmlid, 'html', extra_stylesheet, out_file, dest_dir)
