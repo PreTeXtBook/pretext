@@ -1658,10 +1658,10 @@
         You still need to tag everything that should get an index entry by hand,
         but then the index is produced automatically.
         For a simple index entry for the word <q>group</q>,
-        you just use <c>&lt;idx&gt;group&lt;idx&gt;</c>.
+        you just use <c>&lt;idx&gt;group&lt;/idx&gt;</c>.
         If you need an index entry involving subheadings,
         such as <q>normal</q> under <q>subgroup</q>,
-        use <c>&lt;idx&gt;&lt;h&gt;subgroup&lt;/h&gt;&lt;h&gt;normal&lt;/h&gt;&lt;idx&gt;</c>.
+        use <c>&lt;idx&gt;&lt;h&gt;subgroup&lt;/h&gt;&lt;h&gt;normal&lt;/h&gt;&lt;/idx&gt;</c>.
       </p>
 
       <p>
