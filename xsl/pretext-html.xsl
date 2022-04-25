@@ -7212,6 +7212,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- This an optional component of an author-hosted video, -->
 <!-- and the markup closely tracks the generated HTML.     -->
+<!-- The exception being our @listing; @label is taken.    -->
 <!-- The HTML @default attribute functions simply by being -->
 <!-- present, so we do not provide a value.                -->
 <xsl:template match="track">
@@ -7226,7 +7227,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:attribute name="default"/>
         </xsl:if>
         <xsl:attribute name="label">
-            <xsl:value-of select="@label"/>
+            <xsl:value-of select="@listing"/>
         </xsl:attribute>
         <xsl:attribute name="kind">
             <xsl:value-of select="@kind"/>
