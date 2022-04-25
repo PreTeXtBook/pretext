@@ -1131,7 +1131,7 @@
                 element ol {
                     PermanentID?,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
-                    attribute label {text}?,
+                    attribute marker {text}?,
                     element li {
                         (
                             (MetaDataTarget, TextParagraph)
@@ -1143,7 +1143,7 @@
                 element ul {
                     PermanentID?,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
-                    attribute label {"disc" | "circle" | "square" | ""}?,
+                    attribute marker {"disc" | "circle" | "square" | ""}?,
                     element li {
                         (
                             (MetaDataTarget, TextParagraph)
@@ -1723,7 +1723,7 @@
                     BlockStatement |
                     element ol {
                         attribute cols {text}?,
-                        attribute label {text}?,
+                        attribute marker {text}?,
                         element li {
                             MetaDataTarget,
                             (TextParagraph | BlockText+)
