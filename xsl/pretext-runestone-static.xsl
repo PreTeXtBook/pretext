@@ -89,7 +89,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
     <statement>
         <xsl:copy-of select="statement/node()"/>
-        <p><ol label="A."> <!-- conforms to RS markers -->
+        <p><ol marker="A."> <!-- conforms to RS markers -->
             <xsl:for-each select="choices/choice">
                 <li>
                     <xsl:copy-of select="statement/node()"/>
@@ -118,7 +118,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- feedback for each choice, in a list -->
     <xsl:text>&#xa;</xsl:text>
     <solution>
-        <p><ol label="A."> <!-- conforms to RS markers -->
+        <p><ol marker="A."> <!-- conforms to RS markers -->
             <xsl:for-each select="choices/choice">
                 <li>
                     <title>
@@ -163,7 +163,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <p>
             <xsl:element name="{$list-type}">
                 <xsl:if test="$list-type = 'ol'">
-                    <xsl:attribute name="label">
+                    <xsl:attribute name="marker">
                         <xsl:text>1.</xsl:text>
                     </xsl:attribute>
                 </xsl:if>
@@ -177,7 +177,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <!-- Order is as authored                    -->
                                 <xsl:element name="{$list-type}">
                                     <xsl:if test="$list-type = 'ol'">
-                                        <xsl:attribute name="label">
+                                        <xsl:attribute name="marker">
                                             <xsl:text>(a)</xsl:text>
                                         </xsl:attribute>
                                     </xsl:if>
