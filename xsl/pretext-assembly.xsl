@@ -645,6 +645,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- 2022-04-25 @label deprecated, slated for renewal in starring  -->
+<!-- role. Lists with markers (not description lists) -->
+<xsl:template match="ol/@label|ul/@label" mode="repair">
+    <xsl:attribute name="marker">
+        <xsl:value-of select="."/>
+    </xsl:attribute>
+</xsl:template>
+
+<!-- 2022-04-24 An exception, label on video tracks mimicing HTML -->
+<xsl:template match="video/track/@label" mode="repair">
+    <xsl:attribute name="listing">
+        <xsl:value-of select="."/>
+    </xsl:attribute>
+</xsl:template>
+
+
 <!-- ######### -->
 <!-- Languages -->
 <!-- ######### -->

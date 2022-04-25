@@ -10766,6 +10766,20 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'a Python &quot;program&quot; with the attribute &quot;@interactive&quot; set to &quot;pythontutor&quot; is deprecated, but we will attempt to honor your intent.  Change the attribute value to &quot;codelens&quot; instead, and be certain to manufacture trace data using allied PreTeXt tools'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2022-04-25  "label" (typically on a list) is deprecated for renewal -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//ul/@label|$document-root//ol/@label" />
+        <xsl:with-param name="date-string" select="'2022-04-25'" />
+        <xsl:with-param name="message" select="'a &quot;@label&quot; attribute (on a &quot;ul&quot; or &quot;ol&quot; element) has been deprecated and should be replaced by the functionally equivalent &quot;@marker&quot;.  We will attempt to honor your request'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-04-25  "label" (typically on a list) is deprecated for renewal -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//video/track/@label" />
+        <xsl:with-param name="date-string" select="'2022-04-25'" />
+        <xsl:with-param name="message" select="'a &quot;@label&quot; attribute (on a &quot;video/track&quot; element) has been deprecated and should be replaced by the functionally equivalent &quot;@listing&quot;.  We will attempt to honor your request'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
