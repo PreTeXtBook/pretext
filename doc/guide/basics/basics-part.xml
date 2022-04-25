@@ -343,15 +343,15 @@
     <xi:include href="ol.ptx"/>
 
     <p>
-        <idx><h sortby="label"><attr>label</attr></h><h sortby="of ol">of <tag>ol</tag></h></idx>
-      You can use the <attr>label</attr> attribute<fn>As illustrated here, an attribute is something that appears between the &lt; and &gt; of the opening tag. The convention in <init>XML</init> usage is to prefix an attribute name with <c>@</c> when referring to the attribute <em>outside</em> of the tag. You do not use the <c>@</c> in the tag itself.</fn> on the <tag>ol</tag> tag to change the default labeling.
+        <idx><h sortby="marker"><attr>marker</attr></h><h sortby="of ol">of <tag>ol</tag></h></idx>
+      You can use the <attr>marker</attr> attribute<fn>As illustrated here, an attribute is something that appears between the &lt; and &gt; of the opening tag. The convention in <init>XML</init> usage is to prefix an attribute name with <c>@</c> when referring to the attribute <em>outside</em> of the tag. You do not use the <c>@</c> in the tag itself.</fn> on the <tag>ol</tag> tag to change the default markers.
       For instance,
-      if the opening tag for the list above were <tag>ol label="A"</tag>,
-      then the list items would be labeled as A. and B. Sensible things to use with <attr>label</attr> are i, I, A, a, and 1.
+      if the opening tag for the list above were <tag>ol marker="A"</tag>,
+      then the list items would be marked as A. and B. Sensible things to use with <attr>marker</attr> are i, I, A, a, and 1.
       Nesting of lists is possible,
-      and there are sensible default labels.
+      and there are sensible default markers.
           <idx><h>list</h><h>numbering</h></idx>
-          <idx><h>list</h><h>labeling</h></idx>
+          <idx><h>list</h><h>marking</h></idx>
           <idx><h>numbering</h><h>list items</h></idx>
     </p>
 

@@ -1723,7 +1723,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <idx><h>list</h><h>label</h></idx>
 
         <introduction>
-            <p>A <term>list</term> is an unusual construction, even if everybody knows exactly what one is.  We view the list itself as a container of various chunks of text, while those chunks of text are the <term>list items</term>.  Each item has a <term>label</term> to identify it (which is quite different from how <latex/> uses the term <q>label</q>).</p>
+            <p>A <term>list</term> is an unusual construction, even if everybody knows exactly what one is.  We view the list itself as a container of various chunks of text, while those chunks of text are the <term>list items</term>.  Each item has a <term>marker</term> to identify it.</p>
 
             <p>Markup and processing is complicated by the possibility of a list item containing a list, resulting in <term>nested lists</term>.  We simplify this problem by <em>requiring</em> that a list appear within a paragraph (<tag>p</tag>), see <xref ref="topic-structure-in-paragraph"/>.  One of the three exceptions is the possibility to place a list into a block that earns a caption and a number, using the <tag>list</tag> element, see <xref ref="topic-named-list"/>.</p>
 
@@ -1733,29 +1733,29 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <subsection>
             <title>Ordered, Unordered, Description Lists</title>
 
-            <p>An <term>ordered list</term> has items with labels that are naturally ordered (usually numerically or alphabetically).  We borrow from <init>HTML</init>, and use the <tag>ol</tag> tag to construct an ordered list.  Some commentators suggest an ordered list should only be used when the order of the content is important.  So the steps in a recipe would belong in an ordered list, but the shopping list when you go to the store need not be an ordered list.</p>
+            <p>An <term>ordered list</term> has items with markers that are naturally ordered (usually numerically or alphabetically).  We borrow from <init>HTML</init>, and use the <tag>ol</tag> tag to construct an ordered list.  Some commentators suggest an ordered list should only be used when the order of the content is important.  So the steps in a recipe would belong in an ordered list, but the shopping list when you go to the store need not be an ordered list.</p>
 
-            <p>An <term>unordered list</term> has items with labels that have no inherent order and so are usually symbols like circles, disks, squares, <etc/>  We borrow from <init>HTML</init>, and use the <tag>ul</tag> tag to construct an unordered list.</p>
+            <p>An <term>unordered list</term> has items with markers that have no inherent order and so are usually symbols like circles, disks, squares, <etc/>  We borrow from <init>HTML</init>, and use the <tag>ul</tag> tag to construct an unordered list.</p>
 
-            <p>A <term>description</term> list has items that have <em>short</em> pieces of text as their labels.  We borrow from <init>HTML</init>, and use the <tag>dl</tag> tag to construct a description list.</p>
+            <p>A <term>description</term> list has items that have <em>short</em> pieces of text as their markers.  We borrow from <init>HTML</init>, and use the <tag>dl</tag> tag to construct a description list.</p>
 
             <p>Ordered lists are used as part of <tag>objectives</tag> (<xref provisional="topic-objectives" />) and exercises (<xref ref="topic-exercises-solutions" />).  Any of the three lists may occur inside the <tag>list</tag> element (below, <xref ref="topic-named-list" />).  Otherwise, a list must occur within a paragraph, <tag>p</tag>.  This means that to place a list within a list item of another list, the list item must contain a paragraph.</p>
         </subsection>
 
         <subsection>
-            <title>List Labels</title>
+            <title>List Markers</title>
 
-            <p>Do nothing, and your ordered and unordered lists will get sensible default labels.  They are consistent in the following sense.  If your list has two items, and each of the two items contains a list, then these two lists will use the same type of label.</p>
+            <p>Do nothing, and your ordered and unordered lists will get sensible default markers.  They are consistent in the following sense.  If your list has two items, and each of the two items contains a list, then these two lists will use the same type of marker.</p>
 
-            <p>For a description list, you author each label as part of each list item, as discussed below in the discussion of list items.</p>
+            <p>For a description list, you author each marker as part of each list item, as discussed below in the discussion of list items.</p>
 
-            <p>If you want to change how an ordered list is labeled, then you use the <attr>label</attr> attribute on the <tag>ol</tag>, whose value is a <term>format code</term>.  This string contains one of five codes (a single character), which may be surrounded by other characters, excluding the five codes.  For example <c>label="(A)"</c> will produce uppercase letters wrapped in parentheses:  (A), (B), (C), <ellipsis />.  The extra formatting works well in a conversion to <latex />, but is not possible technically in a conversion to <init>HTML</init>, so it should be considered decorative, and not relied upon for meaning.  The formatting does not carry through to the numbers of list items in cross-references.</p>
+            <p>If you want to change how an ordered list is marked, then you use the <attr>marker</attr> attribute on the <tag>ol</tag>, whose value is a <term>format code</term>.  This string contains one of five codes (a single character), which may be surrounded by other characters, excluding the five codes.  For example <c>marker="(A)"</c> will produce uppercase letters wrapped in parentheses:  (A), (B), (C), <ellipsis />.  The extra formatting works well in a conversion to <latex/>, but is not possible technically in a conversion to <init>HTML</init>, so it should be considered decorative, and not relied upon for meaning.  The formatting does not carry through to the numbers of list items in cross-references.</p>
 
-            <p>If you want to change how an unordered list is labeled, then you use the <attr>label</attr> attribute on the <tag>ul</tag>, whose value is a <term>format code</term>.  This string contains one of three codes in the table below.  Then every item of the list will have that symbol as its label.</p>
+            <p>If you want to change how an unordered list is marked, then you use the <attr>marker</attr> attribute on the <tag>ul</tag>, whose value is a <term>format code</term>.  This string contains one of three codes in the table below.  Then every item of the list will have that symbol as its marker.</p>
 
             <sidebyside>
                 <table>
-                    <title>Ordered List Labels</title>
+                    <title>Ordered List Markers</title>
                     <tabular>
                         <row><cell>Code</cell><cell>Realization</cell></row>
                         <row><cell>1</cell><cell>Arabic numerals</cell></row>
@@ -1767,7 +1767,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                     </tabular>
                 </table>
                 <table>
-                    <title>Unordered List Labels</title>
+                    <title>Unordered List Markers</title>
                     <tabular>
                         <row><cell>Code</cell><cell>Realization</cell></row>
                         <row><cell>disc</cell><cell>Filled small circle, aka a bullet</cell></row>
@@ -1777,11 +1777,11 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 </table>
             </sidebyside>
 
-            <p>Default label types are assigned to each level of nested lists in the order shown in the table, and cycle back to the top of the table if necessary, though zero-based Arabic numerals will be skipped for ordered lists.</p>
+            <p>Default marker types are assigned to each level of nested lists in the order shown in the table, and cycle back to the top of the table if necessary, though zero-based Arabic numerals will be skipped for ordered lists.</p>
 
-            <p>Start with the defaults, and experiment as needed.  See the examples below for some extreme (and unwise) customizations of labels.</p>
+            <p>Start with the defaults, and experiment as needed.  See the examples below for some extreme (and unwise) customizations of markers.</p>
 
-            <p>For a description list, possible labels are more varied than what you can express with an <init>XML</init> attribute.  So the list item must have a <tag>title</tag> element (see below).  This should be very short text, and may contain inline mathematics.  It is often rendered in bold, so be aware that some markup may get lost.  Perhaps for obvious reasons, do not include footnotes, cross-references, or display mathematics.  The <tag>dl</tag> element has a <attr>width</attr> attribute, with possible values <c>narrow</c>, <c>medium</c>, and <c>wide</c>.  The default is <c>narrow</c>.  This is a <em>hint</em> about how much text you have in these labels, and in certain presentations may make better use of horizontal space on a page.</p>
+            <p>For a description list, possible markers are more varied than what you can express within an attribute.  So the list item must have a <tag>title</tag> element (see below).  This should be very short text, and may contain inline mathematics.  It is often rendered in bold, so be aware that some markup may get lost.  Perhaps for obvious reasons, do not include footnotes, cross-references, or display mathematics.  The <tag>dl</tag> element has a <attr>width</attr> attribute, with possible values <c>narrow</c>, <c>medium</c>, and <c>wide</c>.  The default is <c>narrow</c>.  This is a <em>hint</em> about how much text you have in these markers, and in certain presentations may make better use of horizontal space on a page.</p>
         </subsection>
 
         <subsection>
@@ -1795,7 +1795,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>Other items may be interspersed among the paragraphs of a list item, such as a chunk of verbatim text delimited by a <tag>pre</tag> tag.  But anything with a number, such as a <tag>figure</tag> or <tag>remark</tag> is banned, in part because the consequences for numbering and organization become too complicated.  Imagine a remark, and a paragraph of the remark has a list.  Fine so far.  But if the items of that list can again contain remarks, the possibilities become endless.  You should be able to include non-textual items, like an <tag>image</tag>, and work is underway to improve this.  You can use a <tag>sidebyside</tag> in a structured list item, which can in turn hold an <tag>image</tag>, <tag>tabular</tag>, or similar.  But you cannot place items in such a <tag>sidebyside</tag> that are numbered, so a <tag>figure</tag> or <tag>table</tag> is not possible.  A general rule is no numbered components in a list item.  Computational components, such as <tag>sage</tag> are also banned from list items due to the difficulty of converting them into electronic computational notebooks with a relatively flat structure.</p>
 
-            <p>A list item of a description list must have a <tag>title</tag> element, to provide the text of the label.  Now that the list item has some structure, the remainder must also be structured, typically with some paragraphs, as discussed above.  In other words, the earlier option of employing an <tag>li</tag> element just like a <tag>p</tag> element is not available in a description list.  Further, given the complexity of presenting a description list, it can <em>only be a top-level list</em>.  It can contain the two other types nested within its list items.</p>
+            <p>A list item of a description list must have a <tag>title</tag> element, to provide the text of the marker.  Now that the list item has some structure, the remainder must also be structured, typically with some paragraphs, as discussed above.  In other words, the earlier option of employing an <tag>li</tag> element just like a <tag>p</tag> element is not available in a description list.  Further, given the complexity of presenting a description list, it can <em>only be a top-level list</em>.  It can contain the two other types nested within its list items.</p>
 
             <p>For ordered and unordered lists, you may optionally include a <tag>title</tag> when you have structured the <tag>li</tag>.  This will be rendered as a heading of sorts for the list item, though the only distinction might be a change to an italic or oblique font.  As an example, this might be a good way to author a Frequently Asked Questions (<init>FAQ</init>).</p>
 
@@ -1807,9 +1807,9 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>Note that a list is a container, so it cannot be the target of a cross-reference, and so the three types of lists cannot have an <attr>xml:id</attr> attribute.  But you may well be able to point at some other structure (<eg />, a <tag>remark</tag>) with a paragraph containing a list of interest.  If this seems overly restrictive, read below about named lists.</p>
 
-            <p>By contrast, a list item, <tag>li</tag>, is not a container, and does contain content.  Further, a list item of an ordered list has a label that is natural text for a cross-reference.  So in this situation, the list item can have an <attr>xml:id</attr> attribute.  But note that the <q>number</q> of a list item of an ordered list, which is nested inside a list item of an unordered list, is not defined, so a cross-reference by number can fail.</p>
+            <p>By contrast, a list item, <tag>li</tag>, is not a container, and does contain content.  Further, a list item of an ordered list has a marker that is natural text for a cross-reference.  So in this situation, the list item can have an <attr>xml:id</attr> attribute.  But note that the <q>number</q> of a list item of an ordered list, which is nested inside a list item of an unordered list, is not defined, so a cross-reference by number can fail.</p>
 
-            <p>The <q>number</q> of a list item, mostly for the purposes of a cross-reference, is the concatenation of all of the individual labels in the containing lists, outermost first.  For example, from the example lists below, the list item with content <q>Walleye</q> has number <xref ref="walleye" text="local" />.  These are indivisible, there is no way to get a component, excepting leading subsequences obtained by using an <attr>xml:id</attr> on a containing list item.  Note that the format codes never become part of the number.</p>
+            <p>The <q>number</q> of a list item, mostly for the purposes of a cross-reference, is the concatenation of all of the individual markers in the containing lists, outermost first.  For example, from the example lists below, the list item with content <q>Walleye</q> has number <xref ref="walleye" text="local" />.  These are indivisible, there is no way to get a component, excepting leading subsequences obtained by using an <attr>xml:id</attr> on a containing list item.  Note that the format codes never become part of the number.</p>
         </subsection>
 
         <subsection>
@@ -1839,10 +1839,10 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 <p>To illustrate this section, we offer three too-elaborate examples.  Take these as compact examples of what is possible, and not best practice in your writing.  We also use these to illustrate cross-references to list items, see <xref ref="topic-cross-reference-list-item" />.</p>
 
                 <p>We have a paragraph that begins with anonymous list of species that live in water (maybe partially), which necessarily is placed inside a paragraph.  The roman numerals purposely do not have any extra adornment in the <latex /> version (but may for <init>HTML</init> output).
-                <ol label="1)">
+                <ol marker="1)">
                     <li>
                         <p>Amphibians
-                            <ol label="a.">
+                            <ol marker="a.">
                                 <li>Frog</li>
                                 <li>Salamander</li>
                                 <li>Newt</li>
@@ -1852,7 +1852,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                     </li>
                     <li>
                         <p>Freshwater Sport Fish
-                            <ol label="I">
+                            <ol marker="I">
                                 <li xml:id="walleye">Walleye</li>
                                 <li>Bass</li>
                                 <li xml:id="anon-list-target">
@@ -1864,7 +1864,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                     </li>
                     <li>
                         <p>Saltwater Sport Fish
-                            <ol label="(A)">
+                            <ol marker="(A)">
                                 <li>Salmon</li>
                                 <li>Halibut</li>
                                 <li>Marlin</li>
@@ -1898,10 +1898,10 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
                 <list xml:id="named-list">
                     <title>A two-deep ordered list</title>
-                    <ol label="A:">
+                    <ol marker="A:">
                         <li>
                             <p>
-                                <ol label="i.">
+                                <ol marker="i.">
                                     <li>A and i</li>
                                     <li>A and ii</li>
                                 </ol>
@@ -1909,7 +1909,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                         </li>
                         <li>
                             <p>
-                                <ol label="(a)">
+                                <ol marker="(a)">
                                     <li>B and a</li>
                                     <li>B and b</li>
                                     <li xml:id="named-list-target">
@@ -1921,7 +1921,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                         </li>
                         <li>
                             <p>
-                                <ol label="&lt;I&gt;">
+                                <ol marker="&lt;I&gt;">
                                     <li>C and I</li>
                                     <li>C and II</li>
                                     <li>C and III</li>
