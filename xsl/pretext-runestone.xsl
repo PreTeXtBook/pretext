@@ -431,6 +431,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   - every Parsons problem "exercise"             -->
 <!--   - every matching problem "exercise"            -->
 <!--   - every clickable area problem "exercise"      -->
+<!--   - every "exercise" with fill-in blanks         -->
 <!--   - every "exercise" with additional "program"   -->
 <!--   - every "exercise" elected as "shortanswer"    -->
 <!--   - every PROJECT-LIKE with additional "program" -->
@@ -439,6 +440,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'parson') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]
                               |project[@exercise-interactive = 'coding']
@@ -897,6 +899,148 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates/>
     </span>
 </xsl:template>
+
+<!-- Fill-in-the-Blanks problem -->
+
+<!-- Runestone structure -->
+<xsl:template match="exercise[@exercise-interactive = 'fillin-basic']" mode="runestone-to-interactive">
+    <div class="runestone">
+        <!-- dropped "visibility: hidden" on next div -->
+        <div data-component="fillintheblank" data-question_label="">
+            <xsl:attribute name="id">
+                <xsl:apply-templates select="." mode="html-id"/>
+            </xsl:attribute>
+            <xsl:apply-templates select="statement"/>
+            <script type="application/json">
+                <xsl:apply-templates select="setup" mode="json-conditions"/>
+            </script>
+        </div>
+    </div>
+</xsl:template>
+
+<!-- simple substitution in output -->
+<xsl:template match="exercise/statement//var">
+    <!-- NB: this code is used in formulating static representations -->
+    <!-- count location of (context) "var" in problem statement      -->
+    <xsl:variable name="location">
+        <xsl:number from="statement"/>
+    </xsl:variable>
+    <!-- locate corresponding "var" in "setup" -->
+    <xsl:variable name="setup-var" select="ancestor::exercise/setup/var[position() = $location]"/>
+
+    <!-- Know can tell what sort of data goes into the form entry -->
+    <xsl:variable name="placeholder-hint">
+        <xsl:choose>
+            <xsl:when test="$setup-var/condition[1]/@number">
+                <xsl:text>Number</xsl:text>
+            </xsl:when>
+            <xsl:when test="$setup-var/condition[1]/@string">
+                <xsl:text>Text</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- the actual form fill-in, with hint -->
+    <input type="text" placeholder="{$placeholder-hint}"/>
+</xsl:template>
+
+<!-- JSON list-of-list structure -->
+<xsl:template match="exercise/setup"  mode="json-conditions">
+    <!-- outermost list begin -->
+    <xsl:text>[</xsl:text>
+    <xsl:for-each select="var">
+        <!-- per-var list begin -->
+        <xsl:text>[</xsl:text>
+        <xsl:for-each select="condition">
+            <!-- where the real content originates -->
+            <xsl:apply-templates select="." mode="condition-to-json"/>
+            <!-- separate dictionaries for conditions -->
+            <xsl:if test="following-sibling::condition">
+                <xsl:text>, </xsl:text>
+            </xsl:if>
+        </xsl:for-each>
+        <!-- per-var list end -->
+        <xsl:text>]</xsl:text>
+        <!-- separate vars -->
+        <xsl:if test="following-sibling::var">
+            <xsl:text>, </xsl:text>
+        </xsl:if>
+    </xsl:for-each>
+    <!-- outermost list end -->
+    <xsl:text>]</xsl:text>
+</xsl:template>
+
+<!-- JSON dictionary for numerical condition -->
+<xsl:template match="setup/var/condition[@number]" mode="condition-to-json">
+    <!-- per-condition dictionary begin -->
+    <xsl:text>{</xsl:text>
+    <xsl:text>"number": [</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@tolerance">
+            <xsl:value-of select="@number - @tolerance"/>
+            <xsl:text>,</xsl:text>
+            <xsl:value-of select="@number + @tolerance"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="@number"/>
+            <xsl:text>, </xsl:text>
+            <xsl:value-of select="@number"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>]</xsl:text>
+    <xsl:if test="feedback">
+        <xsl:text>, "feedback": "</xsl:text>
+        <xsl:apply-templates select="feedback" mode="serialize-feedback"/>
+        <xsl:text>"</xsl:text>
+    </xsl:if>
+    <!-- per-condition dictionary end -->
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- JSON dictionary for string condition -->
+<xsl:template match="setup/var/condition[@string]" mode="condition-to-json">
+    <!-- per-condition dictionary begin -->
+    <xsl:text>{</xsl:text>
+    <!-- regex string match, drop    -->
+    <!-- leading/trailing whitespace -->
+    <xsl:text>"regex": "</xsl:text>
+    <!-- JSON escapes necessary for regular expression -->
+    <xsl:call-template name="escape-json-string">
+        <xsl:with-param name="text">
+            <xsl:text>^\s*</xsl:text>
+            <xsl:value-of select="@string"/>
+            <xsl:text>\s*$</xsl:text>
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>"</xsl:text>
+    <!-- flag for case-sensitive match -->
+    <!-- default:  'sensitive'         -->
+    <xsl:text>, "regexFlags": "</xsl:text>
+    <xsl:if test="parent::var/@case = 'insensitive'">
+        <xsl:text>i</xsl:text>
+    </xsl:if>
+    <xsl:text>"</xsl:text>
+    <!-- optional feedback -->
+    <xsl:if test="feedback">
+        <xsl:text>, "feedback": "</xsl:text>
+        <xsl:apply-templates select="feedback" mode="serialize-feedback"/>
+        <xsl:text>"</xsl:text>
+    </xsl:if>
+    <!-- per-condition dictionary end -->
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<xsl:template match="setup/var/condition/feedback" mode="serialize-feedback">
+    <xsl:variable name="feedback-rtf">
+        <xsl:apply-templates select="."/>
+    </xsl:variable>
+    <!-- serialize HTML as text, then escape as JSON -->
+    <xsl:call-template name="escape-json-string">
+        <xsl:with-param name="text">
+            <xsl:apply-templates select="exsl:node-set($feedback-rtf)" mode="serialize"/>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
 
 <!-- Short Answer problem -->
 
