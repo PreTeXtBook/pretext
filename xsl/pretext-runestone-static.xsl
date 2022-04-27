@@ -625,6 +625,69 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </delete>
 </xsl:template>
 
+<!-- Fill-In the Blanks (Basic) -->
+
+<xsl:template match="exercise[@exercise-interactive = 'fillin-basic']" mode="runestone-to-static">
+    <!-- reproduce statement identically, but replace var w/ fillin -->
+    <xsl:apply-templates select="statement" mode="fillin-statement"/>
+    <xsl:apply-templates select="statement" mode="fillin-solution"/>
+
+</xsl:template>
+
+<!-- Fillin Statement -->
+<xsl:template match="node()|@*" mode="fillin-statement">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="fillin-statement"/>
+    </xsl:copy>
+</xsl:template>
+
+<xsl:template match="var" mode="fillin-statement">
+    <fillin characters="5"/>
+</xsl:template>
+
+<!-- Fillin complete solution -->
+
+<xsl:template match="node()|@*" mode="fillin-solution">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="fillin-solution"/>
+    </xsl:copy>
+</xsl:template>
+
+<xsl:template match="statement" mode="fillin-solution">
+    <solution>
+        <xsl:apply-templates select="node()|@*" mode="fillin-solution"/>
+        <!-- xerox feedback for correct response on each var -->
+        <xsl:for-each select="ancestor::exercise/setup/var/condition[1]/feedback">
+            <xsl:apply-templates select="node()" mode="fillin-solution"/>
+        </xsl:for-each>
+    </solution>
+</xsl:template>
+
+<xsl:template match="var" mode="fillin-solution">
+    <!-- NB: this code is used in formulating HTML representations -->
+    <!-- count location of (context) "var" in problem statement    -->
+    <xsl:variable name="location">
+        <xsl:number from="statement"/>
+    </xsl:variable>
+    <!-- locate corresponding "var" in "setup" -->
+    <xsl:variable name="setup-var" select="ancestor::exercise/setup/var[position() = $location]"/>
+
+    <!-- Know can tell what the correct answer is, from first "condition"-->
+    <fillin characters="1"/>
+    <xsl:choose>
+        <xsl:when test="$setup-var/condition[1]/@number">
+            <m>
+                <xsl:value-of select="$setup-var/condition[1]/@number"/>
+            </m>
+        </xsl:when>
+        <xsl:when test="$setup-var/condition[1]/@string">
+            <xsl:value-of select="$setup-var/condition[1]/@string"/>
+        </xsl:when>
+    </xsl:choose>
+    <fillin characters="1"/>
+</xsl:template>
+
+
 <!-- Active Code -->
 
 <xsl:template match="exercise[@exercise-interactive = 'coding']|project[@exercise-interactive = 'coding']|activity[@exercise-interactive = 'coding']|exploration[@exercise-interactive = 'coding']|investigation[@exercise-interactive = 'coding']" mode="runestone-to-static">
