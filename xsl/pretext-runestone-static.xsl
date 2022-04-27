@@ -89,7 +89,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
     <statement>
         <xsl:copy-of select="statement/node()"/>
-        <p><ol label="A."> <!-- conforms to RS markers -->
+        <p><ol marker="A."> <!-- conforms to RS markers -->
             <xsl:for-each select="choices/choice">
                 <li>
                     <xsl:copy-of select="statement/node()"/>
@@ -118,7 +118,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- feedback for each choice, in a list -->
     <xsl:text>&#xa;</xsl:text>
     <solution>
-        <p><ol label="A."> <!-- conforms to RS markers -->
+        <p><ol marker="A."> <!-- conforms to RS markers -->
             <xsl:for-each select="choices/choice">
                 <li>
                     <title>
@@ -163,7 +163,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <p>
             <xsl:element name="{$list-type}">
                 <xsl:if test="$list-type = 'ol'">
-                    <xsl:attribute name="label">
+                    <xsl:attribute name="marker">
                         <xsl:text>1.</xsl:text>
                     </xsl:attribute>
                 </xsl:if>
@@ -177,7 +177,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <!-- Order is as authored                    -->
                                 <xsl:element name="{$list-type}">
                                     <xsl:if test="$list-type = 'ol'">
-                                        <xsl:attribute name="label">
+                                        <xsl:attribute name="marker">
                                             <xsl:text>(a)</xsl:text>
                                         </xsl:attribute>
                                     </xsl:if>
@@ -624,6 +624,69 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="node()" mode="solution-areas"/>
     </delete>
 </xsl:template>
+
+<!-- Fill-In the Blanks (Basic) -->
+
+<xsl:template match="exercise[@exercise-interactive = 'fillin-basic']" mode="runestone-to-static">
+    <!-- reproduce statement identically, but replace var w/ fillin -->
+    <xsl:apply-templates select="statement" mode="fillin-statement"/>
+    <xsl:apply-templates select="statement" mode="fillin-solution"/>
+
+</xsl:template>
+
+<!-- Fillin Statement -->
+<xsl:template match="node()|@*" mode="fillin-statement">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="fillin-statement"/>
+    </xsl:copy>
+</xsl:template>
+
+<xsl:template match="var" mode="fillin-statement">
+    <fillin characters="5"/>
+</xsl:template>
+
+<!-- Fillin complete solution -->
+
+<xsl:template match="node()|@*" mode="fillin-solution">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="fillin-solution"/>
+    </xsl:copy>
+</xsl:template>
+
+<xsl:template match="statement" mode="fillin-solution">
+    <solution>
+        <xsl:apply-templates select="node()|@*" mode="fillin-solution"/>
+        <!-- xerox feedback for correct response on each var -->
+        <xsl:for-each select="ancestor::exercise/setup/var/condition[1]/feedback">
+            <xsl:apply-templates select="node()" mode="fillin-solution"/>
+        </xsl:for-each>
+    </solution>
+</xsl:template>
+
+<xsl:template match="var" mode="fillin-solution">
+    <!-- NB: this code is used in formulating HTML representations -->
+    <!-- count location of (context) "var" in problem statement    -->
+    <xsl:variable name="location">
+        <xsl:number from="statement"/>
+    </xsl:variable>
+    <!-- locate corresponding "var" in "setup" -->
+    <xsl:variable name="setup-var" select="ancestor::exercise/setup/var[position() = $location]"/>
+
+    <!-- Know can tell what the correct answer is, from first "condition"-->
+    <fillin characters="1"/>
+    <xsl:choose>
+        <xsl:when test="$setup-var/condition[1]/@number">
+            <m>
+                <xsl:value-of select="$setup-var/condition[1]/@number"/>
+            </m>
+        </xsl:when>
+        <xsl:when test="$setup-var/condition[1]/@string">
+            <xsl:value-of select="$setup-var/condition[1]/@string"/>
+        </xsl:when>
+    </xsl:choose>
+    <fillin characters="1"/>
+</xsl:template>
+
 
 <!-- Active Code -->
 

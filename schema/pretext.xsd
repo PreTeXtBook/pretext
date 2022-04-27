@@ -1166,7 +1166,7 @@
       <xs:attribute name="interactive">
         <xs:simpleType>
           <xs:restriction base="xs:token">
-            <xs:enumeration value="pythontutor"/>
+            <xs:enumeration value="codelens"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
@@ -1207,7 +1207,7 @@
               </xs:restriction>
             </xs:simpleType>
           </xs:attribute>
-          <xs:attribute name="label"/>
+          <xs:attribute name="marker"/>
         </xs:complexType>
       </xs:element>
       <xs:element ref="ul"/>
@@ -1247,7 +1247,7 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="label">
+      <xs:attribute name="marker">
         <xs:simpleType>
           <xs:restriction base="xs:token">
             <xs:enumeration value="disc"/>
@@ -2035,7 +2035,7 @@
               </xs:element>
             </xs:sequence>
             <xs:attribute name="cols"/>
-            <xs:attribute name="label"/>
+            <xs:attribute name="marker"/>
           </xs:complexType>
         </xs:element>
       </xs:choice>

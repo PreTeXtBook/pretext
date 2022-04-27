@@ -5747,18 +5747,18 @@ Book (with parts), "section" at level 3
 <!-- lower-case Roman numeral, upper-case Latin            -->
 <xsl:template match="ol" mode="format-code">
     <xsl:choose>
-        <xsl:when test="@label">
+        <xsl:when test="@marker">
             <xsl:choose>
-                <xsl:when test="contains(@label,'0')">0</xsl:when>
-                <xsl:when test="contains(@label,'1')">1</xsl:when>
-                <xsl:when test="contains(@label,'a')">a</xsl:when>
-                <xsl:when test="contains(@label,'A')">A</xsl:when>
-                <xsl:when test="contains(@label,'i')">i</xsl:when>
-                <xsl:when test="contains(@label,'I')">I</xsl:when>
+                <xsl:when test="contains(@marker,'0')">0</xsl:when>
+                <xsl:when test="contains(@marker,'1')">1</xsl:when>
+                <xsl:when test="contains(@marker,'a')">a</xsl:when>
+                <xsl:when test="contains(@marker,'A')">A</xsl:when>
+                <xsl:when test="contains(@marker,'i')">i</xsl:when>
+                <xsl:when test="contains(@marker,'I')">I</xsl:when>
                 <!-- DEPRECATED 2015-12-12 -->
-                <xsl:when test="@label=''" />
+                <xsl:when test="@marker=''" />
                 <xsl:otherwise>
-                    <xsl:message>PTX:ERROR: ordered list label (<xsl:value-of select="@label" />) not recognized</xsl:message>
+                    <xsl:message>MBX:ERROR: ordered list label (<xsl:value-of select="@marker" />) not recognized</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
@@ -5786,14 +5786,14 @@ Book (with parts), "section" at level 3
 <!-- Default order: disc, circle, square, disc             -->
 <xsl:template match="ul" mode="format-code">
     <xsl:choose>
-        <xsl:when test="@label">
+        <xsl:when test="@marker">
             <xsl:choose>
-                <xsl:when test="@label='disc'">disc</xsl:when>
-                <xsl:when test="@label='circle'">circle</xsl:when>
-                <xsl:when test="@label='square'">square</xsl:when>
-                <xsl:when test="@label=''">none</xsl:when>
+                <xsl:when test="@marker='disc'">disc</xsl:when>
+                <xsl:when test="@marker='circle'">circle</xsl:when>
+                <xsl:when test="@marker='square'">square</xsl:when>
+                <xsl:when test="@marker=''">none</xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:ERROR: unordered list label (<xsl:value-of select="@label" />) not recognized</xsl:message>
+                    <xsl:message>ptx:ERROR: unordered list label (<xsl:value-of select="@marker" />) not recognized</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
@@ -10757,6 +10757,27 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2022-10-31'" />
         <xsl:with-param name="message" select="'the  project.solution  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($project.solution != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-04-22  Python Tutor via @interactive="pythontutor" replaced by Runestone CodeLens-->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//program[@interactive = 'pythontutor']" />
+        <xsl:with-param name="date-string" select="'2022-04-22'" />
+        <xsl:with-param name="message" select="'a Python &quot;program&quot; with the attribute &quot;@interactive&quot; set to &quot;pythontutor&quot; is deprecated, but we will attempt to honor your intent.  Change the attribute value to &quot;codelens&quot; instead, and be certain to manufacture trace data using allied PreTeXt tools'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-04-25  "label" (typically on a list) is deprecated for renewal -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//ul/@label|$document-root//ol/@label" />
+        <xsl:with-param name="date-string" select="'2022-04-25'" />
+        <xsl:with-param name="message" select="'a &quot;@label&quot; attribute (on a &quot;ul&quot; or &quot;ol&quot; element) has been deprecated and should be replaced by the functionally equivalent &quot;@marker&quot;.  We will attempt to honor your request'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-04-25  "label" (typically on a list) is deprecated for renewal -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//video/track/@label" />
+        <xsl:with-param name="date-string" select="'2022-04-25'" />
+        <xsl:with-param name="message" select="'a &quot;@label&quot; attribute (on a &quot;video/track&quot; element) has been deprecated and should be replaced by the functionally equivalent &quot;@listing&quot;.  We will attempt to honor your request'"/>
     </xsl:call-template>
     <!--  -->
 </xsl:template>

@@ -1590,13 +1590,13 @@ the xsltproc executable.
 
             <p>Because of the Fundamental Theorem<fn>First test footnote</fn>, for every derivative we know, there is an antiderivative we might find useful.  Because of the Fundamental Theorem of Calculus<fn>Second test footnote</fn>, we recycle the <q><m>\int</m></q> symbol as notation for an antiderivative.<ul cols="2">
                 <li>
-                    <p>Derivatives<ol label="(a)">
+                    <p>Derivatives<ol marker="(a)">
                         <li><m>\frac{d}{dx}x^n = nx^{n-1}</m></li>
                         <li><m>\frac{d}{dx}e^x = e^x</m></li>
                         <li><m>\frac{d}{dx}\cos(x) = -\sin(x)</m></li>
                     </ol></p>
                 </li>
-                <li><p>Antiderivatives<ol label="i)">
+                <li><p>Antiderivatives<ol marker="i)">
                         <li><m>\indefiniteintegral{x^n}{x} = \displaystyle\frac{x^{n-1}}{n+1}\text{ if }n\neq -1</m></li>
                         <li><m>\indefiniteintegral{e^x}{x} = e^x</m></li>
                         <li><m>\indefiniteintegral{\sin(x)}{x} = -\cos(x)</m></li>
@@ -4387,11 +4387,11 @@ the xsltproc executable.
                     <li><p>Level 1, third.</p></li>
                 </ol></p>
 
-                <p>Now, nested lists with the defaults replaced by custom choices.  First, an ordered list, three deep, upper Roman numerals, then upper-case Latin, then more traditional Arabic numerals on the three elements of the third level.  Note the adornments of the labels will be rendered in LaTeX, but not in HTML.<ol label="*I*">
+                <p>Now, nested lists with the defaults replaced by custom choices.  First, an ordered list, three deep, upper Roman numerals, then upper-case Latin, then more traditional Arabic numerals on the three elements of the third level.  Note the adornments of the labels will be rendered in LaTeX, but not in HTML.<ol marker="*I*">
                     <li><p>Level 1, first.</p></li>
-                    <li><p>Level 1, second.<ol label="++A">
+                    <li><p>Level 1, second.<ol marker="++A">
                             <li><p>Level 2, first.</p></li>
-                            <li><p>Level 2, second.<ol label="1)">
+                            <li><p>Level 2, second.<ol marker="1)">
                                     <li><p>Level 3, first.</p></li>
                                     <li><p>Level 3, second.</p></li>
                                     <li><p>Level 3, third.</p></li>
@@ -4403,9 +4403,9 @@ the xsltproc executable.
                     <li><p>Level 1, third.</p></li>
                 </ol></p>
 
-                <p>A nested unordered list, with labels given as squares on the outer list and nothing (blank) on the inner lists.<ul label="square">
+                <p>A nested unordered list, with labels given as squares on the outer list and nothing (blank) on the inner lists.<ul marker="square">
                     <li><p>Level 1, first.</p></li>
-                    <li><p>Level 1, second.<ul label="">
+                    <li><p>Level 1, second.<ul marker="">
                             <li><p>Level 2, first.</p></li>
                             <li><p>Level 2, second.</p></li>
                         </ul></p>
@@ -4415,7 +4415,7 @@ the xsltproc executable.
 
                 <p>A nested ordered list, to test intramural cross-references.<ol>
                     <li><p>Level 1, first.</p></li>
-                    <li xml:id="list-item-second"><p>Level 1, second.<ul label="">
+                    <li xml:id="list-item-second"><p>Level 1, second.<ul marker="">
                             <li><p>Level 2, first.</p></li>
                             <li><p>Level 2, second.</p></li>
                         </ul></p>
@@ -4424,10 +4424,10 @@ the xsltproc executable.
                     <li><p>Level 1, fourth.  Whose number should not change when the knowl just prior is opened.</p></li>
                 </ol></p>
 
-                <p>An ordered list may begin at zero by using a numeral zero in the <attr>label</attr> attribute, instead of numeral one.<ol label="(0)">
+                <p>An ordered list may begin at zero by using a numeral zero in the <attr>label</attr> attribute, instead of numeral one.<ol marker="(0)">
                     <li>First</li>
                     <li>
-                        <p>Second<ol label="-0-">
+                        <p>Second<ol marker="-0-">
                             <li>Uno</li>
                             <li>Dos</li>
                             <li>Tres</li>
@@ -4443,7 +4443,7 @@ the xsltproc executable.
                     <title>Group</title>
                     <idx>Group</idx>
                     <statement>
-                        <p><idx><h>group</h><h>definition</h></idx><idx><h>paragraph</h><h>initial list</h></idx><ol label="a)">
+                        <p><idx><h>group</h><h>definition</h></idx><idx><h>paragraph</h><h>initial list</h></idx><ol marker="a)">
                             <li>There is a binary operation, denoted <q><m>\cdot</m></q>.</li>
                             <li>The operation is associative.</li>
                             <li>There is an identity element, <m>e</m>.</li>
@@ -4464,7 +4464,7 @@ the xsltproc executable.
             <subsection>
                 <title>List Spacing, I</title>
 
-                <p>This is a short list that ends a subsection, so can be used to address the necessary spacing.  We also test two XML elements separated by a space (which should not go missing).<ol cols="2" label="(a)">
+                <p>This is a short list that ends a subsection, so can be used to address the necessary spacing.  We also test two XML elements separated by a space (which should not go missing).<ol cols="2" marker="(a)">
                     <li>One item.</li>
                     <li><em>Two</em> <alert>ducks</alert>.</li>
                     <li>Three items.  Plus a few more words to check that long entries in a two column list look good.</li>
@@ -4898,10 +4898,10 @@ the xsltproc executable.
                     <introduction>
                         <p>This is the introduction to this named list, which references an item within, via the hybrid <attr>text</attr> attribute:  <xref ref="target-item" text="type-hybrid" />.  At one time this paragraph was inadvertently centered<mdash/>that bug has been fixed.</p>
                     </introduction>
-                    <ol label="A">
+                    <ol marker="A">
                         <li>
                             <p>
-                                <ol label="i">
+                                <ol marker="i">
                                     <li>A and i</li>
                                     <li>A and ii</li>
                                     <li>A and iii</li>
@@ -4910,7 +4910,7 @@ the xsltproc executable.
                         </li>
                         <li>
                             <p>
-                                <ol label="a">
+                                <ol marker="a">
                                     <li>B and a</li>
                                     <li>B and b</li>
                                     <li xml:id="target-item">B and c (target of some cross-references)</li>
@@ -4919,14 +4919,14 @@ the xsltproc executable.
                         </li>
                         <li>
                             <p>
-                                <ul label="disc">
+                                <ul marker="disc">
                                     <li>The next three cross-references point to a list item, just above.  It is interesting because the list is named, hence numbered.  The global reference uses the full number, while the local reference uses the number from within the list.  The hybrid reference recognizes that the target is within the same named list, so the number can be shorter.  An identical hybrid cross-reference appears within the <tag>introduction</tag> to this list, an immediately following, but outside the <tag>list</tag>.</li>
                                     <li>Cross-reference within named list (<c>global</c>): <xref ref="target-item" text="type-global" /></li>
                                     <li>Cross-reference within named list (<c>hybrid</c>): <xref ref="target-item" text="type-hybrid" /></li>
                                     <li>Cross-reference within named list (<c>local</c>): <xref ref="target-item" text="type-local" /></li>
                                     <li>
                                         <p>
-                                            <ol label="1">
+                                            <ol marker="1">
                                                 <li>C and bullet and 1</li>
                                                 <li xml:id="target-no-number">C and bullet and 2</li>
                                                 <li>C and bullet and 3</li>
@@ -4954,10 +4954,10 @@ the xsltproc executable.
                     </li>
                 </dl>That's all!</p>
 
-                <p>A one item list, whose item is a paragraph with two contained ordered lists, separated by text.<ul label="square">
-                    <li><p>Introductory text.<ol label="A">
+                <p>A one item list, whose item is a paragraph with two contained ordered lists, separated by text.<ul marker="square">
+                    <li><p>Introductory text.<ol marker="A">
                         <li>First item, first list.</li>
-                    </ol>Intermediate text.<ol label="a">
+                    </ol>Intermediate text.<ol marker="a">
                         <li>First item, second list.</li>
                     </ol>Concluding text.</p></li>
                 </ul></p>
@@ -6920,15 +6920,15 @@ the xsltproc executable.
                 <figure>
                     <caption>Big Buck Bunny with subtitles adapted from <url href="https://sites.google.com/site/chrisfoo/subtitles" visual="https://sites.google.com/site/chrisfoo/subtitles"/></caption>
                     <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="preview/big-buck-bunny-frame-one.jpg">
-                        <track kind="subtitles" label="US English" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt"/>
+                        <track kind="subtitles" listing="US English" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt"/>
                     </video>
                 </figure>
 
                 <p>This video is identical to the previous one, except it tests the use of a default <tag>track</tag>.  The <attr>default</attr> attribute on <tag>track</tag> can be set to the value <c>yes</c> to make one set of captions the default (and only one!).  Test is a bit lame, the two <tag>track</tag> use the same file, but just have different labels for the player's menu.  Track named <c>US English Two</c> will show as in-use at start-up.</p>
 
                 <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="preview/big-buck-bunny-frame-one.jpg">
-                    <track kind="subtitles" label="US English One" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt"/>
-                    <track kind="subtitles" label="US English Two" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt" default="yes"/>
+                    <track kind="subtitles" listing="US English One" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt"/>
+                    <track kind="subtitles" listing="US English Two" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt" default="yes"/>
                 </video>
 
             </subsection>
@@ -7509,7 +7509,7 @@ the xsltproc executable.
                         <li>Input: <c>n</c></li>
                         <li>Form the list of all integers from <c>2</c> to <c>n</c></li>
                         <li>Set <c>p = 2</c></li>
-                        <li><p>While <c>p &lt; sqrt(n)</c><ol label="1.">
+                        <li><p>While <c>p &lt; sqrt(n)</c><ol marker="1.">
                                 <li>If present, remove from the list multiples <c>2p, 3p, ...</c></li>
                                 <li>If <c>p</c> is now the last element of the list, stop</li>
                                 <li>Otherwise, set <c>p</c> to the element of the list immediately after current <c>p</c></li>

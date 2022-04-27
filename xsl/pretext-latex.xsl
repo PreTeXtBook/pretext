@@ -6976,43 +6976,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Good match between basic HTML types and basic LaTeX types -->
 
-<!-- Utility templates to translate PTX @label specification -->
-<!-- for use with LaTeX enumitem package's label keyword     -->
+<!-- Utility templates to translate @marker specification -->
+<!-- for use with LaTeX enumitem package's label keyword  -->
 <xsl:template match="ol" mode="latex-list-label">
-    <xsl:variable name="mbx-format-code">
+    <xsl:variable name="format-code">
         <xsl:apply-templates select="." mode="format-code" />
     </xsl:variable>
     <!-- deconstruct the left and right adornments of the label   -->
     <!-- or provide the default adornments, consistent with LaTeX -->
     <!-- in the middle, translate PTX codes for enumitem package  -->
     <xsl:choose>
-        <xsl:when test="@label">
-            <xsl:value-of select="substring-before(@label, $mbx-format-code)" />
+        <xsl:when test="@marker">
+            <xsl:value-of select="substring-before(@marker, $format-code)" />
         </xsl:when>
-        <xsl:when test="$mbx-format-code='a'">
+        <xsl:when test="$format-code='a'">
             <xsl:text>(</xsl:text>
         </xsl:when>
         <xsl:otherwise />
     </xsl:choose>
     <xsl:choose>
-        <xsl:when test="$mbx-format-code = '0'">\arabic*</xsl:when>
-        <xsl:when test="$mbx-format-code = '1'">\arabic*</xsl:when>
-        <xsl:when test="$mbx-format-code = 'a'">\alph*</xsl:when>
-        <xsl:when test="$mbx-format-code = 'A'">\Alph*</xsl:when>
-        <xsl:when test="$mbx-format-code = 'i'">\roman*</xsl:when>
-        <xsl:when test="$mbx-format-code = 'I'">\Roman*</xsl:when>
+        <xsl:when test="$format-code = '0'">\arabic*</xsl:when>
+        <xsl:when test="$format-code = '1'">\arabic*</xsl:when>
+        <xsl:when test="$format-code = 'a'">\alph*</xsl:when>
+        <xsl:when test="$format-code = 'A'">\Alph*</xsl:when>
+        <xsl:when test="$format-code = 'i'">\roman*</xsl:when>
+        <xsl:when test="$format-code = 'I'">\Roman*</xsl:when>
         <xsl:otherwise>
             <xsl:message>PTX:BUG: bad ordered list label format code in LaTeX conversion</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:choose>
-        <xsl:when test="@label">
-            <xsl:value-of select="substring-after(@label, $mbx-format-code)" />
+        <xsl:when test="@marker">
+            <xsl:value-of select="substring-after(@marker, $format-code)" />
         </xsl:when>
-        <xsl:when test="$mbx-format-code='a'">
+        <xsl:when test="$format-code='a'">
             <xsl:text>)</xsl:text>
         </xsl:when>
-        <xsl:when test="($mbx-format-code='a') or ($mbx-format-code='i') or ($mbx-format-code='A')">
+        <xsl:when test="($format-code='a') or ($format-code='i') or ($format-code='A')">
             <xsl:text>.</xsl:text>
         </xsl:when>
         <xsl:otherwise />
@@ -7020,14 +7020,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="ul" mode="latex-list-label">
-    <xsl:variable name="mbx-format-code">
+    <xsl:variable name="format-code">
         <xsl:apply-templates select="." mode="format-code" />
     </xsl:variable>
    <xsl:choose>
-        <xsl:when test="$mbx-format-code = 'disc'">\textbullet</xsl:when>
-        <xsl:when test="$mbx-format-code = 'circle'">$\circ$</xsl:when>
-        <xsl:when test="$mbx-format-code = 'square'">$\blacksquare$</xsl:when>
-        <xsl:when test="$mbx-format-code = 'none'"></xsl:when>
+        <xsl:when test="$format-code = 'disc'">\textbullet</xsl:when>
+        <xsl:when test="$format-code = 'circle'">$\circ$</xsl:when>
+        <xsl:when test="$format-code = 'square'">$\blacksquare$</xsl:when>
+        <xsl:when test="$format-code = 'none'"></xsl:when>
         <xsl:otherwise>
             <xsl:message>PTX:BUG: bad unordered list label format code in LaTeX conversion</xsl:message>
         </xsl:otherwise>
@@ -7063,7 +7063,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="ol">
     <!-- need to switch on 0-1 for ol Arabic -->
     <!-- no harm if called on "ul"           -->
-    <xsl:variable name="mbx-format-code">
+    <xsl:variable name="format-code">
         <xsl:apply-templates select="." mode="format-code" />
     </xsl:variable>
     <!-- Determine the number of columns -->
@@ -7086,10 +7086,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>\begin{enumerate}</xsl:text>
     <!-- override LaTeX defaults as indicated -->
-    <xsl:if test="@label or ($mbx-format-code = '0') or ancestor::exercises or ancestor::worksheet or ancestor::reading-questions or ancestor::references">
+    <xsl:if test="@marker or ($format-code = '0') or ancestor::exercises or ancestor::worksheet or ancestor::reading-questions or ancestor::references">
         <xsl:text>[label=</xsl:text>
         <xsl:apply-templates select="." mode="latex-list-label" />
-        <xsl:if test="$mbx-format-code = '0'">
+        <xsl:if test="$format-code = '0'">
             <xsl:text>, start=0</xsl:text>
         </xsl:if>
         <xsl:text>]</xsl:text>

@@ -1291,7 +1291,7 @@
       </optional>
       <optional>
         <attribute name="interactive">
-          <value>pythontutor</value>
+          <value>codelens</value>
         </attribute>
       </optional>
       <element name="input">
@@ -1317,7 +1317,7 @@
           </attribute>
         </optional>
         <optional>
-          <attribute name="label"/>
+          <attribute name="marker"/>
         </optional>
         <oneOrMore>
           <element name="li">
@@ -1352,7 +1352,7 @@
           </attribute>
         </optional>
         <optional>
-          <attribute name="label">
+          <attribute name="marker">
             <choice>
               <value>disc</value>
               <value>circle</value>
@@ -2230,7 +2230,7 @@
             <attribute name="cols"/>
           </optional>
           <optional>
-            <attribute name="label"/>
+            <attribute name="marker"/>
           </optional>
           <oneOrMore>
             <element name="li">

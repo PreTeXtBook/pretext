@@ -631,6 +631,36 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- no more "conclusion", so drop it here; deprecation will warn -->
 <xsl:template match="glossary/conclusion" mode="repair"/>
 
+<!-- 2022-04-22 replace Python Tutor with Runestone CodeLens -->
+<xsl:template match="program/@interactive" mode="repair">
+    <xsl:choose>
+        <xsl:when test=". = 'pythontutor'">
+            <xsl:attribute name="interactive">
+                <xsl:text>codelens</xsl:text>
+            </xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:copy/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- 2022-04-25 @label deprecated, slated for renewal in starring  -->
+<!-- role. Lists with markers (not description lists) -->
+<xsl:template match="ol/@label|ul/@label" mode="repair">
+    <xsl:attribute name="marker">
+        <xsl:value-of select="."/>
+    </xsl:attribute>
+</xsl:template>
+
+<!-- 2022-04-24 An exception, label on video tracks mimicing HTML -->
+<xsl:template match="video/track/@label" mode="repair">
+    <xsl:attribute name="listing">
+        <xsl:value-of select="."/>
+    </xsl:attribute>
+</xsl:template>
+
+
 <!-- ######### -->
 <!-- Languages -->
 <!-- ######### -->
@@ -967,6 +997,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="statement and areas">
                 <xsl:text>clickablearea</xsl:text>
             </xsl:when>
+            <xsl:when test="statement//var and not(webwork)">
+                <xsl:text>fillin-basic</xsl:text>
+            </xsl:when>
             <xsl:when test="statement and program">
                 <xsl:text>coding</xsl:text>
             </xsl:when>
@@ -1062,6 +1095,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'parson') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding')]
                               |project[@exercise-interactive = 'coding']
                               |activity[@exercise-interactive = 'coding']

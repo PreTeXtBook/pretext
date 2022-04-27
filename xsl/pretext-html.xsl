@@ -260,7 +260,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-has-geogebra"     select="boolean($document-root//interactive[@platform='geogebra'])"/>
 <!-- 2018-04-06:  jsxgraph deprecated -->
 <xsl:variable name="b-has-jsxgraph"     select="boolean($document-root//jsxgraph)"/>
-<xsl:variable name="b-has-pytutor"      select="boolean($document-root//program[@interactive='pythontutor'])"/>
 <!-- Every page has an index button, with a link to the index -->
 <!-- Here we assume there is at most one                      -->
 <!-- (The old style of specifying an index is deprecated)     -->
@@ -4588,6 +4587,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'parson') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')"
                                >
@@ -6921,7 +6921,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="google-classic"/>
                 <xsl:call-template name="google-universal"/>
                 <xsl:call-template name="google-gst"/>
-                <!-- <xsl:call-template name="pytutor-footer" /> -->
                 <xsl:call-template name="extra-js-footer"/>
             </body>
         </html>
@@ -7214,6 +7213,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- This an optional component of an author-hosted video, -->
 <!-- and the markup closely tracks the generated HTML.     -->
+<!-- The exception being our @listing; @label is taken.    -->
 <!-- The HTML @default attribute functions simply by being -->
 <!-- present, so we do not provide a value.                -->
 <xsl:template match="track">
@@ -7228,7 +7228,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:attribute name="default"/>
         </xsl:if>
         <xsl:attribute name="label">
-            <xsl:value-of select="@label"/>
+            <xsl:value-of select="@listing"/>
         </xsl:attribute>
         <xsl:attribute name="kind">
             <xsl:value-of select="@kind"/>
@@ -9369,10 +9369,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: maybe ship sanitized "input" to each modal template? -->
 <xsl:template match="program[not(ancestor::sidebyside)]|console[not(ancestor::sidebyside)]">
     <xsl:choose>
-        <!-- OBSOLETE: remove when deprecating PythonTutor -->
-        <xsl:when test="self::program and (@interactive='pythontutor')">
-            <xsl:apply-templates select="." mode="python-tutor"/>
-        </xsl:when>
         <!-- if  a program is elected as interactive, then     -->
         <!-- let Runestone do the best it can via the template -->
         <xsl:when test="self::program and (@interactive='activecode')">
@@ -9411,10 +9407,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="program[ancestor::sidebyside]|console[ancestor::sidebyside]">
     <xsl:choose>
-        <!-- OBSOLETE: remove when deprecating PythonTutor -->
-        <xsl:when test="self::program and (@interactive='pythontutor')">
-            <xsl:apply-templates select="." mode="python-tutor"/>
-        </xsl:when>
         <!-- if  a program is elected as interactive, then     -->
         <!-- let Runestone do the best it can via the template -->
         <xsl:when test="self::program and (@interactive='activecode')">
@@ -9467,54 +9459,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:call-template>
             </code>
         </pre>
-    </xsl:if>
-</xsl:template>
-
-<!-- Interactive Programs, PyTutor -->
-<!-- Use the PyTutor embedding to provide a Python program     -->
-<!-- where a reader can interactively step through the program -->
-<xsl:template match="program" mode="python-tutor">
-    <!-- check that the language is Python? -->
-    <xsl:variable name="hid">
-        <xsl:apply-templates select="." mode="html-id" />
-    </xsl:variable>
-    <xsl:element name="div">
-        <xsl:attribute name="class">
-            <xsl:text>pytutorVisualizer</xsl:text>
-        </xsl:attribute>
-        <xsl:attribute name="id">
-            <xsl:value-of select="$hid" />
-        </xsl:attribute>
-        <xsl:attribute name="data-tracefile">
-            <!-- empty when not using managed directories -->
-            <xsl:value-of select="$external-directory"/>
-            <xsl:text>pytutor/</xsl:text>
-            <xsl:value-of select="$hid" />
-            <xsl:text>.json</xsl:text>
-        </xsl:attribute>
-        <xsl:attribute name="data-params">
-            <xsl:text>{</xsl:text>
-            <xsl:text>"verticalStack": true, </xsl:text>
-            <xsl:text>"embeddedMode": false, </xsl:text>
-            <xsl:text>"codeDivWidth": </xsl:text>
-            <xsl:value-of select="$design-width" />
-            <xsl:text>, </xsl:text>
-            <xsl:text>"codeDivHeight": 300</xsl:text>
-            <xsl:text>}</xsl:text>
-        </xsl:attribute>
-    </xsl:element>
-</xsl:template>
-
-<!-- Bits of Javascript for the top and bottom of the web page -->
-<xsl:template name="pytutor-header">
-    <xsl:if test="$b-has-pytutor">
-        <script src="http://pythontutor.com/build/pytutor-embed.bundle.js?cc25af72af"></script>
-    </xsl:if>
-</xsl:template>
-
-<xsl:template name="pytutor-footer">
-    <xsl:if test="$b-has-pytutor">
-        <script>createAllVisualizersFromHtmlAttrs();</script>
     </xsl:if>
 </xsl:template>
 
@@ -10580,7 +10524,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="jsxgraph" />
             <xsl:call-template name="css" />
             <xsl:call-template name="aim-login-header" />
-            <xsl:call-template name="pytutor-header" />
             <xsl:call-template name="runestone-header"/>
             <xsl:call-template name="font-awesome" />
         </head>
@@ -10664,7 +10607,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="google-classic"/>
             <xsl:call-template name="google-universal"/>
             <xsl:call-template name="google-gst"/>
-            <xsl:call-template name="pytutor-footer" />
             <xsl:call-template name="syntax-highlight-footer" />
             <xsl:call-template name="aim-login-footer" />
             <xsl:call-template name="extra-js-footer"/>

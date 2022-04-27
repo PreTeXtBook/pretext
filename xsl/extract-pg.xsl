@@ -2502,9 +2502,9 @@
     <xsl:choose>
         <xsl:when test="parent::ul">
             <xsl:choose>
-                <xsl:when test="parent::*/@label='disc'">*</xsl:when>
-                <xsl:when test="parent::*/@label='circle'">o</xsl:when>
-                <xsl:when test="parent::*/@label='square'">+</xsl:when>
+                <xsl:when test="parent::*/@marker='disc'">*</xsl:when>
+                <xsl:when test="parent::*/@marker='circle'">o</xsl:when>
+                <xsl:when test="parent::*/@marker='square'">+</xsl:when>
                 <xsl:otherwise>
                     <xsl:choose>
                         <xsl:when test="count(ancestor::ul) mod 3 = 1">*</xsl:when>
@@ -2517,11 +2517,11 @@
         </xsl:when>
         <xsl:when test="parent::ol">
             <xsl:choose>
-                <xsl:when test="contains(parent::*/@label,'1')">1</xsl:when>
-                <xsl:when test="contains(parent::*/@label,'a')">a</xsl:when>
-                <xsl:when test="contains(parent::*/@label,'A')">A</xsl:when>
-                <xsl:when test="contains(parent::*/@label,'i')">i</xsl:when>
-                <xsl:when test="contains(parent::*/@label,'I')">I</xsl:when>
+                <xsl:when test="contains(parent::*/@marker,'1')">1</xsl:when>
+                <xsl:when test="contains(parent::*/@marker,'a')">a</xsl:when>
+                <xsl:when test="contains(parent::*/@marker,'A')">A</xsl:when>
+                <xsl:when test="contains(parent::*/@marker,'i')">i</xsl:when>
+                <xsl:when test="contains(parent::*/@marker,'I')">I</xsl:when>
                 <xsl:otherwise>
                     <!-- the exercise will be numbered with Arabic numerals, -->
                     <!-- so we start the default cycle with lower-case Latin -->
