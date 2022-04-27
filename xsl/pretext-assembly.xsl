@@ -997,6 +997,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="statement and areas">
                 <xsl:text>clickablearea</xsl:text>
             </xsl:when>
+            <xsl:when test="statement//var and not(webwork)">
+                <xsl:text>fillin-basic</xsl:text>
+            </xsl:when>
             <xsl:when test="statement and program">
                 <xsl:text>coding</xsl:text>
             </xsl:when>
@@ -1092,6 +1095,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'parson') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding')]
                               |project[@exercise-interactive = 'coding']
                               |activity[@exercise-interactive = 'coding']

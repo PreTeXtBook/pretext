@@ -4587,6 +4587,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'parson') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')"
                                >
