@@ -656,7 +656,7 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
   background: #fee;
   color: #222;
   position: absolute;
-  left: -1em;
+  left: -11em;
   top: 4em;
 }
 #preferences_menu_holder ol {
@@ -757,6 +757,9 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     margin-bottom: -2px;
     background-color: #f3f3f3;
 }
+[data-atmosphere*="dark"][data-ruler="greybar"] .onelineX:hover{
+    color: #333;
+}
 [data-ruler="lightbox"] .onelineX {
     background-color: #e3e3e3;
 }
@@ -784,7 +787,7 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     position: relative;
     z-index: 10;
 }
-x[data-ruler="sunriseunderline"] .onelineX:hover + .onelineX {
+xxxxxx[data-ruler="sunriseunderline"] .onelineX:hover + .onelineX {
     margin-top: -2px;
 }
 [data-ruler="sunriseunderline"] .onelineX:hover ~ .onelineX {
@@ -811,6 +814,15 @@ x[data-ruler="sunriseunderline"] .onelineX:hover + .onelineX {
     margin-left: -5px;
     margin-bottom: -1px;
 }
+[data-atmosphere*="dark"][data-ruler*="underline"] .onelineX:hover{
+    border-bottom: 1.5px solid #ddd;
+    margin-bottom: -1.5px;
+}
+[data-atmosphere*="dark"][data-ruler="lunderline"] .onelineX:hover{
+    border-left: 1.5px solid #ddd;
+    padding-left: 3.5px;
+    margin-left: -5px;
+
 
 
 /*******************************************************************************
