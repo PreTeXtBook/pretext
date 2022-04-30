@@ -1022,23 +1022,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Used for fillin answer blank&#xa;</xsl:text>
         <xsl:text>%% Argument is length in em&#xa;</xsl:text>
         <xsl:text>%% Length may compress for output to fit in one line&#xa;</xsl:text>
+        <xsl:text>\newlength{\fillinminus}&#xa;</xsl:text>
+        <xsl:text>\newlength{\fillinboxedgewidth}&#xa;</xsl:text>
         <xsl:choose>
             <xsl:when test="$latex.fillin.style='underline'">
-                <xsl:text>\newcommand{\fillin}[1]{\leavevmode\leaders\vrule height -1.2pt depth 1.5pt \hskip #1em minus #1em \null}&#xa;</xsl:text>
+                <xsl:text>\setlength{\fillinboxedgewidth}{0pt}&#xa;</xsl:text>
             </xsl:when>
             <xsl:when test="$latex.fillin.style='box'">
-                <xsl:text>% Do not indent lines of this macro definition&#xa;</xsl:text>
-                <xsl:text>\newcommand{\fillin}[1]{%&#xa;</xsl:text>
-                <xsl:text>\leavevmode\rule[-0.3\baselineskip]{0.4pt}{\dimexpr 0.8pt+1.3\baselineskip\relax}% Left edge&#xa;</xsl:text>
-                <xsl:text>\nobreak\leaders\vbox{\hrule \vskip 1.3\baselineskip \hrule width .4pt \vskip -0.3\baselineskip}% Top and bottom edges&#xa;</xsl:text>
-                <xsl:text>\hskip #1em minus #1em% Maximum box width and shrinkage&#xa;</xsl:text>
-                <xsl:text>\nobreak\hbox{\rule[-0.3\baselineskip]{0.4pt}{\dimexpr 0.8pt+1.3\baselineskip\relax}}% Right edge&#xa;</xsl:text>
-                <xsl:text>}&#xa;</xsl:text>
+                <xsl:text>\setlength{\fillinboxedgewidth}{0.4pt}&#xa;</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:message>PTX:ERROR:   the latex.fillin.style parameter should be 'underline' or 'box', not '<xsl:value-of select="$latex.fillin.style"/>'.  Using the default ('underline').</xsl:message>
+                <xsl:text>\setlength{\fillinboxedgewidth}{0pt}&#xa;</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
+        <xsl:text>\newcommand{\fillin}[1]{%&#xa;</xsl:text>
+        <xsl:text>\setlength{\fillinminus}{#1em * \real{0.2}}%&#xa;</xsl:text>
+        <xsl:text>\leavevmode\rule[-0.2\baselineskip]{\fillinboxedgewidth}{\dimexpr 2\fillinboxedgewidth+\baselineskip\relax}%&#xa;</xsl:text>
+        <xsl:text>\nobreak\hspace{-\fillinboxedgewidth}\leaders\vbox{\hrule width \fillinboxedgewidth \vskip \baselineskip \hrule width 0.4pt \vskip -0.2\baselineskip}%&#xa;</xsl:text>
+        <xsl:text>\hskip #1em minus \fillinminus%&#xa;</xsl:text>
+        <xsl:text>\nobreak\hspace{-\fillinboxedgewidth}\hbox{\rule[-0.2\baselineskip]{\fillinboxedgewidth}{\dimexpr 2\fillinboxedgewidth+\baselineskip\relax}}%&#xa;</xsl:text>
+        <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <!-- http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/ -->
     <xsl:if test="$document-root//swungdash">
