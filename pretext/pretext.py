@@ -1044,8 +1044,8 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
                 os.remove(os.path.join(ww_images_dir, ptx_image_filename))
 
         # Start appending XML children
-        # Use "webwork-reps" as parent tag for the various representations of a problem
         response_root = ET.fromstring(response_text)
+        # Use "webwork-reps" as parent tag for the various representations of a problem
         webwork_reps = ET.SubElement(webwork_representations,'webwork-reps')
         webwork_reps.set('version',ww_reps_version)
         webwork_reps.set("{%s}id" % (XML),'extracted-' + problem)
@@ -1141,6 +1141,10 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
                             solution.append(chcopy)
 
         static_webwork_level(static,response_root)
+        # Remove elements we'd rather not keep
+        # p with only a single fillin, not counting those inside an li without preceding siblings
+        for unwanted in static.xpath("//p[not(normalize-space(text()))][count(fillin)=1 and count(*)=1][not(parent::li) or (parent::li and preceding-sibling::*)]"):
+            unwanted.getparent().remove(unwanted)
 
         # Add elements for interactivity
         if (ww_reps_version == '2'):
