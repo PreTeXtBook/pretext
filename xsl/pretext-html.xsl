@@ -10419,15 +10419,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
-<!-- In WeBWorK problems, a p whose only child is a fillin blank     -->
-<!-- almost certainly means a question has been asked, and below it  -->
-<!-- there is an entry field. In print, there is no need to print    -->
-<!-- that entry field and removing it can save a lot of vertical     -->
-<!-- space. This is in constrast with fillins in the middle of a p,  -->
-<!-- where answer blanks need to be printed because of the fill      -->
-<!-- in the blank nature of the quesiton.                            -->
-<xsl:template match="p[not(normalize-space(text()))][count(fillin)=1 and count(*)=1][not(parent::li)]|p[not(normalize-space(text()))][count(fillin)=1 and count(*)=1][parent::li][preceding-sibling::*]" />
-
 <!-- ############################# -->
 <!-- MyOpenMath Embedded Exercises -->
 <!-- ############################# -->
