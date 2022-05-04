@@ -83,14 +83,6 @@ HTMLOUT    = $(SCRATCH)/html
 EPUBOUT    = $(SCRATCH)/epub
 PGOUT      = $(SCRATCH)/pg
 
-# Some aspects of producing these examples require a WeBWorK server.
-# Either specify only the protocol and domain (like https://webwork.yourschool.edu)
-# or specify a 5-tuple with quotes exactly as in this example
-# SERVER = "(https://webwork-ptx.aimath.org,courseID,userID,password,course_password)"
-# NOTE: it is IMPORTANT to get the protocol correct for your server (HTTP versus HTTPS)
-SERVER = https://webwork-ptx.aimath.org
-
-
 
 ##################
 # Targets for make
@@ -113,10 +105,10 @@ SERVER = https://webwork-ptx.aimath.org
 #  within "webwork" subfolder
 
 sample-chapter-representations:
-	$(PTX)/pretext/pretext -v -c webwork -p $(SMPCPUB) -s $(SERVER) $(SMPC)
+	$(PTX)/pretext/pretext -v -c webwork -p $(SMPCPUB) $(SMPC)
 
 mini-representations:
-	$(PTX)/pretext/pretext -v -c webwork -p $(MINIPUB) -s $(SERVER) $(MINI)
+	$(PTX)/pretext/pretext -v -c webwork -p $(MINIPUB) $(MINI)
 
 
 #########################################################################
@@ -219,13 +211,13 @@ WWOUT        = $(SCRATCH)/webwork-representations
 sample-chapter-representations-not-managed:
 	-rm -r $(WWOUT)
 	install -d $(WWOUT)
-	$(PTX)/pretext/pretext -vv -c webwork -d $(WWOUT) -s $(SERVER) $(SMPC)
+	$(PTX)/pretext/pretext -vv -c webwork -p $(SMPCPUBNOMAN) -d $(WWOUT) $(SMPC)
 
 # DO NOT MODEL YOUR PROJECT AFTER THIS
 mini-representations-not-managed:
 	-rm -r $(WWOUT)
 	install -d $(WWOUT)
-	$(PTX)/pretext/pretext -vv -c webwork -d $(WWOUT) -s $(SERVER) $(MINI)
+	$(PTX)/pretext/pretext -vv -c webwork -p $(MINIPUBNOMAN) -d $(WWOUT) $(MINI)
 
 
 #########################################################################

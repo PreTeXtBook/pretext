@@ -731,25 +731,44 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
     # globals() necessary for success
     exec(problem_dictionaries.replace('\\','\\\\'), globals())
 
-    # verify, construct problem format requestor
-    # remove any surrounding white space
-    if server_params is None:
-        raise ValueError("No WeBWorK server declared")
-    server_params = server_params.strip()
-    if (server_params.startswith("(") and server_params.endswith(")")):
-        server_params=server_params.strip('()')
-        split_server_params = server_params.split(',')
-        ww_domain = sanitize_url(split_server_params[0])
-        courseID = sanitize_alpha_num_underscore(split_server_params[1])
-        userID = sanitize_alpha_num_underscore(split_server_params[2])
-        password = sanitize_alpha_num_underscore(split_server_params[3])
-        course_password = sanitize_alpha_num_underscore(split_server_params[4])
+    # ideally, pub_file is in use, in which case server_params_pub is nonempty.
+    # if no pub_file in use, rely on server_params.
+    # if both present, use server_params_pub and give warning
+    # if neither in use give warning and fail
+    if not(server_params_pub) and server_params is None:
+        raise ValueError("No WeBWorK server declared. Declare WeBWorK server in publication/webwork/@server.")
+    elif not(server_params_pub):
+        # We rely on the argument server_params
+        # This is deprecated in favor of using a publication file
+        print("PTX:WARNING:  WeBWorK server declared using -s argument.\n" +
+              "              Please consider using a publication file with publication/webwork/@server instead.")
+        server_params = server_params.strip()
+        if (server_params.startswith("(") and server_params.endswith(")")):
+            server_params=server_params.strip('()')
+            split_server_params = server_params.split(',')
+            ww_domain = sanitize_url(split_server_params[0])
+            courseID = sanitize_alpha_num_underscore(split_server_params[1])
+            userID = sanitize_alpha_num_underscore(split_server_params[2])
+            password = sanitize_alpha_num_underscore(split_server_params[3])
+            course_password = sanitize_alpha_num_underscore(split_server_params[4])
+        else:
+            ww_domain       = sanitize_url(server_params)
+            courseID        = 'anonymous'
+            userID          = 'anonymous'
+            password        = 'anonymous'
+            course_password = 'anonymous'
     else:
-        ww_domain = sanitize_url(server_params)
-        courseID = 'anonymous'
-        userID = 'anonymous'
-        password = 'anonymous'
-        course_password = 'anonymous'
+        # Now we know server_params_pub is nonepty
+        # Use it, and warn if server_params argument is also present
+        if server_params is not None:
+            print("PTX:WARNING:  Publication file in use and -s argument passed for WeBWorK server.\n" +
+                  "              -s argument will be ignored.\n" +
+                  "              Using publication/webwork values (or defaults) instead.")
+        ww_domain       = sanitize_url(server_params_pub["ww_domain"])
+        courseID        = server_params_pub["courseID"]
+        userID          = server_params_pub["userID"]
+        password        = server_params_pub["password"]
+        course_password = server_params_pub["course_password"]
 
     ww_domain_ww2 = ww_domain + '/webwork2/'
     ww_domain_path = ww_domain_ww2 + 'html2xml'
