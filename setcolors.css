@@ -15,7 +15,7 @@ body.pretext {
   color: #932c1c;
   color: var(--bodytitle);
 }
-#ptx-toc > ul > li a {
+#ptx-toc ul.structural li a {
   color: #505050;
   color: var(--chaptertoctext);
   background-color: #dbf5ff;
@@ -23,15 +23,21 @@ body.pretext {
   border-color: #afc2e5;
   border-color: var(--tocborder);
 }
+#ptx-toc ul.structural li .toc-chevron-surround svg {
+  fill: var(--chaptertoctext);
+}
 
-#ptx-toc ul li ul a {
+#ptx-toc ul.structural li ul.structural a {
   color: #404040;
   color: var(--sectiontoctext);
   background-color: #ffffff;
   background-color: var(--sectiontoc);
 }
+#ptx-toc ul.structural li ul.structural .toc-chevron-surround svg {
+  fill: var(--sectiontoctext);
+}
 
-#ptx-toc ul li a.active {
+#ptx-toc ul.structural li a.active {
   color: #404040;
   color: var(--chaptertoctextactive);
   background-color: #fae5b6;
@@ -39,7 +45,7 @@ body.pretext {
   border-color: #d7b772;
   border-color: var(--highlighttocborder);
 }
-#ptx-toc ul li ul a.active {
+#ptx-toc ul.structural li ul.structural a.active {
   color: #404040;
   color: var(--sectiontoctextactive);
   background-color: #fae5b6;
@@ -48,8 +54,8 @@ body.pretext {
   border-color: var(--highlighttocborder);
 }
 
-#ptx-toc ul li a:focus,
-#ptx-toc ul li a:hover {
+#ptx-toc ul.structural li a:focus,
+#ptx-toc ul.structural li a:hover {
   color: #321a0c;
   color: var(--highlighttoctext);
   background-color: #fac793;
@@ -57,8 +63,8 @@ body.pretext {
   border-color: #ec704b;
   border-color: var(--highlighttocborder);
 }
-#ptx-toc ul li ul a:focus,
-#ptx-toc ul li ul a:hover {
+#ptx-toc ul.structural li ul.structural a:focus,
+#ptx-toc ul.structural li ul.structural a:hover {
   color: #321a0c;
   color: var(--highlighttoctext);
   background-color: #fac793;
@@ -67,25 +73,25 @@ body.pretext {
   border-color: var(--highlighttocborder);
 }
 
-#ptx-toc ul li.part a {
+#ptx-toc ul.structural li.part a {
     margin-top: 15px;
     border-bottom: none;
 }
-#ptx-toc ul li.part a,
-#ptx-toc ul li.frontmatter a:first-child,
-#ptx-toc ul li.backmatter a:first-child {
+#ptx-toc ul.structural li.part a,
+#ptx-toc ul.structural li.frontmatter a:first-child,
+#ptx-toc ul.structural li.backmatter a:first-child {
     color: #222222;
     background-color: var(--bodytitlehighlight);
     font-size: 110%;
     padding-top: 7px;
     padding-bottom: 7px;
 }
-#ptx-toc ul li.part a:focus,
-#ptx-toc ul li.frontmatter a:focus,
-#ptx-toc ul li.backmatter a:focus,
-#ptx-toc ul li.part a:hover,
-#ptx-toc ul li.frontmatter a:hover,
-#ptx-toc ul li.backmatter a:hover {
+#ptx-toc ul.structural li.part a:focus,
+#ptx-toc ul.structural li.frontmatter a:focus,
+#ptx-toc ul.structural li.backmatter a:focus,
+#ptx-toc ul.structural li.part a:hover,
+#ptx-toc ul.structural li.frontmatter a:hover,
+#ptx-toc ul.structural li.backmatter a:hover {
     color: #ffffff;
     background-color: var(--highlighttoc);
 }
