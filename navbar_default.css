@@ -247,6 +247,7 @@
 }
 
 #ptx-navbar .treebuttons {
+    display: block;
     float: right;
 }
 #ptx-navbar .treebuttons .next-button, #ptx-navbar .treebuttons .up-button, #ptx-navbar .treebuttons .previous-button {
