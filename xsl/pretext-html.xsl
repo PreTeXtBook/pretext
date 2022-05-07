@@ -11560,7 +11560,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="this-page" select="self::*" />
     <!-- start recursion at the top, since the  -->
     <!-- ToC is global for the whole document   -->
-    <ul>
+    <ul class="structural">
         <xsl:apply-templates select="$document-root" mode="toc-item">
             <xsl:with-param name="possessing-page" select="$this-page"/>
         </xsl:apply-templates>
@@ -11578,7 +11578,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Recurse into children divisions (if any)-->
         <xsl:variable name="child-list" select="frontmatter|abstract|frontmatter/colophon|biography|dedication|acknowledgement|preface|contributors|part|chapter|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|backmatter|appendix|index|backmatter/colophon"/>
         <xsl:if test="$child-list">
-            <ul>
+            <ul class="structural">
                 <xsl:apply-templates select="*" mode="toc-item">
                     <xsl:with-param name="possessing-page" select="$possessing-page"/>
                 </xsl:apply-templates>
