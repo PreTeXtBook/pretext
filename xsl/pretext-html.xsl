@@ -12128,9 +12128,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:with-param>
         </xsl:call-template>
     </xsl:if>
-    <!-- For testing purposes, make a "developer.css" possible and always available -->
-    <xsl:comment> 2019-10-12: Temporary - CSS file for experiments with styling </xsl:comment>
-    <link href="developer.css" rel="stylesheet" type="text/css" />
+    <!-- For testing purposes a developer can set the stringparam -->
+    <!-- "debug.developer.css" to the value "yes" and provide a   -->
+    <!-- CSS file to be loaded last.                              -->
+    <xsl:if test="$debug.developer.css = 'yes'">
+        <xsl:comment> This HTML version has been built with elective CSS strictly </xsl:comment>
+        <xsl:comment> for testing purposes, and the developer who chose to use it </xsl:comment>
+        <xsl:comment> must supply it.                                             </xsl:comment>
+        <link href="developer.css" rel="stylesheet" type="text/css" />
+    </xsl:if>
 </xsl:template>
 
 <!-- Treated as characters, these could show up often, -->
