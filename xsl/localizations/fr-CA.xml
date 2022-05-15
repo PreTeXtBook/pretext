@@ -215,4 +215,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Translate at first opportunity, please                  -->
     <localization string-id='evaluate'>Évaluer</localization>
     <localization string-id='code'>Code</localization>
+    <!-- Notation List headings/foot -->
+    <localization string-id='symbol'>Symbole</localization>
+    <localization string-id='description'>Description</localization>
+    <localization string-id='location'>Emplacement</localization>
+    <localization string-id='page'>Page</localization>
+    <localization string-id='continued'>Suite à la page suivante</localization>
 </locale>
