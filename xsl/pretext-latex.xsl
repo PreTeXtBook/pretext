@@ -10821,7 +10821,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\poemTitle{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:apply-templates select="stanza"/>
+    <xsl:apply-templates select="stanza|idx"/>
     <xsl:apply-templates select="author" />
     <xsl:text>\end{poem}&#xa;</xsl:text>
 </xsl:template>
@@ -10844,7 +10844,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\begin{stanza}&#xa;</xsl:text>
-    <xsl:apply-templates select="line" />
+    <xsl:apply-templates select="line|idx"/>
     <xsl:text>\end{stanza}&#xa;</xsl:text>
 </xsl:template>
 
