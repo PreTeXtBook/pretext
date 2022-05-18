@@ -81,7 +81,7 @@
                         <cell><attr>statement</attr>, <attr>hint</attr>, <attr>answer</attr>, <attr>solution</attr></cell>
                     </row>
                     <row>
-                        <cell><c>common/project</c></cell>
+                        <cell><c>common/exercise-project</c></cell>
                         <cell><attr>statement</attr>, <attr>hint</attr>, <attr>answer</attr>, <attr>solution</attr></cell>
                     </row>
                 </tabular>
