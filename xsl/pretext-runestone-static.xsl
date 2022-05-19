@@ -176,11 +176,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <!-- separate alternatives with "Either/Or"  -->
                                 <!-- Order is as authored                    -->
                                 <xsl:element name="{$list-type}">
-                                    <xsl:if test="$list-type = 'ol'">
-                                        <xsl:attribute name="marker">
-                                            <xsl:text>(a)</xsl:text>
-                                        </xsl:attribute>
-                                    </xsl:if>
+                                    <xsl:attribute name="marker">
+                                        <xsl:choose>
+                                            <xsl:when test="$list-type = 'ol'">
+                                                <!-- sub-number as a, b, c -->
+                                                <xsl:text>(a)</xsl:text>
+                                            </xsl:when>
+                                            <xsl:when test="$list-type = 'ul'">
+                                                <!-- no markers on "bulleted" sublists -->
+                                                <xsl:text/>
+                                            </xsl:when>
+                                        </xsl:choose>
+                                    </xsl:attribute>
                                     <xsl:for-each select="choice">
                                         <li>
                                             <xsl:if test="$list-type = 'ul'">

@@ -178,6 +178,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='index'>Index</localization>
     <localization string-id='see'>Visiter</localization>
     <localization string-id='also'>Voir Aussi</localization>
+    <!-- Notation List headings/foot -->
+    <localization string-id='symbol'>Symbole</localization>
+    <localization string-id='description'>Description</localization>
+    <localization string-id='location'>Emplacement</localization>
+    <localization string-id='page'>Page</localization>
+    <localization string-id='continued'>Suite à la page suivante</localization>
     <!-- Navigation Interface elements -->
     <!-- Assistive "skip to content" link -->
     <localization string-id='skip-to-content'>Sauter au contenu</localization>

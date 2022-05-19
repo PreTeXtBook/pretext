@@ -570,6 +570,8 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <xsl:variable name= "b-debug-react-global" select="not($debug.react.global = 'no')"/>
 <xsl:variable name="b-debug-react" select="$b-debug-react-local or $b-debug-react-global"/>
 
+<!-- HTML only, a developer must elect to use this CSS file -->
+<xsl:param name="debug.developer.css" select="'no'"/>
 
 <!-- Maybe not debugging, but transitional variables -->
 

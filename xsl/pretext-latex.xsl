@@ -1022,16 +1022,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Used for fillin answer blank&#xa;</xsl:text>
         <xsl:text>%% Argument is length in em&#xa;</xsl:text>
         <xsl:text>%% Length may compress for output to fit in one line&#xa;</xsl:text>
+        <!-- \fillincontract is set using \real, which comes from calc package -->
+        <!-- which comes from mtool package, which comes from extpfeil.        -->
+        <!-- So any changes to extpfeil inclusion should be followed up here.  -->
+        <xsl:text>\newlength{\fillincontract}&#xa;</xsl:text>
         <xsl:choose>
             <xsl:when test="$latex.fillin.style='underline'">
-                <xsl:text>\newcommand{\fillin}[1]{\leavevmode\leaders\vrule height -1.2pt depth 1.5pt \hskip #1em minus #1em \null}&#xa;</xsl:text>
+                <xsl:text>\newcommand{\fillin}[1]{%&#xa;</xsl:text>
+                <xsl:text>\setlength{\fillincontract}{#1em * \real{0.2}}%&#xa;</xsl:text>
+                <xsl:text>\leavevmode\leaders\vrule height -1.2pt depth 1.5pt \hskip #1em minus \fillincontract \null%&#xa;</xsl:text>
+                <xsl:text>}&#xa;</xsl:text>
             </xsl:when>
             <xsl:when test="$latex.fillin.style='box'">
                 <xsl:text>% Do not indent lines of this macro definition&#xa;</xsl:text>
                 <xsl:text>\newcommand{\fillin}[1]{%&#xa;</xsl:text>
+                <xsl:text>\setlength{\fillincontract}{#1em * \real{0.2}}%&#xa;</xsl:text>
                 <xsl:text>\leavevmode\rule[-0.3\baselineskip]{0.4pt}{\dimexpr 0.8pt+1.3\baselineskip\relax}% Left edge&#xa;</xsl:text>
                 <xsl:text>\nobreak\leaders\vbox{\hrule \vskip 1.3\baselineskip \hrule width .4pt \vskip -0.3\baselineskip}% Top and bottom edges&#xa;</xsl:text>
-                <xsl:text>\hskip #1em minus #1em% Maximum box width and shrinkage&#xa;</xsl:text>
+                <xsl:text>\hskip #1em minus \fillincontract% Maximum box width and shrinkage&#xa;</xsl:text>
                 <xsl:text>\nobreak\hbox{\rule[-0.3\baselineskip]{0.4pt}{\dimexpr 0.8pt+1.3\baselineskip\relax}}% Right edge&#xa;</xsl:text>
                 <xsl:text>}&#xa;</xsl:text>
             </xsl:when>
@@ -10813,7 +10821,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\poemTitle{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:apply-templates select="stanza"/>
+    <xsl:apply-templates select="stanza|idx"/>
     <xsl:apply-templates select="author" />
     <xsl:text>\end{poem}&#xa;</xsl:text>
 </xsl:template>
@@ -10836,7 +10844,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\begin{stanza}&#xa;</xsl:text>
-    <xsl:apply-templates select="line" />
+    <xsl:apply-templates select="line|idx"/>
     <xsl:text>\end{stanza}&#xa;</xsl:text>
 </xsl:template>
 
