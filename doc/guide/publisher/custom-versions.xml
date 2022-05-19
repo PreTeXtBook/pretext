@@ -12,5 +12,51 @@
     <idx>custom versions</idx>
     <idx><h>versions</h><h>custom</h></idx>
 
+    <section xml:id="publisher-customizations">
+        <title>Customizations</title>
+        <idx>customizations</idx>
+
+        <p>The customization feature allows you to create two or more versions of your text for slightly different audiences. To do this, an author defines custom elements that find their translations in a file specified in the publication file.  Multiple customization files can then be used to build different versions of the text. For example, we might want to create two versions of our <init>AOTA</init> book, one for zoologists and one for laypeople. For the zoologist edition we want animal names to be scientific names, but in the edition for laypeople we want to use common names. The rest of the text is identical.  To execute this, we make every animal name a custom element and create a customization file for each of the two versions.</p>
+
+        <p>Say we want to write a sentence that reads <q>The IUCN red list classification of the western lowland gorilla is critically endangered</q> in the layperson’s edition and <q>The IUCN red list classification of the <taxon>Gorilla gorilla gorilla</taxon> is critically endangered</q> in the zoologist’s edition. We begin by writing the sentence in the source and creating a <tag>custom</tag> element as a place-holder for the name of the gorilla:</p>
+
+        <pre>
+        The &lt;init>IUCN&lt;/init&gt; red list classification of
+        the &lt;custom ref="gorilla-name"/&gt; is critically endangered.
+        </pre>
+
+        <p>Then the file of translations will contain a <tag>custom</tag> element, with a <attr>name</attr> attribute that has value <c>gorilla-name</c>, and whose content is the translation.</p>
+
+        <p>Once you have placed <tag>custom</tag> elements in your source, you need to create one or more files of translations.  To stay organized you might choose to place them in a directory of their own.  The customization file opens with a special element and then contains a definition for each customization.</p>
+
+        <p>For the example above, here is the beginning of the customization file we might name <c>customizations/zoologist.ptx.</c></p>
+
+        <pre>
+        &lt;pi:customizations xmlns:pi="http://pretextbook.org/2020/pretext/internal"&gt;
+          &lt;!-- Name of Western mountain gorilla --&gt;
+          &lt;custom name= "gorilla-name">
+            &lt;taxon&gt;Gorilla gorilla gorilla&lt;/taxon&gt;
+          &lt;/custom&gt;
+        &lt;/pi:customizations&gt;
+        </pre>
+
+        <p>Note that employing a common value for the <attr>name</attr> attribute and the <attr>ref</attr> attribute makes the association for the replacement in the source. Next, we would also create a customization file named <q>customizations/layperson.ptx</q> that looks like the following.</p>
+
+        <pre>
+        &lt;pi:customizations xmlns:pi="http://pretextbook.org/2020/pretext/internal"&gt;
+          &lt;!-- Name of Western mountain gorilla --&gt;
+          &lt;custom name= "gorilla-name">western lowland gorilla&lt;/custom&gt;
+        &lt;/pi:customizations&gt;
+        </pre>
+
+        <p>Once the customization files are created, the element <c>&lt;custom ref="gorilla-name"/&gt;</c> can be used <em>throughout</em> the text and will populate automatically depending on which customization file is specified in the publication file.</p>
+
+        <p>When choosing names to use as values for the  <attr>ref</attr> and <attr>name</attr> attributes, develop a consistent scheme that will make sense to other authors. Do not use spaces or capital letters. This name will never be visible to readers but should be easy for developers to understand.  Placing careful comments in one <q>main</q> customization file can help other authors create new customizations that are accurate.</p>
+
+        <p>Note that this functionality is limited when it comes to irregular plurals and capitalization. Take care with the placement of custom elements: they will not, for example, capitalize automatically at the beginning of a sentence.</p>
+
+        <p>See <xref ref="publication-file-source-extras"/> for the mechanics of specifying a file of customizations via the publication file.</p>
+    </section>
+
 </chapter>
 
