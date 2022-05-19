@@ -8244,16 +8244,47 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- no real harm in just doing nothing            -->
 </xsl:template>
 
+<!-- "mag" is pretty much verbatim, but we allow LaTeX syntax  -->
+<!-- for \pi and we need to make them amenable to MathJax.     -->
+<!-- TODO:                                                     -->
+<!--   - implement <pi/> strictly inside "mag" (LaTeX too)     -->
+<!--   - move the recursive template to the "repair"           -->
+<!--     pass of the pre-processor                             -->
 <xsl:template match="mag">
-    <xsl:variable name="mag">
-        <xsl:value-of select="."/>
-    </xsl:variable>
-    <xsl:variable name="math-pi">
-        <xsl:call-template name="inline-math-wrapper">
-            <xsl:with-param name="math" select="'\pi'"/>
-        </xsl:call-template>
-    </xsl:variable>
-    <xsl:value-of select="str:replace($mag,'\pi',string($math-pi))"/>
+    <xsl:call-template name="wrap-units-pi">
+        <xsl:with-param name="text">
+            <xsl:value-of select="."/>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- We recursively isolate instances of \pi and replace them  -->
+<!-- with wrapped versions so MathJax will process them.  A    -->
+<!-- simple string replacement will not work since the         -->
+<!-- replacement is a span.process-math (an HTML element).     -->
+<!-- NB: this will not generalize easily to additional symbols -->
+<xsl:template name="wrap-units-pi">
+    <xsl:param name="text"/>
+
+    <xsl:variable name="pi" select="'\pi'"/>
+    <xsl:choose>
+        <xsl:when test="not(contains($text, $pi))">
+            <!-- nothing left to do, output as-is, and finish -->
+            <xsl:value-of select="$text"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- must have a \pi, output prior text -->
+            <xsl:value-of select="substring-before($text, $pi)"/>
+            <!-- output \pi, appropriately bundled -->
+            <xsl:call-template name="inline-math-wrapper">
+                <xsl:with-param name="math" select="$pi"/>
+            </xsl:call-template>
+            <!-- recurse on remainder -->
+            <xsl:call-template name="wrap-units-pi">
+                <xsl:with-param name="text" select="substring-after($text, $pi)"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- unit and per children of a quantity element    -->
