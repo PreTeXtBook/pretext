@@ -2183,7 +2183,7 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
 #################
 
 # Pythonic replacement for xsltproc executable
-def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
+def xsltproc(xsl, xml, result, output_dir=None, stringparams={}, outputfn=print):
     """
     Apply an XSL stylesheet to an XML source, with control over location of results.
 
@@ -2195,6 +2195,8 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
     output_dir   - a directory for exsl:document() templates to write to
     stringparams - a dictionary of option/value string:string pairs to
                    pass to  xsl:param  elements of the stylesheet
+    outputfn     - a function for routing output of error messages. Any
+                   such function should process its parameters like print
 
     N.B. The value of a "publisher" string parameter passed in the
     "stringparams" argument must be a complete path, since a relative
@@ -2267,14 +2269,14 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
             end = len(xslt.error_log)
             # print out any unprinted messages from error_log
             for line in range(start, end):
-                print('    * ', xslt.error_log[line])
+                outputfn('    * ', xslt.error_log[line])
             start = end
         if texc is None:
-            print('PTX: Successful application of {}'.format(xsl))
+            outputfn('PTX: Successful application of {}'.format(xsl))
         else:
             raise(texc)
     except Exception as e:
-        print('PTX: Processing with {} has failed\n'.format(xsl))
+        outputfn('PTX: Processing with {} has failed\n'.format(xsl))
         # report any errors on failure (indented)
         raise(e)
     finally:
