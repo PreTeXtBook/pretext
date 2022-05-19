@@ -7757,7 +7757,11 @@ the xsltproc executable.
                 <mag>2\pi</mag>
                 <unit base="radian"/>
             </quantity>
-            in a full circle.</p>
+            in a full circle.  This is a similar quantity with multiple occurences of <c>\pi</c> to test a particular template used for HTML output.  It is not meant to make any sense:
+            <quantity>
+                <mag>21\pi45\pi234\pi890</mag>
+                <unit base="radian"/>
+            </quantity>.</p>
 
             <p>For a full list of the allowed units and prefixes, see <c>pretext-units.xsl</c>. If you have a need for more units, they need to be added to <c>pretext-units.xsl</c> in the section that deals with units which are not part of <c>siunitx</c> by default.  Note that the <c>mag</c> element should come first, followed by the <c>unit</c> element, followed by the <c>per</c> element.</p>
 
