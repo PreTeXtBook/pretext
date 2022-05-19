@@ -539,6 +539,18 @@
             </ul>It is an error to only specify one of the two directories.  It is all or nothing.</p>
         </subsection>
 
+        <subsection xml:id="publication-file-source-version">
+            <title>Versions</title>
+
+            <p>Different versions of your source can be constructed by marking elements as belonging to different components.  Each component has a name of your choosing, and then you elect components to include or exclude via the publication file.  See <xref ref="publisher-versions"/> for the exact details and examples.</p>
+
+            <p>To specify components to include, the<cd>
+                <cline>/publication/source/version/@include</cline>
+            </cd>attribute should be a space-separated list of component names.  For example, if <tag>version</tag> has<cd>
+                <cline>include="videos labs"</cline>
+            </cd>then a version would be created that includes all of the videos and all of the labs (since the author placed them into these components), but would not contain any elements whose component is <c>genome</c>.  Note that <c>videos</c>, <c>labs</c>, and <c>genome</c> are names peculiar to the organization of your project, and are not <pretext/> element names (even if they are used consistently with similar element names, such as <tag>video</tag>).</p>
+        </subsection>
+
         <subsection xml:id="publication-file-source-extras">
             <title>Extras</title>
 
