@@ -2183,7 +2183,7 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
 #################
 
 # Pythonic replacement for xsltproc executable
-def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
+def xsltproc(xsl, xml, result, output_dir=None, stringparams={}, outputfn=print):
     """
     Apply an XSL stylesheet to an XML source, with control over location of results.
 
@@ -2195,6 +2195,8 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
     output_dir   - a directory for exsl:document() templates to write to
     stringparams - a dictionary of option/value string:string pairs to
                    pass to  xsl:param  elements of the stylesheet
+    outputfn     - a function for routing output of error messages. Any
+                   such function should process its parameters like print
 
     N.B. The value of a "publisher" string parameter passed in the
     "stringparams" argument must be a complete path, since a relative
@@ -2202,6 +2204,7 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
     different than that at the time of the command-line invocation.
     """
     import os
+    import threading # Thread()
     # external module, often forgotten
     try:
         import lxml.etree as ET  # XML source
@@ -2244,23 +2247,38 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
         os.chdir(output_dir)
     # clear global errors, apply the xsl transform
     ET.clear_error_log()
+    result_tree = []
+    texc = None
+
+    def transform():
+        nonlocal result_tree, texc
+        try:
+            result_tree = xslt(src_tree, **stringparams)
+        except Exception as e:
+            texc = e
+
     try:
-        result_tree = xslt(src_tree, **stringparams)
-        # report any messages, even if successful (indented)
-        messages = xslt.error_log
-        if messages:
-            print('PTX: Successful application of {}, but with messages:'.format(xsl))
-            for m in messages:
-                print('    * ', m.message)
+        outputfn('PTX: comprehensive messages, warnings, and errors:')
+        parse_t = threading.Thread(target=transform)
+        parse_t.start()
+        still_alive = True
+        start = 0
+        while still_alive:
+            parse_t.join(0.5) # Wait 0.5 seconds for thread to complete
+            still_alive = parse_t.is_alive()
+
+            end = len(xslt.error_log)
+            # print out any unprinted messages from error_log
+            for line in range(start, end):
+                outputfn('    * ', xslt.error_log[line].message)
+            start = end
+        if texc is None:
+            outputfn('PTX: Successful application of {}'.format(xsl))
+        else:
+            raise(texc)
     except Exception as e:
-        msg = 'PTX: Processing with {} has failed\n'.format(xsl)
+        outputfn('PTX: Processing with {} has failed\n'.format(xsl))
         # report any errors on failure (indented)
-        messages = xslt.error_log
-        if messages:
-            msg += 'PTX: comprehensive messages, warnings, and errors:\n'
-            for m in messages:
-                msg = msg + '    * ' + m.message + '\n'
-        print(msg)
         raise(e)
     finally:
         # restore directory in success or failure
