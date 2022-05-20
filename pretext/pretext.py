@@ -2269,7 +2269,7 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}, outputfn=print)
             end = len(xslt.error_log)
             # print out any unprinted messages from error_log
             for line in range(start, end):
-                outputfn('    * ', xslt.error_log[line])
+                outputfn('    * ', xslt.error_log[line].message)
             start = end
         if texc is None:
             outputfn('PTX: Successful application of {}'.format(xsl))
