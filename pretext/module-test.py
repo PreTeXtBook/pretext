@@ -28,9 +28,9 @@
 import pretext as ptx
 
 # Read arguments from the command line with the standard "sys" module
-import sys # argv
+import sys  # argv
 
-import os.path # abspath()
+import os.path  # abspath()
 
 # module is parameterized by the level of console output
 # Not necessary, default is 0 and no output
@@ -49,5 +49,4 @@ dest_dir = os.path.abspath(sys.argv[2])
 #
 # latex_image_conversion(xml_source, stringparams, root_xmlid, data_dir, dest_dir, 'source')
 #
-ptx.latex_image_conversion(xml_source, None, '', None, dest_dir, 'source')
-
+ptx.latex_image_conversion(xml_source, None, "", None, dest_dir, "source")
