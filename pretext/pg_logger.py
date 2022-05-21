@@ -31,6 +31,7 @@
 
 import json
 import random
+
 # RAB, 2022-04-21  Removed relative import indication
 from pg_encoder import is_class, is_instance, ObjectEncoder, create_lambda_line_number
 import sys
@@ -1138,11 +1139,11 @@ class PGLogger(bdb.Bdb):
             # don't display return value for zombie frames
             # TODO: reconsider ...
             """
-          try:
-            e['ordered_varnames'].remove('__return__')
-          except ValueError:
-            pass
-          """
+            try:
+              e['ordered_varnames'].remove('__return__')
+            except ValueError:
+              pass
+            """
 
             e["is_zombie"] = True
             e["is_highlighted"] = False  # never highlight zombie entries
@@ -1511,6 +1512,7 @@ class PGLogger(bdb.Bdb):
 
 
 # the MAIN meaty function!!!
+
 
 def exec_script_str(script_str, raw_input_lst_json, options_json, finalizer_func):
     options = json.loads(options_json)
