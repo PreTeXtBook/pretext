@@ -96,6 +96,27 @@
     <xsl:text>localization = '</xsl:text>
     <xsl:value-of select="$document-language"/>
     <xsl:text>'&#xa;</xsl:text>
+    <!-- Record the server address and credentials from publisher variables -->
+    <!-- This will be an empty dictionary if there was no publication file. -->
+    <xsl:text>server_params_pub = {&#xa;</xsl:text>
+    <xsl:if test="$publisher">
+        <xsl:text>    "ww_domain":"</xsl:text>
+        <xsl:value-of select="$webwork-server"/>
+        <xsl:text>",&#xa;</xsl:text>
+        <xsl:text>    "courseID":"</xsl:text>
+        <xsl:value-of select="$webwork-course"/>
+        <xsl:text>",&#xa;</xsl:text>
+        <xsl:text>    "userID":"</xsl:text>
+        <xsl:value-of select="$webwork-user"/>
+        <xsl:text>",&#xa;</xsl:text>
+        <xsl:text>    "password":"</xsl:text>
+        <xsl:value-of select="$webwork-userpassword"/>
+        <xsl:text>",&#xa;</xsl:text>
+        <xsl:text>    "course_password":"</xsl:text>
+        <xsl:value-of select="$webwork-coursepassword"/>
+        <xsl:text>"&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>}&#xa;</xsl:text>
     <!-- Initialize empty dictionaries, then define key-value pairs -->
     <xsl:text>origin = {}&#xa;</xsl:text>
     <xsl:text>copiedfrom = {}&#xa;</xsl:text>
