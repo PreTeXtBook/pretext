@@ -1116,6 +1116,59 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- WeBWorK server location and credentials for the daemon course -->
+<xsl:variable name="webwork-server">
+    <xsl:choose>
+        <xsl:when test="$publication/webwork/@server">
+            <xsl:value-of select="$publication/webwork/@server"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>https://webwork-ptx.aimath.org</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="webwork-course">
+    <xsl:choose>
+        <xsl:when test="$publication/webwork/@course">
+            <xsl:value-of select="$publication/webwork/@course"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>anonymous</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="webwork-coursepassword">
+    <xsl:choose>
+        <xsl:when test="$publication/webwork/@coursepassword">
+            <xsl:value-of select="$publication/webwork/@coursepassword"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>anonymous</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="webwork-user">
+    <xsl:choose>
+        <xsl:when test="$publication/webwork/@user">
+            <xsl:value-of select="$publication/webwork/@user"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>anonymous</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="webwork-userpassword">
+    <xsl:choose>
+        <xsl:when test="$publication/webwork/@userpassword">
+            <xsl:value-of select="$publication/webwork/@userpassword"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>anonymous</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+
 <!-- WeBWork problem representations are formed by the           -->
 <!-- pretext/pretext script communicating with a WeBWorK server. -->
 <xsl:variable name="webwork-representations-file">
