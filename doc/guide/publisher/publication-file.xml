@@ -566,4 +566,70 @@
         </subsection>
     </section>
 
+    <section xml:id="publication-file-webwork">
+        <title>WeBWorK Options</title>
+        <idx>WeBWorK publisher options</idx>
+        <idx><h>publisher options</h><h>WeBWorK</h></idx>
+
+        <introduction>
+            <p>
+                A <webwork/> host course on a <webwork/> server somewhere does the processing of a project's <tag>webwork</tag> elements.
+                These are the details needed to specify where that course is and how <pretext/> will access it.
+                These are discussed again in <xref ref="webwork-representations"/>.
+            </p>
+        </introduction>
+
+        <subsection xml:id="publication-file-webwork-server">
+            <title>Server</title>
+            <p>
+                The URL to the <webwork/> server is in the attribute
+                <cd>
+                    <cline>/publication/webwork/@server</cline>
+                </cd>
+                should include the protocol (e.g.<nbsp/><c>http</c> or <c>https</c>) and not include a trailing slash.
+                The server should be version 2.14 or later.
+            </p>
+        </subsection>
+
+        <subsection xml:id="publication-file-webwork-course">
+            <title>Course</title>
+            <p>
+                The name of the host course is in the attribute
+                <cd>
+                    <cline>/publication/webwork/@course</cline>
+                </cd>
+            </p>
+        </subsection>
+
+        <subsection xml:id="publication-file-webwork-course-password">
+            <title>Course Password</title>
+            <p>
+                A course password (distinct from a user password) is in the attribute
+                <cd>
+                    <cline>/publication/webwork/@coursepassword</cline>
+                </cd>
+            </p>
+        </subsection>
+
+        <subsection xml:id="publication-file-webwork-user">
+            <title>User</title>
+            <p>
+                The username that signs in to the host course to process exercises is in the attribute
+                <cd>
+                    <cline>/publication/webwork/@user</cline>
+                </cd>
+            </p>
+        </subsection>
+
+        <subsection xml:id="publication-file-webwork-user-password">
+            <title>User Password</title>
+            <p>
+                That user's password is in the attribute
+                <cd>
+                    <cline>/publication/webwork/@userpassword</cline>
+                </cd>
+            </p>
+        </subsection>
+    </section>
+
 </chapter>
