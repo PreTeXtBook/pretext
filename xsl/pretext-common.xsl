@@ -599,30 +599,6 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
     </xsl:choose>
 </xsl:variable>
 
-<!-- 2019-05: this is a switch to transition from slow, more-stable -->
-<!-- identication strings to fast, less-stable strings.             -->
-<!--   1.  Default should switch to make transition                 -->
-<!--   2.  Switch should be deprecated and slow code abandoned      -->
-<!-- To change default from old-slow-style                          -->
-<!--   1.  move match on empty to "no" result                       -->
-<!--   2.  flip otherwise clause                                    -->
-<!-- 2021-03-03: move to Bad Bank once deactivated -->
-<xsl:param name="oldids" select="''"/>
-<xsl:variable name="oldstyle">
-    <xsl:choose>
-        <xsl:when test="($oldids = '') or ($oldids = 'yes')">
-            <xsl:text>yes</xsl:text>
-        </xsl:when>
-        <xsl:when test="$oldids = 'no'">
-            <xsl:text>no</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>yes</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-<xsl:variable name="b-fast-ids" select="$oldstyle = 'no'"/>
-
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->
@@ -3513,53 +3489,22 @@ Book (with parts), "section" at level 3
 
 <!-- These strings are used for items an author must manage              -->
 <!-- (image files) or that a reader will interact with (shared URLs)     -->
-<!-- Fast version (as of 2019-05) prefers                                -->
-<!--   1.  @xml:id - authored (with meaning), 100% author-controlled     -->
-<!--   2.  @permid - highly stable, controlled via edition management    -->
-<!--   3.  auto    - fast, unique per build, but unstable between builds -->
 <!-- Since items like filenames and URLs are sometimes shared across     -->
 <!-- conversions (or extractions) this template is in -common            -->
+
+
 <xsl:template match="*" mode="visible-id">
     <xsl:choose>
-        <!-- 2019-05: more efficient replacement -->
-        <!-- version of previous internal-id     -->
-        <xsl:when test="$b-fast-ids">
-            <xsl:choose>
-                <xsl:when test="@name">
-                    <xsl:value-of select="@name"/>
-                </xsl:when>
-                <xsl:when test="@xml:id">
-                    <xsl:value-of select="@xml:id" />
-                </xsl:when>
-                <xsl:when test="@permid">
-                    <xsl:value-of select="local-name(.)" />
-                    <xsl:text>-</xsl:text>
-                    <xsl:value-of select="@perm-id" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="local-name(.)" />
-                    <xsl:text>-</xsl:text>
-                    <!-- xsltproc produces non-numeric prefix "idm" -->
-                    <xsl:value-of select="substring(generate-id(.), 4)"/>
-                </xsl:otherwise>
-            </xsl:choose>
+        <xsl:when test="@name">
+            <xsl:value-of select="@name"/>
         </xsl:when>
-        <!-- 2019-05: following matches the slow       -->
-        <!-- internal-id previously in use exclusively -->
+        <xsl:when test="@xml:id">
+            <xsl:value-of select="@xml:id" />
+        </xsl:when>
         <xsl:otherwise>
-            <xsl:choose>
-                <xsl:when test="@name">
-                    <xsl:value-of select="@name"/>
-                </xsl:when>
-                <xsl:when test="@xml:id">
-                    <xsl:value-of select="@xml:id" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="local-name(.)" />
-                    <xsl:text>-</xsl:text>
-                    <xsl:number from="book|article|letter|memo" level="any" />
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:value-of select="local-name(.)" />
+            <xsl:text>-</xsl:text>
+            <xsl:number from="book|article|letter|memo" level="any" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -10543,13 +10488,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'docinfo/numbering/division/@part has been replaced by the  numbering/divisions/@part-structure  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'"/>
     </xsl:call-template>
     <!--  -->
-    <!-- 2021-03-03  switch never tested, experiment never enacted, ids improved anyway -->
-    <xsl:call-template name="parameter-deprecation-message">
-        <xsl:with-param name="date-string" select="'2021-03-03'" />
-        <xsl:with-param name="message" select="'the  oldids  string parameter was used for testing, and is now deprecated.  Code has not yet been removed, but will soon be, and this message will change to say so.'" />
-        <xsl:with-param name="incorrect-use" select="($oldids != '')" />
-    </xsl:call-template>
-    <!--  -->
     <!-- 2021-03-17  deprecate worksheet/pagebreak in favor of worksheet/page -->
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurrences" select="$document-root//worksheet/pagebreak" />
@@ -10780,6 +10718,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="$document-root//video/track/@label" />
         <xsl:with-param name="date-string" select="'2022-04-25'" />
         <xsl:with-param name="message" select="'a &quot;@label&quot; attribute (on a &quot;video/track&quot; element) has been deprecated and should be replaced by the functionally equivalent &quot;@listing&quot;.  We will attempt to honor your request'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-05-23  experimental scheme for "fast-id" abandonend -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-05-23'" />
+        <xsl:with-param name="message" select="'the  oldids  string parameter was used for testing, was deprecated on 2021-03-03, is now obsolete, there is no replacement, relevant code has been removed, and the parameter is being ignored'" />
+        <xsl:with-param name="incorrect-use" select="($oldids != '')" />
     </xsl:call-template>
     <!--  -->
 </xsl:template>

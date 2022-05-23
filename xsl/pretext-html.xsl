@@ -8157,17 +8157,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:otherwise>
                     <xsl:value-of select="local-name(.)"/>
                     <xsl:text>-</xsl:text>
-                    <!-- 2015-09: slow version matches previous "internal-id" -->
-                    <!-- use for third (automatic) construction               -->
-                    <xsl:choose>
-                        <xsl:when test="$b-fast-ids">
-                            <!-- xsltproc produces non-numeric prefix "idm" -->
-                            <xsl:value-of select="substring(generate-id(.), 4)"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:number from="book|article|letter|memo" level="any"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
+                    <xsl:number from="book|article|letter|memo" level="any"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>

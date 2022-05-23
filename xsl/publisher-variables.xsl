@@ -3173,6 +3173,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="project.answer" select="''" />
 <xsl:param name="project.solution" select="''" />
 
+<!-- On 2021-03-03 abandoned a "fast-id" scheme that was never -->
+<!-- really used since it was in-effect a developer testing    -->
+<!-- option. Then on 2022-05-23 removed code, strengthened     -->
+<!-- deprecation message, and moved parameter here.            -->
+<xsl:param name="oldids" select="''"/>
+
 <!-- ################# -->
 <!-- Variable Bad Bank -->
 <!-- ################# -->
