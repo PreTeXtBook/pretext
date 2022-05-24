@@ -11811,7 +11811,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-debug-react">
             <xsl:text>/* Mathjax typesetting operation is under the control of React */&#xa;</xsl:text>
             <xsl:text>  startup: {&#xa;</xsl:text>
-            <xsl:text>    typeset: false;&#xa;</xsl:text>
+            <xsl:text>    typeset: false,&#xa;</xsl:text>
             <xsl:text>  },&#xa;</xsl:text>
         </xsl:if>
         <!-- optional presentation mode gets clickable, large math -->
