@@ -3495,9 +3495,6 @@ Book (with parts), "section" at level 3
 
 <xsl:template match="*" mode="visible-id">
     <xsl:choose>
-        <xsl:when test="@name">
-            <xsl:value-of select="@name"/>
-        </xsl:when>
         <xsl:when test="@xml:id">
             <xsl:value-of select="@xml:id" />
         </xsl:when>
