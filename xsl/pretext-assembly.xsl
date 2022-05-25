@@ -703,7 +703,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- [Probably unnecessary]                                           -->
         <xsl:choose>
             <xsl:when test="not(@xml:id) and not(@label)"/>
-            <xsl:when test="@xml:id and not(@label)"/>
+            <xsl:when test="@xml:id and not(@label)">
+                <xsl:attribute name="label">
+                    <xsl:value-of select="@xml:id"/>
+                </xsl:attribute>
+            </xsl:when>
             <xsl:when test="not(@xml:id) and @label"/>
             <!-- both thoughtfully authored, nothing to do -->
             <xsl:when test="@xml:id and @label"/>
