@@ -247,6 +247,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="repair" select="exsl:node-set($repair-rtf)"/>
 
 <xsl:variable name="identification-rtf">
+    <!-- pass in all elements with authored @xml:id -->
+    <!-- to look for authored duplicates            -->
+    <xsl:call-template name="duplication-check-xmlid">
+        <xsl:with-param name="nodes" select="$repair//*[@xml:id]"/>
+        <xsl:with-param name="purpose" select="'authored'"/>
+    </xsl:call-template>
+
     <xsl:if test="$time-assembly">
         <xsl:message><xsl:value-of select="date:date-time()"/>: start identification</xsl:message>
     </xsl:if>
@@ -703,6 +710,40 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
         <xsl:apply-templates select="node()" mode="identification"/>
     </xsl:copy>
+</xsl:template>
+
+<!-- We look for duplicate identifiers both right after    -->
+<!-- assembly and right after automatic generation.  The   -->
+<!-- application of these templates is mixed-in to the     -->
+<!-- creation of the trees.                                -->
+<!-- NB: these were built as regular templates and the     -->
+<!-- root of the relevant tree was passed in, this created -->
+<!-- some error with the construction of the final tree:   -->
+<!-- "Recursive definition of root"                        -->
+<xsl:template name="duplication-check-xmlid">
+    <!-- pass in all elements with @xml:id attributes -->
+    <xsl:param name="nodes"/>
+    <!-- 'authored' or 'generated', just influences messages -->
+    <xsl:param name="purpose"/>
+
+    <xsl:for-each select="$nodes">
+        <!-- save off the string on current node -->
+        <xsl:variable name="the-id" select="string(./@xml:id)"/>
+        <!-- locate all elements that are duplicates of this one -->
+        <xsl:variable name="duplicates" select="$nodes[@xml:id = $the-id]"/>
+        <!-- warn only for the element that occurs earliest in the duplicate list -->
+        <xsl:if test="(count($duplicates) > 1) and (count(.|$duplicates[1]) = 1)">
+            <xsl:choose>
+                <xsl:when test="$purpose = 'authored'">
+                    <xsl:message>PTX:ERROR: the @xml:id value "<xsl:value-of select="$the-id"/>" should be unique, but is authored <xsl:value-of select="count($duplicates)"/> times.</xsl:message>
+                </xsl:when>
+            </xsl:choose>
+            <xsl:message>           Results will be unpredictable, and likely incorrect.  Information on the locations follows:</xsl:message>
+            <xsl:for-each select="$duplicates">
+                <xsl:apply-templates select="." mode="location-report" />
+            </xsl:for-each>
+        </xsl:if>
+    </xsl:for-each>
 </xsl:template>
 
 
