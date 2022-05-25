@@ -156,6 +156,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<xsl:template match="node()|@*" mode="identification">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="identification"/>
+    </xsl:copy>
+</xsl:template>
+
 <xsl:template match="node()|@*" mode="language">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="language"/>
@@ -240,6 +246,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="repair" select="exsl:node-set($repair-rtf)"/>
 
+<xsl:variable name="identification-rtf">
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: start identification</xsl:message>
+    </xsl:if>
+    <!--  -->
+    <xsl:apply-templates select="$repair" mode="identification"/>
+    <!--  -->
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: end identification</xsl:message>
+    </xsl:if>
+    <!--  -->
+</xsl:variable>
+<xsl:variable name="identification" select="exsl:node-set($identification-rtf)"/>
+
 <!-- Once the "repair" tree is formed, any source modifications      -->
 <!-- have been made, and it is on to *augmenting* the source.        -->
 <!-- Various publisher variables are consulted for the augmentation, -->
@@ -247,7 +267,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- be available for creating those variables, notably sensible     -->
 <!-- defaults based on the source.  We refer to this tree as the     -->
 <!-- "assembly" tree.                                                -->
-<xsl:variable name="assembly-root" select="$repair/pretext"/>
+<xsl:variable name="assembly-root" select="$identification/pretext"/>
 <xsl:variable name="assembly-docinfo" select="$assembly-root/docinfo"/>
 <xsl:variable name="assembly-document-root" select="$assembly-root/*[not(self::docinfo)]"/>
 
@@ -256,7 +276,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:message><xsl:value-of select="date:date-time()"/>: start language</xsl:message>
     </xsl:if>
     <!--  -->
-    <xsl:apply-templates select="$repair" mode="language"/>
+    <xsl:apply-templates select="$identification" mode="language"/>
     <!--  -->
     <xsl:if test="$time-assembly">
         <xsl:message><xsl:value-of select="date:date-time()"/>: end language</xsl:message>
@@ -658,6 +678,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:attribute name="listing">
         <xsl:value-of select="."/>
     </xsl:attribute>
+</xsl:template>
+
+
+<!-- ############## -->
+<!-- Identification -->
+<!-- ############## -->
+
+<xsl:template match="*" mode="identification">
+    <xsl:copy>
+        <!-- duplicate all attributes, especially  -->
+        <!-- preserve any authored @xml:id, @label -->
+        <xsl:apply-templates select="@*" mode="identification"/>
+        <!-- We fix up two identifiers, we assume authored @label are rarest, -->
+        <!-- and then authored @xml:id, in order to minimize tests (rather    -->
+        <!-- than the overhead of making two variables and checking them).    -->
+        <!-- [Probably unnecessary]                                           -->
+        <xsl:choose>
+            <xsl:when test="not(@xml:id) and not(@label)"/>
+            <xsl:when test="@xml:id and not(@label)"/>
+            <xsl:when test="not(@xml:id) and @label"/>
+            <!-- both thoughtfully authored, nothing to do -->
+            <xsl:when test="@xml:id and @label"/>
+        </xsl:choose>
+        <xsl:apply-templates select="node()" mode="identification"/>
+    </xsl:copy>
 </xsl:template>
 
 
