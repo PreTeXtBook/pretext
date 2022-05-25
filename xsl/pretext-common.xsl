@@ -3448,8 +3448,8 @@ Book (with parts), "section" at level 3
 <!-- conversions (or extractions) this template is in -common            -->
 <xsl:template match="*" mode="visible-id">
     <xsl:choose>
-        <xsl:when test="@xml:id">
-            <xsl:value-of select="@xml:id" />
+        <xsl:when test="@label">
+            <xsl:value-of select="@label"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:value-of select="local-name(.)" />

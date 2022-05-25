@@ -10366,11 +10366,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="latex-id">
     <xsl:choose>
         <!-- xml:id may be more recognizable -->
-        <xsl:when test="@xml:id">
+        <xsl:when test="@label">
             <xsl:text>x:</xsl:text>
             <xsl:value-of select="local-name(.)"/>
             <xsl:text>:</xsl:text>
-            <xsl:value-of select="@xml:id"/>
+            <xsl:value-of select="@label"/>
         </xsl:when>
         <!-- permid may be pervasive -->
         <xsl:when test="@permid">
