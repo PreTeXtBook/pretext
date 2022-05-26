@@ -125,6 +125,19 @@ mini-pdf:
 	install -d $(PDFOUT)
 	$(PTX)/pretext/pretext -vv -c all -f pdf -p $(MINIPUB) -d $(PDFOUT) $(MINI)
 
+#########################################################################
+# TeX versions
+# use -x latex.fillin.style box for box answer blanks instead of underlines
+
+sample-chapter-latex:
+	-rm -r $(PDFOUT)
+	install -d $(PDFOUT)
+	$(PTX)/pretext/pretext -vv -c all -f latex -p $(SMPCPUB) -d $(PDFOUT) $(SMPC)
+
+mini-latex:
+	-rm -r $(PDFOUT)
+	install -d $(PDFOUT)
+	$(PTX)/pretext/pretext -vv -c all -f latex -p $(MINIPUB) -d $(PDFOUT) $(MINI)
 
 #########################################################################
 # HTML output
