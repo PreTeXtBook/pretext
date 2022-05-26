@@ -405,7 +405,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- representations at face-value            -->
 <xsl:template match="webwork[node()|@*]" mode="assembly">
     <xsl:variable name="ww-id">
-        <xsl:apply-templates select="." mode="visible-id" />
+        <!-- This is the former "visible-id" template, which got modified  -->
+        <!-- to use @label, which is not guaranteed to exist yet (see      -->
+        <!-- "identification" phase).  This is going to break again, once  -->
+        <!-- authors use @label and once the default value scheme changes. -->
+        <!-- TODO: design a less-brittle system for identification.        -->
+        <xsl:choose>
+            <xsl:when test="@xml:id">
+                <xsl:value-of select="@xml:id"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="local-name(.)" />
+                <xsl:text>-</xsl:text>
+                <xsl:number from="book|article|letter|memo" level="any" />
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$b-extracting-pg">
