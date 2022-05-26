@@ -388,13 +388,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- WeBWorK Manufacture -->
 <!-- ################### -->
 
-<!-- Prevents repeated access attempts to non-existent file    -->
-<!-- Also use for overall warning about inability to create WW -->
-<!-- $webwork-representations-file is from publisher file      -->
-<xsl:variable name="b-doing-webwork-assembly" select="not($webwork-representations-file = '')"/>
 
-<!-- Normally we are not extracting PG. When we do, extract-pg.xsl -->
-<!-- will override the following with true()                       -->
+<!-- This pre-processing stylesheet will be run prior to isolating WW      -->
+<!-- problems for their eventual trip to a WW server ("extraction").       -->
+<!-- This is necessary so certain numbers are formed properly, etc.        -->
+<!-- In this phase we handle making copies of WW problems by duplicating   -->
+<!-- them.  This stylesheet is parameterized by the boolean variable       -->
+<!-- $b-extracting-pg, and is set by the stylesheet that actually harvests -->
+<!-- the WW problems and converts them to PG versions (extract-pg.xsl).    -->
 <xsl:variable name="b-extracting-pg" select="false()"/>
 
 <!-- Don't match on simple WeBWorK logo       -->
@@ -404,60 +405,42 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- performed here since we accept           -->
 <!-- representations at face-value            -->
 <xsl:template match="webwork[node()|@*]" mode="assembly">
-    <xsl:variable name="ww-id">
-        <xsl:apply-templates select="." mode="visible-id" />
-    </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$b-extracting-pg">
+        <xsl:when test="$b-extracting-pg and @copy">
+            <xsl:variable name="target" select="id(@copy)"/>
             <xsl:choose>
-                <xsl:when test="@copy">
-                    <!-- this will need to switch to a document-wide search     -->
-                    <!-- for a match on the @name value, once that attribute    -->
-                    <!-- is in place, since we do not yet have the              -->
-                    <!-- @name -> @xml:id  mapping until we are done assembling -->
-                    <xsl:variable name="target" select="id(@copy)"/>
-                    <xsl:choose>
-                        <xsl:when test="$target/statement|$target/task|$target/stage">
-                            <xsl:copy>
-                                <xsl:attribute name="copied-from">
-                                    <xsl:value-of select="@copy"/>
-                                </xsl:attribute>
-                                <xsl:apply-templates select="@*[not(local-name(.) = 'copy')]" mode="assembly"/>
-                                <xsl:apply-templates select="$target/@*[not(local-name(.) = 'id')][not(local-name(.) = 'seed')]" mode="assembly"/>
-                                <!-- TODO: The following should scrub unique IDs as it continues down the tree. -->
-                                <!-- Perhaps with a param to the assembly modal template.                       -->
-                                <xsl:apply-templates select="$target/node()" mode="assembly"/>
-                            </xsl:copy>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <webwork>
-                                <statement>
-                                    <p>
-                                        A WeBWorK problem would appear here, but something about its <c>@copy</c> attribute is not right.
-                                        Search the runtime output for <q><c>PTX:ERROR</c></q>.
-                                    </p>
-                                </statement>
-                            </webwork>
-                        </xsl:otherwise>
-                    </xsl:choose>
+                <xsl:when test="$target/statement|$target/task|$target/stage">
+                    <xsl:copy>
+                        <xsl:attribute name="copied-from">
+                            <xsl:value-of select="@copy"/>
+                        </xsl:attribute>
+                        <xsl:apply-templates select="@*[not(local-name(.) = 'copy')]" mode="assembly"/>
+                        <xsl:apply-templates select="$target/@*[not(local-name(.) = 'id')][not(local-name(.) = 'seed')]" mode="assembly"/>
+                        <!-- TODO: The following should scrub unique IDs as it continues down the tree. -->
+                        <!-- Perhaps with a param to the assembly modal template.                       -->
+                        <xsl:apply-templates select="$target/node()" mode="assembly"/>
+                    </xsl:copy>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:copy>
-                        <xsl:apply-templates select="node()|@*" mode="assembly"/>
-                    </xsl:copy>
+                    <webwork>
+                        <statement>
+                            <p>
+                                A WeBWorK problem would appear here, but something about its <c>@copy</c> attribute is not right.
+                                Search the runtime output for <q><c>PTX:ERROR</c></q>.
+                            </p>
+                        </statement>
+                    </webwork>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
-        <xsl:when test="$b-doing-webwork-assembly">
-            <xsl:copy-of select="document($webwork-representations-file, $original)/webwork-representations/webwork-reps[@ww-id=$ww-id]" />
-        </xsl:when>
         <xsl:otherwise>
-            <statement>
-                <p>The WeBWorK problem with ID <q><xsl:value-of select="$ww-id"/></q> will appear here if you provide the file of problems that have been processed by a WeBWorK server (<c>webwork-representations.ptx</c>).</p>
-            </statement>
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="assembly"/>
+            </xsl:copy>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
 
 <!-- ################# -->
 <!-- Private Solutions -->
@@ -1215,6 +1198,36 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Static (non-interactive) -->
 <!-- @exercise-interactive = 'static' needs no adjustments -->
 
+<!-- Warn/fail if the file of WW representations is not found -->
+<xsl:variable name="b-ww-representations-missing" select="($webwork-representations-file = '') and not($b-extracting-pg)"/>
+
+<!-- WeBWorK problems have been sent to a server and come back as      -->
+<!-- several different representations, all collected in one big file, -->
+<!-- which we mine and duplicate in this pass.                         -->
+
+<xsl:template match="webwork[node()|@*]" mode="representations">
+    <xsl:variable name="ww-id">
+        <xsl:apply-templates select="." mode="visible-id" />
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$b-extracting-pg">
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="representations"/>
+            </xsl:copy>
+        </xsl:when>
+        <!-- not extracting, check on file, drop placeholder -->
+        <xsl:when test="$b-ww-representations-missing">
+            <statement>
+                <p>The WeBWorK problem with ID <q><xsl:value-of select="$ww-id"/></q> will appear here if you provide the file of problems that have been processed by a WeBWorK server (<c>webwork-representations.ptx</c>).</p>
+            </statement>
+        </xsl:when>
+        <!-- get the representations now -->
+        <xsl:otherwise>
+            <xsl:copy-of select="document($webwork-representations-file, $original)/webwork-representations/webwork-reps[@ww-id=$ww-id]" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- ######## -->
 <!-- Warnings -->
@@ -1223,7 +1236,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A place for warnings about missing files, etc -->
 <!-- and/or temporary/experimental features        -->
 <xsl:template name="assembly-warnings">
-    <xsl:if test="$original/*[not(self::docinfo)]//webwork/node() and not($b-doing-webwork-assembly or $b-extracting-pg)">
+    <xsl:if test="$original/*[not(self::docinfo)]//webwork/node() and $b-ww-representations-missing">
         <xsl:message>PTX:WARNING: Your document has WeBWorK exercises,</xsl:message>
         <xsl:message>             but your publisher file does not indicate the file</xsl:message>
         <xsl:message>             of problem representations created by a WeBWorK server.</xsl:message>
