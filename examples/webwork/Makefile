@@ -77,6 +77,7 @@ MINIPUB = $(WWEXAMPLE)/minimal/publication.xml
 
 # These paths are subdirectories of
 # the scratch directory
+TEXOUT     = $(SCRATCH)/latex
 PDFOUT     = $(SCRATCH)/pdf
 IMGOUT     = $(SCRATCH)/images
 HTMLOUT    = $(SCRATCH)/html
@@ -130,14 +131,14 @@ mini-pdf:
 # use -x latex.fillin.style box for box answer blanks instead of underlines
 
 sample-chapter-latex:
-	-rm -r $(PDFOUT)
-	install -d $(PDFOUT)
-	$(PTX)/pretext/pretext -vv -c all -f latex -p $(SMPCPUB) -d $(PDFOUT) $(SMPC)
+	-rm -r $(TEXOUT)
+	install -d $(TEXOUT)
+	$(PTX)/pretext/pretext -vv -c all -f latex -p $(SMPCPUB) -d $(TEXOUT) $(SMPC)
 
 mini-latex:
-	-rm -r $(PDFOUT)
-	install -d $(PDFOUT)
-	$(PTX)/pretext/pretext -vv -c all -f latex -p $(MINIPUB) -d $(PDFOUT) $(MINI)
+	-rm -r $(TEXOUT)
+	install -d $(TEXOUT)
+	$(PTX)/pretext/pretext -vv -c all -f latex -p $(MINIPUB) -d $(TEXOUT) $(MINI)
 
 #########################################################################
 # HTML output
