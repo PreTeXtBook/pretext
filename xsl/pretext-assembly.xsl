@@ -144,6 +144,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<xsl:template match="node()|@*" mode="labeling">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="labeling"/>
+    </xsl:copy>
+</xsl:template>
+
 <xsl:template match="node()|@*" mode="assembly">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="assembly"/>
@@ -218,12 +224,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="version" select="exsl:node-set($version-rtf)"/>
 
+<xsl:variable name="labeled-rtf">
+    <xsl:call-template name="assembly-warnings"/>
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: start label</xsl:message>
+    </xsl:if>
+    <xsl:apply-templates select="$version" mode="labeling"/>
+    <!--  -->
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: end label</xsl:message>
+    </xsl:if>
+    <!--  -->
+</xsl:variable>
+<xsl:variable name="labeled" select="exsl:node-set($labeled-rtf)"/>
+
 <xsl:variable name="assembly-rtf">
     <xsl:if test="$time-assembly">
         <xsl:message><xsl:value-of select="date:date-time()"/>: start assembly</xsl:message>
     </xsl:if>
     <!--  -->
-    <xsl:apply-templates select="$version" mode="assembly"/>
+    <xsl:apply-templates select="$labeled" mode="assembly"/>
     <!--  -->
     <xsl:if test="$time-assembly">
         <xsl:message><xsl:value-of select="date:date-time()"/>: end assembly</xsl:message>
@@ -675,6 +695,34 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Identification -->
 <!-- ############## -->
 
+<xsl:template match="*" mode="labeling">
+    <xsl:copy>
+        <!-- duplicate all attributes, especially  -->
+        <!-- preserve any authored @xml:id, @label -->
+        <xsl:apply-templates select="@*" mode="labeling"/>
+        <!-- The "visible-id" template switched to prefer @label,         -->
+        <!-- rather than @xml:id (at 1779e6dbc84c6ecc).  So to preserve   -->
+        <!-- authored (crafted) identifier strings, we copy the old over  -->
+        <!-- into the new.  This preserves identifiers in output          -->
+        <!-- (filenames, fragment identifiers).                           -->
+        <!-- We do this *early*, but crtically, before WW representations -->
+        <!-- get melded in since sometimes we have  webwork/@xml:id  as a -->
+        <!-- target for a copy.                                           -->
+        <!--                                                              -->
+        <!-- DELAY: when we replace generated values ("theorem-420") in   -->
+        <!-- the "visible-id" template, we will create those new strings  -->
+        <!-- ("good-section-s3t5") here on the fly and the WW problems    -->
+        <!-- will behave (with semi-stable identifiers).                  -->
+        <xsl:if test="@xml:id and not(@label)">
+            <xsl:attribute name="label">
+                <xsl:value-of select="@xml:id"/>
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:apply-templates select="node()" mode="labeling"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- THIS IS DOING NOTHING, WILL RECYCLE FOR GENERATED XML:ID -->
 <xsl:template match="*" mode="identification">
     <xsl:copy>
         <!-- duplicate all attributes, especially  -->
@@ -686,11 +734,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- [Probably unnecessary]                                           -->
         <xsl:choose>
             <xsl:when test="not(@xml:id) and not(@label)"/>
-            <xsl:when test="@xml:id and not(@label)">
-                <xsl:attribute name="label">
-                    <xsl:value-of select="@xml:id"/>
-                </xsl:attribute>
-            </xsl:when>
+            <xsl:when test="@xml:id and not(@label)"/>
             <xsl:when test="not(@xml:id) and @label"/>
             <!-- both thoughtfully authored, nothing to do -->
             <xsl:when test="@xml:id and @label"/>
