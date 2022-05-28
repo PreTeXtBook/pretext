@@ -156,6 +156,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<xsl:template match="node()|@*" mode="representations">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="representations"/>
+    </xsl:copy>
+</xsl:template>
+
 <xsl:template match="node()|@*" mode="repair">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="repair"/>
@@ -192,15 +198,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="node()|@*" mode="exercise">
             <xsl:with-param name="division" select="$division"/>
         </xsl:apply-templates>
-    </xsl:copy>
-</xsl:template>
-
-<xsl:template match="node()|@*" mode="representations">
-    <xsl:param name="fn-subtree-number"/>
-    <xsl:param name="fn-subtree"/>
-
-    <xsl:copy>
-        <xsl:apply-templates select="node()|@*" mode="representations"/>
     </xsl:copy>
 </xsl:template>
 
@@ -252,12 +249,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="assembly" select="exsl:node-set($assembly-rtf)"/>
 
+<xsl:variable name="representations-rtf">
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: start representations</xsl:message>
+    </xsl:if>
+    <!--  -->
+    <xsl:apply-templates select="$assembly" mode="representations"/>
+    <!--  -->
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: end representations</xsl:message>
+    </xsl:if>
+    <!--  -->
+</xsl:variable>
+<xsl:variable name="representations" select="exsl:node-set($representations-rtf)"/>
+
 <xsl:variable name="repair-rtf">
     <xsl:if test="$time-assembly">
         <xsl:message><xsl:value-of select="date:date-time()"/>: start repair</xsl:message>
     </xsl:if>
     <!--  -->
-    <xsl:apply-templates select="$assembly" mode="repair"/>
+    <xsl:apply-templates select="$representations" mode="repair"/>
     <!--  -->
     <xsl:if test="$time-assembly">
         <xsl:message><xsl:value-of select="date:date-time()"/>: end repair</xsl:message>
@@ -343,27 +354,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="exercise" select="exsl:node-set($exercise-rtf)"/>
 
-<xsl:variable name="representations-rtf">
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: start representations</xsl:message>
-    </xsl:if>
-    <!--  -->
-    <xsl:apply-templates select="$exercise" mode="representations"/>
-    <!--  -->
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: end representations</xsl:message>
-    </xsl:if>
-    <!--  -->
-</xsl:variable>
-<xsl:variable name="representations" select="exsl:node-set($representations-rtf)"/>
-
 <!-- The main "pretext" element only has two possible children      -->
 <!-- One is "docinfo", the other is "book", "article", etc.         -->
 <!-- This is of interest by itself, or the root of content searches -->
 <!-- And docinfo is the other child, these help prevent searching   -->
 <!-- the wrong half.                                                -->
 <!-- NB: source repair below converts a /mathbook to a /pretext     -->
-<xsl:variable name="root" select="$representations/pretext"/>
+<xsl:variable name="root" select="$exercise/pretext"/>
 <xsl:variable name="docinfo" select="$root/docinfo"/>
 <xsl:variable name="document-root" select="$root/*[not(self::docinfo)]"/>
 
