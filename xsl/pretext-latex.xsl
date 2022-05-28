@@ -6062,14 +6062,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- stage.  We realize each stage in print as a "Part", which    -->
 <!-- has a statement and optionally, hints, answers and solutions.-->
 
-<!-- Warn if WeBWorK representations have not been assembled -->
-<xsl:template match="webwork[node()|@*]">
-    <xsl:message>PTX:ERROR: A document that uses WeBWorK nees to incorporate a file</xsl:message>
-    <xsl:message>of representations of WW problems.  These can be created with the</xsl:message>
-    <xsl:message>"pretext" Python script and specified in a publisher file.</xsl:message>
-    <xsl:message>See the documentation for details.</xsl:message>
-</xsl:template>
-
 <!-- A "webwork-reps" inside an "exercise" indicates a WeBWorK problem -->
 <!-- originally in the source.  We could try to condition on a bare    -->
 <!-- "static" versus "static/stage" but it seems safer to stick with   -->
