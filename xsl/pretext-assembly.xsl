@@ -416,12 +416,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-extracting-pg" select="false()"/>
 
 <!-- Don't match on simple WeBWorK logo       -->
+<!-- But do match with a @copy attribute      -->
 <!-- Seed and possibly source attributes      -->
 <!-- Then authored?, pg?, and static children -->
 <!-- NB: "xref" check elsewhere is not        -->
 <!-- performed here since we accept           -->
 <!-- representations at face-value            -->
-<xsl:template match="webwork[node()|@*]" mode="assembly">
+<xsl:template match="webwork[* or @copy or @source]" mode="assembly">
     <xsl:choose>
         <xsl:when test="$b-extracting-pg and @copy">
             <xsl:variable name="target" select="id(@copy)"/>
@@ -1255,7 +1256,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- several different representations, all collected in one big file, -->
 <!-- which we mine and duplicate in this pass.                         -->
 
-<xsl:template match="webwork[node()|@*]" mode="representations">
+<xsl:template match="webwork[* or @copy or @source]" mode="representations">
     <xsl:variable name="ww-id">
         <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>

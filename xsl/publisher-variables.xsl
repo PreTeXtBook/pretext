@@ -1174,7 +1174,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="webwork-representations-file">
     <xsl:choose>
         <!-- XSLT should skip the second condition below if the first is false (boosts efficiency). -->
-        <xsl:when test="$generated-directory-source != '' and $original//webwork[*|@*]">
+        <xsl:when test="$generated-directory-source != '' and $original//webwork[* or @copy or @source]">
             <xsl:value-of select="str:replace(concat($generated-directory-source, 'webwork/webwork-representations.xml'), '&#x20;', '%20')"/>
         </xsl:when>
         <xsl:when test="$publication/source/@webwork-problems">

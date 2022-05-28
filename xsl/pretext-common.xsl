@@ -9340,9 +9340,16 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Conveniences -->
 <!-- ############ -->
 
-<!-- Conveniences, which can be overridden in format-specific conversions -->
+<!-- Conveniences, possibly overridden in format-specific conversions -->
+<!-- NB: we need to distinguish empty elements in some cases.  Since  -->
+<!-- pre-processing is likely to add some attributes, and perhaps an  -->
+<!-- element could have an opening and ending tag split across lines, -->
+<!-- we just presume the non-empty case is indicated by elements as   -->
+<!-- children.  Also, the schema should indicate that there are       -->
+<!-- extraneous authored elements, so the less-severe testing is not  -->
+<!-- a contract.                                                      -->
 <!-- TODO: kern, etc. into LaTeX, HTML versions -->
-<xsl:template match="webwork[not(child::node() or @*)]">
+<xsl:template match="webwork[not(* or @copy or @source)]">
     <xsl:text>WeBWorK</xsl:text>
 </xsl:template>
 
