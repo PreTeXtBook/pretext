@@ -434,10 +434,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:attribute name="copied-from">
                             <xsl:value-of select="@copy"/>
                         </xsl:attribute>
+                        <!-- Duplicate attributes, but remove the @copy attribute -->
+                        <!-- used as a signal here.  We don't want to copy this   -->
+                        <!-- again after we have been to the WW server.           -->
                         <xsl:apply-templates select="@*[not(local-name(.) = 'copy')]" mode="assembly"/>
-                        <xsl:apply-templates select="$target/@*[not(local-name(.) = 'id')][not(local-name(.) = 'seed')]" mode="assembly"/>
+                        <!-- The @seed makes the problem different, and @xml:id and @label -->
+                        <!-- are unique identifiers, so grab any other attributes of the   -->
+                        <!-- original, but exclude these while formulating a copy/clone.   -->
+                        <xsl:apply-templates select="$target/@*[(not(local-name(.) = 'id')) and
+                                                                (not(local-name(.) = 'label')) and
+                                                                (not(local-name(.) = 'seed'))]" mode="assembly"/>
                         <!-- TODO: The following should scrub unique IDs as it continues down the tree. -->
                         <!-- Perhaps with a param to the assembly modal template.                       -->
+                        <!-- Does the contents of the original WW have any @xml:id or @label?           -->
                         <xsl:apply-templates select="$target/node()" mode="assembly"/>
                     </xsl:copy>
                 </xsl:when>
