@@ -27,6 +27,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:xhtml="http://www.w3.org/1999/xhtml"
     xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
@@ -747,6 +748,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="@xml:id and @label"/>
         </xsl:choose>
         <xsl:apply-templates select="node()" mode="identification"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- There is no real putpose to put an @xml:id onto an (X)HTML -->
+<!-- element floating around as part of an interactive.         -->
+<xsl:template match="xhtml:*" mode="identification">
+    <xsl:copy>
+        <xsl:apply-templates select="@*|node()" mode="identification"/>
     </xsl:copy>
 </xsl:template>
 
