@@ -5554,9 +5554,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- title may be default title -->
     <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}\space\space</xsl:text>
-    <xsl:if test="@xml:id">
-        <xsl:apply-templates select="." mode="label"/>
-    </xsl:if>
+    <xsl:apply-templates select="." mode="optional-label"/>
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates select="introduction" />
     <xsl:choose>
@@ -6265,6 +6263,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- \label{} will separate content, if   -->
                     <!-- employed, else we use an empty group -->
                     <xsl:choose>
+                        <!-- not quite tight for modal "optional-label" -->
                         <xsl:when test="@xml:id">
                             <xsl:apply-templates select="." mode="label" />
                         </xsl:when>
@@ -6697,8 +6696,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- we can't cross-reference here without an @xml:id -->
     <!-- place it on a line of its own just prior to guts -->
+    <xsl:apply-templates select="." mode="optional-label"/>
+    <!-- line break is optional as well -->
     <xsl:if test="@xml:id">
-        <xsl:apply-templates select="." mode="label" />
         <xsl:text>%&#xa;</xsl:text>
     </xsl:if>
     <xsl:apply-templates />
@@ -7160,6 +7160,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- \label{} will separate content, if   -->
     <!-- employed, else we use an empty group -->
     <xsl:choose>
+        <!-- not quite tight for modal "optional-label" -->
         <xsl:when test="@xml:id">
             <xsl:apply-templates select="." mode="label" />
         </xsl:when>
@@ -7662,9 +7663,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: <quote> element for inline -->
 <xsl:template match="blockquote">
     <xsl:text>\begin{quote}</xsl:text>
-    <xsl:if test="@xml:id">
-        <xsl:apply-templates select="." mode="label"/>
-    </xsl:if>
+    <xsl:apply-templates select="." mode="optional-label"/>
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates />
     <xsl:text>\end{quote}&#xa;</xsl:text>
@@ -10441,6 +10440,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- We sometimes use the presence of @xml:id to indicate that an     -->
+<!-- author intends an element to be the target of a cross-reference, -->
+<!-- and then *elect* to place a label.                               -->
+<xsl:template match="*" mode="optional-label">
+    <xsl:if test="@xml:id">
+        <xsl:apply-templates select="." mode="label"/>
+    </xsl:if>
+</xsl:template>
+
 <!-- An extraordinary template produces labels for exercise components -->
 <!-- (hint, answer, solution) displayed in solution lists (via the     -->
 <!-- "solutions" element).  The purpose is to allow the original       -->
@@ -10823,9 +10831,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="poem">
     <xsl:text>\begin{poem}</xsl:text>
-    <xsl:if test="@xml:id">
-        <xsl:apply-templates select="." mode="label"/>
-    </xsl:if>
+    <xsl:apply-templates select="." mode="optional-label"/>
     <xsl:text>%&#xa;</xsl:text>
     <xsl:text>\poemTitle{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
@@ -11312,9 +11318,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   We first close off the citation itself -->
 <xsl:template match="biblio/note">
     <xsl:text>\par</xsl:text>
-    <xsl:if test="@xml:id">
-        <xsl:apply-templates select="." mode="label"/>
-    </xsl:if>
+    <xsl:apply-templates select="." mode="optional-label"/>
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates />
 </xsl:template>
