@@ -341,32 +341,6 @@
         <c>-d</c> specifies a folder to place the PDF output.
         If unspecified, this will be the current working directory.
       </p>
-      <p>
-        There is one string parameter you may pass to <c>pretext</c> using <c>-x</c>.
-        If you use <c>-x</c> with <c>pretext</c>,
-        make sure at least one other switch (<c>-p</c> for example) follows the use of <c>-x</c>.
-      </p>
-      <tabular valign="top">
-        <col />
-        <col width="60%" />
-        <row bottom="major">
-          <cell>stringparam</cell>
-          <cell>options</cell>
-        </row>
-        <row bottom="minor">
-          <cell><c>latex.fillin.style</c></cell>
-          <cell>
-            <p>
-              <c>'underline'</c> (default) means that where there would be an answer blank,
-              it is rendered as an underline.
-            </p>
-            <p>
-              <c>'box'</c> means that where there would be an answer blank,
-              it is rendered as a box outline.
-            </p>
-          </cell>
-        </row>
-      </tabular>
     </subsection>
 
     <subsection>

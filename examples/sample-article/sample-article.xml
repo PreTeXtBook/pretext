@@ -1526,7 +1526,7 @@ the xsltproc executable.
 
                 <p>Similarly, within a paragraph, you can identify edits between versions as <insert>inserted text that has been added</insert><idx><h>styling words</h><h>insert</h></idx> with <tag>insert</tag> or as <delete>deleted text that has been removed</delete><idx><h>styling words</h><h>delete</h></idx> with <tag>delete</tag>.  Note that these identified edits are slightly different than <stale>stale text that you want to retain, but which is no longer relevant</stale><idx><h>styling words</h><h>stale</h></idx>, which is accomplished with <tag>stale</tag>.  The original request for stale text came from an instructor with an online list of student topics for presentations, and as students claimed topics they were marked as no longer available for other students.</p>
 
-                <p>If you need a <q>fill-in blank</q>, like this<fillin />, it can be obtained with an empty <tag>fillin</tag> element that defaults to roughly a 10-character width.  You can use the <tag>characters</tag> attribute to make the rule longer or shorter, such as a 40-character blank: <fillin characters="40" />.  The character count is approximate, based on typical character widths within a proportional font carrying English language text.  Adjust to suit, or request a language-specific adjustment if it is critical.</p>
+                <p>If you need a <q>fill-in blank</q>, like this <fillin />, it can be obtained with an empty <tag>fillin</tag> element that defaults to roughly a 10-character width.  You can use the <tag>characters</tag> attribute to make the rule longer or shorter, such as a 40-character blank: <fillin characters="40" />.  The character count is approximate, based on typical character widths within a proportional font carrying English language text.  Adjust to suit, or request a language-specific adjustment if it is critical.</p>
 
                 <p>Long after we started this mess, we added <pretext /> tags to mark up tags and attributes.  The elements are: <tag>tag</tag>, <tag>tage</tag>, <tag>attr</tag>.  Examples of how these render are (respectively): <tag>section</tag>, <tage>hash</tage>, <attr>width</attr>.  Perhaps this document will make greater use of these tags.</p>
 
@@ -4073,20 +4073,23 @@ the xsltproc executable.
                 <exercise>
                     <statement>
                         <p>One of the few things you can place inside of mathematics is a <q>fill-in</q> blank.<idx><h>fill-in blank</h></idx>  We demonstrate a few scenarios here.  See details on syntax in <xref ref="subsection-paragraph-markup" text="type-global" /><ndash />the use is identical within mathematics.<ul>
-                            <li><p>Inside inline math (short, 4 characters): <m>\sin(<fillin characters="4" />)</m></p></li>
+                            <li><p>Inside inline math (short, space for <m>x</m>): <m>\sin(<fillin fill="x" />)</m></p></li>
 
-                            <li><p>Inside inline math (default, 10 characters): <m>\sin(<fillin characters="10" />)</m></p></li>
+                            <li><p>Inside inline math (default, space for <m>XXX</m>): <m>\sin(<fillin />)</m></p></li>
 
-                            <li><p>Inside exponents and subscripts (2 characters each).  In this case, be sure to wrap your exponents and subscripts in braces, as would be good <latex /> practice anyway: <m>x^{5+<fillin characters="2" />}\,y_{<fillin characters="2" />}</m></p></li>
+                            <li><p>Inside exponents and subscripts (each is space for the string <q>12</q>).  In this case, be sure to wrap your exponents and subscripts in braces, as would be good <latex /> practice anyway: <m>x^{5+<fillin fill="12" />}\,y_{<fillin fill="12" />}</m></p></li>
 
-                            <li><p>Inside inline math (too long for this line probably, 40 characters long): <m>\tan(<fillin characters="40" />)</m></p></li>
+                            <li><p>Inside inline math (too long for this line probably, 40 characters long): <m>\tan(<fillin fill="Mxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" />)</m></p></li>
 
-                            <li><p>So use inside a displayed equation<me>16\log\space<fillin characters="8" /></me>like this one.</p></li>
+                            <li><p>So use inside a displayed equation<me>16\log\space<fillin fill="1-x^2" /></me>like this one.</p></li>
 
                             <li><p>Inside the second line of a multi-line display:<md>
                                 <mrow>y &amp;= x^7\,x^8</mrow>
-                                <mrow>  &amp;= x^{<fillin characters="3" />}</mrow>
+                                <mrow>  &amp;= x^{<fillin fill="15" />}</mrow>
                             </md></p></li>
+                            <li><p>
+                                This fillin has the deprecated <attr>characters</attr> attribute for a fillin inside math: <m>1+<fillin characters="5"/>+4=10</m>.
+                            </p></li>
                         </ul></p>
                     </statement>
                 </exercise>
@@ -11125,7 +11128,7 @@ the xsltproc executable.
                 <exercise workspace="2in">
                   <statement>
                     <p>To show that the point <m>P</m> exists (as the common intersection of the <m>\vec{M}_{i}</m>), show that <me>
-                      \vec{A} + \frac{2}{3} \vec{M}_{3} = \frac{2}{3} \vec{M}_{2} = <fillin characters="10"/>
+                      \vec{A} + \frac{2}{3} \vec{M}_{3} = \frac{2}{3} \vec{M}_{2} = <fillin fill="\frac{2}{3} \vec{M}_{1}-\vec{C}"/>
                     </me>.</p>
                   </statement>
                 </exercise>

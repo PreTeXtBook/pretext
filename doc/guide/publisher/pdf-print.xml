@@ -126,12 +126,6 @@
         <p>This is meant to help you create a professional electronic <init>PDF</init>.  A print-on-demand service (<xref ref="print-on-demand"/>) will likely want a standalone image (possibly with the front and back, plus a spine, all rolled into one <term>wrap</term> image).  So build your <em>real</em> cover images (<xref ref="cover-design"/>), and then modify them for this use.</p>
     </section>
 
-    <section>
-        <title>Fill-Ins</title>
-
-        <p>The <tag>fillin</tag> element can be rendered as a line near the baseline of the current line of text, or as a complete rectangle (<q>box</q>).  Set <c>latex.fillin.style</c> to the values <c>underline</c> or <c>box</c>.</p>
-    </section>
-
     <section xml:id="latex-icons">
         <title>Icons</title>
 
@@ -200,11 +194,6 @@
                     <cell><c>latex.watermark.scale</c></cell>
                     <cell><c>2.0</c></cell>
                     <cell>Positive rational number</cell>
-                </row>
-                <row>
-                    <cell><c>latex.fillin.style</c></cell>
-                    <cell><c>underline</c></cell>
-                    <cell><c>underline</c>, <c>box</c></cell>
                 </row>
                 <row>
                     <cell><c>latex.preamble.early</c></cell>

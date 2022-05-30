@@ -8492,7 +8492,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- height and depth of the rule"                                        -->
 <!-- Davide Cervone                                                       -->
 <!-- https://groups.google.com/forum/#!topic/mathjax-users/IEivs1D7ntM    -->
-<xsl:template match="fillin">
+<xsl:template match="fillin[not(parent::m or parent::me or parent::men or parent::mrow)]">
     <xsl:variable name="characters">
         <xsl:choose>
             <xsl:when test="@characters">
@@ -8503,26 +8503,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:choose>
-        <xsl:when test="parent::m or parent::me or parent::men or parent::mrow">
-            <xsl:text>\underline{\hspace{</xsl:text>
+    <span class="fillin {$fillin-text-style}" role="img">
+        <xsl:attribute name="aria-label">
+            <xsl:value-of select="$characters" />
+            <xsl:text>-character blank</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="style">
+            <xsl:text>width: </xsl:text>
             <xsl:value-of select="5 * $characters div 11" />
-            <xsl:text>em}}</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <span class="fillin" role="img">
-                <xsl:attribute name="aria-label">
-                    <xsl:value-of select="$characters" />
-                    <xsl:text>-character blank</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="style">
-                    <xsl:text>width: </xsl:text>
-                    <xsl:value-of select="5 * $characters div 11" />
-                    <xsl:text>em;</xsl:text>
-                </xsl:attribute>
-            </span>
-        </xsl:otherwise>
-    </xsl:choose>
+            <xsl:text>em;</xsl:text>
+        </xsl:attribute>
+    </span>
 </xsl:template>
 
 <xsl:template match="var[@form='checkboxes']">
@@ -12193,6 +12184,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="math">
                 <xsl:value-of select="$latex-packages-mathjax"/>
                 <xsl:value-of select="$latex-macros"/>
+                <xsl:call-template name="fillin-math"/>
                 <!-- legacy built-in support for "slanted|beveled|nice" fractions -->
                 <xsl:if test="$b-has-sfrac">
                     <xsl:text>\newcommand{\sfrac}[2]{{#1}/{#2}}&#xa;</xsl:text>
