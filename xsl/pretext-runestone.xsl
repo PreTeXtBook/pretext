@@ -329,6 +329,32 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- When hosted on Runestone, an interactive exercise is tracked in a    -->
+<!-- database across courses ("base course") and semesters ("time").      -->
+<!-- And the HTML representation of an interactive exercise, when powered -->
+<!-- by Runestone services, needs an HTML id.  But the PreTeXt "exercise" -->
+<!-- that wraps it has its own HTML id necessary for targets of           -->
+<!-- cross-reference (in-context) URLs.  We will prefer @label for the    -->
+<!-- PreTeXt "exercise" HTML id.  And we will require a *stable* @label   -->
+<!-- from an author, which we will dress up here.  Notice that this can   -->
+<!-- change when an author declares a new edition.                        -->
+<xsl:template match="exercise|program|&PROJECT-LIKE;" mode="runestone-id">
+    <xsl:if test="not(@label)">
+        <xsl:message>DEVELOPMENT: a Runestone object and there is no @label on container</xsl:message>
+        <xsl:message>             this is strictly temporary and informational</xsl:message>
+        <xsl:apply-templates select="." mode="location-report"/>
+    </xsl:if>
+    <!-- perhaps bifurcate on hosting/for-all  -->
+    <!-- dfinitely get base/edition in docinfo -->
+    <xsl:text>base_edition_</xsl:text>
+    <xsl:value-of select="@label"/>
+</xsl:template>
+
+<xsl:template match="exercise|program|&PROJECT-LIKE;" mode="runestone-id-attribute">
+    <xsl:attribute name="id">
+        <xsl:apply-templates select="." mode="runestone-id"/>
+    </xsl:attribute>
+</xsl:template>
 
 <!-- ################## -->
 <!-- Runestone Manifest -->
@@ -518,7 +544,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="exercise[@exercise-interactive = 'truefalse']" mode="runestone-to-interactive">
     <xsl:variable name="the-id">
-        <xsl:apply-templates select="." mode="html-id"/>
+        <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
     <div class="runestone ">
         <!-- ul can have multiple answer attribute -->
@@ -583,7 +609,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="exercise[@exercise-interactive = 'multiplechoice']" mode="runestone-to-interactive">
     <xsl:variable name="the-id">
-        <xsl:apply-templates select="." mode="html-id"/>
+        <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
     <div class="runestone ">
         <!-- ul can have multiple answer attribute -->
@@ -661,9 +687,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="b-natural" select="not(@language) or (@language = 'natural')"/>
     <div class="runestone" style="max-width: none;">
         <div data-component="parsons" class=" parsons">
-            <xsl:attribute name="id">
-                <xsl:apply-templates select="." mode="html-id"/>
-            </xsl:attribute>
+            <xsl:apply-templates select="." mode="runestone-id-attribute"/>
             <div class="parsons_question parsons-text" >
                 <!-- the prompt -->
                 <xsl:apply-templates select="statement"/>
@@ -783,7 +807,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="exercise[@exercise-interactive = 'matching']" mode="runestone-to-interactive">
     <xsl:variable name="html-id">
-        <xsl:apply-templates select="." mode="html-id"/>
+        <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
     <div class="runestone">
         <ul data-component="dragndrop" data-question_label="" style="visibility: hidden;">
@@ -827,7 +851,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="exercise[@exercise-interactive = 'clickablearea']" mode="runestone-to-interactive">
     <xsl:variable name="html-id">
-        <xsl:apply-templates select="." mode="html-id"/>
+        <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
     <div class="runestone">
         <div data-component="clickablearea" class="runestone" data-question_label="" style="visibility: hidden;">
@@ -907,9 +931,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <div class="runestone">
         <!-- dropped "visibility: hidden" on next div -->
         <div data-component="fillintheblank" data-question_label="">
-            <xsl:attribute name="id">
-                <xsl:apply-templates select="." mode="html-id"/>
-            </xsl:attribute>
+            <xsl:apply-templates select="." mode="runestone-id-attribute"/>
             <xsl:apply-templates select="statement"/>
             <script type="application/json">
                 <xsl:apply-templates select="setup" mode="json-conditions"/>
@@ -1052,9 +1074,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercise[@exercise-interactive = 'shortanswer']" mode="runestone-to-interactive">
     <div class="runestone">
         <div data-component="shortanswer" data-question_label="" class="journal alert alert-warning" data-mathjax="">
-            <xsl:attribute name="id">
-                <xsl:apply-templates select="." mode="html-id"/>
-            </xsl:attribute>
+            <xsl:apply-templates select="." mode="runestone-id-attribute"/>
             <xsl:apply-templates select="statement"/>
         </div>
     </div>
@@ -1078,7 +1098,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="height"/>
 
     <xsl:variable name="hid">
-        <xsl:apply-templates select="." mode="html-id"/>
+        <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
 
     <div id="{$hid}" data-component="youtube" class="align-left youtube-video"
@@ -1129,11 +1149,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="hid">
         <xsl:choose>
             <xsl:when test="$exercise-statement">
-                <xsl:apply-templates select="parent::*" mode="html-id"/>
-                <xsl:text>-ac</xsl:text>
+                <xsl:apply-templates select="parent::*" mode="runestone-id"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:apply-templates select="." mode="html-id"/>
+                <xsl:apply-templates select="." mode="runestone-id"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -1235,9 +1254,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <div class="runestone codelens">
         <div class="alert alert-warning cd_section" data-component="codelens" data-question_label="">
             <div class="pytutorVisualizer">
-                <xsl:attribute name="id">
-                    <xsl:apply-templates select="." mode="html-id"/>
-                </xsl:attribute>
+                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
                 <xsl:attribute name="data-params">
                     <xsl:value-of select="$parameter-dictionary"/>
                 </xsl:attribute>
