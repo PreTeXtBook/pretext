@@ -283,7 +283,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>Program listings can be more that just live demonstrations, they can be exercises.  The first two also occur in the sample article where they just get a static rendering, if at all.</p>
 
-        <exercise xml:id="coding-exercise-blank">
+        <exercise label="coding-exercise-blank">
             <title>Inline Coding Exercise, No Help</title>
 
             <statement>
@@ -295,7 +295,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <hint>We didn't really ask you to do anything.</hint>
         </exercise>
 
-        <exercise xml:id="coding-exercise-partial-one">
+        <exercise label="coding-exercise-partial-one">
             <title>Inline Coding Exercise, Partial</title>
 
             <statement>
@@ -351,7 +351,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <solution>We're not really sure. Still.</solution>
         </exercise>
 
-        <exercise xml:id="coding-exercise-python-unit-test">
+        <exercise label="coding-exercise-python-unit-test">
             <title>Coding Exercise, with Unit Tests</title>
 
             <statement>
@@ -413,7 +413,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>An <tag>activity</tag> next.  This one has a <tag>program</tag> so will be made interactive whenever possible.</p>
 
-            <activity>
+            <activity label="activity-in-subsection">
                 <title>Activity in a Subsection</title>
 
                 <statement>
@@ -475,7 +475,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>A sample of interactive problem types.</p>
 
-        <exercise>
+        <exercise label="vector-space-dimension">
             <title>True/False</title>
             <idx>vector space</idx>
             <statement correct="no">
@@ -489,7 +489,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
         </exercise>
 
-        <exercise>
+        <exercise label="multiple-choice-not-randomized">
             <title>Multiple-Choice, Not Randomized, One Answer</title>
             <idx>stop signs</idx>
             <statement>
@@ -534,7 +534,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
         </exercise>
 
-        <exercise>
+        <exercise label="multiple-choice-multiple-answers">
             <title>Multiple-Choice, Not Randomized, Multiple Answers</title>
             <idx>stop signs</idx>
             <statement>
@@ -579,7 +579,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
         </exercise>
 
-        <exercise>
+        <exercise label="multiple-choice-randomized">
             <title>Multiple-Choice, Randomized, One Answer</title>
             <idx>stop signs</idx>
             <statement>
@@ -619,7 +619,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
         </exercise>
 
-        <exercise>
+        <exercise label="multiple-choice-randomized-multiple-answers">
             <title>Multiple-Choice, Randomized, Multiple Answers</title>
             <idx>stop signs</idx>
             <statement>
@@ -664,7 +664,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
         </exercise>
 
-        <exercise>
+        <exercise label="mathematical-multiple-choice-multiple-answers">
             <title>Mathematical Multiple-Choice, Not Randomized, Multiple Answers</title>
             <idx>stop signs</idx>
             <statement>
@@ -709,7 +709,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
         </exercise>
 
-        <exercise xml:id="number-theory-proof" adaptive="yes">
+        <exercise label="number-theory-proof" adaptive="yes">
             <title>Parsons Problem, Mathematical Proof</title>
             <idx>even numbers</idx>
             <statement>
@@ -737,7 +737,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <hint>Dorothy will not be much help with this proof.</hint>
         </exercise>
 
-        <exercise xml:id="prime-number-program-indent-yes" language="python" adaptive="yes" indentation="hide">
+        <exercise label="prime-number-program-indent-yes" language="python" adaptive="yes" indentation="hide">
             <title>Parsons Problem, Programming</title>
             <idx>prime numbers</idx>
             <idx>Sieve of Eratosthenes</idx>
@@ -783,7 +783,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </blocks>
         </exercise>
 
-        <exercise xml:id="prime-number-program-indent-no" language="python" adaptive="yes" indentation="show">
+        <exercise label="prime-number-program-indent-no" language="python" adaptive="yes" indentation="show">
             <title>Parsons Problem, Programming</title>
             <idx>prime numbers</idx>
             <idx>Sieve of Eratosthenes</idx>
@@ -829,7 +829,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </blocks>
         </exercise>
 
-        <exercise xml:id="number-theory-proof-numbered-left" adaptive="yes">
+        <exercise label="number-theory-proof-numbered-left" adaptive="yes">
             <title>Parsons Problem, Mathematical Proof, Numbered Blocks</title>
             <idx>even numbers</idx>
             <statement>
@@ -857,7 +857,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <hint>Dorothy will not be much help with this proof.</hint>
         </exercise>
 
-        <exercise xml:id="prime-number-program-numbered-right" language="python" adaptive="yes" indentation="hide">
+        <exercise label="prime-number-program-numbered-right" language="python" adaptive="yes" indentation="hide">
             <title>Parsons Problem, Programming</title>
             <idx>prime numbers</idx>
             <idx>Sieve of Eratosthenes</idx>
@@ -904,7 +904,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </exercise>
 
         <!-- https://www.britannica.com/list/25-decade-defining-events-in-us-history -->
-        <exercise xml:id="matching-dates">
+        <exercise label="matching-dates">
             <title>Matching Problem, Dates</title>
             <idx>matching US dates</idx>
             <statement>
@@ -933,7 +933,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </matches>
         </exercise>
 
-        <exercise xml:id="matching-derivatives">
+        <exercise label="matching-derivatives">
             <title>Matching Problem, Derivatives</title>
             <idx>matching derivatives</idx>
             <statement>
@@ -958,7 +958,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </matches>
         </exercise>
 
-        <exercise xml:id="clickable-text">
+        <exercise label="clickable-text">
             <title>Clickable Areas, <q>Regular</q> Text</title>
 
             <statement>
@@ -974,7 +974,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </feedback>
         </exercise>
 
-        <exercise xml:id="clickable-code">
+        <exercise label="clickable-code">
             <title>Clickable Areas, Code</title>
 
             <statement>
@@ -995,7 +995,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </feedback>
         </exercise>
 
-        <exercise xml:id="clickable-table">
+        <exercise label="clickable-table">
             <title>Clickable Areas, Text in a Table</title>
 
             <statement>
@@ -1042,7 +1042,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </feedback>
         </exercise>
 
-        <exercise>
+        <exercise label="short-answer-question">
             <title>Short Answer</title>
 
             <statement>
@@ -1050,7 +1050,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </statement>
         </exercise>
 
-        <exercise>
+        <exercise label="fillin-integer">
             <title>Fill-In, Integer Answer</title>
 
             <statement>
@@ -1077,7 +1077,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </setup>
         </exercise>
 
-        <exercise>
+        <exercise label="fillin-string-integer">
             <title>Fill-In, String and Number Answers</title>
 
             <statement>
@@ -1112,7 +1112,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </setup>
         </exercise>
 
-        <exercise>
+        <exercise label="fillin-case-insensitive">
             <title>Fill-In, Case-Insensitive Answer</title>
 
             <statement>
@@ -1131,7 +1131,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </setup>
         </exercise>
 
-        <exercise>
+        <exercise label="fillin-decimal">
             <title>Fill-In, Decimal Answer</title>
 
             <statement>
@@ -1173,7 +1173,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <reading-questions>
 
-        <exercise>
+        <exercise label="simple-reading-question">
             <statement>
                 <p>This is a simple question.  Does this look like a short answer question?</p>
                 <p>Both questions in this <q>reading-questions</q> division should render in an interactive <q>short answer</q> form on a capable platform.  This is the default, and we have also explicitly set this behavior in the publication file.</p>
@@ -1183,7 +1183,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
         </exercise>
 
-        <exercise>
+        <exercise label="second-reading-question">
             <statement>
                 <p>And a second reading question, so we can test having more than one.  Specifically to be certain each goes into the manifest properly.  How about some math now, <m>a^2+b^2=c^2</m>.  Is that all right?</p>
             </statement>
