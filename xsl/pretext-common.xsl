@@ -9464,11 +9464,11 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <!-- Checks for errors that would be time-consuming -->
 <!-- if done repeatedly, so a pre-processing step   -->
-<!-- Calling context should be "mathbook" element   -->
+<!-- Calling context could be "mathbook" element    -->
 <xsl:template match="mathbook|pretext" mode="generic-warnings">
     <xsl:apply-templates select="." mode="literate-programming-warning" />
     <xsl:apply-templates select="." mode="xinclude-warnings" />
-    <xsl:apply-templates select="." mode="xmlid-warning" />
+    <xsl:apply-templates select="." mode="identifier-warning"/>
     <xsl:apply-templates select="." mode="text-element-warning" />
     <xsl:apply-templates select="." mode="subdivision-structure-warning" />
 </xsl:template>
@@ -9511,17 +9511,25 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- 10 digits, hyphen/dash, underscore     -->
 <!-- TODO: Added 2016-10-29, make into a fatal error later -->
 <!-- Unique UI id's added 2017-09-25 as fatal error -->
-<!-- NB: internal IDs for LaTeX use colons with @xml:id,  -->
-<!-- but this may not be necessary to achieve uniqueness  -->
-<xsl:template match="mathbook|pretext" mode="xmlid-warning">
+<xsl:template match="mathbook|pretext" mode="identifier-warning">
     <xsl:variable name="xmlid-characters" select="concat('-_', &SIMPLECHAR;)" />
     <xsl:for-each select=".//@xml:id">
         <xsl:if test="not(translate(., $xmlid-characters, '') = '')">
             <xsl:message>
-                <xsl:text>PTX:WARNING:    </xsl:text>
+                <xsl:text>PTX:ERROR:      </xsl:text>
                 <xsl:text>The @xml:id "</xsl:text>
                 <xsl:value-of select="." />
                 <xsl:text>" is invalid.  Use only letters, numbers, hyphens and underscores.</xsl:text>
+            </xsl:message>
+        </xsl:if>
+        <xsl:if test="contains(., $gen-id-sep)">
+            <xsl:message>
+                <xsl:text>PTX:ERROR:      The character sequence "</xsl:text>
+                <xsl:value-of select="$gen-id-sep"/>
+                <xsl:text>" in the authored @xmlid "</xsl:text>
+                <xsl:value-of select="." />
+                <xsl:text>" is reserved for internal use by PreTeXt.&#xa;</xsl:text>
+                <xsl:text>                Please edit your source to use a new value for this @xml:id.  Until then, results will be unpredictable.</xsl:text>
             </xsl:message>
         </xsl:if>
         <!-- unique HTML id's in use for PreTeXt-provided UI -->
