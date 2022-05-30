@@ -703,6 +703,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Identification -->
 <!-- ############## -->
 
+<!-- For generated identifiers we reserve a separator string for    -->
+<!-- internal use, this could also be used to identify authored     -->
+<!-- @xml:id and authored @label.  Either on the fly, or as a late  -->
+<!-- task in the pre-processor.  We allow a dash and an underscore  -->
+<!-- as non-letter characters.  Every other character is a bad idea -->
+<!-- when we create variables for languages, WeBWork, LaTeX, etc.   -->
+<!-- Good reasons not to use a dollar sign (LaTeX, Perl, WeBWork,   -->
+<!-- XSL) or a period (object/method notation in Python or          -->
+<!-- Javascript).  Even a dash/hyphen is a bad idea - it is not     -->
+<!-- legal in Javascript variables, and is a minus sign in Python.  -->
+<!-- So we have a sanitization template below.                      -->
+<!--                                                                -->
+<!-- Back on task, the string defined here could be made more       -->
+<!-- complicated, if it turns out to be insufficient.               -->
+<xsl:variable name="gen-id-sep" select="'_-_'"/>
+
 <xsl:template match="*" mode="labeling">
     <xsl:copy>
         <!-- duplicate all attributes, especially  -->
