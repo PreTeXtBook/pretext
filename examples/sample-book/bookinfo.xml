@@ -36,8 +36,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <covers front="external/original-front-cover-aata.pdf"
             back="external/plain-back-cover-aata.pdf"/>
 
+    <document-id edition="2">PTXSB</document-id>
+
     <!-- Prefix to enhance Sage notebook contents -->
-    <initialism>AATA</initialism>
+    <initialism>SB</initialism>
 
     <!-- Math-related macros from "macros.tex" in previous LaTeX version -->
     <!-- \notdivide replaces \notmid to avoid conflict with tikz - TWJ 5/6/2010 -->

@@ -339,14 +339,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- from an author, which we will dress up here.  Notice that this can   -->
 <!-- change when an author declares a new edition.                        -->
 <xsl:template match="exercise|program|&PROJECT-LIKE;" mode="runestone-id">
-    <xsl:if test="not(@label)">
-        <xsl:message>DEVELOPMENT: a Runestone object and there is no @label on container</xsl:message>
-        <xsl:message>             this is strictly temporary and informational</xsl:message>
-        <xsl:apply-templates select="." mode="location-report"/>
+    <!-- Once we generate labels, we can warn an author that they should   -->
+    <!-- be committing to a long-term @label value for database entries.   -->
+    <!-- We do this by checking for the $gen-id-sep string being present   -->
+    <!-- in the value of @label.  At this time, consider making a -common  -->
+    <!-- function that will examine both an @xml:id value or a @label for  -->
+    <!-- an "authored" pproperty, this could be set in the assembly phase. -->
+
+    <!-- Prefix just for RS server builds, in order that the database -->
+    <!-- of exercises gets a globally unique identifier.              -->
+    <xsl:if test="$b-host-runestone">
+        <xsl:value-of select="$docinfo/document-id"/>
+        <xsl:text>_</xsl:text>
+        <xsl:value-of select="$docinfo/document-id/@edition"/>
+        <xsl:text>_</xsl:text>
     </xsl:if>
-    <!-- perhaps bifurcate on hosting/for-all  -->
-    <!-- dfinitely get base/edition in docinfo -->
-    <xsl:text>base_edition_</xsl:text>
     <xsl:value-of select="@label"/>
 </xsl:template>
 
