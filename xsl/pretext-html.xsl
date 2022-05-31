@@ -5812,15 +5812,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="me|men|md|mdn" mode="knowl-urls">
     <xsl:variable name="display-math-cross-references" select="..//xref"/>
-    <xsl:attribute name="data-contains-math-knowls">
-        <xsl:for-each select="$display-math-cross-references">
-            <!-- space before all, except first -->
-            <xsl:if test="position() != 1">
-                <xsl:text> </xsl:text>
-            </xsl:if>
-            <xsl:apply-templates select="id(@ref)" mode="xref-knowl-filename"/>
-        </xsl:for-each>
-    </xsl:attribute>
+    <!-- don't add such an attribute if there is nothing happening -->
+    <xsl:if test="$display-math-cross-references">
+        <xsl:attribute name="data-contains-math-knowls">
+            <xsl:for-each select="$display-math-cross-references">
+                <!-- space before all, except first -->
+                <xsl:if test="position() != 1">
+                    <xsl:text> </xsl:text>
+                </xsl:if>
+                <xsl:apply-templates select="id(@ref)" mode="xref-knowl-filename"/>
+            </xsl:for-each>
+        </xsl:attribute>
+    </xsl:if>
 </xsl:template>
 
 <!-- "men" needs to be handled in the knowl production          -->
