@@ -686,7 +686,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- determine this option before context switches -->
     <xsl:variable name="b-natural" select="not(@language) or (@language = 'natural')"/>
     <div class="runestone" style="max-width: none;">
-        <div data-component="parsons" class=" parsons">
+        <div data-component="parsons" class="parsons">
             <xsl:apply-templates select="." mode="runestone-id-attribute"/>
             <div class="parsons_question parsons-text" >
                 <!-- the prompt -->
@@ -1073,7 +1073,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: match is recycled in manifest formation                   -->
 <xsl:template match="exercise[@exercise-interactive = 'shortanswer']" mode="runestone-to-interactive">
     <div class="runestone">
-        <div data-component="shortanswer" data-question_label="" class="journal alert alert-warning" data-mathjax="">
+        <div data-component="shortanswer" data-question_label="" class="journal" data-mathjax="">
             <xsl:apply-templates select="." mode="runestone-id-attribute"/>
             <xsl:apply-templates select="statement"/>
         </div>
@@ -1252,7 +1252,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <!-- the Runestone HTML -->
     <div class="runestone codelens">
-        <div class="alert alert-warning cd_section" data-component="codelens" data-question_label="">
+        <div class="cd_section" data-component="codelens" data-question_label="">
             <div class="pytutorVisualizer">
                 <xsl:apply-templates select="." mode="runestone-id-attribute"/>
                 <xsl:attribute name="data-params">
