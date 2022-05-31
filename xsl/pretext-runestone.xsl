@@ -479,14 +479,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Duplicate, but still should look like original (ID, etc.),  -->
         <!-- not knowled. Solutions are available in the originals, via  -->
         <!-- an "in context" link off the Assignment page                -->
-        <xsl:apply-templates select="."  mode="exercise-components">
-            <xsl:with-param name="b-original" select="true()"/>
-            <xsl:with-param name="block-type" select="'visible'"/>
-            <xsl:with-param name="b-has-statement" select="true()" />
-            <xsl:with-param name="b-has-hint"      select="false()" />
-            <xsl:with-param name="b-has-answer"    select="false()" />
-            <xsl:with-param name="b-has-solution"  select="false()" />
-        </xsl:apply-templates>
+        <htmlsrc>
+            <xsl:apply-templates select="."  mode="exercise-components">
+                <xsl:with-param name="b-original" select="true()"/>
+                <xsl:with-param name="block-type" select="'visible'"/>
+                <xsl:with-param name="b-has-statement" select="true()" />
+                <xsl:with-param name="b-has-hint"      select="false()" />
+                <xsl:with-param name="b-has-answer"    select="false()" />
+                <xsl:with-param name="b-has-solution"  select="false()" />
+            </xsl:apply-templates>
+        </htmlsrc>
     </question>
 </xsl:template>
 
