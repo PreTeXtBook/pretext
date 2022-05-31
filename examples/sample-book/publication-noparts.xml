@@ -25,9 +25,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <publication>
 
+    <!-- managed directories, standard directory names in source  -->
+    <source>
+        <directories external="external" generated="generated"/>
+    </source>
+
     <!-- EPUB-Specific Options -->
     <!-- Specification of image locations, relative to main source file -->
-    <epub cover="images/cover_aata_2014.png" image-directory="images"/>
+    <!-- NB: EPUB conversion needs attention -->
+    <!-- <epub cover="images/cover_aata_2014.png" image-directory="images"/> -->
 
     <numbering>
         <!-- we just run with defaults for a book -->
