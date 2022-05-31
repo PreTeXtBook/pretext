@@ -1046,7 +1046,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>Short Answer</title>
 
             <statement>
-                <p>This sample book is configured to make some simple questions interactive on a capable platform, and to make others never interactive, even if it is possible.  In this case a <q>divisional</q> exercise will be made interactive whenever possible (which is the default, even though we have set this option explicitly).</p>
+                <p>This sample book is configured to make some simple questions interactive on a capable platform, and to make others never interactive, even if it is possible.  In this case a <q>divisional</q> exercise (like this one) could be made interactive for capable platforms by adjusting a switch in the publication file.</p>
             </statement>
         </exercise>
 

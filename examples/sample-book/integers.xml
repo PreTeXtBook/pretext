@@ -353,7 +353,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercises>
         <title>Programming Exercises</title>
 
-        <exercise>
+        <exercise xml:id="sieve-primes">
             <title>The Sieve of Eratosthenes</title>
             <idx><h>Sieve of Eratosthenes</h></idx>  
             <statement>
