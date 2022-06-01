@@ -47,6 +47,33 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: ananlyzing *original* source, not *assembled*  -->
 <xsl:variable name="b-needs-runestone" select="boolean($original//exercise/choices|$original//exercise/blocks|$original//exercise/program)"/>
 
+<!-- Runestone Services -->
+<!-- Runestone provides universally-applicable Javascript, and since Brad Miller -->
+<!-- is "such a nice guy" he provides an XML version of the necessary files,     -->
+<!-- which we store as "support/runestone-services.xml".  The structure of that  -->
+<!-- file is pretty simple, and should be apparent to the cognescenti.           -->
+<!-- NB: dev.runestoneinteractive.org  is temporary while testing -->
+<!-- NB: we may eventually condition on Runestone server/hosting  -->
+<!-- to affect the prefix network location.                       -->
+<!--  -->
+<!-- We allow for experimental services vis a "debug" parameter.  -->
+<!-- Note that any path must be relative to *this* file you are   -->
+<!-- viewing right now, i.e. relative to the "xsl" directory of   -->
+<!-- the PreteXt distribution.  An absolute path should always    -->
+<!-- be correct.                                                  -->
+<xsl:variable name="runestone-services-filename">
+    <xsl:choose>
+        <xsl:when test="not($debug.rs.services.file = '')">
+            <xsl:value-of select="$debug.rs.services.file"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>support/runestone-services.xml</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="runestone-services" select="document($runestone-services-filename)"/>
+
 <!-- The Runestone platform option requires output that can be used  -->
 <!-- on the server with a templating language/tool.  For books       -->
 <!-- originating from PreTeXt we use a non-default pair of strings.  -->
@@ -222,32 +249,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>&#xa;</xsl:text>
         </xsl:when>
     </xsl:choose>
-    <!-- Runestone Services -->
-    <!-- Runestone provides universally-applicable Javascript, and since Brad Miller -->
-    <!-- is "such a nice guy" he provides an XML version of the necessary files,     -->
-    <!-- which we store as "support/runestone-services.xml".  The structure of that  -->
-    <!-- file is pretty simple, and should be apparent to the cognescenti.           -->
-    <!-- NB: dev.runestoneinteractive.org  is temporary while testing -->
-    <!-- NB: we may eventually condition on Runestone server/hosting  -->
-    <!-- to affect the prefix network location.                       -->
-    <!--  -->
-    <!-- We allow for experimental services vis a "debug" parameter.  -->
-    <!-- Note that any path must be relative to *this* file you are   -->
-    <!-- viewing right now, i.e. relative to the "xsl" directory of   -->
-    <!-- the PreteXt distribution.  An absolute path should always    -->
-    <!-- be correct.                                                  -->
-    <xsl:variable name="runestone-services-filename">
-        <xsl:choose>
-            <xsl:when test="not($debug.rs.services.file = '')">
-                <xsl:value-of select="$debug.rs.services.file"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>support/runestone-services.xml</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-
-    <xsl:variable name="runestone-services" select="document($runestone-services-filename)"/>
 
     <!-- If hosted on Runestone then we point to "_static" directory right -->
     <!-- on the Runestone Server.  But in the "Runestone for All" case,    -->
