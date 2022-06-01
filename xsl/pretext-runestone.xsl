@@ -384,6 +384,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="book|article" mode="runestone-manifest">
     <exsl:document href="runestone-manifest.xml" method="xml" indent="yes" encoding="UTF-8">
         <manifest>
+            <!-- version of Runestone Services used for this build -->
+            <runestone-services>
+                <xsl:attribute name="version">
+                    <xsl:value-of select="$runestone-services/all/version"/>
+                </xsl:attribute>
+            </runestone-services>
             <!-- LaTeX packages and macros first -->
             <latex-macros>
                 <xsl:text>&#xa;</xsl:text>
