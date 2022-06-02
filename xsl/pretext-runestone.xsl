@@ -390,6 +390,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:value-of select="$runestone-services/all/version"/>
                 </xsl:attribute>
             </runestone-services>
+            <!-- mine various bits and pieces of the source for RS metadata  -->
+            <!-- collection, which is technically a "conf.py" file, per-book -->
+            <library-metadata publisher="pretext">
+                <!-- sanitizes footnotes, quotes, math for overall title-->
+                <xsl:comment>Missing a blurb for library description, book back covers</xsl:comment>
+                <title>
+                    <xsl:apply-templates select="$document-root" mode="title-plain"/>
+                </title>
+                <subtitle>
+                    <xsl:apply-templates select="$document-root" mode="subtitle"/>
+                </subtitle>
+                <!-- edition, too? -->
+                <document-id>
+                    <xsl:attribute name="edition">
+                        <xsl:value-of select="$docinfo/document-id/@edition"/>
+                    </xsl:attribute>
+                    <xsl:value-of select="$docinfo/document-id"/>
+                </document-id>
+            </library-metadata>
             <!-- LaTeX packages and macros first -->
             <latex-macros>
                 <xsl:text>&#xa;</xsl:text>
