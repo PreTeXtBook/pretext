@@ -4208,6 +4208,48 @@ the xsltproc executable.
                     <conclusion><p>This feature was designed with short <q>drill</q> exercises in mind.  With long exercises, or exercises with long hints, answers, or solutions, there is a risk that the <latex/> output will have bad page breaks in the vicinity (just before) such an exercise that occupies too much vertical space.  Edit, rearrange, or use fewer columns to see if the situation improves.</p></conclusion>
                 </exercisegroup>
 
+                <exercise>
+                    <statement>
+                        <p>
+                            Make a table and a graph for the function <m>f(x)=x^2</m>.
+                        </p>
+                    </statement>
+                    <answer>
+                        <sidebyside>
+                            <tabular halign="center">
+                                <row header="yes" bottom="medium">
+                                    <cell><m>x</m></cell>
+                                    <cell><m>f(x)</m></cell>
+                                </row>
+                                <row>
+                                    <cell><m>0</m></cell>
+                                    <cell><m>0</m></cell>
+                                </row>
+                                <row>
+                                    <cell><m>1</m></cell>
+                                    <cell><m>1</m></cell>
+                                </row>
+                                <row>
+                                    <cell><m>2</m></cell>
+                                    <cell><m>4</m></cell>
+                                </row>
+                                <row>
+                                    <cell><m>3</m></cell>
+                                    <cell><m>9</m></cell>
+                                </row>
+                            </tabular>
+                            <image xml:id="x-squared">
+                                <latex-image>
+                                \begin{tikzpicture}
+                                    \begin{axis}
+                                        \addplot[domain=-1.5:4, blue, thick, {stealth}-{stealth}] {x^2};
+                                    \end{axis}
+                                \end{tikzpicture}
+                                </latex-image>
+                            </image>
+                        </sidebyside>
+                    </answer>
+                </exercise>
             </exercises>
 
             <references xml:id="references-section">
