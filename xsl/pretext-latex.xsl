@@ -99,10 +99,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Page Numbers in cross-references -->
 <xsl:param name="latex.pageref" select="''"/>
 <!--  -->
-<!-- Fillin Style Option                                  -->
-<!-- Can be 'underline' or 'box'                          -->
-<xsl:param name="latex.fillin.style" select="'underline'"/>
-<!--  -->
 <!-- Preamble insertions                    -->
 <!-- Insert packages, options into preamble -->
 <!-- early or late                          -->
@@ -1018,35 +1014,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\newcommand{\stale}[1]{\renewcommand{\ULthickness}{\stalethick}\sout{#1}}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="$document-root//fillin">
-        <xsl:text>%% Used for fillin answer blank&#xa;</xsl:text>
-        <xsl:text>%% Argument is length in em&#xa;</xsl:text>
-        <xsl:text>%% Length may compress for output to fit in one line&#xa;</xsl:text>
-        <!-- \fillincontract is set using \real, which comes from calc package -->
-        <!-- which comes from mtool package, which comes from extpfeil.        -->
-        <!-- So any changes to extpfeil inclusion should be followed up here.  -->
-        <xsl:text>\newlength{\fillincontract}&#xa;</xsl:text>
-        <xsl:choose>
-            <xsl:when test="$latex.fillin.style='underline'">
-                <xsl:text>\newcommand{\fillin}[1]{%&#xa;</xsl:text>
-                <xsl:text>\setlength{\fillincontract}{#1em * \real{0.2}}%&#xa;</xsl:text>
-                <xsl:text>\leavevmode\leaders\vrule height -1.2pt depth 1.5pt \hskip #1em minus \fillincontract \null%&#xa;</xsl:text>
-                <xsl:text>}&#xa;</xsl:text>
-            </xsl:when>
-            <xsl:when test="$latex.fillin.style='box'">
-                <xsl:text>% Do not indent lines of this macro definition&#xa;</xsl:text>
-                <xsl:text>\newcommand{\fillin}[1]{%&#xa;</xsl:text>
-                <xsl:text>\setlength{\fillincontract}{#1em * \real{0.2}}%&#xa;</xsl:text>
-                <xsl:text>\leavevmode\rule[-0.3\baselineskip]{0.4pt}{\dimexpr 0.8pt+1.3\baselineskip\relax}% Left edge&#xa;</xsl:text>
-                <xsl:text>\nobreak\leaders\vbox{\hrule \vskip 1.3\baselineskip \hrule width .4pt \vskip -0.3\baselineskip}% Top and bottom edges&#xa;</xsl:text>
-                <xsl:text>\hskip #1em minus \fillincontract% Maximum box width and shrinkage&#xa;</xsl:text>
-                <xsl:text>\nobreak\hbox{\rule[-0.3\baselineskip]{0.4pt}{\dimexpr 0.8pt+1.3\baselineskip\relax}}% Right edge&#xa;</xsl:text>
-                <xsl:text>}&#xa;</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:message>PTX:ERROR:   the latex.fillin.style parameter should be 'underline' or 'box', not '<xsl:value-of select="$latex.fillin.style"/>'.  Using the default ('underline').</xsl:message>
-            </xsl:otherwise>
-        </xsl:choose>
+    <xsl:if test="$document-root//fillin[not(parent::m or parent::me or parent::men or parent::mrow)]">
+        <xsl:call-template name="fillin-text"/>
+    </xsl:if>
+    <xsl:if test="$document-root//m/fillin|$document-root//me/fillin|$document-root//men/fillin|$document-root//mrow/fillin">
+        <xsl:call-template name="fillin-math"/>
     </xsl:if>
     <!-- http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/ -->
     <xsl:if test="$document-root//swungdash">
@@ -2416,6 +2388,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$docinfo/covers/@back"/>
         <xsl:text>}%&#xa;</xsl:text>
     </xsl:if>
+</xsl:template>
+
+<!-- Fill-in-the-blank in text content -->
+<xsl:template name="fillin-text">
+    <xsl:text>%% Used for fillin answer blank in text&#xa;</xsl:text>
+    <xsl:text>%% Relies on calc package, loaded via tcolorbox&#xa;</xsl:text>
+    <xsl:text>%% Argument is intended number of characters of blank&#xa;</xsl:text>
+    <xsl:text>%% Length may compress for output to fit in one line&#xa;</xsl:text>
+    <xsl:text>\newlength{\fillinmaxwidth}&#xa;</xsl:text>
+    <xsl:text>\newlength{\fillincontract}&#xa;</xsl:text>
+    <xsl:text>\newlength{\fillinheight}&#xa;</xsl:text>
+    <xsl:if test="$fillin-text-style = 'shade'">
+        <xsl:text>\definecolor{fillintextshade}{gray}{0.9}</xsl:text>
+    </xsl:if>
+    <xsl:text>\newcommand{\fillintext}[1]{%&#xa;</xsl:text>
+    <xsl:text>\setlength{\fillinmaxwidth}{#1em*\real{0.5}}%&#xa;</xsl:text>
+    <xsl:text>\setlength{\fillincontract}{#1em*\real{0.5}*\real{0.2}}%&#xa;</xsl:text>
+    <xsl:text>\setlength{\fillinheight}{\heightof{\strut}+1.2pt}%&#xa;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$fillin-text-style = 'underline'">
+            <xsl:text>\nobreak\leaders\vbox{\hrule width 0pt height 0pt \vskip \fillinheight \hrule width 0.3pt height 0.3pt \vskip -1.2pt}%&#xa;</xsl:text>
+            <xsl:text>\hskip 1\fillinmaxwidth minus \fillincontract%&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:when test="$fillin-text-style = 'box'">
+            <xsl:text>\rule[-1.2pt]{0.3pt}{\heightof{\strut}+1.8pt}%&#xa;</xsl:text>
+            <xsl:text>\nobreak\hspace{-0.3pt}{\nobreak\leaders\vbox{\hrule width 0.3pt height 0.3pt \vskip \fillinheight \hrule width 0.3pt height 0.3pt \vskip -1.2pt}%&#xa;</xsl:text>
+            <xsl:text>\hskip 1\fillinmaxwidth minus \fillincontract}%&#xa;</xsl:text>
+            <xsl:text>\nobreak\hspace{-0.3pt}\hbox{\rule[-1.2pt]{0.3pt}{\heightof{\strut}+1.8pt}}%&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:when test="$fillin-text-style = 'shade'">
+            <xsl:text>\nobreak{\color{fillintextshade}\nobreak\leaders\vbox{\hrule width 0pt height 0pt \vskip 0pt \hrule width 0.3pt height \fillinheight \vskip -1.2pt}%&#xa;</xsl:text>
+            <xsl:text>\hskip 1\fillinmaxwidth minus \fillincontract}%&#xa;</xsl:text>
+        </xsl:when>
+    </xsl:choose>
+    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- PTX Divisions to LaTeX Divisions -->
@@ -8354,10 +8361,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Fill-in blank -->
-<!-- \fillin{} defined in preamble as semantic macro       -->
-<!-- argument is number of "em", Bringhurst suggests 5/11  -->
-<!-- \rule works in text and in math (unlike HTML/MathJax) -->
-<xsl:template match="fillin">
+<!-- \fillintext{} defined in preamble as semantic macro   -->
+<!-- Argument is intended number of characters             -->
+<xsl:template match="fillin[not(parent::m or parent::me or parent::men or parent::mrow)]">
     <xsl:variable name="characters">
         <xsl:choose>
             <xsl:when test="@characters">
@@ -8368,8 +8374,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:text>\fillin{</xsl:text>
-    <xsl:value-of select="5 * $characters div 11" />
+    <xsl:text>\fillintext{</xsl:text>
+    <xsl:value-of select="$characters" />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
