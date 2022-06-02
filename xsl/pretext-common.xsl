@@ -1632,6 +1632,56 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!-- For a "fillin" within math.                                       -->
+<!-- First, define math fillin macro that is common to LaTeX, MathJax. -->
+<!-- Then below, template for matching on each "fillin".               -->
+<xsl:template name="fillin-math">
+    <xsl:choose>
+        <xsl:when test="$fillin-math-style = 'underline'">
+            <xsl:text>\newcommand{\fillinmath}[1]{\mathchoice</xsl:text>
+            <xsl:text>{\underline{\displaystyle     \phantom{\ \,#1\ \,}}}</xsl:text>
+            <xsl:text>{\underline{\textstyle        \phantom{\ \,#1\ \,}}}</xsl:text>
+            <xsl:text>{\underline{\scriptstyle      \phantom{\ \,#1\ \,}}}</xsl:text>
+            <xsl:text>{\underline{\scriptscriptstyle\phantom{\ \,#1\ \,}}}}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:when test="$fillin-math-style = 'box'">
+            <xsl:text>\newcommand{\fillinmath}[1]{\mathchoice</xsl:text>
+            <xsl:text>{\boxed{\displaystyle     \phantom{\,#1\,}}}</xsl:text>
+            <xsl:text>{\boxed{\textstyle        \phantom{\,#1\,}}}</xsl:text>
+            <xsl:text>{\boxed{\scriptstyle      \phantom{\,#1\,}}}</xsl:text>
+            <xsl:text>{\boxed{\scriptscriptstyle\phantom{\,#1\,}}}}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:when test="$fillin-math-style = 'shade'">
+            <xsl:text>\definecolor{fillinmathshade}{gray}{0.9}&#xa;</xsl:text>
+            <xsl:text>\newcommand{\fillinmath}[1]{\mathchoice</xsl:text>
+            <xsl:text>{\colorbox{fillinmathshade}{$\displaystyle     \phantom{\,#1\,}$}}</xsl:text>
+            <xsl:text>{\colorbox{fillinmathshade}{$\textstyle        \phantom{\,#1\,}$}}</xsl:text>
+            <xsl:text>{\colorbox{fillinmathshade}{$\scriptstyle      \phantom{\,#1\,}$}}</xsl:text>
+            <xsl:text>{\colorbox{fillinmathshade}{$\scriptscriptstyle\phantom{\,#1\,}$}}}&#xa;</xsl:text>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="m/fillin|me/fillin|men/fillin|mrow/fillin">
+    <xsl:choose>
+        <xsl:when test="@fill">
+            <xsl:text>\fillinmath{</xsl:text>
+            <xsl:value-of select="@fill"/>
+            <xsl:text>}</xsl:text>
+        </xsl:when>
+        <xsl:when test="@characters">
+            <xsl:text>\fillinmath{</xsl:text>
+                <xsl:call-template name="duplicate-string">
+                    <xsl:with-param name="count" select="@characters" />
+                    <xsl:with-param name="text"  select="'X'" />
+                </xsl:call-template>
+            <xsl:text>}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\fillinmath{XXX}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- Sage Cells -->
 <!-- Contents are text manipulations (below)     -->
@@ -10689,6 +10739,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2022-05-23'" />
         <xsl:with-param name="message" select="'the  oldids  string parameter was used for testing, was deprecated on 2021-03-03, is now obsolete, there is no replacement, relevant code has been removed, and the parameter is being ignored'" />
         <xsl:with-param name="incorrect-use" select="($oldids != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-05-28  "latex.fillin.style" is deprecated for publisher variables -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-05-28'" />
+        <xsl:with-param name="message" select="'the  latex.fillin.style  parameter has been replaced by the  common/fillin/@textstyle  and  common/fillin/mathstyle  entries in the publication file. The default style for a text fillin is now  underline  and the default style for a math fillin is now  shade .  To use  box  style for either, set values in the publication file.'" />
+        <xsl:with-param name="incorrect-use" select="($numbering.maximum.level != '')" />
     </xsl:call-template>
     <!--  -->
 </xsl:template>

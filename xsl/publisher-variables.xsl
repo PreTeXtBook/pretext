@@ -140,6 +140,37 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Flag Table of Contents, or not, with boolean variable -->
 <xsl:variable name="b-has-toc" select="$toc-level > 0" />
 
+<!-- Fillin styles (underline, box, shade) -->
+<xsl:variable name="fillin-text-style">
+    <xsl:choose>
+        <xsl:when test="$publication/common/fillin/@textstyle = 'box'">
+            <xsl:text>box</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/common/fillin/@textstyle = 'shade'">
+            <xsl:text>shade</xsl:text>
+        </xsl:when>
+        <!-- default -->
+        <xsl:otherwise>
+            <xsl:text>underline</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="fillin-math-style">
+    <xsl:choose>
+        <xsl:when test="$publication/common/fillin/@mathstyle = 'underline'">
+            <xsl:text>underline</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/common/fillin/@mathstyle = 'box'">
+            <xsl:text>box</xsl:text>
+        </xsl:when>
+        <!-- default -->
+        <xsl:otherwise>
+            <xsl:text>shade</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- ########################### -->
 <!-- Exercise component switches -->
 <!-- ########################### -->
