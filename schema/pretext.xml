@@ -477,17 +477,6 @@
             </code>
         </fragment>
 
-        <p>A <c>fillin</c> blank is not really a character, but maybe a really long, low dash?  The <c>characters</c> attribute controls the length.  It is atomic, indivisible, and content-less, like all the other characters.  <c>fillin</c> is also unusual due to its allowed use within mathematics.</p>
-
-        <fragment xml:id="fillin-character">
-            <title>Fill-in blank character</title>
-            <code>
-            FillIn = element fillin {attribute characters {xsd:integer}?, empty}
-            Character |=
-                FillIn
-            </code>
-        </fragment>
-
         <p>We define a few characters to help with simple arithmetic expressions authored within regular text.  (Perhaps you are writing a novel with <pretext/>.)  These are for simple uses in regular text, not for actual mathematics, which is described later.  The <term>solidus</term> is slightly different from the <term>slash</term> found on a keyboard and is used for fractions and ratios.  The <tage>minus</tage> is for subtraction and negation, and is not a hyphen or dash.  An <term>obelus</term> is better known as a division sign.  <tage>degree</tage>, <tage>prime</tage>, and <tage>dblprime</tage> are designed for specifying coordinates in degrees, minutes, and seconds.  Use the unambiguous <c>+</c> keyboard character for addition.</p>
 
         <fragment xml:id="arithmetic-character">
@@ -594,7 +583,6 @@
         <fragment xml:id="character">
             <title>Characters</title>
             <fragref ref="dash-character" />
-            <fragref ref="fillin-character" />
             <fragref ref="delimiter-character" />
             <fragref ref="arithmetic-character" />
             <fragref ref="exotic-character" />
@@ -631,6 +619,17 @@
                 element ps {empty} |
                 element vs {empty} |
                 element viz {empty}
+            </code>
+        </fragment>
+
+        <p>A <c>fillin</c> blank is not really a character, but maybe a really long, low dash?  The <c>characters</c> attribute controls the length.  It is atomic, indivisible, and content-less, like all the other characters.  <c>fillin</c> is also unusual due to its allowed use within mathematics.</p>
+
+        <fragment xml:id="fillin-character">
+            <title>Fill-in blank character</title>
+            <code>
+            FillInText = element fillin {attribute characters {xsd:integer}?, empty}
+            Generator |=
+                FillInText
             </code>
         </fragment>
 
@@ -761,14 +760,18 @@
     <section>
         <title>Mathematics</title>
 
-        <p>All mathematics appears inside paragraphs, and the syntax is that of <latex/>, as supported by MathJax, whose supported commands and macros are meant to be very similar to those of the AMSMath package.  Note that the content is typically unstructured, excepting <q>fill-in-the-blank</q>, <webwork/> variables (see variants), and internal cross-references in multi-row display mathematics. Also, <c>md</c> and <c>mdn</c> are not targets of cross-references, though their rows can be.</p>
+        <p>All mathematics appears inside paragraphs, and the syntax is that of <latex/>, as supported by MathJax, whose supported commands and macros are meant to be very similar to those of the AMSMath package.  Note that the content is typically unstructured, excepting <q>fill-in-the-blank</q>, <webwork/> variables (see variants), and internal cross-references in multi-row display mathematics. Also, <c>md</c> and <c>mdn</c> are not targets of cross-references, though their rows can be.  Fill-in blanks have a variant attribute <attr>fill</attr> more suited for mathematics.</p>
 
         <fragment xml:id="mathematics">
             <title>Mathematics</title>
             <code>
+            FillInMath = element fillin {
+                             (attribute fill{text}?|attribute characters {xsd:integer}?),
+                             empty
+                         }
             MathInline =
                 element m {
-                    mixed {(FillIn | WWVariable)*}
+                    mixed {(FillInMath | WWVariable)*}
                 }
             MathRow =
                 element mrow {
@@ -782,16 +785,16 @@
                                        "maltese" | "dmaltese" | "tmaltese" }
                     )?,
                     attribute break {"yes" | "no"}?,
-                    mixed {(Xref | FillIn | WWVariable)*}
+                    mixed {(Xref | FillInMath | WWVariable)*}
                 }
             MathIntertext = element intertext {TextLong}
             MathDisplay =
                 element me {
-                    mixed {(FillIn | WWVariable)*}
+                    mixed {(FillInMath | WWVariable)*}
                 } |
                 element men {
                     MetaDataTarget,
-                    mixed {(FillIn | WWVariable)*}
+                    mixed {(FillInMath | WWVariable)*}
                 } |
                 element md {
                     attribute number {"yes" | "no"}?,
@@ -2569,6 +2572,7 @@
             <fragref ref="verbatim" />
             <fragref ref="group" />
             <fragref ref="generator" />
+            <fragref ref="fillin-character" />
             <fragref ref="siunit" />
             <fragref ref="character" />
             <fragref ref="listgenerator" />

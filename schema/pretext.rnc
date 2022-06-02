@@ -1329,9 +1329,13 @@
                     }
                 }
             
+            FillInMath = element fillin {
+                             (attribute fill{text}?|attribute characters {xsd:integer}?),
+                             empty
+                         }
             MathInline =
                 element m {
-                    mixed {(FillIn | WWVariable)*}
+                    mixed {(FillInMath | WWVariable)*}
                 }
             MathRow =
                 element mrow {
@@ -1345,16 +1349,16 @@
                                        "maltese" | "dmaltese" | "tmaltese" }
                     )?,
                     attribute break {"yes" | "no"}?,
-                    mixed {(Xref | FillIn | WWVariable)*}
+                    mixed {(Xref | FillInMath | WWVariable)*}
                 }
             MathIntertext = element intertext {TextLong}
             MathDisplay =
                 element me {
-                    mixed {(FillIn | WWVariable)*}
+                    mixed {(FillInMath | WWVariable)*}
                 } |
                 element men {
                     MetaDataTarget,
-                    mixed {(FillIn | WWVariable)*}
+                    mixed {(FillInMath | WWVariable)*}
                 } |
                 element md {
                     attribute number {"yes" | "no"}?,
@@ -1444,6 +1448,10 @@
                 element vs {empty} |
                 element viz {empty}
             
+            FillInText = element fillin {attribute characters {xsd:integer}?, empty}
+            Generator |=
+                FillInText
+            
             UnitSpecification =
                     attribute prefix {text}?,
                     attribute base {text},
@@ -1459,10 +1467,6 @@
                 element nbsp {empty} |
                 element ndash {empty} |
                 element mdash {empty}
-            
-            FillIn = element fillin {attribute characters {xsd:integer}?, empty}
-            Character |=
-                FillIn
             
             Character =
                 element lsq {empty} |
