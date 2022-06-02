@@ -2966,6 +2966,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>-knowl</xsl:text>
             <!--  -->
             <xsl:text> original</xsl:text>
+            <!-- classes indicate if opening the knowl reveals specials -->
+            <xsl:if test=".//image">
+                <xsl:text> has-image</xsl:text>
+            </xsl:if>
+            <xsl:if test=".//video">
+                <xsl:text> has-video</xsl:text>
+            </xsl:if>
+            <xsl:if test=".//interactive">
+                <xsl:text> has-interactive</xsl:text>
+            </xsl:if>
+            <xsl:if test=".//tabular">
+                <xsl:text> has-tabular</xsl:text>
+            </xsl:if>
         </xsl:attribute>
         <!-- and the id via a template for consistency -->
         <xsl:attribute name="data-refid">
