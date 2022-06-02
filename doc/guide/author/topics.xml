@@ -760,7 +760,7 @@
 
             <paragraphs>
                 <title><tage>fillin</tage>, <fillin characters="5" />, fill-in blank</title>
-                <p>A <q>fill in the blank</q> blank.  While meant for use with normal text, it may also be used within mathematics contexts.  The <attr>characters</attr> attribute may be used to hint at how long the line will be, should the default value of 10 be too long or too short.  Here we have set <attr>characters</attr> to the value <c>5</c>.</p>
+                <p>A <q>fill in the blank</q> blank.  May be used in normal text or within mathematics contexts.  The <attr>characters</attr> attribute may be used to hint at how long the line will be.  Here we have set <attr>characters</attr> to the value <c>5</c>. If used inside math, a <attr>fill</attr> attribute (in lieu of <attr>characters</attr>) may be some string of math that will be used to determine width, height, and depth of the blank. In text, the default value of <c>10</c> is used for <attr>characters</attr>. In math, the default value of <c>XXX</c> is used for <attr>fill</attr>.</p>
             </paragraphs>
 
             <paragraphs>
@@ -1514,7 +1514,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <subsection>
             <title>Fill-In Blanks in Mathematics</title>
 
-            <p>The other mix-in <init>XML</init> element is <tag>fillin</tag> with an optional <attr>characters</attr> attribute that takes an integer value.  You will get a thin horizontal line, on the baseline, which can suggest to a reader that they should supply something within the surrounding mathematics.  The attribute suggests the length of the line<mdash />experiment a bit, since it is not super-precise.</p>
+            <p>The other mix-in <init>XML</init> element is <tag>fillin</tag>. It may use a <attr>fill</attr> attribute with some math string to determine width, height, and depth of the blank. Or it may use a <attr>characters</attr> attribute that takes an integer value to hint at the width.</p>
         </subsection>
 
         <subsection>
