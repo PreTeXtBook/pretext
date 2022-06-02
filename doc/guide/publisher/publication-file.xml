@@ -87,6 +87,28 @@
                 </tabular>
             </table>
         </subsection>
+
+        <subsection xml:id="common-fillin-options">
+            <title>Fillin Options</title>
+            <idx><h>common options</h><h>fillin</h></idx>
+            <idx><h>fillin</h><h>options</h></idx>
+
+            <p>The style of fill-in-the-blanks (from a <tag>fillin</tag>) is set by the attributes<ul>
+                <li>
+                    <title>Text Fillin</title>
+                    <p>Set<cd>
+                        <cline>/publication/common/fillin/@textstyle</cline>
+                    </cd> to values <c>underline</c>, <c>box</c>, or <c>shade</c> to influence the style of a fillin within text. The default is <c>underline</c>.</p>
+                </li>
+
+                <li>
+                    <title>Math Fillin</title>
+                    <p>Set<cd>
+                        <cline>/publication/common/fillin/@mathstyle</cline>
+                    </cd> to values <c>underline</c>, <c>box</c>, or <c>shade</c> to influence the style of a fillin within math. The default is <c>shade</c>.</p>
+                </li>
+            </ul></p>
+        </subsection>
     </section>
 
     <section xml:id="publication-file-numbering">

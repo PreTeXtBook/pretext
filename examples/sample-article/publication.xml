@@ -37,6 +37,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- parts of an exercise, where born.                      -->
         <exercise-inline hint="yes"/>
         <exercise-project answer="yes"/>
+        <!-- fillin styles are "underline" (the default for text),  -->
+        <!-- "box", and "shade" (the default for math)              -->
+        <fillin textstyle="underline" mathstyle="shade"/>
     </common>
 
     <!-- we use customizations-two for the oscarlevin style example -->

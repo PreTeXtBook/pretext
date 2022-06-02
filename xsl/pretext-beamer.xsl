@@ -439,29 +439,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
       <xsl:text>\newcommand{\stale}[1]{\renewcommand{\ULthickness}{\stalethick}\sout{#1}}&#xa;</xsl:text>
     </xsl:if>
   </xsl:if>
-  <!-- 2020-05-28: this "if" was edited in xsl/pretext-latex and is no longer in-sync -->
-  <xsl:if test="$document-root//fillin">
-    <xsl:text>%% Used for fillin answer blank&#xa;</xsl:text>
-    <xsl:text>%% Argument is length in em&#xa;</xsl:text>
-    <xsl:text>%% Length may compress for output to fit in one line&#xa;</xsl:text>
-    <xsl:choose>
-      <xsl:when test="$latex.fillin.style='underline'">
-        <xsl:text>\newcommand{\fillin}[1]{\leavevmode\leaders\vrule height -1.2pt depth 1.5pt \hskip #1em minus #1em \null}&#xa;</xsl:text>
-      </xsl:when>
-      <xsl:when test="$latex.fillin.style='box'">
-        <xsl:text>% Do not indent lines of this macro definition&#xa;</xsl:text>
-        <xsl:text>\newcommand{\fillin}[1]{%&#xa;</xsl:text>
-        <xsl:text>\leavevmode\rule[-0.3\baselineskip]{0.4pt}{\dimexpr 0.8pt+1.3\baselineskip\relax}% Left edge&#xa;</xsl:text>
-        <xsl:text>\nobreak\leaders\vbox{\hrule \vskip 1.3\baselineskip \hrule width .4pt \vskip -0.3\baselineskip}% Top and bottom edges&#xa;</xsl:text>
-        <xsl:text>\hskip #1em minus #1em% Maximum box width and shrinkage&#xa;</xsl:text>
-        <xsl:text>\nobreak\hbox{\rule[-0.3\baselineskip]{0.4pt}{\dimexpr 0.8pt+1.3\baselineskip\relax}}% Right edge&#xa;</xsl:text>
-        <xsl:text>}&#xa;</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:message terminate="yes">PTX:ERROR: invalid value <xsl:value-of select="$latex.fillin.style" />
- for latex.fillin.style stringparam. Should be 'underline' or 'box'.</xsl:message>
-      </xsl:otherwise>
-    </xsl:choose>
+  <xsl:if test="$document-root//fillin[not(parent::m or parent::me or parent::men or parent::mrow)]">
+    <xsl:call-template name="fillin-text">
+  </xsl:if>
+  <xsl:if test="$document-root//m/fillin|$document-root//me/fillin|$document-root//men/fillin|$document-root//mrow/fillin">
+      <xsl:call-template name="fillin-math"/>
   </xsl:if>
   <!-- http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/ -->
   <xsl:if test="$document-root//swungdash">

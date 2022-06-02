@@ -114,7 +114,6 @@ mini-representations:
 
 #########################################################################
 # PDF versions
-# use -x latex.fillin.style box for box answer blanks instead of underlines
 
 sample-chapter-pdf:
 	-rm -r $(PDFOUT)
