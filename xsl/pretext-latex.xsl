@@ -2408,7 +2408,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\setlength{\fillinheight}{\heightof{\strut}+1.2pt}%&#xa;</xsl:text>
     <xsl:choose>
         <xsl:when test="$fillin-text-style = 'underline'">
-            <xsl:text>\nobreak\leaders\vbox{\hrule width 0pt height 0pt \vskip \fillinheight \hrule width 0.3pt height 0.3pt \vskip -1.2pt}%&#xa;</xsl:text>
+            <xsl:text>\null\nobreak\leaders\vbox{\hrule width 0pt height 0pt \vskip \fillinheight \hrule width 0.3pt height 0.3pt \vskip -1.2pt}%&#xa;</xsl:text>
             <xsl:text>\hskip 1\fillinmaxwidth minus \fillincontract%&#xa;</xsl:text>
         </xsl:when>
         <xsl:when test="$fillin-text-style = 'box'">
