@@ -1282,7 +1282,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% arguments are left-margin, width, right-margin, as multiples of&#xa;</xsl:text>
         <xsl:text>%% \linewidth, and are guaranteed to be positive and sum to 1.0&#xa;</xsl:text>
         <xsl:text>\tcbset{ imagestyle/.style={bwminimalstyle} }&#xa;</xsl:text>
-        <xsl:text>\NewTColorBox{image}{mmm}{imagestyle,left skip=#1\linewidth,width=#2\linewidth}&#xa;</xsl:text>
+        <xsl:text>\NewTColorBox{imageptx}{mmm}{imagestyle,left skip=#1\linewidth,width=#2\linewidth}&#xa;</xsl:text>
     </xsl:if>
     <!-- Tables -->
     <xsl:if test="$document-root//tabular">
@@ -9090,7 +9090,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="layout-parameters" />
     </xsl:variable>
     <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
-    <xsl:text>\begin{image}</xsl:text>
+    <xsl:text>\begin{imageptx}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$layout/left-margin div 100"/>
     <xsl:text>}</xsl:text>
@@ -9101,7 +9101,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$layout/right-margin div 100"/>
     <xsl:text>}%&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="image-inclusion" />
-    <xsl:text>\end{image}%&#xa;</xsl:text>
+    <xsl:text>\end{imageptx}%&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Second: images already constrained by side-by-side panels -->

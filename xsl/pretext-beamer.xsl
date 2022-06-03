@@ -65,7 +65,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
   <xsl:text>\newcommand{\tabularfont}{}&#xa;</xsl:text>
   <xsl:text>\usepackage[xparse, raster]{tcolorbox}&#xa;</xsl:text>
   <xsl:text>\tcbset{colback=white, colframe=white}&#xa;</xsl:text>
-  <xsl:text>\NewTColorBox{image}{mmm}{boxrule=0.25pt, colframe=gray, left skip=#1\linewidth,width=#2\linewidth}&#xa;</xsl:text>
+  <xsl:text>\NewTColorBox{imageptx}{mmm}{boxrule=0.25pt, colframe=gray, left skip=#1\linewidth,width=#2\linewidth}&#xa;</xsl:text>
   <xsl:text>\RenewTColorBox{definition}{m}{colback=teal!30!white, colbacktitle=teal!30!white, coltitle=black, colframe=gray, boxrule=0.5pt, sharp corners=downhill, titlerule = 0.25pt, title={#1}}&#xa;</xsl:text>
   <xsl:text>\RenewTColorBox{theorem}{m}{colback=pink!30!white, colbacktitle=pink!30!white, coltitle=black, colframe=gray, boxrule=0.5pt, sharp corners=downhill, titlerule = 0.25pt, title={#1}}&#xa;</xsl:text>
   <xsl:text>\RenewTColorBox{proof}{}{boxrule=0.25pt, colframe=gray, colback=white, before upper={Proof:}, after upper={\qed}}&#xa;</xsl:text>
