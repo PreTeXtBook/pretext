@@ -140,6 +140,37 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Flag Table of Contents, or not, with boolean variable -->
 <xsl:variable name="b-has-toc" select="$toc-level > 0" />
 
+<!-- Fillin styles (underline, box, shade) -->
+<xsl:variable name="fillin-text-style">
+    <xsl:choose>
+        <xsl:when test="$publication/common/fillin/@textstyle = 'box'">
+            <xsl:text>box</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/common/fillin/@textstyle = 'shade'">
+            <xsl:text>shade</xsl:text>
+        </xsl:when>
+        <!-- default -->
+        <xsl:otherwise>
+            <xsl:text>underline</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="fillin-math-style">
+    <xsl:choose>
+        <xsl:when test="$publication/common/fillin/@mathstyle = 'underline'">
+            <xsl:text>underline</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/common/fillin/@mathstyle = 'box'">
+            <xsl:text>box</xsl:text>
+        </xsl:when>
+        <!-- default -->
+        <xsl:otherwise>
+            <xsl:text>shade</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- ########################### -->
 <!-- Exercise component switches -->
 <!-- ########################### -->
@@ -1116,12 +1147,65 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- WeBWorK server location and credentials for the daemon course -->
+<xsl:variable name="webwork-server">
+    <xsl:choose>
+        <xsl:when test="$publication/webwork/@server">
+            <xsl:value-of select="$publication/webwork/@server"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>https://webwork-ptx.aimath.org</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="webwork-course">
+    <xsl:choose>
+        <xsl:when test="$publication/webwork/@course">
+            <xsl:value-of select="$publication/webwork/@course"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>anonymous</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="webwork-coursepassword">
+    <xsl:choose>
+        <xsl:when test="$publication/webwork/@coursepassword">
+            <xsl:value-of select="$publication/webwork/@coursepassword"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>anonymous</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="webwork-user">
+    <xsl:choose>
+        <xsl:when test="$publication/webwork/@user">
+            <xsl:value-of select="$publication/webwork/@user"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>anonymous</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="webwork-userpassword">
+    <xsl:choose>
+        <xsl:when test="$publication/webwork/@userpassword">
+            <xsl:value-of select="$publication/webwork/@userpassword"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>anonymous</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+
 <!-- WeBWork problem representations are formed by the           -->
 <!-- pretext/pretext script communicating with a WeBWorK server. -->
 <xsl:variable name="webwork-representations-file">
     <xsl:choose>
         <!-- XSLT should skip the second condition below if the first is false (boosts efficiency). -->
-        <xsl:when test="$generated-directory-source != '' and $original//webwork[*|@*]">
+        <xsl:when test="$generated-directory-source != '' and $original//webwork[* or @copy or @source]">
             <xsl:value-of select="str:replace(concat($generated-directory-source, 'webwork/webwork-representations.xml'), '&#x20;', '%20')"/>
         </xsl:when>
         <xsl:when test="$publication/source/@webwork-problems">
@@ -3149,6 +3233,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="project.hint" select="''" />
 <xsl:param name="project.answer" select="''" />
 <xsl:param name="project.solution" select="''" />
+
+<!-- On 2021-03-03 abandoned a "fast-id" scheme that was never -->
+<!-- really used since it was in-effect a developer testing    -->
+<!-- option. Then on 2022-05-23 removed code, strengthened     -->
+<!-- deprecation message, and moved parameter here.            -->
+<xsl:param name="oldids" select="''"/>
 
 <!-- ################# -->
 <!-- Variable Bad Bank -->

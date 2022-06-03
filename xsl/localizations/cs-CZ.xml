@@ -22,7 +22,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See  xsl/localizations/README.md  for an explanation of this file -->
 
 <!-- cs-CZ, Czech (Czechia) -->
-<!-- Jiri Lebl, lebl@okstate.edu, 2021-03-07   -->
+<!-- Jiri Lebl, lebl@okstate.edu, 2022-05-05   -->
 
 <locale language="cs-CZ">
     <!-- THEOREM-LIKE blocks -->
@@ -37,10 +37,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='identity'>Rovnost</localization>
     <!-- PROOF-LIKE -->
     <localization string-id='proof'>Důkaz</localization>
-    <!-- <localization string-id='argument'>Argument</localization> -->
-    <!-- <localization string-id='justification'>Justification</localization> -->
-    <!-- <localization string-id='reasoning'>Reasoning</localization> -->
-    <!-- <localization string-id='explanation'>Explanation</localization> -->
+    <localization string-id='argument'>Argument</localization>
+    <localization string-id='justification'>Odůvodnění</localization>
+    <localization string-id='reasoning'>Argumentace</localization>
+    <localization string-id='explanation'>Vysvětlení</localization>
     <!-- Mathematical statements without proofs -->
     <!-- AXIOM-LIKE blocks -->
     <localization string-id='axiom'>Axiom</localization>

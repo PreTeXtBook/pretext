@@ -49,6 +49,7 @@
             <xi:include href="publisher/production.xml"/>
             <xi:include href="publisher/open-licenses.xml"/>
             <xi:include href="publisher/conversions.xml"/>
+            <xi:include href="publisher/custom-versions.xml"/>
             <xi:include href="publisher/online-html.xml"/>
             <xi:include href="publisher/pdf-print.xml"/>
             <xi:include href="publisher/epub.xml"/>

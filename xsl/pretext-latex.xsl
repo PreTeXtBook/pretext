@@ -99,10 +99,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Page Numbers in cross-references -->
 <xsl:param name="latex.pageref" select="''"/>
 <!--  -->
-<!-- Fillin Style Option                                  -->
-<!-- Can be 'underline' or 'box'                          -->
-<xsl:param name="latex.fillin.style" select="'underline'"/>
-<!--  -->
 <!-- Preamble insertions                    -->
 <!-- Insert packages, options into preamble -->
 <!-- early or late                          -->
@@ -1018,27 +1014,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\newcommand{\stale}[1]{\renewcommand{\ULthickness}{\stalethick}\sout{#1}}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="$document-root//fillin">
-        <xsl:text>%% Used for fillin answer blank&#xa;</xsl:text>
-        <xsl:text>%% Argument is length in em&#xa;</xsl:text>
-        <xsl:text>%% Length may compress for output to fit in one line&#xa;</xsl:text>
-        <xsl:choose>
-            <xsl:when test="$latex.fillin.style='underline'">
-                <xsl:text>\newcommand{\fillin}[1]{\leavevmode\leaders\vrule height -1.2pt depth 1.5pt \hskip #1em minus #1em \null}&#xa;</xsl:text>
-            </xsl:when>
-            <xsl:when test="$latex.fillin.style='box'">
-                <xsl:text>% Do not indent lines of this macro definition&#xa;</xsl:text>
-                <xsl:text>\newcommand{\fillin}[1]{%&#xa;</xsl:text>
-                <xsl:text>\leavevmode\rule[-0.3\baselineskip]{0.4pt}{\dimexpr 0.8pt+1.3\baselineskip\relax}% Left edge&#xa;</xsl:text>
-                <xsl:text>\nobreak\leaders\vbox{\hrule \vskip 1.3\baselineskip \hrule width .4pt \vskip -0.3\baselineskip}% Top and bottom edges&#xa;</xsl:text>
-                <xsl:text>\hskip #1em minus #1em% Maximum box width and shrinkage&#xa;</xsl:text>
-                <xsl:text>\nobreak\hbox{\rule[-0.3\baselineskip]{0.4pt}{\dimexpr 0.8pt+1.3\baselineskip\relax}}% Right edge&#xa;</xsl:text>
-                <xsl:text>}&#xa;</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:message>PTX:ERROR:   the latex.fillin.style parameter should be 'underline' or 'box', not '<xsl:value-of select="$latex.fillin.style"/>'.  Using the default ('underline').</xsl:message>
-            </xsl:otherwise>
-        </xsl:choose>
+    <xsl:if test="$document-root//fillin[not(parent::m or parent::me or parent::men or parent::mrow)]">
+        <xsl:call-template name="fillin-text"/>
+    </xsl:if>
+    <xsl:if test="$document-root//m/fillin|$document-root//me/fillin|$document-root//men/fillin|$document-root//mrow/fillin">
+        <xsl:call-template name="fillin-math"/>
     </xsl:if>
     <!-- http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/ -->
     <xsl:if test="$document-root//swungdash">
@@ -1048,6 +1028,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$document-root//quantity">
         <xsl:text>%% Used for units and number formatting&#xa;</xsl:text>
         <xsl:text>\usepackage[per-mode=fraction]{siunitx}&#xa;</xsl:text>
+        <!-- v2 -> v3 is a major upgrade, we need to accomodate both    -->
+        <!-- Eventually we may want to just fail on version 2 and warn. -->
+        <!-- Kernel test is actually "equal or later" according to      -->
+        <!-- https://tex.stackexchange.com/questions/47743/             -->
+        <!--   require-a-certain-or-later-version-of-a-package          -->
+        <!-- IfPackageAtLeastTF: maybe only available since 2020-10-01? -->
+        <xsl:text>%% v3 dated 2021-05-17, fix major behavior change&#xa;</xsl:text>
+        <xsl:text>\makeatletter%&#xa;</xsl:text>
+        <xsl:text>\@ifpackagelater{siunitx}{2021/05/17}&#xa;</xsl:text>
+        <xsl:text>{%&#xa;</xsl:text>
+        <xsl:text>\typeout{PTX: discovered siunitx v3, >= 2021-05-17}%&#xa;</xsl:text>
+        <xsl:text>\sisetup{parse-numbers = false}%&#xa;</xsl:text>
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>{%&#xa;</xsl:text>
+        <xsl:text>\typeout{PTX: discovered siunitx v2, &lt; 2021-05-17}%&#xa;</xsl:text>
+        <xsl:text>}%&#xa;</xsl:text>
+        <xsl:text>\makeatother%&#xa;</xsl:text>
         <xsl:text>\sisetup{inter-unit-product=\cdot}&#xa;</xsl:text>
         <xsl:text>\ifxetex\sisetup{math-micro=\text{µ},text-micro=µ}\fi</xsl:text>
         <xsl:text>\ifluatex\sisetup{math-micro=\text{µ},text-micro=µ}\fi</xsl:text>
@@ -2391,6 +2388,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$docinfo/covers/@back"/>
         <xsl:text>}%&#xa;</xsl:text>
     </xsl:if>
+</xsl:template>
+
+<!-- Fill-in-the-blank in text content -->
+<xsl:template name="fillin-text">
+    <xsl:text>%% Used for fillin answer blank in text&#xa;</xsl:text>
+    <xsl:text>%% Relies on calc package, loaded via tcolorbox&#xa;</xsl:text>
+    <xsl:text>%% Argument is intended number of characters of blank&#xa;</xsl:text>
+    <xsl:text>%% Length may compress for output to fit in one line&#xa;</xsl:text>
+    <xsl:text>\newlength{\fillinmaxwidth}&#xa;</xsl:text>
+    <xsl:text>\newlength{\fillincontract}&#xa;</xsl:text>
+    <xsl:text>\newlength{\fillinheight}&#xa;</xsl:text>
+    <xsl:if test="$fillin-text-style = 'shade'">
+        <xsl:text>\definecolor{fillintextshade}{gray}{0.9}</xsl:text>
+    </xsl:if>
+    <xsl:text>\newcommand{\fillintext}[1]{%&#xa;</xsl:text>
+    <xsl:text>\setlength{\fillinmaxwidth}{#1em*\real{0.5}}%&#xa;</xsl:text>
+    <xsl:text>\setlength{\fillincontract}{#1em*\real{0.5}*\real{0.2}}%&#xa;</xsl:text>
+    <xsl:text>\setlength{\fillinheight}{\heightof{\strut}+1.2pt}%&#xa;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$fillin-text-style = 'underline'">
+            <xsl:text>\null\nobreak\leaders\vbox{\hrule width 0pt height 0pt \vskip \fillinheight \hrule width 0.3pt height 0.3pt \vskip -1.2pt}%&#xa;</xsl:text>
+            <xsl:text>\hskip 1\fillinmaxwidth minus \fillincontract%&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:when test="$fillin-text-style = 'box'">
+            <xsl:text>\rule[-1.2pt]{0.3pt}{\heightof{\strut}+1.8pt}%&#xa;</xsl:text>
+            <xsl:text>\nobreak\hspace{-0.3pt}{\nobreak\leaders\vbox{\hrule width 0.3pt height 0.3pt \vskip \fillinheight \hrule width 0.3pt height 0.3pt \vskip -1.2pt}%&#xa;</xsl:text>
+            <xsl:text>\hskip 1\fillinmaxwidth minus \fillincontract}%&#xa;</xsl:text>
+            <xsl:text>\nobreak\hspace{-0.3pt}\hbox{\rule[-1.2pt]{0.3pt}{\heightof{\strut}+1.8pt}}%&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:when test="$fillin-text-style = 'shade'">
+            <xsl:text>\nobreak{\color{fillintextshade}\nobreak\leaders\vbox{\hrule width 0pt height 0pt \vskip 0pt \hrule width 0.3pt height \fillinheight \vskip -1.2pt}%&#xa;</xsl:text>
+            <xsl:text>\hskip 1\fillinmaxwidth minus \fillincontract}%&#xa;</xsl:text>
+        </xsl:when>
+    </xsl:choose>
+    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- PTX Divisions to LaTeX Divisions -->
@@ -5529,9 +5561,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- title may be default title -->
     <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}\space\space</xsl:text>
-    <xsl:if test="@xml:id">
-        <xsl:apply-templates select="." mode="label"/>
-    </xsl:if>
+    <xsl:apply-templates select="." mode="optional-label"/>
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates select="introduction" />
     <xsl:choose>
@@ -6037,14 +6067,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- stage.  We realize each stage in print as a "Part", which    -->
 <!-- has a statement and optionally, hints, answers and solutions.-->
 
-<!-- Warn if WeBWorK representations have not been assembled -->
-<xsl:template match="webwork[node()|@*]">
-    <xsl:message>PTX:ERROR: A document that uses WeBWorK nees to incorporate a file</xsl:message>
-    <xsl:message>of representations of WW problems.  These can be created with the</xsl:message>
-    <xsl:message>"pretext" Python script and specified in a publisher file.</xsl:message>
-    <xsl:message>See the documentation for details.</xsl:message>
-</xsl:template>
-
 <!-- A "webwork-reps" inside an "exercise" indicates a WeBWorK problem -->
 <!-- originally in the source.  We could try to condition on a bare    -->
 <!-- "static" versus "static/stage" but it seems safer to stick with   -->
@@ -6248,6 +6270,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- \label{} will separate content, if   -->
                     <!-- employed, else we use an empty group -->
                     <xsl:choose>
+                        <!-- not quite tight for modal "optional-label" -->
                         <xsl:when test="@xml:id">
                             <xsl:apply-templates select="." mode="label" />
                         </xsl:when>
@@ -6680,25 +6703,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- we can't cross-reference here without an @xml:id -->
     <!-- place it on a line of its own just prior to guts -->
+    <xsl:apply-templates select="." mode="optional-label"/>
+    <!-- line break is optional as well -->
     <xsl:if test="@xml:id">
-        <xsl:apply-templates select="." mode="label" />
         <xsl:text>%&#xa;</xsl:text>
     </xsl:if>
     <xsl:apply-templates />
     <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
-
-<!-- In WeBWorK problems, a p whose only child is a fillin blank     -->
-<!-- almost certainly means a question has been asked, and below it  -->
-<!-- there is an entry field. In print, there is no need to print    -->
-<!-- that entry field and removing it can save a lot of vertical     -->
-<!-- space. This is in constrast with fillins in the middle of a p,  -->
-<!-- where answer blanks need to be printed because of the fill      -->
-<!-- in the blank nature of the quesiton.                            -->
-<xsl:template match="p[not(normalize-space(text()))][count(fillin)=1 and count(*)=1][not(parent::li)]|p[not(normalize-space(text()))][count(fillin)=1 and count(*)=1][parent::li][preceding-sibling::*]" />
-
-
-
 
 <!-- For a memo, not indenting the first paragraph helps -->
 <!-- with alignment and the to/from/subject/date block   -->
@@ -6976,43 +6988,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Good match between basic HTML types and basic LaTeX types -->
 
-<!-- Utility templates to translate PTX @label specification -->
-<!-- for use with LaTeX enumitem package's label keyword     -->
+<!-- Utility templates to translate @marker specification -->
+<!-- for use with LaTeX enumitem package's label keyword  -->
 <xsl:template match="ol" mode="latex-list-label">
-    <xsl:variable name="mbx-format-code">
+    <xsl:variable name="format-code">
         <xsl:apply-templates select="." mode="format-code" />
     </xsl:variable>
     <!-- deconstruct the left and right adornments of the label   -->
     <!-- or provide the default adornments, consistent with LaTeX -->
     <!-- in the middle, translate PTX codes for enumitem package  -->
     <xsl:choose>
-        <xsl:when test="@label">
-            <xsl:value-of select="substring-before(@label, $mbx-format-code)" />
+        <xsl:when test="@marker">
+            <xsl:value-of select="substring-before(@marker, $format-code)" />
         </xsl:when>
-        <xsl:when test="$mbx-format-code='a'">
+        <xsl:when test="$format-code='a'">
             <xsl:text>(</xsl:text>
         </xsl:when>
         <xsl:otherwise />
     </xsl:choose>
     <xsl:choose>
-        <xsl:when test="$mbx-format-code = '0'">\arabic*</xsl:when>
-        <xsl:when test="$mbx-format-code = '1'">\arabic*</xsl:when>
-        <xsl:when test="$mbx-format-code = 'a'">\alph*</xsl:when>
-        <xsl:when test="$mbx-format-code = 'A'">\Alph*</xsl:when>
-        <xsl:when test="$mbx-format-code = 'i'">\roman*</xsl:when>
-        <xsl:when test="$mbx-format-code = 'I'">\Roman*</xsl:when>
+        <xsl:when test="$format-code = '0'">\arabic*</xsl:when>
+        <xsl:when test="$format-code = '1'">\arabic*</xsl:when>
+        <xsl:when test="$format-code = 'a'">\alph*</xsl:when>
+        <xsl:when test="$format-code = 'A'">\Alph*</xsl:when>
+        <xsl:when test="$format-code = 'i'">\roman*</xsl:when>
+        <xsl:when test="$format-code = 'I'">\Roman*</xsl:when>
         <xsl:otherwise>
             <xsl:message>PTX:BUG: bad ordered list label format code in LaTeX conversion</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:choose>
-        <xsl:when test="@label">
-            <xsl:value-of select="substring-after(@label, $mbx-format-code)" />
+        <xsl:when test="@marker">
+            <xsl:value-of select="substring-after(@marker, $format-code)" />
         </xsl:when>
-        <xsl:when test="$mbx-format-code='a'">
+        <xsl:when test="$format-code='a'">
             <xsl:text>)</xsl:text>
         </xsl:when>
-        <xsl:when test="($mbx-format-code='a') or ($mbx-format-code='i') or ($mbx-format-code='A')">
+        <xsl:when test="($format-code='a') or ($format-code='i') or ($format-code='A')">
             <xsl:text>.</xsl:text>
         </xsl:when>
         <xsl:otherwise />
@@ -7020,14 +7032,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="ul" mode="latex-list-label">
-    <xsl:variable name="mbx-format-code">
+    <xsl:variable name="format-code">
         <xsl:apply-templates select="." mode="format-code" />
     </xsl:variable>
    <xsl:choose>
-        <xsl:when test="$mbx-format-code = 'disc'">\textbullet</xsl:when>
-        <xsl:when test="$mbx-format-code = 'circle'">$\circ$</xsl:when>
-        <xsl:when test="$mbx-format-code = 'square'">$\blacksquare$</xsl:when>
-        <xsl:when test="$mbx-format-code = 'none'"></xsl:when>
+        <xsl:when test="$format-code = 'disc'">\textbullet</xsl:when>
+        <xsl:when test="$format-code = 'circle'">$\circ$</xsl:when>
+        <xsl:when test="$format-code = 'square'">$\blacksquare$</xsl:when>
+        <xsl:when test="$format-code = 'none'"></xsl:when>
         <xsl:otherwise>
             <xsl:message>PTX:BUG: bad unordered list label format code in LaTeX conversion</xsl:message>
         </xsl:otherwise>
@@ -7063,7 +7075,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="ol">
     <!-- need to switch on 0-1 for ol Arabic -->
     <!-- no harm if called on "ul"           -->
-    <xsl:variable name="mbx-format-code">
+    <xsl:variable name="format-code">
         <xsl:apply-templates select="." mode="format-code" />
     </xsl:variable>
     <!-- Determine the number of columns -->
@@ -7086,10 +7098,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>\begin{enumerate}</xsl:text>
     <!-- override LaTeX defaults as indicated -->
-    <xsl:if test="@label or ($mbx-format-code = '0') or ancestor::exercises or ancestor::worksheet or ancestor::reading-questions or ancestor::references">
+    <xsl:if test="@marker or ($format-code = '0') or ancestor::exercises or ancestor::worksheet or ancestor::reading-questions or ancestor::references">
         <xsl:text>[label=</xsl:text>
         <xsl:apply-templates select="." mode="latex-list-label" />
-        <xsl:if test="$mbx-format-code = '0'">
+        <xsl:if test="$format-code = '0'">
             <xsl:text>, start=0</xsl:text>
         </xsl:if>
         <xsl:text>]</xsl:text>
@@ -7155,6 +7167,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- \label{} will separate content, if   -->
     <!-- employed, else we use an empty group -->
     <xsl:choose>
+        <!-- not quite tight for modal "optional-label" -->
         <xsl:when test="@xml:id">
             <xsl:apply-templates select="." mode="label" />
         </xsl:when>
@@ -7657,9 +7670,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: <quote> element for inline -->
 <xsl:template match="blockquote">
     <xsl:text>\begin{quote}</xsl:text>
-    <xsl:if test="@xml:id">
-        <xsl:apply-templates select="." mode="label"/>
-    </xsl:if>
+    <xsl:apply-templates select="." mode="optional-label"/>
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates />
     <xsl:text>\end{quote}&#xa;</xsl:text>
@@ -8350,10 +8361,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Fill-in blank -->
-<!-- \fillin{} defined in preamble as semantic macro       -->
-<!-- argument is number of "em", Bringhurst suggests 5/11  -->
-<!-- \rule works in text and in math (unlike HTML/MathJax) -->
-<xsl:template match="fillin">
+<!-- \fillintext{} defined in preamble as semantic macro   -->
+<!-- Argument is intended number of characters             -->
+<xsl:template match="fillin[not(parent::m or parent::me or parent::men or parent::mrow)]">
     <xsl:variable name="characters">
         <xsl:choose>
             <xsl:when test="@characters">
@@ -8364,8 +8374,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:text>\fillin{</xsl:text>
-    <xsl:value-of select="5 * $characters div 11" />
+    <xsl:text>\fillintext{</xsl:text>
+    <xsl:value-of select="$characters" />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -10353,11 +10363,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="latex-id">
     <xsl:choose>
         <!-- xml:id may be more recognizable -->
-        <xsl:when test="@xml:id">
+        <xsl:when test="@label">
             <xsl:text>x:</xsl:text>
             <xsl:value-of select="local-name(.)"/>
             <xsl:text>:</xsl:text>
-            <xsl:value-of select="@xml:id"/>
+            <xsl:value-of select="@label"/>
         </xsl:when>
         <!-- permid may be pervasive -->
         <xsl:when test="@permid">
@@ -10434,6 +10444,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}{}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- We sometimes use the presence of @xml:id to indicate that an     -->
+<!-- author intends an element to be the target of a cross-reference, -->
+<!-- and then *elect* to place a label.                               -->
+<xsl:template match="*" mode="optional-label">
+    <xsl:if test="@xml:id">
+        <xsl:apply-templates select="." mode="label"/>
+    </xsl:if>
 </xsl:template>
 
 <!-- An extraordinary template produces labels for exercise components -->
@@ -10818,14 +10837,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="poem">
     <xsl:text>\begin{poem}</xsl:text>
-    <xsl:if test="@xml:id">
-        <xsl:apply-templates select="." mode="label"/>
-    </xsl:if>
+    <xsl:apply-templates select="." mode="optional-label"/>
     <xsl:text>%&#xa;</xsl:text>
     <xsl:text>\poemTitle{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:apply-templates select="stanza"/>
+    <xsl:apply-templates select="stanza|idx"/>
     <xsl:apply-templates select="author" />
     <xsl:text>\end{poem}&#xa;</xsl:text>
 </xsl:template>
@@ -10848,7 +10865,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\begin{stanza}&#xa;</xsl:text>
-    <xsl:apply-templates select="line" />
+    <xsl:apply-templates select="line|idx"/>
     <xsl:text>\end{stanza}&#xa;</xsl:text>
 </xsl:template>
 
@@ -11307,9 +11324,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   We first close off the citation itself -->
 <xsl:template match="biblio/note">
     <xsl:text>\par</xsl:text>
-    <xsl:if test="@xml:id">
-        <xsl:apply-templates select="." mode="label"/>
-    </xsl:if>
+    <xsl:apply-templates select="." mode="optional-label"/>
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates />
 </xsl:template>

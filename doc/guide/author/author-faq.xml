@@ -138,12 +138,10 @@
         </li>
 
         <!-- mathbook-xml-support:  2015-06-21:  Subscripts in custom lists -->
-        <!-- mathbook-xml-support:  2016-06-19:  Formulas in list labels    -->
+        <!-- mathbook-xml-support:  2016-06-19:  Formulas in list markers    -->
         <li>
-            <title>How do I put mathematics into my list labels?</title>
-            <p>First, realize that the way <latex/> uses the term <term>label</term> in the context of lists is different from how much of the rest of the world uses the term in this context.  In our case the <attr>label</attr> attribute describes the style of the grouping markers.  For example, bullets versus squares on items of an unordered list, or Roman numerals versus Arabic numerals on an ordered list.  So this attribute conveys information <em>about</em> the list, not content <em>of</em> the list.  And even if you tried putting an <tag>m</tag> tag into the value of the attribute, you would not have any luck since <init>XML</init> does not even allow that construction.  Finally, there is no real good way to accomplish this in <init>HTML</init>, so conversion to that format would be difficult.</p>
-
-            <p>The alternative is to use a description list, with a <tag>dl</tag> element.  Put your mathematics in the <tag>title</tag> and put the associated content into the remainder of the <tag>li</tag>.  Or, put titles on the list items of an ordered or unordered list.</p>
+            <title>How do I put mathematics into my list markers?</title>
+            <p>List markers are an organizational device for grouping small bits of information.  It is not appropriate to use mathematics in this situation.  (Even if <latex/> list item <q>labels</q> allow such a construction.)  The alternative is to use a description list, with a <tag>dl</tag> element.  Put your mathematics in the <tag>title</tag> and put the associated content into the remainder of the <tag>li</tag>.  Or, put titles on the list items of an ordered or unordered list, and include mathematics there.</p>
         </li>
 
         <li>
@@ -244,9 +242,9 @@
         </li>
 
         <li>
-          <title>The labels of my description list are long, and the formatting is really bad.</title>
+          <title>The titles of my description list are long, and the formatting is really bad.</title>
 
-          <p>Use shorter label text?  Read too about the <attr>width</attr> hint for list items within <xref ref="topic-lists"/>.</p>
+          <p>Use shorter titles?  Read too about the <attr>width</attr> hint for list items within <xref ref="topic-lists"/>.</p>
 
           <p>Or convert your list to an <tag>ol</tag> or <tag>ul</tag>.  The titles will now render more like their own paragraphs.</p>
         </li>

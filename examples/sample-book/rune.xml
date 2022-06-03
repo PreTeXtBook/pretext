@@ -147,12 +147,143 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.</p>
     </section>
 
+    <section xml:id="code-lens">
+        <title>Code Lens</title>
+
+        <p>CodeLens is an interactive tool for following program execution, much like a debugger, without the ability to influence flow control or variable values.  For use without a server, traces must be computed beforehand.  First, we have some trivial programs, to provide minimal testing.</p>
+
+        <listing xml:id="program-codelens-python">
+            <caption>A Python program, stepable with CodeLens</caption>
+            <program xml:id="python-hello-world-code-lens" interactive="codelens" language="python">
+                <input>
+                print('Hello, World!')
+                </input>
+            </program>
+        </listing>
+
+        <listing xml:id="program-codelens-c">
+            <caption>An C program, stepable with CodeLens</caption>
+            <program xml:id="c-hello-world-code-lens" interactive="codelens" language="c">
+                <input>
+                #include &lt;stdio.h&gt;
+
+                int main(void)
+                {
+                    puts("Hello, World!");
+                }
+                </input>
+            </program>
+        </listing>
+
+        <listing xml:id="program-codelens-java">
+            <caption>A Java program, stepable with CodeLens</caption>
+            <program xml:id="java-hello-world-code-lens" interactive="codelens" language="java">
+                <input>
+                public class HelloWorld {
+                    public static void main(String[] args) {
+                        System.out.println("Hello, World!");
+                    }
+                }
+                </input>
+            </program>
+        </listing>
+
+        <p>Now some moderately more complicated programs to find teh prime numbers less than <m>20</m>.  We do not vouch for the quality of these, or even their correctness!</p>
+
+        <listing xml:id="sieve-python">
+            <caption><url href="https://www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes" visual="www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes">Sieve of Eratosthenes</url>, Java</caption>
+            <program xml:id="sieve-codelens-python" interactive="codelens" language="python">
+                <input><![CDATA[
+                def SieveOfEratosthenes(n):
+                   # array of type boolean with True values in it
+                   prime = [True for i in range(n + 1)]
+                   p = 2
+                   while (p * p <= n):
+                      # If it remain unchanged it is prime
+                      if (prime[p] == True):
+                         # updating all the multiples
+                         for i in range(p * 2, n + 1, p):
+                            prime[i] = False
+                      p += 1
+                   prime[0]= False
+                   prime[1]= False
+                   # Print
+                   for p in range(n + 1):
+                      if prime[p]:
+                         print (p,end=" ")
+                # main
+                if __name__=='__main__':
+                   n = 20
+                   print ("The prime numbers smaller than or equal to", n,"is")
+                   SieveOfEratosthenes(n)
+                ]]>
+                </input>
+            </program>
+        </listing>
+
+        <listing xml:id="sieve-cpp">
+            <caption><url href="https://www.tutorialspoint.com/cplusplus-program-to-implement-sieve-of-eratosthenes-to-generate-prime-numbers-between-given-range" visual="www.tutorialspoint.com/cplusplus-program-to-implement-sieve-of-eratosthenes-to-generate-prime-numbers-between-given-range">Sieve of Eratosthenes</url>, C++</caption>
+            <program xml:id="sieve-codelens-cpp" interactive="codelens" language="cpp">
+                <input> <![CDATA[
+                #include <stdio.h>
+                const int len = 20;
+                int main() {
+                   int arr[20] = {0};
+                   for (int i = 2; i < len; i++) {
+                      for (int j = i * i; j < len; j+=i) {
+                         arr[j - 1] = 1;
+                      }
+                   }
+                   for (int i = 1; i < len; i++) {
+                      if (arr[i - 1] == 0)
+                        printf(" %d", i);
+                   }
+                }
+                ]]>
+                </input>
+            </program>
+        </listing>
+
+        <listing xml:id="sieve-java">
+            <caption><url href="https://www.tutorialspoint.com/Sieve-of-Eratosthenes-in-java" visual="www.tutorialspoint.com/Sieve-of-Eratosthenes-in-java">Sieve of Eratosthenes</url>, Java</caption>
+            <program xml:id="sieve-codelens-java" interactive="codelens" language="java">
+                <input><![CDATA[
+                public class SievePrimeFactors  {
+                   public static void main(String args[]) {
+                      int num = 20;
+                      boolean[] bool = new boolean[num];
+
+                      for (int i = 0; i< bool.length; i++) {
+                         bool[i] = true;
+                      }
+                      for (int i = 2; i < Math.sqrt(num); i++) {
+                         if(bool[i] == true) {
+                            for(int j = (i*i); j < num; j = j+i) {
+                               bool[j] = false;
+                            }
+                         }
+                      }
+                      System.out.println("List of prime numbers: ");
+                      for (int i = 2; i< bool.length; i++) {
+                         if(bool[i]==true) {
+                            System.out.println(i);
+                         }
+                      }
+                   }
+                }
+                ]]>
+                </input>
+            </program>
+        </listing>
+
+    </section>
+
     <section xml:id="coding-exercises">
         <title>Coding Exercises</title>
 
         <p>Program listings can be more that just live demonstrations, they can be exercises.  The first two also occur in the sample article where they just get a static rendering, if at all.</p>
 
-        <exercise xml:id="coding-exercise-blank">
+        <exercise label="coding-exercise-blank">
             <title>Inline Coding Exercise, No Help</title>
 
             <statement>
@@ -164,7 +295,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <hint>We didn't really ask you to do anything.</hint>
         </exercise>
 
-        <exercise xml:id="coding-exercise-partial-one">
+        <exercise label="coding-exercise-partial-one">
             <title>Inline Coding Exercise, Partial</title>
 
             <statement>
@@ -220,7 +351,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <solution>We're not really sure. Still.</solution>
         </exercise>
 
-        <exercise xml:id="coding-exercise-python-unit-test">
+        <exercise label="coding-exercise-python-unit-test">
             <title>Coding Exercise, with Unit Tests</title>
 
             <statement>
@@ -282,7 +413,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>An <tag>activity</tag> next.  This one has a <tag>program</tag> so will be made interactive whenever possible.</p>
 
-            <activity>
+            <activity label="activity-in-subsection">
                 <title>Activity in a Subsection</title>
 
                 <statement>
@@ -344,7 +475,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>A sample of interactive problem types.</p>
 
-        <exercise>
+        <exercise label="vector-space-dimension">
             <title>True/False</title>
             <idx>vector space</idx>
             <statement correct="no">
@@ -358,7 +489,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
         </exercise>
 
-        <exercise>
+        <exercise label="multiple-choice-not-randomized">
             <title>Multiple-Choice, Not Randomized, One Answer</title>
             <idx>stop signs</idx>
             <statement>
@@ -403,7 +534,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
         </exercise>
 
-        <exercise>
+        <exercise label="multiple-choice-multiple-answers">
             <title>Multiple-Choice, Not Randomized, Multiple Answers</title>
             <idx>stop signs</idx>
             <statement>
@@ -448,7 +579,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
         </exercise>
 
-        <exercise>
+        <exercise label="multiple-choice-randomized">
             <title>Multiple-Choice, Randomized, One Answer</title>
             <idx>stop signs</idx>
             <statement>
@@ -488,7 +619,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
         </exercise>
 
-        <exercise>
+        <exercise label="multiple-choice-randomized-multiple-answers">
             <title>Multiple-Choice, Randomized, Multiple Answers</title>
             <idx>stop signs</idx>
             <statement>
@@ -533,7 +664,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
         </exercise>
 
-        <exercise>
+        <exercise label="mathematical-multiple-choice-multiple-answers">
             <title>Mathematical Multiple-Choice, Not Randomized, Multiple Answers</title>
             <idx>stop signs</idx>
             <statement>
@@ -578,7 +709,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
         </exercise>
 
-        <exercise xml:id="number-theory-proof" adaptive="yes">
+        <exercise label="number-theory-proof" adaptive="yes">
             <title>Parsons Problem, Mathematical Proof</title>
             <idx>even numbers</idx>
             <statement>
@@ -606,7 +737,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <hint>Dorothy will not be much help with this proof.</hint>
         </exercise>
 
-        <exercise xml:id="prime-number-program-indent-yes" language="python" adaptive="yes" indentation="hide">
+        <exercise label="prime-number-program-indent-yes" language="python" adaptive="yes" indentation="hide">
             <title>Parsons Problem, Programming</title>
             <idx>prime numbers</idx>
             <idx>Sieve of Eratosthenes</idx>
@@ -652,7 +783,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </blocks>
         </exercise>
 
-        <exercise xml:id="prime-number-program-indent-no" language="python" adaptive="yes" indentation="show">
+        <exercise label="prime-number-program-indent-no" language="python" adaptive="yes" indentation="show">
             <title>Parsons Problem, Programming</title>
             <idx>prime numbers</idx>
             <idx>Sieve of Eratosthenes</idx>
@@ -698,7 +829,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </blocks>
         </exercise>
 
-        <exercise xml:id="number-theory-proof-numbered-left" adaptive="yes">
+        <exercise label="number-theory-proof-numbered-left" adaptive="yes">
             <title>Parsons Problem, Mathematical Proof, Numbered Blocks</title>
             <idx>even numbers</idx>
             <statement>
@@ -726,7 +857,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <hint>Dorothy will not be much help with this proof.</hint>
         </exercise>
 
-        <exercise xml:id="prime-number-program-numbered-right" language="python" adaptive="yes" indentation="hide">
+        <exercise label="prime-number-program-numbered-right" language="python" adaptive="yes" indentation="hide">
             <title>Parsons Problem, Programming</title>
             <idx>prime numbers</idx>
             <idx>Sieve of Eratosthenes</idx>
@@ -773,7 +904,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </exercise>
 
         <!-- https://www.britannica.com/list/25-decade-defining-events-in-us-history -->
-        <exercise xml:id="matching-dates">
+        <exercise label="matching-dates">
             <title>Matching Problem, Dates</title>
             <idx>matching US dates</idx>
             <statement>
@@ -802,7 +933,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </matches>
         </exercise>
 
-        <exercise xml:id="matching-derivatives">
+        <exercise label="matching-derivatives">
             <title>Matching Problem, Derivatives</title>
             <idx>matching derivatives</idx>
             <statement>
@@ -827,12 +958,200 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </matches>
         </exercise>
 
-        <exercise>
+        <exercise label="clickable-text">
+            <title>Clickable Areas, <q>Regular</q> Text</title>
+
+            <statement>
+                <p>Identify (by clicking, or by circling) all of the nouns in this quotation by Eleanor Roosevelt.</p>
+            </statement>
+
+            <areas>
+                <p><q>The <area>future</area> belongs to <area correct="no">those</area> who believe in the <area correct="yes">beauty</area> of <area correct="no">their</area> <area>dreams</area>.</q></p>
+            </areas>
+
+            <feedback>
+                <p>The incorrect words are pronouns.</p>
+            </feedback>
+        </exercise>
+
+        <exercise label="clickable-code">
+            <title>Clickable Areas, Code</title>
+
+            <statement>
+                <p>Identify (by clicking, or by circling) all of the assignment statements in this Python function.</p>
+            </statement>
+
+            <areas language="python">
+                <cline><area correct="no">def main():</area></cline>
+                <cline>    <area correct="yes">x = 4</area></cline>
+                <cline>    for i in range(5):</cline>
+                <cline>        <area>y = i</area></cline>
+                <cline>        <area correct="no">if y > 2:</area></cline>
+                <cline>            print(y)</cline>
+            </areas>
+
+            <feedback>
+                <p>Remember, the operator <c>=</c> is used for assignment.</p>
+            </feedback>
+        </exercise>
+
+        <exercise label="clickable-table">
+            <title>Clickable Areas, Text in a Table</title>
+
+            <statement>
+                <p>A two-dimensional array was created in Python with the list comprehension:<cd>
+                        <cline>[[0 for x in range(3)] for y in range(2)]</cline>
+                </cd>Then the values were (mostly) changed from zeros and the final array is shown below.</p>
+                <p>Identify (by clicking, or by circling) all of the boolean values in the array.</p>
+            </statement>
+
+            <areas>
+                <tabular top="minor" bottom="minor" left="minor" right="minor">
+                    <row>
+                        <cell><c>42</c></cell>
+                        <cell><area><c>True</c></area></cell>
+                        <cell><area correct="no"><c>'towel'</c></area></cell>
+                    </row>
+                    <row>
+                        <cell><area correct="no">'true'</area></cell>
+                        <cell>0</cell>
+                        <cell><area>False</area></cell>
+                    </row>
+                </tabular>
+
+                <p>This second table has no <tag>area</tag>, in order to test CSS for tables.</p>
+
+                <tabular top="minor" bottom="minor" left="minor" right="minor">
+                    <row>
+                        <cell><c>42</c></cell>
+                        <cell><c>True</c></cell>
+                        <cell><c>'towel'</c></cell>
+                    </row>
+                    <row>
+                        <cell>'true'</cell>
+                        <cell>0</cell>
+                        <cell>False</cell>
+                    </row>
+                </tabular>
+            </areas>
+            <hint>
+                <p>Python boolean variables begin with capital latters.</p>
+            </hint>
+            <feedback>
+                <p>Python boolean variables are <c>True</c> and <c>False</c>.  A value in quotation marks is a string, not a boolean.</p>
+            </feedback>
+        </exercise>
+
+        <exercise label="short-answer-question">
             <title>Short Answer</title>
 
             <statement>
-                <p>This sample book is configured to make some simple questions interactive on a capable platform, and to make others never interactive, even if it is possible.  In this case a <q>divisional</q> exercise will be made interactive whenever possible (which is the default, even though we have set this option explicitly).</p>
+                <p>This sample book is configured to make some simple questions interactive on a capable platform, and to make others never interactive, even if it is possible.  In this case a <q>divisional</q> exercise (like this one) could be made interactive for capable platforms by adjusting a switch in the publication file.</p>
             </statement>
+        </exercise>
+
+        <exercise label="fillin-integer">
+            <title>Fill-In, Integer Answer</title>
+
+            <statement>
+                <p>The game of bowling uses <var/> pins that you try to knock down.</p>
+            </statement>
+            <setup>
+                <var>
+                    <condition number="10">
+                        <feedback>
+                            <p>Arranged in a triangle, there are <m>1+2+3+4 = 10</m> pins, a so-called <term>triangular</term> number.</p>
+                        </feedback>
+                    </condition>
+                    <condition number="16">
+                        <feedback>
+                            <p><em>Close</em>! You may have used hexadecimal notation, when you did not really mean to.</p>
+                        </feedback>
+                    </condition>
+                    <condition string=".*">
+                        <feedback>
+                            <p>Incorrect.</p>
+                        </feedback>
+                    </condition>
+                </var>
+            </setup>
+        </exercise>
+
+        <exercise label="fillin-string-integer">
+            <title>Fill-In, String and Number Answers</title>
+
+            <statement>
+                <p>Complete the following line of a Python program so that it will declare an integer variable <c>age</c> with an initial value of <c>5</c>.</p>
+                <p><var/> <c>age = </c> <var/><c>;</c></p>
+            </statement>
+            <setup>
+                <var>
+                    <condition string="int">
+                        <feedback>
+                            <p>A variable of type <c>int</c> is appropriate for whole number ages.</p>
+                        </feedback>
+                    </condition>
+                    <condition string=".*">
+                        <feedback>
+                            <p>Remember that Java uses just the first three letters of the word <q>integer</q> to define an integral type.</p>
+                        </feedback>
+                    </condition>
+                </var>
+                <var>
+                    <condition number="5">
+                        <feedback>
+                            <p>An integer variable may be initialized to a value.</p>
+                        </feedback>
+                    </condition>
+                    <condition string=".*">
+                        <feedback>
+                            <p>Use <c>5</c> as the initial value of the variable.</p>
+                        </feedback>
+                    </condition>
+                </var>
+            </setup>
+        </exercise>
+
+        <exercise label="fillin-case-insensitive">
+            <title>Fill-In, Case-Insensitive Answer</title>
+
+            <statement>
+                <p>The word <var/> is the opposite of <q>yes</q>.  (Try a mixture of upper and lower-case letters.)</p>
+            </statement>
+            <setup>
+                <var case="insensitive">
+                    <!-- Note, no "p" in "feedback" -->
+                    <condition string="no">
+                        <feedback>The correct answers are  no, No, nO, and NO.</feedback>
+                    </condition>
+                    <condition string=".*">
+                        <feedback>Incorrect.</feedback>
+                    </condition>
+                </var>
+            </setup>
+        </exercise>
+
+        <exercise label="fillin-decimal">
+            <title>Fill-In, Decimal Answer</title>
+
+            <statement>
+                <p>The decimal number <var/> is an approximation of <m>\sfrac{1}{3}</m> to within three significant figures.  (<url href="https://en.wikipedia.org/wiki/Significant_figures" visual="en.wikipedia.org/wiki/Significant_figures">Wikipedia</url>).</p>
+            </statement>
+            <setup>
+                <var>
+                    <!-- Note, no "p" in "feedback" -->
+                    <condition number="0.333" tolerance="0.0005">
+                        <feedback>
+                            <p>Any value in the interval <m>0.333\pm 0.0005</m> is correct.</p>
+                        </feedback>
+                    </condition>
+                    <condition string=".*">
+                        <feedback>
+                            <p>Incorrect. Did you provide three <em>significant figures</em>?</p>
+                        </feedback>
+                    </condition>
+                </var>
+            </setup>
         </exercise>
 
     </exercises>
@@ -854,7 +1173,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <reading-questions>
 
-        <exercise>
+        <exercise label="simple-reading-question">
             <statement>
                 <p>This is a simple question.  Does this look like a short answer question?</p>
                 <p>Both questions in this <q>reading-questions</q> division should render in an interactive <q>short answer</q> form on a capable platform.  This is the default, and we have also explicitly set this behavior in the publication file.</p>
@@ -864,7 +1183,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
         </exercise>
 
-        <exercise>
+        <exercise label="second-reading-question">
             <statement>
                 <p>And a second reading question, so we can test having more than one.  Specifically to be certain each goes into the manifest properly.  How about some math now, <m>a^2+b^2=c^2</m>.  Is that all right?</p>
             </statement>

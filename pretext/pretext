@@ -32,6 +32,7 @@ import pretext as ptx
 # by author/publisher on the command line
 # Use pretext module console messaging routines
 
+
 def verify_input_file(f, file_type):
     """Verify file exists, or raise error.  Return absolute path"""
     # file_type is 'source' or 'publisher' or 'config'
@@ -41,42 +42,46 @@ def verify_input_file(f, file_type):
     #    actually opens it for reading, so we need to make
     #    separators all of a style the XSL command expects
     #    Bonus, we can customize logging messages
-    import os # .sep
-    import os.path # isfile(), abspath()
+    import os  # .sep
+    import os.path  # isfile(), abspath()
 
     # print representation AND error-check
-    if file_type == 'source':
-        file_descriptor = 'XML source'
-    elif file_type == 'publisher':
-        file_descriptor = 'publisher'
-    elif file_type == 'stylesheet':
-        file_descriptor = 'extra XSL stylesheet'
-    elif file_type == 'config':
-        file_descriptor = 'executables configuration'
+    if file_type == "source":
+        file_descriptor = "XML source"
+    elif file_type == "publisher":
+        file_descriptor = "publisher"
+    elif file_type == "stylesheet":
+        file_descriptor = "extra XSL stylesheet"
+    elif file_type == "config":
+        file_descriptor = "executables configuration"
     else:
         msg = "input file verification should receive a 'source', 'publisher', 'stylesheet', or 'config' parameter, not '{}'"
         raise ValueError(msg.format(file_type))
 
-    ptx._verbose('verifying and expanding {} file: {}'.format(file_descriptor, f))
-    if not(os.path.isfile(f)):
-        msg = '{} file {}{} does not exist'.format(
-            file_descriptor, f,
-            ' from the command line' if file_type == 'config' else ''
+    ptx._verbose("verifying and expanding {} file: {}".format(file_descriptor, f))
+    if not (os.path.isfile(f)):
+        msg = "{} file {}{} does not exist".format(
+            file_descriptor,
+            f,
+            " from the command line" if file_type == "config" else "",
         )
-        if file_type == 'config':
-            print('PTX:WARNING: {}'.format(msg))
+        if file_type == "config":
+            print("PTX:WARNING: {}".format(msg))
             return None
         else:
             raise ValueError(msg)
     absf = os.path.abspath(f)
-    if file_type == 'publisher':
-        absf = absf.replace(os.sep, '/')
-    ptx._verbose('input {} file expanded to absolute path: {}'.format(file_descriptor, absf))
+    if file_type == "publisher":
+        absf = absf.replace(os.sep, "/")
+    ptx._verbose(
+        "input {} file expanded to absolute path: {}".format(file_descriptor, absf)
+    )
     return absf
+
 
 def get_output_file(file_path):
     """Expand provided filename, or return None"""
-    import os # getcwd
+    import os  # getcwd
 
     # if specified, return absolute path
     # does not need to exist
@@ -85,22 +90,24 @@ def get_output_file(file_path):
     # else leave unspecified
     return None
 
+
 def get_destination_directory(directory, xml_source, pub_file, component):
     """Check and expand provided directory, or return current working directory"""
-    import os # getcwd(), mkdir()
-    import os.path # join()
+    import os  # getcwd(), mkdir()
+    import os.path  # join()
 
     # directory names presumed within "generated" directory of
     # the managed directories scheme, indexed by the "component",
     # simply listed here in alphabetical order
     component_dirs = {
-                        'asy':'asymptote',
-                        'latex-image':'latex-image',
-                        'mom':'problems',
-                        'preview':'preview',
-                        'sageplot':'sageplot',
-                        'youtube':'youtube',
-                      }
+        "asy": "asymptote",
+        "latex-image": "latex-image",
+        "mom": "problems",
+        "preview": "preview",
+        "sageplot": "sageplot",
+        "trace": "trace",
+        "youtube": "youtube",
+    }
     # if specified, check, sanitize, return absolute path
     if directory:
         return ptx.verify_input_directory(directory)
@@ -126,53 +133,67 @@ def get_destination_directory(directory, xml_source, pub_file, component):
     # else, absent managed directories, default to current working directory
     return os.getcwd()
 
+
 def string_parameters_as_dict(pairs):
     """Convert flat list of consecutive keys and values into a dictionary"""
     # Expects a list, and argparse below defaults to that
     # But still includes reasonable behavior for input of None
-    if not(pairs):
+    if not (pairs):
         return {}
     if (len(pairs) % 2) == 1:
-        msg = 'There are an odd number of items in option/value list ({})'.format(pairs)
+        msg = "There are an odd number of items in option/value list ({})".format(pairs)
         raise ValueError(msg)
     # safe to assume even length, so floor division
     params = {}
-    for i in range(len(pairs)//2):
-        params[pairs[2*i]] = pairs[2*i+1]
+    for i in range(len(pairs) // 2):
+        params[pairs[2 * i]] = pairs[2 * i + 1]
     return params
 
+
 def sanitize_method(method, component, format):
-    '''Returns a string appropriate for the component and format, else None'''
-    if component == 'asy':
+    """Returns a string appropriate for the component and format, else None"""
+    if component == "asy":
         # unset by command-line, use default
-        if not(method):
-            return 'server'
+        if not (method):
+            return "server"
         # set, but illegal
-        elif not(method in ['local', 'server']):
-            msg = '\n'.join(['PTX:WARNING: the method given for generating Asymptote diagrams ("{}") is not "local" or "server",',
-                             '             so using the default method instead ("server")'])
+        elif not (method in ["local", "server"]):
+            msg = "\n".join(
+                [
+                    'PTX:WARNING: the method given for generating Asymptote diagrams ("{}") is not "local" or "server",',
+                    '             so using the default method instead ("server")',
+                ]
+            )
             print(msg.format(method))
-            return 'server'
+            return "server"
         # set correctly
         else:
             return method
-    elif ((component == 'all') and (format == 'pdf')) or (component == 'latex-image'):
+    elif ((component == "all") and (format == "pdf")) or (component == "latex-image"):
         # we will arbitrarily set xelatex as the default
-        if not(method):
-            return 'xelatex'
+        if not (method):
+            return "xelatex"
         # set, but illegal
-        elif not(method in ['pdflatex', 'xelatex']):
-            msg = '\n'.join(['PTX:WARNING: the method given for the "{}" component and format "{}" ("{}") is not "pdflatex" or "xelatex",',
-                             '             so using the default method instead ("xelatex")'])
+        elif not (method in ["pdflatex", "xelatex"]):
+            msg = "\n".join(
+                [
+                    'PTX:WARNING: the method given for the "{}" component and format "{}" ("{}") is not "pdflatex" or "xelatex",',
+                    '             so using the default method instead ("xelatex")',
+                ]
+            )
             print(msg.format(component, format, method))
-            return 'xelatex'
+            return "xelatex"
         # set correctly
         else:
             return method
     # inappropriate attempt to use this argument
     elif method:
-        msg = ''.join(['PTX:WARNING: the method "{}" is not applicable for ',
-              'component "{}" and format "{}".  It is being ignored.'])
+        msg = "".join(
+            [
+                'PTX:WARNING: the method "{}" is not applicable for ',
+                'component "{}" and format "{}".  It is being ignored.',
+            ]
+        )
         print(msg.format(method, component, format))
         return None
     # not relevant, not attempted
@@ -183,26 +204,27 @@ def sanitize_method(method, component, format):
 # Configuration File
 ####################
 
+
 def get_executables(arg_supplied_config_file):
     """Query the configuration file, return dictionary of executables/commands"""
 
-    import configparser # ConfigParser()
-    import os.path # join()
+    import configparser  # ConfigParser()
+    import os.path  # join()
 
     # parse user configuration(s), contains locations of executables
     # in the "executables" section of the INI-style file
 
     ptx_dir = ptx.get_ptx_path()
-    config_filename = 'pretext.cfg'
-    default_config_file = os.path.join(ptx_dir, 'pretext', config_filename)
-    user_config_file = os.path.join(ptx_dir, 'user', config_filename)
+    config_filename = "pretext.cfg"
+    default_config_file = os.path.join(ptx_dir, "pretext", config_filename)
+    user_config_file = os.path.join(ptx_dir, "user", config_filename)
     # 2020-05-21: obsolete'd mbx script and associated config filenames
     # Try to read old version, but prefer new version
-    stale_user_config_file = os.path.join(ptx_dir, 'user', 'mbx.cfg')
+    stale_user_config_file = os.path.join(ptx_dir, "user", "mbx.cfg")
     config_file_list = [default_config_file, stale_user_config_file, user_config_file]
-    if (arg_supplied_config_file):
-        arg_supplied_config_file = verify_input_file(arg_supplied_config_file, 'config')
-    if (arg_supplied_config_file):
+    if arg_supplied_config_file:
+        arg_supplied_config_file = verify_input_file(arg_supplied_config_file, "config")
+    if arg_supplied_config_file:
         config_file_list.append(arg_supplied_config_file)
 
     # report on which configuration files are being examined
@@ -212,116 +234,220 @@ def get_executables(arg_supplied_config_file):
     files_read = config.read(config_file_list)
     # report on which configuration files were used
     ptx._debug("configuration files actually used/read: {}".format(files_read))
-    if not(user_config_file in files_read) and not(arg_supplied_config_file in files_read):
+    if not (user_config_file in files_read) and not (
+        arg_supplied_config_file in files_read
+    ):
         ptx._verbose("using default configuration only")
-    if not(user_config_file in files_read):
+    if not (user_config_file in files_read):
         msg = "custom configuration file not used at {}"
         ptx._verbose(msg.format(user_config_file))
-    if arg_supplied_config_file and not(arg_supplied_config_file in files_read):
+    if arg_supplied_config_file and not (arg_supplied_config_file in files_read):
         msg = "command-line specified config file not used at {}"
         ptx._verbose(msg.format(arg_supplied_config_file))
 
-    executable_dict = dict(config['executables'])
+    executable_dict = dict(config["executables"])
     # report the dictionary of keys
     ptx._debug("dictionary of executables/commands: {}".format(executable_dict))
 
     return executable_dict
 
+
 #####################
 # Command-Line Parser
 #####################
 
+
 def get_cli_arguments():
     """Return the CLI arguments in parser object"""
     import argparse
-    parser = argparse.ArgumentParser(description='PreTeXt utility script (requires Python 3.6)',
-                                     formatter_class=argparse.RawTextHelpFormatter)
 
-    verbose_help = '\n'.join(["verbosity of information on progress of the program",
-                              "  -v  is actions being performed",
-                              "  -vv is some additional raw debugging information"])
-    parser.add_argument('-v', '--verbose', help=verbose_help, action="count")
+    parser = argparse.ArgumentParser(
+        description="PreTeXt utility script (requires Python 3.6)",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
 
-    config_help = '\n'.join(["filename for pretext script config file",
-                             "  Settings in the specified file will override both defaults in",
-                             "  {}/pretext/pretext.cfg".format(ptx.get_ptx_path()),
-                             "  and user overrides in",
-                             "  {}/user/pretext.cfg".format(ptx.get_ptx_path()),
-                             "  (if it exists)"])
-    parser.add_argument('-C', '--config', help=config_help, action="store", dest='config_file')
+    verbose_help = "\n".join(
+        [
+            "verbosity of information on progress of the program",
+            "  -v  is actions being performed",
+            "  -vv is some additional raw debugging information",
+        ]
+    )
+    parser.add_argument("-v", "--verbose", help=verbose_help, action="count")
+
+    config_help = "\n".join(
+        [
+            "filename for pretext script config file",
+            "  Settings in the specified file will override both defaults in",
+            "  {}/pretext/pretext.cfg".format(ptx.get_ptx_path()),
+            "  and user overrides in",
+            "  {}/user/pretext.cfg".format(ptx.get_ptx_path()),
+            "  (if it exists)",
+        ]
+    )
+    parser.add_argument(
+        "-C", "--config", help=config_help, action="store", dest="config_file"
+    )
 
     component_info = [
-        ('asy', 'Asymptote diagrams (method: [server], local)'),
-        ('sageplot', 'Sage graphics'),
-        ('latex-image', 'LaTeX pictures (method: [xelatex], pdflatex)'),
-        ('webwork', 'WeBWorK problems in authored, PG, url, and static representations'),
-        ('pg-macros', 'Server-side macros for WeBWorK problem generation'),
-        ('youtube', 'Thumbnails for YouTube videos (JPEG only)'),
-        ('preview', 'Static preview images for interactives'),
-        ('mom', 'MyOpenMath problem files, static versions'),
-        ('math', 'Math elements for MathJax conversion (only)'),
-        ('all', 'Complete document (in various formats) (for pdf, method: [xelatex], pdflatex)'),
-        ('tikz', 'tikz pictures (removed, use latex-image)'),
+        ("asy", "Asymptote diagrams (method: [server], local)"),
+        ("sageplot", "Sage graphics"),
+        ("latex-image", "LaTeX pictures (method: [xelatex], pdflatex)"),
+        (
+            "webwork",
+            "WeBWorK problems in authored, PG, url, and static representations",
+        ),
+        ("pg-macros", "Server-side macros for WeBWorK problem generation"),
+        ("youtube", "Thumbnails for YouTube videos (JPEG only)"),
+        ("preview", "Static preview images for interactives"),
+        ("mom", "MyOpenMath problem files, static versions"),
+        ("math", "Math elements for MathJax conversion (only)"),
+        ("trace", "Program trace data for CodeLens"),
+        (
+            "all",
+            "Complete document (in various formats) (for pdf, method: [xelatex], pdflatex)",
+        ),
+        ("tikz", "tikz pictures (removed, use latex-image)"),
     ]
-    component_help = 'Possible components are:\n' + '\n'.join(['  {} - {}'.format(info[0], info[1]) for info in component_info])
-    parser.add_argument('-c', '--component', help=component_help, action="store", dest="component")
+    component_help = "Possible components are:\n" + "\n".join(
+        ["  {} - {}".format(info[0], info[1]) for info in component_info]
+    )
+    parser.add_argument(
+        "-c", "--component", help=component_help, action="store", dest="component"
+    )
 
     format_info = [
-        ('svg', 'Scalable Vector Graphics file(s)'),
-        ('pdf', 'Portable Document Format file(s)'),
-        ('png', 'Portable Network Graphics file(s)'),
-        ('eps', 'Encapsulated Post Script file(s)'),
-        ('mml', 'MathML (math elements)'),
-        ('braille', 'Nemeth Braille (math elements only)'),
-        ('braille-emboss', 'UEB + Nemeth braille, for print'),
-        ('braille-electronic', 'UEB + Nemeth Braille, for one-line display'),
-        ('tactile', 'Images with braille labels, etc. (latex-image graphics only)'),
-        ('speech', 'Speech (math elements)'),
-        ('source', 'Standalone source files'),
-        ('latex', 'LaTeX source file'),
-        ('html', 'HyperText Markup Language (online/web pages)'),
-        ('html-zip', 'HyperText Markup Language (single zip file)'),
-        ('epub-svg', 'EPUB container, math as SVG'),
-        ('epub-mml', 'EPUB container, math as MathML'),
-        ('epub-speech', 'EPUB container, math as speech'),
-        ('epub-kindle', 'EPUB container, math as MathML, PNG images'),
-        ('assembly-static', 'PreTeXt source, after pre-processor, static exercises (for developers)'),
-        ('assembly-dynamic', 'PreTeXt source, after pre-processor, dynamic exercises (for developers)'),
-        ('sagenb', 'Sage worksheet conversion (removed)'),
-        ('all', 'All available output formats'),
+        ("svg", "Scalable Vector Graphics file(s)"),
+        ("pdf", "Portable Document Format file(s)"),
+        ("png", "Portable Network Graphics file(s)"),
+        ("eps", "Encapsulated Post Script file(s)"),
+        ("mml", "MathML (math elements)"),
+        ("braille", "Nemeth Braille (math elements only)"),
+        ("braille-emboss", "UEB + Nemeth braille, for print"),
+        ("braille-electronic", "UEB + Nemeth Braille, for one-line display"),
+        ("tactile", "Images with braille labels, etc. (latex-image graphics only)"),
+        ("speech", "Speech (math elements)"),
+        ("source", "Standalone source files"),
+        ("latex", "LaTeX source file (intermediate format, for developers)"),
+        ("html", "HyperText Markup Language (online/web pages)"),
+        ("html-zip", "HyperText Markup Language (single zip file)"),
+        ("epub-svg", "EPUB container, math as SVG"),
+        ("epub-mml", "EPUB container, math as MathML"),
+        ("epub-speech", "EPUB container, math as speech"),
+        ("epub-kindle", "EPUB container, math as MathML, PNG images"),
+        (
+            "assembly-static",
+            "PreTeXt source, after pre-processor, static exercises (for developers)",
+        ),
+        (
+            "assembly-dynamic",
+            "PreTeXt source, after pre-processor, dynamic exercises (for developers)",
+        ),
+        ("sagenb", "Sage worksheet conversion (removed)"),
+        ("all", "All available output formats"),
     ]
-    format_help = 'Output formats are:\n' + '\n'.join(['  {} - {}'.format(info[0], info[1]) for info in format_info])
-    parser.add_argument('-f', '--format', help=format_help, action="store", dest='format')
+    format_help = "Output formats are:\n" + "\n".join(
+        ["  {} - {}".format(info[0], info[1]) for info in format_info]
+    )
+    parser.add_argument(
+        "-f", "--format", help=format_help, action="store", dest="format"
+    )
 
-    parser.add_argument('-p', '--publication', '--publisher', help='filename for publication file (--publisher is deprecated as a switch)', action="store", dest='publication_file')
+    parser.add_argument(
+        "-p",
+        "--publication",
+        "--publisher",
+        help="filename for publication file (--publisher is deprecated as a switch)",
+        action="store",
+        dest="publication_file",
+    )
     # "nargs" allows multiple options following the flag
     # separate by spaces, can't use "-stringparam"
     # stringparams is a list of strings on return, defaults to empty list
-    parser.add_argument('-x', '--parameters', nargs='+', help='extra stringparam options to pass to XSLT extraction stylesheet (multiple option/value pairs, not as last argument)',
-                         action="store", dest='stringparams', default=[])
+    parser.add_argument(
+        "-x",
+        "--parameters",
+        nargs="+",
+        help="extra stringparam options to pass to XSLT extraction stylesheet (multiple option/value pairs, not as last argument)",
+        action="store",
+        dest="stringparams",
+        default=[],
+    )
     # filename for "eXtra" XSL, really alternate XSL
-    parser.add_argument('-X', '--XSL', help='filename for extra XSL stylesheet (only PDF, HTML, LaTeX formats)', action="store", dest='extra_stylesheet')
+    parser.add_argument(
+        "-X",
+        "--XSL",
+        help="filename for extra XSL stylesheet (only PDF, HTML, LaTeX formats)",
+        action="store",
+        dest="extra_stylesheet",
+    )
     # an option of sorts, called method, default will be per-component
-    parser.add_argument('-M', '--method', help='method to use for a component/format (values and defaults vary)',
-                         action="store", dest='method', default='')
+    parser.add_argument(
+        "-M",
+        "--method",
+        help="method to use for a component/format (values and defaults vary)",
+        action="store",
+        dest="method",
+        default="",
+    )
     # default to an empty string, which signals root to XSL stylesheet
-    parser.add_argument('-r', '--restrict', help='restrict to subtree rooted at element with specified xml:id',
-                         action="store", dest='xmlid', default='')
-    parser.add_argument('-s', '--server', help='base URL for server (webwork only)', action="store", dest='server')
+    parser.add_argument(
+        "-r",
+        "--restrict",
+        help="restrict to subtree rooted at element with specified xml:id",
+        action="store",
+        dest="xmlid",
+        default="",
+    )
+    parser.add_argument(
+        "-s",
+        "--server",
+        help="base URL for server (webwork only)",
+        action="store",
+        dest="server",
+    )
 
     # recognize this switch, but only warn later that it is being ignored
-    parser.add_argument('-i', '--include', help='external data directory, deprecated 2021-07-26, IGNORED', action="store", dest='data_dir')
-    parser.add_argument('-o', '--output', help='file for output (supersedes -d)', action="store", dest='out')
-    parser.add_argument('-d', '--directory', help='directory for output, defaults to managed directories from publication file\nfor components with multiple outputs, else current directory', action="store", dest='dir')
-    parser.add_argument('-a', '--abort', help='abort script upon recoverable errors', action="store_true", dest='abort')
+    parser.add_argument(
+        "-i",
+        "--include",
+        help="external data directory, deprecated 2021-07-26, IGNORED",
+        action="store",
+        dest="data_dir",
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        help="file for output (supersedes -d)",
+        action="store",
+        dest="out",
+    )
+    parser.add_argument(
+        "-d",
+        "--directory",
+        help="directory for output, defaults to managed directories from publication file\nfor components with multiple outputs, else current directory",
+        action="store",
+        dest="dir",
+    )
+    parser.add_argument(
+        "-a",
+        "--abort",
+        help="abort script upon recoverable errors",
+        action="store_true",
+        dest="abort",
+    )
 
-    parser.add_argument('xml_file', help='PreTeXt source file with content', action="store")
+    parser.add_argument(
+        "xml_file", help="PreTeXt source file with content", action="store"
+    )
 
     return parser.parse_args()
+
 
 ############################################
 # Interface Command-Line to Module Functions
 ############################################
+
 
 def main():
     """React to command-line switches in order to perform basic tasks"""
@@ -335,7 +461,7 @@ def main():
     # set verbosity of supplied console messages
     # based on CLI argument, if supplied (0,1,2)
     # Parser can return None, this is level 0
-    if not(args.verbose):
+    if not (args.verbose):
         ptx.set_verbosity(0)
     else:
         ptx.set_verbosity(args.verbose)
@@ -348,23 +474,33 @@ def main():
 
     # Issue command-line argument deprecations
     if args.data_dir:
-        msg = '\n'.join(["the '-i/--include' switch is deprecated and ignored, as of 2021-07-26.",
-                         "Transition to using a publisher file to set managed directories.  See the PreTeXt Guide."])
+        msg = "\n".join(
+            [
+                "the '-i/--include' switch is deprecated and ignored, as of 2021-07-26.",
+                "Transition to using a publisher file to set managed directories.  See the PreTeXt Guide.",
+            ]
+        )
         raise ValueError(msg)
 
     # Report Python version in debugging output
-    ptx._debug("Python version: {} (expecting 3.6 or newer)".format(ptx.python_version()))
+    ptx._debug(
+        "Python version: {} (expecting 3.6 or newer)".format(ptx.python_version())
+    )
 
     # Check discovering directory locations as
     # realized by PreTeXt installation
     # Necessary for locating configuration files (next)
-    ptx._debug("discovered distribution and xsl directories: {}, {}".format(ptx.get_ptx_path(), ptx.get_ptx_xsl_path()))
+    ptx._debug(
+        "discovered distribution and xsl directories: {}, {}".format(
+            ptx.get_ptx_path(), ptx.get_ptx_xsl_path()
+        )
+    )
 
     # The "get" will report 'executables' in configuration file
     ptx.set_executables(get_executables(args.config_file))
 
     # check and sanitize XML source, presumed to exiast
-    xml_source = verify_input_file(args.xml_file, 'source')
+    xml_source = verify_input_file(args.xml_file, "source")
     # data directory is optional, so allow for None here
     if args.data_dir:
         data_dir = ptx.verify_input_directory(args.data_dir)
@@ -372,12 +508,12 @@ def main():
         data_dir = None
     # publisher file is optional, so allow for None here
     if args.publication_file:
-        publication_file = verify_input_file(args.publication_file, 'publisher')
+        publication_file = verify_input_file(args.publication_file, "publisher")
     else:
         publication_file = None
     # extra XSL is optional, so allow for None here
     if args.extra_stylesheet:
-        extra_stylesheet = verify_input_file(args.extra_stylesheet, 'stylesheet')
+        extra_stylesheet = verify_input_file(args.extra_stylesheet, "stylesheet")
     else:
         extra_stylesheet = None
     # directory/file locations provided on command-line by user
@@ -388,7 +524,9 @@ def main():
     out_file = get_output_file(args.out)
     # output directory: CLI switch or default to cwd
     # must exist first if given, return value always exists
-    dest_dir = get_destination_directory(args.dir, xml_source, publication_file, args.component)
+    dest_dir = get_destination_directory(
+        args.dir, xml_source, publication_file, args.component
+    )
     # method may not be required, but when it may apply we use a
     # routine to error-check and sanitize possible values and defaults
     # varies by component and format
@@ -399,90 +537,211 @@ def main():
     # if 'publisher' is passed as stringparam, pull it out
     # as 'publication_file' and ensure correct slashes
     # but do not stomp on a file passed with dedicated switch
-    if ('publisher' in stringparams) and not(publication_file):
-        publication_file = verify_input_file(stringparams['publisher'], 'publisher')
-        del stringparams['publisher']
+    if ("publisher" in stringparams) and not (publication_file):
+        publication_file = verify_input_file(stringparams["publisher"], "publisher")
+        del stringparams["publisher"]
 
-    ptx._verbose('Done examining environment and initializing setup info')
+    ptx._verbose("Done examining environment and initializing setup info")
 
     # The big switch
-    if args.component == 'asy':
-        if args.format in ['html', 'pdf', 'svg', 'png', 'eps', 'source', 'all']:
-            ptx.asymptote_conversion(xml_source, publication_file, stringparams, args.xmlid, dest_dir, args.format, method)
+    if args.component == "asy":
+        if args.format in ["html", "pdf", "svg", "png", "eps", "source", "all"]:
+            ptx.asymptote_conversion(
+                xml_source,
+                publication_file,
+                stringparams,
+                args.xmlid,
+                dest_dir,
+                args.format,
+                method,
+            )
         else:
-            raise NotImplementedError('cannot make Asymptote diagrams in "{}" format'.format(args.format))
-    elif  args.component == 'sageplot':
-        if args.format in ['pdf', 'svg', 'png', 'html', 'all']:
-            ptx.sage_conversion(xml_source, publication_file, stringparams, args.xmlid, dest_dir, args.format)
+            raise NotImplementedError(
+                'cannot make Asymptote diagrams in "{}" format'.format(args.format)
+            )
+    elif args.component == "sageplot":
+        if args.format in ["pdf", "svg", "png", "html", "all"]:
+            ptx.sage_conversion(
+                xml_source,
+                publication_file,
+                stringparams,
+                args.xmlid,
+                dest_dir,
+                args.format,
+            )
         else:
-            raise NotImplementedError('cannot make Sage graphics in "{}" format'.format(args.format))
-    elif args.component == 'latex-image':
-        if args.format in ['pdf', 'svg', 'png', 'eps', 'source', 'all']:
-            ptx.latex_image_conversion(xml_source, publication_file, stringparams, args.xmlid, dest_dir, args.format, method)
-        elif args.format in ['tactile']:
-            ptx.latex_tactile_image_conversion(xml_source, publication_file, stringparams, dest_dir, args.format)
+            raise NotImplementedError(
+                'cannot make Sage graphics in "{}" format'.format(args.format)
+            )
+    elif args.component == "latex-image":
+        if args.format in ["pdf", "svg", "png", "eps", "source", "all"]:
+            ptx.latex_image_conversion(
+                xml_source,
+                publication_file,
+                stringparams,
+                args.xmlid,
+                dest_dir,
+                args.format,
+                method,
+            )
+        elif args.format in ["tactile"]:
+            ptx.latex_tactile_image_conversion(
+                xml_source, publication_file, stringparams, dest_dir, args.format
+            )
         else:
-            raise NotImplementedError('cannot make LaTeX pictures in "{}" format'.format(args.format))
-    elif args.component == 'webwork-tex':
-        wtdep = ('the "webwork-tex" component has been replaced by the "webwork" component, '
-                 'and behaves very differently')
+            raise NotImplementedError(
+                'cannot make LaTeX pictures in "{}" format'.format(args.format)
+            )
+    elif args.component == "webwork-tex":
+        wtdep = (
+            'the "webwork-tex" component has been replaced by the "webwork" component, '
+            "and behaves very differently"
+        )
         raise NotImplementedError(wtdep)
-    elif args.component == 'webwork':
-        ptx.webwork_to_xml(xml_source, publication_file, stringparams, args.abort, args.server, dest_dir)
-    elif args.component == 'pg-macros':
+    elif args.component == "webwork":
+        ptx.webwork_to_xml(
+            xml_source,
+            publication_file,
+            stringparams,
+            args.abort,
+            args.server,
+            dest_dir,
+        )
+    elif args.component == "pg-macros":
         ptx.pg_macros(xml_source, dest_dir)
-    elif args.component == 'youtube':
-        ptx.youtube_thumbnail(xml_source, publication_file, stringparams, args.xmlid, dest_dir)
-    elif args.component == 'preview':
-        ptx.preview_images(xml_source, publication_file, stringparams, args.xmlid, dest_dir)
-    elif args.component == 'mom':
-        ptx.mom_static_problems(xml_source, publication_file, stringparams, args.xmlid, dest_dir)
-    elif args.component == 'math':
-        if args.format in ['svg', 'mml', 'nemeth', 'speech']:
-            ptx.mathjax_latex(xml_source, publication_file, out_file, dest_dir, args.format)
+    elif args.component == "youtube":
+        ptx.youtube_thumbnail(
+            xml_source, publication_file, stringparams, args.xmlid, dest_dir
+        )
+    elif args.component == "preview":
+        ptx.preview_images(
+            xml_source, publication_file, stringparams, args.xmlid, dest_dir
+        )
+    elif args.component == "mom":
+        ptx.mom_static_problems(
+            xml_source, publication_file, stringparams, args.xmlid, dest_dir
+        )
+    elif args.component == "math":
+        if args.format in ["svg", "mml", "nemeth", "speech"]:
+            ptx.mathjax_latex(
+                xml_source, publication_file, out_file, dest_dir, args.format
+            )
         else:
-            raise NotImplementedError('cannot convert math elements to "{}" format'.format(args.format))
-    elif args.component == 'all':
-        if args.format == 'html':
-            ptx.html(xml_source, publication_file, stringparams, args.xmlid, 'html', extra_stylesheet, out_file, dest_dir)
-        elif args.format == 'html-zip':
+            raise NotImplementedError(
+                'cannot convert math elements to "{}" format'.format(args.format)
+            )
+    elif args.component == "trace":
+        ptx.tracer(xml_source, publication_file, stringparams, args.xmlid, dest_dir)
+    elif args.component == "all":
+        if args.format == "html":
+            ptx.html(
+                xml_source,
+                publication_file,
+                stringparams,
+                args.xmlid,
+                "html",
+                extra_stylesheet,
+                out_file,
+                dest_dir,
+            )
+        elif args.format == "html-zip":
             # no "subtree root" build is possible
-            ptx.html(xml_source, publication_file, stringparams, None, 'zip', extra_stylesheet, out_file, dest_dir)
-        elif args.format == 'pdf':
-            ptx.pdf(xml_source, publication_file, stringparams, extra_stylesheet, out_file, dest_dir, method)
-        elif args.format == 'latex':
-            ptx.latex(xml_source, publication_file, stringparams, extra_stylesheet, out_file, dest_dir)
-        elif args.format == 'braille-emboss':
-            ptx.braille(xml_source, publication_file, stringparams, out_file, dest_dir, 'emboss')
-        elif args.format == 'braille-electronic':
-            ptx.braille(xml_source, publication_file, stringparams, out_file, dest_dir, 'electronic')
-        elif args.format == 'epub-svg':
-            ptx.epub(xml_source, publication_file, out_file, dest_dir, 'svg', stringparams)
-        elif args.format == 'epub-mml':
-            ptx.epub(xml_source, publication_file, out_file, dest_dir, 'mml', stringparams)
-        elif args.format == 'epub-speech':
-            ptx.epub(xml_source, publication_file, out_file, dest_dir, 'speech', stringparams)
-        elif args.format == 'epub-kindle':
-            ptx.epub(xml_source, publication_file, out_file, dest_dir, 'kindle', stringparams)
-        elif args.format == 'assembly-static':
-            ptx.assembly(xml_source, publication_file, stringparams, out_file, dest_dir, 'static')
-        elif args.format == 'assembly-dynamic':
-            ptx.assembly(xml_source, publication_file, stringparams, out_file, dest_dir, 'dynamic')
+            ptx.html(
+                xml_source,
+                publication_file,
+                stringparams,
+                None,
+                "zip",
+                extra_stylesheet,
+                out_file,
+                dest_dir,
+            )
+        elif args.format == "pdf":
+            ptx.pdf(
+                xml_source,
+                publication_file,
+                stringparams,
+                extra_stylesheet,
+                out_file,
+                dest_dir,
+                method,
+            )
+        elif args.format == "latex":
+            ptx.latex(
+                xml_source,
+                publication_file,
+                stringparams,
+                extra_stylesheet,
+                out_file,
+                dest_dir,
+            )
+        elif args.format == "braille-emboss":
+            ptx.braille(
+                xml_source, publication_file, stringparams, out_file, dest_dir, "emboss"
+            )
+        elif args.format == "braille-electronic":
+            ptx.braille(
+                xml_source,
+                publication_file,
+                stringparams,
+                out_file,
+                dest_dir,
+                "electronic",
+            )
+        elif args.format == "epub-svg":
+            ptx.epub(
+                xml_source, publication_file, out_file, dest_dir, "svg", stringparams
+            )
+        elif args.format == "epub-mml":
+            ptx.epub(
+                xml_source, publication_file, out_file, dest_dir, "mml", stringparams
+            )
+        elif args.format == "epub-speech":
+            ptx.epub(
+                xml_source, publication_file, out_file, dest_dir, "speech", stringparams
+            )
+        elif args.format == "epub-kindle":
+            ptx.epub(
+                xml_source, publication_file, out_file, dest_dir, "kindle", stringparams
+            )
+        elif args.format == "assembly-static":
+            ptx.assembly(
+                xml_source, publication_file, stringparams, out_file, dest_dir, "static"
+            )
+        elif args.format == "assembly-dynamic":
+            ptx.assembly(
+                xml_source,
+                publication_file,
+                stringparams,
+                out_file,
+                dest_dir,
+                "dynamic",
+            )
         # 2020-05-19 MathBookXMLtoSWS class removed
-        elif args.format == 'sagenb':
-            raise NotImplementedError("conversion to Sage notebook format removed (2020-05-18)")
-        #2020-08-19 Deprecated in favor of -emboss, -electronic
-        elif args.format == 'braille':
-            raise NotImplementedError("'braille' format deprecated (2020-08-19), 'braille-emboss' is replacement")
+        elif args.format == "sagenb":
+            raise NotImplementedError(
+                "conversion to Sage notebook format removed (2020-05-18)"
+            )
+        # 2020-08-19 Deprecated in favor of -emboss, -electronic
+        elif args.format == "braille":
+            raise NotImplementedError(
+                "'braille' format deprecated (2020-08-19), 'braille-emboss' is replacement"
+            )
         else:
-            raise NotImplementedError('cannot make entire document in "{}" format'.format(args.format))
-    elif args.component == 'images':
+            raise NotImplementedError(
+                'cannot make entire document in "{}" format'.format(args.format)
+            )
+    elif args.component == "images":
         ptx.all_images(xml_source, publication_file, stringparams, args.xmlid)
     # 2020-05-19 tikz_conversion() function removed
-    elif args.component == 'tikz':
-        raise NotImplementedError('conversion of TikZ pictures has been subsumed into the "latex-image" component (2020-05-19)')
+    elif args.component == "tikz":
+        raise NotImplementedError(
+            'conversion of TikZ pictures has been subsumed into the "latex-image" component (2020-05-19)'
+        )
     else:
-        raise ValueError('the "{}" component is not a conversion option'.format(args.component))
+        raise ValueError(
+            'the "{}" component is not a conversion option'.format(args.component)
+        )
 
     # Cleanup, if execution does not raise errors
     ptx.release_temporary_directories()

@@ -64,6 +64,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>Algebra</title>
             <xi:include href="./groups.xml" />                  <!-- Groups -->
             <xi:include href="./cyclic.xml" />                  <!-- Cyclic Groups -->
+            <xi:include href="./rune.xml" />                    <!-- Runestone -->
         </part>
 
         <!-- Many chapters removed from original AATA, here -->

@@ -260,7 +260,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-has-geogebra"     select="boolean($document-root//interactive[@platform='geogebra'])"/>
 <!-- 2018-04-06:  jsxgraph deprecated -->
 <xsl:variable name="b-has-jsxgraph"     select="boolean($document-root//jsxgraph)"/>
-<xsl:variable name="b-has-pytutor"      select="boolean($document-root//program[@interactive='pythontutor'])"/>
 <!-- Every page has an index button, with a link to the index -->
 <!-- Here we assume there is at most one                      -->
 <!-- (The old style of specifying an index is deprecated)     -->
@@ -2967,6 +2966,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>-knowl</xsl:text>
             <!--  -->
             <xsl:text> original</xsl:text>
+            <!-- classes indicate if opening the knowl reveals specials -->
+            <xsl:if test=".//image">
+                <xsl:text> has-image</xsl:text>
+            </xsl:if>
+            <xsl:if test=".//video">
+                <xsl:text> has-video</xsl:text>
+            </xsl:if>
+            <xsl:if test=".//interactive">
+                <xsl:text> has-interactive</xsl:text>
+            </xsl:if>
+            <xsl:if test=".//tabular">
+                <xsl:text> has-tabular</xsl:text>
+            </xsl:if>
         </xsl:attribute>
         <!-- and the id via a template for consistency -->
         <xsl:attribute name="data-refid">
@@ -4571,108 +4583,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-has-answer" />
     <xsl:param name="b-has-solution" />
 
-    <!-- Later we need to know what type of "exercise" this is based on location. -->
-    <!-- "inline" is the default after specialized instances are exhausted.       -->
-    <!-- NB: variable and subsequent conditional are recycled for the Runestone manifest -->
-    <xsl:variable name="b-is-divisional" select="boolean(ancestor::exercises)"/>
-    <xsl:variable name="b-is-worksheet" select="boolean(ancestor::worksheet)"/>
-    <xsl:variable name="b-is-reading" select="boolean(ancestor::reading-questions)"/>
-    <xsl:variable name="b-is-project" select="boolean(ancestor::*[&PROJECT-FILTER;])"/>
-    <xsl:variable name="b-is-inline" select="not($b-is-divisional or $b-is-worksheet or $b-is-reading or $b-is-project)"/>
-
     <xsl:choose>
         <!-- signal on intentional, temporary, hack      -->
         <!-- simply duplicated in assembly, no solutions -->
-        <xsl:when test="@runestone">
+        <xsl:when test="@exercise-interactive = 'htmlhack'">
             <xsl:apply-templates select="." mode="runestone-to-interactive"/>
         </xsl:when>
-        <!-- intercept a True/False question                        -->
-        <!-- signal on "statement/statement/@correct" from assembly -->
-        <xsl:when test="statement/statement and statement/statement/@correct">
+        <!-- True/False        -->
+        <!-- Multiple Choice   -->
+        <!-- Parson problems   -->
+        <!-- Matching problems -->
+        <!-- Clickable Area    -->
+        <!-- Short Answer      -->
+        <xsl:when test="(@exercise-interactive = 'truefalse') or
+                               (@exercise-interactive = 'multiplechoice') or
+                               (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'coding') or
+                               (@exercise-interactive = 'shortanswer')"
+                               >
             <xsl:if test="$b-has-statement">
-                <xsl:apply-templates select="statement" mode="runestone-to-interactive"/>
+                <xsl:apply-templates select="." mode="runestone-to-interactive"/>
             </xsl:if>
-            <xsl:apply-templates select="." mode="solutions-div">
-                <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="block-type" select="$block-type"/>
-                <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
-                <xsl:with-param name="b-has-answer"  select="$b-has-answer"/>
-                <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
-            </xsl:apply-templates>
-        </xsl:when>
-        <!-- intercept a multiple choice question        -->
-        <!-- signal on "statement/choices" from assembly -->
-        <xsl:when test="statement/statement and statement/choices">
-            <xsl:if test="$b-has-statement">
-                <xsl:apply-templates select="statement" mode="runestone-to-interactive"/>
-            </xsl:if>
-            <xsl:apply-templates select="." mode="solutions-div">
-                <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="block-type" select="$block-type"/>
-                <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
-                <xsl:with-param name="b-has-answer"  select="$b-has-answer"/>
-                <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
-            </xsl:apply-templates>
-        </xsl:when>
-        <!-- intercept a Parsons problem                -->
-        <!-- signal on "statement/blocks" from assembly -->
-        <xsl:when test="statement/statement and statement/blocks">
-            <xsl:if test="$b-has-statement">
-                <xsl:apply-templates select="statement" mode="runestone-to-interactive"/>
-            </xsl:if>
-            <xsl:apply-templates select="." mode="solutions-div">
-                <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="block-type" select="$block-type"/>
-                <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
-                <xsl:with-param name="b-has-answer"  select="$b-has-answer"/>
-                <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
-            </xsl:apply-templates>
-        </xsl:when>
-        <!-- intercept a matching question               -->
-        <!-- signal on "statement/choices" from assembly -->
-        <xsl:when test="statement/statement and statement/matches">
-            <xsl:if test="$b-has-statement">
-                <xsl:apply-templates select="statement" mode="runestone-to-interactive"/>
-            </xsl:if>
-            <xsl:apply-templates select="." mode="solutions-div">
-                <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="block-type" select="$block-type"/>
-                <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
-                <xsl:with-param name="b-has-answer"  select="$b-has-answer"/>
-                <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
-            </xsl:apply-templates>
-        </xsl:when>
-        <!-- ActiveCode exercises, powered by Runestone Services -->
-        <!-- condition looks for packaging of a "statement" and a "program"      -->
-        <!-- into a statement via assembly, which is distinct from an "exercise" -->
-        <!-- which has an authored statement with a "program" inside it          -->
-        <xsl:when test="statement/statement and statement/program">
-            <xsl:if test="$b-has-statement">
-                <xsl:apply-templates select="statement" mode="runestone-to-interactive"/>
-            </xsl:if>
-            <xsl:apply-templates select="." mode="solutions-div">
-                <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="block-type" select="$block-type"/>
-                <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
-                <xsl:with-param name="b-has-answer"  select="$b-has-answer"/>
-                <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
-            </xsl:apply-templates>
-        </xsl:when>
-        <!-- We have run out of exceptional interactive forms, so turn our attention to -->
-        <!--     1.  statement|hint|answer|solution                                     -->
-        <!--     2.  structured by task                                                 -->
-        <!--     3.  some content, meant to be a statement only (adjust pre-processor?) -->
-        <!-- First is an "exercise" or PROJECT-LIKE that has a statement and            -->
-        <!-- has been elected as an interactive short answer problem and we             -->
-        <!-- have a capable platform                                                    -->
-        <xsl:when test="$b-host-runestone and statement and
-                         ( ($b-is-divisional and $b-sa-divisional-dynamic) or
-                           ($b-is-worksheet and $b-sa-worksheet-dynamic) or
-                           ($b-is-reading and $b-sa-reading-dynamic) or
-                           ($b-is-project and $b-sa-project-dynamic) or
-                           ($b-is-inline and $b-sa-inline-dynamic)
-                         )">
-            <xsl:apply-templates select="." mode="runestone-to-interactive"/>
             <xsl:apply-templates select="." mode="solutions-div">
                 <xsl:with-param name="b-original" select="$b-original"/>
                 <xsl:with-param name="block-type" select="$block-type"/>
@@ -6967,7 +6901,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="google-classic"/>
                 <xsl:call-template name="google-universal"/>
                 <xsl:call-template name="google-gst"/>
-                <!-- <xsl:call-template name="pytutor-footer" /> -->
                 <xsl:call-template name="extra-js-footer"/>
             </body>
         </html>
@@ -7260,6 +7193,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- This an optional component of an author-hosted video, -->
 <!-- and the markup closely tracks the generated HTML.     -->
+<!-- The exception being our @listing; @label is taken.    -->
 <!-- The HTML @default attribute functions simply by being -->
 <!-- present, so we do not provide a value.                -->
 <xsl:template match="track">
@@ -7274,7 +7208,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:attribute name="default"/>
         </xsl:if>
         <xsl:attribute name="label">
-            <xsl:value-of select="@label"/>
+            <xsl:value-of select="@listing"/>
         </xsl:attribute>
         <xsl:attribute name="kind">
             <xsl:value-of select="@kind"/>
@@ -8188,37 +8122,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   B.  The permid-edition scheme is effective           -->
 <xsl:template match="*" mode="html-id">
     <xsl:choose>
-        <!-- primary version, as described above -->
-        <xsl:when test="not($b-host-runestone)">
-            <xsl:choose>
-                <xsl:when test="@name">
-                    <xsl:value-of select="@name"/>
-                </xsl:when>
-                <xsl:when test="@permid">
-                    <xsl:value-of select="@permid"/>
-                </xsl:when>
-                <xsl:when test="@xml:id">
-                    <xsl:value-of select="@xml:id"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="local-name(.)"/>
-                    <xsl:text>-</xsl:text>
-                    <!-- 2015-09: slow version matches previous "internal-id" -->
-                    <!-- use for third (automatic) construction               -->
-                    <xsl:choose>
-                        <xsl:when test="$b-fast-ids">
-                            <!-- xsltproc produces non-numeric prefix "idm" -->
-                            <xsl:value-of select="substring(generate-id(.), 4)"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:number from="book|article|letter|memo" level="any"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:otherwise>
-            </xsl:choose>
+        <!-- always use the "visible-id" for interior Runestone -->
+        <xsl:when test="not($b-host-runestone) and @permid">
+            <xsl:value-of select="@permid"/>
         </xsl:when>
-        <!-- alternate version for Runestone, prefer @xml:id, -->
-        <!-- never use permid, no fast-id testing, in -common -->
         <xsl:otherwise>
             <xsl:apply-templates select="." mode="visible-id"/>
         </xsl:otherwise>
@@ -8290,16 +8197,47 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- no real harm in just doing nothing            -->
 </xsl:template>
 
+<!-- "mag" is pretty much verbatim, but we allow LaTeX syntax  -->
+<!-- for \pi and we need to make them amenable to MathJax.     -->
+<!-- TODO:                                                     -->
+<!--   - implement <pi/> strictly inside "mag" (LaTeX too)     -->
+<!--   - move the recursive template to the "repair"           -->
+<!--     pass of the pre-processor                             -->
 <xsl:template match="mag">
-    <xsl:variable name="mag">
-        <xsl:value-of select="."/>
-    </xsl:variable>
-    <xsl:variable name="math-pi">
-        <xsl:call-template name="inline-math-wrapper">
-            <xsl:with-param name="math" select="'\pi'"/>
-        </xsl:call-template>
-    </xsl:variable>
-    <xsl:value-of select="str:replace($mag,'\pi',string($math-pi))"/>
+    <xsl:call-template name="wrap-units-pi">
+        <xsl:with-param name="text">
+            <xsl:value-of select="."/>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- We recursively isolate instances of \pi and replace them  -->
+<!-- with wrapped versions so MathJax will process them.  A    -->
+<!-- simple string replacement will not work since the         -->
+<!-- replacement is a span.process-math (an HTML element).     -->
+<!-- NB: this will not generalize easily to additional symbols -->
+<xsl:template name="wrap-units-pi">
+    <xsl:param name="text"/>
+
+    <xsl:variable name="pi" select="'\pi'"/>
+    <xsl:choose>
+        <xsl:when test="not(contains($text, $pi))">
+            <!-- nothing left to do, output as-is, and finish -->
+            <xsl:value-of select="$text"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- must have a \pi, output prior text -->
+            <xsl:value-of select="substring-before($text, $pi)"/>
+            <!-- output \pi, appropriately bundled -->
+            <xsl:call-template name="inline-math-wrapper">
+                <xsl:with-param name="math" select="$pi"/>
+            </xsl:call-template>
+            <!-- recurse on remainder -->
+            <xsl:call-template name="wrap-units-pi">
+                <xsl:with-param name="text" select="substring-after($text, $pi)"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- unit and per children of a quantity element    -->
@@ -8534,7 +8472,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- height and depth of the rule"                                        -->
 <!-- Davide Cervone                                                       -->
 <!-- https://groups.google.com/forum/#!topic/mathjax-users/IEivs1D7ntM    -->
-<xsl:template match="fillin">
+<xsl:template match="fillin[not(parent::m or parent::me or parent::men or parent::mrow)]">
     <xsl:variable name="characters">
         <xsl:choose>
             <xsl:when test="@characters">
@@ -8545,26 +8483,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:choose>
-        <xsl:when test="parent::m or parent::me or parent::men or parent::mrow">
-            <xsl:text>\underline{\hspace{</xsl:text>
+    <span class="fillin {$fillin-text-style}" role="img">
+        <xsl:attribute name="aria-label">
+            <xsl:value-of select="$characters" />
+            <xsl:text>-character blank</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="style">
+            <xsl:text>width: </xsl:text>
             <xsl:value-of select="5 * $characters div 11" />
-            <xsl:text>em}}</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <span class="fillin" role="img">
-                <xsl:attribute name="aria-label">
-                    <xsl:value-of select="$characters" />
-                    <xsl:text>-character blank</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="style">
-                    <xsl:text>width: </xsl:text>
-                    <xsl:value-of select="5 * $characters div 11" />
-                    <xsl:text>em;</xsl:text>
-                </xsl:attribute>
-            </span>
-        </xsl:otherwise>
-    </xsl:choose>
+            <xsl:text>em;</xsl:text>
+        </xsl:attribute>
+    </span>
 </xsl:template>
 
 <xsl:template match="var[@form='checkboxes']">
@@ -9409,14 +9338,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: maybe ship sanitized "input" to each modal template? -->
 <xsl:template match="program[not(ancestor::sidebyside)]|console[not(ancestor::sidebyside)]">
     <xsl:choose>
-        <!-- OBSOLETE: remove when deprecating PythonTutor -->
-        <xsl:when test="self::program and (@interactive='pythontutor')">
-            <xsl:apply-templates select="." mode="python-tutor"/>
-        </xsl:when>
         <!-- if  a program is elected as interactive, then     -->
         <!-- let Runestone do the best it can via the template -->
         <xsl:when test="self::program and (@interactive='activecode')">
             <xsl:apply-templates select="." mode="runestone-activecode"/>
+        </xsl:when>
+        <!-- if  a program is elected as interactive, then     -->
+        <!-- let Runestone do the best it can via the template -->
+        <xsl:when test="self::program and (@interactive='codelens')">
+            <xsl:apply-templates select="." mode="runestone-codelens"/>
         </xsl:when>
         <!-- fallback is a less-capable static version, which -->
         <!-- might actually be desired for many formats       -->
@@ -9446,14 +9376,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="program[ancestor::sidebyside]|console[ancestor::sidebyside]">
     <xsl:choose>
-        <!-- OBSOLETE: remove when deprecating PythonTutor -->
-        <xsl:when test="self::program and (@interactive='pythontutor')">
-            <xsl:apply-templates select="." mode="python-tutor"/>
-        </xsl:when>
         <!-- if  a program is elected as interactive, then     -->
         <!-- let Runestone do the best it can via the template -->
         <xsl:when test="self::program and (@interactive='activecode')">
             <xsl:apply-templates select="." mode="runestone-activecode"/>
+        </xsl:when>
+        <!-- if  a program is elected as interactive, then     -->
+        <!-- let Runestone do the best it can via the template -->
+        <xsl:when test="self::program and (@interactive='codelens')">
+            <xsl:apply-templates select="." mode="runestone-codelens"/>
         </xsl:when>
         <!-- fallback is a less-capable static version, which -->
         <!-- might actually be desired for many formats       -->
@@ -9497,54 +9428,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:call-template>
             </code>
         </pre>
-    </xsl:if>
-</xsl:template>
-
-<!-- Interactive Programs, PyTutor -->
-<!-- Use the PyTutor embedding to provide a Python program     -->
-<!-- where a reader can interactively step through the program -->
-<xsl:template match="program" mode="python-tutor">
-    <!-- check that the language is Python? -->
-    <xsl:variable name="hid">
-        <xsl:apply-templates select="." mode="html-id" />
-    </xsl:variable>
-    <xsl:element name="div">
-        <xsl:attribute name="class">
-            <xsl:text>pytutorVisualizer</xsl:text>
-        </xsl:attribute>
-        <xsl:attribute name="id">
-            <xsl:value-of select="$hid" />
-        </xsl:attribute>
-        <xsl:attribute name="data-tracefile">
-            <!-- empty when not using managed directories -->
-            <xsl:value-of select="$external-directory"/>
-            <xsl:text>pytutor/</xsl:text>
-            <xsl:value-of select="$hid" />
-            <xsl:text>.json</xsl:text>
-        </xsl:attribute>
-        <xsl:attribute name="data-params">
-            <xsl:text>{</xsl:text>
-            <xsl:text>"verticalStack": true, </xsl:text>
-            <xsl:text>"embeddedMode": false, </xsl:text>
-            <xsl:text>"codeDivWidth": </xsl:text>
-            <xsl:value-of select="$design-width" />
-            <xsl:text>, </xsl:text>
-            <xsl:text>"codeDivHeight": 300</xsl:text>
-            <xsl:text>}</xsl:text>
-        </xsl:attribute>
-    </xsl:element>
-</xsl:template>
-
-<!-- Bits of Javascript for the top and bottom of the web page -->
-<xsl:template name="pytutor-header">
-    <xsl:if test="$b-has-pytutor">
-        <script src="http://pythontutor.com/build/pytutor-embed.bundle.js?cc25af72af"></script>
-    </xsl:if>
-</xsl:template>
-
-<xsl:template name="pytutor-footer">
-    <xsl:if test="$b-has-pytutor">
-        <script>createAllVisualizersFromHtmlAttrs();</script>
     </xsl:if>
 </xsl:template>
 
@@ -10349,8 +10232,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Fail if WeBWorK extraction and merging has not been done -->
-<xsl:template match="webwork[node()|@*]">
-    <xsl:message>PTX:ERROR: A document that uses WeBWorK must have the mbx script webwork extraction run, followed by a merge using pretext-merge.xsl.  Apply subsequent style sheets to the merged output.  Your WeBWorK problems will be absent from your HTML output.</xsl:message>
+<xsl:template match="webwork[*]">
+    <xsl:message>PTX:ERROR: A document that uses WeBWorK nees to incorporate a file</xsl:message>
+    <xsl:message>of representations of WW problems.  These can be created with the</xsl:message>
+    <xsl:message>"pretext" Python script and specified in a publisher file.</xsl:message>
+    <xsl:message>See the documentation for details.</xsl:message>
 </xsl:template>
 
 <!-- The guts of a WeBWorK problem realized in HTML -->
@@ -10505,15 +10391,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
-<!-- In WeBWorK problems, a p whose only child is a fillin blank     -->
-<!-- almost certainly means a question has been asked, and below it  -->
-<!-- there is an entry field. In print, there is no need to print    -->
-<!-- that entry field and removing it can save a lot of vertical     -->
-<!-- space. This is in constrast with fillins in the middle of a p,  -->
-<!-- where answer blanks need to be printed because of the fill      -->
-<!-- in the blank nature of the quesiton.                            -->
-<xsl:template match="p[not(normalize-space(text()))][count(fillin)=1 and count(*)=1][not(parent::li)]|p[not(normalize-space(text()))][count(fillin)=1 and count(*)=1][parent::li][preceding-sibling::*]" />
-
 <!-- ############################# -->
 <!-- MyOpenMath Embedded Exercises -->
 <!-- ############################# -->
@@ -10610,7 +10487,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="jsxgraph" />
             <xsl:call-template name="css" />
             <xsl:call-template name="aim-login-header" />
-            <xsl:call-template name="pytutor-header" />
             <xsl:call-template name="runestone-header"/>
             <xsl:call-template name="font-awesome" />
             <!-- analytics services, if requested -->
@@ -10713,6 +10589,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="pretext-link" />
                 <xsl:call-template name="powered-by-mathjax" />
             </div>
+            <!-- analytics services, if requested -->
+            <xsl:call-template name="statcounter"/>
+            <xsl:call-template name="google-classic"/>
+            <xsl:call-template name="google-universal"/>
+            <xsl:call-template name="google-gst"/>
+            <xsl:call-template name="syntax-highlight-footer" />
+            <xsl:call-template name="aim-login-footer" />
+            <xsl:call-template name="extra-js-footer"/>
         </body>
     </html>
     </exsl:document>
@@ -12202,9 +12086,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:with-param>
         </xsl:call-template>
     </xsl:if>
-    <!-- For testing purposes, make a "developer.css" possible and always available -->
-    <xsl:comment> 2019-10-12: Temporary - CSS file for experiments with styling </xsl:comment>
-    <link href="developer.css" rel="stylesheet" type="text/css" />
+    <!-- For testing purposes a developer can set the stringparam -->
+    <!-- "debug.developer.css" to the value "yes" and provide a   -->
+    <!-- CSS file to be loaded last.                              -->
+    <xsl:if test="$debug.developer.css = 'yes'">
+        <xsl:comment> This HTML version has been built with elective CSS strictly </xsl:comment>
+        <xsl:comment> for testing purposes, and the developer who chose to use it </xsl:comment>
+        <xsl:comment> must supply it.                                             </xsl:comment>
+        <link href="developer.css" rel="stylesheet" type="text/css" />
+    </xsl:if>
 </xsl:template>
 
 <!-- Treated as characters, these could show up often, -->
@@ -12254,6 +12144,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="math">
                 <xsl:value-of select="$latex-packages-mathjax"/>
                 <xsl:value-of select="$latex-macros"/>
+                <xsl:call-template name="fillin-math"/>
                 <!-- legacy built-in support for "slanted|beveled|nice" fractions -->
                 <xsl:if test="$b-has-sfrac">
                     <xsl:text>\newcommand{\sfrac}[2]{{#1}/{#2}}&#xa;</xsl:text>

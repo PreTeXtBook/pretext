@@ -570,6 +570,8 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <xsl:variable name= "b-debug-react-global" select="not($debug.react.global = 'no')"/>
 <xsl:variable name="b-debug-react" select="$b-debug-react-local or $b-debug-react-global"/>
 
+<!-- HTML only, a developer must elect to use this CSS file -->
+<xsl:param name="debug.developer.css" select="'no'"/>
 
 <!-- Maybe not debugging, but transitional variables -->
 
@@ -596,30 +598,6 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
-
-<!-- 2019-05: this is a switch to transition from slow, more-stable -->
-<!-- identication strings to fast, less-stable strings.             -->
-<!--   1.  Default should switch to make transition                 -->
-<!--   2.  Switch should be deprecated and slow code abandoned      -->
-<!-- To change default from old-slow-style                          -->
-<!--   1.  move match on empty to "no" result                       -->
-<!--   2.  flip otherwise clause                                    -->
-<!-- 2021-03-03: move to Bad Bank once deactivated -->
-<xsl:param name="oldids" select="''"/>
-<xsl:variable name="oldstyle">
-    <xsl:choose>
-        <xsl:when test="($oldids = '') or ($oldids = 'yes')">
-            <xsl:text>yes</xsl:text>
-        </xsl:when>
-        <xsl:when test="$oldids = 'no'">
-            <xsl:text>no</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>yes</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-<xsl:variable name="b-fast-ids" select="$oldstyle = 'no'"/>
 
 <!-- ############## -->
 <!-- Entry Template -->
@@ -1654,6 +1632,56 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!-- For a "fillin" within math.                                       -->
+<!-- First, define math fillin macro that is common to LaTeX, MathJax. -->
+<!-- Then below, template for matching on each "fillin".               -->
+<xsl:template name="fillin-math">
+    <xsl:choose>
+        <xsl:when test="$fillin-math-style = 'underline'">
+            <xsl:text>\newcommand{\fillinmath}[1]{\mathchoice</xsl:text>
+            <xsl:text>{\underline{\displaystyle     \phantom{\ \,#1\ \,}}}</xsl:text>
+            <xsl:text>{\underline{\textstyle        \phantom{\ \,#1\ \,}}}</xsl:text>
+            <xsl:text>{\underline{\scriptstyle      \phantom{\ \,#1\ \,}}}</xsl:text>
+            <xsl:text>{\underline{\scriptscriptstyle\phantom{\ \,#1\ \,}}}}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:when test="$fillin-math-style = 'box'">
+            <xsl:text>\newcommand{\fillinmath}[1]{\mathchoice</xsl:text>
+            <xsl:text>{\boxed{\displaystyle     \phantom{\,#1\,}}}</xsl:text>
+            <xsl:text>{\boxed{\textstyle        \phantom{\,#1\,}}}</xsl:text>
+            <xsl:text>{\boxed{\scriptstyle      \phantom{\,#1\,}}}</xsl:text>
+            <xsl:text>{\boxed{\scriptscriptstyle\phantom{\,#1\,}}}}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:when test="$fillin-math-style = 'shade'">
+            <xsl:text>\definecolor{fillinmathshade}{gray}{0.9}&#xa;</xsl:text>
+            <xsl:text>\newcommand{\fillinmath}[1]{\mathchoice</xsl:text>
+            <xsl:text>{\colorbox{fillinmathshade}{$\displaystyle     \phantom{\,#1\,}$}}</xsl:text>
+            <xsl:text>{\colorbox{fillinmathshade}{$\textstyle        \phantom{\,#1\,}$}}</xsl:text>
+            <xsl:text>{\colorbox{fillinmathshade}{$\scriptstyle      \phantom{\,#1\,}$}}</xsl:text>
+            <xsl:text>{\colorbox{fillinmathshade}{$\scriptscriptstyle\phantom{\,#1\,}$}}}&#xa;</xsl:text>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="m/fillin|me/fillin|men/fillin|mrow/fillin">
+    <xsl:choose>
+        <xsl:when test="@fill">
+            <xsl:text>\fillinmath{</xsl:text>
+            <xsl:value-of select="@fill"/>
+            <xsl:text>}</xsl:text>
+        </xsl:when>
+        <xsl:when test="@characters">
+            <xsl:text>\fillinmath{</xsl:text>
+                <xsl:call-template name="duplicate-string">
+                    <xsl:with-param name="count" select="@characters" />
+                    <xsl:with-param name="text"  select="'X'" />
+                </xsl:call-template>
+            <xsl:text>}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\fillinmath{XXX}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- Sage Cells -->
 <!-- Contents are text manipulations (below)     -->
@@ -3464,100 +3492,19 @@ Book (with parts), "section" at level 3
 <!-- Identifiers -->
 <!-- ########### -->
 
-<xsl:template match="*" mode="check-duplicate-xmlid">
-    <xsl:variable name="tagged-elements" select=".//*[@xml:id]"/>
-    <!-- course over all such tagged elements, we will stop at the first -->
-    <!-- one with duplicates and report all of the duplicates            -->
-    <xsl:for-each select="$tagged-elements">
-        <!-- It is possible to sort here on the @xml:id, and -->
-        <!-- does not seem to be a big hit in performance or -->
-        <!-- coding, but also seems of little value since    -->
-        <!-- duplicates should be removed soon/quickly       -->
-
-        <xsl:variable name="the-id" select="string(@xml:id)"/>
-
-        <!-- Normally just a single element, count will reveal the  -->
-        <!-- existence of multiple elements with the same @xml:id.  -->
-        <!-- We report to the author by coursing over this node-set -->
-        <xsl:variable name="duplicate-elements" select="$tagged-elements[@xml:id = $the-id]"/>
-
-        <!-- (A) If $duplicate-elements has multiple elements, then $the-id   -->
-        <!--     is an identifier that is duplicated (so these are elements   -->
-        <!--     with duplicates, not duplicated elements).  So the first     -->
-        <!--     condition recognizes a problematic @xml:id value.            -->
-        <!--                                                                  -->
-        <!-- (B) We only report at the first "tagged element" with a problem, -->
-        <!--     but we want to report on each of the "duplicate-elements",   -->
-        <!--     specifically a location, to help an author                   -->
-        <!--     We test equality of context (current "tagged-element")       -->
-        <!--     and the first "duplicate-element"                            -->
-        <!--     Plain equality seems to work, but is not suggested at:       -->
-        <!--     Determining if Two Nodes Are the Same                        -->
-        <!--     XSLT Cookbook, 2nd Edition                                   -->
-        <!--     https://www.oreilly.com/library/view/xslt-cookbook/0596003722/ch04s02.html -->
-        <xsl:if test="(count($duplicate-elements) &gt; 1) and (count(.|$duplicate-elements[position() = 1]) = 1)">
-            <xsl:message>PTX:ERROR: the @xml:id value "<xsl:value-of select="$the-id"/>" should be unique, but appears <xsl:value-of select="count($duplicate-elements)"/> times.&#xa;           Results will be unpredictable, and likely incorrect.  Information on the locations follows:</xsl:message>
-            <xsl:for-each select="$duplicate-elements">
-                <xsl:apply-templates select="." mode="location-report" />
-            </xsl:for-each>
-        </xsl:if>
-    </xsl:for-each>
-</xsl:template>
-
-
-<!--                    -->
-<!-- Visible Identifier -->
-<!--                    -->
-
 <!-- These strings are used for items an author must manage              -->
 <!-- (image files) or that a reader will interact with (shared URLs)     -->
-<!-- Fast version (as of 2019-05) prefers                                -->
-<!--   1.  @xml:id - authored (with meaning), 100% author-controlled     -->
-<!--   2.  @permid - highly stable, controlled via edition management    -->
-<!--   3.  auto    - fast, unique per build, but unstable between builds -->
 <!-- Since items like filenames and URLs are sometimes shared across     -->
 <!-- conversions (or extractions) this template is in -common            -->
 <xsl:template match="*" mode="visible-id">
     <xsl:choose>
-        <!-- 2019-05: more efficient replacement -->
-        <!-- version of previous internal-id     -->
-        <xsl:when test="$b-fast-ids">
-            <xsl:choose>
-                <xsl:when test="@name">
-                    <xsl:value-of select="@name"/>
-                </xsl:when>
-                <xsl:when test="@xml:id">
-                    <xsl:value-of select="@xml:id" />
-                </xsl:when>
-                <xsl:when test="@permid">
-                    <xsl:value-of select="local-name(.)" />
-                    <xsl:text>-</xsl:text>
-                    <xsl:value-of select="@perm-id" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="local-name(.)" />
-                    <xsl:text>-</xsl:text>
-                    <!-- xsltproc produces non-numeric prefix "idm" -->
-                    <xsl:value-of select="substring(generate-id(.), 4)"/>
-                </xsl:otherwise>
-            </xsl:choose>
+        <xsl:when test="@label">
+            <xsl:value-of select="@label"/>
         </xsl:when>
-        <!-- 2019-05: following matches the slow       -->
-        <!-- internal-id previously in use exclusively -->
         <xsl:otherwise>
-            <xsl:choose>
-                <xsl:when test="@name">
-                    <xsl:value-of select="@name"/>
-                </xsl:when>
-                <xsl:when test="@xml:id">
-                    <xsl:value-of select="@xml:id" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="local-name(.)" />
-                    <xsl:text>-</xsl:text>
-                    <xsl:number from="book|article|letter|memo" level="any" />
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:value-of select="local-name(.)" />
+            <xsl:text>-</xsl:text>
+            <xsl:number from="book|article|letter|memo" level="any" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -5747,18 +5694,18 @@ Book (with parts), "section" at level 3
 <!-- lower-case Roman numeral, upper-case Latin            -->
 <xsl:template match="ol" mode="format-code">
     <xsl:choose>
-        <xsl:when test="@label">
+        <xsl:when test="@marker">
             <xsl:choose>
-                <xsl:when test="contains(@label,'0')">0</xsl:when>
-                <xsl:when test="contains(@label,'1')">1</xsl:when>
-                <xsl:when test="contains(@label,'a')">a</xsl:when>
-                <xsl:when test="contains(@label,'A')">A</xsl:when>
-                <xsl:when test="contains(@label,'i')">i</xsl:when>
-                <xsl:when test="contains(@label,'I')">I</xsl:when>
+                <xsl:when test="contains(@marker,'0')">0</xsl:when>
+                <xsl:when test="contains(@marker,'1')">1</xsl:when>
+                <xsl:when test="contains(@marker,'a')">a</xsl:when>
+                <xsl:when test="contains(@marker,'A')">A</xsl:when>
+                <xsl:when test="contains(@marker,'i')">i</xsl:when>
+                <xsl:when test="contains(@marker,'I')">I</xsl:when>
                 <!-- DEPRECATED 2015-12-12 -->
-                <xsl:when test="@label=''" />
+                <xsl:when test="@marker=''" />
                 <xsl:otherwise>
-                    <xsl:message>PTX:ERROR: ordered list label (<xsl:value-of select="@label" />) not recognized</xsl:message>
+                    <xsl:message>MBX:ERROR: ordered list label (<xsl:value-of select="@marker" />) not recognized</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
@@ -5786,14 +5733,14 @@ Book (with parts), "section" at level 3
 <!-- Default order: disc, circle, square, disc             -->
 <xsl:template match="ul" mode="format-code">
     <xsl:choose>
-        <xsl:when test="@label">
+        <xsl:when test="@marker">
             <xsl:choose>
-                <xsl:when test="@label='disc'">disc</xsl:when>
-                <xsl:when test="@label='circle'">circle</xsl:when>
-                <xsl:when test="@label='square'">square</xsl:when>
-                <xsl:when test="@label=''">none</xsl:when>
+                <xsl:when test="@marker='disc'">disc</xsl:when>
+                <xsl:when test="@marker='circle'">circle</xsl:when>
+                <xsl:when test="@marker='square'">square</xsl:when>
+                <xsl:when test="@marker=''">none</xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:ERROR: unordered list label (<xsl:value-of select="@label" />) not recognized</xsl:message>
+                    <xsl:message>ptx:ERROR: unordered list label (<xsl:value-of select="@marker" />) not recognized</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
@@ -9443,9 +9390,16 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Conveniences -->
 <!-- ############ -->
 
-<!-- Conveniences, which can be overridden in format-specific conversions -->
+<!-- Conveniences, possibly overridden in format-specific conversions -->
+<!-- NB: we need to distinguish empty elements in some cases.  Since  -->
+<!-- pre-processing is likely to add some attributes, and perhaps an  -->
+<!-- element could have an opening and ending tag split across lines, -->
+<!-- we just presume the non-empty case is indicated by elements as   -->
+<!-- children.  Also, the schema should indicate that there are       -->
+<!-- extraneous authored elements, so the less-severe testing is not  -->
+<!-- a contract.                                                      -->
 <!-- TODO: kern, etc. into LaTeX, HTML versions -->
-<xsl:template match="webwork[not(child::node() or @*)]">
+<xsl:template match="webwork[not(* or @copy or @source)]">
     <xsl:text>WeBWorK</xsl:text>
 </xsl:template>
 
@@ -9560,12 +9514,11 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <!-- Checks for errors that would be time-consuming -->
 <!-- if done repeatedly, so a pre-processing step   -->
-<!-- Calling context should be "mathbook" element   -->
+<!-- Calling context could be "mathbook" element    -->
 <xsl:template match="mathbook|pretext" mode="generic-warnings">
     <xsl:apply-templates select="." mode="literate-programming-warning" />
     <xsl:apply-templates select="." mode="xinclude-warnings" />
-    <xsl:apply-templates select="." mode="xmlid-warning" />
-    <xsl:apply-templates select="." mode="check-duplicate-xmlid"/>
+    <xsl:apply-templates select="." mode="identifier-warning"/>
     <xsl:apply-templates select="." mode="text-element-warning" />
     <xsl:apply-templates select="." mode="subdivision-structure-warning" />
 </xsl:template>
@@ -9608,17 +9561,25 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- 10 digits, hyphen/dash, underscore     -->
 <!-- TODO: Added 2016-10-29, make into a fatal error later -->
 <!-- Unique UI id's added 2017-09-25 as fatal error -->
-<!-- NB: internal IDs for LaTeX use colons with @xml:id,  -->
-<!-- but this may not be necessary to achieve uniqueness  -->
-<xsl:template match="mathbook|pretext" mode="xmlid-warning">
+<xsl:template match="mathbook|pretext" mode="identifier-warning">
     <xsl:variable name="xmlid-characters" select="concat('-_', &SIMPLECHAR;)" />
     <xsl:for-each select=".//@xml:id">
         <xsl:if test="not(translate(., $xmlid-characters, '') = '')">
             <xsl:message>
-                <xsl:text>PTX:WARNING:    </xsl:text>
+                <xsl:text>PTX:ERROR:      </xsl:text>
                 <xsl:text>The @xml:id "</xsl:text>
                 <xsl:value-of select="." />
                 <xsl:text>" is invalid.  Use only letters, numbers, hyphens and underscores.</xsl:text>
+            </xsl:message>
+        </xsl:if>
+        <xsl:if test="contains(., $gen-id-sep)">
+            <xsl:message>
+                <xsl:text>PTX:ERROR:      The character sequence "</xsl:text>
+                <xsl:value-of select="$gen-id-sep"/>
+                <xsl:text>" in the authored @xmlid "</xsl:text>
+                <xsl:value-of select="." />
+                <xsl:text>" is reserved for internal use by PreTeXt.&#xa;</xsl:text>
+                <xsl:text>                Please edit your source to use a new value for this @xml:id.  Until then, results will be unpredictable.</xsl:text>
             </xsl:message>
         </xsl:if>
         <!-- unique HTML id's in use for PreTeXt-provided UI -->
@@ -9657,8 +9618,9 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- templates in the places where elements are banned -->
 <!-- c, cline; unstructured cd, pre                    -->
 <!-- prompt, input, output for sage, console, program  -->
+<!-- NB: cline/area is used in Clickable Area problems -->
 <xsl:template match="mathbook|pretext" mode="text-element-warning">
-    <xsl:variable name="bad-elements" select=".//c/*|.//cline/*|.//cd[not(cline)]/*|.//pre[not(cline)]/*|.//prompt/*|.//input/*|.//output/*" />
+    <xsl:variable name="bad-elements" select=".//c/*|.//cline/*[not(self::area)]|.//cd[not(cline)]/*|.//pre[not(cline)]/*|.//prompt/*|.//input/*|.//output/*" />
     <xsl:if test="$bad-elements">
         <xsl:message>
             <xsl:text>PTX:WARNING: </xsl:text>
@@ -10540,13 +10502,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'docinfo/numbering/division/@part has been replaced by the  numbering/divisions/@part-structure  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'"/>
     </xsl:call-template>
     <!--  -->
-    <!-- 2021-03-03  switch never tested, experiment never enacted, ids improved anyway -->
-    <xsl:call-template name="parameter-deprecation-message">
-        <xsl:with-param name="date-string" select="'2021-03-03'" />
-        <xsl:with-param name="message" select="'the  oldids  string parameter was used for testing, and is now deprecated.  Code has not yet been removed, but will soon be, and this message will change to say so.'" />
-        <xsl:with-param name="incorrect-use" select="($oldids != '')" />
-    </xsl:call-template>
-    <!--  -->
     <!-- 2021-03-17  deprecate worksheet/pagebreak in favor of worksheet/page -->
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurrences" select="$document-root//worksheet/pagebreak" />
@@ -10620,142 +10575,177 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!--  -->
     <!-- 2022-01-31  exercise component visibility setting 1/20 -->
     <xsl:call-template name="parameter-deprecation-message">
-        <xsl:with-param name="date-string" select="'2022-10-31'" />
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
         <xsl:with-param name="message" select="'the  exercise.inline.statement  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($exercise.inline.statement != '')" />
     </xsl:call-template>
     <!--  -->
     <!-- 2022-01-31  exercise component visibility setting 2/20 -->
     <xsl:call-template name="parameter-deprecation-message">
-        <xsl:with-param name="date-string" select="'2022-10-31'" />
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
         <xsl:with-param name="message" select="'the  exercise.inline.hint  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($exercise.inline.hint != '')" />
     </xsl:call-template>
     <!--  -->
     <!-- 2022-01-31  exercise component visibility setting 3/20 -->
     <xsl:call-template name="parameter-deprecation-message">
-        <xsl:with-param name="date-string" select="'2022-10-31'" />
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
         <xsl:with-param name="message" select="'the  exercise.inline.answer  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($exercise.inline.answer != '')" />
     </xsl:call-template>
     <!--  -->
     <!-- 2022-01-31  exercise component visibility setting 4/20 -->
     <xsl:call-template name="parameter-deprecation-message">
-        <xsl:with-param name="date-string" select="'2022-10-31'" />
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
         <xsl:with-param name="message" select="'the  exercise.inline.solution  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($exercise.inline.solution != '')" />
     </xsl:call-template>
     <!--  -->
     <!-- 2022-01-31  exercise component visibility setting 5/20 -->
     <xsl:call-template name="parameter-deprecation-message">
-        <xsl:with-param name="date-string" select="'2022-10-31'" />
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
         <xsl:with-param name="message" select="'the  exercise.divisional.statement  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($exercise.divisional.statement != '')" />
     </xsl:call-template>
     <!--  -->
     <!-- 2022-01-31  exercise component visibility setting 6/20 -->
     <xsl:call-template name="parameter-deprecation-message">
-        <xsl:with-param name="date-string" select="'2022-10-31'" />
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
         <xsl:with-param name="message" select="'the  exercise.divisional.hint  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($exercise.divisional.hint != '')" />
     </xsl:call-template>
     <!--  -->
     <!-- 2022-01-31  exercise component visibility setting 7/20 -->
     <xsl:call-template name="parameter-deprecation-message">
-        <xsl:with-param name="date-string" select="'2022-10-31'" />
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
         <xsl:with-param name="message" select="'the  exercise.divisional.answer  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($exercise.divisional.answer != '')" />
     </xsl:call-template>
     <!--  -->
     <!-- 2022-01-31  exercise component visibility setting 8/20 -->
     <xsl:call-template name="parameter-deprecation-message">
-        <xsl:with-param name="date-string" select="'2022-10-31'" />
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
         <xsl:with-param name="message" select="'the  exercise.divisional.solution  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($exercise.divisional.solution != '')" />
     </xsl:call-template>
     <!--  -->
     <!-- 2022-01-31  exercise component visibility setting 9/20 -->
     <xsl:call-template name="parameter-deprecation-message">
-        <xsl:with-param name="date-string" select="'2022-10-31'" />
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
         <xsl:with-param name="message" select="'the  exercise.worksheet.statement  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($exercise.worksheet.statement != '')" />
     </xsl:call-template>
     <!--  -->
     <!-- 2022-01-31  exercise component visibility setting 10/20 -->
     <xsl:call-template name="parameter-deprecation-message">
-        <xsl:with-param name="date-string" select="'2022-10-31'" />
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
         <xsl:with-param name="message" select="'the  exercise.worksheet.hint  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($exercise.worksheet.hint != '')" />
     </xsl:call-template>
     <!--  -->
     <!-- 2022-01-31  exercise component visibility setting 11/20 -->
     <xsl:call-template name="parameter-deprecation-message">
-        <xsl:with-param name="date-string" select="'2022-10-31'" />
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
         <xsl:with-param name="message" select="'the  exercise.worksheet.answer  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($exercise.worksheet.answer != '')" />
     </xsl:call-template>
     <!--  -->
     <!-- 2022-01-31  exercise component visibility setting 12/20 -->
     <xsl:call-template name="parameter-deprecation-message">
-        <xsl:with-param name="date-string" select="'2022-10-31'" />
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
         <xsl:with-param name="message" select="'the  exercise.worksheet.solution  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($exercise.worksheet.solution != '')" />
     </xsl:call-template>
     <!--  -->
     <!-- 2022-01-31  exercise component visibility setting 13/20 -->
     <xsl:call-template name="parameter-deprecation-message">
-        <xsl:with-param name="date-string" select="'2022-10-31'" />
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
         <xsl:with-param name="message" select="'the  exercise.reading.statement  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($exercise.reading.statement != '')" />
     </xsl:call-template>
     <!--  -->
     <!-- 2022-01-31  exercise component visibility setting 14/20 -->
     <xsl:call-template name="parameter-deprecation-message">
-        <xsl:with-param name="date-string" select="'2022-10-31'" />
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
         <xsl:with-param name="message" select="'the  exercise.reading.hint  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($exercise.reading.hint != '')" />
     </xsl:call-template>
     <!--  -->
     <!-- 2022-01-31  exercise component visibility setting 15/20 -->
     <xsl:call-template name="parameter-deprecation-message">
-        <xsl:with-param name="date-string" select="'2022-10-31'" />
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
         <xsl:with-param name="message" select="'the  exercise.reading.answer  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($exercise.reading.answer != '')" />
     </xsl:call-template>
     <!--  -->
     <!-- 2022-01-31  exercise component visibility setting 16/20 -->
     <xsl:call-template name="parameter-deprecation-message">
-        <xsl:with-param name="date-string" select="'2022-10-31'" />
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
         <xsl:with-param name="message" select="'the  exercise.reading.solution  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($exercise.reading.solution != '')" />
     </xsl:call-template>
     <!--  -->
     <!-- 2022-01-31  exercise component visibility setting 17/20 -->
     <xsl:call-template name="parameter-deprecation-message">
-        <xsl:with-param name="date-string" select="'2022-10-31'" />
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
         <xsl:with-param name="message" select="'the  project.statement  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($project.statement != '')" />
     </xsl:call-template>
     <!--  -->
     <!-- 2022-01-31  exercise component visibility setting 18/20 -->
     <xsl:call-template name="parameter-deprecation-message">
-        <xsl:with-param name="date-string" select="'2022-10-31'" />
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
         <xsl:with-param name="message" select="'the  project.hint  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($project.hint != '')" />
     </xsl:call-template>
     <!--  -->
     <!-- 2022-01-31  exercise component visibility setting 19/20 -->
     <xsl:call-template name="parameter-deprecation-message">
-        <xsl:with-param name="date-string" select="'2022-10-31'" />
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
         <xsl:with-param name="message" select="'the  project.answer  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($project.answer != '')" />
     </xsl:call-template>
     <!--  -->
     <!-- 2022-01-31  exercise component visibility setting 20/20 -->
     <xsl:call-template name="parameter-deprecation-message">
-        <xsl:with-param name="date-string" select="'2022-10-31'" />
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
         <xsl:with-param name="message" select="'the  project.solution  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($project.solution != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-04-22  Python Tutor via @interactive="pythontutor" replaced by Runestone CodeLens-->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//program[@interactive = 'pythontutor']" />
+        <xsl:with-param name="date-string" select="'2022-04-22'" />
+        <xsl:with-param name="message" select="'a Python &quot;program&quot; with the attribute &quot;@interactive&quot; set to &quot;pythontutor&quot; is deprecated, but we will attempt to honor your intent.  Change the attribute value to &quot;codelens&quot; instead, and be certain to manufacture trace data using allied PreTeXt tools'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-04-25  "label" (typically on a list) is deprecated for renewal -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//ul/@label|$document-root//ol/@label" />
+        <xsl:with-param name="date-string" select="'2022-04-25'" />
+        <xsl:with-param name="message" select="'a &quot;@label&quot; attribute (on a &quot;ul&quot; or &quot;ol&quot; element) has been deprecated and should be replaced by the functionally equivalent &quot;@marker&quot;.  We will attempt to honor your request'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-04-25  "label" (typically on a list) is deprecated for renewal -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//video/track/@label" />
+        <xsl:with-param name="date-string" select="'2022-04-25'" />
+        <xsl:with-param name="message" select="'a &quot;@label&quot; attribute (on a &quot;video/track&quot; element) has been deprecated and should be replaced by the functionally equivalent &quot;@listing&quot;.  We will attempt to honor your request'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-05-23  experimental scheme for "fast-id" abandonend -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-05-23'" />
+        <xsl:with-param name="message" select="'the  oldids  string parameter was used for testing, was deprecated on 2021-03-03, is now obsolete, there is no replacement, relevant code has been removed, and the parameter is being ignored'" />
+        <xsl:with-param name="incorrect-use" select="($oldids != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-05-28  "latex.fillin.style" is deprecated for publisher variables -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-05-28'" />
+        <xsl:with-param name="message" select="'the  latex.fillin.style  parameter has been replaced by the  common/fillin/@textstyle  and  common/fillin/mathstyle  entries in the publication file. The default style for a text fillin is now  underline  and the default style for a math fillin is now  shade .  To use  box  style for either, set values in the publication file.'" />
+        <xsl:with-param name="incorrect-use" select="($numbering.maximum.level != '')" />
     </xsl:call-template>
     <!--  -->
 </xsl:template>

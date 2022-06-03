@@ -81,11 +81,33 @@
                         <cell><attr>statement</attr>, <attr>hint</attr>, <attr>answer</attr>, <attr>solution</attr></cell>
                     </row>
                     <row>
-                        <cell><c>common/project</c></cell>
+                        <cell><c>common/exercise-project</c></cell>
                         <cell><attr>statement</attr>, <attr>hint</attr>, <attr>answer</attr>, <attr>solution</attr></cell>
                     </row>
                 </tabular>
             </table>
+        </subsection>
+
+        <subsection xml:id="common-fillin-options">
+            <title>Fillin Options</title>
+            <idx><h>common options</h><h>fillin</h></idx>
+            <idx><h>fillin</h><h>options</h></idx>
+
+            <p>The style of fill-in-the-blanks (from a <tag>fillin</tag>) is set by the attributes<ul>
+                <li>
+                    <title>Text Fillin</title>
+                    <p>Set<cd>
+                        <cline>/publication/common/fillin/@textstyle</cline>
+                    </cd> to values <c>underline</c>, <c>box</c>, or <c>shade</c> to influence the style of a fillin within text. The default is <c>underline</c>.</p>
+                </li>
+
+                <li>
+                    <title>Math Fillin</title>
+                    <p>Set<cd>
+                        <cline>/publication/common/fillin/@mathstyle</cline>
+                    </cd> to values <c>underline</c>, <c>box</c>, or <c>shade</c> to influence the style of a fillin within math. The default is <c>shade</c>.</p>
+                </li>
+            </ul></p>
         </subsection>
     </section>
 
@@ -539,6 +561,18 @@
             </ul>It is an error to only specify one of the two directories.  It is all or nothing.</p>
         </subsection>
 
+        <subsection xml:id="publication-file-source-version">
+            <title>Versions</title>
+
+            <p>Different versions of your source can be constructed by marking elements as belonging to different components.  Each component has a name of your choosing, and then you elect components to include or exclude via the publication file.  See <xref ref="publisher-versions"/> for the exact details and examples.</p>
+
+            <p>To specify components to include, the<cd>
+                <cline>/publication/source/version/@include</cline>
+            </cd>attribute should be a space-separated list of component names.  For example, if <tag>version</tag> has<cd>
+                <cline>include="videos labs"</cline>
+            </cd>then a version would be created that includes all of the videos and all of the labs (since the author placed them into these components), but would not contain any elements whose component is <c>genome</c>.  Note that <c>videos</c>, <c>labs</c>, and <c>genome</c> are names peculiar to the organization of your project, and are not <pretext/> element names (even if they are used consistently with similar element names, such as <tag>video</tag>).</p>
+        </subsection>
+
         <subsection xml:id="publication-file-source-extras">
             <title>Extras</title>
 
@@ -551,6 +585,72 @@
                 <li><attr>private-solutions</attr>: A filename for a structured file of <tag>hint</tag>, <tag>answer</tag>, <tag>solution</tag> that will see limited distribution (for example, instructors only).  See <xref ref="private-solutions-file"/> for details about the use of a private solutions file.</li>
                 <li><attr>webwork-problems</attr>: A filename for a structured file of multiple representations of <webwork/> problems.  It is now recommended that when using <webwork/>, that you also use managed directories (see <xref ref="processing-directory-management"/>), in which case this attribute is unsused.</li>
             </ul></p>
+        </subsection>
+    </section>
+
+    <section xml:id="publication-file-webwork">
+        <title>WeBWorK Options</title>
+        <idx>WeBWorK publisher options</idx>
+        <idx><h>publisher options</h><h>WeBWorK</h></idx>
+
+        <introduction>
+            <p>
+                A <webwork/> host course on a <webwork/> server somewhere does the processing of a project's <tag>webwork</tag> elements.
+                These are the details needed to specify where that course is and how <pretext/> will access it.
+                These are discussed again in <xref ref="webwork-representations"/>.
+            </p>
+        </introduction>
+
+        <subsection xml:id="publication-file-webwork-server">
+            <title>Server</title>
+            <p>
+                The URL to the <webwork/> server is in the attribute
+                <cd>
+                    <cline>/publication/webwork/@server</cline>
+                </cd>
+                should include the protocol (e.g.<nbsp/><c>http</c> or <c>https</c>) and not include a trailing slash.
+                The server should be version 2.14 or later.
+            </p>
+        </subsection>
+
+        <subsection xml:id="publication-file-webwork-course">
+            <title>Course</title>
+            <p>
+                The name of the host course is in the attribute
+                <cd>
+                    <cline>/publication/webwork/@course</cline>
+                </cd>
+            </p>
+        </subsection>
+
+        <subsection xml:id="publication-file-webwork-course-password">
+            <title>Course Password</title>
+            <p>
+                A course password (distinct from a user password) is in the attribute
+                <cd>
+                    <cline>/publication/webwork/@coursepassword</cline>
+                </cd>
+            </p>
+        </subsection>
+
+        <subsection xml:id="publication-file-webwork-user">
+            <title>User</title>
+            <p>
+                The username that signs in to the host course to process exercises is in the attribute
+                <cd>
+                    <cline>/publication/webwork/@user</cline>
+                </cd>
+            </p>
+        </subsection>
+
+        <subsection xml:id="publication-file-webwork-user-password">
+            <title>User Password</title>
+            <p>
+                That user's password is in the attribute
+                <cd>
+                    <cline>/publication/webwork/@userpassword</cline>
+                </cd>
+            </p>
         </subsection>
     </section>
 

@@ -293,12 +293,12 @@ dfn {
       <section>
         <!-- we assume an overall title exists -->
         <h1>
-            <xsl:apply-templates select="/pretext/slideshow" mode="title-full" />
+            <xsl:apply-templates select="$root/slideshow" mode="title-full" />
         </h1>
         <!-- subtitle would be optional, subsidary -->
-        <xsl:if test="/pretext/slideshow/subtitle">
+        <xsl:if test="$root/slideshow/subtitle">
             <h2>
-                <xsl:apply-templates select="/pretext/slideshow" mode="subtitle" />
+                <xsl:apply-templates select="$root/slideshow" mode="subtitle" />
             </h2>
         </xsl:if>
         <!-- we assume at least one author, these are in a table -->

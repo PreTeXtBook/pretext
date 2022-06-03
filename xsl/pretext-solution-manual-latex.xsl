@@ -93,7 +93,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Conceived as a "print only" PDF, this is also necessary    -->
 <!-- to keep links (such as a solution number linking back to   -->
 <!-- the original) from being seen/interpreted as actual links. -->
-<xsl:param name="latex.print" select="'yes'"/>
+<!-- Here, we override a variable from the stylesheet           -->
+<!-- pulisher-variables.xsl.  Note that it is important to      -->
+<!-- change the boolean variable, so other properties default   -->
+<!-- properly, such as "sided-ness".                            -->
+<xsl:variable name="b-latex-print" select="true()"/>
 <!-- There are not even labels for page numbers, beside -->
 <!-- the fact that they don't make much sense           -->
 <xsl:param name="latex.pageref" select="'no'"/>

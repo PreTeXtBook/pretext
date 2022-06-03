@@ -213,7 +213,7 @@
       </p>
       <console>
         <prompt>$ </prompt>
-        <input>pretext -c webwork -p &lt;publisher&gt; -s &lt;server&gt; aota.ptx</input>
+        <input>pretext -c webwork -p &lt;publisher&gt; aota.ptx</input>
       </console>
       <p>
         <c>aota.ptx</c> in the example is the root file for your <pretext/> project.
@@ -231,21 +231,12 @@
       </p>
       <p>
         <c>-p</c> specifies the publication file, as described in <xref ref="publication-file-reference"/>.
-      </p>
-      <p>
-        <c>-s</c> specifies the <webwork/> server.
-        The <webwork/> server needs to be version 2.14 or later, specified with its protocol and domain,
-        like <c>https://webwork-ptx.aimath.org</c>.
-        It is <em>important</em> to get the protocol correct for your server (<c>http</c> versus <c>https</c>).
-        If you do not have a server, you may use <c>https://webwork-ptx.aimath.org</c>.
-      </p>
-      <p>
-        If any of your hosting course, user for that course, password for the site, or password for the course user are not <q>anonymous</q>,
-        then specify the server like
-        <cd>-s "(https://webwork-ptx.aimath.org,courseID,userID,site_password,course_password)"</cd>
-        The <c>site_password</c> is probably <q>anonymous</q>,
-        but could be something different. Only server administrators can set this.
-        Again, it is <em>important</em> to get the protocol correct for your server (<c>http</c> versus <c>https</c>).
+        In the publication file, the element <tag>webwork</tag> may have attributes <attr>server</attr>,
+        <attr>course</attr>, <attr>coursepassword</attr>, <attr>user</attr>, and <attr>userpassword</attr>.
+        If absent, these default to <c>https://webwork-ptx.aimath.org</c>, <c>anonymous</c>, <c>anonymous</c>,
+        <c>anonymous</c>, and <c>anonymous</c> respectively. If you specify a server, you must correctly
+        specify the protocol (<c>http</c> versus <c>https</c>). And it must be version 2.14 or later.
+        Do not include a trailing slash.
       </p>
     </subsection>
 
@@ -350,32 +341,6 @@
         <c>-d</c> specifies a folder to place the PDF output.
         If unspecified, this will be the current working directory.
       </p>
-      <p>
-        There is one string parameter you may pass to <c>pretext</c> using <c>-x</c>.
-        If you use <c>-x</c> with <c>pretext</c>,
-        make sure at least one other switch (<c>-p</c> for example) follows the use of <c>-x</c>.
-      </p>
-      <tabular valign="top">
-        <col />
-        <col width="60%" />
-        <row bottom="major">
-          <cell>stringparam</cell>
-          <cell>options</cell>
-        </row>
-        <row bottom="minor">
-          <cell><c>latex.fillin.style</c></cell>
-          <cell>
-            <p>
-              <c>'underline'</c> (default) means that where there would be an answer blank,
-              it is rendered as an underline.
-            </p>
-            <p>
-              <c>'box'</c> means that where there would be an answer blank,
-              it is rendered as a box outline.
-            </p>
-          </cell>
-        </row>
-      </tabular>
     </subsection>
 
     <subsection>

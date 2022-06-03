@@ -19,9 +19,15 @@ You should have received a copy of the GNU General Public License
 along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
+<!DOCTYPE xsl:stylesheet [
+    <!ENTITY % entities SYSTEM "entities.ent">
+    %entities;
+]>
+
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:xhtml="http://www.w3.org/1999/xhtml"
     xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
@@ -139,15 +145,33 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<xsl:template match="node()|@*" mode="labeling">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="labeling"/>
+    </xsl:copy>
+</xsl:template>
+
 <xsl:template match="node()|@*" mode="assembly">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="assembly"/>
     </xsl:copy>
 </xsl:template>
 
+<xsl:template match="node()|@*" mode="representations">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="representations"/>
+    </xsl:copy>
+</xsl:template>
+
 <xsl:template match="node()|@*" mode="repair">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </xsl:copy>
+</xsl:template>
+
+<xsl:template match="node()|@*" mode="identification">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="identification"/>
     </xsl:copy>
 </xsl:template>
 
@@ -168,12 +192,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
-<xsl:template match="node()|@*" mode="representations">
-    <xsl:param name="fn-subtree-number"/>
-    <xsl:param name="fn-subtree"/>
+<xsl:template match="node()|@*" mode="exercise">
+    <xsl:param name="division" select="''"/>
 
     <xsl:copy>
-        <xsl:apply-templates select="node()|@*" mode="representations"/>
+        <xsl:apply-templates select="node()|@*" mode="exercise">
+            <xsl:with-param name="division" select="$division"/>
+        </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
 
@@ -197,12 +222,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="version" select="exsl:node-set($version-rtf)"/>
 
+<xsl:variable name="labeled-rtf">
+    <xsl:call-template name="assembly-warnings"/>
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: start label</xsl:message>
+    </xsl:if>
+    <xsl:apply-templates select="$version" mode="labeling"/>
+    <!--  -->
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: end label</xsl:message>
+    </xsl:if>
+    <!--  -->
+</xsl:variable>
+<xsl:variable name="labeled" select="exsl:node-set($labeled-rtf)"/>
+
 <xsl:variable name="assembly-rtf">
     <xsl:if test="$time-assembly">
         <xsl:message><xsl:value-of select="date:date-time()"/>: start assembly</xsl:message>
     </xsl:if>
     <!--  -->
-    <xsl:apply-templates select="$version" mode="assembly"/>
+    <xsl:apply-templates select="$labeled" mode="assembly"/>
     <!--  -->
     <xsl:if test="$time-assembly">
         <xsl:message><xsl:value-of select="date:date-time()"/>: end assembly</xsl:message>
@@ -211,12 +250,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="assembly" select="exsl:node-set($assembly-rtf)"/>
 
+<xsl:variable name="representations-rtf">
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: start representations</xsl:message>
+    </xsl:if>
+    <!--  -->
+    <xsl:apply-templates select="$assembly" mode="representations"/>
+    <!--  -->
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: end representations</xsl:message>
+    </xsl:if>
+    <!--  -->
+</xsl:variable>
+<xsl:variable name="representations" select="exsl:node-set($representations-rtf)"/>
+
 <xsl:variable name="repair-rtf">
     <xsl:if test="$time-assembly">
         <xsl:message><xsl:value-of select="date:date-time()"/>: start repair</xsl:message>
     </xsl:if>
     <!--  -->
-    <xsl:apply-templates select="$assembly" mode="repair"/>
+    <xsl:apply-templates select="$representations" mode="repair"/>
     <!--  -->
     <xsl:if test="$time-assembly">
         <xsl:message><xsl:value-of select="date:date-time()"/>: end repair</xsl:message>
@@ -225,6 +278,33 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="repair" select="exsl:node-set($repair-rtf)"/>
 
+<xsl:variable name="identification-rtf">
+    <!-- pass in all elements with authored @xml:id -->
+    <!-- to look for authored duplicates            -->
+    <xsl:call-template name="duplication-check-xmlid">
+        <xsl:with-param name="nodes" select="$repair//*[@xml:id]"/>
+        <xsl:with-param name="purpose" select="'authored'"/>
+    </xsl:call-template>
+    <!-- pass in all elements with authored @label -->
+    <!-- to look for authored duplicates           -->
+    <xsl:call-template name="duplication-check-label">
+        <xsl:with-param name="nodes" select="$repair//*[@label]"/>
+        <xsl:with-param name="purpose" select="'authored'"/>
+    </xsl:call-template>
+
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: start identification</xsl:message>
+    </xsl:if>
+    <!--  -->
+    <xsl:apply-templates select="$repair" mode="identification"/>
+    <!--  -->
+    <xsl:if test="$time-assembly">
+        <xsl:message><xsl:value-of select="date:date-time()"/>: end identification</xsl:message>
+    </xsl:if>
+    <!--  -->
+</xsl:variable>
+<xsl:variable name="identification" select="exsl:node-set($identification-rtf)"/>
+
 <!-- Once the "repair" tree is formed, any source modifications      -->
 <!-- have been made, and it is on to *augmenting* the source.        -->
 <!-- Various publisher variables are consulted for the augmentation, -->
@@ -232,7 +312,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- be available for creating those variables, notably sensible     -->
 <!-- defaults based on the source.  We refer to this tree as the     -->
 <!-- "assembly" tree.                                                -->
-<xsl:variable name="assembly-root" select="$repair/pretext"/>
+<xsl:variable name="assembly-root" select="$identification/pretext"/>
 <xsl:variable name="assembly-docinfo" select="$assembly-root/docinfo"/>
 <xsl:variable name="assembly-document-root" select="$assembly-root/*[not(self::docinfo)]"/>
 
@@ -241,7 +321,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:message><xsl:value-of select="date:date-time()"/>: start language</xsl:message>
     </xsl:if>
     <!--  -->
-    <xsl:apply-templates select="$repair" mode="language"/>
+    <xsl:apply-templates select="$identification" mode="language"/>
     <!--  -->
     <xsl:if test="$time-assembly">
         <xsl:message><xsl:value-of select="date:date-time()"/>: end language</xsl:message>
@@ -264,19 +344,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="augment" select="exsl:node-set($augment-rtf)"/>
 
-<xsl:variable name="representations-rtf">
+<xsl:variable name="exercise-rtf">
     <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: start representations</xsl:message>
+        <xsl:message><xsl:value-of select="date:date-time()"/>: start exercise</xsl:message>
     </xsl:if>
     <!--  -->
-    <xsl:apply-templates select="$augment" mode="representations"/>
+    <!-- initialize with default, 'inline' -->
+    <xsl:apply-templates select="$augment" mode="exercise">
+        <xsl:with-param name="division" select="'inline'"/>
+    </xsl:apply-templates>
     <!--  -->
     <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: end representations</xsl:message>
+        <xsl:message><xsl:value-of select="date:date-time()"/>: end exercise</xsl:message>
     </xsl:if>
     <!--  -->
 </xsl:variable>
-<xsl:variable name="representations" select="exsl:node-set($representations-rtf)"/>
+<xsl:variable name="exercise" select="exsl:node-set($exercise-rtf)"/>
 
 <!-- The main "pretext" element only has two possible children      -->
 <!-- One is "docinfo", the other is "book", "article", etc.         -->
@@ -284,7 +367,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- And docinfo is the other child, these help prevent searching   -->
 <!-- the wrong half.                                                -->
 <!-- NB: source repair below converts a /mathbook to a /pretext     -->
-<xsl:variable name="root" select="$representations/pretext"/>
+<xsl:variable name="root" select="$exercise/pretext"/>
 <xsl:variable name="docinfo" select="$root/docinfo"/>
 <xsl:variable name="document-root" select="$root/*[not(self::docinfo)]"/>
 
@@ -329,76 +412,69 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- WeBWorK Manufacture -->
 <!-- ################### -->
 
-<!-- Prevents repeated access attempts to non-existent file    -->
-<!-- Also use for overall warning about inability to create WW -->
-<!-- $webwork-representations-file is from publisher file      -->
-<xsl:variable name="b-doing-webwork-assembly" select="not($webwork-representations-file = '')"/>
 
-<!-- Normally we are not extracting PG. When we do, extract-pg.xsl -->
-<!-- will override the following with true()                       -->
+<!-- This pre-processing stylesheet will be run prior to isolating WW      -->
+<!-- problems for their eventual trip to a WW server ("extraction").       -->
+<!-- This is necessary so certain numbers are formed properly, etc.        -->
+<!-- In this phase we handle making copies of WW problems by duplicating   -->
+<!-- them.  This stylesheet is parameterized by the boolean variable       -->
+<!-- $b-extracting-pg, and is set by the stylesheet that actually harvests -->
+<!-- the WW problems and converts them to PG versions (extract-pg.xsl).    -->
 <xsl:variable name="b-extracting-pg" select="false()"/>
 
 <!-- Don't match on simple WeBWorK logo       -->
+<!-- But do match with a @copy attribute      -->
 <!-- Seed and possibly source attributes      -->
 <!-- Then authored?, pg?, and static children -->
 <!-- NB: "xref" check elsewhere is not        -->
 <!-- performed here since we accept           -->
 <!-- representations at face-value            -->
-<xsl:template match="webwork[node()|@*]" mode="assembly">
-    <xsl:variable name="ww-id">
-        <xsl:apply-templates select="." mode="visible-id" />
-    </xsl:variable>
+<xsl:template match="webwork[* or @copy or @source]" mode="assembly">
     <xsl:choose>
-        <xsl:when test="$b-extracting-pg">
+        <xsl:when test="$b-extracting-pg and @copy">
+            <xsl:variable name="target" select="id(@copy)"/>
             <xsl:choose>
-                <xsl:when test="@copy">
-                    <!-- this will need to switch to a document-wide search     -->
-                    <!-- for a match on the @name value, once that attribute    -->
-                    <!-- is in place, since we do not yet have the              -->
-                    <!-- @name -> @xml:id  mapping until we are done assembling -->
-                    <xsl:variable name="target" select="id(@copy)"/>
-                    <xsl:choose>
-                        <xsl:when test="$target/statement|$target/task|$target/stage">
-                            <xsl:copy>
-                                <xsl:attribute name="copied-from">
-                                    <xsl:value-of select="@copy"/>
-                                </xsl:attribute>
-                                <xsl:apply-templates select="@*[not(local-name(.) = 'copy')]" mode="assembly"/>
-                                <xsl:apply-templates select="$target/@*[not(local-name(.) = 'id')][not(local-name(.) = 'seed')]" mode="assembly"/>
-                                <!-- TODO: The following should scrub unique IDs as it continues down the tree. -->
-                                <!-- Perhaps with a param to the assembly modal template.                       -->
-                                <xsl:apply-templates select="$target/node()" mode="assembly"/>
-                            </xsl:copy>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <webwork>
-                                <statement>
-                                    <p>
-                                        A WeBWorK problem would appear here, but something about its <c>@copy</c> attribute is not right.
-                                        Search the runtime output for <q><c>PTX:ERROR</c></q>.
-                                    </p>
-                                </statement>
-                            </webwork>
-                        </xsl:otherwise>
-                    </xsl:choose>
+                <xsl:when test="$target/statement|$target/task|$target/stage">
+                    <xsl:copy>
+                        <xsl:attribute name="copied-from">
+                            <xsl:value-of select="@copy"/>
+                        </xsl:attribute>
+                        <!-- Duplicate attributes, but remove the @copy attribute -->
+                        <!-- used as a signal here.  We don't want to copy this   -->
+                        <!-- again after we have been to the WW server.           -->
+                        <xsl:apply-templates select="@*[not(local-name(.) = 'copy')]" mode="assembly"/>
+                        <!-- The @seed makes the problem different, and @xml:id and @label -->
+                        <!-- are unique identifiers, so grab any other attributes of the   -->
+                        <!-- original, but exclude these while formulating a copy/clone.   -->
+                        <xsl:apply-templates select="$target/@*[(not(local-name(.) = 'id')) and
+                                                                (not(local-name(.) = 'label')) and
+                                                                (not(local-name(.) = 'seed'))]" mode="assembly"/>
+                        <!-- TODO: The following should scrub unique IDs as it continues down the tree. -->
+                        <!-- Perhaps with a param to the assembly modal template.                       -->
+                        <!-- Does the contents of the original WW have any @xml:id or @label?           -->
+                        <xsl:apply-templates select="$target/node()" mode="assembly"/>
+                    </xsl:copy>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:copy>
-                        <xsl:apply-templates select="node()|@*" mode="assembly"/>
-                    </xsl:copy>
+                    <webwork>
+                        <statement>
+                            <p>
+                                A WeBWorK problem would appear here, but something about its <c>@copy</c> attribute is not right.
+                                Search the runtime output for <q><c>PTX:ERROR</c></q>.
+                            </p>
+                        </statement>
+                    </webwork>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
-        <xsl:when test="$b-doing-webwork-assembly">
-            <xsl:copy-of select="document($webwork-representations-file, $original)/webwork-representations/webwork-reps[@ww-id=$ww-id]" />
-        </xsl:when>
         <xsl:otherwise>
-            <statement>
-                <p>The WeBWorK problem with ID <q><xsl:value-of select="$ww-id"/></q> will appear here if you provide the file of problems that have been processed by a WeBWorK server (<c>webwork-representations.ptx</c>).</p>
-            </statement>
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="assembly"/>
+            </xsl:copy>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
 
 <!-- ################# -->
 <!-- Private Solutions -->
@@ -598,6 +674,176 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- no more "conclusion", so drop it here; deprecation will warn -->
 <xsl:template match="glossary/conclusion" mode="repair"/>
+
+<!-- 2022-04-22 replace Python Tutor with Runestone CodeLens -->
+<xsl:template match="program/@interactive" mode="repair">
+    <xsl:choose>
+        <xsl:when test=". = 'pythontutor'">
+            <xsl:attribute name="interactive">
+                <xsl:text>codelens</xsl:text>
+            </xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:copy/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- 2022-04-25 @label deprecated, slated for renewal in starring  -->
+<!-- role. Lists with markers (not description lists) -->
+<xsl:template match="ol/@label|ul/@label" mode="repair">
+    <xsl:attribute name="marker">
+        <xsl:value-of select="."/>
+    </xsl:attribute>
+</xsl:template>
+
+<!-- 2022-04-24 An exception, label on video tracks mimicing HTML -->
+<xsl:template match="video/track/@label" mode="repair">
+    <xsl:attribute name="listing">
+        <xsl:value-of select="."/>
+    </xsl:attribute>
+</xsl:template>
+
+
+<!-- ############## -->
+<!-- Identification -->
+<!-- ############## -->
+
+<!-- For generated identifiers we reserve a separator string for    -->
+<!-- internal use, this could also be used to identify authored     -->
+<!-- @xml:id and authored @label.  Either on the fly, or as a late  -->
+<!-- task in the pre-processor.  We allow a dash and an underscore  -->
+<!-- as non-letter characters.  Every other character is a bad idea -->
+<!-- when we create variables for languages, WeBWork, LaTeX, etc.   -->
+<!-- Good reasons not to use a dollar sign (LaTeX, Perl, WeBWork,   -->
+<!-- XSL) or a period (object/method notation in Python or          -->
+<!-- Javascript).  Even a dash/hyphen is a bad idea - it is not     -->
+<!-- legal in Javascript variables, and is a minus sign in Python.  -->
+<!-- So we have a sanitization template below.                      -->
+<!--                                                                -->
+<!-- Back on task, the string defined here could be made more       -->
+<!-- complicated, if it turns out to be insufficient.               -->
+<xsl:variable name="gen-id-sep" select="'_-_'"/>
+
+<xsl:template match="*" mode="labeling">
+    <xsl:copy>
+        <!-- duplicate all attributes, especially  -->
+        <!-- preserve any authored @xml:id, @label -->
+        <xsl:apply-templates select="@*" mode="labeling"/>
+        <!-- The "visible-id" template switched to prefer @label,         -->
+        <!-- rather than @xml:id (at 1779e6dbc84c6ecc).  So to preserve   -->
+        <!-- authored (crafted) identifier strings, we copy the old over  -->
+        <!-- into the new.  This preserves identifiers in output          -->
+        <!-- (filenames, fragment identifiers).                           -->
+        <!-- We do this *early*, but crtically, before WW representations -->
+        <!-- get melded in since sometimes we have  webwork/@xml:id  as a -->
+        <!-- target for a copy.                                           -->
+        <!--                                                              -->
+        <!-- DELAY: when we replace generated values ("theorem-420") in   -->
+        <!-- the "visible-id" template, we will create those new strings  -->
+        <!-- ("good-section-s3t5") here on the fly and the WW problems    -->
+        <!-- will behave (with semi-stable identifiers).                  -->
+        <xsl:if test="@xml:id and not(@label)">
+            <xsl:attribute name="label">
+                <xsl:value-of select="@xml:id"/>
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:apply-templates select="node()" mode="labeling"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- THIS IS DOING NOTHING, WILL RECYCLE FOR GENERATED XML:ID -->
+<xsl:template match="*" mode="identification">
+    <xsl:copy>
+        <!-- duplicate all attributes, especially  -->
+        <!-- preserve any authored @xml:id, @label -->
+        <xsl:apply-templates select="@*" mode="identification"/>
+        <!-- We fix up two identifiers, we assume authored @label are rarest, -->
+        <!-- and then authored @xml:id, in order to minimize tests (rather    -->
+        <!-- than the overhead of making two variables and checking them).    -->
+        <!-- [Probably unnecessary]                                           -->
+        <xsl:choose>
+            <xsl:when test="not(@xml:id) and not(@label)"/>
+            <xsl:when test="@xml:id and not(@label)"/>
+            <xsl:when test="not(@xml:id) and @label"/>
+            <!-- both thoughtfully authored, nothing to do -->
+            <xsl:when test="@xml:id and @label"/>
+        </xsl:choose>
+        <xsl:apply-templates select="node()" mode="identification"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- There is no real putpose to put an @xml:id onto an (X)HTML -->
+<!-- element floating around as part of an interactive.         -->
+<xsl:template match="xhtml:*" mode="identification">
+    <xsl:copy>
+        <xsl:apply-templates select="@*|node()" mode="identification"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- We look for duplicate identifiers both right after    -->
+<!-- assembly and right after automatic generation.  The   -->
+<!-- application of these templates is mixed-in to the     -->
+<!-- creation of the trees.                                -->
+<!-- NB: these two templates are identical (keep it that   -->
+<!-- way!) because we can't see how to make the attribute  -->
+<!-- itself a parameter.                                   -->
+<!-- NB: these were built as regular templates and the     -->
+<!-- root of the relevant tree was passed in, this created -->
+<!-- some error with the construction of the final tree:   -->
+<!-- "Recursive definition of root"                        -->
+<xsl:template name="duplication-check-xmlid">
+    <!-- pass in all elements with @xml:id attributes -->
+    <xsl:param name="nodes"/>
+    <!-- 'authored' or 'generated', just influences messages -->
+    <xsl:param name="purpose"/>
+
+    <xsl:for-each select="$nodes">
+        <!-- save off the string on current node -->
+        <xsl:variable name="the-id" select="string(./@xml:id)"/>
+        <!-- locate all elements that are duplicates of this one -->
+        <xsl:variable name="duplicates" select="$nodes[@xml:id = $the-id]"/>
+        <!-- warn only for the element that occurs earliest in the duplicate list -->
+        <xsl:if test="(count($duplicates) > 1) and (count(.|$duplicates[1]) = 1)">
+            <xsl:choose>
+                <xsl:when test="$purpose = 'authored'">
+                    <xsl:message>PTX:ERROR: the @xml:id value "<xsl:value-of select="$the-id"/>" should be unique, but is authored <xsl:value-of select="count($duplicates)"/> times.</xsl:message>
+                </xsl:when>
+            </xsl:choose>
+            <xsl:message>           Results will be unpredictable, and likely incorrect.  Information on the locations follows:</xsl:message>
+            <xsl:for-each select="$duplicates">
+                <xsl:apply-templates select="." mode="location-report" />
+            </xsl:for-each>
+        </xsl:if>
+    </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="duplication-check-label">
+    <!-- pass in all elements with @label attributes -->
+    <xsl:param name="nodes"/>
+    <!-- 'authored' or 'generated', just influences messages -->
+    <xsl:param name="purpose"/>
+
+    <xsl:for-each select="$nodes">
+        <!-- save off the string on current node -->
+        <xsl:variable name="the-id" select="string(./@label)"/>
+        <!-- locate all elements that are duplicates of this one -->
+        <xsl:variable name="duplicates" select="$nodes[@label = $the-id]"/>
+        <!-- warn only for the element that occurs earliest in the duplicate list -->
+        <xsl:if test="(count($duplicates) > 1) and (count(.|$duplicates[1]) = 1)">
+            <xsl:choose>
+                <xsl:when test="$purpose = 'authored'">
+                    <xsl:message>PTX:ERROR: the @label value "<xsl:value-of select="$the-id"/>" should be unique, but is authored <xsl:value-of select="count($duplicates)"/> times.</xsl:message>
+                </xsl:when>
+            </xsl:choose>
+            <xsl:message>           Results will be unpredictable, and likely incorrect.  Information on the locations follows:</xsl:message>
+            <xsl:for-each select="$duplicates">
+                <xsl:apply-templates select="." mode="location-report" />
+            </xsl:for-each>
+        </xsl:if>
+    </xsl:for-each>
+</xsl:template>
+
 
 <!-- ######### -->
 <!-- Languages -->
@@ -802,26 +1048,209 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- ######### -->
+<!-- Exercises -->
+<!-- ######### -->
+
+<!-- Exercises, and their kin, are complicated.  They come in five types   -->
+<!-- (inline, divisional, reading, worksheet, project-like) based largely  -->
+<!-- on location.  They can be static, interactive in HTML, interactive    -->
+<!-- on a server.  Interactive versions come in many flavors, such as      -->
+<!-- short answer, multiple choice, true/false, Parson, matching, fill-in, -->
+<!-- and so on.  Their solutions (hint, answer, solution) apear, or do not -->
+<!-- appear, where born or in specialized "solutions" divisions.  We       -->
+<!-- scribble on each to record as much as we can right now.  It'll be     -->
+<!-- useful below and forever.                                             -->
+
+<!-- Record exercise ancestors/location-->
+<!-- An "exercise" can be in one of four places.  We reset the parameter   -->
+<!-- as we pass through.  Default is "inline" and we initialize with that  -->
+<!-- value.  These three specialized divisions are always terminal, so we  -->
+<!-- will never find an inline exercise contained within.  We allow        -->
+<!-- publisher customization of exercises based on these locations, *and*  -->
+<!-- for project-like.  These templates are just about divisions.          -->
+
+<xsl:template match="reading-questions" mode="exercise">
+    <xsl:param name="division"/>
+
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="exercise">
+            <xsl:with-param name="division" select="'reading'"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<xsl:template match="worksheet" mode="exercise">
+    <xsl:param name="division"/>
+
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="exercise">
+            <xsl:with-param name="division" select="'worksheet'"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<xsl:template match="exercises" mode="exercise">
+    <xsl:param name="division"/>
+
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="exercise">
+            <xsl:with-param name="division" select="'divisional'"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Annotate "exercise" and PROJECT-LIKE -->
+<!-- Pre-processing here is entirely about supporting interactive       -->
+<!-- exercises powered by Runestone Services.  We allow publisher       -->
+<!-- options to control interactivity of "short answer" questions       -->
+<!-- when hosted on a server, so that is why locations are being noted. -->
+<!--   1.  "exercise-customization" refers to the situation where       -->
+<!--       certain publication options can vary behavior or visibility  -->
+<!--   2.  "exercise-interactive" refers to the type of                 -->
+<!--        interactivity, "static" is the default                      -->
+<!--                                                                    -->
+<!-- TODO:                                                              -->
+<!-- 1.  Expand to WW, example-like, and task                           -->
+<!-- 2.  Insert "statement" when not authored                           -->
+<!-- 3.  Use locations computed here, remove elsewhere                  -->
+
+<xsl:template match="exercise|&PROJECT-LIKE;" mode="exercise">
+    <xsl:param name="division"/>
+
+    <xsl:copy>
+        <!-- Record one of five categories for customization, which    -->
+        <!-- are not relevant for "example" (always inline), or "task" -->
+        <!-- (always just a component of something larger).  WeBWork   -->
+        <!-- problems are interactive or static, inline or not, based  -->
+        <!-- on publisher options.                                     -->
+        <xsl:attribute name="exercise-customization">
+            <xsl:choose>
+                <xsl:when test="&PROJECT-FILTER;">
+                    <xsl:text>project</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$division"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+        <!-- Determine and record types of interactivity, partially based   -->
+        <!-- on location due to publisher options for "short answer" (only) -->
+        <xsl:apply-templates select="." mode="exercise-interactive-attribute">
+            <xsl:with-param name="division" select="$division"/>
+        </xsl:apply-templates>
+        <!-- catch remaining attributes -->
+        <xsl:apply-templates select="@*" mode="exercise">
+            <xsl:with-param name="division" select="$division"/>
+        </xsl:apply-templates>
+        <!-- Now the child elements -->
+        <!-- NB: this would be a place to insert a "statement" for  -->
+        <!-- "exercise", "example", "project" and "task", for which -->
+        <!-- an author has not needed/elected to use one.           -->
+        <xsl:apply-templates select="node()" mode="exercise">
+            <xsl:with-param name="division" select="$division"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- These "interactivity types" are meant for Runestone-enabled  -->
+<!-- interactive exercises and projects                           -->
+<xsl:template match="*" mode="exercise-interactive-attribute">
+    <xsl:param name="division"/>
+
+    <xsl:attribute name="exercise-interactive">
+        <xsl:choose>
+            <!-- hack for temporary demo HTML versions -->
+            <xsl:when test="@runestone">
+                <xsl:text>htmlhack</xsl:text>
+            </xsl:when>
+            <!-- true/false -->
+            <xsl:when test="statement/@correct">
+                <xsl:text>truefalse</xsl:text>
+            </xsl:when>
+            <!-- multiple choice -->
+            <xsl:when test="statement and choices">
+                <xsl:text>multiplechoice</xsl:text>
+            </xsl:when>
+            <xsl:when test="statement and blocks">
+                <xsl:text>parson</xsl:text>
+            </xsl:when>
+            <xsl:when test="statement and matches">
+                <xsl:text>matching</xsl:text>
+            </xsl:when>
+            <xsl:when test="statement and areas">
+                <xsl:text>clickablearea</xsl:text>
+            </xsl:when>
+            <xsl:when test="statement//var and not(webwork)">
+                <xsl:text>fillin-basic</xsl:text>
+            </xsl:when>
+            <xsl:when test="statement and program">
+                <xsl:text>coding</xsl:text>
+            </xsl:when>
+            <!-- Now we have what once would have been called a "traditional"     -->
+            <!-- PreTeXt question, which is just "statement|hint|answer|solution" -->
+            <!-- (perhaps after a bit of preprocessing.  More accurately, these   -->
+            <!-- are "short answer", "essay", or "free response".  We have allow  -->
+            <!-- these to be interactive (or not) for a capable platform.         -->
+            <!-- Conveniently, we have the cusomization types in the $division    -->
+            <!-- parameter. This only matters when we are on a Runestone server.  -->
+            <xsl:when test="$b-host-runestone">
+                <xsl:choose>
+                    <xsl:when test="($division = 'inline') and $b-sa-inline-dynamic">
+                        <xsl:text>shortanswer</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="($division = 'divisional') and $b-sa-divisional-dynamic">
+                        <xsl:text>shortanswer</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="($division = 'reading') and $b-sa-reading-dynamic">
+                        <xsl:text>shortanswer</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="($division = 'worksheet') and $b-sa-worksheet-dynamic">
+                        <xsl:text>shortanswer</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="($division = 'project') and $b-sa-project-dynamic">
+                        <xsl:text>shortanswer</xsl:text>
+                    </xsl:when>
+                    <!-- examples are never assesments                -->
+                    <!-- maybe WeBWork will someday be on a RS server -->
+                    <xsl:otherwise>
+                        <xsl:text>static</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <!-- That's it, we are out of opportunities to be interactive -->
+            <xsl:otherwise>
+                <xsl:text>static</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:attribute>
+</xsl:template>
+
+
 <!-- ############### -->
 <!-- Representations -->
 <!-- ############### -->
 
-<!-- Build multiple representations of exercises that are produced        -->
-<!-- in static and dynamic (HTML) versions.  Generally these templates    -->
-<!-- are parameterized by the $exercise-style variable/parameter.         -->
+<!-- Build multiple (two) representations of exercises that are produced  -->
+<!-- in static (almost everything) and dynamic (HTML) versions.            -->
+<!-- Generally these templates are parameterized by the $exercise-style   -->
+<!-- variable/parameter.  We need the parameterization, since we do not   -->
+<!-- want to make *multiple* copies of each exercise in the source, since -->
+<!-- then duplicate items might confuse later templates e.g numbering).   -->
 <!--                                                                      -->
 <!-- A "static" version should be entirely in the style of a "regular"    -->
 <!-- PreTeXt exercise, having a statement|hint|answer|solution structure. -->
 <!-- Then it can be leveraged through all the infrastructure for things   -->
 <!-- like solutions manuals and non-capable output formats.               -->
 <!--                                                                      -->
-<!-- A "dynamic" version should still have statement|hint|answer|solution -->
-<!-- structure, but the "statement" should have copies of enough of the   -->
-<!-- authored source for an interactive version to be produced later.     -->
+<!-- A "dynamic" version is simply a duplicate of the author's source,    -->
+<!-- which is handled by templates elsewhere, applied in the HTML         -->
+<!-- conversion itself.                                                   -->
 
 <!-- Hacked -->
+<!-- Will eventually be obsolete -->
 
-<xsl:template match="exercise[@runestone]" mode="representations">
+<xsl:template match="exercise[@exercise-interactive = 'htmlhack']" mode="representations">
     <xsl:choose>
         <xsl:when test="$exercise-style = 'static'">
             <!-- punt for static versions, we have nothing -->
@@ -838,114 +1267,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- True/False -->
-
-<xsl:template match="exercise[statement/@correct]" mode="representations">
-    <!-- always preserve "exercise" container, with metadata -->
-    <!-- given as attributes and elements (title, idx)       -->
-    <xsl:copy>
-        <xsl:apply-templates select="@*" mode="representations"/>
-        <xsl:apply-templates select="title" mode="representations"/>
-        <xsl:apply-templates select="idx" mode="representations"/>
-        <xsl:choose>
-            <!-- make a static version, in a PreTeXt   -->
-            <!-- statement|hint|answer|solution style  -->
-            <!-- for use naturally by most conversions -->
-            <xsl:when test="$exercise-style = 'static'">
-                <xsl:apply-templates select="." mode="runestone-to-static"/>
-            </xsl:when>
-            <!-- duplicate necessary bits, again in a PreTeXt          -->
-            <!-- statement|hint|answer|solution style, but let the     -->
-            <!-- conversion make the actual code for a dynamic version -->
-            <xsl:when test="$exercise-style = 'dynamic'">
-                <statement>
-                    <xsl:apply-templates select="statement" mode="representations"/>
-                    <xsl:apply-templates select="feedback" mode="representations"/>
-                </statement>
-                <!-- Only hints are allowed/relevant since an interactive -->
-                <!-- version will reveal an answer eventually and provide -->
-                <!-- "feedbacK' that amounts to a solution                -->
-                <xsl:apply-templates select="hint" mode="representations"/>
-            </xsl:when>
-        </xsl:choose>
-    </xsl:copy>
-</xsl:template>
-
-<!-- Multiple Choice -->
-
-<xsl:template match="exercise[statement and choices]" mode="representations">
-    <!-- always preserve "exercise" container, with metadata -->
-    <!-- given as attributes and elements (title, idx)       -->
-    <xsl:copy>
-        <xsl:apply-templates select="@*" mode="representations"/>
-        <xsl:apply-templates select="title" mode="representations"/>
-        <xsl:apply-templates select="idx" mode="representations"/>
-        <xsl:choose>
-            <!-- make a static version, in a PreTeXt   -->
-            <!-- statement|hint|answer|solution style  -->
-            <!-- for use naturally by most conversions -->
-            <xsl:when test="$exercise-style = 'static'">
-                <xsl:apply-templates select="." mode="runestone-to-static"/>
-            </xsl:when>
-            <!-- duplicate necessary bits, again in a PreTeXt          -->
-            <!-- statement|hint|answer|solution style, but let the     -->
-            <!-- conversion make the actual code for a dynamic version -->
-            <xsl:when test="$exercise-style = 'dynamic'">
-                <statement>
-                    <xsl:apply-templates select="statement" mode="representations"/>
-                    <xsl:apply-templates select="choices" mode="representations"/>
-                </statement>
-                <!-- Only hints are allowed/relevant since an interactive -->
-                <!-- version will reveal an answer eventually and provide -->
-                <!-- "feedbacK' that amounts to a solution                -->
-                <xsl:apply-templates select="hint" mode="representations"/>
-            </xsl:when>
-        </xsl:choose>
-    </xsl:copy>
-</xsl:template>
-
-<!-- Parsons problems -->
-
-<xsl:template match="exercise[statement and blocks]" mode="representations">
-    <!-- always preserve "exercise" container, with metadata -->
-    <!-- given as attributes and elements (title, idx)       -->
-    <xsl:copy>
-        <xsl:apply-templates select="@*" mode="representations"/>
-        <xsl:apply-templates select="title" mode="representations"/>
-        <xsl:apply-templates select="idx" mode="representations"/>
-        <xsl:choose>
-            <!-- make a static version, in a PreTeXt   -->
-            <!-- statement|hint|answer|solution style  -->
-            <!-- for use naturally by most conversions -->
-            <xsl:when test="$exercise-style = 'static'">
-                <xsl:apply-templates select="." mode="runestone-to-static"/>
-            </xsl:when>
-            <!-- duplicate necessary bits, again in a PreTeXt          -->
-            <!-- statement|hint|answer|solution style, but let the     -->
-            <!-- conversion make the actual code for a dynamic version -->
-            <xsl:when test="$exercise-style = 'dynamic'">
-                <statement>
-                    <xsl:apply-templates select="statement" mode="representations"/>
-                    <xsl:apply-templates select="blocks" mode="representations"/>
-                </statement>
-                <!-- Only hints are allowed/relevant since an interactive -->
-                <!-- version will reveal an answer eventually and provide -->
-                <!-- "feedbacK' that amounts to a solution                -->
-                <xsl:apply-templates select="hint" mode="representations"/>
-            </xsl:when>
-        </xsl:choose>
-    </xsl:copy>
-</xsl:template>
-
+<!-- True/False        -->
+<!-- Multiple Choice   -->
+<!-- Parson problems   -->
 <!-- Matching problems -->
+<!-- Clickable Area    -->
+<!-- ActiveCode        -->
 
-<xsl:template match="exercise[statement and matches]" mode="representations">
-    <!-- always preserve "exercise" container, with metadata -->
-    <!-- given as attributes and elements (title, idx)       -->
+<xsl:template match="exercise[ (@exercise-interactive = 'truefalse') or
+                               (@exercise-interactive = 'multiplechoice') or
+                               (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'coding')]
+                              |project[@exercise-interactive = 'coding']
+                              |activity[@exercise-interactive = 'coding']
+                              |exploration[@exercise-interactive = 'coding']
+                              |investigation[@exercise-interactive = 'coding']" mode="representations">
+    <!-- always preserve "exercise" container, with attributes -->
     <xsl:copy>
         <xsl:apply-templates select="@*" mode="representations"/>
-        <xsl:apply-templates select="title" mode="representations"/>
-        <xsl:apply-templates select="idx" mode="representations"/>
         <xsl:choose>
             <!-- make a static version, in a PreTeXt   -->
             <!-- statement|hint|answer|solution style  -->
@@ -953,54 +1295,48 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="$exercise-style = 'static'">
                 <xsl:apply-templates select="." mode="runestone-to-static"/>
             </xsl:when>
-            <!-- duplicate necessary bits, again in a PreTeXt          -->
-            <!-- statement|hint|answer|solution style, but let the     -->
-            <!-- conversion make the actual code for a dynamic version -->
+            <!-- duplicate for a dynamic version -->
             <xsl:when test="$exercise-style = 'dynamic'">
-                <statement>
-                    <xsl:apply-templates select="statement" mode="representations"/>
-                    <xsl:apply-templates select="matches" mode="representations"/>
-                    <xsl:apply-templates select="feedback" mode="representations"/>
-                </statement>
-                <!-- Only hints are allowed/relevant since an interactive -->
-                <!-- version will reveal an answer eventually and provide -->
-                <!-- "feedbacK' that amounts to a solution                -->
-                <xsl:apply-templates select="hint" mode="representations"/>
+                <xsl:apply-templates select="node()" mode="representations"/>
             </xsl:when>
         </xsl:choose>
     </xsl:copy>
 </xsl:template>
 
-<!-- Active Code -->
+<!-- Short Answer -->
+<!-- @exercise-interactive = 'shortanswer' needs no adjustments -->
 
-<!-- "exercise" and PROJECT-LIKE -->
-<xsl:template match="exercise[statement and program]|project[statement and program]|activity[statement and program]|exploration[statement and program]|investigation[statement and program]" mode="representations">
-    <!-- always preserve "exercise" container, with metadata -->
-    <!-- given as attributes and elements (title, idx)       -->
-    <xsl:copy>
-        <xsl:apply-templates select="@*" mode="representations"/>
-        <xsl:apply-templates select="title" mode="representations"/>
-        <xsl:apply-templates select="idx" mode="representations"/>
-        <xsl:choose>
-            <!-- make a static version, in a PreTeXt   -->
-            <!-- statement|hint|answer|solution style  -->
-            <!-- for use naturally by most conversions -->
-            <xsl:when test="$exercise-style = 'static'">
-                <xsl:apply-templates select="." mode="runestone-to-static"/>
-            </xsl:when>
-            <!-- duplicate necessary bits, again in a PreTeXt          -->
-            <!-- statement|hint|answer|solution style, but let the     -->
-            <!-- conversion make the actual code for a dynamic version -->
-            <xsl:when test="$exercise-style = 'dynamic'">
-                <statement>
-                    <xsl:apply-templates select="statement" mode="representations"/>
-                    <xsl:apply-templates select="program" mode="representations"/>
-                </statement>
-                <!-- Problem design does not imply any part of a solution -->
-                <xsl:apply-templates select="hint|answer|solution" mode="representations"/>
-            </xsl:when>
-        </xsl:choose>
-    </xsl:copy>
+<!-- Static (non-interactive) -->
+<!-- @exercise-interactive = 'static' needs no adjustments -->
+
+<!-- Warn/fail if the file of WW representations is not found -->
+<xsl:variable name="b-ww-representations-missing" select="($webwork-representations-file = '') and not($b-extracting-pg)"/>
+
+<!-- WeBWorK problems have been sent to a server and come back as      -->
+<!-- several different representations, all collected in one big file, -->
+<!-- which we mine and duplicate in this pass.                         -->
+
+<xsl:template match="webwork[* or @copy or @source]" mode="representations">
+    <xsl:variable name="ww-id">
+        <xsl:apply-templates select="." mode="visible-id" />
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$b-extracting-pg">
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="representations"/>
+            </xsl:copy>
+        </xsl:when>
+        <!-- not extracting, check on file, drop placeholder -->
+        <xsl:when test="$b-ww-representations-missing">
+            <statement>
+                <p>The WeBWorK problem with ID <q><xsl:value-of select="$ww-id"/></q> will appear here if you provide the file of problems that have been processed by a WeBWorK server (<c>webwork-representations.ptx</c>).</p>
+            </statement>
+        </xsl:when>
+        <!-- get the representations now -->
+        <xsl:otherwise>
+            <xsl:copy-of select="document($webwork-representations-file, $original)/webwork-representations/webwork-reps[@ww-id=$ww-id]" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 
@@ -1011,7 +1347,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A place for warnings about missing files, etc -->
 <!-- and/or temporary/experimental features        -->
 <xsl:template name="assembly-warnings">
-    <xsl:if test="$original/*[not(self::docinfo)]//webwork/node() and not($b-doing-webwork-assembly or $b-extracting-pg)">
+    <xsl:if test="$original/*[not(self::docinfo)]//webwork/node() and $b-ww-representations-missing">
         <xsl:message>PTX:WARNING: Your document has WeBWorK exercises,</xsl:message>
         <xsl:message>             but your publisher file does not indicate the file</xsl:message>
         <xsl:message>             of problem representations created by a WeBWorK server.</xsl:message>

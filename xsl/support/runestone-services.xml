@@ -1,14 +1,14 @@
 <?xml version="1.0" ?>
 <all>
-    <js type="list">
-        <item type="str">runtime.45581e16620a950c.bundle.js</item>
-	<item type="str">vendors-node_modules_bootstrap_dist_js_bootstrap_js-node_modules_jquery-ui_jquery-ui_js-node_-72cd89.51d9dde4e5162190.bundle.js</item>
-	<item type="str">runestone.7ebb98f3907a79d3.bundle.js</item>
+	<js type="list">
+		<item type="str">runtime.b0f8547c48f16a9f.bundle.js</item>
+		<item type="str">637.d54be67956c5c660.bundle.js</item>
+		<item type="str">runestone.0e9550fe42760516.bundle.js</item>
 	</js>
-    <css type="list">
-	<item type="str">vendors-node_modules_bootstrap_dist_js_bootstrap_js-node_modules_jquery-ui_jquery-ui_js-node_-72cd89.cd688d1623c9932e.css</item>
-	<item type="str">runestone.2c801624658a5cbb.css</item>
-    </css>
-    <cdn-url type="str">https://runestone.academy/cdn/runestone/</cdn-url>
-    <version type="str">test</version>
+	<css type="list">
+		<item type="str">637.fafafbd97df8a0d1.css</item>
+		<item type="str">runestone.e4d5592da655219f.css</item>
+	</css>
+	<cdn-url type="str">https://runestone.academy/cdn/runestone/</cdn-url>
+	<version type="str">6.2.1</version>
 </all>

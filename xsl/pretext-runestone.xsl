@@ -47,6 +47,33 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: ananlyzing *original* source, not *assembled*  -->
 <xsl:variable name="b-needs-runestone" select="boolean($original//exercise/choices|$original//exercise/blocks|$original//exercise/program)"/>
 
+<!-- Runestone Services -->
+<!-- Runestone provides universally-applicable Javascript, and since Brad Miller -->
+<!-- is "such a nice guy" he provides an XML version of the necessary files,     -->
+<!-- which we store as "support/runestone-services.xml".  The structure of that  -->
+<!-- file is pretty simple, and should be apparent to the cognescenti.           -->
+<!-- NB: dev.runestoneinteractive.org  is temporary while testing -->
+<!-- NB: we may eventually condition on Runestone server/hosting  -->
+<!-- to affect the prefix network location.                       -->
+<!--  -->
+<!-- We allow for experimental services vis a "debug" parameter.  -->
+<!-- Note that any path must be relative to *this* file you are   -->
+<!-- viewing right now, i.e. relative to the "xsl" directory of   -->
+<!-- the PreteXt distribution.  An absolute path should always    -->
+<!-- be correct.                                                  -->
+<xsl:variable name="runestone-services-filename">
+    <xsl:choose>
+        <xsl:when test="not($debug.rs.services.file = '')">
+            <xsl:value-of select="$debug.rs.services.file"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>support/runestone-services.xml</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="runestone-services" select="document($runestone-services-filename)"/>
+
 <!-- The Runestone platform option requires output that can be used  -->
 <!-- on the server with a templating language/tool.  For books       -->
 <!-- originating from PreTeXt we use a non-default pair of strings.  -->
@@ -93,7 +120,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>eBookConfig.ajaxURL = eBookConfig.app + "/ajax/";&#xa;</xsl:text>
                 <!-- no .loglevel -->
                 <xsl:text>eBookConfig.username = '</xsl:text><xsl:value-of select="$rso"/><xsl:text> user_id </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
-                <xsl:text>eBookConfig.readings = </xsl:text><xsl:value-of select="$rso"/><xsl:text> readings </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.readings = </xsl:text><xsl:value-of select="$rso"/><xsl:text> readings|safe </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.activities = </xsl:text><xsl:value-of select="$rso"/><xsl:text> activity_info|safe </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.downloadsEnabled = </xsl:text><xsl:value-of select="$rso"/><xsl:text> downloads_enabled </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.allow_pairs = </xsl:text><xsl:value-of select="$rso"/><xsl:text> allow_pairs </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
@@ -222,32 +249,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>&#xa;</xsl:text>
         </xsl:when>
     </xsl:choose>
-    <!-- Runestone Services -->
-    <!-- Runestone provides universally-applicable Javascript, and since Brad Miller -->
-    <!-- is "such a nice guy" he provides an XML version of the necessary files,     -->
-    <!-- which we store as "support/runestone-services.xml".  The structure of that  -->
-    <!-- file is pretty simple, and should be apparent to the cognescenti.           -->
-    <!-- NB: dev.runestoneinteractive.org  is temporary while testing -->
-    <!-- NB: we may eventually condition on Runestone server/hosting  -->
-    <!-- to affect the prefix network location.                       -->
-    <!--  -->
-    <!-- We allow for experimental services vis a "debug" parameter.  -->
-    <!-- Note that any path must be relative to *this* file you are   -->
-    <!-- viewing right now, i.e. relative to the "xsl" directory of   -->
-    <!-- the PreteXt distribution.  An absolute path should always    -->
-    <!-- be correct.                                                  -->
-    <xsl:variable name="runestone-services-filename">
-        <xsl:choose>
-            <xsl:when test="not($debug.rs.services.file = '')">
-                <xsl:value-of select="$debug.rs.services.file"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>support/runestone-services.xml</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-
-    <xsl:variable name="runestone-services" select="document($runestone-services-filename)"/>
 
     <!-- If hosted on Runestone then we point to "_static" directory right -->
     <!-- on the Runestone Server.  But in the "Runestone for All" case,    -->
@@ -329,6 +330,39 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- When hosted on Runestone, an interactive exercise is tracked in a    -->
+<!-- database across courses ("base course") and semesters ("time").      -->
+<!-- And the HTML representation of an interactive exercise, when powered -->
+<!-- by Runestone services, needs an HTML id.  But the PreTeXt "exercise" -->
+<!-- that wraps it has its own HTML id necessary for targets of           -->
+<!-- cross-reference (in-context) URLs.  We will prefer @label for the    -->
+<!-- PreTeXt "exercise" HTML id.  And we will require a *stable* @label   -->
+<!-- from an author, which we will dress up here.  Notice that this can   -->
+<!-- change when an author declares a new edition.                        -->
+<xsl:template match="exercise|program|&PROJECT-LIKE;" mode="runestone-id">
+    <!-- Once we generate labels, we can warn an author that they should   -->
+    <!-- be committing to a long-term @label value for database entries.   -->
+    <!-- We do this by checking for the $gen-id-sep string being present   -->
+    <!-- in the value of @label.  At this time, consider making a -common  -->
+    <!-- function that will examine both an @xml:id value or a @label for  -->
+    <!-- an "authored" pproperty, this could be set in the assembly phase. -->
+
+    <!-- Prefix just for RS server builds, in order that the database -->
+    <!-- of exercises gets a globally unique identifier.              -->
+    <xsl:if test="$b-host-runestone">
+        <xsl:value-of select="$docinfo/document-id"/>
+        <xsl:text>_</xsl:text>
+        <xsl:value-of select="$docinfo/document-id/@edition"/>
+        <xsl:text>_</xsl:text>
+    </xsl:if>
+    <xsl:value-of select="@label"/>
+</xsl:template>
+
+<xsl:template match="exercise|program|&PROJECT-LIKE;" mode="runestone-id-attribute">
+    <xsl:attribute name="id">
+        <xsl:apply-templates select="." mode="runestone-id"/>
+    </xsl:attribute>
+</xsl:template>
 
 <!-- ################## -->
 <!-- Runestone Manifest -->
@@ -350,6 +384,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="book|article" mode="runestone-manifest">
     <exsl:document href="runestone-manifest.xml" method="xml" indent="yes" encoding="UTF-8">
         <manifest>
+            <!-- version of Runestone Services used for this build -->
+            <runestone-services>
+                <xsl:attribute name="version">
+                    <xsl:value-of select="$runestone-services/all/version"/>
+                </xsl:attribute>
+            </runestone-services>
+            <!-- mine various bits and pieces of the source for RS metadata  -->
+            <!-- collection, which is technically a "conf.py" file, per-book -->
+            <library-metadata publisher="pretext">
+                <!-- sanitizes footnotes, quotes, math for overall title-->
+                <xsl:comment>Missing a blurb for library description, book back covers</xsl:comment>
+                <title>
+                    <xsl:apply-templates select="$document-root" mode="title-plain"/>
+                </title>
+                <subtitle>
+                    <xsl:apply-templates select="$document-root" mode="subtitle"/>
+                </subtitle>
+                <!-- edition, too? -->
+                <document-id>
+                    <xsl:attribute name="edition">
+                        <xsl:value-of select="$docinfo/document-id/@edition"/>
+                    </xsl:attribute>
+                    <xsl:value-of select="$docinfo/document-id"/>
+                </document-id>
+            </library-metadata>
             <!-- LaTeX packages and macros first -->
             <latex-macros>
                 <xsl:text>&#xa;</xsl:text>
@@ -430,50 +489,30 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   - every multiple choice "exercise"             -->
 <!--   - every Parsons problem "exercise"             -->
 <!--   - every matching problem "exercise"            -->
+<!--   - every clickable area problem "exercise"      -->
+<!--   - every "exercise" with fill-in blanks         -->
 <!--   - every "exercise" with additional "program"   -->
-<xsl:template match="exercise[statement/statement and statement/statement/@correct]|exercise[statement/statement and statement/choices]|exercise[statement/statement and statement/blocks]|exercise[statement/statement and statement/matches]|exercise[statement/statement and statement/program]" mode="runestone-manifest">
+<!--   - every "exercise" elected as "shortanswer"    -->
+<!--   - every PROJECT-LIKE with additional "program" -->
+<xsl:template match="exercise[ (@exercise-interactive = 'truefalse') or
+                               (@exercise-interactive = 'multiplechoice') or
+                               (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'coding') or
+                               (@exercise-interactive = 'shortanswer')]
+                              |project[@exercise-interactive = 'coding']
+                              |activity[@exercise-interactive = 'coding']
+                              |exploration[@exercise-interactive = 'coding']
+                              |investigation[@exercise-interactive = 'coding']" mode="runestone-manifest">
     <question>
         <!-- label is from the "exercise" -->
         <xsl:apply-templates select="." mode="runestone-manifest-label"/>
         <!-- Duplicate, but still should look like original (ID, etc.),  -->
         <!-- not knowled. Solutions are available in the originals, via  -->
         <!-- an "in context" link off the Assignment page                -->
-        <xsl:apply-templates select="."  mode="exercise-components">
-            <xsl:with-param name="b-original" select="true()"/>
-            <xsl:with-param name="block-type" select="'visible'"/>
-            <xsl:with-param name="b-has-statement" select="true()" />
-            <xsl:with-param name="b-has-hint"      select="false()" />
-            <xsl:with-param name="b-has-answer"    select="false()" />
-            <xsl:with-param name="b-has-solution"  select="false()" />
-        </xsl:apply-templates>
-    </question>
-</xsl:template>
-
-<!-- short answer questions                      -->
-<!-- conditional on (1) simplicity, (2) location -->
-<!-- NB: match is replicated from the defining template below -->
-<xsl:template match="exercise[statement and not(statement/statement)]|*[&PROJECT-FILTER;][statement and not(statement/statement)]" mode="runestone-manifest">
-    <!-- Only add conditionally based on location and publication file options -->
-    <!-- N.B. these conditions are relicated from -html conversion             -->
-
-    <xsl:variable name="b-is-divisional" select="boolean(ancestor::exercises)"/>
-    <xsl:variable name="b-is-worksheet" select="boolean(ancestor::worksheet)"/>
-    <xsl:variable name="b-is-reading" select="boolean(ancestor::reading-questions)"/>
-    <xsl:variable name="b-is-project" select="boolean(ancestor::*[&PROJECT-FILTER;])"/>
-    <xsl:variable name="b-is-inline" select="not($b-is-divisional or $b-is-worksheet or $b-is-reading or $b-is-project)"/>
-
-
-    <xsl:if test="($b-is-divisional and $b-sa-divisional-dynamic) or
-                  ($b-is-worksheet and $b-sa-worksheet-dynamic) or
-                  ($b-is-reading and $b-sa-reading-dynamic) or
-                  ($b-is-project and $b-sa-project-dynamic) or
-                  ($b-is-inline and $b-sa-inline-dynamic)">
-        <question>
-            <!-- label is from the "exercise" -->
-            <xsl:apply-templates select="." mode="runestone-manifest-label"/>
-            <!-- Duplicate, but still should look like original (ID, etc.),  -->
-            <!-- not knowled. Solutions are available in the originals, via  -->
-            <!-- an "in context" link off the Assignment page                -->
+        <htmlsrc>
             <xsl:apply-templates select="."  mode="exercise-components">
                 <xsl:with-param name="b-original" select="true()"/>
                 <xsl:with-param name="block-type" select="'visible'"/>
@@ -482,8 +521,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-has-answer"    select="false()" />
                 <xsl:with-param name="b-has-solution"  select="false()" />
             </xsl:apply-templates>
-        </question>
-    </xsl:if>
+        </htmlsrc>
+    </question>
 </xsl:template>
 
 <xsl:template match="exercise[webwork-reps]" mode="runestone-manifest">
@@ -531,16 +570,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Hacked -->
 
-<xsl:template match="exercise[@runestone]" mode="runestone-to-interactive">
+<xsl:template match="exercise[@exercise-interactive = 'htmlhack']" mode="runestone-to-interactive">
     <xsl:variable name="runestone" select="string(@runestone)"/>
     <xsl:copy-of select="document('rs-substitutes.xml', $original)/substitutes/substitute[@xml:id = $runestone]"/>
 </xsl:template>
 
 <!-- True/False -->
 
-<xsl:template match="exercise/statement[statement/@correct]" mode="runestone-to-interactive">
+<xsl:template match="exercise[@exercise-interactive = 'truefalse']" mode="runestone-to-interactive">
     <xsl:variable name="the-id">
-        <xsl:apply-templates select="parent::exercise" mode="html-id"/>
+        <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
     <div class="runestone ">
         <!-- ul can have multiple answer attribute -->
@@ -603,9 +642,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Multiple Choice -->
 
-<xsl:template match="exercise/statement[statement and choices]" mode="runestone-to-interactive">
+<xsl:template match="exercise[@exercise-interactive = 'multiplechoice']" mode="runestone-to-interactive">
     <xsl:variable name="the-id">
-        <xsl:apply-templates select="parent::exercise" mode="html-id"/>
+        <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
     <div class="runestone ">
         <!-- ul can have multiple answer attribute -->
@@ -644,7 +683,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
-<xsl:template match="exercise/statement/choices/choice">
+<xsl:template match="choices/choice">
     <xsl:param name="the-id"/>
 
     <!-- id for each "choice"                  -->
@@ -678,14 +717,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Parsons Problem -->
 
-<xsl:template match="exercise/statement[statement and blocks]" mode="runestone-to-interactive">
+<xsl:template match="exercise[@exercise-interactive = 'parson']" mode="runestone-to-interactive">
     <!-- determine this option before context switches -->
-    <xsl:variable name="b-natural" select="not(parent::exercise/@language) or (parent::exercise/@language = 'natural')"/>
+    <xsl:variable name="b-natural" select="not(@language) or (@language = 'natural')"/>
     <div class="runestone" style="max-width: none;">
-        <div data-component="parsons" class=" parsons">
-            <xsl:attribute name="id">
-                <xsl:apply-templates select="parent::exercise" mode="html-id"/>
-            </xsl:attribute>
+        <div data-component="parsons" class="parsons">
+            <xsl:apply-templates select="." mode="runestone-id-attribute"/>
             <div class="parsons_question parsons-text" >
                 <!-- the prompt -->
                 <xsl:apply-templates select="statement"/>
@@ -699,7 +736,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:when>
                         <xsl:otherwise>
                             <!-- must now have @language -->
-                            <xsl:value-of select="parent::exercise/@language"/>
+                            <xsl:value-of select="@language"/>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:attribute>
@@ -714,7 +751,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:when test="$numbered = 'no'"/>
                     <xsl:otherwise/>
                 </xsl:choose>
-                <xsl:if test="parent::exercise/@adaptive = 'yes'">
+                <xsl:if test="@adaptive = 'yes'">
                     <xsl:attribute name="data-adaptive">
                         <xsl:text>true</xsl:text>
                     </xsl:attribute>
@@ -724,7 +761,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- (not relevant for natural language)             -->
                 <xsl:attribute name="data-noindent">
                     <xsl:choose>
-                        <xsl:when test="parent::exercise/@indentation = 'hide'">
+                        <xsl:when test="@indentation = 'hide'">
                             <xsl:text>false</xsl:text>
                         </xsl:when>
                         <!-- default is 'show' -->
@@ -742,7 +779,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
-<xsl:template match="exercise/statement/blocks/block">
+<xsl:template match="blocks/block">
     <xsl:param name="b-natural"/>
 
     <xsl:choose>
@@ -783,7 +820,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="exercise/statement/blocks/block/choice">
+<xsl:template match="blocks/block/choice">
     <xsl:param name="b-natural"/>
 
     <xsl:choose>
@@ -803,9 +840,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Matching Problem -->
 
-<xsl:template match="exercise/statement[statement and matches]" mode="runestone-to-interactive">
+<xsl:template match="exercise[@exercise-interactive = 'matching']" mode="runestone-to-interactive">
     <xsl:variable name="html-id">
-        <xsl:apply-templates select="parent::exercise" mode="html-id"/>
+        <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
     <div class="runestone">
         <ul data-component="dragndrop" data-question_label="" style="visibility: hidden;">
@@ -845,6 +882,223 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
+<!-- Clickable Area Problem -->
+
+<xsl:template match="exercise[@exercise-interactive = 'clickablearea']" mode="runestone-to-interactive">
+    <xsl:variable name="html-id">
+        <xsl:apply-templates select="." mode="runestone-id"/>
+    </xsl:variable>
+    <div class="runestone">
+        <div data-component="clickablearea" class="runestone" data-question_label="" style="visibility: hidden;">
+            <xsl:attribute name="id">
+                <xsl:value-of select="$html-id"/>
+            </xsl:attribute>
+            <span data-question="">
+                <xsl:apply-templates select="statement"/>
+            </span>
+            <span data-feedback="">
+                <xsl:apply-templates select="feedback"/>
+            </span>
+            <xsl:apply-templates select="areas" mode="clickable-html"/>
+        </div>
+    </div>
+</xsl:template>
+
+<!-- We use modal templates, primarily for the case of code, -->
+<!-- so we do not mangle text() using routines in -common    -->
+<!-- and to preserve the structure of the program.           -->
+
+<xsl:template match="areas" mode="clickable-html">
+    <xsl:choose>
+        <xsl:when test="cline">
+            <!-- code, so make the "pre" structure -->
+            <pre>
+                <xsl:apply-templates select="cline" mode="clickable-html"/>
+            </pre>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- regular text, this will match a default template later -->
+            <xsl:apply-templates select="*" mode="clickable-html"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- A mix of text and "area", and needs a newline -->
+<xsl:template match="areas/cline" mode="clickable-html">
+    <xsl:apply-templates select="text()|area" mode="clickable-html"/>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Avoid falling into low-level manipulations to remain verbatim -->
+<xsl:template match="areas/cline/text()" mode="clickable-html">
+    <xsl:value-of select="."/>
+</xsl:template>
+
+<!-- Constructions for regular text ("p", "ul", etc) should   -->
+<!-- drop out to default templates, as will an "area" element -->
+<!-- (both code and regular text).                            -->
+<xsl:template match="*" mode="clickable-html">
+    <xsl:apply-templates select="."/>
+</xsl:template>
+
+<!-- NB: we want a generic template (not modal) for use within      -->
+<!-- sentences, etc.  As such it will then be available in every    -->
+<!-- derived conversion, *but* the "area" element should not        -->
+<!-- survive a conversion to a static form, so will not be present. -->
+<xsl:template match="area">
+    <span>
+        <xsl:choose>
+            <xsl:when test="@correct = 'no'">
+                <xsl:attribute name="data-incorrect"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:attribute name="data-correct"/>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:apply-templates/>
+    </span>
+</xsl:template>
+
+<!-- Fill-in-the-Blanks problem -->
+
+<!-- Runestone structure -->
+<xsl:template match="exercise[@exercise-interactive = 'fillin-basic']" mode="runestone-to-interactive">
+    <div class="runestone">
+        <!-- dropped "visibility: hidden" on next div -->
+        <div data-component="fillintheblank" data-question_label="">
+            <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+            <xsl:apply-templates select="statement"/>
+            <script type="application/json">
+                <xsl:apply-templates select="setup" mode="json-conditions"/>
+            </script>
+        </div>
+    </div>
+</xsl:template>
+
+<!-- simple substitution in output -->
+<xsl:template match="exercise/statement//var">
+    <!-- NB: this code is used in formulating static representations -->
+    <!-- count location of (context) "var" in problem statement      -->
+    <xsl:variable name="location">
+        <xsl:number from="statement"/>
+    </xsl:variable>
+    <!-- locate corresponding "var" in "setup" -->
+    <xsl:variable name="setup-var" select="ancestor::exercise/setup/var[position() = $location]"/>
+
+    <!-- Know can tell what sort of data goes into the form entry -->
+    <xsl:variable name="placeholder-hint">
+        <xsl:choose>
+            <xsl:when test="$setup-var/condition[1]/@number">
+                <xsl:text>Number</xsl:text>
+            </xsl:when>
+            <xsl:when test="$setup-var/condition[1]/@string">
+                <xsl:text>Text</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- the actual form fill-in, with hint -->
+    <input type="text" placeholder="{$placeholder-hint}"/>
+</xsl:template>
+
+<!-- JSON list-of-list structure -->
+<xsl:template match="exercise/setup"  mode="json-conditions">
+    <!-- outermost list begin -->
+    <xsl:text>[</xsl:text>
+    <xsl:for-each select="var">
+        <!-- per-var list begin -->
+        <xsl:text>[</xsl:text>
+        <xsl:for-each select="condition">
+            <!-- where the real content originates -->
+            <xsl:apply-templates select="." mode="condition-to-json"/>
+            <!-- separate dictionaries for conditions -->
+            <xsl:if test="following-sibling::condition">
+                <xsl:text>, </xsl:text>
+            </xsl:if>
+        </xsl:for-each>
+        <!-- per-var list end -->
+        <xsl:text>]</xsl:text>
+        <!-- separate vars -->
+        <xsl:if test="following-sibling::var">
+            <xsl:text>, </xsl:text>
+        </xsl:if>
+    </xsl:for-each>
+    <!-- outermost list end -->
+    <xsl:text>]</xsl:text>
+</xsl:template>
+
+<!-- JSON dictionary for numerical condition -->
+<xsl:template match="setup/var/condition[@number]" mode="condition-to-json">
+    <!-- per-condition dictionary begin -->
+    <xsl:text>{</xsl:text>
+    <xsl:text>"number": [</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@tolerance">
+            <xsl:value-of select="@number - @tolerance"/>
+            <xsl:text>,</xsl:text>
+            <xsl:value-of select="@number + @tolerance"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="@number"/>
+            <xsl:text>, </xsl:text>
+            <xsl:value-of select="@number"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>]</xsl:text>
+    <xsl:if test="feedback">
+        <xsl:text>, "feedback": "</xsl:text>
+        <xsl:apply-templates select="feedback" mode="serialize-feedback"/>
+        <xsl:text>"</xsl:text>
+    </xsl:if>
+    <!-- per-condition dictionary end -->
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- JSON dictionary for string condition -->
+<xsl:template match="setup/var/condition[@string]" mode="condition-to-json">
+    <!-- per-condition dictionary begin -->
+    <xsl:text>{</xsl:text>
+    <!-- regex string match, drop    -->
+    <!-- leading/trailing whitespace -->
+    <xsl:text>"regex": "</xsl:text>
+    <!-- JSON escapes necessary for regular expression -->
+    <xsl:call-template name="escape-json-string">
+        <xsl:with-param name="text">
+            <xsl:text>^\s*</xsl:text>
+            <xsl:value-of select="@string"/>
+            <xsl:text>\s*$</xsl:text>
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>"</xsl:text>
+    <!-- flag for case-sensitive match -->
+    <!-- default:  'sensitive'         -->
+    <xsl:text>, "regexFlags": "</xsl:text>
+    <xsl:if test="parent::var/@case = 'insensitive'">
+        <xsl:text>i</xsl:text>
+    </xsl:if>
+    <xsl:text>"</xsl:text>
+    <!-- optional feedback -->
+    <xsl:if test="feedback">
+        <xsl:text>, "feedback": "</xsl:text>
+        <xsl:apply-templates select="feedback" mode="serialize-feedback"/>
+        <xsl:text>"</xsl:text>
+    </xsl:if>
+    <!-- per-condition dictionary end -->
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<xsl:template match="setup/var/condition/feedback" mode="serialize-feedback">
+    <xsl:variable name="feedback-rtf">
+        <xsl:apply-templates select="."/>
+    </xsl:variable>
+    <!-- serialize HTML as text, then escape as JSON -->
+    <xsl:call-template name="escape-json-string">
+        <xsl:with-param name="text">
+            <xsl:apply-templates select="exsl:node-set($feedback-rtf)" mode="serialize"/>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+
 <!-- Short Answer problem -->
 
 <!-- Traditional form, but not converted like other interactive exercises -->
@@ -852,12 +1106,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- interactive, see "static" v. "dynamic" publisher variables.          -->
 <!-- NB - not currently applying to short-form with no "statement" -->
 <!-- NB: match is recycled in manifest formation                   -->
-<xsl:template match="exercise[statement and not(statement/statement)]|*[&PROJECT-FILTER;][statement and not(statement/statement)]" mode="runestone-to-interactive">
+<xsl:template match="exercise[@exercise-interactive = 'shortanswer']" mode="runestone-to-interactive">
     <div class="runestone">
-        <div data-component="shortanswer" data-question_label="" class="journal alert alert-warning" data-mathjax="">
-            <xsl:attribute name="id">
-                <xsl:apply-templates select="." mode="html-id"/>
-            </xsl:attribute>
+        <div data-component="shortanswer" data-question_label="" class="journal" data-mathjax="">
+            <xsl:apply-templates select="." mode="runestone-id-attribute"/>
             <xsl:apply-templates select="statement"/>
         </div>
     </div>
@@ -865,7 +1117,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Active Code exercise -->
 
-<xsl:template match="exercise/statement[statement and program]|project/statement[statement and program]|activity/statement[statement and program]|exploration/statement[statement and program]|investigation/statement[statement and program]" mode="runestone-to-interactive">
+<xsl:template match="exercise[@exercise-interactive = 'coding']|project[@exercise-interactive = 'coding']|activity[@exercise-interactive = 'coding']|exploration[@exercise-interactive = 'coding']|investigation[@exercise-interactive = 'coding']" mode="runestone-to-interactive">
     <xsl:apply-templates select="program" mode="runestone-activecode"/>
 </xsl:template>
 
@@ -881,7 +1133,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="height"/>
 
     <xsl:variable name="hid">
-        <xsl:apply-templates select="." mode="html-id"/>
+        <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
 
     <div id="{$hid}" data-component="youtube" class="align-left youtube-video"
@@ -916,7 +1168,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="program" mode="runestone-activecode">
     <!-- need to be sure there is a "double" statement -->
     <!-- from the -assembly representation             -->
-    <xsl:variable name="exercise-statement" select="parent::statement/child::statement"/>
+    <xsl:variable name="exercise-statement" select="preceding-sibling::statement"/>
 
     <xsl:variable name="active-language">
         <xsl:apply-templates select="." mode="active-language"/>
@@ -932,17 +1184,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="hid">
         <xsl:choose>
             <xsl:when test="$exercise-statement">
-                <xsl:apply-templates select="parent::statement/parent::*" mode="html-id"/>
-                <xsl:text>-ac</xsl:text>
+                <xsl:apply-templates select="parent::*" mode="runestone-id"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:apply-templates select="." mode="html-id"/>
+                <xsl:apply-templates select="." mode="runestone-id"/>
             </xsl:otherwise>
         </xsl:choose>
-    </xsl:variable>
-    <!-- assumes we get here from inside an "exercise" -->
-    <xsl:variable name="num">
-        <xsl:apply-templates select="ancestor::exercise" mode="number"/>
     </xsl:variable>
     <xsl:choose>
         <!-- unsupported on Runestone, period -->
@@ -1012,6 +1259,51 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </div>
         </xsl:when>
     </xsl:choose>
+</xsl:template>
+
+<!-- ######## -->
+<!-- CodeLens -->
+<!-- ######## -->
+
+<xsl:template match="program[@interactive = 'codelens']" mode="runestone-codelens">
+    <!-- as a variable so it does not look like an AVT -->
+    <xsl:variable name="parameter-dictionary">
+        <xsl:text>{</xsl:text>
+        <xsl:text>"embeddedMode": true, </xsl:text>
+        <xsl:text>"lang": "</xsl:text>
+        <xsl:value-of select="@language"/>
+        <xsl:text>", </xsl:text>
+        <xsl:text>"jumpToEnd": false</xsl:text>
+        <xsl:text>}</xsl:text>
+    </xsl:variable>
+    <!-- locate trace data via a *.js file, managed or not -->
+    <xsl:variable name="trace-file">
+        <xsl:value-of select="$generated-directory"/>
+        <xsl:if test="$b-managed-directories">
+            <xsl:text>trace/</xsl:text>
+        </xsl:if>
+        <xsl:apply-templates select="." mode="visible-id"/>
+        <xsl:text>.js</xsl:text>
+    </xsl:variable>
+    <!-- the Runestone HTML -->
+    <div class="runestone codelens">
+        <div class="cd_section" data-component="codelens" data-question_label="">
+            <div class="pytutorVisualizer">
+                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                <xsl:attribute name="data-params">
+                    <xsl:value-of select="$parameter-dictionary"/>
+                </xsl:attribute>
+            </div>
+            <!-- no caption, should go inside a listing? -->
+        </div>
+        <!-- access simple script with variable set to -->
+        <!-- the trace data via the @src attribute     -->
+        <script>
+            <xsl:attribute name="src">
+                <xsl:value-of select="$trace-file"/>
+            </xsl:attribute>
+        </script>
+    </div>
 </xsl:template>
 
 <!-- Some Runestone languages are supported within a browser,      -->

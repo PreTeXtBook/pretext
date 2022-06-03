@@ -1166,7 +1166,7 @@
       <xs:attribute name="interactive">
         <xs:simpleType>
           <xs:restriction base="xs:token">
-            <xs:enumeration value="pythontutor"/>
+            <xs:enumeration value="codelens"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
@@ -1207,7 +1207,7 @@
               </xs:restriction>
             </xs:simpleType>
           </xs:attribute>
-          <xs:attribute name="label"/>
+          <xs:attribute name="marker"/>
         </xs:complexType>
       </xs:element>
       <xs:element ref="ul"/>
@@ -1247,7 +1247,7 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="label">
+      <xs:attribute name="marker">
         <xs:simpleType>
           <xs:restriction base="xs:token">
             <xs:enumeration value="disc"/>
@@ -2035,7 +2035,7 @@
               </xs:element>
             </xs:sequence>
             <xs:attribute name="cols"/>
-            <xs:attribute name="label"/>
+            <xs:attribute name="marker"/>
           </xs:complexType>
         </xs:element>
       </xs:choice>
@@ -2890,10 +2890,20 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:group name="FillInMath">
+    <xs:sequence>
+      <xs:element name="fillin">
+        <xs:complexType>
+          <xs:attribute name="fill"/>
+          <xs:attribute name="characters" type="xs:integer"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
   <xs:element name="m">
     <xs:complexType mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="fillin"/>
+        <xs:group ref="FillInMath"/>
         <xs:element ref="var"/>
       </xs:choice>
     </xs:complexType>
@@ -2904,7 +2914,7 @@
         <xs:group ref="MetaDataTarget"/>
         <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:element ref="xref"/>
-          <xs:element ref="fillin"/>
+          <xs:group ref="FillInMath"/>
           <xs:element ref="var"/>
         </xs:choice>
       </xs:sequence>
@@ -2964,7 +2974,7 @@
   <xs:element name="me">
     <xs:complexType mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="fillin"/>
+        <xs:group ref="FillInMath"/>
         <xs:element ref="var"/>
       </xs:choice>
     </xs:complexType>
@@ -2974,7 +2984,7 @@
       <xs:sequence>
         <xs:group ref="MetaDataTarget"/>
         <xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:element ref="fillin"/>
+          <xs:group ref="FillInMath"/>
           <xs:element ref="var"/>
         </xs:choice>
       </xs:sequence>
@@ -3215,6 +3225,7 @@
         <xs:element ref="vs"/>
         <xs:element ref="viz"/>
       </xs:choice>
+      <xs:group ref="FillInText"/>
       <xs:element ref="quantity"/>
     </xs:choice>
   </xs:group>
@@ -3295,6 +3306,15 @@
       <xs:attributeGroup ref="UnitSpecification"/>
     </xs:complexType>
   </xs:element>
+  <xs:group name="FillInText">
+    <xs:sequence>
+      <xs:element name="fillin">
+        <xs:complexType>
+          <xs:attribute name="characters" type="xs:integer"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
   <xs:attributeGroup name="UnitSpecification">
     <xs:attribute name="prefix"/>
     <xs:attribute name="base" use="required"/>
@@ -3307,7 +3327,6 @@
         <xs:element ref="ndash"/>
         <xs:element ref="mdash"/>
       </xs:choice>
-      <xs:element ref="fillin"/>
       <xs:choice>
         <xs:element ref="lsq"/>
         <xs:element ref="rsq"/>
@@ -3435,11 +3454,6 @@
   <xs:element name="kbd">
     <xs:complexType mixed="true">
       <xs:attribute name="name"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="fillin">
-    <xs:complexType>
-      <xs:attribute name="characters" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   <xs:group name="Music">

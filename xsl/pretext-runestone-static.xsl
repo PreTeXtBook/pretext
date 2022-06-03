@@ -41,7 +41,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- True/False -->
 
-<xsl:template match="exercise[statement/@correct]" mode="runestone-to-static">
+<xsl:template match="exercise[@exercise-interactive = 'truefalse']" mode="runestone-to-static">
+    <!-- metadata (idx, title) -->
+    <xsl:copy-of select="statement/preceding-sibling::*"/>
     <!-- prompt, followed by ordered list of choices -->
     <xsl:text>&#xa;</xsl:text>
     <statement>
@@ -80,12 +82,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </solution>
 </xsl:template>
 
-<xsl:template match="exercise[statement and choices]" mode="runestone-to-static">
+<xsl:template match="exercise[@exercise-interactive = 'multiplechoice']" mode="runestone-to-static">
+    <!-- metadata (idx, title) -->
+    <xsl:copy-of select="statement/preceding-sibling::*"/>
     <!-- prompt, followed by ordered list of choices -->
     <xsl:text>&#xa;</xsl:text>
     <statement>
         <xsl:copy-of select="statement/node()"/>
-        <p><ol label="A."> <!-- conforms to RS markers -->
+        <p><ol marker="A."> <!-- conforms to RS markers -->
             <xsl:for-each select="choices/choice">
                 <li>
                     <xsl:copy-of select="statement/node()"/>
@@ -114,7 +118,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- feedback for each choice, in a list -->
     <xsl:text>&#xa;</xsl:text>
     <solution>
-        <p><ol label="A."> <!-- conforms to RS markers -->
+        <p><ol marker="A."> <!-- conforms to RS markers -->
             <xsl:for-each select="choices/choice">
                 <li>
                     <title>
@@ -134,12 +138,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </solution>
 </xsl:template>
 
-<xsl:template match="exercise[statement and blocks]" mode="runestone-to-static">
+<xsl:template match="exercise[@exercise-interactive = 'parson']" mode="runestone-to-static">
     <!-- determine these options before context switches -->
     <xsl:variable name="b-natural" select="not(@language) or (@language = 'natural')"/>
     <xsl:variable name="b-indent" select="@indentation = 'hide'"/>
     <!-- we use numbers in static versions, if requested, but ignore left/right distinction -->
     <xsl:variable name="b-numbered" select="(blocks/@numbered = 'left') or (blocks/@numbered = 'right')"/>
+    <!-- metadata (idx, title) -->
+    <xsl:copy-of select="statement/preceding-sibling::*"/>
     <!-- Statement -->
     <statement>
         <xsl:copy-of select="statement/node()"/>
@@ -157,7 +163,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <p>
             <xsl:element name="{$list-type}">
                 <xsl:if test="$list-type = 'ol'">
-                    <xsl:attribute name="label">
+                    <xsl:attribute name="marker">
                         <xsl:text>1.</xsl:text>
                     </xsl:attribute>
                 </xsl:if>
@@ -170,11 +176,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <!-- separate alternatives with "Either/Or"  -->
                                 <!-- Order is as authored                    -->
                                 <xsl:element name="{$list-type}">
-                                    <xsl:if test="$list-type = 'ol'">
-                                        <xsl:attribute name="label">
-                                            <xsl:text>(a)</xsl:text>
-                                        </xsl:attribute>
-                                    </xsl:if>
+                                    <xsl:attribute name="marker">
+                                        <xsl:choose>
+                                            <xsl:when test="$list-type = 'ol'">
+                                                <!-- sub-number as a, b, c -->
+                                                <xsl:text>(a)</xsl:text>
+                                            </xsl:when>
+                                            <xsl:when test="$list-type = 'ul'">
+                                                <!-- no markers on "bulleted" sublists -->
+                                                <xsl:text/>
+                                            </xsl:when>
+                                        </xsl:choose>
+                                    </xsl:attribute>
                                     <xsl:for-each select="choice">
                                         <li>
                                             <xsl:if test="$list-type = 'ul'">
@@ -418,7 +431,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Matching Problems -->
 
-<xsl:template match="exercise[statement and matches]" mode="runestone-to-static">
+<xsl:template match="exercise[@exercise-interactive = 'matching']" mode="runestone-to-static">
+    <!-- metadata (idx, title) -->
+    <xsl:copy-of select="statement/preceding-sibling::*"/>
     <!-- Statement -->
     <statement>
         <xsl:copy-of select="statement/node()"/>
@@ -471,9 +486,220 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </row>
 </xsl:template>
 
+<!-- Clickable Area -->
+
+<xsl:template match="exercise[@exercise-interactive = 'clickablearea']" mode="runestone-to-static">
+    <!-- metadata (idx, title) -->
+    <xsl:copy-of select="statement/preceding-sibling::*"/>
+    <!-- Statement -->
+    <statement>
+        <xsl:copy-of select="statement/node()"/>
+        <xsl:apply-templates select="areas" mode="static-areas"/>
+    </statement>
+    <xsl:copy-of select="hint"/>
+    <answer>
+        <p>
+            <xsl:text>Correct: </xsl:text>
+            <xsl:for-each select="areas//area[not(@correct = 'no')]">
+                <xsl:apply-templates select="." mode="answer-areas"/>
+                <xsl:if test="not(position() = last())">
+                    <xsl:text>; </xsl:text>
+                </xsl:if>
+            </xsl:for-each>
+            <xsl:text>.</xsl:text>
+            <xsl:text> </xsl:text>
+            <xsl:text>Incorrect: </xsl:text>
+            <xsl:for-each select="areas//area[@correct = 'no']">
+                <xsl:apply-templates select="." mode="answer-areas"/>
+                <xsl:if test="not(position() = last())">
+                    <xsl:text>; </xsl:text>
+                </xsl:if>
+            </xsl:for-each>
+            <xsl:text>.</xsl:text>
+            <xsl:copy-of select="feedback/node()"/>
+        </p>
+    </answer>
+    <!-- A text version can get markup of correct and incorrect areas    -->
+    <!-- (italics, strikethrough) but no good way to markup code easily. -->
+    <!-- So no "solution" for code versions.                             -->
+    <xsl:if test="not(areas/cline)">
+        <solution>
+            <xsl:apply-templates select="areas/node()" mode="solution-areas"/>
+        </solution>
+    </xsl:if>
+</xsl:template>
+
+<!-- We do a xerox'ing pass to construct the problem. -->
+<!--   (1) "area" gets dropped (invisible in static)  -->
+<!--       [could italicize correct and incorrect?]   -->
+<!--   (2) "cline" get reconstructed as a "program"   -->
+
+<xsl:template match="node()|@*" mode="static-areas">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="static-areas"/>
+    </xsl:copy>
+</xsl:template>
+
+<xsl:template match="areas" mode="static-areas">
+    <xsl:choose>
+        <xsl:when test="cline">
+            <!-- code, so make a "program" structure -->
+            <program>
+                <xsl:copy-of select="@language"/>
+                <input>
+                    <xsl:apply-templates select="cline" mode="static-areas"/>
+                </input>
+            </program>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- regular text, this will match a default template later -->
+            <xsl:apply-templates select="*" mode="static-areas"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="areas/cline" mode="static-areas">
+    <xsl:apply-templates select="text()|area" mode="static-areas"/>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="cline/text()" mode="static-areas">
+    <xsl:value-of select="."/>
+</xsl:template>
+
+<!-- NB: don't apply to attributes of an "area" (just @correct) -->
+<xsl:template match="area" mode="static-areas">
+    <xsl:apply-templates select="node()" mode="static-areas"/>
+</xsl:template>
+
+<!-- Modal templates reproduce answers, which could have some  -->
+<!-- markup in them?  We enter here at each "area" to form the -->
+<!-- lists of correct and incorrect areas.                     -->
+
+<xsl:template match="node()|@*" mode="answer-areas">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="answer-areas"/>
+    </xsl:copy>
+</xsl:template>
+
+<xsl:template match="area[parent::cline]" mode="answer-areas">
+    <c>
+        <!-- NB: don't xerox attributes of an "area" (just @correct) -->
+        <xsl:apply-templates select="node()" mode="answer-areas"/>
+    </c>
+</xsl:template>
+
+<xsl:template match="area[not(parent::cline) and not(@correct = 'no')]" mode="answer-areas">
+    <em>
+        <!-- NB: don't xerox attributes of an "area" (just @correct) -->
+        <xsl:apply-templates select="node()" mode="answer-areas"/>
+    </em>
+</xsl:template>
+
+<xsl:template match="area[not(parent::cline) and (@correct = 'no')]" mode="answer-areas">
+    <delete>
+        <!-- NB: don't xerox attributes of an "area" (just @correct) -->
+        <xsl:apply-templates select="node()" mode="answer-areas"/>
+    </delete>
+</xsl:template>
+
+<!-- protect from low-level routines in -common -->
+<xsl:template match="cline/area/text()" mode="answer-areas">
+    <xsl:value-of select="."/>
+</xsl:template>
+
+<!-- For a text version (only, not a code version) we xerox -->
+<!-- the contents of "areas" and slide-in some highlighting -->
+<!-- of the correct and incorrect "area".                   -->
+
+<xsl:template match="node()|@*" mode="solution-areas">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="solution-areas"/>
+    </xsl:copy>
+</xsl:template>
+
+<xsl:template match="area[not(@correct = 'no')]" mode="solution-areas">
+    <em>
+        <!-- NB: don't xerox attributes of an "area" (just @correct) -->
+        <xsl:apply-templates select="node()" mode="solution-areas"/>
+    </em>
+</xsl:template>
+
+<xsl:template match="area[@correct = 'no']" mode="solution-areas">
+    <delete>
+        <!-- NB: don't xerox attributes of an "area" (just @correct) -->
+        <xsl:apply-templates select="node()" mode="solution-areas"/>
+    </delete>
+</xsl:template>
+
+<!-- Fill-In the Blanks (Basic) -->
+
+<xsl:template match="exercise[@exercise-interactive = 'fillin-basic']" mode="runestone-to-static">
+    <!-- reproduce statement identically, but replace var w/ fillin -->
+    <xsl:apply-templates select="statement" mode="fillin-statement"/>
+    <xsl:apply-templates select="statement" mode="fillin-solution"/>
+
+</xsl:template>
+
+<!-- Fillin Statement -->
+<xsl:template match="node()|@*" mode="fillin-statement">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="fillin-statement"/>
+    </xsl:copy>
+</xsl:template>
+
+<xsl:template match="var" mode="fillin-statement">
+    <fillin characters="5"/>
+</xsl:template>
+
+<!-- Fillin complete solution -->
+
+<xsl:template match="node()|@*" mode="fillin-solution">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="fillin-solution"/>
+    </xsl:copy>
+</xsl:template>
+
+<xsl:template match="statement" mode="fillin-solution">
+    <solution>
+        <xsl:apply-templates select="node()|@*" mode="fillin-solution"/>
+        <!-- xerox feedback for correct response on each var -->
+        <xsl:for-each select="ancestor::exercise/setup/var/condition[1]/feedback">
+            <xsl:apply-templates select="node()" mode="fillin-solution"/>
+        </xsl:for-each>
+    </solution>
+</xsl:template>
+
+<xsl:template match="var" mode="fillin-solution">
+    <!-- NB: this code is used in formulating HTML representations -->
+    <!-- count location of (context) "var" in problem statement    -->
+    <xsl:variable name="location">
+        <xsl:number from="statement"/>
+    </xsl:variable>
+    <!-- locate corresponding "var" in "setup" -->
+    <xsl:variable name="setup-var" select="ancestor::exercise/setup/var[position() = $location]"/>
+
+    <!-- Know can tell what the correct answer is, from first "condition"-->
+    <fillin characters="1"/>
+    <xsl:choose>
+        <xsl:when test="$setup-var/condition[1]/@number">
+            <m>
+                <xsl:value-of select="$setup-var/condition[1]/@number"/>
+            </m>
+        </xsl:when>
+        <xsl:when test="$setup-var/condition[1]/@string">
+            <xsl:value-of select="$setup-var/condition[1]/@string"/>
+        </xsl:when>
+    </xsl:choose>
+    <fillin characters="1"/>
+</xsl:template>
+
+
 <!-- Active Code -->
 
-<xsl:template match="exercise[statement and program]|project[statement and program]|activity[statement and program]|exploration[statement and program]|investigation[statement and program]" mode="runestone-to-static">
+<xsl:template match="exercise[@exercise-interactive = 'coding']|project[@exercise-interactive = 'coding']|activity[@exercise-interactive = 'coding']|exploration[@exercise-interactive = 'coding']|investigation[@exercise-interactive = 'coding']" mode="runestone-to-static">
+    <!-- metadata (idx, title) -->
+    <xsl:copy-of select="statement/preceding-sibling::*"/>
     <statement>
         <!-- duplicate the authored prompt/statement -->
         <xsl:copy-of select="statement/node()"/>
