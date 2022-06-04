@@ -32,6 +32,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </html>
 
     <!-- Relative path, relative to "main" source file -->
-    <source webwork-problems="webwork-representations.ptx"/>
+    <source webwork-problems="webwork-representations.xml"/>
+
+    <!-- These are the defaults but written explicitly here to serve as a model. -->
+    <webwork
+        server="https://webwork-ptx.aimath.org"
+        course="anonymous"
+        coursepassword="anonymous"
+        user="anonymous"
+        userpassword="anonymous"
+        />
 
 </publication>
