@@ -6,7 +6,6 @@
 <!-- PTX:WARNING: PGML wanted to center align here. -->
 <image xmlns:pi="http://pretextbook.org/2020/pretext/internal" width="50%" pi:generated="webwork/images/webwork-12-image-1"/>
 <p>Name an animal that belongs in the center region. Spelling counts!</p>
-<p><fillin name="AnSwEr0001" characters="30"/></p>
 </statement>
       <answer>
         <p>
@@ -18,9 +17,6 @@
     <pg><![CDATA[
 #############################################
 ###       Generated from PreTeXt source      
-###       on 2022-03-23T23:07:56-07:00       
-###   A recent stable commit (2020-08-09):   
-### 98f21740783f166a773df4dc83cab5293ab63a4a 
 ###                                          
 ###         https://pretextbook.org          
 ###                                          
@@ -134,7 +130,6 @@ ENDDOCUMENT();
       <task><title>Use the Quadratic Formula</title>
 <statement><p>Use the quadratic formula to find the solution set to</p>
 <p><me>{2x^{2}-7x-15}=0</me></p>
-<p><fillin name="AnSwEr0004" characters="30"/></p>
 </statement><answer><p><m>\frac{-3}{2}, 5</m></p></answer><solution><p>Recall that the quadratic formula is given in Subsection<nbsp/>1.1.</p>
 <p>You already identified <m>a = 2\text{,}</m> <m>b = -7\text{,}</m> and <m>c = -15\text{,}</m> and the results from using these in the quadratic formula are <m>-\frac{3}{2}</m> and <m>5\text{.}</m></p>
 </solution></task>
@@ -143,9 +138,6 @@ ENDDOCUMENT();
     <pg><![CDATA[
 #############################################
 ###       Generated from PreTeXt source      
-###       on 2022-03-23T23:07:56-07:00       
-###   A recent stable commit (2020-08-09):   
-### 98f21740783f166a773df4dc83cab5293ab63a4a 
 ###                                          
 ###         https://pretextbook.org          
 ###                                          
@@ -283,15 +275,12 @@ ENDDOCUMENT();
       <statement><p><ol label="a.">
 <li>
 <p>The average cost of gasoline in the United States in 2010 was $2.78 per gallon. How much gasoline would $20 get you in 2010, on average?</p>
-<p><fillin name="AnSwEr0001" characters="10"/></p>
 </li>
 <li>
 <p>In 2011, the average cost was $3.52 per gallon. What percent increase was that from 2010?</p>
-<p><fillin name="AnSwEr0002" characters="10"/></p>
 </li>
 <li>
 <p>In 2012, the cost had risen 2.8% from the 2011 cost. What was the cost of a gallon of gasoline in 2012?</p>
-<p><fillin name="AnSwEr0003" characters="10"/></p>
 </li>
 </ol></p>
 </statement>
@@ -315,9 +304,6 @@ ENDDOCUMENT();
     <pg><![CDATA[
 #############################################
 ###       Generated from PreTeXt source      
-###       on 2022-03-23T23:07:57-07:00       
-###   A recent stable commit (2020-08-09):   
-### 98f21740783f166a773df4dc83cab5293ab63a4a 
 ###                                          
 ###         https://pretextbook.org          
 ###                                          
@@ -499,9 +485,6 @@ ENDDOCUMENT();
     <pg><![CDATA[
 #############################################
 ###       Generated from PreTeXt source      
-###       on 2022-03-23T23:07:56-07:00       
-###   A recent stable commit (2020-08-09):   
-### 98f21740783f166a773df4dc83cab5293ab63a4a 
 ###                                          
 ###         https://pretextbook.org          
 ###                                          
@@ -600,7 +583,6 @@ ENDDOCUMENT();
   <webwork-reps version="2" xml:id="extracted-webwork-9" ww-id="webwork-9">
     <static seed="9">
       <statement><p>Simplify the expression <m>{x^{2}x^{5}}\text{.}</m></p>
-<p><fillin name="AnSwEr0001" characters="10"/></p>
 </statement>
       <hint><p>Add the exponents.</p>
 </hint>
@@ -620,9 +602,6 @@ ENDDOCUMENT();
     <pg><![CDATA[
 #############################################
 ###       Generated from PreTeXt source      
-###       on 2022-03-23T23:07:56-07:00       
-###   A recent stable commit (2020-08-09):   
-### 98f21740783f166a773df4dc83cab5293ab63a4a 
 ###                                          
 ###         https://pretextbook.org          
 ###                                          
