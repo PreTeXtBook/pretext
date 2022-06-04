@@ -533,6 +533,26 @@ the xsltproc executable.
                 </input>
             </sage>
 
+            <p>The Sage Cell server importants a few important R packages.  As of 2022-06-04 these are <c>deSolve</c>, <c>ggplot2</c>, <c>pracma</c>, <c>survey</c>, <c>swirl</c>, and <c>tidyverse</c>.  This next example uses the <c>ggplot</c> library for both a data set and the plotting capabilities.  Note the initial use of the <c>library()</c> function.  This is a modified version of the <articletitle>Bubble plot</articletitle> example at <url href="http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html" visual="r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html">Top 50 <c>ggplot2</c> Visualizations <mdash/>The Master List</url>.</p>
+
+            <sage language="r">
+                <input>
+                # load package and data
+                library(ggplot2)
+                data(mpg, package="ggplot2")
+
+                mpg_select &lt;- mpg[mpg$manufacturer %in% c("audi", "ford", "honda", "hyundai"), ]
+
+                # Scatterplot
+                g &lt;- ggplot(mpg_select, aes(displ, cty)) +
+                  labs(subtitle="mpg: Displacement vs City Mileage",
+                       title="Bubble chart")
+
+                g + geom_jitter(aes(col=manufacturer, size=hwy)) +
+                  geom_smooth(aes(col=manufacturer), method="lm", se=F)
+                </input>
+            </sage>
+
             <p>Here is a blank Sage cell that you may use for practice and experimentation with the commands above.  Note that this cell allows a choice of languages, and is not linked with any of the previous cells, so a reader would need to start fresh, or cut/paste definitioons from other cells.</p>
 
             <sage type="practice" />
