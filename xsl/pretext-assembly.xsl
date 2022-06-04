@@ -221,8 +221,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="assembly" select="exsl:node-set($assembly-rtf)"/>
 
+<xsl:variable name="exercise-rtf">
+    <!-- initialize with default, 'inline' -->
+    <xsl:apply-templates select="$assembly" mode="exercise">
+        <xsl:with-param name="division" select="'inline'"/>
+    </xsl:apply-templates>
+</xsl:variable>
+<xsl:variable name="exercise" select="exsl:node-set($exercise-rtf)"/>
+
 <xsl:variable name="representations-rtf">
-    <xsl:apply-templates select="$assembly" mode="representations"/>
+    <xsl:apply-templates select="$exercise" mode="representations"/>
 </xsl:variable>
 <xsl:variable name="representations" select="exsl:node-set($representations-rtf)"/>
 
@@ -269,21 +277,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="augment" select="exsl:node-set($augment-rtf)"/>
 
-<xsl:variable name="exercise-rtf">
-    <!-- initialize with default, 'inline' -->
-    <xsl:apply-templates select="$augment" mode="exercise">
-        <xsl:with-param name="division" select="'inline'"/>
-    </xsl:apply-templates>
-</xsl:variable>
-<xsl:variable name="exercise" select="exsl:node-set($exercise-rtf)"/>
-
 <!-- The main "pretext" element only has two possible children      -->
 <!-- One is "docinfo", the other is "book", "article", etc.         -->
 <!-- This is of interest by itself, or the root of content searches -->
 <!-- And docinfo is the other child, these help prevent searching   -->
 <!-- the wrong half.                                                -->
 <!-- NB: source repair below converts a /mathbook to a /pretext     -->
-<xsl:variable name="root" select="$exercise/pretext"/>
+<xsl:variable name="root" select="$augment/pretext"/>
 <xsl:variable name="docinfo" select="$root/docinfo"/>
 <xsl:variable name="document-root" select="$root/*[not(self::docinfo)]"/>
 
