@@ -11683,7 +11683,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Every item that could be a TOC entry, mined from the schema. -->
-<xsl:template match="frontmatter|abstract|frontmatter/colophon|biography|dedication|acknowledgement|preface|contributors|part|chapter|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|backmatter|appendix|index|backmatter/colophon" mode="toc-item-list">
+<xsl:template match="frontmatter|frontmatter/colophon|biography|dedication|acknowledgement|preface|contributors|part|chapter|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|backmatter|appendix|index|backmatter/colophon" mode="toc-item-list">
     <division>
         <xsl:apply-templates select="." mode="doc-manifest-division-attributes"/>
         <!-- Recurse into children divisions (if any)                 -->
