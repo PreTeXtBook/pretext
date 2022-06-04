@@ -1,0 +1,37 @@
+\documentclass[12pt]{article}
+\usepackage{geometry}
+\geometry{letterpaper,total={408pt,9.0in}}
+%% Custom Page Layout Adjustments (use latex.geometry)
+\usepackage{amsmath,amssymb}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usetikzlibrary{positioning}
+\usepgfplotslibrary{fillbetween}
+\usepackage{pstricks}
+\usepackage{phaistos}
+\usepackage{xcolor}
+\ifdefined\tikzset
+\tikzset{ampersand replacement = \amp}
+\fi
+\newcommand{\order}[1]{\left\lvert#1\right\rvert}
+\newcommand{\lt}{<}
+\newcommand{\gt}{>}
+\newcommand{\amp}{&}
+\begin{document}
+\pagestyle{empty}
+\resizebox{\width}{\height}{
+\begin{tikzpicture}[xscale=1.5, yscale=1.5]
+\draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
+\draw[->,>=latex, style={black, thick}] (3,0) -- (1.47, 1.53) node [above right =1mm] {$\vec{B}$} -- (1,2);
+\draw[->,>=latex, style={black, thick}] (1,2) -- (0.23 , 0.46) node [above left=1mm] {$\vec{C}$} -- (0,0);
+\draw[->,>=latex, style={black,semithick,dashed}] (1,2) -- (7/6, 4/3) node
+{$\vec{M}_{1}$} -- (1.5,0);
+\draw[->,>=latex, style={black,semithick,dashed}] (0,0) -- (2/3, 1/3) node
+{$\vec{M}_{2}$} -- (2,1);
+\draw[->,>=latex, style={black,semithick,dashed}] (3,0) -- (13/6,1/3) node
+{$\vec{M}_{3}$} -- (0.5,1);
+\node[draw,shape=circle,fill=black,name=P,scale=0.5] at (4/3,2/3) {};
+\node[above right=1.2mm and -0.5mm of P] at (4/3,2/3) {$P$};
+\end{tikzpicture}
+}
+\end{document}
