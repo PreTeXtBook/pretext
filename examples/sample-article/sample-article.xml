@@ -533,6 +533,7 @@ the xsltproc executable.
                 </input>
             </sage>
 
+            <!-- https://github.com/sagemath/sagecell/blob/master/contrib/vm/container_manager.py#L260 -->
             <p>The Sage Cell server importants a few important R packages.  As of 2022-06-04 these are <c>deSolve</c>, <c>ggplot2</c>, <c>pracma</c>, <c>survey</c>, <c>swirl</c>, and <c>tidyverse</c>.  This next example uses the <c>ggplot</c> library for both a data set and the plotting capabilities.  Note the initial use of the <c>library()</c> function.  This is a modified version of the <articletitle>Bubble plot</articletitle> example at <url href="http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html" visual="r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html">Top 50 <c>ggplot2</c> Visualizations <mdash/>The Master List</url>.</p>
 
             <sage language="r">
