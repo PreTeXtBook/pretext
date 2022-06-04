@@ -120,10 +120,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--     need a stringparam override to view and test dynamic versions.  -->
 <xsl:variable name="exercise-style" select="'static'"/>
 
-<!-- Timing debugging -->
-<xsl:param name="debug.assembly.time" select="'no'"/>
-<xsl:variable name="time-assembly" select="$debug.assembly.time = 'yes'"/>
-
 <!-- ############################## -->
 <!-- Source Assembly Infrastructure -->
 <!-- ############################## -->
@@ -184,6 +180,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="node()|@*" mode="augment">
     <xsl:param name="parent-struct" select="''"/>
     <xsl:param name="level" select="0"/>
+
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="augment">
             <xsl:with-param name="parent-struct" select="$parent-struct"/>
@@ -210,71 +207,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- root element, as a result of the node-set() manufacture.  -->
 <xsl:variable name="version-rtf">
     <xsl:call-template name="assembly-warnings"/>
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: start version</xsl:message>
-    </xsl:if>
     <xsl:apply-templates select="/" mode="version"/>
-    <!--  -->
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: end version</xsl:message>
-    </xsl:if>
-    <!--  -->
 </xsl:variable>
 <xsl:variable name="version" select="exsl:node-set($version-rtf)"/>
 
 <xsl:variable name="labeled-rtf">
-    <xsl:call-template name="assembly-warnings"/>
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: start label</xsl:message>
-    </xsl:if>
     <xsl:apply-templates select="$version" mode="labeling"/>
-    <!--  -->
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: end label</xsl:message>
-    </xsl:if>
-    <!--  -->
 </xsl:variable>
 <xsl:variable name="labeled" select="exsl:node-set($labeled-rtf)"/>
 
 <xsl:variable name="assembly-rtf">
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: start assembly</xsl:message>
-    </xsl:if>
-    <!--  -->
     <xsl:apply-templates select="$labeled" mode="assembly"/>
-    <!--  -->
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: end assembly</xsl:message>
-    </xsl:if>
-    <!--  -->
 </xsl:variable>
 <xsl:variable name="assembly" select="exsl:node-set($assembly-rtf)"/>
 
 <xsl:variable name="representations-rtf">
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: start representations</xsl:message>
-    </xsl:if>
-    <!--  -->
     <xsl:apply-templates select="$assembly" mode="representations"/>
-    <!--  -->
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: end representations</xsl:message>
-    </xsl:if>
-    <!--  -->
 </xsl:variable>
 <xsl:variable name="representations" select="exsl:node-set($representations-rtf)"/>
 
 <xsl:variable name="repair-rtf">
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: start repair</xsl:message>
-    </xsl:if>
-    <!--  -->
     <xsl:apply-templates select="$representations" mode="repair"/>
-    <!--  -->
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: end repair</xsl:message>
-    </xsl:if>
-    <!--  -->
 </xsl:variable>
 <xsl:variable name="repair" select="exsl:node-set($repair-rtf)"/>
 
@@ -291,17 +244,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="nodes" select="$repair//*[@label]"/>
         <xsl:with-param name="purpose" select="'authored'"/>
     </xsl:call-template>
-
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: start identification</xsl:message>
-    </xsl:if>
-    <!--  -->
     <xsl:apply-templates select="$repair" mode="identification"/>
-    <!--  -->
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: end identification</xsl:message>
-    </xsl:if>
-    <!--  -->
 </xsl:variable>
 <xsl:variable name="identification" select="exsl:node-set($identification-rtf)"/>
 
@@ -317,47 +260,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="assembly-document-root" select="$assembly-root/*[not(self::docinfo)]"/>
 
 <xsl:variable name="language-rtf">
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: start language</xsl:message>
-    </xsl:if>
-    <!--  -->
     <xsl:apply-templates select="$identification" mode="language"/>
-    <!--  -->
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: end language</xsl:message>
-    </xsl:if>
-    <!--  -->
 </xsl:variable>
 <xsl:variable name="language" select="exsl:node-set($language-rtf)"/>
 
 <xsl:variable name="augment-rtf">
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: start augment</xsl:message>
-    </xsl:if>
-    <!--  -->
     <xsl:apply-templates select="$language" mode="augment"/>
-    <!--  -->
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: end augment</xsl:message>
-    </xsl:if>
-    <!--  -->
 </xsl:variable>
 <xsl:variable name="augment" select="exsl:node-set($augment-rtf)"/>
 
 <xsl:variable name="exercise-rtf">
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: start exercise</xsl:message>
-    </xsl:if>
-    <!--  -->
     <!-- initialize with default, 'inline' -->
     <xsl:apply-templates select="$augment" mode="exercise">
         <xsl:with-param name="division" select="'inline'"/>
     </xsl:apply-templates>
-    <!--  -->
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: end exercise</xsl:message>
-    </xsl:if>
-    <!--  -->
 </xsl:variable>
 <xsl:variable name="exercise" select="exsl:node-set($exercise-rtf)"/>
 
