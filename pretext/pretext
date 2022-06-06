@@ -81,8 +81,14 @@ def verify_input_file(f, file_type):
 
 def get_output_file(file_path):
     """Expand provided filename, or return None"""
-    import os  # getcwd
+    import os  # getcwd, isdir
 
+    # if specified and is an extant directory then this is
+    # a misunderstanding and the defaults for a directory
+    # can make a realmess (especially in one's repository)
+    if file_path and os.path.isdir(file_path):
+        msg = '"{}" is a directory and appears where the name of a single file is expected'
+        raise ValueError(msg.format(file_path))
     # if specified, return absolute path
     # does not need to exist
     if file_path:
