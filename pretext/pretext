@@ -418,14 +418,14 @@ def get_cli_arguments():
     parser.add_argument(
         "-o",
         "--output",
-        help="file for output (supersedes -d)",
+        help="file for output, only when when output is a single file (supersedes -d)",
         action="store",
         dest="out",
     )
     parser.add_argument(
         "-d",
         "--directory",
-        help="directory for output, defaults to managed directories from publication file\nfor components with multiple outputs, else current directory",
+        help="directory for output, defaults to managed directories from publication file\nfor generated components, otherwise default is current directory",
         action="store",
         dest="dir",
     )
