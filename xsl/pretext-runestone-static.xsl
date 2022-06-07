@@ -192,12 +192,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                         <li>
                                             <xsl:if test="$list-type = 'ul'">
                                                 <xsl:choose>
-                                                    <xsl:when test="following-sibling::choice">
+                                                    <xsl:when test="not(preceding-sibling::choice)">
                                                         <p>Either:</p>
                                                     </xsl:when>
-                                                    <xsl:when test="preceding-sibling::choice">
+                                                    <xsl:otherwise>
                                                         <p>Or:</p>
-                                                    </xsl:when>
+                                                    </xsl:otherwise>
                                                 </xsl:choose>
                                             </xsl:if>
                                             <xsl:choose>
@@ -272,14 +272,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:if test="not(@correct = 'no')">
                         <xsl:value-of select="@order"/>
                         <xsl:if test="choice">
-                            <xsl:choose>
-                                <xsl:when test="choice[1][@correct = 'yes']">
-                                    <xsl:text>a</xsl:text>
-                                </xsl:when>
-                                <xsl:when test="choice[2][@correct = 'yes']">
-                                    <xsl:text>b</xsl:text>
-                                </xsl:when>
-                            </xsl:choose>
+                            <xsl:for-each select="choice">
+                                <!-- default on "choice" is  correct="no" -->
+                                <xsl:if test="@correct = 'yes'">
+                                    <xsl:number format="a"/>
+                                </xsl:if>
+                            </xsl:for-each>
                         </xsl:if>
                         <xsl:if test="following-sibling::block">
                             <xsl:text>, </xsl:text>
@@ -320,14 +318,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                         <title>
                                             <xsl:value-of select="@order"/>
                                             <xsl:if test="choice">
-                                                <xsl:choose>
-                                                    <xsl:when test="choice[1][@correct = 'yes']">
-                                                        <xsl:text>a</xsl:text>
-                                                    </xsl:when>
-                                                    <xsl:when test="choice[2][@correct = 'yes']">
-                                                        <xsl:text>b</xsl:text>
-                                                    </xsl:when>
-                                                </xsl:choose>
+                                                <xsl:for-each select="choice">
+                                                    <!-- default on "choice" is  correct="no" -->
+                                                    <xsl:if test="@correct = 'yes'">
+                                                        <xsl:number format="a"/>
+                                                    </xsl:if>
+                                                </xsl:for-each>
                                             </xsl:if>
                                         </title>
                                     </xsl:if>
