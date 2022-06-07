@@ -800,16 +800,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <xsl:choose>
         <xsl:when test="choice">
-            <!-- put correct choice first             -->
+            <!-- put single correct choice first      -->
             <!-- default on "choice" is  correct="no" -->
             <xsl:apply-templates select="choice[@correct = 'yes']">
                 <xsl:with-param name="b-natural" select="$b-natural"/>
             </xsl:apply-templates>
-            <xsl:text>&#xa;---&#xa;</xsl:text>
             <xsl:apply-templates select="choice[not(@correct = 'yes')]">
                 <xsl:with-param name="b-natural" select="$b-natural"/>
             </xsl:apply-templates>
-            <xsl:text> #paired</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:choose>
@@ -839,6 +837,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="blocks/block/choice">
     <xsl:param name="b-natural"/>
 
+    <!-- Exactly one choice is correct, it is placed first. -->
+    <!-- Then the  n - 1  separators can be placed on all   -->
+    <!-- the "wrong" choices.                               -->
+    <xsl:if test="not(@correct = 'yes')">
+        <xsl:text>&#xa;---&#xa;</xsl:text>
+    </xsl:if>
     <xsl:choose>
         <xsl:when test="$b-natural">
             <xsl:apply-templates select="*"/>
@@ -852,6 +856,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:for-each>
         </xsl:otherwise>
     </xsl:choose>
+    <xsl:if test="not(@correct = 'yes')">
+        <xsl:text> #paired</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- Matching Problem -->
