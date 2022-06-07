@@ -221,6 +221,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="assembly" select="exsl:node-set($assembly-rtf)"/>
 
+<!-- Exercises are "tagged" as to their nature (division, inline, -->
+<!-- worksheet, reading, project-like) and interactive exercises  -->
+<!-- get more precise categorization.  The latter is used to      -->
+<!-- determine if Runestone Services are loaded.                  -->
+
 <xsl:variable name="exercise-rtf">
     <!-- initialize with default, 'inline' -->
     <xsl:apply-templates select="$assembly" mode="exercise">
@@ -1030,6 +1035,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 1.  Expand to WW, example-like, and task                           -->
 <!-- 2.  Insert "statement" when not authored                           -->
 <!-- 3.  Use locations computed here, remove elsewhere                  -->
+<!-- 4.  Recognize new, modern fill-in problems                         -->
 
 <xsl:template match="exercise|&PROJECT-LIKE;" mode="exercise">
     <xsl:param name="division"/>
@@ -1100,6 +1106,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="statement//var and not(webwork)">
                 <xsl:text>fillin-basic</xsl:text>
             </xsl:when>
+            <!-- new dynamic fillin goes here, perhaps:                     -->
+            <!-- statement//fillin[(@*|node()) and not(@characters|@fill)]? -->
             <xsl:when test="statement and program">
                 <xsl:text>coding</xsl:text>
             </xsl:when>

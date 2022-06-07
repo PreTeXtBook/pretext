@@ -42,10 +42,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Runestone Infrastructure -->
 <!-- ######################## -->
 
-<!-- Temporary, until we have confidence about impact   -->
-<!-- Not guaranteed to be exhaustive during development -->
-<!-- NB: ananlyzing *original* source, not *assembled*  -->
-<xsl:variable name="b-needs-runestone" select="boolean($original//exercise/choices|$original//exercise/blocks|$original//exercise/program)"/>
+<!-- While under development, or maybe forever, do not load  -->
+<!-- Runestone Javascript unless it is necessary.  Various   -->
+<!-- values of @exercise-interactive are added in the        -->
+<!-- pre-processing phase.  program/@interactive takes on    -->
+<!-- values of 'activecode' and 'codelens'.  So a small      -->
+<!-- amount of imprecision here, but should not be critical. -->
+<xsl:variable name="b-needs-runestone" select="boolean($document-root//exercise[@exercise-interactive]|$document-root//program[@interactive])"/>
 
 <!-- Runestone Services -->
 <!-- Runestone provides universally-applicable Javascript, and since Brad Miller -->
