@@ -720,6 +720,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>Suppose <m>n</m> is even.</p>
                 </block>
                 <block order="3">
+                    <choice><p>Then <m>n</m> is a prime number.</p></choice>
                     <choice correct="yes"><p>Then there exists an <m>m</m> so that <m>n = 2m</m>.</p></choice>
                     <choice><p>Then there exists an <m>m</m> so that <m>n = 2m + 1</m>.</p></choice>
                 </block>
@@ -840,6 +841,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>Suppose <m>n</m> is even.</p>
                 </block>
                 <block order="3">
+                    <choice><p>Then <m>n</m> is a prime number.</p></choice>
                     <choice correct="yes"><p>Then there exists an <m>m</m> so that <m>n = 2m</m>.</p></choice>
                     <choice><p>Then there exists an <m>m</m> so that <m>n = 2m + 1</m>.</p></choice>
                 </block>
