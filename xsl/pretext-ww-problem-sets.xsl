@@ -134,13 +134,13 @@
 </xsl:template>
 
 <!-- For problems from the OPL, just report the @source -->
-<xsl:template match="webwork-reps[pg/@source]" mode="filename">
-    <xsl:value-of select="pg/@source" />
+<xsl:template match="webwork-reps[@source]" mode="filename">
+    <xsl:value-of select="@source"/>
 </xsl:template>
 
 <!-- For copied problems move to the problem that was copied -->
-<xsl:template match="webwork-reps[pg/@copied-from]" mode="filename">
-    <xsl:variable name="copied-from" select="pg/@copied-from"/>
+<xsl:template match="webwork-reps[@copied-from]" mode="filename">
+    <xsl:variable name="copied-from" select="@copied-from"/>
     <xsl:apply-templates select="$document-root//webwork-reps[@ww-id=$copied-from]" mode="filename"/>
 </xsl:template>
 
@@ -150,23 +150,23 @@
 <!-- ################## -->
 
 <!-- Extract an authored problem into its own file, flush left -->
-<xsl:template match="webwork-reps[pg]" >
+<xsl:template match="webwork-reps">
     <xsl:variable name="filename">
         <xsl:apply-templates select="." mode="filename" />
     </xsl:variable>
     <exsl:document href="{$filename}" method="text">
         <xsl:call-template name="sanitize-text">
-            <xsl:with-param name="text" select="pg" />
+            <xsl:with-param name="text" select="."/>
         </xsl:call-template>
     </exsl:document>
 </xsl:template>
 
 <!-- OPL problems don't produce PG source files, -->
 <!-- as they live on the server already          -->
-<xsl:template match="webwork-reps[pg/@source]" />
+<xsl:template match="webwork-reps[@source]"/>
 
 <!-- Don't make PG file for copies -->
-<xsl:template match="webwork-reps[pg/@copied-from]" />
+<xsl:template match="webwork-reps[@copied-from]"/>
 
 
 <!-- ################## -->
