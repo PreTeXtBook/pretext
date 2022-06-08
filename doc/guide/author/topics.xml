@@ -4075,9 +4075,9 @@ parts of a slide (e.g. it inserts a Beamer <c>\pause</c>).
         </p>
         <p>
 A minimal working example may be found in the
-<url href="https://github.com/PreTeXtBook/pretext/blob/dev/examples/sample-slideshow/sample-slideshow.xml">
+<url href="https://github.com/PreTeXtBook/pretext/blob/dev/examples/sample-slideshow/sample-slideshow.xml" visual="examples/sample-slideshow/sample-slideshow.xml">
   Examples folder of the PreTeXt repo on GitHub
-</url><fn><c>examples/sample-slideshow/sample-slideshow.xml</c></fn>.
+</url>.
 See publishing details for various outputs in <xref ref="publisher-slides"/>.
         </p>
     </section>
