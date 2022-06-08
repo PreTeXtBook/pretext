@@ -1245,6 +1245,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="ww-id">
         <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
+    <!-- the "webwork-reps" element from the server for this "webwork" -->
+    <xsl:variable name="the-webwork-rep" select="document($webwork-representations-file, $original)/webwork-representations/webwork-reps[@ww-id=$ww-id]"/>
     <xsl:choose>
         <xsl:when test="$b-extracting-pg">
             <xsl:copy>
@@ -1259,10 +1261,47 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- get the representations now -->
         <xsl:otherwise>
-            <xsl:copy-of select="document($webwork-representations-file, $original)/webwork-representations/webwork-reps[@ww-id=$ww-id]" />
+            <xsl:choose>
+                <xsl:when test="$exercise-style = 'pg-problems'">
+                    <!-- isolate and edit representations needed for PG problem archives -->
+                    <xsl:apply-templates select="$the-webwork-rep" mode="webwork-rep-to-pg"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:copy-of select="$the-webwork-rep" />
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
+<!-- Edit a "webwork-reps" from the server into just PG material -->
+<xsl:template match="node()|@*" mode="webwork-rep-to-pg">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="webwork-rep-to-pg"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Promote "pg" specific information to "webwork-reps" -->
+<xsl:template match="webwork-reps" mode="webwork-rep-to-pg">
+    <xsl:copy>
+        <!-- copy existing attributes -->
+        <xsl:apply-templates select="@*" mode="webwork-rep-to-pg"/>
+        <!-- promote "pg" attributes (@source, @copied-from) -->
+        <xsl:apply-templates select="pg/@*" mode="webwork-rep-to-pg"/>
+        <!-- attributes done, recurse into children -->
+        <xsl:apply-templates select="node()" mode="webwork-rep-to-pg"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Attributes preserved, drop "pg" element, duplicate the guts -->
+<!-- which should just be the actual PG version of the problem   -->
+<xsl:template match="webwork-reps/pg" mode="webwork-rep-to-pg">
+    <xsl:apply-templates select="node()" mode="webwork-rep-to-pg"/>
+</xsl:template>
+
+<!-- Drop "webwork-reps" children we don't need for problem sets -->
+<xsl:template match="webwork-reps/static" mode="webwork-rep-to-pg"/>
+<xsl:template match="webwork-reps/server-data" mode="webwork-rep-to-pg"/>
 
 
 <!-- ######## -->
