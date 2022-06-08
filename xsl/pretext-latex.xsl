@@ -2408,18 +2408,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\setlength{\fillinheight}{\heightof{\strut}+1.2pt}%&#xa;</xsl:text>
     <xsl:choose>
         <xsl:when test="$fillin-text-style = 'underline'">
-            <xsl:text>\null\nobreak\leaders\vbox{\hrule width 0pt height 0pt \vskip \fillinheight \hrule width 0.3pt height 0.3pt \vskip -1.2pt}%&#xa;</xsl:text>
-            <xsl:text>\hskip 1\fillinmaxwidth minus \fillincontract%&#xa;</xsl:text>
+            <xsl:text>\strut\nobreak\leaders\vbox{\hrule width 0.3pt height 0.3pt \vskip -1.2pt}\hskip 1\fillinmaxwidth minus \fillincontract\nobreak\strut%&#xa;</xsl:text>
         </xsl:when>
         <xsl:when test="$fillin-text-style = 'box'">
-            <xsl:text>\rule[-1.2pt]{0.3pt}{\heightof{\strut}+1.8pt}%&#xa;</xsl:text>
-            <xsl:text>\nobreak\hspace{-0.3pt}{\nobreak\leaders\vbox{\hrule width 0.3pt height 0.3pt \vskip \fillinheight \hrule width 0.3pt height 0.3pt \vskip -1.2pt}%&#xa;</xsl:text>
-            <xsl:text>\hskip 1\fillinmaxwidth minus \fillincontract}%&#xa;</xsl:text>
-            <xsl:text>\nobreak\hspace{-0.3pt}\hbox{\rule[-1.2pt]{0.3pt}{\heightof{\strut}+1.8pt}}%&#xa;</xsl:text>
+            <xsl:text>\rule[-1.2pt]{0.3pt}{\heightof{\strut}+1.8pt}\nobreak\hspace{-0.3pt}\nobreak\leaders\vbox{\hrule width 0.3pt height 0.3pt \vskip \fillinheight \hrule width 0.3pt height 0.3pt \vskip -1.2pt}\hskip 1\fillinmaxwidth minus \fillincontract\nobreak\hspace{-0.3pt}\rule[-1.2pt]{0.3pt}{\heightof{\strut}+1.8pt}%&#xa;</xsl:text>
         </xsl:when>
         <xsl:when test="$fillin-text-style = 'shade'">
-            <xsl:text>\nobreak{\color{fillintextshade}\nobreak\leaders\vbox{\hrule width 0pt height 0pt \vskip 0pt \hrule width 0.3pt height \fillinheight \vskip -1.2pt}%&#xa;</xsl:text>
-            <xsl:text>\hskip 1\fillinmaxwidth minus \fillincontract}%&#xa;</xsl:text>
+            <xsl:text>{\color{fillintextshade}\strut\nobreak\leaders\vbox{\hrule width 0.3pt height \fillinheight \vskip -1.2pt}\hskip 1\fillinmaxwidth minus \fillincontract}%&#xa;</xsl:text>
         </xsl:when>
     </xsl:choose>
     <xsl:text>}&#xa;</xsl:text>
