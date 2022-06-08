@@ -116,6 +116,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   * We default here to "static".  HTML production will override     -->
 <!--     to "dynamic" and then any importing stylesheet will need to     -->
 <!--     override back to "static".                                      -->
+<!--   * 'pg-problems' are WeBWork problems for an archive               -->
 <!--   * If testing, the pretext-enhanced-source.xsl  stylesheet will    -->
 <!--     need a stringparam override to view and test dynamic versions.  -->
 <xsl:variable name="exercise-style" select="'static'"/>

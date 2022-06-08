@@ -50,6 +50,12 @@
 <!-- Variables -->
 <!-- ######### -->
 
+<!-- This variable controls representations of interactive exercises    -->
+<!-- built in  pretext-assembly.xsl.  This is the one place we override -->
+<!-- this variable to the value 'pg-problems' as a signal to only mine  -->
+<!-- PG representations from the multiple representations available.    -->
+<xsl:variable name="exercise-style" select="'pg-problems'"/>
+
 <!-- We default to one massive def file -->
 <xsl:variable name="chunk-level">
     <xsl:choose>
