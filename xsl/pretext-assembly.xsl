@@ -1297,8 +1297,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="@*" mode="webwork-rep-to-pg"/>
         <!-- promote "pg" attributes (@source, @copied-from) -->
         <xsl:apply-templates select="pg/@*" mode="webwork-rep-to-pg"/>
-        <!-- attributes done, recurse into children -->
-        <xsl:apply-templates select="node()" mode="webwork-rep-to-pg"/>
+        <!-- attributes done, recurse into child *elements*  -->
+        <!-- no node() here, so drops interstial whitespace  -->
+        <!-- that accumulates into the textual PG code, even -->
+        <!-- if it does get sanitized in its use/application -->
+        <xsl:apply-templates select="*" mode="webwork-rep-to-pg"/>
     </xsl:copy>
 </xsl:template>
 
