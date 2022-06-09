@@ -105,6 +105,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Isolate conversion of Runestone/interactive to PreTeXt/static -->
 <xsl:import href="./pretext-runestone-static.xsl"/>
 
+<!-- There is an implicit assumption that the "pretext-common.xsl"      -->
+<!-- stylesheet has been imported, via teh use of the "visible-id"      -->
+<!-- template.  This is used to coordinate between the "extract-pg.xsl" -->
+<!-- stylesheet, the trip to the WW server, and the assembly here to    -->
+<!-- make different representations available to conversions.  We       -->
+<!-- prefer to not have this dependency, so perhaps a purpose-build     -->
+<!-- identification template ("webwork-xxx" as default) is necessary.   -->
+<!-- (2022-06-09)                                                       -->
+
 <!-- The "representations" pass is used to make derived versions of      -->
 <!-- authored exercises which can be rendered dynamically.  For example, -->
 <!-- a multiple choice question.  These representations can be "static"  -->

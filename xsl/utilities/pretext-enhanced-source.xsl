@@ -54,6 +54,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:import href="../publisher-variables.xsl"/>
 <xsl:import href="../pretext-assembly.xsl"/>
 
+<!-- There are some implicit assumptions in the assembly stylesheet -->
+<!-- that certain templates are from -common are available when     -->
+<!-- source is being assembled.  A safe assumption in practice, but -->
+<!-- not a wise one.  As of 2021-06-09, the modal "visible-id" is   -->
+<!-- one such template.  To get accurate results here, we import    -->
+<!-- the -common stylesheet.                                        -->
+<xsl:import href="../pretext-common.xsl"/>
+
 <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
 <!-- The "pretext-assembly.xsl" stylesheet is parameterized by a   -->
