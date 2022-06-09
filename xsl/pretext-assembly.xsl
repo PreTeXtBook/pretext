@@ -366,6 +366,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="webwork[* or @copy or @source]" mode="assembly">
     <xsl:choose>
         <xsl:when test="$b-extracting-pg and @copy">
+            <!-- this sanity-check template could be incorporated here -->
+            <xsl:apply-templates select="." mode="webwork-copy-warning"/>
             <xsl:variable name="target" select="id(@copy)"/>
             <xsl:choose>
                 <xsl:when test="$target/statement|$target/task|$target/stage">
@@ -1338,7 +1340,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ######## -->
 
 <!-- A place for warnings about missing files, etc -->
-<!-- and/or temporary/experimental features        -->
+<!-- and/or temporary/experimental features. These -->
+<!-- should be one-time global problems.           -->
 <xsl:template name="assembly-warnings">
     <xsl:if test="$original/*[not(self::docinfo)]//webwork/node() and $b-ww-representations-missing">
         <xsl:message>PTX:WARNING: Your document has WeBWorK exercises,</xsl:message>
@@ -1349,13 +1352,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:message>             can cause difficulties when parts of your document get</xsl:message>
         <xsl:message>             processed by external programs (e.g. graphics, previews)</xsl:message>
     </xsl:if>
-    <xsl:if test="$b-extracting-pg">
-        <xsl:variable name="webwork-with-copy" select="$original//webwork[@copy]"/>
-        <xsl:for-each select="$webwork-with-copy">
-            <!-- this will need to switch to a document-wide search     -->
-            <!-- for a match on the @name value, once that attribute    -->
-            <!-- is in place, since we do not yet have the              -->
-            <!-- @name -> @xml:id  mapping until we are done assembling -->
+</xsl:template>
+
+<!-- Indentation below is off, so that a rearrangement makes a clear diff. -->
+<!-- And two things should happen:                                         -->
+<!--   1. Should move back up into the "assembly" template where           -->
+<!--      called, this will remove more duplicate code.                    -->
+<!--   2. Maybe run a gauntlet on @copy and $target:                       -->
+<!--      (a) not($target) -> not pointing at anything                     -->
+<!--      (b) not($target/self::webwork) -> not pointing at a WW           -->
+<!--      (c) $target/@copy, $target/@source -> not copyable               -->
+<!--      (d) the structure of $target should have already satisfied the   -->
+<!--          and so does not checking here, original will be busted       -->
+<xsl:template match="webwork[@copy]" mode="webwork-copy-warning">
             <xsl:variable name="target" select="id(@copy)"/>
             <xsl:choose>
                 <xsl:when test="$target/statement|$target/task|$target/stage"/>
@@ -1375,8 +1384,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:message>             points to a WeBWorK problem that does not have a statement, task, or stage.</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
-        </xsl:for-each>
-    </xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>
