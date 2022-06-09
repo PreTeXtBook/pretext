@@ -1254,8 +1254,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="ww-id">
         <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
-    <!-- the "webwork-reps" element from the server for this "webwork" -->
-    <xsl:variable name="the-webwork-rep" select="document($webwork-representations-file, $original)/webwork-representations/webwork-reps[@ww-id=$ww-id]"/>
     <xsl:choose>
         <xsl:when test="$b-extracting-pg">
             <xsl:copy>
@@ -1270,6 +1268,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- get the representations now -->
         <xsl:otherwise>
+            <!-- the "webwork-reps" element from the server for this "webwork" -->
+            <xsl:variable name="the-webwork-rep" select="document($webwork-representations-file, $original)/webwork-representations/webwork-reps[@ww-id=$ww-id]"/>
             <xsl:choose>
                 <xsl:when test="$exercise-style = 'pg-problems'">
                     <!-- isolate and edit representations needed for PG problem archives -->
