@@ -10748,6 +10748,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="incorrect-use" select="($numbering.maximum.level != '')" />
     </xsl:call-template>
     <!--  -->
+    <!-- 2022-06-09  replace a WebWorK "stage" by a standard "task" -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//webwork/stage" />
+        <xsl:with-param name="date-string" select="'2022-06-09'" />
+        <xsl:with-param name="message" select="'an ad-hoc &quot;stage&quot; element in a scaffolded WeBWorK problem has been replaced by a standard PreTeXt &quot;task&quot; element, so make simple subsitutions.  We will attempt to honor your request'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->

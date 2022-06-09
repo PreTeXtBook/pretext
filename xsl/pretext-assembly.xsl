@@ -249,6 +249,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="representations" select="exsl:node-set($representations-rtf)"/>
 
+<!-- Dependency: "repair" will fix some exercise representations, -->
+<!-- especially coming from an "old" WeBWorK server, so the       -->
+<!-- "repair" pass must come after the "representations" pass.    -->
 <xsl:variable name="repair-rtf">
     <xsl:apply-templates select="$representations" mode="repair"/>
 </xsl:variable>
@@ -633,6 +636,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:attribute name="listing">
         <xsl:value-of select="."/>
     </xsl:attribute>
+</xsl:template>
+
+<!-- 2022-06-09 WeBWorK "stage" deprecated in favor of "task"       -->
+<!-- We could use  match="webwork/stage"  but then this would only  -->
+<!-- happen to the author's source while being prepared for the     -->
+<!-- "extract-pg.xsl" worksheet.  But we also want to catch "stage" -->
+<!-- coming back from an old WeBWorK server, which may be various   -->
+<!-- places after we algorithmically manipulate the "webwork-reps"  -->
+<!-- structure.  Instead, we just wait until now.  If necessary,    -->
+<!-- perhaps "exercise/stage" for the post-server pass.             -->
+<xsl:template match="stage" mode="repair">
+    <task>
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </task>
 </xsl:template>
 
 
