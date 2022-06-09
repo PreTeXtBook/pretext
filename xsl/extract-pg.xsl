@@ -128,7 +128,7 @@
     <xsl:text>pgdense['hint_no_solution_yes'] = {}&#xa;</xsl:text>
     <xsl:text>pgdense['hint_yes_solution_no'] = {}&#xa;</xsl:text>
     <xsl:text>pgdense['hint_yes_solution_yes'] = {}&#xa;</xsl:text>
-    <xsl:apply-templates select="$document-root//webwork[statement|task|stage|@source]" mode="dictionaries"/>
+    <xsl:apply-templates select="$document-root//webwork[statement|task|@source]" mode="dictionaries"/>
 </xsl:template>
 
 <xsl:template match="webwork[@source]" mode="dictionaries">
@@ -154,7 +154,7 @@
     <xsl:text>"&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="webwork[statement|task|stage]" mode="dictionaries">
+<xsl:template match="webwork[statement|task]" mode="dictionaries">
     <!-- Define values for the visible-id as key -->
     <xsl:variable name="problem">
         <xsl:apply-templates select="." mode="visible-id" />
@@ -306,7 +306,7 @@
 <!-- 1. be empty; just for printing "WeBWorK"                              -->
 <!-- 2. use an existing .pg problem from the server                        -->
 <!-- 3. have a single statement child                                      -->
-<!-- 4. have two or more stage children (known in WW as "scaffolded")      -->
+<!-- 4. have two or more task children (known in WW as "scaffolded")       -->
 <!-- What follows is not concerned with the first two. The latter two top  -->
 <!-- level templates follow.                                               -->
 
@@ -356,7 +356,7 @@
     </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="webwork[task|stage]">
+<xsl:template match="webwork[task]">
     <xsl:param name="b-hint" />
     <xsl:param name="b-solution" />
     <xsl:param name="b-human-readable" />
@@ -408,7 +408,7 @@
     <xsl:if test="$b-human-readable">
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="task|stage">
+    <xsl:apply-templates select="task">
         <xsl:with-param name="b-hint" select="$b-hint" />
         <xsl:with-param name="b-solution" select="$b-solution" />
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
@@ -432,7 +432,7 @@
     </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="task[statement]|stage">
+<xsl:template match="task[statement]">
     <xsl:param name="b-hint" />
     <xsl:param name="b-solution" />
     <xsl:param name="b-human-readable" />
@@ -821,7 +821,7 @@
             </xsl:call-template>
         </xsl:if>
         <!-- multistage problems ("scaffolded") -->
-        <xsl:if test="task|stage">
+        <xsl:if test="task">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'scaffold.pl'"/>
                 <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
