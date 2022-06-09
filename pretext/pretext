@@ -349,6 +349,10 @@ def get_cli_arguments():
             "assembly-dynamic",
             "PreTeXt source, after pre-processor, dynamic exercises (for developers)",
         ),
+        (
+            "assembly-pg",
+            "PreTeXt source, after pre-processor, WeBWorK problem set PG exercises (for developers)",
+        ),
         ("sagenb", "Sage worksheet conversion (removed)"),
         ("all", "All available output formats"),
     ]
@@ -722,6 +726,10 @@ def main():
                 out_file,
                 dest_dir,
                 "dynamic",
+            )
+        elif args.format == "assembly-pg":
+            ptx.assembly(
+                xml_source, publication_file, stringparams, out_file, dest_dir, "pg-problems"
             )
         # 2020-05-19 MathBookXMLtoSWS class removed
         elif args.format == "sagenb":
