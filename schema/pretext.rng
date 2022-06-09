@@ -2616,20 +2616,6 @@
             <ref name="ConclusionText"/>
           </optional>
         </group>
-        <oneOrMore>
-          <element name="stage">
-            <optional>
-              <ref name="Title"/>
-            </optional>
-            <ref name="StatementExerciseWW"/>
-            <optional>
-              <ref name="HintWW"/>
-            </optional>
-            <optional>
-              <ref name="SolutionWW"/>
-            </optional>
-          </element>
-        </oneOrMore>
       </choice>
     </element>
   </define>

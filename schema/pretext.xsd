@@ -2352,7 +2352,6 @@
                 <xs:group maxOccurs="unbounded" ref="TaskWW"/>
                 <xs:group minOccurs="0" ref="ConclusionText"/>
               </xs:sequence>
-              <xs:element maxOccurs="unbounded" ref="stage"/>
             </xs:choice>
           </xs:sequence>
           <xs:attribute ref="xml:id"/>
@@ -2363,16 +2362,6 @@
     </xs:sequence>
   </xs:group>
   <xs:element name="pg-code" type="xs:string"/>
-  <xs:element name="stage">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:group minOccurs="0" ref="Title"/>
-        <xs:group ref="StatementExerciseWW"/>
-        <xs:group minOccurs="0" ref="HintWW"/>
-        <xs:group minOccurs="0" ref="SolutionWW"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
   <xs:group name="BlockStatementWW">
     <xs:choice>
       <xs:group ref="Paragraph"/>

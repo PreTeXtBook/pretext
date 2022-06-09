@@ -1034,13 +1034,6 @@
                         (StatementExerciseWW, HintWW?, SolutionWW?)
                     |
                         (IntroductionText?, TaskWW+, ConclusionText?)
-                    |
-                        element stage {
-                            Title?,
-                            StatementExerciseWW,
-                            HintWW?,
-                            SolutionWW?
-                        }+
                     )
                 }
             BlockStatementWW =
