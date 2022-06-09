@@ -51,13 +51,17 @@
         To install, the editor, first download the installer from <url href="https://code.visualstudio.com/" visual="code.visualstudio.com">the VSCode website</url>.
       </p>
 
-      <image width="70%" source="../images/vscode-download.png"/>
+      <image width="70%" source="../images/vscode-download.png">
+        <description>Screenshot of the VSCode website, showing where to click to download the installer</description>
+      </image>
 
       <p>
         When running the installer, be sure that the <q>Add to PATH</q> option is selected:
       </p>
 
-      <image width="50%" source="../images/vscode-setup.png"/>
+      <image width="50%" source="../images/vscode-setup.png">
+        <description>Screenshot of the VSCode installer program, showing where to click to ensure the program is added to the Windows system environment variables</description>
+      </image>
 
       <p>
         You should now have VSCode installed on your system.
@@ -76,14 +80,18 @@
         To install Python, simply download the installer from the <url href="https://www.python.org/" visual="python.org">Python website</url>.
       </p>
 
-      <image width="70%" source="../images/python-download.png"/>
+      <image width="70%" source="../images/python-download.png">
+        <description>Screenshot of the python.org webpage, showing where to access the installer download</description>
+      </image>
 
       <p>
         When you run the installer, be sure to check off the box to add Python to the Windows PATH during installation.
         This will ensure that Python commands can be run from the command line without needing to provide the path to the Python program.
       </p>
 
-      <image width="50%" source="../images/python-setup.png"/>
+      <image width="50%" source="../images/python-setup.png">
+        <description>Screenshot of the Python installer program, showing the box that needs to be checked to ensure it is added to the system environment variables</description>
+      </image>
     </subsection>
 
     <subsection xml:id="windows-cli-git">
@@ -107,7 +115,9 @@
         Since we have already installed VSCode, we can choose to use that instead of an editor like Emacs or Nano that you may be unfamiliar with.
       </p>
 
-      <image width="50%" source="../images/git-setup.png"/>
+      <image width="50%" source="../images/git-setup.png">
+        <description>Screenshot of the Git for Windows installation program, showing how to select VSCode as the default text editor</description>
+      </image>
     </subsection>
 
     <subsection xml:id="windows-cli-other-software">
@@ -163,7 +173,9 @@
               Click on the <q>Code</q> button, and then click on the clipboard icon to copy the <init>URL</init>, as shown below:
             </p>
 
-            <image width="85%" source="../images/pdf2svg-download.png"/>
+            <image width="85%" source="../images/pdf2svg-download.png">
+              <description>Screenshot of the GitHub page for the pdf2svg project, showing where to click to copy the project URL to the clipboard</description>
+            </image>
 
             <p>
               Next, in Git Bash, type <c>git clone</c> and then right-click to paste the <init>URL</init> you copied,
@@ -192,11 +204,17 @@
       </p>
 
       <sidebyside widths="33% 33% 33%">
-        <image source="../images/windows-path-1.png"/>
+        <image source="../images/windows-path-1.png">
+          <description>Screenshot of the Windows system property control panel, showing how to access the Environment Variables</description>
+        </image>
 
-        <image source="../images/windows-path-2.png"/>
+        <image source="../images/windows-path-2.png">
+          <description>Screenshot of the Environment Variables control panel, showing how to access and edit the Path</description>
+        </image>
 
-        <image source="../images/windows-path-3.png"/>
+        <image source="../images/windows-path-3.png">
+          <description>Screenshot of the interface for editing the Windows Path to add a new program</description>
+        </image>
       </sidebyside>
 
       <p>
