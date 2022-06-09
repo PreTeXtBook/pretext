@@ -8,7 +8,7 @@
 <!-- See the file COPYING for copying conditions.             -->
 
 <appendix xml:id="windows-cli">
-  <title>Using the <pretext/>-CLI on Windows</title>
+  <title>Installing the <pretext/>-CLI on Windows</title>
   <author>Sean Fitzpatrick</author>
 
   <introduction>
@@ -32,12 +32,13 @@
 
   <section xml:id="windows-cli-software">
     <title>Software prerequisites</title>
+    <introduction>
+      <p>
+        We begin with the programs you will want to have installed prior to using the <pretext/>-CLI.
+        All software can be downloaded free of charge, and is relatively easy to install.
+      </p>
+    </introduction>
 
-    <p>
-      We begin with the programs you will want to have installed prior to using the <pretext/>-CLI.
-      All software can be downloaded free of charge, and is relatively easy to install.
-    </p>
-    
     <subsection xml:id="windows-cli-vscode">
       <title>VSCode</title>
       <p>
@@ -50,13 +51,13 @@
         To install, the editor, first download the installer from <url href="https://code.visualstudio.com/" visual="code.visualstudio.com">the VSCode website</url>.
       </p>
 
-      <image width="50%" source="../images/vscode-download.png"/>
+      <image width="70%" source="../images/vscode-download.png"/>
 
       <p>
         When running the installer, be sure that the <q>Add to PATH</q> option is selected:
       </p>
 
-      <image width="30%" source="../images/vscode-setup.png"/>
+      <image width="50%" source="../images/vscode-setup.png"/>
 
       <p>
         You should now have VSCode installed on your system.
@@ -75,14 +76,14 @@
         To install Python, simply download the installer from the <url href="https://www.python.org/" visual="python.org">Python website</url>.
       </p>
 
-      <image width="50%" source="../images/python-download.png"/>
+      <image width="70%" source="../images/python-download.png"/>
 
       <p>
         When you run the installer, be sure to check off the box to add Python to the Windows PATH during installation.
         This will ensure that Python commands can be run from the command line without needing to provide the path to the Python program.
       </p>
 
-      <image width="40%" source="../images/python-setup.png"/>
+      <image width="50%" source="../images/python-setup.png"/>
     </subsection>
 
     <subsection xml:id="windows-cli-git">
@@ -105,8 +106,8 @@
         The only thing you might want to do is change the default editor.
         Since we have already installed VSCode, we can choose to use that instead of an editor like Emacs or Nano that you may be unfamiliar with.
       </p>
-      
-      <image width="40%" source="../images/git-setup.png"/>
+
+      <image width="50%" source="../images/git-setup.png"/>
     </subsection>
 
     <subsection xml:id="windows-cli-other-software">
@@ -162,7 +163,7 @@
               Click on the <q>Code</q> button, and then click on the clipboard icon to copy the <init>URL</init>, as shown below:
             </p>
 
-            <image width="65%" source="../images/pdf2svg-download.png"/>
+            <image width="85%" source="../images/pdf2svg-download.png"/>
 
             <p>
               Next, in Git Bash, type <c>git clone</c> and then right-click to paste the <init>URL</init> you copied,
@@ -182,18 +183,24 @@
               You can then click on <q>Browse</q>, and find the <c>pdf2svg-windows</c> folder you just downloaded.
             </p>
 
-            <sidebyside widths="30% 30% 30%" margins="2%" valign="bottom">
-              <image source="../images/windows-path-1.png"/>
-              <image source="../images/windows-path-2.png"/>
-              <image source="../images/windows-path-3.png"/>
-            </sidebyside>
-
             <p>
               You should now have a working installation of <c>pdf2svg</c>.
               To confirm, type <c>which pdf2svg</c> in Git Bash. It should display the path to the <c>pdf2svg</c>program. (You may have to restart Git Bash first.)
             </p>
           </li>
+        </dl>
+      </p>
 
+      <sidebyside widths="33% 33% 33%">
+        <image source="../images/windows-path-1.png"/>
+
+        <image source="../images/windows-path-2.png"/>
+
+        <image source="../images/windows-path-3.png"/>
+      </sidebyside>
+
+      <p>
+        <dl>
           <li>
             <title>Sage</title>
             <p>
@@ -218,7 +225,7 @@
               (To install, you must first install <c>node.js</c>. The installation is time-consuming, and it will probably mess up your existing Python installation.)
               You can avoid the need for <c>pageres</c> by taking screenshots manually,
               and including them in your book using the <attr>preview</attr> attribute.
-              (Usage will look like <c>&lt; interactive preview="images/preview.png" &rt;</c>.)
+              (Usage will look like <c>&lt; interactive preview="images/preview.png" &gt;</c>.)
               A future version of the <pretext />-CLI may be able to use a Python-based alternative that will bypass the need for this program.
             </p>
           </li>
@@ -235,154 +242,150 @@
         </dl>
       </p>
     </subsection>
-
-    <subsection xml:id="windows-cli-setup">
-      <title>Setting up</title>
-      <introduction>
-        <p>
-          Congratulations! You now have all the necessary software installed.
-          Next, we need to set up Git Bash, and install the <pretext />-CLI.
-        </p>
-      </introduction>
-
-      <subsubsection xml:id="windows-cli-git-setup">
-        <title>Setting up Git Bash</title>
-        <p>
-          One change that you will want to make right away is setting the default working directory for Git Bash.
-          In your home folder (<c>C:\Users\Sean</c> in our example), look for a file called <c>.bashrc</c>.
-          If it doesn't already exist, open Git Bash, navigate to this folder, and type <c>touch .bashrc</c> to create the file.
-          Open the file (it is a plain text file), and add the line <c>cd C:/Users/Sean</c>,
-          where you should replace the directory with the one you want to use.
-        </p>
-        
-        <p>
-          Next, we need to set up <init>SSH</init> authentication, for more efficient communication with GitHub.
-          We assume that you already have a GitHub account; it not, you should create one at <url href="https://github.com/" visual="github.com"/>.
-          There are existing instructions available online at
-          <url href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh" visual="docs.github.com/en/authentication/connecting-to-github-with-ssh">docs.github.com</url>.
-          To begin with, please follow the instructions provided there for generating an <init>SSH</init> key using Git Bash, and adding it to GitHub.
-        </p>
-
-        <p>
-          There is one aspect of the instructions that is not quite correct.
-          When you get to the step for <url href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent" visual="docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">adding the ssh key to the ssh agent</url>,
-          the instructions will tell you to add your <init>SSH</init> key to the <init>SSH</init> agent using a relative path, with a line such as <c>ssh-add ~/.ssh/id_ed25519</c>.
-          <alert>You must use a full path here</alert>. Instead, type <c>ssh-add /c/Users/Sean/.ssh/id_ed25519</c>,
-          where as usual you should replace <c>Users/Sean</c> with your own directory.
-        </p>
-
-        <p>
-          There is one more step you will want to complete.
-          The <c>ssh-agent</c> program will not start automatically when you open Git Bash.
-          To change this, we follow the instructions provided at <url href="https://gist.github.com/bsara/5c4d90db3016814a3d2fe38d314f9c23" visual="gist.github.com/bsara/5c4d90db3016814a3d2fe38d314f9c23"/>.
-        </p>
-
-        <p>
-          <ol>
-            <li>
-              <p>
-                In the file <c>/c/Users/Sean/.ssh</c>, open the <c>config</c> file (or create it using the <c>touch</c> command in Git Bash if it doesn't already exist),
-                and add the following lines:
-                <cd>
-                  <cline>Host github.com</cline>
-                  <cline> Hostname github.com</cline>
-                  <cline> IdentityFile ~/.ssh/id_rsa</cline>
-                </cd>
-                Note that the second and third lines are indented by one space.
-                Note also that this assumes an <init>RSA</init> key, but you may have chosen a different encryption method.
-                You may, for example, want to replace <c>id_rsa</c> with <c>id_ed25519</c>.
-              </p>
-            </li>
-
-            <li>
-              <p>
-                In the file <c>/c/Users/Sean/.bash_profile</c>, (again, create it if it does not already exist) add the following lines:
-                <cd>
-                  <cline>test -f ~/.profile &amp;&amp; . ~/.profile</cline>
-                  <cline>test -f ~/.bashrc &amp;&amp; . ~/.bashrc</cline>
-                </cd>
-              </p>
-            </li>
-
-            <li>
-              <p>
-                In the file <c>/c/Users/Sean/.ssh</c>, we need to add the following script, which will automatically start the <c>ssh-agent</c>.
-              </p>
-
-              <program>
-                <input>
-                  # Start SSH Agent
-                  #----------------------------
-
-                  SSH_ENV="$HOME/.ssh/environment"
-
-                  function run_ssh_env {
-                    . "${SSH_ENV}" > /dev/null
-                  }
-
-                  function start_ssh_agent {
-                    echo "Initializing new SSH agent..."
-                    ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
-                    echo "succeeded"
-                    chmod 600 "${SSH_ENV}"
-
-                    run_ssh_env;
-
-                    ssh-add ~/.ssh/id_rsa;
-                  }
-
-                  if [ -f "${SSH_ENV}" ]; then
-                    run_ssh_env;
-                    ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
-                      start_ssh_agent;
-                    }
-                  else
-                    start_ssh_agent;
-                  fi
-                </input>
-              </program>
-            </li>
-          </ol>
-        </p>
-
-        <p>
-          You should now be set up to work with GitHub on your Windows machine.
-          When you clone a GitHub repository containing a <pretext /> book, be sure to choose the <init>SSH</init> option rather than <init>HTML</init>.
-        </p>
-      </subsubsection>
-
-      <subsubsection xml:id="windows-cli-install">
-        <title>Installing the CLI</title>
-        <p>
-          Finally, we are ready to install the <pretext />-CLI. This is perhaps the easiest step of the whole process.
-          From the Git Bash terminal, first type <c>which python</c> to confirm that Python has been successfully added to the PATH.
-          You should see the path to your Python program if things are working correctly.
-          If you don't, you may need to reinstall Python, or you can manually add it as we did for <c>pdf2svg</c>.
-        </p>
-
-        <p>
-          To install the CLI, simply type <c>pip install pretextbook</c>.
-        </p>
-      </subsubsection>
-    </subsection>
   </section>
 
+  <section xml:id="windows-cli-installation">
+    <title>Installing the CLI</title>
 
+    <introduction>
+      <p>
+        You now have all the necessary software installed.
+        Next, we need to set up Git Bash, and install the <pretext />-CLI.
+      </p>
+    </introduction>
 
-  <conclusion>
-    <p>
-      Congratulations! You are now ready to start using <pretext /> on your Windows machine.
-      If you did not do so previously, there is one additional step you may want to take.
-      In VSCode, go to File, then Preferences, then Extentions in the menu, or type <kbd>Ctrl</kbd>-<kbd>Shift</kbd>-X.
-      In the search bar that comes up, type <q>pretext-tools</q>, and install the package that comes up.
-      This will equip VSCode with syntax highlighting for <c>.ptx</c> files, as well as some automatic tag completion.
-      (For example, typing <c>thm</c> and then the <kbd>Tab</kbd> key will automatically insert the <init>XML</init> markup for a theorem.) 
-    </p>
+    <subsection xml:id="windows-cli-git-setup">
+      <title>Setting up Git Bash</title>
+      <p>
+        One change that you will want to make right away is setting the default working directory for Git Bash.
+        In your home folder (<c>C:\Users\Sean</c> in our example), look for a file called <c>.bashrc</c>.
+        If it doesn't already exist, open Git Bash, navigate to this folder, and type <c>touch .bashrc</c> to create the file.
+        Open the file (it is a plain text file), and add the line <c>cd C:/Users/Sean</c>,
+        where you should replace the directory with the one you want to use.
+      </p>
 
-    <p>
-      Additionally, from the command palette, (View, then Command Palette in the menu, or <kbd>Ctrl</kbd>-<kbd>Shift</kbd>-P)
-      if you type <q>pretext</q>, you will see some built-in options for building your book using the CLI.
-    </p>
-  </conclusion>
+      <p>
+        Next, we need to set up <init>SSH</init> authentication, for more efficient communication with GitHub.
+        We assume that you already have a GitHub account; it not, you should create one at <url href="https://github.com/" visual="github.com"/>.
+        There are existing instructions available online at
+        <url href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh" visual="docs.github.com/en/authentication/connecting-to-github-with-ssh">docs.github.com</url>.
+        To begin with, please follow the instructions provided there for generating an <init>SSH</init> key using Git Bash, and adding it to GitHub.
+      </p>
 
+      <p>
+        There is one aspect of the instructions that is not quite correct.
+        When you get to the step for <url href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent" visual="docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">adding the ssh key to the ssh agent</url>,
+        the instructions will tell you to add your <init>SSH</init> key to the <init>SSH</init> agent using a relative path, with a line such as <c>ssh-add ~/.ssh/id_ed25519</c>.
+        <alert>You must use a full path here</alert>. Instead, type <c>ssh-add /c/Users/Sean/.ssh/id_ed25519</c>,
+        where as usual you should replace <c>Users/Sean</c> with your own directory.
+      </p>
+
+      <p>
+        There is one more step you will want to complete.
+        The <c>ssh-agent</c> program will not start automatically when you open Git Bash.
+        To change this, we follow the instructions provided at <url href="https://gist.github.com/bsara/5c4d90db3016814a3d2fe38d314f9c23" visual="gist.github.com/bsara/5c4d90db3016814a3d2fe38d314f9c23"/>.
+      </p>
+
+      <p>
+        <ol>
+          <li>
+            <p>
+              In the file <c>/c/Users/Sean/.ssh</c>, open the <c>config</c> file (or create it using the <c>touch</c> command in Git Bash if it doesn't already exist),
+              and add the following lines:
+              <cd>
+                <cline>Host github.com</cline>
+                <cline> Hostname github.com</cline>
+                <cline> IdentityFile ~/.ssh/id_rsa</cline>
+              </cd>
+              Note that the second and third lines are indented by one space.
+              Note also that this assumes an <init>RSA</init> key, but you may have chosen a different encryption method.
+              You may, for example, want to replace <c>id_rsa</c> with <c>id_ed25519</c>.
+            </p>
+          </li>
+
+          <li>
+            <p>
+              In the file <c>/c/Users/Sean/.bash_profile</c>, (again, create it if it does not already exist) add the following lines:
+              <cd>
+                <cline>test -f ~/.profile &amp;&amp; . ~/.profile</cline>
+                <cline>test -f ~/.bashrc &amp;&amp; . ~/.bashrc</cline>
+              </cd>
+            </p>
+          </li>
+
+          <li>
+            <p>
+              In the file <c>/c/Users/Sean/.ssh</c>, we need to add the following script, which will automatically start the <c>ssh-agent</c>.
+            </p>
+
+            <program>
+              <input>
+                # Start SSH Agent
+                #----------------------------
+
+                SSH_ENV="$HOME/.ssh/environment"
+
+                function run_ssh_env {
+                  . "${SSH_ENV}" > /dev/null
+                }
+
+                function start_ssh_agent {
+                  echo "Initializing new SSH agent..."
+                  ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+                  echo "succeeded"
+                  chmod 600 "${SSH_ENV}"
+
+                  run_ssh_env;
+
+                  ssh-add ~/.ssh/id_rsa;
+                }
+
+                if [ -f "${SSH_ENV}" ]; then
+                  run_ssh_env;
+                  ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+                    start_ssh_agent;
+                  }
+                else
+                  start_ssh_agent;
+                fi
+              </input>
+            </program>
+          </li>
+        </ol>
+      </p>
+
+      <p>
+        You should now be set up to work with GitHub on your Windows machine.
+        When you clone a GitHub repository containing a <pretext /> book, be sure to choose the <init>SSH</init> option rather than <init>HTML</init>.
+      </p>
+    </subsection>
+
+    <subsection xml:id="windows-cli-install">
+      <title>Installing the CLI</title>
+      <p>
+        Finally, we are ready to install the <pretext />-CLI. This is perhaps the easiest step of the whole process.
+        From the Git Bash terminal, first type <c>which python</c> to confirm that Python has been successfully added to the PATH.
+        You should see the path to your Python program if things are working correctly.
+        If you don't, you may need to reinstall Python, or you can manually add it as we did for <c>pdf2svg</c>.
+      </p>
+
+      <p>
+        To install the CLI, simply type <c>pip install pretextbook</c>.
+      </p>
+
+      <p>
+        Congratulations! You are now ready to start using <pretext /> on your Windows machine.
+        If you did not do so previously, there is one additional step you may want to take.
+        In VSCode, go to File, then Preferences, then Extentions in the menu, or type <kbd>Ctrl</kbd>-<kbd>Shift</kbd>-X.
+        In the search bar that comes up, type <q>pretext-tools</q>, and install the package that comes up.
+        This will equip VSCode with syntax highlighting for <c>.ptx</c> files, as well as some automatic tag completion.
+        (For example, typing <c>thm</c> and then the <kbd>Tab</kbd> key will automatically insert the <init>XML</init> markup for a theorem.)
+      </p>
+
+      <p>
+        Additionally, from the command palette, (View, then Command Palette in the menu, or <kbd>Ctrl</kbd>-<kbd>Shift</kbd>-P)
+        if you type <q>pretext</q>, you will see some built-in options for building your book using the CLI.
+      </p>
+    </subsection>
+  </section>
 </appendix>
