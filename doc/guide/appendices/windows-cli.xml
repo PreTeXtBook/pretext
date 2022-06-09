@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<appendix xml:id="windows-cli">
+  <title>Using the <pretext/>-CLI on Windows</title>
+  <author>Sean Fitzpatrick</author>
+
+  <introduction>
+    <p>
+      The <pretext/>-CLI is the simplest way for authors to get started using <pretext/>,
+      and it is the recommended method on all systems, including Windows.
+      Details on using the CLI can be found starting in <xref ref="processing-CLI"/>.
+      Setting up the <pretext/>-CLI on Windows is considerably simpler than the method presented in <xref ref="windows-install-notes"/>,
+      but there is still some effort required.
+      In particular, you will have to install several pieces of software to get your system ready for using <pretext/>.
+    </p>
+
+    <p>
+      If you prefer a video walkthrough, one is provided below.
+      The video is approximately 40 minutes in length, but it goes through the entire installation process,
+      from adding the necessary software, to setting up <url href="https://github.com" visual="github.com">GitHub</url>.
+    </p>
+
+    <video youtube="tAtdzyVBcZA"/>
+  </introduction>
+
+  <section xml:id="windows-cli-software">
+    <title>Software prerequisites</title>
+
+    <p>
+      We begin with the programs you will want to have installed prior to using the <pretext/>-CLI.
+      All software can be downloaded free of charge, and is relatively easy to install.
+    </p>
+    
+    <subsection xml:id="windows-cli-vscode">
+      <title>VSCode</title>
+      <p>
+        <term>VSCode</term> is short for Visual Studio Code.
+        This is a text editor developed by Microsoft; we recommend it not because it plays well with Windows (although it does),
+        but because of the availability of the <c>pretext-tools</c> add-on, which will let you run the <pretext/>-CLI without leaving the editor.
+      </p>
+
+      <p>
+        To install, the editor, first download the installer from <url href="https://code.visualstudio.com/" visual="code.visualstudio.com">the VSCode website</url>.
+      </p>
+
+      <image width="50%" source="../images/vscode-download.png"/>
+
+      <p>
+        When running the installer, be sure that the <q>Add to PATH</q> option is selected:
+      </p>
+
+      <image width="30%" source="../images/vscode-setup.png"/>
+
+      <p>
+        You should now have VSCode installed on your system.
+      </p>
+    </subsection>
+
+    <subsection xml:id="windows-cli-python">
+      <title>Python</title>
+      <p>
+        One difficulty with using <pretext /> on Windows is the fact that Python is not core software, and there are many different ways to install install.
+        The recommended method for installing Python is to get it directly from <url href="https://www.python.org/" visual="python.org"/>.
+        Other Python installations, such as Anaconda, or even Miniconda, include a lot of extras that we don't need.
+      </p>
+
+      <p>
+        To install Python, simply download the installer from the <url href="https://www.python.org/" visual="python.org">Python website</url>.
+      </p>
+
+      <image width="50%" source="../images/python-download.png"/>
+
+      <p>
+        When you run the installer, be sure to check off the box to add Python to the Windows PATH during installation.
+        This will ensure that Python commands can be run from the command line without needing to provide the path to the Python program.
+      </p>
+
+      <image width="40%" source="../images/python-setup.png"/>
+    </subsection>
+
+    <subsection xml:id="windows-cli-git">
+      <title>Git for Windows</title>
+      <p>
+        The next piece of software we need to install is Git for Windows.
+        This will provide tools for allowing us to interact with textbook source on GitHub.
+        More importantly, it provides us with the <term>Git Bash</term> terminal,
+        which is what we will be running all of the commands for <pretext />.
+      </p>
+
+      <p>
+        You can get Git for Windows at <url href="https://gitforwindows.org/" visual="gitforwindows.org"/>.
+      </p>
+
+      <p>
+        The installation process for Git for Windows can seem quite complicated,
+        as there are a lot of options, and many of them are quite technical.
+        You can safely choose the defaults throughout, unless there is a particular setting you're familiar with that you wish to change.
+        The only thing you might want to do is change the default editor.
+        Since we have already installed VSCode, we can choose to use that instead of an editor like Emacs or Nano that you may be unfamiliar with.
+      </p>
+      
+      <image width="40%" source="../images/git-setup.png"/>
+    </subsection>
+
+    <subsection xml:id="windows-cli-other-software">
+      <title>Other software</title>
+
+      <p>
+        A number of additional programs may be needed to assist in processing your book, depending on what elements your book contains.
+      </p>
+
+      <p>
+        <dl>
+          <li>
+            <title><latex/></title>
+            <p>
+              You will almost certainly need to be able to process <latex />, either to produce the <init>PDF</init> version of your book,
+              or to process <latex /> images for the <init>HTML</init> version of your book.
+            </p>
+
+            <p>
+              There are two ways to install <latex /> on Windows: <url href="https://miktex.org/" visual="miktex.org">MikTeX</url>,
+              or <url href="https://www.tug.org/texlive/windows.html" visual="www.tug.org/texlive/windows.html">TeXLive</url>.
+              Although TeXLive is the default <latex /> distribution for Linux and MacOS platforms,
+              most Windows users find MikTeX easier to use, since it comes with package management software to assist with automatically installing needed <latex/> packages.
+              One thing to keep in mind: with MikTeX, you <em>must</em> run an initial update from the MikTeX pacakage manager before it will work correctly.
+            </p>
+          </li>
+
+          <li>
+            <title>pdf2svg</title>
+            <p>
+              If your book contains <latex /> images such as TikZ, the <pretext />-CLI will process those images using whatever version of <latex /> you installed,
+              and then it needs <c>pdf2svg</c> to convert the output to <init>SVG</init> format for use in <init>HTML</init>.
+            </p>
+
+            <p>
+              There is no Windows <q>installer</q> for thos program. Instead, it is available as a GitHub repository.
+              The easiest way to get it onto your computer is to use the newly-installed Git Bash terminal.
+              The first time you open Git Bash, your <em>working directory</em> might be the root <c>c:</c> drive.
+              Type <c>pwd</c> to find out what folder you're in.
+              It doesn't matter where you install <c>pdf2svg</c>, as long as you're aware of where it is.
+              If you want to change to a different folder, you can do so using the <c>cd</c> command.
+            </p>
+
+            <p>
+              An important note of caution: avoid using directories such as <c>Program Files</c> that have spaces in the name.
+              This can cause problems with some of the scripts used by the <pretext />-CLI.
+              For this example, we will choose to place the program in our own user directory.
+              In Git Bash, type <c>cd Users/Sean</c> (where you will replace <q>Sean</q> with your own user name, as long as it doesn't contain spaces).
+            </p>
+
+            <p>
+              Next, go to the <url href="https://github.com/jalios/pdf2svg-windows" visual="github.com/jailos/pdf2svg-windows">pdf2svg repository on GitHub</url>.
+              Click on the <q>Code</q> button, and then click on the clipboard icon to copy the <init>URL</init>, as shown below:
+            </p>
+
+            <image width="65%" source="../images/pdf2svg-download.png"/>
+
+            <p>
+              Next, in Git Bash, type <c>git clone</c> and then right-click to paste the <init>URL</init> you copied,
+              or use the keyboard shortcut <kbd>Shift</kbd>-<kbd>Insert</kbd>. Hit <kbd>Enter</kbd>.
+            </p>
+
+            <p>
+              You will now have the necessary software downloaded to your computer.
+              In my example, it is now available in <c>C:\Users\Sean\pdf2svg-windows</c>.
+              To complete the installation, we need to add the program to the Windows environment variables.
+              Hit the <kbd>Windows</kbd> key, and type <q>path</q>. Open the suggested program.
+            </p>
+
+            <p>
+              As shown below, click on the <q>Environment Variables...</q> button, then click on the line beginning with <q>Path</q>,
+              and click on the <q>Edit</q> button.
+              You can then click on <q>Browse</q>, and find the <c>pdf2svg-windows</c> folder you just downloaded.
+            </p>
+
+            <sidebyside widths="30% 30% 30%" margins="2%" valign="bottom">
+              <image source="../images/windows-path-1.png"/>
+              <image source="../images/windows-path-2.png"/>
+              <image source="../images/windows-path-3.png"/>
+            </sidebyside>
+
+            <p>
+              You should now have a working installation of <c>pdf2svg</c>.
+              To confirm, type <c>which pdf2svg</c> in Git Bash. It should display the path to the <c>pdf2svg</c>program. (You may have to restart Git Bash first.)
+            </p>
+          </li>
+
+          <li>
+            <title>Sage</title>
+            <p>
+              If your book includes Sage components, such as <c>sageplot</c> (but <em>not</em> Sage Cells),
+              you will need to install Sage to process them.
+              Sage is available at <url href="https://www.sagemath.org/" visual="www.sagemath.org"/>.
+              Click on the download button, and follow the instructions in the installer.
+            </p>
+          </li>
+
+          <li>
+            <title>Pageres</title>
+            <p>
+              If your book contains <em>interactive</em> elements, such as GeoGebra,
+              or videos in formats other than YouTube, the <pretext />-CLI wil want to take screenshots of the web-based content to produce
+              <q>preview</q> images.
+            </p>
+
+            <p>
+              Previews are generated using a program called <c>pageres</c>.
+              Installing this on Windows is actually quite difficult, and it does not seem to be working correctly at this time.
+              (To install, you must first install <c>node.js</c>. The installation is time-consuming, and it will probably mess up your existing Python installation.)
+              You can avoid the need for <c>pageres</c> by taking screenshots manually,
+              and including them in your book using the <attr>preview</attr> attribute.
+              (Usage will look like <c>&lt; interactive preview="images/preview.png" &rt;</c>.)
+              A future version of the <pretext />-CLI may be able to use a Python-based alternative that will bypass the need for this program.
+            </p>
+          </li>
+
+          <li>
+            <title>GitHub Deskop</title>
+            <p>
+              If you find it difficult to manage git from the command line,
+              GitHub provides a graphical user interface for the Windows environment,
+              called <url href="https://desktop.github.com/" visual="desktop.github.com">GitHub Desktop</url>.
+              This provides a point-and-click interface for synchronizing your local changes with GitHub.
+            </p>
+          </li>
+        </dl>
+      </p>
+    </subsection>
+
+    <subsection xml:id="windows-cli-setup">
+      <title>Setting up</title>
+      <introduction>
+        <p>
+          Congratulations! You now have all the necessary software installed.
+          Next, we need to set up Git Bash, and install the <pretext />-CLI.
+        </p>
+      </introduction>
+
+      <subsubsection xml:id="windows-cli-git-setup">
+        <title>Setting up Git Bash</title>
+        <p>
+          One change that you will want to make right away is setting the default working directory for Git Bash.
+          In your home folder (<c>C:\Users\Sean</c> in our example), look for a file called <c>.bashrc</c>.
+          If it doesn't already exist, open Git Bash, navigate to this folder, and type <c>touch .bashrc</c> to create the file.
+          Open the file (it is a plain text file), and add the line <c>cd C:/Users/Sean</c>,
+          where you should replace the directory with the one you want to use.
+        </p>
+        
+        <p>
+          Next, we need to set up <init>SSH</init> authentication, for more efficient communication with GitHub.
+          We assume that you already have a GitHub account; it not, you should create one at <url href="https://github.com/" visual="github.com"/>.
+          There are existing instructions available online at
+          <url href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh" visual="docs.github.com/en/authentication/connecting-to-github-with-ssh">docs.github.com</url>.
+          To begin with, please follow the instructions provided there for generating an <init>SSH</init> key using Git Bash, and adding it to GitHub.
+        </p>
+
+        <p>
+          There is one aspect of the instructions that is not quite correct.
+          When you get to the step for <url href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent" visual="docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">adding the ssh key to the ssh agent</url>,
+          the instructions will tell you to add your <init>SSH</init> key to the <init>SSH</init> agent using a relative path, with a line such as <c>ssh-add ~/.ssh/id_ed25519</c>.
+          <alert>You must use a full path here</alert>. Instead, type <c>ssh-add /c/Users/Sean/.ssh/id_ed25519</c>,
+          where as usual you should replace <c>Users/Sean</c> with your own directory.
+        </p>
+
+        <p>
+          There is one more step you will want to complete.
+          The <c>ssh-agent</c> program will not start automatically when you open Git Bash.
+          To change this, we follow the instructions provided at <url href="https://gist.github.com/bsara/5c4d90db3016814a3d2fe38d314f9c23" visual="gist.github.com/bsara/5c4d90db3016814a3d2fe38d314f9c23"/>.
+        </p>
+
+        <p>
+          <ol>
+            <li>
+              <p>
+                In the file <c>/c/Users/Sean/.ssh</c>, open the <c>config</c> file (or create it using the <c>touch</c> command in Git Bash if it doesn't already exist),
+                and add the following lines:
+                <cd>
+                  <cline>Host github.com</cline>
+                  <cline> Hostname github.com</cline>
+                  <cline> IdentityFile ~/.ssh/id_rsa</cline>
+                </cd>
+                Note that the second and third lines are indented by one space.
+                Note also that this assumes an <init>RSA</init> key, but you may have chosen a different encryption method.
+                You may, for example, want to replace <c>id_rsa</c> with <c>id_ed25519</c>.
+              </p>
+            </li>
+
+            <li>
+              <p>
+                In the file <c>/c/Users/Sean/.bash_profile</c>, (again, create it if it does not already exist) add the following lines:
+                <cd>
+                  <cline>test -f ~/.profile &amp;&amp; . ~/.profile</cline>
+                  <cline>test -f ~/.bashrc &amp;&amp; . ~/.bashrc</cline>
+                </cd>
+              </p>
+            </li>
+
+            <li>
+              <p>
+                In the file <c>/c/Users/Sean/.ssh</c>, we need to add the following script, which will automatically start the <c>ssh-agent</c>.
+              </p>
+
+              <program>
+                <input>
+                  # Start SSH Agent
+                  #----------------------------
+
+                  SSH_ENV="$HOME/.ssh/environment"
+
+                  function run_ssh_env {
+                    . "${SSH_ENV}" > /dev/null
+                  }
+
+                  function start_ssh_agent {
+                    echo "Initializing new SSH agent..."
+                    ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+                    echo "succeeded"
+                    chmod 600 "${SSH_ENV}"
+
+                    run_ssh_env;
+
+                    ssh-add ~/.ssh/id_rsa;
+                  }
+
+                  if [ -f "${SSH_ENV}" ]; then
+                    run_ssh_env;
+                    ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+                      start_ssh_agent;
+                    }
+                  else
+                    start_ssh_agent;
+                  fi
+                </input>
+              </program>
+            </li>
+          </ol>
+        </p>
+
+        <p>
+          You should now be set up to work with GitHub on your Windows machine.
+          When you clone a GitHub repository containing a <pretext /> book, be sure to choose the <init>SSH</init> option rather than <init>HTML</init>.
+        </p>
+      </subsubsection>
+
+      <subsubsection xml:id="windows-cli-install">
+        <title>Installing the CLI</title>
+        <p>
+          Finally, we are ready to install the <pretext />-CLI. This is perhaps the easiest step of the whole process.
+          From the Git Bash terminal, first type <c>which python</c> to confirm that Python has been successfully added to the PATH.
+          You should see the path to your Python program if things are working correctly.
+          If you don't, you may need to reinstall Python, or you can manually add it as we did for <c>pdf2svg</c>.
+        </p>
+
+        <p>
+          To install the CLI, simply type <c>pip install pretextbook</c>.
+        </p>
+      </subsubsection>
+    </subsection>
+  </section>
+
+
+
+  <conclusion>
+    <p>
+      Congratulations! You are now ready to start using <pretext /> on your Windows machine.
+      If you did not do so previously, there is one additional step you may want to take.
+      In VSCode, go to File, then Preferences, then Extentions in the menu, or type <kbd>Ctrl</kbd>-<kbd>Shift</kbd>-X.
+      In the search bar that comes up, type <q>pretext-tools</q>, and install the package that comes up.
+      This will equip VSCode with syntax highlighting for <c>.ptx</c> files, as well as some automatic tag completion.
+      (For example, typing <c>thm</c> and then the <kbd>Tab</kbd> key will automatically insert the <init>XML</init> markup for a theorem.) 
+    </p>
+
+    <p>
+      Additionally, from the command palette, (View, then Command Palette in the menu, or <kbd>Ctrl</kbd>-<kbd>Shift</kbd>-P)
+      if you type <q>pretext</q>, you will see some built-in options for building your book using the CLI.
+    </p>
+  </conclusion>
+
+</appendix>
