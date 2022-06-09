@@ -560,93 +560,6 @@
                 <webwork copy="webwork-solve-quadratic" seed="832"/>
 
             </exercise>
-
-            <p>
-                We repeat a version of a previous exercise using the deprectated <tag>stage</tag> element.
-                This is for testing to monitor if <tag>stage</tag> decays.
-            </p>
-
-            <exercise xml:id="quadratic-equation-with-stage">
-                <title>Solving Quadratic Equations</title>
-
-                <webwork>
-                    <description>
-                        <line>Find a quadratic equation's solutions.</line>
-                        <line>One positive integer solution and one negative fraction solution.</line>
-                    </description>
-
-                    <pg-code>
-                        Context("Fraction");
-
-                        $a = Compute(random(2,6,1));
-                        do {$k = Compute(random(2,6,1))} until (gcd($a,$k)==1);
-                        $r = Compute(random(2,6,1));
-                        $c = $k*-$r;
-                        $b = $a*-$r+$k;
-                        $quadratic = Formula("$a x^2 + $b x + $c")->reduce;
-                        $x1 = Fraction($r,1);
-                        $x2 = Fraction(-$k,$a);
-                        Context()->flags->set(reduceConstants=>0,reduceConstantFunctions=>0);
-                        $solnum1 = Formula("-$b+sqrt(($b)**2-4($a)($c))");
-                        $solnum2 = Formula("-$b-sqrt(($b)**2-4($a)($c))");
-
-                        $evaluatorfora = $a->cmp()->withPostFilter(AnswerHints(
-                            [-$a] =>
-                            "Do you have the sign correct?"));
-                        $evaluatorforb = $b->cmp()->withPostFilter(AnswerHints(
-                            [-$b] =>
-                            "Do you have the sign correct?"));
-                        $evaluatorforc = $c->cmp()->withPostFilter(AnswerHints(
-                            [-$c] =>
-                            "Do you have the sign correct?"));
-
-                        Context("LimitedFraction");
-                        $multians1 = MultiAnswer(Fraction("$x1"),Fraction("$x2"))->with(
-                            singleResult => 0,
-                            allowBlankAnswers => 1,
-                            checker => sub {
-                                my ($correct,$student,$self) = @_;
-                                my ($s1, $s2) = @{$student};
-                                my ($c1, $c2) = @{$correct};
-
-                                return (1,1) if ($c1 == $s1 and $c2 == $s2) or
-                                                ($c1 == $s2 and $c2 == $s1);
-                                return (1,0) if $c1 == $s1 or $c2 == $s1;
-                                return (0,1) if $c1 == $s2 or $c2 == $s2;
-                                return (0,0);
-                             }
-                        );
-                    </pg-code>
-
-                    <stage>
-                        <title>Identify Coefficients</title>
-                        <statement>
-                            <p>Consider the quadratic equation given by <me><var name="$quadratic" /> = 0\text{.}</me>  First, identify the coefficients for the quadratic equation using the standard form from <xref ref="theorem-quadratic-formula" />.</p>
-
-                            <p><m>a=</m> <var name="$a" width="4" evaluator="$evaluatorfora"/>, <m>b=</m> <var name="$b" width="4" evaluator="$evaluatorforb"/>, <m>c=</m> <var name="$c" width="4" evaluator="$evaluatorforc"/></p>
-                        </statement>
-
-                        <solution>
-                            <p> Take the coefficient of <m>x^2</m> for the value of <m>a</m>, the coefficient of <m>x</m> for <m>b</m>, and the constant for <m>c</m>.  <em>In this case</em>, they are <m>a = <var name="$a" /></m>, <m>b = <var name="$b" /></m>, <m>c = <var name="$c" /></m>.</p>
-                        </solution>
-                    </stage>
-
-                    <stage>
-                        <title>Use the Quadratic Formula</title>
-                        <statement>
-                            <p>Using the quadratic formula, solve <m><var name="$quadratic"/>=0</m>.</p>
-                            <p><m>x=</m> <var name="$multians1" width="15"/> or <m>x=</m> <var name="$multians1" width="15"/></p>
-                        </statement>
-
-                        <solution>
-                            <p>Recall that the quadratic formula is given in <xref ref="theorem-quadratic-formula" />.</p>
-
-                            <p>You already identified <m>a = <var name="$a"/></m>, <m>b = <var name="$b"/></m>, and <m>c = <var name="$c"/></m>, so the results are: <me>x = {<var name="$solnum1"/> \over 2(<var name="$a"/>)} = <var name="$x1"/></me> or <me>x = {<var name="$solnum2"/> \over 2(<var name="$a"/>)} = <var name="$x2"/></me></p>
-                        </solution>
-
-                    </stage>
-                </webwork>
-            </exercise>
         </section>
 
         <section>
@@ -1719,7 +1632,7 @@
                         add_functions($gr[6], "cos(x) for x in &lt;-1,4> using color:blue and weight:2");
                         add_functions($gr[7], "exp(-x^2) for x in &lt;-1,4> using color:blue and weight:2");
                     </pg-code>
-                    <stage>
+                    <task>
                         <statement>
                             <image pg-name="$gr[0]" width="25%"/>
                             <image pg-name="$gr[1]" width="25%"/>
@@ -1727,8 +1640,8 @@
                         <solution>
                             <image pg-name="$gr[2]" width="25%"/>
                         </solution>
-                    </stage>
-                    <stage>
+                    </task>
+                    <task>
                         <statement>
                             <image pg-name="$gr[3]" width="25%"/>
                             <image pg-name="$gr[4]" width="25%"/>
@@ -1740,7 +1653,7 @@
                         <solution>
                             <image pg-name="$gr[7]" width="25%"/>
                         </solution>
-                    </stage>
+                    </task>
                 </webwork>
             </exercise>
 
