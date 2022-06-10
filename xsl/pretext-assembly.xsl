@@ -105,14 +105,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Isolate conversion of Runestone/interactive to PreTeXt/static -->
 <xsl:import href="./pretext-runestone-static.xsl"/>
 
-<!-- There is an implicit assumption that the "pretext-common.xsl"      -->
-<!-- stylesheet has been imported, via teh use of the "visible-id"      -->
-<!-- template.  This is used to coordinate between the "extract-pg.xsl" -->
-<!-- stylesheet, the trip to the WW server, and the assembly here to    -->
-<!-- make different representations available to conversions.  We       -->
-<!-- prefer to not have this dependency, so perhaps a purpose-build     -->
-<!-- identification template ("webwork-xxx" as default) is necessary.   -->
-<!-- (2022-06-09)                                                       -->
+<!-- We explicitly do not import "pretext-common.xsl" as we want    -->
+<!-- this important pre-processing stylesheet to have no hidden     -->
+<!-- dependencies.  In almost every rational use, the "-common"     -->
+<!-- stylesheet is imported by a conversion, so it is easy to       -->
+<!-- miss these dependencies.  An example in 2022-06 was the use    -->
+<!-- of the "visible-id" template to coordinate construction and    -->
+<!-- insertion of WeBWorK problems with an intervening trip to a    -->
+<!-- WW server.  The "pretext-enhanced-source.xsl" stylesheet is    -->
+<!-- one place where "-common" does not creep in.  Use of a modal   -->
+<!-- template here, with a definition in -common, will do a         -->
+<!-- massive "value-of" when not defined for the "-enhanced-source" -->
+<!-- stylesheet, which might be detectable (in strange ways).       -->
 
 <!-- The "representations" pass is used to make derived versions of      -->
 <!-- authored exercises which can be rendered dynamically.  For example, -->
