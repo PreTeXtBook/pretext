@@ -134,7 +134,7 @@
 <xsl:template match="webwork[@source]" mode="dictionaries">
     <!-- Define values for the visible-id as key -->
     <xsl:variable name="problem">
-        <xsl:apply-templates select="." mode="visible-id" />
+        <xsl:value-of select="@webwork-id"/>
     </xsl:variable>
     <!-- 1. a ptx|copy|server flag (authored in PTX, a copy, or from server)   -->
     <xsl:text>origin["</xsl:text>
@@ -157,7 +157,7 @@
 <xsl:template match="webwork[statement|task]" mode="dictionaries">
     <!-- Define values for the visible-id as key -->
     <xsl:variable name="problem">
-        <xsl:apply-templates select="." mode="visible-id" />
+        <xsl:value-of select="@webwork-id"/>
     </xsl:variable>
     <!-- 1. a ptx|server flag (authored in PTX [or a copy], or from server)    -->
     <xsl:text>origin["</xsl:text>
