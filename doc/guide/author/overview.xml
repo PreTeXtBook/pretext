@@ -21,7 +21,17 @@
 
         <p>An <tag>article</tag> starts divisions from <tag>section</tag>, though it may choose to have no divisions at all.  <tag>paragraphs</tag> are exceptional.  They lack a full set of features, but can be used to divide anything, in books or in articles, though they are always terminal since you cannot divide them further.  You will have noticed that we prefer the generic term <term>division</term><idx><h>division</h><seealso>structural division</seealso></idx> (rather than <q>section</q>) since a <tag>section</tag> is a very particular division.</p>
 
-        <p>A division may be unstructured, in which case you fill it with paragraphs and lists and figures and theorems and so on.  But if you choose to structure a division it must look like an optional <tag>introduction</tag>, followed by multiple divisions of the next finer granularity, with an optional <tag>conclusion</tag>.  Either version may have a single <tag>exercises</tag> division at the end.  The structured version may have more than one <tag>exercises</tag>.  Finally, there may be a single <tag>references</tag> within a division.</p>
+        <p>A division may be unstructured, in which case you fill it with paragraphs and lists and figures and theorems and so on.  But if you choose to structure a division it must look like the following:
+        <ul>
+        <li>An optional <tag>introduction</tag> </li>
+        <li>One or more divisions of the next finer granularity</li>
+        <li>An optional <tag>conclusion</tag>.</li>
+        </ul>  
+        Either version may have a single <tag>exercises</tag> division at the end.  
+        
+        The structured version may have more than one <tag>exercises</tag>.  Finally, there may be a single <tag>references</tag> within a division.</p>
+
+        <p>The <tag>introduction</tag> and <tag>conclusion</tag> divisions are meant to be short, and may not contain any other numbered tag.  No exercises, theorems, listings, etc. If you want to have an introductory division with any of the numbered elements you are free to omit the <tag>introduction</tag> and use the next finer subdivision with a <tag>title</tag> of <q>Introduction</q></p>
 
         <p>Every division tag can carry an <attr>xml:id</attr> attribute, and it is a good practice to (a) provide one, (b) use a very short list of words describing the content, and (c) adopt a consistent pattern of your choosing.  Do not use numbers, you may later regret it.  These are optional, and with practice you will learn how best to use them. See <xref ref="overview-cross-references" /> just below for more on this.</p>
 
