@@ -204,10 +204,6 @@ Scaffold::Begin(is_open => "correct_or_first_incorrect", numbered => 1);
 ############################################################
 Section::Begin("Identify Coefficients");
 
-############################################################
-# Body
-############################################################
-
 BEGIN_PGML
 Consider the equation
 
@@ -234,10 +230,6 @@ Section::End();
 # Section
 ############################################################
 Section::Begin("Use the Quadratic Formula");
-
-############################################################
-# Body
-############################################################
 
 BEGIN_PGML
 Use the quadratic formula to find the solution set to
