@@ -3,6 +3,12 @@ doc/guide/webwork-representations.ptx
 script/mjsre/node_modules/
 script/mjsre/package-lock.json
 pretext/__pycache__/**
+.error_schema.log
+# any file ending in ~ (backups, usually)
+*~
 .vscode
 **/_build
 **/output
+**/rsbuild
+**/build
+
