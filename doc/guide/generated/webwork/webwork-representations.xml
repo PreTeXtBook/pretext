@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-representations>
+  <webwork-reps version="2" xml:id="extracted-webwork-65" ww-id="webwork-65">
+    <static seed="65" source="Library/ma122DB/set12/s5_4_26.pg">
+      <statement><p><m>\displaystyle \int_0^{1} (4 e^x+5 \sin x)\, dx</m> =  <fillin name="AnSwEr0001" characters="20"/></p>
+</statement>
+      <answer>
+        <p>
+          <m>9.17161578449548</m>
+        </p>
+      </answer>
+      <solution><p>SOLUTION</p>
+<p><me>\begin{array}{rcl} \displaystyle \int_0^{1} (4 e^x+5 \sin x)\, dx \amp =\amp   
+\displaystyle  4 e^x-5 \cos x  \Big]_0^{1}
+\\ \amp =\amp  (4 e^{1} - 5 \cos 1) - (4 e^0 - 5 \cos0 ) 
+\\ \amp =\amp  4 e^{1} - 5 \cos 1  + 1 
+\end{array}</me></p>
+</solution>
+    </static>
+    <server-data sourceFilePath="Library/ma122DB/set12/s5_4_26.pg" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" course-password="anonymous" language="en-US"/>
+    <pg source="Library/ma122DB/set12/s5_4_26.pg"/>
+  </webwork-reps>
+  <webwork-reps version="2" xml:id="extracted-webwork-71" ww-id="webwork-71">
+    <static seed="71">
+      <statement><p><m>1+2=</m><fillin name="AnSwEr0001" characters="5"/></p>
+</statement>
+      <answer>
+        <p>
+          <m>3</m>
+        </p>
+      </answer>
+    </static>
+    <server-data problemSource="RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIk1hdGhPYmplY3RzLnBsIiwiUEdNTC5wbCIsIkFuc3dlckZvcm1hdEhlbHAucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTsKQ29udGV4dCgnTnVtZXJpYycpOwoKQkVHSU5fUEdNTApbYDErMj1gXVtfXXszfXs1fQoKCkVORF9QR01MCgpFTkRET0NVTUVOVCgpOw==" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" course-password="anonymous" language="en-US"/>
+    <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###       on 2022-06-11T17:46:52-07:00       
+###   A recent stable commit (2020-08-09):   
+### 98f21740783f166a773df4dc83cab5293ab63a4a 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(16.5.4)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "MathObjects.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+[`1+2=`][_]{3}{5}
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+  </webwork-reps>
+</webwork-representations>
