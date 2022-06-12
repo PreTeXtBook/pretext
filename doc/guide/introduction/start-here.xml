@@ -141,7 +141,7 @@
         </p>
 
         <p>
-            For the majority of authors who are starting out with <pretext />, a simpler workflow is available: the PreTeXt-CLI (CLI is <em>Command Line Interface</em>).  This is a Python program that implements the most common conversion tasks that previously required <c>xsltproc</c> and the pretext script.
+            For the majority of authors who are starting out with <pretext />, a simpler workflow is available: the PreTeXt-CLI (CLI is <em>Command Line Interface</em>).  This is a Python program that implements the most common conversion tasks that previously required <c>xsltproc</c> and the pretext script.  If you are ready to install and get started see <xref ref="xref-getting-pretext" />.
         </p>
     </section>
 

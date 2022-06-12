@@ -830,6 +830,7 @@
                     <li>Typically a block does not contain another block, except that the more planar ones can appear as part of a more textual one.</li>
 
                     <li>When numbered, all blocks generally run consecutively.  (In <latex/>-speak, <q>on the same counter.</q>)  Numbering FIGURE-LIKE and PROJECT-LIKE independently is in transition at this writing (2021-07-07).</li>
+                    <li>Depending on the output format of your document, some block types may be initially hidden to improve the visual flow.  The reader must click on the heading for the block to reveal its contents.  You can change this behavior by configuring your publication file.  See <xref ref="publication-file-online"/>.  We will make note of the elements that are hidden by default for <init>HTML</init> output.</li>
                 </ul>
             </list>
 
@@ -854,7 +855,7 @@
                     <li>
                         <title>EXAMPLE-LIKE</title>
                         <p><tag>example</tag>, <tag>question</tag>, <tag>problem</tag></p>
-                        <p>A worked problem meant as exposition.  It can be structured with <tag>task</tag>, <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> just like an <tag>exercise</tag> or PROJECT-LIKE, but the <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> cannot be electively removed from output, and they do not migrate to collections of solutions elsewhere.</p>
+                        <p>A worked problem meant as exposition.  It can be structured with <tag>task</tag>, <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> just like an <tag>exercise</tag> or PROJECT-LIKE, but the <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> cannot be electively removed from output, and they do not migrate to collections of solutions elsewhere. Hidden by default for <init>HTML</init> output formats.</p>
                     </li>
 
                     <li>
@@ -872,7 +873,7 @@
                     <li>
                         <title>THEOREM-LIKE</title>
                         <p><tag>theorem</tag>, <tag>corollary</tag>, <tag>lemma</tag>, <tag>algorithm</tag>, <tag>proposition</tag>, <tag>claim</tag>, <tag>fact</tag>, <tag>identity</tag></p>
-                        <p>Mathematical results, which can have an (optional) proof.</p>
+                        <p>Mathematical results, which can have an (optional) <tag>proof</tag>.  Proofs are hidden by default in <init>HTML</init> output.</p>
                     </li>
 
                     <li>
@@ -912,7 +913,7 @@
         <subsection>
             <title>Other Blocks</title>
 
-            <p>There are other blocks which can be achieved using just one element.  Examples are <tag>poem</tag> and <tag>assemblage</tag>.  An <tag>exercise</tag> can take on different behaviors, depending on its placement (see <xref ref="topic-exercises"/>).  One such placement is as a child of a division, which we call an <term>inline exercise</term>, and this would be regarded as a block, very similar to a PROJECT-LIKE.</p>
+            <p>There are other blocks which can be achieved using just one element.  Examples are <tag>poem</tag> and <tag>assemblage</tag>.  An <tag>exercise</tag> can take on different behaviors, depending on its placement (see <xref ref="topic-exercises"/>).  One such placement is as a child of a division, which we call an <term>inline exercise</term>, and this would be regarded as a block, very similar to a PROJECT-LIKE.  Inline exercises are hidden by default in <init>HTML</init> output.</p>
 
             <p>A paragraph (<tag>p</tag>) can appear many places and is a primary component of blocks.  But when it is a child of a division, it shares some charateristics with other blocks.  There are a number of peers of a <tag>p</tag> which would then also qualify:  <tag>pre</tag>, <tag>blockquote</tag>, <tag>image</tag>, <tag>video</tag>, <tag>program</tag>, <tag>console</tag>, and <tag>tabular</tag>.  None of these can have a title or number, making them less useful, but widening the possibilities for placement.</p>
         </subsection>
@@ -2829,6 +2830,8 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <p>A <tag>program</tag> will be treated as verbatim text (see <xref ref="overview-verbatim-literal"/>), subject to all the exceptions for exceptional characters (see <xref ref="overview-exceptional-characters"/>).  Indentation will be preserved, though an equal amount of leading whitespace will be stripped from every line, so as to keep the code shifted left as far as possible.  So you can indent your code consistently along with your <init>XML</init> indentation.  For this reason it is best to indent with spaces, and not tabs.  A mix will almost surely end badly, and in some programming languages tabs are discouraged (e.g. Python).</p>
 
         <p>The <attr>language</attr> attribute may be used to get some degree of language-specific syntax highlighting.  We will eventually provide a table of attribute values here.  They are always lowercase, and a first guess might succeed.</p>
+
+        <p>the <attr>interactive</attr> attribute may have the values <q>activecode</q>, <q>codelens</q>, or <q>no</q>.  The activecode value is used to indicate that in an interactive output format like <init>HTML</init> that the program should be executable in the browser.  Some languages like Java and C++ require the  output to be for a runestone server in order to get the program to compile and run. Other languages like Python, SQL, and Javascript can run right in the browser.  The codelens option will provide a visualization of the code and allow the reader to step through a program line by line and observe the changes in variables and other data structures. </p>
 
         <p>A <tag>console</tag> is a transcript of an interactive session in a terminal or console at a command-line.  It is a sequence of the following elements, in this order, possibly repeated many times as a group: <tag>prompt</tag>, <tag>input</tag>, and <tag>output</tag>.  The <tag>output</tag> is optional, and a <tag>prompt</tag> is only displayed when there is an immediately subsequent <tag>input</tag> (which could be empty).  The content is treated as verbatim text (see <xref ref="overview-verbatim-literal"/>), subject to all the exceptions for exceptional characters (see <xref ref="overview-exceptional-characters"/>).</p>
 
