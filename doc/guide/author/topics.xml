@@ -3866,7 +3866,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <figure>
                 <caption>Sea Hares, Flower Garden Banks National Marine Sanctuary</caption>
-                <video xml:id="video-sea-hares" href="https://flowergarden.noaa.gov/image_library/video/seaharew.mp4" width="80%" preview="images/sea-hare.jpg" />
+                <video xml:id="video-sea-hares" href="https://flowergarden.noaa.gov/image_library/video/seaharew.mp4" width="80%" preview="sea-hare.jpg" />
             </figure>
         </subsection>
 
@@ -3881,12 +3881,12 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <figure>
                 <caption>The Eagles, <articletitle>Hotel California</articletitle></caption>
-                <video xml:id="video-hotel-california" youtube="YW4dzWE1SUs" width="60%" start="12" preview="images/hotel-california.jpg" />
+                <video xml:id="video-hotel-california" youtube="YW4dzWE1SUs" width="60%" start="12" preview="hotel-california.jpg" />
             </figure>
 
             <figure>
                 <caption>Mozart, Piano Sonata in C Major, K. 545, II</caption>
-                <video xml:id="mozart-piano-sonata" youtube="1Yv_AINhVn4" width="80%" preview="images/mozart-piano.jpg" />
+                <video xml:id="mozart-piano-sonata" youtube="1Yv_AINhVn4" width="80%" preview="mozart-piano.jpg" />
             </figure>
 
             <p>The <c>pretext</c> script (<xref ref="pretext-script" />) may be used to download the provided preview images for YouTube videos (only).  Filenames will be formed from the <attr>xml:id</attr> of the <tag>video</tag> element.  These will be used in static versions of output, such as print.  Once custom preview images are implemented for author-hosted video, their static representation will improve.</p>

@@ -31,7 +31,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- Relative path, relative to "main" source file -->
     <source webwork-problems="webwork-representations.xml">
-        <directories external="images" generated="generated"/>
+        <directories external="external" generated="generated"/>
     </source>
 
     <!-- These are the defaults but written explicitly here to serve as a model. -->
