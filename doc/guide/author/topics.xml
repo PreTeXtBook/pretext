@@ -1963,6 +1963,114 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
     </section>
 
+    <section xml:id="topic-interactive-exercises">
+        <title>Interactive Exercises</title>
+        <idx>interactive exercises</idx>
+        <idx><h>exercise</h><h>interactive</h></idx>
+
+        <introduction>
+            <p><pretext/> has markup for a variety of interactive problem types, described individually in the subsections to follow.  Generally, for a regular <init>HTML</init> build (<xref ref="online-html"/>), these will be interactive, informing the reader when their answer is correct, and providing feedback when their answer is not correct.  When <init>HTML</init> is built to host on a Runestone server (<xref ref="runestone"/>), then student progress as part of a course will be recorded on the server.  Some features, which will be noted below, such as execution of computer code, is more capable on a Runestone server.</p>
+
+            <p>Generally, an interactive exercise is authored much like a <q>regular</q> <tag>exercise</tag> (<xref ref="overview-exercises"/>) with <tag>statement</tag>, <tag>hint</tag>, <tag>answer</tag>, <tag>solution</tag>.  However, there is also some additional markup which serves as a <term>signal</term> that the exercise is more than a short-answer, or free-response, question.  Usually, but not always, this signal is an additional element following <tag>statement</tag>.  One consequence of this is that all but one type of interactive exercise will require a <tag>statement</tag> element to contain the question text.</p>
+
+            <p>Each type of interactive question has a <term>static</term> version for use in output formats like print, <init>PDF</init>, or braille.  Details are given below.  Note that since the ability for instant evaluation of a reader's answer means an author provides the solution and other feedback, this can then be incorporated into a static version as an automatically-generated <tag>answer</tag> and/or <tag>solution</tag> (in addition to any others an author provides).  Note that an author can provide a <tag>hint</tag> for use in all output formats, but there are not any  automatically-generated <tag>hint</tag> for static versions of interactive problems.  Visibility of these solutions can be controlled via the mechanism applicable to all exercises, see <xref ref="exercise-component-visibility"/>.</p>
+
+            <p>Note the opportunity to provide feeback to the reader using a <tag>feedback</tag> element in various locations.  These are generally optional, but highly encouraged as a way to improve the quality of your reader's experience.</p>
+        </introduction>
+
+        <!-- From "pretext-runestone.xsl", temporary -->
+        <!--   - every multiple choice "exercise"             -->
+        <!--   - every Parsons problem "exercise"             -->
+        <!--   - every matching problem "exercise"            -->
+        <!--   - every clickable area problem "exercise"      -->
+        <!--   - every "exercise" with fill-in blanks         -->
+        <!--   - every "exercise" with additional "program"   -->
+        <!--   - every "exercise" elected as "shortanswer"    -->
+        <!--   - every PROJECT-LIKE with additional "program" -->
+
+
+        <subsection xml:id="true-false-exercises">
+            <title>True/False Exercises (*)</title>
+            <idx>true/false</idx>
+            <idx><h>interactive exercises</h><h>true/false</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>true/false</h></idx>
+
+            <!-- signal and static -->
+        </subsection>
+
+        <subsection xml:id="multiple-choice-exercises">
+            <title>Multiple-Choice Exercises (*)</title>
+            <idx>multiple-choice exercises</idx>
+            <idx><h>interactive exercises</h><h>multiple-choice</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>multiple-choice</h></idx>
+
+            <!-- signal and static -->
+        </subsection>
+
+        <subsection xml:id="parson-problems">
+            <title>Parson Problems (*)</title>
+            <idx>Parson problems</idx>
+            <idx><h>interactive exercises</h><h>Parson problems</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>Parson problems</h></idx>
+            <idx>mixed-up blocks exercises</idx>
+            <idx><h>interactive exercises</h><h>mixed-up blocks</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>mixed-up blocks</h></idx>
+
+            <!-- aka mixed-up blocks -->
+            <!-- signal, static, presentation -->
+        </subsection>
+
+        <subsection xml:id="matching-exercises">
+            <title>Matching Exercises (*)</title>
+            <idx>matching exercises</idx>
+            <idx><h>interactive exercises</h><h>matching</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>matching</h></idx>
+
+            <!-- signal, static, presentation -->
+        </subsection>
+
+        <subsection xml:id="clickable-area-exercises">
+            <title>Clickable Area Exercises (*)</title>
+            <idx>clickable-area exercises</idx>
+            <idx><h>interactive exercises</h><h>clickable-area</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>clickable-area</h></idx>
+
+            <!-- "clickable" in static? -->
+            <!-- signal, static, presentation -->
+        </subsection>
+
+        <subsection xml:id="fill-in-exercises">
+            <title>Fill-in-the-Blanks Exercises (*)</title>
+            <idx>fill-in exercises</idx>
+            <idx><h>interactive exercises</h><h>fill-in </h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>fill-in </h></idx>
+
+            <!-- signal, static, presentation -->
+        </subsection>
+
+        <subsection xml:id="coding-exercises">
+            <title>Coding Exercises (*)</title>
+            <idx>coding exercises</idx>
+            <idx><h>interactive exercises</h><h>coding</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>coding</h></idx>
+
+            <!-- signal, static, presentation -->
+        </subsection>
+
+        <subsection xml:id="short-answer-exercises">
+            <title>Short-Answer Exercises (*)</title>
+            <idx>short-answer exercises</idx>
+            <idx><h>interactive exercises</h><h>short-answer</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>short-answer</h></idx>
+            <idx>free-response exercises</idx>
+            <idx><h>interactive exercises</h><h>free-response</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>free-response</h></idx>
+
+            <!-- aka free-response -->
+            <!-- signal, static, presentation -->
+        </subsection>
+    </section>
+
     <section xml:id="topic-exercises-solutions">
         <title>Exercises and their Solutions</title>
 
