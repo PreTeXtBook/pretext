@@ -140,9 +140,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="exercise[@exercise-interactive = 'parson']" mode="runestone-to-static">
     <!-- determine these options before context switches -->
+    <!-- default for @language is "natural" -->
     <xsl:variable name="b-natural" select="not(@language) or (@language = 'natural')"/>
+    <!-- default for @indentation is "show", regards presentation -->
     <xsl:variable name="b-indent" select="@indentation = 'hide'"/>
     <!-- we use numbers in static versions, if requested, but ignore left/right distinction -->
+    <!-- default for @numbered is "no" -->
     <xsl:variable name="b-numbered" select="(blocks/@numbered = 'left') or (blocks/@numbered = 'right')"/>
     <!-- metadata (idx, title) -->
     <xsl:copy-of select="statement/preceding-sibling::*"/>
