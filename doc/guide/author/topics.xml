@@ -1979,7 +1979,6 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         </introduction>
 
         <!-- From "pretext-runestone.xsl", temporary -->
-        <!--   - every multiple choice "exercise"             -->
         <!--   - every Parsons problem "exercise"             -->
         <!--   - every matching problem "exercise"            -->
         <!--   - every clickable area problem "exercise"      -->
@@ -2005,12 +2004,20 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         </subsection>
 
         <subsection xml:id="multiple-choice-exercises">
-            <title>Multiple-Choice Exercises (*)</title>
+            <title>Multiple-Choice Exercises</title>
             <idx>multiple-choice exercises</idx>
             <idx><h>interactive exercises</h><h>multiple-choice</h></idx>
             <idx><h>exercise</h><h>interactive</h><h>multiple-choice</h></idx>
 
-            <!-- signal and static -->
+            <p>A multiple-choice exercise is signaled by a <tag>choices</tag> element (plural) following a <tag>statement</tag> and preceding an optional <tag>hint</tag>.  The <tag>choices</tag> element is structured by a sequence of <tag>choice</tag> elements, whose content is a potential answer for the reader to choose.  So the <tag>statement</tag> is the prompt or question, and the <tag>choice</tag> are the possible answers.</p>
+
+            <p>At least one <tag>choice</tag> has an attribute <attr>correct</attr> set to the value <c>yes</c>.  The default value of <attr>correct</attr> is <c>no</c>.  There may be several correct answers, indicated with this attribute.  The presentation as an exercise with one answer or many is automatic.  However, in the event there is exactly one correct answer, but you wish the reader to consider the possibility of multiple correct answers, you may set the <attr>multiple-correct</attr> attribute on the <tag>choices</tag> element to <c>yes</c>.  The default value is <c>no</c>.</p>
+
+            <p>Each <tag>choice</tag> element must be further structured with a <tag>statement</tag> and a <tag>feedback</tag>, which each can contain items such as paragraphs (<tag>p</tag>).  In this way, the highly-encouraged feedback can be associated with each correct and incorrect choice.</p>
+
+            <p>The order of the <tag>choice</tag> as authored, is the order they will be given in a static version.  To present the choices in different orders in an interactive version, set the <attr>randomize</attr> attribute on the <tag>choices</tag> element to <c>yes</c>.</p>
+
+            <p>An automatic <tag>answer</tag> for the static version is simply the list markers for the correct choices.  An automatic <tag>solution</tag> has an indication for each choice if it is correct or incorrect, along with the choice's feedback.</p>
         </subsection>
 
         <subsection xml:id="parson-problems">
