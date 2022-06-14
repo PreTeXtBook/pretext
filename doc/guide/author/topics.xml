@@ -2049,12 +2049,16 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         </subsection>
 
         <subsection xml:id="matching-exercises">
-            <title>Matching Exercises (*)</title>
+            <title>Matching Exercises</title>
             <idx>matching exercises</idx>
             <idx><h>interactive exercises</h><h>matching</h></idx>
             <idx><h>exercise</h><h>interactive</h><h>matching</h></idx>
 
-            <!-- signal, static, presentation -->
+            <p>A <term>matching exercise</term> asks a reader to pair a <term>premise</term> with a <term>response</term>.  Similar to multiple-choice exercises and Parsons problems, a <tag>matches</tag> element follows a <tag>statement</tag> and this is the signal.  The <tag>matches</tag> element is structured as a sequence of <tag>match</tag> elements, each of which has a <tag>premise</tag> element and the matching <tag>response</tag> element.  Since the content of each premise and response is best kept short and simple as a phrase, the elements may also be simple phrases without the additional structure of <tag>p</tag> elements, or similar.  That's it.</p>
+
+            <p>An interactive interface should randomize at least one of the lists of premises and responses, consulting the authored version for the correct pairings.  For a static version, an author should put an <tag>order</tag> element on each <tag>match</tag> whose value is a whole number, starting from 1.  Then the <tag>premise</tag> will appear in the authored order, while the <tag>response</tag> will be re-ordered according to the attribute.</p>
+
+            <p>A single <tag>feedback</tag> element may be given, as a peer of <tag>statement</tag>, in addition to authored <tag>hint</tag>, <tag>answer</tag>, or <tag>solution</tag>.  For a static version an automatic <tag>solution</tag> presents the problem in the order the <tag>match</tag> were authored.</p>
         </subsection>
 
         <subsection xml:id="clickable-area-exercises">
