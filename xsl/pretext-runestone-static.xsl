@@ -53,6 +53,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Hints are authored, not derived from problem formulation -->
     <xsl:text>&#xa;</xsl:text>
     <xsl:copy-of select="hint"/>
+    <!-- Any authored answers, not derived from problem formulation.  -->
+    <!-- *Before* automatic ones, so numbering matches interactive    -->
+    <!-- versions on authored ones.                                   -->
+    <xsl:copy-of select="answer"/>
     <!-- the answer, simply "True" or "False" -->
     <xsl:text>&#xa;</xsl:text>
     <answer>
@@ -66,6 +70,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:otherwise/>
         </xsl:choose>
     </answer>
+    <!-- Any authored solutions, not derived from problem formulation. -->
+    <!-- *Before* automatic ones, so numbering matches interactive     -->
+    <!-- versions on authored ones.                                    -->
+    <xsl:copy-of select="solution"/>
     <!-- Answer, as above, plus explication with feedback -->
     <xsl:text>&#xa;</xsl:text>
     <solution>
@@ -100,6 +108,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Hints are authored, not derived from problem formulation -->
     <xsl:text>&#xa;</xsl:text>
     <xsl:copy-of select="hint"/>
+    <!-- Any authored answers, not derived from problem formulation. -->
+    <!-- *Before* automatic ones, so numbering matches interactive   -->
+    <!-- versions on authored ones.                                  -->
+    <xsl:copy-of select="answer"/>
     <!-- the correct choices, as letters, in a sentence as a list -->
     <xsl:text>&#xa;</xsl:text>
     <answer>
@@ -115,6 +127,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>.</xsl:text>
         </p>
     </answer>
+    <!-- Any authored solutions, not derived from problem formulation. -->
+    <!-- *Before* automatic ones, so numbering matches interactive     -->
+    <!-- versions on authored ones.                                    -->
+    <xsl:copy-of select="solution"/>
     <!-- feedback for each choice, in a list -->
     <xsl:text>&#xa;</xsl:text>
     <solution>
@@ -264,6 +280,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:element>
         </p>
     </statement>
+    <!-- Any authored answers, not derived from problem formulation. -->
+    <!-- *Before* automatic ones, so numbering matches interactive   -->
+    <!-- versions on authored ones.                                  -->
+    <xsl:copy-of select="answer"/>
     <!-- Answer (potentially) -->
     <xsl:if test="$b-numbered">
         <!-- can make an economical answer with numbers of the -->
@@ -290,6 +310,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </p>
         </answer>
     </xsl:if>
+    <!-- Any authored solutions, not derived from problem formulation. -->
+    <!-- *Before* automatic ones, so numbering matches interactive     -->
+    <!-- versions on authored ones.                                   -->
+    <xsl:copy-of select="solution"/>
     <!-- Solution -->
     <solution>
         <xsl:choose>
@@ -441,6 +465,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="matches/match" mode="matching-statement"/>
         </tabular>
     </statement>
+    <!-- Any authored hint, answers, solutions not derived from   -->
+    <!-- problem formulation. *Before* automatic solution, so     -->
+    <!-- numbering matches interactive versions on authored ones. -->
+    <xsl:copy-of select="hint"/>
+    <xsl:copy-of select="answer"/>
+    <xsl:copy-of select="solution"/>
     <!-- Solution -->
     <solution>
         <tabular>
@@ -496,6 +526,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="areas" mode="static-areas"/>
     </statement>
     <xsl:copy-of select="hint"/>
+    <!-- Any authored answers, not derived from problem formulation. -->
+    <!-- *Before* automatic ones, so numbering matches interactive   -->
+    <!-- versions on authored ones.                                  -->
+    <xsl:copy-of select="answer"/>
     <answer>
         <p>
             <xsl:text>Correct: </xsl:text>
@@ -518,6 +552,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:copy-of select="feedback/node()"/>
         </p>
     </answer>
+    <!-- Any authored solutions, not derived from problem formulation. -->
+    <!-- *Before* automatic ones, so numbering matches interactive     -->
+    <!-- versions on authored ones.                                    -->
+    <xsl:copy-of select="solution"/>
     <!-- A text version can get markup of correct and incorrect areas    -->
     <!-- (italics, strikethrough) but no good way to markup code easily. -->
     <!-- So no "solution" for code versions.                             -->
@@ -636,6 +674,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercise[@exercise-interactive = 'fillin-basic']" mode="runestone-to-static">
     <!-- reproduce statement identically, but replace var w/ fillin -->
     <xsl:apply-templates select="statement" mode="fillin-statement"/>
+    <!-- Any authored hints, answers, solutions, not derived from   -->
+    <!-- problem formulation. *Before* automatic ones, so numbering -->
+    <!-- matches interactive versions on authored ones.             -->
+    <xsl:copy-of select="hint"/>
+    <xsl:copy-of select="answer"/>
+    <xsl:copy-of select="solution"/>
     <xsl:apply-templates select="statement" mode="fillin-solution"/>
 
 </xsl:template>
@@ -705,7 +749,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- bring up the program as part of the problem statement -->
         <xsl:copy-of select="program"/>
     </statement>
-    <xsl:copy-of select="hint|answer|solution"/>
+    <xsl:copy-of select="hint"/>
+    <xsl:copy-of select="answer"/>
+    <xsl:copy-of select="solution"/>
 </xsl:template>
 
 </xsl:stylesheet>
