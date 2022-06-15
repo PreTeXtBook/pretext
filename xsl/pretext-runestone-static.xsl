@@ -45,20 +45,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- metadata (idx, title) -->
     <xsl:copy-of select="statement/preceding-sibling::*"/>
     <!-- prompt, followed by ordered list of choices -->
-    <xsl:text>&#xa;</xsl:text>
     <statement>
         <xsl:copy-of select="statement/node()"/>
         <p>True or False?</p>
     </statement>
     <!-- Hints are authored, not derived from problem formulation -->
-    <xsl:text>&#xa;</xsl:text>
     <xsl:copy-of select="hint"/>
     <!-- Any authored answers, not derived from problem formulation.  -->
     <!-- *Before* automatic ones, so numbering matches interactive    -->
     <!-- versions on authored ones.                                   -->
     <xsl:copy-of select="answer"/>
     <!-- the answer, simply "True" or "False" -->
-    <xsl:text>&#xa;</xsl:text>
     <answer>
         <xsl:choose>
             <xsl:when test="statement/@correct = 'yes'">
@@ -75,7 +72,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- versions on authored ones.                                    -->
     <xsl:copy-of select="solution"/>
     <!-- Answer, as above, plus explication with feedback -->
-    <xsl:text>&#xa;</xsl:text>
     <solution>
         <xsl:choose>
             <xsl:when test="statement/@correct = 'yes'">
@@ -94,7 +90,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- metadata (idx, title) -->
     <xsl:copy-of select="statement/preceding-sibling::*"/>
     <!-- prompt, followed by ordered list of choices -->
-    <xsl:text>&#xa;</xsl:text>
     <statement>
         <xsl:copy-of select="statement/node()"/>
         <p><ol marker="A."> <!-- conforms to RS markers -->
@@ -106,14 +101,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </ol></p>
     </statement>
     <!-- Hints are authored, not derived from problem formulation -->
-    <xsl:text>&#xa;</xsl:text>
     <xsl:copy-of select="hint"/>
     <!-- Any authored answers, not derived from problem formulation. -->
     <!-- *Before* automatic ones, so numbering matches interactive   -->
     <!-- versions on authored ones.                                  -->
     <xsl:copy-of select="answer"/>
     <!-- the correct choices, as letters, in a sentence as a list -->
-    <xsl:text>&#xa;</xsl:text>
     <answer>
         <p>
             <xsl:for-each select="choices/choice">
@@ -132,7 +125,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- versions on authored ones.                                    -->
     <xsl:copy-of select="solution"/>
     <!-- feedback for each choice, in a list -->
-    <xsl:text>&#xa;</xsl:text>
     <solution>
         <p><ol marker="A."> <!-- conforms to RS markers -->
             <xsl:for-each select="choices/choice">
