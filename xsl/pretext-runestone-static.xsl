@@ -72,6 +72,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- versions on authored ones.                                    -->
     <xsl:copy-of select="solution"/>
     <!-- Answer, as above, plus explication with feedback -->
+    <!-- TODO: experiment with a one-item "dl" for a slightly more       -->
+    <!--       appealing presentation, rather than a one-word paragraph. -->
     <solution>
         <xsl:choose>
             <xsl:when test="statement/@correct = 'yes'">
