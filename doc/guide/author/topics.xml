@@ -2062,13 +2062,25 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         </subsection>
 
         <subsection xml:id="clickable-area-exercises">
-            <title>Clickable Area Exercises (*)</title>
-            <idx>clickable-area exercises</idx>
-            <idx><h>interactive exercises</h><h>clickable-area</h></idx>
-            <idx><h>exercise</h><h>interactive</h><h>clickable-area</h></idx>
+            <title>Clickable Area Exercises</title>
+            <idx>clickable area exercises</idx>
+            <idx><h>interactive exercises</h><h>clickable area</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>clickable area</h></idx>
+            <idx>select text exercises</idx>
+            <idx><h>interactive exercises</h><h>select text</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>select text</h></idx>
 
-            <!-- "clickable" in static? -->
-            <!-- signal, static, presentation -->
+            <p><term>Clickable Area</term> is a misnomer, assuming an interactive version of this type of problem.  Perhaps <q>Select Text</q> would be better.  In any event <q>area</q> is not meant to connote a geometric notion, instead this is about a sequence of characters, either in natural language or in computer code.</p>
+
+            <p>A <tag>statement</tag> is a prompt, describing which sort of areas should be selected by the reader.  Such as: Locate all the nouns in the following paragraph. This is followed by an <tag>areas</tag> element, which is the signal for this type of exercise.  The <tag>areas</tag> element holds either (a) <pretext/> paragraphs or similar, or (b) a sequence of <tag>cline</tag>, understood to be program code.  In the latter case, a <attr>language</attr> attribute on the <tag>areas</tag> element will enable the right syntax highlighting in some output formats.</p>
+
+            <p>Within the content of the <tag>areas</tag> element an <tag>area</tag> element can be used to surround a run of characters.  These cannot cross <init>XML</init> boundaries, such as a <tag>cline</tag> or <tag>p</tag>.  A <attr>correct</attr> attribute, with values <c>yes</c> or <c>no</c>, indicates the text is to be selected (clicked on) or that it is a distractor (tempting to click on).  The default is <c>yes</c>, so only distractors need to be indicated.</p>
+
+            <p>A single overall <tag>feedback</tag> may be placed following the <tag>areas</tag> element.</p>
+
+            <p>Now an interactive version will allow the reader to click on and off the marked areas of text, and provide information about which are correct and which are not, in addition to general feedback.</p>
+
+            <p>Generally, a static version of the problem will not be clickable.  <tage>wink</tage>  So your prompt might say something generic like <q>select</q> or <q>locate</q> since a reader might work the problem on paper by circling or underlining the areas.  A static version includes an automatic <tag>answer</tag> which is a list of the correct areas as text, followed by a list of the incorrect areas as text.  An automatic <tag>solution</tag> repeats the text in the <tag>areas</tag> element, and uses (accessible) visual cues to note the correct and incorrect text.</p>
         </subsection>
 
         <subsection xml:id="fill-in-exercises">
