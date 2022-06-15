@@ -2084,12 +2084,20 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         </subsection>
 
         <subsection xml:id="fill-in-exercises">
-            <title>Fill-in-the-Blanks Exercises (*)</title>
+            <title>Fill-in-the-Blanks Exercises</title>
             <idx>fill-in exercises</idx>
             <idx><h>interactive exercises</h><h>fill-in </h></idx>
             <idx><h>exercise</h><h>interactive</h><h>fill-in </h></idx>
 
-            <!-- signal, static, presentation -->
+            <p>As of 2022-06-14 a major effort is underway to provide comprehensive markup for <term>fill-in-the-blank</term> problems.  Until then, there is transitional markup intended only to supply a migration path for projects originally authored for Runestone servers (<xref ref="runestone"/>).  So (a) our documentation is sparse, and (b) there will be no backward-compatible improvements.  So in particular, new projects should wait for the new markup.  Also, studying examples may be a useful way to augment what is described here.</p>
+
+            <p>A <tag>statement</tag> is enriched with empty <tage>var</tage> elements which will render as the blanks in the problem.</p>
+
+            <p>The signal for a fill-in problem is a <tag>setup</tag> element containing a sequence of <tag>var</tag> elements.  Each <tag>var</tag> contains a sequence of <tag>condition</tag> elements that describe possible values (via regular expressions) which might appear in a blank.  The first condition describes the correct answer(s), and then the subsequent conditions are descriptions of probable incorrect answers.  Each <tag>condition</tag> has a <tag>feedback</tag>.  So the first condition to match an entry provided via a blank will be noted as correct or incorrect, and its feedback will be relayed.</p>
+
+            <p>The <tag>var</tag> of the statement and the <tag>var</tag> of the setup are in a 1-1 correspondence, which establishes how the setup is associated with a blank.</p>
+
+            <p>A static version will include an automatic <tag>solution</tag> which <q>fills in</q> each blank with a correct answer, and then duplicates the feedback text, in order.</p>
         </subsection>
 
         <subsection xml:id="coding-exercises">
