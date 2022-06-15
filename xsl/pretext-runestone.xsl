@@ -628,9 +628,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="id">
                     <xsl:value-of select="$true-choice-id"/>
                 </xsl:attribute>
-                <xsl:if test="statement/@correct = 'yes'">
-                    <xsl:apply-templates select="feedback"/>
-                </xsl:if>
+                <!-- identical feedback for each reader responses -->
+                <xsl:apply-templates select="feedback"/>
             </li>
             <!-- radio button for False -->
             <xsl:variable name="false-choice-id">
@@ -651,9 +650,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="id">
                     <xsl:value-of select="$false-choice-id"/>
                 </xsl:attribute>
-                <xsl:if test="statement/@correct = 'no'">
-                    <xsl:apply-templates select="feedback"/>
-                </xsl:if>
+                <!-- identical feedback for each reader responses -->
+                <xsl:apply-templates select="feedback"/>
             </li>
         </ul>
     </div>
