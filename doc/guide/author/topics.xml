@@ -2986,15 +2986,117 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <idx>program</idx>
         <idx>console</idx>
 
-        <p>A <tag>program</tag> will be treated as verbatim text (see <xref ref="overview-verbatim-literal"/>), subject to all the exceptions for exceptional characters (see <xref ref="overview-exceptional-characters"/>).  Indentation will be preserved, though an equal amount of leading whitespace will be stripped from every line, so as to keep the code shifted left as far as possible.  So you can indent your code consistently along with your <init>XML</init> indentation.  For this reason it is best to indent with spaces, and not tabs.  A mix will almost surely end badly, and in some programming languages tabs are discouraged (e.g. Python).</p>
+        <subsection>
+            <title>Content and Placement of Programs and Consoles</title>
 
-        <p>The <attr>language</attr> attribute may be used to get some degree of language-specific syntax highlighting.  We will eventually provide a table of attribute values here.  They are always lowercase, and a first guess might succeed.</p>
+            <p>A <tag>program</tag> will be treated as verbatim text (see <xref ref="overview-verbatim-literal"/>), subject to all the exceptions for exceptional characters (see <xref ref="overview-exceptional-characters"/>).  Indentation will be preserved, though an equal amount of leading whitespace will be stripped from every line, so as to keep the code shifted left as far as possible.  So you can indent your code consistently along with your <init>XML</init> indentation.  For this reason it is best to indent with spaces, and not tabs.  A mix will almost surely end badly, and in some programming languages tabs are discouraged (e.g. Python).</p>
 
-        <p>the <attr>interactive</attr> attribute may have the values <q>activecode</q>, <q>codelens</q>, or <q>no</q>.  The activecode value is used to indicate that in an interactive output format like <init>HTML</init> that the program should be executable in the browser.  Some languages like Java and C++ require the  output to be for a runestone server in order to get the program to compile and run. Other languages like Python, SQL, and Javascript can run right in the browser.  The codelens option will provide a visualization of the code and allow the reader to step through a program line by line and observe the changes in variables and other data structures. </p>
+            <p>A <tag>console</tag> is a transcript of an interactive session in a terminal or console at a command-line.  It is a sequence of the following elements, in this order, possibly repeated many times as a group: <tag>prompt</tag>, <tag>input</tag>, and <tag>output</tag>.  The <tag>output</tag> is optional, and a <tag>prompt</tag> is only displayed when there is an immediately subsequent <tag>input</tag> (which could be empty).  The content is treated as verbatim text (see <xref ref="overview-verbatim-literal"/>), subject to all the exceptions for exceptional characters (see <xref ref="overview-exceptional-characters"/>).</p>
 
-        <p>A <tag>console</tag> is a transcript of an interactive session in a terminal or console at a command-line.  It is a sequence of the following elements, in this order, possibly repeated many times as a group: <tag>prompt</tag>, <tag>input</tag>, and <tag>output</tag>.  The <tag>output</tag> is optional, and a <tag>prompt</tag> is only displayed when there is an immediately subsequent <tag>input</tag> (which could be empty).  The content is treated as verbatim text (see <xref ref="overview-verbatim-literal"/>), subject to all the exceptions for exceptional characters (see <xref ref="overview-exceptional-characters"/>).</p>
+            <p>A <tag>program</tag> or <tag>console</tag> may be wrapped in a <tag>listing</tag>, see <xref ref="topic-listing"/>.  This will behave similar to a <tag>figure</tag>, with the <tag>caption</tag> displayed below, and a number assigned.  So, in particular, if your program or console is important enough to cross-reference, it is an enclosing <tag>listing</tag> that serves as the target.</p>
 
-        <p>A <tag>program</tag> or <tag>console</tag> may be wrapped in a <tag>listing</tag>, see <xref ref="topic-listing"/>.</p>
+            <p>The <attr>language</attr> attribute may be used to get some degree of language-specific syntax highlighting and/or interactive behavior.  We will eventually provide a table of attribute values here.  They are always lowercase, and a good first guess is likely to succeed.</p>
+        </subsection>
+
+        <subsection xml:id="interactive-program-codelens">
+            <title>Interactive Programs, CodeLens</title>
+
+            <p><term>CodeLens</term> is an interactive version of a computer program, which can be visualized by stepping through the code one statement at a time, watching output, variables, and other data structures change.  So it is similar to a debugger, except the reader does not set breakpoints or modify program data on-the-fly.  This is possible automatically for several different languages when your <init>HTML</init> is hosted on a Runestone server (<xref ref="runestone"/>).  This may also be accomplished <q>in browser</q> when hosted on any old generic web server.  The catch is that for a generic server a publisher must generate <term>trace data</term> in advance, typically with the PreTeXt-CLI (<xref ref="processing-CLI"/>).  Place the <tag>interactive</tag> attribute on a <tag>program</tag> element with the value <c>codelens</c> to elect this behavior (<c>no</c> is the default value).  Also, be sure to specify a language from the supported languages: Python, Java, C, and C++.  Consult <xref ref="table-program-interactive"/> below for a summary of various combinations.  When an output format does not support an interactive CodeLens instance, the fallback is a static program listing.</p>
+        </subsection>
+
+        <subsection xml:id="interactive-program-activecode">
+            <title>Interactive Programs, ActiveCode</title>
+
+            <p><term>ActiveCode</term> is an interactive environment where a reader may work on code through repeated edit-compile-test cycles.  Code can be provided by an author as a complete program to be modified, a partial program to be completed, or nothing at all.  One good example is that maybe header files, import statement, and similar are provided, and a skeleton of a main entry-point procedure is also provided.  Then a reader can concentrate on the more conceptual parts of the programming.  Some languages will be executable <q>in browser</q> on any old generic web server, while others must be on a Runestone server (<xref ref="runestone"/>) where a <url href="https://github.com/trampgeek/jobe" visual="github.com/trampgeek/jobe">Jobe Server</url> is running to support the execution.</p>
+
+            <p>Place the <tag>interactive</tag> attribute on a <tag>program</tag> element with the value <c>activecode</c> to elect this behavior (<c>no</c> is the default value).  Also, be sure to specify a language from the supported languages.  Consult <xref ref="table-program-interactive"/> below for a summary of various combinations.  When an output format does not support an interactive ActiveCode instance, the fallback is a static program listing.</p>
+
+            <p>Note that a Python ActiveCode automatically is enabled with a CodeLens button and requires no preparation of any trace data.  So a reader can form any type of Python program and closely examine its behavior.</p>
+        </subsection>
+
+        <subsection>
+            <title>Interactive Program Capabilities</title>
+
+            <p>This table lists which types of interactivity are available on various combinations of servers and programming languages.  The entry <q>AC + CL</q> means that both ActiveCode and CodeLens instances are availble, but the ActiveCode instance will have a CodeLens button enabled.</p>
+
+            <p>Note that <c>python</c> is generic Python with the standard libraries (version 3.x).  On the other hand <c>python3</c> is a Runestone server installation (only) with a number of additional popular Python packages available, such as <c>numpy</c> and <c>pandas</c>.</p>
+
+            <table xml:id="table-program-interactive">
+                <title>Interactive Programs</title>
+
+                <tabular>
+                    <row header="yes">
+                        <cell>Language</cell>
+                        <cell><c>@language</c></cell>
+                        <cell colspan="2" halign="center">Server</cell>
+                    </row>
+                    <row header="yes" bottom="major">
+                        <cell></cell>
+                        <cell></cell>
+                        <cell>Generic</cell>
+                        <cell>Runestone</cell>
+                    </row>
+                    <row>
+                        <cell>Python</cell>
+                        <cell><c>python</c></cell>
+                        <cell>AC + CL</cell>
+                        <cell>AC + CL</cell>
+                    </row>
+                    <row>
+                        <cell>Python 3</cell>
+                        <cell><c>python3</c></cell>
+                        <cell></cell>
+                        <cell>AC</cell>
+                    </row>
+                    <row>
+                        <cell>Java</cell>
+                        <cell><c>java</c></cell>
+                        <cell>CL</cell>
+                        <cell>AC + CL</cell>
+                    </row>
+                    <row>
+                        <cell>C</cell>
+                        <cell><c>c</c></cell>
+                        <cell>CL</cell>
+                        <cell>AC + CL</cell>
+                    </row>
+                    <row>
+                        <cell>C++</cell>
+                        <cell><c>cpp</c></cell>
+                        <cell>CL</cell>
+                        <cell>AC + CL</cell>
+                    </row>
+                    <row>
+                        <cell>JavaScript</cell>
+                        <cell>javascript<c></c></cell>
+                        <cell>AC</cell>
+                        <cell>AC</cell>
+                    </row>
+                    <row>
+                        <cell>HTML</cell>
+                        <cell><c>html</c></cell>
+                        <cell>AC</cell>
+                        <cell>AC</cell>
+                    </row>
+                    <row>
+                        <cell>SQL</cell>
+                        <cell><c>sql</c></cell>
+                        <cell>AC</cell>
+                        <cell>AC</cell>
+                    </row>
+                    <row bottom="major">
+                        <cell>Octave</cell>
+                        <cell><c>octave</c></cell>
+                        <cell></cell>
+                        <cell>AC</cell>
+                    </row>
+                    <!-- should really be a note, or similar -->
+                    <row>
+                        <cell halign="left" colspan="4">AC = ActiveCode, CL = CodeLens</cell>
+                    </row>
+                </tabular>
+            </table>
+        </subsection>
     </section>
 
     <section xml:id="topic-figure">
