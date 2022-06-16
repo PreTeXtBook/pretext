@@ -1979,12 +1979,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         </introduction>
 
         <!-- From "pretext-runestone.xsl", temporary -->
-        <!--   - every Parsons problem "exercise"             -->
-        <!--   - every matching problem "exercise"            -->
-        <!--   - every clickable area problem "exercise"      -->
-        <!--   - every "exercise" with fill-in blanks         -->
         <!--   - every "exercise" with additional "program"   -->
-        <!--   - every "exercise" elected as "shortanswer"    -->
         <!--   - every PROJECT-LIKE with additional "program" -->
 
 
@@ -2110,16 +2105,20 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         </subsection>
 
         <subsection xml:id="short-answer-exercises">
-            <title>Short-Answer Exercises (*)</title>
-            <idx>short-answer exercises</idx>
-            <idx><h>interactive exercises</h><h>short-answer</h></idx>
-            <idx><h>exercise</h><h>interactive</h><h>short-answer</h></idx>
+            <title>Short Answer Exercises</title>
+            <idx>short answer exercises</idx>
+            <idx><h>interactive exercises</h><h>short answer</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>short answer</h></idx>
             <idx>free-response exercises</idx>
             <idx><h>interactive exercises</h><h>free-response</h></idx>
             <idx><h>exercise</h><h>interactive</h><h>free-response</h></idx>
+            <idx>essay question exercises</idx>
+            <idx><h>interactive exercises</h><h>essay question</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>essay question</h></idx>
 
-            <!-- aka free-response -->
-            <!-- signal, static, presentation -->
+            <p><term>Short Answer</term> questions might also be known as <term>Free Response</term> questions, or <term>Essay</term> questions.  A <pretext/> <tag>exercise</tag>, or a PROJECT-LIKE that is not structured by <tag>task</tag>, is implicitly of this nature.  In an online setting, it is a simple matter to provide a place for a reader to type in an answer, response, or essay.  But then what?  Until artificial intelligence is brought to bear, somebody (not something), such as an instructor for a course of enrolled students, will need to read a response and provide a score and/or comments that can be saved and distributed back to the students.  So the first prerequisite is that <init>HTML</init> output is being built for a capable platform.  As of 2022-06-15, this means a Runestone server (<xref ref="runestone"/>), but it could easily also be a <webwork/> server.  Then a publisher might wish some questions to be enabled this way, and others not.</p>
+
+            <p>You might only want reading questions to be submitted online.  Or activities (<tag>activity</tag>) only.  Perhaps inline exercises are meant for student reflection while reading, while divisional exercises are being submitted for scores (or vice-versa).  Our approach is opt-out.  When building for a capable platform, all short answer exercises will be rendered so that they may be answered and submitted online.  If this is not desired, a publisher (via the publication file, <xref ref="publication-file"/>) may turn off online submission for each of the five categories of exercises: inline, divisional, reading question, worksheet, project-like.  See <xref ref="online-short-answer-options"/> for precise details.</p>
         </subsection>
     </section>
 
