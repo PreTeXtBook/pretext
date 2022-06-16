@@ -6923,7 +6923,6 @@ Book (with parts), "section" at level 3
     <language ptx="pascal"      active=""            listings="Pascal"           prism="pascal"/>
     <language ptx="perl"        active=""            listings="Perl"             prism="perl"/>
     <language ptx="python"      active="python"      listings="Python"           prism="py"/>
-    <language ptx="python2"     active="python2"     listings="Python"           prism="py"/>
     <language ptx="python3"     active="python3"     listings="Python"           prism="py"/>
     <language ptx="r"           active=""            listings="R"                prism="r"/>
     <language ptx="s"           active=""            listings="S"                prism="s"/>
