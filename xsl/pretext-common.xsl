@@ -6907,8 +6907,11 @@ Book (with parts), "section" at level 3
 <!-- 2019-09-23: minor review, v 1.7 (2018-09-02)  -->
 
 <!-- ActiveCode (Runestone) -->
-<!-- Languages supported by Runestone ActiveCode   -->
-<!-- interactive element, added 2020-08-13         -->
+<!-- Languages supported by Runestone ActiveCode and  -->
+<!-- CodeLens interactive elements, added 2020-08-13. -->
+<!-- "python3" is just on Runestone servers where     -->
+<!-- additional popular packages (e.g. numpy, pandas) -->
+<!-- are available.                                   -->
 
 <!-- Our strings (@ptx) are always all-lowercase, no symbols, no punctuation -->
 <mb:programming>
@@ -6938,9 +6941,9 @@ Book (with parts), "section" at level 3
     <language ptx="elisp"       active=""            listings="Lisp"             prism="elisp"/>
     <language ptx="scheme"      active=""            listings="Lisp"             prism="scheme"/>
     <language ptx="racket"      active=""            listings="Lisp"             prism="racket"/>
-    <language ptx="sql"         active="sql"         listings="SQL"                 prism="sql"/>
+    <language ptx="sql"         active="sql"         listings="SQL"              prism="sql"/>
     <language ptx="llvm"        active=""            listings="LLVM"             prism="llvm"/>
-    <language ptx="matlab"      active="octave"      listings="Matlab"           prism="matlab"/>
+    <language ptx="matlab"      active=""            listings="Matlab"           prism="matlab"/>
     <language ptx="octave"      active="octave"      listings="Octave"           prism="matlab"/>
     <language ptx="ml"          active=""            listings="ML"               prism=""/>
     <language ptx="ocaml"       active=""            listings="[Objective]Caml"  prism="ocaml"/>
