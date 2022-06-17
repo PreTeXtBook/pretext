@@ -1,0 +1,3 @@
+lxml == 4.*
+requests == 2.*
+runestone == 6.*

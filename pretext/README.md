@@ -8,6 +8,8 @@ A Python module to automate various aspects of manipulating
 PreTeXt source via XSL stylesheets and using external programs
 on some of the results.
 
+Be sure to install the PyPI packages given in `requirements.txt`.
+
 `module-test.py`
 ----------------
 
@@ -38,11 +40,3 @@ perform various tasks.  Look inside the file for instructions on
 making, placing, and employing a customized version.
 
 **NEVER EDIT THE ORIGINAL VERSION OF** `pretext.cfg`
-
-`pg_encoder.py`, `pg_logger.py`
--------------------------------
-
-Modules from Runestone to support the formulation of trace data for
-Python programs to poer CodeLens interactive programs written in Python.
-
-Edits for use with the `pretext` script are noted.
