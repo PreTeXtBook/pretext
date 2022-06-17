@@ -2757,6 +2757,9 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}, outputfn=print)
         # report any errors on failure (indented)
         raise (e)
     finally:
+        # wait until thread is done
+        if parse_t.is_alive():
+            parse_t.join()
         # restore directory in success or failure
         os.chdir(owd)
 
