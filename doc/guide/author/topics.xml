@@ -1978,11 +1978,6 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <p>Note the opportunity to provide feeback to the reader using a <tag>feedback</tag> element in various locations.  These are generally optional, but highly encouraged as a way to improve the quality of your reader's experience.</p>
         </introduction>
 
-        <!-- From "pretext-runestone.xsl", temporary -->
-        <!--   - every "exercise" with additional "program"   -->
-        <!--   - every PROJECT-LIKE with additional "program" -->
-
-
         <subsection xml:id="true-false-exercises">
             <title>True/False Exercises</title>
             <idx>true/false</idx>
@@ -2095,13 +2090,17 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <p>A static version will include an automatic <tag>solution</tag> which <q>fills in</q> each blank with a correct answer, and then duplicates the feedback text, in order.</p>
         </subsection>
 
-        <subsection xml:id="coding-exercises">
-            <title>Coding Exercises (*)</title>
+        <subsection xml:id="coding-exercises-projects">
+            <title>Coding Exercises and Projects</title>
             <idx>coding exercises</idx>
             <idx><h>interactive exercises</h><h>coding</h></idx>
             <idx><h>exercise</h><h>interactive</h><h>coding</h></idx>
 
-            <!-- signal, static, presentation -->
+            <p>A <term>Coding Exercise</term> is formed by placing a <tag>program</tag> element <em>after</em> the <tag>statement</tag> of an <tag>exercise</tag>.  The main distinction is that this is a signal that the interactivity is provided by the <tag>program</tag>, and therefore the <tag>exercise</tag> will not be understood as a short answer exercise (<xref ref="short-answer-exercises"/>).  For this reason, the <tag>program</tag> should be requested as one of the interactive realizations (<xref ref="interactive-program-codelens"/>, <xref ref="interactive-program-activecode"/>).</p>
+
+            <p>The identical construction may be used with any PROJECT-LIKE (<xref ref="block-summary"/>) such as an <tag>activity</tag>.  As of 2022-06-17 this only applies to the form that uses a <tag>statement</tag>, but will soon also apply to <tag>task</tag> within PROJECT-LIKE.</p>
+
+            <p>Realize that it is always possible to place a <tag>program</tag> <em>inside</em> of a <tag>statement</tag>, and if there is no <tag>program</tag> that is <em>after</em> the <tag>statement</tag> (or another signal for an interactive exercise) then the <tag>exercise</tag> will be classified as a short-answer exercise.  It may be instructive to understand that in a static realization, a <tag>program</tag> at the <em>end</em> of a <tag>statement</tag> may be visually identical to an <tag>exercise</tag> where the <tag>program</tag> is <em>after</em> the <tag>statement</tag>, even though the former is a short-answer exercise and the latter is a coding exercise (which will render differently for different output formats and hosting platforms).</p>
         </subsection>
 
         <subsection xml:id="short-answer-exercises">
