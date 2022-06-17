@@ -716,7 +716,7 @@ def latex_tactile_image_conversion(
 
 def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     import os.path  # join()
-    import pg_logger  # exec_script_str_local()
+    from runestone.codelens.pg_logger import exec_script_str_local
 
     try:
         import requests  # post()
@@ -775,7 +775,7 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
                 print(server_time_out_string.format(url, visible_id))
         elif language == "python":
             # local routines handle this case, no server involved
-            trace = pg_logger.exec_script_str_local(
+            trace = exec_script_str_local(
                 source, None, False, None, _js_var_finalizer
             )
 
