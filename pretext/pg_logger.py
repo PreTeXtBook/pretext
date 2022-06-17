@@ -31,9 +31,7 @@
 
 import json
 import random
-
-# RAB, 2022-04-21  Removed relative import indication
-from pg_encoder import is_class, is_instance, ObjectEncoder, create_lambda_line_number
+from .pg_encoder import is_class, is_instance, ObjectEncoder, create_lambda_line_number
 import sys
 import bdb  # the KEY import here!
 import re
