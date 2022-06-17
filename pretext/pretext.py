@@ -732,7 +732,7 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         "creating trace data from {} for placement in {}".format(xml_source, dest_dir)
     )
     ptx_xsl_dir = get_ptx_xsl_path()
-    extraction_xslt = os.path.join(ptx_xsl_dir, "extract-codelens.xsl")
+    extraction_xslt = os.path.join(ptx_xsl_dir, "extract-trace.xsl")
     # support publisher file, subtree argument
     if pub_file:
         stringparams["publisher"] = pub_file
