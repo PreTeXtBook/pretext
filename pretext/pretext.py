@@ -342,6 +342,12 @@ def latex_image_conversion(
     import os.path  # join()
     import subprocess  # call() is Python 3.5
     import os, shutil
+    # external module, often forgotten
+    try:
+        import pdfCropMargins
+    except ImportError:
+        global __module_warning
+        raise ImportError(__module_warning.format("pdfCropMargins"))
 
     _verbose(
         "converting latex-image pictures from {} to {} graphics for placement in {}".format(
@@ -422,8 +428,7 @@ def latex_image_conversion(
                     "##################################################################"
                 )
             else:
-                pcm_executable_cmd = get_executable_cmd("pdfcrop")
-                pcm_cmd = pcm_executable_cmd + [
+                pcm_cmd = [
                     latex_image_pdf,
                     "-o",
                     "cropped-" + latex_image_pdf,
@@ -437,7 +442,7 @@ def latex_image_conversion(
                         latex_image_pdf, "cropped-" + latex_image_pdf
                     )
                 )
-                subprocess.call(pcm_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+                pdfCropMargins.crop(pcm_cmd)
                 if not os.path.exists("cropped-" + latex_image_pdf):
                     print(
                         "PTX:ERROR: There was a problem cropping {} and {} was not created".format(
@@ -2939,8 +2944,8 @@ def get_executable_cmd(exec_name):
         ]
     if config_cmd_line[0] == "pdfcrop":
         error_messages += [
-            'PTX:ERROR: Program "pdfcrop" was replaced by "pdf-crop-margins" as of 2020-07-07.',
-            'Install with "pip install pdfCropMargins" and update your configuration file with "pdfcrop = pdf-crop-margins".',
+            'PTX:WARNING: Program "pdfcrop" is deprecated as of 2022-06-17 and may be deleted from "pretext.cfg" / "project.ptx".',
+            'After running "pip install pdfCropMargins" the cropping program will instead called as a Python script.',
         ]
     if error_messages:
         raise OSError("\n".join(error_messages))
