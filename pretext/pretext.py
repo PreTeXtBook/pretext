@@ -747,13 +747,14 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     code_file = open(code_filename, "r")
     for program in code_file.readlines():
         # three parts, always
-        program_triple = program.split(",", 2)
-        visible_id = program_triple[0]
-        language = program_triple[1]
+        program_quad = program.split(",", 3)
+        runestone_id = program_quad[0]
+        visible_id = program_quad[1]
+        language = program_quad[2]
         url = url_string.format(language)
         # instead use  .decode('string_escape')  somehow
         # as part of reading the file?
-        source = program_triple[2].replace("\\n", "\n")
+        source = program_quad[3].replace("\\n", "\n")
         _verbose("converting {} source {} to a trace...".format(language, visible_id))
 
         # success will replace this empty string
@@ -782,9 +783,8 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         # no trace, then do not even try to produce a file
         if trace:
             script_leadin_string = 'if (allTraceData === undefined) {{\n var allTraceData = {{}};\n }}\n allTraceData["{}"] = '
-            script_leadin = script_leadin_string.format(visible_id)
+            script_leadin = script_leadin_string.format(runestone_id)
             trace = script_leadin + trace
-            # print(program_triple[0], trace)
             trace_file = os.path.join(dest_dir, "{}.js".format(visible_id))
             with open(trace_file, "w") as f:
                 f.write(trace)
