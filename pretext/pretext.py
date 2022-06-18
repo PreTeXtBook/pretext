@@ -2945,11 +2945,6 @@ def get_executable_cmd(exec_name):
             '***  Edit the configuration file  ("pretext.cfg" or "project.ptx") and/or install  ***',
             "***  the necessary program and/or make sure the executable is on your PATH         ***",
         ]
-    if config_cmd_line[0] == "pdfcrop":
-        error_messages += [
-            'PTX:WARNING: Program "pdfcrop" is deprecated as of 2022-06-17 and may be deleted from "pretext.cfg" / "project.ptx".',
-            'After running "pip install pdfCropMargins" the cropping program will instead called as a Python script.',
-        ]
     if error_messages:
         raise OSError("\n".join(error_messages))
     _debug(
