@@ -448,9 +448,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <title>Exploration in a Subsection</title>
 
                 <statement>
-                    <p>We would suggest now that you explore something here.</p>
+                    <p>We would suggest now that you explore something here.  In this case we simply provide a CodeLens, which would be graded as an <q>interaction</q>.</p>
                 </statement>
-                <program language="python">
+                <program xml:id="python-count-10" interactive="codelens" language="python">
                     <input>
                     for i in range(10):
                         print(i)
