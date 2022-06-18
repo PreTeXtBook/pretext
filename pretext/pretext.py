@@ -428,6 +428,10 @@ def latex_image_conversion(
                     "##################################################################"
                 )
             else:
+                pcm_executable_cmd = get_executable_cmd("pdfcrop")
+                # Strip the executable itself, since we will .crop() internally,
+                # but do keep the options/arguments provided by a publisher,
+                # which *might* supersede ones give here earlier (untested)
                 pcm_cmd = [
                     latex_image_pdf,
                     "-o",
@@ -436,7 +440,7 @@ def latex_image_conversion(
                     "0",
                     "-a",
                     "-1",
-                ]
+                ] + pcm_executable_cmd[1:]
                 _verbose(
                     "cropping {} to {}".format(
                         latex_image_pdf, "cropped-" + latex_image_pdf
