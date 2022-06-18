@@ -2949,6 +2949,11 @@ def get_executable_cmd(exec_name):
             '***  Edit the configuration file  ("pretext.cfg" or "project.ptx") and/or install  ***',
             "***  the necessary program and/or make sure the executable is on your PATH         ***",
         ]
+    if config_cmd_line[0] == "pdfcrop":
+        error_messages += [
+            'PTX:ERROR: Program "pdfcrop" was replaced by "pdf-crop-margins" as of 2020-07-07.',
+            'Install with "pip install pdfCropMargins" and update your configuration file with "pdfcrop = pdf-crop-margins".',
+        ]
     if error_messages:
         raise OSError("\n".join(error_messages))
     _debug(
