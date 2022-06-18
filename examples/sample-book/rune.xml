@@ -291,7 +291,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>In interactive formats, try creating and running a Python program below.  Use CodeLens to step through the program.</p>
             </statement>
-            <program language="python"/>
+            <program interactive="activecode" language="python"/>
             <hint>We didn't really ask you to do anything.</hint>
         </exercise>
 
@@ -301,7 +301,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <statement>
                 <p>Similar to above, but we provide a starting point for the exercise.</p>
             </statement>
-            <program language="c">
+            <program interactive="activecode" language="c">
                 <input>
                 #include &lt;stdio.h&gt;
 
@@ -326,7 +326,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <statement>
                 <p>Similar to above, but now as a complete Python program inside an <tag>activity</tag>.  This demonstrates the possibility to use any <q>project-like</q> block (<tag>project</tag>, <tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag>), but not in the case when structured with <tag>task</tag>.</p>
             </statement>
-            <program language="python">
+            <program interactive="activecode" language="python">
                 <input>
                 for i in range(10):
                     print(i)
@@ -357,7 +357,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <statement>
                 <p>Fix the following code so that it always correctly adds two numbers. [Ed. Unit test support is experimental.]</p>
             </statement>
-            <program language="python">
+            <program interactive="activecode" language="python">
                 <input>
                 def add(a,b):
                     return 4
@@ -419,7 +419,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <statement>
                     <p>We would suggest you do something here.</p>
                 </statement>
-                <program xml:id="coding-exercise-partial-three" language="c">
+                <program xml:id="coding-exercise-partial-three" interactive="activecode" language="c">
                     <input>
                     #include &lt;stdio.h&gt;
 
