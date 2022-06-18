@@ -4596,7 +4596,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Parson problems   -->
         <!-- Matching problems -->
         <!-- Clickable Area    -->
+        <!-- Fill-In (Basic)   -->
+        <!-- Coding Exercise   -->
         <!-- Short Answer      -->
+        <!-- The "runestone-to-interactive" templates will combine a   -->
+        <!-- "regular" PreTeXt statement together with some additional -->
+        <!-- interactive material to make a hybrid "statement"         -->
         <xsl:when test="(@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or

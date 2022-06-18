@@ -560,6 +560,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Components -->
 <!-- ########## -->
 
+<!-- The "runestone-to-interactive" templates will combine a   -->
+<!-- "regular" PreTeXt statement together with some additional -->
+<!-- interactive material to make a hybrid "statement"         -->
+
+
 <!-- Hacked -->
 
 <xsl:template match="exercise[@exercise-interactive = 'htmlhack']" mode="runestone-to-interactive">
