@@ -1101,6 +1101,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- Coding exercise -->
+
+<xsl:template match="exercise[@exercise-interactive = 'coding']|project[@exercise-interactive = 'coding']|activity[@exercise-interactive = 'coding']|exploration[@exercise-interactive = 'coding']|investigation[@exercise-interactive = 'coding']" mode="runestone-to-interactive">
+    <!-- We don't have a 'coding' attribute value  -->
+    <!-- unless one of the two tests below is true -->
+    <xsl:choose>
+        <xsl:when test="program/@interactive = 'codelens'">
+            <xsl:apply-templates select="statement"/>
+            <xsl:apply-templates select="program" mode="runestone-codelens"/>
+        </xsl:when>
+        <xsl:when test="program/@interactive = 'activecode'">
+            <xsl:apply-templates select="program" mode="runestone-activecode">
+                <xsl:with-param name="exercise-statement" select="statement"/>
+            </xsl:apply-templates>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+
 <!-- Short Answer problem -->
 
 <!-- Traditional form, but not converted like other interactive exercises -->
@@ -1115,12 +1134,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="statement"/>
         </div>
     </div>
-</xsl:template>
-
-<!-- Active Code exercise -->
-
-<xsl:template match="exercise[@exercise-interactive = 'coding']|project[@exercise-interactive = 'coding']|activity[@exercise-interactive = 'coding']|exploration[@exercise-interactive = 'coding']|investigation[@exercise-interactive = 'coding']" mode="runestone-to-interactive">
-    <xsl:apply-templates select="program" mode="runestone-activecode"/>
 </xsl:template>
 
 <!-- YouTube Video -->
@@ -1161,16 +1174,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- When a "program" is part of an exercise/project-like, -->
 <!-- then we need to get the problem "statement" absorbed  -->
 <!-- into the ActiveCode.  This is an authored "statement" -->
-<!-- that has been packed into a manufactured "statement"  -->
-<!-- created as part of the dynamic representation from    -->
-<!-- -assembly.  Other times a "program" is an atomic item -->
+<!-- passed in via the $exercise-statement parameter.      -->
+<!-- Other times a "program" is an atomic item             -->
 <!-- and surrounding text explains its purpose, hence      -->
 <!-- "exercise-statment" appropriately defaults to an      -->
 <!-- empty node-set.                                       -->
 <xsl:template match="program" mode="runestone-activecode">
-    <!-- need to be sure there is a "double" statement -->
-    <!-- from the -assembly representation             -->
-    <xsl:variable name="exercise-statement" select="preceding-sibling::statement"/>
+    <xsl:param name="exercise-statement" select="/.."/>
 
     <xsl:variable name="active-language">
         <xsl:apply-templates select="." mode="active-language"/>
@@ -1178,11 +1188,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="hosting">
         <xsl:apply-templates select="." mode="activecode-host"/>
     </xsl:variable>
-    <!-- use an id from the "program" element, unless used inside -->
-    <!-- an exercise/project-like, which is up two levels (and    -->
-    <!-- could be many different types of project-like).  The     -->
-    <!-- "program" needs to have its id adjusted to not conflict  -->
-    <!-- with the id of the containing exercise.                  -->
+    <!-- Use an id from the "program" element, unless employed -->
+    <!-- inside an exercise/project-like, which is up a level  -->
+    <!-- (and could be many different types of project-like).  -->
     <xsl:variable name="hid">
         <xsl:choose>
             <xsl:when test="$exercise-statement">
