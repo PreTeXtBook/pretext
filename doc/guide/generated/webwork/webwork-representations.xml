@@ -1,27 +1,27 @@
 <?xml version='1.0' encoding='utf-8'?>
 <webwork-representations>
-  <webwork-reps version="2" xml:id="extracted-webwork-65" ww-id="webwork-65">
-    <static seed="65" source="Library/ma122DB/set12/s5_4_26.pg">
-      <statement><p><m>\displaystyle \int_0^{1} (4 e^x+5 \sin x)\, dx</m> =  <fillin name="AnSwEr0001" characters="20"/></p>
+  <webwork-reps version="2" xml:id="extracted-webwork-66" ww-id="webwork-66">
+    <static seed="66" source="Library/ma122DB/set12/s5_4_26.pg">
+      <statement><p><m>\displaystyle \int_0^{2} (2 e^x+3 \sin x)\, dx</m> =  <fillin name="AnSwEr0001" characters="20"/></p>
 </statement>
       <answer>
         <p>
-          <m>9.17161578449548</m>
+          <m>17.0265527075027</m>
         </p>
       </answer>
       <solution><p>SOLUTION</p>
-<p><me>\begin{array}{rcl} \displaystyle \int_0^{1} (4 e^x+5 \sin x)\, dx \amp =\amp   
-\displaystyle  4 e^x-5 \cos x  \Big]_0^{1}
-\\ \amp =\amp  (4 e^{1} - 5 \cos 1) - (4 e^0 - 5 \cos0 ) 
-\\ \amp =\amp  4 e^{1} - 5 \cos 1  + 1 
+<p><me>\begin{array}{rcl} \displaystyle \int_0^{2} (2 e^x+3 \sin x)\, dx \amp =\amp   
+\displaystyle  2 e^x-3 \cos x  \Big]_0^{2}
+\\ \amp =\amp  (2 e^{2} - 3 \cos 2) - (2 e^0 - 3 \cos0 ) 
+\\ \amp =\amp  2 e^{2} - 3 \cos 2  + 1 
 \end{array}</me></p>
 </solution>
     </static>
     <server-data sourceFilePath="Library/ma122DB/set12/s5_4_26.pg" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" course-password="anonymous" language="en-US"/>
     <pg source="Library/ma122DB/set12/s5_4_26.pg"/>
   </webwork-reps>
-  <webwork-reps version="2" xml:id="extracted-webwork-71" ww-id="webwork-71">
-    <static seed="71">
+  <webwork-reps version="2" xml:id="extracted-webwork-72" ww-id="webwork-72">
+    <static seed="72">
       <statement><p><m>1+2=</m><fillin name="AnSwEr0001" characters="5"/></p>
 </statement>
       <answer>
