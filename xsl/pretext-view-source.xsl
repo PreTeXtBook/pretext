@@ -40,6 +40,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:import href="./pretext-html.xsl" />
 
+<!--                       IMPORTANT                         -->
+<!-- The "sanitize-text" template can be called on sizeable  -->
+<!-- chunks of text, in a recursive manner, and then looks   -->
+<!-- like runaway recursion.  "xsltproc" has a "-maxdepth"   -->
+<!-- argument.  For the sample article, we increased it from -->
+<!-- 3000 to 6000 to prevent a spurious error.               -->
+
 <!-- We assume the source is in great shape, typically having been -->
 <!-- created by a pretty-printing tool.  So we keep all the        -->
 <!-- whitespace as being of interest to human reader.   This is    -->
