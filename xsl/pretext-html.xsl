@@ -10501,7 +10501,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="google-classic"/>
             <xsl:call-template name="google-universal"/>
             <xsl:call-template name="google-gst"/>
-            <xsl:call-template name="pytutor-footer" />
             <xsl:call-template name="syntax-highlight-footer" />
             <xsl:call-template name="aim-login-footer" />
             <xsl:call-template name="extra-js-footer"/>
