@@ -9,6 +9,7 @@ pretext/__pycache__/**
 .vscode
 **/_build
 **/output
+**/cli.log
 **/rsbuild
 **/build
 
