@@ -9,10 +9,13 @@
 
 <chapter xml:id="runestone">
     <title>Conversion to Runestone</title>
-    <introduction>
-        <!-- indentation is off, for a clean commit as re-arranged -->
 
+    <introduction>
         <p><url href="https://runestone.academy" visual="runestone.academy">Runestone Interactive</url> is a textbook hosting system orginally designed for <init>HTML</init> textbooks about computer science.  It is similar in design and goals to <pretext/>, but is also complementary in important ways.  In particular, Runestone excels at providing very interactive versions where student work in the textbook can be graded (automatically or manually), scores recorded, and that information can be viewed by an instructor.  Any instructor can easily spin-up an instance of your book for their course, at no charge to the school or to the students.</p>
+    </introduction>
+
+    <section>
+        <title>About Runestone Academy</title>
 
         <p>Runestone textbooks are designed around interactive activities and active reading.  We are well along in the process of exposing these capabilities via <pretext/> markup, as of 2022-06-13.  Expect this list to expand, and change slightly, as we make further progress.<ul>
             <li>Every feature of the usual <pretext/> <init>HTML</init> output should function identically on a Runestone server.</li>
@@ -28,7 +31,7 @@
         </ul></p>
 
         <p>We will not attempt to duplicate Runestone's documentation here.  Visit the <url href="https://runestone.academy" visual="runestone.academy">Runestone Academy</url> site to learn more about all the features designed for hosting your textbook for everybody's courses.</p>
-    </introduction>
+    </section>
 
     <section xml:id="sec-publishing-to-runestone-academy">
         <title>Publishing to Runestone Academy</title>
