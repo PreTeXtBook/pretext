@@ -342,6 +342,12 @@ def latex_image_conversion(
     import os.path  # join()
     import subprocess  # call() is Python 3.5
     import os, shutil
+    # external module, often forgotten
+    try:
+        import pdfCropMargins
+    except ImportError:
+        global __module_warning
+        raise ImportError(__module_warning.format("pdfCropMargins"))
 
     _verbose(
         "converting latex-image pictures from {} to {} graphics for placement in {}".format(
@@ -423,7 +429,10 @@ def latex_image_conversion(
                 )
             else:
                 pcm_executable_cmd = get_executable_cmd("pdfcrop")
-                pcm_cmd = pcm_executable_cmd + [
+                # Strip the executable itself, since we will .crop() internally,
+                # but do keep the options/arguments provided by a publisher,
+                # which *might* supersede ones give here earlier (untested)
+                pcm_cmd = [
                     latex_image_pdf,
                     "-o",
                     "cropped-" + latex_image_pdf,
@@ -431,13 +440,13 @@ def latex_image_conversion(
                     "0",
                     "-a",
                     "-1",
-                ]
+                ] + pcm_executable_cmd[1:]
                 _verbose(
                     "cropping {} to {}".format(
                         latex_image_pdf, "cropped-" + latex_image_pdf
                     )
                 )
-                subprocess.call(pcm_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+                pdfCropMargins.crop(pcm_cmd)
                 if not os.path.exists("cropped-" + latex_image_pdf):
                     print(
                         "PTX:ERROR: There was a problem cropping {} and {} was not created".format(
@@ -716,7 +725,7 @@ def latex_tactile_image_conversion(
 
 def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     import os.path  # join()
-    import pg_logger  # exec_script_str_local()
+    import runestone.codelens.pg_logger  # exec_script_str_local()
 
     try:
         import requests  # post()
@@ -732,7 +741,7 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         "creating trace data from {} for placement in {}".format(xml_source, dest_dir)
     )
     ptx_xsl_dir = get_ptx_xsl_path()
-    extraction_xslt = os.path.join(ptx_xsl_dir, "extract-codelens.xsl")
+    extraction_xslt = os.path.join(ptx_xsl_dir, "extract-trace.xsl")
     # support publisher file, subtree argument
     if pub_file:
         stringparams["publisher"] = pub_file
@@ -747,13 +756,14 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     code_file = open(code_filename, "r")
     for program in code_file.readlines():
         # three parts, always
-        program_triple = program.split(",", 2)
-        visible_id = program_triple[0]
-        language = program_triple[1]
+        program_quad = program.split(",", 3)
+        runestone_id = program_quad[0]
+        visible_id = program_quad[1]
+        language = program_quad[2]
         url = url_string.format(language)
         # instead use  .decode('string_escape')  somehow
         # as part of reading the file?
-        source = program_triple[2].replace("\\n", "\n")
+        source = program_quad[3].replace("\\n", "\n")
         _verbose("converting {} source {} to a trace...".format(language, visible_id))
 
         # success will replace this empty string
@@ -774,7 +784,7 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
                 print(server_time_out_string.format(url, visible_id))
         elif language == "python":
             # local routines handle this case, no server involved
-            trace = pg_logger.exec_script_str_local(
+            trace = runestone.codelens.pg_logger.exec_script_str_local(
                 source, None, False, None, _js_var_finalizer
             )
 
@@ -782,9 +792,8 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         # no trace, then do not even try to produce a file
         if trace:
             script_leadin_string = 'if (allTraceData === undefined) {{\n var allTraceData = {{}};\n }}\n allTraceData["{}"] = '
-            script_leadin = script_leadin_string.format(visible_id)
+            script_leadin = script_leadin_string.format(runestone_id)
             trace = script_leadin + trace
-            # print(program_triple[0], trace)
             trace_file = os.path.join(dest_dir, "{}.js".format(visible_id))
             with open(trace_file, "w") as f:
                 f.write(trace)
@@ -2757,6 +2766,9 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}, outputfn=print)
         # report any errors on failure (indented)
         raise (e)
     finally:
+        # wait until thread is done
+        if parse_t.is_alive():
+            parse_t.join()
         # restore directory in success or failure
         os.chdir(owd)
 

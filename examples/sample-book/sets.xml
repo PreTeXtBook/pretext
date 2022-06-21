@@ -35,6 +35,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <introduction>
         <p>A certain amount of mathematical maturity is necessary to find and study applications of abstract algebra.  A basic knowledge of set theory, mathematical induction, equivalence relations, and matrices is a must.  Even more important is the ability to read and understand mathematical proofs.  In this chapter we will outline the background needed for a course in abstract algebra.</p>
+
+        <p>It helps when testing to know when this sample document was generated: <today />, <timeofday />.</p>
     </introduction>
 
     <section xml:id="section-note-on-proofs">

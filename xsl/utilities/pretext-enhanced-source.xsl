@@ -54,6 +54,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:import href="../publisher-variables.xsl"/>
 <xsl:import href="../pretext-assembly.xsl"/>
 
+<!-- We do not include "pretext-common.xsl" here, even if     -->
+<!-- most conversions normally do.  We want to keep           -->
+<!-- "pretext-assembly.xsl" self-contained and so this is     -->
+<!-- a bit of a test of what can go wrong if a presumed       -->
+<!-- template goes missing.  Downside - we lose the automatic -->
+<!-- whitespace control of "strip-space" and so are partly at -->
+<!-- the mercy of whitespace nodes in the original source.    -->
+
 <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
 <!-- The "pretext-assembly.xsl" stylesheet is parameterized by a   -->

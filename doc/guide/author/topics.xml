@@ -830,6 +830,7 @@
                     <li>Typically a block does not contain another block, except that the more planar ones can appear as part of a more textual one.</li>
 
                     <li>When numbered, all blocks generally run consecutively.  (In <latex/>-speak, <q>on the same counter.</q>)  Numbering FIGURE-LIKE and PROJECT-LIKE independently is in transition at this writing (2021-07-07).</li>
+                    <li>Depending on the output format of your document, some block types may be initially hidden to improve the visual flow.  The reader must click on the heading for the block to reveal its contents.  You can change this behavior by configuring your publication file.  See <xref ref="publication-file-online"/>.  We will make note of the elements that are hidden by default for <init>HTML</init> output.</li>
                 </ul>
             </list>
 
@@ -854,7 +855,7 @@
                     <li>
                         <title>EXAMPLE-LIKE</title>
                         <p><tag>example</tag>, <tag>question</tag>, <tag>problem</tag></p>
-                        <p>A worked problem meant as exposition.  It can be structured with <tag>task</tag>, <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> just like an <tag>exercise</tag> or PROJECT-LIKE, but the <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> cannot be electively removed from output, and they do not migrate to collections of solutions elsewhere.</p>
+                        <p>A worked problem meant as exposition.  It can be structured with <tag>task</tag>, <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> just like an <tag>exercise</tag> or PROJECT-LIKE, but the <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> cannot be electively removed from output, and they do not migrate to collections of solutions elsewhere. Hidden by default for <init>HTML</init> output formats.</p>
                     </li>
 
                     <li>
@@ -872,7 +873,7 @@
                     <li>
                         <title>THEOREM-LIKE</title>
                         <p><tag>theorem</tag>, <tag>corollary</tag>, <tag>lemma</tag>, <tag>algorithm</tag>, <tag>proposition</tag>, <tag>claim</tag>, <tag>fact</tag>, <tag>identity</tag></p>
-                        <p>Mathematical results, which can have an (optional) proof.</p>
+                        <p>Mathematical results, which can have an (optional) <tag>proof</tag>.  Proofs are hidden by default in <init>HTML</init> output.</p>
                     </li>
 
                     <li>
@@ -912,7 +913,7 @@
         <subsection>
             <title>Other Blocks</title>
 
-            <p>There are other blocks which can be achieved using just one element.  Examples are <tag>poem</tag> and <tag>assemblage</tag>.  An <tag>exercise</tag> can take on different behaviors, depending on its placement (see <xref ref="topic-exercises"/>).  One such placement is as a child of a division, which we call an <term>inline exercise</term>, and this would be regarded as a block, very similar to a PROJECT-LIKE.</p>
+            <p>There are other blocks which can be achieved using just one element.  Examples are <tag>poem</tag> and <tag>assemblage</tag>.  An <tag>exercise</tag> can take on different behaviors, depending on its placement (see <xref ref="topic-exercises"/>).  One such placement is as a child of a division, which we call an <term>inline exercise</term>, and this would be regarded as a block, very similar to a PROJECT-LIKE.  Inline exercises are hidden by default in <init>HTML</init> output.</p>
 
             <p>A paragraph (<tag>p</tag>) can appear many places and is a primary component of blocks.  But when it is a child of a division, it shares some charateristics with other blocks.  There are a number of peers of a <tag>p</tag> which would then also qualify:  <tag>pre</tag>, <tag>blockquote</tag>, <tag>image</tag>, <tag>video</tag>, <tag>program</tag>, <tag>console</tag>, and <tag>tabular</tag>.  None of these can have a title or number, making them less useful, but widening the possibilities for placement.</p>
         </subsection>
@@ -1962,6 +1963,164 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
     </section>
 
+    <section xml:id="topic-interactive-exercises">
+        <title>Interactive Exercises</title>
+        <idx>interactive exercises</idx>
+        <idx><h>exercise</h><h>interactive</h></idx>
+
+        <introduction>
+            <p><pretext/> has markup for a variety of interactive problem types, described individually in the subsections to follow.  Generally, for a regular <init>HTML</init> build (<xref ref="online-html"/>), these will be interactive, informing the reader when their answer is correct, and providing feedback when their answer is not correct.  When <init>HTML</init> is built to host on a Runestone server (<xref ref="runestone"/>), then student progress as part of a course will be recorded on the server.  Some features, which will be noted below, such as execution of computer code, is more capable on a Runestone server.</p>
+
+            <p>Generally, an interactive exercise is authored much like a <q>regular</q> <tag>exercise</tag> (<xref ref="overview-exercises"/>) with <tag>statement</tag>, <tag>hint</tag>, <tag>answer</tag>, <tag>solution</tag>.  However, there is also some additional markup which serves as a <term>signal</term> that the exercise is more than a short-answer, or free-response, question.  Usually, but not always, this signal is an additional element following <tag>statement</tag>.  One consequence of this is that all but one type of interactive exercise will require a <tag>statement</tag> element to contain the question text.</p>
+
+            <p>Each type of interactive question has a <term>static</term> version for use in output formats like print, <init>PDF</init>, or braille.  Details are given below.  Note that since the ability for instant evaluation of a reader's answer means an author provides the solution and other feedback, this can then be incorporated into a static version as an automatically-generated <tag>answer</tag> and/or <tag>solution</tag> (in addition to any others an author provides).  Note that an author can provide a <tag>hint</tag> for use in all output formats, but there are not any  automatically-generated <tag>hint</tag> for static versions of interactive problems.  Visibility of these solutions can be controlled via the mechanism applicable to all exercises, see <xref ref="exercise-component-visibility"/>.</p>
+
+            <p>Note the opportunity to provide feeback to the reader using a <tag>feedback</tag> element in various locations.  These are generally optional, but highly encouraged as a way to improve the quality of your reader's experience.</p>
+        </introduction>
+
+        <subsection xml:id="true-false-exercises">
+            <title>True/False Exercises</title>
+            <idx>true/false</idx>
+            <idx><h>interactive exercises</h><h>true/false</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>true/false</h></idx>
+
+            <p>A True/False exercise <em>must</em> have a <tag>statement</tag> element, and this element <em>must</em> have a <attr>correct</attr> attribute, whose value is <c>yes</c> or <c>no</c> (there is no default value).  That's it.  The presence of the <attr>correct</attr> attribute is the signal that this is a True/False exercise.</p>
+
+            <p>The text of the statement is the assertion the reader must determine is true or not.  The <attr>correct</attr> attribute is how an author describes if the statment is true (<c>yes</c>) or false (<c>no</c>).  This is enough information for a conversion to formulate a version of the question.  An optional <tag>feedback</tag> element may follow the <tag>statement</tag>, and should provide more thatn a binary explanation of the exercise.</p>
+
+            <p>Presentation as an interactive element will vary cosmetically, according to the output type targeted.</p>
+
+            <p>A static version gets an automatic <tag>answer</tag> that is simply <q>True</q> or <q>False</q>.  The automatic <tag>solution</tag> is the same, plus the content of <tag>feedback</tag>.</p>
+        </subsection>
+
+        <subsection xml:id="multiple-choice-exercises">
+            <title>Multiple-Choice Exercises</title>
+            <idx>multiple-choice exercises</idx>
+            <idx><h>interactive exercises</h><h>multiple-choice</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>multiple-choice</h></idx>
+
+            <p>A multiple-choice exercise is signaled by a <tag>choices</tag> element (plural) following a <tag>statement</tag> and preceding an optional <tag>hint</tag>.  The <tag>choices</tag> element is structured by a sequence of <tag>choice</tag> elements, whose content is a potential answer for the reader to choose.  So the <tag>statement</tag> is the prompt or question, and the <tag>choice</tag> are the possible answers.</p>
+
+            <p>At least one <tag>choice</tag> has an attribute <attr>correct</attr> set to the value <c>yes</c>.  The default value of <attr>correct</attr> is <c>no</c>.  There may be several correct answers, indicated with this attribute.  The presentation as an exercise with one answer or many is automatic.  However, in the event there is exactly one correct answer, but you wish the reader to consider the possibility of multiple correct answers, you may set the <attr>multiple-correct</attr> attribute on the <tag>choices</tag> element to <c>yes</c>.  The default value is <c>no</c>.</p>
+
+            <p>Each <tag>choice</tag> element must be further structured with a <tag>statement</tag> and a <tag>feedback</tag>, which each can contain items such as paragraphs (<tag>p</tag>).  In this way, the highly-encouraged feedback can be associated with each correct and incorrect choice.</p>
+
+            <p>The order of the <tag>choice</tag> as authored, is the order they will be given in a static version.  To present the choices in different orders in an interactive version, set the <attr>randomize</attr> attribute on the <tag>choices</tag> element to <c>yes</c>.</p>
+
+            <p>An automatic <tag>answer</tag> for the static version is simply the list markers for the correct choices.  An automatic <tag>solution</tag> has an indication for each choice if it is correct or incorrect, along with the choice's feedback.</p>
+        </subsection>
+
+        <subsection xml:id="parsons-problems">
+            <title>Parsons Problems</title>
+            <idx>Parsons problems</idx>
+            <idx><h>interactive exercises</h><h>Parsons problems</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>Parsons problems</h></idx>
+            <idx>mixed-up blocks exercises</idx>
+            <idx><h>interactive exercises</h><h>mixed-up blocks</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>mixed-up blocks</h></idx>
+
+            <p>Parsons problems are named for Dale Parsons, one of their creators, along with Patricia Haden.  They could also be called <term>mixed-up blocks</term>.  A reader is presented with a set of blocks containing text, either computer code or natural language, and their goal is to assemble the blocks into a correct order.  This could be a computer problem with a stated purpose, or could be a logical argument such as proof, or it could be a procedure such as a recipe.  An interactive drag-and-drip interface is a very efficient presentation for a reader.</p>
+
+            <p>Similar to multiple-choice exercises, a <tag>statement</tag> is followed by a <tag>blocks</tag> element containing a sequence of <tag>block</tag> elements.  The <tag>blocks</tag> element is teh signal that this is a Parsons problem.  The <tag>blocks</tag> element may have several attributes:<ul>
+                <li><attr>numbered</attr> set to <c>left</c> or <c>right</c> indicates the blocks should be numbered, and on which side the numbers go.  The default value is <c>no</c>.</li>
+                <li><attr>language</attr> set to <c>natural</c> indicates the text of the blocks is natural language, while the use of a computer language should be indicated by naming the actual language employed.  A list of languages will soon be added in <xref ref="topic-program-console"/>.  The default is <c>natural</c>.</li>
+                <li><attr>indentation</attr> set to <c>hide</c> indicates that a computer code exercise will not include indentation common to each line of a block.  In other words, the problem is slightly harder, as the interactive interface will require the reader to adjust the block horizontally to provide common indentation for the block.  The default is <c>show</c>.</li>
+            </ul></p>
+
+            <p>A <tag>block</tag> that has natural content is authored as usual, with a sequence of paragraphs (<tag>p</tag>) or similar.  If the content is a computer language, then it should be authored as a sequence of lines, using the <tag>cline</tag> element, which allows for precise interpretation of indentation and non-standard characters.  Include <em>all</em> indentation necessary for each line, no matter how <attr>indentation</attr> is set.  The content of the blocks, arranged properly, should form a syntactically correct program.  If the reader is to provide indentation, <pretext/> will strip away the common amount of indentation.</p>
+
+            <p>A block may be a <term>distractor</term>, meaning it is not to be used at all in the solution.  Indicate this with a <attr>correct</attr> attribute on the <tag>block</tag> set to <c>no</c> (the default being <c>yes</c>).  Furthermore, a given block of the solution can be authored with several alternatives, only one of which is correct.  Indicate this by structuring a <tag>block</tag> with a sequence of <tag>choice</tag>.  Each <tag>choice</tag> should be authored similarly to a <tag>block</tag>, and the one correct choice should have the <tag>correct</tag> attribute set to <c>yes</c> (the default being <c>no</c>).</p>
+
+            <p>The blocks should be authored in the correct order and the interactive interface will control the randomization.  A block that is a distractor may be placed in any location amidst the other blocks.  Each block should have an <tag>@order</tag> attribute that is a whole number, counting from 1.  This is the fixed, mixed-up, order that will be presented in any static rendition.  In static versions, sequences of blocks are in lists, which are numbered if the attribute has been set, but the left/right distinction is lost<mdash/>all numbers are to the left.  An automatic <tag>answer</tag> is provided if blocks are numbered, and it is just the block numbers in the correct order.  An automatic <tag>solution</tag> is always generated with the text of the blocks listed in the correct order.  For an exercise with computer code, the <pretext/> <tag>program</tag> element and the exercise's <attr>language</attr> attribute will produce a syntax-highlighted listing.</p>
+
+            <p>There is no provision for a <tag>feedback</tag> element.  Further explanation may be provided in a <tag>hint</tag>, <tag>answer</tag>, or <tag>solution</tag>.  Also, a good interactive interface can provide assistance to a reader by telling them if they have too few or too many blocks, or combining or removing blocks, and so on.</p>
+
+            <p>As of 2022-06-14 work is underway to relax the strict ordering assumed of the blocks.  So there will be extra markup to specify a poset or directed acyclic graph on the blocks.</p>
+        </subsection>
+
+        <subsection xml:id="matching-exercises">
+            <title>Matching Exercises</title>
+            <idx>matching exercises</idx>
+            <idx><h>interactive exercises</h><h>matching</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>matching</h></idx>
+
+            <p>A <term>matching exercise</term> asks a reader to pair a <term>premise</term> with a <term>response</term>.  Similar to multiple-choice exercises and Parsons problems, a <tag>matches</tag> element follows a <tag>statement</tag> and this is the signal.  The <tag>matches</tag> element is structured as a sequence of <tag>match</tag> elements, each of which has a <tag>premise</tag> element and the matching <tag>response</tag> element.  Since the content of each premise and response is best kept short and simple as a phrase, the elements may also be simple phrases without the additional structure of <tag>p</tag> elements, or similar.  That's it.</p>
+
+            <p>An interactive interface should randomize at least one of the lists of premises and responses, consulting the authored version for the correct pairings.  For a static version, an author should put an <tag>order</tag> element on each <tag>match</tag> whose value is a whole number, starting from 1.  Then the <tag>premise</tag> will appear in the authored order, while the <tag>response</tag> will be re-ordered according to the attribute.</p>
+
+            <p>A single <tag>feedback</tag> element may be given, as a peer of <tag>statement</tag>, in addition to authored <tag>hint</tag>, <tag>answer</tag>, or <tag>solution</tag>.  For a static version an automatic <tag>solution</tag> presents the problem in the order the <tag>match</tag> were authored.</p>
+        </subsection>
+
+        <subsection xml:id="clickable-area-exercises">
+            <title>Clickable Area Exercises</title>
+            <idx>clickable area exercises</idx>
+            <idx><h>interactive exercises</h><h>clickable area</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>clickable area</h></idx>
+            <idx>select text exercises</idx>
+            <idx><h>interactive exercises</h><h>select text</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>select text</h></idx>
+
+            <p><term>Clickable Area</term> is a misnomer, assuming an interactive version of this type of problem.  Perhaps <q>Select Text</q> would be better.  In any event <q>area</q> is not meant to connote a geometric notion, instead this is about a sequence of characters, either in natural language or in computer code.</p>
+
+            <p>A <tag>statement</tag> is a prompt, describing which sort of areas should be selected by the reader.  Such as: Locate all the nouns in the following paragraph. This is followed by an <tag>areas</tag> element, which is the signal for this type of exercise.  The <tag>areas</tag> element holds either (a) <pretext/> paragraphs or similar, or (b) a sequence of <tag>cline</tag>, understood to be program code.  In the latter case, a <attr>language</attr> attribute on the <tag>areas</tag> element will enable the right syntax highlighting in some output formats.</p>
+
+            <p>Within the content of the <tag>areas</tag> element an <tag>area</tag> element can be used to surround a run of characters.  These cannot cross <init>XML</init> boundaries, such as a <tag>cline</tag> or <tag>p</tag>.  A <attr>correct</attr> attribute, with values <c>yes</c> or <c>no</c>, indicates the text is to be selected (clicked on) or that it is a distractor (tempting to click on).  The default is <c>yes</c>, so only distractors need to be indicated.</p>
+
+            <p>A single overall <tag>feedback</tag> may be placed following the <tag>areas</tag> element.</p>
+
+            <p>Now an interactive version will allow the reader to click on and off the marked areas of text, and provide information about which are correct and which are not, in addition to general feedback.</p>
+
+            <p>Generally, a static version of the problem will not be clickable.  <tage>wink</tage>  So your prompt might say something generic like <q>select</q> or <q>locate</q> since a reader might work the problem on paper by circling or underlining the areas.  A static version includes an automatic <tag>answer</tag> which is a list of the correct areas as text, followed by a list of the incorrect areas as text.  An automatic <tag>solution</tag> repeats the text in the <tag>areas</tag> element, and uses (accessible) visual cues to note the correct and incorrect text.</p>
+        </subsection>
+
+        <subsection xml:id="fill-in-exercises">
+            <title>Fill-in-the-Blanks Exercises</title>
+            <idx>fill-in exercises</idx>
+            <idx><h>interactive exercises</h><h>fill-in </h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>fill-in </h></idx>
+
+            <p>As of 2022-06-14 a major effort is underway to provide comprehensive markup for <term>fill-in-the-blank</term> problems.  Until then, there is transitional markup intended only to supply a migration path for projects originally authored for Runestone servers (<xref ref="runestone"/>).  So (a) our documentation is sparse, and (b) there will be no backward-compatible improvements.  So in particular, new projects should wait for the new markup.  Also, studying examples may be a useful way to augment what is described here.</p>
+
+            <p>A <tag>statement</tag> is enriched with empty <tage>var</tage> elements which will render as the blanks in the problem.</p>
+
+            <p>The signal for a fill-in problem is a <tag>setup</tag> element containing a sequence of <tag>var</tag> elements.  Each <tag>var</tag> contains a sequence of <tag>condition</tag> elements that describe possible values (via regular expressions) which might appear in a blank.  The first condition describes the correct answer(s), and then the subsequent conditions are descriptions of probable incorrect answers.  Each <tag>condition</tag> has a <tag>feedback</tag>.  So the first condition to match an entry provided via a blank will be noted as correct or incorrect, and its feedback will be relayed.</p>
+
+            <p>The <tag>var</tag> of the statement and the <tag>var</tag> of the setup are in a 1-1 correspondence, which establishes how the setup is associated with a blank.</p>
+
+            <p>A static version will include an automatic <tag>solution</tag> which <q>fills in</q> each blank with a correct answer, and then duplicates the feedback text, in order.</p>
+        </subsection>
+
+        <subsection xml:id="coding-exercises-projects">
+            <title>Coding Exercises and Projects</title>
+            <idx>coding exercises</idx>
+            <idx><h>interactive exercises</h><h>coding</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>coding</h></idx>
+
+            <p>A <term>Coding Exercise</term> is formed by placing a <tag>program</tag> element <em>after</em> the <tag>statement</tag> of an <tag>exercise</tag>.  The main distinction is that this is a signal that the interactivity is provided by the <tag>program</tag>, and therefore the <tag>exercise</tag> will not be understood as a short answer exercise (<xref ref="short-answer-exercises"/>).  For this reason, the <tag>program</tag> should be requested as one of the interactive realizations (<xref ref="interactive-program-codelens"/>, <xref ref="interactive-program-activecode"/>).</p>
+
+            <p>The identical construction may be used with any PROJECT-LIKE (<xref ref="block-summary"/>) such as an <tag>activity</tag>.  As of 2022-06-17 this only applies to the form that uses a <tag>statement</tag>, but will soon also apply to <tag>task</tag> within PROJECT-LIKE.</p>
+
+            <p>Realize that it is always possible to place a <tag>program</tag> <em>inside</em> of a <tag>statement</tag>, and if there is no <tag>program</tag> that is <em>after</em> the <tag>statement</tag> (or another signal for an interactive exercise) then the <tag>exercise</tag> will be classified as a short-answer exercise.  It may be instructive to understand that in a static realization, a <tag>program</tag> at the <em>end</em> of a <tag>statement</tag> may be visually identical to an <tag>exercise</tag> where the <tag>program</tag> is <em>after</em> the <tag>statement</tag>, even though the former is a short-answer exercise and the latter is a coding exercise (which will render differently for different output formats and hosting platforms).</p>
+        </subsection>
+
+        <subsection xml:id="short-answer-exercises">
+            <title>Short Answer Exercises</title>
+            <idx>short answer exercises</idx>
+            <idx><h>interactive exercises</h><h>short answer</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>short answer</h></idx>
+            <idx>free-response exercises</idx>
+            <idx><h>interactive exercises</h><h>free-response</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>free-response</h></idx>
+            <idx>essay question exercises</idx>
+            <idx><h>interactive exercises</h><h>essay question</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>essay question</h></idx>
+
+            <p><term>Short Answer</term> questions might also be known as <term>Free Response</term> questions, or <term>Essay</term> questions.  A <pretext/> <tag>exercise</tag>, or a PROJECT-LIKE that is not structured by <tag>task</tag>, is implicitly of this nature.  In an online setting, it is a simple matter to provide a place for a reader to type in an answer, response, or essay.  But then what?  Until artificial intelligence is brought to bear, somebody (not something), such as an instructor for a course of enrolled students, will need to read a response and provide a score and/or comments that can be saved and distributed back to the students.  So the first prerequisite is that <init>HTML</init> output is being built for a capable platform.  As of 2022-06-15, this means a Runestone server (<xref ref="runestone"/>), but it could easily also be a <webwork/> server.  Then a publisher might wish some questions to be enabled this way, and others not.</p>
+
+            <p>You might only want reading questions to be submitted online.  Or activities (<tag>activity</tag>) only.  Perhaps inline exercises are meant for student reflection while reading, while divisional exercises are being submitted for scores (or vice-versa).  Our approach is opt-out.  When building for a capable platform, all short answer exercises will be rendered so that they may be answered and submitted online.  If this is not desired, a publisher (via the publication file, <xref ref="publication-file"/>) may turn off online submission for each of the five categories of exercises: inline, divisional, reading question, worksheet, project-like.  See <xref ref="online-short-answer-options"/> for precise details.</p>
+        </subsection>
+    </section>
+
     <section xml:id="topic-exercises-solutions">
         <title>Exercises and their Solutions</title>
 
@@ -2826,13 +2985,117 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <idx>program</idx>
         <idx>console</idx>
 
-        <p>A <tag>program</tag> will be treated as verbatim text (see <xref ref="overview-verbatim-literal"/>), subject to all the exceptions for exceptional characters (see <xref ref="overview-exceptional-characters"/>).  Indentation will be preserved, though an equal amount of leading whitespace will be stripped from every line, so as to keep the code shifted left as far as possible.  So you can indent your code consistently along with your <init>XML</init> indentation.  For this reason it is best to indent with spaces, and not tabs.  A mix will almost surely end badly, and in some programming languages tabs are discouraged (e.g. Python).</p>
+        <subsection>
+            <title>Content and Placement of Programs and Consoles</title>
 
-        <p>The <attr>language</attr> attribute may be used to get some degree of language-specific syntax highlighting.  We will eventually provide a table of attribute values here.  They are always lowercase, and a first guess might succeed.</p>
+            <p>A <tag>program</tag> will be treated as verbatim text (see <xref ref="overview-verbatim-literal"/>), subject to all the exceptions for exceptional characters (see <xref ref="overview-exceptional-characters"/>).  Indentation will be preserved, though an equal amount of leading whitespace will be stripped from every line, so as to keep the code shifted left as far as possible.  So you can indent your code consistently along with your <init>XML</init> indentation.  For this reason it is best to indent with spaces, and not tabs.  A mix will almost surely end badly, and in some programming languages tabs are discouraged (e.g. Python).</p>
 
-        <p>A <tag>console</tag> is a transcript of an interactive session in a terminal or console at a command-line.  It is a sequence of the following elements, in this order, possibly repeated many times as a group: <tag>prompt</tag>, <tag>input</tag>, and <tag>output</tag>.  The <tag>output</tag> is optional, and a <tag>prompt</tag> is only displayed when there is an immediately subsequent <tag>input</tag> (which could be empty).  The content is treated as verbatim text (see <xref ref="overview-verbatim-literal"/>), subject to all the exceptions for exceptional characters (see <xref ref="overview-exceptional-characters"/>).</p>
+            <p>A <tag>console</tag> is a transcript of an interactive session in a terminal or console at a command-line.  It is a sequence of the following elements, in this order, possibly repeated many times as a group: <tag>prompt</tag>, <tag>input</tag>, and <tag>output</tag>.  The <tag>output</tag> is optional, and a <tag>prompt</tag> is only displayed when there is an immediately subsequent <tag>input</tag> (which could be empty).  The content is treated as verbatim text (see <xref ref="overview-verbatim-literal"/>), subject to all the exceptions for exceptional characters (see <xref ref="overview-exceptional-characters"/>).</p>
 
-        <p>A <tag>program</tag> or <tag>console</tag> may be wrapped in a <tag>listing</tag>, see <xref ref="topic-listing"/>.</p>
+            <p>A <tag>program</tag> or <tag>console</tag> may be wrapped in a <tag>listing</tag>, see <xref ref="topic-listing"/>.  This will behave similar to a <tag>figure</tag>, with the <tag>caption</tag> displayed below, and a number assigned.  So, in particular, if your program or console is important enough to cross-reference, it is an enclosing <tag>listing</tag> that serves as the target.</p>
+
+            <p>The <attr>language</attr> attribute may be used to get some degree of language-specific syntax highlighting and/or interactive behavior.  We will eventually provide a table of attribute values here.  They are always lowercase, and a good first guess is likely to succeed.</p>
+        </subsection>
+
+        <subsection xml:id="interactive-program-codelens">
+            <title>Interactive Programs, CodeLens</title>
+
+            <p><term>CodeLens</term> is an interactive version of a computer program, which can be visualized by stepping through the code one statement at a time, watching output, variables, and other data structures change.  So it is similar to a debugger, except the reader does not set breakpoints or modify program data on-the-fly.  This is possible automatically for several different languages when your <init>HTML</init> is hosted on a Runestone server (<xref ref="runestone"/>).  This may also be accomplished <q>in browser</q> when hosted on any old generic web server.  The catch is that for a generic server a publisher must generate <term>trace data</term> in advance, typically with the PreTeXt-CLI (<xref ref="processing-CLI"/>).  Place the <tag>interactive</tag> attribute on a <tag>program</tag> element with the value <c>codelens</c> to elect this behavior (<c>no</c> is the default value).  Also, be sure to specify a language from the supported languages: Python, Java, C, and C++.  Consult <xref ref="table-program-interactive"/> below for a summary of various combinations.  When an output format does not support an interactive CodeLens instance, the fallback is a static program listing.</p>
+        </subsection>
+
+        <subsection xml:id="interactive-program-activecode">
+            <title>Interactive Programs, ActiveCode</title>
+
+            <p><term>ActiveCode</term> is an interactive environment where a reader may work on code through repeated edit-compile-test cycles.  Code can be provided by an author as a complete program to be modified, a partial program to be completed, or nothing at all.  One good example is that maybe header files, import statement, and similar are provided, and a skeleton of a main entry-point procedure is also provided.  Then a reader can concentrate on the more conceptual parts of the programming.  Some languages will be executable <q>in browser</q> on any old generic web server, while others must be on a Runestone server (<xref ref="runestone"/>) where a <url href="https://github.com/trampgeek/jobe" visual="github.com/trampgeek/jobe">Jobe Server</url> is running to support the execution.</p>
+
+            <p>Place the <tag>interactive</tag> attribute on a <tag>program</tag> element with the value <c>activecode</c> to elect this behavior (<c>no</c> is the default value).  Also, be sure to specify a language from the supported languages.  Consult <xref ref="table-program-interactive"/> below for a summary of various combinations.  When an output format does not support an interactive ActiveCode instance, the fallback is a static program listing.</p>
+
+            <p>Note that a Python ActiveCode automatically is enabled with a CodeLens button and requires no preparation of any trace data.  So a reader can form any type of Python program and closely examine its behavior.</p>
+        </subsection>
+
+        <subsection>
+            <title>Interactive Program Capabilities</title>
+
+            <p>This table lists which types of interactivity are available on various combinations of servers and programming languages.  The entry <q>AC + CL</q> means that both ActiveCode and CodeLens instances are availble, but the ActiveCode instance will have a CodeLens button enabled.</p>
+
+            <p>Note that <c>python</c> is generic Python with the standard libraries (version 3.x).  On the other hand <c>python3</c> is a Runestone server installation (only) with a number of additional popular Python packages available, such as <c>numpy</c> and <c>pandas</c>.</p>
+
+            <table xml:id="table-program-interactive">
+                <title>Interactive Programs</title>
+
+                <tabular>
+                    <row header="yes">
+                        <cell>Language</cell>
+                        <cell><c>@language</c></cell>
+                        <cell colspan="2" halign="center">Server</cell>
+                    </row>
+                    <row header="yes" bottom="major">
+                        <cell></cell>
+                        <cell></cell>
+                        <cell>Generic</cell>
+                        <cell>Runestone</cell>
+                    </row>
+                    <row>
+                        <cell>Python</cell>
+                        <cell><c>python</c></cell>
+                        <cell>AC + CL</cell>
+                        <cell>AC + CL</cell>
+                    </row>
+                    <row>
+                        <cell>Python 3</cell>
+                        <cell><c>python3</c></cell>
+                        <cell></cell>
+                        <cell>AC</cell>
+                    </row>
+                    <row>
+                        <cell>Java</cell>
+                        <cell><c>java</c></cell>
+                        <cell>CL</cell>
+                        <cell>AC + CL</cell>
+                    </row>
+                    <row>
+                        <cell>C</cell>
+                        <cell><c>c</c></cell>
+                        <cell>CL</cell>
+                        <cell>AC + CL</cell>
+                    </row>
+                    <row>
+                        <cell>C++</cell>
+                        <cell><c>cpp</c></cell>
+                        <cell>CL</cell>
+                        <cell>AC + CL</cell>
+                    </row>
+                    <row>
+                        <cell>JavaScript</cell>
+                        <cell>javascript<c></c></cell>
+                        <cell>AC</cell>
+                        <cell>AC</cell>
+                    </row>
+                    <row>
+                        <cell>HTML</cell>
+                        <cell><c>html</c></cell>
+                        <cell>AC</cell>
+                        <cell>AC</cell>
+                    </row>
+                    <row>
+                        <cell>SQL</cell>
+                        <cell><c>sql</c></cell>
+                        <cell>AC</cell>
+                        <cell>AC</cell>
+                    </row>
+                    <row bottom="major">
+                        <cell>Octave</cell>
+                        <cell><c>octave</c></cell>
+                        <cell></cell>
+                        <cell>AC</cell>
+                    </row>
+                    <!-- should really be a note, or similar -->
+                    <row>
+                        <cell halign="left" colspan="4">AC = ActiveCode, CL = CodeLens</cell>
+                    </row>
+                </tabular>
+            </table>
+        </subsection>
     </section>
 
     <section xml:id="topic-figure">
@@ -3749,7 +4012,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <figure>
                 <caption>Sea Hares, Flower Garden Banks National Marine Sanctuary</caption>
-                <video xml:id="video-sea-hares" href="https://flowergarden.noaa.gov/image_library/video/seaharew.mp4" width="80%" preview="images/sea-hare.jpg" />
+                <video xml:id="video-sea-hares" href="https://flowergarden.noaa.gov/image_library/video/seaharew.mp4" width="80%" preview="sea-hare.jpg" />
             </figure>
         </subsection>
 
@@ -3764,12 +4027,12 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <figure>
                 <caption>The Eagles, <articletitle>Hotel California</articletitle></caption>
-                <video xml:id="video-hotel-california" youtube="YW4dzWE1SUs" width="60%" start="12" preview="images/hotel-california.jpg" />
+                <video xml:id="video-hotel-california" youtube="YW4dzWE1SUs" width="60%" start="12" preview="hotel-california.jpg" />
             </figure>
 
             <figure>
                 <caption>Mozart, Piano Sonata in C Major, K. 545, II</caption>
-                <video xml:id="mozart-piano-sonata" youtube="1Yv_AINhVn4" width="80%" preview="images/mozart-piano.jpg" />
+                <video xml:id="mozart-piano-sonata" youtube="1Yv_AINhVn4" width="80%" preview="mozart-piano.jpg" />
             </figure>
 
             <p>The <c>pretext</c> script (<xref ref="pretext-script" />) may be used to download the provided preview images for YouTube videos (only).  Filenames will be formed from the <attr>xml:id</attr> of the <tag>video</tag> element.  These will be used in static versions of output, such as print.  Once custom preview images are implemented for author-hosted video, their static representation will improve.</p>
@@ -4075,9 +4338,9 @@ parts of a slide (e.g. it inserts a Beamer <c>\pause</c>).
         </p>
         <p>
 A minimal working example may be found in the
-<url href="https://github.com/PreTeXtBook/pretext/blob/dev/examples/sample-slideshow/sample-slideshow.xml">
+<url href="https://github.com/PreTeXtBook/pretext/blob/dev/examples/sample-slideshow/sample-slideshow.xml" visual="examples/sample-slideshow/sample-slideshow.xml">
   Examples folder of the PreTeXt repo on GitHub
-</url><fn><c>examples/sample-slideshow/sample-slideshow.xml</c></fn>.
+</url>.
 See publishing details for various outputs in <xref ref="publisher-slides"/>.
         </p>
     </section>

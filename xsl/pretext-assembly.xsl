@@ -105,6 +105,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Isolate conversion of Runestone/interactive to PreTeXt/static -->
 <xsl:import href="./pretext-runestone-static.xsl"/>
 
+<!-- We explicitly do not import "pretext-common.xsl" as we want    -->
+<!-- this important pre-processing stylesheet to have no hidden     -->
+<!-- dependencies.  In almost every rational use, the "-common"     -->
+<!-- stylesheet is imported by a conversion, so it is easy to       -->
+<!-- miss these dependencies.  An example in 2022-06 was the use    -->
+<!-- of the "visible-id" template to coordinate construction and    -->
+<!-- insertion of WeBWorK problems with an intervening trip to a    -->
+<!-- WW server.  The "pretext-enhanced-source.xsl" stylesheet is    -->
+<!-- one place where "-common" does not creep in.  Use of a modal   -->
+<!-- template here, with a definition in -common, will do a         -->
+<!-- massive "value-of" when not defined for the "-enhanced-source" -->
+<!-- stylesheet, which might be detectable (in strange ways).       -->
+
 <!-- The "representations" pass is used to make derived versions of      -->
 <!-- authored exercises which can be rendered dynamically.  For example, -->
 <!-- a multiple choice question.  These representations can be "static"  -->
@@ -116,13 +129,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   * We default here to "static".  HTML production will override     -->
 <!--     to "dynamic" and then any importing stylesheet will need to     -->
 <!--     override back to "static".                                      -->
+<!--   * 'pg-problems' are WeBWork problems for an archive               -->
 <!--   * If testing, the pretext-enhanced-source.xsl  stylesheet will    -->
 <!--     need a stringparam override to view and test dynamic versions.  -->
 <xsl:variable name="exercise-style" select="'static'"/>
-
-<!-- Timing debugging -->
-<xsl:param name="debug.assembly.time" select="'no'"/>
-<xsl:variable name="time-assembly" select="$debug.assembly.time = 'yes'"/>
 
 <!-- ############################## -->
 <!-- Source Assembly Infrastructure -->
@@ -184,6 +194,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="node()|@*" mode="augment">
     <xsl:param name="parent-struct" select="''"/>
     <xsl:param name="level" select="0"/>
+
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="augment">
             <xsl:with-param name="parent-struct" select="$parent-struct"/>
@@ -210,71 +221,43 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- root element, as a result of the node-set() manufacture.  -->
 <xsl:variable name="version-rtf">
     <xsl:call-template name="assembly-warnings"/>
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: start version</xsl:message>
-    </xsl:if>
     <xsl:apply-templates select="/" mode="version"/>
-    <!--  -->
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: end version</xsl:message>
-    </xsl:if>
-    <!--  -->
 </xsl:variable>
 <xsl:variable name="version" select="exsl:node-set($version-rtf)"/>
 
 <xsl:variable name="labeled-rtf">
-    <xsl:call-template name="assembly-warnings"/>
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: start label</xsl:message>
-    </xsl:if>
     <xsl:apply-templates select="$version" mode="labeling"/>
-    <!--  -->
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: end label</xsl:message>
-    </xsl:if>
-    <!--  -->
 </xsl:variable>
 <xsl:variable name="labeled" select="exsl:node-set($labeled-rtf)"/>
 
 <xsl:variable name="assembly-rtf">
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: start assembly</xsl:message>
-    </xsl:if>
-    <!--  -->
     <xsl:apply-templates select="$labeled" mode="assembly"/>
-    <!--  -->
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: end assembly</xsl:message>
-    </xsl:if>
-    <!--  -->
 </xsl:variable>
 <xsl:variable name="assembly" select="exsl:node-set($assembly-rtf)"/>
 
+<!-- Exercises are "tagged" as to their nature (division, inline, -->
+<!-- worksheet, reading, project-like) and interactive exercises  -->
+<!-- get more precise categorization.  The latter is used to      -->
+<!-- determine if Runestone Services are loaded.                  -->
+
+<xsl:variable name="exercise-rtf">
+    <!-- initialize with default, 'inline' -->
+    <xsl:apply-templates select="$assembly" mode="exercise">
+        <xsl:with-param name="division" select="'inline'"/>
+    </xsl:apply-templates>
+</xsl:variable>
+<xsl:variable name="exercise" select="exsl:node-set($exercise-rtf)"/>
+
 <xsl:variable name="representations-rtf">
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: start representations</xsl:message>
-    </xsl:if>
-    <!--  -->
-    <xsl:apply-templates select="$assembly" mode="representations"/>
-    <!--  -->
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: end representations</xsl:message>
-    </xsl:if>
-    <!--  -->
+    <xsl:apply-templates select="$exercise" mode="representations"/>
 </xsl:variable>
 <xsl:variable name="representations" select="exsl:node-set($representations-rtf)"/>
 
+<!-- Dependency: "repair" will fix some exercise representations, -->
+<!-- especially coming from an "old" WeBWorK server, so the       -->
+<!-- "repair" pass must come after the "representations" pass.    -->
 <xsl:variable name="repair-rtf">
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: start repair</xsl:message>
-    </xsl:if>
-    <!--  -->
     <xsl:apply-templates select="$representations" mode="repair"/>
-    <!--  -->
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: end repair</xsl:message>
-    </xsl:if>
-    <!--  -->
 </xsl:variable>
 <xsl:variable name="repair" select="exsl:node-set($repair-rtf)"/>
 
@@ -291,17 +274,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="nodes" select="$repair//*[@label]"/>
         <xsl:with-param name="purpose" select="'authored'"/>
     </xsl:call-template>
-
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: start identification</xsl:message>
-    </xsl:if>
-    <!--  -->
     <xsl:apply-templates select="$repair" mode="identification"/>
-    <!--  -->
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: end identification</xsl:message>
-    </xsl:if>
-    <!--  -->
 </xsl:variable>
 <xsl:variable name="identification" select="exsl:node-set($identification-rtf)"/>
 
@@ -317,49 +290,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="assembly-document-root" select="$assembly-root/*[not(self::docinfo)]"/>
 
 <xsl:variable name="language-rtf">
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: start language</xsl:message>
-    </xsl:if>
-    <!--  -->
     <xsl:apply-templates select="$identification" mode="language"/>
-    <!--  -->
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: end language</xsl:message>
-    </xsl:if>
-    <!--  -->
 </xsl:variable>
 <xsl:variable name="language" select="exsl:node-set($language-rtf)"/>
 
 <xsl:variable name="augment-rtf">
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: start augment</xsl:message>
-    </xsl:if>
-    <!--  -->
     <xsl:apply-templates select="$language" mode="augment"/>
-    <!--  -->
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: end augment</xsl:message>
-    </xsl:if>
-    <!--  -->
 </xsl:variable>
 <xsl:variable name="augment" select="exsl:node-set($augment-rtf)"/>
-
-<xsl:variable name="exercise-rtf">
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: start exercise</xsl:message>
-    </xsl:if>
-    <!--  -->
-    <!-- initialize with default, 'inline' -->
-    <xsl:apply-templates select="$augment" mode="exercise">
-        <xsl:with-param name="division" select="'inline'"/>
-    </xsl:apply-templates>
-    <!--  -->
-    <xsl:if test="$time-assembly">
-        <xsl:message><xsl:value-of select="date:date-time()"/>: end exercise</xsl:message>
-    </xsl:if>
-    <!--  -->
-</xsl:variable>
-<xsl:variable name="exercise" select="exsl:node-set($exercise-rtf)"/>
 
 <!-- The main "pretext" element only has two possible children      -->
 <!-- One is "docinfo", the other is "book", "article", etc.         -->
@@ -367,7 +305,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- And docinfo is the other child, these help prevent searching   -->
 <!-- the wrong half.                                                -->
 <!-- NB: source repair below converts a /mathbook to a /pretext     -->
-<xsl:variable name="root" select="$exercise/pretext"/>
+<xsl:variable name="root" select="$augment/pretext"/>
 <xsl:variable name="docinfo" select="$root/docinfo"/>
 <xsl:variable name="document-root" select="$root/*[not(self::docinfo)]"/>
 
@@ -432,6 +370,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="webwork[* or @copy or @source]" mode="assembly">
     <xsl:choose>
         <xsl:when test="$b-extracting-pg and @copy">
+            <!-- this sanity-check template could be incorporated here -->
+            <xsl:apply-templates select="." mode="webwork-copy-warning"/>
             <xsl:variable name="target" select="id(@copy)"/>
             <xsl:choose>
                 <xsl:when test="$target/statement|$target/task|$target/stage">
@@ -443,10 +383,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <!-- used as a signal here.  We don't want to copy this   -->
                         <!-- again after we have been to the WW server.           -->
                         <xsl:apply-templates select="@*[not(local-name(.) = 'copy')]" mode="assembly"/>
-                        <!-- The @seed makes the problem different, and @xml:id and @label -->
-                        <!-- are unique identifiers, so grab any other attributes of the   -->
-                        <!-- original, but exclude these while formulating a copy/clone.   -->
+                        <!-- The @seed makes the problem different, and there are also   -->
+                        <!-- unique identifiers, so grab any other attributes of the     -->
+                        <!-- original, but exclude these while formulating a copy/clone. -->
                         <xsl:apply-templates select="$target/@*[(not(local-name(.) = 'id')) and
+                                                                (not(local-name(.) = 'webwork-id')) and
                                                                 (not(local-name(.) = 'label')) and
                                                                 (not(local-name(.) = 'seed'))]" mode="assembly"/>
                         <!-- TODO: The following should scrub unique IDs as it continues down the tree. -->
@@ -704,6 +645,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:attribute>
 </xsl:template>
 
+<!-- 2022-06-09 WeBWorK "stage" deprecated in favor of "task"       -->
+<!-- We could use  match="webwork/stage"  but then this would only  -->
+<!-- happen to the author's source while being prepared for the     -->
+<!-- "extract-pg.xsl" worksheet.  But we also want to catch "stage" -->
+<!-- coming back from an old WeBWorK server, which may be various   -->
+<!-- places after we algorithmically manipulate the "webwork-reps"  -->
+<!-- structure.  Instead, we just wait until now.  If necessary,    -->
+<!-- perhaps "exercise/stage" for the post-server pass.             -->
+<xsl:template match="stage" mode="repair">
+    <task>
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </task>
+</xsl:template>
+
 
 <!-- ############## -->
 <!-- Identification -->
@@ -748,6 +703,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="@xml:id"/>
             </xsl:attribute>
         </xsl:if>
+        <!-- Every "webwork" that is a problem (not a generator) gets a   -->
+        <!-- lifetime identification in both passes through the source.   -->
+        <!-- The first migrates through the "extract-pg.xsl" template,    -->
+        <!-- then the Python communication with the server, and into the  -->
+        <!-- representations file.  The second is then used to align the  -->
+        <!-- source with the representations file on the second pass.     -->
+        <!-- When this present labeling pass provides a default label     -->
+        <!-- on all "webwork" we can just transition to that.             -->
+        <!-- Or maybe this identifier should be manufactured and attached -->
+        <!-- to a "webwork" as part of the "assembly" phase during the    -->
+        <!-- first pass, in concert with making copies.  On the second    -->
+        <!-- pass it gets generated again under identical circumstances   -->
+        <!-- (same look for source). -->
+        <xsl:if test="self::webwork[* or @source or @copy]">
+            <xsl:attribute name="webwork-id">
+                <xsl:apply-templates select="." mode="webwork-id"/>
+            </xsl:attribute>
+        </xsl:if>
+        <!-- Attributes done, recurse into children nodes -->
         <xsl:apply-templates select="node()" mode="labeling"/>
     </xsl:copy>
 </xsl:template>
@@ -1114,6 +1088,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 1.  Expand to WW, example-like, and task                           -->
 <!-- 2.  Insert "statement" when not authored                           -->
 <!-- 3.  Use locations computed here, remove elsewhere                  -->
+<!-- 4.  Recognize new, modern fill-in problems                         -->
 
 <xsl:template match="exercise|&PROJECT-LIKE;" mode="exercise">
     <xsl:param name="division"/>
@@ -1184,7 +1159,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="statement//var and not(webwork)">
                 <xsl:text>fillin-basic</xsl:text>
             </xsl:when>
-            <xsl:when test="statement and program">
+            <!-- new dynamic fillin goes here, perhaps:                     -->
+            <!-- statement//fillin[(@*|node()) and not(@characters|@fill)]? -->
+            <!-- only interactive programs make sense after a "statement" -->
+            <xsl:when test="statement and program[(@interactive = 'codelens') or (@interactive = 'activecode')]">
                 <xsl:text>coding</xsl:text>
             </xsl:when>
             <!-- Now we have what once would have been called a "traditional"     -->
@@ -1318,7 +1296,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="webwork[* or @copy or @source]" mode="representations">
     <xsl:variable name="ww-id">
-        <xsl:apply-templates select="." mode="visible-id" />
+        <xsl:value-of select="@webwork-id"/>
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$b-extracting-pg">
@@ -1334,7 +1312,74 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- get the representations now -->
         <xsl:otherwise>
-            <xsl:copy-of select="document($webwork-representations-file, $original)/webwork-representations/webwork-reps[@ww-id=$ww-id]" />
+            <!-- the "webwork-reps" element from the server for this "webwork" -->
+            <xsl:variable name="the-webwork-rep" select="document($webwork-representations-file, $original)/webwork-representations/webwork-reps[@ww-id=$ww-id]"/>
+            <xsl:choose>
+                <xsl:when test="$exercise-style = 'pg-problems'">
+                    <!-- isolate and edit representations needed for PG problem archives -->
+                    <xsl:apply-templates select="$the-webwork-rep" mode="webwork-rep-to-pg"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:copy-of select="$the-webwork-rep" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Edit a "webwork-reps" from the server into just PG material -->
+<xsl:template match="node()|@*" mode="webwork-rep-to-pg">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="webwork-rep-to-pg"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Promote "pg" specific information to "webwork-reps" -->
+<xsl:template match="webwork-reps" mode="webwork-rep-to-pg">
+    <xsl:copy>
+        <!-- copy existing attributes -->
+        <xsl:apply-templates select="@*" mode="webwork-rep-to-pg"/>
+        <!-- promote "pg" attributes (@source, @copied-from) -->
+        <xsl:apply-templates select="pg/@*" mode="webwork-rep-to-pg"/>
+        <!-- attributes done, recurse into child *elements*  -->
+        <!-- no node() here, so drops interstial whitespace  -->
+        <!-- that accumulates into the textual PG code, even -->
+        <!-- if it does get sanitized in its use/application -->
+        <xsl:apply-templates select="*" mode="webwork-rep-to-pg"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Attributes preserved, drop "pg" element, duplicate the guts -->
+<!-- which should just be the actual PG version of the problem   -->
+<xsl:template match="webwork-reps/pg" mode="webwork-rep-to-pg">
+    <xsl:apply-templates select="node()" mode="webwork-rep-to-pg"/>
+</xsl:template>
+
+<!-- Drop "webwork-reps" children we don't need for problem sets -->
+<xsl:template match="webwork-reps/static" mode="webwork-rep-to-pg"/>
+<xsl:template match="webwork-reps/server-data" mode="webwork-rep-to-pg"/>
+
+
+<!-- ######### -->
+<!-- Utilities -->
+<!-- ######### -->
+
+<!-- This matches the historical version of the "visible-id" template as  -->
+<!-- of 2022-06-10, which means that existing "webwork-representations"   -->
+<!-- files should be unchanged.  Long-term, this could be replaced by     -->
+<!-- simply the value of  @label  or  @xml:id  once we know that defaults -->
+<!-- are in place, and stable during the two passes.  Or maybe we keep    -->
+<!-- this scheme and let labeling be a late pass, for more completeness   -->
+<!-- of the id assignment phases.                                         -->
+<xsl:template match="webwork" mode="webwork-id">
+    <xsl:choose>
+        <xsl:when test="@xml:id">
+            <xsl:value-of select="@xml:id"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="local-name(.)" />
+            <xsl:text>-</xsl:text>
+            <xsl:number from="book|article|letter|memo" level="any" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -1345,7 +1390,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ######## -->
 
 <!-- A place for warnings about missing files, etc -->
-<!-- and/or temporary/experimental features        -->
+<!-- and/or temporary/experimental features. These -->
+<!-- should be one-time global problems.           -->
 <xsl:template name="assembly-warnings">
     <xsl:if test="$original/*[not(self::docinfo)]//webwork/node() and $b-ww-representations-missing">
         <xsl:message>PTX:WARNING: Your document has WeBWorK exercises,</xsl:message>
@@ -1356,13 +1402,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:message>             can cause difficulties when parts of your document get</xsl:message>
         <xsl:message>             processed by external programs (e.g. graphics, previews)</xsl:message>
     </xsl:if>
-    <xsl:if test="$b-extracting-pg">
-        <xsl:variable name="webwork-with-copy" select="$original//webwork[@copy]"/>
-        <xsl:for-each select="$webwork-with-copy">
-            <!-- this will need to switch to a document-wide search     -->
-            <!-- for a match on the @name value, once that attribute    -->
-            <!-- is in place, since we do not yet have the              -->
-            <!-- @name -> @xml:id  mapping until we are done assembling -->
+</xsl:template>
+
+<!-- Indentation below is off, so that a rearrangement makes a clear diff. -->
+<!-- And two things should happen:                                         -->
+<!--   1. Should move back up into the "assembly" template where           -->
+<!--      called, this will remove more duplicate code.                    -->
+<!--   2. Maybe run a gauntlet on @copy and $target:                       -->
+<!--      (a) not($target) -> not pointing at anything                     -->
+<!--      (b) not($target/self::webwork) -> not pointing at a WW           -->
+<!--      (c) $target/@copy, $target/@source -> not copyable               -->
+<!--      (d) the structure of $target should have already satisfied the   -->
+<!--          and so does not checking here, original will be busted       -->
+<xsl:template match="webwork[@copy]" mode="webwork-copy-warning">
             <xsl:variable name="target" select="id(@copy)"/>
             <xsl:choose>
                 <xsl:when test="$target/statement|$target/task|$target/stage"/>
@@ -1382,8 +1434,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:message>             points to a WeBWorK problem that does not have a statement, task, or stage.</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
-        </xsl:for-each>
-    </xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>

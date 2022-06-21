@@ -427,11 +427,11 @@
             <title>HTML Interactive Short Answer Exercises</title>
             <idx><h>short answer</h><h>HTML</h></idx>
 
-            <p>When <init>HTML</init> output is configured for use on an interactive platform, such as Runestone (<xref ref="runestone"/>), you may want <term>short answer</term> (or <term>essay</term> or <term>open-ended</term>) exercises to appear <term>static</term>, much as they would in print.  Or you might want them to be <term>dynamic</term>, where a student can enter an answer in a text box, for later grading by an instructor.  This behavior can be elected as a group for each of the five type of exercises.  Note: these options are only consulted when output is configured for a platform which can express the distinction.</p>
+            <p>When <init>HTML</init> output is configured for use on an interactive platform, such as Runestone (<xref ref="runestone"/>), you may want <term>short answer</term> (or <term>essay</term> or <term>open-ended</term>) exercises to appear <term>static</term>, much as they would in print.  Or you might want them to be <term>dynamic</term>, where a student can enter an answer in a text box, for later grading by an instructor.  See <xref ref="short-answer-exercises"/> for more rationale and explanation.  This behavior can be elected as a group for each of the five type of exercises.  Note: these options are only consulted when output is configured for a platform which can express the distinction.</p>
 
             <p>The<cd>
                 <cline>/publication/html/short-answer</cline>
-            </cd>element can have five different attributes: <attr>inline</attr>, <attr>divisional</attr>, <attr>worksheet</attr>, <attr>reading</attr>, and <attr>project</attr>.  For each, the allowed attribute values are <c>static</c> and <c>dynamic</c>.  (See <xref ref="overview-exercises"/> for more about the different types of exercises.)  The default for each is <c>dynamic</c>, so in practice, these options are used to make certain groups of exercises non-interactive when there is no expectation of grading them online.</p>
+            </cd>element can have five different attributes: <attr>inline</attr>, <attr>divisional</attr>, <attr>worksheet</attr>, <attr>reading</attr>, and <attr>project</attr>.  For each, the allowed attribute values are <c>static</c> and <c>dynamic</c>.  The default for each is <c>dynamic</c>, so in practice, these options are used to make certain groups of exercises non-interactive when there is no expectation of reviewing them online, or recording progress or scores.  In other words, you need to <q>opt-out</q> of dynamic short-answer questions.</p>
         </subsection>
 
         <subsection xml:id="online-style-options">

@@ -1143,7 +1143,7 @@
         the output format you're generating will determine what gets added on so that the right file is used.
         If your browser says it can't find the image file,
         make sure that the <init>SVG</init> file is in the correct location relative to the <init>HTML</init> file.
-        Here, we need a directory called <c>images</c> that lives next to our <init>HTML</init> files with a file called <c>small_graph.svg</c> inside that directory.
+        Here, we need a directory called <c>images</c> that lives next to our <init>HTML</init> files with a file called <c>small-graph.svg</c> inside that directory.
         If using a <init>PNG</init> or <init>JPEG</init> file across
 	<init>HTML</init>, <latex />/<init>PDF</init>,
 	<init>EPUB</init>, and Kindle,

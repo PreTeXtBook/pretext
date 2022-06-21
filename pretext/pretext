@@ -81,8 +81,14 @@ def verify_input_file(f, file_type):
 
 def get_output_file(file_path):
     """Expand provided filename, or return None"""
-    import os  # getcwd
+    import os  # getcwd, isdir
 
+    # if specified and is an extant directory then this is
+    # a misunderstanding and the defaults for a directory
+    # can make a realmess (especially in one's repository)
+    if file_path and os.path.isdir(file_path):
+        msg = '"{}" is a directory and appears where the name of a single file is expected'
+        raise ValueError(msg.format(file_path))
     # if specified, return absolute path
     # does not need to exist
     if file_path:
@@ -343,6 +349,10 @@ def get_cli_arguments():
             "assembly-dynamic",
             "PreTeXt source, after pre-processor, dynamic exercises (for developers)",
         ),
+        (
+            "assembly-pg",
+            "PreTeXt source, after pre-processor, WeBWorK problem set PG exercises (for developers)",
+        ),
         ("sagenb", "Sage worksheet conversion (removed)"),
         ("all", "All available output formats"),
     ]
@@ -418,14 +428,14 @@ def get_cli_arguments():
     parser.add_argument(
         "-o",
         "--output",
-        help="file for output (supersedes -d)",
+        help="file for output, only when when output is a single file (supersedes -d)",
         action="store",
         dest="out",
     )
     parser.add_argument(
         "-d",
         "--directory",
-        help="directory for output, defaults to managed directories from publication file\nfor components with multiple outputs, else current directory",
+        help="directory for output, defaults to managed directories from publication file\nfor generated components, otherwise default is current directory",
         action="store",
         dest="dir",
     )
@@ -716,6 +726,10 @@ def main():
                 out_file,
                 dest_dir,
                 "dynamic",
+            )
+        elif args.format == "assembly-pg":
+            ptx.assembly(
+                xml_source, publication_file, stringparams, out_file, dest_dir, "pg-problems"
             )
         # 2020-05-19 MathBookXMLtoSWS class removed
         elif args.format == "sagenb":

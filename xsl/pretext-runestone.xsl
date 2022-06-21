@@ -42,10 +42,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Runestone Infrastructure -->
 <!-- ######################## -->
 
-<!-- Temporary, until we have confidence about impact   -->
-<!-- Not guaranteed to be exhaustive during development -->
-<!-- NB: ananlyzing *original* source, not *assembled*  -->
-<xsl:variable name="b-needs-runestone" select="boolean($original//exercise/choices|$original//exercise/blocks|$original//exercise/program)"/>
+<!-- While under development, or maybe forever, do not load  -->
+<!-- Runestone Javascript unless it is necessary.  Various   -->
+<!-- values of @exercise-interactive are added in the        -->
+<!-- pre-processing phase.  program/@interactive takes on    -->
+<!-- values of 'activecode' and 'codelens'.  So a small      -->
+<!-- amount of imprecision here, but should not be critical. -->
+<xsl:variable name="b-needs-runestone" select="boolean($document-root//exercise[@exercise-interactive]|$document-root//program[@interactive])"/>
 
 <!-- Runestone Services -->
 <!-- Runestone provides universally-applicable Javascript, and since Brad Miller -->
@@ -330,38 +333,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- When hosted on Runestone, an interactive exercise is tracked in a    -->
-<!-- database across courses ("base course") and semesters ("time").      -->
-<!-- And the HTML representation of an interactive exercise, when powered -->
-<!-- by Runestone services, needs an HTML id.  But the PreTeXt "exercise" -->
-<!-- that wraps it has its own HTML id necessary for targets of           -->
-<!-- cross-reference (in-context) URLs.  We will prefer @label for the    -->
-<!-- PreTeXt "exercise" HTML id.  And we will require a *stable* @label   -->
-<!-- from an author, which we will dress up here.  Notice that this can   -->
-<!-- change when an author declares a new edition.                        -->
-<xsl:template match="exercise|program|&PROJECT-LIKE;" mode="runestone-id">
-    <!-- Once we generate labels, we can warn an author that they should   -->
-    <!-- be committing to a long-term @label value for database entries.   -->
-    <!-- We do this by checking for the $gen-id-sep string being present   -->
-    <!-- in the value of @label.  At this time, consider making a -common  -->
-    <!-- function that will examine both an @xml:id value or a @label for  -->
-    <!-- an "authored" pproperty, this could be set in the assembly phase. -->
-
-    <!-- Prefix just for RS server builds, in order that the database -->
-    <!-- of exercises gets a globally unique identifier.              -->
-    <xsl:if test="$b-host-runestone">
-        <xsl:value-of select="$docinfo/document-id"/>
-        <xsl:text>_</xsl:text>
-        <xsl:value-of select="$docinfo/document-id/@edition"/>
-        <xsl:text>_</xsl:text>
-    </xsl:if>
-    <xsl:value-of select="@label"/>
-</xsl:template>
-
+<!-- A convenience for attaching a Runestone id -->
 <xsl:template match="exercise|program|&PROJECT-LIKE;" mode="runestone-id-attribute">
     <xsl:attribute name="id">
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:attribute>
+</xsl:template>
+
+<!-- ############### -->
+<!-- Runestone Hooks -->
+<!-- ############### -->
+
+<!-- Various additions/modifications to the HTML output, but which  -->
+<!-- we isolate here in this stylesheet for organizational reasons. -->
+
+<!-- A textual and visual progress indicator of completed activities  -->
+<!-- for a book hosted on a RS server, only.  At the RS "subchapter"  -->
+<!-- level, which we shortcut by checking for a chapter-level parent. -->
+<xsl:template match="&STRUCTURAL;" mode="runestone-progress-indicator">
+    <xsl:if test="$b-host-runestone and (parent::chapter or parent::appendix)">
+        <div id="scprogresscontainer">You have attempted <span id="scprogresstotal"/> of <span id="scprogressposs"/> activities on this page.<div id="subchapterprogress" aria-label="Page progress"/></div>
+    </xsl:if>
 </xsl:template>
 
 <!-- ################## -->
@@ -568,6 +560,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Components -->
 <!-- ########## -->
 
+<!-- The "runestone-to-interactive" templates will combine a   -->
+<!-- "regular" PreTeXt statement together with some additional -->
+<!-- interactive material to make a hybrid "statement"         -->
+
+
 <!-- Hacked -->
 
 <xsl:template match="exercise[@exercise-interactive = 'htmlhack']" mode="runestone-to-interactive">
@@ -609,9 +606,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="id">
                     <xsl:value-of select="$true-choice-id"/>
                 </xsl:attribute>
-                <xsl:if test="statement/@correct = 'yes'">
-                    <xsl:apply-templates select="feedback"/>
-                </xsl:if>
+                <!-- identical feedback for each reader responses -->
+                <xsl:apply-templates select="feedback"/>
             </li>
             <!-- radio button for False -->
             <xsl:variable name="false-choice-id">
@@ -632,9 +628,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="id">
                     <xsl:value-of select="$false-choice-id"/>
                 </xsl:attribute>
-                <xsl:if test="statement/@correct = 'no'">
-                    <xsl:apply-templates select="feedback"/>
-                </xsl:if>
+                <!-- identical feedback for each reader responses -->
+                <xsl:apply-templates select="feedback"/>
             </li>
         </ul>
     </div>
@@ -784,16 +779,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <xsl:choose>
         <xsl:when test="choice">
-            <!-- put correct choice first             -->
+            <!-- put single correct choice first      -->
             <!-- default on "choice" is  correct="no" -->
             <xsl:apply-templates select="choice[@correct = 'yes']">
                 <xsl:with-param name="b-natural" select="$b-natural"/>
             </xsl:apply-templates>
-            <xsl:text>&#xa;---&#xa;</xsl:text>
             <xsl:apply-templates select="choice[not(@correct = 'yes')]">
                 <xsl:with-param name="b-natural" select="$b-natural"/>
             </xsl:apply-templates>
-            <xsl:text> #paired</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:choose>
@@ -823,6 +816,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="blocks/block/choice">
     <xsl:param name="b-natural"/>
 
+    <!-- Exactly one choice is correct, it is placed first. -->
+    <!-- Then the  n - 1  separators can be placed on all   -->
+    <!-- the "wrong" choices.                               -->
+    <xsl:if test="not(@correct = 'yes')">
+        <xsl:text>&#xa;---&#xa;</xsl:text>
+    </xsl:if>
     <xsl:choose>
         <xsl:when test="$b-natural">
             <xsl:apply-templates select="*"/>
@@ -836,6 +835,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:for-each>
         </xsl:otherwise>
     </xsl:choose>
+    <xsl:if test="not(@correct = 'yes')">
+        <xsl:text> #paired</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- Matching Problem -->
@@ -1099,6 +1101,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- Coding exercise -->
+
+<xsl:template match="exercise[@exercise-interactive = 'coding']|project[@exercise-interactive = 'coding']|activity[@exercise-interactive = 'coding']|exploration[@exercise-interactive = 'coding']|investigation[@exercise-interactive = 'coding']" mode="runestone-to-interactive">
+    <!-- We don't have a 'coding' attribute value  -->
+    <!-- unless one of the two tests below is true -->
+    <xsl:choose>
+        <xsl:when test="program/@interactive = 'codelens'">
+            <xsl:apply-templates select="statement"/>
+            <xsl:apply-templates select="program" mode="runestone-codelens"/>
+        </xsl:when>
+        <xsl:when test="program/@interactive = 'activecode'">
+            <xsl:apply-templates select="program" mode="runestone-activecode">
+                <xsl:with-param name="exercise-statement" select="statement"/>
+            </xsl:apply-templates>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+
 <!-- Short Answer problem -->
 
 <!-- Traditional form, but not converted like other interactive exercises -->
@@ -1113,12 +1134,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="statement"/>
         </div>
     </div>
-</xsl:template>
-
-<!-- Active Code exercise -->
-
-<xsl:template match="exercise[@exercise-interactive = 'coding']|project[@exercise-interactive = 'coding']|activity[@exercise-interactive = 'coding']|exploration[@exercise-interactive = 'coding']|investigation[@exercise-interactive = 'coding']" mode="runestone-to-interactive">
-    <xsl:apply-templates select="program" mode="runestone-activecode"/>
 </xsl:template>
 
 <!-- YouTube Video -->
@@ -1159,16 +1174,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- When a "program" is part of an exercise/project-like, -->
 <!-- then we need to get the problem "statement" absorbed  -->
 <!-- into the ActiveCode.  This is an authored "statement" -->
-<!-- that has been packed into a manufactured "statement"  -->
-<!-- created as part of the dynamic representation from    -->
-<!-- -assembly.  Other times a "program" is an atomic item -->
+<!-- passed in via the $exercise-statement parameter.      -->
+<!-- Other times a "program" is an atomic item             -->
 <!-- and surrounding text explains its purpose, hence      -->
 <!-- "exercise-statment" appropriately defaults to an      -->
 <!-- empty node-set.                                       -->
 <xsl:template match="program" mode="runestone-activecode">
-    <!-- need to be sure there is a "double" statement -->
-    <!-- from the -assembly representation             -->
-    <xsl:variable name="exercise-statement" select="preceding-sibling::statement"/>
+    <xsl:param name="exercise-statement" select="/.."/>
 
     <xsl:variable name="active-language">
         <xsl:apply-templates select="." mode="active-language"/>
@@ -1176,11 +1188,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="hosting">
         <xsl:apply-templates select="." mode="activecode-host"/>
     </xsl:variable>
-    <!-- use an id from the "program" element, unless used inside -->
-    <!-- an exercise/project-like, which is up two levels (and    -->
-    <!-- could be many different types of project-like).  The     -->
-    <!-- "program" needs to have its id adjusted to not conflict  -->
-    <!-- with the id of the containing exercise.                  -->
+    <!-- Use an id from the "program" element, unless employed -->
+    <!-- inside an exercise/project-like, which is up a level  -->
+    <!-- (and could be many different types of project-like).  -->
     <xsl:variable name="hid">
         <xsl:choose>
             <xsl:when test="$exercise-statement">

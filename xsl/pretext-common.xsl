@@ -3509,6 +3509,34 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!-- When hosted on Runestone, an interactive exercise is tracked in a    -->
+<!-- database across courses ("base course") and semesters ("time").      -->
+<!-- And the HTML representation of an interactive exercise, when powered -->
+<!-- by Runestone services, needs an HTML id.  But the PreTeXt "exercise" -->
+<!-- that wraps it has its own HTML id necessary for targets of           -->
+<!-- cross-reference (in-context) URLs.  We will prefer @label for the    -->
+<!-- PreTeXt "exercise" HTML id.  And we will require a *stable* @label   -->
+<!-- from an author, which we will dress up here.  Notice that this can   -->
+<!-- change when an author declares a new edition.                        -->
+<xsl:template match="exercise|program|&PROJECT-LIKE;" mode="runestone-id">
+    <!-- Once we generate labels, we can warn an author that they should   -->
+    <!-- be committing to a long-term @label value for database entries.   -->
+    <!-- We do this by checking for the $gen-id-sep string being present   -->
+    <!-- in the value of @label.  At this time, consider making a -common  -->
+    <!-- function that will examine both an @xml:id value or a @label for  -->
+    <!-- an "authored" pproperty, this could be set in the assembly phase. -->
+
+    <!-- Prefix just for RS server builds, in order that the database -->
+    <!-- of exercises gets a globally unique identifier.              -->
+    <xsl:if test="$b-host-runestone">
+        <xsl:value-of select="$docinfo/document-id"/>
+        <xsl:text>_</xsl:text>
+        <xsl:value-of select="$docinfo/document-id/@edition"/>
+        <xsl:text>_</xsl:text>
+    </xsl:if>
+    <xsl:value-of select="@label"/>
+</xsl:template>
+
 <!--            -->
 <!-- Long Names -->
 <!--            -->
@@ -6879,8 +6907,11 @@ Book (with parts), "section" at level 3
 <!-- 2019-09-23: minor review, v 1.7 (2018-09-02)  -->
 
 <!-- ActiveCode (Runestone) -->
-<!-- Languages supported by Runestone ActiveCode   -->
-<!-- interactive element, added 2020-08-13         -->
+<!-- Languages supported by Runestone ActiveCode and  -->
+<!-- CodeLens interactive elements, added 2020-08-13. -->
+<!-- "python3" is just on Runestone servers where     -->
+<!-- additional popular packages (e.g. numpy, pandas) -->
+<!-- are available.                                   -->
 
 <!-- Our strings (@ptx) are always all-lowercase, no symbols, no punctuation -->
 <mb:programming>
@@ -6895,7 +6926,6 @@ Book (with parts), "section" at level 3
     <language ptx="pascal"      active=""            listings="Pascal"           prism="pascal"/>
     <language ptx="perl"        active=""            listings="Perl"             prism="perl"/>
     <language ptx="python"      active="python"      listings="Python"           prism="py"/>
-    <language ptx="python2"     active="python2"     listings="Python"           prism="py"/>
     <language ptx="python3"     active="python3"     listings="Python"           prism="py"/>
     <language ptx="r"           active=""            listings="R"                prism="r"/>
     <language ptx="s"           active=""            listings="S"                prism="s"/>
@@ -6911,9 +6941,9 @@ Book (with parts), "section" at level 3
     <language ptx="elisp"       active=""            listings="Lisp"             prism="elisp"/>
     <language ptx="scheme"      active=""            listings="Lisp"             prism="scheme"/>
     <language ptx="racket"      active=""            listings="Lisp"             prism="racket"/>
-    <language ptx="sql"         active="sql"         listings="SQL"                 prism="sql"/>
+    <language ptx="sql"         active="sql"         listings="SQL"              prism="sql"/>
     <language ptx="llvm"        active=""            listings="LLVM"             prism="llvm"/>
-    <language ptx="matlab"      active="octave"      listings="Matlab"           prism="matlab"/>
+    <language ptx="matlab"      active=""            listings="Matlab"           prism="matlab"/>
     <language ptx="octave"      active="octave"      listings="Octave"           prism="matlab"/>
     <language ptx="ml"          active=""            listings="ML"               prism=""/>
     <language ptx="ocaml"       active=""            listings="[Objective]Caml"  prism="ocaml"/>
@@ -10746,6 +10776,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2022-05-28'" />
         <xsl:with-param name="message" select="'the  latex.fillin.style  parameter has been replaced by the  common/fillin/@textstyle  and  common/fillin/mathstyle  entries in the publication file. The default style for a text fillin is now  underline  and the default style for a math fillin is now  shade .  To use  box  style for either, set values in the publication file.'" />
         <xsl:with-param name="incorrect-use" select="($numbering.maximum.level != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-06-09  replace a WebWorK "stage" by a standard "task" -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//webwork/stage" />
+        <xsl:with-param name="date-string" select="'2022-06-09'" />
+        <xsl:with-param name="message" select="'an ad-hoc &quot;stage&quot; element in a scaffolded WeBWorK problem has been replaced by a standard PreTeXt &quot;task&quot; element, so make simple subsitutions.  We will attempt to honor your request'"/>
     </xsl:call-template>
     <!--  -->
 </xsl:template>

@@ -737,13 +737,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Only &STRUCTURAL; elements will pass through here, but we -->
 <!-- can't limit the match (without explicit exclusions), this -->
 <!-- is the default.  Which is to just apply templates to      -->
-<!-- elements within the division.                             -->
+<!-- elements within the division. Optional: add RS progress.  -->
 <xsl:template match="*" mode="structural-division-inner-content">
     <xsl:param name="heading-level"/>
 
     <xsl:apply-templates select="*">
         <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
+    <!-- only at "section" level. only when building for a Runestone server -->
+    <xsl:apply-templates select="." mode="runestone-progress-indicator"/>
 </xsl:template>
 
 <!-- Worksheets generate two additional versions, each -->
@@ -4594,7 +4596,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Parson problems   -->
         <!-- Matching problems -->
         <!-- Clickable Area    -->
+        <!-- Fill-In (Basic)   -->
+        <!-- Coding Exercise   -->
         <!-- Short Answer      -->
+        <!-- The "runestone-to-interactive" templates will combine a   -->
+        <!-- "regular" PreTeXt statement together with some additional -->
+        <!-- interactive material to make a hybrid "statement"         -->
         <xsl:when test="(@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
@@ -11531,8 +11538,78 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- The top-level organization is of two flavors:                  -->
+<!--                                                                -->
+<!-- (1a) For a book with no parts                                  -->
+<!--                                                                -->
+<!-- frontmatter                                                    -->
+<!-- mainmatter                                                     -->
+<!--   chapter                                                      -->
+<!--   chapter                                                      -->
+<!-- backmatter                                                     -->
+<!--                                                                -->
+<!-- (1b) For an article                                            -->
+<!--                                                                -->
+<!-- frontmatter                                                    -->
+<!-- mainmatter                                                     -->
+<!--   section                                                      -->
+<!--   section                                                      -->
+<!-- backmatter                                                     -->
+<!--                                                                -->
+<!-- (2) For a book with parts                                      -->
+<!--                                                                -->
+<!--   frontmatter                                                  -->
+<!--   part                                                         -->
+<!--   part                                                         -->
+<!--   backmatter                                                   -->
+<!--                                                                -->
+<!-- So there are four top-level divisions for the ToC:             -->
+<!--                                                                -->
+<!--   frontmatter, mainmatter, backmatter, part                    -->
+<!--                                                                -->
+<!-- which are always peers.  Then, for example, a book chapter     -->
+<!-- and a book appendix are always at the same depth, parts or     -->
+<!-- not.  The "mainmatter" division is a fiction, so not rendered. -->
+
+<xsl:template match="article|book" mode="toc-item-list">
+    <division>
+        <xsl:apply-templates select="." mode="doc-manifest-division-attributes"/>
+        <xsl:choose>
+            <xsl:when test="$b-has-parts">
+                <!-- identical to general recursion below, see comments -->
+                <xsl:apply-templates select="*" mode="toc-item-list"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="frontmatter" mode="toc-item-list"/>
+                <!-- insert a faux "mainmatter" division to coordinate the levels -->
+                <!-- of similar divisions, such a chapter and appendix in a book  -->
+                <!-- attributes are sensible defaults                             -->
+                <division type="mainmatter" number="" id="mainmatter">
+                    <!-- form URL of "mainmatter" to be the document root -->
+                    <xsl:variable name="the-url">
+                        <xsl:apply-templates select="." mode="url"/>
+                    </xsl:variable>
+                    <xsl:attribute name="url">
+                        <xsl:value-of select="$the-url"/>
+                        <!-- add the HTML id as a fragment identifier when absent, -->
+                        <!-- which is the case where the division is a chunk/page  -->
+                        <xsl:if test="not(contains($the-url, '#'))">
+                            <xsl:text>#</xsl:text>
+                            <xsl:apply-templates select="." mode="html-id"/>
+                        </xsl:if>
+                    </xsl:attribute>
+                    <!-- title not localized, not expected to be displayed -->
+                    <title>Main Matter</title>
+                    <xsl:apply-templates select="*[not(self::frontmatter or self::backmatter)]" mode="toc-item-list"/>
+                </division>
+                <xsl:apply-templates select="backmatter" mode="toc-item-list"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </division>
+</xsl:template>
+
 <!-- Every item that could be a TOC entry, mined from the schema. -->
-<xsl:template match="article|book|frontmatter|abstract|frontmatter/colophon|biography|dedication|acknowledgement|preface|contributors|part|chapter|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|backmatter|appendix|index|backmatter/colophon" mode="toc-item-list">
+<xsl:template match="frontmatter|frontmatter/colophon|biography|dedication|acknowledgement|preface|contributors|part|chapter|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|backmatter|appendix|index|backmatter/colophon" mode="toc-item-list">
     <division>
         <xsl:apply-templates select="." mode="doc-manifest-division-attributes"/>
         <!-- Recurse into children divisions (if any)                 -->
@@ -11551,6 +11628,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*" mode="toc-item-list"/>
 </xsl:template>
 
+<!-- Coordinate changes here with faux division, "mainmatter", above -->
 <xsl:template match="*" mode="doc-manifest-division-attributes">
         <xsl:attribute name="type">
             <xsl:value-of select="local-name(.)"/>

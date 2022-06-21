@@ -533,11 +533,32 @@ the xsltproc executable.
                 </input>
             </sage>
 
+            <!-- https://github.com/sagemath/sagecell/blob/master/contrib/vm/container_manager.py#L260 -->
+            <p>The Sage Cell server importants a few important R packages.  As of 2022-06-04 these are <c>deSolve</c>, <c>ggplot2</c>, <c>pracma</c>, <c>survey</c>, <c>swirl</c>, and <c>tidyverse</c>.  This next example uses the <c>ggplot</c> library for both a data set and the plotting capabilities.  Note the initial use of the <c>library()</c> function.  This is a modified version of the <articletitle>Bubble plot</articletitle> example at <url href="http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html" visual="r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html">Top 50 <c>ggplot2</c> Visualizations <mdash/>The Master List</url>.</p>
+
+            <sage language="r">
+                <input>
+                # load package and data
+                library(ggplot2)
+                data(mpg, package="ggplot2")
+
+                mpg_select &lt;- mpg[mpg$manufacturer %in% c("audi", "ford", "honda", "hyundai"), ]
+
+                # Scatterplot
+                g &lt;- ggplot(mpg_select, aes(displ, cty)) +
+                  labs(subtitle="mpg: Displacement vs City Mileage",
+                       title="Bubble chart")
+
+                g + geom_jitter(aes(col=manufacturer, size=hwy)) +
+                  geom_smooth(aes(col=manufacturer), method="lm", se=F)
+                </input>
+            </sage>
+
             <p>Here is a blank Sage cell that you may use for practice and experimentation with the commands above.  Note that this cell allows a choice of languages, and is not linked with any of the previous cells, so a reader would need to start fresh, or cut/paste definitioons from other cells.</p>
 
             <sage type="practice" />
 
-            <p>On the other hand a <tag>sage</tag> element with no content will also create an empty Sage cell for the reader's use, but now it will be specific to a particular language and linked to others of the same language.  Run the <c>R</c> cell above that defines the variable <c>ruth</c> and then try typing <c>summary(ruth)</c> in the cell below.  (The linking seems a bit buggy, as it repeats the boxplot in the output, as of 2016-06-13).</p>
+            <p>On the other hand a <tag>sage</tag> element with no content will also create an empty Sage cell for the reader's use, but now it will be specific to a particular language and linked to others of the same language.  Run the <c>R</c> cell above that defines the variable <c>ruth</c> and then try typing <c>summary(ruth)</c> in the cell below.</p>
 
             <sage language="r" />
 
@@ -1527,6 +1548,10 @@ the xsltproc executable.
                 <p>Similarly, within a paragraph, you can identify edits between versions as <insert>inserted text that has been added</insert><idx><h>styling words</h><h>insert</h></idx> with <tag>insert</tag> or as <delete>deleted text that has been removed</delete><idx><h>styling words</h><h>delete</h></idx> with <tag>delete</tag>.  Note that these identified edits are slightly different than <stale>stale text that you want to retain, but which is no longer relevant</stale><idx><h>styling words</h><h>stale</h></idx>, which is accomplished with <tag>stale</tag>.  The original request for stale text came from an instructor with an online list of student topics for presentations, and as students claimed topics they were marked as no longer available for other students.</p>
 
                 <p>If you need a <q>fill-in blank</q>, like this <fillin />, it can be obtained with an empty <tag>fillin</tag> element that defaults to roughly a 10-character width.  You can use the <tag>characters</tag> attribute to make the rule longer or shorter, such as a 40-character blank: <fillin characters="40" />.  The character count is approximate, based on typical character widths within a proportional font carrying English language text.  Adjust to suit, or request a language-specific adjustment if it is critical.</p>
+
+                <p>This paragraph is intended to make a <tag>fillin</tag> appear right at the start of <fillin chacaters="20"/> the second line  in print and then the next paragraph has nothing but a <tag>fillin</tag>. Both are for testing purposes.</p>
+
+                <p><fillin characters="5"/></p>
 
                 <p>Long after we started this mess, we added <pretext /> tags to mark up tags and attributes.  The elements are: <tag>tag</tag>, <tag>tage</tag>, <tag>attr</tag>.  Examples of how these render are (respectively): <tag>section</tag>, <tage>hash</tage>, <attr>width</attr>.  Perhaps this document will make greater use of these tags.</p>
 

@@ -1,8 +1,16 @@
-PreTeXt Showcase
-================
+#PreTeXt Showcase Article
 
-This directory contains the components for the PreTeXt
-Showcase document.  These notes are primarly for contributors.
+This folder contains the components for the PreTeXt
+Showcase document.
+
+##Building the Showcase Article
+
+To build the PreTeXt Showcase article:
+1. Install the PreTeXt CLI (https://github.com/PreTeXtBook/pretext-cli)
+2. From this folder, run `pretext build html` or `pretext build pdf`
+3. To view, run `pretext view html` or `pretext view pdf`
+
+##Notes for Contributors
 
 This example has several purposes:
 * To demonstrate PreTeXt features
@@ -16,8 +24,6 @@ Therefore:
 same as providing a comprehensive example
 * Include comments in the source file where implementation
 is not obvious, such as when settings in `docinfo` are necessary
-
-Notes:
 * Please observe standards for high-quality source.
 Running the pretty-printing script across the source
 should only introduce minimal changes.
@@ -29,3 +35,8 @@ for scientific units:
 * Review the existing documentation (in the Author's Guide)
 for each new feature added, with an eye towards completeness
 and correctness.
+* Add any new generated assets (for example latex-images) to the
+repository, including in all available formats.
+* Do not commit insignificant changes to the assets. For example
+some insignificant file diff stemming from using different hardware
+while building latex-images.
