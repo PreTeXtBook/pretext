@@ -9,18 +9,10 @@
 
 <chapter xml:id="runestone">
     <title>Conversion to Runestone</title>
-
+    <introduction>
         <!-- indentation is off, for a clean commit as re-arranged -->
 
         <p><url href="https://runestone.academy" visual="runestone.academy">Runestone Interactive</url> is a textbook hosting system orginally designed for <init>HTML</init> textbooks about computer science.  It is similar in design and goals to <pretext/>, but is also complementary in important ways.  In particular, Runestone excels at providing very interactive versions where student work in the textbook can be graded (automatically or manually), scores recorded, and that information can be viewed by an instructor.  Any instructor can easily spin-up an instance of your book for their course, at no charge to the school or to the students.</p>
-
-        <p>The usual <pretext/> <init>HTML</init> output (<xref ref="online-html"/>) only needs minor modifications to run profitably on a Runestone server.  You accomplish this via a publication file (<xref ref="publication-file"/>).  The absolute simplest publication file to accomplish this is<cd>
-            <cline>&lt;publication&gt;</cline>
-            <cline>  &lt;html&gt;</cline>
-            <cline>    &lt;platform host="runestone"/&gt;</cline>
-            <cline>  &lt;/html&gt;</cline>
-            <cline>&lt;/publication&gt;</cline>
-        </cd>(See <xref ref="online-platform-options"/>.)  Then perform the usual conversion to online <init>HTML</init>, as described in <xref ref="online-html"/> but also be sure to specify the publication file.  The output should appear like a usual <pretext/> document, but will now include a new menu on each page.  This has options which allow a reader or instructor to interact with the Runestone server, once hosted there.</p>
 
         <p>Runestone textbooks are designed around interactive activities and active reading.  We are well along in the process of exposing these capabilities via <pretext/> markup, as of 2022-06-13.  Expect this list to expand, and change slightly, as we make further progress.<ul>
             <li>Every feature of the usual <pretext/> <init>HTML</init> output should function identically on a Runestone server.</li>
@@ -36,4 +28,64 @@
         </ul></p>
 
         <p>We will not attempt to duplicate Runestone's documentation here.  Visit the <url href="https://runestone.academy" visual="runestone.academy">Runestone Academy</url> site to learn more about all the features designed for hosting your textbook for everybody's courses.</p>
+    </introduction>
+
+    <section xml:id="sec-publishing-to-runestone-academy">
+        <title>Publishing to Runestone Academy</title>
+
+            <p>The usual <pretext/> <init>HTML</init> output (<xref ref="online-html"/>) only needs minor modifications to run profitably on a Runestone server.  You accomplish this via a publication file (<xref ref="publication-file"/>).  The absolute simplest publication file to accomplish this is<cd>
+                <cline>&lt;publication&gt;</cline>
+                <cline>  &lt;html&gt;</cline>
+                <cline>    &lt;platform host="runestone"/&gt;</cline>
+                <cline>  &lt;/html&gt;</cline>
+                <cline>&lt;/publication&gt;</cline>
+            </cd>(See <xref ref="online-platform-options"/>.)  Then perform the usual conversion to online <init>HTML</init>, as described in <xref ref="online-html"/> but also be sure to specify the publication file.  The output should appear like a usual <pretext/> document, but will now include a new menu on each page.  This has options which allow a reader or instructor to interact with the Runestone server, once hosted there.</p>
+
+        <p>
+            While this HTML may be manually deployed to any Runestone server, authors who wish to publish their
+            work on the <url href="https://runestone.academy" visual="Runestone.Academy">Runestone Academy</url>
+            server have a few more requirements.
+        </p>
+        <ul>
+            <li>
+                <p>
+                    Your project must be managed using the CLI (<xref ref="processing-CLI"/>). If you didn't
+                    create it using <c>pretext new</c>, run <c>pretext init</c> to get started upgrading.
+                    You'll also need to make it available to the public via GitHub (instructions below).
+                </p>
+            </li>
+            <li>
+                <p>
+                    You should create a new <c>&lt;target name="runestone"&gt;&lt;/target&gt;</c> in your <c>project.ptx</c>.
+                    The contents of this tag will likely be identical to your usual html-format build target,
+                    except you should change your <c>&lt;publication&gt;</c> to point to a new file, perhaps named
+                    <c>publication/runestone.ptx</c>.
+                </p>
+            </li>
+            <li>
+                <p>
+                    Copy the usual publication file you use for your html-format build target and name it as
+                    <c>publication/runestone.ptx</c> (or whatever you chose in the previous step). Edit this file
+                    so your <c>&lt;html&gt;</c> element matches the example above.
+                </p>
+            </li>
+            <li>
+                <p>
+                    Use <c>pretext deploy</c> on the command line to deploy your project to GitHub (it will walk
+                    you through setup if you haven't deployed your project before). You do <em>not</em> have to
+                    enable GitHub Pages unless you want to (GitHub Pages does not have the features of a Runestone
+                    server, but can host your regular html-format build).
+                </p>
+            </li>
+            <li>
+                <p>
+                    Log into GitHub and open an Issue at
+                    <url href="https://github.com/RunestoneInteractive/RunestoneServer/issues/new"/>
+                    to request that your project be added to Runestone Academy. Be sure to provide the URL
+                    of your GitHub repository (e.g. <c>https://github.com/UserName/repo-name/</c>). Runestone
+                    Academy administrators will communicate with you via GitHub to complete this process.
+                </p>
+            </li>
+        </ul>
+    </section>
 </chapter>
