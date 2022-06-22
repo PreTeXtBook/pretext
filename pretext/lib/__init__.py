@@ -725,7 +725,7 @@ def latex_tactile_image_conversion(
 
 def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     import os.path  # join()
-    import runestone.codelens.pg_logger  # exec_script_str_local()
+    from .codelens import pg_logger  # exec_script_str_local()
 
     try:
         import requests  # post()
@@ -784,7 +784,7 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
                 print(server_time_out_string.format(url, visible_id))
         elif language == "python":
             # local routines handle this case, no server involved
-            trace = runestone.codelens.pg_logger.exec_script_str_local(
+            trace = pg_logger.exec_script_str_local(
                 source, None, False, None, _js_var_finalizer
             )
 
@@ -2872,12 +2872,8 @@ def set_ptx_path(path=None):
     if path:
         __ptx_path = path
     else:
-        # full path to module itself
-        ptx_path = os.path.abspath(__file__)
-        # split "python.py" off module's filename
-        module_dir, _ = os.path.split(ptx_path)
-        # split "pretext" path off executable
-        __ptx_path, _ = os.path.split(module_dir)
+        # two directories above location of this file
+        __ptx_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     return None
 
 
